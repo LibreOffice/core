@@ -45,6 +45,7 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -1354,6 +1355,41 @@ void CopyTableWizard::impl_doCopy_nothrow()
 
                 if ( xSourceResultSet.is() )
                     impl_copyRows_throw( xSourceResultSet, xTable );
+
+                // Code to address Bug #119962
+                // https://bugs.documentfoundation.org/show_bug.cgi?id=119962
+                //
+                // SELECT MAX("ID") FROM "TABLENAME"
+                // ALTER TABLE "TABLENAME" ALTER "ID" RESTART WITH NUMBER
+                //
+                const Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_SET_THROW );
+                const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, xTable, ::dbtools::EComposeRule::InDataManipulation, true );
+
+                OUStringBuffer sqlBuffer("SELECT MAX(\"ID\") FROM ");
+                sqlBuffer.append(sComposedTableName);
+                OUString strSql = sqlBuffer.makeStringAndClear();
+
+                Reference< XResultSet > xResultMAXNUM(m_xDestConnection->createStatement()->executeQuery(strSql));
+
+                Reference< XRow > xRow(xResultMAXNUM, UNO_QUERY_THROW);
+
+                tools::Long maxVal = -1L;
+                while (xResultMAXNUM->next())
+                {
+                    maxVal = xRow->getLong(1);
+                    break;
+                }
+
+                if (maxVal > 0L)
+                {
+                    sqlBuffer.append("ALTER TABLE ");
+                    sqlBuffer.append(sComposedTableName);
+                    sqlBuffer.append(" ALTER \"ID\" RESTART WITH ");
+                    sqlBuffer.append(maxVal);
+                    strSql = sqlBuffer.makeStringAndClear();
+
+                    m_xDestConnection->createStatement()->execute(strSql);
+                }
             }
             break;
 
