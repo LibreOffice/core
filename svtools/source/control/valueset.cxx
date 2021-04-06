@@ -1393,7 +1393,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
 
         if (pItem->meType == VALUESETITEM_USERDRAW)
         {
-            UserDrawEvent aUDEvt(nullptr, maVirDev.get(), aRect, pItem->mnId);
+            UserDrawEvent aUDEvt(maVirDev.get(), aRect, pItem->mnId);
             UserDraw(aUDEvt);
         }
         else
