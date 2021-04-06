@@ -28,11 +28,6 @@
 #include <document.hxx>
 #include <sc.hrc>
 
-const VclPtr<vcl::Window>& ScCellShell::GetFrameWin() const
-{
-    return pFrameWin;
-}
-
 void ScCellShell::ExecuteCursor( SfxRequest& rReq )
 {
     ScViewData& rData = GetViewData();
@@ -125,7 +120,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     // If ScrollLock key is active, cell cursor stays on the current cell while
     // scrolling the grid.
     bool bScrollLock = false;
-    KeyIndicatorState eState = GetFrameWin()->GetIndicatorState();
+    KeyIndicatorState eState = pFrameWin->GetIndicatorState();
     if (eState & KeyIndicatorState::SCROLLLOCK)
         bScrollLock = true;
 
