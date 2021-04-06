@@ -256,6 +256,11 @@ DECLARE_WW8EXPORT_TEST(testTdf122460_header, "tdf122460_header.odt")
     CPPUNIT_ASSERT(headerIsOn);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf139495_negativeSizeHeader, "tdf139495_negativeSizeHeader.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_WW8EXPORT_TEST(testFdo53985, "fdo53985.doc")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
