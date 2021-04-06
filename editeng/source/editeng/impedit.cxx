@@ -51,7 +51,7 @@ using namespace ::com::sun::star::linguistic2;
 
 #define SCRLRANGE   20  // Scroll 1/20 of the width/height, when in QueryDrop
 
-static void lcl_AllignToPixel( Point& rPoint, const OutputDevice& rOutDev, short nDiffX, short nDiffY )
+static void lcl_AlignToPixel(Point& rPoint, const OutputDevice& rOutDev, short nDiffX, short nDiffY)
 {
     rPoint = rOutDev.LogicToPixel( rPoint );
 
@@ -680,13 +680,13 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDo
 
     if ( !IsVertical() )
     {
-        lcl_AllignToPixel(aPnt1, rTarget, +1, 0);
-        lcl_AllignToPixel(aPnt2, rTarget, 0, (bPixelMode ? 0 : -1));
+        lcl_AlignToPixel(aPnt1, rTarget, +1, 0);
+        lcl_AlignToPixel(aPnt2, rTarget, 0, (bPixelMode ? 0 : -1));
     }
     else
     {
-        lcl_AllignToPixel(aPnt1, rTarget, 0, +1 );
-        lcl_AllignToPixel(aPnt2, rTarget, (bPixelMode ? 0 : +1), 0);
+        lcl_AlignToPixel(aPnt1, rTarget, 0, +1 );
+        lcl_AlignToPixel(aPnt2, rTarget, (bPixelMode ? 0 : +1), 0);
     }
 
     tools::Rectangle aRect( aPnt1, aPnt2 );

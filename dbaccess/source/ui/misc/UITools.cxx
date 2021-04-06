@@ -688,7 +688,7 @@ bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Reference< 
     return bRet;
 }
 
-sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
+sal_Int32 mapTextAlign(const SvxCellHorJustify& _eAlignment)
 {
     sal_Int32 nAlignment = css::awt::TextAlign::LEFT;
     switch (_eAlignment)
@@ -741,7 +741,7 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
 
         if(callColumnFormatDialog(_pParent,_pFormatter,nDataType,nFormatKey,eJustify,bHasFormat))
         {
-            xAffectedCol->setPropertyValue(PROPERTY_ALIGN, makeAny(static_cast<sal_Int16>(dbaui::mapTextAllign(eJustify))));
+            xAffectedCol->setPropertyValue(PROPERTY_ALIGN, makeAny(static_cast<sal_Int16>(dbaui::mapTextAlign(eJustify))));
             if (bHasFormat)
                 xAffectedCol->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
 
