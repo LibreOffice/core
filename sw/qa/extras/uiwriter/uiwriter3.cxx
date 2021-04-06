@@ -2697,6 +2697,52 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138897)
     Scheduler::ProcessEventsToIdle();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136740)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    css::uno::Reference<css::lang::XMultiServiceFactory> xFact(mxComponent,
+                                                               css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::beans::XPropertySet> xTextDefaults(
+        xFact->createInstance("com.sun.star.text.Defaults"), css::uno::UNO_QUERY_THROW);
+    const css::uno::Any aOrig = xTextDefaults->getPropertyValue("TabStopDistance");
+    sal_Int32 nDefTab = aOrig.get<sal_Int32>();
+    CPPUNIT_ASSERT(nDefTab != 0);
+
+    css::uno::Reference<css::text::XTextRange> const xParagraph(getParagraphOrTable(1),
+                                                                css::uno::UNO_QUERY_THROW);
+    xParagraph->setString("Foo");
+
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString("Foo"), xParagraph->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+
+    const css::uno::Any aNew(nDefTab * 2);
+    xTextDefaults->setPropertyValue("TabStopDistance", aNew);
+    // it may become slightly different because of conversions, so get the actual value
+    const css::uno::Any aNewCorrected = xTextDefaults->getPropertyValue("TabStopDistance");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nDefTab * 2, aNewCorrected.get<sal_Int32>(), 1);
+
+    // Paste special as RTF
+    const auto aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat",
+            css::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
+    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString("FooFoo"), xParagraph->getString());
+
+    // Without the fix in place, this would fail with
+    //     equality assertion failed
+    //     - Expected: <Any: (long) 2501>
+    //     - Actual  : <Any: (long) 1251>
+    // i.e., pasting RTF would reset the modified default tab stop distance to hardcoded default
+    CPPUNIT_ASSERT_EQUAL(aNewCorrected, xTextDefaults->getPropertyValue("TabStopDistance"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
