@@ -22,8 +22,9 @@
 
 #include <comphelper/lok.hxx>
 #include <config_global.h>
-#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/window.hxx>
 
 #include <tools/stream.hxx>
 

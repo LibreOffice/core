@@ -334,7 +334,7 @@ protected:
     void ShowDDCursor( const tools::Rectangle& rRect );
     void HideDDCursor();
 
-    void ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly );
+    void ImplDrawHighlightRect(OutputDevice& rTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly);
     tools::Rectangle ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nShowCursorFlags,
             sal_Int32& nTextPortionStart, const ParaPortion* pParaPortion) const;
 
@@ -437,8 +437,7 @@ public:
     bool        DoInvalidateMore() const        { return bool( nControl & EVControlBits::INVONEMORE ); }
 
     void        SetBackgroundColor( const Color& rColor );
-    const Color & GetBackgroundColor() const {
-                        return ( mxBackgroundColor ? *mxBackgroundColor : pOutWin->GetBackground().GetColor() ); }
+    const Color& GetBackgroundColor() const;
 
     /// Informs this edit view about which view shell contains it.
     void RegisterViewShell(OutlinerViewShell* pViewShell);

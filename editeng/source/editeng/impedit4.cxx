@@ -19,6 +19,7 @@
 
 
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <svl/srchitem.hxx>
 #include <editeng/lspcitem.hxx>
