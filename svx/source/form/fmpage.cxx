@@ -29,6 +29,7 @@
 #include <svx/svdview.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
+#include <vcl/window.hxx>
 
 
 #include <fmprop.hxx>

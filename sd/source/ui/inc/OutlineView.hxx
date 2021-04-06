@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <vcl/image.hxx>
+#include <vcl/vclevent.hxx>
 #include <editeng/lrspitem.hxx>
 #include <o3tl/deleter.hxx>
 #include "View.hxx"

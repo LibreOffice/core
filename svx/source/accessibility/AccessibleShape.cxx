@@ -43,6 +43,7 @@
 #include <svx/SvxShapeTypes.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <svx/svdview.hxx>

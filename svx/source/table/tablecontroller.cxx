@@ -34,6 +34,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/window.hxx>
 
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>

@@ -32,6 +32,7 @@
 #include <svx/fmview.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <tools/debug.hxx>
+#include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
 

@@ -49,6 +49,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

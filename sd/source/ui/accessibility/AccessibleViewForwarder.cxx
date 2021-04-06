@@ -19,7 +19,7 @@
 
 #include <AccessibleViewForwarder.hxx>
 #include <svx/svdpntv.hxx>
-#include <vcl/outdev.hxx>
+#include <vcl/window.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <osl/diagnose.h>
 

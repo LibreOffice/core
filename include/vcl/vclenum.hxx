@@ -400,6 +400,20 @@ namespace o3tl
     template<> struct typed_flags<ShowFlags> : is_typed_flags<ShowFlags, 0x000e> {};
 }
 
+enum class TrackingEventFlags
+{
+    NONE           = 0x0000,
+    Cancel         = 0x0001,
+    Key            = 0x0002,
+    Focus          = 0x0004,
+    Repeat         = 0x0100,
+    End            = 0x1000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<TrackingEventFlags> : is_typed_flags<TrackingEventFlags, 0x1107> {};
+}
+
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

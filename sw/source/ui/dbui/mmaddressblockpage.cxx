@@ -44,7 +44,6 @@
 #include <mmaddressblockpage.hrc>
 #include <helpids.h>
 
-using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdb;

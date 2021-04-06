@@ -45,6 +45,7 @@
 
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <cppuhelper/implbase.hxx>

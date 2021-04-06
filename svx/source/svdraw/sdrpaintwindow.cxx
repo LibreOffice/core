@@ -25,6 +25,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/window.hxx>
 #include <set>
 #include <vector>
 
