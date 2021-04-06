@@ -888,6 +888,21 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Start <> End", aStart, aEnd);
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141268)
+{
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf141268.odp";
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    SdrObjCustomShape& rSdrCustomShape(
+        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+
+    // Check left/bottom of bound rect. Without fix it would be left=6722, bottom=9483.
+    tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(7620), aBoundRect.Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(8585), aBoundRect.Bottom());
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
 {
     // Error was, that fObjectRotation was not correctly updated after shearing.
