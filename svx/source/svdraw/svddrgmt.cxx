@@ -1356,11 +1356,13 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
     {
         std::unique_ptr<SdrUndoAction> pUndo;
         std::unique_ptr<SdrUndoAction> pUndo2;
-        const bool bUndo = getSdrDragView().IsUndoEnabled();
+        bool bLOK = comphelper::LibreOfficeKit::isActive();
+        const bool bUndo = getSdrDragView().IsUndoEnabled() && (!bLOK || getSdrDragView().CanDoSdrUndo());
 
         if( bUndo )
         {
-            getSdrDragView().EndTextEditAllViews();
+            if (!bLOK)
+                getSdrDragView().EndTextEditAllViews();
             if(!getSdrDragView().IsInsObjPoint() && pObj->IsInserted() )
             {
                 if (DragStat().IsEndDragChangesAttributes())

@@ -115,6 +115,7 @@ public:
     void testMultiViewInsertDeletePage();
     void testMultiViewInsertDeletePage2();
     void testEditingTextBoxAndInsertShapeInterrupt();
+    void testEditingTextBoxAndModifiedShapeInterrupt();
     void testDisableUndoRepair();
     void testDocumentRepair();
     void testLanguageStatus();
@@ -169,6 +170,7 @@ public:
     CPPUNIT_TEST(testMultiViewInsertDeletePage);
     CPPUNIT_TEST(testMultiViewInsertDeletePage2);
     CPPUNIT_TEST(testEditingTextBoxAndInsertShapeInterrupt);
+    CPPUNIT_TEST(testEditingTextBoxAndModifiedShapeInterrupt);
     CPPUNIT_TEST(testDisableUndoRepair);
     CPPUNIT_TEST(testDocumentRepair);
     CPPUNIT_TEST(testLanguageStatus);
@@ -2031,6 +2033,76 @@ void SdTiledRenderingTest::testEditingTextBoxAndInsertShapeInterrupt()
     // Insert shape in 1st view
     SfxLokHelper::setView(nView1);
     comphelper::dispatchCommand(".uno:BasicShapes.rectangle", aArgs);
+
+    // We must be still in text editing mode and have cursor visible.
+    SfxLokHelper::setView(nView2);
+    CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
+}
+
+void SdTiledRenderingTest::testEditingTextBoxAndModifiedShapeInterrupt()
+{
+    // Load the document.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    uno::Sequence<beans::PropertyValue> aArgs;
+
+    // Create second view
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(aArgs);
+    ViewCallback aView2;
+    int nView2 = SfxLokHelper::getView();
+
+    // Begin text edit on the only object on the slide.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject1 = pActualPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject1 != nullptr);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject1->GetObjIdentifier());
+    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
+
+    // Double-click outside the text to enter edit mode.
+    const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
+    const auto cornerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 4));
+    const auto cornerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 4));
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      cornerX, cornerY,
+                                      2, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      cornerX, cornerY,
+                                      2, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // We must be in text editing mode and have cursor visible.
+    CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
+
+    // Switch to 1st view
+    SfxLokHelper::setView(nView1);
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell2->GetActualPage();
+
+    // insert shape
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(1), pPage->GetObjCount());
+    comphelper::dispatchCommand(".uno:BasicShapes.rectangle", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(2), pPage->GetObjCount());
+
+    // select inserted shape
+    SdrObject* pObject = pPage->GetObj(1);
+    const ::tools::Rectangle aRect2 = pObject->GetCurrentBoundRect();
+    const auto cornerX2 = convertMm100ToTwip(aRect2.getX() + (aRect2.getWidth() / 4));
+    const auto cornerY2 = convertMm100ToTwip(aRect2.getY() + (aRect2.getHeight() / 4));
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      cornerX2, cornerY2,
+                                      2, MOUSE_LEFT, 0);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // modify selected shape
+    pViewShell2->GetDrawView()->MoveMarkedObj(Size(100, 200));
+    pViewShell2->GetDrawView()->ResizeMarkedObj(Point(0, 0), Fraction(0.5), Fraction(0.5));
+    pViewShell2->GetDrawView()->RotateMarkedObj(Point(0, 0), 4500);
 
     // We must be still in text editing mode and have cursor visible.
     SfxLokHelper::setView(nView2);
