@@ -945,6 +945,8 @@ bool Bitmap::Convert( BmpConversion eConversion )
         // avoid large chunk of obsolete and hopefully rarely used conversions.
         if (eConversion == BmpConversion::N8BitNoConversion)
         {
+            if (mxSalBmp->GetBitCount() == 8 && HasGreyPalette8Bit())
+                return true;
             std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
             // frequently used conversion for creating alpha masks
             if (xImpBmp->Create(*mxSalBmp) && xImpBmp->InterpretAs8Bit())
