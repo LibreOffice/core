@@ -73,6 +73,18 @@ int const & fS2_2(S2 const & s) {
     return s.n; // expected-note {{first consumption is here [loplugin:casttovoid]}}
 }
 
+// Don't trigger assert in CastToVoid::VisitReturnStmt:
+int n = [] { return 0; }();
+
+int f() {
+    int n1 = n;
+    int n2 = [](int const & n) -> int const & {
+        (void) n; // expected-error {{unnecessary cast to void [loplugin:casttovoid]}}
+        return n; // expected-note {{first consumption is here [loplugin:casttovoid]}}
+    }(n1);
+    return n2;
+}
+
 int main() {
     int n1 = 0;
     (void) n1; // expected-error {{unnecessary cast to void [loplugin:casttovoid]}}

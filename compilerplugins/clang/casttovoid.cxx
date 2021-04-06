@@ -169,6 +169,32 @@ public:
         return RecursiveASTVisitor::TraverseConstructorInitializer(init);
     }
 
+    bool TraverseLambdaExpr(LambdaExpr * expr, DataRecursionQueue * queue = nullptr) {
+        if (!shouldTraversePostOrder()) {
+            if (!WalkUpFromLambdaExpr(expr)) {
+                return false;
+            }
+        }
+        auto const n = expr->capture_size();
+        for (unsigned i = 0; i != n; ++i) {
+            auto const c = expr->capture_begin() + i;
+            if (c->isExplicit() || shouldVisitImplicitCode()) {
+                if (!TraverseLambdaCapture(expr, c, expr->capture_init_begin()[i])) {
+                    return false;
+                }
+            }
+        }
+        if (!TraverseCXXRecordDecl(expr->getLambdaClass())) {
+            return false;
+        }
+        if (!queue && shouldTraversePostOrder()) {
+            if (!WalkUpFromLambdaExpr(expr)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     bool VisitDeclRefExpr(DeclRefExpr const * expr) {
         if (ignoreLocation(expr)) {
             return true;
