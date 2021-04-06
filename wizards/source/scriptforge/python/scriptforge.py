@@ -350,7 +350,7 @@ class ScriptForge(object, metaclass = _Singleton):
             for method in methods:
                 func = getattr(cls, method)
                 if callable(func):
-                    # Assign the synonymes to the original method
+                    # Assign the synonyms to the original method
                     m = method.lower()
                     if hasattr(cls, m) is False:
                         setattr(cls, m, func)
