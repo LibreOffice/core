@@ -16,6 +16,23 @@
       "revId": "f3cd5ba60eb16fc3376ae97231fca4360238c920",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7145461e_c4087325",
+        "filename": "tools/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-04-06T13:42:50Z",
+      "side": 1,
+      "message": "I suggest to change all references to “fdo” issues to “tdf”",
+      "revId": "f3cd5ba60eb16fc3376ae97231fca4360238c920",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
