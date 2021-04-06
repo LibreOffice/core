@@ -93,6 +93,54 @@
       "revId": "a160feea9e6d0d6e901f5a257611820c08ee2550",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "030d6346_1d0d5bf8",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-04-06T22:55:44Z",
+      "side": 1,
+      "message": "Dropped the phrase in the parentheses.",
+      "parentUuid": "ccac6b6c_f282478d",
+      "range": {
+        "startLine": 240,
+        "startChar": 138,
+        "endLine": 240,
+        "endChar": 187
+      },
+      "revId": "a160feea9e6d0d6e901f5a257611820c08ee2550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "652c205c_496e7bd4",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-04-06T22:55:44Z",
+      "side": 1,
+      "message": "I\u0027ve now added a link to the online help as the URI, since I\u0027m still not convinced that adding a \".uno:\" URI will lead the user to a help page.",
+      "parentUuid": "f5706f9d_6df876c2",
+      "range": {
+        "startLine": 240,
+        "startChar": 192,
+        "endLine": 240,
+        "endChar": 195
+      },
+      "revId": "a160feea9e6d0d6e901f5a257611820c08ee2550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
