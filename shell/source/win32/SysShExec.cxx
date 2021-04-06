@@ -362,7 +362,8 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     sei.lpFile       = o3tl::toW(preprocessed_command.getStr());
     sei.lpParameters = o3tl::toW(aParameter.getStr());
     sei.nShow        = SW_SHOWNORMAL;
-    sei.fMask = SEE_MASK_NOCLOSEPROCESS; // we need sei.hProcess
+    // we need sei.hProcess; we don't want system error dialog
+    sei.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_FLAG_NO_UI;
 
     if (NO_SYSTEM_ERROR_MESSAGE & nFlags)
         sei.fMask |= SEE_MASK_FLAG_NO_UI;
