@@ -669,8 +669,10 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             }
             else
             {
+                // Hack alert: these calculations are based on
+                // #112727# import negative height headers/footers as floating frames inside fixed height headers/footer
                 // #i48832# - set correct spacing between header and body.
-                const sal_Int32 nHdLowerSpace( std::abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
+                const sal_Int32 nHdLowerSpace(std::max<sal_Int32>(0, std::abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo));
                 pHdFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Fixed, 0, rData.nSwHLo + nHdLowerSpace));
                 aHdUL.SetLower( static_cast< sal_uInt16 >(nHdLowerSpace) );
                 pHdFormat->SetFormatAttr(SwHeaderAndFooterEatSpacingItem(
@@ -697,7 +699,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             else
             {
                 // #i48832# - set correct spacing between footer and body.
-                const SwTwips nFtUpperSpace( std::abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp );
+                const sal_Int32 nFtUpperSpace(std::max<sal_Int32>(0, std::abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp));
                 pFtFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Fixed, 0, rData.nSwFUp + nFtUpperSpace));
                 aFtUL.SetUpper( static_cast< sal_uInt16 >(nFtUpperSpace) );
                 pFtFormat->SetFormatAttr(SwHeaderAndFooterEatSpacingItem(
