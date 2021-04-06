@@ -1143,9 +1143,11 @@ void EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
     EPaM aP = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM);
     EPaM aP2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM2);
 
-
     if (comphelper::LibreOfficeKit::isActive())
     {
+        xPopupMenu->remove("autocorrect");
+        xPopupMenu->remove("autocorrectdlg");
+
         // For mobile phones, send the context menu structure
         const SfxViewShell* pViewShell = SfxViewShell::Current();
         if (pViewShell && pViewShell->isLOKMobilePhone())
