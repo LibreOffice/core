@@ -2988,9 +2988,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
                         pSelEngine->ReleaseMouse();
                 }
 
-                vcl::Window* pParent = &pActiveViewSh->GetViewFrame()->GetWindow();
-
-                if (pData->DoError(pParent ? pParent->GetFrameWeld() : nullptr, aString, aCursorPos))
+                if (pData->DoError(pActiveViewSh->GetFrameWeld(), aString, aCursorPos))
                     bForget = true;                 // Do not take over input
             }
         }
