@@ -56,6 +56,7 @@ public:
     void testTdf133887();
     void testTdf133889();
     void testTdf138646();
+    void testTdf105558();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(testTdf133887);
     CPPUNIT_TEST(testTdf133889);
     CPPUNIT_TEST(testTdf138646);
+    CPPUNIT_TEST(testTdf105558);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1022,6 +1024,36 @@ void ScMacrosTest::testTdf138646()
     }
 
     pDocSh->DoClose();
+}
+
+void ScMacrosTest::testTdf105558()
+{
+    OUString aFileName;
+    createFileURL(u"tdf105558.ods", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
+
+    css::uno::Any aRet;
+    css::uno::Sequence<sal_Int16> aOutParamIndex;
+    css::uno::Sequence<css::uno::Any> aOutParam;
+    css::uno::Sequence<css::uno::Any> aParams{ css::uno::Any(sal_Int16(0)) };
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.TestType?language=Basic&location=document", aParams,
+        aRet, aOutParamIndex, aOutParam);
+
+    OUString aReturnValue;
+    aRet >>= aReturnValue;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Currency
+    // - Actual  : String
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Currency"), aReturnValue);
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
 }
 
 
