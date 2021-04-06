@@ -101,21 +101,6 @@ namespace weld { class Window; }
 template<class T> class VclPtr;
 namespace tools { class JsonWriter; }
 
-enum class TrackingEventFlags
-{
-    NONE           = 0x0000,
-    Cancel         = 0x0001,
-    Key            = 0x0002,
-    Focus          = 0x0004,
-    Repeat         = 0x0100,
-    End            = 0x1000,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<TrackingEventFlags> : is_typed_flags<TrackingEventFlags, 0x1107> {};
-}
-
-
 // Type for GetWindow()
 enum class GetWindowType
 {

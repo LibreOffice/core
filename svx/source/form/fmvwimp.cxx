@@ -77,6 +77,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/window.hxx>
 #include <connectivity/dbtools.hxx>
 
 #include <algorithm>

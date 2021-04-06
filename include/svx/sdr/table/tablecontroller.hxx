@@ -29,6 +29,7 @@
 #include <svx/svdview.hxx>
 #include <memory>
 
+struct ImplSVEvent;
 class SdrView;
 class SdrObject;
 class SfxItemSet;

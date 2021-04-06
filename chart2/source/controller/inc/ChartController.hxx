@@ -55,6 +55,7 @@ namespace com::sun::star::awt { struct Point; }
 namespace com::sun::star::document { class XUndoManager; }
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XLayoutManagerEventBroadcaster; }
+namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::lang { class XInitialization; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XCloseable; }
@@ -72,13 +73,11 @@ namespace svx::sidebar {
     class SelectionChangeHandler;
 }
 
-class DropTargetHelper;
-
-namespace com::sun::star {
-    namespace graphic {
-        class XGraphic;
-    }
+namespace weld {
+    class Window;
 }
+
+class DropTargetHelper;
 
 namespace chart
 {

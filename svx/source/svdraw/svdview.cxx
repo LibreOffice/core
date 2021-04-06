@@ -46,7 +46,7 @@
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <sal/log.hxx>
 #include <vcl/ptrstyle.hxx>
-
+#include <vcl/window.hxx>
 
 SdrViewEvent::SdrViewEvent()
 :     pHdl(nullptr),

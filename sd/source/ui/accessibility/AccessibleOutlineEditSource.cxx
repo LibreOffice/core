@@ -21,7 +21,7 @@
 #include <editeng/unoedhlp.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdview.hxx>
-
+#include <vcl/window.hxx>
 #include <AccessibleOutlineEditSource.hxx>
 
 namespace accessibility
