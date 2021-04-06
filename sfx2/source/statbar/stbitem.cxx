@@ -340,7 +340,7 @@ void SAL_CALL SfxStatusBarControl::paint(
     if ( pOutDev )
     {
         ::tools::Rectangle aRect = VCLRectangle( rOutputRectangle );
-        UserDrawEvent aUserDrawEvent(nullptr, pOutDev, aRect, pBar->GetCurItemId());
+        UserDrawEvent aUserDrawEvent(pOutDev, aRect, pBar->GetCurItemId());
         Paint( aUserDrawEvent );
     }
 }

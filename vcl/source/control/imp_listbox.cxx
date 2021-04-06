@@ -1634,7 +1634,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
             nPos = GetEntryList()->FindEntry(GetEntryList()->GetEntryText(nPos));
         nPos = nPos - GetEntryList()->GetMRUCount();
 
-        UserDrawEvent aUDEvt(this, &rRenderContext, aRect, nPos, bSelected);
+        UserDrawEvent aUDEvt(&rRenderContext, aRect, nPos, bSelected);
         maUserDrawHdl.Call( &aUDEvt );
         mbInUserDraw = false;
     }

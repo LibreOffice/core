@@ -1278,7 +1278,6 @@ bool ComboBox::IsUserDrawEnabled() const
 
 void ComboBox::DrawEntry(const UserDrawEvent& rEvt)
 {
-    SAL_WARN_IF(rEvt.GetWindow() != GetMainWindow(), "vcl", "DrawEntry?!");
     GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), /*bDrawImage*/false, /*bDrawText*/false);
 }
 
