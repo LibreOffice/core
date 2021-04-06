@@ -242,6 +242,8 @@ void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
 
 ErrCode SwHTMLWriter::WriteStream()
 {
+    if (!SW_MOD())
+        return ERRCODE_ABORT;
     // Intercept paste output if requested.
     char* pPasteEnv = getenv("SW_DEBUG_HTML_PASTE_TO");
     std::unique_ptr<SvStream> pPasteStream;
