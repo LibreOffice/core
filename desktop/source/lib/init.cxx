@@ -6098,7 +6098,7 @@ static void activateNotebookbar(std::u16string_view rApp)
 
     if (aAppNode.isValid())
     {
-        aAppNode.setNodeValue("Active", makeAny(OUString("notebookbar.ui")));
+        aAppNode.setNodeValue("Active", makeAny(OUString("notebookbar_online.ui")));
         aAppNode.commit();
     }
 }
