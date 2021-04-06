@@ -36,6 +36,7 @@
 #include <vcl/transfer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
+#include <vcl/window.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -50,16 +51,16 @@ using namespace ::com::sun::star::linguistic2;
 
 #define SCRLRANGE   20  // Scroll 1/20 of the width/height, when in QueryDrop
 
-static void lcl_AllignToPixel( Point& rPoint, OutputDevice const * pOutDev, short nDiffX, short nDiffY )
+static void lcl_AllignToPixel( Point& rPoint, const OutputDevice& rOutDev, short nDiffX, short nDiffY )
 {
-    rPoint = pOutDev->LogicToPixel( rPoint );
+    rPoint = rOutDev.LogicToPixel( rPoint );
 
     if ( nDiffX )
         rPoint.AdjustX(nDiffX );
     if ( nDiffY )
         rPoint.AdjustY(nDiffY );
 
-    rPoint = pOutDev->PixelToLogic( rPoint );
+    rPoint = rOutDev.PixelToLogic( rPoint );
 }
 
 LOKSpecialPositioning::LOKSpecialPositioning(const ImpEditView& rImpEditView, MapUnit eUnit,
@@ -216,6 +217,11 @@ ImpEditView::~ImpEditView()
 void ImpEditView::SetBackgroundColor( const Color& rColor )
 {
     mxBackgroundColor = rColor;
+}
+
+const Color& ImpEditView::GetBackgroundColor() const
+{
+    return mxBackgroundColor ? *mxBackgroundColor : GetOutputDevice().GetBackground().GetColor();
 }
 
 void ImpEditView::RegisterViewShell(OutlinerViewShell* pViewShell)
@@ -472,13 +478,9 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
     // pRegion: When not NULL, then only calculate Region.
 
-    OutputDevice* pTarget;
-    if (pTargetDevice)
-        pTarget = pTargetDevice;
-    else
-        pTarget = getEditViewCallbacks() ? &getEditViewCallbacks()->EditViewOutputDevice() : pOutWin;
-    bool bClipRegion = pTarget->IsClipRegion();
-    vcl::Region aOldRegion = pTarget->GetClipRegion();
+    OutputDevice& rTarget = pTargetDevice ? *pTargetDevice : GetOutputDevice();
+    bool bClipRegion = rTarget.IsClipRegion();
+    vcl::Region aOldRegion = rTarget.GetClipRegion();
 
     std::unique_ptr<tools::PolyPolygon> pPolyPoly;
 
@@ -497,7 +499,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
         tools::Rectangle aTmpOutArea( aOutArea );
         if ( aTmpOutArea.GetWidth() > pEditEngine->pImpEditEngine->GetPaperSize().Width() )
             aTmpOutArea.SetRight( aTmpOutArea.Left() + pEditEngine->pImpEditEngine->GetPaperSize().Width() );
-        pTarget->IntersectClipRegion( aTmpOutArea );
+        rTarget.IntersectClipRegion( aTmpOutArea );
 
         if (pOutWin && pOutWin->GetCursor())
             pOutWin->GetCursor()->Hide();
@@ -593,7 +595,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 Range aLineXPosStartEnd = pEditEngine->GetLineXPosStartEnd(pTmpPortion, &rLine);
                 aTopLeft.setX( aLineXPosStartEnd.Min() );
                 aBottomRight.setX( aLineXPosStartEnd.Max() );
-                ImplDrawHighlightRect( pTarget, aTopLeft, aBottomRight, pPolyPoly.get() );
+                ImplDrawHighlightRect(rTarget, aTopLeft, aBottomRight, pPolyPoly.get());
             }
             else
             {
@@ -614,7 +616,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                     Point aPt1( std::min( nX1, nX2 ), aTopLeft.Y() );
                     Point aPt2( std::max( nX1, nX2 ), aBottomRight.Y() );
 
-                    ImplDrawHighlightRect( pTarget, aPt1, aPt2, pPolyPoly.get() );
+                    ImplDrawHighlightRect(rTarget, aPt1, aPt2, pPolyPoly.get());
                     nTmpStartIndex = nTmpEndIndex;
                 }
             }
@@ -635,10 +637,10 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
         if (pOutWin && pOutWin->GetCursor())
             pOutWin->GetCursor()->Show();
 
-        if ( bClipRegion )
-            pTarget->SetClipRegion( aOldRegion );
+        if (bClipRegion)
+            rTarget.SetClipRegion(aOldRegion);
         else
-            pTarget->SetClipRegion();
+            rTarget.SetClipRegion();
     }
 }
 
@@ -649,14 +651,14 @@ void ImpEditView::GetSelectionRectangles(EditSelection aTmpSel, std::vector<tool
     aRegion.GetRegionRectangles(rLogicRects);
 }
 
-void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly )
+void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly )
 {
     if ( rDocPosTopLeft.X() == rDocPosBottomRight.X() )
         return;
 
     if (mpLOKSpecialPositioning && pPolyPoly)
     {
-        MapUnit eDevUnit = _pTarget->GetMapMode().GetMapUnit();
+        MapUnit eDevUnit = rTarget.GetMapMode().GetMapUnit();
         tools::Rectangle aSelRect(rDocPosTopLeft, rDocPosBottomRight);
         aSelRect = mpLOKSpecialPositioning->GetWindowPos(aSelRect, eDevUnit);
         const Point aRefPoint = mpLOKSpecialPositioning->GetRefPoint();
@@ -671,20 +673,20 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rD
         return;
     }
 
-    bool bPixelMode = _pTarget->GetMapMode().GetMapUnit() == MapUnit::MapPixel;
+    bool bPixelMode = rTarget.GetMapMode().GetMapUnit() == MapUnit::MapPixel;
 
     Point aPnt1( GetWindowPos( rDocPosTopLeft ) );
     Point aPnt2( GetWindowPos( rDocPosBottomRight ) );
 
     if ( !IsVertical() )
     {
-        lcl_AllignToPixel( aPnt1, _pTarget, +1, 0 );
-        lcl_AllignToPixel( aPnt2, _pTarget, 0, ( bPixelMode ? 0 : -1 ) );
+        lcl_AllignToPixel(aPnt1, rTarget, +1, 0);
+        lcl_AllignToPixel(aPnt2, rTarget, 0, (bPixelMode ? 0 : -1));
     }
     else
     {
-        lcl_AllignToPixel( aPnt1, _pTarget, 0, +1 );
-        lcl_AllignToPixel( aPnt2, _pTarget, ( bPixelMode ? 0 : +1 ), 0 );
+        lcl_AllignToPixel(aPnt1, rTarget, 0, +1 );
+        lcl_AllignToPixel(aPnt2, rTarget, (bPixelMode ? 0 : +1), 0);
     }
 
     tools::Rectangle aRect( aPnt1, aPnt2 );
@@ -699,20 +701,20 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rD
     }
     else
     {
-        vcl::Window* pWindow = dynamic_cast< vcl::Window* >(_pTarget);
+        vcl::Window* pWindow = dynamic_cast<vcl::Window*>(&rTarget);
 
-        if(pWindow)
+        if (pWindow)
         {
             pWindow->Invert( aRect );
         }
         else
         {
-            _pTarget->Push(PushFlags::LINECOLOR|PushFlags::FILLCOLOR|PushFlags::RASTEROP);
-            _pTarget->SetLineColor();
-            _pTarget->SetFillColor(COL_BLACK);
-            _pTarget->SetRasterOp(RasterOp::Invert);
-            _pTarget->DrawRect(aRect);
-            _pTarget->Pop();
+            rTarget.Push(PushFlags::LINECOLOR|PushFlags::FILLCOLOR|PushFlags::RASTEROP);
+            rTarget.SetLineColor();
+            rTarget.SetFillColor(COL_BLACK);
+            rTarget.SetRasterOp(RasterOp::Invert);
+            rTarget.DrawRect(aRect);
+            rTarget.Pop();
         }
     }
 }

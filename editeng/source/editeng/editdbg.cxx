@@ -21,6 +21,7 @@
 #include <memory>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/window.hxx>
 
 #include <editeng/lspcitem.hxx>
 #include <editeng/lrspitem.hxx>

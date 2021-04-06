@@ -3857,7 +3857,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
     tools::Rectangle aClipRect( pView->GetOutputArea() );
     aClipRect.Intersection( rRect );
 
-    OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pView->GetWindow();
+    OutputDevice& rTarget = pTargetDevice ? *pTargetDevice : pView->GetOutputDevice();
 
     Point aStartPos;
     if ( !IsVertical() )
@@ -3895,18 +3895,18 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
             aClipRect.SetRight( nMaxX );
     }
 
-    bool bClipRegion = pTarget->IsClipRegion();
-    vcl::Region aOldRegion = pTarget->GetClipRegion();
-    pTarget->IntersectClipRegion( aClipRect );
+    bool bClipRegion = rTarget.IsClipRegion();
+    vcl::Region aOldRegion = rTarget.GetClipRegion();
+    rTarget.IntersectClipRegion( aClipRect );
 
-    Paint( pTarget, aClipRect, aStartPos );
+    Paint( &rTarget, aClipRect, aStartPos );
 
     if ( bClipRegion )
-        pTarget->SetClipRegion( aOldRegion );
+        rTarget.SetClipRegion( aOldRegion );
     else
-        pTarget->SetClipRegion();
+        rTarget.SetClipRegion();
 
-    pView->DrawSelectionXOR(pView->GetEditSelection(), nullptr, pTarget);
+    pView->DrawSelectionXOR(pView->GetEditSelection(), nullptr, &rTarget);
 }
 
 void ImpEditEngine::InsertContent( ContentNode* pNode, sal_Int32 nPos )
