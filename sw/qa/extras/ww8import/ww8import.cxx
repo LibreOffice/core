@@ -245,6 +245,10 @@ DECLARE_WW8IMPORT_TEST(testTdf122425_1, "tdf122425_1.doc")
             CPPUNIT_ASSERT(!pBox->GetLine(eLine));
         }
     }
+
+    //tdf#139495: without the fix, a negative number was converted into a uInt16, overflowing to 115501
+    auto nDist = getProperty<sal_uInt32>(getStyles("PageStyles")->getByName("Standard"), "HeaderBodyDistance");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), nDist);
 }
 
 DECLARE_WW8IMPORT_TEST(testTdf110987, "tdf110987")
