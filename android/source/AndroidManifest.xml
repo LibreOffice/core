@@ -110,23 +110,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Document Provider Settings Activity -->
-        <activity android:name=".storage.DocumentProviderSettingsActivity"
-                  android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-                  android:label="@string/storage_provider_settings">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".storage.external.BrowserSelectorActivity" >
-        </activity>
-
-        <activity android:name=".storage.external.DirectoryBrowserActivity"
-            android:label="@string/directory_browser_label"
-            android:windowSoftInputMode="stateHidden">
-        </activity>
-
         <activity android:name=".PresentationActivity"
             android:screenOrientation="landscape" >
             <meta-data

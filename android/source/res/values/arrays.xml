@@ -1,47 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer-array name="FilterTypeValues">
-        <item >-1</item>
-        <item >0</item>
-        <item >1</item>
-        <item >2</item>
-    </integer-array>
-    <string-array name="FilterTypeStringValues">
-        <item >-1</item>
-        <item >0</item>
-        <item >1</item>
-        <item >2</item>
-        <item >3</item>
-    </string-array>
     <string-array name="SupportedLanguagesValues">
         <item>SYSTEM_DEFAULT_LANGUAGE</item>
         <item >de</item>
         <item >en</item>
         <item >tr</item>
-    </string-array>
-    <string-array name="SortModeStringValues">
-        <item >0</item>
-        <item >1</item>
-        <item >2</item>
-        <item >3</item>
-        <item >4</item>
-        <item >5</item>
-    </string-array>
-    <!-- View Mode names,values -->
-    <string-array name="ViewModeNames">
-        <item >@string/grid_view</item>
-        <item >@string/list_view</item>
-    </string-array>
-    <string-array name="ViewModeStringValues">
-        <item >0</item>
-        <item >1</item>
-    </string-array>
-    <string-array name="FilterTypeNames">
-        <item>@string/filter_everything</item>
-        <item>@string/filter_documents</item>
-        <item>@string/filter_spreadsheets</item>
-        <item>@string/filter_presentations</item>
-        <item>@string/filter_drawings</item>
     </string-array>
     <string-array name="SupportedLanguages">
         <item>(System Default)</item>
@@ -49,14 +12,4 @@
         <item>English</item>
         <item>Turkçe</item>
     </string-array>
-    <string-array name="SortModeNames">
-        <item >@string/sort_az</item>
-        <item >@string/sort_za</item>
-        <item >@string/sort_oldest</item>
-        <item >@string/sort_newest</item>
-        <item >@string/sort_largest</item>
-        <item >@string/sort_smallest</item>
-    </string-array>
-
-
 </resources>

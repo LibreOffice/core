@@ -8,17 +8,9 @@
  */
 package org.libreoffice.ui;
 
-import org.libreoffice.storage.IFile;
-
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
-import java.text.Collator;
 import java.util.Map;
-import java.util.Collections;
-import java.util.List;
 import java.util.HashMap;
-import java.util.Comparator;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -40,17 +32,6 @@ public class FileUtilities {
     static final int DRAWING = 3;
 
     static final int UNKNOWN = 10;
-
-    static final int SORT_AZ = 0;
-    static final int SORT_ZA = 1;
-    /** Oldest Files First*/
-    static final int SORT_OLDEST = 2;
-    /** Newest Files First*/
-    static final int SORT_NEWEST = 3;
-    /** Largest Files First */
-    static final int SORT_LARGEST = 4;
-    /** Smallest Files First */
-    static final int SORT_SMALLEST = 5;
 
     public static final String DEFAULT_WRITER_EXTENSION = ".odt";
     public static final String DEFAULT_IMPRESS_EXTENSION = ".odp";
@@ -183,101 +164,12 @@ public class FileUtilities {
         return true;
     }
 
-    static FileFilter getFileFilter(final int mode) {
-        return new FileFilter() {
-            public boolean accept(File pathname) {
-                if (pathname.isDirectory())
-                    return true;
-                if (lookupExtension(pathname.getName()) == UNKNOWN)
-                    return false;
-                return doAccept(pathname.getName(), mode, "");
-            }
-        };
-    }
-
-    static FilenameFilter getFilenameFilter(final int mode) {
-        return new FilenameFilter() {
-            public boolean accept(File dir, String filename) {
-                if (new File(dir , filename).isDirectory())
-                    return true;
-                return doAccept(filename, mode, "");
-            }
-        };
-    }
-
-    static void sortFiles(List<IFile> files, int sortMode) {
-        if (files == null)
-            return;
-        // Compare filenames in the default locale
-        final Collator mCollator = Collator.getInstance();
-        switch (sortMode) {
-            case SORT_AZ:
-                Collections.sort(files , new Comparator<IFile>() {
-                    public int compare(IFile lhs, IFile rhs) {
-                        return mCollator.compare(lhs.getName(), rhs.getName());
-                    }
-                });
-                break;
-            case SORT_ZA:
-                Collections.sort(files , new Comparator<IFile>() {
-                    public int compare(IFile lhs, IFile rhs) {
-                        return mCollator.compare(rhs.getName(), lhs.getName());
-                    }
-                });
-                break;
-            case SORT_OLDEST:
-                Collections.sort(files , new Comparator<IFile>() {
-                    public int compare(IFile lhs, IFile rhs) {
-                        return lhs.getLastModified().compareTo(rhs.getLastModified());
-                    }
-                });
-                break;
-            case SORT_NEWEST:
-                Collections.sort(files , new Comparator<IFile>() {
-                    public int compare(IFile lhs, IFile rhs) {
-                        return rhs.getLastModified().compareTo(lhs.getLastModified());
-                    }
-                });
-                break;
-            case SORT_LARGEST:
-                Collections.sort(files , new Comparator<IFile>() {
-                    public int compare(IFile lhs, IFile rhs) {
-                        return Long.valueOf(rhs.getSize()).compareTo(lhs.getSize());
-                    }
-                });
-                break;
-            case SORT_SMALLEST:
-                Collections.sort(files , new Comparator<IFile>() {
-                    public int compare(IFile lhs, IFile rhs) {
-                        return Long.valueOf(lhs.getSize()).compareTo(rhs.getSize());
-                    }
-                });
-                break;
-            default:
-                Log.e(LOGTAG, "uncatched sortMode: " + sortMode);
-        }
-    }
-
     static boolean isHidden(File file) {
         return file.getName().startsWith(".");
     }
 
     static boolean isThumbnail(File file) {
         return isHidden(file) && file.getName().endsWith(".png");
-    }
-
-    static boolean hasThumbnail(File file) {
-        String filename = file.getName();
-        if (lookupExtension(filename) == DOC) // only do this for docs for now
-        {
-            // Will need another method to check if Thumb is up-to-date - or extend this one?
-            return new File(file.getParent(), getThumbnailName(file)).isFile();
-        }
-        return true;
-    }
-
-    static String getThumbnailName(File file) {
-        return "." + file.getName().split("[.]")[0] + ".png" ;
     }
 
     /**

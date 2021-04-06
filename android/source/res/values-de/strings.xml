@@ -21,67 +21,25 @@
     <string name="new_drawing">Neue Zeichnung</string>
     <string name="default_document_name">unbenannt</string>
 
-    <string name="system_file_selector">System-Dateidialog</string>
     <string name="select_file_to_open">Datei zum Öffnen auswählen</string>
 
     <string name="browser_app_name">LibreOffice Browser</string>
     <string name="menu_search">Suchen</string>
-    <string name="list_view">Liste</string>
-    <string name="grid_view">Gitter</string>
     <string name="filter">Filtern nach</string>
     <string name="search_not_found">Suchbegriff nicht gefunden</string>
-    <string name="sort">Sortieren nach</string>
-    <string name="sort_smallest">Kleinste zuerst</string>
-    <string name="sort_largest">Größte zuerst</string>
-    <string name="sort_az">A-Z</string>
-    <string name="sort_za">Z-A</string>
-    <string name="sort_oldest">Älteste zuerst</string>
-    <string name="sort_newest">Neueste zuerst</string>
-    <string name="menu_sort_size">Nach Größe sortieren</string>
-    <string name="menu_sort_az">Von A bis Z sortieren</string>
-    <string name="menu_sort_modified">Nach Datum sortieren</string>
     <string name="menu_preferences">Einstellungen</string>
     <string name="file_icon_desc">Datei-Icon</string>
     <string name="title_recents">Zuletzt verwendete Dateien</string>
     <string name="title_browser">Alle Dateien</string>
-    <!-- Pref keys as resources ; Not currently used -->
-    <string name="EXPLORER_VIEW_TYPE_KEY">EXPLORER_VIEW_TYPE</string>
-    <string name="CURRENT_DIRECTORY_KEY">CURRENT_DIRECTORY</string>
-    <string name="pref_category_explorer">Dateimanager-Einstellungen</string>
     <string name="pref_category_general">Allgemein</string>
     <string name="pref_experimental_editing">Experimenteller Modus</string>
     <string name="pref_experimental_editing_summary">Den experimentellen Editier-Modus aktivieren. Verwendung auf eigene Gefahr.</string>
-    <string name="pref_show_hidden_files">Versteckte Dateien/Ordner</string>
-    <string name="pref_show_hidden_files_summary">Anzeige versteckter Dateien/Ordner aktivieren</string>
     <string name="pref_developer_mode">Entwickler-Modus</string>
     <string name="pref_developer_mode_summary">Entwickler-Modus, in dem in der App UNO-Kommandos gesendet werden können. Verwendung auf eigene Gefahr.</string>
 
     <string name="action_about">Info</string>
     <string name="action_parts">Abschnitte</string>
     <string name="action_settings">Einstellungen</string>
-    <string name="open">Öffnen</string>
-    <string name="share">Teilen</string>
-    <string name="share_via">Teilen via</string>
-
-    <!-- Document browser filters -->
-    <string name="filter_everything">Alles</string>
-    <string name="filter_documents">Dokumente</string>
-    <string name="filter_spreadsheets">Tabellendokumente</string>
-    <string name="filter_presentations">Präsentationen</string>
-    <string name="filter_drawings">Zeichnungen</string>
-
-    <!-- Document provider names -->
-    <string name="document_locations">Dokumentenorte</string>
-    <string name="close_document_locations">Dokumentenorte schließen</string>
-    <string name="local_documents">Dokumentenverzeichnis</string>
-    <string name="local_file_system">Lokales Dateisystem</string>
-    <string name="external_sd_file_system">Externe SD</string>
-    <string name="otg_file_system">OTG-Gerät (experimentell)</string>
-    <string name="usb_connected_configure">USB verbunden, richten Sie Ihr Gerät ein.</string>
-
-    <string name="ext_document_provider_error">Ungültige Wurzel-Datei. Prüfen Sie die SD-Karten-Einstellungen.</string>
-    <string name="legacy_extsd_missing_error">Ungültige Wurzel-Datei. Prüfen Sie die externe SD-Karte und/oder die Einstellungen</string>
-    <string name="otg_missing_error">Ungültige Wurzel-Datei. Prüfen Sie Ihr OTG-Gerät und/oder die Einstellungen.</string>
 
     <!-- Edit action names -->
     <string name="action_bold">Fett</string>
@@ -100,24 +58,9 @@
     <string name="message_save_incomplete">Speichern unvollständig. Gab es Änderungen?</string>
     <string name="message_saving_failed">Speichern des Dokuments ist fehlgeschlagen.</string>
 
-    <!-- Document provider settings -->
-    <string name="storage_provider_settings">Speicheranbieter-Einstellungen</string>
-    <string name="physical_storage_settings">Einstellungen für physikalischen Speicher</string>
-    <string name="external_sd_path">Pfad zur externen SD-Karte</string>
-    <string name="otg_device_path">Pfad zum OTG-Gerät</string>
-    <string name="otg_warning">Experimentelles Feature: Nur verwenden, wenn OTG-Gerät beschreibbar ist.</string>
     <string name="password">Passwort</string>
     <string name="action_undo">Rückgängig</string>
     <string name="action_redo">Wiederherstellen</string>
-
-    <!-- Directory browser strings -->
-    <string name="up_description">Nach oben</string>
-    <string name="confirm_label">Bestätigen</string>
-    <string name="cancel_label">Abbrechen</string>
-    <string name="search_label">Los</string>
-    <string name="directory_browser_label">Verzeichnis auswählen</string>
-    <string name="bad_directory">Ungültiger Verzeichnispfad</string>
-    <string name="current_dir">Aktuelles Verzeichnis: %1$s</string>
 
     <!-- Save Alert dialog strings -->
     <string name="save_alert_dialog_title">Dokument vor dem Schließen speichern?</string>
@@ -207,12 +150,6 @@
     <string name="alert_cancel">Abbrechen</string>
     <string name="unable_to_go_further">Kann nicht weiter gehen.</string>
     <string name="current_uno_command">Aktuelles UNO-Kommando</string>
-    <string name="pref_sort_summary">Sortiermodus für Dateien auswählen: A-Z, nach Größe oder nach Datum.</string>
-    <string name="pref_viewmode_summary">Dateien als Gitter oder als Liste anzeigen.</string>
-    <string name="pref_file_explorer_title">Dateimanager-Layout</string>
-    <string name="pref_sort_title">Datei-Reihenfolge</string>
-    <string name="pref_filter_title">Standard-Dateifilter</string>
-    <string name="pref_filter_summary">Wählen Sie, welcher Dateifilter standardmäßig verwendet werden soll.</string>
     <string name="display_language">Anzeigesprache</string>
     <string name="display_language_summary">Wählen Sie die Standard-Anzeigesprache</string>
     <string name="unable_to_export_pdf">PDF-Export nicht möglich</string>
