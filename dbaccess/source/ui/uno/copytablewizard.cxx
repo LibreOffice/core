@@ -21,6 +21,7 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <core_resource.hxx>
+
 #include <WCopyTable.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -1354,6 +1355,60 @@ void CopyTableWizard::impl_doCopy_nothrow()
 
                 if ( xSourceResultSet.is() )
                     impl_copyRows_throw( xSourceResultSet, xTable );
+
+                // tdf#119962
+                const Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_SET_THROW );
+                const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, xTable, ::dbtools::EComposeRule::InDataManipulation, true );
+
+                OUString aSchema,aTable;
+                xTable->getPropertyValue("SchemaName") >>= aSchema;
+                xTable->getPropertyValue("Name")       >>= aTable;
+                Any aCatalog = xTable->getPropertyValue("CatalogName");
+
+                const Reference< XResultSet > xResultPKCL(xDestMetaData->getPrimaryKeys(aCatalog,aSchema,aTable));
+                Reference< XRow > xRowPKCL(xResultPKCL, UNO_QUERY_THROW);
+                OUString sPKCL;
+                if ( xRowPKCL.is() )
+                {
+                    if (xResultPKCL->next())
+                    {
+                        sPKCL = xRowPKCL->getString(4);
+                    }
+                }
+
+                if (!sPKCL.isEmpty())
+                {
+                    OUStringBuffer aSqlBuff("SELECT MAX(\"");
+                    aSqlBuff.append(sPKCL);
+                    aSqlBuff.append("\") FROM ");
+                    aSqlBuff.append(sComposedTableName);
+                    OUString strSql = aSqlBuff.makeStringAndClear();
+
+                    Reference< XResultSet > xResultMAXNUM(m_xDestConnection->createStatement()->executeQuery(strSql));
+                    Reference< XRow > xRow(xResultMAXNUM, UNO_QUERY_THROW);
+
+                    sal_Int64 maxVal = -1L;
+                    if ( xResultMAXNUM.is() )
+                    {
+                        if (xResultMAXNUM->next())
+                        {
+                            maxVal = xRow->getLong(1);
+                        }
+                    }
+
+                    if (maxVal > 0L)
+                    {
+                        aSqlBuff.append("ALTER TABLE ");
+                        aSqlBuff.append(sComposedTableName);
+                        aSqlBuff.append(" ALTER \"");
+                        aSqlBuff.append(sPKCL);
+                        aSqlBuff.append("\" RESTART WITH ");
+                        aSqlBuff.append(maxVal);
+                        strSql = aSqlBuff.makeStringAndClear();
+
+                        m_xDestConnection->createStatement()->execute(strSql);
+                    }
+                }
             }
             break;
 
