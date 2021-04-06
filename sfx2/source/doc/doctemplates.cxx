@@ -2759,4 +2759,12 @@ OUString DocTemplLocaleHelper::GetStandardGroupString()
     return SfxResId(TEMPLATE_LONG_NAMES_ARY[0]);
 }
 
+std::vector<OUString> DocTemplLocaleHelper::GetBuiltInGroupNames()
+{
+    std::vector<OUString> aGroups;
+    for(auto aGroupName : TEMPLATE_LONG_NAMES_ARY)
+        aGroups.push_back(SfxResId(aGroupName));
+    return aGroups;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
