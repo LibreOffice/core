@@ -142,6 +142,10 @@ class ScriptForge(object, metaclass = _Singleton):
         # Establish a list of the available services as a dictionary (servicename, serviceclass)
         ScriptForge.serviceslist = dict((cls.servicename, cls) for cls in SFServices.__subclasses__())
         ScriptForge.servicesdispatcher = None
+        #
+        # All properties and methods of the ScriptForge API are ProperCased
+        # Compute their synonyms as lowercased and camelCased names
+        ScriptForge.SetAttributeSynonyms()
 
     @classmethod
     def ConnectToLOProcess(cls, hostname = '', port = 0):
@@ -314,6 +318,47 @@ class ScriptForge(object, metaclass = _Singleton):
             pass
         return returntuple[cstValue]
 
+    @staticmethod
+    def SetAttributeSynonyms():
+        """
+            A synonym of an attribute is either the lowercase or the camelCase form of its original ProperCase name.
+            In every subclass of SFServices:
+            1) Fill the propertysynonyms dictionary with the synonyms of the properties listed in serviceproperties
+                Example:
+                     serviceproperties = dict(ConfigFolder = False, InstallFolder = False)
+                     propertysynonyms = dict(configfolder = 'ConfigFolder', installfolder = 'InstallFolder',
+                                             configFolder = 'ConfigFolder', installFolder = 'InstallFolder')
+            2) Define new method attributes synonyms of the original methods
+                Example:
+                    def CopyFile(...):
+                        # etc ...
+                    copyFile, copyfile = CopyFile, CopyFile
+            """
+        def camelCase(key):
+            return key[0].lower() + key[1:]
+
+        for cls in SFServices.__subclasses__():
+            # Synonyms of properties
+            if hasattr(cls, 'serviceproperties'):
+                dico = cls.serviceproperties
+                dicosyn = dict(zip(map(str.lower, dico.keys()), dico.keys()))   # lower case
+                cc = dict(zip(map(camelCase, dico.keys()), dico.keys()))        # camel Case
+                dicosyn.update(cc)
+                setattr(cls, 'propertysynonyms', dicosyn)
+            # Synonyms of methods. A method is a public callable attribute
+            methods = [method for method in dir(cls) if not method.startswith('_')]
+            for method in methods:
+                func = getattr(cls, method)
+                if callable(func):
+                    # Assign the synonymes to the original method
+                    m = method.lower()
+                    if hasattr(cls, m) is False:
+                        setattr(cls, m, func)
+                    m = camelCase(method)
+                    if hasattr(cls, m) is False:
+                        setattr(cls, m, func)
+        return True
+
 
 # #####################################################################################################################
 #                           SFServices CLASS    (ScriptForge services superclass)                                   ###
@@ -433,11 +478,11 @@ class SFServices(object):
                     if name in self.__dict__:
                         return self.__dict__[name]
                     else:
-                        # Get Property from Basic
+                        # Get Property from Basic and store it
                         prop = self.GetProperty(name)
                         self.__dict__[name] = prop
                         return prop
-                else:
+                else:   # Get Property from Basic and do not store it
                     return self.GetProperty(name)
         # Execute the usual attributes getter
         return super(SFServices, self).__getattribute__(name)
@@ -449,7 +494,8 @@ class SFServices(object):
             Management of __dict__ is automatically done in the final usual object.__setattr__ method
             """
         if self.serviceimplementation == 'basic':
-            if name in ('serviceproperties', 'localProperties', 'internal_attributes', 'propertysynonyms'):
+            if name in ('serviceproperties', 'localProperties', 'internal_attributes', 'propertysynonyms',
+                        'forceGetProperty'):
                 pass
             elif name[0:2] == '__' or name in self.internal_attributes or name in self.localProperties:
                 pass
@@ -460,6 +506,7 @@ class SFServices(object):
                     pass
                 elif self.serviceproperties[name] is True:  # True == Editable
                     self.SetProperty(name, value)
+                    return
                 else:
                     raise AttributeError(
                         "type object '" + self.objecttype + "' has no editable property '" + name + "'")
@@ -472,30 +519,11 @@ class SFServices(object):
         return self.serviceimplementation + '/' + self.servicename + '/' + str(self.objectreference) + '/' + \
                super(SFServices, self).__repr__()
 
-    @staticmethod
-    def _getAttributeSynonyms(dico):
-        """
-            Returns a dictionary with key = name in lower case and in camelCase, value = real ProperCased name
-            Example:
-                 d = dict(ConfigFolder = False, InstallFolder = False)
-                 dh = _getHomonyms(d)
-                    # dh == dict(configfolder = 'ConfigFolder', installfolder = 'InstallFolder',
-                                 configFolder = 'ConfigFolder', installFolder = 'InstallFolder')
-            """
-        def camelCase(key):
-            return key[0].lower() + key[1:]
-
-        lc = dict(zip(map(str.casefold, dico.keys()), dico.keys()))
-        cc = dict(zip(map(camelCase, dico.keys()), dico.keys()))
-        lc.update(cc)
-        return lc
-
     def Dispose(self):
         if self.serviceimplementation == 'basic':
             if self.objectreference >= len(ScriptForge.servicesmodules):    # Do not dispose predefined module objects
                 self.Execute(self.vbMethod, 'Dispose')
                 self.objectreference = -1
-    dispose = Dispose
 
     def Execute(self, flags = 0, methodname = '', *args):
         if flags == 0:
@@ -515,11 +543,9 @@ class SFServices(object):
             else:   # There are a few cases (Calc ...) where GetProperty accepts an argument
                 return self.EXEC(self.objectreference, calltype, propertyname, arg)
         return None
-    getProperty, getproperty = GetProperty, GetProperty
 
     def Properties(self):
         return list(self.serviceproperties)
-    properties = Properties
 
     def SetProperty(self, propertyname, value):
         """
@@ -527,7 +553,6 @@ class SFServices(object):
             """
         if self.serviceimplementation == 'basic':
             return self.EXEC(self.objectreference, self.vbLet, propertyname, value)
-    setProperty, setproperty = SetProperty, SetProperty
 
 
 # #####################################################################################################################
@@ -551,7 +576,6 @@ class SFScriptForge:
         servicename = 'ScriptForge.Array'
         servicesynonyms = ('array', 'scriptforge.array')
         serviceproperties = dict()
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
         def ImportFromCSVFile(self, filename, delimiter = ',', dateformat = ''):
             """
@@ -559,7 +583,6 @@ class SFScriptForge:
                 not as any of the datetime objects.
                 """
             return self.Execute(self.vbMethod + self.flgArrayRet, 'ImportFromCSVFile', filename, delimiter, dateformat)
-        importFromCSVFile, importfromcsvfile = ImportFromCSVFile, ImportFromCSVFile
 
     # #########################################################################
     # SF_Basic CLASS
@@ -588,22 +611,18 @@ class SFScriptForge:
 
         def ConvertFromUrl(self, url):
             return self.SIMPLEEXEC(self.module + '.PyConvertFromUrl', url)
-        convertFromUrl, convertfromurl = ConvertFromUrl, ConvertFromUrl
 
         def ConvertToUrl(self, systempath):
             return self.SIMPLEEXEC(self.module + '.PyConvertToUrl', systempath)
-        convertToUrl, converttourl = ConvertToUrl, ConvertToUrl
 
         def CreateUnoService(self, servicename):
             return self.SIMPLEEXEC(self.module + '.PyCreateUnoService', servicename)
-        createUnoService, createunoservice = CreateUnoService, CreateUnoService
 
         def DateAdd(self, interval, number, date):
             if isinstance(date, datetime.datetime):
                 date = date.isoformat()
             dateadd = self.SIMPLEEXEC(self.module + '.PyDateAdd', interval, number, date)
             return datetime.datetime.fromisoformat(dateadd)
-        dateAdd, dateadd = DateAdd, DateAdd
 
         def DateDiff(self, interval, date1, date2, firstdayofweek = 1, firstweekofyear = 1):
             if isinstance(date1, datetime.datetime):
@@ -611,26 +630,22 @@ class SFScriptForge:
             if isinstance(date2, datetime.datetime):
                 date2 = date2.isoformat()
             return self.SIMPLEEXEC(self.module + '.PyDateDiff', interval, date1, date2, firstdayofweek, firstweekofyear)
-        dateDiff, datediff = DateDiff, DateDiff
 
         def DatePart(self, interval, date, firstdayofweek = 1, firstweekofyear = 1):
             if isinstance(date, datetime.datetime):
                 date = date.isoformat()
             return self.SIMPLEEXEC(self.module + '.PyDatePart', interval, date, firstdayofweek, firstweekofyear)
-        datePart, datepart = DatePart, DatePart
 
         def DateValue(self, string):
             if isinstance(string, datetime.datetime):
                 string = string.isoformat()
             datevalue = self.SIMPLEEXEC(self.module + '.PyDateValue', string)
             return datetime.datetime.fromisoformat(datevalue)
-        dateValue, datevalue = DateValue, DateValue
 
         def Format(self, expression, format = ''):
             if isinstance(expression, datetime.datetime):
                 expression = expression.isoformat()
             return self.SIMPLEEXEC(self.module + '.PyFormat', expression, format)
-        format = Format
 
         @staticmethod
         def GetDefaultContext():
@@ -639,11 +654,9 @@ class SFScriptForge:
 
         def GetGuiType(self):
             return self.SIMPLEEXEC(self.module + '.PyGetGuiType')
-        getGuiType, getguitype = GetGuiType, GetGuiType
 
         def GetSystemTicks(self):
             return self.SIMPLEEXEC(self.module + '.PyGetSystemTicks')
-        getSystemTicks, getsystemticks = GetSystemTicks, GetSystemTicks
 
         @staticmethod
         def GetPathSeparator():
@@ -663,11 +676,9 @@ class SFScriptForge:
             if xpostwips < 0 or ypostwips < 0:
                 return self.SIMPLEEXEC(self.module + '.PyInputBox', prompt, title, default)
             return self.SIMPLEEXEC(self.module + '.PyInputBox', prompt, title, default, xpostwips, ypostwips)
-        inputBox, inputbox = InputBox, InputBox
 
         def MsgBox(self, prompt, buttons = 0, title = ''):
             return self.SIMPLEEXEC(self.module + '.PyMsgBox', prompt, buttons, title)
-        msgBox, msgbox = MsgBox, MsgBox
 
         @staticmethod
         def Now():
@@ -692,7 +703,6 @@ class SFScriptForge:
 
         def Xray(self, unoobject = None):
             return self.SIMPLEEXEC('XrayTool._main.xray', unoobject)
-        xray = Xray
 
     # #########################################################################
     # SF_Dictionary CLASS
@@ -782,7 +792,6 @@ class SFScriptForge:
                 pv.Value = item
                 result.append(pv)
             return result
-        convertToPropertyValues, converttopropertyvalues = ConvertToPropertyValues, ConvertToPropertyValues
 
         def ImportFromPropertyValues(self, propertyvalues, overwrite = False):
             """
@@ -808,7 +817,6 @@ class SFScriptForge:
                     result.append((key, item))
             self.update(result)
             return True
-        importFromPropertyValues, importfrompropertyvalues = ImportFromPropertyValues, ImportFromPropertyValues
 
     # #########################################################################
     # SF_Exception CLASS
@@ -829,20 +837,16 @@ class SFScriptForge:
         servicename = 'ScriptForge.Exception'
         servicesynonyms = ('exception', 'scriptforge.exception')
         serviceproperties = dict()
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
         def Console(self, modal = True):
             # Modal is always True in Python: Basic execution lasts only the time to display the box
             return self.Execute(self.vbMethod, 'Console', True)
-        console = Console
 
         def ConsoleClear(self, keep = 0):
             return self.Execute(self.vbMethod, 'ConsoleClear', keep)
-        consoleClear, consoleclear = ConsoleClear, ConsoleClear
 
         def ConsoleToFile(self, filename):
             return self.Execute(self.vbMethod, 'ConsoleToFile', filename)
-        consoleToFile, consoletofile = ConsoleToFile, ConsoleToFile
 
         def DebugDisplay(self, *args):
             # Arguments are concatenated in a single string similar to what the Python print() function would produce
@@ -850,13 +854,11 @@ class SFScriptForge:
             param = '\n'.join(list(map(lambda a: a.strip("'") if isinstance(a, str) else repr(a), args)))
             bas = CreateScriptService('ScriptForge.Basic')
             return bas.MsgBox(param, bas.MB_OK + bas.MB_ICONINFORMATION, 'DebugDisplay')
-        debugDisplay, debugdisplay = DebugDisplay, DebugDisplay
 
         def DebugPrint(self, *args):
             # Arguments are concatenated in a single string similar to what the Python print() function would produce
             param = '\t'.join(list(map(repr, args))).expandtabs(tabsize = 4)
             return self.Execute(self.vbMethod, 'DebugPrint', param)
-        debugPrint, debugprint = DebugPrint, DebugPrint
 
         def RaiseFatal(self, errorcode, *args):
             """
@@ -881,7 +883,6 @@ class SFScriptForge:
         serviceproperties = dict(FileNaming = True, ConfigFolder = False, ExtensionsFolder = False, HomeFolder = False,
                                  InstallFolder = False, TemplatesFolder = False, TemporaryFolder = False,
                                  UserTemplatesFolder = False)
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
         # Force for each property to get its value from Basic - due to FileNaming updatability
         forceGetProperty = True
         # Open TextStream constants
@@ -919,7 +920,6 @@ class SFScriptForge:
 
         def FileExists(self, filename):
             return self.Execute(self.vbMethod, 'FileExists', filename)
-        fileexists, fileExists = FileExists, FileExists
 
         def Files(self, foldername, filter = ''):
             return self.Execute(self.vbMethod, 'Files', foldername, filter)
@@ -999,19 +999,16 @@ class SFScriptForge:
         servicename = 'ScriptForge.L10N'
         servicesynonyms = ()
         serviceproperties = dict(Folder = False, Languages = False, Locale = False)
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
         def AddText(self, context = '', msgid = '', comment = ''):
             return self.Execute(self.vbMethod, 'AddText', context, msgid, comment)
-        addText, addtext = AddText, AddText
 
         def ExportToPOTFile(self, filename, header = '', encoding= 'UTF-8'):
             return self.Execute(self.vbMethod, 'ExportToPOTFile', filename, header, encoding)
-        exportToPOTFile, exporttopotfile = ExportToPOTFile, ExportToPOTFile
 
         def GetText(self, msgid, *args):
             return self.Execute(self.vbMethod, 'GetText', msgid, *args)
-        _, gettext, getText = GetText, GetText, GetText
+        _ = GetText
 
     # #########################################################################
     # SF_Platform CLASS
@@ -1034,59 +1031,48 @@ class SFScriptForge:
         serviceproperties = dict(Architecture = False, ComputerName = False, CPUCount = False, CurrentUser = False,
                                  Locale = False, Machine = False, OfficeVersion = False, OSName = False,
                                  OSPlatform = False, OSRelease = False, OSVersion = False, Processor = False)
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
         # Python helper functions
         py = ScriptForge.pythonhelpermodule + '$' + '_SF_Platform'
 
         @property
         def Architecture(self):
             return self.SIMPLEEXEC(self.py, 'Architecture')
-        architecture = Architecture
 
         @property
         def ComputerName(self):
             return self.SIMPLEEXEC(self.py, 'ComputerName')
-        computerName, computername = ComputerName, ComputerName
 
         @property
         def CPUCount(self):
             return self.SIMPLEEXEC(self.py, 'CPUCount')
-        cpuCount, cpucount = CPUCount, CPUCount
 
         @property
         def CurrentUser(self):
             return self.SIMPLEEXEC(self.py, 'CurrentUser')
-        currentUser, currentuser = CurrentUser, CurrentUser
 
         @property
         def Machine(self):
             return self.SIMPLEEXEC(self.py, 'Machine')
-        machine = Machine
 
         @property
         def OSName(self):
             return self.SIMPLEEXEC(self.py, 'OSName')
-        osName, osname = OSName, OSName
 
         @property
         def OSPlatform(self):
             return self.SIMPLEEXEC(self.py, 'OSPlatform')
-        osPlatform, osplatform = OSPlatform, OSPlatform
 
         @property
         def OSRelease(self):
             return self.SIMPLEEXEC(self.py, 'OSRelease')
-        osRelease, osrelease = OSRelease, OSRelease
 
         @property
         def OSVersion(self):
             return self.SIMPLEEXEC(self.py, 'OSVersion')
-        osVersion, osversion = OSVersion, OSVersion
 
         @property
         def Processor(self):
             return self.SIMPLEEXEC(self.py, 'Processor')
-        processor = Processor
 
     # #########################################################################
     # SF_Session CLASS
@@ -1102,7 +1088,6 @@ class SFScriptForge:
         servicename = 'ScriptForge.Session'
         servicesynonyms = ('session', 'scriptforge.session')
         serviceproperties = dict()
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
         # Class constants                       Where to find an invoked library ?
         SCRIPTISEMBEDDED = 'document'           # in the document
@@ -1122,7 +1107,6 @@ class SFScriptForge:
                 args = (scope,) + (script,) + args
             # ExecuteBasicScript method has a ParamArray parameter in Basic
             return self.SIMPLEEXEC('@SF_Session.ExecuteBasicScript', args)
-        executeBasicScript, executebasicscript = ExecuteBasicScript, ExecuteBasicScript
 
         def ExecuteCalcFunction(self, calcfunction, *args):
             if len(args) == 0:
@@ -1132,48 +1116,37 @@ class SFScriptForge:
                 args = (calcfunction,) + args
             # ExecuteCalcFunction method has a ParamArray parameter in Basic
             return self.SIMPLEEXEC('@SF_Session.ExecuteCalcFunction', args)
-        executeCalcFunction, executecalcfunction = ExecuteCalcFunction, ExecuteCalcFunction
 
         def ExecutePythonScript(self, scope = '', script = '', *args):
             return self.SIMPLEEXEC(scope + ':' + script, *args)
-        executePythonScript, executepythonscript = ExecutePythonScript, ExecutePythonScript
 
         def HasUnoMethod(self, unoobject, methodname):
             return self.Execute(self.vbMethod, 'HasUnoMethod', unoobject, methodname)
-        hasUnoMethod, hasunomethod = HasUnoMethod, HasUnoMethod
 
         def HasUnoProperty(self, unoobject, propertyname):
             return self.Execute(self.vbMethod, 'HasUnoProperty', unoobject, propertyname)
-        hasUnoProperty, hasunoproperty = HasUnoProperty, HasUnoProperty
 
         def OpenURLInBrowser(self, url):
             py = ScriptForge.pythonhelpermodule + '$' + '_SF_Session__OpenURLInBrowser'
             return self.SIMPLEEXEC(py, url)
-        openURLInBrowser, openurlinbrowser = OpenURLInBrowser, OpenURLInBrowser
 
         def RunApplication(self, command, parameters):
             return self.Execute(self.vbMethod, 'RunApplication', command, parameters)
-        runApplication, runapplication = RunApplication, RunApplication
 
         def SendMail(self, recipient, cc = '', bcc = '', subject = '', body = '', filenames = '', editmessage = True):
             return self.Execute(self.vbMethod, 'SendMail', recipient, cc, bcc, subject, body, filenames, editmessage)
-        sendMail, sendmail = SendMail, SendMail
 
         def UnoObjectType(self, unoobject):
             return self.Execute(self.vbMethod, 'UnoObjectType', unoobject)
-        unoObjectType, unoobjecttype = UnoObjectType, UnoObjectType
 
         def UnoMethods(self, unoobject):
             return self.Execute(self.vbMethod, 'UnoMethods', unoobject)
-        unoMethods, unomethods = UnoMethods, UnoMethods
 
         def UnoProperties(self, unoobject):
             return self.Execute(self.vbMethod, 'UnoProperties', unoobject)
-        unoProperties, unoproperties = UnoProperties, UnoProperties
 
         def WebService(self, uri):
             return self.Execute(self.vbMethod, 'WebService', uri)
-        webService, webservice = WebService, WebService
 
     # #########################################################################
     # SF_String CLASS
@@ -1189,52 +1162,40 @@ class SFScriptForge:
         servicename = 'ScriptForge.String'
         servicesynonyms = ('string', 'scriptforge.string')
         serviceproperties = dict()
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
         def HashStr(self, inputstr, algorithm):
             py = ScriptForge.pythonhelpermodule + '$' + '_SF_String__HashStr'
             return self.SIMPLEEXEC(py, inputstr, algorithm.lower())
-        hashStr, hashstr = HashStr, HashStr
 
         def IsADate(self, inputstr, dateformat = 'YYYY-MM-DD'):
             return self.Execute(self.vbMethod, 'IsADate', inputstr, dateformat)
-        isADate, isadate = IsADate, IsADate
 
         def IsEmail(self, inputstr):
             return self.Execute(self.vbMethod, 'IsEmail', inputstr)
-        isEmail, isemail = IsEmail, IsEmail
 
         def IsFileName(self, inputstr, osname = ScriptForge.cstSymEmpty):
             return self.Execute(self.vbMethod, 'IsFileName', inputstr, osname)
-        isFileName, isfilename = IsFileName, IsFileName
 
         def IsIBAN(self, inputstr):
             return self.Execute(self.vbMethod, 'IsIBAN', inputstr)
-        isIBAN, isiban = IsIBAN, IsIBAN
 
         def IsIPv4(self, inputstr):
             return self.Execute(self.vbMethod, 'IsIPv4', inputstr)
-        isIPv4, isipv4 = IsIPv4, IsIPv4
 
         def IsLike(self, inputstr, pattern, casesensitive = False):
             return self.Execute(self.vbMethod, 'IsLike', inputstr, pattern, casesensitive)
-        isLike, islike = IsLike, IsLike
 
         def IsSheetName(self, inputstr):
             return self.Execute(self.vbMethod, 'IsSheetName', inputstr)
-        isSheetName, issheetname = IsSheetName, IsSheetName
 
         def IsUrl(self, inputstr):
             return self.Execute(self.vbMethod, 'IsUrl', inputstr)
-        isUrl, isurl = IsUrl, IsUrl
 
         def SplitNotQuoted(self, inputstr, delimiter = ' ', occurrences = 0, quotechar = '"'):
             return self.Execute(self.vbMethod, 'SplitNotQuoted', inputstr, delimiter, occurrences, quotechar)
-        splitNotQuoted, splitnotquoted = SplitNotQuoted, SplitNotQuoted
 
         def Wrap(self, inputstr, width = 70, tabsize = 8):
             return self.Execute(self.vbMethod, 'Wrap', inputstr, width, tabsize)
-        wrap = Wrap
 
     # #########################################################################
     # SF_TextStream CLASS
@@ -1250,7 +1211,6 @@ class SFScriptForge:
         servicesynonyms = ()
         serviceproperties = dict(AtEndOfStream = False, Encoding = False, FileName = False, IOMode = False,
                                  Line = False, NewLine = True)
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
         @property
         def AtEndOfStream(self):
@@ -1264,27 +1224,21 @@ class SFScriptForge:
 
         def CloseFile(self):
             return self.Execute(self.vbMethod, 'CloseFile')
-        closeFile, closefile = CloseFile, CloseFile
 
         def ReadAll(self):
             return self.Execute(self.vbMethod, 'ReadAll')
-        readAll, readall = ReadAll, ReadAll
 
         def ReadLine(self):
             return self.Execute(self.vbMethod, 'ReadLine')
-        readLine, readline = ReadLine, ReadLine
 
         def SkipLine(self):
             return self.Execute(self.vbMethod, 'SkipLine')
-        skipLine, skipline = SkipLine, SkipLine
 
         def WriteBlankLines(self, lines):
             return self.Execute(self.vbMethod, 'WriteBlankLines', lines)
-        writeBlankLines, writeblanklines = WriteBlankLines, WriteBlankLines
 
         def WriteLine(self, line):
             return self.Execute(self.vbMethod, 'WriteLine', line)
-        writeLine, writeline = WriteLine, WriteLine
 
     # #########################################################################
     # SF_Timer CLASS
@@ -1299,7 +1253,6 @@ class SFScriptForge:
         servicesynonyms = ()
         serviceproperties = dict(Duration = False, IsStarted = False, IsSuspended = False,
                                  SuspendDuration = False, TotalDuration = False)
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
         # Force for each property to get its value from Basic
         forceGetProperty = True
 
@@ -1308,19 +1261,15 @@ class SFScriptForge:
 
         def Restart(self):
             return self.Execute(self.vbMethod, 'Restart')
-        restart = Restart
 
         def Start(self):
             return self.Execute(self.vbMethod, 'Start')
-        start = Start
 
         def Suspend(self):
             return self.Execute(self.vbMethod, 'Suspend')
-        suspend = Suspend
 
         def Terminate(self):
             return self.Execute(self.vbMethod, 'Terminate')
-        terminate = Terminate
 
     # #########################################################################
     # SF_UI CLASS
@@ -1340,7 +1289,6 @@ class SFScriptForge:
         servicename = 'ScriptForge.UI'
         servicesynonyms = ('ui', 'scriptforge.ui')
         serviceproperties = dict(ActiveWindow = False)
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
         # Class constants
         MACROEXECALWAYS, MACROEXECNEVER, MACROEXECNORMAL = 2, 1, 0
@@ -1350,59 +1298,46 @@ class SFScriptForge:
         @property
         def ActiveWindow(self):
             return self.Execute(self.vbMethod, 'ActiveWindow')
-        activeWindow, activewindow = ActiveWindow, ActiveWindow
 
         def Activate(self, windowname = ''):
             return self.Execute(self.vbMethod, 'Activate', windowname)
-        activate = Activate
 
         def CreateBaseDocument(self, filename, embeddeddatabase = 'HSQLDB', registrationname = ''):
             return self.Execute(self.vbMethod, 'CreateBaseDocument', filename, embeddeddatabase, registrationname)
-        createBaseDocument, createbasedocument = CreateBaseDocument, CreateBaseDocument
 
         def CreateDocument(self, documenttype = '', templatefile = '', hidden = False):
             return self.Execute(self.vbMethod, 'CreateDocument', documenttype, templatefile, hidden)
-        createDocument, createdocument = CreateDocument, CreateDocument
 
         def Documents(self):
             return self.Execute(self.vbMethod, 'Documents')
-        documents = Documents
 
         def GetDocument(self, windowname = ''):
             return self.Execute(self.vbMethod, 'GetDocument', windowname)
-        getDocument, getdocument = GetDocument, GetDocument
 
         def Maximize(self, windowname = ''):
             return self.Execute(self.vbMethod, 'Maximize', windowname)
-        maximize = Maximize
 
         def Minimize(self, windowname = ''):
             return self.Execute(self.vbMethod, 'Minimize', windowname)
-        minimize = Minimize
 
         def OpenBaseDocument(self, filename = '', registrationname = '', macroexecution = MACROEXECNORMAL):
             return self.Execute(self.vbMethod, 'OpenBaseDocument', filename, registrationname, macroexecution)
-        openBaseDocument, openbasedocument = OpenBaseDocument, OpenBaseDocument
 
         def OpenDocument(self, filename, password = '', readonly = False, hidden = False,
                          macroexecution = MACROEXECNORMAL, filtername = '', filteroptions = ''):
             return self.Execute(self.vbMethod, 'OpenDocument', filename, password, readonly, hidden,
                                 macroexecution, filtername, filteroptions)
-        openDocument, opendocument = OpenDocument, OpenDocument
 
         def Resize(self, left = -1, top = -1, width = -1, height = -1):
             return self.Execute(self.vbMethod, 'Resize', left, top, width, height)
-        resize = Resize
 
         def SetStatusbar(self, text = '', percentage = -1):
             return self.Execute(self.vbMethod, 'SetStatusbar', text, percentage)
-        setStatusbar, setstatusbar = SetStatusbar, SetStatusbar
 
         # ShowProgressBar - not supported in Python
 
         def WindowExists(self, windowname):
             return self.Execute(self.vbMethod, 'WindowExists', windowname)
-        windowExists, windowexists = WindowExists, WindowExists
 
 
 # #####################################################################################################################
@@ -1434,42 +1369,33 @@ class SFDocuments:
                                  IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
                                  Keywords = True, Readonly = False, Subject = True, Title = True,
                                  XComponent = False)
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
         @property
         def XComponent(self):
             return self.Execute(self.vbGet + self.flgUno, 'XComponent')
-        xComponent, xcomponent = XComponent, XComponent
 
         def Activate(self):
             return self.Execute(self.vbMethod, 'Activate')
-        activate = Activate
 
         def CloseDocument(self, saveask = True):
             return self.Execute(self.vbMethod, 'CloseDocument', saveask)
-        closeDocument, closedocument = CloseDocument, CloseDocument
 
         def Forms(self, form = ''):
             return self.Execute(self.vbMethod + self.flgArrayRet, 'Forms', form)
-        forms = Forms
 
         def RunCommand(self, command):
             return self.Execute(self.vbMethod, 'RunCommand', command)
-        runCommand, runcommand = RunCommand, RunCommand
 
         def Save(self):
             return self.Execute(self.vbMethod, 'Save')
-        save = Save
 
         def SaveAs(self, filename, overwrite = False, password = '', filtername = '', filteroptions = ''):
             return self.Execute(self.vbMethod, 'SaveAs', filename, overwrite, password, filtername, filteroptions)
-        saveAs, saveas = SaveAs, SaveAs
 
         def SaveCopyAs(self, filename, overwrite = False, password = '', filtername = '', filteroptions = ''):
             return self.Execute(self.vbMethod, 'SaveCopyAs', filename, overwrite, password, filtername, filteroptions)
-        saveCopyAs, savecopyas = SaveCopyAs, SaveCopyAs
 
     # #########################################################################
     # SF_Base CLASS
@@ -1487,7 +1413,6 @@ class SFDocuments:
         serviceproperties = dict(DocumentType = False, IsBase = False, IsCalc = False,
                                  IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
                                  XComponent = False)
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
     # #########################################################################
     # SF_Calc CLASS
@@ -1507,179 +1432,139 @@ class SFDocuments:
                                  IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
                                  Keywords = True, Readonly = False, Subject = True, Title = True,
                                  XComponent = False)
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
         # Next functions are implemented in Basic as read-only properties with 1 argument
         def Height(self, rangename):
             return self.GetProperty('Height', rangename)
-        height = Height
 
         def LastCell(self, sheetname):
             return self.GetProperty('LastCell', sheetname)
-        lastCell, lastcell = LastCell, LastCell
 
         def LastColumn(self, sheetname):
             return self.GetProperty('LastColumn', sheetname)
-        lastColumn, lastcolumn = LastColumn, LastColumn
 
         def LastRow(self, sheetname):
             return self.GetProperty('LastRow', sheetname)
-        lastRow, lastrow = LastRow, LastRow
 
         def Range(self, rangename):
             return self.GetProperty('Range', rangename)
-        range = Range
 
         def Sheet(self, sheetname):
             return self.GetProperty('Sheet', sheetname)
-        sheet = Sheet
 
         def Width(self, rangename):
             return self.GetProperty('Width', rangename)
-        width = Width
 
         def XCellRange(self, rangename):
             return self.Execute(self.vbGet + self.flgUno, 'XCellRange', rangename)
-        xCellRange, xcellrange = XCellRange, XCellRange
 
         def XSpreadsheet(self, sheetname):
             return self.Execute(self.vbGet + self.flgUno, 'XSpreadsheet', sheetname)
-        xSpreadsheet, xspreadsheet = XSpreadsheet, XSpreadsheet
 
         # Usual methods
         def Activate(self, sheetname = ''):
             return self.Execute(self.vbMethod, 'Activate', sheetname)
-        activate = Activate
 
         def ClearAll(self, range):
             return self.Execute(self.vbMethod, 'ClearAll', range)
-        clearAll, clearall = ClearAll, ClearAll
 
         def ClearFormats(self, range):
             return self.Execute(self.vbMethod, 'ClearFormats', range)
-        clearFormats, clearformats = ClearFormats, ClearFormats
 
         def ClearValues(self, range):
             return self.Execute(self.vbMethod, 'ClearValues', range)
-        clearValues, clearvalues = ClearValues, ClearValues
 
         def CopySheet(self, sheetname, newname, beforesheet = 32768):
             sheet = (sheetname.objectreference if isinstance(sheetname, SFDocuments.SF_CalcReference) else sheetname)
             return self.Execute(self.vbMethod + self.flgObject, 'CopySheet', sheet, newname, beforesheet)
-        copySheet, copysheet = CopySheet, CopySheet
 
         def CopySheetFromFile(self, filename, sheetname, newname, beforesheet = 32768):
             sheet = (sheetname.objectreference if isinstance(sheetname, SFDocuments.SF_CalcReference) else sheetname)
             return self.Execute(self.vbMethod + self.flgObject, 'CopySheetFromFile',
                                 filename, sheet, newname, beforesheet)
-        copySheetFromFile, copysheetfromfile = CopySheetFromFile, CopySheetFromFile
 
         def CopyToCell(self, sourcerange, destinationcell):
             range = (sourcerange.objectreference if isinstance(sourcerange, SFDocuments.SF_CalcReference)
                      else sourcerange)
             return self.Execute(self.vbMethod + self.flgObject, 'CopyToCell', range, destinationcell)
-        copyToCell, copytocell = CopyToCell, CopyToCell
 
         def CopyToRange(self, sourcerange, destinationrange):
             range = (sourcerange.objectreference if isinstance(sourcerange, SFDocuments.SF_CalcReference)
                      else sourcerange)
             return self.Execute(self.vbMethod + self.flgObject, 'CopyToRange', range, destinationrange)
-        copyToRange, copytorange = CopyToRange, CopyToRange
 
         def DAvg(self, range):
             return self.Execute(self.vbMethod, 'DAvg', range)
-        dAvg, davg = DAvg, DAvg
 
         def DCount(self, range):
             return self.Execute(self.vbMethod, 'DCount', range)
-        dCount, dcount = DCount, DCount
 
         def DMax(self, range):
             return self.Execute(self.vbMethod, 'DMax', range)
-        dMax, dmax = DMax, DMax
 
         def DMin(self, range):
             return self.Execute(self.vbMethod, 'DMin', range)
-        dMin, dmin = DMin, DMin
 
         def DSum(self, range):
             return self.Execute(self.vbMethod, 'DSum', range)
-        dSum, dsum = DSum, DSum
 
         def Forms(self, sheetname, form = ''):
             return self.Execute(self.vbMethod + self.flgArrayRet, 'Forms', sheetname, form)
-        forms = Forms
 
         def GetColumnName(self, columnnumber):
             return self.Execute(self.vbMethod, 'GetColumnName', columnnumber)
-        getColumnName, getcolumnname = GetColumnName, GetColumnName
 
         def GetFormula(self, range):
             return self.Execute(self.vbMethod + self.flgArrayRet, 'GetFormula', range)
-        getFormula, getformula = GetFormula, GetFormula
 
         def GetValue(self, range):
             return self.Execute(self.vbMethod + self.flgArrayRet, 'GetValue', range)
-        getValue, getvalue = GetValue, GetValue
 
         def ImportFromCSVFile(self, filename, destinationcell, filteroptions = ScriptForge.cstSymEmpty):
             return self.Execute(self.vbMethod, 'ImportFromCSVFile', filename, destinationcell, filteroptions)
-        importFromCSVFile, importfromcsvfile = ImportFromCSVFile, ImportFromCSVFile
 
         def ImportFromDatabase(self, filename = '', registrationname = '', destinationcell = '', sqlcommand = '',
                                directsql = False):
             return self.Execute(self.vbMethod, 'ImportFromDatabase', filename, registrationname,
                                 destinationcell, sqlcommand, directsql)
-        importFromDatabase, importfromdatabase = ImportFromDatabase, ImportFromDatabase
 
         def InsertSheet(self, sheetname, beforesheet = 32768):
             return self.Execute(self.vbMethod, 'InsertSheet', sheetname, beforesheet)
-        insertSheet, insertsheet = InsertSheet, InsertSheet
 
         def MoveRange(self, source, destination):
             return self.Execute(self.vbMethod, 'MoveRange', source, destination)
-        moveRange, moverange = MoveRange, MoveRange
 
         def MoveSheet(self, sheetname, beforesheet = 32768):
             return self.Execute(self.vbMethod, 'MoveSheet', sheetname, beforesheet)
-        moveSheet, movesheet = MoveSheet, MoveSheet
 
         def Offset(self, range, rows = 0, columns = 0, height = ScriptForge.cstSymEmpty,
                    width = ScriptForge.cstSymEmpty):
             return self.Execute(self.vbMethod, 'Offset', range, rows, columns, height, width)
-        offset = Offset
 
         def RemoveSheet(self, sheetname):
             return self.Execute(self.vbMethod, 'RemoveSheet', sheetname)
-        removeSheet, removesheet = RemoveSheet, RemoveSheet
 
         def RenameSheet(self, sheetname, newname):
             return self.Execute(self.vbMethod, 'RenameSheet', sheetname, newname)
-        renameSheet, renamesheet = RenameSheet, RenameSheet
 
         def SetArray(self, targetcell, value):
             return self.Execute(self.vbMethod + self.flgArrayArg, 'SetArray', targetcell, value)
-        setArray, setarray = SetArray, SetArray
 
         def SetCellStyle(self, targetrange, style):
             return self.Execute(self.vbMethod, 'SetCellStyle', targetrange, style)
-        setCellStyle, setcellstyle = SetCellStyle, SetCellStyle
 
         def SetFormula(self, targetrange, formula):
             return self.Execute(self.vbMethod + self.flgArrayArg, 'SetFormula', targetrange, formula)
-        setFormula, setformula = SetFormula, SetFormula
 
         def SetValue(self, targetrange, value):
             return self.Execute(self.vbMethod + self.flgArrayArg, 'SetValue', targetrange, value)
-        setValue, setvalue = SetValue, SetValue
 
         def SortRange(self, range, sortkeys, sortorder = 'ASC', destinationcell = ScriptForge.cstSymEmpty,
                       containsheader = False, casesensitive = False, sortcolumns = False):
             return self.Execute(self.vbMethod, 'SortRange', range, sortkeys, sortorder, destinationcell,
                                 containsheader, casesensitive, sortcolumns)
-        sortRange, sortrange = SortRange, SortRange
 
     # #########################################################################
     # SF_CalcReference CLASS
@@ -1694,7 +1579,6 @@ class SFDocuments:
         servicename = 'SFDocuments.CalcReference'
         servicesynonyms = ()
         serviceproperties = dict()
-        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
 
 # ##############################################False##################################################################
