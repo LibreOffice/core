@@ -15,14 +15,14 @@
 #include <vcl/weld.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-/** Tabbed implementation of NotebookBar for Writer
+/**
+ * Welded wrapper for NotebookBar used for online
 */
 class VCL_DLLPUBLIC WeldedTabbedNotebookbar
 {
     std::unique_ptr<weld::Builder> m_xBuilder;
 
     std::unique_ptr<weld::Container> m_xContainer;
-    std::unique_ptr<weld::Notebook> m_xNotebook;
 
 public:
     WeldedTabbedNotebookbar(const VclPtr<vcl::Window>& pContainerWindow,
