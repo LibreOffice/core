@@ -2955,7 +2955,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     lcl_RemoveTabs(aPreAutoCorrectString);
 
     // Test if valid (always with simple string)
-    if ( bModified && nValidation && pActiveViewSh )
+    if (bModified && nValidation && pActiveViewSh)
     {
         ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
         const ScValidationData* pData = rDoc.GetValidationEntry( nValidation );
@@ -2977,25 +2977,18 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
             if (!bOk)
             {
-                if ( pActiveViewSh )                // If it came from MouseButtonDown
-                {
-                    pActiveViewSh->StopMarking();   // (the InfoBox consumes the MouseButtonUp)
+                pActiveViewSh->StopMarking();   // (the InfoBox consumes the MouseButtonUp)
 
-                    // tdf#125917 Release the grab that a current mouse-down event being handled
-                    // by ScTabView has put on the mouse via its SelectionEngine.
-                    // Otherwise the warning box cannot interact with the mouse
-                    if (ScTabView* pView = pActiveViewSh->GetViewData().GetView())
-                    {
-                        if (ScViewSelectionEngine* pSelEngine = pView->GetSelEngine())
-                            pSelEngine->ReleaseMouse();
-                    }
+                // tdf#125917 Release the grab that a current mouse-down event being handled
+                // by ScTabView has put on the mouse via its SelectionEngine.
+                // Otherwise the warning box cannot interact with the mouse
+                if (ScTabView* pView = pActiveViewSh->GetViewData().GetView())
+                {
+                    if (ScViewSelectionEngine* pSelEngine = pView->GetSelEngine())
+                        pSelEngine->ReleaseMouse();
                 }
 
-                vcl::Window* pParent = nullptr;
-                if (pActiveViewSh)
-                    pParent = &pActiveViewSh->GetViewFrame()->GetWindow();
-                else
-                    pParent = Application::GetDefDialogParent();
+                vcl::Window* pParent = &pActiveViewSh->GetViewFrame()->GetWindow();
 
                 if (pData->DoError(pParent ? pParent->GetFrameWeld() : nullptr, aString, aCursorPos))
                     bForget = true;                 // Do not take over input
