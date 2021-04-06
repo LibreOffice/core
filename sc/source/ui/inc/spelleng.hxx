@@ -27,7 +27,7 @@ class ScDocShell;
 class ScDocument;
 class SfxItemPool;
 
-namespace weld { class Window; }
+namespace weld { class Widget; }
 
 /** Base class for special type of edit engines, i.e. for spell checker and text conversion. */
 class ScConversionEngineBase : public ScEditEngineDefaulter
@@ -40,7 +40,7 @@ public:
     virtual             ~ScConversionEngineBase() override;
 
     /** Derived classes implement to convert all cells in the selection or sheet. */
-    virtual void        ConvertAll( EditView& rEditView ) = 0;
+    virtual void        ConvertAll(weld::Widget* pDialogParent, EditView& rEditView) = 0;
 
     /** Returns true, if at least one cell has been modified. */
     bool         IsAnyModified() const { return mbIsAnyModified; }
@@ -103,7 +103,7 @@ public:
                             css::uno::Reference< css::linguistic2::XSpellChecker1 > const & xSpeller );
 
     /** Checks spelling of all cells in the selection or sheet. */
-    virtual void        ConvertAll( EditView& rEditView ) override;
+    virtual void        ConvertAll(weld::Widget* pDialogParent, EditView& rEditView) override;
 
 protected:
     /** Callback from edit engine to check the next cell. */
@@ -120,7 +120,7 @@ protected:
 
 private:
     /** Returns the spelling dialog if it is open. */
-    weld::Window*       GetDialogParent();
+    weld::Widget*       GetDialogParent();
 };
 
 /** Edit engine for text conversion. */
@@ -135,7 +135,7 @@ public:
                             ScDocument* pRedoDoc );
 
     /** Converts all cells in the selection or sheet according to set language. */
-    virtual void        ConvertAll( EditView& rEditView ) override;
+    virtual void        ConvertAll(weld::Widget* pDialogParent, EditView& rEditView) override;
 
 protected:
     /** Callback from edit engine to convert the next cell. */

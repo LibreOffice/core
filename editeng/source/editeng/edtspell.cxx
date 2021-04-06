@@ -36,7 +36,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::linguistic2;
 
 
-EditSpellWrapper::EditSpellWrapper(weld::Window* pWindow,
+EditSpellWrapper::EditSpellWrapper(weld::Widget* pWindow,
         bool bIsStart, EditView* pView )
     : SvxSpellWrapper(pWindow, bIsStart, false/*bIsAllRight*/)
 {

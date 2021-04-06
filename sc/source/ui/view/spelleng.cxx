@@ -282,11 +282,11 @@ ScSpellingEngine::ScSpellingEngine(
     SetSpeller( xSpeller );
 }
 
-void ScSpellingEngine::ConvertAll( EditView& rEditView )
+void ScSpellingEngine::ConvertAll(weld::Widget* pDialogParent, EditView& rEditView)
 {
     EESpellState eState = EESpellState::Ok;
     if( FindNextConversionCell() )
-        eState = rEditView.StartSpeller( true );
+        eState = rEditView.StartSpeller(pDialogParent, true);
 
     OSL_ENSURE( eState != EESpellState::NoSpeller, "ScSpellingEngine::Convert - no spell checker" );
 }
@@ -303,7 +303,7 @@ bool ScSpellingEngine::NeedsConversion()
 
 bool ScSpellingEngine::ShowTableWrapDialog()
 {
-    weld::Window* pParent = GetDialogParent();
+    weld::Widget* pParent = GetDialogParent();
     weld::WaitObject aWaitOff(pParent);
 
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
@@ -316,7 +316,7 @@ bool ScSpellingEngine::ShowTableWrapDialog()
 
 void ScSpellingEngine::ShowFinishDialog()
 {
-    weld::Window* pParent = GetDialogParent();
+    weld::Widget* pParent = GetDialogParent();
     weld::WaitObject aWaitOff(pParent);
     std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Info, VclButtonsType::Ok,
@@ -324,7 +324,7 @@ void ScSpellingEngine::ShowFinishDialog()
     xInfoBox->run();
 }
 
-weld::Window* ScSpellingEngine::GetDialogParent()
+weld::Widget* ScSpellingEngine::GetDialogParent()
 {
     sal_uInt16 nWinId = ScSpellDialogChildWindow::GetChildWindowId();
     SfxViewFrame* pViewFrm = mrViewData.GetViewShell()->GetViewFrame();
@@ -395,11 +395,11 @@ ScTextConversionEngine::ScTextConversionEngine(
 {
 }
 
-void ScTextConversionEngine::ConvertAll( EditView& rEditView )
+void ScTextConversionEngine::ConvertAll(weld::Widget* pDialogParent, EditView& rEditView)
 {
     if( FindNextConversionCell() )
     {
-        rEditView.StartTextConversion(
+        rEditView.StartTextConversion(pDialogParent,
             maConvParam.GetSourceLang(), maConvParam.GetTargetLang(), maConvParam.GetTargetFont(),
             maConvParam.GetOptions(), maConvParam.IsInteractive(), true );
         // #i34769# restore initial cursor position

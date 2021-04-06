@@ -381,7 +381,7 @@ void SwAnnotationWin::InitControls()
     mxMenuButton->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
 
     SetLanguage(GetLanguage());
-    GetOutlinerView()->StartSpeller();
+    GetOutlinerView()->StartSpeller(mxSidebarTextControl->GetDrawingArea());
     SetPostItText();
     mpOutliner->CompleteOnlineSpelling();
 

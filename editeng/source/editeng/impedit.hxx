@@ -1001,15 +1001,15 @@ public:
     css::lang::Locale   GetLocale( const EditPaM& rPaM ) const;
 
     void DoOnlineSpelling( ContentNode* pThisNodeOnly = nullptr, bool bSpellAtCursorPos = false, bool bInterruptible = true );
-    EESpellState        Spell( EditView* pEditView, bool bMultipleDoc );
+    EESpellState        Spell(EditView* pEditView, weld::Widget* pDialogParent, bool bMultipleDoc);
     EESpellState        HasSpellErrors();
     void                ClearSpellErrors();
-    EESpellState        StartThesaurus( EditView* pEditView );
+    EESpellState        StartThesaurus(EditView* pEditView, weld::Widget* pDialogParent);
     css::uno::Reference< css::linguistic2::XSpellAlternatives >
                         ImpSpell( EditView* pEditView );
 
     // text conversion functions
-    void                Convert( EditView* pEditView, LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
+    void                Convert(EditView* pEditView, weld::Widget* pDialogParent, LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc);
     void                ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang, EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
                                     bool bAllowImplicitChangesForNotConvertibleText, LanguageType nTargetLang, const vcl::Font *pTargetFont );
     ConvInfo *          GetConvInfo() const { return pConvInfo.get(); }

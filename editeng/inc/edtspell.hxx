@@ -45,7 +45,7 @@ private:
     virtual bool            SpellMore() override;
 
 public:
-    EditSpellWrapper(weld::Window* pWin, bool bIsStart, EditView* pView);
+    EditSpellWrapper(weld::Widget* pWin, bool bIsStart, EditView* pView);
 };
 
 /**

@@ -72,7 +72,7 @@ class SvxHyphenWordDialog : public SfxDialogController
 
 public:
     SvxHyphenWordDialog(const OUString &rWord, LanguageType nLang,
-                        weld::Window* pParent,
+                        weld::Widget* pParent,
                         css::uno::Reference<css::linguistic2::XHyphenator> const &xHyphen,
                         SvxSpellWrapper* pWrapper);
     virtual ~SvxHyphenWordDialog() override;

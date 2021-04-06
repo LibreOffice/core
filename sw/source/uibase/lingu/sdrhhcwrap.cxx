@@ -89,7 +89,7 @@ SdrHHCWrapper::~SdrHHCWrapper()
 
 void SdrHHCWrapper::StartTextConversion()
 {
-    pOutlView->StartTextConversion( nSourceLang, nTargetLang, pTargetFont, nOptions, bIsInteractive, true );
+    pOutlView->StartTextConversion(pView->GetFrameWeld(), nSourceLang, nTargetLang, pTargetFont, nOptions, bIsInteractive, true);
 }
 
 bool SdrHHCWrapper::ConvertNextDocument()

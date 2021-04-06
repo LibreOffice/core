@@ -305,6 +305,7 @@ void ScViewFunc::DoRefConversion()
     if (!bOk)
         ErrorMessage(STR_ERR_NOREF);
 }
+
 //  Thesaurus - Undo ok
 void ScViewFunc::DoThesaurus()
 {
@@ -384,7 +385,7 @@ void ScViewFunc::DoThesaurus()
 
     //  language is now in EditEngine attributes -> no longer passed to StartThesaurus
 
-    eState = pEditView->StartThesaurus();
+    eState = pEditView->StartThesaurus(GetViewData().GetDialogParent());
     OSL_ENSURE(eState != EESpellState::NoSpeller, "No SpellChecker");
 
     if (eState == EESpellState::ErrorFound)              // should happen later through Wrapper!
@@ -534,7 +535,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
     // *** do the conversion *** ----------------------------------------------
 
     pEngine->ClearModifyFlag();
-    pEngine->ConvertAll( *pEditView );
+    pEngine->ConvertAll(GetViewData().GetDialogParent(), *pEditView);
 
     // *** undo/redo *** ------------------------------------------------------
 

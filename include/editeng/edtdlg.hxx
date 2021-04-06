@@ -97,7 +97,7 @@ public:
                                                 css::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
                                                 const OUString &rWord, LanguageType nLanguage) = 0;
 
-    virtual VclPtr<AbstractHyphenWordDialog> CreateHyphenWordDialog(weld::Window*,
+    virtual VclPtr<AbstractHyphenWordDialog> CreateHyphenWordDialog(weld::Widget*,
                                                 const OUString &rWord, LanguageType nLang,
                                                 css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper) = 0;

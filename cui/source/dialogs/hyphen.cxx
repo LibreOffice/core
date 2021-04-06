@@ -403,7 +403,7 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, GetFocusHdl_Impl, weld::Widget&, void)
 
 SvxHyphenWordDialog::SvxHyphenWordDialog(
     const OUString &rWord, LanguageType nLang,
-    weld::Window* pParent,
+    weld::Widget* pParent,
     uno::Reference< linguistic2::XHyphenator > const &xHyphen,
     SvxSpellWrapper* pWrapper)
     : SfxDialogController(pParent, "cui/ui/hyphenate.ui", "HyphenateDialog")

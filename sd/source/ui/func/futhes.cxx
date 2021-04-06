@@ -20,6 +20,7 @@
 #include <futhes.hxx>
 
 #include <editeng/outliner.hxx>
+#include <sfx2/request.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/eeitem.hxx>
@@ -28,6 +29,7 @@
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/unolingu.hxx>
+#include <vcl/weld.hxx>
 #include <drawdoc.hxx>
 #include <View.hxx>
 #include <Outliner.hxx>
@@ -58,7 +60,7 @@ rtl::Reference<FuPoor> FuThesaurus::Create( ViewShell* pViewSh, ::sd::Window* pW
     return xFunc;
 }
 
-void FuThesaurus::DoExecute( SfxRequest& )
+void FuThesaurus::DoExecute(SfxRequest& rReq)
 {
     SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, OUString(),
                              mpWindow->GetFrameWeld(), RID_SVXERRCTX, SvxResLocale());
@@ -98,7 +100,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
                 pOutliner->SetDefaultLanguage( mpDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
             }
 
-            EESpellState eState = const_cast<OutlinerView*>(pOutlView)->StartThesaurus();
+            EESpellState eState = const_cast<OutlinerView*>(pOutlView)->StartThesaurus(rReq.GetFrameWeld());
             DBG_ASSERT(eState != EESpellState::NoSpeller, "No SpellChecker");
         }
     }
@@ -120,7 +122,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
             pOutliner->SetDefaultLanguage( mpDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
         }
 
-        EESpellState eState = pOutlView->StartThesaurus();
+        EESpellState eState = pOutlView->StartThesaurus(rReq.GetFrameWeld());
         DBG_ASSERT(eState != EESpellState::NoSpeller, "No SpellChecker");
     }
 }
