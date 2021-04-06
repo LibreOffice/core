@@ -2962,7 +2962,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 pHdl->SetModified();
 
             Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
-            pEditView->ExecuteSpellPopup( aMenuPos, &aLink );
+            pEditView->ExecuteSpellPopup(aMenuPos, aLink);
 
             bDone = true;
         }

@@ -1356,7 +1356,7 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
             // Popup for Online-Spelling now handled by DrawDocShell
             Link<SpellCallbackInfo&,void> aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
 
-            pOLV->ExecuteSpellPopup(aPos, &aLink);
+            pOLV->ExecuteSpellPopup(aPos, aLink);
             pOLV->GetEditView().Invalidate();
         }
         else
