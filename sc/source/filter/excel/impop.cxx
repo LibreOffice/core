@@ -859,15 +859,12 @@ void ImportExcel::Shrfmla()
 void ImportExcel::Mulrk()
 {
     XclAddress aXclPos;
-    sal_uInt16  nXF;
-    sal_Int32   nRkNum;
-
     aIn >> aXclPos;
 
     for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() > 2); ++aCurrXclPos.mnCol )
     {
-        nXF = aIn.ReaduInt16();
-        nRkNum = aIn.ReadInt32();
+        sal_uInt16 nXF = aIn.ReaduInt16();
+        sal_Int32 nRkNum = aIn.ReadInt32();
 
         ScAddress aScPos( ScAddress::UNINITIALIZED );
         if( GetAddressConverter().ConvertAddress( aScPos, aCurrXclPos, GetCurrScTab(), true ) )
@@ -881,13 +878,11 @@ void ImportExcel::Mulrk()
 void ImportExcel::Mulblank()
 {
     XclAddress aXclPos;
-    sal_uInt16  nXF;
-
     aIn >> aXclPos;
 
     for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() > 2); ++aCurrXclPos.mnCol )
     {
-        nXF = aIn.ReaduInt16();
+        sal_uInt16 nXF = aIn.ReaduInt16();
 
         ScAddress aScPos( ScAddress::UNINITIALIZED );
         if( GetAddressConverter().ConvertAddress( aScPos, aCurrXclPos, GetCurrScTab(), true ) )
