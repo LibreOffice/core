@@ -16,6 +16,24 @@
       "revId": "97540c81bae6413124e433eafa376b0494d55a1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f34add26_36b7c37c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-06T14:53:43Z",
+      "side": 1,
+      "message": "Because I did that separately in https://gerrit.libreoffice.org/c/core/+/113552, and now this change does not modify this aspect.",
+      "parentUuid": "ff27c294_2650a4ad",
+      "revId": "97540c81bae6413124e433eafa376b0494d55a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
