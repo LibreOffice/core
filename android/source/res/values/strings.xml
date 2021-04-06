@@ -21,67 +21,24 @@
     <string name="new_drawing">New Drawing</string>
     <string name="default_document_name">untitled</string>
 
-    <string name="system_file_selector">System File Dialog</string>
     <string name="select_file_to_open">Select file to open</string>
 
     <string name="browser_app_name">LibreOffice Browser</string>
     <string name="menu_search">Search</string>
-    <string name="list_view">List</string>
-    <string name="grid_view">Grid</string>
-    <string name="filter">Filter by</string>
     <string name="search_not_found">Keyword not found</string>
-    <string name="sort">Sort by</string>
-    <string name="sort_smallest">Smallest first</string>
-    <string name="sort_largest">Largest first</string>
-    <string name="sort_az">A-Z</string>
-    <string name="sort_za">Z-A</string>
-    <string name="sort_oldest">Oldest first</string>
-    <string name="sort_newest">Newest first</string>
-    <string name="menu_sort_size">Sort By Size</string>
-    <string name="menu_sort_az">Sort A-Z</string>
-    <string name="menu_sort_modified">Sort by Date</string>
     <string name="menu_preferences">Preferences</string>
     <string name="file_icon_desc">fileicon</string>
     <string name="title_recents">Recent files</string>
     <string name="title_browser">All files</string>
-    <!-- Pref keys as resources ; Not currently used -->
-    <string name="EXPLORER_VIEW_TYPE_KEY">EXPLORER_VIEW_TYPE</string>
-    <string name="CURRENT_DIRECTORY_KEY">CURRENT_DIRECTORY</string>
-    <string name="pref_category_explorer">File Explorer Settings</string>
     <string name="pref_category_general">General</string>
     <string name="pref_experimental_editing">Experimental Mode</string>
     <string name="pref_experimental_editing_summary">Enable the experimental editing mode. Use at your own risk.</string>
-    <string name="pref_show_hidden_files">Hidden Files/Folders</string>
-    <string name="pref_show_hidden_files_summary">Enable to show hidden files/folders</string>
     <string name="pref_developer_mode">Developer Mode</string>
     <string name="pref_developer_mode_summary">Enable developer mode where you can send UNO commands within app. Use at your own risk.</string>
 
     <string name="action_about">About</string>
     <string name="action_parts">Parts</string>
     <string name="action_settings">Settings</string>
-    <string name="open">Open</string>
-    <string name="share">Share</string>
-    <string name="share_via">Share via</string>
-
-    <!-- Document browser filters -->
-    <string name="filter_everything">Everything</string>
-    <string name="filter_documents">Documents</string>
-    <string name="filter_spreadsheets">Spreadsheets</string>
-    <string name="filter_presentations">Presentations</string>
-    <string name="filter_drawings">Drawings</string>
-
-    <!-- Document provider names -->
-    <string name="document_locations">Document locations</string>
-    <string name="close_document_locations">Close document locations</string>
-    <string name="local_documents">Documents directory</string>
-    <string name="local_file_system">Local file system</string>
-    <string name="external_sd_file_system">External SD</string>
-    <string name="otg_file_system">OTG device (experimental)</string>
-    <string name="usb_connected_configure">USB connected, configure your device.</string>
-
-    <string name="ext_document_provider_error">Invalid root file. Check your sd card configuration.</string>
-    <string name="legacy_extsd_missing_error">Invalid root file. Check your external sd card and/or configuration.</string>
-    <string name="otg_missing_error">Invalid root file. Check your OTG device and/or configuration.</string>
 
     <!-- Edit action names -->
     <string name="action_bold">Bold</string>
@@ -100,24 +57,9 @@
     <string name="message_saving_failed">Saving the document failed.</string>
     <string name="message_save_incomplete">Save incomplete. Were there any changes?</string>
 
-    <!-- Document provider settings -->
-    <string name="storage_provider_settings">Storage provider settings</string>
-    <string name="physical_storage_settings">Physical storage settings</string>
-    <string name="external_sd_path">External SD path</string>
-    <string name="otg_device_path">OTG device path</string>
-    <string name="otg_warning">Experimental Feature: Use only if OTG device is writable.</string>
     <string name="password">Password</string>
     <string name="action_undo">Undo</string>
     <string name="action_redo">Redo</string>
-
-    <!-- Directory browser strings -->
-    <string name="up_description">To parent directory</string>
-    <string name="confirm_label">Confirm</string>
-    <string name="cancel_label">Cancel</string>
-    <string name="search_label">Go</string>
-    <string name="directory_browser_label">Choose Directory</string>
-    <string name="bad_directory">Invalid directory path</string>
-    <string name="current_dir">Current Directory: %1$s</string>
 
     <!-- Save Alert dialog strings -->
     <string name="save_alert_dialog_title">Save the document before closing?</string>
@@ -207,12 +149,6 @@
     <string name="alert_cancel">Cancel</string>
     <string name="unable_to_go_further">Unable to go further.</string>
     <string name="current_uno_command">Current UNO command</string>
-    <string name="pref_sort_summary">Select how to order files: A-Z, by size or by date.</string>
-    <string name="pref_viewmode_summary">View files as a grid or in a list.</string>
-    <string name="pref_file_explorer_title">File explorer layout</string>
-    <string name="pref_sort_title">File Order</string>
-    <string name="pref_filter_title">Default File Filter</string>
-    <string name="pref_filter_summary">Set which file filter should be used by default.</string>
     <string name="display_language">Display Language</string>
     <string name="display_language_summary">Set the default display language</string>
     <string name="unable_to_export_pdf">Unable to export to pdf</string>

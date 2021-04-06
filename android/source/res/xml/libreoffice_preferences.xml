@@ -1,37 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory
-        android:title="@string/pref_category_explorer"
-        android:key="PREF_CATEGORY_EXPLORER">
-        <ListPreference
-            android:title="@string/pref_filter_title"
-            android:summary="@string/pref_filter_summary"
-            android:entries="@array/FilterTypeNames"
-            android:entryValues="@array/FilterTypeStringValues"
-            android:defaultValue="-1"
-            android:key="FILTER_MODE"/>
-        <ListPreference
-            android:summary="@string/pref_sort_summary"
-            android:key="SORT_MODE"
-            android:title="@string/pref_sort_title"
-            android:entries="@array/SortModeNames"
-            android:defaultValue="0"
-            android:entryValues="@array/SortModeStringValues"/>
-        <ListPreference
-            android:entries="@array/ViewModeNames"
-            android:entryValues="@array/ViewModeStringValues"
-            android:defaultValue="@integer/grid_view_integer"
-            android:title="@string/pref_file_explorer_title"
-            android:key="EXPLORER_VIEW_TYPE"
-            android:summary="@string/pref_viewmode_summary" />
-
-        <CheckBoxPreference
-            android:title="@string/pref_show_hidden_files"
-            android:key="ENABLE_SHOW_HIDDEN_FILES"
-            android:summary="@string/pref_show_hidden_files_summary"
-            android:defaultValue="false" />
-    </PreferenceCategory>
-    <PreferenceCategory
         android:title="@string/pref_category_general"
         android:key="PREF_CATEGORY_GENERAL">
 
