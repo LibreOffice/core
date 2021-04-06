@@ -2,6 +2,132 @@
   "comments": [
     {
       "key": {
+        "uuid": "adda7d67_ed822020",
+        "filename": "animations/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-06T18:50:05Z",
+      "side": 1,
+      "message": "this is misleading, has nothing to do with CSS, css is abbreviation of com::sun::star",
+      "range": {
+        "startLine": 1,
+        "startChar": 21,
+        "endLine": 1,
+        "endChar": 24
+      },
+      "revId": "f3cd5ba60eb16fc3376ae97231fca4360238c920",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83a279b5_79235a12",
+        "filename": "animations/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-06T18:50:05Z",
+      "side": 1,
+      "message": "maybe it\u0027s better to keep the module name here? otherwise it begs the question, where *is* LibreOffice Draw?",
+      "range": {
+        "startLine": 3,
+        "startChar": 76,
+        "endLine": 3,
+        "endChar": 92
+      },
+      "revId": "f3cd5ba60eb16fc3376ae97231fca4360238c920",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20613f50_887ce19e",
+        "filename": "bridges/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-06T18:50:05Z",
+      "side": 1,
+      "message": "perhaps add here: \"A bridge for MS .Net is in cli_ure\"",
+      "revId": "f3cd5ba60eb16fc3376ae97231fca4360238c920",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a210bba_0b415842",
+        "filename": "desktop/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-06T18:50:05Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 4,
+        "startChar": 17,
+        "endLine": 4,
+        "endChar": 25
+      },
+      "revId": "f3cd5ba60eb16fc3376ae97231fca4360238c920",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "380d581f_c8547d5d",
+        "filename": "desktop/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-06T18:50:05Z",
+      "side": 1,
+      "message": "i don\u0027t think this belongs under \"stable interface\", perhaps put it before that or a new section at the bottom?",
+      "revId": "f3cd5ba60eb16fc3376ae97231fca4360238c920",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9e483f8_8e7b91fd",
+        "filename": "lingucomponent/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-06T18:50:05Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 22
+      },
+      "revId": "f3cd5ba60eb16fc3376ae97231fca4360238c920",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ac236421_20d613f9",
         "filename": "oox/README.md",
         "patchSetId": 3
@@ -30,6 +156,23 @@
       "writtenOn": "2021-04-06T13:42:50Z",
       "side": 1,
       "message": "I suggest to change all references to “fdo” issues to “tdf”",
+      "revId": "f3cd5ba60eb16fc3376ae97231fca4360238c920",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c5c2575_e850ad19",
+        "filename": "unoil/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-06T18:50:05Z",
+      "side": 1,
+      "message": "might be helpful to add that this is for \"offapi\", while \"ridljar\" is for \"udkapi\"  - that used to be implicit in the \"offuh\" mention but the module \"offuh\" was removed many years ago...",
       "revId": "f3cd5ba60eb16fc3376ae97231fca4360238c920",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
