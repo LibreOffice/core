@@ -54,6 +54,7 @@
 #include <comphelper/dispatchcommand.hxx>
 
 #include <sfx2/strings.hrc>
+#include "doctemplateslocal.hxx"
 
 constexpr OUStringLiteral TM_SETTING_MANAGER = u"TemplateManager";
 constexpr OUStringLiteral TM_SETTING_LASTFOLDER = u"LastFolder";
@@ -1215,6 +1216,7 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
 {
     SfxTemplateCategoryDialog aDlg(m_xDialog.get());
     aDlg.SetCategoryLBEntries(mxLocalView->getFolderNames());
+    aDlg.SetAllowBuiltInCategories(false);
     aDlg.HideNewCategoryOption();
     aDlg.set_title(MnemonicGenerator::EraseAllMnemonicChars(SfxResId(STR_CATEGORY_DELETE)));
     aDlg.SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT));
@@ -1373,6 +1375,7 @@ SfxTemplateCategoryDialog::SfxTemplateCategoryDialog(weld::Window* pParent)
     , mxNewCategoryEdit(m_xBuilder->weld_entry("category_entry"))
     , mxCreateLabel(m_xBuilder->weld_label("create_label"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
+    , mnAllowBuiltInCategories(true)
 {
     mxLBCategory->append_text(SfxResId(STR_CATEGORY_NONE));
     mxNewCategoryEdit->connect_changed(LINK(this, SfxTemplateCategoryDialog, NewCategoryEditHdl));
@@ -1405,7 +1408,14 @@ IMPL_LINK_NOARG(SfxTemplateCategoryDialog, NewCategoryEditHdl, weld::Entry&, voi
 
 IMPL_LINK_NOARG(SfxTemplateCategoryDialog, SelectCategoryHdl, weld::TreeView&, void)
 {
-    if (mxLBCategory->get_selected_index() == 0)
+    bool isBuiltInCategory = false;
+    if(!mnAllowBuiltInCategories)
+    {
+        auto aGroupNames = DocTemplLocaleHelper::GetBuiltInGroupNames();
+        isBuiltInCategory = std::find(aGroupNames.begin(), aGroupNames.end(),
+                                        mxLBCategory->get_selected_text()) != aGroupNames.end();
+    }
+    if (mxLBCategory->get_selected_index() == 0 || isBuiltInCategory)
     {
         msSelectedCategory = OUString();
         mxOKButton->set_sensitive(false);
