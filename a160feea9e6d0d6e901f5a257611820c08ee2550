@@ -45,6 +45,54 @@
       "revId": "a160feea9e6d0d6e901f5a257611820c08ee2550",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5706f9d_6df876c2",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-04-06T09:49:26Z",
+      "side": 1,
+      "message": "Are you suggesting adding \".uno:NewGlobalDoc\" as the second item of the tuple, replacing the current empty string?\n\nBut according to the instructions at the top of the file, a URI starting with \".uno:\" will run the UNO command.  So I imagine if such a change is made, there will be a link in the TotD dialog, and when the user clicks it, this \"create new master document\" UNO command will be run, which is probably not what the user expects.  Also what will happen if the TotD dialog is shown in modules other than Writer?\n\nThe correct way to provide more information should be linking to the help page about creating master document.  I don\u0027t know what that link is and can\u0027t deduct it easily from just the UNO command.",
+      "parentUuid": "5c2e0ff8_c9517410",
+      "range": {
+        "startLine": 240,
+        "startChar": 192,
+        "endLine": 240,
+        "endChar": 195
+      },
+      "revId": "a160feea9e6d0d6e901f5a257611820c08ee2550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccac6b6c_f282478d",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-04-06T09:49:26Z",
+      "side": 1,
+      "message": "My very simple testing doesn\u0027t give difference results whether I choose a certain outline or a certain para style in the \"create new master document\" dialog.",
+      "parentUuid": "d7888cb8_a441d8f5",
+      "range": {
+        "startLine": 240,
+        "startChar": 138,
+        "endLine": 240,
+        "endChar": 187
+      },
+      "revId": "a160feea9e6d0d6e901f5a257611820c08ee2550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
