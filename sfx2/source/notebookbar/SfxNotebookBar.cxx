@@ -295,6 +295,9 @@ bool SfxNotebookBar::IsActive()
 
     OUString aActive = comphelper::getString( aAppNode.getNodeValue( "Active" ) );
 
+    if (comphelper::LibreOfficeKit::isActive() && aActive == "notebookbar_online.ui")
+        return true;
+
     const utl::OConfigurationNode aModesNode = aAppNode.openNode("Modes");
     const Sequence<OUString> aModeNodeNames( aModesNode.getNodeNames() );
 
@@ -360,6 +363,8 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         OUString aModuleName = xModuleManager->identify( xFrame );
         vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
         OUString sFile = lcl_getNotebookbarFileName( eApp );
+        if (comphelper::LibreOfficeKit::isActive())
+            sFile = "notebookbar_online.ui";
         OUString sNewFile = rUIFile + sFile;
         OUString sCurrentFile;
         VclPtr<NotebookBar> pNotebookBar = pSysWindow->GetNotebookBar();
