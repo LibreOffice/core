@@ -256,6 +256,12 @@ DECLARE_WW8EXPORT_TEST(testTdf122460_header, "tdf122460_header.odt")
     CPPUNIT_ASSERT(headerIsOn);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf139495_tinyHeader, "tdf139495_tinyHeader.doc")
+{
+    // In Word 2003, this is one page, but definitely not six pages.
+    CPPUNIT_ASSERT(getPages() < 3);
+}
+
 DECLARE_WW8EXPORT_TEST(testFdo53985, "fdo53985.doc")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
