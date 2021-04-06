@@ -876,7 +876,7 @@ protected:
                     ScCompiler aCompiler( m_rDoc, aCellRanges.front().aStart, m_eGrammar );
                     // compile the string in the format passed in
                     std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sFormula));
-                    // set desired convention to that of the document
+                    // convert to API grammar
                     aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_API );
                     OUString sConverted;
                     aCompiler.CreateStringFromTokenArray(sConverted);
@@ -908,22 +908,27 @@ public:
     {
         uno::Any aValue;
         aValue <<= xCell->getFormula();
-        OUString sVal;
-        aValue >>= sVal;
-        uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
-        ScCellRangesBase* pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );
-        if ( ( xCell->getType() == table::CellContentType_FORMULA ) &&
-            pUnoRangesBase )
+        // XCell::getFormula() returns the formula in API grammar, convert.
+        if ((xCell->getType() == table::CellContentType_FORMULA)
+                && m_eGrammar != formula::FormulaGrammar::GRAM_API)
         {
-            ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-            ScCompiler aCompiler( m_rDoc, aCellRanges.front().aStart, formula::FormulaGrammar::GRAM_DEFAULT );
-            std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sVal));
-            // set desired convention
-            aCompiler.SetGrammar( m_eGrammar );
-            OUString sConverted;
-            aCompiler.CreateStringFromTokenArray(sConverted);
-            sVal = EQUALS + sConverted;
-            aValue <<= sVal;
+            uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
+            ScCellRangesBase* pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );
+            if (pUnoRangesBase)
+            {
+                OUString sVal;
+                aValue >>= sVal;
+                ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
+                // Compile string from API grammar.
+                ScCompiler aCompiler( m_rDoc, aCellRanges.front().aStart, formula::FormulaGrammar::GRAM_API );
+                std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sVal));
+                // Convert to desired grammar.
+                aCompiler.SetGrammar( m_eGrammar );
+                OUString sConverted;
+                aCompiler.CreateStringFromTokenArray(sConverted);
+                sVal = EQUALS + sConverted;
+                aValue <<= sVal;
+            }
         }
 
         processValue( aValue );
