@@ -50,6 +50,7 @@
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"
 #include "xmlexpit.hxx"
+#include "zorder.hxx"
 #include <comphelper/processfactory.hxx>
 #include <docary.hxx>
 #include <frameformats.hxx>
@@ -272,11 +273,7 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         // tdf#133487 call this once in flat-ODF case
         uno::Reference<drawing::XDrawPageSupplier> const xDPS(GetModel(), uno::UNO_QUERY);
         assert(xDPS.is());
-        xmloff::FixZOrder(xDPS->getDrawPage(),
-            [](uno::Reference<beans::XPropertySet> const& xShape)
-            {
-                return !*o3tl::doAccess<bool>(xShape->getPropertyValue("Opaque"));
-            });
+        xmloff::FixZOrder(xDPS->getDrawPage(), sw::GetZOrderLayer(m_pDoc->getIDocumentDrawModelAccess()));
 
         // now save and switch redline mode
         nRedlineFlags = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();

@@ -3144,6 +3144,18 @@ void ScExportTest::testTdf133487()
     // attribute is only written for value "true"
     assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:table-row[3]/table:table-cell[1]/draw:custom-shape"
             "/attribute::table:table-background", 0);
+    // shape in foreground, previously index 4
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:shapes/draw:custom-shape",
+            "z-index", "3");
+    // attribute is only written for value "true"
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:shapes/draw:custom-shape"
+            "/attribute::table:table-background", 0);
+    // form control, previously index 3
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:shapes/draw:control",
+            "z-index", "4");
+    // attribute is only written for value "true"
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:shapes/draw:control"
+            "/attribute::table:table-background", 0);
 
     xShell->DoClose();
 }

@@ -104,6 +104,12 @@
   <style:style style:name="gr3" style:family="graphic">
    <style:graphic-properties draw:fill-color="#0000ff" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.914cm" fo:min-width="8.397cm"/>
   </style:style>
+  <style:style style:name="gr4" style:family="graphic">
+   <style:graphic-properties fo:border="none"/>
+  </style:style>
+  <style:style style:name="gr5" style:family="graphic">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="25.62mm" fo:min-width="1.48mm"/>
+  </style:style>
   <style:page-layout style:name="pm1">
    <style:page-layout-properties style:writing-mode="lr-tb"/>
    <style:header-style>
@@ -170,6 +176,49 @@
   <office:spreadsheet>
    <table:calculation-settings table:automatic-find-labels="false" table:use-regular-expressions="false" table:use-wildcards="true"/>
    <table:table table:name="Sheet1" table:style-name="ta1">
+    <office:forms form:automatic-focus="false" form:apply-design-mode="false">
+     <form:form form:name="Form" form:apply-filter="true" form:command-type="table" form:control-implementation="ooo:com.sun.star.form.component.Form" office:target-frame="">
+      <form:properties>
+       <form:property form:property-name="PropertyChangeNotificationEnabled" office:value-type="boolean" office:boolean-value="true"/>
+       <form:property form:property-name="TargetURL" office:value-type="string" office:string-value=""/>
+      </form:properties>
+      <form:listbox form:name="List Box 1" form:control-implementation="ooo:com.sun.star.form.component.ListBox" xml:id="control1" form:id="control1" form:dropdown="true" form:size="20" form:input-required="false" form:bound-column="1" form:linked-cell="Sheet1.E2" form:list-linkage-type="selection">
+       <form:properties>
+        <form:property form:property-name="ControlTypeinMSO" office:value-type="float" office:value="0"/>
+        <form:property form:property-name="DefaultControl" office:value-type="string" office:string-value="com.sun.star.form.control.ListBox"/>
+        <form:property form:property-name="MouseWheelBehavior" office:value-type="float" office:value="0"/>
+        <form:property form:property-name="ObjIDinMSO" office:value-type="float" office:value="65535"/>
+        <form:list-property form:property-name="TypedItemList" office:value-type="float"/>
+       </form:properties>
+       <form:option form:label="11"/>
+       <form:option form:label="12" form:current-selected="true"/>
+       <form:option form:label="13"/>
+       <form:option form:label="14"/>
+       <form:option form:label="15"/>
+       <form:option form:label="16"/>
+       <form:option form:label="17"/>
+       <form:option form:label="18"/>
+       <form:option form:label="19"/>
+      </form:listbox>
+     </form:form>
+    </office:forms>
+    <table:shapes>
+     <draw:control draw:z-index="3" draw:name="Control 1" draw:style-name="gr4" draw:text-style-name="P1" svg:width="21.78mm" svg:height="7.45mm" svg:x="41.78mm" svg:y="10.85mm" draw:control="control1"/>
+     <draw:custom-shape draw:z-index="4" draw:name="Shape 1" draw:style-name="gr5" draw:text-style-name="P2" svg:width="6.19mm" svg:height="27.24mm" svg:x="49.04mm" svg:y="12.34mm">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="?f0 0 ?f2 ?f5" draw:type="down-arrow" draw:modifiers="17208.6605504587 7455.48387096774" draw:enhanced-path="M ?f0 0 L ?f0 ?f1 0 ?f1 10800 21600 21600 ?f1 ?f2 ?f1 ?f2 0 Z N">
+       <draw:equation draw:name="f0" draw:formula="$1 "/>
+       <draw:equation draw:name="f1" draw:formula="$0 "/>
+       <draw:equation draw:name="f2" draw:formula="21600-$1 "/>
+       <draw:equation draw:name="f3" draw:formula="21600-?f1 "/>
+       <draw:equation draw:name="f4" draw:formula="?f3 *?f0 /10800"/>
+       <draw:equation draw:name="f5" draw:formula="?f1 +?f4 "/>
+       <draw:equation draw:name="f6" draw:formula="?f1 *?f0 /10800"/>
+       <draw:equation draw:name="f7" draw:formula="?f1 -?f6 "/>
+       <draw:handle draw:handle-position="$1 $0" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="21600"/>
+      </draw:enhanced-geometry>
+     </draw:custom-shape>
+    </table:shapes>
     <table:table-column table:style-name="co1" table:number-columns-repeated="2" table:default-cell-style-name="Default"/>
     <table:table-row table:style-name="ro1">
      <table:table-cell>

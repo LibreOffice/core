@@ -22,6 +22,7 @@
 #include <sfx2/objsh.hxx>
 #include <sot/storage.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/unreachable.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -783,7 +784,21 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
                 {
                     sal_Int16 nLayerID(0);
                     xShape->getPropertyValue("LayerID") >>= nLayerID;
-                    return SdrLayerID(nLayerID) == SC_LAYER_BACK;
+                    switch (nLayerID)
+                    {
+                        case sal_uInt8(SC_LAYER_FRONT):
+                            return 1;
+                        case sal_uInt8(SC_LAYER_BACK):
+                            return 0;
+                        case sal_uInt8(SC_LAYER_INTERN):
+                            return 2;
+                        case sal_uInt8(SC_LAYER_CONTROLS):
+                            return 3;
+                        case sal_uInt8(SC_LAYER_HIDDEN):
+                            return 1; // treat as equivalent to front
+                        default:
+                            O3TL_UNREACHABLE;
+                    }
                 });
         }
 
