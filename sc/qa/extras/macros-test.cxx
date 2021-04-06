@@ -56,6 +56,7 @@ public:
     void testTdf133887();
     void testTdf133889();
     void testTdf138646();
+    void testTdf105558();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(testTdf133887);
     CPPUNIT_TEST(testTdf133889);
     CPPUNIT_TEST(testTdf138646);
+    CPPUNIT_TEST(testTdf105558);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1022,6 +1024,30 @@ void ScMacrosTest::testTdf138646()
     }
 
     pDocSh->DoClose();
+}
+
+void ScMacrosTest::testTdf105558()
+{
+    OUString aFileName;
+    createFileURL(u"tdf105558.ods", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT(xComponent);
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT(pFoundShell);
+
+    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 5.5
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(5.5, rDoc.GetValue(ScAddress(0, 0, 0)));
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
 }
 
 
