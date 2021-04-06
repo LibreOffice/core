@@ -29,11 +29,7 @@ class Qt5Bitmap final : public SalBitmap
 {
     std::unique_ptr<QImage> m_pImage;
     BitmapPalette m_aPalette;
-
-    // for 4bit support
-    std::unique_ptr<sal_uInt8[]> m_pBuffer;
     Size m_aSize;
-    sal_uInt32 m_nScanline;
 
 public:
     Qt5Bitmap();

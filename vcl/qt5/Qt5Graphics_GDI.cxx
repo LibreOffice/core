@@ -477,12 +477,8 @@ void Qt5Graphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBit
         || rPosAry.mnDestHeight <= 0)
         return;
 
-    Qt5Bitmap aRGBABitmap;
-    if (rSalBitmap.GetBitCount() == 4)
-        aRGBABitmap.Create(rSalBitmap, 32);
-    const QImage* pImage = (rSalBitmap.GetBitCount() != 4)
-                               ? static_cast<const Qt5Bitmap*>(&rSalBitmap)->GetQImage()
-                               : aRGBABitmap.GetQImage();
+    const QImage* pImage = static_cast<const Qt5Bitmap*>(&rSalBitmap)->GetQImage();
+
     assert(pImage);
 
     drawScaledImage(rPosAry, *pImage);
@@ -576,12 +572,7 @@ static bool getAlphaImage(const SalBitmap& rSourceBitmap, const SalBitmap& rAlph
         return false;
     }
 
-    Qt5Bitmap aRGBABitmap;
-    if (rSourceBitmap.GetBitCount() == 4)
-        aRGBABitmap.Create(rSourceBitmap, 32);
-    const QImage* pBitmap = (rSourceBitmap.GetBitCount() != 4)
-                                ? static_cast<const Qt5Bitmap*>(&rSourceBitmap)->GetQImage()
-                                : aRGBABitmap.GetQImage();
+    const QImage* pBitmap = static_cast<const Qt5Bitmap*>(&rSourceBitmap)->GetQImage();
     const QImage* pAlpha = static_cast<const Qt5Bitmap*>(&rAlphaBitmap)->GetQImage();
     rAlphaImage = pBitmap->convertToFormat(Qt5_DefaultFormat32);
 
@@ -635,12 +626,7 @@ bool Qt5Graphics::drawTransformedBitmap(const basegfx::B2DPoint& rNull, const ba
         return false;
     else
     {
-        Qt5Bitmap aRGBABitmap;
-        if (rSourceBitmap.GetBitCount() == 4)
-            aRGBABitmap.Create(rSourceBitmap, 32);
-        const QImage* pBitmap = (rSourceBitmap.GetBitCount() != 4)
-                                    ? static_cast<const Qt5Bitmap*>(&rSourceBitmap)->GetQImage()
-                                    : aRGBABitmap.GetQImage();
+        const QImage* pBitmap = static_cast<const Qt5Bitmap*>(&rSourceBitmap)->GetQImage();
         aImage = pBitmap->convertToFormat(Qt5_DefaultFormat32);
     }
 
