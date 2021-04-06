@@ -838,6 +838,8 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFl
 
         // calculate symbol size
         tools::Long nSymbolSize    = pDev->GetTextHeight() / 2 + 1;
+        if (nSymbolSize > aSize.Width() / 2)
+            nSymbolSize = aSize.Width() / 2;
 
         nSeparatorX = aInRect.Right() - 2*nSymbolSize;
         aSize.AdjustWidth( -(2*nSymbolSize) );
