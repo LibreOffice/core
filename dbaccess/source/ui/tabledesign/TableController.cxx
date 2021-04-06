@@ -1127,7 +1127,7 @@ void OTableController::alterColumns()
             if(xInfo->hasPropertyByName(PROPERTY_FORMATKEY))
                 xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
             if(xInfo->hasPropertyByName(PROPERTY_ALIGN))
-                xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(pField->GetHorJustify())));
+                xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAlign(pField->GetHorJustify())));
         }
     }
     // second drop all columns which could be found by name

@@ -422,7 +422,7 @@ void OFieldDescription::SetHorJustify(const SvxCellHorJustify& _rHorJustify)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ALIGN) )
-            m_xDest->setPropertyValue(PROPERTY_ALIGN,makeAny( dbaui::mapTextAllign(_rHorJustify)));
+            m_xDest->setPropertyValue(PROPERTY_ALIGN,makeAny( dbaui::mapTextAlign(_rHorJustify)));
         else
             m_eHorJustify = _rHorJustify;
     }
@@ -624,7 +624,7 @@ void OFieldDescription::copyColumnSettingsTo(const Reference< XPropertySet >& _r
     if ( GetFormatKey() != NumberFormat::ALL && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
         _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(GetFormatKey()));
     if ( GetHorJustify() != SvxCellHorJustify::Standard && xInfo->hasPropertyByName(PROPERTY_ALIGN) )
-        _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(GetHorJustify())));
+        _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAlign(GetHorJustify())));
     if ( !GetHelpText().isEmpty() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
         _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(GetHelpText()));
     if ( GetControlDefault().hasValue() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )

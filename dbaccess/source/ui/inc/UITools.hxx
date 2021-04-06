@@ -139,7 +139,7 @@ namespace dbaui
         @param SvxCellHorJustify& _eAlignment
         @return the corresponding css::awt::TextAlign
     */
-    sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment);
+    sal_Int32 mapTextAlign(const SvxCellHorJustify& _eAlignment);
 
     /** retrieves a data source given by name or URL, and displays an error if this fails
 
