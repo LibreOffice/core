@@ -845,8 +845,8 @@ public:
 
     int get_menu_button_width() const override
     {
-        const int nButtonWidth = 20;
-        return nButtonWidth;
+        OutputDevice* pDefault = Application::GetDefaultDevice();
+        return 20 * (pDefault ? pDefault->GetDPIScaleFactor() : 1.0);
     }
 
     void CallHandleEventListener(VclWindowEvent& rEvent)
