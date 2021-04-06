@@ -3328,6 +3328,12 @@ bool ScCompiler::IsSingleReference( const OUString& rName, const OUString* pErrR
 bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
 {
     // Has to be called before IsValue
+
+    // A later IsNamedRange() relies on these, being set in IsSingleReference()
+    // if so, reset in all cases.
+    mnCurrentSheetEndPos = 0;
+    mnCurrentSheetTab = -1;
+
     sal_Unicode ch1 = rName[0];
     sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' : ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0] );
     if ( ch1 == cDecSep )
