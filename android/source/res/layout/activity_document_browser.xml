@@ -82,10 +82,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:drawableLeft="@drawable/ic_folder_grey_144dp"
+                        android:drawableLeft="@drawable/ic_folder_grey_48dp"
                         android:gravity="center_vertical"
                         android:text="@string/select_file_to_open"
-                        android:textSize="24dp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
 
                 <TextView
