@@ -69,10 +69,10 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
         sUIDir = getCustomizedUIRootDir();
 
     bool bIsWelded = comphelper::LibreOfficeKit::isActive()
-                    && (rUIXMLDescription == "modules/swriter/ui/notebookbar.ui"
-                    || rUIXMLDescription == "modules/scalc/ui/notebookbar.ui"
-                    || rUIXMLDescription == "modules/simpress/ui/notebookbar.ui"
-                    || rUIXMLDescription == "modules/sdraw/ui/notebookbar.ui");
+                    && (rUIXMLDescription == "modules/swriter/ui/notebookbar_online.ui"
+                    || rUIXMLDescription == "modules/scalc/ui/notebookbar_online.ui"
+                    || rUIXMLDescription == "modules/simpress/ui/notebookbar_online.ui"
+                    || rUIXMLDescription == "modules/sdraw/ui/notebookbar_online.ui");
     if (bIsWelded)
     {
         m_bIsWelded = true;
