@@ -21,6 +21,12 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <core_resource.hxx>
+
+// required for Bug #119962 fix, OMetaConnection.
+#include "../../../../../connectivity/source/inc/TConnection.hxx"
+// required for Bug #119962 fix, OPropertyMap.
+#include "../../../../../connectivity/source/inc/propertyids.hxx"
+
 #include <WCopyTable.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -45,6 +51,7 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -1354,6 +1361,68 @@ void CopyTableWizard::impl_doCopy_nothrow()
 
                 if ( xSourceResultSet.is() )
                     impl_copyRows_throw( xSourceResultSet, xTable );
+
+                // Code to address Bug #119962
+                // https://bugs.documentfoundation.org/show_bug.cgi?id=119962
+                //
+                // SELECT MAX("ID") FROM "TABLENAME"
+                // ALTER TABLE "TABLENAME" ALTER "ID" RESTART WITH NUMBER
+                //
+                const Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_SET_THROW );
+                const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, xTable, ::dbtools::EComposeRule::InDataManipulation, true );
+
+                ::dbtools::OPropertyMap& rPropMap = connectivity::OMetaConnection::getPropMap();
+
+                OUString aSchema,aTable;
+                xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
+                xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
+
+                Any aCatalog = xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME));
+
+                const Reference< XResultSet > xResultKPCL(xDestMetaData->getPrimaryKeys(aCatalog,aSchema,aTable));
+                Reference< XRow > xRowKPCL(xResultKPCL, UNO_QUERY_THROW);
+                OUString sPKCL;
+                if ( xRowKPCL.is() )
+                {
+                    if (xResultKPCL->next())
+                    {
+                        sPKCL = xRowKPCL->getString(4);
+                    }
+                }
+
+                if (!sPKCL.isEmpty())
+                {
+                    OUStringBuffer aSqlBuff("SELECT MAX(\"");
+                    aSqlBuff.append(sPKCL);
+                    aSqlBuff.append("\") FROM ");
+                    aSqlBuff.append(sComposedTableName);
+                    OUString strSql = aSqlBuff.makeStringAndClear();
+
+                    Reference< XResultSet > xResultMAXNUM(m_xDestConnection->createStatement()->executeQuery(strSql));
+                    Reference< XRow > xRow(xResultMAXNUM, UNO_QUERY_THROW);
+
+                    sal_Int64 maxVal = -1L;
+                    if ( xResultMAXNUM.is() )
+                    {
+                        if (xResultMAXNUM->next())
+                        {
+                            maxVal = xRow->getLong(1);
+                        }
+                    }
+
+                    if (maxVal > 0L)
+                    {
+                        aSqlBuff.append("ALTER TABLE ");
+                        aSqlBuff.append(sComposedTableName);
+                        aSqlBuff.append(" ALTER \"");
+                        aSqlBuff.append(sPKCL);
+                        aSqlBuff.append("\" RESTART WITH ");
+                        aSqlBuff.append(maxVal);
+                        strSql = aSqlBuff.makeStringAndClear();
+
+                        m_xDestConnection->createStatement()->execute(strSql);
+                    }
+                }
             }
             break;
 
