@@ -1093,6 +1093,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
 
         if (comphelper::LibreOfficeKit::isActive())
         {
+            aPopupMenu->remove("autocorrect");
+            aPopupMenu->remove("autocorrectdlg");
+
             // For mobile phones, send the context menu structure
             const SfxViewShell* pViewShell = SfxViewShell::Current();
             if (pViewShell && pViewShell->isLOKMobilePhone())
