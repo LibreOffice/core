@@ -22,7 +22,6 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/rtfutil.hxx>
-#include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/string.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/globname.hxx>
@@ -267,7 +266,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_pMapperStream(nullptr)
     , m_aDefaultState(this)
     , m_bSkipUnknown(false)
-    , m_bFirstRun(!comphelper::IsContextFlagActive("InPasteFromClipboard"))
+    , m_bFirstRun(true)
     , m_bFirstRunException(false)
     , m_bNeedPap(true)
     , m_bNeedCr(false)
@@ -372,6 +371,9 @@ void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString const&
 
 void RTFDocumentImpl::outputSettingsTable()
 {
+    // tdf#136740: do not change trarget document settings when pasting
+    if (!m_bIsNewDoc)
+        return;
     writerfilter::Reference<Properties>::Pointer_t pProp
         = new RTFReferenceProperties(m_aSettingsTableAttributes, m_aSettingsTableSprms);
     RTFReferenceTable::Entries_t aSettingsTableEntries;
