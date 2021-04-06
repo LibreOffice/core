@@ -17,6 +17,7 @@
 #include <tools/fract.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

@@ -26,7 +26,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
 #include <optional>
 
 class CommandEvent;
@@ -37,6 +36,10 @@ enum class TextDirectionality {
     TopToBottom_RightToLeft,
     BottomToTop_LeftToRight
 };
+
+namespace vcl {
+    class Window;
+}
 
 class VCL_DLLPUBLIC KeyEvent
 {

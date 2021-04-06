@@ -21,17 +21,14 @@
 
 #include <sal/types.h>
 #include <vcl/seleng.hxx>
+#include <vcl/window.hxx>
 
 #include <table/tabletypes.hxx>
 #include <table/tablemodel.hxx>
 
-
 namespace svt::table
 {
-
-
     //= TableControlAction
-
     enum TableControlAction
     {
         /// moves the cursor in the table control one row up, if possible, by keeping the current column
@@ -235,9 +232,6 @@ namespace svt::table
         virtual ~ITableControl() {};
     };
 
-
 } // namespace svt::table
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

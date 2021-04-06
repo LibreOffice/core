@@ -33,6 +33,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/weak.hxx>
 #include <vcl/event.hxx>
+#include <vcl/window.hxx>
 #include <osl/diagnose.h>
 
 namespace sfx2
