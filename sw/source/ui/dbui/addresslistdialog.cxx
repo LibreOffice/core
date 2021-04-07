@@ -52,6 +52,7 @@
 #include <svl/urihelper.hxx>
 #include <strings.hrc>
 #include <view.hxx>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -304,8 +305,11 @@ IMPL_LINK_NOARG(SwAddressListDialog, RemoveHdl_Impl, weld::Button&, void)
     if (xQuery->run() != RET_YES)
         return;
 
+    // tdf#141538: Split content of TreeView row to make removal work on non-GTK vclplugs
+    std::vector<OUString> aSplitColumns = comphelper::string::split(m_xListLB->get_selected_text(), '\t');
+
     // Remove data source connection
-    SwDBManager::RevokeDataSource(m_xListLB->get_selected_text());
+    SwDBManager::RevokeDataSource(aSplitColumns.front());
     // Remove item from the list
     m_xListLB->remove(nEntry);
     // If this was the last item, disable the Remove & Edit buttons and enable Create
