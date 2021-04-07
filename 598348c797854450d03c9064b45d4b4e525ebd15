@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c85b986_f38d5e0c",
+        "filename": "uui/source/secmacrowarnings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-07T06:35:29Z",
+      "side": 1,
+      "message": "I\u0027m curious what prompted the inclusion of comphelper/documentconstants.hxx, unotools/resmgr.hxx, and com/sun/star/security/NoPasswordException.hpp",
+      "revId": "598348c797854450d03c9064b45d4b4e525ebd15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
