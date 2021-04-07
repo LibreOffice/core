@@ -849,8 +849,8 @@ void SwXDrawPage::InvalidateSwDoc()
 
 const uno::Sequence< sal_Int8 > & SwXShape::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXShapeUnoTunnelId;
-    return theSwXShapeUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId )

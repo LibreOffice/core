@@ -480,8 +480,8 @@ void SwXMLExport::ExportContent_()
 
 const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theSwXMLExportUnoTunnelId;
-    return theSwXMLExportUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )

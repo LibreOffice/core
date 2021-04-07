@@ -899,8 +899,8 @@ void SwXTextRange::DeleteAndInsert(
 
 const uno::Sequence< sal_Int8 > & SwXTextRange::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextRangeUnoTunnelId;
-    return theSwXTextRangeUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 // XUnoTunnel
@@ -1607,8 +1607,8 @@ rtl::Reference<SwXTextRanges> SwXTextRanges::Create(SwPaM *const pPaM)
 
 const uno::Sequence< sal_Int8 > & SwXTextRanges::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextRangesUnoTunnelId;
-    return theSwXTextRangesUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL

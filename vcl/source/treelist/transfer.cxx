@@ -1037,8 +1037,8 @@ void TransferableHelper::ClearPrimarySelection()
 
 const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theTransferableHelperUnoTunnelId;
-    return theTransferableHelperUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 namespace {

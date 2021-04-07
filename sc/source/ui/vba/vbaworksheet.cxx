@@ -172,8 +172,8 @@ ScVbaWorksheet::~ScVbaWorksheet()
 
 const uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScVbaWorksheetUnoTunnelId;
-    return theScVbaWorksheetUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 uno::Reference< ov::excel::XWorksheet >

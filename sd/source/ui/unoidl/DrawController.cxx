@@ -559,8 +559,8 @@ Reference<XModuleController> SAL_CALL
 
 const Sequence<sal_Int8>& DrawController::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theDrawControllerUnoTunnelId;
-    return theDrawControllerUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)

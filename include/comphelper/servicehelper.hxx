@@ -25,16 +25,14 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-class UnoTunnelIdInit
+#include <algorithm>
+
+// Takes address of the initialized static variable, which guarantees uniqueness of the value
+inline css::uno::Sequence<sal_Int8> UnoTunnelIdInit(const void* p)
 {
-private:
-    css::uno::Sequence< sal_Int8 > m_aSeq;
-public:
-    UnoTunnelIdInit() : m_aSeq(16)
-    {
-        rtl_createUuid( reinterpret_cast<sal_uInt8*>(m_aSeq.getArray()), nullptr, true );
-    }
-    const css::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
+    css::uno::Sequence<sal_Int8> aSequence(16);
+    memcpy(aSequence.getArray(), &p, std::min(sizeof(p), size_t(16)));
+    return aSequence;
 };
 
 namespace comphelper {
@@ -77,13 +75,10 @@ inline bool isUnoTunnelId(const css::uno::Sequence< sal_Int8 >& rId)
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
 #define UNO3_GETIMPLEMENTATION_BASE_IMPL( classname ) \
-namespace \
-{ \
-    class the##classname##UnoTunnelId : public rtl::Static< UnoTunnelIdInit, the##classname##UnoTunnelId> {}; \
-} \
 const css::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() throw() \
 { \
-    return the##classname##UnoTunnelId::get().getSeq(); \
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId); \
+    return sId; \
 }
 
 #define UNO3_GETIMPLEMENTATION_IMPL( classname )\

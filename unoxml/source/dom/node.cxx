@@ -164,8 +164,8 @@ namespace DOM
 
     const css::uno::Sequence< sal_Int8 > & CNode::getUnoTunnelId() throw()
     {
-        static const UnoTunnelIdInit theCNodeUnoTunnelId;
-        return theCNodeUnoTunnelId.getSeq();
+        static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+        return sId;
     }
 
     CDocument & CNode::GetOwnerDocument()

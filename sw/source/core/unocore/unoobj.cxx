@@ -865,8 +865,8 @@ SwXTextCursor::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXTextCursor::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextCursorUnoTunnelId;
-    return theSwXTextCursorUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL

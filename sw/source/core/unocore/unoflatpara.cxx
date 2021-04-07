@@ -315,8 +315,8 @@ css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions
 const uno::Sequence< sal_Int8 >&
 SwXFlatParagraph::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXFlatParagraphUnoTunnelId;
-    return theSwXFlatParagraphUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL

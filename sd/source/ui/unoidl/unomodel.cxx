@@ -335,8 +335,8 @@ void SAL_CALL SdXImpressDocument::release() throw ( )
 // XUnoTunnel
 const css::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theSdXImpressDocumentUnoTunnelId;
-    return theSdXImpressDocumentUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )

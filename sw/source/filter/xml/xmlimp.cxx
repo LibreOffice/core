@@ -361,8 +361,8 @@ void SwXMLImport::setStyleInsertMode( SfxStyleFamily nFamilies,
 
 const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theSwXMLImportUnoTunnelId;
-    return theSwXMLImportUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )

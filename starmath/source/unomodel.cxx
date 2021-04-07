@@ -355,8 +355,8 @@ uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  )
 
 const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSmModelUnoTunnelId;
-    return theSmModelUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )

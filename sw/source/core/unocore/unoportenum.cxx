@@ -280,8 +280,8 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXTextPortionEnumeration::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextPortionEnumerationUnoTunnelId;
-    return theSwXTextPortionEnumerationUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SwXTextPortionEnumeration::getSomething(

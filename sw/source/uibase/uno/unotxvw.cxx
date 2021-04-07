@@ -1693,8 +1693,8 @@ Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXTextViewCursor::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextViewCursorUnoTunnelId;
-    return theSwXTextViewCursorUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 //XUnoTunnel

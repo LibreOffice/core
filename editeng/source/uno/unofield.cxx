@@ -231,8 +231,8 @@ static tools::Time setTime( util::DateTime const & rDate )
 
 const css::uno::Sequence< sal_Int8 > & SvxUnoTextField::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theSvxUnoTextFieldUnoTunnelId;
-    return theSvxUnoTextFieldUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SvxUnoTextField::getSomething( const css::uno::Sequence< sal_Int8 >& rId )

@@ -79,8 +79,8 @@ void ValueItemAcc::ParentDestroyed()
 
 const uno::Sequence< sal_Int8 >& ValueItemAcc::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theValueItemAccUnoTunnelId;
-    return theValueItemAccUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 
@@ -464,8 +464,8 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
 
 const uno::Sequence< sal_Int8 >& ValueSetAcc::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theValueSetAccUnoTunnelId;
-    return theValueSetAccUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 

@@ -270,8 +270,8 @@ public:
 
 const Sequence< sal_Int8 > & SwXTextDocument::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextDocumentUnoTunnelId;
-    return theSwXTextDocumentUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rId )

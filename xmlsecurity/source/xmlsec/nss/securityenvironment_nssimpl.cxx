@@ -163,8 +163,8 @@ sal_Int64 SAL_CALL SecurityEnvironment_NssImpl::getSomething( const Sequence< sa
 /* XUnoTunnel extension */
 
 const Sequence< sal_Int8>& SecurityEnvironment_NssImpl::getUnoTunnelId() {
-    static const UnoTunnelIdInit theSecurityEnvironment_NssImplUnoTunnelId;
-    return theSecurityEnvironment_NssImplUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation()

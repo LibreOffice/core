@@ -2065,8 +2065,8 @@ void SfxObjectShell::SignScriptingContent(weld::Window* pDialogParent)
 
 const uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSfxObjectShellUnoTunnelId;
-    return theSfxObjectShellUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

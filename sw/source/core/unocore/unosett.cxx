@@ -1025,8 +1025,8 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXNumberingRules::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXNumberingRulesUnoTunnelId;
-    return theSwXNumberingRulesUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 // return implementation specific data
@@ -2433,8 +2433,8 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXTextColumns::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextColumnsUnoTunnelId;
-    return theSwXTextColumnsUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SwXTextColumns::getSomething( const uno::Sequence< sal_Int8 >& rId )

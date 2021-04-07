@@ -1209,8 +1209,8 @@ namespace
 
 const uno::Sequence<sal_Int8>& SwXStyle::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXStyleUnoTunnelId;
-    return theSwXStyleUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SwXStyle::getSomething(const uno::Sequence<sal_Int8>& rId)

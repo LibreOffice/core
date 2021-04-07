@@ -24,8 +24,8 @@ using namespace ::com::sun::star;
 
 const uno::Sequence< sal_Int8 > & OTextCursorHelper::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theOTextCursorHelperUnoTunnelId;
-    return theOTextCursorHelperUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 //XUnoTunnel

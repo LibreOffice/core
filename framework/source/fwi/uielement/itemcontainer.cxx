@@ -136,8 +136,8 @@ Reference< XIndexAccess > ItemContainer::deepCopyContainer( const Reference< XIn
 
 const Sequence< sal_Int8 >& ItemContainer::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theItemContainerUnoTunnelId;
-    return theItemContainerUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 // XElementAccess

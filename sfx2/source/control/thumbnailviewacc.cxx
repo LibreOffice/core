@@ -48,8 +48,8 @@ ThumbnailViewAcc::~ThumbnailViewAcc()
 
 const uno::Sequence< sal_Int8 >& ThumbnailViewAcc::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSfxValueSetAccUnoTunnelId;
-    return theSfxValueSetAccUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 ThumbnailViewAcc* ThumbnailViewAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
@@ -548,8 +548,8 @@ void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOld
 
 const uno::Sequence< sal_Int8 >& ThumbnailViewItemAcc::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theValueItemAccUnoTunnelId;
-    return theValueItemAccUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 ThumbnailViewItemAcc* ThumbnailViewItemAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )

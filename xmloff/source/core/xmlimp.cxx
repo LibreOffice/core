@@ -467,8 +467,8 @@ bool SvXMLImport::addEmbeddedFont(const css::uno::Reference< css::io::XInputStre
 
 const css::uno::Sequence<sal_Int8>& SvXMLImport::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theSvXMLImportUnoTunnelId;
-    return theSvXMLImportUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 // XUnoTunnel

@@ -1945,8 +1945,8 @@ Oasis2OOoTransformer::~Oasis2OOoTransformer() throw()
 
 const css::uno::Sequence<sal_Int8>& Oasis2OOoTransformer::getUnoTunnelId() throw()
 {
-    static const class UnoTunnelIdInit theOasis2OOoTransformerUnoTunnelId;
-    return theOasis2OOoTransformerUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 // XUnoTunnel

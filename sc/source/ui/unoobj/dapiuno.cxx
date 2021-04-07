@@ -989,8 +989,8 @@ sal_Int64 SAL_CALL ScDataPilotDescriptorBase::getSomething(
 
 const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScDataPilotDescriptorBaseUnoTunnelId;
-    return theScDataPilotDescriptorBaseUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN) :

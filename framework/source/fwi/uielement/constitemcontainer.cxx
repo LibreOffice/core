@@ -171,8 +171,8 @@ sal_Int64 ConstItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >
 
 const Sequence< sal_Int8 >& ConstItemContainer::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theConstItemContainerUnoTunnelId;
-    return theConstItemContainerUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 // XElementAccess

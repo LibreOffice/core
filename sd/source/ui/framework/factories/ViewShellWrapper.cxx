@@ -213,8 +213,8 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
 
 const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theViewShellWrapperUnoTunnelId;
-    return theViewShellWrapperUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId)

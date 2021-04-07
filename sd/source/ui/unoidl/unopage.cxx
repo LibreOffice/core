@@ -323,8 +323,8 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
 
 const css::uno::Sequence< sal_Int8 > & SdGenericDrawPage::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theSdGenericDrawPageUnoTunnelId;
-    return theSdGenericDrawPageUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const css::uno::Sequence< sal_Int8 >& rId )

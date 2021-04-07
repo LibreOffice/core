@@ -425,8 +425,8 @@ css::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
 
 const css::uno::Sequence< sal_Int8 >& UnoControlModel::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theUnoControlModelUnoTunnelId;
-    return theUnoControlModelUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 UnoControlModel::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )

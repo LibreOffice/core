@@ -1873,8 +1873,8 @@ SwChartDataSequence::~SwChartDataSequence()
 
 const uno::Sequence< sal_Int8 > & SwChartDataSequence::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwChartDataSequenceUnoTunnelId;
-    return theSwChartDataSequenceUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const uno::Sequence< sal_Int8 > &rId )

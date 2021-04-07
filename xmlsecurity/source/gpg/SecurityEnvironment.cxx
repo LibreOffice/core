@@ -106,8 +106,8 @@ namespace
 }
 
 const Sequence< sal_Int8>& SecurityEnvironmentGpg::getUnoTunnelId() {
-    static const UnoTunnelIdInit theSecurityEnvironmentUnoTunnelId;
-    return theSecurityEnvironmentUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 OUString SecurityEnvironmentGpg::getSecurityEnvironmentInformation()

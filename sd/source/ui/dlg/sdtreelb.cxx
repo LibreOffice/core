@@ -128,8 +128,8 @@ sal_Int64 SAL_CALL SdPageObjsTLV::SdPageObjsTransferable::getSomething( const cs
 
 const css::uno::Sequence<sal_Int8>& SdPageObjsTLV::SdPageObjsTransferable::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSdPageObjsTLBUnoTunnelId;
-    return theSdPageObjsTLBUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData )

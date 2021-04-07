@@ -2163,8 +2163,8 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames_Stat
 
 const uno::Sequence< sal_Int8 > & SvxUnoTextBase::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theSvxUnoTextBaseUnoTunnelId;
-    return theSvxUnoTextBaseUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SvxUnoTextBase::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -2237,8 +2237,8 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxUnoText::getImplementationId(  )
 
 const uno::Sequence< sal_Int8 > & SvxUnoText::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theSvxUnoTextUnoTunnelId;
-    return theSvxUnoTextUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SvxUnoText::getSomething( const uno::Sequence< sal_Int8 >& rId )

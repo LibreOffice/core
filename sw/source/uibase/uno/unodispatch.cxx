@@ -151,8 +151,8 @@ void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
 
 const uno::Sequence< sal_Int8 > & SwXDispatchProviderInterceptor::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXDispatchProviderInterceptorUnoTunnelId;
-    return theSwXDispatchProviderInterceptorUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SwXDispatchProviderInterceptor::getSomething(

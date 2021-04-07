@@ -151,8 +151,8 @@ SwXReferenceMark::CreateXReferenceMark(
 
 const uno::Sequence< sal_Int8 > & SwXReferenceMark::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXReferenceMarkUnoTunnelId;
-    return theSwXReferenceMarkUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL
@@ -842,8 +842,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
 
 const uno::Sequence< sal_Int8 > & SwXMeta::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXMetaUnoTunnelId;
-    return theSwXMetaUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 // XUnoTunnel

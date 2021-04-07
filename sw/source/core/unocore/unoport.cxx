@@ -774,8 +774,8 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
 
 const uno::Sequence< sal_Int8 > & SwXTextPortion::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextPortionUnoTunnelId;
-    return theSwXTextPortionUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SwXTextPortion::getSomething( const uno::Sequence< sal_Int8 >& rId )

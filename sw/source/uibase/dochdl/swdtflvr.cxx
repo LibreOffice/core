@@ -4199,8 +4199,8 @@ void SwTransferable::ClearSelection( SwWrtShell& rSh,
 
 const Sequence< sal_Int8 >& SwTransferable::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwTransferableUnoTunnelId;
-    return theSwTransferableUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId )

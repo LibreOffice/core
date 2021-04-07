@@ -331,8 +331,8 @@ sal_Int64 SAL_CALL SmXMLExport::getSomething(const uno::Sequence<sal_Int8>& rId)
 
 const uno::Sequence<sal_Int8>& SmXMLExport::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theSmXMLExportUnoTunnelId;
-    return theSmXMLExportUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

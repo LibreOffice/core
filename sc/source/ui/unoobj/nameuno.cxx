@@ -435,8 +435,8 @@ sal_Int64 SAL_CALL ScNamedRangeObj::getSomething(
 
 const uno::Sequence<sal_Int8>& ScNamedRangeObj::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScNamedRangeObjUnoTunnelId;
-    return theScNamedRangeObjUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 ScNamedRangesObj::ScNamedRangesObj(ScDocShell* pDocSh) :

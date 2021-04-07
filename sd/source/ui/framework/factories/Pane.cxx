@@ -140,8 +140,8 @@ sal_Bool SAL_CALL Pane::isAnchorOnly()
 
 const Sequence<sal_Int8>& Pane::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit thePaneUnoTunnelId;
-    return thePaneUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL Pane::getSomething (const Sequence<sal_Int8>& rId)

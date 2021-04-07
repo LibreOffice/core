@@ -908,8 +908,8 @@ void ScTransferObj::StripRefs( ScDocument& rDoc,
 
 const css::uno::Sequence< sal_Int8 >& ScTransferObj::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScTransferUnoTunnelId;
-    return theScTransferUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL ScTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )

@@ -408,8 +408,8 @@ SmXMLImport::SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>&
 
 const uno::Sequence<sal_Int8>& SmXMLImport::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theSmXMLImportUnoTunnelId;
-    return theSmXMLImportUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

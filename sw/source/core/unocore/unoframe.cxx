@@ -1161,8 +1161,8 @@ public:
 
 const ::uno::Sequence< sal_Int8 > & SwXFrame::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXFrameUnoTunnelId;
-    return theSwXFrameUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SwXFrame::getSomething( const ::uno::Sequence< sal_Int8 >& rId )

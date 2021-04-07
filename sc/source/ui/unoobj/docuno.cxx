@@ -3088,8 +3088,8 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
 
 const uno::Sequence<sal_Int8>& ScModelObj::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScModelObjUnoTunnelId;
-    return theScModelObjUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 // XChangesNotifier

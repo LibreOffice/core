@@ -913,8 +913,8 @@ SfxStyleSheetBasePool::StoreStyleSheet(const rtl::Reference< SfxStyleSheetBase >
 
 const css::uno::Sequence< ::sal_Int8 >& SfxUnoStyleSheet::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSfxUnoStyleSheetIdentifier;
-    return theSfxUnoStyleSheetIdentifier.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 void

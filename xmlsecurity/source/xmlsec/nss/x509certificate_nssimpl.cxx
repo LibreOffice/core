@@ -353,8 +353,8 @@ sal_Int64 SAL_CALL X509Certificate_NssImpl::getSomething( const Sequence< sal_In
 /* XUnoTunnel extension */
 
 const Sequence< sal_Int8>& X509Certificate_NssImpl::getUnoTunnelId() {
-    static const UnoTunnelIdInit theX509Certificate_NssImplUnoTunnelId;
-    return theX509Certificate_NssImplUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 static OUString getAlgorithmDescription(SECAlgorithmID const *aid)

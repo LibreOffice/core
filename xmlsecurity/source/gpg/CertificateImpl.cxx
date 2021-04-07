@@ -206,8 +206,8 @@ sal_Int64 SAL_CALL CertificateImpl::getSomething(const Sequence< sal_Int8 >& aId
 /* XUnoTunnel extension */
 
 const Sequence< sal_Int8>& CertificateImpl::getUnoTunnelId() {
-    static const UnoTunnelIdInit theCertificateImplUnoTunnelId;
-    return theCertificateImplUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 void CertificateImpl::setCertificate(GpgME::Context* ctx, const GpgME::Key& key)

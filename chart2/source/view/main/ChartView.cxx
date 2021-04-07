@@ -1032,8 +1032,8 @@ struct CreateShapeParam2D
 
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theExplicitValueProviderUnoTunnelId;
-    return theExplicitValueProviderUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 ChartView::ChartView(

@@ -206,8 +206,8 @@ uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXAutoTextGroup::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXAutoTextGroupUnoTunnelId;
-    return theSwXAutoTextGroupUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SwXAutoTextGroup::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -666,8 +666,8 @@ uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXAutoTextEntry::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXAutoTextEntryUnoTunnelId;
-    return theSwXAutoTextEntryUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SwXAutoTextEntry::getSomething( const uno::Sequence< sal_Int8 >& rId )

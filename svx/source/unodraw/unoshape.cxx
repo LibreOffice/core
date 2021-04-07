@@ -309,8 +309,8 @@ uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type& rType )
 
 const css::uno::Sequence< sal_Int8 > & SvxShape::getUnoTunnelId() throw()
 {
-    static const UnoTunnelIdInit theSvxShapeUnoTunnelId;
-    return theSvxShapeUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL SvxShape::getSomething( const css::uno::Sequence< sal_Int8 >& rId )

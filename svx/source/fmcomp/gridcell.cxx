@@ -4437,8 +4437,8 @@ sal_Int64 SAL_CALL FmXFilterCell::getSomething( const Sequence< sal_Int8 >& _rId
 
 const Sequence<sal_Int8>& FmXFilterCell::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theFmXFilterCellUnoTunnelId;
-    return theFmXFilterCellUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 

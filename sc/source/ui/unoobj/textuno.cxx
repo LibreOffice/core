@@ -144,8 +144,8 @@ sal_Int64 SAL_CALL ScHeaderFooterContentObj::getSomething(
 
 const uno::Sequence<sal_Int8>& ScHeaderFooterContentObj::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScHeaderFooterContentObjUnoTunnelId;
-    return theScHeaderFooterContentObjUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 rtl::Reference<ScHeaderFooterContentObj> ScHeaderFooterContentObj::getImplementation(

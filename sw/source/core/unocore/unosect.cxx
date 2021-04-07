@@ -230,8 +230,8 @@ SwXTextSection::~SwXTextSection()
 
 const uno::Sequence< sal_Int8 > & SwXTextSection::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextSectionUnoTunnelId;
-    return theSwXTextSectionUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> sId = UnoTunnelIdInit(&sId);
+    return sId;
 }
 
 sal_Int64 SAL_CALL
