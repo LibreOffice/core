@@ -39,7 +39,7 @@ class FontAttributes;
 class SalInfoPrinter;
 class ImplFontMetricData;
 
-class VCL_DLLPUBLIC GenPspGraphics final : public SalGraphics
+class VCL_DLLPUBLIC GenPspGraphics final : public SalGraphicsAutoDelegateToImpl
 {
     std::unique_ptr<GenPspGfxBackend> m_pBackend;
 
@@ -75,19 +75,6 @@ public:
     }
 
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
-    virtual sal_uInt16      GetBitCount() const override;
-    virtual tools::Long            GetGraphicsWidth() const override;
-
-    virtual void            ResetClipRegion() override;
-    virtual bool            setClipRegion( const vcl::Region& ) override;
-
-    virtual void            SetLineColor() override;
-    virtual void            SetLineColor( Color nColor ) override;
-    virtual void            SetFillColor() override;
-    virtual void            SetFillColor( Color nColor ) override;
-    virtual void            SetXORMode( bool bSet, bool ) override;
-    virtual void            SetROPLineColor( SalROPColor nROPColor ) override;
-    virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
 
     virtual void            SetTextColor( Color nColor ) override;
     virtual void            SetFont(LogicalFontInstance*, int nFallbackLevel) override;
@@ -120,94 +107,8 @@ public:
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
-    virtual bool            supportsOperation( OutDevSupportType ) const override;
-    virtual void            drawPixel( tools::Long nX, tools::Long nY ) override;
-    virtual void            drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override;
-    virtual void            drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) override;
-    virtual void            drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-    virtual void            drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
-    virtual void            drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
-    virtual void            drawPolyPolygon( sal_uInt32 nPoly,
-                                             const sal_uInt32* pPoints,
-                                             const Point** pPtAry ) override;
-
-    virtual bool            drawPolyPolygon(
-                                const basegfx::B2DHomMatrix& rObjectToDevice,
-                                const basegfx::B2DPolyPolygon&,
-                                double fTransparency) override;
-
-    virtual bool            drawPolyLine(
-                                const basegfx::B2DHomMatrix& rObjectToDevice,
-                                const basegfx::B2DPolygon&,
-                                double fTransparency,
-                                double fLineWidth,
-                                const std::vector< double >* pStroke, // MM01
-                                basegfx::B2DLineJoin,
-                                css::drawing::LineCap,
-                                double fMiterMinimumAngle,
-                                bool bPixelSnapHairline) override;
-    virtual bool            drawPolyLineBezier( sal_uInt32 nPoints,
-                                                const Point* pPtAry,
-                                                const PolyFlags* pFlgAry ) override;
-    virtual bool            drawPolygonBezier( sal_uInt32 nPoints,
-                                               const Point* pPtAry,
-                                               const PolyFlags* pFlgAry ) override;
-    virtual bool            drawPolyPolygonBezier( sal_uInt32 nPoly,
-                                                   const sal_uInt32* pPoints,
-                                                   const Point* const* pPtAry,
-                                                   const PolyFlags* const* pFlgAry ) override;
-
-    virtual void            copyArea( tools::Long nDestX,
-                                      tools::Long nDestY,
-                                      tools::Long nSrcX,
-                                      tools::Long nSrcY,
-                                      tools::Long nSrcWidth,
-                                      tools::Long nSrcHeight,
-                                      bool bWindowInvalidate) override;
-    virtual void            copyBits( const SalTwoRect& rPosAry,
-                                      SalGraphics* pSrcGraphics ) override;
-    virtual void            drawBitmap( const SalTwoRect& rPosAry,
-                                        const SalBitmap& rSalBitmap ) override;
-    virtual void            drawBitmap( const SalTwoRect& rPosAry,
-                                        const SalBitmap& rSalBitmap,
-                                        const SalBitmap& rTransparentBitmap ) override;
-    virtual void            drawMask( const SalTwoRect& rPosAry,
-                                      const SalBitmap& rSalBitmap,
-                                      Color nMaskColor ) override;
-    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-    virtual Color           getPixel( tools::Long nX, tools::Long nY ) override;
-    virtual void            invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                                    SalInvert nFlags ) override;
-    virtual void            invert( sal_uInt32 nPoints, const Point* pPtAry,
-                                    SalInvert nFlags ) override;
-
-    virtual bool            drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                                     void* pPtr, sal_uInt32 nSize ) override;
-    virtual bool            blendBitmap( const SalTwoRect&,
-                                         const SalBitmap& rBitmap ) override;
-    virtual bool            blendAlphaBitmap( const SalTwoRect&,
-                                              const SalBitmap& rSrcBitmap,
-                                              const SalBitmap& rMaskBitmap,
-                                              const SalBitmap& rAlphaBitmap ) override;
-    virtual bool            drawAlphaBitmap( const SalTwoRect&,
-                                             const SalBitmap& rSourceBitmap,
-                                             const SalBitmap& rAlphaBitmap ) override;
-    virtual bool            drawTransformedBitmap( const basegfx::B2DPoint& rNull,
-                                                   const basegfx::B2DPoint& rX,
-                                                   const basegfx::B2DPoint& rY,
-                                                   const SalBitmap& rSourceBitmap,
-                                                   const SalBitmap* pAlphaBitmap,
-                                                   double fAlpha) override;
-    virtual bool            hasFastDrawTransformedBitmap() const override;
-    virtual bool            drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                                           sal_uInt8 nTransparency ) override;
-
-    virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
-    virtual bool implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon, SalGradient const& rGradient) override;
 
     virtual SystemGraphicsData GetGraphicsData() const override;
-
-    virtual OUString getRenderBackendName() const override { return "genpsp"; }
 
 #if ENABLE_CAIRO_CANVAS
     virtual bool            SupportsCairo() const override;
