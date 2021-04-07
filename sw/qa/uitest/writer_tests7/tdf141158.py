@@ -3,15 +3,9 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
-import importlib
-import pathlib
-import org.libreoffice.unotest
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import get_url_for_data_file
 import time
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
-
 
 class TestTdf141158(UITestCase):
     def test_tdf141158(self):

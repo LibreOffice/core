@@ -5,13 +5,7 @@
 #
 
 from uitest.framework import UITestCase
-import org.libreoffice.unotest
-import pathlib
-
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
-
+from uitest.uihelper.common import get_url_for_data_file
 
 # Test for sfx2/source/doc/objserv.cxx.
 class Test(UITestCase):
