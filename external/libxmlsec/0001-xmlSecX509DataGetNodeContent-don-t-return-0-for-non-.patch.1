@@ -1,0 +1,68 @@
+From a39b110cb2c25680259a38b2f397b350151bc6e7 Mon Sep 17 00:00:00 2001
+From: Michael Stahl <michael.stahl@allotropia.de>
+Date: Wed, 7 Apr 2021 16:43:48 +0200
+Subject: [PATCH] xmlSecX509DataGetNodeContent(): don't return 0 for non-empty
+ elements
+
+LibreOffice wants to write the content of KeyInfo itself and thus writes
+X509Certificate element with content.
+
+But then xmlSecMSCngKeyDataX509XmlWrite() writes a duplicate
+X509Certificate element, which then makes a new additional consistency
+check in LO unhappy.
+
+The duplicate is written because xmlSecX509DataGetNodeContent() returns
+0 because it only checks for empty nodes; if there are only non-empty
+nodes a fallback to XMLSEC_X509DATA_DEFAULT occurs in all backends.
+
+Change the return value to be non-0 without changing the signature of
+the function, as it is apparently public.
+
+This doesn't happen in LO in the NSS backend due to another accident,
+where the private key flag isn't set when the X509Certificate is read,
+but otherwise the code is the same.
+---
+ src/x509.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/src/x509.c b/src/x509.c
+index ed8788ae..dac8bd2b 100644
+--- a/src/x509.c
++++ b/src/x509.c
+@@ -60,22 +60,33 @@ xmlSecX509DataGetNodeContent (xmlNodePtr node, xmlSecKeyInfoCtxPtr keyInfoCtx) {
+         if(xmlSecCheckNodeName(cur, xmlSecNodeX509Certificate, xmlSecDSigNs)) {
+             if(xmlSecIsEmptyNode(cur) == 1) {
+                 content |= XMLSEC_X509DATA_CERTIFICATE_NODE;
++            } else {
++                /* ensure return value isn't 0 if there are non-empty elements */
++                content |= (XMLSEC_X509DATA_CERTIFICATE_NODE << 16);
+             }
+         } else if(xmlSecCheckNodeName(cur, xmlSecNodeX509SubjectName, xmlSecDSigNs)) {
+             if(xmlSecIsEmptyNode(cur) == 1) {
+                 content |= XMLSEC_X509DATA_SUBJECTNAME_NODE;
++            } else {
++                content |= (XMLSEC_X509DATA_SUBJECTNAME_NODE << 16);
+             }
+         } else if(xmlSecCheckNodeName(cur, xmlSecNodeX509IssuerSerial, xmlSecDSigNs)) {
+             if(xmlSecIsEmptyNode(cur) == 1) {
+                 content |= XMLSEC_X509DATA_ISSUERSERIAL_NODE;
++            } else {
++                content |= (XMLSEC_X509DATA_ISSUERSERIAL_NODE << 16);
+             }
+         } else if(xmlSecCheckNodeName(cur, xmlSecNodeX509SKI, xmlSecDSigNs)) {
+             if(xmlSecIsEmptyNode(cur) == 1) {
+                 content |= XMLSEC_X509DATA_SKI_NODE;
++            } else {
++                content |= (XMLSEC_X509DATA_SKI_NODE << 16);
+             }
+         } else if(xmlSecCheckNodeName(cur, xmlSecNodeX509CRL, xmlSecDSigNs)) {
+             if(xmlSecIsEmptyNode(cur) == 1) {
+                 content |= XMLSEC_X509DATA_CRL_NODE;
++            } else {
++                content |= (XMLSEC_X509DATA_CRL_NODE << 16);
+             }
+         } else {
+             /* todo: fail on unknown child node? */
+-- 
+2.30.2
+
