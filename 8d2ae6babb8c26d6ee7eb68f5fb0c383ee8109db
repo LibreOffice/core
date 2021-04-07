@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "f9bbeccb_3cedf433",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-07T14:53:54Z",
+      "side": 1,
+      "message": "why the unrelated, random change?",
+      "range": {
+        "startLine": 916,
+        "startChar": 71,
+        "endLine": 916,
+        "endChar": 74
+      },
+      "revId": "8d2ae6babb8c26d6ee7eb68f5fb0c383ee8109db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56fd90a5_48adfc2d",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-07T14:53:54Z",
+      "side": 1,
+      "message": "this breaks the ABI",
+      "revId": "8d2ae6babb8c26d6ee7eb68f5fb0c383ee8109db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1a641e55_40b6ce79",
         "filename": "sal/osl/unx/file_url.cxx",
         "patchSetId": 3
@@ -13,6 +53,30 @@
       "writtenOn": "2021-04-07T14:39:05Z",
       "side": 1,
       "message": "So I added an exception for this, but I\u0027m not sure it is really needed.\nThis is supposed to support file://\u003chostname\u003e URLs. But since this call is inside getSystemPathFromFileUrl(), it will only work for the current host, it does not help with reaching other computers on the network. And in this case, supporting the local host name should be enough IMO, no need to query DNS.\nWhat do others think?",
+      "range": {
+        "startLine": 268,
+        "startChar": 12,
+        "endLine": 268,
+        "endChar": 76
+      },
+      "revId": "8d2ae6babb8c26d6ee7eb68f5fb0c383ee8109db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f262fbd0_a7b3c1b7",
+        "filename": "sal/osl/unx/file_url.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-07T14:53:54Z",
+      "side": 1,
+      "message": "See my comment at \u003chttps://gerrit.libreoffice.org/c/core/+/107513/4#message-73a10683c1d1849a59d88d02bc58292ffdc1d519\u003e \"Do not call GetAddrInfoW if we just want the hostname\":  \"Note how the comment at \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d107461#c6\u003e, citing \u003chttps://tools.ietf.org/html/rfc8089\u003e \u0027The \u0027file\u0027 URI Scheme\u0027 does imply that we want osl_getLocalHostName to return a FQDN in this case.\"",
+      "parentUuid": "1a641e55_40b6ce79",
       "range": {
         "startLine": 268,
         "startChar": 12,
