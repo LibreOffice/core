@@ -8,8 +8,6 @@ from uitest.framework import UITestCase
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import is_row_hidden
-from uitest.uihelper.common import get_url_for_data_file
-
 #Bug 117276 - Autofilter settings being reset in some cases
 
 class tdf117276_autofilter_reset(UITestCase):

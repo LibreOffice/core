@@ -6,11 +6,8 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
 from uitest.uihelper.common import select_by_text
-import time
-from uitest.debug import sleep
-#Tools -Sort dialog + tdf81292
+from uitest.uihelper.common import type_text
 
 class WriterSort(UITestCase):
 

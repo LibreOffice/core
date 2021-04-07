@@ -16,17 +16,6 @@
     the License at http://www.apache.org/licenses/LICENSE-2.0 .
 '''
 import unittest
-import unohelper
-import os
-from com.sun.star.lang import XMultiServiceFactory
-from com.sun.star.text import XTextDocument
-from com.sun.star.text import XTextField
-from com.sun.star.container import XEnumeration
-from com.sun.star.util import XRefreshable
-from com.sun.star.container import XEnumerationAccess
-from com.sun.star.beans import XPropertySet
-from com.sun.star.text import XTextFieldsSupplier
-from com.sun.star.container import XNamed
 from com.sun.star.text.ReferenceFieldPart import (NUMBER, NUMBER_NO_CONTEXT, NUMBER_FULL_CONTEXT, TEXT)
 from com.sun.star.text.ReferenceFieldSource import BOOKMARK
 from org.libreoffice.unotest import UnoInProcess

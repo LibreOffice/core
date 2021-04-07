@@ -8,11 +8,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 import unittest
-import unohelper
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.beans import PropertyValue
-import uno
 
 
 class TestXModel(unittest.TestCase):

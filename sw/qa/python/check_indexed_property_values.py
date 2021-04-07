@@ -17,12 +17,9 @@
 '''
 
 import unittest
-import unohelper
 import uno
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.beans import PropertyValue
-from com.sun.star.container import XIndexContainer
-from org.libreoffice.unotest import OfficeConnection
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.lang import IndexOutOfBoundsException
 

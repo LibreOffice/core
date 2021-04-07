@@ -10,10 +10,8 @@
 from uitest.framework import UITestCase
 import os
 import re
-import time
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
 
 #test Hyperlink dialog
 class HyperlinkDialog(UITestCase):

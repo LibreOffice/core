@@ -6,7 +6,6 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
-from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import change_measurement_unit
 
 class tdf132169(UITestCase):

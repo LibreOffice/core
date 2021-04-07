@@ -8,10 +8,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 import unittest
-import unohelper
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.container import NoSuchElementException
-import uno
 
 
 class TestXTextFieldsSupplier(unittest.TestCase):
