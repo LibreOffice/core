@@ -8,12 +8,7 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import type_text
-import importlib
-import org.libreoffice.unotest
-import pathlib
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
+from uitest.uihelper.common import get_url_for_data_file
 
 class tdf46561(UITestCase):
     def check_header_texts(self, master="", first="", left="", right=""):

@@ -8,10 +8,8 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.common import get_state_as_dict, type_text
 from uitest.uihelper.common import select_pos
-import org.libreoffice.unotest
-import pathlib
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
+from uitest.uihelper.common import get_url_for_data_file
+
 class tdf138546(UITestCase):
     def test_tdf138546(self):
         self.ui_test.load_file(get_url_for_data_file("tdf138546.odt"))
