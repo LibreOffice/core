@@ -7,7 +7,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 #Bug 122449 - Crash in: mergedlo.dll when closing "Edit Index Entry" dialog (gen/gtk)
 

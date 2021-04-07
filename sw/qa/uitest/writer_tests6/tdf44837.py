@@ -5,10 +5,8 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import select_pos, get_state_as_dict, type_text
-from com.sun.star.uno import RuntimeException
+from uitest.uihelper.common import type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
 #Bug 44837 - EDITING 'Replace All' clears current selection
 
 class tdf44837(UITestCase):

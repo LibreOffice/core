@@ -9,7 +9,6 @@ from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-
 #Bug 79983 - Calc sort lists aren't case sensitive
 
 class tdf79983(UITestCase):

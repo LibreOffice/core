@@ -6,9 +6,7 @@
 #
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
-from uitest.debug import sleep
 from uitest.uihelper.common import select_pos
 
 #Bug 116737 - INSERT TABLE: Can't select table style (gen/gtk)

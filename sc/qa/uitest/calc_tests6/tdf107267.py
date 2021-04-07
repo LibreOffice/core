@@ -7,12 +7,10 @@
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
-from libreoffice.calc.document import get_column
-from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_url_for_data_file
 
 #Bug 107267 - During a sub-total calculation or sum, the data set is not computed well.
 class Subtotals(UITestCase):
