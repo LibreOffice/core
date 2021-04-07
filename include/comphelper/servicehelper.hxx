@@ -25,6 +25,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <algorithm>
+
 class UnoTunnelIdInit
 {
 private:
@@ -48,6 +50,13 @@ namespace comphelper {
 
         return reinterpret_cast<T*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( T::getUnoTunnelId() )));
     }
+
+css::uno::Sequence<sal_Int8> sequence16FromPointer(const void* p)
+{
+    css::uno::Sequence<sal_Int8> aSequence(16);
+    memcpy(aSequence.getArray(), &p, std::min(sizeof(p), size_t(16)));
+    return aSequence;
+}
 
 }
 
