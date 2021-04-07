@@ -1170,7 +1170,9 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "Substract" ||
              aEvent.FeatureURL.Path == "DistributeSelection" ||
              aEvent.FeatureURL.Path == "Intersect" ||
-             aEvent.FeatureURL.Path == "ResetAttributes")
+             aEvent.FeatureURL.Path == "ResetAttributes" ||
+             aEvent.FeatureURL.Path == "IncrementIndent" ||
+             aEvent.FeatureURL.Path == "DecrementIndent")
     {
         aBuffer.append(aEvent.IsEnabled ? std::u16string_view(u"enabled") : std::u16string_view(u"disabled"));
     }
