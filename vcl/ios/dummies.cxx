@@ -110,11 +110,6 @@ void SalGenericInstance::jobEndedPrinterUpdate()
 {
 }
 
-bool AquaSalGraphics::drawEPS( long, long, long, long, void*, sal_uInt32 )
-{
-    return false;
-}
-
 using namespace psp;
 
 GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstance *const pInstance)
