@@ -46,7 +46,9 @@
 static bool  bWindowScaling = false;
 static float fWindowScale = 1.0f;
 
-float AquaSalGraphics::GetWindowScaling()
+namespace sal::aqua
+{
+float getWindowScaling()
 {
     if (!bWindowScaling)
     {
@@ -65,38 +67,35 @@ float AquaSalGraphics::GetWindowScaling()
     }
     return fWindowScale;
 }
+} // end aqua
 
 void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
 {
-    mpFrame = pFrame;
-    mbWindow = true;
-    mbPrinter = false;
-    mbVirDev = false;
+    maShared.mpFrame = pFrame;
+    maShared.mbWindow = true;
+    maShared.mbPrinter = false;
+    maShared.mbVirDev = false;
 }
 
 void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, sal_Int32 nDPIX, sal_Int32 nDPIY )
 {
-    mbWindow = false;
-    mbPrinter = true;
-    mbVirDev = false;
+    maShared.mbWindow = false;
+    maShared.mbPrinter = true;
+    maShared.mbVirDev = false;
 
-    maContextHolder.set(xContext);
+    maShared.maContextHolder.set(xContext);
     mnRealDPIX = nDPIX;
     mnRealDPIY = nDPIY;
 
     // a previously set clip path is now invalid
-    if( mxClipPath )
-    {
-        CGPathRelease( mxClipPath );
-        mxClipPath = nullptr;
-    }
+    maShared.unsetClipPath();
 
-    if (maContextHolder.isSet())
+    if (maShared.maContextHolder.isSet())
     {
-        CGContextSetFillColorSpace( maContextHolder.get(), GetSalData()->mxRGBSpace );
-        CGContextSetStrokeColorSpace( maContextHolder.get(), GetSalData()->mxRGBSpace );
-        CGContextSaveGState( maContextHolder.get() );
-        SetState();
+        CGContextSetFillColorSpace( maShared.maContextHolder.get(), GetSalData()->mxRGBSpace );
+        CGContextSetStrokeColorSpace( maShared.maContextHolder.get(), GetSalData()->mxRGBSpace );
+        CGContextSaveGState( maShared.maContextHolder.get() );
+        maShared.setState();
     }
 }
 
@@ -104,50 +103,46 @@ void AquaSalGraphics::InvalidateContext()
 {
     UnsetState();
 
-    CGContextRelease(maContextHolder.get());
-    CGContextRelease(maBGContextHolder.get());
-    CGContextRelease(maCSContextHolder.get());
+    CGContextRelease(maShared.maContextHolder.get());
+    CGContextRelease(maShared.maBGContextHolder.get());
+    CGContextRelease(maShared.maCSContextHolder.get());
 
-    maContextHolder.set(nullptr);
-    maCSContextHolder.set(nullptr);
-    maBGContextHolder.set(nullptr);
+    maShared.maContextHolder.set(nullptr);
+    maShared.maCSContextHolder.set(nullptr);
+    maShared.maBGContextHolder.set(nullptr);
 }
 
 void AquaSalGraphics::UnsetState()
 {
-    if (maBGContextHolder.isSet())
+    if (maShared.maBGContextHolder.isSet())
     {
-        CGContextRelease(maBGContextHolder.get());
-        maBGContextHolder.set(nullptr);
+        CGContextRelease(maShared.maBGContextHolder.get());
+        maShared.maBGContextHolder.set(nullptr);
     }
-    if (maCSContextHolder.isSet())
+    if (maShared.maCSContextHolder.isSet())
     {
-        CGContextRelease(maCSContextHolder.get());
-        maBGContextHolder.set(nullptr);
+        CGContextRelease(maShared.maCSContextHolder.get());
+        maShared.maBGContextHolder.set(nullptr);
     }
-    if (maContextHolder.isSet())
+    if (maShared.maContextHolder.isSet())
     {
-        maContextHolder.restoreState();
-        maContextHolder.set(nullptr);
+        maShared.maContextHolder.restoreState();
+        maShared.maContextHolder.set(nullptr);
     }
-    if( mxClipPath )
-    {
-        CGPathRelease( mxClipPath );
-        mxClipPath = nullptr;
-    }
+    maShared.unsetState();
 }
 
 /**
  * (re-)create the off-screen maLayer we render everything to if
  * necessary: eg. not initialized yet, or it has an incorrect size.
  */
-bool AquaSalGraphics::CheckContext()
+bool AquaSharedAttributes::checkContext()
 {
     if (mbWindow && mpFrame && (mpFrame->getNSWindow() || Application::IsBitmapRendering()))
     {
         const unsigned int nWidth = mpFrame->maGeometry.nWidth;
         const unsigned int nHeight = mpFrame->maGeometry.nHeight;
-        const float fScale = GetWindowScaling();
+        const float fScale = sal::aqua::getWindowScaling();
         CGLayerRef rReleaseLayer = nullptr;
 
         // check if a new drawing context is needed (e.g. after a resize)
@@ -218,7 +213,7 @@ bool AquaSalGraphics::CheckContext()
                 // apply a scale matrix so everything is auto-magically scaled
                 CGContextScaleCTM(maContextHolder.get(), fScale, fScale);
                 maContextHolder.saveState();
-                SetState();
+                setState();
 
                 // re-enable XOR emulation for the new context
                 if (mpXorEmulation)
@@ -239,19 +234,19 @@ bool AquaSalGraphics::CheckContext()
  */
 void AquaSalGraphics::UpdateWindow( NSRect& )
 {
-    if( !mpFrame )
+    if (!maShared.mpFrame)
     {
         return;
     }
 
     NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
-    if (maLayer.isSet() && pContext != nullptr)
+    if (maShared.maLayer.isSet() && pContext != nullptr)
     {
         CGContextHolder rCGContextHolder([pContext CGContext]);
 
         rCGContextHolder.saveState();
 
-        CGMutablePathRef rClip = mpFrame->getClipPath();
+        CGMutablePathRef rClip = maShared.mpFrame->getClipPath();
         if (rClip)
         {
             CGContextBeginPath(rCGContextHolder.get());
@@ -259,16 +254,16 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
             CGContextClip(rCGContextHolder.get());
         }
 
-        ApplyXorContext();
+        maShared.applyXorContext();
 
-        const CGSize aSize = maLayer.getSizePoints();
+        const CGSize aSize = maShared.maLayer.getSizePoints();
         const CGRect aRect = CGRectMake(0, 0, aSize.width,  aSize.height);
-        const CGRect aRectPoints = { CGPointZero, maLayer.getSizePixels() };
-        CGContextSetBlendMode(maCSContextHolder.get(), kCGBlendModeCopy);
-        CGContextDrawLayerInRect(maCSContextHolder.get(), aRectPoints, maLayer.get());
+        const CGRect aRectPoints = { CGPointZero, maShared.maLayer.getSizePixels() };
+        CGContextSetBlendMode(maShared.maCSContextHolder.get(), kCGBlendModeCopy);
+        CGContextDrawLayerInRect(maShared.maCSContextHolder.get(), aRectPoints, maShared.maLayer.get());
 
-        CGImageRef img = CGBitmapContextCreateImage(maCSContextHolder.get());
-        CGImageRef displayColorSpaceImage = CGImageCreateCopyWithColorSpace(img, [[mpFrame->getNSWindow() colorSpace] CGColorSpace]);
+        CGImageRef img = CGBitmapContextCreateImage(maShared.maCSContextHolder.get());
+        CGImageRef displayColorSpaceImage = CGImageCreateCopyWithColorSpace(img, [[maShared.mpFrame->getNSWindow() colorSpace] CGColorSpace]);
         CGContextSetBlendMode(rCGContextHolder.get(), kCGBlendModeCopy);
         CGContextDrawImage(rCGContextHolder.get(), aRect, displayColorSpaceImage);
 
@@ -279,7 +274,7 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
     }
     else
     {
-        SAL_WARN_IF( !mpFrame->mbInitShow, "vcl", "UpdateWindow called on uneligible graphics" );
+        SAL_WARN_IF(!maShared.mpFrame->mbInitShow, "vcl", "UpdateWindow called on uneligible graphics");
     }
 }
 

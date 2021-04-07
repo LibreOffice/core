@@ -137,6 +137,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_osx,\
     vcl/quartz/salgdicommon \
     vcl/quartz/salvd \
     vcl/quartz/utils \
+    vcl/quartz/AquaGraphicsBackend \
 ))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,vclplug_osx,\

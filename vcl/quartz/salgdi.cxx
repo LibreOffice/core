@@ -186,27 +186,11 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
 }
 
 AquaSalGraphics::AquaSalGraphics()
-    : mnXorMode( 0 )
-    , mnWidth( 0 )
-    , mnHeight( 0 )
-    , mnBitmapDepth( 0 )
+    : mpBackend(new AquaGraphicsBackend(maShared))
     , mnRealDPIX( 0 )
     , mnRealDPIY( 0 )
-    , mxClipPath( nullptr )
-    , maLineColor( COL_WHITE )
-    , maFillColor( COL_BLACK )
     , maTextColor( COL_BLACK )
     , mbNonAntialiasedText( false )
-#ifdef MACOSX
-    , mpFrame( nullptr )
-#endif
-    , mbPrinter( false )
-    , mbVirDev( false )
-#ifdef MACOSX
-    , mbWindow( false )
-#else
-    , mbForeignContext( false )
-#endif
 {
     SAL_INFO( "vcl.quartz", "AquaSalGraphics::AquaSalGraphics() this=" << this );
 
@@ -221,38 +205,35 @@ AquaSalGraphics::~AquaSalGraphics()
 {
     SAL_INFO( "vcl.quartz", "AquaSalGraphics::~AquaSalGraphics() this=" << this );
 
-    if( mxClipPath )
-    {
-        CGPathRelease( mxClipPath );
-    }
+    maShared.unsetClipPath();
 
     ReleaseFonts();
 
-    mpXorEmulation.reset();
+    maShared.mpXorEmulation.reset();
 
 #ifdef IOS
-    if (mbForeignContext)
+    if (maShared.mbForeignContext)
         return;
 #endif
-    if (maLayer.isSet())
+    if (maShared.maLayer.isSet())
     {
-        CGLayerRelease(maLayer.get());
+        CGLayerRelease(maShared.maLayer.get());
     }
-    else if (maContextHolder.isSet()
+    else if (maShared.maContextHolder.isSet()
 #ifdef MACOSX
-             && mbWindow
+             && maShared.mbWindow
 #endif
              )
     {
         // destroy backbuffer bitmap context that we created ourself
-        CGContextRelease(maContextHolder.get());
-        maContextHolder.set(nullptr);
+        CGContextRelease(maShared.maContextHolder.get());
+        maShared.maContextHolder.set(nullptr);
     }
 }
 
 SalGraphicsImpl* AquaSalGraphics::GetImpl() const
 {
-    return nullptr;
+    return mpBackend.get();
 }
 
 void AquaSalGraphics::SetTextColor( Color nColor )
@@ -370,7 +351,7 @@ bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
 void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
 #ifdef IOS
-    if (!CheckContext())
+    if (!maShared.checkContext())
     {
         SAL_WARN("vcl.quartz", "AquaSalGraphics::DrawTextLayout() without context");
         return;
@@ -444,20 +425,20 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     std::cerr << "]\n";
 #endif
 
-    maContextHolder.saveState();
+    maShared.maContextHolder.saveState();
 
     // The view is vertically flipped (no idea why), flip it back.
-    CGContextScaleCTM(maContextHolder.get(), 1.0, -1.0);
-    CGContextSetShouldAntialias(maContextHolder.get(), !mbNonAntialiasedText);
-    CGContextSetFillColor(maContextHolder.get(), maTextColor.AsArray());
+    CGContextScaleCTM(maShared.maContextHolder.get(), 1.0, -1.0);
+    CGContextSetShouldAntialias(maShared.maContextHolder.get(), !mbNonAntialiasedText);
+    CGContextSetFillColor(maShared.maContextHolder.get(), maTextColor.AsArray());
 
     if (rStyle.mbFauxBold)
     {
 
         float fSize = rFontSelect.mnHeight / 23.0f;
-        CGContextSetStrokeColor(maContextHolder.get(), maTextColor.AsArray());
-        CGContextSetLineWidth(maContextHolder.get(), fSize);
-        CGContextSetTextDrawingMode(maContextHolder.get(), kCGTextFillStroke);
+        CGContextSetStrokeColor(maShared.maContextHolder.get(), maTextColor.AsArray());
+        CGContextSetLineWidth(maShared.maContextHolder.get(), fSize);
+        CGContextSetTextDrawingMode(maShared.maContextHolder.get(), kCGTextFillStroke);
     }
 
     auto aIt = aGlyphOrientation.cbegin();
@@ -470,18 +451,18 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         size_t nStartIndex = std::distance(aGlyphOrientation.cbegin(), aIt);
         size_t nLen = std::distance(aIt, aNext);
 
-        maContextHolder.saveState();
+        maShared.maContextHolder.saveState();
         if (rStyle.mfFontRotation && !bUprightGlyph)
         {
-            CGContextRotateCTM(maContextHolder.get(), rStyle.mfFontRotation);
+            CGContextRotateCTM(maShared.maContextHolder.get(), rStyle.mfFontRotation);
         }
-        CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, maContextHolder.get());
-        maContextHolder.restoreState();
+        CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, maShared.maContextHolder.get());
+        maShared.maContextHolder.restoreState();
 
         aIt = aNext;
     }
 
-    maContextHolder.restoreState();
+    maShared.maContextHolder.restoreState();
 }
 
 void AquaSalGraphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
@@ -780,46 +761,9 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, tools::Long /*nDataL
     SAL_WARN_IF( (pData==nullptr), "vcl", "AquaSalGraphics::FreeEmbedFontData() is not implemented");
 }
 
-bool AquaSalGraphics::IsFlipped() const
-{
-#ifdef MACOSX
-    return mbWindow;
-#else
-    return false;
-#endif
-}
-
-void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight)
-{
-#ifdef MACOSX
-    if( ! mbWindow ) // view only on Window graphics
-        return;
-
-    if( mpFrame )
-    {
-        // update a little more around the designated rectangle
-        // this helps with antialiased rendering
-        // Rounding down x and width can accumulate a rounding error of up to 2
-        // The decrementing of x, the rounding error and the antialiasing border
-        // require that the width and the height need to be increased by four
-        const tools::Rectangle aVclRect(Point(static_cast<tools::Long>(lX-1),
-                                       static_cast<tools::Long>(lY-1) ),
-                                 Size(  static_cast<tools::Long>(lWidth+4),
-                                        static_cast<tools::Long>(lHeight+4) ) );
-        mpFrame->maInvalidRect.Union( aVclRect );
-    }
-#else
-    (void) lX;
-    (void) lY;
-    (void) lWidth;
-    (void) lHeight;
-    return;
-#endif
-}
-
 #ifdef IOS
 
-bool AquaSalGraphics::CheckContext()
+bool AquaSharedAttributes::checkContext()
 {
     if (mbForeignContext)
     {
