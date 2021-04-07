@@ -80,8 +80,19 @@ public:
 
     virtual SalGraphicsImpl*    GetImpl() const = 0;
 
-    void                        setAntiAlias(bool bNew) { m_bAntiAlias = bNew; }
-    bool                        getAntiAlias() const { return m_bAntiAlias; }
+    void                        setAntiAlias(bool bNew)
+    {
+        m_bAntiAlias = bNew;
+
+        // Temporary store in both
+        if (GetImpl())
+            GetImpl()->setAntiAlias(bNew);
+    }
+
+    bool                        getAntiAlias() const
+    {
+        return m_bAntiAlias;
+    }
 
     // public SalGraphics methods, the interface to the independent vcl part
 

@@ -21,7 +21,7 @@
 
 #include <QtGui/QColor>
 
-Qt5Painter::Qt5Painter(Qt5Graphics& rGraphics, bool bPrepareBrush, sal_uInt8 nTransparency)
+Qt5Painter::Qt5Painter(Qt5GraphicsBackend& rGraphics, bool bPrepareBrush, sal_uInt8 nTransparency)
     : m_rGraphics(rGraphics)
 {
     if (rGraphics.m_pQImage)

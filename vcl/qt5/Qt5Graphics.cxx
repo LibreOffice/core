@@ -32,14 +32,10 @@
 
 Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage )
     : m_pFrame( pFrame )
-    , m_pQImage( pQImage )
-    , m_aLineColor( 0x00, 0x00, 0x00 )
-    , m_aFillColor( 0xFF, 0xFF, 0XFF )
-    , m_eCompositionMode( QPainter::CompositionMode_SourceOver )
     , m_pTextStyle{ nullptr, }
     , m_aTextColor( 0x00, 0x00, 0x00 )
 {
-    ResetClipRegion();
+    m_pBackend = std::make_unique<Qt5GraphicsBackend>(m_pFrame, pQImage);
 
     if (!initWidgetDrawBackends(false))
     {
@@ -54,25 +50,13 @@ Qt5Graphics::~Qt5Graphics() { ReleaseFonts(); }
 
 void Qt5Graphics::ChangeQImage(QImage* pQImage)
 {
-    m_pQImage = pQImage;
-    ResetClipRegion();
+    m_pBackend->setQImage(pQImage);
+    m_pBackend->ResetClipRegion();
 }
 
-SalGraphicsImpl* Qt5Graphics::GetImpl() const { return nullptr; }
+SalGraphicsImpl* Qt5Graphics::GetImpl() const { return m_pBackend.get(); }
 
 SystemGraphicsData Qt5Graphics::GetGraphicsData() const { return SystemGraphicsData(); }
-
-bool Qt5Graphics::supportsOperation(OutDevSupportType eType) const
-{
-    switch (eType)
-    {
-        case OutDevSupportType::B2DDraw:
-        case OutDevSupportType::TransparentRect:
-            return true;
-        default:
-            return false;
-    }
-}
 
 #if ENABLE_CAIRO_CANVAS
 
@@ -114,7 +98,7 @@ void Qt5Graphics::handleDamage(const tools::Rectangle& rDamagedRegion)
     QImage* pImage = static_cast<Qt5Graphics_Controls*>(m_pWidgetDraw.get())->getImage();
     QImage blit(*pImage);
     blit.setDevicePixelRatio(1);
-    Qt5Painter aPainter(*this);
+    Qt5Painter aPainter(*m_pBackend);
     aPainter.drawImage(QPoint(rDamagedRegion.getX(), rDamagedRegion.getY()), blit);
     aPainter.update(toQRect(rDamagedRegion));
 }

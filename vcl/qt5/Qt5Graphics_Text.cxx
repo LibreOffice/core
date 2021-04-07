@@ -328,7 +328,7 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
     aGlyphRun.setGlyphIndexes(glyphIndexes);
     aGlyphRun.setRawFont(aRawFont);
 
-    Qt5Painter aPainter(*this);
+    Qt5Painter aPainter(*m_pBackend);
     QColor aColor = toQColor(m_aTextColor);
     aPainter.setPen(aColor);
 

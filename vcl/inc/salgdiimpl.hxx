@@ -40,7 +40,22 @@ struct SalGradient;
 
 class VCL_PLUGIN_PUBLIC SalGraphicsImpl
 {
+    bool m_bAntiAlias;
 public:
+
+    void setAntiAlias(bool bNew)
+    {
+        m_bAntiAlias = bNew;
+    }
+
+    bool getAntiAlias() const
+    {
+        return m_bAntiAlias;
+    }
+
+    SalGraphicsImpl()
+        : m_bAntiAlias(false)
+    {}
 
     virtual ~SalGraphicsImpl();
 
