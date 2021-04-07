@@ -125,6 +125,8 @@ ScChartObj* ScChartsObj::GetObjectByName_Impl(const OUString& aName) const
 {
     if (sc::tools::findChartsByName(pDocShell, nTab, aName, sc::tools::ChartSourceType::CELL_RANGE))
         return new ScChartObj( pDocShell, nTab, aName );
+    if (sc::tools::findChartsByName(pDocShell, nTab, aName, sc::tools::ChartSourceType::PIVOT_TABLE))
+        return new ScChartObj( pDocShell, nTab, aName );
     return nullptr;
 }
 
