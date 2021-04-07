@@ -8,7 +8,7 @@ from uitest.framework import UITestCase
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
-from libreoffice.calc.document import get_row
+from libreoffice.calc.document import is_row_hidden
 
 class tdf126306(UITestCase):
     def check_values(self, document, results):
@@ -17,8 +17,7 @@ class tdf126306(UITestCase):
 
     def check_row_hidden(self, document, results = [True] * 14):
         for i, value in enumerate(results, start=1):
-            row = get_row(document, i)
-            bVisible = row.getPropertyValue("IsVisible")
+            bVisible = not is_row_hidden(document, i)
             self.assertEqual(bVisible, value)
 
     def test_run(self):

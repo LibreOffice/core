@@ -48,4 +48,16 @@ def get_row(document, row, tab = 0):
     sheet = get_sheet_from_doc(document, tab)
     return sheet.getRows().getByIndex(row)
 
+def is_row_hidden(document, row, tab = 0):
+    """ Check whether a row object is hidden
+
+    Keyword arguments:
+    document -- The document that should be used
+    tab -- The 0-based sheet number
+    column -- The 0-based row number
+    """
+    xRow = get_row(document, row, tab)
+    bVisible = xRow.getPropertyValue("IsVisible")
+    return not bVisible
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

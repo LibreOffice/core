@@ -6,13 +6,8 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from libreoffice.calc.document import get_row
+from libreoffice.calc.document import is_row_hidden
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
-
-def is_row_hidden(doc, index):
-    row = get_row(doc, index)
-    val = row.getPropertyValue("IsVisible")
-    return not val
 
 class tdf92767(UITestCase):
 
