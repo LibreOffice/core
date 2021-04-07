@@ -62,6 +62,11 @@
 #include <impfontmetricdata.hxx>
 #include <impglyphitem.hxx>
 
+#if HAVE_FEATURE_SKIA
+#include <vcl/skia/SkiaHelper.hxx>
+#include <skia/win/font.hxx>
+#endif
+
 using namespace vcl;
 
 static FIXED FixedFromDouble( double d )
@@ -662,6 +667,10 @@ sal_IntPtr WinFontFace::GetFontId() const
 
 rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
+#if HAVE_FEATURE_SKIA
+    if (SkiaHelper::isVCLSkiaEnabled())
+        return new SkiaWinFontInstance(*this, rFSD);
+#endif
     return new WinFontInstance(*this, rFSD);
 }
 

@@ -13,7 +13,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
-#include <win/winlayout.hxx>
+#include <skia/win/font.hxx>
 #include <comphelper/windowserrorstring.hxx>
 
 #include <SkCanvas.h>
@@ -199,11 +199,9 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
 
 bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    const WinFontInstance& rWinFont = static_cast<const WinFontInstance&>(rLayout.GetFont());
-    float fHScale = rWinFont.getHScale();
-
-    assert(dynamic_cast<const WinFontInstance*>(&rLayout.GetFont()));
-    const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
+    assert(dynamic_cast<const SkiaWinFontInstance*>(&rLayout.GetFont()));
+    const SkiaWinFontInstance* pWinFont
+        = static_cast<const SkiaWinFontInstance*>(&rLayout.GetFont());
     const HFONT hLayoutFont = pWinFont->GetHFONT();
     LOGFONTW logFont;
     if (GetObjectW(hLayoutFont, sizeof(logFont), &logFont) == 0)
@@ -211,12 +209,18 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
         assert(false);
         return false;
     }
-    sk_sp<SkTypeface> typeface = createDirectWriteTypeface(mWinParent.getHDC(), hLayoutFont);
-    GlyphOrientation glyphOrientation = GlyphOrientation::Apply;
-    if (!typeface) // fall back to GDI text rendering
+    sk_sp<SkTypeface> typeface = pWinFont->GetSkiaTypeface();
+    if (!typeface)
     {
-        typeface.reset(SkCreateTypefaceFromLOGFONT(logFont));
-        glyphOrientation = GlyphOrientation::Ignore;
+        typeface = createDirectWriteTypeface(mWinParent.getHDC(), hLayoutFont);
+        bool dwrite = true;
+        if (!typeface) // fall back to GDI text rendering
+        {
+            typeface.reset(SkCreateTypefaceFromLOGFONT(logFont));
+            dwrite = false;
+        }
+        // Cache the typeface.
+        const_cast<SkiaWinFontInstance*>(pWinFont)->SetSkiaTypeface(typeface, dwrite);
     }
     // lfHeight actually depends on DPI, so it's not really font height as such,
     // but for LOGFONT-based typefaces Skia simply sets lfHeight back to this value
@@ -224,14 +228,15 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     double fontHeight = logFont.lfHeight;
     if (fontHeight < 0)
         fontHeight = -fontHeight;
-    SkFont font(typeface, fontHeight, fHScale, 0);
+    SkFont font(typeface, fontHeight, pWinFont->getHScale(), 0);
     font.setEdging(fontEdging);
     assert(dynamic_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl()));
     SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl());
     COLORREF color = ::GetTextColor(mWinParent.getHDC());
     Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
-    // The font already is set up to have glyphs rotated as needed.
-    impl->drawGenericLayout(rLayout, salColor, font, glyphOrientation);
+    impl->drawGenericLayout(rLayout, salColor, font,
+                            pWinFont->GetSkiaDWrite() ? GlyphOrientation::Apply
+                                                      : GlyphOrientation::Ignore);
     return true;
 }
 
