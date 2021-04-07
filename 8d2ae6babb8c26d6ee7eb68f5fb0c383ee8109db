@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a641e55_40b6ce79",
+        "filename": "sal/osl/unx/file_url.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-04-07T14:39:05Z",
+      "side": 1,
+      "message": "So I added an exception for this, but I\u0027m not sure it is really needed.\nThis is supposed to support file://\u003chostname\u003e URLs. But since this call is inside getSystemPathFromFileUrl(), it will only work for the current host, it does not help with reaching other computers on the network. And in this case, supporting the local host name should be enough IMO, no need to query DNS.\nWhat do others think?",
+      "range": {
+        "startLine": 268,
+        "startChar": 12,
+        "endLine": 268,
+        "endChar": 76
+      },
+      "revId": "8d2ae6babb8c26d6ee7eb68f5fb0c383ee8109db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
