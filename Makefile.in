@@ -59,11 +59,16 @@ else # MAKE_RESTARTS
 .DEFAULT_GOAL := build
 
 check-if-root:
-	@if test ! `uname` = 'Haiku' -a `id -u` = 0 && test -z $$LIB_FUZZING_ENGINE && test -z $$container && ! grep -q 'lxc\|docker' /proc/self/cgroup && ! grep -q 'libpod_parent' /proc/self/cgroup; then \
+	@if test ! `uname` = 'Haiku' -a `id -u` = 0 && test -z $$LIB_FUZZING_ENGINE; \
 		echo; \
-		echo 'Building LibreOffice as root is a very bad idea, use a regular user.'; \
-		echo; \
-		exit 1; \
+		echo 'Building LibreOffice as root is a very bad idea, checking for container environment…'; \
+		if (systemd-detect-virt -c); \
+			echo 'container detected, building as root is allowed.'; \
+		else \
+			echo 'not running in a container, building as root rejected. Use a regular user.'; \
+			echo; \
+			exit 1; \
+		fi
 	fi
 
 gb_Side ?= host
