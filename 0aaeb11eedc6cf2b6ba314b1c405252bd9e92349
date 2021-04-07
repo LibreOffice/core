@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "badc0875_5968e077",
+        "filename": "include/comphelper/servicehelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-07T11:49:27Z",
+      "side": 1,
+      "message": "UnoTunnel is not about uniqueness within one process, but about uniqueness across processes, so a pseudo-random UUID may still be more appropriate than a Sequence initialized with a zero-extended memory address",
+      "revId": "0aaeb11eedc6cf2b6ba314b1c405252bd9e92349",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
