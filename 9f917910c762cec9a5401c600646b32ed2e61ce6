@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "149d51c0_5ed95ae9",
+        "filename": "include/comphelper/servicehelper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-07T08:31:22Z",
+      "side": 1,
+      "message": "I think this should be\n   reinterpret_cast\u003cconst sal_Int8*\u003e(p);\notherwise we are taking the address of something on the stack :-)",
+      "revId": "9f917910c762cec9a5401c600646b32ed2e61ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
