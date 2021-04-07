@@ -16,6 +16,24 @@
       "revId": "9f917910c762cec9a5401c600646b32ed2e61ce6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "017eeab9_0a1e0861",
+        "filename": "include/comphelper/servicehelper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-07T08:39:30Z",
+      "side": 1,
+      "message": "I am afraid I don\u0027t quite get this. I suppose I want to have the address written into the sequence bytes:\n\np \u003d\u003d e.g. 0x1223344556677889 \u003d\u003d {0x12 0x23 0x34 0x45 0x56 0x67 0x78 0x89}\n\u0026p \u003d\u003d address of {0x12 0x23 0x34 0x45 0x56 0x67 0x78 0x89}",
+      "parentUuid": "149d51c0_5ed95ae9",
+      "revId": "9f917910c762cec9a5401c600646b32ed2e61ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
