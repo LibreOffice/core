@@ -202,16 +202,34 @@ void TemplateLocalView::ContextMenuSelectHdl(std::string_view  rIdent)
     {
         InputDialog aTitleEditDlg(GetDrawingArea(), SfxResId(STR_RENAME_TEMPLATE));
         OUString sOldTitle = maSelectedItem->getTitle();
-        aTitleEditDlg.SetEntryText(sOldTitle);
-        aTitleEditDlg.HideHelpBtn();
-
-        if (!aTitleEditDlg.run())
-            return;
-        OUString sNewTitle = comphelper::string::strip(aTitleEditDlg.GetEntryText(), ' ');
-
-        if ( !sNewTitle.isEmpty() && sNewTitle != sOldTitle )
+        bool bEnd = false;
+        while(!bEnd)
         {
-            maSelectedItem->setTitle(sNewTitle);
+            aTitleEditDlg.SetEntryText(sOldTitle);
+            aTitleEditDlg.HideHelpBtn();
+
+            if (!aTitleEditDlg.run())
+                return;
+            OUString sNewTitle = comphelper::string::strip(aTitleEditDlg.GetEntryText(), ' ');
+
+            if ( !sNewTitle.isEmpty() && sNewTitle != sOldTitle )
+            {
+                auto nRegionId = maSelectedItem->mnRegionId;
+                auto nDocId = maSelectedItem->mnDocId;
+                bEnd = mpDocTemplates->SetName( sNewTitle, nRegionId, nDocId );
+                if(!bEnd)
+                {
+                    OUString aMsg(SfxResId(STR_MSG_ERROR_RENAME_TEMPLATE));
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetDrawingArea(),
+                                                                VclMessageType::Warning, VclButtonsType::Ok,
+                                                                aMsg.replaceFirst( "$1",maSelectedItem->maTitle)));
+                    xBox->run();
+                }
+                else
+                    maSelectedItem->maTitle = sNewTitle;
+            }
+            else
+                bEnd = true;
         }
     }
     else if (rIdent == "delete")
