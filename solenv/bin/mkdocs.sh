@@ -226,10 +226,10 @@ echo "generating index page"
 header "LibreOffice Modules" " " "$BASE_OUTPUT/index.html"
 for module_name in *; do
   if [ -d $module_name ]; then
-    cur_file=$(echo $module_name/README* $module_name/readme.txt*)
+    cur_file=$(echo $module_name/README.md)
     if [ -f "$cur_file" ]; then
       # write index.html entry
-      text="<h2><a href=\"${module_name}.html\">${module_name}</a></h2>\n"
+      text=$(echo -e "<h2><a href=\"${module_name}.html\">${module_name}</a></h2>\n")
 
       if [ ${cur_file: -3} == ".md" ]; then
         # This is a markdown file.
@@ -268,6 +268,10 @@ done
 if [ ${#empty_modules[*]} -gt 0 ]; then
   echo -e "<p>&nbsp;</p><p>READMEs were not available for these modules:</p><ul>\n" >> "$BASE_OUTPUT/index.html"
   for module_name in "${empty_modules[@]}"; do
+    # Do not process these directories
+    if [[ "$module_name" =~ ^(autom4te.cache|dictionaries|docs|helpcompiler|helpcontent2|include|instdir|translations|workdir)$ ]]; then
+      continue
+    fi
     echo -e "<li><a href=\"https://cgit.freedesktop.org/libreoffice/core/tree/${module_name}\">${module_name}</a></li>\n" >> "$BASE_OUTPUT/index.html"
   done
   echo -e "</ul>\n" >> "$BASE_OUTPUT/index.html"
