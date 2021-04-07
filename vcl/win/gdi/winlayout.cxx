@@ -186,11 +186,18 @@ struct BlobReference
     {
         hb_blob_reference(mpBlob);
     }
-    BlobReference(BlobReference const& other)
+    BlobReference(BlobReference&& other)
         : mpBlob(other.mpBlob)
     {
-        hb_blob_reference(mpBlob);
+        other.mpBlob = nullptr;
     }
+    BlobReference& operator=(BlobReference&& other)
+    {
+        std::swap(mpBlob, other.mpBlob);
+        return *this;
+    }
+    BlobReference(const BlobReference& other) = delete;
+    BlobReference& operator=(BlobReference& other) = delete;
     ~BlobReference() { hb_blob_destroy(mpBlob); }
 };
 }
@@ -242,13 +249,14 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     SelectObject(hDC, hOrigFont);
 
     if (!pBuffer)
+    { // Cache also failures.
+        gCache.insert({ cacheKey, BlobReference(nullptr) });
         return nullptr;
+    }
 
     hb_blob_t* pBlob
         = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
                          pBuffer, [](void* data) { delete[] static_cast<unsigned char*>(data); });
-    if (!pBlob)
-        return pBlob;
     gCache.insert({ cacheKey, BlobReference(pBlob) });
     return pBlob;
 }
