@@ -20,7 +20,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 #include <vcl/weld.hxx>
 #include <openuriexternally.hxx>
 #include <comphelper/lok.hxx>
