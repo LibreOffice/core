@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a813328d_6ee28e46",
+        "filename": "include/comphelper/servicehelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-07T10:52:31Z",
+      "side": 0,
+      "message": "By the way, we need to also change this into static as in https://gerrit.libreoffice.org/c/core/+/113698",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 3
+      },
+      "revId": "07fd90cc7d85a89b9f74efba7ddc9ac457110ce3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
