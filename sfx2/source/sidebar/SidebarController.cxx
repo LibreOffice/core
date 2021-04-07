@@ -1230,9 +1230,8 @@ void SidebarController::RequestCloseDeck()
     if (comphelper::LibreOfficeKit::isActive() && mpCurrentDeck)
     {
         const vcl::ILibreOfficeKitNotifier* pNotifier = mpCurrentDeck->GetLOKNotifier();
-        auto pMobileNotifier = SfxViewShell::Current();
         const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (pMobileNotifier && pViewShell && pViewShell->isLOKMobilePhone())
+        if (pViewShell && pViewShell->isLOKMobilePhone())
         {
             // Mobile phone.
             std::stringstream aStream;
@@ -1243,7 +1242,7 @@ void SidebarController::RequestCloseDeck()
             aTree.put("enabled", false);
             boost::property_tree::write_json(aStream, aTree);
             const std::string message = aStream.str();
-            pMobileNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
         }
         else if (pNotifier)
             pNotifier->notifyWindow(mpCurrentDeck->GetLOKWindowId(), "close");
