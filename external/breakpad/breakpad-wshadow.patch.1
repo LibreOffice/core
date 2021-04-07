@@ -1,29 +1,9 @@
-Only in breakpad: breakpad-client.pc
-Only in breakpad: breakpad.pc
-Only in breakpad: build.log
-Only in breakpad: config.log
-Only in breakpad: config.status
-Only in breakpad: Makefile
-Only in breakpad/src/client: .deps
-Only in breakpad/src/client: .dirstamp
-Only in breakpad/src/client/linux/crash_generation: crash_generation_client.o
-Only in breakpad/src/client/linux/crash_generation: crash_generation_server.o
-Only in breakpad/src/client/linux/crash_generation: .deps
-Only in breakpad/src/client/linux/crash_generation: .dirstamp
-Only in breakpad/src/client/linux: .dirstamp
-Only in breakpad/src/client/linux/dump_writer_common: .deps
-Only in breakpad/src/client/linux/dump_writer_common: .dirstamp
-Only in breakpad/src/client/linux/dump_writer_common: thread_info.o
-Only in breakpad/src/client/linux/dump_writer_common: ucontext_reader.o
-Only in breakpad/src/client/linux/handler: .deps
-Only in breakpad/src/client/linux/handler: .dirstamp
-Only in breakpad/src/client/linux/handler: exception_handler.o
-diff -ur breakpad.org/src/client/linux/handler/minidump_descriptor.h breakpad/src/client/linux/handler/minidump_descriptor.h
---- breakpad.org/src/client/linux/handler/minidump_descriptor.h	2016-02-07 19:22:24.329411023 +0100
-+++ breakpad/src/client/linux/handler/minidump_descriptor.h	2016-02-07 19:24:28.600438386 +0100
-@@ -55,18 +55,18 @@
-         fd_(-1),
-         size_limit_(-1) {}
+diff -u -p -d -N -r breakpad.sav/src/client/linux/handler/minidump_descriptor.h breakpad/src/client/linux/handler/minidump_descriptor.h
+--- breakpad.sav/src/client/linux/handler/minidump_descriptor.h	2021-04-07 19:12:50.329462509 +0200
++++ breakpad/src/client/linux/handler/minidump_descriptor.h	2021-04-07 19:29:58.526084027 +0200
+@@ -57,27 +57,27 @@ class MinidumpDescriptor {
+         address_within_principal_mapping_(0),
+         skip_dump_if_principal_mapping_not_referenced_(false) {}
  
 -  explicit MinidumpDescriptor(const string& directory)
 +  explicit MinidumpDescriptor(const string& dir)
@@ -32,8 +12,12 @@ diff -ur breakpad.org/src/client/linux/handler/minidump_descriptor.h breakpad/sr
 -        directory_(directory),
 +        directory_(dir),
          c_path_(NULL),
-         size_limit_(-1) {
-     assert(!directory.empty());
+         size_limit_(-1),
+         address_within_principal_mapping_(0),
+         skip_dump_if_principal_mapping_not_referenced_(false),
+         sanitize_stacks_(false) {
+-    assert(!directory.empty());
++    assert(!dir.empty());
    }
  
 -  explicit MinidumpDescriptor(int fd)
@@ -42,26 +26,20 @@ diff -ur breakpad.org/src/client/linux/handler/minidump_descriptor.h breakpad/sr
 -        fd_(fd),
 +        fd_(file_descriptor),
          c_path_(NULL),
-         size_limit_(-1) {
-     assert(fd != -1);
-Only in breakpad/src/client/linux/handler: .minidump_descriptor.h.un~
-Only in breakpad/src/client/linux/handler: minidump_descriptor.o
-Only in breakpad/src/client/linux: libbreakpad_client.a
-Only in breakpad/src/client/linux: linux_dumper_unittest_helper
-Only in breakpad/src/client/linux/log: .deps
-Only in breakpad/src/client/linux/log: .dirstamp
-Only in breakpad/src/client/linux/log: log.o
-Only in breakpad/src/client/linux/microdump_writer: .deps
-Only in breakpad/src/client/linux/microdump_writer: .dirstamp
-Only in breakpad/src/client/linux/microdump_writer: microdump_writer.o
-Only in breakpad/src/client/linux/minidump_writer: .deps
-Only in breakpad/src/client/linux/minidump_writer: .dirstamp
-Only in breakpad/src/client/linux/minidump_writer: linux_core_dumper.o
-diff -ur breakpad.org/src/client/linux/minidump_writer/linux_dumper.h breakpad/src/client/linux/minidump_writer/linux_dumper.h
---- breakpad.org/src/client/linux/minidump_writer/linux_dumper.h	2016-02-07 19:22:24.330410999 +0100
-+++ breakpad/src/client/linux/minidump_writer/linux_dumper.h	2016-02-07 19:26:10.870017835 +0100
-@@ -130,15 +130,15 @@
-                                    uint8_t identifier[sizeof(MDGUID)]);
+         size_limit_(-1),
+         address_within_principal_mapping_(0),
+         skip_dump_if_principal_mapping_not_referenced_(false),
+         sanitize_stacks_(false) {
+-    assert(fd != -1);
++    assert(file_descriptor != -1);
+   }
+ 
+   explicit MinidumpDescriptor(const MicrodumpOnConsole&)
+diff -u -p -d -N -r breakpad.sav/src/client/linux/minidump_writer/linux_dumper.h breakpad/src/client/linux/minidump_writer/linux_dumper.h
+--- breakpad.sav/src/client/linux/minidump_writer/linux_dumper.h	2021-04-07 19:12:50.329462509 +0200
++++ breakpad/src/client/linux/minidump_writer/linux_dumper.h	2021-04-07 19:27:50.808928572 +0200
+@@ -176,12 +176,12 @@ class LinuxDumper {
+   void SetCrashInfoFromSigInfo(const siginfo_t& siginfo);
  
    uintptr_t crash_address() const { return crash_address_; }
 -  void set_crash_address(uintptr_t crash_address) {
@@ -73,160 +51,15 @@ diff -ur breakpad.org/src/client/linux/minidump_writer/linux_dumper.h breakpad/s
    int crash_signal() const { return crash_signal_; }
 -  void set_crash_signal(int crash_signal) { crash_signal_ = crash_signal; }
 +  void set_crash_signal(int crash_sig) { crash_signal_ = crash_sig; }
+   const char* GetCrashSignalString() const;
+ 
+   void set_crash_signal_code(int code) { crash_signal_code_ = code; }
+@@ -196,7 +196,7 @@ class LinuxDumper {
+   }
  
    pid_t crash_thread() const { return crash_thread_; }
 -  void set_crash_thread(pid_t crash_thread) { crash_thread_ = crash_thread; }
 +  void set_crash_thread(pid_t thread) { crash_thread_ = thread; }
  
-   // Extracts the effective path and file name of from |mapping|. In most cases
-   // the effective name/path are just the mapping's path and basename. In some
-Only in breakpad/src/client/linux/minidump_writer: .linux_dumper.h.un~
-Only in breakpad/src/client/linux/minidump_writer: linux_dumper.o
-Only in breakpad/src/client/linux/minidump_writer: linux_ptrace_dumper.o
-Only in breakpad/src/client/linux/minidump_writer: minidump_writer.o
-Only in breakpad/src/client/linux/minidump_writer: src_client_linux_linux_dumper_unittest_helper-linux_dumper_unittest_helper.o
-Only in breakpad/src/client: minidump_file_writer.o
-Only in breakpad/src/common/android: .deps
-Only in breakpad/src/common: convert_UTF.o
-Only in breakpad/src/common: .deps
-Only in breakpad/src/common: .dirstamp
-Only in breakpad/src/common/dwarf: bytereader.o
-Only in breakpad/src/common/dwarf: .deps
-Only in breakpad/src/common/dwarf: .dirstamp
-Only in breakpad/src/common/dwarf: dwarf2diehandler.o
-Only in breakpad/src/common/dwarf: dwarf2reader.o
-Only in breakpad/src/common/dwarf: src_tools_mac_dump_syms_dump_syms-bytereader.o
-Only in breakpad/src/common/dwarf: src_tools_mac_dump_syms_dump_syms-dwarf2diehandler.o
-Only in breakpad/src/common/dwarf: src_tools_mac_dump_syms_dump_syms-dwarf2reader.o
-Only in breakpad/src/common: dwarf_cfi_to_module.o
-Only in breakpad/src/common: dwarf_cu_to_module.o
-Only in breakpad/src/common: dwarf_line_to_module.o
-Only in breakpad/src/common: language.o
-Only in breakpad/src/common/linux: crc32.o
-Only in breakpad/src/common/linux: .deps
-Only in breakpad/src/common/linux: .dirstamp
-Only in breakpad/src/common/linux: dump_symbols.o
-Only in breakpad/src/common/linux: elf_core_dump.o
-Only in breakpad/src/common/linux: elf_symbols_to_module.o
-Only in breakpad/src/common/linux: elfutils.o
-Only in breakpad/src/common/linux: file_id.o
-Only in breakpad/src/common/linux: guid_creator.o
-Only in breakpad/src/common/linux: http_upload.o
-Only in breakpad/src/common/linux: linux_libc_support.o
-Only in breakpad/src/common/linux: memory_mapped_file.o
-Only in breakpad/src/common/linux: safe_readlink.o
-Only in breakpad/src/common/linux/tests: .deps
-Only in breakpad/src/common/mac: .deps
-Only in breakpad/src/common/mac: .dirstamp
-Only in breakpad/src/common/mac: src_tools_mac_dump_syms_dump_syms-arch_utilities.o
-Only in breakpad/src/common/mac: src_tools_mac_dump_syms_dump_syms-dump_syms.o
-Only in breakpad/src/common/mac: src_tools_mac_dump_syms_dump_syms-file_id.o
-Only in breakpad/src/common/mac: src_tools_mac_dump_syms_dump_syms-macho_id.o
-Only in breakpad/src/common/mac: src_tools_mac_dump_syms_dump_syms-macho_reader.o
-Only in breakpad/src/common/mac: src_tools_mac_dump_syms_dump_syms-macho_utilities.o
-Only in breakpad/src/common/mac: src_tools_mac_dump_syms_dump_syms-macho_walker.o
-Only in breakpad/src/common: md5.o
-Only in breakpad/src/common: module.o
-Only in breakpad/src/common: src_tools_mac_dump_syms_dump_syms-dwarf_cfi_to_module.o
-Only in breakpad/src/common: src_tools_mac_dump_syms_dump_syms-dwarf_cu_to_module.o
-Only in breakpad/src/common: src_tools_mac_dump_syms_dump_syms-dwarf_line_to_module.o
-Only in breakpad/src/common: src_tools_mac_dump_syms_dump_syms-language.o
-Only in breakpad/src/common: src_tools_mac_dump_syms_dump_syms-md5.o
-Only in breakpad/src/common: src_tools_mac_dump_syms_dump_syms-module.o
-Only in breakpad/src/common: src_tools_mac_dump_syms_dump_syms-stabs_reader.o
-Only in breakpad/src/common: src_tools_mac_dump_syms_dump_syms-stabs_to_module.o
-Only in breakpad/src/common: stabs_reader.o
-Only in breakpad/src/common: stabs_to_module.o
-Only in breakpad/src/common: string_conversion.o
-Only in breakpad/src/common/tests: .deps
-Only in breakpad/src: config.h
-Only in breakpad/src: .dirstamp
-Only in breakpad/src: libbreakpad.a
-Only in breakpad/src/processor: basic_code_modules.o
-Only in breakpad/src/processor: basic_source_line_resolver.o
-Only in breakpad/src/processor: call_stack.o
-Only in breakpad/src/processor: cfi_frame_info.o
-Only in breakpad/src/processor: .deps
-Only in breakpad/src/processor: .dirstamp
-Only in breakpad/src/processor: disassembler_x86.o
-Only in breakpad/src/processor: dump_context.o
-Only in breakpad/src/processor: dump_object.o
-Only in breakpad/src/processor: exploitability_linux.o
-Only in breakpad/src/processor: exploitability.o
-Only in breakpad/src/processor: exploitability_win.o
-Only in breakpad/src/processor: fast_source_line_resolver.o
-Only in breakpad/src/processor: logging.o
-Only in breakpad/src/processor: microdump.o
-Only in breakpad/src/processor: microdump_processor.o
-Only in breakpad/src/processor: microdump_stackwalk
-Only in breakpad/src/processor: microdump_stackwalk.o
-Only in breakpad/src/processor: minidump_dump
-Only in breakpad/src/processor: minidump_dump.o
-Only in breakpad/src/processor: minidump.o
-Only in breakpad/src/processor: minidump_processor.o
-Only in breakpad/src/processor: minidump_stackwalk
-Only in breakpad/src/processor: minidump_stackwalk.o
-Only in breakpad/src/processor: module_comparer.o
-Only in breakpad/src/processor: module_serializer.o
-Only in breakpad/src/processor: pathname_stripper.o
-Only in breakpad/src/processor: process_state.o
-Only in breakpad/src/processor: proc_maps_linux.o
-Only in breakpad/src/processor: simple_symbol_supplier.o
-Only in breakpad/src/processor: source_line_resolver_base.o
-Only in breakpad/src/processor: stack_frame_cpu.o
-Only in breakpad/src/processor: stack_frame_symbolizer.o
-Only in breakpad/src/processor: stackwalk_common.o
-Only in breakpad/src/processor: stackwalker_address_list.o
-Only in breakpad/src/processor: stackwalker_amd64.o
-Only in breakpad/src/processor: stackwalker_arm64.o
-Only in breakpad/src/processor: stackwalker_arm.o
-Only in breakpad/src/processor: stackwalker_mips.o
-Only in breakpad/src/processor: stackwalker.o
-Only in breakpad/src/processor: stackwalker_ppc64.o
-Only in breakpad/src/processor: stackwalker_ppc.o
-Only in breakpad/src/processor: stackwalker_sparc.o
-Only in breakpad/src/processor: stackwalker_x86.o
-Only in breakpad/src/processor: symbolic_constants_win.o
-Only in breakpad/src/processor: tokenize.o
-Only in breakpad/src: stamp-h1
-Only in breakpad/src/testing/gtest/src: .deps
-Only in breakpad/src/testing/src: .deps
-Only in breakpad/src/third_party/libdisasm: .deps
-Only in breakpad/src/third_party/libdisasm: .dirstamp
-Only in breakpad/src/third_party/libdisasm: ia32_implicit.o
-Only in breakpad/src/third_party/libdisasm: ia32_insn.o
-Only in breakpad/src/third_party/libdisasm: ia32_invariant.o
-Only in breakpad/src/third_party/libdisasm: ia32_modrm.o
-Only in breakpad/src/third_party/libdisasm: ia32_opcode_tables.o
-Only in breakpad/src/third_party/libdisasm: ia32_operand.o
-Only in breakpad/src/third_party/libdisasm: ia32_reg.o
-Only in breakpad/src/third_party/libdisasm: ia32_settings.o
-Only in breakpad/src/third_party/libdisasm: libdisasm.a
-Only in breakpad/src/third_party/libdisasm: x86_disasm.o
-Only in breakpad/src/third_party/libdisasm: x86_format.o
-Only in breakpad/src/third_party/libdisasm: x86_imm.o
-Only in breakpad/src/third_party/libdisasm: x86_insn.o
-Only in breakpad/src/third_party/libdisasm: x86_misc.o
-Only in breakpad/src/third_party/libdisasm: x86_operand_list.o
-Only in breakpad/src/tools/linux/core2md: core2md
-Only in breakpad/src/tools/linux/core2md: core2md.o
-Only in breakpad/src/tools/linux/core2md: .deps
-Only in breakpad/src/tools/linux/core2md: .dirstamp
-Only in breakpad/src/tools/linux/dump_syms: .deps
-Only in breakpad/src/tools/linux/dump_syms: .dirstamp
-Only in breakpad/src/tools/linux/dump_syms: dump_syms
-Only in breakpad/src/tools/linux/dump_syms: dump_syms.o
-Only in breakpad/src/tools/linux/md2core: .deps
-Only in breakpad/src/tools/linux/md2core: .dirstamp
-Only in breakpad/src/tools/linux/md2core: minidump-2-core
-Only in breakpad/src/tools/linux/md2core: minidump-2-core.o
-Only in breakpad/src/tools/linux/symupload: .deps
-Only in breakpad/src/tools/linux/symupload: .dirstamp
-Only in breakpad/src/tools/linux/symupload: minidump_upload
-Only in breakpad/src/tools/linux/symupload: minidump_upload.o
-Only in breakpad/src/tools/linux/symupload: sym_upload
-Only in breakpad/src/tools/linux/symupload: sym_upload.o
-Only in breakpad/src/tools/mac/dump_syms: .deps
-Only in breakpad/src/tools/mac/dump_syms: .dirstamp
-Only in breakpad/src/tools/mac/dump_syms: dump_syms
-Only in breakpad/src/tools/mac/dump_syms: src_tools_mac_dump_syms_dump_syms-dump_syms_tool.o
+   // Concatenates the |root_prefix_| and |mapping| path. Writes into |path| and
+   // returns true unless the string is too long.

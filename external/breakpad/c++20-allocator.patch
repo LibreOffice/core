@@ -1,6 +1,7 @@
---- src/common/memory.h
-+++ src/common/memory.h
-@@ -162,7 +162,7 @@
+diff -u -p -d -N -r breakpad.sav/src/common/memory_allocator.h breakpad/src/common/memory_allocator.h
+--- src/common/memory_allocator.h	2021-04-07 19:12:50.357462734 +0200
++++ src/common/memory_allocator.h	2021-04-07 19:45:05.490291766 +0200
+@@ -161,7 +161,7 @@ class PageAllocator {
  // Wrapper to use with STL containers
  template <typename T>
  struct PageStdAllocator : public std::allocator<T> {
@@ -8,4 +9,4 @@
 +  typedef T* pointer;
    typedef typename std::allocator<T>::size_type size_type;
  
-   explicit PageStdAllocator(PageAllocator& allocator): allocator_(allocator) {}
+   explicit PageStdAllocator(PageAllocator& allocator) : allocator_(allocator),
