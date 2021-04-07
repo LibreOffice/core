@@ -29,7 +29,6 @@ class Qt5Bitmap final : public SalBitmap
 {
     std::unique_ptr<QImage> m_pImage;
     BitmapPalette m_aPalette;
-    Size m_aSize;
 
 public:
     Qt5Bitmap();
