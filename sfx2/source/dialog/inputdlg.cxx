@@ -14,6 +14,7 @@ InputDialog::InputDialog(weld::Widget* pParent, const OUString& rLabelText)
     , m_xEntry(m_xBuilder->weld_entry("entry"))
     , m_xLabel(m_xBuilder->weld_label("label"))
     , m_xHelp(m_xBuilder->weld_button("help"))
+    , m_xOk(m_xBuilder->weld_button("ok"))
 {
     m_xLabel->set_label(rLabelText);
 }
@@ -28,4 +29,39 @@ void InputDialog::SetEntryText(const OUString& rStr)
     m_xEntry->set_position(-1);
 }
 
+void InputDialog::SetEntryMessageType(weld::EntryMessageType aType)
+{
+    m_xEntry->set_message_type(aType);
+    if (aType == weld::EntryMessageType::Error)
+    {
+        m_xEntry->select_region(0, -1);
+        m_xEntry->grab_focus();
+        m_xOk->set_sensitive(false);
+    }
+    else
+    {
+        m_xOk->set_sensitive(true);
+        SetTooltip("");
+    }
+}
+
+void InputDialog::SetTooltip(const OUString& rStr)
+{
+    m_xEntry->set_tooltip_text(rStr);
+    m_xOk->set_tooltip_text(rStr);
+}
+
+void InputDialog::setCheckEntry(std::function<bool(OUString)> aFunc)
+{
+    mCheckEntry = aFunc;
+    m_xEntry->connect_changed(LINK(this, InputDialog, EntryChangedHdl));
+}
+
+IMPL_LINK_NOARG(InputDialog, EntryChangedHdl, weld::Entry&, void)
+{
+    if (mCheckEntry(m_xEntry->get_text()))
+        SetEntryMessageType(weld::EntryMessageType::Normal);
+    else
+        SetEntryMessageType(weld::EntryMessageType::Error);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

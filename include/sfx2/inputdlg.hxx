@@ -19,12 +19,18 @@ private:
     std::unique_ptr<weld::Entry> m_xEntry;
     std::unique_ptr<weld::Label> m_xLabel;
     std::unique_ptr<weld::Button> m_xHelp;
+    std::unique_ptr<weld::Button> m_xOk;
+    std::function<bool(OUString)> mCheckEntry;
+    DECL_LINK(EntryChangedHdl, weld::Entry&, void);
 
 public:
     InputDialog(weld::Widget* pParent, const OUString& rLabelText);
     OUString GetEntryText() const;
     void SetEntryText(const OUString& rStr);
     void HideHelpBtn();
+    void SetEntryMessageType(weld::EntryMessageType aType);
+    void SetTooltip(const OUString& rStr);
+    void setCheckEntry(std::function<bool(OUString)> aFunc);
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
