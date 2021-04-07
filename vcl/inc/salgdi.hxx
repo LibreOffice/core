@@ -667,6 +667,253 @@ bool SalGraphics::UpdateSettings(AllSettings& rSettings)
 
 void SalGraphics::handleDamage(const tools::Rectangle&) {}
 
+
+class VCL_DLLPUBLIC SalGraphicsAutoDelegateToImpl : public SalGraphics
+{
+public:
+    sal_uInt16 GetBitCount() const override
+    {
+        return GetImpl()->GetBitCount();
+    }
+
+    tools::Long GetGraphicsWidth() const override
+    {
+        return GetImpl()->GetGraphicsWidth();
+    }
+
+    void ResetClipRegion() override
+    {
+        GetImpl()->ResetClipRegion();
+    }
+
+    bool setClipRegion( const vcl::Region& i_rClip ) override
+    {
+        return GetImpl()->setClipRegion(i_rClip);
+    }
+
+    void SetLineColor() override
+    {
+        GetImpl()->SetLineColor();
+    }
+
+    void SetLineColor( Color nColor ) override
+    {
+        GetImpl()->SetLineColor(nColor);
+    }
+
+    void SetFillColor() override
+    {
+        GetImpl()->SetFillColor();
+    }
+
+    void SetFillColor( Color nColor ) override
+    {
+        GetImpl()->SetFillColor (nColor);
+    }
+
+    void SetROPLineColor(SalROPColor aColor) override
+    {
+        GetImpl()->SetROPLineColor(aColor);
+    }
+
+    void SetROPFillColor( SalROPColor aColor) override
+    {
+        GetImpl()->SetROPFillColor(aColor);
+    }
+
+    void SetXORMode(bool bSet, bool bInvertOnly) override
+    {
+        GetImpl()->SetXORMode(bSet, bInvertOnly);
+    }
+
+    void drawPixel( tools::Long nX, tools::Long nY ) override
+    {
+        GetImpl()->drawPixel(nX, nY);
+    }
+
+    void drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override
+    {
+        GetImpl()->drawPixel(nX, nY, nColor);
+    }
+
+    void drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) override
+    {
+        GetImpl()->drawLine(nX1, nY1, nX2, nY2);
+    }
+
+    void drawRect( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY ) override
+    {
+        GetImpl()->drawRect(nX, nY, nDX, nDY);
+    }
+
+    void drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry ) override
+    {
+        GetImpl()->drawPolyLine(nPoints, pPtAry);
+    }
+
+    void drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override
+    {
+        GetImpl()->drawPolygon(nPoints, pPtAry);
+    }
+
+    void drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry) override
+    {
+        GetImpl()->drawPolyPolygon (nPoly, pPoints, pPtAry);
+    }
+
+    bool drawPolyPolygon(
+        const basegfx::B2DHomMatrix& rObjectToDevice,
+        const basegfx::B2DPolyPolygon& rPolyPolygon,
+        double fTransparency) override
+    {
+        return GetImpl()->drawPolyPolygon(rObjectToDevice, rPolyPolygon, fTransparency);
+    }
+
+    bool drawPolyLine(
+        const basegfx::B2DHomMatrix& rObjectToDevice,
+        const basegfx::B2DPolygon& rPolygon,
+        double fTransparency,
+        double fLineWidth,
+        const std::vector< double >* pStroke,
+        basegfx::B2DLineJoin eJoin,
+        css::drawing::LineCap eLineCap,
+        double fMiterMinimumAngle,
+        bool bPixelSnapHairline) override
+    {
+        return GetImpl()->drawPolyLine(rObjectToDevice, rPolygon, fTransparency, fLineWidth, pStroke, eJoin, eLineCap, fMiterMinimumAngle, bPixelSnapHairline);
+    }
+
+    bool drawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry ) override
+    {
+        return GetImpl()->drawPolyLineBezier(nPoints, pPtAry, pFlgAry);
+    }
+
+    bool drawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry ) override
+    {
+        return GetImpl()->drawPolygonBezier(nPoints, pPtAry, pFlgAry);
+    }
+
+    bool drawPolyPolygonBezier( sal_uInt32 nPoly,
+                                                 const sal_uInt32* pPoints,
+                                                 const Point* const* pPtAry,
+                                                 const PolyFlags* const* pFlgAry) override
+    {
+        return GetImpl()->drawPolyPolygonBezier(nPoly, pPoints, pPtAry, pFlgAry);
+    }
+
+    void invert(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                                        SalInvert nFlags) override
+    {
+       GetImpl()->invert(nX, nY, nWidth, nHeight, nFlags);
+    }
+
+    void invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags) override
+    {
+       GetImpl()->invert(nPoints, pPtAry, nFlags);
+    }
+
+    bool drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                   tools::Long nHeight, void* pPtr, sal_uInt32 nSize) override
+    {
+        return GetImpl()->drawEPS(nX, nY, nWidth, nHeight, pPtr, nSize);
+    }
+
+    void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override
+    {
+        GetImpl()->copyBits(rPosAry, pSrcGraphics);
+    }
+
+    void copyArea (tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX,
+                                    tools::Long nSrcY, tools::Long nSrcWidth, tools::Long nSrcHeight,
+                                    bool bWindowInvalidate) override
+    {
+        GetImpl()->copyArea(nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, bWindowInvalidate);
+    }
+
+    void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap) override
+    {
+        GetImpl()->drawBitmap(rPosAry, rSalBitmap);
+    }
+
+    void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, const SalBitmap& rMaskBitmap) override
+    {
+        GetImpl()->drawBitmap(rPosAry, rSalBitmap, rMaskBitmap);
+    }
+
+    void drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, Color nMaskColor) override
+    {
+        GetImpl()->drawMask(rPosAry, rSalBitmap, nMaskColor);
+    }
+
+    std::shared_ptr<SalBitmap> getBitmap(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight) override
+    {
+        return GetImpl()->getBitmap(nX, nY, nWidth, nHeight);
+    }
+
+    Color getPixel(tools::Long nX, tools::Long nY) override
+    {
+        return GetImpl()->getPixel(nX, nY);
+    }
+
+    bool blendBitmap(const SalTwoRect& rPosAry, const SalBitmap& rBitmap) override
+    {
+        return GetImpl()->blendBitmap(rPosAry, rBitmap);
+    }
+
+    bool blendAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
+                                          const SalBitmap& rMaskBitmap, const SalBitmap& rAlphaBitmap) override
+    {
+        return GetImpl()->blendAlphaBitmap(rPosAry, rSourceBitmap, rMaskBitmap, rAlphaBitmap);
+    }
+
+    bool drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
+                                         const SalBitmap& rAlphaBitmap) override
+    {
+        return GetImpl()->drawAlphaBitmap(rPosAry, rSourceBitmap, rAlphaBitmap);
+    }
+
+    bool drawTransformedBitmap(const basegfx::B2DPoint& rNull,
+                                                 const basegfx::B2DPoint& rX,
+                                                 const basegfx::B2DPoint& rY,
+                                                 const SalBitmap& rSourceBitmap,
+                                                 const SalBitmap* pAlphaBitmap, double fAlpha) override
+    {
+        return GetImpl()->drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha);
+    }
+
+    bool hasFastDrawTransformedBitmap() const override
+    {
+        return GetImpl()->hasFastDrawTransformedBitmap();
+    }
+
+    bool drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                       tools::Long nHeight, sal_uInt8 nTransparency) override
+    {
+        return GetImpl()->drawAlphaRect(nX, nY, nWidth, nHeight, nTransparency);
+    }
+
+    bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override
+    {
+        return GetImpl()->drawGradient(rPolygon, rGradient);
+    }
+
+    bool implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
+                                            SalGradient const& rGradient) override
+    {
+        return GetImpl()->implDrawGradient(rPolyPolygon, rGradient);
+    }
+
+    bool supportsOperation(OutDevSupportType eType) const override
+    {
+        return GetImpl()->supportsOperation(eType);
+    }
+
+    OUString getRenderBackendName() const override
+    {
+        return GetImpl()->getRenderBackendName();
+    }
+};
+
 #endif // INCLUDED_VCL_INC_SALGDI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
