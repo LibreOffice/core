@@ -10,17 +10,10 @@
 
 #include <vcl/VectorGraphicSearch.hxx>
 
-#include <config_features.h>
-
-#if HAVE_FEATURE_PDFIUM
-
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <sal/config.h>
-
-#include <fpdf_doc.h>
-#include <fpdf_text.h>
 
 namespace
 {
@@ -209,6 +202,11 @@ VectorGraphicSearch::~VectorGraphicSearch() { mpImplementation.reset(); }
 bool VectorGraphicSearch::search(OUString const& rSearchString,
                                  VectorGraphicSearchOptions const& rOptions)
 {
+    if (!mpImplementation->mpPDFium)
+    {
+        return false;
+    }
+
     if (!mpImplementation->mpSearchContext)
     {
         auto pData = maGraphic.getVectorGraphicData();
@@ -227,6 +225,11 @@ bool VectorGraphicSearch::search(OUString const& rSearchString,
 
 bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rData)
 {
+    if (!mpImplementation->mpPDFium)
+    {
+        return false;
+    }
+
     mpImplementation->mpPdfDocument = mpImplementation->mpPDFium->openDocument(
         rData->getBinaryDataContainer().getData(), rData->getBinaryDataContainer().getSize());
 
@@ -298,44 +301,5 @@ std::vector<basegfx::B2DRectangle> VectorGraphicSearch::getTextRectangles()
 
     return std::vector<basegfx::B2DRectangle>();
 }
-
-#else // !HAVE_FEATURE_PDFIUM
-
-class VectorGraphicSearch::Implementation
-{
-};
-
-VectorGraphicSearch::VectorGraphicSearch(Graphic const& rGraphic)
-    : maGraphic(rGraphic)
-{
-}
-
-VectorGraphicSearch::~VectorGraphicSearch() {}
-
-bool VectorGraphicSearch::search(OUString const& /*rSearchString*/,
-                                 VectorGraphicSearchOptions const& /*rOptions*/)
-{
-    return false;
-}
-
-bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& /*rData*/)
-{
-    return false;
-}
-
-basegfx::B2DSize VectorGraphicSearch::pageSize() { return basegfx::B2DSize(); }
-
-bool VectorGraphicSearch::next() { return false; }
-
-bool VectorGraphicSearch::previous() { return false; }
-
-int VectorGraphicSearch::index() { return -1; }
-
-std::vector<basegfx::B2DRectangle> VectorGraphicSearch::getTextRectangles()
-{
-    return std::vector<basegfx::B2DRectangle>();
-}
-
-#endif // HAVE_FEATURE_PDFIUM
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
