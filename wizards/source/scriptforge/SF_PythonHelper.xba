@@ -704,20 +704,30 @@ Try:
 			ElseIf (CallType And vbLet) = vbLet Then
 				vReturn = vBasicObject.SetProperty(Script, vArgs(0))
 			
-			&apos;	Methods in class modules using a 2D array or returning arrays are hardcoded as exceptions
+			&apos;	Methods in class modules using a 2D array or returning arrays are hardcoded as exceptions. Bug #138155
 			ElseIf ((CallType And vbMethod) + (CallType And cstArgArray)) = vbMethod + cstArgArray Or _
 				   ((CallType And vbMethod) + (CallType And cstRetArray)) = vbMethod + cstRetArray Then
 				Select Case sServiceName
 					Case &quot;SFDocuments.Document&quot;
 						If Script = &quot;Forms&quot; Then vReturn = vBasicObject.Forms(vArgs(0))
+					Case &quot;SFDocuments.Base&quot;
+						Select Case Script
+							Case &quot;FormDocuments&quot;	:	vReturn = vBasicObject.FormDocuments()
+							Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0), vArgs(1))
+						End Select
 					Case &quot;SFDocuments.Calc&quot;
 						Select Case Script
-							Case &quot;Forms&quot;		:	vReturn = vBasicObject.Forms(vArgs(0), vArgs(1))
-							Case &quot;GetFormula&quot;	:	vReturn = vBasicObject.GetFormula(vArgs(0))
-							Case &quot;GetValue&quot;		:	vReturn = vBasicObject.GetValue(vArgs(0))
-							Case &quot;SetArray&quot;		:	vReturn = vBasicObject.SetArray(vArgs(0), vArgs(1))
-							Case &quot;SetFormula&quot;	:	vReturn = vBasicObject.SetFormula(vArgs(0), vArgs(1))
-							Case &quot;SetValue&quot;		:	vReturn = vBasicObject.SetValue(vArgs(0), vArgs(1))
+							Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0), vArgs(1))
+							Case &quot;GetFormula&quot;		:	vReturn = vBasicObject.GetFormula(vArgs(0))
+							Case &quot;GetValue&quot;			:	vReturn = vBasicObject.GetValue(vArgs(0))
+							Case &quot;SetArray&quot;			:	vReturn = vBasicObject.SetArray(vArgs(0), vArgs(1))
+							Case &quot;SetFormula&quot;		:	vReturn = vBasicObject.SetFormula(vArgs(0), vArgs(1))
+							Case &quot;SetValue&quot;			:	vReturn = vBasicObject.SetValue(vArgs(0), vArgs(1))
+						End Select
+					Case &quot;SFDocuments.Form&quot;
+						Select Case Script
+							Case &quot;Controls&quot;		:	vReturn = vBasicObject.Controls(vArgs(0))
+							Case &quot;Subforms&quot;		:	vReturn = vBasicObject.Subforms(vArgs(0))
 						End Select
 				End Select
 			
