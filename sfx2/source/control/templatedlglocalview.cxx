@@ -142,6 +142,24 @@ void TemplateDlgLocalView::ContextMenuSelectHdl(std::string_view rIdent)
         aTitleEditDlg.SetEntryText(sOldTitle);
         aTitleEditDlg.HideHelpBtn();
 
+        auto aCurRegionItems = getFilteredItems([&](const TemplateItemProperties& rItem) {
+            return rItem.aRegionName == getRegionName(maSelectedItem->mnRegionId);
+        });
+        OUString sTooltip(SfxResId(STR_TOOLTIP_ERROR_RENAME_TEMPLATE));
+        sTooltip = sTooltip.replaceFirst("$2", getRegionName(maSelectedItem->mnRegionId));
+        aTitleEditDlg.setCheckEntry([&](OUString sNewTitle) {
+            if (sNewTitle.isEmpty() || sNewTitle == sOldTitle)
+                return true;
+            for (const auto& rItem : aCurRegionItems)
+            {
+                if (rItem.aName == sNewTitle)
+                {
+                    aTitleEditDlg.SetTooltip(sTooltip.replaceFirst("$1", sNewTitle));
+                    return false;
+                }
+            }
+            return true;
+        });
         if (!aTitleEditDlg.run())
             return;
         OUString sNewTitle = comphelper::string::strip(aTitleEditDlg.GetEntryText(), ' ');
@@ -149,8 +167,8 @@ void TemplateDlgLocalView::ContextMenuSelectHdl(std::string_view rIdent)
         if (!sNewTitle.isEmpty() && sNewTitle != sOldTitle)
         {
             maSelectedItem->setTitle(sNewTitle);
+            ListView::rename(OUString::number(maSelectedItem->mnId), maSelectedItem->maTitle);
         }
-        ListView::rename(OUString::number(maSelectedItem->mnId), maSelectedItem->maTitle);
     }
     else if (rIdent == "delete")
     {
