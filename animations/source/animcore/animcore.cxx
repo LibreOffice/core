@@ -2103,8 +2103,8 @@ void SAL_CALL AnimationNode::removeChangesListener( const Reference< XChangesLis
 
 const css::uno::Sequence< sal_Int8 > & AnimationNode::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theAnimationNodeUnoTunnelId;
-    return theAnimationNodeUnoTunnelId.getSeq();
+    static const css::uno::Sequence<sal_Int8> theId = comphelper::sequence16bitFromPointer(&theId);
+    return theId;
 }
 
 
