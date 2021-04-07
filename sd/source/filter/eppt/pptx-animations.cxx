@@ -1220,7 +1220,8 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
         if (xAudio->getSource() >>= xShape)
         {
             uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-            if (xShapeProps->getPropertyValue("MediaURL") >>= sUrl)
+            bool bHasMediaURL = xShapeProps->getPropertySetInfo()->hasPropertyByName("MediaURL");
+            if (bHasMediaURL && (xShapeProps->getPropertyValue("MediaURL") >>= sUrl))
             {
                 bValid = IsAudioURL(sUrl);
             }
@@ -1431,7 +1432,9 @@ void NodeContext::initValid(bool bHasValidChild, bool bIsIterateChild)
             else if (xAudio->getSource() >>= xShape)
             {
                 uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-                if (xShapeProps->getPropertyValue("MediaURL") >>= sURL)
+                bool bHasMediaURL
+                    = xShapeProps->getPropertySetInfo()->hasPropertyByName("MediaURL");
+                if (bHasMediaURL && (xShapeProps->getPropertyValue("MediaURL") >>= sURL))
                 {
                     mbValid = IsAudioURL(sURL);
                 }

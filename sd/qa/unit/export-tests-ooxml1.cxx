@@ -98,6 +98,7 @@ public:
     void testRoundtripOwnLineStyles();
     void testRoundtripPrstDash();
     void testDashOnHairline();
+    void testNarrationNonMediaShape();
     void testCustomshapeBitmapfillSrcrect();
     void testTdf100348FontworkBitmapFill();
     void testTdf100348FontworkGradientGlow();
@@ -150,6 +151,7 @@ public:
     CPPUNIT_TEST(testRoundtripOwnLineStyles);
     CPPUNIT_TEST(testRoundtripPrstDash);
     CPPUNIT_TEST(testDashOnHairline);
+    CPPUNIT_TEST(testNarrationNonMediaShape);
     CPPUNIT_TEST(testCustomshapeBitmapfillSrcrect);
     CPPUNIT_TEST(testTdf100348FontworkBitmapFill);
     CPPUNIT_TEST(testTdf100348FontworkGradientGlow);
@@ -1142,6 +1144,17 @@ void SdOOXMLExportTest1::testDashOnHairline()
 
     xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:ln/a:custDash/a:ds", 11);
+}
+
+void SdOOXMLExportTest1::testNarrationNonMediaShape()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/narration-non-media-shape.pptx"), PPTX);
+    utl::TempFile aTempFile;
+    // Without the accompanying fix in place, this test would have failed,
+    // beans::UnknownPropertyException was thrown.
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &aTempFile);
+    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
