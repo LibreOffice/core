@@ -1789,10 +1789,21 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     // TODO/LATER: handle the case when temp doc can not be created
     // the document is a new embedded object so it must be marked as modified
     uno::Reference< util::XCloseable > xDocument = CreateTempDocFromLink_Impl();
-    uno::Reference< util::XModifiable > xModif( m_xDocHolder->GetComponent(), uno::UNO_QUERY_THROW );
     try
     {
-        xModif->setModified( true );
+        if(m_xDocHolder.is() && m_xDocHolder->GetComponent().is())
+        {
+            // tdf#141528 m_xDocHolder->GetComponent() may be not set, so add it
+            // to the try path to not get thrown out of the local context to the next
+            // highter try...catch on the stack. To make breakLink work it is
+            // *necessary* to execute the code below that resets the linked state,
+            // esp. the *.clear stuff and resetting m_bIsLink.
+            uno::Reference< util::XModifiable > xModif( m_xDocHolder->GetComponent(), uno::UNO_QUERY_THROW );
+
+            // all other locations in this file check for xModif.is(), so do it here, too
+            if ( xModif.is() )
+                xModif->setModified( true );
+        }
     }
     catch( const uno::Exception& )
     {}
