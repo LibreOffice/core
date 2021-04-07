@@ -291,11 +291,14 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
         if( nMaxValues < 0 )
             nMaxValues = 2;
         SeriesModel &aModel = *mrModel.maSeries.get(0);
-        DataSourceModel &aSrc = aModel.maSources.create( SeriesModel::CATEGORIES );
-        DataSequenceModel &aSeq = aSrc.mxDataSeq.create();
-        aSeq.mnPointCount = nMaxValues;
-        for( sal_Int32 i = 0; i < nMaxValues; i++ )
-            aSeq.maData[ i ] <<= OUString::number( i + 1 );
+        if (!aModel.maSources.has(SeriesModel::CATEGORIES))
+        {
+            DataSourceModel &aSrc = aModel.maSources.create( SeriesModel::CATEGORIES );
+            DataSequenceModel &aSeq = aSrc.mxDataSeq.create();
+            aSeq.mnPointCount = nMaxValues;
+            for( sal_Int32 i = 0; i < nMaxValues; i++ )
+                aSeq.maData[ i ] <<= OUString::number( i + 1 );
+        }
         SeriesConverter aSeriesConv( *this,  aModel );
         xLabeledSeq = aSeriesConv.createCategorySequence( "categories" );
     }
