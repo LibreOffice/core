@@ -424,6 +424,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
     aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_aScaleWidth),
                                 tools::Long( aRealObjArea.GetHeight() * m_aScaleHeight) ) );
 
+    vcl::Window* pEditWin = m_pClient->GetEditWin();
     // In Writer and Impress the map mode is disabled. So when a chart is
     // activated (for in place editing) we get the chart win size in 100th mm
     // and any method that should return pixels returns 100th mm and the chart
@@ -432,17 +433,16 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
     // editing in LOK.
     if (comphelper::LibreOfficeKit::isActive())
     {
-        vcl::Window* pEditWin = m_pClient->GetEditWin();
         bool bMapModeEnabled = pEditWin->IsMapModeEnabled();
         if (!bMapModeEnabled)
             pEditWin->EnableMapMode();
-        aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
+        aRealObjArea = pEditWin->LogicToPixel(aRealObjArea);
         if (!bMapModeEnabled && pEditWin->IsMapModeEnabled())
             pEditWin->EnableMapMode(false);
     }
     else
     {
-        aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
+        aRealObjArea = pEditWin->LogicToPixel(aRealObjArea);
     }
 
     return AWTRectangle( aRealObjArea );
@@ -459,20 +459,20 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
     aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_aScaleWidth),
                                 tools::Long( aRealObjArea.GetHeight() * m_aScaleHeight) ) );
 
+    vcl::Window* pEditWin = m_pClient->GetEditWin();
     // See comment for SfxInPlaceClient_Impl::getPlacement.
     if (comphelper::LibreOfficeKit::isActive())
     {
-        vcl::Window* pEditWin = m_pClient->GetEditWin();
         bool bMapModeEnabled = pEditWin->IsMapModeEnabled();
         if (!bMapModeEnabled)
             pEditWin->EnableMapMode();
-        aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
+        aRealObjArea = pEditWin->LogicToPixel(aRealObjArea);
         if (!bMapModeEnabled && pEditWin->IsMapModeEnabled())
             pEditWin->EnableMapMode(false);
     }
     else
     {
-        aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
+        aRealObjArea = pEditWin->LogicToPixel(aRealObjArea);
     }
 
     return AWTRectangle( aRealObjArea );
