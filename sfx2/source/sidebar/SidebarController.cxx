@@ -1231,7 +1231,6 @@ void SidebarController::RequestCloseDeck()
 {
     if (comphelper::LibreOfficeKit::isActive() && mpCurrentDeck)
     {
-        const vcl::ILibreOfficeKitNotifier* pNotifier = mpCurrentDeck->GetLOKNotifier();
         const SfxViewShell* pViewShell = SfxViewShell::Current();
         if (pViewShell && pViewShell->isLOKMobilePhone())
         {
@@ -1246,7 +1245,7 @@ void SidebarController::RequestCloseDeck()
             const std::string message = aStream.str();
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
         }
-        else if (pNotifier)
+        else if (const vcl::ILibreOfficeKitNotifier* pNotifier = mpCurrentDeck->GetLOKNotifier())
             pNotifier->notifyWindow(mpCurrentDeck->GetLOKWindowId(), "close");
     }
 
