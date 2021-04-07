@@ -3883,6 +3883,57 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123218)
     CPPUNIT_ASSERT_EQUAL(chart2::AxisOrientation_REVERSE, aScaleData.Orientation);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126735)
+{
+    SwDoc* pDoc = createDoc("tdf39721.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    //turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // check next selected tracked change
+    dispatchCommand(mxComponent, ".uno:NextTrackedChange", {});
+    uno::Reference<view::XSelectionSupplier> xSelSupplier(pTextDoc->getCurrentController(),
+                                                          uno::UNO_QUERY_THROW);
+    uno::Any aSelection = xSelSupplier->getSelection();
+    uno::Reference<text::XTextRange> xTextRange = getAssociatedTextRange(aSelection);
+    CPPUNIT_ASSERT(xTextRange);
+    CPPUNIT_ASSERT_EQUAL(OUString(" ipsu"), xTextRange->getString());
+
+    // check next selected tracked change
+    dispatchCommand(mxComponent, ".uno:NextTrackedChange", {});
+    aSelection = xSelSupplier->getSelection();
+    xTextRange = getAssociatedTextRange(aSelection);
+    CPPUNIT_ASSERT(xTextRange);
+    CPPUNIT_ASSERT_EQUAL(OUString("or "), xTextRange->getString());
+
+    // check next selected tracked change at the end of the document:
+    // select the first tracked change of the document
+    dispatchCommand(mxComponent, ".uno:NextTrackedChange", {});
+    aSelection = xSelSupplier->getSelection();
+    xTextRange = getAssociatedTextRange(aSelection);
+    CPPUNIT_ASSERT(xTextRange);
+    // This was empty (collapsing at the end of the last tracked change)
+    CPPUNIT_ASSERT_EQUAL(OUString(" ipsu"), xTextRange->getString());
+
+    // check the previous tracked change at the start of the document:
+    // select the last tracked change of the document
+    dispatchCommand(mxComponent, ".uno:PreviousTrackedChange", {});
+    aSelection = xSelSupplier->getSelection();
+    xTextRange = getAssociatedTextRange(aSelection);
+    CPPUNIT_ASSERT(xTextRange);
+    // This was empty (collapsing at the start of the last tracked change)
+    CPPUNIT_ASSERT_EQUAL(OUString("or "), xTextRange->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -71,6 +71,8 @@
 #include <docufld.hxx>
 #include <svx/srchdlg.hxx>
 #include <frameformats.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
 
 using namespace ::com::sun::star;
 
@@ -2208,6 +2210,14 @@ const SwRangeRedline* SwCursorShell::SelNextRedline()
         // ensure point is at the end so alternating SelNext/SelPrev works
         NormalizePam(false);
         pFnd = GetDoc()->getIDocumentRedlineAccess().SelNextRedline( *m_pCurrentCursor );
+
+        // at the end of the document, go the the start of the document, and try again
+        if ( !pFnd )
+        {
+            GetDoc()->GetDocShell()->GetWrtShell()->StartOfSection();
+            pFnd = GetDoc()->getIDocumentRedlineAccess().SelNextRedline( *m_pCurrentCursor );
+        }
+
         if( pFnd && !m_pCurrentCursor->IsInProtectTable() && !m_pCurrentCursor->IsSelOvr() )
             UpdateCursor( SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
         else
@@ -2228,6 +2238,14 @@ const SwRangeRedline* SwCursorShell::SelPrevRedline()
         // ensure point is at the start so alternating SelNext/SelPrev works
         NormalizePam(true);
         pFnd = GetDoc()->getIDocumentRedlineAccess().SelPrevRedline( *m_pCurrentCursor );
+
+        // at the start of the document, go the the end of the document, and try again
+        if ( !pFnd )
+        {
+            GetDoc()->GetDocShell()->GetWrtShell()->EndOfSection();
+            pFnd = GetDoc()->getIDocumentRedlineAccess().SelPrevRedline( *m_pCurrentCursor );
+        }
+
         if( pFnd && !m_pCurrentCursor->IsInProtectTable() && !m_pCurrentCursor->IsSelOvr() )
             UpdateCursor( SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
         else
