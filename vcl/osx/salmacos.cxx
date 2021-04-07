@@ -96,29 +96,36 @@ bool QuartzSalBitmap::Create(CGLayerHolder const & rLayerHolder, int nBitmapBits
 
 // From salgdicommon.cxx
 
-void AquaSalGraphics::copyBits(const SalTwoRect &rPosAry, SalGraphics *pSrcGraphics)
+void AquaGraphicsBackend::copyBits(const SalTwoRect &rPosAry, SalGraphics *pSrcGraphics)
 {
-    if (!pSrcGraphics)
-        pSrcGraphics = this;
-    AquaSalGraphics *pSrc = static_cast<AquaSalGraphics*>(pSrcGraphics);
+    AquaSharedAttributes* pSrcShared = nullptr;
+
+    if (pSrcGraphics)
+    {
+        AquaSalGraphics* pSrc = static_cast<AquaSalGraphics*>(pSrcGraphics);
+        pSrcShared = &pSrc->getAquaGraphicsBackend()->mrShared;
+    }
+    else
+        pSrcShared = &mrShared;
+
     if (rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0 || rPosAry.mnDestWidth <= 0 || rPosAry.mnDestHeight <= 0)
         return;
-    if (!maContextHolder.isSet())
+    if (!mrShared.maContextHolder.isSet())
         return;
 
-    SAL_WARN_IF (!pSrc->maLayer.isSet(), "vcl.quartz", "AquaSalGraphics::copyBits() from non-layered graphics this=" << this);
+    SAL_WARN_IF (!pSrcShared->maLayer.isSet(), "vcl.quartz", "AquaSalGraphics::copyBits() from non-layered graphics this=" << this);
 
     // Layered graphics are copied by AquaSalGraphics::copyScaledArea() which is able to consider the layer's scaling.
 
-    if (pSrc->maLayer.isSet())
+    if (pSrcShared->maLayer.isSet())
         copyScaledArea(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnSrcX, rPosAry.mnSrcY,
-                       rPosAry.mnSrcWidth, rPosAry.mnSrcHeight, pSrcGraphics);
+                       rPosAry.mnSrcWidth, rPosAry.mnSrcHeight, pSrcShared);
     else
     {
-        ApplyXorContext();
-        pSrc->ApplyXorContext();
-        std::shared_ptr<SalBitmap> pBitmap = pSrc->getBitmap(rPosAry.mnSrcX, rPosAry.mnSrcY,
-                                                             rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
+        mrShared.applyXorContext();
+        pSrcShared->applyXorContext();
+        std::shared_ptr<SalBitmap> pBitmap = pSrcGraphics->GetImpl()->getBitmap(rPosAry.mnSrcX, rPosAry.mnSrcY,
+                                                                        rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
         if (pBitmap)
         {
             SalTwoRect aPosAry(rPosAry);
@@ -129,34 +136,30 @@ void AquaSalGraphics::copyBits(const SalTwoRect &rPosAry, SalGraphics *pSrcGraph
     }
 }
 
-void AquaSalGraphics::copyArea(tools::Long nDstX, tools::Long nDstY,tools::Long nSrcX, tools::Long nSrcY,
+void AquaGraphicsBackend::copyArea(tools::Long nDstX, tools::Long nDstY,tools::Long nSrcX, tools::Long nSrcY,
                                tools::Long nSrcWidth, tools::Long nSrcHeight, bool)
 {
-    if (!maContextHolder.isSet())
+    if (!mrShared.maContextHolder.isSet())
         return;
 
     // Functionality is implemented in protected member function AquaSalGraphics::copyScaledArea() which requires an additional
     // parameter of type SalGraphics to be used in AquaSalGraphics::copyBits() too.
 
-    copyScaledArea(nDstX, nDstY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, this);
+    copyScaledArea(nDstX, nDstY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, &mrShared);
 }
 
-void AquaSalGraphics::copyScaledArea(tools::Long nDstX, tools::Long nDstY,tools::Long nSrcX, tools::Long nSrcY,
-                                     tools::Long nSrcWidth, tools::Long nSrcHeight, SalGraphics *pSrcGraphics)
+void AquaGraphicsBackend::copyScaledArea(tools::Long nDstX, tools::Long nDstY,tools::Long nSrcX, tools::Long nSrcY,
+                                     tools::Long nSrcWidth, tools::Long nSrcHeight, AquaSharedAttributes* pSrcShared)
 {
-    if (!pSrcGraphics)
-        pSrcGraphics = this;
-    AquaSalGraphics *pSrc = static_cast<AquaSalGraphics*>(pSrcGraphics);
-
-    SAL_WARN_IF(!maLayer.isSet(), "vcl.quartz",
+    SAL_WARN_IF(!mrShared.maLayer.isSet(), "vcl.quartz",
                 "AquaSalGraphics::copyScaledArea() without graphics context or for non-layered graphics this=" << this);
 
-    if (!maContextHolder.isSet() || !maLayer.isSet())
+    if (!mrShared.maContextHolder.isSet() || !mrShared.maLayer.isSet())
         return;
 
     // Determine scaled geometry of source and target area assuming source and target area have the same scale
 
-    float fScale = maLayer.getScale();
+    float fScale = mrShared.maLayer.getScale();
     CGFloat nScaledSourceX = nSrcX * fScale;
     CGFloat nScaledSourceY = nSrcY * fScale;
     CGFloat nScaledTargetX = nDstX * fScale;
@@ -166,11 +169,11 @@ void AquaSalGraphics::copyScaledArea(tools::Long nDstX, tools::Long nDstY,tools:
 
     // Apply XOR context and get copy context from current graphics context or XOR context
 
-    ApplyXorContext();
-    maContextHolder.saveState();
-    CGContextRef xCopyContext = maContextHolder.get();
-    if (mpXorEmulation && mpXorEmulation->IsEnabled())
-        xCopyContext = mpXorEmulation->GetTargetContext();
+    mrShared.applyXorContext();
+    mrShared.maContextHolder.saveState();
+    CGContextRef xCopyContext = mrShared.maContextHolder.get();
+    if (mrShared.mpXorEmulation && mrShared.mpXorEmulation->IsEnabled())
+        xCopyContext = mrShared.mpXorEmulation->GetTargetContext();
 
     // Set scale matrix of copy context to consider layer scaling
 
@@ -179,19 +182,19 @@ void AquaSalGraphics::copyScaledArea(tools::Long nDstX, tools::Long nDstY,tools:
     // Creating an additional layer is required for drawing with the required scale and extent at the drawing destination
     // thereafter.
 
-    CGLayerHolder aSourceLayerHolder(pSrc->maLayer);
+    CGLayerHolder aSourceLayerHolder(pSrcShared->maLayer);
     const CGSize aSourceSize = CGSizeMake(nScaledSourceWidth, nScaledSourceHeight);
     aSourceLayerHolder.set(CGLayerCreateWithContext(xCopyContext, aSourceSize, nullptr));
     const CGContextRef xSourceContext = CGLayerGetContext(aSourceLayerHolder.get());
     CGPoint aSrcPoint = CGPointMake(-nScaledSourceX, -nScaledSourceY);
-    if (pSrc->IsFlipped())
+    if (pSrcShared->isFlipped())
     {
         CGContextTranslateCTM(xSourceContext, 0, nScaledSourceHeight);
         CGContextScaleCTM(xSourceContext, 1, -1);
-        aSrcPoint.y = nScaledSourceY + nScaledSourceHeight - mnHeight * fScale;
+        aSrcPoint.y = nScaledSourceY + nScaledSourceHeight - mrShared.mnHeight * fScale;
     }
     CGContextSetBlendMode(xSourceContext, kCGBlendModeCopy);
-    CGContextDrawLayerAtPoint(xSourceContext, aSrcPoint, pSrc->maLayer.get());
+    CGContextDrawLayerAtPoint(xSourceContext, aSrcPoint, pSrcShared->maLayer.get());
 
     // Copy source area from additional layer to target area
 
@@ -201,10 +204,11 @@ void AquaSalGraphics::copyScaledArea(tools::Long nDstX, tools::Long nDstY,tools:
 
     // Housekeeping on exit
 
-    maContextHolder.restoreState();
-    if (aSourceLayerHolder.get() != maLayer.get())
+    mrShared.maContextHolder.restoreState();
+    if (aSourceLayerHolder.get() != mrShared.maLayer.get())
         CGLayerRelease(aSourceLayerHolder.get());
-    RefreshRect(nDstX, nDstY, nSrcWidth, nSrcHeight);
+
+    mrShared.refreshRect(nDstX, nDstY, nSrcWidth, nSrcHeight);
 }
 
 void AquaSalGraphics::SetVirDevGraphics(CGLayerHolder const &rLayer, CGContextRef xContext, int nBitmapDepth)
@@ -214,61 +218,61 @@ void AquaSalGraphics::SetVirDevGraphics(CGLayerHolder const &rLayer, CGContextRe
     // Set member variables
 
     InvalidateContext();
-    mbWindow = false;
-    mbPrinter = false;
-    mbVirDev = true;
-    maLayer = rLayer;
-    mnBitmapDepth = nBitmapDepth;
+    maShared.mbWindow = false;
+    maShared.mbPrinter = false;
+    maShared.mbVirDev = true;
+    maShared.maLayer = rLayer;
+    maShared.mnBitmapDepth = nBitmapDepth;
 
-    // Get size and scale from layer if set else from bitmap and AquaSalGraphics::GetWindowScaling(), which is used to determine
+    // Get size and scale from layer if set else from bitmap and sal::aqua::getWindowScaling(), which is used to determine
     // scaling for direct graphics output too
 
     CGSize aSize;
     float fScale;
-    if (maLayer.isSet())
+    if (maShared.maLayer.isSet())
     {
-        maContextHolder.set(CGLayerGetContext(maLayer.get()));
-        aSize = CGLayerGetSize(maLayer.get());
-        fScale = maLayer.getScale();
+        maShared.maContextHolder.set(CGLayerGetContext(maShared.maLayer.get()));
+        aSize = CGLayerGetSize(maShared.maLayer.get());
+        fScale = maShared.maLayer.getScale();
     }
     else
     {
-        maContextHolder.set(xContext);
+        maShared.maContextHolder.set(xContext);
         if (!xContext)
             return;
         aSize.width = CGBitmapContextGetWidth(xContext);
         aSize.height = CGBitmapContextGetHeight(xContext);
-        fScale = GetWindowScaling();
+        fScale = sal::aqua::getWindowScaling();
     }
-    mnWidth = aSize.width / fScale;
-    mnHeight = aSize.height / fScale;
+    maShared.mnWidth = aSize.width / fScale;
+    maShared.mnHeight = aSize.height / fScale;
 
     // Set color space for fill and stroke
 
     CGColorSpaceRef aColorSpace = GetSalData()->mxRGBSpace;
-    CGContextSetFillColorSpace(maContextHolder.get(), aColorSpace);
-    CGContextSetStrokeColorSpace(maContextHolder.get(), aColorSpace);
+    CGContextSetFillColorSpace(maShared.maContextHolder.get(), aColorSpace);
+    CGContextSetStrokeColorSpace(maShared.maContextHolder.get(), aColorSpace);
 
     // Apply scale matrix to virtual device graphics
 
-    CGContextScaleCTM(maContextHolder.get(), fScale, fScale);
+    CGContextScaleCTM(maShared.maContextHolder.get(), fScale, fScale);
 
     // Apply XOR emulation if required
 
-    if (mpXorEmulation)
+    if (maShared.mpXorEmulation)
     {
-        mpXorEmulation->SetTarget(mnWidth, mnHeight, mnBitmapDepth, maContextHolder.get(), maLayer.get());
-        if (mpXorEmulation->IsEnabled())
-            maContextHolder.set(mpXorEmulation->GetMaskContext());
+        maShared.mpXorEmulation->SetTarget(maShared.mnWidth, maShared.mnHeight, maShared.mnBitmapDepth, maShared.maContextHolder.get(), maShared.maLayer.get());
+        if (maShared.mpXorEmulation->IsEnabled())
+            maShared.maContextHolder.set(maShared.mpXorEmulation->GetMaskContext());
     }
 
     // Housekeeping on exit
 
-    maContextHolder.saveState();
-    SetState();
+    maShared.maContextHolder.saveState();
+    maShared.setState();
 
     SAL_INFO("vcl.quartz", "SetVirDevGraphics() this=" << this <<
-             " (" << mnWidth << "x" << mnHeight << ") fScale=" << fScale << " mnBitmapDepth=" << mnBitmapDepth);
+             " (" << maShared.mnWidth << "x" << maShared.mnHeight << ") fScale=" << fScale << " mnBitmapDepth=" << maShared.mnBitmapDepth);
 }
 
 // From salvd.cxx
@@ -277,7 +281,7 @@ void AquaSalVirtualDevice::Destroy()
 {
     SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::Destroy() this=" << this << " mbForeignContext=" << mbForeignContext );
 
-    if( mbForeignContext )
+    if (mbForeignContext)
     {
         // Do not delete mxContext that we have received from outside VCL
         maLayer.set(nullptr);
@@ -327,11 +331,11 @@ bool AquaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY)
     Destroy();
 
     // Prepare new graphics context for initialization, use scaling independent of prior graphics context calculated by
-    // AquaSalGraphics::GetWindowScaling(), which is used to determine scaling for direct graphics output too
+    // sal::aqua::getWindowScaling(), which is used to determine scaling for direct graphics output too
 
     mnWidth = nDX;
     mnHeight = nDY;
-    fScale = AquaSalGraphics::GetWindowScaling();
+    fScale = sal::aqua::getWindowScaling();
     CGColorSpaceRef aColorSpace;
     uint32_t nFlags;
     if (mnBitmapDepth && (mnBitmapDepth < 16))
