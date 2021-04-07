@@ -85,8 +85,7 @@ function proc_text {
 }
 
 function proc_text_markdown {
-  sed -re ' s/\[\[([-_a-zA-Z0-9]+)\]\]/<a href="\1.html">\1<\/a>/g' - \
-  | sed -re ' s/\[git:([^]]+)\]/<a href="https:\/\/cgit.freedesktop.org\/libreoffice\/core\/tree\/\1">\1<\/a>/g'
+  sed -re ' s/\[git:([^]]+)\]/<a href="\.\.\/\1">\1<\/a>/g'
 }
 
 function check_cmd {
@@ -226,10 +225,10 @@ echo "generating index page"
 header "LibreOffice Modules" " " "$BASE_OUTPUT/index.html"
 for module_name in *; do
   if [ -d $module_name ]; then
-    cur_file=$(echo $module_name/README* $module_name/readme.txt*)
+    cur_file=$(echo $module_name/README.md)
     if [ -f "$cur_file" ]; then
       # write index.html entry
-      text="<h2><a href=\"${module_name}.html\">${module_name}</a></h2>\n"
+      text=$(echo -e "<h2><a href=\"${module_name}.html\">${module_name}</a></h2>\n")
 
       if [ ${cur_file: -3} == ".md" ]; then
         # This is a markdown file.
@@ -239,7 +238,7 @@ for module_name in *; do
       else
         text="${text}$(head -n1 $cur_file | proc_text)"
       fi
-      echo -e $text >> "$BASE_OUTPUT/index.html"
+      echo -e "$text" >> "$BASE_OUTPUT/index.html"
 
       # write detailed module content
       header "$module_name" "<a href=\"index.html\">LibreOffice</a> &raquo; ${module_name}" "$BASE_OUTPUT/${module_name}.html"
@@ -249,12 +248,12 @@ for module_name in *; do
         text="${text} &nbsp; <a href=\"${module_name}/html/classes.html\">Doxygen</a>"
       fi
       text="${text} </p><p>&nbsp;</p>"
-      echo -e $text >> "$BASE_OUTPUT/${module_name}.html"
+      echo -e "$text" >> "$BASE_OUTPUT/${module_name}.html"
 
       if [ ${cur_file: -3} == ".md" ]; then
         # This is a markdown file.
         text="$(${markdown} $cur_file | proc_text_markdown)"
-        echo $text >> "$BASE_OUTPUT/${module_name}.html"
+        echo -e "$text" >> "$BASE_OUTPUT/${module_name}.html"
       else
         proc_text < $cur_file >> "$BASE_OUTPUT/${module_name}.html"
       fi
@@ -265,9 +264,13 @@ for module_name in *; do
   fi
 done
 
-if [ ${#empty_modules[*]} -gt 0 ]; then
+if [ ${#empty_modules[*]} -gt 10 ]; then
   echo -e "<p>&nbsp;</p><p>READMEs were not available for these modules:</p><ul>\n" >> "$BASE_OUTPUT/index.html"
   for module_name in "${empty_modules[@]}"; do
+    # Do not process these directories
+    if [[ "$module_name" =~ ^(autom4te.cache|dictionaries|docs|helpcompiler|helpcontent2|include|instdir|lo|translations|workdir)$ ]]; then
+      continue
+    fi
     echo -e "<li><a href=\"https://cgit.freedesktop.org/libreoffice/core/tree/${module_name}\">${module_name}</a></li>\n" >> "$BASE_OUTPUT/index.html"
   done
   echo -e "</ul>\n" >> "$BASE_OUTPUT/index.html"
