@@ -15,7 +15,7 @@ class Qt5GraphicsBase
 {
     qreal m_fDPR;
 
-protected:
+public:
     Qt5GraphicsBase()
         : m_fDPR(qApp ? qApp->devicePixelRatio() : 1.0)
     {
@@ -23,7 +23,6 @@ protected:
 
     void setDevicePixelRatioF(qreal fDPR) { m_fDPR = fDPR; }
 
-public:
     qreal devicePixelRatioF() const { return m_fDPR; }
 };
 

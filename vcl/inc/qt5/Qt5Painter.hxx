@@ -28,11 +28,12 @@
 
 class Qt5Painter final : public QPainter
 {
-    Qt5Graphics& m_rGraphics;
+    Qt5GraphicsBackend& m_rGraphics;
     QRegion m_aRegion;
 
 public:
-    Qt5Painter(Qt5Graphics& rGraphics, bool bPrepareBrush = false, sal_uInt8 nTransparency = 255);
+    Qt5Painter(Qt5GraphicsBackend& rGraphics, bool bPrepareBrush = false,
+               sal_uInt8 nTransparency = 255);
     ~Qt5Painter()
     {
         if (m_rGraphics.m_pFrame && !m_aRegion.isEmpty())

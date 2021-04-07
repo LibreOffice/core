@@ -70,7 +70,7 @@ bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pSalGraphics)
 {
     const Qt5Bitmap* pBitmap = static_cast<const Qt5Bitmap*>(&rSalBmp);
     Qt5Graphics* pGraphics = static_cast<Qt5Graphics*>(pSalGraphics);
-    QImage* pImage = pGraphics->m_pQImage;
+    QImage* pImage = pGraphics->getQImage();
     m_pImage.reset(new QImage(pBitmap->m_pImage->convertToFormat(pImage->format())));
     return true;
 }
