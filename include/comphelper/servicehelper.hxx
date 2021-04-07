@@ -49,6 +49,15 @@ namespace comphelper {
         return reinterpret_cast<T*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( T::getUnoTunnelId() )));
     }
 
+css::uno::Sequence<sal_Int8> sequence16FromPointer(const void* p)
+{
+    css::uno::Sequence<sal_Int8> aSequence(16);
+    static_assert(sizeof(p) <= 16);
+    const sal_Int8* pData = reinterpret_cast<const sal_Int8*>(&p);
+    for (int i = 0; i < sizeof(p); ++i)
+        aSequence[i] = pData[i];
+}
+
 }
 
 template <typename T>
