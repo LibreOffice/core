@@ -139,18 +139,40 @@ void TemplateDlgLocalView::ContextMenuSelectHdl(std::string_view rIdent)
     {
         InputDialog aTitleEditDlg(GetDrawingArea(), SfxResId(STR_RENAME_TEMPLATE));
         OUString sOldTitle = maSelectedItem->getTitle();
+        bool bEnd = false;
         aTitleEditDlg.SetEntryText(sOldTitle);
-        aTitleEditDlg.HideHelpBtn();
-
-        if (!aTitleEditDlg.run())
-            return;
-        OUString sNewTitle = comphelper::string::strip(aTitleEditDlg.GetEntryText(), ' ');
-
-        if (!sNewTitle.isEmpty() && sNewTitle != sOldTitle)
+        while (!bEnd)
         {
-            maSelectedItem->setTitle(sNewTitle);
+            aTitleEditDlg.HideHelpBtn();
+
+            if (!aTitleEditDlg.run())
+                return;
+            OUString sNewTitle = comphelper::string::strip(aTitleEditDlg.GetEntryText(), ' ');
+
+            if (!sNewTitle.isEmpty() && sNewTitle != sOldTitle)
+            {
+                auto nRegionId = maSelectedItem->mnRegionId;
+                auto nDocId = maSelectedItem->mnDocId;
+                bEnd = mpDocTemplates->SetName(sNewTitle, nRegionId, nDocId);
+                if (bEnd)
+                {
+                    maSelectedItem->maTitle = sNewTitle;
+                    ListView::rename(OUString::number(maSelectedItem->mnId),
+                                     maSelectedItem->maTitle);
+                    reload();
+                }
+                else
+                {
+                    aTitleEditDlg.SetEntryMessageType(weld::EntryMessageType::Error);
+                    OUString aMsg(SfxResId(STR_TOOLTIP_ERROR_RENAME_TEMPLATE));
+                    aTitleEditDlg.SetLabelB(SfxResId(STR_LABEL_ERROR_RENAME_TEMPLATE), COL_RED);
+                    aTitleEditDlg.SetTooltip(aMsg.replaceFirst("$1", sNewTitle)
+                                                 .replaceFirst("$2", getRegionName(nRegionId)));
+                }
+            }
+            else
+                bEnd = true;
         }
-        ListView::rename(OUString::number(maSelectedItem->mnId), maSelectedItem->maTitle);
     }
     else if (rIdent == "delete")
     {
