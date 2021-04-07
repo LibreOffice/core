@@ -307,7 +307,7 @@ Public Sub ConsoleClear(Optional ByVal Keep)
 &apos;&apos;&apos;	Clear the console keeping an optional number of recent messages
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Keep: the number of messages to keep
-&apos;&apos;&apos;				If Keep is bigger than the the number of messages stored in the console,
+&apos;&apos;&apos;				If Keep is bigger than the number of messages stored in the console,
 &apos;&apos;&apos;				the console is not cleared
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		SF_Exception.ConsoleClear(5)

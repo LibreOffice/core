@@ -2211,7 +2211,7 @@ const SwRangeRedline* SwCursorShell::SelNextRedline()
         NormalizePam(false);
         pFnd = GetDoc()->getIDocumentRedlineAccess().SelNextRedline( *m_pCurrentCursor );
 
-        // at the end of the document, go the the start of the document, and try again
+        // at the end of the document, go to the start of the document, and try again
         if ( !pFnd )
         {
             GetDoc()->GetDocShell()->GetWrtShell()->StartOfSection();
@@ -2239,7 +2239,7 @@ const SwRangeRedline* SwCursorShell::SelPrevRedline()
         NormalizePam(true);
         pFnd = GetDoc()->getIDocumentRedlineAccess().SelPrevRedline( *m_pCurrentCursor );
 
-        // at the start of the document, go the the end of the document, and try again
+        // at the start of the document, go to the end of the document, and try again
         if ( !pFnd )
         {
             GetDoc()->GetDocShell()->GetWrtShell()->EndOfSection();

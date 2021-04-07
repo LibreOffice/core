@@ -1795,7 +1795,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
         {
             // tdf#141528 m_xDocHolder->GetComponent() may be not set, so add it
             // to the try path to not get thrown out of the local context to the next
-            // highter try...catch on the stack. To make breakLink work it is
+            // higher try...catch on the stack. To make breakLink work it is
             // *necessary* to execute the code below that resets the linked state,
             // esp. the *.clear stuff and resetting m_bIsLink.
             uno::Reference< util::XModifiable > xModif( m_xDocHolder->GetComponent(), uno::UNO_QUERY_THROW );
