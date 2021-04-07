@@ -34,6 +34,24 @@
       "revId": "9f917910c762cec9a5401c600646b32ed2e61ce6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "683dff5b_8f9bf0ec",
+        "filename": "include/comphelper/servicehelper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-07T09:00:42Z",
+      "side": 1,
+      "message": "You have already taken the address of the field at the call site.\nNow you are taking the address of the storage location for the p variable, which is currently on the stack.",
+      "parentUuid": "017eeab9_0a1e0861",
+      "revId": "9f917910c762cec9a5401c600646b32ed2e61ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
