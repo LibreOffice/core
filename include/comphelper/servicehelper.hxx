@@ -77,13 +77,10 @@ inline bool isUnoTunnelId(const css::uno::Sequence< sal_Int8 >& rId)
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
 #define UNO3_GETIMPLEMENTATION_BASE_IMPL( classname ) \
-namespace \
-{ \
-    class the##classname##UnoTunnelId : public rtl::Static< UnoTunnelIdInit, the##classname##UnoTunnelId> {}; \
-} \
 const css::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() throw() \
 { \
-    return the##classname##UnoTunnelId::get().getSeq(); \
+    static const UnoTunnelIdInit aId; \
+    return aId.getSeq(); \
 }
 
 #define UNO3_GETIMPLEMENTATION_IMPL( classname )\
