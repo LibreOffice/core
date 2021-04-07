@@ -11,7 +11,6 @@
 import unittest
 
 from org.libreoffice.unotest import UnoInProcess
-from com.sun.star.lang import IllegalArgumentException
 
 class TestXText(unittest.TestCase):
 

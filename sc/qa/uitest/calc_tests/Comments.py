@@ -7,7 +7,6 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
 
 class Comments(UITestCase):
     def test_comment(self):

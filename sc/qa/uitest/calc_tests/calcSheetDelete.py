@@ -6,11 +6,8 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
 from uitest.uihelper.calc import enter_text_to_cell
-import time
 
 class calcSheetDelete(UITestCase):
 

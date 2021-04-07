@@ -7,9 +7,8 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
-from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import change_measurement_unit
 
 class WriterLineNumbering(UITestCase):

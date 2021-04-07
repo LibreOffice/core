@@ -8,8 +8,6 @@
 """Covers sw/source/ui/fmtui/ fixes."""
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 

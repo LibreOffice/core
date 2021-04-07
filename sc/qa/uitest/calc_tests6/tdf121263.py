@@ -8,9 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
-from libreoffice.calc.document import get_column
 from uitest.uihelper.common import get_state_as_dict
-from libreoffice.calc.document import get_cell_by_position
 
 class tdf121263(UITestCase):
 
