@@ -55,7 +55,6 @@
 #include "vbasystemaxcontrol.hxx"
 #include "vbaimage.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/window.hxx>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <svx/svdobj.hxx>
@@ -494,24 +493,13 @@ static PointerStyle lcl_msoPointerToLOPointer( tools::Long msoPointerStyle )
 ::sal_Int32 SAL_CALL
 ScVbaControl::getMousePointer()
 {
-    PointerStyle eType = PointerStyle::Arrow; // default ?
-    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
-    if ( pWindow )
-    {
-        eType = pWindow->GetPointer();
-    }
-    return lcl_loPointerToMsoPointer( eType );
+    return lcl_loPointerToMsoPointer(VCLUnoHelper::getMousePointer(getWindowPeer()));
 }
 
 void SAL_CALL
 ScVbaControl::setMousePointer( ::sal_Int32 _mousepointer )
 {
-    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
-    if ( pWindow )
-    {
-        PointerStyle aPointer = lcl_msoPointerToLOPointer( _mousepointer );
-        pWindow->SetPointer( aPointer );
-    }
+    VCLUnoHelper::setMousePointer(getWindowPeer(), lcl_msoPointerToLOPointer(_mousepointer));
 }
 
 void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
