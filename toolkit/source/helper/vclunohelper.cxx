@@ -18,10 +18,13 @@
  */
 
 #include <tools/stream.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/event.hxx>
-#include <vcl/window.hxx>
-#include <vcl/unohelp.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/ptrstyle.hxx>
+#include <vcl/unohelp.hxx>
+#include <vcl/window.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -42,13 +45,11 @@
 #include <toolkit/awt/vclxfont.hxx>
 #include <controls/unocontrolcontainer.hxx>
 #include <controls/unocontrolcontainermodel.hxx>
-#include <vcl/graph.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
-#include <vcl/dibtools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -585,6 +586,23 @@ awt::KeyEvent VCLUnoHelper::createKeyEvent( const ::KeyEvent& _rVclEvent, const 
 
     return ::KeyEvent (nChar, aKeyCode);
 
+}
+
+::PointerStyle VCLUnoHelper::getMousePointer(const css::uno::Reference<css::awt::XWindowPeer>& rWindowPeer)
+{
+    ::PointerStyle eType = ::PointerStyle::Arrow; // default ?
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(rWindowPeer);
+    if (pWindow)
+        eType = pWindow->GetPointer();
+    return eType;
+}
+
+void VCLUnoHelper::setMousePointer(const css::uno::Reference<css::awt::XWindowPeer>& rWindowPeer, ::PointerStyle ePointer)
+{
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(rWindowPeer);
+    if (!pWindow)
+        return;
+    pWindow->SetPointer(ePointer);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
