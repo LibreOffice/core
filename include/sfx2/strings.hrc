@@ -70,6 +70,7 @@
 #define STR_MSG_ERROR_IMPORT                    NC_("STR_MSG_ERROR_IMPORT", "Error importing the following templates to $1:\n$2")
 #define STR_MSG_ERROR_DELETE_TEMPLATE           NC_("STR_MSG_ERROR_DELETE_TEMPLATE", "The following templates cannot be deleted:\n$1")
 #define STR_MSG_ERROR_DELETE_FOLDER             NC_("STR_MSG_ERROR_DELETE_FOLDER", "The following folders cannot be deleted:\n$1")
+#define STR_TOOLTIP_ERROR_RENAME_TEMPLATE       NC_("STR_TOOLTIP_ERROR_RENAME_TEMPLATE", "There is another template with the name $1 in $2.")
 #define STR_QMSG_SEL_FOLDER_DELETE              NC_("STR_QMSG_SEL_FOLDER_DELETE", "Do you want to delete the selected category?")
 #define STR_QMSG_TEMPLATE_OVERWRITE             NC_("STR_QMSG_TEMPLATE_OVERWRITE", "A template named $1 already exists in $2. Do you want to overwrite it?")
 #define STR_QMSG_SEL_TEMPLATE_DELETE            NC_("STR_QMSG_SEL_TEMPLATE_DELETE", "Do you want to delete the selected templates?")
