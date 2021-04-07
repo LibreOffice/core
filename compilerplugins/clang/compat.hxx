@@ -321,6 +321,14 @@ inline bool isComparisonOp(clang::CXXOperatorCallExpr const * callExpr)
            || op == OO_EqualEqual || op == OO_ExclaimEqual;
 }
 
+inline bool isPtrMemOp(clang::BinaryOperatorKind op) {
+#if CLANG_VERSION >= 80000
+    return clang::BinaryOperator::isPtrMemOp(op);
+#else
+    return op == clang::BO_PtrMemD || op == clang::BO_PtrMemI;
+#endif
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
