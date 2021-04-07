@@ -91,7 +91,7 @@ using ::basic::BasicManagerRepository;
 
 namespace {
 
-class theCurrentComponent : public rtl::Static< WeakReference< XInterface >, theCurrentComponent > {};
+WeakReference< XInterface > theCurrentComponent;
 
 #if HAVE_FEATURE_SCRIPTING
 
@@ -861,7 +861,7 @@ sal_uInt16 SfxObjectShell::GetAutoStyleFilterIndex() const
 
 void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComponent )
 {
-    WeakReference< XInterface >& rTheCurrentComponent = theCurrentComponent::get();
+    WeakReference< XInterface >& rTheCurrentComponent = theCurrentComponent;
 
     Reference< XInterface > xOldCurrentComp(rTheCurrentComponent);
     if ( _rxComponent == xOldCurrentComp )
@@ -906,7 +906,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
 
 Reference< XInterface > SfxObjectShell::GetCurrentComponent()
 {
-    return theCurrentComponent::get();
+    return theCurrentComponent;
 }
 
 
