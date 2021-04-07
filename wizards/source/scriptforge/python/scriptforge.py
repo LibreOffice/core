@@ -350,14 +350,14 @@ class ScriptForge(object, metaclass = _Singleton):
             for method in methods:
                 func = getattr(cls, method)
                 if callable(func):
-                    # Assign the synonyms to the original method
+                    # Assign to each synonym a reference to the original method
                     m = method.lower()
                     if hasattr(cls, m) is False:
                         setattr(cls, m, func)
                     m = camelCase(method)
                     if hasattr(cls, m) is False:
                         setattr(cls, m, func)
-        return True
+        return
 
 
 # #####################################################################################################################
@@ -427,10 +427,11 @@ class SFServices(object):
         """
     # Python-Basic protocol constants and flags
     vbGet, vbLet, vbMethod, vbSet = 2, 4, 1, 8  # CallByName constants
+    flgPost = 32    # The method or the property implies a hardcoded post-processing
     flgDateArg = 64  # Invoked service method may contain a date argument
     flgDateRet = 128  # Invoked service method can return a date
     flgArrayArg = 512  # 1st argument can be a 2D array
-    flgArrayRet = 1024  # Invoked service method can return a 2D array
+    flgArrayRet = 1024  # Invoked service method can return a 2D array (standard modules) or any array (class modules)
     flgUno = 256  # Invoked service method/property can return a UNO object
     flgObject = 2048  # 1st argument may be a Basic object
     # Basic class type
@@ -1372,10 +1373,6 @@ class SFDocuments:
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
-        @property
-        def XComponent(self):
-            return self.Execute(self.vbGet + self.flgUno, 'XComponent')
-
         def Activate(self):
             return self.Execute(self.vbMethod, 'Activate')
 
@@ -1413,6 +1410,24 @@ class SFDocuments:
         serviceproperties = dict(DocumentType = False, IsBase = False, IsCalc = False,
                                  IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
                                  XComponent = False)
+
+        def CloseDocument(self, saveask = True):
+            return self.Execute(self.vbMethod, 'CloseDocument', saveask)
+
+        def FormDocuments(self):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'FormDocuments')
+
+        def Forms(self, formdocument, form = ''):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'Forms', formdocument, form)
+
+        def GetDatabase(self, user = '', password = ''):
+            return self.Execute(self.vbMethod, 'GetDatabase', user, password)
+
+        def IsLoaded(self, formdocument):
+            return self.Execute(self.vbMethod, 'IsLoaded', formdocument)
+
+        def OpenFormDocument(self, formdocument, designmode = False):
+            return self.Execute(self.vbMethod, 'OpenFormDocument', formdocument, designmode)
 
     # #########################################################################
     # SF_Calc CLASS
@@ -1580,6 +1595,64 @@ class SFDocuments:
         servicesynonyms = ()
         serviceproperties = dict()
 
+    # #########################################################################
+    # SF_Form CLASS
+    # #########################################################################
+    class SF_Form(SFServices):
+        """
+            Management of forms defined in LibreOffice documents. Supported types are Base, Calc and Writer documents.
+            It includes the management of subforms
+            Each instance of the current class represents a single form or a single subform
+            A form may optionally be (understand "is often") linked to a data source manageable with
+            the SFDatabases.Database service. The current service offers a rapid access to that service.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDocuments.Form'
+        servicesynonyms = ()
+        serviceproperties = dict(AllowDeletes = True, AllowInserts = True, AllowUpdates = True, BaseForm = False,
+                                 Bookmark = True, CurrentRecord = True, Filter = True, LinkChildFields = False,
+                                 LinkParentFields = False, Name = False,
+                                 OnApproveCursorMove = True, OnApproveParameter = True, OnApproveReset = True,
+                                 OnApproveRowChange = True, OnApproveSubmit = True, OnConfirmDelete = True,
+                                 OnCursorMoved = True, OnErrorOccurred = True, OnLoaded = True, OnReloaded = True,
+                                 OnReloading = True, OnResetted = True, OnRowChanged = True, OnUnloaded = True,
+                                 OnUnloading = True,
+                                 OrderBy = True, Parent = False, RecordSource = True, XForm = False)
+
+        def Activate(self):
+            return self.Execute(self.vbMethod, 'Activate')
+
+        def CloseFormDocument(self):
+            return self.Execute(self.vbMethod, 'CloseFormDocument')
+
+        def Controls(self, controlname = ''):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
+
+        def GetDatabase(self, user = '', password = ''):
+            return self.Execute(self.vbMethod, 'GetDatabase', user, password)
+
+        def MoveFirst(self):
+            return self.Execute(self.vbMethod, 'MoveFirst')
+
+        def MoveLast(self):
+            return self.Execute(self.vbMethod, 'MoveLast')
+
+        def MoveNew(self):
+            return self.Execute(self.vbMethod, 'MoveNew')
+
+        def MoveNext(self, offset = 1):
+            return self.Execute(self.vbMethod, 'MoveNext', offset)
+
+        def MovePrevious(self, offset = 1):
+            return self.Execute(self.vbMethod, 'MovePrevious', offset)
+
+        def Requery(self):
+            return self.Execute(self.vbMethod, 'Requery')
+
+        def Subforms(self, subform = ''):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'Subforms', subform)
+
 
 # ##############################################False##################################################################
 #                           CreateScriptService()                                                                   ###
@@ -1642,8 +1715,22 @@ createScriptService, createscriptservice = CreateScriptService, CreateScriptServ
 # #####################################################################################################################
 #                           Services shortcuts                                                                      ###
 # #####################################################################################################################
+def _CreateScriptService(service):
+    """
+        Mini CreateScriptService() function to create singleton predefined Basic services
+        The ScriptForge() initialization is SKIPPED.
+        """
+    if service in ScriptForge.servicesmodules:
+        serv = ScriptForge.serviceslist[service]
+        return serv(ScriptForge.servicesmodules[service], classmodule = SFServices.moduleStandard)
+    return None
+
+
+# Shortcuts below are for compatibility with the Basic ScriptForge API
 SF_Basic = SFScriptForge.SF_Basic()
-# SF_String = None
+SF_Array = _CreateScriptService('ScriptForge.SF_Array')
+SF_Exception = _CreateScriptService('ScriptForge.SF_Exception')
+SF_String = _CreateScriptService('ScriptForge.SF_String')
 
 
 # ######################################################################
