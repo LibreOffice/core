@@ -958,6 +958,7 @@ Public Function Properties() As Variant
 					&quot;AllowDeletes&quot; _
 					, &quot;AllowInserts&quot; _
 					, &quot;AllowUpdates&quot; _
+					, &quot;BaseForm&quot; _
 					, &quot;Bookmark&quot; _
 					, &quot;CurrentRecord&quot; _
 					, &quot;Filter&quot; _
