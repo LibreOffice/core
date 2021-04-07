@@ -9,6 +9,7 @@
 
 xmlsec_patches :=
 xmlsec_patches += windows7.patch.1
+xmlsec_patches += 0001-xmlSecX509DataGetNodeContent-don-t-return-0-for-non-.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
