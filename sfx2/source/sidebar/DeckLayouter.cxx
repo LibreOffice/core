@@ -28,8 +28,6 @@
 #include <comphelper/lok.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <vcl/window.hxx>
-#include <vcl/scrbar.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
