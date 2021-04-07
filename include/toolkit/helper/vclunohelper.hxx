@@ -60,12 +60,12 @@ namespace com::sun::star::awt {
 }
 
 
+enum class PointerStyle;
+
 class FontMetric;
 class OutputDevice;
 class MouseEvent;
 class KeyEvent;
-
-
 
 class TOOLKIT_DLLPUBLIC VCLUnoHelper
 {
@@ -148,8 +148,10 @@ public:
         );
 
     static ::KeyEvent createVCLKeyEvent( const css::awt::KeyEvent& _rAwtEvent );
-};
 
+    static ::PointerStyle getMousePointer(const css::uno::Reference<css::awt::XWindowPeer>& rWindowPeer);
+    static void setMousePointer(const css::uno::Reference<css::awt::XWindowPeer>& rWindowPeer, ::PointerStyle mousepointer);
+};
 
 #endif // INCLUDED_TOOLKIT_HELPER_VCLUNOHELPER_HXX
 
