@@ -639,10 +639,13 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
     {
         const auto pDrawViewShell =
                 static_cast<::sd::DrawViewShell *>(pDrawDocShell->GetViewShell());
-        bool bEditModePage(pDrawViewShell->GetEditMode() == EditMode::Page);
-        pNavigatorWin->mxToolbox->set_sensitive(bEditModePage);
-        pNavigatorWin->mxLbDocs->set_sensitive(bEditModePage);
-        pNavigatorWin->mxTlbObjects->set_sensitive(bEditModePage);
+        if (pDrawViewShell)
+        {
+            bool bEditModePage(pDrawViewShell->GetEditMode() == EditMode::Page);
+            pNavigatorWin->mxToolbox->set_sensitive(bEditModePage);
+            pNavigatorWin->mxLbDocs->set_sensitive(bEditModePage);
+            pNavigatorWin->mxTlbObjects->set_sensitive(bEditModePage);
+        }
     }
 
     const SfxUInt32Item& rStateItem = dynamic_cast<const SfxUInt32Item&>(*pItem);
