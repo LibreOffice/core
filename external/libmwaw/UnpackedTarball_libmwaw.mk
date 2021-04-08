@@ -15,6 +15,10 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libmwaw,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libmwaw))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
+	external/libmwaw/0001-drop-unneeded-include.patch.1 \
+))
+
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
