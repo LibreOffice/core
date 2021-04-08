@@ -779,9 +779,9 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
             assert(surface);
             SkPaint paint;
             paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-            surface->getCanvas()->drawImageRect(mImage,
-                                                SkRect::MakeWH(mSize.Width(), mSize.Height()),
-                                                makeSamplingOptions(mScaleQuality), &paint);
+            surface->getCanvas()->drawImageRect(
+                mImage, SkRect::MakeWH(mSize.Width(), mSize.Height()),
+                makeSamplingOptions(mScaleQuality, imageSize(mImage), mSize), &paint);
             SAL_INFO("vcl.skia.trace", "getskimage(" << this << "): image scaled "
                                                      << Size(mImage->width(), mImage->height())
                                                      << "->" << mSize << ":"
@@ -893,7 +893,9 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
         surface->getCanvas()->drawImageRect(
             mImage, SkRect::MakeWH(mSize.Width(), mSize.Height()),
-            scaling ? makeSamplingOptions(mScaleQuality) : SkSamplingOptions(), &paint);
+            scaling ? makeSamplingOptions(mScaleQuality, imageSize(mImage), mSize)
+                    : SkSamplingOptions(),
+            &paint);
         if (scaling)
             SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << "): image scaled "
                                                           << Size(mImage->width(), mImage->height())
@@ -1147,7 +1149,8 @@ void SkiaSalBitmap::EnsureBitmapData()
         if (imageSize(mImage) != mSize) // pending scaling?
         {
             canvas.drawImageRect(mImage, SkRect::MakeWH(mSize.getWidth(), mSize.getHeight()),
-                                 makeSamplingOptions(mScaleQuality), &paint);
+                                 makeSamplingOptions(mScaleQuality, imageSize(mImage), mSize),
+                                 &paint);
             SAL_INFO("vcl.skia.trace",
                      "ensurebitmapdata(" << this << "): image scaled " << imageSize(mImage) << "->"
                                          << mSize << ":" << static_cast<int>(mScaleQuality));

@@ -85,11 +85,42 @@ VCL_DLLPUBLIC const SkSurfaceProps* surfaceProps();
 // Set pixel geometry to be used by SkSurfaceProps.
 VCL_DLLPUBLIC void setPixelGeometry(SkPixelGeometry pixelGeometry);
 
-inline SkSamplingOptions makeSamplingOptions(BmpScaleFlag scaling)
+// Normal scaling algorithms have a poor quality when downscaling a lot.
+// https://bugs.chromium.org/p/skia/issues/detail?id=11810 suggests to use mipmaps
+// in such a case, which is annoying to do explicitly instead of Skia deciding which
+// algorithm would be the best, but now with Skia removing SkFilterQuality and requiring
+// explicitly being told what algorithm to use this appears to be the best we can do.
+// Anything scaled down at least this ratio will use linear+mipmaps.
+constexpr int downscaleRatioThreshold = 4;
+
+inline SkSamplingOptions makeSamplingOptions(BmpScaleFlag scaling, const SkMatrix& matrix)
 {
     switch (scaling)
     {
         case BmpScaleFlag::BestQuality:
+            if (matrix.getScaleX() <= 1.0 / downscaleRatioThreshold
+                || matrix.getScaleY() <= 1.0 / downscaleRatioThreshold)
+                return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kLinear);
+            return SkSamplingOptions(SkCubicResampler::Mitchell());
+        case BmpScaleFlag::Default:
+            return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kNone);
+        case BmpScaleFlag::Fast:
+            return SkSamplingOptions(SkFilterMode::kNearest, SkMipmapMode::kNone);
+        default:
+            assert(false);
+            return SkSamplingOptions();
+    }
+}
+
+inline SkSamplingOptions makeSamplingOptions(BmpScaleFlag scaling, const Size& srcSize,
+                                             const Size& destSize)
+{
+    switch (scaling)
+    {
+        case BmpScaleFlag::BestQuality:
+            if (srcSize.Width() / destSize.Width() >= downscaleRatioThreshold
+                || srcSize.Height() / destSize.Height() >= downscaleRatioThreshold)
+                return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kLinear);
             return SkSamplingOptions(SkCubicResampler::Mitchell());
         case BmpScaleFlag::Default:
             return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kNone);
@@ -104,7 +135,12 @@ inline SkSamplingOptions makeSamplingOptions(BmpScaleFlag scaling)
 inline SkSamplingOptions makeSamplingOptions(const SalTwoRect& rPosAry)
 {
     if (rPosAry.mnSrcWidth != rPosAry.mnDestWidth || rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
+    {
+        if (rPosAry.mnSrcWidth / rPosAry.mnDestWidth >= downscaleRatioThreshold
+            || rPosAry.mnSrcHeight / rPosAry.mnDestHeight >= downscaleRatioThreshold)
+            return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kLinear);
         return SkSamplingOptions(SkCubicResampler::Mitchell()); // best
+    }
     return SkSamplingOptions(); // none
 }
 
