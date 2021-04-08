@@ -54,6 +54,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="HiddenTrackChanges" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether an Infobar is shown when hidden Track Changes settings or data are there in a document</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>

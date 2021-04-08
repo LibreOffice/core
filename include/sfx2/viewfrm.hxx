@@ -67,6 +67,7 @@ protected:
     DECL_LINK(WhatsNewHandler, weld::Button&, void);
     DECL_LINK(SwitchReadOnlyHandler, weld::Button&, void);
     DECL_LINK(SignDocumentHandler, weld::Button&, void);
+    DECL_LINK(HiddenTrackChangesHandler, weld::Button&, void);
     SAL_DLLPRIVATE void KillDispatcher_Impl();
 
     virtual                 ~SfxViewFrame() override;
