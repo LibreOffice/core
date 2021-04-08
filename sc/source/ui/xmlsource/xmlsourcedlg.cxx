@@ -49,12 +49,8 @@ OUString getXPath(
         if (pData)
             rNamespaces.push_back(pData->mnNamespaceID);
 
-        // element separator is '/' whereas attribute separator is '/@' in xpath.
         aBuf.insert(0, rTree.get_text(*xEntry, 0));
-        if (isAttribute(rTree, *xEntry))
-            aBuf.insert(0, "/@");
-        else
-            aBuf.insert(0, '/');
+        aBuf.insert(0, isAttribute(rTree, *xEntry) ? '@' : '/');
     }
     while (rTree.iter_parent(*xEntry));
 

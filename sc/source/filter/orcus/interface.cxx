@@ -46,7 +46,6 @@
 #include <sal/log.hxx>
 
 #include <stylesbuffer.hxx>
-#include <orcus/exception.hpp>
 
 using namespace com::sun::star;
 
@@ -159,7 +158,7 @@ orcus::spreadsheet::formula_grammar_t ScOrcusGlobalSettings::get_default_formula
 ScOrcusRefResolver::ScOrcusRefResolver( const ScOrcusGlobalSettings& rGS ) :
     mrGlobalSettings(rGS) {}
 
-os::src_address_t ScOrcusRefResolver::resolve_address(const char* p, size_t n)
+os::address_t ScOrcusRefResolver::resolve_address(const char* p, size_t n)
 {
     OUString aStr(p, n, mrGlobalSettings.getTextEncoding());
 
@@ -168,22 +167,20 @@ os::src_address_t ScOrcusRefResolver::resolve_address(const char* p, size_t n)
         formula::FormulaGrammar::extractRefConvention(
             mrGlobalSettings.getCalcGrammar()));
 
-    if (!aAddr.IsValid())
-    {
-        std::ostringstream os;
-        os << "'" << std::string(p, n) << "' is not a valid address expression.";
-        throw orcus::invalid_arg_error(os.str());
-    }
+    os::address_t ret;
+    ret.column = 0;
+    ret.row = 0;
 
-    os::src_address_t ret;
-    ret.sheet = aAddr.Tab();
-    ret.column = aAddr.Col();
-    ret.row = aAddr.Row();
+    if (aAddr.IsValid())
+    {
+        ret.column = aAddr.Col();
+        ret.row = aAddr.Row();
+    }
 
     return ret;
 }
 
-os::src_range_t ScOrcusRefResolver::resolve_range(const char* p, size_t n)
+os::range_t ScOrcusRefResolver::resolve_range(const char* p, size_t n)
 {
     OUString aStr(p, n, mrGlobalSettings.getTextEncoding());
 
@@ -192,20 +189,19 @@ os::src_range_t ScOrcusRefResolver::resolve_range(const char* p, size_t n)
         formula::FormulaGrammar::extractRefConvention(
             mrGlobalSettings.getCalcGrammar()));
 
-    if (!aRange.IsValid())
-    {
-        std::ostringstream os;
-        os << "'" << std::string(p, n) << "' is not a valid range expression.";
-        throw orcus::invalid_arg_error(os.str());
-    }
+    os::range_t ret;
+    ret.first.column = 0;
+    ret.first.row = 0;
+    ret.last.column = 0;
+    ret.last.row = 0;
 
-    os::src_range_t ret;
-    ret.first.sheet  = aRange.aStart.Tab();
-    ret.first.column = aRange.aStart.Col();
-    ret.first.row    = aRange.aStart.Row();
-    ret.last.sheet   = aRange.aEnd.Tab();
-    ret.last.column  = aRange.aEnd.Col();
-    ret.last.row     = aRange.aEnd.Row();
+    if (aRange.IsValid())
+    {
+        ret.first.column = aRange.aStart.Col();
+        ret.first.row    = aRange.aStart.Row();
+        ret.last.column  = aRange.aEnd.Col();
+        ret.last.row     = aRange.aEnd.Row();
+    }
 
     return ret;
 }
@@ -214,46 +210,20 @@ ScOrcusNamedExpression::ScOrcusNamedExpression(
     ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS, SCTAB nTab ) :
     mrDoc(rDoc), mrGlobalSettings(rGS), mnTab(nTab) {}
 
-void ScOrcusNamedExpression::reset()
+void ScOrcusNamedExpression::define_name(const char* p_name, size_t n_name, const char* p_exp, size_t n_exp)
 {
-    maBasePos.SetTab(0);
-    maBasePos.SetCol(0);
-    maBasePos.SetRow(0);
-    maName.clear();
-    maExpr.clear();
-}
+    OUString aName(p_name, n_name, mrGlobalSettings.getTextEncoding());
+    OUString aExpr(p_exp, n_exp, mrGlobalSettings.getTextEncoding());
 
-void ScOrcusNamedExpression::set_base_position(const orcus::spreadsheet::src_address_t& pos)
-{
-    maBasePos.SetTab(pos.sheet);
-    maBasePos.SetCol(pos.column);
-    maBasePos.SetRow(pos.row);
-}
-
-void ScOrcusNamedExpression::set_named_expression(const char* p_name, size_t n_name, const char* p_exp, size_t n_exp)
-{
-    maName = OUString(p_name, n_name, mrGlobalSettings.getTextEncoding());
-    maExpr = OUString(p_exp, n_exp, mrGlobalSettings.getTextEncoding());
-}
-
-void ScOrcusNamedExpression::set_named_range(const char* /*p_name*/, size_t /*n_name*/, const char* /*p_range*/, size_t /*n_range*/)
-{
-    throw std::runtime_error("ScOrcusNamedExpression::set_named_range not implemented yet.");
-}
-
-void ScOrcusNamedExpression::commit()
-{
     ScRangeName* pNames = mnTab >= 0 ? mrDoc.getDoc().GetRangeName(mnTab) : mrDoc.getDoc().GetRangeName();
     if (!pNames)
         return;
 
     ScRangeData* pRange = new ScRangeData(
-        mrDoc.getDoc(), maName, maExpr, maBasePos, ScRangeData::Type::Name,
+        mrDoc.getDoc(), aName, aExpr, ScAddress(), ScRangeData::Type::Name,
         mrGlobalSettings.getCalcGrammar());
 
     pNames->insert(pRange, false);
-
-    reset(); // make sure to reset the state for the next run.
 }
 
 ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, Type eType)

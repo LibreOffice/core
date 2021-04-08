@@ -75,28 +75,20 @@ class ScOrcusRefResolver : public orcus::spreadsheet::iface::import_reference_re
 public:
     ScOrcusRefResolver( const ScOrcusGlobalSettings& rGS );
 
-    orcus::spreadsheet::src_address_t resolve_address(const char* p, size_t n) override;
-    orcus::spreadsheet::src_range_t resolve_range(const char* p, size_t n) override;
+    orcus::spreadsheet::address_t resolve_address(const char* p, size_t n) override;
+    orcus::spreadsheet::range_t resolve_range(const char* p, size_t n) override;
 };
 
 class ScOrcusNamedExpression : public orcus::spreadsheet::iface::import_named_expression
 {
     ScDocumentImport& mrDoc;
     const ScOrcusGlobalSettings& mrGlobalSettings;
-    ScAddress maBasePos;
-    OUString maName;
-    OUString maExpr;
-    const SCTAB mnTab; //< negative if global, else >= 0 for sheet-local named expressions.
+    SCTAB mnTab; //< negative if global, else >= 0 for sheet-local named expressions.
 
 public:
     ScOrcusNamedExpression( ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS, SCTAB nTab = -1 );
 
-    void reset();
-
-    virtual void set_base_position(const orcus::spreadsheet::src_address_t& pos) override;
-    virtual void set_named_expression(const char* p_name, size_t n_name, const char* p_exp, size_t n_exp) override;
-    virtual void set_named_range(const char* p_name, size_t n_name, const char* p_range, size_t n_range) override;
-    virtual void commit() override;
+    virtual void define_name(const char* p_name, size_t n_name, const char* p_exp, size_t n_exp) override;
 };
 
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
