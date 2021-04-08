@@ -110,6 +110,8 @@ cdata.set10('HAVE_DCONF', false)
 
 cdata.set10('HAVE_FEATURE_SKIA', false)
 
+cdata.set10('ENABLE_ZXING', true)
+
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
   configuration: cdata)
@@ -252,4 +254,12 @@ configure_file(input: 'config_skia.h.meson',
 
 configure_file(input: 'config_libnumbertext.h.meson',
   output: 'config_libnumbertext.h',
+  configuration: cdata)
+
+configure_file(input: 'config_zxing.h.meson',
+  output: 'config_zxing.h',
+  configuration: cdata)
+
+configure_file(input: 'config_box2d.h.meson',
+  output: 'config_box2d.h',
   configuration: cdata)

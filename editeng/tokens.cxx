@@ -1,5 +1,5 @@
 /* C++ code produced by gperf version 3.1 */
-/* Command-line: /usr/bin/gperf --compare-strncmp --readonly-tables --output-file=/home/jpakkane/bob/libreoffice/workdir/CustomTarget/editeng/generated/tokens.cxx /home/jpakkane/bob/libreoffice/workdir/CustomTarget/editeng/generated/tokens.gperf  */
+/* Command-line: /usr/bin/gperf --compare-strncmp --readonly-tables --output-file=/home/jmg/Development/libreoffice/symbols/workdir/CustomTarget/editeng/generated/tokens.cxx /home/jmg/Development/libreoffice/symbols/workdir/CustomTarget/editeng/generated/tokens.gperf  */
 /* Computed positions: -k'1' */
 
 #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
@@ -31,7 +31,7 @@
 
 struct xmltoken
 {
-  const sal_Char *name; XMLTokenEnum nToken;
+  const char *name; XMLTokenEnum nToken;
 };
 
 #define TOTAL_KEYWORDS 7

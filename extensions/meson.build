@@ -23,7 +23,6 @@ log_lib = shared_library('loglo',
 )
 
 scn_lib = shared_library('scnlo',
-  'source/scanner/scnserv.cxx',
   'source/scanner/scanner.cxx',
   'source/scanner/grid.cxx',
   'source/scanner/sane.cxx',

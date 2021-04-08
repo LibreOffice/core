@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+#
 # This file is part of the LibreOffice project.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public

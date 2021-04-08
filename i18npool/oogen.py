@@ -12,9 +12,7 @@ rsp_name = os.path.join(priv_dir, dattmp_name)
 if not os.path.isdir(priv_dir):
     os.mkdir(priv_dir)
 
-open(dattmp_name, 'w').write('''char_in.brk
-char.brk
-count_word.brk
+open(dattmp_name, 'w').write('''count_word.brk
 dict_word_he.brk
 dict_word_hu.brk
 dict_word_nodash.brk

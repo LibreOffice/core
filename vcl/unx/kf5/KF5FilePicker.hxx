@@ -20,9 +20,10 @@
 #pragma once
 
 #include <Qt5FilePicker.hxx>
-#include <memory>
 
-class QGridLayout;
+#include <QtWidgets/QGridLayout>
+
+#include <memory>
 
 class KF5FilePicker final : public Qt5FilePicker
 {

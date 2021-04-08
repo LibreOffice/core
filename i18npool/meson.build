@@ -25,9 +25,7 @@ g = generator(breakgen,
               output: '@BASENAME@_brk.c',
               arguments: ['@INPUT@', '@OUTPUT@'])
 
-break_sources = g.process('source/breakiterator/data/char.txt',
-                          'source/breakiterator/data/char_in.txt',
-                          'source/breakiterator/data/count_word.txt',
+break_sources = g.process('source/breakiterator/data/count_word.txt',
                           'source/breakiterator/data/dict_word.txt',
                           'source/breakiterator/data/dict_word_he.txt',
                           'source/breakiterator/data/dict_word_hu.txt',

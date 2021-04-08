@@ -26,50 +26,51 @@ namespace oox {
 const size_t NMSP_SHIFT = 16;
 const sal_Int32 NMSP_a14 = 1 << NMSP_SHIFT;
 const sal_Int32 NMSP_ax = 2 << NMSP_SHIFT;
-const sal_Int32 NMSP_dc = 3 << NMSP_SHIFT;
-const sal_Int32 NMSP_dcTerms = 4 << NMSP_SHIFT;
-const sal_Int32 NMSP_dcmiType = 5 << NMSP_SHIFT;
-const sal_Int32 NMSP_dml = 6 << NMSP_SHIFT;
-const sal_Int32 NMSP_dmlChart = 7 << NMSP_SHIFT;
-const sal_Int32 NMSP_dmlChartDr = 8 << NMSP_SHIFT;
-const sal_Int32 NMSP_dmlDiagram = 9 << NMSP_SHIFT;
-const sal_Int32 NMSP_dmlLockedCanvas = 10 << NMSP_SHIFT;
-const sal_Int32 NMSP_dmlPicture = 11 << NMSP_SHIFT;
-const sal_Int32 NMSP_dmlSpreadDr = 12 << NMSP_SHIFT;
-const sal_Int32 NMSP_dmlWordDr = 13 << NMSP_SHIFT;
-const sal_Int32 NMSP_doc = 14 << NMSP_SHIFT;
-const sal_Int32 NMSP_dsp = 15 << NMSP_SHIFT;
-const sal_Int32 NMSP_loext = 16 << NMSP_SHIFT;
-const sal_Int32 NMSP_mce = 17 << NMSP_SHIFT;
-const sal_Int32 NMSP_mceTest = 18 << NMSP_SHIFT;
-const sal_Int32 NMSP_officeCustomPr = 19 << NMSP_SHIFT;
-const sal_Int32 NMSP_officeDocPropsVT = 20 << NMSP_SHIFT;
-const sal_Int32 NMSP_officeExtPr = 21 << NMSP_SHIFT;
-const sal_Int32 NMSP_officeMath = 22 << NMSP_SHIFT;
-const sal_Int32 NMSP_officeRel = 23 << NMSP_SHIFT;
-const sal_Int32 NMSP_officeRelTheme = 24 << NMSP_SHIFT;
-const sal_Int32 NMSP_p14 = 25 << NMSP_SHIFT;
-const sal_Int32 NMSP_p15 = 26 << NMSP_SHIFT;
-const sal_Int32 NMSP_packageContentTypes = 27 << NMSP_SHIFT;
-const sal_Int32 NMSP_packageMetaCorePr = 28 << NMSP_SHIFT;
-const sal_Int32 NMSP_packageRel = 29 << NMSP_SHIFT;
-const sal_Int32 NMSP_ppt = 30 << NMSP_SHIFT;
-const sal_Int32 NMSP_schema = 31 << NMSP_SHIFT;
-const sal_Int32 NMSP_vml = 32 << NMSP_SHIFT;
-const sal_Int32 NMSP_vmlExcel = 33 << NMSP_SHIFT;
-const sal_Int32 NMSP_vmlOffice = 34 << NMSP_SHIFT;
-const sal_Int32 NMSP_vmlPowerpoint = 35 << NMSP_SHIFT;
-const sal_Int32 NMSP_vmlWord = 36 << NMSP_SHIFT;
-const sal_Int32 NMSP_w14 = 37 << NMSP_SHIFT;
-const sal_Int32 NMSP_wp14 = 38 << NMSP_SHIFT;
-const sal_Int32 NMSP_wpg = 39 << NMSP_SHIFT;
-const sal_Int32 NMSP_wps = 40 << NMSP_SHIFT;
-const sal_Int32 NMSP_x12ac = 41 << NMSP_SHIFT;
-const sal_Int32 NMSP_xls = 42 << NMSP_SHIFT;
-const sal_Int32 NMSP_xls14Lst = 43 << NMSP_SHIFT;
-const sal_Int32 NMSP_xm = 44 << NMSP_SHIFT;
-const sal_Int32 NMSP_xml = 45 << NMSP_SHIFT;
-const sal_Int32 NMSP_xsi = 46 << NMSP_SHIFT;
+const sal_Int32 NMSP_c15 = 3 << NMSP_SHIFT;
+const sal_Int32 NMSP_dc = 4 << NMSP_SHIFT;
+const sal_Int32 NMSP_dcTerms = 5 << NMSP_SHIFT;
+const sal_Int32 NMSP_dcmiType = 6 << NMSP_SHIFT;
+const sal_Int32 NMSP_dml = 7 << NMSP_SHIFT;
+const sal_Int32 NMSP_dmlChart = 8 << NMSP_SHIFT;
+const sal_Int32 NMSP_dmlChartDr = 9 << NMSP_SHIFT;
+const sal_Int32 NMSP_dmlDiagram = 10 << NMSP_SHIFT;
+const sal_Int32 NMSP_dmlLockedCanvas = 11 << NMSP_SHIFT;
+const sal_Int32 NMSP_dmlPicture = 12 << NMSP_SHIFT;
+const sal_Int32 NMSP_dmlSpreadDr = 13 << NMSP_SHIFT;
+const sal_Int32 NMSP_dmlWordDr = 14 << NMSP_SHIFT;
+const sal_Int32 NMSP_doc = 15 << NMSP_SHIFT;
+const sal_Int32 NMSP_dsp = 16 << NMSP_SHIFT;
+const sal_Int32 NMSP_loext = 17 << NMSP_SHIFT;
+const sal_Int32 NMSP_mce = 18 << NMSP_SHIFT;
+const sal_Int32 NMSP_mceTest = 19 << NMSP_SHIFT;
+const sal_Int32 NMSP_officeCustomPr = 20 << NMSP_SHIFT;
+const sal_Int32 NMSP_officeDocPropsVT = 21 << NMSP_SHIFT;
+const sal_Int32 NMSP_officeExtPr = 22 << NMSP_SHIFT;
+const sal_Int32 NMSP_officeMath = 23 << NMSP_SHIFT;
+const sal_Int32 NMSP_officeRel = 24 << NMSP_SHIFT;
+const sal_Int32 NMSP_officeRelTheme = 25 << NMSP_SHIFT;
+const sal_Int32 NMSP_p14 = 26 << NMSP_SHIFT;
+const sal_Int32 NMSP_p15 = 27 << NMSP_SHIFT;
+const sal_Int32 NMSP_packageContentTypes = 28 << NMSP_SHIFT;
+const sal_Int32 NMSP_packageMetaCorePr = 29 << NMSP_SHIFT;
+const sal_Int32 NMSP_packageRel = 30 << NMSP_SHIFT;
+const sal_Int32 NMSP_ppt = 31 << NMSP_SHIFT;
+const sal_Int32 NMSP_schema = 32 << NMSP_SHIFT;
+const sal_Int32 NMSP_vml = 33 << NMSP_SHIFT;
+const sal_Int32 NMSP_vmlExcel = 34 << NMSP_SHIFT;
+const sal_Int32 NMSP_vmlOffice = 35 << NMSP_SHIFT;
+const sal_Int32 NMSP_vmlPowerpoint = 36 << NMSP_SHIFT;
+const sal_Int32 NMSP_vmlWord = 37 << NMSP_SHIFT;
+const sal_Int32 NMSP_w14 = 38 << NMSP_SHIFT;
+const sal_Int32 NMSP_wp14 = 39 << NMSP_SHIFT;
+const sal_Int32 NMSP_wpg = 40 << NMSP_SHIFT;
+const sal_Int32 NMSP_wps = 41 << NMSP_SHIFT;
+const sal_Int32 NMSP_x12ac = 42 << NMSP_SHIFT;
+const sal_Int32 NMSP_xls = 43 << NMSP_SHIFT;
+const sal_Int32 NMSP_xls14Lst = 44 << NMSP_SHIFT;
+const sal_Int32 NMSP_xm = 45 << NMSP_SHIFT;
+const sal_Int32 NMSP_xml = 46 << NMSP_SHIFT;
+const sal_Int32 NMSP_xsi = 47 << NMSP_SHIFT;
 /*
  * This file is part of the LibreOffice project.
  *
@@ -115,6 +116,7 @@ inline sal_Int32 getNamespace( sal_Int32 nToken ) { return nToken & NMSP_MASK; }
 #define PPT_TOKEN( token )      OOX_TOKEN( ppt, token )
 #define P14_TOKEN( token )      OOX_TOKEN( p14, token )
 #define P15_TOKEN( token )      OOX_TOKEN( p15, token )
+#define C15_TOKEN( token )      OOX_TOKEN( c15, token )
 #define PR_TOKEN( token )       OOX_TOKEN( packageRel, token )
 #define R_TOKEN( token )        OOX_TOKEN( officeRel, token )
 #define VML_TOKEN( token )      OOX_TOKEN( vml, token )

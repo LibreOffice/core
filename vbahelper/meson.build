@@ -49,7 +49,6 @@ vbahelper_lib = shared_library('vbahelperlo',
 )
 
 msforms_lib = shared_library('msformslo',
-  'source/msforms/service.cxx',
   'source/msforms/vbabutton.cxx',
   'source/msforms/vbacheckbox.cxx',
   'source/msforms/vbacombobox.cxx',

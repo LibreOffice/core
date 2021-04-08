@@ -29,8 +29,6 @@ unoxml_lib = shared_library('unoxmllo',
   'source/events/mutationevent.cxx',
   'source/events/uievent.cxx',
   'source/events/mouseevent.cxx',
-  'source/service/services.cxx',
-
 
   udk_fake_h, off_fake_h,
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
@@ -53,7 +51,6 @@ unordf_lib = shared_library('unordflo',
   'source/rdf/CURI.cxx',
   'source/rdf/CLiteral.cxx',
   'source/rdf/librdf_repository.cxx',
-  'source/rdf/librdf_services.cxx',
 
   udk_fake_h, off_fake_h,
   cpp_args: ['-DTOOLS_DLLIMPLEMENTATION',

@@ -1,6 +1,5 @@
 localebe_lib = shared_library('localebe1lo',
   'source/backends/localebe/localebackend.cxx',
-  'source/backends/localebe/localebecdef.cxx',
   udk_fake_h, off_fake_h,
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],

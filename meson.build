@@ -1,5 +1,5 @@
 project('libreoffice', 'c', 'cpp',
-  version: '1.2.3',
+  version: '7.2.0',
   default_options: [
     'cpp_std=c++17',
     'prefix=' + meson.source_root() + '/instdir',
@@ -13,7 +13,7 @@ major_version = varr[0]
 minor_version = varr[1]
 micro_version = varr[2]
 patch_version = '0'
-this_year = '2020'
+this_year = '2021'
 main_inc = include_directories('include', 'config_host')
 cpp = meson.get_compiler('cpp')
 thread_dep = dependency('threads')
@@ -108,6 +108,7 @@ cppunit_dep = dependency('cppunit')
 langtag_dep = dependency('liblangtag')
 icuuc_dep = dependency('icu-uc')
 icu18_dep = dependency('icu-i18n')
+icuio_dep = dependency('icu-io')
 openssl_dep = dependency('', required: false) #dependency('openssl')
 nss_dep = dependency('nss')
 zlib_dep = dependency('zlib')
@@ -136,8 +137,6 @@ orcus_dep = dependency('liborcus-0.15')
 clucene_dep = dependency('libclucene-core')
 libxslt_dep = dependency('libxslt')
 libexslt_dep = dependency('libexslt')
-qrcodegen_dep = declare_dependency(compile_args: ['-I/usr/include/qrcodegen'],
-  dependencies: cpp.find_library('qrcodegencpp'))
 revenge_dep = dependency('librevenge-0.0')
 odfgen_dep = dependency('libodfgen-0.1')
 epubgen_dep = dependency('libepubgen-0.1')
@@ -160,6 +159,8 @@ hyphen_dep = cpp.find_library('hyphen')
 mythes_dep = dependency('mythes')
 libexttextcat_dep = dependency('libexttextcat')
 numbertext_dep = dependency('libnumbertext')
+zxing_dep = dependency('zxing')
+box2d_dep = dependency('box2d')
 
 x11_core_dep = dependency('x11')
 x11_ice_dep = dependency('ice')
@@ -185,6 +186,7 @@ jni_dep = declare_dependency(compile_args: ['-I/usr/lib/jvm/java-11-openjdk-amd6
                                             '-I/usr/lib/jvm/java-11-openjdk-amd64/include/linux'])
 
 subdir('config_host')
+subdir('external')
 subdir('sal')
 subdir('salhelper')
 subdir('store')
@@ -216,7 +218,6 @@ subdir('i18nutil')
 subdir('i18npool')
 subdir('sot')
 subdir('svl')
-subdir('external')
 subdir('opencl')
 subdir('vcl')
 subdir('xmlscript')
@@ -276,7 +277,6 @@ subdir('shell')
 subdir('extensions')
 subdir('lingucomponent')
 subdir('scripting')
-subdir('dtrans')
 subdir('sdext')
 subdir('instsetoo_native')
 #subdir('postprocess')

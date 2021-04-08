@@ -12,6 +12,7 @@
 #include <salmenu.hxx>
 
 #include <QtCore/QObject>
+#include <QtWidgets/QMenu>
 
 #include <memory>
 
@@ -19,7 +20,6 @@ class MenuItemList;
 class QAction;
 class QActionGroup;
 class QPushButton;
-class QMenu;
 class QMenuBar;
 class Qt5MenuItem;
 class Qt5Frame;

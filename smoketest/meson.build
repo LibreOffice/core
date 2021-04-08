@@ -8,11 +8,3 @@ smoketest_lib = shared_library('smoketest',
   dependencies: [cppunit_dep],
   install: true,
 )
-
-libtest_bin = executable('libtest',
-  'libtest.cxx',
-  udk_fake_h, off_fake_h,
-  include_directories: [main_inc, udkh_inc, offapi_inc],
-  dependencies: [dl_dep],
-  install: true,
-)

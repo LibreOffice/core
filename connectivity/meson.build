@@ -82,9 +82,10 @@ dbtools_lib = shared_library('dbtoolslo',
   'source/sdbcx/VUser.cxx',
   'source/sdbcx/VView.cxx',
   udk_fake_h, off_fake_h, sql_lex, sql_bison,
-  cpp_args: ['-DOOO_DLLIMPLEMENTATION_DBTOOLS',
-             '-DBOOST_SPIRIT_USE_OLD_NAMESPACE',
-             '-DLIBO_INTERNAL_ONLY'],
+  cpp_args: [
+    '-DOOO_DLLIMPLEMENTATION_DBTOOLS',
+    '-DLIBO_INTERNAL_ONLY',
+  ],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/inc'],
   link_with: [
     cppuhelper_lib,

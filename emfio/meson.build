@@ -1,5 +1,4 @@
 emfio_lib = shared_library('emfio',
-  'source/emfuno/emfuno.cxx',
   'source/emfuno/xemfparser.cxx',
   'source/reader/mtftools.cxx',
   'source/reader/wmfreader.cxx',

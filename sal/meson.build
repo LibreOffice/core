@@ -30,7 +30,6 @@ unix_common = [
   'osl/unx/uunxapi.cxx',
 ]
 
-
 if host_machine.system() == 'windows'
   system_sources = [
     'osl/w32/backtrace.cxx',
@@ -100,6 +99,7 @@ sal_lib = shared_library('uno_sal',
   'osl/all/log.cxx',
   'osl/all/signalshared.cxx',
   'osl/all/utility.cxx',
+  'osl/all/mutexshared.cxx',
   'textenc/converter.cxx',
   'textenc/convertsimple.cxx',
   'textenc/handleundefinedunicodetotextchar.cxx',
@@ -118,8 +118,10 @@ sal_lib = shared_library('uno_sal',
   link_args: system_link_args,
   dependencies: [
     dl_dep,
+    dtoa_dep,
     osx_frameworks_dep,
     thread_dep,
+    zlib_dep,
   ],
   soversion : '3',
   gnu_symbol_visibility: 'hidden',
