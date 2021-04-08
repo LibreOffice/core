@@ -43,7 +43,7 @@ using namespace ::com::sun::star::uno;
 
 // edit insert-field
 SwChangeDBDlg::SwChangeDBDlg(SwView const & rVw)
-    : SfxDialogController(rVw.GetViewFrame()->GetWindow().GetFrameWeld(), "modules/swriter/ui/exchangedatabases.ui",
+    : SfxDialogController(rVw.GetViewFrame()->GetFrameWeld(), "modules/swriter/ui/exchangedatabases.ui",
                           "ExchangeDatabasesDialog")
     , pSh(rVw.GetWrtShellPtr())
     , m_xUsedDBTLB(m_xBuilder->weld_tree_view("inuselb"))

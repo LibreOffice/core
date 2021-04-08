@@ -2512,6 +2512,11 @@ vcl::Window& SfxViewFrame::GetWindow() const
     return m_pImpl->pWindow ? *m_pImpl->pWindow : GetFrame().GetWindow();
 }
 
+weld::Window* SfxViewFrame::GetFrameWeld() const
+{
+    return GetWindow().GetFrameWeld();
+}
+
 bool SfxViewFrame::DoClose()
 {
     return GetFrame().DoClose();

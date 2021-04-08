@@ -658,7 +658,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         std::shared_ptr<const SfxFilter> pFlt = GetMedium()->GetFilter();
                         if(!pFlt || pFlt->GetUserData() != pHtmlFlt->GetUserData())
                         {
-                            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pViewFrame->GetWindow().GetFrameWeld(), "modules/swriter/ui/saveashtmldialog.ui"));
+                            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pViewFrame->GetFrameWeld(), "modules/swriter/ui/saveashtmldialog.ui"));
                             std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("SaveAsHTMLDialog"));
                             if (RET_YES == xQuery->run())
                                 bLocalHasName = false;
@@ -1266,7 +1266,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     SfxViewShell* pViewShell = GetView() ? GetView() : SfxViewShell::Current();
                     SfxBindings& rBindings( pViewShell->GetViewFrame()->GetBindings() );
-                    auto xDlg = std::make_shared<SwWatermarkDialog>(pViewShell->GetViewFrame()->GetWindow().GetFrameWeld(),
+                    auto xDlg = std::make_shared<SwWatermarkDialog>(pViewShell->GetViewFrame()->GetFrameWeld(),
                                                                                   rBindings);
                     weld::DialogController::runAsync(xDlg, [](sal_Int32 /*nResult*/){});
                 }
