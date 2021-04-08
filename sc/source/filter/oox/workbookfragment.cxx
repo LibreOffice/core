@@ -481,13 +481,6 @@ void WorkbookFragment::finalizeImport()
 
     // final conversions, e.g. calculation settings and view settings
     finalizeWorkbookImport();
-    //
-    //stop preventing establishment of listeners as is done in
-    //ScDocShell::AfterXMLLoading() for ods
-    getScDocument().SetInsertingFromOtherDoc(false);
-    getDocImport().finalize();
-
-    recalcFormulaCells();
 
     for( WorksheetHelper* pHelper : aHelpers )
     {
@@ -500,6 +493,13 @@ void WorkbookFragment::finalizeImport()
         rxFragment.clear();
         rxSheetGlob.reset();
     }
+
+    //stop preventing establishment of listeners as is done in
+    //ScDocShell::AfterXMLLoading() for ods
+    getScDocument().SetInsertingFromOtherDoc(false);
+    getDocImport().finalize();
+
+    recalcFormulaCells();
 
     OUString aRevHeadersPath = getFragmentPathFromFirstType(CREATE_OFFICEDOC_RELATION_TYPE("revisionHeaders"));
     if (!aRevHeadersPath.isEmpty())
