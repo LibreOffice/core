@@ -34,6 +34,24 @@
       "revId": "85550c940f37d8e91fd7f73bdb04bcc7083a70a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f92de4ff_50d4fb2b",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-08T10:06:46Z",
+      "side": 1,
+      "message": "clumsy but obvious is better than elegant but hard-to-read :-)\n\nWrap it in #ifdef LIBO_INTERNAL, that way we can fix it when someone comes up with something better, without having to worry about extensions",
+      "parentUuid": "0a96b49a_53b8f469",
+      "revId": "85550c940f37d8e91fd7f73bdb04bcc7083a70a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
