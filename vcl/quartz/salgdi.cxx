@@ -186,8 +186,7 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
 }
 
 AquaSalGraphics::AquaSalGraphics()
-    : mpXorEmulation( nullptr )
-    , mnXorMode( 0 )
+    : mnXorMode( 0 )
     , mnWidth( 0 )
     , mnHeight( 0 )
     , mnBitmapDepth( 0 )
@@ -229,8 +228,7 @@ AquaSalGraphics::~AquaSalGraphics()
 
     ReleaseFonts();
 
-    if( mpXorEmulation )
-        delete mpXorEmulation;
+    mpXorEmulation.reset();
 
 #ifdef IOS
     if (mbForeignContext)

@@ -137,7 +137,7 @@ class AquaSalGraphics : public SalGraphics
     CGContextHolder maBGContextHolder;  // Quartz drawing context for CGLayer
     CGContextHolder maCSContextHolder;  // Quartz drawing context considering the color space
 
-    XorEmulation*                           mpXorEmulation;
+    std::unique_ptr<XorEmulation> mpXorEmulation;
     int                                     mnXorMode; // 0: off 1: on 2: invert only
     int                                     mnWidth;
     int                                     mnHeight;
