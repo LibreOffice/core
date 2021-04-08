@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3edf531b_1efd445f",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-08T15:44:27Z",
+      "side": 1,
+      "message": "I\u0027ve made a clean-up for this, see patch set 3. (I\u0027ve added also the \u0027Show Toolbar\" -\u003e \"Hide Toolbar\" Button transition mentioned in the issue tracker, which I missed to add to this patch set 2.) Thanks for the review!",
+      "parentUuid": "1bc05672_1eddea1e",
+      "range": {
+        "startLine": 1468,
+        "startChar": 68,
+        "endLine": 1468,
+        "endChar": 71
+      },
+      "revId": "9ee6e9ee52b280c2aa9c9763acc6a0e8d22e05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dcba41ed_4e8d2ccc",
         "filename": "sfx2/source/view/viewfrm.cxx",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "9ee6e9ee52b280c2aa9c9763acc6a0e8d22e05f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddf6f743_2be7175b",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-08T15:44:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcba41ed_4e8d2ccc",
+      "revId": "9ee6e9ee52b280c2aa9c9763acc6a0e8d22e05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
