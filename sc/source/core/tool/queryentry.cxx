@@ -115,17 +115,9 @@ bool ScQueryEntry::IsQueryByNonEmpty() const
         rItem.mfVal == SC_NONEMPTYFIELDS;
 }
 
-const ScQueryEntry::Item& ScQueryEntry::GetQueryItem() const
+ScQueryEntry::Item& ScQueryEntry::GetQueryItemImpl() const
 {
-    if (maQueryItems.size() > 1)
-        // Reset to a single query mode.
-        maQueryItems.resize(1);
-    return maQueryItems[0];
-}
-
-ScQueryEntry::Item& ScQueryEntry::GetQueryItem()
-{
-    if (maQueryItems.size() > 1)
+    if (maQueryItems.size() != 1)
         // Reset to a single query mode.
         maQueryItems.resize(1);
     return maQueryItems[0];
