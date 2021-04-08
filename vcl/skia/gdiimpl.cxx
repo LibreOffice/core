@@ -1652,7 +1652,7 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         matrix.set(SkMatrix::kMScaleX, 1.0 * targetSize.Width() / bitmap.GetSize().Width());
         matrix.set(SkMatrix::kMScaleY, 1.0 * targetSize.Height() / bitmap.GetSize().Height());
         canvas->concat(matrix);
-        samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality);
+        samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix);
     }
     if (alphaBitmap != nullptr)
     {
@@ -1884,7 +1884,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         canvas->concat(matrix);
         SkSamplingOptions samplingOptions;
         if (matrixNeedsHighQuality(matrix))
-            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality);
+            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix);
         if (fAlpha == 1.0)
             canvas->drawImage(imageToDraw, 0, 0, samplingOptions);
         else
@@ -1911,7 +1911,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         canvas->concat(matrix);
         SkSamplingOptions samplingOptions;
         if (matrixNeedsHighQuality(matrix))
-            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality);
+            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality, matrix);
         if (pSkiaAlphaBitmap)
         {
             SkPaint paint;
