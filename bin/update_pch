@@ -690,6 +690,12 @@ def is_allowed_if(line, module):
     # Our sources always build with LIBO_INTERNAL_ONLY.
     if line == "#if defined LIBO_INTERNAL_ONLY" or line == "#ifdef LIBO_INTERNAL_ONLY":
         return True
+    # We use PCHs only for C++.
+    if line == "#if defined(__cplusplus)" or line == "#if defined __cplusplus":
+        return True
+    # Debug-specific code, it shouldn't hurt including it unconditionally.
+    if line == "#ifdef DBG_UTIL" or line == "#if OSL_DEBUG_LEVEL > 0":
+        return True
     if module == "external/skia":
         # We always set these.
         if line == "#ifdef SK_VULKAN" or line == "#if SK_SUPPORT_GPU":
