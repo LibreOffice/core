@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75ffc439_184c2487",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-04-08T08:24:11Z",
+      "side": 1,
+      "message": "What did you do in order to get \u0027String\u0027 instead of \u0027Currency\u0027 as the actual value? even if the fix is reverted, the function returns \u0027Currency\u0027. Did you try to revert the fix and check if the unittest fails?\nReading the fix, it\u0027s about getting a number or not, so one way to check it would be to use \u003dISNUMBER()",
+      "revId": "12a0860ab56b2f1c63a6afd98108472de9eaae9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
