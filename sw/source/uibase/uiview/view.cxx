@@ -1171,9 +1171,8 @@ static bool lcl_IsOwnDocument( SwView& rView )
     OUString Created = xDocProps->getAuthor();
     OUString Changed = xDocProps->getModifiedBy();
     OUString FullName = SW_MOD()->GetUserOptions().GetFullName();
-    return (!FullName.isEmpty() &&
-            (!Changed.isEmpty() && Changed == FullName )) ||
-            (Changed.isEmpty() && !Created.isEmpty() && Created == FullName );
+    return !FullName.isEmpty()
+           && (Changed == FullName || (Changed.isEmpty() && Created == FullName));
 }
 
 void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
