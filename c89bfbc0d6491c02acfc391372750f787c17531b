@@ -16,6 +16,24 @@
       "revId": "c89bfbc0d6491c02acfc391372750f787c17531b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "750a311f_e66ca4e8",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-04-08T09:12:24Z",
+      "side": 0,
+      "message": "Restored.",
+      "parentUuid": "6fce495f_9432f53e",
+      "revId": "c89bfbc0d6491c02acfc391372750f787c17531b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "69c6ffac_9617ad74",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-04-08T09:12:24Z",
+      "side": 1,
+      "message": "accidental clang-format change. reverted.",
+      "parentUuid": "f9bbeccb_3cedf433",
+      "range": {
+        "startLine": 916,
+        "startChar": 71,
+        "endLine": 916,
+        "endChar": 74
+      },
+      "revId": "8d2ae6babb8c26d6ee7eb68f5fb0c383ee8109db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56fd90a5_48adfc2d",
         "filename": "include/osl/socket.h",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "8d2ae6babb8c26d6ee7eb68f5fb0c383ee8109db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8bdac0c_fc965627",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-04-08T09:12:24Z",
+      "side": 1,
+      "message": "ok, added a different method now.",
+      "parentUuid": "56fd90a5_48adfc2d",
+      "revId": "8d2ae6babb8c26d6ee7eb68f5fb0c383ee8109db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -86,6 +128,30 @@
       "revId": "8d2ae6babb8c26d6ee7eb68f5fb0c383ee8109db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "969d928b_c027827d",
+        "filename": "sal/osl/unx/file_url.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-04-08T09:12:24Z",
+      "side": 1,
+      "message": "Ok, I don\u0027t fully understand why we need the FQDN in this case, but anyway, lets keep it this way for this case.",
+      "parentUuid": "f262fbd0_a7b3c1b7",
+      "range": {
+        "startLine": 268,
+        "startChar": 12,
+        "endLine": 268,
+        "endChar": 76
+      },
+      "revId": "8d2ae6babb8c26d6ee7eb68f5fb0c383ee8109db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
