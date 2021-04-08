@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29d51fc0_e10c74b6",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-08T07:21:00Z",
+      "side": 1,
+      "message": "these two lines can be just\n  tdf#119962",
+      "revId": "951654e9cb60a7fa658e56379c2639368242d8e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49600362_9cb35152",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1368,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-08T07:21:00Z",
+      "side": 1,
+      "message": "are we sure the PK column is always called \"ID\" ?",
+      "revId": "951654e9cb60a7fa658e56379c2639368242d8e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1a2565a_835f56b7",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-08T07:21:00Z",
+      "side": 1,
+      "message": "this can be written as\n    OUString strSql \u003d SELECT MAX(\\\"ID\\\") FROM \" + sComposedTableName;",
+      "revId": "951654e9cb60a7fa658e56379c2639368242d8e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6e1ddb0_f67b05d7",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-08T07:21:00Z",
+      "side": 1,
+      "message": "this should be sal_Int64",
+      "revId": "951654e9cb60a7fa658e56379c2639368242d8e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d323ce0_7a70fd56",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-08T07:21:00Z",
+      "side": 1,
+      "message": "this should be:\n   xResultMAXNUM-\u003enext();\n   tools::Long maxVal \u003d xRow-\u003egetLong(1);\nsince there is one and only one row",
+      "revId": "951654e9cb60a7fa658e56379c2639368242d8e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba63168c_e2a0ffca",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-08T07:21:00Z",
+      "side": 1,
+      "message": "similar to above, just write this with +",
+      "revId": "951654e9cb60a7fa658e56379c2639368242d8e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
