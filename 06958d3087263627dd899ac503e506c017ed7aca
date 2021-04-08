@@ -16,6 +16,24 @@
       "revId": "06958d3087263627dd899ac503e506c017ed7aca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "315b14af_75bb42a4",
+        "filename": "sw/source/uibase/uiview/view.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-08T11:30:03Z",
+      "side": 1,
+      "message": "Your placement is closer to the original placement, but I changed the placement intentionally: the \"!FullName.isEmpty()\" is invariant here (and global pre-requisite), so I moved it outside of the following OR-ed condition about which document property is equal to the non-empty FullName.",
+      "parentUuid": "57750734_e6bfa81b",
+      "revId": "06958d3087263627dd899ac503e506c017ed7aca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
