@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a8c031d_c0814e9b",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-08T09:24:14Z",
+      "side": 1,
+      "message": "since stuff in include/osl can be called by extensions, I think you will need to do it the other way around. ie. add a new function that retrieves the machines hostname, but without checking DNS",
+      "revId": "85550c940f37d8e91fd7f73bdb04bcc7083a70a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
