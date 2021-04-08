@@ -22,6 +22,30 @@
       "revId": "5f315a590b160a293667b2066e17fbdc88302f9f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fa82eb9_73c47e45",
+        "filename": "sc/source/ui/unoobj/nameuno.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-04-08T13:13:46Z",
+      "side": 1,
+      "message": "I will change it, because it makes definitely make sense here not to get all the names before the validation is finished.",
+      "parentUuid": "0fc8acd5_3c3d5b4b",
+      "range": {
+        "startLine": 490,
+        "startChar": 8,
+        "endLine": 490,
+        "endChar": 50
+      },
+      "revId": "5f315a590b160a293667b2066e17fbdc88302f9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
