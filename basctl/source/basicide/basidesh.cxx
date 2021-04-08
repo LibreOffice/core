@@ -390,7 +390,7 @@ bool Shell::PrepareClose( bool bUI )
     {
         if( bUI )
         {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetViewFrame()->GetWindow().GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetViewFrame()->GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           IDEResId(RID_STR_CANNOTCLOSE)));
             xInfoBox->run();

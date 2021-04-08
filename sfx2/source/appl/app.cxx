@@ -34,6 +34,7 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <basic/basmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/objsh.hxx>
@@ -415,7 +416,7 @@ IMPL_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBas
             const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             std::shared_ptr<weld::MessageDialog> xBox;
             xBox.reset(Application::CreateMessageDialog(
-                           pViewFrame->GetWindow().GetFrameWeld(),
+                           pViewFrame->GetFrameWeld(),
                            VclMessageType::Error,
                            VclButtonsType::Ok,
                            aError,

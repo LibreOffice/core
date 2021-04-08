@@ -344,7 +344,7 @@ TabBarAllowRenamingReturnCode LayerTabBar::AllowRenaming()
         (rLayerAdmin.GetLayer( aNewName ) && aLayerName != aNewName) )
     {
         // Name already exists.
-        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pDrViewSh->GetViewFrame()->GetWindow().GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pDrViewSh->GetViewFrame()->GetFrameWeld(),
                                                    VclMessageType::Warning, VclButtonsType::Ok,
                                                    SdResId(STR_WARN_NAME_DUPLICATE)));
         xWarn->run();

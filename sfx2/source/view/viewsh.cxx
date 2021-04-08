@@ -447,7 +447,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         {
             SfxObjectShell* pDoc = GetObjectShell();
             if ( pDoc && pDoc->QueryHiddenInformation(
-                             HiddenWarningFact::WhenSaving, GetViewFrame()->GetWindow().GetFrameWeld() ) != RET_YES )
+                             HiddenWarningFact::WhenSaving, GetViewFrame()->GetFrameWeld() ) != RET_YES )
                 break;
 
 
@@ -507,7 +507,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             SfxBluetoothModel aModel;
             SfxObjectShell* pDoc = GetObjectShell();
             if ( pDoc && pDoc->QueryHiddenInformation(
-                            HiddenWarningFact::WhenSaving, GetViewFrame()->GetWindow().GetFrameWeld() ) != RET_YES )
+                            HiddenWarningFact::WhenSaving, GetViewFrame()->GetFrameWeld() ) != RET_YES )
                 break;
             uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
             SfxMailModel::SendMailResult eResult = aModel.SaveAndSend( xFrame );
@@ -1133,7 +1133,7 @@ bool SfxViewShell::PrepareClose
     {
         if ( bUI )
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewFrame()->GetWindow().GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewFrame()->GetFrameWeld(),
                                                                      VclMessageType::Info, VclButtonsType::Ok,
                                                                      SfxResId(STR_CANT_CLOSE)));
             xBox->run();

@@ -177,7 +177,7 @@ IMPL_LINK(SwGlossaryDlg, TextFilterHdl, OUString&, rTest, bool)
 
 SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame const * pViewFrame,
                              SwGlossaryHdl * pGlosHdl, SwWrtShell *pWrtShell)
-    : SfxDialogController(pViewFrame->GetWindow().GetFrameWeld(), "modules/swriter/ui/autotext.ui", "AutoTextDialog")
+    : SfxDialogController(pViewFrame->GetFrameWeld(), "modules/swriter/ui/autotext.ui", "AutoTextDialog")
     , m_sReadonlyPath(SwResId(STR_READONLY_PATH))
     , m_pGlossaryHdl(pGlosHdl)
     , m_bResume(false)

@@ -1053,7 +1053,7 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_GOTO_PAGE:
         {
-            SwGotoPageDlg aDlg(GetViewFrame()->GetWindow().GetFrameWeld(), &GetViewFrame()->GetBindings());
+            SwGotoPageDlg aDlg(GetViewFrame()->GetFrameWeld(), &GetViewFrame()->GetBindings());
             if (aDlg.run() == RET_OK)
                 GetWrtShell().GotoPage(aDlg.GetPageSelection(), true);
         }
@@ -1281,7 +1281,7 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 SfxViewFrame* pTmpFrame = GetViewFrame();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractMailMergeCreateFromDlg> pDlg(pFact->CreateMailMergeCreateFromDlg(pTmpFrame->GetWindow().GetFrameWeld()));
+                ScopedVclPtr<AbstractMailMergeCreateFromDlg> pDlg(pFact->CreateMailMergeCreateFromDlg(pTmpFrame->GetFrameWeld()));
                 if (RET_OK == pDlg->Execute())
                     bUseCurrentDocument = pDlg->IsThisDocument();
                 else
@@ -1876,7 +1876,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     }
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame()->GetWindow().GetFrameWeld(), aCoreSet));
+                    pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame()->GetFrameWeld(), aCoreSet));
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
                     if( pDlg->Execute() != RET_CANCEL )
                         pSet = pDlg->GetOutputItemSet();
@@ -2056,7 +2056,7 @@ void SwView::EditLinkDlg()
 {
     bool bWeb = dynamic_cast<SwWebView*>( this ) !=  nullptr;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(GetViewFrame()->GetWindow().GetFrameWeld(), &GetWrtShell().GetLinkManager(), bWeb));
+    ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(GetViewFrame()->GetFrameWeld(), &GetWrtShell().GetLinkManager(), bWeb));
     pDlg->Execute();
 }
 

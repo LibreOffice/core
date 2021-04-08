@@ -2949,7 +2949,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         pFound = FindDSConnection(sDataSource, true);
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    m_pImpl->pMergeDialog = pFact->CreateMailMergeDlg(rSh.GetView().GetViewFrame()->GetWindow().GetFrameWeld(), rSh,
+    m_pImpl->pMergeDialog = pFact->CreateMailMergeDlg(rSh.GetView().GetViewFrame()->GetFrameWeld(), rSh,
                                                      sDataSource,
                                                      sDataTableOrQuery,
                                                      nCmdType,

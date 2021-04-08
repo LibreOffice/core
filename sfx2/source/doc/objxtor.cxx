@@ -557,7 +557,7 @@ bool SfxObjectShell::PrepareClose
         {
             const Reference<XTitle> xTitle(*pImpl->pBaseModel, UNO_QUERY_THROW);
             const OUString     sTitle = xTitle->getTitle ();
-            nRet = ExecuteQuerySaveDocument(pFrame->GetWindow().GetFrameWeld(), sTitle);
+            nRet = ExecuteQuerySaveDocument(pFrame->GetFrameWeld(), sTitle);
         }
         /*HACK for plugin::destroy()*/
 
