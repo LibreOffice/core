@@ -27,6 +27,10 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/io/TempFile.hpp>
+#include <comphelper/storagehelper.hxx>
+
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
@@ -52,8 +56,10 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XCompon
 , m_bEmbeddedScriptSupport( true )
 , m_bDocumentRecoverySupport( true )
 , m_bWaitSaveCompleted( false )
-, m_bIsLink( false )
+, m_bIsLinkURL( false )
+, m_bLinkTempFileChanged( false )
 , m_bLinkHasPassword( false )
+, m_aLinkTempFile( )
 , m_bHasClonedSize( false )
 , m_nClonedMapUnit( 0 )
 {
@@ -77,8 +83,10 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_bEmbeddedScriptSupport( true )
 , m_bDocumentRecoverySupport( true )
 , m_bWaitSaveCompleted( false )
-, m_bIsLink( true )
+, m_bIsLinkURL( true )
+, m_bLinkTempFileChanged( false )
 , m_bLinkHasPassword( false )
+, m_aLinkTempFile( )
 , m_bHasClonedSize( false )
 , m_nClonedMapUnit( 0 )
 {
@@ -213,7 +221,61 @@ void OCommonEmbeddedObject::LinkInit_Impl(
         m_bReadOnly = aExportFilterName != m_aLinkFilterName;
     }
 
-    m_aDocMediaDescriptor = GetValuableArgs_Impl( aMediaDescr, false );
+    if(m_bIsLinkURL && !m_bReadOnly)
+    {
+        // tdf#141529 we have a linked OLE object. To prevent the original OLE
+        // data to be changed each time the OLE gets changed (at deactivate), copy it to
+        // a temporary file. That file will be changed on activated OLE changes then.
+        // The moment the original gets changed itself will now be associated with the
+        // file/document embedding the OLE being changed (see other additions to the
+        // task-ID above)
+        //
+        // open OLE original data as read input file
+        uno::Reference< ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( m_xContext ) );
+        uno::Reference< io::XInputStream > xInStream( xTempAccess->openFileRead( m_aLinkURL ) );
+
+        if(xInStream.is())
+        {
+            // create temporary file
+            m_aLinkTempFile = io::TempFile::create(m_xContext);
+
+            if(m_aLinkTempFile.is())
+            {
+                // completely copy content of original OLE data
+                uno::Reference < io::XOutputStream > xTempOut = m_aLinkTempFile->getOutputStream();
+                ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xTempOut );
+                xTempOut->flush();
+                xTempOut->closeOutput();
+
+                // reset flag m_bLinkTempFileChanged, so it will also work for multiple
+                // save op's of the containing file/document
+                m_bLinkTempFileChanged = false;
+            }
+        }
+    }
+
+    if(m_aLinkTempFile.is())
+    {
+        uno::Sequence< beans::PropertyValue > aAlternativeMediaDescr(aMediaDescr.getLength());
+
+        for ( sal_Int32 a(0); a < aMediaDescr.getLength(); a++ )
+        {
+            const beans::PropertyValue& rSource(aMediaDescr[a]);
+            beans::PropertyValue& rDestination(aAlternativeMediaDescr[a]);
+
+            rDestination.Name = rSource.Name;
+            if(rSource.Name == "URL")
+                rDestination.Value <<= m_aLinkTempFile->getUri();
+            else
+                rDestination.Value = rSource.Value;
+        }
+
+        m_aDocMediaDescriptor = GetValuableArgs_Impl( aAlternativeMediaDescr, false );
+    }
+    else
+    {
+        m_aDocMediaDescriptor = GetValuableArgs_Impl( aMediaDescr, false );
+    }
 
     uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
     for ( beans::PropertyValue const & prop : aObjectDescr )
