@@ -100,6 +100,12 @@ void OCommonEmbeddedObject::Deactivate()
     {
         try {
             xClientSite->saveObject();
+
+            // tdf#141529 take note that an eventually used linked file
+            // got changed/saved/written and that we need to copy it back if the
+            // hosting file/document gets saved
+            if(m_aLinkTempFile.is())
+                m_bLinkTempFileChanged = true;
         }
         catch( const embed::ObjectSaveVetoException& )
         {
@@ -168,7 +174,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             // after the object reaches the running state the cloned size is not necessary any more
             m_bHasClonedSize = false;
 
-            if ( m_bIsLink )
+            if ( m_bIsLinkURL )
             {
                 m_xDocHolder->SetComponent( LoadLink_Impl(), m_bReadOnly );
             }
