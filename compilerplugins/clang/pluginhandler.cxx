@@ -231,6 +231,19 @@ bool PluginHandler::ignoreLocation(SourceLocation loc) {
 
 bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
 {
+#if HAVE_BUILDING_PCH_WITH_OBJ
+    // If we're building a separate precompiled_foo.cxx file
+    // for a PCH, then it is not necessary to check contents of everything
+    // included by the PCH in every compilation, check only once for that
+    // precompiled_foo.cxx file.
+    if( !compiler.getSourceManager().isLocalSourceLocation( loc ))
+    {
+        if( !compiler.getLangOpts().BuildingPCHWithObjectFile )
+            return true;
+    }
+#elif CLANG_VERSION >= 110000
+#error Internal error, -building-pch-with-obj support not detected in Clang.
+#endif
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
     if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
         return true;
