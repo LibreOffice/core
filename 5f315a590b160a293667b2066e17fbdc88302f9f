@@ -46,6 +46,29 @@
       "revId": "5f315a590b160a293667b2066e17fbdc88302f9f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "28eae8f7_daa2744e",
+        "filename": "sc/source/ui/unoobj/nameuno.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-08T13:20:32Z",
+      "side": 1,
+      "message": "Then I suggest you also change this \u0027default\u0027 into \u0027case NAME_VALID\u0027, to be explicit, and avoid strange things if another enum value gets added someday",
+      "range": {
+        "startLine": 504,
+        "startChar": 12,
+        "endLine": 504,
+        "endChar": 19
+      },
+      "revId": "5f315a590b160a293667b2066e17fbdc88302f9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
