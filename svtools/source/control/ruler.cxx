@@ -856,9 +856,10 @@ static void ImplDrawRulerTab(vcl::RenderContext& rRenderContext, const Point& rP
     // drawn become asymmetric due to the +1 offsets
     sal_uInt16 DPIOffset = rRenderContext.GetDPIScaleFactor() - 1;
 
-    tools::Rectangle aRect1;
-    tools::Rectangle aRect2;
-    tools::Rectangle aRect3;
+    // A tabstop is drawn using three rectangles
+    tools::Rectangle aRect1; // A horizontal short line
+    tools::Rectangle aRect2; // A vertical short line
+    tools::Rectangle aRect3; // A small square
 
     aRect3.SetEmpty();
 
