@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c57375c_29080899",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-08T11:57:28Z",
+      "side": 1,
+      "message": "I would clarify somewhere in the commit message that this is about a semantic change to osl_getLocalHostName",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 12
+      },
+      "revId": "4d5134fce62b52c9fc7aac5306058223267f6f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6247d792_9be3d7d0",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-08T11:57:28Z",
+      "side": 1,
+      "message": "do not put this internal function into a (URE-, even) public include file",
+      "revId": "4d5134fce62b52c9fc7aac5306058223267f6f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "606a63e0_dedf9cee",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-08T11:57:28Z",
+      "side": 1,
+      "message": "this whole file is already implicitly UNX-only?",
+      "revId": "4d5134fce62b52c9fc7aac5306058223267f6f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39765233_46600e43",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-08T11:57:28Z",
+      "side": 1,
+      "message": "can you somehow factor out the common parts of osl_getLocalHostname and osl_getLocalHostnameFQDN, to avoid code duplication?",
+      "revId": "4d5134fce62b52c9fc7aac5306058223267f6f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
