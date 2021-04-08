@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <vcl/TaskStopwatch.hxx>
+#include <vcl/inputtypes.hxx>
 #include <tools/color.hxx>
 
 #include <ctime>
@@ -56,7 +56,6 @@ class SwLayAction
 {
     SwRootFrame  *m_pRoot;
     SwViewShellImp  *m_pImp; // here the action logs in and off
-    TaskStopwatch* m_pWatch;
 
     // For the sake of optimization, so that the tables stick a bit better to
     // the Cursor when hitting return/backspace in front of one.
@@ -75,6 +74,7 @@ class SwLayAction
     std::clock_t m_nStartTicks;      // The Action's starting time; if too much time passes the
                                 // WaitCursor can be enabled via CheckWaitCursor()
 
+    VclInputFlags m_nInputType;   // Which input should terminate processing
     sal_uInt16 m_nEndPage;        // StatBar control
     sal_uInt16 m_nCheckPageNum;   // CheckPageDesc() was delayed if != USHRT_MAX
                                 // check from this page onwards
@@ -84,8 +84,9 @@ class SwLayAction
     bool m_bCalcLayout;    // Complete reformatting?
     bool m_bAgain;         // For the automatically repeated Action if Pages are deleted
     bool m_bNextCycle;     // Reset on the first invalid Page
+    bool m_bInput;         // For terminating processing on input
+    bool m_bIdle;          // True if the LayAction was triggered by the Idler
     bool m_bReschedule;    // Call Reschedule depending on Progress?
-    bool m_bInterrupt;     // For termination the layouting
     bool m_bCheckPages;    // Run CheckPageDescs() or delay it
     bool m_bUpdateExpFields; // Is set if, after Formatting, we need to do another round for ExpField
     bool m_bBrowseActionStop; // Terminate Action early (as per bInput) and leave the rest to the Idler
@@ -123,26 +124,33 @@ class SwLayAction
 
     bool RemoveEmptyBrowserPages();
 
+    inline void CheckIdleEnd();
+
 public:
-    SwLayAction(SwRootFrame *pRt, SwViewShellImp *pImp, TaskStopwatch* pWatch = nullptr);
+    SwLayAction( SwRootFrame *pRt, SwViewShellImp *pImp );
     ~SwLayAction();
 
+    void SetIdle            ( bool bNew )   { m_bIdle = bNew; }
     void SetCheckPages      ( bool bNew )   { m_bCheckPages = bNew; }
     void SetBrowseActionStop( bool bNew )   { m_bBrowseActionStop = bNew; }
     void SetNextCycle       ( bool bNew )   { m_bNextCycle = bNew; }
 
     bool IsWaitAllowed()        const       { return m_bWaitAllowed; }
     bool IsNextCycle()          const       { return m_bNextCycle; }
+    bool IsInput()              const       { return m_bInput; }
     bool IsPaint()              const       { return m_bPaint; }
+    bool IsIdle()               const       { return m_bIdle;  }
     bool IsReschedule()         const       { return m_bReschedule;  }
-    bool IsIdle()               const       { return m_pWatch != nullptr; }
-    bool IsPaintExtraData()     const       { return m_bPaintExtraData; }
-    bool IsInterrupt();
+    bool IsPaintExtraData()     const       { return m_bPaintExtraData;}
+    bool IsInterrupt()          const       { return IsInput(); }
+
+    VclInputFlags GetInputType()    const { return m_nInputType; }
 
     // adjusting Action to the wanted behaviour
     void SetPaint       ( bool bNew )   { m_bPaint = bNew; }
     void SetComplete    ( bool bNew )   { m_bComplete = bNew; }
     void SetStatBar     ( bool bNew );
+    void SetInputType   ( VclInputFlags nNew ) { m_nInputType = nNew; }
     void SetCalcLayout  ( bool bNew )   { m_bCalcLayout = bNew; }
     void SetReschedule  ( bool bNew )   { m_bReschedule = bNew; }
     void SetWaitAllowed ( bool bNew )   { m_bWaitAllowed = bNew; }
@@ -179,7 +187,6 @@ public:
 
 class SwLayIdle
 {
-    TaskStopwatch m_aWatch;
     SwRootFrame *m_pRoot;
     SwViewShellImp  *m_pImp;           // The Idler registers and deregisters here
     SwContentNode *m_pContentNode;    // The current cursor position is saved here
@@ -191,7 +198,6 @@ class SwLayIdle
     void ShowIdle( Color eName );
 #endif
 
-    bool IsInterrupt();
     enum IdleJobType{ ONLINE_SPELLING, AUTOCOMPLETE_WORDS, WORD_COUNT, SMART_TAGS };
     bool DoIdleJob_( const SwContentFrame*, IdleJobType );
     bool DoIdleJob( IdleJobType, bool bVisAreaOnly );
