@@ -1593,7 +1593,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SvtModuleOptions aModuleOpt;
             if ( !aModuleOpt.IsImpress() )
             {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(rReq.GetFrameWeld(),
                                                                          VclMessageType::Warning, VclButtonsType::Ok,
                                                                          SfxResId(STR_MODULENOTINSTALLED)));
                 xBox->run();
