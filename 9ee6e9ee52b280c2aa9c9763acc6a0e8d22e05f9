@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1bc05672_1eddea1e",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-08T13:01:40Z",
+      "side": 1,
+      "message": "Is this \"not\" correct? (I must admit that I might get confused)",
+      "range": {
+        "startLine": 1468,
+        "startChar": 68,
+        "endLine": 1468,
+        "endChar": 71
+      },
+      "revId": "9ee6e9ee52b280c2aa9c9763acc6a0e8d22e05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcba41ed_4e8d2ccc",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-08T13:01:40Z",
+      "side": 1,
+      "message": "So will this happen for all infobars, when they are not \"hiddentrackchanges\", bSkipTrackChanges will be false",
+      "revId": "9ee6e9ee52b280c2aa9c9763acc6a0e8d22e05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
