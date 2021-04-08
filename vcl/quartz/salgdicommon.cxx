@@ -242,11 +242,11 @@ static Color ImplGetROPColor( SalROPColor nROPColor )
 // apply the XOR mask to the target context if active and dirty
 void AquaSalGraphics::ApplyXorContext()
 {
-    if( !mpXorEmulation )
+    if (!mpXorEmulation)
     {
         return;
     }
-    if( mpXorEmulation->UpdateTarget() )
+    if (mpXorEmulation->UpdateTarget())
     {
         RefreshRect( 0, 0, mnWidth, mnHeight ); // TODO: refresh minimal changerect
     }
@@ -1486,11 +1486,11 @@ void AquaSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
         return;
     }
 
-    if( (mpXorEmulation == nullptr) && !bSet )
+    if (!mpXorEmulation && !bSet)
     {
         return;
     }
-    if( (mpXorEmulation != nullptr) && (bSet == mpXorEmulation->IsEnabled()) )
+    if (mpXorEmulation && bSet == mpXorEmulation->IsEnabled())
     {
         return;
     }
@@ -1499,9 +1499,9 @@ void AquaSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
          return;
     }
     // prepare XOR emulation
-    if( !mpXorEmulation )
+    if (!mpXorEmulation)
     {
-        mpXorEmulation = new XorEmulation();
+        mpXorEmulation = std::make_unique<XorEmulation>();
         mpXorEmulation->SetTarget(mnWidth, mnHeight, mnBitmapDepth, maContextHolder.get(), maLayer.get());
     }
 
