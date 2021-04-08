@@ -52,6 +52,24 @@
       "revId": "85550c940f37d8e91fd7f73bdb04bcc7083a70a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a1de41a_c6f7698b",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-08T10:23:27Z",
+      "side": 1,
+      "message": "If, from the list of issues in my comment at \u003chttps://gerrit.libreoffice.org/c/core/+/107513/4#message-73a10683c1d1849a59d88d02bc58292ffdc1d519\u003e \"Do not call GetAddrInfoW if we just want the hostname\", the only case that needs a FQDN is indeed just the sal-internal call from getSystemPathFromFileUrl addressed by this change, I would proceed as follows:\n\n* Do a semantic [API CHANGE] of osl_getLocalHostname to never return a FQDN.  I wouldn\u0027t be too worried about any effect on 3rd-party code, and \"May not always be a fully qualified domain name\" always gave us that leeway, anyway.\n\n* Make the FQDN-variant a sal/osl/unx-internal function.  (Which also avoids having to amend sal/util/sal.map, and having to implement this for Windows, both of which this change failed to do so far.)",
+      "parentUuid": "f92de4ff_50d4fb2b",
+      "revId": "85550c940f37d8e91fd7f73bdb04bcc7083a70a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
