@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-06 09:16:43 using:
+ Generated on 2021-04-08 13:50:53 using:
  ./bin/update_pch reportdesign rpt --cutoff=9 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -41,14 +41,12 @@
 #include <new>
 #include <optional>
 #include <ostream>
-#include <safeint.h>
 #include <stddef.h>
 #include <string.h>
 #include <string>
 #include <string_view>
 #include <type_traits>
 #include <typeinfo>
-#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -80,6 +78,7 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
+#include <sal/backtrace.hxx>
 #include <sal/detail/log.h>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
@@ -138,11 +137,15 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
+#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -190,6 +193,7 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/propertysetmixin.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
@@ -206,7 +210,6 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
-#include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>

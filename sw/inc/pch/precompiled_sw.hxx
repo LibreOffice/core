@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-06 09:20:29 using:
+ Generated on 2021-04-08 13:52:12 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -81,6 +81,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/backtrace.hxx>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -569,6 +570,7 @@
 #include <iodetect.hxx>
 #include <istyleaccess.hxx>
 #include <layact.hxx>
+#include <layfrm.hxx>
 #include <layouter.hxx>
 #include <lineinfo.hxx>
 #include <list.hxx>
@@ -628,6 +630,7 @@
 #include <tabcol.hxx>
 #include <tabfrm.hxx>
 #include <tblafmt.hxx>
+#include <tblrwcl.hxx>
 #include <tblsel.hxx>
 #include <textboxhelper.hxx>
 #include <textsh.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-06 09:16:45 using:
+ Generated on 2021-04-08 13:56:00 using:
  ./bin/update_pch reportdesign rptui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <assert.h>
 #include <cassert>
+#include <chrono>
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
@@ -43,7 +44,6 @@
 #include <new>
 #include <optional>
 #include <ostream>
-#include <safeint.h>
 #include <set>
 #include <sstream>
 #include <stddef.h>
@@ -85,6 +85,7 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
+#include <sal/backtrace.hxx>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -179,7 +180,6 @@
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -222,7 +222,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -435,7 +434,6 @@
 #if PCH_LEVEL >= 4
 #include <AddField.hxx>
 #include <DesignView.hxx>
-#include <IReportControllerObserver.hxx>
 #include <ReportController.hxx>
 #include <ReportSection.hxx>
 #include <ReportWindow.hxx>

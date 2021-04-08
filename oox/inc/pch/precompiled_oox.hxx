@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-06 09:16:41 using:
+ Generated on 2021-04-08 13:50:52 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -254,6 +254,7 @@
 #include <oox/ole/olestorage.hxx>
 #include <oox/ppt/comments.hxx>
 #include <oox/ppt/headerfooter.hxx>
+#include <oox/ppt/pptimport.hxx>
 #include <oox/ppt/pptshape.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/token/namespaces.hxx>

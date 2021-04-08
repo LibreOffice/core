@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-06 09:18:40 using:
+ Generated on 2021-04-08 13:56:41 using:
  ./bin/update_pch sd sdui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
+#include <chrono>
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
@@ -42,7 +43,6 @@
 #include <new>
 #include <optional>
 #include <ostream>
-#include <safeint.h>
 #include <set>
 #include <sstream>
 #include <stddef.h>
@@ -86,6 +86,7 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
+#include <sal/backtrace.hxx>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -111,6 +112,7 @@
 #include <vcl/builderpage.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
+#include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
@@ -323,8 +325,10 @@
 #include <editeng/paragraphdata.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
+#include <helper/simplereferencecomponent.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/enumarray.hxx>
@@ -365,7 +369,6 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
-#include <svtools/tabbar.hxx>
 #include <svtools/unitconv.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/DiagramDataInterface.hxx>
@@ -463,6 +466,7 @@
 #include <DrawDocShell.hxx>
 #include <View.hxx>
 #include <drawdoc.hxx>
+#include <fupoor.hxx>
 #include <pres.hxx>
 #include <sddllapi.h>
 #include <sdmod.hxx>

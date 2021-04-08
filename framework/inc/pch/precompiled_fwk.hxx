@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-06 09:16:38 using:
+ Generated on 2021-04-08 13:55:51 using:
  ./bin/update_pch framework fwk --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
+#include <chrono>
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
@@ -125,6 +126,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/utils/common.hxx>

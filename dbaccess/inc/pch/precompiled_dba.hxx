@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-06 09:16:18 using:
+ Generated on 2021-04-08 13:55:44 using:
  ./bin/update_pch dbaccess dba --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #include <assert.h>
 #include <atomic>
 #include <cassert>
+#include <chrono>
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
@@ -83,6 +84,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <sal/backtrace.hxx>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
@@ -152,12 +154,12 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -263,6 +265,7 @@
 #include <ContainerMediator.hxx>
 #include <apitools.hxx>
 #include <column.hxx>
+#include <columnsettings.hxx>
 #include <core_resource.hxx>
 #include <sdbcoretools.hxx>
 #include <stringconstants.hxx>

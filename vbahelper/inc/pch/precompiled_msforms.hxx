@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-20 10:40:28 using:
+ Generated on 2021-04-08 13:52:34 using:
  ./bin/update_pch vbahelper msforms --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -64,6 +64,7 @@
 #include <rtl/textenc.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <sal/backtrace.hxx>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>

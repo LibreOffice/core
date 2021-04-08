@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-20 12:49:56 using:
+ Generated on 2021-04-08 13:56:43 using:
  ./bin/update_pch sot sot --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -46,6 +46,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <vcl/dllapi.h>

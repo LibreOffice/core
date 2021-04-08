@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-06 09:18:45 using:
+ Generated on 2021-04-08 13:56:43 using:
  ./bin/update_pch slideshow slideshow --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
+#include <chrono>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
@@ -40,7 +41,6 @@
 #include <new>
 #include <optional>
 #include <ostream>
-#include <safeint.h>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -80,6 +80,7 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
+#include <sal/backtrace.hxx>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -149,6 +150,7 @@
 #include <canvas/canvastools.hxx>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -310,15 +312,15 @@
 #include <activitiesqueue.hxx>
 #include <animatableshape.hxx>
 #include <animationfactory.hxx>
-#include <attributableshape.hxx>
+#include <animationnode.hxx>
 #include <cursormanager.hxx>
 #include <delayevent.hxx>
 #include <disposable.hxx>
 #include <doctreenode.hxx>
 #include <doctreenodesupplier.hxx>
+#include <event.hxx>
 #include <eventmultiplexer.hxx>
 #include <eventqueue.hxx>
-#include <hyperlinkarea.hxx>
 #include <rgbcolor.hxx>
 #include <screenupdater.hxx>
 #include <shape.hxx>

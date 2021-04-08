@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-13 10:18:34 using:
+ Generated on 2021-04-08 13:56:42 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <assert.h>
 #include <cassert>
+#include <chrono>
 #include <cstddef>
 #include <cstdlib>
 #include <deque>
@@ -84,6 +85,7 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
+#include <sal/backtrace.hxx>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
