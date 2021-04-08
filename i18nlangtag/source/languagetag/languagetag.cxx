@@ -49,7 +49,7 @@ struct myLtError
     ~myLtError() { if (p) lt_error_unref( p); }
 };
 
-// "statics" to be returned as const reference to an empty locale and string.
+// "static" to be returned as const reference to an empty locale.
 struct theEmptyLocale : public rtl::Static< lang::Locale, theEmptyLocale > {};
 }
 
