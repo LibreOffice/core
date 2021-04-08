@@ -55,7 +55,7 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
         changeState( embed::EmbedStates::RUNNING );
 
         // the links should be switched back to loaded state for now to avoid locking problems
-        bBackToLoaded = m_bIsLink;
+        bBackToLoaded = m_bIsLinkURL;
     }
 
     bool bSuccess = m_xDocHolder->SetExtent( nAspect, aSize );
@@ -88,7 +88,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         changeState( embed::EmbedStates::RUNNING );
 
         // the links should be switched back to loaded state for now to avoid locking problems
-        bBackToLoaded = m_bIsLink;
+        bBackToLoaded = m_bIsLinkURL;
     }
 
     awt::Size aResult;
@@ -128,7 +128,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         changeState( embed::EmbedStates::RUNNING );
 
         // the links should be switched back to loaded state for now to avoid locking problems
-        bBackToLoaded = m_bIsLink;
+        bBackToLoaded = m_bIsLinkURL;
     }
 
     sal_Int32 nResult = m_xDocHolder->GetMapUnit( nAspect );
@@ -172,7 +172,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
             setVisualAreaSize(nAspect, aOrigSize);
 
         // the links should be switched back to loaded state for now to avoid locking problems
-        bBackToLoaded = m_bIsLink;
+        bBackToLoaded = m_bIsLinkURL;
     }
 
     SAL_WARN_IF( !m_xDocHolder->GetComponent().is(), "embeddedobj.common", "Running or Active object has no component!" );

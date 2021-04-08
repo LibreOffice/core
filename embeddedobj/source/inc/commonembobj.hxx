@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
+#include <com/sun/star/io/XTempFile.hpp>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
 #include <map>
@@ -133,7 +134,8 @@ protected:
     css::awt::Rectangle m_aOwnRectangle;
     css::awt::Rectangle m_aClipRectangle;
 
-    bool m_bIsLink;
+    bool m_bIsLinkURL;
+    bool m_bLinkTempFileChanged;
 
     // embedded object related stuff
     OUString m_aEntryName;
@@ -146,6 +148,9 @@ protected:
     OUString m_aLinkFilterName;
     bool        m_bLinkHasPassword;
     OUString m_aLinkPassword;
+
+    // tdf#141529 hold a cc of a linked OLE
+    css::uno::Reference < css::io::XTempFile > m_aLinkTempFile;
 
     css::uno::Reference< css::uno::XInterface > m_xParent;
 
