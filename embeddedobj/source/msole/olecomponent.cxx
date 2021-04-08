@@ -1299,7 +1299,10 @@ void OleComponent::StoreOwnTmpIfNecessary()
             GUID aCLSID;
             hr = m_pNativeImpl->m_pOleObject->GetUserClassID( &aCLSID );
             if ( FAILED( hr ) )
+            {
+                SAL_WARN("embeddedobj.ole", "OleComponent::StoreOwnTmpIfNecessary: GetUserClassID() failed");
                 throw io::IOException(); // TODO
+            }
 
             hr = WriteClassStg( m_pNativeImpl->m_pIStorage, aCLSID );
             if ( FAILED( hr ) )
