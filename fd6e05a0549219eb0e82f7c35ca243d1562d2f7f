@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e7689ac_f82857b0",
+        "filename": "sw/qa/uitest/writer_tests7/tdf141557.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-04-08T11:04:07Z",
+      "side": 1,
+      "message": "this is duplicated. use \u0027from uitest.uihelper.common import get_url_for_data_file\u0027 instead.\nSee https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dbd78ce123cd65fb8d0843df1d2530a168d5d464d",
+      "revId": "fd6e05a0549219eb0e82f7c35ca243d1562d2f7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
