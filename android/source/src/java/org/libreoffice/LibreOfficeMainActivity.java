@@ -82,6 +82,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private int partIndex=-1;
     private File mInputFile;
     private DocumentOverlay mDocumentOverlay;
+    /** URI of the actual document. */
+    private Uri mDocumentUri;
+    /** Temporary local copy of the document. */
     private File mTempFile = null;
     private File mTempSlideShowFile = null;
     public boolean firstStart = true;
@@ -170,8 +173,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         mbISReadOnlyMode = !isExperimentalMode();
 
-        if (getIntent().getData() != null) {
-            if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+        mDocumentUri = getIntent().getData();
+        if (mDocumentUri != null) {
+            if (mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 final boolean isReadOnlyDoc;
                 if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
                     // New document type string is not null, meaning we want to open a new document
@@ -185,28 +189,30 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                     isReadOnlyDoc = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
                 } else {
                     // TODO: can't open the file
-                    Log.e(LOGTAG, "couldn't create temporary file from " + getIntent().getData());
+                    Log.e(LOGTAG, "couldn't create temporary file from " + mDocumentUri);
                     return;
                 }
 
-                mbISReadOnlyMode = !isExperimentalMode()  || isReadOnlyDoc;
-                Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
+                mbISReadOnlyMode = !isExperimentalMode() || isReadOnlyDoc;
+                Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + mDocumentUri.getPath());
 
-                String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), getIntent().getData());
+                String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), mDocumentUri);
                 if (displayName.isEmpty()) {
                     // fall back to using temp file name
                     displayName = mInputFile.getName();
                 }
                 toolbarTop.setTitle(displayName);
 
-            } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
-                mInputFile = new File(getIntent().getData().getPath());
+            } else if (mDocumentUri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
+                mInputFile = new File(mDocumentUri.getPath());
                 mbISReadOnlyMode = true;
-                Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + getIntent().getData().getPath());
+                Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + mDocumentUri.getPath());
                 toolbarTop.setTitle(mInputFile.getName());
             }
         } else {
             mInputFile = new File(DEFAULT_DOC_PATH);
+            mDocumentUri = Uri.fromFile(mInputFile);
+            mbISReadOnlyMode = true;
         }
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -304,9 +310,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                     public void run() {
                         result = false;
                         try {
-                            final AssetFileDescriptor assetFD = contentResolver.openAssetFileDescriptor(getIntent().getData(), "r");
+                            final AssetFileDescriptor assetFD = contentResolver.openAssetFileDescriptor(mDocumentUri, "r");
                             if (assetFD == null) {
-                                Log.e(LOGTAG, "couldn't create assetfiledescriptor from " + getIntent().getDataString());
+                                Log.e(LOGTAG, "couldn't create assetfiledescriptor from " + mDocumentUri);
                                 return;
                             }
                             FileChannel inputChannel = assetFD.createInputStream().getChannel();
@@ -359,17 +365,16 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     public void saveFileToOriginalSource() {
-        if (isReadOnlyMode() || mInputFile == null || getIntent().getData() == null || !getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT))
+        if (isReadOnlyMode() || mInputFile == null || mDocumentUri == null || !mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT))
             return;
 
-        Uri uri = getIntent().getData();
         FileInputStream inputStream = null;
         OutputStream outputStream = null;
 
         try {
             inputStream = new FileInputStream(mInputFile);
             // OutputStream for the actual (original) location
-            outputStream = getContentResolver().openOutputStream(uri);
+            outputStream = getContentResolver().openOutputStream(mDocumentUri);
 
             byte[] buffer = new byte[4096];
             int readBytes = inputStream.read(buffer);
