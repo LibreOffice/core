@@ -727,6 +727,12 @@ def process_source(root, module, filename, maxdepth=0):
                 else:
                     lastif = '#if'
                 del allowed_ifs[ ifdepth ]
+            elif line.startswith('#pragma once'):
+                # maxdepth == 1 means we are parsing a header file
+                # and are allowed one #ifdef block (the include guard),
+                # but in the #pragma once case do not allow that
+                assert maxdepth == 1
+                maxdepth = 0
             elif line.startswith('#include'):
                 if ifdepth - ifsallowed <= maxdepth:
                     line = sanitize(line)
