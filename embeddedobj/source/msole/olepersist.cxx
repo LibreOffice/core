@@ -768,6 +768,21 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
     sal_Int32 nStreamMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
 
     uno::Reference< io::XStream > xNewOwnStream = xNewParentStorage->openStreamElement( aNewName, nStreamMode );
+
+    uno::Reference<io::XSeekable> xNewSeekable (xNewOwnStream, uno::UNO_QUERY);
+    if (xNewSeekable.is() && xNewSeekable->getLength() == 0)
+    {
+        uno::Reference<io::XSeekable> xOldSeekable(m_xObjectStream, uno::UNO_QUERY);
+        if (xOldSeekable.is() && xOldSeekable->getLength() > 0)
+        {
+            SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::SwitchOwnPersistence: empty new stream, reusing old one");
+            uno::Reference<io::XInputStream> xInput = m_xObjectStream->getInputStream();
+            uno::Reference<io::XOutputStream> xOutput = xNewOwnStream->getOutputStream();
+            comphelper::OStorageHelper::CopyInputToOutput(xInput, xOutput);
+            xNewSeekable->seek(0);
+        }
+    }
+
     SAL_WARN_IF( !xNewOwnStream.is(), "embeddedobj.ole", "The method can not return empty reference!" );
 
     SwitchOwnPersistence( xNewParentStorage, xNewOwnStream, aNewName );

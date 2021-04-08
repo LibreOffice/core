@@ -142,6 +142,15 @@ bool ParseOLE2Presentation(SvStream& rOle2, sal_uInt32& nWidth, sal_uInt32& nHei
     // Read Data.
     if (nSize > xOle2Presentation->remainingSize())
         return false;
+
+    if (nSize <= 64)
+    {
+        SAL_WARN("sw.html",
+                 "ParseOLE2Presentation: ignoring potentially broken small preview: size is "
+                     << nSize);
+        return false;
+    }
+
     std::vector<char> aBuffer(nSize);
     xOle2Presentation->ReadBytes(aBuffer.data(), aBuffer.size());
     rPresentationData.WriteBytes(aBuffer.data(), aBuffer.size());
