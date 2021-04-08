@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57750734_e6bfa81b",
+        "filename": "sw/source/uibase/uiview/view.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-08T11:27:17Z",
+      "side": 1,
+      "message": "i think this should be:\n    return (!FullName.isEmpty() \u0026\u0026 Changed \u003d\u003d FullName ) ||\n            (Changed.isEmpty() \u0026\u0026 !Created.isEmpty() \u0026\u0026 Created \u003d\u003d FullName);\n\nnote different placement of brackets",
+      "revId": "06958d3087263627dd899ac503e506c017ed7aca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
