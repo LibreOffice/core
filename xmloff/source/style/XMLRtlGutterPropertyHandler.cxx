@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <XMLRtlGutterPropertyHandler.hxx>
+
 #include <set>
 
 #include <com/sun/star/uno/Any.hxx>
 
 #include <xmloff/xmluconv.hxx>
-
-#include <XMLRtlGutterPropertyHandler.hxx>
 
 using namespace com::sun::star;
 
