@@ -133,6 +133,8 @@ using ::com::sun::star::container::XIndexContainer;
 #define ShellClass_SfxViewFrame
 #include <sfxslots.hxx>
 
+#define CHANGES_STR "private:resource/toolbar/changes"
+
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)
 
 void SfxViewFrame::InitInterface_Impl()
@@ -1280,6 +1282,28 @@ void SfxViewFrame::AppendReadOnlyInfobar()
     }
 }
 
+namespace
+{
+css::uno::Reference<css::frame::XLayoutManager> getLayoutManager(const SfxFrame& rFrame)
+{
+    css::uno::Reference<css::frame::XLayoutManager> xLayoutManager;
+    css::uno::Reference<css::beans::XPropertySet> xPropSet(rFrame.GetFrameInterface(),
+                                                 uno::UNO_QUERY);
+    if (xPropSet.is())
+    {
+        try
+        {
+            xLayoutManager.set(xPropSet->getPropertyValue("LayoutManager"), uno::UNO_QUERY);
+        }
+        catch (const Exception& e)
+        {
+            SAL_WARN("sfx.view", "Failure getting layout manager: " + e.Message);
+        }
+    }
+    return xLayoutManager;
+}
+}
+
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if(m_pImpl->bIsDowning)
@@ -1437,9 +1461,35 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 while (!aPendingInfobars.empty())
                 {
                     InfobarData& aInfobarData = aPendingInfobars.back();
-                    AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
+                    bool bSkipTrackChanges = false;
+
+                    if (aInfobarData.msId == "trackchanges")
+                    {
+                        // only hidden, if Track Changes toolbar is not visible
+                        if (auto xLayoutManager = getLayoutManager(GetFrame()))
+                        {
+                            if ( xLayoutManager->getElement(CHANGES_STR).is() )
+                                bSkipTrackChanges = true;
+                        }
+                    }
+
+                    if ( !bSkipTrackChanges )
+                    {
+                        VclPtr<SfxInfoBarWindow> pInfoBar =
+                            AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
                                   aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
                                   aInfobarData.mbShowCloseButton);
+
+                        // add a button to show/hide Track Changes functions
+                        if ( pInfoBar && aInfobarData.msId == "trackchanges" )
+                        {
+                            weld::Button& rWhatsNewButton = pInfoBar->addButton();
+                            rWhatsNewButton.set_label(SfxResId(STR_TRACK_CHANGES_BUTTON));
+                            rWhatsNewButton.connect_clicked(LINK(this,
+                                                    SfxViewFrame, TrackChangesHandler));
+                        }
+                    }
+
                     aPendingInfobars.pop_back();
                 }
 
@@ -1557,6 +1607,26 @@ IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, weld::Button&, rButton, void)
 IMPL_LINK_NOARG(SfxViewFrame, SignDocumentHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_SIGNATURE);
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, TrackChangesHandler, weld::Button&, void)
+{
+    // enable Track Changes toolbar, if it is disabled.
+    // Otherwise disable the toolbar, and close the infobar
+    if (auto xLayoutManager = getLayoutManager(GetFrame()))
+    {
+        if (!xLayoutManager->getElement(CHANGES_STR).is())
+        {
+            xLayoutManager->createElement(CHANGES_STR);
+            xLayoutManager->showElement(CHANGES_STR);
+        }
+        else
+        {
+            xLayoutManager->hideElement(CHANGES_STR);
+            xLayoutManager->destroyElement(CHANGES_STR);
+            RemoveInfoBar(u"trackchanges");
+        }
+    }
 }
 
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
@@ -2871,24 +2941,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_TOGGLESTATUSBAR:
         {
-            css::uno::Reference< css::frame::XFrame > xFrame =
-                    GetFrame().GetFrameInterface();
-
-            Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-            Reference< css::frame::XLayoutManager > xLayoutManager;
-            if ( xPropSet.is() )
-            {
-                try
-                {
-                    Any aValue = xPropSet->getPropertyValue("LayoutManager");
-                    aValue >>= xLayoutManager;
-                }
-                catch ( Exception& )
-                {
-                }
-            }
-
-            if ( xLayoutManager.is() )
+            if ( auto xLayoutManager = getLayoutManager(GetFrame()) )
             {
                 static const OUStringLiteral aStatusbarResString( u"private:resource/statusbar/statusbar" );
                 // Evaluate parameter.
@@ -2924,23 +2977,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 WorkWindow* pWork = static_cast<WorkWindow*>( pTop->GetFrame().GetTopWindow_Impl() );
                 if ( pWork )
                 {
-                    css::uno::Reference< css::frame::XFrame > xFrame =
-                            GetFrame().GetFrameInterface();
-
-                    Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-                    Reference< css::frame::XLayoutManager > xLayoutManager;
-                    if ( xPropSet.is() )
-                    {
-                        try
-                        {
-                            Any aValue = xPropSet->getPropertyValue("LayoutManager");
-                            aValue >>= xLayoutManager;
-                        }
-                        catch ( Exception& )
-                        {
-                        }
-                    }
-
+                    Reference< css::frame::XLayoutManager > xLayoutManager = getLayoutManager(GetFrame());
                     bool bNewFullScreenMode = pItem ? pItem->GetValue() : !pWork->IsFullScreenMode();
                     if ( bNewFullScreenMode != pWork->IsFullScreenMode() )
                     {
