@@ -1521,7 +1521,6 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_CELL_CURSOR:
             case LOK_CALLBACK_CELL_FORMULA:
             case LOK_CALLBACK_CELL_ADDRESS:
-            case LOK_CALLBACK_CURSOR_VISIBLE:
             case LOK_CALLBACK_SET_PART:
             case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
             case LOK_CALLBACK_RULER_UPDATE:
