@@ -68,13 +68,15 @@ struct SC_DLLPUBLIC ScQueryEntry
     bool IsQueryByEmpty() const;
     void SetQueryByNonEmpty();
     bool IsQueryByNonEmpty() const;
-    const Item& GetQueryItem() const;
-    Item& GetQueryItem();
+    const Item& GetQueryItem() const { return GetQueryItemImpl(); }
+    Item& GetQueryItem() { return GetQueryItemImpl(); }
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );
     bool            operator==( const ScQueryEntry& r ) const;
 
 private:
+    Item& GetQueryItemImpl() const;
+
     /**
      * Stores all query items.  It must contain at least one item at all times
      * (for single equality match queries or comparative queries).  It may
