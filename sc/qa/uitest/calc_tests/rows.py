@@ -46,7 +46,7 @@ class CalcRows(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:RowHeight")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xCancel = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancel)
 
@@ -79,7 +79,7 @@ class CalcRows(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:RowHeight")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -87,7 +87,7 @@ class CalcRows(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:RowHeight")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -127,7 +127,7 @@ class CalcRows(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:RowHeight")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -214,7 +214,7 @@ class CalcRows(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:RowHeight")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -222,7 +222,7 @@ class CalcRows(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:RowHeight")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 

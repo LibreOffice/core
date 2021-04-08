@@ -46,7 +46,7 @@ class CalcColumns(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xCancel = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancel)
 
@@ -79,7 +79,7 @@ class CalcColumns(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -87,7 +87,7 @@ class CalcColumns(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -126,7 +126,7 @@ class CalcColumns(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -236,7 +236,7 @@ class CalcColumns(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -244,7 +244,7 @@ class CalcColumns(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.0003 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -252,7 +252,7 @@ class CalcColumns(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.0004 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -260,7 +260,7 @@ class CalcColumns(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -268,7 +268,7 @@ class CalcColumns(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.0003 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
@@ -276,7 +276,7 @@ class CalcColumns(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:ColumnWidth")
         xDialog = self.xUITest.getTopFocusWindow()
         xvalue = xDialog.getChild("value")
-        self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.00 cm")
+        self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.0004 cm")
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)
 
