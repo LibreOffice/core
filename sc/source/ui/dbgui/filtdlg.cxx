@@ -221,7 +221,6 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         ScQueryEntry& rEntry = theQueryData.GetEntry(i);
         if ( rEntry.bDoQuery )
         {
-            const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
             nCondPos = static_cast<size_t>(rEntry.eOp);
             nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
             if (rEntry.IsQueryByEmpty())
@@ -236,6 +235,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
             }
             else
             {
+                const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
                 OUString aQueryStr = rItem.maString.getString();
                 SetValString(aQueryStr, rItem, aValStr);
             }
