@@ -47,6 +47,9 @@
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/io/XTruncate.hpp>
+
 #include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -254,7 +257,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
     m_aEntryName = aNewName;
 
     // the linked document should not be switched
-    if ( !m_bIsLink )
+    if ( !m_bIsLinkURL )
     {
         uno::Reference< document::XStorageBasedDocument > xDoc( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
         if ( xDoc.is() )
@@ -369,10 +372,16 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 
     sal_Int32 nLen = 2;
     uno::Sequence< beans::PropertyValue > aArgs( nLen );
+
     aArgs[0].Name = "URL";
-    aArgs[0].Value <<= m_aLinkURL;
+    if(m_aLinkTempFile.is())
+        aArgs[0].Value <<= m_aLinkTempFile->getUri();
+    else
+        aArgs[0].Value <<= m_aLinkURL;
+
     aArgs[1].Name = "FilterName";
     aArgs[1].Value <<= m_aLinkFilterName;
+
     if ( m_bLinkHasPassword )
     {
         aArgs.realloc( ++nLen );
@@ -843,7 +852,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
 {
     uno::Reference< util::XCloseable > xResult;
 
-    SAL_WARN_IF( !m_bIsLink, "embeddedobj.common", "The object is not a linked one!" );
+    SAL_WARN_IF( !m_bIsLinkURL, "embeddedobj.common", "The object is not a linked one!" );
 
     uno::Sequence< beans::PropertyValue > aTempMediaDescr;
 
@@ -895,7 +904,12 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
     {
         aTempMediaDescr.realloc( 2 );
         aTempMediaDescr[0].Name = "URL";
-        aTempMediaDescr[0].Value <<= m_aLinkURL;
+
+        // tdf#141529 use URL of the linked TempFile if it exists
+        aTempMediaDescr[0].Value <<= m_aLinkTempFile.is()
+            ? m_aLinkTempFile->getUri()
+            : m_aLinkURL;
+
         aTempMediaDescr[1].Name = "FilterName";
         aTempMediaDescr[1].Value <<= m_aLinkFilterName;
     }
@@ -968,8 +982,8 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
     // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
-    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!" );
-    if ( m_bIsLink )
+    // OSL_ENSURE( !m_bIsLinkURL, "This method implementation must not be used for links!" );
+    if ( m_bIsLinkURL )
     {
         m_aEntryName = sEntName;
         return;
@@ -1147,8 +1161,8 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
     // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
-    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!" );
-    if ( m_bIsLink )
+    // OSL_ENSURE( !m_bIsLinkURL, "This method implementation must not be used for links!" );
+    if ( m_bIsLinkURL )
         return;
 
     OSL_ENSURE( m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!" );
@@ -1275,10 +1289,33 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
     // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
-    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!" );
-    if ( m_bIsLink )
+    // OSL_ENSURE( !m_bIsLinkURL, "This method implementation must not be used for links!" );
+    if ( m_bIsLinkURL )
     {
         m_aNewEntryName = sEntName;
+
+        if(m_aLinkTempFile.is() && m_bLinkTempFileChanged)
+        {
+            // tdf#141529 if we have a changed copy of the original OLE data we now
+            // need to write it back 'over' the original OLE data
+            uno::Reference < ucb::XSimpleFileAccess2 > xFileAccess(ucb::SimpleFileAccess::create( m_xContext ));
+            uno::Reference < io::XInputStream > xTempIn = m_aLinkTempFile->getInputStream();
+
+            // This is *needed* since OTempFileService calls OTempFileService::readBytes which
+            // ensures the SvStream mpStream gets/is opened, *but* also sets the mnCachedPos from
+            // OTempFileService which still points to the end-of-file (from write-cc'ing).
+            uno::Reference < io::XSeekable > xSeek( xTempIn, uno::UNO_QUERY_THROW );
+            xSeek->seek(0);
+
+            xFileAccess->writeFile(m_aLinkURL, xTempIn);
+
+            // Do *not* close input, that would remove the temporary file too early
+            // xTempIn->closeInput();
+
+            // reset flag m_bLinkTempFileChanged
+            m_bLinkTempFileChanged = false;
+        }
+
         return;
     }
 
@@ -1407,8 +1444,8 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
     // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
-    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!" );
-    if ( m_bIsLink )
+    // OSL_ENSURE( !m_bIsLinkURL, "This method implementation must not be used for links!" );
+    if ( m_bIsLinkURL )
     {
         if ( bUseNew )
             m_aEntryName = m_aNewEntryName;
@@ -1542,7 +1579,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
     if ( !m_xDocHolder->GetComponent().is() )
         throw uno::RuntimeException();
 
-    if ( m_bIsLink )
+    if ( m_bIsLinkURL )
     {
         // TODO: just store the document to its location
         uno::Reference< frame::XStorable > xStorable( m_xDocHolder->GetComponent(), uno::UNO_QUERY_THROW );
@@ -1650,7 +1687,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
                     "The object waits for saveCompleted() call!",
                     static_cast< ::cppu::OWeakObject* >(this) );
 
-    if ( m_bIsLink )
+    if ( m_bIsLinkURL )
     {
         // reload of the link
         OUString aOldLinkFilter = m_aLinkFilterName;
@@ -1719,7 +1756,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
         if ( prop.Name == "ReadOnly" )
             prop.Value >>= m_bReadOnly;
 
-    if ( bOldReadOnlyValue == m_bReadOnly || m_bIsLink )
+    if ( bOldReadOnlyValue == m_bReadOnly || m_bIsLinkURL )
         return;
 
     // close own storage
@@ -1751,7 +1788,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if (!m_bIsLink || m_nObjectState == -1)
+    if (!m_bIsLinkURL || m_nObjectState == -1)
     {
         // it must be a linked initialized object
         throw embed::WrongStateException(
@@ -1820,7 +1857,10 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     else if ( m_nObjectState == embed::EmbedStates::ACTIVE )
         m_xDocHolder->Show();
 
-    m_bIsLink = false;
+    // tdf#141529 reset all stuff involved in linked state, including
+    // the OLE content copied to the temp file
+    m_bIsLinkURL = false;
+    m_aLinkTempFile.clear();
     m_aLinkFilterName.clear();
     m_aLinkURL.clear();
 }
@@ -1832,7 +1872,7 @@ sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    return m_bIsLink;
+    return m_bIsLinkURL;
 }
 
 
@@ -1842,7 +1882,7 @@ OUString SAL_CALL OCommonEmbeddedObject::getLinkURL()
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( !m_bIsLink )
+    if ( !m_bIsLinkURL )
         throw embed::WrongStateException(
                     "The object is not a link object!",
                     static_cast< ::cppu::OWeakObject* >(this) );
