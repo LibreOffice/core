@@ -1434,7 +1434,14 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     // with SkBlendMode::kDifference(?) and surfaces wider than 1024 pixels, resulting
     // in drawing errors. Work that around by fetching the relevant part of the surface
     // and drawing using CPU.
-    bool intelHack = (isGPU() && getVendor() == DriverBlocklist::VendorIntel && !mXorMode);
+    bool rasterHack = (isGPU() && getVendor() == DriverBlocklist::VendorIntel && !mXorMode);
+#if defined LINUX
+    // With the chrome/m91 Skia version BackendTest::testDrawInvertTrackFrameWithRectangle()
+    // also has a problem with SkBlendMode::kDifference on AMD/Linux, leading to crashes or even
+    // driver instability. Also work around by drawing using CPU.
+    if (isGPU() && getVendor() == DriverBlocklist::VendorAMD && !mXorMode)
+        rasterHack = true;
+#endif
     SkPath aPath;
     addPolygonToPath(rPoly, aPath);
     aPath.setFillType(SkPathFillType::kEvenOdd);
@@ -1454,7 +1461,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
         aPaint.setPathEffect(SkDashPathEffect::Make(intervals, SK_ARRAY_COUNT(intervals), 0));
         aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
         aPaint.setBlendMode(SkBlendMode::kDifference);
-        if (!intelHack)
+        if (!rasterHack)
             getDrawCanvas()->drawPath(aPath, aPaint);
         else
         {
@@ -1505,7 +1512,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             aPaint.setShader(
                 aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat, SkSamplingOptions()));
         }
-        if (!intelHack)
+        if (!rasterHack)
             getDrawCanvas()->drawPath(aPath, aPaint);
         else
         {

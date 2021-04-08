@@ -22,23 +22,23 @@ index aba610eacf..792da4e9fb 100644
 +
  #endif
 diff --git a/src/core/SkM44.cpp b/src/core/SkM44.cpp
-index 248917423f..3d0bc00307 100644
+index 0cd138e6cc..ad7f7eca74 100644
 --- a/src/core/SkM44.cpp
 +++ b/src/core/SkM44.cpp
-@@ -283,6 +283,8 @@ SkM44 Sk3LookAt(const SkV3& eye, const SkV3& center, const SkV3& up) {
+@@ -283,6 +283,8 @@ SkM44 SkM44::LookAt(const SkV3& eye, const SkV3& center, const SkV3& up) {
      return m;
  }
  
 +#undef near
 +#undef far
- SkM44 Sk3Perspective(float near, float far, float angle) {
+ SkM44 SkM44::Perspective(float near, float far, float angle) {
      SkASSERT(far > near);
  
 diff --git a/src/gpu/gl/GrGLGpu.cpp b/src/gpu/gl/GrGLGpu.cpp
-index 76f69754c6..01ce4a1e2d 100644
+index afe3698f99..119ae41093 100644
 --- a/src/gpu/gl/GrGLGpu.cpp
 +++ b/src/gpu/gl/GrGLGpu.cpp
-@@ -3531,6 +3531,8 @@ void GrGLGpu::xferBarrier(GrRenderTarget* rt, GrXferBarrierType type) {
+@@ -3536,6 +3536,8 @@ void GrGLGpu::xferBarrier(GrRenderTarget* rt, GrXferBarrierType type) {
      }
  }
  
@@ -47,17 +47,6 @@ index 76f69754c6..01ce4a1e2d 100644
  void GrGLGpu::insertManualFramebufferBarrier() {
      SkASSERT(this->caps()->requiresManualFBBarrierAfterTessellatedStencilDraw());
      GL_CALL(MemoryBarrier(GR_GL_FRAMEBUFFER_BARRIER_BIT));
-diff --git a/src/gpu/text/GrTextBlobCache.h b/src/gpu/text/GrTextBlobCache.h
-index c973384081..8943198ddd 100644
---- a/src/gpu/text/GrTextBlobCache.h
-+++ b/src/gpu/text/GrTextBlobCache.h
-@@ -91,4 +91,6 @@ private:
-     SkMessageBus<PurgeBlobMessage>::Inbox fPurgeBlobInbox SK_GUARDED_BY(fSpinLock);
- };
- 
-+template<> SkMessageBus<GrTextBlobCache::PurgeBlobMessage>* SkMessageBus<GrTextBlobCache::PurgeBlobMessage>::Get();
-+
- #endif
 diff --git a/src/gpu/vk/GrVkSemaphore.cpp b/src/gpu/vk/GrVkSemaphore.cpp
 index 23bf656bf8..f926ebfdc2 100644
 --- a/src/gpu/vk/GrVkSemaphore.cpp
@@ -84,7 +73,7 @@ index af4909aaaf..825ec35c83 100644
  #include <d2d1.h>
  
 diff --git a/third_party/skcms/skcms.cc b/third_party/skcms/skcms.cc
-index 4f983439b9..f6fc53c91a 100644
+index 33e3514253..af9313a958 100644
 --- a/third_party/skcms/skcms.cc
 +++ b/third_party/skcms/skcms.cc
 @@ -130,7 +130,8 @@ static float minus_1_ulp(float x) {
@@ -97,7 +86,7 @@ index 4f983439b9..f6fc53c91a 100644
  struct TF_PQish  { float A,B,C,D,E,F; };
  struct TF_HLGish { float R,G,a,b,c,K_minus_1; };
  // We didn't originally support a scale factor K for HLG, and instead just stored 0 in
-@@ -2059,7 +2060,9 @@ typedef enum {
+@@ -2061,7 +2062,9 @@ typedef enum {
      Op_store_hhhh,
      Op_store_fff,
      Op_store_ffff,
