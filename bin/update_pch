@@ -1107,7 +1107,8 @@ def main():
                         return 0
 
     # Didn't update.
-    return 1
+    # Use exit code 2 to distinguish it from exit code 1 used e.g. when an exception occurs.
+    return 2
 
 if __name__ == '__main__':
     """ Process all the includes in a Module
