@@ -34,6 +34,24 @@
       "revId": "06958d3087263627dd899ac503e506c017ed7aca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ee81066_000e8280",
+        "filename": "sw/source/uibase/uiview/view.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-08T11:36:34Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "315b14af_75bb42a4",
+      "revId": "06958d3087263627dd899ac503e506c017ed7aca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
