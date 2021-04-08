@@ -334,7 +334,7 @@ void SfxObjectShell::CheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetWindow().GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::Ok, e.Message));
         xBox->run();
     }
@@ -353,7 +353,7 @@ void SfxObjectShell::CancelCheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetWindow().GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::Ok, e.Message));
         xBox->run();
     }
@@ -365,7 +365,7 @@ void SfxObjectShell::CheckIn( )
     {
         uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
         // Pop up dialog to ask for comment and major
-        SfxCheckinDialog checkinDlg(GetFrame()->GetWindow().GetFrameWeld());
+        SfxCheckinDialog checkinDlg(GetFrame()->GetFrameWeld());
         if (checkinDlg.run() == RET_OK)
         {
             xCmisDoc->checkIn(checkinDlg.IsMajor(), checkinDlg.GetComment());
@@ -376,7 +376,7 @@ void SfxObjectShell::CheckIn( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetWindow().GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::Ok, e.Message));
         xBox->run();
     }
@@ -391,7 +391,7 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( ) const
     }
     catch ( const uno::RuntimeException& e )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetWindow().GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::Ok, e.Message));
         xBox->run();
     }
@@ -475,7 +475,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         if (!pFrame)
             pFrame = SfxViewFrame::GetFirst(this);
         if (pFrame)
-            pDialogParent = pFrame->GetWindow().GetFrameWeld();
+            pDialogParent = pFrame->GetFrameWeld();
     }
 
     sal_uInt16 nId = rReq.GetSlot();

@@ -1538,7 +1538,7 @@ void FmXFormShell::ExecuteSearch_Lock()
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractFmSearchDialog> pDialog(
             pFact->CreateFmSearchDialog(
-                m_pShell->GetViewShell()->GetViewFrame()->GetWindow().GetFrameWeld(),
+                m_pShell->GetViewShell()->GetViewFrame()->GetFrameWeld(),
                 strInitialText, aContextNames, nInitialContext,
                 LINK(this, FmXFormShell, OnSearchContextRequest_Lock) ));
     pDialog->SetActiveField( strActiveField );
