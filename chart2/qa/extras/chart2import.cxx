@@ -119,6 +119,7 @@ public:
     void testAxisTitleRotationXLSX();
     void testAxisTitlePositionDOCX();
     void testCombinedChartAttachedAxisXLSX();
+    void testTdf140489MultiSeriesChartAxisXLSX();
 
     void testTdf90510(); // Pie chart label placement settings(XLS)
     void testTdf109858(); // Pie chart label placement settings(XLSX)
@@ -243,6 +244,7 @@ public:
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisTitlePositionDOCX);
     CPPUNIT_TEST(testCombinedChartAttachedAxisXLSX);
+    CPPUNIT_TEST(testTdf140489MultiSeriesChartAxisXLSX);
     CPPUNIT_TEST(testTdf90510);
     CPPUNIT_TEST(testTdf109858);
     CPPUNIT_TEST(testTdf130105);
@@ -1757,6 +1759,39 @@ void Chart2ImportTest::testCombinedChartAttachedAxisXLSX()
     aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
     CPPUNIT_ASSERT(aAny >>= nAxisIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAxisIndex);
+}
+
+void Chart2ImportTest::testTdf140489MultiSeriesChartAxisXLSX()
+{
+    load(u"/chart2/qa/extras/data/xlsx/", "tdf140489.xlsx");
+    Reference< chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    // First series
+    Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xSeries.is());
+
+    Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
+    sal_Int32 nAxisIndex = -1;
+    uno::Any aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+    CPPUNIT_ASSERT(aAny >>= nAxisIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAxisIndex);
+
+    // Second series
+    xSeries = getDataSeriesFromDoc(xChartDoc, 0, 1);
+    CPPUNIT_ASSERT(xSeries.is());
+
+    xPropSet.set(xSeries, uno::UNO_QUERY_THROW);
+    aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+    CPPUNIT_ASSERT(aAny >>= nAxisIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAxisIndex);
+
+    // Third series
+    xSeries = getDataSeriesFromDoc(xChartDoc, 0, 2);
+    CPPUNIT_ASSERT(xSeries.is());
+
+    xPropSet.set(xSeries, uno::UNO_QUERY_THROW);
+    aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+    CPPUNIT_ASSERT(aAny >>= nAxisIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nAxisIndex);
 }
 
 void Chart2ImportTest::testInternalDataProvider() {
