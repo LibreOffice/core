@@ -58,6 +58,11 @@ for x in $headers; do
         libname=`echo $header | sed -e s/.*precompiled_// -e s/\.hxx//`
 
         ./bin/update_pch "$module" "$libname"
+        exitcode=$?
+        if test $exitcode -ne 0 -a $exitcode -ne 2; then
+            echo Failed.
+            exit 1
+        fi
     fi
 done
 
