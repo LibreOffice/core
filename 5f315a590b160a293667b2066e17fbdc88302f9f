@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0fc8acd5_3c3d5b4b",
+        "filename": "sc/source/ui/unoobj/nameuno.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-08T12:46:53Z",
+      "side": 1,
+      "message": "This pNames becomes used in only one of the possible branches. Before C++17, you only could use braces inside the case if you wanted to declare variable in that case; but now you can optionally do this:\n\n    if (ScRangeName* pNames \u003d GetRangeName_Impl();\n        pNames \u0026\u0026 !pNames-\u003efindByUpperName(ScGlobal::getCharClassPtr()-\u003euppercase(aName)))\n\nand it will be only available inside the \u0027if\u0027\n\n(please note that I don\u0027t mean you need to do this, just mentioning in case it could be interesting)",
+      "range": {
+        "startLine": 490,
+        "startChar": 8,
+        "endLine": 490,
+        "endChar": 50
+      },
+      "revId": "5f315a590b160a293667b2066e17fbdc88302f9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
