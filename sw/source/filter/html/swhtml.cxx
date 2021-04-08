@@ -286,7 +286,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_nContinue( 0 ),
 #endif
     m_eParaAdjust( SvxAdjust::End ),
-    m_bDocInitalized( false ),
+    m_bDocInitialized( false ),
     m_bSetModEnabled( false ),
     m_bInFloatingFrame( false ),
     m_bInField( false ),
@@ -954,8 +954,8 @@ void SwHTMLParser::Notify(const SfxHint& rHint)
 
 void SwHTMLParser::DocumentDetected()
 {
-    OSL_ENSURE( !m_bDocInitalized, "DocumentDetected called multiple times" );
-    m_bDocInitalized = true;
+    OSL_ENSURE( !m_bDocInitialized, "DocumentDetected called multiple times" );
+    m_bDocInitialized = true;
     if( IsNewDoc() )
     {
         if( IsInHeader() )
@@ -1073,7 +1073,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     // Find out what type of document it is if we don't know already.
     // For Controls this has to be finished before the control is inserted
     // because for inserting a View is needed.
-    if( !m_bDocInitalized )
+    if( !m_bDocInitialized )
         DocumentDetected();
 
     bool bGetIDOption = false, bInsertUnknown = false;
@@ -1253,7 +1253,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             // (but surely if we are not in the header section) fdo#36080 fdo#34666
             if (!aToken.isEmpty() && !IsInHeader() )
             {
-                if( !m_bDocInitalized )
+                if( !m_bDocInitialized )
                     DocumentDetected();
                 m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aToken );
 
@@ -1524,7 +1524,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
         if( !aToken.isEmpty() )
         {
-            if( !m_bDocInitalized )
+            if( !m_bDocInitialized )
                 DocumentDetected();
 
             if (!m_aEmbeds.empty())

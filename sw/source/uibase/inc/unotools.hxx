@@ -62,7 +62,7 @@ class SW_DLLPUBLIC SwOneExampleFrame : public weld::CustomWidgetController
 
 public:
     SwOneExampleFrame(sal_uInt32 nStyleFlags,
-                    const Link<SwOneExampleFrame&,void>* pInitalizedLink,
+                    const Link<SwOneExampleFrame&,void>* pInitializedLink,
                     const OUString* pURL = nullptr);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;

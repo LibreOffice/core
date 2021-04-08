@@ -1803,8 +1803,8 @@ bool GeometryHandler::isDefaultFunction( const OUString& _sQuotedFunction
         {
             if ( !_xFunctionsSupplier.is() || _xFunctionsSupplier == aFind.first->second.second )
             {
-                const beans::Optional< OUString> aInitalFormula = aFind.first->second.first->getInitialFormula();
-                if ( aInitalFormula.IsPresent )
+                const beans::Optional< OUString> aInitialFormula = aFind.first->second.first->getInitialFormula();
+                if ( aInitialFormula.IsPresent )
                 {
                     OUString sDefaultFunctionName;
                     bDefaultFunction = impl_isDefaultFunction_nothrow(aFind.first->second.first,_rDataField,sDefaultFunctionName);
@@ -2052,8 +2052,8 @@ bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunct
     ::std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(_sQuotedFunctionName);
     while ( aFind.first != aFind.second )
     {
-        const beans::Optional< OUString> aInitalFormula = aFind.first->second.first->getInitialFormula();
-        if ( aInitalFormula.IsPresent )
+        const beans::Optional< OUString> aInitialFormula = aFind.first->second.first->getInitialFormula();
+        if ( aInitialFormula.IsPresent )
         {
             const OUString sFormula( aFind.first->second.first->getFormula() );
             i18nutil::SearchOptions2 aSearchOptions;
