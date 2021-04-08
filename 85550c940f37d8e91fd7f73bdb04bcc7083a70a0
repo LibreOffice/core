@@ -70,6 +70,24 @@
       "revId": "85550c940f37d8e91fd7f73bdb04bcc7083a70a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3039df4e_e60cdce8",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-04-08T11:52:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a1de41a_c6f7698b",
+      "revId": "85550c940f37d8e91fd7f73bdb04bcc7083a70a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
