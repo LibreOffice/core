@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:14:01 using:
+ Generated on 2021-04-08 13:50:51 using:
  ./bin/update_pch lotuswordpro lwpft --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -45,13 +45,14 @@
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/endian.h>
-#include <osl/file.h>
 #include <osl/file.hxx>
+#include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <osl/time.h>
+#include <rtl/alloc.h>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
@@ -69,9 +70,11 @@
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/cppuhelperdllapi.h>
+#include <cppuhelper/implbase.hxx>
 #include <o3tl/numeric.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>

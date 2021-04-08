@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:12:11 using:
+ Generated on 2021-04-08 13:55:35 using:
  ./bin/update_pch configmgr configmgr --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <cassert>
+#include <chrono>
 #include <cstddef>
 #include <limits>
 #include <new>
