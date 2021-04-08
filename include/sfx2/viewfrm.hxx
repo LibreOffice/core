@@ -30,7 +30,10 @@
 #include <svl/poolitem.hxx>
 #include <vcl/svapp.hxx>
 
-namespace weld { class Button; }
+namespace weld {
+    class Button;
+    class Window;
+}
 class SvBorder;
 class SfxDispatcher;
 class SfxBindings;
@@ -101,6 +104,7 @@ public:
     SfxBindings&            GetBindings() { return *m_pBindings; }
     const SfxBindings&      GetBindings() const  { return *m_pBindings; }
     vcl::Window&            GetWindow() const;
+    weld::Window*           GetFrameWeld() const;
 
     SfxProgress*            GetProgress() const;
 

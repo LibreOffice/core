@@ -795,8 +795,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         }
         else
         {
-            vcl::Window& rTmpWindow = GetViewFrame()->GetWindow();
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(rTmpWindow.GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewFrame()->GetFrameWeld(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       SwResId(STR_ERR_SRCSTREAM)));
             xBox->run();
