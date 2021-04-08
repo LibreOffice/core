@@ -632,6 +632,14 @@ class LOKitTileProvider implements TileProvider {
     }
 
     /**
+     * @see TileProvider#isDrawing()
+     */
+    @Override
+    public boolean isDrawing() {
+        return mDocument != null && mDocument.getDocumentType() == Document.DOCTYPE_DRAWING;
+    }
+
+    /**
      * @see TileProvider#isTextDocument()
      */
     @Override

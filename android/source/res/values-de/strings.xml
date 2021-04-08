@@ -48,6 +48,7 @@
     <string name="action_strikeout">Durchgestrichen</string>
     <string name="action_keyboard">Tastatur anzeigen</string>
     <string name="action_save">Speichern</string>
+    <string name="action_save_as">Speichern unter...</string>
     <string name="action_fromat">Format anwenden</string>
     <string name="action_search">Suchen</string>
     <string name="action_UNO_commands">UNO-Kommando senden</string>

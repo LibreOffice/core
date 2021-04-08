@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
@@ -62,6 +63,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private static final String ENABLE_EXPERIMENTAL_PREFS_KEY = "ENABLE_EXPERIMENTAL";
     private static final String ASSETS_EXTRACTED_PREFS_KEY = "ASSETS_EXTRACTED";
     private static final String ENABLE_DEVELOPER_PREFS_KEY = "ENABLE_DEVELOPER";
+    private static final int REQUEST_CODE_SAVEAS = 12345;
 
     //TODO "public static" is a temporary workaround
     public static LOKitThread loKitThread;
@@ -337,6 +339,56 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         Toast.makeText(this, R.string.message_saving, Toast.LENGTH_SHORT).show();
         // local save
         LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND_NOTIFY, ".uno:Save", true));
+    }
+
+    /**
+     * Open file chooser and save the document to the URI
+     * selected there.
+     */
+    public void saveDocumentAs() {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        String mimeType = getODFMimeTypeForDocument();
+        intent.setType(mimeType);
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, mDocumentUri);
+
+        startActivityForResult(intent, REQUEST_CODE_SAVEAS);
+    }
+
+    /**
+     * Saves the document under the given URI using ODF format
+     * and uses that URI from now on for all operations.
+     * @param newUri URI to save the document and use from now on.
+     */
+    private void saveDocumentAs(Uri newUri) {
+        mDocumentUri = newUri;
+        // save in ODF format
+        mTileProvider.saveDocumentAs(mTempFile.getPath(), true);
+        saveFileToOriginalSource();
+
+        String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), mDocumentUri);
+        toolbarTop.setTitle(displayName);
+    }
+
+    /**
+     * Returns the ODF MIME type that can be used for the current document,
+     * regardless of whether the document is an ODF Document or not
+     * (e.g. returns FileUtilities.MIMETYPE_OPENDOCUMENT_TEXT for a DOCX file).
+     * @return MIME type, or empty string, if no appropriate MIME type could be found.
+     */
+    private String getODFMimeTypeForDocument() {
+        if (mTileProvider.isTextDocument())
+            return FileUtilities.MIMETYPE_OPENDOCUMENT_TEXT;
+        else if (mTileProvider.isSpreadsheet())
+            return FileUtilities.MIMETYPE_OPENDOCUMENT_SPREADSHEET;
+        else if (mTileProvider.isPresentation())
+            return FileUtilities.MIMETYPE_OPENDOCUMENT_PRESENTATION;
+        else if (mTileProvider.isDrawing())
+            return FileUtilities.MIMETYPE_OPENDOCUMENT_GRAPHICS;
+        else {
+            Log.w(LOGTAG, "Cannot determine MIME type to use.");
+            return "";
+        }
     }
 
     public void saveFileToOriginalSource() {
@@ -951,8 +1003,13 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mFormattingController.handleActivityResult(requestCode, resultCode, data);
-        hideBottomToolbar();
+        if (requestCode == REQUEST_CODE_SAVEAS && resultCode == RESULT_OK) {
+            final Uri fileUri = data.getData();
+            saveDocumentAs(fileUri);
+        } else {
+            mFormattingController.handleActivityResult(requestCode, resultCode, data);
+            hideBottomToolbar();
+        }
     }
 }
 
