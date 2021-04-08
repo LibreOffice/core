@@ -16,6 +16,24 @@
       "revId": "85550c940f37d8e91fd7f73bdb04bcc7083a70a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a96b49a_53b8f469",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-04-08T09:44:16Z",
+      "side": 1,
+      "message": "Ok, any suggestion how name it?\nosl_getLocalHostnameNoFQDN sounds a bit clumsy.",
+      "parentUuid": "0a8c031d_c0814e9b",
+      "revId": "85550c940f37d8e91fd7f73bdb04bcc7083a70a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
