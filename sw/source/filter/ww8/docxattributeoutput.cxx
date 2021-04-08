@@ -6847,6 +6847,10 @@ static OString lcl_ConvertNumberingType(sal_Int16 nNumberingType, const SfxItemS
         case style::NumberingType::CHARS_ARABIC_ABJAD: aType="arabicAbjad"; break;
         case style::NumberingType::CHARS_THAI: aType="thaiLetters"; break;
         case style::NumberingType::CHARS_PERSIAN: aType="hindiVowels"; break;
+        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_RU:
+        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_RU: aType = "russianUpper"; break;
+        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU:
+        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_RU: aType = "russianLower"; break;
         case style::NumberingType::TEXT_NUMBER: aType="ordinal"; break;
         case style::NumberingType::TEXT_CARDINAL: aType="cardinalText"; break;
         case style::NumberingType::TEXT_ORDINAL: aType="ordinalText"; break;
@@ -6881,10 +6885,6 @@ static OString lcl_ConvertNumberingType(sal_Int16 nNumberingType, const SfxItemS
         case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_BG:
         case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_BG:
         case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_BG:
-        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_RU:
-        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU:
-        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_RU:
-        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_RU:
         case style::NumberingType::CHARS_MYANMAR:
         case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_SR:
         case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_SR:
