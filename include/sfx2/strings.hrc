@@ -292,6 +292,8 @@
 #define STR_SIGNATURE_NOTVALIDATED_PARTIAL_OK   NC_("STR_SIGNATURE_NOTVALIDATED_PARTIAL_OK", "The certificate could not be validated and the document is only partially signed.")
 #define STR_SIGNATURE_OK                        NC_("STR_SIGNATURE_OK", "This document is digitally signed and the signature is valid.")
 #define STR_SIGNATURE_SHOW                      NC_("STR_SIGNATURE_SHOW", "Show Signatures")
+#define STR_TRACK_CHANGES_BUTTON                NC_("STR_TRACK_CHANGES_BUTTON", "Show Toolbar")
+#define STR_TRACK_CHANGES_BUTTON_HIDE           NC_("STR_TRACK_CHANGES_BUTTON_HIDE", "Hide Toolbar")
 
 #define STR_CLOSE_PANE                          NC_("STR_CLOSE_PANE", "Close Pane")
 
