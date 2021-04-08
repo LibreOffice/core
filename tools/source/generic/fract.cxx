@@ -62,7 +62,8 @@ Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mnNumerator(nNum), mnDeno
         SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' invalid fraction created" );
         return;
     }
-    if (nDen == -1 && nNum == std::numeric_limits<sal_Int32>::min())
+    if ((nDen == -1 && nNum == std::numeric_limits<sal_Int32>::min()) ||
+        (nNum == -1 && nDen == std::numeric_limits<sal_Int32>::min()))
     {
         mbValid = false;
         SAL_WARN("tools.fraction", "'Fraction(" << nNum << "," << nDen << ")' invalid fraction created");
