@@ -276,8 +276,8 @@ void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >
 {
     osl::MutexGuard aLock( m_aMutex );
 
-    bool bInitalized( m_bInitialized );
-    if ( !bInitalized )
+    bool bInitialized( m_bInitialized );
+    if ( !bInitialized )
     {
         svt::PopupMenuControllerBase::initialize(aArguments);
 

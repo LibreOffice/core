@@ -432,7 +432,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
 
     bool m_bOldIsHTMLMode : 1;    // Was it a HTML document?
 
-    bool m_bDocInitalized : 1;    // document resp. shell was initialize
+    bool m_bDocInitialized : 1;   // document resp. shell was initialize
                                   // flag to prevent double init via recursion
     bool m_bViewCreated : 1;      // the view was already created (asynchronous)
     bool m_bSetModEnabled : 1;
