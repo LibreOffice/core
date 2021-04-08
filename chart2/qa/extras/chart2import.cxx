@@ -50,6 +50,7 @@ public:
     void testDOCChartSeries();
     void testDOCXChartSeries();
     void testDOCXChartEmptySeries();
+    void testTdf81396();
     void testDOCXChartValuesSize();
     void testPPTXChartSeries();
     void testPPTXSparseChartSeries();
@@ -185,6 +186,7 @@ public:
     CPPUNIT_TEST(testDOCChartSeries);
     CPPUNIT_TEST(testDOCXChartSeries);
     CPPUNIT_TEST(testDOCXChartEmptySeries);
+    CPPUNIT_TEST(testTdf81396);
     CPPUNIT_TEST(testDOCXChartValuesSize);
     CPPUNIT_TEST(testPPTChartSeries);
     CPPUNIT_TEST(testPPTXChartSeries);
@@ -541,6 +543,23 @@ void Chart2ImportTest::testDOCXChartEmptySeries()
     //test the third series (empty) values
     CPPUNIT_ASSERT(std::isnan(aValues[2][0]));
     CPPUNIT_ASSERT(std::isnan(aValues[2][1]));
+}
+
+void Chart2ImportTest::testTdf81396()
+{
+    load(u"/chart2/qa/extras/data/xlsx/", "tdf81396.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+                                               UNO_QUERY_THROW);
+
+    Reference<chart2::XChartDocument> xChartDoc2(xChartDoc, UNO_QUERY_THROW);
+    Reference<chart2::XChartType> xChartType(getChartTypeFromDoc(xChartDoc2, 0), UNO_SET_THROW);
+    std::vector aDataSeriesYValues = getDataSeriesYValuesFromChartType(xChartType);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aDataSeriesYValues.size());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 105.210801910481
+    // - Actual  : nan
+    CPPUNIT_ASSERT_EQUAL(105.210801910481, aDataSeriesYValues[0][0]);
 }
 
 void Chart2ImportTest::testDOCXChartValuesSize()
