@@ -404,6 +404,10 @@
 #define STR_HYPH_TITLE                          NC_("STR_HYPH_TITLE", "Hyphenation")
 #define STR_HYPH_MISSING                        NC_("STR_HYPH_MISSING", "Missing hyphenation data")
 #define STR_HYPH_MISSING_DETAIL                 NC_("STR_HYPH_MISSING", "Please install the hyphenation package for locale “%1”.")
+#define STR_HIDDEN_CHANGES                      NC_("STR_HIDDEN_CHANGES", "Track Changes")
+#define STR_HIDDEN_CHANGES_DETAIL               NC_("STR_HIDDEN_CHANGES_DETAIL", "Document contains tracked changes and recording is enabled.")
+#define STR_HIDDEN_CHANGES_DETAIL2              NC_("STR_HIDDEN_CHANGES_DETAIL2", "Recording of changes is enabled.")
+#define STR_HIDDEN_CHANGES_DETAIL3              NC_("STR_HIDDEN_CHANGES_DETAIL3", "Document contains tracked changes.")
 
 // Undo
 #define STR_CANT_UNDO                           NC_("STR_CANT_UNDO", "not possible")

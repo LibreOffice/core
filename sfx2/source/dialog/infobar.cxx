@@ -434,6 +434,8 @@ bool SfxInfoBarContainerWindow::isInfobarEnabled(std::u16string_view sId)
         return officecfg::Office::UI::Infobar::Enabled::HyphenationMissing::get();
     if (sId == u"whatsnew")
         return officecfg::Office::UI::Infobar::Enabled::WhatsNew::get();
+    if (sId == u"hiddentrackchanges")
+        return officecfg::Office::UI::Infobar::Enabled::HiddenTrackChanges::get();
 
     return true;
 }

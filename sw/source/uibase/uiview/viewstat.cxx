@@ -49,6 +49,9 @@
 #include <redline.hxx>
 #include <rootfrm.hxx>
 #include <docary.hxx>
+#include <sfx2/infobar.hxx>
+#include <docsh.hxx>
+#include <strings.hrc>
 
 #include <cmdid.h>
 #include <IDocumentRedlineAccess.hxx>
@@ -324,13 +327,27 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_REDLINE_ON:
                 rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording() ) );
-                // switch on the disabled Tracked Changes toolbar if the view is
-                // new (e.g. on load), and if recording of changes is enabled
-                // or if it contains tracked changes.
-                if ( m_bForceChangesToolbar && ( GetDocShell()->IsChangeRecording() ||
-                    m_pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size() ) )
+                // When the view is new (e.g. on load), show the Hidden Track Changes infobar
+                // if Show Changes is disabled, but recording of changes is enabled
+                // or hidden tracked changes are there already in the document.
+                // Note: the infobar won't be shown, if the Track Changes toolbar is already
+                // enabled, see in sfx2.
+                if ( m_bForceChangesToolbar && m_pWrtShell->GetLayout()->IsHideRedlines() )
                 {
-                    ShowUIElement("private:resource/toolbar/changes");
+                    bool isRecording = GetDocShell()->IsChangeRecording();
+                    bool hasRecorded =
+                        m_pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size();
+                    if ( isRecording || hasRecorded )
+                    {
+                        GetDocShell()->AppendInfoBarWhenReady(
+                            "hiddentrackchanges", SwResId(STR_HIDDEN_CHANGES),
+                            SwResId( (isRecording && hasRecorded)
+                                    ? STR_HIDDEN_CHANGES_DETAIL
+                                    : isRecording
+                                        ? STR_HIDDEN_CHANGES_DETAIL2
+                                        : STR_HIDDEN_CHANGES_DETAIL3 ),
+                            InfobarType::INFO);
+                    }
                 }
                 m_bForceChangesToolbar = false;
             break;
