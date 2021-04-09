@@ -16,6 +16,29 @@
       "revId": "cb8a0460f14fc75a1e2ece01534e7ce930270ecc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5081f24f_56146c89",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-09T15:20:42Z",
+      "side": 1,
+      "message": "This likely needs to be (maxVal + 1)",
+      "range": {
+        "startLine": 1397,
+        "startChar": 131,
+        "endLine": 1397,
+        "endChar": 137
+      },
+      "revId": "cb8a0460f14fc75a1e2ece01534e7ce930270ecc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

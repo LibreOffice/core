@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9da8d939_e6e93a91",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-09T15:20:42Z",
+      "side": 1,
+      "message": "Please no unrelated newlines (likely a leftover from removing previously added includes)",
+      "revId": "48712f5f2e6796b74eb4e06f5cfcab0aac454d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
