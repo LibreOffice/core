@@ -10,6 +10,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper import guarded
 #test FontWorks dialog
 class fontWorksDialog(UITestCase):
 
@@ -18,26 +19,21 @@ class fontWorksDialog(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        self.ui_test.execute_dialog_through_command(".uno:FontworkGalleryFloater")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with guarded.execute_dialog_through_command(self, ".uno:FontworkGalleryFloater", close_button="cancel") as xDialog:
+            FontWorkSelector = xDialog.getChild("ctlFavoriteswin")
+            # Select element with id (3)
+            element3 = FontWorkSelector.getChild("2")
+            element3.executeAction("SELECT", mkPropertyValues({}))
+            print(get_state_as_dict(FontWorkSelector))
+            self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "2")
+            self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "3")
+            self.assertEqual(get_state_as_dict(FontWorkSelector)["VisibleCount"], "36")
 
-        FontWorkSelector = xDialog.getChild("ctlFavoriteswin")
-        # Select element with id (3)
-        element3 = FontWorkSelector.getChild("2")
-        element3.executeAction("SELECT", mkPropertyValues({}))
-        print(get_state_as_dict(FontWorkSelector))
-        self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "2")
-        self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "3")
-        self.assertEqual(get_state_as_dict(FontWorkSelector)["VisibleCount"], "36")
-
-        # Select element with id (7)
-        element7 = FontWorkSelector.getChild("6")
-        element7.executeAction("SELECT", mkPropertyValues({}))
-        self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "6")
-        self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "7")
-
-        xCloseBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
+            # Select element with id (7)
+            element7 = FontWorkSelector.getChild("6")
+            element7.executeAction("SELECT", mkPropertyValues({}))
+            self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "6")
+            self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "7")
 
         self.ui_test.close_doc()
 
