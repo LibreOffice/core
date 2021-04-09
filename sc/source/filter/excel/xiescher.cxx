@@ -1345,11 +1345,12 @@ void XclImpPolygonObj::ReadCoordList( XclImpStream& rStrm )
     if( (rStrm.GetNextRecId() == EXC_ID_COORDLIST) && rStrm.StartNextRecord() )
     {
         OSL_ENSURE( rStrm.GetRecLeft() / 4 == mnPointCount, "XclImpPolygonObj::ReadCoordList - wrong polygon point count" );
-        while( rStrm.GetRecLeft() >= 4 )
+        while (true)
         {
-            sal_uInt16 nX, nY;
-            nX = rStrm.ReaduInt16();
-            nY = rStrm.ReaduInt16();
+            if (rStrm.GetRecLeft() < 4)
+                break;
+            sal_uInt16 nX = rStrm.ReaduInt16();
+            sal_uInt16 nY = rStrm.ReaduInt16();
             maCoords.emplace_back( nX, nY );
         }
     }
