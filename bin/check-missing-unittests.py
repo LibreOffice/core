@@ -188,8 +188,9 @@ def main(ignoredBugs):
                         priority = bug['priority']
                         break
 
-                #Ignore open bugs and performance bugs
-                if status and not isOpen(status) and 'perf' not in keywords:
+                #Ignore open bugs, performance bugs and accessibility bugs
+                if status and not isOpen(status) and 'perf' not in keywords \
+                        and 'accessibility' not in keywords:
                     print(
                         "# {} - [{}] {} - [https://bugs.documentfoundation.org/show_bug.cgi?id={} tdf#{}]".format(
                         info[0], priority.upper(), info[1], bugId, bugId))
