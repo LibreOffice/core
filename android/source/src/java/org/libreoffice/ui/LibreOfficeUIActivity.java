@@ -257,7 +257,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         if (requestCode == REQUEST_CODE_OPEN_FILECHOOSER && resultCode == RESULT_OK) {
             final Uri fileUri = data.getData();
             openDocument(fileUri);
-        } else if (requestCode == REQUEST_CODE_CREATE_NEW_DOCUMENT) {
+        } else if (requestCode == REQUEST_CODE_CREATE_NEW_DOCUMENT && resultCode == RESULT_OK) {
             // "forward" to LibreOfficeMainActivity to create + open the file
             final Uri fileUri = data.getData();
             loadNewDocument(newDocType, fileUri);
