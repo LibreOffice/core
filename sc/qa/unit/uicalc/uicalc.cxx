@@ -12,6 +12,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <document.hxx>
@@ -176,6 +177,28 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf83901)
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 1, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117985)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues
+        = comphelper::InitPropertySequence({ { "ToPoint", uno::makeAny(OUString("A66054")) } });
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+
+    // Add a new comment
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Comment")) } });
+    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on A66054",
+                           pDoc->HasNote(ScAddress(0, 66053, 0)));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
