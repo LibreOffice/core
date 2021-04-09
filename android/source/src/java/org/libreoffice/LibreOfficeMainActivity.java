@@ -44,6 +44,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
@@ -368,21 +369,15 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         if (isReadOnlyMode() || mInputFile == null || mDocumentUri == null || !mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT))
             return;
 
-        FileInputStream inputStream = null;
-        OutputStream outputStream = null;
-
+        boolean copyOK = false;
         try {
-            inputStream = new FileInputStream(mInputFile);
-            // OutputStream for the actual (original) location
-            outputStream = getContentResolver().openOutputStream(mDocumentUri);
-
-            byte[] buffer = new byte[4096];
-            int readBytes = inputStream.read(buffer);
-            while (readBytes != -1) {
-                outputStream.write(buffer, 0, readBytes);
-                readBytes = inputStream.read(buffer);
-            }
-
+            final FileInputStream inputStream = new FileInputStream(mInputFile);
+            final OutputStream outputStream = getContentResolver().openOutputStream(mDocumentUri);
+            copyOK = copyStream(inputStream, outputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (copyOK) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -391,7 +386,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 }
             });
             setDocumentChanged(false);
-        } catch (Exception e) {
+        } else {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -399,16 +394,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                         Toast.LENGTH_SHORT).show();
                 }
             });
-            e.printStackTrace();
-        } finally {
-            try {
-                if (inputStream != null)
-                    inputStream.close();
-                if (outputStream != null)
-                    outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -946,6 +931,33 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         }
     }
 
+    /**
+     * Copies everything from the given input stream to the given output stream
+     * and closes both streams in the end.
+     * @return Whether copy operation was successful.
+     */
+    private boolean copyStream(InputStream inputStream, OutputStream outputStream) {
+        try {
+            byte[] buffer = new byte[4096];
+            int readBytes = inputStream.read(buffer);
+            while (readBytes != -1) {
+                outputStream.write(buffer, 0, readBytes);
+                readBytes = inputStream.read(buffer);
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                inputStream.close();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void showCustomStatusMessage(String message){
         Snackbar.make(mDrawerLayout, message, Snackbar.LENGTH_LONG).show();
     }
@@ -990,7 +1002,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
