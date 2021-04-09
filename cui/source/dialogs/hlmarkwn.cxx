@@ -39,6 +39,8 @@
 #include <hltpbase.hxx>
 #include <hlmarkwn_def.hxx>
 
+#include <stack>
+
 using namespace ::com::sun::star;
 
 namespace {

@@ -6508,7 +6508,6 @@ include/vcl/vclptr.hxx
 include/vcl/vclreferencebase.hxx
 include/vcl/vectorgraphicdata.hxx
 include/vcl/virdev.hxx
-include/vcl/waitobj.hxx
 include/vcl/wall.hxx
 include/vcl/window.hxx
 include/vcl/wizardmachine.hxx

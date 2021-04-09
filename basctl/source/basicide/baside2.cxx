@@ -55,7 +55,7 @@
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
 #include <tools/debug.hxx>
-#include <vcl/waitobj.hxx>
+#include <vcl/locktoplevels.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
 #include <vcl/print.hxx>

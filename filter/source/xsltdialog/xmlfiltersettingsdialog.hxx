@@ -21,7 +21,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/weld.hxx>
-#include <vcl/waitobj.hxx>
+#include <vcl/locktoplevels.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include "xmlfiltercommon.hxx"

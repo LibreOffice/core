@@ -47,7 +47,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
-#include <vcl/waitobj.hxx>
+#include <vcl/locktoplevels.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/mnemonic.hxx>
@@ -64,7 +64,9 @@
 #include <tools/json_writer.hxx>
 
 #include <iostream>
+#include <stack>
 #include <utility>
+#include <vector>
 
 static OString ImplGetDialogText( Dialog* pDialog )
 {
@@ -1607,6 +1609,16 @@ void Dialog::Command(const CommandEvent& rCEvt)
     SystemWindow::Command(rCEvt);
 }
 
+struct TopLevelWindowLockerImpl
+{
+    std::stack<std::vector<VclPtr<vcl::Window>>> m_aBusyStack;
+};
+
+TopLevelWindowLocker::TopLevelWindowLocker()
+    : m_xImpl(std::make_unique<TopLevelWindowLockerImpl>())
+{
+}
+
 void TopLevelWindowLocker::incBusy(const weld::Widget* pIgnore)
 {
     // lock any toplevel windows from being closed until busy is over
@@ -1632,20 +1644,29 @@ void TopLevelWindowLocker::incBusy(const weld::Widget* pIgnore)
         a->IncModalCount();
         a->ImplGetFrame()->NotifyModalHierarchy(true);
     }
-    m_aBusyStack.push(aTopLevels);
+    m_xImpl->m_aBusyStack.push(aTopLevels);
 }
 
 void TopLevelWindowLocker::decBusy()
 {
     // unlock locked toplevel windows from being closed now busy is over
-    for (auto& a : m_aBusyStack.top())
+    for (auto& a : m_xImpl->m_aBusyStack.top())
     {
         if (a->IsDisposed())
             continue;
         a->DecModalCount();
         a->ImplGetFrame()->NotifyModalHierarchy(false);
     }
-    m_aBusyStack.pop();
+    m_xImpl->m_aBusyStack.pop();
+}
+
+bool TopLevelWindowLocker::isBusy() const
+{
+    return !m_xImpl->m_aBusyStack.empty();
+}
+
+TopLevelWindowLocker::~TopLevelWindowLocker()
+{
 }
 
 void Dialog::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)

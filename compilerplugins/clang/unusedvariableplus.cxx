@@ -438,7 +438,6 @@ public:
             "webdav_ucp::NeonHeadRequest",
             "webdav_ucp::NeonPropFindRequest",
             "webdav_ucp::NeonUri",
-            "WaitObject",
             "weld::WaitObject",
             "writerfilter::ooxml::(anonymous namespace)::StatusIndicatorGuard",
             "WriterSpecificAutoFormatBlock",

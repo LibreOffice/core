@@ -60,7 +60,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/waitobj.hxx>
+#include <vcl/locktoplevels.hxx>
 #include <vcl/weld.hxx>
 #include <openuriexternally.hxx>
 

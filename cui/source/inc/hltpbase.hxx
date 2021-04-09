@@ -23,7 +23,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svtools/inettbc.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/waitobj.hxx>
+#include <vcl/locktoplevels.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/hlnkitem.hxx>

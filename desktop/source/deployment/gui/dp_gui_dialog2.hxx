@@ -21,7 +21,7 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/waitobj.hxx>
+#include <vcl/locktoplevels.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
@@ -36,13 +36,13 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace dp_gui {
+struct ImplSVEvent;
 
+namespace dp_gui {
 
 class ExtBoxWithBtns_Impl;
 class ExtensionBox_Impl;
 class TheExtensionManager;
-
 
 class DialogHelper
 {

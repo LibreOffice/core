@@ -18,22 +18,8 @@
  */
 
 #include <vcl/window.hxx>
-#include <vcl/waitobj.hxx>
 #include <window.h>
 #include <vcl/cursor.hxx>
-
-WaitObject::WaitObject(vcl::Window* pWindow)
-    : mpWindow(pWindow)
-{
-    if (mpWindow)
-        mpWindow->EnterWait();
-}
-
-WaitObject::~WaitObject()
-{
-    if (mpWindow)
-        mpWindow->LeaveWait();
-}
 
 namespace vcl
 {
