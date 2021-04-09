@@ -173,8 +173,8 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
 #endif
 #if defined(_WIN32)
     , m_xFileAssocFrame(m_xBuilder->weld_widget("fileassoc"))
-    , m_xPerformFileExtCheck(m_xBuilder->weld_check_button("cbPerformFileExtCheck"))
     , m_xFileAssocBtn(m_xBuilder->weld_button("assocfiles"))
+    , m_xPerformFileExtCheck(m_xBuilder->weld_check_button("cbPerformFileExtCheck"))
 #endif
 {
     if (!lcl_HasSystemFilePicker())
