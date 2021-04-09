@@ -60,7 +60,6 @@ import java.util.UUID;
 public class LibreOfficeMainActivity extends AppCompatActivity implements SettingsListenerModel.OnSettingsPreferenceChangedListener {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
-    private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
     private static final String ENABLE_EXPERIMENTAL_PREFS_KEY = "ENABLE_EXPERIMENTAL";
     private static final String ASSETS_EXTRACTED_PREFS_KEY = "ASSETS_EXTRACTED";
     private static final String ENABLE_DEVELOPER_PREFS_KEY = "ENABLE_DEVELOPER";
@@ -211,9 +210,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 toolbarTop.setTitle(mInputFile.getName());
             }
         } else {
-            mInputFile = new File(DEFAULT_DOC_PATH);
-            mDocumentUri = Uri.fromFile(mInputFile);
-            mbISReadOnlyMode = true;
+            Log.e(LOGTAG, "No document specified. This should never happen.");
+            return;
         }
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -356,10 +354,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
      * Save the document.
      */
     public void saveDocument() {
-        if (!mInputFile.exists()) {
-            // Needed for handling null in case new document is not created.
-            mInputFile = new File(DEFAULT_DOC_PATH);
-        }
         Toast.makeText(this, R.string.message_saving, Toast.LENGTH_SHORT).show();
         // local save
         LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND_NOTIFY, ".uno:Save", true));
