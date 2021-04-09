@@ -18,6 +18,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
 
 #include <test/helper/transferable.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -45,6 +46,7 @@
 #include <tools/json_writer.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
@@ -153,6 +155,7 @@ public:
     void testBulletDeleteInvalidation();
     void testBulletNoNumInvalidation();
     void testBulletMultiDeleteInvalidation();
+    void testCondCollCopy();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -231,6 +234,7 @@ public:
     CPPUNIT_TEST(testBulletDeleteInvalidation);
     CPPUNIT_TEST(testBulletNoNumInvalidation);
     CPPUNIT_TEST(testBulletMultiDeleteInvalidation);
+    CPPUNIT_TEST(testCondCollCopy);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3068,6 +3072,28 @@ void SwTiledRenderingTest::testBulletMultiDeleteInvalidation()
     SwFrame* pFirstText = pBody->GetLower();
     tools::Rectangle aFirstTextRect = pFirstText->getFrameArea().SVRect();
     CPPUNIT_ASSERT(!aFirstTextRect.IsOver(m_aInvalidations));
+}
+
+void SwTiledRenderingTest::testCondCollCopy()
+{
+    // Given a document with a custom Text Body cond style:
+    SwXTextDocument* pXTextDocument = createDoc("cond-coll-copy.odt");
+    uno::Sequence<beans::PropertyValue> aPropertyValues
+        = { comphelper::makePropertyValue("Style", OUString("Text Body")),
+            comphelper::makePropertyValue("FamilyName", OUString("ParagraphStyles")) };
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->SelAll();
+
+    // When getting the text selection, then make sure it doesn't crash:
+    uno::Reference<datatransfer::XTransferable2> xTransferable(pXTextDocument->getSelection(),
+                                                               css::uno::UNO_QUERY);
+    datatransfer::DataFlavor aFlavor;
+    aFlavor.MimeType = "text/plain;charset=utf-16";
+    aFlavor.DataType = cppu::UnoType<OUString>::get();
+    CPPUNIT_ASSERT(xTransferable->isDataFlavorSupported(aFlavor));
+    // Without the accompanying fix in place, this test would have crashed.
+    xTransferable->getTransferData(aFlavor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);

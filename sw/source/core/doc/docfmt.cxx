@@ -1336,9 +1336,18 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
 
 //FEATURE::CONDCOLL
             if( RES_CONDTXTFMTCOLL == pSrc->Which() )
+            {
+                if (pDstColl->Which() != RES_CONDTXTFMTCOLL)
+                {
+                    // Target already had a style with a matching name, but it's not a conditional
+                    // style, then don't copy the conditions.
+                    continue;
+                }
+
                 // Copy the conditions, but delete the old ones first!
                 static_cast<SwConditionTextFormatColl*>(pDstColl)->SetConditions(
                             static_cast<SwConditionTextFormatColl*>(pSrc)->GetCondColls() );
+            }
 //FEATURE::CONDCOLL
         }
     }
