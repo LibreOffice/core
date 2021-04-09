@@ -16,6 +16,24 @@
       "revId": "4715943554dac769e4846e50c2b84141004d1419",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7dca424_81a1d828",
+        "filename": "sw/source/core/draw/dcontact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-09T13:24:11Z",
+      "side": 1,
+      "message": "oh, indeed it is, got some Wshadow warning",
+      "parentUuid": "0ab17570_02dc5cd8",
+      "revId": "4715943554dac769e4846e50c2b84141004d1419",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
