@@ -2080,6 +2080,30 @@ void SwWrtShell::ToggleOutlineContentVisibility(const size_t nPos, const bool bF
     }
 
     SwNodeIndex aIdx(*pSttNd, +1); // the next node after pSttdNd in the doc model SwNodes
+
+    // Nodes with visible frames could have become outline content of a folded outline node.
+    // For example an outline paragraph (paragraph with outline level attribute > 0) is changed
+    // to a paragraph having no outline level. The changed paragraph and all paragraphs that
+    // follow until the next outline paragraph will become outline content of the previous
+    // outline paragraph. If the previous outline paragraph has outline content visible attribute
+    // false (folded), there will be visible outline content paragraphs of the folded outline node.
+    // To prevent duplicate frames being created of these visible paragraphs when the folded
+    // outline node is toggled visible (unfolded), remove all outline content frames.
+
+    // remove outline content frames
+    while (aIdx != *pEndNd)
+    {
+        SwNode* pNd = &aIdx.GetNode();
+        if (pNd->IsContentNode())
+            pNd->GetContentNode()->DelFrames(nullptr);
+        else if (pNd->IsTableNode())
+            pNd->GetTableNode()->DelFrames(nullptr);
+        aIdx++;
+    }
+
+    // reset the node index
+    aIdx.Assign(*pSttNd, +1);
+
     if (!IsOutlineContentVisible(nPos) && !bForceNotVisible)
     {
         // make visible
@@ -2123,16 +2147,6 @@ void SwWrtShell::ToggleOutlineContentVisibility(const size_t nPos, const bool bF
     }
     else
     {
-        // remove content frames
-        while (aIdx != *pEndNd)
-        {
-            SwNode* pNd = &aIdx.GetNode();
-            if (pNd->IsContentNode())
-                pNd->GetContentNode()->DelFrames(nullptr);
-            else if (pNd->IsTableNode())
-                pNd->GetTableNode()->DelFrames(nullptr);
-            aIdx++;
-        }
         pSttNd->GetTextNode()->SetAttrOutlineContentVisible(false);
     }
 
