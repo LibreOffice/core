@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "681418d0_e7ed1fc4",
+        "filename": "svx/source/unodraw/unoshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-09T13:53:52Z",
+      "side": 0,
+      "message": "This would loose this nullptr check - can it happen that pSdrHint-\u003eGetObject() is also nullptr, and so the following code would dereference it?",
+      "revId": "3a18a0b83b724061dc9ab90e6a294fc5be405910",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
