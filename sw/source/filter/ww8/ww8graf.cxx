@@ -2798,6 +2798,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
                 /* Need to make sure that the correct layer ordering is applied. */
                 //  pass information, if object is in page header|footer to method.
                 m_xWWZOrder->InsertEscherObject( pObject, pF->nSpId,
+                                                 pRecord->bDrawHell,
                                                m_bIsHeader || m_bIsFooter );
             }
             else
@@ -3029,6 +3030,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             {
                 // pass information, if object is in page header|footer to method.
                 m_xWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
+                                                 pRecord->bDrawHell,
                                                m_bIsHeader || m_bIsFooter );
             }
         }
@@ -3180,6 +3182,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
         {
             // pass information, if object is in page header|footer to method.
             m_xWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
+                                             pRecord->bDrawHell,
                                            m_bIsHeader || m_bIsFooter );
         }
     }

@@ -262,6 +262,14 @@ DECLARE_WW8IMPORT_TEST(testTdf110987, "tdf110987")
     CPPUNIT_ASSERT(sFilterName != "MS Word 97 Vorlage");
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf120768_zOrder, "tdf120768_zOrder.doc")
+{
+    //The blue shape was covering everything (highest zorder = 2) instead of the lowest(0)
+    uno::Reference<drawing::XShape> xShape(getShapeByName(u"Picture 2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "ZOrder"));
+}
+
+
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
