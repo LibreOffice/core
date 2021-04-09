@@ -1669,29 +1669,52 @@ ScVbaRange::getFormulaValue( formula::FormulaGrammar::Grammar eGram )
 
 }
 
+uno::Any
+ScVbaRange::getFormula()
+{
+    return getFormulaValue( formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 );
+}
+
 void
 ScVbaRange::setFormula(const uno::Any &rFormula )
 {
-    // #FIXME converting "=$a$1" e.g. CONV_XL_A1 -> CONV_OOO                            // results in "=$a$1:a1", temporarily disable conversion
-    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
+    setFormulaValue( rFormula, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 );
 }
 
 uno::Any
 ScVbaRange::getFormulaR1C1()
 {
-    return getFormulaValue( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
+    return getFormulaValue( formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1 );
 }
 
 void
 ScVbaRange::setFormulaR1C1(const uno::Any& rFormula )
 {
-    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
+    setFormulaValue( rFormula, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1 );
 }
 
 uno::Any
-ScVbaRange::getFormula()
+ScVbaRange::getFormulaLocal()
 {
     return getFormulaValue( formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
+}
+
+void
+ScVbaRange::setFormulaLocal(const uno::Any &rFormula )
+{
+    setFormulaValue( rFormula, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
+}
+
+uno::Any
+ScVbaRange::getFormulaR1C1Local()
+{
+    return getFormulaValue( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
+}
+
+void
+ScVbaRange::setFormulaR1C1Local(const uno::Any& rFormula )
+{
+    setFormulaValue( rFormula, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
 }
 
 sal_Int32
