@@ -175,7 +175,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         mDocumentUri = getIntent().getData();
         if (mDocumentUri != null) {
-            if (mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            if (mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
+                    || mDocumentUri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)) {
                 final boolean isReadOnlyDoc;
                 if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
                     // New document type string is not null, meaning we want to open a new document
@@ -296,53 +297,37 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         try {
             mTempFile = File.createTempFile("LibreOffice", suffix, this.getCacheDir());
-            final FileChannel outputChannel = new FileOutputStream(mTempFile).getChannel();
-            try {
-                // need to run copy operation in a separate thread, since network access is not
-                // allowed from main thread, but that may happen here when underlying
-                // DocumentsProvider (like the NextCloud one) does that
-                class CopyThread extends Thread {
-                    /** Whether copy operation was successful. */
-                    private boolean result = false;
+            final FileOutputStream outputStream = new FileOutputStream(mTempFile);
+            // need to run copy operation in a separate thread, since network access is not
+            // allowed from main thread, but that may happen here when underlying
+            // DocumentsProvider (like the NextCloud one) does that
+            class CopyThread extends Thread {
+                /** Whether copy operation was successful. */
+                private boolean result = false;
 
-                    @Override
-                    public void run() {
-                        result = false;
-                        try {
-                            final AssetFileDescriptor assetFD = contentResolver.openAssetFileDescriptor(mDocumentUri, "r");
-                            if (assetFD == null) {
-                                Log.e(LOGTAG, "couldn't create assetfiledescriptor from " + mDocumentUri);
-                                return;
-                            }
-                            FileChannel inputChannel = assetFD.createInputStream().getChannel();
-                            long bytesTransferred = 0;
-                            // might not  copy all at once, so make sure everything gets copied...
-                            while (bytesTransferred < inputChannel.size()) {
-                                bytesTransferred += outputChannel.transferFrom(inputChannel, bytesTransferred, inputChannel.size());
-                            }
-                            Log.e(LOGTAG, "Success copying " + bytesTransferred + " bytes");
-                            inputChannel.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            return;
-                        }
-                        result = true;
+                @Override
+                public void run() {
+                    result = false;
+                    try {
+                        InputStream inputStream = contentResolver.openInputStream(mDocumentUri);
+                        result = copyStream(inputStream, outputStream);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return;
                     }
-                };
-                CopyThread copyThread = new CopyThread();
-                copyThread.start();
-                try {
-                    // wait for copy operation to finish
-                    // NOTE: might be useful to add some indicator in UI for long copy operations involving network...
-                    copyThread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
-
-                return copyThread.result;
-            } finally {
-                outputChannel.close();
+            };
+            CopyThread copyThread = new CopyThread();
+            copyThread.start();
+            try {
+                // wait for copy operation to finish
+                // NOTE: might be useful to add some indicator in UI for long copy operations involving network...
+                copyThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+
+            return copyThread.result;
         } catch (FileNotFoundException e) {
             return false;
         } catch (IOException e) {

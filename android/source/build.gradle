@@ -42,7 +42,7 @@ android {
     sourceSets {
         main.manifest.srcFile 'AndroidManifest.xml'
         main.assets.srcDirs = ['assets']
-        main.res.srcDirs = ['res']
+        main.res.srcDirs = ['res', 'res_generated']
         main.java.srcDirs = ['../Bootstrap/src', 'src/java']
         main.jniLibs.srcDirs = ["${liboJniLibsdir}"]
         main.jni.srcDirs = [] // don't attempt to build native-lib via gradle
@@ -144,14 +144,6 @@ task copyUnpackAssets(type: Copy) {
 task copyAssets(type: Copy) {
     description "copies assets that can be accessed within the installed apk"
     into 'assets'
-    from("${liboInstdir}") {
-        includes = ["LICENSE", "NOTICE"]
-        rename "LICENSE", "license.txt"
-        rename "NOTICE", "notice.txt"
-    }
-    from("${liboExampleDocument}") {
-        rename ".*", "example.odt"
-    }
 
     // include icons
     into ('share') {
@@ -190,6 +182,19 @@ task copyAssets(type: Copy) {
                 '**/inforeadonlydialog.ui',
                 '**/pbmenubutton.ui',
                 '**/tabbuttons.ui', '**/tabviewbar.ui'
+    }
+}
+
+task copyAppResources(type: Copy) {
+    description "copies documents to make them available as app resources"
+    into 'res_generated/raw'
+    from("${liboInstdir}") {
+        includes = ["LICENSE", "NOTICE"]
+        rename "LICENSE", "license.txt"
+        rename "NOTICE", "notice.txt"
+    }
+    from("${liboExampleDocument}") {
+        rename ".*", "example.odt"
     }
 }
 
@@ -290,7 +295,8 @@ task createRCfiles {
 preBuild.dependsOn 'createRCfiles',
         'createStrippedConfigMain',
         'createStrippedConfigRegistry',
-        'createFullConfig'
+        'createFullConfig',
+        'copyAppResources'
 
 clean.dependsOn 'cleanCopyAssets',
         'cleanCreateStrippedConfig',
