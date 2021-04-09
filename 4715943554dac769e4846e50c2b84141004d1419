@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ab17570_02dc5cd8",
+        "filename": "sw/source/core/draw/dcontact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-09T13:22:32Z",
+      "side": 1,
+      "message": "What is \"NOTM\"? Is this working around the problem that SdrObject::nOrdNum is not prefixed with \"m\"?",
+      "revId": "4715943554dac769e4846e50c2b84141004d1419",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
