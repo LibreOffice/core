@@ -58,15 +58,6 @@
     <string name="action_undo">Geri Al</string>
     <string name="action_redo">Yinele</string>
 
-    <!-- Directory browser strings -->
-    <string name="up_description">Üst dizin</string>
-    <string name="confirm_label">Onayla</string>
-    <string name="cancel_label">İptal</string>
-    <string name="search_label">Git</string>
-    <string name="directory_browser_label">Dizin Seç</string>
-    <string name="bad_directory">Geçersiz dizin</string>
-    <string name="current_dir">Şuan ki dizin: %1$s</string>
-
     <!-- Save Alert dialog strings -->
     <string name="save_alert_dialog_title">Değişiklikleri kaydetmek istiyor musunuz?</string>
     <string name="save_document">Kaydet</string>
