@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "918d1560_45944932",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-04-09T07:23:22Z",
+      "side": 1,
+      "message": "just use CPPUNIT_ASSERT instead of converting the bool to int",
+      "revId": "fcecfecd5ea92fb6dd22eb9c671717cc3ce7813f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
