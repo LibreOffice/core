@@ -241,19 +241,19 @@ void DiscreteFilter::importAttribs( sal_Int32 nElement, const AttributeList& rAt
             // because if the dateGroupItem exists also XML_dateTimeGrouping exists!
             sal_uInt16 nToken = rAttribs.getToken(XML_dateTimeGrouping, XML_day);
             if( nToken == XML_year || nToken == XML_month || nToken == XML_day ||
-                nToken == XML_hour || nToken == XML_min || nToken == XML_second )
+                nToken == XML_hour || nToken == XML_minute || nToken == XML_second )
             {
                 aDateValue = rAttribs.getString(XML_year, OUString());
 
                 if( nToken == XML_month || nToken == XML_day || nToken == XML_hour ||
-                    nToken == XML_min || nToken == XML_second )
+                    nToken == XML_minute || nToken == XML_second )
                 {
                     OUString aMonthName = rAttribs.getString(XML_month, OUString());
                     if( aMonthName.getLength() == 1 )
                         aMonthName = "0" + aMonthName;
                     aDateValue += "-" + aMonthName;
 
-                    if( nToken == XML_day || nToken == XML_hour || nToken == XML_min ||
+                    if( nToken == XML_day || nToken == XML_hour || nToken == XML_minute ||
                         nToken == XML_second )
                     {
                         OUString aDayName = rAttribs.getString(XML_day, OUString());
@@ -261,16 +261,16 @@ void DiscreteFilter::importAttribs( sal_Int32 nElement, const AttributeList& rAt
                             aDayName = "0" + aDayName;
                         aDateValue += "-" + aDayName;
 
-                        if( nToken == XML_hour || nToken == XML_min || nToken == XML_second )
+                        if( nToken == XML_hour || nToken == XML_minute || nToken == XML_second )
                         {
                             OUString aHourName = rAttribs.getString(XML_hour, OUString());
                             if( aHourName.getLength() == 1 )
                                 aHourName = "0" + aHourName;
                             aDateValue += " " + aHourName;
 
-                            if( nToken == XML_min || nToken == XML_second )
+                            if( nToken == XML_minute || nToken == XML_second )
                             {
-                                OUString aMinName = rAttribs.getString(XML_min, OUString());
+                                OUString aMinName = rAttribs.getString(XML_minute, OUString());
                                 if( aMinName.getLength() == 1 )
                                     aMinName = "0" + aMinName;
                                 aDateValue += ":" + aMinName;
