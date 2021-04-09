@@ -17,6 +17,4 @@ Settings related to Clang compiler plugins.
 thus causing update of this .h file and triggering rebuild of our Clang plugin. */
 #undef CLANG_FULL_VERSION
 
-#define HAVE_BUILDING_PCH_WITH_OBJ 0
-
 #endif
