@@ -1989,6 +1989,7 @@ bool SvpSalGraphics::drawGradient(const tools::PolyPolygon& rPolyPolygon, const 
         1.0);
 
     cairo_set_source(cr, pattern);
+    cairo_pattern_destroy(pattern);
 
     basegfx::B2DRange extents = getClippedFillDamage(cr);
     cairo_fill_preserve(cr);
@@ -2008,8 +2009,7 @@ bool SvpSalGraphics::implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolyg
     for (auto const & rPolygon : rPolyPolygon)
         AddPolygonToPath(cr, rPolygon, rObjectToDevice, !getAntiAlias(), false);
 
-    cairo_pattern_t* pattern;
-    pattern = cairo_pattern_create_linear(rGradient.maPoint1.getX(), rGradient.maPoint1.getY(), rGradient.maPoint2.getX(), rGradient.maPoint2.getY());
+    cairo_pattern_t* pattern = cairo_pattern_create_linear(rGradient.maPoint1.getX(), rGradient.maPoint1.getY(), rGradient.maPoint2.getX(), rGradient.maPoint2.getY());
 
     for (SalGradientStop const & rStop : rGradient.maStops)
     {
@@ -2022,6 +2022,7 @@ bool SvpSalGraphics::implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolyg
         cairo_pattern_add_color_stop_rgba(pattern, offset, r, g, b, a);
     }
     cairo_set_source(cr, pattern);
+    cairo_pattern_destroy(pattern);
 
     basegfx::B2DRange extents = getClippedFillDamage(cr);
     cairo_fill_preserve(cr);
