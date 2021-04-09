@@ -1,0 +1,860 @@
+diff -ru liblayout-0.2.10.orig/source/org/jfree/layouting/input/style/parser/CSSValueFactory.java liblayout-0.2.10/source/org/jfree/layouting/input/style/parser/CSSValueFactory.java
+--- liblayout-0.2.10.orig/source/org/jfree/layouting/input/style/parser/CSSValueFactory.java	2021-04-07 10:34:09.797045462 +0100
++++ liblayout-0.2.10/source/org/jfree/layouting/input/style/parser/CSSValueFactory.java	2021-04-07 10:41:20.015338056 +0100
+@@ -49,8 +49,7 @@
+ import org.jfree.layouting.input.style.values.CSSStringValue;
+ import org.jfree.layouting.input.style.values.CSSValue;
+ import org.w3c.css.sac.LexicalUnit;
+-import org.apache.commons.logging.LogFactory;
+-import org.apache.commons.logging.Log;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.config.Configuration;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+ 
+@@ -61,7 +60,7 @@
+  */
+ public class CSSValueFactory
+ {
+-  private static final Log logger = LogFactory.getLog(CSSValueFactory.class);
++  private static final Logger logger = Logger.getLogger(CSSValueFactory.class.getName());
+   public static final String SIMPLE_PREFIX = "org.jfree.layouting.parser.handlers.";
+   public static final String COMPOUND_PREFIX = "org.jfree.layouting.parser.compoundhandlers.";
+ 
+@@ -99,7 +98,7 @@
+       }
+       else
+       {
+-        logger.warn("Invalid module implementation: " + c);
++        logger.warning("Invalid module implementation: " + c);
+       }
+     }
+ 
+@@ -300,7 +299,7 @@
+             (CSSCompoundValueReadHandler) compoundHandlers.get(name);
+     if (handler == null)
+     {
+-      logger.warn("Got no key for inherited value: " + name);
++      logger.warning("Got no key for inherited value: " + name);
+       return;
+     }
+ 
+@@ -324,7 +323,7 @@
+             (CSSCompoundValueReadHandler) compoundHandlers.get(name);
+     if (handler == null)
+     {
+-      logger.warn("Got no key for compound attr function: " + name);
++      logger.warning("Got no key for compound attr function: " + name);
+       return;
+     }
+ 
+@@ -373,7 +372,7 @@
+       {
+         if (key == null)
+         {
+-          // Log.warn("Got no key for attribute-function " + normalizedName);
++          // Log.warning("Got no key for attribute-function " + normalizedName);
+           setCompundAttrValue(normalizedName, attrFn, rule, important);
+           return;
+         }
+@@ -387,7 +386,7 @@
+       // ATTR function (extended version).
+       if (key == null)
+       {
+-        logger.warn("Got no key for attribute-function " + normalizedName);
++        logger.warning("Got no key for attribute-function " + normalizedName);
+         return;
+       }
+       final CSSAttrFunction attrFn = parseComplexAttrFn(value.getParameters());
+@@ -421,7 +420,7 @@
+         return;
+       }
+ 
+-      logger.warn("Unparsable value: Got no valid result for " + normalizedName + " (" + value + ')');
++      logger.warning("Unparsable value: Got no valid result for " + normalizedName + " (" + value + ')');
+       return; // ignore this rule ..
+     }
+     final Map map = module.createValues(value);
+diff -ru liblayout-0.2.10.orig/source/org/jfree/layouting/input/style/parser/StyleSheetHandler.java liblayout-0.2.10/source/org/jfree/layouting/input/style/parser/StyleSheetHandler.java
+--- liblayout-0.2.10.orig/source/org/jfree/layouting/input/style/parser/StyleSheetHandler.java	2021-04-07 10:34:09.798045474 +0100
++++ liblayout-0.2.10/source/org/jfree/layouting/input/style/parser/StyleSheetHandler.java	2021-04-07 10:48:18.496489721 +0100
+@@ -60,8 +60,7 @@
+ import org.pentaho.reporting.libraries.resourceloader.Resource;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceException;
+ import org.pentaho.reporting.libraries.base.util.FastStack;
+-import org.apache.commons.logging.LogFactory;
+-import org.apache.commons.logging.Log;
++import java.util.logging.Logger;
+ 
+ /**
+  * Creation-Date: 23.11.2005, 13:06:06
+@@ -70,7 +69,7 @@
+  */
+ public class StyleSheetHandler implements DocumentHandler, ErrorHandler
+ {
+-  private static final Log logger = LogFactory.getLog(StyleSheetHandler.class);
++  private static final Logger logger = Logger.getLogger(StyleSheetHandler.class.getName());
+   private HashMap namespaces;
+   private StyleKeyRegistry registry;
+   private StyleSheet styleSheet;
+@@ -614,7 +613,7 @@
+     catch (Exception e)
+     {
+       // we catch everything.
+-      logger.warn("Error parsing style key: " + name, e);
++      logger.warning("Error parsing style key: " + name + " : " + e);
+     }
+ 
+   }
+@@ -639,7 +638,7 @@
+   public void warning(final CSSParseException exception)
+       throws CSSException
+   {
+-    logger.warn("Warning: " + exception.getMessage());
++    logger.warning("Warning: " + exception.getMessage());
+   }
+ 
+   /**
+@@ -665,7 +664,7 @@
+   public void error(final CSSParseException exception)
+       throws CSSException
+   {
+-    logger.warn("Error: ", exception);
++    logger.warning("Error: " + exception);
+   }
+ 
+   /**
+@@ -690,6 +689,6 @@
+   public void fatalError(final CSSParseException exception)
+       throws CSSException
+   {
+-    logger.warn("Fatal Error: ", exception);
++    logger.warning("Fatal Error: " + exception);
+   }
+ }
+diff -ru liblayout-0.2.10.orig/source/org/jfree/layouting/normalizer/generator/PrintContentGenerator.java liblayout-0.2.10/source/org/jfree/layouting/normalizer/generator/PrintContentGenerator.java
+--- liblayout-0.2.10.orig/source/org/jfree/layouting/normalizer/generator/PrintContentGenerator.java	2021-04-07 10:34:09.766045081 +0100
++++ liblayout-0.2.10/source/org/jfree/layouting/normalizer/generator/PrintContentGenerator.java	2021-04-07 10:47:20.093770766 +0100
+@@ -38,8 +38,7 @@
+ import org.jfree.layouting.layouter.context.PageContext;
+ import org.jfree.layouting.normalizer.content.NormalizationException;
+ import org.jfree.layouting.renderer.Renderer;
+-import org.apache.commons.logging.LogFactory;
+-import org.apache.commons.logging.Log;
++import java.util.logging.Logger;
+ 
+ /**
+  * Simply prints each incoming call.
+@@ -48,7 +47,7 @@
+  */
+ public class PrintContentGenerator implements ContentGenerator
+ {
+-  private static final Log logger = LogFactory.getLog(PrintContentGenerator.class);
++  private static final Logger logger = Logger.getLogger(PrintContentGenerator.class.getName());
+ 
+ 
+   private static class PrintContentGeneratorState implements State
+@@ -96,56 +95,56 @@
+    */
+   public void startedDocument(final PageContext pageContext)
+   {
+-    logger.debug("<document>");
++    logger.config("<document>");
+     renderer.startedDocument(pageContext);
+   }
+ 
+   public void startedFlow(final LayoutContext element)
+       throws NormalizationException
+   {
+-    logger.debug("<flow tag='" + element.getTagName() + "'>");
++    logger.config("<flow tag='" + element.getTagName() + "'>");
+     renderer.startedFlow(element);
+   }
+ 
+   public void startedTable(final LayoutContext element)
+       throws NormalizationException
+   {
+-    logger.debug("<table>");
++    logger.config("<table>");
+     renderer.startedTable(element);
+   }
+ 
+   public void startedTableColumnGroup(final LayoutContext element)
+           throws NormalizationException
+   {
+-    logger.debug("<table-col-group>");
++    logger.config("<table-col-group>");
+     renderer.startedTableColumnGroup(element);
+   }
+ 
+   public void startedTableColumn(final LayoutContext element)
+           throws NormalizationException
+   {
+-    logger.debug("<table-col>");
++    logger.config("<table-col>");
+     renderer.startedTableColumn(element);
+   }
+ 
+   public void startedTableSection(final LayoutContext element)
+       throws NormalizationException
+   {
+-    logger.debug("<table-section>");
++    logger.config("<table-section>");
+     renderer.startedTableSection(element);
+   }
+ 
+   public void startedTableRow(final LayoutContext element)
+       throws NormalizationException
+   {
+-    logger.debug("<table-row>");
++    logger.config("<table-row>");
+     renderer.startedTableRow(element);
+   }
+ 
+   public void startedTableCell(final LayoutContext element)
+       throws NormalizationException
+   {
+-    logger.debug("<table-cell>");
++    logger.config("<table-cell>");
+     renderer.startedTableCell(element);
+   }
+ 
+@@ -153,7 +152,7 @@
+       throws NormalizationException
+   {
+     final String tagName = element.getTagName();
+-    logger.debug("<block tag='" + tagName + "'>");
++    logger.config("<block tag='" + tagName + "'>");
+     renderer.startedBlock(element);
+   }
+ 
+@@ -161,14 +160,14 @@
+           throws NormalizationException
+   {
+     final String tagName = element.getTagName();
+-    logger.debug("<paragraph tag='" + tagName + "'>");
++    logger.config("<paragraph tag='" + tagName + "'>");
+     renderer.startedRootInline(element);
+   }
+ 
+   public void startedMarker(final LayoutContext element)
+           throws NormalizationException
+   {
+-    logger.debug("<marker>");
++    logger.config("<marker>");
+     renderer.startedMarker(element);
+   }
+ 
+@@ -176,80 +175,80 @@
+       throws NormalizationException
+   {
+     final String tagName = element.getTagName();
+-    logger.debug("<inline tag='" + tagName + "'>");
++    logger.config("<inline tag='" + tagName + "'>");
+     renderer.startedInline(element);
+   }
+ 
+   public void addContent(final LayoutContext node, final ContentToken token)
+       throws NormalizationException
+   {
+-    logger.debug("<content>" + token + "</content>");
++    logger.config("<content>" + token + "</content>");
+     renderer.addContent(node, token);
+   }
+ 
+   public void finishedInline() throws NormalizationException
+   {
+-    logger.debug("</inline>");
++    logger.config("</inline>");
+     renderer.finishedInline();
+   }
+ 
+   public void finishedMarker() throws NormalizationException
+   {
+-    logger.debug("</marker>");
++    logger.config("</marker>");
+     renderer.finishedMarker();
+   }
+ 
+   public void finishedRootInline() throws NormalizationException
+   {
+-    logger.debug("</paragraph>");
++    logger.config("</paragraph>");
+     renderer.finishedRootInline();
+   }
+ 
+   public void finishedBlock() throws NormalizationException
+   {
+-    logger.debug("</block>");
++    logger.config("</block>");
+     renderer.finishedBlock();
+   }
+ 
+   public void finishedTableCell() throws NormalizationException
+   {
+-    logger.debug("</table-cell>");
++    logger.config("</table-cell>");
+     renderer.finishedTableCell();
+   }
+ 
+   public void finishedTableRow() throws NormalizationException
+   {
+-    logger.debug("</table-row>");
++    logger.config("</table-row>");
+     renderer.finishedTableRow();
+   }
+ 
+   public void finishedTableSection() throws NormalizationException
+   {
+-    logger.debug("</table-section>");
++    logger.config("</table-section>");
+     renderer.finishedTableSection();
+   }
+ 
+   public void finishedTableColumn() throws NormalizationException
+   {
+-    logger.debug("</table-col>");
++    logger.config("</table-col>");
+     renderer.finishedTableColumn();
+   }
+ 
+   public void finishedTableColumnGroup() throws NormalizationException
+   {
+-    logger.debug("</table-col-group>");
++    logger.config("</table-col-group>");
+     renderer.finishedTableColumnGroup();
+   }
+ 
+   public void finishedTable() throws NormalizationException
+   {
+-    logger.debug("</table>");
++    logger.config("</table>");
+     renderer.finishedTable();
+   }
+ 
+   public void finishedFlow() throws NormalizationException
+   {
+-    logger.debug("</flow>");
++    logger.config("</flow>");
+     renderer.finishedFlow();
+   }
+ 
+@@ -259,7 +258,7 @@
+    */
+   public void finishedDocument() throws NormalizationException
+   {
+-    logger.debug("</document>");
++    logger.config("</document>");
+     renderer.finishedDocument();
+   }
+ 
+@@ -276,7 +275,7 @@
+   public void startedPassThrough(final LayoutContext element)
+       throws NormalizationException
+   {
+-    logger.debug("<pass-through>");
++    logger.config("<pass-through>");
+     renderer.startedPassThrough(element);
+   }
+ 
+@@ -284,26 +283,26 @@
+                                     final ContentToken token)
+       throws NormalizationException
+   {
+-    logger.debug("<pass-through-content>" + token + "</pass-through-content>");
++    logger.config("<pass-through-content>" + token + "</pass-through-content>");
+     renderer.addPassThroughContent(node, token);
+   }
+ 
+   public void finishedPassThrough() throws NormalizationException
+   {
+-    logger.debug("</pass-through>");
++    logger.config("</pass-through>");
+     renderer.finishedPassThrough();
+   }
+ 
+   public void startedTableCaption(final LayoutContext context)
+       throws NormalizationException
+   {
+-    logger.debug("<table-caption>");
++    logger.config("<table-caption>");
+     renderer.startedTableCaption(context);
+   }
+ 
+   public void finishedTableCaption() throws NormalizationException
+   {
+-    logger.debug("</table-caption>");
++    logger.config("</table-caption>");
+     renderer.finishedTableCaption();
+   }
+ 
+diff -ru liblayout-0.2.10.orig/source/org/jfree/layouting/renderer/model/RenderBox.java liblayout-0.2.10/source/org/jfree/layouting/renderer/model/RenderBox.java
+--- liblayout-0.2.10.orig/source/org/jfree/layouting/renderer/model/RenderBox.java	2021-04-07 10:34:09.779045241 +0100
++++ liblayout-0.2.10/source/org/jfree/layouting/renderer/model/RenderBox.java	2021-04-07 10:49:14.499179135 +0100
+@@ -44,8 +44,7 @@
+ import org.jfree.layouting.renderer.text.ExtendedBaselineInfo;
+ import org.jfree.layouting.renderer.text.TextUtility;
+ import org.pentaho.reporting.libraries.fonts.registry.FontMetrics;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * A render-box corresponds to elements in a DOM tree.
+@@ -62,7 +61,7 @@
+  */
+ public abstract class RenderBox extends RenderNode
+ {
+-  private static final Log logger = LogFactory.getLog(RenderBox.class);
++  private static final Logger logger = Logger.getLogger(RenderBox.class.getName());
+   public static final boolean LOG_PRUNE = false;
+ 
+   private RenderNode firstChild;
+@@ -930,7 +929,7 @@
+       {
+         if (LOG_PRUNE)
+         {
+-          logger.debug("Pruning: " + this);
++          logger.config("Pruning: " + this);
+         }
+         getParent().remove(this);
+       }
+@@ -944,7 +943,7 @@
+         {
+           if (LOG_PRUNE)
+           {
+-            logger.debug("Pruning: " + lastChild);
++            logger.config("Pruning: " + lastChild);
+           }
+           remove(lastChild);
+           lastChild = getLastChild();
+diff -ru liblayout-0.2.10.orig/source/org/jfree/layouting/renderer/ModelPrinter.java liblayout-0.2.10/source/org/jfree/layouting/renderer/ModelPrinter.java
+--- liblayout-0.2.10.orig/source/org/jfree/layouting/renderer/ModelPrinter.java	2021-04-07 10:34:09.786045327 +0100
++++ liblayout-0.2.10/source/org/jfree/layouting/renderer/ModelPrinter.java	2021-04-07 10:46:12.757941838 +0100
+@@ -41,8 +41,7 @@
+ import org.jfree.layouting.renderer.model.table.cells.TableCell;
+ import org.jfree.layouting.renderer.model.table.cols.TableColumn;
+ import org.jfree.layouting.renderer.model.table.cols.TableColumnModel;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * Creation-Date: Jan 9, 2007, 2:22:59 PM
+@@ -51,7 +50,7 @@
+  */
+ public class ModelPrinter
+ {
+-  private static final Log logger = LogFactory.getLog (ModelPrinter.class);
++  private static final Logger logger = Logger.getLogger(ModelPrinter.class.getName());
+ 
+   private ModelPrinter()
+   {
+@@ -66,7 +65,7 @@
+       b.append('[');
+       b.append(Integer.toHexString(System.identityHashCode(node)));
+       b.append(']');
+-      logger.debug (b);
++      logger.config(b.toString());
+       node = node.getParent();
+     }
+   }
+@@ -96,7 +95,7 @@
+     b.append(", height=");
+     b.append(box.getHeight());
+     b.append('}');
+-    logger.debug(b.toString());
++    logger.config(b.toString());
+ 
+     b = new StringBuffer();
+     for (int i = 0; i < level; i++)
+@@ -105,7 +104,7 @@
+     }
+     b.append("- nodeLayoutProperties=");
+     b.append(box.getNodeLayoutProperties());
+-    logger.debug(b.toString());
++    logger.config(b.toString());
+ 
+     b = new StringBuffer();
+     for (int i = 0; i < level; i++)
+@@ -114,7 +113,7 @@
+     }
+     b.append("- boxLayoutProperties=");
+     b.append(box.getBoxLayoutProperties());
+-    logger.debug(b.toString());
++    logger.config(b.toString());
+ 
+     if (box instanceof TableRowRenderBox)
+     {
+@@ -124,7 +123,7 @@
+       for (int i = 0; i < rowInfoStructure.getCellCount(); i++)
+       {
+         final TableCell cell = rowInfoStructure.getCellAt(i);
+-        logger.debug ("CELL: " + i + " = " + cell.getRowSpan() + ' ' + cell.getColSpan() + ' ' + cell);
++        logger.config("CELL: " + i + " = " + cell.getRowSpan() + ' ' + cell.getColSpan() + ' ' + cell);
+       }
+     }
+     else if (box instanceof TableRenderBox)
+@@ -134,7 +133,7 @@
+       for (int i = 0; i < columnModel.getColumnCount(); i++)
+       {
+         final TableColumn col = columnModel.getColumn(i);
+-        logger.debug ("COLUMN: EffectiveSize: " + col.getEffectiveSize() +  " Computed Max Width: " + col.getComputedMaximumWidth() + " Computed ChunkSize: " + col.getComputedMinChunkSize());
++        logger.config("COLUMN: EffectiveSize: " + col.getEffectiveSize() +  " Computed Max Width: " + col.getComputedMaximumWidth() + " Computed ChunkSize: " + col.getComputedMinChunkSize());
+ //        for (int cs = 1; cs < 3; cs++)
+ //        {
+ //          Log.debug ("* COLUMN: " + i + "(" + cs + ") " +
+@@ -149,14 +148,14 @@
+     else if (box instanceof TableCellRenderBox)
+     {
+       final TableCellRenderBox cellBox = (TableCellRenderBox) box;
+-      logger.debug ("CELL: Position: " + cellBox.getColumnIndex());
++      logger.config("CELL: Position: " + cellBox.getColumnIndex());
+     }
+     else if (box instanceof ParagraphRenderBox)
+     {
+       final ParagraphRenderBox paraBox = (ParagraphRenderBox) box;
+-      logger.debug ("-----------------------------------------------------");
++      logger.config("-----------------------------------------------------");
+       printBox(paraBox.getLineboxContainer(), level + 1);
+-      logger.debug ("-----------------------------------------------------");
++      logger.config("-----------------------------------------------------");
+     }
+ 
+     printChilds(box, level);
+@@ -203,7 +202,7 @@
+     b.append(", height=");
+     b.append(node.getHeight());
+     b.append('}');
+-    logger.debug(b.toString());
++    logger.config(b.toString());
+ 
+ 
+     b = new StringBuffer();
+@@ -213,7 +212,7 @@
+     }
+     b.append("- nodeLayoutProperties=");
+     b.append(node.getNodeLayoutProperties());
+-    logger.debug(b.toString());
++    logger.config(b.toString());
+   }
+ 
+   private static void printText(final RenderableText text, final int level)
+@@ -238,7 +237,7 @@
+     b.append(", text='");
+     b.append(text.getRawText());
+     b.append("'}");
+-    logger.debug(b.toString());
++    logger.config(b.toString());
+ 
+     b = new StringBuffer();
+     for (int i = 0; i < level; i++)
+@@ -247,7 +246,7 @@
+     }
+     b.append("- nodeLayoutProperties=");
+     b.append(text.getNodeLayoutProperties());
+-    logger.debug(b.toString());
++    logger.config(b.toString());
+   }
+ 
+ }
+diff -ru liblayout-0.2.10.orig/source/org/jfree/layouting/renderer/PrintingRenderer.java liblayout-0.2.10/source/org/jfree/layouting/renderer/PrintingRenderer.java
+--- liblayout-0.2.10.orig/source/org/jfree/layouting/renderer/PrintingRenderer.java	2021-04-07 10:34:09.786045327 +0100
++++ liblayout-0.2.10/source/org/jfree/layouting/renderer/PrintingRenderer.java	2021-04-07 10:45:03.987095239 +0100
+@@ -37,8 +37,7 @@
+ import org.jfree.layouting.layouter.context.LayoutContext;
+ import org.jfree.layouting.layouter.context.PageContext;
+ import org.jfree.layouting.normalizer.content.NormalizationException;
+-import org.apache.commons.logging.LogFactory;
+-import org.apache.commons.logging.Log;
++import java.util.logging.Logger;
+ 
+ /**
+  * Creation-Date: 17.07.2006, 17:43:21
+@@ -47,7 +46,7 @@
+  */
+ public class PrintingRenderer implements Renderer
+ {
+-  private static final Log logger = LogFactory.getLog(PrintingRenderer.class);
++  private static final Logger logger = Logger.getLogger(PrintingRenderer.class.getName());
+   private static class PrintingRendererState implements State
+   {
+     private State parentState;
+@@ -89,7 +88,7 @@
+    */
+   public void startedDocument(final PageContext pageContext)
+   {
+-    logger.debug ("<document>");
++    logger.config("<document>");
+     parent.startedDocument(pageContext);
+   }
+ 
+@@ -102,7 +101,7 @@
+   public void startedFlow(final LayoutContext context)
+           throws NormalizationException
+   {
+-    logger.debug ("<flow " +
++    logger.config("<flow " +
+         "tag='" + context.getTagName() + "' namespace='" + context.getNamespace() + "'>");
+     parent.startedFlow(context);
+   }
+@@ -110,7 +109,7 @@
+   public void startedTable(final LayoutContext context)
+           throws NormalizationException
+   {
+-    logger.debug ("<table " +
++    logger.config("<table " +
+         "tag='" + context.getTagName() + "' namespace='" + context.getNamespace() + "'>");
+     parent.startedTable(context);
+   }
+@@ -118,7 +117,7 @@
+   public void startedTableSection(final LayoutContext layoutContext)
+           throws NormalizationException
+   {
+-    logger.debug ("<table-section " +
++    logger.config("<table-section " +
+         "tag='" + layoutContext.getTagName() + "' namespace='" + layoutContext.getNamespace() + "'>");
+     parent.startedTableSection(layoutContext);
+   }
+@@ -126,7 +125,7 @@
+   public void startedTableRow(final LayoutContext layoutContext)
+           throws NormalizationException
+   {
+-    logger.debug ("<table-row " +
++    logger.config("<table-row " +
+         "tag='" + layoutContext.getTagName() + "' namespace='" + layoutContext.getNamespace() + "'>");
+     parent.startedTableRow(layoutContext);
+   }
+@@ -134,7 +133,7 @@
+   public void startedTableCell(final LayoutContext layoutContext)
+           throws NormalizationException
+   {
+-    logger.debug ("<table-cell " +
++    logger.config("<table-cell " +
+         "tag='" + layoutContext.getTagName() + "' namespace='" + layoutContext.getNamespace() + "'>");
+     parent.startedTableCell(layoutContext);
+   }
+@@ -142,7 +141,7 @@
+   public void startedBlock(final LayoutContext context)
+           throws NormalizationException
+   {
+-    logger.debug ("<block " +
++    logger.config("<block " +
+         "tag='" + context.getTagName() + "' namespace='" + context.getNamespace() + "'>");
+     parent.startedBlock(context);
+   }
+@@ -150,7 +149,7 @@
+   public void startedMarker(final LayoutContext context)
+           throws NormalizationException
+   {
+-    logger.debug ("<marker " +
++    logger.config("<marker " +
+         "tag='" + context.getTagName() + "' namespace='" + context.getNamespace() + "'>");
+     parent.startedMarker(context);
+   }
+@@ -158,7 +157,7 @@
+   public void startedRootInline(final LayoutContext context)
+           throws NormalizationException
+   {
+-    logger.debug ("<paragraph " +
++    logger.config("<paragraph " +
+         "tag='" + context.getTagName() + "' namespace='" + context.getNamespace() + "'>");
+     parent.startedRootInline(context);
+   }
+@@ -166,7 +165,7 @@
+   public void startedInline(final LayoutContext context)
+           throws NormalizationException
+   {
+-    logger.debug ("<inline " +
++    logger.config("<inline " +
+         "tag='" + context.getTagName() + "' namespace='" + context.getNamespace() + "'>");
+     parent.startedInline(context);
+   }
+@@ -175,93 +174,93 @@
+                          final ContentToken content)
+           throws NormalizationException
+   {
+-    logger.debug ("<content>" + content + "</content>");
++    logger.config("<content>" + content + "</content>");
+     parent.addContent(context, content);
+   }
+ 
+   public void finishedInline() throws NormalizationException
+   {
+-    logger.debug ("</inline>");
++    logger.config("</inline>");
+     parent.finishedInline();
+   }
+ 
+   public void finishedRootInline() throws NormalizationException
+   {
+-    logger.debug ("</paragraph>");
++    logger.config("</paragraph>");
+     parent.finishedRootInline();
+   }
+ 
+   public void finishedMarker() throws NormalizationException
+   {
+-    logger.debug ("</marker>");
++    logger.config("</marker>");
+     parent.finishedMarker();
+   }
+ 
+   public void finishedBlock() throws NormalizationException
+   {
+-    logger.debug ("</block>");
++    logger.config("</block>");
+     parent.finishedBlock();
+   }
+ 
+   public void finishedTableCell() throws NormalizationException
+   {
+-    logger.debug ("</table-cell>");
++    logger.config("</table-cell>");
+     parent.finishedTableCell();
+   }
+ 
+   public void finishedTableRow() throws NormalizationException
+   {
+-    logger.debug ("</table-row>");
++    logger.config("</table-row>");
+     parent.finishedTableRow();
+   }
+ 
+   public void finishedTableSection() throws NormalizationException
+   {
+-    logger.debug ("</table-section>");
++    logger.config("</table-section>");
+     parent.finishedTableSection();
+   }
+ 
+   public void finishedTable() throws NormalizationException
+   {
+-    logger.debug ("</table>");
++    logger.config("</table>");
+     parent.finishedTable();
+   }
+ 
+   public void finishedFlow() throws NormalizationException
+   {
+-    logger.debug ("</flow>");
++    logger.config("</flow>");
+     parent.finishedFlow();
+   }
+ 
+   public void finishedDocument() throws NormalizationException
+   {
+-    logger.debug ("</document>");
++    logger.config("</document>");
+     parent.finishedDocument();
+   }
+ 
+   public void startedTableColumnGroup(final LayoutContext context)
+           throws NormalizationException
+   {
+-    logger.debug ("<table-column-group>");
++    logger.config("<table-column-group>");
+     parent.startedTableColumnGroup(context);
+   }
+ 
+   public void startedTableColumn(final LayoutContext context)
+           throws NormalizationException
+   {
+-    logger.debug ("<table-column>");
++    logger.config("<table-column>");
+     parent.startedTableColumn(context);
+   }
+ 
+   public void finishedTableColumnGroup() throws NormalizationException
+   {
+-    logger.debug ("</table-column-group>");
++    logger.config("</table-column-group>");
+     parent.finishedTableColumnGroup();
+   }
+ 
+   public void finishedTableColumn() throws NormalizationException
+   {
+-    logger.debug ("</table-column>");
++    logger.config("</table-column>");
+     parent.finishedTableColumn();
+   }
+ 
+@@ -274,14 +273,14 @@
+    */
+   public void handlePageBreak(final PageContext pageContext)
+   {
+-    logger.debug ("<!-- PAGEBREAK ENCOUNTERED -->");
++    logger.config("<!-- PAGEBREAK ENCOUNTERED -->");
+     parent.handlePageBreak(pageContext);
+   }
+ 
+   public void startedPassThrough(final LayoutContext context)
+       throws NormalizationException
+   {
+-    logger.debug ("<pass-through>");
++    logger.config("<pass-through>");
+     parent.startedPassThrough(context);
+   }
+ 
+@@ -289,13 +288,13 @@
+                                     final ContentToken content)
+       throws NormalizationException
+   {
+-    logger.debug ("<pass-through-content>" + content + "</pass-through-content>");
++    logger.config("<pass-through-content>" + content + "</pass-through-content>");
+     parent.addPassThroughContent(context, content);
+   }
+ 
+   public void finishedPassThrough() throws NormalizationException
+   {
+-    logger.debug ("</pass-through>");
++    logger.config("</pass-through>");
+     parent.finishedPassThrough();
+   }
+ 
+@@ -307,13 +306,13 @@
+   public void startedTableCaption(final LayoutContext context)
+       throws NormalizationException
+   {
+-    logger.debug ("<table-caption>");
++    logger.config("<table-caption>");
+     parent.startedTableCaption(context);
+   }
+ 
+   public void finishedTableCaption() throws NormalizationException
+   {
+-    logger.debug ("</table-caption>");
++    logger.config("</table-caption>");
+     parent.finishedTableCaption();
+   }
+ }
+diff -ru liblayout-0.2.10.orig/source/org/jfree/layouting/util/AttributeMap.java liblayout-0.2.10/source/org/jfree/layouting/util/AttributeMap.java
+--- liblayout-0.2.10.orig/source/org/jfree/layouting/util/AttributeMap.java	2021-04-07 10:34:09.787045339 +0100
++++ liblayout-0.2.10/source/org/jfree/layouting/util/AttributeMap.java	2021-04-07 10:48:57.444969193 +0100
+@@ -35,8 +35,7 @@
+ import java.util.Iterator;
+ import java.util.Map;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+ 
+ /**
+@@ -46,7 +45,7 @@
+  */
+ public class AttributeMap implements Serializable, Cloneable
+ {
+-  private static final Log logger = LogFactory.getLog(AttributeMap.class);
++  private static final Logger logger = Logger.getLogger(AttributeMap.class.getName());
+ 
+   private static final long serialVersionUID = -7442871030874215436L;
+   private static final String[] EMPTY_NAMESPACES = new String[0];
+@@ -102,7 +101,7 @@
+     }
+     catch (Exception e)
+     {
+-      logger.error("Clone failed for ReportAttributeMap.createUnmodifiableMap", e);
++      logger.severe("Clone failed for ReportAttributeMap.createUnmodifiableMap:" + e);
+       throw new IllegalStateException("Clone failed for ReportAttributeMap.createUnmodifiableMap");
+     }
+   }
