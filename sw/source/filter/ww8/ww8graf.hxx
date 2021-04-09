@@ -33,12 +33,14 @@ struct EscherShape
 {
     sal_uLong mnEscherShapeOrder;
     sal_uLong mnNoInlines;
-    // new member <mbInHeaderFooter>
+    bool mbInHellLayer;
     bool mbInHeaderFooter;
     EscherShape( sal_uLong nEscherShapeOrder,
+                 bool bInHellLayer,
                  bool _bInHeaderFooter )
         : mnEscherShapeOrder(nEscherShapeOrder),
           mnNoInlines(0),
+          mbInHellLayer(bInHellLayer),
           mbInHeaderFooter( _bInHeaderFooter )
     {}
 };
@@ -71,6 +73,7 @@ private:
     // new parameter <_bInHeaderFooter>, indicating
     // that object is in header or footer
     sal_uLong GetEscherObjectPos( sal_uLong nSpId,
+                                  const bool bInHellLayer,
                               const bool _bInHeaderFooter );
     sal_uLong GetDrawingObjectPos(short nWwHeight);
     void InsertObject(SdrObject *pObject, sal_uLong nPos);
@@ -86,6 +89,7 @@ public:
     // new parameter <_bInHeaderFooter>, indicating that object is in header or footer
     void InsertEscherObject( SdrObject* pObject,
                              sal_uLong nSpId,
+                             const bool bInHellLayer,
                              const bool _bInHeaderFooter );
     void InsideEscher(sal_uLong nIndex);
     void OutsideEscher();
