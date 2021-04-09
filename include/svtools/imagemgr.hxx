@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <svtools/svtdllapi.h>
+#include <unotools/ucbhelper.hxx>
 #include <vcl/vclenum.hxx>
 
 enum class SvImageId {
@@ -119,7 +120,10 @@ private:
 
 public:
     SVT_DLLPUBLIC static OUString GetImageId( const INetURLObject& rURL, bool bBig = false );
-    SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, bool bBig = false);
+    SVT_DLLPUBLIC static Image  GetImage(
+        const INetURLObject& rURL, bool bBig = false,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & env
+            = utl::UCBContentHelper::getDefaultCommandEnvironment());
     SVT_DLLPUBLIC static OUString GetFileImageId( const INetURLObject& rURL );
     SVT_DLLPUBLIC static Image  GetImageNoDefault(const INetURLObject& rURL, vcl::ImageType eImageType = vcl::ImageType::Small);
     SVT_DLLPUBLIC static OUString GetFolderImageId( const svtools::VolumeInfo& rInfo );

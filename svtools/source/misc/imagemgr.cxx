@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -350,7 +351,25 @@ static SvImageId GetFolderImageId_Impl( const OUString& rURL )
     return nRet;
 }
 
-static SvImageId GetImageId_Impl( const INetURLObject& rObject, bool bDetectFolder )
+static bool isFolder(
+    OUString const & url, css::uno::Reference<css::ucb::XCommandEnvironment> const & env)
+{
+    try {
+        return ucbhelper::Content(url, env, comphelper::getProcessComponentContext()).isFolder();
+    } catch (css::uno::RuntimeException &) {
+        throw;
+    } catch (css::ucb::CommandAbortedException &) {
+        assert(false); // this cannot happen
+        throw;
+    } catch (css::uno::Exception &) {
+        TOOLS_INFO_EXCEPTION("svtools.misc", "isFolder(" << url << ")");
+        return false;
+    }
+}
+
+static SvImageId GetImageId_Impl(
+    const INetURLObject& rObject, bool bDetectFolder,
+    css::uno::Reference<css::ucb::XCommandEnvironment> const & env )
 {
     OUString aExt, sURL = rObject.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     SvImageId nImage = SvImageId::File;
@@ -404,7 +423,7 @@ static SvImageId GetImageId_Impl( const INetURLObject& rObject, bool bDetectFold
 
     if ( nImage == SvImageId::File && !sURL.isEmpty() )
     {
-        if ( bDetectFolder && CONTENT_HELPER::IsFolder( sURL ) )
+        if ( bDetectFolder && isFolder( sURL, env ) )
             nImage = GetFolderImageId_Impl( sURL );
         else if ( !aExt.isEmpty() )
             nImage = GetImageId_Impl( aExt );
@@ -783,28 +802,33 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
 
 OUString SvFileInformationManager::GetImageId(const INetURLObject& rObject, bool bBig)
 {
-    SvImageId nImage = GetImageId_Impl( rObject, true );
+    SvImageId nImage = GetImageId_Impl(
+        rObject, true, utl::UCBContentHelper::getDefaultCommandEnvironment() );
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
     return GetImageNameFromList_Impl(nImage, bBig ? vcl::ImageType::Size26 : vcl::ImageType::Size16);
 }
 
-Image SvFileInformationManager::GetImage(const INetURLObject& rObject, bool bBig)
+Image SvFileInformationManager::GetImage(
+    const INetURLObject& rObject, bool bBig,
+    css::uno::Reference<css::ucb::XCommandEnvironment> const & env)
 {
-    SvImageId nImage = GetImageId_Impl( rObject, true );
+    SvImageId nImage = GetImageId_Impl( rObject, true, env );
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
     return GetImageFromList_Impl(nImage, bBig ? vcl::ImageType::Size26 : vcl::ImageType::Size16);
 }
 
 OUString SvFileInformationManager::GetFileImageId(const INetURLObject& rObject)
 {
-    SvImageId nImage = GetImageId_Impl( rObject, false );
+    SvImageId nImage = GetImageId_Impl(
+        rObject, false, utl::UCBContentHelper::getDefaultCommandEnvironment() );
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
     return GetImageNameFromList_Impl(nImage, vcl::ImageType::Size16);
 }
 
 Image SvFileInformationManager::GetImageNoDefault(const INetURLObject& rObject, vcl::ImageType eImageType)
 {
-    SvImageId nImage = GetImageId_Impl(rObject, true);
+    SvImageId nImage = GetImageId_Impl(
+        rObject, true, utl::UCBContentHelper::getDefaultCommandEnvironment());
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
 
     if ( nImage == SvImageId::File )

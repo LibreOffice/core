@@ -204,7 +204,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             pVCLPopupMenu->InsertItem( sal_uInt16( i+1 ), aMenuShortCut.makeStringAndClear() );
 
             if ( bIsIconsAllowed ) {
-                Image aThumbnail = SvFileInformationManager::GetImage(aURL);
+                Image aThumbnail = SvFileInformationManager::GetImage(aURL, false, {});
                 pVCLPopupMenu->SetItemImage(sal_uInt16 ( i+1 ), aThumbnail);
             }
 
