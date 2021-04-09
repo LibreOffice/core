@@ -42,6 +42,9 @@ namespace o3tl
 #define SPLITWINDOW_APPEND          (sal_uInt16(0xFFFF))
 #define SPLITWINDOW_ITEM_NOTFOUND   (sal_uInt16(0xFFFF))
 
+#define SPLITWIN_SPLITSIZE              4
+#define SPLITWIN_SPLITSIZEEXLN          7
+
 class VCL_DLLPUBLIC SplitWindow : public DockingWindow
 {
 private:
