@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "739f8eb8_640f3e65",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-09T08:09:49Z",
+      "side": 1,
+      "message": "What if there are multi-column primary key? Then the xResultKPCL has several rows (one per column taking part in the key).\n\nAdditionally, primary key might not be auto-incremented. Which is likely for multi-column ones (so maybe just skip if xResultKPCL has many rows), and needs checking for single-column ones.",
+      "revId": "93416b2b451aa906b42d436f2f0a4155c1becf02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4df53138_5f4dee15",
         "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
         "patchSetId": 5
