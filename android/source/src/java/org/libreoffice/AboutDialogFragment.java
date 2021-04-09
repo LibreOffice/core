@@ -30,9 +30,6 @@ import java.io.File;
 
 public class AboutDialogFragment extends DialogFragment {
 
-    private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
-
-
     @NonNull @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -81,21 +78,21 @@ public class AboutDialogFragment extends DialogFragment {
                 .setNegativeButton(R.string.about_license, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        loadFromAbout("/assets/license.txt");
+                        loadFromAbout(R.raw.license);
                         dialog.dismiss();
                     }
                 })
                 .setPositiveButton(R.string.about_notice, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        loadFromAbout("/assets/notice.txt");
+                        loadFromAbout(R.raw.notice);
                         dialog.dismiss();
                     }
                 })
                 .setNeutralButton(R.string.about_moreinfo, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        loadFromAbout(DEFAULT_DOC_PATH);
+                        loadFromAbout(R.raw.example);
                         dialog.dismiss();
                     }
                 });
@@ -103,8 +100,8 @@ public class AboutDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    private void loadFromAbout(String input) {
-        Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(new File(input)));
+    private void loadFromAbout(int resourceId) {
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("android.resource://" + BuildConfig.APPLICATION_ID + "/" + resourceId));
         String packageName = getActivity().getApplicationContext().getPackageName();
         ComponentName componentName = new ComponentName(packageName, LibreOfficeMainActivity.class.getName());
         i.setComponent(componentName);

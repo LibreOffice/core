@@ -6,6 +6,7 @@
 /source/build/
 /source/captures/
 /source/jni/Application.mk
+/source/res_generated
 /jniLibs/
 /source/liboSettings.gradle
 /source/local.properties
