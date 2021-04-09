@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bac43659_70dcdf8c",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-04-09T09:28:20Z",
+      "side": 1,
+      "message": "just use \u0027CPPUNIT_ASSERT(rDoc.GetValue(ScAddress(1, 0, 0)));\u0027",
+      "revId": "2b03cbebf30c70c1c9d1e8cbfa2207d538aa7900",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
