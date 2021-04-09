@@ -124,7 +124,13 @@ class OfficeConnection:
                     xMgr = self.xContext.ServiceManager
                     xDesktop = xMgr.createInstanceWithContext(
                             "com.sun.star.frame.Desktop", self.xContext)
-                    xDesktop.terminate()
+                    success = xDesktop.terminate()
+                    if not (success):
+                       time.sleep(1)
+                       success = xDesktop.terminate()
+                       if not (success):
+                          print("forcing to terminate the office process")
+                          self.soffice.terminate()
                     print("...done")
                 except pyuno.getClass("com.sun.star.beans.UnknownPropertyException"):
                     print("caught while TearDown:\n", traceback.format_exc())
