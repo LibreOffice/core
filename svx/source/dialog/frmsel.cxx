@@ -413,6 +413,9 @@ void FrameSelectorImpl::InitBorderGeometry()
     maHor.AddFocusPolygon(    tools::Rectangle( mnLine1 - mnFocusOffs, mnLine2 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine2 + mnFocusOffs ) );
     maBottom.AddFocusPolygon( tools::Rectangle( mnLine1 - mnFocusOffs, mnLine3 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
 
+    maTLBR.ClearFocusArea();
+    maBLTR.ClearFocusArea();
+
     for( nCol = 0, nCols = maArray.GetColCount(); nCol < nCols; ++nCol )
     {
         for( nRow = 0, nRows = maArray.GetRowCount(); nRow < nRows; ++nRow )
