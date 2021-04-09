@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63cd81d3_22337518",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-09T15:13:26Z",
+      "side": 1,
+      "message": "don\u0027t need this check",
+      "revId": "cb8a0460f14fc75a1e2ece01534e7ce930270ecc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
