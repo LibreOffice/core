@@ -74,30 +74,15 @@ class LOKitTileProvider implements TileProvider {
         mContext.setTileProvider(this);
         mInputFile = input;
         File f = new File(mInputFile);
-        final String cacheFile = mContext.getExternalCacheDir().getAbsolutePath() + "/lo_cached_" + f.getName();
-
-        if(mContext.firstStart){
-            File cacheFileObj = new File(cacheFile);
-            if(cacheFileObj.exists()) {
-                cacheFileObj.delete();
-            }
-            mContext.firstStart=false;
-        }
 
         Log.i(LOGTAG, "====> Loading file '" + input + "'");
-        File fileToBeEncoded;
-        if(isDocumentCached()){
-            fileToBeEncoded = new File(cacheFile);
-        }else{
-            fileToBeEncoded = new File(input);
 
-        }
+        File fileToBeEncoded = new File(input);
         String encodedFileName = android.net.Uri.encode(fileToBeEncoded.getName());
 
         mDocument = mOffice.documentLoad(
                 (new File(fileToBeEncoded.getParent(),encodedFileName)).getPath()
         );
-
 
         if (mDocument == null && !mContext.isPasswordProtected()) {
             Log.i(LOGTAG, "====> mOffice.documentLoad() returned null, trying to restart 'Office' and loading again");
@@ -401,44 +386,9 @@ class LOKitTileProvider implements TileProvider {
         }
     }
 
-    public boolean isDocumentCached(){
-        File input = new File(mInputFile);
-        final String cacheFile = mContext.getExternalCacheDir().getAbsolutePath() + "/lo_cached_" + input.getName();
-        File cacheFileObj = new File(cacheFile);
-        if(cacheFileObj.exists())
-            return true;
-
-        return false;
-    }
-
-    public void cacheDocument() {
-        String cacheDir = mContext.getExternalCacheDir().getAbsolutePath();
-        File input = new File(mInputFile);
-        final String cacheFile = cacheDir + "/lo_cached_" + input.getName();
-        Log.i(LOGTAG, "cacheDocument: " + cacheFile);
-        if(isDocumentCached()){
-            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
-        }else if(mDocument != null){
-            mDocument.saveAs("file://"+cacheFile, FileUtilities.getExtension(input.getPath()).substring(1),"");
-        }else{
-            Log.w(LOGTAG, "mDocument was null when trying to save cacheDocument: " + cacheFile);
-        }
-    }
-
     public void saveDocument(){
-        if(isDocumentCached()){
-            String format = FileUtilities.getExtension(mInputFile).substring(1);
-            String cacheDir = mContext.getExternalCacheDir().getAbsolutePath();
-            File input = new File(mInputFile);
-            final String cacheFile = cacheDir + "/lo_cached_" + input.getName();
-            String path = input.getAbsolutePath();
-            saveDocumentAs(path, format, true);
-            (new File(cacheFile)).delete();
-        }else{
-            mContext.saveDocument();
-        }
+        mContext.saveDocument();
     }
-
 
     private void setupDocumentFonts() {
         String values = mDocument.getCommandValues(".uno:CharFontName");

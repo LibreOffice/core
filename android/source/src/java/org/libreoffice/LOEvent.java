@@ -33,7 +33,6 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int SWIPE_LEFT = 12;
     public static final int NAVIGATION_CLICK = 13;
     public static final int UNO_COMMAND = 14;
-    public static final int RESUME = 15;
     public static final int LOAD_NEW = 16;
     public static final int SAVE_AS = 17;
     public static final int UPDATE_PART_PAGE_RECT = 18;
@@ -103,13 +102,6 @@ public class LOEvent implements Comparable<LOEvent> {
         mTypeString = "key / value";
         mString = key;
         mValue = value;
-    }
-
-    public LOEvent(int type, String key, int value) {
-        mType = type;
-        mTypeString = "Resume partIndex";
-        mString = key;
-        mPartIndex = value;
     }
 
     public LOEvent(String filePath, int type) {

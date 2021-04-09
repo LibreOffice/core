@@ -188,26 +188,6 @@ class LOKitThread extends Thread {
         mLayerClient.setZoomConstraints(new ZoomConstraints(true, 1f, minZoom, 0f));
     }
 
-
-    /**
-     * Resume the document with the current part
-     */
-
-    private void resumeDocument(String filename, int partIndex){
-
-        mLayerClient = mContext.getLayerClient();
-
-        mInvalidationHandler = new InvalidationHandler(mContext);
-        mTileProvider = TileProviderFactory.create(mContext, mInvalidationHandler, filename);
-
-        if (mTileProvider.isReady()) {
-            updateZoomConstraints();
-            changePart(partIndex);
-        } else {
-            closeDocument();
-        }
-    }
-
     /**
      * Change part of the document.
      */
@@ -309,9 +289,6 @@ class LOKitThread extends Thread {
                 break;
             case LOEvent.SAVE_COPY_AS:
                 saveDocumentAs(event.filePath, event.fileType, false);
-                break;
-            case LOEvent.RESUME:
-                resumeDocument(event.mString, event.mPartIndex);
                 break;
             case LOEvent.CLOSE:
                 closeDocument();
