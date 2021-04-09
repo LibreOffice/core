@@ -476,7 +476,7 @@ void ScInputWindow::SetSizePixel( const Size& rNewSize )
     ToolBox::SetSizePixel(rNewSize);
 }
 
-void ScInputWindow::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags)
+void ScInputWindow::setPosSizePixel(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags)
 {
     ToolBox::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
