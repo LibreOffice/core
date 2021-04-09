@@ -55,12 +55,6 @@ postprocess_FILES_calc := \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-calc.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-calc.xcu
 
-ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
-postprocess_FILES_calc += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/calc)/org/openoffice/Office/DataAccess/Drivers-calc.xcu
-postprocess_DRIVERS += calc
-endif
-
 postprocess_DEPS_cjk := main
 postprocess_FILES_cjk := \
 	$(postprocess_MOD)/org/openoffice/Office/Common-cjk.xcu \
@@ -276,23 +270,15 @@ postprocess_FILES_main := \
 	$(postprocess_MOD)/org/openoffice/TypeDetection/UISort-impress.xcu \
 	$(postprocess_MOD)/org/openoffice/TypeDetection/UISort-math.xcu \
 	$(postprocess_MOD)/org/openoffice/TypeDetection/UISort-writer.xcu
-ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
-postprocess_FILES_main += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/dbase)/org/openoffice/Office/DataAccess/Drivers-dbase.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/flat)/org/openoffice/Office/DataAccess/Drivers-flat.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/odbc)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysql_jdbc)/org/openoffice/Office/DataAccess/Drivers-mysql_jdbc.xcu
-postprocess_DRIVERS += dbase flat odbc mysql_jdbc
-endif
+
 ifeq (MACOSX,$(OS))
 postprocess_FILES_main += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/macab)/org/openoffice/Office/DataAccess/Drivers-macab.xcu \
 	$(postprocess_MOD)/org/openoffice/Inet-macosx.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Accelerators-macosx.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Common-macosx.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Paths-macosx.xcu
 		# Inet-macosx.xcu must come after Inet.xcu
-postprocess_DRIVERS += macab
+
 else ifeq ($(USING_X11), TRUE)
 postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Inet-unixdesktop.xcu \
@@ -314,36 +300,10 @@ postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Office/Paths-unxwnt.xcu \
 	$(postprocess_MOD)/org/openoffice/ucb/Configuration-win.xcu
 		# Inet-wnt.xcu must come after Inet.xcu
-ifeq ($(gb_Side),host)
-postprocess_FILES_main += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/ado)/org/openoffice/Office/DataAccess/Drivers-ado.xcu
-postprocess_DRIVERS += ado
-endif
-endif
-ifneq ($(WITH_WEBDAV),)
-postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/ucb/Configuration-webdav.xcu
-endif
-ifeq ($(ENABLE_EVOAB2),TRUE)
-postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/evoab2)/org/openoffice/Office/DataAccess/Drivers-evoab2.xcu
-postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess-evoab2.xcu
-postprocess_DRIVERS += evoab
-endif
-ifeq ($(ENABLE_JAVA),TRUE)
-postprocess_FILES_main += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/hsqldb)/org/openoffice/Office/DataAccess/Drivers-hsqldb.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/jdbc)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu
-postprocess_DRIVERS += hsqldb jdbc
-endif
-ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
-postprocess_FILES_main += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/firebird)/org/openoffice/Office/DataAccess/Drivers-firebird.xcu
-postprocess_DRIVERS += firebird_sdbc
 endif
 
-ifeq ($(ENABLE_MARIADBC),TRUE)
-postprocess_FILES_main += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysqlc)/org/openoffice/Office/DataAccess/Drivers-mysqlc.xcu
-postprocess_DRIVERS += mysqlc
+ifneq ($(WITH_WEBDAV),)
+postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/ucb/Configuration-webdav.xcu
 endif
 
 ifneq (,$(SYSTEM_LIBEXTTEXTCAT_DATA))
@@ -425,25 +385,11 @@ postprocess_FILES_writer := \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-writer.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-writer.xcu
 
-ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
-postprocess_FILES_writer += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/writer)/org/openoffice/Office/DataAccess/Drivers-writer.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysql_jdbc)/org/openoffice/Office/DataAccess/Drivers-mysql_jdbc.xcu
-postprocess_DRIVERS += writer mysql_jdbc
-endif
-
 postprocess_DEPS_xsltfilter := main
 postprocess_OPTDEPS_xsltfilter := calc writer
 postprocess_FILES_xsltfilter := \
 	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_xslt_filters.xcu) \
 	$(call gb_XcuFilterTypesTarget_get_target,fcfg_xslt_types.xcu)
-
-ifneq ($(BUILD_POSTGRESQL_SDBC),)
-postprocess_XCDS += postgresql.xcd
-postprocess_DEPS_postgresql := main
-postprocess_FILES_postgresql := $(call gb_XcuModuleTarget_get_target,connectivity/registry/postgresql)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu
-postprocess_DRIVERS += postgresql
-endif
 
 ifneq (,$(and $(USING_X11), $(ENABLE_GIO)))
 postprocess_XCDS += gnome.xcd
@@ -484,6 +430,71 @@ postprocess_DEPS_forcedefault := main
 postprocess_FILES_forcedefault := \
 	$(postprocess_MOD)/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu
 endif
+
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+postprocess_FILES_main += \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/dbase)/org/openoffice/Office/DataAccess/Drivers-dbase.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/flat)/org/openoffice/Office/DataAccess/Drivers-flat.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/odbc)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu
+postprocess_DRIVERS += dbase flat odbc
+
+ifeq ($(gb_Side),host)
+postprocess_FILES_writer += \
+       $(call gb_XcuModuleTarget_get_target,connectivity/registry/writer)/org/openoffice/Office/DataAccess/Drivers-writer.xcu
+postprocess_DRIVERS += writer
+
+postprocess_FILES_calc += \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/calc)/org/openoffice/Office/DataAccess/Drivers-calc.xcu
+postprocess_DRIVERS += calc
+
+ifeq ($(ENABLE_EVOAB2),TRUE)
+postprocess_FILES_main += \
+    $(call gb_XcuModuleTarget_get_target,connectivity/registry/evoab2)/org/openoffice/Office/DataAccess/Drivers-evoab2.xcu \
+    $(postprocess_MOD)/org/openoffice/Office/DataAccess-evoab2.xcu
+postprocess_DRIVERS += evoab
+endif
+
+ifeq ($(ENABLE_JAVA),TRUE)
+postprocess_FILES_main += \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/hsqldb)/org/openoffice/Office/DataAccess/Drivers-hsqldb.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/jdbc)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysql_jdbc)/org/openoffice/Office/DataAccess/Drivers-mysql_jdbc.xcu
+postprocess_DRIVERS += hsqldb jdbc mysql_jdbc
+endif
+
+ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
+postprocess_FILES_main += \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/firebird)/org/openoffice/Office/DataAccess/Drivers-firebird.xcu
+postprocess_DRIVERS += firebird_sdbc
+endif
+
+ifeq ($(ENABLE_MARIADBC),TRUE)
+postprocess_FILES_main += \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysqlc)/org/openoffice/Office/DataAccess/Drivers-mysqlc.xcu
+postprocess_DRIVERS += mysqlc
+endif
+
+ifneq (,$(BUILD_POSTGRESQL_SDBC))
+postprocess_XCDS += postgresql.xcd
+postprocess_DEPS_postgresql := main
+postprocess_FILES_postgresql := \
+    $(call gb_XcuModuleTarget_get_target,connectivity/registry/postgresql)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu
+postprocess_DRIVERS += postgresql
+endif
+
+ifeq (MACOSX,$(OS))
+postprocess_FILES_main += \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/macab)/org/openoffice/Office/DataAccess/Drivers-macab.xcu \
+postprocess_DRIVERS += macab
+
+else ifeq (WNT,$(OS))
+postprocess_FILES_main += \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/ado)/org/openoffice/Office/DataAccess/Drivers-ado.xcu
+postprocess_DRIVERS += ado
+endif
+
+endif # host
+endif # DBCONNECTIVITY
 
 postprocess_DRIVERS := $(foreach driver,$(postprocess_DRIVERS),driver_$(driver))
 

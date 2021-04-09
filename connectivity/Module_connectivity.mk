@@ -49,8 +49,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-ifneq ($(OS),WNT)
-
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_macab \
@@ -59,13 +57,17 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-endif
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_ado \
 	Library_ado \
 ))
+# "ADO is not available on 64bit" said the commit
+ifeq ($(CPUNAME),INTEL)
+$(eval $(call gb_Module_add_check_targets,connectivity,\
+    CppunitTest_connectivity_ado \
+))
+endif
 endif
 
 ifeq ($(ENABLE_EVOAB2),TRUE)
@@ -107,15 +109,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 
 endif
 
-ifeq ($(OS),WNT)
-# "ADO is not available on 64bit" said the commit
-ifneq ($(CPUNAME),X86_64)
-$(eval $(call gb_Module_add_check_targets,connectivity,\
-	CppunitTest_connectivity_ado \
-))
-endif
-endif
-
 ifneq ($(filter QADEVOOO,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 	Jar_ConnectivityTools \
@@ -137,6 +130,6 @@ $(eval $(call gb_Module_add_check_targets,connectivity,\
 	CppunitTest_connectivity_sharedresources \
 ))
 
-endif
+endif # DBCONNECTIVITY
 
 # vim: set noet sw=4 ts=4:

@@ -72,7 +72,7 @@ gb_LinkTarget_LDFLAGS += \
 	-Wl,--sysroot=$(SYSBASE)
 endif
 
-ifneq ($(DISABLE_DYNLOADING),TRUE)
+ifeq (,$(DISABLE_DYNLOADING))
 gb_LinkTarget_LDFLAGS += \
 	-Wl,-rpath-link,$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
 	-Wl,-z,combreloc \

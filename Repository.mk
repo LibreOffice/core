@@ -17,6 +17,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+gb_Windows_dotNET = $(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64,$(CPUNAME)),$(if $(DISABLE_DYNLOADING),,$(true))))
+
 $(eval $(call gb_Helper_register_executables,NONE, \
 	HelpIndexer \
 	HelpLinker \
@@ -77,7 +79,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
-	$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64,$(CPUNAME)),climaker)) \
+	$(if $(call gb_Windows_dotNET),climaker) \
 	cppumaker \
 	idlc \
 	javamaker \
@@ -326,7 +328,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ogltrans, \
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
 	$(if $(filter MACOSX,$(OS)),\
-		avmediaMacAVF \
+		$(call gb_Helper_optional,AVMEDIA,avmediaMacAVF) \
 	) \
 	$(call gb_Helper_optional,SCRIPTING, \
 		basctl \
@@ -558,7 +560,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	affine_uno_uno \
-	$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64,$(CPUNAME)),cli_uno)) \
+	$(if $(call gb_Windows_dotNET),cli_uno) \
 	i18nlangtag \
 	$(if $(ENABLE_JAVA), \
 		java_uno \
@@ -605,8 +607,10 @@ $(eval $(call gb_Helper_register_plugins_for_install,PRIVATELIBS_URE,ure, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
-	$(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
-	$(if $(filter WNT,$(OS)),avmediawin) \
+	$(call gb_Helper_optional,AVMEDIA, \
+        $(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
+	    $(if $(filter WNT,$(OS)),avmediawin) \
+	) \
 	cached1 \
 	collator_data \
 	comphelper \
@@ -857,7 +861,7 @@ $(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
 $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	odk_share_readme \
 	odk_share_readme_generated \
-	$(if $(filter WNT,$(OS)),$(if $(filter-out AARCH64,$(CPUNAME)),odk_cli)) \
+	$(if $(call gb_Windows_dotNET),odk_cli) \
 	odk_config \
 	$(if $(filter WNT,$(OS)),odk_config_win) \
 	odk_docs \

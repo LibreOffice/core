@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,odk,\
-	$(if $(filter-out AARCH64,$(CPUNAME)),Package_cli) \
+	$(if $(or $(filter AARCH64,$(CPUNAME)),$(DISABLE_DYNLOADING)),,Package_cli) \
 	CustomTarget_config_win \
 	Package_config_win \
 ))

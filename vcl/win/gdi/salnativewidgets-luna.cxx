@@ -113,6 +113,7 @@ VisualStylesAPI::VisualStylesAPI()
       lpfnGetThemePartSize( nullptr ),
       lpfnIsThemeActive( nullptr )
 {
+#ifdef DSIABLE_DYNLOADING
     OUString aLibraryName( "uxtheme.dll" );
     mhModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
 
@@ -126,12 +127,15 @@ VisualStylesAPI::VisualStylesAPI()
         lpfnGetThemePartSize = reinterpret_cast<GetThemePartSize_Proc_T>(osl_getAsciiFunctionSymbol( mhModule, "GetThemePartSize" ));
         lpfnIsThemeActive = reinterpret_cast<IsThemeActive_Proc_T>(osl_getAsciiFunctionSymbol( mhModule, "IsThemeActive" ));
     }
+#endif
 }
 
 VisualStylesAPI::~VisualStylesAPI()
 {
+#ifdef DSIABLE_DYNLOADING
     if( mhModule )
         osl_unloadModule( mhModule );
+#endif
 }
 
 HTHEME VisualStylesAPI::OpenThemeData( HWND hwnd, LPCWSTR pszClassList )

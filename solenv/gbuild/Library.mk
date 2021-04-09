@@ -84,16 +84,20 @@ $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_LinkTarget_add_defs,$(2),\
 	$(gb_Library_DEFS) \
 )
-$(call gb_Library_get_exports_target,$(1)) : $(call gb_Library_get_target,$(1))
-$(call gb_LinkTarget_get_headers_target,$(2)) : \
-	| $(dir $(call gb_Library_get_ilib_target,$(1))).dir
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
+
+ifeq (,$(DISABLE_DYNLOADING))
+$(call gb_Library_get_exports_target,$(1)) : $(call gb_Library_get_target,$(1))
+$(call gb_LinkTarget_get_headers_target,$(2)) : | $(dir $(call gb_Library_get_ilib_target,$(1))).dir
 $(call gb_Library_Library_platform,$(1),$(2),$(call gb_Library_get_ilib_target,$(1)))
-
 $$(eval $$(call gb_Module_register_target,$(call gb_Library_get_exports_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
-
 $(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library_get_exports_target,$(1)))
+else
+$(call gb_Library_Library_platform,$(1),$(2),$(call gb_Library_get_target,$(1)))
+$$(eval $$(call gb_Module_register_target,$(call gb_Library_get_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Library)
+endif
 
 endef
 

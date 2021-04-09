@@ -18,9 +18,11 @@ endif
 
 ifeq ($(COM),MSC)
 ifneq ($(CPUNAME),AARCH64)
+ifeq (,$(DISABLE_DYNLOADING))
 $(eval $(call gb_Module_add_targets,unoil,\
     CliUnoApi_oootypes \
 ))
+endif
 endif
 endif
 

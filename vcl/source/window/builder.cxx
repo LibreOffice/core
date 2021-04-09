@@ -81,8 +81,10 @@
 #include <tools/svlibrary.h>
 #include <jsdialog/jsdialogbuilder.hxx>
 
+#ifndef _WIN32
 #if defined(DISABLE_DYNLOADING) || defined(LINUX)
 #include <dlfcn.h>
+#endif
 #endif
 
 static bool toBool(std::string_view rValue)
@@ -1578,7 +1580,7 @@ VclBuilder::customMakeWidget GetCustomMakeWidget(const OString& rName)
         pFunction = lo_get_custom_widget_func(sFunction.toUtf8().getStr());
         SAL_WARN_IF(!pFunction, "vcl.builder", "Could not find " << sFunction);
         assert(pFunction);
-#else
+#elif ! defined _WIN32
         pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(
             osl_getFunctionSymbol((oslModule)RTLD_DEFAULT, sFunction.pData));
 #endif

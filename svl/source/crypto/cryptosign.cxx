@@ -66,6 +66,9 @@
 // apparently are broken, if this overflows you end up with an invalid
 // PDF. Need to fix that.
 
+#endif
+
+#if HAVE_FEATURE_NSS || defined _WIN32
 #define MAX_SIGNATURE_CONTENT_LENGTH 50000
 #endif
 
@@ -73,7 +76,7 @@ using namespace com::sun::star;
 
 namespace {
 
-#if HAVE_FEATURE_NSS
+#if HAVE_FEATURE_NSS || defined _WIN32
 void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 {
     static const char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
@@ -81,7 +84,7 @@ void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
     rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
     rBuffer.append( pHexDigits[ nInt & 15 ] );
 }
-#endif // HAVE_FEATURE_NSS
+#endif
 
 #if HAVE_FEATURE_NSS && !defined(_WIN32)
 

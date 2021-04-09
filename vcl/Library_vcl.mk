@@ -580,7 +580,7 @@ vcl_headless_freetype_code=\
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    $(if $(DISABLE_DYNLOADING),,vcl/source/app/salplug) \
+    $(if $(DISABLE_DYNLOADING),vcl/source/app/salplug_static,vcl/source/app/salplug) \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/unx/generic/window/screensaverinhibitor \
@@ -610,7 +610,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
-    vcl/wasm/salplug \
+    vcl/source/app/salplug_static \
     $(vcl_headless_code) \
     $(vcl_headless_freetype_code) \
 ))
@@ -622,12 +622,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
     fontconfig \
     freetype \
 ))
-else
-ifneq (,$(DISABLE_DYNLOADING))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/wasm/salplug \
-))
-endif
 endif
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
@@ -775,7 +769,7 @@ endif
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/opengl/win/WinDeviceInfo \
-    $(if $(DISABLE_DYNLOADING),vcl/wasm/salplug,vcl/source/app/salplug) \
+    $(if $(DISABLE_DYNLOADING),vcl/source/app/salplug_static,vcl/source/app/salplug) \
     vcl/win/app/fileregistration \
 ))
 

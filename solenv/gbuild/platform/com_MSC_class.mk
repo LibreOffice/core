@@ -68,7 +68,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(if $(filter -clr,$(2)),,$(if $(5),$(gb_COMPILER_PLUGINS))) \
 		$(if $(COMPILER_TEST),-fsyntax-only -ferror-limit=0 -Xclang -verify) \
-		-Fd$(PDBFILE) \
+		$(if $(PDBFILE),-Fd$(PDBFILE),$(error No PDBFILE set for $(1))) \
 		$(PCHFLAGS) \
 		$(if $(COMPILER_TEST),,$(gb_COMPILERDEPFLAGS)) \
 		$(INCLUDE) \
@@ -101,7 +101,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(call gb_CObject__compiler,$(4) $(5),$(3),$(8)) \
 		$(call gb_Helper_remove_overridden_flags, \
 			$(4) $(5) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
-		-Fd$(PDBFILE) \
+		$(if $(PDBFILE),-Fd$(PDBFILE),$(error No PDBFILE set for $(1))) \
 		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
 		$(gb_LTOFLAGS) \
 		$(gb_COMPILERDEPFLAGS) \
@@ -194,7 +194,7 @@ gb_LinkTarget_get_manifestfile = \
 
 gb_LinkTarget_get_linksearchpath_for_layer = \
 	-LIBPATH:$(WORKDIR)/LinkTarget/StaticLibrary \
-	-LIBPATH:$(INSTDIR)/$(SDKDIRNAME)/lib \
+	-LIBPATH:$(INSTDIR)/$(if $(DISABLE_DYNLOADING),program,$(SDKDIRNAME)/lib) \
 	$(if $(filter OXT,$(1)),\
 		-LIBPATH:$(WORKDIR)/LinkTarget/ExtensionLibrary, \
 		-LIBPATH:$(WORKDIR)/LinkTarget/Library)
@@ -206,6 +206,9 @@ mv $${RESPONSEFILE}.1 $${RESPONSEFILE} &&
 endef
 
 MSC_SUBSYSTEM_VERSION=$(COMMA)$(if $(filter AARCH64,$(CPUNAME)),6.02,6.01)
+
+gb_LinkTarget__is_static_lib = $(if $(or $(filter StaticLibrary,$(TARGETTYPE)),$(and $(filter Library,$(TARGETTYPE)),$(DISABLE_DYNLOADING))),$(true))
+gb_LinkTarget__is_shared_lib = $(if $(and $(filter Library,$(TARGETTYPE)),$(call gb_not,$(DISABLE_DYNLOADING))),$(true))
 
 # the sort on the libraries is used to filter out duplicates to keep commandline
 # length in check - otherwise the dupes easily hit the limit when linking mergedlib
@@ -227,14 +230,15 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter $(call gb_Library__get_workdir_linktargetname,merged),$(2)),$(call gb_LinkTarget_MergedResponseFile)) \
 	unset INCLUDE && \
 	$(gb_LINK) \
-		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(if $(filter StaticLibrary,$(TARGETTYPE)),-LIB) \
+		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(if $(DISABLE_DYNLOADING),,$(gb_Library_TARGETTYPEFLAGS))) \
+		$(if $(call gb_LinkTarget__is_static_lib),-LIB) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-		$(if $(T_SYMBOLS),$(if $(filter Executable Library CppunitTest,$(TARGETTYPE)),$(gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO)),) \
+		$(if $(and $(T_SYMBOLS),$(or $(filter Executable CppunitTest,$(TARGETTYPE)),\
+			$(call gb_LinkTarget__is_shared_lib))),$(gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO)) \
 		$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS$(MSC_SUBSYSTEM_VERSION), -SUBSYSTEM:CONSOLE$(MSC_SUBSYSTEM_VERSION)) \
-		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64) \
 		$(if $(filter YES,$(PE_X86)), -MACHINE:X86) \
 		$(if $(filter YES,$(LIBRARY_X64)), \
+			-MACHINE:X64 \
 			-LIBPATH:$(COMPATH)/lib/x64 \
 			-LIBPATH:$(WINDOWS_SDK_HOME)/lib/x64 \
 			-LIBPATH:$(UCRTSDKDIR)lib/$(UCRTVERSION)/ucrt/x64 \
@@ -245,26 +249,33 @@ $(call gb_Helper_abbreviate_dirs,\
 			-LIBPATH:$(UCRTSDKDIR)lib/$(UCRTVERSION)/ucrt/x86 \
 			$(if $(filter 80 81 10,$(WINDOWS_SDK_VERSION)),-LIBPATH:$(WINDOWS_SDK_HOME)/lib/$(WINDOWS_SDK_LIB_SUBDIR)/um/x86)) \
 		$(T_USE_LD) $(T_LDFLAGS) \
-		$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),/NATVIS:$(SRCDIR)/solenv/vs/LibreOffice.natvis) \
+		$(if $(or $(filter CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__is_shared_lib)),/NATVIS:$(SRCDIR)/solenv/vs/LibreOffice.natvis) \
 		@$${RESPONSEFILE} \
-		$(foreach lib,$(sort $(LINKED_LIBS)),$(call gb_Library_get_ilibfilename,$(lib))) \
-		$(foreach lib,$(sort $(LINKED_STATIC_LIBS)),$(call gb_StaticLibrary_get_filename,$(lib))) \
-		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),\
+		$(if $(call gb_LinkTarget__is_static_lib),,\
+			$(foreach lib,$(sort $(LINKED_LIBS)),$(call gb_Library_get_ilibfilename,$(lib))) \
+			$(foreach lib,$(sort $(LINKED_STATIC_LIBS)),$(call gb_StaticLibrary_get_filename,$(lib))) \
 			$(sort $(T_LIBS)) user32.lib \
 			-manifestfile:$(WORKDIR)/LinkTarget/$(2).manifest \
 			-pdb:$(call gb_LinkTarget__get_pdb_filename,$(WORKDIR)/LinkTarget/$(2))) \
-		$(if $(ILIBTARGET),-out:$(1) -implib:$(ILIBTARGET),-out:$(1)) \
+		-out:$(1) $(if $(call gb_LinkTarget__is_shared_lib),-implib:$(ILIBTARGET)) \
 		| LC_ALL=C $(GBUILDDIR)/platform/filter-creatingLibrary.awk; RC=$${PIPESTATUS[0]}; rm $${RESPONSEFILE} \
-	$(if $(filter Library,$(TARGETTYPE)),; if [ ! -f $(ILIBTARGET) ]; then rm -f $(1); exit 42; fi) \
-	$(if $(filter Library,$(TARGETTYPE)),&& if [ -f $(WORKDIR)/LinkTarget/$(2).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(WORKDIR)/LinkTarget/$(2).manifest $(SRCDIR)/solenv/gbuild/platform/win_compatibility.manifest -outputresource:$(1)\;2 && touch -r $(1) $(WORKDIR)/LinkTarget/$(2).manifest $(ILIBTARGET); fi) \
-	$(if $(filter Executable,$(TARGETTYPE)),&& if [ -f $(WORKDIR)/LinkTarget/$(2).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(WORKDIR)/LinkTarget/$(2).manifest $(SRCDIR)/solenv/gbuild/platform/win_compatibility.manifest -outputresource:$(1)\;1 && touch -r $(1) $(WORKDIR)/LinkTarget/$(2).manifest; fi) \
-	$(if $(filter Executable,$(TARGETTYPE)),&& mt.exe $(MTFLAGS) -nologo -manifest $(SRCDIR)/solenv/gbuild/platform/DeclareDPIAware.manifest -updateresource:$(1)\;1 ) \
-	$(if $(filter Library,$(TARGETTYPE)),&& \
-		echo $(notdir $(1)) > $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
+	$(if $(call gb_LinkTarget__is_shared_lib),; \
+		if [ ! -f $(ILIBTARGET) ]; then rm -f $(1); exit 42; fi \
+		&& if [ -f $(WORKDIR)/LinkTarget/$(2).manifest ]; then \
+			mt.exe $(MTFLAGS) -nologo -manifest $(WORKDIR)/LinkTarget/$(2).manifest $(SRCDIR)/solenv/gbuild/platform/win_compatibility.manifest -outputresource:$(1)\;2 \
+				&& touch -r $(1) $(WORKDIR)/LinkTarget/$(2).manifest $(ILIBTARGET); \
+		fi \
+		&& echo $(notdir $(1)) > $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
 		$(gb_LINK) \
 			-dump -exports $(ILIBTARGET) \
 			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
 		$(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp,$(WORKDIR)/LinkTarget/$(2).exports,$(1))) \
+	$(if $(filter Executable,$(TARGETTYPE)),\
+		&& if [ -f $(WORKDIR)/LinkTarget/$(2).manifest ]; then \
+			mt.exe $(MTFLAGS) -nologo -manifest $(WORKDIR)/LinkTarget/$(2).manifest $(SRCDIR)/solenv/gbuild/platform/win_compatibility.manifest -outputresource:$(1)\;1 \
+				&& touch -r $(1) $(WORKDIR)/LinkTarget/$(2).manifest; \
+		fi \
+		&& mt.exe $(MTFLAGS) -nologo -manifest $(SRCDIR)/solenv/gbuild/platform/DeclareDPIAware.manifest -updateresource:$(1)\;1 ) \
 	; \
 	$(call gb_Trace_EndRange,$(2),LNK) $(if $(gb_TRACE),;) \
 	exit $$RC)
@@ -308,8 +319,14 @@ gb_Library_TARGETTYPEFLAGS := \
 
 gb_Library_get_rpath :=
 
-gb_Library_SYSPRE := i
 gb_Library_PLAINEXT := .lib
+ifeq (,$(DISABLE_DYNLOADING))
+gb_Library_DLLEXT := .dll
+gb_Library_SYSPRE := i
+else
+gb_Library_DLLEXT := .lib
+gb_Library_SYSPRE :=
+endif
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
@@ -326,7 +343,6 @@ gb_Library_LAYER := \
 gb_Library_ILIBFILENAMES :=\
 	$(foreach lib,$(gb_Library_KNOWNLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
-gb_Library_DLLEXT := .dll
 gb_Library_UDK_MAJORVER := 3
 gb_Library_RTEXT := MSC$(gb_Library_DLLEXT)
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
@@ -357,12 +373,17 @@ define gb_Library_Library_platform
 $(call gb_LinkTarget_set_ilibtarget,$(2),$(3))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
-	$(patsubst %.lib,%.exp,$(3)) \
 	$(call gb_LinkTarget_get_manifestfile,$(2)) \
 	$(call gb_LinkTarget_get_pdbfile_in,$(2)) \
 	$(call gb_LinkTarget_get_pdbfile_out,$(2)) \
+)
+
+ifeq (,$(DISABLE_DYNLOADING))
+$(call gb_LinkTarget_add_auxtargets,$(2),\
+	$(patsubst %.lib,%.exp,$(3)) \
 	$(call gb_LinkTarget_get_ilkfile,$(2)) \
 )
+endif
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
 

@@ -40,6 +40,7 @@ gb_BUILD_TOOLS = \
 		) \
 	,$(call gb_Executable_get_runtime_dependencies,$(executable))) \
 	$(foreach executable, \
+        python \
 		xsltproc \
 	,$(call gb_ExternalExecutable_get_dependencies,$(executable))) \
 	$(INSTROOT)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno) \

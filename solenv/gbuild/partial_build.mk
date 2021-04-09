@@ -37,7 +37,7 @@ include $(SRCDIR)/solenv/gbuild/gbuild.mk
 
 $(eval $(call gb_Module_make_global_targets,$(wildcard $(module_directory)Module*.mk)))
 
-ifneq (,$(DISABLE_DYNLOADING))
+ifeq ($(DISABLE_DYNLOADING),TRUE)
 include $(SRCDIR)/solenv/gbuild/static.mk
 endif
 

@@ -72,6 +72,9 @@ endif
 endif
 
 ifeq ($(OS),WNT)
+gb_Library_FILENAMES := $(patsubst unobootstrapprotector:libuno%,unobootstrapprotector:uno%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst unoexceptionprotector:libuno%,unoexceptionprotector:uno%,$(gb_Library_FILENAMES))
+
 gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst rdf:rdf%,rdf:librdf%,$(gb_Library_FILENAMES))
 

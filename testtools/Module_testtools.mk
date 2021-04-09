@@ -30,9 +30,13 @@ $(eval $(call gb_Module_add_targets,testtools,\
 endif
 
 ifeq ($(COM),MSC)
+ifneq ($(CPUNAME),AARCH64)
+ifeq (,$(DISABLE_DYNLOADING))
 $(eval $(call gb_Module_add_targets,testtools,\
 	CustomTarget_bridgetest_climaker \
 ))
+endif
+endif
 endif
 
 $(eval $(call gb_Module_add_check_targets,testtools,\

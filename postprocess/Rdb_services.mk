@@ -143,20 +143,18 @@ $(eval $(call gb_Rdb_add_components,services,\
 		lingucomponent/source/spellcheck/macosxspell/MacOSXSpell \
 	) \
 	$(if $(filter WNT,$(OS)), \
-		avmedia/source/win/avmediawin \
+		$(call gb_Helper_optional,AVMEDIA,avmedia/source/win/avmediawin) \
+		embeddedobj/source/msole/emboleobj.windows \
+		embedserv/util/emser \
+		extensions/source/ole/oleautobridge \
 		fpicker/source/win32/fps \
 		shell/source/backends/wininetbe/wininetbe1 \
 		shell/source/win32/simplemail/smplmail \
 		shell/source/win32/syssh \
+		winaccessibility/source/service/winaccessibility \
 	) \
 	$(if $(filter-out WNT,$(OS)), \
 		embeddedobj/source/msole/emboleobj \
-	) \
-	$(if $(filter WNT,$(OS)), \
-		embeddedobj/source/msole/emboleobj.windows \
-		embedserv/util/emser \
-		extensions/source/ole/oleautobridge \
-		winaccessibility/source/service/winaccessibility \
 	) \
 	$(if $(WITH_WEBDAV), \
 		ucb/source/ucp/webdav-neon/ucpdav1 \
@@ -184,7 +182,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		ucb/source/ucp/gio/ucpgio \
 	) \
 	$(if $(ENABLE_GSTREAMER_1_0), \
-		avmedia/source/gstreamer/avmediagstreamer \
+		$(call gb_Helper_optional,AVMEDIA,avmedia/source/gstreamer/avmediagstreamer) \
 	) \
 	$(if $(ENABLE_KF5), \
 		shell/source/backends/kf5be/kf5be1 \
@@ -271,7 +269,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(DISABLE_GUI),,desktop/source/splash/spl) \
 	$(if $(ENABLE_LDAP),extensions/source/config/ldap/ldapbe2) \
 	$(if $(filter WNT,$(OS)),\
-		extensions/source/config/WinUserInfo/WinUserInfoBe \
+		$(if $(DISABLE_DYNLOADING),,extensions/source/config/WinUserInfo/WinUserInfoBe) \
 	) \
 	extensions/source/logging/log \
 	$(if $(filter-out WNT,$(OS)),\

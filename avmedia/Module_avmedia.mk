@@ -13,7 +13,6 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmedia \
 ))
 
-ifneq ($(USE_AVMEDIA_DUMMY),TRUE)
 $(eval $(call gb_Module_add_l10n_targets,avmedia,\
     AllLangMoTarget_avmedia \
 ))
@@ -34,8 +33,6 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediawin \
 ))
-endif
-
 endif
 
 # vim: set noet sw=4 ts=4:

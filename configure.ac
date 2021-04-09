@@ -1290,7 +1290,7 @@ if test "$_os" = "Emscripten"; then
         EMSCRIPTEN_ERROR=1
     fi
     if test -z "$EMMAKEN_JUST_CONFIGURE"; then
-	AC_MSG_WARN(["\$EMMAKEN_JUST_CONFIGURE wasn't set by emconfigure. Prefix configure or use autogen.sh])
+        AC_MSG_WARN(["\$EMMAKEN_JUST_CONFIGURE wasn't set by emconfigure. Prefix configure or use autogen.sh])
         EMSCRIPTEN_ERROR=1
     fi
     if test $EMSCRIPTEN_ERROR -ne 0; then
@@ -2903,13 +2903,10 @@ if test -z "$enable_avmedia"; then
     enable_avmedia=yes
 fi
 
-BUILD_TYPE="$BUILD_TYPE AVMEDIA"
 if test "$enable_avmedia" = yes; then
+    BUILD_TYPE="$BUILD_TYPE AVMEDIA"
     AC_DEFINE(HAVE_FEATURE_AVMEDIA)
-else
-    USE_AVMEDIA_DUMMY='TRUE'
 fi
-AC_SUBST(USE_AVMEDIA_DUMMY)
 
 # Decide whether to build database connectivity stuff (including
 # Base) or not. We probably don't want to on non-desktop OSes.
@@ -9441,28 +9438,26 @@ if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
         fi
     fi
 fi
-AC_SUBST(PYTHON_FOR_BUILD)
 
 # Checks for Python to use for Pyuno
 AC_MSG_CHECKING([which Python to use for Pyuno])
 case "$enable_python" in
 no|disable)
-    if test -z $PYTHON_FOR_BUILD; then
+    if test -z "$PYTHON_FOR_BUILD" -a "$cross_compiling" != yes; then
         # Python is required to build LibreOffice. In theory we could separate the build-time Python
         # requirement from the choice whether to include Python stuff in the installer, but why
         # bother?
-        if test "$cross_compiling" = yes; then
-            enable_python=system
-        else
-            AC_MSG_ERROR([Python is required at build time.])
-        fi
+        AC_MSG_ERROR([Python is required at build time.])
     fi
     enable_python=no
     AC_MSG_RESULT([none])
     ;;
 ""|yes|auto)
-    if test "$DISABLE_SCRIPTING" = TRUE -a -n "$PYTHON_FOR_BUILD"; then
-        AC_MSG_RESULT([no, overridden by --disable-scripting])
+    if test "$DISABLE_SCRIPTING" = TRUE; then
+        if test -z "$PYTHON_FOR_BUILD" -a "$cross_compiling" != yes; then
+            AC_MSG_ERROR([Python support can't be disabled without cross-compiling or a system python.])
+        fi
+        AC_MSG_RESULT([none, overridden by --disable-scripting])
         enable_python=no
     elif test $build_os = cygwin; then
         dnl When building on Windows we don't attempt to use any installed
@@ -9604,6 +9599,22 @@ if test "$with_lxml" != no; then
     fi
 fi
 
+if test \( "$cross_compiling" = yes -a -z "$PYTHON_FOR_BUILD" \) -o "$enable_python" = internal; then
+    SYSTEM_PYTHON=
+    PYTHON_VERSION_MAJOR=3
+    PYTHON_VERSION_MINOR=8
+    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.8
+    if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
+        AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
+    fi
+    AC_DEFINE_UNQUOTED([PYTHON_VERSION_STRING], [L"${PYTHON_VERSION}"])
+
+    # Embedded Python dies without Home set
+    if test "$HOME" = ""; then
+        export HOME=""
+    fi
+fi
+
 dnl By now enable_python should be "system", "internal" or "no"
 case $enable_python in
 system)
@@ -9630,21 +9641,9 @@ int main(int argc, char **argv) {
     ;;
 
 internal)
-    SYSTEM_PYTHON=
-    PYTHON_VERSION_MAJOR=3
-    PYTHON_VERSION_MINOR=8
-    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.8
-    if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
-        AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
-    fi
-    AC_DEFINE_UNQUOTED([PYTHON_VERSION_STRING], [L"${PYTHON_VERSION}"])
     BUILD_TYPE="$BUILD_TYPE PYTHON"
     if test "$OS" = LINUX -o "$OS" = WNT ; then
         BUILD_TYPE="$BUILD_TYPE LIBFFI"
-    fi
-    # Embedded Python dies without Home set
-    if test "$HOME" = ""; then
-        export HOME=""
     fi
     ;;
 no)
@@ -9659,6 +9658,7 @@ esac
 AC_SUBST(DISABLE_PYTHON)
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
+AC_SUBST(PYTHON_FOR_BUILD)
 AC_SUBST(PYTHON_LIBS)
 AC_SUBST(PYTHON_VERSION)
 AC_SUBST(PYTHON_VERSION_MAJOR)
@@ -12643,7 +12643,7 @@ then
         if test ! -f "$QT5_PLATFORMS_SRCDIR"/wasm_shell.html ; then
             QT5_PLATFORMS_SRCDIR="${QT5_PLATFORMS_SRCDIR/plugins/src\/plugins}/wasm"
         fi
-	if test ! -f "${qt5_platformsdir}"/libqwasm.a -o ! -f "$QT5_PLATFORMS_SRCDIR"/wasm_shell.html; then
+        if test ! -f "${qt5_platformsdir}"/libqwasm.a -o ! -f "$QT5_PLATFORMS_SRCDIR"/wasm_shell.html; then
             AC_MSG_ERROR([No Qt5 WASM QPA plugin found in ${qt5_platformsdir} or ${QT5_PLATFORMS_SRCDIR}])
         fi
     fi

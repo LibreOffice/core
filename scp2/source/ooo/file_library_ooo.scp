@@ -26,7 +26,7 @@
  ************************************************************************/
 #include "macros.inc"
 
-#if defined _MSC_VER && ! defined _ARM64_
+#if defined _MSC_VER && ! defined _ARM64_ && ! DISABLE_DYNLOADING
 
 File gid_File_Lib_Cli_Oootypes_Assembly
     TXT_FILE_BODY;
