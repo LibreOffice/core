@@ -186,7 +186,7 @@ struct BlobReference
     {
         hb_blob_reference(mpBlob);
     }
-    BlobReference(BlobReference&& other)
+    BlobReference(BlobReference&& other) noexcept
         : mpBlob(other.mpBlob)
     {
         other.mpBlob = nullptr;
