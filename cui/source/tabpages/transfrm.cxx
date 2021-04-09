@@ -39,6 +39,7 @@
 #include <svl/aeitem.hxx>
 #include <swpossizetabpage.hxx>
 #include <vcl/canvastools.hxx>
+#include <sal/log.hxx>
 
 // static ----------------------------------------------------------------
 
@@ -247,8 +248,10 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
     if (m_aCtlAngle.IsValueModified() || m_xMtrPosX->get_value_changed_from_saved() || m_xMtrPosY->get_value_changed_from_saved())
     {
         const double fUIScale(double(pView->GetModel()->GetUIScale()));
-        const double fTmpX((GetCoreValue(*m_xMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
-        const double fTmpY((GetCoreValue(*m_xMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
+        //const double fTmpX((GetCoreValue(*m_xMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
+        //const double fTmpY((GetCoreValue(*m_xMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
+        const double fTmpX(static_cast<double>(m_xMtrPosX->get_value(FieldUnit::NONE)));
+        const double fTmpY(static_cast<double>(m_xMtrPosY->get_value(FieldUnit::NONE)));
 
         rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_aCtlAngle.GetRotation()));
         rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), basegfx::fround(fTmpX)));
@@ -913,8 +916,11 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
         if (m_xMtrPosX->get_value_changed_from_saved() || m_xMtrPosY->get_value_changed_from_saved())
         {
             const double fUIScale(double(mpView->GetModel()->GetUIScale()));
-            double fX((GetCoreValue( *m_xMtrPosX, mePoolUnit ) + maAnchor.getX()) * fUIScale);
-            double fY((GetCoreValue( *m_xMtrPosY, mePoolUnit ) + maAnchor.getY()) * fUIScale);
+            //double fX((GetCoreValue( *m_xMtrPosX, mePoolUnit ) + maAnchor.getX()) * fUIScale);
+            //double fY((GetCoreValue( *m_xMtrPosY, mePoolUnit ) + maAnchor.getY()) * fUIScale);
+
+            double fX(static_cast<double>(m_xMtrPosX->get_value(FieldUnit::NONE)));
+            double fY(static_cast<double>(m_xMtrPosY->get_value(FieldUnit::NONE)));
 
             { // #i75273#
                 ::tools::Rectangle aTempRect(mpView->GetAllMarkedRect());

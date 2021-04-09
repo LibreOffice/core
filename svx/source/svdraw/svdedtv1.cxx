@@ -74,6 +74,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/viewsh.hxx>
 #include <comphelper/lok.hxx>
+#include <sal/log.hxx>
 
 // EditView
 
@@ -1598,7 +1599,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
     SfxItemSet aSetAttr(mpModel->GetItemPool());
 
     const SfxPoolItem* pPoolItem=nullptr;
-
     // position
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_X,true,&pPoolItem)) {
         nPosDX=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue() - aRect.Left();
