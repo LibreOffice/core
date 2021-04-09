@@ -91,11 +91,11 @@ static bool IsDefaultAppInstalledInReg()
         return false;
 
     WCHAR szProcPath[MAX_LONG_PATH];
-    if (!GetModuleFileNameW(NULL, szProcPath, MAX_LONG_PATH))
+    if (!GetModuleFileNameW(nullptr, szProcPath, MAX_LONG_PATH))
         return false;
 
     WCHAR szFullProcPath[MAX_LONG_PATH];
-    if (!GetFullPathNameW(szProcPath, MAX_LONG_PATH, szFullProcPath, NULL))
+    if (!GetFullPathNameW(szProcPath, MAX_LONG_PATH, szFullProcPath, nullptr))
         return false;
 
     if (!GetLongPathNameW(szFullProcPath, szFullProcPath, MAX_LONG_PATH))
@@ -104,7 +104,7 @@ static bool IsDefaultAppInstalledInReg()
     if (!GetLongPathNameW(szRegPath, szRegPath, MAX_LONG_PATH))
         return false;
 
-    if (wcslen(szRegPath) > 0 && wcsstr(szFullProcPath, szRegPath) != NULL)
+    if (wcslen(szRegPath) > 0 && wcsstr(szFullProcPath, szRegPath) != nullptr)
         return true;
 
     return false;
