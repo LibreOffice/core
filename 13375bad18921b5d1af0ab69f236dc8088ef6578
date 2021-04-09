@@ -16,6 +16,24 @@
       "revId": "13375bad18921b5d1af0ab69f236dc8088ef6578",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d697966_4fee02eb",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1003161
+      },
+      "writtenOn": "2021-04-09T16:03:44Z",
+      "side": 1,
+      "message": "Fixed (deep night, lack off coffee).",
+      "parentUuid": "939d0d16_95107080",
+      "revId": "13375bad18921b5d1af0ab69f236dc8088ef6578",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
