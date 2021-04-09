@@ -955,11 +955,26 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
             //  HasEra flag is set
             break;
         case SvXMLStyleTokens::DayOfWeek:
-            rParent.UpdateCalendar( sCalendar );
 //! I18N doesn't provide SYSTEM or extended date information yet
-            rParent.AddNfKeyword(
-                sal::static_int_cast< sal_uInt16 >(
-                    bEffLong ? NF_KEY_NNNN : NF_KEY_NN ) );
+            {
+                // Implicit secondary calendar uses A keyword, default and
+                // explicit calendar N keyword.
+                rParent.UpdateCalendar( sCalendar);
+                const SvXMLNumFormatContext::ImplicitCalendar eCal = rParent.GetImplicitCalendarState();
+                if (eCal == SvXMLNumFormatContext::ImplicitCalendar::SECONDARY
+                        || eCal == SvXMLNumFormatContext::ImplicitCalendar::SECONDARY_FROM_OTHER)
+                {
+                    rParent.AddNfKeyword(
+                            sal::static_int_cast< sal_uInt16 >(
+                                bEffLong ? NF_KEY_AAAA : NF_KEY_AAA ) );
+                }
+                else
+                {
+                    rParent.AddNfKeyword(
+                            sal::static_int_cast< sal_uInt16 >(
+                                bEffLong ? NF_KEY_NNNN : NF_KEY_NN ) );
+                }
+            }
             break;
         case SvXMLStyleTokens::WeekOfYear:
             rParent.UpdateCalendar( sCalendar );
