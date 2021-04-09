@@ -178,6 +178,10 @@ public:
     virtual void   SAL_CALL setFormulaArray(const css::uno::Any& rFormula) override;
     virtual css::uno::Any SAL_CALL getFormulaR1C1() override;
     virtual void   SAL_CALL setFormulaR1C1( const css::uno::Any &rFormula ) override;
+    virtual css::uno::Any SAL_CALL getFormulaLocal() override;
+    virtual void   SAL_CALL setFormulaLocal( const css::uno::Any &rFormula ) override;
+    virtual css::uno::Any SAL_CALL getFormulaR1C1Local() override;
+    virtual void   SAL_CALL setFormulaR1C1Local( const css::uno::Any &rFormula ) override;
     virtual ::sal_Int32 SAL_CALL getCount() override;
     virtual ::sal_Int32 SAL_CALL getRow() override;
     virtual ::sal_Int32 SAL_CALL getColumn() override;

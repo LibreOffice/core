@@ -59,6 +59,8 @@ interface XRange
     [attribute] any Formula;
     [attribute] any FormulaArray;
     [attribute] any FormulaR1C1;
+    [attribute] any FormulaLocal;
+    [attribute] any FormulaR1C1Local;
     [attribute, readonly] long  Count;
     [attribute, readonly] long Row;
     [attribute, readonly] long Column;
