@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "939d0d16_95107080",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-04-09T06:23:33Z",
+      "side": 1,
+      "message": "Is this statement correct? Since it can be reduced to colorLuminance \u003c 250?",
+      "revId": "13375bad18921b5d1af0ab69f236dc8088ef6578",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
