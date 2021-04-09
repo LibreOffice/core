@@ -157,7 +157,6 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-
     // User defined types
 
     SfxObjectShell::CallXScript(
