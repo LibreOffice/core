@@ -80,7 +80,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private int partIndex=-1;
-    private File mInputFile;
     private DocumentOverlay mDocumentOverlay;
     /** URI of the actual document. */
     private Uri mDocumentUri;
@@ -183,36 +182,35 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                     String newDocumentType = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY);
                     // create a temporary local file, will be copied to the actual URI when saving
                     loadNewDocument(newDocumentType);
-                    mInputFile = mTempFile;
                     isReadOnlyDoc = false;
-                } else if (copyFileToTemp() && mTempFile != null) {
-                    mInputFile = mTempFile;
-                    isReadOnlyDoc = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
                 } else {
-                    // TODO: can't open the file
-                    Log.e(LOGTAG, "couldn't create temporary file from " + mDocumentUri);
-                    return;
+                    isReadOnlyDoc = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
                 }
 
                 mbISReadOnlyMode = !isExperimentalMode() || isReadOnlyDoc;
                 Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + mDocumentUri.getPath());
 
                 String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), mDocumentUri);
-                if (displayName.isEmpty()) {
-                    // fall back to using temp file name
-                    displayName = mInputFile.getName();
-                }
                 toolbarTop.setTitle(displayName);
 
             } else if (mDocumentUri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
-                mInputFile = new File(mDocumentUri.getPath());
                 mbISReadOnlyMode = true;
                 Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + mDocumentUri.getPath());
-                toolbarTop.setTitle(mInputFile.getName());
+                toolbarTop.setTitle(mDocumentUri.getLastPathSegment());
             }
         } else {
             Log.e(LOGTAG, "No document specified. This should never happen.");
             return;
+        }
+
+        if (!isNewDocument) {
+            // create a temporary local copy to work with
+            boolean copyOK = copyFileToTemp() && mTempFile != null;
+            if (!copyOK) {
+                // TODO: can't open the file
+                Log.e(LOGTAG, "couldn't create temporary file from " + mDocumentUri);
+                return;
+            }
         }
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -345,12 +343,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     public void saveFileToOriginalSource() {
-        if (isReadOnlyMode() || mInputFile == null || mDocumentUri == null || !mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT))
+        if (isReadOnlyMode() || mTempFile == null || mDocumentUri == null || !mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT))
             return;
 
         boolean copyOK = false;
         try {
-            final FileInputStream inputStream = new FileInputStream(mInputFile);
+            final FileInputStream inputStream = new FileInputStream(mTempFile);
             final OutputStream outputStream = getContentResolver().openOutputStream(mDocumentUri);
             copyOK = copyStream(inputStream, outputStream);
         } catch (FileNotFoundException e) {
@@ -401,9 +399,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         super.onStart();
         if (!isNewDocument){
             if (partIndex == -1)
-                LOKitShell.sendLoadEvent(mInputFile.getPath());
+                LOKitShell.sendLoadEvent(mTempFile.getPath());
             else
-                LOKitShell.sendResumeEvent(mInputFile.getPath(), partIndex);
+                LOKitShell.sendResumeEvent(mTempFile.getPath(), partIndex);
         }
     }
 
@@ -785,7 +783,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     // this function can only be called in InvalidationHandler.java
     public void setPassword() {
-        mTileProvider.setDocumentPassword("file://"+mInputFile.getPath(), mPassword);
+        mTileProvider.setDocumentPassword("file://" + mTempFile.getPath(), mPassword);
     }
 
     // setTileProvider is meant to let main activity have a handle of LOKit when dealing with password
@@ -943,7 +941,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     public void preparePresentation() {
         if (getExternalCacheDir() != null) {
-            String tempPath = getExternalCacheDir().getPath() + "/" + mInputFile.getName() + ".svg";
+            String tempPath = getExternalCacheDir().getPath() + "/" + mTempFile.getName() + ".svg";
             mTempSlideShowFile = new File(tempPath);
             if (mTempSlideShowFile.exists() && !isDocumentChanged) {
                 startPresentation("file://" + tempPath);
