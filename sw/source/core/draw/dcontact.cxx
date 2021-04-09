@@ -827,7 +827,7 @@ SwFrame* SwDrawContact::GetAnchorFrame(SdrObject const *const pDrawObj)
 
 /** add a 'virtual' drawing object to drawing page.
  */
-SwDrawVirtObj* SwDrawContact::AddVirtObj()
+SwDrawVirtObj* SwDrawContact::AddVirtObj(SwFrame const& rAnchorFrame)
 {
     maDrawVirtObjs.push_back(
         SwDrawVirtObjPtr(
@@ -835,7 +835,7 @@ SwDrawVirtObj* SwDrawContact::AddVirtObj()
                 GetMaster()->getSdrModelFromSdrObject(),
                 *GetMaster(),
                 *this)));
-    maDrawVirtObjs.back()->AddToDrawingPage();
+    maDrawVirtObjs.back()->AddToDrawingPage(rAnchorFrame);
     return maDrawVirtObjs.back().get();
 }
 
@@ -1926,7 +1926,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                         else
                         {
                             // append 'virtual' drawing object
-                            SwDrawVirtObj* pDrawVirtObj = AddVirtObj();
+                            SwDrawVirtObj* pDrawVirtObj = AddVirtObj(*pFrame);
                             if ( pAnch->GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                             {
                                 ClrContourCache( pDrawVirtObj );
@@ -2274,30 +2274,56 @@ void SwDrawVirtObj::RemoveFromWriterLayout()
     }
 }
 
-void SwDrawVirtObj::AddToDrawingPage()
+void SwDrawVirtObj::AddToDrawingPage(SwFrame const& rAnchorFrame)
 {
     // determine 'master'
     SdrObject* pOrgMasterSdrObj = mrDrawContact.GetMaster();
 
     // insert 'virtual' drawing object into page, set layer and user call.
     SdrPage* pDrawPg = pOrgMasterSdrObj->getSdrPageFromSdrObject();
+    // default: insert before master object
+    auto NOTM_nOrdNum(GetReferencedObj().GetOrdNum());
+
+    // maintain invariant that a shape's textbox immediately follows the shape
+    // also for the multiple SdrDrawVirtObj created for shapes in header/footer
+    if (SwFrameFormat const*const pFlyFormat =
+            SwTextBoxHelper::getOtherTextBoxFormat(mrDrawContact.GetFormat(), RES_DRAWFRMFMT))
+    {
+        // this is for the case when the flyframe SdrVirtObj is created before the draw one
+        if (SwSortedObjs const*const pObjs = rAnchorFrame.GetDrawObjs())
+        {
+            for (SwAnchoredObject const*const pAnchoredObj : *pObjs)
+            {
+                if (&pAnchoredObj->GetFrameFormat() == pFlyFormat)
+                {
+                    assert(dynamic_cast<SwFlyFrame const*>(pAnchoredObj));
+                    NOTM_nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
+                    // the master SdrObj should have the highest index
+                    assert(NOTM_nOrdNum < GetReferencedObj().GetOrdNum());
+                    break;
+                }
+            }
+        }
+        // this happens on initial insertion, the draw object is created first
+        SAL_INFO_IF(GetReferencedObj().GetOrdNum() == NOTM_nOrdNum, "sw", "AddToDrawingPage: cannot find SdrObject for text box's shape");
+    }
+
     // #i27030# - apply order number of referenced object
     if ( nullptr != pDrawPg )
     {
         // #i27030# - apply order number of referenced object
-        pDrawPg->InsertObject( this, GetReferencedObj().GetOrdNum() );
+        pDrawPg->InsertObject(this, NOTM_nOrdNum);
     }
     else
     {
         pDrawPg = getSdrPageFromSdrObject();
         if ( pDrawPg )
         {
-            pDrawPg->SetObjectOrdNum( GetOrdNumDirect(),
-                                      GetReferencedObj().GetOrdNum() );
+            pDrawPg->SetObjectOrdNum(GetOrdNumDirect(), NOTM_nOrdNum);
         }
         else
         {
-            SetOrdNum( GetReferencedObj().GetOrdNum() );
+            SetOrdNum(NOTM_nOrdNum);
         }
     }
     SetUserCall( &mrDrawContact );

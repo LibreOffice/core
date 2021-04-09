@@ -251,7 +251,7 @@ class SwDrawVirtObj final : public SdrVirtObj
         void RemoveFromWriterLayout();
 
         /// connection to drawing layer
-        void AddToDrawingPage();
+        void AddToDrawingPage(SwFrame const& rAnchorFrame);
         void RemoveFromDrawingPage();
 
         /** is 'virtual' drawing object connected to writer layout and
@@ -401,7 +401,7 @@ class SAL_DLLPUBLIC_RTTI SwDrawContact final : public SwContact
         /// Moves all SW-connections to new Master)
         void ChangeMasterObject( SdrObject *pNewMaster );
 
-        SwDrawVirtObj* AddVirtObj();
+        SwDrawVirtObj* AddVirtObj(SwFrame const& rAnchorFrame);
 
         void NotifyBackgrdOfAllVirtObjs( const tools::Rectangle* pOldBoundRect );
 
