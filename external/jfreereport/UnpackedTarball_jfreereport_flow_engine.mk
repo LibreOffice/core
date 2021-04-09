@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,jfreereport_flow_engine,\
 $(eval $(call gb_UnpackedTarball_add_patches,jfreereport_flow_engine,\
 	external/jfreereport/patches/flow-engine.patch \
 	external/jfreereport/patches/flow-engine_date_is_datetime.patch.1 \
+	external/jfreereport/patches/pentaho-reporting-flow-engine-0.9.4-remove-commons-logging.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
