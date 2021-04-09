@@ -287,6 +287,12 @@ public:
     virtual void freeze() = 0;
     virtual void thaw() = 0;
 
+    /* push/pop busy mouse cursor state
+
+      bBusy of true to push a busy state onto the stack and false
+      to pop it off, calls to this should balance.
+
+      see weld::WaitObject */
     virtual void set_busy_cursor(bool bBusy) = 0;
 
     virtual void queue_resize() = 0;

@@ -38,7 +38,6 @@
 #include <svx/svdview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/waitobj.hxx>
 #include <osl/diagnose.h>
 
 #include <viewfunc.hxx>
@@ -895,8 +894,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     }
 
     //  Insert via PasteFromClip
-
-    WaitObject aWait( GetFrameWin() );
+    weld::WaitObject aWait(GetViewData().GetDialogParent());
 
     ScAddress aPos( nCol, nRow, nTab );
 
@@ -2347,7 +2345,7 @@ void ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    WaitObject aWait( GetFrameWin() );
+    weld::WaitObject aWait(GetViewData().GetDialogParent());
 
     if (bRecord)
     {
@@ -2388,7 +2386,7 @@ bool ScViewFunc::AppendTable( const OUString& rName, bool bRecord )
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    WaitObject aWait( GetFrameWin() );
+    weld::WaitObject aWait(GetViewData().GetDialogParent());
 
     if (bRecord)
         rDoc.BeginDrawUndo();                          //  InsertTab creates a SdrUndoNewPage
@@ -2435,7 +2433,7 @@ void ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
     ScDocument& rDoc    = pDocSh->GetDocument();
     bool bVbaEnabled = rDoc.IsInVBAMode();
     SCTAB       nNewTab = nTab;
-    WaitObject aWait( GetFrameWin() );
+    weld::WaitObject aWait(GetViewData().GetDialogParent());
 
     while ( nNewTab > 0 && !rDoc.IsVisible( nNewTab ) )
         --nNewTab;
@@ -2474,7 +2472,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
     ScDocument& rDoc    = pDocSh->GetDocument();
     bool bVbaEnabled = rDoc.IsInVBAMode();
     SCTAB       nNewTab = TheTabs.front();
-    WaitObject aWait( GetFrameWin() );
+    weld::WaitObject aWait(GetViewData().GetDialogParent());
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
     if ( bVbaEnabled )

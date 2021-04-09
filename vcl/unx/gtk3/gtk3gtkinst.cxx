@@ -2109,6 +2109,7 @@ protected:
 private:
     bool m_bTakeOwnership;
     bool m_bDraggedOver;
+    int m_nWaitCount;
     sal_uInt16 m_nLastMouseButton;
     sal_uInt16 m_nLastMouseClicks;
     int m_nPressedButton;
@@ -2480,6 +2481,7 @@ public:
         , m_pBuilder(pBuilder)
         , m_bTakeOwnership(bTakeOwnership)
         , m_bDraggedOver(false)
+        , m_nWaitCount(0)
         , m_nLastMouseButton(0)
         , m_nLastMouseClicks(0)
         , m_nPressedButton(-1)
@@ -3021,7 +3023,15 @@ public:
 
     virtual void set_busy_cursor(bool bBusy) override
     {
-        set_cursor(m_pWidget, bBusy ? "progress" : nullptr);
+        if (bBusy)
+            ++m_nWaitCount;
+        else
+            --m_nWaitCount;
+        if (m_nWaitCount == 1)
+            set_cursor(m_pWidget, "progress");
+        else if (m_nWaitCount == 0)
+            set_cursor(m_pWidget, nullptr);
+        assert (m_nWaitCount >= 0);
     }
 
     virtual void queue_resize() override
