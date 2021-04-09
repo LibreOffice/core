@@ -2769,7 +2769,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137185)
     auto pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
     CPPUNIT_ASSERT(pModel);
     auto pPage = pModel->GetPage(0);
-    CPPUNIT_ASSERT(pModel);
+    CPPUNIT_ASSERT(pPage);
     auto pObj = pPage->GetObj(0);
     CPPUNIT_ASSERT(pObj);
 
