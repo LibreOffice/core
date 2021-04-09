@@ -868,4 +868,6 @@ loplugin::Plugin::Registration< VCLWidgets > vclwidgets("vclwidgets");
 
 }
 
+// Cannot be shared, uses TraverseStmt().
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 // Find explicit casts from signed to unsigned integer in comparison against unsigned integer, where
 // the cast is presumably used to avoid warnings about signed vs. unsigned comparisons, and could
 // thus be replaced with o3tl::make_unsigned for clarity.
@@ -163,7 +165,6 @@ public:
         return true;
     }
 
-private:
     bool preRun() override
     {
         return compiler.getLangOpts().CPlusPlus
@@ -180,6 +181,7 @@ private:
         }
     }
 
+private:
     ExplicitCastExpr const* isCastToUnsigned(Expr const* expr)
     {
         auto const e = dyn_cast<ExplicitCastExpr>(expr->IgnoreParenImpCasts());
@@ -229,5 +231,7 @@ private:
 
 loplugin::Plugin::Registration<UnsignedCompare> unsignedcompare("unsignedcompare");
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
