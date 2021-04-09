@@ -116,7 +116,6 @@ void ScMacrosTest::testMSP()
     createFileURL(u"MasterScriptProviderProblem.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load MasterScriptProviderProblem.ods", xComponent.is());
 
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
@@ -146,8 +145,6 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
     OUString aFileName;
     createFileURL(u"testTypePassword.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load testTypePassword.ods", xComponent.is());
 
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
@@ -200,8 +197,6 @@ void ScMacrosTest::testStarBasic()
     OUString aFileName;
     createFileURL(u"StarBasic.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
 
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
@@ -348,8 +343,6 @@ void ScMacrosTest::testVba()
         OUString aFileName;
         createFileURL(OUString(rTestInfo.sFileBaseName + "xls"), aFileName);
         uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-        OUString sMsg( "Failed to load " + aFileName );
-        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 
         // process all events such as OnLoad events etc.
         // otherwise the tend to arrive later at a random
@@ -401,8 +394,6 @@ void ScMacrosTest::testTdf107885()
     createFileURL(u"tdf107885.xlsm", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
-
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
     Sequence< Any > aOutParam;
@@ -451,8 +442,6 @@ void ScMacrosTest::testRowColumn()
     createFileURL(u"StarBasic.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
-
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
     Sequence< Any > aOutParam;
@@ -487,8 +476,6 @@ void ScMacrosTest::testTdf131562()
     OUString aFileName;
     createFileURL(u"tdf131562.xlsm", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
 
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
@@ -526,7 +513,6 @@ void ScMacrosTest::testPasswordProtectedUnicodeString()
     OUString aFileName;
     createFileURL(u"tdf57113.ods", aFileName);
     auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(xComponent);
 
     // Check that loading password-protected macro image correctly loads Unicode strings
     {
@@ -585,7 +571,6 @@ void ScMacrosTest::testPasswordProtectedArrayInUserType()
     OUString aFileName;
     createFileURL(u"ProtectedArrayInCustomType.ods", aFileName);
     auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(xComponent);
 
     // Check that loading password-protected macro image correctly loads array bounds
     {
@@ -641,8 +626,6 @@ void ScMacrosTest::testTdf114427()
     createFileURL(u"tdf114427.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
-
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
     Sequence< Any > aOutParam;
@@ -676,8 +659,6 @@ void ScMacrosTest::testTdf107902()
     OUString aFileName;
     createFileURL(u"tdf107902.xlsm", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
 
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
@@ -727,8 +708,6 @@ void ScMacrosTest::testTdf131296_legacy()
     OUString aFileName;
     createFileURL(u"tdf131296_legacy.ods", aFileName);
     auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(xComponent);
-
     {
         Any aRet;
         Sequence<sal_Int16> aOutParamIndex;
@@ -767,8 +746,6 @@ void ScMacrosTest::testTdf131296_new()
     OUString aFileName;
     createFileURL(u"tdf131296_new.ods", aFileName);
     auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(xComponent);
-
     {
         Any aRet;
         Sequence<sal_Int16> aOutParamIndex;
@@ -797,8 +774,6 @@ void ScMacrosTest::testTdf46119()
     OUString aFileName;
     createFileURL(u"tdf46119.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
 
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
@@ -841,8 +816,6 @@ void ScMacrosTest::testTdf128218()
     createFileURL(u"tdf128218.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
-
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
     Sequence< Any > aOutParam;
@@ -869,7 +842,6 @@ void ScMacrosTest::testTdf128218()
 void ScMacrosTest::testTdf71271()
 {
     uno::Reference<lang::XComponent> xComponent = loadFromDesktop("private:factory/scalc");
-    CPPUNIT_ASSERT(xComponent);
 
     {
         uno::Reference<sheet::XSpreadsheetDocument> xDoc(xComponent, uno::UNO_QUERY_THROW);
@@ -902,7 +874,6 @@ void ScMacrosTest::testTdf43003()
     OUString aFileName;
     createFileURL(u"tdf43003.ods", aFileName);
     auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(xComponent);
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
     CPPUNIT_ASSERT(pFoundShell);
@@ -926,8 +897,6 @@ void ScMacrosTest::testTdf133887()
     OUString aFileName;
     createFileURL(u"tdf133887.ods", aFileName);
     auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
 
     css::uno::Any aRet;
     css::uno::Sequence<sal_Int16> aOutParamIndex;
@@ -958,8 +927,6 @@ void ScMacrosTest::testTdf133889()
     createFileURL(u"tdf133889.ods", aFileName);
     auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
-
     css::uno::Any aRet;
     css::uno::Sequence<sal_Int16> aOutParamIndex;
     css::uno::Sequence<css::uno::Any> aOutParam;
@@ -988,7 +955,6 @@ void ScMacrosTest::testTdf138646()
     OUString aFileName;
     createFileURL(u"tdf138646.ods", aFileName);
     auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -1034,14 +1000,12 @@ void ScMacrosTest::testTdf105558()
     OUString aFileName;
     createFileURL(u"tdf105558.ods", aFileName);
     auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(xComponent);
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
     CPPUNIT_ASSERT(pFoundShell);
 
     ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
     CPPUNIT_ASSERT(xDocSh);
-
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Without the fix in place, this test would have failed with
