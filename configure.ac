@@ -5779,7 +5779,6 @@ if test -n "$ENABLE_PCH"; then
     CFLAGS=$save_CFLAGS
     if test -n "$BUILDING_PCH_WITH_OBJ"; then
         AC_MSG_RESULT(yes)
-        AC_DEFINE(HAVE_BUILDING_PCH_WITH_OBJ)
     else
         AC_MSG_RESULT(no)
     fi
