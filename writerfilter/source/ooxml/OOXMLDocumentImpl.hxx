@@ -47,6 +47,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     /// Stack of shape contexts, 1 element for VML, 1 element / nesting level for drawingML.
     std::stack< css::uno::Reference<css::xml::sax::XFastShapeContextHandler> > maShapeContexts;
     css::uno::Reference<css::xml::dom::XDocument> mxThemeDom;
+    css::uno::Reference<css::xml::dom::XDocument> mxCommentsExtended;
     css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomList;
     css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomPropsList;
     css::uno::Reference<css::xml::dom::XDocument> mxCustomXmlProsDom;
@@ -129,6 +130,7 @@ public:
     void pushShapeContext() override;
     void popShapeContext() override;
     virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom() override;
+    virtual css::uno::Reference<css::xml::dom::XDocument> getCommentsExtended( ) override;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList() override;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomPropsList() override;
     virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom() override;

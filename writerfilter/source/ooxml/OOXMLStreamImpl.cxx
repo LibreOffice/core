@@ -137,6 +137,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     static const char sFootnotesType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes";
     static const char sEndnotesType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes";
     static const char sCommentsType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments";
+    static const char sCommentsExtendedType[] = "http://schemas.microsoft.com/office/2011/relationships/commentsExtended";
     static const char sThemeType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
     static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml";
     static const char sCustomPropsType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps";
@@ -156,6 +157,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     static const char sFootnotesTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/footnotes";
     static const char sEndnotesTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/endnotes";
     static const char sCommentsTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/comments";
+    static const char sCommentsExtendedTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/commentsExtended"; // TESTME.
     static const char sThemeTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/theme";
     static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXml";
     static const char sCustomPropsTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXmlProps";
@@ -210,6 +212,10 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
         case COMMENTS:
             sStreamType = sCommentsType;
             sStreamTypeStrict = sCommentsTypeStrict;
+            break;
+        case COMMENTS_EXTENDED:
+            sStreamType = sCommentsExtendedType;
+            sStreamTypeStrict = sCommentsExtendedTypeStrict;
             break;
         case THEME:
             sStreamType = sThemeType;

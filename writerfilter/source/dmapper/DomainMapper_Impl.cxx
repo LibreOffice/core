@@ -2657,6 +2657,11 @@ void DomainMapper_Impl::PopAnnotation()
                 xCursor->setString(OUString());
             }
         }
+        if ()
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(m_xAnnotationField, uno::UNO_QUERY_THROW);
+            xPropertySet->setPropertyValue("Resolved",
+                                           }
         m_aAnnotationPositions.erase( m_nAnnotationId );
     }
     catch (uno::Exception const&)

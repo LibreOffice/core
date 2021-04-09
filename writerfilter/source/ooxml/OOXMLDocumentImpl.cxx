@@ -475,6 +475,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 
         resolveFastSubStream(rStream, OOXMLStream::SETTINGS);
         mxThemeDom = importSubStream(OOXMLStream::THEME);
+        mxCommentsExtended = importSubStream(OOXMLStream::COMMENTS_EXTENDED);
         resolveFastSubStream(rStream, OOXMLStream::THEME);
         mxGlossaryDocDom = importSubStream(OOXMLStream::GLOSSARY);
         if (mxGlossaryDocDom.is())
@@ -857,6 +858,11 @@ void OOXMLDocumentImpl::popShapeContext()
 uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getThemeDom( )
 {
     return mxThemeDom;
+}
+
+css::uno::Reference<css::xml::dom::XDocument> OOXMLDocumentImpl::getCommentsExtended(
+{
+    return mxCommentsExtended;
 }
 
 uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustomXmlDomList( )

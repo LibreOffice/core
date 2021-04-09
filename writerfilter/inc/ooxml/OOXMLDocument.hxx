@@ -75,7 +75,9 @@ class OOXMLStream : public virtual SvRefBase
 {
 public:
     enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, WEBSETTINGS, FONTTABLE, NUMBERING,
-        FOOTNOTES, ENDNOTES, COMMENTS, THEME, CUSTOMXML, CUSTOMXMLPROPS, GLOSSARY, CHARTS, EMBEDDINGS, SETTINGS, VBAPROJECT, FOOTER, HEADER, VBADATA };
+                        FOOTNOTES, ENDNOTES, COMMENTS, COMMENTS_EXTENDED, THEME,
+                        CUSTOMXML, CUSTOMXMLPROPS, GLOSSARY, CHARTS, EMBEDDINGS,
+                        SETTINGS, VBAPROJECT, FOOTER, HEADER, VBADATA };
     typedef tools::SvRef<OOXMLStream> Pointer_t;
 
     /**
@@ -221,6 +223,7 @@ public:
     /// Pop context of a previously pushed drawingML shape.
     virtual void popShapeContext() = 0;
     virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom( ) = 0;
+    virtual css::uno::Reference<css::xml::dom::XDocument> getCommentsExtended( ) = 0;
     virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom( ) = 0;
     virtual css::uno::Sequence<css::uno::Sequence< css::uno::Any> > getGlossaryDomList() = 0;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList( ) = 0;
