@@ -963,11 +963,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         mFormattingController.handleActivityResult(requestCode, resultCode, data);
         hideBottomToolbar();
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
