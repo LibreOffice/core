@@ -1019,7 +1019,7 @@ void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *c
                               pNew->GetAnchorFrame() != pFrame &&
                               !pNew->GetDrawObjectByAnchorFrame( *pFrame ) )
                     {
-                        SwDrawVirtObj* pDrawVirtObj = pNew->AddVirtObj();
+                        SwDrawVirtObj* pDrawVirtObj = pNew->AddVirtObj(*pFrame);
                         pFrame->AppendDrawObj( *(pNew->GetAnchoredObj( pDrawVirtObj )) );
 
                         pDrawVirtObj->ActionChanged();
