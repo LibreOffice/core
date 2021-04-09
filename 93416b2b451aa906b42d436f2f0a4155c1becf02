@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0118c760_532f3fe3",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-09T07:44:19Z",
+      "side": 1,
+      "message": "just write this as\n\n    xTable-\u003egetPropertyValue(\"SchemaName\") \u003e\u003e\u003d aSchema;\n    xTable-\u003egetPropertyValue(\"Name\")       \u003e\u003e\u003d aTable;\n\nthen we don\u0027t need to add any #includes.",
+      "revId": "93416b2b451aa906b42d436f2f0a4155c1becf02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afab39bf_7b774a36",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-09T07:44:19Z",
+      "side": 1,
+      "message": "Write this as\n\n    Any aCatalog \u003d xTable-\u003egetPropertyValue(\"CatalogName\");",
+      "revId": "93416b2b451aa906b42d436f2f0a4155c1becf02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4df53138_5f4dee15",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-09T07:44:19Z",
+      "side": 1,
+      "message": "use +",
+      "revId": "93416b2b451aa906b42d436f2f0a4155c1becf02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6135000c_0161ef51",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-09T07:44:19Z",
+      "side": 1,
+      "message": "no need to check is() here, should never happen",
+      "revId": "93416b2b451aa906b42d436f2f0a4155c1becf02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce51ac78_7a60c4a6",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-09T07:44:19Z",
+      "side": 1,
+      "message": "use +",
+      "revId": "93416b2b451aa906b42d436f2f0a4155c1becf02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
