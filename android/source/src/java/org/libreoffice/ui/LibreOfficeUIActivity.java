@@ -9,11 +9,13 @@
 
 package org.libreoffice.ui;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
@@ -21,7 +23,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -120,6 +125,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     private static final int REQUEST_CODE_OPEN_FILECHOOSER = 12345;
     private static final int REQUEST_CODE_CREATE_NEW_DOCUMENT = 12346;
 
+    private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0;
+
     private Animation fabOpenAnimation;
     private Animation fabCloseAnimation;
     private boolean isFabMenuOpen = false;
@@ -144,6 +151,17 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         createUI();
         fabOpenAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_open);
         fabCloseAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_close);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Log.i(LOGTAG, "no permission to read external storage - asking for permission");
+            ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                PERMISSION_WRITE_EXTERNAL_STORAGE);
+        }
     }
 
     @Override
