@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea00ed76_1044cc39",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2194,
+      "author": {
+        "id": 1000210
+      },
+      "writtenOn": "2021-04-09T02:30:18Z",
+      "side": 1,
+      "message": "This line here is where I filtered out TIMER events.  Everything else in this commit is the reversion of commit 383032c50a3e3354f04200ce984a47ab9d2c5c67 (with some conflicts resolved)",
+      "revId": "fbbfa94101a6e8cb88f786deb00929ab9d79ac95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
