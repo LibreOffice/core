@@ -689,7 +689,7 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
     , m_xNameED(m_xBuilder->weld_label("nameed"))
     , m_xChangePassBtn(m_xBuilder->weld_button("changepass"))
     , m_xShowTypeFT(m_xBuilder->weld_label("showtype"))
-    , m_xFileValEd(m_xBuilder->weld_label("showlocation"))
+    , m_xFileValEd(m_xBuilder->weld_link_button("showlocation"))
     , m_xShowSizeFT(m_xBuilder->weld_label("showsize"))
     , m_xCreateValFt(m_xBuilder->weld_label("showcreate"))
     , m_xChangeValFt(m_xBuilder->weld_label("showmodify"))
@@ -974,10 +974,14 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         // we know it's a folder -> don't need the final slash, but it's better for WB_PATHELLIPSIS
         aPath.removeFinalSlash();
         OUString aText( aPath.PathToFileName() ); //! (pb) MaxLen?
-        m_xFileValEd->set_label( aText );
+        m_xFileValEd->set_label(aText);
+        m_xFileValEd->set_uri("file://" + aText);
     }
-    else if ( aURL.GetProtocol() != INetProtocol::PrivSoffice )
-        m_xFileValEd->set_label( aURL.GetPartBeforeLastName() );
+    else if (aURL.GetProtocol() != INetProtocol::PrivSoffice)
+    {
+        m_xFileValEd->set_label(aURL.GetPartBeforeLastName());
+        m_xFileValEd->set_uri(m_xFileValEd->get_label());
+    }
 
     // handle access data
     bool bUseUserData = rInfoItem.IsUseUserData();
