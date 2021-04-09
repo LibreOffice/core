@@ -1152,8 +1152,6 @@ void SvXMLExport::ImplExportContent()
 {
     CheckAttrList();
 
-    CheckAttrList();
-
     {
         SvXMLElementExport aElement( *this, XML_NAMESPACE_OFFICE, XML_BODY,
                                   true, true );
