@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef LO_CLANG_SHARED_PLUGINS
+
 #include <vector>
 
 #include "plugin.hxx"
@@ -24,28 +26,45 @@ public:
     {
     }
 
-    bool TraverseVarDecl(VarDecl* decl)
+    bool PreTraverseVarDecl(VarDecl* decl)
     {
         decls_.push_back({ decl, decl->getCanonicalDecl() });
-        auto const ret = FilteringPlugin::TraverseVarDecl(decl);
+        return true;
+    }
+    bool PostTraverseVarDecl(VarDecl*, bool)
+    {
         decls_.pop_back();
+        return true;
+    }
+    bool TraverseVarDecl(VarDecl* decl)
+    {
+        PreTraverseVarDecl(decl);
+        auto const ret = FilteringPlugin::TraverseVarDecl(decl);
+        PostTraverseVarDecl(decl, ret);
         return ret;
     }
 
-    bool TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr* expr)
+    bool PreTraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr* expr)
     {
         if (expr->getKind() == UETT_SizeOf)
-        {
-            return true;
-        }
-        return FilteringPlugin::TraverseUnaryExprOrTypeTraitExpr(expr);
+            return false;
+        return true;
+    }
+    bool TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr* expr)
+    {
+        if (PreTraverseUnaryExprOrTypeTraitExpr(expr))
+            return FilteringPlugin::TraverseUnaryExprOrTypeTraitExpr(expr);
+        return true;
     }
 
-    bool TraverseCXXTypeidExpr(CXXTypeidExpr const*) { return true; }
+    bool TraverseCXXTypeidExpr(CXXTypeidExpr*) { return true; }
+    bool PreTraverseCXXTypeidExpr(CXXTypeidExpr*) { return false; }
 
-    bool TraverseCXXNoexceptExpr(CXXNoexceptExpr const*) { return true; }
+    bool TraverseCXXNoexceptExpr(CXXNoexceptExpr*) { return true; }
+    bool PreTraverseCXXNoexceptExpr(CXXNoexceptExpr*) { return false; }
 
     bool TraverseDecltypeTypeLoc(DecltypeTypeLoc) { return true; }
+    bool PreTraverseDecltypeTypeLoc(DecltypeTypeLoc) { return false; }
 
     bool VisitDeclRefExpr(DeclRefExpr const* expr)
     {
@@ -82,7 +101,9 @@ private:
     std::vector<Decl> decls_;
 };
 
-loplugin::Plugin::Registration<SelfInit> X("selfinit");
+loplugin::Plugin::Registration<SelfInit> selfinit("selfinit");
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

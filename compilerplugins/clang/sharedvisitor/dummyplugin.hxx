@@ -56,6 +56,8 @@ public:
     bool TraverseFriendDecl( FriendDecl* ) { return complain(); }
     bool TraverseTypeLoc( TypeLoc ) { return complain(); }
     bool TraverseAlignedAttr( AlignedAttr* ) { return complain(); }
+    bool TraverseVarDecl( VarDecl* ) { return complain(); }
+    bool TraverseUnaryExprOrTypeTraitExpr( UnaryExprOrTypeTraitExpr* ) { return complain(); }
 private:
     bool complain() { assert(false && "should not be calling this in sharedplugin mode"); abort(); return false; }
 };
