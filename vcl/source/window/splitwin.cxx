@@ -33,9 +33,7 @@
 #include <strings.hrc>
 
 
-#define SPLITWIN_SPLITSIZE              4
 #define SPLITWIN_SPLITSIZEEX            4
-#define SPLITWIN_SPLITSIZEEXLN          7
 #define SPLITWIN_SPLITSIZEAUTOHIDE      72
 #define SPLITWIN_SPLITSIZEFADE          72
 
