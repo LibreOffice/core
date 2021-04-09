@@ -34,7 +34,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/waitobj.hxx>
 #include <stdlib.h>
 #include <unotools/charclass.hxx>
 #include <vcl/uitest/logger.hxx>
@@ -1830,7 +1829,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
 
     //  proceed
 
-    WaitObject aWait( GetFrameWin() );      // important for TrackFormulas in UpdateReference
+    weld::WaitObject aWait(GetViewData().GetDialogParent());      // important for TrackFormulas in UpdateReference
 
     ResetAutoSpellForContentChange();
 
