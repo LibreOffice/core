@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.RectF;
 import android.net.Uri;
@@ -79,14 +78,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private ListView mDrawerList;
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
-    private int partIndex=-1;
     private DocumentOverlay mDocumentOverlay;
     /** URI of the actual document. */
     private Uri mDocumentUri;
     /** Temporary local copy of the document. */
     private File mTempFile = null;
     private File mTempSlideShowFile = null;
-    public boolean firstStart = true;
 
     BottomSheetBehavior bottomToolbarSheetBehavior;
     BottomSheetBehavior toolbarColorPickerBottomSheetBehavior;
@@ -120,7 +117,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private boolean isSearchToolbarOpen = false;
     private static boolean isDocumentChanged = false;
     private boolean isUNOCommandsToolbarOpen = false;
-    private boolean isNewDocument = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,6 +167,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         mDocumentOverlay = new DocumentOverlay(this, layerView);
 
         mbISReadOnlyMode = !isExperimentalMode();
+        boolean isNewDocument = false;
 
         mDocumentUri = getIntent().getData();
         if (mDocumentUri != null) {
@@ -182,6 +179,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                     String newDocumentType = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY);
                     // create a temporary local file, will be copied to the actual URI when saving
                     loadNewDocument(newDocumentType);
+                    isNewDocument = true;
                     isReadOnlyDoc = false;
                 } else {
                     isReadOnlyDoc = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
@@ -211,6 +209,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 Log.e(LOGTAG, "couldn't create temporary file from " + mDocumentUri);
                 return;
             }
+            LOKitShell.sendLoadEvent(mTempFile.getPath());
         }
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -277,7 +276,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         String tempFileName = "LibreOffice_" + UUID.randomUUID().toString();
         mTempFile = new File(this.getCacheDir(), tempFileName);
         LOKitShell.sendNewDocumentLoadEvent(mTempFile.getPath(), newDocumentType);
-        isNewDocument = true;
     }
 
     public RectF getCurrentCursorPosition() {
@@ -397,28 +395,20 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     protected void onStart() {
         Log.i(LOGTAG, "onStart..");
         super.onStart();
-        if (!isNewDocument){
-            if (partIndex == -1)
-                LOKitShell.sendLoadEvent(mTempFile.getPath());
-            else
-                LOKitShell.sendResumeEvent(mTempFile.getPath(), partIndex);
-        }
+        LOKitShell.sendEvent(new LOEvent(LOEvent.REFRESH));
     }
 
     @Override
     protected void onStop() {
         Log.i(LOGTAG, "onStop..");
-        //save document to cache
-        if (mTileProvider != null)
-            mTileProvider.cacheDocument();
         hideSoftKeyboardDirect();
-        LOKitShell.sendCloseEvent();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
         Log.i(LOGTAG, "onDestroy..");
+        LOKitShell.sendCloseEvent();
         mLayerClient.destroy();
         super.onDestroy();
 
@@ -845,7 +835,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             DocumentPartView partView = mDocumentPartViewListAdapter.getItem(position);
-            partIndex = partView.partIndex;
             LOKitShell.sendChangePartEvent(partView.partIndex);
             mDrawerLayout.closeDrawer(mDrawerList);
         }
