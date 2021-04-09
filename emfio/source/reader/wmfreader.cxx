@@ -233,7 +233,7 @@ namespace
             // Yes, return a pointer to a static buffer. This is a very
             // local debugging output function, so no big deal.
             static char buffer[11];
-            sprintf(buffer, "0x%08" SAL_PRIxUINT32, nRecType);
+            sprintf(buffer, "0x%08" SAL_PRIxUINT32, sal_uInt32(nRecType));
             return buffer;
         }
     #endif
