@@ -28,4 +28,14 @@ def execute_dialog_through_action(testCase, ui_object, action, parameters = None
     finally:
         testCase.ui_test.close_dialog_through_button(xDialog.getChild(close_button))
 
+# Calls UITest.close_dialog_through_button at exit
+@contextmanager
+def execute_dialog_through_command(testCase, unoCommand, close_button = "ok"):
+    testCase.ui_test.execute_dialog_through_command(unoCommand)
+    xDialog = testCase.xUITest.getTopFocusWindow()
+    try:
+        yield xDialog
+    finally:
+        testCase.ui_test.close_dialog_through_button(xDialog.getChild(close_button))
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
