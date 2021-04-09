@@ -992,16 +992,18 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
 void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
     DBG_TESTSOLARMUTEX();
-    if( !HasSdrObject() )
+
+    // do cheap checks first, this method is hot
+    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
+        return;
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
+    if (pSdrHint->GetKind() != SdrHintKind::ModelCleared &&
+        pSdrHint->GetKind() != SdrHintKind::ObjectChange)
         return;
 
     // #i55919# SdrHintKind::ObjectChange is only interesting if it's for this object
-    if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
-        return;
     SdrObject* pSdrObject(GetSdrObject());
-    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
-    if ((pSdrHint->GetKind() != SdrHintKind::ModelCleared) &&
-         (pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != pSdrObject ))
+    if ( !pSdrObject || pSdrHint->GetObject() != pSdrObject )
         return;
 
     uno::Reference< uno::XInterface > xSelf( pSdrObject->getWeakUnoShape() );
