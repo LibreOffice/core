@@ -954,6 +954,26 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117985)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("A66054");
+
+    // Add a new comment
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Comment")) } });
+    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on A66054",
+                           pDoc->HasNote(ScAddress(0, 66053, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124778)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
