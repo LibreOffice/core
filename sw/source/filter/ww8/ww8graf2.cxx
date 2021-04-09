@@ -69,9 +69,10 @@ void wwZOrderer::OutsideEscher()
 // consider new parameter <_bInHeaderFooter>
 void wwZOrderer::InsertEscherObject( SdrObject* pObject,
                                      sal_uLong nSpId,
+                                     const bool bInHellLayer,
                                      const bool _bInHeaderFooter )
 {
-    sal_uLong nInsertPos = GetEscherObjectPos( nSpId, _bInHeaderFooter );
+    sal_uLong nInsertPos = GetEscherObjectPos( nSpId, bInHellLayer, _bInHeaderFooter );
     InsertObject(pObject, nInsertPos + mnNoInitialObjects + mnInlines);
 }
 
@@ -100,6 +101,7 @@ sal_uInt16 wwZOrderer::GetEscherObjectIdx(sal_uLong nSpId)
 
 // consider new parameter <_bInHeaderFooter>
 sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
+                                          const bool bInHellLayer,
                                       const bool _bInHeaderFooter )
 {
     /*
@@ -137,12 +139,15 @@ sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
         {
             break;
         }
+        if ( bInHellLayer && !aIter->mbInHellLayer )
+            break;
+
         if ( aIter->mnEscherShapeOrder > nFound )
             break;
         nRet += aIter->mnNoInlines+1;
         ++aIter;
     }
-    maEscherLayer.insert(aIter, EscherShape( nFound, _bInHeaderFooter ) );
+    maEscherLayer.insert(aIter, EscherShape( nFound, bInHellLayer, _bInHeaderFooter ) );
     return nRet;
 }
 
