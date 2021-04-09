@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "807e3977_4d9e83f7",
+        "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-09T07:48:00Z",
+      "side": 1,
+      "message": "rWizard creates keys inside this call. It uses its own public getDestVector to get the columns, including keys. I believe you don\u0027t need to try to use another module\u0027s internals here to get the keys.",
+      "revId": "93416b2b451aa906b42d436f2f0a4155c1becf02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0118c760_532f3fe3",
         "filename": "dbaccess/source/ui/uno/copytablewizard.cxx",
         "patchSetId": 5
