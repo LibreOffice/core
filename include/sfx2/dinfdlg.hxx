@@ -167,7 +167,7 @@ private:
     std::unique_ptr<weld::Button> m_xChangePassBtn;
 
     std::unique_ptr<weld::Label> m_xShowTypeFT;
-    std::unique_ptr<weld::Label> m_xFileValEd;
+    std::unique_ptr<weld::LinkButton> m_xFileValEd;
     std::unique_ptr<weld::Label> m_xShowSizeFT;
 
     std::unique_ptr<weld::Label> m_xCreateValFt;
