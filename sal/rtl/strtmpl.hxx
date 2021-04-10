@@ -398,6 +398,14 @@ sal_Int32 indexOfChar_WithLength                             ( const IMPL_RTL_ST
         IMPL_RTL_STRCODE* p = static_cast<IMPL_RTL_STRCODE*>(std::memchr(const_cast<IMPL_RTL_STRCODE *>(pStr), c, nLen));
         return p ? p - pStr : -1;
     }
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char16_t))
+    {
+        // take advantage of builtin optimisations
+        if (nLen <= 0) // char_traits::find takes an unsigned length
+            return -1;
+        char16_t const * p = std::char_traits<char16_t>::find(pStr, nLen, c);
+        return p ? p - pStr : -1;
+    }
     else
     {
         const IMPL_RTL_STRCODE* pTempStr = pStr;
@@ -409,7 +417,6 @@ sal_Int32 indexOfChar_WithLength                             ( const IMPL_RTL_ST
             pTempStr++;
             nLen--;
         }
-
         return -1;
     }
 }
