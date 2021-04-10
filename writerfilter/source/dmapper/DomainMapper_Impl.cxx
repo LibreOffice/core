@@ -2592,7 +2592,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
         // If we have *hidden* header footer
         else if (bLeft && !GetSettingsTable()->GetEvenAndOddHeaders())
         {
-            bool bIsShared;
+            bool bIsShared = false;
             // Turn on the headers
             xPageStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::makeAny(true));
             // Store the state of the previous state of shared prop
