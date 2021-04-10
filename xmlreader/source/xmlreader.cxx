@@ -714,12 +714,12 @@ void XmlReader::handleElementEnd() {
 
 XmlReader::Result XmlReader::handleSkippedText(Span * data, int * nsId) {
     for (;;) {
-        sal_Int32 i = rtl_str_indexOfChar_WithLength(pos_, end_ - pos_, '<');
-        if (i < 0) {
+        auto i = static_cast<const char*>(std::memchr(pos_, '<', end_ - pos_));
+        if (!i) {
             throw css::uno::RuntimeException(
                 "premature end of " + fileUrl_ );
         }
-        pos_ += i + 1;
+        pos_ = i + 1;
         switch (peek()) {
         case '!':
             ++pos_;
