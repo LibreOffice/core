@@ -285,7 +285,7 @@ bool TxtBox::Read(HWPFile & hwpf)
     ncell = nCell;
     if (ncell <= 0){
         return hwpf.SetState(HWP_InvalidFileFormat);
-     }
+    }
 
     cell.reset( ::comphelper::newArray_null<Cell>(ncell) );
     if (!cell) {
@@ -333,22 +333,18 @@ bool TxtBox::Read(HWPFile & hwpf)
             tcell->pCell = &cell[ii];
             pArr[ii] = tcell;
         }
-        TCell *tmp;
+
         // Sort by row and column
         for( ii = 0 ; ii < ncell - 1; ii++ ){
             for( int jj = ii ; jj < ncell ; jj++){
                if( pArr[ii]->nRowIndex > pArr[jj]->nRowIndex ){
-                    tmp = pArr[ii];
-                    pArr[ii] = pArr[jj];
-                    pArr[jj] = tmp;
+                    std::swap(pArr[ii], pArr[jj]);
                }
             }
             for( int kk = ii ; kk > 0 ; kk--){
                if( ( pArr[kk]->nRowIndex == pArr[kk-1]->nRowIndex ) &&
                       (pArr[kk]->nColumnIndex < pArr[kk-1]->nColumnIndex )){
-                    tmp = pArr[kk];
-                    pArr[kk] = pArr[kk-1];
-                    pArr[kk-1] = tmp;
+                    std::swap(pArr[kk], pArr[kk-1]);
                }
             }
         }
