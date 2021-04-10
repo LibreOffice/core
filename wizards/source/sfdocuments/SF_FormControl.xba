@@ -758,9 +758,10 @@ Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		see the exceptions of the individual properties
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		myModel.GetProperty(&quot;MyProperty&quot;)
+&apos;&apos;&apos;		myControl.GetProperty(&quot;MyProperty&quot;)
 
-Const cstThisSub = &quot;SFDocuments.DialogControl.GetProperty&quot;
+Dim vDefault As Variant			&apos;	Default value when property not applicable on control type
+Const cstThisSub = &quot;SFDocuments.FormControl.GetProperty&quot;
 Const cstSubArgs = &quot;&quot;
 
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
@@ -772,7 +773,28 @@ Check:
 	End If
 
 Try:
-	GetProperty = _PropertyGet(PropertyName)
+	&apos;	FormControl properties are far from applicable to all control types
+	&apos;	Getting a property must never abort to not interfere with the Basic IDE watch function
+	&apos;	Hence a default value must be provided
+	Select Case UCase(PropertyName)
+		Case UCase(&quot;Default&quot;)		:	vDefault = False
+		Case UCase(&quot;DefaultValue&quot;)	:	vDefault = Null
+		Case UCase(&quot;Enabled&quot;)		:	vDefault = False
+		Case UCase(&quot;ListCount&quot;)		:	vDefault = 0
+		Case UCase(&quot;ListIndex&quot;)		:	vDefault = -1
+		Case UCase(&quot;Locked&quot;)		:	vDefault = False
+		Case UCase(&quot;MultiSelect&quot;)	:	vDefault = False
+		Case UCase(&quot;Parent&quot;)		:	vDefault = Nothing
+		Case UCase(&quot;Required&quot;)		:	vDefault = False
+		Case UCase(&quot;TripleState&quot;)	:	vDefault = False
+		Case UCase(&quot;Value&quot;)			:	vDefault = Empty
+		Case UCase(&quot;Visible&quot;)		:	vDefault = True
+		Case UCase(&quot;XControlModel&quot;)	:	vDefault = Nothing
+		Case UCase(&quot;XControlView&quot;)	:	vDefault = Nothing
+		Case Else					:	vDefault = &quot;&quot;
+	End Select
+
+	GetProperty = _PropertyGet(PropertyName, vDefault)
 
 Finally:
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
@@ -783,7 +805,7 @@ End Function	&apos;	SFDocuments.SF_FormControl.GetProperty
 
 REM -----------------------------------------------------------------------------
 Public Function Methods() As Variant
-&apos;&apos;&apos;	Return the list of public methods of the Model service as an array
+&apos;&apos;&apos;	Return the list of public methods of the FormControl service as an array
 
 	Methods = Array( _
 					&quot;AddSubNode&quot; _
@@ -798,10 +820,11 @@ End Function	&apos;	SFDocuments.SF_FormControl.Methods
 
 REM -----------------------------------------------------------------------------
 Public Function Properties() As Variant
-&apos;&apos;&apos;	Return the list or properties of the Timer class as an array
+&apos;&apos;&apos;	Return the list or properties of the FormControl class as an array
 
 	Properties = Array( _
-					&quot;Cancel&quot; _
+					&quot;Action&quot; _
+					, &quot;Cancel&quot; _
 					, &quot;Caption&quot; _
 					, &quot;ControlSource&quot; _
 					, &quot;ControlType&quot; _
@@ -926,7 +949,7 @@ Public Function SetProperty(Optional ByVal PropertyName As Variant _
 &apos;&apos;&apos;	Exceptions
 &apos;&apos;&apos;		ARGUMENTERROR		The property does not exist
 
-Const cstThisSub = &quot;SFDocuments.DialogControl.SetProperty&quot;
+Const cstThisSub = &quot;SFDocuments.FormControl.SetProperty&quot;
 Const cstSubArgs = &quot;PropertyName, Value&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
@@ -1173,7 +1196,7 @@ Dim vSelection As Variant					&apos;	Alias of Model.SelectedItems or Model.Selec
 Dim vList As Variant						&apos;	Alias of Model.StringItemList
 Dim lIndex As Long							&apos;	Index in StringItemList
 Dim sItem As String							&apos;	A single item
-Dim vDate As Variant						&apos;	com.sun.star.util.Date or com.sun.star.util.Time
+Dim vDate As Variant						&apos;	Date after conversion from com.sun.star.util.Date or com.sun.star.util.Time
 Dim vValues As Variant						&apos;	Array of listbox values
 Dim oControlEvents As Object				&apos;	com.sun.star.container.XNameContainer
 Dim sEventName As String					&apos;	Internal event name
@@ -1246,8 +1269,10 @@ Const cstSubArgs = &quot;&quot;
 				Case CTLDATEFIELD
 					If oSession.HasUNOProperty(_ControlModel, &quot;DefaultDate&quot;) Then
 						If Not IsEmpty(_ControlModel.DefaultDate) Then
-							vDate = _ControlModel.DefaultDate
-							_PropertyGet = DateSerial(vDate.Year, vDate.Month, vDate.Day)
+							With _ControlModel.DefaultDate
+								vDate = DateSerial(.Year, .Month, .Day)
+							End With
+							_PropertyGet = vDate
 						End If
 					End If
 				Case CTLFORMATTEDFIELD
@@ -1268,8 +1293,10 @@ Const cstSubArgs = &quot;&quot;
 				Case CTLTIMEFIELD
 					If oSession.HasUNOProperty(_ControlModel, &quot;DefaultTime&quot;) Then
 						If Not IsEmpty(_ControlModel.DefaultTime) Then
-							vDate = _ControlModel.DefaultTime
-							_PropertyGet = TimeSerial(vDate.Hours, vDate.Minutes, vDate.Seconds)
+							With _ControlModel.DefaultTime
+								vDate = TimeSerial(.Hours, .Minutes, .Seconds)
+							End With
+							_PropertyGet = vDate
 						End If
 					End If
 				Case Else	:	GoTo CatchType
@@ -1387,15 +1414,19 @@ Const cstSubArgs = &quot;&quot;
 							And oSession.HasUNOProperty(_ControlModel, &quot;FormatKey&quot;) _
 							And oSession.HasUNOProperty(_ControlModel, &quot;FormatsSupplier&quot;) Then
 						If Not IsEmpty(_ControlModel.Date) Then
-							vDate = DateSerial(_ControlModel.Date.Year, _ControlModel.Date.Month, _ControlModel.Date.Day)
+							With _ControlModel.Date
+								vDate = DateSerial(.Year, .Month, .Day)
+							End With
 							_PropertyGet = Format(vDate, _ControlModel.FormatsSupplier.getNumberFormats.getByKey(_ControlModel.FormatKey).FormatString)
 						End If
 					End If
 				Case CTLTIMEFIELD
 					If oSession.HasUNOProperty(_ControlModel, &quot;Text&quot;) Then
 						If Not IsEmpty(_ControlModel.Time) Then
-							Set vDate = _ControlModel.Time
-							_PropertyGet = Format(TimeSerial(vDate.Hours, vDate.Minutes, vDate.Seconds), &quot;HH:MM:SS&quot;)
+							With _ControlModel.Time
+								vDate = TimeSerial(.Hours, .Minutes, .Seconds)
+							End With
+							_PropertyGet = Format(vDate, &quot;HH:MM:SS&quot;)
 						End If
 					End If
 				Case CTLCOMBOBOX, CTLFILECONTROL, CTLFORMATTEDFIELD, CTLPATTERNFIELD, CTLTEXTFIELD
@@ -1432,8 +1463,10 @@ Const cstSubArgs = &quot;&quot;
 					vGet = CDate(1)
 					If oSession.HasUnoProperty(_ControlModel, &quot;Date&quot;) Then
 						If VarType(_ControlModel.Date) = ScriptForge.V_OBJECT Then	&apos;	com.sun.star.util.Date
-							Set vDate = _ControlModel.Date
-							vGet = DateSerial(vDate.Year, vDate.Month, vDate.Day)
+							With _ControlModel.Date
+								vDate = DateSerial(.Year, .Month, .Day)
+							End With
+							vGet = vDate
 						Else	&apos;	.Date = Empty
 						End If
 					End If
@@ -1480,8 +1513,10 @@ Const cstSubArgs = &quot;&quot;
 					vGet = CDate(0)
 					If oSession.HasUnoProperty(_ControlModel, &quot;Time&quot;) Then
 						If VarType(_ControlModel.Time) = ScriptForge.V_OBJECT Then	&apos;	com.sun.star.Util.Time
-							Set vDate = _ControlModel.Time
-							vGet = TimeSerial(vDate.Hours, vDate.Minutes, vDate.Seconds)
+							With _ControlModel.Time
+								vDate = TimeSerial(.Hours, .Minutes, .Seconds)
+							End With
+							vGet = vDate
 						Else	&apos;	.Time = Empty
 						End If
 					End If
@@ -1625,7 +1660,7 @@ Const cstSubArgs = &quot;Value&quot;
 									If _ControlType = CTLCOMBOBOX Then _ControlModel.ListSource = pvValue Else _ControlModel.ListSource = Array(pvValue)
 									_ControlModel.refresh()
 								Case .SQL
-									et oDatabase = _ParentForm.GetDatabase()
+									Set oDatabase = _ParentForm.GetDatabase()
 									If _ControlType = CTLCOMBOBOX Then _ControlModel.ListSource = oDatabase._ReplaceSquareBrackets(pvValue) Else _ControlModel.ListSource = Array(oDatabase._ReplaceSquareBrackets(pvValue))
 									_ControlModel.refresh()
 								Case .VALUELIST			&apos;	ListBox only !
