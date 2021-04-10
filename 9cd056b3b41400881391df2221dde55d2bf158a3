@@ -45,6 +45,54 @@
       "revId": "9cd056b3b41400881391df2221dde55d2bf158a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0866ef7b_511d8544",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-04-10T05:17:36Z",
+      "side": 1,
+      "message": "Done.  Although I\u0027ll note that the current tips are completely inconsistent on such wordings.  I copied \"via\" from others like line #85 and #114, there are also \"with\" (line #59), \"from\" (line #61), \"per\" (line #112), etc.",
+      "parentUuid": "a660e96b_3242e03c",
+      "range": {
+        "startLine": 240,
+        "startChar": 101,
+        "endLine": 240,
+        "endChar": 105
+      },
+      "revId": "9cd056b3b41400881391df2221dde55d2bf158a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "13758ff4_725c734b",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-04-10T05:17:36Z",
+      "side": 1,
+      "message": "Like this in patchset 3?\n\nI must admit I don\u0027t have a local environment to build and test, and there are no other tips that use this kind of URI, so I have no idea if it works or even builds.  All the other URIs that can link to both local and online help are of the form \"modules/scalc/ui/conditionalformatdialog/ConditionalFormatDialog\".",
+      "parentUuid": "88c32336_290a7c5c",
+      "range": {
+        "startLine": 240,
+        "startChar": 147,
+        "endLine": 240,
+        "endChar": 234
+      },
+      "revId": "9cd056b3b41400881391df2221dde55d2bf158a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
