@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71d2bfa4_06651e79",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-10T19:57:32Z",
+      "side": 1,
+      "message": "Would it possibly make sense to just unify on using std::basic_string_view\u003cIMPL_RTL_STRCODE\u003e::rfind (for all three cases)?",
+      "revId": "5ebccaa07589383653dbd65e58204a82dd3cde09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
