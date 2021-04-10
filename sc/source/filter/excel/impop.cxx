@@ -861,8 +861,13 @@ void ImportExcel::Mulrk()
     XclAddress aXclPos;
     aIn >> aXclPos;
 
-    for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() >= 6); ++aCurrXclPos.mnCol )
+    XclAddress aCurrXclPos(aXclPos);
+    while (true)
     {
+        if (aIn.GetRecLeft() < 6)
+            break;
+        if (aCurrXclPos.mnCol < aXclPos.mnCol)
+            break;
         sal_uInt16 nXF = aIn.ReaduInt16();
         sal_Int32 nRkNum = aIn.ReadInt32();
 
@@ -872,6 +877,7 @@ void ImportExcel::Mulrk()
             GetXFRangeBuffer().SetXF( aScPos, nXF );
             GetDocImport().setNumericCell(aScPos, XclTools::GetDoubleFromRK(nRkNum));
         }
+        ++aCurrXclPos.mnCol;
     }
 }
 
@@ -880,13 +886,19 @@ void ImportExcel::Mulblank()
     XclAddress aXclPos;
     aIn >> aXclPos;
 
-    for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() >= 2); ++aCurrXclPos.mnCol )
+    XclAddress aCurrXclPos(aXclPos);
+    while (true)
     {
+        if (aIn.GetRecLeft() < 2)
+            break;
+        if (aCurrXclPos.mnCol < aXclPos.mnCol)
+            break;
         sal_uInt16 nXF = aIn.ReaduInt16();
 
         ScAddress aScPos( ScAddress::UNINITIALIZED );
         if( GetAddressConverter().ConvertAddress( aScPos, aCurrXclPos, GetCurrScTab(), true ) )
             GetXFRangeBuffer().SetBlankXF( aScPos, nXF );
+        ++aCurrXclPos.mnCol;
     }
 }
 
@@ -919,13 +931,19 @@ void ImportExcel::Cellmerging()
     SCTAB nScTab = GetCurrScTab();
 
     sal_uInt16 nCount = maStrm.ReaduInt16();
-    for( sal_uInt16 nIdx = 0; (nIdx < nCount) && (maStrm.GetRecLeft() >= 8); ++nIdx )
+    sal_uInt16 nIdx = 0;
+    while (true)
     {
+        if (maStrm.GetRecLeft() < 8)
+            break;
+        if (nIdx >= nCount)
+            break;
         XclRange aXclRange;
         maStrm >> aXclRange;    // 16-bit rows and columns
         ScRange aScRange( ScAddress::UNINITIALIZED );
         if( rAddrConv.ConvertRange( aScRange, aXclRange, nScTab, nScTab, true ) )
             GetXFRangeBuffer().SetMerge( aScRange.aStart.Col(), aScRange.aStart.Row(), aScRange.aEnd.Col(), aScRange.aEnd.Row() );
+        ++nIdx;
     }
 }
 
