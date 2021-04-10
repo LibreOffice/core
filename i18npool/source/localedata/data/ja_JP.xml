@@ -114,7 +114,7 @@
       <FormatCode>YY/M/D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="long" usage="DATE" formatindex="19">
-      <FormatCode>YYYY年MM月DD日（AAAA）</FormatCode>
+      <FormatCode>YYYY"年"MM"月"DD"日（"AAAA"）"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="20">
       <FormatCode>YY/MM/DD</FormatCode>
@@ -123,31 +123,31 @@
       <FormatCode>YYYY/MM/DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey5" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>YY年M月D日</FormatCode>
+      <FormatCode>YY"年"M"月"D"日"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="true" type="long" usage="DATE" formatindex="23">
-      <FormatCode>YYYY年M月D日</FormatCode>
+      <FormatCode>YYYY"年"M"月"D"日"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>GGGE年M月D日</FormatCode>
+      <FormatCode>GGGE"年"M"月"D"日"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>YYYY年M月D日</FormatCode>
+      <FormatCode>YYYY"年"M"月"D"日"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="false" type="long" usage="DATE" formatindex="26">
-      <FormatCode>GGGE年M月D日（AAAA）</FormatCode>
+      <FormatCode>GGGE"年"M"月"D"日（"AAAA"）"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="27">
-      <FormatCode>YY年M月D日（AAA）</FormatCode>
+      <FormatCode>YY"年"M"月"D"日（"AAA"）"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="28">
-      <FormatCode>GGGE年M月D日（AAA）</FormatCode>
+      <FormatCode>GGGE"年"M"月"D"日（"AAA"）"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>YYYY年M月D日（AAA）</FormatCode>
+      <FormatCode>YYYY"年"M"月"D"日（"AAA"）"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>YYYY年M月D日（AAAA）</FormatCode>
+      <FormatCode>YYYY"年"M"月"D"日（"AAAA"）"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey23" default="false" type="long" usage="DATE" formatindex="69">
       <FormatCode>YYYY"年（"GGGE"年）"MM"月"DD"日"</FormatCode>
@@ -169,13 +169,13 @@
       <FormatCode>YY/MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="true" type="medium" usage="DATE" formatindex="35">
-      <FormatCode>M月D日</FormatCode>
+      <FormatCode>M"月"D"日"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="36">
-      <FormatCode>M月</FormatCode>
+      <FormatCode>M"月"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="37">
-      <FormatCode>YY年 QQ</FormatCode>
+      <FormatCode>YY"年 "QQ</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW 1</FormatCode>
@@ -202,10 +202,10 @@
       <FormatCode>[HH]:MM:SS.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey8" default="false" type="short" usage="TIME" formatindex="66">
-      <FormatCode>H時MM分</FormatCode>
+      <FormatCode>H"時"MM"分"</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey9" default="false" type="medium" usage="TIME" formatindex="67">
-      <FormatCode>H時MM分SS秒</FormatCode>
+      <FormatCode>H"時"MM"分"SS"秒"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey1" default="false" type="medium" usage="DATE_TIME" formatindex="46">
       <FormatCode>YY/MM/DD HH:MM</FormatCode>
