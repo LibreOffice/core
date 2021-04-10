@@ -4256,8 +4256,14 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
     sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.GetRecLeft() ) );
     OUStringBuffer aNoteText = rStrm.ReadRawByteString( nPartLen );
     nTotalLen = nTotalLen - nPartLen;
-    while( (nTotalLen > 0) && (rStrm.GetNextRecId() == EXC_ID_NOTE) && rStrm.StartNextRecord() )
+    while (true)
     {
+        if (!nTotalLen)
+            break;
+        if (rStrm.GetNextRecId() != EXC_ID_NOTE)
+            break;
+        if (!rStrm.StartNextRecord())
+            break;
         rStrm >> aXclPos;
         nPartLen = rStrm.ReaduInt16();
         OSL_ENSURE( aXclPos.mnRow == 0xFFFF, "XclImpObjectManager::ReadNote3 - missing continuation NOTE record" );
