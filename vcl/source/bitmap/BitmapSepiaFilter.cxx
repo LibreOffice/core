@@ -103,7 +103,7 @@ BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
     }
 
     if (bRet)
-        return rBitmapEx;
+        return BitmapEx(aBitmap);
 
     return BitmapEx();
 }
