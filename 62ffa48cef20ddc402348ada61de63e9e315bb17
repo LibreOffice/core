@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1f1614a_c90dd4a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-10T21:39:27Z",
+      "side": 1,
+      "message": "I suggest to omit this detail from the message (it is necessary to avoid warning, so required anyway); but it seems that you actually forgot to remove it?",
+      "range": {
+        "startLine": 7,
+        "startChar": 58,
+        "endLine": 7,
+        "endChar": 89
+      },
+      "revId": "62ffa48cef20ddc402348ada61de63e9e315bb17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

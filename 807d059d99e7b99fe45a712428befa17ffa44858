@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "710922f3_ee7ffbc9",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-10T21:39:27Z",
+      "side": 0,
+      "message": "This is unused now",
+      "range": {
+        "startLine": 348,
+        "startChar": 17,
+        "endLine": 348,
+        "endChar": 21
+      },
+      "revId": "807d059d99e7b99fe45a712428befa17ffa44858",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcbba249_0d11ffa6",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-10T21:39:27Z",
+      "side": 0,
+      "message": "Why remove this?",
+      "range": {
+        "startLine": 1037,
+        "startChar": 4,
+        "endLine": 1037,
+        "endChar": 32
+      },
+      "revId": "807d059d99e7b99fe45a712428befa17ffa44858",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5f10958_02a08c7a",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-10T21:39:27Z",
+      "side": 0,
+      "message": "And this?",
+      "range": {
+        "startLine": 1040,
+        "startChar": 19,
+        "endLine": 1040,
+        "endChar": 25
+      },
+      "revId": "807d059d99e7b99fe45a712428befa17ffa44858",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
