@@ -365,7 +365,7 @@ void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos)
 
     // TODO: We need a different broadcast here!
     // Repaint from object number ... (heads-up: GroupObj)
-    if(pObj->getSdrPageFromSdrObject())
+    if(pObj->getSdrPageFromSdrObject() && !pObj->getSdrModelFromSdrObject().isLocked())
     {
         SdrHint aHint(SdrHintKind::ObjectInserted, *pObj);
         pObj->getSdrModelFromSdrObject().Broadcast(aHint);
