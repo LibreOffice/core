@@ -3182,7 +3182,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
         {
             // pass information, if object is in page header|footer to method.
             m_xWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
-                                             pRecord->bDrawHell,
+                                             pRecord ? pRecord->bDrawHell : false,
                                            m_bIsHeader || m_bIsFooter );
         }
     }
