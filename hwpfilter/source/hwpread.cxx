@@ -283,7 +283,12 @@ bool TxtBox::Read(HWPFile & hwpf)
     UpdateBBox(this);
 
     ncell = nCell;
-    if (ncell <= 0){
+    if (ncell <= 0) {
+        return hwpf.SetState(HWP_InvalidFileFormat);
+    }
+
+    if (ncell > 4096 && utl::ConfigManager::IsFuzzing()) {
+        // cut off at an arbitary size to speed up fuzzing
         return hwpf.SetState(HWP_InvalidFileFormat);
     }
 
