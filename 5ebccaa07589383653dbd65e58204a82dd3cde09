@@ -16,6 +16,29 @@
       "revId": "5ebccaa07589383653dbd65e58204a82dd3cde09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6dfd2a0_5bf463df",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-10T20:05:45Z",
+      "side": 1,
+      "message": "This should be u16string_view",
+      "range": {
+        "startLine": 465,
+        "startChar": 27,
+        "endLine": 465,
+        "endChar": 38
+      },
+      "revId": "5ebccaa07589383653dbd65e58204a82dd3cde09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
