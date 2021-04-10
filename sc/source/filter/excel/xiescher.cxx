@@ -907,11 +907,13 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
     rStrm.Seek( EXC_REC_SEEK_TO_BEGIN );
 
     bool bLoop = true;
-    while( bLoop && (rStrm.GetRecLeft() >= 4) )
+    while (bLoop)
     {
-        sal_uInt16 nSubRecId, nSubRecSize;
-        nSubRecId = rStrm.ReaduInt16();
-        nSubRecSize = rStrm.ReaduInt16();
+        if (rStrm.GetRecLeft() < 4)
+            break;
+
+        sal_uInt16 nSubRecId = rStrm.ReaduInt16();
+        sal_uInt16 nSubRecSize = rStrm.ReaduInt16();
         rStrm.PushPosition();
         // sometimes the last subrecord has an invalid length (OBJLBSDATA) -> min()
         nSubRecSize = static_cast< sal_uInt16 >( ::std::min< std::size_t >( nSubRecSize, rStrm.GetRecLeft() ) );
@@ -961,8 +963,14 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
     sal_uInt32 nDataSize = rStrm.ReaduInt32();
     nDataSize -= rStrm.GetRecLeft();
     // skip following CONTINUE records until IMGDATA ends
-    while( (nDataSize > 0) && (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord() )
+    while (true)
     {
+        if (!nDataSize)
+            break;
+        if (rStrm.GetNextRecId() != EXC_ID_CONT)
+            break;
+        if (!rStrm.StartNextRecord())
+            break;
         OSL_ENSURE( nDataSize >= rStrm.GetRecLeft(), "XclImpDrawObjBase::ImplReadObj8 - CONTINUE too long" );
         nDataSize -= ::std::min< sal_uInt32 >( rStrm.GetRecLeft(), nDataSize );
     }
