@@ -450,17 +450,33 @@ sal_Int32 lastIndexOfChar_WithLength                             ( const IMPL_RT
                                                                    IMPL_RTL_STRCODE c )
 {
     assert(nLen >= 0);
-    pStr += nLen;
-    while ( nLen > 0 )
+    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
     {
-        nLen--;
-        pStr--;
-
-        if ( *pStr == c )
-            return nLen;
+        // take advantage of builtin optimisations
+        std::string_view v(pStr, nLen);
+        std::string_view::size_type idx = v.rfind(c);
+        return idx == std::string_view::npos ? -1 : idx;
     }
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char16_t))
+    {
+        // take advantage of builtin optimisations
+        std::u16string_view v(pStr, nLen);
+        std::u16string_view::size_type idx = v.rfind(c);
+        return idx == std::string_view::npos ? -1 : idx;
+    }
+    else
+    {
+        pStr += nLen;
+        while ( nLen > 0 )
+        {
+            nLen--;
+            pStr--;
 
-    return -1;
+            if ( *pStr == c )
+                return nLen;
+        }
+        return -1;
+    }
 }
 
 /* ----------------------------------------------------------------------- */
@@ -504,10 +520,28 @@ sal_Int32 indexOfStr_WithLength                             ( const IMPL_RTL_STR
 {
     assert(nStrLen >= 0);
     assert(nSubLen >= 0);
-    /* faster search for a single character */
-    if ( nSubLen < 2 )
+    /* an empty SubString is always not findable */
+    if ( nSubLen == 0 )
+        ;
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
     {
-        /* an empty SubString is always not findable */
+        // take advantage of builtin optimisations
+        std::string_view v(pStr, nStrLen);
+        std::string_view needle(pSubStr, nSubLen);
+        std::string_view::size_type idx = v.find(needle);
+        return idx == std::string_view::npos ? -1 : idx;
+    }
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char16_t))
+    {
+        // take advantage of builtin optimisations
+        std::u16string_view v(pStr, nStrLen);
+        std::u16string_view needle(pSubStr, nSubLen);
+        std::u16string_view::size_type idx = v.find(needle);
+        return idx == std::string_view::npos ? -1 : idx;
+    }
+    else
+    {
+        /* faster search for a single character */
         if ( nSubLen == 1 )
         {
             IMPL_RTL_STRCODE        c = *pSubStr;
@@ -521,42 +555,41 @@ sal_Int32 indexOfStr_WithLength                             ( const IMPL_RTL_STR
                 nStrLen--;
             }
         }
-    }
-    else
-    {
-        const IMPL_RTL_STRCODE* pTempStr = pStr;
-        while ( nStrLen > 0 )
+        else
         {
-            if ( *pTempStr == *pSubStr )
+            const IMPL_RTL_STRCODE* pTempStr = pStr;
+            while ( nStrLen > 0 )
             {
-                /* Compare SubString */
-                if ( nSubLen <= nStrLen )
+                if ( *pTempStr == *pSubStr )
                 {
-                    const IMPL_RTL_STRCODE* pTempStr1 = pTempStr;
-                    const IMPL_RTL_STRCODE* pTempStr2 = pSubStr;
-                    sal_Int32               nTempLen = nSubLen;
-                    while ( nTempLen )
+                    /* Compare SubString */
+                    if ( nSubLen <= nStrLen )
                     {
-                        if ( *pTempStr1 != *pTempStr2 )
-                            break;
+                        const IMPL_RTL_STRCODE* pTempStr1 = pTempStr;
+                        const IMPL_RTL_STRCODE* pTempStr2 = pSubStr;
+                        sal_Int32               nTempLen = nSubLen;
+                        while ( nTempLen )
+                        {
+                            if ( *pTempStr1 != *pTempStr2 )
+                                break;
 
-                        pTempStr1++;
-                        pTempStr2++;
-                        nTempLen--;
+                            pTempStr1++;
+                            pTempStr2++;
+                            nTempLen--;
+                        }
+
+                        if ( !nTempLen )
+                            return pTempStr-pStr;
                     }
-
-                    if ( !nTempLen )
-                        return pTempStr-pStr;
+                    else
+                        break;
                 }
-                else
-                    break;
-            }
 
-            nStrLen--;
-            pTempStr++;
+                nStrLen--;
+                pTempStr++;
+            }
         }
     }
-
     return -1;
 }
 
@@ -584,10 +617,28 @@ sal_Int32 lastIndexOfStr_WithLength                             ( const IMPL_RTL
 {
     assert(nStrLen >= 0);
     assert(nSubLen >= 0);
-    /* faster search for a single character */
-    if ( nSubLen < 2 )
+    /* an empty SubString is always not findable */
+    if ( nSubLen == 0 )
+        ;
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
     {
-        /* an empty SubString is always not findable */
+        // take advantage of builtin optimisations
+        std::string_view v(pStr, nStrLen);
+        std::string_view needle(pSubStr, nSubLen);
+        std::string_view::size_type idx = v.rfind(needle);
+        return idx == std::string_view::npos ? -1 : idx;
+    }
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char16_t))
+    {
+        // take advantage of builtin optimisations
+        std::u16string_view v(pStr, nStrLen);
+        std::u16string_view needle(pSubStr, nSubLen);
+        std::u16string_view::size_type idx = v.rfind(needle);
+        return idx == std::string_view::npos ? -1 : idx;
+    }
+    else
+    {
+        /* faster search for a single character */
         if ( nSubLen == 1 )
         {
             IMPL_RTL_STRCODE c = *pSubStr;
@@ -601,35 +652,34 @@ sal_Int32 lastIndexOfStr_WithLength                             ( const IMPL_RTL
                     return nStrLen;
             }
         }
-    }
-    else
-    {
-        pStr += nStrLen;
-        nStrLen -= nSubLen;
-        pStr -= nSubLen;
-        while ( nStrLen >= 0 )
+        else
         {
-            const IMPL_RTL_STRCODE* pTempStr1 = pStr;
-            const IMPL_RTL_STRCODE* pTempStr2 = pSubStr;
-            sal_Int32               nTempLen = nSubLen;
-            while ( nTempLen )
+            pStr += nStrLen;
+            nStrLen -= nSubLen;
+            pStr -= nSubLen;
+            while ( nStrLen >= 0 )
             {
-                if ( *pTempStr1 != *pTempStr2 )
-                    break;
+                const IMPL_RTL_STRCODE* pTempStr1 = pStr;
+                const IMPL_RTL_STRCODE* pTempStr2 = pSubStr;
+                sal_Int32               nTempLen = nSubLen;
+                while ( nTempLen )
+                {
+                    if ( *pTempStr1 != *pTempStr2 )
+                        break;
 
-                pTempStr1++;
-                pTempStr2++;
-                nTempLen--;
+                    pTempStr1++;
+                    pTempStr2++;
+                    nTempLen--;
+                }
+
+                if ( !nTempLen )
+                    return nStrLen;
+
+                nStrLen--;
+                pStr--;
             }
-
-            if ( !nTempLen )
-                return nStrLen;
-
-            nStrLen--;
-            pStr--;
         }
     }
-
     return -1;
 }
 
