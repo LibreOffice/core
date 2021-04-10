@@ -131,6 +131,16 @@ sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
             ++aIter;
         }
     }
+    if (!bInHellLayer)
+    {
+        while (aIter != aEnd)
+        {
+            if (!aIter->mbInHellLayer || (_bInHeaderFooter && !aIter->mbInHeaderFooter))
+                break;
+            nRet += aIter->mnNoInlines + 1;
+            ++aIter;
+        }
+    }
     while (aIter != aEnd)
     {
         // insert object in page header|footer
