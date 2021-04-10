@@ -729,6 +729,10 @@ Try:
 							Case &quot;Controls&quot;		:	vReturn = vBasicObject.Controls(vArgs(0))
 							Case &quot;Subforms&quot;		:	vReturn = vBasicObject.Subforms(vArgs(0))
 						End Select
+					Case &quot;SFDocuments.FormControl&quot;
+						Select Case Script
+							Case &quot;Controls&quot;		:	vReturn = vBasicObject.Controls(vArgs(0))
+						End Select
 				End Select
 			
 			&apos;	Methods in class modules are invoked with CallByName

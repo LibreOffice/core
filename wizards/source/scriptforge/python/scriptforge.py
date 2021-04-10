@@ -183,7 +183,7 @@ class ScriptForge(object, metaclass = _Singleton):
             """
         servicemanager = context.ServiceManager  # com.sun.star.lang.XMultiComponentFactory
         masterscript = servicemanager.createInstanceWithContext(
-            "com.sun.star.script.provider.MasterScriptProviderFactory", context)
+            'com.sun.star.script.provider.MasterScriptProviderFactory', context)
         return masterscript.createScriptProvider("")
 
     @classmethod
@@ -201,7 +201,7 @@ class ScriptForge(object, metaclass = _Singleton):
             :return: the value returned by the invoked script, or an error if the script was not found
             """
 
-        # The frequently called PythonDispatcher in the ScriptForge Basic library is buffered to privilege performance
+        # The frequently called PythonDispatcher in the ScriptForge Basic library is cached to privilege performance
         if cls.servicesdispatcher is not None and script == ScriptForge.basicdispatcher:
             xscript = cls.servicesdispatcher
             fullscript = script
@@ -313,7 +313,11 @@ class ScriptForge(object, metaclass = _Singleton):
         elif returntuple[cstVarType] >= ScriptForge.V_ARRAY:
             pass
         elif returntuple[cstVarType] == ScriptForge.V_DATE:
-            return datetime.datetime.fromisoformat(returntuple[cstValue])
+            try:    # Anticipate fromisoformat('00:00:00') and alike
+                dat = None
+                dat = datetime.datetime.fromisoformat(returntuple[cstValue])
+            finally:
+                return dat
         else:         # All other scalar values
             pass
         return returntuple[cstValue]
@@ -351,12 +355,11 @@ class ScriptForge(object, metaclass = _Singleton):
                 func = getattr(cls, method)
                 if callable(func):
                     # Assign to each synonym a reference to the original method
-                    m = method.lower()
-                    if hasattr(cls, m) is False:
-                        setattr(cls, m, func)
-                    m = camelCase(method)
-                    if hasattr(cls, m) is False:
-                        setattr(cls, m, func)
+                    lc = method.lower()
+                    setattr(cls, lc, func)
+                    cc = camelCase(method)
+                    if cc != lc:
+                        setattr(cls, cc, func)
         return
 
 
@@ -553,7 +556,7 @@ class SFServices(object):
             Set the given property to a new value in the Basic world
             """
         if self.serviceimplementation == 'basic':
-            return self.EXEC(self.objectreference, self.vbLet, propertyname, value)
+            return self.EXEC(self.objectreference, self.vbLet + self.flgDateArg, propertyname, value)
 
 
 # #####################################################################################################################
@@ -648,10 +651,9 @@ class SFScriptForge:
                 expression = expression.isoformat()
             return self.SIMPLEEXEC(self.module + '.PyFormat', expression, format)
 
-        @staticmethod
-        def GetDefaultContext():
+        @classmethod
+        def GetDefaultContext(cls):
             return ScriptForge.componentcontext
-        getDefaultContext, getdefaultcontext = GetDefaultContext, GetDefaultContext
 
         def GetGuiType(self):
             return self.SIMPLEEXEC(self.module + '.PyGetGuiType')
@@ -659,10 +661,9 @@ class SFScriptForge:
         def GetSystemTicks(self):
             return self.SIMPLEEXEC(self.module + '.PyGetSystemTicks')
 
-        @staticmethod
-        def GetPathSeparator():
+        @classmethod
+        def GetPathSeparator(cls):
             return os.sep
-        getPathSeparator, getpathseparator = GetPathSeparator, GetPathSeparator
 
         class GlobalScope(object, metaclass = _Singleton):
             @classmethod  # Mandatory because the GlobalScope class is normally not instantiated
@@ -681,18 +682,16 @@ class SFScriptForge:
         def MsgBox(self, prompt, buttons = 0, title = ''):
             return self.SIMPLEEXEC(self.module + '.PyMsgBox', prompt, buttons, title)
 
-        @staticmethod
-        def Now():
+        @classmethod
+        def Now(cls):
             return datetime.datetime.now()
-        now = Now
 
-        @staticmethod
-        def RGB(red, green, blue):
+        @classmethod
+        def RGB(cls, red, green, blue):
             return int('%02x%02x%02x' % (red, green, blue), 16)
-        rgb = RGB
 
-        @staticmethod
-        def StarDesktop():
+        @classmethod
+        def StarDesktop(cls):
             ctx = ScriptForge.componentcontext
             if ctx is None:
                 return None
@@ -700,7 +699,6 @@ class SFScriptForge:
             DESK = 'com.sun.star.frame.Desktop'
             desktop = smgr.createInstanceWithContext(DESK, ctx)
             return desktop
-        starDesktop, stardesktop = StarDesktop, StarDesktop
 
         def Xray(self, unoobject = None):
             return self.SIMPLEEXEC('XrayTool._main.xray', unoobject)
@@ -1653,6 +1651,40 @@ class SFDocuments:
         def Subforms(self, subform = ''):
             return self.Execute(self.vbMethod + self.flgArrayRet, 'Subforms', subform)
 
+    # #########################################################################
+    # SF_FormControl CLASS
+    # #########################################################################
+    class SF_FormControl(SFServices):
+        """
+            Manage the controls belonging to a form or subform stored in a document.
+            Each instance of the current class represents a single control within a form, a subform or a tablecontrol.
+            A prerequisite is that all controls within the same form, subform or tablecontrol must have
+            a unique name.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDocuments.FormControl'
+        servicesynonyms = ()
+        serviceproperties = dict(Action = True, Caption = True, ControlSource = False, ControlType = False,
+                                 Default = True, DefaultValue = True, Enabled = True, Format = True,
+                                 ListCount = False, ListIndex = True, ListSource = True, ListSourceType = True,
+                                 Locked = True, MultiSelect = True, Name = False,
+                                 OnActionPerformed = True, OnAdjustmentValueChanged = True,
+                                 OnApproveAction = True, OnApproveReset = True, OnApproveUpdate = True,
+                                 OnChanged = True, OnErrorOccurred = True, OnFocusGained = True, OnFocusLost = True,
+                                 OnItemStateChanged = True, OnKeyPressed = True, OnKeyReleased = True,
+                                 OnMouseDragged = True, OnMouseEntered = True, OnMouseExited = True,
+                                 OnMouseMoved = True, OnMousePressed = True, OnMouseReleased = True, OnResetted = True,
+                                 OnTextChanged = True, OnUpdated = True, Parent = False, Picture = True,
+                                 Required = True, Text = False, TipText = True, TripleState = True, Value = True,
+                                 Visible = True, XControlModel = False, XControlView = False)
+
+        def Controls(self, controlname = ''):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
+
+        def SetFocus(self):
+            return self.Execute(self.vbMethod, 'SetFocus')
+
 
 # ##############################################False##################################################################
 #                           CreateScriptService()                                                                   ###
@@ -1710,27 +1742,6 @@ def CreateScriptService(service, *args):
 
 
 createScriptService, createscriptservice = CreateScriptService, CreateScriptService
-
-
-# #####################################################################################################################
-#                           Services shortcuts                                                                      ###
-# #####################################################################################################################
-def _CreateScriptService(service):
-    """
-        Mini CreateScriptService() function to create singleton predefined Basic services
-        The ScriptForge() initialization is SKIPPED.
-        """
-    if service in ScriptForge.servicesmodules:
-        serv = ScriptForge.serviceslist[service]
-        return serv(ScriptForge.servicesmodules[service], classmodule = SFServices.moduleStandard)
-    return None
-
-
-# Shortcuts below are for compatibility with the Basic ScriptForge API
-SF_Basic = SFScriptForge.SF_Basic()
-SF_Array = _CreateScriptService('ScriptForge.SF_Array')
-SF_Exception = _CreateScriptService('ScriptForge.SF_Exception')
-SF_String = _CreateScriptService('ScriptForge.SF_String')
 
 
 # ######################################################################

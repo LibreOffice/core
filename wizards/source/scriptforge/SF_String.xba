@@ -2309,7 +2309,7 @@ Dim bSplit As Boolean					&apos;	New chunk found or not
 Dim i As Long
 Const cstDouble = &quot;&quot;&quot;&quot;		:	Const cstSingle = &quot;&apos;&quot;
 Const cstThisSub = &quot;String.SplitNotQuoted&quot;
-Const cstSubArgs = &quot;InputStr, [Delimiter=&quot;&quot; &quot;&quot;], [Occurrences=0], [QuoteChar=&quot;&quot;&quot; &amp; cstDouble &amp; &quot;&quot;&quot;&quot;
+Const cstSubArgs = &quot;InputStr, [Delimiter=&quot;&quot; &quot;&quot;], [Occurrences=0], [QuoteChar=&quot;&quot;&quot; &amp; cstDouble &amp; &quot;&quot;&quot;]&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	vSplit = Array()
