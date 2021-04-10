@@ -427,8 +427,15 @@ static void rational_ReduceInaccurate(boost::rational<sal_Int32>& rRational, uns
         return;
 
     // http://www.boost.org/doc/libs/release/libs/rational/rational.html#Internal%20representation
-    const bool bNeg = ( rRational.numerator() < 0 );
-    sal_Int32 nMul = bNeg? -rRational.numerator(): rRational.numerator();
+    sal_Int32 nMul = rRational.numerator();
+    if (nMul == std::numeric_limits<sal_Int32>::min())
+    {
+        // ofz#32973 Integer-overflow
+        return;
+    }
+    const bool bNeg = nMul < 0;
+    if (bNeg)
+        nMul = -nMul;
     sal_Int32 nDiv = rRational.denominator();
 
     DBG_ASSERT(nSignificantBits<65, "More than 64 bit of significance is overkill!");
