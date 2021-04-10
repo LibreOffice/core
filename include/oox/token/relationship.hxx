@@ -21,6 +21,7 @@ enum class Relationship
     ACTIVEXCONTROLBINARY,
     CHART,
     COMMENTS,
+    COMMENTS_EXTENDED,
     COMMENTAUTHORS,
     CONTROL,
     CTRLPROP,

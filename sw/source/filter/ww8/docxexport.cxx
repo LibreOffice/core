@@ -740,6 +740,20 @@ void DocxExport::WritePostitFields()
         m_pAttrOutput->WritePostitFields();
         m_pAttrOutput->SetSerializer( m_pDocumentFS );
         pPostitFS->endElementNS( XML_w, XML_comments );
+
+        m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+                oox::getRelationship(Relationship::COMMENTS_EXTENDED),
+                "commentsExtended.xml" );
+
+        ::sax_fastparser::FSHelperPtr pExtendedFS =
+            m_pFilter->openFragmentStreamWithSerializer( "word/comments.xml",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.commentsExtended+xml" );
+
+        pExtendedFS->startElementNS( XML_w15, XML_commentsEx, MainXmlNamespaces());
+//        m_pAttrOutput->SetSerializer( pExtendedFS );
+//        m_pAttrOutput->WritePostitFields();
+//        m_pAttrOutput->SetSerializer( m_pDocumentFS );
+        pExtendedFS->endElementNS( XML_w15, XML_commentsEx );
     }
 }
 

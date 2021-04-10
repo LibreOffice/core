@@ -1,6 +1,7 @@
 {Relationship::ACTIVEXCONTROLBINARY, "http://schemas.microsoft.com/office/2006/relationships/activeXControlBinary"},
 {Relationship::CHART, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart"},
 {Relationship::COMMENTS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"},
+{Relationship::COMMENTS_EXTENDED, "http://schemas.microsoft.com/office/2011/relationships/commentsExtended"},
 {Relationship::COMMENTAUTHORS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/commentAuthors"},
 {Relationship::CONTROL, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control"},
 {Relationship::CTRLPROP, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp"},
