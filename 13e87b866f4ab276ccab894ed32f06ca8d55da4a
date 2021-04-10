@@ -16,6 +16,24 @@
       "revId": "13e87b866f4ab276ccab894ed32f06ca8d55da4a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b75c0327_3fc024a2",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-10T06:01:13Z",
+      "side": 1,
+      "message": "The whitespace comes from the revert of 383032c50a3e3354f04200ce984a47ab9d2c5c67 (as well as whitespace changes in SwLayAction::SwLayAction and elsewhere) 😊",
+      "parentUuid": "d15f2cfc_0d2819d6",
+      "revId": "13e87b866f4ab276ccab894ed32f06ca8d55da4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
