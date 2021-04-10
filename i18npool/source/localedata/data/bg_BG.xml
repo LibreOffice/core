@@ -208,8 +208,8 @@
   <LC_INDEX>
     <IndexKey phonetic="false" default="true" unoid="alphanumeric">А-Ь Ѣ Ю-Я Ѫ</IndexKey>
     <UnicodeScript>8</UnicodeScript>
-    <FollowPageWord>стр.</FollowPageWord>
-    <FollowPageWord>стр.</FollowPageWord>
+    <FollowPageWord> и сл.</FollowPageWord>
+    <FollowPageWord> и сл.</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
