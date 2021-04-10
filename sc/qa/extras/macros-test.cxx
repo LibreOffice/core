@@ -343,7 +343,6 @@ void ScMacrosTest::testVba()
         OUString aFileName;
         createFileURL(OUString(rTestInfo.sFileBaseName + "xls"), aFileName);
         uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-        OUString sMsg( "Failed to load " + aFileName );
 
         // process all events such as OnLoad events etc.
         // otherwise the tend to arrive later at a random
