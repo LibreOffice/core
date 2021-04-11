@@ -861,7 +861,7 @@ void ImportExcel::Mulrk()
     XclAddress aXclPos;
     aIn >> aXclPos;
 
-    for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() > 6); ++aCurrXclPos.mnCol )
+    for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() >= 6); ++aCurrXclPos.mnCol )
     {
         sal_uInt16 nXF = aIn.ReaduInt16();
         sal_Int32 nRkNum = aIn.ReadInt32();
@@ -880,7 +880,7 @@ void ImportExcel::Mulblank()
     XclAddress aXclPos;
     aIn >> aXclPos;
 
-    for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() > 2); ++aCurrXclPos.mnCol )
+    for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() >= 2); ++aCurrXclPos.mnCol )
     {
         sal_uInt16 nXF = aIn.ReaduInt16();
 
