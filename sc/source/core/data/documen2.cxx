@@ -36,6 +36,7 @@
 #include <comphelper/threadpool.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <unotools/configmgr.hxx>
 
 #include <scmod.hxx>
 #include <document.hxx>
@@ -192,8 +193,8 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
     if ( eMode == SCDOCMODE_DOCUMENT || eMode == SCDOCMODE_FUNCTIONACCESS )
     {
         mxPoolHelper = new ScPoolHelper( *this );
-
-        pBASM.reset( new ScBroadcastAreaSlotMachine( this ) );
+        if (!utl::ConfigManager::IsFuzzing()) //just too slow
+            pBASM.reset( new ScBroadcastAreaSlotMachine( this ) );
         pChartListenerCollection.reset( new ScChartListenerCollection( *this ) );
         pRefreshTimerControl.reset( new ScRefreshTimerControl );
     }
