@@ -41,6 +41,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
 
+#include <awt/vclxwindows.hxx>
 #include <controls/filectrl.hxx>
 #include <controls/svmedit.hxx>
 #include <svl/zforlist.hxx>

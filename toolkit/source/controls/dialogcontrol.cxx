@@ -43,6 +43,7 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/controls/unocontrols.hxx>
 
+#include <awt/vclxwindows.hxx>
 #include <helper/unopropertyarrayhelper.hxx>
 #include "controlmodelcontainerbase_internal.hxx"
 

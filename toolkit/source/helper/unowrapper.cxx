@@ -24,6 +24,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <awt/vclxgraphics.hxx>
+#include <awt/vclxwindows.hxx>
 
 #include <toolkit/dllapi.h>
 #include <vcl/menu.hxx>
