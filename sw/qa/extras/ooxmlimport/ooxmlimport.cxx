@@ -729,7 +729,8 @@ DECLARE_OOXMLIMPORT_TEST(testFdo43641, "fdo43641.docx")
     uno::Reference<container::XIndexAccess> xGroupShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xLine(xGroupShape->getByIndex(1), uno::UNO_QUERY);
     // This was 2200, not 2579 in mm100, i.e. the size of the line shape was incorrect.
-    CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(928440), xLine->getSize().Width);
+    // File cx=928694EMU = 2579.7Hmm, round up 2580Hmm. Currently off by 1.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2581), xLine->getSize().Width);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeSdt, "groupshape-sdt.docx")

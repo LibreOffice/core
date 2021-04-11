@@ -982,6 +982,10 @@ Reference< XShape > const & Shape::createAndInsert(
         // TODO: use ph color when applying effect properties
         //sal_Int32 nEffectPhClr = -1;
 
+        // dmapper needs the original rotation angle for calculating square wrap. This angle is not
+        // available as property there, so store it in InteropGrabBag.
+        putPropertyToGrabBag("mso-rotation-angle", Any(mnRotation));
+
         if( pTheme )
         {
             if( const ShapeStyleRef* pLineRef = getShapeStyleRef( XML_lnRef ) )

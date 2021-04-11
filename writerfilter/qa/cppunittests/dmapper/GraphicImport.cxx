@@ -10,6 +10,8 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -51,6 +53,69 @@ void Test::tearDown()
 }
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/dmapper/data/";
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf141540ChildRotation)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf141540ChildRotation.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xRotatedShape(xGroup->getByIndex(1), uno::UNO_QUERY);
+    sal_Int32 nShearAngle = 9000; // initialize with invalid value
+    xRotatedShape->getPropertyValue("ShearAngle") >>= nShearAngle;
+    // Without fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 2494
+    // i.e. the rotated rectangle in the group was sheared, although the group itself is not rotated
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nShearAngle);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupRotation)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf141540GroupRotation.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nShearAngle = 9000; // init with invalid value
+    xShape->getPropertyValue("ShearAngle") >>= nShearAngle;
+    // Without fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : -3190
+    // i.e. the group has got a shearing although MSO does not know shearing at all.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nShearAngle);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupLinePosSize)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf141540GroupLinePosSize.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+
+    // Test line
+    uno::Reference<drawing::XShape> xLineShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    awt::Point aPosition = xLineShape->getPosition();
+    awt::Size aSize = xLineShape->getSize();
+    // Without fix in place, you had got Position = (19|6498), Size = 5001 x 2
+    // i.e. the line was nearly horizontal instead of vertical
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5022), aPosition.X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2963), aPosition.Y);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7073), aSize.Height);
+
+    // Test group
+    uno::Reference<drawing::XShape> xGroupShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    aPosition = xGroupShape->getPosition();
+    aSize = xGroupShape->getSize();
+    // Without fix in place, you had got Position = (11511|3480), Size = 4022 x 4022
+    // i.e. the group was erroneously downscaled to unrotated size
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10679), aPosition.X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2648), aPosition.Y);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5687), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5687), aSize.Height);
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testGroupShapeRotation)
 {

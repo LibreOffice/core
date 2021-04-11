@@ -125,12 +125,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlTextshapeB, "dml-textshapeB.docx")
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(3), uno::UNO_QUERY);
     // Connector was incorrectly shifted towards the top left corner, X was 192, Y was -5743.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3778), xShape->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-5066), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3776), xShape->getPosition().X);
+    // Value as of LO7.2. Whole group is still shifted 3mm to rigth and 5mm down.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-5063), xShape->getPosition().Y);
 
     xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
     // This was incorrectly shifted towards the top of the page, Y was -5011.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4715), xShape->getPosition().Y);
+    // Value as of LO 7.2
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4712), xShape->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
