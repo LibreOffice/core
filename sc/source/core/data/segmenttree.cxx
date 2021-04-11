@@ -146,41 +146,93 @@ template<typename ValueType_, typename ExtValueType_>
 typename ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ExtValueType
 ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOLROW nPos2)
 {
-    RangeData aData;
-    if (!getRangeData(nPos1, aData))
-        return 0;
-
-    sal_uInt32 nValue = 0;
-
-    SCROW nCurPos = nPos1;
-    SCROW nEndPos = aData.mnPos2;
-    while (nEndPos <= nPos2)
+    if (mbTreeSearchEnabled)
     {
-        sal_uInt32 nRes;
-        if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
-        {
-            SAL_WARN("sc.core", "row height overflow");
-            nRes = SAL_MAX_INT32;
-        }
-        nValue = o3tl::saturating_add(nValue, nRes);
-        nCurPos = nEndPos + 1;
-        if (!getRangeData(nCurPos, aData))
-            break;
 
-        nEndPos = aData.mnPos2;
-    }
-    if (nCurPos <= nPos2)
-    {
-        nEndPos = ::std::min(nEndPos, nPos2);
-        sal_uInt32 nRes;
-        if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
+        if (!maSegments.is_tree_valid())
         {
-            SAL_WARN("sc.core", "row height overflow");
-            nRes = SAL_MAX_INT32;
+            assert(!ScGlobal::bThreadedGroupCalcInProgress);
+            maSegments.build_tree();
         }
-        nValue = o3tl::saturating_add(nValue, nRes);
+
+        RangeData aData;
+        auto [it, found] = maSegments.search_tree(nPos1, aData.mnValue, &aData.mnPos1, &aData.mnPos2);
+        if (!found)
+            return 0;
+        aData.mnPos2 = aData.mnPos2-1; // end point is not inclusive.
+
+        sal_uInt32 nValue = 0;
+
+        SCROW nCurPos = nPos1;
+        SCROW nEndPos = aData.mnPos2;
+        while (nEndPos <= nPos2)
+        {
+            sal_uInt32 nRes;
+            if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
+            {
+                SAL_WARN("sc.core", "row height overflow");
+                nRes = SAL_MAX_INT32;
+            }
+            nValue = o3tl::saturating_add(nValue, nRes);
+            nCurPos = nEndPos + 1;
+            auto itPair = maSegments.search(it, nCurPos, aData.mnValue, &aData.mnPos1, &aData.mnPos2);
+            if (!itPair.second)
+                break;
+            it = itPair.first;
+            aData.mnPos2 = aData.mnPos2-1; // end point is not inclusive.
+            nEndPos = aData.mnPos2;
+        }
+        if (nCurPos <= nPos2)
+        {
+            nEndPos = ::std::min(nEndPos, nPos2);
+            sal_uInt32 nRes;
+            if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
+            {
+                SAL_WARN("sc.core", "row height overflow");
+                nRes = SAL_MAX_INT32;
+            }
+            nValue = o3tl::saturating_add(nValue, nRes);
+        }
+        return nValue;
     }
-    return nValue;
+    else
+    {
+        RangeData aData;
+        if (!getRangeDataLeaf(nPos1, aData))
+            return 0;
+
+        sal_uInt32 nValue = 0;
+
+        SCROW nCurPos = nPos1;
+        SCROW nEndPos = aData.mnPos2;
+        while (nEndPos <= nPos2)
+        {
+            sal_uInt32 nRes;
+            if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
+            {
+                SAL_WARN("sc.core", "row height overflow");
+                nRes = SAL_MAX_INT32;
+            }
+            nValue = o3tl::saturating_add(nValue, nRes);
+            nCurPos = nEndPos + 1;
+            if (!getRangeDataLeaf(nCurPos, aData))
+                break;
+
+            nEndPos = aData.mnPos2;
+        }
+        if (nCurPos <= nPos2)
+        {
+            nEndPos = ::std::min(nEndPos, nPos2);
+            sal_uInt32 nRes;
+            if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
+            {
+                SAL_WARN("sc.core", "row height overflow");
+                nRes = SAL_MAX_INT32;
+            }
+            nValue = o3tl::saturating_add(nValue, nRes);
+        }
+        return nValue;
+    }
 }
 
 template<typename ValueType_, typename ExtValueType_>
@@ -195,7 +247,8 @@ bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getRangeData(SCCOLROW nPos, 
         maSegments.build_tree();
     }
 
-    if (!maSegments.search_tree(nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2).second)
+    auto it = maSegments.search_tree(nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2);
+    if (!it.second)
         return false;
 
     rData.mnPos2 = rData.mnPos2-1; // end point is not inclusive.
