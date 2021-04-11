@@ -346,7 +346,7 @@ int officeloader_impl(bool bAllowConsole)
             do
             {
                 // On Windows XP it seems as the desktop calls WaitForInputIdle after "OpenWith" so
-                // we have to do so as if we where processing any messages
+                // we have to do so as if we here processing any messages
 
                 dwWaitResult = MsgWaitForMultipleObjects(1, &aProcessInfo.hProcess, FALSE, INFINITE,
                                                          QS_ALLEVENTS);
@@ -453,7 +453,7 @@ int unopkgloader_impl(bool bAllowConsole)
         do
         {
             // On Windows XP it seems as the desktop calls WaitForInputIdle after "OpenWidth" so we have to do so
-            // as if we where processing any messages
+            // as if we were processing any messages
 
             dwWaitResult = MsgWaitForMultipleObjects(1, &aProcessInfo.hProcess, FALSE, INFINITE, QS_ALLEVENTS);
 
