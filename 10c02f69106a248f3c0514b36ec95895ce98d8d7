@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "599dc21a_72fb894a",
+        "filename": "desktop/win32/source/loader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2021-04-11T22:53:38Z",
+      "side": 1,
+      "message": "\u0027we here\u0027 or \u0027we were\u0027?",
+      "revId": "10c02f69106a248f3c0514b36ec95895ce98d8d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
