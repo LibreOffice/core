@@ -43,7 +43,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 
+#include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdtrans.hxx>
 #include <svx/unoapi.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -334,7 +336,7 @@ public:
         return nYSize;
     }
 
-    bool isYSizeValis () const
+    bool isYSizeValid() const
     {
         return bYSizeValid;
     }
@@ -506,6 +508,31 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
 
         xSet->setPropertyValue(aGrabBagPropName, uno::makeAny(comphelper::containerToSequence(aGrabBag)));
     }
+}
+
+static bool lcl_bHasGroupSlantedChild (const SdrObject* pObj)
+{
+    // Returns true, if a child object differs more then 0.02deg from horizontal or vertical.
+    // Because lines sometimes are imported as customshapes, a horizontal or vertical line
+    // might not have exactly 0, 90, 180, or 270 degree as rotate angle.
+    if (!pObj)
+        return false;
+    if (!pObj->IsGroupObject())
+        return false;
+    SdrObjList* pSubList = pObj->GetSubList();
+    if (!pSubList)
+        return false;
+    SdrObjListIter aIterator(pSubList, SdrIterMode::DeepNoGroups);
+    while (aIterator.IsMore())
+    {
+            const SdrObject* pSubObj = aIterator.Next();
+            const Degree100 nRotateAngle = NormAngle36000(pSubObj->GetRotateAngle());
+            const sal_uInt16 nRot = nRotateAngle.get();
+            if ((3 < nRot && nRot < 8997) || (9003 < nRot && nRot < 17997)
+                || (18003 < nRot && nRot < 26997) || (27003 < nRot && nRot < 35997))
+                return true;
+    }
+    return false;
 }
 
 void GraphicImport::lcl_attribute(Id nName, Value& rValue)
@@ -787,10 +814,34 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         awt::Size aSize(m_xShape->getSize());
 
-                        if (m_pImpl->isXSizeValid())
-                            aSize.Width = m_pImpl->getXSize();
-                        if (m_pImpl->isYSizeValis())
-                            aSize.Height = m_pImpl->getYSize();
+                        // One purpose of the next part is, to set the logic rectangle of the SdrObject
+                        // to nXSize and nYSize from import. That doesn't work for groups or lines,
+                        // because they do not have a logic rectangle and m_xShape->getSize and
+                        // m_xShape->setSize would work on the snap rectangle. In case a shape is
+                        // rotated, non-uniform scaling the snap rectangle will introduce shearing on
+                        // the shape. In case group or line is rotated, nXSize and nYSize contain the
+                        // unrotated size from oox. The rotation is already incorporated into group
+                        // children and line points. We must not scale them to unrotated size. Exclude
+                        // those shapes here.
+
+                        // Get MSO rotation angle. GetRotateAngle from SdrObject is not suitable
+                        // here, because it returns the rotate angle of the first child for groups
+                        // and slope angle for lines, even if line or group had not been rotated.
+                        // Import in oox has put the rotation from oox file into InteropGrabBag.
+                        comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));
+                        sal_Int32 nOOXAngle(0);
+                        aInteropGrabBag.getValue("mso-rotation-angle") >>= nOOXAngle; // 1/60000 deg
+                        const bool bIsGroupOrLine = xServiceInfo->supportsService("com.sun.star.drawing.GroupShape")
+                            || xServiceInfo->supportsService("com.sun.star.drawing.LineShape");
+                        SdrObject* pShape = GetSdrObjectFromXShape(m_xShape);
+                        if ((bIsGroupOrLine && !lcl_bHasGroupSlantedChild(pShape) && nOOXAngle == 0)
+                            || !bIsGroupOrLine)
+                        {
+                            if (m_pImpl->isXSizeValid())
+                                aSize.Width = m_pImpl->getXSize();
+                            if (m_pImpl->isYSizeValid())
+                                aSize.Height = m_pImpl->getYSize();
+                        }
 
                         Degree100 nRotation;
                         if (bKeepRotation)
@@ -798,7 +849,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             // Use internal API, getPropertyValue(RotateAngle)
                             // would use GetObjectRotation(), which is not what
                             // we want.
-                            if (SdrObject* pShape = GetSdrObjectFromXShape(m_xShape))
+                            if (pShape)
                                 nRotation = pShape->GetRotateAngle();
                         }
                         m_xShape->setSize(aSize);
@@ -864,6 +915,64 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         if (!m_pImpl->sAnchorId.isEmpty())
                         {
                             putPropertyToFrameGrabBag("AnchorId", uno::makeAny(m_pImpl->sAnchorId));
+                        }
+
+                        // Calculate mso unrotated rectangle and its center, needed below
+                        awt::Size aImportSize(m_xShape->getSize()); // here only fallback
+                        if (m_pImpl->isXSizeValid())
+                            aImportSize.Width = m_pImpl->getXSize(); // Hmm
+                        if (m_pImpl->isYSizeValid())
+                            aImportSize.Height = m_pImpl->getYSize(); // Hmm
+                        const awt::Point aImportPosition(GetGraphicObjectPosition()); // Hmm
+                        const awt::Point aCentrum(aImportPosition.X + aImportSize.Width / 2,
+                                                  aImportPosition.Y + aImportSize.Height / 2);
+
+                        // In case of group and lines, rotations are incorported in the child shapes or
+                        // points respectively in LO. MSO has rotation as separate property. The
+                        // position refers to the unrotated rectangle of MSO. We need to adapt it to
+                        // the left-top of the rotated shape.
+                        if (bIsGroupOrLine)
+                        {
+                            // Get actual LO snap rectangle size of group or line.
+                            awt::Size aLOSize(m_xShape->getSize()); //Hmm
+
+                            // Set LO position. MSO rotation is done on shape center.
+                            m_pImpl->nLeftPosition = aCentrum.X - aLOSize.Width / 2;
+                            m_pImpl->nTopPosition = aCentrum.Y - aLOSize.Height / 2;
+                            m_xShape->setPosition(GetGraphicObjectPosition());
+                        }
+
+                        // Margin correction
+                        // In case of wrap "Square" or "in Line", MSO uses special rules to
+                        // determine the rectangle into which the shape is placed, depending on
+                        // rotation angle.
+                        // If angle is smaller to horizontal than 45deg, the unrotated mso shape
+                        // rectangle is used, whereby the height is expanded to the bounding
+                        // rectangle height of the shape.
+                        // If angle is larger to horizontal than 45deg, the 90deg rotated rectangle
+                        // is used, whereby the width is expanded to the bounding width of the
+                        // shape.
+                        if (bIsGroupOrLine && (m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE
+                            || (m_pImpl->nWrap == text::WrapTextMode_PARALLEL && !(m_pImpl->mpWrapPolygon))))
+                        {
+
+                            nOOXAngle = (nOOXAngle / 60000) % 180; // convert to degree in [0°,180°[
+
+                            if (nOOXAngle >= 45 && nOOXAngle < 135)
+                            {
+                                const sal_Int32 nImportRot90Top(aCentrum.Y - aImportSize.Width / 2);
+                                sal_Int32 nVertMarginOffset(m_pImpl->nTopPosition - nImportRot90Top);
+                                nVertMarginOffset = std::max<sal_Int32>(nVertMarginOffset, 0);
+                                m_pImpl->nTopMargin += nVertMarginOffset;
+                                m_pImpl->nBottomMargin += nVertMarginOffset;
+                            }
+                            else
+                            {
+                                sal_Int32 nHoriMarginOffset(m_pImpl->nLeftPosition - aImportPosition.X);
+                                nHoriMarginOffset = std::max<sal_Int32>(nHoriMarginOffset, 0);
+                                m_pImpl->nLeftMargin += nHoriMarginOffset;
+                                m_pImpl->nRightMargin += nHoriMarginOffset;
+                            }
                         }
                     }
 
