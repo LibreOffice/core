@@ -334,7 +334,7 @@ public:
         return nYSize;
     }
 
-    bool isYSizeValis () const
+    bool isYSizeValid() const
     {
         return bYSizeValid;
     }
@@ -787,10 +787,21 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         awt::Size aSize(m_xShape->getSize());
 
-                        if (m_pImpl->isXSizeValid())
-                            aSize.Width = m_pImpl->getXSize();
-                        if (m_pImpl->isYSizeValis())
-                            aSize.Height = m_pImpl->getYSize();
+                        // ToDo: Using size from import does not work for groups or for shapes, which
+                        // were lines originally. Why?
+                        bool bIsGroup =
+                            xServiceInfo->supportsService("com.sun.star.drawing.GroupShape");
+                        bool bIsLikeLine =
+                            xServiceInfo->supportsService("com.sun.star.drawing.LineShape")
+                            || (m_pImpl->isXSizeValid() && m_pImpl->getXSize() <= 1)
+                            || (m_pImpl->isYSizeValid() && m_pImpl->getYSize() <= 1);
+                    if (!bIsGroup && !bIsLikeLine)
+                        {
+                            if (m_pImpl->isXSizeValid())
+                                aSize.Width = m_pImpl->getXSize();
+                            if (m_pImpl->isYSizeValid())
+                                aSize.Height = m_pImpl->getYSize();
+                        }
 
                         Degree100 nRotation;
                         if (bKeepRotation)
@@ -864,6 +875,74 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         if (!m_pImpl->sAnchorId.isEmpty())
                         {
                             putPropertyToFrameGrabBag("AnchorId", uno::makeAny(m_pImpl->sAnchorId));
+                        }
+
+                        // Adapt position and margin for wrap "Square" and "in Line". The adaption
+                        // currently works for groups and shapes, which were originally kind of lines.
+                        if ((m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE
+                            || m_pImpl->nWrap == text::WrapTextMode_PARALLEL)
+                            && (bIsLikeLine || bIsGroup))
+                        {
+                            // The rectangle area into which the shape is placed, depends on the rotation
+                            // angle. If rotation angle is smaller to horizontal than 45deg, the unrotated
+                            // mso shape rectangle is used, whereby the height is expanded to the bounding
+                            // rectangle height of the shape. In case larger than 45deg the 90deg rotated
+                            // mso shape rectangle is used, whereby the width is expanded to the bounding
+                            // width of the shape. Rotation is arround shape center.
+                            // Import in oox has put the rotation from oox file into  InteropGrabBag.
+                            // GetRotateAngle from SdrObject is not suitable here, because it returns
+                            // the rotate angle of the first child for groups and slope angle for
+                            // lines even if line or group had not been rotated.
+                            comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));
+                            sal_Int32 nOOXAngle(0); // 1/60000 deg
+                            aInteropGrabBag.getValue("mso-rotation-angle") >>= nOOXAngle;
+                            nOOXAngle = (nOOXAngle / 60000) % 180; // convert to degree in [0°,180°[
+                            const bool bCase90deg(nOOXAngle >= 45 && nOOXAngle < 135);
+
+                            awt::Size aLOSize(m_xShape->getSize()); //Hmm
+                            if (!bIsGroup)
+                            {
+                                if (SdrObject* pShape = GetSdrObjectFromXShape(m_xShape))
+                                {
+                                    aLOSize.Width = pShape->GetSnapRect().getWidth(); // Twips
+                                    aLOSize.Height = pShape->GetSnapRect().getHeight(); // Twips
+                                    aLOSize.Width = ConversionHelper::convertTwipToMM100(aLOSize.Width);
+                                    aLOSize.Height = ConversionHelper::convertTwipToMM100(aLOSize.Height);
+                                }
+                            }
+
+                            // Calculate mso unrotated rectangle
+                            awt::Size aImportSize(aLOSize); // here only fallback
+                            if (m_pImpl->isXSizeValid())
+                                aImportSize.Width = m_pImpl->getXSize(); // Hmm
+                            if (m_pImpl->isYSizeValid())
+                                aImportSize.Height = m_pImpl->getYSize(); // Hmm
+                            const awt::Point aImportPosition(GetGraphicObjectPosition()); // Hmm
+                            const awt::Point aCentrum(aImportPosition.X + aImportSize.Width / 2,
+                                                      aImportPosition.Y + aImportSize.Height / 2);
+
+                            // LO position
+                            m_pImpl->nLeftPosition = aCentrum.X - aLOSize.Width / 2;
+                            m_pImpl->nTopPosition = aCentrum.Y - aLOSize.Height / 2;
+                            m_xShape->setPosition(GetGraphicObjectPosition());
+
+                            // Margin correction
+                            if (bCase90deg)
+                            {
+                                const sal_Int32 nImportRot90Top(aCentrum.Y - aImportSize.Width / 2);
+                                const sal_Int32 nImportRot90Left(aCentrum.X - aImportSize.Height / 2);
+                                sal_Int32 nVertMarginOffset(m_pImpl->nTopPosition - nImportRot90Top);
+                                nVertMarginOffset = std::max<sal_Int32>(nVertMarginOffset, 0);
+                                m_pImpl->nTopMargin += nVertMarginOffset;
+                                m_pImpl->nBottomMargin += nVertMarginOffset;
+                            }
+                            else
+                            {
+                                sal_Int32 nHoriMarginOffset(m_pImpl->nLeftPosition - aImportPosition.X);
+                                nHoriMarginOffset = std::max<sal_Int32>(nHoriMarginOffset, 0);
+                                m_pImpl->nLeftMargin += nHoriMarginOffset;
+                                m_pImpl->nRightMargin += nHoriMarginOffset;
+                            }
                         }
                     }
 
