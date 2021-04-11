@@ -290,11 +290,11 @@ void Qt5Frame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExten
 
 void Qt5Frame::InitQt5SvpGraphics(Qt5SvpGraphics* pQt5SvpGraphics)
 {
-    int width = 640;
-    int height = 480;
+    QSize aSize = m_pQWidget->size() * devicePixelRatioF();
     m_pSvpGraphics = pQt5SvpGraphics;
-    m_pSurface.reset(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height));
-    m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(width, height));
+    m_pSurface.reset(
+        cairo_image_surface_create(CAIRO_FORMAT_ARGB32, aSize.width(), aSize.height()));
+    m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(aSize.width(), aSize.height()));
     cairo_surface_set_user_data(m_pSurface.get(), Qt5SvpGraphics::getDamageKey(), &m_aDamageHandler,
                                 nullptr);
 }
