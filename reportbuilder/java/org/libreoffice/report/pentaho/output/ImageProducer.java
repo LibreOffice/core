@@ -48,9 +48,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.jfree.layouting.input.style.values.CSSNumericType;
 import org.jfree.layouting.input.style.values.CSSNumericValue;
 
@@ -67,7 +64,7 @@ import org.pentaho.reporting.libraries.base.util.WaitingImageObserver;
 public class ImageProducer
 {
 
-    private static final Log LOGGER = LogFactory.getLog(ImageProducer.class);
+    private static final Logger LOGGER = Logger.getLogger(ImageProducer.class.getName());
 
     public static class OfficeImage
     {
@@ -188,7 +185,7 @@ public class ImageProducer
             final boolean preserveIRI)
     {
 
-        LOGGER.debug("Want to produce image " + imageData);
+        LOGGER.config("Want to produce image " + imageData);
         if (imageData instanceof String)
         {
             return produceFromString((String) imageData, preserveIRI);
@@ -247,11 +244,11 @@ public class ImageProducer
         }
         catch (IOException e)
         {
-            LOGGER.warn("Failed to produce image from Blob", e);
+            LOGGER.warning("Failed to produce image from Blob: " + e);
         }
         catch (SQLException e)
         {
-            LOGGER.warn("Failed to produce image from Blob", e);
+            LOGGER.warning("Failed to produce image from Blob: " + e);
         }
         return null;
     }
@@ -295,11 +292,11 @@ public class ImageProducer
         }
         catch (IOException e)
         {
-            LOGGER.warn("Failed to load image from local input-repository", e);
+            LOGGER.warning("Failed to load image from local input-repository: " + e);
         }
         catch (ReportExecutionException e)
         {
-            LOGGER.warn("Failed to create image from local input-repository", e);
+            LOGGER.warning("Failed to create image from local input-repository: " + e);
         }
         return null;
     }
@@ -353,11 +350,11 @@ public class ImageProducer
             }
             catch (IOException e)
             {
-                LOGGER.warn("Failed to load image from local input-repository", e);
+                LOGGER.warning("Failed to load image from local input-repository: " + e);
             }
             catch (ReportExecutionException e)
             {
-                LOGGER.warn("Failed to create image from local input-repository", e);
+                LOGGER.warning("Failed to create image from local input-repository: " + e);
             }
         }
         else
@@ -435,11 +432,11 @@ public class ImageProducer
         }
         catch (IOException e)
         {
-            LOGGER.warn("Failed to load image from local input-repository", e);
+            LOGGER.warning("Failed to load image from local input-repository: " + e);
         }
         catch (ReportExecutionException e)
         {
-            LOGGER.warn("Failed to create image from local input-repository", e);
+            LOGGER.warning("Failed to create image from local input-repository: " + e);
         }
 
         if (!preserveIRI)

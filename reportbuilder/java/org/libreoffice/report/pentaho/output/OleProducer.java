@@ -32,14 +32,12 @@ import org.libreoffice.report.pentaho.PentahoReportEngineMetaData;
 import java.io.IOException;
 
 import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 public class OleProducer
 {
 
-    private static final Log LOGGER = LogFactory.getLog(OleProducer.class);
+    private static final Logger LOGGER = Logger.getLogger(OleProducer.class.getName());
     private final InputRepository inputRepository;
     private final OutputRepository outputRepository;
     private final DefaultNameGenerator nameGenerator;
@@ -100,16 +98,16 @@ public class OleProducer
             }
             catch (ReportExecutionException ex)
             {
-                LOGGER.error("ReportProcessing failed", ex);
+                LOGGER.severe("ReportProcessing failed: " + ex);
             }
             catch (IOException ex)
             {
-                LOGGER.error("ReportProcessing failed", ex);
+                LOGGER.severe("ReportProcessing failed: " + ex);
             }
         }
         catch (IOException ex)
         {
-            LOGGER.error("ReportProcessing failed", ex);
+            LOGGER.severe("ReportProcessing failed: " + ex);
         } finally
         {
             if (subInputRepository != null)

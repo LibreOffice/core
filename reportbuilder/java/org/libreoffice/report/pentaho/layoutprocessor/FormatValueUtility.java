@@ -208,7 +208,7 @@ public class FormatValueUtility
         if (result == null)
         {
             // ignore it. Ignoring it is much better than printing 'null'.
-            // LOGGER.debug("Formula '" + formulaExpression.getFormula() + "' evaluated to null.");
+            // LOGGER.config("Formula '" + formulaExpression.getFormula() + "' evaluated to null.");
             return null;
         }
         else if (result instanceof DataFlags)

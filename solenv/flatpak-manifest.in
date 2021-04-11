@@ -477,12 +477,6 @@
                     "dest-filename": "external/tarballs/beeca87be45ec87d241ddd0e1bad80c1-bsh-2.0b6-src.zip"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/commons-logging-1.2-src.tar.gz",
-                    "sha256": "49665da5a60d033e6dff40fe0a7f9173e886ae859ce6096c1afe34c48b677c81",
-                    "type": "file",
-                    "dest-filename": "external/tarballs/commons-logging-1.2-src.tar.gz"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/ba2930200c9f019c2d93a8c88c651a0f-flow-engine-0.9.4.zip",
                     "sha256": "233f66e8d25c5dd971716d4200203a612a407649686ef3b52075d04b4c9df0dd",
                     "type": "file",

@@ -37,9 +37,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 /**
  * A directory holds all the contents here.
@@ -49,8 +47,8 @@ import org.apache.commons.logging.LogFactory;
 public class StorageRepository implements InputRepository, OutputRepository
 {
 
-    private static final Log LOGGER = LogFactory.getLog(StorageRepository.class);
-    private static final String REPORT_PROCESSING_FAILED = "ReportProcessing failed";
+    private static final Logger LOGGER = Logger.getLogger(StorageRepository.class.getName());
+    private static final String REPORT_PROCESSING_FAILED = "ReportProcessing failed: ";
     private XStorage input;
     private XStorage output;
     private final String rootURL;
@@ -134,11 +132,11 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
         catch (InvalidStorageException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (com.sun.star.lang.IllegalArgumentException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (NoSuchElementException e)
         {
@@ -168,15 +166,15 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
         catch (InvalidStorageException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (com.sun.star.lang.IllegalArgumentException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (NoSuchElementException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         return false;
     }
@@ -195,23 +193,23 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
         catch (NoSuchElementException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (WrappedTargetException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (InvalidStorageException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (IllegalArgumentException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (com.sun.star.io.IOException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         throw new IOException();
     }
@@ -245,27 +243,27 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
         catch (UnknownPropertyException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (PropertyVetoException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (IllegalArgumentException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (WrappedTargetException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (InvalidStorageException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (com.sun.star.io.IOException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
 
         throw new IOException();
@@ -293,11 +291,11 @@ public class StorageRepository implements InputRepository, OutputRepository
             }
             catch (com.sun.star.io.IOException ex)
             {
-                LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+                LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
             }
             catch (WrappedTargetException ex)
             {
-                LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+                LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
             }
             output.dispose();
         }
@@ -312,11 +310,11 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
         catch (InvalidStorageException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (com.sun.star.lang.IllegalArgumentException ex)
         {
-            LOGGER.error(REPORT_PROCESSING_FAILED, ex);
+            LOGGER.severe(REPORT_PROCESSING_FAILED + ex);
         }
         catch (NoSuchElementException ex)
         {

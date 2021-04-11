@@ -28,9 +28,7 @@ import org.libreoffice.report.pentaho.model.OfficeStylesCollection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 import org.jfree.report.ReportProcessingException;
 import org.jfree.report.structure.Element;
@@ -46,7 +44,7 @@ import org.jfree.report.util.AttributeNameGenerator;
 public class StyleUtilities
 {
 
-    private static final Log LOGGER = LogFactory.getLog(StyleUtilities.class);
+    private static final Logger LOGGER = Logger.getLogger(StyleUtilities.class.getName());
     private static final String STYLE = "style";
 
     private StyleUtilities()
@@ -180,7 +178,7 @@ public class StyleUtilities
             }
             else if (styleParent != null)
             {
-                LOGGER.warn("Inconsistent styles: " + styleFamily + ":" + styleParent + " does not exist.");
+                LOGGER.warning("Inconsistent styles: " + styleFamily + ":" + styleParent + " does not exist.");
             }
             return preStyle;
         }
@@ -301,7 +299,7 @@ public class StyleUtilities
                         }
                         else
                         {
-                            LOGGER.warn("Dangling data style: " + styleName);
+                            LOGGER.warning("Dangling data style: " + styleName);
                             derivedStyle = null;
                         }
                     }

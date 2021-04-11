@@ -3723,32 +3723,6 @@ endif # SYSTEM_RHINO
 
 endif
 
-ifneq ($(SYSTEM_APACHE_COMMONS),)
-
-define gb_Jar__use_commons-logging
-$(call gb_Jar_use_system_jar,$(1),$(COMMONS_LOGGING_JAR))
-endef
-gb_ExternalProject__use_commons-logging :=
-
-else # !SYSTEM_APACHE_COMMONS
-
-ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
-	commons-logging-$(COMMONS_LOGGING_VERSION) \
-))
-endif
-
-define gb_Jar__use_commons-logging
-$(call gb_Jar_use_external_project,$(1),apache_commons_logging)
-$(call gb_Jar_use_jar,$(1),commons-logging-$(COMMONS_LOGGING_VERSION))
-endef
-define gb_ExternalProject__use_commons-logging
-$(call gb_ExternalProject_use_external_project,$(1),apache_commons_logging)
-endef
-
-endif # SYSTEM_APACHE_COMMONS
-
-
 ifneq ($(SYSTEM_JFREEREPORT),)
 
 define gb_Jar__use_flow-engine
