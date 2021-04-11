@@ -767,7 +767,8 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     nRow2 = aMarkRange.aEnd.Row();
                     if( nCol2 != nCol1 || nRow1 != nRow2 )
                     {
-                        const auto nRows = nRow2 - nRow1 + 1;
+                        const auto nRows
+                            = rDoc.CountNonFilteredRows(nRow1, nRow2, aMarkRange.aStart.Tab());
                         const auto nCols = nCol2 - nCol1 + 1;
                         const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
                         OUString aRowArg = ScResId(STR_SELCOUNT_ROWARG, nRows).replaceAll("$1", rLocaleData.getNum(nRows, 0));
