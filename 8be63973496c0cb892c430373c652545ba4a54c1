@@ -34,6 +34,24 @@
       "revId": "8be63973496c0cb892c430373c652545ba4a54c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80b1dc84_1459e758",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-11T18:30:14Z",
+      "side": 1,
+      "message": "Ah, no assert here!",
+      "parentUuid": "f2c006fb_8ee7d290",
+      "revId": "8be63973496c0cb892c430373c652545ba4a54c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
