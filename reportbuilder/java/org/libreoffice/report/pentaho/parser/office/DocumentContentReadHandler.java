@@ -22,8 +22,7 @@ import org.libreoffice.report.pentaho.model.OfficeDocument;
 import org.libreoffice.report.pentaho.model.OfficeStylesCollection;
 import org.libreoffice.report.pentaho.parser.style.OfficeStylesReadHandler;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 import org.jfree.report.JFreeReport;
 
@@ -49,7 +48,7 @@ import org.xml.sax.SAXException;
 public class DocumentContentReadHandler extends AbstractXmlReadHandler
 {
 
-    private static final Log LOGGER = LogFactory.getLog(DocumentContentReadHandler.class);
+    private static final Logger LOGGER = Logger.getLogger(DocumentContentReadHandler.class.getName());
     private OfficeDocument report;
     private FontFaceDeclsReadHandler fontFaceReadHandler;
     private BodyReadHandler bodyReadHandler;
@@ -98,12 +97,12 @@ public class DocumentContentReadHandler extends AbstractXmlReadHandler
         catch (ResourceKeyCreationException e)
         {
             // ignore ..
-            LOGGER.debug("Failed to create resource-key for 'styles.xml'. Ignoring.", e);
+            LOGGER.config("Failed to create resource-key for 'styles.xml'. Ignoring: " + e);
         }
         catch (ResourceException e)
         {
             // ignore ..
-            LOGGER.debug("Failed to parse resource for 'styles.xml'. Ignoring.", e);
+            LOGGER.config("Failed to parse resource for 'styles.xml'. Ignoring: " + e);
         }
 
         return new OfficeStylesCollection();
@@ -135,12 +134,12 @@ public class DocumentContentReadHandler extends AbstractXmlReadHandler
         catch (ResourceKeyCreationException e)
         {
             // ignore ..
-            LOGGER.debug("Failed to create resource-key for 'content.xml'. Ignoring.");
+            LOGGER.config("Failed to create resource-key for 'content.xml'. Ignoring.");
         }
         catch (ResourceException e)
         {
             // ignore ..
-            LOGGER.debug("Failed to parse resource for 'content.xml'. Ignoring.");
+            LOGGER.config("Failed to parse resource for 'content.xml'. Ignoring.");
         }
         return new OfficeDocument();
 

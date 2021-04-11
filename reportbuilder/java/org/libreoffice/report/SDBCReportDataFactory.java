@@ -51,9 +51,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 
 /**
  * Very primitive implementation, just to show how this could be used ...
@@ -135,7 +132,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         private int parameterCount = 0;
         private final ArrayList<Integer> parameterIndex = new ArrayList<Integer>();
     }
-    private static final Log LOGGER = LogFactory.getLog(SDBCReportDataFactory.class);
+    private static final Logger LOGGER = Logger.getLogger(SDBCReportDataFactory.class.getName());
     public static final String COMMAND_TYPE = "command-type";
     public static final String ESCAPE_PROCESSING = "escape-processing";
     public static final String SORT_EXPRESSIONS = "sort-expressions";
@@ -231,7 +228,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         }
         catch (SQLException ex)
         {
-            LOGGER.error("ReportProcessing failed / getOrderStatement could not get quote character", ex);
+            LOGGER.severe("ReportProcessing failed / getOrderStatement could not get quote character: " + ex);
             // fall back to the SQL standard
             quote="";
         }

@@ -65,9 +65,6 @@ import java.io.Writer;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * This class capsulates the class, that implements the minimal component, a factory for creating the service
  * (<CODE>__getComponentFactory</CODE>) and a method, that writes the information into the given registry key
@@ -83,7 +80,7 @@ public class SOReportJobFactory
     public static class _SOReportJobFactory extends WeakBase implements XInitialization, XServiceInfo, XJob, XPropertySet, ReportJobFactory
     {
 
-        private static final Log LOGGER = LogFactory.getLog(_SOReportJobFactory.class);
+        private static final Logger LOGGER = Logger.getLogger(_SOReportJobFactory.class.getName());
         /**
          * The service name, that must be used to get an instance of this service.
          */
@@ -219,7 +216,7 @@ public class SOReportJobFactory
             }
             catch (java.lang.Exception e)
             {
-                LOGGER.error("ReportProcessing failed", e);
+                LOGGER.severe("ReportProcessing failed: " + e);
                 Writer result = new StringWriter();
                 PrintWriter printWriter = new PrintWriter(result);
                 e.printStackTrace(printWriter);
@@ -227,7 +224,7 @@ public class SOReportJobFactory
             }
             catch (java.lang.IncompatibleClassChangeError e)
             {
-                LOGGER.error("Detected an IncompatibleClassChangeError");
+                LOGGER.severe("Detected an IncompatibleClassChangeError");
                 Writer result = new StringWriter();
                 PrintWriter printWriter = new PrintWriter(result);
                 e.printStackTrace(printWriter);
