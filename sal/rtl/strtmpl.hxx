@@ -392,33 +392,13 @@ sal_Int32 indexOfChar_WithLength                             ( const IMPL_RTL_ST
                                                                IMPL_RTL_STRCODE c )
 {
 //    assert(nLen >= 0);
-    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
-    {
-        // take advantage of builtin optimisations
-        IMPL_RTL_STRCODE* p = static_cast<IMPL_RTL_STRCODE*>(std::memchr(const_cast<IMPL_RTL_STRCODE *>(pStr), c, nLen));
-        return p ? p - pStr : -1;
-    }
-    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char16_t))
-    {
-        // take advantage of builtin optimisations
-        if (nLen <= 0) // char_traits::find takes an unsigned length
-            return -1;
-        char16_t const * p = std::char_traits<char16_t>::find(pStr, nLen, c);
-        return p ? p - pStr : -1;
-    }
-    else
-    {
-        const IMPL_RTL_STRCODE* pTempStr = pStr;
-        while ( nLen > 0 )
-        {
-            if ( *pTempStr == c )
-                return pTempStr-pStr;
-
-            pTempStr++;
-            nLen--;
-        }
+    if (nLen <= 0)
         return -1;
-    }
+    // take advantage of builtin optimisations
+    using my_string_view = std::basic_string_view<IMPL_RTL_STRCODE>;
+    my_string_view v(pStr, nLen);
+    typename my_string_view::size_type idx = v.find(c);
+    return idx == my_string_view::npos ? -1 : idx;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -457,33 +437,11 @@ sal_Int32 lastIndexOfChar_WithLength                             ( const IMPL_RT
                                                                    IMPL_RTL_STRCODE c )
 {
     assert(nLen >= 0);
-    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
-    {
-        // take advantage of builtin optimisations
-        std::string_view v(pStr, nLen);
-        std::string_view::size_type idx = v.rfind(c);
-        return idx == std::string_view::npos ? -1 : idx;
-    }
-    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char16_t))
-    {
-        // take advantage of builtin optimisations
-        std::u16string_view v(pStr, nLen);
-        std::u16string_view::size_type idx = v.rfind(c);
-        return idx == std::string_view::npos ? -1 : idx;
-    }
-    else
-    {
-        pStr += nLen;
-        while ( nLen > 0 )
-        {
-            nLen--;
-            pStr--;
-
-            if ( *pStr == c )
-                return nLen;
-        }
-        return -1;
-    }
+    // take advantage of builtin optimisations
+    using my_string_view = std::basic_string_view<IMPL_RTL_STRCODE>;
+    my_string_view v(pStr, nLen);
+    typename my_string_view::size_type idx = v.rfind(c);
+    return idx == my_string_view::npos ? -1 : idx;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -529,75 +487,13 @@ sal_Int32 indexOfStr_WithLength                             ( const IMPL_RTL_STR
     assert(nSubLen >= 0);
     /* an empty SubString is always not findable */
     if ( nSubLen == 0 )
-        ;
-    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
-    {
-        // take advantage of builtin optimisations
-        std::string_view v(pStr, nStrLen);
-        std::string_view needle(pSubStr, nSubLen);
-        std::string_view::size_type idx = v.find(needle);
-        return idx == std::string_view::npos ? -1 : idx;
-    }
-    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char16_t))
-    {
-        // take advantage of builtin optimisations
-        std::u16string_view v(pStr, nStrLen);
-        std::u16string_view needle(pSubStr, nSubLen);
-        std::u16string_view::size_type idx = v.find(needle);
-        return idx == std::string_view::npos ? -1 : idx;
-    }
-    else
-    {
-        /* faster search for a single character */
-        if ( nSubLen == 1 )
-        {
-            IMPL_RTL_STRCODE        c = *pSubStr;
-            const IMPL_RTL_STRCODE* pTempStr = pStr;
-            while ( nStrLen > 0 )
-            {
-                if ( *pTempStr == c )
-                    return pTempStr-pStr;
-
-                pTempStr++;
-                nStrLen--;
-            }
-        }
-        else
-        {
-            const IMPL_RTL_STRCODE* pTempStr = pStr;
-            while ( nStrLen > 0 )
-            {
-                if ( *pTempStr == *pSubStr )
-                {
-                    /* Compare SubString */
-                    if ( nSubLen <= nStrLen )
-                    {
-                        const IMPL_RTL_STRCODE* pTempStr1 = pTempStr;
-                        const IMPL_RTL_STRCODE* pTempStr2 = pSubStr;
-                        sal_Int32               nTempLen = nSubLen;
-                        while ( nTempLen )
-                        {
-                            if ( *pTempStr1 != *pTempStr2 )
-                                break;
-
-                            pTempStr1++;
-                            pTempStr2++;
-                            nTempLen--;
-                        }
-
-                        if ( !nTempLen )
-                            return pTempStr-pStr;
-                    }
-                    else
-                        break;
-                }
-
-                nStrLen--;
-                pTempStr++;
-            }
-        }
-    }
-    return -1;
+        return -1;
+    // take advantage of builtin optimisations
+    using my_string_view = std::basic_string_view<IMPL_RTL_STRCODE>;
+    my_string_view v(pStr, nStrLen);
+    my_string_view needle(pSubStr, nSubLen);
+    typename my_string_view::size_type idx = v.find(needle);
+    return idx == my_string_view::npos ? -1 : idx;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -626,68 +522,13 @@ sal_Int32 lastIndexOfStr_WithLength                             ( const IMPL_RTL
     assert(nSubLen >= 0);
     /* an empty SubString is always not findable */
     if ( nSubLen == 0 )
-        ;
-    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
-    {
-        // take advantage of builtin optimisations
-        std::string_view v(pStr, nStrLen);
-        std::string_view needle(pSubStr, nSubLen);
-        std::string_view::size_type idx = v.rfind(needle);
-        return idx == std::string_view::npos ? -1 : idx;
-    }
-    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char16_t))
-    {
-        // take advantage of builtin optimisations
-        std::u16string_view v(pStr, nStrLen);
-        std::u16string_view needle(pSubStr, nSubLen);
-        std::u16string_view::size_type idx = v.rfind(needle);
-        return idx == std::string_view::npos ? -1 : idx;
-    }
-    else
-    {
-        /* faster search for a single character */
-        if ( nSubLen == 1 )
-        {
-            IMPL_RTL_STRCODE c = *pSubStr;
-            pStr += nStrLen;
-            while ( nStrLen > 0 )
-            {
-                nStrLen--;
-                pStr--;
-
-                if ( *pStr == c )
-                    return nStrLen;
-            }
-        }
-        else
-        {
-            pStr += nStrLen;
-            nStrLen -= nSubLen;
-            pStr -= nSubLen;
-            while ( nStrLen >= 0 )
-            {
-                const IMPL_RTL_STRCODE* pTempStr1 = pStr;
-                const IMPL_RTL_STRCODE* pTempStr2 = pSubStr;
-                sal_Int32               nTempLen = nSubLen;
-                while ( nTempLen )
-                {
-                    if ( *pTempStr1 != *pTempStr2 )
-                        break;
-
-                    pTempStr1++;
-                    pTempStr2++;
-                    nTempLen--;
-                }
-
-                if ( !nTempLen )
-                    return nStrLen;
-
-                nStrLen--;
-                pStr--;
-            }
-        }
-    }
-    return -1;
+        return -1;
+    // take advantage of builtin optimisations
+    using my_string_view = std::basic_string_view<IMPL_RTL_STRCODE>;
+    my_string_view v(pStr, nStrLen);
+    my_string_view needle(pSubStr, nSubLen);
+    typename my_string_view::size_type idx = v.rfind(needle);
+    return idx == my_string_view::npos ? -1 : idx;
 }
 
 /* ----------------------------------------------------------------------- */
