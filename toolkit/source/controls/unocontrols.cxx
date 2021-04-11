@@ -36,7 +36,7 @@
 #include <toolkit/helper/macros.hxx>
 
 // for introspection
-#include <toolkit/awt/vclxwindows.hxx>
+#include <awt/vclxwindows.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>

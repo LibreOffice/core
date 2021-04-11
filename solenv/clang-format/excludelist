@@ -13688,6 +13688,7 @@ toolkit/inc/awt/vclxregion.hxx
 toolkit/inc/awt/vclxspinbutton.hxx
 toolkit/inc/awt/vclxsystemdependentwindow.hxx
 toolkit/inc/awt/vclxtabpagecontainer.hxx
+toolkit/inc/awt/vclxwindows.hxx
 toolkit/inc/controls/accessiblecontrolcontext.hxx
 toolkit/inc/controls/animatedimages.hxx
 toolkit/inc/controls/controlmodelcontainerbase.hxx
