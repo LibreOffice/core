@@ -48,6 +48,7 @@
 #include "layerimp.hxx"
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include <XMLNumberStylesImport.hxx>
+#include <unotools/configmgr.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/table/XMLTableImport.hxx>
 
@@ -1318,6 +1319,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesConte
             sal_Int32 nMasterPageCount = xMasterPages->getCount();
             if (nNewMasterPageCount + 1 > nMasterPageCount)
             {
+                // arbitrary limit to master pages when fuzzing to avoid deadend timeouts
+                if (nMasterPageCount >= 64 && utl::ConfigManager::IsFuzzing())
+                    return nullptr;
+
                 // new page, create and insert
                 xNewMasterPage = xMasterPages->insertNewByIndex(nMasterPageCount);
             }
