@@ -85,6 +85,7 @@ protected:
                  QFileDialog::FileMode);
     // encodes cairo usage and Qt platform name into the ToolkitName
     OUString contructToolkitID(const OUString& sTKname);
+    bool useCairo() const { return m_bUseCairo; }
 
 public:
     explicit Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo = false);

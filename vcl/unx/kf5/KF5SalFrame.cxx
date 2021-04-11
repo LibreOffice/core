@@ -45,7 +45,6 @@
 
 KF5SalFrame::KF5SalFrame(KF5SalFrame* pParent, SalFrameStyleFlags nState, bool bUseCairo)
     : Qt5Frame(pParent, nState, bUseCairo)
-    , m_bGraphicsInUse(false)
 {
 }
 
@@ -160,29 +159,6 @@ void KF5SalFrame::UpdateSettings(AllSettings& rSettings)
     style.SetMenuFont(aFont);
 
     rSettings.SetStyleSettings(style);
-}
-
-SalGraphics* KF5SalFrame::AcquireGraphics()
-{
-    if (m_bGraphicsInUse)
-        return nullptr;
-
-    m_bGraphicsInUse = true;
-
-    if (!m_pKF5Graphics)
-    {
-        m_pKF5Graphics.reset(new Qt5SvpGraphics(this));
-        Qt5Frame::InitQt5SvpGraphics(m_pKF5Graphics.get());
-    }
-
-    return m_pKF5Graphics.get();
-}
-
-void KF5SalFrame::ReleaseGraphics(SalGraphics* pSalGraph)
-{
-    (void)pSalGraph;
-    assert(pSalGraph == m_pKF5Graphics.get());
-    m_bGraphicsInUse = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
