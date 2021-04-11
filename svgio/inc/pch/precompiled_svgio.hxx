@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-20 10:39:06 using:
+ Generated on 2021-04-11 19:48:19 using:
  ./bin/update_pch svgio svgio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,7 +24,6 @@
 #if PCH_LEVEL >= 1
 #include <memory>
 #include <ostream>
-#include <set>
 #include <string_view>
 #include <vector>
 #endif // PCH_LEVEL >= 1

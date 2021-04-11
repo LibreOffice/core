@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:57:41 using:
+ Generated on 2021-04-11 19:48:51 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -156,7 +156,6 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -183,7 +182,9 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -256,7 +257,7 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <ooo/vba/XCollection.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/WdSaveFormat.hpp>
+#include <ooo/vba/word/XParagraphFormat.hpp>
 #include <sfx2/Metadatable.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/shell.hxx>
