@@ -288,7 +288,7 @@ bool TxtBox::Read(HWPFile & hwpf)
     }
 
     if (ncell > 4096 && utl::ConfigManager::IsFuzzing()) {
-        // cut off at an arbitary size to speed up fuzzing
+        // cut off at an arbitrary size to speed up fuzzing
         return hwpf.SetState(HWP_InvalidFileFormat);
     }
 
