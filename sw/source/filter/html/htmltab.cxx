@@ -2291,16 +2291,19 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     // Step 1: needed layout structures are created (including tables in tables)
     CreateLayoutInfo();
 
-    // Step 2: the minimal and maximal column width is calculated
-    // (including tables in tables). Since we don't have boxes yet,
-    // we'll work on the start nodes
-    m_xLayoutInfo->AutoLayoutPass1();
+    if (!utl::ConfigManager::IsFuzzing()) // skip slow path for fuzzing
+    {
+        // Step 2: the minimal and maximal column width is calculated
+        // (including tables in tables). Since we don't have boxes yet,
+        // we'll work on the start nodes
+        m_xLayoutInfo->AutoLayoutPass1();
 
-    // Step 3: the actual column widths of this table are calculated (not tables in tables)
-    // We need this now to decide if we need filler cells
-    // (Pass1 was needed because of this as well)
-    m_xLayoutInfo->AutoLayoutPass2( nAbsAvail, nRelAvail, nAbsLeftSpace,
-                                  nAbsRightSpace, nInhAbsSpace );
+        // Step 3: the actual column widths of this table are calculated (not tables in tables)
+        // We need this now to decide if we need filler cells
+        // (Pass1 was needed because of this as well)
+        m_xLayoutInfo->AutoLayoutPass2( nAbsAvail, nRelAvail, nAbsLeftSpace,
+                                      nAbsRightSpace, nInhAbsSpace );
+    }
 
     // Set adjustment for the top table
     sal_Int16 eHoriOri;
