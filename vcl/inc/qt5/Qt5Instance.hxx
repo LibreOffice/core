@@ -84,6 +84,8 @@ protected:
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode);
     bool useCairo() const { return m_bUseCairo; }
+    // encodes cairo usage and Qt platform name into the ToolkitName
+    OUString contructToolkitID(const OUString& sTKname);
 
 public:
     explicit Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo = false);
