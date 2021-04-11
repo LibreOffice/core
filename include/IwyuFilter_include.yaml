@@ -350,10 +350,6 @@ excludelist:
     include/toolkit/awt/vclxaccessiblecomponent.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
-    include/toolkit/awt/vclxtopwindow.hxx:
-    # base class has to be a complete type
-    - com/sun/star/awt/XTopWindow2.hpp
-    - com/sun/star/awt/XSystemDependentWindowPeer.hpp
     include/toolkit/awt/vclxwindow.hxx:
     # base class has to be a complete type
     - toolkit/awt/vclxdevice.hxx

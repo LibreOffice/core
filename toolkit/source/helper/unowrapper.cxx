@@ -20,10 +20,10 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
-#include <toolkit/awt/vclxcontainer.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
-#include <toolkit/awt/vclxtopwindow.hxx>
+#include <awt/vclxcontainer.hxx>
 #include <awt/vclxgraphics.hxx>
+#include <awt/vclxtopwindow.hxx>
 #include <awt/vclxwindows.hxx>
 
 #include <toolkit/dllapi.h>

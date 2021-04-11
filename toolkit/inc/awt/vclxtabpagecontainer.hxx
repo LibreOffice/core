@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/tab/XTabPageContainer.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
-#include <toolkit/awt/vclxcontainer.hxx>
+#include <awt/vclxcontainer.hxx>
 
 
 typedef cppu::ImplInheritanceHelper< VCLXContainer,

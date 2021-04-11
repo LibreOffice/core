@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolkit/awt/vclxcontainer.hxx>
+#include <awt/vclxcontainer.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -30,9 +30,6 @@
 #include <tools/debug.hxx>
 #include <helper/scrollabledialog.hxx>
 #include <toolkit/helper/property.hxx>
-
-
-
 
 void VCLXContainer::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {

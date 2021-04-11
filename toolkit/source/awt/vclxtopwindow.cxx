@@ -32,7 +32,7 @@
 #include <vcl/sysdata.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <toolkit/awt/vclxtopwindow.hxx>
+#include <awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 
 #include <vcl/wrkwin.hxx>

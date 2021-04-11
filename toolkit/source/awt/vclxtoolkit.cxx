@@ -76,9 +76,9 @@
 #include <awt/vclxsystemdependentwindow.hxx>
 #include <awt/vclxregion.hxx>
 #include <awt/vclxtabpagecontainer.hxx>
+#include <awt/vclxtopwindow.hxx>
 
 #include <awt/animatedimagespeer.hxx>
-#include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/property.hxx>

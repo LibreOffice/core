@@ -17,18 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_AWT_VCLXCONTAINER_HXX
-#define INCLUDED_TOOLKIT_AWT_VCLXCONTAINER_HXX
-
+#pragma once
 
 #include <com/sun/star/awt/XVclContainer.hpp>
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
 #include <cppuhelper/weak.hxx>
 
 #include <toolkit/awt/vclxwindow.hxx>
-
-
-
 
 class VCLXContainer : public css::awt::XVclContainer,
                         public css::awt::XVclContainerPeer,
@@ -63,8 +58,5 @@ public:
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
-
-
-#endif // INCLUDED_TOOLKIT_AWT_VCLXCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

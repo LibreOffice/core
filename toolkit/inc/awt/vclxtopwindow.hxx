@@ -26,7 +26,7 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-#include <toolkit/awt/vclxcontainer.hxx>
+#include <awt/vclxcontainer.hxx>
 
 namespace com::sun::star::awt { class XMenuBar; }
 
