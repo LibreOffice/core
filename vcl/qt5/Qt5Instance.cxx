@@ -196,6 +196,19 @@ void Qt5Instance::RunInMainThread(std::function<void()> func)
     }
 }
 
+OUString Qt5Instance::contructToolkitID(const OUString& sTKname)
+{
+    OUString sID(sTKname);
+    sID += OUStringLiteral(u" (");
+    if (m_bUseCairo)
+        sID += OUStringLiteral(u"cairo+");
+    else
+        sID += OUStringLiteral(u"qfont+");
+    sID += toOUString(QGuiApplication::platformName());
+    sID += OUStringLiteral(u")");
+    return sID;
+}
+
 Qt5Instance::Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     : SalGenericInstance(std::make_unique<Qt5YieldMutex>())
     , m_bUseCairo(bUseCairo)
@@ -206,10 +219,7 @@ Qt5Instance::Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     , m_bUpdateFonts(false)
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if (bUseCairo)
-        pSVData->maAppData.mxToolkitName = OUString("qt5+cairo");
-    else
-        pSVData->maAppData.mxToolkitName = OUString("qt5");
+    pSVData->maAppData.mxToolkitName = contructToolkitID("qt5");
 
     // this one needs to be blocking, so that the handling in main thread
     // is processed before the thread emitting the signal continues
