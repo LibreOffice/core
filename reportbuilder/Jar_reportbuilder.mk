@@ -15,7 +15,6 @@ $(eval $(call gb_Jar_use_jars,reportbuilder,\
 ))
 
 $(eval $(call gb_Jar_use_externals,reportbuilder,\
-	commons-logging \
 	flow-engine \
 	flute \
 	libbase \

@@ -22,8 +22,7 @@ import org.libreoffice.report.OfficeToken;
 import org.libreoffice.report.pentaho.OfficeNamespaces;
 import org.libreoffice.report.pentaho.model.ImageElement;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataSourceException;
@@ -59,7 +58,7 @@ public class ImageElementLayoutController
         extends AbstractReportElementLayoutController
 {
 
-    private static final Log LOGGER = LogFactory.getLog(ImageElementLayoutController.class);
+    private static final Logger LOGGER = Logger.getLogger(ImageElementLayoutController.class.getName());
     private ImageElementContext context;
 
     @Override
@@ -116,7 +115,7 @@ public class ImageElementLayoutController
             final LayoutController cellController = findParentCell();
             if (cellController == null)
             {
-                LOGGER.warn("Image is not contained in a table. Unable to calculate the image-size.");
+                LOGGER.warning("Image is not contained in a table. Unable to calculate the image-size.");
                 return null;
             }
             final Element tableCell = (Element) cellController.getNode();
@@ -124,14 +123,14 @@ public class ImageElementLayoutController
             final int colSpan = TextUtilities.parseInt((String) tableCell.getAttribute(OfficeNamespaces.TABLE_NS, "number-columns-spanned"), 1);
             if (rowSpan < 1 || colSpan < 1)
             {
-                LOGGER.warn("Rowspan or colspan for image-size calculation was invalid.");
+                LOGGER.warning("Rowspan or colspan for image-size calculation was invalid.");
                 return null;
             }
 
             final LayoutController rowController = cellController.getParent();
             if (rowController == null)
             {
-                LOGGER.warn("Table-Cell has no parent. Unable to calculate the image-size.");
+                LOGGER.warning("Table-Cell has no parent. Unable to calculate the image-size.");
                 return null;
             }
             final Section tableRow = (Section) rowController.getNode();
@@ -141,14 +140,14 @@ public class ImageElementLayoutController
             final int columnPos = findNodeInSection(tableRow, tableCell, OfficeToken.COVERED_TABLE_CELL);
             if (columnPos == -1)
             {
-                LOGGER.warn("Table-Cell is not a direct child of the table-row. Unable to calculate the image-size.");
+                LOGGER.warning("Table-Cell is not a direct child of the table-row. Unable to calculate the image-size.");
                 return null;
             }
 
             final LayoutController tableController = rowController.getParent();
             if (tableController == null)
             {
-                LOGGER.warn("Table-Row has no Table. Unable to calculate the image-size.");
+                LOGGER.warning("Table-Row has no Table. Unable to calculate the image-size.");
                 return null;
             }
 
@@ -158,7 +157,7 @@ public class ImageElementLayoutController
             if (columns.getNodeCount() <= columnPos + colSpan)
             {
                 // the colspan is too large. The table definition is therefore invalid. We do not try to fix this.
-                LOGGER.warn(
+                LOGGER.warning(
                         "The Table's defined columns do not match the col-span or col-position. Unable to calculate the image-size.");
                 return null;
             }
@@ -169,7 +168,7 @@ public class ImageElementLayoutController
             final int rowPos = findNodeInSection(table, tableRow, null);
             if (rowPos == -1)
             {
-                LOGGER.warn("Table-Cell is not a direct child of the table-row. Unable to calculate the image-size.");
+                LOGGER.warning("Table-Cell is not a direct child of the table-row. Unable to calculate the image-size.");
                 return null;
             }
 

@@ -65,9 +65,6 @@ import java.util.Map;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.jfree.layouting.input.style.parser.CSSValueFactory;
 import org.jfree.layouting.input.style.parser.StyleSheetParserUtil;
 import org.jfree.layouting.input.style.values.CSSNumericType;
@@ -112,7 +109,7 @@ import org.w3c.css.sac.LexicalUnit;
 public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 {
 
-    protected static final Log LOGGER = LogFactory.getLog(OfficeDocumentReportTarget.class);
+    protected static final Logger LOGGER = Logger.getLogger(OfficeDocumentReportTarget.class.getName());
     public static final String HORIZONTAL_POS = "horizontal-pos";
     public static final String TAG_DEF_PREFIX = "org.libreoffice.report.pentaho.output.";
     private static final int ROLE_NONE = 0;
@@ -517,7 +514,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         // todo
         if (DEBUG_ELEMENTS)
         {
-            LOGGER.debug("Starting " + getCurrentState() + '/' + states.size() + ' ' + ReportTargetUtil.getNamespaceFromAttribute(attrs) + " -> " + ReportTargetUtil.getElemenTypeFromAttribute(attrs));
+            LOGGER.config("Starting " + getCurrentState() + '/' + states.size() + ' ' + ReportTargetUtil.getNamespaceFromAttribute(attrs) + " -> " + ReportTargetUtil.getElemenTypeFromAttribute(attrs));
         }
         try
         {
@@ -713,7 +710,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
         catch (IOException ioe)
         {
-            LOGGER.error("ReportProcessing failed", ioe);
+            LOGGER.severe("ReportProcessing failed: " + ioe);
             throw new ReportProcessingException("Failed to write content", ioe);
         }
     }
@@ -762,7 +759,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                 if (styleMapper.isListOfStyles(elementNamespace, elementName, attrNamespace, attrName))
                 {
                     // ignored for now.
-                    LOGGER.warn("List of styles is not yet implemented.");
+                    LOGGER.warning("List of styles is not yet implemented.");
                     continue;
                 }
 
@@ -970,7 +967,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
             if (DEBUG_ELEMENTS)
             {
-                LOGGER.debug("Finished " + getCurrentState() + "/" + states.size() + " " + ReportTargetUtil.getNamespaceFromAttribute(attrs) + ":" + ReportTargetUtil.getElemenTypeFromAttribute(attrs));
+                LOGGER.config("Finished " + getCurrentState() + "/" + states.size() + " " + ReportTargetUtil.getNamespaceFromAttribute(attrs) + ":" + ReportTargetUtil.getElemenTypeFromAttribute(attrs));
             }
 
         }
@@ -1153,7 +1150,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
         catch (IOException e)
         {
-            LOGGER.error("ReportProcessing failed", e);
+            LOGGER.severe("ReportProcessing failed: " + e);
         }
         return state;
     }
@@ -1294,7 +1291,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
             final CSSNumericValue height = image.getHeight(); // always in 100th of a mm
 
-            LOGGER.debug("Image " + imageData + " Width: " + width + ", Height: " + height);
+            LOGGER.config("Image " + imageData + " Width: " + width + ", Height: " + height);
             if (width == null || height == null)
             {
                 return;
@@ -1313,7 +1310,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
                 if (imageAreaWidthVal == null || imageAreaHeightVal == null)
                 {
-                    LOGGER.debug("Image data returned from context is invalid. Maybe this is not an image?");
+                    LOGGER.config("Image data returned from context is invalid. Maybe this is not an image?");
                     return;
                 }
                 else
@@ -1410,7 +1407,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             }
             else
             {
-                LOGGER.debug("There is no image-context, so we have to rely on the image's natural bounds. " + "This may go awfully wrong.");
+                LOGGER.config("There is no image-context, so we have to rely on the image's natural bounds. " + "This may go awfully wrong.");
                 imageAreaWidthVal = image.getWidth();
                 imageAreaHeightVal = image.getHeight();
             }
@@ -1427,7 +1424,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             frameList.setAttribute(OfficeNamespaces.SVG_NS, "y", posY.getValue() + posY.getType().getType());
 
 
-            LOGGER.debug("Image " + imageData + " A-Width: " + imageAreaWidthVal + ", A-Height: " + imageAreaHeightVal);
+            LOGGER.config("Image " + imageData + " A-Width: " + imageAreaWidthVal + ", A-Height: " + imageAreaHeightVal);
 
             if (imageAreaWidthVal != null)
             {

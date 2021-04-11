@@ -16,7 +16,6 @@ endif
 $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,XMLSEC,xmlsec) \
 	$(call gb_Helper_optional,ABW,libabw) \
-	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
 	$(call gb_Helper_optional,APR,apr) \
 	$(call gb_Helper_optional,BOOST,boost) \
 	$(call gb_Helper_optional,BOX2D,box2d) \

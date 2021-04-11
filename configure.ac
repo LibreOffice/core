@@ -2053,11 +2053,6 @@ AC_ARG_WITH(system-gpgmepp,
         [Use gpgmepp already on system]),,
     [with_system_gpgmepp="$with_system_libs"])
 
-AC_ARG_WITH(system-apache-commons,
-    AS_HELP_STRING([--with-system-apache-commons],
-        [Use Apache commons libraries already on system.]),,
-    [with_system_apache_commons="$with_system_jars"])
-
 AC_ARG_WITH(system-mariadb,
     AS_HELP_STRING([--with-system-mariadb],
         [Use MariaDB/MySQL libraries already on system.]),,
@@ -2134,11 +2129,6 @@ AC_ARG_WITH(rhino-jar,
     AS_HELP_STRING([--with-rhino-jar=JARFILE],
         [Specify path to jarfile manually.]),
     RHINO_JAR=$withval)
-
-AC_ARG_WITH(commons-logging-jar,
-    AS_HELP_STRING([--with-commons-logging-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    COMMONS_LOGGING_JAR=$withval)
 
 AC_ARG_WITH(system-jfreereport,
     AS_HELP_STRING([--with-system-jfreereport],
@@ -12316,36 +12306,6 @@ AC_SUBST(LIBFORMULA_JAR)
 AC_SUBST(LIBREPOSITORY_JAR)
 AC_SUBST(LIBFONTS_JAR)
 AC_SUBST(LIBSERIALIZER_JAR)
-
-# this has to be here because both the Wiki Publisher and the SRB use
-# commons-logging
-COMMONS_LOGGING_VERSION=1.2
-if test "$ENABLE_REPORTBUILDER" = "TRUE"; then
-    AC_MSG_CHECKING([which Apache commons-* libs to use])
-    if test "$with_system_apache_commons" = "yes"; then
-        SYSTEM_APACHE_COMMONS=TRUE
-        AC_MSG_RESULT([external])
-        if test -z $COMMONS_LOGGING_JAR; then
-            if test -f /usr/share/java/commons-logging-${COMMONS_LOGGING_VERSION}.jar; then
-               COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-${COMMONS_LOGGING_VERSION}.jar
-           elif test -f /usr/share/java/commons-logging.jar; then
-                COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar
-            else
-                AC_MSG_ERROR(commons-logging.jar replacement not found.)
-            fi
-        elif ! test -f $COMMONS_LOGGING_JAR; then
-            AC_MSG_ERROR(commons-logging.jar not found.)
-        fi
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_APACHE_COMMONS=
-        BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS"
-        NEED_ANT=TRUE
-    fi
-fi
-AC_SUBST(SYSTEM_APACHE_COMMONS)
-AC_SUBST(COMMONS_LOGGING_JAR)
-AC_SUBST(COMMONS_LOGGING_VERSION)
 
 # scripting provider for BeanShell?
 AC_MSG_CHECKING([whether to build support for scripts in BeanShell])

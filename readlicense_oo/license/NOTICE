@@ -25,7 +25,6 @@ Apache projects:
 - Apache Lucene
 - Apache Portable Runtime
 - Apache Portable Runtime Utility Library
-- Apache Commons - used by MediaWiki Publisher extension
 - Apache Jakarta HttpClient - used by MediaWiki Publisher extension
 - Apache Tomcat - used by MediaWiki Publisher extension
 
@@ -75,13 +74,6 @@ This software contains code derived from the RSA Data Security
 Inc. MD5 Message-Digest Algorithm, including various
 modifications by Spyglass Inc., Carnegie Mellon University, and
 Bell Communications Research, Inc (Bellcore).
-
-
-Apache Commons Logging
-Copyright 2003-2007 The Apache Software Foundation
-
-This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
 
 
 Apache Tomcat

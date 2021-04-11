@@ -305,7 +305,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             }
             catch (IOException ex)
             {
-                LOGGER.error("ReportProcessing failed", ex);
+                LOGGER.severe("ReportProcessing failed: " + ex);
             }
         }
     }

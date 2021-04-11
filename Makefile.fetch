@@ -101,7 +101,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 	@date >> $(fetch_LOGFILE)
 	$(foreach item, \
 		$(call fetch_Optional,ABW,ABW_TARBALL) \
-		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_LOGGING_TARBALL) \
 		$(call fetch_Optional,APR,APR_TARBALL) \
 		$(call fetch_Optional,APR,APR_UTIL_TARBALL) \
 		$(call fetch_Optional,BOOST,BOOST_TARBALL) \
