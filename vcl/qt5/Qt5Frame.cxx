@@ -104,10 +104,8 @@ sal_Int32 screenNumber(const QScreen* pScreen)
 Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     : m_pTopLevel(nullptr)
     , m_bUseCairo(bUseCairo)
-    , m_pSvpGraphics(nullptr)
     , m_bNullRegion(true)
     , m_bGraphicsInUse(false)
-    , m_bGraphicsInvalid(false)
     , m_ePointerStyle(PointerStyle::Arrow)
     , m_pDragSource(nullptr)
     , m_pDropTarget(nullptr)
@@ -288,17 +286,6 @@ void Qt5Frame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExten
                                    1 / devicePixelRatioF()));
 }
 
-void Qt5Frame::InitQt5SvpGraphics(Qt5SvpGraphics* pQt5SvpGraphics)
-{
-    QSize aSize = m_pQWidget->size() * devicePixelRatioF();
-    m_pSvpGraphics = pQt5SvpGraphics;
-    m_pSurface.reset(
-        cairo_image_surface_create(CAIRO_FORMAT_ARGB32, aSize.width(), aSize.height()));
-    m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(aSize.width(), aSize.height()));
-    cairo_surface_set_user_data(m_pSurface.get(), Qt5SvpGraphics::getDamageKey(), &m_aDamageHandler,
-                                nullptr);
-}
-
 SalGraphics* Qt5Frame::AcquireGraphics()
 {
     if (m_bGraphicsInUse)
@@ -308,24 +295,28 @@ SalGraphics* Qt5Frame::AcquireGraphics()
 
     if (m_bUseCairo)
     {
-        if (!m_pOurSvpGraphics || m_bGraphicsInvalid)
+        if (!m_pSvpGraphics)
         {
-            m_pOurSvpGraphics.reset(new Qt5SvpGraphics(this));
-            InitQt5SvpGraphics(m_pOurSvpGraphics.get());
-            m_bGraphicsInvalid = false;
+            QSize aSize = m_pQWidget->size() * devicePixelRatioF();
+            m_pSvpGraphics.reset(new Qt5SvpGraphics(this));
+            m_pSurface.reset(
+                cairo_image_surface_create(CAIRO_FORMAT_ARGB32, aSize.width(), aSize.height()));
+            m_pSvpGraphics->setSurface(m_pSurface.get(),
+                                       basegfx::B2IVector(aSize.width(), aSize.height()));
+            cairo_surface_set_user_data(m_pSurface.get(), Qt5SvpGraphics::getDamageKey(),
+                                        &m_aDamageHandler, nullptr);
         }
-        return m_pOurSvpGraphics.get();
+        return m_pSvpGraphics.get();
     }
     else
     {
-        if (!m_pQt5Graphics || m_bGraphicsInvalid)
+        if (!m_pQt5Graphics)
         {
             m_pQt5Graphics.reset(new Qt5Graphics(this));
             m_pQImage.reset(
                 new QImage(m_pQWidget->size() * devicePixelRatioF(), Qt5_DefaultFormat32));
             m_pQImage->fill(Qt::transparent);
             m_pQt5Graphics->ChangeQImage(m_pQImage.get());
-            m_bGraphicsInvalid = false;
         }
         return m_pQt5Graphics.get();
     }
@@ -335,7 +326,7 @@ void Qt5Frame::ReleaseGraphics(SalGraphics* pSalGraph)
 {
     (void)pSalGraph;
     if (m_bUseCairo)
-        assert(pSalGraph == m_pOurSvpGraphics.get());
+        assert(pSalGraph == m_pSvpGraphics.get());
     else
         assert(pSalGraph == m_pQt5Graphics.get());
     m_bGraphicsInUse = false;
@@ -1145,7 +1136,6 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     style.SetShadowColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
     style.SetDarkShadowColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
 
-    m_bGraphicsInvalid = true;
     rSettings.SetStyleSettings(style);
 }
 
