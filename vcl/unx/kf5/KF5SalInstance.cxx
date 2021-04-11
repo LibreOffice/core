@@ -33,21 +33,22 @@
 
 using namespace com::sun::star;
 
-KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp)
-    : Qt5Instance(pQApp, true)
+KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
+    : Qt5Instance(pQApp, bUseCairo)
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = contructToolkitID("kf5");
 }
 
+SalFrame* KF5SalInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
+{
+    return new KF5SalFrame(nullptr, nStyle, useCairo());
+}
+
 SalFrame* KF5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
 {
-    SalFrame* pRet(nullptr);
-    RunInMainThread([&pRet, pParent, nState]() {
-        pRet = new KF5SalFrame(static_cast<KF5SalFrame*>(pParent), nState, true);
-    });
-    assert(pRet);
-    return pRet;
+    assert(!pParent || dynamic_cast<KF5SalFrame*>(pParent));
+    return new KF5SalFrame(static_cast<KF5SalFrame*>(pParent), nState, useCairo());
 }
 
 bool KF5SalInstance::hasNativeFileSelection() const
@@ -81,6 +82,8 @@ KF5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> co
 extern "C" {
 VCLPLUG_KF5_PUBLIC SalInstance* create_SalInstance()
 {
+    static const bool bUseCairo = (nullptr == getenv("SAL_VCL_KF5_USE_QFONT"));
+
     std::unique_ptr<char* []> pFakeArgv;
     std::unique_ptr<int> pFakeArgc;
     std::vector<FreeableCStr> aFakeArgvFreeable;
@@ -89,7 +92,7 @@ VCLPLUG_KF5_PUBLIC SalInstance* create_SalInstance()
     std::unique_ptr<QApplication> pQApp
         = Qt5Instance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
 
-    KF5SalInstance* pInstance = new KF5SalInstance(pQApp);
+    KF5SalInstance* pInstance = new KF5SalInstance(pQApp, bUseCairo);
     pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 
     new Qt5Data(pInstance);
