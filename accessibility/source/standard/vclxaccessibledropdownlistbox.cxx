@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <standard/vclxaccessibledropdownlistbox.hxx>
-
 #include <toolkit/awt/vclxwindow.hxx>
-
+#include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -34,20 +32,16 @@ VCLXAccessibleDropDownListBox::VCLXAccessibleDropDownListBox (VCLXWindow* pVCLWi
 {
 }
 
-
 bool VCLXAccessibleDropDownListBox::IsValid() const
 {
     return GetWindow();
 }
 
-
 // XServiceInfo
-
 OUString VCLXAccessibleDropDownListBox::getImplementationName()
 {
     return "com.sun.star.comp.toolkit.AccessibleDropDownListBox";
 }
-
 
 Sequence< OUString > VCLXAccessibleDropDownListBox::getSupportedServiceNames()
 {

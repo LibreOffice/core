@@ -27,6 +27,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
+#include <vcl/window.hxx>
 #include "textwindowpeer.hxx"
 
 namespace {

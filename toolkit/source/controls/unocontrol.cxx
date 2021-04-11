@@ -35,6 +35,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <controls/accessiblecontrolcontext.hxx>

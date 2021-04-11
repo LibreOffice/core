@@ -20,6 +20,7 @@
 #include "ColumnControl.hxx"
 #include "ColumnPeer.hxx"
 #include <apitools.hxx>
+#include <vcl/window.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

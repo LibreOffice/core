@@ -25,6 +25,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
+#include <vcl/window.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
 
