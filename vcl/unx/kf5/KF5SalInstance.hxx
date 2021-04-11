@@ -32,7 +32,7 @@ class KF5SalInstance final : public Qt5Instance
     SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle) override;
 
 public:
-    explicit KF5SalInstance(std::unique_ptr<QApplication>& pQApp);
+    explicit KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
