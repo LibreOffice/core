@@ -16,6 +16,24 @@
       "revId": "8be63973496c0cb892c430373c652545ba4a54c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2c006fb_8ee7d290",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-11T18:14:30Z",
+      "side": 1,
+      "message": "But here there\u0027s an assert, so passing a negative here would be a programming error?",
+      "parentUuid": "832367eb_597acbba",
+      "revId": "8be63973496c0cb892c430373c652545ba4a54c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
