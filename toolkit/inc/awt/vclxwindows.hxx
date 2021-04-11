@@ -36,8 +36,8 @@
 #include <svl/numuno.hxx>
 #include <tools/lineend.hxx>
 
+#include <awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
-#include <toolkit/awt/vclxtopwindow.hxx>
 
 class FormatterBase;
 class TabControl;

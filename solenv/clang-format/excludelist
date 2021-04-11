@@ -6177,11 +6177,9 @@ include/test/util/xsearchable.hxx
 include/test/xmldiff.hxx
 include/test/xmltesttools.hxx
 include/toolkit/awt/vclxaccessiblecomponent.hxx
-include/toolkit/awt/vclxcontainer.hxx
 include/toolkit/awt/vclxdevice.hxx
 include/toolkit/awt/vclxfont.hxx
 include/toolkit/awt/vclxmenu.hxx
-include/toolkit/awt/vclxtopwindow.hxx
 include/toolkit/awt/vclxwindow.hxx
 include/toolkit/awt/vclxwindows.hxx
 include/toolkit/controls/unocontrol.hxx
@@ -13681,6 +13679,7 @@ testtools/source/performance/ubobject.cxx
 testtools/source/performance/ubtest.cxx
 toolkit/inc/awt/animatedimagespeer.hxx
 toolkit/inc/awt/vclxbitmap.hxx
+toolkit/inc/awt/vclxcontainer.hxx
 toolkit/inc/awt/vclxgraphics.hxx
 toolkit/inc/awt/vclxpointer.hxx
 toolkit/inc/awt/vclxprinter.hxx
@@ -13688,6 +13687,7 @@ toolkit/inc/awt/vclxregion.hxx
 toolkit/inc/awt/vclxspinbutton.hxx
 toolkit/inc/awt/vclxsystemdependentwindow.hxx
 toolkit/inc/awt/vclxtabpagecontainer.hxx
+toolkit/inc/awt/vclxtopwindow.hxx
 toolkit/inc/awt/vclxwindows.hxx
 toolkit/inc/controls/accessiblecontrolcontext.hxx
 toolkit/inc/controls/animatedimages.hxx
