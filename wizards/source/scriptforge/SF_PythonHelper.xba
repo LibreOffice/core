@@ -708,8 +708,10 @@ Try:
 			ElseIf ((CallType And vbMethod) + (CallType And cstArgArray)) = vbMethod + cstArgArray Or _
 				   ((CallType And vbMethod) + (CallType And cstRetArray)) = vbMethod + cstRetArray Then
 				Select Case sServiceName
+					Case &quot;SFDatabases.Database&quot;
+						If Script = &quot;GetRows&quot; Then		vReturn = vBasicObject.GetRows(vArgs(0), vArgs(1), vArgs(2), vArgs(3))
 					Case &quot;SFDocuments.Document&quot;
-						If Script = &quot;Forms&quot; Then vReturn = vBasicObject.Forms(vArgs(0))
+						If Script = &quot;Forms&quot; Then		vReturn = vBasicObject.Forms(vArgs(0))
 					Case &quot;SFDocuments.Base&quot;
 						Select Case Script
 							Case &quot;FormDocuments&quot;	:	vReturn = vBasicObject.FormDocuments()
@@ -726,13 +728,11 @@ Try:
 						End Select
 					Case &quot;SFDocuments.Form&quot;
 						Select Case Script
-							Case &quot;Controls&quot;		:	vReturn = vBasicObject.Controls(vArgs(0))
-							Case &quot;Subforms&quot;		:	vReturn = vBasicObject.Subforms(vArgs(0))
+							Case &quot;Controls&quot;			:	vReturn = vBasicObject.Controls(vArgs(0))
+							Case &quot;Subforms&quot;			:	vReturn = vBasicObject.Subforms(vArgs(0))
 						End Select
 					Case &quot;SFDocuments.FormControl&quot;
-						Select Case Script
-							Case &quot;Controls&quot;		:	vReturn = vBasicObject.Controls(vArgs(0))
-						End Select
+						If Script = &quot;Controls&quot; Then		vReturn = vBasicObject.Controls(vArgs(0))
 				End Select
 			
 			&apos;	Methods in class modules are invoked with CallByName

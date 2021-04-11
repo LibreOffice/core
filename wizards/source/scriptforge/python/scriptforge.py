@@ -311,7 +311,9 @@ class ScriptForge(object, metaclass = _Singleton):
                     return subcls(returntuple[cstValue], returntuple[cstType], returntuple[cstClass],
                                   returntuple[cstName])
         elif returntuple[cstVarType] >= ScriptForge.V_ARRAY:
-            pass
+            # Intercept empty array
+            if isinstance(returntuple[cstValue], uno.ByteSequence):
+                return ()
         elif returntuple[cstVarType] == ScriptForge.V_DATE:
             try:    # Anticipate fromisoformat('00:00:00') and alike
                 dat = None
@@ -1337,6 +1339,62 @@ class SFScriptForge:
 
         def WindowExists(self, windowname):
             return self.Execute(self.vbMethod, 'WindowExists', windowname)
+
+
+# #####################################################################################################################
+#                       SFDatabases CLASS    (alias of SFDatabases Basic library)                                   ###
+# #####################################################################################################################
+class SFDatabases:
+    """
+        The SFDatabases class manages databases embedded in or connected to Base documents
+        """
+    pass
+
+    # #########################################################################
+    # SF_Document CLASS
+    # #########################################################################
+    class SF_Database(SFServices):
+        """
+            Each instance of the current class represents a single database, with essentially its tables, queries
+            and data
+            The exchanges with the database are done in SQL only.
+            To make them more readable, use optionally square brackets to surround table/query/field names
+            instead of the (RDBMS-dependent) normal surrounding character.
+            SQL statements may be run in direct or indirect mode. In direct mode the statement is transferred literally
+            without syntax checking nor review to the database engine.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDatabases.Database'
+        servicesynonyms = ('database', 'sfdatabases.database')
+        serviceproperties = dict(Queries = False, Tables = False, XConnection = False, XMetaData = False)
+
+        def CloseDatabase(self):
+            return self.Execute(self.vbMethod, 'CloseDatabase')
+
+        def DAvg(self, expression, tablename, criteria = ''):
+            return self.Execute(self.vbMethod, 'DAvg', expression, tablename, criteria)
+
+        def DCount(self, expression, tablename, criteria = ''):
+            return self.Execute(self.vbMethod, 'DCount', expression, tablename, criteria)
+
+        def DLookup(self, expression, tablename, criteria = '', orderclause = ''):
+            return self.Execute(self.vbMethod, 'DLookup', expression, tablename, criteria, orderclause)
+
+        def DMax(self, expression, tablename, criteria = ''):
+            return self.Execute(self.vbMethod, 'DMax', expression, tablename, criteria)
+
+        def DMin(self, expression, tablename, criteria = ''):
+            return self.Execute(self.vbMethod, 'DMin', expression, tablename, criteria)
+
+        def DSum(self, expression, tablename, criteria = ''):
+            return self.Execute(self.vbMethod, 'DSum', expression, tablename, criteria)
+
+        def GetRows(self, sqlcommand, directsql = False, header = False, maxrows = 0):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'GetRows', sqlcommand, directsql, header, maxrows)
+
+        def RunSql(self, sqlcommand, directsql = False):
+            return self.Execute(self.vbMethod, 'RunSql', sqlcommand, directsql)
 
 
 # #####################################################################################################################
