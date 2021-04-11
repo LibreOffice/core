@@ -695,7 +695,7 @@ void PushButton::ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext,
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         if (nStyle & DrawButtonFlags::Highlight)
         {
-            // with the custom background, native highlight do nothing, so code bellow mimic
+            // with the custom background, native highlight do nothing, so code below mimic
             // native highlight by changing luminance
             Color controlBackgroundColorHighlighted = GetControlBackground();
             sal_uInt8 colorLuminance = controlBackgroundColorHighlighted.GetLuminance();
