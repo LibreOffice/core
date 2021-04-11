@@ -28,15 +28,9 @@ class QWidget;
 
 class KF5SalFrame : public Qt5Frame
 {
-private:
-    std::unique_ptr<Qt5SvpGraphics> m_pKF5Graphics;
-    bool m_bGraphicsInUse;
-
 public:
     KF5SalFrame(KF5SalFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo);
 
-    virtual SalGraphics* AcquireGraphics() override;
-    virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
     virtual void UpdateSettings(AllSettings& rSettings) override;
 };
 
