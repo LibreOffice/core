@@ -42,9 +42,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 import org.jfree.report.expressions.Expression;
 import org.jfree.report.expressions.FormulaExpression;
@@ -72,7 +70,7 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 public class PentahoReportJob implements ReportJob
 {
 
-    private static final Log LOGGER = LogFactory.getLog(PentahoReportJob.class);
+    private static final Logger LOGGER = Logger.getLogger(PentahoReportJob.class.getName());
     private final DataSourceFactory dataSourceFactory;
     private final OutputRepository outputRepository;
     private final JobProperties jobProperties;
@@ -235,7 +233,7 @@ public class PentahoReportJob implements ReportJob
                 }
                 catch (ParseException ex)
                 {
-                    LOGGER.error("ReportProcessing failed", ex);
+                    LOGGER.severe("ReportProcessing failed: " + ex);
                 }
             }
             else if (node instanceof OfficeDetailSection)
@@ -338,7 +336,7 @@ public class PentahoReportJob implements ReportJob
             rp.processReport(job);
             job.close();
             final long endTime = System.currentTimeMillis();
-            LOGGER.debug("Report processing time: " + (endTime - startTime));
+            LOGGER.config("Report processing time: " + (endTime - startTime));
         }
         catch (final Exception e)
         {

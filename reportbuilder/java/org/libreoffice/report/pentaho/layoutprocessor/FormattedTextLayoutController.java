@@ -20,8 +20,7 @@ package org.libreoffice.report.pentaho.layoutprocessor;
 
 import org.libreoffice.report.pentaho.OfficeNamespaces;
 import org.libreoffice.report.pentaho.model.FormattedTextElement;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 import org.jfree.report.DataFlags;
 import org.jfree.report.DataSourceException;
@@ -45,7 +44,7 @@ public class FormattedTextLayoutController
         extends AbstractReportElementLayoutController
 {
 
-    private static final Log LOGGER = LogFactory.getLog(FormattedTextLayoutController.class);
+    private static final Logger LOGGER = Logger.getLogger(FormattedTextLayoutController.class.getName());
 
     @Override
     public boolean isValueChanged()
@@ -62,7 +61,7 @@ public class FormattedTextLayoutController
         }
         catch (final ParseException e)
         {
-            LOGGER.debug("Parse Exception", e);
+            LOGGER.config("Parse Exception: " + e);
             return false;
         }
     }
