@@ -40,14 +40,15 @@ KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp)
     pSVData->maAppData.mxToolkitName = OUString("kf5");
 }
 
+SalFrame* KF5SalInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
+{
+    return new KF5SalFrame(nullptr, nStyle, useCairo());
+}
+
 SalFrame* KF5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
 {
-    SalFrame* pRet(nullptr);
-    RunInMainThread([&pRet, pParent, nState]() {
-        pRet = new KF5SalFrame(static_cast<KF5SalFrame*>(pParent), nState, true);
-    });
-    assert(pRet);
-    return pRet;
+    assert(!pParent || dynamic_cast<KF5SalFrame*>(pParent));
+    return new KF5SalFrame(static_cast<KF5SalFrame*>(pParent), nState, useCairo());
 }
 
 bool KF5SalInstance::hasNativeFileSelection() const
