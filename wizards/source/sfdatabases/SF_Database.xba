@@ -391,7 +391,8 @@ Public Function Methods() As Variant
 &apos;&apos;&apos;	Return the list of public methods of the Database service as an array
 
 	Methods = Array( _
-					&quot;DAvg&quot; _
+					&quot;CloseDatabase&quot; _
+					, &quot;DAvg&quot; _
 					, &quot;DCount&quot; _
 					, &quot;DLookup&quot; _
 					, &quot;DMax&quot; _
