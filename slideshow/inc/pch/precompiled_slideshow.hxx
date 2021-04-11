@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:56:43 using:
+ Generated on 2021-04-11 19:48:19 using:
  ./bin/update_pch slideshow slideshow --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -150,7 +150,6 @@
 #include <canvas/canvastools.hxx>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
-#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -234,7 +233,6 @@
 #include <editeng/macros.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -312,15 +310,15 @@
 #include <activitiesqueue.hxx>
 #include <animatableshape.hxx>
 #include <animationfactory.hxx>
-#include <animationnode.hxx>
+#include <attributableshape.hxx>
 #include <cursormanager.hxx>
 #include <delayevent.hxx>
 #include <disposable.hxx>
 #include <doctreenode.hxx>
 #include <doctreenodesupplier.hxx>
-#include <event.hxx>
 #include <eventmultiplexer.hxx>
 #include <eventqueue.hxx>
+#include <hyperlinkarea.hxx>
 #include <rgbcolor.hxx>
 #include <screenupdater.hxx>
 #include <shape.hxx>

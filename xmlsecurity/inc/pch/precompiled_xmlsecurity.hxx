@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:57:49 using:
+ Generated on 2021-04-11 19:48:55 using:
  ./bin/update_pch xmlsecurity xmlsecurity --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -168,7 +168,6 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <sax/fastattribs.hxx>
 #include <sax/saxdllapi.h>
 #include <svl/sigstruct.hxx>
 #include <tools/color.hxx>

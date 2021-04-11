@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:52:34 using:
+ Generated on 2021-04-11 19:48:52 using:
  ./bin/update_pch vbahelper msforms --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -49,7 +49,6 @@
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
-#include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/interlck.h>
 #include <rtl/alloc.h>
@@ -65,7 +64,6 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/backtrace.hxx>
-#include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
@@ -84,7 +82,6 @@
 #include <vcl/font.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -114,8 +111,6 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
-#include <com/sun/star/awt/Key.hpp>
-#include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -152,7 +147,6 @@
 #include <tools/degree.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
-#include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
