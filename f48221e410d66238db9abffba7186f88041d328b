@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc00ac4d_226b340e",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-11T11:59:33Z",
+      "side": 1,
+      "message": "I think you\u0027re going to need the\n    if ( nSubLen \u003d\u003d 0 )\n        return -1\notherwise std::string_view returns 0",
+      "revId": "f48221e410d66238db9abffba7186f88041d328b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
