@@ -37,7 +37,7 @@ KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCa
     : Qt5Instance(pQApp, bUseCairo)
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mxToolkitName = OUString("kf5");
+    pSVData->maAppData.mxToolkitName = constructToolkitID(u"kf5");
 }
 
 SalFrame* KF5SalInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
