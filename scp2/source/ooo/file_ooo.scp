@@ -402,6 +402,15 @@ End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Eo
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-eo.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
+	TXT_FILE_BODY;
+End
+#endif
+
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Es
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-es.filelist";
