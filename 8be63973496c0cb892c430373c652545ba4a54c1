@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "832367eb_597acbba",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-11T16:55:13Z",
+      "side": 1,
+      "message": "going to need this little piece in a few places\n\n    if (nLen \u003c\u003d 0) // char_traits::find takes an unsigned length\n        return -1;\n\notherwise the negative value is silently converted to a very large unsigned number.\nDon\u0027t you love C++ :-) ?",
+      "revId": "8be63973496c0cb892c430373c652545ba4a54c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
