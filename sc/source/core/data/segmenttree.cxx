@@ -146,9 +146,19 @@ template<typename ValueType_, typename ExtValueType_>
 typename ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ExtValueType
 ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOLROW nPos2)
 {
+    assert(mbTreeSearchEnabled);
+
+    if (!maSegments.is_tree_valid())
+    {
+        assert(!ScGlobal::bThreadedGroupCalcInProgress);
+        maSegments.build_tree();
+    }
+
     RangeData aData;
-    if (!getRangeData(nPos1, aData))
+    auto [it, found] = maSegments.search_tree(nPos1, aData.mnValue, &aData.mnPos1, &aData.mnPos2);
+    if (!found)
         return 0;
+    aData.mnPos2 = aData.mnPos2-1; // end point is not inclusive.
 
     sal_uInt32 nValue = 0;
 
@@ -164,9 +174,11 @@ ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOL
         }
         nValue = o3tl::saturating_add(nValue, nRes);
         nCurPos = nEndPos + 1;
-        if (!getRangeData(nCurPos, aData))
+        auto itPair = maSegments.search(it, nCurPos, aData.mnValue, &aData.mnPos1, &aData.mnPos2);
+        if (!itPair.second)
             break;
-
+        it = itPair.first;
+        aData.mnPos2 = aData.mnPos2-1; // end point is not inclusive.
         nEndPos = aData.mnPos2;
     }
     if (nCurPos <= nPos2)
@@ -195,7 +207,8 @@ bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getRangeData(SCCOLROW nPos, 
         maSegments.build_tree();
     }
 
-    if (!maSegments.search_tree(nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2).second)
+    auto it = maSegments.search_tree(nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2);
+    if (!it.second)
         return false;
 
     rData.mnPos2 = rData.mnPos2-1; // end point is not inclusive.
