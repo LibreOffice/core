@@ -1,0 +1,13 @@
+--- src/gen_dispatch.py.orig	2020-09-30 06:33:23.765680489 +0200
++++ src/gen_dispatch.py	2020-09-30 06:37:07.719152050 +0200
+@@ -182,6 +182,10 @@
+         # provided the name of the symbol to be requested.
+         self.provider_loader = {}
+ 
++    def __del__(self):
++        if self.out_file is not None:
++            close(self.out_file)
++
+     def all_text_until_element_name(self, element, element_name):
+         text = ''
+ 
