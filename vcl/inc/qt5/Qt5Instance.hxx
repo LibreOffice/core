@@ -81,6 +81,7 @@ protected:
     virtual Qt5FilePicker*
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode);
+    bool useCairo() const { return m_bUseCairo; }
 
 public:
     explicit Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo = false);
