@@ -21,6 +21,7 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/window.hxx>
 
 
 using namespace ::com::sun::star;
