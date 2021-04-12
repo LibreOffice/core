@@ -1188,7 +1188,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
     switch( pEntry ? pEntry->nWID : -1 )
     {
@@ -1270,7 +1270,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
     switch( pEntry ? pEntry->nWID : -1 )
     {

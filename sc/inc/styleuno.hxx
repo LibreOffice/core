@@ -44,6 +44,7 @@ class SfxItemSet;
 class ScStyleFamilyObj;
 class ScStyleObj;
 struct SfxItemPropertySimpleEntry;
+struct SfxItemPropertyMapEntry;
 
 class ScStyleFamiliesObj final : public ::cppu::WeakImplHelper<
                             css::container::XIndexAccess,
@@ -173,7 +174,7 @@ private:
     SfxStyleSheetBase*      pStyle_cached;
 
     SfxStyleSheetBase*      GetStyle_Impl( bool bUseCachedValue = false );
-    const SfxItemSet*       GetStyleItemSet_Impl( std::u16string_view rPropName, const SfxItemPropertySimpleEntry*& rpEntry );
+    const SfxItemSet*       GetStyleItemSet_Impl( std::u16string_view rPropName, const SfxItemPropertyMapEntry*& rpEntry );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
     css::beans::PropertyState getPropertyState_Impl( std::u16string_view PropertyName );
@@ -188,7 +189,7 @@ private:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     void                    setPropertyValue_Impl( std::u16string_view rPropertyName,
-                                                 const SfxItemPropertySimpleEntry* pEntry,
+                                                 const SfxItemPropertyMapEntry* pEntry,
                                                  const css::uno::Any* pValue );
 
 public:
