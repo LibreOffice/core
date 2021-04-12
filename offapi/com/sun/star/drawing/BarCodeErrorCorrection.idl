@@ -7,16 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_drawing_QRCodeErrorCorrection_idl__
-#define __com_sun_star_drawing_QRCodeErrorCorrection_idl__
+#ifndef __com_sun_star_drawing_BarCodeErrorCorrection_idl__
+#define __com_sun_star_drawing_BarCodeErrorCorrection_idl__
 
 module com { module sun { module star { module drawing {
 
 /** These constants identify the type of Error Correction for
-    a QR Code.
+    a Bar Code.
 
-    <p>The Error Correction for a QR code is a measure that
-        helps a QR code to recover, if it is destroyed.
+    <p>The Error Correction for a Bar code is a measure that
+        helps a Bar code to recover, if it is destroyed.
 
         Level L (Low)       7% of codewords can be restored.
         Level M (Medium)    15% of codewords can be restored.
@@ -26,13 +26,13 @@ module com { module sun { module star { module drawing {
         More Info - <a href="https://en.wikipedia.org/wiki/QR_code#Error_correction">here</a>
     </p>
 
-    @see QRCode
+    @see BarCode
     @see GraphicObectShape
 
-    @since LibreOffice 6.4
+    @since LibreOffice 7.3
 */
 
-published constants QRCodeErrorCorrection
+published constants BarCodeErrorCorrection
 {
     const long LOW = 1;
 

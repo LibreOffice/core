@@ -1463,6 +1463,7 @@ pyramid
 qrcode
 qrcode-border
 qrcode-errorcorrection
+qrcode-type
 quarter
 query-name
 quo-vadis

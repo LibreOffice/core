@@ -1811,6 +1811,9 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       <rng:attribute name="loext:qrcode-border">
         <rng:ref name="nonNegativeInteger"/>
       </rng:attribute>
+      <rng:attribute name="loext:qrcode-type">
+        <rng:ref name="nonNegativeInteger"/>
+      </rng:attribute>
     </rng:element>
   </rng:define>
 

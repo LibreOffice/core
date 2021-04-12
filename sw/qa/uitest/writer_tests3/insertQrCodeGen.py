@@ -37,9 +37,9 @@ class insertQrCode(UITestCase):
                 xBorder.executeAction("DOWN", tuple())
 
             # check the QR code in the document
-            self.assertEqual(document.DrawPage.getByIndex(0).QRCodeProperties.Payload, "www.libreoffice.org")
-            self.assertEqual(document.DrawPage.getByIndex(0).QRCodeProperties.ErrorCorrection, 1)
-            self.assertEqual(document.DrawPage.getByIndex(0).QRCodeProperties.Border, 1)
+            self.assertEqual(document.DrawPage.getByIndex(0).BarCodeProperties.Payload, "www.libreoffice.org")
+            self.assertEqual(document.DrawPage.getByIndex(0).BarCodeProperties.ErrorCorrection, 1)
+            self.assertEqual(document.DrawPage.getByIndex(0).BarCodeProperties.Border, 1)
 
 
    def test_insert_qr_code_gen2(self):
@@ -58,8 +58,8 @@ class insertQrCode(UITestCase):
                 xBorder.executeAction("DOWN", tuple())
 
             #check the QR Code in the document
-            self.assertEqual(document.DrawPage.getByIndex(0).QRCodeProperties.Payload, "www.libreoffice.org")
-            self.assertEqual(document.DrawPage.getByIndex(0).QRCodeProperties.ErrorCorrection, 1)
-            self.assertEqual(document.DrawPage.getByIndex(0).QRCodeProperties.Border, 1)
+            self.assertEqual(document.DrawPage.getByIndex(0).BarCodeProperties.Payload, "www.libreoffice.org")
+            self.assertEqual(document.DrawPage.getByIndex(0).BarCodeProperties.ErrorCorrection, 1)
+            self.assertEqual(document.DrawPage.getByIndex(0).BarCodeProperties.Border, 1)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
