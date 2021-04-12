@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "355a9f04_e7b40ffe",
+        "filename": "sc/source/filter/excel/impop.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2021-04-12T19:11:34Z",
+      "side": 1,
+      "message": "The sign is wrong way around.",
+      "range": {
+        "startLine": 869,
+        "startChar": 30,
+        "endLine": 869,
+        "endChar": 31
+      },
+      "revId": "e0c60c4bf9be283ad80fd7b156d691717aa70ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
