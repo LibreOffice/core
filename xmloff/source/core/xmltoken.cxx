@@ -1563,6 +1563,7 @@ namespace xmloff::token {
         TOKEN( "qrcode",                          XML_QRCODE ),
         TOKEN( "qrcode-border",                   XML_QRCODE_BORDER ),
         TOKEN( "qrcode-errorcorrection",          XML_QRCODE_ERROR_CORRECTION ),
+        TOKEN( "qrcode-type",                     XML_QRCODE_TYPE ),
         TOKEN( "quarter",                         XML_QUARTER ),
         TOKEN( "query-name",                      XML_QUERY_NAME ),
         TOKEN( "quo-vadis",                       XML_QUO_VADIS ),

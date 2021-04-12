@@ -43,8 +43,8 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/drawing/QRCode.hpp>
-#include <com/sun/star/drawing/QRCodeErrorCorrection.hpp>
+#include <com/sun/star/drawing/BarCode.hpp>
+#include <com/sun/star/drawing/BarCodeErrorCorrection.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -100,29 +100,40 @@ OString ConvertToSVGFormat(const ZXing::BitMatrix& bitmatrix)
     return sb.toString();
 }
 
-OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRBorder)
+std::string GetBarCodeType(const int& type)
+{
+    switch (type)
+    {
+        case 1:
+            return "CODE_128";
+        default:
+            return "QR_CODE";
+    }
+}
+
+OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRBorder, int aQRType)
 {
     // Associated ZXing error correction levels (0-8) to our constants arbitrarily.
     int bqrEcc = 1;
 
     switch (aQRECC)
     {
-        case css::drawing::QRCodeErrorCorrection::LOW:
+        case css::drawing::BarCodeErrorCorrection::LOW:
         {
             bqrEcc = 1;
             break;
         }
-        case css::drawing::QRCodeErrorCorrection::MEDIUM:
+        case css::drawing::BarCodeErrorCorrection::MEDIUM:
         {
             bqrEcc = 3;
             break;
         }
-        case css::drawing::QRCodeErrorCorrection::QUARTILE:
+        case css::drawing::BarCodeErrorCorrection::QUARTILE:
         {
             bqrEcc = 5;
             break;
         }
-        case css::drawing::QRCodeErrorCorrection::HIGH:
+        case css::drawing::BarCodeErrorCorrection::HIGH:
         {
             bqrEcc = 7;
             break;
@@ -131,7 +142,7 @@ OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRB
 
     OString o = OUStringToOString(aQRText, RTL_TEXTENCODING_UTF8);
     std::string QRText(o.getStr(), o.getLength());
-    ZXing::BarcodeFormat format = ZXing::BarcodeFormatFromString("QR_CODE");
+    ZXing::BarcodeFormat format = ZXing::BarcodeFormatFromString(GetBarCodeType(aQRType));
     auto writer = ZXing::MultiFormatWriter(format).setMargin(aQRBorder).setEccLevel(bqrEcc);
     writer.setEncoding(ZXing::CharacterSet::UTF8);
     ZXing::BitMatrix bitmatrix = writer.encode(ZXing::TextUtfEncoding::FromUtf8(QRText), 0, 0);
@@ -151,6 +162,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
               m_xBuilder->weld_radio_button("button_quartile"),
               m_xBuilder->weld_radio_button("button_high") }
     , m_xSpinBorder(m_xBuilder->weld_spin_button("edit_margin"))
+    , m_xComboType(m_xBuilder->weld_combo_box("choose_type"))
 #if ENABLE_ZXING
     , mpParent(pParent)
 #endif
@@ -173,15 +185,17 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
     Reference<XPropertySet> xProps(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
 
     // Read properties from selected QR Code
-    css::drawing::QRCode aQRCode;
-    xProps->getPropertyValue("QRCodeProperties") >>= aQRCode;
+    css::drawing::BarCode aBarCode;
+    xProps->getPropertyValue("BarCodeProperties") >>= aBarCode;
 
-    m_xEdittext->set_text(aQRCode.Payload);
+    m_xEdittext->set_text(aBarCode.Payload);
 
     //Get Error Correction Constant from selected QR Code
-    GetErrorCorrection(aQRCode.ErrorCorrection);
+    GetErrorCorrection(aBarCode.ErrorCorrection);
 
-    m_xSpinBorder->set_value(aQRCode.Border);
+    m_xSpinBorder->set_value(aBarCode.Border);
+
+    m_xComboType->set_active(aBarCode.Type);
 
     // Mark this as existing shape
     m_xExistingShapeProperties = xProps;
@@ -221,8 +235,9 @@ short QrCodeGenDialog::run()
 void QrCodeGenDialog::Apply()
 {
 #if ENABLE_ZXING
-    css::drawing::QRCode aQRCode;
-    aQRCode.Payload = m_xEdittext->get_text();
+    css::drawing::BarCode aBarCode;
+    aBarCode.Payload = m_xEdittext->get_text();
+    aBarCode.Type = m_xComboType->get_active();
 
     bool bLowECCActive(m_xECC[0]->get_active());
     bool bMediumECCActive(m_xECC[1]->get_active());
@@ -230,25 +245,26 @@ void QrCodeGenDialog::Apply()
 
     if (bLowECCActive)
     {
-        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::LOW;
+        aBarCode.ErrorCorrection = css::drawing::BarCodeErrorCorrection::LOW;
     }
     else if (bMediumECCActive)
     {
-        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::MEDIUM;
+        aBarCode.ErrorCorrection = css::drawing::BarCodeErrorCorrection::MEDIUM;
     }
     else if (bQuartileECCActive)
     {
-        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::QUARTILE;
+        aBarCode.ErrorCorrection = css::drawing::BarCodeErrorCorrection::QUARTILE;
     }
     else
     {
-        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::HIGH;
+        aBarCode.ErrorCorrection = css::drawing::BarCodeErrorCorrection::HIGH;
     }
 
-    aQRCode.Border = m_xSpinBorder->get_value();
+    aBarCode.Border = m_xSpinBorder->get_value();
 
     // Read svg and replace placeholder texts
-    OString aSvgImage = GenerateQRCode(aQRCode.Payload, aQRCode.ErrorCorrection, aQRCode.Border);
+    OString aSvgImage = GenerateQRCode(aBarCode.Payload, aBarCode.ErrorCorrection, aBarCode.Border,
+                                       aBarCode.Type);
 
     // Insert/Update graphic
     SvMemoryStream aSvgStream(4096, 4096);
@@ -273,7 +289,7 @@ void QrCodeGenDialog::Apply()
     xShapeProps->setPropertyValue("Graphic", Any(xGraphic));
 
     // Set QRCode properties
-    xShapeProps->setPropertyValue("QRCodeProperties", Any(aQRCode));
+    xShapeProps->setPropertyValue("BarCodeProperties", Any(aBarCode));
 
     if (bIsExistingQRCode)
         return;
@@ -346,22 +362,22 @@ void QrCodeGenDialog::GetErrorCorrection(tools::Long ErrorCorrection)
 {
     switch (ErrorCorrection)
     {
-        case css::drawing::QRCodeErrorCorrection::LOW:
+        case css::drawing::BarCodeErrorCorrection::LOW:
         {
             m_xECC[0]->set_active(true);
             break;
         }
-        case css::drawing::QRCodeErrorCorrection::MEDIUM:
+        case css::drawing::BarCodeErrorCorrection::MEDIUM:
         {
             m_xECC[1]->set_active(true);
             break;
         }
-        case css::drawing::QRCodeErrorCorrection::QUARTILE:
+        case css::drawing::BarCodeErrorCorrection::QUARTILE:
         {
             m_xECC[2]->set_active(true);
             break;
         }
-        case css::drawing::QRCodeErrorCorrection::HIGH:
+        case css::drawing::BarCodeErrorCorrection::HIGH:
         {
             m_xECC[3]->set_active(true);
             break;

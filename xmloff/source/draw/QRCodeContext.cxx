@@ -13,8 +13,8 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/drawing/QRCode.hpp>
-#include <com/sun/star/drawing/QRCodeErrorCorrection.hpp>
+#include <com/sun/star/drawing/BarCode.hpp>
+#include <com/sun/star/drawing/BarCodeErrorCorrection.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 #include <xmloff/xmltoken.hxx>
@@ -42,7 +42,7 @@ QRCodeContext::QRCodeContext(SvXMLImport& rImport, sal_Int32 /*nElement*/,
 {
     Reference<beans::XPropertySet> xPropSet(rxShape, UNO_QUERY_THROW);
 
-    css::drawing::QRCode aQRCode;
+    css::drawing::BarCode aBarCode;
 
     for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
@@ -53,32 +53,39 @@ QRCodeContext::QRCodeContext(SvXMLImport& rImport, sal_Int32 /*nElement*/,
                 OUString aErrorCorrValue = aIter.toString();
 
                 if (aErrorCorrValue == "low")
-                    aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::LOW;
+                    aBarCode.ErrorCorrection = css::drawing::BarCodeErrorCorrection::LOW;
                 else if (aErrorCorrValue == "medium")
-                    aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::MEDIUM;
+                    aBarCode.ErrorCorrection = css::drawing::BarCodeErrorCorrection::MEDIUM;
                 else if (aErrorCorrValue == "quartile")
-                    aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::QUARTILE;
+                    aBarCode.ErrorCorrection = css::drawing::BarCodeErrorCorrection::QUARTILE;
                 else
-                    aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::HIGH;
+                    aBarCode.ErrorCorrection = css::drawing::BarCodeErrorCorrection::HIGH;
                 break;
             }
             case XML_ELEMENT(LO_EXT, XML_QRCODE_BORDER):
             {
                 sal_Int32 nAttrVal;
                 if (sax::Converter::convertNumber(nAttrVal, aIter.toView(), 0))
-                    aQRCode.Border = nAttrVal;
+                    aBarCode.Border = nAttrVal;
                 break;
             }
             case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
             {
-                aQRCode.Payload = aIter.toString();
+                aBarCode.Payload = aIter.toString();
+                break;
+            }
+            case XML_ELEMENT(LO_EXT, XML_QRCODE_TYPE):
+            {
+                sal_Int32 nAttrVal;
+                if (sax::Converter::convertNumber(nAttrVal, aIter.toView(), 0))
+                    aBarCode.Type = nAttrVal;
                 break;
             }
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
-    xPropSet->setPropertyValue("QRCodeProperties", Any(aQRCode));
+    xPropSet->setPropertyValue("BarCodeProperties", Any(aBarCode));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
