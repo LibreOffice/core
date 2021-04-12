@@ -1005,6 +1005,14 @@ void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj, sal_uInt1
     // and again, for the still missing ends
     switch (nSlotId)
     {
+        case SID_LINE_ARROW_CIRCLE:
+        {
+            // circle end
+            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineEndWidthItem(nWidth));
+        }
+        break;
+
         case SID_LINE_CIRCLE_ARROW:
         {
             // circle start
