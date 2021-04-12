@@ -1077,7 +1077,8 @@ void PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
     {
         aCtx.m_bTransparenciesWereRemoved = rWriter.GetReferenceDevice()->
             RemoveTransparenciesFromMetaFile( rMtf, aMtf, mnMaxImageResolution, mnMaxImageResolution,
-                                              false, true, mbReduceImageResolution );
+                                              false, true, mbReduceImageResolution, COL_TRANSPARENT,
+                                              &rPDFExtOutDevData );
     }
     else
     {

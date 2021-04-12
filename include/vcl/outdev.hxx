@@ -92,6 +92,7 @@ namespace vcl
     class ExtOutDevData;
     class ITextLayout;
     struct FontCapabilities;
+    class PDFExtOutDevData;
     class TextLayoutCache;
     class Window;
     namespace font {
@@ -1619,7 +1620,8 @@ public:
                                     bool bReduceTransparency,
                                     bool bTransparencyAutoMode,
                                     bool bDownsampleBitmaps,
-                                    const Color& rBackground = COL_TRANSPARENT );
+                                    const Color& rBackground = COL_TRANSPARENT,
+                                    vcl::PDFExtOutDevData* pPDFExtOutDevData = nullptr);
 
     SAL_DLLPRIVATE Color        ImplDrawModeToColor  ( const Color& rColor ) const;
 

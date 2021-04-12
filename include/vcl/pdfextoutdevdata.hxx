@@ -182,6 +182,9 @@ public:
                           const tools::Rectangle&  rOutputRect,
                           const tools::Rectangle&  rVisibleOutputRect );
 
+    void        MoveGroups(sal_uInt32 nIndex, sal_Int32 nSize);
+
+
     /// Detect if stream is compressed enough to avoid de-compress / scale & re-compress
     bool        HasAdequateCompression( const Graphic &rGraphic,
                                         const tools::Rectangle &rOutputRect,

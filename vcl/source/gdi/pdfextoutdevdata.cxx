@@ -310,6 +310,8 @@ struct PageSyncData
 
     void PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDataSync::Action eAct );
     bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf, const PDFExtOutDevData& rOutDevData );
+
+    void MoveGroups(sal_uInt32 nIndex, sal_Int32 nSize);
 };
 
 void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDataSync::Action eAct )
@@ -325,6 +327,19 @@ void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDa
         aSync.nIdx = 0x7fffffff;    // sync not possible
     mActions.push_back( aSync );
 }
+
+void PageSyncData::MoveGroups(sal_uInt32 nIndex, sal_Int32 nSize)
+{
+    for (auto& rSync : mActions)
+    {
+        if (rSync.nIdx == 0x7fffffff)
+            continue;
+        if (rSync.nIdx < nIndex)
+            continue;
+        rSync.nIdx += nSize;
+    }
+}
+
 bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf, const PDFExtOutDevData& rOutDevData )
 {
     bool bRet = false;
@@ -735,7 +750,7 @@ void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_u
 
 /* local (page), actions have to be played synchronously to the actions of
    of the recorded metafile (created by each xRenderable->render()) */
-   sal_Int32 PDFExtOutDevData::BeginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias )
+sal_Int32 PDFExtOutDevData::BeginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::BeginStructureElement );
     mpPageSyncData->mParaStructElements.push_back( eType );
@@ -746,11 +761,18 @@ void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_u
     mpGlobalSyncData->mCurrentStructElement = nNewId;
     return nNewId;
 }
+
 void PDFExtOutDevData::EndStructureElement()
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::EndStructureElement );
     mpGlobalSyncData->mCurrentStructElement = mpGlobalSyncData->mStructParents[ mpGlobalSyncData->mCurrentStructElement ];
 }
+
+void PDFExtOutDevData::MoveGroups(sal_uInt32 nIndex, sal_Int32 nSize)
+{
+    mpPageSyncData->MoveGroups(nIndex, nSize);
+}
+
 bool PDFExtOutDevData::SetCurrentStructureElement( sal_Int32 nStructId )
 {
     bool bSuccess = false;

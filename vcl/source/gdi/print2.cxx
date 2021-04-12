@@ -28,6 +28,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/BitmapReadAccess.hxx>
@@ -627,9 +628,8 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
                                                      tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY,
                                                      bool bReduceTransparency, bool bTransparencyAutoMode,
-                                                     bool bDownsampleBitmaps,
-                                                     const Color& rBackground
-                                                     )
+                                                     bool bDownsampleBitmaps, const Color& rBackground,
+                                                     vcl::PDFExtOutDevData* pPDFExtOutDevData )
 {
     MetaAction*             pCurrAct;
     bool                    bTransparent( false );
@@ -1047,6 +1047,9 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             rOutMtf.AddAction( component.first );
         }
 
+        // pPDFExtOutDevData indexes are valid to this point
+        size_t nIdenticalStartingActions = rOutMtf.GetActionSize();
+
         //  STAGE 3.2: Generate banded bitmaps for special regions
 
         Point aPageOffset;
@@ -1218,6 +1221,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         aMapModeVDev->ClearStack(); // clean up aMapModeVDev
 
+        size_t nExtraActions = rOutMtf.GetActionSize() - nIdenticalStartingActions;
+        if (pPDFExtOutDevData)
+            pPDFExtOutDevData->MoveGroups(nIdenticalStartingActions, nExtraActions);
+
         //  STAGE 4: Copy actions to output metafile
 
         // iterate over all actions and duplicate the ones not in a
@@ -1243,12 +1250,16 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 if( DoesActionHandleTransparency( *pCurrAct ) &&
                     pCurrAssociatedComponent->aComponentList.begin()->first == pCurrAct )
                 {
+                    size_t nActionSize = rOutMtf.GetActionSize();
                     // convert actions, where masked-out parts are of
                     // given background color
                     ImplConvertTransparentAction(rOutMtf,
                                                  *pCurrAct,
                                                  *aMapModeVDev,
                                                  aBackgroundComponent.aBgColor);
+                    int nInsertedActions = rOutMtf.GetActionSize() - nActionSize;
+                    if (pPDFExtOutDevData)
+                        pPDFExtOutDevData->MoveGroups(nActionSize, nInsertedActions - 1);
                 }
                 else
                 {
