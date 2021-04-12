@@ -164,7 +164,6 @@ private:
     mutable std::recursive_mutex m_aMutex;
     WorkerThread *m_pThread;
     osl::Condition m_aCondition;
-    osl::Condition m_NotInWaitState;
 
     UpdateInfo m_aUpdateInfo;
     OUString m_aImageName;

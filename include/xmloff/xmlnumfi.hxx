@@ -148,7 +148,6 @@ private:
     OUStringBuffer aFormatCode{64};
     OUStringBuffer aConditions{32};
     bool            bHasLongDoW;
-    bool            bHasEra;
     bool            bHasDateTime;
     bool            bRemoveAfterUse;
 

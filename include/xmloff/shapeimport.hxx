@@ -93,8 +93,6 @@ protected:
     ::basegfx::B3DVector        maVPN;
     ::basegfx::B3DVector        maVUP;
     bool                        mbVRPUsed;
-    bool                        mbVPNUsed;
-    bool                        mbVUPUsed;
 
 public:
     SdXML3DSceneAttributesHelper( SvXMLImport& rImporter );
