@@ -74,6 +74,10 @@ QRCodeContext::QRCodeContext(SvXMLImport& rImport, sal_Int32 /*nElement*/,
                 aQRCode.Payload = aIter.toString();
                 break;
             }
+            case XML_ELEMENT(LO_EXT, XML_QRCODE_TYPE):
+            {
+                aQRCode.Type = aIter.toString();
+            }
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
