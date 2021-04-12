@@ -1913,20 +1913,29 @@
      <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
-    <table:table-row table:style-name="ro7">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce16"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce24"/>
-     <table:table-cell/>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:style-name="ce11" table:formula="of:=IRR({-10000|5000|5000|5000})" office:value-type="percentage" office:value="0.233751928528259" calcext:value-type="percentage">
+      <text:p>23,38%</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0.233751928528259" calcext:value-type="float">
+      <text:p>0.233751928528259</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce16" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=IRR({-10000|5000|5000|5000})" calcext:value-type="string">
+      <text:p>=IRR({-10000|5000|5000|5000})</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce24" office:value-type="string" calcext:value-type="string">
+      <text:p>Tdf#58585 enhancement</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1"/>
      <table:table-cell office:value-type="float" office:value="20" calcext:value-type="float">
-      <text:p>20</text:p>
+      <text:p>10</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:style-name="ce31"/>
-     <table:table-cell table:style-name="ce29" table:number-columns-repeated="3"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:style-name="ce12"/>
@@ -2011,20 +2020,6 @@
      </table:table-cell>
      <table:table-cell table:style-name="ce28" office:value-type="string" calcext:value-type="string">
       <text:p>AOO#118154 enhancement</text:p>
-     </table:table-cell>
-     <table:table-cell table:number-columns-repeated="15"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro7">
-     <table:table-cell table:style-name="ce11" table:formula="of:=IRR( {-10000|5000|5000|5000})" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:504</text:p>
-     </table:table-cell>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A23])" office:value-type="string" office:string-value="=IRR( {-10000;5000;5000;5000})" calcext:value-type="string">
-      <text:p>=IRR( {-10000;5000;5000;5000})</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce24" office:value-type="string" calcext:value-type="string">
-      <text:p>Tdf#58585 enhancement</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="15"/>
     </table:table-row>
