@@ -264,7 +264,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
 
     sd::PresentationSettings& rPresSettings = mpDoc->getPresentationSettings();
 
-    const SfxItemPropertySimpleEntry* pEntry = maPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMapEntry* pEntry = maPropSet.getPropertyMapEntry(aPropertyName);
 
     if( pEntry && ((pEntry->nFlags & PropertyAttribute::READONLY) != 0) )
         throw PropertyVetoException();
@@ -526,7 +526,7 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName )
 
     const sd::PresentationSettings& rPresSettings = mpDoc->getPresentationSettings();
 
-    const SfxItemPropertySimpleEntry* pEntry = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pEntry = maPropSet.getPropertyMapEntry(PropertyName);
 
     switch( pEntry ? pEntry->nWID : -1 )
     {

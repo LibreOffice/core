@@ -241,7 +241,7 @@ struct ImpRememberTransAndRect
 
 }
 
-bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -351,7 +351,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
 }
 
 
-bool Svx3DSceneObject::getPropertyValueImpl(const OUString& rName, const SfxItemPropertySimpleEntry* pProperty,
+bool Svx3DSceneObject::getPropertyValueImpl(const OUString& rName, const SfxItemPropertyMapEntry* pProperty,
     css::uno::Any& rValue)
 {
     switch( pProperty->nWID )
@@ -412,7 +412,7 @@ Svx3DCubeObject::~Svx3DCubeObject() throw()
 {
 }
 
-bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     SolarMutexGuard aGuard;
 
@@ -467,7 +467,7 @@ bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItem
     throw IllegalArgumentException();
 }
 
-bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue )
+bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -533,7 +533,7 @@ Svx3DSphereObject::~Svx3DSphereObject() throw()
 {
 }
 
-bool Svx3DSphereObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool Svx3DSphereObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -577,7 +577,7 @@ bool Svx3DSphereObject::setPropertyValueImpl( const OUString& rName, const SfxIt
     throw IllegalArgumentException();
 }
 
-bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue )
+bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -726,7 +726,7 @@ static void B3dPolyPolygon_to_PolyPolygonShape3D( const basegfx::B3DPolyPolygon&
     rValue <<= aRetval;
 }
 
-bool Svx3DLatheObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool Svx3DLatheObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -772,7 +772,7 @@ bool Svx3DLatheObject::setPropertyValueImpl( const OUString& rName, const SfxIte
     throw IllegalArgumentException();
 }
 
-bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue )
+bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -818,7 +818,7 @@ Svx3DExtrudeObject::~Svx3DExtrudeObject() throw()
 {
 }
 
-bool Svx3DExtrudeObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool Svx3DExtrudeObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -853,7 +853,7 @@ bool Svx3DExtrudeObject::setPropertyValueImpl( const OUString& rName, const SfxI
     throw IllegalArgumentException();
 }
 
-bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue )
+bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -901,7 +901,7 @@ Svx3DPolygonObject::~Svx3DPolygonObject() throw()
 {
 }
 
-bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -974,7 +974,7 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxI
     throw IllegalArgumentException();
 }
 
-bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue )
+bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {

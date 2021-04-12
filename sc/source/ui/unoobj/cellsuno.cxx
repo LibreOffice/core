@@ -1772,7 +1772,7 @@ const SfxItemPropertyMap& ScCellRangesBase::GetItemPropertyMap()
     return pPropSet->getPropertyMap();
 }
 
-static void lcl_GetPropertyWhich( const SfxItemPropertySimpleEntry* pEntry,
+static void lcl_GetPropertyWhich( const SfxItemPropertyMapEntry* pEntry,
                                                 sal_uInt16& rItemWhich )
 {
     //  Which-ID of the affected items also when the item can't handle
@@ -1803,7 +1803,7 @@ static void lcl_GetPropertyWhich( const SfxItemPropertySimpleEntry* pEntry,
 
 }
 
-beans::PropertyState ScCellRangesBase::GetOnePropertyState( sal_uInt16 nItemWhich, const SfxItemPropertySimpleEntry* pEntry )
+beans::PropertyState ScCellRangesBase::GetOnePropertyState( sal_uInt16 nItemWhich, const SfxItemPropertyMapEntry* pEntry )
 {
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
     if ( nItemWhich )                   // item wid (from map or special case)
@@ -1859,7 +1859,7 @@ beans::PropertyState SAL_CALL ScCellRangesBase::getPropertyState( const OUString
 
     const SfxItemPropertyMap& rMap = GetItemPropertyMap();     // from derived class
     sal_uInt16 nItemWhich = 0;
-    const SfxItemPropertySimpleEntry* pEntry  = rMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry  = rMap.getByName( aPropertyName );
     lcl_GetPropertyWhich( pEntry, nItemWhich );
     return GetOnePropertyState( nItemWhich, pEntry );
 }
@@ -1875,7 +1875,7 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.begin(),
         [this, &rPropertyMap](const auto& rName) -> beans::PropertyState {
             sal_uInt16 nItemWhich = 0;
-            const SfxItemPropertySimpleEntry* pEntry  = rPropertyMap.getByName( rName );
+            const SfxItemPropertyMapEntry* pEntry  = rPropertyMap.getByName( rName );
             lcl_GetPropertyWhich( pEntry, nItemWhich );
             return GetOnePropertyState(nItemWhich, pEntry);
         });
@@ -1890,7 +1890,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const OUString& aPropertyN
 
     const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
     sal_uInt16 nItemWhich = 0;
-    const SfxItemPropertySimpleEntry* pEntry  = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry  = rPropertyMap.getByName( aPropertyName );
     lcl_GetPropertyWhich( pEntry, nItemWhich );
     if ( nItemWhich )               // item wid (from map or special case)
     {
@@ -1937,7 +1937,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
-        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+        const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
         if ( pEntry )
         {
             if ( IsScItemWid( pEntry->nWID ) )
@@ -2040,7 +2040,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellRangesBase::getPropertySe
     return aRef;
 }
 
-static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rValue,
+static void lcl_SetCellProperty( const SfxItemPropertyMapEntry& rEntry, const uno::Any& rValue,
                             ScPatternAttr& rPattern, const ScDocument &rDoc,
                             sal_uInt16& rFirstItemId, sal_uInt16& rSecondItemId )
 {
@@ -2158,14 +2158,14 @@ void SAL_CALL ScCellRangesBase::setPropertyValue(
         throw uno::RuntimeException();
 
     const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
     SetOnePropertyValue( pEntry, aValue );
 }
 
-void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue )
+void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, const uno::Any& aValue )
 {
     if ( !pEntry )
         return;
@@ -2370,7 +2370,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyValue( const OUString& aPropertyN
         throw uno::RuntimeException();
 
     const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -2379,7 +2379,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyValue( const OUString& aPropertyN
     return aAny;
 }
 
-void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, uno::Any& rAny )
+void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, uno::Any& rAny )
 {
     if ( !pEntry )
         return;
@@ -2578,7 +2578,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
     const OUString* pNames = aPropertyNames.getConstArray();
     const uno::Any* pValues = aValues.getConstArray();
 
-    std::unique_ptr<const SfxItemPropertySimpleEntry*[]> pEntryArray(new const SfxItemPropertySimpleEntry*[nCount]);
+    std::unique_ptr<const SfxItemPropertyMapEntry*[]> pEntryArray(new const SfxItemPropertyMapEntry*[nCount]);
 
     sal_Int32 i;
     for(i = 0; i < nCount; i++)
@@ -2586,7 +2586,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
         // first loop: find all properties in map, but handle only CellStyle
         // (CellStyle must be set before any other cell properties)
 
-        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( pNames[i] );
+        const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( pNames[i] );
         pEntryArray[i] = pEntry;
         if (pEntry)
         {
@@ -2612,7 +2612,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
     {
         // second loop: handle other properties
 
-        const SfxItemPropertySimpleEntry* pEntry = pEntryArray[i];
+        const SfxItemPropertyMapEntry* pEntry = pEntryArray[i];
         if ( pEntry )
         {
             if ( IsScItemWid( pEntry->nWID ) )  // can be handled by SfxItemPropertySet
@@ -2658,7 +2658,7 @@ uno::Sequence<uno::Any> SAL_CALL ScCellRangesBase::getPropertyValues(
     uno::Any* pProperties = aRet.getArray();
     for(sal_Int32 i = 0; i < aPropertyNames.getLength(); i++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyNames[i] );
+        const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyNames[i] );
         GetOnePropertyValue( pEntry, pProperties[i] );
     }
     return aRet;
@@ -2713,7 +2713,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
         const OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
-        std::unique_ptr<const SfxItemPropertySimpleEntry*[]> pMapArray(new const SfxItemPropertySimpleEntry*[nCount]);
+        std::unique_ptr<const SfxItemPropertyMapEntry*[]> pMapArray(new const SfxItemPropertyMapEntry*[nCount]);
 
         sal_Int32 i;
         for(i = 0; i < nCount; i++)
@@ -2721,7 +2721,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
             // first loop: find all properties in map, but handle only CellStyle
             // (CellStyle must be set before any other cell properties)
 
-            const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( pNames[i] );
+            const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( pNames[i] );
             pMapArray[i] = pEntry;
             if (pEntry)
             {
@@ -2748,7 +2748,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
         {
             // second loop: handle other properties
 
-            const SfxItemPropertySimpleEntry* pEntry = pMapArray[i];
+            const SfxItemPropertyMapEntry* pEntry = pMapArray[i];
             if ( pEntry && ((pEntry->nFlags & beans::PropertyAttribute::READONLY) == 0))
             {
                 if ( IsScItemWid( pEntry->nWID ) )  // can be handled by SfxItemPropertySet
@@ -2824,7 +2824,7 @@ uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL ScCellRangesBase::get
 
     for(sal_Int32 i = 0; i < nCount; i++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyNames[i] );
+        const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyNames[i] );
         if (!pEntry)
         {
             pReturns[i].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
@@ -2854,7 +2854,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL ScCellRangesBas
     sal_Int32 j = 0;
     for(sal_Int32 i = 0; i < nCount; i++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyNames[i] );
+        const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyNames[i] );
         if (!pEntry)
         {
             pReturns[i].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
@@ -5709,7 +5709,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellRangeObj::getPropertySetI
     return aRef;
 }
 
-void ScCellRangeObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue )
+void ScCellRangeObj::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, const uno::Any& aValue )
 {
     //  Range has only Position and Size in addition to ScCellRangesBase, both are ReadOnly
     //  -> nothing to do here
@@ -5717,7 +5717,7 @@ void ScCellRangeObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEnt
     ScCellRangesBase::SetOnePropertyValue( pEntry, aValue );
 }
 
-void ScCellRangeObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, uno::Any& rAny )
+void ScCellRangeObj::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, uno::Any& rAny )
 {
     if ( !pEntry )
         return;
@@ -6407,7 +6407,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellObj::getPropertySetInfo()
     return aRef;
 }
 
-void ScCellObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue )
+void ScCellObj::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, const uno::Any& aValue )
 {
     if ( !pEntry )
         return;
@@ -6428,7 +6428,7 @@ void ScCellObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, c
         ScCellRangeObj::SetOnePropertyValue( pEntry, aValue );
 }
 
-void ScCellObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, uno::Any& rAny )
+void ScCellObj::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, uno::Any& rAny )
 {
     if ( !pEntry )
         return;
@@ -7810,7 +7810,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableSheetObj::getPropertySet
     return aRef;
 }
 
-void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue )
+void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, const uno::Any& aValue )
 {
     if ( !pEntry )
         return;
@@ -8137,7 +8137,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID
 }
 
-void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                             uno::Any& rAny )
 {
     if ( !pEntry )
@@ -8380,7 +8380,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableColumnObj::getPropertySe
     return aRef;
 }
 
-void ScTableColumnObj::SetOnePropertyValue(const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue)
+void ScTableColumnObj::SetOnePropertyValue(const SfxItemPropertyMapEntry* pEntry, const uno::Any& aValue)
 {
     if ( !pEntry )
         return;
@@ -8443,7 +8443,7 @@ void ScTableColumnObj::SetOnePropertyValue(const SfxItemPropertySimpleEntry* pEn
         ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID
 }
 
-void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, uno::Any& rAny )
+void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, uno::Any& rAny )
 {
     if ( !pEntry )
         return;
@@ -8516,7 +8516,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableRowObj::getPropertySetIn
     return aRef;
 }
 
-void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue )
+void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, const uno::Any& aValue )
 {
     if ( !pEntry )
         return;
@@ -8590,7 +8590,7 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID
 }
 
-void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, uno::Any& rAny )
+void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, uno::Any& rAny )
 {
     if ( !pEntry )
         return;

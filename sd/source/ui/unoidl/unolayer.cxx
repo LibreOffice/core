@@ -120,7 +120,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     if(pLayer == nullptr || mxLayerManager == nullptr)
         throw lang::DisposedException();
 
-    const SfxItemPropertySimpleEntry* pEntry = pPropSet->getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMapEntry* pEntry = pPropSet->getPropertyMapEntry(aPropertyName);
 
     switch( pEntry ? pEntry->nWID : -1 )
     {
@@ -188,7 +188,7 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
     if(pLayer == nullptr || mxLayerManager == nullptr)
         throw lang::DisposedException();
 
-    const SfxItemPropertySimpleEntry* pEntry = pPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pEntry = pPropSet->getPropertyMapEntry(PropertyName);
 
     uno::Any aValue;
 

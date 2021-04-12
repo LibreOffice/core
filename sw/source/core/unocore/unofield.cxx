@@ -314,7 +314,7 @@ static sal_uInt16 GetFieldTypeMId( std::u16string_view rProperty, const SwFieldT
         nId = USHRT_MAX;
     else
     {
-        const SfxItemPropertySimpleEntry* pEntry = pSet->getPropertyMap().getByName(rProperty);
+        const SfxItemPropertyMapEntry* pEntry = pSet->getPropertyMap().getByName(rProperty);
         nId = pEntry ? pEntry->nWID : USHRT_MAX;
     }
     return nId;
@@ -2164,7 +2164,7 @@ SwXTextField::setPropertyValue(
     SwField const*const pField = m_pImpl->GetField();
     const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
                 lcl_GetPropertyMapOfService(m_pImpl->m_nServiceId));
-    const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap().getByName(rPropertyName);
+    const SfxItemPropertyMapEntry*   pEntry = _pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
         throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -2317,7 +2317,7 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
     SwField const*const pField = m_pImpl->GetField();
     const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
                 lcl_GetPropertyMapOfService(m_pImpl->m_nServiceId));
-    const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap().getByName(rPropertyName);
+    const SfxItemPropertyMapEntry*   pEntry = _pPropSet->getPropertyMap().getByName(rPropertyName);
     if(!pEntry )
     {
         const SfxItemPropertySet* _pParaPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH_EXTENSIONS);

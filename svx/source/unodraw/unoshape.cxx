@@ -592,24 +592,24 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
 
     const SfxItemPropertyMap& rSrc = rPropSet.getPropertyMap();
 
-    for(const auto& rSrcProp : rSrc.getPropertyEntries())
+    for(const SfxItemPropertyMapEntry* pSrcProp : rSrc.getPropertyEntries())
     {
-        const sal_uInt16 nWID = rSrcProp.second.nWID;
+        const sal_uInt16 nWID = pSrcProp->nWID;
         if(SfxItemPool::IsWhich(nWID)
                 && (nWID < OWN_ATTR_VALUE_START || nWID > OWN_ATTR_VALUE_END)
-                && rPropSet.GetUsrAnyForID(rSrcProp.second))
+                && rPropSet.GetUsrAnyForID(*pSrcProp))
             rSet.Put(rSet.GetPool()->GetDefaultItem(nWID));
     }
 
-    for(const auto& rSrcProp : rSrc.getPropertyEntries())
+    for(const SfxItemPropertyMapEntry* pSrcProp : rSrc.getPropertyEntries())
     {
-        if(rSrcProp.second.nWID)
+        if(pSrcProp->nWID)
         {
-            uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(rSrcProp.second);
+            uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(*pSrcProp);
             if(pUsrAny)
             {
                 // search for equivalent entry in pDst
-                const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( rSrcProp.first );
+                const SfxItemPropertyMapEntry* pEntry = pMap->getByName( pSrcProp->aName );
                 if(pEntry)
                 {
                     // entry found
@@ -617,7 +617,7 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
                     {
                         // special ID in PropertySet, can only be set
                         // directly at the object
-                        xSet->setPropertyValue( OUString(rSrcProp.first), *pUsrAny);
+                        xSet->setPropertyValue( pSrcProp->aName, *pUsrAny);
                     }
                     else
                     {
@@ -1588,7 +1588,7 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
 {
     ::SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
+    const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
 
     if (!HasSdrObject())
     {
@@ -1731,7 +1731,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
 {
     ::SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
     uno::Any aAny;
     if(HasSdrObject())
@@ -1896,7 +1896,7 @@ void SAL_CALL SvxShape::firePropertiesChangeEvent( const css::uno::Sequence< OUS
 }
 
 
-uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEntry* pMap ) const
+uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry* pMap ) const
 {
     DBG_TESTSOLARMUTEX();
     uno::Any aAny;
@@ -1995,7 +1995,7 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
 {
     ::SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( !HasSdrObject() || pMap == nullptr )
         throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
@@ -2058,7 +2058,7 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
     return eState;
 }
 
-bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -2524,7 +2524,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 }
 
 
-bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue )
+bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -2921,7 +2921,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 }
 
 
-bool SvxShape::getPropertyStateImpl( const SfxItemPropertySimpleEntry* pProperty, css::beans::PropertyState& rState )
+bool SvxShape::getPropertyStateImpl( const SfxItemPropertyMapEntry* pProperty, css::beans::PropertyState& rState )
 {
     if( pProperty->nWID == OWN_ATTR_FILLBMP_MODE )
     {
@@ -2951,7 +2951,7 @@ bool SvxShape::getPropertyStateImpl( const SfxItemPropertySimpleEntry* pProperty
 }
 
 
-bool SvxShape::setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* pProperty )
+bool SvxShape::setPropertyToDefaultImpl( const SfxItemPropertyMapEntry* pProperty )
 {
     if( pProperty->nWID == OWN_ATTR_FILLBMP_MODE )
     {
@@ -2999,7 +2999,7 @@ void SvxShape::_setPropertyToDefault( const OUString& PropertyName )
 {
     ::SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pProperty = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pProperty = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( !HasSdrObject() || pProperty == nullptr )
         throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
@@ -3029,7 +3029,7 @@ uno::Any SvxShape::_getPropertyDefault( const OUString& aPropertyName )
 {
     ::SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
 
     if( !HasSdrObject() || pMap == nullptr )
         throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
@@ -3884,7 +3884,7 @@ void SAL_CALL SvxShapeText::setString( const OUString& aString )
 }
 
 // override these for special property handling in subcasses. Return true if property is handled
-bool SvxShapeText::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool SvxShapeText::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     // HACK-fix #99090#
     // since SdrTextObj::SetVerticalWriting exchanges
@@ -3907,7 +3907,7 @@ bool SvxShapeText::setPropertyValueImpl( const OUString& rName, const SfxItemPro
     return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
 }
 
-bool SvxShapeText::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue )
+bool SvxShapeText::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
     if( pProperty->nWID == SDRATTR_TEXTDIRECTION )
     {
@@ -3922,12 +3922,12 @@ bool SvxShapeText::getPropertyValueImpl( const OUString& rName, const SfxItemPro
     return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
 }
 
-bool SvxShapeText::getPropertyStateImpl( const SfxItemPropertySimpleEntry* pProperty, css::beans::PropertyState& rState )
+bool SvxShapeText::getPropertyStateImpl( const SfxItemPropertyMapEntry* pProperty, css::beans::PropertyState& rState )
 {
     return SvxShape::getPropertyStateImpl( pProperty, rState );
 }
 
-bool SvxShapeText::setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* pProperty )
+bool SvxShapeText::setPropertyToDefaultImpl( const SfxItemPropertyMapEntry* pProperty )
 {
     return SvxShape::setPropertyToDefaultImpl( pProperty );
 }
@@ -3979,7 +3979,7 @@ SdrObject* SdrObject::getSdrObjectFromXShape( const css::uno::Reference< css::un
     return pSvxShape ? pSvxShape->GetSdrObject() : nullptr;
 }
 
-uno::Any SvxItemPropertySet_getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet )
+uno::Any SvxItemPropertySet_getPropertyValue( const SfxItemPropertyMapEntry* pMap, const SfxItemSet& rSet )
 {
     if(!pMap || !pMap->nWID)
         return uno::Any();
@@ -3989,7 +3989,7 @@ uno::Any SvxItemPropertySet_getPropertyValue( const SfxItemPropertySimpleEntry* 
     return SvxItemPropertySet::getPropertyValue( pMap, rSet, (pMap->nWID != SDRATTR_XMLATTRIBUTES), bDontConvertNegativeValues );
 }
 
-void SvxItemPropertySet_setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet )
+void SvxItemPropertySet_setPropertyValue( const SfxItemPropertyMapEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet )
 {
     if(!pMap || !pMap->nWID)
         return;

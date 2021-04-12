@@ -65,7 +65,7 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
         //  (headers/footers are in twips)
 
         SfxItemPropertyMapEntry* pEntry = aHdFtPropertyMap_Impl;
-        while (!pEntry->aName.empty())
+        while (!pEntry->aName.isEmpty())
         {
             if ( ( pEntry->nWID == EE_CHAR_FONTHEIGHT ||
                    pEntry->nWID == EE_CHAR_FONTHEIGHT_CJK ||

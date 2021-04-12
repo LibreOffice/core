@@ -150,7 +150,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
     for(auto const & rPair : maValues)
     {
         SfxPoolItem* pTempItem = nullptr;
-        const SfxItemPropertySimpleEntry & rPropEntry = mrMap.getPropertyEntries().find(std::u16string_view(rPair.first))->second;
+        const SfxItemPropertyMapEntry & rPropEntry = *mrMap.getByName(rPair.first);
         sal_uInt16 nWID = rPropEntry.nWID;
         switch(nWID)
         {
@@ -391,7 +391,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextSearch::getPropertySetInfo()
 void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if(!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -423,7 +423,7 @@ uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard aGuard;
     uno::Any aRet;
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     bool bSet = false;
     if(!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );

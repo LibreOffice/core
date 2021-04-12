@@ -29,6 +29,7 @@
 class SfxItemSet;
 class SfxItemPropertySet;
 struct SfxItemPropertySimpleEntry;
+struct SfxItemPropertyMapEntry;
 class SdrObject;
 class SwTextNode;
 class SwCursor;
@@ -77,7 +78,7 @@ namespace SwUnoCursorHelper
         GetNestedTextContent(SwTextNode const & rTextNode, sal_Int32 const nIndex,
             bool const bParent);
 
-    bool                    getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
+    bool                    getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                                         , SwPaM& rPam
                                         , css::uno::Any *pAny
                                         , css::beans::PropertyState& eState
@@ -91,7 +92,7 @@ namespace SwUnoCursorHelper
                                         { return rUnoCursor.GetContentNode() &&
                                             rUnoCursor.GetPoint()->nContent == rUnoCursor.GetContentNode()->Len();}
 
-    void                        resetCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam);
+    void                        resetCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry, SwPaM& rPam);
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
@@ -217,7 +218,7 @@ namespace SwUnoCursorHelper
     /// @throws css::uno::RuntimeException
     /// @throws css::uno::DeploymentException
     bool SetCursorPropertyValue(
-            SfxItemPropertySimpleEntry const& rEntry,
+            SfxItemPropertyMapEntry const& rEntry,
             css::uno::Any const& rValue,
             SwPaM & rPam, SfxItemSet & rItemSet);
 
