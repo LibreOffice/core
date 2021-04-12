@@ -8,13 +8,11 @@
  */
 
 #include <svx/uiobject.hxx>
-
 #include <svx/svdobj.hxx>
-
-#include <tools/fract.hxx>
-
-#include <memory>
 #include <svx/SvxColorValueSet.hxx>
+#include <tools/fract.hxx>
+#include <vcl/window.hxx>
+#include <memory>
 
 SdrUIObject::~SdrUIObject() {}
 
