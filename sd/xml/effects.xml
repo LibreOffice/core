@@ -349,7 +349,7 @@
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-diagonal-squares" pres:preset-sub-type="left-to-bottom">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
-        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalRight"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalLeft"/>
     </anim:par>
     </anim:par>
     </anim:par>
@@ -357,7 +357,7 @@
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-diagonal-squares" pres:preset-sub-type="left-to-top">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
-        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalLeft" smil:direction="reverse"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalRight" smil:direction="reverse"/>
     </anim:par>
     </anim:par>
     </anim:par>
@@ -365,7 +365,7 @@
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-diagonal-squares" pres:preset-sub-type="right-to-bottom">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
-        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalLeft"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalRight"/>
     </anim:par>
     </anim:par>
     </anim:par>
@@ -373,7 +373,7 @@
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-diagonal-squares" pres:preset-sub-type="right-to-top">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
-        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalRight" smil:direction="reverse"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalLeft" smil:direction="reverse"/>
     </anim:par>
     </anim:par>
     </anim:par>
@@ -1655,7 +1655,7 @@
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-diagonal-squares" pres:preset-sub-type="left-to-bottom">
-        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalRight" smil:mode="out"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalLeft" smil:mode="out" smil:direction="reverse"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
     </anim:par>
     </anim:par>
@@ -1663,7 +1663,7 @@
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-diagonal-squares" pres:preset-sub-type="left-to-top">
-        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalRight" smil:mode="out" smil:direction="reverse"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalRight" smil:mode="out"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
     </anim:par>
     </anim:par>
@@ -1671,7 +1671,7 @@
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-diagonal-squares" pres:preset-sub-type="right-to-bottom">
-        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalLeft" smil:mode="out"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalRight" smil:mode="out" smil:direction="reverse"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
     </anim:par>
     </anim:par>
@@ -1679,7 +1679,7 @@
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-diagonal-squares" pres:preset-sub-type="right-to-top">
-        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalLeft" smil:mode="out" smil:direction="reverse"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="waterfallWipe" smil:subtype="horizontalLeft" smil:mode="out"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
     </anim:par>
     </anim:par>
