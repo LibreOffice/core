@@ -1,7 +1,7 @@
-connectivity/source/inc/dbase/dindexnode.hxx:120
+connectivity/source/inc/dbase/dindexnode.hxx:119
     connectivity::dbase::ONDXPage bNoDelete
     unsigned int
-cui/source/inc/cfg.hxx:233
+cui/source/inc/cfg.hxx:234
     SvxConfigEntry nId
     sal_uInt16
 desktop/source/app/main.c:29
@@ -13,9 +13,6 @@ editeng/source/misc/hangulhanja.cxx:78
 editeng/source/misc/svxacorr.cxx:233
     GetIgnoreTranslWrapper bIsInit
     int
-filter/source/graphicfilter/eps/eps.cxx:140
-    (anonymous namespace)::PSWriter nNextChrSetId
-    sal_uInt8
 include/opencl/openclwrapper.hxx:46
     openclwrapper::GPUEnv mnIsUserCreated
     int
@@ -37,7 +34,7 @@ include/vcl/headbar.hxx:209
 include/vcl/toolkit/dialog.hxx:54
     Dialog mnMousePositioned
     tools::Long
-jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:191
+jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:199
     (anonymous) g_bInGetJavaVM
     sig_atomic_t
 libreofficekit/source/gtk/tilebuffer.hxx:232
@@ -46,22 +43,22 @@ libreofficekit/source/gtk/tilebuffer.hxx:232
 sal/rtl/cipher.cxx:113
     (anonymous namespace)::Cipher_Impl m_algorithm
     rtlCipherAlgorithm
-sc/source/filter/inc/stylesbuffer.hxx:289
+sc/source/filter/inc/stylesbuffer.hxx:288
     oox::xls::ApiAlignmentData mnHorJustifyMethod
     sal_Int32
-sc/source/filter/inc/stylesbuffer.hxx:291
+sc/source/filter/inc/stylesbuffer.hxx:290
     oox::xls::ApiAlignmentData mnVerJustifyMethod
     sal_Int32
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1083
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1084
     (anonymous namespace)::ScPagePreviewCountData nHeaders
     tools::Long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1084
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1085
     (anonymous namespace)::ScPagePreviewCountData nTables
     tools::Long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1086
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1087
     (anonymous namespace)::ScPagePreviewCountData nFooters
     tools::Long
-sc/source/ui/vba/vbahyperlink.hxx:84
+sc/source/ui/vba/vbahyperlink.hxx:83
     ScVbaHyperlink mnType
     tools::Long
 sd/qa/unit/tiledrendering/tiledrendering.cxx:854
@@ -79,7 +76,7 @@ soltools/cpp/cpp.h:121
 svx/source/inc/cell.hxx:202
     sdr::table::Cell mnCellContentType
     css::table::CellContentType
-svx/source/table/tablertfimporter.cxx:56
+svx/source/table/tablertfimporter.cxx:57
     sdr::table::(anonymous namespace)::RTFCellDefault mnRowSpan
     sal_Int32
 sw/source/filter/ww8/docxexport.hxx:98
@@ -94,9 +91,12 @@ sw/source/uibase/inc/tautofmt.hxx:48
 vcl/inc/unx/i18n_ic.hxx:32
     SalI18N_InputContext mbUseable
     int
-vcl/inc/unx/salframe.h:126
+vcl/inc/unx/salframe.h:125
     X11SalFrame mbInputFocus
     int
+vcl/source/filter/eps/eps.cxx:141
+    (anonymous namespace)::PSWriter nNextChrSetId
+    sal_uInt8
 vcl/unx/generic/app/saldata.cxx:449
     EmitFontpathWarning bOnce
     int
@@ -112,6 +112,6 @@ vcl/workben/icontest.cxx:145
 workdir/LexTarget/l10ntools/source/cfglex.cxx:2293
     /home/noel/libo2/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
     int
-writerfilter/source/dmapper/PageBordersHandler.hxx:48
+writerfilter/source/dmapper/PageBordersHandler.hxx:47
     writerfilter::dmapper::PageBordersHandler m_eOffsetFrom
     class SectionPropertyMap::BorderOffsetFrom

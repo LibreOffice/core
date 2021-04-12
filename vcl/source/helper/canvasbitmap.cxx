@@ -111,7 +111,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     m_nBlueIndex(-1),
     m_nAlphaIndex(-1),
     m_nIndexIndex(-1),
-    m_nEndianness(0),
     m_bPalette(false)
 {
     if( m_aBmpEx.IsTransparent() )
@@ -141,28 +140,24 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         case ScanlineFormat::N1BitMsbPal:
             m_bPalette           = true;
             m_nBitsPerInputPixel = 1;
-            m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
             m_aLayout.IsMsbFirst = true;
             break;
 
         case ScanlineFormat::N1BitLsbPal:
             m_bPalette           = true;
             m_nBitsPerInputPixel = 1;
-            m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
             m_aLayout.IsMsbFirst = false;
             break;
 
         case ScanlineFormat::N8BitPal:
             m_bPalette           = true;
             m_nBitsPerInputPixel = 8;
-            m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
             m_aLayout.IsMsbFirst = false; // doesn't matter
             break;
 
         case ScanlineFormat::N24BitTcBgr:
             m_bPalette           = false;
             m_nBitsPerInputPixel = 24;
-            m_nEndianness        = util::Endianness::LITTLE;
             m_aLayout.IsMsbFirst = false; // doesn't matter
             setComponentInfo( static_cast<sal_uInt32>(0xff0000UL),
                               static_cast<sal_uInt32>(0x00ff00UL),
@@ -172,7 +167,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         case ScanlineFormat::N24BitTcRgb:
             m_bPalette           = false;
             m_nBitsPerInputPixel = 24;
-            m_nEndianness        = util::Endianness::LITTLE;
             m_aLayout.IsMsbFirst = false; // doesn't matter
             setComponentInfo( static_cast<sal_uInt32>(0x0000ffUL),
                               static_cast<sal_uInt32>(0x00ff00UL),
@@ -183,7 +177,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 32;
-            m_nEndianness        = util::Endianness::LITTLE;
             m_aLayout.IsMsbFirst = false; // doesn't matter
 
             m_aComponentTags.realloc(4);
@@ -211,7 +204,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 32;
-            m_nEndianness        = util::Endianness::LITTLE;
             m_aLayout.IsMsbFirst = false; // doesn't matter
 
             m_aComponentTags.realloc(4);
@@ -239,7 +231,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 32;
-            m_nEndianness        = util::Endianness::LITTLE;
             m_aLayout.IsMsbFirst = false; // doesn't matter
 
             m_aComponentTags.realloc(4);
@@ -267,7 +258,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 32;
-            m_nEndianness        = util::Endianness::LITTLE;
             m_aLayout.IsMsbFirst = false; // doesn't matter
 
             m_aComponentTags.realloc(4);
@@ -294,7 +284,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         case ScanlineFormat::N32BitTcMask:
             m_bPalette           = false;
             m_nBitsPerInputPixel = 32;
-            m_nEndianness        = util::Endianness::LITTLE;
             m_aLayout.IsMsbFirst = false; // doesn't matter
             setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
                               m_pBmpAcc->GetColorMask().GetGreenMask(),
@@ -339,24 +328,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
 
     m_aComponentBitCounts.realloc(m_aComponentBitCounts.getLength()+1);
     m_aComponentBitCounts[m_aComponentBitCounts.getLength()-1] = m_aBmpEx.IsAlpha() ? 8 : 1;
-
-    if( m_nEndianness == util::Endianness::BIG )
-    {
-        // put alpha in front of all the color channels
-        sal_Int8*  pTags  =m_aComponentTags.getArray();
-        sal_Int32* pCounts=m_aComponentBitCounts.getArray();
-        std::rotate(pTags,
-                    pTags+m_aComponentTags.getLength()-1,
-                    pTags+m_aComponentTags.getLength());
-        std::rotate(pCounts,
-                    pCounts+m_aComponentBitCounts.getLength()-1,
-                    pCounts+m_aComponentBitCounts.getLength());
-        ++m_nRedIndex;
-        ++m_nGreenIndex;
-        ++m_nBlueIndex;
-        ++m_nIndexIndex;
-        m_nAlphaIndex=0;
-    }
 
     // always add a full byte to the pixel size, otherwise
     // pixel packing hell breaks loose.
@@ -984,8 +955,7 @@ uno::Sequence< ::sal_Int32 > SAL_CALL VclCanvasBitmap::getComponentBitCounts(  )
 
 sal_Int8 SAL_CALL VclCanvasBitmap::getEndianness(  )
 {
-    SolarMutexGuard aGuard;
-    return m_nEndianness;
+    return util::Endianness::LITTLE;
 }
 
 uno::Sequence<double> SAL_CALL VclCanvasBitmap::convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,

@@ -50,7 +50,6 @@ namespace vcl::unotools
         sal_Int32                                      m_nBlueIndex;
         sal_Int32                                      m_nAlphaIndex;
         sal_Int32                                      m_nIndexIndex;
-        sal_Int8                                       m_nEndianness;
         bool                                           m_bPalette;
 
         SAL_DLLPRIVATE void setComponentInfo( sal_uInt32 redShift, sal_uInt32 greenShift, sal_uInt32 blueShift );
