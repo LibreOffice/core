@@ -13,6 +13,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/window.hxx>
 
 #include <set>
 

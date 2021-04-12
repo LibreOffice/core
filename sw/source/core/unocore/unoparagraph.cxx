@@ -106,7 +106,7 @@ SwParaSelection::~SwParaSelection()
 static beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             const SwTextNode& rTextNode,
                             const SwAttrSet** ppSet,
-                            const SfxItemPropertySimpleEntry& rEntry,
+                            const SfxItemPropertyMapEntry& rEntry,
                             bool &rAttrSetFetched );
 
 class SwXParagraph::Impl
@@ -173,7 +173,7 @@ public:
 
     /// @throws uno::RuntimeException
     void GetSinglePropertyValue_Impl(
-        const SfxItemPropertySimpleEntry& rEntry,
+        const SfxItemPropertyMapEntry& rEntry,
         const SfxItemSet& rSet,
         uno::Any& rAny ) const;
 
@@ -391,7 +391,7 @@ void SwXParagraph::Impl::SetPropertyValues_Impl(
     uno::Sequence< beans::PropertyValue > aValues( rPropertyNames.getLength() );
     for (sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
-        SfxItemPropertySimpleEntry const*const pEntry =
+        SfxItemPropertyMapEntry const*const pEntry =
             rMap.getByName( pPropertyNames[nProp] );
         if (!pEntry)
         {
@@ -434,7 +434,7 @@ void SAL_CALL SwXParagraph::setPropertyValues(
 
 // Support for DrawingLayer FillStyles for GetPropertyValue() usages
 void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
-    const SfxItemPropertySimpleEntry& rEntry,
+    const SfxItemPropertyMapEntry& rEntry,
     const SfxItemSet& rSet,
     uno::Any& rAny ) const
 {
@@ -535,7 +535,7 @@ uno::Sequence< uno::Any > SwXParagraph::Impl::GetPropertyValues_Impl(
     const SwAttrSet& rAttrSet( rTextNode.GetSwAttrSet() );
     for (sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
-        SfxItemPropertySimpleEntry const*const pEntry =
+        SfxItemPropertyMapEntry const*const pEntry =
             rMap.getByName( pPropertyNames[nProp] );
         if (!pEntry)
         {
@@ -648,7 +648,7 @@ SwXParagraph::setPropertyValuesTolerant(
         {
             pFailed[ nFailed ].Name = pProp[i];
 
-            SfxItemPropertySimpleEntry const*const pEntry =
+            SfxItemPropertyMapEntry const*const pEntry =
                 rPropMap.getByName( pProp[i] );
             if (!pEntry)
             {
@@ -757,7 +757,7 @@ SwXParagraph::Impl::GetPropertyValuesTolerant_Impl(
         {
             rResult.Name = rProp;
 
-            SfxItemPropertySimpleEntry const*const pEntry =
+            SfxItemPropertyMapEntry const*const pEntry =
                 rPropMap.getByName( rProp );
             if (!pEntry)  // property available?
             {
@@ -903,7 +903,7 @@ SwXParagraph::removeVetoableChangeListener(
 static beans::PropertyState lcl_SwXParagraph_getPropertyState(
     const SwTextNode& rTextNode,
     const SwAttrSet** ppSet,
-    const SfxItemPropertySimpleEntry& rEntry,
+    const SfxItemPropertyMapEntry& rEntry,
     bool &rAttrSetFetched)
 {
     beans::PropertyState eRet(beans::PropertyState_DEFAULT_VALUE);
@@ -1013,7 +1013,7 @@ SwXParagraph::getPropertyState(const OUString& rPropertyName)
     SwTextNode & rTextNode(m_pImpl->GetTextNodeOrThrow());
 
     const SwAttrSet* pSet = nullptr;
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
@@ -1045,7 +1045,7 @@ SwXParagraph::getPropertyStates(
     for (sal_Int32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd;
             ++i, ++pStates, ++pNames)
     {
-        SfxItemPropertySimpleEntry const*const pEntry =
+        SfxItemPropertyMapEntry const*const pEntry =
             rMap.getByName( *pNames );
         if (!pEntry)
         {
@@ -1086,7 +1086,7 @@ SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
 
     // select paragraph
     SwParaSelection aParaSel( aCursor );
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
     {
@@ -1169,7 +1169,7 @@ SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
         return aRet;
     }
 
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {

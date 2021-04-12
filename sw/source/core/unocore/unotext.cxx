@@ -1120,7 +1120,7 @@ SwXText::getPropertyValue(
         throw  uno::RuntimeException();
     }
 
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {

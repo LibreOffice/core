@@ -1488,16 +1488,16 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     {
         const SfxItemPropertyMap& rPropMap =
                     aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_CURSOR )->getPropertyMap();
-        for ( const auto& rPair : rPropMap.getPropertyEntries() )
+        for ( const auto pEntry : rPropMap.getPropertyEntries() )
         {
-            const SfxPoolItem* pItem = pSet->GetItem( rPair.second.nWID );
+            const SfxPoolItem* pItem = pSet->GetItem( pEntry->nWID );
             if ( pItem )
             {
                 uno::Any aVal;
-                pItem->QueryValue( aVal, rPair.second.nMemberId );
+                pItem->QueryValue( aVal, pEntry->nMemberId );
 
                 PropertyValue rPropVal;
-                rPropVal.Name = rPair.first;
+                rPropVal.Name = pEntry->aName;
                 rPropVal.Value = aVal;
                 rPropVal.Handle = -1;
                 rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
@@ -1680,18 +1680,18 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
 
             const SfxItemPropertyMap& rPropMap =
                     aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_CURSOR )->getPropertyMap();
-            for ( const auto& rPair : rPropMap.getPropertyEntries() )
+            for ( const auto pEntry : rPropMap.getPropertyEntries() )
             {
                 const SfxPoolItem* pItem( nullptr );
                 // #i82637# - Found character attributes, whose value equals the value of
                 // the corresponding default character attributes, are excluded.
-                if ( aSet.GetItemState( rPair.second.nWID, true, &pItem ) == SfxItemState::SET )
+                if ( aSet.GetItemState( pEntry->nWID, true, &pItem ) == SfxItemState::SET )
                 {
                     uno::Any aVal;
-                    pItem->QueryValue( aVal, rPair.second.nMemberId );
+                    pItem->QueryValue( aVal, pEntry->nMemberId );
 
                     PropertyValue rPropVal;
-                    rPropVal.Name = rPair.first;
+                    rPropVal.Name = pEntry->aName;
                     rPropVal.Value = aVal;
                     rPropVal.Handle = -1;
                     rPropVal.State = PropertyState_DIRECT_VALUE;
@@ -1776,7 +1776,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
     {
         const SfxItemPropertyMapEntry* pPropMap(
                 aSwMapProvider.GetPropertyMapEntries( PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE ) );
-        while ( !pPropMap->aName.empty() )
+        while ( !pPropMap->aName.isEmpty() )
         {
             const SfxPoolItem* pItem = pSet->GetItem( pPropMap->nWID );
             if ( pItem )

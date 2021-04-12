@@ -867,7 +867,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pCur)
         throw UnknownPropertyException(rPropertyName);
     else if (pCur->nFlags & PropertyAttribute::READONLY)
@@ -1022,7 +1022,7 @@ uno::Any SAL_CALL SwXMailMerge::getPropertyValue(
 
     Any aRet;
 
-    const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pCur)
         throw UnknownPropertyException(rPropertyName);
 
@@ -1073,7 +1073,7 @@ void SAL_CALL SwXMailMerge::addPropertyChangeListener(
     SolarMutexGuard aGuard;
     if (!m_bDisposing && rListener.is())
     {
-        const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+        const SfxItemPropertyMapEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
         if (!pCur)
             throw UnknownPropertyException(rPropertyName);
         m_aPropListeners.addInterface( pCur->nWID, rListener );
@@ -1087,7 +1087,7 @@ void SAL_CALL SwXMailMerge::removePropertyChangeListener(
     SolarMutexGuard aGuard;
     if (!m_bDisposing && rListener.is())
     {
-        const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+        const SfxItemPropertyMapEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
         if (!pCur)
             throw UnknownPropertyException(rPropertyName);
         m_aPropListeners.removeInterface( pCur->nWID, rListener );

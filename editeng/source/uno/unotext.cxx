@@ -427,7 +427,7 @@ void SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyName, const
     {
         CheckSelection( maSelection, pForwarder );
 
-        const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName );
+        const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName );
         if ( pMap )
         {
             ESelection aSel( GetSelection() );
@@ -477,7 +477,7 @@ void SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyName, const
     throw beans::UnknownPropertyException(PropertyName);
 }
 
-void SvxUnoTextRangeBase::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet )
+void SvxUnoTextRangeBase::setPropertyValue( const SfxItemPropertyMapEntry* pMap, const uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet )
 {
     if(!SetPropertyValueHelper( pMap, rValue, rNewSet, &rSelection, GetEditSource() ))
     {
@@ -488,7 +488,7 @@ void SvxUnoTextRangeBase::setPropertyValue( const SfxItemPropertySimpleEntry* pM
     }
 }
 
-bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemPropertySimpleEntry* pMap, const uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL*/ )
+bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemPropertyMapEntry* pMap, const uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL*/ )
 {
     switch( pMap->nWID )
     {
@@ -598,7 +598,7 @@ uno::Any SvxUnoTextRangeBase::_getPropertyValue(const OUString& PropertyName, sa
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
     {
-        const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName );
+        const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName );
         if( pMap )
         {
             std::unique_ptr<SfxItemSet> pAttribs;
@@ -619,7 +619,7 @@ uno::Any SvxUnoTextRangeBase::_getPropertyValue(const OUString& PropertyName, sa
     throw beans::UnknownPropertyException(PropertyName);
 }
 
-void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pMap, uno::Any& rAny, const SfxItemSet& rSet )
+void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMapEntry* pMap, uno::Any& rAny, const SfxItemSet& rSet )
 {
     switch( pMap->nWID )
     {
@@ -659,7 +659,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
     }
 }
 
-bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, const SfxItemPropertySimpleEntry* pMap, uno::Any& aAny, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL */ )
+bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, const SfxItemPropertyMapEntry* pMap, uno::Any& aAny, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL */ )
 {
     switch( pMap->nWID )
     {
@@ -778,7 +778,7 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
 
     for( ; nCount; nCount--, pPropertyNames++, pValues++ )
     {
-        const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( *pPropertyNames );
+        const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry( *pPropertyNames );
 
         if( pMap )
         {
@@ -893,7 +893,7 @@ uno::Sequence< uno::Any > SvxUnoTextRangeBase::_getPropertyValues( const uno::Se
 
         for( ; nCount; nCount--, pPropertyNames++, pValues++ )
         {
-            const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( *pPropertyNames );
+            const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry( *pPropertyNames );
             if( pMap )
             {
                 getPropertyValue( pMap, *pValues, *pAttribs );
@@ -926,7 +926,7 @@ const sal_uInt16 aSvxUnoFontDescriptorWhichMap[] = { EE_CHAR_FONTINFO, EE_CHAR_F
                                                   EE_CHAR_UNDERLINE, EE_CHAR_WEIGHT, EE_CHAR_STRIKEOUT, EE_CHAR_CASEMAP,
                                                   EE_CHAR_WLM, 0 };
 
-beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara)
+beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara)
 {
     if ( pMap )
     {
@@ -1051,7 +1051,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
         beans::PropertyState* pState = aRet.getArray();
         for( const OUString& rName : PropertyName )
         {
-            const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( rName );
+            const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry( rName );
             if( !_getOnePropertyStates(pSet.get(), pMap, *pState++) )
             {
                 throw beans::UnknownPropertyException(rName);
@@ -1062,7 +1062,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
     return aRet;
 }
 
-bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertySimpleEntry* pMap, beans::PropertyState& rState)
+bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertyMapEntry* pMap, beans::PropertyState& rState)
 {
     bool bUnknownPropertyFound = false;
     if(pSet && pMap)
@@ -1161,7 +1161,7 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
 
     if( pForwarder )
     {
-        const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( PropertyName );
+        const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry( PropertyName );
         if ( pMap )
         {
             CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
@@ -1173,7 +1173,7 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
     throw beans::UnknownPropertyException(PropertyName);
 }
 
-void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara )
+void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara )
 {
     do
     {
@@ -1221,7 +1221,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
     {
-        const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( aPropertyName );
+        const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry( aPropertyName );
         if( pMap )
         {
             SfxItemPool* pPool = pForwarder->GetPool();
@@ -1268,9 +1268,9 @@ void SAL_CALL SvxUnoTextRangeBase::setAllPropertiesToDefault()
 
     if( pForwarder )
     {
-        for (auto & entry : mpPropSet->getPropertyMap().getPropertyEntries())
+        for (const SfxItemPropertyMapEntry* entry : mpPropSet->getPropertyMap().getPropertyEntries())
         {
-            _setPropertyToDefault( pForwarder, &entry.second, -1 );
+            _setPropertyToDefault( pForwarder, entry, -1 );
         }
     }
 }
@@ -1970,7 +1970,7 @@ static void SvxPropertyValuesToItemSet(
 {
     for (const beans::PropertyValue& rProp : rPropertyValues)
     {
-        const SfxItemPropertySimpleEntry *pEntry = pPropSet->getPropertyMap().getByName( rProp.Name );
+        const SfxItemPropertyMapEntry *pEntry = pPropSet->getPropertyMap().getByName( rProp.Name );
         if (!pEntry)
             throw beans::UnknownPropertyException( "Unknown property: " + rProp.Name, static_cast < cppu::OWeakObject * > ( nullptr ) );
         // Note: there is no need to take special care of the properties

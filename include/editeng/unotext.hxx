@@ -271,30 +271,30 @@ protected:
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    css::beans::PropertyState _getPropertyState( const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara = -1 );
+    css::beans::PropertyState _getPropertyState( const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara = -1 );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    css::beans::PropertyState _getPropertyState(  std::u16string_view PropertyName, sal_Int32 nPara = -1 );
+    css::beans::PropertyState _getPropertyState( std::u16string_view PropertyName, sal_Int32 nPara = -1 );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::beans::PropertyState > _getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName, sal_Int32 nPara = -1  );
     // returns true if property found or false if unknown property
-    static bool _getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertySimpleEntry* pMap, css::beans::PropertyState& rState);
+    static bool _getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertyMapEntry* pMap, css::beans::PropertyState& rState);
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
     void _setPropertyToDefault( const OUString& PropertyName, sal_Int32 nPara = -1 );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    void _setPropertyToDefault( SvxTextForwarder* pForwarder, const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara );
+    void _setPropertyToDefault( SvxTextForwarder* pForwarder, const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara );
     void SetEditSource( SvxEditSource* _pEditSource ) throw();
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    void getPropertyValue( const SfxItemPropertySimpleEntry* pMap, css::uno::Any& rAny, const SfxItemSet& rSet );
+    void getPropertyValue( const SfxItemPropertyMapEntry* pMap, css::uno::Any& rAny, const SfxItemSet& rSet );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::IllegalArgumentException
-    void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet );
+    void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet );
 
     SvxUnoTextRangeBase(const SvxItemPropertySet* _pSet);
     SvxUnoTextRangeBase(const SvxEditSource* pSource, const SvxItemPropertySet* _pSet);
@@ -323,9 +323,9 @@ public:
     const SvxItemPropertySet*   getPropertySet() const throw() { return mpPropSet; }
     SvxEditSource*              GetEditSource() const throw() { return mpEditSource.get(); }
 
-    static bool SetPropertyValueHelper( const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = nullptr, SvxEditSource* pEditSource = nullptr );
+    static bool SetPropertyValueHelper( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = nullptr, SvxEditSource* pEditSource = nullptr );
     /// @throws css::uno::RuntimeException
-    static bool GetPropertyValueHelper(  SfxItemSet const & rSet, const SfxItemPropertySimpleEntry* pMap, css::uno::Any& aAny, const ESelection* pSelection = nullptr,  SvxEditSource* pEditSource = nullptr  );
+    static bool GetPropertyValueHelper(  SfxItemSet const & rSet, const SfxItemPropertyMapEntry* pMap, css::uno::Any& aAny, const ESelection* pSelection = nullptr,  SvxEditSource* pEditSource = nullptr  );
 
     void attachField( std::unique_ptr<SvxFieldData> pData ) throw();
 

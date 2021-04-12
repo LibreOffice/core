@@ -37,9 +37,10 @@ using namespace com::sun::star::uno;
 
 SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries )
 {
-    while( !pEntries->aName.empty() )
+    m_aMap.reserve(128);
+    while( !pEntries->aName.isEmpty() )
     {
-        m_aMap.emplace( pEntries->aName, *pEntries );
+        m_aMap.insert( pEntries );
         ++pEntries;
     }
 }
@@ -50,12 +51,23 @@ SfxItemPropertyMap::~SfxItemPropertyMap()
 {
 }
 
-const SfxItemPropertySimpleEntry* SfxItemPropertyMap::getByName( std::u16string_view rName ) const
+const SfxItemPropertyMapEntry* SfxItemPropertyMap::getByName( std::u16string_view rName ) const
 {
-    auto aIter = m_aMap.find(rName);
-    if( aIter == m_aMap.end() )
+    struct Compare
+    {
+        bool operator() ( const SfxItemPropertyMapEntry* lhs, std::u16string_view rhs ) const
+        {
+            return lhs->aName < rhs;
+        }
+        bool operator() ( std::u16string_view lhs, const SfxItemPropertyMapEntry* rhs ) const
+        {
+            return lhs < rhs->aName;
+        }
+    };
+    auto it = std::lower_bound(m_aMap.begin(), m_aMap.end(), rName, Compare());
+    if (it == m_aMap.end() || Compare()(rName, *it))
         return nullptr;
-    return &aIter->second;
+    return *it;
 }
 
 uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
@@ -65,10 +77,9 @@ uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
         m_aPropSeq.realloc( m_aMap.size() );
         beans::Property* pPropArray = m_aPropSeq.getArray();
         sal_uInt32 n = 0;
-        for( const auto& rPair : m_aMap )
+        for( const SfxItemPropertyMapEntry* pEntry : m_aMap )
         {
-            const SfxItemPropertySimpleEntry* pEntry = &rPair.second;
-            pPropArray[n].Name = rPair.first;
+            pPropArray[n].Name = pEntry->aName;
             pPropArray[n].Handle = pEntry->nWID;
             pPropArray[n].Type = pEntry->aType;
             pPropArray[n].Attributes =
@@ -80,12 +91,11 @@ uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
     return m_aPropSeq;
 }
 
-beans::Property SfxItemPropertyMap::getPropertyByName( const OUString & rName ) const
+beans::Property SfxItemPropertyMap::getPropertyByName( const OUString& rName ) const
 {
-    auto aIter = m_aMap.find(rName);
-    if( aIter == m_aMap.end() )
+    const SfxItemPropertyMapEntry* pEntry = getByName(rName);
+    if( !pEntry )
         throw UnknownPropertyException(rName);
-    const SfxItemPropertySimpleEntry* pEntry = &aIter->second;
     beans::Property aProp;
     aProp.Name = rName;
     aProp.Handle = pEntry->nWID;
@@ -96,20 +106,7 @@ beans::Property SfxItemPropertyMap::getPropertyByName( const OUString & rName ) 
 
 bool SfxItemPropertyMap::hasPropertyByName( std::u16string_view rName ) const
 {
-    auto aIter = m_aMap.find(rName);
-    return aIter != m_aMap.end();
-}
-
-void SfxItemPropertyMap::mergeProperties( const uno::Sequence< beans::Property >& rPropSeq )
-{
-    for( const beans::Property& rProp : rPropSeq )
-    {
-        SfxItemPropertySimpleEntry aTemp(
-            sal::static_int_cast< sal_Int16 >( rProp.Handle ), //nWID
-            rProp.Type, //aType
-            rProp.Attributes); //nFlags
-        m_aMap[rProp.Name] = aTemp;
-    }
+    return getByName(rName) != nullptr;
 }
 
 sal_uInt32 SfxItemPropertyMap::getSize() const
@@ -121,7 +118,7 @@ SfxItemPropertySet::~SfxItemPropertySet()
 {
 }
 
-void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
+void SfxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry& rEntry,
             const SfxItemSet& rSet, Any& rAny ) const
 {
     // get the SfxPoolItem
@@ -153,7 +150,7 @@ void SfxItemPropertySet::getPropertyValue( const OUString &rName,
                                            const SfxItemSet& rSet, Any& rAny ) const
 {
     // detect which-id
-    const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
+    const SfxItemPropertyMapEntry* pEntry = m_aMap.getByName( rName );
     if ( !pEntry )
         throw UnknownPropertyException(rName);
     getPropertyValue( *pEntry,rSet, rAny );
@@ -167,7 +164,7 @@ Any SfxItemPropertySet::getPropertyValue( const OUString &rName,
     return aVal;
 }
 
-void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
+void SfxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry& rEntry,
                                            const Any& aVal,
                                            SfxItemSet& rSet ) const
 {
@@ -196,7 +193,7 @@ void SfxItemPropertySet::setPropertyValue( const OUString &rName,
                                            const Any& aVal,
                                            SfxItemSet& rSet ) const
 {
-    const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
+    const SfxItemPropertyMapEntry* pEntry = m_aMap.getByName( rName );
     if ( !pEntry )
     {
         throw UnknownPropertyException(rName);
@@ -204,7 +201,7 @@ void SfxItemPropertySet::setPropertyValue( const OUString &rName,
     setPropertyValue(*pEntry, aVal, rSet);
 }
 
-PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertySimpleEntry& rEntry, const SfxItemSet& rSet) const
+PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertyMapEntry& rEntry, const SfxItemSet& rSet) const
     throw()
 {
     PropertyState eRet = PropertyState_DIRECT_VALUE;
@@ -225,7 +222,7 @@ PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, cons
     PropertyState eRet = PropertyState_DIRECT_VALUE;
 
     // Get WhichId
-    const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
+    const SfxItemPropertyMapEntry* pEntry = m_aMap.getByName( rName );
     if( !pEntry || !pEntry->nWID )
     {
         throw UnknownPropertyException(rName);
@@ -278,11 +275,22 @@ sal_Bool SAL_CALL SfxItemPropertySetInfo::hasPropertyByName( const OUString& rNa
     return m_aOwnMap.hasPropertyByName( rName );
 }
 
-SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo( const SfxItemPropertyMapEntry *pMap,
+SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo( const SfxItemPropertyMapEntry *pEntries,
                                                       const Sequence<Property>& rPropSeq )
-    : aExtMap( pMap )
 {
-    aExtMap.mergeProperties( rPropSeq );
+    while( !pEntries->aName.isEmpty() )
+    {
+        maMap.emplace( pEntries->aName, *pEntries );
+        ++pEntries;
+    }
+    for( const auto & rProp : rPropSeq )
+    {
+        SfxItemPropertySimpleEntry aTemp(
+            sal::static_int_cast< sal_Int16 >( rProp.Handle ), //nWID
+            rProp.Type, //aType
+            rProp.Attributes); //nFlags
+        maMap[rProp.Name] = aTemp;
+    }
 }
 
 SfxExtItemPropertySetInfo::~SfxExtItemPropertySetInfo()
@@ -291,17 +299,43 @@ SfxExtItemPropertySetInfo::~SfxExtItemPropertySetInfo()
 
 Sequence< Property > SAL_CALL SfxExtItemPropertySetInfo::getProperties(  )
 {
-    return aExtMap.getProperties();
+    if( !m_aPropSeq.hasElements() )
+    {
+        m_aPropSeq.realloc( maMap.size() );
+        beans::Property* pPropArray = m_aPropSeq.getArray();
+        sal_uInt32 n = 0;
+        for( const auto& rPair : maMap )
+        {
+            const SfxItemPropertySimpleEntry& rEntry = rPair.second;
+            pPropArray[n].Name = rPair.first;
+            pPropArray[n].Handle = rEntry.nWID;
+            pPropArray[n].Type = rEntry.aType;
+            pPropArray[n].Attributes =
+                sal::static_int_cast< sal_Int16 >(rEntry.nFlags);
+            n++;
+        }
+    }
+
+    return m_aPropSeq;
 }
 
 Property SAL_CALL SfxExtItemPropertySetInfo::getPropertyByName( const OUString& rPropertyName )
 {
-    return aExtMap.getPropertyByName( rPropertyName );
+    auto aIter = maMap.find(rPropertyName);
+    if( aIter == maMap.end() )
+        throw UnknownPropertyException(rPropertyName);
+    const SfxItemPropertySimpleEntry& rEntry = aIter->second;
+    beans::Property aProp;
+    aProp.Name = rPropertyName;
+    aProp.Handle = rEntry.nWID;
+    aProp.Type = rEntry.aType;
+    aProp.Attributes = sal::static_int_cast< sal_Int16 >(rEntry.nFlags);
+    return aProp;
 }
 
 sal_Bool SAL_CALL SfxExtItemPropertySetInfo::hasPropertyByName( const OUString& rPropertyName )
 {
-    return aExtMap.hasPropertyByName( rPropertyName );
+    return maMap.find(rPropertyName) != maMap.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
