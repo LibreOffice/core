@@ -59,7 +59,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
-#include <com/sun/star/drawing/QRCode.hpp>
+#include <com/sun/star/drawing/BarCode.hpp>
 #include <com/sun/star/drawing/QRCodeErrorCorrection.hpp>
 #include <com/sun/star/drawing/XShapes3.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -1365,16 +1365,16 @@ void XMLShapeExport::ImpExportQRCode(const uno::Reference<drawing::XShape>& xSha
 {
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
 
-    uno::Any aAny = xPropSet->getPropertyValue("QRCodeProperties");
+    uno::Any aAny = xPropSet->getPropertyValue("BarCodeProperties");
 
-    css::drawing::QRCode aQRCode;
-    if(!(aAny >>= aQRCode))
+    css::drawing::BarCode aBarCode;
+    if(!(aAny >>= aBarCode))
         return;
 
-    mrExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_STRING_VALUE, aQRCode.Payload);
+    mrExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_STRING_VALUE, aBarCode.Payload);
     /* Export QR Code as per customised schema, @see OpenDocument-schema-v1.3+libreoffice */
     OUString temp;
-    switch(aQRCode.ErrorCorrection){
+    switch(aBarCode.ErrorCorrection){
         case css::drawing::QRCodeErrorCorrection::LOW :
             temp = "low";
             break;
@@ -1389,9 +1389,10 @@ void XMLShapeExport::ImpExportQRCode(const uno::Reference<drawing::XShape>& xSha
             break;
     }
     mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_ERROR_CORRECTION, temp);
-    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_BORDER, OUString::number(aQRCode.Border));
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_BORDER, OUStringBuffer(20).append(aBarCode.Border).makeStringAndClear());
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_TYPE, OUStringBuffer(20).append(aBarCode.Type).makeStringAndClear());
 
-    SvXMLElementExport aQRCodeElement(mrExport, XML_NAMESPACE_LO_EXT, XML_QRCODE, true,
+    SvXMLElementExport aBarCodeElement(mrExport, XML_NAMESPACE_LO_EXT, XML_QRCODE, true,
                                             true);
 }
 

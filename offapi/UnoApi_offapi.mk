@@ -2331,7 +2331,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	PolygonKind \
 	Position3D \
 	ProjectionMode \
-	QRCode \
+	BarCode \
 	QRCodeErrorCorrection \
 	RectanglePoint \
 	ShadeMode \
