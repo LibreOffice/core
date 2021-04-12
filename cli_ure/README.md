@@ -3,4 +3,5 @@
 Support assemblies and tools for the MS .NET UNO binding.
 
 ## See also
-`git:cli\_ure/readme.txt`
+
+`[git:cli_ure/readme.txt]`
