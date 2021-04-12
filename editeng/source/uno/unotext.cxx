@@ -1270,7 +1270,7 @@ void SAL_CALL SvxUnoTextRangeBase::setAllPropertiesToDefault()
     {
         for (auto & entry : mpPropSet->getPropertyMap().getPropertyEntries())
         {
-            _setPropertyToDefault( pForwarder, &entry, -1 );
+            _setPropertyToDefault( pForwarder, &entry.second, -1 );
         }
     }
 }

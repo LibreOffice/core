@@ -114,7 +114,6 @@ struct SfxItemPropertyNamedEntry : public SfxItemPropertySimpleEntry
 }
 
 };
-typedef std::vector< SfxItemPropertyNamedEntry > PropertyEntryVector_t;
 class SVL_DLLPUBLIC SfxItemPropertyMap
 {
     std::unordered_map< std::u16string_view,
@@ -132,7 +131,8 @@ public:
     bool hasPropertyByName( std::u16string_view rName ) const;
 
     void mergeProperties( const css::uno::Sequence< css::beans::Property >& rPropSeq );
-    PropertyEntryVector_t getPropertyEntries() const;
+    const std::unordered_map< std::u16string_view,
+                        SfxItemPropertySimpleEntry >& getPropertyEntries() const { return m_aMap; }
     sal_uInt32 getSize() const;
 
 };
