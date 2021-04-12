@@ -10350,7 +10350,6 @@ sfx2/inc/sidebar/ContextChangeBroadcaster.hxx
 sfx2/inc/sidebar/ContextList.hxx
 sfx2/inc/sidebar/ControllerFactory.hxx
 sfx2/inc/sidebar/DeckLayouter.hxx
-sfx2/inc/sidebar/DrawHelper.hxx
 sfx2/inc/sidebar/PanelDescriptor.hxx
 sfx2/inc/sidebar/PanelTitleBar.hxx
 sfx2/inc/sidebar/SidebarToolBox.hxx
@@ -10563,7 +10562,6 @@ sfx2/source/sidebar/Deck.cxx
 sfx2/source/sidebar/DeckDescriptor.cxx
 sfx2/source/sidebar/DeckLayouter.cxx
 sfx2/source/sidebar/DeckTitleBar.cxx
-sfx2/source/sidebar/DrawHelper.cxx
 sfx2/source/sidebar/FocusManager.cxx
 sfx2/source/sidebar/IContextChangeReceiver.cxx
 sfx2/source/sidebar/ILayoutableWindow.cxx

@@ -83,13 +83,6 @@ public:
     TOOLS_DLLPUBLIC friend bool operator> ( const Fraction& rVal1, const Fraction& rVal2 );
     TOOLS_DLLPUBLIC friend bool operator<=( const Fraction& rVal1, const Fraction& rVal2 );
     TOOLS_DLLPUBLIC friend bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
-
-    static Fraction createInvalid()
-    {
-        Fraction aFraction;
-        aFraction.mbValid = false;
-        return aFraction;
-    }
 };
 
 TOOLS_DLLPUBLIC Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 );

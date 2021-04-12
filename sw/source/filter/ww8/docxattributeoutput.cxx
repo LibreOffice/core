@@ -4876,14 +4876,6 @@ void DocxAttributeOutput::WriteSrcRect(
          XML_b, OString::number(bottom) );
 }
 
-void DocxAttributeOutput::PopRelIdCache()
-{
-    if (!m_aRelIdCache.empty())
-        m_aRelIdCache.pop();
-    if (!m_aSdrRelIdCache.empty())
-        m_aSdrRelIdCache.pop();
-}
-
 void DocxAttributeOutput::PushRelIdCache()
 {
     m_aRelIdCache.emplace();

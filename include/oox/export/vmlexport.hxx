@@ -67,8 +67,6 @@ public:
     virtual void WriteVMLTextBox(css::uno::Reference<css::drawing::XShape> xShape) = 0;
     /// Look up the RelId of a graphic based on its checksum.
     virtual OUString FindRelId(BitmapChecksum nChecksum) = 0;
-    /// Look up the filename of a graphic based on its checksum.
-    virtual OUString FindFileName(BitmapChecksum nChecksum) = 0;
     /// Store the RelId and filename of a graphic based on its checksum.
     virtual void CacheRelId(BitmapChecksum nChecksum, const OUString& rRelId, const OUString& rFileName) = 0;
 protected:

@@ -60,7 +60,6 @@ class ToolBarManagerImpl
 {
 public:
     virtual ~ToolBarManagerImpl() = default;
-    virtual void Init() = 0;
     virtual void Destroy() = 0;
     virtual css::uno::Reference<css::awt::XWindow> GetInterface() = 0;
     virtual css::uno::Reference<css::frame::XStatusListener> CreateToolBoxController(

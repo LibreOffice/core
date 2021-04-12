@@ -363,7 +363,6 @@ public:
     void WriteFinalBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void PushRelIdCache();
-    void PopRelIdCache();
     /// End possibly opened paragraph sdt block.
     void EndParaSdtBlock();
 

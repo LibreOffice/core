@@ -468,7 +468,6 @@ public:
     OUString GetUniqueGrfName() const;
     OUString GetUniqueOLEName() const;
     OUString GetUniqueFrameName() const;
-    OUString GetUniqueShapeName() const;
 
     /// Jump to named Fly (graphic/OLE).
     bool GotoFly( const OUString& rName, FlyCntType eType,

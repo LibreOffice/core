@@ -149,16 +149,6 @@ public:
         OSL_ASSERT( !m_bAddedToTaskPaneList );
     }
 
-    virtual void Init() override
-    {
-        vcl::Window* pWindow = m_pToolBar;
-        while ( pWindow && !pWindow->IsSystemWindow() )
-            pWindow = pWindow->GetParent();
-
-        if ( pWindow )
-            static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( m_pToolBar );
-    }
-
     virtual void Destroy() override
     {
         OSL_ASSERT( m_pToolBar != nullptr );
@@ -413,8 +403,6 @@ public:
     , m_pManager(nullptr)
     , m_nCurrentId(0)
     {}
-
-    virtual void Init() override {}
 
     virtual void Destroy() override {}
 
