@@ -236,13 +236,13 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
     mbSignatureLineIsSigned = false;
     mpSignatureLineUnsignedGraphic = rSource.mpSignatureLineUnsignedGraphic;
 
-    if(rSource.mpQrCode)
+    if(rSource.mpBarCode)
     {
-        mpQrCode = std::make_unique<css::drawing::QRCode>(*rSource.mpQrCode);
+        mpBarCode = std::make_unique<css::drawing::BarCode>(*rSource.mpBarCode);
     }
     else
     {
-        mpQrCode.reset();
+        mpBarCode.reset();
     }
 
     if (mbIsSignatureLine && rSource.mpSignatureLineUnsignedGraphic)

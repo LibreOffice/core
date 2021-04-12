@@ -65,7 +65,7 @@
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/drawing/QRCode.hpp>
+#include <com/sun/star/drawing/BarCode.hpp>
 
 #include <editeng/unoprnms.hxx>
 #include <svx/svddef.hxx>
@@ -464,7 +464,7 @@
     { u"" UNO_NAME_GRAPHOBJ_SIGNATURELINE_CAN_ADD_COMMENT, OWN_ATTR_SIGNATURELINE_CAN_ADD_COMMENT, cppu::UnoType<bool>::get(), 0, 0}, \
     { u"" UNO_NAME_GRAPHOBJ_SIGNATURELINE_UNSIGNED_IMAGE, OWN_ATTR_SIGNATURELINE_UNSIGNED_IMAGE, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0}, \
     { u"" UNO_NAME_GRAPHOBJ_SIGNATURELINE_IS_SIGNED,     OWN_ATTR_SIGNATURELINE_IS_SIGNED   , cppu::UnoType<bool>::get(), 0, 0}, \
-    { u"" UNO_NAME_GRAPHOBJ_QRCODE,               OWN_ATTR_QRCODE            , cppu::UnoType<css::drawing::QRCode>::get(), 0, 0},
+    { u"" UNO_NAME_GRAPHOBJ_QRCODE,               OWN_ATTR_QRCODE            , cppu::UnoType<css::drawing::BarCode>::get(), 0, 0},
 
 #define SPECIAL_3DSCENEOBJECT_PROPERTIES_DEFAULTS \
     { u"" UNO_NAME_3D_SCENE_AMBIENTCOLOR,     SDRATTR_3DSCENE_AMBIENTCOLOR   , ::cppu::UnoType<sal_Int32>::get(),   0,  0}, \

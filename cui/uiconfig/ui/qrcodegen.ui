@@ -9,9 +9,9 @@
     <property name="page-increment">10</property>
   </object>
   <object class="GtkDialog" id="QrCodeGenDialog">
-    <property name="can-focus">False</property>
-    <property name="border-width">6</property>
-    <property name="title" translatable="yes" context="qrcodegen|QrCodeGenDialog">QR Code Generator</property>
+    <property name="can_focus">False</property>
+    <property name="border_width">6</property>
+    <property name="title" translatable="yes" context="qrcodegen|QrCodeGenDialog">QR and Barcode</property>
     <property name="modal">True</property>
     <property name="default-width">0</property>
     <property name="default-height">0</property>
@@ -152,6 +152,43 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label_type">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes" context="qrcodegen|label_type" comments="Select type">Type:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">choose_type</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="choose_type">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="active">0</property>
+                        <items>
+                          <item translatable="yes" context="qrcodegen|QrCode">QR Code</item>
+                          <item translatable="yes" context="qrcodegen|BarCode">Bar Code</item>
+                        </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="choose_type-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="type">The type which is to be generated.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">3</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
