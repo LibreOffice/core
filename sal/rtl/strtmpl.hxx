@@ -60,22 +60,10 @@ template <typename T> sal_Int32 getLength( const T* pStr )
     {
         return pStr->length;
     }
-    else if constexpr (sizeof(T) == sizeof(char))
-    {
-        // take advantage of builtin optimisations
-        return strlen( pStr);
-    }
-    else if constexpr (sizeof(T) == sizeof(wchar_t))
-    {
-        // take advantage of builtin optimisations
-        return wcslen(reinterpret_cast<wchar_t const *>(pStr));
-    }
     else
     {
-        const T* pTempStr = pStr;
-        while( *pTempStr )
-            pTempStr++;
-        return pTempStr-pStr;
+        // take advantage of builtin optimisations
+        return std::char_traits<T>::length(pStr);
     }
 }
 
@@ -124,40 +112,10 @@ sal_Int32 compare_WithLength                             ( const IMPL_RTL_STRCOD
 {
     assert(nStr1Len >= 0);
     assert(nStr2Len >= 0);
-    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
-    {
-        // take advantage of builtin optimisations
-        sal_Int32 nMin = std::min(nStr1Len, nStr2Len);
-        sal_Int32 nRet = memcmp(pStr1, pStr2, nMin);
-        return nRet == 0 ? nStr1Len - nStr2Len : nRet;
-    }
-    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
-    {
-        // take advantage of builtin optimisations
-        sal_Int32 nMin = std::min(nStr1Len, nStr2Len);
-        sal_Int32 nRet = wmemcmp(reinterpret_cast<wchar_t const *>(pStr1),
-                reinterpret_cast<wchar_t const *>(pStr2), nMin);
-        return nRet == 0 ? nStr1Len - nStr2Len : nRet;
-    }
-    else
-    {
-        sal_Int32 nRet = nStr1Len - nStr2Len;
-        int nCount = (nRet <= 0) ? nStr1Len : nStr2Len;
-
-        while( --nCount >= 0 ) {
-            if (*pStr1 != *pStr2) {
-                break;
-            }
-            ++pStr1;
-            ++pStr2;
-        }
-
-        if( nCount >= 0 )
-            nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr1 ))
-                 - static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr2 ));
-
-        return nRet;
-    }
+    // take advantage of builtin optimisations
+    std::basic_string_view<IMPL_RTL_STRCODE> aView1(pStr1, nStr1Len);
+    std::basic_string_view<IMPL_RTL_STRCODE> aView2(pStr2, nStr2Len);
+    return aView1.compare(aView2);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -172,46 +130,10 @@ sal_Int32 shortenedCompare_WithLength                             ( const IMPL_R
     assert(nStr1Len >= 0);
     assert(nStr2Len >= 0);
     assert(nShortenedLength >= 0);
-    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
-    {
-        // take advantage of builtin optimisations
-        sal_Int32 nMin = std::min(std::min(nStr1Len, nStr2Len), nShortenedLength);
-        sal_Int32 nRet = memcmp(pStr1, pStr2, nMin);
-        if (nRet == 0 && nShortenedLength > std::min(nStr1Len, nStr2Len))
-            return nStr1Len - nStr2Len;
-        return nRet;
-    }
-    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
-    {
-        // take advantage of builtin optimisations
-        sal_Int32 nMin = std::min(std::min(nStr1Len, nStr2Len), nShortenedLength);
-        sal_Int32 nRet = wmemcmp(reinterpret_cast<wchar_t const *>(pStr1), reinterpret_cast<wchar_t const *>(pStr2), nMin);
-        if (nRet == 0 && nShortenedLength > std::min(nStr1Len, nStr2Len))
-            return nStr1Len - nStr2Len;
-        return nRet;
-    }
-    else
-    {
-        const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
-        const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
-        sal_Int32               nRet;
-        while ( (nShortenedLength > 0) &&
-                (pStr1 < pStr1End) && (pStr2 < pStr2End) )
-        {
-            nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr1 ))-
-                   static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr2 ));
-            if ( nRet )
-                return nRet;
-
-            nShortenedLength--;
-            pStr1++;
-            pStr2++;
-        }
-
-        if ( nShortenedLength <= 0 )
-            return 0;
-        return nStr1Len - nStr2Len;
-    }
+    // take advantage of builtin optimisations
+    std::basic_string_view<IMPL_RTL_STRCODE> aView1(pStr1, std::min(nStr1Len, nShortenedLength));
+    std::basic_string_view<IMPL_RTL_STRCODE> aView2(pStr2, std::min(nStr2Len, nShortenedLength));
+    return aView1.compare(aView2);
 }
 
 /* ----------------------------------------------------------------------- */
