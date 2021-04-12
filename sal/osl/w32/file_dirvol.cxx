@@ -1006,7 +1006,16 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
 
             hFind = FindFirstFileW( o3tl::toW(rtl_uString_getStr(strSysFilePath)), &aFindData );
 
-            if ( hFind != INVALID_HANDLE_VALUE )
+            // tdf#123625 - try to retrieve the file attributes of a root directory
+            bool bHasFileAttributes = false;
+            if (hFind == INVALID_HANDLE_VALUE)
+            {
+                bHasFileAttributes
+                    = GetFileAttributesExW(o3tl::toW(rtl_uString_getStr(strSysFilePath)),
+                                           GetFileExInfoStandard, &aFindData);
+            }
+
+            if (hFind != INVALID_HANDLE_VALUE || bHasFileAttributes)
             {
                 DirectoryItem_Impl *pItemImpl = new (std::nothrow) DirectoryItem_Impl;
                 if (!pItemImpl)
@@ -1026,9 +1035,9 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                     *pItem = pItemImpl;
                 }
 
-                FindClose( hFind );
-            }
-            else
+                if (hFind != INVALID_HANDLE_VALUE)
+                    FindClose(hFind);
+            } else
                 error = oslTranslateFileError( GetLastError() );
         }
         break;
