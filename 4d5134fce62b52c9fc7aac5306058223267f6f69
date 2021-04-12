@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "10564b5d_18d5acca",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-12T06:46:31Z",
+      "side": 1,
+      "message": "make a new header e.g. sal/inc/oslsocket.hxx",
+      "parentUuid": "1175b425_48400b4c",
+      "revId": "4d5134fce62b52c9fc7aac5306058223267f6f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "606a63e0_dedf9cee",
         "filename": "sal/osl/unx/socket.cxx",
         "patchSetId": 6
