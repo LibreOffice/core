@@ -26,7 +26,7 @@
 #include <svl/itemset.hxx>
 #include <svl/svldllapi.h>
 #include <vector>
-#include <memory>
+#include <unordered_map>
 #include <string_view>
 
 // values from com/sun/star/beans/PropertyAttribute
@@ -115,10 +115,11 @@ struct SfxItemPropertyNamedEntry : public SfxItemPropertySimpleEntry
 
 };
 typedef std::vector< SfxItemPropertyNamedEntry > PropertyEntryVector_t;
-class SfxItemPropertyMap_Impl;
 class SVL_DLLPUBLIC SfxItemPropertyMap
 {
-    std::unique_ptr<SfxItemPropertyMap_Impl> m_pImpl;
+    std::unordered_map< std::u16string_view,
+                        SfxItemPropertySimpleEntry > m_aMap;
+    mutable css::uno::Sequence< css::beans::Property > m_aPropSeq;
 public:
     SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries );
     SfxItemPropertyMap( const SfxItemPropertyMap& rSource );

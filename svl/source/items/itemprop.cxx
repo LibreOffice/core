@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <memory>
-#include <unordered_map>
+
 /*
  * UNO III Implementation
  */
@@ -35,38 +35,16 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
-typedef std::unordered_map< std::u16string_view,
-                            SfxItemPropertySimpleEntry > SfxItemPropertyHashMap_t;
-
-class SfxItemPropertyMap_Impl : public SfxItemPropertyHashMap_t
-{
-public:
-    mutable uno::Sequence< beans::Property > m_aPropSeq;
-
-    SfxItemPropertyMap_Impl(){}
-    explicit SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl* pSource );
-};
-
-SfxItemPropertyMap_Impl::SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl* pSource )
-{
-    SfxItemPropertyHashMap_t::operator=( *pSource );
-    m_aPropSeq = pSource->m_aPropSeq;
-}
-
-SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries ) :
-    m_pImpl( new SfxItemPropertyMap_Impl )
+SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries )
 {
     while( !pEntries->aName.empty() )
     {
-        (*m_pImpl) [ pEntries->aName ] = *pEntries;
+        m_aMap[ pEntries->aName ] = *pEntries;
         ++pEntries;
     }
 }
 
-SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMap& rSource ) :
-    m_pImpl( new SfxItemPropertyMap_Impl( rSource.m_pImpl.get() ) )
-{
-}
+SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMap& rSource ) = default;
 
 SfxItemPropertyMap::~SfxItemPropertyMap()
 {
@@ -74,24 +52,23 @@ SfxItemPropertyMap::~SfxItemPropertyMap()
 
 const SfxItemPropertySimpleEntry* SfxItemPropertyMap::getByName( std::u16string_view rName ) const
 {
-    SfxItemPropertyHashMap_t::const_iterator aIter = m_pImpl->find(rName);
-    if( aIter == m_pImpl->end() )
+    auto aIter = m_aMap.find(rName);
+    if( aIter == m_aMap.end() )
         return nullptr;
     return &aIter->second;
 }
 
 uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
 {
-    if( !m_pImpl->m_aPropSeq.hasElements() )
+    if( !m_aPropSeq.hasElements() )
     {
-        m_pImpl->m_aPropSeq.realloc( m_pImpl->size() );
-        beans::Property* pPropArray = m_pImpl->m_aPropSeq.getArray();
+        m_aPropSeq.realloc( m_aMap.size() );
+        beans::Property* pPropArray = m_aPropSeq.getArray();
         sal_uInt32 n = 0;
-        for( const auto& rEntry : *m_pImpl )
-        //for ( const SfxItemPropertyMap *pMap = _pMap; pMap->pName; ++pMap )
+        for( const auto& rPair : m_aMap )
         {
-            const SfxItemPropertySimpleEntry* pEntry = &rEntry.second;
-            pPropArray[n].Name = rEntry.first;
+            const SfxItemPropertySimpleEntry* pEntry = &rPair.second;
+            pPropArray[n].Name = rPair.first;
             pPropArray[n].Handle = pEntry->nWID;
             pPropArray[n].Type = pEntry->aType;
             pPropArray[n].Attributes =
@@ -100,13 +77,13 @@ uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
         }
     }
 
-    return m_pImpl->m_aPropSeq;
+    return m_aPropSeq;
 }
 
 beans::Property SfxItemPropertyMap::getPropertyByName( const OUString & rName ) const
 {
-    SfxItemPropertyHashMap_t::const_iterator aIter = m_pImpl->find(rName);
-    if( aIter == m_pImpl->end() )
+    auto aIter = m_aMap.find(rName);
+    if( aIter == m_aMap.end() )
         throw UnknownPropertyException(rName);
     const SfxItemPropertySimpleEntry* pEntry = &aIter->second;
     beans::Property aProp;
@@ -119,8 +96,8 @@ beans::Property SfxItemPropertyMap::getPropertyByName( const OUString & rName ) 
 
 bool SfxItemPropertyMap::hasPropertyByName( std::u16string_view rName ) const
 {
-    SfxItemPropertyHashMap_t::const_iterator aIter = m_pImpl->find(rName);
-    return aIter != m_pImpl->end();
+    auto aIter = m_aMap.find(rName);
+    return aIter != m_aMap.end();
 }
 
 void SfxItemPropertyMap::mergeProperties( const uno::Sequence< beans::Property >& rPropSeq )
@@ -131,26 +108,26 @@ void SfxItemPropertyMap::mergeProperties( const uno::Sequence< beans::Property >
             sal::static_int_cast< sal_Int16 >( rProp.Handle ), //nWID
             rProp.Type, //aType
             rProp.Attributes); //nFlags
-        (*m_pImpl)[rProp.Name] = aTemp;
+        m_aMap[rProp.Name] = aTemp;
     }
 }
 
 PropertyEntryVector_t SfxItemPropertyMap::getPropertyEntries() const
 {
     PropertyEntryVector_t aRet;
-    aRet.reserve(m_pImpl->size());
+    aRet.reserve(m_aMap.size());
 
-    for( const auto& rEntry : *m_pImpl )
+    for( const auto& rPair : m_aMap )
     {
-        const SfxItemPropertySimpleEntry* pEntry = &rEntry.second;
-        aRet.emplace_back( OUString(rEntry.first), * pEntry );
+        const SfxItemPropertySimpleEntry* pEntry = &rPair.second;
+        aRet.emplace_back( OUString(rPair.first), *pEntry );
     }
     return aRet;
 }
 
 sal_uInt32 SfxItemPropertyMap::getSize() const
 {
-    return m_pImpl->size();
+    return m_aMap.size();
 }
 
 SfxItemPropertySet::~SfxItemPropertySet()
