@@ -1814,7 +1814,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
     if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
         throw UnknownPropertyException(rPropertyName);
@@ -2007,7 +2007,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
     if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
         throw UnknownPropertyException(rPropertyName);
@@ -2253,7 +2253,7 @@ PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPrope
     if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
         throw UnknownPropertyException(rPropertyName);
     return PropertyState_DIRECT_VALUE;
@@ -2276,7 +2276,7 @@ void SAL_CALL SwXTextDocument::setPropertyToDefault( const OUString& rPropertyNa
     if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
         throw UnknownPropertyException(rPropertyName);
     switch(pEntry->nWID)
@@ -2291,7 +2291,7 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
     if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
         throw UnknownPropertyException(rPropertyName);
     Any aAny;

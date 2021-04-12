@@ -562,7 +562,7 @@ void SAL_CALL ScCondFormatObj::setPropertyValue(
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -600,7 +600,7 @@ uno::Any SAL_CALL ScCondFormatObj::getPropertyValue( const OUString& aPropertyNa
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -702,7 +702,7 @@ void SAL_CALL ScConditionEntryObj::setPropertyValue(
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -765,7 +765,7 @@ uno::Any SAL_CALL ScConditionEntryObj::getPropertyValue( const OUString& aProper
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -909,7 +909,7 @@ void SAL_CALL ScColorScaleFormatObj::setPropertyValue(
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -943,7 +943,7 @@ uno::Any SAL_CALL ScColorScaleFormatObj::getPropertyValue( const OUString& aProp
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -1159,7 +1159,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -1283,7 +1283,7 @@ uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropert
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -1534,7 +1534,7 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -1605,7 +1605,7 @@ uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPropert
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -1799,7 +1799,7 @@ void SAL_CALL ScCondDateFormatObj::setPropertyValue(
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -1841,7 +1841,7 @@ uno::Any SAL_CALL ScCondDateFormatObj::getPropertyValue( const OUString& aProper
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = maPropSet.getPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 

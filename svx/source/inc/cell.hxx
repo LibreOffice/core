@@ -185,7 +185,7 @@ protected:
     SVX_DLLPRIVATE virtual const SfxItemSet& GetObjectItemSet() override;
     SVX_DLLPRIVATE void SetObjectItem(const SfxPoolItem& rItem);
 
-    SVX_DLLPRIVATE static css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEntry* pMap );
+    SVX_DLLPRIVATE static css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry* pMap );
 
 private:
     /// @throws css::uno::RuntimeException

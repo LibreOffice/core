@@ -78,7 +78,7 @@ SvxOle2Shape::~SvxOle2Shape() throw()
 }
 
 //XPropertySet
-bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -196,7 +196,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
     throw IllegalArgumentException();
 }
 
-bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue )
+bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -578,7 +578,7 @@ void SAL_CALL SvxAppletShape::setPropertyValues( const css::uno::Sequence< OUStr
     resetModifiedState();
 }
 
-bool SvxAppletShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool SvxAppletShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     if( (pProperty->nWID >= OWN_ATTR_APPLET_DOCBASE) && (pProperty->nWID <= OWN_ATTR_APPLET_ISSCRIPT) )
     {
@@ -599,7 +599,7 @@ bool SvxAppletShape::setPropertyValueImpl( const OUString& rName, const SfxItemP
     }
 }
 
-bool SvxAppletShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue )
+bool SvxAppletShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
     if( (pProperty->nWID >= OWN_ATTR_APPLET_DOCBASE) && (pProperty->nWID <= OWN_ATTR_APPLET_ISSCRIPT) )
     {
@@ -649,7 +649,7 @@ void SAL_CALL SvxPluginShape::setPropertyValues( const css::uno::Sequence< OUStr
     resetModifiedState();
 }
 
-bool SvxPluginShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool SvxPluginShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     if( (pProperty->nWID >= OWN_ATTR_PLUGIN_MIMETYPE) && (pProperty->nWID <= OWN_ATTR_PLUGIN_COMMANDS) )
     {
@@ -670,7 +670,7 @@ bool SvxPluginShape::setPropertyValueImpl( const OUString& rName, const SfxItemP
     }
 }
 
-bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue )
+bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
     if( (pProperty->nWID >= OWN_ATTR_PLUGIN_MIMETYPE) && (pProperty->nWID <= OWN_ATTR_PLUGIN_COMMANDS) )
     {
@@ -721,7 +721,7 @@ void SAL_CALL SvxFrameShape::setPropertyValues( const css::uno::Sequence< OUStri
     resetModifiedState();
 }
 
-bool SvxFrameShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool SvxFrameShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     if( (pProperty->nWID >= OWN_ATTR_FRAME_URL) && (pProperty->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT) )
     {
@@ -742,7 +742,7 @@ bool SvxFrameShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
     }
 }
 
-bool SvxFrameShape::getPropertyValueImpl(const OUString& rName, const SfxItemPropertySimpleEntry* pProperty,
+bool SvxFrameShape::getPropertyValueImpl(const OUString& rName, const SfxItemPropertyMapEntry* pProperty,
     css::uno::Any& rValue)
 {
     if( (pProperty->nWID >= OWN_ATTR_FRAME_URL) && (pProperty->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT) )
@@ -775,7 +775,7 @@ SvxMediaShape::~SvxMediaShape() throw()
 }
 
 
-bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
+bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
     if( ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) && (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))
         || (pProperty->nWID == OWN_ATTR_MEDIA_STREAM)
@@ -931,7 +931,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
 }
 
 
-bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue )
+bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
     if (   ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) &&
             (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))

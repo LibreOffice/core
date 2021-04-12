@@ -81,10 +81,10 @@ class SvxShapeMaster;
 class SvxItemPropertySet;
 class SfxItemSet;
 
-void SVXCORE_DLLPUBLIC SvxItemPropertySet_setPropertyValue( const SfxItemPropertySimpleEntry* pMap,
+void SVXCORE_DLLPUBLIC SvxItemPropertySet_setPropertyValue( const SfxItemPropertyMapEntry* pMap,
         const css::uno::Any& rVal, SfxItemSet& rSet );
 
-css::uno::Any SVXCORE_DLLPUBLIC SvxItemPropertySet_getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet );
+css::uno::Any SVXCORE_DLLPUBLIC SvxItemPropertySet_getPropertyValue( const SfxItemPropertyMapEntry* pMap, const SfxItemSet& rSet );
 
 
 // WARNING: if you update the supported interfaces,
@@ -147,7 +147,7 @@ protected:
     void ForceMetricToItemPoolMetric(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw();
     void ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw();
 
-    css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEntry* pMap ) const;
+    css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry* pMap ) const;
 
     bool SetFillAttribute( sal_uInt16 nWID, const OUString& rName );
 
@@ -171,17 +171,17 @@ protected:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue );
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue );
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    virtual bool getPropertyStateImpl( const SfxItemPropertySimpleEntry* pProperty, css::beans::PropertyState& rState );
+    virtual bool getPropertyStateImpl( const SfxItemPropertyMapEntry* pProperty, css::beans::PropertyState& rState );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    virtual bool setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* pProperty );
+    virtual bool setPropertyToDefaultImpl( const SfxItemPropertyMapEntry* pProperty );
 
 public:
     /// @throws css::uno::RuntimeException
@@ -359,10 +359,10 @@ protected:
 
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
-    virtual bool getPropertyStateImpl( const SfxItemPropertySimpleEntry* pProperty, css::beans::PropertyState& rState ) override;
-    virtual bool setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* pProperty ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool getPropertyStateImpl( const SfxItemPropertyMapEntry* pProperty, css::beans::PropertyState& rState ) override;
+    virtual bool setPropertyToDefaultImpl( const SfxItemPropertyMapEntry* pProperty ) override;
 
 public:
     SvxShapeText(SdrObject* pObj);
@@ -591,8 +591,8 @@ class SVXCORE_DLLPUBLIC SvxOle2Shape : public SvxShapeText
 {
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
     void resetModifiedState();
 
@@ -617,8 +617,8 @@ class SvxShapePolyPolygon final : public SvxShapeText
     using SvxUnoTextRangeBase::getPropertyValue;
 
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
     // local helper to detect PolygonKind from SdrObject::GetObjIdentifier()
     css::drawing::PolygonKind GetPolygonKind() const;
@@ -645,8 +645,8 @@ class SvxGraphicObject final : public SvxShapeText
     using SvxUnoTextRangeBase::getPropertyValue;
 
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
     SvxGraphicObject(SdrObject* pObj);
@@ -668,8 +668,8 @@ protected:
 public:
     Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage);
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl(const OUString& rName, const SfxItemPropertySimpleEntry* pProperty,
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl(const OUString& rName, const SfxItemPropertyMapEntry* pProperty,
         css::uno::Any& rValue ) override;
 
     virtual ~Svx3DSceneObject() throw() override;
@@ -709,8 +709,8 @@ public:
 class Svx3DCubeObject final : public SvxShape
 {
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
     Svx3DCubeObject(SdrObject* pObj);
@@ -729,8 +729,8 @@ public:
     Svx3DSphereObject(SdrObject* pObj);
 private:
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
     virtual ~Svx3DSphereObject() throw() override;
 
@@ -744,8 +744,8 @@ private:
 class Svx3DLatheObject final : public SvxShape
 {
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
     Svx3DLatheObject(SdrObject* pObj);
@@ -764,8 +764,8 @@ public:
     Svx3DExtrudeObject(SdrObject* pObj);
 private:
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
     virtual ~Svx3DExtrudeObject() throw() override;
 
@@ -779,8 +779,8 @@ private:
 class Svx3DPolygonObject final : public SvxShape
 {
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
     Svx3DPolygonObject(SdrObject* pObj);
@@ -802,7 +802,7 @@ protected:
 public:
     SvxCustomShape(SdrObject* pObj);
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
 
     virtual ~SvxCustomShape() throw () override;
@@ -840,8 +840,8 @@ public:
 
 private:
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
     OUString referer_;
 };

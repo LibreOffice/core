@@ -1039,7 +1039,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 {
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if(!m_xShapeAgg.is())
         return;
 
@@ -1450,7 +1450,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
     SwFrameFormat*   pFormat = GetFrameFormat();
     if(m_xShapeAgg.is())
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+        const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
         if(pEntry)
         {
             if(pFormat)
@@ -1776,7 +1776,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
     uno::Reference< XPropertyState >  xShapePrState;
     for(sal_Int32 nProperty = 0; nProperty < aPropertyNames.getLength(); nProperty++)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( pNames[nProperty] );
+        const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( pNames[nProperty] );
         if(pEntry)
         {
             if(RES_OPAQUE == pEntry->nWID)
@@ -1874,7 +1874,7 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
     if(!m_xShapeAgg.is())
         throw uno::RuntimeException();
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if(pEntry)
     {
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
@@ -1936,7 +1936,7 @@ uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
     if(!m_xShapeAgg.is())
         throw uno::RuntimeException();
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if(pEntry)
     {
         if(!(pEntry->nWID < RES_FRMATR_END && pFormat))

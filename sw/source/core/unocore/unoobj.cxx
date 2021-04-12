@@ -435,7 +435,7 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
 
 bool
 SwUnoCursorHelper::SetCursorPropertyValue(
-        SfxItemPropertySimpleEntry const& rEntry, const uno::Any& rValue,
+        SfxItemPropertyMapEntry const& rEntry, const uno::Any& rValue,
         SwPaM & rPam, SfxItemSet & rItemSet)
 {
     if (!(rEntry.nFlags & beans::PropertyAttribute::MAYBEVOID) &&
@@ -526,7 +526,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
 
                     for (beans::NamedValue const & prop : std::as_const(props))
                     {
-                        SfxItemPropertySimpleEntry const*const pEntry =
+                        SfxItemPropertyMapEntry const*const pEntry =
                             rMap.getByName(prop.Name);
                         if (!pEntry)
                         {
@@ -1722,7 +1722,7 @@ uno::Any SwUnoCursorHelper::GetPropertyValue(
     std::u16string_view rPropertyName)
 {
     uno::Any aAny;
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         rPropSet.getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
@@ -1789,13 +1789,13 @@ void SwUnoCursorHelper::SetPropertyValues(
     // Build set of attributes we want to fetch
     const sal_uInt16 zero = 0;
     SfxItemSet aItemSet(rDoc.GetAttrPool(), &zero);
-    std::vector<std::pair<const SfxItemPropertySimpleEntry*, const uno::Any&>> aEntries;
+    std::vector<std::pair<const SfxItemPropertyMapEntry*, const uno::Any&>> aEntries;
     aEntries.reserve(rPropertyValues.getLength());
     for (const auto& rPropVal : rPropertyValues)
     {
         const OUString &rPropertyName = rPropVal.Name;
 
-        SfxItemPropertySimpleEntry const* pEntry =
+        SfxItemPropertyMapEntry const* pEntry =
             rPropSet.getPropertyMap().getByName(rPropertyName);
 
         // Queue up any exceptions until the end ...
@@ -1820,7 +1820,7 @@ void SwUnoCursorHelper::SetPropertyValues(
         bool bPreviousPropertyCausesSideEffectsInNodes = false;
         for (size_t i = 0; i < aEntries.size(); ++i)
         {
-            SfxItemPropertySimpleEntry const*const pEntry = aEntries[i].first;
+            SfxItemPropertyMapEntry const*const pEntry = aEntries[i].first;
             bool bPropertyCausesSideEffectsInNodes =
                 propertyCausesSideEffectsInNodes(pEntry->nWID);
 
@@ -1872,7 +1872,7 @@ SwUnoCursorHelper::GetPropertyStates(
 
     for (sal_Int32 i = 0, nEnd = rPropertyNames.getLength(); i < nEnd; i++)
     {
-        SfxItemPropertySimpleEntry const*const pEntry =
+        SfxItemPropertyMapEntry const*const pEntry =
                 rMap.getByName( pNames[i] );
         if(!pEntry)
         {
@@ -2003,7 +2003,7 @@ void SwUnoCursorHelper::SetPropertyToDefault(
     std::u16string_view rPropertyName)
 {
     SwDoc& rDoc = rPaM.GetDoc();
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
@@ -2041,7 +2041,7 @@ uno::Any SwUnoCursorHelper::GetPropertyDefault(
     SwPaM const & rPaM, const SfxItemPropertySet& rPropSet,
     std::u16string_view rPropertyName)
 {
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
@@ -2357,7 +2357,7 @@ SwXTextCursor::setPropertiesToDefault(
     o3tl::sorted_vector<sal_uInt16> aParaWhichIds;
     for (const OUString& rName : rPropertyNames)
     {
-        SfxItemPropertySimpleEntry const*const  pEntry =
+        SfxItemPropertyMapEntry const*const  pEntry =
             m_pImpl->m_rPropSet.getPropertyMap().getByName( rName );
         if (!pEntry)
         {
@@ -2421,7 +2421,7 @@ SwXTextCursor::getPropertyDefaults(
         uno::Any *pAny = aRet.getArray();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            SfxItemPropertySimpleEntry const*const pEntry =
+            SfxItemPropertyMapEntry const*const pEntry =
                 m_pImpl->m_rPropSet.getPropertyMap().getByName( pNames[i] );
             if (!pEntry)
             {

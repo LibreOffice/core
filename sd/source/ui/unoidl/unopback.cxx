@@ -100,24 +100,24 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet )
 
         if( mpPropSet->AreThereOwnUsrAnys() )
         {
-            for( const auto& rProp : mpPropSet->getPropertyMap().getPropertyEntries() )
+            for( const auto pProp : mpPropSet->getPropertyMap().getPropertyEntries() )
             {
-                uno::Any* pAny = mpPropSet->GetUsrAnyForID( rProp.second );
+                uno::Any* pAny = mpPropSet->GetUsrAnyForID( *pProp );
                 if( pAny )
                 {
-                    OUString aPropertyName( rProp.first );
-                    switch( rProp.second.nWID )
+                    const OUString & aPropertyName = pProp->aName;
+                    switch( pProp->nWID )
                     {
                         case XATTR_FILLFLOATTRANSPARENCE :
                         case XATTR_FILLGRADIENT :
                         {
                             if ( ( pAny->getValueType() == ::cppu::UnoType< css::awt::Gradient>::get() )
-                                && ( rProp.second.nMemberId == MID_FILLGRADIENT ) )
+                                && ( pProp->nMemberId == MID_FILLGRADIENT ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
                             else if ( ( pAny->getValueType() == ::cppu::UnoType<OUString>::get() ) &&
-                                        ( rProp.second.nMemberId == MID_NAME ) )
+                                        ( pProp->nMemberId == MID_NAME ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
@@ -126,12 +126,12 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet )
                         case XATTR_FILLHATCH :
                         {
                             if ( ( pAny->getValueType() == ::cppu::UnoType< css::drawing::Hatch>::get() )
-                                && ( rProp.second.nMemberId == MID_FILLHATCH ) )
+                                && ( pProp->nMemberId == MID_FILLHATCH ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
                             else if ( ( pAny->getValueType() == ::cppu::UnoType<OUString>::get() ) &&
-                                        ( rProp.second.nMemberId == MID_NAME ) )
+                                        ( pProp->nMemberId == MID_NAME ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
@@ -139,13 +139,13 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet )
                         break;
                         case XATTR_FILLBITMAP :
                         {
-                            if (rProp.second.nMemberId == MID_BITMAP &&
+                            if (pProp->nMemberId == MID_BITMAP &&
                                 (pAny->getValueType() == cppu::UnoType<css::awt::XBitmap>::get() ||
                                  pAny->getValueType() == cppu::UnoType<css::graphic::XGraphic>::get()))
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
-                            else if (pAny->getValueType() == ::cppu::UnoType<OUString>::get() && rProp.second.nMemberId == MID_NAME)
+                            else if (pAny->getValueType() == ::cppu::UnoType<OUString>::get() && pProp->nMemberId == MID_NAME)
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
@@ -189,7 +189,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry( aPropertyName );
 
     if( pEntry == nullptr )
     {
@@ -244,7 +244,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
     SolarMutexGuard aGuard;
 
     uno::Any aAny;
-    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry(PropertyName);
 
     if( pEntry == nullptr )
     {
@@ -299,7 +299,7 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry(PropertyName);
 
     if( pEntry == nullptr )
         throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
@@ -359,7 +359,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyToDefault( const OUString& Propert
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry(PropertyName);
 
     if( pEntry == nullptr )
         throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
@@ -382,7 +382,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry(aPropertyName);
     if( pEntry == nullptr || mpSet == nullptr )
         throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
 
@@ -403,7 +403,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
 }
 
 /** this is used because our property map is not sorted yet */
-const SfxItemPropertySimpleEntry* SdUnoPageBackground::getPropertyMapEntry( std::u16string_view rPropertyName ) const throw()
+const SfxItemPropertyMapEntry* SdUnoPageBackground::getPropertyMapEntry( std::u16string_view rPropertyName ) const throw()
 {
     return mpPropSet->getPropertyMap().getByName(rPropertyName);
 }

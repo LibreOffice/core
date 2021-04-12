@@ -566,7 +566,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
-    const SfxItemPropertySimpleEntry* pEntry =
+    const SfxItemPropertyMapEntry* pEntry =
             aPropSet.getPropertyMap().getByName( aPropertyName );
 
     if ( !(pEntry && pEntry->nWID && nFormatIndex < pFormats->size()) )
@@ -668,7 +668,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPrope
     uno::Any aVal;
 
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
-    const SfxItemPropertySimpleEntry* pEntry =
+    const SfxItemPropertyMapEntry* pEntry =
             aPropSet.getPropertyMap().getByName( aPropertyName );
 
     if ( pEntry && pEntry->nWID && nFormatIndex < pFormats->size() )
