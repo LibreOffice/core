@@ -27,6 +27,7 @@
 #include <svl/svldllapi.h>
 #include <vector>
 #include <unordered_map>
+#include <o3tl/sorted_vector.hxx>
 #include <string_view>
 
 // values from com/sun/star/beans/PropertyAttribute
@@ -35,7 +36,7 @@
 /// map a property between beans::XPropertySet and SfxPoolItem
 struct SfxItemPropertyMapEntry
 {
-    std::u16string_view                 aName; ///< name of property
+    OUString                            aName; ///< name of property
     css::uno::Type                      aType; ///< UNO type of property
     sal_uInt16                          nWID;  ///< WhichId of SfxPoolItem
     /// flag bitmap, @see css::beans::PropertyAttribute
@@ -45,7 +46,7 @@ struct SfxItemPropertyMapEntry
     sal_uInt8                           nMemberId;
     PropertyMoreFlags                   nMoreFlags;
 
-    SfxItemPropertyMapEntry(std::u16string_view _aName, sal_uInt16 _nWID, css::uno::Type const & _rType,
+    SfxItemPropertyMapEntry(const OUString & _aName, sal_uInt16 _nWID, css::uno::Type const & _rType,
                                sal_Int16 _nFlags, sal_uInt8 const _nMemberId, PropertyMoreFlags _nMoreFlags = PropertyMoreFlags::NONE)
         : aName(      _aName )
         , aType(     _rType )
@@ -104,35 +105,41 @@ struct SfxItemPropertySimpleEntry
         }
 
 };
+
 struct SfxItemPropertyNamedEntry : public SfxItemPropertySimpleEntry
 {
     OUString sName;
     SfxItemPropertyNamedEntry( const OUString& rName, const SfxItemPropertySimpleEntry& rSimpleEntry)
         : SfxItemPropertySimpleEntry( rSimpleEntry )
         , sName( rName )
-{
-}
+    {
+    }
+};
 
+
+struct SfxItemPropertyMapCompare
+{
+    bool operator() ( const SfxItemPropertyMapEntry * lhs, const SfxItemPropertyMapEntry * rhs ) const
+    {
+        return lhs->aName < rhs->aName;
+    }
 };
 class SVL_DLLPUBLIC SfxItemPropertyMap
 {
-    std::unordered_map< std::u16string_view,
-                        SfxItemPropertySimpleEntry > m_aMap;
+    o3tl::sorted_vector< const SfxItemPropertyMapEntry*, SfxItemPropertyMapCompare > m_aMap;
     mutable css::uno::Sequence< css::beans::Property > m_aPropSeq;
 public:
     SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries );
     SfxItemPropertyMap( const SfxItemPropertyMap& rSource );
     ~SfxItemPropertyMap();
 
-    const SfxItemPropertySimpleEntry*  getByName( std::u16string_view rName ) const;
+    const SfxItemPropertyMapEntry* getByName( std::u16string_view rName ) const;
     css::uno::Sequence< css::beans::Property > const & getProperties() const;
     /// @throws css::beans::UnknownPropertyException
     css::beans::Property getPropertyByName( const OUString & rName ) const;
     bool hasPropertyByName( std::u16string_view rName ) const;
 
-    void mergeProperties( const css::uno::Sequence< css::beans::Property >& rPropSeq );
-    const std::unordered_map< std::u16string_view,
-                        SfxItemPropertySimpleEntry >& getPropertyEntries() const { return m_aMap; }
+    const o3tl::sorted_vector< const SfxItemPropertyMapEntry*, SfxItemPropertyMapCompare >& getPropertyEntries() const { return m_aMap; }
     sal_uInt32 getSize() const;
 
 };
@@ -148,7 +155,7 @@ public:
                             ~SfxItemPropertySet();
 
     /// @throws css::uno::RuntimeException
-    void getPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
+    void getPropertyValue( const SfxItemPropertyMapEntry& rEntry,
                                           const SfxItemSet& rSet,
                                           css::uno::Any& rAny) const;
     /// @throws css::uno::RuntimeException
@@ -163,7 +170,7 @@ public:
                                             const SfxItemSet& rSet ) const;
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    void                setPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
+    void                setPropertyValue( const SfxItemPropertyMapEntry& rEntry,
                                           const css::uno::Any& aVal,
                                           SfxItemSet& rSet ) const;
     /// @throws css::uno::RuntimeException
@@ -177,7 +184,7 @@ public:
     css::beans::PropertyState
         getPropertyState(const OUString& rName, const SfxItemSet& rSet)const;
     css::beans::PropertyState
-        getPropertyState(const SfxItemPropertySimpleEntry& rEntry, const SfxItemSet& rSet) const
+        getPropertyState(const SfxItemPropertyMapEntry& rEntry, const SfxItemSet& rSet) const
                                     throw();
 
     css::uno::Reference<css::beans::XPropertySetInfo> const &
@@ -213,7 +220,6 @@ class SAL_DLLPUBLIC_TEMPLATE SfxExtItemPropertySetInfo_Base : public cppu::WeakI
 
 class SVL_DLLPUBLIC SfxExtItemPropertySetInfo final : public SfxExtItemPropertySetInfo_Base
 {
-    SfxItemPropertyMap aExtMap;
 public:
                             SfxExtItemPropertySetInfo(
                                 const SfxItemPropertyMapEntry *pMap,
@@ -228,6 +234,10 @@ public:
 
     virtual sal_Bool SAL_CALL
         hasPropertyByName( const OUString& Name ) override;
+
+private:
+    std::unordered_map<OUString, SfxItemPropertySimpleEntry> maMap;
+    mutable css::uno::Sequence< css::beans::Property > m_aPropSeq;
 };
 
 #endif

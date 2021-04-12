@@ -308,7 +308,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
     if(!m_pDoc)
         throw uno::RuntimeException();
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -429,7 +429,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
     if(!m_pDoc)
         throw uno::RuntimeException();
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
         throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -587,7 +587,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
     if(!m_pDoc)
         return;
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
         throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -661,7 +661,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     if(m_pDoc)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
+        const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
         if(!pEntry)
             throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -790,7 +790,7 @@ void SwXLineNumberingProperties::setPropertyValue(
     if(!m_pDoc)
         throw uno::RuntimeException();
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
         throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -904,7 +904,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
     if(!m_pDoc)
         throw uno::RuntimeException();
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
         throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -2299,7 +2299,7 @@ uno::Reference< XPropertySetInfo > SwXTextColumns::getPropertySetInfo(  )
 
 void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any& aValue )
 {
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
         throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pEntry->nFlags & PropertyAttribute::READONLY)
@@ -2372,7 +2372,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
 
 Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
 {
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
         throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 

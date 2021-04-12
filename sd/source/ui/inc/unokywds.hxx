@@ -44,20 +44,21 @@ inline constexpr OUStringLiteral sUNO_Service_ImageMapPolygonObject
     = u"com.sun.star.image.ImageMapPolygonObject";
 
 // properties
-inline const char16_t sUNO_Prop_ForbiddenCharacters[] = u"ForbiddenCharacters";
-inline const char16_t sUNO_Prop_MapUnit[] = u"MapUnit";
-inline const char16_t sUNO_Prop_VisibleArea[] = u"VisibleArea";
-inline const char16_t sUNO_Prop_TabStop[] = u"TabStop";
-inline const char16_t sUNO_Prop_CharLocale[] = u"CharLocale";
-inline const char16_t sUNO_Prop_AutomContFocus[] = u"AutomaticControlFocus";
-inline const char16_t sUNO_Prop_ApplyFrmDsgnMode[] = u"ApplyFormDesignMode";
-inline const char16_t sUNO_Prop_IsBackgroundVisible[] = u"IsBackgroundVisible";
-inline const char16_t sUNO_Prop_IsBackgroundObjectsVisible[] = u"IsBackgroundObjectsVisible";
-inline const char16_t sUNO_Prop_UserDefinedAttributes[] = u"UserDefinedAttributes";
-inline const char16_t sUNO_Prop_BookmarkURL[] = u"BookmarkURL";
-inline const char16_t sUNO_Prop_RuntimeUID[] = u"RuntimeUID";
-inline const char16_t sUNO_Prop_HasValidSignatures[] = u"HasValidSignatures";
-inline const char16_t sUNO_Prop_InteropGrabBag[] = u"InteropGrabBag";
+inline constexpr OUStringLiteral sUNO_Prop_ForbiddenCharacters = u"ForbiddenCharacters";
+inline constexpr OUStringLiteral sUNO_Prop_MapUnit = u"MapUnit";
+inline constexpr OUStringLiteral sUNO_Prop_VisibleArea = u"VisibleArea";
+inline constexpr OUStringLiteral sUNO_Prop_TabStop = u"TabStop";
+inline constexpr OUStringLiteral sUNO_Prop_CharLocale = u"CharLocale";
+inline constexpr OUStringLiteral sUNO_Prop_AutomContFocus = u"AutomaticControlFocus";
+inline constexpr OUStringLiteral sUNO_Prop_ApplyFrmDsgnMode = u"ApplyFormDesignMode";
+inline constexpr OUStringLiteral sUNO_Prop_IsBackgroundVisible = u"IsBackgroundVisible";
+inline constexpr OUStringLiteral sUNO_Prop_IsBackgroundObjectsVisible
+    = u"IsBackgroundObjectsVisible";
+inline constexpr OUStringLiteral sUNO_Prop_UserDefinedAttributes = u"UserDefinedAttributes";
+inline constexpr OUStringLiteral sUNO_Prop_BookmarkURL = u"BookmarkURL";
+inline constexpr OUStringLiteral sUNO_Prop_RuntimeUID = u"RuntimeUID";
+inline constexpr OUStringLiteral sUNO_Prop_HasValidSignatures = u"HasValidSignatures";
+inline constexpr OUStringLiteral sUNO_Prop_InteropGrabBag = u"InteropGrabBag";
 
 // view settings
 inline constexpr OUStringLiteral sUNO_View_ViewId = u"ViewId";

@@ -528,7 +528,7 @@ SwXDocumentIndex::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
@@ -861,7 +861,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard aGuard;
 
     uno::Any aRet;
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
@@ -2042,7 +2042,7 @@ SwXDocumentIndexMark::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
@@ -2179,7 +2179,7 @@ SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard aGuard;
 
     uno::Any aRet;
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
