@@ -317,13 +317,13 @@ static uno::Any GetParaListAutoFormat(SwTextNode const& rNode)
     SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
     std::vector<beans::NamedValue> props;
     // have to iterate the map, not the item set?
-    for (auto const& rEntry : rMap.getPropertyEntries())
+    for (auto const& rPair : rMap.getPropertyEntries())
     {
-        if (rPropSet.getPropertyState(rEntry, rSet) == PropertyState_DIRECT_VALUE)
+        if (rPropSet.getPropertyState(rPair.second, rSet) == PropertyState_DIRECT_VALUE)
         {
             Any value;
-            rPropSet.getPropertyValue(rEntry, rSet, value);
-            props.emplace_back(rEntry.sName, value);
+            rPropSet.getPropertyValue(rPair.second, rSet, value);
+            props.emplace_back(OUString(rPair.first), value);
         }
     }
     return uno::makeAny(comphelper::containerToSequence(props));

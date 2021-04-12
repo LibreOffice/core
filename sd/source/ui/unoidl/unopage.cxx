@@ -2780,15 +2780,14 @@ void SdMasterPage::setBackground( const Any& rValue )
             Reference< beans::XPropertySetInfo >  xSetInfo( xInputSet->getPropertySetInfo(), UNO_SET_THROW );
             Reference< beans::XPropertyState > xSetStates( xInputSet, UNO_QUERY );
 
-            PropertyEntryVector_t aBackgroundProperties = ImplGetPageBackgroundPropertySet()->getPropertyMap().getPropertyEntries();
-            for( const auto& rProp : aBackgroundProperties )
+            for( const auto& rProp : ImplGetPageBackgroundPropertySet()->getPropertyMap().getPropertyEntries() )
             {
-                if( xSetInfo->hasPropertyByName( rProp.sName ) )
+                if( xSetInfo->hasPropertyByName( OUString(rProp.first) ) )
                 {
-                    if( !xSetStates.is() || xSetStates->getPropertyState( rProp.sName ) == beans::PropertyState_DIRECT_VALUE )
-                        xStyleSet->setPropertyValue( rProp.sName,    xInputSet->getPropertyValue( rProp.sName ) );
+                    if( !xSetStates.is() || xSetStates->getPropertyState( OUString(rProp.first) ) == beans::PropertyState_DIRECT_VALUE )
+                        xStyleSet->setPropertyValue( OUString(rProp.first), xInputSet->getPropertyValue( OUString(rProp.first) ) );
                     else
-                        xSetStates->setPropertyToDefault( rProp.sName );
+                        xSetStates->setPropertyToDefault( OUString(rProp.first) );
                 }
             }
         }
