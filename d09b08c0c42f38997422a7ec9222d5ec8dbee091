@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83da6850_efd5c17f",
+        "filename": "sw/source/filter/ww8/ww8graf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2370,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-04-12T17:59:23Z",
+      "side": 1,
+      "message": "NOTE TO SELF: This formatting could be fixed too if there are any revisions to be made",
+      "range": {
+        "startLine": 2370,
+        "startChar": 12,
+        "endLine": 2370,
+        "endChar": 21
+      },
+      "revId": "d09b08c0c42f38997422a7ec9222d5ec8dbee091",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
