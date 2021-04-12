@@ -17,6 +17,8 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/XFormField.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -26,9 +28,11 @@
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <osl/thread.hxx>
 
 #include <IDocumentSettingAccess.hxx>
 #include <docsh.hxx>
@@ -67,6 +71,21 @@ DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.d
     // tdf#136983
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Last printed date", sal_Int16(2009), xDPS->getDocumentProperties()->getPrintDate().Year);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf100961_fixedDateTime, "tdf100961_fixedDateTime.doc")
+{
+    if (mbExported)
+        return;
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+
+    osl::Thread::wait(std::chrono::seconds(2));
+    uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)->refresh();
+
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    xFields->nextElement(); // Date field
+    CPPUNIT_ASSERT_MESSAGE("constant time", getProperty<bool>(xFields->nextElement(), "IsFixed"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf138345_paraCharHighlight, "tdf138345_paraCharHighlight.doc")

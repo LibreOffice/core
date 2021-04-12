@@ -1819,17 +1819,20 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, OUString& rStr )
         }
     }
 
+    sal_uInt16 nDoNotUpdate = (pF->nOpt & 0x10) ? FIXEDFLD : 0;
     if (nDT & SvNumFormatType::DATE)
     {
         SwDateTimeField aField(static_cast<SwDateTimeFieldType*>(
-            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime )), DATEFLD, nFormat);
+            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime)),
+                                                              (DATEFLD | nDoNotUpdate), nFormat);
         ForceFieldLanguage(aField, nLang);
         m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
     }
     else if (nDT == SvNumFormatType::TIME)
     {
         SwDateTimeField aField(static_cast<SwDateTimeFieldType*>(
-            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime)), TIMEFLD, nFormat);
+            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime)),
+                                                              (TIMEFLD | nDoNotUpdate), nFormat);
         ForceFieldLanguage(aField, nLang);
         m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
     }
