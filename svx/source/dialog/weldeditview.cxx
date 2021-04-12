@@ -43,6 +43,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
 void WeldEditView::SetText(const OUString& rStr) { GetEditEngine()->SetText(rStr); }
