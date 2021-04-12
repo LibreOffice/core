@@ -1247,20 +1247,19 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         css::uno::Sequence< css::beans::PropertyValue > aProperties;
         sal_Int32 nCount = 0;
         const SfxItemPropertyMap& rMap = ScCellObj::GetCellPropertyMap();
-        PropertyEntryVector_t aPropVector = rMap.getPropertyEntries();
         for ( sal_uInt16 nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; ++nWhich )
         {
             const SfxPoolItem* pItem = nullptr;
             if ( rNewSet.GetItemState( nWhich, true, &pItem ) == SfxItemState::SET && pItem )
             {
-                for ( const auto& rProp : aPropVector)
+                for ( const auto& rProp : rMap.getPropertyEntries())
                 {
-                    if ( rProp.nWID == nWhich )
+                    if ( rProp.second.nWID == nWhich )
                     {
                         css::uno::Any aVal;
-                        pItem->QueryValue( aVal, rProp.nMemberId );
+                        pItem->QueryValue( aVal, rProp.second.nMemberId );
                         aProperties.realloc( nCount + 1 );
-                        aProperties[ nCount ].Name = rProp.sName;
+                        aProperties[ nCount ].Name = rProp.first;
                         aProperties[ nCount ].Value = aVal;
                         ++nCount;
                     }

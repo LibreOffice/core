@@ -1138,17 +1138,16 @@ namespace {
 
 class SwStyleProperties_Impl
 {
-    const PropertyEntryVector_t aPropertyEntries;
+    const SfxItemPropertyMap& mrMap;
     std::map<OUString, uno::Any> m_vPropertyValues;
 public:
     explicit SwStyleProperties_Impl(const SfxItemPropertyMap& rMap)
-        : aPropertyEntries(rMap.getPropertyEntries())
+        : mrMap(rMap)
     { }
 
-    bool AllowsKey(const OUString& rName)
+    bool AllowsKey(std::u16string_view rName)
     {
-        return std::any_of(aPropertyEntries.begin(), aPropertyEntries.end(),
-            [rName] (const SfxItemPropertyNamedEntry& rEntry) {return rName == rEntry.sName;} );
+        return mrMap.hasPropertyByName(rName);
     }
     bool SetProperty(const OUString& rName, const uno::Any& rValue)
     {
@@ -4269,7 +4268,6 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
 
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
-    PropertyEntryVector_t aPropVector = rMap.getPropertyEntries();
 
     SfxItemSet& rSet = *mpSet;
     SfxItemIter aIter(rSet);
@@ -4280,13 +4278,13 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
 
         // TODO: Optimize - and fix! the old iteration filled each WhichId
         // only once but there are more properties than WhichIds
-        for( const auto& rProp : aPropVector )
+        for( const auto& rPair : rMap.getPropertyEntries() )
         {
-            if ( rProp.nWID == nWID )
+            if ( rPair.second.nWID == nWID )
             {
                 beans::PropertyValue aPropertyValue;
-                aPropertyValue.Name = rProp.sName;
-                pItem->QueryValue( aPropertyValue.Value, rProp.nMemberId );
+                aPropertyValue.Name = rPair.first;
+                pItem->QueryValue( aPropertyValue.Value, rPair.second.nMemberId );
                 aPropertyVector.push_back( aPropertyValue );
             }
         }

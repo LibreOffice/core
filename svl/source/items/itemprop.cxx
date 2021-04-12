@@ -112,19 +112,6 @@ void SfxItemPropertyMap::mergeProperties( const uno::Sequence< beans::Property >
     }
 }
 
-PropertyEntryVector_t SfxItemPropertyMap::getPropertyEntries() const
-{
-    PropertyEntryVector_t aRet;
-    aRet.reserve(m_aMap.size());
-
-    for( const auto& rPair : m_aMap )
-    {
-        const SfxItemPropertySimpleEntry* pEntry = &rPair.second;
-        aRet.emplace_back( OUString(rPair.first), *pEntry );
-    }
-    return aRet;
-}
-
 sal_uInt32 SfxItemPropertyMap::getSize() const
 {
     return m_aMap.size();
