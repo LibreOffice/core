@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccfe47ba_21e4c7bf",
+        "filename": "sc/source/filter/excel/xiescher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2021-04-12T19:16:24Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be \"nDataSize \u003c\u003d 0\", as this is not a boolean, but can be negative - see its decrement on line 964 above.",
+      "range": {
+        "startLine": 968,
+        "startChar": 12,
+        "endLine": 968,
+        "endChar": 13
+      },
+      "revId": "3808c6fe2074cf16be9c0ee5681a18ce588c6a74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
