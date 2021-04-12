@@ -14,7 +14,8 @@
 #include <map>
 #include <memory>
 
-#include <vcl/window.hxx>
+#include <vcl/vclevent.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/dllapi.h>
 
 #include <set>
@@ -38,6 +39,7 @@ class VclDrawingArea;
 class VclMultiLineEdit;
 class MenuButton;
 class ToolBox;
+namespace vcl { class Window; }
 namespace weld { class CustomWidgetController; }
 
 typedef std::map<OUString, OUString> StringMap;

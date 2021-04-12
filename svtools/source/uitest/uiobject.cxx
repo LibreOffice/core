@@ -10,6 +10,7 @@
 #include <memory>
 #include <uiobject.hxx>
 #include <svtools/valueset.hxx>
+#include <vcl/window.hxx>
 
 ValueSetUIObject::ValueSetUIObject(const VclPtr<vcl::Window>& rSetWin)
     : DrawingAreaUIObject(rSetWin)

@@ -10,8 +10,8 @@
 #include <memory>
 #include <uiobject.hxx>
 #include <svx/charmap.hxx>
-
 #include <svx/numvset.hxx>
+#include <vcl/window.hxx>
 
 SvxShowCharSetUIObject::SvxShowCharSetUIObject(const VclPtr<vcl::Window>& rCharSetWin)
     : DrawingAreaUIObject(rCharSetWin)
