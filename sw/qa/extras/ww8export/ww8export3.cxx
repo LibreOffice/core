@@ -69,6 +69,12 @@ DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.d
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Last printed date", sal_Int16(2009), xDPS->getDocumentProperties()->getPrintDate().Year);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf100961_fixedDateTime, "tdf100961_fixedDateTime.doc")
+{
+    // This should be a fixed date/time field, not the current time.
+    getParagraph(1, "05.01.19 04:06:08");
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf138345_paraCharHighlight, "tdf138345_paraCharHighlight.doc")
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(9), 1, "A side benefit is that "), uno::UNO_QUERY_THROW);
