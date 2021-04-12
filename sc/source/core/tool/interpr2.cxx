@@ -1410,17 +1410,43 @@ void ScInterpreter::ScIRR()
         fEstimated = GetDouble();
     else
         fEstimated = 0.1;
-    sal_uInt16 sPos = sp;                  // memorize the position of the stack
     double fEps = 1.0;
     double x, fValue;
     if (fEstimated == -1.0)
         x = 0.1;                           // default result for division by zero
     else
         x = fEstimated;                    // startvalue
+
+    ScRange aRange;
+    ScMatrixRef pMat;
+    SCSIZE nC = 0;
+    SCSIZE nR = 0;
+    bool bIsMatrix = false;
     switch (GetStackType())
     {
-        case svDoubleRef :
+        case svDoubleRef:
+            PopDoubleRef(aRange);
         break;
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+            pMat = GetMatrix();
+            if (pMat)
+            {
+                pMat->GetDimensions(nC, nR);
+                if (nC == 0 || nR == 0)
+                {
+                    PushIllegalParameter();
+                    return;
+                }
+                bIsMatrix = true;
+            }
+            else
+            {
+                PushIllegalParameter();
+                return;
+            }
+            break;
         default:
         {
             PushIllegalParameter();
@@ -1429,28 +1455,43 @@ void ScInterpreter::ScIRR()
     }
     const sal_uInt16 nIterationsMax = 20;
     sal_uInt16 nItCount = 0;
-    ScRange aRange;
-    while (fEps > SCdEpsilon && nItCount < nIterationsMax)
+    FormulaError nIterError = FormulaError::NONE;
+    while (fEps > SCdEpsilon && nItCount < nIterationsMax && nGlobalError == FormulaError::NONE)
     {                                       // Newtons method:
-        sp = sPos;                          // reset stack
         double fNom = 0.0;
         double fDenom = 0.0;
-        FormulaError nErr = FormulaError::NONE;
-        PopDoubleRef( aRange );
-        ScValueIterator aValIter(mrDoc, aRange, mnSubTotalFlags);
-        if (aValIter.GetFirst(fValue, nErr))
+        double fCount = 0.0;
+        if (bIsMatrix)
         {
-            double fCount = 0.0;
-            fNom    +=           fValue / pow(1.0+x,fCount);
-            fDenom  += -fCount * fValue / pow(1.0+x,fCount+1.0);
-            fCount++;
-            while ((nErr == FormulaError::NONE) && aValIter.GetNext(fValue, nErr))
+            for (SCSIZE j = 0; j < nC && nGlobalError == FormulaError::NONE; j++)
+            {
+                for (SCSIZE k = 0; k < nR; k++)
+                {
+                    if (!pMat->IsValue(j, k))
+                        continue;
+                    fValue = pMat->GetDouble(j, k);
+                    if (nGlobalError != FormulaError::NONE)
+                        break;
+
+                    fNom   +=           fValue / pow(1.0+x,fCount);
+                    fDenom += -fCount * fValue / pow(1.0+x,fCount+1.0);
+                    fCount++;
+                }
+            }
+        }
+        else
+        {
+            ScValueIterator aValIter(mrDoc, aRange, mnSubTotalFlags);
+            bool bLoop = aValIter.GetFirst(fValue, nIterError);
+            while (bLoop && nIterError == FormulaError::NONE)
             {
                 fNom   +=           fValue / pow(1.0+x,fCount);
                 fDenom += -fCount * fValue / pow(1.0+x,fCount+1.0);
                 fCount++;
+
+                bLoop = aValIter.GetNext(fValue, nIterError);
             }
-            SetError(nErr);
+            SetError(nIterError);
         }
         double xNew = x - fNom / fDenom;  // x(i+1) = x(i)-f(x(i))/f'(x(i))
         nItCount++;
