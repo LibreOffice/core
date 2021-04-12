@@ -791,7 +791,7 @@ SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)
     , mbAdjustingTextFrameWidthAndHeight(false)
     , mpLastShadowGeometry(nullptr)
 {
-    bClosedObj = true; // custom shapes may be filled
+    m_bClosedObj = true; // custom shapes may be filled
     bTextFrame = true;
 }
 
@@ -801,7 +801,7 @@ SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel, SdrObjCustomShape cons
     , mbAdjustingTextFrameWidthAndHeight(false)
     , mpLastShadowGeometry(nullptr)
 {
-    bClosedObj = true; // custom shapes may be filled
+    m_bClosedObj = true; // custom shapes may be filled
     bTextFrame = true;
 
     fObjectRotation = rSource.fObjectRotation;
@@ -1429,7 +1429,7 @@ void SdrObjCustomShape::NbcSetSnapRect( const tools::Rectangle& rRect )
 void SdrObjCustomShape::SetSnapRect( const tools::Rectangle& rRect )
 {
     tools::Rectangle aBoundRect0;
-    if ( pUserCall )
+    if ( m_pUserCall )
         aBoundRect0 = GetLastBoundRect();
     NbcSetSnapRect( rRect );
     BroadcastObjectChange();
@@ -1451,7 +1451,7 @@ void SdrObjCustomShape::NbcSetLogicRect( const tools::Rectangle& rRect )
 void SdrObjCustomShape::SetLogicRect( const tools::Rectangle& rRect )
 {
     tools::Rectangle aBoundRect0;
-    if ( pUserCall )
+    if ( m_pUserCall )
         aBoundRect0 = GetLastBoundRect();
     NbcSetLogicRect(rRect);
     BroadcastObjectChange();
@@ -1463,7 +1463,7 @@ void SdrObjCustomShape::Move( const Size& rSiz )
     if ( rSiz.Width() || rSiz.Height() )
     {
         tools::Rectangle aBoundRect0;
-        if ( pUserCall )
+        if ( m_pUserCall )
             aBoundRect0 = GetLastBoundRect();
         NbcMove(rSiz);
         SetChanged();
@@ -1814,9 +1814,9 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
     // GluePointList should not be set, but we delivered by using GetGluePointList(),
     // maybe on demand. Since the local object is changed here, this is assumed to
     // be a result of GetGluePointList and thus the list is copied
-    if(pPlusData)
+    if(m_pPlusData)
     {
-        pPlusData->SetGluePoints(aNewList);
+        m_pPlusData->SetGluePoints(aNewList);
     }
 }
 
@@ -2034,7 +2034,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
             sal_Int32 nYDiff = aPt.Y - aInteractionHandle.aPosition.Y;
 
             maRect.Move( nXDiff, nYDiff );
-            aOutRect.Move( nXDiff, nYDiff );
+            m_aOutRect.Move( nXDiff, nYDiff );
             maSnapRect.Move( nXDiff, nYDiff );
             SetRectsDirty(true);
             InvalidateRenderGeometry();
@@ -2136,7 +2136,7 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
     }
 
     SetBoundRectDirty();
-    bSnapRectDirty=true;
+    m_bSnapRectDirty=true;
 }
 
 bool SdrObjCustomShape::MovCreate(SdrDragStat& rStat)
@@ -2484,7 +2484,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
     if ( bRet )
     {
         tools::Rectangle aBoundRect0;
-        if ( pUserCall )
+        if ( m_pUserCall )
             aBoundRect0 = GetCurrentBoundRect();
 
         // taking care of handles that should not been changed

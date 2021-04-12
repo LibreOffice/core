@@ -1333,7 +1333,7 @@ void SdrOle2Obj::SetClosedObj( bool bIsClosed )
 {
     // TODO/LATER: do we still need this hack?
     // Allow changes to the closed state of OLE objects
-    bClosedObj = bIsClosed;
+    m_bClosedObj = bIsClosed;
 }
 
 SdrObjectUniquePtr SdrOle2Obj::getFullDragClone() const

@@ -252,7 +252,7 @@ void SdrTextObj::NbcSetText(const OUString& rStr)
 
 void SdrTextObj::SetText(const OUString& rStr)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetText(rStr);
     SetChanged();
     BroadcastObjectChange();
@@ -275,7 +275,7 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, EETextFo
 
 void SdrTextObj::SetText(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetText(rInput,rBaseURL,eFormat);
     SetChanged();
     BroadcastObjectChange();

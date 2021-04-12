@@ -122,7 +122,7 @@ SdrCircObj::SdrCircObj(
     nStartAngle=0_deg100;
     nEndAngle=36000_deg100;
     meCircleKind=eNewKind;
-    bClosedObj=eNewKind!=SdrCircKind::Arc;
+    m_bClosedObj=eNewKind!=SdrCircKind::Arc;
 }
 
 SdrCircObj::SdrCircObj(SdrModel& rSdrModel, SdrCircObj const & rSource)
@@ -131,7 +131,7 @@ SdrCircObj::SdrCircObj(SdrModel& rSdrModel, SdrCircObj const & rSource)
     meCircleKind = rSource.meCircleKind;
     nStartAngle = rSource.nStartAngle;
     nEndAngle = rSource.nEndAngle;
-    bClosedObj = rSource.bClosedObj;
+    m_bClosedObj = rSource.m_bClosedObj;
 }
 
 SdrCircObj::SdrCircObj(
@@ -143,7 +143,7 @@ SdrCircObj::SdrCircObj(
     nStartAngle=0_deg100;
     nEndAngle=36000_deg100;
     meCircleKind=eNewKind;
-    bClosedObj=eNewKind!=SdrCircKind::Arc;
+    m_bClosedObj=eNewKind!=SdrCircKind::Arc;
 }
 
 SdrCircObj::SdrCircObj(
@@ -159,7 +159,7 @@ SdrCircObj::SdrCircObj(
     nEndAngle=NormAngle36000(nNewEndAngle);
     if (nAngleDif==36000_deg100) nEndAngle+=nAngleDif; // full circle
     meCircleKind=eNewKind;
-    bClosedObj=eNewKind!=SdrCircKind::Arc;
+    m_bClosedObj=eNewKind!=SdrCircKind::Arc;
 }
 
 SdrCircObj::~SdrCircObj()
@@ -719,7 +719,7 @@ bool SdrCircObj::MovCreate(SdrDragStat& rStat)
     nStartAngle=pU->nStart;
     nEndAngle=pU->nEnd;
     SetBoundRectDirty();
-    bSnapRectDirty=true;
+    m_bSnapRectDirty=true;
     SetXPolyDirty();
 
     // #i103058# push current angle settings to ItemSet to
@@ -755,7 +755,7 @@ bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             nEndAngle=pU->nEnd;
         }
     }
-    bClosedObj=meCircleKind!=SdrCircKind::Arc;
+    m_bClosedObj=meCircleKind!=SdrCircKind::Arc;
     SetRectsDirty();
     SetXPolyDirty();
     ImpSetCircInfoToAttr();
@@ -818,7 +818,7 @@ PointerStyle SdrCircObj::GetCreatePointer() const
 void SdrCircObj::NbcMove(const Size& aSiz)
 {
     maRect.Move(aSiz);
-    aOutRect.Move(aSiz);
+    m_aOutRect.Move(aSiz);
     maSnapRect.Move(aSiz);
     SetXPolyDirty();
     SetRectsDirty(true);

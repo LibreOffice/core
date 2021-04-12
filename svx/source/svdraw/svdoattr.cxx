@@ -48,10 +48,10 @@ SdrAttrObj::~SdrAttrObj() {}
 
 const tools::Rectangle& SdrAttrObj::GetSnapRect() const
 {
-    if (bSnapRectDirty)
+    if (m_bSnapRectDirty)
     {
         const_cast<SdrAttrObj*>(this)->RecalcSnapRect();
-        const_cast<SdrAttrObj*>(this)->bSnapRectDirty = false;
+        const_cast<SdrAttrObj*>(this)->m_bSnapRectDirty = false;
     }
 
     return maSnapRect;
@@ -89,7 +89,7 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
 
 bool SdrAttrObj::HasFill() const
 {
-    return bClosedObj
+    return m_bClosedObj
            && GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE).GetValue()
                   != drawing::FillStyle_NONE;
 }

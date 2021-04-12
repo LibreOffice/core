@@ -424,8 +424,8 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(
     m_pFlyFrame(pFly)
 {
     const SvxProtectItem &rP = m_pFlyFrame->GetFormat()->GetProtect();
-    bMovProt = rP.IsPosProtected();
-    bSizProt = rP.IsSizeProtected();
+    m_bMovProt = rP.IsPosProtected();
+    m_bSizProt = rP.IsSizeProtected();
 }
 
 SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
@@ -549,15 +549,15 @@ void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 void SwVirtFlyDrawObj::SetRect() const
 {
     if ( GetFlyFrame()->getFrameArea().HasArea() )
-        const_cast<SwVirtFlyDrawObj*>(this)->aOutRect = GetFlyFrame()->getFrameArea().SVRect();
+        const_cast<SwVirtFlyDrawObj*>(this)->m_aOutRect = GetFlyFrame()->getFrameArea().SVRect();
     else
-        const_cast<SwVirtFlyDrawObj*>(this)->aOutRect = tools::Rectangle();
+        const_cast<SwVirtFlyDrawObj*>(this)->m_aOutRect = tools::Rectangle();
 }
 
 const tools::Rectangle& SwVirtFlyDrawObj::GetCurrentBoundRect() const
 {
     SetRect();
-    return aOutRect;
+    return m_aOutRect;
 }
 
 const tools::Rectangle& SwVirtFlyDrawObj::GetLastBoundRect() const
@@ -578,7 +578,7 @@ void SwVirtFlyDrawObj::RecalcSnapRect()
 const tools::Rectangle& SwVirtFlyDrawObj::GetSnapRect()  const
 {
     SetRect();
-    return aOutRect;
+    return m_aOutRect;
 }
 
 void SwVirtFlyDrawObj::SetSnapRect(const tools::Rectangle& )
@@ -587,8 +587,8 @@ void SwVirtFlyDrawObj::SetSnapRect(const tools::Rectangle& )
     SetRect();
     SetChanged();
     BroadcastObjectChange();
-    if (pUserCall!=nullptr)
-        pUserCall->Changed(*this, SdrUserCallType::Resize, aTmp);
+    if (m_pUserCall!=nullptr)
+        m_pUserCall->Changed(*this, SdrUserCallType::Resize, aTmp);
 }
 
 void SwVirtFlyDrawObj::NbcSetSnapRect(const tools::Rectangle& )
@@ -599,7 +599,7 @@ void SwVirtFlyDrawObj::NbcSetSnapRect(const tools::Rectangle& )
 const tools::Rectangle& SwVirtFlyDrawObj::GetLogicRect() const
 {
     SetRect();
-    return aOutRect;
+    return m_aOutRect;
 }
 
 void SwVirtFlyDrawObj::SetLogicRect(const tools::Rectangle& )
@@ -608,8 +608,8 @@ void SwVirtFlyDrawObj::SetLogicRect(const tools::Rectangle& )
     SetRect();
     SetChanged();
     BroadcastObjectChange();
-    if (pUserCall!=nullptr)
-        pUserCall->Changed(*this, SdrUserCallType::Resize, aTmp);
+    if (m_pUserCall!=nullptr)
+        m_pUserCall->Changed(*this, SdrUserCallType::Resize, aTmp);
 }
 
 void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle& )
@@ -638,13 +638,13 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         // working properly. Restore FrameArea and use aOutRect from old FrameArea.
         TransformableSwFrame* pTransformableSwFrame(static_cast<SwFlyFreeFrame*>(GetFlyFrame())->getTransformableSwFrame());
         pTransformableSwFrame->restoreFrameAreas();
-        aOutRect = GetFlyFrame()->getFrameArea().SVRect();
+        m_aOutRect = GetFlyFrame()->getFrameArea().SVRect();
     }
 
-    aOutRect.Move( rSiz );
+    m_aOutRect.Move( rSiz );
     const Point aOldPos( GetFlyFrame()->getFrameArea().Pos() );
-    const Point aNewPos( aOutRect.TopLeft() );
-    const SwRect aFlyRect( aOutRect );
+    const Point aNewPos( m_aOutRect.TopLeft() );
+    const SwRect aFlyRect( m_aOutRect );
 
     //If the Fly has an automatic align (right or top),
     //so preserve the automatic.
@@ -833,7 +833,7 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
         // working properly. Restore FrameArea and use aOutRect from old FrameArea.
         TransformableSwFrame* pTransformableSwFrame(static_cast<SwFlyFreeFrame*>(GetFlyFrame())->getTransformableSwFrame());
         pTransformableSwFrame->restoreFrameAreas();
-        aOutRect = GetFlyFrame()->getFrameArea().SVRect();
+        m_aOutRect = GetFlyFrame()->getFrameArea().SVRect();
     }
 
     // Compute old and new rect. This will give us the deformation to apply to
@@ -904,8 +904,8 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
     // Set new frame size
     SwFrameFormat *pFormat = GetFormat();
     SwFormatFrameSize aSz( pFormat->GetFrameSize() );
-    const tools::Long aNewWidth(aNewRect.GetWidth() + (aOutRect.GetWidth() - aOldRect.GetWidth()));
-    const tools::Long aNewHeight(aNewRect.GetHeight() + (aOutRect.GetHeight() - aOldRect.GetHeight()));
+    const tools::Long aNewWidth(aNewRect.GetWidth() + (m_aOutRect.GetWidth() - aOldRect.GetWidth()));
+    const tools::Long aNewHeight(aNewRect.GetHeight() + (m_aOutRect.GetHeight() - aOldRect.GetHeight()));
     aSz.SetWidth(aNewWidth);
     aSz.SetHeight(aNewHeight);
     pFormat->GetDoc()->SetAttr( aSz, *pFormat );
@@ -1002,7 +1002,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
         const basegfx::B2DVector aAbsScale(basegfx::absolute(aScale));
 
         // create new modified, but untransformed OutRect
-        aOutRect = tools::Rectangle(
+        m_aOutRect = tools::Rectangle(
             basegfx::fround(aCenter.getX() - (0.5 * aAbsScale.getX())),
             basegfx::fround(aCenter.getY() - (0.5 * aAbsScale.getY())),
             basegfx::fround(aCenter.getX() + (0.5 * aAbsScale.getX())),
@@ -1015,7 +1015,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
     }
     else
     {
-        ResizeRect( aOutRect, rRef, xFact, yFact );
+        ResizeRect( m_aOutRect, rRef, xFact, yFact );
     }
 
     // Position may also change, remember old one. This is now already
@@ -1023,7 +1023,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
     Point aOldPos(bUseRightEdge ? GetFlyFrame()->getFrameArea().TopRight() : GetFlyFrame()->getFrameArea().Pos());
 
     // get target size in old coordinate system
-    Size aSz( aOutRect.Right() - aOutRect.Left() + 1, aOutRect.Bottom()- aOutRect.Top()  + 1 );
+    Size aSz( m_aOutRect.Right() - m_aOutRect.Left() + 1, m_aOutRect.Bottom()- m_aOutRect.Top()  + 1 );
 
     // compare with restored FrameArea
     if( aSz != GetFlyFrame()->getFrameArea().SSize() )
@@ -1091,7 +1091,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
     }
 
     //Position can also be changed, get new one
-    const Point aNewPos(bUseRightEdge ? aOutRect.Right() + 1 : aOutRect.Left(), aOutRect.Top());
+    const Point aNewPos(bUseRightEdge ? m_aOutRect.Right() + 1 : m_aOutRect.Left(), m_aOutRect.Top());
 
     if ( aNewPos == aOldPos )
         return;
@@ -1104,7 +1104,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
     const Size aDeltaMove(
             aNewPos.X() - aOldPos.X(),
             aNewPos.Y() - aOldPos.Y());
-    aOutRect.Move(-aDeltaMove.Width(), -aDeltaMove.Height());
+    m_aOutRect.Move(-aDeltaMove.Width(), -aDeltaMove.Height());
 
     // Now, move as needed (no empty delta which was a hack anyways)
     if(bIsTransformableSwFrame)
@@ -1112,7 +1112,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
         // need to save aOutRect to FrameArea, will be restored to aOutRect in
         // SwVirtFlyDrawObj::NbcMove currently for TransformableSwFrames
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*GetFlyFrame());
-        aFrm.setSwRect(aOutRect);
+        aFrm.setSwRect(m_aOutRect);
     }
 
     // keep old hack - not clear what happens here

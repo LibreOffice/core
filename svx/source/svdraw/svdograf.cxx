@@ -565,7 +565,7 @@ bool SdrGrafObj::IsLinkedGraphic() const
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    bool bNoPresGrf = ( mpGraphicObject->GetType() != GraphicType::NONE ) && !bEmptyPresObj;
+    bool bNoPresGrf = ( mpGraphicObject->GetType() != GraphicType::NONE ) && !m_bEmptyPresObj;
 
     rInfo.bResizeFreeAllowed = aGeo.nRotationAngle.get() % 9000 == 0 ||
                                aGeo.nRotationAngle.get() % 18000 == 0 ||
@@ -576,7 +576,7 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bRotate90Allowed = bNoPresGrf;
     rInfo.bMirrorFreeAllowed = bNoPresGrf;
     rInfo.bMirror45Allowed = bNoPresGrf;
-    rInfo.bMirror90Allowed = !bEmptyPresObj;
+    rInfo.bMirror90Allowed = !m_bEmptyPresObj;
     rInfo.bTransparenceAllowed = false;
 
     // #i118485# Shear allowed and possible now

@@ -906,7 +906,7 @@ SdrTableObj::SdrTableObj(
 
 void SdrTableObj::init( sal_Int32 nColumns, sal_Int32 nRows )
 {
-    bClosedObj = true;
+    m_bClosedObj = true;
 
     mpImpl = new SdrTableObjImpl;
     mpImpl->init( this, nColumns, nRows );
@@ -1968,7 +1968,7 @@ bool SdrTableObj::AdjustTextFrameWidthAndHeight()
     if (bRet)
     {
         tools::Rectangle aBoundRect0;
-        if (pUserCall!=nullptr)
+        if (m_pUserCall!=nullptr)
             aBoundRect0=GetLastBoundRect();
         maRect = aNewRect;
         SetRectsDirty();
@@ -2311,7 +2311,7 @@ bool SdrTableObj::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     maRect = aRect1; // for ObjName
     SetBoundRectDirty();
-    bSnapRectDirty=true;
+    m_bSnapRectDirty=true;
     return true;
 }
 

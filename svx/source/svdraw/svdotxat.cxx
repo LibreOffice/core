@@ -257,7 +257,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight()
     tools::Rectangle aNewRect(maRect);
     bool bRet=AdjustTextFrameWidthAndHeight(aNewRect);
     if (bRet) {
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         maRect = aNewRect;
         SetRectsDirty();
         if (auto pRectObj = dynamic_cast<SdrRectObj *>(this)) { // this is a hack

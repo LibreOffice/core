@@ -54,13 +54,13 @@ std::unique_ptr<sdr::contact::ViewContact> SdrRectObj::CreateObjectSpecificViewC
 SdrRectObj::SdrRectObj(SdrModel& rSdrModel)
 :   SdrTextObj(rSdrModel)
 {
-    bClosedObj=true;
+    m_bClosedObj=true;
 }
 
 SdrRectObj::SdrRectObj(SdrModel& rSdrModel, SdrRectObj const & rSource)
 :   SdrTextObj(rSdrModel, rSource)
 {
-    bClosedObj=true;
+    m_bClosedObj=true;
     if ( rSource.mpXPoly )
         mpXPoly.reset( new XPolygon( *rSource.mpXPoly ) );
     else
@@ -72,7 +72,7 @@ SdrRectObj::SdrRectObj(
     const tools::Rectangle& rRect)
 :   SdrTextObj(rSdrModel, rRect)
 {
-    bClosedObj=true;
+    m_bClosedObj=true;
 }
 
 SdrRectObj::SdrRectObj(
@@ -83,7 +83,7 @@ SdrRectObj::SdrRectObj(
     DBG_ASSERT(eTextKind==OBJ_TEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
                "SdrRectObj::SdrRectObj(SdrObjKind) can only be applied to text frames.");
-    bClosedObj=true;
+    m_bClosedObj=true;
 }
 
 SdrRectObj::SdrRectObj(
@@ -95,7 +95,7 @@ SdrRectObj::SdrRectObj(
     DBG_ASSERT(eTextKind==OBJ_TEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
                "SdrRectObj::SdrRectObj(SdrObjKind,...) can only be applied to text frames.");
-    bClosedObj=true;
+    m_bClosedObj=true;
 }
 
 SdrRectObj::~SdrRectObj()
