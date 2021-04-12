@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3445e139_ffddca82",
+        "filename": "sc/source/filter/excel/xistream.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2021-04-12T19:38:46Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be \"nBytesLeft \u003c\u003d 0\", as this is not a boolean, but can be negative - see its decrement on line 964 above.\n\nActually, it shouldn\u0027t be negative, it is unsigned (size_t). But it could \"underflow\" to large unsigned values, unless checked before the decrement. So that it should probably be a defined as signed int? (In any case, \"\u003c\u003d\" may probably be semantically better than \"!\", as it the variable is not used with boolean semantics?)",
+      "range": {
+        "startLine": 757,
+        "startChar": 16,
+        "endLine": 757,
+        "endChar": 17
+      },
+      "revId": "b356facc76ae31f82d2d0a68af152680cc003929",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
