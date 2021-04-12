@@ -591,26 +591,25 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
         return;
 
     const SfxItemPropertyMap& rSrc = rPropSet.getPropertyMap();
-    PropertyEntryVector_t aSrcPropVector = rSrc.getPropertyEntries();
 
-    for(const auto& rSrcProp : aSrcPropVector)
+    for(const auto& rSrcProp : rSrc.getPropertyEntries())
     {
-        const sal_uInt16 nWID = rSrcProp.nWID;
+        const sal_uInt16 nWID = rSrcProp.second.nWID;
         if(SfxItemPool::IsWhich(nWID)
                 && (nWID < OWN_ATTR_VALUE_START || nWID > OWN_ATTR_VALUE_END)
-                && rPropSet.GetUsrAnyForID(rSrcProp))
+                && rPropSet.GetUsrAnyForID(rSrcProp.second))
             rSet.Put(rSet.GetPool()->GetDefaultItem(nWID));
     }
 
-    for(const auto& rSrcProp : aSrcPropVector)
+    for(const auto& rSrcProp : rSrc.getPropertyEntries())
     {
-        if(rSrcProp.nWID)
+        if(rSrcProp.second.nWID)
         {
-            uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(rSrcProp);
+            uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(rSrcProp.second);
             if(pUsrAny)
             {
                 // search for equivalent entry in pDst
-                const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( rSrcProp.sName );
+                const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( rSrcProp.first );
                 if(pEntry)
                 {
                     // entry found
@@ -618,7 +617,7 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
                     {
                         // special ID in PropertySet, can only be set
                         // directly at the object
-                        xSet->setPropertyValue( rSrcProp.sName, *pUsrAny);
+                        xSet->setPropertyValue( OUString(rSrcProp.first), *pUsrAny);
                     }
                     else
                     {

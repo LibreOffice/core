@@ -1488,17 +1488,16 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     {
         const SfxItemPropertyMap& rPropMap =
                     aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_CURSOR )->getPropertyMap();
-        PropertyEntryVector_t aPropertyEntries = rPropMap.getPropertyEntries();
-        for ( const auto& rProp : aPropertyEntries )
+        for ( const auto& rPair : rPropMap.getPropertyEntries() )
         {
-            const SfxPoolItem* pItem = pSet->GetItem( rProp.nWID );
+            const SfxPoolItem* pItem = pSet->GetItem( rPair.second.nWID );
             if ( pItem )
             {
                 uno::Any aVal;
-                pItem->QueryValue( aVal, rProp.nMemberId );
+                pItem->QueryValue( aVal, rPair.second.nMemberId );
 
                 PropertyValue rPropVal;
-                rPropVal.Name = rProp.sName;
+                rPropVal.Name = rPair.first;
                 rPropVal.Value = aVal;
                 rPropVal.Handle = -1;
                 rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
@@ -1681,19 +1680,18 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
 
             const SfxItemPropertyMap& rPropMap =
                     aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_CURSOR )->getPropertyMap();
-            PropertyEntryVector_t aPropertyEntries = rPropMap.getPropertyEntries();
-            for ( const auto& rProp : aPropertyEntries )
+            for ( const auto& rPair : rPropMap.getPropertyEntries() )
             {
                 const SfxPoolItem* pItem( nullptr );
                 // #i82637# - Found character attributes, whose value equals the value of
                 // the corresponding default character attributes, are excluded.
-                if ( aSet.GetItemState( rProp.nWID, true, &pItem ) == SfxItemState::SET )
+                if ( aSet.GetItemState( rPair.second.nWID, true, &pItem ) == SfxItemState::SET )
                 {
                     uno::Any aVal;
-                    pItem->QueryValue( aVal, rProp.nMemberId );
+                    pItem->QueryValue( aVal, rPair.second.nMemberId );
 
                     PropertyValue rPropVal;
-                    rPropVal.Name = rProp.sName;
+                    rPropVal.Name = rPair.first;
                     rPropVal.Value = aVal;
                     rPropVal.Handle = -1;
                     rPropVal.State = PropertyState_DIRECT_VALUE;
