@@ -121,6 +121,20 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport)
     CPPUNIT_ASSERT(pPdfPage->hasLinks());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTabOverMarginSection)
+{
+    createSwDoc(DATA_DIRECTORY, "tabovermargin-section.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nWidth
+        = getXPath(pXmlDoc, "//Text[@nType='PortionType::TabRight']", "nWidth").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 5000
+    // - Actual  : 9372
+    // i.e. the tab portion width was not the expected 4386, but much larger, so the number after
+    // the tab portion was not visible.
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(5000), nWidth);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
