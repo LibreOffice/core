@@ -16,6 +16,24 @@
       "revId": "10c02f69106a248f3c0514b36ec95895ce98d8d7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e396c658_e2494e93",
+        "filename": "desktop/win32/source/loader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-12T06:48:18Z",
+      "side": 1,
+      "message": "corret, this should be \u0027we were\u0027",
+      "parentUuid": "599dc21a_72fb894a",
+      "revId": "10c02f69106a248f3c0514b36ec95895ce98d8d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
