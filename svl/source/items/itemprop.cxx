@@ -39,7 +39,7 @@ SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries 
 {
     while( !pEntries->aName.empty() )
     {
-        m_aMap[ pEntries->aName ] = *pEntries;
+        m_aMap.emplace( pEntries->aName, *pEntries );
         ++pEntries;
     }
 }

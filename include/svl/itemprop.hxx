@@ -94,7 +94,7 @@ struct SfxItemPropertySimpleEntry
             assert(_nFlags <= 0x1ff );
         }
 
-    SfxItemPropertySimpleEntry( const SfxItemPropertyMapEntry& rMapEntry )
+    explicit SfxItemPropertySimpleEntry( const SfxItemPropertyMapEntry& rMapEntry )
         : aType( rMapEntry.aType )
         , nWID( rMapEntry.nWID )
         , nFlags( rMapEntry.nFlags )
