@@ -45,21 +45,21 @@ public:
     SvxItemPropertySet( SvxItemPropertySet const & ) = delete; // MSVC2015 workaround
 
     // Methods, which work directly with the ItemSet
-    static css::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues );
-    static void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues );
+    static css::uno::Any getPropertyValue( const SfxItemPropertyMapEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues );
+    static void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues );
 
     // Methods that use Any instead
-    css::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const;
-    void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& rVal ) const;
+    css::uno::Any getPropertyValue( const SfxItemPropertyMapEntry* pMap ) const;
+    void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rVal ) const;
 
     bool AreThereOwnUsrAnys() const { return ! aCombineList.empty(); }
-    css::uno::Any* GetUsrAnyForID(SfxItemPropertySimpleEntry const & entry) const;
-    void AddUsrAnyForID(const css::uno::Any& rAny, SfxItemPropertySimpleEntry const & entry);
+    css::uno::Any* GetUsrAnyForID(SfxItemPropertyMapEntry const & entry) const;
+    void AddUsrAnyForID(const css::uno::Any& rAny, SfxItemPropertyMapEntry const & entry);
     void ClearAllUsrAny();
 
     css::uno::Reference< css::beans::XPropertySetInfo > const & getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const { return m_aPropertyMap;}
-    const SfxItemPropertySimpleEntry* getPropertyMapEntry(std::u16string_view rName) const;
+    const SfxItemPropertyMapEntry* getPropertyMapEntry(std::u16string_view rName) const;
 };
 
 /** converts the given any with a metric to 100th/mm if needed */

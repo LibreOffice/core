@@ -47,7 +47,7 @@ SvxTableShape::~SvxTableShape() throw()
 
 bool SvxTableShape::setPropertyValueImpl(
     const OUString& rName,
-    const SfxItemPropertySimpleEntry* pProperty,
+    const SfxItemPropertyMapEntry* pProperty,
     const css::uno::Any& rValue )
 {
     switch( pProperty->nWID )
@@ -99,7 +99,7 @@ bool SvxTableShape::setPropertyValueImpl(
 
 bool SvxTableShape::getPropertyValueImpl(
     const OUString& rName,
-    const SfxItemPropertySimpleEntry* pProperty,
+    const SfxItemPropertyMapEntry* pProperty,
     css::uno::Any& rValue )
 {
     switch( pProperty->nWID )

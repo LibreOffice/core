@@ -323,13 +323,13 @@ protected:
     css::uno::Reference<css::beans::XPropertySet> m_xStyleData;
 
     template<sal_uInt16>
-    void SetPropertyValue(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any&, SwStyleBase_Impl&);
+    void SetPropertyValue(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any&, SwStyleBase_Impl&);
     void SetPropertyValues_Impl( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues );
     SfxStyleSheetBase* GetStyleSheetBase();
     void PrepareStyleBase(SwStyleBase_Impl& rBase);
     template<sal_uInt16>
-    uno::Any GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
-    uno::Any GetStyleProperty_Impl(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
+    uno::Any GetStyleProperty(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
+    uno::Any GetStyleProperty_Impl(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
     uno::Any GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet, SwStyleBase_Impl& rBase, const OUString& rPropertyName);
 
 public:
@@ -418,8 +418,8 @@ public:
     /// @throws lang::IllegalArgumentException
     /// @throws lang::WrappedTargetException
     /// @throws uno::RuntimeException
-    void SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase);
-    void PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl);
+    void SetStyleProperty(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase);
+    void PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertyMapEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl);
 };
 
 class SwXFrameStyle
@@ -1587,7 +1587,7 @@ const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
 
 
 
-static sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, SwDoc* pDoc, uno::Any& o_aValue)
+static sal_uInt8 lcl_TranslateMetric(const SfxItemPropertyMapEntry& rEntry, SwDoc* pDoc, uno::Any& o_aValue)
 {
     // check for needed metric translation
     if(!(rEntry.nMoreFlags & PropertyMoreFlags::METRIC_ITEM))
@@ -1608,7 +1608,7 @@ static sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, S
     return rEntry.nMemberId;
 }
 template<>
-void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     // default ItemSet handling
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
@@ -1618,7 +1618,7 @@ void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertySimpleEntry& rE
     rStyleSet.Put(aSet);
 }
 template<>
-void SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     bool bHidden = false;
     if(rValue >>= bHidden)
@@ -1630,14 +1630,14 @@ void SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>(const SfxItemPropertySimpleEntry&
     SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
 }
 template<>
-void SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     o_rStyleBase.getNewBase()->GetItemSet();
     o_rStyleBase.getNewBase()->SetGrabBagItem(rValue);
     SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
 }
 template<>
-void SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     uno::Any aValue(rValue);
     const auto nMemberId(lcl_TranslateMetric(rEntry, m_pDoc, aValue));
@@ -1664,7 +1664,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>(const SfxItemPro
         SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, aValue, o_rStyleBase);
 }
 template<>
-void SwXStyle::SetPropertyValue<sal_uInt16(RES_BACKGROUND)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(RES_BACKGROUND)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
     const std::unique_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND, true, m_pDoc->IsInXMLImport()));
@@ -1683,7 +1683,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_BACKGROUND)>(const SfxItemPropert
     setSvxBrushItemAsFillAttributesToTargetSet(*aChangedBrushItem, rStyleSet);
 }
 template<>
-void SwXStyle::SetPropertyValue<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     drawing::BitmapMode eMode;
     if(!(rValue >>= eMode))
@@ -1697,7 +1697,7 @@ void SwXStyle::SetPropertyValue<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertySimp
     rStyleSet.Put(XFillBmpTileItem(drawing::BitmapMode_REPEAT == eMode));
 }
 template<>
-void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if(!rValue.has<OUString>())
         throw lang::IllegalArgumentException();
@@ -1727,7 +1727,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProperty
     rStyleSet.Put(aSet);
 }
 template<>
-void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if(!rValue.has<uno::Reference<container::XIndexReplace>>() || !rValue.has<uno::Reference<lang::XUnoTunnel>>())
         throw lang::IllegalArgumentException();
@@ -1778,7 +1778,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertySimpleEnt
     o_rStyleBase.getNewBase()->SetNumRule(aSetRule);
 }
 template<>
-void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_OUTLINELEVEL)>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_OUTLINELEVEL)>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if(!rValue.has<sal_Int16>())
         return;
@@ -1787,7 +1787,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_OUTLINELEVEL)>(const SfxIt
         o_rStyleBase.getNewBase()->GetCollection()->SetAttrOutlineLevel(nLevel);
 }
 template<>
-void SwXStyle::SetPropertyValue<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if(!rValue.has<OUString>())
         return;
@@ -1797,7 +1797,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertySimple
     o_rStyleBase.getNewBase()->SetFollow(aString);
 }
 template<>
-void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAGEDESC)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAGEDESC)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if(MID_PAGEDESC_PAGEDESCNAME != rEntry.nMemberId)
     {
@@ -1834,7 +1834,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAGEDESC)>(const SfxItemPropertyS
     }
 }
 template<>
-void SwXStyle::SetPropertyValue<sal_uInt16(RES_TEXT_VERT_ADJUST)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(RES_TEXT_VERT_ADJUST)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if(m_rEntry.m_eFamily != SfxStyleFamily::Page)
     {
@@ -1848,7 +1848,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_TEXT_VERT_ADJUST)>(const SfxItemP
         pPageDesc->SetVerticalAdjustment(rValue.get<drawing::TextVerticalAdjust>());
 }
 template<>
-void SwXStyle::SetPropertyValue<FN_UNO_IS_AUTO_UPDATE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<FN_UNO_IS_AUTO_UPDATE>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if(!rValue.has<bool>())
         throw lang::IllegalArgumentException();
@@ -1859,7 +1859,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_IS_AUTO_UPDATE>(const SfxItemPropertySimp
         o_rStyleBase.getNewBase()->GetFrameFormat()->SetAutoUpdateFormat(bAuto);
 }
 template<>
-void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     static_assert(COND_COMMAND_COUNT == 28, "invalid size of command count?");
     using expectedarg_t = uno::Sequence<beans::NamedValue>;
@@ -1895,7 +1895,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPrope
     o_rStyleBase.GetItemSet().Put(aCondItem);
 }
 template<>
-void SwXStyle::SetPropertyValue<FN_UNO_CATEGORY>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<FN_UNO_CATEGORY>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if(!o_rStyleBase.getNewBase()->IsUserDefined() || !rValue.has<paragraphstyle_t>())
         throw lang::IllegalArgumentException();
@@ -1913,7 +1913,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_CATEGORY>(const SfxItemPropertySimpleEntr
     o_rStyleBase.getNewBase()->SetMask( pUnoToCoreIt->second|SfxStyleSearchBits::UserDefined );
 }
 template<>
-void SwXStyle::SetPropertyValue<SID_SWREGISTER_COLLECTION>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<SID_SWREGISTER_COLLECTION>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     OUString sName;
     rValue >>= sName;
@@ -1925,7 +1925,7 @@ void SwXStyle::SetPropertyValue<SID_SWREGISTER_COLLECTION>(const SfxItemProperty
     o_rStyleBase.GetItemSet().Put(SfxStringItem(SID_SWREGISTER_COLLECTION, aString ) );
 }
 template<>
-void SwXStyle::SetPropertyValue<sal_uInt16(RES_TXTATR_CJK_RUBY)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(RES_TXTATR_CJK_RUBY)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if(MID_RUBY_CHARSTYLE != rEntry.nMemberId)
         return;
@@ -1952,7 +1952,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_TXTATR_CJK_RUBY)>(const SfxItemPr
     SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
 }
 template<>
-void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_DROP)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_DROP)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if(MID_DROPCAP_CHAR_STYLE_NAME != rEntry.nMemberId)
     {
@@ -1981,7 +1981,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_DROP)>(const SfxItemProper
     rStyleSet.Put(*pDrop);
 }
 template<>
-void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_NUMRULE)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_NUMRULE)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     uno::Any aValue(rValue);
     lcl_TranslateMetric(rEntry, m_pDoc, aValue);
@@ -1999,10 +1999,10 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_NUMRULE)>(const SfxItemPro
     }
 }
 
-void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase)
+void SwXStyle::SetStyleProperty(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase)
 {
     using propertytype_t = decltype(rEntry.nWID);
-    using coresetter_t = std::function<void(SwXStyle&, const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any&, SwStyleBase_Impl&)>;
+    using coresetter_t = std::function<void(SwXStyle&, const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any&, SwStyleBase_Impl&)>;
     static std::unique_ptr<std::map<propertytype_t, coresetter_t>> pUnoToCore;
     if(!pUnoToCore)
     {
@@ -2070,7 +2070,7 @@ void SwXStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNa
     const uno::Any* pValues = rValues.getConstArray();
     for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
     {
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pNames[nProp]);
+        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(pNames[nProp]);
         if(!pEntry || (!m_bIsConditional && pNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
             throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], static_cast<cppu::OWeakObject*>(this));
         if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
@@ -2120,9 +2120,9 @@ void SwXStyle::PrepareStyleBase(SwStyleBase_Impl& rBase)
 }
 
 template<>
-uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
+uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
 template<>
-uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_PHYSICAL>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_PHYSICAL>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
 {
     SfxStyleSheetBase* pBase(GetStyleSheetBase());
     if(!pBase)
@@ -2136,7 +2136,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_PHYSICAL>(const SfxItemPropertySim
     return uno::makeAny<bool>(bPhys);
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<FN_UNO_HIDDEN>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_HIDDEN>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
 {
     SfxStyleSheetBase* pBase(GetStyleSheetBase());
     if(!pBase)
@@ -2145,7 +2145,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_HIDDEN>(const SfxItemPropertySimpleEn
     return uno::makeAny(xBase->IsHidden());
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
 {
     SfxStyleSheetBase* pBase(GetStyleSheetBase());
     if(!pBase)
@@ -2156,7 +2156,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItem
     return aRet;
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAPER_BIN)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAPER_BIN)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     SfxItemSet& rSet = rBase.GetItemSet();
@@ -2171,7 +2171,7 @@ uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProp
     return uno::makeAny(pPrinter->GetPaperBinName(nBin));
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<FN_UNO_NUM_RULES>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_NUM_RULES>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     const SwNumRule* pRule = rBase.getNewBase()->GetNumRule();
@@ -2180,14 +2180,14 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_NUM_RULES>(const SfxItemPropertySimpl
     return uno::makeAny<uno::Reference<container::XIndexReplace>>(xRules);
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PARATR_OUTLINELEVEL)>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PARATR_OUTLINELEVEL)>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     SAL_WARN_IF(SfxStyleFamily::Para != GetFamily(), "sw.uno", "only paras");
     return uno::makeAny<sal_Int16>(rBase.getNewBase()->GetCollection()->GetAttrOutlineLevel());
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     OUString aString;
@@ -2195,7 +2195,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertySi
     return uno::makeAny(aString);
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAGEDESC)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAGEDESC)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     if(MID_PAGEDESC_PAGEDESCNAME != rEntry.nMemberId)
@@ -2212,7 +2212,7 @@ uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAGEDESC)>(const SfxItemPrope
     return uno::makeAny(aString);
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_AUTO_UPDATE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_AUTO_UPDATE>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     switch(GetFamily())
@@ -2223,13 +2223,13 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_AUTO_UPDATE>(const SfxItemProperty
     }
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<FN_UNO_DISPLAY_NAME>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_DISPLAY_NAME>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     return uno::makeAny(rBase.getNewBase()->GetName());
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     static_assert(COND_COMMAND_COUNT == 28, "invalid size of command count?");
@@ -2259,7 +2259,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemP
     return uno::makeAny(aSeq);
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     static std::unique_ptr<std::map<collectionbits_t, paragraphstyle_t>> pUnoToCore;
@@ -2277,7 +2277,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertySimple
     return uno::makeAny(pUnoToCoreIt->second);
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<SID_SWREGISTER_COLLECTION>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<SID_SWREGISTER_COLLECTION>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     const SwPageDesc *pPageDesc = rBase.getNewBase()->GetPageDesc();
@@ -2291,7 +2291,7 @@ uno::Any SwXStyle::GetStyleProperty<SID_SWREGISTER_COLLECTION>(const SfxItemProp
     return uno::makeAny(aName);
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_BACKGROUND)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_BACKGROUND)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     const SfxItemSet& rSet = rBase.GetItemSet();
@@ -2302,7 +2302,7 @@ uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_BACKGROUND)>(const SfxItemPro
     return aResult;
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     const SfxItemSet& rSet = rBase.GetItemSet();
@@ -2313,7 +2313,7 @@ uno::Any SwXStyle::GetStyleProperty<OWN_ATTR_FILLBMP_MODE>(const SfxItemProperty
     return uno::makeAny(drawing::BitmapMode_NO_REPEAT);
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     SfxItemSet& rSet = rBase.GetItemSet();
@@ -2339,10 +2339,10 @@ uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertySimpleEntry
     return aResult;
 }
 
-uno::Any SwXStyle::GetStyleProperty_Impl(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty_Impl(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
 {
     using propertytype_t = decltype(rEntry.nWID);
-    using coresetter_t = std::function<uno::Any(SwXStyle&, const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)>;
+    using coresetter_t = std::function<uno::Any(SwXStyle&, const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)>;
     static std::unique_ptr<std::map<propertytype_t, coresetter_t>> pUnoToCore;
     if(!pUnoToCore)
     {
@@ -2374,7 +2374,7 @@ uno::Any SwXStyle::GetStyleProperty_Impl(const SfxItemPropertySimpleEntry& rEntr
 uno::Any SwXStyle::GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet, SwStyleBase_Impl& rBase, const OUString& rPropertyName)
 {
     const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
-    const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropertyName);
+    const SfxItemPropertyMapEntry* pEntry = rMap.getByName(rPropertyName);
     if(!pEntry || (!m_bIsConditional && rPropertyName == UNO_NAME_PARA_STYLE_CONDITIONS))
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
     if(m_pBasePool)
@@ -2514,7 +2514,7 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
     for(sal_Int32 i = 0; i < rPropertyNames.getLength(); ++i)
     {
         const OUString sPropName = pNames[i];
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(sPropName);
+        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(sPropName);
 
         if(!pEntry)
             throw beans::UnknownPropertyException("Unknown property: " + sPropName, static_cast<cppu::OWeakObject*>(this));
@@ -2629,7 +2629,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aP
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
     for(const auto& rName : aPropertyNames)
     {
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rName);
+        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(rName);
         if(!pEntry)
             throw beans::UnknownPropertyException("Unknown property: " + rName, static_cast<cppu::OWeakObject*>(this));
         if(pEntry->nWID == FN_UNO_FOLLOW_STYLE || pEntry->nWID == FN_UNO_NUM_RULES)
@@ -2748,7 +2748,7 @@ uno::Sequence<uno::Any> SAL_CALL SwXStyle::getPropertyDefaults(const uno::Sequen
     const SfxItemSet &rSet = xStyle->GetItemSet(), *pParentSet = rSet.GetParent();
     for(sal_Int32 i = 0; i < nCount; ++i)
     {
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(aPropertyNames[i]);
+        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(aPropertyNames[i]);
 
         if(!pEntry)
             throw beans::UnknownPropertyException("Unknown property: " + aPropertyNames[i], static_cast < cppu::OWeakObject * >(this));
@@ -2812,7 +2812,7 @@ SwXPageStyle::SwXPageStyle(SwDocShell* pDocSh)
     : SwXStyle(pDocSh->GetDoc(), SfxStyleFamily::Page)
 { }
 
-void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl)
+void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertyMapEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl)
 {
     // create a new SvxSetItem and get it's ItemSet as new target
     const std::unique_ptr<SvxSetItem> pNewSetItem(pSetItem->Clone());
@@ -2862,7 +2862,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
     for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
     {
         const OUString& rPropName = rPropertyNames[nProp];
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
+        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(rPropName);
 
         if(!pEntry)
             throw beans::UnknownPropertyException("Unknown property: " + rPropName, static_cast<cppu::OWeakObject*>(this));
@@ -3103,7 +3103,7 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
     for(sal_Int32 nProp = 0; nProp < nLength; ++nProp)
     {
         const OUString& rPropName = rPropertyNames[nProp];
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
+        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(rPropName);
 
         if (!pEntry)
             throw beans::UnknownPropertyException("Unknown property: " + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -3595,7 +3595,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         {
             const OUString& rPropName = rValue.Name;
             uno::Any aValue(rValue.Value);
-            const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
+            const SfxItemPropertyMapEntry* pEntry = rMap.getByName(rPropName);
 
             if (!pEntry)
             {
@@ -3982,7 +3982,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
     for( sal_Int32 i = 0; i < nLen; ++i )
     {
         const OUString sPropName = pNames[i];
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(sPropName);
+        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(sPropName);
         if(!pEntry)
         {
             throw beans::UnknownPropertyException("Unknown property: " + sPropName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -4179,7 +4179,7 @@ uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
     for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
     {
         const OUString sPropName = pNames[i];
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(sPropName);
+        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(sPropName);
         if(!pEntry)
         {
             throw beans::UnknownPropertyException("Unknown property: " + sPropName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -4278,13 +4278,13 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
 
         // TODO: Optimize - and fix! the old iteration filled each WhichId
         // only once but there are more properties than WhichIds
-        for( const auto& rPair : rMap.getPropertyEntries() )
+        for( const auto pEntry : rMap.getPropertyEntries() )
         {
-            if ( rPair.second.nWID == nWID )
+            if ( pEntry->nWID == nWID )
             {
                 beans::PropertyValue aPropertyValue;
-                aPropertyValue.Name = rPair.first;
-                pItem->QueryValue( aPropertyValue.Value, rPair.second.nMemberId );
+                aPropertyValue.Name = pEntry->aName;
+                pItem->QueryValue( aPropertyValue.Value, pEntry->nMemberId );
                 aPropertyVector.push_back( aPropertyValue );
             }
         }
@@ -4861,7 +4861,7 @@ css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL SwXTextCellStyle::get
 void SAL_CALL SwXTextCellStyle::setPropertyValue(const OUString& rPropertyName, const css::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
-    const SfxItemPropertySimpleEntry *const pEntry = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CELL_STYLE)->getPropertyMap().getByName(rPropertyName);
+    const SfxItemPropertyMapEntry *const pEntry = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CELL_STYLE)->getPropertyMap().getByName(rPropertyName);
     if(pEntry)
     {
         switch(pEntry->nWID)
@@ -5051,7 +5051,7 @@ css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPrope
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    const SfxItemPropertySimpleEntry *const pEntry = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CELL_STYLE)->getPropertyMap().getByName(rPropertyName);
+    const SfxItemPropertyMapEntry *const pEntry = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CELL_STYLE)->getPropertyMap().getByName(rPropertyName);
     if(pEntry)
     {
         switch(pEntry->nWID)
@@ -5251,7 +5251,7 @@ css::uno::Sequence<css::beans::PropertyState> SAL_CALL SwXTextCellStyle::getProp
     for(sal_Int32 i=0; i < aPropertyNames.getLength(); ++i)
     {
         const OUString sPropName = pNames[i];
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(sPropName);
+        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(sPropName);
         if(pEntry)
         {
             uno::Any aAny1, aAny2;
@@ -5395,7 +5395,7 @@ void SAL_CALL SwXTextCellStyle::setPropertyToDefault(const OUString& rPropertyNa
     SolarMutexGuard aGuard;
     const SwBoxAutoFormat& rDefaultBoxFormat = SwTableAutoFormat::GetDefaultBoxFormat();
     const SfxItemPropertyMap& rMap = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CELL_STYLE)->getPropertyMap();
-    const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropertyName);
+    const SfxItemPropertyMapEntry* pEntry = rMap.getByName(rPropertyName);
     if(!pEntry)
         return;
 

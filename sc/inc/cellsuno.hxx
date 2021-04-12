@@ -114,6 +114,7 @@ class SfxItemPropertyMap;
 class SfxItemPropertySet;
 class SfxItemSet;
 struct SfxItemPropertySimpleEntry;
+struct SfxItemPropertyMapEntry;
 
 namespace editeng { class SvxBorderLine; }
 
@@ -220,13 +221,13 @@ protected:
     // GetItemPropertyMap for derived classes must contain all entries, including base class
     virtual const SfxItemPropertyMap& GetItemPropertyMap();
     css::beans::PropertyState GetOnePropertyState(
-                                sal_uInt16 nItemWhich, const SfxItemPropertySimpleEntry* pEntry );
+                                sal_uInt16 nItemWhich, const SfxItemPropertyMapEntry* pEntry );
     /// @throws css::uno::RuntimeException
-    virtual void            GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void            GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                 css::uno::Any& );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                                 const css::uno::Any& aValue );
 
 public:
@@ -477,9 +478,9 @@ private:
 protected:
     const ScRange&          GetRange() const    { return aRange; }
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
-    virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                 css::uno::Any& ) override;
-    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                                 const css::uno::Any& aValue ) override;
 
     /// @throws css::lang::IndexOutOfBoundsException
@@ -650,9 +651,9 @@ private:
     sal_Int32 GetResultType_Impl() const;
 
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
-    virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                 css::uno::Any& ) override;
-    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                                 const css::uno::Any& aValue ) override;
 
 public:
@@ -789,9 +790,9 @@ private:
 
 protected:
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
-    virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                 css::uno::Any& ) override;
-    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                                 const css::uno::Any& aValue ) override;
 
 public:
@@ -966,9 +967,9 @@ private:
     const SfxItemPropertySet*       pColPropSet;
 
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
-    virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                 css::uno::Any& ) override;
-    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                                 const css::uno::Any& aValue ) override;
 
 public:
@@ -1004,9 +1005,9 @@ private:
     const SfxItemPropertySet*       pRowPropSet;
 
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
-    virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                 css::uno::Any& ) override;
-    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                                 const css::uno::Any& aValue ) override;
 
 public:

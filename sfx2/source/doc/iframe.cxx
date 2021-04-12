@@ -238,7 +238,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL IFrameObject::getPropertySetI
 
 void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, const uno::Any& aAny)
 {
-    const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = maPropMap.getByName( aPropertyName );
     if( !pEntry )
          throw beans::UnknownPropertyException(aPropertyName);
     switch( pEntry->nWID )
@@ -318,7 +318,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, cons
 
 uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
 {
-    const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = maPropMap.getByName( aPropertyName );
     if( !pEntry )
          throw beans::UnknownPropertyException(aPropertyName);
     uno::Any aAny;

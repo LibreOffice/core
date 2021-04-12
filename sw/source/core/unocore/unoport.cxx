@@ -210,7 +210,7 @@ void SwXTextPortion::setPropertyValue(const OUString& rPropertyName,
 
 void SwXTextPortion::GetPropertyValue(
         uno::Any &rVal,
-        const SfxItemPropertySimpleEntry& rEntry,
+        const SfxItemPropertyMapEntry& rEntry,
         SwUnoCursor *pUnoCursor,
         std::unique_ptr<SfxItemSet> &pSet )
 {
@@ -385,7 +385,7 @@ uno::Sequence< uno::Any > SwXTextPortion::GetPropertyValues_Impl(
         const SfxItemPropertyMap& rMap = m_pPropSet->getPropertyMap();
         for(sal_Int32 nProp = 0; nProp < nLength; nProp++)
         {
-            const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
+            const SfxItemPropertyMapEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
             if(!pEntry)
                 throw beans::UnknownPropertyException( "Unknown property: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             GetPropertyValue( pValues[nProp], *pEntry, &rUnoCursor, pSet );
@@ -415,7 +415,7 @@ void SwXTextPortion::SetPropertyValues_Impl(
         uno::Sequence< beans::PropertyValue > aValues( rPropertyNames.getLength() );
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
-            const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
+            const SfxItemPropertyMapEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
             if (!pEntry)
                 throw beans::UnknownPropertyException( "Unknown property: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
@@ -505,7 +505,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
         {
             pFailed[ nFailed ].Name    = pProp[i];
 
-            const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( pProp[i] );
+            const SfxItemPropertyMapEntry* pEntry = rPropMap.getByName( pProp[i] );
             if (!pEntry)
                 pFailed[ nFailed++ ].Result  = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
             else
@@ -609,7 +609,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::GetPrope
                 }
                 else
                 {
-                    const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( pProp[i] );
+                    const SfxItemPropertyMapEntry* pEntry = rPropMap.getByName( pProp[i] );
                     if (!pEntry)
                         throw beans::UnknownPropertyException( "Unknown property: " + pProp[i], static_cast < cppu::OWeakObject * > ( this ) );
                     aResult.State  = pPropertyStates[i];

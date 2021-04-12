@@ -52,7 +52,7 @@ using namespace com::sun::star;
 static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 {
     static const SvxItemPropertySet aHdFtPropertySet_Impl = [] {
-        SfxItemPropertyMapEntry aHdFtPropertyMap_Impl[] =
+        static SfxItemPropertyMapEntry aHdFtPropertyMap_Impl[] =
         {
             SVX_UNOEDIT_CHAR_PROPERTIES,
             SVX_UNOEDIT_FONT_PROPERTIES,
@@ -65,7 +65,7 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
         //  (headers/footers are in twips)
 
         SfxItemPropertyMapEntry* pEntry = aHdFtPropertyMap_Impl;
-        while (!pEntry->aName.empty())
+        while (!pEntry->aName.isEmpty())
         {
             if ( ( pEntry->nWID == EE_CHAR_FONTHEIGHT ||
                    pEntry->nWID == EE_CHAR_FONTHEIGHT_CJK ||

@@ -317,20 +317,20 @@ static uno::Any GetParaListAutoFormat(SwTextNode const& rNode)
     SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
     std::vector<beans::NamedValue> props;
     // have to iterate the map, not the item set?
-    for (auto const& rPair : rMap.getPropertyEntries())
+    for (auto const pEntry : rMap.getPropertyEntries())
     {
-        if (rPropSet.getPropertyState(rPair.second, rSet) == PropertyState_DIRECT_VALUE)
+        if (rPropSet.getPropertyState(*pEntry, rSet) == PropertyState_DIRECT_VALUE)
         {
             Any value;
-            rPropSet.getPropertyValue(rPair.second, rSet, value);
-            props.emplace_back(OUString(rPair.first), value);
+            rPropSet.getPropertyValue(*pEntry, rSet, value);
+            props.emplace_back(pEntry->aName, value);
         }
     }
     return uno::makeAny(comphelper::containerToSequence(props));
 }
 
 // Read the special properties of the cursor
-bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
+bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                                         , SwPaM& rPam
                                         , Any *pAny
                                         , PropertyState& eState
@@ -983,7 +983,7 @@ void GetCurPageStyle(SwPaM const & rPaM, OUString &rString)
 }
 
 // reset special properties of the cursor
-void resetCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam)
+void resetCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry, SwPaM& rPam)
 {
     SwDoc& rDoc = rPam.GetDoc();
     switch(rEntry.nWID)
@@ -1290,7 +1290,7 @@ void makeRedline( SwPaM const & rPaM,
 
             // Build set of attributes we want to fetch
             std::vector<sal_uInt16> aWhichPairs;
-            std::vector<SfxItemPropertySimpleEntry const*> aEntries;
+            std::vector<SfxItemPropertyMapEntry const*> aEntries;
             std::vector<uno::Any> aValues;
             aEntries.reserve(aRevertProperties.getLength());
             sal_uInt16 nStyleId = USHRT_MAX;
@@ -1298,7 +1298,7 @@ void makeRedline( SwPaM const & rPaM,
             for (const auto& rRevertProperty : std::as_const(aRevertProperties))
             {
                 const OUString &rPropertyName = rRevertProperty.Name;
-                SfxItemPropertySimpleEntry const* pEntry = rPropSet.getPropertyMap().getByName(rPropertyName);
+                SfxItemPropertyMapEntry const* pEntry = rPropSet.getPropertyMap().getByName(rPropertyName);
 
                 if (!pEntry)
                 {
@@ -1336,7 +1336,7 @@ void makeRedline( SwPaM const & rPaM,
 
                 for (size_t i = 0; i < aEntries.size(); ++i)
                 {
-                    SfxItemPropertySimpleEntry const*const pEntry = aEntries[i];
+                    SfxItemPropertyMapEntry const*const pEntry = aEntries[i];
                     const uno::Any &rValue = aValues[i];
                     if (i == nNumId)
                     {

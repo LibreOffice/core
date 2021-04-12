@@ -36,7 +36,7 @@ class SdDrawDocument;
 class SdrModel;
 class SfxItemSet;
 class SvxItemPropertySet;
-struct SfxItemPropertySimpleEntry;
+struct SfxItemPropertyMapEntry;
 
 const SvxItemPropertySet* ImplGetPageBackgroundPropertySet();
 
@@ -51,7 +51,7 @@ class SdUnoPageBackground final : public ::cppu::WeakImplHelper<
     std::unique_ptr<SfxItemSet> mpSet;
     SdrModel*           mpDoc;
 
-    const SfxItemPropertySimpleEntry* getPropertyMapEntry( std::u16string_view rPropertyName ) const throw();
+    const SfxItemPropertyMapEntry* getPropertyMapEntry( std::u16string_view rPropertyName ) const throw();
 public:
     SdUnoPageBackground( SdDrawDocument* pDoc = nullptr, const SfxItemSet* pSet = nullptr);
     virtual ~SdUnoPageBackground() throw() override;

@@ -1252,14 +1252,14 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
             const SfxPoolItem* pItem = nullptr;
             if ( rNewSet.GetItemState( nWhich, true, &pItem ) == SfxItemState::SET && pItem )
             {
-                for ( const auto& rProp : rMap.getPropertyEntries())
+                for ( const auto pEntry : rMap.getPropertyEntries())
                 {
-                    if ( rProp.second.nWID == nWhich )
+                    if ( pEntry->nWID == nWhich )
                     {
                         css::uno::Any aVal;
-                        pItem->QueryValue( aVal, rProp.second.nMemberId );
+                        pItem->QueryValue( aVal, pEntry->nMemberId );
                         aProperties.realloc( nCount + 1 );
-                        aProperties[ nCount ].Name = rProp.first;
+                        aProperties[ nCount ].Name = pEntry->aName;
                         aProperties[ nCount ].Value = aVal;
                         ++nCount;
                     }

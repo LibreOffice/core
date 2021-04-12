@@ -220,7 +220,7 @@ void SAL_CALL LinguProps::setPropertyValue(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    const SfxItemPropertySimpleEntry* pCur = aPropertyMap.getByName( rPropertyName );
+    const SfxItemPropertyMapEntry* pCur = aPropertyMap.getByName( rPropertyName );
     if (pCur)
     {
         Any aOld( aConfig.GetProperty( pCur->nWID ) );
@@ -239,7 +239,7 @@ Any SAL_CALL LinguProps::getPropertyValue( const OUString& rPropertyName )
 
     Any aRet;
 
-    const SfxItemPropertySimpleEntry* pCur = aPropertyMap.getByName( rPropertyName );
+    const SfxItemPropertyMapEntry* pCur = aPropertyMap.getByName( rPropertyName );
     if(pCur)
     {
         aRet = aConfig.GetProperty( pCur->nWID );
@@ -256,7 +256,7 @@ void SAL_CALL LinguProps::addPropertyChangeListener(
 
     if (!bDisposing && rxListener.is())
     {
-        const SfxItemPropertySimpleEntry* pCur = aPropertyMap.getByName( rPropertyName );
+        const SfxItemPropertyMapEntry* pCur = aPropertyMap.getByName( rPropertyName );
         if(pCur)
             aPropListeners.addInterface( pCur->nWID, rxListener );
     }
@@ -270,7 +270,7 @@ void SAL_CALL LinguProps::removePropertyChangeListener(
 
     if (!bDisposing && rxListener.is())
     {
-        const SfxItemPropertySimpleEntry* pCur = aPropertyMap.getByName( rPropertyName );
+        const SfxItemPropertyMapEntry* pCur = aPropertyMap.getByName( rPropertyName );
         if(pCur)
             aPropListeners.removeInterface( pCur->nWID, rxListener );
     }
@@ -319,9 +319,9 @@ Sequence< PropertyValue > SAL_CALL
 
     std::vector<PropertyValue> aProps;
     aProps.reserve(aPropertyMap.getPropertyEntries().size());
-    for(auto & rPair : aPropertyMap.getPropertyEntries())
-        aProps.push_back(PropertyValue(OUString(rPair.first), rPair.second.nWID,
-                                 aConfig.GetProperty(rPair.second.nWID),
+    for(auto pEntry : aPropertyMap.getPropertyEntries())
+        aProps.push_back(PropertyValue(pEntry->aName, pEntry->nWID,
+                                 aConfig.GetProperty(pEntry->nWID),
                                  css::beans::PropertyState_DIRECT_VALUE));
     return comphelper::containerToSequence(aProps);
 }

@@ -597,7 +597,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
     for (sal_Int32 nProperty = 0; nProperty < rPropertyNames.getLength();
          nProperty++)
     {
-        SfxItemPropertySimpleEntry const*const pEntry =
+        SfxItemPropertyMapEntry const*const pEntry =
             m_rPropSet.getPropertyMap().getByName(pPropertyNames[nProperty]);
         if (!pEntry)
         {
@@ -980,7 +980,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
     for (sal_Int32 nProperty = 0; nProperty < rPropertyNames.getLength();
         nProperty++)
     {
-        SfxItemPropertySimpleEntry const*const pEntry =
+        SfxItemPropertyMapEntry const*const pEntry =
             m_rPropSet.getPropertyMap().getByName(pPropertyNames[nProperty]);
         if (!pEntry)
         {
@@ -1383,7 +1383,7 @@ SwXTextSection::getPropertyStates(
     for (sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
     {
         pStates[i] = beans::PropertyState_DEFAULT_VALUE;
-        SfxItemPropertySimpleEntry const*const pEntry =
+        SfxItemPropertyMapEntry const*const pEntry =
             m_pImpl->m_rPropSet.getPropertyMap().getByName( pNames[i]);
         if (!pEntry)
         {
@@ -1458,7 +1458,7 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
         throw uno::RuntimeException();
     }
 
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
@@ -1596,7 +1596,7 @@ SwXTextSection::getPropertyDefault(const OUString& rPropertyName)
 
     uno::Any aRet;
     SwSectionFormat *const pFormat = m_pImpl->GetSectionFormat();
-    SfxItemPropertySimpleEntry const*const pEntry =
+    SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {

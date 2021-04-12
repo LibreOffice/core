@@ -961,7 +961,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
-    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry( aPropertyName );
     if( pEntry == nullptr )
     {
         throw UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
@@ -1047,7 +1047,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
 
     throwIfDisposed();
 
-    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
+    const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry( PropertyName );
     if( pEntry == nullptr )
     {
         throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
@@ -1159,7 +1159,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
 
     throwIfDisposed();
 
-    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
+    const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry( PropertyName );
 
     if( pEntry == nullptr )
         throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
@@ -1252,7 +1252,7 @@ void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName )
 
     throwIfDisposed();
 
-    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
+    const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry( PropertyName );
     if( pEntry == nullptr )
         throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
 
@@ -1276,7 +1276,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName )
 
     throwIfDisposed();
 
-    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry( aPropertyName );
     if( pEntry == nullptr )
         throw UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     Any aRet;
@@ -1303,7 +1303,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName )
 }
 
 /** this is used because our property map is not sorted yet */
-const SfxItemPropertySimpleEntry* SdStyleSheet::getPropertyMapEntry( std::u16string_view rPropertyName )
+const SfxItemPropertyMapEntry* SdStyleSheet::getPropertyMapEntry( std::u16string_view rPropertyName )
 {
     return GetStylePropertySet().getPropertyMapEntry(rPropertyName);
 }

@@ -137,7 +137,7 @@ protected:
         const css::uno::Sequence< OUString >& aPropertyNames );
 
     void GetPropertyValue( css::uno::Any &rVal,
-                const SfxItemPropertySimpleEntry& rEntry, SwUnoCursor *pUnoCursor, std::unique_ptr<SfxItemSet> &pSet );
+                const SfxItemPropertyMapEntry& rEntry, SwUnoCursor *pUnoCursor, std::unique_ptr<SfxItemSet> &pSet );
 
     /// @throws css::uno::RuntimeException
     css::uno::Sequence<css::beans::GetDirectPropertyTolerantResult> GetPropertyValuesTolerant_Impl(

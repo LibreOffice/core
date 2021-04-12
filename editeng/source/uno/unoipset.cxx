@@ -52,7 +52,7 @@ SvxItemPropertySet::~SvxItemPropertySet()
 }
 
 
-uno::Any* SvxItemPropertySet::GetUsrAnyForID(SfxItemPropertySimpleEntry const & entry) const
+uno::Any* SvxItemPropertySet::GetUsrAnyForID(SfxItemPropertyMapEntry const & entry) const
 {
     for (auto const & pActual : aCombineList)
     {
@@ -64,7 +64,7 @@ uno::Any* SvxItemPropertySet::GetUsrAnyForID(SfxItemPropertySimpleEntry const & 
 
 
 void SvxItemPropertySet::AddUsrAnyForID(
-    const uno::Any& rAny, SfxItemPropertySimpleEntry const & entry)
+    const uno::Any& rAny, SfxItemPropertyMapEntry const & entry)
 {
     std::unique_ptr<SvxIDPropertyCombine> pNew(new SvxIDPropertyCombine);
     pNew->nWID = entry.nWID;
@@ -90,7 +90,7 @@ static bool SvxUnoCheckForPositiveValue( const uno::Any& rVal )
 }
 
 
-uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues )
+uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues )
 {
     uno::Any aVal;
     if(!pMap || !pMap->nWID)
@@ -136,7 +136,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
 }
 
 
-void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues )
+void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues )
 {
     if(!pMap || !pMap->nWID)
         return;
@@ -184,7 +184,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 }
 
 
-uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const
+uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pMap ) const
 {
     // Already entered a value? Then finish quickly
     uno::Any* pUsrAny = GetUsrAnyForID(*pMap);
@@ -236,7 +236,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
 }
 
 
-void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal ) const
+void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, const uno::Any& rVal ) const
 {
     uno::Any* pUsrAny = GetUsrAnyForID(*pMap);
     if(!pUsrAny)
@@ -246,7 +246,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 }
 
 
-const SfxItemPropertySimpleEntry* SvxItemPropertySet::getPropertyMapEntry(std::u16string_view rName) const
+const SfxItemPropertyMapEntry* SvxItemPropertySet::getPropertyMapEntry(std::u16string_view rName) const
 {
     return m_aPropertyMap.getByName( rName );
  }

@@ -415,7 +415,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
     if( pEntry )
     {
@@ -656,7 +656,7 @@ css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
 
     uno::Any aRet;
 
-    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( pEntry && mpShape->GetSdrObject() )
     {
