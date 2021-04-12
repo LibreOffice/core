@@ -130,6 +130,9 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
 
     void fixICCCMwindowGroup();
 
+private Q_SLOTS:
+    void screenChanged(QScreen*);
+
 public:
     Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
     virtual ~Qt5Frame() override;

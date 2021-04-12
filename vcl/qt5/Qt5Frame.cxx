@@ -168,10 +168,13 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     else
         m_pQWidget = new Qt5Widget(*this, aWinFlags);
 
+    QWindow* pChildWindow = asChild()->window()->windowHandle();
+    if (pChildWindow)
+        connect(pChildWindow, SIGNAL(screenChanged(QScreen*)), this, SLOT(screenChanged(QScreen*)));
+
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
         QWindow* pParentWindow = pParent->GetQWidget()->window()->windowHandle();
-        QWindow* pChildWindow = asChild()->window()->windowHandle();
         if (pParentWindow && pChildWindow && (pParentWindow != pChildWindow))
             pChildWindow->setTransientParent(pParentWindow);
     }
@@ -1434,5 +1437,7 @@ void Qt5Frame::handleDragLeave()
     m_pDropTarget->fire_dragExit(aEvent);
     m_bInDrag = false;
 }
+
+void Qt5Frame::screenChanged(QScreen*) { CallCallback(SalEvent::DisplayChanged, nullptr); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
