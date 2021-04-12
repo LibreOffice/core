@@ -30,7 +30,7 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PolygonKind.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/drawing/QRCode.hpp>
+#include <com/sun/star/drawing/BarCode.hpp>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
@@ -1382,10 +1382,10 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
 
     case OWN_ATTR_QRCODE:
     {
-        css::drawing::QRCode aQrCode;
-        if (rValue >>= aQrCode)
+        css::drawing::BarCode aBarCode;
+        if (rValue >>= aBarCode)
         {
-            static_cast<SdrGrafObj*>(GetSdrObject())->setQrCode(aQrCode);
+            static_cast<SdrGrafObj*>(GetSdrObject())->setQrCode(aBarCode);
             bOk = true;
         }
         break;
@@ -1535,7 +1535,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
     case OWN_ATTR_QRCODE:
     {
-        css::drawing::QRCode* ptr = static_cast<SdrGrafObj*>(GetSdrObject())->getQrCode();
+        css::drawing::BarCode* ptr = static_cast<SdrGrafObj*>(GetSdrObject())->getQrCode();
         if(ptr)
         {
             rValue <<= *ptr;

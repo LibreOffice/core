@@ -5538,10 +5538,11 @@ module com {
      interface ::com::sun::star::document::XMimeTypeInfo;
     };
     published service GraphicExportFilter: ::com::sun::star::drawing::XGraphicExportFilter;
-    published struct QRCode {
+    published struct BarCode {
      string Payload;
      long ErrorCorrection;
      long Border;
+     long Type;
     };
     published service GraphicObjectShape {
      service ::com::sun::star::drawing::Shape;
@@ -5571,7 +5572,7 @@ module com {
      [property, optional] boolean SignatureLineCanAddComment;
      [property, optional] ::com::sun::star::graphic::XGraphic SignatureLineUnsignedImage;
      [property, optional] boolean SignatureLineIsSigned;
-     [property, optional] ::com::sun::star::drawing::QRCode QRCodeProperties;
+     [property, optional] ::com::sun::star::drawing::BarCode BarCodeProperties;
     };
     /** @deprecated */ published interface XShapeGroup {
      interface ::com::sun::star::drawing::XShape;
