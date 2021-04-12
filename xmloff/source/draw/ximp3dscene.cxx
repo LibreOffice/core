@@ -198,9 +198,7 @@ SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImport
     maVRP(0.0, 0.0, 1.0),
     maVPN(0.0, 0.0, 1.0),
     maVUP(0.0, 1.0, 0.0),
-    mbVRPUsed(false),
-    mbVPNUsed(false),
-    mbVUPUsed(false)
+    mbVRPUsed(false)
 {
 }
 
@@ -251,7 +249,6 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( const sax_fastparser::
             if(aNewVec != maVPN)
             {
                 maVPN = aNewVec;
-                mbVPNUsed = true;
             }
             return;
         }
@@ -263,7 +260,6 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( const sax_fastparser::
             if(aNewVec != maVUP)
             {
                 maVUP = aNewVec;
-                mbVUPUsed = true;
             }
             return;
         }

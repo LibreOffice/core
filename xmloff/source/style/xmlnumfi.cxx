@@ -1134,7 +1134,6 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     bAutoInt( false ),
     bHasExtraText( false ),
     bHasLongDoW( false ),
-    bHasEra( false ),
     bHasDateTime( false ),
     bRemoveAfterUse( false ),
     eDateDOW( XML_DEA_NONE ),
@@ -1271,7 +1270,6 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     bAutoInt( false ),
     bHasExtraText( false ),
     bHasLongDoW( false ),
-    bHasEra( false ),
     bHasDateTime( false ),
     bRemoveAfterUse( false ),
     eDateDOW( XML_DEA_NONE ),
@@ -1871,9 +1869,6 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
     if (!pFormatter)
         return;
-
-    if ( nIndex == NF_KEY_G || nIndex == NF_KEY_GG || nIndex == NF_KEY_GGG )
-        bHasEra = true;
 
     if ( nIndex == NF_KEY_NNNN )
     {
