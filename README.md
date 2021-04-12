@@ -53,7 +53,7 @@ If you want to use Clang with the LibreOffice compiler plugins, the minimal
 version of Clang is 5.0.2. Since Xcode doesn't provide the compiler plugin
 headers, you have to compile your own Clang to use them on macOS.
 
-You can find the TDF configure switches in the distro-configs/ directory.
+You can find the TDF configure switches in the `distro-configs/` directory.
 
 To setup your initial build environment on Windows and macOS, we provide
 the LibreOffice Development Environment

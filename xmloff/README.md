@@ -6,10 +6,10 @@ via its UNO API, which has the advantage that the same import/export
 code can be used for text in all applications (from/to Writer/EditEngine).
 The filter consumes/produces via SAX UNO API interface (implemented in
 "sax").  Various bits of the ODF filters are also implemented in
-applications, for example [git:sw/source/filter/xml].
+applications, for example `[git:sw/source/filter/xml]`.
 
 There is a central list of all element or attribute names in
-`git:include/xmloff/xmltoken.hxx`.  The main class of the import filter
+`[git:include/xmloff/xmltoken.hxx]`.  The main class of the import filter
 is SvXMLImport, and of the export filter SvXMLExport.
 
 The Import filter maintains a stack of contexts for each element being
@@ -42,6 +42,6 @@ to the OpenOffice.org XML format but is possibly outdated and obsolete.
 When adding a new XML token, you need to add its entry in the following three
 files:
 
-* `git:include/xmloff/xmltoken.hxx`
-* `git:xmloff/source/core/xmltoken.cxx`
-* `git:xmloff/source/token/tokens.txt`
+* `[git:include/xmloff/xmltoken.hxx]`
+* `[git:xmloff/source/core/xmltoken.cxx]`
+* `[git:xmloff/source/token/tokens.txt]`

@@ -63,4 +63,4 @@ in rewriting mode (during which no object files are generate).
 
 ## Code Documentation / HowTos
 
-<http://wiki.documentfoundation.org/Clang_plugins>
+<https://wiki.documentfoundation.org/Clang_plugins>

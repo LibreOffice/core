@@ -13,25 +13,21 @@ to boost, but isn't as of now)."
 
 ## Class Overview
 
-- `git:o3tl/inc/o3tl/cow_wrapper.hxx`
+- `[git:include/o3tl/cow_wrapper.hxx]`
 
     A copy-on-write wrapper.
 
-- `git:o3tl/inc/o3tl/lazy_update.hxx`
+- `[git:include/o3tl/lazy_update.hxx]`
 
     This template collects data in input type, and updates the output type with the given update functor,
     but only if the output is requested. Useful if updating is expensive, or input changes frequently, but
     output is only comparatively seldom used.
 
-- `git:o3tl/inc/o3tl/range.hxx`
-
-    Represents a range of integer or iterator values.
-
-- `git:o3tl/inc/o3tl/vector_pool.hxx`
+- `[git:include/o3tl/vector_pool.hxx]`
 
     Simple vector-based memory pool allocator.
 
-- `git:o3tl/inc/o3tl/functional.hxx`
+- `[git:include/o3tl/functional.hxx]`
 
     Some more templates, leftovers in spirit of STLport's old functional
     header that are not part of the C++ standard (STLport has been

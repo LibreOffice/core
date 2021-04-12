@@ -9,7 +9,7 @@ IMPORTANT:  The `<updated>` element in `vmfwk/distributions/OpenOfficeorg/javave
 should only be updated for incompatible changes, not for compatible ones.  As stated in the commit
 message of <https://gerrit.libreoffice.org/#/c/69730/> in LibreOffice gerrit:
 
-"**javavendors\_\*.xml \<updated\> should not have been updated...**
+javavendors\_\*.xml &lt;updated\> should not have been updated...
 
 Changing `<updated>` causes `jfw_startVM` and `jfw_getSelectedJRE` (both
 `jvmfwk/source/framework.cxx`) to fail with `JFW_E_INVALID_SETTINGS`, which in turn causes functionality

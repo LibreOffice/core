@@ -157,6 +157,7 @@ custom shapes. OpenXML SDK tools might help when fixing
 
 ## Export
 Here is how LO's enhanced custom shapes are exported:
+
 * Shape name is `ooxml-*` - they are imported from ooxml, export as is.
 * Denylist - ODF presets that has OOXML equivalent.
   We convert adjustment values case by case. Microsoft Office
