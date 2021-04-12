@@ -20,7 +20,6 @@
 #include <sfx2/sidebar/Deck.hxx>
 #include <sidebar/DeckDescriptor.hxx>
 #include <sidebar/DeckLayouter.hxx>
-#include <sidebar/DrawHelper.hxx>
 #include <sidebar/DeckTitleBar.hxx>
 #include <sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Panel.hxx>

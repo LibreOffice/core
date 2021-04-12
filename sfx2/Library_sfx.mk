@@ -272,7 +272,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/sidebar/DeckDescriptor \
     sfx2/source/sidebar/DeckLayouter \
     sfx2/source/sidebar/DeckTitleBar \
-    sfx2/source/sidebar/DrawHelper \
     sfx2/source/sidebar/FocusManager \
     sfx2/source/sidebar/IContextChangeReceiver \
     sfx2/source/sidebar/ILayoutableWindow \

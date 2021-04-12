@@ -85,11 +85,6 @@ OUString SwFEShell::GetUniqueFrameName() const
     return GetDoc()->GetUniqueFrameName();
 }
 
-OUString SwFEShell::GetUniqueShapeName() const
-{
-    return GetDoc()->GetUniqueShapeName();
-}
-
 bool SwFEShell::FinishOLEObj()                      // Server is terminated
 {
     SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
