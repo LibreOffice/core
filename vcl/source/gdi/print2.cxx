@@ -788,6 +788,18 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             ++nActionNum;
         }
 
+        if (nLastBgAction != -1)
+        {
+            size_t nActionSize = rInMtf.GetActionSize();
+            // tdf#134736 move nLastBgAction to also include any trailing pops
+            for (size_t nPostLastBgAction = nLastBgAction + 1; nPostLastBgAction < nActionSize; ++nPostLastBgAction)
+            {
+                if (rInMtf.GetAction(nPostLastBgAction)->GetType() != MetaActionType::POP)
+                    break;
+                nLastBgAction = nPostLastBgAction;
+            }
+        }
+
         aMapModeVDev->ClearStack(); // clean up aMapModeVDev
 
         // fast-forward until one after the last background action
