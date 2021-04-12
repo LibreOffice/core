@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "135b84da_a98a589d",
+        "filename": "sc/source/filter/excel/xiescher.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4261,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2021-04-12T19:21:19Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \"nTotalLen \u003c\u003d 0\", as it can be negative - see its decrement on line 4258 above.",
+      "range": {
+        "startLine": 4261,
+        "startChar": 12,
+        "endLine": 4261,
+        "endChar": 13
+      },
+      "revId": "2f4684ac3950fe34d234a5c2334000af9396fec4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
