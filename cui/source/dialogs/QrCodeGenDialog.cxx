@@ -99,6 +99,17 @@ OString ConvertToSVGFormat(const ZXing::BitMatrix& bitmatrix)
     return sb.toString();
 }
 
+std::string GetBarCodeType(const int& type)
+{
+    switch (type)
+    {
+        case 1:
+            return "CODE_128";
+        default:
+            return "QR_CODE";
+    }
+}
+
 OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRBorder)
 {
     // Associated ZXing error correction levels (0-8) to our constants arbitrarily.
@@ -130,7 +141,7 @@ OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRB
 
     OString o = OUStringToOString(aQRText, RTL_TEXTENCODING_UTF8);
     std::string QRText(o.getStr(), o.getLength());
-    ZXing::BarcodeFormat format = ZXing::BarcodeFormatFromString("QR_CODE");
+    ZXing::BarcodeFormat format = ZXing::BarcodeFormatFromString(GetBarCodeType(aQRType));
     auto writer = ZXing::MultiFormatWriter(format).setMargin(aQRBorder).setEccLevel(bqrEcc);
     writer.setEncoding(ZXing::CharacterSet::UTF8);
     ZXing::BitMatrix bitmatrix = writer.encode(ZXing::TextUtfEncoding::FromUtf8(QRText), 0, 0);
@@ -150,6 +161,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
               m_xBuilder->weld_radio_button("button_quartile"),
               m_xBuilder->weld_radio_button("button_high") }
     , m_xSpinBorder(m_xBuilder->weld_spin_button("edit_margin"))
+    , m_xComboType(m_xBuilder->weld_combo_box("choose_type"))
 #if ENABLE_ZXING
     , mpParent(pParent)
 #endif
@@ -181,6 +193,8 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
     GetErrorCorrection(aQRCode.ErrorCorrection);
 
     m_xSpinBorder->set_value(aQRCode.Border);
+
+    m_xComboType->set_active(aQRCode.Type);
 
     // Mark this as existing shape
     m_xExistingShapeProperties = xProps;
@@ -222,6 +236,7 @@ void QrCodeGenDialog::Apply()
 #if ENABLE_ZXING
     css::drawing::QRCode aQRCode;
     aQRCode.Payload = m_xEdittext->get_text();
+    aQRCode.Type = m_xComboType->get_active();
 
     bool bLowECCActive(m_xECC[0]->get_active());
     bool bMediumECCActive(m_xECC[1]->get_active());
@@ -247,7 +262,8 @@ void QrCodeGenDialog::Apply()
     aQRCode.Border = m_xSpinBorder->get_value();
 
     // Read svg and replace placeholder texts
-    OString aSvgImage = GenerateQRCode(aQRCode.Payload, aQRCode.ErrorCorrection, aQRCode.Border);
+    OString aSvgImage
+        = GenerateBarCode(aQRCode.Payload, aQRCode.ErrorCorrection, aQRCode.Border, aQRCode.Type);
 
     // Insert/Update graphic
     SvMemoryStream aSvgStream(4096, 4096);
