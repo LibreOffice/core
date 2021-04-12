@@ -57,8 +57,8 @@ E3dObject::E3dObject(SdrModel& rSdrModel)
     mbTfHasChanged(true),
     mbIsSelected(false)
 {
-    bIs3DObj = true;
-    bClosedObj = true;
+    m_bIs3DObj = true;
+    m_bClosedObj = true;
 }
 
 E3dObject::E3dObject(SdrModel& rSdrModel, E3dObject const & rSource)
@@ -69,8 +69,8 @@ E3dObject::E3dObject(SdrModel& rSdrModel, E3dObject const & rSource)
     mbTfHasChanged(true),
     mbIsSelected(false)
 {
-    bIs3DObj = true;
-    bClosedObj = true;
+    m_bIs3DObj = true;
+    m_bClosedObj = true;
 
     // BoundVol can be copied since also the children are copied
     maLocalBoundVol  = rSource.maLocalBoundVol;
@@ -375,7 +375,7 @@ void E3dObject::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
         NbcSetTransform(rMatrix);
         SetChanged();
         BroadcastObjectChange();
-        if (pUserCall != nullptr) pUserCall->Changed(*this, SdrUserCallType::Resize, tools::Rectangle());
+        if (m_pUserCall != nullptr) m_pUserCall->Changed(*this, SdrUserCallType::Resize, tools::Rectangle());
     }
 }
 

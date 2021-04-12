@@ -94,7 +94,7 @@ Degree100 SdrTextObj::GetShearAngle(bool /*bVertical*/) const
 void SdrTextObj::NbcMove(const Size& rSiz)
 {
     maRect.Move(rSiz);
-    aOutRect.Move(rSiz);
+    m_aOutRect.Move(rSiz);
     maSnapRect.Move(rSiz);
     SetRectsDirty(true);
 }
@@ -449,7 +449,7 @@ SdrPathObjUniquePtr SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon&
         pPathObj->SetPathPoly(basegfx::utils::expandToCurve(pPathObj->GetPathPoly()));
     }
 
-    pPathObj->ImpSetAnchorPos(aAnchor);
+    pPathObj->ImpSetAnchorPos(m_aAnchor);
     pPathObj->NbcSetLayer(GetLayer());
     sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
     pPathObj->ClearMergedItem();

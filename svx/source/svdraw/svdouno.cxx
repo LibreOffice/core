@@ -140,7 +140,7 @@ SdrUnoObj::SdrUnoObj(
 :   SdrRectObj(rSdrModel),
     m_pImpl( new SdrUnoObjDataHolder )
 {
-    bIsUnoObj = true;
+    m_bIsUnoObj = true;
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
@@ -153,7 +153,7 @@ SdrUnoObj::SdrUnoObj( SdrModel& rSdrModel, SdrUnoObj const & rSource)
 :   SdrRectObj(rSdrModel, rSource),
     m_pImpl( new SdrUnoObjDataHolder )
 {
-    bIsUnoObj = true;
+    m_bIsUnoObj = true;
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
@@ -198,7 +198,7 @@ SdrUnoObj::SdrUnoObj(
 :   SdrRectObj(rSdrModel),
     m_pImpl( new SdrUnoObjDataHolder )
 {
-    bIsUnoObj = true;
+    m_bIsUnoObj = true;
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 

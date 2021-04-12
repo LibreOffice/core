@@ -52,14 +52,14 @@ SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel)
     SdrObjList(),
     aRefPoint(0, 0)
 {
-    bClosedObj=false;
+    m_bClosedObj=false;
 }
 
 SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const & rSource)
 :   SdrObject(rSdrModel, rSource),
     SdrObjList()
 {
-    bClosedObj=false;
+    m_bClosedObj=false;
 
     // copy child SdrObjects
     if(nullptr != rSource.GetSubList())
@@ -199,10 +199,10 @@ const tools::Rectangle& SdrObjGroup::GetCurrentBoundRect() const
     // <aOutRect> has to contain the bounding rectangle
     if(0 != GetObjCount())
     {
-        aOutRect = GetAllObjBoundRect();
+        m_aOutRect = GetAllObjBoundRect();
     }
 
-    return aOutRect;
+    return m_aOutRect;
 }
 
 const tools::Rectangle& SdrObjGroup::GetSnapRect() const
@@ -214,7 +214,7 @@ const tools::Rectangle& SdrObjGroup::GetSnapRect() const
     }
     else
     {
-        return aOutRect;
+        return m_aOutRect;
     }
 }
 
@@ -276,7 +276,7 @@ basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly() const
 
     if(!aRetval.count())
     {
-        const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aOutRect);
+        const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(m_aOutRect);
         aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
     }
 
@@ -366,7 +366,7 @@ void SdrObjGroup::NbcMove(const Size& rSiz)
     }
     else
     {
-        aOutRect.Move(rSiz);
+        m_aOutRect.Move(rSiz);
         SetRectsDirty();
     }
 }
@@ -403,7 +403,7 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
     }
     else
     {
-        ResizeRect(aOutRect,rRef,xFact,yFact);
+        ResizeRect(m_aOutRect,rRef,xFact,yFact);
         SetRectsDirty();
     }
 }
@@ -462,8 +462,8 @@ void SdrObjGroup::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool 
 
 void SdrObjGroup::NbcSetAnchorPos(const Point& rPnt)
 {
-    aAnchor=rPnt;
-    Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());
+    m_aAnchor=rPnt;
+    Size aSiz(rPnt.X()-m_aAnchor.X(),rPnt.Y()-m_aAnchor.Y());
     aRefPoint.Move(aSiz);
     const size_t nObjCount(GetObjCount());
 
@@ -477,7 +477,7 @@ void SdrObjGroup::NbcSetAnchorPos(const Point& rPnt)
 
 void SdrObjGroup::SetSnapRect(const tools::Rectangle& rRect)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     tools::Rectangle aOld(GetSnapRect());
     if (aOld.IsEmpty())
     {
@@ -520,7 +520,7 @@ void SdrObjGroup::Move(const Size& rSiz)
     if (rSiz.Width()==0 && rSiz.Height()==0)
         return;
 
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     aRefPoint.Move(rSiz);
     const size_t nObjCount(GetObjCount());
 
@@ -543,7 +543,7 @@ void SdrObjGroup::Move(const Size& rSiz)
     }
     else
     {
-        aOutRect.Move(rSiz);
+        m_aOutRect.Move(rSiz);
         SetRectsDirty();
     }
 
@@ -573,7 +573,7 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
             NbcMirrorGluePoints(aRef1,aRef2);
         }
     }
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     ResizePoint(aRefPoint,rRef,xFact,yFact);
     const size_t nObjCount(GetObjCount());
 
@@ -596,7 +596,7 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
     }
     else
     {
-        ResizeRect(aOutRect,rRef,xFact,yFact);
+        ResizeRect(m_aOutRect,rRef,xFact,yFact);
         SetRectsDirty();
     }
 
@@ -612,7 +612,7 @@ void SdrObjGroup::Rotate(const Point& rRef, Degree100 nAngle, double sn, double 
         return;
 
     SetGlueReallyAbsolute(true);
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     RotatePoint(aRefPoint,rRef,sn,cs);
     // move the connectors first, everything else afterwards
     const size_t nObjCount(GetObjCount());
@@ -642,7 +642,7 @@ void SdrObjGroup::Rotate(const Point& rRef, Degree100 nAngle, double sn, double 
 void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     MirrorPoint(aRefPoint,rRef1,rRef2); // implementation missing in SvdEtc!
     // move the connectors first, everything else afterwards
     const size_t nObjCount(GetObjCount());
@@ -675,7 +675,7 @@ void SdrObjGroup::Shear(const Point& rRef, Degree100 nAngle, double tn, bool bVS
         return;
 
     SetGlueReallyAbsolute(true);
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     ShearPoint(aRefPoint,rRef,tn);
     // move the connectors first, everything else afterwards
     const size_t nObjCount(GetObjCount());
@@ -705,10 +705,10 @@ void SdrObjGroup::Shear(const Point& rRef, Degree100 nAngle, double tn, bool bVS
 
 void SdrObjGroup::SetAnchorPos(const Point& rPnt)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-    bool bChg=aAnchor!=rPnt;
-    aAnchor=rPnt;
-    Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    bool bChg=m_aAnchor!=rPnt;
+    m_aAnchor=rPnt;
+    Size aSiz(rPnt.X()-m_aAnchor.X(),rPnt.Y()-m_aAnchor.Y());
     aRefPoint.Move(aSiz);
     // move the connectors first, everything else afterwards
     const size_t nObjCount(GetObjCount());
@@ -738,14 +738,14 @@ void SdrObjGroup::SetAnchorPos(const Point& rPnt)
 
 void SdrObjGroup::NbcSetRelativePos(const Point& rPnt)
 {
-    Point aRelPos0(GetSnapRect().TopLeft()-aAnchor);
+    Point aRelPos0(GetSnapRect().TopLeft()-m_aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
     NbcMove(aSiz); // this also calls SetRectsDirty()
 }
 
 void SdrObjGroup::SetRelativePos(const Point& rPnt)
 {
-    Point aRelPos0(GetSnapRect().TopLeft()-aAnchor);
+    Point aRelPos0(GetSnapRect().TopLeft()-m_aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
     if (aSiz.Width()!=0 || aSiz.Height()!=0) Move(aSiz); // this also calls SetRectsDirty() and Broadcast, ...
 }

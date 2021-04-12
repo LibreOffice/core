@@ -529,8 +529,8 @@ void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
 {
     Point UpperLeft, LowerRight, Center, NewCenter;
 
-    UpperLeft = aOutRect.TopLeft();
-    LowerRight = aOutRect.BottomRight();
+    UpperLeft = m_aOutRect.TopLeft();
+    LowerRight = m_aOutRect.BottomRight();
 
     tools::Long dxOutRectHalf = std::abs(UpperLeft.X() - LowerRight.X());
     dxOutRectHalf /= 2;
@@ -709,7 +709,7 @@ bool E3dScene::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     NbcSetSnapRect(aRect1);
     SetBoundRectDirty();
-    bSnapRectDirty=true;
+    m_bSnapRectDirty=true;
     return true;
 }
 

@@ -2282,7 +2282,7 @@ void SwDrawVirtObj::AddToDrawingPage(SwFrame const& rAnchorFrame)
     // insert 'virtual' drawing object into page, set layer and user call.
     SdrPage* pDrawPg = pOrgMasterSdrObj->getSdrPageFromSdrObject();
     // default: insert before master object
-    auto NOTM_nOrdNum(GetReferencedObj().GetOrdNum());
+    auto nOrdNum(GetReferencedObj().GetOrdNum());
 
     // maintain invariant that a shape's textbox immediately follows the shape
     // also for the multiple SdrDrawVirtObj created for shapes in header/footer
@@ -2297,33 +2297,33 @@ void SwDrawVirtObj::AddToDrawingPage(SwFrame const& rAnchorFrame)
                 if (&pAnchoredObj->GetFrameFormat() == pFlyFormat)
                 {
                     assert(dynamic_cast<SwFlyFrame const*>(pAnchoredObj));
-                    NOTM_nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
+                    nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
                     // the master SdrObj should have the highest index
-                    assert(NOTM_nOrdNum < GetReferencedObj().GetOrdNum());
+                    assert(nOrdNum < GetReferencedObj().GetOrdNum());
                     break;
                 }
             }
         }
         // this happens on initial insertion, the draw object is created first
-        SAL_INFO_IF(GetReferencedObj().GetOrdNum() == NOTM_nOrdNum, "sw", "AddToDrawingPage: cannot find SdrObject for text box's shape");
+        SAL_INFO_IF(GetReferencedObj().GetOrdNum() == nOrdNum, "sw", "AddToDrawingPage: cannot find SdrObject for text box's shape");
     }
 
     // #i27030# - apply order number of referenced object
     if ( nullptr != pDrawPg )
     {
         // #i27030# - apply order number of referenced object
-        pDrawPg->InsertObject(this, NOTM_nOrdNum);
+        pDrawPg->InsertObject(this, nOrdNum);
     }
     else
     {
         pDrawPg = getSdrPageFromSdrObject();
         if ( pDrawPg )
         {
-            pDrawPg->SetObjectOrdNum(GetOrdNumDirect(), NOTM_nOrdNum);
+            pDrawPg->SetObjectOrdNum(GetOrdNumDirect(), nOrdNum);
         }
         else
         {
-            SetOrdNum(NOTM_nOrdNum);
+            SetOrdNum(nOrdNum);
         }
     }
     SetUserCall( &mrDrawContact );
@@ -2357,30 +2357,30 @@ void SwDrawVirtObj::NbcSetAnchorPos(const Point& rPnt)
 
 const tools::Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
 {
-    if(aOutRect.IsEmpty())
+    if(m_aOutRect.IsEmpty())
     {
         const_cast<SwDrawVirtObj*>(this)->RecalcBoundRect();
     }
 
-    return aOutRect;
+    return m_aOutRect;
 }
 
 const tools::Rectangle& SwDrawVirtObj::GetLastBoundRect() const
 {
-    return aOutRect;
+    return m_aOutRect;
 }
 
 Point SwDrawVirtObj::GetOffset() const
 {
     // do NOT use IsEmpty() here, there is already a useful offset
     // in the position
-    if(aOutRect == tools::Rectangle())
+    if(m_aOutRect == tools::Rectangle())
     {
         return Point();
     }
     else
     {
-        return aOutRect.TopLeft() - GetReferencedObj().GetCurrentBoundRect().TopLeft();
+        return m_aOutRect.TopLeft() - GetReferencedObj().GetCurrentBoundRect().TopLeft();
     }
 }
 
@@ -2396,7 +2396,7 @@ void SwDrawVirtObj::RecalcBoundRect()
     // its value by the 'BoundRect' of the referenced object.
 
     const Point aOffset(GetOffset());
-    aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
+    m_aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
 }
 
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
@@ -2468,7 +2468,7 @@ void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fract
 {
     if(xFact.GetNumerator() != xFact.GetDenominator() || yFact.GetNumerator() != yFact.GetDenominator())
     {
-        tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Resize(rRef - GetOffset(), xFact, yFact, bUnsetRelative);
         SetRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
@@ -2479,7 +2479,7 @@ void SwDrawVirtObj::Rotate(const Point& rRef, Degree100 nAngle, double sn, doubl
 {
     if(nAngle)
     {
-        tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Rotate(rRef - GetOffset(), nAngle, sn, cs);
         SetRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
@@ -2488,7 +2488,7 @@ void SwDrawVirtObj::Rotate(const Point& rRef, Degree100 nAngle, double sn, doubl
 
 void SwDrawVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
 {
-    tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
     rRefObj.Mirror(rRef1 - GetOffset(), rRef2 - GetOffset());
     SetRectsDirty();
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
@@ -2498,7 +2498,7 @@ void SwDrawVirtObj::Shear(const Point& rRef, Degree100 nAngle, double tn, bool b
 {
     if(nAngle)
     {
-        tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Shear(rRef - GetOffset(), nAngle, tn, bVShear);
         SetRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
@@ -2521,7 +2521,7 @@ const tools::Rectangle& SwDrawVirtObj::GetSnapRect() const
 
 void SwDrawVirtObj::SetSnapRect(const tools::Rectangle& rRect)
 {
-    tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
     tools::Rectangle aR(rRect);
     aR -= GetOffset();
     rRefObj.SetSnapRect(aR);
@@ -2547,7 +2547,7 @@ const tools::Rectangle& SwDrawVirtObj::GetLogicRect() const
 
 void SwDrawVirtObj::SetLogicRect(const tools::Rectangle& rRect)
 {
-    tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
     tools::Rectangle aR(rRect);
     aR -= GetOffset();
     rRefObj.SetLogicRect(aR);

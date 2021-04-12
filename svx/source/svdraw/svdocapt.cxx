@@ -312,7 +312,7 @@ bool SdrCaptionObj::beginSpecialDrag(SdrDragStat& rDrag) const
 
         if(!pHdl)
         {
-            if (bMovProt)
+            if (m_bMovProt)
                 return false;
 
             rDrag.SetNoSnap();
@@ -538,7 +538,7 @@ bool SdrCaptionObj::MovCreate(SdrDragStat& rStat)
     ImpCalcTail(aPara,aTailPoly,maRect);
     rStat.SetActionRect(maRect);
     SetBoundRectDirty();
-    bSnapRectDirty=true;
+    m_bSnapRectDirty=true;
     return true;
 }
 
@@ -594,14 +594,14 @@ void SdrCaptionObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fr
 
 void SdrCaptionObj::NbcSetRelativePos(const Point& rPnt)
 {
-    Point aRelPos0(aTailPoly.GetPoint(0)-aAnchor);
+    Point aRelPos0(aTailPoly.GetPoint(0)-m_aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
     NbcMove(aSiz); // This also calls SetRectsDirty()
 }
 
 Point SdrCaptionObj::GetRelativePos() const
 {
-    return aTailPoly.GetPoint(0)-aAnchor;
+    return aTailPoly.GetPoint(0)-m_aAnchor;
 }
 
 const tools::Rectangle& SdrCaptionObj::GetLogicRect() const
@@ -623,7 +623,7 @@ const Point& SdrCaptionObj::GetTailPos() const
 void SdrCaptionObj::SetTailPos(const Point& rPos)
 {
     if (aTailPoly.GetSize()==0 || aTailPoly[0]!=rPos) {
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcSetTailPos(rPos);
         SetChanged();
         BroadcastObjectChange();

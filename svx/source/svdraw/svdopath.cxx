@@ -1624,14 +1624,14 @@ SdrPathObj::SdrPathObj(
 :   SdrTextObj(rSdrModel),
     meKind(eNewKind)
 {
-    bClosedObj = IsClosed();
+    m_bClosedObj = IsClosed();
 }
 
 SdrPathObj::SdrPathObj(SdrModel& rSdrModel, SdrPathObj const & rSource)
 :   SdrTextObj(rSdrModel, rSource),
     meKind(rSource.meKind)
 {
-    bClosedObj = IsClosed();
+    m_bClosedObj = IsClosed();
     maPathPolygon = rSource.GetPathPoly();
 }
 
@@ -1643,7 +1643,7 @@ SdrPathObj::SdrPathObj(
     maPathPolygon(rPathPoly),
     meKind(eNewKind)
 {
-    bClosedObj = IsClosed();
+    m_bClosedObj = IsClosed();
     ImpForceKind();
 }
 
@@ -1718,7 +1718,7 @@ void SdrPathObj::ImpForceKind()
     if (meKind==OBJ_LINE && !lcl_ImpIsLine(GetPathPoly())) meKind=OBJ_PLIN;
     if (meKind==OBJ_PLIN && lcl_ImpIsLine(GetPathPoly())) meKind=OBJ_LINE;
 
-    bClosedObj=IsClosed();
+    m_bClosedObj=IsClosed();
 
     if (meKind==OBJ_LINE)
     {
@@ -1788,7 +1788,7 @@ void SdrPathObj::ImpSetClosed(bool bClose)
             default: break;
         }
 
-        bClosedObj = true;
+        m_bClosedObj = true;
     }
     else
     {
@@ -1801,7 +1801,7 @@ void SdrPathObj::ImpSetClosed(bool bClose)
             default: break;
         }
 
-        bClosedObj = false;
+        m_bClosedObj = false;
     }
 
     ImpForceKind();
@@ -2740,7 +2740,7 @@ void SdrPathObj::SetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly)
 {
     if(GetPathPoly() != rPathPoly)
     {
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcSetPathPoly(rPathPoly);
         SetChanged();
         BroadcastObjectChange();
@@ -2751,7 +2751,7 @@ void SdrPathObj::SetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly)
 void SdrPathObj::ToggleClosed()
 {
     tools::Rectangle aBoundRect0;
-    if(pUserCall != nullptr)
+    if(m_pUserCall != nullptr)
         aBoundRect0 = GetLastBoundRect();
     ImpSetClosed(!IsClosed()); // set new ObjKind
     ImpForceKind(); // because we want Line -> Poly -> PolyLine instead of Line -> Poly -> Line

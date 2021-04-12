@@ -164,8 +164,8 @@ SdrEdgeObj::SdrEdgeObj(SdrModel& rSdrModel)
     mbBoundRectCalculationRunning(false),
     mbSuppressed(false)
 {
-    bClosedObj=false;
-    bIsEdge=true;
+    m_bClosedObj=false;
+    m_bIsEdge=true;
     pEdgeTrack.reset(new XPolygon);
 }
 
@@ -179,8 +179,8 @@ SdrEdgeObj::SdrEdgeObj(SdrModel& rSdrModel, SdrEdgeObj const & rSource)
     mbBoundRectCalculationRunning(false),
     mbSuppressed(false)
 {
-    bClosedObj = false;
-    bIsEdge = true;
+    m_bClosedObj = false;
+    m_bIsEdge = true;
     pEdgeTrack.reset(new XPolygon(*rSource.pEdgeTrack));
     bEdgeTrackDirty=rSource.bEdgeTrackDirty;
     aCon1          =rSource.aCon1;
@@ -603,7 +603,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
             mbSuppressed = false;
         }
 
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
+        tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
         SetRectsDirty();
         *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
         ImpSetEdgeInfoToAttr(); // copy values from aEdgeInfo into the pool
@@ -731,9 +731,9 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         nSiz--;
         aPt2=rTrack0[nSiz];
     } else {
-        if (!aOutRect.IsEmpty()) {
-            aPt1=aOutRect.TopLeft();
-            aPt2=aOutRect.BottomRight();
+        if (!m_aOutRect.IsEmpty()) {
+            aPt1=m_aOutRect.TopLeft();
+            aPt2=m_aOutRect.BottomRight();
         }
     }
 
@@ -747,7 +747,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         if (rCon1.pObj==static_cast<SdrObject const *>(this))
         {
             // check, just in case
-            aBoundRect1=aOutRect;
+            aBoundRect1=m_aOutRect;
         }
         else
         {
@@ -774,7 +774,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     {
         if (rCon2.pObj==static_cast<SdrObject const *>(this))
         { // check, just in case
-            aBoundRect2=aOutRect;
+            aBoundRect2=m_aOutRect;
         }
         else
         {
@@ -1635,7 +1635,7 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         (pSdrHint && pSdrHint->GetKind()==SdrHintKind::ObjectRemoved))
     {
         // broadcasting only, if on the same page
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
+        tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
         ImpDirtyEdgeTrack();
 
         // only redraw here, object hasn't actually changed
@@ -2083,7 +2083,7 @@ bool SdrEdgeObj::MovCreate(SdrDragStat& rDragStat)
         rDragStat.GetView()->SetConnectMarker(aCon2);
     }
     SetBoundRectDirty();
-    bSnapRectDirty=true;
+    m_bSnapRectDirty=true;
     ConnectToNode(false,aCon2.pObj);
     *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
     bEdgeTrackDirty=false;
@@ -2527,9 +2527,9 @@ Point SdrEdgeObj::GetTailPoint( bool bTail ) const
     else
     {
         if(bTail)
-            return aOutRect.TopLeft();
+            return m_aOutRect.TopLeft();
         else
-            return aOutRect.BottomRight();
+            return m_aOutRect.BottomRight();
     }
 
 }
@@ -2547,7 +2547,7 @@ void SdrEdgeObj::SetTailPoint( bool bTail, const Point& rPt )
 */
 void SdrEdgeObj::setGluePointIndex( bool bTail, sal_Int32 nIndex /* = -1 */ )
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
 
     SdrObjConnection& rConn1 = GetConnection( bTail );
 

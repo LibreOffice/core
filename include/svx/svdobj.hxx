@@ -728,31 +728,31 @@ private:
 public:
 
     // if true, reference onto an object
-    bool IsVirtualObj() const { return bVirtObj;}
+    bool IsVirtualObj() const { return m_bVirtObj;}
 
     // is true, if object can probably be filled
     // is false, if object has probably line ends
     // is invalid, if this is a group object
-    bool IsClosedObj() const { return bClosedObj;}
+    bool IsClosedObj() const { return m_bClosedObj;}
 
     // tdf#118662 reorganize inserted state, no local bool needed anymore,
     // it depends on being a member of a SdrObjList
     void InsertedStateChange();
     bool IsInserted() const { return nullptr != getParentSdrObjListFromSdrObject(); }
 
-    bool IsEdgeObj() const { return bIsEdge;}
-    bool Is3DObj() const { return bIs3DObj;}
-    bool IsUnoObj() const { return bIsUnoObj;}
+    bool IsEdgeObj() const { return m_bIsEdge;}
+    bool Is3DObj() const { return m_bIs3DObj;}
+    bool IsUnoObj() const { return m_bIsUnoObj;}
     void SetMoveProtect(bool bProt);
-    bool IsMoveProtect() const { return bMovProt;}
+    bool IsMoveProtect() const { return m_bMovProt;}
     void SetResizeProtect(bool bProt);
-    bool IsResizeProtect() const { return bSizProt;}
+    bool IsResizeProtect() const { return m_bSizProt;}
     void SetPrintable(bool bPrn);
-    bool IsPrintable() const { return !bNoPrint;}
+    bool IsPrintable() const { return !m_bNoPrint;}
     void SetVisible(bool bVisible);
     bool IsVisible() const { return mbVisible;}
     void SetMarkProtect(bool bProt);
-    bool IsMarkProtect() const { return bMarkProt;}
+    bool IsMarkProtect() const { return m_bMarkProt;}
 
     /// Whether the aspect ratio should be kept by default when resizing.
     virtual bool shouldKeepAspectRatio() const { return false; }
@@ -826,18 +826,18 @@ public:
     virtual bool IsTextBox() const;
 
     void SetEmptyPresObj(bool bEpt);
-    bool IsEmptyPresObj() const { return bEmptyPresObj;}
+    bool IsEmptyPresObj() const { return m_bEmptyPresObj;}
     void SetNotVisibleAsMaster(bool bFlg);
-    bool IsNotVisibleAsMaster() const { return bNotVisibleAsMaster;}
+    bool IsNotVisibleAsMaster() const { return m_bNotVisibleAsMaster;}
     void SetUserCall(SdrObjUserCall* pUser);
-    SdrObjUserCall* GetUserCall() const { return pUserCall;}
+    SdrObjUserCall* GetUserCall() const { return m_pUserCall;}
     /// @see mbDoNotInsertIntoPageAutomatically
     void SetDoNotInsertIntoPageAutomatically(bool bSet);
     /// @see mbDoNotInsertIntoPageAutomatically
     bool IsDoNotInsertIntoPageAutomatically() const { return mbDoNotInsertIntoPageAutomatically;}
 
     // Warning: this method should only be used if you really know what you're doing
-    sal_uInt32 GetOrdNumDirect() const { return nOrdNum;}
+    sal_uInt32 GetOrdNumDirect() const { return m_nOrdNum;}
 
     // #i25616#
     bool DoesSupportTextIndentingOnLineWidthChange() const { return mbSupportTextIndentingOnLineWidthChange;}
@@ -869,30 +869,30 @@ public:
     const Graphic* getFillGraphic() const;
 
 protected:
-    mutable tools::Rectangle    aOutRect;     // surrounding rectangle for Paint (incl. LineWidth, ...)
-    Point                       aAnchor;      // anchor position (Writer)
-    SdrObjUserCall*             pUserCall;
+    mutable tools::Rectangle    m_aOutRect;     // surrounding rectangle for Paint (incl. LineWidth, ...)
+    Point                       m_aAnchor;      // anchor position (Writer)
+    SdrObjUserCall*             m_pUserCall;
     std::unique_ptr<SdrObjPlusData>
-                                pPlusData;    // Broadcaster, UserData, connectors, ... (this is the Bitsack)
+                                m_pPlusData;    // Broadcaster, UserData, connectors, ... (this is the Bitsack)
     // object is only pointing to another one
-    bool                        bVirtObj : 1;
-    bool                        bSnapRectDirty : 1;
+    bool                        m_bVirtObj : 1;
+    bool                        m_bSnapRectDirty : 1;
     // the following flags will be streamed
-    bool                        bMovProt : 1;   // if true, the position is protected
-    bool                        bSizProt : 1;   // if true, the size is protected
+    bool                        m_bMovProt : 1;   // if true, the position is protected
+    bool                        m_bSizProt : 1;   // if true, the size is protected
     // If bEmptyPresObj is true, it is a presentation object that has no content yet.
     // The flag's default value is false.
     // The management is done by the application.
     // Neither assign operator nor cloning copies the flag!
     // The flag is persistent.
-    bool                        bEmptyPresObj : 1; // empty presentation object (Draw)
+    bool                        m_bEmptyPresObj : 1; // empty presentation object (Draw)
     // if true, object is invisible as object of the MasterPage
-    bool                        bNotVisibleAsMaster : 1;
+    bool                        m_bNotVisibleAsMaster : 1;
     // if true, the object is closed, i.e. no line, arc...
-    bool                        bClosedObj : 1;
-    bool                        bIsEdge : 1;
-    bool                        bIs3DObj : 1;
-    bool                        bIsUnoObj : 1;
+    bool                        m_bClosedObj : 1;
+    bool                        m_bIsEdge : 1;
+    bool                        m_bIs3DObj : 1;
+    bool                        m_bIsUnoObj : 1;
     // #i25616#
     bool                        mbLineIsOutsideGeometry : 1;
     // #i25616#
@@ -948,14 +948,14 @@ private:
     struct Impl;
     std::unique_ptr<Impl>             mpImpl;
     SdrObjList*                       mpParentOfSdrObject;     // list that includes this object
-    sal_uInt32                        nOrdNum;      // order number of the object in the list
-    std::unique_ptr<SfxGrabBagItem>   pGrabBagItem; // holds the GrabBagItem property
+    sal_uInt32                        m_nOrdNum;      // order number of the object in the list
+    std::unique_ptr<SfxGrabBagItem>   m_pGrabBagItem; // holds the GrabBagItem property
     // Position in the navigation order. SAL_MAX_UINT32 when not used.
     sal_uInt32                        mnNavigationPosition;
     SdrLayerID                        mnLayerID;
-    bool                              bNoPrint : 1;   // if true, the object is not printed.
+    bool                              m_bNoPrint : 1;   // if true, the object is not printed.
     bool                              mbVisible : 1;  // if false, the object is not visible on screen (but maybe on printer, depending on bNoprint
-    bool                              bMarkProt : 1;  // marking forbidden, persistent
+    bool                              m_bMarkProt : 1;  // marking forbidden, persistent
     // on import of OLE object from MS documents the BLIP size might be retrieved,
     // in this case the following member is initialized as nonempty rectangle
     tools::Rectangle                         maBLIPSizeRectangle;

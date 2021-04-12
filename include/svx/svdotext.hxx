@@ -336,7 +336,7 @@ public:
     // Setting attributes can only be done on the text frame.
     void SetTextLink(const OUString& rFileName, const OUString& rFilterName);
     void ReleaseTextLink();
-    bool IsLinkedText() const { return pPlusData!=nullptr && GetLinkUserData()!=nullptr; }
+    bool IsLinkedText() const { return m_pPlusData!=nullptr && GetLinkUserData()!=nullptr; }
     bool ReloadLinkedText(bool bForceLoad);
     bool LoadText(const OUString& rFileName, rtl_TextEncoding eCharSet);
 

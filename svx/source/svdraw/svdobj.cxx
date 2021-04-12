@@ -312,7 +312,7 @@ SdrObjList* SdrObject::getChildrenOfSdrObject() const
 
 void SdrObject::SetBoundRectDirty()
 {
-    aOutRect = tools::Rectangle();
+    m_aOutRect = tools::Rectangle();
 }
 
 #ifdef DBG_UTIL
@@ -333,24 +333,24 @@ void impRemoveIncarnatedSdrObjectToSdrModel(const SdrObject& rSdrObject, SdrMode
 SdrObject::SdrObject(SdrModel& rSdrModel)
 :   mpFillGeometryDefiningShape(nullptr)
     ,mrSdrModelFromSdrObject(rSdrModel)
-    ,pUserCall(nullptr)
+    ,m_pUserCall(nullptr)
     ,mpImpl(new Impl)
     ,mpParentOfSdrObject(nullptr)
-    ,nOrdNum(0)
+    ,m_nOrdNum(0)
     ,mnNavigationPosition(SAL_MAX_UINT32)
     ,mnLayerID(0)
     ,mpSvxShape( nullptr )
     ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)
 {
-    bVirtObj         =false;
-    bSnapRectDirty   =true;
-    bMovProt         =false;
-    bSizProt         =false;
-    bNoPrint         =false;
-    bEmptyPresObj    =false;
-    bNotVisibleAsMaster=false;
-    bClosedObj       =false;
+    m_bVirtObj         =false;
+    m_bSnapRectDirty   =true;
+    m_bMovProt         =false;
+    m_bSizProt         =false;
+    m_bNoPrint         =false;
+    m_bEmptyPresObj    =false;
+    m_bNotVisibleAsMaster=false;
+    m_bClosedObj       =false;
     mbVisible        = true;
 
     // #i25616#
@@ -359,10 +359,10 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
 
-    bIsEdge=false;
-    bIs3DObj=false;
-    bMarkProt=false;
-    bIsUnoObj=false;
+    m_bIsEdge=false;
+    m_bIs3DObj=false;
+    m_bMarkProt=false;
+    m_bIsUnoObj=false;
 #ifdef DBG_UTIL
     // SdrObjectLifetimeWatchDog:
     impAddIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
@@ -372,24 +372,24 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
 SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
 :   mpFillGeometryDefiningShape(nullptr)
     ,mrSdrModelFromSdrObject(rSdrModel)
-    ,pUserCall(nullptr)
+    ,m_pUserCall(nullptr)
     ,mpImpl(new Impl)
     ,mpParentOfSdrObject(nullptr)
-    ,nOrdNum(0)
+    ,m_nOrdNum(0)
     ,mnNavigationPosition(SAL_MAX_UINT32)
     ,mnLayerID(0)
     ,mpSvxShape( nullptr )
     ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)
 {
-    bVirtObj         =false;
-    bSnapRectDirty   =true;
-    bMovProt         =false;
-    bSizProt         =false;
-    bNoPrint         =false;
-    bEmptyPresObj    =false;
-    bNotVisibleAsMaster=false;
-    bClosedObj       =false;
+    m_bVirtObj         =false;
+    m_bSnapRectDirty   =true;
+    m_bMovProt         =false;
+    m_bSizProt         =false;
+    m_bNoPrint         =false;
+    m_bEmptyPresObj    =false;
+    m_bNotVisibleAsMaster=false;
+    m_bClosedObj       =false;
     mbVisible        = true;
 
     // #i25616#
@@ -398,10 +398,10 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
 
-    bIsEdge=false;
-    bIs3DObj=false;
-    bMarkProt=false;
-    bIsUnoObj=false;
+    m_bIsEdge=false;
+    m_bIs3DObj=false;
+    m_bMarkProt=false;
+    m_bIsUnoObj=false;
 #ifdef DBG_UTIL
     // SdrObjectLifetimeWatchDog:
     impAddIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
@@ -415,29 +415,29 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     // draw object, an SdrObject needs to be provided, as in the normal constructor.
     mpProperties = rSource.GetProperties().Clone(*this);
 
-    aOutRect=rSource.aOutRect;
+    m_aOutRect=rSource.m_aOutRect;
     mnLayerID = rSource.mnLayerID;
-    aAnchor =rSource.aAnchor;
-    bVirtObj=rSource.bVirtObj;
-    bSizProt=rSource.bSizProt;
-    bMovProt=rSource.bMovProt;
-    bNoPrint=rSource.bNoPrint;
+    m_aAnchor =rSource.m_aAnchor;
+    m_bVirtObj=rSource.m_bVirtObj;
+    m_bSizProt=rSource.m_bSizProt;
+    m_bMovProt=rSource.m_bMovProt;
+    m_bNoPrint=rSource.m_bNoPrint;
     mbVisible=rSource.mbVisible;
-    bMarkProt=rSource.bMarkProt;
-    bEmptyPresObj =rSource.bEmptyPresObj;
-    bNotVisibleAsMaster=rSource.bNotVisibleAsMaster;
-    bSnapRectDirty=true;
-    pPlusData.reset();
-    if (rSource.pPlusData!=nullptr) {
-        pPlusData.reset(rSource.pPlusData->Clone(this));
+    m_bMarkProt=rSource.m_bMarkProt;
+    m_bEmptyPresObj =rSource.m_bEmptyPresObj;
+    m_bNotVisibleAsMaster=rSource.m_bNotVisibleAsMaster;
+    m_bSnapRectDirty=true;
+    m_pPlusData.reset();
+    if (rSource.m_pPlusData!=nullptr) {
+        m_pPlusData.reset(rSource.m_pPlusData->Clone(this));
     }
-    if (pPlusData!=nullptr && pPlusData->pBroadcast!=nullptr) {
-        pPlusData->pBroadcast.reset(); // broadcaster isn't copied
+    if (m_pPlusData!=nullptr && m_pPlusData->pBroadcast!=nullptr) {
+        m_pPlusData->pBroadcast.reset(); // broadcaster isn't copied
     }
 
-    pGrabBagItem.reset();
-    if (rSource.pGrabBagItem!=nullptr)
-        pGrabBagItem.reset(rSource.pGrabBagItem->Clone());
+    m_pGrabBagItem.reset();
+    if (rSource.m_pGrabBagItem!=nullptr)
+        m_pGrabBagItem.reset(rSource.m_pGrabBagItem->Clone());
 }
 
 SdrObject::~SdrObject()
@@ -455,9 +455,9 @@ SdrObject::~SdrObject()
 
     // UserCall
     SendUserCall(SdrUserCallType::Delete, GetLastBoundRect());
-    o3tl::reset_preserve_ptr_during(pPlusData);
+    o3tl::reset_preserve_ptr_during(m_pPlusData);
 
-    pGrabBagItem.reset();
+    m_pGrabBagItem.reset();
     mpProperties.reset();
     mpViewContact.reset();
 
@@ -511,7 +511,7 @@ void SdrObject::SetRectsDirty(bool bNotMyself, bool bRecursive)
     if (!bNotMyself)
     {
         SetBoundRectDirty();
-        bSnapRectDirty=true;
+        m_bSnapRectDirty=true;
     }
 
     if (bRecursive && nullptr != getParentSdrObjListFromSdrObject())
@@ -680,27 +680,27 @@ void SdrObject::SetLayer(SdrLayerID nLayer)
 void SdrObject::AddListener(SfxListener& rListener)
 {
     ImpForcePlusData();
-    if (pPlusData->pBroadcast==nullptr) pPlusData->pBroadcast.reset(new SfxBroadcaster);
+    if (m_pPlusData->pBroadcast==nullptr) m_pPlusData->pBroadcast.reset(new SfxBroadcaster);
 
     // SdrEdgeObj may be connected to same SdrObject on both ends so allow it
     // to listen twice
     SdrEdgeObj const*const pEdge(dynamic_cast<SdrEdgeObj const*>(&rListener));
-    rListener.StartListening(*pPlusData->pBroadcast, pEdge ? DuplicateHandling::Allow : DuplicateHandling::Unexpected);
+    rListener.StartListening(*m_pPlusData->pBroadcast, pEdge ? DuplicateHandling::Allow : DuplicateHandling::Unexpected);
 }
 
 void SdrObject::RemoveListener(SfxListener& rListener)
 {
-    if (pPlusData!=nullptr && pPlusData->pBroadcast!=nullptr) {
-        rListener.EndListening(*pPlusData->pBroadcast);
-        if (!pPlusData->pBroadcast->HasListeners()) {
-            pPlusData->pBroadcast.reset();
+    if (m_pPlusData!=nullptr && m_pPlusData->pBroadcast!=nullptr) {
+        rListener.EndListening(*m_pPlusData->pBroadcast);
+        if (!m_pPlusData->pBroadcast->HasListeners()) {
+            m_pPlusData->pBroadcast.reset();
         }
     }
 }
 
 const SfxBroadcaster* SdrObject::GetBroadcaster() const
 {
-    return pPlusData!=nullptr ? pPlusData->pBroadcast.get() : nullptr;
+    return m_pPlusData!=nullptr ? m_pPlusData->pBroadcast.get() : nullptr;
 }
 
 void SdrObject::AddReference(SdrVirtObj& rVrtObj)
@@ -737,12 +737,12 @@ SdrObject* SdrObject::getParentSdrObjectFromSdrObject() const
 
 void SdrObject::SetName(const OUString& rStr, const bool bSetChanged)
 {
-    if (!rStr.isEmpty() && !pPlusData)
+    if (!rStr.isEmpty() && !m_pPlusData)
     {
         ImpForcePlusData();
     }
 
-    if(!(pPlusData && pPlusData->aObjName != rStr))
+    if(!(m_pPlusData && m_pPlusData->aObjName != rStr))
         return;
 
     // Undo/Redo for setting object's name (#i73249#)
@@ -759,7 +759,7 @@ void SdrObject::SetName(const OUString& rStr, const bool bSetChanged)
         getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
         getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
     }
-    pPlusData->aObjName = rStr;
+    m_pPlusData->aObjName = rStr;
     // Undo/Redo for setting object's name (#i73249#)
     if ( bUndo )
     {
@@ -774,9 +774,9 @@ void SdrObject::SetName(const OUString& rStr, const bool bSetChanged)
 
 OUString SdrObject::GetName() const
 {
-    if(pPlusData)
+    if(m_pPlusData)
     {
-        return pPlusData->aObjName;
+        return m_pPlusData->aObjName;
     }
 
     return OUString();
@@ -784,12 +784,12 @@ OUString SdrObject::GetName() const
 
 void SdrObject::SetTitle(const OUString& rStr)
 {
-    if (!rStr.isEmpty() && !pPlusData)
+    if (!rStr.isEmpty() && !m_pPlusData)
     {
         ImpForcePlusData();
     }
 
-    if(!(pPlusData && pPlusData->aObjTitle != rStr))
+    if(!(m_pPlusData && m_pPlusData->aObjTitle != rStr))
         return;
 
     // Undo/Redo for setting object's title (#i73249#)
@@ -806,7 +806,7 @@ void SdrObject::SetTitle(const OUString& rStr)
         getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
         getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
     }
-    pPlusData->aObjTitle = rStr;
+    m_pPlusData->aObjTitle = rStr;
     // Undo/Redo for setting object's title (#i73249#)
     if ( bUndo )
     {
@@ -818,9 +818,9 @@ void SdrObject::SetTitle(const OUString& rStr)
 
 OUString SdrObject::GetTitle() const
 {
-    if(pPlusData)
+    if(m_pPlusData)
     {
-        return pPlusData->aObjTitle;
+        return m_pPlusData->aObjTitle;
     }
 
     return OUString();
@@ -828,12 +828,12 @@ OUString SdrObject::GetTitle() const
 
 void SdrObject::SetDescription(const OUString& rStr)
 {
-    if (!rStr.isEmpty() && !pPlusData)
+    if (!rStr.isEmpty() && !m_pPlusData)
     {
         ImpForcePlusData();
     }
 
-    if(!(pPlusData && pPlusData->aObjDescription != rStr))
+    if(!(m_pPlusData && m_pPlusData->aObjDescription != rStr))
         return;
 
     // Undo/Redo for setting object's description (#i73249#)
@@ -850,7 +850,7 @@ void SdrObject::SetDescription(const OUString& rStr)
         getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
         getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
     }
-    pPlusData->aObjDescription = rStr;
+    m_pPlusData->aObjDescription = rStr;
     // Undo/Redo for setting object's description (#i73249#)
     if ( bUndo )
     {
@@ -862,9 +862,9 @@ void SdrObject::SetDescription(const OUString& rStr)
 
 OUString SdrObject::GetDescription() const
 {
-    if(pPlusData)
+    if(m_pPlusData)
     {
-        return pPlusData->aObjDescription;
+        return m_pPlusData->aObjDescription;
     }
 
     return OUString();
@@ -878,30 +878,30 @@ sal_uInt32 SdrObject::GetOrdNum() const
         {
             getParentSdrObjListFromSdrObject()->RecalcObjOrdNums();
         }
-    } else const_cast<SdrObject*>(this)->nOrdNum=0;
-    return nOrdNum;
+    } else const_cast<SdrObject*>(this)->m_nOrdNum=0;
+    return m_nOrdNum;
 }
 
 
 void SdrObject::SetOrdNum(sal_uInt32 nNum)
 {
-    nOrdNum = nNum;
+    m_nOrdNum = nNum;
 }
 
 void SdrObject::GetGrabBagItem(css::uno::Any& rVal) const
 {
-    if (pGrabBagItem != nullptr)
-        pGrabBagItem->QueryValue(rVal);
+    if (m_pGrabBagItem != nullptr)
+        m_pGrabBagItem->QueryValue(rVal);
     else
         rVal <<= uno::Sequence<beans::PropertyValue>();
 }
 
 void SdrObject::SetGrabBagItem(const css::uno::Any& rVal)
 {
-    if (pGrabBagItem == nullptr)
-        pGrabBagItem.reset(new SfxGrabBagItem);
+    if (m_pGrabBagItem == nullptr)
+        m_pGrabBagItem.reset(new SfxGrabBagItem);
 
-    pGrabBagItem->PutValue(rVal, 0);
+    m_pGrabBagItem->PutValue(rVal, 0);
 
     SetChanged();
     BroadcastObjectChange();
@@ -930,12 +930,12 @@ void SdrObject::SetNavigationPosition (const sal_uInt32 nNewPosition)
 // GetCurrentBoundRect().
 const tools::Rectangle& SdrObject::GetCurrentBoundRect() const
 {
-    if(aOutRect.IsEmpty())
+    if(m_aOutRect.IsEmpty())
     {
         const_cast< SdrObject* >(this)->RecalcBoundRect();
     }
 
-    return aOutRect;
+    return m_aOutRect;
 }
 
 // To have a possibility to get the last calculated BoundRect e.g for producing
@@ -944,7 +944,7 @@ const tools::Rectangle& SdrObject::GetCurrentBoundRect() const
 // a new method for accessing the last BoundRect.
 const tools::Rectangle& SdrObject::GetLastBoundRect() const
 {
-    return aOutRect;
+    return m_aOutRect;
 }
 
 void SdrObject::RecalcBoundRect()
@@ -954,7 +954,7 @@ void SdrObject::RecalcBoundRect()
         return;
 
     // central new method which will calculate the BoundRect using primitive geometry
-    if(!aOutRect.IsEmpty())
+    if(!m_aOutRect.IsEmpty())
         return;
 
     // Use view-independent data - we do not want any connections
@@ -970,7 +970,7 @@ void SdrObject::RecalcBoundRect()
 
     if(!aRange.isEmpty())
     {
-        aOutRect = tools::Rectangle(
+        m_aOutRect = tools::Rectangle(
             static_cast<tools::Long>(floor(aRange.getMinX())),
             static_cast<tools::Long>(floor(aRange.getMinY())),
             static_cast<tools::Long>(ceil(aRange.getMaxX())),
@@ -984,7 +984,7 @@ void SdrObject::BroadcastObjectChange() const
     if ((getSdrModelFromSdrObject().isLocked()) || utl::ConfigManager::IsFuzzing())
         return;
 
-    bool bPlusDataBroadcast(pPlusData && pPlusData->pBroadcast);
+    bool bPlusDataBroadcast(m_pPlusData && m_pPlusData->pBroadcast);
     bool bObjectChange(IsInserted());
 
     if(!(bPlusDataBroadcast || bObjectChange))
@@ -994,7 +994,7 @@ void SdrObject::BroadcastObjectChange() const
 
     if(bPlusDataBroadcast)
     {
-        pPlusData->pBroadcast->Broadcast(aHint);
+        m_pPlusData->pBroadcast->Broadcast(aHint);
     }
 
     if(bObjectChange)
@@ -1093,8 +1093,8 @@ OUString SdrObject::ImpGetDescriptionStr(const char* pStrCacheID) const
 
 void SdrObject::ImpForcePlusData()
 {
-    if (!pPlusData)
-        pPlusData.reset( new SdrObjPlusData );
+    if (!m_pPlusData)
+        m_pPlusData.reset( new SdrObjPlusData );
 }
 
 OUString SdrObject::GetMetrStr(tools::Long nVal) const
@@ -1362,23 +1362,23 @@ bool SdrObject::BegCreate(SdrDragStat& rStat)
     tools::Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
-    aOutRect = aRect1;
+    m_aOutRect = aRect1;
     return true;
 }
 
 bool SdrObject::MovCreate(SdrDragStat& rStat)
 {
-    rStat.TakeCreateRect(aOutRect);
-    rStat.SetActionRect(aOutRect);
-    aOutRect.Justify();
+    rStat.TakeCreateRect(m_aOutRect);
+    rStat.SetActionRect(m_aOutRect);
+    m_aOutRect.Justify();
 
     return true;
 }
 
 bool SdrObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    rStat.TakeCreateRect(aOutRect);
-    aOutRect.Justify();
+    rStat.TakeCreateRect(m_aOutRect);
+    m_aOutRect.Justify();
 
     return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
 }
@@ -1411,7 +1411,7 @@ PointerStyle SdrObject::GetCreatePointer() const
 // transformations
 void SdrObject::NbcMove(const Size& rSiz)
 {
-    aOutRect.Move(rSiz);
+    m_aOutRect.Move(rSiz);
     SetRectsDirty();
 }
 
@@ -1432,7 +1432,7 @@ void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
             NbcMirrorGluePoints(aRef1,aRef2);
         }
     }
-    ResizeRect(aOutRect,rRef,xFact,yFact);
+    ResizeRect(m_aOutRect,rRef,xFact,yFact);
     SetRectsDirty();
 }
 
@@ -1448,26 +1448,26 @@ void SdrObject::NbcRotate(const Point& rRef, Degree100 nAngle)
 void SdrObject::NbcRotate(const Point& rRef,  Degree100 nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
-    aOutRect.Move(-rRef.X(),-rRef.Y());
-    tools::Rectangle R(aOutRect);
+    m_aOutRect.Move(-rRef.X(),-rRef.Y());
+    tools::Rectangle R(m_aOutRect);
     if (sn==1.0 && cs==0.0) { // 90deg
-        aOutRect.SetLeft(-R.Bottom() );
-        aOutRect.SetRight(-R.Top() );
-        aOutRect.SetTop(R.Left() );
-        aOutRect.SetBottom(R.Right() );
+        m_aOutRect.SetLeft(-R.Bottom() );
+        m_aOutRect.SetRight(-R.Top() );
+        m_aOutRect.SetTop(R.Left() );
+        m_aOutRect.SetBottom(R.Right() );
     } else if (sn==0.0 && cs==-1.0) { // 180deg
-        aOutRect.SetLeft(-R.Right() );
-        aOutRect.SetRight(-R.Left() );
-        aOutRect.SetTop(-R.Bottom() );
-        aOutRect.SetBottom(-R.Top() );
+        m_aOutRect.SetLeft(-R.Right() );
+        m_aOutRect.SetRight(-R.Left() );
+        m_aOutRect.SetTop(-R.Bottom() );
+        m_aOutRect.SetBottom(-R.Top() );
     } else if (sn==-1.0 && cs==0.0) { // 270deg
-        aOutRect.SetLeft(R.Top() );
-        aOutRect.SetRight(R.Bottom() );
-        aOutRect.SetTop(-R.Right() );
-        aOutRect.SetBottom(-R.Left() );
+        m_aOutRect.SetLeft(R.Top() );
+        m_aOutRect.SetRight(R.Bottom() );
+        m_aOutRect.SetTop(-R.Right() );
+        m_aOutRect.SetBottom(-R.Left() );
     }
-    aOutRect.Move(rRef.X(),rRef.Y());
-    aOutRect.Justify(); // just in case
+    m_aOutRect.Move(rRef.X(),rRef.Y());
+    m_aOutRect.Justify(); // just in case
     SetRectsDirty();
     NbcRotateGluePoints(rRef,nAngle,sn,cs);
     SetGlueReallyAbsolute(false);
@@ -1476,29 +1476,29 @@ void SdrObject::NbcRotate(const Point& rRef,  Degree100 nAngle, double sn, doubl
 void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
-    aOutRect.Move(-rRef1.X(),-rRef1.Y());
-    tools::Rectangle R(aOutRect);
+    m_aOutRect.Move(-rRef1.X(),-rRef1.Y());
+    tools::Rectangle R(m_aOutRect);
     tools::Long dx=rRef2.X()-rRef1.X();
     tools::Long dy=rRef2.Y()-rRef1.Y();
     if (dx==0) {          // vertical axis
-        aOutRect.SetLeft(-R.Right() );
-        aOutRect.SetRight(-R.Left() );
+        m_aOutRect.SetLeft(-R.Right() );
+        m_aOutRect.SetRight(-R.Left() );
     } else if (dy==0) {   // horizontal axis
-        aOutRect.SetTop(-R.Bottom() );
-        aOutRect.SetBottom(-R.Top() );
+        m_aOutRect.SetTop(-R.Bottom() );
+        m_aOutRect.SetBottom(-R.Top() );
     } else if (dx==dy) {  // 45deg axis
-        aOutRect.SetLeft(R.Top() );
-        aOutRect.SetRight(R.Bottom() );
-        aOutRect.SetTop(R.Left() );
-        aOutRect.SetBottom(R.Right() );
+        m_aOutRect.SetLeft(R.Top() );
+        m_aOutRect.SetRight(R.Bottom() );
+        m_aOutRect.SetTop(R.Left() );
+        m_aOutRect.SetBottom(R.Right() );
     } else if (dx==-dy) { // 45deg axis
-        aOutRect.SetLeft(-R.Bottom() );
-        aOutRect.SetRight(-R.Top() );
-        aOutRect.SetTop(-R.Right() );
-        aOutRect.SetBottom(-R.Left() );
+        m_aOutRect.SetLeft(-R.Bottom() );
+        m_aOutRect.SetRight(-R.Top() );
+        m_aOutRect.SetTop(-R.Right() );
+        m_aOutRect.SetBottom(-R.Left() );
     }
-    aOutRect.Move(rRef1.X(),rRef1.Y());
-    aOutRect.Justify(); // just in case
+    m_aOutRect.Move(rRef1.X(),rRef1.Y());
+    m_aOutRect.Justify(); // just in case
     SetRectsDirty();
     NbcMirrorGluePoints(rRef1,rRef2);
     SetGlueReallyAbsolute(false);
@@ -1514,7 +1514,7 @@ void SdrObject::NbcShear(const Point& rRef, Degree100 /*nAngle*/, double tn, boo
 void SdrObject::Move(const Size& rSiz)
 {
     if (rSiz.Width()!=0 || rSiz.Height()!=0) {
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcMove(rSiz);
         SetChanged();
         BroadcastObjectChange();
@@ -1540,7 +1540,7 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
         mpImpl->meRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
         mpImpl->mnRelativeHeight.reset();
     }
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcResize(rRef,xFact,yFact);
     SetChanged();
     BroadcastObjectChange();
@@ -1549,7 +1549,7 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
 
 void SdrObject::Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcCrop(rRef, fxFact, fyFact);
     SetChanged();
     BroadcastObjectChange();
@@ -1559,7 +1559,7 @@ void SdrObject::Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact
 void SdrObject::Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     if (nAngle) {
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcRotate(rRef,nAngle,sn,cs);
         SetChanged();
         BroadcastObjectChange();
@@ -1569,7 +1569,7 @@ void SdrObject::Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs
 
 void SdrObject::Mirror(const Point& rRef1, const Point& rRef2)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcMirror(rRef1,rRef2);
     SetChanged();
     BroadcastObjectChange();
@@ -1579,7 +1579,7 @@ void SdrObject::Mirror(const Point& rRef1, const Point& rRef2)
 void SdrObject::Shear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
     if (nAngle) {
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcShear(rRef,nAngle,tn,bVShear);
         SetChanged();
         BroadcastObjectChange();
@@ -1589,7 +1589,7 @@ void SdrObject::Shear(const Point& rRef, Degree100 nAngle, double tn, bool bVShe
 
 void SdrObject::NbcSetRelativePos(const Point& rPnt)
 {
-    Point aRelPos0(GetSnapRect().TopLeft()-aAnchor);
+    Point aRelPos0(GetSnapRect().TopLeft()-m_aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
     NbcMove(aSiz); // This also calls SetRectsDirty()
 }
@@ -1597,7 +1597,7 @@ void SdrObject::NbcSetRelativePos(const Point& rPnt)
 void SdrObject::SetRelativePos(const Point& rPnt)
 {
     if (rPnt!=GetRelativePos()) {
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcSetRelativePos(rPnt);
         SetChanged();
         BroadcastObjectChange();
@@ -1607,25 +1607,25 @@ void SdrObject::SetRelativePos(const Point& rPnt)
 
 Point SdrObject::GetRelativePos() const
 {
-    return GetSnapRect().TopLeft()-aAnchor;
+    return GetSnapRect().TopLeft()-m_aAnchor;
 }
 
 void SdrObject::ImpSetAnchorPos(const Point& rPnt)
 {
-    aAnchor = rPnt;
+    m_aAnchor = rPnt;
 }
 
 void SdrObject::NbcSetAnchorPos(const Point& rPnt)
 {
-    Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());
-    aAnchor=rPnt;
+    Size aSiz(rPnt.X()-m_aAnchor.X(),rPnt.Y()-m_aAnchor.Y());
+    m_aAnchor=rPnt;
     NbcMove(aSiz); // This also calls SetRectsDirty()
 }
 
 void SdrObject::SetAnchorPos(const Point& rPnt)
 {
-    if (rPnt!=aAnchor) {
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    if (rPnt!=m_aAnchor) {
+        tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcSetAnchorPos(rPnt);
         SetChanged();
         BroadcastObjectChange();
@@ -1635,7 +1635,7 @@ void SdrObject::SetAnchorPos(const Point& rPnt)
 
 const Point& SdrObject::GetAnchorPos() const
 {
-    return aAnchor;
+    return m_aAnchor;
 }
 
 void SdrObject::RecalcSnapRect()
@@ -1644,12 +1644,12 @@ void SdrObject::RecalcSnapRect()
 
 const tools::Rectangle& SdrObject::GetSnapRect() const
 {
-    return aOutRect;
+    return m_aOutRect;
 }
 
 void SdrObject::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
-    aOutRect=rRect;
+    m_aOutRect=rRect;
 }
 
 const tools::Rectangle& SdrObject::GetLogicRect() const
@@ -1669,7 +1669,7 @@ void SdrObject::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool /* bShri
 
 void SdrObject::SetSnapRect(const tools::Rectangle& rRect)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetSnapRect(rRect);
     SetChanged();
     BroadcastObjectChange();
@@ -1678,7 +1678,7 @@ void SdrObject::SetSnapRect(const tools::Rectangle& rRect)
 
 void SdrObject::SetLogicRect(const tools::Rectangle& rRect)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetLogicRect(rRect);
     SetChanged();
     BroadcastObjectChange();
@@ -1722,7 +1722,7 @@ Point SdrObject::GetPoint(sal_uInt32 /*i*/) const
 
 void SdrObject::SetPoint(const Point& rPnt, sal_uInt32 i)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetPoint(rPnt, i);
     SetChanged();
     BroadcastObjectChange();
@@ -1740,14 +1740,14 @@ bool SdrObject::HasTextEdit() const
 
 bool SdrObject::Equals(const SdrObject& rOtherObj) const
 {
-    return (aAnchor.X() == rOtherObj.aAnchor.X() && aAnchor.Y() == rOtherObj.aAnchor.Y() &&
-            nOrdNum == rOtherObj.nOrdNum && mnNavigationPosition == rOtherObj.mnNavigationPosition &&
+    return (m_aAnchor.X() == rOtherObj.m_aAnchor.X() && m_aAnchor.Y() == rOtherObj.m_aAnchor.Y() &&
+            m_nOrdNum == rOtherObj.m_nOrdNum && mnNavigationPosition == rOtherObj.mnNavigationPosition &&
             mbSupportTextIndentingOnLineWidthChange == rOtherObj.mbSupportTextIndentingOnLineWidthChange &&
-            mbLineIsOutsideGeometry == rOtherObj.mbLineIsOutsideGeometry && bMarkProt == rOtherObj.bMarkProt &&
-            bIs3DObj == rOtherObj.bIs3DObj && bIsEdge == rOtherObj.bIsEdge && bClosedObj == rOtherObj.bClosedObj &&
-            bNotVisibleAsMaster == rOtherObj.bNotVisibleAsMaster && bEmptyPresObj == rOtherObj.bEmptyPresObj &&
-            mbVisible == rOtherObj.mbVisible && bNoPrint == rOtherObj.bNoPrint && bSizProt == rOtherObj.bSizProt &&
-            bMovProt == rOtherObj.bMovProt && bVirtObj == rOtherObj.bVirtObj &&
+            mbLineIsOutsideGeometry == rOtherObj.mbLineIsOutsideGeometry && m_bMarkProt == rOtherObj.m_bMarkProt &&
+            m_bIs3DObj == rOtherObj.m_bIs3DObj && m_bIsEdge == rOtherObj.m_bIsEdge && m_bClosedObj == rOtherObj.m_bClosedObj &&
+            m_bNotVisibleAsMaster == rOtherObj.m_bNotVisibleAsMaster && m_bEmptyPresObj == rOtherObj.m_bEmptyPresObj &&
+            mbVisible == rOtherObj.mbVisible && m_bNoPrint == rOtherObj.m_bNoPrint && m_bSizProt == rOtherObj.m_bSizProt &&
+            m_bMovProt == rOtherObj.m_bMovProt && m_bVirtObj == rOtherObj.m_bVirtObj &&
             mnLayerID == rOtherObj.mnLayerID && GetMergedItemSet().Equals(rOtherObj.GetMergedItemSet(), false) );
 }
 
@@ -1760,11 +1760,11 @@ void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("title"), "%s", BAD_CAST(GetTitle().toUtf8().getStr()));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("description"), "%s", BAD_CAST(GetDescription().toUtf8().getStr()));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nOrdNum"), "%" SAL_PRIuUINT32, GetOrdNumDirect());
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aOutRect"), BAD_CAST(aOutRect.toString().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aOutRect"), BAD_CAST(m_aOutRect.toString().getStr()));
 
-    if (pGrabBagItem)
+    if (m_pGrabBagItem)
     {
-        pGrabBagItem->dumpAsXml(pWriter);
+        m_pGrabBagItem->dumpAsXml(pWriter);
     }
 
     if (mpProperties)
@@ -1780,7 +1780,7 @@ void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 void SdrObject::SetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetOutlinerParaObject(std::move(pTextObject));
     SetChanged();
     BroadcastObjectChange();
@@ -1883,20 +1883,20 @@ std::unique_ptr<SdrObjGeoData> SdrObject::NewGeoData() const
 void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     rGeo.aBoundRect    =GetCurrentBoundRect();
-    rGeo.aAnchor       =aAnchor       ;
-    rGeo.bMovProt      =bMovProt      ;
-    rGeo.bSizProt      =bSizProt      ;
-    rGeo.bNoPrint      =bNoPrint      ;
+    rGeo.aAnchor       =m_aAnchor       ;
+    rGeo.bMovProt      =m_bMovProt      ;
+    rGeo.bSizProt      =m_bSizProt      ;
+    rGeo.bNoPrint      =m_bNoPrint      ;
     rGeo.mbVisible     =mbVisible     ;
-    rGeo.bClosedObj    =bClosedObj    ;
+    rGeo.bClosedObj    =m_bClosedObj    ;
     rGeo.mnLayerID = mnLayerID;
 
     // user-defined glue points
-    if (pPlusData!=nullptr && pPlusData->pGluePoints!=nullptr) {
+    if (m_pPlusData!=nullptr && m_pPlusData->pGluePoints!=nullptr) {
         if (rGeo.pGPL!=nullptr) {
-            *rGeo.pGPL=*pPlusData->pGluePoints;
+            *rGeo.pGPL=*m_pPlusData->pGluePoints;
         } else {
-            rGeo.pGPL.reset( new SdrGluePointList(*pPlusData->pGluePoints) );
+            rGeo.pGPL.reset( new SdrGluePointList(*m_pPlusData->pGluePoints) );
         }
     } else {
         rGeo.pGPL.reset();
@@ -1906,26 +1906,26 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
 void SdrObject::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     SetRectsDirty();
-    aOutRect      =rGeo.aBoundRect    ;
-    aAnchor       =rGeo.aAnchor       ;
-    bMovProt      =rGeo.bMovProt      ;
-    bSizProt      =rGeo.bSizProt      ;
-    bNoPrint      =rGeo.bNoPrint      ;
+    m_aOutRect      =rGeo.aBoundRect    ;
+    m_aAnchor       =rGeo.aAnchor       ;
+    m_bMovProt      =rGeo.bMovProt      ;
+    m_bSizProt      =rGeo.bSizProt      ;
+    m_bNoPrint      =rGeo.bNoPrint      ;
     mbVisible     =rGeo.mbVisible     ;
-    bClosedObj    =rGeo.bClosedObj    ;
+    m_bClosedObj    =rGeo.bClosedObj    ;
     mnLayerID = rGeo.mnLayerID;
 
     // user-defined glue points
     if (rGeo.pGPL!=nullptr) {
         ImpForcePlusData();
-        if (pPlusData->pGluePoints!=nullptr) {
-            *pPlusData->pGluePoints=*rGeo.pGPL;
+        if (m_pPlusData->pGluePoints!=nullptr) {
+            *m_pPlusData->pGluePoints=*rGeo.pGPL;
         } else {
-            pPlusData->pGluePoints.reset(new SdrGluePointList(*rGeo.pGPL));
+            m_pPlusData->pGluePoints.reset(new SdrGluePointList(*rGeo.pGPL));
         }
     } else {
-        if (pPlusData!=nullptr && pPlusData->pGluePoints!=nullptr) {
-            pPlusData->pGluePoints.reset();
+        if (m_pPlusData!=nullptr && m_pPlusData->pGluePoints!=nullptr) {
+            m_pPlusData->pGluePoints.reset();
         }
     }
 }
@@ -1939,7 +1939,7 @@ std::unique_ptr<SdrObjGeoData> SdrObject::GetGeoData() const
 
 void SdrObject::SetGeoData(const SdrObjGeoData& rGeo)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     RestoreGeoData(rGeo);
     SetChanged();
     BroadcastObjectChange();
@@ -2001,7 +2001,7 @@ void SdrObject::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClear
 
 void SdrObject::ApplyNotPersistAttr(const SfxItemSet& rAttr)
 {
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcApplyNotPersistAttr(rAttr);
     SetChanged();
     BroadcastObjectChange();
@@ -2210,7 +2210,7 @@ void SdrObject::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHar
 {
     tools::Rectangle aBoundRect0;
 
-    if(pUserCall)
+    if(m_pUserCall)
         aBoundRect0 = GetLastBoundRect();
 
     NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
@@ -2266,7 +2266,7 @@ SdrGluePoint SdrObject::GetCornerGluePoint(sal_uInt16 nPosNum) const
 
 const SdrGluePointList* SdrObject::GetGluePointList() const
 {
-    if (pPlusData!=nullptr) return pPlusData->pGluePoints.get();
+    if (m_pPlusData!=nullptr) return m_pPlusData->pGluePoints.get();
     return nullptr;
 }
 
@@ -2274,10 +2274,10 @@ const SdrGluePointList* SdrObject::GetGluePointList() const
 SdrGluePointList* SdrObject::ForceGluePointList()
 {
     ImpForcePlusData();
-    if (pPlusData->pGluePoints==nullptr) {
-        pPlusData->pGluePoints.reset(new SdrGluePointList);
+    if (m_pPlusData->pGluePoints==nullptr) {
+        m_pPlusData->pGluePoints.reset(new SdrGluePointList);
     }
-    return pPlusData->pGluePoints.get();
+    return m_pPlusData->pGluePoints.get();
 }
 
 void SdrObject::SetGlueReallyAbsolute(bool bOn)
@@ -2516,19 +2516,19 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
 
 void SdrObject::SetMarkProtect(bool bProt)
 {
-    bMarkProt = bProt;
+    m_bMarkProt = bProt;
 }
 
 
 void SdrObject::SetEmptyPresObj(bool bEpt)
 {
-    bEmptyPresObj = bEpt;
+    m_bEmptyPresObj = bEpt;
 }
 
 
 void SdrObject::SetNotVisibleAsMaster(bool bFlg)
 {
-    bNotVisibleAsMaster=bFlg;
+    m_bNotVisibleAsMaster=bFlg;
 }
 
 
@@ -2611,10 +2611,10 @@ void SdrObject::InsertedStateChange()
         SendUserCall(SdrUserCallType::Removed, aBoundRect0);
     }
 
-    if(nullptr != pPlusData && nullptr != pPlusData->pBroadcast)
+    if(nullptr != m_pPlusData && nullptr != m_pPlusData->pBroadcast)
     {
         SdrHint aHint(bIsInserted ? SdrHintKind::ObjectInserted : SdrHintKind::ObjectRemoved, *this);
-        pPlusData->pBroadcast->Broadcast(aHint);
+        m_pPlusData->pBroadcast->Broadcast(aHint);
     }
 }
 
@@ -2623,7 +2623,7 @@ void SdrObject::SetMoveProtect(bool bProt)
     if(IsMoveProtect() != bProt)
     {
         // #i77187# secured and simplified
-        bMovProt = bProt;
+        m_bMovProt = bProt;
         SetChanged();
         BroadcastObjectChange();
     }
@@ -2634,7 +2634,7 @@ void SdrObject::SetResizeProtect(bool bProt)
     if(IsResizeProtect() != bProt)
     {
         // #i77187# secured and simplified
-        bSizProt = bProt;
+        m_bSizProt = bProt;
         SetChanged();
         BroadcastObjectChange();
     }
@@ -2642,9 +2642,9 @@ void SdrObject::SetResizeProtect(bool bProt)
 
 void SdrObject::SetPrintable(bool bPrn)
 {
-    if( bPrn == bNoPrint )
+    if( bPrn == m_bNoPrint )
     {
-        bNoPrint=!bPrn;
+        m_bNoPrint=!bPrn;
         SetChanged();
         if (IsInserted())
         {
@@ -2671,14 +2671,14 @@ void SdrObject::SetVisible(bool bVisible)
 
 sal_uInt16 SdrObject::GetUserDataCount() const
 {
-    if (pPlusData==nullptr || pPlusData->pUserDataList==nullptr) return 0;
-    return pPlusData->pUserDataList->GetUserDataCount();
+    if (m_pPlusData==nullptr || m_pPlusData->pUserDataList==nullptr) return 0;
+    return m_pPlusData->pUserDataList->GetUserDataCount();
 }
 
 SdrObjUserData* SdrObject::GetUserData(sal_uInt16 nNum) const
 {
-    if (pPlusData==nullptr || pPlusData->pUserDataList==nullptr) return nullptr;
-    return &pPlusData->pUserDataList->GetUserData(nNum);
+    if (m_pPlusData==nullptr || m_pPlusData->pUserDataList==nullptr) return nullptr;
+    return &m_pPlusData->pUserDataList->GetUserData(nNum);
 }
 
 void SdrObject::AppendUserData(std::unique_ptr<SdrObjUserData> pData)
@@ -2690,19 +2690,19 @@ void SdrObject::AppendUserData(std::unique_ptr<SdrObjUserData> pData)
     }
 
     ImpForcePlusData();
-    if (!pPlusData->pUserDataList)
-        pPlusData->pUserDataList.reset( new SdrObjUserDataList );
+    if (!m_pPlusData->pUserDataList)
+        m_pPlusData->pUserDataList.reset( new SdrObjUserDataList );
 
-    pPlusData->pUserDataList->AppendUserData(std::move(pData));
+    m_pPlusData->pUserDataList->AppendUserData(std::move(pData));
 }
 
 void SdrObject::DeleteUserData(sal_uInt16 nNum)
 {
     sal_uInt16 nCount=GetUserDataCount();
     if (nNum<nCount) {
-        pPlusData->pUserDataList->DeleteUserData(nNum);
+        m_pPlusData->pUserDataList->DeleteUserData(nNum);
         if (nCount==1)  {
-            pPlusData->pUserDataList.reset();
+            m_pPlusData->pUserDataList.reset();
         }
     } else {
         OSL_FAIL("SdrObject::DeleteUserData(): Invalid Index.");
@@ -2711,7 +2711,7 @@ void SdrObject::DeleteUserData(sal_uInt16 nNum)
 
 void SdrObject::SetUserCall(SdrObjUserCall* pUser)
 {
-    pUserCall = pUser;
+    m_pUserCall = pUser;
 }
 
 
@@ -2719,9 +2719,9 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
 {
     SdrObject* pGroup(getParentSdrObjectFromSdrObject());
 
-    if ( pUserCall )
+    if ( m_pUserCall )
     {
-        pUserCall->Changed( *this, eUserCall, rBoundRect );
+        m_pUserCall->Changed( *this, eUserCall, rBoundRect );
     }
 
     if(nullptr != pGroup && pGroup->GetUserCall())

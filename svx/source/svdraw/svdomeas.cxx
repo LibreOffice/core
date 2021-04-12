@@ -964,7 +964,7 @@ bool SdrMeasureObj::MovCreate(SdrDragStat& rStat)
     }
     SetTextDirty();
     SetBoundRectDirty();
-    bSnapRectDirty=true;
+    m_bSnapRectDirty=true;
     return true;
 }
 
@@ -1420,7 +1420,7 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
         return;
 
     // set model values and broadcast
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
 
     aPt1 = aNewPt1;
     aPt2 = aNewPt2;
