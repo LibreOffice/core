@@ -19,6 +19,7 @@
 #include <condition_variable>
 #include <mutex>
 
+#include <tools/link.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
 class Timer;
