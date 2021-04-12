@@ -22,6 +22,30 @@
       "revId": "3808c6fe2074cf16be9c0ee5681a18ce588c6a74",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "501d656a_163b2aaa",
+        "filename": "sc/source/filter/excel/xiescher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2021-04-12T19:30:55Z",
+      "side": 1,
+      "message": "Actually, it shouldn\u0027t be negative, it is unsigned (sal_uInt32). But it could \"underflow\" to large unsigned values, unless checked before the decrement. So that it should probably be a defined as signed int? (In any case, \"\u003c\u003d\" may probably be semantically better than \"!\", as it the variable is not used with boolean semantics?)",
+      "parentUuid": "ccfe47ba_21e4c7bf",
+      "range": {
+        "startLine": 968,
+        "startChar": 12,
+        "endLine": 968,
+        "endChar": 13
+      },
+      "revId": "3808c6fe2074cf16be9c0ee5681a18ce588c6a74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
