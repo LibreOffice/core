@@ -693,14 +693,12 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         aMapModeVDev->mnDPIY = mnDPIY;
         aMapModeVDev->EnableOutput(false);
 
-        int nLastBgAction, nActionNum;
-
         // weed out page-filling background objects (if they are
         // uniformly coloured). Keeping them outside the other
         // connected components often prevents whole-page bitmap
         // generation.
         bool bStillBackground=true; // true until first non-bg action
-        nActionNum=0; nLastBgAction=-1;
+        int nActionNum = 0, nLastBgAction = -1;
         pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction();
         if( rBackground != COL_TRANSPARENT )
         {
