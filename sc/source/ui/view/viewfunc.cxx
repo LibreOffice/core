@@ -1254,12 +1254,12 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
             {
                 for ( const auto& rProp : rMap.getPropertyEntries())
                 {
-                    if ( rProp.second.nWID == nWhich )
+                    if ( rProp.second->nWID == nWhich )
                     {
                         css::uno::Any aVal;
-                        pItem->QueryValue( aVal, rProp.second.nMemberId );
+                        pItem->QueryValue( aVal, rProp.second->nMemberId );
                         aProperties.realloc( nCount + 1 );
-                        aProperties[ nCount ].Name = rProp.first;
+                        aProperties[ nCount ].Name = rProp.second->aName;
                         aProperties[ nCount ].Value = aVal;
                         ++nCount;
                     }

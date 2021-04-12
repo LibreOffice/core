@@ -582,7 +582,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
     throwIfDisposed();
 
-    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
     switch( pEntry ? pEntry->nWID : -1 )
     {
@@ -992,7 +992,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
     uno::Any aAny;
 
-    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
     sal_Int16 nEntry = pEntry ? pEntry->nWID : -1;
     switch (nEntry)
@@ -2782,12 +2782,13 @@ void SdMasterPage::setBackground( const Any& rValue )
 
             for( const auto& rProp : ImplGetPageBackgroundPropertySet()->getPropertyMap().getPropertyEntries() )
             {
-                if( xSetInfo->hasPropertyByName( OUString(rProp.first) ) )
+                const OUString& rPropName = rProp.second->aName;
+                if( xSetInfo->hasPropertyByName( rPropName ) )
                 {
-                    if( !xSetStates.is() || xSetStates->getPropertyState( OUString(rProp.first) ) == beans::PropertyState_DIRECT_VALUE )
-                        xStyleSet->setPropertyValue( OUString(rProp.first), xInputSet->getPropertyValue( OUString(rProp.first) ) );
+                    if( !xSetStates.is() || xSetStates->getPropertyState( rPropName ) == beans::PropertyState_DIRECT_VALUE )
+                        xStyleSet->setPropertyValue( rPropName, xInputSet->getPropertyValue( rPropName ) );
                     else
-                        xSetStates->setPropertyToDefault( OUString(rProp.first) );
+                        xSetStates->setPropertyToDefault( rPropName );
                 }
             }
         }

@@ -121,7 +121,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
     if(!pEntry->nWID)
@@ -203,7 +203,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
         throw uno::RuntimeException();
 
     uno::Any aRet;
-    const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -248,7 +248,7 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const OUString
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -293,7 +293,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyToDefault( const OUString& aPropertyN
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -315,7 +315,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const OUString& aPropert
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 

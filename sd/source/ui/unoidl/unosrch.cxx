@@ -689,7 +689,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aP
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
     bool bOk = false;
 
@@ -718,7 +718,7 @@ uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const OUString
 
     uno::Any aAny;
 
-    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
     switch( pEntry ? pEntry->nWID : -1 )
     {

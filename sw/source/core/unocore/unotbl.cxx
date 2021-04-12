@@ -184,7 +184,7 @@ static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSv
 /// @throws lang::IllegalArgumentException
 /// @throws uno::RuntimeException
 static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
-                                   const SfxItemPropertySimpleEntry* pEntry,
+                                   const SfxItemPropertyMapEntry* pEntry,
                                    const uno::Any& aValue)
 {
     // special treatment for "non-items"
@@ -263,7 +263,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
     }
 }
 
-static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemPropertySimpleEntry* pEntry )
+static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemPropertyMapEntry* pEntry )
 {
     switch(pEntry->nWID)
     {
@@ -1292,7 +1292,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
     }
     else
     {
-        const SfxItemPropertySimpleEntry* pEntry =
+        const SfxItemPropertyMapEntry* pEntry =
             m_pPropSet->getPropertyMap().getByName(rPropertyName);
         SwDoc* pDoc = pFormat->GetDoc();
         if (!pEntry)
@@ -1351,7 +1351,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName)
     SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
     if(pLn)
     {
-        const SfxItemPropertySimpleEntry* pEntry =
+        const SfxItemPropertyMapEntry* pEntry =
                                 m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if (!pEntry)
             throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -2483,7 +2483,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
     SwFrameFormat* pFormat = GetFrameFormat();
     if(!aValue.hasValue())
         throw lang::IllegalArgumentException();
-    const SfxItemPropertySimpleEntry* pEntry =
+    const SfxItemPropertyMapEntry* pEntry =
             m_pImpl->m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if( !pEntry )
         throw lang::IllegalArgumentException();
@@ -2737,7 +2737,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard aGuard;
     uno::Any aRet;
     SwFrameFormat* pFormat = GetFrameFormat();
-    const SfxItemPropertySimpleEntry* pEntry =
+    const SfxItemPropertyMapEntry* pEntry =
             m_pImpl->m_pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
@@ -3362,7 +3362,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     if(!pFormat)
         return;
 
-    const SfxItemPropertySimpleEntry *const pEntry =
+    const SfxItemPropertyMapEntry *const pEntry =
             m_pImpl->m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if(!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -3480,7 +3480,7 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
     SwFrameFormat *const pFormat = m_pImpl->GetFrameFormat();
     if(pFormat)
     {
-        const SfxItemPropertySimpleEntry *const pEntry =
+        const SfxItemPropertyMapEntry *const pEntry =
             m_pImpl->m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(!pEntry)
            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );

@@ -1120,12 +1120,12 @@ uno::Reference<container::XIndexReplace> ScStyleObj::CreateEmptyNumberingRules()
 // beans::XPropertyState
 
 const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( std::u16string_view rPropName,
-                                                    const SfxItemPropertySimpleEntry*& rpResultEntry )
+                                                    const SfxItemPropertyMapEntry*& rpResultEntry )
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl( true );
     if ( pStyle )
     {
-        const SfxItemPropertySimpleEntry* pEntry = nullptr;
+        const SfxItemPropertyMapEntry* pEntry = nullptr;
         if ( eFamily == SfxStyleFamily::Page )
         {
             pEntry = lcl_GetHeaderStyleMap()->getByName( rPropName );
@@ -1157,7 +1157,7 @@ beans::PropertyState ScStyleObj::getPropertyState_Impl( std::u16string_view aPro
 {
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
 
-    const SfxItemPropertySimpleEntry* pResultEntry = nullptr;
+    const SfxItemPropertyMapEntry* pResultEntry = nullptr;
     const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aPropertyName, pResultEntry );
 
     if ( pItemSet && pResultEntry )
@@ -1215,7 +1215,7 @@ void SAL_CALL ScStyleObj::setPropertyToDefault( const OUString& aPropertyName )
     SolarMutexGuard aGuard;
     GetStyle_Impl();
 
-    const SfxItemPropertySimpleEntry* pEntry = pPropSet->getPropertyMap().getByName( aPropertyName );
+    const SfxItemPropertyMapEntry* pEntry = pPropSet->getPropertyMap().getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
@@ -1226,7 +1226,7 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( std::u16string_view aPropertyName 
 {
     uno::Any aAny;
 
-    const SfxItemPropertySimpleEntry* pResultEntry = nullptr;
+    const SfxItemPropertyMapEntry* pResultEntry = nullptr;
     const SfxItemSet* pStyleSet = GetStyleItemSet_Impl( aPropertyName, pResultEntry );
 
     if ( pStyleSet && pResultEntry )
@@ -1340,7 +1340,7 @@ void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< OUString >& aP
     const SfxItemPropertyMap& rPropertyMap = pPropSet->getPropertyMap();
     for ( sal_Int32 i = 0; i < aPropertyNames.getLength(); i++ )
     {
-        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( pNames[i] );
+        const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( pNames[i] );
         setPropertyValue_Impl( pNames[i], pEntry, &pValues[i] );
     }
 }
@@ -1434,7 +1434,7 @@ void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<OUString>&
     const SfxItemPropertyMap& rPropertyMap = pPropSet->getPropertyMap();
     for ( const OUString& rName : aPropertyNames )
     {
-        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( rName );
+        const SfxItemPropertyMapEntry* pEntry = rPropertyMap.getByName( rName );
         setPropertyValue_Impl( rName, pEntry, nullptr );
     }
 }
@@ -1452,14 +1452,14 @@ void SAL_CALL ScStyleObj::setPropertyValue( const OUString& aPropertyName, const
     SolarMutexGuard aGuard;
     GetStyle_Impl();
 
-    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( aPropertyName );
+    const SfxItemPropertyMapEntry*  pEntry = pPropSet->getPropertyMap().getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
     setPropertyValue_Impl( aPropertyName, pEntry, &aValue );
 }
 
-void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const SfxItemPropertySimpleEntry* pEntry, const uno::Any* pValue )
+void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const SfxItemPropertyMapEntry* pEntry, const uno::Any* pValue )
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl( true );
     if ( !(pStyle && pEntry) )
@@ -1475,7 +1475,7 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
     {
         if(pEntry->nWID == SC_WID_UNO_HEADERSET)
         {
-            const SfxItemPropertySimpleEntry* pHeaderEntry = lcl_GetHeaderStyleMap()->getByName( rPropertyName );
+            const SfxItemPropertyMapEntry* pHeaderEntry = lcl_GetHeaderStyleMap()->getByName( rPropertyName );
             if ( pHeaderEntry ) // only item-WIDs in header/footer map
             {
                 SvxSetItem aNewHeader( rSet.Get(ATTR_PAGE_HEADERSET) );
@@ -1489,7 +1489,7 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
         }
         else if(pEntry->nWID == SC_WID_UNO_FOOTERSET)
         {
-            const SfxItemPropertySimpleEntry* pFooterEntry = lcl_GetFooterStyleMap()->getByName( rPropertyName );
+            const SfxItemPropertyMapEntry* pFooterEntry = lcl_GetFooterStyleMap()->getByName( rPropertyName );
             if ( pFooterEntry ) // only item-WIDs in header/footer map
             {
                 SvxSetItem aNewFooter( rSet.Get(ATTR_PAGE_FOOTERSET) );
@@ -1780,7 +1780,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
     }
     else
     {
-        const SfxItemPropertySimpleEntry* pResultEntry = nullptr;
+        const SfxItemPropertyMapEntry* pResultEntry = nullptr;
         const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aPropertyName, pResultEntry );
 
         if ( pItemSet && pResultEntry )

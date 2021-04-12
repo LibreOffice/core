@@ -995,7 +995,7 @@ sal_Int32 SAL_CALL Cell::getError(  )
 // XPropertySet
 
 
-Any Cell::GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEntry* pMap )
+Any Cell::GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry* pMap )
 {
     Any aAny( SvxItemPropertySet_getPropertyValue( pMap, aSet ) );
 
@@ -1030,7 +1030,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
     if(mpProperties == nullptr)
         throw DisposedException();
 
-    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
+    const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
     if( pMap )
     {
         if( (pMap->nFlags & PropertyAttribute::READONLY ) != 0 )
@@ -1183,7 +1183,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
     if(mpProperties == nullptr)
         throw DisposedException();
 
-    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
     if( pMap )
     {
         switch( pMap->nWID )
@@ -1374,7 +1374,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
     if(mpProperties == nullptr)
         throw DisposedException();
 
-    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( pMap )
     {
@@ -1503,7 +1503,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName )
     if(mpProperties == nullptr)
         throw DisposedException();
 
-    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
     if( pMap )
     {
         switch( pMap->nWID )
@@ -1544,7 +1544,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName )
     if(mpProperties == nullptr)
         throw DisposedException();
 
-    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
     if( pMap )
     {
         switch( pMap->nWID )

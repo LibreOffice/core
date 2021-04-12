@@ -1414,7 +1414,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
         return;
     }
 
-    const ::SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
+    const ::SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
         throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -1980,7 +1980,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard aGuard;
     uno::Any aAny;
     SwFrameFormat* pFormat = GetFrameFormat();
-    const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
+    const SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
         throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -2390,7 +2390,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
         const SwAttrSet& rFormatSet = pFormat->GetAttrSet();
         for(int i = 0; i < aPropertyNames.getLength(); i++)
         {
-            const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(pNames[i]);
+            const SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName(pNames[i]);
             if (!pEntry)
                 throw beans::UnknownPropertyException("Unknown property: " + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -2468,7 +2468,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
     {
-        const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
+        const SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if (!pEntry)
             throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
@@ -2560,7 +2560,7 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
     {
-        const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
+        const SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(!pEntry)
             throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
