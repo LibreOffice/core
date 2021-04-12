@@ -7,29 +7,35 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_drawing_QRCode_idl__
-#define __com_sun_star_drawing_QRCode_idl__
+#ifndef __com_sun_star_drawing_BarCode_idl__
+#define __com_sun_star_drawing_BarCode_idl__
 
  module com {  module sun {  module star {  module drawing {
 
 
-/// This struct defines the attributes of a QR Code
-/// @since LibreOffice 6.4
+/// This struct defines the attributes of a Bar Code
+/// @since LibreOffice 7.3
 
-published struct QRCode
+published struct BarCode
 {
-    /** Text for which QR Code is made
+    /** Type of the Bar Code
+        that is to be generated.
+        Supported types - 0:"QR Code", 1:"Code 128"
+    */
+    long Type;
+
+    /** Text for which Bar Code is made
      */
     string Payload;
 
-    /** Qr Code Error Correction Level
-        @see drawing/QRCodeErrorCorrection
+    /** Bar Code Error Correction Level
+        @see drawing/BarCodeErrorCorrection
     */
     long ErrorCorrection;
 
-    /** Border surrounding the Qr Code
+    /** Border surrounding the Bar Code
         It is a non-negative value.
-        One Border unit is equal to one dot in the generated QR code.
+        One Border unit is equal to one dot in the generated Bar code.
     */
     long Border;
 };
