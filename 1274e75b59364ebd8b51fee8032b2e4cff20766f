@@ -16,6 +16,24 @@
       "revId": "1274e75b59364ebd8b51fee8032b2e4cff20766f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66a48739_f286b401",
+        "filename": "uitest/libreoffice/connection.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2021-04-12T11:30:24Z",
+      "side": 1,
+      "message": "The terminate() fails because someone veto exception. So I thought it will be a good idea\nto give some time and try again.  I will investigate more and add more patches",
+      "parentUuid": "4b081d14_1c210c80",
+      "revId": "1274e75b59364ebd8b51fee8032b2e4cff20766f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
