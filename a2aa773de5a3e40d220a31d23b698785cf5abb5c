@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8434c129_37bf4ff2",
+        "filename": "cui/uiconfig/ui/qrcodegen.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-04-12T20:01:47Z",
+      "side": 1,
+      "message": "The title should be “QR and Barcode”, one word. Simpler :)",
+      "revId": "a2aa773de5a3e40d220a31d23b698785cf5abb5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
