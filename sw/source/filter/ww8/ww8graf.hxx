@@ -95,7 +95,7 @@ public:
     void OutsideEscher();
 };
 
-void WW8FSPAShadowToReal( WW8_FSPA_SHADOW const * pFSPAS, WW8_FSPA* pPic );
+void WW8FSPAShadowToReal(const WW8_FSPA_SHADOW& rFSPAS, WW8_FSPA& rPic);
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -685,7 +685,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                 if (pRet)
                 {
                     if (pRecord)
-                        SetAttributesAtGrfNode(pRecord, pRet, nullptr);
+                        SetAttributesAtGrfNode(*pRecord, *pRet, nullptr);
 
                     OUString aObjectName(pObject->GetName());
                     if (aObjectName.isEmpty() || !m_rDoc.FindFlyByName(aObjectName, GetNodeType(*pRet)))
@@ -760,25 +760,25 @@ void WW8PicShadowToReal( WW8_PIC_SHADOW const * pPicS, WW8_PIC * pPic )
     pPic->bpp = pPicS->aBits2;
 }
 
-void WW8FSPAShadowToReal( WW8_FSPA_SHADOW const * pFSPAS, WW8_FSPA * pFSPA )
+void WW8FSPAShadowToReal(const WW8_FSPA_SHADOW& rFSPAS, WW8_FSPA& rFSPA)
 {
-    pFSPA->nSpId        = SVBT32ToUInt32( pFSPAS->nSpId );
-    pFSPA->nXaLeft      = SVBT32ToUInt32( pFSPAS->nXaLeft );
-    pFSPA->nYaTop       = SVBT32ToUInt32( pFSPAS->nYaTop );
-    pFSPA->nXaRight     = SVBT32ToUInt32( pFSPAS->nXaRight );
-    pFSPA->nYaBottom    = SVBT32ToUInt32( pFSPAS->nYaBottom );
+    rFSPA.nSpId = SVBT32ToUInt32(rFSPAS.nSpId);
+    rFSPA.nXaLeft = SVBT32ToUInt32(rFSPAS.nXaLeft);
+    rFSPA.nYaTop = SVBT32ToUInt32(rFSPAS.nYaTop);
+    rFSPA.nXaRight = SVBT32ToUInt32(rFSPAS.nXaRight);
+    rFSPA.nYaBottom = SVBT32ToUInt32(rFSPAS.nYaBottom);
 
-    sal_uInt16 nBits        = SVBT16ToUInt16( pFSPAS->aBits1 );
+    sal_uInt16 nBits = SVBT16ToUInt16(rFSPAS.aBits1);
 
-    pFSPA->bHdr         = sal_uInt16(0 !=  ( nBits & 0x0001 ));
-    pFSPA->nbx          =       ( nBits & 0x0006 ) >> 1;
-    pFSPA->nby          =       ( nBits & 0x0018 ) >> 3;
-    pFSPA->nwr          =       ( nBits & 0x01E0 ) >> 5;
-    pFSPA->nwrk         =       ( nBits & 0x1E00 ) >> 9;
-    pFSPA->bRcaSimple   = sal_uInt16(0 !=  ( nBits & 0x2000 ));
-    pFSPA->bBelowText   = sal_uInt16(0 !=  ( nBits & 0x4000 ));
-    pFSPA->bAnchorLock  = sal_uInt16(0 !=  ( nBits & 0x8000 ));
-    pFSPA->nTxbx = SVBT32ToUInt32( pFSPAS->nTxbx );
+    rFSPA.bHdr = sal_uInt16(0 != (nBits & 0x0001));
+    rFSPA.nbx = (nBits & 0x0006) >> 1;
+    rFSPA.nby = (nBits & 0x0018) >> 3;
+    rFSPA.nwr = (nBits & 0x01E0) >> 5;
+    rFSPA.nwrk = (nBits & 0x1E00) >> 9;
+    rFSPA.bRcaSimple = sal_uInt16(0 != (nBits & 0x2000));
+    rFSPA.bBelowText = sal_uInt16(0 != (nBits & 0x4000));
+    rFSPA.bAnchorLock = sal_uInt16(0 != (nBits & 0x8000));
+    rFSPA.nTxbx = SVBT32ToUInt32(rFSPAS.nTxbx);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

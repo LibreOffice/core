@@ -1492,10 +1492,10 @@ private:
         SvxLRSpaceItem &rLR);
     static void AdjustULWrapForWordMargins(const SvxMSDffImportRec &rRecord,
         SvxULSpaceItem &rUL);
-    static void MapWrapIntoFlyFormat(SvxMSDffImportRec const * pRecord, SwFrameFormat* pFlyFormat);
+    static void MapWrapIntoFlyFormat(const SvxMSDffImportRec& rRecord, SwFrameFormat& rFlyFormat);
 
-    void SetAttributesAtGrfNode(SvxMSDffImportRec const* pRecord,
-            SwFrameFormat const *pFlyFormat, WW8_FSPA const *pF);
+    void SetAttributesAtGrfNode(const SvxMSDffImportRec& rRecord, const SwFrameFormat& rFlyFormat,
+                                WW8_FSPA const* pF);
 
     bool IsDropCap() const;
     bool IsListOrDropcap() const { return (!m_xCurrentItemSet  || m_bDropCap); };
@@ -1611,21 +1611,20 @@ private:
     SdrObject *ReadCaptionBox(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     SdrObject *ReadGroup(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     SdrObject *ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet);
-    void ReadGrafLayer1( WW8PLCFspecial* pPF, tools::Long nGrafAnchorCp );
+    void ReadGrafLayer1(WW8PLCFspecial& rPF, tools::Long nGrafAnchorCp);
     SdrObject* CreateContactObject(SwFrameFormat* pFlyFormat);
-    RndStdIds ProcessEscherAlign(SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
-        SfxItemSet &rFlySet);
+    RndStdIds ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FSPA& rFSPA, SfxItemSet& rFlySet);
     bool MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
         sal_Int16 eHoriOri, sal_Int16 eHoriRel);
     SwFrameFormat* Read_GrafLayer( tools::Long nGrafAnchorCp );
-    SwFlyFrameFormat* ImportReplaceableDrawables( SdrObject* &rpObject,
-        SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, WW8_FSPA *pF,
-        SfxItemSet &rFlySet );
-    SwFlyFrameFormat *ConvertDrawTextToFly( SdrObject* &rpObject,
-        SdrObject* &rpOurNewObject, SvxMSDffImportRec const * pRecord,
-        RndStdIds eAnchor, WW8_FSPA const *pF, SfxItemSet &rFlySet );
-    SwFrameFormat* MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
-        tools::Long nGrafAnchorCp, SwFrameFormat *pRetFrameFormat);
+    SwFlyFrameFormat* ImportReplaceableDrawables(SdrObject*& rpObject, SdrObject*& rpOurNewObject,
+                                                 SvxMSDffImportRec& rRecord, WW8_FSPA& rF,
+                                                 SfxItemSet& rFlySet);
+    SwFlyFrameFormat* ConvertDrawTextToFly(SdrObject*& rpObject, SdrObject*& rpOurNewObject,
+                                           const SvxMSDffImportRec& rRecord, RndStdIds eAnchor,
+                                           const WW8_FSPA& rF, SfxItemSet& rFlySet);
+    SwFrameFormat* MungeTextIntoDrawBox(SvxMSDffImportRec& rRecord, tools::Long nGrafAnchorCp,
+                                        SwFrameFormat* pRetFrameFormat);
 
     void GraphicCtor();
     void GraphicDtor();
