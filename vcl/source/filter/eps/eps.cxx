@@ -138,7 +138,6 @@ private:
 
     vcl::Font           maFont;
     vcl::Font           maLastFont;
-    sal_uInt8           nNextChrSetId;      // first unused ChrSet-Id
 
     std::unique_ptr<PSLZWCTreeNode[]> pTable; // LZW compression data
     PSLZWCTreeNode*     pPrefix;            // the compression is as same as the TIFF compression
@@ -268,7 +267,6 @@ PSWriter::PSWriter()
     , aDashArray()
     , maFont()
     , maLastFont()
-    , nNextChrSetId(0)
     , pPrefix(nullptr)
     , nDataSize(0)
     , nClearCode(0)
@@ -411,8 +409,6 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     eJoinType = SvtGraphicStroke::joinMiter;
     aBackgroundColor = COL_WHITE;
     eTextAlign = ALIGN_BASELINE;
-
-    nNextChrSetId = 1;
 
     if( pMTF->GetActionSize() )
     {

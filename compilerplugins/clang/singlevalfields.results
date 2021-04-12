@@ -55,7 +55,7 @@ canvas/inc/rendering/irendermodule.hxx:37
 chart2/source/controller/dialogs/DataBrowser.cxx:201
     chart::impl::SeriesHeader m_aUpdateDataTimer
     UpdateDataTimer
-chart2/source/controller/inc/ChartController.hxx:378
+chart2/source/controller/inc/ChartController.hxx:377
     chart::ChartController m_aLifeTimeManager
     0
 chart2/source/controller/inc/TitleDialogData.hxx:33
@@ -73,37 +73,37 @@ chart2/source/model/main/DataPoint.hxx:107
 comphelper/source/misc/threadpool.cxx:37
     comphelper gbIsWorkerThread
     1
-connectivity/source/inc/dbase/DIndexIter.hxx:34
+connectivity/source/inc/dbase/DIndexIter.hxx:33
     connectivity::dbase::OIndexIterator m_pOperator
     0
-connectivity/source/inc/dbase/DIndexIter.hxx:35
+connectivity/source/inc/dbase/DIndexIter.hxx:34
     connectivity::dbase::OIndexIterator m_pOperand
     0
-connectivity/source/inc/OColumn.hxx:41
+connectivity/source/inc/OColumn.hxx:40
     connectivity::OColumn m_AutoIncrement
     0
-connectivity/source/inc/OColumn.hxx:42
+connectivity/source/inc/OColumn.hxx:41
     connectivity::OColumn m_CaseSensitive
     0
-connectivity/source/inc/OColumn.hxx:43
+connectivity/source/inc/OColumn.hxx:42
     connectivity::OColumn m_Searchable
     1
-connectivity/source/inc/OColumn.hxx:44
+connectivity/source/inc/OColumn.hxx:43
     connectivity::OColumn m_Currency
     0
-connectivity/source/inc/OColumn.hxx:45
+connectivity/source/inc/OColumn.hxx:44
     connectivity::OColumn m_Signed
     0
-connectivity/source/inc/OColumn.hxx:46
+connectivity/source/inc/OColumn.hxx:45
     connectivity::OColumn m_ReadOnly
     1
-connectivity/source/inc/OColumn.hxx:47
+connectivity/source/inc/OColumn.hxx:46
     connectivity::OColumn m_Writable
     0
-connectivity/source/inc/OColumn.hxx:48
+connectivity/source/inc/OColumn.hxx:47
     connectivity::OColumn m_DefinitelyWritable
     0
-connectivity/source/inc/writer/WTable.hxx:44
+connectivity/source/inc/writer/WTable.hxx:43
     connectivity::writer::OWriterTable m_nStartCol
     0
 cppu/source/uno/copy.hxx:38
@@ -115,7 +115,7 @@ cui/source/inc/acccfg.hxx:100
 cui/source/inc/AdditionsDialog.hxx:59
     AdditionsDialog m_aSearchDataTimer
     SearchDataTimer
-cui/source/inc/cfg.hxx:371
+cui/source/inc/cfg.hxx:372
     SvxConfigPage m_aUpdateDataTimer
     UpdateDataTimer
 cui/source/inc/linkdlg.hxx:45
@@ -124,7 +124,7 @@ cui/source/inc/linkdlg.hxx:45
 cui/source/inc/thesdlg.hxx:31
     SvxThesaurusDialog m_aModifyIdle
     cui SvxThesaurusDialog LookUp Modify
-cui/source/options/optgdlg.cxx:1014
+cui/source/options/optgdlg.cxx:1010
     LanguageConfig_Impl aLanguageOptions
     0
 cui/source/options/optjava.hxx:59
@@ -133,7 +133,7 @@ cui/source/options/optjava.hxx:59
 dbaccess/source/ui/inc/sqledit.hxx:42
     dbaui::SQLEditView m_aHighlighter
     1
-desktop/source/app/app.cxx:478
+desktop/source/app/app.cxx:480
     desktop::Desktop::Init bTryHardOfficeconfigBroken
     0
 desktop/source/app/cmdlineargs.hxx:136
@@ -145,7 +145,7 @@ drawinglayer/source/primitive2d/sceneprimitive2d.cxx:373
 drawinglayer/source/primitive2d/sceneprimitive2d.cxx:481
     drawinglayer::primitive2d::ScenePrimitive2D::create2DDecomposition bAddOutlineToCreated3DSceneRepresentation
     0
-drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:339
+drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:333
     drawinglayer::impBufferDevice::paint bDoSaveForVisualControl
     0
 drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:950
@@ -163,25 +163,28 @@ drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2158
 drawinglayer/source/tools/converters.cxx:91
     drawinglayer::convertToBitmapEx bDoSaveForVisualControl
     0
-editeng/source/editeng/impedit.hxx:531
+editeng/source/editeng/impedit.hxx:530
     ImpEditEngine nBigTextObjectStart
     20
-emfio/source/reader/emfreader.cxx:1584
+emfio/qa/cppunit/wmf/wmfimporttest.cxx:34
+    WmfTest maDataUrl
+    /emfio/qa/cppunit/wmf/data/
+emfio/source/reader/emfreader.cxx:1596
     emfio::EmfReader::ReadEnhWMF bDoSaveForVisualControl
     0
-extensions/source/bibliography/bibcont.hxx:68
+extensions/source/bibliography/bibcont.hxx:67
     BibBookContainer aIdle
     extensions BibBookContainer Split Idle
-filter/source/msfilter/msdffimp.cxx:2631
+filter/source/msfilter/msdffimp.cxx:2637
     DffPropertyReader::ApplyAttributes bCheckShadow
     0
-filter/source/msfilter/viscache.hxx:30
+filter/source/msfilter/viscache.hxx:29
     Impl_OlePres nFormat
     3
 framework/source/services/autorecovery.cxx:398
     (anonymous namespace)::AutoRecovery m_aTimer
     Auto save timer
-framework/source/uiconfiguration/imagemanagerimpl.hxx:173
+framework/source/uiconfiguration/imagemanagerimpl.hxx:172
     framework::ImageManagerImpl m_aResourceString
     private:resource/images/moduleimages
 helpcompiler/inc/BasCodeTagger.hxx:28
@@ -206,9 +209,9 @@ include/basegfx/pixel/bpixel.hxx:41
     basegfx::BPixel::(anonymous union)::(anonymous) mnValue
     0
 include/basegfx/pixel/bpixel.hxx:42
-    basegfx::BPixel::(anonymous) maCombinedRGBO
+    basegfx::BPixel::(anonymous) maCombinedRGBA
     0
-include/basic/sbxvar.hxx:73
+include/basic/sbxvar.hxx:75
     SbxValues::(anonymous) pData
     0
 include/comphelper/parallelsort.hxx:88
@@ -229,7 +232,7 @@ include/filter/msfilter/dffpropset.hxx:35
 include/i18nutil/casefolding.hxx:58
     i18nutil::Mapping nmap
     0
-include/o3tl/cow_wrapper.hxx:204
+include/o3tl/cow_wrapper.hxx:203
     o3tl::cow_wrapper::impl_t m_ref_count
     1
 include/o3tl/vector_pool.hxx:93
@@ -265,7 +268,7 @@ include/sfx2/msg.hxx:201
 include/sfx2/templatedlg.hxx:131
     SfxTemplateManagerDlg m_aUpdateDataTimer
     UpdateDataTimer
-include/svtools/ctrlbox.hxx:337
+include/svtools/ctrlbox.hxx:339
     FontNameBox maUpdateIdle
     FontNameBox Preview Update
 include/svtools/filechangedchecker.hxx:31
@@ -334,19 +337,16 @@ include/svx/svdmark.hxx:144
 include/svx/svdmark.hxx:145
     SdrMarkList mbGluePointNameOk
     0
-include/vcl/opengl/OpenGLContext.hxx:116
-    OpenGLContext maClipRegion
-    0
-include/vcl/settings.hxx:145
+include/vcl/settings.hxx:143
     DialogStyle content_area_border
     2
-include/vcl/settings.hxx:146
+include/vcl/settings.hxx:144
     DialogStyle button_spacing
     6
-include/vcl/settings.hxx:147
+include/vcl/settings.hxx:145
     DialogStyle action_area_border
     5
-include/vcl/toolkit/treelistbox.hxx:213
+include/vcl/toolkit/treelistbox.hxx:212
     SvTreeListBox nIndent
     20
 io/qa/textinputstream.cxx:97
@@ -355,13 +355,16 @@ io/qa/textinputstream.cxx:97
 libreofficekit/source/gtk/lokdocview.cxx:85
     (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading
     0
+lotuswordpro/source/filter/lwppara.hxx:213
+    LwpPara m_AllText
+    
 oox/source/core/contexthandler2.cxx:36
     oox::core::ElementInfo maChars
     0
-opencl/source/opencl_device.cxx:53
+opencl/source/opencl_device.cxx:54
     (anonymous namespace)::LibreOfficeDeviceEvaluationIO inputSize
     15360
-opencl/source/opencl_device.cxx:54
+opencl/source/opencl_device.cxx:55
     (anonymous namespace)::LibreOfficeDeviceEvaluationIO outputSize
     15360
 package/inc/ZipFile.hxx:61
@@ -376,49 +379,58 @@ pyuno/source/module/pyuno_gc.cxx:30
 pyuno/source/module/pyuno_impl.hxx:226
     pyuno::RuntimeCargo valid
     1
+reportdesign/source/ui/inc/DesignView.hxx:62
+    rptui::ODesignView m_aMarkIdle
+    reportdesign ODesignView Mark Idle
+sal/osl/unx/signal.cxx:81
+    (anonymous namespace)::SignalAction Action
+    1
 sal/osl/unx/sockimpl.hxx:39
     oslSocketImpl m_bIsInShutdown
     1
 sal/qa/osl/condition/osl_Condition_Const.h:41
     /home/noel/libo2/sal/qa/osl/condition/osl_Condition.cxx aTestCon
     testcondition
-sal/qa/osl/file/osl_File_Const.h:115
+sal/qa/osl/file/osl_File_Const.h:118
     extern aPreURL
     file:///
-sal/qa/osl/file/osl_File_Const.h:128
+sal/qa/osl/file/osl_File_Const.h:131
     extern aCanURL3
     ca@#;+.,$//tmp/678nonical//name
-sal/qa/osl/file/osl_File_Const.h:141
+sal/qa/osl/file/osl_File_Const.h:132
+    extern aCanURL4
+    canonical.name
+sal/qa/osl/file/osl_File_Const.h:144
     extern aRelURL1
     relative/file1
-sal/qa/osl/file/osl_File_Const.h:142
+sal/qa/osl/file/osl_File_Const.h:145
     extern aRelURL2
     relative/./file2
-sal/qa/osl/file/osl_File_Const.h:143
+sal/qa/osl/file/osl_File_Const.h:146
     extern aRelURL3
     relative/../file3
-sal/qa/osl/file/osl_File_Const.h:165
+sal/qa/osl/file/osl_File_Const.h:168
     extern aTypeURL1
     file:///dev/ccv
-sal/qa/osl/file/osl_File_Const.h:166
+sal/qa/osl/file/osl_File_Const.h:169
     extern aTypeURL2
     file:///devices/pseudo/tcp@0:tcp
-sal/qa/osl/file/osl_File_Const.h:167
+sal/qa/osl/file/osl_File_Const.h:170
     extern aTypeURL3
     file:///lib
-sal/qa/osl/file/osl_File_Const.h:182
+sal/qa/osl/file/osl_File_Const.h:185
     extern aVolURL2
     file:///dev/floppy/0u1440
-sal/qa/osl/file/osl_File_Const.h:184
+sal/qa/osl/file/osl_File_Const.h:187
     extern aVolURL3
     file:///proc
-sal/qa/osl/file/osl_File_Const.h:185
+sal/qa/osl/file/osl_File_Const.h:188
     extern aVolURL4
     file:///staroffice
-sal/qa/osl/file/osl_File_Const.h:186
+sal/qa/osl/file/osl_File_Const.h:189
     extern aVolURL5
     file:///tmp
-sal/qa/osl/file/osl_File_Const.h:187
+sal/qa/osl/file/osl_File_Const.h:190
     extern aVolURL6
     file:///cdrom
 sal/qa/osl/process/osl_process.cxx:151
@@ -472,31 +484,31 @@ sal/qa/rtl/strings/test_strings_replace.cxx:29
 sax/source/tools/fastserializer.hxx:232
     sax_fastparser::FastSaxSerializer mbXescape
     1
-sc/inc/compiler.hxx:113
+sc/inc/compiler.hxx:112
     ScRawToken::(anonymous union)::(anonymous) eInForceArray
     0
-sc/inc/drwlayer.hxx:221
+sc/inc/document.hxx:437
+    ScDocument aTrackIdle
+    sc ScDocument Track Idle
+sc/inc/drwlayer.hxx:230
     /home/noel/libo2/sc/source/core/data/drwlayer.cxx bDrawIsInUndo
     0
-sc/inc/global.hxx:911
+sc/inc/global.hxx:910
     /home/noel/libo2/sc/source/core/data/global.cxx pScActiveViewShell
     0
-sc/inc/global.hxx:912
+sc/inc/global.hxx:911
     /home/noel/libo2/sc/source/core/data/global.cxx nScClickMouseModifier
     0
-sc/inc/global.hxx:913
+sc/inc/global.hxx:912
     /home/noel/libo2/sc/source/core/data/global.cxx nScFillModeMouseModifier
     0
-sc/inc/hints.hxx:32
-    ScPaintHint bPrint
-    1
-sc/inc/markmulti.hxx:81
+sc/inc/markmulti.hxx:80
     ScMultiSelIter aMarkArrayIter
     0
-sc/inc/refdata.hxx:39
+sc/inc/refdata.hxx:38
     ScSingleRefData::(anonymous) mnFlagValue
     0
-sc/inc/scmod.hxx:82
+sc/inc/scmod.hxx:81
     ScModule m_aIdleTimer
     sc ScModule IdleTimer
 sc/inc/table.hxx:180
@@ -508,88 +520,85 @@ sc/qa/extras/check_data_pilot_field.cxx:63
 sc/qa/unit/screenshots/screenshots.cxx:40
     ScScreenshotTest mCsv
     some, strings, here, separated, by, commas
-sc/qa/unit/ucalc.hxx:43
+sc/qa/unit/ucalc.hxx:42
     Test::RangeNameDef mnIndex
     1
-sc/source/core/inc/parclass.hxx:94
+sc/source/core/inc/parclass.hxx:93
     ScParameterClassification::RunData bHasForceArray
     1
 sc/source/core/tool/scmatrix.cxx:344
     /home/noel/libo2/sc/source/core/tool/scmatrix.cxx bElementsMaxFetched
     1
-sc/source/filter/inc/extlstcontext.hxx:20
+sc/source/filter/inc/extlstcontext.hxx:19
     /home/noel/libo2/sc/source/filter/oox/condformatbuffer.cxx rStyleIdx
     0
-sc/source/filter/inc/orcusinterface.hxx:187
+sc/source/filter/inc/orcusinterface.hxx:186
     ScOrcusConditionalFormat meEntryType
     0
-sc/source/filter/inc/xltracer.hxx:82
+sc/source/filter/inc/xltracer.hxx:81
     XclTracer mbEnabled
     0
-sc/source/ui/inc/acredlin.hxx:51
+sc/source/ui/inc/acredlin.hxx:50
     ScAcceptChgDlg aSelectionIdle
     ScAcceptChgDlg SelectionIdle
-sc/source/ui/inc/acredlin.hxx:52
+sc/source/ui/inc/acredlin.hxx:51
     ScAcceptChgDlg aReOpenIdle
     ScAcceptChgDlg ReOpenIdle
-sc/source/ui/inc/autostyl.hxx:59
+sc/source/ui/inc/autostyl.hxx:58
     ScAutoStyleList aTimer
     ScAutoStyleList Timer
-sc/source/ui/inc/autostyl.hxx:60
+sc/source/ui/inc/autostyl.hxx:59
     ScAutoStyleList aInitIdle
     ScAutoStyleList InitIdle
-sc/source/ui/inc/conflictsdlg.hxx:120
+sc/source/ui/inc/conflictsdlg.hxx:119
     ScConflictsDlg maSelectionIdle
     ScConflictsDlg SelectionIdle
-sc/source/ui/inc/viewdata.hxx:289
+sc/source/ui/inc/hdrcont.hxx:38
+    ScHeaderControl aShowHelpTimer
+    sc HeaderControl Popover Timer
+sc/source/ui/inc/viewdata.hxx:288
     ScViewData aLogicMode
     0
-sc/source/ui/inc/viewfunc.hxx:378
+sc/source/ui/inc/viewfunc.hxx:377
     /home/noel/libo2/sc/source/ui/view/viewfun7.cxx bPasteIsMove
     0
+sc/source/ui/view/output2.cxx:119
+    ScDrawStringsVars mCachedGlyphs
+    1000
 sccomp/source/solver/SwarmSolver.cxx:124
     (anonymous namespace)::SwarmSolver mfResultValue
     0\10
-sd/inc/sdpptwrp.hxx:44
+sd/inc/sdpptwrp.hxx:43
     SdPPTFilter pBas
     0
 sd/source/filter/html/htmlex.hxx:116
     HtmlExport mbAutoSlide
     1
-sd/source/ui/animations/CustomAnimationPane.hxx:146
-    sd::CustomAnimationPane maIdle
-    sd idle treeview select
-sd/source/ui/framework/module/ShellStackGuard.hxx:84
+sd/source/ui/framework/module/ShellStackGuard.hxx:83
     sd::framework::ShellStackGuard maPrinterPollingIdle
     sd ShellStackGuard PrinterPollingIdle
-sd/source/ui/inc/DrawController.hxx:292
-    sd::DrawController mpCurrentPage
-    0
+sd/source/ui/inc/CustomAnimationPane.hxx:143
+    sd::CustomAnimationPane maIdle
+    sd idle treeview select
 sd/source/ui/inc/pubdlg.hxx:157
     SdPublishingDlg aAssistentFunc
     6
-sd/source/ui/inc/View.hxx:263
+sd/source/ui/inc/View.hxx:262
     sd::View maDropErrorIdle
     sd View DropError
-sd/source/ui/inc/View.hxx:264
+sd/source/ui/inc/View.hxx:263
     sd::View maDropInsertFileIdle
     sd View DropInsertFile
-sd/source/ui/inc/WindowUpdater.hxx:98
+sd/source/ui/inc/WindowUpdater.hxx:97
     sd::WindowUpdater maCTLOptions
     0
-sd/source/ui/presenter/SlideRenderer.hxx:82
+sd/source/ui/presenter/SlideRenderer.hxx:81
     sd::presenter::SlideRenderer maPreviewRenderer
     1
-sd/source/ui/remotecontrol/DiscoveryService.hxx:37
-    sd::DiscoveryService zService
-    0
-sd/source/ui/sidebar/PanelBase.hxx:54
-    sd::sidebar::PanelBase mpWrappedControl
-    0
-sd/source/ui/slidesorter/cache/SlsBitmapFactory.hxx:42
+sd/source/ui/slidesorter/cache/SlsBitmapFactory.hxx:41
     sd::slidesorter::cache::BitmapFactory maRenderer
     0
-sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:92
+sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:91
     sd::slidesorter::controller::Animator maIdle
     sd slidesorter controller Animator
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:60
@@ -607,16 +616,16 @@ sfx2/source/appl/lnkbase2.cxx:84
 sfx2/source/appl/lnkbase2.cxx:103
     sfx2::(anonymous namespace)::ImplDdeItem bIsInDTOR
     1
-sfx2/source/appl/newhelp.hxx:93
+sfx2/source/appl/newhelp.hxx:94
     IndexTabPage_Impl aFactoryIdle
     sfx2 appl IndexTabPage_Impl Factory
-sfx2/source/appl/newhelp.hxx:94
+sfx2/source/appl/newhelp.hxx:95
     IndexTabPage_Impl aAutoCompleteIdle
     sfx2 appl IndexTabPage_Impl AutoComplete
-sfx2/source/appl/newhelp.hxx:226
+sfx2/source/appl/newhelp.hxx:227
     SfxHelpIndexWindow_Impl aIdle
     sfx2 appl SfxHelpIndexWindow_Impl
-sfx2/source/appl/newhelp.hxx:346
+sfx2/source/appl/newhelp.hxx:347
     SfxHelpTextWindow_Impl aSelectIdle
     sfx2 appl SfxHelpTextWindow_Impl Select
 sfx2/source/control/itemdel.cxx:31
@@ -652,12 +661,12 @@ soltools/mkdepend/def.h:185
 soltools/mkdepend/def.h:189
     /home/noel/libo2/soltools/mkdepend/main.c show_where_not
     0
-starmath/inc/edit.hxx:57
-    SmEditWindow aModifyIdle
-    SmEditWindow ModifyIdle
-starmath/inc/cfgitem.hxx:109
+starmath/inc/cfgitem.hxx:105
     SmMathConfig vFontPickList
     5
+starmath/inc/edit.hxx:55
+    SmEditWindow aModifyIdle
+    SmEditWindow ModifyIdle
 stoc/source/corereflection/lrucache.hxx:52
     LRU_Cache _pBlock
     0
@@ -688,13 +697,13 @@ svx/source/dialog/contimp.hxx:70
 svx/source/dialog/contimp.hxx:71
     SvxSuperContourDlg aCreateIdle
     SvxSuperContourDlg CreateIdle
-svx/source/inc/StylesPreviewWindow.hxx:47
+svx/source/inc/StylesPreviewWindow.hxx:61
     StyleItemController m_eStyleFamily
     2
 svx/source/sdr/contact/viewcontactofsdrpage.cxx:104
     sdr::contact::ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence bUseOldPageShadow
     0
-svx/source/sidebar/media/MediaPlaybackPanel.hxx:61
+svx/source/sidebar/media/MediaPlaybackPanel.hxx:58
     svx::sidebar::MediaPlaybackPanel maIdle
     MediaPlaybackPanel
 svx/source/tbxctrls/lboxctrl.cxx:49
@@ -703,10 +712,10 @@ svx/source/tbxctrls/lboxctrl.cxx:49
 svx/source/unodraw/recoveryui.cxx:63
     (anonymous namespace)::RecoveryUI m_pParentWindow
     0
-sw/inc/authfld.hxx:151
+sw/inc/authfld.hxx:156
     SwAuthorityField m_nTempSequencePos
     -1
-sw/inc/authfld.hxx:152
+sw/inc/authfld.hxx:157
     SwAuthorityField m_nTempSequencePosRLHidden
     -1
 sw/inc/checkit.hxx:38
@@ -721,7 +730,7 @@ sw/inc/dbgoutsw.hxx:52
 sw/inc/ftninfo.hxx:46
     SwEndNoteInfo m_aFormat
     4
-sw/inc/hints.hxx:268
+sw/inc/hints.hxx:272
     SwAttrSetChg m_bDelSet
     0
 sw/inc/modcfg.hxx:210
@@ -742,25 +751,25 @@ sw/inc/swmodule.hxx:265
 sw/inc/swmodule.hxx:265
     /home/noel/libo2/sw/source/uibase/ribbar/conform.cxx g_bNoInterrupt
     1
-sw/inc/view.hxx:189
+sw/inc/view.hxx:201
     SwView m_pHScrollbar
     0
-sw/inc/view.hxx:190
+sw/inc/view.hxx:202
     SwView m_pVScrollbar
     0
-sw/inc/view.hxx:697
+sw/inc/view.hxx:719
     /home/noel/libo2/sw/source/uibase/uiview/view.cxx bDocSzUpdated
     1
-sw/inc/view.hxx:697
+sw/inc/view.hxx:719
     /home/noel/libo2/sw/source/uibase/uiview/viewport.cxx bDocSzUpdated
     0
-sw/inc/viewopt.hxx:194
+sw/inc/viewopt.hxx:195
     SwViewOption m_bTest10
     0
 sw/source/core/bastyp/calc.cxx:99
     CalcOp eOp
     0
-sw/source/core/doc/docredln.cxx:66
+sw/source/core/doc/docredln.cxx:67
     sw_DebugRedline nWatch
     0
 sw/source/core/docnode/threadmanager.hxx:125
@@ -775,10 +784,10 @@ sw/source/core/inc/fntcache.hxx:60
 sw/source/core/inc/fntcache.hxx:61
     /home/noel/libo2/sw/source/core/txtnode/fntcache.cxx pLastFont
     0
-sw/source/core/inc/frmtool.hxx:153
+sw/source/core/inc/frmtool.hxx:154
     /home/noel/libo2/sw/source/core/layout/frmtool.cxx bDontCreateObjects
     0
-sw/source/core/inc/frmtool.hxx:156
+sw/source/core/inc/frmtool.hxx:157
     /home/noel/libo2/sw/source/core/layout/frmtool.cxx bSetCompletePaintOnInvalidate
     0
 sw/source/core/inc/noteurl.hxx:28
@@ -796,106 +805,106 @@ sw/source/core/inc/UndoSort.hxx:38
 sw/source/core/inc/UndoSplitMove.hxx:57
     SwUndoMove m_bJoinNext
     0
-sw/source/core/layout/flylay.cxx:305
+sw/source/core/layout/flylay.cxx:306
     SwFlyFreeFrame::supportsAutoContour bOverrideHandleContourToAlwaysOff
     1
-sw/source/core/ole/ndole.cxx:1088
+sw/source/core/ole/ndole.cxx:1089
     SwOLEObj::tryToGetChartContentAsPrimitive2DSequence bAsynchronousLoadingAllowed
     0
-sw/source/core/text/pordrop.hxx:33
+sw/source/core/text/pordrop.hxx:32
     /home/noel/libo2/sw/source/core/text/txtinit.cxx pDropCapCache
     0
 sw/source/filter/inc/rtf.hxx:31
     RTFSurround::(anonymous union)::(anonymous) nJunk
     0
-sw/source/filter/ww8/ww8par3.cxx:339
+sw/source/filter/ww8/ww8par3.cxx:340
     (anonymous namespace)::WW8LST bSimpleList
     1
-sw/source/filter/ww8/ww8par3.cxx:340
+sw/source/filter/ww8/ww8par3.cxx:341
     (anonymous namespace)::WW8LST bRestartHdn
     1
-sw/source/filter/ww8/ww8par3.cxx:376
+sw/source/filter/ww8/ww8par3.cxx:375
     (anonymous namespace)::WW8LVL bV6Prev
     1
-sw/source/filter/ww8/ww8par3.cxx:377
+sw/source/filter/ww8/ww8par3.cxx:376
     (anonymous namespace)::WW8LVL bV6PrSp
     1
-sw/source/filter/ww8/ww8par3.cxx:378
+sw/source/filter/ww8/ww8par3.cxx:377
     (anonymous namespace)::WW8LVL bV6
     1
-sw/source/filter/ww8/ww8par5.cxx:1565
+sw/source/filter/ww8/ww8par5.cxx:1566
     SwWW8ImplReader::Read_F_DocInfo aName10
     \15
-sw/source/filter/ww8/ww8par5.cxx:1566
+sw/source/filter/ww8/ww8par5.cxx:1567
     SwWW8ImplReader::Read_F_DocInfo aName11
     TITEL
-sw/source/filter/ww8/ww8par5.cxx:1568
+sw/source/filter/ww8/ww8par5.cxx:1569
     SwWW8ImplReader::Read_F_DocInfo aName12
     TITRE
-sw/source/filter/ww8/ww8par5.cxx:1570
+sw/source/filter/ww8/ww8par5.cxx:1571
     SwWW8ImplReader::Read_F_DocInfo aName13
     TITLE
-sw/source/filter/ww8/ww8par5.cxx:1572
+sw/source/filter/ww8/ww8par5.cxx:1573
     SwWW8ImplReader::Read_F_DocInfo aName14
     TITRO
-sw/source/filter/ww8/ww8par5.cxx:1574
+sw/source/filter/ww8/ww8par5.cxx:1575
     SwWW8ImplReader::Read_F_DocInfo aName20
     \21
-sw/source/filter/ww8/ww8par5.cxx:1575
+sw/source/filter/ww8/ww8par5.cxx:1576
     SwWW8ImplReader::Read_F_DocInfo aName21
     ERSTELLDATUM
-sw/source/filter/ww8/ww8par5.cxx:1577
+sw/source/filter/ww8/ww8par5.cxx:1578
     SwWW8ImplReader::Read_F_DocInfo aName22
     CR\-55\-55
-sw/source/filter/ww8/ww8par5.cxx:1579
+sw/source/filter/ww8/ww8par5.cxx:1580
     SwWW8ImplReader::Read_F_DocInfo aName23
     CREATED
-sw/source/filter/ww8/ww8par5.cxx:1581
+sw/source/filter/ww8/ww8par5.cxx:1582
     SwWW8ImplReader::Read_F_DocInfo aName24
     CREADO
-sw/source/filter/ww8/ww8par5.cxx:1583
+sw/source/filter/ww8/ww8par5.cxx:1584
     SwWW8ImplReader::Read_F_DocInfo aName30
     \22
-sw/source/filter/ww8/ww8par5.cxx:1584
+sw/source/filter/ww8/ww8par5.cxx:1585
     SwWW8ImplReader::Read_F_DocInfo aName31
     ZULETZTGESPEICHERTZEIT
-sw/source/filter/ww8/ww8par5.cxx:1586
+sw/source/filter/ww8/ww8par5.cxx:1587
     SwWW8ImplReader::Read_F_DocInfo aName32
     DERNIERENREGISTREMENT
-sw/source/filter/ww8/ww8par5.cxx:1588
+sw/source/filter/ww8/ww8par5.cxx:1589
     SwWW8ImplReader::Read_F_DocInfo aName33
     SAVED
-sw/source/filter/ww8/ww8par5.cxx:1590
+sw/source/filter/ww8/ww8par5.cxx:1591
     SwWW8ImplReader::Read_F_DocInfo aName34
     MODIFICADO
-sw/source/filter/ww8/ww8par5.cxx:1592
+sw/source/filter/ww8/ww8par5.cxx:1593
     SwWW8ImplReader::Read_F_DocInfo aName40
     \23
-sw/source/filter/ww8/ww8par5.cxx:1593
+sw/source/filter/ww8/ww8par5.cxx:1594
     SwWW8ImplReader::Read_F_DocInfo aName41
     ZULETZTGEDRUCKT
-sw/source/filter/ww8/ww8par5.cxx:1595
+sw/source/filter/ww8/ww8par5.cxx:1596
     SwWW8ImplReader::Read_F_DocInfo aName42
     DERNI\-56REIMPRESSION
-sw/source/filter/ww8/ww8par5.cxx:1597
+sw/source/filter/ww8/ww8par5.cxx:1598
     SwWW8ImplReader::Read_F_DocInfo aName43
     LASTPRINTED
-sw/source/filter/ww8/ww8par5.cxx:1599
+sw/source/filter/ww8/ww8par5.cxx:1600
     SwWW8ImplReader::Read_F_DocInfo aName44
     HUPS PUPS
-sw/source/filter/ww8/ww8par5.cxx:1601
+sw/source/filter/ww8/ww8par5.cxx:1602
     SwWW8ImplReader::Read_F_DocInfo aName50
     \24
-sw/source/filter/ww8/ww8par5.cxx:1602
+sw/source/filter/ww8/ww8par5.cxx:1603
     SwWW8ImplReader::Read_F_DocInfo aName51
     \-36BERARBEITUNGSNUMMER
-sw/source/filter/ww8/ww8par5.cxx:1604
+sw/source/filter/ww8/ww8par5.cxx:1605
     SwWW8ImplReader::Read_F_DocInfo aName52
     NUM\-55RODEREVISION
-sw/source/filter/ww8/ww8par5.cxx:1606
+sw/source/filter/ww8/ww8par5.cxx:1607
     SwWW8ImplReader::Read_F_DocInfo aName53
     REVISIONNUMBER
-sw/source/filter/ww8/ww8par5.cxx:1608
+sw/source/filter/ww8/ww8par5.cxx:1609
     SwWW8ImplReader::Read_F_DocInfo aName54
     SNUBBEL BUBBEL
 sw/source/filter/ww8/ww8par.hxx:669
@@ -904,19 +913,19 @@ sw/source/filter/ww8/ww8par.hxx:669
 sw/source/filter/ww8/ww8par.hxx:676
     WW8FormulaControl mhpsCheckBox
     20
-sw/source/filter/ww8/ww8par.hxx:1033
+sw/source/filter/ww8/ww8par.hxx:1035
     WW8TabBandDesc bCantSplit90
     0
-sw/source/filter/ww8/ww8scan.hxx:1166
+sw/source/filter/ww8/ww8scan.hxx:1165
     WW8Fib m_fObfuscated
     0
-sw/source/filter/ww8/ww8scan.hxx:1512
+sw/source/filter/ww8/ww8scan.hxx:1511
     WW8Fib m_fcPlcffactoid
     0
-sw/source/filter/ww8/ww8scan.hxx:1514
+sw/source/filter/ww8/ww8scan.hxx:1513
     WW8Fib m_lcbPlcffactoid
     0
-sw/source/filter/ww8/ww8scan.hxx:1519
+sw/source/filter/ww8/ww8scan.hxx:1518
     WW8Fib m_lcbHplxsdr
     0
 sw/source/filter/ww8/ww8struc.hxx:542
@@ -931,16 +940,16 @@ sw/source/ui/envelp/labfmt.hxx:68
 sw/source/uibase/inc/edtdd.hxx:15
     /home/noel/libo2/sw/source/uibase/docvw/edtwin.cxx g_bExecuteDrag
     0
-sw/source/uibase/inc/edtwin.hxx:302
+sw/source/uibase/inc/edtwin.hxx:300
     /home/noel/libo2/sw/source/uibase/docvw/edtdd.cxx g_bFrameDrag
     0
-sw/source/uibase/inc/edtwin.hxx:303
+sw/source/uibase/inc/edtwin.hxx:301
     /home/noel/libo2/sw/source/uibase/docvw/edtwin.cxx g_bDDTimerStarted
     0
-sw/source/uibase/inc/edtwin.hxx:305
+sw/source/uibase/inc/edtwin.hxx:303
     /home/noel/libo2/sw/source/uibase/dochdl/swdtflvr.cxx g_bDDINetAttr
     1
-sw/source/uibase/inc/edtwin.hxx:305
+sw/source/uibase/inc/edtwin.hxx:303
     /home/noel/libo2/sw/source/uibase/docvw/edtwin.cxx g_bDDINetAttr
     0
 sw/source/uibase/inc/instable.hxx:44
@@ -961,25 +970,28 @@ sw/source/uibase/inc/unotools.hxx:46
 unotools/source/config/saveopt.cxx:82
     (anonymous namespace)::SvtSaveOptions_Impl bROUserAutoSave
     0
-vcl/headless/svpgdi.cxx:600
+vcl/headless/svpgdi.cxx:598
     (anonymous) nMinimalSquareSizeToBuffer
     4096
-vcl/headless/svpgdi.cxx:1634
+vcl/headless/svpgdi.cxx:1641
     SvpSalGraphics::drawPolyLine bDoDirectCairoStroke
     1
+vcl/inc/backend/BackendCapabilities.hxx:18
+    vcl::BackendCapabilities mbSupportsBitmap32
+    0
 vcl/inc/canvasbitmap.hxx:53
     vcl::unotools::VclCanvasBitmap m_nEndianness
     0
-vcl/inc/graphic/Manager.hxx:39
+vcl/inc/graphic/Manager.hxx:41
     vcl::graphic::Manager maSwapOutTimer
     graphic::Manager maSwapOutTimer
 vcl/inc/impfontcache.hxx:75
     ImplFontCache m_aBoundRectCache
     3000
-vcl/inc/printdlg.hxx:210
+vcl/inc/printdlg.hxx:209
     vcl::PrintDialog maUpdatePreviewIdle
     Print Dialog Update Preview Idle
-vcl/inc/printdlg.hxx:212
+vcl/inc/printdlg.hxx:211
     vcl::PrintDialog maUpdatePreviewNoCacheIdle
     Print Dialog Update Preview (no cache) Idle
 vcl/inc/qt5/Qt5Instance.hxx:67
@@ -997,15 +1009,54 @@ vcl/inc/salwtype.hxx:164
 vcl/inc/svdata.hxx:316
     ImplSVNWFData mbMenuBarDockingAreaCommonBG
     0
-vcl/source/bitmap/bitmap.cxx:140
+vcl/qa/cppunit/png/PngFilterTest.cxx:35
+    PngFilterTest maDataUrl
+    /vcl/qa/cppunit/png/data/
+vcl/qa/cppunit/svm/svmtest.cxx:33
+    SvmTest maDataUrl
+    /vcl/qa/cppunit/svm/data/
+vcl/source/bitmap/bitmap.cxx:159
     Bitmap::~Bitmap save
     0
-vcl/source/bitmap/BitmapTools.cxx:1049
-    vcl::bitmap::get_unpremultiply_table inited
-    1
-vcl/source/bitmap/BitmapTools.cxx:1065
-    vcl::bitmap::get_premultiply_table inited
-    1
+vcl/source/bitmap/dibtools.cxx:52
+    (anonymous namespace)::CIEXYZ aXyzX
+    0
+vcl/source/bitmap/dibtools.cxx:53
+    (anonymous namespace)::CIEXYZ aXyzY
+    0
+vcl/source/bitmap/dibtools.cxx:54
+    (anonymous namespace)::CIEXYZ aXyzZ
+    0
+vcl/source/bitmap/dibtools.cxx:107
+    (anonymous namespace)::DIBV5Header nV5RedMask
+    0
+vcl/source/bitmap/dibtools.cxx:108
+    (anonymous namespace)::DIBV5Header nV5GreenMask
+    0
+vcl/source/bitmap/dibtools.cxx:109
+    (anonymous namespace)::DIBV5Header nV5BlueMask
+    0
+vcl/source/bitmap/dibtools.cxx:110
+    (anonymous namespace)::DIBV5Header nV5AlphaMask
+    0
+vcl/source/bitmap/dibtools.cxx:113
+    (anonymous namespace)::DIBV5Header nV5GammaRed
+    0
+vcl/source/bitmap/dibtools.cxx:114
+    (anonymous namespace)::DIBV5Header nV5GammaGreen
+    0
+vcl/source/bitmap/dibtools.cxx:115
+    (anonymous namespace)::DIBV5Header nV5GammaBlue
+    0
+vcl/source/bitmap/dibtools.cxx:117
+    (anonymous namespace)::DIBV5Header nV5ProfileData
+    0
+vcl/source/bitmap/dibtools.cxx:118
+    (anonymous namespace)::DIBV5Header nV5ProfileSize
+    0
+vcl/source/bitmap/dibtools.cxx:119
+    (anonymous namespace)::DIBV5Header nV5Reserved
+    0
 vcl/source/control/imivctl.hxx:123
     SvxIconChoiceCtrl_Impl aAutoArrangeIdle
     svtools contnr SvxIconChoiceCtrl_Impl AutoArrange
@@ -1039,93 +1090,48 @@ vcl/source/filter/jpeg/transupp.h:147
 vcl/source/filter/jpeg/transupp.h:149
     (anonymous) crop_yoffset
     0
-vcl/source/filter/png/pngread.cxx:113
-    vcl::PNGReaderImpl mnPreviewShift
-    0
-vcl/source/font/font.cxx:542
+vcl/source/font/font.cxx:697
     (anonymous namespace)::WeightSearchEntry weight
     5
 vcl/source/fontsubset/ttcr.cxx:350
     vcl::(anonymous namespace)::tdata_post ptr
     0
-vcl/source/gdi/dibtools.cxx:53
-    (anonymous namespace)::CIEXYZ aXyzX
-    0
-vcl/source/gdi/dibtools.cxx:54
-    (anonymous namespace)::CIEXYZ aXyzY
-    0
-vcl/source/gdi/dibtools.cxx:55
-    (anonymous namespace)::CIEXYZ aXyzZ
-    0
-vcl/source/gdi/dibtools.cxx:108
-    (anonymous namespace)::DIBV5Header nV5RedMask
-    0
-vcl/source/gdi/dibtools.cxx:109
-    (anonymous namespace)::DIBV5Header nV5GreenMask
-    0
-vcl/source/gdi/dibtools.cxx:110
-    (anonymous namespace)::DIBV5Header nV5BlueMask
-    0
-vcl/source/gdi/dibtools.cxx:111
-    (anonymous namespace)::DIBV5Header nV5AlphaMask
-    0
-vcl/source/gdi/dibtools.cxx:114
-    (anonymous namespace)::DIBV5Header nV5GammaRed
-    0
-vcl/source/gdi/dibtools.cxx:115
-    (anonymous namespace)::DIBV5Header nV5GammaGreen
-    0
-vcl/source/gdi/dibtools.cxx:116
-    (anonymous namespace)::DIBV5Header nV5GammaBlue
-    0
-vcl/source/gdi/dibtools.cxx:118
-    (anonymous namespace)::DIBV5Header nV5ProfileData
-    0
-vcl/source/gdi/dibtools.cxx:119
-    (anonymous namespace)::DIBV5Header nV5ProfileSize
-    0
-vcl/source/gdi/dibtools.cxx:120
-    (anonymous namespace)::DIBV5Header nV5Reserved
-    0
 vcl/source/gdi/pdfwriter_impl.hxx:766
     vcl::PDFWriterImpl m_DocDigest
     0
-vcl/source/outdev/bitmap.cxx:1263
-    OutputDevice::DrawTransformedBitmapEx bAllowPreferDirectPaint
-    1
-vcl/unx/gtk3/a11y/gtk3atkutil.cxx:694
+vcl/unx/gtk3/a11y/gtk3atkutil.cxx:629
     ooo_atk_util_ensure_event_listener bInited
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:16446
+vcl/unx/gtk3/gtk3gtkinst.cxx:16767
     (anonymous namespace)::ensure_intercept_drawing_area_accessibility bDone
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:16474
+vcl/unx/gtk3/gtk3gtkinst.cxx:16795
     (anonymous namespace)::ensure_disable_ctrl_page_up_down_bindings bDone
     1
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:706
     /home/noel/libo2/workdir/LexTarget/l10ntools/source/xrmlex.cxx bText
     0
-writerfilter/source/dmapper/DomainMapper_Impl.hxx:148
+writerfilter/source/dmapper/DomainMapper_Impl.hxx:159
     writerfilter::dmapper::FieldParagraph m_bRemove
     0
 writerfilter/source/dmapper/SettingsTable.cxx:271
     writerfilter::dmapper::SettingsTable_Impl m_pThemeFontLangProps
     3
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:877
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:876
     writerfilter::rtftok::RTFDocumentImpl m_nNestedTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:878
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:877
     writerfilter::rtftok::RTFDocumentImpl m_nTopLevelTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:881
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:880
     writerfilter::rtftok::RTFDocumentImpl m_nNestedCurrentCellX
     0
-writerfilter/source/rtftok/rtftokenizer.hxx:61
+writerfilter/source/rtftok/rtftokenizer.hxx:60
     writerfilter::rtftok::RTFTokenizer s_bControlWordsInitialised
     1
-writerfilter/source/rtftok/rtftokenizer.hxx:64
+writerfilter/source/rtftok/rtftokenizer.hxx:63
     writerfilter::rtftok::RTFTokenizer s_bMathControlWordsSorted
     1
-xmloff/source/text/XMLIndexTemplateContext.hxx:57
+xmloff/source/text/XMLIndexTemplateContext.hxx:56
     /home/noel/libo2/xmloff/source/text/XMLIndexTemplateContext.cxx aLevelNameTableMap
     0
