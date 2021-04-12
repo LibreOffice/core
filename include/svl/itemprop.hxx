@@ -94,12 +94,12 @@ struct SfxItemPropertySimpleEntry
             assert(_nFlags <= 0x1ff );
         }
 
-    SfxItemPropertySimpleEntry( const SfxItemPropertyMapEntry* pMapEntry )
-        : aType( pMapEntry->aType )
-        , nWID( pMapEntry->nWID )
-        , nFlags( pMapEntry->nFlags )
-        , nMemberId( pMapEntry->nMemberId )
-        , nMoreFlags( pMapEntry->nMoreFlags )
+    SfxItemPropertySimpleEntry( const SfxItemPropertyMapEntry& rMapEntry )
+        : aType( rMapEntry.aType )
+        , nWID( rMapEntry.nWID )
+        , nFlags( rMapEntry.nFlags )
+        , nMemberId( rMapEntry.nMemberId )
+        , nMoreFlags( rMapEntry.nMoreFlags )
         {
         }
 
