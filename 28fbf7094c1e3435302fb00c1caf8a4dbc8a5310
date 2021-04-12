@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f588c522_ed29fd7a",
+        "filename": "framework/source/uielement/toolbarmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-04-12T19:33:55Z",
+      "side": 0,
+      "message": "since...\n\ncommit ac1aefd5174258d9bcb41465ce566ed1a0819f3d\nAuthor: Szymon Kłos \u003cszymon.klos@collabora.com\u003e\nDate:   Wed Mar 10 16:20:07 2021 +0100\n\n    Extend ToolBarManager to build weld::Toolbar\n\nI think ?",
+      "revId": "28fbf7094c1e3435302fb00c1caf8a4dbc8a5310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fbdb1d0_b9b4869a",
+        "filename": "include/tools/fract.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-04-12T19:33:55Z",
+      "side": 0,
+      "message": "this seems to have been unused since it was introduced by 711ec7b6c71410b850cdf6d1411d054ca34ec5a0 (https://gerrit.libreoffice.org/c/core/+/113499)",
+      "revId": "28fbf7094c1e3435302fb00c1caf8a4dbc8a5310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "33832868_9b287641",
+        "filename": "sfx2/source/sidebar/Deck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-04-12T19:33:55Z",
+      "side": 0,
+      "message": "DrawHelper getting replaced with a more normal scrolledwindow leading to it getting removed is ok by me",
+      "revId": "28fbf7094c1e3435302fb00c1caf8a4dbc8a5310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
