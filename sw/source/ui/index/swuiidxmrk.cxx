@@ -20,6 +20,7 @@
 #include <swuiidxmrk.hxx>
 #include <hintids.hxx>
 #include <helpids.h>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -49,6 +50,7 @@
 #include <strings.hrc>
 #include <svl/cjkoptions.hxx>
 #include <comphelper/fileurl.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <ndtxt.hxx>
 #include <SwRewriter.hxx>
 
@@ -1015,6 +1017,7 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
 
     std::vector<std::unique_ptr<weld::Container>> m_aOrigContainers;
     std::vector<std::unique_ptr<weld::Label>> m_aFixedTexts;
+    std::unique_ptr<weld::Box> m_pBoxes[AUTH_FIELD_END];
     std::unique_ptr<weld::Entry> pEdits[AUTH_FIELD_END];
     std::unique_ptr<weld::Button> m_xOKBT;
     std::unique_ptr<weld::Container> m_xBox;
@@ -1022,10 +1025,12 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     std::unique_ptr<weld::Container> m_xRight;
     std::unique_ptr<weld::ComboBox> m_xTypeListBox;
     std::unique_ptr<weld::ComboBox> m_xIdentifierBox;
+    std::unique_ptr<weld::Button> m_xBrowseButton;
 
     DECL_LINK(IdentifierHdl, weld::ComboBox&, void);
     DECL_LINK(ShortNameHdl, weld::Entry&, void);
     DECL_LINK(EnableHdl, weld::ComboBox&, void);
+    DECL_LINK(BrowseHdl, weld::Button&, void);
 
 public:
     SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
@@ -1593,15 +1598,16 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         }
         else
         {
+            m_pBoxes[nIndex] = m_aBuilders.back()->weld_box("hbox");
             pEdits[nIndex] = m_aBuilders.back()->weld_entry("entry");
             if (bLeft)
-                m_aOrigContainers.back()->move(pEdits[nIndex].get(), m_xLeft.get());
+                m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xLeft.get());
             else
-                m_aOrigContainers.back()->move(pEdits[nIndex].get(), m_xRight.get());
+                m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xRight.get());
 
-            pEdits[nIndex]->set_grid_left_attach(1);
-            pEdits[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
-            pEdits[nIndex]->set_hexpand(true);
+            m_pBoxes[nIndex]->set_grid_left_attach(1);
+            m_pBoxes[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            m_pBoxes[nIndex]->set_hexpand(true);
             pEdits[nIndex]->set_text(pFields[aCurInfo.nToxField]);
             pEdits[nIndex]->show();
             pEdits[nIndex]->set_help_id(aCurInfo.pHelpId);
@@ -1615,6 +1621,14 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                     pEdits[nIndex]->set_sensitive(false);
                 }
             }
+            else if (aCurInfo.nToxField == AUTH_FIELD_URL
+                     && comphelper::isFileUrl(pFields[aCurInfo.nToxField]))
+            {
+                m_xBrowseButton = m_aBuilders.back()->weld_button("browse");
+                m_xBrowseButton->connect_clicked(LINK(this, SwCreateAuthEntryDlg_Impl, BrowseHdl));
+                m_xBrowseButton->show();
+            }
+
             m_aFixedTexts.back()->set_mnemonic_widget(pEdits[nIndex].get());
         }
         if(bLeft)
@@ -1697,6 +1711,32 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, weld::Entry&, rEdit, void)
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, weld::ComboBox&, rBox, void)
 {
     m_xOKBT->set_sensitive(m_bNameAllowed && rBox.get_active() != -1);
+};
+
+IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
+{
+    sfx2::FileDialogHelper aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                                    FileDialogFlags::NONE, getDialog());
+    OUString aPath = GetEntryText(AUTH_FIELD_URL);
+    if (!aPath.isEmpty())
+    {
+        aFileDlg.SetDisplayDirectory(aPath);
+    }
+
+    if (aFileDlg.Execute() != ERRCODE_NONE)
+    {
+        return;
+    }
+
+    for (int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
+    {
+        const TextInfo& rCurInfo = aTextInfoArr[nIndex];
+        if (rCurInfo.nToxField == AUTH_FIELD_URL)
+        {
+            pEdits[nIndex]->set_text(aFileDlg.GetPath());
+            break;
+        }
+    }
 };
 
 SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
