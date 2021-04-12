@@ -47,6 +47,8 @@
 #include <tuple>
 #include <unordered_map>
 #include <vector>
+#include <mutex>
+
 
 namespace editeng { class SvxBorderLine; }
 
@@ -1635,6 +1637,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr = nullptr) const;
 
     std::set<Color> GetDocColors();
+    std::mutex mvUnoCursorTableLock;
     std::vector< std::weak_ptr<SwUnoCursor> > mvUnoCursorTable;
 
     // Remove expired UnoCursor weak pointers the document keeps to notify about document death.

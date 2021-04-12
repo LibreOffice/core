@@ -424,12 +424,15 @@ SwDoc::~SwDoc()
     getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAndDestroyAll();
 
     const sw::UnoCursorHint aHint;
-    cleanupUnoCursorTable();
-    for(const auto& pWeakCursor : mvUnoCursorTable)
-    {
-        auto pCursor(pWeakCursor.lock());
-        if(pCursor)
-            pCursor->m_aNotifier.Broadcast(aHint);
+    { /* scope for the lock_guard */
+        std::lock_guard<std::mutex> lock(mvUnoCursorTableLock);
+        cleanupUnoCursorTable();
+        for(const auto& pWeakCursor : mvUnoCursorTable)
+        {
+            auto pCursor(pWeakCursor.lock());
+            if(pCursor)
+                pCursor->m_aNotifier.Broadcast(aHint);
+        }
     }
     mpACEWord.reset();
 

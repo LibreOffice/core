@@ -1784,6 +1784,7 @@ std::shared_ptr<SwUnoCursor> SwDoc::CreateUnoCursor( const SwPosition& rPos, boo
     else
         pNew = std::make_shared<SwUnoCursor>(rPos);
 
+    std::lock_guard lock(mvUnoCursorTableLock);
     mvUnoCursorTable.push_back( pNew );
     return pNew;
 }

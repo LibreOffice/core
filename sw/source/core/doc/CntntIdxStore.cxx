@@ -404,6 +404,7 @@ void ContentIdxStoreImpl::RestoreFlys(SwDoc& rDoc, updater_t const & rUpdater, b
 
 void ContentIdxStoreImpl::SaveUnoCursors(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent)
 {
+    std::lock_guard lock(rDoc.mvUnoCursorTableLock);
     rDoc.cleanupUnoCursorTable();
     for (const auto& pWeakUnoCursor : rDoc.mvUnoCursorTable)
     {

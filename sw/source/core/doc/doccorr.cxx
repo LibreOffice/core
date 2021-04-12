@@ -27,6 +27,7 @@
 #include <mvsave.hxx>
 #include <docary.hxx>
 #include <unocrsr.hxx>
+#include <mutex>
 
 namespace
 {
@@ -121,6 +122,7 @@ void PaMCorrAbs( const SwPaM& rRange,
         }
     }
 
+    std::lock_guard<std::mutex> lock(rDoc.mvUnoCursorTableLock);
     rDoc.cleanupUnoCursorTable();
     for(const auto& pWeakUnoCursor : rDoc.mvUnoCursorTable)
     {
@@ -279,6 +281,11 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
        }
     }
 
+    /* The only reason this code is able to call cleanupUnoCursorTable() on rDoc is because that method
+     * falsely declares itself to be const but then internally uses const_cast. Not locking here allows
+     * for a potential race condition on mvUnoCursorTable. The only workaround is to use const_cast on rDoc. */
+    SwDoc& ncrDoc = const_cast<SwDoc&>(rDoc);
+    std::lock_guard<std::mutex> lock(ncrDoc.mvUnoCursorTableLock);
     rDoc.cleanupUnoCursorTable();
     for(const auto& pWeakUnoCursor : rDoc.mvUnoCursorTable)
     {
