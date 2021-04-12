@@ -1547,6 +1547,7 @@ namespace xmloff::token {
         XML_QRCODE,
         XML_QRCODE_BORDER,
         XML_QRCODE_ERROR_CORRECTION,
+        XML_QRCODE_TYPE,
         XML_QUARTER,
         XML_QUERY_NAME,
         XML_QUO_VADIS,
