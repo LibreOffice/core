@@ -2269,6 +2269,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	Alignment \
 	Arrangement \
+	BarCode \
+	BarCodeErrorCorrection \
 	BezierPoint \
 	BitmapMode \
 	BoundVolume \
@@ -2331,8 +2333,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	PolygonKind \
 	Position3D \
 	ProjectionMode \
-	QRCode \
-	QRCodeErrorCorrection \
 	RectanglePoint \
 	ShadeMode \
 	ShadingPattern \
