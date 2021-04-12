@@ -84,6 +84,7 @@ OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const OString& r
 {
     CPPUNIT_ASSERT(pXmlDoc);
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    CPPUNIT_ASSERT(pXmlObj);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OStringLiteral("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
