@@ -31,6 +31,8 @@
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
+#include <osl/file.hxx>
+
 const wchar_t UNC_PREFIX[] = L"\\\\";
 const wchar_t BACKSLASH = '\\';
 const wchar_t SLASH = '/';
@@ -1083,7 +1085,16 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
 
             hFind = FindFirstFileW( o3tl::toW(rtl_uString_getStr(strSysFilePath)), &aFindData );
 
-            if ( hFind != INVALID_HANDLE_VALUE )
+            // tdf#123625 - try to retrieve the file attributes of a root directory
+            bool bHasFileAttributes = false;
+            if (hFind == INVALID_HANDLE_VALUE)
+            {
+                bHasFileAttributes
+                    = GetFileAttributesExW(o3tl::toW(rtl_uString_getStr(strSysFilePath)),
+                                           GetFileExInfoStandard, &aFindData);
+            }
+
+            if (hFind != INVALID_HANDLE_VALUE || bHasFileAttributes)
             {
                 DirectoryItem_Impl  *pItemImpl =
                     static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
@@ -1105,9 +1116,9 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                     *pItem = pItemImpl;
                 }
 
-                FindClose( hFind );
-            }
-            else
+                if ( hFind != INVALID_HANDLE_VALUE)
+                    FindClose( hFind );
+            } else
                 error = oslTranslateFileError( GetLastError() );
         }
         break;
