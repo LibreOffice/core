@@ -276,16 +276,15 @@ namespace
         uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
         const SfxItemPropertyMap& rPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
-        PropertyEntryVector_t aPropVector = rPropertyMap.getPropertyEntries();
-        for (const auto& rProp : aPropVector)
+        for (const auto& rProp : rPropertyMap.getPropertyEntries())
         {
-            if ( xInfo->hasPropertyByName(rProp.sName) )
+            if ( xInfo->hasPropertyByName(OUString(rProp.first)) )
             {
-                const SfxPoolItem* pItem = _rItemSet.GetItem(rProp.nWID);
+                const SfxPoolItem* pItem = _rItemSet.GetItem(rProp.second.nWID);
                 if ( pItem )
                 {
-                    ::std::unique_ptr<SfxPoolItem> pClone(pItem->CloneSetWhich(rProp.nWID));
-                    pClone->PutValue(_xShape->getPropertyValue(rProp.sName), rProp.nMemberId);
+                    ::std::unique_ptr<SfxPoolItem> pClone(pItem->CloneSetWhich(rProp.second.nWID));
+                    pClone->PutValue(_xShape->getPropertyValue(OUString(rProp.first)), rProp.second.nMemberId);
                     _rItemSet.Put(std::move(pClone));
                 }
             }
@@ -297,21 +296,20 @@ namespace
         const uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
         const SfxItemPropertyMap& rPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
-        PropertyEntryVector_t aPropVector = rPropertyMap.getPropertyEntries();
-        for (const auto& rProp : aPropVector)
+        for (const auto& rProp : rPropertyMap.getPropertyEntries())
         {
-            if ( SfxItemState::SET == _rItemSet.GetItemState(rProp.nWID) && xInfo->hasPropertyByName(rProp.sName) )
+            if ( SfxItemState::SET == _rItemSet.GetItemState(rProp.second.nWID) && xInfo->hasPropertyByName(OUString(rProp.first)) )
             {
-                if ( ( rProp.nFlags & beans::PropertyAttribute::READONLY ) != beans::PropertyAttribute::READONLY )
+                if ( ( rProp.second.nFlags & beans::PropertyAttribute::READONLY ) != beans::PropertyAttribute::READONLY )
                 {
-                    const SfxPoolItem* pItem = _rItemSet.GetItem(rProp.nWID);
+                    const SfxPoolItem* pItem = _rItemSet.GetItem(rProp.second.nWID);
                     if ( pItem )
                     {
                         uno::Any aValue;
-                        pItem->QueryValue(aValue,rProp.nMemberId);
+                        pItem->QueryValue(aValue,rProp.second.nMemberId);
                         try
                         {
-                            _xShape->setPropertyValue(rProp.sName, aValue);
+                            _xShape->setPropertyValue(OUString(rProp.first), aValue);
                         }
                         catch(uno::Exception&)
                         { // shapes have a bug so we ignore this one.

@@ -317,15 +317,12 @@ Sequence< PropertyValue > SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    PropertyEntryVector_t aPropEntries = aPropertyMap.getPropertyEntries();
     std::vector<PropertyValue> aProps;
-    aProps.reserve(aPropertyMap.getSize());
-
-    std::transform(aPropEntries.begin(), aPropEntries.end(), std::back_inserter(aProps),
-        [this](PropertyEntryVector_t::const_reference rPropEntry) {
-            return PropertyValue(rPropEntry.sName, rPropEntry.nWID,
-                                 aConfig.GetProperty(rPropEntry.nWID),
-                                 css::beans::PropertyState_DIRECT_VALUE); });
+    aProps.reserve(aPropertyMap.getPropertyEntries().size());
+    for(auto & rPair : aPropertyMap.getPropertyEntries())
+        aProps.push_back(PropertyValue(OUString(rPair.first), rPair.second.nWID,
+                                 aConfig.GetProperty(rPair.second.nWID),
+                                 css::beans::PropertyState_DIRECT_VALUE));
     return comphelper::containerToSequence(aProps);
 }
 
