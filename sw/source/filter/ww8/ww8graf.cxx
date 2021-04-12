@@ -1161,7 +1161,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
                     pFlyFormat->SetFormatAttr( aFlySet );
 
-                    MapWrapIntoFlyFormat(pRecord, pFlyFormat);
+                    MapWrapIntoFlyFormat(*pRecord, *pFlyFormat);
                 }
                 aString.clear();
                 rbEraseTextObj = (nullptr != pFlyFormat);
@@ -1419,12 +1419,12 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
     return pRet;
 }
 
-void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, tools::Long nGrafAnchorCp )
+void SwWW8ImplReader::ReadGrafLayer1(WW8PLCFspecial& rPF, tools::Long nGrafAnchorCp)
 {
-    pPF->SeekPos( nGrafAnchorCp );
+    rPF.SeekPos(nGrafAnchorCp);
     WW8_FC nStartFc;
     void* pF0;
-    if( !pPF->Get( nStartFc, pF0 ) )
+    if (!rPF.Get(nStartFc, pF0))
     {
         OSL_ENSURE( false, "+Where is the graphic (2) ?" );
         return;
@@ -1967,33 +1967,29 @@ void SwWW8ImplReader::AdjustULWrapForWordMargins(
         rUL.SetUpper(sal_uInt16(0));
 }
 
-void SwWW8ImplReader::MapWrapIntoFlyFormat(SvxMSDffImportRec const * pRecord,
-    SwFrameFormat* pFlyFormat)
+void SwWW8ImplReader::MapWrapIntoFlyFormat(const SvxMSDffImportRec& rRecord,
+                                           SwFrameFormat& rFlyFormat)
 {
-    if (!pRecord || !pFlyFormat)
-        return;
-
-    if (pRecord->nDxWrapDistLeft || pRecord->nDxWrapDistRight)
+    if (rRecord.nDxWrapDistLeft || rRecord.nDxWrapDistRight)
     {
-        SvxLRSpaceItem aLR(writer_cast<sal_uInt16>(pRecord->nDxWrapDistLeft),
-            writer_cast<sal_uInt16>(pRecord->nDxWrapDistRight), 0, 0, RES_LR_SPACE);
-        AdjustLRWrapForWordMargins(*pRecord, aLR);
-        pFlyFormat->SetFormatAttr(aLR);
+        SvxLRSpaceItem aLR(writer_cast<sal_uInt16>(rRecord.nDxWrapDistLeft),
+                           writer_cast<sal_uInt16>(rRecord.nDxWrapDistRight), 0, 0, RES_LR_SPACE);
+        AdjustLRWrapForWordMargins(rRecord, aLR);
+        rFlyFormat.SetFormatAttr(aLR);
     }
-    if (pRecord->nDyWrapDistTop || pRecord->nDyWrapDistBottom)
+    if (rRecord.nDyWrapDistTop || rRecord.nDyWrapDistBottom)
     {
-        SvxULSpaceItem aUL(writer_cast<sal_uInt16>(pRecord->nDyWrapDistTop),
-            writer_cast<sal_uInt16>(pRecord->nDyWrapDistBottom), RES_UL_SPACE);
-        AdjustULWrapForWordMargins(*pRecord, aUL);
-        pFlyFormat->SetFormatAttr(aUL);
+        SvxULSpaceItem aUL(writer_cast<sal_uInt16>(rRecord.nDyWrapDistTop),
+                           writer_cast<sal_uInt16>(rRecord.nDyWrapDistBottom), RES_UL_SPACE);
+        AdjustULWrapForWordMargins(rRecord, aUL);
+        rFlyFormat.SetFormatAttr(aUL);
     }
 
     // If we are contoured and have a custom polygon...
-    if (pRecord->pWrapPolygon && pFlyFormat->GetSurround().IsContour())
+    if (rRecord.pWrapPolygon && rFlyFormat.GetSurround().IsContour())
     {
-        if (SwNoTextNode *pNd = GetNoTextNodeFromSwFrameFormat(*pFlyFormat))
+        if (SwNoTextNode* pNd = GetNoTextNodeFromSwFrameFormat(rFlyFormat))
         {
-
             /*
              Gather round children and hear of a tale that will raise the
              hairs on the back of your neck this dark halloween night.
@@ -2040,7 +2036,7 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(SvxMSDffImportRec const * pRecord,
              what I actually see in word
             */
 
-            tools::PolyPolygon aPoly(*pRecord->pWrapPolygon);
+            tools::PolyPolygon aPoly(*rRecord.pWrapPolygon);
             const Size &rSize = pNd->GetTwipSize();
             /*
              Move to the left by 15twips, and rescale to
@@ -2068,13 +2064,13 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(SvxMSDffImportRec const * pRecord,
             pNd->SetContour(&aPoly);
         }
     }
-    else if (pFlyFormat->GetSurround().IsContour())
+    else if (rFlyFormat.GetSurround().IsContour())
     {
         // Contour is enabled, but no polygon is set: disable contour, because Word does not
         // Writer-style auto-contour in that case.
-        SwFormatSurround aSurround(pFlyFormat->GetSurround());
+        SwFormatSurround aSurround(rFlyFormat.GetSurround());
         aSurround.SetContour(false);
-        pFlyFormat->SetFormatAttr(aSurround);
+        rFlyFormat.SetFormatAttr(aSurround);
     }
 }
 
@@ -2091,11 +2087,10 @@ static sal_Int32 lcl_ConvertCrop(sal_uInt32 const nCrop, sal_Int32 const nSize)
     return (nIntegral * nSize) + (((nCrop & 0xffff) * nSize) >> 16);
 }
 
-void
-SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
-    SwFrameFormat const *pFlyFormat, WW8_FSPA const *pF )
+void SwWW8ImplReader::SetAttributesAtGrfNode(const SvxMSDffImportRec& rRecord,
+                                             const SwFrameFormat& rFlyFormat, WW8_FSPA const *pF)
 {
-    const SwNodeIndex* pIdx = pFlyFormat->GetContent(false).GetContentIdx();
+    const SwNodeIndex* pIdx = rFlyFormat.GetContent(false).GetContentIdx();
     SwGrfNode *const pGrfNd(
         pIdx ? m_rDoc.GetNodes()[pIdx->GetIndex() + 1]->GetGrfNode() : nullptr);
     if (!pGrfNd)
@@ -2111,33 +2106,33 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
     else if (!nHeight && pF)
         nHeight = o3tl::saturating_sub(pF->nYaBottom, pF->nYaTop);
 
-    if( pRecord->nCropFromTop || pRecord->nCropFromBottom ||
-        pRecord->nCropFromLeft || pRecord->nCropFromRight )
+    if (rRecord.nCropFromTop || rRecord.nCropFromBottom ||
+        rRecord.nCropFromLeft || rRecord.nCropFromRight)
     {
         SwCropGrf aCrop;            // Cropping is stored in 'fixed floats'
                                     // 16.16 (fraction times total
-        if( pRecord->nCropFromTop ) //        image width or height resp.)
+        if (rRecord.nCropFromTop)   //        image width or height resp.)
         {
-            aCrop.SetTop(lcl_ConvertCrop(pRecord->nCropFromTop, nHeight));
+            aCrop.SetTop(lcl_ConvertCrop(rRecord.nCropFromTop, nHeight));
         }
-        if( pRecord->nCropFromBottom )
+        if (rRecord.nCropFromBottom)
         {
-            aCrop.SetBottom(lcl_ConvertCrop(pRecord->nCropFromBottom, nHeight));
+            aCrop.SetBottom(lcl_ConvertCrop(rRecord.nCropFromBottom, nHeight));
         }
-        if( pRecord->nCropFromLeft )
+        if (rRecord.nCropFromLeft)
         {
-            aCrop.SetLeft(lcl_ConvertCrop(pRecord->nCropFromLeft, nWidth));
+            aCrop.SetLeft(lcl_ConvertCrop(rRecord.nCropFromLeft, nWidth));
         }
-        if( pRecord->nCropFromRight )
+        if (rRecord.nCropFromRight)
         {
-            aCrop.SetRight(lcl_ConvertCrop(pRecord->nCropFromRight, nWidth));
+            aCrop.SetRight(lcl_ConvertCrop(rRecord.nCropFromRight, nWidth));
         }
 
         pGrfNd->SetAttr( aCrop );
     }
 
-    bool bFlipH(pRecord->nFlags & ShapeFlag::FlipH);
-    bool bFlipV(pRecord->nFlags & ShapeFlag::FlipV);
+    bool bFlipH(rRecord.nFlags & ShapeFlag::FlipH);
+    bool bFlipV(rRecord.nFlags & ShapeFlag::FlipV);
     if ( bFlipH || bFlipV )
     {
         SwMirrorGrf aMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
@@ -2154,10 +2149,10 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
         pGrfNd->SetAttr( aMirror );
     }
 
-    if (!pRecord->pObj)
+    if (!rRecord.pObj)
         return;
 
-    const SfxItemSet& rOldSet = pRecord->pObj->GetMergedItemSet();
+    const SfxItemSet& rOldSet = rRecord.pObj->GetMergedItemSet();
     // contrast
     if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFCONTRAST,
         SdrGrafContrastItem))
@@ -2223,24 +2218,18 @@ bool SwWW8ImplReader::MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
             m_aSectionManager.GetPageWidth());
 }
 
-RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
-    WW8_FSPA *pFSPA, SfxItemSet &rFlySet)
+RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FSPA& rFSPA,
+                                              SfxItemSet &rFlySet)
 {
-    OSL_ENSURE(pRecord || pFSPA, "give me something! to work with for anchoring");
-    if (!pRecord && !pFSPA)
-        return RndStdIds::FLY_AT_PAGE;
     bool bCurSectionVertical = m_aSectionManager.CurrentSectionIsVertical();
 
-    SvxMSDffImportRec aRecordFromFSPA;
-    if (!pRecord)
-        pRecord = &aRecordFromFSPA;
-    if (!(pRecord->nXRelTo) && pFSPA)
+    if (!rRecord.nXRelTo)
     {
-        pRecord->nXRelTo = sal_Int32(pFSPA->nbx);
+        rRecord.nXRelTo = sal_Int32(rFSPA.nbx);
     }
-    if (!(pRecord->nYRelTo) && pFSPA)
+    if (!rRecord.nYRelTo)
     {
-        pRecord->nYRelTo = sal_Int32(pFSPA->nby);
+        rRecord.nYRelTo = sal_Int32(rFSPA.nby);
     }
 
     // nXAlign - abs. Position, Left,  Centered,  Right,  Inside, Outside
@@ -2254,29 +2243,22 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
     const sal_uInt32 nCntRelTo  = 4;
 
-    sal_uInt32 nXAlign = nCntXAlign > pRecord->nXAlign ? pRecord->nXAlign : 1;
-    sal_uInt32 nYAlign = nCntYAlign > pRecord->nYAlign ? pRecord->nYAlign : 1;
+    sal_uInt32 nXAlign = nCntXAlign > rRecord.nXAlign ? rRecord.nXAlign : 1;
+    sal_uInt32 nYAlign = nCntYAlign > rRecord.nYAlign ? rRecord.nYAlign : 1;
 
-    if (pFSPA)
+    // #i52565# - try to handle special case for objects in tables regarding its X Rel
+
+    // if X and Y Rel values are on default take it as a hint, that they have not been set
+    // by <SwMSDffManager::ProcessObj(..)>
+    const bool bXYRelHaveDefaultValues = *rRecord.nXRelTo == 2 && *rRecord.nYRelTo == 2;
+    if (bXYRelHaveDefaultValues && m_nInTable > 0 && !bCurSectionVertical)
     {
-        // #i52565# - try to handle special case for objects in tables regarding its X Rel
-
-        // if X and Y Rel values are on default take it as a hint, that they have not been set
-        // by <SwMSDffManager::ProcessObj(..)>
-        const bool bXYRelHaveDefaultValues = *pRecord->nXRelTo == 2 && *pRecord->nYRelTo == 2;
-        if ( bXYRelHaveDefaultValues
-             && m_nInTable > 0
-             && !bCurSectionVertical )
-        {
-            if ( sal_uInt32(pFSPA->nby) != pRecord->nYRelTo )
-            {
-                pRecord->nYRelTo = sal_uInt32(pFSPA->nby);
-            }
-        }
+        if (sal_uInt32(rFSPA.nby) != rRecord.nYRelTo)
+            rRecord.nYRelTo = sal_uInt32(rFSPA.nby);
     }
 
-    sal_uInt32 nXRelTo = (pRecord->nXRelTo && nCntRelTo > pRecord->nXRelTo) ? *pRecord->nXRelTo : 1;
-    sal_uInt32 nYRelTo = (pRecord->nYRelTo && nCntRelTo > pRecord->nYRelTo) ? *pRecord->nYRelTo : 1;
+    sal_uInt32 nXRelTo = (rRecord.nXRelTo && nCntRelTo > rRecord.nXRelTo) ? *rRecord.nXRelTo : 1;
+    sal_uInt32 nYRelTo = (rRecord.nYRelTo && nCntRelTo > rRecord.nYRelTo) ? *rRecord.nYRelTo : 1;
 
     RndStdIds eAnchor = IsInlineEscherHack() ? RndStdIds::FLY_AS_CHAR : RndStdIds::FLY_AT_CHAR; // #i43718#
 
@@ -2284,157 +2266,154 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     aAnchor.SetAnchor( m_pPaM->GetPoint() );
     rFlySet.Put( aAnchor );
 
-    if (pFSPA)
+    // #i18732#
+    // Given new layout where everything is changed to be anchored to
+    // character the following 4 tables may need to be changed.
+
+    // horizontal Adjustment
+    static const sal_Int16 aHoriOriTab[ nCntXAlign ] =
     {
-        // #i18732#
-        // Given new layout where everything is changed to be anchored to
-        // character the following 4 tables may need to be changed.
+        text::HoriOrientation::NONE,     // From left position
+        text::HoriOrientation::LEFT,     // left
+        text::HoriOrientation::CENTER,   // centered
+        text::HoriOrientation::RIGHT,    // right
+        // #i36649#
+        // - inside -> text::HoriOrientation::LEFT and outside -> text::HoriOrientation::RIGHT
+        text::HoriOrientation::LEFT,   // inside
+        text::HoriOrientation::RIGHT   // outside
+    };
 
-        // horizontal Adjustment
-        static const sal_Int16 aHoriOriTab[ nCntXAlign ] =
-        {
-            text::HoriOrientation::NONE,     // From left position
-            text::HoriOrientation::LEFT,     // left
-            text::HoriOrientation::CENTER,   // centered
-            text::HoriOrientation::RIGHT,    // right
-            // #i36649#
-            // - inside -> text::HoriOrientation::LEFT and outside -> text::HoriOrientation::RIGHT
-            text::HoriOrientation::LEFT,   // inside
-            text::HoriOrientation::RIGHT   // outside
-        };
+    // generic vertical Adjustment
+    static const sal_Int16 aVertOriTab[ nCntYAlign ] =
+    {
+        text::VertOrientation::NONE,         // From Top position
+        text::VertOrientation::TOP,          // top
+        text::VertOrientation::CENTER,       // centered
+        text::VertOrientation::BOTTOM,       // bottom
+        text::VertOrientation::LINE_TOP,     // inside (obscure)
+        text::VertOrientation::LINE_BOTTOM   // outside (obscure)
+    };
 
-        // generic vertical Adjustment
-        static const sal_Int16 aVertOriTab[ nCntYAlign ] =
-        {
-            text::VertOrientation::NONE,         // From Top position
-            text::VertOrientation::TOP,          // top
-            text::VertOrientation::CENTER,       // centered
-            text::VertOrientation::BOTTOM,       // bottom
-            text::VertOrientation::LINE_TOP,     // inside (obscure)
-            text::VertOrientation::LINE_BOTTOM   // outside (obscure)
-        };
+    // #i22673# - to-line vertical alignment
+    static const sal_Int16 aToLineVertOriTab[ nCntYAlign ] =
+    {
+        text::VertOrientation::NONE,         // below
+        text::VertOrientation::LINE_BOTTOM,  // top
+        text::VertOrientation::LINE_CENTER,  // centered
+        text::VertOrientation::LINE_TOP,     // bottom
+        text::VertOrientation::LINE_BOTTOM,  // inside (obscure)
+        text::VertOrientation::LINE_TOP      // outside (obscure)
+    };
 
-        // #i22673# - to-line vertical alignment
-        static const sal_Int16 aToLineVertOriTab[ nCntYAlign ] =
-        {
-            text::VertOrientation::NONE,         // below
-            text::VertOrientation::LINE_BOTTOM,  // top
-            text::VertOrientation::LINE_CENTER,  // centered
-            text::VertOrientation::LINE_TOP,     // bottom
-            text::VertOrientation::LINE_BOTTOM,  // inside (obscure)
-            text::VertOrientation::LINE_TOP      // outside (obscure)
-        };
+    // Adjustment is horizontally relative to...
+    static const sal_Int16 aHoriRelOriTab[nCntRelTo] =
+    {
+        text::RelOrientation::PAGE_PRINT_AREA,    // 0 is page textarea margin
+        text::RelOrientation::PAGE_FRAME,  // 1 is page margin
+        text::RelOrientation::FRAME,         // 2 is relative to column
+        text::RelOrientation::CHAR       // 3 is relative to character
+    };
 
-        // Adjustment is horizontally relative to...
-        static const sal_Int16 aHoriRelOriTab[nCntRelTo] =
-        {
-            text::RelOrientation::PAGE_PRINT_AREA,    // 0 is page textarea margin
-            text::RelOrientation::PAGE_FRAME,  // 1 is page margin
-            text::RelOrientation::FRAME,         // 2 is relative to column
-            text::RelOrientation::CHAR       // 3 is relative to character
-        };
+    // Adjustment is vertically relative to...
+    // #i22673# - adjustment for new vertical alignment at top of line.
+    static const sal_Int16 aVertRelOriTab[nCntRelTo] =
+    {
+        text::RelOrientation::PAGE_PRINT_AREA, // 0 is page textarea margin
+        text::RelOrientation::PAGE_FRAME,   // 1 is page margin
+        text::RelOrientation::FRAME,          // 2 is relative to paragraph
+        text::RelOrientation::TEXT_LINE   // 3 is relative to line
+    };
 
-        // Adjustment is vertically relative to...
-        // #i22673# - adjustment for new vertical alignment at top of line.
-        static const sal_Int16 aVertRelOriTab[nCntRelTo] =
-        {
-            text::RelOrientation::PAGE_PRINT_AREA, // 0 is page textarea margin
-            text::RelOrientation::PAGE_FRAME,   // 1 is page margin
-            text::RelOrientation::FRAME,          // 2 is relative to paragraph
-            text::RelOrientation::TEXT_LINE   // 3 is relative to line
-        };
+    sal_Int16 eHoriOri = aHoriOriTab[ nXAlign ];
+    sal_Int16 eHoriRel = aHoriRelOriTab[ nXRelTo ];
 
-        sal_Int16 eHoriOri = aHoriOriTab[ nXAlign ];
-        sal_Int16 eHoriRel = aHoriRelOriTab[  nXRelTo ];
-
-        // #i36649# - adjustments for certain alignments
-        if ( eHoriOri == text::HoriOrientation::LEFT && eHoriRel == text::RelOrientation::PAGE_FRAME )
-        {
-            // convert 'left to page' to 'from left -<width> to page text area'
-            eHoriOri = text::HoriOrientation::NONE;
-            eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
-            const tools::Long nWidth = pFSPA->nXaRight - pFSPA->nXaLeft;
-            pFSPA->nXaLeft = -nWidth;
-            pFSPA->nXaRight = 0;
-        }
-        else if ( eHoriOri == text::HoriOrientation::RIGHT && eHoriRel == text::RelOrientation::PAGE_FRAME )
-        {
-            // convert 'right to page' to 'from left 0 to right page border'
-            eHoriOri = text::HoriOrientation::NONE;
-            eHoriRel = text::RelOrientation::PAGE_RIGHT;
-            const tools::Long nWidth = pFSPA->nXaRight - pFSPA->nXaLeft;
-            pFSPA->nXaLeft = 0;
-            pFSPA->nXaRight = nWidth;
-        }
-
-        // #i24255# - position of floating screen objects in
-        // R2L layout are given in L2R layout, thus convert them of all
-        // floating screen objects, which are imported.
-        {
-            // Miserable miserable hack.
-            SwTwips nWidth = o3tl::saturating_sub(pFSPA->nXaRight, pFSPA->nXaLeft);
-            SwTwips nLeft = pFSPA->nXaLeft;
-            if (MiserableRTLGraphicsHack(nLeft, nWidth, eHoriOri,
-                eHoriRel))
-            {
-                pFSPA->nXaLeft = nLeft;
-                pFSPA->nXaRight = pFSPA->nXaLeft + nWidth;
-            }
-        }
-
-        // if the object is anchored inside a table cell, is horizontal aligned
-        // at frame|character and has wrap through, but its attribute
-        // 'layout in table cell' isn't set, convert its horizontal alignment to page text area.
-        // #i84783# - use new method <IsObjectLayoutInTableCell()>
-        if ( m_nInTable &&
-             ( eHoriRel == text::RelOrientation::FRAME || eHoriRel == text::RelOrientation::CHAR ) &&
-             pFSPA->nwr == 3 &&
-             !IsObjectLayoutInTableCell( pRecord->nLayoutInTableCell ) )
-        {
-            eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
-        }
-
-        // Writer honours this wrap distance when aligned as "left" or "right",
-        // Word doesn't. Writer doesn't honour it when its "from left".
-        if (eHoriOri == text::HoriOrientation::LEFT)
-            pRecord->nDxWrapDistLeft=0;
-        else if (eHoriOri == text::HoriOrientation::RIGHT)
-            pRecord->nDxWrapDistRight=0;
-
-        sal_Int16 eVertRel;
-
-        eVertRel = aVertRelOriTab[  nYRelTo ]; // #i18732#
-        if ( bCurSectionVertical && nYRelTo == 2 )
-            eVertRel = text::RelOrientation::PAGE_PRINT_AREA;
-        // #i22673# - fill <eVertOri> in dependence of <eVertRel>
-        sal_Int16 eVertOri;
-        if ( eVertRel == text::RelOrientation::TEXT_LINE )
-        {
-            eVertOri = aToLineVertOriTab[ nYAlign ];
-        }
-        else
-        {
-            eVertOri = aVertOriTab[ nYAlign ];
-        }
-
-        // Below line in word is a positive value, while in writer its
-        // negative
-        tools::Long nYPos = pFSPA->nYaTop;
-        // #i22673#
-        if ((eVertRel == text::RelOrientation::TEXT_LINE) && (eVertOri == text::VertOrientation::NONE))
-            nYPos = -nYPos;
-
-        SwFormatHoriOrient aHoriOri(MakeSafePositioningValue(  bCurSectionVertical ? nYPos : pFSPA->nXaLeft ),
-                                                            bCurSectionVertical ? eVertOri : eHoriOri,
-                                                            bCurSectionVertical ? eVertRel : eHoriRel);
-        if( 4 <= nXAlign )
-            aHoriOri.SetPosToggle(true);
-        rFlySet.Put( aHoriOri );
-
-        rFlySet.Put(SwFormatVertOrient(MakeSafePositioningValue( !bCurSectionVertical ? nYPos : -pFSPA->nXaRight ),
-                                                                !bCurSectionVertical ? eVertOri : eHoriOri,
-                                                                !bCurSectionVertical ? eVertRel : eHoriRel ));
+    // #i36649# - adjustments for certain alignments
+    if (eHoriOri == text::HoriOrientation::LEFT && eHoriRel == text::RelOrientation::PAGE_FRAME)
+    {
+        // convert 'left to page' to 'from left -<width> to page text area'
+        eHoriOri = text::HoriOrientation::NONE;
+        eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
+        const tools::Long nWidth = rFSPA.nXaRight - rFSPA.nXaLeft;
+        rFSPA.nXaLeft = -nWidth;
+        rFSPA.nXaRight = 0;
     }
+    else if (eHoriOri == text::HoriOrientation::RIGHT && eHoriRel == text::RelOrientation::PAGE_FRAME)
+    {
+        // convert 'right to page' to 'from left 0 to right page border'
+        eHoriOri = text::HoriOrientation::NONE;
+        eHoriRel = text::RelOrientation::PAGE_RIGHT;
+        const tools::Long nWidth = rFSPA.nXaRight - rFSPA.nXaLeft;
+        rFSPA.nXaLeft = 0;
+        rFSPA.nXaRight = nWidth;
+    }
+
+    // #i24255# - position of floating screen objects in
+    // R2L layout are given in L2R layout, thus convert them of all
+    // floating screen objects, which are imported.
+    {
+        // Miserable miserable hack.
+        SwTwips nWidth = o3tl::saturating_sub(rFSPA.nXaRight, rFSPA.nXaLeft);
+        SwTwips nLeft = rFSPA.nXaLeft;
+        if (MiserableRTLGraphicsHack(nLeft, nWidth, eHoriOri,
+            eHoriRel))
+        {
+            rFSPA.nXaLeft = nLeft;
+            rFSPA.nXaRight = rFSPA.nXaLeft + nWidth;
+        }
+    }
+
+    // if the object is anchored inside a table cell, is horizontal aligned
+    // at frame|character and has wrap through, but its attribute
+    // 'layout in table cell' isn't set, convert its horizontal alignment to page text area.
+    // #i84783# - use new method <IsObjectLayoutInTableCell()>
+    if (m_nInTable &&
+            (eHoriRel == text::RelOrientation::FRAME || eHoriRel == text::RelOrientation::CHAR) &&
+            rFSPA.nwr == 3 &&
+            !IsObjectLayoutInTableCell(rRecord.nLayoutInTableCell))
+    {
+        eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
+    }
+
+    // Writer honours this wrap distance when aligned as "left" or "right",
+    // Word doesn't. Writer doesn't honour it when its "from left".
+    if (eHoriOri == text::HoriOrientation::LEFT)
+        rRecord.nDxWrapDistLeft = 0;
+    else if (eHoriOri == text::HoriOrientation::RIGHT)
+        rRecord.nDxWrapDistRight = 0;
+
+    sal_Int16 eVertRel;
+
+    eVertRel = aVertRelOriTab[ nYRelTo ]; // #i18732#
+    if (bCurSectionVertical && nYRelTo == 2)
+        eVertRel = text::RelOrientation::PAGE_PRINT_AREA;
+    // #i22673# - fill <eVertOri> in dependence of <eVertRel>
+    sal_Int16 eVertOri;
+    if (eVertRel == text::RelOrientation::TEXT_LINE)
+    {
+        eVertOri = aToLineVertOriTab[ nYAlign ];
+    }
+    else
+    {
+        eVertOri = aVertOriTab[ nYAlign ];
+    }
+
+    // Below line in word is a positive value, while in writer its
+    // negative
+    tools::Long nYPos = rFSPA.nYaTop;
+    // #i22673#
+    if ((eVertRel == text::RelOrientation::TEXT_LINE) && (eVertOri == text::VertOrientation::NONE))
+        nYPos = -nYPos;
+
+    SwFormatHoriOrient aHoriOri(MakeSafePositioningValue(bCurSectionVertical ? nYPos : rFSPA.nXaLeft),
+                                bCurSectionVertical ? eVertOri : eHoriOri,
+                                bCurSectionVertical ? eVertRel : eHoriRel);
+    if (4 <= nXAlign)
+        aHoriOri.SetPosToggle(true);
+    rFlySet.Put(aHoriOri);
+
+    rFlySet.Put(SwFormatVertOrient(MakeSafePositioningValue(!bCurSectionVertical ? nYPos : -rFSPA.nXaRight),
+                                   !bCurSectionVertical ? eVertOri : eHoriOri,
+                                   !bCurSectionVertical ? eVertRel : eHoriRel));
 
     return eAnchor;
 }
@@ -2526,7 +2505,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
         tools::Long nOldPos = m_pStrm->Tell();
 
         m_nDrawXOfs = m_nDrawYOfs = 0;
-        ReadGrafLayer1( pPF, nGrafAnchorCp );
+        ReadGrafLayer1(*pPF, nGrafAnchorCp);
 
         m_pStrm->Seek( nOldPos );
         return nullptr;
@@ -2537,17 +2516,17 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
 
     WW8_FC nStartFc;
     void* pF0;
-    if( !pPF->Get( nStartFc, pF0 ) ){
+    pPF->Get(nStartFc, pF0);
+    if (!pF0)
+    {
         OSL_ENSURE( false, "+Where is the graphic (2) ?" );
         return nullptr;
     }
 
-    WW8_FSPA_SHADOW* pFS = static_cast<WW8_FSPA_SHADOW*>(pF0);
-    WW8_FSPA*        pF;
+    WW8_FSPA_SHADOW& rFS = *static_cast<WW8_FSPA_SHADOW*>(pF0);
     WW8_FSPA aFSFA;
-    pF = &aFSFA;
-    WW8FSPAShadowToReal( pFS, pF );
-    if( !pF->nSpId )
+    WW8FSPAShadowToReal(rFS, aFSFA);
+    if (!aFSFA.nSpId)
     {
         OSL_ENSURE( false, "+Where is the graphic (3) ?" );
         return nullptr;
@@ -2556,7 +2535,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     if (!m_xMSDffManager->GetModel())
          m_xMSDffManager->SetModel(m_pDrawModel, 1440);
 
-    tools::Rectangle aRect(pF->nXaLeft,  pF->nYaTop, pF->nXaRight, pF->nYaBottom);
+    tools::Rectangle aRect(aFSFA.nXaLeft, aFSFA.nYaTop, aFSFA.nXaRight, aFSFA.nYaBottom);
     SvxMSDffImportData aData( aRect );
 
     /*
@@ -2568,7 +2547,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     m_rDoc.SetDocShell(nullptr);         // #i20540# Persist guard
 
     SdrObject* pObject = nullptr;
-    bool bOk = (m_xMSDffManager->GetShape(pF->nSpId, pObject, aData) && pObject);
+    bool bOk = (m_xMSDffManager->GetShape(aFSFA.nSpId, pObject, aData) && pObject);
 
     m_rDoc.SetDocShell(pPersist);  // #i20540# Persist guard
 
@@ -2583,10 +2562,10 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     if (pObject->GetRotateAngle())
     {
         tools::Rectangle aObjSnapRect(pObject->GetSnapRect()); // recalculates the SnapRect
-        pF->nXaLeft = aObjSnapRect.Left();
-        pF->nYaTop = aObjSnapRect.Top();
-        pF->nXaRight = aObjSnapRect.Right();
-        pF->nYaBottom = aObjSnapRect.Bottom();
+        aFSFA.nXaLeft = aObjSnapRect.Left();
+        aFSFA.nYaTop = aObjSnapRect.Top();
+        aFSFA.nXaRight = aObjSnapRect.Right();
+        aFSFA.nYaBottom = aObjSnapRect.Bottom();
     }
 
     bool bDone = false;
@@ -2614,7 +2593,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     Reader::ResetFrameFormatAttrs(aFlySet); // tdf#122425: Explicitly remove borders and spacing
     css::text::WrapTextMode eSurround = css::text::WrapTextMode_PARALLEL;
     bool bContour = false;
-    switch (pF->nwr)
+    switch (aFSFA.nwr)
     {
         case 0: // 0 like 2, but doesn't require absolute object
         case 2: // 2 wrap around absolute object
@@ -2634,9 +2613,9 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     }
 
     // if mode 2 or 4 also regard the additional parameters
-    if ( (2 == pF->nwr) || (4 == pF->nwr) )
+    if ((2 == aFSFA.nwr) || (4 == aFSFA.nwr))
     {
-        switch( pF->nwrk )
+        switch (aFSFA.nwrk)
         {
             // 0 wrap both sides
             case 0:
@@ -2717,7 +2696,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
                     && pData->GetId() == SW_UD_IMAPDATA)
             {
                 SwMacroInfo* macInf = dynamic_cast<SwMacroInfo*>(pData);
-                if( macInf && macInf->GetShapeId() == pF->nSpId )
+                if (macInf && macInf->GetShapeId() == aFSFA.nSpId)
                 {
                     lnName = macInf->GetHlink();
                     aObjName = macInf->GetName();
@@ -2743,7 +2722,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     // both flags <bBelowText> and <bDrawHell> have to be set to move object into the background.
     // #i46794# - it reveals that value of flag <bBelowText> can be neglected.
     const bool bMoveToBackgrd = pRecord->bDrawHell ||
-                                ( ( m_bIsHeader || m_bIsFooter ) && pF->nwr == 3 );
+                                ((m_bIsHeader || m_bIsFooter) && aFSFA.nwr == 3);
     if ( bMoveToBackgrd )
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
 
@@ -2756,27 +2735,26 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     if (bReplaceable)
     {
         // Single graphics or ole objects
-        pRetFrameFormat = ImportReplaceableDrawables(pObject, pOurNewObject, pRecord,
-            pF, aFlySet);
+        pRetFrameFormat = ImportReplaceableDrawables(pObject, pOurNewObject, *pRecord, aFSFA, aFlySet);
     }
     else
     {
         bDrawObj = true;
 
         // Drawing objects, (e.g. ovals or drawing groups)
-        if (pF->bRcaSimple)
+        if (aFSFA.bRcaSimple)
         {
-            pF->nbx = WW8_FSPA::RelPageBorder;
-            pF->nby = WW8_FSPA::RelPageBorder;
+            aFSFA.nbx = WW8_FSPA::RelPageBorder;
+            aFSFA.nby = WW8_FSPA::RelPageBorder;
         }
 
-        RndStdIds eAnchor = ProcessEscherAlign(pRecord, pF, aFlySet);
+        RndStdIds eAnchor = ProcessEscherAlign(*pRecord, aFSFA, aFlySet);
 
         // Should we, and is it possible to make this into a writer textbox
         if ((!(m_nIniFlags1 & WW8FL_NO_FLY_FOR_TXBX)) && pRecord->bReplaceByFly)
         {
-            pRetFrameFormat = ConvertDrawTextToFly(pObject, pOurNewObject, pRecord,
-                eAnchor, pF, aFlySet);
+            pRetFrameFormat
+                = ConvertDrawTextToFly(pObject, pOurNewObject, *pRecord, eAnchor, aFSFA, aFlySet);
             if (pRetFrameFormat)
             {
                 bDone = true;
@@ -2797,9 +2775,8 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
             {
                 /* Need to make sure that the correct layer ordering is applied. */
                 //  pass information, if object is in page header|footer to method.
-                m_xWWZOrder->InsertEscherObject( pObject, pF->nSpId,
-                                                 pRecord->bDrawHell,
-                                               m_bIsHeader || m_bIsFooter );
+                m_xWWZOrder->InsertEscherObject(pObject, aFSFA.nSpId, pRecord->bDrawHell,
+                                                m_bIsHeader || m_bIsFooter);
             }
             else
             {
@@ -2820,7 +2797,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
                 if (pRecord->pObj && pRecord->aTextId.nTxBxS)
                 { // #i52825# pRetFrameFormat can be NULL
                     pRetFrameFormat = MungeTextIntoDrawBox(
-                        pRecord, nGrafAnchorCp, pRetFrameFormat);
+                        *pRecord, nGrafAnchorCp, pRetFrameFormat);
                 }
             }
         }
@@ -2830,8 +2807,8 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     // #i44344#, #i44681# - positioning attributes already set
     if (pDrawFrameFormat)
         pDrawFrameFormat->PosAttrSet();
-    if (!IsInlineEscherHack())
-        MapWrapIntoFlyFormat(pRecord, pRetFrameFormat);
+    if (!IsInlineEscherHack() && pRetFrameFormat)
+        MapWrapIntoFlyFormat(*pRecord, *pRetFrameFormat);
 
     // Set frame name with object name
     if (pRetFrameFormat /*#i52825# */)
@@ -2864,15 +2841,15 @@ SwFrameFormat *SwWW8ImplReader::AddAutoAnchor(SwFrameFormat *pFormat)
     return pFormat;
 }
 
-SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
+SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec& rRecord,
     tools::Long nGrafAnchorCp, SwFrameFormat* pRetFrameFormat)
 {
-    SdrObject* pTrueObject = pRecord->pObj;
+    SdrObject* pTrueObject = rRecord.pObj;
 
     SdrTextObj* pSdrTextObj;
 
     // check for group object (e.g. two parentheses)
-    if (SdrObjGroup* pThisGroup = dynamic_cast<SdrObjGroup*>( pRecord->pObj) )
+    if (SdrObjGroup* pThisGroup = dynamic_cast<SdrObjGroup*>(rRecord.pObj))
     {
         // Group objects don't have text. Insert a text object into
         // the group for holding the text.
@@ -2892,7 +2869,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
         pThisGroup->GetSubList()->NbcInsertObject(pSdrTextObj);
     }
     else
-        pSdrTextObj = dynamic_cast<SdrTextObj*>( pRecord->pObj );
+        pSdrTextObj = dynamic_cast<SdrTextObj*>(rRecord.pObj);
 
     if( pSdrTextObj )
     {
@@ -2904,10 +2881,10 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
 
         const size_t nOrdNum = pSdrTextObj->GetOrdNum();
         bool bEraseThisObject;
-        InsertTxbxText( pSdrTextObj, &aObjSize, pRecord->aTextId.nTxBxS,
-            pRecord->aTextId.nSequence, nGrafAnchorCp, pRetFrameFormat,
-            (pSdrTextObj != pTrueObject) || (nullptr != pGroupObject),
-            bEraseThisObject, nullptr, nullptr, nullptr, nullptr, pRecord);
+        InsertTxbxText(pSdrTextObj, &aObjSize, rRecord.aTextId.nTxBxS, rRecord.aTextId.nSequence,
+                       nGrafAnchorCp, pRetFrameFormat,
+                       (pSdrTextObj != pTrueObject) || (nullptr != pGroupObject), bEraseThisObject,
+                       nullptr, nullptr, nullptr, nullptr, &rRecord);
 
         // was this object replaced ??
         if (bEraseThisObject)
@@ -2924,9 +2901,9 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
                     // Replace object in the Z-Order-List
                     m_xMSDffManager->ExchangeInShapeOrder(pSdrTextObj, 0, pNewObj);
                     // now delete object
-                    SdrObject::Free( pRecord->pObj );
+                    SdrObject::Free(rRecord.pObj);
                     // and save the new object.
-                    pRecord->pObj = pNewObj;
+                    rRecord.pObj = pNewObj;
                 }
             }
             else
@@ -2941,7 +2918,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
                 m_rDoc.DelFrameFormat( pRetFrameFormat );
                 pRetFrameFormat = nullptr;
                 // also delete the object record
-                pRecord->pObj = nullptr;
+                rRecord.pObj = nullptr;
             }
         }
         else
@@ -2949,19 +2926,21 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
             // use ww8-default border distance
             SfxItemSet aItemSet(m_pDrawModel->GetItemPool(),
                 svl::Items<SDRATTR_TEXT_LEFTDIST, SDRATTR_TEXT_LOWERDIST>{});
-            aItemSet.Put( makeSdrTextLeftDistItem( pRecord->nDxTextLeft ) );
-            aItemSet.Put( makeSdrTextRightDistItem( pRecord->nDxTextRight  ) );
-            aItemSet.Put( makeSdrTextUpperDistItem( pRecord->nDyTextTop    ) );
-            aItemSet.Put( makeSdrTextLowerDistItem( pRecord->nDyTextBottom ) );
+            aItemSet.Put(makeSdrTextLeftDistItem(rRecord.nDxTextLeft));
+            aItemSet.Put(makeSdrTextRightDistItem(rRecord.nDxTextRight));
+            aItemSet.Put(makeSdrTextUpperDistItem(rRecord.nDyTextTop));
+            aItemSet.Put(makeSdrTextLowerDistItem(rRecord.nDyTextBottom));
             pSdrTextObj->SetMergedItemSetAndBroadcast(aItemSet);
         }
     }
     return pRetFrameFormat;
 }
 
-SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
-    SdrObject* &rpOurNewObject, SvxMSDffImportRec const * pRecord, RndStdIds eAnchor,
-    WW8_FSPA const *pF, SfxItemSet &rFlySet)
+SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject*& rpObject,
+                                                        SdrObject*& rpOurNewObject,
+                                                        const SvxMSDffImportRec& rRecord,
+                                                        RndStdIds eAnchor, const WW8_FSPA& rF,
+                                                        SfxItemSet &rFlySet)
 {
     SwFlyFrameFormat* pRetFrameFormat = nullptr;
     tools::Long nStartCp;
@@ -2969,22 +2948,24 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
 
     // Check if this textbox chain contains text as conversion of an empty
     // chain would not make sense.
-    if ( TxbxChainContainsRealText(pRecord->aTextId.nTxBxS,nStartCp,nEndCp) )
+    if (TxbxChainContainsRealText(rRecord.aTextId.nTxBxS, nStartCp, nEndCp))
     {
         // The Text is not read into SdrTextObj!  Rather insert a frame and
         // insert the text from nStartCp to nEndCp.
 
         // More attributes can be used in a frame compared to the
         // Edit-Engine, and it can contain field, OLEs or graphics...
-        tools::Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
-            pRecord->nDxTextRight, pRecord->nDyTextBottom);
+        tools::Rectangle aInnerDist(rRecord.nDxTextLeft, rRecord.nDyTextTop, rRecord.nDxTextRight,
+                                    rRecord.nDyTextBottom);
 
-        SwFormatFrameSize aFrameSize(SwFrameSize::Fixed, pF->nXaRight - pF->nXaLeft, pF->nYaBottom - pF->nYaTop);
-        aFrameSize.SetWidthSizeType(pRecord->bAutoWidth ? SwFrameSize::Variable : SwFrameSize::Fixed);
+        SwFormatFrameSize aFrameSize(SwFrameSize::Fixed, rF.nXaRight - rF.nXaLeft,
+                                     rF.nYaBottom - rF.nYaTop);
+        aFrameSize.SetWidthSizeType(rRecord.bAutoWidth ? SwFrameSize::Variable
+                                                       : SwFrameSize::Fixed);
         rFlySet.Put(aFrameSize);
 
-        MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
-            pRecord->eLineDashing, pRecord->eShapeType, aInnerDist );
+        MatchSdrItemsIntoFlySet(rpObject, rFlySet, rRecord.eLineStyle, rRecord.eLineDashing,
+                                rRecord.eShapeType, aInnerDist);
 
         SdrTextObj *pSdrTextObj = dynamic_cast<SdrTextObj*>(rpObject);
         if (pSdrTextObj && pSdrTextObj->IsVerticalWriting())
@@ -3020,30 +3001,29 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             contact object, while a raw rpOutNewObject stored here becomes
             deleted and useless.
             */
-            m_xMSDffManager->StoreShapeOrder(pF->nSpId,
-                (static_cast<sal_uLong>(pRecord->aTextId.nTxBxS) << 16) +
-                pRecord->aTextId.nSequence, nullptr, pRetFrameFormat);
+            m_xMSDffManager->StoreShapeOrder(rF.nSpId,
+                (static_cast<sal_uLong>(rRecord.aTextId.nTxBxS) << 16) +
+                rRecord.aTextId.nSequence, nullptr, pRetFrameFormat);
 
             // The Contact object has to be inserted into the draw page, so
             // SwWW8ImplReader::LoadDoc1() can determine the z-order.
             if (!rpOurNewObject->IsInserted())
             {
                 // pass information, if object is in page header|footer to method.
-                m_xWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
-                                                 pRecord->bDrawHell,
-                                               m_bIsHeader || m_bIsFooter );
+                m_xWWZOrder->InsertEscherObject(rpOurNewObject, rF.nSpId, rRecord.bDrawHell,
+                                                m_bIsHeader || m_bIsFooter);
             }
         }
 
         // Box-0 receives the text for the whole chain!
-        if( !pRecord->aTextId.nSequence )
+        if (!rRecord.aTextId.nSequence)
         {
             // save flags etc and reset them
             WW8ReaderSave aSave( this );
 
             MoveInsideFly(pRetFrameFormat);
 
-            m_xWWZOrder->InsideEscher(pF->nSpId);
+            m_xWWZOrder->InsideEscher(rF.nSpId);
 
             // read in the text
             m_bTxbxFlySection = true;
@@ -3064,8 +3044,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
     return pRetFrameFormat;
 }
 
-void MatchEscherMirrorIntoFlySet(const SvxMSDffImportRec &rRecord,
-    SfxItemSet &rFlySet)
+void MatchEscherMirrorIntoFlySet(const SvxMSDffImportRec &rRecord, SfxItemSet &rFlySet)
 {
     if (rRecord.bVFlip || rRecord.bHFlip)
     {
@@ -3080,35 +3059,34 @@ void MatchEscherMirrorIntoFlySet(const SvxMSDffImportRec &rRecord,
     }
 }
 
-SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
-    SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, WW8_FSPA *pF,
-    SfxItemSet &rFlySet )
+SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables(SdrObject* &rpObject,
+                                                              SdrObject* &rpOurNewObject,
+                                                              SvxMSDffImportRec& rRecord,
+                                                              WW8_FSPA& rF,
+                                                              SfxItemSet &rFlySet )
 {
     SwFlyFrameFormat* pRetFrameFormat = nullptr;
-    sal_Int32 nWidthTw = o3tl::saturating_sub(pF->nXaRight, pF->nXaLeft);
+    sal_Int32 nWidthTw = o3tl::saturating_sub(rF.nXaRight, rF.nXaLeft);
     if (0 > nWidthTw)
         nWidthTw = 0;
-    sal_Int32 nHeightTw = o3tl::saturating_sub(pF->nYaBottom, pF->nYaTop);
+    sal_Int32 nHeightTw = o3tl::saturating_sub(rF.nYaBottom, rF.nYaTop);
     if (0 > nHeightTw)
         nHeightTw = 0;
 
-    ProcessEscherAlign(pRecord, pF, rFlySet);
+    ProcessEscherAlign(rRecord, rF, rFlySet);
 
     rFlySet.Put(SwFormatFrameSize(SwFrameSize::Fixed, nWidthTw, nHeightTw));
 
     SfxItemSet aGrSet(m_rDoc.GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END-1>{});
 
-    if (pRecord)
-    {
-        // Note that the escher inner distance only seems to be honoured in
-        // word for textboxes, not for graphics and ole objects.
-        tools::Rectangle aInnerDist(0, 0, 0, 0);
+    // Note that the escher inner distance only seems to be honoured in
+    // word for textboxes, not for graphics and ole objects.
+    tools::Rectangle aInnerDist(0, 0, 0, 0);
 
-        MatchSdrItemsIntoFlySet(rpObject, rFlySet, pRecord->eLineStyle,
-            pRecord->eLineDashing, pRecord->eShapeType, aInnerDist);
+    MatchSdrItemsIntoFlySet(rpObject, rFlySet, rRecord.eLineStyle, rRecord.eLineDashing,
+                            rRecord.eShapeType, aInnerDist);
 
-        MatchEscherMirrorIntoFlySet(*pRecord, aGrSet);
-    }
+    MatchEscherMirrorIntoFlySet(rRecord, aGrSet);
 
     OUString aObjectName(rpObject->GetName());
     if (OBJ_OLE2 == rpObject->GetObjIdentifier())
@@ -3146,11 +3124,8 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
 
     if (pRetFrameFormat)
     {
-        if( pRecord )
-        {
-            if( OBJ_OLE2 != rpObject->GetObjIdentifier() )
-                SetAttributesAtGrfNode( pRecord, pRetFrameFormat, pF );
-        }
+        if (OBJ_OLE2 != rpObject->GetObjIdentifier())
+            SetAttributesAtGrfNode(rRecord, *pRetFrameFormat, &rF);
         // avoid multiple occurrences of the same graphic name
         m_aGrfNameGenerator.SetUniqueGraphName(pRetFrameFormat, aObjectName);
     }
@@ -3174,15 +3149,14 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     if (rpOurNewObject)
     {
         if (!m_bHdFtFootnoteEdn)
-            m_xMSDffManager->StoreShapeOrder(pF->nSpId, 0, rpOurNewObject );
+            m_xMSDffManager->StoreShapeOrder(rF.nSpId, 0, rpOurNewObject);
 
         // The Contact-Object MUST be set in the Draw-Page, so that in
         // SwWW8ImplReader::LoadDoc1() the Z-Order can be defined !!!
         if (!rpOurNewObject->IsInserted())
         {
             // pass information, if object is in page header|footer to method.
-            m_xWWZOrder->InsertEscherObject(rpOurNewObject, pF->nSpId,
-                                            pRecord && pRecord->bDrawHell,
+            m_xWWZOrder->InsertEscherObject(rpOurNewObject, rF.nSpId, rRecord.bDrawHell,
                                             m_bIsHeader || m_bIsFooter);
         }
     }
