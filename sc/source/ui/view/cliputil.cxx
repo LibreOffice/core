@@ -98,11 +98,21 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
     }
     if (comphelper::LibreOfficeKit::isActive())
     {
-        const ScLineBreakCell* pItem = rThisDoc.GetAttr(nThisCol, nThisRow, nThisTab, ATTR_LINEBREAK);
-        if (pItem && pItem->GetValue())
+        bool entireColumnOrRowSelected = false;
+        if (pOwnClip)
+        {
+            ScClipParam clipParam = pOwnClip->GetDocument()->GetClipParam();
+            if (clipParam.maRanges.size() > 0)
+            {
+                if (clipParam.maRanges[0].aEnd.Col() == MAXCOLCOUNT -1 || clipParam.maRanges[0].aEnd.Row() == MAXROWCOUNT - 1)
+                    entireColumnOrRowSelected = true;
+            }
+        }
+        const SfxBoolItem* pItem = rThisDoc.GetAttr(nThisCol, nThisRow, nThisTab, ATTR_LINEBREAK);
+        if (pItem->GetValue() || entireColumnOrRowSelected)
         {
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
-                pTabViewShell, false /* bColumns */, true /* bRows */, true /* bSizes*/,
+                pTabViewShell, true /* bColumns */, true /* bRows */, true /* bSizes*/,
                 true /* bHidden */, true /* bFiltered */, true /* bGroups */, nThisTab);
         }
     }

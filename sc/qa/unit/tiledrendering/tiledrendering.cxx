@@ -2336,8 +2336,8 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
     pView->GetViewFrame()->GetBindings().Execute(SID_PASTE);
     Scheduler::ProcessEventsToIdle();
 
-    // SG invalidations for rows
-    CPPUNIT_ASSERT_EQUAL(OString("rows"), aView.m_sInvalidateSheetGeometry);
+    // SG invalidations for all
+    CPPUNIT_ASSERT_EQUAL(OString("all"), aView.m_sInvalidateSheetGeometry);
 
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
