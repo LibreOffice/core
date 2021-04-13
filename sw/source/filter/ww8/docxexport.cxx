@@ -1685,17 +1685,17 @@ void DocxExport::WriteMainText()
 rtl::Reference<FastAttributeList> DocxExport::MainXmlNamespaces()
 {
     rtl::Reference<FastAttributeList> pAttr = FastSerializerHelper::createAttrList();
-    pAttr->add( FSNS( XML_xmlns, XML_o ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(vmlOffice)), RTL_TEXTENCODING_UTF8).getStr() );
-    pAttr->add( FSNS( XML_xmlns, XML_r ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr() );
-    pAttr->add( FSNS( XML_xmlns, XML_v ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(vml)), RTL_TEXTENCODING_UTF8).getStr() );
-    pAttr->add( FSNS( XML_xmlns, XML_w ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8).getStr() );
-    pAttr->add( FSNS( XML_xmlns, XML_w10 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(vmlWord)), RTL_TEXTENCODING_UTF8).getStr() );
-    pAttr->add( FSNS( XML_xmlns, XML_wp ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(dmlWordDr)), RTL_TEXTENCODING_UTF8).getStr() );
-    pAttr->add( FSNS( XML_xmlns, XML_wps ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(wps)), RTL_TEXTENCODING_UTF8).getStr() );
-    pAttr->add( FSNS( XML_xmlns, XML_wpg ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(wpg)), RTL_TEXTENCODING_UTF8).getStr() );
-    pAttr->add( FSNS( XML_xmlns, XML_mc ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(mce)), RTL_TEXTENCODING_UTF8).getStr() );
-    pAttr->add( FSNS( XML_xmlns, XML_wp14 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(wp14)), RTL_TEXTENCODING_UTF8).getStr() );
-    pAttr->add( FSNS( XML_xmlns, XML_w14 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(w14)), RTL_TEXTENCODING_UTF8).getStr() );
+    pAttr->add( FSNS( XML_xmlns, XML_o ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(vmlOffice)), RTL_TEXTENCODING_UTF8) );
+    pAttr->add( FSNS( XML_xmlns, XML_r ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8) );
+    pAttr->add( FSNS( XML_xmlns, XML_v ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(vml)), RTL_TEXTENCODING_UTF8) );
+    pAttr->add( FSNS( XML_xmlns, XML_w ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8) );
+    pAttr->add( FSNS( XML_xmlns, XML_w10 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(vmlWord)), RTL_TEXTENCODING_UTF8) );
+    pAttr->add( FSNS( XML_xmlns, XML_wp ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(dmlWordDr)), RTL_TEXTENCODING_UTF8) );
+    pAttr->add( FSNS( XML_xmlns, XML_wps ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(wps)), RTL_TEXTENCODING_UTF8) );
+    pAttr->add( FSNS( XML_xmlns, XML_wpg ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(wpg)), RTL_TEXTENCODING_UTF8) );
+    pAttr->add( FSNS( XML_xmlns, XML_mc ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(mce)), RTL_TEXTENCODING_UTF8) );
+    pAttr->add( FSNS( XML_xmlns, XML_wp14 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(wp14)), RTL_TEXTENCODING_UTF8) );
+    pAttr->add( FSNS( XML_xmlns, XML_w14 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(w14)), RTL_TEXTENCODING_UTF8) );
     pAttr->add( FSNS( XML_mc, XML_Ignorable ), "w14 wp14" );
     return pAttr;
 }
