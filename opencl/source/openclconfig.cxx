@@ -11,7 +11,7 @@
 
 #include <string_view>
 
-#include <unicode/regex.h>
+#include <regex>
 
 #include <comphelper/configuration.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -120,12 +120,8 @@ bool match(const OUString& rPattern, const OUString& rInput)
     if (rPattern.isEmpty())
         return true;
 
-    UErrorCode nIcuError(U_ZERO_ERROR);
-    icu::UnicodeString sIcuPattern(reinterpret_cast<const UChar*>(rPattern.getStr()), rPattern.getLength());
-    icu::UnicodeString sIcuInput(reinterpret_cast<const UChar*>(rInput.getStr()), rInput.getLength());
-    icu::RegexMatcher aMatcher(sIcuPattern, sIcuInput, 0, nIcuError);
-
-    return U_SUCCESS(nIcuError) && aMatcher.matches(nIcuError) && U_SUCCESS(nIcuError);
+    const std::regex regex(rPattern.toUtf8().getStr());
+    return std::regex_match(rInput.toUtf8().getStr(), regex);
 }
 
 bool match(const OpenCLConfig::ImplMatcher& rListEntry, const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice)
