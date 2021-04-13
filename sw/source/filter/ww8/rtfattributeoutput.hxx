@@ -48,7 +48,8 @@ public:
     void RTLAndCJKState(bool bIsRTL, sal_uInt16 nScript) override;
 
     /// Start of the paragraph.
-    void StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo) override;
+    sal_Int32 StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo,
+                             bool bGenerateParaId) override;
 
     /// End of the paragraph.
     void EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner) override;

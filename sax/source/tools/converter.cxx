@@ -2328,6 +2328,21 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
     return bConverted;
 }
 
+void Converter::convertBytesToHexBinary(OUStringBuffer& rBuffer, const void* pBytes,
+                                        sal_Int32 nBytes)
+{
+    rBuffer.setLength(0);
+    rBuffer.ensureCapacity(nBytes * 2);
+    auto pChars = static_cast<const unsigned char*>(pBytes);
+    for (sal_Int32 i = 0; i < nBytes; ++i)
+    {
+        sal_Int32 c = *pChars++;
+        if (c < 16)
+            rBuffer.append('0');
+        rBuffer.append(c, 16);
+    }
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
