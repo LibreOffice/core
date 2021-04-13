@@ -19,6 +19,58 @@
     },
     {
       "key": {
+        "uuid": "b1aefc4f_e30ea6bf",
+        "filename": "framework/source/uielement/toolbarmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-04-13T06:36:04Z",
+      "side": 0,
+      "message": "Hi, this shouldn\u0027t be removed. instead of m_pImpl-\u003eInit() I called just Init() in my code.... that\u0027s why it is unused",
+      "parentUuid": "f588c522_ed29fd7a",
+      "revId": "28fbf7094c1e3435302fb00c1caf8a4dbc8a5310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc1eb925_dc8608ab",
+        "filename": "framework/source/uielement/toolbarmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-04-13T06:36:04Z",
+      "side": 0,
+      "message": "here m_pImpl-\u003eInit();",
+      "revId": "28fbf7094c1e3435302fb00c1caf8a4dbc8a5310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3f5d304_503c1ae1",
+        "filename": "framework/source/uielement/toolbarmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-04-13T06:36:04Z",
+      "side": 0,
+      "message": "here m_pImpl-\u003eInit();",
+      "revId": "28fbf7094c1e3435302fb00c1caf8a4dbc8a5310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6fbdb1d0_b9b4869a",
         "filename": "include/tools/fract.hxx",
         "patchSetId": 1
