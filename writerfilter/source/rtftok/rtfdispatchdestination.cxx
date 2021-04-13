@@ -63,6 +63,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 break;
             case RTFKeyword::FIELD:
                 m_aStates.top().setDestination(Destination::FIELD);
+                m_aStates.top().setFieldLocked(false);
                 break;
             case RTFKeyword::FLDINST:
             {

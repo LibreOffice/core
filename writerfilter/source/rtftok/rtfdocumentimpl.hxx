@@ -516,6 +516,8 @@ public:
     RTFBorderState getBorderState() const { return m_nBorderState; }
     void setFieldStatus(RTFFieldStatus eFieldStatus) { m_eFieldStatus = eFieldStatus; }
     RTFFieldStatus getFieldStatus() const { return m_eFieldStatus; }
+    void setFieldLocked(bool bSet) { m_bFieldLocked = bSet; }
+    bool isFieldLocked() { return m_bFieldLocked; }
     void setDestination(Destination eDestination) { m_eDestination = eDestination; }
     Destination getDestination() const { return m_eDestination; }
     void setInternalState(RTFInternalState nInternalState) { m_nInternalState = nInternalState; }
@@ -527,6 +529,7 @@ private:
     RTFInternalState m_nInternalState;
     Destination m_eDestination;
     RTFFieldStatus m_eFieldStatus;
+    bool m_bFieldLocked;
     RTFBorderState m_nBorderState;
     // font table, stylesheet table
     RTFSprms m_aTableSprms;
