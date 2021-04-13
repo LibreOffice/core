@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ec39742_a94d9651",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-04-13T06:19:12Z",
+      "side": 1,
+      "message": "Don\u0027t see the need to restart a dialog that is opened via UNO command.",
+      "range": {
+        "startLine": 59,
+        "startChar": 38,
+        "endLine": 59,
+        "endChar": 44
+      },
+      "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
