@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d6c5799e_a0e8e268",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-04-13T07:09:48Z",
+      "side": 1,
+      "message": "So Should I rename this function to something like \"GenerateBarCode\" which might also cover the fact that the QR Code itself is a type of Bar Code(matrix) as you said?",
+      "parentUuid": "26cacbfa_e1fe26b7",
+      "range": {
+        "startLine": 103,
+        "startChar": 8,
+        "endLine": 103,
+        "endChar": 22
+      },
+      "revId": "e80cc6c663d2c05db411749c2097956cba5eebe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "722b0862_62b33e36",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2021-04-13T06:42:15Z",
       "side": 1,
       "message": "Do I understand it right, that you initially initialize the QRType with the content of t, and after that re-assign it to another string unconditionally? Why?\n\nIt could be cleaner then to avoid the intermediate OString, and do something like\n\n    std::string QRType \u003d (aQRType \u003d\u003d \"QR Code\") ? \"QR_CODE\" : \"CODE_128\";\n\nor even introduce an utility mapper between OUStrings coming in aQRType and std::strings accepted by ZXing::BarcodeFormatFromString.\n\nAlso why do you only limit to two types?",
+      "revId": "e80cc6c663d2c05db411749c2097956cba5eebe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70b65ea2_951c085b",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-04-13T07:09:48Z",
+      "side": 1,
+      "message": "Actually I was a bit confused about converting the OUString to std::string, also I thought comparison between a normal string like \"QR Code\" with the OUString type wasn\u0027t allowed. Nevermind, I would like to ask you that to serve the purpose of the \"utility mapper\" that you said would map the type of BarCode in OUString format to ZXing\u0027s acceptable string format should a seperate function be created? Also, please guide me regarding what more types should be added, should every type available in the ZXing lib be added or some special ones be added. Thanks!",
+      "parentUuid": "722b0862_62b33e36",
       "revId": "e80cc6c663d2c05db411749c2097956cba5eebe0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "cbcc4262_7e1b87a9",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-04-13T07:09:48Z",
+      "side": 1,
+      "message": "So would something like \"m_xComboType\" be descriptive here?",
+      "parentUuid": "c6c97113_e94c91d4",
+      "range": {
+        "startLine": 170,
+        "startChar": 46,
+        "endLine": 170,
+        "endChar": 50
+      },
+      "revId": "e80cc6c663d2c05db411749c2097956cba5eebe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7b3254a4_3fc5c88f",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 3
@@ -76,6 +142,30 @@
       "writtenOn": "2021-04-13T06:42:15Z",
       "side": 1,
       "message": "Don\u0027t we expect the strings in the combo box to be translatable? It seems that passing a translatable string to a function expecting API values is not optimal. Better take *number* of selected element, and have a mapping from the numeric positions to the API type names.",
+      "range": {
+        "startLine": 245,
+        "startChar": 4,
+        "endLine": 245,
+        "endChar": 16
+      },
+      "revId": "e80cc6c663d2c05db411749c2097956cba5eebe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b50a1926_b5946eaf",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-04-13T07:09:48Z",
+      "side": 1,
+      "message": "Okay, so here what you mean is that we should take the serial value of the selected type (for example \"QR Code\" -\u003e 1) and then map it accordingly to the type selected by creating a separate function for it?",
+      "parentUuid": "7b3254a4_3fc5c88f",
       "range": {
         "startLine": 245,
         "startChar": 4,
