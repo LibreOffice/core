@@ -82,6 +82,13 @@ $(call gb_CppunitTest_get_target,sw_ooxmlexport$(1)) : $(call gb_Library_get_tar
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_ooxmlexport$(1)))
 
+ifeq ($(OS),WNT)
+# gpgme-w32spawn.exe is needed in workdir/LinkTarget/Executable
+$(eval $(call gb_CppunitTest_use_packages,sw_ooxmlexport$(1),\
+    $(call gb_Helper_optional,GPGMEPP,gpgmepp)\
+))
+endif
+
 endef
 
 # vim: set noet sw=4 ts=4:
