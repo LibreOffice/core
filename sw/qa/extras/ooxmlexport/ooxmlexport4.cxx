@@ -1044,8 +1044,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
     // More precisely, the table in the first page was clipped.
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        sal_Int32 nFlyPrtHeight = getXPath(pXmlDoc, "(/root/page[1]//fly)[1]/infos/prtBounds", "height").toInt32();
-        sal_Int32 nTableHeight = getXPath(pXmlDoc, "(/root/page[1]//fly)[1]/tab/infos/bounds", "height").toInt32();
+        sal_Int32 nFlyPrtHeight = getXPath(pXmlDoc, "(/root/page[1]//anchored/fly)[1]/infos/prtBounds", "height").toInt32();
+        sal_Int32 nTableHeight = getXPath(pXmlDoc, "(/root/page[1]//anchored/fly)[1]/tab/infos/bounds", "height").toInt32();
         CPPUNIT_ASSERT_MESSAGE("The table is clipped in a fly frame.", nFlyPrtHeight >= nTableHeight);
     }
 

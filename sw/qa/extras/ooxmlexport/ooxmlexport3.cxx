@@ -1149,13 +1149,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorWidthFromInsideOutsideMarg
     // The open book: outside --text-- inside | inside --text-- outside
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Inside
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "width", "1440");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds", "width", "1440");
     // Outside
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "width", "2552");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds", "width", "2552");
     // Outside
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "width", "2552");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[3]/bounds", "width", "2552");
     // Inside
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[4]/bounds", "width", "1440");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[4]/bounds", "width", "1440");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBodyPrUpright, "tdf123610_handle_upright.docx")
