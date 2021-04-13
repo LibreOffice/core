@@ -153,7 +153,7 @@ public:
     virtual void RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript ) = 0;
 
     /// Start of the paragraph.
-    virtual void StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo ) = 0;
+    virtual sal_Int32 StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, bool bGenerateParaId ) = 0;
 
     /// End of the paragraph.
     virtual void EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner ) = 0;

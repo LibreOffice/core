@@ -722,6 +722,8 @@ void SwModelTestBase::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w14"),
                        BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordml"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w15"),
+                       BAD_CAST("http://schemas.microsoft.com/office/word/2012/wordml"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("m"),
                        BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/math"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("ContentType"),

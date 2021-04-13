@@ -189,7 +189,7 @@ public:
     /// Writes the shape using drawingML syntax.
     void OutputDML( css::uno::Reference< css::drawing::XShape > const & xShape );
 
-    void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
+    sal_Int32 WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp, bool bNeedsLastParaId);
 
     virtual ExportFormat GetExportFormat() const override { return ExportFormat::DOCX; }
 
