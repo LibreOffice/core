@@ -23,6 +23,9 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfac.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
+#include <cmdid.h>
 #include <view.hxx>
 #include <docsh.hxx>
 #include "mmdocselectpage.hxx"
@@ -50,6 +53,7 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(weld::Container* pPage, SwMai
     , m_xBrowseTemplatePB(m_xBuilder->weld_button("browsetemplate"))
     , m_xRecentDocLB(m_xBuilder->weld_combo_box("recentdoclb"))
     , m_xDataSourceWarningFT(m_xBuilder->weld_label("datasourcewarning"))
+    , m_xExchangeDatabasePB(m_xBuilder->weld_button("exchangedatabase"))
 {
     m_xCurrentDocRB->set_active(true);
     DocSelectHdl(*m_xNewDocRB);
@@ -64,6 +68,9 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(weld::Container* pPage, SwMai
     Link<weld::Button&,void> aFileSelectHdl = LINK(this, SwMailMergeDocSelectPage, FileSelectHdl);
     m_xBrowseDocPB->connect_clicked(aFileSelectHdl);
     m_xBrowseTemplatePB->connect_clicked(aFileSelectHdl);
+
+    Link<weld::Button&,void> aExchangeDatabaseHdl = LINK(this, SwMailMergeDocSelectPage, ExchangeDatabaseHdl);
+    m_xExchangeDatabasePB->connect_clicked(aExchangeDatabaseHdl);
 
     const uno::Sequence< OUString >& rDocs =
                             m_pWizard->GetConfigItem().GetSavedDocuments();
@@ -153,6 +160,13 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, weld::Button&, rButton, void)
     }
     m_pWizard->UpdateRoadmap();
     m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_OUTPUTTYPETPAGE));
+}
+
+IMPL_LINK_NOARG(SwMailMergeDocSelectPage, ExchangeDatabaseHdl, weld::Button&, void)
+{
+    m_pWizard->GetSwView()->GetViewFrame()->GetDispatcher()->Execute(FN_CHANGE_DBFIELD);
+    m_xDataSourceWarningFT->hide();
+    m_pWizard->enableButtons(WizardButtonFlags::NEXT, true);
 }
 
 bool SwMailMergeDocSelectPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
