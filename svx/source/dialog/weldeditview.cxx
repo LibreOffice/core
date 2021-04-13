@@ -65,6 +65,12 @@ bool WeldEditView::HasSelection() const
     return pEditView && pEditView->HasSelection();
 }
 
+void WeldEditView::Delete()
+{
+    if (EditView* pEditView = GetEditView())
+        pEditView->DeleteSelected();
+}
+
 void WeldEditView::Cut()
 {
     if (EditView* pEditView = GetEditView())
@@ -83,7 +89,10 @@ void WeldEditView::Paste()
         pEditView->Paste();
 }
 
-WeldEditView::WeldEditView() {}
+WeldEditView::WeldEditView()
+    : m_bAcceptsTab(false)
+{
+}
 
 // tdf#127033 want to use UI font so override makeEditEngine to enable that
 void WeldEditView::makeEditEngine()
@@ -201,7 +210,7 @@ bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
 
     sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
 
-    if (nKey == KEY_TAB)
+    if (nKey == KEY_TAB && !GetAcceptsTab())
     {
         return false;
     }
