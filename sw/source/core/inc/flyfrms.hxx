@@ -170,6 +170,7 @@ protected:
         #i28701#
     */
     virtual void RegisterAtCorrectPage() override;
+    virtual void RegisterAtPage(SwPageFrame &) override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 public:
