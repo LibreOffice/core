@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,jfreereport_libserializer,\
 
 $(eval $(call gb_UnpackedTarball_add_patches,jfreereport_libserializer,\
 	external/jfreereport/patches/common_build.patch \
+	external/jfreereport/patches/libserializer-1.1.2-remove-commons-logging.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

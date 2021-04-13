@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,jfreereport_libfonts,\
 $(eval $(call gb_UnpackedTarball_add_patches,jfreereport_libfonts,\
 	external/jfreereport/patches/common_build.patch \
 	external/jfreereport/patches/libfonts-$(LIBFONTS_VERSION)-deprecated.patch \
+	external/jfreereport/patches/libfonts-1.1.3-remove-commons-logging.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
