@@ -979,8 +979,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
-    pDocPrAttrList->add(XML_name,
-                        OUStringToOString(pSdrObject->GetName(), RTL_TEXTENCODING_UTF8).getStr());
+    pDocPrAttrList->add(XML_name, OUStringToOString(pSdrObject->GetName(), RTL_TEXTENCODING_UTF8));
     if (!pSdrObject->GetTitle().isEmpty())
         pDocPrAttrList->add(XML_title,
                             OUStringToOString(pSdrObject->GetTitle(), RTL_TEXTENCODING_UTF8));
@@ -1356,8 +1355,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
             = sax_fastparser::FastSerializerHelper::createAttrList();
         pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
-        pDocPrAttrList->add(
-            XML_name, OUStringToOString(rFrameFormat.GetName(), RTL_TEXTENCODING_UTF8).getStr());
+        pDocPrAttrList->add(XML_name,
+                            OUStringToOString(rFrameFormat.GetName(), RTL_TEXTENCODING_UTF8));
         pFS->singleElementNS(XML_wp, XML_docPr, pDocPrAttrList);
 
         pFS->startElementNS(XML_a, XML_graphic, FSNS(XML_xmlns, XML_a),

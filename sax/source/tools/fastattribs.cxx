@@ -111,7 +111,7 @@ void FastAttributeList::add( sal_Int32 nToken, const char* pValue, size_t nValue
         mpChunk = p;
 
     }
-    strncpy(mpChunk + nWritePosition, pValue, nValueLength);
+    memcpy(mpChunk + nWritePosition, pValue, nValueLength);
     mpChunk[nWritePosition + nValueLength] = '\0';
 }
 
