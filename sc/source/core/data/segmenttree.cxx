@@ -247,10 +247,10 @@ bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getRangeData(SCCOLROW nPos, 
         maSegments.build_tree();
     }
 
-    auto it = maSegments.search_tree(nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2);
-    if (!it.second)
+    auto [it,found] = maSegments.search_tree(nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2);
+    if (!found)
         return false;
-
+    maItr = it; // cache the iterator to speed up ForwardIterator.
     rData.mnPos2 = rData.mnPos2-1; // end point is not inclusive.
     return true;
 }
@@ -597,12 +597,23 @@ bool ScFlatUInt16RowSegments::ForwardIterator::getValue(SCROW nPos, sal_uInt16& 
     if (mnCurPos > mnLastPos)
     {
         // position not in the current segment.  Update the current value.
-        ScFlatUInt16RowSegments::RangeData aData;
-        if (!mrSegs.getRangeData(mnCurPos, aData))
-            return false;
+        ScFlatUInt16SegmentsImpl::RangeData aData;
+        if (mnLastPos == -1)
+        {
+            // first time in this method, use the tree search based method
+            if (!mrSegs.mpImpl->getRangeData(mnCurPos, aData))
+                return false;
+        }
+        else
+        {
+            // but on subsequent calls, use the leaf method, which is faster
+            // because we have a cached iterator.
+            if (!mrSegs.mpImpl->getRangeDataLeaf(mnCurPos, aData))
+                return false;
+        }
 
         mnCurValue = aData.mnValue;
-        mnLastPos = aData.mnRow2;
+        mnLastPos = aData.mnPos2;
     }
 
     rVal = mnCurValue;
