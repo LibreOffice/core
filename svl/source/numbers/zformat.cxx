@@ -2446,7 +2446,6 @@ bool SvNumberformat::GetOutputString(double fNumber,
                                      const Color** ppColor)
 {
     bool bRes = false;
-    OUStringBuffer sBuff(64);
     OutString.clear();
     *ppColor = nullptr; // No color change
     if (eType & SvNumFormatType::LOGICAL)
@@ -2461,6 +2460,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
         }
         return false;
     }
+    OUStringBuffer sBuff(64);
     if (eType & SvNumFormatType::TEXT)
     {
         ImpGetOutputStandard(fNumber, sBuff);
