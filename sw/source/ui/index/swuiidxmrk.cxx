@@ -51,8 +51,12 @@
 #include <svl/cjkoptions.hxx>
 #include <comphelper/fileurl.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <tools/urlobj.hxx>
 #include <ndtxt.hxx>
 #include <SwRewriter.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
 
 #define POS_CONTENT 0
 #define POS_INDEX   1
@@ -1718,8 +1722,18 @@ IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
     sfx2::FileDialogHelper aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                     FileDialogFlags::NONE, getDialog());
     OUString aPath = GetEntryText(AUTH_FIELD_URL);
+    bool bSaveRelFSys = officecfg::Office::Common::Save::URL::FileSystem::get();
     if (!aPath.isEmpty())
     {
+        if (bSaveRelFSys && !comphelper::isFileUrl(aPath))
+        {
+            SwDocShell* pDocShell = rWrtSh.GetDoc()->GetDocShell();
+            OUString aBasePath = pDocShell->getDocumentBaseURL();
+            aPath = INetURLObject::GetAbsURL(aBasePath, aPath,
+                                             INetURLObject::EncodeMechanism::WasEncoded,
+                                             INetURLObject::DecodeMechanism::WithCharset);
+        }
+
         aFileDlg.SetDisplayDirectory(aPath);
     }
 
@@ -1728,12 +1742,22 @@ IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
         return;
     }
 
+    aPath = aFileDlg.GetPath();
+    if (bSaveRelFSys)
+    {
+        SwDocShell* pDocShell = rWrtSh.GetDoc()->GetDocShell();
+        OUString aBasePath = pDocShell->getDocumentBaseURL();
+        aPath
+            = INetURLObject::GetRelURL(aBasePath, aPath, INetURLObject::EncodeMechanism::WasEncoded,
+                                       INetURLObject::DecodeMechanism::WithCharset);
+    }
+
     for (int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
     {
         const TextInfo& rCurInfo = aTextInfoArr[nIndex];
         if (rCurInfo.nToxField == AUTH_FIELD_URL)
         {
-            pEdits[nIndex]->set_text(aFileDlg.GetPath());
+            pEdits[nIndex]->set_text(aPath);
             break;
         }
     }
