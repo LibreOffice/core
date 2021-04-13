@@ -2297,7 +2297,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         if( softBreakList.size() > 1 ) // not for empty paragraph
             ++aBreakIt;
 
-        AttrOutput().StartParagraph( pTextNodeInfo );
+        AttrOutput().StartParagraph(pTextNodeInfo, false);
 
         const SwSection* pTOXSect = nullptr;
         if( m_bInWriteTOX )
