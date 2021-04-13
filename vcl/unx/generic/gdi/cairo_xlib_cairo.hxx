@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_XLIB_CAIRO_HXX
-#define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_XLIB_CAIRO_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <vcl/cairo.hxx>
@@ -93,7 +92,5 @@ namespace cairo {
         const X11PixmapSharedPtr& getPixmap() const { return mpPixmap; }
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

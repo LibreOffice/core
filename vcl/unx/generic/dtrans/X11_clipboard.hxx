@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_CLIPBOARD_HXX
-#define INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_CLIPBOARD_HXX
+#pragma once
 
 #include "X11_selection.hxx"
 
@@ -108,7 +107,5 @@ namespace x11 {
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 } // namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_SOURCE_WINDOW_BUFFERDEVICE_HXX
-#define INCLUDED_VCL_SOURCE_WINDOW_BUFFERDEVICE_HXX
+#pragma once
 
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
@@ -32,7 +31,5 @@ public:
     vcl::RenderContext& operator*();
 };
 }
-
-#endif // INCLUDED_VCL_SOURCE_WINDOW_BUFFERDEVICE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

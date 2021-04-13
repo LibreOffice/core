@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_SELECTION_HXX
-#define INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_SELECTION_HXX
+#pragma once
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -493,7 +492,5 @@ namespace x11 {
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

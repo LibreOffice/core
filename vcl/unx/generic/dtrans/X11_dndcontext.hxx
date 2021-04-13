@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_DNDCONTEXT_HXX
-#define INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_DNDCONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
@@ -77,7 +76,5 @@ namespace x11 {
         virtual void        SAL_CALL transferablesFlavorsChanged() override;
     };
 } // namespace
-
-#endif // INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_DNDCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

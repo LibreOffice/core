@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKTEXTATTRIBUTES_HXX
-#define INCLUDED_VCL_UNX_GTK_A11Y_ATKTEXTATTRIBUTES_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -42,7 +41,5 @@ AtkAttributeSet* attribute_set_prepend_misspelled(AtkAttributeSet* attribute_set
 AtkAttributeSet* attribute_set_prepend_tracked_change_insertion(AtkAttributeSet* attribute_set);
 AtkAttributeSet* attribute_set_prepend_tracked_change_deletion(AtkAttributeSet* attribute_set);
 AtkAttributeSet* attribute_set_prepend_tracked_change_formatchange(AtkAttributeSet* attribute_set);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

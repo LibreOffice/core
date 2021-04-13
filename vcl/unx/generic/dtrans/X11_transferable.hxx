@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_TRANSFERABLE_HXX
-#define INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_TRANSFERABLE_HXX
+#pragma once
 
 #include "X11_selection.hxx"
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -47,7 +46,5 @@ namespace x11 {
     };
 
 } // namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

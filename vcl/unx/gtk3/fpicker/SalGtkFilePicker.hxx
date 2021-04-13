@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKFILEPICKER_HXX
-#define INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKFILEPICKER_HXX
+#pragma once
 
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -233,7 +232,5 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
          virtual ~SalGtkFilePicker() override;
 
 };
-
-#endif // INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKFILEPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
