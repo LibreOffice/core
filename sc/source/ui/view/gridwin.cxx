@@ -1717,14 +1717,17 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         SCCOL nRealPosX;
         SCROW nRealPosY;
         mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nRealPosX, nRealPosY, false );//the real row/col
-        const ScMergeFlagAttr* pRealPosAttr = rDoc.GetAttr( nRealPosX, nRealPosY, nTab, ATTR_MERGE_FLAG );
-        const ScMergeFlagAttr* pAttr = rDoc.GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
+
+        // show in the merged cells the filter of the first cell (nPosX instead of nRealPosX)
+        const ScMergeFlagAttr* pRealPosAttr = rDoc.GetAttr(nPosX, nRealPosY, nTab, ATTR_MERGE_FLAG);
         if( pRealPosAttr->HasAutoFilter() )
         {
             SC_MOD()->InputEnterHandler();
-            if (DoAutoFilterButton( nRealPosX, nRealPosY, rMEvt))
+            if (DoAutoFilterButton(nPosX, nRealPosY, rMEvt))
                 return;
         }
+
+        const ScMergeFlagAttr* pAttr = rDoc.GetAttr(nPosX, nPosY, nTab, ATTR_MERGE_FLAG);
         if (pAttr->HasAutoFilter())
         {
             if (DoAutoFilterButton(nPosX, nPosY, rMEvt))
