@@ -505,7 +505,7 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
                 changeStateTo(OverlayState.TRANSITION);
             }
             mDocumentOverlay.changeSelections(Collections.<RectF>emptyList());
-            if (mContext.isSpreadsheet()) {
+            if (mContext.getTileProvider().isSpreadsheet()) {
                 mDocumentOverlay.showHeaderSelection(null);
             }
             mContext.getToolbarController().showHideClipboardCutAndCopy(false);
@@ -516,7 +516,7 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
             }
             changeStateTo(OverlayState.SELECTION);
             mDocumentOverlay.changeSelections(rectangles);
-            if (mContext.isSpreadsheet()) {
+            if (mContext.getTileProvider().isSpreadsheet()) {
                 mDocumentOverlay.showHeaderSelection(rectangles.get(0));
             }
             String selectedText = mContext.getTileProvider().getTextSelection("");

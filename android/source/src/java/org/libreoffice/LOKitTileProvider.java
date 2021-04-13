@@ -102,10 +102,6 @@ class LOKitTileProvider implements TileProvider {
 
         Log.i(LOGTAG, "====> mDocument = " + mDocument);
 
-        if(isSpreadsheet()) {
-            mContext.setIsSpreadsheet(true); // Calc is treated differently e.g. DPI = 96f
-        }
-
         mDPI = LOKitShell.getDpi(mContext);
         mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
         mTileHeight = pixelToTwip(TILE_SIZE, mDPI);

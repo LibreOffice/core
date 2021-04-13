@@ -158,7 +158,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
             JSONObject valueJson = new JSONObject();
             valueJson.put("type", "long");
             valueJson.put("value", 0x00FFFFFF & color);
-            if(mActivity.isSpreadsheet()){
+            if(mActivity.getTileProvider().isSpreadsheet()){
                 json.put("BackgroundColor", valueJson);
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:BackgroundColor", json.toString()));
             }else if(mActivity.getTileProvider().isPresentation()){
