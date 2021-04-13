@@ -15,6 +15,7 @@
 #include <pagefrm.hxx>
 #include <txtfrm.hxx>
 #include <cellfrm.hxx>
+#include <flyfrm.hxx>
 #include <hffrm.hxx>
 #include <rootfrm.hxx>
 #include <editsh.hxx>
@@ -350,6 +351,27 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
             OUString aFormatName = pPageFrame->GetPageDesc()->GetName();
             xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("pageDesc"), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
             xmlTextWriterEndElement(writer);
+            // disable for tests to avoid resolving loads of merge conflicts
+            if (!getenv("LO_TESTNAME")) if (auto const* pObjs = pPageFrame->GetSortedObjs())
+            {
+                (void)xmlTextWriterStartElement(writer, BAD_CAST("sorted_objs"));
+                for (SwAnchoredObject const*const pObj : *pObjs)
+                {   // just print pointer, full details will be printed on its anchor frame
+                    // this nonsense is needed because of multiple inheritance
+                    if (SwFlyFrame const*const pFly = dynamic_cast<SwFlyFrame const*>(pObj))
+                    {
+                        (void)xmlTextWriterStartElement(writer, BAD_CAST("fly"));
+                        (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pFly);
+                    }
+                    else
+                    {
+                        (void)xmlTextWriterStartElement(writer, BAD_CAST(pObj->getElementName()));
+                        (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pObj);
+                    }
+                    (void)xmlTextWriterEndElement(writer);
+                }
+                (void)xmlTextWriterEndElement(writer);
+            }
         }
 
         if (IsTextFrame())
