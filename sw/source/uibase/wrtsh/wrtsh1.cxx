@@ -29,6 +29,7 @@
 #include <hintids.hxx>
 #include <sot/exchange.hxx>
 #include <svx/hdft.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/svdview.hxx>
 #include <svl/itemiter.hxx>
 #include <tools/bigint.hxx>
@@ -102,6 +103,7 @@
 
 #include <frmtool.hxx>
 #include <viewopt.hxx>
+#include <svx/xfillit0.hxx>
 
 using namespace sw::mark;
 using namespace com::sun::star;
@@ -1860,8 +1862,8 @@ void SwWrtShell::ChangeHeaderOrFooter(
                         const_cast<SwFrameFormat*>(rMaster.GetHeader().GetHeaderFormat()) :
                         const_cast<SwFrameFormat*>(rMaster.GetFooter().GetFooterFormat());
                     pFormat->SetFormatAttr( aUL );
-                    XFillStyleItem aFill(css::drawing::FillStyle_NONE);
-                    pFormat->SetFormatAttr(aFill);
+                    XFillStyleItem aFill( drawing::FillStyle_NONE );
+                    pFormat->SetFormatAttr( aFill );
                 }
             }
             if( bChgd )
