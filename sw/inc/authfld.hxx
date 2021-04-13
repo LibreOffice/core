@@ -186,6 +186,7 @@ public:
     OUString GetAuthority(const SwTextAttr* pTextAttr, const SwRootFrame* pLayout) const;
 
     bool HasURL() const;
+    OUString GetAbsoluteURL() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
