@@ -14,7 +14,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_graphic_test, \
     vcl/qa/cppunit/GraphicDescriptorTest \
     vcl/qa/cppunit/GraphicFormatDetectorTest \
     vcl/qa/cppunit/GraphicNativeMetadataTest \
-    vcl/qa/cppunit/VectorGraphicSearchTest \
+    $(if $(filter PDFIUM,$(BUILD_TYPE)),vcl/qa/cppunit/VectorGraphicSearchTest) \
     vcl/qa/cppunit/BinaryDataContainerTest \
 ))
 

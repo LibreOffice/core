@@ -9,8 +9,6 @@
 
 #include <config_features.h>
 
-#if HAVE_FEATURE_PDFIUM
-
 #include <string_view>
 
 #include <cppunit/TestAssert.h>
@@ -286,7 +284,5 @@ void VectorGraphicSearchTest::testSearchMatchCase()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorGraphicSearchTest);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
