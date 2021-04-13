@@ -1,0 +1,635 @@
+diff -ru libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/DefaultResourceManagerBackend.java libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/DefaultResourceManagerBackend.java
+--- libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/DefaultResourceManagerBackend.java	2021-04-07 10:55:58.343147414 +0100
++++ libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/DefaultResourceManagerBackend.java	2021-04-07 11:08:48.389599751 +0100
+@@ -22,8 +22,8 @@
+ import java.util.Iterator;
+ import java.util.Map;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.config.Configuration;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+ 
+@@ -34,7 +34,7 @@
+  */
+ public class DefaultResourceManagerBackend implements ResourceManagerBackend
+ {
+-  private static final Log logger = LogFactory.getLog(DefaultResourceManagerBackend.class);
++  private static final Logger logger = Logger.getLogger(DefaultResourceManagerBackend.class.getName());
+ 
+   private ArrayList resourceLoaders;
+   private ArrayList resourceBundleLoaders;
+@@ -280,9 +280,9 @@
+         {
+           // ignore it, try the next factory ...
+           exception = rex;
+-          if (logger.isDebugEnabled())
++          if (logger.isLoggable(Level.CONFIG))
+           {
+-            logger.debug("Failed at " + fact.getClass() + ": ", rex);
++            logger.config("Failed at " + fact.getClass() + ": " + rex);
+           }
+         }
+       }
+@@ -413,7 +413,7 @@
+     {
+       throw new UnrecognizedLoaderException("Invalid key: No resource-loader registered for schema: " + key.getSchema());
+     }
+-    logger.debug("Loaded " + key);
++    logger.config("Loaded " + key);
+     return loader.load(key);
+   }
+ 
+@@ -451,7 +451,7 @@
+           ResourceLoader.class);
+       if (loader != null)
+       {
+-        //Log.debug("Registering loader for " + loader.getSchema());
++        //Log.config("Registering loader for " + loader.getSchema());
+         registerLoader(loader);
+       }
+     }
+@@ -465,7 +465,7 @@
+           ResourceManager.class, ResourceBundleLoader.class);
+       if (loader != null)
+       {
+-        //Log.debug("Registering loader for " + loader.getSchema());
++        //Log.config("Registering loader for " + loader.getSchema());
+         registerBundleLoader(loader);
+       }
+     }
+diff -ru libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/factory/drawable/DrawableWrapper.java libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/factory/drawable/DrawableWrapper.java
+--- libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/factory/drawable/DrawableWrapper.java	2021-04-07 10:55:58.342147402 +0100
++++ libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/factory/drawable/DrawableWrapper.java	2021-04-07 11:05:40.206289803 +0100
+@@ -27,8 +27,8 @@
+ import java.util.Collections;
+ import java.util.Map;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ 
+ /**
+  * Creation-Date: 05.12.2007, 19:15:56
+@@ -37,7 +37,7 @@
+  */
+ public class DrawableWrapper
+ {
+-  private static final Log logger = LogFactory.getLog(DrawableWrapper.class);
++  private static final Logger logger = Logger.getLogger(DrawableWrapper.class.getName());
+   private static final Map drawables = Collections.synchronizedMap(new HashMap());
+ 
+   private Object backend;
+@@ -67,9 +67,9 @@
+           Modifier.isAbstract(modifiers) ||
+           Modifier.isStatic(modifiers))
+       {
+-        if (logger.isWarnEnabled())
++        if (logger.isLoggable(Level.WARNING))
+         {
+-          logger.warn("DrawMethod is not valid: " + aClass + '#' + drawMethod);
++          logger.warning("DrawMethod is not valid: " + aClass + '#' + drawMethod);
+         }
+         drawMethod = null;
+       }
+@@ -77,9 +77,9 @@
+     catch (NoSuchMethodException e)
+     {
+       // ignore exception
+-      if (logger.isWarnEnabled())
++      if (logger.isLoggable(Level.WARNING))
+       {
+-        logger.warn("The object is not a drawable: " + aClass);
++        logger.warning("The object is not a drawable: " + aClass);
+       }
+       drawMethod = null;
+     }
+@@ -141,9 +141,9 @@
+     }
+     catch (Exception e)
+     {
+-      if (logger.isDebugEnabled())
++      if (logger.isLoggable(Level.CONFIG))
+       {
+-        logger.warn("Invoking draw failed:", e);
++        logger.warning("Invoking draw failed: " + e);
+       }
+     }
+   }
+@@ -167,9 +167,9 @@
+     }
+     catch (Exception e)
+     {
+-      if (logger.isWarnEnabled())
++      if (logger.isLoggable(Level.WARNING))
+       {
+-        logger.warn("Invoking getPreferredSize failed:", e);
++        logger.warning("Invoking getPreferredSize failed: " + e);
+       }
+       return null;
+     }
+@@ -193,9 +193,9 @@
+     }
+     catch (Exception e)
+     {
+-      if (logger.isWarnEnabled())
++      if (logger.isLoggable(Level.WARNING))
+       {
+-        logger.warn("Invoking isKeepAspectRatio failed:", e);
++        logger.warning("Invoking isKeepAspectRatio failed: " + e);
+       }
+       return false;
+     }
+diff -ru libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/loader/file/FileResourceLoader.java libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/loader/file/FileResourceLoader.java
+--- libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/loader/file/FileResourceLoader.java	2021-04-07 10:55:58.344147426 +0100
++++ libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/loader/file/FileResourceLoader.java	2021-04-07 11:03:22.711602044 +0100
+@@ -24,8 +24,7 @@
+ import java.util.HashMap;
+ import java.util.Map;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceData;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceKeyCreationException;
+@@ -43,7 +42,7 @@
+ public class FileResourceLoader implements ResourceLoader
+ {
+   public static final String SCHEMA_NAME = FileResourceLoader.class.getName();
+-  private static final Log logger = LogFactory.getLog(FileResourceLoader.class);
++  private static final Logger logger = Logger.getLogger(FileResourceLoader.class.getName());
+ 
+   public FileResourceLoader()
+   {
+@@ -210,7 +209,7 @@
+     }
+ 
+     // Log information
+-    logger.debug("Serializing a File Resource Key...");
++    logger.config("Serializing a File Resource Key...");
+     if (key.getParent() != null)
+     {
+       throw new ResourceException
+@@ -224,7 +223,7 @@
+       final String strIdentifier = file.getCanonicalPath();
+       final String result = ResourceKeyUtils.createStringResourceKey
+           (key.getSchema().toString(), strIdentifier, key.getFactoryParameters());
+-      logger.debug("Serialized File Resource Key: [" + result + "]");
++      logger.config("Serialized File Resource Key: [" + result + "]");
+       return result;
+     }
+     catch (IOException ioe)
+diff -ru libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/loader/raw/RawResourceLoader.java libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/loader/raw/RawResourceLoader.java
+--- libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/loader/raw/RawResourceLoader.java	2021-04-07 10:55:58.343147414 +0100
++++ libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/loader/raw/RawResourceLoader.java	2021-04-07 11:01:56.064538444 +0100
+@@ -21,8 +21,7 @@
+ import java.util.HashMap;
+ import java.util.Map;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceData;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceException;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
+diff -ru libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/loader/resource/ClassloaderResourceLoader.java libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/loader/resource/ClassloaderResourceLoader.java
+--- libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/loader/resource/ClassloaderResourceLoader.java	2021-04-07 10:55:58.343147414 +0100
++++ libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/loader/resource/ClassloaderResourceLoader.java	2021-04-07 11:03:14.370499656 +0100
+@@ -21,8 +21,7 @@
+ import java.util.Map;
+ import java.net.URL;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceData;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceKeyCreationException;
+@@ -41,7 +40,7 @@
+ public class ClassloaderResourceLoader implements ResourceLoader
+ {
+   public static final String SCHEMA_NAME = ClassloaderResourceLoader.class.getName();
+-  private static final Log logger = LogFactory.getLog(ClassloaderResourceLoader.class);
++  private static final Logger logger = Logger.getLogger(ClassloaderResourceLoader.class.getName());
+ 
+   public ClassloaderResourceLoader()
+   {
+@@ -197,7 +196,7 @@
+     }
+ 
+     // Log information
+-    logger.debug("Serializing a Classloader Resource Key...");
++    logger.config("Serializing a Classloader Resource Key...");
+     if (key.getParent() != null)
+     {
+       throw new ResourceException
+@@ -207,7 +206,7 @@
+     // Serialize the key
+     final String result = ResourceKeyUtils.createStringResourceKey(key.getSchema().toString(),
+         (String) key.getIdentifier(), key.getFactoryParameters());
+-    logger.debug("Serialized Classloader Resource Key: [" + result + "]");
++    logger.config("Serialized Classloader Resource Key: [" + result + "]");
+     return result;
+   }
+ 
+diff -ru libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/loader/URLResourceLoader.java libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/loader/URLResourceLoader.java
+--- libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/loader/URLResourceLoader.java	2021-04-07 10:55:58.344147426 +0100
++++ libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/loader/URLResourceLoader.java	2021-04-07 11:03:41.998838804 +0100
+@@ -22,8 +22,7 @@
+ import java.util.HashMap;
+ import java.util.Map;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceData;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceKeyCreationException;
+@@ -40,7 +39,7 @@
+ public class URLResourceLoader implements ResourceLoader
+ {
+   public static final String SCHEMA_NAME = URLResourceLoader.class.getName();
+-  private static final Log logger = LogFactory.getLog(URLResourceLoader.class);
++  private static final Logger logger = Logger.getLogger(URLResourceLoader.class.getName());
+ 
+   public URLResourceLoader()
+   {
+@@ -188,10 +187,10 @@
+     }
+ 
+     // Log information
+-    logger.debug("Serializing a Classloader Resource Key...");
++    logger.config("Serializing a Classloader Resource Key...");
+     if (key.getParent() != null)
+     {
+-      logger.warn("Serializing a Classloader Resource Key which contains a parent: key=[" + bundleKey + "] parent=["
++      logger.warning("Serializing a Classloader Resource Key which contains a parent: key=[" + bundleKey + "] parent=["
+           + key.getParent() + "]");
+     }
+ 
+@@ -199,7 +198,7 @@
+     final URL url = (URL) key.getIdentifier();
+     final String result = ResourceKeyUtils.createStringResourceKey
+         (key.getSchema().toString(), url.toExternalForm(), key.getFactoryParameters());
+-    logger.debug("Serialized Classloader Resource Key: [" + result + "]");
++    logger.config("Serialized Classloader Resource Key: [" + result + "]");
+     return result;
+   }
+ 
+diff -ru libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/loader/zip/ZipResourceLoader.java libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/loader/zip/ZipResourceLoader.java
+--- libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/loader/zip/ZipResourceLoader.java	2021-04-07 10:55:58.344147426 +0100
++++ libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/loader/zip/ZipResourceLoader.java	2021-04-07 11:02:18.522814132 +0100
+@@ -21,8 +21,7 @@
+ import java.util.HashMap;
+ import java.util.Map;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceData;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceException;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
+@@ -40,7 +39,7 @@
+ public class ZipResourceLoader implements ResourceLoader
+ {
+   public static final String SCHEMA_NAME = ZipResourceLoader.class.getName();
+-  private static final Log logger = LogFactory.getLog(ZipResourceLoader.class);
++  private static final Logger logger = Logger.getLogger(ZipResourceLoader.class.getName());
+ 
+   public ZipResourceLoader()
+   {
+diff -ru libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHCacheModule.java libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHCacheModule.java
+--- libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHCacheModule.java	2021-04-07 10:55:58.345147438 +0100
++++ libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHCacheModule.java	2021-04-07 10:58:52.758288370 +0100
+@@ -20,8 +20,7 @@
+ import org.pentaho.reporting.libraries.base.boot.AbstractModule;
+ import org.pentaho.reporting.libraries.base.boot.ModuleInitializeException;
+ import org.pentaho.reporting.libraries.base.boot.SubSystem;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * Creation-Date: 13.04.2006, 16:29:07
+@@ -30,7 +29,7 @@
+  */
+ public class EHCacheModule extends AbstractModule
+ {
+-  public static final Log CACHE_MONITOR = LogFactory.getLog(EHCacheModule.class.getName() + "#CacheLog"); 
++  public static final Logger CACHE_MONITOR = Logger.getLogger(EHCacheModule.class.getName() + "#CacheLog"); 
+ 
+   public EHCacheModule() throws ModuleInitializeException
+   {
+diff -ru libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHResourceFactoryCache.java libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHResourceFactoryCache.java
+--- libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHResourceFactoryCache.java	2021-04-07 10:55:58.345147438 +0100
++++ libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHResourceFactoryCache.java	2021-04-07 10:59:17.251589016 +0100
+@@ -20,8 +20,8 @@
+ import net.sf.ehcache.Cache;
+ import net.sf.ehcache.CacheException;
+ import net.sf.ehcache.Element;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.resourceloader.Resource;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
+ import org.pentaho.reporting.libraries.resourceloader.cache.ResourceFactoryCache;
+@@ -110,7 +109,7 @@
+     }
+   }
+ 
+-  private static final Log logger = LogFactory.getLog(EHResourceFactoryCache.class);
++  private static final Logger logger = Logger.getLogger(EHResourceFactoryCache.class.getName());
+   private Cache factoryCache;
+ 
+   public EHResourceFactoryCache(final Cache factoryCache)
+@@ -128,16 +128,16 @@
+       final Resource res = getInternal(key, target[i]);
+       if (res != null)
+       {
+-        if (EHCacheModule.CACHE_MONITOR.isDebugEnabled())
++        if (EHCacheModule.CACHE_MONITOR.isLoggable(Level.CONFIG))
+         {
+-          EHCacheModule.CACHE_MONITOR.debug("Res  Cache Hit  " + key);
++          EHCacheModule.CACHE_MONITOR.config("Res  Cache Hit  " + key);
+         }
+         return res;
+       }
+     }
+-    if (EHCacheModule.CACHE_MONITOR.isDebugEnabled())
++    if (EHCacheModule.CACHE_MONITOR.isLoggable(Level.CONFIG))
+     {
+-      EHCacheModule.CACHE_MONITOR.debug("Res  Cache Miss  " + key);
++      EHCacheModule.CACHE_MONITOR.config("Res  Cache Miss  " + key);
+     }
+     return null;
+   }
+@@ -168,9 +168,9 @@
+     }
+     catch (CacheException e)
+     {
+-      if (logger.isDebugEnabled())
++      if (logger.isLoggable(Level.CONFIG))
+       {
+-        logger.debug("Failed to retrieve resource for key " + key, e);
++        logger.config("Failed to retrieve resource for key " + key + ": " + e);
+       }
+       return null;
+     }
+@@ -185,9 +185,9 @@
+     }
+     catch (Exception e)
+     {
+-      if (logger.isDebugEnabled())
++      if (logger.isLoggable(Level.CONFIG))
+       {
+-        logger.debug("Failed to store resource for key " + source, e);
++        logger.config("Failed to store resource for key " + source + ": " + e);
+       }
+       // ignore ... the object is not serializable ..
+     }
+diff -ru libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/ResourceKeyUtils.java libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/ResourceKeyUtils.java
+--- libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/ResourceKeyUtils.java	2021-04-07 10:55:58.342147402 +0100
++++ libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/ResourceKeyUtils.java	2021-04-07 11:06:27.248867251 +0100
+@@ -27,8 +27,8 @@
+ import java.util.Iterator;
+ import java.util.Map;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.util.CSVQuoter;
+ import org.pentaho.reporting.libraries.base.util.CSVTokenizer;
+ import org.pentaho.reporting.libraries.base.util.IOUtils;
+@@ -42,7 +42,7 @@
+ {
+   private static final String DELIMITER = ";";
+   private static final String SERIALIZATION_PREFIX = "resourcekey:";
+-  private static final Log logger = LogFactory.getLog(ResourceManager.class);
++  private static final Logger logger = Logger.getLogger(ResourceManager.class.getName());
+ 
+   /**
+    * Returns a string representation of the ResourceKey based on the pieces that are passed as parameters
+@@ -169,7 +169,7 @@
+ 
+       sb.append(quoter.doQuoting(entrySb.toString()));
+     }
+-    logger.debug("Converted ResourceKey's Factory Parameters to String: [" + sb.toString() + "]");
++    logger.config("Converted ResourceKey's Factory Parameters to String: [" + sb.toString() + "]");
+     return sb.toString();
+   }
+ 
+@@ -226,9 +226,9 @@
+       params.put(key, value);
+     }
+ 
+-    if (logger.isDebugEnabled())
++    if (logger.isLoggable(Level.CONFIG))
+     {
+-      logger.debug("Converted ResourceKey's Factory Parameter String to a Map: [" + factoryParameters
++      logger.config("Converted ResourceKey's Factory Parameter String to a Map: [" + factoryParameters
+           + "] -> map of size " + params.size());
+     }
+     return params;
+@@ -369,7 +369,7 @@
+       }
+       catch (IOException e)
+       {
+-        logger.error("Error closing input stream", e);
++        logger.severe("Error closing input stream: " + e);
+       }
+     }
+   }
+diff -ru libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/ResourceManager.java libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/ResourceManager.java
+--- libloader-1.1.3.orig/source/org/pentaho/reporting/libraries/resourceloader/ResourceManager.java	2021-04-07 10:55:58.344147426 +0100
++++ libloader-1.1.3/source/org/pentaho/reporting/libraries/resourceloader/ResourceManager.java	2021-04-07 11:07:50.557889876 +0100
+@@ -22,8 +22,8 @@
+ import java.util.Map;
+ import java.util.Set;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.config.Configuration;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+ import org.pentaho.reporting.libraries.resourceloader.cache.BundleCacheResourceWrapper;
+@@ -57,7 +57,7 @@
+  */
+ public final class ResourceManager
+ {
+-  private static final Log logger = LogFactory.getLog(ResourceManager.class);
++  private static final Logger logger = Logger.getLogger(ResourceManager.class.getName());
+   private ResourceManagerBackend backend;
+ 
+   public static final String BUNDLE_LOADER_PREFIX = "org.pentaho.reporting.libraries.resourceloader.bundle.loader.";
+@@ -273,7 +273,7 @@
+     final ResourceBundleData bundle = loadResourceBundle(key);
+     if (bundle != null)
+     {
+-      logger.debug("Loaded bundle for key " + key);
++      logger.config("Loaded bundle for key " + key);
+       return bundle;
+     }
+     final ResourceKey parent = key.getParent();
+@@ -283,7 +283,7 @@
+       final ResourceBundleData parentData = loadResourceBundle(parent);
+       if (parentData != null)
+       {
+-        logger.debug("Loaded bundle for key (derivate) " + key);
++        logger.config("Loaded bundle for key (derivate) " + key);
+         return parentData.deriveData(key);
+       }
+     }
+@@ -400,9 +400,9 @@
+       newResource = backend.create(derivedManager, resourceBundleData, context, target);
+       if (isResourceCacheable(newResource))
+       {
+-        if (EHCacheModule.CACHE_MONITOR.isDebugEnabled())
++        if (EHCacheModule.CACHE_MONITOR.isLoggable(Level.CONFIG))
+         {
+-          EHCacheModule.CACHE_MONITOR.debug("Storing created bundle-resource for key: " + key);
++          EHCacheModule.CACHE_MONITOR.config("Storing created bundle-resource for key: " + key);
+         }
+         factoryCache.put(newResource);
+         if (key != newResource.getSource())
+@@ -412,9 +412,9 @@
+       }
+       else
+       {
+-        if (EHCacheModule.CACHE_MONITOR.isDebugEnabled())
++        if (EHCacheModule.CACHE_MONITOR.isLoggable(Level.CONFIG))
+         {
+-          EHCacheModule.CACHE_MONITOR.debug("Created bundle-resource is not cacheable for " + key);
++          EHCacheModule.CACHE_MONITOR.config("Created bundle-resource is not cacheable for " + key);
+         }
+       }
+     }
+@@ -423,17 +423,17 @@
+       newResource = backend.create(this, loadedData, context, target);
+       if (isResourceCacheable(newResource))
+       {
+-        if (EHCacheModule.CACHE_MONITOR.isDebugEnabled())
++        if (EHCacheModule.CACHE_MONITOR.isLoggable(Level.CONFIG))
+         {
+-          EHCacheModule.CACHE_MONITOR.debug("Storing created resource for key: " + key);
++          EHCacheModule.CACHE_MONITOR.config("Storing created resource for key: " + key);
+         }
+         factoryCache.put(newResource);
+       }
+       else
+       {
+-        if (EHCacheModule.CACHE_MONITOR.isDebugEnabled())
++        if (EHCacheModule.CACHE_MONITOR.isLoggable(Level.CONFIG))
+         {
+-          EHCacheModule.CACHE_MONITOR.debug("Created resource is not cacheable for " + key);
++          EHCacheModule.CACHE_MONITOR.config("Created resource is not cacheable for " + key);
+         }
+       }
+     }
+@@ -556,7 +556,7 @@
+       {
+         if (failedModules.contains(dataCacheProviderClass) == false)
+         {
+-          logger.warn("Failed to create data cache: " + e.getLocalizedMessage());
++          logger.warning("Failed to create data cache: " + e.getLocalizedMessage());
+           failedModules.add(dataCacheProviderClass);
+         }
+       }
+@@ -593,7 +593,7 @@
+         {
+           if (failedModules.contains(dataCacheProviderClass) == false)
+           {
+-            logger.warn("Failed to create data cache: " + e.getLocalizedMessage());
++            logger.warning("Failed to create data cache: " + e.getLocalizedMessage());
+             failedModules.add(dataCacheProviderClass);
+           }
+         }
+@@ -630,7 +630,7 @@
+         {
+           if (failedModules.contains(cacheProviderClass) == false)
+           {
+-            logger.warn("Failed to create factory cache: " + e.getLocalizedMessage());
++            logger.warning("Failed to create factory cache: " + e.getLocalizedMessage());
+             failedModules.add(cacheProviderClass);
+           }
+         }
+--- a/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHResourceBundleDataCache.java
++++ b/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHResourceBundleDataCache.java
+@@ -17,6 +17,7 @@
+ 
+ package org.pentaho.reporting.libraries.resourceloader.modules.cache.ehcache;
+ 
++import java.util.logging.Level;
+ import net.sf.ehcache.Cache;
+ import net.sf.ehcache.CacheException;
+ import net.sf.ehcache.Element;
+@@ -64,17 +65,17 @@
+       final Element element = dataCache.get((Object) key);
+       if (element != null)
+       {
+-        if (EHCacheModule.CACHE_MONITOR.isDebugEnabled())
++        if (EHCacheModule.CACHE_MONITOR.isLoggable(Level.CONFIG))
+         {
+-          EHCacheModule.CACHE_MONITOR.debug("Bund Cache Hit  " + key);
++          EHCacheModule.CACHE_MONITOR.config("Bund Cache Hit  " + key);
+         }
+         return (ResourceBundleDataCacheEntry) element.getObjectValue();
+       }
+       else
+       {
+-        if (EHCacheModule.CACHE_MONITOR.isDebugEnabled())
++        if (EHCacheModule.CACHE_MONITOR.isLoggable(Level.CONFIG))
+         {
+-          EHCacheModule.CACHE_MONITOR.debug("Bund Cache Miss " + key);
++          EHCacheModule.CACHE_MONITOR.config("Bund Cache Miss " + key);
+         }
+         return null;
+       }
+@@ -101,9 +102,9 @@
+     final Object keyObject = data.getBundleKey();
+     final Object valueObject = new DefaultResourceBundleDataCacheEntry(cdata, caller);
+     final Element element = new Element(keyObject, valueObject);
+-    if (EHCacheModule.CACHE_MONITOR.isDebugEnabled())
++    if (EHCacheModule.CACHE_MONITOR.isLoggable(Level.CONFIG))
+     {
+-      EHCacheModule.CACHE_MONITOR.debug("Storing Bundle " + keyObject);
++      EHCacheModule.CACHE_MONITOR.config("Storing Bundle " + keyObject);
+     }
+     dataCache.put(element);
+     return cdata;
+--- a/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHResourceDataCache.java
++++ b/source/org/pentaho/reporting/libraries/resourceloader/modules/cache/ehcache/EHResourceDataCache.java
+@@ -17,6 +17,7 @@
+ 
+ package org.pentaho.reporting.libraries.resourceloader.modules.cache.ehcache;
+ 
++import java.util.logging.Level;
+ import net.sf.ehcache.Cache;
+ import net.sf.ehcache.CacheException;
+ import net.sf.ehcache.Element;
+@@ -64,15 +65,15 @@
+       final Element element = dataCache.get((Object) key);
+       if (element != null)
+       {
+-        if (EHCacheModule.CACHE_MONITOR.isDebugEnabled())
++        if (EHCacheModule.CACHE_MONITOR.isLoggable(Level.CONFIG))
+         {
+-          EHCacheModule.CACHE_MONITOR.debug("Data Cache Hit  " + key);
++          EHCacheModule.CACHE_MONITOR.config("Data Cache Hit  " + key);
+         }
+         return (ResourceDataCacheEntry) element.getObjectValue();
+       }
+-      if (EHCacheModule.CACHE_MONITOR.isDebugEnabled())
++      if (EHCacheModule.CACHE_MONITOR.isLoggable(Level.CONFIG))
+       {
+-        EHCacheModule.CACHE_MONITOR.debug("Data Cache Miss " + key);
++        EHCacheModule.CACHE_MONITOR.config("Data Cache Miss " + key);
+       }
+       return null;
+     }

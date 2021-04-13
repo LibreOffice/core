@@ -1,0 +1,903 @@
+diff -ru libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/boot/AbstractBoot.java libbase-1.1.3/source/org/pentaho/reporting/libraries/base/boot/AbstractBoot.java
+--- libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/boot/AbstractBoot.java	2009-11-16 10:14:12.000000000 +0000
++++ libbase-1.1.3/source/org/pentaho/reporting/libraries/base/boot/AbstractBoot.java	2021-02-23 12:11:46.680967049 +0000
+@@ -24,8 +24,7 @@
+ import java.util.ArrayList;
+ import java.util.Enumeration;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.config.Configuration;
+ import org.pentaho.reporting.libraries.base.config.ExtendedConfiguration;
+ import org.pentaho.reporting.libraries.base.config.ExtendedConfigurationWrapper;
+@@ -52,7 +51,7 @@
+   /**
+    * The logger for this class.
+    */
+-  private static final Log LOGGER = LogFactory.getLog(AbstractBoot.class);
++  private static final Logger LOGGER = Logger.getLogger(AbstractBoot.class.getName());
+ 
+   /**
+    * The configuration wrapper around the plain configuration.
+@@ -163,7 +162,7 @@
+       }
+       if (isBootFailed())
+       {
+-        LOGGER.error(getClass() + " failed to boot: " + bootFailed.getMessage());
++        LOGGER.severe(getClass() + " failed to boot: " + bootFailed.getMessage());
+       }
+       while (isBootInProgress())
+       {
+@@ -206,7 +205,7 @@
+     }
+     catch (Exception e)
+     {
+-      LOGGER.error(getClass() + " failed to boot: ", e);
++      LOGGER.severe(getClass() + " failed to boot: " + e);
+       this.bootFailed = e;
+     }
+     finally
+@@ -265,8 +264,8 @@
+           if (boot.isBootFailed())
+           {
+             this.bootFailed = boot.getBootFailureReason();
+-            LOGGER.error("Dependent project failed to boot up: " +
+-                projectInformation.getBootClass() + " failed to boot: ", this.bootFailed);
++            LOGGER.severe("Dependent project failed to boot up: " +
++                projectInformation.getBootClass() + " failed to boot: " + this.bootFailed);
+             return;
+           }
+         }
+@@ -419,7 +418,7 @@
+           }
+           catch (IOException ioe)
+           {
+-            LOGGER.warn("Failed to load the user configuration at " + url, ioe);
++            LOGGER.warning("Failed to load the user configuration at " + url + " : " + ioe);
+           }
+         }
+ 
+@@ -431,7 +430,7 @@
+       }
+       catch (IOException e)
+       {
+-        LOGGER.warn("Failed to lookup the user configurations.", e);
++        LOGGER.warning("Failed to lookup the user configurations: " + e);
+       }
+     }
+     if (addSysProps)
+@@ -455,4 +454,4 @@
+     }
+     return extWrapper;
+   }
+-}
+\ No newline at end of file
++}
+diff -ru libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/boot/PackageManager.java libbase-1.1.3/source/org/pentaho/reporting/libraries/base/boot/PackageManager.java
+--- libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/boot/PackageManager.java	2009-11-16 10:14:12.000000000 +0000
++++ libbase-1.1.3/source/org/pentaho/reporting/libraries/base/boot/PackageManager.java	2021-02-23 12:18:45.836952221 +0000
+@@ -23,8 +23,8 @@
+ import java.util.HashMap;
+ import java.util.Iterator;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.config.Configuration;
+ import org.pentaho.reporting.libraries.base.config.PropertyFileConfiguration;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+@@ -63,7 +63,7 @@
+     }
+   }
+ 
+-  private static final Log LOGGER = LogFactory.getLog(PackageManager.class);
++  private static final Logger LOGGER = Logger.getLogger(PackageManager.class.getName());
+ 
+   /**
+    * An internal constant declaring that the specified module was already loaded.
+@@ -201,7 +201,7 @@
+         }
+       }
+     }
+-    LOGGER.debug("Loaded a total of " + count + " modules under prefix: " + modulePrefix);
++    LOGGER.config("Loaded a total of " + count + " modules under prefix: " + modulePrefix);
+   }
+ 
+   /**
+@@ -224,9 +224,9 @@
+ 
+       if (mod.configure(this.booter))
+       {
+-        if (LOGGER.isDebugEnabled())
++        if (LOGGER.isLoggable(Level.CONFIG))
+         {
+-          LOGGER.debug("Conf: " +
++          LOGGER.config("Conf: " +
+               new PadMessage(mod.getModule().getModuleClass(), 70) +
+               " [" + mod.getModule().getSubSystem() + ']');
+         }
+@@ -244,9 +244,9 @@
+ 
+       if (mod.initialize(this.booter))
+       {
+-        if (LOGGER.isDebugEnabled())
++        if (LOGGER.isLoggable(Level.CONFIG))
+         {
+-          LOGGER.debug("Init: " +
++          LOGGER.config("Init: " +
+               new PadMessage(mod.getModule().getModuleClass(), 70) +
+               " [" + mod.getModule().getSubSystem() + ']');
+         }
+@@ -271,12 +271,12 @@
+       final PackageState dependentState = (PackageState) modulesByClass.get(key);
+       if (dependentState == null)
+       {
+-        LOGGER.warn("Required dependency '" + key + "' for module '" + state.getModule().getModuleClass() + " not found.");
++        LOGGER.warning("Required dependency '" + key + "' for module '" + state.getModule().getModuleClass() + " not found.");
+         return false;
+       }
+       if (dependentState.getState() != PackageState.STATE_CONFIGURED)
+       {
+-        LOGGER.warn("Required dependency '" + key + "' for module '" + state.getModule().getModuleClass() + " not configured.");
++        LOGGER.warning("Required dependency '" + key + "' for module '" + state.getModule().getModuleClass() + " not configured.");
+         return false;
+       }
+     }
+@@ -300,12 +300,12 @@
+       final PackageState dependentState = (PackageState) modulesByClass.get(key);
+       if (dependentState == null)
+       {
+-        LOGGER.warn("Required dependency '" + key + "' for module '" + state.getModule().getModuleClass() + " not found.");
++        LOGGER.warning("Required dependency '" + key + "' for module '" + state.getModule().getModuleClass() + " not found.");
+         return false;
+       }
+       if (dependentState.getState() != PackageState.STATE_INITIALIZED)
+       {
+-        LOGGER.warn("Required dependency '" + key + "' for module '" + state.getModule().getModuleClass() + " not initializable.");
++        LOGGER.warning("Required dependency '" + key + "' for module '" + state.getModule().getModuleClass() + " not initializable.");
+         return false;
+       }
+     }
+@@ -418,15 +418,15 @@
+       {
+         if (fatal)
+         {
+-          LOGGER.warn("Unresolved dependency for package: " + moduleInfo.getModuleClass());
++          LOGGER.warning("Unresolved dependency for package: " + moduleInfo.getModuleClass());
+         }
+-        LOGGER.debug("Module class referenced, but not in classpath: " + moduleInfo.getModuleClass());
++        LOGGER.config("Module class referenced, but not in classpath: " + moduleInfo.getModuleClass());
+       }
+ 
+       if (acceptVersion(moduleInfo, module) == false)
+       {
+         // module conflict!
+-        LOGGER.warn("Module " + module.getName() + ": required version: "
++        LOGGER.warning("Module " + module.getName() + ": required version: "
+             + moduleInfo + ", but found Version: \n" + module);
+         final PackageState state = new PackageState(module, PackageState.STATE_ERROR);
+         dropFailedModule(state);
+@@ -437,7 +437,7 @@
+       if (moduleContained == RETURN_MODULE_ERROR)
+       {
+         // the module caused harm before ...
+-        LOGGER.debug("Indicated failure for module: " + module.getModuleClass());
++        LOGGER.config("Indicated failure for module: " + module.getModuleClass());
+         final PackageState state = new PackageState(module, PackageState.STATE_ERROR);
+         dropFailedModule(state);
+         return false;
+@@ -447,7 +447,7 @@
+         if (incompleteModules.contains(module))
+         {
+           // we assume that loading will continue ...
+-          LOGGER.error
++          LOGGER.severe
+               ("Circular module reference: This module definition is invalid: " +
+                   module.getClass());
+           final PackageState state = new PackageState(module, PackageState.STATE_ERROR);
+@@ -460,7 +460,7 @@
+         {
+           if (loadModule(required[i], incompleteModules, modules, true) == false)
+           {
+-            LOGGER.debug("Indicated failure for module: " + module.getModuleClass());
++            LOGGER.config("Indicated failure for module: " + module.getModuleClass());
+             final PackageState state = new PackageState(module, PackageState.STATE_ERROR);
+             dropFailedModule(state);
+             return false;
+@@ -472,7 +472,7 @@
+         {
+           if (loadModule(optional[i], incompleteModules, modules, true) == false)
+           {
+-            LOGGER.debug("Optional module: " + optional[i].getModuleClass() + " was not loaded.");
++            LOGGER.config("Optional module: " + optional[i].getModuleClass() + " was not loaded.");
+           }
+         }
+         // maybe a dependent module defined the same base module ...
+@@ -486,7 +486,7 @@
+     }
+     catch (Exception e)
+     {
+-      LOGGER.warn("Exception while loading module: " + moduleInfo, e);
++      LOGGER.warning("Exception while loading module: " + moduleInfo + " : " + e);
+       return false;
+     }
+   }
+@@ -506,7 +506,7 @@
+     }
+     if (module.getMajorVersion() == null)
+     {
+-      LOGGER.warn("Module " + module.getName() + " does not define a major version.");
++      LOGGER.warning("Module " + module.getName() + " does not define a major version.");
+     }
+     else
+     {
+@@ -528,7 +528,7 @@
+     }
+     if (module.getMinorVersion() == null)
+     {
+-      LOGGER.warn("Module " + module.getName() + " does not define a minor version.");
++      LOGGER.warning("Module " + module.getName() + " does not define a minor version.");
+     }
+     else
+     {
+@@ -550,14 +550,14 @@
+     }
+     if (module.getPatchLevel() == null)
+     {
+-      LOGGER.debug("Module " + module.getName() + " does not define a patch level.");
++      LOGGER.config("Module " + module.getName() + " does not define a patch level.");
+     }
+     else
+     {
+       if (acceptVersion(moduleRequirement.getPatchLevel(),
+           module.getPatchLevel()) > 0)
+       {
+-        LOGGER.debug("Did not accept patchlevel: "
++        LOGGER.config("Did not accept patchlevel: "
+             + moduleRequirement.getPatchLevel() + " - "
+             + module.getPatchLevel());
+         return false;
+@@ -699,4 +699,4 @@
+       p.println(mod.getDescription());
+     }
+   }
+-}
+\ No newline at end of file
++}
+diff -ru libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/boot/PackageSorter.java libbase-1.1.3/source/org/pentaho/reporting/libraries/base/boot/PackageSorter.java
+--- libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/boot/PackageSorter.java	2009-11-16 10:14:12.000000000 +0000
++++ libbase-1.1.3/source/org/pentaho/reporting/libraries/base/boot/PackageSorter.java	2021-02-23 12:19:11.752198616 +0000
+@@ -23,8 +23,7 @@
+ import java.util.Iterator;
+ import java.util.List;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+ 
+ /**
+@@ -180,7 +179,7 @@
+   }
+ 
+   /** A logger for debug-messages. */
+-  private static final Log LOGGER = LogFactory.getLog(PackageSorter.class);
++  private static final Logger LOGGER = Logger.getLogger(PackageSorter.class.getName());
+ 
+   /**
+    * DefaultConstructor.
+@@ -313,7 +312,7 @@
+       final SortModule reqMod = (SortModule) moduleMap.get(moduleName);
+       if (reqMod == null)
+       {
+-        LOGGER.warn("Invalid state: Required dependency of '" + moduleName + "' had an error.");
++        LOGGER.warning("Invalid state: Required dependency of '" + moduleName + "' had an error.");
+         continue;
+       }
+       if (reqMod.getPosition() >= position)
+@@ -415,7 +414,7 @@
+           moduleMap.get(requiredModules[i].getModuleClass());
+       if (dependentModule == null)
+       {
+-        LOGGER.warn
++        LOGGER.warning
+             ("A dependent module was not found in the list of known modules." +
+                 requiredModules[i].getModuleClass());
+         continue;
+@@ -431,11 +430,11 @@
+           moduleMap.get(optionalModules[i].getModuleClass());
+       if (dependentModule == null)
+       {
+-        LOGGER.warn("A dependent module was not found in the list of known modules.");
++        LOGGER.warning("A dependent module was not found in the list of known modules.");
+         continue;
+       }
+       collector.add(dependentModule.getSubSystem());
+     }
+     return collector;
+   }
+-}
+\ No newline at end of file
++}
+diff -ru libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/boot/PackageState.java libbase-1.1.3/source/org/pentaho/reporting/libraries/base/boot/PackageState.java
+--- libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/boot/PackageState.java	2009-11-16 10:14:12.000000000 +0000
++++ libbase-1.1.3/source/org/pentaho/reporting/libraries/base/boot/PackageState.java	2021-02-23 12:22:15.204942814 +0000
+@@ -17,8 +17,8 @@
+ 
+ package org.pentaho.reporting.libraries.base.boot;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ 
+ /**
+  * The package state class is used by the package manager to keep track of
+@@ -31,7 +31,7 @@
+ public class PackageState
+ {
+   /** A logger. */
+-  private static final Log LOGGER = LogFactory.getLog(PackageState.class);
++  private static final Logger LOGGER = Logger.getLogger(PackageState.class.getName());
+ 
+   /**
+    * A constant defining that the package is new.
+@@ -119,20 +119,20 @@
+       }
+       catch (NoClassDefFoundError noClassDef)
+       {
+-        LOGGER.warn("Unable to load module classes for " +
++        LOGGER.warning("Unable to load module classes for " +
+             this.module.getName() + ':' + noClassDef.getMessage());
+         this.state = STATE_ERROR;
+       }
+       catch (Exception e)
+       {
+-        if (LOGGER.isDebugEnabled())
++        if (LOGGER.isLoggable(Level.CONFIG))
+         {
+           // its still worth a warning, but now we are more verbose ...
+-          LOGGER.warn("Unable to configure the module " + this.module.getName(), e);
++          LOGGER.warning("Unable to configure the module " + this.module.getName() + " : " + e);
+         }
+-        else if (LOGGER.isWarnEnabled())
++	else if (LOGGER.isLoggable(Level.WARNING))
+         {
+-          LOGGER.warn("Unable to configure the module " + this.module.getName());
++          LOGGER.warning("Unable to configure the module " + this.module.getName());
+         }
+         this.state = STATE_ERROR;
+       }
+@@ -187,32 +187,32 @@
+       }
+       catch (NoClassDefFoundError noClassDef)
+       {
+-        LOGGER.warn("Unable to load module classes for " + this.module.getName() + ':' + noClassDef.getMessage());
++        LOGGER.warning("Unable to load module classes for " + this.module.getName() + ':' + noClassDef.getMessage());
+         this.state = STATE_ERROR;
+       }
+       catch (ModuleInitializeException me)
+       {
+-        if (LOGGER.isDebugEnabled())
++        if (LOGGER.isLoggable(Level.CONFIG))
+         {
+           // its still worth a warning, but now we are more verbose ...
+-          LOGGER.warn("Unable to initialize the module " + this.module.getName(), me);
++          LOGGER.warning("Unable to initialize the module " + this.module.getName() + " : " + me);
+         }
+-        else if (LOGGER.isWarnEnabled())
++	else if (LOGGER.isLoggable(Level.WARNING))
+         {
+-          LOGGER.warn("Unable to initialize the module " + this.module.getName());
++          LOGGER.warning("Unable to initialize the module " + this.module.getName());
+         }
+         this.state = STATE_ERROR;
+       }
+       catch (Exception e)
+       {
+-        if (LOGGER.isDebugEnabled())
++        if (LOGGER.isLoggable(Level.CONFIG))
+         {
+           // its still worth a warning, but now we are more verbose ...
+-          LOGGER.warn("Unable to initialize the module " + this.module.getName(), e);
++          LOGGER.warning("Unable to initialize the module " + this.module.getName() + " : " + e);
+         }
+-        else if (LOGGER.isWarnEnabled())
++	else if (LOGGER.isLoggable(Level.WARNING))
+         {
+-          LOGGER.warn("Unable to initialize the module " + this.module.getName());
++          LOGGER.warning("Unable to initialize the module " + this.module.getName());
+         }
+         this.state = STATE_ERROR;
+       }
+@@ -267,4 +267,4 @@
+   {
+     this.state = STATE_ERROR;
+   }
+-}
+\ No newline at end of file
++}
+diff -ru libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/config/PropertyFileConfiguration.java libbase-1.1.3/source/org/pentaho/reporting/libraries/base/config/PropertyFileConfiguration.java
+--- libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/config/PropertyFileConfiguration.java	2009-11-16 10:14:12.000000000 +0000
++++ libbase-1.1.3/source/org/pentaho/reporting/libraries/base/config/PropertyFileConfiguration.java	2021-02-23 12:13:55.788194558 +0000
+@@ -22,8 +22,7 @@
+ import java.io.InputStream;
+ import java.util.Properties;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+ 
+ /**
+@@ -34,7 +33,7 @@
+ public class PropertyFileConfiguration extends HierarchicalConfiguration
+ {
+   /** A logger for debug-messages. */
+-  private static final Log LOGGER = LogFactory.getLog(PropertyFileConfiguration.class);
++  private static final Logger LOGGER = Logger.getLogger(PropertyFileConfiguration.class.getName());
+   /** A serialization related constant. */
+   private static final long serialVersionUID = 2423181637547944866L;
+ 
+@@ -89,7 +88,7 @@
+     }
+     else
+     {
+-      LOGGER.debug("Configuration file not found in the classpath: " + resourceName);
++      LOGGER.config("Configuration file not found in the classpath: " + resourceName);
+     }
+ 
+   }
+@@ -118,9 +117,9 @@
+     }
+     catch (IOException ioe)
+     {
+-      LOGGER.warn("Unable to read configuration", ioe);
++      LOGGER.warning("Unable to read configuration:" + ioe);
+     }
+ 
+   }
+ 
+-}
+\ No newline at end of file
++}
+diff -ru libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/ClassQueryTool.java libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/ClassQueryTool.java
+--- libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/ClassQueryTool.java	2009-11-16 10:14:12.000000000 +0000
++++ libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/ClassQueryTool.java	2021-02-23 12:24:05.460991092 +0000
+@@ -26,8 +26,7 @@
+ import java.util.zip.ZipEntry;
+ import java.util.zip.ZipInputStream;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * The class-query tool loads classes using a classloader and calls "processClass" for each class encountered. This is
+@@ -41,7 +40,7 @@
+ public abstract class ClassQueryTool
+ {
+   /** A logger. */
+-  private static final Log logger = LogFactory.getLog(ClassQueryTool.class);
++  private static final Logger logger = Logger.getLogger(ClassQueryTool.class.getName());
+ 
+   /**
+    * The default constructor.
+@@ -89,7 +88,7 @@
+     catch (Throwable e)
+     {
+       // ignore ..
+-      logger.debug("At class '" + className + "': " + e);
++      logger.config("At class '" + className + "': " + e);
+     }
+   }
+ 
+@@ -137,7 +136,7 @@
+     }
+     catch (final IOException e1)
+     {
+-      logger.debug("Caught IO-Exception while processing file " + jarFile, e1);
++      logger.config("Caught IO-Exception while processing file " + jarFile + " : " + e1);
+     }
+   }
+ 
+@@ -225,7 +224,7 @@
+     for (int i = 0; i < allArray.length; i++)
+     {
+       final URL url = allArray[i];
+-      logger.debug(url);
++      logger.config(url.toString());
+     }
+     for (int i = 0; i < urlsArray.length; i++)
+     {
+diff -ru libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/DebugLog.java libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/DebugLog.java
+--- libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/DebugLog.java	2009-11-16 10:14:12.000000000 +0000
++++ libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/DebugLog.java	2021-02-23 12:26:00.488084723 +0000
+@@ -17,8 +17,7 @@
+ 
+ package org.pentaho.reporting.libraries.base.util;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * This class provides static log messages for on-going bug-hunting efforts. This removes the need to create
+@@ -29,7 +28,7 @@
+ public final class DebugLog
+ {
+   /** A logger. */
+-  private static final Log logger = LogFactory.getLog(DebugLog.class);
++  private static final Logger logger = Logger.getLogger(DebugLog.class.getName());
+ 
+   /**
+    * Logs a message using the debug-logger. By channeling all temporary log messages through this method,
+@@ -39,7 +38,7 @@
+    */
+   public static void log(final Object message)
+   {
+-    logger.info(message);
++    logger.info(message.toString());
+   }
+ 
+   /**
+@@ -51,7 +50,7 @@
+    */
+   public static void log(final Object message, final Throwable t)
+   {
+-    logger.info(message, t);
++    logger.info(message + " : " + t);
+   }
+ 
+   /**
+@@ -68,7 +67,7 @@
+   public static void logHereWE()
+   {
+     //noinspection ThrowableInstanceNeverThrown
+-    logger.info("HERE: Debug point reached", new Exception("Debug-Point reached"));
++    logger.info("HERE: Debug point reached");
+   }
+ 
+   /**
+diff -ru libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/ObjectUtilities.java libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/ObjectUtilities.java
+--- libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/ObjectUtilities.java	2009-11-16 10:14:12.000000000 +0000
++++ libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/ObjectUtilities.java	2021-02-23 12:30:11.253468898 +0000
+@@ -29,8 +29,8 @@
+ import java.util.Arrays;
+ import java.util.StringTokenizer;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ 
+ /**
+  * A collection of useful static utility methods for handling classes and object instantiation.
+@@ -39,7 +39,7 @@
+  */
+ public final class ObjectUtilities
+ {
+-  private static final Log LOGGER = LogFactory.getLog(ObjectUtilities.class);
++  private static final Logger LOGGER = Logger.getLogger(ObjectUtilities.class.getName());
+ 
+   /**
+    * A constant for using the TheadContext as source for the classloader.
+@@ -180,15 +180,15 @@
+     }
+     catch (NoSuchMethodException e)
+     {
+-      LOGGER.warn("Object without clone() method is impossible on class " + aClass, e);
++      LOGGER.warning("Object without clone() method is impossible on class " + aClass + " : " + e);
+     }
+     catch (IllegalAccessException e)
+     {
+-      LOGGER.warn("Object.clone(): unable to call method 'clone()'  on class " + aClass, e);
++      LOGGER.warning("Object.clone(): unable to call method 'clone()'  on class " + aClass + " : " + e);
+     }
+     catch (InvocationTargetException e)
+     {
+-      LOGGER.warn("Object without clone() method is impossible on class " + aClass, e);
++      LOGGER.warning("Object without clone() method is impossible on class " + aClass + " : " + e);
+     }
+     throw new CloneNotSupportedException
+         ("Failed to clone: Clone caused an Exception while cloning type " + aClass);
+@@ -424,32 +424,32 @@
+       if (type != null && type.isAssignableFrom(c) == false)
+       {
+         // this is unacceptable and means someone messed up the configuration
+-        LOGGER.warn("Specified class " + className + " is not of expected type " + type);
++        LOGGER.warning("Specified class " + className + " is not of expected type " + type);
+         return null;
+       }
+       return c.newInstance();
+     }
+     catch (ClassNotFoundException e)
+     {
+-      if (LOGGER.isDebugEnabled())
++      if (LOGGER.isLoggable(Level.CONFIG))
+       {
+-        LOGGER.debug("Specified class " + className + " does not exist.");
++        LOGGER.config("Specified class " + className + " does not exist.");
+       }
+       // sometimes, this one is expected.
+     }
+     catch (NoClassDefFoundError e)
+     {
+-      if (LOGGER.isDebugEnabled())
++      if (LOGGER.isLoggable(Level.CONFIG))
+       {
+-        LOGGER.debug("Specified class " + className + " cannot be loaded [NOCLASSDEFERROR].");
++        LOGGER.config("Specified class " + className + " cannot be loaded [NOCLASSDEFERROR].");
+       }
+     }
+     catch (Throwable e)
+     {
+       // this is more severe than a class not being found at all
+-      if (LOGGER.isDebugEnabled())
++      if (LOGGER.isLoggable(Level.CONFIG))
+       {
+-        LOGGER.info("Specified class " + className + " failed to instantiate correctly.", e);
++        LOGGER.info("Specified class " + className + " failed to instantiate correctly." + " : " + e);
+       }
+       else
+       {
+@@ -615,4 +615,4 @@
+     }
+     return hashCode;
+   }
+-}
+\ No newline at end of file
++}
+diff -ru libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/PngEncoder.java libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/PngEncoder.java
+--- libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/PngEncoder.java	2009-11-16 10:14:12.000000000 +0000
++++ libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/PngEncoder.java	2021-02-23 12:27:15.484797751 +0000
+@@ -27,8 +27,7 @@
+ import java.util.zip.Deflater;
+ import java.util.zip.DeflaterOutputStream;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.encoder.ImageEncoder;
+ import org.pentaho.reporting.libraries.base.encoder.UnsupportedEncoderException;
+ 
+@@ -66,7 +65,7 @@
+ public class PngEncoder implements ImageEncoder
+ {
+   /** A logger for debug-messages. */
+-  private static final Log logger = LogFactory.getLog(PngEncoder.class);
++  private static final Logger logger = Logger.getLogger(PngEncoder.class.getName());
+ 
+   /**
+    * Constant specifying that alpha channel should be encoded.
+@@ -622,12 +621,12 @@
+         }
+         catch (Exception e)
+         {
+-          logger.error("interrupted waiting for pixels!", e);
++          logger.severe("interrupted waiting for pixels: " + e);
+           return false;
+         }
+         if ((pg.getStatus() & ImageObserver.ABORT) != 0)
+         {
+-          logger.error("image fetch aborted or errored");
++          logger.severe("image fetch aborted or errored");
+           return false;
+         }
+ 
+@@ -709,7 +708,7 @@
+     }
+     catch (IOException e)
+     {
+-      logger.error("Failed to write PNG Data", e);
++      logger.severe("Failed to write PNG Data:" + e);
+       return false;
+     }
+   }
+diff -ru libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/ResourceBundleSupport.java libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/ResourceBundleSupport.java
+--- libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/ResourceBundleSupport.java	2009-11-16 10:14:12.000000000 +0000
++++ libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/ResourceBundleSupport.java	2021-02-23 12:27:45.015078518 +0000
+@@ -36,8 +36,7 @@
+ import javax.swing.JMenu;
+ import javax.swing.KeyStroke;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * An utility class to ease up using property-file resource bundles.
+@@ -60,7 +59,7 @@
+   /**
+    * A logger for debug-messages.
+    */
+-  private static final Log logger = LogFactory.getLog(ResourceBundleSupport.class);
++  private static final Logger logger = Logger.getLogger(ResourceBundleSupport.class.getName());
+ 
+   /**
+    * The resource bundle that will be used for local lookups.
+@@ -259,7 +258,7 @@
+         }
+         catch (Exception e)
+         {
+-          logger.error("Error during global lookup", e);
++          logger.severe("Error during global lookup: " + e);
+           throw new MissingResourceException("Error during global lookup", getResourceBase(), key);
+         }
+       }
+@@ -643,7 +642,7 @@
+     final URL in = ObjectUtilities.getResource(name, ResourceBundleSupport.class);
+     if (in == null)
+     {
+-      logger.warn("Unable to find file in the class path: " + name + "; key=" + key);
++      logger.warning("Unable to find file in the class path: " + name + "; key=" + key);
+     }
+     return in;
+   }
+@@ -668,13 +667,13 @@
+ 
+     if (in == null)
+     {
+-      logger.warn("Unable to find file in the class path: " + resourceName);
++      logger.warning("Unable to find file in the class path: " + resourceName);
+       return new ImageIcon(createTransparentImage(1, 1));
+     }
+     final Image img = Toolkit.getDefaultToolkit().createImage(in);
+     if (img == null)
+     {
+-      logger.warn("Unable to instantiate the image: " + resourceName);
++      logger.warning("Unable to instantiate the image: " + resourceName);
+       return new ImageIcon(createTransparentImage(1, 1));
+     }
+     if (scale)
+@@ -808,7 +808,7 @@
+     }
+     catch (MissingResourceException mre)
+     {
+-      logger.warn ("ResourceBundleSupport#getString(,,)", mre);
++      logger.warning ("ResourceBundleSupport#getString(,,): " + mre);
+       return '!' + key + '!';
+     }
+   }
+@@ -821,7 +821,7 @@
+     }
+     catch (MissingResourceException mre)
+     {
+-      logger.warn ("ResourceBundleSupport#getString(,,)", mre);
++      logger.warning ("ResourceBundleSupport#getString(,,): " + mre);
+       return '!' + key + '!';
+     }
+   }
+@@ -836,7 +836,7 @@
+     }
+     catch (MissingResourceException mre)
+     {
+-      logger.warn ("ResourceBundleSupport#getString(,,)", mre);
++      logger.warning ("ResourceBundleSupport#getString(,,): " + mre);
+       return '!' + key + '!';
+     }
+   }
+@@ -852,7 +852,7 @@
+     }
+     catch (MissingResourceException mre)
+     {
+-      logger.warn ("ResourceBundleSupport#getString(,,)", mre);
++      logger.warning ("ResourceBundleSupport#getString(,,): " + mre);
+       return '!' + key + '!';
+     }
+   }
+diff -ru libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/WaitingImageObserver.java libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/WaitingImageObserver.java
+--- libbase-1.1.3.orig/source/org/pentaho/reporting/libraries/base/util/WaitingImageObserver.java	2009-11-16 10:14:12.000000000 +0000
++++ libbase-1.1.3/source/org/pentaho/reporting/libraries/base/util/WaitingImageObserver.java	2021-02-23 12:30:28.223630238 +0000
+@@ -22,8 +22,7 @@
+ import java.awt.image.BufferedImage;
+ import java.awt.image.ImageObserver;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * This image observer blocks until the image is completely loaded. AWT defers the loading of images until they are
+@@ -37,7 +36,7 @@
+ public class WaitingImageObserver implements ImageObserver
+ {
+   /** A logger. */
+-  private static final Log LOGGER = LogFactory.getLog(WaitingImageObserver.class);
++  private static final Logger LOGGER = Logger.getLogger(WaitingImageObserver.class.getName());
+ 
+   /**
+    * For serialization.
+@@ -149,7 +148,7 @@
+       }
+       catch (InterruptedException e)
+       {
+-        LOGGER.info("WaitingImageObserver.waitImageLoaded(): InterruptedException thrown", e);
++        LOGGER.info("WaitingImageObserver.waitImageLoaded(): InterruptedException thrown: " + e);
+       }
+ 
+       if (maxLoadTime > 0 && lastUpdate < (System.currentTimeMillis() - maxLoadTime))
+@@ -172,4 +171,4 @@
+   {
+     return this.error;
+   }
+-}
+\ No newline at end of file
++}
+--- a/source/org/pentaho/reporting/libraries/base/util/IOUtils.java
++++ b/source/org/pentaho/reporting/libraries/base/util/IOUtils.java
+@@ -34,8 +34,7 @@
+ import java.sql.Clob;
+ import java.sql.SQLException;
+ 
+-import org.apache.commons.logging.LogFactory;
+-import org.apache.commons.logging.Log;
++import java.util.logging.Logger;
+ 
+ /**
+  * The IOUtils provide some IO related helper methods.
+@@ -48,7 +47,7 @@
+    * the singleton instance of the utility package.
+    */
+   private static IOUtils instance;
+-  private static final Log logger = LogFactory.getLog(IOUtils.class);
++  private static final Logger logger = Logger.getLogger(IOUtils.class.getName());
+   /**
+    * DefaultConstructor.
+    */
+@@ -855,7 +854,7 @@
+       final long length = clob.length();
+       if (length > Integer.MAX_VALUE)
+       {
+-        logger.warn ("This CLOB contains more than 2^31 characters. We cannot handle that.");
++        logger.warning ("This CLOB contains more than 2^31 characters. We cannot handle that.");
+         return null;
+       }
+ 
+@@ -867,7 +866,7 @@
+       }
+       catch (IOException e)
+       {
+-        logger.warn ("Copying the stream failed.", e);
++        logger.warning ("Copying the stream failed: " + e);
+       }
+       try
+       {
+@@ -875,7 +874,7 @@
+       }
+       catch (IOException e)
+       {
+-        logger.warn ("Failed to close input stream. No worries, we will be alright anyway.", e);
++        logger.warning ("Failed to close input stream. No worries, we will be alright anyway: " + e);
+       }
+       return outStream.toString();
+     }
+@@ -898,7 +897,7 @@
+     final long length = clob.length();
+     if (length > Integer.MAX_VALUE)
+     {
+-      logger.warn ("This CLOB contains more than 2^31 characters. We cannot handle that.");
++      logger.warning ("This CLOB contains more than 2^31 characters. We cannot handle that.");
+       return null;
+     }
+ 
+@@ -910,7 +909,7 @@
+     }
+     catch (IOException e)
+     {
+-      logger.warn ("Copying the stream failed.", e);
++      logger.warning ("Copying the stream failed: " + e);
+     }
+     try
+     {
+@@ -918,7 +917,7 @@
+     }
+     catch (IOException e)
+     {
+-      logger.warn ("Failed to close input stream. No worries, we will be alright anyway.", e);
++      logger.warning ("Failed to close input stream. No worries, we will be alright anyway: " + e);
+     }
+     return outStream.toByteArray();
+   }

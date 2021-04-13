@@ -1,0 +1,313 @@
+diff -ru pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/AbstractXmlReadHandler.java pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/AbstractXmlReadHandler.java
+--- pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/AbstractXmlReadHandler.java	2021-04-07 11:34:22.313653786 +0100
++++ pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/AbstractXmlReadHandler.java	2021-04-07 11:48:16.381234640 +0100
+@@ -20,8 +20,8 @@
+ import java.util.HashMap;
+ import java.util.Map;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.resourceloader.DependencyCollector;
+ import org.pentaho.reporting.libraries.resourceloader.FactoryParameterKey;
+ import org.pentaho.reporting.libraries.resourceloader.Resource;
+@@ -40,7 +40,7 @@
+  */
+ public abstract class AbstractXmlReadHandler implements XmlReadHandler
+ {
+-  private static final Log logger = LogFactory.getLog(AbstractXmlReadHandler.class);
++  private static final Logger logger = Logger.getLogger(AbstractXmlReadHandler.class.getName());
+ 
+   /**
+    * The root handler.
+@@ -120,8 +120,8 @@
+       final XmlReadHandler childHandler = getHandlerForChild(uri, tagName, attrs);
+       if (childHandler == null)
+       {
+-        logger.warn("Unknown tag <" + uri + ':' + tagName + ">: Start to ignore this element and all of its childs. " + getLocatorString());
+-        logger.debug(this.getClass());
++        logger.warning("Unknown tag <" + uri + ':' + tagName + ">: Start to ignore this element and all of its childs. " + getLocatorString());
++        logger.config(this.getClass().getName());
+         final IgnoreAnyChildReadHandler ignoreAnyChildReadHandler =
+             new IgnoreAnyChildReadHandler();
+         ignoreAnyChildReadHandler.init(getRootHandler(), uri, tagName);
+diff -ru pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/AbstractXmlResourceFactory.java pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/AbstractXmlResourceFactory.java
+--- pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/AbstractXmlResourceFactory.java	2021-04-07 11:34:22.313653786 +0100
++++ pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/AbstractXmlResourceFactory.java	2021-04-07 11:44:15.729203631 +0100
+@@ -26,8 +26,7 @@
+ import javax.xml.parsers.SAXParser;
+ import javax.xml.parsers.SAXParserFactory;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.resourceloader.CompoundResource;
+ import org.pentaho.reporting.libraries.resourceloader.FactoryParameterKey;
+ import org.pentaho.reporting.libraries.resourceloader.Resource;
+@@ -56,7 +55,7 @@
+  */
+ public abstract class AbstractXmlResourceFactory implements ResourceFactory
+ {
+-  private static final Log logger = LogFactory.getLog(AbstractXmlResourceFactory.class);
++  private static final Logger logger = Logger.getLogger(AbstractXmlResourceFactory.class.getName());
+ 
+   /**
+    * A key for the content base.
+@@ -115,7 +114,7 @@
+     }
+     catch (SAXException se)
+     {
+-      logger.debug("Comments are not supported by this SAX implementation.");
++      logger.config("Comments are not supported by this SAX implementation.");
+     }
+ 
+     try
+@@ -133,7 +132,7 @@
+     }
+     catch (SAXException e)
+     {
+-      logger.warn("No Namespace features will be available. (Yes, this is serious)");
++      logger.warning("No Namespace features will be available. (Yes, this is serious)");
+     }
+   }
+ 
+diff -ru pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/DomTreeResourceFactory.java pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/DomTreeResourceFactory.java
+--- pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/DomTreeResourceFactory.java	2021-04-07 11:34:22.314653798 +0100
++++ pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/DomTreeResourceFactory.java	2021-04-07 11:43:15.934442890 +0100
+@@ -22,8 +22,7 @@
+ import javax.xml.parsers.DocumentBuilderFactory;
+ import javax.xml.parsers.ParserConfigurationException;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.resourceloader.Resource;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceCreationException;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceData;
+@@ -61,7 +60,7 @@
+     }
+   }
+ 
+-  private static final Log logger = LogFactory.getLog(DomTreeResourceFactory.class);
++  private static final Logger logger = Logger.getLogger(DomTreeResourceFactory.class.getName());
+ 
+   /**
+    * Creates a resource by interpreting the data given in the resource-data object. If additional datastreams need to
+diff -ru pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/LoggingErrorHandler.java pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/LoggingErrorHandler.java
+--- pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/LoggingErrorHandler.java	2021-04-07 11:34:22.313653786 +0100
++++ pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/LoggingErrorHandler.java	2021-04-07 11:49:49.117390246 +0100
+@@ -17,8 +17,8 @@
+ 
+ package org.pentaho.reporting.libraries.xmlns.parser;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ import org.xml.sax.ErrorHandler;
+ import org.xml.sax.SAXException;
+ import org.xml.sax.SAXParseException;
+@@ -30,9 +30,9 @@
+  */
+ public class LoggingErrorHandler implements ErrorHandler
+ {
+-  private static final Log defaultLogContext = LogFactory.getLog(LoggingErrorHandler.class);
++  private static final Logger defaultLogContext = Logger.getLogger(LoggingErrorHandler.class.getName());
+   /** @noinspection NonConstantLogger*/
+-  private Log logContext;
++  private Logger logContext;
+ 
+   /**
+    * Default-Constructor. Logs to a logger configured with this class name as category.
+@@ -47,7 +47,7 @@
+    *
+    * @param logContext the logger that should receive the messages.
+    */
+-  public LoggingErrorHandler(final Log logContext)
++  public LoggingErrorHandler(final Logger logContext)
+   {
+     if (logContext == null)
+     {
+@@ -78,7 +78,7 @@
+    */
+   public void warning(final SAXParseException exception) throws SAXException
+   {
+-    if (logContext.isDebugEnabled())
++    if (logContext.isLoggable(Level.CONFIG))
+     {
+       if (exception.getMessage().startsWith("URI was not reported to parser for entity"))
+       {
+@@ -86,7 +86,7 @@
+         // the GNU thing complain about it ..
+         return;
+       }
+-      logContext.debug("Parser-Warning", exception);
++      logContext.severe("Parser-Warning: " + exception.getMessage());
+     }
+   }
+ 
+@@ -115,15 +115,15 @@
+    */
+   public void error(final SAXParseException exception) throws SAXException
+   {
+-    if (logContext.isWarnEnabled())
++    if (logContext.isLoggable(Level.WARNING))
+     {
+-      if (logContext.isDebugEnabled())
++      if (logContext.isLoggable(Level.CONFIG))
+       {
+-        logContext.warn("Recoverable Parser-Error", exception);
++        logContext.warning("Recoverable Parser-Error:" + exception.getMessage());
+       }
+       else
+       {
+-        logContext.warn("Recoverable Parser-Error:" + exception.getMessage());
++        logContext.warning("Recoverable Parser-Error:" + exception.getMessage());
+       }
+     }
+   }
+@@ -156,15 +156,15 @@
+    */
+   public void fatalError(final SAXParseException exception) throws SAXException
+   {
+-    if (logContext.isErrorEnabled())
++    if (logContext.isLoggable(Level.SEVERE))
+     {
+-      if (logContext.isDebugEnabled())
++      if (logContext.isLoggable(Level.CONFIG))
+       {
+-        logContext.error("Fatal Parser-Error", exception);
++        logContext.severe("Fatal Parser-Error:" + exception.getMessage());
+       }
+       else
+       {
+-        logContext.error("Fatal Parser-Error:" + exception.getMessage());
++        logContext.severe("Fatal Parser-Error:" + exception.getMessage());
+       }
+     }
+   }
+diff -ru pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/ParserEntityResolver.java pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/ParserEntityResolver.java
+--- pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/ParserEntityResolver.java	2021-04-07 11:34:22.314653798 +0100
++++ pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/ParserEntityResolver.java	2021-04-07 11:43:45.602820344 +0100
+@@ -22,8 +22,7 @@
+ import java.net.URL;
+ import java.util.HashMap;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.xml.sax.EntityResolver;
+ import org.xml.sax.InputSource;
+ 
+@@ -34,7 +33,7 @@
+  */
+ public final class ParserEntityResolver implements EntityResolver
+ {
+-  private static final Log logger = LogFactory.getLog(ParserEntityResolver.class);
++  private static final Logger logger = Logger.getLogger(ParserEntityResolver.class.getName());
+ 
+   /**
+    * The hashtable for the known entities (deprecated DTDs).
+@@ -75,7 +74,7 @@
+     }
+     else
+     {
+-      logger.warn("Validate location failed for " + publicID + " location: " + location);
++      logger.warning("Validate location failed for " + publicID + " location: " + location);
+       return false;
+     }
+   }
+@@ -101,7 +100,7 @@
+     }
+     else
+     {
+-      logger.warn("Validate location failed for " + publicID + " location: " + location);
++      logger.warning("Validate location failed for " + publicID + " location: " + location);
+       return false;
+     }
+   }
+@@ -195,7 +194,7 @@
+     }
+     catch (IOException ioe)
+     {
+-      logger.warn("Unable to open specified DTD", ioe);
++      logger.warning("Unable to open specified DTD: " + ioe);
+     }
+     return null;
+   }
+diff -ru pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/ResourceDataInputSource.java pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/ResourceDataInputSource.java
+--- pentaho-libxml-1.1.3.orig/source/org/pentaho/reporting/libraries/xmlns/parser/ResourceDataInputSource.java	2021-04-07 11:34:22.312653773 +0100
++++ pentaho-libxml-1.1.3/source/org/pentaho/reporting/libraries/xmlns/parser/ResourceDataInputSource.java	2021-04-07 11:44:05.484073284 +0100
+@@ -20,8 +20,7 @@
+ import java.io.InputStream;
+ import java.net.URL;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceData;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceLoadingException;
+ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
+@@ -34,7 +33,7 @@
+  */
+ public class ResourceDataInputSource extends InputSource
+ {
+-  private static final Log logger = LogFactory.getLog(ResourceDataInputSource.class);
++  private static final Logger logger = Logger.getLogger(ResourceDataInputSource.class.getName());
+   private ResourceData data;
+   private long version;
+   private ResourceManager caller;
+@@ -103,7 +102,7 @@
+     }
+     catch (ResourceLoadingException e)
+     {
+-      logger.error("Unable to create byte-stream: " + data.getKey());
++      logger.severe("Unable to create byte-stream: " + data.getKey());
+       return null;
+     }
+   }
+--- a/source/org/pentaho/reporting/libraries/xmlns/common/ParserUtil.java
++++ b/source/org/pentaho/reporting/libraries/xmlns/common/ParserUtil.java
+@@ -21,8 +21,7 @@
+ import org.pentaho.reporting.libraries.xmlns.LibXmlBoot;
+ import org.xml.sax.Locator;
+ import org.xml.sax.SAXException;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * Basic helper functions to ease up the process of parsing.
+@@ -31,7 +30,7 @@
+  */
+ public class ParserUtil
+ {
+-  private static final Log logger = LogFactory.getLog(ParserUtil.class);
++  private static final Logger logger = Logger.getLogger(ParserUtil.class.getName());
+   private static boolean strictParsing;
+ 
+   static
+@@ -243,7 +242,7 @@
+         return false;
+       }
+ 
+-      logger.warn("Invalid value encountered: Expected 'true' or 'false', but got '" + text + "'");
++      logger.warning("Invalid value encountered: Expected 'true' or 'false', but got '" + text + "'");
+       return "true".equalsIgnoreCase(text);
+     }
+   }
+@@ -281,11 +280,11 @@
+ 
+     if (locator == null)
+     {
+-      logger.warn("Invalid value encountered for boolean attribute.");
++      logger.warning("Invalid value encountered for boolean attribute.");
+     }
+     else
+     {
+-      logger.warn("Invalid value encountered for boolean attribute. [Line: " +
++      logger.warning("Invalid value encountered for boolean attribute. [Line: " +
+           locator.getLineNumber() + " Column: " + locator.getColumnNumber() + "]");
+     }
+     return Boolean.FALSE;

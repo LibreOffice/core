@@ -1,0 +1,506 @@
+diff -ru libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/afm/AfmFontRegistry.java libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/afm/AfmFontRegistry.java
+--- libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/afm/AfmFontRegistry.java	2021-03-12 10:15:06.215353433 +0000
++++ libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/afm/AfmFontRegistry.java	2021-03-12 10:26:44.036236575 +0000
+@@ -37,8 +37,7 @@
+ import org.pentaho.reporting.libraries.resourceloader.ResourceData;
+ import org.pentaho.reporting.libraries.base.util.StringUtils;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * Creation-Date: 21.07.2007, 20:14:05
+@@ -47,7 +46,8 @@
+  */
+ public class AfmFontRegistry extends AbstractFontFileRegistry
+ {
+-  private static final Log logger = LogFactory.getLog(AfmFontRegistry.class);
++  private static final Logger logger = Logger.getLogger(AfmFontRegistry.class.getName());
++
+   /**
+    * The font path filter is used to collect font files and directories during
+    * the font path registration.
+@@ -133,7 +133,7 @@
+         filePfb.isFile() == false ||
+         filePfb.canRead() == false)
+     {
+-      logger.warn("Cannot embedd font: " + filePfb + " is missing for " + font);
++      logger.warning("Cannot embedd font: " + filePfb + " is missing for " + font);
+       embedded = false;
+     }
+ 
+@@ -264,11 +264,11 @@
+     catch (final ClassNotFoundException cnfe)
+     {
+       // ignore the exception.
+-      logger.debug("Failed to restore the cache: Cache was created by a different version of LibFonts");
++      logger.config("Failed to restore the cache: Cache was created by a different version of LibFonts");
+     }
+     catch (Exception e)
+     {
+-      logger.debug("Failed to restore the cache:", e);
++      logger.config("Failed to restore the cache: " + e);
+     }
+   }
+ 
+@@ -311,14 +311,14 @@
+         catch (IOException e)
+         {
+           // ignore ..
+-          logger.debug("Failed to store cached font data", e);
++          logger.config("Failed to store cached font data: " + e);
+         }
+       }
+     }
+     catch (IOException e)
+     {
+       // should not happen
+-      logger.debug("Failed to store cached font data", e);
++      logger.config("Failed to store cached font data: " + e);
+     }
+   }
+ }
+diff -ru libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/encoding/EncodingRegistry.java libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/encoding/EncodingRegistry.java
+--- libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/encoding/EncodingRegistry.java	2021-03-12 10:15:06.228353587 +0000
++++ libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/encoding/EncodingRegistry.java	2021-03-12 10:27:11.614524616 +0000
+@@ -31,8 +31,7 @@
+ import org.pentaho.reporting.libraries.resourceloader.factory.property.PropertiesResourceFactory;
+ import org.pentaho.reporting.libraries.base.config.Configuration;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * A global registry for all supported encodings. This offers the option to fall
+@@ -42,7 +41,7 @@
+  */
+ public final class EncodingRegistry
+ {
+-  private static final Log logger = LogFactory.getLog(EncodingRegistry.class);
++  private static final Logger logger = Logger.getLogger(EncodingRegistry.class.getName());
+ 
+   /**
+    * Implementation doc: This class uses several sources to load the encodings.
+@@ -266,7 +265,7 @@
+       catch (Exception e)
+       {
+         // fall back ...
+-        logger.warn("Failed to create external-encoding instance for key " + key, e);
++        logger.warning("Failed to create external-encoding instance for key " + key + " : " + e);
+       }
+     }
+     if (isEncodingSupportedJVM(name))
+diff -ru libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/encoding/generator/EncodingGenerator.java libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/encoding/generator/EncodingGenerator.java
+--- libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/encoding/generator/EncodingGenerator.java	2021-03-12 10:15:06.218353469 +0000
++++ libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/encoding/generator/EncodingGenerator.java	2021-03-12 10:27:47.015894357 +0000
+@@ -35,8 +35,7 @@
+ import org.pentaho.reporting.libraries.fonts.encoding.External8BitEncodingData;
+ import org.pentaho.reporting.libraries.base.config.DefaultConfiguration;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * A simple sourcecode generator.
+@@ -45,7 +44,7 @@
+  */
+ public class EncodingGenerator
+ {
+-  private static final Log logger = LogFactory.getLog(EncodingGenerator.class);
++  private static final Logger logger = Logger.getLogger(EncodingGenerator.class.getName());
+ 
+   private File targetDirectory;
+   private DefaultConfiguration propertySet;
+@@ -200,7 +199,7 @@
+       }
+       catch(Exception e)
+       {
+-        logger.warn ("Failed to generate Encoding " + key, e);
++        logger.warning("Failed to generate Encoding " + key + " : " + e);
+       }
+     }
+   }
+@@ -269,7 +268,7 @@
+       }
+       catch(Exception e)
+       {
+-        logger.warn ("Failed to generate Encoding " + key, e);
++        logger.warning("Failed to generate Encoding " + key + " : " + e);
+       }
+     }
+ 
+diff -ru libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/pfm/PfmFontRegistry.java libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/pfm/PfmFontRegistry.java
+--- libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/pfm/PfmFontRegistry.java	2021-03-12 10:15:06.217353457 +0000
++++ libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/pfm/PfmFontRegistry.java	2021-03-12 10:28:33.904384084 +0000
+@@ -37,8 +37,7 @@
+ import org.pentaho.reporting.libraries.resourceloader.ResourceData;
+ import org.pentaho.reporting.libraries.base.util.StringUtils;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * Creation-Date: 21.07.2007, 16:58:06
+@@ -47,7 +46,7 @@
+  */
+ public class PfmFontRegistry extends AbstractFontFileRegistry
+ {
+-  private static final Log logger = LogFactory.getLog(PfmFontRegistry.class);
++  private static final Logger logger = Logger.getLogger(PfmFontRegistry.class.getName());
+ 
+   /**
+    * The font path filter is used to collect font files and directories during
+@@ -146,7 +145,7 @@
+         filePfb.isFile() == false ||
+         filePfb.canRead() == false)
+     {
+-      logger.warn("Cannot embedd font: " + filePfb + " is missing for " + font);
++      logger.warning("Cannot embedd font: " + filePfb + " is missing for " + font);
+       embedded = false;
+     }
+ 
+@@ -155,7 +154,7 @@
+     {
+       if (pfmFont.isItextCompatible() == false)
+       {
+-        logger.warn("Cannot embedd font: pfb-file for " + font + " is not valid (according to iText).");
++        logger.warning("Cannot embedd font: pfb-file for " + font + " is not valid (according to iText).");
+       }
+     }
+     registerFont (pfmFont);
+@@ -283,7 +282,7 @@
+     }
+     catch (Exception e)
+     {
+-      logger.debug("Failed to restore the cache:", e);
++      logger.config("Failed to restore the cache: " + e);
+     }
+   }
+ 
+@@ -326,14 +325,14 @@
+         catch (IOException e)
+         {
+           // ignore ..
+-          logger.debug("Failed to store cached font data", e);
++          logger.config("Failed to store cached font data: " + e);
+         }
+       }
+     }
+     catch (IOException e)
+     {
+       // should not happen
+-      logger.debug("Failed to store cached font data", e);
++      logger.config("Failed to store cached font data: " + e);
+     }
+   }
+ }
+diff -ru libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/registry/AbstractFontFileRegistry.java libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/registry/AbstractFontFileRegistry.java
+--- libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/registry/AbstractFontFileRegistry.java	2021-03-12 10:15:06.229353599 +0000
++++ libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/registry/AbstractFontFileRegistry.java	2021-03-12 10:25:43.831607771 +0000
+@@ -25,8 +25,7 @@
+ import java.util.Iterator;
+ import java.util.Map;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.fonts.LibFontBoot;
+ import org.pentaho.reporting.libraries.fonts.encoding.EncodingRegistry;
+ import org.pentaho.reporting.libraries.base.util.StringUtils;
+@@ -39,7 +38,7 @@
+  */
+ public abstract class AbstractFontFileRegistry implements FontRegistry
+ {
+-  private static final Log logger = LogFactory.getLog(AbstractFontFileRegistry.class);
++  private static final Logger logger = Logger.getLogger(AbstractFontFileRegistry.class.getName());
+ 
+   private HashMap seenFiles;
+ 
+@@ -74,7 +73,7 @@
+       }
+       catch (Exception e)
+       {
+-        logger.warn("Extra font path " + extraDir + " could not be fully registered.", e);
++        logger.warning("Extra font path " + extraDir + " could not be fully registered: " + e);
+       }
+     }
+   }
+@@ -98,13 +97,13 @@
+     final String jrepath = safeSystemGetProperty("java.home", ".");
+     final String fs = safeSystemGetProperty("file.separator", File.separator);
+ 
+-    logger.debug("Running on operating system: " + osname);
+-    logger.debug("Character encoding used as default: " + encoding);
++    logger.config("Running on operating system: " + osname);
++    logger.config("Character encoding used as default: " + encoding);
+ 
+     if (safeSystemGetProperty("mrj.version", null) != null)
+     {
+       final String userhome = safeSystemGetProperty("user.home", ".");
+-      logger.debug("Detected MacOS (Property 'mrj.version' is present.");
++      logger.config("Detected MacOS (Property 'mrj.version' is present.");
+       registerFontPath(new File(userhome + "/Library/Fonts"), encoding);
+       registerFontPath(new File("/Library/Fonts"), encoding);
+       registerFontPath(new File("/Network/Library/Fonts"), encoding);
+@@ -116,7 +115,7 @@
+     }
+     else
+     {
+-      logger.debug("Assuming unix like file structures");
++      logger.config("Assuming unix like file structures");
+       // Assume X11 is installed in the default location.
+       registerFontPath(new File("/usr/X11R6/lib/X11/fonts"), encoding);
+       registerFontPath(new File("/usr/share/fonts"), encoding);
+@@ -145,7 +144,7 @@
+    */
+   private void registerWindowsFontPath(final String encoding)
+   {
+-    logger.debug("Found 'Windows' in the OS name, assuming DOS/Win32 structures");
++    logger.config("Found 'Windows' in the OS name, assuming DOS/Win32 structures");
+     // Assume windows
+     // If you are not using windows, ignore this. This just checks if a windows system
+     // directory exist and includes a font dir.
+@@ -182,7 +181,7 @@
+         }
+       }
+     }
+-    logger.debug("Fonts located in \"" + fontPath + '\"');
++    logger.config("Fonts located in \"" + fontPath + '\"');
+     if (fontPath != null)
+     {
+       final File file = new File(fontPath);
+@@ -272,7 +271,7 @@
+       }
+       catch (Exception e)
+       {
+-        logger.warn("Font " + file + " is invalid. Message:" + e.getMessage(), e);
++        logger.warning("Font " + file + " is invalid. Message: " + e);
+       }
+     }
+   }
+diff -ru libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/text/GraphemeClassifier.java libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/text/GraphemeClassifier.java
+--- libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/text/GraphemeClassifier.java	2021-03-12 10:15:06.205353315 +0000
++++ libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/text/GraphemeClassifier.java	2021-03-12 10:29:03.600694237 +0000
+@@ -22,8 +22,7 @@
+ import java.io.IOException;
+ 
+ import org.pentaho.reporting.libraries.fonts.tools.ByteTable;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * Creation-Date: 11.06.2006, 17:11:16
+@@ -32,7 +31,7 @@
+  */
+ public final class GraphemeClassifier
+ {
+-  private static final Log logger = LogFactory.getLog(GraphemeClassifier.class);
++  private static final Logger logger = Logger.getLogger(GraphemeClassifier.class.getName());
+ 
+   public static final int OTHER = 0;
+ 
+@@ -70,7 +69,7 @@
+       }
+       catch(Exception e)
+       {
+-        logger.warn ("Unable to load the pre-generated classification data.", e);
++        logger.warning("Unable to load the pre-generated classification data: " + e);
+       }
+       finally
+       {
+diff -ru libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFont.java libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFont.java
+--- libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFont.java	2021-03-12 10:15:06.214353421 +0000
++++ libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFont.java	2021-03-12 10:29:19.746862875 +0000
+@@ -24,8 +24,7 @@
+ import org.pentaho.reporting.libraries.fonts.ByteAccessUtilities;
+ import org.pentaho.reporting.libraries.fonts.io.FileFontDataInputSource;
+ import org.pentaho.reporting.libraries.fonts.io.FontDataInputSource;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * Creation-Date: 06.11.2005, 18:27:21
+@@ -34,7 +33,7 @@
+  */
+ public class TrueTypeFont
+ {
+-  private static final Log logger = LogFactory.getLog(TrueTypeFont.class);
++  private static final Logger logger = Logger.getLogger(TrueTypeFont.class.getName());
+ 
+   private static class TrueTypeFontHeader
+   {
+@@ -327,7 +326,7 @@
+               (FontHeaderTable) getTable(FontHeaderTable.TABLE_ID);
+       if (header == null)
+       {
+-        logger.warn("The font '" + filename + "' does not have a 'head' table. The font file is not valid.");
++        logger.warning("The font '" + filename + "' does not have a 'head' table. The font file is not valid.");
+         return null;
+       }
+       final byte[] buffer =
+diff -ru libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFontMetricsFactory.java libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFontMetricsFactory.java
+--- libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFontMetricsFactory.java	2021-03-12 10:15:06.213353409 +0000
++++ libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFontMetricsFactory.java	2021-03-12 10:29:38.442058137 +0000
+@@ -21,8 +21,7 @@
+ import java.io.IOException;
+ import java.util.HashMap;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.fonts.io.FileFontDataInputSource;
+ import org.pentaho.reporting.libraries.fonts.io.FontDataInputSource;
+ import org.pentaho.reporting.libraries.fonts.registry.FontContext;
+@@ -38,7 +37,7 @@
+  */
+ public class TrueTypeFontMetricsFactory implements FontMetricsFactory
+ {
+-  private static final Log logger = LogFactory.getLog(TrueTypeFontMetricsFactory.class);
++  private static final Logger logger = Logger.getLogger(TrueTypeFontMetricsFactory.class.getName());
+   private HashMap fontRecords;
+ 
+   public TrueTypeFontMetricsFactory()
+@@ -77,7 +76,7 @@
+     }
+     catch (IOException e)
+     {
+-      logger.warn("Unable to read the font.", e);
++      logger.warning("Unable to read the font: " + e);
+       // todo: We should throw a better exception instead, shouldnt we?
+       throw new IllegalStateException();
+     }
+diff -ru libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFontRegistry.java libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFontRegistry.java
+--- libfonts-1.1.3.orig/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFontRegistry.java	2021-03-12 10:15:06.214353421 +0000
++++ libfonts-1.1.3/source/org/pentaho/reporting/libraries/fonts/truetype/TrueTypeFontRegistry.java	2021-03-12 10:31:15.504071887 +0000
+@@ -28,8 +28,7 @@
+ import java.io.Serializable;
+ import java.util.HashMap;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.fonts.FontException;
+ import org.pentaho.reporting.libraries.fonts.LibFontBoot;
+ import org.pentaho.reporting.libraries.fonts.cache.FontCache;
+@@ -61,7 +60,7 @@
+     return secondLevelCache;
+   }
+ 
+-  private static final Log logger = LogFactory.getLog(TrueTypeFontRegistry.class);
++  private static final Logger logger = Logger.getLogger(TrueTypeFontRegistry.class.getName());
+ 
+   /**
+    * The font path filter is used to collect font files and directories during the font path registration.
+@@ -180,7 +179,7 @@
+     }
+     catch (Exception e)
+     {
+-      logger.info("Unable to register font file " + file, e);
++      logger.info("Unable to register font file " + file + " : " + e);
+       // An error must not stop us on our holy mission to find and register
+       // all fonts :)
+       return false;
+@@ -206,7 +205,7 @@
+     }
+     catch (FontException e)
+     {
+-      logger.info("The font '" + font.getFilename() + "' is invalid.", e);
++      logger.info("The font '" + font.getFilename() + "' is invalid: " + e);
+       return;
+     }
+ 
+@@ -347,11 +346,11 @@
+     catch (final ClassNotFoundException cnfe)
+     {
+       // ignore the exception.
+-      logger.debug("Failed to restore the cache: Cache was created by a different version of LibFonts");
++      logger.config("Failed to restore the cache: Cache was created by a different version of LibFonts");
+     }
+     catch (Exception e)
+     {
+-      logger.debug("Non-Fatal: Failed to restore the cache. The cache will be rebuilt.", e);
++      logger.config("Non-Fatal: Failed to restore the cache. The cache will be rebuilt: " + e);
+     }
+   }
+ 
+@@ -394,14 +393,14 @@
+         catch (IOException e)
+         {
+           // ignore ..
+-          logger.debug("Failed to store cached font data", e);
++          logger.config("Failed to store cached font data: " + e);
+         }
+       }
+     }
+     catch (IOException e)
+     {
+       // should not happen
+-      logger.debug("Failed to store cached font data", e);
++      logger.config("Failed to store cached font data: " + e);
+     }
+   }
+ }
+--- a/source/org/pentaho/reporting/libraries/fonts/itext/BaseFontSupport.java
++++ b/source/org/pentaho/reporting/libraries/fonts/itext/BaseFontSupport.java
+@@ -34,8 +34,8 @@
+ import org.pentaho.reporting.libraries.fonts.merge.CompoundFontRecord;
+ import org.pentaho.reporting.libraries.base.config.ExtendedConfiguration;
+ import org.pentaho.reporting.libraries.base.util.StringUtils;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ 
+ /**
+  * iText font support.
+@@ -44,7 +44,7 @@
+  */
+ public class BaseFontSupport implements FontMapper
+ {
+-  private static final Log logger = LogFactory.getLog(BaseFontSupport.class);
++  private static final Logger logger = Logger.getLogger(BaseFontSupport.class.getName());
+   /**
+    * Storage for BaseFont objects created.
+    */
+@@ -235,7 +235,7 @@
+             final FontSource source = (FontSource) registryFontRecord;
+             if (source.isEmbeddable() == false)
+             {
+-              logger.warn("License of font forbids embedded usage for font: " + fontKey);
++              logger.warning("License of font forbids embedded usage for font: " + fontKey);
+               // strict mode here?
+               embeddedOverride = false;
+             }
+@@ -286,13 +286,13 @@
+     }
+     catch (Exception e)
+     {
+-      if (logger.isDebugEnabled())
++      if (logger.isLoggable(Level.CONFIG))
+       {
+-        logger.debug("BaseFont.createFont failed. Key = " + fontKey + ": " + e.getMessage(), e);
++        logger.config("BaseFont.createFont failed. Key = " + fontKey + ": " + e);
+       }
+-      else if (logger.isWarnEnabled())
++      else if (logger.isLoggable(Level.WARNING))
+       {
+-        logger.warn("BaseFont.createFont failed. Key = " + fontKey + ": " + e.getMessage());
++        logger.warning("BaseFont.createFont failed. Key = " + fontKey + ": " + e.getMessage());
+       }
+     }
+     // fallback .. use BaseFont.HELVETICA as default
+@@ -322,7 +322,7 @@
+     }
+     catch (Exception e)
+     {
+-      logger.warn("BaseFont.createFont for FALLBACK failed.", e);
++      logger.warning("BaseFont.createFont for FALLBACK failed: " + e);
+       throw new BaseFontCreateException("Null font = " + fontKey);
+     }
+     throw new BaseFontCreateException("BaseFont creation failed, null font: " + fontKey);
