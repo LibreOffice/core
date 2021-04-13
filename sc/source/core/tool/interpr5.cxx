@@ -1443,7 +1443,7 @@ void ScInterpreter::ScAmpersand()
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
-        ScMatrixRef pResMat = GetNewMat(nC, nR);
+        ScMatrixRef pResMat = GetNewMat(nC, nR, /*bEmpty*/true);
         if (pResMat)
         {
             if (nGlobalError != FormulaError::NONE)
