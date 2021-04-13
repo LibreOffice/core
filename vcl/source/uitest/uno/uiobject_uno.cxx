@@ -11,8 +11,9 @@
 #include "uiobject_uno.hxx"
 #include <utility>
 #include <cppuhelper/supportsservice.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <set>
 
