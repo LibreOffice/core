@@ -40,6 +40,7 @@ public:
 
     bool HasSelection() const;
 
+    void Delete();
     void Cut();
     void Copy();
     void Paste();
@@ -47,6 +48,7 @@ public:
     virtual ~WeldEditView() override;
 
 protected:
+    bool m_bAcceptsTab;
     std::unique_ptr<EditEngine> m_xEditEngine;
     std::unique_ptr<EditView> m_xEditView;
     rtl::Reference<WeldEditAccessible> m_xAccessible;
@@ -66,6 +68,11 @@ protected:
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
     virtual void Resize() override;
+
+    // Whether Tab will result in entering a tab or not
+    bool GetAcceptsTab() const { return m_bAcceptsTab; }
+
+    void SetAcceptsTab(bool bAcceptsTab) { m_bAcceptsTab = bAcceptsTab; }
 
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 

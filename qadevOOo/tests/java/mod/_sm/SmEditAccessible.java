@@ -86,7 +86,7 @@ public class SmEditAccessible extends TestCase {
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.TEXT_FRAME, "", "SmEditAccessible");
+            (xRoot, AccessibleRole.TEXT_FRAME, "", "WeldEditAccessible");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
