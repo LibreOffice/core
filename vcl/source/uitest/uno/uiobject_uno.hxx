@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_SOURCE_UITEST_UNO_UIOBJECT_UNO_HXX
-#define INCLUDED_VCL_SOURCE_UITEST_UNO_UIOBJECT_UNO_HXX
+#pragma once
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -69,7 +68,5 @@ private:
     OUString mAction;
     css::uno::Sequence<css::beans::PropertyValue> mPropValues;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
