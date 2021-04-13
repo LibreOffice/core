@@ -2189,7 +2189,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
             else
             {
                 sal_Int32 const nAttr = NAMESPACE_TOKEN(nDefaultNamespace) | nToken;
-                mxFastAttributes->add(nAttr, OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8).getStr());
+                mxFastAttributes->add(nAttr, OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8));
             }
             continue;
         }
@@ -2211,7 +2211,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
         else
         {
             sal_Int32 const nAttr = NAMESPACE_TOKEN(nAttrPrefix) | nToken;
-            mxFastAttributes->add(nAttr, OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8).getStr());
+            mxFastAttributes->add(nAttr, OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8));
         }
     }
     mrImport->startFastElement( mnElement, mxFastAttributes );
