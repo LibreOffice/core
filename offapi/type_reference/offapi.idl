@@ -1357,6 +1357,12 @@ module com {
      [property, optional] boolean DesktopAsParent;
      [property, optional] string ImageURL;
      [property, optional, transient] ::com::sun::star::graphic::XGraphic Graphic;
+     [property, optional] boolean HScroll;
+     [property, optional] boolean VScroll;
+     [property, optional] long ScrollLeft;
+     [property, optional] long ScrollTop;
+     [property, optional] long ScrollWidth;
+     [property, optional] long ScrollHeight;
     };
     published service UnoControlEditModel {
      service ::com::sun::star::awt::UnoControlModel;
@@ -2464,6 +2470,15 @@ module com {
      };
      published service UnoControlTabPageModel {
       interface ::com::sun::star::awt::tab::XTabPageModel;
+      [property, optional] string Title;
+      [property, optional] string HelpText;
+      [property, optional] string HelpURL;
+      [property, optional] boolean HScroll;
+      [property, optional] boolean VScroll;
+      [property, optional] long ScrollLeft;
+      [property, optional] long ScrollTop;
+      [property, optional] long ScrollWidth;
+      [property, optional] long ScrollHeight;
      };
      published interface XTabPageContainerListener {
       interface ::com::sun::star::lang::XEventListener;
@@ -3052,6 +3067,7 @@ module com {
      interface ::com::sun::star::chart::XChartDataArray;
     };
     published constants ChartDataCaption {
+     const long CUSTOM = 32;
      /** @deprecated */ const long FORMAT = 8;
      const long NONE = 0;
      const long PERCENT = 2;
@@ -4267,7 +4283,8 @@ module com {
      };
      published constants RenderingCapabilities {
       const byte Delayed = 1;
-      const byte Persistant = 2;
+      /** @deprecated */ const byte Persistant = 2;
+      const byte Persistent = 2;
      };
      published interface XFlushableClipboard {
       interface ::com::sun::star::uno::XInterface;
@@ -4959,6 +4976,7 @@ module com {
      [property] short ShadowTransparence;
      [property] long ShadowXDistance;
      [property] long ShadowYDistance;
+     [property, optional] long ShadowBlur;
     };
     published enum TextAnimationDirection {
      LEFT = 0,
@@ -11739,6 +11757,7 @@ module com {
      [property, optional] long RasterSubdivisionX;
      [property, optional] long RasterSubdivisionY;
      [property, optional] boolean IsRasterAxisSynchronized;
+     [property, optional] boolean IsDocumentShared;
     };
     published enum FillDateMode {
      FILL_DATE_DAY = 0,
@@ -13377,6 +13396,7 @@ module com {
      const short ROMAN_LOWER = 3;
      const short ROMAN_UPPER = 2;
      const short SYMBOL_CHICAGO = 63;
+     const short SZEKELY_ROVAS = 68;
      const short TEXT_CARDINAL = 61;
      const short TEXT_NUMBER = 60;
      const short TEXT_ORDINAL = 62;
@@ -14669,6 +14689,7 @@ module com {
      const short PAGE_LEFT = 3;
      const short PAGE_PRINT_AREA = 8;
      const short PAGE_PRINT_AREA_BOTTOM = 10;
+     const short PAGE_PRINT_AREA_TOP = 11;
      const short PAGE_RIGHT = 4;
      const short PRINT_AREA = 1;
      const short TEXT_LINE = 9;
@@ -15200,6 +15221,8 @@ module com {
      [property, optional] boolean ShowInlineTooltips;
      [property, optional] boolean UseHeaderFooterMenu;
      [property, optional] boolean ShowBookmarks;
+     [property, optional] boolean ShowOutlineContentVisibilityButton;
+     [property, optional] boolean ShowChangesInMargin;
     };
     published constants WritingMode2 {
      const short BT_LR = 5;
@@ -17380,6 +17403,7 @@ module com {
      [property, optional] boolean Wait;
      [property, optional] short DuplexMode;
      [property, optional] string PrinterName;
+     [property, optional] boolean SinglePrintJobs;
     };
     published service PrintSettings {
      [property] boolean PrintBlackFonts;
