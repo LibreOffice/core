@@ -7421,16 +7421,16 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
                 {
                     eFS = css::drawing::FillStyle_BITMAP;
 
-                    const XFillBitmapItem aXFillBitmapItem(pObj->GetMergedItem( XATTR_FILLBITMAP ));
-                    uno::Reference<graphic::XGraphic> xGraphic = aXFillBitmapItem.GetGraphicObject().GetGraphic().GetXGraphic();
+                    const XFillBitmapItem & rXFillBitmapItem(pObj->GetMergedItem( XATTR_FILLBITMAP ));
+                    uno::Reference<graphic::XGraphic> xGraphic = rXFillBitmapItem.GetGraphicObject().GetGraphic().GetXGraphic();
                     uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
                     xPropSet->setPropertyValue("FillBitmap", uno::makeAny(xBitmap));
 
-                    const XFillBmpStretchItem aStretchItem(pObj->GetMergedItem( XATTR_FILLBMP_STRETCH ));
-                    const XFillBmpTileItem aTileItem(pObj->GetMergedItem( XATTR_FILLBMP_TILE ));
-                    if( aTileItem.GetValue() )
+                    const XFillBmpStretchItem & rStretchItem(pObj->GetMergedItem( XATTR_FILLBMP_STRETCH ));
+                    const XFillBmpTileItem & rTileItem(pObj->GetMergedItem( XATTR_FILLBMP_TILE ));
+                    if( rTileItem.GetValue() )
                         xPropSet->setPropertyValue("FillBitmapMode", uno::makeAny(drawing::BitmapMode_REPEAT));
-                    else if( aStretchItem.GetValue() )
+                    else if( rStretchItem.GetValue() )
                         xPropSet->setPropertyValue("FillBitmapMode", uno::makeAny(drawing::BitmapMode_STRETCH));
                     else
                         xPropSet->setPropertyValue("FillBitmapMode", uno::makeAny(drawing::BitmapMode_NO_REPEAT));

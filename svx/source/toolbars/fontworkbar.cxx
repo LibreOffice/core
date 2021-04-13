@@ -151,8 +151,8 @@ static void SetFontWorkShapeTypeState( SdrView const * pSdrView, SfxItemSet& rSe
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
-            const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-            const Any* pAny = aGeometryItem.GetPropertyValueByName( "Type" );
+            const SdrCustomShapeGeometryItem & rGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+            const Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
             if( pAny )
             {
                 OUString aType;
@@ -212,8 +212,8 @@ bool checkForFontWork( SdrObject* pObj )
 
     if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
     {
-        const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-        const Any* pAny = aGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
+        const SdrCustomShapeGeometryItem & rGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+        const Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
         if( pAny )
             *pAny >>= bFound;
     }

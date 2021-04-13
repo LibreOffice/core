@@ -468,8 +468,8 @@ bool SdrObjCustomShape::UseNoFillStyle() const
 bool SdrObjCustomShape::IsMirroredX() const
 {
     bool bMirroredX = false;
-    SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    css::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( "MirroredX" );
+    const SdrCustomShapeGeometryItem & rGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+    const css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "MirroredX" );
     if ( pAny )
         *pAny >>= bMirroredX;
     return bMirroredX;
@@ -477,8 +477,8 @@ bool SdrObjCustomShape::IsMirroredX() const
 bool SdrObjCustomShape::IsMirroredY() const
 {
     bool bMirroredY = false;
-    SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    css::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( "MirroredY" );
+    const SdrCustomShapeGeometryItem & rGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+    const css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "MirroredY" );
     if ( pAny )
         *pAny >>= bMirroredY;
     return bMirroredY;
@@ -1101,9 +1101,9 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
     bool bIsDefaultGeometry = false;
 
     OUString sShapeType;
-    const SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+    const SdrCustomShapeGeometryItem & rGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
-    const Any *pAny = aGeometryItem.GetPropertyValueByName( "Type" );
+    const Any *pAny = rGeometryItem.GetPropertyValueByName( "Type" );
     if ( pAny )
         *pAny >>= sShapeType;
 
@@ -1115,7 +1115,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
     {
         case DefaultType::Viewbox :
         {
-            const Any* pViewBox = const_cast<SdrCustomShapeGeometryItem&>(aGeometryItem).GetPropertyValueByName( "ViewBox" );
+            const Any* pViewBox = rGeometryItem.GetPropertyValueByName( "ViewBox" );
             css::awt::Rectangle aViewBox;
             if (pViewBox && (*pViewBox >>= aViewBox) && pDefCustomShape)
             {
@@ -1128,7 +1128,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
 
         case DefaultType::Path :
         {
-            pAny = const_cast<SdrCustomShapeGeometryItem&>(aGeometryItem).GetPropertyValueByName( sPath, "Coordinates" );
+            pAny = rGeometryItem.GetPropertyValueByName( sPath, "Coordinates" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nVertices && pDefCustomShape->pVertices )
             {
                 css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates1, seqCoordinates2;
@@ -1152,7 +1152,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
 
         case DefaultType::Gluepoints :
         {
-            pAny = const_cast<SdrCustomShapeGeometryItem&>(aGeometryItem).GetPropertyValueByName( sPath, "GluePoints" );
+            pAny = rGeometryItem.GetPropertyValueByName( sPath, "GluePoints" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nGluePoints && pDefCustomShape->pGluePoints )
             {
                 css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqGluePoints1, seqGluePoints2;
@@ -1177,7 +1177,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         case DefaultType::Segments :
         {
             // Path/Segments
-            pAny = const_cast<SdrCustomShapeGeometryItem&>(aGeometryItem).GetPropertyValueByName( sPath, "Segments" );
+            pAny = rGeometryItem.GetPropertyValueByName( sPath, "Segments" );
             if ( pAny )
             {
                 css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > seqSegments1, seqSegments2;
@@ -1220,7 +1220,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
 
         case DefaultType::StretchX :
         {
-            pAny = const_cast<SdrCustomShapeGeometryItem&>(aGeometryItem).GetPropertyValueByName( sPath, "StretchX" );
+            pAny = rGeometryItem.GetPropertyValueByName( sPath, "StretchX" );
             if ( pAny && pDefCustomShape )
             {
                 sal_Int32 nStretchX = 0;
@@ -1237,7 +1237,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
 
         case DefaultType::StretchY :
         {
-            pAny = const_cast<SdrCustomShapeGeometryItem&>(aGeometryItem).GetPropertyValueByName( sPath, "StretchY" );
+            pAny = rGeometryItem.GetPropertyValueByName( sPath, "StretchY" );
             if ( pAny && pDefCustomShape )
             {
                 sal_Int32 nStretchY = 0;
@@ -1254,7 +1254,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
 
         case DefaultType::Equations :
         {
-            pAny = const_cast<SdrCustomShapeGeometryItem&>(aGeometryItem).GetPropertyValueByName( "Equations" );
+            pAny = rGeometryItem.GetPropertyValueByName( "Equations" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nCalculation && pDefCustomShape->pCalculation )
             {
                 css::uno::Sequence< OUString > seqEquations1, seqEquations2;
@@ -1278,7 +1278,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
 
         case DefaultType::TextFrames :
         {
-            pAny = const_cast<SdrCustomShapeGeometryItem&>(aGeometryItem).GetPropertyValueByName( sPath, "TextFrames" );
+            pAny = rGeometryItem.GetPropertyValueByName( sPath, "TextFrames" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nTextRect && pDefCustomShape->pTextRect )
             {
                 css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > seqTextFrames1, seqTextFrames2;
