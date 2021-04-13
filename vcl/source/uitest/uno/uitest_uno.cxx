@@ -18,6 +18,7 @@
 
 #include <vcl/uitest/uitest.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include "uiobject_uno.hxx"
 
