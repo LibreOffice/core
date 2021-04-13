@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b695b236_58a0692f",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1439,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-04-13T19:03:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd3474b4_6ffdc8da",
+      "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e416cb9a_abaf4e92",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57a89b54_e4003f5b",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-04-13T19:03:24Z",
+      "side": 1,
+      "message": "I was not sure about, if it would only omit Strings Or Non-numeric values.",
+      "parentUuid": "e416cb9a_abaf4e92",
+      "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "b92b4063_97b0f008",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-04-13T19:03:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7051775c_646aaf9c",
+      "range": {
+        "startLine": 1482,
+        "startChar": 0,
+        "endLine": 1483,
+        "endChar": 1
+      },
+      "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec458e53_264d0f3a",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 7
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "c753fa3f_7ffbad65",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-04-13T19:03:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec458e53_264d0f3a",
+      "range": {
+        "startLine": 1494,
+        "startChar": 0,
+        "endLine": 1494,
+        "endChar": 1
+      },
+      "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3bffd008_32573320",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 7
@@ -96,6 +180,24 @@
       "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbfef3ac_e94c0763",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-04-13T19:03:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bffd008_32573320",
+      "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
