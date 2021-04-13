@@ -167,6 +167,7 @@ class SwFlyAtContentFrame final: public SwFlyFreeFrame
         #i28701#
     */
     virtual void RegisterAtCorrectPage() override;
+    virtual void RegisterAtPage(SwPageFrame &) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
