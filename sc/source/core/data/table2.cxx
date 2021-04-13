@@ -3307,16 +3307,17 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
                     nLastRow = nEndRow;
 
                 // #i117315# can't use getSumValue, because individual values must be rounded
+                ScFlatUInt16RowSegments::ForwardIterator aSegmentIter(*mpRowHeights);
                 while (nRow <= nLastRow)
                 {
-                    ScFlatUInt16RowSegments::RangeData aData;
-                    if (!mpRowHeights->getRangeData(nRow, aData))
+                    sal_uInt16 nRowVal;
+                    if (!aSegmentIter.getValue(nRow, nRowVal))
                         return nHeight;   // shouldn't happen
 
-                    SCROW nSegmentEnd = std::min( nLastRow, aData.mnRow2 );
+                    SCROW nSegmentEnd = std::min( nLastRow, aSegmentIter.getLastPos() );
 
                     // round-down a single height value, multiply resulting (pixel) values
-                    const sal_uLong nOneHeight = static_cast<sal_uLong>( aData.mnValue * fScale );
+                    const sal_uLong nOneHeight = static_cast<sal_uLong>( nRowVal * fScale );
                     // sometimes scaling results in zero height
                     if (nOneHeight)
                     {
