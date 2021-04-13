@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKREGISTRY_HXX
-#define INCLUDED_VCL_UNX_GTK_A11Y_ATKREGISTRY_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <atk/atk.h>
@@ -31,7 +30,5 @@ void ooo_wrapper_registry_add(
 
 void ooo_wrapper_registry_remove(
     css::uno::Reference<css::accessibility::XAccessible> const& pAccessible);
-
-#endif // __ATK_REGISTRY_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
