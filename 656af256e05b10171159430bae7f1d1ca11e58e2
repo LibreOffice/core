@@ -22,6 +22,23 @@
       "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6f3a592_74be43ff",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-04-13T07:56:16Z",
+      "side": 1,
+      "message": "I don\u0027t think I\u0027ve seen a pattern of using VclEventId::ObjectDying to dismiss non-modal children dialogs before. Is this based on some other example ? It presumably works fine in this case where the dialog is a child of a toplevel frame though.",
+      "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
