@@ -23,6 +23,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <comphelper/configuration.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <editeng/escapementitem.hxx>
 #include <unotools/fltrcfg.hxx>
 
@@ -309,6 +310,29 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf140137, "tdf140137.docx")
 {
     // Don't throw exception during load
+}
+
+DECLARE_OOXMLEXPORT_TEST(testCommentDone, "CommentDone.docx")
+{
+    if (!mbExported)
+    {
+        // This manually toggles (enables) the resolved state of the first comment now, while
+        // import is not yet implemented (TODO)
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            { { "Id", uno::makeAny(OUString("1")) } });
+        dispatchCommand(mxComponent, ".uno:ResolveComment", aPropertyValues);
+        return;
+    }
+
+    xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
+    assertXPath(pXmlComm, "/w:comments/w:comment[1]/w:p", 2);
+    OUString idLastPara = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[2]", "paraId");
+    xmlDocUniquePtr pXmlCommExt = parseExport("word/commentsExtended.xml");
+    assertXPath(pXmlCommExt, "/w15:commentsEx", "Ignorable", "w15");
+    assertXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", 1);
+    OUString idLastParaEx = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "paraId");
+    CPPUNIT_ASSERT_EQUAL(idLastPara, idLastParaEx);
+    assertXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "done", "1");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

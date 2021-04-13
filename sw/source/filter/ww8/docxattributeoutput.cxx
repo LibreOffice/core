@@ -90,6 +90,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/borderline.hxx>
+#include <sax/tools/converter.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -290,6 +291,14 @@ class FieldMarkParamsHelper
     }
 };
 
+// [ISO/IEC29500-1:2016] 17.18.50 ST_LongHexNumber (Eight Digit Hexadecimal Value)
+OUString NumberToHexBinary(sal_Int32 n)
+{
+    OUStringBuffer aBuf;
+    sax::Converter::convertNumberToHexBinary(aBuf, n);
+    return aBuf.makeStringAndClear();
+}
+
 }
 
 void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
@@ -380,7 +389,8 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
     }
 }
 
-void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo )
+sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo,
+                                              bool bGenerateParaId)
 {
     // Paragraphs (in headers/footers/comments/frames etc) can start before another finishes.
     // So a stack is needed to keep track of each paragraph's status separately.
@@ -475,7 +485,14 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     // We will only know if we have to do that later.
     m_pSerializer->mark(Tag_StartParagraph_1);
 
-    m_pSerializer->startElementNS(XML_w, XML_p);
+    std::optional<OUString> aParaId;
+    sal_Int32 nParaId = 0;
+    if (bGenerateParaId)
+    {
+        nParaId = m_nNextParaId++;
+        aParaId = NumberToHexBinary(nParaId);
+    }
+    m_pSerializer->startElementNS(XML_w, XML_p, FSNS(XML_w14, XML_paraId), aParaId);
 
     // postpone the output of the run (we get it before the paragraph
     // properties, but must write it after them)
@@ -486,6 +503,8 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
 
     m_bParagraphOpened = true;
     m_bIsFirstParagraph = false;
+
+    return nParaId;
 }
 
 static OString convertToOOXMLVertOrient(sal_Int16 nOrient)
@@ -6191,7 +6210,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         sal_Int32 nCurrentPos = 0;
         sal_Int32 nEnd = aStr.getLength();
 
-        StartParagraph(ww8::WW8TableNodeInfo::Pointer_t());
+        StartParagraph(ww8::WW8TableNodeInfo::Pointer_t(), false);
 
         // Write paragraph properties.
         StartParagraphProperties();
@@ -7971,14 +7990,14 @@ void DocxAttributeOutput::PostitField( const SwField* pField )
     else
         // Otherwise get a new one.
         nId = m_nNextAnnotationMarkId++;
-    m_postitFields.emplace_back(pPostItField, nId);
+    m_postitFields.emplace_back(pPostItField, PostItDOCXData{ nId });
 }
 
 void DocxAttributeOutput::WritePostitFieldReference()
 {
     while( m_postitFieldsMaxId < m_postitFields.size())
     {
-        OString idstr = OString::number(m_postitFields[m_postitFieldsMaxId].second);
+        OString idstr = OString::number(m_postitFields[m_postitFieldsMaxId].second.id);
 
         // In case this file is inside annotation marks, we want to write the
         // comment reference after the annotation mark is closed, not here.
@@ -7990,27 +8009,37 @@ void DocxAttributeOutput::WritePostitFieldReference()
     }
 }
 
-void DocxAttributeOutput::WritePostitFields()
+DocxAttributeOutput::hasResolved DocxAttributeOutput::WritePostitFields()
 {
-    for (const auto& rPair : m_postitFields)
+    hasResolved eResult = hasResolved::no;
+    for (auto& [f, data] : m_postitFields)
     {
-        OString idstr = OString::number( rPair.second);
-        const SwPostItField* f = rPair.first;
+        OString idstr = OString::number(data.id);
         m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr,
             FSNS( XML_w, XML_author ), f->GetPar1(),
             FSNS( XML_w, XML_date ), DateTimeToOString(f->GetDateTime()),
             FSNS( XML_w, XML_initials ), f->GetInitials() );
 
+        const bool bNeedParaId = f->GetResolved();
+        if (bNeedParaId)
+            eResult = hasResolved::yes;
+
         if (f->GetTextObject() != nullptr)
         {
             // richtext
-            GetExport().WriteOutliner(*f->GetTextObject(), TXT_ATN);
+            data.lastParaId = GetExport().WriteOutliner(*f->GetTextObject(), TXT_ATN, bNeedParaId);
         }
         else
         {
             // just plain text - eg. when the field was created via the
             // .uno:InsertAnnotation API
-            m_pSerializer->startElementNS(XML_w, XML_p);
+            std::optional<OUString> aParaId;
+            if (bNeedParaId)
+            {
+                data.lastParaId = m_nNextParaId++;
+                aParaId = NumberToHexBinary(data.lastParaId);
+            }
+            m_pSerializer->startElementNS(XML_w, XML_p, FSNS(XML_w14, XML_paraId), aParaId);
             m_pSerializer->startElementNS(XML_w, XML_r);
             RunText(f->GetText());
             m_pSerializer->endElementNS(XML_w, XML_r);
@@ -8018,6 +8047,19 @@ void DocxAttributeOutput::WritePostitFields()
         }
 
         m_pSerializer->endElementNS( XML_w, XML_comment );
+    }
+    return eResult;
+}
+
+void DocxAttributeOutput::WritePostItFieldsResolved()
+{
+    for (auto& [f, data] : m_postitFields)
+    {
+        if (!f->GetResolved())
+            continue;
+        OUString idstr = NumberToHexBinary(data.lastParaId);
+        m_pSerializer->singleElementNS(XML_w15, XML_commentEx, FSNS(XML_w15, XML_paraId), idstr,
+                                       FSNS(XML_w15, XML_done), "1");
     }
 }
 

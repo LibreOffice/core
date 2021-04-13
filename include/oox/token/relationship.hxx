@@ -23,6 +23,7 @@ enum class Relationship
     CHARTUSERSHAPES,
     COMMENTS,
     COMMENTAUTHORS,
+    COMMENTSEXTENDED,
     CONTROL,
     CTRLPROP,
     CUSTOMXML,

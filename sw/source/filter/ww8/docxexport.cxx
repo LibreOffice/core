@@ -736,9 +736,29 @@ void DocxExport::WritePostitFields()
 
     pPostitFS->startElementNS( XML_w, XML_comments, MainXmlNamespaces());
     m_pAttrOutput->SetSerializer( pPostitFS );
-    m_pAttrOutput->WritePostitFields();
+    const auto eHasResolved = m_pAttrOutput->WritePostitFields();
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
     pPostitFS->endElementNS( XML_w, XML_comments );
+
+    if (eHasResolved != DocxAttributeOutput::hasResolved::yes)
+        return;
+
+    m_rFilter.addRelation(m_pDocumentFS->getOutputStream(),
+                          oox::getRelationship(Relationship::COMMENTSEXTENDED),
+                          "commentsExtended.xml");
+
+    pPostitFS = m_rFilter.openFragmentStreamWithSerializer(
+        "word/commentsExtended.xml",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.commentsExtended+xml");
+
+    pPostitFS->startElementNS(XML_w15, XML_commentsEx, // Add namespaces manually now
+                              FSNS(XML_xmlns, XML_mc), m_rFilter.getNamespaceURL(OOX_NS(mce)),
+                              FSNS(XML_xmlns, XML_w15), m_rFilter.getNamespaceURL(OOX_NS(w15)),
+                              FSNS(XML_mc, XML_Ignorable), "w15");
+    m_pAttrOutput->SetSerializer(pPostitFS);
+    m_pAttrOutput->WritePostItFieldsResolved();
+    m_pAttrOutput->SetSerializer(m_pDocumentFS);
+    pPostitFS->endElementNS(XML_w15, XML_commentsEx);
 }
 
 void DocxExport::WriteNumbering()
@@ -1709,18 +1729,21 @@ bool DocxExport::ignoreAttributeForStyleDefaults( sal_uInt16 nWhich ) const
     return MSWordExportBase::ignoreAttributeForStyleDefaults( nWhich );
 }
 
-void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp)
+sal_Int32 DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp,
+                                    bool bNeedsLastParaId)
 {
     const EditTextObject& rEditObj = rParaObj.GetTextObject();
     MSWord_SdrAttrIter aAttrIter( *this, rEditObj, nTyp );
 
     sal_Int32 nPara = rEditObj.GetParagraphCount();
+    sal_Int32 nParaId = 0;
     for( sal_Int32 n = 0; n < nPara; ++n )
     {
         if( n )
             aAttrIter.NextPara( n );
 
-        AttrOutput().StartParagraph( ww8::WW8TableNodeInfo::Pointer_t());
+        nParaId = AttrOutput().StartParagraph(ww8::WW8TableNodeInfo::Pointer_t(),
+                                              bNeedsLastParaId && n == nPara - 1);
         rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
         OUString aStr( rEditObj.GetText( n ));
         sal_Int32 nCurrentPos = 0;
@@ -1755,6 +1778,7 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
 //        aAttrIter.OutParaAttr(false);
         AttrOutput().EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t());
     }
+    return nParaId;
 }
 
 void DocxExport::SetFS( ::sax_fastparser::FSHelperPtr const & pFS )
