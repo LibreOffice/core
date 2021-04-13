@@ -160,11 +160,11 @@ public:
     CPPUNIT_TEST(testODFUntrustedGoodGPG);
     CPPUNIT_TEST(testODFBrokenStreamGPG);
     CPPUNIT_TEST(testODFBrokenDsigGPG);
+    CPPUNIT_TEST(testPreserveMacroTemplateSignature12);
 #if HAVE_GPGCONF_SOCKETDIR
     CPPUNIT_TEST(testODFEncryptedGPG);
 #endif
 #endif
-    CPPUNIT_TEST(testPreserveMacroTemplateSignature12);
     CPPUNIT_TEST(testDropMacroTemplateSignature);
     CPPUNIT_TEST(testPreserveMacroTemplateSignature10);
     CPPUNIT_TEST(testPreserveMacroSignatureODB);
@@ -1001,6 +1001,8 @@ void SigningTest::testODFEncryptedGPG()
 
 #endif
 
+#endif
+
 SfxObjectShell* SigningTest::assertDocument(const ::CppUnit::SourceLine aSrcLine,
                                             const OUString& rFilterName,
                                             const SignatureState nDocSign,
@@ -1360,8 +1362,6 @@ void SigningTest::testPreserveMacroTemplateSignature10()
     assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
                    SignatureState::NOTVALIDATED, OUString());
 }
-
-#endif
 
 void SigningTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
