@@ -1916,6 +1916,13 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             if (nSubType == REF_SEQUENCEFLD)
                 aField15[0] |= (0x4 << 5);
         }
+        // This ought to apply to any field, but just to be safe, start off with DATE/TIME only.
+        if (pField->GetTyp()->Which() == SwFieldIds::DateTime
+            && (pField->GetSubType() & FIXEDFLD))
+        {
+            //bit 5 - Locked: do not recalculate field
+            aField15[1] |= 0x10;
+        }
     }
 
     pFieldP->Append( Fc2Cp( Strm().Tell() ), aField15 );
