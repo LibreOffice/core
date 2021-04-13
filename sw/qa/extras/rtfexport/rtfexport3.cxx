@@ -14,6 +14,8 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -32,6 +34,16 @@ public:
     {
     }
 };
+
+DECLARE_RTFEXPORT_TEST(testTdf100961_fixedDateTime, "tdf100961_fixedDateTime.rtf")
+{
+    // This should be a fixed date/time field, not the current time.
+    getParagraph(1, "05.01.19 04:06:08");
+
+    uno::Reference<text::XTextFieldsSupplier> xTFS(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xFields(xTFS->getTextFields()->createEnumeration());
+    CPPUNIT_ASSERT_MESSAGE("constant time", getProperty<bool>(xFields->nextElement(), "IsFixed"));
+}
 
 DECLARE_RTFEXPORT_TEST(testTdf108949, "tdf108949_footnoteCharFormat.odt")
 {

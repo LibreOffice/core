@@ -2223,6 +2223,9 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             }
             m_aFormfieldAttributes.clear();
             m_aFormfieldSprms.clear();
+
+            if (m_aStates.top().isFieldLocked())
+                singleChar(cFieldLock);
             singleChar(cFieldSep);
         }
         break;
@@ -3642,6 +3645,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
     , m_nInternalState(RTFInternalState::NORMAL)
     , m_eDestination(Destination::NORMAL)
     , m_eFieldStatus(RTFFieldStatus::NONE)
+    , m_bFieldLocked(false)
     , m_nBorderState(RTFBorderState::NONE)
     , m_nCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(0))
     , m_nUc(1)
