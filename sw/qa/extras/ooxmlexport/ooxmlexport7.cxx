@@ -851,8 +851,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79591, "fdo79591.docx")
      */
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr", "name", "");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "ID", "");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr", "name", "_x0000_t0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "ID", "_x0000_t0");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")

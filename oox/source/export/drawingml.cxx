@@ -3972,7 +3972,7 @@ void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< Pro
                 {
                     OUString sVal;
                     rOuterShdwProp.Value >>= sVal;
-                    aOuterShdwAttrList->add( XML_algn, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    aOuterShdwAttrList->add( XML_algn, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ) );
                 }
                 else if( rOuterShdwProp.Name == "blurRad" )
                 {
@@ -4408,7 +4408,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
         {
             OUString sVal;
             rEffectProp.Value >>= sVal;
-            aCameraAttrList->add( XML_prst, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+            aCameraAttrList->add(XML_prst, OUStringToOString(sVal, RTL_TEXTENCODING_UTF8));
         }
         else if( rEffectProp.Name == "fov" )
         {
@@ -4453,7 +4453,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
                 nToken = XML_rig;
             else if( rLightRigProp.Name == "dir" )
                 nToken = XML_dir;
-            aLightRigAttrList->add( nToken, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+            aLightRigAttrList->add(nToken, OUStringToOString(sVal, RTL_TEXTENCODING_UTF8));
         }
         else if( rLightRigProp.Name == "rotLat" ||
                 rLightRigProp.Name == "rotLon" ||
@@ -4532,7 +4532,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
         {
             OUString sVal;
             rShape3DProp.Value >>= sVal;
-            aShape3DAttrList->add( XML_prstMaterial, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+            aShape3DAttrList->add(XML_prstMaterial, OUStringToOString(sVal, RTL_TEXTENCODING_UTF8));
         }
         else if( rShape3DProp.Name == "extrusionClr" )
         {
@@ -4576,7 +4576,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
                 {
                     OUString sVal;
                     rBevelProp.Value >>= sVal;
-                    aBevelAttrList->add( XML_prst, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    aBevelAttrList->add(XML_prst, OUStringToOString(sVal, RTL_TEXTENCODING_UTF8));
                 }
             }
 
@@ -4783,7 +4783,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
         = sax_fastparser::FastSerializerHelper::createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nDiagramId).getStr());
     OUString sName = "Diagram" + OUString::number(nDiagramId);
-    pDocPrAttrList->add(XML_name, OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
+    pDocPrAttrList->add(XML_name, OUStringToOString(sName, RTL_TEXTENCODING_UTF8));
 
     if (GetDocumentType() == DOCUMENT_DOCX)
     {
