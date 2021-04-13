@@ -2313,7 +2313,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 ++aBreakIt;
         }
 
-        AttrOutput().StartParagraph( pTextNodeInfo );
+        AttrOutput().StartParagraph(pTextNodeInfo, false);
 
         const SwSection* pTOXSect = nullptr;
         if( m_bInWriteTOX )

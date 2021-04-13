@@ -129,7 +129,8 @@ public:
     virtual void RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript ) override;
 
     /// Start of the paragraph.
-    virtual void StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo ) override;
+    virtual sal_Int32 StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo,
+                                     bool bGenerateParaId) override;
 
     /// End of the paragraph.
     virtual void EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner ) override;
@@ -796,6 +797,9 @@ private:
     sal_Int32 m_nNextBookmarkId;
     sal_Int32 m_nNextAnnotationMarkId;
 
+    /// [MS-DOCX] section 2.6.2.3
+    sal_Int32 m_nNextParaId = 1; // MUST be greater than 0
+
     OUString m_sRawText;
 
     /// Bookmarks to output
@@ -929,8 +933,13 @@ private:
     std::vector<const SdrObject*> m_aPostponedFormControls;
     std::vector<PostponedDrawing> m_aPostponedActiveXControls;
     const SwField* pendingPlaceholder;
+
+    struct PostItDOCXData{
+        sal_Int32 id;
+        sal_Int32 lastParaId = 0; // [MS-DOCX] 2.5.3.1 CT_CommentEx needs paraId attribute
+    };
     /// Maps postit fields to ID's, used in commentRangeStart/End, commentReference and comment.xml.
-    std::vector< std::pair<const SwPostItField*, sal_Int32> > m_postitFields;
+    std::vector<std::pair<const SwPostItField*, PostItDOCXData>> m_postitFields;
     /// Number of postit fields which already have a commentReference written.
     unsigned int m_postitFieldsMaxId;
     int m_anchorId;
@@ -1021,7 +1030,9 @@ public:
     static void WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr const & fs, int tag, const SwEndNoteInfo& info, int listtag );
 
     bool HasPostitFields() const;
-    void WritePostitFields();
+    enum class hasResolved { no, yes };
+    hasResolved WritePostitFields();
+    void WritePostItFieldsResolved();
 
     /// VMLTextExport
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj) override;
