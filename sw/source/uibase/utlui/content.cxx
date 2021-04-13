@@ -1216,18 +1216,22 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
     rPop.set_sensitive(OString::number(HIDE_OUTLINE_CONTENT_VISIBILITY), false);
     rPop.set_sensitive(OString::number(SHOW_OUTLINE_CONTENT_VISIBILITY), false);
 
-    if (!pThis->GetActiveWrtShell()->GetViewOptions()->IsShowOutlineContentVisibilityButton())
-        return;
-
     // todo: multi selection
     if (rContentTree.count_selected_rows() > 1)
         return;
 
+    bool bIsRoot = lcl_IsContentType(rEntry, rContentTree);
+
+    if (pThis->GetActiveWrtShell()->GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
+    {
+        if (!bIsRoot)
+            rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), true);
+        return;
+    }
+
     const SwNodes& rNodes = pThis->GetWrtShell()->GetNodes();
     const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
     size_t nOutlinePos = weld::GetAbsPos(rContentTree, rEntry);
-
-    bool bIsRoot = lcl_IsContentType(rEntry, rContentTree);
 
     if (!bIsRoot)
         --nOutlinePos;
@@ -1323,8 +1327,7 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
         rPop.set_sensitive(OString::number(SHOW_OUTLINE_CONTENT_VISIBILITY), bHasFolded);
     }
 
-    bIsRoot ? rPop.remove(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY))
-            : rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), true);
+    rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), !bIsRoot);
 }
 
 IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
