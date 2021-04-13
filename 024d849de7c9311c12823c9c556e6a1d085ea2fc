@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dafd2693_e4202d20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-04-13T05:27:34Z",
+      "side": 1,
+      "message": "Hmm - the commit message explains the PAST behaviour, not the CURRENT behaviour.\n\nAlso, especially for beginners, I would suggest adding some paragraphs showing that you understand what the patch is doing.\n-a short summary of what was wrong before (i.e. the background colour was active when the UI looked at the header\u0027s area.)\n-why this patches change fixes this\n-what testing/investigation you did to see if this would break anything. (perhaps hard to do when everything is new and foreign).\n\nFor example, see one of my (shorter) commit messages at https://gerrit.libreoffice.org/c/core/+/113986",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 65
+      },
+      "revId": "024d849de7c9311c12823c9c556e6a1d085ea2fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24632a26_513dce5f",
+        "filename": "svx/source/xoutdev/xpool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-04-13T05:27:34Z",
+      "side": 1,
+      "message": "What is this supposed to do? It doesn\u0027t look right to me.\n\n[Oh, I see - it is adapted from a comment I made in the bug report. The comment was just there to indicate that a FillStyleItem was already created - and that the default (unspecified) value for that is SOLID - which is why we see a SOLID colour - the colour XFillColorItem   (aNullStr,aNullFillCol). Normally I would expect a default fillstyle to be NONE, but that isn\u0027t true in this case, which is why we see the problems. But it would be VERY DANGEROUS - in terms of breaking other people\u0027s code - to change the default value, so instead we are just assigning a NONE in cases that still need it.]\n\nIn any case, this is either wrong, or else it does nothing. It certainly is different looking than all the other initialized defaults in this file (which is a good clue).",
+      "range": {
+        "startLine": 116,
+        "startChar": 83,
+        "endLine": 116,
+        "endChar": 85
+      },
+      "revId": "024d849de7c9311c12823c9c556e6a1d085ea2fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
