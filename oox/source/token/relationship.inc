@@ -2,6 +2,7 @@
 {Relationship::CHART, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart"},
 {Relationship::COMMENTS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"},
 {Relationship::COMMENTAUTHORS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/commentAuthors"},
+{Relationship::COMMENTSEXTENDED, "http://schemas.microsoft.com/office/2011/relationships/commentsExtended"},
 {Relationship::CONTROL, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control"},
 {Relationship::CTRLPROP, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp"},
 {Relationship::CUSTOMXML, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml"},

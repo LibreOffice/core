@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SAX_TOOLS_CONVERTER_HXX
 #define INCLUDED_SAX_TOOLS_CONVERTER_HXX
 
+#include <sal/config.h>
+
+#include <type_traits>
+
 #include <sax/saxdllapi.h>
 
 #include <sal/types.h>
@@ -212,6 +216,16 @@ public:
     static bool convertAny(OUStringBuffer&          rsValue,
                            OUStringBuffer&          rsType ,
                            const css::uno::Any& rValue);
+
+    /** convert specified byte sequence to xsd:hexBinary string **/
+    static void convertBytesToHexBinary(OUStringBuffer& rBuffer, const void* pBytes,
+                                        sal_Int32 nBytes);
+
+    template <typename T, std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>
+    static void convertNumberToHexBinary(OUStringBuffer& rBuffer, T n)
+    {
+        convertBytesToHexBinary(rBuffer, &n, sizeof(n));
+    }
 
 };
 
