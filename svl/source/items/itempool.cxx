@@ -670,6 +670,7 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
         pNewItem = rItem.Clone(pImpl->mpMaster);
     pNewItem->SetWhich(nWhich);
     assert(typeid(rItem) == typeid(*pNewItem) && "SfxItemPool::Put(): unequal types, no Clone() override?");
+#ifndef NDEBUG
     if (dynamic_cast<const SfxSetItem*>(&rItem) == nullptr)
     {
         assert((!IsItemPoolable(nWhich) || rItem == *pNewItem)
@@ -677,6 +678,7 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
         assert((!IsItemPoolable(*pNewItem) || *pNewItem == rItem)
             && "SfxItemPool::Put(): unequal items: no operator== override?");
     }
+#endif
     AddRef( *pNewItem );
 
     // 4. finally insert into the pointer array
