@@ -1116,22 +1116,14 @@ std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const Fa
     addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
     FcPatternAddDouble(pPattern, FC_PIXEL_SIZE, nSize);
 
-    int hintstyle = FC_HINT_FULL;
-
     FcConfigSubstitute(pConfig, pPattern, FcMatchPattern);
     FontConfigFontOptions::cairo_font_options_substitute(pPattern);
     FcDefaultSubstitute(pPattern);
 
     FcResult eResult = FcResultNoMatch;
     FcFontSet* pFontSet = rWrapper.getFontSet();
-    FcPattern* pResult = FcFontSetMatch( pConfig, &pFontSet, 1, pPattern, &eResult );
-    if( pResult )
-    {
-        (void) FcPatternGetInteger(pResult,
-            FC_HINT_STYLE, 0, &hintstyle);
-
+    if (FcPattern* pResult = FcFontSetMatch(pConfig, &pFontSet, 1, pPattern, &eResult))
         pOptions.reset(new FontConfigFontOptions(pResult));
-    }
 
     // cleanup
     FcPatternDestroy( pPattern );
