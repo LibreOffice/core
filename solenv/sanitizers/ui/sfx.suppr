@@ -19,7 +19,6 @@ sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='showprint'] orphan-label
 sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='showedittime'] orphan-label
 sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='showrevision'] orphan-label
 sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='showsize'] orphan-label
-sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='showlocation'] orphan-label
 sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='showtype'] orphan-label
 sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='showtemplate'] orphan-label
 sfx2/uiconfig/ui/documentinfopage.ui://GtkImage[@id='icon'] no-labelled-by
