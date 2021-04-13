@@ -94,6 +94,7 @@ class SwAnchoredDrawObject final : public SwAnchoredObject
             page frame
         */
         virtual void RegisterAtCorrectPage() override;
+        virtual void RegisterAtPage(SwPageFrame &) override;
 
         virtual bool SetObjTop_( const SwTwips _nTop) override;
         virtual bool SetObjLeft_( const SwTwips _nLeft) override;
