@@ -2,6 +2,92 @@
   "comments": [
     {
       "key": {
+        "uuid": "26cacbfa_e1fe26b7",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-13T06:42:15Z",
+      "side": 1,
+      "message": "This now is not limited to QR codes. Now it generates more types of *barcodes* (note that QR code is a type of *matrix barcode* [1]), and so it\u0027s desirable to rename all relevant names from *QRCode* to *Barcode* where applicable.\n\n[1] https://en.wikipedia.org/wiki/QR_code",
+      "range": {
+        "startLine": 103,
+        "startChar": 8,
+        "endLine": 103,
+        "endChar": 22
+      },
+      "revId": "e80cc6c663d2c05db411749c2097956cba5eebe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "722b0862_62b33e36",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-13T06:42:15Z",
+      "side": 1,
+      "message": "Do I understand it right, that you initially initialize the QRType with the content of t, and after that re-assign it to another string unconditionally? Why?\n\nIt could be cleaner then to avoid the intermediate OString, and do something like\n\n    std::string QRType \u003d (aQRType \u003d\u003d \"QR Code\") ? \"QR_CODE\" : \"CODE_128\";\n\nor even introduce an utility mapper between OUStrings coming in aQRType and std::strings accepted by ZXing::BarcodeFormatFromString.\n\nAlso why do you only limit to two types?",
+      "revId": "e80cc6c663d2c05db411749c2097956cba5eebe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6c97113_e94c91d4",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-13T06:42:15Z",
+      "side": 1,
+      "message": "Why is this \"edit\", if it is a combo box?\n\nWhy it is named \"m_xComboBox\", which is absolutely not telling what it is about? See e.g. how \"m_xSpinBorder\" has \"Border\" in its name, to tell what it controls.",
+      "range": {
+        "startLine": 170,
+        "startChar": 46,
+        "endLine": 170,
+        "endChar": 50
+      },
+      "revId": "e80cc6c663d2c05db411749c2097956cba5eebe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b3254a4_3fc5c88f",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-13T06:42:15Z",
+      "side": 1,
+      "message": "Don\u0027t we expect the strings in the combo box to be translatable? It seems that passing a translatable string to a function expecting API values is not optimal. Better take *number* of selected element, and have a mapping from the numeric positions to the API type names.",
+      "range": {
+        "startLine": 245,
+        "startChar": 4,
+        "endLine": 245,
+        "endChar": 16
+      },
+      "revId": "e80cc6c663d2c05db411749c2097956cba5eebe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4f629d17_5f443e4e",
         "filename": "schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng",
         "patchSetId": 3
