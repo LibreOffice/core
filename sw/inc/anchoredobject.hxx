@@ -295,6 +295,8 @@ class SW_DLLPUBLIC SwAnchoredObject
         /** method to invalidate position of the anchored object */
         virtual void InvalidateObjPos() = 0;
 
+        virtual void RegisterAtPage(SwPageFrame &) = 0;
+
         /** method to perform necessary invalidations for the positioning of
             objects, for whose the wrapping style influence has to be considered
             on the object positioning.
