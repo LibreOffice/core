@@ -23,6 +23,8 @@
 
 #include <viewopt.hxx>
 
+#include <FrameControlsManager.hxx>
+
 SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin,
                                                              const SwFrame* pFrame)
     : InterimItemWindow(pEditWin, "modules/swriter/ui/outlinebutton.ui", "OutlineButton")
@@ -223,14 +225,40 @@ IMPL_LINK(SwOutlineContentVisibilityWin, MouseMoveHdl, const MouseEvent&, rMEvt,
             auto nY = GetPosPixel().getY() + rMEvt.GetPosPixel().getY();
             if (nY <= 0 || nY <= aFrameAreaPxRect.Top() || nY >= aFrameAreaPxRect.Bottom()
                 || nY >= GetEditWin()->GetSizePixel().Height())
-                Hide();
+            {
+                GetEditWin()->SetSavedOutlineFrame(nullptr);
+                GetEditWin()->GetFrameControlsManager().RemoveControlsByType(
+                    FrameControlType::Outline, GetFrame());
+                // warning: "this" is disposed now
+            }
         }
     }
     else if (rMEvt.IsEnterWindow())
     {
+        // Leave window event might not have resulted in removing hide button from saved frame
+        // and the edit win might not receive mouse event between leaving saved frame button and
+        // entering this button.
+        if (GetFrame() != GetEditWin()->GetSavedOutlineFrame())
+        {
+            SwFrameControlPtr pFrameControl = GetEditWin()->GetFrameControlsManager().GetControl(
+                FrameControlType::Outline, GetEditWin()->GetSavedOutlineFrame());
+            if (pFrameControl)
+            {
+                SwOutlineContentVisibilityWin* pControl
+                    = dynamic_cast<SwOutlineContentVisibilityWin*>(pFrameControl->GetIFacePtr());
+                if (pControl && pControl->GetSymbol() == ButtonSymbol::HIDE)
+                {
+                    GetEditWin()->GetFrameControlsManager().RemoveControlsByType(
+                        FrameControlType::Outline, GetEditWin()->GetSavedOutlineFrame());
+                    // The outline content visibility window frame control (hide button)
+                    // for saved outline frame is now disposed.
+                }
+            }
+            GetEditWin()->SetSavedOutlineFrame(const_cast<SwFrame*>(GetFrame()));
+        }
         if (!m_bDestroyed && m_aDelayTimer.IsActive())
             m_aDelayTimer.Stop();
-        // bring button to top and grab focus
+        // bring button to top
         SetZOrder(this, ZOrderFlags::First);
     }
     return false;
