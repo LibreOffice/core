@@ -1140,7 +1140,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorWidthFromLeftMargin, "tdf1
     // tdf#132976 The size of the width of this shape should come from the size of the left margin.
     // It was set to the size of the width of the entire page before.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width", "1133");
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "width", "1133");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorWidthFromInsideOutsideMargin, "tdf133861_RelativeAnchorWidthFromInsideOutsideMargin.docx")
@@ -1149,13 +1149,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorWidthFromInsideOutsideMarg
     // The open book: outside --text-- inside | inside --text-- outside
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Inside
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "width", "1440");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds", "width", "1440");
     // Outside
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "width", "2552");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds", "width", "2552");
     // Outside
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "width", "2552");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[3]/bounds", "width", "2552");
     // Inside
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[4]/bounds", "width", "1440");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[4]/bounds", "width", "1440");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBodyPrUpright, "tdf123610_handle_upright.docx")

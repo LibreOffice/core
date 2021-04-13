@@ -163,12 +163,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testAnchorPositionBasedOnParagraph)
     load(DATA_DIRECTORY, "tdf134783_testAnchorPositionBasedOnParagraph.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "top", "1671");
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "bottom", "1732");
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "top", "1947");
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "bottom", "2008");
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "top", "3783");
-    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "bottom", "3844");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds", "top", "1671");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds", "bottom", "1732");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds", "top", "1947");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds", "bottom", "2008");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[3]/bounds", "top", "3783");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[3]/bounds", "bottom", "3844");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
@@ -181,8 +181,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
     // Without the fix in place, this test would have failed with
     // - Expected: 1932
     // - Actual  : 7476
-    assertXPath(pXmlDoc, "//fly/infos/bounds", "top", "1932");
-    assertXPath(pXmlDoc, "//fly/infos/bounds", "bottom", "7184");
+    assertXPath(pXmlDoc, "//anchored/fly/infos/bounds", "top", "1932");
+    assertXPath(pXmlDoc, "//anchored/fly/infos/bounds", "bottom", "7184");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxNotModifiedOnOpen)
@@ -210,10 +210,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
     discardDumpedLayout();
     xmlDocUniquePtr pLayout = parseLayoutDump();
     CPPUNIT_ASSERT(pLayout);
-    sal_Int32 nFlyLeft = getXPath(pLayout, "//fly/infos/bounds", "left").toInt32();
-    sal_Int32 nFlyTop = getXPath(pLayout, "//fly/infos/bounds", "top").toInt32();
-    sal_Int32 nFlyRight = getXPath(pLayout, "//fly/infos/bounds", "right").toInt32();
-    sal_Int32 nFlyBottom = getXPath(pLayout, "//fly/infos/bounds", "bottom").toInt32();
+    sal_Int32 nFlyLeft = getXPath(pLayout, "//anchored/fly/infos/bounds", "left").toInt32();
+    sal_Int32 nFlyTop = getXPath(pLayout, "//anchored/fly/infos/bounds", "top").toInt32();
+    sal_Int32 nFlyRight = getXPath(pLayout, "//anchored/fly/infos/bounds", "right").toInt32();
+    sal_Int32 nFlyBottom = getXPath(pLayout, "//anchored/fly/infos/bounds", "bottom").toInt32();
     tools::Rectangle aFlyRect(nFlyLeft, nFlyTop, nFlyRight, nFlyBottom);
     // Without the accompanying fix in place, this test would have failed, as aFlyRect was too wide,
     // so it was not inside aShapeRect anymore.

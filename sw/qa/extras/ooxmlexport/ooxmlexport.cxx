@@ -822,10 +822,10 @@ DECLARE_OOXMLEXPORT_TEST(testTextboxRightEdge, "textbox-right-edge.docx")
     // I'm fairly sure this is not specific to DOCX, but the doc model created
     // by the ODF import doesn't trigger this bug, so let's test this here
     // instead of uiwriter.
-    int nShapeLeft = parseDump("//SwAnchoredDrawObject/bounds", "left").toInt32();
-    int nShapeWidth = parseDump("//SwAnchoredDrawObject/bounds", "width").toInt32();
-    int nTextboxLeft = parseDump("//fly/infos/bounds", "left").toInt32();
-    int nTextboxWidth = parseDump("//fly/infos/bounds", "width").toInt32();
+    int nShapeLeft = parseDump("//anchored/SwAnchoredDrawObject/bounds", "left").toInt32();
+    int nShapeWidth = parseDump("//anchored/SwAnchoredDrawObject/bounds", "width").toInt32();
+    int nTextboxLeft = parseDump("//anchored/fly/infos/bounds", "left").toInt32();
+    int nTextboxWidth = parseDump("//anchored/fly/infos/bounds", "width").toInt32();
     // This is a rectangle, make sure the right edge of the textbox is still
     // inside the draw shape.
     CPPUNIT_ASSERT(nShapeLeft + nShapeWidth >= nTextboxLeft + nTextboxWidth);

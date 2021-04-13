@@ -3748,7 +3748,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129655)
 {
     createDoc("tdf129655-vtextbox.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//fly/txt[@WritingMode='Vertical']", 1);
+    assertXPath(pXmlDoc, "//anchored/fly/txt[@WritingMode='Vertical']", 1);
 }
 
 static uno::Reference<text::XTextRange> getAssociatedTextRange(uno::Any object)
