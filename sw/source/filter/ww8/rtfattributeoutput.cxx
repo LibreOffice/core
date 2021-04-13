@@ -211,7 +211,8 @@ void RtfAttributeOutput::RTLAndCJKState(bool bIsRTL, sal_uInt16 nScript)
     m_bControlLtrRtl = true;
 }
 
-void RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo)
+sal_Int32 RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo,
+                                             bool /*bGenerateParaId*/)
 {
     if (m_bIsBeforeFirstParagraph && m_rExport.m_nTextTyp != TXT_HDFT)
         m_bIsBeforeFirstParagraph = false;
@@ -267,6 +268,7 @@ void RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNo
     }
 
     OSL_ENSURE(m_aRun.getLength() == 0, "m_aRun is not empty");
+    return 0;
 }
 
 void RtfAttributeOutput::EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner)
