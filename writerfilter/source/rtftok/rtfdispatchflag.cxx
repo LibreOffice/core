@@ -1234,6 +1234,12 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                                                   new RTFValue(1));
         }
         break;
+        case RTFKeyword::FLDLOCK:
+        {
+            if (m_aStates.top().getDestination() == Destination::FIELD)
+                m_aStates.top().setFieldLocked(true);
+        }
+        break;
         default:
         {
             SAL_INFO("writerfilter", "TODO handle flag '" << keywordToString(nKeyword) << "'");

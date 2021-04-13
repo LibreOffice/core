@@ -171,6 +171,7 @@ protected:
     ~BinaryObj() {}
 };
 
+const sal_uInt8 cFieldLock = 0x8;
 const sal_uInt8 cFieldStart = 0x13;
 const sal_uInt8 cFieldSep = 0x14;
 const sal_uInt8 cFieldEnd = 0x15;

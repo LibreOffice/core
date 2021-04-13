@@ -48,7 +48,6 @@ const sal_Unicode uNoBreakHyphen = 0x2011;
 const sal_Unicode uSoftHyphen = 0xAD;
 
 const sal_uInt8 cFtnEdnCont = 0x4;
-const sal_uInt8 cFieldLock = 0x8;
 
 namespace writerfilter::ooxml
 {
