@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "709036e8_53771d5f",
+        "filename": "xmloff/source/draw/QRCodeContext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-04-13T06:20:35Z",
+      "side": 1,
+      "message": "This fails to build:\n\nxmloff/source/draw/QRCodeContext.cxx:79:25: error: ‘struct com::sun::star::drawing::QRCode’ has no member named ‘Type’\n   79 |                 aQRCode.Type \u003d aIter.toString();",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 48
+      },
+      "revId": "e80cc6c663d2c05db411749c2097956cba5eebe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
