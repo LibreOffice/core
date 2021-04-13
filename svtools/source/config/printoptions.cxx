@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <officecfg/Office/Common.hxx>
