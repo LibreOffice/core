@@ -1628,7 +1628,11 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
         // reduce log noise by ignoring two properties that higher level code queries for on all objects
         SAL_WARN_IF(rPropertyName != "FromWordArt" && rPropertyName != "GraphicColorMode",
             "svx.uno", "Unknown Property: " << rPropertyName);
-        throw beans::UnknownPropertyException( rPropertyName, static_cast<cppu::OWeakObject*>(this));
+        // Just ignore these. Higher level code tries to set them on everything, and exception
+        // throwing becomes expensive when loading tons of shape objects.
+        if (rPropertyName == u"FromWordArt" || rPropertyName == u"GraphicColorMode")
+            return;
+        //throw beans::UnknownPropertyException( rPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
 
     if ((pMap->nFlags & beans::PropertyAttribute::READONLY) != 0)
