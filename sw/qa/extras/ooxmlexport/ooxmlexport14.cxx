@@ -1318,7 +1318,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromTopMarginHasHead
     // Note: page print area top = margin + header height.
     // In this case the header exists.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "2551");
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "height", "2551");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromTopMarginNoHeader,
@@ -1333,7 +1333,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromTopMarginNoHeade
     // Note: page print area top = margin + header height.
     // In this case the header does not exist, so OpenDocument and OOXML margins are the same.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "2551");
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "height", "2551");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf64531,"tdf64531.docx")
@@ -1354,7 +1354,7 @@ DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWor
     if (!pXmlDoc)
         return;
     // The bound rect of shape will be wider if wrap does not work (the wrong value is 3167).
-    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width", "2500");
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "width", "2500");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredX, "tdf97517_testVmlLineShapeMirroredX.docx")

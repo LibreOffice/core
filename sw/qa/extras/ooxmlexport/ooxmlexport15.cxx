@@ -893,7 +893,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromBottomMarginHasF
     // Note: page print area bottom = margin + footer height.
     // In this case the footer exists.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "1147");
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "height", "1147");
 }
 
 DECLARE_OOXMLEXPORT_TEST(TestTdf132483, "tdf132483.docx")
@@ -917,7 +917,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromBottomMarginNoFo
     // Note: page print area bottom = margin + footer height.
     // In this case the footer does not exist, so OpenDocument and OOXML margins are the same.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "1147");
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "height", "1147");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133702, "tdf133702.docx")

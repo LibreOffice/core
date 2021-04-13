@@ -1008,9 +1008,9 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAlignmentFromTopMargin,
         return;
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[1]/bounds", "top", "1502"); // center
-    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[2]/bounds", "top", "2683"); // bottom
-    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[3]/bounds", "top", "313");  // top
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds", "top", "1502"); // center
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds", "top", "2683"); // bottom
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds", "top", "313");  // top
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

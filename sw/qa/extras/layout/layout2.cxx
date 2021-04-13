@@ -1982,7 +1982,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf123651)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Without the accompanying fix in place, this test would have failed with 'Expected: 7639;
     // Actual: 12926'. The shape was below the second "Lorem ipsum" text, not above it.
-    const sal_Int32 nTopValue = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "top").toInt32();
+    const sal_Int32 nTopValue
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "top").toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7639, nTopValue, 10);
 }
 
@@ -2402,9 +2403,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124601b)
     createDoc("tdf124601b.doc");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    sal_Int32 nFlyTop = getXPath(pXmlDoc, "//fly/infos/bounds", "top").toInt32();
-    sal_Int32 nFlyLeft = getXPath(pXmlDoc, "//fly/infos/bounds", "left").toInt32();
-    sal_Int32 nFlyRight = nFlyLeft + getXPath(pXmlDoc, "//fly/infos/bounds", "width").toInt32();
+    sal_Int32 nFlyTop = getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "top").toInt32();
+    sal_Int32 nFlyLeft = getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "left").toInt32();
+    sal_Int32 nFlyRight
+        = nFlyLeft + getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "width").toInt32();
     sal_Int32 nSecondRowTop = getXPath(pXmlDoc, "//tab/row[2]/infos/bounds", "top").toInt32();
     sal_Int32 nLastCellLeft
         = getXPath(pXmlDoc, "//tab/row[1]/cell[5]/infos/bounds", "left").toInt32();
@@ -2665,7 +2667,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testWriterImageNoCapture)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
     sal_Int32 nPageLeft = getXPath(pXmlDoc, "//page/infos/bounds", "left").toInt32();
-    sal_Int32 nImageLeft = getXPath(pXmlDoc, "//fly/infos/bounds", "left").toInt32();
+    sal_Int32 nImageLeft = getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "left").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected less than: 284
     // - Actual  : 284
@@ -2741,16 +2743,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124423)
 {
     createDoc("tdf124423.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nFly1Width = getXPath(pXmlDoc, "(//fly)[1]/infos/prtBounds", "width").toInt32();
-    sal_Int32 nFly2Width = getXPath(pXmlDoc, "(//fly)[2]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nFly1Width
+        = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nFly2Width
+        = getXPath(pXmlDoc, "(//anchored/fly)[2]/infos/prtBounds", "width").toInt32();
     sal_Int32 nPageWidth = getXPath(pXmlDoc, "//page/infos/prtBounds", "width").toInt32();
     CPPUNIT_ASSERT_EQUAL(nPageWidth, nFly2Width);
     CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly1Width);
 
     createDoc("tdf124423.odt");
     pXmlDoc = parseLayoutDump();
-    nFly1Width = getXPath(pXmlDoc, "(//fly)[1]/infos/prtBounds", "width").toInt32();
-    nFly2Width = getXPath(pXmlDoc, "(//fly)[2]/infos/prtBounds", "width").toInt32();
+    nFly1Width = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
+    nFly2Width = getXPath(pXmlDoc, "(//anchored/fly)[2]/infos/prtBounds", "width").toInt32();
     nPageWidth = getXPath(pXmlDoc, "//page/infos/prtBounds", "width").toInt32();
     CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly2Width);
     CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly1Width);
@@ -2801,9 +2805,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf135035)
 {
     createDoc("tdf135035.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nFly1Width = getXPath(pXmlDoc, "(//fly)[1]/infos/prtBounds", "width").toInt32();
-    sal_Int32 nFly2Width = getXPath(pXmlDoc, "(//fly)[2]/infos/prtBounds", "width").toInt32();
-    sal_Int32 nFly3Width = getXPath(pXmlDoc, "(//fly)[3]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nFly1Width
+        = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nFly2Width
+        = getXPath(pXmlDoc, "(//anchored/fly)[2]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nFly3Width
+        = getXPath(pXmlDoc, "(//anchored/fly)[3]/infos/prtBounds", "width").toInt32();
     sal_Int32 nParentWidth = getXPath(pXmlDoc, "(//txt)[1]/infos/prtBounds", "width").toInt32();
     CPPUNIT_ASSERT_EQUAL(nParentWidth, nFly2Width);
     CPPUNIT_ASSERT_EQUAL(nParentWidth, nFly3Width);
@@ -2811,9 +2818,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf135035)
 
     createDoc("tdf135035.odt");
     pXmlDoc = parseLayoutDump();
-    nFly1Width = getXPath(pXmlDoc, "(//fly)[1]/infos/prtBounds", "width").toInt32();
-    nFly2Width = getXPath(pXmlDoc, "(//fly)[2]/infos/prtBounds", "width").toInt32();
-    nFly3Width = getXPath(pXmlDoc, "(//fly)[3]/infos/prtBounds", "width").toInt32();
+    nFly1Width = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
+    nFly2Width = getXPath(pXmlDoc, "(//anchored/fly)[2]/infos/prtBounds", "width").toInt32();
+    nFly3Width = getXPath(pXmlDoc, "(//anchored/fly)[3]/infos/prtBounds", "width").toInt32();
     nParentWidth = getXPath(pXmlDoc, "(//txt)[1]/infos/prtBounds", "width").toInt32();
     CPPUNIT_ASSERT_LESS(nParentWidth / 2, nFly2Width);
     CPPUNIT_ASSERT_LESS(nParentWidth / 2, nFly1Width);

@@ -128,7 +128,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf114212, "tdf114212.docx")
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1427
     // - Actual  : 387
-    OUString aTop = parseDump("//fly[1]/infos/bounds", "top");
+    OUString aTop = parseDump("//anchored/fly[1]/infos/bounds", "top");
     CPPUNIT_ASSERT_EQUAL(OUString("1427"), aTop);
 }
 
@@ -446,7 +446,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
                             getShape(1)->getSize().Width, getShape(1)->getSize().Height);
     CPPUNIT_ASSERT_MESSAGE("The textframe must be off-page!", !aPageRect.IsInside(aShapeRect));
 
-    //OUString aTop = parseDump("//fly[1]/infos/bounds", "top");
+    //OUString aTop = parseDump("//anchored/fly[1]/infos/bounds", "top");
     //CPPUNIT_ASSERT_EQUAL(sal_Int32(30624), aTop.toInt32() );
 }
 
