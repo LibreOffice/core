@@ -205,6 +205,7 @@ public:
     void testTdf66668();
     void testTdf130108();
     void testTdf76949();
+    void testTdf107586();
     void testTdf55417();
     void testTdf129985();
     void testTdf73063();
@@ -391,6 +392,7 @@ public:
     CPPUNIT_TEST(testTdf66668);
     CPPUNIT_TEST(testTdf130108);
     CPPUNIT_TEST(testTdf76949);
+    CPPUNIT_TEST(testTdf107586);
     CPPUNIT_TEST(testTdf55417);
     CPPUNIT_TEST(testTdf129985);
     CPPUNIT_TEST(testTdf73063);
@@ -4427,6 +4429,21 @@ void ScExportTest::testTdf76949()
     CPPUNIT_ASSERT(pSheet);
 
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:f", "_xlfn.CHISQ.DIST(1,1,1)");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf107586()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf107586.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pSheet);
+
+    // Without the fix in place, this test would haved failed with
+    // XPath '/x:worksheet/x:sheetPr/x:tabColor' number of nodes is incorrect
+    assertXPath(pSheet, "/x:worksheet/x:sheetPr/x:tabColor", "rgb", "FF9BBB59");
 
     xDocSh->DoClose();
 }
