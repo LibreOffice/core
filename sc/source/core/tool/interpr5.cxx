@@ -739,7 +739,7 @@ void ScInterpreter::ScEMat()
         PushError( FormulaError::MatrixSize);
     else
     {
-        ScMatrixRef pRMat = GetNewMat(nDim, nDim);
+        ScMatrixRef pRMat = GetNewMat(nDim, nDim, /*bEmpty*/true);
         if (pRMat)
         {
             MEMat(pRMat, nDim);
@@ -1005,7 +1005,7 @@ void ScInterpreter::ScMatInv()
         // LUP decomposition is done inplace, use copy.
         ScMatrixRef xLU = pMat->Clone();
         // The result matrix.
-        ScMatrixRef xY = GetNewMat( nR, nR);
+        ScMatrixRef xY = GetNewMat( nR, nR, /*bEmpty*/true );
         if (!xLU || !xY)
             PushError( FormulaError::CodeOverflow);
         else
@@ -1095,7 +1095,7 @@ void ScInterpreter::ScMatMult()
                 PushIllegalArgument();
             else
             {
-                pRMat = GetNewMat(nC2, nR1);
+                pRMat = GetNewMat(nC2, nR1, /*bEmpty*/true);
                 if (pRMat)
                 {
                     double sum;
@@ -1135,7 +1135,7 @@ void ScInterpreter::ScMatTrans()
     {
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
-        pRMat = GetNewMat(nR, nC);
+        pRMat = GetNewMat(nR, nC, /*bEmpty*/true);
         if ( pRMat )
         {
             pMat->MatTrans(*pRMat);
@@ -1177,7 +1177,7 @@ static ScMatrixRef lcl_MatrixCalculation(
     rMat2.GetDimensions(nC2, nR2);
     nMinC = lcl_GetMinExtent( nC1, nC2);
     nMinR = lcl_GetMinExtent( nR1, nR2);
-    ScMatrixRef xResMat = pInterpreter->GetNewMat(nMinC, nMinR);
+    ScMatrixRef xResMat = pInterpreter->GetNewMat(nMinC, nMinR, /*bEmpty*/true);
     if (xResMat)
     {
         for (i = 0; i < nMinC; i++)
@@ -1235,7 +1235,7 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
     pMat2->GetDimensions(nC2, nR2);
     nMinC = lcl_GetMinExtent( nC1, nC2);
     nMinR = lcl_GetMinExtent( nR1, nR2);
-    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
+    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR, /*bEmpty*/true);
     if (xResMat)
     {
         xResMat->MatConcat(nMinC, nMinR, pMat1, pMat2, *pFormatter, mrDoc.GetSharedStringPool());
@@ -1443,7 +1443,7 @@ void ScInterpreter::ScAmpersand()
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
-        ScMatrixRef pResMat = GetNewMat(nC, nR);
+        ScMatrixRef pResMat = GetNewMat(nC, nR, /*bEmpty*/true);
         if (pResMat)
         {
             if (nGlobalError != FormulaError::NONE)
@@ -1556,7 +1556,7 @@ void ScInterpreter::ScMul()
             fVal = fVal2;
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
-        ScMatrixRef pResMat = GetNewMat(nC, nR);
+        ScMatrixRef pResMat = GetNewMat(nC, nR, /*bEmpty*/true);
         if (pResMat)
         {
             pMat->MulOp( fVal, *pResMat);
@@ -1633,7 +1633,7 @@ void ScInterpreter::ScDiv()
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
-        ScMatrixRef pResMat = GetNewMat(nC, nR);
+        ScMatrixRef pResMat = GetNewMat(nC, nR, /*bEmpty*/true);
         if (pResMat)
         {
             pMat->DivOp( bFlag, fVal, *pResMat);
@@ -1700,7 +1700,7 @@ void ScInterpreter::ScPow()
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
-        ScMatrixRef pResMat = GetNewMat(nC, nR);
+        ScMatrixRef pResMat = GetNewMat(nC, nR, /*bEmpty*/true);
         if (pResMat)
         {
             pMat->PowOp( bFlag, fVal, *pResMat);
@@ -1902,7 +1902,7 @@ void ScInterpreter::ScFrequency()
         PushNoValue();
         return;
     }
-    ScMatrixRef pResMat = GetNewMat(1, nBinSize+1);
+    ScMatrixRef pResMat = GetNewMat(1, nBinSize+1, /*bEmpty*/true);
     if (!pResMat)
     {
         PushIllegalArgument();
@@ -2376,7 +2376,7 @@ bool ScInterpreter::CheckMatrix(bool _bLOG, sal_uInt8& nCase, SCSIZE& nCX,
     }
     else
     {
-        pMatX = GetNewMat(nCY, nRY);
+        pMatX = GetNewMat(nCY, nRY, /*bEmpty*/true);
         nCX = nCY;
         nRX = nRY;
         if (!pMatX)
@@ -2479,9 +2479,9 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
 
     ScMatrixRef pResMat;
     if (bStats)
-        pResMat = GetNewMat(K+1,5);
+        pResMat = GetNewMat(K+1,5, /*bEmpty*/true);
     else
-        pResMat = GetNewMat(K+1,1);
+        pResMat = GetNewMat(K+1,1, /*bEmpty*/true);
     if (!pResMat)
     {
         PushError(FormulaError::CodeOverflow);
@@ -2608,13 +2608,13 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
         {
             ::std::vector< double> aVecR(N); // for QR decomposition
             // Enough memory for needed matrices?
-            ScMatrixRef pMeans = GetNewMat(K, 1); // mean of each column
+            ScMatrixRef pMeans = GetNewMat(K, 1, /*bEmpty*/true); // mean of each column
             ScMatrixRef pMatZ; // for Q' * Y , inter alia
             if (bStats)
                 pMatZ = pMatY->Clone(); // Y is used in statistic, keep it
             else
                 pMatZ = pMatY; // Y can be overwritten
-            ScMatrixRef pSlopes = GetNewMat(1,K); // from b1 to bK
+            ScMatrixRef pSlopes = GetNewMat(1,K, /*bEmpty*/true); // from b1 to bK
             if (!pMeans || !pMatZ || !pSlopes)
             {
                 PushError(FormulaError::CodeOverflow);
@@ -2763,13 +2763,13 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
         {
             ::std::vector< double> aVecR(N); // for QR decomposition
             // Enough memory for needed matrices?
-            ScMatrixRef pMeans = GetNewMat(1, K); // mean of each row
+            ScMatrixRef pMeans = GetNewMat(1, K, /*bEmpty*/true); // mean of each row
             ScMatrixRef pMatZ; // for Q' * Y , inter alia
             if (bStats)
                 pMatZ = pMatY->Clone(); // Y is used in statistic, keep it
             else
                 pMatZ = pMatY; // Y can be overwritten
-            ScMatrixRef pSlopes = GetNewMat(K,1); // from b1 to bK
+            ScMatrixRef pSlopes = GetNewMat(K,1, /*bEmpty*/true); // from b1 to bK
             if (!pMeans || !pMatZ || !pSlopes)
             {
                 PushError(FormulaError::CodeOverflow);
@@ -3030,13 +3030,13 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     }
     ScMatrixRef pResMat; // size depends on nCase
     if (nCase == 1)
-        pResMat = GetNewMat(nCXN,nRXN);
+        pResMat = GetNewMat(nCXN,nRXN, /*bEmpty*/true);
     else
     {
         if (nCase==2)
-            pResMat = GetNewMat(1,nRXN);
+            pResMat = GetNewMat(1,nRXN, /*bEmpty*/true);
         else
-            pResMat = GetNewMat(nCXN,1);
+            pResMat = GetNewMat(nCXN,1, /*bEmpty*/true);
     }
     if (!pResMat)
     {
@@ -3110,8 +3110,8 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
         {
             ::std::vector< double> aVecR(N); // for QR decomposition
             // Enough memory for needed matrices?
-            ScMatrixRef pMeans = GetNewMat(K, 1); // mean of each column
-            ScMatrixRef pSlopes = GetNewMat(1,K); // from b1 to bK
+            ScMatrixRef pMeans = GetNewMat(K, 1, /*bEmpty*/true); // mean of each column
+            ScMatrixRef pSlopes = GetNewMat(1,K, /*bEmpty*/true); // from b1 to bK
             if (!pMeans || !pSlopes)
             {
                 PushError(FormulaError::CodeOverflow);
@@ -3169,8 +3169,8 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
 
             ::std::vector< double> aVecR(N); // for QR decomposition
             // Enough memory for needed matrices?
-            ScMatrixRef pMeans = GetNewMat(1, K); // mean of each row
-            ScMatrixRef pSlopes = GetNewMat(K,1); // row from b1 to bK
+            ScMatrixRef pMeans = GetNewMat(1, K, /*bEmpty*/true); // mean of each row
+            ScMatrixRef pSlopes = GetNewMat(K,1, /*bEmpty*/true); // row from b1 to bK
             if (!pMeans || !pSlopes)
             {
                 PushError(FormulaError::CodeOverflow);

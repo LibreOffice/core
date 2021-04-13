@@ -1056,7 +1056,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
         aMat[1].mpMat->GetDimensions(nC1, nR1);
         SCSIZE nC = std::max( nC0, nC1 );
         SCSIZE nR = std::max( nR0, nR1 );
-        aRes.mpMat = GetNewMat( nC, nR);
+        aRes.mpMat = GetNewMat( nC, nR, /*bEmpty*/true );
         if (!aRes.mpMat)
             return aRes;
         for ( SCSIZE j=0; j<nC; j++ )
@@ -1577,7 +1577,7 @@ void ScInterpreter::ScNeg()
             {
                 SCSIZE nC, nR;
                 pMat->GetDimensions( nC, nR );
-                ScMatrixRef pResMat = GetNewMat( nC, nR);
+                ScMatrixRef pResMat = GetNewMat( nC, nR, /*bEmpty*/true );
                 if ( !pResMat )
                     PushIllegalArgument();
                 else
@@ -1621,7 +1621,7 @@ void ScInterpreter::ScNot()
             {
                 SCSIZE nC, nR;
                 pMat->GetDimensions( nC, nR );
-                ScMatrixRef pResMat = GetNewMat( nC, nR);
+                ScMatrixRef pResMat = GetNewMat( nC, nR, /*bEmpty*/true);
                 if ( !pResMat )
                     PushIllegalArgument();
                 else
@@ -1762,7 +1762,7 @@ void ScInterpreter::ScRandomImpl( const std::function<double( double fFirst, dou
             nCols = 1;
         if (nRows == 0)
             nRows = 1;
-        ScMatrixRef pResMat = GetNewMat( static_cast<SCSIZE>(nCols), static_cast<SCSIZE>(nRows));
+        ScMatrixRef pResMat = GetNewMat( static_cast<SCSIZE>(nCols), static_cast<SCSIZE>(nRows), /*bEmpty*/true );
         if (!pResMat)
             PushError( FormulaError::MatrixSize);
         else
@@ -4394,7 +4394,7 @@ void ScInterpreter::ScColumn()
                 // matrix result is not available yet.
                 nCols = 1;
             }
-            ScMatrixRef pResMat = GetNewMat( static_cast<SCSIZE>(nCols), 1);
+            ScMatrixRef pResMat = GetNewMat( static_cast<SCSIZE>(nCols), 1, /*bEmpty*/true );
             if (pResMat)
             {
                 for (SCCOL i=0; i < nCols; ++i)
@@ -4454,7 +4454,7 @@ void ScInterpreter::ScColumn()
                 if (nCol2 > nCol1)
                 {
                     ScMatrixRef pResMat = GetNewMat(
-                            static_cast<SCSIZE>(nCol2-nCol1+1), 1);
+                            static_cast<SCSIZE>(nCol2-nCol1+1), 1, /*bEmpty*/true);
                     if (pResMat)
                     {
                         for (SCCOL i = nCol1; i <= nCol2; i++)
@@ -4498,7 +4498,7 @@ void ScInterpreter::ScRow()
                 // matrix result is not available yet.
                 nRows = 1;
             }
-            ScMatrixRef pResMat = GetNewMat( 1, static_cast<SCSIZE>(nRows));
+            ScMatrixRef pResMat = GetNewMat( 1, static_cast<SCSIZE>(nRows), /*bEmpty*/true);
             if (pResMat)
             {
                 for (SCROW i=0; i < nRows; i++)
@@ -4557,7 +4557,7 @@ void ScInterpreter::ScRow()
                 if (nRow2 > nRow1)
                 {
                     ScMatrixRef pResMat = GetNewMat( 1,
-                            static_cast<SCSIZE>(nRow2-nRow1+1));
+                            static_cast<SCSIZE>(nRow2-nRow1+1), /*bEmpty*/true);
                     if (pResMat)
                     {
                         for (SCROW i = nRow1; i <= nRow2; i++)
@@ -5115,7 +5115,7 @@ void ScInterpreter::ScCountEmptyCells()
 
     const SCSIZE nMatRows = GetRefListArrayMaxSize(1);
     // There's either one RefList and nothing else, or none.
-    ScMatrixRef xResMat = (nMatRows ? GetNewMat( 1, nMatRows) : nullptr);
+    ScMatrixRef xResMat = (nMatRows ? GetNewMat( 1, nMatRows, /*bEmpty*/true ) : nullptr);
     sal_uLong nMaxCount = 0, nCount = 0;
     switch (GetStackType())
     {
@@ -5335,7 +5335,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
     short nParam = 1;
     const SCSIZE nMatRows = GetRefListArrayMaxSize( nParam);
     // There's either one RefList and nothing else, or none.
-    ScMatrixRef xResMat = (nMatRows ? GetNewMat( 1, nMatRows) : nullptr);
+    ScMatrixRef xResMat = (nMatRows ? GetNewMat( 1, nMatRows, /*bEmpty*/true ) : nullptr);
     SCSIZE nRefListArrayPos = 0;
     size_t nRefInList = 0;
     while (nParam-- > 0)
@@ -5694,7 +5694,7 @@ void ScInterpreter::ScCountIf()
     short nParam = 1;
     const SCSIZE nMatRows = GetRefListArrayMaxSize( nParam);
     // There's either one RefList and nothing else, or none.
-    ScMatrixRef xResMat = (nMatRows ? GetNewMat( 1, nMatRows) : nullptr);
+    ScMatrixRef xResMat = (nMatRows ? GetNewMat( 1, nMatRows, /*bEmpty*/true ) : nullptr);
     SCSIZE nRefListArrayPos = 0;
     size_t nRefInList = 0;
     while (nParam-- > 0)
@@ -6357,7 +6357,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             const bool bAppliedArray = (!bRefArrayMain && nRefArrayMainPos == 0);
 
             if (nRefArrayMainPos == 0)
-                xResMat = GetNewMat( 1, nRefArrayRows);
+                xResMat = GetNewMat( 1, nRefArrayRows, /*bEmpty*/true );
 
             if (pMainMatrix)
             {
@@ -6468,7 +6468,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
         }
         else
         {
-            xResMat = GetNewMat( 1, nRefArrayRows);
+            xResMat = GetNewMat( 1, nRefArrayRows, /*bEmpty*/true );
             for (size_t i=0, n = vRefArrayConditions.size(); i < n; ++i)
             {
                 double fCount = 0.0;
@@ -6477,8 +6477,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     if (rCond == nQueryCount)
                         ++fCount;
                 }
-                if (fCount)
-                    xResMat->PutDouble( fCount, 0, i);
+                xResMat->PutDouble( fCount, 0, i);
             }
         }
     }
@@ -6886,13 +6885,13 @@ void ScInterpreter::ScLookup()
                 nLenMajor = nElems;
                 if (bVertical)
                 {
-                    ScMatrixRef pTempMat = GetNewMat( 1, nElems);
+                    ScMatrixRef pTempMat = GetNewMat( 1, nElems, /*bEmpty*/true );
                     pTempMat->PutDoubleVector( vArray, 0, 0);
                     pDataMat2 = pTempMat;
                 }
                 else
                 {
-                    ScMatrixRef pTempMat = GetNewMat( nElems, 1);
+                    ScMatrixRef pTempMat = GetNewMat( nElems, 1, /*bEmpty*/true );
                     for (size_t i=0; i < nElems; ++i)
                         pTempMat->PutDouble( vArray[i], i, 0);
                     pDataMat2 = pTempMat;
@@ -8642,7 +8641,7 @@ void ScInterpreter::ScIndex()
                     }
                     else if (nCol == 0)
                     {
-                        ScMatrixRef pResMat = GetNewMat(nC, 1);
+                        ScMatrixRef pResMat = GetNewMat(nC, 1, /*bEmpty*/true);
                         if (pResMat)
                         {
                             SCSIZE nRowMinus1 = static_cast<SCSIZE>(nRow - 1);
@@ -8660,7 +8659,7 @@ void ScInterpreter::ScIndex()
                     }
                     else if (nRow == 0)
                     {
-                        ScMatrixRef pResMat = GetNewMat(1, nR);
+                        ScMatrixRef pResMat = GetNewMat(1, nR, /*bEmpty*/true);
                         if (pResMat)
                         {
                             SCSIZE nColMinus1 = static_cast<SCSIZE>(nCol - 1);

@@ -1323,7 +1323,7 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
             {
                 SCSIZE nC, nR;
                 pTMat->GetDimensions( nC, nR );
-                ScMatrixRef pFcMat = GetNewMat( nC, nR );
+                ScMatrixRef pFcMat = GetNewMat( nC, nR, /*bEmpty*/true );
                 aETSCalc.GetForecastRange( pTMat, pFcMat );
                 if (aETSCalc.GetError() != FormulaError::NONE)
                     PushError( aETSCalc.GetError());    // explicitly push error, PushMatrix() does not
@@ -1336,7 +1336,7 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
             {
                 SCSIZE nC, nR;
                 pTMat->GetDimensions( nC, nR );
-                ScMatrixRef pPIMat = GetNewMat( nC, nR );
+                ScMatrixRef pPIMat = GetNewMat( nC, nR, /*bEmpty*/true );
                 if ( nSmplInPrd == 0 )
                 {
                     aETSCalc.GetEDSPredictionIntervals( pTMat, pPIMat, fPILevel );
@@ -1356,7 +1356,7 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
             {
                 SCSIZE nC, nR;
                 pTypeMat->GetDimensions( nC, nR );
-                ScMatrixRef pStatMat = GetNewMat( nC, nR );
+                ScMatrixRef pStatMat = GetNewMat( nC, nR, /*bEmpty*/true );
                 aETSCalc.GetStatisticValue( pTypeMat, pStatMat );
                 if (aETSCalc.GetError() != FormulaError::NONE)
                     PushError( aETSCalc.GetError());    // explicitly push error, PushMatrix() does not

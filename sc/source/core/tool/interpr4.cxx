@@ -3467,7 +3467,7 @@ void ScInterpreter::ScMacro()
                     nColIdx = 1;
                     nRowIdx = 0;
                 }
-                ScMatrixRef pMat = GetNewMat( nC, nR);
+                ScMatrixRef pMat = GetNewMat( nC, nR, /*bEmpty*/true);
                 if ( pMat )
                 {
                     SbxVariable* pV;
