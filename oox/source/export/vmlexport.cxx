@@ -1036,7 +1036,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     OUString idStr = SvxMSDffManager::MSDFFReadZString(aStream, opt.nProp.size(), true);
                     aStream.Seek(0);
                     if (!IsWaterMarkShape(m_pSdrObject->GetName()) && !m_bSkipwzName)
-                         m_pShapeAttrList->add(XML_ID, OUStringToOString(idStr, RTL_TEXTENCODING_UTF8).getStr());
+                         m_pShapeAttrList->add(XML_ID, OUStringToOString(idStr, RTL_TEXTENCODING_UTF8));
 
                     bAlreadyWritten[ESCHER_Prop_wzName] = true;
                 }

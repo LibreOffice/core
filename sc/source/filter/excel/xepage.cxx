@@ -102,8 +102,8 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
     }
     else
     {
-        pAttrList->add( XML_paperWidth,     OString(OString::number( mrData.mnPaperWidth ) + "mm").getStr() );
-        pAttrList->add( XML_paperHeight,    OString(OString::number( mrData.mnPaperHeight ) + "mm").getStr() );
+        pAttrList->add( XML_paperWidth,     OString::number( mrData.mnPaperWidth ) + "mm" );
+        pAttrList->add( XML_paperHeight,    OString::number( mrData.mnPaperHeight ) + "mm" );
         // pAttrList->add( XML_paperUnits,          "mm" );
     }
     pAttrList->add( XML_scale,              OString::number(  mrData.mnScaling ).getStr() );
