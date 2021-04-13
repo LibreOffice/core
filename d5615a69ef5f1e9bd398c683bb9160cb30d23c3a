@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd3474b4_6ffdc8da",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1439,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-13T14:50:49Z",
+      "side": 1,
+      "message": "When pushing an error we can return early, like below in the default case. It is unnecessary to execute any further code here.",
+      "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e416cb9a_abaf4e92",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-13T14:50:49Z",
+      "side": 1,
+      "message": "When breaking the inner loop also break the outer loop.\n\nActually the very outer loop\n\n    while (fEps \u003e SCdEpsilon \u0026\u0026 nItCount \u003c nIterationsMax)\n\ncould benefit from an error check as well.",
+      "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7051775c_646aaf9c",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-13T14:50:49Z",
+      "side": 1,
+      "message": "This \"remember stack position and pop all over again and again\" is odd anyway.. the reference can be popped once in the switch (GetStackType()) above, aRange is not altered by the iterator.",
+      "range": {
+        "startLine": 1482,
+        "startChar": 0,
+        "endLine": 1483,
+        "endChar": 1
+      },
+      "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec458e53_264d0f3a",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-13T14:50:49Z",
+      "side": 1,
+      "message": "This extra check is unnecessary. SetError() also does it and is inline.",
+      "range": {
+        "startLine": 1494,
+        "startChar": 0,
+        "endLine": 1494,
+        "endChar": 1
+      },
+      "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bffd008_32573320",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-13T14:50:49Z",
+      "side": 1,
+      "message": "The explicit PushError() is not strictly necessary, all Push...() check for an already existing error condition first and push that instead of the value. We only have two simple condition calculations below that don\u0027t need to be guarded against unnecessary calculations.",
+      "revId": "d5615a69ef5f1e9bd398c683bb9160cb30d23c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

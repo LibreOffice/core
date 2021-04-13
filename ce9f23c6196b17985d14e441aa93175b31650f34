@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a65febd_cb1d1730",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1447,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-13T14:50:49Z",
+      "side": 0,
+      "message": "Keep this check for error because it breaks the loop early if already obtaining a cell value from the iterator sets an error.",
+      "range": {
+        "startLine": 1447,
+        "startChar": 19,
+        "endLine": 1447,
+        "endChar": 47
+      },
+      "revId": "ce9f23c6196b17985d14e441aa93175b31650f34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
