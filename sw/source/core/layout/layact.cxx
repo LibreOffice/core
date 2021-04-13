@@ -62,6 +62,8 @@
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <fntcache.hxx>
+#include <fmtanchr.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <vector>
 #include <tools/diagnose_ex.h>
 
@@ -1624,8 +1626,45 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
     return bChanged;
 }
 
-bool SwLayAction::FormatContent( const SwPageFrame *pPage )
+bool SwLayAction::FormatContent(SwPageFrame *const pPage)
 {
+    ::comphelper::ScopeGuard g([this, pPage]() {
+        if (IsAgain())
+        {
+            return; // pPage probably deleted
+        }
+        if (auto const* pObjs = pPage->GetSortedObjs())
+        {
+            std::vector<std::pair<SwAnchoredObject*, SwPageFrame*>> moved;
+            for (auto const pObj : *pObjs)
+            {
+                SwPageFrame *const pAnchorPage(pObj->FindPageFrameOfAnchor());
+                assert(pAnchorPage);
+                if (pAnchorPage != pPage
+                    && pPage->GetPhyPageNum() < pAnchorPage->GetPhyPageNum()
+                    && pObj->GetFrameFormat().GetAnchor().GetAnchorId()
+                        != RndStdIds::FLY_AS_CHAR)
+                {
+                    moved.emplace_back(pObj, pAnchorPage);
+                }
+            }
+            for (auto const& [pObj, pAnchorPage] : moved)
+            {
+                pObj->RegisterAtPage(*pAnchorPage);
+                ::Notify_Background(pObj->GetDrawObj(), pPage,
+                    pObj->GetObjRect(), PrepareHint::FlyFrameLeave, false);
+            }
+            if (!moved.empty())
+            {
+                pPage->InvalidateFlyLayout();
+                if (auto *const pContent = pPage->FindLastBodyContent())
+                {
+                    pContent->InvalidateSize();
+                }
+            }
+        }
+    });
+
     const SwContentFrame *pContent = pPage->ContainsContent();
     const SwViewShell *pSh = m_pRoot->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();

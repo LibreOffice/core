@@ -1429,10 +1429,20 @@ void SwFlyAtContentFrame::RegisterAtCorrectPage()
     }
     if ( pPageFrame && GetPageFrame() != pPageFrame )
     {
-        if ( GetPageFrame() )
-            GetPageFrame()->MoveFly( this, pPageFrame );
-        else
-            pPageFrame->AppendFlyToPage( this );
+        RegisterAtPage(*pPageFrame);
+    }
+}
+
+void SwFlyAtContentFrame::RegisterAtPage(SwPageFrame & rPageFrame)
+{
+    assert(GetPageFrame() != &rPageFrame);
+    if (GetPageFrame())
+    {
+        GetPageFrame()->MoveFly( this, &rPageFrame );
+    }
+    else
+    {
+        rPageFrame.AppendFlyToPage( this );
     }
 }
 
