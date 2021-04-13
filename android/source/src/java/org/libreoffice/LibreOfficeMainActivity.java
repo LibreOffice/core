@@ -94,7 +94,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private SearchController mSearchController;
     private UNOCommandsController mUNOCommandsController;
     private CalcHeadersController mCalcHeadersController;
-    private boolean mIsSpreadsheet;
     private LOKitTileProvider mTileProvider;
     private String mPassword;
     private boolean mPasswordProtected;
@@ -813,14 +812,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 findViewById(R.id.calc_formula).setVisibility(View.VISIBLE);
             }
         });
-    }
-
-    public void setIsSpreadsheet(boolean b) {
-        mIsSpreadsheet = b;
-    }
-
-    public boolean isSpreadsheet() {
-        return mIsSpreadsheet;
     }
 
     public static boolean isReadOnlyMode() {
