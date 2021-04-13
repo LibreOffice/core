@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,jfreereport_libformula,\
 	external/jfreereport/patches/libformula-seconds_rounding.patch.1 \
 	external/jfreereport/patches/libformula-minutes_truncation.patch.1 \
 	external/jfreereport/patches/libformula-datevalue_truncation.patch.1 \
+	external/jfreereport/patches/libformula-1.1.3-remove-commons-logging.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
