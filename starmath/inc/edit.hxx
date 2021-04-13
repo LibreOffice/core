@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <vcl/window.hxx>
+#include <svx/weldeditview.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/transfer.hxx>
 
@@ -28,11 +29,8 @@ class SmViewShell;
 class EditView;
 class EditEngine;
 class EditStatus;
-class ScrollBar;
-class ScrollBarBox;
 class DataChangedEvent;
 class SmCmdBoxWindow;
-class SmEditAccessible;
 class CommandEvent;
 class Timer;
 
@@ -43,50 +41,64 @@ class ColorConfig;
 
 void SmGetLeftSelectionPart(const ESelection& rSelection, sal_Int32& nPara, sal_uInt16& nPos);
 
-class SmEditWindow final : public vcl::Window, public DropTargetHelper
-{
-    rtl::Reference<SmEditAccessible> mxAccessible;
+class SmEditWindow;
 
-    SmCmdBoxWindow& rCmdBox;
-    std::unique_ptr<EditView> pEditView;
-    VclPtr<ScrollBar> pHScrollBar;
-    VclPtr<ScrollBar> pVScrollBar;
-    VclPtr<ScrollBarBox> pScrollBox;
+class SmEditTextWindow : public WeldEditView
+{
+private:
+    SmEditWindow& mrEditWindow;
+
     Idle aModifyIdle;
     Idle aCursorMoveIdle;
-    ESelection aOldSelection;
 
-    virtual void KeyInput(const KeyEvent& rKEvt) override;
-    virtual void Command(const CommandEvent& rCEvt) override;
+    ESelection aOldSelection;
 
     DECL_LINK(ModifyTimerHdl, Timer*, void);
     DECL_LINK(CursorMoveTimerHdl, Timer*, void);
+    DECL_LINK(EditStatusHdl, EditStatus&, void);
+
+public:
+    SmEditTextWindow(SmEditWindow& rEditWindow);
+    virtual ~SmEditTextWindow() override;
+
+    virtual EditEngine* GetEditEngine() const override;
+
+    virtual void EditViewScrollStateChange() override;
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+
+    virtual bool KeyInput(const KeyEvent& rKeyEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rEvt) override;
+    virtual bool Command(const CommandEvent& rCEvt) override;
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
+
+    void SetText(const OUString& rText);
+    void InsertText(const OUString& rText);
+    void SelNextMark();
+    ESelection GetSelection() const;
+    void UserPossiblyChangedText();
+    void Flush();
+    void UpdateStatus(bool bSetDocModified);
+    void StartCursorMove();
+};
+
+class SmEditWindow final : public InterimItemWindow, public DropTargetHelper
+{
+    SmCmdBoxWindow& rCmdBox;
+    std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
+    std::unique_ptr<SmEditTextWindow> mxTextControl;
+    std::unique_ptr<weld::CustomWeld> mxTextControlWin;
 
     virtual void ApplySettings(vcl::RenderContext&) override;
     virtual void DataChanged(const DataChangedEvent&) override;
-    virtual void Resize() override;
-    virtual void MouseMove(const MouseEvent& rEvt) override;
-    virtual void MouseButtonUp(const MouseEvent& rEvt) override;
-    virtual void MouseButtonDown(const MouseEvent& rEvt) override;
-
-    virtual OUString GetSurroundingText() const override;
-    virtual Selection GetSurroundingTextSelection() const override;
-    virtual bool DeleteSurroundingText(const Selection& rSelection) override;
 
     virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
     virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
-    DECL_LINK(EditStatusHdl, EditStatus&, void);
-    DECL_LINK(ScrollHdl, ScrollBar*, void);
+    DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
 
     void CreateEditView();
-    tools::Rectangle AdjustScrollBars();
-    void SetScrollBarRanges();
-    void InitScrollBars();
-    void InvalidateSlots();
-    void UpdateStatus(bool bSetDocModified);
-    void UserPossiblyChangedText();
 
 public:
     explicit SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin);
@@ -95,14 +107,14 @@ public:
 
     SmDocShell* GetDoc();
     SmViewShell* GetView();
-    EditView* GetEditView();
+    EditView* GetEditView() const;
     EditEngine* GetEditEngine();
 
     // Window
     virtual void SetText(const OUString& rText) override;
     virtual OUString GetText() const override;
-    virtual void GetFocus() override;
-    virtual void LoseFocus() override;
+    virtual void Resize() override;
+    virtual void Command(const CommandEvent& rCEvt) override;
 
     ESelection GetSelection() const;
     void SetSelection(const ESelection& rSel);
@@ -110,6 +122,9 @@ public:
     bool IsEmpty() const;
     bool IsSelected() const;
     bool IsAllSelected() const;
+    void SetScrollBarRanges();
+    tools::Rectangle AdjustScrollBars();
+    void InvalidateSlots();
     void Cut();
     void Copy();
     void Paste();
@@ -119,19 +134,11 @@ public:
     void MarkError(const Point& rPos);
     void SelNextMark();
     void SelPrevMark();
-    static bool HasMark(const OUString& rText);
 
-    void Flush() override;
     void DeleteEditView();
 
-    bool HandleWheelCommands(const CommandEvent& rCEvt);
-    static bool IsInlineEditEnabled();
-    void StartCursorMove();
-
-    // for Accessibility
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
-
-    using Window::GetAccessible;
+    void HideScrollbars();
+    void ShowScrollbars();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
