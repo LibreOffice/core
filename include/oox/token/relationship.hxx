@@ -22,6 +22,7 @@ enum class Relationship
     CHART,
     COMMENTS,
     COMMENTAUTHORS,
+    COMMENTSEXTENDED,
     CONTROL,
     CTRLPROP,
     CUSTOMXML,

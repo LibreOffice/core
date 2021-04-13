@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <editeng/escapementitem.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/ooxmlexport/data/";
@@ -169,6 +170,29 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
     // I.e. Shadow size will be smaller than actual.
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(200000), nSize1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testCommentDone, "CommentDone.docx")
+{
+    if (!mbExported)
+    {
+        // This manually toggles (enables) the resolved state of the first comment now, while
+        // import is not yet implemented (TODO)
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            { { "Id", uno::makeAny(OUString("1")) } });
+        dispatchCommand(mxComponent, ".uno:ResolveComment", aPropertyValues);
+        return;
+    }
+
+    xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
+    assertXPath(pXmlComm, "/w:comments/w:comment[1]/w:p", 2);
+    OUString idLastPara = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[2]", "paraId");
+    xmlDocUniquePtr pXmlCommExt = parseExport("word/commentsExtended.xml");
+    assertXPath(pXmlCommExt, "/w15:commentsEx", "Ignorable", "w15");
+    assertXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", 1);
+    OUString idLastParaEx = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "paraId");
+    CPPUNIT_ASSERT_EQUAL(idLastPara, idLastParaEx);
+    assertXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "done", "1");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
