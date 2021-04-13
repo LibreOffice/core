@@ -2796,6 +2796,11 @@ void SwFlyFrame::RegisterAtCorrectPage()
     // default behaviour is to do nothing.
 }
 
+void SwFlyFrame::RegisterAtPage(SwPageFrame &)
+{
+    // default behaviour is to do nothing.
+}
+
 /** method to determine, if a <MakeAll()> on the Writer fly frame is possible
 
     OD 2004-05-11 #i28701#

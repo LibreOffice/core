@@ -840,10 +840,18 @@ void SwAnchoredDrawObject::RegisterAtCorrectPage()
     }
     if ( pPageFrame && GetPageFrame() != pPageFrame )
     {
-        if ( GetPageFrame() )
-            GetPageFrame()->RemoveDrawObjFromPage( *this );
-        pPageFrame->AppendDrawObjToPage( *this );
+        RegisterAtPage(*pPageFrame);
     }
+}
+
+void SwAnchoredDrawObject::RegisterAtPage(SwPageFrame & rPageFrame)
+{
+    assert(GetPageFrame() != &rPageFrame);
+    if (GetPageFrame())
+    {
+        GetPageFrame()->RemoveDrawObjFromPage( *this );
+    }
+    rPageFrame.AppendDrawObjToPage( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
