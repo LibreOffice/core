@@ -2817,7 +2817,7 @@ void ScInterpreter::ScDde()
     {
         SCSIZE nC, nR;
         pLinkMat->GetDimensions(nC, nR);
-        ScMatrixRef pNewMat = GetNewMat( nC, nR);
+        ScMatrixRef pNewMat = GetNewMat( nC, nR, /*bEmpty*/true);
         if (pNewMat)
         {
             pLinkMat->MatCopy(*pNewMat);        // copy
