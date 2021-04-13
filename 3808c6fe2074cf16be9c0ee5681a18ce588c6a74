@@ -46,6 +46,30 @@
       "revId": "3808c6fe2074cf16be9c0ee5681a18ce588c6a74",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39b3b589_cb8bf743",
+        "filename": "sc/source/filter/excel/xiescher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-04-13T13:22:44Z",
+      "side": 1,
+      "message": "I don\u0027t want to change its type as I don\u0027t want to change the logic in this commit, just rearrange it. At which point its just stylistic if its !nDataSize or nDataSize \u003d\u003d 0",
+      "parentUuid": "501d656a_163b2aaa",
+      "range": {
+        "startLine": 968,
+        "startChar": 12,
+        "endLine": 968,
+        "endChar": 13
+      },
+      "revId": "3808c6fe2074cf16be9c0ee5681a18ce588c6a74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
