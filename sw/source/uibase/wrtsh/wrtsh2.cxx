@@ -411,7 +411,7 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
                 break;
             }
 
-            const OUString& rURL = pField->GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
+            const OUString& rURL = pField->GetAbsoluteURL();
             ::LoadURL(*this, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
         }
         break;

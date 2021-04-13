@@ -25,6 +25,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
+#include <tools/urlobj.hxx>
 #include <swtypes.hxx>
 #include <strings.hrc>
 #include <authfld.hxx>
@@ -42,6 +43,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <unofldmid.h>
 #include <unoprnms.hxx>
+#include <docsh.hxx>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 
@@ -608,6 +610,16 @@ bool SwAuthorityField::HasURL() const
 {
     const OUString& rURL = GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
     return !rURL.isEmpty();
+}
+
+OUString SwAuthorityField::GetAbsoluteURL() const
+{
+    const OUString& rURL = GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
+    SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(GetTyp())->GetDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    OUString aBasePath = pDocShell->getDocumentBaseURL();
+    return INetURLObject::GetAbsURL(aBasePath, rURL, INetURLObject::EncodeMechanism::WasEncoded,
+                                    INetURLObject::DecodeMechanism::WithCharset);
 }
 
 void SwAuthorityField::dumpAsXml(xmlTextWriterPtr pWriter) const

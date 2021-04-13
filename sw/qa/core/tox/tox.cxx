@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
@@ -17,6 +18,7 @@
 #include <comphelper/propertyvalue.hxx>
 
 #include <IDocumentFieldsAccess.hxx>
+#include <authfld.hxx>
 #include <fmtfld.hxx>
 
 namespace
@@ -152,6 +154,49 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryClick)
     CPPUNIT_ASSERT(pField->IsClickable());
     // This is needed, so the mouse has the correct RefHand pointer style.
     CPPUNIT_ASSERT(pField->HasClickHdl());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryRelClick)
+{
+    // Given an empty document with a file:// base URL:
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FilterName", OUString("writer8")),
+    };
+    xStorable->storeAsURL(maTempFile.GetURL(), aArgs);
+
+    // When inserting a biblio entry field with a relative URL:
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFields = {
+        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue("Identifier", OUString("AT")),
+        comphelper::makePropertyValue("Author", OUString("Author")),
+        comphelper::makePropertyValue("Title", OUString("Title")),
+        comphelper::makePropertyValue("URL", OUString("test.pdf#page=1")),
+    };
+    xField->setPropertyValue("Fields", uno::makeAny(aFields));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
+
+    // Then make sure that the field is clickable:
+    const SwFieldTypes* pTypes = pDoc->getIDocumentFieldsAccess().GetFieldTypes();
+    auto it = std::find_if(pTypes->begin(), pTypes->end(),
+                           [](const std::unique_ptr<SwFieldType>& pType) {
+                               return pType->Which() == SwFieldIds::TableOfAuthorities;
+                           });
+    CPPUNIT_ASSERT(it != pTypes->end());
+    const SwFieldType* pType = it->get();
+    std::vector<SwFormatField*> aFormatFields;
+    pType->GatherFields(aFormatFields);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aFormatFields.size());
+    auto pField = static_cast<SwAuthorityField*>(aFormatFields[0]->GetField());
+    CPPUNIT_ASSERT(pField->GetAbsoluteURL().startsWith("file://"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableURLDeduplication)
