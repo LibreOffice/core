@@ -1316,12 +1316,14 @@ comma
 command
 commandType
 comment
+commentEx
 commentList
 commentPr
 commentRangeEnd
 commentRangeStart
 commentReference
 comments
+commentsEx
 comp
 compact
 compactData
@@ -1903,6 +1905,7 @@ doNotValidateAgainstSchema
 doNotVertAlignCellWithSp
 doNotVertAlignInTxbx
 doNotWrapTextWithPunct
+done
 doc
 docDefaults
 docEnd
@@ -3852,6 +3855,7 @@ parTrans
 parTransId
 parTxLTRAlign
 parTxRTLAlign
+paraId
 paragraph
 parallel
 parallelogram
@@ -5674,6 +5678,7 @@ vt
 w
 w10
 w14
+w15
 wAfter
 wArH
 wBefore
