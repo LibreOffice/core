@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,jfreereport_libloader,\
 $(eval $(call gb_UnpackedTarball_add_patches,jfreereport_libloader,\
 	external/jfreereport/patches/common_build.patch \
 	external/jfreereport/patches/libloader-$(LIBLOADER_VERSION)-deprecated.patch \
+	external/jfreereport/patches/libloader-1.1.3-remove-commons-logging.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

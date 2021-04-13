@@ -1,0 +1,266 @@
+diff -ru libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/Formula.java libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/Formula.java
+--- libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/Formula.java	2021-02-23 14:41:06.962127389 +0000
++++ libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/Formula.java	2021-02-23 14:48:18.016328356 +0000
+@@ -19,8 +19,7 @@
+ 
+ import java.io.Serializable;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.formula.lvalues.LValue;
+ import org.pentaho.reporting.libraries.formula.lvalues.TypeValuePair;
+ import org.pentaho.reporting.libraries.formula.parser.FormulaParseException;
+@@ -40,7 +39,7 @@
+  */
+ public class Formula implements Serializable, Cloneable
+ {
+-  private static final Log logger = LogFactory.getLog(Formula.class);
++  private static final Logger logger = Logger.getLogger(Formula.class.getName());
+   private LValue rootReference;
+   private static final long serialVersionUID = -1176925812499923546L;
+ 
+@@ -105,7 +104,7 @@
+       final Type type = typeValuePair.getType();
+       if (type.isFlagSet(Type.ERROR_TYPE))
+       {
+-        logger.debug("Error: " + typeValuePair.getValue());
++        logger.config("Error: " + typeValuePair.getValue());
+       }
+       else if (type.isFlagSet(Type.ARRAY_TYPE))
+       {
+@@ -131,7 +130,7 @@
+     }
+     catch (Exception e)
+     {
+-      logger.warn("Evaluation failed unexpectedly: ", e);
++      logger.warning("Evaluation failed unexpectedly: " + e);
+       return new TypeValuePair(ErrorType.TYPE, LibFormulaErrorValue.ERROR_UNEXPECTED_VALUE);
+     }
+   }
+diff -ru libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/function/DefaultFunctionRegistry.java libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/function/DefaultFunctionRegistry.java
+--- libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/function/DefaultFunctionRegistry.java	2021-02-23 14:41:06.980127564 +0000
++++ libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/function/DefaultFunctionRegistry.java	2021-02-23 14:48:29.995445103 +0000
+@@ -25,9 +25,7 @@
+ import org.pentaho.reporting.libraries.base.util.HashNMap;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+ import org.pentaho.reporting.libraries.base.config.Configuration;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
+-
++import java.util.logging.Logger;
+ 
+ /**
+  * Creation-Date: 02.11.2006, 12:48:32
+@@ -36,7 +34,7 @@
+  */
+ public class DefaultFunctionRegistry implements FunctionRegistry
+ {
+-  private static final Log logger = LogFactory.getLog(DefaultFunctionRegistry.class);
++  private static final Logger logger = Logger.getLogger(DefaultFunctionRegistry.class.getName());
+   
+   private static final String FUNCTIONS_PREFIX = "org.pentaho.reporting.libraries.formula.functions.";
+   private static final String[] EMPTY_ARRAY = new String[0];
+@@ -72,7 +70,7 @@
+       final Function function = createFunction(aName);
+       if (function == null)
+       {
+-        logger.debug ("There is no such function: " + aName);
++        logger.config ("There is no such function: " + aName);
+       }
+       else
+       {
+@@ -132,7 +130,7 @@
+         (functionClass, DefaultFunctionRegistry.class, Function.class);
+     if (function == null)
+     {
+-      logger.debug ("There is no such function: " + name);
++      logger.config ("There is no such function: " + name);
+     }
+     else
+     {
+diff -ru libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/function/information/IsErrFunction.java libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/function/information/IsErrFunction.java
+--- libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/function/information/IsErrFunction.java	2021-02-23 14:41:06.983127594 +0000
++++ libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/function/information/IsErrFunction.java	2021-02-23 14:48:54.904687864 +0000
+@@ -27,8 +27,7 @@
+ import org.pentaho.reporting.libraries.formula.typing.Type;
+ import org.pentaho.reporting.libraries.formula.typing.coretypes.ErrorType;
+ import org.pentaho.reporting.libraries.formula.typing.coretypes.LogicalType;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * This function returns true if the parameter is of error and not of error type NA.
+@@ -37,7 +36,7 @@
+  */
+ public class IsErrFunction implements Function
+ {
+-  private static final Log logger = LogFactory.getLog(IsErrFunction.class); 
++  private static final Logger logger = Logger.getLogger(IsErrFunction.class.getName());
+   private static final TypeValuePair RETURN_TRUE = new TypeValuePair(LogicalType.TYPE, Boolean.TRUE);
+   private static final TypeValuePair RETURN_FALSE = new TypeValuePair(LogicalType.TYPE, Boolean.FALSE);
+   private static final long serialVersionUID = 6749192734608313367L;
+@@ -61,7 +60,7 @@
+ 
+       if (ErrorType.TYPE.equals(type) && value instanceof ErrorValue)
+       {
+-        logger.warn ("Passing errors around is deprecated. Throw exceptions instead.");
++        logger.warning("Passing errors around is deprecated. Throw exceptions instead.");
+         final ErrorValue na = (ErrorValue) value;
+         if (na.getErrorCode() == LibFormulaErrorValue.ERROR_NA)
+         {
+diff -ru libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/function/information/IsNaFunction.java libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/function/information/IsNaFunction.java
+--- libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/function/information/IsNaFunction.java	2021-02-23 14:41:06.984127603 +0000
++++ libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/function/information/IsNaFunction.java	2021-02-23 14:49:05.917795194 +0000
+@@ -27,8 +27,7 @@
+ import org.pentaho.reporting.libraries.formula.typing.Type;
+ import org.pentaho.reporting.libraries.formula.typing.coretypes.ErrorType;
+ import org.pentaho.reporting.libraries.formula.typing.coretypes.LogicalType;
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ 
+ /**
+  * This function returns true if the parameter is of error type NA.
+@@ -39,7 +38,7 @@
+ {
+   private static final TypeValuePair RETURN_FALSE = new TypeValuePair(LogicalType.TYPE, Boolean.FALSE);
+   private static final TypeValuePair RETURN_TRUE = new TypeValuePair(LogicalType.TYPE, Boolean.TRUE);
+-  private static final Log logger = LogFactory.getLog(IsNaFunction.class);
++  private static final Logger logger = Logger.getLogger(IsNaFunction.class.getName());
+   private static final long serialVersionUID = 1205462839536368718L;
+ 
+   public IsNaFunction()
+@@ -61,7 +60,7 @@
+ 
+       if (ErrorType.TYPE.equals(type) && value instanceof ErrorValue)
+       {
+-        logger.warn ("Passing errors around is deprecated. Throw exceptions instead.");
++        logger.warning("Passing errors around is deprecated. Throw exceptions instead.");
+         final ErrorValue na = (ErrorValue) value;
+         if (na.getErrorCode() == LibFormulaErrorValue.ERROR_NA)
+         {
+diff -ru libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/lvalues/FormulaFunction.java libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/lvalues/FormulaFunction.java
+--- libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/lvalues/FormulaFunction.java	2021-02-23 14:41:06.988127642 +0000
++++ libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/lvalues/FormulaFunction.java	2021-02-23 14:50:26.354579111 +0000
+@@ -17,8 +17,8 @@
+ 
+ package org.pentaho.reporting.libraries.formula.lvalues;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Level;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.formula.EvaluationException;
+ import org.pentaho.reporting.libraries.formula.FormulaContext;
+ import org.pentaho.reporting.libraries.formula.LibFormulaErrorValue;
+@@ -44,7 +44,7 @@
+  */
+ public class FormulaFunction extends AbstractLValue
+ {
+-  private static final Log logger = LogFactory.getLog(FormulaFunction.class);
++  private static final Logger logger = Logger.getLogger(FormulaFunction.class.getName());
+ 
+   private static class FormulaParameterCallback implements ParameterCallback
+   {
+@@ -74,9 +74,9 @@
+         final TypeValuePair converted = typeRegistry.convertTo(paramType, result);
+         if (converted == null)
+         {
+-          if (logger.isDebugEnabled())
++          if (logger.isLoggable(Level.CONFIG))
+           {
+-            logger.debug("Failed to evaluate parameter " + pos + " on function " + function);
++            logger.config("Failed to evaluate parameter " + pos + " on function " + function);
+           }
+           throw EvaluationException.getInstance(LibFormulaErrorValue.ERROR_INVALID_AUTO_ARGUMENT_VALUE);
+         }
+@@ -228,7 +228,7 @@
+     }
+     catch (Exception e)
+     {
+-      logger.error("Unexpected exception while evaluating", e);
++      logger.severe("Unexpected exception while evaluating: " + e);
+       throw EvaluationException.getInstance(LibFormulaErrorValue.ERROR_UNEXPECTED_VALUE);
+     }
+   }
+diff -ru libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/typing/DefaultTypeRegistry.java libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/typing/DefaultTypeRegistry.java
+--- libformula-1.1.3.orig/source/org/pentaho/reporting/libraries/formula/typing/DefaultTypeRegistry.java	2021-02-23 14:41:06.961127380 +0000
++++ libformula-1.1.3/source/org/pentaho/reporting/libraries/formula/typing/DefaultTypeRegistry.java	2021-02-23 14:47:11.376678905 +0000
+@@ -35,8 +35,7 @@
+ import java.util.List;
+ import java.util.Locale;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.base.config.Configuration;
+ import org.pentaho.reporting.libraries.base.util.IOUtils;
+ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+@@ -66,7 +65,7 @@
+  */
+ public class DefaultTypeRegistry implements TypeRegistry
+ {
+-  private static final Log logger = LogFactory.getLog(DefaultTypeRegistry.class);
++  private static final Logger logger = Logger.getLogger(DefaultTypeRegistry.class.getName());
+ 
+   private static class ArrayConverterCallback implements ArrayCallback
+   {
+@@ -599,7 +598,7 @@
+       }
+       else
+       {
+-        logger.warn("Assertation failure: Type declared to be a sequence, but no sequence found inside.");
++        logger.warning("Assertation failure: Type declared to be a sequence, but no sequence found inside.");
+         throw TypeConversionException.getInstance();
+       }
+     }
+@@ -612,7 +611,7 @@
+       }
+       else
+       {
+-        logger.warn("Assertation failure: Type declared to be array, but no array callback found inside.");
++        logger.warning("Assertation failure: Type declared to be array, but no array callback found inside.");
+         throw TypeConversionException.getInstance();
+       }
+     }
+@@ -651,7 +650,7 @@
+       }
+       else
+       {
+-        logger.warn("Assertation failure: Type declared to be array, but no array callback found inside.");
++        logger.warning("Assertation failure: Type declared to be array, but no array callback found inside.");
+         throw TypeConversionException.getInstance();
+       }
+     }
+--- a/source/org/pentaho/reporting/libraries/formula/function/logical/IfNaFunction.java
++++ b/source/org/pentaho/reporting/libraries/formula/function/logical/IfNaFunction.java
+@@ -17,8 +17,7 @@
+ 
+ package org.pentaho.reporting.libraries.formula.function.logical;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
++import java.util.logging.Logger;
+ import org.pentaho.reporting.libraries.formula.ErrorValue;
+ import org.pentaho.reporting.libraries.formula.EvaluationException;
+ import org.pentaho.reporting.libraries.formula.FormulaContext;
+@@ -37,7 +36,7 @@
+  */
+ public class IfNaFunction implements Function
+ {
+-  private static final Log logger = LogFactory.getLog(IfNaFunction.class);
++  private static final Logger logger = Logger.getLogger(IfNaFunction.class.getName());
+   private static final long serialVersionUID = -7517668261071087411L;
+ 
+   public IfNaFunction()
+@@ -67,7 +66,7 @@
+       value = parameters.getValue(0);
+       if (ErrorType.TYPE.equals(type) && value instanceof ErrorValue)
+       {
+-        logger.warn("Passing errors around is deprecated. Throw exceptions instead.");
++        logger.warning("Passing errors around is deprecated. Throw exceptions instead.");
+         final ErrorValue na = (ErrorValue) value;
+         if (na.getErrorCode() == LibFormulaErrorValue.ERROR_NA)
+         {
