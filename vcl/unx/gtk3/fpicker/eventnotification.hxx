@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_FPICKER_EVENTNOTIFICATION_HXX
-#define INCLUDED_VCL_UNX_GTK_FPICKER_EVENTNOTIFICATION_HXX
+#pragma once
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -38,7 +37,5 @@ public:
     virtual void SAL_CALL notifyEventListener(css::uno::Reference<css::uno::XInterface> xListener)
         = 0;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

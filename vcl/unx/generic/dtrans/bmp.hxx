@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GENERIC_DTRANS_BMP_HXX
-#define INCLUDED_VCL_UNX_GENERIC_DTRANS_BMP_HXX
+#pragma once
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -72,7 +71,5 @@ css::uno::Sequence<sal_Int8> convertBitmapDepth(
     css::uno::Sequence<sal_Int8> const & data, int depth);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
