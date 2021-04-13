@@ -1679,6 +1679,8 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* const pField, ww::eField
         if (bHasInstructions)
         {
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
+            if (pField && (pField->GetSubType() & FIXEDFLD))
+                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLDLOCK);
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST
                                " ");
             m_aRunText->append(
