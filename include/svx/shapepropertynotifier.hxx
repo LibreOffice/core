@@ -22,9 +22,11 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/shapeproperty.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 #include <rtl/ustring.hxx>
 
 #include <memory>
+#include <unordered_map>
 
 namespace com::sun::star::beans { class XPropertyChangeListener; }
 namespace com::sun::star::uno { class Any; }
@@ -89,10 +91,6 @@ namespace svx
     };
 
 
-    //= PropertyChangeNotifier
-
-    struct PropertyChangeNotifier_Data;
-
     /** helper class for notifying XPropertyChangeListeners
 
         The class is intended to be held as member of the class which does the property change broadcasting.
@@ -132,7 +130,18 @@ namespace svx
         PropertyChangeNotifier(const PropertyChangeNotifier&) = delete;
         PropertyChangeNotifier& operator=(const PropertyChangeNotifier&) = delete;
 
-        std::unique_ptr< PropertyChangeNotifier_Data >  m_xData;
+        struct ShapePropertyHash
+        {
+            size_t operator()( svx::ShapeProperty x ) const
+            {
+                return size_t( x );
+            }
+        };
+        typedef std::unordered_map< ShapeProperty, std::shared_ptr<IPropertyValueProvider>, ShapePropertyHash  >
+            PropertyProviders;
+        ::cppu::OWeakObject&            m_rContext;
+        PropertyProviders               m_aProviders;
+        cppu::OMultiTypeInterfaceContainerHelperVar<OUString> m_aPropertyChangeListeners;
     };
 
 
