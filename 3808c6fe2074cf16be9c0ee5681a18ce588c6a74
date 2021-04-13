@@ -70,6 +70,30 @@
       "revId": "3808c6fe2074cf16be9c0ee5681a18ce588c6a74",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "49c28dd3_18a41e81",
+        "filename": "sc/source/filter/excel/xiescher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2021-04-13T21:38:56Z",
+      "side": 1,
+      "message": "You are right. But is it possible that this \"cid#1474366 Untrusted loop bound\" message is based on the unchecked decrement \"nDataSize -\u003d rStrm.GetRecLeft();\" at line 964, which should actually be like the one 975 (with ::std::min)?\n\nBecause, due to your lack of change of the logic, you might have just obfuscated the code enough for your code analyzer to no longer understand it, but the underlying issue may still be there. Or why should the code analyzer no longer trigger now, if the logic is exactly the same?",
+      "parentUuid": "39b3b589_cb8bf743",
+      "range": {
+        "startLine": 968,
+        "startChar": 12,
+        "endLine": 968,
+        "endChar": 13
+      },
+      "revId": "3808c6fe2074cf16be9c0ee5681a18ce588c6a74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
