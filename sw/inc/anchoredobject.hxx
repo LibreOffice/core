@@ -46,7 +46,8 @@ class SW_DLLPUBLIC SwAnchoredObject
     private:
         // drawing object representing the anchored object in the drawing layer
         SdrObject* mpDrawObj;
-        // frame the object is anchored at
+        /// Frame the object is anchored at.
+        /// For at-char/at-para anchor, this is always the master SwTextFrame.
         SwFrame* mpAnchorFrame;
         // #i28701 - page frame the object is registered at
         // note: no page frame for as-character anchored objects
@@ -294,6 +295,8 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         /** method to invalidate position of the anchored object */
         virtual void InvalidateObjPos() = 0;
+
+        virtual void RegisterAtPage(SwPageFrame &) = 0;
 
         /** method to perform necessary invalidations for the positioning of
             objects, for whose the wrapping style influence has to be considered
