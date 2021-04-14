@@ -4441,7 +4441,7 @@ void ScExportTest::testTdf107586()
     xmlDocUniquePtr pSheet = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pSheet);
 
-    // Without the fix in place, this test would haved failed with
+    // Without the fix in place, this test would have failed with
     // XPath '/x:worksheet/x:sheetPr/x:tabColor' number of nodes is incorrect
     assertXPath(pSheet, "/x:worksheet/x:sheetPr/x:tabColor", "rgb", "FF9BBB59");
 

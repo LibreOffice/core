@@ -1080,7 +1080,7 @@ void PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
                                               false, true, mbReduceImageResolution );
         // tdf#134736 if the metafile was replaced then rPDFExtOutDevData's PageSyncData mActions
         // all still point to MetaAction indexes in the original metafile that are now invalid.
-        // Throw them all way in the absence of a way to reposition them to new positions of
+        // Throw them all away in the absence of a way to reposition them to new positions of
         // their replacements.
         if (aCtx.m_bTransparenciesWereRemoved)
             rPDFExtOutDevData.ResetSyncData();
