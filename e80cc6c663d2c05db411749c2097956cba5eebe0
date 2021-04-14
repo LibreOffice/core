@@ -201,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "4f47df97_788780b0",
+        "filename": "schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng",
+        "patchSetId": 3
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-14T09:32:42Z",
+      "side": 1,
+      "message": "apparently there are 100s of different kinds of barcode... probably we don\u0027t want a separate element for each?\n\nthey tend to have different kinds of parameters too.\n\nhow about we have a single element \"draw:barcode\" (keep loext:qrcode while it\u0027s in extension namespace) with a type attribute and the other attribute depending on the type:\n\n    \u003crng:element name\u003d\"loext:qrcode\"\u003e\n      \u003crng:attribute name\u003d\"office:string-value\"\u003e\n        \u003crng:ref name\u003d\"string\"/\u003e\n      \u003c/rng:attribute\u003e\n      \u003crng:choice\u003e\n        \u003crng:group\u003e\n          \u003crng:attribute name\u003d\"loext:barcode-type\"\u003e\n            \u003crng:value\u003eQR\u003c/rng:value\u003e\n          \u003c/rng:attribute\u003e\n          \u003crng:attribute name\u003d\"loext:qrcode-errorcorrection\"\u003e\n            \u003crng:choice\u003e\n              \u003crng:value\u003elow\u003c/rng:value\u003e\n              \u003crng:value\u003emedium\u003c/rng:value\u003e\n              \u003crng:value\u003equartile\u003c/rng:value\u003e\n              \u003crng:value\u003ehigh\u003c/rng:value\u003e\n            \u003c/rng:choice\u003e\n          \u003c/rng:attribute\u003e\n          \u003crng:attribute name\u003d\"loext:qrcode-border\"\u003e\n            \u003crng:ref name\u003d\"nonNegativeInteger\"/\u003e\n          \u003c/rng:attribute\u003e\n        \u003c/rng:group\u003e\n        \u003crng:group\u003e\n          \u003crng:attribute name\u003d\"loext:barcode-type\"\u003e\n            \u003crng:value\u003eCode 128\u003c/rng:value\u003e\n          \u003c/rng:attribute\u003e\n... attributes for 128 ...\n        \u003c/rng:group\u003e\n      \u003c/rng:choice\u003e\n    \u003c/rng:element\u003e",
+      "parentUuid": "4f629d17_5f443e4e",
+      "range": {
+        "startLine": 1814,
+        "startChar": 27,
+        "endLine": 1814,
+        "endChar": 44
+      },
+      "revId": "e80cc6c663d2c05db411749c2097956cba5eebe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "709036e8_53771d5f",
         "filename": "xmloff/source/draw/QRCodeContext.cxx",
         "patchSetId": 3
