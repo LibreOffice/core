@@ -90,12 +90,17 @@ void SwLayAction::CheckWaitCursor()
 
 bool SwLayAction::IsInterrupt(const SwPageFrame *pPage)
 {
+    // This just ignores all TIMER events when Idle processing, until the current page is
+    // finished. There used to be a 2nd layout loop, which should have always finished the
+    // current page, after an Idle interrupt, so I'm not sure ignoring just the TIMER at
+    // this point is fine... and it couldn't handle the busy-loop from the tdf#141556 doc.
     assert(pPage);
     if (m_pInterruptedPage)
     {
-        SAL_INFO_IF(pPage != m_pInterruptedPage, "sw.idle", "Idle interrupt allowed with "
-                                                            << pPage << " " << pPage->GetPhyPageNum());
-        return (pPage != m_pInterruptedPage);
+        const bool bNonTimerEvent = Application::AnyInput(GetInputType() & VclInputFlags(~VclInputFlags::TIMER));
+        SAL_INFO_IF(bNonTimerEvent || (pPage != m_pInterruptedPage), "sw.idle", "Idle interrupt allowed with "
+                                                                     << pPage << " " << pPage->GetPhyPageNum());
+        return bNonTimerEvent || (pPage != m_pInterruptedPage);
     }
     if (!m_bInterrupt)
         m_bInterrupt = bool(GetInputType()) && Application::AnyInput(GetInputType());
@@ -103,6 +108,7 @@ bool SwLayAction::IsInterrupt(const SwPageFrame *pPage)
     {
         SAL_INFO("sw.idle", "Register Idle interrupt at " << pPage << " " << pPage->GetPhyPageNum());
         m_pInterruptedPage = pPage;
+        return IsInterrupt(pPage);
     }
     return m_bInterrupt && !IsIdle();
 }
