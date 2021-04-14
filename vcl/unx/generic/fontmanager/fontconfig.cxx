@@ -1113,7 +1113,8 @@ std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const Fa
     if( !sFamily.isEmpty() )
         FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<FcChar8 const *>(sFamily.getStr()));
 
-    addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
+    // TODO: ePitch argument of always PITCH_DONTKNOW is suspicious
+    addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, PITCH_DONTKNOW);
     FcPatternAddDouble(pPattern, FC_PIXEL_SIZE, nSize);
 
     FcConfigSubstitute(pConfig, pPattern, FcMatchPattern);
