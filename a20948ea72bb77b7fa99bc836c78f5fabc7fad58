@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0537694_4366bf36",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-14T10:54:22Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 90,
+        "startChar": 17,
+        "endLine": 90,
+        "endChar": 26
+      },
+      "revId": "a20948ea72bb77b7fa99bc836c78f5fabc7fad58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3316ae5f_9e804a44",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-14T10:54:22Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 94,
+        "startChar": 17,
+        "endLine": 94,
+        "endChar": 26
+      },
+      "revId": "a20948ea72bb77b7fa99bc836c78f5fabc7fad58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07e96302_222cdb07",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-14T10:54:22Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 115,
+        "startChar": 23,
+        "endLine": 115,
+        "endChar": 24
+      },
+      "revId": "a20948ea72bb77b7fa99bc836c78f5fabc7fad58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "310d61c6_64a6384a",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-14T10:54:22Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 119,
+        "startChar": 48,
+        "endLine": 119,
+        "endChar": 49
+      },
+      "revId": "a20948ea72bb77b7fa99bc836c78f5fabc7fad58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ceb4821_09749afc",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-14T10:54:22Z",
+      "side": 1,
+      "message": "fails",
+      "range": {
+        "startLine": 314,
+        "startChar": 36,
+        "endLine": 314,
+        "endChar": 40
+      },
+      "revId": "a20948ea72bb77b7fa99bc836c78f5fabc7fad58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc9d8faf_19d09e4f",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-14T10:54:22Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 314,
+        "startChar": 8,
+        "endLine": 314,
+        "endChar": 9
+      },
+      "revId": "a20948ea72bb77b7fa99bc836c78f5fabc7fad58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c50bb1b6_c814fd30",
+        "filename": "sw/qa/uitest/writer_tests7/tdf141557.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-14T10:54:22Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 35,
+        "startChar": 11,
+        "endLine": 35,
+        "endChar": 12
+      },
+      "revId": "a20948ea72bb77b7fa99bc836c78f5fabc7fad58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa4d37c9_7fab9b3d",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-14T10:54:22Z",
+      "side": 1,
+      "message": "\"Exception caught: \"\n\nAlso it would be fine to write more about the exception:\n\nIs it common/ignored, not intended or fatal?",
+      "range": {
+        "startLine": 1088,
+        "startChar": 30,
+        "endLine": 1088,
+        "endChar": 46
+      },
+      "revId": "a20948ea72bb77b7fa99bc836c78f5fabc7fad58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dba5f939_0a9ed948",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-14T10:54:22Z",
+      "side": 1,
+      "message": "} catch (uno::Exception \u0026) {\n            // ignore\n        }\n\nor something more about it...",
+      "range": {
+        "startLine": 1189,
+        "startChar": 0,
+        "endLine": 1191,
+        "endChar": 17
+      },
+      "revId": "a20948ea72bb77b7fa99bc836c78f5fabc7fad58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bac5524_72da5ae9",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-14T10:54:22Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1263,
+        "startChar": 54,
+        "endLine": 1263,
+        "endChar": 55
+      },
+      "revId": "a20948ea72bb77b7fa99bc836c78f5fabc7fad58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
