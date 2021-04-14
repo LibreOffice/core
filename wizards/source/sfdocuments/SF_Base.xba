@@ -428,6 +428,7 @@ Public Function OpenFormDocument(Optional ByVal FormDocument As Variant _
 Dim bOpen As Boolean				&apos;	Return value
 Dim vFormNames As Variant			&apos;	Array of all document form names present in the document
 Dim oContainer As Object			&apos;	com.sun.star.awt.XWindow
+Dim oNewForm As Object				&apos;	Output of loadComponent()
 Const cstThisSub = &quot;SFDocuments.Base.OpenFormDocument&quot;
 Const cstSubArgs = &quot;FormDocument, [DesignMode=False]&quot;
 
@@ -446,22 +447,16 @@ Check:
 	End If
 
 Try:
-	If IsLoaded(FormDocument) Then		&apos;	Activate
-		Set oContainer = _FormDocuments.getByHierarchicalName(FormDocument).Component.CurrentController.Frame.ContainerWindow
-		With oContainer
-			If .isVisible() = False Then .setVisible(True)
-			.IsMinimized = False
-			.setFocus()
-			.toFront()				&apos;	Force window change in Linux
-			Wait 1					&apos;	Bypass desynchro issue in Linux
+	With _Component.CurrentController
+		If Not .IsConnected Then .connect()
+		&apos;	loadComponent activates the form when already loaded
+		Set oNewForm = .loadComponent(com.sun.star.sdb.application.DatabaseObject.FORM, FormDocument, DesignMode)
+		&apos;	When user opened manually the form in design mode and closed it, the next execution in normal mode needs to be confirmed as below
+		With oNewForm.CurrentController
+			If .isFormDesignMode() &lt;&gt; DesignMode Then .setFormDesignMode(DesignMode)
 		End With
-	Else								&apos;	Open
-		With _Component.CurrentController
-			If Not .IsConnected Then .connect()
-			.loadComponent(com.sun.star.sdb.application.DatabaseObject.FORM, FormDocument, DesignMode)
-		End With
-		bOpen = True
-	End If
+	End With
+	bOpen = True
 
 Finally:
 	OpenFormDocument = bOpen
