@@ -1376,12 +1376,21 @@ void SdrObjCustomShape::AdaptTextMinSize()
     if (getSdrModelFromSdrObject().IsCreatingDataObj() || getSdrModelFromSdrObject().IsPasteResize())
         return;
 
+    // check if we need to change anything before creating an SfxItemSet, because that is expensive
     const bool bResizeShapeToFitText(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue());
+    tools::Rectangle aTextBound(maRect);
+    bool bChanged(false);
+    if(bResizeShapeToFitText)
+        bChanged = true;
+    else if(GetTextBounds(aTextBound))
+        bChanged = true;
+    if (!bChanged)
+       return;
+
     SfxItemSet aSet(
         *GetObjectItemSet().GetPool(),
         svl::Items<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
         SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH>{}); // contains SDRATTR_TEXT_MAXFRAMEWIDTH
-    bool bChanged(false);
 
     if(bResizeShapeToFitText)
     {
@@ -1389,28 +1398,20 @@ void SdrObjCustomShape::AdaptTextMinSize()
         // to allow resizing being completely dependent on text size only
         aSet.Put(makeSdrTextMinFrameWidthItem(0));
         aSet.Put(makeSdrTextMinFrameHeightItem(0));
-        bChanged = true;
     }
     else
     {
         // recreate from CustomShape-specific TextBounds
-        tools::Rectangle aTextBound(maRect);
+        const tools::Long nHDist(GetTextLeftDistance() + GetTextRightDistance());
+        const tools::Long nVDist(GetTextUpperDistance() + GetTextLowerDistance());
+        const tools::Long nTWdt(std::max(tools::Long(0), static_cast<tools::Long>(aTextBound.GetWidth() - 1 - nHDist)));
+        const tools::Long nTHgt(std::max(tools::Long(0), static_cast<tools::Long>(aTextBound.GetHeight() - 1 - nVDist)));
 
-        if(GetTextBounds(aTextBound))
-        {
-            const tools::Long nHDist(GetTextLeftDistance() + GetTextRightDistance());
-            const tools::Long nVDist(GetTextUpperDistance() + GetTextLowerDistance());
-            const tools::Long nTWdt(std::max(tools::Long(0), static_cast<tools::Long>(aTextBound.GetWidth() - 1 - nHDist)));
-            const tools::Long nTHgt(std::max(tools::Long(0), static_cast<tools::Long>(aTextBound.GetHeight() - 1 - nVDist)));
-
-            aSet.Put(makeSdrTextMinFrameWidthItem(nTWdt));
-            aSet.Put(makeSdrTextMinFrameHeightItem(nTHgt));
-            bChanged = true;
-        }
+        aSet.Put(makeSdrTextMinFrameWidthItem(nTWdt));
+        aSet.Put(makeSdrTextMinFrameHeightItem(nTHgt));
     }
 
-    if(bChanged)
-        SetObjectItemSet(aSet);
+    SetObjectItemSet(aSet);
 }
 
 void SdrObjCustomShape::NbcSetSnapRect( const tools::Rectangle& rRect )
