@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08762dac_578f8a49",
+        "filename": "sw/qa/extras/rtfexport/rtfexport3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-14T06:22:36Z",
+      "side": 1,
+      "message": "Leftover from an abandoned local version?",
+      "revId": "1113986edcaadcb1674037df9863c0ead4cf3790",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39ba6265_75f14746",
+        "filename": "sw/qa/extras/rtfexport/rtfexport3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-14T06:22:36Z",
+      "side": 1,
+      "message": "Same here?",
+      "revId": "1113986edcaadcb1674037df9863c0ead4cf3790",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
