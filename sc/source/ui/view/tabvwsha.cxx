@@ -511,7 +511,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     auto pOldSet = std::make_shared<SfxItemSet>(pOldAttrs->GetItemSet());
     std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
-    pOldSet->MergeRange(XATTR_FILLSTYLE, XATTR_FILLCOLOR);
+    pOldSet->MergeRange(XATTR_FILLSTYLE, XATTR_FILLGRADIENT);
 
     pOldSet->MergeRange(SID_ATTR_BORDER_STYLES, SID_ATTR_BORDER_DEFAULT_WIDTH);
 
