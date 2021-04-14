@@ -42,10 +42,13 @@ class   SalI18N_InputContext;
 namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }
 
 // X11SalFrame
-#define SHOWSTATE_UNKNOWN       -1
-#define SHOWSTATE_MINIMIZED     0
-#define SHOWSTATE_NORMAL        1
-#define SHOWSTATE_HIDDEN        2
+enum class X11ShowState
+{
+    Unknown = -1,
+    Minimized = 0,
+    Normal = 1,
+    Hidden = 2
+};
 
 enum class WMWindowType
 {
@@ -86,7 +89,7 @@ class X11SalFrame final : public SalFrame
     bool            mbSendExtKeyModChange;
     ModKeyFlags     mnExtKeyMod;
 
-    int             nShowState_;        // show state
+    X11ShowState    nShowState_;        // show state
     int             nWidth_;            // client width
     int             nHeight_;           // client height
     tools::Rectangle       maRestorePosSize;

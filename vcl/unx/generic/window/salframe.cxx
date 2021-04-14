@@ -412,7 +412,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         ! (nSalFrameStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
         )
     {
-        if( nShowState_ == SHOWSTATE_UNKNOWN )
+        if( nShowState_ == X11ShowState::Unknown )
         {
             w = 10;
             h = 10;
@@ -631,7 +631,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         }
     }
 
-    nShowState_                 = SHOWSTATE_UNKNOWN;
+    nShowState_                 = X11ShowState::Unknown;
     bViewable_                  = true;
     bMapped_                    = false;
     nVisibility_                = VisibilityFullyObscured;
@@ -830,7 +830,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     mbSendExtKeyModChange       = false;
     mnExtKeyMod                 = ModKeyFlags::NONE;
 
-    nShowState_                 = SHOWSTATE_UNKNOWN;
+    nShowState_                 = X11ShowState::Unknown;
     nWidth_                     = 0;
     nHeight_                    = 0;
     nStyle_                     = SalFrameStyleFlags::NONE;
@@ -1192,7 +1192,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
         }
 
         // update NET_WM_STATE which may have been deleted due to earlier Show(false)
-        if( nShowState_ == SHOWSTATE_HIDDEN )
+        if( nShowState_ == X11ShowState::Hidden )
             GetDisplay()->getWMAdaptor()->frameIsMapping( this );
 
         /*
@@ -1322,11 +1322,11 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
             }
         }
         /*
-         *  leave SHOWSTATE_UNKNOWN as this indicates first mapping
+         *  leave X11ShowState::Unknown as this indicates first mapping
          *  and is only reset int HandleSizeEvent
          */
-        if( nShowState_ != SHOWSTATE_UNKNOWN )
-            nShowState_ = SHOWSTATE_NORMAL;
+        if( nShowState_ != X11ShowState::Unknown )
+            nShowState_ = X11ShowState::Normal;
 
         /*
          *  plugged windows don't necessarily get the
@@ -1365,7 +1365,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
         else if( ! m_bXEmbed )
             XUnmapWindow( GetXDisplay(), GetWindow() );
 
-        nShowState_ = SHOWSTATE_HIDDEN;
+        nShowState_ = X11ShowState::Hidden;
         if( IsFloatGrabWindow() && nVisibleFloats )
         {
             nVisibleFloats--;
@@ -1383,8 +1383,8 @@ void X11SalFrame::ToTop( SalFrameToTop nFlags )
 {
     if( ( nFlags & SalFrameToTop::RestoreWhenMin )
         && ! ( nStyle_ & SalFrameStyleFlags::FLOAT )
-        && nShowState_ != SHOWSTATE_HIDDEN
-        && nShowState_ != SHOWSTATE_UNKNOWN
+        && nShowState_ != X11ShowState::Hidden
+        && nShowState_ != X11ShowState::Unknown
         )
     {
         GetDisplay()->getWMAdaptor()->frameIsMapping( this );
@@ -1521,7 +1521,7 @@ void X11SalFrame::Center( )
         }
     }
 
-    if( mpParent && mpParent->nShowState_ == SHOWSTATE_NORMAL )
+    if( mpParent && mpParent->nShowState_ == X11ShowState::Normal )
     {
         if( maGeometry.nWidth >= mpParent->maGeometry.nWidth &&
             maGeometry.nHeight >= mpParent->maGeometry.nHeight )
@@ -1755,7 +1755,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
 
     if (pState->mnState & WindowStateState::Maximized)
     {
-        nShowState_ = SHOWSTATE_NORMAL;
+        nShowState_ = X11ShowState::Normal;
         if( ! (pState->mnState & (WindowStateState::MaximizedHorz|WindowStateState::MaximizedVert) ) )
             Maximize();
         else
@@ -1774,20 +1774,20 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
 
     if (pState->mnState & WindowStateState::Minimized)
     {
-        if (nShowState_ == SHOWSTATE_UNKNOWN)
-            nShowState_ = SHOWSTATE_NORMAL;
+        if (nShowState_ == X11ShowState::Unknown)
+            nShowState_ = X11ShowState::Normal;
         Minimize();
     }
     if (pState->mnState & WindowStateState::Normal)
     {
-        if (nShowState_ != SHOWSTATE_NORMAL)
+        if (nShowState_ != X11ShowState::Normal)
             Restore();
     }
 }
 
 bool X11SalFrame::GetWindowState( SalFrameState* pState )
 {
-    if( SHOWSTATE_MINIMIZED == nShowState_ )
+    if( X11ShowState::Minimized == nShowState_ )
         pState->mnState = WindowStateState::Minimized;
     else
         pState->mnState = WindowStateState::Normal;
@@ -1931,8 +1931,8 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
         // popups (menu, help window, etc.)
         &&  (nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) != SalFrameStyleFlags::FLOAT
         // shown, sizeable windows
-        && ( nShowState_ == SHOWSTATE_UNKNOWN ||
-             nShowState_ == SHOWSTATE_HIDDEN ||
+        && ( nShowState_ == X11ShowState::Unknown ||
+             nShowState_ == X11ShowState::Hidden ||
              ! ( nStyle_ & SalFrameStyleFlags::SIZEABLE )
              )
         )
@@ -1952,7 +1952,7 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
             pHints->max_height  = rPosSize.GetHeight();
             pHints->flags |= PMinSize | PMaxSize;
         }
-        if( nShowState_ == SHOWSTATE_UNKNOWN || nShowState_ == SHOWSTATE_HIDDEN )
+        if( nShowState_ == X11ShowState::Unknown || nShowState_ == X11ShowState::Hidden )
         {
             pHints->flags |= PPosition | PWinGravity;
             pHints->x           = values.x;
@@ -2009,7 +2009,7 @@ void X11SalFrame::Minimize()
     if( IsSysChildWindow() )
         return;
 
-    if( SHOWSTATE_UNKNOWN == nShowState_ || SHOWSTATE_HIDDEN == nShowState_ )
+    if( X11ShowState::Unknown == nShowState_ || X11ShowState::Hidden == nShowState_ )
     {
         SAL_WARN( "vcl", "X11SalFrame::Minimize on withdrawn window" );
         return;
@@ -2018,7 +2018,7 @@ void X11SalFrame::Minimize()
     if( XIconifyWindow( GetXDisplay(),
                         GetShellWindow(),
                         pDisplay_->GetDefaultXScreen().getXScreen() ) )
-        nShowState_ = SHOWSTATE_MINIMIZED;
+        nShowState_ = X11ShowState::Minimized;
 }
 
 void X11SalFrame::Maximize()
@@ -2026,11 +2026,11 @@ void X11SalFrame::Maximize()
     if( IsSysChildWindow() )
         return;
 
-    if( SHOWSTATE_MINIMIZED == nShowState_ )
+    if( X11ShowState::Minimized == nShowState_ )
     {
         GetDisplay()->getWMAdaptor()->frameIsMapping( this );
         XMapWindow( GetXDisplay(), GetShellWindow() );
-        nShowState_ = SHOWSTATE_NORMAL;
+        nShowState_ = X11ShowState::Normal;
     }
 
     pDisplay_->getWMAdaptor()->maximizeFrame( this );
@@ -2041,17 +2041,17 @@ void X11SalFrame::Restore()
     if( IsSysChildWindow() )
         return;
 
-    if( SHOWSTATE_UNKNOWN == nShowState_ || SHOWSTATE_HIDDEN == nShowState_ )
+    if( X11ShowState::Unknown == nShowState_ || X11ShowState::Hidden == nShowState_ )
     {
         SAL_INFO( "vcl", "X11SalFrame::Restore on withdrawn window" );
         return;
     }
 
-    if( SHOWSTATE_MINIMIZED == nShowState_ )
+    if( X11ShowState::Minimized == nShowState_ )
     {
         GetDisplay()->getWMAdaptor()->frameIsMapping( this );
         XMapWindow( GetXDisplay(), GetShellWindow() );
-        nShowState_ = SHOWSTATE_NORMAL;
+        nShowState_ = X11ShowState::Normal;
     }
 
     pDisplay_->getWMAdaptor()->maximizeFrame( this, false, false );
@@ -3509,8 +3509,8 @@ bool X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     }
 
     // check size hints in first time SalFrame::Show
-    if( SHOWSTATE_UNKNOWN == nShowState_ && bMapped_ )
-        nShowState_ = SHOWSTATE_NORMAL;
+    if( X11ShowState::Unknown == nShowState_ && bMapped_ )
+        nShowState_ = X11ShowState::Normal;
 
     // Avoid a race condition where resizing this window to one size and shortly after that
     // to another size generates first size event with the old size and only after that
@@ -3766,9 +3766,9 @@ bool X11SalFrame::HandleStateEvent( XPropertyEvent const *pEvent )
                 &&  0 == bytes_after, "HandleStateEvent" );
 
     if( *reinterpret_cast<unsigned long*>(prop) == NormalState )
-        nShowState_ = SHOWSTATE_NORMAL;
+        nShowState_ = X11ShowState::Normal;
     else if( *reinterpret_cast<unsigned long*>(prop) == IconicState )
-        nShowState_ = SHOWSTATE_MINIMIZED;
+        nShowState_ = X11ShowState::Minimized;
 
     XFree( prop );
     return true;
@@ -3893,7 +3893,7 @@ bool X11SalFrame::Dispatch( XEvent *pEvent )
             case MapNotify:
                 if( pEvent->xmap.window == GetShellWindow() )
                 {
-                    if( nShowState_ == SHOWSTATE_HIDDEN )
+                    if( nShowState_ == X11ShowState::Hidden )
                     {
                         /*
                          *  workaround for (at least) KWin 2.2.2

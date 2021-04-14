@@ -1151,7 +1151,7 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
      *  reset gravity hint to static gravity
      *  (this should not move window according to ICCCM)
      */
-    if( bHint && pFrame->nShowState_ != SHOWSTATE_UNKNOWN )
+    if( bHint && pFrame->nShowState_ != X11ShowState::Unknown )
     {
         hints.win_gravity = StaticGravity;
         XSetWMNormalHints( m_pDisplay,
@@ -1239,7 +1239,7 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
      *  reset gravity hint to static gravity
      *  (this should not move window according to ICCCM)
      */
-    if( bHint && pFrame->nShowState_ != SHOWSTATE_UNKNOWN )
+    if( bHint && pFrame->nShowState_ != X11ShowState::Unknown )
     {
         hints.win_gravity = StaticGravity;
         XSetWMNormalHints( m_pDisplay,
