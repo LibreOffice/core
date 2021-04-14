@@ -24,6 +24,7 @@
 #include <drawingml/textbodyproperties.hxx>
 #include <drawingml/textliststyle.hxx>
 #include <drawingml/shape3dproperties.hxx>
+#include <oox/helper/refvector.hxx>
 
 namespace com::sun::star::text {
     class XText;
