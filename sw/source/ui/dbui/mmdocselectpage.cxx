@@ -32,7 +32,7 @@
 #include <mailmergewizard.hxx>
 #include <swabstdlg.hxx>
 #include <mmconfigitem.hxx>
-
+#include <swuiexp.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 
@@ -164,9 +164,20 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, weld::Button&, rButton, void)
 
 IMPL_LINK_NOARG(SwMailMergeDocSelectPage, ExchangeDatabaseHdl, weld::Button&, void)
 {
-    m_pWizard->GetSwView()->GetViewFrame()->GetDispatcher()->Execute(FN_CHANGE_DBFIELD);
-    m_xDataSourceWarningFT->hide();
-    m_pWizard->enableButtons(WizardButtonFlags::NEXT, true);
+
+    SwAbstractDialogFactory& rFact = ::swui::GetFactory();
+    ScopedVclPtr<VclAbstractDialog> pDlg(rFact.CreateSwChangeDBDlg(*m_pWizard->GetSwView()));
+    pDlg->Execute();
+
+    OUString sDataSourceName = m_pWizard->GetSwView()->GetDataSourceName();
+
+    if(m_xCurrentDocRB->get_active() &&
+       !sDataSourceName.isEmpty() &&
+       SwView::IsDataSourceAvailable(sDataSourceName))
+    {
+        m_xDataSourceWarningFT->hide();
+        m_pWizard->enableButtons(WizardButtonFlags::NEXT, true);
+    }
 }
 
 bool SwMailMergeDocSelectPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )
