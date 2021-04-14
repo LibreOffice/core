@@ -238,18 +238,18 @@ IMPL_LINK(SwOutlineContentVisibilityWin, MouseMoveHdl, const MouseEvent&, rMEvt,
 
 IMPL_LINK(SwOutlineContentVisibilityWin, MousePressHdl, const MouseEvent&, rMEvt, bool)
 {
-    Hide();
-    // Crash occurs if control does not have focus when toggling from hidden to shown.
-    // Seems to happen due to the control being disposed in the toggle process.
-    // Does NOT crash in debugger with GrabFocus and GrabFocusToDocument commented out.
-    // DOES crash in debugger on GrabFocusToDocument when GrabFocus is commented out.
-    // Until light is shed on why this happens, prevent crash by doing the following:
-    //  1) grab focus to the control
-    //  2) toggle content visibility
-    //  3) grab focus to the document
+    // GrabFocusToDocument() here is needed so gtk3 doesn't crash when focus was previously
+    // in the sidebar and press is made on a Show button.
+    GrabFocusToDocument();
+    // The control has to have focus before the ToggleOutlineContentVisibility
+    // call or it will be removed in the call. Crash mystery solved!
     if (!ControlHasFocus())
         GrabFocus();
     ToggleOutlineContentVisibility(rMEvt.IsRight());
+    // Set and Show here so button change does not have a delay
+    Set();
+    Show();
+    GetEditWin()->Invalidate();
     GrabFocusToDocument();
     return false;
 }
