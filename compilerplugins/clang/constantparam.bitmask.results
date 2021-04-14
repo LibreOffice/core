@@ -22,13 +22,13 @@ include/svtools/brwbox.hxx:510
 include/vcl/wizardmachine.hxx:139
     void vcl::WizardMachine::WizardMachine(class weld::Window *,enum WizardButtonFlags)
     enum WizardButtonFlags _nButtonFlags setBits=0xf
-sc/inc/rangelst.hxx:48
+sc/inc/rangelst.hxx:47
     void ScRangeList::Format(class rtl::OUString &,enum ScRefFlags,const class ScDocument &,enum formula::FormulaGrammar::AddressConvention,char16_t,_Bool) const
     enum ScRefFlags nFlags setBits=0x8000 clearBits=0x7f80
-sc/inc/rangeutl.hxx:162
+sc/inc/rangeutl.hxx:168
     void ScRangeStringConverter::GetStringFromAddress(class rtl::OUString &,const class ScAddress &,const class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t,_Bool,enum ScRefFlags)
     enum ScRefFlags nFormatFlags setBits=0x8008 clearBits=0x7ff0
-sc/inc/xmlwrap.hxx:89
+sc/inc/xmlwrap.hxx:88
     _Bool ScXMLImportWrapper::Import(enum ImportFlags,class ErrCode &)
     enum ImportFlags nMode setBits=0x1
 sc/source/ui/view/cellsh1.cxx:103
@@ -46,9 +46,9 @@ sw/source/filter/html/swhtml.hxx:689
 sw/source/filter/ww8/wrtw8esh.cxx:1545
     enum ShapeFlag AddMirrorFlags(enum ShapeFlag,const class SwMirrorGrf &)
     enum ShapeFlag nFlags setBits=0xa00 clearBits=0x5ef
-xmloff/inc/MetaExportComponent.hxx:32
+xmloff/inc/MetaExportComponent.hxx:31
     void XMLMetaExportComponent::XMLMetaExportComponent(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nFlags setBits=0x1
-xmloff/source/text/XMLAutoTextEventExport.hxx:51
+xmloff/source/text/XMLAutoTextEventExport.hxx:50
     void XMLAutoTextEventExport::XMLAutoTextEventExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nFlags setBits=0x5ff clearBits=0x200
