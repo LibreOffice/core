@@ -21,11 +21,14 @@
 #define INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLE_HXX
 
 #include <drawingml/textparagraphproperties.hxx>
-#include <oox/helper/refvector.hxx>
+#include <array>
+#include <memory>
 
 namespace oox::drawingml
 {
-typedef RefVector<TextParagraphProperties> TextParagraphPropertiesVector;
+constexpr int NUM_TEXT_LIST_STYLE_ENTRIES = 9;
+typedef std::array<std::shared_ptr<TextParagraphProperties>, NUM_TEXT_LIST_STYLE_ENTRIES>
+    TextParagraphPropertiesArray;
 
 class TextListStyle
 {
@@ -38,22 +41,22 @@ public:
 
     void apply(const TextListStyle& rTextListStyle);
 
-    const TextParagraphPropertiesVector& getListStyle() const { return maListStyle; };
-    TextParagraphPropertiesVector& getListStyle() { return maListStyle; };
+    const TextParagraphPropertiesArray& getListStyle() const { return maListStyle; };
+    TextParagraphPropertiesArray& getListStyle() { return maListStyle; };
 
-    const TextParagraphPropertiesVector& getAggregationListStyle() const
+    const TextParagraphPropertiesArray& getAggregationListStyle() const
     {
         return maAggregationListStyle;
     };
-    TextParagraphPropertiesVector& getAggregationListStyle() { return maAggregationListStyle; };
+    TextParagraphPropertiesArray& getAggregationListStyle() { return maAggregationListStyle; };
 
 #ifdef DBG_UTIL
     void dump() const;
 #endif
 
 private:
-    TextParagraphPropertiesVector maListStyle;
-    TextParagraphPropertiesVector maAggregationListStyle;
+    TextParagraphPropertiesArray maListStyle;
+    TextParagraphPropertiesArray maAggregationListStyle;
 };
 }
 

@@ -66,7 +66,7 @@ TextParagraphPropertiesPtr TextParagraph::getParagraphStyle(
 
     SAL_INFO("oox", "TextParagraph::getParagraphStyle - level " << nLevel);
 
-    const TextParagraphPropertiesVector& rListStyle = rTextListStyle.getListStyle();
+    const TextParagraphPropertiesArray& rListStyle = rTextListStyle.getListStyle();
     if (nLevel >= static_cast< sal_Int16 >(rListStyle.size()))
         nLevel = 0;
     TextParagraphPropertiesPtr pTextParagraphStyle;

@@ -24,10 +24,10 @@ namespace oox::drawingml {
 
 TextListStyle::TextListStyle()
 {
-    for ( int i = 0; i < 9; i++ )
+    for ( int i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
     {
-        maListStyle.push_back( std::make_shared<TextParagraphProperties>( ) );
-        maAggregationListStyle.push_back( std::make_shared<TextParagraphProperties>( ) );
+        maListStyle[i] = std::make_shared<TextParagraphProperties>( );
+        maAggregationListStyle[i] = std::make_shared<TextParagraphProperties>( );
     }
 }
 
@@ -37,12 +37,10 @@ TextListStyle::~TextListStyle()
 
 TextListStyle::TextListStyle(const TextListStyle& rStyle)
 {
-    assert(rStyle.maListStyle.size() == 9);
-    assert(rStyle.maAggregationListStyle.size() == 9);
-    for ( size_t i = 0; i < 9; i++ )
+    for ( size_t i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
     {
-        maListStyle.push_back( std::make_shared<TextParagraphProperties>( *rStyle.maListStyle[i] ) );
-        maAggregationListStyle.push_back( std::make_shared<TextParagraphProperties>( *rStyle.maAggregationListStyle[i] ) );
+        maListStyle[i] = std::make_shared<TextParagraphProperties>( *rStyle.maListStyle[i] );
+        maAggregationListStyle[i] = std::make_shared<TextParagraphProperties>( *rStyle.maAggregationListStyle[i] );
     }
 }
 
@@ -50,11 +48,7 @@ TextListStyle& TextListStyle::operator=(const TextListStyle& rStyle)
 {
     if(this != &rStyle)
     {
-        assert(rStyle.maListStyle.size() == 9);
-        assert(rStyle.maAggregationListStyle.size() == 9);
-        assert(maListStyle.size() == 9);
-        assert(maAggregationListStyle.size() == 9);
-        for ( size_t i = 0; i < 9; i++ )
+        for ( size_t i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
         {
             *maListStyle[i] = *rStyle.maListStyle[i];
             *maAggregationListStyle[i] = *rStyle.maAggregationListStyle[i];
@@ -63,19 +57,10 @@ TextListStyle& TextListStyle::operator=(const TextListStyle& rStyle)
     return *this;
 }
 
-static void applyStyleList( const TextParagraphPropertiesVector& rSourceListStyle, TextParagraphPropertiesVector& rDestListStyle )
+static void applyStyleList( const TextParagraphPropertiesArray& rSourceListStyle, TextParagraphPropertiesArray& rDestListStyle )
 {
-    TextParagraphPropertiesVector::iterator aDestListStyleIter( rDestListStyle.begin() );
-    for (auto const& elemSource : rSourceListStyle)
-    {
-        if ( aDestListStyleIter != rDestListStyle.end() )
-        {
-            (*aDestListStyleIter)->apply(*elemSource);
-            ++aDestListStyleIter;
-        }
-        else
-            rDestListStyle.push_back( std::make_shared<TextParagraphProperties>(*elemSource) );
-    }
+    for ( size_t i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
+        rDestListStyle[i]->apply(*rSourceListStyle[i]);
 }
 
 void TextListStyle::apply( const TextListStyle& rTextListStyle )
@@ -87,7 +72,7 @@ void TextListStyle::apply( const TextListStyle& rTextListStyle )
 #ifdef DBG_UTIL
 void TextListStyle::dump() const
 {
-    for ( int i = 0; i < 9; i++ )
+    for ( int i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
     {
         SAL_INFO("oox.drawingml", "text list style level: " << i);
         maListStyle[i]->dump();
