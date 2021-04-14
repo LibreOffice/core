@@ -88,6 +88,7 @@
 #include <docstat.hxx>
 
 #include <viewopt.hxx>
+#include <FrameControlsManager.hxx>
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
@@ -3859,6 +3860,9 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
                 } while (++nPos < nOutlineNodesCount
                          && (nLevel == -1 || m_pActiveShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel));
             }
+            // set the buttons and update the edit window
+            m_pActiveShell->GetView().GetEditWin().GetFrameControlsManager().SetOutlineContentVisibilityButtons();
+            m_pActiveShell->GetView().GetEditWin().Invalidate();
             // show in the document what was toggled
             if (lcl_IsContentType(*xFirst, *m_xTreeView)) // Headings root entry
                 m_pActiveShell->GotoPage(1, true);
