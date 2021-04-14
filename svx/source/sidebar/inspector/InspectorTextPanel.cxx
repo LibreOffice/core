@@ -31,6 +31,8 @@
 
 using namespace css;
 
+const int MinimumPanelWidth = 250;
+
 namespace svx::sidebar
 {
 std::unique_ptr<PanelLayout> InspectorTextPanel::Create(weld::Widget* pParent)
@@ -45,11 +47,11 @@ InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent)
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui")
     , mpListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
 {
-    mpListBoxStyles->set_size_request(-1, -1);
+    mpListBoxStyles->set_size_request(MinimumPanelWidth, -1);
     float fWidth = mpListBoxStyles->get_approximate_digit_width();
     std::vector<int> aWidths;
-    aWidths.push_back(fWidth * 34);
-    aWidths.push_back(fWidth * 34);
+    aWidths.push_back(fWidth * 29);
+    aWidths.push_back(fWidth * 10);
     mpListBoxStyles->set_column_fixed_widths(aWidths);
 }
 
