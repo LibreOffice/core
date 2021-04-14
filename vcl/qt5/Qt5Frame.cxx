@@ -412,16 +412,26 @@ void Qt5Frame::DrawMenuBar() { /* not needed */}
 
 void Qt5Frame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed */}
 
-void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
+void Qt5Frame::Show(bool bVisible, bool bNoActivate)
 {
     assert(m_pQWidget);
+    if (bVisible == asChild()->isVisible())
+        return;
 
     SetDefaultSize();
     SetDefaultPos();
 
     auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
     assert(pSalInst);
-    pSalInst->RunInMainThread([this, bVisible]() { asChild()->setVisible(bVisible); });
+    pSalInst->RunInMainThread([this, bVisible, bNoActivate]() {
+        asChild()->setVisible(bVisible);
+        asChild()->raise();
+        if (!bNoActivate)
+        {
+            asChild()->activateWindow();
+            asChild()->setFocus();
+        }
+    });
 }
 
 void Qt5Frame::SetMinClientSize(tools::Long nWidth, tools::Long nHeight)
