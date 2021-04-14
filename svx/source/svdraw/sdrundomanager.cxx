@@ -25,6 +25,7 @@ SdrUndoManager::SdrUndoManager()
     : EditUndoManager(20 /*nMaxUndoActionCount*/)
     , maEndTextEditHdl()
     , mpLastUndoActionBeforeTextEdit(nullptr)
+    , mnRedoActionCountBeforeTextEdit(0)
     , mbEndTextEditTriggeredFromUndo(false)
     , m_pDocSh(nullptr)
 {
@@ -107,6 +108,7 @@ void SdrUndoManager::SetEndTextEditHdl(const Link<SdrUndoManager*, void>& rLink)
     {
         // text edit start, remember last non-textedit action for later cleanup
         mpLastUndoActionBeforeTextEdit = GetUndoActionCount() ? GetUndoAction() : nullptr;
+        mnRedoActionCountBeforeTextEdit = GetRedoActionCount();
     }
     else
     {
@@ -123,6 +125,7 @@ void SdrUndoManager::SetEndTextEditHdl(const Link<SdrUndoManager*, void>& rLink)
 
         // forget marker again
         mpLastUndoActionBeforeTextEdit = nullptr;
+        mnRedoActionCountBeforeTextEdit = 0;
     }
 }
 
