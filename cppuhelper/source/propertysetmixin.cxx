@@ -411,6 +411,7 @@ PropertySetMixinImpl::Impl::Impl(
     m_type(type)
 {
     assert(context.is());
+    assert(reinterpret_cast<unsigned long>(context.get()) < 0x4ffff7bfb4c0);
     assert(
         (implements
          & ~(IMPLEMENTS_PROPERTY_SET | IMPLEMENTS_FAST_PROPERTY_SET
