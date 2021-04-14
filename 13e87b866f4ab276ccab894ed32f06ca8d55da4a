@@ -34,6 +34,24 @@
       "revId": "13e87b866f4ab276ccab894ed32f06ca8d55da4a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7e4e360_0286d354",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-14T06:24:36Z",
+      "side": 1,
+      "message": "Ah, I see.",
+      "parentUuid": "b75c0327_3fc024a2",
+      "revId": "13e87b866f4ab276ccab894ed32f06ca8d55da4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
