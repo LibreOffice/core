@@ -27,7 +27,7 @@
 namespace oox::drawingml
 {
 constexpr int NUM_TEXT_LIST_STYLE_ENTRIES = 9;
-typedef std::array<std::shared_ptr<TextParagraphProperties>, NUM_TEXT_LIST_STYLE_ENTRIES>
+typedef std::array<TextParagraphProperties, NUM_TEXT_LIST_STYLE_ENTRIES>
     TextParagraphPropertiesArray;
 
 class TextListStyle

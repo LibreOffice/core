@@ -24,11 +24,6 @@ namespace oox::drawingml {
 
 TextListStyle::TextListStyle()
 {
-    for ( int i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
-    {
-        maListStyle[i] = std::make_shared<TextParagraphProperties>( );
-        maAggregationListStyle[i] = std::make_shared<TextParagraphProperties>( );
-    }
 }
 
 TextListStyle::~TextListStyle()
@@ -39,8 +34,8 @@ TextListStyle::TextListStyle(const TextListStyle& rStyle)
 {
     for ( size_t i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
     {
-        maListStyle[i] = std::make_shared<TextParagraphProperties>( *rStyle.maListStyle[i] );
-        maAggregationListStyle[i] = std::make_shared<TextParagraphProperties>( *rStyle.maAggregationListStyle[i] );
+        maListStyle[i] = rStyle.maListStyle[i];
+        maAggregationListStyle[i] = rStyle.maAggregationListStyle[i];
     }
 }
 
@@ -50,8 +45,8 @@ TextListStyle& TextListStyle::operator=(const TextListStyle& rStyle)
     {
         for ( size_t i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
         {
-            *maListStyle[i] = *rStyle.maListStyle[i];
-            *maAggregationListStyle[i] = *rStyle.maAggregationListStyle[i];
+            maListStyle[i] = rStyle.maListStyle[i];
+            maAggregationListStyle[i] = rStyle.maAggregationListStyle[i];
         }
     }
     return *this;
@@ -60,7 +55,7 @@ TextListStyle& TextListStyle::operator=(const TextListStyle& rStyle)
 static void applyStyleList( const TextParagraphPropertiesArray& rSourceListStyle, TextParagraphPropertiesArray& rDestListStyle )
 {
     for ( size_t i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
-        rDestListStyle[i]->apply(*rSourceListStyle[i]);
+        rDestListStyle[i].apply(rSourceListStyle[i]);
 }
 
 void TextListStyle::apply( const TextListStyle& rTextListStyle )
@@ -75,7 +70,7 @@ void TextListStyle::dump() const
     for ( int i = 0; i < NUM_TEXT_LIST_STYLE_ENTRIES; i++ )
     {
         SAL_INFO("oox.drawingml", "text list style level: " << i);
-        maListStyle[i]->dump();
+        maListStyle[i].dump();
     }
 }
 #endif

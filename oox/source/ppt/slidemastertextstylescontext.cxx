@@ -67,7 +67,7 @@ SlideMasterTextStylesContext::~SlideMasterTextStylesContext()
     if ( aTextListStylePtr )            // sj: the master list style is the last instance of from where properties
     {                                   // are obtained. i got some documents without having the textsize set at
         for ( int i = 0; i < 9; i++ )   // any point, the master reference application is using 18pt then
-            aTextListStylePtr->getListStyle()[ i ]->getTextCharacterProperties().moHeight = 1800;
+            aTextListStylePtr->getListStyle()[ i ].getTextCharacterProperties().moHeight = 1800;
         return new oox::drawingml::TextListStyleContext( *this, *aTextListStylePtr );
     }
 

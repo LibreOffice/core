@@ -33,10 +33,6 @@ namespace com::sun::star {
 
 namespace oox::drawingml {
 
-class TextParagraphProperties;
-
-typedef std::shared_ptr< TextParagraphProperties > TextParagraphPropertiesPtr;
-
 class BulletList
 {
 public:

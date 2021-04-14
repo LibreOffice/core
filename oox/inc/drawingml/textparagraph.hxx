@@ -60,7 +60,7 @@ public:
         const TextCharacterProperties& rTextStyleProperties,
         const TextListStyle& rTextListStyle) const;
 
-    TextParagraphPropertiesPtr      getParagraphStyle(
+    TextParagraphProperties*      getParagraphStyle(
         const TextListStyle& rTextListStyle) const;
 
     void                        insertAt(

@@ -1050,8 +1050,8 @@ Reference< XShape > const & Shape::createAndInsert(
             mpTextBody->getTextProperties().pushRotationAdjustments();
             aShapeProps.assignUsed( mpTextBody->getTextProperties().maPropertyMap );
             // Push char properties as well - specifically useful when this is a placeholder
-            if( mpMasterTextListStyle &&  mpMasterTextListStyle->getListStyle()[0]->getTextCharacterProperties().moHeight.has() )
-                aShapeProps.setProperty(PROP_CharHeight, GetFontHeight( mpMasterTextListStyle->getListStyle()[0]->getTextCharacterProperties().moHeight.get() ));
+            if( mpMasterTextListStyle &&  mpMasterTextListStyle->getListStyle()[0].getTextCharacterProperties().moHeight.has() )
+                aShapeProps.setProperty(PROP_CharHeight, GetFontHeight( mpMasterTextListStyle->getListStyle()[0].getTextCharacterProperties().moHeight.get() ));
         }
 
         // applying properties

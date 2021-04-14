@@ -49,7 +49,7 @@ TextCharacterProperties TextParagraph::getCharacterStyle (
     const TextCharacterProperties& rTextStyleProperties,
     const TextListStyle& rTextListStyle) const
 {
-    TextParagraphPropertiesPtr pTextParagraphStyle = getParagraphStyle(rTextListStyle);
+    const TextParagraphProperties* pTextParagraphStyle = getParagraphStyle(rTextListStyle);
 
     TextCharacterProperties aTextCharacterStyle;
     if (pTextParagraphStyle)
@@ -59,7 +59,7 @@ TextCharacterProperties TextParagraph::getCharacterStyle (
     return aTextCharacterStyle;
 }
 
-TextParagraphPropertiesPtr TextParagraph::getParagraphStyle(
+TextParagraphProperties* TextParagraph::getParagraphStyle(
     const TextListStyle& rTextListStyle) const
 {
     sal_Int16 nLevel = maProperties.getLevel();
@@ -69,11 +69,11 @@ TextParagraphPropertiesPtr TextParagraph::getParagraphStyle(
     const TextParagraphPropertiesArray& rListStyle = rTextListStyle.getListStyle();
     if (nLevel >= static_cast< sal_Int16 >(rListStyle.size()))
         nLevel = 0;
-    TextParagraphPropertiesPtr pTextParagraphStyle;
+    const TextParagraphProperties* pTextParagraphStyle = nullptr;
     if (!rListStyle.empty())
-        pTextParagraphStyle = rListStyle[nLevel];
+        pTextParagraphStyle = &rListStyle[nLevel];
 
-    return pTextParagraphStyle;
+    return const_cast<TextParagraphProperties*>(pTextParagraphStyle);
 }
 
 void TextParagraph::insertAt(
@@ -126,7 +126,7 @@ void TextParagraph::insertAt(
         PropertyMap aioBulletList;
         Reference< XPropertySet > xProps( xAt, UNO_QUERY);
 
-        TextParagraphPropertiesPtr pTextParagraphStyle = getParagraphStyle(rTextListStyle);
+        TextParagraphProperties* pTextParagraphStyle = getParagraphStyle(rTextListStyle);
         if ( pTextParagraphStyle )
         {
             TextParagraphProperties aParaProp;
