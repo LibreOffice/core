@@ -25,6 +25,7 @@
 #include <com/sun/star/text/XText.hpp>
 
 #include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/refvector.hxx>
 #include <drawingml/textrun.hxx>
 #include <drawingml/textliststyle.hxx>
 #include <drawingml/textparagraphproperties.hxx>
