@@ -57,7 +57,7 @@
 static double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
 {
     const tools::Long nDX = rPt.X() - rCenter.X();
-    double fAngle = atan2( -rPt.Y() + rCenter.Y(), ( ( nDX == 0 ) ? 0.000000001 : nDX ) );
+    double fAngle = atan2( o3tl::saturating_toggle_sign(rPt.Y()) + rCenter.Y(), ( ( nDX == 0 ) ? 0.000000001 : nDX ) );
 
     return atan2(fWR*sin(fAngle), fHR*cos(fAngle));
 }
