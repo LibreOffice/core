@@ -18,6 +18,9 @@
  */
 
 #include <memory>
+#include <string_view>
+
+#include <o3tl/lru_map.hxx>
 #include <unx/fontmanager.hxx>
 #include <unx/helper.hxx>
 #include <comphelper/sequence.hxx>
@@ -44,6 +47,7 @@ using namespace psp;
 
 #include <osl/process.h>
 
+#include <boost/functional/hash.hpp>
 #include <utility>
 #include <algorithm>
 
@@ -51,7 +55,92 @@ using namespace osl;
 
 namespace
 {
-    typedef std::pair<FcChar8*, FcChar8*> lang_and_element;
+
+struct FontOptionsKey
+{
+    OUString m_sFamilyName;
+    int m_nFontSize;
+    FontItalic m_eItalic;
+    FontWeight m_eWeight;
+    FontWidth m_eWidth;
+
+    bool operator==(const FontOptionsKey& rOther) const
+    {
+        return m_sFamilyName == rOther.m_sFamilyName &&
+               m_nFontSize == rOther.m_nFontSize &&
+               m_eItalic == rOther.m_eItalic &&
+               m_eWeight == rOther.m_eWeight &&
+               m_eWidth == rOther.m_eWidth;
+    }
+};
+
+}
+
+namespace std
+{
+
+template <> struct hash<FontOptionsKey>
+{
+    std::size_t operator()(const FontOptionsKey& k) const noexcept
+    {
+        std::size_t seed = k.m_sFamilyName.hashCode();
+        boost::hash_combine(seed, k.m_nFontSize);
+        boost::hash_combine(seed, k.m_eItalic);
+        boost::hash_combine(seed, k.m_eWeight);
+        boost::hash_combine(seed, k.m_eWidth);
+        return seed;
+    }
+};
+
+} // end std namespace
+
+namespace
+{
+
+struct FcPatternDeleter
+{
+    void operator()(FcPattern* pPattern) const
+    {
+        FcPatternDestroy(pPattern);
+    }
+};
+
+typedef std::unique_ptr<FcPattern, FcPatternDeleter> FcPatternUniquePtr;
+
+class CachedFontConfigFontOptions
+{
+private:
+    FontOptionsKey m_aKey;
+    std::unique_ptr<FontConfigFontOptions> m_xLastFontOptions;
+
+    o3tl::lru_map<FontOptionsKey, FcPatternUniquePtr> lru_options_cache;
+
+public:
+    CachedFontConfigFontOptions()
+        : lru_options_cache(10) // arbitrary cache size of 10
+    {
+    }
+
+    std::unique_ptr<FontConfigFontOptions> lookup(const FontOptionsKey& rKey)
+    {
+        auto it = lru_options_cache.find(rKey);
+        if (it != lru_options_cache.end())
+            return std::make_unique<FontConfigFontOptions>(FcPatternDuplicate(it->second.get()));
+        return nullptr;
+    }
+
+    void cache(const FontOptionsKey& rKey, const FcPattern* pPattern)
+    {
+        lru_options_cache.insert(std::make_pair(rKey, FcPatternUniquePtr(FcPatternDuplicate(pPattern))));
+    }
+
+    void clear()
+    {
+        m_xLastFontOptions.reset();
+    }
+};
+
+typedef std::pair<FcChar8*, FcChar8*> lang_and_element;
 
 class FontCfgWrapper
 {
@@ -76,6 +165,7 @@ public:
 //to-do, make private and add some cleaner accessor methods
     std::unordered_map< OString, OString > m_aFontNameToLocalized;
     std::unordered_map< OString, OString > m_aLocalizedToCanonical;
+    CachedFontConfigFontOptions m_aCachedFontOptions;
 private:
     void cacheLocalizedFontNames(const FcChar8 *origfontname, const FcChar8 *bestfontname, const std::vector< lang_and_element > &lang_and_elements);
 
@@ -367,6 +457,7 @@ void FontCfgWrapper::clear()
         m_pFontSet = nullptr;
     }
     m_pLanguageTag.reset();
+    m_aCachedFontOptions.clear();
 }
 
 /*
@@ -1095,15 +1186,20 @@ void FontConfigFontOptions::SyncPattern(const OString& rFileName, sal_uInt32 nIn
     FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
 }
 
-std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const FastPrintFontInfo& rInfo, int nSize)
+std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const FontAttributes& rInfo, int nSize)
 {
+    FontOptionsKey aKey{ rInfo.GetFamilyName(), nSize, rInfo.GetItalic(), rInfo.GetWeight(), rInfo.GetWidthType() };
+
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
-    std::unique_ptr<FontConfigFontOptions> pOptions;
+    std::unique_ptr<FontConfigFontOptions> pOptions = rWrapper.m_aCachedFontOptions.lookup(aKey);
+    if (pOptions)
+        return pOptions;
+
     FcConfig* pConfig = FcConfigGetCurrent();
     FcPattern* pPattern = FcPatternCreate();
 
-    OString sFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );
+    OString sFamily = OUStringToOString(aKey.m_sFamilyName, RTL_TEXTENCODING_UTF8);
 
     std::unordered_map< OString, OString >::const_iterator aI = rWrapper.m_aLocalizedToCanonical.find(sFamily);
     if (aI != rWrapper.m_aLocalizedToCanonical.end())
@@ -1111,10 +1207,9 @@ std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const Fa
     if( !sFamily.isEmpty() )
         FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<FcChar8 const *>(sFamily.getStr()));
 
-    addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
+    // TODO: ePitch argument of always PITCH_DONTKNOW is suspicious
+    addtopattern(pPattern, aKey.m_eItalic, aKey.m_eWeight, aKey.m_eWidth, PITCH_DONTKNOW);
     FcPatternAddDouble(pPattern, FC_PIXEL_SIZE, nSize);
-
-    int hintstyle = FC_HINT_FULL;
 
     FcConfigSubstitute(pConfig, pPattern, FcMatchPattern);
     FontConfigFontOptions::cairo_font_options_substitute(pPattern);
@@ -1122,12 +1217,9 @@ std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const Fa
 
     FcResult eResult = FcResultNoMatch;
     FcFontSet* pFontSet = rWrapper.getFontSet();
-    FcPattern* pResult = FcFontSetMatch( pConfig, &pFontSet, 1, pPattern, &eResult );
-    if( pResult )
+    if (FcPattern* pResult = FcFontSetMatch(pConfig, &pFontSet, 1, pPattern, &eResult))
     {
-        (void) FcPatternGetInteger(pResult,
-            FC_HINT_STYLE, 0, &hintstyle);
-
+        rWrapper.m_aCachedFontOptions.cache(aKey, pResult);
         pOptions.reset(new FontConfigFontOptions(pResult));
     }
 
@@ -1135,6 +1227,12 @@ std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const Fa
     FcPatternDestroy( pPattern );
 
     return pOptions;
+}
+
+void PrintFontManager::clearFontOptionsCache()
+{
+    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
+    rWrapper.m_aCachedFontOptions.clear();
 }
 
 void PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale )
