@@ -86,7 +86,7 @@ PresentationFragmentHandler::PresentationFragmentHandler(XmlFilterBase& rFilter,
     , mpTextListStyle( std::make_shared<TextListStyle>() )
     , mbCommentAuthorsRead(false)
 {
-    TextParagraphPropertiesVector& rParagraphDefaultsVector( mpTextListStyle->getListStyle() );
+    TextParagraphPropertiesArray& rParagraphDefaultsVector( mpTextListStyle->getListStyle() );
     for (auto const& elem : rParagraphDefaultsVector)
     {
         // ppt is having zero bottom margin per default, whereas OOo is 0,5cm,
