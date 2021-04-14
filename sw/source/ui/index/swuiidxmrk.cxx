@@ -1629,6 +1629,11 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             pEdits[nIndex]->set_text(pFields[aCurInfo.nToxField]);
             pEdits[nIndex]->show();
             pEdits[nIndex]->set_help_id(aCurInfo.pHelpId);
+            if (aCurInfo.nToxField == AUTH_FIELD_URL)
+            {
+                m_xBrowseButton = m_aBuilders.back()->weld_button("browse");
+                m_xBrowseButton->connect_clicked(LINK(this, SwCreateAuthEntryDlg_Impl, BrowseHdl));
+            }
             if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
             {
                 pEdits[nIndex]->connect_changed(LINK(this, SwCreateAuthEntryDlg_Impl, ShortNameHdl));
@@ -1642,8 +1647,6 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             else if (aCurInfo.nToxField == AUTH_FIELD_URL
                      && IsFileUrl(rWrtSh, pFields[aCurInfo.nToxField]))
             {
-                m_xBrowseButton = m_aBuilders.back()->weld_button("browse");
-                m_xBrowseButton->connect_clicked(LINK(this, SwCreateAuthEntryDlg_Impl, BrowseHdl));
                 m_xBrowseButton->show();
             }
 
@@ -1729,6 +1732,18 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, weld::Entry&, rEdit, void)
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, weld::ComboBox&, rBox, void)
 {
     m_xOKBT->set_sensitive(m_bNameAllowed && rBox.get_active() != -1);
+
+    int nType = m_xTypeListBox->get_active();
+    if (nType == AUTH_TYPE_END && !m_xBrowseButton->is_visible())
+    {
+        // File URL -> show the browse button.
+        m_xBrowseButton->show();
+    }
+    else if (nType != AUTH_TYPE_END && m_xBrowseButton->is_visible())
+    {
+        // Not a file URL -> hide the browse button.
+        m_xBrowseButton->hide();
+    }
 };
 
 IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
