@@ -92,6 +92,7 @@
 #include <comphelper/threadpool.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/backupfilehelper.hxx>
+#include <comphelper/lok.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -411,6 +412,12 @@ OUString ReplaceStringHookProc( const OUString& rStr )
     std::call_once(aInitOnce, []
     {
         sBrandName = utl::ConfigManager::getProductName();
+
+        if (comphelper::LibreOfficeKit::isActive() && sBrandName.indexOf("Collabora Office") != -1)
+        {
+            sBrandName = sBrandName.replaceFirst("Collabora Office", "Collabora Online");
+        }
+
         sVersion = utl::ConfigManager::getProductVersion();
         sAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
         sAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
