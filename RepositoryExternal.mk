@@ -1107,20 +1107,39 @@ endif
 
 endef
 
+ifneq ($(SYSTEM_SERF),)
+
 define gb_LinkTarget__use_serf
+$(call gb_LinkTarget_add_defs,$(1),\
+	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(SERF_CFLAGS))) \
+)
+
 $(call gb_LinkTarget_set_include,$(1),\
-	$(SERF_CFLAGS) \
+	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(SERF_CFLAGS)))) \
 	$$(INCLUDE) \
 )
+
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(SERF_LIBS) \
 )
 
-ifeq ($(SYSTEM_SERF),)
-$(call gb_LinkTarget_use_external_project,$(1),serf)
-endif
+endef
+
+else # !SYSTEM_SERF
+
+define gb_LinkTarget__use_serf
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,serf) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	serf \
+)
 
 endef
+
+endif # SYSTEM_SERF
 
 else ifeq ($(WITH_WEBDAV),neon)
 

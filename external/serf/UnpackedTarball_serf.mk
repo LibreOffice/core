@@ -11,12 +11,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,serf))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,serf,$(SERF_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_fix_end_of_line,serf,\
-	serf.mak \
-))
-
 $(eval $(call gb_UnpackedTarball_add_patches,serf,\
-	external/serf/windows.build.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
