@@ -11702,7 +11702,7 @@ AC_SUBST(POPPLER_LIBS)
 # Skia?
 AC_MSG_CHECKING([whether to build Skia])
 ENABLE_SKIA=
-if test "$enable_skia" != "no" -a "$build_skia" = "yes"; then
+if test "$enable_skia" != "no" -a "$build_skia" = "yes" -a -z "$DISABLE_GUI"; then
     if test "$enable_skia" = "debug"; then
         AC_MSG_RESULT([yes (debug)])
         ENABLE_SKIA_DEBUG=TRUE
