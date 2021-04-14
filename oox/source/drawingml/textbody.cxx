@@ -119,7 +119,7 @@ void TextBody::ApplyStyleEmpty(
     aTextCharacterProps.pushToPropSet(aPropSet, rFilterBase);
 
     // Apply paragraph properties
-    TextParagraphPropertiesPtr pTextParagraphStyle = maParagraphs[0]->getParagraphStyle(aCombinedTextStyle);
+    TextParagraphProperties* pTextParagraphStyle = maParagraphs[0]->getParagraphStyle(aCombinedTextStyle);
     if (pTextParagraphStyle)
     {
         Reference< XPropertySet > xProps(xText, UNO_QUERY);
