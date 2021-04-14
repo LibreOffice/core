@@ -473,16 +473,9 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, const std::share
 
 namespace
 {
-    std::unique_ptr<FontConfigFontOptions> GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize)
+    std::unique_ptr<FontConfigFontOptions> GetFCFontOptions(const FontAttributes& rFontAttributes, int nSize)
     {
-        psp::FastPrintFontInfo aInfo;
-
-        aInfo.m_aFamilyName = rFontAttributes.GetFamilyName();
-        aInfo.m_eItalic = rFontAttributes.GetItalic();
-        aInfo.m_eWeight = rFontAttributes.GetWeight();
-        aInfo.m_eWidth = rFontAttributes.GetWidthType();
-
-        return psp::PrintFontManager::getFontOptions(aInfo, nSize);
+        return psp::PrintFontManager::getFontOptions(rFontAttributes, nSize);
     }
 }
 
