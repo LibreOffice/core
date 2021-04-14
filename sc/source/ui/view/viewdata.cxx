@@ -3144,10 +3144,25 @@ void ScViewData::CalcPPT()
         }
     }
 
-    if (nPPTX != nOldPPTX)
-        GetLOKWidthHelper().invalidateByPosition(0L);
-    if (nPPTY != nOldPPTY)
-        GetLOKHeightHelper().invalidateByPosition(0L);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SCTAB nTabCount = maTabData.size();
+        bool bResetWidths = (nPPTX != nOldPPTX);
+        bool bResetHeights = (nPPTY != nOldPPTY);
+        for (SCTAB nTabIdx = 0; nTabIdx < nTabCount; ++nTabIdx)
+        {
+            if (!maTabData[nTabIdx])
+                continue;
+
+            if (bResetWidths)
+                if (auto* pWHelper = GetLOKWidthHelper(nTabIdx))
+                    pWHelper->invalidateByPosition(0L);
+
+            if (bResetHeights)
+                if (auto* pHHelper = GetLOKHeightHelper(nTabIdx))
+                    pHHelper->invalidateByPosition(0L);
+        }
+    }
 }
 
 #define SC_OLD_TABSEP   '/'
