@@ -6159,7 +6159,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     // Turn profile zones on early
     if (bProfileZones && eStage == SECOND_INIT)
     {
-        comphelper::ProfileRecording::startRecording(true);
+        comphelper::ProfileRecording::startRecording();
         new ProfileZoneDumper();
     }
 

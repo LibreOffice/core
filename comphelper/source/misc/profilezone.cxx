@@ -32,17 +32,19 @@ static int g_aNesting;           // level of overlapped zones
 static long long g_aStartTime;                // start time of recording
 static ::osl::Mutex g_aMutex;
 
-void startRecording(bool bStartRecording)
+void startRecording()
 {
-    if (bStartRecording)
-    {
-        TimeValue systemTime;
-        osl_getSystemTime( &systemTime );
-        ::osl::MutexGuard aGuard( g_aMutex );
-        g_aStartTime = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec/1000;
-        g_aNesting = 0;
-    }
-    ProfileZone::g_bRecording = bStartRecording;
+    TimeValue systemTime;
+    osl_getSystemTime( &systemTime );
+    ::osl::MutexGuard aGuard( g_aMutex );
+    g_aStartTime = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec/1000;
+    g_aNesting = 0;
+    ProfileZone::g_bRecording = true;
+}
+
+void stopRecording()
+{
+    ProfileZone::g_bRecording = false;
 }
 
 long long addRecording(const char * aProfileId, long long aCreateTime)
@@ -88,13 +90,14 @@ css::uno::Sequence<OUString> getRecordingAndClear()
     {
         ::osl::MutexGuard aGuard( g_aMutex );
         bRecording = ProfileZone::g_bRecording;
-        startRecording(false);
+        stopRecording();
         aRecording.swap(g_aRecording);
         long long aSumTime = g_aSumTime;
         aRecording.insert(aRecording.begin(), OUString::number(aSumTime/1000000.0));
     }
     // reset start time and nesting level
-    startRecording(bRecording);
+    if (bRecording)
+        startRecording();
     return ::comphelper::containerToSequence(aRecording);
 }
 
