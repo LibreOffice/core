@@ -33,6 +33,7 @@ private:
 
     Link<SdrUndoManager*, void> maEndTextEditHdl;
     SfxUndoAction* mpLastUndoActionBeforeTextEdit;
+    size_t mnRedoActionCountBeforeTextEdit;
     bool mbEndTextEditTriggeredFromUndo;
 
     SfxObjectShell* m_pDocSh;
@@ -64,6 +65,7 @@ public:
     // by a last undo during text edit
     bool isEndTextEditTriggeredFromUndo() const { return mbEndTextEditTriggeredFromUndo; }
     void SetDocShell(SfxObjectShell* pDocShell);
+    size_t GetRedoActionCountBeforeTextEdit() const { return mnRedoActionCountBeforeTextEdit; }
 };
 
 #endif // INCLUDED_SVX_SDRUNDOMANAGER_HXX

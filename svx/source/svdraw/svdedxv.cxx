@@ -1441,7 +1441,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                     // to create a complete text change undo action for the redo buffer. Also mark this
                     // state when at least one redo was executed; the created extra TextChange needs to
                     // be undone in addition to the first real undo outside the text edit changes
-                    while (pSdrUndoManager->GetRedoActionCount())
+                    while (pSdrUndoManager->GetRedoActionCount()
+                           > pSdrUndoManager->GetRedoActionCountBeforeTextEdit())
                     {
                         bNeedToUndoSavedRedoTextEdit = true;
                         pSdrUndoManager->Redo();
