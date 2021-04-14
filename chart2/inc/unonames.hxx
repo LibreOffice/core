@@ -32,5 +32,6 @@
 #define CHART_UNONAME_LABEL_FILL_HATCH_NAME "LabelFillHatchName"
 #define CHART_UNONAME_LABEL_FILL_COLOR      "LabelFillColor"
 #define CHART_UNONAME_CUSTOM_LABEL_FIELDS   "CustomLabelFields"
+#define CHART_UNONAME_REVERSE_Z_ORDER       "ReverseZOrder"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

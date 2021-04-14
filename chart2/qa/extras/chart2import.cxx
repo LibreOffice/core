@@ -1769,11 +1769,25 @@ void Chart2ImportTest::testTdf140489MultiSeriesChartAxisXLSX()
     Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xSeries.is());
 
+    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+
+    Reference<beans::XPropertySet> xTypePropSet(xChartType, uno::UNO_QUERY_THROW);
+    bool bReverseZOrder = true;
+    uno::Any aAny = xTypePropSet->getPropertyValue("ReverseZOrder");
+    CPPUNIT_ASSERT(aAny >>= bReverseZOrder);
+    CPPUNIT_ASSERT_EQUAL(false, bReverseZOrder);
+
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
     sal_Int32 nAxisIndex = -1;
-    uno::Any aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+    aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
     CPPUNIT_ASSERT(aAny >>= nAxisIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAxisIndex);
+
+    Reference<beans::XPropertySet> xPoint = xSeries->getDataPointByIndex(0);
+    CPPUNIT_ASSERT(xPoint.is());
+    sal_Int32 nColor = xPoint->getPropertyValue("FillColor").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16777215), nColor);
 
     // Second series
     xSeries = getDataSeriesFromDoc(xChartDoc, 0, 1);

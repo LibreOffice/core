@@ -23,7 +23,9 @@
 #include <CloneHelper.hxx>
 #include <AxisIndexDefines.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <PropertyHelper.hxx>
 #include <vcl/svapp.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <tools/diagnose_ex.h>
@@ -33,6 +35,37 @@ using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
+
+namespace {
+    enum
+    {
+        PROP_CHART_TYPE_REVERSEZORDER
+    };
+
+    void lcl_AddPropertiesToVector(
+        std::vector< Property > & rOutProperties )
+    {
+        rOutProperties.emplace_back( "ReverseZOrder",
+                    PROP_CHART_TYPE_REVERSEZORDER,
+                    cppu::UnoType<bool>::get(),
+                    css::beans::PropertyAttribute::BOUND
+                    | css::beans::PropertyAttribute::MAYBEDEFAULT );
+    }
+
+    struct StaticChartTypeDefaults_Initializer
+    {
+        ::chart::tPropertyValueMap* operator()()
+        {
+            static ::chart::tPropertyValueMap aStaticDefaults;
+            ::chart::PropertyHelper::setPropertyValueDefault< bool >( aStaticDefaults, PROP_CHART_TYPE_REVERSEZORDER, true );
+            return &aStaticDefaults;
+        }
+    };
+
+    struct StaticChartTypeDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticChartTypeDefaults_Initializer >
+    {
+    };
+}
 
 namespace chart
 {
@@ -191,9 +224,13 @@ void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XData
 }
 
 // ____ OPropertySet ____
-uno::Any ChartType::GetDefaultValue( sal_Int32 /* nHandle */ ) const
+uno::Any ChartType::GetDefaultValue( sal_Int32 nHandle ) const
 {
-    return uno::Any();
+    const tPropertyValueMap& rStaticDefaults = *StaticChartTypeDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
+    if( aFound == rStaticDefaults.end() )
+        return uno::Any();
+    return (*aFound).second;
 }
 
 namespace
@@ -203,8 +240,20 @@ struct StaticChartTypeInfoHelper_Initializer
 {
     ::cppu::OPropertyArrayHelper* operator()()
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( Sequence< beans::Property >{} );
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
         return &aPropHelper;
+    }
+
+private:
+    static uno::Sequence< Property > lcl_GetPropertySequence()
+    {
+        std::vector< css::beans::Property > aProperties;
+        lcl_AddPropertiesToVector( aProperties );
+
+        std::sort( aProperties.begin(), aProperties.end(),
+                     ::chart::PropertyNameLess() );
+
+        return comphelper::containerToSequence( aProperties );
     }
 };
 

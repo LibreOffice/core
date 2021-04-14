@@ -607,8 +607,16 @@ void AreaChart::createShapes()
     if( m_aZSlots.empty() ) //no series
         return;
 
+    bool bReverseZOrder = true;
+    if( m_xChartTypeModelProps.is() )
+    {
+        const uno::Reference<css::beans::XPropertySetInfo>& rPropertySetInfo = m_xChartTypeModelProps->getPropertySetInfo();
+        if( rPropertySetInfo.is() && rPropertySetInfo->hasPropertyByName(CHART_UNONAME_REVERSE_Z_ORDER) )
+            m_xChartTypeModelProps->getPropertyValue(CHART_UNONAME_REVERSE_Z_ORDER) >>= bReverseZOrder;
+    }
+
     //tdf#127813 Don't reverse the series in OOXML-heavy environments
-    if( officecfg::Office::Compatibility::View::ReverseSeriesOrderAreaAndNetChart::get() && m_nDimension == 2 && ( m_bArea || !m_bCategoryXAxis ) )
+    if( bReverseZOrder && officecfg::Office::Compatibility::View::ReverseSeriesOrderAreaAndNetChart::get() && m_nDimension == 2 && ( m_bArea || !m_bCategoryXAxis ) )
         lcl_reorderSeries( m_aZSlots );
 
     OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"AreaChart is not proper initialized");
