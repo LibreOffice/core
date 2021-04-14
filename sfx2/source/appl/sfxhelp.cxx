@@ -695,7 +695,7 @@ bool SfxHelp::Start( const OUString& rURL, const vcl::Window* pWindow )
     if (bLaunchingHelp)
         return true;
     bLaunchingHelp = true;
-    bool bRet = Start_Impl( rURL, pWindow, OUString() );
+    bool bRet = Start_Impl( rURL, pWindow );
     bLaunchingHelp = false;
     return bRet;
 }
@@ -1031,7 +1031,7 @@ public:
 
 }
 
-bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword)
+bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
 {
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
     AppendConfigToken(aHelpRootURL, true);
@@ -1199,8 +1199,6 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
     pHelpWindow->SetHelpURL( aHelpURL );
     pHelpWindow->loadHelpContent(aHelpURL);
-    if (!rKeyword.isEmpty())
-        pHelpWindow->OpenKeyword( rKeyword );
 
     Reference < css::awt::XTopWindow > xTopWindow( xHelp->getContainerWindow(), UNO_QUERY );
     if ( xTopWindow.is() )
