@@ -94,13 +94,11 @@ class SwLayAction
     bool m_bPaintExtraData;   // Painting line numbers (or similar) enabled?
     bool m_bActionInProgress; // Is set in Action() at the beginning and deleted at the end
 
-    // OD 14.04.2003 #106346# - new flag for content formatting on interrupt.
-    bool    mbFormatContentOnInterrupt;
-
     // for loop control by disabling in-row splitting within embedded tables
     const SwPageFrame  *m_pCurPage;
     sal_uInt16 m_nTabLevel;  // embedding level
     sal_uInt32 m_nCallCount; // calling FormatLayoutTab on the same page
+    const SwPageFrame *m_pInterruptedPage; // the page we processed when interrupted during Idle
 
     void PaintContent( const SwContentFrame *, const SwPageFrame *,
                      const SwRect &rOldRect, tools::Long nOldBottom );
@@ -124,13 +122,13 @@ class SwLayAction
 
     bool RemoveEmptyBrowserPages();
 
-    inline void CheckIdleEnd();
+    bool IsInterrupt(const SwPageFrame *pPage);
 
 public:
     SwLayAction( SwRootFrame *pRt, SwViewShellImp *pImp );
     ~SwLayAction();
 
-    void SetIdle            ( bool bNew )   { m_bIdle = bNew; }
+    void SetIdle() { m_bIdle = true; }
     void SetCheckPages      ( bool bNew )   { m_bCheckPages = bNew; }
     void SetBrowseActionStop( bool bNew )   { m_bBrowseActionStop = bNew; }
     void SetNextCycle       ( bool bNew )   { m_bNextCycle = bNew; }
@@ -180,7 +178,7 @@ public:
     // delete 2nd parameter, because it's not used;
     void FormatLayoutFly( SwFlyFrame * );
     // #i28701# - method is now public
-    void FormatFlyContent( const SwFlyFrame * );
+    void FormatFlyContent(const SwFlyFrame*, const SwPageFrame&);
 
 };
 

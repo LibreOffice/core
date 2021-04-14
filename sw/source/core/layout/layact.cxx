@@ -88,11 +88,23 @@ void SwLayAction::CheckWaitCursor()
     }
 }
 
-// Time over already?
-inline void SwLayAction::CheckIdleEnd()
+bool SwLayAction::IsInterrupt(const SwPageFrame *pPage)
 {
-    if (!IsInterrupt())
+    assert(pPage);
+    if (m_pInterruptedPage)
+    {
+        SAL_INFO_IF(pPage != m_pInterruptedPage, "sw.idle", "Idle interrupt allowed with "
+                                                            << pPage << " " << pPage->GetPhyPageNum());
+        return (pPage != m_pInterruptedPage);
+    }
+    if (!m_bInterrupt)
         m_bInterrupt = bool(GetInputType()) && Application::AnyInput(GetInputType());
+    if (m_bInterrupt && IsIdle())
+    {
+        SAL_INFO("sw.idle", "Register Idle interrupt at " << pPage << " " << pPage->GetPhyPageNum());
+        m_pInterruptedPage = pPage;
+    }
+    return m_bInterrupt && !IsIdle();
 }
 
 void SwLayAction::SetStatBar( bool bNew )
@@ -264,13 +276,12 @@ SwLayAction::SwLayAction( SwRootFrame *pRt, SwViewShellImp *pI ) :
     m_pCurPage( nullptr ),
     m_nTabLevel( 0 ),
     m_nCallCount( 0 )
+    , m_pInterruptedPage(nullptr)
 {
     m_bPaintExtraData = ::IsExtraData( m_pImp->GetShell()->GetDoc() );
     m_bPaint = m_bComplete = m_bWaitAllowed = m_bCheckPages = true;
     m_bInterrupt = m_bAgain = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
     m_bUpdateExpFields = m_bBrowseActionStop = m_bActionInProgress = false;
-    // init new flag <mbFormatContentOnInterrupt>.
-    mbFormatContentOnInterrupt = false;
 
     assert(!m_pImp->m_pLayAction); // there can be only one SwLayAction
     m_pImp->m_pLayAction = this;   // register there
@@ -292,6 +303,7 @@ void SwLayAction::Reset()
     m_bInterrupt = m_bAgain = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
     m_bUpdateExpFields = m_bBrowseActionStop = false;
     m_pCurPage = nullptr;
+    m_pInterruptedPage = nullptr;
 }
 
 bool SwLayAction::RemoveEmptyBrowserPages()
@@ -449,10 +461,10 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
     IDocumentLayoutAccess& rLayoutAccess = m_pRoot->GetFormat()->getIDocumentLayoutAccess();
     bool bNoLoop = pPage && SwLayouter::StartLoopControl( m_pRoot->GetFormat()->GetDoc(), pPage );
     sal_uInt16 nPercentPageNum = 0;
-    while ( (pPage && !IsInterrupt()) || m_nCheckPageNum != USHRT_MAX )
+    while ((pPage && !IsInterrupt(pPage)) || (m_nCheckPageNum != USHRT_MAX))
     {
         // note: this is the only place that consumes and resets m_nCheckPageNum
-        if ((IsInterrupt() || !pPage) && m_nCheckPageNum != USHRT_MAX)
+        if ((!pPage || IsInterrupt(pPage)) && m_nCheckPageNum != USHRT_MAX)
         {
             if (!pPage || m_nCheckPageNum < pPage->GetPhyPageNum())
             {
@@ -475,6 +487,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             continue;
         }
 
+        assert(pPage);
         if ( m_nEndPage != USHRT_MAX && pPage->GetPhyPageNum() > nPercentPageNum )
         {
             nPercentPageNum = pPage->GetPhyPageNum();
@@ -519,7 +532,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             m_pRoot->DeleteEmptySct();
             XCHECKPAGE;
 
-            while ( !IsInterrupt() && !IsNextCycle() &&
+            while (!IsInterrupt(pPage) && !IsNextCycle() &&
                     ((pPage->GetSortedObjs() && pPage->IsInvalidFly()) || pPage->IsInvalid()) )
             {
                 unlockPositionOfObjects( pPage );
@@ -532,7 +545,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                     pPage->ValidateFlyContent();
                 }
                 // change condition
-                while ( !IsInterrupt() && !IsNextCycle() &&
+                while (!IsInterrupt(pPage) && !IsNextCycle() &&
                         ( pPage->IsInvalid() ||
                           (pPage->GetSortedObjs() && pPage->IsInvalidFly()) ) )
                 {
@@ -591,7 +604,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                 pPage->ValidateFlyLayout();
                 pPage->ValidateFlyContent();
             }
-            if ( !IsInterrupt() )
+            if (!IsInterrupt(pPage))
             {
                 SetNextCycle( false );
 
@@ -632,9 +645,8 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                 if( bNoLoop )
                     rLayoutAccess.GetLayouter()->LoopControl( pPage );
             }
-            CheckIdleEnd();
         }
-        if ( !pPage && !IsInterrupt() &&
+        if (!pPage && !IsInterrupt() &&
              (m_pRoot->IsSuperfluous() || m_pRoot->IsAssertFlyPages()) )
         {
             if ( m_pRoot->IsAssertFlyPages() )
@@ -659,121 +671,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                 pPage = static_cast<SwPageFrame*>(pPage->GetNext());
         }
     }
-    if ( IsInterrupt() && pPage )
-    {
-        // If we have input, we don't want to format content anymore, but
-        // we still should clean the layout.
-        // Otherwise, the following situation might arise:
-        // The user enters some text at the end of the paragraph of the last
-        // page, causing the paragraph to create a Follow for the next page.
-        // Meanwhile the user continues typing, so we have input while
-        // still formatting.
-        // The paragraph on the new page has already been partially formatted,
-        // and the new page has been fully formatted and is set to CompletePaint,
-        // but hasn't added itself to the area to be output. Then we paint,
-        // the CompletePaint of the page is reset because the new paragraph
-        // already added itself, but the borders of the page haven't been painted
-        // yet.
-        // Oh well, with the inevitable following LayAction, the page doesn't
-        // register itself, because it's (LayoutFrame) flags have been reset
-        // already - the border of the page will never be painted.
-        SwPageFrame *pPg = pPage;
-        XCHECKPAGE;
-        const SwRect &rVis = m_pImp->GetShell()->VisArea();
 
-        while( pPg && pPg->getFrameArea().Bottom() < rVis.Top() )
-            pPg = static_cast<SwPageFrame*>(pPg->GetNext());
-        if( pPg != pPage )
-            pPg = pPg ? static_cast<SwPageFrame*>(pPg->GetPrev()) : pPage;
-
-        // set flag for interrupt content formatting
-        mbFormatContentOnInterrupt = true;
-        tools::Long nBottom = rVis.Bottom();
-        // #i42586# - format current page, if idle action is active
-        // This is an optimization for the case that the interrupt is created by
-        // the move of a form control object, which is represented by a window.
-        while ( pPg && ( pPg->getFrameArea().Top() < nBottom ||
-                         ( IsIdle() && pPg == pPage ) ) )
-        {
-            unlockPositionOfObjects( pPg );
-
-            XCHECKPAGE;
-
-            // new loop control
-            int nLoopControlRuns_2 = 0;
-            const int nLoopControlMax = 20;
-
-            // special case: interrupt content formatting
-            // conditions are incorrect and are too strict.
-            // adjust interrupt formatting to normal page formatting - see above.
-            while ( ( mbFormatContentOnInterrupt &&
-                      ( pPg->IsInvalid() ||
-                        ( pPg->GetSortedObjs() && pPg->IsInvalidFly() ) ) ) ||
-                    ( !mbFormatContentOnInterrupt && pPg->IsInvalidLayout() ) )
-            {
-                XCHECKPAGE;
-                // format also at-page anchored objects
-                SwObjectFormatter::FormatObjsAtFrame( *pPg, *pPg, this );
-                if ( !pPg->GetSortedObjs() )
-                {
-                    pPg->ValidateFlyLayout();
-                    pPg->ValidateFlyContent();
-                }
-
-                // new loop control
-                int nLoopControlRuns_3 = 0;
-
-                while ( pPg->IsInvalidLayout() )
-                {
-                    pPg->ValidateLayout();
-
-                    if ( ++nLoopControlRuns_3 > nLoopControlMax )
-                    {
-                        OSL_FAIL( "LoopControl_3 in Interrupt formatting in SwLayAction::InternalAction" );
-                        break;
-                    }
-
-                    FormatLayout( pRenderContext, pPg );
-                    XCHECKPAGE;
-                }
-
-                if ( mbFormatContentOnInterrupt &&
-                     ( pPg->IsInvalidContent() ||
-                       ( pPg->GetSortedObjs() && pPg->IsInvalidFly() ) ) )
-                {
-                    pPg->ValidateFlyInCnt();
-                    pPg->ValidateContent();
-                    pPg->ValidateFlyLayout();
-                    pPg->ValidateFlyContent();
-
-                    if ( ++nLoopControlRuns_2 > nLoopControlMax )
-                    {
-                        OSL_FAIL( "LoopControl_2 in Interrupt formatting in SwLayAction::InternalAction" );
-                        break;
-                    }
-
-                    if ( !FormatContent( pPg ) )
-                    {
-                        XCHECKPAGE;
-                        pPg->InvalidateContent();
-                        pPg->InvalidateFlyInCnt();
-                        pPg->InvalidateFlyLayout();
-                        pPg->InvalidateFlyContent();
-                    }
-                    // we are satisfied if the content is formatted once complete.
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-
-            unlockPositionOfObjects( pPg );
-            pPg = static_cast<SwPageFrame*>(pPg->GetNext());
-        }
-        // reset flag for special interrupt content formatting.
-        mbFormatContentOnInterrupt = false;
-    }
     m_pOptTab = nullptr;
     if( bNoLoop )
         rLayoutAccess.GetLayouter()->EndLoopControl();
@@ -843,7 +741,7 @@ bool SwLayAction::TurboAction()
     {
         if ( !TurboAction_( m_pRoot->GetTurbo() ) )
         {
-            CheckIdleEnd();
+            IsInterrupt();
             bRet = false;
         }
         m_pRoot->ResetTurbo();
@@ -1657,9 +1555,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
             // it's the format for this interrupt
             // pass correct page frame
             // to the object formatter.
-            if ( !IsAgain() &&
-                 ( !IsInterrupt() || mbFormatContentOnInterrupt ) &&
-                 pContent->IsTextFrame() &&
+            if (!IsAgain() && !IsInterrupt(pPage) && pContent->IsTextFrame() &&
                  !SwObjectFormatter::FormatObjsAtFrame( *const_cast<SwContentFrame*>(pContent),
                                                       *(pContent->FindPageFrame()), this ) )
             {
@@ -1685,13 +1581,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
             // paragraph has been processed.
             if (!pTab || !bInValid)
             {
-                CheckIdleEnd();
-                // consider interrupt formatting.
-                if ( ( IsInterrupt() && !mbFormatContentOnInterrupt ) ||
-                     ( !bBrowse && pPage->IsInvalidLayout() ) ||
-                     // consider interrupt formatting
-                     ( pPage->GetSortedObjs() && pPage->IsInvalidFly() && !mbFormatContentOnInterrupt )
-                   )
+                if (IsInterrupt(pPage) || (!bBrowse && pPage->IsInvalidLayout()))
                     return false;
             }
             if ( pOldUpper != pContent->GetUpper() )
@@ -1705,11 +1595,8 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
                 if ( !IsCalcLayout() && pPage->GetPhyPageNum() > nCurNum+1 )
                 {
                     SetNextCycle( true );
-                    // consider interrupt formatting
-                    if ( !mbFormatContentOnInterrupt )
-                    {
+                    if (IsInterrupt(pPage))
                         return false;
-                    }
                 }
             }
             // If the frame moved forwards to the next page, we re-run through
@@ -1746,11 +1633,8 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
                               (!pPage->IsInvalidLayout() ||
                                !lcl_FindFirstInvaLay( pPage, nBottom )))
                             SetBrowseActionStop( true );
-                        // consider interrupt formatting.
-                        if ( !mbFormatContentOnInterrupt )
-                        {
+                        if (IsInterrupt(pPage))
                             return false;
-                        }
                     }
                 }
                 pContent = bNxtCnt ? pContentNext : pContent->GetNextContentFrame();
@@ -1776,13 +1660,8 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
             if ( pContent->IsTextFrame() && static_cast<const SwTextFrame*>(pContent)->HasRepaint() &&
                   IsPaint() )
                 PaintContent( pContent, pPage, pContent->getFrameArea(), pContent->getFrameArea().Bottom());
-            if ( IsIdle() )
-            {
-                CheckIdleEnd();
-                // consider interrupt formatting.
-                if ( IsInterrupt() && !mbFormatContentOnInterrupt )
-                    return false;
-            }
+            if (IsInterrupt(pPage))
+                return false;
             if ( bBrowse && !IsIdle() && !IsCalcLayout() && !IsComplete() &&
                  pContent->getFrameArea().Top() > m_pImp->GetShell()->VisArea().Bottom())
             {
@@ -1796,19 +1675,15 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
                             (!pPage->IsInvalidLayout() ||
                             !lcl_FindFirstInvaLay( pPage, nBottom )))
                         SetBrowseActionStop( true );
-                    // consider interrupt formatting.
-                    if ( !mbFormatContentOnInterrupt )
-                    {
+                    if (IsInterrupt(pPage))
                         return false;
-                    }
                 }
             }
             pContent = pContent->GetNextContentFrame();
         }
     }
     CheckWaitCursor();
-    // consider interrupt formatting.
-    return !IsInterrupt() || mbFormatContentOnInterrupt;
+    return !IsInterrupt(pPage);
 }
 
 void SwLayAction::FormatContent_( const SwContentFrame *pContent, const SwPageFrame  *pPage )
@@ -1839,7 +1714,7 @@ void SwLayAction::FormatContent_( const SwContentFrame *pContent, const SwPageFr
     }
 }
 
-void SwLayAction::FormatFlyContent( const SwFlyFrame *pFly )
+void SwLayAction::FormatFlyContent(const SwFlyFrame *pFly, const SwPageFrame& rPage)
 {
     const SwContentFrame *pContent = pFly->ContainsContent();
 
@@ -1872,13 +1747,9 @@ void SwLayAction::FormatFlyContent( const SwFlyFrame *pFly )
             return;
 
         // If there's input, we interrupt processing.
-        if ( !pFly->IsFlyInContentFrame() )
-        {
-            CheckIdleEnd();
-            // consider interrupt formatting.
-            if ( IsInterrupt() && !mbFormatContentOnInterrupt )
-                return;
-        }
+        if (!pFly->IsFlyInContentFrame() && IsInterrupt(&rPage))
+            return;
+
         pContent = pContent->GetNextContentFrame();
     }
     CheckWaitCursor();
@@ -2191,8 +2062,8 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
         bool bInterrupt(false);
         {
             SwLayAction aAction( m_pRoot, m_pImp );
-            aAction.SetInputType( VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER) );
-            aAction.SetIdle( true );
+            aAction.SetInputType(VCL_INPUT_ANY);
+            aAction.SetIdle();
             aAction.SetWaitAllowed( false );
             aAction.Action(m_pImp->GetShell()->GetOut());
             bInterrupt = aAction.IsInterrupt();
