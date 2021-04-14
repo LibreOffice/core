@@ -42,6 +42,7 @@
 
 #include <strings.hrc>
 #include <reffld.hxx>
+#include <docsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -842,15 +843,32 @@ OUString SwTOXAuthority::GetText(sal_uInt16 nAuthField, const SwRootFrame* pLayo
     return sText;
 }
 
-OUString SwTOXAuthority::GetSourceURL(const OUString& rText)
+OUString SwTOXAuthority::GetSourceURL(const OUString& rText) const
 {
     OUString aText = rText;
-    INetURLObject aObject(aText);
+
+    SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(m_rField.GetField()->GetTyp())->GetDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    OUString aBasePath = pDocShell->getDocumentBaseURL();
+    OUString aAbs
+        = INetURLObject::GetAbsURL(aBasePath, aText, INetURLObject::EncodeMechanism::WasEncoded,
+                                   INetURLObject::DecodeMechanism::WithCharset);
+    bool bRelative = aAbs != aText;
+
+    INetURLObject aObject(aAbs);
     if (aObject.GetMark().startsWith("page="))
     {
         aObject.SetMark(OUString());
         aText = aObject.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     }
+
+    if (bRelative)
+    {
+        aText
+            = INetURLObject::GetRelURL(aBasePath, aText, INetURLObject::EncodeMechanism::WasEncoded,
+                                       INetURLObject::DecodeMechanism::WithCharset);
+    }
+
     return aText;
 }
 
