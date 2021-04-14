@@ -313,6 +313,7 @@ public:
     void matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale );
 
     static std::unique_ptr<FontConfigFontOptions> getFontOptions(const FontAttributes& rFontAttributes, int nSize);
+    static void clearFontOptionsCache();
 
     void Substitute(FontSelectPattern &rPattern, OUString& rMissingCodes);
 
