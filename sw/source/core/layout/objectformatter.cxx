@@ -308,7 +308,7 @@ void SwObjectFormatter::FormatObj_( SwAnchoredObject& _rAnchoredObj )
                                                 mpLayAction );
             if ( mpLayAction )
             {
-                mpLayAction->FormatFlyContent( pFlyFrame );
+                mpLayAction->FormatFlyContent(pFlyFrame, mrPageFrame);
                 // --> consider, if the layout action
                 // has to be restarted due to a delete of a page frame.
                 if ( mpLayAction->IsAgain() )
