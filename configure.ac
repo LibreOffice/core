@@ -10607,13 +10607,7 @@ serf)
     fi
 
     # Check for system serf
-    libo_CHECK_SYSTEM_MODULE([serf],[SERF],[serf-1 >= 1.1.0],["-I${WORKDIR}/UnpackedTarball/serf"],
-                             ["-L${WORKDIR}/UnpackedTarball/serf/.libs -lserf-1"])
-    if test "$COM" = "MSC"; then
-        SERF_LIB_DIR="Release"
-        test -n "${MSVC_USE_DEBUG_RUNTIME}" && SERF_LIB_DIR="Debug"
-        SERF_LIBS="${WORKDIR}/UnpackedTarball/serf/${SERF_LIB_DIR}/serf-1.lib"
-    fi
+    libo_CHECK_SYSTEM_MODULE([serf],[SERF],[serf-1 >= 1.3.9])
     ;;
 neon)
     AC_MSG_RESULT([neon])
