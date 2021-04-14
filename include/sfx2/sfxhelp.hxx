@@ -37,7 +37,7 @@ private:
     SAL_DLLPRIVATE static OUString GetHelpModuleName_Impl(const OUString &rHelpId);
     SAL_DLLPRIVATE static OUString CreateHelpURL_Impl( const OUString& aCommandURL, const OUString& rModuleName );
 
-    SAL_DLLPRIVATE static bool Start_Impl( const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword );
+    SAL_DLLPRIVATE static bool Start_Impl( const OUString& rURL, const vcl::Window* pWindow );
     SAL_DLLPRIVATE virtual bool Start( const OUString& rURL, const vcl::Window* pWindow ) override;
 
 public:

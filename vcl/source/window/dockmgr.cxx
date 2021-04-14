@@ -754,17 +754,10 @@ void ImplDockingWindowWrapper::Resizing( Size& rSize )
         pDockingWindow->Resizing( rSize );
 }
 
-void ImplDockingWindowWrapper::ShowTitleButton( TitleButton nButton, bool bVisible )
+void ImplDockingWindowWrapper::ShowMenuTitleButton( bool bVisible )
 {
     if ( mpFloatWin )
-        mpFloatWin->ShowTitleButton( nButton, bVisible );
-    else
-    {
-        if ( nButton == TitleButton::Docking )
-            mbDockBtn = bVisible;
-        else // if ( nButton == TitleButton::Hide )
-            mbHideBtn = bVisible;
-    }
+        mpFloatWin->ShowTitleButton( TitleButton::Menu, bVisible );
 }
 
 void ImplDockingWindowWrapper::ImplPreparePopupMode()
