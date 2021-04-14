@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
-
-#if HAVE_FEATURE_PDFIUM
-
 #include <string_view>
 
 #include <cppunit/TestAssert.h>
@@ -405,7 +401,5 @@ void PDFiumLibraryTest::testTools()
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFiumLibraryTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
