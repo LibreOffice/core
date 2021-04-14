@@ -39,6 +39,7 @@
  *  friends are PostScript afm style, that is they are 1/1000 font height
  */
 
+class FontAttributes;
 class FontSubsetInfo;
 class FontConfigFontOptions;
 class FontSelectPattern;
@@ -309,7 +310,9 @@ public:
     in different fonts in e.g. english and japanese
      */
     void matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale );
-    static std::unique_ptr<FontConfigFontOptions> getFontOptions( const FastPrintFontInfo&, int nSize);
+
+    static std::unique_ptr<FontConfigFontOptions> getFontOptions(const FontAttributes& rFontAttributes, int nSize);
+    static void clearFontOptionsCache();
 
     void Substitute(FontSelectPattern &rPattern, OUString& rMissingCodes);
 
