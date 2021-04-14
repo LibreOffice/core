@@ -1097,7 +1097,7 @@ void FontConfigFontOptions::SyncPattern(const OString& rFileName, sal_uInt32 nIn
     FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
 }
 
-std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const FastPrintFontInfo& rInfo, int nSize)
+std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const FontAttributes& rInfo, int nSize)
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
@@ -1105,7 +1105,7 @@ std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const Fa
     FcConfig* pConfig = FcConfigGetCurrent();
     FcPattern* pPattern = FcPatternCreate();
 
-    OString sFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );
+    OString sFamily = OUStringToOString( rInfo.GetFamilyName(), RTL_TEXTENCODING_UTF8 );
 
     std::unordered_map< OString, OString >::const_iterator aI = rWrapper.m_aLocalizedToCanonical.find(sFamily);
     if (aI != rWrapper.m_aLocalizedToCanonical.end())
@@ -1114,7 +1114,7 @@ std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const Fa
         FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<FcChar8 const *>(sFamily.getStr()));
 
     // TODO: ePitch argument of always PITCH_DONTKNOW is suspicious
-    addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, PITCH_DONTKNOW);
+    addtopattern(pPattern, rInfo.GetItalic(), rInfo.GetWeight(), rInfo.GetWidthType(), PITCH_DONTKNOW);
     FcPatternAddDouble(pPattern, FC_PIXEL_SIZE, nSize);
 
     FcConfigSubstitute(pConfig, pPattern, FcMatchPattern);
