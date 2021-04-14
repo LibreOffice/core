@@ -84,7 +84,7 @@ class SwLayAction
     bool m_bCalcLayout;    // Complete reformatting?
     bool m_bAgain;         // For the automatically repeated Action if Pages are deleted
     bool m_bNextCycle;     // Reset on the first invalid Page
-    bool m_bInput;         // For terminating processing on input
+    bool m_bInterrupt;     // For terminating processing on interrupt
     bool m_bIdle;          // True if the LayAction was triggered by the Idler
     bool m_bReschedule;    // Call Reschedule depending on Progress?
     bool m_bCheckPages;    // Run CheckPageDescs() or delay it
@@ -137,12 +137,11 @@ public:
 
     bool IsWaitAllowed()        const       { return m_bWaitAllowed; }
     bool IsNextCycle()          const       { return m_bNextCycle; }
-    bool IsInput()              const       { return m_bInput; }
     bool IsPaint()              const       { return m_bPaint; }
     bool IsIdle()               const       { return m_bIdle;  }
     bool IsReschedule()         const       { return m_bReschedule;  }
     bool IsPaintExtraData()     const       { return m_bPaintExtraData;}
-    bool IsInterrupt()          const       { return IsInput(); }
+    bool IsInterrupt()          const       { return m_bInterrupt; }
 
     VclInputFlags GetInputType()    const { return m_nInputType; }
 

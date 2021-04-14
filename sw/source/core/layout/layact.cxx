@@ -91,8 +91,8 @@ void SwLayAction::CheckWaitCursor()
 // Time over already?
 inline void SwLayAction::CheckIdleEnd()
 {
-    if ( !IsInput() )
-        m_bInput = bool(GetInputType()) && Application::AnyInput( GetInputType() );
+    if (!IsInterrupt())
+        m_bInterrupt = bool(GetInputType()) && Application::AnyInput(GetInputType());
 }
 
 void SwLayAction::SetStatBar( bool bNew )
@@ -267,7 +267,7 @@ SwLayAction::SwLayAction( SwRootFrame *pRt, SwViewShellImp *pI ) :
 {
     m_bPaintExtraData = ::IsExtraData( m_pImp->GetShell()->GetDoc() );
     m_bPaint = m_bComplete = m_bWaitAllowed = m_bCheckPages = true;
-    m_bInput = m_bAgain = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
+    m_bInterrupt = m_bAgain = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
     m_bUpdateExpFields = m_bBrowseActionStop = m_bActionInProgress = false;
     // init new flag <mbFormatContentOnInterrupt>.
     mbFormatContentOnInterrupt = false;
@@ -289,7 +289,7 @@ void SwLayAction::Reset()
     m_nInputType = VclInputFlags::NONE;
     m_nEndPage = m_nPreInvaPage = m_nCheckPageNum = USHRT_MAX;
     m_bPaint = m_bComplete = m_bWaitAllowed = m_bCheckPages = true;
-    m_bInput = m_bAgain = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
+    m_bInterrupt = m_bAgain = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
     m_bUpdateExpFields = m_bBrowseActionStop = false;
     m_pCurPage = nullptr;
 }
@@ -573,7 +573,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                             pPage->InvalidateFlyLayout();
                             pPage->InvalidateFlyContent();
                             if ( IsBrowseActionStop() )
-                                m_bInput = true;
+                                m_bInterrupt = true;
                         }
                     }
                     if( bNoLoop )
@@ -687,7 +687,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             pPg = pPg ? static_cast<SwPageFrame*>(pPg->GetPrev()) : pPage;
 
         // set flag for interrupt content formatting
-        mbFormatContentOnInterrupt = IsInput();
+        mbFormatContentOnInterrupt = true;
         tools::Long nBottom = rVis.Bottom();
         // #i42586# - format current page, if idle action is active
         // This is an optimization for the case that the interrupt is created by
