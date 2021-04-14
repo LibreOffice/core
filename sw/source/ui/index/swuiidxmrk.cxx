@@ -72,6 +72,20 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace ::comphelper;
 
+namespace
+{
+/// Similar to comphelper::isFileUrl(), but handles relative URLs as well.
+bool IsFileUrl(SwWrtShell& rWrtSh, const OUString& rUrl)
+{
+    SwDocShell* pDocShell = rWrtSh.GetDoc()->GetDocShell();
+    OUString aBaseUrl = pDocShell->getDocumentBaseURL();
+    OUString aAbs = INetURLObject::GetAbsURL(aBaseUrl, rUrl,
+            INetURLObject::EncodeMechanism::WasEncoded,
+            INetURLObject::DecodeMechanism::WithCharset);
+    return comphelper::isFileUrl(aAbs);
+}
+}
+
 // dialog to insert a directory selection
 SwIndexMarkPane::SwIndexMarkPane(const std::shared_ptr<weld::Dialog>& rDialog, weld::Builder& rBuilder, bool bNewDlg,
     SwWrtShell* pWrtShell)
@@ -1557,7 +1571,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             if(!pFields[aCurInfo.nToxField].isEmpty())
             {
                 int nPos = pFields[aCurInfo.nToxField].toInt32();
-                if (nPos == AUTH_TYPE_WWW && comphelper::isFileUrl(pFields[AUTH_FIELD_URL]))
+                if (nPos == AUTH_TYPE_WWW && IsFileUrl(rWrtSh, pFields[AUTH_FIELD_URL]))
                 {
                     // Map file URL to local file.
                     nPos = AUTH_TYPE_END;
@@ -1626,7 +1640,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                 }
             }
             else if (aCurInfo.nToxField == AUTH_FIELD_URL
-                     && comphelper::isFileUrl(pFields[aCurInfo.nToxField]))
+                     && IsFileUrl(rWrtSh, pFields[aCurInfo.nToxField]))
             {
                 m_xBrowseButton = m_aBuilders.back()->weld_button("browse");
                 m_xBrowseButton->connect_clicked(LINK(this, SwCreateAuthEntryDlg_Impl, BrowseHdl));
@@ -1725,7 +1739,7 @@ IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
     bool bSaveRelFSys = officecfg::Office::Common::Save::URL::FileSystem::get();
     if (!aPath.isEmpty())
     {
-        if (bSaveRelFSys && !comphelper::isFileUrl(aPath))
+        if (bSaveRelFSys && !IsFileUrl(rWrtSh, aPath))
         {
             SwDocShell* pDocShell = rWrtSh.GetDoc()->GetDocShell();
             OUString aBasePath = pDocShell->getDocumentBaseURL();
