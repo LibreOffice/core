@@ -343,6 +343,10 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     m_sDlgMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
     m_aStrGroupStyles(CuiResId(RID_SVXSTR_GROUP_STYLES))
 {
+    if (comphelper::LibreOfficeKit::isActive() && m_sProdMacros.indexOf("Collabora Office") != -1)
+    {
+        m_sProdMacros = m_sProdMacros.replaceFirst("Collabora Office", "Collabora Online");
+    }
 }
 
 void CuiConfigGroupListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
