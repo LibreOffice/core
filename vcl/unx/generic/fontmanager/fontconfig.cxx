@@ -63,6 +63,7 @@ struct FontOptionsKey
     FontItalic m_eItalic;
     FontWeight m_eWeight;
     FontWidth m_eWidth;
+    FontPitch m_ePitch;
 
     bool operator==(const FontOptionsKey& rOther) const
     {
@@ -70,7 +71,8 @@ struct FontOptionsKey
                m_nFontSize == rOther.m_nFontSize &&
                m_eItalic == rOther.m_eItalic &&
                m_eWeight == rOther.m_eWeight &&
-               m_eWidth == rOther.m_eWidth;
+               m_eWidth == rOther.m_eWidth &&
+               m_ePitch == rOther.m_ePitch;
     }
 };
 
@@ -88,6 +90,7 @@ template <> struct hash<FontOptionsKey>
         boost::hash_combine(seed, k.m_eItalic);
         boost::hash_combine(seed, k.m_eWeight);
         boost::hash_combine(seed, k.m_eWidth);
+        boost::hash_combine(seed, k.m_ePitch);
         return seed;
     }
 };
@@ -1188,7 +1191,8 @@ void FontConfigFontOptions::SyncPattern(const OString& rFileName, sal_uInt32 nIn
 
 std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const FontAttributes& rInfo, int nSize)
 {
-    FontOptionsKey aKey{ rInfo.GetFamilyName(), nSize, rInfo.GetItalic(), rInfo.GetWeight(), rInfo.GetWidthType() };
+    FontOptionsKey aKey{ rInfo.GetFamilyName(), nSize, rInfo.GetItalic(),
+                         rInfo.GetWeight(), rInfo.GetWidthType(), rInfo.GetPitch() };
 
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
@@ -1207,8 +1211,7 @@ std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const Fo
     if( !sFamily.isEmpty() )
         FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<FcChar8 const *>(sFamily.getStr()));
 
-    // TODO: ePitch argument of always PITCH_DONTKNOW is suspicious
-    addtopattern(pPattern, aKey.m_eItalic, aKey.m_eWeight, aKey.m_eWidth, PITCH_DONTKNOW);
+    addtopattern(pPattern, aKey.m_eItalic, aKey.m_eWeight, aKey.m_eWidth, aKey.m_ePitch);
     FcPatternAddDouble(pPattern, FC_PIXEL_SIZE, nSize);
 
     FcConfigSubstitute(pConfig, pPattern, FcMatchPattern);
