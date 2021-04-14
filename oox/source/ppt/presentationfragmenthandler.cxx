@@ -87,11 +87,11 @@ PresentationFragmentHandler::PresentationFragmentHandler(XmlFilterBase& rFilter,
     , mbCommentAuthorsRead(false)
 {
     TextParagraphPropertiesArray& rParagraphDefaultsVector( mpTextListStyle->getListStyle() );
-    for (auto const& elem : rParagraphDefaultsVector)
+    for (auto & elem : rParagraphDefaultsVector)
     {
         // ppt is having zero bottom margin per default, whereas OOo is 0,5cm,
         // so this attribute needs to be set always
-        elem->getParaBottomMargin() = TextSpacing( 0 );
+        elem.getParaBottomMargin() = TextSpacing( 0 );
     }
 }
 

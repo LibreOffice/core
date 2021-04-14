@@ -44,29 +44,29 @@ ContextHandlerRef TextListStyleContext::onCreateContext( sal_Int32 aElementToken
     switch( aElementToken )
     {
         case A_TOKEN( defPPr ):     // CT_TextParagraphProperties
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 0 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getListStyle()[ 0 ] );
         case A_TOKEN( outline1pPr ):
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getAggregationListStyle()[ 0 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getAggregationListStyle()[ 0 ] );
         case A_TOKEN( outline2pPr ):
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getAggregationListStyle()[ 1 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getAggregationListStyle()[ 1 ] );
         case A_TOKEN( lvl1pPr ):
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 0 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getListStyle()[ 0 ] );
         case A_TOKEN( lvl2pPr ):
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 1 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getListStyle()[ 1 ] );
         case A_TOKEN( lvl3pPr ):
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 2 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getListStyle()[ 2 ] );
         case A_TOKEN( lvl4pPr ):
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 3 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getListStyle()[ 3 ] );
         case A_TOKEN( lvl5pPr ):
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 4 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getListStyle()[ 4 ] );
         case A_TOKEN( lvl6pPr ):
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 5 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getListStyle()[ 5 ] );
         case A_TOKEN( lvl7pPr ):
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 6 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getListStyle()[ 6 ] );
         case A_TOKEN( lvl8pPr ):
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 7 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getListStyle()[ 7 ] );
         case A_TOKEN( lvl9pPr ):
-            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 8 ] );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrTextListStyle.getListStyle()[ 8 ] );
     }
 
     return this;
