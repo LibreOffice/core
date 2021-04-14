@@ -69,7 +69,6 @@ SvxBkgTabPage::SvxBkgTabPage(weld::Container* pPage, weld::DialogController* pCo
     bCharBackColor(false),
     maSet(rInAttrs)
 {
-    m_xBtnGradient->hide();
     m_xBtnHatch->hide();
     m_xBtnBitmap->hide();
     m_xBtnPattern->hide();
@@ -89,8 +88,14 @@ SvxBkgTabPage::SvxBkgTabPage(weld::Container* pPage, weld::DialogController* pCo
         if (auto pItem = pDocSh->GetItem( SID_BITMAP_LIST ) )
             pBitmapList = pItem->GetBitmapList();
 
+    XGradientListRef pGradientList;
+    if (pDocSh)
+        if (auto pItem = pDocSh->GetItem(SID_GRADIENT_LIST))
+            pGradientList = pItem->GetGradientList();
+
     SetColorList(pColorTable);
     SetBitmapList(pBitmapList);
+    SetGradientList(pGradientList);
 }
 
 SvxBkgTabPage::~SvxBkgTabPage()
