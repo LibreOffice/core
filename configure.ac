@@ -11627,7 +11627,6 @@ ENABLE_PDFIUM=
 if test \( -z "$enable_pdfium" -a "$ENABLE_PDFIMPORT" = "TRUE" \) -o "$enable_pdfium" = yes; then
     AC_MSG_RESULT([yes])
     ENABLE_PDFIUM=TRUE
-    AC_DEFINE(HAVE_FEATURE_PDFIUM)
     BUILD_TYPE="$BUILD_TYPE PDFIUM"
 else
     AC_MSG_RESULT([no])
