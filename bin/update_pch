@@ -474,8 +474,7 @@ def filter_ignore(line, module):
             'src/sksl/SkSLCPP.h',
             'src/gpu/vk/GrVkAMDMemoryAllocator.h',
             'src/gpu/GrUtil.h',
-            'src/sksl/dsl/', # conflict between SkSL::Expression and SkSL::dsl::Expression
-            'include/sksl/',
+            'src/sksl/dsl/',
             ]
 
     for i in ignore_list:
