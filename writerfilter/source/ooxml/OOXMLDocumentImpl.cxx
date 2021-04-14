@@ -101,7 +101,7 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
         xParser->setFastDocumentHandler(pDocHandler);
         xParser->setTokenHandler(xTokenHandler);
 
-        uno::Reference<io::XInputStream> xInputStream = pStream->getDocumentStream();
+        uno::Reference<io::XInputStream> xInputStream = mpStream->getDocumentStream();
 
         if (xInputStream.is())
         {
