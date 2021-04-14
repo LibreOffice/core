@@ -10,8 +10,8 @@
 $(eval $(call gb_Module_Module,serf))
 
 $(eval $(call gb_Module_add_targets,serf,\
+	StaticLibrary_serf \
 	UnpackedTarball_serf \
-	ExternalProject_serf \
 ))
 
 # vim: set noet sw=4 ts=4:
