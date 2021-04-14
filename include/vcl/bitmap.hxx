@@ -536,7 +536,7 @@ public:
 
 private:
     SAL_DLLPRIVATE bool ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const* pExtColor = nullptr);
-    SAL_DLLPRIVATE bool ImplConvertDown(vcl::PixelFormat ePixelFormat, Color const* pExtColor = nullptr);
+    SAL_DLLPRIVATE bool ImplConvertDown8BPP(Color const* pExtColor = nullptr);
 
 private:
     std::shared_ptr<SalBitmap> mxSalBmp;

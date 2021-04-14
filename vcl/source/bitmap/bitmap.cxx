@@ -991,7 +991,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
             if( nBitCount < 8 )
                 bRet = ImplConvertUp(vcl::PixelFormat::N8_BPP);
             else if( nBitCount > 8 )
-                bRet = ImplConvertDown(vcl::PixelFormat::N8_BPP);
+                bRet = ImplConvertDown8BPP();
             else
                 bRet = true;
         }
@@ -1004,7 +1004,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
             if( nBitCount < 8 )
                 bRet = ImplConvertUp(vcl::PixelFormat::N8_BPP, &aTrans );
             else
-                bRet = ImplConvertDown(vcl::PixelFormat::N8_BPP, &aTrans );
+                bRet = ImplConvertDown8BPP(&aTrans );
         }
         break;
 
@@ -1240,9 +1240,9 @@ bool Bitmap::ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const * pExtColo
     return bRet;
 }
 
-bool Bitmap::ImplConvertDown(vcl::PixelFormat ePixelFormat, Color const * pExtColor)
+bool Bitmap::ImplConvertDown8BPP(Color const * pExtColor)
 {
-    SAL_WARN_IF(ePixelFormat > getPixelFormat(), "vcl", "New pixelformat must be lower ( or equal when pExtColor is set )!");
+    SAL_WARN_IF(vcl::PixelFormat::N8_BPP > getPixelFormat(), "vcl", "New pixelformat must be lower ( or equal when pExtColor is set )!");
 
     Bitmap::ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
@@ -1250,12 +1250,12 @@ bool Bitmap::ImplConvertDown(vcl::PixelFormat ePixelFormat, Color const * pExtCo
     if (pReadAcc)
     {
         BitmapPalette aPalette;
-        Bitmap aNewBmp(GetSizePixel(), ePixelFormat, &aPalette);
+        Bitmap aNewBmp(GetSizePixel(), vcl::PixelFormat::N8_BPP, &aPalette);
         BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if (pWriteAcc)
         {
-            sal_Int16 nNewBitCount = sal_Int16(ePixelFormat);
+            sal_Int16 nNewBitCount = sal_Int16(vcl::PixelFormat::N8_BPP);
             const sal_uInt16 nCount = 1 << nNewBitCount;
             const tools::Long nWidth = pWriteAcc->Width();
             const tools::Long nWidth1 = nWidth - 1;

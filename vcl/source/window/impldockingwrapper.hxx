@@ -105,7 +105,7 @@ public:
     void            Resizing( Size& rSize );
     void            Tracking( const TrackingEvent& rTEvt );
 
-    void            ShowTitleButton( TitleButton nButton, bool bVisible );
+    void            ShowMenuTitleButton( bool bVisible );
 
     void            SetMinOutputSizePixel( const Size& rSize );
 

@@ -67,8 +67,7 @@ public:
     VDevBuffer();
     virtual ~VDevBuffer() override;
 
-    VclPtr<VirtualDevice> alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bMonoChrome,
-                                bool bTransparent);
+    VclPtr<VirtualDevice> alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bTransparent);
     void free(VirtualDevice& rDevice);
 
     // Timer virtuals
@@ -103,12 +102,12 @@ VDevBuffer::~VDevBuffer()
 }
 
 VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel,
-                                        bool bMonoChrome, bool bTransparent)
+                                        bool bTransparent)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     VclPtr<VirtualDevice> pRetval;
 
-    sal_Int32 nBits = bMonoChrome ? 1 : rOutDev.GetBitCount();
+    sal_Int32 nBits = rOutDev.GetBitCount();
 
     bool bOkay(false);
     if (!maFreeBuffers.empty())
@@ -204,9 +203,9 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
     // no success yet, create new buffer
     if (!pRetval)
     {
-        pRetval = VclPtr<VirtualDevice>::Create(
-            rOutDev, bMonoChrome ? DeviceFormat::BITMASK : DeviceFormat::DEFAULT,
-            bTransparent ? DeviceFormat::DEFAULT : DeviceFormat::NONE);
+        pRetval = VclPtr<VirtualDevice>::Create(rOutDev, DeviceFormat::DEFAULT,
+                                                bTransparent ? DeviceFormat::DEFAULT
+                                                             : DeviceFormat::NONE);
         maDeviceTemplates[pRetval] = &rOutDev;
         pRetval->SetOutputSizePixel(rSizePixel, true);
     }
@@ -287,7 +286,7 @@ impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange&
     if (!isVisible())
         return;
 
-    mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, true);
+    mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true);
 
     // #i93485# assert when copying from window to VDev is used
     SAL_WARN_IF(
@@ -408,7 +407,7 @@ VirtualDevice& impBufferDevice::getTransparence()
                 "impBufferDevice: No content, check isVisible() before accessing (!)");
     if (!mpAlpha)
     {
-        mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, false);
+        mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false);
         mpAlpha->SetMapMode(mpContent->GetMapMode());
 
         // copy AA flag for new target; masking needs to be smooth
