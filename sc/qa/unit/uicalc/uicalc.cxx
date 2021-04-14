@@ -1126,7 +1126,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf112884)
 
     dispatchCommand(mxComponent, ".uno:RecalcPivotTable", {});
 
-    // Without the fix in place, this test would haved failed with
+    // Without the fix in place, this test would have failed with
     // - Expected: #DIV/0!
     // - Actual  : 0.5
     CPPUNIT_ASSERT_EQUAL(OUString("#DIV/0!"), pDoc->GetString(ScAddress(6, 2, 0)));

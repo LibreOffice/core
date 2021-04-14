@@ -1646,7 +1646,7 @@ void ScTiledRenderingTest::testFunctionDlg()
     SfxViewShell* pView2 = SfxViewShell::Current();
     CPPUNIT_ASSERT(pView1 != pView2);
 
-    // check loking
+    // check locking
     CPPUNIT_ASSERT_EQUAL(true, pView1->GetViewFrame()->GetDispatcher()->IsLocked());
     CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame()->GetDispatcher()->IsLocked());
 
