@@ -1554,7 +1554,7 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
                 for( tools::Long nX = 0; nX < nWidth; nX++ )
                 {
                     nNewTrans = nTrans + *pAScan;
-                    *pAScan++ = static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 0 : (255 - nNewTrans) );
+                    *pAScan++ = static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans );
                 }
             }
         }
