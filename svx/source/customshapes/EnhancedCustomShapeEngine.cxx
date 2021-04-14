@@ -263,25 +263,21 @@ void SetTemporary( uno::Reference< drawing::XShape > const & xShape )
 
 Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
 {
-    const bool bIsSdrObjCustomShape(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape)));
+    SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape));
 
-    if(!bIsSdrObjCustomShape)
+    if(!pSdrObjCustomShape)
     {
         return Reference< drawing::XShape >();
     }
 
-    SdrObjCustomShape& rSdrObjCustomShape(
-        static_cast< SdrObjCustomShape& >(
-            *GetSdrObjectFromXShape(mxShape)));
-
     // retrieving the TextPath property to check if feature is enabled
-    const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const SdrCustomShapeGeometryItem& rGeometryItem(pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     bool bTextPathOn = false;
     const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "TextPath" );
     if ( pAny )
         *pAny >>= bTextPathOn;
 
-    EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+    EnhancedCustomShape2d aCustomShape2d(*pSdrObjCustomShape);
     Degree100 nRotateAngle = aCustomShape2d.GetRotateAngle();
 
     bool bFlipV = aCustomShape2d.IsFlipVert();
@@ -296,14 +292,14 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
             std::unique_ptr<SdrObject, SdrObjectFreeOp> xRenderedFontWork(
                 EnhancedCustomShapeFontWork::CreateFontWork(
                     xRenderedShape.get(),
-                    rSdrObjCustomShape));
+                    *pSdrObjCustomShape));
 
             if (xRenderedFontWork)
             {
                 xRenderedShape = std::move(xRenderedFontWork);
             }
         }
-        std::unique_ptr<SdrObject, SdrObjectFreeOp> xRenderedShape3d(EnhancedCustomShape3d::Create3DObject(xRenderedShape.get(), rSdrObjCustomShape));
+        std::unique_ptr<SdrObject, SdrObjectFreeOp> xRenderedShape3d(EnhancedCustomShape3d::Create3DObject(xRenderedShape.get(), *pSdrObjCustomShape));
         if (xRenderedShape3d)
         {
             bFlipV = bFlipH = false;
@@ -311,8 +307,8 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
             xRenderedShape = std::move(xRenderedShape3d);
         }
 
-        tools::Rectangle aRect(rSdrObjCustomShape.GetSnapRect());
-        const GeoStat& rGeoStat(rSdrObjCustomShape.GetGeoStat());
+        tools::Rectangle aRect(pSdrObjCustomShape->GetSnapRect());
+        const GeoStat& rGeoStat(pSdrObjCustomShape->GetGeoStat());
 
         if ( rGeoStat.nShearAngle )
         {
@@ -324,10 +320,10 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
                 nTan = -nTan;
             }
 
-            xRenderedShape->Shear(rSdrObjCustomShape.GetSnapRect().Center(), nShearAngle, nTan, false);
+            xRenderedShape->Shear(pSdrObjCustomShape->GetSnapRect().Center(), nShearAngle, nTan, false);
         }
         if(nRotateAngle )
-            xRenderedShape->NbcRotate(rSdrObjCustomShape.GetSnapRect().Center(), nRotateAngle);
+            xRenderedShape->NbcRotate(pSdrObjCustomShape->GetSnapRect().Center(), nRotateAngle);
         if ( bFlipV )
         {
             Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
@@ -341,14 +337,14 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
             xRenderedShape->NbcMirror( aTop, aBottom );
         }
 
-        xRenderedShape->NbcSetStyleSheet(rSdrObjCustomShape.GetStyleSheet(), true);
+        xRenderedShape->NbcSetStyleSheet(pSdrObjCustomShape->GetStyleSheet(), true);
         xRenderedShape->RecalcSnapRect();
     }
 
     if ( mbForceGroupWithText )
     {
         xRenderedShape = ImplForceGroupWithText(
-            rSdrObjCustomShape,
+            *pSdrObjCustomShape,
             std::move(xRenderedShape));
     }
 
@@ -370,16 +366,13 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
 awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
 {
     awt::Rectangle aTextRect;
-    const bool bIsSdrObjCustomShape(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape)));
-
-    if(bIsSdrObjCustomShape)
+    if (SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape)))
     {
-        SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(mxShape)));
         uno::Reference< document::XActionLockable > xLockable( mxShape, uno::UNO_QUERY );
 
         if(xLockable.is() && !xLockable->isActionLocked())
         {
-            EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+            EnhancedCustomShape2d aCustomShape2d(*pSdrObjCustomShape);
             tools::Rectangle aRect( aCustomShape2d.GetTextRect() );
             aTextRect.X = aRect.Left();
             aTextRect.Y = aRect.Top();
@@ -394,22 +387,19 @@ awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
 drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeometry()
 {
     drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
-    const bool bIsSdrObjCustomShape(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape)));
+    SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape));
 
-    if(bIsSdrObjCustomShape)
+    if(pSdrObjCustomShape)
     {
-        SdrObjCustomShape& rSdrObjCustomShape(
-            static_cast< SdrObjCustomShape& >(
-                *GetSdrObjectFromXShape(mxShape)));
-        EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+        EnhancedCustomShape2d aCustomShape2d(*pSdrObjCustomShape);
         SdrObjectUniquePtr pObj = aCustomShape2d.CreateLineGeometry();
 
         if ( pObj )
         {
-            tools::Rectangle aRect(rSdrObjCustomShape.GetSnapRect());
+            tools::Rectangle aRect(pSdrObjCustomShape->GetSnapRect());
             bool bFlipV = aCustomShape2d.IsFlipVert();
             bool bFlipH = aCustomShape2d.IsFlipHorz();
-            const GeoStat& rGeoStat(rSdrObjCustomShape.GetGeoStat());
+            const GeoStat& rGeoStat(pSdrObjCustomShape->GetGeoStat());
 
             if ( rGeoStat.nShearAngle )
             {
@@ -473,14 +463,11 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
 Sequence< Reference< drawing::XCustomShapeHandle > > SAL_CALL EnhancedCustomShapeEngine::getInteraction()
 {
     sal_uInt32 i, nHdlCount = 0;
-    const bool bIsSdrObjCustomShape(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape)));
+    SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape));
 
-    if(bIsSdrObjCustomShape)
+    if(pSdrObjCustomShape)
     {
-        SdrObjCustomShape& rSdrObjCustomShape(
-            static_cast< SdrObjCustomShape& >(
-                *GetSdrObjectFromXShape(mxShape)));
-        EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+        EnhancedCustomShape2d aCustomShape2d(*pSdrObjCustomShape);
         nHdlCount = aCustomShape2d.GetHdlCount();
     }
 
