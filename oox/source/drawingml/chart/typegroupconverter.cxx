@@ -352,6 +352,11 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         for (auto const& elemSeries : mrModel.maSeries)
             aSeries.push_back( std::make_shared<SeriesConverter>(*this, *elemSeries) );
 
+        // some unstacked 2D chart types shouldn't have reversed z-order
+        if( (maTypeInfo.meTypeId == TYPEID_AREA || maTypeInfo.meTypeId == TYPEID_RADARAREA)
+            && !mb3dChart && !isStacked() && !isPercent() )
+            aTypeProp.setProperty( PROP_ReverseZOrder, false );
+
         // decide whether to use varying colors for each data point
         bool bVaryColorsByPoint = bSupportsVaryColorsByPoint && mrModel.mbVaryColors;
         switch( maTypeInfo.meVarPointMode )
