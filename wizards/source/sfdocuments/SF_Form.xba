@@ -1296,7 +1296,6 @@ Check:
 Try:
 	&apos;	At main form termination, all database connections are lost
 	bAlive = Not IsNull(_Form)
-	If bAlive Then bAlive = Not IsNull(_Form.ActiveConnection)
 	If Not bAlive Then GoTo Catch
 
 Finally:
