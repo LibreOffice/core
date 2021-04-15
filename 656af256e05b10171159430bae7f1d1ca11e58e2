@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8c2b4bc0_e47975a5",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-04-15T11:22:56Z",
+      "side": 1,
+      "message": "You add a button to add another dialog. It clutters the simple dialog for no good reason.",
+      "parentUuid": "daededd5_c5d0be34",
+      "range": {
+        "startLine": 59,
+        "startChar": 38,
+        "endLine": 59,
+        "endChar": 44
+      },
+      "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c6f3a592_74be43ff",
         "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
         "patchSetId": 4
