@@ -1748,6 +1748,7 @@ void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pP
 // Shrink() or Grow() to adjust the frame's size to the changed required space.
 void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs * )
 {
+    SAL_DEBUG("XXX SwTextFrame::Format enter " << this << " " << GetFrameId());
     SwRectFnSet aRectFnSet(this);
 
     CalcAdditionalFirstLineOffset();
@@ -1965,6 +1966,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
                //set the frame to its original location
                aPrt.SetTopAndHeight(0, aTmpHeight);
     }
+    SAL_DEBUG("XXX SwTextFrame::Format exit  " << this << " " << GetFrameId());
 }
 
 // bForceQuickFormat is set if GetFormatted() has been called during the

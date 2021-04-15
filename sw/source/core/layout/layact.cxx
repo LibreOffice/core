@@ -342,6 +342,26 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
     if ( IsCalcLayout() )
         SetCheckPages( false );
 
+    auto dumpW = [this](auto const pName)
+    {
+        SAL_DEBUG("XXX Action " << pName);
+#if 0
+        xmlTextWriterPtr writer = xmlNewTextWriterFilename( pName, 0 );
+        xmlTextWriterSetIndent(writer, 1);
+        xmlTextWriterSetIndentString(writer, BAD_CAST("  "));
+        xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
+        m_pRoot->dumpAsXml(writer);
+        xmlTextWriterEndDocument( writer );
+        xmlFreeTextWriter( writer );
+#else
+        (void) this;
+#endif
+    };
+
+    static int i = 0;
+    ++i;
+    dumpW(OString("LHM-627_f2_" + OString::number(i) + "_pre.xml").getStr());
+
     InternalAction(pRenderContext);
     m_bAgain |= RemoveEmptyBrowserPages();
     while ( IsAgain() )
@@ -351,6 +371,8 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
         m_bAgain |= RemoveEmptyBrowserPages();
     }
     m_pRoot->DeleteEmptySct();
+
+    dumpW(OString("LHM-627_f2_" + OString::number(i) + "_post.xml").getStr());
 
     m_pWait.reset();
 

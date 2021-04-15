@@ -372,6 +372,7 @@ void SwFrame::DestroyImpl()
 
 SwFrame::~SwFrame()
 {
+    SAL_DEBUG("XXX -SwFrame " <<  this << " " << GetFrameId());
     assert(m_isInDestroy); // check that only DestroySwFrame does "delete"
     assert(!IsDeleteForbidden()); // check that it's not deleted while deletes are forbidden
 #if OSL_DEBUG_LEVEL > 0
