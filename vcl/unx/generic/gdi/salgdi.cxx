@@ -498,9 +498,12 @@ void X11SalGraphics::Flush()
 
 bool X11SalGraphics::SupportsCairo() const
 {
-    Display *pDisplay = GetXDisplay();
-    int nDummy;
-    return XQueryExtension(pDisplay, "RENDER", &nDummy, &nDummy, &nDummy);
+    static bool bSupportsCairo = [this] {
+        Display *pDisplay = GetXDisplay();
+        int nDummy;
+        return XQueryExtension(pDisplay, "RENDER", &nDummy, &nDummy, &nDummy);
+    }();
+    return bSupportsCairo;
 }
 
 cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
