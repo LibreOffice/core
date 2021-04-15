@@ -82,7 +82,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private DocumentOverlay mDocumentOverlay;
-    /** URI of the actual document. */
+    /** URI to save the document to. */
     private Uri mDocumentUri;
     /** Temporary local copy of the document. */
     private File mTempFile = null;
@@ -170,29 +170,38 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         mbISReadOnlyMode = !isExperimentalMode();
 
-        mDocumentUri = getIntent().getData();
-        if (mDocumentUri != null) {
-            if (mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
-                    || mDocumentUri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)) {
+        final Uri docUri = getIntent().getData();
+        if (docUri != null) {
+            if (docUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
+                    || docUri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)) {
                 final boolean isReadOnlyDoc  = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
                 mbISReadOnlyMode = !isExperimentalMode() || isReadOnlyDoc;
-                Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + mDocumentUri.getPath());
+                Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + docUri.getPath());
 
-                String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), mDocumentUri);
+                String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), docUri);
                 toolbarTop.setTitle(displayName);
 
-            } else if (mDocumentUri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
+            } else if (docUri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
                 mbISReadOnlyMode = true;
-                Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + mDocumentUri.getPath());
-                toolbarTop.setTitle(mDocumentUri.getLastPathSegment());
+                Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + docUri.getPath());
+                toolbarTop.setTitle(docUri.getLastPathSegment());
             }
             // create a temporary local copy to work with
-            boolean copyOK = copyFileToTemp() && mTempFile != null;
+            boolean copyOK = copyFileToTemp(docUri) && mTempFile != null;
             if (!copyOK) {
                 // TODO: can't open the file
-                Log.e(LOGTAG, "couldn't create temporary file from " + mDocumentUri);
+                Log.e(LOGTAG, "couldn't create temporary file from " + docUri);
                 return;
             }
+
+            // if input doc is a template, a new doc is created and a proper URI to save to
+            // will only be available after a "Save As"
+            if (isTemplate(docUri)) {
+                toolbarTop.setTitle(R.string.default_document_name);
+            } else {
+                mDocumentUri = docUri;
+            }
+
             LOKitShell.sendLoadEvent(mTempFile.getPath());
         } else if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
             // New document type string is not null, meaning we want to open a new document
@@ -275,7 +284,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         return mDocumentOverlay.getCurrentCursorPosition();
     }
 
-    private boolean copyFileToTemp() {
+    private boolean copyFileToTemp(Uri documentUri) {
         // CSV files need a .csv suffix to be opened in Calc.
         String suffix = null;
         String intentType = getIntent().getType();
@@ -286,7 +295,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         try {
             mTempFile = File.createTempFile("LibreOffice", suffix, this.getCacheDir());
             final FileOutputStream outputStream = new FileOutputStream(mTempFile);
-            return copyUriToStream(mDocumentUri, outputStream);
+            return copyUriToStream(documentUri, outputStream);
         } catch (FileNotFoundException e) {
             return false;
         } catch (IOException e) {
@@ -393,6 +402,14 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             Log.w(LOGTAG, "Cannot determine MIME type to use.");
             return "";
         }
+    }
+
+    /**
+     * Returns whether the MIME type for the URI is considered one for a document template.
+     */
+    private boolean isTemplate(final Uri documentUri) {
+        final String mimeType = getContentResolver().getType(documentUri);
+        return FileUtilities.isTemplateMimeType(mimeType);
     }
 
     public void saveFileToOriginalSource() {
