@@ -33,11 +33,6 @@ public class FileUtilities {
 
     static final int UNKNOWN = 10;
 
-    public static final String DEFAULT_WRITER_EXTENSION = ".odt";
-    public static final String DEFAULT_IMPRESS_EXTENSION = ".odp";
-    public static final String DEFAULT_SPREADSHEET_EXTENSION = ".ods";
-    public static final String DEFAULT_DRAWING_EXTENSION = ".odg";
-
     public static final String MIMETYPE_OPENDOCUMENT_TEXT = "application/vnd.oasis.opendocument.text";
     public static final String MIMETYPE_OPENDOCUMENT_SPREADSHEET = "application/vnd.oasis.opendocument.spreadsheet";
     public static final String MIMETYPE_OPENDOCUMENT_PRESENTATION = "application/vnd.oasis.opendocument.presentation";
