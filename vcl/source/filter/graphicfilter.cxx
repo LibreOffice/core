@@ -44,6 +44,7 @@
 #include "igif/gifread.hxx"
 #include <vcl/pdfread.hxx>
 #include "jpeg/jpeg.hxx"
+#include "png/png.hxx"
 #include "ixbm/xbmread.hxx"
 #include <filter/XpmReader.hxx>
 #include <filter/TiffReader.hxx>
@@ -545,6 +546,9 @@ struct GraphicImportContext
     std::shared_ptr<Graphic> m_pGraphic;
     /// Write pixel data using this access.
     std::unique_ptr<BitmapScopedWriteAccess> m_pAccess;
+    std::unique_ptr<AlphaScopedWriteAccess> m_pAlphaAccess;
+    // Need to have an AlphaMask instance to keep its lifetime.
+    AlphaMask mAlphaMask;
     /// Signals if import finished correctly.
     ErrCode m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
     /// Original graphic format.
@@ -581,10 +585,20 @@ void GraphicImportTask::doWork()
 
 void GraphicImportTask::doImport(GraphicImportContext& rContext)
 {
-    if (!ImportJPEG(*rContext.m_pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, rContext.m_pAccess.get()))
-        rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
-    else
-        rContext.m_eLinkType = GfxLinkType::NativeJpg;
+    if(rContext.m_eLinkType == GfxLinkType::NativeJpg)
+    {
+        if (!ImportJPEG(*rContext.m_pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, rContext.m_pAccess.get()))
+            rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
+    }
+    else if(rContext.m_eLinkType == GfxLinkType::NativePng)
+    {
+        if (!vcl::ImportPNG(*rContext.m_pStream, *rContext.m_pGraphic,
+            rContext.m_nImportFlags | GraphicFilterImportFlags::UseExistingBitmap,
+            rContext.m_pAccess.get(), rContext.m_pAlphaAccess.get()))
+        {
+            rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
+        }
+    }
 }
 
 void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGraphics, std::vector< std::unique_ptr<SvStream> > vStreams)
@@ -620,11 +634,10 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
 
                 if (aFilterName.equalsIgnoreAsciiCase(IMP_JPEG))
                 {
+                    rContext.m_eLinkType = GfxLinkType::NativeJpg;
                     rContext.m_nImportFlags = GraphicFilterImportFlags::SetLogsizeForJpeg;
 
-                    if (!ImportJPEG( *rContext.m_pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
-                        rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
-                    else
+                    if (ImportJPEG( *rContext.m_pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
                     {
                         Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pGraphic->GetBitmapExRef().GetBitmap());
                         rContext.m_pAccess = std::make_unique<BitmapScopedWriteAccess>(rBitmap);
@@ -634,6 +647,40 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                         else
                             GraphicImportTask::doImport(rContext);
                     }
+                    else
+                        rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
+                }
+                else if (aFilterName.equalsIgnoreAsciiCase(IMP_PNG))
+                {
+                    rContext.m_eLinkType = GfxLinkType::NativePng;
+
+                    if (vcl::ImportPNG( *rContext.m_pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr, nullptr))
+                    {
+                        const BitmapEx& rBitmapEx = rContext.m_pGraphic->GetBitmapExRef();
+                        Bitmap& rBitmap = const_cast<Bitmap&>(rBitmapEx.GetBitmap());
+                        rContext.m_pAccess = std::make_unique<BitmapScopedWriteAccess>(rBitmap);
+                        // The png reader either uses only Bitmap or Bitmap+AlphaMask.
+                        assert(rBitmapEx.IsAlpha() || !rBitmapEx.IsTransparent());
+                        if(rBitmapEx.IsAlpha())
+                        {
+                            // The separate alpha bitmap causes a number of complications. Not only
+                            // we need to have an extra bitmap access for it, but we also need
+                            // to keep an AlphaMask instance in the context. This is because
+                            // BitmapEx internally keeps Bitmap and not AlphaMask (because the Bitmap
+                            // may be also a mask, not alpha). So BitmapEx::GetAlpha() returns
+                            // a temporary, and direct access to the Bitmap wouldn't work
+                            // with AlphaScopedBitmapAccess. *sigh*
+                            rContext.mAlphaMask = rBitmapEx.GetAlpha();
+                            rContext.m_pAlphaAccess = std::make_unique<AlphaScopedWriteAccess>(rContext.mAlphaMask);
+                        }
+                        rContext.m_pStream->Seek(rContext.m_nStreamBegin);
+                        if (bThreads)
+                            rSharedPool.pushTask(std::make_unique<GraphicImportTask>(pTag, rContext));
+                        else
+                            GraphicImportTask::doImport(rContext);
+                    }
+                    else
+                        rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
                 }
                 else
                     rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
@@ -646,7 +693,10 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
     // Process data after import.
     for (auto& rContext : aContexts)
     {
+        if(rContext.m_pAlphaAccess) // Need to move the AlphaMask back to the BitmapEx.
+            *rContext.m_pGraphic = BitmapEx( rContext.m_pGraphic->GetBitmapExRef().GetBitmap(), rContext.mAlphaMask );
         rContext.m_pAccess.reset();
+        rContext.m_pAlphaAccess.reset();
 
         if (rContext.m_nStatus == ERRCODE_NONE && (rContext.m_eLinkType != GfxLinkType::NONE) && !rContext.m_pGraphic->GetReaderContext())
         {
@@ -686,16 +736,17 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
 
 void GraphicFilter::MakeGraphicsAvailableThreaded(std::vector<Graphic*>& graphics)
 {
-    // Graphic::makeAvailable() is not thread-safe. Only the jpeg loader is, so here
-    // we process only jpeg images that also have their stream data, load new Graphic's
+    // Graphic::makeAvailable() is not thread-safe. Only the jpeg and png loaders are, so here
+    // we process only jpeg and png images that also have their stream data, load new Graphic's
     // from them and then update the passed objects using them.
     std::vector< Graphic* > toLoad;
     for(auto graphic : graphics)
     {
         // Need to use GetSharedGfxLink, to access the pointer without copying.
         if(!graphic->isAvailable() && graphic->IsGfxLink()
-            && graphic->GetSharedGfxLink()->GetType() == GfxLinkType::NativeJpg
-            && graphic->GetSharedGfxLink()->GetDataSize() != 0 )
+            && graphic->GetSharedGfxLink()->GetDataSize() != 0
+            && (graphic->GetSharedGfxLink()->GetType() == GfxLinkType::NativeJpg
+                || graphic->GetSharedGfxLink()->GetType() == GfxLinkType::NativePng))
         {
             // Graphic objects share internal ImpGraphic, do not process any of those twice.
             const auto predicate = [graphic](Graphic* item) { return item->ImplGetImpGraphic() == graphic->ImplGetImpGraphic(); };

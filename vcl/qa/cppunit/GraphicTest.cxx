@@ -80,6 +80,8 @@ private:
     void testLoadPCX();
     void testLoadEPS();
 
+    void testAvailableThreaded();
+
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testUnloadedGraphic);
     CPPUNIT_TEST(testUnloadedGraphicLoading);
@@ -113,6 +115,8 @@ private:
     CPPUNIT_TEST(testLoadXPM);
     CPPUNIT_TEST(testLoadPCX);
     CPPUNIT_TEST(testLoadEPS);
+
+    CPPUNIT_TEST(testAvailableThreaded);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -245,6 +249,15 @@ Graphic loadGraphic(std::u16string_view const& rFilename)
         ERRCODE_NONE,
         rGraphicFilter.ImportGraphic(aGraphic, OUString(), aFileStream, GRFILTER_FORMAT_DONTKNOW));
     return aGraphic;
+}
+
+Graphic importUnloadedGraphic(std::u16string_view const& rFilename)
+{
+    test::Directories aDirectories;
+    OUString aFilename = aDirectories.getURLFromSrc(DATA_DIRECTORY) + rFilename;
+    SvFileStream aFileStream(aFilename, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    return rGraphicFilter.ImportUnloadedGraphic(aFileStream);
 }
 
 void GraphicTest::testUnloadedGraphic()
@@ -1217,6 +1230,21 @@ void GraphicTest::testLoadEPS()
 {
     Graphic aGraphic = loadGraphic(u"TypeDetectionExample.eps");
     CPPUNIT_ASSERT_EQUAL(GraphicType::GdiMetafile, aGraphic.GetType());
+}
+
+void GraphicTest::testAvailableThreaded()
+{
+    Graphic jpgGraphic1 = importUnloadedGraphic(u"TypeDetectionExample.jpg");
+    Graphic jpgGraphic2 = importUnloadedGraphic(u"Exif1.jpg");
+    Graphic pngGraphic1 = importUnloadedGraphic(u"TypeDetectionExample.png");
+    Graphic pngGraphic2 = importUnloadedGraphic(u"testBasicMorphology.png");
+    std::vector<Graphic*> graphics = { &jpgGraphic1, &jpgGraphic2, &pngGraphic1, &pngGraphic2 };
+    for (auto& graphic : graphics)
+        CPPUNIT_ASSERT(!graphic->isAvailable());
+    GraphicFilter& graphicFilter = GraphicFilter::GetGraphicFilter();
+    graphicFilter.MakeGraphicsAvailableThreaded(graphics);
+    for (auto& graphic : graphics)
+        CPPUNIT_ASSERT(graphic->isAvailable());
 }
 
 } // namespace
