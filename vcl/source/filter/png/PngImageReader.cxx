@@ -187,169 +187,156 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                         static_cast<sal_Int32>((100000.0 * height) / res_y));
     }
 
+    if (colorType == PNG_COLOR_TYPE_RGB)
     {
-        if (colorType == PNG_COLOR_TYPE_RGB)
+        aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
+        pWriteAccess = BitmapScopedWriteAccess(aBitmap);
+        if (!pWriteAccess)
         {
-            aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
-            {
-                pWriteAccess = BitmapScopedWriteAccess(aBitmap);
-                if (!pWriteAccess)
-                {
-                    png_destroy_read_struct(&pPng, &pInfo, nullptr);
-                    return false;
-                }
-                ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
-                if (eFormat == ScanlineFormat::N24BitTcBgr)
-                    png_set_bgr(pPng);
-
-                for (int pass = 0; pass < nNumberOfPasses; pass++)
-                {
-                    for (png_uint_32 y = 0; y < height; y++)
-                    {
-                        Scanline pScanline = pWriteAccess->GetScanline(y);
-                        png_read_row(pPng, pScanline, nullptr);
-                    }
-                }
-                pWriteAccess.reset();
-            }
-            rBitmapEx = BitmapEx(aBitmap);
+            png_destroy_read_struct(&pPng, &pInfo, nullptr);
+            return false;
         }
-        else if (colorType == PNG_COLOR_TYPE_RGB_ALPHA)
+        ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
+        if (eFormat == ScanlineFormat::N24BitTcBgr)
+            png_set_bgr(pPng);
+
+        for (int pass = 0; pass < nNumberOfPasses; pass++)
         {
-            size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
-
-            if (bUseBitmap32)
+            for (png_uint_32 y = 0; y < height; y++)
             {
-                aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N32_BPP);
-                {
-                    pWriteAccess = BitmapScopedWriteAccess(aBitmap);
-                    if (!pWriteAccess)
-                    {
-                        png_destroy_read_struct(&pPng, &pInfo, nullptr);
-                        return false;
-                    }
-                    ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
-                    if (eFormat == ScanlineFormat::N32BitTcAbgr
-                        || eFormat == ScanlineFormat::N32BitTcBgra)
-                    {
-                        png_set_bgr(pPng);
-                    }
+                Scanline pScanline = pWriteAccess->GetScanline(y);
+                png_read_row(pPng, pScanline, nullptr);
+            }
+        }
+        pWriteAccess.reset();
+        rBitmapEx = BitmapEx(aBitmap);
+    }
+    else if (colorType == PNG_COLOR_TYPE_RGB_ALPHA)
+    {
+        size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
 
-                    for (int pass = 0; pass < nNumberOfPasses; pass++)
-                    {
-                        for (png_uint_32 y = 0; y < height; y++)
-                        {
-                            Scanline pScanline = pWriteAccess->GetScanline(y);
-                            png_read_row(pPng, pScanline, nullptr);
-                        }
-                    }
-                    const vcl::bitmap::lookup_table& premultiply
-                        = vcl::bitmap::get_premultiply_table();
-                    if (eFormat == ScanlineFormat::N32BitTcAbgr
-                        || eFormat == ScanlineFormat::N32BitTcArgb)
-                    { // alpha first and premultiply
-                        for (png_uint_32 y = 0; y < height; y++)
-                        {
-                            Scanline pScanline = pWriteAccess->GetScanline(y);
-                            for (size_t i = 0; i < aRowSizeBytes; i += 4)
-                            {
-                                const sal_uInt8 alpha = pScanline[i + 3];
-                                pScanline[i + 3] = premultiply[alpha][pScanline[i + 2]];
-                                pScanline[i + 2] = premultiply[alpha][pScanline[i + 1]];
-                                pScanline[i + 1] = premultiply[alpha][pScanline[i]];
-                                pScanline[i] = alpha;
-                            }
-                        }
-                    }
-                    else
-                    { // keep alpha last, only premultiply
-                        for (png_uint_32 y = 0; y < height; y++)
-                        {
-                            Scanline pScanline = pWriteAccess->GetScanline(y);
-                            for (size_t i = 0; i < aRowSizeBytes; i += 4)
-                            {
-                                const sal_uInt8 alpha = pScanline[i + 3];
-                                pScanline[i] = premultiply[alpha][pScanline[i]];
-                                pScanline[i + 1] = premultiply[alpha][pScanline[i + 1]];
-                                pScanline[i + 2] = premultiply[alpha][pScanline[i + 2]];
-                            }
-                        }
-                    }
-                    pWriteAccess.reset();
+        if (bUseBitmap32)
+        {
+            aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N32_BPP);
+            pWriteAccess = BitmapScopedWriteAccess(aBitmap);
+            if (!pWriteAccess)
+            {
+                png_destroy_read_struct(&pPng, &pInfo, nullptr);
+                return false;
+            }
+            ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
+            if (eFormat == ScanlineFormat::N32BitTcAbgr || eFormat == ScanlineFormat::N32BitTcBgra)
+            {
+                png_set_bgr(pPng);
+            }
+
+            for (int pass = 0; pass < nNumberOfPasses; pass++)
+            {
+                for (png_uint_32 y = 0; y < height; y++)
+                {
+                    Scanline pScanline = pWriteAccess->GetScanline(y);
+                    png_read_row(pPng, pScanline, nullptr);
                 }
-                rBitmapEx = BitmapEx(aBitmap);
+            }
+            const vcl::bitmap::lookup_table& premultiply = vcl::bitmap::get_premultiply_table();
+            if (eFormat == ScanlineFormat::N32BitTcAbgr || eFormat == ScanlineFormat::N32BitTcArgb)
+            { // alpha first and premultiply
+                for (png_uint_32 y = 0; y < height; y++)
+                {
+                    Scanline pScanline = pWriteAccess->GetScanline(y);
+                    for (size_t i = 0; i < aRowSizeBytes; i += 4)
+                    {
+                        const sal_uInt8 alpha = pScanline[i + 3];
+                        pScanline[i + 3] = premultiply[alpha][pScanline[i + 2]];
+                        pScanline[i + 2] = premultiply[alpha][pScanline[i + 1]];
+                        pScanline[i + 1] = premultiply[alpha][pScanline[i]];
+                        pScanline[i] = alpha;
+                    }
+                }
             }
             else
-            {
-                aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
-                aBitmapAlpha = AlphaMask(Size(width, height), nullptr);
+            { // keep alpha last, only premultiply
+                for (png_uint_32 y = 0; y < height; y++)
                 {
-                    pWriteAccess = BitmapScopedWriteAccess(aBitmap);
-                    if (!pWriteAccess)
+                    Scanline pScanline = pWriteAccess->GetScanline(y);
+                    for (size_t i = 0; i < aRowSizeBytes; i += 4)
                     {
-                        png_destroy_read_struct(&pPng, &pInfo, nullptr);
-                        return false;
+                        const sal_uInt8 alpha = pScanline[i + 3];
+                        pScanline[i] = premultiply[alpha][pScanline[i]];
+                        pScanline[i + 1] = premultiply[alpha][pScanline[i + 1]];
+                        pScanline[i + 2] = premultiply[alpha][pScanline[i + 2]];
                     }
-                    ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
-                    if (eFormat == ScanlineFormat::N24BitTcBgr)
-                        png_set_bgr(pPng);
-
-                    pWriteAccessAlpha = AlphaScopedWriteAccess(aBitmapAlpha);
-
-                    aRows = std::vector<std::vector<png_byte>>(height);
-                    for (auto& rRow : aRows)
-                        rRow.resize(aRowSizeBytes, 0);
-
-                    for (int pass = 0; pass < nNumberOfPasses; pass++)
-                    {
-                        for (png_uint_32 y = 0; y < height; y++)
-                        {
-                            Scanline pScanline = pWriteAccess->GetScanline(y);
-                            Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
-                            png_bytep pRow = aRows[y].data();
-                            png_read_row(pPng, pRow, nullptr);
-                            size_t iAlpha = 0;
-                            size_t iColor = 0;
-                            for (size_t i = 0; i < aRowSizeBytes; i += 4)
-                            {
-                                pScanline[iColor++] = pRow[i + 0];
-                                pScanline[iColor++] = pRow[i + 1];
-                                pScanline[iColor++] = pRow[i + 2];
-                                pScanAlpha[iAlpha++] = 0xFF - pRow[i + 3];
-                            }
-                        }
-                    }
-                    pWriteAccess.reset();
-                    pWriteAccessAlpha.reset();
                 }
-                rBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
             }
-        }
-        else if (colorType == PNG_COLOR_TYPE_GRAY)
-        {
-            aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N8_BPP,
-                             &Bitmap::GetGreyPalette(256));
-            aBitmap.Erase(COL_WHITE);
-            {
-                pWriteAccess = BitmapScopedWriteAccess(aBitmap);
-                if (!pWriteAccess)
-                {
-                    png_destroy_read_struct(&pPng, &pInfo, nullptr);
-                    return false;
-                }
-
-                for (int pass = 0; pass < nNumberOfPasses; pass++)
-                {
-                    for (png_uint_32 y = 0; y < height; y++)
-                    {
-                        Scanline pScanline = pWriteAccess->GetScanline(y);
-                        png_read_row(pPng, pScanline, nullptr);
-                    }
-                }
-                pWriteAccess.reset();
-            }
+            pWriteAccess.reset();
             rBitmapEx = BitmapEx(aBitmap);
         }
+        else
+        {
+            aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
+            aBitmapAlpha = AlphaMask(Size(width, height), nullptr);
+            pWriteAccess = BitmapScopedWriteAccess(aBitmap);
+            if (!pWriteAccess)
+            {
+                png_destroy_read_struct(&pPng, &pInfo, nullptr);
+                return false;
+            }
+            ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
+            if (eFormat == ScanlineFormat::N24BitTcBgr)
+                png_set_bgr(pPng);
+
+            pWriteAccessAlpha = AlphaScopedWriteAccess(aBitmapAlpha);
+
+            aRows = std::vector<std::vector<png_byte>>(height);
+            for (auto& rRow : aRows)
+                rRow.resize(aRowSizeBytes, 0);
+
+            for (int pass = 0; pass < nNumberOfPasses; pass++)
+            {
+                for (png_uint_32 y = 0; y < height; y++)
+                {
+                    Scanline pScanline = pWriteAccess->GetScanline(y);
+                    Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
+                    png_bytep pRow = aRows[y].data();
+                    png_read_row(pPng, pRow, nullptr);
+                    size_t iAlpha = 0;
+                    size_t iColor = 0;
+                    for (size_t i = 0; i < aRowSizeBytes; i += 4)
+                    {
+                        pScanline[iColor++] = pRow[i + 0];
+                        pScanline[iColor++] = pRow[i + 1];
+                        pScanline[iColor++] = pRow[i + 2];
+                        pScanAlpha[iAlpha++] = 0xFF - pRow[i + 3];
+                    }
+                }
+            }
+            pWriteAccess.reset();
+            pWriteAccessAlpha.reset();
+            rBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
+        }
+    }
+    else if (colorType == PNG_COLOR_TYPE_GRAY)
+    {
+        aBitmap
+            = Bitmap(Size(width, height), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
+        aBitmap.Erase(COL_WHITE);
+        pWriteAccess = BitmapScopedWriteAccess(aBitmap);
+        if (!pWriteAccess)
+        {
+            png_destroy_read_struct(&pPng, &pInfo, nullptr);
+            return false;
+        }
+
+        for (int pass = 0; pass < nNumberOfPasses; pass++)
+        {
+            for (png_uint_32 y = 0; y < height; y++)
+            {
+                Scanline pScanline = pWriteAccess->GetScanline(y);
+                png_read_row(pPng, pScanline, nullptr);
+            }
+        }
+        pWriteAccess.reset();
+        rBitmapEx = BitmapEx(aBitmap);
     }
 
     png_read_end(pPng, pInfo);
