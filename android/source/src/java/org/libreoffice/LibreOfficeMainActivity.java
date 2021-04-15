@@ -282,7 +282,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     private boolean copyFileToTemp() {
-        final ContentResolver contentResolver = getContentResolver();
         // CSV files need a .csv suffix to be opened in Calc.
         String suffix = null;
         String intentType = getIntent().getType();
@@ -293,36 +292,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         try {
             mTempFile = File.createTempFile("LibreOffice", suffix, this.getCacheDir());
             final FileOutputStream outputStream = new FileOutputStream(mTempFile);
-            // need to run copy operation in a separate thread, since network access is not
-            // allowed from main thread, but that may happen here when underlying
-            // DocumentsProvider (like the NextCloud one) does that
-            class CopyThread extends Thread {
-                /** Whether copy operation was successful. */
-                private boolean result = false;
-
-                @Override
-                public void run() {
-                    result = false;
-                    try {
-                        InputStream inputStream = contentResolver.openInputStream(mDocumentUri);
-                        result = copyStream(inputStream, outputStream);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                }
-            };
-            CopyThread copyThread = new CopyThread();
-            copyThread.start();
-            try {
-                // wait for copy operation to finish
-                // NOTE: might be useful to add some indicator in UI for long copy operations involving network...
-                copyThread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            return copyThread.result;
+            return copyUriToStream(mDocumentUri, outputStream);
         } catch (FileNotFoundException e) {
             return false;
         } catch (IOException e) {
@@ -913,6 +883,43 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Copies everything from the given Uri to the given OutputStream
+     * and closes the OutputStream in the end.
+     * The copy operation runs in a separate thread, but the method only returns
+     * after the thread has finished its execution.
+     * This can be used to copy in a blocking way when network access is involved,
+     * which is not allowed from the main thread, but that may happen when an underlying
+     * DocumentsProvider (like the NextCloud one) does network access.
+     */
+    private boolean copyUriToStream(final Uri inputUri, final OutputStream outputStream) {
+        class CopyThread extends Thread {
+            /** Whether copy operation was successful. */
+            private boolean result = false;
+
+            @Override
+            public void run() {
+                final ContentResolver contentResolver = getContentResolver();
+                try {
+                    InputStream inputStream = contentResolver.openInputStream(inputUri);
+                    result = copyStream(inputStream, outputStream);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        CopyThread copyThread = new CopyThread();
+        copyThread.start();
+        try {
+            // wait for copy operation to finish
+            // NOTE: might be useful to add some indicator in UI for long copy operations involving network...
+            copyThread.join();
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+        return copyThread.result;
     }
 
     public void showCustomStatusMessage(String message){
