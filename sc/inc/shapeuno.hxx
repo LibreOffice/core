@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -48,6 +49,7 @@ class  ScMacroInfo;
 
 typedef ::cppu::WeakImplHelper <   css::beans::XPropertySet
                                 ,   css::beans::XPropertyState
+                                ,   css::beans::XPropertySetInfo
                                 ,   css::text::XTextContent
                                 ,   css::document::XEventsSupplier
                                 ,   css::lang::XServiceInfo
@@ -66,7 +68,7 @@ private:
     // cached pointers to avoid repeated queryAggregation calls:
     css::beans::XPropertySet*                                  pShapePropertySet;
     css::beans::XPropertyState*                                pShapePropertyState;
-    css::uno::Reference< css::beans::XPropertySetInfo >        mxPropSetInfo;
+    css::beans::XPropertySetInfo*                              mpShapePropertySetInfo = nullptr;
     bool                                                       bIsTextShape;
     bool                                                       bIsNoteCaption;
 
@@ -74,6 +76,7 @@ private:
 
     void                    GetShapePropertySet();
     void                    GetShapePropertyState();
+    void                    GetShapePropertySetInfo();
 
 friend class ShapeUnoEventAccessImpl;
 
@@ -113,6 +116,11 @@ public:
                             getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void SAL_CALL   setPropertyToDefault( const OUString& PropertyName ) override;
     virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+
+    // XPropertySetInfo
+    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
+    virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
                             // XTextContent
     virtual void SAL_CALL   attach(const css::uno::Reference< css::text::XTextRange > & xTextRange) override;
