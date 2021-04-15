@@ -521,8 +521,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
         {
             // input less than a byte - copy via GetPixel()
             *pOutBuf++ = m_pBmpAcc->GetPixelIndex(pos.Y,pos.X);
-            // convert alpha to transparency to preserve UNO compat
-            *pOutBuf   = 255 - m_pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
+            *pOutBuf   = m_pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
         }
         else
         {
@@ -532,8 +531,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
             // input integer multiple of byte - copy directly
             memcpy(pOutBuf, pScan+nScanlineLeftOffset, nNonAlphaBytes );
             pOutBuf += nNonAlphaBytes;
-            // convert alpha to transparency to preserve UNO compat
-            *pOutBuf++ = 255 - m_pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
+            *pOutBuf++ = m_pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
         }
     }
 
@@ -1278,7 +1276,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( co
 
             m_pBmpAcc->SetPixelOnData(pColors,i,aCol2);
             pColors   += nNonAlphaBytes;
-            *pColors++ = toByteColor(rgbColor[i].Alpha);
+            *pColors++ = 255 - toByteColor(rgbColor[i].Alpha);
         }
     }
     else
@@ -1328,7 +1326,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( c
 
             m_pBmpAcc->SetPixelOnData(pColors,i,aCol2);
             pColors   += nNonAlphaBytes;
-            *pColors++ = toByteColor(nAlpha);
+            *pColors++ = 255 - toByteColor(nAlpha);
         }
     }
     else

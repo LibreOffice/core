@@ -46,7 +46,7 @@ public:
 
     virtual void writePixel(Color nColor) override
     {
-        *pData++ = nColor.GetAlpha();
+        *pData++ = 255 - nColor.GetAlpha();
         *pData++ = nColor.GetRed();
         *pData++ = nColor.GetGreen();
         *pData++ = nColor.GetBlue();
