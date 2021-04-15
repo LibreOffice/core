@@ -1249,7 +1249,7 @@ void SwWW8AttrIter::SplitRun( sal_Int32 nSplitEndPos )
     nCurrentSwPos = SearchNext(1);
 }
 
-void WW8AttributeOutput::FieldVanish( const OUString& rText, ww::eField /*eType*/ )
+void WW8AttributeOutput::FieldVanish(const OUString& rText, ww::eField /*eType*/, OUString const*const)
 {
     ww::bytes aItems;
     m_rWW8Export.GetCurrentItems( aItems );
@@ -1327,7 +1327,15 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
     }
 
     if (!sText.isEmpty())
-        FieldVanish( sText, eType );
+    {
+        OUString const* pBookmarkName(nullptr);
+        if (auto const it = GetExport().m_TOXMarkBookmarksByTOXMark.find(&rAttr);
+            it != GetExport().m_TOXMarkBookmarksByTOXMark.end())
+        {
+            pBookmarkName = &it->second;
+        }
+        FieldVanish(sText, eType, pBookmarkName);
+    }
 }
 
 int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)

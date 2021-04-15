@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_TOX_HXX
 
 #include <vector>
+#include <optional>
 
 #include <cppuhelper/weakref.hxx>
 #include <editeng/svxenum.hxx>
@@ -69,6 +70,8 @@ namespace sw {
         const SwRootFrame* m_pLayout;
         CollectTextTOXMarksForLayoutHint(std::vector<std::reference_wrapper<SwTextTOXMark>>& rMarks, const SwRootFrame* pLayout) : m_rMarks(rMarks), m_pLayout(pLayout) {}
     };
+    SW_DLLPUBLIC auto PrepareJumpToTOXMark(SwDoc const& rDoc, OUString const& rName)
+        -> std::optional<std::pair<SwTOXMark, sal_Int32>>;
 }
 
 // Entry of content index, alphabetical index or user defined index

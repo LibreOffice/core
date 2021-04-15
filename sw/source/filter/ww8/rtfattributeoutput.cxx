@@ -600,7 +600,8 @@ bool RtfAttributeOutput::EndURL(bool const isAtEndOfParagraph)
     return true;
 }
 
-void RtfAttributeOutput::FieldVanish(const OUString& /*rText*/, ww::eField /*eType*/)
+void RtfAttributeOutput::FieldVanish(const OUString& /*rText*/, ww::eField /*eType*/,
+                                     OUString const*)
 {
     SAL_INFO("sw.rtf", "TODO: " << __func__);
 }

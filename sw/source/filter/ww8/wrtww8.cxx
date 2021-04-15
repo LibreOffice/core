@@ -3215,6 +3215,27 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
             }
         }
     }
+    else if (sCmp == "toxmark")
+    {
+        OUString const name(aURL.copy(0, nPos));
+        OUString const nameDecoded(INetURLObject::decode(name,
+                               INetURLObject::DecodeMechanism::WithCharset));
+        std::optional<std::pair<SwTOXMark, sal_Int32>> const tmp(
+            sw::PrepareJumpToTOXMark(m_rDoc, nameDecoded));
+        if (tmp)
+        {
+            SwTOXMark const* pMark(&tmp->first);
+            for (sal_Int32 i = 0; i < tmp->second; ++i)
+            {
+                pMark = &m_rDoc.GotoTOXMark(*pMark, TOX_SAME_NXT, true);
+            }
+            if (pMark != &tmp->first)
+            {
+                m_TOXMarkBookmarksByURL.emplace(aURL, name);
+                m_TOXMarkBookmarksByTOXMark.emplace(pMark, nameDecoded);
+            }
+        }
+    }
     if (noBookmark)
     {
         aBookmarkPair aImplicitBookmark;

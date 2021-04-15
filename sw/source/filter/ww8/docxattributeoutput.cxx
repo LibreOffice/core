@@ -1451,6 +1451,16 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
         }
         if (pIt->bSep && !pIt->pField)
         {
+            // for TOXMark:
+            // Word ignores bookmarks in field result that is empty;
+            // work around this by writing bookmark into field command.
+            if (!m_sFieldBkm.isEmpty())
+            {
+                DoWriteBookmarkTagStart(m_sFieldBkm);
+                DoWriteBookmarkTagEnd(m_nNextBookmarkId);
+                m_nNextBookmarkId++;
+                m_sFieldBkm.clear();
+            }
             CmdEndField_Impl(pNode, nPos, true);
             // Remove the field if no end needs to be written
             if (!pIt->bClose)
@@ -2370,13 +2380,21 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
     // Write the ref field if a bookmark had to be set and the field
     // should be visible
     if ( !rInfos.pField )
+    {
+        m_sFieldBkm.clear();
         return;
+    }
 
     sal_uInt16 nSubType = rInfos.pField->GetSubType( );
     bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == SwFieldIds::SetExp;
     bool bShowRef = bIsSetField && ( nSubType & nsSwExtendedSubType::SUB_INVISIBLE ) == 0;
 
-    if ( m_sFieldBkm.isEmpty() || !bShowRef )
+    if (!bShowRef)
+    {
+        m_sFieldBkm.clear();
+    }
+
+    if (m_sFieldBkm.isEmpty())
         return;
 
     // Write the field beginning
@@ -3059,6 +3077,14 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
                     }
                 }
             }
+            else if (sMark.endsWith("|toxmark"))
+            {
+                if (auto const it = GetExport().m_TOXMarkBookmarksByURL.find(sMark);
+                    it != GetExport().m_TOXMarkBookmarksByURL.end())
+                {
+                    sMark = it->second;
+                }
+            }
             // Spaces are prohibited in bookmark name.
             sMark = sMark.replace(' ', '_');
             m_pHyperlinkAttrList->add( FSNS( XML_w, XML_anchor ),
@@ -3085,9 +3111,10 @@ bool DocxAttributeOutput::EndURL(bool const)
     return true;
 }
 
-void DocxAttributeOutput::FieldVanish( const OUString& rText, ww::eField eType )
+void DocxAttributeOutput::FieldVanish(const OUString& rText,
+        ww::eField const eType, OUString const*const pBookmarkName)
 {
-    WriteField_Impl( nullptr, eType, rText, FieldFlags::All );
+    WriteField_Impl(nullptr, eType, rText, FieldFlags::All, pBookmarkName);
 }
 
 // The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
@@ -8044,7 +8071,9 @@ void DocxAttributeOutput::WriteExpand( const SwField* pField )
     m_rExport.OutputField( pField, ww::eUNKNOWN, OUString() );
 }
 
-void DocxAttributeOutput::WriteField_Impl( const SwField* pField, ww::eField eType, const OUString& rFieldCmd, FieldFlags nMode )
+void DocxAttributeOutput::WriteField_Impl(const SwField *const pField,
+    ww::eField const eType, const OUString& rFieldCmd, FieldFlags const nMode,
+    OUString const*const pBookmarkName)
 {
     if (m_bPreventDoubleFieldsHandling)
         return;
@@ -8058,6 +8087,11 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pField, ww::eField eTy
     infos.bSep = bool(FieldFlags::CmdEnd & nMode);
     infos.bOpen = bool(FieldFlags::Start & nMode);
     m_Fields.push_back( infos );
+
+    if (pBookmarkName)
+    {
+        m_sFieldBkm = *pBookmarkName;
+    }
 
     if ( !pField )
         return;

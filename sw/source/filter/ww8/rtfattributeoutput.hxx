@@ -103,7 +103,7 @@ public:
     /// Output URL end.
     bool EndURL(bool isAtEndOfParagraph) override;
 
-    void FieldVanish(const OUString& rText, ww::eField eType) override;
+    void FieldVanish(const OUString& rText, ww::eField eType, OUString const*) override;
 
     /// Output redlining.
     ///

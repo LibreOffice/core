@@ -182,7 +182,7 @@ public:
     /// Output URL end.
     virtual bool EndURL(bool) override;
 
-    virtual void FieldVanish( const OUString& rText, ww::eField eType ) override;
+    virtual void FieldVanish(const OUString& rText, ww::eField eType, OUString const*) override;
 
     /// Output redlining.
     ///
@@ -356,7 +356,9 @@ public:
         const OUString &rNumberingString,
         const SvxBrushItem* pBrush ) override;
 
-    void WriteField_Impl( const SwField* pField, ww::eField eType, const OUString& rFieldCmd, FieldFlags nMode );
+    void WriteField_Impl(const SwField* pField, ww::eField eType,
+            const OUString& rFieldCmd, FieldFlags nMode,
+            OUString const* pBookmarkName = nullptr);
     void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
 
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
