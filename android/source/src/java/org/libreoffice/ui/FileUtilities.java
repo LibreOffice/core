@@ -38,6 +38,11 @@ public class FileUtilities {
     public static final String DEFAULT_SPREADSHEET_EXTENSION = ".ods";
     public static final String DEFAULT_DRAWING_EXTENSION = ".odg";
 
+    public static final String MIMETYPE_OPENDOCUMENT_TEXT = "application/vnd.oasis.opendocument.text";
+    public static final String MIMETYPE_OPENDOCUMENT_SPREADSHEET = "application/vnd.oasis.opendocument.spreadsheet";
+    public static final String MIMETYPE_OPENDOCUMENT_PRESENTATION = "application/vnd.oasis.opendocument.presentation";
+    public static final String MIMETYPE_OPENDOCUMENT_GRAPHICS = "application/vnd.oasis.opendocument.graphics";
+
     private static final Map<String, Integer> mExtnMap = new HashMap<String, Integer>();
     private static final Map<String, String> extensionToMimeTypeMap = new HashMap<String, String>();
     static {
@@ -101,14 +106,14 @@ public class FileUtilities {
         // Android's MimeTypeMap lacks some types that we need
         extensionToMimeTypeMap.put("odb", "application/vnd.oasis.opendocument.database");
         extensionToMimeTypeMap.put("odf", "application/vnd.oasis.opendocument.formula");
-        extensionToMimeTypeMap.put("odg", "application/vnd.oasis.opendocument.graphics");
+        extensionToMimeTypeMap.put("odg", MIMETYPE_OPENDOCUMENT_GRAPHICS);
         extensionToMimeTypeMap.put("otg", "application/vnd.oasis.opendocument.graphics-template");
         extensionToMimeTypeMap.put("odi", "application/vnd.oasis.opendocument.image");
-        extensionToMimeTypeMap.put("odp", "application/vnd.oasis.opendocument.presentation");
+        extensionToMimeTypeMap.put("odp", MIMETYPE_OPENDOCUMENT_PRESENTATION);
         extensionToMimeTypeMap.put("otp", "application/vnd.oasis.opendocument.presentation-template");
-        extensionToMimeTypeMap.put("ods", "application/vnd.oasis.opendocument.spreadsheet");
+        extensionToMimeTypeMap.put("ods", MIMETYPE_OPENDOCUMENT_SPREADSHEET);
         extensionToMimeTypeMap.put("ots", "application/vnd.oasis.opendocument.spreadsheet-template");
-        extensionToMimeTypeMap.put("odt", "application/vnd.oasis.opendocument.text");
+        extensionToMimeTypeMap.put("odt", MIMETYPE_OPENDOCUMENT_TEXT);
         extensionToMimeTypeMap.put("odm", "application/vnd.oasis.opendocument.text-master");
         extensionToMimeTypeMap.put("ott", "application/vnd.oasis.opendocument.text-template");
         extensionToMimeTypeMap.put("oth", "application/vnd.oasis.opendocument.text-web");
