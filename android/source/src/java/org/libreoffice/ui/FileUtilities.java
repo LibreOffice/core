@@ -157,6 +157,14 @@ public class FileUtilities {
     }
 
     /**
+     * Returns whether the passed MIME type is one for a document template.
+     */
+    public static boolean isTemplateMimeType(final String mimeType) {
+        // this works for ODF and OOXML template MIME types
+        return mimeType.endsWith("template");
+    }
+
+    /**
      * Tries to retrieve the display (which should be the document name)
      * for the given URI using the given resolver.
      */
