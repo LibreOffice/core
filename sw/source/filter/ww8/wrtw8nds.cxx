@@ -2594,7 +2594,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
                 if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )
                 {
-                    bPostponeWritingText = true ;
                     aSavedSnippet = aSnippet ;
                 }
                 else
