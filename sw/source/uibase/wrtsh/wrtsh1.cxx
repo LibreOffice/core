@@ -1994,12 +1994,12 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
 }
 bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
 {
-    const SwNodes& rNodes = GetDoc()->GetNodes();
-    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+    SwNode* pOutlineNode = GetDoc()->GetNodes().GetOutLineNds()[nPos];
 
-    SwNode* pOutlineNode = rOutlineNodes[nPos];
-    if (pOutlineNode->IsEndNode())
-        return true;
+    // no layout frame means outline folding is set to include sub levels and the outline node has
+    // a parent outline node with outline content visible attribute false (folded outline content)
+    if (!pOutlineNode->GetTextNode()->getLayoutFrame(nullptr))
+        return false;
 
     bool bOutlineContentVisibleAttr = false;
     if (pOutlineNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr))
