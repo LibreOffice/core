@@ -30,6 +30,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdetc.hxx>
 
+#include <svx/sdr/table/tablecontroller.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdview.hxx>
 #include <editeng/flditem.hxx>
@@ -1338,7 +1339,33 @@ void SdrView::MarkAll()
         GetTextEditOutlinerView()->SetSelection(ESelection(0,0,EE_PARA_ALL,EE_TEXTPOS_ALL));
     } else if (IsGluePointEditMode()) MarkAllGluePoints();
     else if (HasMarkablePoints()) MarkAllPoints();
-    else MarkAllObj();
+    else {
+        // check for table
+        bool bMarkAll = true;
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
+        if (rMarkList.GetMarkCount() == 1)
+        {
+            const SdrObject* pObj(rMarkList.GetMark(0)->GetMarkedSdrObj());
+            SdrView* pView = this;
+            if (pObj && pView && (pObj->GetObjInventor() == SdrInventor::Default)
+                && (pObj->GetObjIdentifier() == OBJ_TABLE))
+            {
+                mxSelectionController.clear();
+                mxSelectionController = sdr::table::CreateTableController(
+                    *pView, static_cast<const sdr::table::SdrTableObj&>(*pObj),
+                    mxLastSelectionController);
+
+                if (mxSelectionController.is())
+                {
+                    mxLastSelectionController.clear();
+                    mxSelectionController->onSelectAll();
+                    bMarkAll = false;
+                }
+            }
+        }
+        if ( bMarkAll )
+            MarkAllObj();
+    }
 }
 
 void SdrView::UnmarkAll()
