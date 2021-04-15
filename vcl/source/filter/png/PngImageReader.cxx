@@ -58,6 +58,13 @@ bool isPng(SvStream& rStream)
     return png_sig_cmp(aHeader, 0, PNG_SIGNATURE_SIZE) == 0;
 }
 
+struct PngDestructor
+{
+    ~PngDestructor() { png_destroy_read_struct(&pPng, &pInfo, nullptr); }
+    png_structp pPng;
+    png_infop pInfo;
+};
+
 bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
 {
     if (!isPng(rStream))
@@ -74,6 +81,8 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
         return false;
     }
 
+    PngDestructor pngDestructor = { pPng, pInfo };
+
     // All variables holding resources need to be declared here in order to be
     // properly cleaned up in case of an error, otherwise libpng's longjmp()
     // jumps over the destructor calls.
@@ -86,7 +95,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
 
     if (setjmp(png_jmpbuf(pPng)))
     {
-        png_destroy_read_struct(&pPng, &pInfo, nullptr);
         // Set the bitmap if it contains something, even on failure. This allows
         // reading images that are only partially broken.
         pWriteAccess.reset();
@@ -126,10 +134,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                                            &interlace, nullptr, nullptr);
 
     if (returnValue != 1)
-    {
-        png_destroy_read_struct(&pPng, &pInfo, nullptr);
         return false;
-    }
 
     if (colorType == PNG_COLOR_TYPE_PALETTE)
         png_set_palette_to_rgb(pPng);
@@ -163,16 +168,12 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                                nullptr, nullptr);
 
     if (returnValue != 1)
-    {
-        png_destroy_read_struct(&pPng, &pInfo, nullptr);
         return false;
-    }
 
     if (bitDepth != 8
         || (colorType != PNG_COLOR_TYPE_RGB && colorType != PNG_COLOR_TYPE_RGB_ALPHA
             && colorType != PNG_COLOR_TYPE_GRAY))
     {
-        png_destroy_read_struct(&pPng, &pInfo, nullptr);
         return false;
     }
 
@@ -192,10 +193,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
         aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
         pWriteAccess = BitmapScopedWriteAccess(aBitmap);
         if (!pWriteAccess)
-        {
-            png_destroy_read_struct(&pPng, &pInfo, nullptr);
             return false;
-        }
         ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
         if (eFormat == ScanlineFormat::N24BitTcBgr)
             png_set_bgr(pPng);
@@ -220,10 +218,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
             aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N32_BPP);
             pWriteAccess = BitmapScopedWriteAccess(aBitmap);
             if (!pWriteAccess)
-            {
-                png_destroy_read_struct(&pPng, &pInfo, nullptr);
                 return false;
-            }
             ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
             if (eFormat == ScanlineFormat::N32BitTcAbgr || eFormat == ScanlineFormat::N32BitTcBgra)
             {
@@ -277,10 +272,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
             aBitmapAlpha = AlphaMask(Size(width, height), nullptr);
             pWriteAccess = BitmapScopedWriteAccess(aBitmap);
             if (!pWriteAccess)
-            {
-                png_destroy_read_struct(&pPng, &pInfo, nullptr);
                 return false;
-            }
             ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
             if (eFormat == ScanlineFormat::N24BitTcBgr)
                 png_set_bgr(pPng);
@@ -322,10 +314,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
         aBitmap.Erase(COL_WHITE);
         pWriteAccess = BitmapScopedWriteAccess(aBitmap);
         if (!pWriteAccess)
-        {
-            png_destroy_read_struct(&pPng, &pInfo, nullptr);
             return false;
-        }
 
         for (int pass = 0; pass < nNumberOfPasses; pass++)
         {
@@ -340,8 +329,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
     }
 
     png_read_end(pPng, pInfo);
-
-    png_destroy_read_struct(&pPng, &pInfo, nullptr);
 
     if (!prefSize.IsEmpty())
     {
