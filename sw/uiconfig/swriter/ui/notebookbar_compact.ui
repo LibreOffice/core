@@ -1697,10 +1697,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="UpdateAllD">
+      <object class="GtkMenuItem" id="RepaginateD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:UpdateAll</property>
+        <property name="action_name">.uno:Repaginate</property>
       </object>
     </child>
     <child>
@@ -1708,6 +1708,34 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:UpdateFields</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="UpdateAllIndexesD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:UpdateAllIndexes</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="UpdateCurIndexD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:UpdateCurIndex</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="UpdateAllLinksD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:UpdateAllLinks</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="UpdateChartsD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:UpdateCharts</property>
       </object>
     </child>
   </object>
