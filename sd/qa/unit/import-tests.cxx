@@ -119,6 +119,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testInternalHyperlink();
     void testHyperlinkColor();
     void testSmoketest();
     void testTdf131269();
@@ -236,6 +237,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testInternalHyperlink);
     CPPUNIT_TEST(testHyperlinkColor);
     CPPUNIT_TEST(testSmoketest);
     CPPUNIT_TEST(testTdf131269);
@@ -427,6 +429,32 @@ void SdImportTest::testDocumentLayout()
                 OUString(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump )),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testInternalHyperlink()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf65724.pptx"), PPTX);
+
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 1, 0, xDocShRef ) );
+
+    // Get first paragraph
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
+
+    // first chunk of text
+    uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+
+    uno::Reference<text::XTextField> xField;
+    xPropSet->getPropertyValue("TextField") >>= xField;
+    CPPUNIT_ASSERT_MESSAGE("The text field is missing!", xField.is() );
+
+    xPropSet.set(xField, uno::UNO_QUERY);
+    OUString aURL;
+    xPropSet->getPropertyValue("URL") >>= aURL;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("URLs don't match", OUString("#Slide2"), aURL);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testHyperlinkColor()
