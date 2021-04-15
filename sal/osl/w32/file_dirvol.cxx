@@ -890,7 +890,7 @@ static oslFileError osl_getNextFileItem(
         rtl_uString_newConcat( &pItemImpl->m_pFullPath, pDirImpl->m_pDirectoryPath, pTmpFileName );
         rtl_uString_release( pTmpFileName );
 
-        pItemImpl->bFullPathNormalized = false;
+        pItemImpl->bFullPathNormalized = true;
         *pItem = static_cast<oslDirectoryItem>(pItemImpl);
         return osl_File_E_None;
     }
