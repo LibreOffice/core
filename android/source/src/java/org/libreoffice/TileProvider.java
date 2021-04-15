@@ -86,6 +86,11 @@ public interface TileProvider {
     void close();
 
     /**
+     * Returns true if the current open document is a drawing.
+     */
+    boolean isDrawing();
+
+    /**
      * Returns true if the current open document is a text document.
      */
     boolean isTextDocument();

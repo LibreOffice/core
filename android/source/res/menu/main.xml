@@ -36,6 +36,10 @@
             android:title="@string/action_save"
             android:orderInCategory="100" />
 
+        <item android:id="@+id/action_save_as"
+            android:title="@string/action_save_as"
+            android:orderInCategory="100" />
+
         <item android:id="@+id/action_exportToPDF"
             android:title="@string/action_exportToPDF"
             android:orderInCategory="100"

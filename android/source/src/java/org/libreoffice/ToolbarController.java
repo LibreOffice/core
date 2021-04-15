@@ -174,6 +174,9 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
             case R.id.action_save:
                 mContext.getTileProvider().saveDocument();
                 return true;
+            case R.id.action_save_as:
+                mContext.saveDocumentAs();
+                return true;
             case R.id.action_parts:
                 mContext.openDrawer();
                 return true;
