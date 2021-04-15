@@ -152,9 +152,9 @@
     <string name="current_uno_command">Current UNO command</string>
     <string name="display_language">Display Language</string>
     <string name="display_language_summary">Set the default display language</string>
+    <string name="pdf_export_finished">PDF export finished</string>
     <string name="unable_to_export_pdf">Unable to export to pdf</string>
     <string name="unable_to_save">Unable to save file</string>
-    <string name="pdf_exported_at">Exported to PDF at</string>
     <string name="printing_not_supported">Your device does not support printing</string>
     <string name="creating_new_files_not_supported">Creating new files not supported on this device, requires Android SDK version >= 19.</string>
     <string name="error">Error</string>
