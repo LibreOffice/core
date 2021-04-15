@@ -395,7 +395,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
     return nMinPos;
 }
 
-void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bWriteCombChars)
+void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars, bool bPostponeSingleUse)
 {
     m_rExport.AttrOutput().RTLAndCJKState( mbCharIsRTL, GetScript() );
 
@@ -459,6 +459,13 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bWriteCombChars)
                         }
                         nWhichId = aIter.NextWhich();
                     }
+                }
+                else if (bPostponeSingleUse &&
+                         (nWhich == RES_TXTATR_FTN || nWhich == RES_TXTATR_ANNOTATION || nWhich == RES_TXTATR_FIELD))
+                {
+                    // Do not duplicate these multiple times when the character run is split.
+                    // Skip this time - it will be attempted later.
+                    // ?? also RES_TXTATR_REFMARK: RES_TXTATR_TOXMARK: RES_TXTATR_META: RES_TXTATR_METAFIELD: ??
                 }
                 else
                     aRangeItems[nWhich] = (&(pHt->GetAttr()));
@@ -2613,7 +2620,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 // Output the character attributes
                 // #i51277# do this before writing flys at end of paragraph
                 AttrOutput().StartRunProperties();
-                aAttrIter.OutAttr( nCurrentPos, false );
+                aAttrIter.OutAttr(nCurrentPos, false, bPostponeWritingText);
                 AttrOutput().EndRunProperties( pRedlineData );
             }
 

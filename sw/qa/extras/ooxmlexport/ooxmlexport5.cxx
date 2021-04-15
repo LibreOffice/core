@@ -131,6 +131,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79008, "fdo79008.docx")
      */
     parseExport("word/document.xml");
 
+    // tdf#134951: there is only one comment
+    xmlDocUniquePtr pXmlSettings = parseExport("word/comments.xml");
+    assertXPath(pXmlSettings, "/w:comments/w:comment", 1);
+
     // Read-only is set, but it is not enforced, so it should be off...
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
