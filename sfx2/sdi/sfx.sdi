@@ -4900,21 +4900,6 @@ SfxVoidItem SendFeedback SID_SEND_FEEDBACK
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Application;
 ]
-SfxVoidItem QuestionAnswers SID_Q_AND_A
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    GroupId = SfxGroupId::Application;
-]
 SfxVoidItem Documentation SID_DOCUMENTATION
 ()
 [
