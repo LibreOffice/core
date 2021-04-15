@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7ce90f91_c48ea4ff",
+        "filename": "compilerplugins/clang/stringliteralvar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-15T08:39:43Z",
+      "side": 1,
+      "message": "please update this comment accordingly",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 51
+      },
+      "revId": "67ae928ef2e647085b4970884f21e4b9daf5fd1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c97ba0b6_a8fd8042",
         "filename": "compilerplugins/clang/stringliteralvar.cxx",
         "patchSetId": 1
