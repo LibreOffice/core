@@ -1902,9 +1902,8 @@ void Shape::putPropertyToGrabBag( const OUString& sPropertyName, const Any& aPro
 void Shape::putPropertyToGrabBag( const PropertyValue& pProperty )
 {
     Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
-    Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
     const OUString aGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if( mxShape.is() && xSet.is() && xSetInfo.is() && xSetInfo->hasPropertyByName( aGrabBagPropName ) )
+    if( mxShape.is() && xSet.is() )
     {
         Sequence< PropertyValue > aGrabBag;
         xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
@@ -1920,9 +1919,8 @@ void Shape::putPropertyToGrabBag( const PropertyValue& pProperty )
 void Shape::putPropertiesToGrabBag( const Sequence< PropertyValue >& aProperties )
 {
     Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
-    Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
     const OUString aGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if( !(mxShape.is() && xSet.is() && xSetInfo.is() && xSetInfo->hasPropertyByName( aGrabBagPropName )) )
+    if( !(mxShape.is() && xSet.is()) )
         return;
 
     // get existing grab bag
