@@ -893,6 +893,8 @@ bool SwTabFrame::RemoveFollowFlowLine()
         return false;
     }
 
+    SAL_DEBUG("XXX RemoveFollowFlowLine " << pFollowFlowLine->GetFrameId() << " of " << GetFrameId());
+
     // We have to reset the flag here, because lcl_MoveRowContent
     // calls a GrowFrame(), which has a different behavior if
     // this flag is set.
@@ -1009,6 +1011,7 @@ static bool lcl_FindSectionsInRow( const SwRowFrame& rRow )
 
 bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep )
 {
+    SAL_DEBUG("XXX SwTabFrame::Split " << GetFrameId() << " " << nCutPos << " " << bTryToSplit);
     bool bRet = true;
 
     SwRectFnSet aRectFnSet(this);
@@ -1026,7 +1029,10 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     //They can definitely be invalid because of position changes of the table.
     SwRowFrame *pRow = static_cast<SwRowFrame*>(Lower());
     if( !pRow )
+    {
+        SAL_DEBUG("XXX SwTabFrame::Split " << GetFrameId() << " !pRow(1) -> true");
         return bRet;
+    }
 
     const sal_uInt16 nRepeat = GetTable()->GetRowsToRepeat();
     sal_uInt16 nRowCount = 0;           // pRow currently points to the first row
@@ -1088,6 +1094,8 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         // to fix interoperability problems (very long tables only with headline)
         OSL_ENSURE( !GetIndPrev(), "Table is supposed to be at beginning" );
         m_pTable->SetRowsToRepeat(0);
+
+        SAL_DEBUG("XXX SwTabFrame::Split " << GetFrameId() << " nRowCount<nRepeat -> false");
         return false;
     }
     else if ( !GetIndPrev() && nRepeat == nRowCount )
@@ -1134,7 +1142,10 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
 
     // No more row to split or to move to follow table:
     if ( !pRow )
+    {
+        SAL_DEBUG("XXX SwTabFrame::Split " << GetFrameId() << " !pRow(2) -> true");
         return bRet;
+    }
 
     // We try to split the row if
     // - the attributes of the row are set accordingly and
@@ -1171,7 +1182,10 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     {
         SwRowFrame* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
         if ( pRow == pFirstNonHeadlineRow )
+        {
+            SAL_DEBUG("XXX SwTabFrame::Split " << GetFrameId() << " pRow==pFirstNonHeadlineRow -> false");
             return false;
+        }
 
         // #i91764#
         // Ignore row span lines
@@ -1182,6 +1196,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         }
         if ( !pTmpRow || pRow == pTmpRow )
         {
+            SAL_DEBUG("XXX SwTabFrame::Split " << GetFrameId() << " !pTmpRow -> false");
             return false;
         }
     }
@@ -1351,6 +1366,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
             lcl_AdjustRowSpanCells( pFollowRow );
     }
 
+    SAL_DEBUG("XXX SwTabFrame::Split " << GetFrameId() << " exit -> " << bRet);
     return bRet;
 }
 
@@ -1855,6 +1871,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             return;
     }
 
+    SAL_DEBUG("XXX SwTabFrame::MakeAll enter " << this << " " << GetFrameId());
     PROTOCOL_ENTER( this, PROT::MakeAll, DbgAction::NONE, nullptr )
 
     LockJoin(); //I don't want to be destroyed on the way.
@@ -2712,6 +2729,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     UnlockJoin();
     if ( bMovedFwd || bMovedBwd || !bOldValidPos )
         aNotify.SetInvaKeep();
+    SAL_DEBUG("XXX SwTabFrame::MakeAll exit " << this << " " << GetFrameId());
 }
 
 static bool IsNextOnSamePage(SwPageFrame const& rPage,

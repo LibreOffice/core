@@ -308,6 +308,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
 
 bool SwObjectFormatterTextFrame::DoFormatObjs()
 {
+    SAL_DEBUG("XXX SwObjectFormatterTextFrame::DoFormatObjs enter " << mrAnchorTextFrame.GetFrameId());
     if ( !mrAnchorTextFrame.isFrameAreaDefinitionValid() )
     {
         if ( GetLayAction() &&
@@ -479,6 +480,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
         }
     }
 
+    SAL_DEBUG("XXX SwObjectFormatterTextFrame::DoFormatObjs exit  " << mrAnchorTextFrame.GetFrameId());
     return bSuccess;
 }
 
@@ -711,7 +713,7 @@ bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
                 {
                     if (pPageFrameOfAnchor->GetPhyPageNum() < pObjAnchorPage->GetPhyPageNum())
                     {
-                        SAL_INFO("sw.layout", "SwObjectFormatterTextFrame::CheckMovedFwdCondition(): o_rbPageHasFlysAnchoredBelowThis because next page");
+                        SAL_DEBUG(/*"sw.layout",*/ "SwObjectFormatterTextFrame::CheckMovedFwdCondition(): o_rbPageHasFlysAnchoredBelowThis because next page");
                         o_rbPageHasFlysAnchoredBelowThis = true;
                         break;
                     }
@@ -737,7 +739,7 @@ bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
                                     || FindTopLevelRowFrame(pInBodyFrameAnchoredObj)
                                         != FindTopLevelRowFrame(pInBodyFrameAnchoredObj))
                                 {   // anchored in next chain on same page
-                                    SAL_INFO("sw.layout", "SwObjectFormatterTextFrame::CheckMovedFwdCondition(): o_rbPageHasFlysAnchoredBelowThis because next chain on same page");
+                                    SAL_DEBUG(/*"sw.layout",*/ "SwObjectFormatterTextFrame::CheckMovedFwdCondition(): o_rbPageHasFlysAnchoredBelowThis because next chain on same page");
                                     o_rbPageHasFlysAnchoredBelowThis = true;
                                     isBreakMore = true;
                                 }

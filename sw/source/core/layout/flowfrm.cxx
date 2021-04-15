@@ -2051,6 +2051,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
         // situation.
         if( pNewUpper != m_rThis.GetUpper() )
         {
+            SAL_DEBUG("XXX MoveFwd " << m_rThis.GetFrameId() << " from " << m_rThis.GetUpper()->GetFrameId() << " to " << pNewUpper->GetFrameId());
             // i#27145
             SwSectionFrame* pOldSct = nullptr;
             if ( m_rThis.GetUpper()->IsSctFrame() )
@@ -2602,6 +2603,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
                 }
             }
         }
+        SAL_DEBUG("XXX MoveBwd " << m_rThis.GetFrameId() << " from " << m_rThis.GetUpper()->GetFrameId() << " to " << pNewUpper->GetFrameId());
         bool bUnlock = false;
         bool bFollow = false;
         // Lock section. Otherwise, it could get destroyed if the only Content

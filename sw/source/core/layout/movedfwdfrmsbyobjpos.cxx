@@ -36,11 +36,13 @@ SwMovedFwdFramesByObjPos::~SwMovedFwdFramesByObjPos()
 void SwMovedFwdFramesByObjPos::Insert( const SwTextFrame& _rMovedFwdFrameByObjPos,
                                      const sal_uInt32 _nToPageNum )
 {
+    SAL_DEBUG("XXX SwMovedFwdFramesByObjPos::Insert " << _rMovedFwdFrameByObjPos.GetFrameId() << " " << _nToPageNum);
     maMovedFwdFrames.emplace(_rMovedFwdFrameByObjPos.GetTextNodeFirst(), _nToPageNum);
 }
 
 void SwMovedFwdFramesByObjPos::Remove( const SwTextFrame& _rTextFrame )
 {
+    SAL_DEBUG("XXX SwMovedFwdFramesByObjPos::Remove " << _rTextFrame.GetFrameId());
     maMovedFwdFrames.erase(_rTextFrame.GetTextNodeFirst());
 }
 
@@ -53,6 +55,7 @@ bool SwMovedFwdFramesByObjPos::FrameMovedFwdByObjPos( const SwTextFrame& _rTextF
     if ( maMovedFwdFrames.end() != aIter )
     {
         _ornToPageNum = (*aIter).second;
+        SAL_DEBUG("XXX SwMovedFwdFramesByObjPos::FrameMovedFwdByObjPos " << _rTextFrame.GetFrameId() << " " << _ornToPageNum);
         return true;
     }
 

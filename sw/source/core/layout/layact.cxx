@@ -334,6 +334,26 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
     if ( IsCalcLayout() )
         SetCheckPages( false );
 
+    auto dumpW = [this](auto const pName)
+    {
+        SAL_DEBUG("XXX Action " << pName);
+#if 0
+        xmlTextWriterPtr writer = xmlNewTextWriterFilename( pName, 0 );
+        xmlTextWriterSetIndent(writer, 1);
+        xmlTextWriterSetIndentString(writer, BAD_CAST("  "));
+        xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
+        m_pRoot->dumpAsXml(writer);
+        xmlTextWriterEndDocument( writer );
+        xmlFreeTextWriter( writer );
+#else
+        (void) this;
+#endif
+    };
+
+    static int i = 0;
+    ++i;
+    dumpW(OString("Action_" + OString::number(i) + "_pre.xml").getStr());
+
     InternalAction(pRenderContext);
     m_bAgain |= RemoveEmptyBrowserPages();
     while ( IsAgain() )
@@ -343,6 +363,8 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
         m_bAgain |= RemoveEmptyBrowserPages();
     }
     m_pRoot->DeleteEmptySct();
+
+    dumpW(OString("Action_" + OString::number(i) + "_post.xml").getStr());
 
     m_pWait.reset();
 
@@ -448,6 +470,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 
     while ( (pPage && !IsInterrupt()) || m_nCheckPageNum != USHRT_MAX )
     {
+        SAL_DEBUG("XXX loop1 pPage " << pPage << " " << (pPage ? pPage->GetFrameId() : -1) << " " << (pPage ? pPage->GetPhyPageNum() : -1));
         // note: this is the only place that consumes and resets m_nCheckPageNum
         if ((IsInterrupt() || !pPage) && m_nCheckPageNum != USHRT_MAX)
         {
@@ -661,6 +684,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         while ( pPg && ( pPg->getFrameArea().Top() < nBottom ||
                          ( IsIdle() && pPg == pPage ) ) )
         {
+            SAL_DEBUG("XXX loop2 pPage " << pPg << " " << pPg->GetFrameId() << " " << pPg->GetPhyPageNum());
             unlockPositionOfObjects( pPg );
 
             if (lcl_isLayoutLooping()) return;
@@ -1577,6 +1601,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
 
 bool SwLayAction::FormatContent(SwPageFrame *const pPage)
 {
+#if 1
     ::comphelper::ScopeGuard g([this, pPage]() {
         if (IsAgain())
         {
@@ -1602,6 +1627,7 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
             for (auto const& [pObj, pAnchorPage] : moved)
             {
                 SAL_INFO("sw.layout", "SwLayAction::FormatContent: move anchored " << pObj << " from " << pPage->GetPhyPageNum() << " to " << pAnchorPage->GetPhyPageNum());
+                SAL_DEBUG("XXX YYY move anchored " << pObj << " from " << pPage->GetPhyPageNum() << " to " << pAnchorPage->GetPhyPageNum());
                 pObj->RegisterAtPage(*pAnchorPage);
                 ::Notify_Background(pObj->GetDrawObj(), pPage,
                     pObj->GetObjRect(), PrepareHint::FlyFrameLeave, false);
@@ -1616,6 +1642,7 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
             }
         }
     });
+#endif
 
     const SwContentFrame *pContent = pPage->ContainsContent();
     const SwViewShell *pSh = m_pRoot->GetCurrShell();

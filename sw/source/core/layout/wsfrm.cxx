@@ -322,6 +322,7 @@ SwFrame::SwFrame( sw::BroadcastingModify *pMod, SwFrame* pSib )
     m_isInDestroy(false),
     mbForbidDelete(false)
 {
+    SAL_DEBUG("XXX +SwFrame " <<  this << " " << GetFrameId());
     OSL_ENSURE( pMod, "No frame format given." );
 }
 
@@ -4545,6 +4546,7 @@ static void UnHideRedlinesExtras(SwRootFrame & rLayout,
 
 static void UnHide(SwRootFrame & rLayout)
 {
+    SAL_DEBUG(" XXX SetHideRedlines " << rLayout.IsHideRedlines());
     assert(rLayout.GetCurrShell()->ActionPend()); // tdf#125754 avoid recursive layout
     SwDoc & rDoc(*rLayout.GetFormat()->GetDoc());
     // don't do early return if there are no redlines:
