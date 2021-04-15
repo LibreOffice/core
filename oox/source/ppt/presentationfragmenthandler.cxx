@@ -53,6 +53,9 @@
 
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
+#include <unotools/resmgr.hxx>
+#include <strings.hrc>
+#include <../sd/inc/sdmod.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;
@@ -143,7 +146,14 @@ static void ResolveTextFields( XmlFilterBase const & rFilter )
                             xDrawPage = xPresentationPage->getNotesPage();
                         }
                         Reference< container::XNamed > xNamed( xDrawPage, UNO_QUERY_THROW );
-                        aURL = "#" + xNamed->getName();
+                        if (xNamed->getName() == "page" + OUString::number(nPageNumber))
+                        {
+                            OUString aSlideName
+                                = Translate::get(STR_PAGE, SD_MOD()->GetResLocale());
+                            aURL = "#" + aSlideName + " " + OUString::number(nPageNumber);
+                        }
+                        else
+                            aURL = "#" + xNamed->getName();
                         xPropSet->setPropertyValue( sURL, Any( aURL ) );
                         Reference< text::XTextContent > xContent( rTextField.xTextField);
                         Reference< text::XTextRange > xTextRange = rTextField.xTextCursor;
