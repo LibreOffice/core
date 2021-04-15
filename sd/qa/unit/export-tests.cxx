@@ -524,15 +524,15 @@ void SdExportTest::testBnc480256()
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(10208238), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x9bc3ee), nColor);
     xCell->getPropertyValue("LeftBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(util::Color(5609427), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5597d3), aBorderLine.Color);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(13032959), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xc6ddff), nColor);
     xCell->getPropertyValue("TopBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(util::Color(5609427), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5597d3), aBorderLine.Color);
 
     pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(1));
     CPPUNIT_ASSERT( pTableObj );
@@ -540,17 +540,17 @@ void SdExportTest::testBnc480256()
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(7056614), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x6bace6), nColor);
     xCell->getPropertyValue("LeftBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(util::Color(12505062), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xbecfe6), aBorderLine.Color);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4626400), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4697e0), nColor);
 
     xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("BottomBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(util::Color(COL_AUTO), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_AUTO), aBorderLine.Color);
 
     xDocShRef->DoClose();
 }

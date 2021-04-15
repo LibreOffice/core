@@ -461,9 +461,9 @@ void SdImportTest::testHyperlinkColor()
     xPropSet3->getPropertyValue( "CharColor" ) >>= nCharColorGreen;
 
     // Hyperlink colors should be blue, red, green.
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(4485828), nCharColorBlue );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(16711680), nCharColorRed );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(5538357), nCharColorGreen );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x4472c4), nCharColorBlue );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xff0000), nCharColorRed );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x548235), nCharColorGreen );
 
     xDocShRef->DoClose();
 }
@@ -749,7 +749,7 @@ void SdImportTest::testFdo68594()
     const SvxColorItem *pC = &pTxtObj->GetMergedItem(EE_CHAR_COLOR);
     CPPUNIT_ASSERT_MESSAGE( "no color item", pC != nullptr);
     // Color should be black
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Placeholder color mismatch", sal_uInt32(0), sal_uInt32(pC->GetValue()) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Placeholder color mismatch", sal_uInt32(0x0), sal_uInt32(pC->GetValue()) );
 
     xDocShRef->DoClose();
 }
@@ -1037,15 +1037,15 @@ void SdImportTest::testPredefinedTableStyle()
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0), nColor);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(13421772), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xcccccc), nColor);
 
     xCell.set(xTable->getCellByPosition(0, 2), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(15198183), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xe7e7e7), nColor);
 
     xDocShRef->DoClose();
 }
@@ -1066,31 +1066,31 @@ void SdImportTest::testBnc887225()
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5b9bd5), nColor);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5b9bd5), nColor);
 
     xCell.set(xTable->getCellByPosition(1, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(13754095), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xd1deef), nColor);
 
     xCell.set(xTable->getCellByPosition(1, 2), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(15331319), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xe9eff7), nColor);
 
     xCell.set(xTable->getCellByPosition(1, 4), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5b9bd5), nColor);
 
     xCell.set(xTable->getCellByPosition(3, 2), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5b9bd5), nColor);
 
     xCell.set(xTable->getCellByPosition(3, 4), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5b9bd5), nColor);
 
     xDocShRef->DoClose();
 }
@@ -1531,7 +1531,7 @@ void SdImportTest::testBnc910045()
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5210557), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), nColor);
 
     xDocShRef->DoClose();
 }
@@ -2812,7 +2812,7 @@ void SdImportTest::testTdf134174()
 
     Graphic aGraphic(xGraphic);
     BitmapEx aBitmap(aGraphic.GetBitmapEx());
-    CPPUNIT_ASSERT_EQUAL( Color(9118171), aBitmap.GetPixelColor( 0, 0 ));
+    CPPUNIT_ASSERT_EQUAL( Color(0x8b21db), aBitmap.GetPixelColor( 0, 0 ));
 
     xDocShRef->DoClose();
 }
@@ -2829,7 +2829,7 @@ void SdImportTest::testTdf134210()
 
     Graphic aGraphic(xGraphic);
     BitmapEx aBitmap(aGraphic.GetBitmapEx());
-    CPPUNIT_ASSERT_EQUAL( Color(6313534), aBitmap.GetPixelColor( 0, 0 ));
+    CPPUNIT_ASSERT_EQUAL( Color(0x60563e), aBitmap.GetPixelColor( 0, 0 ));
 
     xDocShRef->DoClose();
 }
@@ -3382,7 +3382,7 @@ void SdImportTest::testMirroredGraphic()
     CPPUNIT_ASSERT(xGraphic.is());
     Graphic aGraphic(xGraphic);
     BitmapEx aBitmap(aGraphic.GetBitmapEx());
-    CPPUNIT_ASSERT_EQUAL( Color(5196117), aBitmap.GetPixelColor( 0, 0 ));
+    CPPUNIT_ASSERT_EQUAL( Color(0x4f4955), aBitmap.GetPixelColor( 0, 0 ));
     xDocShRef->DoClose();
 }
 
@@ -3397,7 +3397,7 @@ void SdImportTest::testTdf134210CropPosition()
     CPPUNIT_ASSERT(xGraphic.is());
     Graphic aGraphic(xGraphic);
     BitmapEx aBitmap(aGraphic.GetBitmapEx());
-    CPPUNIT_ASSERT_EQUAL( Color(8508442), aBitmap.GetPixelColor( 0, 0 ));
+    CPPUNIT_ASSERT_EQUAL( Color(0x81d41a), aBitmap.GetPixelColor( 0, 0 ));
     xDocShRef->DoClose();
 }
 
@@ -3411,7 +3411,7 @@ void SdImportTest::testGreysScaleGraphic()
     CPPUNIT_ASSERT(xGraphic.is());
     Graphic aGraphic(xGraphic);
     BitmapEx aBitmap(aGraphic.GetBitmapEx());
-    CPPUNIT_ASSERT_EQUAL( Color(3947580), aBitmap.GetPixelColor( 0, 0 ));
+    CPPUNIT_ASSERT_EQUAL( Color(0x3c3c3c), aBitmap.GetPixelColor( 0, 0 ));
     xDocShRef->DoClose();
 }
 
