@@ -749,7 +749,7 @@ void SdImportTest::testFdo68594()
     const SvxColorItem *pC = &pTxtObj->GetMergedItem(EE_CHAR_COLOR);
     CPPUNIT_ASSERT_MESSAGE( "no color item", pC != nullptr);
     // Color should be black
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Placeholder color mismatch", sal_uInt32(0x0), sal_uInt32(pC->GetValue()) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Placeholder color mismatch", COL_BLACK, pC->GetValue() );
 
     xDocShRef->DoClose();
 }
@@ -1197,7 +1197,7 @@ void SdImportTest::testBnc904423()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
         const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
                 pObj->GetMergedItem(XATTR_FILLCOLOR));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x00CC99), sal_uInt32(rColorItem.GetColorValue()));
+        CPPUNIT_ASSERT_EQUAL(Color(0x00CC99), rColorItem.GetColorValue());
     }
 
     // Second shape's background color is defined by theme
@@ -1210,7 +1210,7 @@ void SdImportTest::testBnc904423()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
         const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
                 pObj->GetMergedItem(XATTR_FILLCOLOR));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x3333CC), sal_uInt32(rColorItem.GetColorValue()));
+        CPPUNIT_ASSERT_EQUAL(Color(0x3333CC), rColorItem.GetColorValue());
     }
 
     // Third shape's background color is defined by direct formatting
@@ -1223,7 +1223,7 @@ void SdImportTest::testBnc904423()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
         const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
                 pObj->GetMergedItem(XATTR_FILLCOLOR));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xFF0000), sal_uInt32(rColorItem.GetColorValue()));
+        CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), rColorItem.GetColorValue());
     }
 
     xDocShRef->DoClose();
@@ -1247,7 +1247,7 @@ void SdImportTest::testShapeLineStyle()
 
         const XLineColorItem& rColorItem = dynamic_cast<const XLineColorItem&>(
                 pObj->GetMergedItem(XATTR_LINECOLOR));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xFF0000), sal_uInt32(rColorItem.GetColorValue()));
+        CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), rColorItem.GetColorValue());
 
         const XLineWidthItem& rWidthItem = dynamic_cast<const XLineWidthItem&>(
                 pObj->GetMergedItem(XATTR_LINEWIDTH));
@@ -1265,7 +1265,7 @@ void SdImportTest::testShapeLineStyle()
 
         const XLineColorItem& rColorItem = dynamic_cast<const XLineColorItem&>(
                 pObj->GetMergedItem(XATTR_LINECOLOR));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x3333CC), sal_uInt32(rColorItem.GetColorValue()));
+        CPPUNIT_ASSERT_EQUAL(Color(0x3333CC), rColorItem.GetColorValue());
 
         const XLineWidthItem& rWidthItem = dynamic_cast<const XLineWidthItem&>(
                 pObj->GetMergedItem(XATTR_LINEWIDTH));
@@ -1283,7 +1283,7 @@ void SdImportTest::testShapeLineStyle()
 
         const XLineColorItem& rColorItem = dynamic_cast<const XLineColorItem&>(
                 pObj->GetMergedItem(XATTR_LINECOLOR));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x7030A0), sal_uInt32(rColorItem.GetColorValue()));
+        CPPUNIT_ASSERT_EQUAL(Color(0x7030A0), rColorItem.GetColorValue());
 
         const XLineWidthItem& rWidthItem = dynamic_cast<const XLineWidthItem&>(
                 pObj->GetMergedItem(XATTR_LINEWIDTH));
@@ -1853,7 +1853,7 @@ void SdImportTest::testTdf95932()
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
     const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
         pObj->GetMergedItem(XATTR_FILLCOLOR));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x76bf3d), sal_uInt32(rColorItem.GetColorValue()));
+    CPPUNIT_ASSERT_EQUAL(Color(0x76bf3d), rColorItem.GetColorValue());
 
     xDocShRef->DoClose();
 }
@@ -2137,7 +2137,7 @@ void SdImportTest::testTdf104015()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
         const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
                 pObj->GetMergedItem(XATTR_FILLCOLOR));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xFF0000), sal_uInt32(rColorItem.GetColorValue()));
+        CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), rColorItem.GetColorValue());
     }
     // Should have a blue line
     {
@@ -2147,7 +2147,7 @@ void SdImportTest::testTdf104015()
 
         const XLineColorItem& rColorItem = dynamic_cast<const XLineColorItem&>(
                 pObj->GetMergedItem(XATTR_LINECOLOR));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x0000FF), sal_uInt32(rColorItem.GetColorValue()));
+        CPPUNIT_ASSERT_EQUAL(Color(0x0000FF), rColorItem.GetColorValue());
     }
     // Should have some shadow
     {
@@ -2176,7 +2176,7 @@ void SdImportTest::testTdf104201()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
         const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
             pObj->GetMergedItem(XATTR_FILLCOLOR));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x00FF00), sal_uInt32(rColorItem.GetColorValue()));
+        CPPUNIT_ASSERT_EQUAL(Color(0x00FF00), rColorItem.GetColorValue());
     }
     // Second shape has blue fill, but this should be overwritten by green group fill
     {
@@ -2187,7 +2187,7 @@ void SdImportTest::testTdf104201()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
         const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
             pObj->GetMergedItem(XATTR_FILLCOLOR));
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x00FF00), sal_uInt32(rColorItem.GetColorValue()));
+        CPPUNIT_ASSERT_EQUAL(Color(0x00FF00), rColorItem.GetColorValue());
     }
 
     xDocShRef->DoClose();
