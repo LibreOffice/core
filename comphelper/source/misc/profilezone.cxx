@@ -63,7 +63,7 @@ void ProfileZone::addRecording()
                             "\"dur\":" + OUString::number(nNow - m_nCreateTime) + ","
                             "\"pid\":" + OUString::number(m_nPid) + ","
                             "\"tid\":" + OUString::number(osl_getThreadIdentifier(nullptr)) +
-                            "}");
+                            "},");
     ::osl::MutexGuard aGuard(g_aMutex);
 
     g_aRecording.emplace_back(sRecordingData);
