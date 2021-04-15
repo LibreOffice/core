@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "daededd5_c5d0be34",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-04-15T03:47:50Z",
+      "side": 1,
+      "message": "I don\u0027t understand what you mean, can you please clarify?  There is no restarting dialogs but instead allowing the user to open another dialog to view more tips.",
+      "parentUuid": "2ec39742_a94d9651",
+      "range": {
+        "startLine": 59,
+        "startChar": 38,
+        "endLine": 59,
+        "endChar": 44
+      },
+      "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c6f3a592_74be43ff",
         "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
         "patchSetId": 4
@@ -36,6 +60,24 @@
       "writtenOn": "2021-04-13T07:56:16Z",
       "side": 1,
       "message": "I don\u0027t think I\u0027ve seen a pattern of using VclEventId::ObjectDying to dismiss non-modal children dialogs before. Is this based on some other example ? It presumably works fine in this case where the dialog is a child of a toplevel frame though.",
+      "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da30c194_6fdaf6e6",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-04-15T03:47:50Z",
+      "side": 1,
+      "message": "The other examples I looked at use \"RegisterChildWindow\" when the specific loading module is initialized, but then these child windows are destructed when the module is closed.  For example, if you open Calc then do File-\u003eClose and switch to Writer, opening the sidebar in Calc is closed before switching.  Ideally the Tip-of-the-day can stay open even if the user closes windows or switches between modules so the user can follow the tip; currently it does when switching modules, but not when closing a toplevel frame.  When closing a toplevel frame, the child dialog is automatically destroyed, and reparenting isn\u0027t allowed by Windows for owned windows (see https://docs.microsoft.com/en-us/windows/win32/winmsg/window-features#owned-windows).  We could make the dialog not \"owned\" by not giving it a parent, but then it wouldn\u0027t be \"on-top\" of the toplevel frame, and changing the dialog to use WS_EX_TOPMOST would show on-top of other non-LO system windows and I don\u0027t think we want that behavior.  The usage of VclEventId::ObjectDying is just based on observation of Window::dispose and looking at other uses such as SidebarController::WindowEventHandler.  We could also use XCloseListener but it\u0027s not clear there\u0027s any benefit to that and it might be additional work to find the right frame to add the event listener to.",
+      "parentUuid": "c6f3a592_74be43ff",
       "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
