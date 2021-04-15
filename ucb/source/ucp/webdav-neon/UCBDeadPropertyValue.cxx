@@ -49,19 +49,19 @@ struct UCBDeadPropertyValueParseContext
 
 }
 
-const char aTypeString[] = "string";
-const char aTypeLong[] = "long";
-const char aTypeShort[] = "short";
-const char aTypeBoolean[] = "boolean";
-const char aTypeChar[] = "char";
-const char aTypeByte[] = "byte";
-const char aTypeHyper[] = "hyper";
-const char aTypeFloat[] = "float";
-const char aTypeDouble[] = "double";
+constexpr OUStringLiteral aTypeString = u"string";
+constexpr OUStringLiteral aTypeLong = u"long";
+constexpr OUStringLiteral aTypeShort = u"short";
+constexpr OUStringLiteral aTypeBoolean = u"boolean";
+constexpr OUStringLiteral aTypeChar = u"char";
+constexpr OUStringLiteral aTypeByte = u"byte";
+constexpr OUStringLiteral aTypeHyper = u"hyper";
+constexpr OUStringLiteral aTypeFloat = u"float";
+constexpr OUStringLiteral aTypeDouble = u"double";
 
-const char aXMLPre[] = "<ucbprop><type>";
-const char aXMLMid[] = "</type><value>";
-const char aXMLEnd[] = "</value></ucbprop>";
+constexpr OUStringLiteral aXMLPre = u"<ucbprop><type>";
+constexpr OUStringLiteral aXMLMid = u"</type><value>";
+constexpr OUStringLiteral aXMLEnd = u"</value></ucbprop>";
 
 
 #define STATE_TOP (1)

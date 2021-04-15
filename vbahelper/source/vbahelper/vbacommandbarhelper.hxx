@@ -27,17 +27,17 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <memory>
 
-const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
+inline constexpr OUStringLiteral ITEM_DESCRIPTOR_COMMANDURL = u"CommandURL";
+inline constexpr OUStringLiteral ITEM_DESCRIPTOR_HELPURL = u"HelpURL";
 inline constexpr OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";
 inline constexpr OUStringLiteral ITEM_DESCRIPTOR_LABEL = u"Label";
-const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
-const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
+inline constexpr OUStringLiteral ITEM_DESCRIPTOR_TYPE = u"Type";
+inline constexpr OUStringLiteral ITEM_DESCRIPTOR_STYLE = u"Style";
 inline constexpr OUStringLiteral ITEM_DESCRIPTOR_ISVISIBLE = u"IsVisible";
 inline constexpr OUStringLiteral ITEM_DESCRIPTOR_UINAME = u"UIName";
 inline constexpr OUStringLiteral ITEM_DESCRIPTOR_ENABLED = u"Enabled";
 
-const char ITEM_MENUBAR_URL[] = "private:resource/menubar/menubar";
+inline constexpr OUStringLiteral ITEM_MENUBAR_URL = u"private:resource/menubar/menubar";
 constexpr char16_t ITEM_TOOLBAR_URL[] = u"private:resource/toolbar/";
 
 const char CUSTOM_TOOLBAR_STR[] = "custom_toolbar_";

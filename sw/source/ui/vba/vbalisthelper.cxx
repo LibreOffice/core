@@ -38,14 +38,14 @@ constexpr OUStringLiteral UNO_NAME_CHAR_STYLE_NAME = u"CharStyleName";
 constexpr OUStringLiteral UNO_NAME_NUMBERING_TYPE = u"NumberingType";
 constexpr OUStringLiteral UNO_NAME_BULLET_CHAR = u"BulletChar";
 
-const sal_Unicode CHAR_CLOSED_DOT[] = u"\u2022";
-const char CHAR_EMPTY_DOT[] = "o";
-const sal_Unicode CHAR_SQUARE[] = u"\u2540";
-const sal_Unicode CHAR_STAR_SYMBOL[] = u"\u272A";
-const sal_Unicode CHAR_FOUR_DIAMONDS[] = u"\u2756";
-const sal_Unicode CHAR_DIAMOND[] = u"\u2726";
-const sal_Unicode CHAR_ARROW[] = u"\u27A2";
-const sal_Unicode CHAR_CHECK_MARK[] = u"\u2713";
+constexpr OUStringLiteral CHAR_CLOSED_DOT = u"\u2022";
+constexpr OUStringLiteral CHAR_EMPTY_DOT = u"o";
+constexpr OUStringLiteral CHAR_SQUARE = u"\u2540";
+constexpr OUStringLiteral CHAR_STAR_SYMBOL = u"\u272A";
+constexpr OUStringLiteral CHAR_FOUR_DIAMONDS = u"\u2756";
+constexpr OUStringLiteral CHAR_DIAMOND = u"\u2726";
+constexpr OUStringLiteral CHAR_ARROW = u"\u27A2";
+constexpr OUStringLiteral CHAR_CHECK_MARK = u"\u2713";
 
 SwVbaListHelper::SwVbaListHelper( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) : mxTextDocument( xTextDoc ), mnGalleryType( nGalleryType ), mnTemplateType( nTemplateType )
 {
