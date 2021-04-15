@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f16ebf61_4bb4b46b",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-15T14:48:19Z",
+      "side": 1,
+      "message": "I don\u0027t know if it makes it cleaner, just mention that we also may remove the explicit rtl_uString_release below, if we here do\n\n    pDirImpl-\u003em_sDirectoryPath \u003d OUString(strSysPath, SAL_NO_ACQUIRE);",
+      "revId": "fd97345226499cacaf21519cf5208fa5248a6b5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f48e645_00377151",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-15T14:48:19Z",
+      "side": 1,
+      "message": "Actually I wonder why don\u0027t we do this potentially failing OpenLogicalDrivesEnum() after preparing pDirImpl, and then clean it up, instead of reversing the order and avoid the manual cleanup... :-) (unrelated to the change, of course)",
+      "revId": "fd97345226499cacaf21519cf5208fa5248a6b5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5c2b366_d33281dc",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-15T14:48:19Z",
+      "side": 1,
+      "message": "Unrelated to the change, but I\u0027m always worried with GetLastError being not the first call after the error. There may possibly be system calls somewhere in the middle, like system functions used for allocation/deallocation.",
+      "revId": "fd97345226499cacaf21519cf5208fa5248a6b5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0bd8967_a27d96d0",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-15T14:48:19Z",
+      "side": 1,
+      "message": "Why? We don\u0027t do that in other places, and generally consider it OK to throw (and crash) on OOM?",
+      "revId": "fd97345226499cacaf21519cf5208fa5248a6b5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
