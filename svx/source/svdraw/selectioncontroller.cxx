@@ -47,6 +47,10 @@ void SelectionController::onSelectionHasChanged()
 {
 }
 
+void SelectionController::onSelectAll()
+{
+}
+
 void SelectionController::GetState( SfxItemSet& /*rSet*/ )
 {
 }
