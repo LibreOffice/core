@@ -572,7 +572,7 @@ void SdOOXMLExportTest1::testTableCellFillProperties()
     sal_Int32 nColor;
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6750207), nColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x66ffff), nColor);
 
     // Test Picture fill type for cell
     drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
@@ -847,26 +847,26 @@ void SdOOXMLExportTest1::testTableCellBorder()
     sal_Int32 nLeftBorder = aBorderLine.LineWidth * 2;
     nLeftBorder = oox::drawingml::convertHmmToEmu( nLeftBorder );
     CPPUNIT_ASSERT(nLeftBorder);
-    CPPUNIT_ASSERT_EQUAL(util::Color(45296), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
 
     xCellPropSet->getPropertyValue("RightBorder") >>= aBorderLine;
     sal_Int32 nRightBorder = aBorderLine.LineWidth * 2;
     nRightBorder = oox::drawingml::convertHmmToEmu( nRightBorder );
     CPPUNIT_ASSERT(nRightBorder);
-    CPPUNIT_ASSERT_EQUAL(util::Color(16777215), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), aBorderLine.Color);
 
     xCellPropSet->getPropertyValue("TopBorder") >>= aBorderLine;
     sal_Int32 nTopBorder = aBorderLine.LineWidth * 2;
     nTopBorder = oox::drawingml::convertHmmToEmu( nTopBorder );
     CPPUNIT_ASSERT(nTopBorder);
-    CPPUNIT_ASSERT_EQUAL(util::Color(45296), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
 
 
     xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
     sal_Int32 nBottomBorder = aBorderLine.LineWidth * 2;
     nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
     CPPUNIT_ASSERT(nBottomBorder);
-    CPPUNIT_ASSERT_EQUAL(util::Color(45296), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
 
     xDocShRef->DoClose();
 }
@@ -994,7 +994,7 @@ void SdOOXMLExportTest1::testTdf94238()
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 0, Actual  : 10592673', i.e. the start color of the gradient
     // was incorrect.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x0), aGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x8B8B8B), aGradient.EndColor);
 
     xDocShRef->DoClose();
