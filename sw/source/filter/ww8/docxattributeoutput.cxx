@@ -1681,16 +1681,10 @@ void DocxAttributeOutput::DoWriteBookmarkTagStart(const OUString & bookmarkName)
         FSNS(XML_w, XML_name), BookmarkToWord(bookmarkName));
 }
 
-void DocxAttributeOutput::DoWriteBookmarkTagEnd(const OUString & bookmarkName)
+void DocxAttributeOutput::DoWriteBookmarkTagEnd(sal_Int32 const nId)
 {
-    const auto nameToIdIter = m_rOpenedBookmarksIds.find(bookmarkName);
-    if (nameToIdIter != m_rOpenedBookmarksIds.end())
-    {
-        const sal_Int32 nId = nameToIdIter->second;
-
-        m_pSerializer->singleElementNS(XML_w, XML_bookmarkEnd,
-            FSNS(XML_w, XML_id), OString::number(nId));
-    }
+    m_pSerializer->singleElementNS(XML_w, XML_bookmarkEnd,
+        FSNS(XML_w, XML_id), OString::number(nId));
 }
 
 void DocxAttributeOutput::DoWriteBookmarkStartIfExist(sal_Int32 nRunPos)
@@ -1715,7 +1709,7 @@ void DocxAttributeOutput::DoWriteBookmarkEndIfExist(sal_Int32 nRunPos)
         if (pPos != m_rOpenedBookmarksIds.end())
         {
             // Output the bookmark
-            DoWriteBookmarkTagEnd(aIter->second);
+            DoWriteBookmarkTagEnd(pPos->second);
             m_rOpenedBookmarksIds.erase(aIter->second);
         }
     }
@@ -1746,7 +1740,7 @@ void DocxAttributeOutput::DoWriteBookmarksEnd(std::vector<OUString>& rEnds)
         if (pPos != m_rOpenedBookmarksIds.end())
         {
             // Output the bookmark
-            DoWriteBookmarkTagEnd(bookmarkName);
+            DoWriteBookmarkTagEnd(pPos->second);
 
             m_rOpenedBookmarksIds.erase(bookmarkName);
         }
@@ -2359,7 +2353,7 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
     // Write the bookmark end if any
     if ( !m_sFieldBkm.isEmpty() )
     {
-        DoWriteBookmarkTagEnd(m_sFieldBkm);
+        DoWriteBookmarkTagEnd(m_nNextBookmarkId);
 
         m_nNextBookmarkId++;
     }

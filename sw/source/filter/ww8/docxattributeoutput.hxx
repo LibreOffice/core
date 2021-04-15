@@ -694,7 +694,7 @@ protected:
 private:
 
     void DoWriteBookmarkTagStart(const OUString & bookmarkName);
-    void DoWriteBookmarkTagEnd(const OUString & bookmarkName);
+    void DoWriteBookmarkTagEnd(sal_Int32 nId);
     void DoWriteBookmarksStart(std::vector<OUString>& rStarts);
     void DoWriteBookmarksEnd(std::vector<OUString>& rEnds);
     void DoWriteBookmarkStartIfExist(sal_Int32 nRunPos);
