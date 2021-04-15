@@ -1541,7 +1541,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             {
                 pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, aRightMargin, /*bOverwrite=*/false);
 
-                sal_Int32 nListId2(static_cast<ParagraphPropertyMap*>(pPropertyMap.get())->GetListId());
+                sal_Int32 nListId2(pParaContext->GetListId());
 
                 const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId2, nListLevel, "FirstLineIndent");
                 const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId2, nListLevel, "IndentAt");
@@ -1840,12 +1840,12 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     if (m_xPreviousParagraph.is() && // null for SvxUnoTextBase
                         (isNumberingViaStyle || isNumberingViaRule))
                     {
-                        assert(dynamic_cast<ParagraphPropertyMap*>(pPropertyMap.get()));
+                        assert(pParaContext);
                         // Use lcl_getListId(), so we find the list ID in parent styles as well.
                         bool bNumberingFromBaseStyle = false;
                         sal_Int32 const nListId2( isNumberingViaStyle
                             ? lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle)
-                            : static_cast<ParagraphPropertyMap*>(pPropertyMap.get())->GetListId());
+                            : pParaContext->GetListId());
                         if (ListDef::Pointer const& pList = m_pListTable->GetList(nListId2))
                         {   // styles could refer to non-existing lists...
                             AbstractListDef::Pointer const& pAbsList =
