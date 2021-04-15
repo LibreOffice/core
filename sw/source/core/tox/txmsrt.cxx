@@ -17,9 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
+#include <comphelper/processfactory.hxx>
 #include <txtfld.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -843,30 +846,26 @@ OUString SwTOXAuthority::GetText(sal_uInt16 nAuthField, const SwRootFrame* pLayo
     return sText;
 }
 
-OUString SwTOXAuthority::GetSourceURL(const OUString& rText) const
+OUString SwTOXAuthority::GetSourceURL(const OUString& rText)
 {
     OUString aText = rText;
 
-    SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(m_rField.GetField()->GetTyp())->GetDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
-    OUString aBasePath = pDocShell->getDocumentBaseURL();
-    OUString aAbs
-        = INetURLObject::GetAbsURL(aBasePath, aText, INetURLObject::EncodeMechanism::WasEncoded,
-                                   INetURLObject::DecodeMechanism::WithCharset);
-    bool bRelative = aAbs != aText;
-
-    INetURLObject aObject(aAbs);
-    if (aObject.GetMark().startsWith("page="))
+    uno::Reference<uri::XUriReferenceFactory> xUriReferenceFactory
+        = uri::UriReferenceFactory::create(comphelper::getProcessComponentContext());
+    uno::Reference<uri::XUriReference> xUriRef;
+    try
     {
-        aObject.SetMark(OUString());
-        aText = aObject.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        xUriRef = xUriReferenceFactory->parse(aText);
     }
-
-    if (bRelative)
+    catch (const uno::Exception& rException)
     {
-        aText
-            = INetURLObject::GetRelURL(aBasePath, aText, INetURLObject::EncodeMechanism::WasEncoded,
-                                       INetURLObject::DecodeMechanism::WithCharset);
+        SAL_WARN("sw.core",
+                 "SwTOXAuthority::GetSourceURL: failed to parse url: " << rException.Message);
+    }
+    if (xUriRef.is() && xUriRef->getFragment().startsWith("page="))
+    {
+        xUriRef->clearFragment();
+        aText = xUriRef->getUriReference();
     }
 
     return aText;
