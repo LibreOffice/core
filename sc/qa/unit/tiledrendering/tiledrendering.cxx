@@ -2348,7 +2348,7 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Set Wrap text in A3
-    pDoc->ApplyAttr(0, 2, 0, SfxBoolItem(ATTR_LINEBREAK, true));
+    pDoc->ApplyAttr(0, 2, 0, ScLineBreakCell(true));
     const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pDoc->GetAttr(0, 2, 0, ATTR_LINEBREAK));
     CPPUNIT_ASSERT(pItem->GetValue());
 
