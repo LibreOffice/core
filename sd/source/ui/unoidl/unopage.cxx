@@ -2107,7 +2107,7 @@ OUString getPageApiName( SdPage const * pPage )
 
     if(pPage)
     {
-        aPageName = pPage->GetRealName();
+        aPageName = pPage->GetName();
 
         if( aPageName.isEmpty() )
         {
