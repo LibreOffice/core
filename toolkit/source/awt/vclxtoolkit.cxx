@@ -2562,17 +2562,17 @@ void SAL_CALL VCLXToolkit::pause(sal_Int32 nMilliseconds)
 
 void SAL_CALL VCLXToolkit::startRecording()
 {
-    ::comphelper::ProfileRecording::startRecording();
+    comphelper::ProfileZone::startRecording();
 }
 
 void SAL_CALL VCLXToolkit::stopRecording()
 {
-    ::comphelper::ProfileRecording::stopRecording();
+    comphelper::ProfileZone::stopRecording();
 }
 
 css::uno::Sequence< OUString > VCLXToolkit::getRecordingAndClear()
 {
-    return ::comphelper::ProfileRecording::getRecordingAndClear();
+    return comphelper::ProfileZone::getRecordingAndClear();
 }
 
 // css:awt:XToolkitRobot
