@@ -7007,15 +7007,24 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">For Selection</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Language for Selection</value>
+        </prop>
       </node>
       <node oor:name=".uno:SetLanguageParagraphMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">For Paragraph</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Language for Paragraph</value>
+        </prop>
       </node>
       <node oor:name=".uno:SetLanguageAllTextMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">For All Text</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Language for All Text</value>
         </prop>
       </node>
       <node oor:name=".uno:MoreDictionaries" oor:op="replace">
