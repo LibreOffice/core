@@ -490,6 +490,8 @@ public:
 public:
     /* implicit bookmark vector containing pairs of node indexes and bookmark names */
     std::vector<aBookmarkPair> m_aImplicitBookmarks;
+    std::unordered_map<OUString, OUString> m_TOXMarkBookmarksByURL;
+    std::unordered_map<SwTOXMark const*, OUString> m_TOXMarkBookmarksByTOXMark;
     ww8::Frames m_aFrames;             // The floating frames in this document
     const SwPageDesc *m_pCurrentPageDesc;
     bool m_bFirstTOCNodeWithSection;

@@ -209,7 +209,7 @@ public:
     /// Output URL end.
     virtual bool EndURL(bool isAtEndOfParagraph) = 0;
 
-    virtual void FieldVanish( const OUString& rText, ww::eField eType ) = 0;
+    virtual void FieldVanish(const OUString& rText, ww::eField eType, OUString const*) = 0;
 
     /// MSO uses bookmarks to reference sequence fields, so we need to generate these additional bookmarks during export
     void GenerateBookmarksForSequenceField(const SwTextNode& rNode, SwWW8AttrIter& rAttrIter);
