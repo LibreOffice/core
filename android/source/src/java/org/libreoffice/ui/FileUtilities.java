@@ -153,23 +153,6 @@ public class FileUtilities {
         return mime;
     }
 
-    // Filter by mode, and/or in future by filename/wildcard
-    private static boolean doAccept(String filename, int byMode, String byFilename) {
-        Log.d(LOGTAG, "doAccept : " + filename + " mode " + byMode + " byFilename " + byFilename);
-        if (filename == null)
-            return false;
-
-        // check extension
-        if (byMode != ALL) {
-            if (mExtnMap.get (getExtension (filename)) != byMode)
-                return false;
-        }
-        if (!byFilename.equals("")) {
-            // FIXME return false on a non-match
-        }
-        return true;
-    }
-
     static boolean isHidden(File file) {
         return file.getName().startsWith(".");
     }
