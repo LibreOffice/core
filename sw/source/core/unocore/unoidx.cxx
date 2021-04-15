@@ -152,8 +152,8 @@ lcl_ConvertTOUNameToUserName(OUString& rTmp)
         USER_AND_SUFFIXLEN == rTmp.getLength())
     {
         //make sure that in non-English versions the " (user)" suffix is removed
-        if (rTmp.match(cUserDefined) &&
-            rTmp.matchAsciiL(cUserSuffix, sizeof(cUserSuffix), USER_LEN))
+        if (rTmp.startsWith(cUserDefined) &&
+            rTmp.match(cUserSuffix, USER_LEN))
         {
             rTmp = cUserDefined;
         }
