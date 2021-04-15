@@ -50,6 +50,7 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <drwlayer.hxx>
+#include <attrib.hxx>
 
 using namespace css;
 
