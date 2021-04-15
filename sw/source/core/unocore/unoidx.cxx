@@ -119,7 +119,7 @@ lcl_ReAssignTOXType(SwDoc& rDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
     rTOXBase.RegisterToTOXType( *const_cast<SwTOXType*>(pNewType) );
 }
 
-const char cUserDefined[] = "User-Defined";
+constexpr OUStringLiteral cUserDefined = u"User-Defined";
 const char cUserSuffix[] = " (user)";
 #define USER_LEN 12
 #define USER_AND_SUFFIXLEN 19
@@ -152,7 +152,7 @@ lcl_ConvertTOUNameToUserName(OUString& rTmp)
         USER_AND_SUFFIXLEN == rTmp.getLength())
     {
         //make sure that in non-English versions the " (user)" suffix is removed
-        if (rTmp.matchAsciiL(cUserDefined, sizeof(cUserDefined)) &&
+        if (rTmp.match(cUserDefined) &&
             rTmp.matchAsciiL(cUserSuffix, sizeof(cUserSuffix), USER_LEN))
         {
             rTmp = cUserDefined;

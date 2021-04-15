@@ -960,8 +960,8 @@ struct RefClearGuard
 bool impl_callRecoveryUI(bool bEmergencySave     ,
                          bool bExistsRecoveryData)
 {
-    static const char COMMAND_EMERGENCYSAVE[] = "vnd.sun.star.autorecovery:/doEmergencySave";
-    static const char COMMAND_RECOVERY[] = "vnd.sun.star.autorecovery:/doAutoRecovery";
+    constexpr OUStringLiteral COMMAND_EMERGENCYSAVE = u"vnd.sun.star.autorecovery:/doEmergencySave";
+    constexpr OUStringLiteral COMMAND_RECOVERY = u"vnd.sun.star.autorecovery:/doAutoRecovery";
 
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 

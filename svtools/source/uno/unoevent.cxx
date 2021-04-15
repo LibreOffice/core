@@ -34,9 +34,9 @@ using css::beans::PropertyValue;
 
 
 constexpr OUStringLiteral sAPI_ServiceName = u"com.sun.star.container.XNameReplace";
-const char sEventType[] = "EventType";
-const char sMacroName[] = "MacroName";
-const char sLibrary[] = "Library";
+constexpr OUStringLiteral sEventType = u"EventType";
+constexpr OUStringLiteral sMacroName = u"MacroName";
+constexpr OUStringLiteral sLibrary = u"Library";
 constexpr OUStringLiteral sStarBasic = u"StarBasic";
 constexpr OUStringLiteral sScript = u"Script";
 constexpr OUStringLiteral sNone = u"None";

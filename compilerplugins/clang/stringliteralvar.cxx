@@ -7,8 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// Find constant character array variables that are passed into O[U]String constructors and should
-// thus be turned into O[U]StringLiteral variables.
+// Find constant character array variables that are either
+//   (a) passed into O[U]String constructors
+//   (b) assigned to O[U]String
+// and should thus be turned into O[U]StringLiteral variables.
 //
 // Such a variable may have been used in multiple places, not all of which would be compatible with
 // changing the variable's type to O[U]StringLiteral.  However, this plugin is aggressive and
@@ -152,6 +154,52 @@ public:
             }
             break;
         }
+        return true;
+    }
+
+    bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* expr)
+    {
+        if (ignoreLocation(expr))
+        {
+            return true;
+        }
+        if (expr->getOperator() != OO_Equal)
+        {
+            return true;
+        }
+        loplugin::TypeCheck const tc(expr->getType());
+        if (!(tc.Class("OString").Namespace("rtl").GlobalNamespace()
+              || tc.Class("OUString").Namespace("rtl").GlobalNamespace()))
+        {
+            return true;
+        }
+        if (expr->getNumArgs() != 2)
+        {
+            return true;
+        }
+        auto const e = dyn_cast<DeclRefExpr>(expr->getArg(1)->IgnoreParenImpCasts());
+        if (e == nullptr)
+        {
+            return true;
+        }
+        auto const t = e->getType();
+        if (!(t.isConstQualified() && t->isConstantArrayType()))
+        {
+            return true;
+        }
+        auto const d = e->getDecl();
+        if (!reportedArray_.insert(d).second)
+        {
+            return true;
+        }
+        report(DiagnosticsEngine::Warning,
+               "change type of variable %0 from constant character array (%1) to "
+               "%select{OStringLiteral|OUStringLiteral}2%select{|, and make it static}3",
+               d->getLocation())
+            << d << d->getType() << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1)
+            << isAutomaticVariable(cast<VarDecl>(d)) << d->getSourceRange();
+        report(DiagnosticsEngine::Note, "first assigned here", compat::getBeginLoc(expr))
+            << expr->getSourceRange();
         return true;
     }
 
