@@ -2112,7 +2112,7 @@ OUString getPageApiName( SdPage const * pPage )
         if( aPageName.isEmpty() )
         {
             const sal_Int32 nPageNum = ( ( pPage->GetPageNum() - 1 ) >> 1 ) + 1;
-            aPageName = sEmptyPageName + OUString::number( nPageNum );
+            aPageName = SdResId(STR_PAGE) + " " + OUString::number( nPageNum );
         }
     }
 
