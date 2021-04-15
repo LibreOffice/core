@@ -225,14 +225,14 @@ namespace {
 
 struct DirectoryItem_Impl
 {
-    UINT uType;
+    UINT uType = 0;
     union {
         WIN32_FIND_DATAW FindData;
         WCHAR            cDriveString[MAX_PATH];
     };
-    rtl_uString*    m_pFullPath;
-    bool            bFullPathNormalized;
-    int             nRefCount;
+    OUString        m_sFullPath;
+    bool            bFullPathNormalized = false;
+    int             nRefCount = 0;
 };
 
 }
@@ -245,12 +245,12 @@ namespace {
 
 struct Directory_Impl
 {
-    UINT uType;
+    UINT uType = 0;
     union {
-        HANDLE  hDirectory;
+        HANDLE  hDirectory = 0;
         HANDLE  hEnumDrives;
     };
-    rtl_uString*    m_pDirectoryPath;
+    OUString    m_sDirectoryPath;
 };
 
 typedef struct tagDRIVEENUM
@@ -447,29 +447,19 @@ static oslFileError osl_openLocalRoot(
     error = osl_getSystemPathFromFileURL_( strDirectoryPath, &strSysPath, false );
     if ( osl_File_E_None == error )
     {
-        Directory_Impl  *pDirImpl;
-
-        pDirImpl = static_cast<Directory_Impl*>(malloc( sizeof(Directory_Impl)));
+        Directory_Impl* pDirImpl = new (std::nothrow) Directory_Impl;
         assert(pDirImpl); // Don't handle OOM conditions
-        ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
-        rtl_uString_newFromString( &pDirImpl->m_pDirectoryPath, strSysPath );
+        pDirImpl->m_sDirectoryPath = OUString(strSysPath, SAL_NO_ACQUIRE);
 
         /* Append backslash if necessary */
 
         /* @@@ToDo
            use function ensure backslash
         */
-        sal_uInt32 nLen = rtl_uString_getLength( pDirImpl->m_pDirectoryPath );
-        if ( nLen && pDirImpl->m_pDirectoryPath->buffer[nLen - 1] != L'\\' )
+        sal_uInt32 nLen = pDirImpl->m_sDirectoryPath.getLength();
+        if ( nLen && pDirImpl->m_sDirectoryPath[nLen - 1] != L'\\' )
         {
-            rtl_uString* pCurDir = nullptr;
-            rtl_uString* pBackSlash = nullptr;
-
-            rtl_uString_assign( &pCurDir, pDirImpl->m_pDirectoryPath );
-            rtl_uString_newFromAscii( &pBackSlash, "\\" );
-            rtl_uString_newConcat( &pDirImpl->m_pDirectoryPath, pCurDir, pBackSlash );
-            rtl_uString_release( pBackSlash );
-            rtl_uString_release( pCurDir );
+            pDirImpl->m_sDirectoryPath += "\\";
         }
 
         pDirImpl->uType = DIRECTORYTYPE_LOCALROOT;
@@ -487,20 +477,12 @@ static oslFileError osl_openLocalRoot(
         {
             if ( pDirImpl )
             {
-                if ( pDirImpl->m_pDirectoryPath )
-                {
-                    rtl_uString_release( pDirImpl->m_pDirectoryPath );
-                    pDirImpl->m_pDirectoryPath = nullptr;
-                }
-
-                free(pDirImpl);
+                delete pDirImpl;
                 pDirImpl = nullptr;
             }
 
             error = oslTranslateFileError( GetLastError() );
         }
-
-        rtl_uString_release( strSysPath );
     }
     return error;
 }
@@ -514,43 +496,27 @@ static oslFileError osl_openFileDirectory(
         return osl_File_E_INVAL;
     *pDirectory = nullptr;
 
-    Directory_Impl *pDirImpl = static_cast<Directory_Impl*>(malloc(sizeof(Directory_Impl)));
+    Directory_Impl *pDirImpl = new (std::nothrow) Directory_Impl;
     assert(pDirImpl); // Don't handle OOM conditions
-    ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
-    rtl_uString_newFromString( &pDirImpl->m_pDirectoryPath, strDirectoryPath );
+    pDirImpl->m_sDirectoryPath = strDirectoryPath;
 
     /* Append backslash if necessary */
 
     /* @@@ToDo
        use function ensure backslash
     */
-    sal_uInt32 nLen = rtl_uString_getLength( pDirImpl->m_pDirectoryPath );
-    if ( nLen && pDirImpl->m_pDirectoryPath->buffer[nLen - 1] != L'\\' )
-    {
-        rtl_uString* pCurDir = nullptr;
-        rtl_uString* pBackSlash = nullptr;
-
-        rtl_uString_assign( &pCurDir, pDirImpl->m_pDirectoryPath );
-        rtl_uString_newFromAscii( &pBackSlash, "\\" );
-        rtl_uString_newConcat( &pDirImpl->m_pDirectoryPath, pCurDir, pBackSlash );
-        rtl_uString_release( pBackSlash );
-        rtl_uString_release( pCurDir );
-    }
+    sal_uInt32 nLen = pDirImpl->m_sDirectoryPath.getLength();
+    if ( nLen && pDirImpl->m_sDirectoryPath[nLen - 1] != '\\' )
+        pDirImpl->m_sDirectoryPath += "\\";
 
     pDirImpl->uType = DIRECTORYTYPE_FILESYSTEM;
-    pDirImpl->hDirectory = OpenDirectory( pDirImpl->m_pDirectoryPath );
+    pDirImpl->hDirectory = OpenDirectory( pDirImpl->m_sDirectoryPath.pData );
 
     if ( !pDirImpl->hDirectory )
     {
         error = oslTranslateFileError( GetLastError() );
 
-        if ( pDirImpl->m_pDirectoryPath )
-        {
-            rtl_uString_release( pDirImpl->m_pDirectoryPath );
-            pDirImpl->m_pDirectoryPath = nullptr;
-        }
-
-        free(pDirImpl);
+        delete pDirImpl;
         pDirImpl = nullptr;
     }
 
@@ -578,11 +544,8 @@ static oslFileError osl_openNetworkServer(
 
     if ( ERROR_SUCCESS == dwError )
     {
-        Directory_Impl  *pDirImpl;
-
-        pDirImpl = static_cast<Directory_Impl*>(malloc(sizeof(Directory_Impl)));
+        Directory_Impl *pDirImpl = new (std::nothrow) Directory_Impl;
         assert(pDirImpl); // Don't handle OOM conditions
-        ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
         pDirImpl->uType = DIRECTORYTYPE_NETROOT;
         pDirImpl->hDirectory = hEnum;
         *pDirectory = static_cast<oslDirectory>(pDirImpl);
@@ -799,11 +762,10 @@ static oslFileError osl_getNextNetResource(
         case NO_ERROR:
         case ERROR_MORE_DATA:
         {
-            pItemImpl = static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
+            pItemImpl = new (std::nothrow) DirectoryItem_Impl;
             if ( !pItemImpl )
                 return osl_File_E_NOMEM;
 
-            ZeroMemory( pItemImpl, sizeof(DirectoryItem_Impl) );
             pItemImpl->uType = DIRECTORYITEM_DRIVE;
             osl_acquireDirectoryItem( static_cast<oslDirectoryItem>(pItemImpl) );
 
@@ -833,11 +795,10 @@ static oslFileError osl_getNextDrive(
     if ( !pDirImpl )
         return osl_File_E_INVAL;
 
-    pItemImpl = static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
+    pItemImpl = new (std::nothrow) DirectoryItem_Impl;
     if ( !pItemImpl )
         return osl_File_E_NOMEM;
 
-    ZeroMemory( pItemImpl, sizeof(DirectoryItem_Impl) );
     pItemImpl->uType = DIRECTORYITEM_DRIVE;
     osl_acquireDirectoryItem( static_cast<oslDirectoryItem>(pItemImpl) );
     fSuccess = EnumLogicalDrives( pDirImpl->hEnumDrives, pItemImpl->cDriveString );
@@ -849,13 +810,7 @@ static oslFileError osl_getNextDrive(
     }
     else
     {
-        if ( pItemImpl->m_pFullPath )
-        {
-            rtl_uString_release( pItemImpl->m_pFullPath );
-            pItemImpl->m_pFullPath = nullptr;
-        }
-
-        free( pItemImpl );
+        delete pItemImpl;
         return oslTranslateFileError( GetLastError() );
     }
 }
@@ -874,7 +829,7 @@ static oslFileError osl_getNextFileItem(
     if ( !pDirImpl )
         return osl_File_E_INVAL;
 
-    pItemImpl = static_cast<DirectoryItem_Impl*>(calloc(1, sizeof(DirectoryItem_Impl)));
+    pItemImpl = new (std::nothrow) DirectoryItem_Impl;
     if ( !pItemImpl )
         return osl_File_E_NOMEM;
 
@@ -885,10 +840,7 @@ static oslFileError osl_getNextFileItem(
         pItemImpl->uType = DIRECTORYITEM_FILE;
         pItemImpl->nRefCount = 1;
 
-        rtl_uString* pTmpFileName = nullptr;
-        rtl_uString_newFromStr( &pTmpFileName, o3tl::toU(pItemImpl->FindData.cFileName) );
-        rtl_uString_newConcat( &pItemImpl->m_pFullPath, pDirImpl->m_pDirectoryPath, pTmpFileName );
-        rtl_uString_release( pTmpFileName );
+        pItemImpl->m_sFullPath = pDirImpl->m_sDirectoryPath + o3tl::toU(pItemImpl->FindData.cFileName);
 
         pItemImpl->bFullPathNormalized = true;
         *pItem = static_cast<oslDirectoryItem>(pItemImpl);
@@ -896,13 +848,7 @@ static oslFileError osl_getNextFileItem(
     }
     else
     {
-        if ( pItemImpl->m_pFullPath )
-        {
-            rtl_uString_release( pItemImpl->m_pFullPath );
-            pItemImpl->m_pFullPath = nullptr;
-        }
-
-        free( pItemImpl );
+        delete pItemImpl;
         return oslTranslateFileError( GetLastError() );
     }
 }
@@ -960,13 +906,7 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory Directory)
             break;
         }
 
-        if ( pDirImpl->m_pDirectoryPath )
-        {
-            rtl_uString_release( pDirImpl->m_pDirectoryPath );
-            pDirImpl->m_pDirectoryPath = nullptr;
-        }
-
-        free(pDirImpl);
+        delete pDirImpl;
     }
     return eError;
 }
@@ -1017,19 +957,17 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
     {
     case PATHTYPE_NETSERVER:
         {
-            DirectoryItem_Impl* pItemImpl =
-                static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
+            DirectoryItem_Impl* pItemImpl = new (std::nothrow) DirectoryItem_Impl;
 
             if ( !pItemImpl )
                 error = osl_File_E_NOMEM;
 
             if ( osl_File_E_None == error )
             {
-                ZeroMemory( pItemImpl, sizeof(DirectoryItem_Impl) );
                 pItemImpl->uType = DIRECTORYITEM_SERVER;
 
                 osl_acquireDirectoryItem( static_cast<oslDirectoryItem>(pItemImpl) );
-                rtl_uString_newFromString( &pItemImpl->m_pFullPath, strSysFilePath );
+                pItemImpl->m_sFullPath = strSysFilePath;
 
                 // Assign a title anyway
                 {
@@ -1048,15 +986,13 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
         break;
     case PATHTYPE_VOLUME:
         {
-            DirectoryItem_Impl* pItemImpl =
-                static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
+            DirectoryItem_Impl* pItemImpl = new (std::nothrow) DirectoryItem_Impl;
 
             if ( !pItemImpl )
                 error = osl_File_E_NOMEM;
 
             if ( osl_File_E_None == error )
             {
-                ZeroMemory( pItemImpl, sizeof(DirectoryItem_Impl) );
                 pItemImpl->uType = DIRECTORYITEM_DRIVE;
 
                 osl_acquireDirectoryItem( static_cast<oslDirectoryItem>(pItemImpl) );
@@ -1085,18 +1021,16 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
 
             if ( hFind != INVALID_HANDLE_VALUE )
             {
-                DirectoryItem_Impl  *pItemImpl =
-                    static_cast<DirectoryItem_Impl*>(malloc(sizeof(DirectoryItem_Impl)));
+                DirectoryItem_Impl *pItemImpl = new (std::nothrow) DirectoryItem_Impl;
                 if (!pItemImpl)
                     error = osl_File_E_NOMEM;
 
                 if (osl_File_E_None == error)
                 {
-                    ZeroMemory(pItemImpl, sizeof(DirectoryItem_Impl));
                     osl_acquireDirectoryItem(static_cast<oslDirectoryItem>(pItemImpl));
 
                     CopyMemory(&pItemImpl->FindData, &aFindData, sizeof(WIN32_FIND_DATAW));
-                    rtl_uString_newFromString(&pItemImpl->m_pFullPath, strSysFilePath);
+                    pItemImpl->m_sFullPath = strSysFilePath;
 
                     // MT: This costs 600ms startup time on fast v60x!
                     // GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
@@ -1138,15 +1072,7 @@ oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
         return osl_File_E_INVAL;
 
     if ( ! --pItemImpl->nRefCount )
-    {
-        if ( pItemImpl->m_pFullPath )
-        {
-            rtl_uString_release( pItemImpl->m_pFullPath );
-            pItemImpl->m_pFullPath = nullptr;
-        }
-
-        free( pItemImpl );
-    }
+        delete pItemImpl;
 
     return osl_File_E_None;
 }
@@ -1159,7 +1085,7 @@ SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
     if (a == b)
         return true;
     /* same name => same item, unless renaming / moving madness has occurred */
-    if (pA->m_pFullPath == pB->m_pFullPath)
+    if (pA->m_sFullPath == pB->m_sFullPath)
         return true;
 
     // FIXME: as/when/if this is used in anger on Windows we could
@@ -1571,7 +1497,7 @@ static oslFileError osl_getServerInfo(
 
     if ( uFieldMask & osl_FileStatus_Mask_FileURL )
     {
-        oslFileError error = osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrFileURL );
+        oslFileError error = osl_getFileURLFromSystemPath( pItemImpl->m_sFullPath.pData, &pStatus->ustrFileURL );
         if (error != osl_File_E_None)
             return error;
         pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
@@ -1599,7 +1525,7 @@ oslFileError SAL_CALL osl_getFileStatus(
         break;
     }
 
-    OUString sFullPath(pItemImpl->m_pFullPath);
+    OUString sFullPath(pItemImpl->m_sFullPath);
 
     // Prefix long paths, windows API calls expect this prefix
     // (only local paths starting with something like C: or D:)
@@ -1687,8 +1613,8 @@ oslFileError SAL_CALL osl_getFileStatus(
 
             if ( nNewLen )
             {
-                rtl_uString_newFromStr( &pItemImpl->m_pFullPath, aBuffer );
-                sFullPath = OUString( pItemImpl->m_pFullPath );
+                pItemImpl->m_sFullPath = OUString(&*aBuffer, nNewLen);
+                sFullPath = pItemImpl->m_sFullPath;
                 pItemImpl->bFullPathNormalized = true;
             }
         }
