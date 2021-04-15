@@ -277,7 +277,7 @@ class LOKitTileProvider implements TileProvider {
     }
 
     @Override
-    public void saveDocumentAs(final String filePath, String format, boolean takeOwnership) {
+    public boolean saveDocumentAs(final String filePath, String format, boolean takeOwnership) {
         String options = "";
         if (takeOwnership) {
             options = "TakeOwnership";
@@ -287,21 +287,16 @@ class LOKitTileProvider implements TileProvider {
         Log.d("saveFilePathURL", newFilePath);
         LOKitShell.showProgressSpinner(mContext);
         mDocument.saveAs(newFilePath, format, options);
+        final boolean ok;
         if (!mOffice.getError().isEmpty()){
+            ok = true;
             Log.e("Save Error", mOffice.getError());
             if (format.equals("svg")) {
                 // error in creating temp slideshow svg file
                 Log.d(LOGTAG, "Error in creating temp slideshow svg file");
             } else if(format.equals("pdf")){
                 Log.d(LOGTAG, "Error in creating pdf file");
-                LOKitShell.getMainHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // There was some error
-                        mContext.showCustomStatusMessage(mContext.getString(R.string.unable_to_export_pdf));
-                    }
-                });
-            }else {
+            } else {
                 LOKitShell.getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
@@ -311,6 +306,7 @@ class LOKitTileProvider implements TileProvider {
                 });
             }
         } else {
+            ok = false;
             if (format.equals("svg")) {
                 // successfully created temp slideshow svg file
                 LOKitShell.getMainHandler().post(new Runnable() {
@@ -319,52 +315,36 @@ class LOKitTileProvider implements TileProvider {
                         mContext.startPresentation(newFilePath);
                     }
                 });
-            }else if(format.equals("pdf")){
-                LOKitShell.getMainHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // There was no error
-                        mContext.showCustomStatusMessage(mContext.getString(R.string.pdf_exported_at)+filePath);
-                    }
-                });
             } else if (takeOwnership) {
                 mInputFile = filePath;
             }
         }
         LOKitShell.hideProgressSpinner(mContext);
+        return ok;
     }
 
     @Override
-    public void saveDocumentAs(final String filePath, boolean takeOwnership) {
+    public boolean saveDocumentAs(final String filePath, boolean takeOwnership) {
         final int docType = mDocument.getDocumentType();
         if (docType == Document.DOCTYPE_TEXT)
-            saveDocumentAs(filePath, "odt", takeOwnership);
+            return saveDocumentAs(filePath, "odt", takeOwnership);
         else if (docType == Document.DOCTYPE_SPREADSHEET)
-            saveDocumentAs(filePath, "ods", takeOwnership);
+            return saveDocumentAs(filePath, "ods", takeOwnership);
         else if (docType == Document.DOCTYPE_PRESENTATION)
-            saveDocumentAs(filePath, "odp", takeOwnership);
+            return saveDocumentAs(filePath, "odp", takeOwnership);
         else if (docType == Document.DOCTYPE_DRAWING)
-            saveDocumentAs(filePath, "odg", takeOwnership);
-        else
-            Log.w(LOGTAG, "Cannot determine file format from document. Not saving.");
+            return saveDocumentAs(filePath, "odg", takeOwnership);
+
+        Log.w(LOGTAG, "Cannot determine file format from document. Not saving.");
+        return false;
     }
 
-    public void exportToPDF(boolean print){
-        String dir = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Documents";
-        File docDir = new File(dir);
-        if(!docDir.exists()){
-            docDir.mkdir();
-        }
+    public void printDocument() {
         String mInputFileName = (new File(mInputFile)).getName();
         String file = mInputFileName.substring(0,(mInputFileName.length()-3))+"pdf";
-        if(print){
-            String cacheFile = mContext.getExternalCacheDir().getAbsolutePath()
-                    + "/" + file;
-            mDocument.saveAs("file://"+cacheFile,"pdf","");
-            printDocument(cacheFile);
-        }else{
-            saveDocumentAs(dir+"/"+file,"pdf", false);
-        }
+        String cacheFile = mContext.getExternalCacheDir().getAbsolutePath() + "/" + file;
+        mDocument.saveAs("file://"+cacheFile,"pdf","");
+        printDocument(cacheFile);
     }
 
     private void printDocument(String cacheFile) {

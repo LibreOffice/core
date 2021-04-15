@@ -153,9 +153,9 @@
     <string name="current_uno_command">Aktuelles UNO-Kommando</string>
     <string name="display_language">Anzeigesprache</string>
     <string name="display_language_summary">Wählen Sie die Standard-Anzeigesprache</string>
+    <string name="pdf_export_finished">PDF-Export abgeschlossen</string>
     <string name="unable_to_export_pdf">PDF-Export nicht möglich</string>
     <string name="unable_to_save">Speichern nicht möglich</string>
-    <string name="pdf_exported_at">PDF exportiert nach</string>
     <string name="printing_not_supported">Ihr Gerät unterstützt Drucken nicht</string>
     <string name="creating_new_files_not_supported">Erstellen neuer Dokumente auf diesem Gerät nicht verfügbar, benötigt Android-SDK-Version >= 19.</string>
     <string name="error">Fehler</string>
