@@ -293,8 +293,7 @@ private:
 };
 
 /**
- * This class implements a popup window for field button, for quick access
- * of hide-item list, and possibly more stuff related to field options.
+ * This class implements a popup window for the auto filter dropdown.
  */
 class ScCheckListMenuWindow : public DropdownDockingWindow
 {
