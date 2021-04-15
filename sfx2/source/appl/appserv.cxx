@@ -627,23 +627,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_SEND_FEEDBACK:
         {
-            OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            OUString sURL("mailto:hello@collaboraoffice.com?Subject=Version:%20" + utl::ConfigManager::getAboutBoxProductVersion() +
-                ",%20Locale:%20" + utl::ConfigManager::getUILocale() + ",%20Module:%20" + module.subView(module.lastIndexOf('.') + 1 )  );
-            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
+            sfx2::openUriExternally("https://www.cib.de/office", false, rReq.GetFrameWeld());
             break;
         }
 
-        case SID_Q_AND_A:
-        {
-            // Askbot has URL's normalized to languages, not locales
-            // Get language from locale: ll or lll or ll-CC or lll-CC
-
-            OUString sURL(officecfg::Office::Common::Menus::QA_URL::get() + //https://hub.libreoffice.org/forum/
-                "?LOlocale=" + utl::ConfigManager::getUILocale());
-            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
-            break;
-        }
         case SID_DOCUMENTATION:
         {
             // Open documentation page based on locales
