@@ -407,13 +407,6 @@ void SvxTableController::onSelectionHasChanged()
         const SdrMarkList& rMarkList= mrView.GetMarkedObjectList();
         if( rMarkList.GetMarkCount() == 1 )
             bSelected = mxTableObj.get() == rMarkList.GetMark(0)->GetMarkedSdrObj();
-        /* fdo#46186 Selecting the table means selecting the entire cells */
-        if (!hasSelectedCells() && pTableObj)
-        {
-            maCursorFirstPos = SdrTableObj::getFirstCell();
-            maCursorLastPos = pTableObj->getLastCell();
-            mbCellSelectionMode=true;
-        }
     }
 
     if( bSelected )
