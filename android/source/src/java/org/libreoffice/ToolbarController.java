@@ -45,12 +45,12 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
         clipboardManager = (ClipboardManager)mContext.getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
-    public void disableMenuItem(final int menuItemId, final boolean disabled) {
+    private void enableMenuItem(final int menuItemId, final boolean enabled) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
                 MenuItem menuItem = mMainMenu.findItem(menuItemId);
                 if (menuItem != null) {
-                    menuItem.setEnabled(!disabled);
+                    menuItem.setEnabled(enabled);
                 } else {
                     Log.e(LOGTAG, "MenuItem not found.");
                 }
@@ -245,11 +245,14 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
     }
 
     void setupToolbars() {
-        // show message in case experimental mode is enabled (i.e. editing is supported in general),
-        // but current document  is readonly
-        if (LibreOfficeMainActivity.isExperimentalMode() && LibreOfficeMainActivity.isReadOnlyMode()) {
-            disableMenuItem(R.id.action_save, true);
-            Toast.makeText(mContext, mContext.getString(R.string.temp_file_saving_disabled), Toast.LENGTH_LONG).show();
+        if (LibreOfficeMainActivity.isExperimentalMode()) {
+            boolean enableSaveEntry = !LibreOfficeMainActivity.isReadOnlyMode() && mContext.hasLocationForSave();
+            enableMenuItem(R.id.action_save, enableSaveEntry);
+            if (LibreOfficeMainActivity.isReadOnlyMode()) {
+                // show message in case experimental mode is enabled (i.e. editing is supported in general),
+                // but current document is readonly
+                Toast.makeText(mContext, mContext.getString(R.string.temp_file_saving_disabled), Toast.LENGTH_LONG).show();
+            }
         }
         mMainMenu.findItem(R.id.action_parts).setVisible(mContext.isDrawerEnabled());
     }

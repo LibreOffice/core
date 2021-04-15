@@ -23,7 +23,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -66,9 +65,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         INVALID
     }
 
-    private String LOGTAG = LibreOfficeUIActivity.class.getSimpleName();
-
-    private DocumentType newDocType = DocumentType.INVALID;
+    private static final String LOGTAG = LibreOfficeUIActivity.class.getSimpleName();
 
     public static final String EXPLORER_PREFS_KEY = "EXPLORER_PREFS";
     private static final String RECENT_DOCUMENTS_KEY = "RECENT_DOCUMENT_URIS";
@@ -123,7 +120,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     };
 
     private static final int REQUEST_CODE_OPEN_FILECHOOSER = 12345;
-    private static final int REQUEST_CODE_CREATE_NEW_DOCUMENT = 12346;
 
     private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0;
 
@@ -257,10 +253,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         if (requestCode == REQUEST_CODE_OPEN_FILECHOOSER && resultCode == RESULT_OK) {
             final Uri fileUri = data.getData();
             openDocument(fileUri);
-        } else if (requestCode == REQUEST_CODE_CREATE_NEW_DOCUMENT && resultCode == RESULT_OK) {
-            // "forward" to LibreOfficeMainActivity to create + open the file
-            final Uri fileUri = data.getData();
-            loadNewDocument(newDocType, fileUri);
         }
     }
 
@@ -295,33 +287,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         startActivity(intent);
     }
 
-    private void createNewFileDialog() {
-        final String extension;
-        if (newDocType == DocumentType.WRITER) {
-            extension = FileUtilities.DEFAULT_WRITER_EXTENSION;
-        } else if (newDocType == DocumentType.CALC) {
-            extension = FileUtilities.DEFAULT_SPREADSHEET_EXTENSION;
-        } else if (newDocType == DocumentType.IMPRESS) {
-            extension = FileUtilities.DEFAULT_IMPRESS_EXTENSION;
-        } else if (newDocType == DocumentType.DRAW) {
-            extension = FileUtilities.DEFAULT_DRAWING_EXTENSION;
-        } else {
-            Log.e(LOGTAG, "Invalid document type passed.");
-            return;
-        }
-
-        String defaultFileName = getString(R.string.default_document_name) + extension;
-        String mimeType = FileUtilities.getMimeType(defaultFileName);
-
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType(mimeType);
-        intent.putExtra(Intent.EXTRA_TITLE, defaultFileName);
-
-        startActivityForResult(intent, REQUEST_CODE_CREATE_NEW_DOCUMENT);
-    }
-
-    private void loadNewDocument(DocumentType docType, Uri newFileUri) {
+    private void loadNewDocument(DocumentType docType) {
         final String newDocumentType;
         if (docType == DocumentType.WRITER) {
             newDocumentType = NEW_WRITER_STRING_KEY;
@@ -338,7 +304,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         Intent intent = new Intent(LibreOfficeUIActivity.this, LibreOfficeMainActivity.class);
         intent.putExtra(NEW_DOC_TYPE_KEY, newDocumentType);
-        intent.setData(newFileUri);
         startActivity(intent);
     }
 
@@ -493,20 +458,16 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 showSystemFilePickerAndOpenFile();
                 break;
             case R.id.newWriterFAB:
-                newDocType = DocumentType.WRITER;
-                createNewFileDialog();
+                loadNewDocument(DocumentType.WRITER);
                 break;
             case R.id.newImpressFAB:
-                newDocType = DocumentType.IMPRESS;
-                createNewFileDialog();
+                loadNewDocument(DocumentType.IMPRESS);
                 break;
             case R.id.newCalcFAB:
-                newDocType = DocumentType.CALC;
-                createNewFileDialog();
+                loadNewDocument(DocumentType.CALC);
                 break;
             case R.id.newDrawFAB:
-                newDocType = DocumentType.DRAW;
-                createNewFileDialog();
+                loadNewDocument(DocumentType.DRAW);
                 break;
         }
     }
