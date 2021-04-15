@@ -42,6 +42,7 @@ public class FileUtilities {
     public static final String MIMETYPE_OPENDOCUMENT_SPREADSHEET = "application/vnd.oasis.opendocument.spreadsheet";
     public static final String MIMETYPE_OPENDOCUMENT_PRESENTATION = "application/vnd.oasis.opendocument.presentation";
     public static final String MIMETYPE_OPENDOCUMENT_GRAPHICS = "application/vnd.oasis.opendocument.graphics";
+    public static final String MIMETYPE_PDF = "application/pdf";
 
     private static final Map<String, Integer> mExtnMap = new HashMap<String, Integer>();
     private static final Map<String, String> extensionToMimeTypeMap = new HashMap<String, String>();
