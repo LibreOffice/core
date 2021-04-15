@@ -17,8 +17,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
-#include <unotools/tempfile.hxx>
-#include <sfx2/docfile.hxx>
 #include <osl/file.hxx>
 
 using namespace com::sun::star;

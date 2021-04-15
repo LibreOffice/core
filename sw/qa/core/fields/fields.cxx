@@ -9,20 +9,13 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <com/sun/star/style/PageStyleLayout.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 
 #include <comphelper/propertyvalue.hxx>
-#include <svx/svdpage.hxx>
-#include <vcl/gdimtf.hxx>
 
-#include <IDocumentDrawModelAccess.hxx>
-#include <IDocumentLayoutAccess.hxx>
-#include <IDocumentState.hxx>
 #include <authfld.hxx>
 #include <docsh.hxx>
-#include <drawdoc.hxx>
 #include <rootfrm.hxx>
-#include <unotxdoc.hxx>
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
 
