@@ -351,7 +351,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
     }
     else if (colorType == PNG_COLOR_TYPE_GRAY)
     {
-        aBitmap.Erase(COL_WHITE);
         for (int pass = 0; pass < nNumberOfPasses; pass++)
         {
             for (png_uint_32 y = 0; y < height; y++)
