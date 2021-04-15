@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c97ba0b6_a8fd8042",
+        "filename": "compilerplugins/clang/stringliteralvar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-15T08:38:24Z",
+      "side": 1,
+      "message": "this copied text needs to be adapted",
+      "range": {
+        "startLine": 199,
+        "startChar": 64,
+        "endLine": 199,
+        "endChar": 75
+      },
+      "revId": "67ae928ef2e647085b4970884f21e4b9daf5fd1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
