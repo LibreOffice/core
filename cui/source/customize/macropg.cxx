@@ -35,7 +35,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-const char aVndSunStarUNO[] = "vnd.sun.star.UNO:";
+constexpr OUStringLiteral aVndSunStarUNO = u"vnd.sun.star.UNO:";
 
 SvxMacroTabPage_Impl::SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
     : bReadOnly(false)
@@ -277,7 +277,7 @@ namespace
         OUString aPureMethod;
         if (bUNO)
         {
-            aPureMethod = rURL.copy(strlen(aVndSunStarUNO));
+            aPureMethod = rURL.copy(aVndSunStarUNO.getLength());
         }
         else
         {
@@ -630,7 +630,7 @@ AssignComponentDialog::AssignComponentDialog(weld::Window* pParent, const OUStri
     OUString aMethodName;
     if( maURL.startsWith( aVndSunStarUNO ) )
     {
-        aMethodName = maURL.copy( strlen(aVndSunStarUNO) );
+        aMethodName = maURL.copy( aVndSunStarUNO.getLength() );
     }
     mxMethodEdit->set_text(aMethodName);
     mxMethodEdit->select_region(0, -1);

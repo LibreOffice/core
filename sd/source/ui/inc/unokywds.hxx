@@ -36,10 +36,12 @@ inline constexpr OUStringLiteral sUNO_Service_FillProperties
     = u"com.sun.star.drawing.FillProperties";
 inline constexpr OUStringLiteral sUNO_Service_PageBackground
     = u"com.sun.star.drawing.PageBackground";
-inline const char sUNO_Service_ImageMapRectangleObject[]
-    = "com.sun.star.image.ImageMapRectangleObject";
-inline const char sUNO_Service_ImageMapCircleObject[] = "com.sun.star.image.ImageMapCircleObject";
-inline const char sUNO_Service_ImageMapPolygonObject[] = "com.sun.star.image.ImageMapPolygonObject";
+inline constexpr OUStringLiteral sUNO_Service_ImageMapRectangleObject
+    = u"com.sun.star.image.ImageMapRectangleObject";
+inline constexpr OUStringLiteral sUNO_Service_ImageMapCircleObject
+    = u"com.sun.star.image.ImageMapCircleObject";
+inline constexpr OUStringLiteral sUNO_Service_ImageMapPolygonObject
+    = u"com.sun.star.image.ImageMapPolygonObject";
 
 // properties
 inline const char16_t sUNO_Prop_ForbiddenCharacters[] = u"ForbiddenCharacters";
@@ -58,7 +60,7 @@ inline const char16_t sUNO_Prop_HasValidSignatures[] = u"HasValidSignatures";
 inline const char16_t sUNO_Prop_InteropGrabBag[] = u"InteropGrabBag";
 
 // view settings
-inline const char sUNO_View_ViewId[] = "ViewId";
+inline constexpr OUStringLiteral sUNO_View_ViewId = u"ViewId";
 inline constexpr OUStringLiteral sUNO_View_SnapLinesDrawing = u"SnapLinesDrawing";
 inline constexpr OUStringLiteral sUNO_View_SnapLinesNotes = u"SnapLinesNotes";
 inline constexpr OUStringLiteral sUNO_View_SnapLinesHandout = u"SnapLinesHandout";
@@ -109,6 +111,6 @@ inline constexpr OUStringLiteral sUNO_View_VisibleAreaLeft = u"VisibleAreaLeft";
 inline constexpr OUStringLiteral sUNO_View_VisibleAreaWidth = u"VisibleAreaWidth";
 inline constexpr OUStringLiteral sUNO_View_VisibleAreaHeight = u"VisibleAreaHeight";
 
-inline const char sUNO_View_ZoomOnPage[] = "ZoomOnPage";
+inline constexpr OUStringLiteral sUNO_View_ZoomOnPage = u"ZoomOnPage";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

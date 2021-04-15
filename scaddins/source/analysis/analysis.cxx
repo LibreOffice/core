@@ -232,7 +232,7 @@ OUString SAL_CALL AnalysisAddIn::getArgumentDescription( const OUString& aName, 
     return aRet;
 }
 
-const char pDefCatName[] = "Add-In";
+constexpr OUStringLiteral pDefCatName = u"Add-In";
 
 OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aName )
 {

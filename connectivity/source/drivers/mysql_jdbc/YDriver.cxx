@@ -236,7 +236,7 @@ Reference<XConnection> SAL_CALL ODriverDelegator::connect(const OUString& url,
                         OUString sAdd;
                         if (RTL_TEXTENCODING_UTF8 == (*aLookup).getEncoding())
                         {
-                            static const char s_sCharSetOp[] = "useUnicode=true&";
+                            static constexpr OUStringLiteral s_sCharSetOp = u"useUnicode=true&";
                             if (!sCuttedUrl.matchIgnoreAsciiCase(s_sCharSetOp))
                             {
                                 sAdd = s_sCharSetOp;

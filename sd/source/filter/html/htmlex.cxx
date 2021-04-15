@@ -2242,8 +2242,8 @@ constexpr OUStringLiteral JS_NavigateAbs =
     "  }\r\n"
     "}\r\n\r\n";
 
-const char JS_NavigateRel[] =
-    "function NavigateRel( nDelta )\r\n"
+constexpr OUStringLiteral JS_NavigateRel =
+    u"function NavigateRel( nDelta )\r\n"
     "{\r\n"
     "  var nPage = parseInt(nCurrentPage) + parseInt(nDelta);\r\n"
     "  if( (nPage >= 0) && (nPage < nPageCount) )\r\n"
@@ -2252,15 +2252,15 @@ const char JS_NavigateRel[] =
     "  }\r\n"
     "}\r\n\r\n";
 
-const char JS_ExpandOutline[] =
-    "function ExpandOutline()\r\n"
+constexpr OUStringLiteral JS_ExpandOutline =
+    u"function ExpandOutline()\r\n"
     "{\r\n"
     "  frames[\"navbar2\"].location.href = \"navbar4.$EXT\";\r\n"
     "  frames[\"outline\"].location.href = \"outline1.$EXT\";\r\n"
     "}\r\n\r\n";
 
-const char JS_CollapseOutline[] =
-    "function CollapseOutline()\r\n"
+constexpr OUStringLiteral JS_CollapseOutline =
+    u"function CollapseOutline()\r\n"
     "{\r\n"
     "  frames[\"navbar2\"].location.href = \"navbar3.$EXT\";\r\n"
     "  frames[\"outline\"].location.href = \"outline0.$EXT\";\r\n"

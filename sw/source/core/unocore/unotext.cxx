@@ -73,7 +73,7 @@
 
 using namespace ::com::sun::star;
 
-const char cInvalidObject[] = "this object is invalid";
+constexpr OUStringLiteral cInvalidObject = u"this object is invalid";
 
 class SwXText::Impl
 {

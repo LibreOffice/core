@@ -36,7 +36,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-const char TITLE[] = "Title";
+constexpr OUStringLiteral TITLE = u"Title";
 
 class FolderDescriptor
 {
