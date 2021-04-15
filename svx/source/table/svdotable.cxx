@@ -245,6 +245,7 @@ private:
     static sal_Int32 lastRowCount;
     static sal_Int32 lastColCount;
     static std::vector<sal_Int32> lastColWidths;
+    static bool rowSizeChanged;
 };
 
 SdrTableObjImpl* SdrTableObjImpl::lastLayoutTable = nullptr;
@@ -255,6 +256,7 @@ bool SdrTableObjImpl::lastLayoutFitHeight;
 WritingMode SdrTableObjImpl::lastLayoutMode;
 sal_Int32 SdrTableObjImpl::lastRowCount;
 sal_Int32 SdrTableObjImpl::lastColCount;
+bool SdrTableObjImpl::rowSizeChanged = false;
 std::vector<sal_Int32> SdrTableObjImpl::lastColWidths;
 
 SdrTableObjImpl::SdrTableObjImpl()
@@ -599,6 +601,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
                 Reference< XIndexAccess > xRows( mxTable->getRows(), UNO_QUERY_THROW );
                 Reference< XPropertySet > xRowSet( xRows->getByIndex( (!nEdge)?nEdge:(nEdge-1) ), UNO_QUERY_THROW );
                 xRowSet->setPropertyValue( sSize, Any( nHeight ) );
+                rowSizeChanged = true;
             }
         }
         else
@@ -801,7 +804,8 @@ void SdrTableObjImpl::LayoutTable( tools::Rectangle& rArea, bool bFitWidth, bool
             || lastLayoutMode != writingMode
             || lastRowCount != getRowCount()
             || lastColCount != getColumnCount()
-            || lastColWidths != getColumnWidths() )
+            || lastColWidths != getColumnWidths()
+            || rowSizeChanged )
         {
             lastLayoutTable = this;
             lastLayoutInputRectangle = rArea;
@@ -816,6 +820,7 @@ void SdrTableObjImpl::LayoutTable( tools::Rectangle& rArea, bool bFitWidth, bool
             TableModelNotifyGuard aGuard( mxTable.get() );
             mpLayouter->LayoutTable( rArea, bFitWidth, bFitHeight );
             lastLayoutResultRectangle = rArea;
+            rowSizeChanged = false;
         }
         else
         {
