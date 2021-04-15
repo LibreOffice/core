@@ -96,7 +96,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
             }
             else if ( aPPAction.match( "hlinksldjump" ) )
             {
-                sURL.clear();
+                sHref = sURL;
 
                 sal_Int32 nIndex2 = 0;
                 while ( nIndex2 < sHref.getLength() )
