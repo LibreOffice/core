@@ -2564,7 +2564,7 @@
           <value xml:lang="en-US">Basic</value>
         </prop>
         <prop oor:name="Effects" oor:type="oor:string-list">
-          <value oor:separator=";">ooo-motionpath-4-point-star;ooo-motionpath-5-point-star;ooo-motionpath-6-point-star;ooo-motionpath-8-point-star;ooo-motionpath-circle;ooo-motionpath-crescent-moon;ooo-motionpath-diamond;ooo-motionpath-equal-triangle;ooo-motionpath-oval;ooo-motionpath-heart;ooo-motionpath-left;ooo-motionpath-right;ooo-motionpath-hexagon;ooo-motionpath-octagon;ooo-motionpath-parallelogram;ooo-motionpath-pentagon;ooo-motionpath-right-triangle;ooo-motionpath-square;ooo-motionpath-teardrop;ooo-motionpath-trapezoid</value>
+          <value oor:separator=";">ooo-motionpath-4-point-star;ooo-motionpath-5-point-star;ooo-motionpath-6-point-star;ooo-motionpath-8-point-star;ooo-motionpath-circle;ooo-motionpath-crescent-moon;ooo-motionpath-diamond;ooo-motionpath-equal-triangle;ooo-motionpath-oval;ooo-motionpath-heart;;ooo-motionpath-hexagon;ooo-motionpath-octagon;ooo-motionpath-parallelogram;ooo-motionpath-pentagon;ooo-motionpath-right-triangle;ooo-motionpath-square;ooo-motionpath-teardrop;ooo-motionpath-trapezoid</value>
         </prop>
       </node>
       <node oor:name="linesandcurves" oor:op="replace">
