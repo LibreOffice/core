@@ -22,6 +22,30 @@
       "revId": "217a33c803206f9ec02bd5a79619922d67334051",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "692c1532_0b870d7f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-15T14:27:48Z",
+      "side": 1,
+      "message": "I think the postponing is needed in general. Word is much less capable when it comes to shape text, when compared to what\u0027s possible in Writer TextFrames. E.g. Word text can only contain as-char images, while Writer TextFrames allow anchored images as well.\n\nYou can try to replace the postponing with e.g. changing at-char or to-para anchored content to as-char markup, which might be nicer, but some kind of tweak is needed, I expect.",
+      "parentUuid": "55306dbe_edfd9355",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 42
+      },
+      "revId": "217a33c803206f9ec02bd5a79619922d67334051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
