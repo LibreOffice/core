@@ -2944,7 +2944,13 @@ static void lcl_PasteRedlines(
         xCrsr->goRight(redPos[i/3], false);
         xCrsr->goRight(redLen[i/3], true);
         uno::Reference < text::XRedline > xRedline( xCrsr, uno::UNO_QUERY_THROW );
-        xRedline->makeRedline( sType, aRedlineProperties );
+        try {
+            xRedline->makeRedline( sType, aRedlineProperties );
+        }
+        catch(const uno::Exception&)
+        {
+            // ignore (footnotes of tracked deletions)
+        }
     }
 }
 

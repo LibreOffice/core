@@ -170,7 +170,8 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
         // send uFtnSep to sign new footnote content, but skip footnote separators
         if (!Attribs->hasAttribute(W_TOKEN(type)) ||
                 ( Attribs->getValue(W_TOKEN(type)) != "separator" &&
-                  Attribs->getValue(W_TOKEN(type)) != "continuationSeparator" ))
+                  Attribs->getValue(W_TOKEN(type)) != "continuationSeparator" &&
+                  Attribs->getValue(W_TOKEN(type)) != "continuationNotice" ))
         {
             mpParserState->setStartFootnote(true);
         }
