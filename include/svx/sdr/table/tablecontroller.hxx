@@ -58,6 +58,7 @@ public:
     SVX_DLLPRIVATE virtual bool DeleteMarked() override;
 
     SVX_DLLPRIVATE virtual void onSelectionHasChanged() override;
+    SVX_DLLPRIVATE virtual void onSelectAll() override;
 
     SVX_DLLPRIVATE virtual void GetState( SfxItemSet& rSet ) override;
     virtual void Execute( SfxRequest& rReq ) override;
