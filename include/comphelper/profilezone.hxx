@@ -14,6 +14,8 @@
 
 #include <atomic>
 
+#include <osl/process.h>
+#include <osl/time.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
@@ -22,29 +24,21 @@
 
 namespace comphelper
 {
-namespace ProfileRecording
-{
-COMPHELPER_DLLPUBLIC void startRecording();
-COMPHELPER_DLLPUBLIC void stopRecording();
-
-COMPHELPER_DLLPUBLIC long long addRecording(const char* aProfileId, long long aCreateTime);
-
-COMPHELPER_DLLPUBLIC css::uno::Sequence<OUString> getRecordingAndClear();
-
-} // namespace ProfileRecording
-
 class COMPHELPER_DLLPUBLIC ProfileZone
 {
 private:
+    static std::atomic<bool> s_bRecording; // true during recording
+    static int s_nNesting;
     const char* m_sProfileId;
-    long long m_aCreateTime;
+    long long m_nCreateTime;
     bool m_bConsole;
     void startConsole();
     void stopConsole();
+    int m_nPid;
+
+    void addRecording();
 
 public:
-    static std::atomic<bool> g_bRecording; // true during recording
-
     /**
      * Starts measuring the cost of a C++ scope.
      *
@@ -61,10 +55,26 @@ public:
      * committing.
      */
     ProfileZone(const char* sProfileId, bool bConsole = false)
-        : m_sProfileId(sProfileId)
-        , m_aCreateTime(g_bRecording ? ProfileRecording::addRecording(sProfileId, 0) : 0)
+        : m_sProfileId(sProfileId ? sProfileId : "(null)")
         , m_bConsole(bConsole)
     {
+        if (s_bRecording)
+        {
+            TimeValue systemTime;
+            osl_getSystemTime(&systemTime);
+            m_nCreateTime
+                = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec / 1000;
+
+            oslProcessInfo aProcessInfo;
+            aProcessInfo.Size = sizeof(oslProcessInfo);
+            if (osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &aProcessInfo)
+                == osl_Process_E_None)
+                m_nPid = aProcessInfo.Ident;
+
+            s_nNesting++;
+        }
+        else
+            m_nCreateTime = 0;
         if (m_bConsole)
         {
             startConsole();
@@ -72,13 +82,21 @@ public:
     }
     ~ProfileZone()
     {
-        if (g_bRecording)
-            ProfileRecording::addRecording(m_sProfileId, m_aCreateTime);
+        if (s_bRecording)
+        {
+            s_nNesting--;
+            addRecording();
+        }
         if (m_bConsole)
         {
             stopConsole();
         }
     }
+
+    static void startRecording();
+    static void stopRecording();
+
+    static css::uno::Sequence<OUString> getRecordingAndClear();
 };
 
 } // namespace comphelper
