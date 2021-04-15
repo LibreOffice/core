@@ -76,6 +76,7 @@ public:
     void testBulletsAsImage();
     void testTdf113818();
     void testTdf119629();
+    void testTdf141269();
     void testTdf123557();
     void testTdf113822();
     void testTdf126761();
@@ -117,6 +118,7 @@ public:
     CPPUNIT_TEST(testBulletsAsImage);
     CPPUNIT_TEST(testTdf113818);
     CPPUNIT_TEST(testTdf119629);
+    CPPUNIT_TEST(testTdf141269);
     CPPUNIT_TEST(testTdf123557);
     CPPUNIT_TEST(testTdf113822);
     CPPUNIT_TEST(testTdf126761);
@@ -1206,6 +1208,35 @@ void SdExportTest::testTdf119629()
             "/anim:par[@presentation:node-type='with-previous']"
             "/anim:par[@presentation:node-type='on-click']"
             "/anim:animate[@anim:formula='width*sin(2.5*pi*$)']", 1);
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf141269()
+{
+    utl::TempFile tempFile;
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf141269.odp"), ODP);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPT);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xShape.is());
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("Graphic") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+
+    Graphic aGraphic(xGraphic);
+    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1920), aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1080), aBitmap.GetSizePixel().Height());
+
+    Color aExpectedColor(0xC2DEEA);
+    aExpectedColor.SetAlpha(0xF);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Color: R:194 G:222 B:234 A:240
+    // - Actual  : Color: R:194 G:222 B:234 A:15
+    CPPUNIT_ASSERT_EQUAL(aExpectedColor, aBitmap.GetPixelColor(960, 540));
+
     xDocShRef->DoClose();
 }
 
