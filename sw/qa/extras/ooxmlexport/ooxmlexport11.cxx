@@ -1306,6 +1306,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagr
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:rPr/w:del");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf141660, "tdf141660.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:footnoteReference", "id", "2");
+    // w:del is imported correctly with its footnote
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:del[2]/w:r/w:footnoteReference", "id", "3");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/w:footnoteReference", "id", "4");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133643, "tdf133643.doc")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
