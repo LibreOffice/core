@@ -13,6 +13,8 @@
 #include <sfx2/safemode.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/settings.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ZipPackageHelper.hxx>
 #include <unotools/configmgr.hxx>
@@ -83,9 +85,7 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
     RadioBtnHdl(*mxRadioRestore);
 
     // Set URL for help button (module=safemode)
-    OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
-        "&LOlocale=" + utl::ConfigManager::getUILocale() + "&LOmodule=safemode");
-    mxBugLink->set_uri(sURL);
+    mxBugLink->set_uri("https://www.allotropia.de/#contact");
 
     mxUserProfileLink->set_uri(comphelper::BackupFileHelper::getUserProfileURL());
 }
