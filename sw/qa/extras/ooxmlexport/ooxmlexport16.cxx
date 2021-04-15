@@ -16,6 +16,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -144,6 +145,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134619_numberingProps, "tdf134619_num
     // Make sure that the blue bullet's font size is 72 points, not 12 points.
     uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName(aCharStyleName), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(72.f, getProperty<float>(xStyle, "CharHeight"));
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134951_duplicates, "tdf134951_duplicates.odt")
+{
+    uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xEndnotesSupplier->getEndnotes()->getCount());
+
+    getParagraph(5, "Duplicate fields: 1");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135773_numberingShading, "tdf135774_numberingShading.docx")
