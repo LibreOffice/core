@@ -1095,14 +1095,14 @@ $(call gb_LinkTarget_add_defs,$(1),\
 	-DAPR_DECLARE_STATIC \
 	-DAPU_DECLARE_STATIC \
 )
-$(call gb_LinkTarget_use_external_project,$(1),apr_util)
+$(call gb_LinkTarget_use_external_project,$(1),apr_util,full)
 endif
 
 endef
 
 define gb_ExternalProject__use_apr
 ifeq ($(SYSTEM_APR),)
-$(call gb_ExternalProject_use_external_project,$(1),apr_util)
+$(call gb_ExternalProject_use_external_project,$(1),apr_util,full)
 endif
 
 endef
