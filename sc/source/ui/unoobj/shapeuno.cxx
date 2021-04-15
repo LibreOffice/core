@@ -47,7 +47,7 @@
 
 using namespace ::com::sun::star;
 
-static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
+static const SfxItemPropertyMap& lcl_GetShapeMap()
 {
     static const SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {
@@ -61,7 +61,8 @@ static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
         {u"" SC_UNONAME_URL, 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { u"", 0, css::uno::Type(), 0, 0 }
     };
-    return aShapeMap_Impl;
+    static const SfxItemPropertyMap aMap(aShapeMap_Impl);
+    return aMap;
 }
 
 const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
@@ -177,6 +178,17 @@ void ScShapeObj::GetShapePropertyState()
     }
 }
 
+void ScShapeObj::GetShapePropertySetInfo()
+{
+    if (!mpShapePropertySetInfo)
+    {
+        uno::Reference<beans::XPropertySetInfo> xProp;
+        if ( mxShapeAgg.is() )
+            mxShapeAgg->queryAggregation( cppu::UnoType<beans::XPropertySetInfo>::get()) >>= xProp;
+        mpShapePropertySetInfo = xProp.get();
+    }
+}
+
 static uno::Reference<lang::XComponent> lcl_GetComponent( const uno::Reference<uno::XAggregation>& xAgg )
 {
     uno::Reference<lang::XComponent> xRet;
@@ -213,21 +225,45 @@ static uno::Reference<text::XTextRange> lcl_GetTextRange( const uno::Reference<u
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
+    return this;
+}
 
-    // #i61527# cache property set info for this object
-    if ( !mxPropSetInfo.is() )
+// XPropertySetInfo
+
+css::uno::Sequence< css::beans::Property > SAL_CALL ScShapeObj::getProperties()
+{
+    css::uno::Sequence< css::beans::Property > aProps;
+    GetShapePropertySetInfo();
+    if (mpShapePropertySetInfo)
     {
-        //  mix own and aggregated properties:
-        GetShapePropertySet();
-        if (pShapePropertySet)
-        {
-            uno::Reference<beans::XPropertySetInfo> xAggInfo(pShapePropertySet->getPropertySetInfo());
-            const uno::Sequence<beans::Property> aPropSeq(xAggInfo->getProperties());
-            mxPropSetInfo.set(new SfxExtItemPropertySetInfo( lcl_GetShapeMap(), aPropSeq ));
-        }
+        aProps = mpShapePropertySetInfo->getProperties();
     }
-    return mxPropSetInfo;
+    const SfxItemPropertyMap & rMap = lcl_GetShapeMap();
+    return comphelper::concatSequences(aProps, rMap.getProperties());
+}
+
+css::beans::Property SAL_CALL ScShapeObj::getPropertyByName( const OUString& aName )
+{
+    const SfxItemPropertyMap & rMap = lcl_GetShapeMap();
+    if (rMap.hasPropertyByName(aName))
+        return rMap.getPropertyByName(aName);
+
+    GetShapePropertySetInfo();
+    if (mpShapePropertySetInfo)
+        return mpShapePropertySetInfo->getPropertyByName(aName);
+
+    throw css::beans::UnknownPropertyException(aName);
+}
+
+sal_Bool SAL_CALL ScShapeObj::hasPropertyByName( const OUString& aName )
+{
+    const SfxItemPropertyMap & rMap = lcl_GetShapeMap();
+    if (rMap.hasPropertyByName(aName))
+        return true;
+    GetShapePropertySetInfo();
+    if (mpShapePropertySetInfo)
+        return mpShapePropertySetInfo->hasPropertyByName(aName);
+    return false;
 }
 
 static bool lcl_GetPageNum( const SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
