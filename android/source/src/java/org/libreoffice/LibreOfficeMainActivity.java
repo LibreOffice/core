@@ -169,24 +169,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         mDocumentOverlay = new DocumentOverlay(this, layerView);
 
         mbISReadOnlyMode = !isExperimentalMode();
-        boolean isNewDocument = false;
 
         mDocumentUri = getIntent().getData();
         if (mDocumentUri != null) {
             if (mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
                     || mDocumentUri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)) {
-                final boolean isReadOnlyDoc;
-                if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
-                    // New document type string is not null, meaning we want to open a new document
-                    String newDocumentType = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY);
-                    // create a temporary local file, will be copied to the actual URI when saving
-                    loadNewDocument(newDocumentType);
-                    isNewDocument = true;
-                    isReadOnlyDoc = false;
-                } else {
-                    isReadOnlyDoc = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
-                }
-
+                final boolean isReadOnlyDoc  = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
                 mbISReadOnlyMode = !isExperimentalMode() || isReadOnlyDoc;
                 Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + mDocumentUri.getPath());
 
@@ -198,12 +186,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + mDocumentUri.getPath());
                 toolbarTop.setTitle(mDocumentUri.getLastPathSegment());
             }
-        } else {
-            Log.e(LOGTAG, "No document specified. This should never happen.");
-            return;
-        }
-
-        if (!isNewDocument) {
             // create a temporary local copy to work with
             boolean copyOK = copyFileToTemp() && mTempFile != null;
             if (!copyOK) {
@@ -212,6 +194,15 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 return;
             }
             LOKitShell.sendLoadEvent(mTempFile.getPath());
+        } else if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
+            // New document type string is not null, meaning we want to open a new document
+            String newDocumentType = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY);
+            // create a temporary local file, will be copied to the actual URI when saving
+            loadNewDocument(newDocumentType);
+            toolbarTop.setTitle(getString(R.string.default_document_name));
+        } else {
+            Log.e(LOGTAG, "No document specified. This should never happen.");
+            return;
         }
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -339,6 +330,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), mDocumentUri);
         toolbarTop.setTitle(displayName);
+        // make sure that "Save" menu item is enabled
+        getToolbarController().setupToolbars();
     }
 
     public void exportToPDF() {
@@ -878,6 +871,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     public static boolean isReadOnlyMode() {
         return mbISReadOnlyMode;
+    }
+
+    public boolean hasLocationForSave() {
+        return mDocumentUri != null;
     }
 
     public static void setDocumentChanged (boolean changed) {
