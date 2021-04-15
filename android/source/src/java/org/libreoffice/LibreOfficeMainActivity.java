@@ -64,6 +64,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private static final String ASSETS_EXTRACTED_PREFS_KEY = "ASSETS_EXTRACTED";
     private static final String ENABLE_DEVELOPER_PREFS_KEY = "ENABLE_DEVELOPER";
     private static final int REQUEST_CODE_SAVEAS = 12345;
+    private static final int REQUEST_CODE_EXPORT_TO_PDF = 12346;
 
     //TODO "public static" is a temporary workaround
     public static LOKitThread loKitThread;
@@ -338,6 +339,46 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), mDocumentUri);
         toolbarTop.setTitle(displayName);
+    }
+
+    public void exportToPDF() {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType(FileUtilities.MIMETYPE_PDF);
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, mDocumentUri);
+
+        startActivityForResult(intent, REQUEST_CODE_EXPORT_TO_PDF);
+    }
+
+    private void exportToPDF(final Uri uri) {
+        boolean exportOK = false;
+        File tempFile = null;
+        try {
+            tempFile = File.createTempFile("LibreOffice_", ".pdf");
+            mTileProvider.saveDocumentAs(tempFile.getAbsolutePath(),"pdf", false);
+
+            try {
+                FileInputStream inputStream = new FileInputStream(tempFile);
+                exportOK = copyStreamToUri(inputStream, uri);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (tempFile != null && tempFile.exists()) {
+                tempFile.delete();
+            }
+        }
+
+        final int msgId = exportOK ? R.string.pdf_export_finished : R.string.unable_to_export_pdf;
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                showCustomStatusMessage(getString(msgId));
+            }
+        });
     }
 
     /**
@@ -1046,6 +1087,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         if (requestCode == REQUEST_CODE_SAVEAS && resultCode == RESULT_OK) {
             final Uri fileUri = data.getData();
             saveDocumentAs(fileUri);
+        } else if (requestCode == REQUEST_CODE_EXPORT_TO_PDF && resultCode == RESULT_OK) {
+            final Uri fileUri = data.getData();
+            exportToPDF(fileUri);
         } else {
             mFormattingController.handleActivityResult(requestCode, resultCode, data);
             hideBottomToolbar();

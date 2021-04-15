@@ -149,7 +149,6 @@
     <string name="display_language">Uygulama Dili</string>
     <string name="display_language_summary">Varsayılan dili değiştir</string>
     <string name="unable_to_export_pdf">Pdf dışa aktarılamıyor.</string>
-    <string name="pdf_exported_at">Şu konumda pdf\'e aktarıldı: </string>
     <string name="printing_not_supported">Cihazınız yazdırmayı desteklemiyor.</string>
     <string name="error">Hata</string>
     <string name="enter_part_name">Bölüm ismi girin.</string>

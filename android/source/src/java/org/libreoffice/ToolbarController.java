@@ -181,10 +181,10 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 mContext.openDrawer();
                 return true;
             case R.id.action_exportToPDF:
-                mContext.getTileProvider().exportToPDF(false);
+                mContext.exportToPDF();
                 return true;
             case R.id.action_print:
-                mContext.getTileProvider().exportToPDF(true);
+                mContext.getTileProvider().printDocument();
                 return true;
             case R.id.action_settings:
                 mContext.showSettings();

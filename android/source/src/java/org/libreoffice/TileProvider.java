@@ -29,8 +29,9 @@ public interface TileProvider {
      *                      as compared to just saving a copy of the current document
      *                      or exporting to a different file format.
      *                      Must be 'false' when using this method for export to e.g. PNG or PDF.
+     * @return Whether saving was successful.
      */
-    void saveDocumentAs(String filePath, String format, boolean takeOwnership);
+    boolean saveDocumentAs(String filePath, String format, boolean takeOwnership);
 
     /**
      * Saves the current document under the given path,
@@ -38,7 +39,7 @@ public interface TileProvider {
      * @param takeOwnership (s. documentation for
      *                      'saveDocumentAs(String filePath, String format, boolean takeOwnership)')
      */
-    void saveDocumentAs(String filePath, boolean takeOwnership);
+    boolean saveDocumentAs(String filePath, boolean takeOwnership);
 
     /**
      * Returns the page width in pixels.
