@@ -340,25 +340,22 @@ class LOKitTileProvider implements TileProvider {
     }
 
     public void printDocument() {
+        if (Build.VERSION.SDK_INT < 19) {
+            mContext.showCustomStatusMessage(mContext.getString(R.string.printing_not_supported));
+            return;
+        }
+
         String mInputFileName = (new File(mInputFile)).getName();
         String file = mInputFileName.substring(0,(mInputFileName.length()-3))+"pdf";
         String cacheFile = mContext.getExternalCacheDir().getAbsolutePath() + "/" + file;
         mDocument.saveAs("file://"+cacheFile,"pdf","");
-        printDocument(cacheFile);
-    }
+        try {
+            PrintManager printManager = (PrintManager) mContext.getSystemService(Context.PRINT_SERVICE);
+            PrintDocumentAdapter printAdapter = new PDFDocumentAdapter(mContext, cacheFile);
+            printManager.print("Document", printAdapter, new PrintAttributes.Builder().build());
 
-    private void printDocument(String cacheFile) {
-        if (Build.VERSION.SDK_INT >= 19) {
-            try {
-                PrintManager printManager = (PrintManager) mContext.getSystemService(Context.PRINT_SERVICE);
-                PrintDocumentAdapter printAdapter = new PDFDocumentAdapter(mContext, cacheFile);
-                printManager.print("Document", printAdapter, new PrintAttributes.Builder().build());
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            mContext.showCustomStatusMessage(mContext.getString(R.string.printing_not_supported));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
