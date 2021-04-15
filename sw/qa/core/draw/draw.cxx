@@ -10,7 +10,6 @@
 #include <swmodeltestbase.hxx>
 
 #include <svx/svdpage.hxx>
-#include <vcl/scheduler.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
