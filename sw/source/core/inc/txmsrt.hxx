@@ -299,7 +299,7 @@ public:
     OUString GetText(sal_uInt16 nAuthField, const SwRootFrame* pLayout) const;
 
     /// Gets the URL of the underlying SwAuthEntry, ignoring its page number.
-    OUString GetSourceURL(const OUString& rText) const;
+    static OUString GetSourceURL(const OUString& rText);
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_TXMSRT_HXX
