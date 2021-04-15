@@ -50,6 +50,8 @@ public:
 
     virtual void onSelectionHasChanged();
 
+    virtual void onSelectAll();
+
     virtual void GetState( SfxItemSet& rSet );
     virtual void Execute( SfxRequest& rReq );
 
