@@ -1542,7 +1542,7 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
         if( !pA )
             return;
 
-        sal_uLong       nTrans = cTrans, nNewTrans;
+        sal_uLong nTrans = cTrans;
         const tools::Long  nWidth = pA->Width(), nHeight = pA->Height();
 
         if( pA->GetScanlineFormat() == ScanlineFormat::N8BitPal )
@@ -1553,8 +1553,10 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
 
                 for( tools::Long nX = 0; nX < nWidth; nX++ )
                 {
-                    nNewTrans = nTrans + *pAScan;
-                    *pAScan++ = static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 0 : (255 - nNewTrans) );
+                    sal_uLong nNewTrans = nTrans + (255 - *pAScan);
+                    // clamp to 255
+                    nNewTrans = ( nNewTrans & 0xffffff00 ) ? 0 : nNewTrans;
+                    *pAScan++ = static_cast<sal_uInt8>( 255 - nNewTrans );
                 }
             }
         }
@@ -1567,8 +1569,11 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
                 Scanline pScanline = pA->GetScanline( nY );
                 for( tools::Long nX = 0; nX < nWidth; nX++ )
                 {
-                    nNewTrans = nTrans + pA->GetIndexFromData( pScanline, nX );
-                    aAlphaValue.SetIndex( static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );
+                    sal_uLong nNewTrans = nTrans + (255 - pA->GetIndexFromData( pScanline, nX ));
+                    // clamp to 255
+                    nNewTrans = ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans;
+                    // convert back to alpha
+                    aAlphaValue.SetIndex( static_cast<sal_uInt8>(255 - nNewTrans) );
                     pA->SetPixelOnData( pScanline, nX, aAlphaValue );
                 }
             }

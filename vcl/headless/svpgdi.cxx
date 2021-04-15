@@ -508,9 +508,6 @@ namespace
 
     class MaskHelper : public SurfaceHelper
     {
-    private:
-        std::unique_ptr<unsigned char[]> pAlphaBits;
-
     public:
         explicit MaskHelper(const SalBitmap& rAlphaBitmap)
         :   SurfaceHelper(),
@@ -521,18 +518,6 @@ namespace
 
             if (rAlphaBitmap.GetBitCount() == 8)
             {
-                // the alpha values need to be inverted for Cairo
-                // so big stupid copy and invert here
-                const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
-                pAlphaBits.reset( new unsigned char[nImageSize] );
-                memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
-
-                // TODO: make upper layers use standard alpha
-                sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits.get());
-                for( int i = nImageSize/sizeof(sal_uInt32); --i >= 0; ++pLDst )
-                    *pLDst = ~*pLDst;
-                assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits.get()+nImageSize);
-
                 implSetSurface(
                     cairo_image_surface_create_for_data(
                         pAlphaBits.get(),
@@ -543,21 +528,6 @@ namespace
             }
             else
             {
-                // the alpha values need to be inverted for Cairo
-                // so big stupid copy and invert here
-                const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
-                pAlphaBits.reset( new unsigned char[nImageSize] );
-                memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
-
-                const sal_Int32 nBlackIndex = pMaskBuf->maPalette.GetBestIndex(BitmapColor(COL_BLACK));
-                if (nBlackIndex == 0)
-                {
-                    // TODO: make upper layers use standard alpha
-                    unsigned char* pDst = pAlphaBits.get();
-                    for (int i = nImageSize; --i >= 0; ++pDst)
-                        *pDst = ~*pDst;
-                }
-
                 implSetSurface(
                     cairo_image_surface_create_for_data(
                         pAlphaBits.get(),
