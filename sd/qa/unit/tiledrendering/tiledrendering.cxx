@@ -1453,8 +1453,8 @@ void SdTiledRenderingTest::testTdf118354()
     Scheduler::ProcessEventsToIdle();
 
     SdrView* pView = pViewShell->GetView();
-    rtl::Reference<sdr::SelectionController> xSelectionController(pView->getSelectionController());
-    CPPUNIT_ASSERT(xSelectionController->hasSelectedCells());
+    auto pMarkedObj = dynamic_cast<sdr::table::SdrTableObj*>(pView->GetMarkedObjectbyIndex(0));
+    CPPUNIT_ASSERT(pMarkedObj == pTableObject);
 }
 
 void SdTiledRenderingTest::testPostKeyEventInvalidation()
