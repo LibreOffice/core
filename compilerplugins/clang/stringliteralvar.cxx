@@ -155,6 +155,53 @@ public:
         return true;
     }
 
+    bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* expr)
+    {
+        if (ignoreLocation(expr))
+        {
+            return true;
+        }
+        if (expr->getOperator() != OO_Equal)
+        {
+            return true;
+        }
+        loplugin::TypeCheck const tc(expr->getType());
+        if (!(tc.Class("OString").Namespace("rtl").GlobalNamespace()
+              || tc.Class("OUString").Namespace("rtl").GlobalNamespace()))
+        {
+            return true;
+        }
+        if (expr->getNumArgs() != 2)
+        {
+            return true;
+        }
+        auto const e = dyn_cast<DeclRefExpr>(expr->getArg(1)->IgnoreParenImpCasts());
+        if (e == nullptr)
+        {
+            return true;
+        }
+        auto const t = e->getType();
+        if (!(t.isConstQualified() && t->isConstantArrayType()))
+        {
+            return true;
+        }
+        auto const d = e->getDecl();
+        if (!reportedArray_.insert(d).second)
+        {
+            return true;
+        }
+        report(DiagnosticsEngine::Warning,
+               "change type of variable %0 from constant character array (%1) to "
+               "%select{OStringLiteral|OUStringLiteral}2%select{|, and make it static}3",
+               d->getLocation())
+            << d << d->getType() << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1)
+            << isAutomaticVariable(cast<VarDecl>(d)) << d->getSourceRange();
+        report(DiagnosticsEngine::Note, "first passed into a %0 constructor here",
+               compat::getBeginLoc(expr))
+            << expr->getType().getUnqualifiedType() << expr->getSourceRange();
+        return true;
+    }
+
     bool VisitUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr const* expr)
     {
         if (ignoreLocation(expr))
