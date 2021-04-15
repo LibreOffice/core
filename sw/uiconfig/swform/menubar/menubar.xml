@@ -735,7 +735,6 @@
       <menu:menuitem menu:id=".uno:TipOfTheDay"/>
       <menu:menuitem menu:id=".uno:CommandPopup"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:QuestionAnswers"/>
       <menu:menuitem menu:id=".uno:SendFeedback"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SafeMode"/>
