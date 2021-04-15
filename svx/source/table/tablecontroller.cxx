@@ -417,6 +417,14 @@ void SvxTableController::onSelectionHasChanged()
         destroySelectionOverlay();
     }
 }
+void SvxTableController::onSelectAll()
+{
+    sdr::table::SdrTableObj* pTableObj = mxTableObj.get();
+    if ( pTableObj && !pTableObj->IsTextEditActive())
+    {
+        selectAll();
+    }
+}
 
 
 void SvxTableController::GetState( SfxItemSet& rSet )
