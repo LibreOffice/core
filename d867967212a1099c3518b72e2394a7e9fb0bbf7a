@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9298f974_40877a79",
+        "filename": "compilerplugins/clang/stringliteralvar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-15T09:28:42Z",
+      "side": 1,
+      "message": "that should be dropped?",
+      "range": {
+        "startLine": 11,
+        "startChar": 44,
+        "endLine": 11,
+        "endChar": 55
+      },
+      "revId": "d867967212a1099c3518b72e2394a7e9fb0bbf7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
