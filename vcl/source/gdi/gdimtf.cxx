@@ -1749,7 +1749,7 @@ Color GDIMetaFile::ImplColConvertFnc( const Color& rColor, const void* pColParam
     if( MtfConversion::N1BitThreshold == static_cast<const ImplColConvertParam*>(pColParam)->eConversion )
         cLum = ( cLum < 128 ) ? 0 : 255;
 
-    return Color( ColorTransparency, 255 - rColor.GetAlpha(), cLum, cLum, cLum );
+    return Color( ColorAlpha, rColor.GetAlpha(), cLum, cLum, cLum );
 }
 
 BitmapEx GDIMetaFile::ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBmpParam )

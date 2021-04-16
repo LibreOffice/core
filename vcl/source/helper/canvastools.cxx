@@ -114,7 +114,7 @@ namespace vcl::unotools
                                                                       toByteColor(rColor.Green),
                                                                       toByteColor(rColor.Blue))))) );
                                 rAlphaAcc->SetPixelOnData( pScanlineAlpha, x,
-                                                     BitmapColor( 255 - toByteColor(rColor.Alpha) ));
+                                                     BitmapColor( toByteColor(rColor.Alpha) ));
                             }
                         }
                         else
@@ -127,7 +127,7 @@ namespace vcl::unotools
                                                                   toByteColor(rColor.Green),
                                                                   toByteColor(rColor.Blue) ));
                                 rAlphaAcc->SetPixelOnData( pScanlineAlpha, x,
-                                                     BitmapColor( 255 - toByteColor(rColor.Alpha) ));
+                                                     BitmapColor( toByteColor(rColor.Alpha) ));
                             }
                         }
                     }

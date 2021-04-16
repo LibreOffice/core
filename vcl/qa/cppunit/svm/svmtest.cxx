@@ -25,6 +25,7 @@
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <sal/log.hxx>
 
 #include <bitmap/BitmapWriteAccess.hxx>
 
@@ -44,7 +45,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }
 
-    void checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile);
+    void checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile, const char * where);
 
     // write GDI Metafile to a file in data directory
     // only use this for new tests to create the svm file
@@ -266,7 +267,7 @@ static void setupBaseVirtualDevice(VirtualDevice& rDevice, GDIMetaFile& rMeta)
     rDevice.Erase();
 }
 
-void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile)
+void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile, const char * where)
 {
     BitmapEx aSourceBitmapEx = pVirtualDev->GetBitmapEx(Point(), Size(10, 10));
     ScopedVclPtrInstance<VirtualDevice> pVirtualDevResult;
@@ -274,25 +275,25 @@ void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtua
     const_cast<GDIMetaFile&>(rMetaFile).Play(*pVirtualDevResult);
     BitmapEx aResultBitmapEx = pVirtualDevResult->GetBitmapEx(Point(), Size(10, 10));
 
-    const bool bWriteCompareBitmap = false;
+    const bool bWriteCompareBitmap = true;
 
     if (bWriteCompareBitmap)
     {
-        utl::TempFile aTempFile;
-        aTempFile.EnableKillingFile();
+        //utl::TempFile aTempFile;
+        //aTempFile.EnableKillingFile();
 
         {
-            SvFileStream aStream(aTempFile.GetURL() + ".source.png", StreamMode::WRITE | StreamMode::TRUNC);
+            SvFileStream aStream("~/libo/source.png", StreamMode::WRITE | StreamMode::TRUNC);
             vcl::PNGWriter aPNGWriter(aSourceBitmapEx);
             aPNGWriter.Write(aStream);
         }
         {
-            SvFileStream aStream(aTempFile.GetURL() + ".result.png", StreamMode::WRITE | StreamMode::TRUNC);
+            SvFileStream aStream("~/libo/result.png", StreamMode::WRITE | StreamMode::TRUNC);
             vcl::PNGWriter aPNGWriter(aResultBitmapEx);
             aPNGWriter.Write(aStream);
         }
     }
-    CPPUNIT_ASSERT_EQUAL(aSourceBitmapEx.GetChecksum(), aResultBitmapEx.GetChecksum());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(where, aSourceBitmapEx.GetChecksum(), aResultBitmapEx.GetChecksum());
 }
 
 static GDIMetaFile readMetafile(const OUString& rUrl)
@@ -975,12 +976,12 @@ void SvmTest::testBitmaps()
     {
         GDIMetaFile aReloadedGDIMetaFile = writeAndReadStream(aGDIMetaFile);
         checkBitmaps(aReloadedGDIMetaFile);
-        checkRendering(pVirtualDev, aReloadedGDIMetaFile);
+        checkRendering(pVirtualDev, aReloadedGDIMetaFile, SAL_WHERE);
     }
     {
         GDIMetaFile aFileGDIMetaFile = readFile(u"bitmaps.svm");
         checkBitmaps(aFileGDIMetaFile);
-        checkRendering(pVirtualDev, aFileGDIMetaFile);
+        checkRendering(pVirtualDev, aFileGDIMetaFile, SAL_WHERE);
     }
 }
 
@@ -991,8 +992,7 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
     if (SkiaHelper::isVCLSkiaEnabled())
         return; // TODO SKIA using CRCs is broken (the idea of it)
 
-    std::vector<OUString> aExpectedCRC;
-    aExpectedCRC.insert(aExpectedCRC.end(),
+    static const std::vector<OUString> aExpectedCRC
     {
         "d8377d4f",
         "281fc589",
@@ -1002,7 +1002,7 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
         "3c80d829", // 4-bit color bitmap - same as 8-bit color bitmap
         "3c80d829",
         "71efc447",
-    });
+    };
 
     assertXPathAttrs(pDoc, "/metafile/bmpex[1]", {
         {"x", "1"}, {"y", "1"}, {"crc", aExpectedCRC[0]}, {"transparenttype", "bitmap"}
@@ -1054,93 +1054,94 @@ void SvmTest::testBitmapExs()
     }
 
     // DrawBitmapEx - Scale
-    {
-        Bitmap aBitmap(Size(4,4), vcl::PixelFormat::N24_BPP);
-        {
-            BitmapScopedWriteAccess pAccess(aBitmap);
-            pAccess->Erase(COL_GREEN);
-        }
-        pVirtualDev->DrawBitmapEx(Point(5, 0), Size(2, 3), BitmapEx(aBitmap, COL_WHITE));
-    }
+//    {
+//        Bitmap aBitmap(Size(4,4), vcl::PixelFormat::N24_BPP);
+//        {
+//            BitmapScopedWriteAccess pAccess(aBitmap);
+//            pAccess->Erase(COL_GREEN);
+//        }
+//        pVirtualDev->DrawBitmapEx(Point(5, 0), Size(2, 3), BitmapEx(aBitmap, COL_WHITE));
+//    }
+//
+//    // DrawBitmapEx - Scale - Part
+//    {
+//        Bitmap aBitmap(Size(4,4), vcl::PixelFormat::N24_BPP);
+//        {
+//            BitmapScopedWriteAccess pAccess(aBitmap);
+//            pAccess->Erase(COL_BLUE);
+//        }
+//        pVirtualDev->DrawBitmapEx(Point(7, 1), Size(2, 2), Point(0, 0), Size(3, 4), BitmapEx(aBitmap, COL_WHITE));
+//    }
 
-    // DrawBitmapEx - Scale - Part
-    {
-        Bitmap aBitmap(Size(4,4), vcl::PixelFormat::N24_BPP);
-        {
-            BitmapScopedWriteAccess pAccess(aBitmap);
-            pAccess->Erase(COL_BLUE);
-        }
-        pVirtualDev->DrawBitmapEx(Point(7, 1), Size(2, 2), Point(0, 0), Size(3, 4), BitmapEx(aBitmap, COL_WHITE));
-    }
-
-    // DrawBitmapEx - 50% transparent
-    {
-        Bitmap aBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
-        AlphaMask aAlpha(Size(4, 4));
-        {
-            BitmapScopedWriteAccess pAccess(aBitmap);
-            pAccess->Erase(COL_MAGENTA);
-
-            AlphaScopedWriteAccess pAlphaAccess(aAlpha);
-            pAlphaAccess->Erase(Color(128, 128, 128));
-        }
-        pVirtualDev->DrawBitmapEx(Point(6, 6), BitmapEx(aBitmap, aAlpha));
-    }
-
-    // DrawBitmapEx - 1-bit
-    {
-        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
-        {
-            BitmapScopedWriteAccess pAccess(aBitmap);
-            pAccess->Erase(COL_MAGENTA);
-        }
-        aBitmap.Convert(BmpConversion::N1BitThreshold);
-        pVirtualDev->DrawBitmapEx(Point(0, 6), BitmapEx(aBitmap, COL_WHITE));
-    }
-
-    // DrawBitmapEx - used to be 4-bit
-    {
-        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
-        {
-            BitmapScopedWriteAccess pAccess(aBitmap);
-            pAccess->Erase(COL_MAGENTA);
-        }
-        aBitmap.Convert(BmpConversion::N8BitColors);
-        pVirtualDev->DrawBitmapEx(Point(2, 6), BitmapEx(aBitmap, COL_WHITE));
-    }
-
-    // DrawBitmapEx - 8-bit Color
-    {
-        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
-        {
-            BitmapScopedWriteAccess pAccess(aBitmap);
-            pAccess->Erase(COL_MAGENTA);
-        }
-        aBitmap.Convert(BmpConversion::N8BitColors);
-        pVirtualDev->DrawBitmapEx(Point(0, 8), BitmapEx(aBitmap, COL_WHITE));
-    }
-
-    // DrawBitmapEx - 8-bit Grey
-    {
-        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
-        {
-            BitmapScopedWriteAccess pAccess(aBitmap);
-            pAccess->Erase(COL_MAGENTA);
-        }
-        aBitmap.Convert(BmpConversion::N8BitGreys);
-        pVirtualDev->DrawBitmapEx(Point(2, 8), BitmapEx(aBitmap, COL_WHITE));
-    }
+//    // DrawBitmapEx - 50% transparent
+//    {
+//        Bitmap aBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
+//        AlphaMask aAlpha(Size(4, 4));
+//        {
+//            BitmapScopedWriteAccess pAccess(aBitmap);
+//            pAccess->Erase(COL_MAGENTA);
+//
+//            AlphaScopedWriteAccess pAlphaAccess(aAlpha);
+//            pAlphaAccess->Erase(Color(128, 128, 128));
+//        }
+//        pVirtualDev->DrawBitmapEx(Point(6, 6), BitmapEx(aBitmap, aAlpha));
+//    }
+//
+//    // DrawBitmapEx - 1-bit
+//    {
+//        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
+//        {
+//            BitmapScopedWriteAccess pAccess(aBitmap);
+//            pAccess->Erase(COL_MAGENTA);
+//        }
+//        aBitmap.Convert(BmpConversion::N1BitThreshold);
+//        pVirtualDev->DrawBitmapEx(Point(0, 6), BitmapEx(aBitmap, COL_WHITE));
+//    }
+//
+//    // DrawBitmapEx - used to be 4-bit
+//    {
+//        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
+//        {
+//            BitmapScopedWriteAccess pAccess(aBitmap);
+//            pAccess->Erase(COL_MAGENTA);
+//        }
+//        aBitmap.Convert(BmpConversion::N8BitColors);
+//        pVirtualDev->DrawBitmapEx(Point(2, 6), BitmapEx(aBitmap, COL_WHITE));
+//    }
+//
+//    // DrawBitmapEx - 8-bit Color
+//    {
+//        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
+//        {
+//            BitmapScopedWriteAccess pAccess(aBitmap);
+//            pAccess->Erase(COL_MAGENTA);
+//        }
+//        aBitmap.Convert(BmpConversion::N8BitColors);
+//        pVirtualDev->DrawBitmapEx(Point(0, 8), BitmapEx(aBitmap, COL_WHITE));
+//    }
+//
+//    // DrawBitmapEx - 8-bit Grey
+//    {
+//        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
+//        {
+//            BitmapScopedWriteAccess pAccess(aBitmap);
+//            pAccess->Erase(COL_MAGENTA);
+//        }
+//        aBitmap.Convert(BmpConversion::N8BitGreys);
+//        pVirtualDev->DrawBitmapEx(Point(2, 8), BitmapEx(aBitmap, COL_WHITE));
+//    }
 
     {
         GDIMetaFile aReloadedGDIMetaFile = writeAndReadStream(aGDIMetaFile);
-        checkBitmapExs(aReloadedGDIMetaFile);
-        checkRendering(pVirtualDev, aReloadedGDIMetaFile);
+        checkRendering(pVirtualDev, aReloadedGDIMetaFile, SAL_WHERE);
+//        checkBitmapExs(aReloadedGDIMetaFile);
+        CPPUNIT_ASSERT_EQUAL(1,2);
     }
-    {
-        GDIMetaFile aFileGDIMetaFile = readFile(u"bitmapexs.svm");
-        checkBitmapExs(aFileGDIMetaFile);
-        checkRendering(pVirtualDev, aFileGDIMetaFile);
-    }
+//    {
+//        GDIMetaFile aFileGDIMetaFile = readFile(u"bitmapexs.svm");
+//        checkBitmapExs(aFileGDIMetaFile);
+//        checkRendering(pVirtualDev, aFileGDIMetaFile, SAL_WHERE);
+//    }
 }
 
 void SvmTest::checkMasks(const GDIMetaFile& rMetaFile)

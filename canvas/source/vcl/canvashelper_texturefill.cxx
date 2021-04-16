@@ -1014,7 +1014,7 @@ namespace vclcanvas
                                                  pVDev->GetOutputSizePixel() ) );
 
                             sal_uInt8 nCol( static_cast< sal_uInt8 >(
-                                           ::basegfx::fround( 255.0*( 1.0 - textures[0].Alpha ) ) ) );
+                                           ::basegfx::fround( 255.0* textures[0].Alpha ) ) );
                             AlphaMask aAlpha( pVDev->GetOutputSizePixel(),
                                               &nCol );
 

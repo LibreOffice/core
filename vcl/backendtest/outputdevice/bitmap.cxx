@@ -105,8 +105,8 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha(vcl::PixelFormat aBitm
     AlphaMask aAlpha(aBitmapSize);
     {
         AlphaScopedWriteAccess aWriteAccess(aAlpha);
-        aWriteAccess->Erase(COL_WHITE);
-        aWriteAccess->SetLineColor(Color(0x44, 0x44, 0x44));
+        aWriteAccess->Erase(COL_ALPHA_TRANSPARENT);
+        aWriteAccess->SetLineColor(Color(0xBB, 0xBB, 0xBB));
         aWriteAccess->DrawRect(tools::Rectangle(0, 0, 8, 8));
         aWriteAccess->DrawRect(tools::Rectangle(3, 3, 5, 5));
     }
@@ -154,8 +154,8 @@ BitmapEx OutputDeviceTestBitmap::setupDrawBlend(vcl::PixelFormat aBitmapFormat)
     AlphaMask aAlpha(aBitmapSize);
     {
         AlphaScopedWriteAccess aWriteAccess(aAlpha);
-        aWriteAccess->Erase(COL_WHITE);
-        aWriteAccess->SetLineColor(Color(0x44, 0x44, 0x44));
+        aWriteAccess->Erase(COL_ALPHA_TRANSPARENT);
+        aWriteAccess->SetLineColor(Color(0xBB, 0xBB, 0xBB));
         aWriteAccess->DrawRect(tools::Rectangle(0, 0, 8, 8));
         aWriteAccess->DrawRect(tools::Rectangle(3, 3, 5, 5));
     }

@@ -89,7 +89,7 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
     // with COL_BLACK)
     if( aFont.GetColor() != COL_TRANSPARENT )
     {
-        mpAlphaVDev->SetTextColor( COL_BLACK );
+        mpAlphaVDev->SetTextColor( COL_ALPHA_OPAQUE  );
         aFont.SetColor( COL_TRANSPARENT );
     }
 
