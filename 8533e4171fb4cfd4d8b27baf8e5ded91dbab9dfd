@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "195c14de_9bd4ac64",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-16T14:50:50Z",
+      "side": 1,
+      "message": "This place also can use OUString::operator []",
+      "revId": "8533e4171fb4cfd4d8b27baf8e5ded91dbab9dfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49e7d282_892a78a7",
         "filename": "sal/osl/w32/file_dirvol.cxx",
         "patchSetId": 6
