@@ -30,9 +30,9 @@ BitmapEx BitmapAlphaClampFilter::execute(BitmapEx const& rBitmapEx) const
             for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
             {
                 BitmapColor aBitmapAlphaValue(pWriteAlpha->GetPixelFromData(pScanAlpha, nX));
-                if (aBitmapAlphaValue.GetIndex() > mcThreshold)
+                if ((255 - aBitmapAlphaValue.GetIndex()) > mcThreshold)
                 {
-                    aBitmapAlphaValue.SetIndex(255);
+                    aBitmapAlphaValue.SetIndex(0);
                     pWriteAlpha->SetPixelOnData(pScanAlpha, nX, aBitmapAlphaValue);
                 }
             }

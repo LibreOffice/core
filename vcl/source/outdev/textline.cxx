@@ -906,7 +906,7 @@ void OutputDevice::SetTextLineColor( const Color& rColor )
     maTextLineColor = aColor;
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetTextLineColor( COL_BLACK );
+        mpAlphaVDev->SetTextLineColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::SetOverlineColor()
@@ -955,7 +955,7 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
     maOverlineColor = aColor;
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetOverlineColor( COL_BLACK );
+        mpAlphaVDev->SetOverlineColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::DrawTextLine( const Point& rPos, tools::Long nWidth,

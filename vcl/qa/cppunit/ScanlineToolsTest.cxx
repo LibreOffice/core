@@ -42,9 +42,9 @@ void ScanlineToolsTest::ScanlineTransformer_32_ARGB()
     pScanlineTransformer->startLine(aScanLine.data());
 
     std::vector<Color> aColors{
-        Color(ColorTransparency, 0, 10, 250, 120),   Color(ColorTransparency, 50, 30, 230, 110),
-        Color(ColorTransparency, 100, 50, 210, 100), Color(ColorTransparency, 150, 70, 190, 90),
-        Color(ColorTransparency, 200, 90, 170, 80),
+        Color(ColorAlpha, 255, 10, 250, 120), Color(ColorAlpha, 205, 30, 230, 110),
+        Color(ColorAlpha, 155, 50, 210, 100), Color(ColorAlpha, 105, 70, 190, 90),
+        Color(ColorAlpha, 55, 90, 170, 80),
     };
 
     for (Color const& aColor : aColors)
@@ -52,8 +52,8 @@ void ScanlineToolsTest::ScanlineTransformer_32_ARGB()
         pScanlineTransformer->writePixel(aColor);
     }
 
-    std::vector<sal_uInt8> aExpectedBytes{ 0,   10,  250, 120, 50,  30, 230, 110, 100, 50,
-                                           210, 100, 150, 70,  190, 90, 200, 90,  170, 80 };
+    std::vector<sal_uInt8> aExpectedBytes{ 255, 10,  250, 120, 205, 30, 230, 110, 155, 50,
+                                           210, 100, 105, 70,  190, 90, 55,  90,  170, 80 };
 
     for (size_t i = 0; i < aScanLine.size(); ++i)
     {

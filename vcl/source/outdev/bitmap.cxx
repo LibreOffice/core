@@ -1073,7 +1073,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     else if (mpAlphaVDev)
     {
         aAlphaBitmap = AlphaMask(rBitmapEx.GetSizePixel());
-        aAlphaBitmap.Erase(COL_BLACK); // opaque
+        aAlphaBitmap.Erase(COL_ALPHA_OPAQUE);
     }
 
     SalBitmap* pSalAlphaBmp = aAlphaBitmap.ImplGetSalBitmap().get();
@@ -1091,7 +1091,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     {
         // Merge bitmap alpha to alpha device
         AlphaMask aAlpha(rBitmapEx.GetSizePixel());
-        aAlpha.Erase( ( 1 - fAlpha ) * 255 );
+        aAlpha.Erase( fAlpha * 255 );
         mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aAlpha, aAlphaBitmap));
     }
 
@@ -1275,7 +1275,7 @@ void OutputDevice::DrawTransformedBitmapEx(
             }
         }
         // Apply the alpha manually.
-        sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
+        sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0 * fAlpha + .5) ) );
         AlphaMask aAlpha( bitmapEx.GetSizePixel(), &nColor );
         if( bitmapEx.IsAlpha())
             aAlpha.BlendWith( bitmapEx.GetAlpha());
@@ -1509,9 +1509,8 @@ namespace
         aSrcCol = pP->GetColor( nMapY, nMapX );
         aDstCol = pB->GetColor( nY, nX );
 
-        // vcl stores transparency, not alpha - invert it
-        const sal_uInt8 nSrcAlpha = 255 - pA->GetPixelIndex( nMapY, nMapX );
-        const sal_uInt8 nDstAlpha = 255 - pAlphaW->GetPixelIndex( nY, nX );
+        const sal_uInt8 nSrcAlpha = pA->GetPixelIndex( nMapY, nMapX );
+        const sal_uInt8 nDstAlpha = pAlphaW->GetPixelIndex( nY, nX );
 
         // Perform porter-duff compositing 'over' operation
 
@@ -1591,9 +1590,9 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
                                               nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16 ] ) );
                     pW->SetPixelOnData( pScanline, nX, aIndex );
 
-                    aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] +
-                                                   nVCLGLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] +
-                                                   nVCLBLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] ) );
+                    aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ ( nVCLLut[ nResAlpha ] + nD ) >> 16 ] +
+                                                   nVCLGLut[ ( nVCLLut[ nResAlpha ] + nD ) >> 16 ] +
+                                                   nVCLBLut[ ( nVCLLut[ nResAlpha ] + nD ) >> 16 ] ) );
                     pAlphaW->SetPixelOnData( pScanlineAlpha, nX, aIndex );
                 }
             }
@@ -1619,7 +1618,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
                     aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB.get(), pAlphaW.get(), nResAlpha );
 
                     pB->SetPixelOnData(pScanlineB, nX, pB->GetBestMatchingColor(aDstCol));
-                    pAlphaW->SetPixelOnData(pScanlineAlpha, nX, pB->GetBestMatchingColor(Color(255L-nResAlpha, 255L-nResAlpha, 255L-nResAlpha)));
+                    pAlphaW->SetPixelOnData(pScanlineAlpha, nX, pB->GetBestMatchingColor(Color(nResAlpha, nResAlpha, nResAlpha)));
                 }
             }
         }

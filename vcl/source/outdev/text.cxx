@@ -691,7 +691,7 @@ void OutputDevice::SetTextColor( const Color& rColor )
     }
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetTextColor( COL_BLACK );
+        mpAlphaVDev->SetTextColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::SetTextFillColor()
@@ -749,7 +749,7 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
         maFont.SetTransparent( bTransFill );
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetTextFillColor( COL_BLACK );
+        mpAlphaVDev->SetTextFillColor( COL_ALPHA_OPAQUE );
 }
 
 Color OutputDevice::GetTextFillColor() const
