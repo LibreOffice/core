@@ -157,14 +157,6 @@ namespace
     void Toggle1BitTransparency(const BitmapBuffer& rBuf)
     {
         assert(rBuf.maPalette.GetBestIndex(BitmapColor(COL_BLACK)) == 0);
-        // TODO: make upper layers use standard alpha
-        if (getCairoFormat(rBuf) == CAIRO_FORMAT_A1)
-        {
-            const int nImageSize = rBuf.mnHeight * rBuf.mnScanlineSize;
-            unsigned char* pDst = rBuf.mpBits;
-            for (int i = nImageSize; --i >= 0; ++pDst)
-                *pDst = ~*pDst;
-        }
     }
 
     std::unique_ptr<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* pSrc)
@@ -508,34 +500,18 @@ namespace
 
     class MaskHelper : public SurfaceHelper
     {
-    private:
-        std::unique_ptr<unsigned char[]> pAlphaBits;
-
     public:
         explicit MaskHelper(const SalBitmap& rAlphaBitmap)
-        :   SurfaceHelper(),
-            pAlphaBits()
+        :   SurfaceHelper()
         {
             const SvpSalBitmap& rMask = static_cast<const SvpSalBitmap&>(rAlphaBitmap);
             const BitmapBuffer* pMaskBuf = rMask.GetBuffer();
 
             if (rAlphaBitmap.GetBitCount() == 8)
             {
-                // the alpha values need to be inverted for Cairo
-                // so big stupid copy and invert here
-                const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
-                pAlphaBits.reset( new unsigned char[nImageSize] );
-                memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
-
-                // TODO: make upper layers use standard alpha
-                sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits.get());
-                for( int i = nImageSize/sizeof(sal_uInt32); --i >= 0; ++pLDst )
-                    *pLDst = ~*pLDst;
-                assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits.get()+nImageSize);
-
                 implSetSurface(
                     cairo_image_surface_create_for_data(
-                        pAlphaBits.get(),
+                        pMaskBuf->mpBits,
                         CAIRO_FORMAT_A8,
                         pMaskBuf->mnWidth,
                         pMaskBuf->mnHeight,
@@ -543,24 +519,9 @@ namespace
             }
             else
             {
-                // the alpha values need to be inverted for Cairo
-                // so big stupid copy and invert here
-                const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
-                pAlphaBits.reset( new unsigned char[nImageSize] );
-                memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
-
-                const sal_Int32 nBlackIndex = pMaskBuf->maPalette.GetBestIndex(BitmapColor(COL_BLACK));
-                if (nBlackIndex == 0)
-                {
-                    // TODO: make upper layers use standard alpha
-                    unsigned char* pDst = pAlphaBits.get();
-                    for (int i = nImageSize; --i >= 0; ++pDst)
-                        *pDst = ~*pDst;
-                }
-
                 implSetSurface(
                     cairo_image_surface_create_for_data(
-                        pAlphaBits.get(),
+                        pMaskBuf->mpBits,
                         CAIRO_FORMAT_A1,
                         pMaskBuf->mnWidth,
                         pMaskBuf->mnHeight,
@@ -2043,8 +2004,8 @@ void SvpSalGraphics::applyColor(cairo_t *cr, Color aColor, double fTransparency)
     }
     else
     {
-        double fSet = aColor == COL_BLACK ? 1.0 : 0.0;
-        cairo_set_source_rgba(cr, 1, 1, 1, fSet);
+        double fSet = aColor == COL_BLACK ? 0.0 : 1.0;
+        cairo_set_source_rgba(cr, 0, 0, 0, fSet);
         cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     }
 }

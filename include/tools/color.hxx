@@ -462,6 +462,9 @@ constexpr ::Color COL_LIGHTGRAYBLUE           ( 0xE0, 0xE0, 0xFF );
 constexpr ::Color COL_YELLOW                  ( 0xFF, 0xFF, 0x00 );
 constexpr ::Color COL_WHITE                   ( 0xFF, 0xFF, 0xFF );
 constexpr ::Color COL_TRANSPARENT             ( ColorTransparency, 0xFF, 0xFF, 0xFF, 0xFF );
+// These are used when drawing to the separate alpha channel we use in vcl
+constexpr ::Color COL_ALPHA_TRANSPARENT       ( 0x00, 0x00, 0x00 );
+constexpr ::Color COL_ALPHA_OPAQUE            ( 0xff, 0xff, 0xff );
 constexpr ::Color COL_AUTO                    ( ColorTransparency, 0xFF, 0xFF, 0xFF, 0xFF );
 constexpr ::Color COL_AUTHOR1_DARK            ( 198,  146,   0 );
 constexpr ::Color COL_AUTHOR1_NORMAL          ( 255,  255, 158 );

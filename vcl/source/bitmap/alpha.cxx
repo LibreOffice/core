@@ -43,7 +43,12 @@ AlphaMask::AlphaMask( const Size& rSizePixel, const sal_uInt8* pEraseTransparenc
     : Bitmap(rSizePixel, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256))
 {
     if( pEraseTransparency )
-        Bitmap::Erase( Color( *pEraseTransparency, *pEraseTransparency, *pEraseTransparency ) );
+    {
+        sal_uInt8 nAlpha = 255 - *pEraseTransparency;
+        Bitmap::Erase( Color( nAlpha, nAlpha, nAlpha ) );
+    }
+    else
+        Bitmap::Erase( COL_ALPHA_OPAQUE );
 }
 
 AlphaMask::~AlphaMask() = default;
@@ -77,7 +82,8 @@ Bitmap const & AlphaMask::GetBitmap() const
 
 void AlphaMask::Erase( sal_uInt8 cTransparency )
 {
-    Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
+    sal_uInt8 nAlpha = 255 - cTransparency;
+    Bitmap::Erase( Color( nAlpha, nAlpha, nAlpha ) );
 }
 
 void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency )
@@ -87,6 +93,8 @@ void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
     if( !(pAcc && pAcc->GetBitCount() == 8) )
         return;
 
+    sal_uInt8 nSearchAlpha = 255 - cSearchTransparency;
+    sal_uInt8 nReplaceAlpha = 255 - cReplaceTransparency;
     const tools::Long nWidth = pAcc->Width(), nHeight = pAcc->Height();
 
     if( pAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
@@ -97,21 +105,21 @@ void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
 
             for( tools::Long nX = 0; nX < nWidth; nX++, pScan++ )
             {
-                if( *pScan == cSearchTransparency )
-                    *pScan = cReplaceTransparency;
+                if( *pScan == nSearchAlpha )
+                    *pScan = nReplaceAlpha;
             }
         }
     }
     else
     {
-        BitmapColor aReplace( cReplaceTransparency );
+        BitmapColor aReplace( nReplaceAlpha );
 
         for( tools::Long nY = 0; nY < nHeight; nY++ )
         {
             Scanline pScanline = pAcc->GetScanline(nY);
             for( tools::Long nX = 0; nX < nWidth; nX++ )
             {
-                if( pAcc->GetIndexFromData( pScanline, nX ) == cSearchTransparency )
+                if( pAcc->GetIndexFromData( pScanline, nX ) == nSearchAlpha )
                     pAcc->SetPixelOnData( pScanline, nX, aReplace );
             }
         }

@@ -385,7 +385,7 @@ void OutputDevice::SetFillColor( const Color& rColor )
     }
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetFillColor( COL_BLACK );
+        mpAlphaVDev->SetFillColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::SetLineColor()
@@ -433,7 +433,7 @@ void OutputDevice::SetLineColor( const Color& rColor )
     }
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor( COL_BLACK );
+        mpAlphaVDev->SetLineColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::SetBackground()
@@ -458,25 +458,26 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
 
     if( mpAlphaVDev )
     {
+        // Also see logic in OutputDevice::DrawWallpaper
         // Some of these are probably wrong (e.g. if the gradient has transparency),
         // but hopefully nobody uses that. If you do, feel free to implement it properly.
         if( rBackground.GetStyle() == WallpaperStyle::NONE )
-            mpAlphaVDev->SetBackground( rBackground );
+            mpAlphaVDev->SetBackground( Wallpaper( Color( 0xff, 0xff, 0xff ))); // fully opaque
         else if( rBackground.IsBitmap())
         {
             BitmapEx bitmap = rBackground.GetBitmap();
             if( bitmap.IsAlpha())
                 mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( Bitmap( bitmap.GetAlpha()))));
             else
-                mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
+                mpAlphaVDev->SetBackground( Wallpaper( COL_ALPHA_OPAQUE ));
         }
         else if( rBackground.IsGradient())
-            mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
+            mpAlphaVDev->SetBackground( Wallpaper( COL_ALPHA_OPAQUE ));
         else
         {
             // Color background.
-            int transparency = 255 - rBackground.GetColor().GetAlpha();
-            mpAlphaVDev->SetBackground( Wallpaper( Color( transparency, transparency, transparency )));
+            int alpha = rBackground.GetColor().GetAlpha();
+            mpAlphaVDev->SetBackground( Wallpaper( Color( alpha, alpha, alpha )));
         }
     }
 }
@@ -565,7 +566,7 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
     // with COL_BLACK)
     if( aFont.GetColor() != COL_TRANSPARENT )
     {
-        mpAlphaVDev->SetTextColor( COL_BLACK );
+        mpAlphaVDev->SetTextColor( COL_ALPHA_OPAQUE );
         aFont.SetColor( COL_TRANSPARENT );
     }
 

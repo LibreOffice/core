@@ -33,6 +33,7 @@ enum class DeviceFormat {
 #endif
                         };
 
+/** magic constant meaning "no color" to the various backends in vcl */
 constexpr ::Color SALCOLOR_NONE ( ColorTransparency, 0xFF, 0xFF, 0xFF, 0xFF );
 
 struct SalTwoRect
