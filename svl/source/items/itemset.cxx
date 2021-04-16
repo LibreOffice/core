@@ -410,6 +410,7 @@ static const sal_uInt16* findWhich(const sal_uInt16* pWhichRanges, sal_uInt16 nW
     // smallest WhichRange with something in it is start+end+0
     if (nWhichRangesLen < 3)
         return nullptr;
+    assert(nWhichRangesLen % 2 == 1);
 
     int nEndIndex = (nWhichRangesLen / 2) - 1;
 
@@ -440,48 +441,35 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
     SfxItemState eRet = SfxItemState::UNKNOWN;
     do
     {
-        SfxPoolItem const** ppFnd = pCurrentSet->m_pItems.get();
-        const sal_uInt16* pPtr = pCurrentSet->m_pWhichRanges;
-        if (pPtr)
+        if (const sal_uInt16* pPtr = findWhich(pCurrentSet->m_pWhichRanges, pCurrentSet->m_nWhichRangeLen, nWhich))
         {
-            assert(pCurrentSet->m_nWhichRangeLen % 2 == 1);
-
-            const sal_uInt16* pFnd = findWhich(pPtr, pCurrentSet->m_nWhichRangeLen, nWhich);
-
-            while ( *pPtr )
+            SfxPoolItem const** ppFnd = pCurrentSet->m_pItems.get();
+            for (const sal_uInt16* pAccum = pCurrentSet->m_pWhichRanges; pAccum < pPtr; pAccum += 2)
+                ppFnd += *(pAccum+1) - *pAccum + 1;
+            // Within this range
+            ppFnd += nWhich - *pPtr;
+            if ( !*ppFnd )
             {
-                if ( *pPtr <= nWhich && nWhich <= *(pPtr+1) )
-                {
-                    assert(pFnd == pPtr);
-                    // Within this range
-                    ppFnd += nWhich - *pPtr;
-                    if ( !*ppFnd )
-                    {
-                        eRet = SfxItemState::DEFAULT;
-                        if( !bSrchInParent )
-                            return eRet; // Not present
-                        pFnd = nullptr;
-                        break; // Keep searching in the parents!
-                    }
-
-                    if ( IsInvalidItem(*ppFnd) )
-                        // Different ones are present
-                        return SfxItemState::DONTCARE;
-
-                    if ( (*ppFnd)->IsVoidItem() )
-                        return SfxItemState::DISABLED;
-
-                    if (ppItem)
-                    {
-                        *ppItem = *ppFnd;
-                    }
-                    return SfxItemState::SET;
-                }
-                ppFnd += *(pPtr+1) - *pPtr + 1;
-                pPtr += 2;
+                eRet = SfxItemState::DEFAULT;
+                if( !bSrchInParent )
+                    return eRet; // Not present
+                // Keep searching in the parents!
             }
+            else
+            {
+                if ( IsInvalidItem(*ppFnd) )
+                    // Different ones are present
+                    return SfxItemState::DONTCARE;
 
-            assert(!pFnd);
+                if ( (*ppFnd)->IsVoidItem() )
+                    return SfxItemState::DISABLED;
+
+                if (ppItem)
+                {
+                    *ppItem = *ppFnd;
+                }
+                return SfxItemState::SET;
+            }
         }
         if (!bSrchInParent)
             break;
