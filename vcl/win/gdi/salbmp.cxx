@@ -397,7 +397,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
                     *targetPixels++ = *pSrcRGB++;
                     *targetPixels++ = *pSrcRGB++;
                     *targetPixels++ = *pSrcRGB++;
-                    *targetPixels++ = 0xff - *pSrcA++;
+                    *targetPixels++ = *pSrcA++;
                 }
 
                 pSrcRGB += nExtraRGB;
