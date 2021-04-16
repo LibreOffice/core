@@ -184,22 +184,22 @@ void PngFilterTest::testPng()
                     CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAlphaAccess->Width());
                     CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAlphaAccess->Height());
 
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x80, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
                                          pAlphaAccess->GetPixel(0, 0));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x80, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
                                          pAlphaAccess->GetPixel(3, 3));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x80, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
                                          pAlphaAccess->GetPixel(3, 0));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x80, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
                                          pAlphaAccess->GetPixel(0, 3));
 
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x40, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xBF, 0x00),
                                          pAlphaAccess->GetPixel(1, 1));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xC0, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x3F, 0x00),
                                          pAlphaAccess->GetPixel(1, 2));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xC0, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x3F, 0x00),
                                          pAlphaAccess->GetPixel(2, 1));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x40, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xBF, 0x00),
                                          pAlphaAccess->GetPixel(2, 2));
                 }
             }

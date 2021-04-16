@@ -237,7 +237,7 @@ void SkiaTest::testAlphaBlendWith()
     skiaAlpha = dynamic_cast<SkiaSalBitmap*>(alpha.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaAlpha->unittestHasEraseColor());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, alpha.getPixelFormat());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(112),
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(208),
                          AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 
     // Test with images set.
@@ -257,7 +257,7 @@ void SkiaTest::testAlphaBlendWith()
     skiaAlpha = dynamic_cast<SkiaSalBitmap*>(alpha.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaAlpha->unittestHasImage());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, alpha.getPixelFormat());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(112),
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(207),
                          AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 
     // Test with erase color for alpha and image for other bitmap.
@@ -274,7 +274,7 @@ void SkiaTest::testAlphaBlendWith()
     skiaAlpha = dynamic_cast<SkiaSalBitmap*>(alpha.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaAlpha->unittestHasImage());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, alpha.getPixelFormat());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(112),
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(207),
                          AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 }
 

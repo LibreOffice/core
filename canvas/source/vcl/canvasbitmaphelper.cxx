@@ -146,7 +146,7 @@ namespace vclcanvas
         pRes[ 0 ] = aColor.GetRed();
         pRes[ 1 ] = aColor.GetGreen();
         pRes[ 2 ] = aColor.GetBlue();
-        pRes[ 3 ] = 255 - aColor.GetAlpha();
+        pRes[ 3 ] = aColor.GetAlpha();
 
         return aRes;
     }
