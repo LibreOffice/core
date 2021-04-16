@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fceb1e0_bee318e1",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport12.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-16T15:23:13Z",
+      "side": 1,
+      "message": "This \u0027[2]\u0027 looks very suspicious.\nIndeed, ISO/IEC 29500-1:2016 for some reason does not limit upper bound of pBdr elelents in pPr. Yet, it seems strange to have a \u003cw:pBdr/\u003e followed by a \u003cw:pBdr\u003e...\u003c/w:pBdr\u003e with all the data. Why do we need the first one? Where is it written? Should it be removed?",
+      "range": {
+        "startLine": 1090,
+        "startChar": 66,
+        "endLine": 1090,
+        "endChar": 69
+      },
+      "revId": "49e2bd6103669ca94d4e308fc08beed57f85c7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
