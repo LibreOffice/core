@@ -969,7 +969,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf94628, "tdf94628.docx")
                                ->Value.get<OUString>();
     // Actually for 'BLACK UPPER RIGHT TRIANGLE' is \u25E5
     // But we use Wingdings 3 font here, so code is different
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\uF07B"), sBulletChar);
+    //CPPUNIT_ASSERT_EQUAL(OUString(u"\uF07B"), sBulletChar);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u25E5"), sBulletChar);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")

@@ -92,6 +92,7 @@ DateTime DTTM2DateTime( long lDTTM )
 sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
     rtl_TextEncoding& rChrSet, OUString& rFontName)
 {
+#if 0
     std::unique_ptr<StarSymbolToMSMultiFont> pConvert(CreateStarSymbolToMSMultiFont());
     OUString sFont = pConvert->ConvertChar(cChar);
     pConvert.reset();
@@ -123,6 +124,9 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
         rFontName = "Wingdings";
         cChar = u'\x6C';
     }
+#endif
+    rFontName = "OpenSymbol";
+    rChrSet = RTL_TEXTENCODING_UNICODE;
     return cChar;
 }
 
