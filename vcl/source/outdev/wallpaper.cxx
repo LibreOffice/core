@@ -56,7 +56,31 @@ void OutputDevice::DrawWallpaper( const tools::Rectangle& rRect,
     }
 
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawWallpaper( rRect, rWallpaper );
+    {
+        // Also see logic in OutputDevice::SetBackground
+        // Some of these are probably wrong (e.g. if the gradient has transparency),
+        // but hopefully nobody uses that. If you do, feel free to implement it properly.
+        Wallpaper aAlphaWallpaper;
+        if( rWallpaper.GetStyle() == WallpaperStyle::NONE )
+            aAlphaWallpaper = Wallpaper( Color( 0xff, 0xff, 0xff )); // fully opaque
+        else if( rWallpaper.IsBitmap())
+        {
+            BitmapEx bitmap = rWallpaper.GetBitmap();
+            if( bitmap.IsAlpha())
+                aAlphaWallpaper = Wallpaper( BitmapEx( Bitmap( bitmap.GetAlpha())));
+            else
+                aAlphaWallpaper = Wallpaper( COL_ALPHA_OPAQUE );
+        }
+        else if( rWallpaper.IsGradient())
+            aAlphaWallpaper = Wallpaper( COL_ALPHA_OPAQUE );
+        else
+        {
+            // Color background.
+            int alpha = rWallpaper.GetColor().GetAlpha();
+            aAlphaWallpaper = Color( alpha, alpha, alpha );
+        }
+        mpAlphaVDev->DrawWallpaper( rRect, aAlphaWallpaper );
+    }
 }
 
 void OutputDevice::DrawWallpaper( tools::Long nX, tools::Long nY,
@@ -108,7 +132,7 @@ void OutputDevice::Erase()
             SetRasterOp( eRasterOp );
     }
 
-    if( mpAlphaVDev )
+    if (mpAlphaVDev)
         mpAlphaVDev->Erase();
 }
 
