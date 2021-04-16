@@ -90,6 +90,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 
+#include <dmapper/CommentProperties.hxx>
 #include <dmapper/GraphicZOrderHelper.hxx>
 
 #include <oox/token/tokens.hxx>
@@ -2120,6 +2121,18 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     m_previousRedline.clear();
     m_bParaChanged = false;
 
+    if (m_bIsInComments && pParaContext)
+    {
+        if (const auto& prop = pParaContext->getProperty(PROP_PARA_ID))
+        {
+            const OUString sParaId = prop->second.get<OUString>();
+            if (const auto& item = m_aCommentProps.find(sParaId); item != m_aCommentProps.end())
+            {
+                m_bAnnotationResolved = item->second.bDone;
+            }
+        }
+    }
+
     if (m_bIsFirstParaInShape)
         m_bIsFirstParaInShape = false;
 
@@ -3037,6 +3050,9 @@ void DomainMapper_Impl::PopAnnotation()
 
     try
     {
+        if (m_bAnnotationResolved)
+            m_xAnnotationField->setPropertyValue("Resolved", css::uno::Any(true));
+
         // See if the annotation will be a single position or a range.
         if (m_nAnnotationId == -1 || !m_aAnnotationPositions[m_nAnnotationId].m_xStart.is() || !m_aAnnotationPositions[m_nAnnotationId].m_xEnd.is())
         {
@@ -3085,6 +3101,7 @@ void DomainMapper_Impl::PopAnnotation()
 
     m_xAnnotationField.clear();
     m_nAnnotationId = -1;
+    m_bAnnotationResolved = false;
 }
 
 void DomainMapper_Impl::PushPendingShape( const uno::Reference< drawing::XShape > & xShape )
@@ -7700,6 +7717,12 @@ void DomainMapper_Impl::substream(Id rName,
         assert(m_aPropertyStacks[i].size() == propSize[i]);
     }
 }
+
+void DomainMapper_Impl::commentProps(const OUString& sId, const CommentProperties& rProps)
+{
+    m_aCommentProps[sId] = rProps;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

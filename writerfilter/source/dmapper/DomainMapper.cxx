@@ -1219,6 +1219,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->HandleAltChunk(sStringValue);
         }
         break;
+        case NS_ooxml::LN_AG_Parids_paraId:
+            if (m_pImpl->GetTopContext() && m_pImpl->GetTopContextType() == CONTEXT_PARAGRAPH)
+            {
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_ID, css::uno::Any(sStringValue));
+            }
+            break;
         default:
             SAL_WARN("writerfilter", "DomainMapper::lcl_attribute: unhandled token: " << nName);
     }
@@ -4101,6 +4107,11 @@ void DomainMapper::finishParagraph(const bool bRemove, const bool bNoNumbering)
     if (m_pImpl->m_pSdtHelper->validateDateFormat())
         m_pImpl->m_pSdtHelper->createDateContentControl();
     m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH), bRemove, bNoNumbering);
+}
+
+void DomainMapper::commentProps(const OUString& sId, const CommentProperties& rProps)
+{
+    m_pImpl->commentProps(sId, rProps);
 }
 
 } //namespace writerfilter

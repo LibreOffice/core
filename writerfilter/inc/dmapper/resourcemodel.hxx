@@ -54,6 +54,8 @@ typedef sal_uInt32 Id;
 
 namespace writerfilter
 {
+struct CommentProperties;
+
 /**
     Reference to a resource that generates events and sends them to a
     handler.
@@ -296,6 +298,8 @@ public:
 
     /// Receives end mark for glossary document entry.
     virtual void endGlossaryEntry() = 0;
+
+    virtual void commentProps(const OUString& /*sId*/, const CommentProperties& /*rProps*/) {}
 
 protected:
     ~Stream() override {}
