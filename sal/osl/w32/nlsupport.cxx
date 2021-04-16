@@ -77,38 +77,39 @@ static BOOL CALLBACK EnumLocalesProcW( LPWSTR lpLocaleStringW )
     /*
         get the ISO language code for this locale
     */
-    if( GetLocaleInfoW( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH ) )
+    if( !GetLocaleInfoW( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH ) )
+        /* retry by going on */
+        return TRUE;
+
+    WCHAR ctryCode[ELP_COUNTRY_FIELD_LENGTH];
+
+    /* continue if language code does not match */
+    if( 0 != wcscmp( langCode, params->Language ) )
+        return TRUE;
+
+    /* check if country code is set and equals the current locale */
+    if( '\0' != params->Country[0] && GetLocaleInfoW( localeId,
+                LOCALE_SISO3166CTRYNAME , ctryCode, ELP_COUNTRY_FIELD_LENGTH ) )
     {
-        WCHAR ctryCode[ELP_COUNTRY_FIELD_LENGTH];
-
-        /* continue if language code does not match */
-        if( 0 != wcscmp( langCode, params->Language ) )
-            return TRUE;
-
-        /* check if country code is set and equals the current locale */
-        if( '\0' != params->Country[0] && GetLocaleInfoW( localeId,
-                    LOCALE_SISO3166CTRYNAME , ctryCode, ELP_COUNTRY_FIELD_LENGTH ) )
+        /* save return value in TLS and break if found desired locale */
+        if( 0 == wcscmp( ctryCode, params->Country ) )
         {
-            /* save return value in TLS and break if found desired locale */
-            if( 0 == wcscmp( ctryCode, params->Country ) )
-            {
-                params->Locale = localeId;
-                return FALSE;
-            }
-        }
-        else
-        {
-            /* fill with default values for that language */
-            LANGID langId = LANGIDFROMLCID( localeId );
-
-            /* exchange sublanguage with SUBLANG_NEUTRAL */
-            langId = MAKELANGID( PRIMARYLANGID( langId ), SUBLANG_NEUTRAL );
-
-            /* and use default sorting order */
-            params->Locale = MAKELCID( langId, SORT_DEFAULT );
-
+            params->Locale = localeId;
             return FALSE;
         }
+    }
+    else
+    {
+        /* fill with default values for that language */
+        LANGID langId = LANGIDFROMLCID( localeId );
+
+        /* exchange sublanguage with SUBLANG_NEUTRAL */
+        langId = MAKELANGID( PRIMARYLANGID( langId ), SUBLANG_NEUTRAL );
+
+        /* and use default sorting order */
+        params->Locale = MAKELCID( langId, SORT_DEFAULT );
+
+        return FALSE;
     }
 
     /* retry by going on */
@@ -117,29 +118,21 @@ static BOOL CALLBACK EnumLocalesProcW( LPWSTR lpLocaleStringW )
 
 static rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
 {
-    rtl_TextEncoding Encoding = RTL_TEXTENCODING_DONTKNOW;
-    WCHAR ansiCP[6];
-
     /* query ansi codepage for given locale */
-    if( localeId && GetLocaleInfoW( localeId, LOCALE_IDEFAULTANSICODEPAGE, ansiCP, 6 ) )
-    {
-        /* if GetLocaleInfo returns "0", it is a UNICODE only locale */
-        if( 0 != wcscmp( ansiCP, L"0" ) )
-        {
-            WCHAR *pwcEnd;
-            UINT  codepage;
+    WCHAR ansiCP[6];
+    if( !localeId || !GetLocaleInfoW( localeId, LOCALE_IDEFAULTANSICODEPAGE, ansiCP, 6 ) )
+        return RTL_TEXTENCODING_DONTKNOW;
 
-            /* values returned from GetLocaleInfo are decimal based */
-            codepage = wcstol( ansiCP, &pwcEnd, 10 );
+    /* if GetLocaleInfo returns "0", it is a UNICODE only locale */
+    if( 0 == wcscmp( ansiCP, L"0" ) )
+        return RTL_TEXTENCODING_UNICODE;
 
-            /* find matching rtl encoding */
-            Encoding = rtl_getTextEncodingFromWindowsCodePage( codepage );
-        }
-        else
-            Encoding = RTL_TEXTENCODING_UNICODE;
-    }
+    /* values returned from GetLocaleInfo are decimal based */
+    WCHAR *pwcEnd;
+    UINT codepage = wcstol( ansiCP, &pwcEnd, 10 );
 
-    return Encoding;
+    /* find matching rtl encoding */
+    return rtl_getTextEncodingFromWindowsCodePage( codepage );
 }
 
 rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
@@ -165,24 +158,22 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         osl_getProcessLocale( &pLocale );
 
     /* copy in parameters to structure */
-    if( pLocale && pLocale->Language && pLocale->Language->length < ELP_LANGUAGE_FIELD_LENGTH )
-    {
-        wcscpy( params.Language, o3tl::toW(pLocale->Language->buffer) );
+    if( !pLocale || !pLocale->Language || pLocale->Language->length >= ELP_LANGUAGE_FIELD_LENGTH )
+        return RTL_TEXTENCODING_DONTKNOW;
 
-        if( pLocale->Country && pLocale->Country->length < ELP_COUNTRY_FIELD_LENGTH )
-            wcscpy( params.Country, o3tl::toW(pLocale->Country->buffer) );
+    wcscpy( params.Language, o3tl::toW(pLocale->Language->buffer) );
 
-        /* save pointer to local structure in TLS */
-        TlsSetValue( g_dwTLSLocaleEncId, &params );
+    if( pLocale->Country && pLocale->Country->length < ELP_COUNTRY_FIELD_LENGTH )
+        wcscpy( params.Country, o3tl::toW(pLocale->Country->buffer) );
 
-        /* enum all locales known to Windows */
-        EnumSystemLocalesW( EnumLocalesProcW, LCID_SUPPORTED );
+    /* save pointer to local structure in TLS */
+    TlsSetValue( g_dwTLSLocaleEncId, &params );
 
-        /* use the LCID found in iteration */
-        return GetTextEncodingFromLCID( params.Locale );
-    }
+    /* enum all locales known to Windows */
+    EnumSystemLocalesW( EnumLocalesProcW, LCID_SUPPORTED );
 
-    return RTL_TEXTENCODING_DONTKNOW;
+    /* use the LCID found in iteration */
+    return GetTextEncodingFromLCID( params.Locale );
 }
 
 void imp_getProcessLocale( rtl_Locale ** ppLocale )

@@ -131,52 +131,49 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
 sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
     TIME_ZONE_INFORMATION aTimeZoneInformation;
-    DWORD Success;
-    sal_Int64   bias;
 
     // get timezone information
-    if ( ( Success=GetTimeZoneInformation( &aTimeZoneInformation ) ) != TIME_ZONE_ID_INVALID)
+    DWORD Success = GetTimeZoneInformation( &aTimeZoneInformation );
+    if (Success == TIME_ZONE_ID_INVALID)
+        return false;
+
+    sal_Int64 bias = aTimeZoneInformation.Bias;
+
+    // add bias for daylight saving time
+    if ( Success == TIME_ZONE_ID_DAYLIGHT )
+        bias+=aTimeZoneInformation.DaylightBias;
+
+    if ( static_cast<sal_Int64>(pSystemTimeVal->Seconds) > ( bias * 60 ) )
     {
-        bias=aTimeZoneInformation.Bias;
+        pLocalTimeVal->Seconds = static_cast<sal_uInt32>(pSystemTimeVal->Seconds - ( bias * 60) );
+        pLocalTimeVal->Nanosec = pSystemTimeVal->Nanosec;
 
-        // add bias for daylight saving time
-        if ( Success== TIME_ZONE_ID_DAYLIGHT )
-            bias+=aTimeZoneInformation.DaylightBias;
-
-        if ( static_cast<sal_Int64>(pSystemTimeVal->Seconds) > ( bias * 60 ) )
-        {
-            pLocalTimeVal->Seconds = static_cast<sal_uInt32>(pSystemTimeVal->Seconds - ( bias * 60) );
-            pLocalTimeVal->Nanosec = pSystemTimeVal->Nanosec;
-
-            return true;
-        }
+        return true;
     }
-
     return false;
 }
 
 sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {
     TIME_ZONE_INFORMATION aTimeZoneInformation;
-    DWORD Success;
-    sal_Int64   bias;
 
     // get timezone information
-    if ( ( Success=GetTimeZoneInformation( &aTimeZoneInformation ) ) != TIME_ZONE_ID_INVALID)
+    DWORD Success = GetTimeZoneInformation( &aTimeZoneInformation );
+    if ( Success == TIME_ZONE_ID_INVALID )
+        return false;
+
+    sal_Int64 bias = aTimeZoneInformation.Bias;
+
+    // add bias for daylight saving time
+    if ( Success == TIME_ZONE_ID_DAYLIGHT )
+        bias+=aTimeZoneInformation.DaylightBias;
+
+    if ( static_cast<sal_Int64>(pLocalTimeVal->Seconds) + ( bias * 60 ) > 0 )
     {
-        bias=aTimeZoneInformation.Bias;
+        pSystemTimeVal->Seconds = static_cast<sal_uInt32>( pLocalTimeVal->Seconds + ( bias * 60) );
+        pSystemTimeVal->Nanosec = pLocalTimeVal->Nanosec;
 
-        // add bias for daylight saving time
-        if ( Success== TIME_ZONE_ID_DAYLIGHT )
-            bias+=aTimeZoneInformation.DaylightBias;
-
-        if ( static_cast<sal_Int64>(pLocalTimeVal->Seconds) + ( bias * 60 ) > 0 )
-        {
-            pSystemTimeVal->Seconds = static_cast<sal_uInt32>( pLocalTimeVal->Seconds + ( bias * 60) );
-            pSystemTimeVal->Nanosec = pLocalTimeVal->Nanosec;
-
-            return true;
-        }
+        return true;
     }
 
     return false;

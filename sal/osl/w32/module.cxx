@@ -182,49 +182,49 @@ osl_getAsciiFunctionSymbol( oslModule Module, const char *pSymbol )
 
 sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
 {
-    bool    bSuccess    = false;    /* Assume failure */
     static HMODULE hModPsapi = LoadLibraryW( L"PSAPI.DLL" );
     static auto lpfnEnumProcessModules = reinterpret_cast<decltype(EnumProcessModules)*>(
         hModPsapi ? GetProcAddress(hModPsapi, "EnumProcessModules") : nullptr);
     static auto lpfnGetModuleInformation = reinterpret_cast<decltype(GetModuleInformation)*>(
         hModPsapi ? GetProcAddress(hModPsapi, "GetModuleInformation") : nullptr);
 
-    if (lpfnEnumProcessModules && lpfnGetModuleInformation)
+    if (!lpfnEnumProcessModules || !lpfnGetModuleInformation)
+        return false;
+
+    bool bSuccess    = false;    /* Assume failure */
+    DWORD cbNeeded = 0;
+    HMODULE* lpModules = nullptr;
+    DWORD nModules = 0;
+    UINT iModule = 0;
+    MODULEINFO modinfo;
+
+    lpfnEnumProcessModules(GetCurrentProcess(), nullptr, 0, &cbNeeded);
+
+    lpModules = static_cast<HMODULE*>(_alloca(cbNeeded));
+    lpfnEnumProcessModules(GetCurrentProcess(), lpModules, cbNeeded, &cbNeeded);
+
+    nModules = cbNeeded / sizeof(HMODULE);
+
+    for (iModule = 0; !bSuccess && iModule < nModules; iModule++)
     {
-        DWORD cbNeeded = 0;
-        HMODULE* lpModules = nullptr;
-        DWORD nModules = 0;
-        UINT iModule = 0;
-        MODULEINFO modinfo;
+        lpfnGetModuleInformation(GetCurrentProcess(), lpModules[iModule], &modinfo,
+                                 sizeof(modinfo));
 
-        lpfnEnumProcessModules(GetCurrentProcess(), nullptr, 0, &cbNeeded);
-
-        lpModules = static_cast<HMODULE*>(_alloca(cbNeeded));
-        lpfnEnumProcessModules(GetCurrentProcess(), lpModules, cbNeeded, &cbNeeded);
-
-        nModules = cbNeeded / sizeof(HMODULE);
-
-        for (iModule = 0; !bSuccess && iModule < nModules; iModule++)
+        if (static_cast<BYTE*>(pv) >= static_cast<BYTE*>(modinfo.lpBaseOfDll)
+            && static_cast<BYTE*>(pv)
+                   < static_cast<BYTE*>(modinfo.lpBaseOfDll) + modinfo.SizeOfImage)
         {
-            lpfnGetModuleInformation(GetCurrentProcess(), lpModules[iModule], &modinfo,
-                                     sizeof(modinfo));
+            ::osl::LongPathBuffer<sal_Unicode> aBuffer(MAX_LONG_PATH);
+            rtl_uString* ustrSysPath = nullptr;
 
-            if (static_cast<BYTE*>(pv) >= static_cast<BYTE*>(modinfo.lpBaseOfDll)
-                && static_cast<BYTE*>(pv)
-                       < static_cast<BYTE*>(modinfo.lpBaseOfDll) + modinfo.SizeOfImage)
-            {
-                ::osl::LongPathBuffer<sal_Unicode> aBuffer(MAX_LONG_PATH);
-                rtl_uString* ustrSysPath = nullptr;
+            GetModuleFileNameW(lpModules[iModule], o3tl::toW(aBuffer),
+                               aBuffer.getBufSizeInSymbols());
 
-                GetModuleFileNameW(lpModules[iModule], o3tl::toW(aBuffer),
-                                   aBuffer.getBufSizeInSymbols());
+            rtl_uString_newFromStr(&ustrSysPath, aBuffer);
+            osl_getFileURLFromSystemPath(ustrSysPath, pustrURL);
+            rtl_uString_release(ustrSysPath);
 
-                rtl_uString_newFromStr(&ustrSysPath, aBuffer);
-                osl_getFileURLFromSystemPath(ustrSysPath, pustrURL);
-                rtl_uString_release(ustrSysPath);
-
-                bSuccess = true;
-            }
+            bSuccess = true;
         }
     }
 
