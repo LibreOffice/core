@@ -265,6 +265,8 @@ public:
     OUString GetOlePath();
     /// Parse the ole1 data out of an RTF fragment URL.
     void ParseOle1FromRtfUrl(const OUString& rRtfUrl, SvMemoryStream& rOle1);
+    /// Export using the C++ HTML export filter, with xhtmlns=reqif-xhtml.
+    void ExportToReqif();
 };
 
 OUString SwHtmlDomExportTest::GetOlePath()
@@ -291,6 +293,16 @@ void SwHtmlDomExportTest::ParseOle1FromRtfUrl(const OUString& rRtfUrl, SvMemoryS
     CPPUNIT_ASSERT(xReader->CallParser() != SvParserState::Error);
     CPPUNIT_ASSERT(xReader->WriteObjectData(rOle1));
     CPPUNIT_ASSERT(rOle1.Tell());
+}
+
+void SwHtmlDomExportTest::ExportToReqif()
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
 }
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/htmlexport/data/";
@@ -767,12 +779,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfTableHeight)
     xRow->setPropertyValue("Height", uno::makeAny(static_cast<sal_Int32>(1000)));
 
     // When exporting to reqif-xhtml:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
 
     // Then make sure that the explicit cell height is omitted from the output:
     SvMemoryStream aStream;
@@ -1033,19 +1040,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testChinese)
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reqif-chinese.odt";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
 
-    // Export it.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-
     // Prevent parseXmlStream guess incompatible encoding and complaint.
     SvxHtmlOptions& rOptions = SvxHtmlOptions::Get();
     rtl_TextEncoding eOldEncoding = rOptions.GetTextEncoding();
     rOptions.SetTextEncoding(RTL_TEXTENCODING_UTF8);
 
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    // Export it.
+    ExportToReqif();
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
     xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
@@ -1067,12 +1068,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aPropertyValues);
 
     // Export it.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
     xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
@@ -1096,12 +1092,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifFontNameSize)
     xTextRange->setString("x");
 
     // Export it.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
     xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
@@ -1124,12 +1115,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifParagraphAlignment)
         "ParaAdjust", uno::makeAny(static_cast<sal_Int16>(style::ParagraphAdjust_RIGHT)));
 
     // Export it.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
     xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
@@ -1149,12 +1135,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf-ole.odt";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
 
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
     OUString aRtfUrl = GetOlePath();
     SvMemoryStream aOle1;
     ParseOle1FromRtfUrl(aRtfUrl, aOle1);
@@ -1178,10 +1159,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     };
     mxComponent
         = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument", aLoadProperties);
-    xStorable.set(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
-    aStoreProperties = {
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue("FilterName", OUString("writer8")),
     };
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProperties);
@@ -1236,11 +1217,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1Paint)
     // case, which has its own clsid.
     CPPUNIT_ASSERT_EQUAL(aExpected.GetHexName(), aActual.GetHexName());
 
-    aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
     OUString aRtfUrl = GetOlePath();
     SvMemoryStream aOle1;
     ParseOle1FromRtfUrl(aRtfUrl, aOle1);
@@ -1290,12 +1267,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
     pWrtShell->SplitNode();
     pWrtShell->Insert("D");
 
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
 
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
@@ -1322,12 +1294,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testUnderlineNone)
                                  uno::makeAny(sal_Int16(awt::FontUnderline::NONE)));
 
     // Export to reqif-xhtml.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
 
     // Make sure that the paragraph has no explicit style, because "text-decoration: none" is
     // filtered out.
@@ -1343,12 +1310,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PresDataNoOle2)
     // Save to reqif-xhtml.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "no-ole2-pres-data.odt";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
     OUString aRtfUrl = GetOlePath();
     SvMemoryStream aOle1;
     ParseOle1FromRtfUrl(aRtfUrl, aOle1);
@@ -1365,12 +1327,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PresDataWmfOnly)
     // Save to reqif-xhtml.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole1-pres-data-wmf.odt";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
     OUString aRtfUrl = GetOlePath();
     SvMemoryStream aOle1;
     ParseOle1FromRtfUrl(aRtfUrl, aOle1);
@@ -1390,12 +1347,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifAscharObjsize)
     mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
 
     // When exporting to reqif-xhtml:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToReqif();
 
     // Then make sure that the RTF snippet has the correct aspect ratio:
     OUString aRtfUrl = GetOlePath();
