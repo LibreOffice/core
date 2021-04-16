@@ -67,6 +67,8 @@ class OOXMLDocumentImpl : public OOXMLDocument
     /// Graphic mapper
     css::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
 
+    bool mbCommentsExtendedResolved = false;
+
 private:
     void resolveFastSubStream(Stream & rStream,
                                       OOXMLStream::StreamType_t nType);
@@ -88,6 +90,8 @@ private:
     void resolveCustomXmlStream(Stream & rStream);
     void resolveGlossaryStream(Stream & rStream);
     void resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream);
+    void resolveCommentsExtendedStream(Stream & rStream);
+
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
     virtual ~OOXMLDocumentImpl() override;

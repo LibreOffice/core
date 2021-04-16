@@ -32,6 +32,8 @@
 #include <vector>
 #include <optional>
 
+#include <dmapper/CommentProperties.hxx>
+
 #include "DomainMapper.hxx"
 #include "DomainMapperTableManager.hxx"
 #include "DomainMapperTableHandler.hxx"
@@ -572,6 +574,7 @@ private:
     //annotation import
     css::uno::Reference< css::beans::XPropertySet > m_xAnnotationField;
     sal_Int32 m_nAnnotationId;
+    bool m_bAnnotationResolved = false;
     std::unordered_map< sal_Int32, AnnotationPosition > m_aAnnotationPositions;
 
     void GetCurrentLocale(css::lang::Locale& rLocale);
@@ -1103,6 +1106,8 @@ public:
     /// Handles <w:altChunk>.
     void HandleAltChunk(const OUString& rStreamName);
 
+    void commentProps(const OUString& sId, const CommentProperties& rProps);
+
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     // Start a new index section; if needed, finish current paragraph
@@ -1119,6 +1124,8 @@ private:
     bool m_bSaveFirstParagraphInCell;
     /// Current paragraph had at least one inline object in it.
     bool m_bParaWithInlineObject;
+
+    std::unordered_map<OUString, CommentProperties> m_aCommentProps;
 };
 
 } //namespace writerfilter::dmapper
