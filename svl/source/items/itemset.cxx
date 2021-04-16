@@ -724,14 +724,14 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
     // null terminate to be compatible with sal_uInt16* array pointers
     aRanges.back() = 0;
 
-    SetRanges( aRanges.data() );
+    SetRanges(aRanges.data(), aRanges.size());
 }
 
 /**
  * Modifies the ranges of settable items. Keeps state of items which
  * are new ranges too.
  */
-void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
+void SfxItemSet::SetRanges(const sal_uInt16 *pNewRanges, sal_uInt16 nCount)
 {
     // Identical Ranges?
     if (m_pWhichRanges == pNewRanges)
@@ -807,7 +807,6 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
     }
     else
     {
-        sal_uInt16 nCount = Count_Impl(pNewRanges) + 1;
         if (m_pWhichRanges != m_pPool->GetFrozenIdRanges())
             delete[] m_pWhichRanges;
         m_pWhichRanges = new sal_uInt16[ nCount ];

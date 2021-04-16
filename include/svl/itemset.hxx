@@ -216,7 +216,7 @@ public:
 
     SfxItemPool*                GetPool() const { return m_pPool; }
     const sal_uInt16*           GetRanges() const { return m_pWhichRanges; }
-    void                        SetRanges( const sal_uInt16 *pRanges );
+    void                        SetRanges(const sal_uInt16 *pRanges, sal_uInt16 nLen);
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return m_pParent; }
 
