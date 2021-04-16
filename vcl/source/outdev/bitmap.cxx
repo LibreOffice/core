@@ -752,9 +752,8 @@ namespace
         aSrcCol = pP->GetColor( nMapY, nMapX );
         aDstCol = pB->GetColor( nY, nX );
 
-        // vcl stores transparency, not alpha - invert it
-        const sal_uInt8 nSrcAlpha = 255 - pA->GetPixelIndex( nMapY, nMapX );
-        const sal_uInt8 nDstAlpha = 255 - pAlphaW->GetPixelIndex( nY, nX );
+        const sal_uInt8 nSrcAlpha = pA->GetPixelIndex( nMapY, nMapX );
+        const sal_uInt8 nDstAlpha = pAlphaW->GetPixelIndex( nY, nX );
 
         // Perform porter-duff compositing 'over' operation
 
@@ -834,9 +833,9 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
                                               nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16 ] ) );
                     pW->SetPixelOnData( pScanline, nX, aIndex );
 
-                    aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] +
-                                                   nVCLGLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] +
-                                                   nVCLBLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] ) );
+                    aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ ( nVCLLut[ nResAlpha ] + nD ) >> 16 ] +
+                                                   nVCLGLut[ ( nVCLLut[ nResAlpha ] + nD ) >> 16 ] +
+                                                   nVCLBLut[ ( nVCLLut[ nResAlpha ] + nD ) >> 16 ] ) );
                     pAlphaW->SetPixelOnData( pScanlineAlpha, nX, aIndex );
                 }
             }
@@ -862,7 +861,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
                     aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB.get(), pAlphaW.get(), nResAlpha );
 
                     pB->SetPixelOnData(pScanlineB, nX, pB->GetBestMatchingColor(aDstCol));
-                    pAlphaW->SetPixelOnData(pScanlineAlpha, nX, pB->GetBestMatchingColor(Color(255L-nResAlpha, 255L-nResAlpha, 255L-nResAlpha)));
+                    pAlphaW->SetPixelOnData(pScanlineAlpha, nX, pB->GetBestMatchingColor(Color(nResAlpha, nResAlpha, nResAlpha)));
                 }
             }
         }

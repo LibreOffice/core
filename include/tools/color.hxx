@@ -453,6 +453,10 @@ static_assert (sal_uInt32(Color(0x12, 0x34, 0x56)) == 0x00123456);
 
 constexpr ::Color COL_TRANSPARENT             ( ColorTransparency, 0xFF, 0xFF, 0xFF, 0xFF );
 constexpr ::Color COL_AUTO                    ( ColorTransparency, 0xFF, 0xFF, 0xFF, 0xFF );
+// These are used when drawing to the separate alpha channel we use in vcl
+constexpr ::Color COL_ALPHA_TRANSPARENT       ( 0x00, 0x00, 0x00 );
+constexpr ::Color COL_ALPHA_OPAQUE            ( 0xff, 0xff, 0xff );
+
 constexpr ::Color COL_BLACK                   ( 0x00, 0x00, 0x00 );
 constexpr ::Color COL_BLUE                    ( 0x00, 0x00, 0x80 );
 constexpr ::Color COL_GREEN                   ( 0x00, 0x80, 0x00 );
