@@ -262,7 +262,9 @@ BitmapEx GetBitmapEx(BitmapEx const& rBitmapEx, DrawModeFlags nDrawMode)
             // DRAWMODE_BLACK/WHITEBITMAP requires monochrome output, having alpha-induced
             // grey levels is not acceptable
             BitmapEx aMaskEx(aBmpEx.GetAlphaMask().GetBitmap());
+            aMaskEx.Invert(); // convert to transparency
             BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(129));
+            aMaskEx.Invert(); // convert to alpha
             aBmpEx = BitmapEx(aColorBmp, aMaskEx.GetBitmap());
         }
         else

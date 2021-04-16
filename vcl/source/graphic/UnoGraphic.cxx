@@ -206,7 +206,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::colorChange(
             if ((nAlphaTo == 0) || (nAlphaTo == sal::static_int_cast< sal_Int8 >(0xff)))
             {
                 Bitmap aBitmap(aBitmapEx.GetBitmap());
-                Bitmap aMask(aBitmap.CreateMask(aColorFrom, nTolerance));
+                AlphaMask aMask(aBitmap.CreateAlphaMask(aColorFrom, nTolerance));
                 aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
                 aReturnGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
             }

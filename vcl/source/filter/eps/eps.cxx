@@ -200,7 +200,7 @@ private:
     void                ImplPolyLine( const tools::Polygon & rPolygon );
 
     void                ImplSetClipRegion( vcl::Region const & rRegion );
-    void                ImplBmp( Bitmap const *, Bitmap const *, const Point &, double nWidth, double nHeight );
+    void                ImplBmp( Bitmap const *, AlphaMask const *, const Point &, double nWidth, double nHeight );
     void                ImplText( const OUString& rUniString, const Point& rPos, KernArraySpan pDXArry, o3tl::span<const sal_Bool> pKashidaArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( char );
@@ -1641,7 +1641,7 @@ void PSWriter::ImplSetClipRegion( vcl::Region const & rClipRegion )
 //          color       1(pal), 4(pal), 8(pal), 24 Bit
 //
 
-void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, const Point & rPoint, double nXWidth, double nYHeightOrg )
+void PSWriter::ImplBmp( Bitmap const * pBitmap, AlphaMask const * pAlphaMaskBitmap, const Point & rPoint, double nXWidth, double nYHeightOrg )
 {
     if ( !pBitmap )
         return;
@@ -1662,7 +1662,7 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
         tools::Rectangle   aRect;
         vcl::Region      aRegion;
 
-        if ( pMaskBitmap )
+        if ( pAlphaMaskBitmap )
         {
             bDoTrans = true;
             while (true)
@@ -1670,7 +1670,7 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                 if ( mnLevel == 1 && nHeight > 10 )
                     nHeight = 8;
                 aRect = tools::Rectangle( Point( 0, nHeightOrg - nHeightLeft ), Size( nWidth, nHeight ) );
-                aRegion = pMaskBitmap->CreateRegion( COL_BLACK, aRect );
+                aRegion = pAlphaMaskBitmap->CreateRegion( COL_ALPHA_OPAQUE, aRect );
 
                 if( mnLevel == 1 )
                 {

@@ -31,8 +31,11 @@ AlphaMask::AlphaMask() = default;
 AlphaMask::AlphaMask( const Bitmap& rBitmap ) :
     Bitmap( rBitmap )
 {
-    if( !rBitmap.IsEmpty() )
+    // no need to do any conversion if it is already an AlphaMask
+    if ( typeid(rBitmap) != typeid(AlphaMask) && !rBitmap.IsEmpty() )
         Convert( BmpConversion::N8BitNoConversion );
+    assert( (IsEmpty() || getPixelFormat() == vcl::PixelFormat::N8_BPP) && "alpha bitmap should be 8bpp" );
+    assert( (IsEmpty() || HasGreyPalette8Bit()) && "alpha bitmap should have greyscale palette" );
 }
 
 AlphaMask::AlphaMask( const AlphaMask& ) = default;
@@ -43,7 +46,12 @@ AlphaMask::AlphaMask( const Size& rSizePixel, const sal_uInt8* pEraseTransparenc
     : Bitmap(rSizePixel, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256))
 {
     if( pEraseTransparency )
-        Bitmap::Erase( Color( *pEraseTransparency, *pEraseTransparency, *pEraseTransparency ) );
+    {
+        sal_uInt8 nAlpha = 255 - *pEraseTransparency;
+        Bitmap::Erase( Color( nAlpha, nAlpha, nAlpha ) );
+    }
+    else
+        Bitmap::Erase( COL_ALPHA_OPAQUE );
 }
 
 AlphaMask::~AlphaMask() = default;
@@ -54,6 +62,9 @@ AlphaMask& AlphaMask::operator=( const Bitmap& rBitmap )
 
     if( !rBitmap.IsEmpty() )
         Convert( BmpConversion::N8BitNoConversion );
+
+    assert( getPixelFormat() == vcl::PixelFormat::N8_BPP && "alpha bitmap should be 8bpp" );
+    assert( HasGreyPalette8Bit() && "alpha bitmap should have greyscale palette" );
 
     return *this;
 }
@@ -70,7 +81,8 @@ Bitmap const & AlphaMask::GetBitmap() const
 
 void AlphaMask::Erase( sal_uInt8 cTransparency )
 {
-    Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
+    sal_uInt8 nAlpha = 255 - cTransparency;
+    Bitmap::Erase( Color( nAlpha, nAlpha, nAlpha ) );
 }
 
 void AlphaMask::BlendWith(const AlphaMask& rOther)
@@ -79,6 +91,8 @@ void AlphaMask::BlendWith(const AlphaMask& rOther)
     if (xImpBmp->Create(*ImplGetSalBitmap()) && xImpBmp->AlphaBlendWith(*rOther.ImplGetSalBitmap()))
     {
         ImplSetSalBitmap(xImpBmp);
+        assert( getPixelFormat() == vcl::PixelFormat::N8_BPP && "alpha bitmap should be 8bpp" );
+        assert( HasGreyPalette8Bit() && "alpha bitmap should have greyscale palette" );
         return;
     }
     Bitmap::ScopedReadAccess pOtherAcc(const_cast<AlphaMask&>(rOther));
@@ -101,11 +115,18 @@ void AlphaMask::BlendWith(const AlphaMask& rOther)
             // Use sal_uInt16 for following multiplication
             const sal_uInt16 nGrey1 = *scanline;
             const sal_uInt16 nGrey2 = *otherScanline;
-            *scanline = static_cast<sal_uInt8>(nGrey1 + nGrey2 - nGrey1 * nGrey2 / 255);
+            // Awkward calculation because the original used transparency, and to replicate
+            // the logic we need to translate into transparency, perform the original logic,
+            // then translate back to alpha.
+            auto tmp = 255 - ((255 - nGrey1) + (255 - nGrey2) - (255 - nGrey1) * (255 - nGrey2));
+            *scanline = static_cast<sal_uInt8>(tmp / 255);
             ++scanline;
             ++otherScanline;
         }
     }
+    pAcc.reset();
+    assert( getPixelFormat() == vcl::PixelFormat::N8_BPP && "alpha bitmap should be 8bpp" );
+    assert( HasGreyPalette8Bit() && "alpha bitmap should have greyscale palette" );
 }
 
 bool AlphaMask::hasAlpha() const
@@ -126,7 +147,7 @@ bool AlphaMask::hasAlpha() const
     {
         for (tools::Long x = 0; x < nWidth; ++x)
         {
-            if (0 != pAcc->GetColor(y, x).GetRed())
+            if (255 != pAcc->GetColor(y, x).GetRed())
             {
                 return true;
             }
@@ -143,6 +164,8 @@ void AlphaMask::ReleaseAccess( BitmapReadAccess* pAccess )
         Bitmap::ReleaseAccess( pAccess );
         Convert( BmpConversion::N8BitNoConversion );
     }
+    assert( getPixelFormat() == vcl::PixelFormat::N8_BPP && "alpha bitmap should be 8bpp" );
+    assert( HasGreyPalette8Bit() && "alpha bitmap should have greyscale palette" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

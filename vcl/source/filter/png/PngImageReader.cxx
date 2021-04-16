@@ -465,6 +465,7 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
                 {
                     aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
                     aBitmapAlpha = AlphaMask(Size(width, height), nullptr);
+                    aBitmapAlpha.Erase(0); // opaque
                 }
                 break;
             case PNG_COLOR_TYPE_GRAY:
@@ -605,7 +606,7 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
                         pScanline[iColor++] = pRow[i + 0];
                         pScanline[iColor++] = pRow[i + 1];
                         pScanline[iColor++] = pRow[i + 2];
-                        pScanAlpha[iAlpha++] = 0xFF - pRow[i + 3];
+                        pScanAlpha[iAlpha++] = pRow[i + 3];
                     }
                 }
             }
@@ -629,7 +630,7 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
                             pScanline[iColor++] = pRow[i + 0];
                             pScanline[iColor++] = pRow[i + 1];
                             pScanline[iColor++] = pRow[i + 2];
-                            pScanAlpha[iAlpha++] = 0xFF - pRow[i + 3];
+                            pScanAlpha[iAlpha++] = pRow[i + 3];
                         }
                     }
                 }

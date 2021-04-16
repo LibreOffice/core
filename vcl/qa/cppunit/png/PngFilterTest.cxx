@@ -325,22 +325,22 @@ void PngFilterTest::testPng()
                     CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAlphaAccess->Width());
                     CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAlphaAccess->Height());
 
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x80, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
                                          pAlphaAccess->GetPixel(0, 0));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x80, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
                                          pAlphaAccess->GetPixel(3, 3));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x80, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
                                          pAlphaAccess->GetPixel(3, 0));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x80, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
                                          pAlphaAccess->GetPixel(0, 3));
 
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x40, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xBF, 0x00),
                                          pAlphaAccess->GetPixel(1, 1));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xC0, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x3F, 0x00),
                                          pAlphaAccess->GetPixel(1, 2));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xC0, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x3F, 0x00),
                                          pAlphaAccess->GetPixel(2, 1));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x40, 0x00),
+                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xBF, 0x00),
                                          pAlphaAccess->GetPixel(2, 2));
                 }
             }
@@ -1887,15 +1887,14 @@ void PngFilterTest::testPngRoundtrip24_8()
         {
             BitmapScopedWriteAccess pWriteAccessBitmap(aBitmap);
             AlphaScopedWriteAccess pWriteAccessAlpha(aAlpha);
-            pWriteAccessAlpha->Erase(Color(ColorTransparency, 0x00, 0xAA, 0xAA, 0xAA));
+            pWriteAccessAlpha->Erase(Color(0xAA, 0xAA, 0xAA));
             pWriteAccessBitmap->Erase(COL_BLACK);
             for (int i = 0; i < 8; ++i)
             {
                 for (int j = 0; j < 8; ++j)
                 {
                     pWriteAccessBitmap->SetPixel(i, j, COL_LIGHTRED);
-                    pWriteAccessAlpha->SetPixel(i, j,
-                                                Color(ColorTransparency, 0x00, 0xBB, 0xBB, 0xBB));
+                    pWriteAccessAlpha->SetPixel(i, j, Color(0xBB, 0xBB, 0xBB));
                 }
             }
             for (int i = 8; i < 16; ++i)
@@ -1903,8 +1902,7 @@ void PngFilterTest::testPngRoundtrip24_8()
                 for (int j = 8; j < 16; ++j)
                 {
                     pWriteAccessBitmap->SetPixel(i, j, COL_LIGHTBLUE);
-                    pWriteAccessAlpha->SetPixel(i, j,
-                                                Color(ColorTransparency, 0x00, 0xCC, 0xCC, 0xCC));
+                    pWriteAccessAlpha->SetPixel(i, j, Color(0xCC, 0xCC, 0xCC));
                 }
             }
         }
@@ -1922,13 +1920,13 @@ void PngFilterTest::testPngRoundtrip24_8()
 
         CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmapEx.GetSizePixel());
 
-        CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xBB, 0xFF, 0x00, 0x00),
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xBB, 0xFF, 0x00, 0x00),
                              aBitmapEx.GetPixelColor(0, 0));
-        CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xCC, 0x00, 0x00, 0xFF),
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xCC, 0x00, 0x00, 0xFF),
                              aBitmapEx.GetPixelColor(15, 15));
-        CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xAA, 0x00, 0x00, 0x00),
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xAA, 0x00, 0x00, 0x00),
                              aBitmapEx.GetPixelColor(15, 0));
-        CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xAA, 0x00, 0x00, 0x00),
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xAA, 0x00, 0x00, 0x00),
                              aBitmapEx.GetPixelColor(0, 15));
     }
 }

@@ -26,9 +26,9 @@
 #include <osl/process.h>     //osl_getProcessLocale
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>       //SAL_WARN
+#include <vcl/graph.hxx>     //Graphic
 #include <vcl/settings.hxx>  //GetSettings
 #include <vcl/svapp.hxx>     //Application::
-#include <vcl/virdev.hxx>    //VirtualDevice
 #include <vcl/weld.hxx>
 #include <unotools/resmgr.hxx> //Translate
 
@@ -105,20 +105,20 @@ AboutDialog::AboutDialog(weld::Window *pParent)
                                        ? "shell/logo_inverted"
                                        : "shell/logo",
                                    aBackgroundBitmap, nWidth * 0.8)) {
-    ScopedVclPtr<VirtualDevice> m_pVirDev =
-        m_pBrandImage->create_virtual_device();
-    m_pVirDev->SetOutputSizePixel(aBackgroundBitmap.GetSizePixel());
-    m_pVirDev->DrawBitmapEx(Point(0, 0), aBackgroundBitmap);
-    m_pBrandImage->set_image(m_pVirDev.get());
-    m_pVirDev.disposeAndClear();
+    // Eliminate white background when Skia is disabled by not drawing the
+    // background bitmap to a VirtualDevice. On most platforms, non-Skia
+    // VirtualDevices will be filled with a solid color when drawing
+    // the bitmap.
+    Graphic aGraphic(aBackgroundBitmap);
+    m_pBrandImage->set_image(aGraphic.GetXGraphic());
   }
   if (SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, nWidth * 0.9)) {
-    ScopedVclPtr<VirtualDevice> m_pVirDev =
-        m_pAboutImage->create_virtual_device();
-    m_pVirDev->SetOutputSizePixel(aBackgroundBitmap.GetSizePixel());
-    m_pVirDev->DrawBitmapEx(Point(0, 0), aBackgroundBitmap);
-    m_pAboutImage->set_image(m_pVirDev.get());
-    m_pVirDev.disposeAndClear();
+    // Eliminate white background when Skia is disabled by not drawing the
+    // background bitmap to a VirtualDevice. On most platforms, non-Skia
+    // VirtualDevices will be filled with a solid color when drawing
+    // the bitmap.
+    Graphic aGraphic(aBackgroundBitmap);
+    m_pAboutImage->set_image(aGraphic.GetXGraphic());
   }
 
   // Links

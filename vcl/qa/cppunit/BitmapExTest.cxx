@@ -47,8 +47,7 @@ void BitmapExTest::testGetPixelColor24_8()
 
     BitmapEx aBitmapEx(aBitmap, aMask);
 
-    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xAA, 0x00, 0xFF, 0x00),
-                         aBitmapEx.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xAA, 0x00, 0xFF, 0x00), aBitmapEx.GetPixelColor(0, 0));
 }
 
 void BitmapExTest::testGetPixelColor32()

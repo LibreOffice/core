@@ -79,7 +79,7 @@ void OutputDevice::SetLineColor( const Color& rColor )
     }
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor( COL_BLACK );
+        mpAlphaVDev->SetLineColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::InitLineColor()

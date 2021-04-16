@@ -109,12 +109,14 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
     png_set_write_fn(pPng, &rStream, lclWriteStream, nullptr);
 
     aBitmap = aBitmapEx.GetBitmap();
-    aAlphaMask = aBitmapEx.GetAlphaMask();
+    if (bTranslucent)
+        aAlphaMask = aBitmapEx.GetAlphaMask();
 
     {
         bool bCombineChannels = false;
         pAccess = Bitmap::ScopedReadAccess(aBitmap);
-        pAlphaAccess = Bitmap::ScopedReadAccess(aAlphaMask);
+        if (bTranslucent)
+            pAlphaAccess = Bitmap::ScopedReadAccess(aAlphaMask);
         Size aSize = aBitmapEx.GetSizePixel();
 
         int bitDepth = -1;
@@ -251,8 +253,6 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                     combineScanlineChannels(pSourcePointer, pAlphaPointer, aCombinedChannels,
                                             nBitmapWidth, colorType);
                     pFinalPointer = aCombinedChannels.data();
-                    // Invert alpha channel (255 - a)
-                    png_set_invert_alpha(pPng);
                 }
                 png_write_row(pPng, pFinalPointer);
             }

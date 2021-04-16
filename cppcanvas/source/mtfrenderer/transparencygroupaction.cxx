@@ -229,7 +229,7 @@ namespace cppcanvas::internal
                     // VirtualDevice with alpha channel
                     ScopedVclPtrInstance<VirtualDevice> aVDev(
                         *::Application::GetDefaultDevice(), DeviceFormat::WITH_ALPHA );
-                    aVDev->SetOutputSizePixel( aBitmapSizePixel );
+                    aVDev->SetOutputSizePixel( aBitmapSizePixel, true, true );
                     aVDev->SetMapMode();
 
                     if( rSubset.mnSubsetBegin != 0 ||

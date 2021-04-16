@@ -1250,7 +1250,6 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
-                    aMsk.Invert();
                     WMFRecord_StretchDIB( pA->GetPoint(), aMsk.GetSizePixel(), aBmp, W_SRCPAINT );
                     WMFRecord_StretchDIB( pA->GetPoint(), aBmp.GetSizePixel(), aBmp, W_SRCAND );
                 }
@@ -1268,7 +1267,6 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
-                    aMsk.Invert();
                     WMFRecord_StretchDIB( pA->GetPoint(), pA->GetSize(), aMsk, W_SRCPAINT );
                     WMFRecord_StretchDIB( pA->GetPoint(), pA->GetSize(), aBmp, W_SRCAND );
                 }
@@ -1288,7 +1286,6 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
-                    aMsk.Invert();
                     WMFRecord_StretchDIB( pA->GetDestPoint(), pA->GetDestSize(), aMsk, W_SRCPAINT );
                     WMFRecord_StretchDIB( pA->GetDestPoint(), pA->GetDestSize(), aBmp, W_SRCAND );
                 }

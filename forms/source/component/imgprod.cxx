@@ -379,7 +379,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 
     if( !pMskAcc )
     {
-        aMask = Bitmap(aBmp.GetSizePixel(), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
+        aMask = AlphaMask(aBmp.GetSizePixel());
         aMask.Erase( 0 );
         pMskAcc = aMask.AcquireReadAccess();
     }
@@ -389,7 +389,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 
     if( pBmpAcc->HasPalette() )
     {
-        const BitmapColor aWhite( pMskAcc->GetBestMatchingColor( COL_WHITE ) );
+        const BitmapColor aWhite( pMskAcc->GetBestMatchingColor( COL_ALPHA_TRANSPARENT ) );
 
         if( mnTransIndex < 256 )
         {

@@ -597,7 +597,6 @@ static QImage getAlphaImage(const SalBitmap& rSourceBitmap, const SalBitmap& rAl
     assert(rAlphaBitmap.GetBitCount() == 8 || rAlphaBitmap.GetBitCount() == 1);
 
     QImage aAlphaMask = *static_cast<const QtBitmap*>(&rAlphaBitmap)->GetQImage();
-    aAlphaMask.invertPixels();
 
     const QImage* pBitmap = static_cast<const QtBitmap*>(&rSourceBitmap)->GetQImage();
     QImage aImage = pBitmap->convertToFormat(Qt_DefaultFormat32);

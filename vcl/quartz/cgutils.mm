@@ -41,27 +41,38 @@ CGImageRef CreateWithSalBitmapAndMask( const SalBitmap& rBitmap, const SalBitmap
     if( !xMask )
         return xImage;
 
-    // CGImageCreateWithMask() only likes masks or greyscale images => convert if needed
-    // TODO: isolate in an extra method?
-    if( !CGImageIsMask(xMask) || rMask.GetBitCount() != 8)//(CGImageGetColorSpace(xMask) != GetSalData()->mxGraySpace) )
+    // If xMask is an image (i.e. not a mask), it must be greyscale - a requirement of the
+    // CGImageCreateWithMask() function.
+    if( !CGImageIsMask(xMask) && CGImageGetColorSpace(xMask) != GetSalData()->mxGraySpace )
     {
-        const CGRect xImageRect=CGRectMake( 0, 0, nWidth, nHeight );//the rect has no offset
+        CGImageRef xGrayMask = CGImageCreateCopyWithColorSpace(xMask, GetSalData()->mxGraySpace);
+        if (xGrayMask)
+        {
+            CFRelease(xMask);
+            xMask = xGrayMask;
+        }
+        else
+        {
+            // Many gallery images will fail to be converted to a grayscale
+            // colorspace so fall back to old mask creation code
+            const CGRect xImageRect=CGRectMake( 0, 0, nWidth, nHeight );//the rect has no offset
 
-        // create the alpha mask image fitting our image
-        // TODO: is caching the full mask or the subimage mask worth it?
-        int nMaskBytesPerRow = ((nWidth + 3) & ~3);
-        void* pMaskMem = std::malloc( nMaskBytesPerRow * nHeight );
-        CGContextRef xMaskContext = CGBitmapContextCreate( pMaskMem,
-            nWidth, nHeight, 8, nMaskBytesPerRow, GetSalData()->mxGraySpace, kCGImageAlphaNone );
-        CGContextDrawImage( xMaskContext, xImageRect, xMask );
-        CFRelease( xMask );
-        CGDataProviderRef xDataProvider( CGDataProviderCreateWithData( nullptr,
-        pMaskMem, nHeight * nMaskBytesPerRow, &CFRTLFree ) );
+            // create the alpha mask image fitting our image
+            // TODO: is caching the full mask or the subimage mask worth it?
+            int nMaskBytesPerRow = ((nWidth + 3) & ~3);
+            void* pMaskMem = std::malloc( nMaskBytesPerRow * nHeight );
+            CGContextRef xMaskContext = CGBitmapContextCreate( pMaskMem,
+                nWidth, nHeight, 8, nMaskBytesPerRow, GetSalData()->mxGraySpace, kCGImageAlphaNone );
+            CGContextDrawImage( xMaskContext, xImageRect, xMask );
+            CFRelease( xMask );
+            CGDataProviderRef xDataProvider( CGDataProviderCreateWithData( nullptr,
+            pMaskMem, nHeight * nMaskBytesPerRow, &CFRTLFree ) );
 
-        static const CGFloat* pDecode = nullptr;
-        xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );
-        CFRelease( xDataProvider );
-        CFRelease( xMaskContext );
+            static const CGFloat* pDecode = nullptr;
+            xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );
+            CFRelease( xDataProvider );
+            CFRelease( xMaskContext );
+        }
     }
 
     if( !xMask )

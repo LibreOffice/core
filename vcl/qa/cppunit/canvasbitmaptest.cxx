@@ -672,17 +672,17 @@ void CanvasBitmapTest::runTest()
 
         checkCanvasBitmap( xBmp, "single bitmap", nDepth );
 
-        Bitmap aMask(Size(200,200), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
-        aMask.Erase(COL_WHITE);
+        AlphaMask aMask(Size(200,200));
+        aMask.Erase(255);
         {
             BitmapScopedWriteAccess pAcc(aMask);
             if( pAcc.get() )
             {
-                pAcc->SetFillColor(COL_BLACK);
+                pAcc->SetFillColor(COL_ALPHA_OPAQUE);
                 pAcc->FillRect(tools::Rectangle(0,0,100,100));
-                pAcc->SetPixel(0,0,BitmapColor(255));
-                pAcc->SetPixel(0,1,BitmapColor(0));
-                pAcc->SetPixel(0,2,BitmapColor(255));
+                pAcc->SetPixel(0,0,BitmapColor(0));
+                pAcc->SetPixel(0,1,BitmapColor(255));
+                pAcc->SetPixel(0,2,BitmapColor(0));
             }
         }
 
@@ -691,16 +691,16 @@ void CanvasBitmapTest::runTest()
         checkCanvasBitmap( xBmp, "masked bitmap", nDepth );
 
         AlphaMask aAlpha(Size(200,200));
-        aAlpha.Erase(255);
+        aAlpha.Erase(0);
         {
             BitmapWriteAccess* pAcc = aAlpha.AcquireWriteAccess();
             if( pAcc )
             {
-                pAcc->SetFillColor(COL_BLACK);
+                pAcc->SetFillColor(COL_ALPHA_OPAQUE);
                 pAcc->FillRect(tools::Rectangle(0,0,100,100));
-                pAcc->SetPixel(0,0,BitmapColor(255));
-                pAcc->SetPixel(0,1,BitmapColor(0));
-                pAcc->SetPixel(0,2,BitmapColor(255));
+                pAcc->SetPixel(0,0,BitmapColor(0));
+                pAcc->SetPixel(0,1,BitmapColor(255));
+                pAcc->SetPixel(0,2,BitmapColor(0));
                 aAlpha.ReleaseAccess(pAcc);
             }
         }
@@ -762,15 +762,15 @@ void CanvasBitmapTest::runTest()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(0,0) incorrect content",
                                BitmapColor(0,1,0), pBmpAcc->GetPixel(0,0));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(0,0) incorrect alpha content",
-                               BitmapColor(255), pAlphaAcc->GetPixel(0,0));
+                               BitmapColor(0), pAlphaAcc->GetPixel(0,0));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(2,2) incorrect content",
                                BitmapColor(0,3,2), pBmpAcc->GetPixel(2,2));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(2,2) incorrect alpha content",
-                               BitmapColor(253), pAlphaAcc->GetPixel(2,2));
+                               BitmapColor(2), pAlphaAcc->GetPixel(2,2));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) incorrect content",
                                BitmapColor(0,3,9), pBmpAcc->GetPixel(2,9));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) correct alpha content",
-                               BitmapColor(253), pAlphaAcc->GetPixel(2,9));
+                               BitmapColor(2), pAlphaAcc->GetPixel(2,9));
 
         aBitmapAlpha.ReleaseAccess(pAlphaAcc);
         Bitmap::ReleaseAccess(pBmpAcc);

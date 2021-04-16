@@ -338,15 +338,15 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         // extract current aVDev content into a new animation
         // frame
         GDIMetaFileSharedPtr pMtf = std::make_shared<GDIMetaFile>();
+        Bitmap aAlphaMask = pVDevMask->GetBitmap(aEmptyPoint, aAnimSize);
+        aAlphaMask.Invert(); // convert from transparency to alpha
         pMtf->AddAction(
             new MetaBmpExAction( aEmptyPoint,
                                  BitmapEx(
                                      pVDev->GetBitmap(
                                          aEmptyPoint,
                                          aAnimSize ),
-                                     pVDevMask->GetBitmap(
-                                         aEmptyPoint,
-                                         aAnimSize ))));
+                                     aAlphaMask)));
 
         // setup mtf dimensions and pref map mode (for
         // simplicity, keep it all in pixel. the metafile

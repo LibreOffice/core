@@ -205,7 +205,8 @@ BitmapEx CreateFromData(sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHei
                 Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
                 for (tools::Long x = 0; x < nWidth; ++x)
                 {
-                    const sal_uInt8 nValue = bReverseAlpha ? 0xff - *p : *p;
+                    // FIXME this parameter is badly named
+                    const sal_uInt8 nValue = bReverseAlpha ? *p : 0xff - *p;
                     xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(nValue));
                     p += 4;
                 }
@@ -271,11 +272,15 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
             Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
             for (tools::Long x = 0; x < nWidth; ++x)
             {
-                xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(255 - *p));
+                xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(*p));
                 p += 4;
             }
         }
     }
+
+    xMaskAcc.reset();
+    pWrite.reset();
+
     if (nBitCount == 32)
         return BitmapEx(aBmp, *pAlphaMask);
     else
@@ -350,7 +355,7 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
 #endif
             }
             pRGBWrite->SetPixel( y, x, BitmapColor( nR, nG, nB ) );
-            pMaskWrite->SetPixelIndex( y, x, 255 - nAlpha );
+            pMaskWrite->SetPixelIndex( y, x, nAlpha );
             pPix++;
         }
     }
@@ -462,7 +467,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                         if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
                             nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                         {
-                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(255) );
+                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(0) );
                         }
                         else
                         {
@@ -486,11 +491,11 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                         if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
                             nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                         {
-                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(255) );
+                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(0) );
                         }
                         else
                         {
-                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(0) );
+                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(255) );
                             pWriteAccess->SetPixelOnData( pScan, x, pReadAccess->GetPixel( nSrcY,
                                                                                  nSrcX ) );
                         }
@@ -521,6 +526,7 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
     }
 
     {
+
         AlphaScopedWriteAccess pOld(aOldMask);
 
         assert(pOld && "Got no access to old alpha mask (!)");
@@ -536,8 +542,8 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
                 Scanline pScanline = pOld->GetScanline( y );
                 for(tools::Long x(0); x < pOld->Width(); x++)
                 {
-                    const double fOpOld(1.0 - (pOld->GetIndexFromData(pScanline, x) * fFactor));
-                    const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
+                    const double fOpOld(pOld->GetIndexFromData(pScanline, x) * fFactor);
+                    const sal_uInt8 aCol(basegfx::fround((fOpOld * fOpNew) * 255.0));
 
                     pOld->SetPixelOnData(pScanline, x, BitmapColor(aCol));
                 }
@@ -557,9 +563,9 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
                 Scanline pScanline = pOld->GetScanline( y );
                 for(tools::Long x(0); x < pOld->Width(); x++)
                 {
-                    const double fOpOld(1.0 - (pOld->GetIndexFromData(pScanline, x) * fFactor));
-                    const double fOpNew(1.0 - (pNew->GetIndexFromData(pScanline, x) * fFactor));
-                    const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
+                    const double fOpOld(pOld->GetIndexFromData(pScanline, x) * fFactor);
+                    const double fOpNew(pNew->GetIndexFromData(pScanline, x) * fFactor);
+                    const sal_uInt8 aCol(basegfx::fround((fOpOld * fOpNew) * 255.0));
 
                     pOld->SetPixelOnData(pScanline, x, BitmapColor(aCol));
                 }
@@ -619,10 +625,9 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBi
                     const sal_uInt8 nIndR(pR->GetIndexFromData(pScanlineR, nX));
                     const sal_uInt8 nIndW(pW->GetIndexFromData(pScanlineW, nX));
 
-                    // these values represent transparency (0 == no, 255 == fully transparent),
-                    // so to blend these we have to multiply the inverse (opacity)
-                    // and re-invert the result to transparence
-                    const sal_uInt8 nCombined(0x00ff - (((0x00ff - nIndR) * (0x00ff - nIndW)) >> 8));
+                    // these values represent alpha (255 == no, 0 == fully transparent),
+                    // so to blend these we have to multiply
+                    const sal_uInt8 nCombined((nIndR * nIndW) >> 8);
 
                     pW->SetPixelOnData(pScanlineW, nX, BitmapColor(nCombined));
                 }
@@ -672,7 +677,7 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, c
                 BitmapColor const& rColor(
                     pAlphaReadAcc->GetPaletteColor(*pReadScan));
                 pReadScan++;
-                nAlpha = data[ nOff ] = 255 - rColor.GetIndex();
+                nAlpha = data[ nOff ] = rColor.GetIndex();
                 if( nAlpha != 255 )
                     bIsAlpha = true;
                 nOff += 4;
@@ -682,7 +687,7 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, c
             SAL_INFO( "canvas.cairo", "fallback to GetColor for alpha - slow, format: " << static_cast<int>(pAlphaReadAcc->GetScanlineFormat()) );
             for( nX = 0; nX < nWidth; nX++ )
             {
-                nAlpha = data[ nOff ] = 255 - pAlphaReadAcc->GetColor( nY, nX ).GetIndex();
+                nAlpha = data[ nOff ] = pAlphaReadAcc->GetColor( nY, nX ).GetIndex();
                 if( nAlpha != 255 )
                     bIsAlpha = true;
                 nOff += 4;
@@ -1027,7 +1032,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
-                    pRes[ nCurrPos++ ] = pAlphaReadAccess->GetIndexFromData( pScanlineReadAlpha, x );
+                    pRes[ nCurrPos++ ] = 255 - pAlphaReadAccess->GetIndexFromData( pScanlineReadAlpha, x );
                 }
             }
             else
@@ -1217,7 +1222,7 @@ bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
             {
                 const BitmapColor aColor = pReadAccess->GetPixelFromData(aReadScan, nX);
                 BitmapColor aResultColor(aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue());
-                BitmapColor aResultColorAlpha(255 - aColor.GetAlpha(), 255 - aColor.GetAlpha(), 255 - aColor.GetAlpha());
+                BitmapColor aResultColorAlpha(aColor.GetAlpha(), aColor.GetAlpha(), aColor.GetAlpha());
 
                 pResultBitmapAccess->SetPixelOnData(aResultScan, nX, aResultColor);
                 pResultAlphaAccess->SetPixelOnData(aResultScanAlpha, nX, aResultColorAlpha);

@@ -95,7 +95,7 @@ AlphaMask implcreateAlphaMask(drawinglayer::primitive2d::Primitive2DContainer& r
     // prepare for mask creation
     pContent->SetMapMode(MapMode(MapUnit::MapPixel));
 
-    // set alpha to all white (fully transparent)
+    // set transparency to all white (fully transparent)
     pContent->Erase();
 
     basegfx::BColorModifierSharedPtr aBColorModifier;
@@ -107,7 +107,7 @@ AlphaMask implcreateAlphaMask(drawinglayer::primitive2d::Primitive2DContainer& r
     }
     else
     {
-        // Embed primitives to paint them black
+        // Embed primitives to paint them black (fully opaque)
         aBColorModifier
             = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0.0, 0.0, 0.0));
     }
@@ -123,7 +123,14 @@ AlphaMask implcreateAlphaMask(drawinglayer::primitive2d::Primitive2DContainer& r
     // get alpha channel from vdev
     pContent->EnableMapMode(false);
     const Point aEmptyPoint;
-    return AlphaMask(pContent->GetBitmap(aEmptyPoint, rSizePixel));
+
+    // Convert from transparency->alpha.
+    // FIXME in theory I should be able to directly construct alpha by using black as background
+    // and white as foreground, but that doesn't work for some reason.
+    Bitmap aContentBitmap = pContent->GetBitmap(aEmptyPoint, rSizePixel);
+    aContentBitmap.Invert();
+
+    return AlphaMask(aContentBitmap);
 }
 }
 
@@ -257,12 +264,16 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     if (aAlpha.hasAlpha())
     {
         // Need to correct content using known alpha to get to background-free
-        // RGBA result, usable e.g. in PNG export(s) or convert-to-bitmap
-        aRetval.RemoveBlendedStartColor(COL_WHITE, aAlpha);
+        // RGBA result, usable e.g. in PNG export(s) or convert-to-bitmap.
+        // Now that vcl supports bitmaps with an alpha channel, only apply
+        // this correction to bitmaps without an alpha channel.
+        if (pContent->GetBitCount() < 32)
+            aRetval.RemoveBlendedStartColor(COL_WHITE, aAlpha);
+        // return combined result
+        return BitmapEx(aRetval, aAlpha);
     }
-
-    // return combined result
-    return BitmapEx(aRetval, aAlpha);
+    else
+        return BitmapEx(aRetval);
 }
 
 BitmapEx convertPrimitive2DContainerToBitmapEx(primitive2d::Primitive2DContainer&& rSequence,

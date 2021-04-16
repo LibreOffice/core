@@ -102,8 +102,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
                 pWriteAccess->CopyScanline(nRow, pPdfLine, ScanlineFormat::N32BitTcBgra, nStride);
                 for (int nCol = 0; nCol < nPageWidth; ++nCol)
                 {
-                    // Invert alpha (source is alpha, target is opacity).
-                    aScanlineAlpha[nCol] = ~pPdfLine[3];
+                    aScanlineAlpha[nCol] = pPdfLine[3];
                     pPdfLine += 4;
                 }
                 pMaskAccess->CopyScanline(nRow, aScanlineAlpha.data(), ScanlineFormat::N8BitPal,

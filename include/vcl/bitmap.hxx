@@ -374,6 +374,37 @@ public:
      */
     Bitmap                  CreateMask( const Color& rTransColor, sal_uInt8 nTol ) const;
 
+    /** Create on-off alpha mask from bitmap
+
+        This method creates a bitmask from the bitmap, where every
+        pixel that equals rTransColor is set transparent, the rest
+        opaque.
+
+        @param rTransColor
+        Color value where the bitmask should be transparent
+
+        @return the resulting bitmask.
+     */
+    AlphaMask              CreateAlphaMask( const Color& rTransColor ) const;
+
+    /** Create on-off alpha mask from bitmap
+
+        This method creates a bitmask from the bitmap, where every
+        pixel that equals rTransColor is set transparent, the rest
+        opaque.
+
+        @param rTransColor
+        Color value where the bitmask should be transparent
+
+        @param nTol
+        Tolerance value. Specifies the maximal difference between
+        rTransColor and the individual pixel values, such that the
+        corresponding pixel is still regarded as transparent.
+
+        @return the resulting bitmask.
+     */
+    AlphaMask             CreateAlphaMask( const Color& rTransColor, sal_uInt8 nTol ) const;
+
     /** Create region of similar colors in a given rectangle
 
         @param rColor

@@ -617,7 +617,12 @@ bool SkiaSalBitmap::AlphaBlendWith(const SalBitmap& rSalBmp)
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // set as is
     surface->getCanvas()->drawImage(GetSkImage(), 0, 0, SkSamplingOptions(), &paint);
-    paint.setBlendMode(SkBlendMode::kScreen); // src+dest - src*dest/255 (in 0..1)
+    // in the 0..1 range that skia uses, the equation we want is:
+    //     r = 1 - ((1 - src) + (1 - dest) - (1 - src) * (1 - dest))
+    // which simplifies to:
+    //     r = src * dest
+    // which is SkBlendMode::kModulate
+    paint.setBlendMode(SkBlendMode::kModulate);
     surface->getCanvas()->drawImage(otherBitmap->GetSkImage(), 0, 0, SkSamplingOptions(), &paint);
     ResetToSkImage(makeCheckedImageSnapshot(surface));
     DataChanged();
@@ -640,8 +645,10 @@ bool SkiaSalBitmap::Invert()
         surface->getCanvas()->clear(SK_ColorWHITE);
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kDifference);
-        surface->getCanvas()->drawImage(
-            mImage, 0, 0, SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kLinear), &paint);
+        // Drawing the image does not work so create a shader from the image
+        paint.setShader(GetSkShader(SkSamplingOptions(SkSamplingOptions())));
+        surface->getCanvas()->drawRect(SkRect::MakeXYWH(0, 0, mSize.Width(), mSize.Height()),
+                                       paint);
         ResetToSkImage(makeCheckedImageSnapshot(surface));
         DataChanged();
         SAL_INFO("vcl.skia.trace", "invert(" << this << ")");
@@ -746,11 +753,8 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
 }
 
 // If mEraseColor is set, this is the color to use when the bitmap is used as alpha bitmap.
-// E.g. COL_BLACK actually means fully opaque and COL_WHITE means fully transparent.
+// E.g. COL_BLACK actually means fully transparent and COL_WHITE means fully opaque.
 // This is because the alpha value is set as the color itself, not the alpha of the color.
-// Additionally VCL actually uses transparency and not opacity, so we should use "255 - value",
-// but we account for this by doing SkBlendMode::kDstOut when using alpha images (which
-// basically does another "255 - alpha"), so do not do it here.
 static SkColor fromEraseColorToAlphaImageColor(Color color)
 {
     return SkColorSetARGB(color.GetBlue(), 0, 0, 0);
@@ -1053,9 +1057,7 @@ bool SkiaSalBitmap::IsFullyOpaqueAsAlpha() const
         return false;
     // If the erase color is set so that this bitmap used as alpha would
     // mean a fully opaque alpha mask (= noop), we can skip using it.
-    // Note that for alpha bitmaps we use the VCL "transparency" convention,
-    // i.e. alpha 0 is opaque.
-    return SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)) == 0;
+    return SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)) == 255;
 }
 
 SkAlphaType SkiaSalBitmap::alphaType() const
@@ -1080,7 +1082,7 @@ void SkiaSalBitmap::PerformErase()
         abort();
     Color fastColor = mEraseColor;
     if (!!mPalette)
-        fastColor = Color(ColorTransparency, mPalette.GetBestIndex(fastColor));
+        fastColor = Color(ColorAlpha, mPalette.GetBestIndex(fastColor));
     if (!ImplFastEraseBitmap(*bitmapBuffer, fastColor))
     {
         FncSetPixel setPixel = BitmapReadAccess::SetPixelFunction(bitmapBuffer->mnFormat);
@@ -1406,7 +1408,7 @@ OString SkiaSalBitmap::GetAlphaImageKey(DirectImage direct) const
     {
         std::stringstream ss;
         ss << std::hex << std::setfill('0') << std::setw(2)
-           << static_cast<int>(255 - SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)));
+           << static_cast<int>(SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)));
         return OString::Concat("E") + ss.str().c_str();
     }
     assert(direct == DirectImage::No || mAlphaImage);

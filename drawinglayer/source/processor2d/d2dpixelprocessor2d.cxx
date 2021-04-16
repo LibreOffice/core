@@ -410,7 +410,7 @@ sal::systools::COMReference<ID2D1Bitmap> createB2DBitmap(const BitmapEx& rBitmap
             {
                 const BitmapColor aColor(pReadAccess->GetColor(y, x));
                 const BitmapColor aAlpha(pAlphaReadAccess->GetColor(y, x));
-                const sal_uInt16 nAlpha(255 - aAlpha.GetRed());
+                const sal_uInt16 nAlpha(aAlpha.GetRed());
 
                 *pTarget++ = sal_uInt32(BitmapColor(
                     ColorAlpha, sal_uInt8((sal_uInt16(aColor.GetRed()) * nAlpha) >> 8),

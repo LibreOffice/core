@@ -277,7 +277,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                     }
 
                     access->SetPixel(y, dest, Color(r, g, b));
-                    accessAlpha->SetPixelIndex(y, dest, 255 - a);
+                    accessAlpha->SetPixelIndex(y, dest, a);
                     ++src;
                 }
             }

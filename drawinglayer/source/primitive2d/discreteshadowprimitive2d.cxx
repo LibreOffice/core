@@ -32,6 +32,7 @@ namespace drawinglayer::primitive2d
         DiscreteShadow::DiscreteShadow(const BitmapEx& rBitmapEx)
         :   maBitmapEx(rBitmapEx)
         {
+            maBitmapEx.Invert(); // convert transparency to alpha
             const Size& rBitmapSize = getBitmapEx().GetSizePixel();
 
             if(rBitmapSize.Width() != rBitmapSize.Height() || rBitmapSize.Width() < 7)

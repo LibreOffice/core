@@ -60,38 +60,54 @@ bool Bitmap::Erase(const Color& rFillColor)
 
 bool Bitmap::Invert()
 {
-    ScopedReadAccess pReadAcc(*this);
-    if (!pReadAcc)
+    if (!mxSalBmp)
         return false;
 
-    if (pReadAcc->HasPalette())
+    // For alpha masks, we need to actually invert the underlying data
+    // or the optimisations elsewhere do not work right.
+    if (typeid(*this) != typeid(AlphaMask))
     {
-        BitmapScopedWriteAccess pWriteAcc(*this);
-        BitmapPalette aBmpPal(pWriteAcc->GetPalette());
-        const sal_uInt16 nCount = aBmpPal.GetEntryCount();
-
-        for (sal_uInt16 i = 0; i < nCount; i++)
+        // We want to avoid using ScopedReadAccess until we really need
+        // it, because on Skia it triggers a GPU->RAM copy, which is very slow.
+        ScopedReadAccess pReadAcc(*this);
+        if (!pReadAcc)
+            return false;
+        if (pReadAcc->HasPalette())
         {
-            aBmpPal[i].Invert();
-        }
+            BitmapScopedWriteAccess pWriteAcc(*this);
+            BitmapPalette aBmpPal(pWriteAcc->GetPalette());
+            const sal_uInt16 nCount = aBmpPal.GetEntryCount();
 
-        pWriteAcc->SetPalette(aBmpPal);
-    }
-    else if (!mxSalBmp->Invert()) // try optimised call first
-    {
-        BitmapScopedWriteAccess pWriteAcc(*this);
-        const tools::Long nWidth = pWriteAcc->Width();
-        const tools::Long nHeight = pWriteAcc->Height();
-
-        for (tools::Long nY = 0; nY < nHeight; nY++)
-        {
-            Scanline pScanline = pWriteAcc->GetScanline(nY);
-            for (tools::Long nX = 0; nX < nWidth; nX++)
+            for (sal_uInt16 i = 0; i < nCount; i++)
             {
-                BitmapColor aBmpColor = pWriteAcc->GetPixelFromData(pScanline, nX);
-                aBmpColor.Invert();
-                pWriteAcc->SetPixelOnData(pScanline, nX, aBmpColor);
+                aBmpPal[i].Invert();
             }
+
+            pWriteAcc->SetPalette(aBmpPal);
+            mxSalBmp->InvalidateChecksum();
+            return true;
+        }
+    }
+
+    // try optimised call, much faster on Skia
+    if (mxSalBmp->Invert())
+    {
+        mxSalBmp->InvalidateChecksum();
+        return true;
+    }
+
+    BitmapScopedWriteAccess pWriteAcc(*this);
+    const tools::Long nWidth = pWriteAcc->Width();
+    const tools::Long nHeight = pWriteAcc->Height();
+
+    for (tools::Long nY = 0; nY < nHeight; nY++)
+    {
+        Scanline pScanline = pWriteAcc->GetScanline(nY);
+        for (tools::Long nX = 0; nX < nWidth; nX++)
+        {
+            BitmapColor aBmpColor = pWriteAcc->GetPixelFromData(pScanline, nX);
+            aBmpColor.Invert();
+            pWriteAcc->SetPixelOnData(pScanline, nX, aBmpColor);
         }
     }
 
@@ -607,6 +623,174 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
     return aNewBmp;
 }
 
+AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor) const
+{
+    ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
+    if (!pReadAcc)
+        return AlphaMask();
+
+    // Historically LO used 1bpp masks, but 8bpp masks are much faster,
+    // better supported by hardware, and the memory savings are not worth
+    // it anymore.
+
+    if ((pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal)
+        && pReadAcc->GetBestMatchingColor(COL_ALPHA_TRANSPARENT)
+               == pReadAcc->GetBestMatchingColor(rTransColor))
+    {
+        // if we're a 1 bit pixel already, and the transcolor matches the color that would replace it
+        // already, then just return a copy
+        return AlphaMask(*this);
+    }
+
+    AlphaMask aNewBmp(GetSizePixel());
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    if (!pWriteAcc)
+        return AlphaMask();
+
+    const tools::Long nWidth = pReadAcc->Width();
+    const tools::Long nHeight = pReadAcc->Height();
+    const BitmapColor aOpaqueColor(pWriteAcc->GetBestMatchingColor(COL_ALPHA_OPAQUE));
+    const BitmapColor aTransparentColor(pWriteAcc->GetBestMatchingColor(COL_ALPHA_TRANSPARENT));
+
+    const BitmapColor aTest(pReadAcc->GetBestMatchingColor(rTransColor));
+
+    if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
+    {
+        // optimized for 8Bit source palette
+        const sal_uInt8 cTest = aTest.GetIndex();
+
+        for (tools::Long nY = 0; nY < nHeight; ++nY)
+        {
+            Scanline pSrc = pReadAcc->GetScanline(nY);
+            Scanline pDst = pWriteAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; ++nX)
+            {
+                if (cTest == pSrc[nX])
+                    pDst[nX] = aTransparentColor.GetIndex();
+                else
+                    pDst[nX] = aOpaqueColor.GetIndex();
+            }
+        }
+    }
+    else
+    {
+        // not optimized
+        for (tools::Long nY = 0; nY < nHeight; ++nY)
+        {
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; ++nX)
+            {
+                if (aTest == pReadAcc->GetPixelFromData(pScanlineRead, nX))
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aTransparentColor);
+                else
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aOpaqueColor);
+            }
+        }
+    }
+
+    pWriteAcc.reset();
+    pReadAcc.reset();
+
+    aNewBmp.maPrefSize = maPrefSize;
+    aNewBmp.maPrefMapMode = maPrefMapMode;
+
+    return aNewBmp;
+}
+
+AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor, sal_uInt8 nTol) const
+{
+    if (nTol == 0)
+        return CreateAlphaMask(rTransColor);
+
+    ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
+    if (!pReadAcc)
+        return AlphaMask();
+
+    // Historically LO used 1bpp masks, but 8bpp masks are much faster,
+    // better supported by hardware, and the memory savings are not worth
+    // it anymore.
+    // TODO: Possibly remove the 1bpp code later.
+
+    AlphaMask aNewBmp(GetSizePixel());
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    if (!pWriteAcc)
+        return AlphaMask();
+
+    const tools::Long nWidth = pReadAcc->Width();
+    const tools::Long nHeight = pReadAcc->Height();
+    const BitmapColor aOpaqueColor(pWriteAcc->GetBestMatchingColor(COL_ALPHA_OPAQUE));
+    const BitmapColor aTransparentColor(pWriteAcc->GetBestMatchingColor(COL_ALPHA_TRANSPARENT));
+
+    BitmapColor aCol;
+    tools::Long nR, nG, nB;
+    const tools::Long nMinR = MinMax<tools::Long>(rTransColor.GetRed() - nTol, 0, 255);
+    const tools::Long nMaxR = MinMax<tools::Long>(rTransColor.GetRed() + nTol, 0, 255);
+    const tools::Long nMinG = MinMax<tools::Long>(rTransColor.GetGreen() - nTol, 0, 255);
+    const tools::Long nMaxG = MinMax<tools::Long>(rTransColor.GetGreen() + nTol, 0, 255);
+    const tools::Long nMinB = MinMax<tools::Long>(rTransColor.GetBlue() - nTol, 0, 255);
+    const tools::Long nMaxB = MinMax<tools::Long>(rTransColor.GetBlue() + nTol, 0, 255);
+
+    if (pReadAcc->HasPalette())
+    {
+        for (tools::Long nY = 0; nY < nHeight; nY++)
+        {
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; nX++)
+            {
+                aCol = pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nX));
+                nR = aCol.GetRed();
+                nG = aCol.GetGreen();
+                nB = aCol.GetBlue();
+
+                if (nMinR <= nR && nMaxR >= nR && nMinG <= nG && nMaxG >= nG && nMinB <= nB
+                    && nMaxB >= nB)
+                {
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aTransparentColor);
+                }
+                else
+                {
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aOpaqueColor);
+                }
+            }
+        }
+    }
+    else
+    {
+        for (tools::Long nY = 0; nY < nHeight; nY++)
+        {
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; nX++)
+            {
+                aCol = pReadAcc->GetPixelFromData(pScanlineRead, nX);
+                nR = aCol.GetRed();
+                nG = aCol.GetGreen();
+                nB = aCol.GetBlue();
+
+                if (nMinR <= nR && nMaxR >= nR && nMinG <= nG && nMaxG >= nG && nMinB <= nB
+                    && nMaxB >= nB)
+                {
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aTransparentColor);
+                }
+                else
+                {
+                    pWriteAcc->SetPixelOnData(pScanline, nX, aOpaqueColor);
+                }
+            }
+        }
+    }
+
+    pWriteAcc.reset();
+    pReadAcc.reset();
+
+    aNewBmp.maPrefSize = maPrefSize;
+    aNewBmp.maPrefMapMode = maPrefMapMode;
+
+    return aNewBmp;
+}
+
 vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rRect) const
 {
     tools::Rectangle aRect(rRect);
@@ -721,7 +905,7 @@ bool Bitmap::Replace(const AlphaMask& rAlpha, const Color& rMergeColor)
         for (tools::Long nX = 0; nX < nWidth; nX++)
         {
             aCol = pAcc->GetColor(nY, nX);
-            aCol.Merge(rMergeColor, 255 - pAlphaAcc->GetIndexFromData(pScanlineAlpha, nX));
+            aCol.Merge(rMergeColor, pAlphaAcc->GetIndexFromData(pScanlineAlpha, nX));
             pNewAcc->SetPixelOnData(pScanline, nX, aCol);
         }
     }
@@ -965,8 +1149,7 @@ bool Bitmap::Blend(const AlphaMask& rAlpha, const Color& rBackgroundColor)
         for (tools::Long nX = 0; nX < nWidth; ++nX)
         {
             BitmapColor aBmpColor = pAcc->GetPixelFromData(pScanline, nX);
-            aBmpColor.Merge(rBackgroundColor,
-                            255 - pAlphaAcc->GetIndexFromData(pScanlineAlpha, nX));
+            aBmpColor.Merge(rBackgroundColor, pAlphaAcc->GetIndexFromData(pScanlineAlpha, nX));
             pAcc->SetPixelOnData(pScanline, nX, aBmpColor);
         }
     }

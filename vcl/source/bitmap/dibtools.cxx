@@ -1699,7 +1699,11 @@ bool ReadDIBV5(
     AlphaMask& rTargetAlpha,
     SvStream& rIStm)
 {
-    return ImplReadDIB(rTarget, &rTargetAlpha, rIStm, true);
+    bool rv = ImplReadDIB(rTarget, &rTargetAlpha, rIStm, true);
+    // convert transparency->alpha
+    if (rv)
+        rTargetAlpha.Invert();
+    return rv;
 }
 
 bool ReadRawDIB(
@@ -1747,7 +1751,10 @@ bool WriteDIBBitmapEx(
 
         if(rSource.IsAlpha())
         {
-            return ImplWriteDIB(rSource.maAlphaMask, rOStm, true, true);
+            // invert the alpha because the other routines actually want transparency
+            AlphaMask tmpAlpha = rSource.maAlphaMask;
+            tmpAlpha.Invert();
+            return ImplWriteDIB(tmpAlpha, rOStm, true, true);
         }
     }
 

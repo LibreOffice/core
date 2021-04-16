@@ -49,7 +49,7 @@ class JPEGReader : public GraphicReader
 {
     SvStream&           mrStream;
     std::optional<Bitmap> mpBitmap;
-    std::optional<Bitmap> mpIncompleteAlpha;
+    std::optional<AlphaMask> mpIncompleteAlpha;
 
     tools::Long                mnLastPos;
     tools::Long                mnLastLines;

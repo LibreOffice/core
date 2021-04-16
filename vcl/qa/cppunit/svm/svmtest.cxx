@@ -26,6 +26,7 @@
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <sal/log.hxx>
 
 #include <bitmap/BitmapWriteAccess.hxx>
 
@@ -46,7 +47,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }
 
-    void checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile);
+    void checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile, const char * where);
 
     // write GDI Metafile to a file in data directory
     // only use this for new tests to create the svm file
@@ -268,7 +269,7 @@ static void setupBaseVirtualDevice(VirtualDevice& rDevice, GDIMetaFile& rMeta)
     rDevice.Erase();
 }
 
-void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile)
+void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile, const char * where)
 {
     BitmapEx aSourceBitmapEx = pVirtualDev->GetBitmapEx(Point(), Size(10, 10));
     ScopedVclPtrInstance<VirtualDevice> pVirtualDevResult;
@@ -294,7 +295,7 @@ void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtua
             aPNGWriter.write(aResultBitmapEx);
         }
     }
-    CPPUNIT_ASSERT_EQUAL(aSourceBitmapEx.GetChecksum(), aResultBitmapEx.GetChecksum());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(where, aSourceBitmapEx.GetChecksum(), aResultBitmapEx.GetChecksum());
 }
 
 static GDIMetaFile readMetafile(const OUString& rUrl)
@@ -989,12 +990,12 @@ void SvmTest::testBitmaps()
     {
         GDIMetaFile aReloadedGDIMetaFile = writeAndReadStream(aGDIMetaFile);
         checkBitmaps(aReloadedGDIMetaFile);
-        checkRendering(pVirtualDev, aReloadedGDIMetaFile);
+        checkRendering(pVirtualDev, aReloadedGDIMetaFile, SAL_WHERE);
     }
     {
         GDIMetaFile aFileGDIMetaFile = readFile(u"bitmaps.svm");
         checkBitmaps(aFileGDIMetaFile);
-        checkRendering(pVirtualDev, aFileGDIMetaFile);
+        checkRendering(pVirtualDev, aFileGDIMetaFile, SAL_WHERE);
     }
 }
 
@@ -1005,7 +1006,7 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
     if (SkiaHelper::isVCLSkiaEnabled())
         return; // TODO SKIA using CRCs is broken (the idea of it)
 
-    std::array<OUString, 8> aExpectedCRC
+    static const std::vector<OUString> aExpectedCRC
     {
 #if defined OSL_BIGENDIAN
         "08feb5d3",
@@ -1028,7 +1029,7 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
 #endif
     };
 
-    std::array<OUString, 8> aExpectedContentChecksum
+    static const std::array<OUString, 8> aExpectedContentChecksum
     {
         "26bdebd04e5b18d685cea04982179e273ee3b659",
         "f4f52df6ef965a2f0fbccbe6aca35ba3457cf9d5",
@@ -1126,7 +1127,7 @@ void SvmTest::testBitmapExs()
             pAccess->Erase(COL_MAGENTA);
 
             AlphaScopedWriteAccess pAlphaAccess(aAlpha);
-            pAlphaAccess->Erase(Color(128, 128, 128));
+            pAlphaAccess->Erase(Color(127, 127, 127));
         }
         pVirtualDev->DrawBitmapEx(Point(6, 6), BitmapEx(aBitmap, aAlpha));
     }
@@ -1178,12 +1179,12 @@ void SvmTest::testBitmapExs()
     {
         GDIMetaFile aReloadedGDIMetaFile = writeAndReadStream(aGDIMetaFile);
         checkBitmapExs(aReloadedGDIMetaFile, /*bIsSvmFile*/false);
-        checkRendering(pVirtualDev, aReloadedGDIMetaFile);
+        checkRendering(pVirtualDev, aReloadedGDIMetaFile, SAL_WHERE);
     }
     {
         GDIMetaFile aFileGDIMetaFile = readFile(u"bitmapexs.svm");
         checkBitmapExs(aFileGDIMetaFile, /*bIsSvmFile*/true);
-        checkRendering(pVirtualDev, aFileGDIMetaFile);
+        checkRendering(pVirtualDev, aFileGDIMetaFile, SAL_WHERE);
     }
 }
 

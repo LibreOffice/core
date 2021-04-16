@@ -84,19 +84,7 @@ MaskHelper::MaskHelper(const SalBitmap& rAlphaBitmap)
     const BitmapBuffer* pMaskBuf = rMask.GetBuffer();
     assert(rAlphaBitmap.GetBitCount() == 8 && "we only support 8-bit masks now");
 
-    // the alpha values need to be inverted for Cairo
-    // so big stupid copy and invert here
-    const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
-    pAlphaBits.reset(new unsigned char[nImageSize]);
-    memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
-
-    // TODO: make upper layers use standard alpha
-    sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits.get());
-    for (int i = nImageSize / sizeof(sal_uInt32); --i >= 0; ++pLDst)
-        *pLDst = ~*pLDst;
-    assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits.get() + nImageSize);
-
-    implSetSurface(cairo_image_surface_create_for_data(pAlphaBits.get(), CAIRO_FORMAT_A8,
+    implSetSurface(cairo_image_surface_create_for_data(pMaskBuf->mpBits, CAIRO_FORMAT_A8,
                                                        pMaskBuf->mnWidth, pMaskBuf->mnHeight,
                                                        pMaskBuf->mnScanlineSize));
 }

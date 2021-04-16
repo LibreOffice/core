@@ -661,7 +661,9 @@ void GIFReader::CreateNewBitmaps()
     if( bGCTransparent )
     {
         pAcc1.reset();
-        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aBmp1 );
+        AlphaMask aAlphaMask(aBmp1);
+        aAlphaMask.Invert(); // convert from transparency to alpha
+        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aAlphaMask );
     }
     else
         aAnimationFrame.maBitmapEx = BitmapEx( aBmp8 );

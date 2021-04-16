@@ -89,6 +89,7 @@ BitmapEx VCLUnoHelper::GetBitmap( const css::uno::Reference< css::awt::XBitmap>&
                 SvMemoryStream aMem( aBytes.getArray(), aBytes.getLength(), StreamMode::READ );
                 ReadDIB(aMask, aMem, true);
             }
+            aMask.Invert(); // Convert from transparency to alpha
             aBmp = BitmapEx( aDIB, aMask );
         }
     }

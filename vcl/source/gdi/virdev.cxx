@@ -341,18 +341,18 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 // fill/linecolor state)
 void VirtualDevice::ImplFillOpaqueRectangle( const tools::Rectangle& rRect )
 {
-    // Set line and fill color to black (->opaque),
+    // Set line and fill color to opaque,
     // fill rect with that (linecolor, too, because of
     // those pesky missing pixel problems)
     Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
-    SetLineColor( COL_BLACK );
-    SetFillColor( COL_BLACK );
+    SetLineColor( COL_ALPHA_OPAQUE );
+    SetFillColor( COL_ALPHA_OPAQUE );
     DrawRect( rRect );
     Pop();
 }
 
 bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
-                                            sal_uInt8 *const pBuffer)
+                                            sal_uInt8 *const pBuffer, bool bAlphaMaskTransparent )
 {
     if( InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer) )
     {
@@ -368,14 +368,16 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
             {
                 mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, meFormatAndAlpha);
                 mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase, nullptr);
+                mpAlphaVDev->SetBackground( Wallpaper(bAlphaMaskTransparent ? COL_ALPHA_TRANSPARENT : COL_ALPHA_OPAQUE) );
+                mpAlphaVDev->Erase();
             }
 
             // TODO: copy full outdev state to new one, here. Also needed in outdev2.cxx:DrawOutDev
             if( GetLineColor() != COL_TRANSPARENT )
-                mpAlphaVDev->SetLineColor( COL_BLACK );
+                mpAlphaVDev->SetLineColor( COL_ALPHA_OPAQUE );
 
             if( GetFillColor() != COL_TRANSPARENT )
-                mpAlphaVDev->SetFillColor( COL_BLACK );
+                mpAlphaVDev->SetFillColor( COL_ALPHA_OPAQUE );
 
             mpAlphaVDev->SetMapMode( GetMapMode() );
 
@@ -400,9 +402,9 @@ void VirtualDevice::EnableRTL( bool bEnable )
     OutputDevice::EnableRTL(bEnable);
 }
 
-bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase )
+bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase, bool bAlphaMaskTransparent )
 {
-    return ImplSetOutputSizePixel(rNewSize, bErase, nullptr);
+    return ImplSetOutputSizePixel(rNewSize, bErase, nullptr, bAlphaMaskTransparent);
 }
 
 bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(

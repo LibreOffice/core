@@ -1564,6 +1564,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
         pVDev->DrawGradient(tools::Rectangle(Point(0, 0), pVDev->GetOutputSizePixel()), rGradient);
 
         aNewMask = AlphaMask(pVDev->GetBitmap(Point(0, 0), pVDev->GetOutputSizePixel()));
+        aNewMask.Invert(); // convert transparency to alpha
         bHasNewMask = true;
     }
 
@@ -1577,9 +1578,9 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
             // no transparence yet, apply new one
             if(bFixedTransparence)
             {
-                sal_uInt8 aAlpha(basegfx::fround(fTransparence * 255.0));
+                sal_uInt8 nTransparence(basegfx::fround(fTransparence * 255.0));
 
-                aNewMask = AlphaMask(aBitmapEx.GetBitmap().GetSizePixel(), &aAlpha);
+                aNewMask = AlphaMask(aBitmapEx.GetBitmap().GetSizePixel(), &nTransparence);
             }
 
             aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aNewMask);

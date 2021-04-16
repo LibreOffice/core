@@ -26,6 +26,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/ImageTree.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 #include <bitmap/BitmapDisabledImageFilter.hxx>
 #include <comphelper/lok.hxx>
 
@@ -164,7 +165,15 @@ BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled, SalGraphics* pGr
             else // if (mxMetaFile)
             {
                 ScopedVclPtrInstance<VirtualDevice> aVDev(DeviceFormat::WITH_ALPHA);
-                aVDev->SetOutputSizePixel(aTarget);
+
+                // Fix white background in font color and font background color
+                // in the Breeze icons by setting the alpha mask to transparent
+                bool bAlphaMaskTransparent = true;
+#if HAVE_FEATURE_SKIA
+                if (SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::isAlphaMaskBlendingEnabled())
+                    bAlphaMaskTransparent = false;
+#endif
+                aVDev->SetOutputSizePixel(aTarget, true, bAlphaMaskTransparent);
                 mxMetaFile->WindStart();
                 mxMetaFile->Play(*aVDev, Point(), aTarget);
                 maBitmapEx = aVDev->GetBitmapEx(Point(), aTarget);

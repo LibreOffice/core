@@ -249,8 +249,8 @@ Graphic JPEGReader::CreateIntermediateGraphic(tools::Long nLines)
 
     if (!mnLastLines)
     {
-        mpIncompleteAlpha.emplace(aSizePixel, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
-        mpIncompleteAlpha->Erase(COL_WHITE);
+        mpIncompleteAlpha.emplace(aSizePixel);
+        mpIncompleteAlpha->Erase(255);
     }
 
     if (nLines && (nLines < aSizePixel.Height()))
@@ -261,7 +261,7 @@ Graphic JPEGReader::CreateIntermediateGraphic(tools::Long nLines)
         {
             {
                 BitmapScopedWriteAccess pAccess(*mpIncompleteAlpha);
-                pAccess->SetFillColor(COL_BLACK);
+                pAccess->SetFillColor(COL_ALPHA_OPAQUE);
                 pAccess->FillRect(tools::Rectangle(Point(0, mnLastLines), Size(pAccess->Width(), nNewLines)));
             }
 

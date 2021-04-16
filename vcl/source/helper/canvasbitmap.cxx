@@ -436,7 +436,9 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
                 for( tools::Long x=aRequestedArea.Left(); x<aRequestedArea.Right(); ++x )
                 {
                     *pOutScan++ = pBmpAcc->GetPixelIndex(y,x);
-                    *pOutScan++ = pAlphaAcc->GetPixelIndex(y,x);
+                    // vcl used to store transparency. Now it stores alpha. But we need the UNO
+                    // interface to still preserve the old interface.
+                    *pOutScan++ = 255 - pAlphaAcc->GetPixelIndex(y,x);
                 }
             }
             else
@@ -451,7 +453,9 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
                 {
                     for( tools::Long i=0; i<nNonAlphaBytes; ++i )
                         *pOutScan++ = *pScan++;
-                    *pOutScan++ = pAlphaAcc->GetIndexFromData( pScanlineAlpha, x );
+                    // vcl used to store transparency. Now it stores alpha. But we need the UNO
+                    // interface to still preserve the old interface.
+                    *pOutScan++ = 255 - pAlphaAcc->GetIndexFromData( pScanlineAlpha, x );
                 }
             }
 
@@ -515,7 +519,9 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
         {
             // input less than a byte - copy via GetPixel()
             *pOutBuf++ = pBmpAcc->GetPixelIndex(pos.Y,pos.X);
-            *pOutBuf   = pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
+            // vcl used to store transparency. Now it stores alpha. But we need the UNO
+            // interface to still preserve the old interface.
+            *pOutBuf   = 255 - pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
         }
         else
         {
@@ -525,7 +531,9 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
             // input integer multiple of byte - copy directly
             memcpy(pOutBuf, pScan+nScanlineLeftOffset, nNonAlphaBytes );
             pOutBuf += nNonAlphaBytes;
-            *pOutBuf++ = pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
+            // vcl used to store transparency. Now it stores alpha. But we need the UNO
+            // interface to still preserve the old interface.
+            *pOutBuf++ = 255 - pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
         }
     }
 

@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <pdf/pdfwriter_impl.hxx>
@@ -549,9 +550,8 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
     if( mpAlphaVDev )
     {
         const Color aFillCol( mpAlphaVDev->GetFillColor() );
-        mpAlphaVDev->SetFillColor( Color(sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
-                                         sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
-                                         sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100)) );
+        sal_uInt8 nAlpha = 255 - sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100);
+        mpAlphaVDev->SetFillColor( Color(nAlpha, nAlpha, nAlpha) );
 
         mpAlphaVDev->DrawTransparent( rPolyPoly, nTransparencePercent );
 
@@ -602,7 +602,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
             xVDev->mnDPIX = mnDPIX;
             xVDev->mnDPIY = mnDPIY;
 
-            if( xVDev->SetOutputSizePixel( aDstRect.GetSize() ) )
+            if( xVDev->SetOutputSizePixel( aDstRect.GetSize(), true, true ) )
             {
                 if(GetAntialiasing() != AntialiasingFlags::NONE)
                 {
@@ -641,7 +641,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // get content bitmap from buffer
                     xVDev->EnableMapMode(false);
 
-                    const Bitmap aPaint(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
+                    const BitmapEx aPaint(xVDev->GetBitmapEx(aPoint, xVDev->GetOutputSizePixel()));
 
                     // create alpha mask from gradient and get as Bitmap
                     xVDev->EnableMapMode(bBufferMapModeEnabled);
@@ -650,12 +650,26 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->SetDrawMode(DrawModeFlags::Default);
                     xVDev->EnableMapMode(false);
 
-                    const AlphaMask aAlpha(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
+                    AlphaMask aAlpha(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
+                    AlphaMask aPaintAlpha(aPaint.GetAlphaMask());
+#if HAVE_FEATURE_SKIA
+                    // One of the alpha masks is inverted from what
+                    // is expected so invert it again
+                    if ( SkiaHelper::isVCLSkiaEnabled() )
+                    {
+                        aAlpha.Invert(); // convert to alpha
+                    }
+                    else
+#endif
+                    {
+                        aPaintAlpha.Invert(); // convert to alpha
+                    }
+                    aAlpha.BlendWith(aPaintAlpha);
 
                     xVDev.disposeAndClear();
 
                     // draw masked content to target and restore MapMode
-                    DrawBitmapEx(aDstRect.TopLeft(), BitmapEx(aPaint, aAlpha));
+                    DrawBitmapEx(aDstRect.TopLeft(), BitmapEx(aPaint.GetBitmap(), aAlpha));
                     EnableMapMode(bOrigMapModeEnabled);
                 }
                 else
@@ -683,7 +697,20 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->EnableMapMode( false );
 
                     AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
-                    aAlpha.BlendWith(aPaint.GetAlphaMask());
+                    AlphaMask aPaintAlpha(aPaint.GetAlphaMask());
+#if HAVE_FEATURE_SKIA
+                    // One of the alpha masks is inverted from what
+                    // is expected so invert it again
+                    if ( SkiaHelper::isVCLSkiaEnabled() )
+                    {
+                        aAlpha.Invert(); // convert to alpha
+                    }
+                    else
+#endif
+                    {
+                        aPaintAlpha.Invert(); // convert to alpha
+                    }
+                    aAlpha.BlendWith(aPaintAlpha);
 
                     xVDev.disposeAndClear();
 

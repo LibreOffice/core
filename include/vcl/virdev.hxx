@@ -58,7 +58,7 @@ private:
     SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                                      sal_uInt8* pBuffer );
     SAL_DLLPRIVATE bool ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
-                                                sal_uInt8* pBuffer );
+                                                sal_uInt8* pBuffer, bool bAlphaMaskTransparent = false );
 
     VirtualDevice (const VirtualDevice &) = delete;
     VirtualDevice & operator= (const VirtualDevice &) = delete;
@@ -124,7 +124,7 @@ public:
 
     virtual void        EnableRTL( bool bEnable = true ) override;
 
-    bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true );
+    bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true, bool bAlphaMaskTransparent = false );
     bool                SetOutputSizePixelScaleOffsetAndLOKBuffer( const Size& rNewSize,
                                                                    const Fraction& rScale,
                                                                    const Point& rNewOffset,

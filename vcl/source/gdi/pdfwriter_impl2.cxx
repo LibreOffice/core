@@ -45,6 +45,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <sal/log.hxx>
 #include <memory>
@@ -462,16 +463,15 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         if ( nPixelX && nPixelY )
                         {
                             Size aDstSizePixel( nPixelX, nPixelY );
-                            ScopedVclPtrInstance<VirtualDevice> xVDev;
-                            if( xVDev->SetOutputSizePixel( aDstSizePixel ) )
+                            ScopedVclPtrInstance<VirtualDevice> xVDev(DeviceFormat::WITH_ALPHA);
+                            if( xVDev->SetOutputSizePixel( aDstSizePixel, true, true ) )
                             {
-                                Bitmap          aPaint, aMask;
-                                AlphaMask       aAlpha;
                                 Point           aPoint;
 
                                 MapMode aMapMode( pDummyVDev->GetMapMode() );
                                 aMapMode.SetOrigin( aPoint );
                                 xVDev->SetMapMode( aMapMode );
+                                const bool bVDevOldMap = xVDev->IsMapModeEnabled();
                                 Size aDstSize( xVDev->PixelToLogic( aDstSizePixel ) );
 
                                 Point   aMtfOrigin( aTmpMtf.GetPrefMapMode().GetOrigin() );
@@ -487,34 +487,42 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aTmpMtf.WindStart();
                                 aTmpMtf.Play(*xVDev, aPoint, aDstSize);
                                 aTmpMtf.WindStart();
-
                                 xVDev->EnableMapMode( false );
-                                aPaint = xVDev->GetBitmap( aPoint, aDstSizePixel );
-                                xVDev->EnableMapMode();
-
-                                // create mask bitmap
-                                xVDev->SetLineColor( COL_BLACK );
-                                xVDev->SetFillColor( COL_BLACK );
-                                xVDev->DrawRect( tools::Rectangle( aPoint, aDstSize ) );
-                                xVDev->SetDrawMode( DrawModeFlags::WhiteLine | DrawModeFlags::WhiteFill | DrawModeFlags::WhiteText |
-                                                    DrawModeFlags::WhiteBitmap | DrawModeFlags::WhiteGradient );
-                                aTmpMtf.WindStart();
-                                aTmpMtf.Play(*xVDev, aPoint, aDstSize);
-                                aTmpMtf.WindStart();
-                                xVDev->EnableMapMode( false );
-                                aMask = xVDev->GetBitmap( aPoint, aDstSizePixel );
-                                xVDev->EnableMapMode();
+                                BitmapEx aPaint = xVDev->GetBitmapEx(aPoint, xVDev->GetOutputSizePixel());
+                                xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
                                 // create alpha mask from gradient
                                 xVDev->SetDrawMode( DrawModeFlags::GrayGradient );
                                 xVDev->DrawGradient( tools::Rectangle( aPoint, aDstSize ), rTransparenceGradient );
                                 xVDev->SetDrawMode( DrawModeFlags::Default );
                                 xVDev->EnableMapMode( false );
-                                xVDev->DrawMask( aPoint, aDstSizePixel, aMask, COL_WHITE );
-                                aAlpha = xVDev->GetBitmap( aPoint, aDstSizePixel );
+
+                                AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
+                                AlphaMask aPaintAlpha(aPaint.GetAlphaMask());
+#if HAVE_FEATURE_SKIA
+                                // One of the alpha masks is inverted from what
+                                // is expected so invert it again
+                                if ( SkiaHelper::isVCLSkiaEnabled() )
+                                {
+                                    aAlpha.Invert(); // convert to alpha
+                                }
+                                else
+#endif
+                                {
+                                    aPaintAlpha.Invert(); // convert to alpha
+                                }
+                                aAlpha.BlendWith(aPaintAlpha);
+#if HAVE_FEATURE_SKIA
+                                if ( !SkiaHelper::isVCLSkiaEnabled() )
+#endif
+                                {
+                                    aAlpha.Invert(); // convert to alpha
+                                }
+
+                                xVDev.disposeAndClear();
 
                                 Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                                implWriteBitmapEx( rPos, rSize, BitmapEx( aPaint, aAlpha ), aGraphic, pDummyVDev, i_rContext );
+                                implWriteBitmapEx( rPos, rSize, BitmapEx( aPaint.GetBitmap(), aAlpha ), aGraphic, pDummyVDev, i_rContext );
                             }
                         }
                     }
@@ -758,7 +766,17 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::BMPEX:
                 {
                     const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pAction);
-                    const BitmapEx& aBitmapEx( pA->GetBitmapEx() );
+
+                    // When rendering an image with an alpha mask during PDF
+                    // export, the alpha mask needs to be inverted
+                    BitmapEx aBitmapEx( pA->GetBitmapEx() );
+                    if ( aBitmapEx.IsAlpha())
+                    {
+                        AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
+                        aAlpha.Invert();
+                        aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
+                    }
+
                     Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
                             aBitmapEx.GetPrefMapMode(), pDummyVDev->GetMapMode() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
@@ -769,15 +787,36 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::BMPEXSCALE:
                 {
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
+
+                    // When rendering an image with an alpha mask during PDF
+                    // export, the alpha mask needs to be inverted
+                    BitmapEx aBitmapEx( pA->GetBitmapEx() );
+                    if ( aBitmapEx.IsAlpha())
+                    {
+                        AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
+                        aAlpha.Invert();
+                        aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
+                    }
+
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), pA->GetBitmapEx(), aGraphic, pDummyVDev, i_rContext );
+                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
                 }
                 break;
 
                 case MetaActionType::BMPEXSCALEPART:
                 {
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
+
+                    // When rendering an image with an alpha mask during PDF
+                    // export, the alpha mask needs to be inverted
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
+                    if ( aBitmapEx.IsAlpha())
+                    {
+                        AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
+                        aAlpha.Invert();
+                        aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
+                    }
+
                     aBitmapEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
                     implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );

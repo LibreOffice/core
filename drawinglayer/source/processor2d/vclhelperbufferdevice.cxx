@@ -476,6 +476,7 @@ void impBufferDevice::paint(double fTrans)
     {
         mpAlpha->EnableMapMode(false);
         AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
+        aAlphaMask.Invert(); // convert transparency to alpha
 
 #ifdef DBG_UTIL
         if (!sDumpPath.isEmpty() && bDoSaveForVisualControl)

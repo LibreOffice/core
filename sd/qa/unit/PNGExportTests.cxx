@@ -295,7 +295,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
                 // - Expected: Color: R:255 G:255 B:255 A:0
                 // - Actual  : Color: R:0 G:0 B:0 A:0
                 const Color aColor = pReadAccess->GetColor(nY, nX);
-                CPPUNIT_ASSERT_EQUAL(COL_WHITE, aColor);
+                CPPUNIT_ASSERT_EQUAL(COL_ALPHA_TRANSPARENT, aColor);
             }
         }
     }
