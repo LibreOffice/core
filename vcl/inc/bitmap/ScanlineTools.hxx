@@ -39,14 +39,14 @@ public:
 
     virtual Color readPixel() override
     {
-        const Color aColor(ColorTransparency, pData[4], pData[1], pData[2], pData[3]);
+        const Color aColor(ColorAlpha, pData[4], pData[1], pData[2], pData[3]);
         pData += 4;
         return aColor;
     }
 
     virtual void writePixel(Color nColor) override
     {
-        *pData++ = 255 - nColor.GetAlpha();
+        *pData++ = nColor.GetAlpha();
         *pData++ = nColor.GetRed();
         *pData++ = nColor.GetGreen();
         *pData++ = nColor.GetBlue();

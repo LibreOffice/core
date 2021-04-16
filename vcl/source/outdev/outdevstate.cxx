@@ -325,7 +325,7 @@ void OutputDevice::SetLineColor( const Color& rColor )
     }
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor( COL_BLACK );
+        mpAlphaVDev->SetLineColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::SetFont( const vcl::Font& rNewFont )
@@ -367,7 +367,7 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
     // with COL_BLACK)
     if( aFont.GetColor() != COL_TRANSPARENT )
     {
-        mpAlphaVDev->SetTextColor( COL_BLACK );
+        mpAlphaVDev->SetTextColor( COL_ALPHA_OPAQUE );
         aFont.SetColor( COL_TRANSPARENT );
     }
 

@@ -14,7 +14,7 @@
 #include <bitmap/BitmapMaskToAlphaFilter.hxx>
 
 /**
- * Convert a 1-bit mask to an alpha layer
+ * Convert a 1-bit mask to an alpha bitmap
  */
 BitmapEx BitmapMaskToAlphaFilter::execute(BitmapEx const& rBitmapEx) const
 {
@@ -38,11 +38,11 @@ BitmapEx BitmapMaskToAlphaFilter::execute(BitmapEx const& rBitmapEx) const
             {
                 BitmapColor aBmpColor = pRead->GetPixelFromData(pScanlineRead, nX);
                 if (aBmpColor == COL_BLACK)
-                    aBmpColor = COL_BLACK;
+                    aBmpColor = COL_ALPHA_OPAQUE;
                 else if (aBmpColor == COL_WHITE)
-                    aBmpColor = COL_WHITE;
+                    aBmpColor = COL_ALPHA_TRANSPARENT;
                 else if (aBmpColor == Color(0, 0, 1))
-                    aBmpColor = COL_WHITE;
+                    aBmpColor = COL_ALPHA_TRANSPARENT;
                 else
                     assert(false);
                 pWrite->SetPixelOnData(pScanline, nX, aBmpColor);
