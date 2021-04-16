@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3f90377_9dcd25b1",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1649,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-16T17:05:28Z",
+      "side": 1,
+      "message": "this is enough for the 25 page case on master but not for the full 311 pages; need to invalidate the content frame too\n\npPage-\u003eFindLastBodyContent()-\u003eInvalidateSize()",
+      "revId": "1db08615bb7782394664b6427ea4e2d491f9c638",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
