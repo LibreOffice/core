@@ -34,6 +34,7 @@
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFactory.hxx"
 #include "Handler.hxx"
+#include <dmapper/CommentProperties.hxx>
 
 static const sal_Unicode uCR = 0xd;
 static const sal_Unicode uFtnEdnRef = 0x2;
@@ -384,6 +385,19 @@ void OOXMLFastContextHandler::startParagraphGroup()
         {
             mpStream->startParagraphGroup();
             mpParserState->setInParagraphGroup(true);
+
+            if (const auto& pPropSet = getPropertySet())
+            {
+                OOXMLPropertySetEntryToString aHandler(NS_ooxml::LN_AG_Parids_paraId);
+                pPropSet->resolve(aHandler);
+                if (const OUString& sText = aHandler.getString(); !sText.isEmpty())
+                {
+                    OOXMLStringValue::Pointer_t pVal = new OOXMLStringValue(sText);
+                    OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
+                    pPropertySet->add(NS_ooxml::LN_AG_Parids_paraId, pVal, OOXMLProperty::ATTRIBUTE);
+                    mpStream->props(pPropertySet.get());
+                }
+            }
         }
     }
 }
@@ -2159,6 +2173,28 @@ void OOXMLFastContextHandlerMath::process()
         pProps->add(NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE);
         mpStream->props( pProps.get() );
     }
+}
+
+OOXMLFastContextHandlerCommentEx::OOXMLFastContextHandlerCommentEx(
+    OOXMLFastContextHandler* pContext)
+    : OOXMLFastContextHandler(pContext)
+{
+}
+
+void OOXMLFastContextHandlerCommentEx::lcl_endFastElement(Token_t /*Element*/)
+{
+    mpStream->commentProps(m_sParaId, { m_bDone });
+}
+
+void OOXMLFastContextHandlerCommentEx::att_paraId(const OOXMLValue::Pointer_t& pValue)
+{
+    m_sParaId = pValue->getString();
+}
+
+void OOXMLFastContextHandlerCommentEx::att_done(const OOXMLValue::Pointer_t& pValue)
+{
+    if (pValue->getInt())
+        m_bDone = true;
 }
 
 }}

@@ -129,6 +129,8 @@ public:
 
     void HandleRedline( Sprm& rSprm );
 
+    virtual void commentProps(const OUString& sId, const CommentProperties& rProps) override;
+
 private:
     // Stream
     virtual void lcl_startSectionGroup() override;

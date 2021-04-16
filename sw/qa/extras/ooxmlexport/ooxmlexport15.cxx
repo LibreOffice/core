@@ -198,6 +198,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(200000), nSize1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCommentDoneModel, "CommentDone.docx")
+{
+    css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
+        mxComponent, css::uno::UNO_QUERY_THROW);
+    auto xFields(xTextFieldsSupplier->getTextFields()->createEnumeration());
+
+    // First comment: resolved
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    css::uno::Any aComment = xFields->nextElement();
+    css::uno::Reference<css::beans::XPropertySet> xComment(aComment, css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(true, xComment->getPropertyValue("Resolved").get<bool>());
+
+    // Second comment: unresolved
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    aComment = xFields->nextElement();
+    xComment.set(aComment, css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(false, xComment->getPropertyValue("Resolved").get<bool>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
