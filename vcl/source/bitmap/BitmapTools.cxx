@@ -314,7 +314,7 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
                 nB = unpremultiply_table[nAlpha][nB];
             }
             pRGBWrite->SetPixel( y, x, BitmapColor( nR, nG, nB ) );
-            pMaskWrite->SetPixelIndex( y, x, 255 - nAlpha );
+            pMaskWrite->SetPixelIndex( y, x, nAlpha );
             pPix++;
         }
     }
@@ -675,7 +675,7 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, c
                 BitmapColor const& rColor(
                     pAlphaReadAcc->GetPaletteColor(*pReadScan));
                 pReadScan++;
-                nAlpha = data[ nOff ] = 255 - rColor.GetIndex();
+                nAlpha = data[ nOff ] = rColor.GetIndex();
                 if( nAlpha != 255 )
                     bIsAlpha = true;
                 nOff += 4;
@@ -685,7 +685,7 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, c
             SAL_INFO( "canvas.cairo", "fallback to GetColor for alpha - slow, format: " << static_cast<int>(pAlphaReadAcc->GetScanlineFormat()) );
             for( nX = 0; nX < nWidth; nX++ )
             {
-                nAlpha = data[ nOff ] = 255 - pAlphaReadAcc->GetColor( nY, nX ).GetIndex();
+                nAlpha = data[ nOff ] = pAlphaReadAcc->GetColor( nY, nX ).GetIndex();
                 if( nAlpha != 255 )
                     bIsAlpha = true;
                 nOff += 4;
@@ -1155,7 +1155,7 @@ bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
             {
                 const BitmapColor aColor = pReadAccess->GetPixelFromData(aReadScan, nX);
                 BitmapColor aResultColor(aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue());
-                BitmapColor aResultColorAlpha(255 - aColor.GetAlpha(), 255 - aColor.GetAlpha(), 255 - aColor.GetAlpha());
+                BitmapColor aResultColorAlpha(aColor.GetAlpha(), aColor.GetAlpha(), aColor.GetAlpha());
 
                 pResultBitmapAccess->SetPixelOnData(aResultScan, nX, aResultColor);
                 pResultAlphaAccess->SetPixelOnData(aResultScanAlpha, nX, aResultColorAlpha);
