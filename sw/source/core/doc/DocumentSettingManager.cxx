@@ -22,6 +22,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
@@ -400,7 +401,11 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         // COMPATIBILITY FLAGS END
 
         case DocumentSettingId::BROWSE_MODE: //can be used temporary (load/save) when no SwViewShell is available
-            mbLastBrowseMode = value;
+            // Can't render in webview successfully.
+            if (comphelper::LibreOfficeKit::isActive())
+                mbLastBrowseMode = false;
+            else
+                mbLastBrowseMode = value;
             break;
 
         case DocumentSettingId::HTML_MODE:
