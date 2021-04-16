@@ -599,6 +599,22 @@ protected:
     virtual void process() override;
 };
 
+class OOXMLFastContextHandlerCommentEx : public OOXMLFastContextHandler
+{
+public:
+    explicit OOXMLFastContextHandlerCommentEx(OOXMLFastContextHandler* pContext);
+
+    virtual std::string getType() const override { return "CommentEx"; }
+    virtual void lcl_endFastElement(Token_t Element) override;
+
+    void att_paraId(const OOXMLValue::Pointer_t& pValue);
+    void att_done(const OOXMLValue::Pointer_t& pValue);
+
+private:
+    OUString m_sParaId;
+    bool m_bDone = false;
+};
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

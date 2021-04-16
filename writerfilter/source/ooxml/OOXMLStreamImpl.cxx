@@ -145,6 +145,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     static const OUStringLiteral sFooterType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer";
     static const OUStringLiteral sHeaderType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/header";
     static const OUStringLiteral sOleObjectType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+    static const OUStringLiteral sCommentsExtendedType = u"http://schemas.microsoft.com/office/2011/relationships/commentsExtended";
     // OOXML strict
     static const OUStringLiteral sDocumentTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument";
     static const OUStringLiteral sStylesTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/styles";
@@ -248,6 +249,10 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
             sStreamType = sHeaderType;
             sStreamTypeStrict = sHeaderTypeStrict;
           break;
+        case COMMENTS_EXTENDED:
+            sStreamType = sCommentsExtendedType;
+            sStreamTypeStrict = sCommentsExtendedType;
+            break;
         default:
             break;
     }

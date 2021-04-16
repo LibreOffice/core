@@ -26,6 +26,7 @@
   xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
   xmlns:v="urn:schemas-microsoft-com:vml"
   xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
+  xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml"
   xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
   xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
   xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"
@@ -5358,6 +5359,54 @@
     <resource name="cntxtAlts" resource="Properties">
       <element name="cntxtAlts" tokenid="ooxml:cntxtAlts_cntxtAlts"/>
     </resource>
+  </namespace>
+  <namespace name="w15">
+    <start name="commentsEx"/>
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2012/wordml" attributeFormDefault="qualified">
+      <define name="commentsEx">
+        <element name="commentsEx">
+          <ref name="CT_CommentsEx"/>
+        </element>
+      </define>
+      <define name="CT_CommentsEx">
+        <element name="commentEx">
+          <ref name="CT_CommentEx"/>
+        </element>
+      </define>
+      <define name="CT_CommentEx">
+        <attribute name="paraId">
+          <ref name="ST_LongHexNumber"/>
+        </attribute>
+        <!-- Not yet used
+        <attribute name="paraIdParent">
+          <ref name="ST_LongHexNumber"/>
+        </attribute>
+        -->
+        <attribute name="done">
+          <ref name="ST_OnOff"/>
+        </attribute>
+      </define>
+      <define name="ST_LongHexNumber">
+        <data type="hexBinary"/>
+      </define>
+      <define name="ST_OnOff">
+        <choice>
+          <value>true</value>
+          <value>false</value>
+          <value>0</value>
+          <value>1</value>
+        </choice>
+      </define>
+    </grammar>
+    <resource name="CT_CommentsEx" resource="Stream">
+      <element name="commentEx" tokenid="ooxml:CT_CommentsEx_commentEx"/>
+    </resource>
+    <resource name="CT_CommentEx" resource="CommentEx">
+      <attribute name="paraId" tokenid="ooxml:CT_CommentEx_paraId" action="att_paraId"/>
+      <attribute name="done" tokenid="ooxml:CT_CommentEx_done" action="att_done"/>
+    </resource>
+    <resource name="ST_LongHexNumber" resource="String"/>
+    <resource name="ST_OnOff" resource="Boolean"/>
   </namespace>
   <namespace name="a14">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/drawing/2010/main">
@@ -14197,6 +14246,18 @@
           </element>
         </choice>
       </define>
+      <!-- [MS-DOCX] sect. 2.2.4 "p and tr Extensions" -->
+      <!-- Should rather be in w14 namespace, but I don't see how to reference things from there -->
+      <define name="AG_Parids">
+        <attribute name="w14:paraId">
+          <data type="string"/>
+        </attribute>
+        <!-- Not yet used
+        <attribute name="textId">
+          <ref name="ST_LongHexNumber"/>
+        </attribute>
+        -->
+      </define>
       <define name="CT_P">
         <element name="pPr">
           <ref name="CT_PPr"/>
@@ -14217,6 +14278,7 @@
         <attribute name="rsidRDefault">
           <data type="string"/>
         </attribute>
+        <ref name="AG_Parids"/>
         <!-- tdf#108714 : allow <w:br> at paragraph level (despite this is illegal according to ECMA-376-1:2016) - bug-to-bug compatibility with Word -->
         <element name="br">
           <ref name="CT_Br_OutOfOrder"/>
@@ -14522,6 +14584,7 @@
         <attribute name="rsidTr">
           <data type="string"/>
         </attribute>
+        <ref name="AG_Parids"/>
       </define>
       <define name="ST_TblLayout">
         <choice>
@@ -18296,6 +18359,7 @@
       <element name="subDoc" tokenid="ooxml:EG_PContent_subDoc"/>
     </resource>
     <resource name="CT_P" resource="Stream">
+      <attribute name="w14:paraId" tokenid="ooxml:AG_Parids_paraId"/>
       <action name="start" action="handleLastParagraphInSection"/>
       <action name="start" action="startParagraphGroup"/>
       <action name="start" action="setHandle"/>
