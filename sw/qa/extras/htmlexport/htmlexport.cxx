@@ -58,10 +58,14 @@ public:
     TestReqIfRtfReader(SvStream& rStream);
     void NextToken(int nToken) override;
     bool WriteObjectData(SvStream& rOLE);
+    tools::Long GetObjw() const { return m_nObjw; }
+    tools::Long GetObjh() const { return m_nObjh; }
 
 private:
     bool m_bInObjData = false;
     OStringBuffer m_aHex;
+    tools::Long m_nObjw = 0;
+    tools::Long m_nObjh = 0;
 };
 
 TestReqIfRtfReader::TestReqIfRtfReader(SvStream& rStream)
@@ -82,6 +86,12 @@ void TestReqIfRtfReader::NextToken(int nToken)
             break;
         case RTF_OBJDATA:
             m_bInObjData = true;
+            break;
+        case RTF_OBJW:
+            m_nObjw = nTokenValue;
+            break;
+        case RTF_OBJH:
+            m_nObjh = nTokenValue;
             break;
     }
 }
@@ -1371,6 +1381,34 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PresDataWmfOnly)
     // - Actual  : 272376
     // i.e. we wrote some additional EMF data into the WMF output, which broke Word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(135660), aOle1Reader.m_nPresentationDataSize);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifAscharObjsize)
+{
+    // Given a document with an as-char anchored embedded object:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reqif-aschar-objsize.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+
+    // When exporting to reqif-xhtml:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure that the RTF snippet has the correct aspect ratio:
+    OUString aRtfUrl = GetOlePath();
+    SvMemoryStream aRtf;
+    HtmlExportTest::wrapRtfFragment(aRtfUrl, aRtf);
+    tools::SvRef<TestReqIfRtfReader> xReader(new TestReqIfRtfReader(aRtf));
+    CPPUNIT_ASSERT(xReader->CallParser() != SvParserState::Error);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 7344
+    // - Actual  : 2836
+    // i.e. the aspect ratio was 1:1, while the PNG aspect ratio was correctly not 1:1.
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(7344), xReader->GetObjw());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(4116), xReader->GetObjh());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
