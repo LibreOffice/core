@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ef24869_e0a0bb45",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1616,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-16T12:52:36Z",
+      "side": 1,
+      "message": "Looks like nNewLen could be used here?",
+      "range": {
+        "startLine": 1616,
+        "startChar": 59,
+        "endLine": 1616,
+        "endChar": 88
+      },
+      "revId": "25306f50981c9f6761cf99967875bd4b787bd128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
