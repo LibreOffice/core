@@ -202,6 +202,7 @@ public:
     void testPreserveTextWhitespaceXLSX();
     void testPreserveTextWhitespace2XLSX();
     void testTextDirectionXLSX();
+    void testTdf120168();
     void testTdf66668();
     void testTdf130108();
     void testTdf76949();
@@ -389,6 +390,7 @@ public:
     CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
     CPPUNIT_TEST(testMatrixMultiplicationXLSX);
     CPPUNIT_TEST(testTextDirectionXLSX);
+    CPPUNIT_TEST(testTdf120168);
     CPPUNIT_TEST(testTdf66668);
     CPPUNIT_TEST(testTdf130108);
     CPPUNIT_TEST(testTdf76949);
@@ -4388,6 +4390,23 @@ void ScExportTest::testTextDirectionXLSX()
 
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1");//LTR
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2");//RTL
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf120168()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf120168.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: left
+    // - Actual  : general
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "horizontal", "left");
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "horizontal", "right");
 
     xDocSh->DoClose();
 }
