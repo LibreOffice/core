@@ -36,9 +36,9 @@ class ElementCollector;
 #include <vector>
 #include <memory>
 
-namespace com::sun::star::xml::crypto::sax { class XSAXEventKeeperStatusChangeListener; }
-namespace com::sun::star::xml::csax { class XCompressedDocumentHandler; }
-namespace com::sun::star::xml::wrapper { class XXMLDocumentWrapper; }
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { namespace sax { class XSAXEventKeeperStatusChangeListener; }}}}}}
+namespace com { namespace sun { namespace star { namespace xml { namespace csax { class XCompressedDocumentHandler; }}}}}
+namespace com { namespace sun { namespace star { namespace xml { namespace wrapper { class XXMLDocumentWrapper; }}}}}
 
 class XMLSECURITY_DLLPUBLIC SAXEventKeeperImpl : public cppu::WeakImplHelper
 <

@@ -28,8 +28,8 @@
 
 #include <framework/signatureengine.hxx>
 
-namespace com::sun::star::xml::crypto { class XSecurityEnvironment; }
-namespace com::sun::star::xml::crypto::sax { class XSignatureCreationResultListener;}
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { class XSecurityEnvironment; }}}}}
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { namespace sax { class XSignatureCreationResultListener; }}}}}}
 
 typedef cppu::ImplInheritanceHelper
 <

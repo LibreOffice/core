@@ -15,6 +15,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <sal/log.hxx>
@@ -84,7 +85,7 @@ auto OOXMLSecParser::Context::CreateChildContext(
 -> std::unique_ptr<Context>
 {
     // default: create new base context
-    return std::make_unique<UnknownContext>(m_rParser, std::move(pOldNamespaceMap));
+    return o3tl::make_unique<UnknownContext>(m_rParser, std::move(pOldNamespaceMap));
 }
 
 /**
@@ -209,11 +210,11 @@ class OOXMLSecParser::DsX509IssuerSerialContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509IssuerName")
             {
-                return std::make_unique<DsX509IssuerNameContext>(m_rParser, std::move(pOldNamespaceMap), m_rX509IssuerName);
+                return o3tl::make_unique<DsX509IssuerNameContext>(m_rParser, std::move(pOldNamespaceMap), m_rX509IssuerName);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509SerialNumber")
             {
-                return std::make_unique<DsX509SerialNumberContext>(m_rParser, std::move(pOldNamespaceMap), m_rX509SerialNumber);
+                return o3tl::make_unique<DsX509SerialNumberContext>(m_rParser, std::move(pOldNamespaceMap), m_rX509SerialNumber);
             }
             // missing: ds:X509SKI, ds:X509SubjectName, ds:X509CRL
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
@@ -249,12 +250,12 @@ class OOXMLSecParser::DsX509DataContext
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509IssuerSerial")
             {
                 m_X509IssuerSerials.emplace_back();
-                return std::make_unique<DsX509IssuerSerialContext>(m_rParser, std::move(pOldNamespaceMap), m_X509IssuerSerials.back().first, m_X509IssuerSerials.back().second);
+                return o3tl::make_unique<DsX509IssuerSerialContext>(m_rParser, std::move(pOldNamespaceMap), m_X509IssuerSerials.back().first, m_X509IssuerSerials.back().second);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509Certificate")
             {
                 m_X509Certificates.emplace_back();
-                return std::make_unique<DsX509CertificateContext>(m_rParser, std::move(pOldNamespaceMap), m_X509Certificates.back());
+                return o3tl::make_unique<DsX509CertificateContext>(m_rParser, std::move(pOldNamespaceMap), m_X509Certificates.back());
             }
             // missing: ds:X509SKI, ds:X509SubjectName, ds:X509CRL
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
@@ -283,7 +284,7 @@ class OOXMLSecParser::DsKeyInfoContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509Data")
             {
-                return std::make_unique<DsX509DataContext>(m_rParser, std::move(pOldNamespaceMap));
+                return o3tl::make_unique<DsX509DataContext>(m_rParser, std::move(pOldNamespaceMap));
             }
             // missing: ds:PGPData
             // missing: ds:KeyName, ds:KeyValue, ds:RetrievalMethod, ds:SPKIData, ds:MgmtData
@@ -438,7 +439,7 @@ class OOXMLSecParser::DsTransformsContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "Transform")
             {
-                return std::make_unique<DsTransformContext>(m_rParser, std::move(pOldNamespaceMap), m_rIsC14N);
+                return o3tl::make_unique<DsTransformContext>(m_rParser, std::move(pOldNamespaceMap), m_rIsC14N);
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -507,15 +508,15 @@ class OOXMLSecParser::DsReferenceContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "Transforms")
             {
-                return std::make_unique<DsTransformsContext>(m_rParser, std::move(pOldNamespaceMap), m_IsC14N);
+                return o3tl::make_unique<DsTransformsContext>(m_rParser, std::move(pOldNamespaceMap), m_IsC14N);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "DigestMethod")
             {
-                return std::make_unique<DsDigestMethodContext>(m_rParser, std::move(pOldNamespaceMap), m_nReferenceDigestID);
+                return o3tl::make_unique<DsDigestMethodContext>(m_rParser, std::move(pOldNamespaceMap), m_nReferenceDigestID);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "DigestValue")
             {
-                return std::make_unique<DsDigestValueContext>(m_rParser, std::move(pOldNamespaceMap), m_DigestValue);
+                return o3tl::make_unique<DsDigestValueContext>(m_rParser, std::move(pOldNamespaceMap), m_DigestValue);
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -570,11 +571,11 @@ class OOXMLSecParser::DsSignedInfoContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "SignatureMethod")
             {
-                return std::make_unique<DsSignatureMethodContext>(m_rParser, std::move(pOldNamespaceMap));
+                return o3tl::make_unique<DsSignatureMethodContext>(m_rParser, std::move(pOldNamespaceMap));
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "Reference")
             {
-                return std::make_unique<DsReferenceContext>(m_rParser, std::move(pOldNamespaceMap));
+                return o3tl::make_unique<DsReferenceContext>(m_rParser, std::move(pOldNamespaceMap));
             }
             // missing: ds:CanonicalizationMethod
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
@@ -604,11 +605,11 @@ class OOXMLSecParser::XadesCertDigestContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "DigestMethod")
             {
-                return std::make_unique<DsDigestMethodContext>(m_rParser, std::move(pOldNamespaceMap), m_rReferenceDigestID);
+                return o3tl::make_unique<DsDigestMethodContext>(m_rParser, std::move(pOldNamespaceMap), m_rReferenceDigestID);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "DigestValue")
             {
-                return std::make_unique<DsDigestValueContext>(m_rParser, std::move(pOldNamespaceMap), m_rDigestValue);
+                return o3tl::make_unique<DsDigestValueContext>(m_rParser, std::move(pOldNamespaceMap), m_rDigestValue);
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -649,11 +650,11 @@ class OOXMLSecParser::XadesCertContext
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "CertDigest")
             {
-                return std::make_unique<XadesCertDigestContext>(m_rParser, std::move(pOldNamespaceMap), m_CertDigest, m_nReferenceDigestID);
+                return o3tl::make_unique<XadesCertDigestContext>(m_rParser, std::move(pOldNamespaceMap), m_CertDigest, m_nReferenceDigestID);
             }
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "IssuerSerial")
             {
-                return std::make_unique<DsX509IssuerSerialContext>(m_rParser, std::move(pOldNamespaceMap), m_X509IssuerName, m_X509SerialNumber);
+                return o3tl::make_unique<DsX509IssuerSerialContext>(m_rParser, std::move(pOldNamespaceMap), m_X509IssuerName, m_X509SerialNumber);
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -676,7 +677,7 @@ class OOXMLSecParser::XadesSigningCertificateContext
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "Cert")
             {
-                return std::make_unique<XadesCertContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return o3tl::make_unique<XadesCertContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -737,11 +738,11 @@ class OOXMLSecParser::XadesSignedSignaturePropertiesContext
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "SigningTime")
             {
-                return std::make_unique<XadesSigningTimeContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return o3tl::make_unique<XadesSigningTimeContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
             }
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "SigningCertificate")
             {
-                return std::make_unique<XadesSigningCertificateContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return o3tl::make_unique<XadesSigningCertificateContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
             }
             // missing: xades:SignaturePolicyIdentifier, xades:SignatureProductionPlace, xades:SignerRole
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
@@ -771,7 +772,7 @@ class OOXMLSecParser::XadesSignedPropertiesContext
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "SignedSignatureProperties")
             {
-                return std::make_unique<XadesSignedSignaturePropertiesContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return o3tl::make_unique<XadesSignedSignaturePropertiesContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
             }
             // missing: xades:SignedDataObjectProperties
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
@@ -801,7 +802,7 @@ class OOXMLSecParser::XadesQualifyingPropertiesContext
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "SignedProperties")
             {
-                return std::make_unique<XadesSignedPropertiesContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return o3tl::make_unique<XadesSignedPropertiesContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
             }
             // missing: xades:UnsignedSignatureProperties
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
@@ -877,11 +878,11 @@ class OOXMLSecParser::MsodigsigSignatureInfoV1Context
         {
             if (nNamespace == XML_NAMESPACE_MSODIGSIG && rName == "SetupID")
             {
-                return std::make_unique<MsodigsigSetupIDContext>(m_rParser, std::move(pOldNamespaceMap), m_SetupID);
+                return o3tl::make_unique<MsodigsigSetupIDContext>(m_rParser, std::move(pOldNamespaceMap), m_SetupID);
             }
             if (nNamespace == XML_NAMESPACE_MSODIGSIG && rName == "SignatureComments")
             {
-                return std::make_unique<MsodigsigSignatureCommentsContext>(m_rParser, std::move(pOldNamespaceMap), m_SignatureComments);
+                return o3tl::make_unique<MsodigsigSignatureCommentsContext>(m_rParser, std::move(pOldNamespaceMap), m_SignatureComments);
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -949,7 +950,7 @@ class OOXMLSecParser::MdssiSignatureTimeContext
         {
             if (nNamespace == XML_NAMESPACE_MDSSI && rName == "Value")
             {
-                return std::make_unique<MdssiValueContext>(m_rParser, std::move(pOldNamespaceMap), m_rValue);
+                return o3tl::make_unique<MdssiValueContext>(m_rParser, std::move(pOldNamespaceMap), m_rValue);
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -1008,11 +1009,11 @@ class OOXMLSecParser::DsSignaturePropertyContext
             if (nNamespace == XML_NAMESPACE_MDSSI && rName == "SignatureTime")
             {
                 m_Property = SignatureProperty::Date;
-                return std::make_unique<MdssiSignatureTimeContext>(m_rParser, std::move(pOldNamespaceMap), m_Value);
+                return o3tl::make_unique<MdssiSignatureTimeContext>(m_rParser, std::move(pOldNamespaceMap), m_Value);
             }
             if (nNamespace == XML_NAMESPACE_MSODIGSIG && rName == "SignatureInfoV1")
             {
-                return std::make_unique<MsodigsigSignatureInfoV1Context>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return o3tl::make_unique<MsodigsigSignatureInfoV1Context>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -1041,7 +1042,7 @@ class OOXMLSecParser::DsSignaturePropertiesContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "SignatureProperty")
             {
-                return std::make_unique<DsSignaturePropertyContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return o3tl::make_unique<DsSignaturePropertyContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -1078,7 +1079,7 @@ class OOXMLSecParser::DsManifestContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "Reference")
             {
-                return std::make_unique<DsReferenceContext>(m_rParser, std::move(pOldNamespaceMap));
+                return o3tl::make_unique<DsReferenceContext>(m_rParser, std::move(pOldNamespaceMap));
             }
             // missing: ds:CanonicalizationMethod
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
@@ -1154,15 +1155,15 @@ class OOXMLSecParser::DsObjectContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "SignatureProperties")
             {
-                return std::make_unique<DsSignaturePropertiesContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return o3tl::make_unique<DsSignaturePropertiesContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
             }
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "QualifyingProperties")
             {
-                return std::make_unique<XadesQualifyingPropertiesContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return o3tl::make_unique<XadesQualifyingPropertiesContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "Manifest")
             {
-                return std::make_unique<DsManifestContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return o3tl::make_unique<DsManifestContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -1196,19 +1197,19 @@ class OOXMLSecParser::DsSignatureContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "SignedInfo")
             {
-                return std::make_unique<DsSignedInfoContext>(m_rParser, std::move(pOldNamespaceMap));
+                return o3tl::make_unique<DsSignedInfoContext>(m_rParser, std::move(pOldNamespaceMap));
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "SignatureValue")
             {
-                return std::make_unique<DsSignatureValueContext>(m_rParser, std::move(pOldNamespaceMap));
+                return o3tl::make_unique<DsSignatureValueContext>(m_rParser, std::move(pOldNamespaceMap));
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "KeyInfo")
             {
-                return std::make_unique<DsKeyInfoContext>(m_rParser, std::move(pOldNamespaceMap));
+                return o3tl::make_unique<DsKeyInfoContext>(m_rParser, std::move(pOldNamespaceMap));
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "Object")
             {
-                return std::make_unique<DsObjectContext>(m_rParser, std::move(pOldNamespaceMap));
+                return o3tl::make_unique<DsObjectContext>(m_rParser, std::move(pOldNamespaceMap));
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }

@@ -14,7 +14,7 @@
 
 #include <global.h>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using namespace css;
 using namespace css::lang;

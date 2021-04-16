@@ -25,6 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <stack>
+#include <memory>
 
 class XMLSignatureHelper;
 class XSecController;

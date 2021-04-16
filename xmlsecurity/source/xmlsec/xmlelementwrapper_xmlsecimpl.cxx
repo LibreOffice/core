@@ -23,7 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; }}}}
 
 using namespace com::sun::star;
 

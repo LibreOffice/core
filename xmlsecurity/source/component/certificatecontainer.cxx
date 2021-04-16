@@ -28,7 +28,7 @@
 
 #include <sal/config.h>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

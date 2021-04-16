@@ -10,6 +10,7 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_GPG_SECURITYENVIRONMENT_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_GPG_SECURITYENVIRONMENT_HXX
 
+#include <memory>
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -18,7 +19,7 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-namespace com::sun::star::security { class XCertificate; }
+namespace com { namespace sun { namespace star { namespace security { class XCertificate; }}}}
 namespace GpgME { class Context; }
 
 class SecurityEnvironmentGpg : public cppu::WeakImplHelper< css::xml::crypto::XSecurityEnvironment,

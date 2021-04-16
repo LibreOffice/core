@@ -22,8 +22,8 @@
 
 #include <xsecxmlsecdllapi.h>
 
-namespace com::sun::star::xml::crypto { class XUriBinding; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { class XUriBinding; }}}}}
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; }}}}
 
 XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks() ;
 XSECXMLSEC_DLLPUBLIC void xmlDisableStreamInputCallbacks() ;

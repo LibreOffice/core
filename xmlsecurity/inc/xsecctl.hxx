@@ -33,16 +33,22 @@
 
 #include "xmlsignaturehelper2.hxx"
 
-namespace com::sun::star::embed { class XStorage; }
-namespace com::sun::star::graphic { class XGraphic; }
-namespace com::sun::star::io { class XInputStream; }
-namespace com::sun::star::lang { class XInitialization; }
-namespace com::sun::star::uno { class XComponentContext; }
-namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
-namespace com::sun::star::xml::crypto { class XXMLSignature; }
-namespace com::sun::star::xml::crypto:: sax { class XReferenceResolvedListener; }
-namespace com::sun::star::xml::sax { class XDocumentHandler; }
-
+namespace com {
+namespace sun {
+namespace star {
+namespace embed { class XStorage; }
+namespace graphic { class XGraphic; }
+namespace io { class XInputStream; }
+namespace lang { class XInitialization; }
+namespace uno { class XComponentContext; }
+namespace xml {
+namespace crypto {
+  class XXMLSecurityContext;
+  class XXMLSignature;
+  namespace sax { class XReferenceResolvedListener; }
+}
+namespace sax { class XDocumentHandler; }
+} } } }
 #define NS_XMLDSIG "http://www.w3.org/2000/09/xmldsig#"
 #define NS_DC      "http://purl.org/dc/elements/1.1/"
 #define NS_XD      "http://uri.etsi.org/01903/v1.3.2#"

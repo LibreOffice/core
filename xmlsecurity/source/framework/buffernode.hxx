@@ -25,7 +25,7 @@
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
+namespace com { namespace sun { namespace star { namespace xml { namespace wrapper { class XXMLElementWrapper; } } } } }
 
 class ElementMark;
 class ElementCollector;

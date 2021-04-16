@@ -25,7 +25,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 #define NSS_SERVICE_NAME "com.sun.star.xml.crypto.NSSInitializer"
 

@@ -18,6 +18,7 @@
 #include <xmloff/nmspmap.hxx>
 
 #include <stack>
+#include <memory>
 
 class XSecController;
 class XMLSignatureHelper;

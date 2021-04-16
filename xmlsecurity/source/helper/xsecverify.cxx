@@ -42,7 +42,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 
-namespace com::sun::star::graphic { class XGraphic; }
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; }}}}
 
 using namespace css;
 using namespace css::uno;
@@ -269,16 +269,18 @@ void XSecController::setX509Data(
             }
             OUString const issuerName(xCert->getIssuerName());
             OUString const serialNumber(xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber()));
-            auto const iter = std::find_if(rX509IssuerSerials.begin(), rX509IssuerSerials.end(),
-                [&](auto const& rX509IssuerSerial) {
-                    return xmlsecurity::EqualDistinguishedNames(issuerName, rX509IssuerSerial.first)
-                        && serialNumber == rX509IssuerSerial.second;
-                });
-            if (iter != rX509IssuerSerials.end())
+            auto iter = rX509IssuerSerials.begin();
+            while (iter != rX509IssuerSerials.end())
             {
-                data.back().X509IssuerName = iter->first;
-                data.back().X509SerialNumber = iter->second;
-                rX509IssuerSerials.erase(iter);
+                if (xmlsecurity::EqualDistinguishedNames(issuerName, iter->first)
+                        && serialNumber == iter->second)
+                {
+                    data.back().X509IssuerName = iter->first;
+                    data.back().X509SerialNumber = iter->second;
+                    rX509IssuerSerials.erase(iter);
+                    break;
+                }
+                iter++;
             }
         }
         catch (uno::Exception const&)

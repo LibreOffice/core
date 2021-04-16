@@ -28,7 +28,7 @@
 #include <framework/signaturecreatorimpl.hxx>
 #include <framework/saxeventkeeperimpl.hxx>
 
-namespace com::sun::star::graphic { class XGraphic; }
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; }}}}
 
 using namespace css;
 using namespace css::uno;

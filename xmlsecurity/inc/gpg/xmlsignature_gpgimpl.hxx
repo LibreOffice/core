@@ -31,10 +31,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 
-namespace com::sun::star::xml::crypto { class XXMLSignatureTemplate; }
-namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
-namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { class XXMLSignatureTemplate; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { class XXMLSecurityContext; } } } } }
 
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 class XSECGPG_DLLPUBLIC XMLSignature_GpgImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignature ,

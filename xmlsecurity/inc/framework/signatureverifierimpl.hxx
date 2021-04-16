@@ -28,8 +28,8 @@
 #include <xmlsecuritydllapi.h>
 #include <framework/signatureengine.hxx>
 
-namespace com::sun::star::xml::crypto::sax { class XSignatureVerifyResultListener; }
-namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { namespace sax { class XSignatureVerifyResultListener; } } } } }}
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { class XXMLSecurityContext; } } } } }
 
 typedef cppu::ImplInheritanceHelper
 <

@@ -25,7 +25,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
+namespace com { namespace sun { namespace star { namespace xml { namespace wraper { class XXMLElementWrapper; } } } } }
 
 using namespace com::sun::star::uno;
 namespace cssu = com::sun::star::uno;

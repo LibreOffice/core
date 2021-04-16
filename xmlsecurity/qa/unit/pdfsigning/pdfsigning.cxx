@@ -40,6 +40,7 @@ class PDFSigningTest : public test::BootstrapFixture
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
 
+protected:
     /**
      * Sign rInURL once and save the result as rOutURL, asserting that rInURL
      * had nOriginalSignatureCount signatures.

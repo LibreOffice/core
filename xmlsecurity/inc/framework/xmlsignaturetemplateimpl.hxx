@@ -31,8 +31,8 @@
 
 #include <vector>
 
-namespace com::sun::star::lang { class XMultiServiceFactory; }
-namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; }}}}
+namespace com { namespace sun { namespace star { namespace xml { namespace wrapper { class XXMLElementWrapper; }}}}}
 
 class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignatureTemplate ,

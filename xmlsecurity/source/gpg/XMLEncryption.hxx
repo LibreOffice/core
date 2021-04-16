@@ -16,8 +16,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/crypto/XXMLEncryption.hpp>
 
-namespace com::sun::star::xml::crypto { class XXMLEncryptionTemplate; }
-namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { class XXMLEncryptionTemplate; }}}}}
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { class XXMLSecurityContext; }}}}}
 
 class XMLEncryptionGpg : public cppu::WeakImplHelper< css::xml::crypto::XXMLEncryption >
 {

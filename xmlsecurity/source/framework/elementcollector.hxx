@@ -24,7 +24,7 @@
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::xml::crypto::sax { class XReferenceResolvedListener; }
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { namespace sax { class XReferenceResolvedListener; }}}}}}
 
 class ElementCollector : public ElementMark
 /****** elementcollector.hxx/CLASS ElementCollector ***************************

@@ -32,7 +32,7 @@
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #include <memory>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; }}}}
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;

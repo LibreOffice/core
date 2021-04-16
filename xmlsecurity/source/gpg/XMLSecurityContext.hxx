@@ -20,7 +20,7 @@
 
 #include <vector>
 
-namespace com::sun::star::xml::crypto { class XSecurityEnvironment; }
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { class XSecurityEnvironment; }}}}}
 
 class XMLSecurityContextGpg : public cppu::WeakImplHelper< css::xml::crypto::XXMLSecurityContext,
                                                            css::lang::XServiceInfo>

@@ -33,8 +33,8 @@
 
 #include <vector>
 
-namespace com::sun::star::io { class XInputStream; }
-namespace com::sun::star::xml::crypto { class XXMLSignature; }
+namespace com { namespace sun { namespace star { namespace io { class XInputStream; }}}}
+namespace com { namespace sun { namespace star { namespace xml { namespace crypto { class XXMLSignature; }}}}}
 namespace rtl { template <class reference_type> class Reference; }
 
 class XMLSignatureTemplateImpl;
