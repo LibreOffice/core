@@ -1549,7 +1549,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             if (xStream.is())
             {
                 std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xStream));
-                if (SwReqIfReader::WrapOleInRtf(*pStream, aOutStream, *pOLENd))
+                if (SwReqIfReader::WrapOleInRtf(*pStream, aOutStream, *pOLENd, rFrameFormat))
                 {
                     // Data always wrapped in RTF.
                     aFileType = aRTFType;
@@ -1568,7 +1568,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             aOLEExp.ExportOLEObject(rOLEObj.GetObject(), *pStorage);
             pStorage->Commit();
             aMemory.Seek(0);
-            if (SwReqIfReader::WrapOleInRtf(aMemory, aOutStream, *pOLENd))
+            if (SwReqIfReader::WrapOleInRtf(aMemory, aOutStream, *pOLENd, rFrameFormat))
             {
                 // Data always wrapped in RTF.
                 aFileType = aRTFType;

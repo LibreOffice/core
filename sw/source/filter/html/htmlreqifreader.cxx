@@ -24,6 +24,8 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/wmf.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <fmtfsize.hxx>
+#include <frmfmt.hxx>
 
 using namespace com::sun::star;
 
@@ -427,7 +429,8 @@ bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle, bool& bOwnFormat)
     return true;
 }
 
-bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode)
+bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode,
+                  const SwFrameFormat& rFormat)
 {
     sal_uInt64 nPos = rOle2.Tell();
     comphelper::ScopeGuard g([&rOle2, nPos] { rOle2.Seek(nPos); });
@@ -436,7 +439,7 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode)
     SvMemoryStream aOLE1;
 
     // Prepare presentation data early, so it's available to both OLE1 and RTF.
-    Size aSize(rOLENode.GetTwipSize());
+    Size aSize = rFormat.GetFrameSize().GetSize();
     sal_uInt32 nWidth = aSize.getWidth();
     sal_uInt32 nHeight = aSize.getHeight();
     const Graphic* pGraphic = rOLENode.GetGraphic();
