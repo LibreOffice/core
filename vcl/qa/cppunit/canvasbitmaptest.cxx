@@ -769,15 +769,15 @@ void CanvasBitmapTest::runTest()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(0,0) incorrect content",
                                BitmapColor(0,1,0), pBmpAcc->GetPixel(0,0));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(0,0) incorrect alpha content",
-                               BitmapColor(255), pAlphaAcc->GetPixel(0,0));
+                               BitmapColor(0), pAlphaAcc->GetPixel(0,0));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(2,2) incorrect content",
                                BitmapColor(0,3,2), pBmpAcc->GetPixel(2,2));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(2,2) incorrect alpha content",
-                               BitmapColor(253), pAlphaAcc->GetPixel(2,2));
+                               BitmapColor(2), pAlphaAcc->GetPixel(2,2));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) incorrect content",
                                BitmapColor(0,3,9), pBmpAcc->GetPixel(2,9));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) correct alpha content",
-                               BitmapColor(253), pAlphaAcc->GetPixel(2,9));
+                               BitmapColor(2), pAlphaAcc->GetPixel(2,9));
 
         aBmp.GetAlpha().ReleaseAccess(pAlphaAcc);
         Bitmap::ReleaseAccess(pBmpAcc);

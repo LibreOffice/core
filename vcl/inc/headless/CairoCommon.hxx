@@ -127,8 +127,6 @@ VCL_DLLPUBLIC cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer);
 VCL_DLLPUBLIC std::unique_ptr<BitmapBuffer>
 FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* pSrc);
 
-VCL_DLLPUBLIC void Toggle1BitTransparency(const BitmapBuffer& rBuf);
-
 enum class PaintMode
 {
     Over,

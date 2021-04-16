@@ -314,7 +314,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     else if (mpAlphaVDev)
     {
         aAlphaBitmap = AlphaMask(rBitmapEx.GetSizePixel());
-        aAlphaBitmap.Erase(COL_BLACK); // opaque
+        aAlphaBitmap.Erase(COL_ALPHA_OPAQUE);
     }
 
     SalBitmap* pSalAlphaBmp = aAlphaBitmap.ImplGetSalBitmap().get();
@@ -332,7 +332,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     {
         // Merge bitmap alpha to alpha device
         AlphaMask aAlpha(rBitmapEx.GetSizePixel());
-        aAlpha.Erase( ( 1 - fAlpha ) * 255 );
+        aAlpha.Erase( fAlpha * 255 );
         mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aAlpha, aAlphaBitmap));
     }
 
@@ -516,7 +516,7 @@ void OutputDevice::DrawTransformedBitmapEx(
             }
         }
         // Apply the alpha manually.
-        sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
+        sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0 * fAlpha + .5) ) );
         AlphaMask aAlpha( bitmapEx.GetSizePixel(), &nColor );
         if( bitmapEx.IsAlpha())
             aAlpha.BlendWith( bitmapEx.GetAlpha());

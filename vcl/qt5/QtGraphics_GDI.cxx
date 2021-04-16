@@ -621,7 +621,7 @@ static bool getAlphaImage(const SalBitmap& rSourceBitmap, const SalBitmap& rAlph
             uchar* image_line = rAlphaImage.scanLine(y);
             const uchar* alpha_line = pAlpha->scanLine(y);
             for (int x = 0; x < rAlphaImage.width(); ++x, image_line += 4)
-                image_line[3] = 255 - alpha_line[x];
+                image_line[3] = alpha_line[x];
         }
     }
     else

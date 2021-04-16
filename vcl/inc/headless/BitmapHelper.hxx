@@ -39,9 +39,6 @@ public:
 
 class MaskHelper : public SurfaceHelper
 {
-private:
-    std::unique_ptr<unsigned char[]> pAlphaBits;
-
 public:
     explicit MaskHelper(const SalBitmap& rAlphaBitmap);
 };
