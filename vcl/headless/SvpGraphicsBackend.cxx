@@ -532,8 +532,6 @@ std::shared_ptr<SalBitmap> SvpGraphicsBackend::getBitmap(tools::Long nX, tools::
     cairo_destroy(cr);
     cairo_surface_destroy(target);
 
-    Toggle1BitTransparency(*pBitmap->GetBuffer());
-
     return pBitmap;
 }
 

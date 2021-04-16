@@ -70,7 +70,7 @@ void OutputDevice::SetFillColor( const Color& rColor )
     }
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetFillColor( COL_BLACK );
+        mpAlphaVDev->SetFillColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::InitFillColor()

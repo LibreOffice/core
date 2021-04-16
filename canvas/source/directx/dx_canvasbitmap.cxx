@@ -214,7 +214,7 @@ namespace dxcanvas
                         sal_uInt8* pOutBits=pAlphaBits.get()+y*nScanWidth;
                         for( sal_Int32 x=0; x<aSize.getX(); ++x )
                         {
-                            *pOutBits++ = 255-*pInBits;
+                            *pOutBits++ = *pInBits;
                             pInBits += 4;
                         }
                     }
