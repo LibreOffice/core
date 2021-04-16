@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8d1f983_14534906",
+        "filename": "include/svl/itemset.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-16T09:21:36Z",
+      "side": 1,
+      "message": "this is fine, but could also use o3tl::span\u003cconst sal_uInt16\u003e,\nalthough as it stands, that template doesn\u0027t currently have a nice implicit constructor for container types",
+      "revId": "b57ac9a11cf67be4df5f238e85ae486d0f913b12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
