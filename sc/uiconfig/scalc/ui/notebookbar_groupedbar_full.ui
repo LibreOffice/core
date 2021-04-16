@@ -1289,13 +1289,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuFile-ExportToEPUB">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExportToEPUB</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuFile-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
