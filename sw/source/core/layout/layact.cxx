@@ -484,43 +484,13 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         }
         m_pOptTab = nullptr;
 
-        // No Shortcut for Idle or CalcLayout
-        if ( !IsIdle() && !IsComplete() && IsShortCut( pPage ) )
-        {
-            m_pRoot->DeleteEmptySct();
-            XCHECKPAGE;
-            if ( !IsInterrupt() &&
-                 (m_pRoot->IsSuperfluous() || m_pRoot->IsAssertFlyPages()) )
-            {
-                if ( m_pRoot->IsAssertFlyPages() )
-                    m_pRoot->AssertFlyPages();
-                if ( m_pRoot->IsSuperfluous() )
-                {
-                    bool bOld = IsAgain();
-                    m_pRoot->RemoveSuperfluous();
-                    m_bAgain = bOld;
-                }
-                if ( IsAgain() )
-                {
-                    if( bNoLoop )
-                        rLayoutAccess.GetLayouter()->EndLoopControl();
-                    return;
-                }
-                pPage = static_cast<SwPageFrame*>(m_pRoot->Lower());
-                while ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
-                    pPage = static_cast<SwPageFrame*>(pPage->GetNext());
-                while ( pPage && pPage->GetNext() &&
-                        pPage->GetPhyPageNum() < nFirstPageNum )
-                    pPage = static_cast<SwPageFrame*>(pPage->GetNext());
-                continue;
-            }
-            break;
-        }
-        else
-        {
-            m_pRoot->DeleteEmptySct();
-            XCHECKPAGE;
+        m_pRoot->DeleteEmptySct();
+        XCHECKPAGE;
 
+        // No Shortcut for Idle or CalcLayout
+        const bool bTakeShortcut = !IsIdle() && !IsComplete() && IsShortCut(pPage);
+        if (!bTakeShortcut)
+        {
             while ( !IsInterrupt() && !IsNextCycle() &&
                     ((pPage->GetSortedObjs() && pPage->IsInvalidFly()) || pPage->IsInvalid()) )
             {
@@ -636,7 +606,8 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             }
             CheckIdleEnd();
         }
-        if ( !pPage && !IsInterrupt() &&
+
+        if ((bTakeShortcut || !pPage) && !IsInterrupt() &&
              (m_pRoot->IsSuperfluous() || m_pRoot->IsAssertFlyPages()) )
         {
             if ( m_pRoot->IsAssertFlyPages() )
@@ -647,12 +618,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                 m_pRoot->RemoveSuperfluous();
                 m_bAgain = bOld;
             }
-            if ( IsAgain() )
-            {
-                if( bNoLoop )
-                    rLayoutAccess.GetLayouter()->EndLoopControl();
-                return;
-            }
+            XCHECKPAGE;
             pPage = static_cast<SwPageFrame*>(m_pRoot->Lower());
             while ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
                 pPage = static_cast<SwPageFrame*>(pPage->GetNext());
@@ -660,6 +626,8 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                     pPage->GetPhyPageNum() < nFirstPageNum )
                 pPage = static_cast<SwPageFrame*>(pPage->GetNext());
         }
+        else if (bTakeShortcut)
+            break;
     }
     if ( IsInterrupt() && pPage )
     {
