@@ -13,6 +13,7 @@ class Graphic;
 class Size;
 class SvStream;
 class SwOLENode;
+class SwFrameFormat;
 
 namespace SwReqIfReader
 {
@@ -24,7 +25,8 @@ namespace SwReqIfReader
 bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle, bool& bOwnFormat);
 
 /// Wraps an OLE2 container binary in an RTF fragment.
-bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode);
+bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode,
+                  const SwFrameFormat& rFormat);
 
 /**
  * Wraps an image in an RTF fragment.
