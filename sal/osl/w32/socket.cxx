@@ -503,34 +503,32 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
     PADDRINFOW pAddrInfo = nullptr;
     int ret = GetAddrInfoW(
                 o3tl::toW(strHostname->buffer), nullptr, nullptr, & pAddrInfo);
-    if (0 == ret)
-    {
-        oslHostAddr pRet = nullptr;
-        for (PADDRINFOW pIter = pAddrInfo; pIter; pIter = pIter->ai_next)
-        {
-            if (AF_INET == pIter->ai_family)
-            {
-                pRet = static_cast<oslHostAddr>(
-                    rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
-                if (pIter->ai_canonname == nullptr) {
-                    rtl_uString_new(&pRet->pHostName);
-                } else {
-                    rtl_uString_newFromStr(&pRet->pHostName, o3tl::toU(pIter->ai_canonname));
-                }
-                pRet->pSockAddr = createSocketAddr();
-                memcpy(& pRet->pSockAddr->m_sockaddr,
-                       pIter->ai_addr, pIter->ai_addrlen);
-                break; // ignore other results
-            }
-        }
-        FreeAddrInfoW(pAddrInfo);
-        return pRet;
-    }
-    else
+    if (0 != ret)
     {
         SAL_INFO("sal.osl", "GetAddrInfoW failed: " << WSAGetLastError());
+        return nullptr;
     }
-    return nullptr;
+
+    oslHostAddr pRet = nullptr;
+    for (PADDRINFOW pIter = pAddrInfo; pIter; pIter = pIter->ai_next)
+    {
+        if (AF_INET == pIter->ai_family)
+        {
+            pRet = static_cast<oslHostAddr>(
+                rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
+            if (pIter->ai_canonname == nullptr) {
+                rtl_uString_new(&pRet->pHostName);
+            } else {
+                rtl_uString_newFromStr(&pRet->pHostName, o3tl::toU(pIter->ai_canonname));
+            }
+            pRet->pSockAddr = createSocketAddr();
+            memcpy(& pRet->pSockAddr->m_sockaddr,
+                   pIter->ai_addr, pIter->ai_addrlen);
+            break; // ignore other results
+        }
+    }
+    FreeAddrInfoW(pAddrInfo);
+    return pRet;
 }
 
 oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr pAddr)
@@ -538,35 +536,32 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr pAddr)
     if (pAddr == nullptr)
         return nullptr;
 
-    if (pAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
+    if (pAddr->m_sockaddr.sa_family != FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
+        return nullptr;
+
+    const struct sockaddr_in *sin= reinterpret_cast<const struct sockaddr_in *>(&pAddr->m_sockaddr);
+
+    if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
+        return nullptr;
+
+    WCHAR buf[NI_MAXHOST];
+    int ret = GetNameInfoW(
+                & pAddr->m_sockaddr, sizeof(struct sockaddr),
+                buf, NI_MAXHOST,
+                nullptr, 0, 0);
+    if (0 != ret)
     {
-        const struct sockaddr_in *sin= reinterpret_cast<const struct sockaddr_in *>(&pAddr->m_sockaddr);
-
-        if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
-            return nullptr;
-
-        WCHAR buf[NI_MAXHOST];
-        int ret = GetNameInfoW(
-                    & pAddr->m_sockaddr, sizeof(struct sockaddr),
-                    buf, NI_MAXHOST,
-                    nullptr, 0, 0);
-        if (0 == ret)
-        {
-            oslHostAddr pRet = static_cast<oslHostAddr>(
-                    rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
-            rtl_uString_newFromStr(&pRet->pHostName, o3tl::toU(buf));
-            pRet->pSockAddr = createSocketAddr();
-            memcpy(& pRet->pSockAddr->m_sockaddr,
-                   & pAddr->m_sockaddr, sizeof(struct sockaddr));
-            return pRet;
-        }
-        else
-        {
-            SAL_INFO("sal.osl", "GetNameInfoW failed: " << WSAGetLastError());
-        }
+        SAL_INFO("sal.osl", "GetNameInfoW failed: " << WSAGetLastError());
+        return nullptr;
     }
 
-    return nullptr;
+    oslHostAddr pRet = static_cast<oslHostAddr>(
+                rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
+    rtl_uString_newFromStr(&pRet->pHostName, o3tl::toU(buf));
+    pRet->pSockAddr = createSocketAddr();
+    memcpy(& pRet->pSockAddr->m_sockaddr,
+           & pAddr->m_sockaddr, sizeof(struct sockaddr));
+    return pRet;
 }
 
 oslHostAddr SAL_CALL osl_copyHostAddr(const oslHostAddr Addr)

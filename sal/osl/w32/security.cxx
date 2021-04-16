@@ -176,110 +176,100 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
 
 sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
-    if (Security != nullptr)
-    {
-        HANDLE                      hImpersonationToken = nullptr;
-        PSID                        psidAdministrators;
-        SID_IDENTIFIER_AUTHORITY    siaNtAuthority = { SECURITY_NT_AUTHORITY };
-        bool                    bSuccess = false;
-
-        /* If Security contains an access token we need to duplicate it to an impersonation
-           access token. NULL works with CheckTokenMembership() as the current effective
-           impersonation token
-         */
-
-        if ( static_cast<oslSecurityImpl*>(Security)->m_hToken )
-        {
-            if ( !DuplicateToken (static_cast<oslSecurityImpl*>(Security)->m_hToken, SecurityImpersonation, &hImpersonationToken) )
-                return false;
-        }
-
-        /* CheckTokenMembership() can be used on W2K and higher (NT4 no longer supported by OOo)
-           and also works on Vista to retrieve the effective user rights. Just checking for
-           membership of Administrators group is not enough on Vista this would require additional
-           complicated checks as described in KB article Q118626: http://support.microsoft.com/kb/118626/en-us
-        */
-
-        if (AllocateAndInitializeSid(&siaNtAuthority,
-                                     2,
-                                     SECURITY_BUILTIN_DOMAIN_RID,
-                                     DOMAIN_ALIAS_RID_ADMINS,
-                                     0, 0, 0, 0, 0, 0,
-                                     &psidAdministrators))
-        {
-            BOOL fSuccess = FALSE;
-
-            if (CheckTokenMembership(hImpersonationToken, psidAdministrators, &fSuccess) && fSuccess)
-                bSuccess = true;
-
-            FreeSid(psidAdministrators);
-        }
-
-        if (hImpersonationToken)
-            CloseHandle(hImpersonationToken);
-
-        return bSuccess;
-    }
-    else
-    {
+    if (!Security)
         return false;
+
+    HANDLE                      hImpersonationToken = nullptr;
+    PSID                        psidAdministrators;
+    SID_IDENTIFIER_AUTHORITY    siaNtAuthority = { SECURITY_NT_AUTHORITY };
+    bool                    bSuccess = false;
+
+    /* If Security contains an access token we need to duplicate it to an impersonation
+       access token. NULL works with CheckTokenMembership() as the current effective
+       impersonation token
+     */
+
+    if ( static_cast<oslSecurityImpl*>(Security)->m_hToken )
+    {
+        if ( !DuplicateToken (static_cast<oslSecurityImpl*>(Security)->m_hToken, SecurityImpersonation, &hImpersonationToken) )
+            return false;
     }
+
+    /* CheckTokenMembership() can be used on W2K and higher (NT4 no longer supported by OOo)
+       and also works on Vista to retrieve the effective user rights. Just checking for
+       membership of Administrators group is not enough on Vista this would require additional
+       complicated checks as described in KB article Q118626: http://support.microsoft.com/kb/118626/en-us
+    */
+
+    if (AllocateAndInitializeSid(&siaNtAuthority,
+                                 2,
+                                 SECURITY_BUILTIN_DOMAIN_RID,
+                                 DOMAIN_ALIAS_RID_ADMINS,
+                                 0, 0, 0, 0, 0, 0,
+                                 &psidAdministrators))
+    {
+        BOOL fSuccess = FALSE;
+
+        if (CheckTokenMembership(hImpersonationToken, psidAdministrators, &fSuccess) && fSuccess)
+            bSuccess = true;
+
+        FreeSid(psidAdministrators);
+    }
+
+    if (hImpersonationToken)
+        CloseHandle(hImpersonationToken);
+
+    return bSuccess;
 }
 
 void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
 {
-    if (Security)
+    if (!Security)
+        return;
+
+    oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl*>(Security);
+
+    if (pSecImpl->m_pNetResource != nullptr)
     {
-        oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl*>(Security);
+        WNetCancelConnection2W(pSecImpl->m_pNetResource->lpRemoteName, 0, true);
 
-        if (pSecImpl->m_pNetResource != nullptr)
-        {
-            WNetCancelConnection2W(pSecImpl->m_pNetResource->lpRemoteName, 0, true);
-
-            free(pSecImpl->m_pNetResource->lpRemoteName);
-            free(pSecImpl->m_pNetResource);
-        }
-
-        if (pSecImpl->m_hToken)
-            CloseHandle(pSecImpl->m_hToken);
-
-        if ( pSecImpl->m_hProfile )
-            CloseHandle(pSecImpl->m_hProfile);
-
-        free (pSecImpl);
+        free(pSecImpl->m_pNetResource->lpRemoteName);
+        free(pSecImpl->m_pNetResource);
     }
+
+    if (pSecImpl->m_hToken)
+        CloseHandle(pSecImpl->m_hToken);
+
+    if ( pSecImpl->m_hProfile )
+        CloseHandle(pSecImpl->m_hProfile);
+
+    free (pSecImpl);
 }
 
 sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
 {
-    if (Security != nullptr)
+    if (!Security)
+       return false;
+
+    oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl*>(Security);
+
+    HANDLE hAccessToken = pSecImpl->m_hToken;
+
+    if (hAccessToken == nullptr)
+        OpenProcessToken(GetCurrentProcess(), TOKEN_DUP_QUERY, &hAccessToken);
+
+    if (hAccessToken)
     {
-        oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl*>(Security);
+        DWORD  nInfoBuffer = 512;
+        UCHAR* pInfoBuffer = static_cast<UCHAR *>(malloc(nInfoBuffer));
 
-        HANDLE hAccessToken = pSecImpl->m_hToken;
-
-        if (hAccessToken == nullptr)
-            OpenProcessToken(GetCurrentProcess(), TOKEN_DUP_QUERY, &hAccessToken);
-
-        if (hAccessToken)
+        while (!GetTokenInformation(hAccessToken, TokenUser,
+                                       pInfoBuffer, nInfoBuffer, &nInfoBuffer))
         {
-            DWORD  nInfoBuffer = 512;
-            UCHAR* pInfoBuffer = static_cast<UCHAR *>(malloc(nInfoBuffer));
-
-            while (!GetTokenInformation(hAccessToken, TokenUser,
-                                           pInfoBuffer, nInfoBuffer, &nInfoBuffer))
+            if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
-                if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-                {
-                    if (auto p = static_cast<UCHAR *>(realloc(pInfoBuffer, nInfoBuffer)))
-                        pInfoBuffer = p;
-                    else
-                    {
-                        free(pInfoBuffer);
-                        pInfoBuffer = nullptr;
-                        break;
-                    }
-                }
+                if (auto p = static_cast<UCHAR *>(realloc(pInfoBuffer, nInfoBuffer)))
+                    pInfoBuffer = p;
                 else
                 {
                     free(pInfoBuffer);
@@ -287,57 +277,62 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                     break;
                 }
             }
-
-            if (pSecImpl->m_hToken == nullptr)
-                CloseHandle(hAccessToken);
-
-            if (pInfoBuffer)
+            else
             {
-                PSID pSid = reinterpret_cast<PTOKEN_USER>(pInfoBuffer)->User.Sid;
-
-                LPWSTR pSidStr = nullptr;
-                bool bResult = ConvertSidToStringSidW(pSid, &pSidStr);
-                if (bResult)
-                {
-                    rtl_uString_newFromStr(strIdent, o3tl::toU(pSidStr));
-                    LocalFree(pSidStr);
-                }
-                else
-                {
-                    const DWORD dwError = GetLastError();
-                    SAL_WARN(
-                        "sal.osl",
-                        "ConvertSidToStringSidW failed. GetLastError returned: " << dwError);
-                }
-
                 free(pInfoBuffer);
-
-                return bResult;
+                pInfoBuffer = nullptr;
+                break;
             }
         }
-        else
+
+        if (pSecImpl->m_hToken == nullptr)
+            CloseHandle(hAccessToken);
+
+        if (pInfoBuffer)
         {
-            DWORD needed = 0;
+            PSID pSid = reinterpret_cast<PTOKEN_USER>(pInfoBuffer)->User.Sid;
 
-            WNetGetUserW(nullptr, nullptr, &needed);
-            if (needed < 16)
-                needed = 16;
-
-            if (auto Ident = static_cast<sal_Unicode *>(malloc(needed*sizeof(sal_Unicode))))
+            LPWSTR pSidStr = nullptr;
+            bool bResult = ConvertSidToStringSidW(pSid, &pSidStr);
+            if (bResult)
             {
-                if (WNetGetUserW(nullptr, o3tl::toW(Ident), &needed) != NO_ERROR)
-                {
-                    wcscpy(o3tl::toW(Ident), L"unknown");
-                    Ident[7] = L'\0';
-                }
-
-                rtl_uString_newFromStr( strIdent, Ident);
-                free(Ident);
-                return true;
+                rtl_uString_newFromStr(strIdent, o3tl::toU(pSidStr));
+                LocalFree(pSidStr);
             }
+            else
+            {
+                const DWORD dwError = GetLastError();
+                SAL_WARN(
+                    "sal.osl",
+                    "ConvertSidToStringSidW failed. GetLastError returned: " << dwError);
+            }
+
+            free(pInfoBuffer);
+
+            return bResult;
         }
     }
+    else
+    {
+        DWORD needed = 0;
 
+        WNetGetUserW(nullptr, nullptr, &needed);
+        if (needed < 16)
+            needed = 16;
+
+        if (auto Ident = static_cast<sal_Unicode *>(malloc(needed*sizeof(sal_Unicode))))
+        {
+            if (WNetGetUserW(nullptr, o3tl::toW(Ident), &needed) != NO_ERROR)
+            {
+                wcscpy(o3tl::toW(Ident), L"unknown");
+                Ident[7] = L'\0';
+            }
+
+            rtl_uString_newFromStr( strIdent, Ident);
+            free(Ident);
+            return true;
+        }
+    }
     return false;
 }
 
@@ -353,24 +348,24 @@ sal_Bool SAL_CALL osl_getShortUserName(oslSecurity Security, rtl_uString **strNa
 
 sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
+    if (!Security)
+        return false;
+
     rtl_uString *ustrSysDir = nullptr;
-    bool    bSuccess = false;
+    bool bSuccess = false;
 
-    if (Security != nullptr)
+    oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl*>(Security);
+
+    if (pSecImpl->m_pNetResource != nullptr)
     {
-        oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl*>(Security);
+        rtl_uString_newFromStr( &ustrSysDir, o3tl::toU(pSecImpl->m_pNetResource->lpRemoteName));
 
-        if (pSecImpl->m_pNetResource != nullptr)
-        {
-            rtl_uString_newFromStr( &ustrSysDir, o3tl::toU(pSecImpl->m_pNetResource->lpRemoteName));
-
-            bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory );
-        }
-        else
-        {
-                bSuccess = GetSpecialFolder(&ustrSysDir, FOLDERID_Documents) &&
-                                     (osl_File_E_None == osl_getFileURLFromSystemPath(ustrSysDir, pustrDirectory));
-        }
+        bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory );
+    }
+    else
+    {
+            bSuccess = GetSpecialFolder(&ustrSysDir, FOLDERID_Documents) &&
+                                 (osl_File_E_None == osl_getFileURLFromSystemPath(ustrSysDir, pustrDirectory));
     }
 
     if ( ustrSysDir )
@@ -381,46 +376,45 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
 
 sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
+    if (!Security)
+        return false;
+
     bool bSuccess = false;
+    oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl*>(Security);
 
-    if (Security != nullptr)
+    if (pSecImpl->m_pNetResource != nullptr)
     {
-        oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl*>(Security);
+        rtl_uString *ustrSysDir = nullptr;
 
-        if (pSecImpl->m_pNetResource != nullptr)
+        rtl_uString_newFromStr( &ustrSysDir, o3tl::toU(pSecImpl->m_pNetResource->lpRemoteName));
+        bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory);
+
+        if ( ustrSysDir )
+            rtl_uString_release( ustrSysDir );
+    }
+    else
+    {
+        if (pSecImpl->m_hToken)
         {
-            rtl_uString *ustrSysDir = nullptr;
-
-            rtl_uString_newFromStr( &ustrSysDir, o3tl::toU(pSecImpl->m_pNetResource->lpRemoteName));
-            bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory);
-
-            if ( ustrSysDir )
-                rtl_uString_release( ustrSysDir );
+            /* not implemented */
+            OSL_ASSERT(false);
         }
         else
         {
-            if (pSecImpl->m_hToken)
+            rtl_uString *ustrFile = nullptr;
+            sal_Unicode sFile[_MAX_PATH];
+
+            if ( !GetSpecialFolder( &ustrFile, FOLDERID_RoamingAppData) )
             {
-                /* not implemented */
-                OSL_ASSERT(false);
+                OSL_VERIFY(GetWindowsDirectoryW(o3tl::toW(sFile), _MAX_DIR) > 0);
+
+                rtl_uString_newFromStr( &ustrFile, sFile);
             }
-            else
-            {
-                rtl_uString *ustrFile = nullptr;
-                sal_Unicode sFile[_MAX_PATH];
 
-                if ( !GetSpecialFolder( &ustrFile, FOLDERID_RoamingAppData) )
-                {
-                    OSL_VERIFY(GetWindowsDirectoryW(o3tl::toW(sFile), _MAX_DIR) > 0);
+            bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath(ustrFile, pustrDirectory);
 
-                    rtl_uString_newFromStr( &ustrFile, sFile);
-                }
-
-                bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath(ustrFile, pustrDirectory);
-
-                if ( ustrFile )
-                    rtl_uString_release( ustrFile );
-            }
+            if ( ustrFile )
+                rtl_uString_release( ustrFile );
         }
     }
 
@@ -436,81 +430,81 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
         It is your responsibility to load the user's registry hive into HKEY_USERS
         with the LoadUserProfile function before calling CreateProcessAsUser.
     */
-    bool bOk = false;
 
     RegCloseKey(HKEY_CURRENT_USER);
 
-    if (Privilege(SE_RESTORE_NAME, true))
+    if (!Privilege(SE_RESTORE_NAME, true))
+        return false;
+
+    bool bOk = false;
+    HANDLE hAccessToken = static_cast<oslSecurityImpl*>(Security)->m_hToken;
+
+    /* try to create user profile */
+    if ( !hAccessToken )
     {
-        HANDLE                  hAccessToken        = static_cast<oslSecurityImpl*>(Security)->m_hToken;
+        /* retrieve security handle if not done before e.g. osl_getCurrentSecurity()
+        */
+        HANDLE hProcess = GetCurrentProcess();
 
-        /* try to create user profile */
-        if ( !hAccessToken )
+        if (hProcess != nullptr)
         {
-            /* retrieve security handle if not done before e.g. osl_getCurrentSecurity()
-            */
-            HANDLE hProcess = GetCurrentProcess();
-
-            if (hProcess != nullptr)
-            {
-                OpenProcessToken(hProcess, TOKEN_IMPERSONATE, &hAccessToken);
-                CloseHandle(hProcess);
-            }
+            OpenProcessToken(hProcess, TOKEN_IMPERSONATE, &hAccessToken);
+            CloseHandle(hProcess);
         }
-
-        rtl_uString *buffer = nullptr;
-        PROFILEINFOW pi;
-
-        getUserNameImpl(Security, &buffer, false);
-
-        ZeroMemory(&pi, sizeof(pi));
-        pi.dwSize = sizeof(pi);
-        pi.lpUserName = o3tl::toW(rtl_uString_getStr(buffer));
-        pi.dwFlags = PI_NOUI;
-
-        if (LoadUserProfileW(hAccessToken, &pi))
-        {
-            UnloadUserProfile(hAccessToken, pi.hProfile);
-
-            bOk = true;
-        }
-
-        rtl_uString_release(buffer);
-
-        if (hAccessToken && (hAccessToken != static_cast<oslSecurityImpl*>(Security)->m_hToken))
-            CloseHandle(hAccessToken);
     }
+
+    rtl_uString *buffer = nullptr;
+    PROFILEINFOW pi;
+
+    getUserNameImpl(Security, &buffer, false);
+
+    ZeroMemory(&pi, sizeof(pi));
+    pi.dwSize = sizeof(pi);
+    pi.lpUserName = o3tl::toW(rtl_uString_getStr(buffer));
+    pi.dwFlags = PI_NOUI;
+
+    if (LoadUserProfileW(hAccessToken, &pi))
+    {
+        UnloadUserProfile(hAccessToken, pi.hProfile);
+
+        bOk = true;
+    }
+
+    rtl_uString_release(buffer);
+
+    if (hAccessToken && (hAccessToken != static_cast<oslSecurityImpl*>(Security)->m_hToken))
+        CloseHandle(hAccessToken);
 
     return bOk;
 }
 
 void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
 {
-    if ( static_cast<oslSecurityImpl*>(Security)->m_hProfile != nullptr )
+    if ( static_cast<oslSecurityImpl*>(Security)->m_hProfile == nullptr )
+        return;
+
+    HANDLE hAccessToken = static_cast<oslSecurityImpl*>(Security)->m_hToken;
+
+    if ( !hAccessToken )
     {
-        HANDLE                  hAccessToken        = static_cast<oslSecurityImpl*>(Security)->m_hToken;
+        /* retrieve security handle if not done before e.g. osl_getCurrentSecurity()
+        */
+        HANDLE hProcess = GetCurrentProcess();
 
-        if ( !hAccessToken )
+        if (hProcess != nullptr)
         {
-            /* retrieve security handle if not done before e.g. osl_getCurrentSecurity()
-            */
-            HANDLE hProcess = GetCurrentProcess();
-
-            if (hProcess != nullptr)
-            {
-                OpenProcessToken(hProcess, TOKEN_IMPERSONATE, &hAccessToken);
-                CloseHandle(hProcess);
-            }
+            OpenProcessToken(hProcess, TOKEN_IMPERSONATE, &hAccessToken);
+            CloseHandle(hProcess);
         }
-
-        /* unloading the user profile */
-        UnloadUserProfile(hAccessToken, static_cast<oslSecurityImpl*>(Security)->m_hProfile);
-
-        static_cast<oslSecurityImpl*>(Security)->m_hProfile = nullptr;
-
-        if (hAccessToken && (hAccessToken != static_cast<oslSecurityImpl*>(Security)->m_hToken))
-            CloseHandle(hAccessToken);
     }
+
+    /* unloading the user profile */
+    UnloadUserProfile(hAccessToken, static_cast<oslSecurityImpl*>(Security)->m_hProfile);
+
+    static_cast<oslSecurityImpl*>(Security)->m_hProfile = nullptr;
+
+    if (hAccessToken && (hAccessToken != static_cast<oslSecurityImpl*>(Security)->m_hToken))
+        CloseHandle(hAccessToken);
 }
 
 static bool GetSpecialFolder(rtl_uString **strPath, REFKNOWNFOLDERID rFolder)
@@ -561,34 +555,28 @@ static bool Privilege(LPCTSTR strPrivilege, bool bEnable)
 
 static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName,  bool bIncludeDomain)
 {
-    if (Security != nullptr)
+    if (!Security)
+        return false;
+
+    oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl*>(Security);
+
+    HANDLE hAccessToken = pSecImpl->m_hToken;
+
+    if (hAccessToken == nullptr)
+        OpenProcessToken(GetCurrentProcess(), TOKEN_DUP_QUERY, &hAccessToken);
+
+    if (hAccessToken)
     {
-        oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl*>(Security);
+        DWORD  nInfoBuffer = 512;
+        UCHAR* pInfoBuffer = static_cast<UCHAR *>(malloc(nInfoBuffer));
 
-        HANDLE hAccessToken = pSecImpl->m_hToken;
-
-        if (hAccessToken == nullptr)
-            OpenProcessToken(GetCurrentProcess(), TOKEN_DUP_QUERY, &hAccessToken);
-
-        if (hAccessToken)
+        while (!GetTokenInformation(hAccessToken, TokenUser,
+                                       pInfoBuffer, nInfoBuffer, &nInfoBuffer))
         {
-            DWORD  nInfoBuffer = 512;
-            UCHAR* pInfoBuffer = static_cast<UCHAR *>(malloc(nInfoBuffer));
-
-            while (!GetTokenInformation(hAccessToken, TokenUser,
-                                           pInfoBuffer, nInfoBuffer, &nInfoBuffer))
+            if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
-                if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-                {
-                    if (auto p = static_cast<UCHAR *>(realloc(pInfoBuffer, nInfoBuffer)))
-                        pInfoBuffer = p;
-                    else
-                    {
-                        free(pInfoBuffer);
-                        pInfoBuffer = nullptr;
-                        break;
-                    }
-                }
+                if (auto p = static_cast<UCHAR *>(realloc(pInfoBuffer, nInfoBuffer)))
+                    pInfoBuffer = p;
                 else
                 {
                     free(pInfoBuffer);
@@ -596,70 +584,76 @@ static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName,  bool b
                     break;
                 }
             }
-
-            if (pSecImpl->m_hToken == nullptr)
-                CloseHandle(hAccessToken);
-
-            if (pInfoBuffer)
+            else
             {
-                sal_Unicode  UserName[128];
-                sal_Unicode  DomainName[128];
-                sal_Unicode  Name[257];
-                DWORD nUserName   = SAL_N_ELEMENTS(UserName);
-                DWORD nDomainName = SAL_N_ELEMENTS(DomainName);
-                SID_NAME_USE sUse;
-
-                if (LookupAccountSidW(nullptr, reinterpret_cast<PTOKEN_USER>(pInfoBuffer)->User.Sid,
-                                        o3tl::toW(UserName), &nUserName,
-                                        o3tl::toW(DomainName), &nDomainName, &sUse))
-                {
-                    if (bIncludeDomain)
-                    {
-                        wcscpy(o3tl::toW(Name), o3tl::toW(DomainName));
-                        wcscat(o3tl::toW(Name), L"/");
-                        wcscat(o3tl::toW(Name), o3tl::toW(UserName));
-                    }
-                    else
-                    {
-                        wcscpy(o3tl::toW(Name), o3tl::toW(UserName));
-                    }
-
-                    rtl_uString_newFromStr(strName, Name);
-                    free(pInfoBuffer);
-                    return true;
-                }
+                free(pInfoBuffer);
+                pInfoBuffer = nullptr;
+                break;
             }
         }
-        else
+
+        if (pSecImpl->m_hToken == nullptr)
+            CloseHandle(hAccessToken);
+
+        if (pInfoBuffer)
         {
-            DWORD needed=0;
-            sal_Unicode *pNameW=nullptr;
+            sal_Unicode  UserName[128];
+            sal_Unicode  DomainName[128];
+            sal_Unicode  Name[257];
+            DWORD nUserName   = SAL_N_ELEMENTS(UserName);
+            DWORD nDomainName = SAL_N_ELEMENTS(DomainName);
+            SID_NAME_USE sUse;
 
-            WNetGetUserW(nullptr, nullptr, &needed);
-            pNameW = static_cast<sal_Unicode *>(malloc (needed*sizeof(sal_Unicode)));
-            assert(pNameW); // Don't handle OOM conditions
-
-            if (WNetGetUserW(nullptr, o3tl::toW(pNameW), &needed) == NO_ERROR)
+            if (LookupAccountSidW(nullptr, reinterpret_cast<PTOKEN_USER>(pInfoBuffer)->User.Sid,
+                                    o3tl::toW(UserName), &nUserName,
+                                    o3tl::toW(DomainName), &nDomainName, &sUse))
             {
-                rtl_uString_newFromStr( strName, pNameW);
+                if (bIncludeDomain)
+                {
+                    wcscpy(o3tl::toW(Name), o3tl::toW(DomainName));
+                    wcscat(o3tl::toW(Name), L"/");
+                    wcscat(o3tl::toW(Name), o3tl::toW(UserName));
+                }
+                else
+                {
+                    wcscpy(o3tl::toW(Name), o3tl::toW(UserName));
+                }
 
-                if (pNameW)
-                    free(pNameW);
+                rtl_uString_newFromStr(strName, Name);
+                free(pInfoBuffer);
                 return true;
             }
-            else if (pSecImpl->m_User[0] != '\0')
-            {
-                rtl_uString_newFromStr(strName, o3tl::toU(pSecImpl->m_pNetResource->lpRemoteName));
+        }
+    }
+    else
+    {
+        DWORD needed=0;
+        sal_Unicode *pNameW=nullptr;
 
-                if (pNameW)
-                    free(pNameW);
+        WNetGetUserW(nullptr, nullptr, &needed);
+        pNameW = static_cast<sal_Unicode *>(malloc (needed*sizeof(sal_Unicode)));
+        assert(pNameW); // Don't handle OOM conditions
 
-                return true;
-            }
+        if (WNetGetUserW(nullptr, o3tl::toW(pNameW), &needed) == NO_ERROR)
+        {
+            rtl_uString_newFromStr( strName, pNameW);
 
             if (pNameW)
                 free(pNameW);
+            return true;
         }
+        else if (pSecImpl->m_User[0] != '\0')
+        {
+            rtl_uString_newFromStr(strName, o3tl::toU(pSecImpl->m_pNetResource->lpRemoteName));
+
+            if (pNameW)
+                free(pNameW);
+
+            return true;
+        }
+
+        if (pNameW)
+            free(pNameW);
     }
 
     return false;

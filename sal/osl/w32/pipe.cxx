@@ -71,26 +71,26 @@ static oslPipe osl_createPipeImpl(void)
 
 static void osl_destroyPipeImpl(oslPipe pPipe)
 {
-    if (pPipe)
+    if (!pPipe)
+        return;
+
+    if (pPipe->m_NamedObject)
+        CloseHandle(pPipe->m_NamedObject);
+
+    if (pPipe->m_Security)
     {
-        if (pPipe->m_NamedObject)
-            CloseHandle(pPipe->m_NamedObject);
-
-        if (pPipe->m_Security)
-        {
-            free(pPipe->m_Security->lpSecurityDescriptor);
-            free(pPipe->m_Security);
-        }
-
-        CloseHandle(pPipe->m_ReadEvent);
-        CloseHandle(pPipe->m_WriteEvent);
-        CloseHandle(pPipe->m_AcceptEvent);
-
-        if (pPipe->m_Name)
-            rtl_uString_release(pPipe->m_Name);
-
-        free(pPipe);
+        free(pPipe->m_Security->lpSecurityDescriptor);
+        free(pPipe->m_Security);
     }
+
+    CloseHandle(pPipe->m_ReadEvent);
+    CloseHandle(pPipe->m_WriteEvent);
+    CloseHandle(pPipe->m_AcceptEvent);
+
+    if (pPipe->m_Name)
+        rtl_uString_release(pPipe->m_Name);
+
+    free(pPipe);
 }
 
 oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options,
