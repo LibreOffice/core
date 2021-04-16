@@ -48,7 +48,9 @@ enum class ResourceType {
     TwipsMeasure_asSigned,
     TwipsMeasure_asZero,
     HpsMeasure,
-    MeasurementOrPercent
+    MeasurementOrPercent,
+    CommentsEx,
+    CommentEx,
 };
 
 struct AttributeInfo

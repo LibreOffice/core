@@ -25,6 +25,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/ref.hxx>
 
+#include <dmapper/CommentProperties.hxx>
+
 /**
    @file resourcemodel.hxx
 
@@ -296,6 +298,8 @@ public:
 
     /// Receives end mark for glossary document entry.
     virtual void endGlossaryEntry() = 0;
+
+    virtual void commentProps(const OUString& /*sId*/, const CommentProperties& /*rProps*/) {}
 
 protected:
     ~Stream() override {}

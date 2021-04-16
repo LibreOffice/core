@@ -310,9 +310,20 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
     resolveFastSubStreamWithId(rStream, mpXNoteStream, nId);
 }
 
+void OOXMLDocumentImpl::resolveCommentsExtendedStream(Stream& rStream)
+{
+    resolveFastSubStream(rStream, OOXMLStream::COMMENTS_EXTENDED);
+}
+
 void OOXMLDocumentImpl::resolveComment(Stream & rStream,
                                        const sal_Int32 nId)
 {
+    if (!mbCommentsExtendedResolved)
+    {
+        resolveCommentsExtendedStream(rStream);
+        mbCommentsExtendedResolved = true;
+    }
+
     writerfilter::Reference<Stream>::Pointer_t pStream =
         getXNoteStream(OOXMLStream::COMMENTS, nId);
 
