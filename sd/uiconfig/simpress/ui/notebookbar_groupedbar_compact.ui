@@ -738,13 +738,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ExportToEPUBD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExportToEPUB</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="separator44">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
