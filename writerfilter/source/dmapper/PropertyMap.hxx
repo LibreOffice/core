@@ -429,6 +429,7 @@ private:
     sal_Int32                                    m_yAlign;         // from ST_YAlign bottom, center, inline, inside, outside, top
     sal_Int8                                     m_nDropCapLength; // number of characters
     OUString                                     m_sParaStyleName;
+    OUString                                     m_sParaId;        // [MS-DOCX] sect. 2.2.4 "p and tr Extensions"
 
     css::uno::Reference< css::text::XTextRange > m_xStartingRange; // start of a frame
     css::uno::Reference< css::text::XTextRange > m_xEndingRange;   // end of the frame
@@ -506,6 +507,9 @@ public:
 
     const OUString& GetParaStyleName() const      { return m_sParaStyleName; }
     void SetParaStyleName( const OUString& rSet ) { m_sParaStyleName = rSet; }
+
+    const OUString& GetParaId() const { return m_sParaId; }
+    void SetParaId(const OUString& rSet) { m_sParaId = rSet; }
 
     void ResetFrameProperties();
 };

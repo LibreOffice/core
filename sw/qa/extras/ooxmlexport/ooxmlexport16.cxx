@@ -18,6 +18,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -312,18 +313,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf140137, "tdf140137.docx")
     // Don't throw exception during load
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCommentDone, "CommentDone.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCommentDone, "CommentDone.docx")
 {
-    if (!mbExported)
-    {
-        // This manually toggles (enables) the resolved state of the first comment now, while
-        // import is not yet implemented (TODO)
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-            { { "Id", uno::makeAny(OUString("1")) } });
-        dispatchCommand(mxComponent, ".uno:ResolveComment", aPropertyValues);
-        return;
-    }
-
     xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
     assertXPath(pXmlComm, "/w:comments/w:comment[1]/w:p", 2);
     OUString idLastPara = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[2]", "paraId");
@@ -333,6 +324,49 @@ DECLARE_OOXMLEXPORT_TEST(testCommentDone, "CommentDone.docx")
     OUString idLastParaEx = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "paraId");
     CPPUNIT_ASSERT_EQUAL(idLastPara, idLastParaEx);
     assertXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "done", "1");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testCommentDoneModel, "CommentDone.docx")
+{
+    css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
+        mxComponent, css::uno::UNO_QUERY_THROW);
+    auto xFields(xTextFieldsSupplier->getTextFields()->createEnumeration());
+
+    // First comment: initially resolved, toggled to unresolved on import, unresolved on roundtrip
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    css::uno::Any aComment = xFields->nextElement();
+    css::uno::Reference<css::beans::XPropertySet> xComment(aComment, css::uno::UNO_QUERY_THROW);
+
+    if (!mbExported)
+    {
+        // Check that it's resolved when initially read
+        CPPUNIT_ASSERT_EQUAL(true, xComment->getPropertyValue("Resolved").get<bool>());
+        // Set to unresolved
+        xComment->setPropertyValue("Resolved", css::uno::Any(false));
+    }
+    else
+    {
+        // After the roundtrip, it keeps the "unresolved" state set above
+        CPPUNIT_ASSERT_EQUAL(false, xComment->getPropertyValue("Resolved").get<bool>());
+    }
+
+    // Second comment: initially unresolved, toggled to resolved on import, resolved on roundtrip
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    aComment = xFields->nextElement();
+    xComment.set(aComment, css::uno::UNO_QUERY_THROW);
+
+    if (!mbExported)
+    {
+        // Check that it's unresolved when initially read
+        CPPUNIT_ASSERT_EQUAL(false, xComment->getPropertyValue("Resolved").get<bool>());
+        // Set to resolved
+        xComment->setPropertyValue("Resolved", css::uno::Any(true));
+    }
+    else
+    {
+        // After the roundtrip, it keeps the "resolved" state set above
+        CPPUNIT_ASSERT_EQUAL(true, xComment->getPropertyValue("Resolved").get<bool>());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
