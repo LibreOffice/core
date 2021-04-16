@@ -787,11 +787,10 @@ SfxItemPool* SfxItemPool::GetMasterPool() const
  */
 void SfxItemPool::FreezeIdRanges()
 {
-    FillItemIdRanges_Impl( pImpl->mpPoolRanges );
+    pImpl->mnPoolRangesLen = FillItemIdRanges_Impl( pImpl->mpPoolRanges );
 }
 
-
-void SfxItemPool::FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRanges ) const
+sal_uInt16 SfxItemPool::FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRanges ) const
 {
     DBG_ASSERT( !pImpl->mpPoolRanges, "GetFrozenRanges() would be faster!" );
 
@@ -800,7 +799,8 @@ void SfxItemPool::FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRa
     for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
         ++nLevel;
 
-    pWhichRanges.reset(new sal_uInt16[ 2*nLevel + 1 ]);
+    sal_uInt16 nLen = 2*nLevel + 1;
+    pWhichRanges.reset(new sal_uInt16[nLen]);
 
     nLevel = 0;
     for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
@@ -809,11 +809,18 @@ void SfxItemPool::FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRa
         pWhichRanges[nLevel++] = pPool->pImpl->mnEnd;
         pWhichRanges[nLevel] = 0;
     }
+
+    return nLen;
 }
 
 const sal_uInt16* SfxItemPool::GetFrozenIdRanges() const
 {
     return pImpl->mpPoolRanges.get();
+}
+
+sal_uInt16 SfxItemPool::GetFrozenIdRangesLen() const
+{
+    return pImpl->mnPoolRangesLen;
 }
 
 const SfxPoolItem *SfxItemPool::GetItem2Default(sal_uInt16 nWhich) const

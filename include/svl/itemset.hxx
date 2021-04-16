@@ -81,8 +81,9 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
     const SfxItemSet* m_pParent;       ///< derivation
     std::unique_ptr<SfxPoolItem const*[]>
                       m_pItems;        ///< array of items
-    sal_uInt16*       m_pWhichRanges;  ///< array of Which Ranges
     sal_uInt16        m_nCount;        ///< number of items
+    sal_uInt16        m_nWhichRangeLen;///< length of m_pWhichRanges
+    sal_uInt16*       m_pWhichRanges;  ///< array of Which Ranges
 
 friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
@@ -216,7 +217,8 @@ public:
 
     SfxItemPool*                GetPool() const { return m_pPool; }
     const sal_uInt16*           GetRanges() const { return m_pWhichRanges; }
-    void                        SetRanges( const sal_uInt16 *pRanges );
+    sal_uInt16                  GetRangesLen() const { return m_nWhichRangeLen; }
+    void                        SetRanges(const sal_uInt16 *pRanges, sal_uInt16 nLen);
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return m_pParent; }
 

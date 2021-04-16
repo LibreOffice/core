@@ -278,7 +278,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                 const SfxPoolItem* pItem = iPair.first;
                 aSetItem.GetItemSet().ClearItem();
                 rWrtSh.GetPaMAttr( pPaM.get(), aSetItem.GetItemSet() );
-                aAttrSet.SetRanges( aSetItem.GetItemSet().GetRanges() );
+                aAttrSet.SetRanges(aSetItem.GetItemSet().GetRanges(), aSetItem.GetItemSet().GetRangesLen());
 
                 pSize = static_cast<const SvxFontHeightItem*>( pItem );
                 if (pSize)

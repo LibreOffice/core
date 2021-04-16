@@ -158,6 +158,7 @@ struct SfxItemPool_Impl
     SfxItemPool*                    mpMaster;
     SfxItemPool*                    mpSecondary;
     std::unique_ptr<sal_uInt16[]>   mpPoolRanges;
+    sal_uInt16                      mnPoolRangesLen;
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
     MapUnit                         eDefMetric;
@@ -169,6 +170,7 @@ struct SfxItemPool_Impl
         , mpStaticDefaults(nullptr)
         , mpMaster(pMaster)
         , mpSecondary(nullptr)
+        , mnPoolRangesLen(0)
         , mnStart(nStart)
         , mnEnd(nEnd)
         , eDefMetric(MapUnit::MapCM)
@@ -186,6 +188,7 @@ struct SfxItemPool_Impl
         maPoolItemArrays.clear();
         maPoolDefaults.clear();
         mpPoolRanges.reset();
+        mnPoolRangesLen = 0;
     }
 
     // unit testing

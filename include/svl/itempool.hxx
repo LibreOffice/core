@@ -74,9 +74,10 @@ private:
     SVL_DLLPRIVATE bool             IsItemPoolable_Impl( sal_uInt16 nWhich ) const;
 
 public:
-    // for default SfxItemSet::CTOR, set default WhichRanges
-    void                            FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRanges ) const;
+    // for default SfxItemSet::CTOR, set default WhichRanges, returns the length of pWhichRanges
+    sal_uInt16                      FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRanges ) const;
     const sal_uInt16*               GetFrozenIdRanges() const;
+    sal_uInt16                      GetFrozenIdRangesLen() const;
 
 protected:
     static inline void              ClearRefCount(SfxPoolItem& rItem);

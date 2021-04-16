@@ -177,7 +177,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
             if (uno::Sequence<sal_uInt16> aOrigRanges; (aIterator->second >>= aOrigRanges)
                                                        && aOrigRanges.getLength() % 2 == 1
                                                        && *(std::cend(aOrigRanges) - 1) == 0)
-                rSet.SetRanges(aOrigRanges.getConstArray());
+                rSet.SetRanges(aOrigRanges.getConstArray(), aOrigRanges.getLength());
         }
     }
     assert(SfxItemState::SET != rSet.GetItemState(RES_PARATR_GRABBAG, false));
