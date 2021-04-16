@@ -789,16 +789,6 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
             memcpy( pDstBits, pSrcBits, nLineSize );
     }
 
-    // the alpha values need to be inverted for XRender
-    // TODO: make upper layers use standard alpha
-    tools::Long* pLDst = reinterpret_cast<long*>(pAlphaBits);
-    for( int i = nImageSize/sizeof(long); --i >= 0; ++pLDst )
-        *pLDst = ~*pLDst;
-
-    char* pCDst = reinterpret_cast<char*>(pLDst);
-    for( int i = nImageSize & (sizeof(long)-1); --i >= 0; ++pCDst )
-        *pCDst = ~*pCDst;
-
     const XRenderPictFormat* pAlphaFormat = rPeer.GetStandardFormatA8();
     XImage* pAlphaImg = XCreateImage( pXDisplay, pSrcXVisual, 8, ZPixmap, 0,
         pAlphaBits, pAlphaBuffer->mnWidth, pAlphaBuffer->mnHeight,

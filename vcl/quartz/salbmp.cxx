@@ -534,7 +534,7 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
 
     // CGImageCreateWithMask() only likes masks or greyscale images => convert if needed
     // TODO: isolate in an extra method?
-    if( !CGImageIsMask(xMask) || rMask.GetBitCount() != 8)//(CGImageGetColorSpace(xMask) != GetSalData()->mxGraySpace) )
+    if( rMask.GetBitCount() != 8)//(CGImageGetColorSpace(xMask) != GetSalData()->mxGraySpace) )
     {
         const CGRect xImageRect=CGRectMake( 0, 0, nWidth, nHeight );//the rect has no offset
 
@@ -547,7 +547,7 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
         CGContextDrawImage( xMaskContext, xImageRect, xMask );
         CFRelease( xMask );
         CGDataProviderRef xDataProvider( CGDataProviderCreateWithData( nullptr,
-        pMaskMem, nHeight * nMaskBytesPerRow, &CFRTLFree ) );
+            pMaskMem, nHeight * nMaskBytesPerRow, &CFRTLFree ) );
 
         static const CGFloat* pDecode = nullptr;
         xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );

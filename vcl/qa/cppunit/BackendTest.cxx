@@ -1181,7 +1181,7 @@ public:
         device->Erase();
         alpha.Erase(255); // transparent
         BitmapWriteAccess* alphaWrite = alpha.AcquireAlphaWriteAccess();
-        alphaWrite->SetPixelIndex(0, 0, 0); // opaque
+        alphaWrite->SetPixelIndex(0, 0, 255); // opaque
         alpha.ReleaseAccess(alphaWrite);
         device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
         exportDevice("blend_extended_04.png", device);
