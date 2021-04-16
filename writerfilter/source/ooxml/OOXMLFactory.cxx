@@ -55,91 +55,54 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 
         Id nId = pFactory->getResourceId(nDefine, nToken);
 
+        OOXMLValue::Pointer_t xValue;
         switch (pAttr->m_nResource)
         {
         case ResourceType::Boolean:
-            {
-                const char *pValue = rAttribs.getAsCharByIndex(nAttrIndex);
-                OOXMLValue::Pointer_t xValue(OOXMLBooleanValue::Create(pValue));
-                pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
-            }
+            xValue = OOXMLBooleanValue::Create(rAttribs.getAsCharByIndex(nAttrIndex));
             break;
         case ResourceType::String:
-            {
-                OUString aValue(rAttribs.getValueByIndex(nAttrIndex));
-                OOXMLValue::Pointer_t xValue(new OOXMLStringValue(aValue));
-                pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
-            }
+            xValue = new OOXMLStringValue(rAttribs.getValueByIndex(nAttrIndex));
             break;
         case ResourceType::Integer:
-            {
-                sal_Int32 nValue = rAttribs.getAsIntegerByIndex(nAttrIndex);
-                OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
-                pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
-            }
+            xValue = OOXMLIntegerValue::Create(rAttribs.getAsIntegerByIndex(nAttrIndex));
             break;
         case ResourceType::Hex:
-            {
-                const char *pValue = rAttribs.getAsCharByIndex(nAttrIndex);
-                OOXMLValue::Pointer_t xValue(new OOXMLHexValue(pValue));
-                pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
-            }
+            xValue = new OOXMLHexValue(rAttribs.getAsCharByIndex(nAttrIndex));
             break;
         case ResourceType::HexColor:
-            {
-                const char *pValue = rAttribs.getAsCharByIndex(nAttrIndex);
-                OOXMLValue::Pointer_t xValue(new OOXMLHexColorValue(pValue));
-                pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
-            }
+            xValue = new OOXMLHexColorValue(rAttribs.getAsCharByIndex(nAttrIndex));
             break;
         case ResourceType::TwipsMeasure_asSigned:
         case ResourceType::TwipsMeasure_asZero:
+            xValue = new OOXMLTwipsMeasureValue(rAttribs.getAsCharByIndex(nAttrIndex));
+            if (xValue->getInt() < 0)
             {
-                const char *pValue = rAttribs.getAsCharByIndex(nAttrIndex);
-                OOXMLValue::Pointer_t xValue(new OOXMLTwipsMeasureValue(pValue));
-                if ( xValue->getInt() < 0 )
-                {
-                    if ( pAttr->m_nResource == ResourceType::TwipsMeasure_asZero )
-                        xValue = OOXMLIntegerValue::Create(0);
-                }
-                pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
+                if (pAttr->m_nResource == ResourceType::TwipsMeasure_asZero)
+                    xValue = OOXMLIntegerValue::Create(0);
             }
             break;
         case ResourceType::HpsMeasure:
-            {
-                const char *pValue = rAttribs.getAsCharByIndex(nAttrIndex);
-                OOXMLValue::Pointer_t xValue(new OOXMLHpsMeasureValue(pValue));
-                pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
-            }
-        break;
+            xValue = new OOXMLHpsMeasureValue(rAttribs.getAsCharByIndex(nAttrIndex));
+            break;
         case ResourceType::MeasurementOrPercent:
-            {
-                const char *pValue = rAttribs.getAsCharByIndex(nAttrIndex);
-                OOXMLValue::Pointer_t xValue(new OOXMLMeasurementOrPercentValue(pValue));
-                pHandler->newProperty(nId, xValue);
-                pFactory->attributeAction(pHandler, nToken, xValue);
-            }
+            xValue = new OOXMLMeasurementOrPercentValue(rAttribs.getAsCharByIndex(nAttrIndex));
             break;
         case ResourceType::List:
+            if (sal_uInt32 nValue;
+                pFactory->getListValue(pAttr->m_nRef, rAttribs.getValueByIndex(nAttrIndex), nValue))
             {
-                sal_uInt32 nValue;
-                if (pFactory->getListValue(pAttr->m_nRef, rAttribs.getValueByIndex(nAttrIndex), nValue))
-                {
-                    OOXMLValue::Pointer_t xValue = OOXMLIntegerValue::Create(nValue);
-                    pHandler->newProperty(nId, xValue);
-                    pFactory->attributeAction(pHandler, nToken, xValue);
-                }
+                xValue = OOXMLIntegerValue::Create(nValue);
             }
             break;
         default:
             break;
+        }
+
+        if (xValue)
+        {
+            pHandler->newProperty(nId, xValue);
+            pFactory->attributeAction(pHandler, nToken, xValue);
         }
     }
 }
