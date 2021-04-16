@@ -328,18 +328,18 @@ bool BitmapEx::Rotate( Degree10 nAngle10, const Color& rFillColor )
             if( maAlphaMask.IsEmpty() )
             {
                 maAlphaMask = Bitmap(GetSizePixel(), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
-                maAlphaMask.Erase( COL_BLACK );
+                maAlphaMask.Erase( COL_WHITE );
             }
 
             if( bRet && !maAlphaMask.IsEmpty() )
-                maAlphaMask.Rotate( nAngle10, COL_WHITE );
+                maAlphaMask.Rotate( nAngle10, COL_BLACK );
         }
         else
         {
             bRet = maBitmap.Rotate( nAngle10, rFillColor );
 
             if( bRet && !maAlphaMask.IsEmpty() )
-                maAlphaMask.Rotate( nAngle10, COL_WHITE );
+                maAlphaMask.Rotate( nAngle10, COL_BLACK );
         }
 
         SetSizePixel(maBitmap.GetSizePixel());
@@ -387,7 +387,7 @@ void BitmapEx::Expand( sal_Int32 nDX, sal_Int32 nDY, bool bExpandTransparent )
 
     if( bRet && !maAlphaMask.IsEmpty() )
     {
-        Color aColor( bExpandTransparent ? COL_WHITE : COL_BLACK );
+        Color aColor( bExpandTransparent ? COL_BLACK : COL_WHITE );
         maAlphaMask.Expand( nDX, nDY, &aColor );
     }
 
@@ -427,8 +427,8 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                         maAlphaMask.CopyPixel_AlphaOptimized( rRectDst, rRectSrc, &pBmpExSrc->maAlphaMask );
                     else
                     {
-                        sal_uInt8 cBlack = 0;
-                        std::unique_ptr<AlphaMask> pAlpha(new AlphaMask(GetSizePixel(), &cBlack));
+                        sal_uInt8 cWhite = 255;
+                        std::unique_ptr<AlphaMask> pAlpha(new AlphaMask(GetSizePixel(), &cWhite));
 
                         maAlphaMask = pAlpha->ImplGetBitmap();
                         pAlpha.reset();
@@ -437,8 +437,8 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                 }
                 else if (IsAlpha())
                 {
-                    sal_uInt8 cBlack = 0;
-                    const AlphaMask aAlphaSrc(pBmpExSrc->GetSizePixel(), &cBlack);
+                    sal_uInt8 cWhite = 255;
+                    const AlphaMask aAlphaSrc(pBmpExSrc->GetSizePixel(), &cWhite);
 
                     maAlphaMask.CopyPixel( rRectDst, rRectSrc, &aAlphaSrc.ImplGetBitmap() );
                 }
@@ -462,7 +462,7 @@ bool BitmapEx::Erase( const Color& rFillColor )
             // Respect transparency on fill color
             if( rFillColor.IsTransparent() )
             {
-                const Color aFill( 255 - rFillColor.GetAlpha(), 255 - rFillColor.GetAlpha(), 255 - rFillColor.GetAlpha() );
+                const Color aFill( rFillColor.GetAlpha(), rFillColor.GetAlpha(), rFillColor.GetAlpha() );
                 maAlphaMask.Erase( aFill );
             }
             else
@@ -587,7 +587,7 @@ sal_uInt8 BitmapEx::GetAlpha(sal_Int32 nX, sal_Int32 nY) const
         if(pRead)
         {
             const BitmapColor aBitmapColor(pRead->GetPixel(nY, nX));
-            nAlpha = 255 - aBitmapColor.GetIndex();
+            nAlpha = aBitmapColor.GetIndex();
         }
     }
     return nAlpha;
@@ -605,7 +605,7 @@ Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
     {
         AlphaMask aAlpha = GetAlpha();
         AlphaMask::ScopedReadAccess pAlphaReadAccess(aAlpha);
-        aColor.SetAlpha(255 - pAlphaReadAccess->GetPixel(nY, nX).GetIndex());
+        aColor.SetAlpha(pAlphaReadAccess->GetPixel(nY, nX).GetIndex());
     }
     else if (maBitmap.getPixelFormat() != vcl::PixelFormat::N32_BPP)
     {
@@ -1029,6 +1029,7 @@ BitmapEx createBlendFrame(
     Color aColorBottomRight,
     Color aColorBottomLeft)
 {
+    nAlpha = 255 - nAlpha;
     BlendFrameCache* pBlendFrameCache = ImplGetBlendFrameCache();
 
     if(pBlendFrameCache->m_aLastSize == rSize
@@ -1381,7 +1382,7 @@ void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
         {
             const sal_uInt8 cIndex = pReadAccess->GetPixelFromData( pScanlineRead, nX ).GetIndex();
             if ( cIndex == cIndexFrom )
-                pWriteAccess->SetPixelOnData( pScanline, nX, BitmapColor(nAlphaTo) );
+                pWriteAccess->SetPixelOnData( pScanline, nX, BitmapColor(255 - nAlphaTo) );
         }
     }
     *this = BitmapEx( GetBitmap(), aAlphaMask );
@@ -1404,7 +1405,7 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
         if( !pA )
             return;
 
-        sal_uLong       nTrans = cTrans, nNewTrans;
+        sal_uLong nTrans = cTrans;
         const tools::Long  nWidth = pA->Width(), nHeight = pA->Height();
 
         if( pA->GetScanlineFormat() == ScanlineFormat::N8BitPal )
@@ -1415,8 +1416,10 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
 
                 for( tools::Long nX = 0; nX < nWidth; nX++ )
                 {
-                    nNewTrans = nTrans + *pAScan;
-                    *pAScan++ = static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans );
+                    sal_uLong nNewTrans = nTrans + (255 - *pAScan);
+                    // clamp to 255
+                    nNewTrans = ( nNewTrans & 0xffffff00 ) ? 0 : nNewTrans;
+                    *pAScan++ = static_cast<sal_uInt8>( 255 - nNewTrans );
                 }
             }
         }
@@ -1429,8 +1432,11 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
                 Scanline pScanline = pA->GetScanline( nY );
                 for( tools::Long nX = 0; nX < nWidth; nX++ )
                 {
-                    nNewTrans = nTrans + pA->GetIndexFromData( pScanline, nX );
-                    aAlphaValue.SetIndex( static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );
+                    sal_uLong nNewTrans = nTrans + (255 - pA->GetIndexFromData( pScanline, nX ));
+                    // clamp to 255
+                    nNewTrans = ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans;
+                    // convert back to alpha
+                    aAlphaValue.SetIndex( static_cast<sal_uInt8>(255 - nNewTrans) );
                     pA->SetPixelOnData( pScanline, nX, aAlphaValue );
                 }
             }

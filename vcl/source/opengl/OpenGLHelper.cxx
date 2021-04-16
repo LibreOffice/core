@@ -598,7 +598,7 @@ BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, t
                 *pScan++ = pBuffer[nCurPos+2];
 
                 nCurPos += 3;
-                *pAlphaScan++ = static_cast<sal_uInt8>( 255 - pBuffer[nCurPos++] );
+                *pAlphaScan++ = pBuffer[nCurPos++];
             }
         }
     }
