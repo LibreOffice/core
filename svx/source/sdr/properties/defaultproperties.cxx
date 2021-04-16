@@ -246,7 +246,10 @@ namespace sdr::properties
         {
             xmlTextWriterStartElement(pWriter, BAD_CAST("DefaultProperties"));
             BaseProperties::dumpAsXml(pWriter);
-            mpItemSet->dumpAsXml(pWriter);
+            if (mpItemSet)
+            {
+                mpItemSet->dumpAsXml(pWriter);
+            }
             xmlTextWriterEndElement(pWriter);
         }
 } // end of namespace
