@@ -842,7 +842,7 @@ bool Bitmap::Replace(const AlphaMask& rAlpha, const Color& rMergeColor)
             for (tools::Long nX = 0; nX < nWidth; nX++)
             {
                 aCol = pAcc->GetColor(nY, nX);
-                aCol.Merge(rMergeColor, 255 - pAlphaAcc->GetIndexFromData(pScanlineAlpha, nX));
+                aCol.Merge(rMergeColor, pAlphaAcc->GetIndexFromData(pScanlineAlpha, nX));
                 pNewAcc->SetPixelOnData(pScanline, nX, aCol);
             }
         }
@@ -1141,8 +1141,7 @@ bool Bitmap::Blend(const AlphaMask& rAlpha, const Color& rBackgroundColor)
             for (tools::Long nX = 0; nX < nWidth; ++nX)
             {
                 BitmapColor aBmpColor = pAcc->GetPixelFromData(pScanline, nX);
-                aBmpColor.Merge(rBackgroundColor,
-                                255 - pAlphaAcc->GetIndexFromData(pScanlineAlpha, nX));
+                aBmpColor.Merge(rBackgroundColor, pAlphaAcc->GetIndexFromData(pScanlineAlpha, nX));
                 pAcc->SetPixelOnData(pScanline, nX, aBmpColor);
             }
         }
