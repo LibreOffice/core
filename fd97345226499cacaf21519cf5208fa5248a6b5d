@@ -67,6 +67,24 @@
       "revId": "fd97345226499cacaf21519cf5208fa5248a6b5d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7eb347d_b9935a6c",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-16T07:21:36Z",
+      "side": 1,
+      "message": "I\u0027m just replicating the original logic - malloc does not throw, so I didn\u0027t want to introduce a change.",
+      "parentUuid": "f0bd8967_a27d96d0",
+      "revId": "fd97345226499cacaf21519cf5208fa5248a6b5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
