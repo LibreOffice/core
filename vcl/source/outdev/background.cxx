@@ -51,7 +51,7 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
     // but hopefully nobody uses that. If you do, feel free to implement it properly.
     if( rBackground.GetStyle() == WallpaperStyle::NONE )
     {
-        mpAlphaVDev->SetBackground( rBackground );
+        mpAlphaVDev->SetBackground( Wallpaper( COL_ALPHA_OPAQUE ) ); // fully opaque;
     }
     else if( rBackground.IsBitmap())
     {
@@ -59,17 +59,17 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
         if( bitmap.IsAlpha())
             mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( Bitmap( bitmap.GetAlpha()))));
         else
-            mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
+            mpAlphaVDev->SetBackground( Wallpaper( COL_ALPHA_OPAQUE ));
     }
     else if( rBackground.IsGradient())
     {
-        mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
+        mpAlphaVDev->SetBackground( Wallpaper( COL_ALPHA_OPAQUE ));
     }
     else
     {
         // Color background.
-        int transparency = 255 - rBackground.GetColor().GetAlpha();
-        mpAlphaVDev->SetBackground( Wallpaper( Color( transparency, transparency, transparency )));
+        int alpha = rBackground.GetColor().GetAlpha();
+        mpAlphaVDev->SetBackground( Wallpaper( Color( alpha, alpha, alpha )));
     }
 }
 
