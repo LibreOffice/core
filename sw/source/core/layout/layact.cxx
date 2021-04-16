@@ -67,16 +67,6 @@
 #include <vector>
 #include <tools/diagnose_ex.h>
 
-// Save some typing work to avoid accessing destroyed pages.
-#define XCHECKPAGE \
-            {   if ( IsAgain() ) \
-                { \
-                    if( bNoLoop ) \
-                        rLayoutAccess.GetLayouter()->EndLoopControl(); \
-                    return; \
-                } \
-            }
-
 void SwLayAction::CheckWaitCursor()
 {
     if (IsReschedule())
@@ -449,8 +439,17 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         pPage = static_cast<SwPageFrame*>(pPage->GetNext());
 
     IDocumentLayoutAccess& rLayoutAccess = m_pRoot->GetFormat()->getIDocumentLayoutAccess();
-    bool bNoLoop = pPage && SwLayouter::StartLoopControl( m_pRoot->GetFormat()->GetDoc(), pPage );
+    const bool bNoLoop = pPage && SwLayouter::StartLoopControl(m_pRoot->GetFormat()->GetDoc(), pPage);
     sal_uInt16 nPercentPageNum = 0;
+
+    auto lcl_isLayoutLooping = [&]()
+    {
+        const bool bAgain = this->IsAgain();
+        if (bAgain && bNoLoop)
+            rLayoutAccess.GetLayouter()->EndLoopControl();
+        return bAgain;
+    };
+
     while ( (pPage && !IsInterrupt()) || m_nCheckPageNum != USHRT_MAX )
     {
         // note: this is the only place that consumes and resets m_nCheckPageNum
@@ -488,7 +487,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         if ( !IsIdle() && !IsComplete() && IsShortCut( pPage ) )
         {
             m_pRoot->DeleteEmptySct();
-            XCHECKPAGE;
+            if (lcl_isLayoutLooping()) return;
             if ( !IsInterrupt() &&
                  (m_pRoot->IsSuperfluous() || m_pRoot->IsAssertFlyPages()) )
             {
@@ -500,12 +499,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                     m_pRoot->RemoveSuperfluous();
                     m_bAgain = bOld;
                 }
-                if ( IsAgain() )
-                {
-                    if( bNoLoop )
-                        rLayoutAccess.GetLayouter()->EndLoopControl();
-                    return;
-                }
+                if (lcl_isLayoutLooping()) return;
                 pPage = static_cast<SwPageFrame*>(m_pRoot->Lower());
                 while ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
                     pPage = static_cast<SwPageFrame*>(pPage->GetNext());
@@ -519,7 +513,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         else
         {
             m_pRoot->DeleteEmptySct();
-            XCHECKPAGE;
+            if (lcl_isLayoutLooping()) return;
 
             while ( !IsInterrupt() && !IsNextCycle() &&
                     ((pPage->GetSortedObjs() && pPage->IsInvalidFly()) || pPage->IsInvalid()) )
@@ -539,7 +533,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                           (pPage->GetSortedObjs() && pPage->IsInvalidFly()) ) )
                 {
                     PROTOCOL( pPage, PROT::FileInit, DbgAction::NONE, nullptr)
-                    XCHECKPAGE;
+                    if (lcl_isLayoutLooping()) return;
 
                     // new loop control
                     int nLoopControlRuns_1 = 0;
@@ -556,7 +550,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                         }
 
                         FormatLayout( pRenderContext, pPage );
-                        XCHECKPAGE;
+                        if (lcl_isLayoutLooping()) return;
                     }
                     // change condition
                     if ( !IsNextCycle() &&
@@ -569,7 +563,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                         pPage->ValidateFlyContent();
                         if ( !FormatContent( pPage ) )
                         {
-                            XCHECKPAGE;
+                            if (lcl_isLayoutLooping()) return;
                             pPage->InvalidateContent();
                             pPage->InvalidateFlyInCnt();
                             pPage->InvalidateFlyLayout();
@@ -586,7 +580,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             }
 
             // A previous page may be invalid again.
-            XCHECKPAGE;
+            if (lcl_isLayoutLooping()) return;
             if ( !pPage->GetSortedObjs() )
             {
                 // If there are no (more) Flys, the flags are superfluous.
@@ -647,12 +641,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                 m_pRoot->RemoveSuperfluous();
                 m_bAgain = bOld;
             }
-            if ( IsAgain() )
-            {
-                if( bNoLoop )
-                    rLayoutAccess.GetLayouter()->EndLoopControl();
-                return;
-            }
+            if (lcl_isLayoutLooping()) return;
             pPage = static_cast<SwPageFrame*>(m_pRoot->Lower());
             while ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
                 pPage = static_cast<SwPageFrame*>(pPage->GetNext());
@@ -680,7 +669,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         // register itself, because it's (LayoutFrame) flags have been reset
         // already - the border of the page will never be painted.
         SwPageFrame *pPg = pPage;
-        XCHECKPAGE;
+        if (lcl_isLayoutLooping()) return;
         const SwRect &rVis = m_pImp->GetShell()->VisArea();
 
         while( pPg && pPg->getFrameArea().Bottom() < rVis.Top() )
@@ -699,7 +688,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         {
             unlockPositionOfObjects( pPg );
 
-            XCHECKPAGE;
+            if (lcl_isLayoutLooping()) return;
 
             // new loop control
             int nLoopControlRuns_2 = 0;
@@ -713,7 +702,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                         ( pPg->GetSortedObjs() && pPg->IsInvalidFly() ) ) ) ||
                     ( !mbFormatContentOnInterrupt && pPg->IsInvalidLayout() ) )
             {
-                XCHECKPAGE;
+                if (lcl_isLayoutLooping()) return;
                 // format also at-page anchored objects
                 SwObjectFormatter::FormatObjsAtFrame( *pPg, *pPg, this );
                 if ( !pPg->GetSortedObjs() )
@@ -736,7 +725,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                     }
 
                     FormatLayout( pRenderContext, pPg );
-                    XCHECKPAGE;
+                    if (lcl_isLayoutLooping()) return;
                 }
 
                 if ( mbFormatContentOnInterrupt &&
@@ -756,7 +745,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 
                     if ( !FormatContent( pPg ) )
                     {
-                        XCHECKPAGE;
+                        if (lcl_isLayoutLooping()) return;
                         pPg->InvalidateContent();
                         pPg->InvalidateFlyInCnt();
                         pPg->InvalidateFlyLayout();
