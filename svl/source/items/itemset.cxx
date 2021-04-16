@@ -56,6 +56,25 @@ sal_uInt16 Capacity_Impl( const sal_uInt16 *pRanges )
     return nCount;
 }
 
+#ifdef DBG_UTIL
+bool IsSorted(const sal_uInt16* pWhichRanges)
+{
+    if (!pWhichRanges)
+        return true;
+    for (const sal_uInt16 *pRange = pWhichRanges; *pRange; pRange += 2)
+    {
+        bool bSorted(pRange[0] <= pRange[1]);
+        if (!bSorted)
+            return false;
+        // ranges must be sorted
+        bSorted = !pRange[2] || pRange[2] > pRange[1];
+        if (!bSorted)
+            return false;
+    }
+    return true;
+}
+#endif
+
 }
 
 /**
@@ -81,6 +100,10 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
         m_pWhichRanges = tmp.release();
     }
 
+#ifdef DBG_UTIL
+    assert(IsSorted(m_pWhichRanges));
+#endif
+
     const sal_uInt16 nSize = TotalCount();
     m_pItems.reset(new const SfxPoolItem*[nSize]{});
 }
@@ -100,6 +123,10 @@ void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
     m_nWhichRangeLen = pPtr - pWhichPairTable +1;
     m_pWhichRanges = new sal_uInt16[m_nWhichRangeLen];
     memcpy( m_pWhichRanges, pWhichPairTable, sizeof(sal_uInt16) * m_nWhichRangeLen );
+
+#ifdef DBG_UTIL
+    assert(IsSorted(m_pWhichRanges));
+#endif
 }
 
 SfxItemSet::SfxItemSet(
@@ -203,6 +230,10 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     m_nWhichRangeLen = pPtr - rASet.m_pWhichRanges+1;
     m_pWhichRanges = new sal_uInt16[m_nWhichRangeLen];
     memcpy(m_pWhichRanges, rASet.m_pWhichRanges, sizeof(sal_uInt16) * m_nWhichRangeLen);
+
+#ifdef DBG_UTIL
+    assert(IsSorted(m_pWhichRanges));
+#endif
 }
 
 SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
@@ -373,6 +404,33 @@ void SfxItemSet::InvalidateAllItems()
     memset(static_cast<void*>(m_pItems.get()), -1, m_nCount * sizeof(SfxPoolItem*));
 }
 
+// binary search for nWhich
+static const sal_uInt16* findWhich(const sal_uInt16* pWhichRanges, sal_uInt16 nWhichRangesLen, sal_uInt16 nWhich)
+{
+    // smallest WhichRange with something in it is start+end+0
+    if (nWhichRangesLen < 3)
+        return nullptr;
+
+    int nEndIndex = (nWhichRangesLen / 2) - 1;
+
+    int i = 0;
+    while (i <= nEndIndex)
+    {
+        int nMidPoint = i + ((nEndIndex - i) / 2);
+
+        const sal_uInt16* pPtr = pWhichRanges + nMidPoint * 2;
+        if (*pPtr <= nWhich && nWhich <= *(pPtr+1))
+            return pPtr;
+
+        if (*pPtr < nWhich)
+            i = nMidPoint + 1;
+        else
+            nEndIndex = nMidPoint - 1;
+    }
+
+    return nullptr;
+}
+
 SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                                         bool bSrchInParent,
                                         const SfxPoolItem **ppItem ) const
@@ -386,10 +444,15 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
         const sal_uInt16* pPtr = pCurrentSet->m_pWhichRanges;
         if (pPtr)
         {
+            assert(pCurrentSet->m_nWhichRangeLen % 2 == 1);
+
+            const sal_uInt16* pFnd = findWhich(pPtr, pCurrentSet->m_nWhichRangeLen, nWhich);
+
             while ( *pPtr )
             {
                 if ( *pPtr <= nWhich && nWhich <= *(pPtr+1) )
                 {
+                    assert(pFnd == pPtr);
                     // Within this range
                     ppFnd += nWhich - *pPtr;
                     if ( !*ppFnd )
@@ -397,6 +460,7 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                         eRet = SfxItemState::DEFAULT;
                         if( !bSrchInParent )
                             return eRet; // Not present
+                        pFnd = nullptr;
                         break; // Keep searching in the parents!
                     }
 
@@ -416,6 +480,8 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                 ppFnd += *(pPtr+1) - *pPtr + 1;
                 pPtr += 2;
             }
+
+            assert(!pFnd);
         }
         if (!bSrchInParent)
             break;
@@ -805,6 +871,10 @@ void SfxItemSet::SetRanges(const sal_uInt16 *pNewRanges, sal_uInt16 nCount)
         memcpy( m_pWhichRanges, pNewRanges, sizeof( sal_uInt16 ) * nCount );
     }
     m_nWhichRangeLen = nCount;
+
+#ifdef DBG_UTIL
+    assert(IsSorted(m_pWhichRanges));
+#endif
 }
 
 /**
@@ -1680,6 +1750,10 @@ const SfxPoolItem* SfxAllItemSet::PutImpl( const SfxPoolItem& rItem, sal_uInt16 
             m_nWhichRangeLen = 3;
         else
             m_nWhichRangeLen += 2;
+
+#ifdef DBG_UTIL
+        assert(IsSorted(m_pWhichRanges));
+#endif
 
         // Expand ItemArray
         nPos = nItemCount;

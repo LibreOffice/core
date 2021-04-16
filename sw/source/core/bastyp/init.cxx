@@ -147,9 +147,9 @@ sal_uInt16 const aBreakSetRange[] = {
 // list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
 // included in the paragraph style's itemset.
 sal_uInt16 const aTextFormatCollSetRange[] = {
-    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
+    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
     // FillAttribute support
@@ -168,10 +168,10 @@ sal_uInt16 const aGrfFormatCollSetRange[] = {
 
 // AttrSet range for TextNode
 sal_uInt16 const aTextNodeSetRange[] = {
-    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+    RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
     // FillAttribute support (paragraph FillStyle)
