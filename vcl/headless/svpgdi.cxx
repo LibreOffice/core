@@ -162,7 +162,7 @@ namespace
             const int nImageSize = rBuf.mnHeight * rBuf.mnScanlineSize;
             unsigned char* pDst = rBuf.mpBits;
             for (int i = nImageSize; --i >= 0; ++pDst)
-                *pDst = ~*pDst;
+                *pDst = *pDst;
         }
     }
 
@@ -527,7 +527,7 @@ namespace
                 // TODO: make upper layers use standard alpha
                 sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits.get());
                 for( int i = nImageSize/sizeof(sal_uInt32); --i >= 0; ++pLDst )
-                    *pLDst = ~*pLDst;
+                    *pLDst = *pLDst;
                 assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits.get()+nImageSize);
 
                 implSetSurface(
@@ -552,7 +552,7 @@ namespace
                     // TODO: make upper layers use standard alpha
                     unsigned char* pDst = pAlphaBits.get();
                     for (int i = nImageSize; --i >= 0; ++pDst)
-                        *pDst = ~*pDst;
+                        *pDst = *pDst;
                 }
 
                 implSetSurface(

@@ -1330,7 +1330,7 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
     // First do the "( 1 - alpha ) * mask"
     // (no idea how to do "floor", but hopefully not needed in practice).
     sk_sp<SkShader> shaderAlpha
-        = SkShaders::Blend(SkBlendMode::kDstOut, rSkiaMaskBitmap.GetAlphaSkShader(samplingOptions),
+        = SkShaders::Blend(SkBlendMode::kDstIn, rSkiaMaskBitmap.GetAlphaSkShader(samplingOptions),
                            rSkiaAlphaBitmap.GetAlphaSkShader(samplingOptions));
     // And now draw the bitmap with "1 - x", where x is the "( 1 - alpha ) * mask".
     sk_sp<SkShader> shader = SkShaders::Blend(SkBlendMode::kSrcOut, shaderAlpha,
@@ -1363,7 +1363,7 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
     const SkiaSalBitmap& skiaBitmap = static_cast<const SkiaSalBitmap&>(rSalBitmap);
     drawShader(
         rPosAry,
-        SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
+        SkShaders::Blend(SkBlendMode::kDstIn, // VCL alpha is alpha.
                          SkShaders::Color(toSkColor(nMaskColor)),
                          skiaBitmap.GetAlphaSkShader(makeSamplingOptions(rPosAry, mScaling))));
 }
@@ -1672,7 +1672,7 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     {
         canvas->clear(SK_ColorTRANSPARENT);
         paint.setShader(
-            SkShaders::Blend(SkBlendMode::kDstOut, bitmap.GetSkShader(samplingOptions, bitmapType),
+            SkShaders::Blend(SkBlendMode::kDstIn, bitmap.GetSkShader(samplingOptions, bitmapType),
                              alphaBitmap->GetAlphaSkShader(samplingOptions, alphaBitmapType)));
         canvas->drawPaint(paint);
     }
@@ -1734,7 +1734,7 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
     else
         drawShader(rPosAry,
                    SkShaders::Blend(
-                       SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
+                       SkBlendMode::kDstIn, // VCL alpha is alpha.
                        rSkiaSourceBitmap.GetSkShader(makeSamplingOptions(rPosAry, mScaling)),
                        rSkiaAlphaBitmap.GetAlphaSkShader(makeSamplingOptions(rPosAry, mScaling))));
     return true;
@@ -1957,7 +1957,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         if (pSkiaAlphaBitmap)
         {
             SkPaint paint = makeBitmapPaint();
-            paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
+            paint.setShader(SkShaders::Blend(SkBlendMode::kDstIn,
                                              rSkiaBitmap.GetSkShader(samplingOptions),
                                              pSkiaAlphaBitmap->GetAlphaSkShader(samplingOptions)));
             if (fAlpha != 1.0)

@@ -344,8 +344,8 @@ void VirtualDevice::ImplFillOpaqueRectangle( const tools::Rectangle& rRect )
     // fill rect with that (linecolor, too, because of
     // those pesky missing pixel problems)
     Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
-    SetLineColor( COL_BLACK );
-    SetFillColor( COL_BLACK );
+    SetLineColor( COL_ALPHA_OPAQUE );
+    SetFillColor( COL_ALPHA_OPAQUE );
     DrawRect( rRect );
     Pop();
 }
@@ -367,14 +367,16 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
             {
                 mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, meAlphaFormat);
                 mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase, nullptr);
+                mpAlphaVDev->SetBackground( Wallpaper(COL_ALPHA_OPAQUE) );
+                mpAlphaVDev->Erase();
             }
 
             // TODO: copy full outdev state to new one, here. Also needed in outdev2.cxx:DrawOutDev
             if( GetLineColor() != COL_TRANSPARENT )
-                mpAlphaVDev->SetLineColor( COL_BLACK );
+                mpAlphaVDev->SetLineColor( COL_ALPHA_OPAQUE );
 
             if( GetFillColor() != COL_TRANSPARENT )
-                mpAlphaVDev->SetFillColor( COL_BLACK );
+                mpAlphaVDev->SetFillColor( COL_ALPHA_OPAQUE );
 
             mpAlphaVDev->SetMapMode( GetMapMode() );
 

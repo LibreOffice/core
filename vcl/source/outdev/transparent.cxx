@@ -549,9 +549,8 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
     if( mpAlphaVDev )
     {
         const Color aFillCol( mpAlphaVDev->GetFillColor() );
-        mpAlphaVDev->SetFillColor( Color(sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
-                                         sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
-                                         sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100)) );
+        sal_uInt8 nAlpha = 255 - sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100);
+        mpAlphaVDev->SetFillColor( Color(nAlpha, nAlpha, nAlpha) );
 
         mpAlphaVDev->DrawTransparent( rPolyPoly, nTransparencePercent );
 

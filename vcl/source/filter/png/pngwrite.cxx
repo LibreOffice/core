@@ -501,7 +501,7 @@ sal_uLong PNGWriterImpl::ImplGetFilter(sal_uLong nY, sal_uLong nXStart, sal_uLon
                         *pDest++ = rColor.GetRed();
                         *pDest++ = rColor.GetGreen();
                         *pDest++ = rColor.GetBlue();
-                        *pDest++ = 255 - mpMaskAccess->GetIndexFromData(pScanlineMask, nX);
+                        *pDest++ = mpMaskAccess->GetIndexFromData(pScanlineMask, nX);
                     }
                 }
                 else

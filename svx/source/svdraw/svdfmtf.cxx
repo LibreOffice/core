@@ -1611,7 +1611,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
             // no transparence yet, apply new one
             if(bFixedTransparence)
             {
-                sal_uInt8 aAlpha(basegfx::fround(fTransparence * 255.0));
+                sal_uInt8 aAlpha(basegfx::fround((1.0 - fTransparence) * 255.0));
 
                 aNewMask = AlphaMask(aBitmapEx.GetBitmap().GetSizePixel(), &aAlpha);
             }

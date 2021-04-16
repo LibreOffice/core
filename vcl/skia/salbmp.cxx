@@ -712,9 +712,6 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
 // If mEraseColor is set, this is the color to use when the bitmap is used as alpha bitmap.
 // E.g. COL_BLACK actually means fully opaque and COL_WHITE means fully transparent.
 // This is because the alpha value is set as the color itself, not the alpha of the color.
-// Additionally VCL actually uses transparency and not opacity, so we should use "255 - value",
-// but we account for this by doing SkBlendMode::kDstOut when using alpha images (which
-// basically does another "255 - alpha"), so do not do it here.
 static SkColor fromEraseColorToAlphaImageColor(Color color)
 {
     return SkColorSetARGB(color.GetBlue(), 0, 0, 0);
@@ -1373,7 +1370,7 @@ OString SkiaSalBitmap::GetAlphaImageKey(DirectImage direct) const
     {
         std::stringstream ss;
         ss << std::hex << std::setfill('0') << std::setw(2)
-           << static_cast<int>(255 - SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)));
+           << static_cast<int>(SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)));
         return OString::Concat("E") + ss.str().c_str();
     }
     assert(direct == DirectImage::No || mAlphaImage);

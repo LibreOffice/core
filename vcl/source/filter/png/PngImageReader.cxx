@@ -347,7 +347,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
                         pScanline[iColor++] = pRow[i + 0];
                         pScanline[iColor++] = pRow[i + 1];
                         pScanline[iColor++] = pRow[i + 2];
-                        pScanAlpha[iAlpha++] = 0xFF - pRow[i + 3];
+                        pScanAlpha[iAlpha++] = pRow[i + 3];
                     }
                 }
             }
