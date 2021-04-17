@@ -496,12 +496,12 @@ void ImplListBoxWindow::ApplySettings(vcl::RenderContext& rRenderContext)
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     ApplyControlFont(rRenderContext, rStyleSettings.GetFieldFont());
-    ApplyControlForeground(rRenderContext, rStyleSettings.GetFieldTextColor());
+    ApplyControlForeground(rRenderContext, rStyleSettings.GetListBoxWindowTextColor());
 
     if (IsControlBackground())
         rRenderContext.SetBackground(GetControlBackground());
     else
-        rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
+        rRenderContext.SetBackground(rStyleSettings.GetListBoxWindowBackgroundColor());
 }
 
 void ImplListBoxWindow::ImplCalcMetrics()
@@ -1612,8 +1612,8 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     bool bSelected = mpEntryList->IsEntryPosSelected(nPos);
     if (bSelected)
     {
-        rRenderContext.SetTextColor(!IsEnabled() ? rStyleSettings.GetDisableColor() : rStyleSettings.GetHighlightTextColor());
-        rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
+        rRenderContext.SetTextColor(!IsEnabled() ? rStyleSettings.GetDisableColor() : rStyleSettings.GetListBoxWindowHighlightTextColor());
+        rRenderContext.SetFillColor(rStyleSettings.GetListBoxWindowHighlightColor());
         rRenderContext.SetLineColor();
         rRenderContext.DrawRect(aRect);
     }
