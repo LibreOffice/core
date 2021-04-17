@@ -1415,10 +1415,10 @@ void LwpTableLayout::ConvertDefaultRow(rtl::Reference<XFTable> const & pXFTable,
  * @param   nRow - row id
  * @param   nCol - column id
  */
-void LwpTableLayout::SetCellsMap(sal_uInt16 nRow1, sal_uInt8 nCol1,
-                                 sal_uInt16 nRow2, sal_uInt8 nCol2, XFCell* pXFCell)
+void LwpTableLayout::SetCellsMap(sal_uInt16 nRow, sal_uInt8 nCol, XFCell* pXFCell)
 {
-    m_CellsMap.insert({{nRow1, nCol1}, {nRow2, nCol2}}, pXFCell);
+    // combine the 16bit nRow and 8bit nCol into a single 32bit number
+    m_CellsMap.insert(std::make_pair((nRow << 8) | nCol, pXFCell));
 }
 
 /**
@@ -1429,12 +1429,13 @@ void LwpTableLayout::SetCellsMap(sal_uInt16 nRow1, sal_uInt8 nCol1,
  */
 XFCell* LwpTableLayout::GetCellsMap(sal_uInt16 nRow, sal_uInt8 nCol)
 {
-    auto results = m_CellsMap.search({{nRow, nCol}, {nRow, nCol}}, rt_type::search_type::overlap);
-    if (results.begin() == results.end())
-       return nullptr;
-    // return the last thing inserted for this position
-    return std::prev(results.end())->GetCell();
+    RowCol pos = (nRow << 8) | nCol;
+    auto iter =  m_CellsMap.find(pos);
+    if (iter == m_CellsMap.end())
+        return nullptr;
+    return iter->second;
 }
+
 /**
  * @descr   Get row layout by row id
  * @param   nRow - row id
