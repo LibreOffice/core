@@ -63,6 +63,7 @@ void Svx3DPreviewControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 Svx3DPreviewControl::~Svx3DPreviewControl()
 {
+    mxFmPage.clear();
     mp3DView.reset();
     mpModel.reset();
 }
