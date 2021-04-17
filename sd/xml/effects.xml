@@ -1406,7 +1406,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-crawl-out" pres:preset-sub-type="from-bottom">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-crawl-out" pres:preset-sub-type="to-bottom">
         <anim:animate smil:dur="5" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="5" smil:attributeName="y" smil:values="y;1+height/2" smil:keyTimes="0;1"/>
         <anim:set smil:begin="4.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -1415,7 +1415,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-crawl-out" pres:preset-sub-type="from-left">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-crawl-out" pres:preset-sub-type="to-left">
         <anim:animate smil:dur="5" smil:attributeName="x" smil:values="x;0-width/2" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="5" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
         <anim:set smil:begin="4.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -1424,7 +1424,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-crawl-out" pres:preset-sub-type="from-right">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-crawl-out" pres:preset-sub-type="to-right">
         <anim:animate smil:dur="5" smil:attributeName="x" smil:values="x;1+width/2" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="5" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
         <anim:set smil:begin="4.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -1433,7 +1433,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-crawl-out" pres:preset-sub-type="from-top">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-crawl-out" pres:preset-sub-type="to-top">
         <anim:animate smil:dur="5" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="5" smil:attributeName="y" smil:values="y;0-height/2" smil:keyTimes="0;1"/>
         <anim:set smil:begin="4.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -1481,7 +1481,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="from-bottom">
+    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="to-bottom">
         <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;1+height/2" smil:keyTimes="0;1"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -1490,7 +1490,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="from-left">
+    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="to-left">
         <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;0-width/2" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -1499,7 +1499,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="from-right">
+    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="to-right">
         <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;1+width/2" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -1508,7 +1508,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="from-top">
+    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="to-top">
         <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;0-height/2" smil:keyTimes="0;1"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -1517,7 +1517,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="from-bottom-left">
+    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="to-bottom-left">
         <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;0-width/2" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;1+height/2" smil:keyTimes="0;1"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -1526,7 +1526,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="from-bottom-right">
+    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="to-bottom-right">
         <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;1+width/2" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;1+height/2" smil:keyTimes="0;1"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -1535,7 +1535,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="from-top-left">
+    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="to-top-left">
         <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;0-width/2" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;0-height/2" smil:keyTimes="0;1"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -1544,7 +1544,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="from-top-right">
+    <anim:par pres:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fly-out" pres:preset-sub-type="to-top-right">
         <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;1+width/2" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;0-height/2" smil:keyTimes="0;1"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
