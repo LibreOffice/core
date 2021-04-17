@@ -24,6 +24,8 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -422,9 +424,10 @@ public:
 };
 }
 
-typedef cppu::WeakImplHelper<
-    css::accessibility::XAccessible, css::accessibility::XAccessibleComponent,
-    css::accessibility::XAccessibleContext, css::accessibility::XAccessibleEventBroadcaster>
+typedef cppu::WeakImplHelper<css::lang::XServiceInfo, css::accessibility::XAccessible,
+                             css::accessibility::XAccessibleComponent,
+                             css::accessibility::XAccessibleContext,
+                             css::accessibility::XAccessibleEventBroadcaster>
     WeldEditAccessibleBaseClass;
 
 class WeldEditAccessible : public WeldEditAccessibleBaseClass
@@ -759,6 +762,19 @@ public:
         if (!m_xTextHelper) // not disposing (about to destroy view shell)
             return;
         m_xTextHelper->RemoveEventListener(rListener);
+    }
+
+    virtual OUString SAL_CALL getImplementationName() override { return "WeldEditAccessible"; }
+
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
+    {
+        return cppu::supportsService(this, rServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    {
+        return { "css::accessibility::Accessible", "css::accessibility::AccessibleComponent",
+                 "css::accessibility::AccessibleContext" };
     }
 };
 
