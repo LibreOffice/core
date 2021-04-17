@@ -63,7 +63,6 @@
 
 #include <xfilter/xfcontent.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
-#include <svl/SfxBroadcaster.hxx>
 
 class XFTable;
 class XFRow;
@@ -72,7 +71,6 @@ class XFRow;
  * @descr   Table cell object.
  */
 class XFCell : public XFContentContainer
-             , public SfxBroadcaster
 {
 public:
     XFCell();

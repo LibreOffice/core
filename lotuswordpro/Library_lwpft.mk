@@ -27,7 +27,6 @@ $(eval $(call gb_Library_use_libraries,lwpft,\
 	i18nlangtag \
     sfx \
     sot \
-    svl \
     svt \
     svxcore \
     tl \
@@ -38,7 +37,6 @@ $(eval $(call gb_Library_use_libraries,lwpft,\
 
 $(eval $(call gb_Library_use_externals,lwpft,\
 	boost_headers \
-	mdds_headers \
     icui18n \
     icuuc \
     icu_headers \
