@@ -22,6 +22,30 @@
       "revId": "49e2bd6103669ca94d4e308fc08beed57f85c7e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1784a31b_664b1395",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport12.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-17T11:49:00Z",
+      "side": 1,
+      "message": "Mike: Indeed, nice catch! It seems, there is also an empty element in the export:\n\n      \u003cw:pPr\u003e\n        \u003cw:pStyle w:val\u003d\"Normal\"/\u003e\n        \u003cw:pBdr/\u003e   \u003c------------------------------------ Why?\n        \u003cw:spacing w:before\u003d\"0\" w:after\u003d\"160\"/\u003e\n        \u003cw:rPr/\u003e\n        \u003cw:framePr w:w\u003d\"4741\" w:h\u003d\"1825\" w:x\u003d\"3421\" w:y\u003d\"384\" w:hSpace\u003d\"141\" w:vSpace\u003d\"0\" w:wrap\u003d\"around\" w:vAnchor\u003d\"text\" w:hAnchor\u003d\"page\" w:hRule\u003d\"exact\"/\u003e\n        \u003cw:pBdr\u003e\n          \u003cw:top w:val\u003d\"single\" w:sz\u003d\"24\" w:space\u003d\"1\" w:color\u003d\"000000\"/\u003e\n          \u003cw:left w:val\u003d\"single\" w:sz\u003d\"24\" w:space\u003d\"1\" w:color\u003d\"000000\"/\u003e\n          \u003cw:bottom w:val\u003d\"single\" w:sz\u003d\"24\" w:space\u003d\"1\" w:color\u003d\"000000\"/\u003e\n          \u003cw:right w:val\u003d\"single\" w:sz\u003d\"24\" w:space\u003d\"1\" w:color\u003d\"000000\"/\u003e\n        \u003c/w:pBdr\u003e\n      \u003c/w:pPr\u003e\n\nTibor: do you remember, did you try to remove that?",
+      "parentUuid": "9fceb1e0_bee318e1",
+      "range": {
+        "startLine": 1090,
+        "startChar": 66,
+        "endLine": 1090,
+        "endChar": 69
+      },
+      "revId": "49e2bd6103669ca94d4e308fc08beed57f85c7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
