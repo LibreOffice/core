@@ -44,7 +44,6 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="valign">start</property>
-    <property name="hexpand">True</property>
     <property name="border_width">6</property>
     <property name="row_spacing">12</property>
     <property name="column_spacing">24</property>
@@ -54,10 +53,10 @@
         <property name="can_focus">False</property>
         <property name="halign">center</property>
         <property name="valign">start</property>
+        <property name="margin_start">24</property>
         <property name="hscrollbar_policy">never</property>
         <property name="vscrollbar_policy">never</property>
         <property name="shadow_type">in</property>
-        <property name="margin-start">24</property>
         <child>
           <object class="GtkViewport">
             <property name="visible">True</property>
@@ -90,7 +89,6 @@
         <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
-        <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="row_spacing">12</property>
         <child>
@@ -104,10 +102,10 @@
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">6</property>
+                <property name="margin_start">12</property>
+                <property name="margin_top">6</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="labelFT_LEFTINDENT">
                     <property name="visible">True</property>
@@ -170,7 +168,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
-                    <property name="truncate-multiline">True</property>
+                    <property name="truncate_multiline">True</property>
                     <property name="adjustment">adjustmentspinED_INDENT</property>
                   </object>
                   <packing>
@@ -183,7 +181,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
-                    <property name="truncate-multiline">True</property>
+                    <property name="truncate_multiline">True</property>
                     <property name="adjustment">adjustmentspinED_INDENT1</property>
                   </object>
                   <packing>
@@ -196,7 +194,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
-                    <property name="truncate-multiline">True</property>
+                    <property name="truncate_multiline">True</property>
                     <property name="adjustment">adjustmentspinED_INDENT2</property>
                   </object>
                   <packing>
@@ -242,17 +240,17 @@
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_start">12</property>
+                <property name="margin_top">6</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">6</property>
+                <property name="spacing">3</property>
                 <child>
                   <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="row_spacing">3</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="labelFT_TOPDIST">
                         <property name="visible">True</property>
@@ -286,7 +284,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
-                        <property name="truncate-multiline">True</property>
+                        <property name="truncate_multiline">True</property>
                         <property name="adjustment">adjustmentED_DIST</property>
                       </object>
                       <packing>
@@ -299,7 +297,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
-                        <property name="truncate-multiline">True</property>
+                        <property name="truncate_multiline">True</property>
                         <property name="adjustment">adjustmentED_DIST1</property>
                       </object>
                       <packing>
@@ -357,21 +355,21 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_start">12</property>
+                <property name="margin_top">6</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">6</property>
+                <property name="spacing">3</property>
                 <child>
                   <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="column_spacing">12</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkBox" id="box3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">12</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkComboBoxText" id="comboLB_LINEDIST">
                             <property name="visible">True</property>
@@ -420,7 +418,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
-                            <property name="truncate-multiline">True</property>
+                            <property name="truncate_multiline">True</property>
                             <property name="adjustment">adjustmentLINEDISTPERCENT</property>
                           </object>
                           <packing>
@@ -434,8 +432,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate_multiline">True</property>
                             <property name="adjustment">adjustmentED_LINEDISTMETRIC</property>
-                            <property name="truncate-multiline">True</property>
                             <property name="digits">1</property>
                           </object>
                           <packing>
@@ -463,6 +461,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes" context="paraindentspacing|checkCB_REGISTER|tooltip_text" comments="xdds">Applies page line-spacing (register-true) if set for the Page Style.</property>
+                    <property name="halign">start</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
@@ -502,25 +501,25 @@
       </packing>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
+  <object class="GtkSizeGroup" id="sizegroup_label">
     <widgets>
-      <widget name="box3"/>
       <widget name="labelFT_LEFTINDENT"/>
       <widget name="labelFT_RIGHTINDENT"/>
       <widget name="labelFT_FLINEINDENT"/>
-      <widget name="checkCB_AUTO"/>
       <widget name="labelFT_TOPDIST"/>
       <widget name="labelFT_BOTTOMDIST"/>
+      <widget name="box3"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup2">
+  <object class="GtkSizeGroup" id="sizegroup_widget">
     <widgets>
-      <widget name="box1"/>
       <widget name="spinED_LEFTINDENT"/>
       <widget name="spinED_RIGHTINDENT"/>
       <widget name="spinED_FLINEINDENT"/>
       <widget name="spinED_TOPDIST"/>
       <widget name="spinED_BOTTOMDIST"/>
+      <widget name="spinED_LINEDISTPERCENT"/>
+      <widget name="spinED_LINEDISTMETRIC"/>
     </widgets>
   </object>
 </interface>
