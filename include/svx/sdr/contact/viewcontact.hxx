@@ -46,11 +46,6 @@ private:
     // Registering and de-registering is done in the VOC constructors/destructors.
     std::vector<ViewObjectContact*> maViewObjectContactVector;
 
-    // Primitive2DContainer of the ViewContact. This contains all necessary information
-    // for the graphical visualisation and needs to be supported by all VCs which
-    // can be visualized.
-    drawinglayer::primitive2d::Primitive2DContainer mxViewIndependentPrimitive2DSequence;
-
     // A new ViewObjectContact was created and shall be remembered.
     void AddViewObjectContact(ViewObjectContact& rVOContact);
 
@@ -123,8 +118,7 @@ public:
 
     // access to the local primitive. This will ensure that the primitive is
     // current in comparing the local one with a fresh created incarnation
-    drawinglayer::primitive2d::Primitive2DContainer const&
-    getViewIndependentPrimitive2DContainer() const;
+    drawinglayer::primitive2d::Primitive2DContainer getViewIndependentPrimitive2DContainer() const;
 
     // add Gluepoints (if available)
     virtual drawinglayer::primitive2d::Primitive2DContainer
