@@ -39,7 +39,6 @@ ViewObjectContact& ViewContact::CreateObjectSpecificViewObjectContact(ObjectCont
 ViewContact::ViewContact()
     : maViewObjectContactVector()
     , mxViewIndependentPrimitive2DSequence()
-    , mbNeedToCreatePrimitives(true)
 {
 }
 
@@ -62,7 +61,6 @@ void ViewContact::deleteAllVOCs()
 
     // assert when there were new entries added during deletion
     DBG_ASSERT(maViewObjectContactVector.empty(), "Corrupted ViewObjectContactList in VC (!)");
-    mbNeedToCreatePrimitives = true;
 }
 
 // get an Object-specific ViewObjectContact for a specific
@@ -98,7 +96,6 @@ ViewObjectContact& ViewContact::GetViewObjectContact(ObjectContact& rObjectConta
 void ViewContact::AddViewObjectContact(ViewObjectContact& rVOContact)
 {
     maViewObjectContactVector.push_back(&rVOContact);
-    mbNeedToCreatePrimitives = true;
 }
 
 // A ViewObjectContact was deleted and shall be forgotten.
@@ -110,7 +107,6 @@ void ViewContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
     if (aFindResult != maViewObjectContactVector.end())
     {
         maViewObjectContactVector.erase(aFindResult);
-        mbNeedToCreatePrimitives = true;
     }
 }
 
@@ -186,7 +182,6 @@ void ViewContact::ActionChildInserted(ViewContact& rChild)
         // rectangle will be invalidated at the associated OutputDevice.
         pCandidate->ActionChildInserted(rChild);
     }
-    mbNeedToCreatePrimitives = true;
 }
 
 // React on changes of the object of this ViewContact
@@ -204,7 +199,6 @@ void ViewContact::ActionChanged()
 
         pCandidate->ActionChanged();
     }
-    mbNeedToCreatePrimitives = true;
 }
 
 // access to SdrObject and/or SdrPage. May return 0L like the default
@@ -235,20 +229,22 @@ ViewContact::createViewIndependentPrimitive2DSequence() const
 drawinglayer::primitive2d::Primitive2DContainer const&
 ViewContact::getViewIndependentPrimitive2DContainer() const
 {
-    if (mbNeedToCreatePrimitives)
+    // local up-to-date checks. Create new list and compare.
+    drawinglayer::primitive2d::Primitive2DContainer xNew(
+        createViewIndependentPrimitive2DSequence());
+
+    if (!xNew.empty())
     {
-        drawinglayer::primitive2d::Primitive2DContainer xNew(
-            createViewIndependentPrimitive2DSequence());
-
-        if (!xNew.empty())
-        {
-            // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
-            xNew = embedToObjectSpecificInformation(std::move(xNew));
-        }
-
-        mxViewIndependentPrimitive2DSequence = std::move(xNew);
-        mbNeedToCreatePrimitives = false;
+        // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
+        xNew = embedToObjectSpecificInformation(std::move(xNew));
     }
+
+    if (mxViewIndependentPrimitive2DSequence != xNew)
+    {
+        // has changed, copy content
+        const_cast<ViewContact*>(this)->mxViewIndependentPrimitive2DSequence = std::move(xNew);
+    }
+
     // return current Primitive2DContainer
     return mxViewIndependentPrimitive2DSequence;
 }

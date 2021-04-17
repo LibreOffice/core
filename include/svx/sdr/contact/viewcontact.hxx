@@ -49,8 +49,7 @@ private:
     // Primitive2DContainer of the ViewContact. This contains all necessary information
     // for the graphical visualisation and needs to be supported by all VCs which
     // can be visualized.
-    mutable drawinglayer::primitive2d::Primitive2DContainer mxViewIndependentPrimitive2DSequence;
-    mutable bool mbNeedToCreatePrimitives;
+    drawinglayer::primitive2d::Primitive2DContainer mxViewIndependentPrimitive2DSequence;
 
     // A new ViewObjectContact was created and shall be remembered.
     void AddViewObjectContact(ViewObjectContact& rVOContact);
