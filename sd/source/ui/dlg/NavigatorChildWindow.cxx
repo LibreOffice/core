@@ -43,11 +43,24 @@ static void RequestNavigatorUpdate (SfxBindings const * pBindings)
 SdNavigatorFloat::SdNavigatorFloat(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* _pParent)
     : SfxNavigator(_pBindings, _pMgr, _pParent)
     , m_xNavWin(std::make_unique<SdNavigatorWin>(m_xContainer.get(), _pBindings, this))
+    , m_bSetInitialFocusOnActivate(true)
 {
     m_xNavWin->SetUpdateRequestFunctor(
         [_pBindings] () { return RequestNavigatorUpdate(_pBindings); });
 
     SetMinOutputSizePixel(GetOptimalSize());
+}
+
+void SdNavigatorFloat::Activate()
+{
+    SfxNavigator::Activate();
+    // tdf#141708 defer grabbing focus to preferred widget until the float is
+    // first activated
+    if (m_bSetInitialFocusOnActivate)
+    {
+        m_xNavWin->FirstFocus();
+        m_bSetInitialFocusOnActivate = false;
+    }
 }
 
 void SdNavigatorFloat::InitTreeLB(const SdDrawDocument* pDoc)
