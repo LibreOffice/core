@@ -285,26 +285,23 @@ static HANDLE WINAPI OpenLogicalDrivesEnum()
 
 static bool WINAPI EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
 {
-    bool        fSuccess = false;
     LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(hEnum);
-
-    if ( pEnum )
+    if ( !pEnum )
     {
-        int nLen = wcslen( pEnum->lpCurrent );
-
-        if ( nLen )
-        {
-            CopyMemory( lpBuffer, pEnum->lpCurrent, (nLen + 1) * sizeof(WCHAR) );
-            pEnum->lpCurrent += nLen + 1;
-            fSuccess = true;
-        }
-        else
-            SetLastError( ERROR_NO_MORE_FILES );
-    }
-    else
         SetLastError( ERROR_INVALID_HANDLE );
+        return false;
+    }
 
-    return fSuccess;
+    int nLen = wcslen( pEnum->lpCurrent );
+    if ( !nLen )
+    {
+        SetLastError( ERROR_NO_MORE_FILES );
+        return false;
+    }
+
+    CopyMemory( lpBuffer, pEnum->lpCurrent, (nLen + 1) * sizeof(WCHAR) );
+    pEnum->lpCurrent += nLen + 1;
+    return true;
 }
 
 static bool WINAPI CloseLogicalDrivesEnum(HANDLE hEnum)
@@ -335,82 +332,78 @@ typedef struct tagDIRECTORY
 
 static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
 {
-    LPDIRECTORY pDirectory = nullptr;
+    if ( !pPath )
+        return nullptr;
 
-    if ( pPath )
+    sal_uInt32 nLen = rtl_uString_getLength( pPath );
+    if ( !nLen )
+        return nullptr;
+
+    const WCHAR* pSuffix = nullptr;
+    sal_uInt32 nSuffLen = 0;
+    if ( pPath->buffer[nLen - 1] != L'\\' )
     {
-        sal_uInt32 nLen = rtl_uString_getLength( pPath );
-        if ( nLen )
+        pSuffix = L"\\*.*";
+        nSuffLen = 4;
+    }
+    else
+    {
+        pSuffix = L"*.*";
+        nSuffLen = 3;
+    }
+
+    WCHAR* szFileMask = static_cast< WCHAR* >( malloc( sizeof( WCHAR ) * ( nLen + nSuffLen + 1 ) ) );
+    assert(szFileMask); // Don't handle OOM conditions
+    wcscpy( szFileMask, o3tl::toW(rtl_uString_getStr( pPath )) );
+    wcscat( szFileMask, pSuffix );
+
+    LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(HeapAlloc(GetProcessHeap(), 0, sizeof(DIRECTORY)));
+    assert(pDirectory); // Don't handle OOM conditions
+    pDirectory->hFind = FindFirstFileW(szFileMask, &pDirectory->aFirstData);
+
+    if (!IsValidHandle(pDirectory->hFind))
+    {
+        if ( GetLastError() != ERROR_NO_MORE_FILES )
         {
-            const WCHAR* pSuffix = nullptr;
-            sal_uInt32 nSuffLen = 0;
-
-            if ( pPath->buffer[nLen - 1] != L'\\' )
-            {
-                pSuffix = L"\\*.*";
-                nSuffLen = 4;
-            }
-            else
-            {
-                pSuffix = L"*.*";
-                nSuffLen = 3;
-            }
-
-            WCHAR* szFileMask = static_cast< WCHAR* >( malloc( sizeof( WCHAR ) * ( nLen + nSuffLen + 1 ) ) );
-            assert(szFileMask); // Don't handle OOM conditions
-            wcscpy( szFileMask, o3tl::toW(rtl_uString_getStr( pPath )) );
-            wcscat( szFileMask, pSuffix );
-
-            pDirectory = static_cast<LPDIRECTORY>(HeapAlloc(GetProcessHeap(), 0, sizeof(DIRECTORY)));
-            assert(pDirectory); // Don't handle OOM conditions
-            pDirectory->hFind = FindFirstFileW(szFileMask, &pDirectory->aFirstData);
-
-            if (!IsValidHandle(pDirectory->hFind))
-            {
-                if ( GetLastError() != ERROR_NO_MORE_FILES )
-                {
-                    HeapFree(GetProcessHeap(), 0, pDirectory);
-                    pDirectory = nullptr;
-                }
-            }
-            free(szFileMask);
+            HeapFree(GetProcessHeap(), 0, pDirectory);
+            pDirectory = nullptr;
         }
     }
+    free(szFileMask);
 
     return static_cast<HANDLE>(pDirectory);
 }
 
 static bool WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData)
 {
-    bool        fSuccess = false;
     LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(hDirectory);
-
-    if ( pDirectory )
+    if ( !pDirectory )
     {
-        bool    fValid;
-
-        do
-        {
-            if ( pDirectory->aFirstData.cFileName[0] )
-            {
-                *pFindData = pDirectory->aFirstData;
-                fSuccess = true;
-                pDirectory->aFirstData.cFileName[0] = 0;
-            }
-            else if ( IsValidHandle( pDirectory->hFind ) )
-                fSuccess = FindNextFileW( pDirectory->hFind, pFindData );
-            else
-            {
-                fSuccess = false;
-                SetLastError( ERROR_NO_MORE_FILES );
-            }
-
-            fValid = fSuccess && wcscmp( L".", pFindData->cFileName ) != 0 && wcscmp( L"..", pFindData->cFileName ) != 0;
-
-        } while( fSuccess && !fValid );
-    }
-    else
         SetLastError( ERROR_INVALID_HANDLE );
+        return false;
+    }
+
+    bool fSuccess = false;
+    bool fValid;
+    do
+    {
+        if ( pDirectory->aFirstData.cFileName[0] )
+        {
+            *pFindData = pDirectory->aFirstData;
+            fSuccess = true;
+            pDirectory->aFirstData.cFileName[0] = 0;
+        }
+        else if ( IsValidHandle( pDirectory->hFind ) )
+            fSuccess = FindNextFileW( pDirectory->hFind, pFindData );
+        else
+        {
+            fSuccess = false;
+            SetLastError( ERROR_NO_MORE_FILES );
+        }
+
+        fValid = fSuccess && wcscmp( L".", pFindData->cFileName ) != 0 && wcscmp( L"..", pFindData->cFileName ) != 0;
+
+    } while( fSuccess && !fValid );
 
     return fSuccess;
 }
@@ -436,53 +429,51 @@ static bool WINAPI CloseDirectory(HANDLE hDirectory)
 static oslFileError osl_openLocalRoot(
     rtl_uString *strDirectoryPath, oslDirectory *pDirectory)
 {
-    rtl_uString     *strSysPath = nullptr;
-    oslFileError    error;
-
     if ( !pDirectory )
         return osl_File_E_INVAL;
 
     *pDirectory = nullptr;
 
-    error = osl_getSystemPathFromFileURL_( strDirectoryPath, &strSysPath, false );
-    if ( osl_File_E_None == error )
+    rtl_uString     *strSysPath = nullptr;
+    oslFileError     error = osl_getSystemPathFromFileURL_( strDirectoryPath, &strSysPath, false );
+    if ( osl_File_E_None != error )
+        return error;
+
+    Directory_Impl* pDirImpl = new (std::nothrow) Directory_Impl;
+    assert(pDirImpl); // Don't handle OOM conditions
+    pDirImpl->m_sDirectoryPath = OUString(strSysPath, SAL_NO_ACQUIRE);
+
+    /* Append backslash if necessary */
+
+    /* @@@ToDo
+       use function ensure backslash
+    */
+    sal_uInt32 nLen = pDirImpl->m_sDirectoryPath.getLength();
+    if ( nLen && pDirImpl->m_sDirectoryPath[nLen - 1] != L'\\' )
     {
-        Directory_Impl* pDirImpl = new (std::nothrow) Directory_Impl;
-        assert(pDirImpl); // Don't handle OOM conditions
-        pDirImpl->m_sDirectoryPath = OUString(strSysPath, SAL_NO_ACQUIRE);
+        pDirImpl->m_sDirectoryPath += "\\";
+    }
 
-        /* Append backslash if necessary */
+    pDirImpl->uType = DIRECTORYTYPE_LOCALROOT;
+    pDirImpl->hEnumDrives = OpenLogicalDrivesEnum();
 
-        /* @@@ToDo
-           use function ensure backslash
-        */
-        sal_uInt32 nLen = pDirImpl->m_sDirectoryPath.getLength();
-        if ( nLen && pDirImpl->m_sDirectoryPath[nLen - 1] != L'\\' )
+    /* @@@ToDo
+       Use IsValidHandle(...)
+    */
+    if ( pDirImpl->hEnumDrives != INVALID_HANDLE_VALUE )
+    {
+        *pDirectory = static_cast<oslDirectory>(pDirImpl);
+        error = osl_File_E_None;
+    }
+    else
+    {
+        if ( pDirImpl )
         {
-            pDirImpl->m_sDirectoryPath += "\\";
+            delete pDirImpl;
+            pDirImpl = nullptr;
         }
 
-        pDirImpl->uType = DIRECTORYTYPE_LOCALROOT;
-        pDirImpl->hEnumDrives = OpenLogicalDrivesEnum();
-
-        /* @@@ToDo
-           Use IsValidHandle(...)
-        */
-        if ( pDirImpl->hEnumDrives != INVALID_HANDLE_VALUE )
-        {
-            *pDirectory = static_cast<oslDirectory>(pDirImpl);
-            error = osl_File_E_None;
-        }
-        else
-        {
-            if ( pDirImpl )
-            {
-                delete pDirImpl;
-                pDirImpl = nullptr;
-            }
-
-            error = oslTranslateFileError( GetLastError() );
-        }
+        error = oslTranslateFileError( GetLastError() );
     }
     return error;
 }
@@ -660,33 +651,32 @@ oslFileError osl_createDirectoryWithFlags(rtl_uString * strPath, sal_uInt32)
     rtl_uString *strSysPath = nullptr;
     oslFileError    error = osl_getSystemPathFromFileURL_( strPath, &strSysPath, false );
 
-    if ( osl_File_E_None == error )
+    if ( osl_File_E_None != error )
+        return error;
+
+    bool bCreated = CreateDirectoryW( o3tl::toW(rtl_uString_getStr( strSysPath )), nullptr );
+    if ( !bCreated )
     {
-        bool bCreated = CreateDirectoryW( o3tl::toW(rtl_uString_getStr( strSysPath )), nullptr );
+        /*@@@ToDo
+          The following case is a hack because the ucb or the webtop had some
+          problems with the error code that CreateDirectory returns in
+          case the path is only a logical drive, should be removed!
+        */
 
-        if ( !bCreated )
-        {
-            /*@@@ToDo
-              The following case is a hack because the ucb or the webtop had some
-              problems with the error code that CreateDirectory returns in
-              case the path is only a logical drive, should be removed!
-            */
+        const sal_Unicode   *pBuffer = rtl_uString_getStr( strSysPath );
+        sal_Int32           nLen = rtl_uString_getLength( strSysPath );
 
-            const sal_Unicode   *pBuffer = rtl_uString_getStr( strSysPath );
-            sal_Int32           nLen = rtl_uString_getLength( strSysPath );
+        if (
+            ( ( pBuffer[0] >= 'A' && pBuffer[0] <= 'Z' ) ||
+              ( pBuffer[0] >= 'a' && pBuffer[0] <= 'z' ) ) &&
+            pBuffer[1] == ':' && ( nLen ==2 || ( nLen == 3 && pBuffer[2] == '\\' ) )
+            )
+            SetLastError( ERROR_ALREADY_EXISTS );
 
-            if (
-                ( ( pBuffer[0] >= 'A' && pBuffer[0] <= 'Z' ) ||
-                  ( pBuffer[0] >= 'a' && pBuffer[0] <= 'z' ) ) &&
-                pBuffer[1] == ':' && ( nLen ==2 || ( nLen == 3 && pBuffer[2] == '\\' ) )
-                )
-                SetLastError( ERROR_ALREADY_EXISTS );
-
-            error = oslTranslateFileError( GetLastError() );
-        }
-
-        rtl_uString_release( strSysPath );
+        error = oslTranslateFileError( GetLastError() );
     }
+
+    rtl_uString_release( strSysPath );
     return error;
 }
 
@@ -834,23 +824,20 @@ static oslFileError osl_getNextFileItem(
         return osl_File_E_NOMEM;
 
     fFound = EnumDirectory( pDirImpl->hDirectory, &pItemImpl->FindData );
-
-    if ( fFound )
-    {
-        pItemImpl->uType = DIRECTORYITEM_FILE;
-        pItemImpl->nRefCount = 1;
-
-        pItemImpl->m_sFullPath = pDirImpl->m_sDirectoryPath + o3tl::toU(pItemImpl->FindData.cFileName);
-
-        pItemImpl->bFullPathNormalized = true;
-        *pItem = static_cast<oslDirectoryItem>(pItemImpl);
-        return osl_File_E_None;
-    }
-    else
+    if ( !fFound )
     {
         delete pItemImpl;
         return oslTranslateFileError( GetLastError() );
     }
+
+    pItemImpl->uType = DIRECTORYITEM_FILE;
+    pItemImpl->nRefCount = 1;
+
+    pItemImpl->m_sFullPath = pDirImpl->m_sDirectoryPath + o3tl::toU(pItemImpl->FindData.cFileName);
+
+    pItemImpl->bFullPathNormalized = true;
+    *pItem = static_cast<oslDirectoryItem>(pItemImpl);
+    return osl_File_E_None;
 }
 
 oslFileError SAL_CALL osl_getNextDirectoryItem(
@@ -1146,28 +1133,26 @@ static bool is_volume_mount_point(const OUString& path)
     OUString p(path);
     osl::systemPathRemoveSeparator(p);
 
+    if (is_floppy_drive(p))
+        return false;
+
+    DWORD fattr = GetFileAttributesW(o3tl::toW(p.getStr()));
+    if ((INVALID_FILE_ATTRIBUTES == fattr) ||
+        !(FILE_ATTRIBUTE_REPARSE_POINT & fattr))
+        return false;
+
     bool  is_volume_root = false;
+    WIN32_FIND_DATAW find_data;
+    HANDLE h_find = FindFirstFileW(o3tl::toW(p.getStr()), &find_data);
 
-    if (!is_floppy_drive(p))
+    if (IsValidHandle(h_find) &&
+        (FILE_ATTRIBUTE_REPARSE_POINT & find_data.dwFileAttributes) &&
+        (IO_REPARSE_TAG_MOUNT_POINT == find_data.dwReserved0))
     {
-        DWORD fattr = GetFileAttributesW(o3tl::toW(p.getStr()));
-
-        if ((INVALID_FILE_ATTRIBUTES != fattr) &&
-            (FILE_ATTRIBUTE_REPARSE_POINT & fattr))
-        {
-            WIN32_FIND_DATAW find_data;
-            HANDLE h_find = FindFirstFileW(o3tl::toW(p.getStr()), &find_data);
-
-            if (IsValidHandle(h_find) &&
-                (FILE_ATTRIBUTE_REPARSE_POINT & find_data.dwFileAttributes) &&
-                (IO_REPARSE_TAG_MOUNT_POINT == find_data.dwReserved0))
-            {
-                is_volume_root = true;
-            }
-            if (IsValidHandle(h_find))
-                FindClose(h_find);
-        }
+        is_volume_root = true;
     }
+    if (IsValidHandle(h_find))
+        FindClose(h_find);
     return is_volume_root;
 }
 
