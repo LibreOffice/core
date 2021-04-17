@@ -262,6 +262,7 @@ void SwStyleNameMapper::FillProgName(
         const OUString& rName, OUString& rFillName,
         SwGetPoolIdFromName const eFlags)
 {
+    static const OUString sStandardName = SwResId(STR_POOLCHR_STANDARD);
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
     if ( nId == USHRT_MAX )
     {
