@@ -83,10 +83,13 @@ class SdNavigatorFloat : public SfxNavigator
 {
 private:
     std::unique_ptr<SdNavigatorWin> m_xNavWin;
+    bool m_bSetInitialFocusOnActivate;
+
 public:
     SdNavigatorFloat(SfxBindings* _pBindings, SfxChildWindow* pMgr, vcl::Window* pParent);
     void InitTreeLB(const SdDrawDocument* pDoc);
     void FreshTree(const SdDrawDocument* pDoc);
+    virtual void Activate() override;
     virtual void dispose() override;
     virtual ~SdNavigatorFloat() override;
 };
@@ -111,6 +114,7 @@ public:
 
     void                        InitTreeLB( const SdDrawDocument* pDoc );
     void                        RefreshDocumentLB( const OUString* pDocName = nullptr );
+    void                        FirstFocus();
 
     bool                        InsertFile(const OUString& rFileName);
 

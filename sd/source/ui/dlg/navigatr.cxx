@@ -77,9 +77,6 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
     mxToolbox->set_item_menu("shapes", mxShapeMenu.get());
     mxShapeMenu->connect_activate(LINK(this, SdNavigatorWin, ShapeFilterCallback));
 
-    // set focus to listbox, otherwise it is in the toolbox which is only useful
-    // for keyboard navigation
-    mxTlbObjects->grab_focus();
     mxTlbObjects->SetSdNavigator(this);
 
     // DragTypeListBox
@@ -91,6 +88,13 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
     mxToolbox->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
     mxTlbObjects->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
     mxLbDocs->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
+}
+
+void SdNavigatorWin::FirstFocus()
+{
+    // set focus to listbox, otherwise it is in the toolbox which is only useful
+    // for keyboard navigation
+    mxTlbObjects->grab_focus();
 }
 
 weld::Window* SdNavigatorWin::GetFrameWeld() const
