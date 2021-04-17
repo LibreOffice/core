@@ -25,7 +25,9 @@
 #include <wrtsh.hxx>
 #include <unoprnms.hxx>
 #include <editeng/unoprnms.hxx>
+#include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -502,15 +504,18 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     svx::sidebar::TreeNode aCharNode;
     svx::sidebar::TreeNode aParaNode;
     svx::sidebar::TreeNode aParaDFNode;
+    svx::sidebar::TreeNode aBookmarksNode;
 
     aCharNode.sNodeName = SwResId(STR_CHARACTERSTYLEFAMILY);
     aParaNode.sNodeName = SwResId(STR_PARAGRAPHSTYLEFAMILY);
     aCharDFNode.sNodeName = SwResId(RID_CHAR_DIRECTFORMAT);
     aParaDFNode.sNodeName = SwResId(RID_PARA_DIRECTFORMAT);
+    aBookmarksNode.sNodeName = SwResId(STR_CONTENT_TYPE_BOOKMARK);
     aCharDFNode.NodeType = svx::sidebar::TreeNode::Category;
     aCharNode.NodeType = svx::sidebar::TreeNode::Category;
     aParaNode.NodeType = svx::sidebar::TreeNode::Category;
     aParaDFNode.NodeType = svx::sidebar::TreeNode::Category;
+    aBookmarksNode.NodeType = svx::sidebar::TreeNode::Category;
 
     uno::Reference<text::XTextRange> xRange(
         SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
@@ -588,17 +593,54 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     std::reverse(aParaNode.children.begin(),
                  aParaNode.children.end()); // Parent style should be first then children
 
+    // Collect bookmarks at character position
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDocSh->GetBaseModel(),
+                                                                uno::UNO_QUERY);
+
+    uno::Reference<container::XIndexAccess> xBookmarks(xBookmarksSupplier->getBookmarks(),
+                                                       uno::UNO_QUERY);
+    for (sal_Int32 i = 0; i < xBookmarks->getCount(); ++i)
+    {
+        svx::sidebar::TreeNode aCurNode;
+        uno::Reference<text::XTextContent> bookmark;
+        xBookmarks->getByIndex(i) >>= bookmark;
+        uno::Reference<container::XNamed> xBookmark(bookmark, uno::UNO_QUERY);
+
+        try
+        {
+            uno::Reference<text::XTextRange> bookmarkRange = bookmark->getAnchor();
+            uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xRange->getText(),
+                                                                      uno::UNO_QUERY);
+            if (xTextRangeCompare.is()
+                && xTextRangeCompare->compareRegionStarts(bookmarkRange, xRange) != -1
+                && xTextRangeCompare->compareRegionEnds(xRange, bookmarkRange) != -1)
+            {
+                aCurNode.sNodeName = xBookmark->getName();
+                aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
+
+                MetadataToTreeNode(xBookmark, aCurNode);
+                aBookmarksNode.children.push_back(aCurNode);
+            }
+        }
+        catch (const lang::IllegalArgumentException&)
+        {
+        }
+    }
+
     /*
     Display Order :-
     PARAGRAPH STYLE
     PARAGRAPH DIRECT FORMATTING
     CHARACTER STYLE
     DIRECT FORMATTING
+    BOOKMARKS
     */
     aStore.push_back(aParaNode);
     aStore.push_back(aParaDFNode);
     aStore.push_back(aCharNode);
     aStore.push_back(aCharDFNode);
+    if (aBookmarksNode.children.size() > 0)
+        aStore.push_back(aBookmarksNode);
 }
 
 IMPL_LINK(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, pLink, void)

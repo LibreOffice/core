@@ -189,4 +189,61 @@ class styleNavigator(UITestCase):
         self.xUITest.executeCommand(".uno:Sidebar")
         self.ui_test.close_doc()
 
+    def test_bookmark_metadata(self):
+        self.ui_test.load_file(get_url_for_data_file("bookmark-metadata.odt"))
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+        self.xUITest.executeCommand(".uno:Sidebar")
+        xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "InspectorTextPanel"}))
+
+        xListBox = xWriterEdit.getChild('listbox_fonts')
+
+        # The cursor is on text without metadata
+        self.assertEqual(1, len(xListBox.getChild('0').getChildren()))
+        self.assertEqual("Default Paragraph Style", get_state_as_dict(xListBox.getChild('0').getChild('0'))['Text'])
+        self.assertEqual(136, len(xListBox.getChild('0').getChild('0').getChildren()))
+        self.assertEqual(0, len(xListBox.getChild('1').getChildren()))
+        self.assertEqual(0, len(xListBox.getChild('2').getChildren()))
+        self.assertEqual(0, len(xListBox.getChild('3').getChildren()))
+
+        self.xUITest.executeCommand(".uno:GoDown")
+
+        # The cursor is on text with paragraph metadata showed under direct paragraph formatting
+        self.assertEqual(1, len(xListBox.getChild('0').getChildren()))
+        self.assertEqual("Default Paragraph Style", get_state_as_dict(xListBox.getChild('0').getChild('0'))['Text'])
+        self.assertEqual(136, len(xListBox.getChild('0').getChild('0').getChildren()))
+
+        # Outer bookmark
+        xBookmarkFormatting = xListBox.getChild('4')
+        self.assertEqual(1, len(xBookmarkFormatting.getChildren()))
+        self.assertEqual("Bookmark 1", get_state_as_dict(xBookmarkFormatting.getChild('0'))['Text'])
+
+        self.xUITest.executeCommand(".uno:GoDown")
+
+        # Inner bookmark
+        xBookmarkFormatting = xListBox.getChild('4')
+        self.assertEqual(2, len(xBookmarkFormatting.getChildren()))
+
+        self.assertEqual("Bookmark 1", get_state_as_dict(xBookmarkFormatting.getChild('0'))['Text'])
+        xMetadata = xBookmarkFormatting.getChild('0').getChild('0')
+        self.assertEqual(2, len(xMetadata.getChildren()))
+        self.assertEqual("xml:id\tID-566430c5-9857-4ff2-be6d-57d127368d88", get_state_as_dict(xMetadata.getChild('0'))['Text'])
+        self.assertEqual("http://www.w3.org/1999/02/22-rdf-syntax-ns#type\tBookmark", get_state_as_dict(xMetadata.getChild('1'))['Text'])
+
+        self.assertEqual("Bookmark 2", get_state_as_dict(xBookmarkFormatting.getChild('1'))['Text'])
+        xMetadata = xBookmarkFormatting.getChild('1').getChild('0')
+        self.assertEqual(2, len(xMetadata.getChildren()))
+        self.assertEqual("xml:id\tID-941142c3-924d-4884-a521-cb6a2dd26f04", get_state_as_dict(xMetadata.getChild('0'))['Text'])
+        self.assertEqual("http://www.w3.org/1999/02/22-rdf-syntax-ns#type\tBookmark", get_state_as_dict(xMetadata.getChild('1'))['Text'])
+
+        # Only in outer bookmark again
+        self.xUITest.executeCommand(".uno:GoDown")
+        xBookmarkFormatting = xListBox.getChild('4')
+        self.assertEqual(1, len(xBookmarkFormatting.getChildren()))
+        self.assertEqual("Bookmark 1", get_state_as_dict(xBookmarkFormatting.getChild('0'))['Text'])
+
+        self.xUITest.executeCommand(".uno:Sidebar")
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
