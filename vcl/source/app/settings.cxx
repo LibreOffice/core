@@ -125,6 +125,10 @@ struct ImplStyleData
     Color                           maMenuHighlightColor;
     Color                           maMenuHighlightTextColor;
     Color                           maMenuTextColor;
+    Color                           maListBoxWindowBackgroundColor;
+    Color                           maListBoxWindowTextColor;
+    Color                           maListBoxWindowHighlightColor;
+    Color                           maListBoxWindowHighlightTextColor;
     Color                           maMenuBarTextColor;
     Color                           maMenuBarRolloverTextColor;
     Color                           maMenuBarHighlightTextColor;
@@ -546,6 +550,10 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maMenuHighlightColor( rData.maMenuHighlightColor ),
     maMenuHighlightTextColor( rData.maMenuHighlightTextColor ),
     maMenuTextColor( rData.maMenuTextColor ),
+    maListBoxWindowBackgroundColor( rData.maListBoxWindowBackgroundColor ),
+    maListBoxWindowTextColor( rData.maListBoxWindowTextColor ),
+    maListBoxWindowHighlightColor( rData.maListBoxWindowHighlightColor ),
+    maListBoxWindowHighlightTextColor( rData.maListBoxWindowHighlightTextColor ),
     maMenuBarTextColor( rData.maMenuBarTextColor ),
     maMenuBarRolloverTextColor( rData.maMenuBarRolloverTextColor ),
     maMenuBarHighlightTextColor( rData.maMenuBarHighlightTextColor ),
@@ -692,6 +700,10 @@ void ImplStyleData::SetStandardStyles()
     maMenuBarRolloverColor      = COL_BLUE;
     maMenuBorderColor           = COL_LIGHTGRAY;
     maMenuTextColor             = COL_BLACK;
+    maListBoxWindowBackgroundColor = COL_LIGHTGRAY;
+    maListBoxWindowTextColor    = COL_BLACK;
+    maListBoxWindowHighlightColor = COL_BLUE;
+    maListBoxWindowHighlightTextColor = COL_WHITE;
     maMenuBarTextColor          = COL_BLACK;
     maMenuBarRolloverTextColor  = COL_WHITE;
     maMenuBarHighlightTextColor = COL_WHITE;
@@ -1436,6 +1448,58 @@ const Color&
 StyleSettings::GetMenuHighlightTextColor() const
 {
     return mxData->maMenuHighlightTextColor;
+}
+
+void
+StyleSettings::SetListBoxWindowBackgroundColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maListBoxWindowBackgroundColor = rColor;
+}
+
+const Color&
+StyleSettings::GetListBoxWindowBackgroundColor() const
+{
+    return mxData->maListBoxWindowBackgroundColor;
+}
+
+void
+StyleSettings::SetListBoxWindowTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maListBoxWindowTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetListBoxWindowTextColor() const
+{
+    return mxData->maListBoxWindowTextColor;
+}
+
+void
+StyleSettings::SetListBoxWindowHighlightColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maListBoxWindowHighlightColor = rColor;
+}
+
+const Color&
+StyleSettings::GetListBoxWindowHighlightColor() const
+{
+    return mxData->maListBoxWindowHighlightColor;
+}
+
+void
+StyleSettings::SetListBoxWindowHighlightTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maListBoxWindowHighlightTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetListBoxWindowHighlightTextColor() const
+{
+    return mxData->maListBoxWindowHighlightTextColor;
 }
 
 void
@@ -2476,6 +2540,10 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maMenuBarRolloverColor    == rSet.mxData->maMenuBarRolloverColor)     &&
          (mxData->maMenuBorderColor         == rSet.mxData->maMenuBorderColor)          &&
          (mxData->maMenuTextColor           == rSet.mxData->maMenuTextColor)            &&
+         (mxData->maListBoxWindowBackgroundColor == rSet.mxData->maListBoxWindowBackgroundColor) &&
+         (mxData->maListBoxWindowTextColor       == rSet.mxData->maListBoxWindowTextColor) &&
+         (mxData->maListBoxWindowHighlightColor  == rSet.mxData->maListBoxWindowHighlightColor) &&
+         (mxData->maListBoxWindowHighlightTextColor == rSet.mxData->maListBoxWindowHighlightTextColor) &&
          (mxData->maMenuBarTextColor        == rSet.mxData->maMenuBarTextColor)         &&
          (mxData->maMenuBarRolloverTextColor == rSet.mxData->maMenuBarRolloverTextColor) &&
          (mxData->maMenuHighlightColor      == rSet.mxData->maMenuHighlightColor)       &&
