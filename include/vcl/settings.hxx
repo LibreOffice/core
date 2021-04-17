@@ -384,6 +384,18 @@ public:
     void                            SetMenuHighlightTextColor( const Color& rColor );
     const Color&                    GetMenuHighlightTextColor() const;
 
+    void                            SetListBoxWindowBackgroundColor( const Color& rColor );
+    const Color&                    GetListBoxWindowBackgroundColor() const;
+
+    void                            SetListBoxWindowTextColor( const Color& rColor );
+    const Color&                    GetListBoxWindowTextColor() const;
+
+    void                            SetListBoxWindowHighlightColor( const Color& rColor );
+    const Color&                    GetListBoxWindowHighlightColor() const;
+
+    void                            SetListBoxWindowHighlightTextColor( const Color& rColor );
+    const Color&                    GetListBoxWindowHighlightTextColor() const;
+
     void                            SetTabTextColor( const Color& rColor );
     const Color&                    GetTabTextColor() const;
 
