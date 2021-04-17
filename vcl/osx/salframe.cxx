@@ -1298,6 +1298,11 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aStyleSettings.SetMenuBarRolloverTextColor( aMenuTextColor );
     aStyleSettings.SetMenuBarHighlightTextColor(aStyleSettings.GetMenuHighlightTextColor());
 
+    aStyleSettings.SetListBoxWindowBackgroundColor( aBackgroundColor );
+    aStyleSettings.SetListBoxWindowTextColor( aMenuTextColor );
+    aStyleSettings.SetListBoxWindowHighlightColor( aMenuHighlightColor );
+    aStyleSettings.SetListBoxWindowHighlightTextColor( aMenuHighlightTextColor );
+
     // Set text colors for buttons and their different status according to OS settings, typically white for selected buttons,
     // black otherwise
 
