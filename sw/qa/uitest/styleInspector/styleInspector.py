@@ -159,10 +159,11 @@ class styleNavigator(UITestCase):
         self.assertEqual("Metadata Reference", get_state_as_dict(xParDirFormatting.getChild('0'))['Text'])
 
         xMetadata = xParDirFormatting.getChild('0')
-        self.assertEqual(3, len(xMetadata.getChildren()))
-        self.assertEqual("http://www.w3.org/1999/02/22-rdf-syntax-ns#type\tParagraph", get_state_as_dict(xMetadata.getChild('0'))['Text'])
-        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#comment\tAbout this paragraph...", get_state_as_dict(xMetadata.getChild('1'))['Text'])
-        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#label\tAnnotated paragraph", get_state_as_dict(xMetadata.getChild('2'))['Text'])
+        self.assertEqual(4, len(xMetadata.getChildren()))
+        self.assertEqual("xml:id\tpara1", get_state_as_dict(xMetadata.getChild('0'))['Text'])
+        self.assertEqual("http://www.w3.org/1999/02/22-rdf-syntax-ns#type\tParagraph", get_state_as_dict(xMetadata.getChild('1'))['Text'])
+        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#comment\tAbout this paragraph...", get_state_as_dict(xMetadata.getChild('2'))['Text'])
+        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#label\tAnnotated paragraph", get_state_as_dict(xMetadata.getChild('3'))['Text'])
 
         self.xUITest.executeCommand(".uno:GoDown")
         # FIXME jump over the control character (not visible in getString(), but it affects
@@ -176,10 +177,11 @@ class styleNavigator(UITestCase):
         self.assertEqual("Nested Text Content\tAnnotated text range", get_state_as_dict(xDirFormatting.getChild('1'))['Text'])
 
         xMetadata = xDirFormatting.getChild('0')
-        self.assertEqual(3, len(xMetadata.getChildren()))
-        self.assertEqual("http://www.w3.org/1999/02/22-rdf-syntax-ns#type\tText span", get_state_as_dict(xMetadata.getChild('0'))['Text'])
-        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#comment\tComment...", get_state_as_dict(xMetadata.getChild('1'))['Text'])
-        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#label\tAnnotated paragraph portion", get_state_as_dict(xMetadata.getChild('2'))['Text'])
+        self.assertEqual(4, len(xMetadata.getChildren()))
+        self.assertEqual("xml:id\tid2758386667", get_state_as_dict(xMetadata.getChild('0'))['Text'])
+        self.assertEqual("http://www.w3.org/1999/02/22-rdf-syntax-ns#type\tText span", get_state_as_dict(xMetadata.getChild('1'))['Text'])
+        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#comment\tComment...", get_state_as_dict(xMetadata.getChild('2'))['Text'])
+        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#label\tAnnotated paragraph portion", get_state_as_dict(xMetadata.getChild('3'))['Text'])
 
         self.assertEqual(0, len(xListBox.getChild('1').getChildren()))
         self.assertEqual(0, len(xListBox.getChild('2').getChildren()))

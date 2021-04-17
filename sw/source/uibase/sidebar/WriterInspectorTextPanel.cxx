@@ -391,6 +391,9 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
         aCurNode.sNodeName = PropertyNametoRID("MetadataReference");
         aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
+        aCurNode.children.push_back(
+            SimplePropToTreeNode("xml:id", uno::makeAny(xMeta->getMetadataReference().Second)));
+
         // list associated (predicate, object) pairs of the actual subject
         // under the tree node "Metadata Reference"
         SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
