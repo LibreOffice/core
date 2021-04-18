@@ -88,6 +88,7 @@
 #include <svx/svdopath.hxx>
 
 #include <memory>
+#include <optional>
 #include <vector>
 #include <iostream>
 
@@ -106,7 +107,7 @@ class GDIMetaFile;
 struct SvxShapeImpl
 {
     SvxShape&       mrAntiImpl;
-    std::unique_ptr<SfxItemSet> mpItemSet;
+    std::optional<SfxItemSet> mxItemSet;
     sal_uInt32      mnObjId;
     SvxShapeMaster* mpMaster;
     bool            mbHasSdrObjectOwnership;
@@ -1653,22 +1654,26 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
             throw IllegalArgumentException();
     }
 
+    std::optional<SfxItemSet> xLocalSet;
     SfxItemSet* pSet;
     if( mbIsMultiPropertyCall && !bIsNotPersist )
     {
-        if( mpImpl->mpItemSet == nullptr )
+        if( !mpImpl->mxItemSet )
         {
-            mpImpl->mpItemSet.reset(new SfxItemSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(),  {{pMap->nWID, pMap->nWID}}));
+            sal_uInt16 aWhichPairTable[] = { pMap->nWID, pMap->nWID, 0, 0 };
+            mpImpl->mxItemSet.emplace( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), aWhichPairTable);
         }
         else
         {
-            mpImpl->mpItemSet->MergeRange(pMap->nWID, pMap->nWID);
+            mpImpl->mxItemSet->MergeRange(pMap->nWID, pMap->nWID);
         }
-        pSet = mpImpl->mpItemSet.get();
+        pSet = &*mpImpl->mxItemSet;
     }
     else
     {
-        pSet = new SfxItemSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(),  {{pMap->nWID, pMap->nWID}});
+        sal_uInt16 aWhichPairTable[] = { pMap->nWID, pMap->nWID, 0, 0 };
+        xLocalSet.emplace( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), aWhichPairTable);
+        pSet = &*xLocalSet;
     }
 
     if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
@@ -1702,18 +1707,13 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
     {
         // set not-persistent attribute extra
         GetSdrObject()->ApplyNotPersistAttr( *pSet );
-        delete pSet;
     }
     else
     {
         // if we have a XMultiProperty call then the item set
         // will be set in setPropertyValues later
         if( !mbIsMultiPropertyCall )
-        {
             GetSdrObject()->SetMergedItemSetAndBroadcast( *pSet );
-
-            delete pSet;
-        }
     }
 }
 
@@ -1828,15 +1828,15 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
         }
     }
 
-    if( mpImpl->mpItemSet && HasSdrObject() )
-        GetSdrObject()->SetMergedItemSetAndBroadcast( *mpImpl->mpItemSet );
+    if( mpImpl->mxItemSet && HasSdrObject() )
+        GetSdrObject()->SetMergedItemSetAndBroadcast( *mpImpl->mxItemSet );
 }
 
 
 void SvxShape::endSetPropertyValues()
 {
     mbIsMultiPropertyCall = false;
-    mpImpl->mpItemSet.reset();
+    mpImpl->mxItemSet.reset();
 }
 
 
