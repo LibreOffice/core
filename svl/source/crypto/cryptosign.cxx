@@ -1427,7 +1427,10 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
                                            &bFreeNeeded))
     {
         SAL_WARN("svl.crypto", "CryptAcquireCertificatePrivateKey failed: " << WindowsErrorString(GetLastError()));
+        // Keep last error value for later checks. WinSDK < 10 during CertFreeCertificateContext() can modify it
+        DWORD dwErr = GetLastError();
         CertFreeCertificateContext(pCertContext);
+        SetLastError(dwErr);
         return false;
     }
     assert(!bFreeNeeded);
