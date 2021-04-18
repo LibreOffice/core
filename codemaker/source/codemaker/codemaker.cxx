@@ -38,6 +38,7 @@ OString convertString(OUString const & string) {
         throw CannotDumpException(
             "Failure converting string from UTF-16 to UTF-8");
     }
+
     return s;
 }
 
