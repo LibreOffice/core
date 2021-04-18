@@ -59,6 +59,9 @@ public:
     /// @throws css::uno::RuntimeException
     virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) = 0;
 
+    // XMultiPropertySet
+    virtual void setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) = 0;
+
     /// @throws css::uno::RuntimeException
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) = 0;
 

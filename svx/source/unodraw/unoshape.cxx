@@ -1787,33 +1787,25 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
 // XMultiPropertySet
 void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues )
 {
-    ::SolarMutexGuard aSolarGuard;
-
-    const sal_Int32 nCount = aPropertyNames.getLength();
-    const OUString* pNames = aPropertyNames.getConstArray();
-
-    const uno::Any* pValues = aValues.getConstArray();
-
-    // make sure mbIsMultiPropertyCall and mpImpl->mpItemSet are
-    // reset even when an exception is thrown
-    const ::comphelper::ScopeGuard aGuard( [this] () { return this->endSetPropertyValues(); } );
-
-    mbIsMultiPropertyCall = true;
-
     if( mpImpl->mpMaster )
     {
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pNames++, pValues++ )
-        {
-            try
-            {
-                setPropertyValue( *pNames, *pValues );
-            }
-            catch( beans::UnknownPropertyException& ) {}
-            catch( uno::Exception& ) {}
-        }
+        mpImpl->mpMaster->setPropertyValues( aPropertyNames, aValues );
     }
     else
     {
+        ::SolarMutexGuard aSolarGuard;
+
+        const sal_Int32 nCount = aPropertyNames.getLength();
+        const OUString* pNames = aPropertyNames.getConstArray();
+
+        const uno::Any* pValues = aValues.getConstArray();
+
+        // make sure mbIsMultiPropertyCall and mpImpl->mpItemSet are
+        // reset even when an exception is thrown
+        const ::comphelper::ScopeGuard aGuard( [this] () { return this->endSetPropertyValues(); } );
+
+        mbIsMultiPropertyCall = true;
+
         uno::Reference< beans::XPropertySet > xSet;
         queryInterface( cppu::UnoType<beans::XPropertySet>::get()) >>= xSet;
 
@@ -1826,10 +1818,9 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
             catch( beans::UnknownPropertyException& ) {}
             catch( uno::Exception& ) {}
         }
+        if( mpImpl->mpItemSet && HasSdrObject() )
+            GetSdrObject()->SetMergedItemSetAndBroadcast( *mpImpl->mpItemSet );
     }
-
-    if( mpImpl->mpItemSet && HasSdrObject() )
-        GetSdrObject()->SetMergedItemSetAndBroadcast( *mpImpl->mpItemSet );
 }
 
 

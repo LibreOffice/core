@@ -411,6 +411,23 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL SdXShape::getProper
     return pInfo;
 }
 
+// XMultiPropertySet
+void SdXShape::setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues )
+{
+    const sal_Int32 nCount = aPropertyNames.getLength();
+    const OUString* pNames = aPropertyNames.getConstArray();
+    const uno::Any* pValues = aValues.getConstArray();
+    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pNames++, pValues++ )
+    {
+        try
+        {
+            setPropertyValue( *pNames, *pValues );
+        }
+        catch( beans::UnknownPropertyException& ) {}
+        catch( uno::Exception& ) {}
+    }
+}
+
 void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
