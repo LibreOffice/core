@@ -3,11 +3,6 @@
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="LinkEditDialog">
-    <child internal-child="accessible">
-      <object class="AtkObject" id="LinkEditDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="linkeditdialog|extended_tip|LinkEditDialog"/>
-      </object>
-    </child>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="linkeditdialog|title">Modify DDE Link</property>
@@ -15,6 +10,11 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="LinkEditDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="linkeditdialog|extended_tip|LinkEditDialog"/>
+      </object>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -143,16 +143,16 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="app">
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="app-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="linkeditdialog|extended_tip|app">Lists the application that last saved the source file. %PRODUCTNAME applications have the server name soffice.</property>
-                      </object>
-                    </child>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="app-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="linkeditdialog|extended_tip|app">Lists the application that last saved the source file. %PRODUCTNAME applications have the server name soffice.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -161,16 +161,16 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="file">
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="file-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="linkeditdialog|extended_tip|file">Path to the source file. Relative paths must be expressed by full URI, for example, with file://.</property>
-                      </object>
-                    </child>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="file-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="linkeditdialog|extended_tip|file">Path to the source file. Relative paths must be expressed by full URI, for example, with file://.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -179,16 +179,16 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="category">
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="category-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="linkeditdialog|extended_tip|category">Lists the section or object that the link refers to in the source file. If you want, you can enter a new section or object here.</property>
-                      </object>
-                    </child>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="category-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="linkeditdialog|extended_tip|category">Lists the section or object that the link refers to in the source file. If you want, you can enter a new section or object here.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
