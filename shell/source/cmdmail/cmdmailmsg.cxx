@@ -21,7 +21,6 @@
 
 using com::sun::star::container::NoSuchElementException;
 using com::sun::star::container::XNameAccess;
-using osl::MutexGuard;
 
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -29,91 +28,91 @@ using namespace com::sun::star::uno;
 
 void SAL_CALL CmdMailMsg::setBody( const OUString& aBody )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_aBody = aBody;
 }
 
 OUString SAL_CALL CmdMailMsg::getBody(  )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return m_aBody;
 }
 
 void SAL_CALL CmdMailMsg::setRecipient( const OUString& aRecipient )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_aRecipient = aRecipient;
 }
 
 OUString SAL_CALL CmdMailMsg::getRecipient(  )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return m_aRecipient;
 }
 
 void SAL_CALL CmdMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_CcRecipients = aCcRecipient;
 }
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getCcRecipient(  )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return m_CcRecipients;
 }
 
 void SAL_CALL CmdMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_BccRecipients = aBccRecipient;
 }
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getBccRecipient(  )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return m_BccRecipients;
 }
 
 void SAL_CALL CmdMailMsg::setOriginator( const OUString& aOriginator )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_aOriginator = aOriginator;
 }
 
 OUString SAL_CALL CmdMailMsg::getOriginator(  )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return m_aOriginator;
 }
 
 void SAL_CALL CmdMailMsg::setSubject( const OUString& aSubject )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_aSubject = aSubject;
 }
 
 OUString SAL_CALL CmdMailMsg::getSubject(  )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return m_aSubject;
 }
 
 void SAL_CALL CmdMailMsg::setAttachement( const Sequence< OUString >& aAttachment )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_Attachments = aAttachment;
 }
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getAttachement(  )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return m_Attachments;
 }
 
 Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if( aName == "body" &&  !m_aBody.isEmpty() )
         return makeAny( m_aBody );
@@ -142,7 +141,7 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     sal_Int32 nItems = 0;
     Sequence< OUString > aRet( 7 );
@@ -174,7 +173,7 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
 
  sal_Bool SAL_CALL CmdMailMsg::hasByName( const OUString& aName )
 {
-    MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if( aName == "body" &&  !m_aBody.isEmpty() )
         return true;
