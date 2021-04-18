@@ -150,7 +150,9 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
     for(auto const & rPair : maValues)
     {
         SfxPoolItem* pTempItem = nullptr;
-        const SfxItemPropertyMapEntry & rPropEntry = *mrMap.getByName(rPair.first);
+        const SfxItemPropertyMapEntry* pPropEntry = mrMap.getByName(rPair.first);
+        assert(pPropEntry && "SetProperties only enters values into maValues if mrMap.hasPropertyByName() wass true");
+        const SfxItemPropertyMapEntry & rPropEntry = *pPropEntry;
         sal_uInt16 nWID = rPropEntry.nWID;
         switch(nWID)
         {
