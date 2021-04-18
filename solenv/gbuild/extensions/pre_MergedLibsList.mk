@@ -96,10 +96,6 @@ MERGE_LIBRARY_LIST := \
 	ucptdoc1 \
 	unordf \
 	unoxml \
-	$(if $(ENABLE_ONLINE_UPDATE), \
-		updatecheckui \
-        updchk \
-	) \
 	updatefeed \
 	utl \
 	uui \
