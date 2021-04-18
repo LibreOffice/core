@@ -118,7 +118,7 @@ void handleCommand(
 }
 
 void InitPoFile(
-    const OString& rProject, const OString& rInPath,
+    std::string_view rProject, const OString& rInPath,
     const OString& rPotDir, const OString& rOutPath )
 {
     //Create directory for po file
@@ -176,7 +176,7 @@ bool fileExists(const OString& fileName)
 
 OString gDestRoot;
 
-bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rPotDir)
+bool handleFile(std::string_view rProject, const OUString& rUrl, const OString& rPotDir)
 {
     struct Command {
         std::u16string_view extension;
@@ -281,7 +281,7 @@ bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rP
 }
 
 void handleFilesOfDir(
-    std::vector<OUString>& aFiles, const OString& rProject,
+    std::vector<OUString>& aFiles, std::string_view rProject,
     const OString& rPotDir )
 {
     ///Handle files in lexical order

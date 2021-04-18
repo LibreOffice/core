@@ -53,7 +53,7 @@ public:
     SvStringHashEntry * Insert( OString const & rElement, sal_uInt32 * pInsertPos );
     bool Test( OString const & rElement, sal_uInt32 * pInsertPos );
     SvStringHashEntry * Get( sal_uInt32 nInsertPos ) const;
-    OString GetNearString( const OString& rName ) const;
+    OString GetNearString( std::string_view rName ) const;
 };
 
 #endif // INCLUDED_IDL_INC_HASH_HXX

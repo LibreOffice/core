@@ -44,7 +44,7 @@ OString unEscapeAll(
     {
         if( rText[nIndex] == '\\' && nIndex+1 < nLength )
         {
-            sal_Int32 nEscapedOne = rEscaped.indexOf(rText.copy(nIndex,2));
+            sal_Int32 nEscapedOne = rEscaped.indexOf(rText.subView(nIndex,2));
             if( nEscapedOne != -1 )
             {
                 sReturn.append(rUnEscaped[nEscapedOne/2]);

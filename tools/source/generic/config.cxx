@@ -647,7 +647,7 @@ void Config::SetGroup(const OString& rGroup)
     }
 }
 
-void Config::DeleteGroup(const OString& rGroup)
+void Config::DeleteGroup(std::string_view rGroup)
 {
     // Update config data if necessary
     if ( !mpData->mbRead )
@@ -727,7 +727,7 @@ sal_uInt16 Config::GetGroupCount() const
     return nGroupCount;
 }
 
-bool Config::HasGroup(const OString& rGroup) const
+bool Config::HasGroup(std::string_view rGroup) const
 {
     ImplGroupData*  pGroup = mpData->mpFirstGroup;
     bool            bRet = false;
@@ -825,7 +825,7 @@ void Config::WriteKey(const OString& rKey, const OString& rStr)
     }
 }
 
-void Config::DeleteKey(const OString& rKey)
+void Config::DeleteKey(std::string_view rKey)
 {
     // Update config data if necessary
     if ( !mpData->mbRead )

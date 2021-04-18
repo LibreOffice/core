@@ -122,6 +122,8 @@ public:
 
     constexpr char const * getStr() const SAL_RETURNS_NONNULL { return buffer; }
 
+    constexpr operator std::string_view() const { return {buffer, sal_uInt32(length)}; }
+
 private:
     static constexpr void assertLayout() {
         // These static_asserts verifying the layout compatibility with rtl_String cannot be class
@@ -689,6 +691,17 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
+#if defined LIBO_INTERNAL_ONLY
+    bool equalsIgnoreAsciiCase( std::string_view str ) const
+    {
+        if ( sal_uInt32(pData->length) != str.size() )
+            return false;
+        if ( pData->buffer == str.data() )
+            return true;
+        return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
+                                                          str.data(), str.size() ) == 0;
+    }
+#else
     bool equalsIgnoreAsciiCase( const OString & str ) const
     {
         if ( pData->length != str.pData->length )
@@ -698,6 +711,7 @@ public:
         return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
                                                           str.pData->buffer, str.pData->length ) == 0;
     }
+#endif
 
     /**
       Perform an ASCII lowercase comparison of two strings.
@@ -797,11 +811,19 @@ public:
                 at the given position;
                 false, otherwise.
     */
+#if defined LIBO_INTERNAL_ONLY
+    bool match( std::string_view str, sal_Int32 fromIndex = 0 ) const
+    {
+        return rtl_str_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                    str.data(), str.size(), str.size() ) == 0;
+    }
+#else
     bool match( const OString & str, sal_Int32 fromIndex = 0 ) const
     {
         return rtl_str_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                     str.pData->buffer, str.pData->length, str.pData->length ) == 0;
     }
+#endif
 
     /**
      @overload
@@ -875,13 +897,21 @@ public:
                 at the given position;
                 false, otherwise.
     */
+#if defined LIBO_INTERNAL_ONLY
+    bool matchIgnoreAsciiCase( std::string_view str, sal_Int32 fromIndex = 0 ) const
+    {
+        return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                                   str.data(), str.size(),
+                                                                   str.size() ) == 0;
+    }
+#else
     bool matchIgnoreAsciiCase( const OString & str, sal_Int32 fromIndex = 0 ) const
     {
         return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                                    str.pData->buffer, str.pData->length,
                                                                    str.pData->length ) == 0;
     }
-
+#endif
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -917,6 +947,15 @@ public:
 
       @since LibreOffice 4.0
     */
+#if defined LIBO_INTERNAL_ONLY
+    bool startsWith(std::string_view str, OString * rest = NULL) const {
+        bool b = match(str);
+        if (b && rest != NULL) {
+            *rest = copy(str.size());
+        }
+        return b;
+    }
+#else
     bool startsWith(OString const & str, OString * rest = NULL) const {
         bool b = match(str);
         if (b && rest != NULL) {
@@ -924,6 +963,7 @@ public:
         }
         return b;
     }
+#endif
 
     /**
      @overload
@@ -962,6 +1002,17 @@ public:
 
       @since LibreOffice 5.1
     */
+#if defined LIBO_INTERNAL_ONLY
+    bool startsWithIgnoreAsciiCase(std::string_view str, OString * rest = NULL)
+        const
+    {
+        bool b = matchIgnoreAsciiCase(str);
+        if (b && rest != NULL) {
+            *rest = copy(str.size());
+        }
+        return b;
+    }
+#else
     bool startsWithIgnoreAsciiCase(OString const & str, OString * rest = NULL)
         const
     {
@@ -971,6 +1022,7 @@ public:
         }
         return b;
     }
+#endif
 
     /**
      @overload
@@ -1006,6 +1058,16 @@ public:
 
       @since LibreOffice 3.6
     */
+#if defined LIBO_INTERNAL_ONLY
+    bool endsWith(std::string_view str, OString * rest = NULL) const {
+        bool b = str.size() <= sal_uInt32(getLength())
+            && match(str, getLength() - str.size());
+        if (b && rest != NULL) {
+            *rest = copy(0, getLength() - str.size());
+        }
+        return b;
+    }
+#else
     bool endsWith(OString const & str, OString * rest = NULL) const {
         bool b = str.getLength() <= getLength()
             && match(str, getLength() - str.getLength());
@@ -1014,6 +1076,7 @@ public:
         }
         return b;
     }
+#endif
 
     /**
      @overload
@@ -1266,13 +1329,21 @@ public:
                 returned. If it does not occur as a substring starting
                 at fromIndex or beyond, -1 is returned.
     */
+#if defined LIBO_INTERNAL_ONLY
+    sal_Int32 indexOf( std::string_view str, sal_Int32 fromIndex = 0 ) const
+    {
+        sal_Int32 ret = rtl_str_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                       str.data(), str.size() );
+        return (ret < 0 ? ret : ret+fromIndex);
+    }
+#else
     sal_Int32 indexOf( const OString & str, sal_Int32 fromIndex = 0 ) const
     {
         sal_Int32 ret = rtl_str_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                        str.pData->buffer, str.pData->length );
         return (ret < 0 ? ret : ret+fromIndex);
     }
-
+#endif
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -1340,11 +1411,19 @@ public:
                 the last such substring is returned. If it does not occur as
                 a substring, -1 is returned.
     */
+#if defined LIBO_INTERNAL_ONLY
+    sal_Int32 lastIndexOf( std::string_view str ) const
+    {
+        return rtl_str_lastIndexOfStr_WithLength( pData->buffer, pData->length,
+                                                  str.data(), str.size() );
+    }
+#else
     sal_Int32 lastIndexOf( const OString & str ) const
     {
         return rtl_str_lastIndexOfStr_WithLength( pData->buffer, pData->length,
                                                   str.pData->buffer, str.pData->length );
     }
+#endif
 
     /**
       Returns the index within this string of the last occurrence of
@@ -1363,11 +1442,19 @@ public:
                 of the first character of the last such substring is
                 returned. Otherwise, -1 is returned.
     */
+#if defined LIBO_INTERNAL_ONLY
+    sal_Int32 lastIndexOf( std::string_view str, sal_Int32 fromIndex ) const
+    {
+        return rtl_str_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
+                                                  str.data(), str.size() );
+    }
+#else
     sal_Int32 lastIndexOf( const OString & str, sal_Int32 fromIndex ) const
     {
         return rtl_str_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                   str.pData->buffer, str.pData->length );
     }
+#endif
 
     /**
       Returns a new string that is a substring of this string.

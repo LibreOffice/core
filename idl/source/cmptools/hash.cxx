@@ -56,7 +56,7 @@ SvStringHashEntry * SvStringHashTable::Get( sal_uInt32 nInsertPos ) const
     return it->second.get();
 }
 
-OString SvStringHashTable::GetNearString( const OString& rName ) const
+OString SvStringHashTable::GetNearString( std::string_view rName ) const
 {
     for( auto const & rPair : maInt2EntryMap )
     {
