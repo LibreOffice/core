@@ -32,12 +32,12 @@ private:
 void Test::testStartsWithIgnoreAsciiCase() {
     {
         OString r;
-        CPPUNIT_ASSERT(OString().startsWithIgnoreAsciiCase(OString(), &r));
+        CPPUNIT_ASSERT(OString().startsWithIgnoreAsciiCase(std::string_view(), &r));
         CPPUNIT_ASSERT(r.isEmpty());
     }
     {
         OString r;
-        CPPUNIT_ASSERT(OString("foo").startsWithIgnoreAsciiCase(OString(), &r));
+        CPPUNIT_ASSERT(OString("foo").startsWithIgnoreAsciiCase(std::string_view(), &r));
         CPPUNIT_ASSERT_EQUAL(OString("foo"), r);
     }
     {

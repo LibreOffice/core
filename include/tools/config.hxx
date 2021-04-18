@@ -44,15 +44,15 @@ public:
 
     void                SetGroup(const OString& rGroup);
     const OString&      GetGroup() const { return maGroupName; }
-    void                DeleteGroup(const OString& rGroup);
+    void                DeleteGroup(std::string_view rGroup);
     OString             GetGroupName(sal_uInt16 nGroup) const;
     sal_uInt16          GetGroupCount() const;
-    bool                HasGroup(const OString& rGroup) const;
+    bool                HasGroup(std::string_view rGroup) const;
 
     OString             ReadKey(const OString& rKey) const;
     OString             ReadKey(const OString& rKey, const OString& rDefault) const;
     void                WriteKey(const OString& rKey, const OString& rValue);
-    void                DeleteKey(const OString& rKey);
+    void                DeleteKey(std::string_view rKey);
     OString             GetKeyName(sal_uInt16 nKey) const;
     OString             ReadKey(sal_uInt16 nKey) const;
     sal_uInt16          GetKeyCount() const;
