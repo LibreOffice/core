@@ -311,7 +311,7 @@ static const sal_Unicode * lcl_XL_ParseSheetRef( const sal_Unicode* start,
                 // We pre-analyzed the quoting, no checks needed here.
                 if (*++p == '\'')
                 {
-                    aTabName += OUString( pCurrentStart,
+                    aTabName += std::u16string_view( pCurrentStart,
                             sal::static_int_cast<sal_Int32>( p - pCurrentStart));
                     pCurrentStart = ++p;
                 }
@@ -324,7 +324,7 @@ static const sal_Unicode * lcl_XL_ParseSheetRef( const sal_Unicode* start,
                 ++p;
         }
         if (pCurrentStart < p)
-            aTabName += OUString( pCurrentStart, sal::static_int_cast<sal_Int32>( p - pCurrentStart));
+            aTabName += std::u16string_view( pCurrentStart, sal::static_int_cast<sal_Int32>( p - pCurrentStart));
         if (aTabName.isEmpty())
             return nullptr;
         if (p == pMsoxlQuoteStop)
@@ -402,7 +402,7 @@ static const sal_Unicode * lcl_XL_ParseSheetRef( const sal_Unicode* start,
         if( *p != '!' && ( !bAllow3D || *p != ':' ) )
             return (!bAllow3D && *p == ':') ? p : start;
 
-        aTabName += OUString( start, sal::static_int_cast<sal_Int32>( p - start ) );
+        aTabName += std::u16string_view( start, sal::static_int_cast<sal_Int32>( p - start ) );
     }
 
     rExternTabName = aTabName;
@@ -509,7 +509,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
             p = ScGlobal::UnicodeStrChr( start+1, ']' );
             if( p == nullptr )
                 return start;
-            rExternDocName += OUString( start+1, sal::static_int_cast<sal_Int32>( p-(start+1) ) );
+            rExternDocName += std::u16string_view( start+1, sal::static_int_cast<sal_Int32>( p-(start+1) ) );
         }
         ++p;
 
