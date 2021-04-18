@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SHELL_SOURCE_CMDMAIL_CMDMAILMSG_HXX
 #define INCLUDED_SHELL_SOURCE_CMDMAIL_CMDMAILMSG_HXX
 
+#include <mutex>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
@@ -41,7 +42,7 @@ class CmdMailMsg :
     css::uno::Sequence< OUString >  m_BccRecipients;
     css::uno::Sequence< OUString >  m_Attachments;
 
-    ::osl::Mutex                    m_aMutex;
+    std::mutex                      m_aMutex;
 
 public:
 
