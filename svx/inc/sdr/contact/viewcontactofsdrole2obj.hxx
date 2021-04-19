@@ -31,9 +31,6 @@ namespace sdr::contact
 class ViewContactOfSdrOle2Obj final : public ViewContactOfSdrRectObj
 {
 private:
-    // #i123539# allow local buffering of chart data (if chart)
-    drawinglayer::primitive2d::Primitive2DReference mxChartContent;
-
     // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
     virtual ViewObjectContact&
@@ -55,9 +52,6 @@ public:
     // createViewIndependentPrimitive2DSequence with false, and with evtl. HighContrast true
     // from the VOC which knows that
     drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceWithParameters() const;
-
-    // #i123539# get rid of buffered chart content (if there) on change
-    virtual void ActionChanged() override;
 
     virtual basegfx::B2DRange
     getRange(const drawinglayer::geometry::ViewInformation2D& rViewInfo2D) const override;
