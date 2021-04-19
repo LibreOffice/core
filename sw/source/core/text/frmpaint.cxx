@@ -305,6 +305,8 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     if( getFrameArea().Top() > rRect.Bottom() || getFrameArea().Bottom() < rRect.Top() )
         return;
 
+    PaintOutlineContentVisibilityButton();
+
     SwDoc const& rDoc(GetDoc());
     const IDocumentRedlineAccess& rIDRA = rDoc.getIDocumentRedlineAccess();
     const SwLineNumberInfo &rLineInf = rDoc.GetLineNumberInfo();

@@ -1051,6 +1051,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if( !m_pVScrollbar->IsVisible( true ) )
         ShowVScrollbar( false );
 
+    if (m_pWrtShell && m_pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        m_pWrtShell->InvalidateOutlineContentVisibility();
+
     GetViewFrame()->GetWindow().AddChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
 }
 

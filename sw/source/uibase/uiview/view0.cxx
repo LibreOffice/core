@@ -603,33 +603,20 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
         SwWrtShell &rSh = GetWrtShell();
 
-        // move cursor to top of document
-        if (rSh.IsSelFrameMode())
-        {
-            rSh.UnSelectFrame();
-            rSh.LeaveSelFrameMode();
-        }
-        rSh.EnterStdMode();
-        rSh.SttEndDoc(true);
-
-        if (!bFlag)
-        {
-            // make all content visible
-            const SwOutlineNodes& rOutlineNds = rSh.GetNodes().GetOutLineNds();
-            for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
-            {
-                SwNode* pNd = rOutlineNds[nPos];
-                bool bOutlineContentVisibleAttr = true;
-                pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                if (!bOutlineContentVisibleAttr)
-                {
-                    rSh.ToggleOutlineContentVisibility(nPos);
-                    pNd->GetTextNode()->SetAttrOutlineContentVisible(false);
-                }
-            }
-        }
+        if (!bFlag) // Outline folding is being turned ON!
+            rSh.MakeAllFoldedOutlineContentVisible();
 
         pOpt->SetShowOutlineContentVisibilityButton(bFlag);
+
+        // Apply option change here so if toggling the outline folding feature ON
+        // the invalidate function will see this.
+        rSh.StartAction();
+        rSh.ApplyViewOptions(*pOpt);
+        rSh.EndAction();
+
+        if (bFlag) // Outline folding is being turned OFF!
+            rSh.MakeAllFoldedOutlineContentVisible(false);
+
         break;
     }
 

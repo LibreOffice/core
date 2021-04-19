@@ -46,6 +46,7 @@ class SwPortionHandler;
 class SwScriptInfo;
 enum class ExpandMode;
 class SwTextAttr;
+class SwWrtShell;
 
 #define NON_PRINTING_CHARACTER_COLOR Color(0x26, 0x8b, 0xd2)
 
@@ -318,6 +319,9 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
 
     virtual void DestroyImpl() override;
     virtual ~SwTextFrame() override;
+
+    void UpdateOutlineContentVisibilityButton(SwWrtShell* pWrtSh) const;
+    void PaintOutlineContentVisibilityButton() const;
 
 protected:
     virtual void SwClientNotify(SwModify const& rModify, SfxHint const& rHint) override;

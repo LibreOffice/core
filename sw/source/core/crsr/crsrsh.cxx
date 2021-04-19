@@ -3344,6 +3344,31 @@ void SwCursorShell::SetReadOnlyAvailable( bool bFlag )
 
 bool SwCursorShell::HasReadonlySel() const
 {
+    if (GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        // Treat selections that span over start or end of paragraph of an outline node
+        // with folded outline content as read-only.
+        SwWrtShell* pWrtSh = GetDoc()->GetDocShell()->GetWrtShell();
+        if (pWrtSh)
+        {
+            for(SwPaM& rPaM : GetCursor()->GetRingContainer())
+            {
+                rPaM.Normalize();
+                SwNodeIndex aPointIdx(rPaM.GetPoint()->nNode.GetNode());
+                SwNodeIndex aMarkIdx(rPaM.GetMark()->nNode.GetNode());
+                if (aPointIdx == aMarkIdx)
+                    continue;
+                // If any nodes in PaM are folded outline content nodes, then set read-only.
+                SwOutlineNodes::size_type nPos;
+                for (SwNodeIndex aIdx = aPointIdx; aIdx <= aMarkIdx; aIdx++)
+                {
+                    if (GetDoc()->GetNodes().GetOutLineNds().Seek_Entry(&(aIdx.GetNode()), &nPos) &&
+                            !pWrtSh->GetAttrOutlineContentVisible(nPos))
+                        return true;
+                }
+            }
+        }
+    }
     bool bRet = false;
     // If protected area is to be ignored, then selections are never read-only.
     if ((IsReadOnlyAvailable() || GetViewOptions()->IsFormView() ||

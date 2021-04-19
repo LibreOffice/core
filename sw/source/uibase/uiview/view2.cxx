@@ -146,6 +146,8 @@
 
 #include <basegfx/utils/zoomtools.hxx>
 
+#include <ndtxt.hxx>
+
 const char sStatusDelim[] = " : ";
 
 using namespace sfx2;
@@ -1185,8 +1187,14 @@ void SwView::Execute(SfxRequest &rReq)
         {
             m_pWrtShell->EnterStdMode();
             size_t nPos(m_pWrtShell->GetOutlinePos());
-            m_pWrtShell->ToggleOutlineContentVisibility(nPos);
-            m_pWrtShell->GotoOutline(nPos);
+            if (nPos != SwOutlineNodes::npos)
+            {
+                SwNode* pNode = m_pWrtShell->GetNodes().GetOutLineNds()[nPos];
+                pNode->GetTextNode()->SetAttrOutlineContentVisible(
+                            !m_pWrtShell->GetAttrOutlineContentVisible(nPos));
+                m_pWrtShell->InvalidateOutlineContentVisibility();
+                m_pWrtShell->GotoOutline(nPos);
+            }
         }
         break;
         case FN_NAV_ELEMENT:

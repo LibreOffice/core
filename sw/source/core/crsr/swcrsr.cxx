@@ -57,6 +57,8 @@
 #include <comphelper/lok.hxx>
 #include <editsh.hxx>
 
+#include <viewopt.hxx>
+
 using namespace ::com::sun::star::i18n;
 
 const sal_uInt16 coSrchRplcThreshold = 60000;
@@ -1798,7 +1800,19 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         }
 
         if ( !Move( fnMove, fnGo ) )
+        {
+            SwEditShell* rSh = GetDoc().GetEditShell();
+            if (rSh && rSh->GetViewOptions() &&
+                    rSh->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+                // Fixes crash that occurs in documents with outline content folded at the end of
+                // the document. When the cursor is at the end of the visible document and
+                // right arrow key is pressed Move fails after moving the cursor to the
+                // end of the document model, which doesn't have a node frame and causes
+                // wierd numbers to be displayed in the statusbar page number count. Left
+                // arrow, when in this state, causes a crash without RestoredSavePos() added here.
+                RestoreSavePos();
             break;
+        }
 
         if (pFrame)
         {

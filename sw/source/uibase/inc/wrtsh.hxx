@@ -30,10 +30,12 @@
 #include <svx/swframetypes.hxx>
 #include <vcl/weld.hxx>
 
+#include <doc.hxx>
+#include <docsh.hxx>
+#include <viewopt.hxx>
+
 namespace vcl { class Window; }
 class SbxArray;
-class SwDoc;
-class SwViewOption;
 class SwFlyFrameAttrMgr;
 class SwField;
 class SwTOXBase;
@@ -492,8 +494,10 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq);
 
     bool IsOutlineContentVisible(const size_t nPos);
-    void ToggleOutlineContentVisibility(SwNode* pNd, const bool bForceNotVisible = false);
-    void ToggleOutlineContentVisibility(const size_t nPos, const bool bForceNotVisible = false);
+    void MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible = true);
+    void MakeAllFoldedOutlineContentVisible(bool bMakeVisible = true);
+    void InvalidateOutlineContentVisibility();
+    bool GetAttrOutlineContentVisible(const size_t nPos);
 
 private:
 
@@ -652,5 +656,40 @@ inline bool SwWrtShell::Is_FnDragEQBeginDrag() const
     return m_fnDrag == &SwWrtShell::BeginDrag;
 #endif
 }
+
+class MakeAllOutlineContentTemporarilyVisible
+{
+private:
+    SwWrtShell* m_pWrtSh;
+    bool m_bDone = false;
+public:
+    static sal_uInt32 nLock;
+    MakeAllOutlineContentTemporarilyVisible(SwDoc* pDoc)
+    {
+        ++nLock;
+        if (nLock > 1)
+            return;
+        if (SwDocShell* pDocSh = pDoc->GetDocShell())
+            if ((m_pWrtSh = pDocSh->GetWrtShell()) && m_pWrtSh->GetViewOptions() &&
+                    m_pWrtSh->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+            {
+                m_pWrtSh->StartAllAction();
+                m_pWrtSh->MakeAllFoldedOutlineContentVisible();
+                m_bDone = true;
+            }
+    }
+
+    ~MakeAllOutlineContentTemporarilyVisible() COVERITY_NOEXCEPT_FALSE
+    {
+        --nLock;
+        if (nLock > 0)
+            return;
+        if (m_bDone && m_pWrtSh)
+        {
+            m_pWrtSh->MakeAllFoldedOutlineContentVisible(false);
+            m_pWrtSh->EndAllAction();
+        }
+    }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
