@@ -30,12 +30,12 @@
 namespace sdr::properties
 {
         // create a new itemset
-        std::unique_ptr<SfxItemSet> GroupProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet GroupProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // Groups have in principle no ItemSet. To support methods like
             // GetMergedItemSet() the local one is used. Thus, all items in the pool
             // may be used and a pool itemset is created.
-            return std::make_unique<SfxItemSet>(rPool);
+            return SfxItemSet(rPool);
         }
 
         GroupProperties::GroupProperties(SdrObject& rObj)
@@ -66,10 +66,10 @@ namespace sdr::properties
         const SfxItemSet& GroupProperties::GetMergedItemSet() const
         {
             // prepare ItemSet
-            if(mpItemSet)
+            if(mxItemSet)
             {
                 // clear local itemset for merge
-                mpItemSet->ClearItem();
+                mxItemSet->ClearItem();
             }
             else
             {
@@ -92,11 +92,11 @@ namespace sdr::properties
                 {
                     if(SfxItemState::DONTCARE == rSet.GetItemState(nWhich, false))
                     {
-                        mpItemSet->InvalidateItem(nWhich);
+                        mxItemSet->InvalidateItem(nWhich);
                     }
                     else
                     {
-                        mpItemSet->MergeValue(rSet.Get(nWhich), true);
+                        mxItemSet->MergeValue(rSet.Get(nWhich), true);
                     }
 
                     nWhich = aIter.NextWhich();
@@ -105,7 +105,7 @@ namespace sdr::properties
 
             // For group properties, do not call parent since groups do
             // not have local ItemSets.
-            return *mpItemSet;
+            return *mxItemSet;
         }
 
         void GroupProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)

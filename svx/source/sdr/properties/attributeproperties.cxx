@@ -55,7 +55,7 @@ namespace sdr::properties
                     {
                         if(SfxItemState::SET == rStyle.GetItemState(nWhich))
                         {
-                            mpItemSet->ClearItem(nWhich);
+                            mxItemSet->ClearItem(nWhich);
                         }
 
                         nWhich = aIter.NextWhich();
@@ -63,7 +63,7 @@ namespace sdr::properties
                 }
 
                 // set new stylesheet as parent
-                mpItemSet->SetParent(&mpStyleSheet->GetItemSet());
+                mxItemSet->SetParent(&mpStyleSheet->GetItemSet());
             }
             else
             {
@@ -110,7 +110,7 @@ namespace sdr::properties
                 // reset parent of ItemSet
                 if(HasSfxItemSet())
                 {
-                    mpItemSet->SetParent(nullptr);
+                    mxItemSet->SetParent(nullptr);
                 }
 
                 SdrObject& rObj = GetSdrObject();
@@ -122,9 +122,9 @@ namespace sdr::properties
         }
 
         // create a new itemset
-        std::unique_ptr<SfxItemSet> AttributeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet AttributeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return std::make_unique<SfxItemSet>(rPool,
+            return SfxItemSet(rPool,
 
                 // ranges from SdrAttrObj
                 svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -272,7 +272,7 @@ namespace sdr::properties
                 }
             }
 
-            return *mpItemSet;
+            return *mxItemSet;
         }
 
         void AttributeProperties::ItemSetChanged(const SfxItemSet& /*rSet*/)
@@ -339,14 +339,14 @@ namespace sdr::properties
                 if(pResultItem)
                 {
                     // force ItemSet
-                    mpItemSet->Put(*pResultItem);
+                    mxItemSet->Put(*pResultItem);
 
                     // delete item if it was a generated one
                     pResultItem.reset();
                 }
                 else
                 {
-                    mpItemSet->Put(*pNewItem);
+                    mxItemSet->Put(*pNewItem);
                 }
             }
             else
@@ -354,7 +354,7 @@ namespace sdr::properties
                 // clear item if ItemSet exists
                 if(HasSfxItemSet())
                 {
-                    mpItemSet->ClearItem(nWhich);
+                    mxItemSet->ClearItem(nWhich);
                 }
             }
         }
@@ -386,8 +386,8 @@ namespace sdr::properties
             GetObjectItemSet();
 
             // prepare copied, new itemset, but WITHOUT parent
-            SfxItemSet* pDestItemSet = new SfxItemSet(*mpItemSet);
-            pDestItemSet->SetParent(nullptr);
+            SfxItemSet aDestItemSet(*mxItemSet);
+            aDestItemSet.SetParent(nullptr);
 
             // prepare forgetting the current stylesheet like in RemoveStyleSheet()
             EndListening(*mpStyleSheet);
@@ -395,7 +395,7 @@ namespace sdr::properties
 
             // prepare the iter; use the mpObjectItemSet which may have less
             // WhichIDs than the style.
-            SfxWhichIter aIter(*pDestItemSet);
+            SfxWhichIter aIter(aDestItemSet);
             sal_uInt16 nWhich(aIter.FirstWhich());
             const SfxPoolItem *pItem = nullptr;
 
@@ -404,16 +404,16 @@ namespace sdr::properties
             {
                 // #i61284# use mpItemSet with parents, makes things easier and reduces to
                 // one loop
-                if(SfxItemState::SET == mpItemSet->GetItemState(nWhich, true, &pItem))
+                if(SfxItemState::SET == mxItemSet->GetItemState(nWhich, true, &pItem))
                 {
-                    pDestItemSet->Put(*pItem);
+                    aDestItemSet.Put(*pItem);
                 }
 
                 nWhich = aIter.NextWhich();
             }
 
             // replace itemsets
-            mpItemSet.reset(pDestItemSet);
+            mxItemSet.emplace(std::move(aDestItemSet));
 
             // set necessary changes like in RemoveStyleSheet()
             GetSdrObject().SetBoundRectDirty();

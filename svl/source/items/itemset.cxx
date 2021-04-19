@@ -1459,6 +1459,31 @@ std::unique_ptr<SfxItemSet> SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool 
                 : new SfxItemSet(*m_pPool, m_pWhichRanges));
 }
 
+SfxItemSet SfxItemSet::CloneAsValue(bool bItems, SfxItemPool *pToPool ) const
+{
+    if (pToPool && pToPool != m_pPool)
+    {
+        SfxItemSet aNewSet(*pToPool, m_pWhichRanges);
+        if ( bItems )
+        {
+            SfxWhichIter aIter(aNewSet);
+            sal_uInt16 nWhich = aIter.FirstWhich();
+            while ( nWhich )
+            {
+                const SfxPoolItem* pItem;
+                if ( SfxItemState::SET == GetItemState( nWhich, false, &pItem ) )
+                    aNewSet.Put( *pItem, pItem->Which() );
+                nWhich = aIter.NextWhich();
+            }
+        }
+        return aNewSet;
+    }
+    else
+        return bItems
+                ? *this
+                : SfxItemSet(*m_pPool, m_pWhichRanges);
+}
+
 void SfxItemSet::PutDirect(const SfxPoolItem &rItem)
 {
     SfxPoolItem const** ppFnd = m_pItems.get();
@@ -1740,6 +1765,13 @@ std::unique_ptr<SfxItemSet> SfxAllItemSet::Clone(bool bItems, SfxItemPool *pToPo
     }
     else
         return std::unique_ptr<SfxItemSet>(bItems ? new SfxAllItemSet(*this) : new SfxAllItemSet(*m_pPool));
+}
+
+SfxItemSet SfxAllItemSet::CloneAsValue(bool , SfxItemPool * ) const
+{
+    // if you are trying to clone, then the thing you are cloning is polymorphic, which means
+    // it cannot be cloned as a value
+    throw std::logic_error("cannot do this");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

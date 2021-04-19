@@ -55,9 +55,9 @@ namespace sdr::properties
         }
 
         // create a new itemset
-        std::unique_ptr<SfxItemSet> GraphicProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet GraphicProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return std::make_unique<SfxItemSet>(rPool,
+            return SfxItemSet(rPool,
 
                 // range from SdrAttrObj
                 svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -132,16 +132,16 @@ namespace sdr::properties
             // force ItemSet
             GetObjectItemSet();
 
-            mpItemSet->Put( SdrGrafLuminanceItem( 0 ) );
-            mpItemSet->Put( SdrGrafContrastItem( 0 ) );
-            mpItemSet->Put( SdrGrafRedItem( 0 ) );
-            mpItemSet->Put( SdrGrafGreenItem( 0 ) );
-            mpItemSet->Put( SdrGrafBlueItem( 0 ) );
-            mpItemSet->Put( SdrGrafGamma100Item( 100 ) );
-            mpItemSet->Put( SdrGrafTransparenceItem( 0 ) );
-            mpItemSet->Put( SdrGrafInvertItem( false ) );
-            mpItemSet->Put( SdrGrafModeItem( GraphicDrawMode::Standard ) );
-            mpItemSet->Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
+            mxItemSet->Put( SdrGrafLuminanceItem( 0 ) );
+            mxItemSet->Put( SdrGrafContrastItem( 0 ) );
+            mxItemSet->Put( SdrGrafRedItem( 0 ) );
+            mxItemSet->Put( SdrGrafGreenItem( 0 ) );
+            mxItemSet->Put( SdrGrafBlueItem( 0 ) );
+            mxItemSet->Put( SdrGrafGamma100Item( 100 ) );
+            mxItemSet->Put( SdrGrafTransparenceItem( 0 ) );
+            mxItemSet->Put( SdrGrafInvertItem( false ) );
+            mxItemSet->Put( SdrGrafModeItem( GraphicDrawMode::Standard ) );
+            mxItemSet->Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
         }
 } // end of namespace
 

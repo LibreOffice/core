@@ -34,10 +34,10 @@
 
 namespace sdr::properties
 {
-        std::unique_ptr<SfxItemSet> DefaultProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet DefaultProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // Basic implementation; Basic object has NO attributes
-            return std::make_unique<SfxItemSet>(rPool);
+            return SfxItemSet(rPool);
         }
 
         DefaultProperties::DefaultProperties(SdrObject& rObj)
@@ -48,15 +48,15 @@ namespace sdr::properties
         DefaultProperties::DefaultProperties(const DefaultProperties& rProps, SdrObject& rObj)
         :   BaseProperties(rObj)
         {
-            if(!rProps.mpItemSet)
+            if(!rProps.mxItemSet)
                 return;
 
             // Clone may be to another model and thus another ItemPool.
             // SfxItemSet supports that thus we are able to Clone all
             // SfxItemState::SET items to the target pool.
-            mpItemSet = rProps.mpItemSet->Clone(
+            mxItemSet.emplace(rProps.mxItemSet->CloneAsValue(
                 true,
-                &rObj.getSdrModelFromSdrObject().GetItemPool());
+                &rObj.getSdrModelFromSdrObject().GetItemPool()));
 
             // React on ModelChange: If metric has changed, scale items.
             // As seen above, clone is supported, but scale is not included,
@@ -74,15 +74,15 @@ namespace sdr::properties
                 {
                     const Fraction aMetricFactor(GetMapFactor(aOldUnit, aNewUnit).X());
 
-                    ScaleItemSet(*mpItemSet, aMetricFactor);
+                    ScaleItemSet(*mxItemSet, aMetricFactor);
                 }
             }
 
             // do not keep parent info, this may be changed by later constructors.
             // This class just copies the ItemSet, ignore parent.
-            if(mpItemSet && mpItemSet->GetParent())
+            if(mxItemSet && mxItemSet->GetParent())
             {
-                mpItemSet->SetParent(nullptr);
+                mxItemSet->SetParent(nullptr);
             }
         }
 
@@ -95,15 +95,15 @@ namespace sdr::properties
 
         const SfxItemSet& DefaultProperties::GetObjectItemSet() const
         {
-            if(!mpItemSet)
+            if(!mxItemSet)
             {
-                const_cast<DefaultProperties*>(this)->mpItemSet = const_cast<DefaultProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
+                mxItemSet.emplace(const_cast<DefaultProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
                 const_cast<DefaultProperties*>(this)->ForceDefaultAttributes();
             }
 
-            assert(mpItemSet && "Could not create an SfxItemSet(!)");
+            assert(mxItemSet && "Could not create an SfxItemSet(!)");
 
-            return *mpItemSet;
+            return *mxItemSet;
         }
 
         void DefaultProperties::SetObjectItem(const SfxPoolItem& rItem)
@@ -223,8 +223,8 @@ namespace sdr::properties
 
         void DefaultProperties::PostItemChange(const sal_uInt16 nWhich )
         {
-            if( (nWhich == XATTR_FILLSTYLE) && (mpItemSet != nullptr) )
-                CleanupFillProperties(*mpItemSet);
+            if( (nWhich == XATTR_FILLSTYLE) && mxItemSet )
+                CleanupFillProperties(*mxItemSet);
         }
 
         void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/)
@@ -246,9 +246,9 @@ namespace sdr::properties
         {
             (void)xmlTextWriterStartElement(pWriter, BAD_CAST("DefaultProperties"));
             BaseProperties::dumpAsXml(pWriter);
-            if (mpItemSet)
+            if (mxItemSet)
             {
-                mpItemSet->dumpAsXml(pWriter);
+                mxItemSet->dumpAsXml(pWriter);
             }
             (void)xmlTextWriterEndElement(pWriter);
         }

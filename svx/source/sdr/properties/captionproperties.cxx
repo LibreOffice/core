@@ -30,9 +30,9 @@
 namespace sdr::properties
 {
         // create a new itemset
-        std::unique_ptr<SfxItemSet> CaptionProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet CaptionProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return std::make_unique<SfxItemSet>(
+            return SfxItemSet(
                 rPool,
                 svl::Items<
                     // Ranges from SdrAttrObj, SdrCaptionObj:
@@ -92,7 +92,7 @@ namespace sdr::properties
 
             // this was set by TextProperties::ForceDefaultAttributes(),
             // reset to default
-            mpItemSet->ClearItem(XATTR_LINESTYLE);
+            mxItemSet->ClearItem(XATTR_LINESTYLE);
         }
 } // end of namespace
 

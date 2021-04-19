@@ -27,11 +27,11 @@
 namespace sdr::properties
 {
         // create a new itemset
-        std::unique_ptr<SfxItemSet> EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // Basic implementation; Basic object has NO attributes
             assert(!"EmptyProperties::CreateObjectSpecificItemSet() should never be called");
-            return std::make_unique<SfxItemSet>(rPool);
+            return SfxItemSet(rPool);
         }
 
         EmptyProperties::EmptyProperties(SdrObject& rObj)
@@ -46,15 +46,15 @@ namespace sdr::properties
 
         const SfxItemSet& EmptyProperties::GetObjectItemSet() const
         {
-            if(!mpEmptyItemSet)
+            if(!mxEmptyItemSet)
             {
-                const_cast<EmptyProperties*>(this)->mpEmptyItemSet = const_cast<EmptyProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
+                mxEmptyItemSet.emplace(const_cast<EmptyProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
             }
 
-            assert(mpEmptyItemSet);
+            assert(mxEmptyItemSet);
             assert(!"EmptyProperties::GetObjectItemSet() should never be called");
 
-            return *mpEmptyItemSet;
+            return *mxEmptyItemSet;
         }
 
         void EmptyProperties::SetObjectItem(const SfxPoolItem& /*rItem*/)

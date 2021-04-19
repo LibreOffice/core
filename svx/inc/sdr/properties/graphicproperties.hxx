@@ -31,7 +31,7 @@ namespace sdr::properties
             virtual void applyDefaultStyleSheetFromSdrModel() override;
 
             // create a new itemset
-            virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
+            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet) override;

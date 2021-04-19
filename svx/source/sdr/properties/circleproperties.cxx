@@ -32,9 +32,9 @@
 namespace sdr::properties
 {
         // create a new itemset
-        std::unique_ptr<SfxItemSet> CircleProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet CircleProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return std::make_unique<SfxItemSet>(
+            return SfxItemSet(
                 rPool,
                 svl::Items<
                     // Ranges from SdrAttrObj, SdrCircObj
@@ -99,16 +99,16 @@ namespace sdr::properties
                 // force ItemSet
                 GetObjectItemSet();
 
-                mpItemSet->Put(SdrCircKindItem(eKind));
+                mxItemSet->Put(SdrCircKindItem(eKind));
 
                 if(rObj.GetStartAngle())
                 {
-                    mpItemSet->Put(makeSdrCircStartAngleItem(rObj.GetStartAngle()));
+                    mxItemSet->Put(makeSdrCircStartAngleItem(rObj.GetStartAngle()));
                 }
 
                 if(rObj.GetEndAngle() != 36000_deg100)
                 {
-                    mpItemSet->Put(makeSdrCircEndAngleItem(rObj.GetEndAngle()));
+                    mxItemSet->Put(makeSdrCircEndAngleItem(rObj.GetEndAngle()));
                 }
             }
 

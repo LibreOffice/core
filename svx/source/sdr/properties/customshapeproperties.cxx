@@ -59,9 +59,9 @@ namespace sdr::properties
             }
         }
 
-        std::unique_ptr<SfxItemSet> CustomShapeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet CustomShapeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return std::make_unique<SfxItemSet>(
+            return SfxItemSet(
                 rPool,
                 svl::Items<
                     // Ranges from SdrAttrObj:
@@ -93,7 +93,7 @@ namespace sdr::properties
         {
             if ( !nWhich )
             {
-                SfxWhichIter aIter( *mpItemSet );
+                SfxWhichIter aIter( *mxItemSet );
                 sal_uInt16 nWhich2 = aIter.FirstWhich();
                 while( nWhich2 )
                 {
@@ -111,7 +111,7 @@ namespace sdr::properties
         {
             if ( !nWhich )
             {
-                SfxWhichIter aIter( *mpItemSet );
+                SfxWhichIter aIter( *mxItemSet );
                 sal_uInt16 nWhich2 = aIter.FirstWhich();
                 while( nWhich2 )
                 {
