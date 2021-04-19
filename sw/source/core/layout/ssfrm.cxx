@@ -37,6 +37,11 @@
 #include <ndtxt.hxx>
 #include <osl/diagnose.h>
 
+#include <docsh.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
+#include <FrameControlsManager.hxx>
+
     // No inline cause we need the function pointers
 tools::Long SwFrame::GetTopMargin() const
     { return getFramePrintArea().Top(); }
@@ -326,6 +331,17 @@ Point SwFrame::GetFrameAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const
 void SwFrame::DestroyImpl()
 {
     mbInDtor = true;
+
+    // remove any frame controls
+    if (IsTextFrame())
+    {
+        if (SwRootFrame *pRootFrame = getRootFrame())
+            if (SwViewShell *pViewSh = pRootFrame->GetCurrShell())
+                if (SwDoc* pDoc = pViewSh->GetDoc())
+                    if (SwDocShell* pDocSh = pDoc->GetDocShell())
+                        if (SwView* pView = pDocSh->GetView())
+                            pView->GetEditWin().GetFrameControlsManager().RemoveControls(this);
+    }
 
     // accessible objects for fly and cell frames have been already disposed
     // by the destructors of the derived classes.

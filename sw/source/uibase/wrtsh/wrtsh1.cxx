@@ -1994,18 +1994,39 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
 }
 bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
 {
-    const SwNodes& rNodes = GetDoc()->GetNodes();
-    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
-
+    const SwOutlineNodes& rOutlineNodes = GetDoc()->GetNodes().GetOutLineNds();
     SwNode* pOutlineNode = rOutlineNodes[nPos];
-    if (pOutlineNode->IsEndNode())
-        return true;
 
-    bool bOutlineContentVisibleAttr = false;
-    if (pOutlineNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr))
-        return bOutlineContentVisibleAttr;
+    // no layout frame means outline folding is set to include sub levels and the outline node has
+    // a parent outline node with outline content visible attribute false (folded outline content)
+    if (!pOutlineNode->GetTextNode()->getLayoutFrame(nullptr))
+        return false;
 
-    return true;
+    // try the next node to determine if this outline node has visible content
+    SwNodeIndex aIdx(*pOutlineNode, +1);
+    if (&aIdx.GetNode() == &aIdx.GetNodes().GetEndOfContent()) // end of regular content
+        return false;
+    if (aIdx.GetNode().IsTextNode())
+    {
+        if (nPos + 1 < rOutlineNodes.size())
+        {
+            // for sublevels as content, if next node (aIdx) doesn't have a layout frame
+            // then this outline node does not have visible outline content.
+            if (GetViewOptions()->IsTreatSubOutlineLevelsAsContent() &&
+                    !aIdx.GetNode().GetTextNode()->getLayoutFrame(nullptr))
+                return false;
+            // if the next node (aIdx) is not the next outline node and it doesn't have a layout
+            // frame then this outline node does not have visible outline content.
+            else if (rOutlineNodes[nPos + 1] != &aIdx.GetNode() &&
+                    !aIdx.GetNode().GetTextNode()->getLayoutFrame(nullptr))
+                return false;
+        }
+    }
+
+    // made it here so use the node outline content visible attribute value, guessing it's true
+    bool bOutlineContentVisibleAttr = true;
+    pOutlineNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+    return bOutlineContentVisibleAttr;
 }
 
 void SwWrtShell::ToggleOutlineContentVisibility(SwNode* pNd, const bool bForceNotVisible)
@@ -2020,38 +2041,16 @@ void SwWrtShell::ToggleOutlineContentVisibility(const size_t nPos, const bool bF
     const SwNodes& rNodes = GetNodes();
     const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
 
-    assert(nPos < rOutlineNodes.size());
-
     SwNode* pSttNd = rOutlineNodes[nPos];
-    if (pSttNd->IsEndNode())
-        return;
 
+    // determine end node
     SwNode* pEndNd = &rNodes.GetEndOfContent();
     if (rOutlineNodes.size() > nPos + 1)
         pEndNd = rOutlineNodes[nPos + 1];
 
-    if (pSttNd->GetTableBox() || pSttNd->GetIndex() < rNodes.GetEndOfExtras().GetIndex())
-    {
-        // limit toggle to within table box
-        if (pSttNd->EndOfSectionIndex() < pEndNd->GetIndex() )
-            pEndNd = pSttNd->EndOfSectionNode();
-    }
-    // if pSttNd isn't in table but pEndNd is, skip over all outline nodes in table
-    else if (pEndNd->GetTableBox())
-    {
-        pEndNd = &rNodes.GetEndOfContent();
-        for (size_t nOutlinePos = nPos + 2; nOutlinePos < rOutlineNodes.size(); nOutlinePos++)
-        {
-            if (!(rOutlineNodes[nOutlinePos]->GetTableBox()))
-            {
-                pEndNd = rOutlineNodes[nOutlinePos];
-                break;
-            }
-        }
-    }
-
     if (GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
     {
+        // get the last outline node to include (iPos)
         int nLevel = pSttNd->GetTextNode()->GetAttrOutlineLevel();
         SwOutlineNodes::size_type iPos = nPos;
         while (++iPos < rOutlineNodes.size() &&
@@ -2080,64 +2079,129 @@ void SwWrtShell::ToggleOutlineContentVisibility(const size_t nPos, const bool bF
         }
     }
 
-    SwNodeIndex aIdx(*pSttNd, +1); // the next node after pSttdNd in the doc model SwNodes
+    // table, text box, header, footer
+    if (pSttNd->GetTableBox() || pSttNd->GetIndex() < rNodes.GetEndOfExtras().GetIndex())
+    {
+        // limit toggle to within section
+        if (pSttNd->EndOfSectionIndex() < pEndNd->GetIndex())
+            pEndNd = pSttNd->EndOfSectionNode();
+    }
+    // if pSttNd isn't in table but pEndNd is, skip over all outline nodes in table
+    else if (pEndNd->GetTableBox())
+    {
+        pEndNd = &rNodes.GetEndOfContent();
+        for (size_t nOutlinePos = nPos + 2; nOutlinePos < rOutlineNodes.size(); nOutlinePos++)
+        {
+            if (!(rOutlineNodes[nOutlinePos]->GetTableBox()))
+            {
+                pEndNd = rOutlineNodes[nOutlinePos];
+                break;
+            }
+        }
+    }
+    // end node determined
+
+    // Remove content frames from the next node after the starting outline node to
+    // the determined ending node. Always do this to prevent the chance of duplicate
+    // frames being made. They will be remade below if needed.
+    SwNodeIndex aIdx(*pSttNd, +1);
+    while (aIdx != *pEndNd)
+    {
+        SwNode* pNd = &aIdx.GetNode();
+        if (pNd->IsContentNode())
+            pNd->GetContentNode()->DelFrames(nullptr);
+        else if (pNd->IsTableNode())
+            pNd->GetTableNode()->DelFrames(nullptr);
+        aIdx++;
+    }
+
+    // toggle to visible content if currently not visible and not being forced to not be visible
     if (!IsOutlineContentVisible(nPos) && !bForceNotVisible)
     {
-        // make visible
+        // reset the index marker and make frames
+        aIdx.Assign(*pSttNd, +1);
         MakeFrames(GetDoc(), aIdx, *pEndNd);
 
         pSttNd->GetTextNode()->SetAttrOutlineContentVisible(true);
 
-        if (GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        // toggle outline content made visible that have outline visible attribute false
+        while (aIdx != *pEndNd)
         {
-            // remove button if focus is not on outline frame control window
-            SwContentFrame* pFrame = pSttNd->GetTextNode()->getLayoutFrame(nullptr);
-            if (pFrame && !pFrame->IsInDtor())
+            SwNode* pTmpNd = &aIdx.GetNode();
+            if (pTmpNd->IsTextNode() && pTmpNd->GetTextNode()->IsOutline())
             {
-                SwFrameControlPtr pOutlineFrameControl = GetView().GetEditWin().GetFrameControlsManager().GetControl(FrameControlType::Outline, pFrame);
-                if (pOutlineFrameControl && pOutlineFrameControl->GetWindow() && !pOutlineFrameControl->HasFocus())
-                    GetView().GetEditWin().GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, pFrame);
-            }
-
-            // toggle outline content made visible that have outline visible attribute false
-            while (aIdx != *pEndNd)
-            {
-                SwNode* pTmpNd = &aIdx.GetNode();
-                if (pTmpNd->IsTextNode() && pTmpNd->GetTextNode()->IsOutline())
+                SwTextNode* pTmpTextNd = pTmpNd->GetTextNode();
+                bool bOutlineContentVisibleAttr = true;
+                if (pTmpTextNd->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr) &&
+                        !bOutlineContentVisibleAttr)
                 {
-                    SwTextNode* pTmpTextNd = pTmpNd->GetTextNode();
-                    bool bOutlineContentVisibleAttr = true;
-                    if (pTmpTextNd->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr) &&
-                            !bOutlineContentVisibleAttr)
+                    SwOutlineNodes::size_type iPos;
+                    if (rOutlineNodes.Seek_Entry(pTmpTextNd, &iPos))
                     {
-                        SwOutlineNodes::size_type iPos;
-                        if (rOutlineNodes.Seek_Entry(pTmpTextNd, &iPos))
-                        {
-                            if (pTmpTextNd->getLayoutFrame(nullptr))
-                                ToggleOutlineContentVisibility(iPos, true); // force not visible
-                        }
+                        if (pTmpTextNd->getLayoutFrame(nullptr))
+                            ToggleOutlineContentVisibility(iPos, true); // force not visible
                     }
                 }
-                aIdx++;
             }
+            aIdx++;
         }
     }
     else
     {
-        // remove content frames
-        while (aIdx != *pEndNd)
-        {
-            SwNode* pNd = &aIdx.GetNode();
-            if (pNd->IsContentNode())
-                pNd->GetContentNode()->DelFrames(nullptr);
-            else if (pNd->IsTableNode())
-                pNd->GetTableNode()->DelFrames(nullptr);
-            aIdx++;
-        }
         pSttNd->GetTextNode()->SetAttrOutlineContentVisible(false);
     }
-
-    GetDoc()->GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
 }
+
+// here is where showing and removal of buttons is done
+// called from edit window paint and key input handler
+void SwWrtShell::InvalidateOutlineContentVisibility()
+{
+    // make content visible only if it isn't already
+    // and fold folded
+    const SwOutlineNodes& rOutlineNds = GetNodes().GetOutLineNds();
+    StartAction();
+    LockView(true);
+    for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
+    {
+        SwNode* pNd = rOutlineNds[nPos];
+        bool bOutlineContentVisibleAttr = true;
+        pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+        // make content visible only if needed
+        if (!IsOutlineContentVisible(nPos) && bOutlineContentVisibleAttr)
+        {
+            // setting attr to false to use toggle function
+            // better may be something like ShowOutlineContent(nPos, bOutlineContentVisibleAttr)
+            pNd->GetTextNode()->SetAttrOutlineContentVisible(false);
+            ToggleOutlineContentVisibility(nPos);
+        }
+        else if (!bOutlineContentVisibleAttr)
+            // force folded not really a toggle
+            // perhaps make this function ShowOutlineContent(nPos, bool)
+            ToggleOutlineContentVisibility(nPos, true);
+    }
+    EndAction();
+    LockView(false);
+
+    // set outline content visibility toggle buttons
+    for (SwNode* pNd : rOutlineNds)
+    {
+        bool bOutlineContentVisibleAttr = true;
+        pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+        if (!bOutlineContentVisibleAttr)
+            GetView().GetEditWin().GetFrameControlsManager().SetOutlineContentVisibilityButton(pNd->GetTextNode());
+        else
+        {
+            // remove button if outline node frame is not saved frame
+            // so the button that the mouse pointer is on doesn't get removed
+            SwContentFrame* pFrame = pNd->GetTextNode()->getLayoutFrame(nullptr);
+            if (pFrame && !pFrame->IsInDtor())
+            {
+                if (pFrame != GetView().GetEditWin().GetSavedOutlineFrame())
+                     GetView().GetEditWin().GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, pFrame);
+            }
+        }
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
