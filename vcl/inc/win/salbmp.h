@@ -55,8 +55,6 @@ public:
     static HGLOBAL      ImplCreateDIB( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal );
     static HANDLE       ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB );
     static sal_uInt16   ImplGetDIBColorCount( HGLOBAL hDIB );
-    static void         ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
-                                             const Size& rSizePixel, bool bRLE4 );
 
 public:
 
