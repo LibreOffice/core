@@ -1197,15 +1197,7 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
 
     if(HasSdrObject())
     {
-        // #i123539# optimization for 3D chart object generation: do not use UNO
-        // API commands to get the range, this is too expensive since for 3D
-        // scenes it may recalculate the whole scene since in AOO this depends
-        // on the contained geometry (layouted to show all content)
-        const bool b3DConstruction(dynamic_cast< E3dObject* >(GetSdrObject()) && GetSdrObject()->getSdrModelFromSdrObject().isLocked());
-        tools::Rectangle aRect(
-            b3DConstruction ?
-                tools::Rectangle(maPosition.X, maPosition.Y, maSize.Width, maSize.Height) :
-                svx_getLogicRectHack(GetSdrObject()) );
+        tools::Rectangle aRect( svx_getLogicRectHack(GetSdrObject()) );
         Size aLocalSize( rSize.Width, rSize.Height );
         ForceMetricToItemPoolMetric(aLocalSize);
 
