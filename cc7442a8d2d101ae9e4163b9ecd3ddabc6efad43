@@ -63,6 +63,30 @@
       "revId": "cc7442a8d2d101ae9e4163b9ecd3ddabc6efad43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca310308_8885507c",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-19T11:01:15Z",
+      "side": 1,
+      "message": "\u003e I suppose you mean \"+ sizeof(sal_Unicode)\"\n\neh, right  :)",
+      "parentUuid": "7019f5cc_4219160d",
+      "range": {
+        "startLine": 114,
+        "startChar": 8,
+        "endLine": 120,
+        "endChar": 70
+      },
+      "revId": "cc7442a8d2d101ae9e4163b9ecd3ddabc6efad43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
