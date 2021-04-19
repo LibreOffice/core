@@ -51,8 +51,6 @@
 #include <svl/cjkoptions.hxx>
 #include <comphelper/fileurl.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <officecfg/Office/Common.hxx>
-#include <tools/urlobj.hxx>
 #include <ndtxt.hxx>
 #include <SwRewriter.hxx>
 #include <doc.hxx>
@@ -71,20 +69,6 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace ::comphelper;
-
-namespace
-{
-/// Similar to comphelper::isFileUrl(), but handles relative URLs as well.
-bool IsFileUrl(SwWrtShell& rWrtSh, const OUString& rUrl)
-{
-    SwDocShell* pDocShell = rWrtSh.GetDoc()->GetDocShell();
-    OUString aBaseUrl = pDocShell->getDocumentBaseURL();
-    OUString aAbs = INetURLObject::GetAbsURL(aBaseUrl, rUrl,
-            INetURLObject::EncodeMechanism::WasEncoded,
-            INetURLObject::DecodeMechanism::WithCharset);
-    return comphelper::isFileUrl(aAbs);
-}
-}
 
 // dialog to insert a directory selection
 SwIndexMarkPane::SwIndexMarkPane(const std::shared_ptr<weld::Dialog>& rDialog, weld::Builder& rBuilder, bool bNewDlg,
@@ -1571,7 +1555,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             if(!pFields[aCurInfo.nToxField].isEmpty())
             {
                 int nPos = pFields[aCurInfo.nToxField].toInt32();
-                if (nPos == AUTH_TYPE_WWW && IsFileUrl(rWrtSh, pFields[AUTH_FIELD_URL]))
+                if (nPos == AUTH_TYPE_WWW && comphelper::isFileUrl(pFields[AUTH_FIELD_URL]))
                 {
                     // Map file URL to local file.
                     nPos = AUTH_TYPE_END;
@@ -1645,7 +1629,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                 }
             }
             else if (aCurInfo.nToxField == AUTH_FIELD_URL
-                     && IsFileUrl(rWrtSh, pFields[aCurInfo.nToxField]))
+                     && comphelper::isFileUrl(pFields[aCurInfo.nToxField]))
             {
                 m_xBrowseButton->show();
             }
@@ -1751,18 +1735,8 @@ IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
     sfx2::FileDialogHelper aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                     FileDialogFlags::NONE, getDialog());
     OUString aPath = GetEntryText(AUTH_FIELD_URL);
-    bool bSaveRelFSys = officecfg::Office::Common::Save::URL::FileSystem::get();
     if (!aPath.isEmpty())
     {
-        if (bSaveRelFSys && !IsFileUrl(rWrtSh, aPath))
-        {
-            SwDocShell* pDocShell = rWrtSh.GetDoc()->GetDocShell();
-            OUString aBasePath = pDocShell->getDocumentBaseURL();
-            aPath = INetURLObject::GetAbsURL(aBasePath, aPath,
-                                             INetURLObject::EncodeMechanism::WasEncoded,
-                                             INetURLObject::DecodeMechanism::WithCharset);
-        }
-
         aFileDlg.SetDisplayDirectory(aPath);
     }
 
@@ -1772,14 +1746,6 @@ IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
     }
 
     aPath = aFileDlg.GetPath();
-    if (bSaveRelFSys)
-    {
-        SwDocShell* pDocShell = rWrtSh.GetDoc()->GetDocShell();
-        OUString aBasePath = pDocShell->getDocumentBaseURL();
-        aPath
-            = INetURLObject::GetRelURL(aBasePath, aPath, INetURLObject::EncodeMechanism::WasEncoded,
-                                       INetURLObject::DecodeMechanism::WithCharset);
-    }
 
     for (int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
     {

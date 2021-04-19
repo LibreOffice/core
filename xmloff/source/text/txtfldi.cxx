@@ -2974,7 +2974,12 @@ void XMLBibliographyFieldImportContext::startFastElement(
             }
             else
             {
-                aAny <<= aIter.toString();
+                OUString aStringValue = aIter.toString();
+                if (nToken == XML_URL)
+                {
+                    aStringValue = GetImport().GetAbsoluteReference(aStringValue);
+                }
+                aAny <<= aStringValue;
                 aValue.Value = aAny;
 
                 aValues.push_back(aValue);
