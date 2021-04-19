@@ -226,6 +226,7 @@ Public Function _NewDialog(Optional ByVal pvArgs As Variant) As Object
 &apos;&apos;&apos;		Library: the name of the library hosting the dialog. Default = &quot;Standard&quot;
 &apos;&apos;&apos;		DialogName: The name of the dialog
 &apos;&apos;&apos;			Library and dialog names are case-sensitive
+&apos;&apos;&apos;		Context: When called from Python, the context must be provided : XSCRIPTCONTEXT
 &apos;&apos;&apos;	Returns: the instance or Nothing
 
 Dim oDialog As Object				&apos;	Return value
@@ -233,11 +234,14 @@ Dim vContainer As Variant			&apos;	Alias of pvArgs(0)
 Dim vLibrary As Variant				&apos;	Alias of pvArgs(1)
 Dim vDialogName As Variant			&apos;	Alias of pvArgs(2)
 Dim oLibraries As Object			&apos;	com.sun.star.comp.sfx2.DialogLibraryContainer
-Dim oLibrary As Object				&apos;	com.sun.star.container.XNameAccess
+Dim vContext As Variant				&apos;	com.sun.star.uno.XComponentContext
 Dim oDialogProvider As Object		&apos;	com.sun.star.io.XInputStreamProvider
 Dim oEnum As Object					&apos;	com.sun.star.container.XEnumeration
 Dim oComp As Object					&apos;	com.sun.star.lang.XComponent
+Dim oDialogControl As Object		&apos;	com.sun.star.awt.XControl - stardiv.Toolkit.UnoDialogControl
 Dim vWindow As Window				&apos;	A single component
+Dim sScope As String				&apos;	&quot;application&quot; or &quot;document&quot;
+Dim sURI As String					&apos;	URI of the targeted dialog
 Dim oUi As Object					&apos;	&quot;UI&quot; service
 Dim bFound As Boolean				&apos;	True if WindowName is found on the desktop
 Const cstService = &quot;SFDialogs.Dialog&quot;
@@ -255,16 +259,18 @@ Check:
 	If Not ScriptForge.SF_Utils._Validate(vContainer, &quot;Container&quot;, Array(V_STRING, ScriptForge.V_OBJECT)) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(vLibrary, &quot;Library&quot;, V_STRING) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(vDialogName, &quot;DialogName&quot;, V_STRING) Then GoTo Finally
+	If UBound(pvArgs) &gt;= 3 Then vContext = pvArgs(3) Else vContext = Nothing
+	If Not ScriptForge.SF_Utils._Validate(vContext, &quot;DialogName&quot;, V_OBJECT) Then GoTo Finally
 	Set oDialog = Nothing
 
 Try:
-	&apos;	Determine the container and the library hosting the dialog
-	Set oLibraries = Nothing
+	&apos;	Determine the library container hosting the dialog
+	Set oUi = ScriptForge.SF_Register.CreateScriptService(&quot;UI&quot;)
+	Set oComp = Nothing
 	If VarType(vContainer) = V_STRING Then
-		If UCase(vContainer) = UCase(cstGlobal) Then Set oLibraries = GlobalScope.DialogLibraries
+		bFound = ( UCase(vContainer) = UCase(cstGlobal) )
 	End If
-	If IsNull(oLibraries) Then
-		Set oUi = ScriptForge.SF_Register.CreateScriptService(&quot;UI&quot;)
+	If Not bFound Then
 		Select Case VarType(vContainer)
 			Case V_STRING
 				If Len(vContainer) &gt; 0 Then
@@ -294,19 +300,27 @@ Try:
 		End Select
 		If Not bFound Then GoTo CatchNotFound
 		If Len(vWindow.DocumentType) = 0 Then GoTo CatchNotFound
-		&apos;	The library is now fully determined
-		Set oLibraries = oComp.DialogLibraries
 	End If
 
-	&apos;	Load the library and get the dialog
-	With oLibraries
-		If Not .hasByName(vLibrary) Then GoTo CatchNotFound
-		If Not .isLibraryLoaded(vLibrary) Then .loadLibrary(vLibrary)
-		Set oLibrary = .getByName(vLibrary)
-		If Not oLibrary.hasByName(vDialogName) Then GoTo CatchNotFound
-		Set oDialogProvider = oLibrary.getByName(vDialogName)
-	End With
+	&apos;	Determine the dialog provider
+	Select Case True
+		Case IsNull(vContext) And IsNull(oComp)			&apos;	Basic and GlobalScope
+			Set oDialogProvider = GetProcessServiceManager.createInstance(&quot;com.sun.star.awt.DialogProvider&quot;)
+		Case IsNull(vContext) And Not IsNull(oComp)		&apos;	Basic and Document
+			Set oDialogProvider = GetProcessServiceManager.createInstanceWithArguments(&quot;com.sun.star.awt.DialogProvider&quot;, Array(oComp))
+		Case Not IsNull(vContext) And IsNull(oComp)		&apos;	Python and GlobalScope
+			Set oDialogProvider = vContext.getServiceManager().createInstanceWithContext(&quot;com.sun.star.awt.DialogProvider&quot;, vContext)
+		Case Not IsNull(vContext) And Not IsNull(oComp)	&apos;	Python and Document
+			Set oDialogProvider = vContext.getServiceManager().createInstanceWithContext(&quot;com.sun.star.awt.DialogProvider&quot;, Array(oComp))
+	End Select
 
+	&apos;	Create the graphcal interface
+	sScope = Iif(IsNull(oComp), &quot;application&quot;, &quot;document&quot;)
+	sURI = &quot;vnd.sun.star.script:&quot; &amp; vLibrary &amp; &quot;.&quot; &amp; vDialogName &amp; &quot;?location=&quot; &amp; sScope
+	On Local Error GoTo CatchNotFound
+	Set oDialogControl = oDialogProvider.createDialog(sURI)
+
+	&apos;	Initialize the basic SF_Dialog instance to return to the user script
 	Set oDialog = New SF_Dialog
 	With oDialog
 		Set .[Me] = oDialog
@@ -314,6 +328,7 @@ Try:
 		._Library = vLibrary
 		._Name = vDialogName
 		Set ._DialogProvider = oDialogProvider
+		Set ._DialogControl = oDialogControl
 		._Initialize()
 	End With
 

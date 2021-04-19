@@ -315,8 +315,8 @@ class ScriptForge(object, metaclass = _Singleton):
             if isinstance(returntuple[cstValue], uno.ByteSequence):
                 return ()
         elif returntuple[cstVarType] == ScriptForge.V_DATE:
+            dat = None
             try:    # Anticipate fromisoformat('00:00:00') and alike
-                dat = None
                 dat = datetime.datetime.fromisoformat(returntuple[cstValue])
             finally:
                 return dat
@@ -528,10 +528,10 @@ class SFServices(object):
     def Dispose(self):
         if self.serviceimplementation == 'basic':
             if self.objectreference >= len(ScriptForge.servicesmodules):    # Do not dispose predefined module objects
-                self.Execute(self.vbMethod, 'Dispose')
+                self.ExecMethod(self.vbMethod, 'Dispose')
                 self.objectreference = -1
 
-    def Execute(self, flags = 0, methodname = '', *args):
+    def ExecMethod(self, flags = 0, methodname = '', *args):
         if flags == 0:
             flags = self.vbMethod
         if len(methodname) > 0:
@@ -558,6 +558,8 @@ class SFServices(object):
             Set the given property to a new value in the Basic world
             """
         if self.serviceimplementation == 'basic':
+            if isinstance(value, datetime.datetime):
+                value = value.isoformat()
             return self.EXEC(self.objectreference, self.vbLet + self.flgDateArg, propertyname, value)
 
 
@@ -588,7 +590,8 @@ class SFScriptForge:
                 Difference with the Basic version: dates are returned in their iso format,
                 not as any of the datetime objects.
                 """
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'ImportFromCSVFile', filename, delimiter, dateformat)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'ImportFromCSVFile',
+                                   filename, delimiter, dateformat)
 
     # #########################################################################
     # SF_Basic CLASS
@@ -840,14 +843,14 @@ class SFScriptForge:
         serviceproperties = dict()
 
         def Console(self, modal = True):
-            # Modal is always True in Python: Basic execution lasts only the time to display the box
-            return self.Execute(self.vbMethod, 'Console', True)
+            # From Python, the current XComponentContext must be added as last argument
+            return self.ExecMethod(self.vbMethod, 'Console', modal, ScriptForge.componentcontext)
 
         def ConsoleClear(self, keep = 0):
-            return self.Execute(self.vbMethod, 'ConsoleClear', keep)
+            return self.ExecMethod(self.vbMethod, 'ConsoleClear', keep)
 
         def ConsoleToFile(self, filename):
-            return self.Execute(self.vbMethod, 'ConsoleToFile', filename)
+            return self.ExecMethod(self.vbMethod, 'ConsoleToFile', filename)
 
         def DebugDisplay(self, *args):
             # Arguments are concatenated in a single string similar to what the Python print() function would produce
@@ -859,7 +862,7 @@ class SFScriptForge:
         def DebugPrint(self, *args):
             # Arguments are concatenated in a single string similar to what the Python print() function would produce
             param = '\t'.join(list(map(repr, args))).expandtabs(tabsize = 4)
-            return self.Execute(self.vbMethod, 'DebugPrint', param)
+            return self.ExecMethod(self.vbMethod, 'DebugPrint', param)
 
         def RaiseFatal(self, errorcode, *args):
             """
@@ -869,6 +872,16 @@ class SFScriptForge:
                 """
             # Direct call because RaiseFatal forces an execution stop in Basic
             return self.SIMPLEEXEC('SF_Exception.RaiseFatal', errorcode, *args)
+
+        def _RaiseFatal(self, sub, subargs, errorcode, *args):
+            """
+                Wrapper of RaiseFatal(). Includes method and syntax of the failed Python routine
+                to simulate the exact behaviour of the Basic RaiseFatal() method
+                For INTERNAL USE only
+                """
+            ScriptForge.InvokeSimpleScript('ScriptForge.SF_Utils._EnterFunction', sub, subargs)
+            self.RaiseFatal(errorcode, *args)
+            raise RuntimeError("The execution of the method '" + sub.split('.')[-1] + "' failed. Execution stops.")
 
     # #########################################################################
     # SF_FileSystem CLASS
@@ -890,7 +903,7 @@ class SFScriptForge:
         ForReading, ForWriting, ForAppending = 1, 2, 8
 
         def BuildPath(self, foldername, name):
-            return self.Execute(self.vbMethod, 'BuildPath', foldername, name)
+            return self.ExecMethod(self.vbMethod, 'BuildPath', foldername, name)
 
         def CompareFiles(self, filename1, filename2, comparecontents = False):
             py = ScriptForge.pythonhelpermodule + '$' + '_SF_FileSystem__CompareFiles'
@@ -902,37 +915,37 @@ class SFScriptForge:
                 return False
 
         def CopyFile(self, source, destination, overwrite = True):
-            return self.Execute(self.vbMethod, 'CopyFile', source, destination, overwrite)
+            return self.ExecMethod(self.vbMethod, 'CopyFile', source, destination, overwrite)
 
         def CopyFolder(self, source, destination, overwrite = True):
-            return self.Execute(self.vbMethod, 'CopyFolder', source, destination, overwrite)
+            return self.ExecMethod(self.vbMethod, 'CopyFolder', source, destination, overwrite)
 
         def CreateFolder(self, foldername):
-            return self.Execute(self.vbMethod, 'CreateFolder', foldername)
+            return self.ExecMethod(self.vbMethod, 'CreateFolder', foldername)
 
         def CreateTextFile(self, filename, overwrite = True, encoding = 'UTF-8'):
-            return self.Execute(self.vbMethod, 'CreateTextFile', filename, overwrite, encoding)
+            return self.ExecMethod(self.vbMethod, 'CreateTextFile', filename, overwrite, encoding)
 
         def DeleteFile(self, filename):
-            return self.Execute(self.vbMethod, 'DeleteFile', filename)
+            return self.ExecMethod(self.vbMethod, 'DeleteFile', filename)
 
         def DeleteFolder(self, foldername):
-            return self.Execute(self.vbMethod, 'DeleteFolder', foldername)
+            return self.ExecMethod(self.vbMethod, 'DeleteFolder', foldername)
 
         def FileExists(self, filename):
-            return self.Execute(self.vbMethod, 'FileExists', filename)
+            return self.ExecMethod(self.vbMethod, 'FileExists', filename)
 
         def Files(self, foldername, filter = ''):
-            return self.Execute(self.vbMethod, 'Files', foldername, filter)
+            return self.ExecMethod(self.vbMethod, 'Files', foldername, filter)
 
         def FolderExists(self, foldername):
-            return self.Execute(self.vbMethod, 'FolderExists', foldername)
+            return self.ExecMethod(self.vbMethod, 'FolderExists', foldername)
 
         def GetBaseName(self, filename):
-            return self.Execute(self.vbMethod, 'GetBaseName', filename)
+            return self.ExecMethod(self.vbMethod, 'GetBaseName', filename)
 
         def GetExtension(self, filename):
-            return self.Execute(self.vbMethod, 'GetExtension', filename)
+            return self.ExecMethod(self.vbMethod, 'GetExtension', filename)
 
         def GetFileLen(self, filename):
             py = ScriptForge.pythonhelpermodule + '$' + '_SF_FileSystem__GetFilelen'
@@ -943,16 +956,16 @@ class SFScriptForge:
                 return 0
 
         def GetFileModified(self, filename):
-            return self.Execute(self.vbMethod + self.flgDateRet, 'GetFileModified', filename)
+            return self.ExecMethod(self.vbMethod + self.flgDateRet, 'GetFileModified', filename)
 
         def GetName(self, filename):
-            return self.Execute(self.vbMethod, 'GetName', filename)
+            return self.ExecMethod(self.vbMethod, 'GetName', filename)
 
         def GetParentFolderName(self, filename):
-            return self.Execute(self.vbMethod, 'GetParentFolderName', filename)
+            return self.ExecMethod(self.vbMethod, 'GetParentFolderName', filename)
 
         def GetTempName(self):
-            return self.Execute(self.vbMethod, 'GetTempName')
+            return self.ExecMethod(self.vbMethod, 'GetTempName')
 
         def HashFile(self, filename, algorithm):
             py = ScriptForge.pythonhelpermodule + '$' + '_SF_FileSystem__HashFile'
@@ -963,22 +976,22 @@ class SFScriptForge:
                 return ''
 
         def MoveFile(self, source, destination):
-            return self.Execute(self.vbMethod, 'MoveFile', source, destination)
+            return self.ExecMethod(self.vbMethod, 'MoveFile', source, destination)
 
         def MoveFolder(self, source, destination):
-            return self.Execute(self.vbMethod, 'MoveFolder', source, destination)
+            return self.ExecMethod(self.vbMethod, 'MoveFolder', source, destination)
 
         def OpenTextFile(self, filename, iomode = 1, create = False, encoding = 'UTF-8'):
-            return self.Execute(self.vbMethod, 'OpenTextFile', filename, iomode, create, encoding)
+            return self.ExecMethod(self.vbMethod, 'OpenTextFile', filename, iomode, create, encoding)
 
         def PickFile(self, defaultfile = ScriptForge.cstSymEmpty, mode = 'OPEN', filter = ''):
-            return self.Execute(self.vbMethod, 'PickFile', defaultfile, mode, filter)
+            return self.ExecMethod(self.vbMethod, 'PickFile', defaultfile, mode, filter)
 
         def PickFolder(self, defaultfolder = ScriptForge.cstSymEmpty, freetext = ''):
-            return self.Execute(self.vbMethod, 'PickFolder', defaultfolder, freetext)
+            return self.ExecMethod(self.vbMethod, 'PickFolder', defaultfolder, freetext)
 
         def SubFolders(self, foldername, filter = ''):
-            return self.Execute(self.vbMethod, 'SubFolders', foldername, filter)
+            return self.ExecMethod(self.vbMethod, 'SubFolders', foldername, filter)
 
         def _ConvertFromUrl(self, filename):
             # Alias for same function in FileSystem Basic module
@@ -1002,13 +1015,13 @@ class SFScriptForge:
         serviceproperties = dict(Folder = False, Languages = False, Locale = False)
 
         def AddText(self, context = '', msgid = '', comment = ''):
-            return self.Execute(self.vbMethod, 'AddText', context, msgid, comment)
+            return self.ExecMethod(self.vbMethod, 'AddText', context, msgid, comment)
 
         def ExportToPOTFile(self, filename, header = '', encoding= 'UTF-8'):
-            return self.Execute(self.vbMethod, 'ExportToPOTFile', filename, header, encoding)
+            return self.ExecMethod(self.vbMethod, 'ExportToPOTFile', filename, header, encoding)
 
         def GetText(self, msgid, *args):
-            return self.Execute(self.vbMethod, 'GetText', msgid, *args)
+            return self.ExecMethod(self.vbMethod, 'GetText', msgid, *args)
         _ = GetText
 
     # #########################################################################
@@ -1122,32 +1135,32 @@ class SFScriptForge:
             return self.SIMPLEEXEC(scope + ':' + script, *args)
 
         def HasUnoMethod(self, unoobject, methodname):
-            return self.Execute(self.vbMethod, 'HasUnoMethod', unoobject, methodname)
+            return self.ExecMethod(self.vbMethod, 'HasUnoMethod', unoobject, methodname)
 
         def HasUnoProperty(self, unoobject, propertyname):
-            return self.Execute(self.vbMethod, 'HasUnoProperty', unoobject, propertyname)
+            return self.ExecMethod(self.vbMethod, 'HasUnoProperty', unoobject, propertyname)
 
         def OpenURLInBrowser(self, url):
             py = ScriptForge.pythonhelpermodule + '$' + '_SF_Session__OpenURLInBrowser'
             return self.SIMPLEEXEC(py, url)
 
         def RunApplication(self, command, parameters):
-            return self.Execute(self.vbMethod, 'RunApplication', command, parameters)
+            return self.ExecMethod(self.vbMethod, 'RunApplication', command, parameters)
 
         def SendMail(self, recipient, cc = '', bcc = '', subject = '', body = '', filenames = '', editmessage = True):
-            return self.Execute(self.vbMethod, 'SendMail', recipient, cc, bcc, subject, body, filenames, editmessage)
+            return self.ExecMethod(self.vbMethod, 'SendMail', recipient, cc, bcc, subject, body, filenames, editmessage)
 
         def UnoObjectType(self, unoobject):
-            return self.Execute(self.vbMethod, 'UnoObjectType', unoobject)
+            return self.ExecMethod(self.vbMethod, 'UnoObjectType', unoobject)
 
         def UnoMethods(self, unoobject):
-            return self.Execute(self.vbMethod, 'UnoMethods', unoobject)
+            return self.ExecMethod(self.vbMethod, 'UnoMethods', unoobject)
 
         def UnoProperties(self, unoobject):
-            return self.Execute(self.vbMethod, 'UnoProperties', unoobject)
+            return self.ExecMethod(self.vbMethod, 'UnoProperties', unoobject)
 
         def WebService(self, uri):
-            return self.Execute(self.vbMethod, 'WebService', uri)
+            return self.ExecMethod(self.vbMethod, 'WebService', uri)
 
     # #########################################################################
     # SF_String CLASS
@@ -1169,34 +1182,34 @@ class SFScriptForge:
             return self.SIMPLEEXEC(py, inputstr, algorithm.lower())
 
         def IsADate(self, inputstr, dateformat = 'YYYY-MM-DD'):
-            return self.Execute(self.vbMethod, 'IsADate', inputstr, dateformat)
+            return self.ExecMethod(self.vbMethod, 'IsADate', inputstr, dateformat)
 
         def IsEmail(self, inputstr):
-            return self.Execute(self.vbMethod, 'IsEmail', inputstr)
+            return self.ExecMethod(self.vbMethod, 'IsEmail', inputstr)
 
         def IsFileName(self, inputstr, osname = ScriptForge.cstSymEmpty):
-            return self.Execute(self.vbMethod, 'IsFileName', inputstr, osname)
+            return self.ExecMethod(self.vbMethod, 'IsFileName', inputstr, osname)
 
         def IsIBAN(self, inputstr):
-            return self.Execute(self.vbMethod, 'IsIBAN', inputstr)
+            return self.ExecMethod(self.vbMethod, 'IsIBAN', inputstr)
 
         def IsIPv4(self, inputstr):
-            return self.Execute(self.vbMethod, 'IsIPv4', inputstr)
+            return self.ExecMethod(self.vbMethod, 'IsIPv4', inputstr)
 
         def IsLike(self, inputstr, pattern, casesensitive = False):
-            return self.Execute(self.vbMethod, 'IsLike', inputstr, pattern, casesensitive)
+            return self.ExecMethod(self.vbMethod, 'IsLike', inputstr, pattern, casesensitive)
 
         def IsSheetName(self, inputstr):
-            return self.Execute(self.vbMethod, 'IsSheetName', inputstr)
+            return self.ExecMethod(self.vbMethod, 'IsSheetName', inputstr)
 
         def IsUrl(self, inputstr):
-            return self.Execute(self.vbMethod, 'IsUrl', inputstr)
+            return self.ExecMethod(self.vbMethod, 'IsUrl', inputstr)
 
         def SplitNotQuoted(self, inputstr, delimiter = ' ', occurrences = 0, quotechar = '"'):
-            return self.Execute(self.vbMethod, 'SplitNotQuoted', inputstr, delimiter, occurrences, quotechar)
+            return self.ExecMethod(self.vbMethod, 'SplitNotQuoted', inputstr, delimiter, occurrences, quotechar)
 
         def Wrap(self, inputstr, width = 70, tabsize = 8):
-            return self.Execute(self.vbMethod, 'Wrap', inputstr, width, tabsize)
+            return self.ExecMethod(self.vbMethod, 'Wrap', inputstr, width, tabsize)
 
     # #########################################################################
     # SF_TextStream CLASS
@@ -1224,22 +1237,22 @@ class SFScriptForge:
         line = Line
 
         def CloseFile(self):
-            return self.Execute(self.vbMethod, 'CloseFile')
+            return self.ExecMethod(self.vbMethod, 'CloseFile')
 
         def ReadAll(self):
-            return self.Execute(self.vbMethod, 'ReadAll')
+            return self.ExecMethod(self.vbMethod, 'ReadAll')
 
         def ReadLine(self):
-            return self.Execute(self.vbMethod, 'ReadLine')
+            return self.ExecMethod(self.vbMethod, 'ReadLine')
 
         def SkipLine(self):
-            return self.Execute(self.vbMethod, 'SkipLine')
+            return self.ExecMethod(self.vbMethod, 'SkipLine')
 
         def WriteBlankLines(self, lines):
-            return self.Execute(self.vbMethod, 'WriteBlankLines', lines)
+            return self.ExecMethod(self.vbMethod, 'WriteBlankLines', lines)
 
         def WriteLine(self, line):
-            return self.Execute(self.vbMethod, 'WriteLine', line)
+            return self.ExecMethod(self.vbMethod, 'WriteLine', line)
 
     # #########################################################################
     # SF_Timer CLASS
@@ -1258,19 +1271,19 @@ class SFScriptForge:
         forceGetProperty = True
 
         def Continue(self):
-            return self.Execute(self.vbMethod, 'Continue')
+            return self.ExecMethod(self.vbMethod, 'Continue')
 
         def Restart(self):
-            return self.Execute(self.vbMethod, 'Restart')
+            return self.ExecMethod(self.vbMethod, 'Restart')
 
         def Start(self):
-            return self.Execute(self.vbMethod, 'Start')
+            return self.ExecMethod(self.vbMethod, 'Start')
 
         def Suspend(self):
-            return self.Execute(self.vbMethod, 'Suspend')
+            return self.ExecMethod(self.vbMethod, 'Suspend')
 
         def Terminate(self):
-            return self.Execute(self.vbMethod, 'Terminate')
+            return self.ExecMethod(self.vbMethod, 'Terminate')
 
     # #########################################################################
     # SF_UI CLASS
@@ -1298,47 +1311,50 @@ class SFScriptForge:
 
         @property
         def ActiveWindow(self):
-            return self.Execute(self.vbMethod, 'ActiveWindow')
+            return self.ExecMethod(self.vbMethod, 'ActiveWindow')
 
         def Activate(self, windowname = ''):
-            return self.Execute(self.vbMethod, 'Activate', windowname)
+            return self.ExecMethod(self.vbMethod, 'Activate', windowname)
 
         def CreateBaseDocument(self, filename, embeddeddatabase = 'HSQLDB', registrationname = ''):
-            return self.Execute(self.vbMethod, 'CreateBaseDocument', filename, embeddeddatabase, registrationname)
+            return self.ExecMethod(self.vbMethod, 'CreateBaseDocument', filename, embeddeddatabase, registrationname)
 
         def CreateDocument(self, documenttype = '', templatefile = '', hidden = False):
-            return self.Execute(self.vbMethod, 'CreateDocument', documenttype, templatefile, hidden)
+            return self.ExecMethod(self.vbMethod, 'CreateDocument', documenttype, templatefile, hidden)
 
         def Documents(self):
-            return self.Execute(self.vbMethod, 'Documents')
+            return self.ExecMethod(self.vbMethod, 'Documents')
 
         def GetDocument(self, windowname = ''):
-            return self.Execute(self.vbMethod, 'GetDocument', windowname)
+            return self.ExecMethod(self.vbMethod, 'GetDocument', windowname)
 
         def Maximize(self, windowname = ''):
-            return self.Execute(self.vbMethod, 'Maximize', windowname)
+            return self.ExecMethod(self.vbMethod, 'Maximize', windowname)
 
         def Minimize(self, windowname = ''):
-            return self.Execute(self.vbMethod, 'Minimize', windowname)
+            return self.ExecMethod(self.vbMethod, 'Minimize', windowname)
 
         def OpenBaseDocument(self, filename = '', registrationname = '', macroexecution = MACROEXECNORMAL):
-            return self.Execute(self.vbMethod, 'OpenBaseDocument', filename, registrationname, macroexecution)
+            return self.ExecMethod(self.vbMethod, 'OpenBaseDocument', filename, registrationname, macroexecution)
 
         def OpenDocument(self, filename, password = '', readonly = False, hidden = False,
                          macroexecution = MACROEXECNORMAL, filtername = '', filteroptions = ''):
-            return self.Execute(self.vbMethod, 'OpenDocument', filename, password, readonly, hidden,
-                                macroexecution, filtername, filteroptions)
+            return self.ExecMethod(self.vbMethod, 'OpenDocument', filename, password, readonly, hidden,
+                                   macroexecution, filtername, filteroptions)
 
         def Resize(self, left = -1, top = -1, width = -1, height = -1):
-            return self.Execute(self.vbMethod, 'Resize', left, top, width, height)
+            return self.ExecMethod(self.vbMethod, 'Resize', left, top, width, height)
 
         def SetStatusbar(self, text = '', percentage = -1):
-            return self.Execute(self.vbMethod, 'SetStatusbar', text, percentage)
+            return self.ExecMethod(self.vbMethod, 'SetStatusbar', text, percentage)
 
-        # ShowProgressBar - not supported in Python
+        def ShowProgressBar(self, title = '', text = '', percentage = -1):
+            # From Python, the current XComponentContext must be added as last argument
+            return self.ExecMethod(self.vbMethod, 'ShowProgressBar', title, text, percentage,
+                                   ScriptForge.componentcontext)
 
         def WindowExists(self, windowname):
-            return self.Execute(self.vbMethod, 'WindowExists', windowname)
+            return self.ExecMethod(self.vbMethod, 'WindowExists', windowname)
 
 
 # #####################################################################################################################
@@ -1370,31 +1386,141 @@ class SFDatabases:
         serviceproperties = dict(Queries = False, Tables = False, XConnection = False, XMetaData = False)
 
         def CloseDatabase(self):
-            return self.Execute(self.vbMethod, 'CloseDatabase')
+            return self.ExecMethod(self.vbMethod, 'CloseDatabase')
 
         def DAvg(self, expression, tablename, criteria = ''):
-            return self.Execute(self.vbMethod, 'DAvg', expression, tablename, criteria)
+            return self.ExecMethod(self.vbMethod, 'DAvg', expression, tablename, criteria)
 
         def DCount(self, expression, tablename, criteria = ''):
-            return self.Execute(self.vbMethod, 'DCount', expression, tablename, criteria)
+            return self.ExecMethod(self.vbMethod, 'DCount', expression, tablename, criteria)
 
         def DLookup(self, expression, tablename, criteria = '', orderclause = ''):
-            return self.Execute(self.vbMethod, 'DLookup', expression, tablename, criteria, orderclause)
+            return self.ExecMethod(self.vbMethod, 'DLookup', expression, tablename, criteria, orderclause)
 
         def DMax(self, expression, tablename, criteria = ''):
-            return self.Execute(self.vbMethod, 'DMax', expression, tablename, criteria)
+            return self.ExecMethod(self.vbMethod, 'DMax', expression, tablename, criteria)
 
         def DMin(self, expression, tablename, criteria = ''):
-            return self.Execute(self.vbMethod, 'DMin', expression, tablename, criteria)
+            return self.ExecMethod(self.vbMethod, 'DMin', expression, tablename, criteria)
 
         def DSum(self, expression, tablename, criteria = ''):
-            return self.Execute(self.vbMethod, 'DSum', expression, tablename, criteria)
+            return self.ExecMethod(self.vbMethod, 'DSum', expression, tablename, criteria)
 
         def GetRows(self, sqlcommand, directsql = False, header = False, maxrows = 0):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'GetRows', sqlcommand, directsql, header, maxrows)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetRows', sqlcommand, directsql, header, maxrows)
 
         def RunSql(self, sqlcommand, directsql = False):
-            return self.Execute(self.vbMethod, 'RunSql', sqlcommand, directsql)
+            return self.ExecMethod(self.vbMethod, 'RunSql', sqlcommand, directsql)
+
+
+# #####################################################################################################################
+#                       SFDialogs CLASS    (alias of SFDialogs Basic library)                                       ###
+# #####################################################################################################################
+class SFDialogs:
+    """
+        The SFDialogs class manages dialogs defined with the Basic IDE
+        """
+    pass
+
+    # #########################################################################
+    # SF_Dialog CLASS
+    # #########################################################################
+    class SF_Dialog(SFServices):
+        """
+            Each instance of the current class represents a single dialog box displayed to the user.
+            From a Python script, a dialog box can be displayed in modal mode only.
+            In modal mode, the box is displayed and the execution of the macro process is suspended
+            until one of the OK or Cancel buttons is pressed. In the meantime, other user actions
+            executed on the box can trigger specific actions.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDialogs.Dialog'
+        servicesynonyms = ('dialog', 'sfdialogs.dialog')
+        serviceproperties = dict(Caption = True, Height = True, Modal = False, Name = False,
+                                 OnFocusGained = False, OnFocusLost = False, OnKeyPressed = False,
+                                 OnKeyReleased = False, OnMouseDragged = False, OnMouseEntered = False,
+                                 OnMouseExited = False, OnMouseMoved = False, OnMousePressed = False,
+                                 OnMouseReleased = False,
+                                 Page = True, Visible = True, Width = True, XDialogModel = False, XDialogView = False)
+
+        @classmethod
+        def PreProcessArgs(cls, args):
+            """
+                Review the arguments of the creation of the Basic service (must be a class method)
+                Add the XComponentContext as last argument
+                """
+            newargs = (*args, ScriptForge.componentcontext)
+            return newargs
+
+        def Activate(self):
+            return self.ExecMethod(self.vbMethod, 'Activate')
+
+        def Controls(self, controlname = ''):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
+
+        def EndExecute(self, returnvalue):
+            return self.ExecMethod(self.vbMethod, 'EndExecute', returnvalue)
+
+        def Execute(self, modal = True):
+            return self.ExecMethod(self.vbMethod, 'Execute', modal)
+
+        def Terminate(self):
+            return self.ExecMethod(self.vbMethod, 'Terminate')
+
+    # #########################################################################
+    # SF_DialogControl CLASS
+    # #########################################################################
+    class SF_DialogControl(SFServices):
+        """
+            Each instance of the current class represents a single control within a dialog box.
+            The focus is clearly set on getting and setting the values displayed by the controls of the dialog box,
+            not on their formatting.
+            A special attention is given to controls with type TreeControl.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDialogs.DialogControl'
+        servicesynonyms = ('dialogcontrol', 'sfdialogs.dialog')
+        serviceproperties = dict(Cancel = True, Caption = True, ControlType = False, CurrentNode = True,
+                                 Default = True, Enabled = True, Format = True, ListCount = False,
+                                 ListIndex = True, Locked = True, MultiSelect = True, Name = False,
+                                 OnActionPerformed = False, OnAdjustmentValueChanged = False, OnFocusGained = False,
+                                 OnFocusLost = False, OnItemStateChanged = False, OnKeyPressed = False,
+                                 OnKeyReleased = False, OnMouseDragged = False, OnMouseEntered = False,
+                                 OnMouseExited = False, OnMouseMoved = False, OnMousePressed = False,
+                                 OnMouseReleased = False, OnNodeExpanded = True, OnNodeSelected = True,
+                                 OnTextChanged = False, Page = True, Parent = False, Picture = True,
+                                 RootNode = False, RowSource = True, Text = False, TipText = True,
+                                 TripleState = True, Value = True, Visible = True,
+                                 XControlModel = False, XControlView = False, XTreeDataModel = False)
+
+        # Root related properties do not start with X and, nevertheless, return a UNO object
+        @property
+        def CurrentNode(self):
+            return self.EXEC(self.objectreference, self.vbGet + self.flgUno, 'CurrentNode')
+
+        @property
+        def RootNode(self):
+            return self.EXEC(self.objectreference, self.vbGet + self.flgUno, 'RootNode')
+
+        def AddSubNode(self, parentnode, displayvalue, datavalue = ScriptForge.cstSymEmpty):
+            return self.ExecMethod(self.vbMethod + self.flgUno, 'AddSubNode', parentnode, displayvalue, datavalue)
+
+        def AddSubTree(self, parentnode, flattree, withdatavalue = False):
+            return self.ExecMethod(self.vbMethod, 'AddSubTree', parentnode, flattree, withdatavalue)
+
+        def CreateRoot(self, displayvalue, datavalue = ScriptForge.cstSymEmpty):
+            return self.ExecMethod(self.vbMethod + self.flgUno, 'CreateRoot', displayvalue, datavalue)
+
+        def FindNode(self, displayvalue, datavalue = ScriptForge.cstSymEmpty, casesensitive = False):
+            return self.ExecMethod(self.vbMethod + self.flgUno, 'FindNode', displayvalue, datavalue, casesensitive)
+
+        def SetFocus(self):
+            return self.ExecMethod(self.vbMethod, 'SetFocus')
+
+        def WriteLine(self, line = ''):
+            return self.ExecMethod(self.vbMethod, 'WriteLine', line)
 
 
 # #####################################################################################################################
@@ -1430,25 +1556,26 @@ class SFDocuments:
         forceGetProperty = True
 
         def Activate(self):
-            return self.Execute(self.vbMethod, 'Activate')
+            return self.ExecMethod(self.vbMethod, 'Activate')
 
         def CloseDocument(self, saveask = True):
-            return self.Execute(self.vbMethod, 'CloseDocument', saveask)
+            return self.ExecMethod(self.vbMethod, 'CloseDocument', saveask)
 
         def Forms(self, form = ''):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'Forms', form)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', form)
 
         def RunCommand(self, command):
-            return self.Execute(self.vbMethod, 'RunCommand', command)
+            return self.ExecMethod(self.vbMethod, 'RunCommand', command)
 
         def Save(self):
-            return self.Execute(self.vbMethod, 'Save')
+            return self.ExecMethod(self.vbMethod, 'Save')
 
         def SaveAs(self, filename, overwrite = False, password = '', filtername = '', filteroptions = ''):
-            return self.Execute(self.vbMethod, 'SaveAs', filename, overwrite, password, filtername, filteroptions)
+            return self.ExecMethod(self.vbMethod, 'SaveAs', filename, overwrite, password, filtername, filteroptions)
 
         def SaveCopyAs(self, filename, overwrite = False, password = '', filtername = '', filteroptions = ''):
-            return self.Execute(self.vbMethod, 'SaveCopyAs', filename, overwrite, password, filtername, filteroptions)
+            return self.ExecMethod(self.vbMethod, 'SaveCopyAs', filename, overwrite,
+                                   password, filtername, filteroptions)
 
     # #########################################################################
     # SF_Base CLASS
@@ -1468,22 +1595,22 @@ class SFDocuments:
                                  XComponent = False)
 
         def CloseDocument(self, saveask = True):
-            return self.Execute(self.vbMethod, 'CloseDocument', saveask)
+            return self.ExecMethod(self.vbMethod, 'CloseDocument', saveask)
 
         def FormDocuments(self):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'FormDocuments')
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'FormDocuments')
 
         def Forms(self, formdocument, form = ''):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'Forms', formdocument, form)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', formdocument, form)
 
         def GetDatabase(self, user = '', password = ''):
-            return self.Execute(self.vbMethod, 'GetDatabase', user, password)
+            return self.ExecMethod(self.vbMethod, 'GetDatabase', user, password)
 
         def IsLoaded(self, formdocument):
-            return self.Execute(self.vbMethod, 'IsLoaded', formdocument)
+            return self.ExecMethod(self.vbMethod, 'IsLoaded', formdocument)
 
         def OpenFormDocument(self, formdocument, designmode = False):
-            return self.Execute(self.vbMethod, 'OpenFormDocument', formdocument, designmode)
+            return self.ExecMethod(self.vbMethod, 'OpenFormDocument', formdocument, designmode)
 
     # #########################################################################
     # SF_Calc CLASS
@@ -1529,113 +1656,113 @@ class SFDocuments:
             return self.GetProperty('Width', rangename)
 
         def XCellRange(self, rangename):
-            return self.Execute(self.vbGet + self.flgUno, 'XCellRange', rangename)
+            return self.ExecMethod(self.vbGet + self.flgUno, 'XCellRange', rangename)
 
         def XSpreadsheet(self, sheetname):
-            return self.Execute(self.vbGet + self.flgUno, 'XSpreadsheet', sheetname)
+            return self.ExecMethod(self.vbGet + self.flgUno, 'XSpreadsheet', sheetname)
 
         # Usual methods
         def Activate(self, sheetname = ''):
-            return self.Execute(self.vbMethod, 'Activate', sheetname)
+            return self.ExecMethod(self.vbMethod, 'Activate', sheetname)
 
         def ClearAll(self, range):
-            return self.Execute(self.vbMethod, 'ClearAll', range)
+            return self.ExecMethod(self.vbMethod, 'ClearAll', range)
 
         def ClearFormats(self, range):
-            return self.Execute(self.vbMethod, 'ClearFormats', range)
+            return self.ExecMethod(self.vbMethod, 'ClearFormats', range)
 
         def ClearValues(self, range):
-            return self.Execute(self.vbMethod, 'ClearValues', range)
+            return self.ExecMethod(self.vbMethod, 'ClearValues', range)
 
         def CopySheet(self, sheetname, newname, beforesheet = 32768):
             sheet = (sheetname.objectreference if isinstance(sheetname, SFDocuments.SF_CalcReference) else sheetname)
-            return self.Execute(self.vbMethod + self.flgObject, 'CopySheet', sheet, newname, beforesheet)
+            return self.ExecMethod(self.vbMethod + self.flgObject, 'CopySheet', sheet, newname, beforesheet)
 
         def CopySheetFromFile(self, filename, sheetname, newname, beforesheet = 32768):
             sheet = (sheetname.objectreference if isinstance(sheetname, SFDocuments.SF_CalcReference) else sheetname)
-            return self.Execute(self.vbMethod + self.flgObject, 'CopySheetFromFile',
-                                filename, sheet, newname, beforesheet)
+            return self.ExecMethod(self.vbMethod + self.flgObject, 'CopySheetFromFile',
+                                   filename, sheet, newname, beforesheet)
 
         def CopyToCell(self, sourcerange, destinationcell):
             range = (sourcerange.objectreference if isinstance(sourcerange, SFDocuments.SF_CalcReference)
                      else sourcerange)
-            return self.Execute(self.vbMethod + self.flgObject, 'CopyToCell', range, destinationcell)
+            return self.ExecMethod(self.vbMethod + self.flgObject, 'CopyToCell', range, destinationcell)
 
         def CopyToRange(self, sourcerange, destinationrange):
             range = (sourcerange.objectreference if isinstance(sourcerange, SFDocuments.SF_CalcReference)
                      else sourcerange)
-            return self.Execute(self.vbMethod + self.flgObject, 'CopyToRange', range, destinationrange)
+            return self.ExecMethod(self.vbMethod + self.flgObject, 'CopyToRange', range, destinationrange)
 
         def DAvg(self, range):
-            return self.Execute(self.vbMethod, 'DAvg', range)
+            return self.ExecMethod(self.vbMethod, 'DAvg', range)
 
         def DCount(self, range):
-            return self.Execute(self.vbMethod, 'DCount', range)
+            return self.ExecMethod(self.vbMethod, 'DCount', range)
 
         def DMax(self, range):
-            return self.Execute(self.vbMethod, 'DMax', range)
+            return self.ExecMethod(self.vbMethod, 'DMax', range)
 
         def DMin(self, range):
-            return self.Execute(self.vbMethod, 'DMin', range)
+            return self.ExecMethod(self.vbMethod, 'DMin', range)
 
         def DSum(self, range):
-            return self.Execute(self.vbMethod, 'DSum', range)
+            return self.ExecMethod(self.vbMethod, 'DSum', range)
 
         def Forms(self, sheetname, form = ''):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'Forms', sheetname, form)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', sheetname, form)
 
         def GetColumnName(self, columnnumber):
-            return self.Execute(self.vbMethod, 'GetColumnName', columnnumber)
+            return self.ExecMethod(self.vbMethod, 'GetColumnName', columnnumber)
 
         def GetFormula(self, range):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'GetFormula', range)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetFormula', range)
 
         def GetValue(self, range):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'GetValue', range)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetValue', range)
 
         def ImportFromCSVFile(self, filename, destinationcell, filteroptions = ScriptForge.cstSymEmpty):
-            return self.Execute(self.vbMethod, 'ImportFromCSVFile', filename, destinationcell, filteroptions)
+            return self.ExecMethod(self.vbMethod, 'ImportFromCSVFile', filename, destinationcell, filteroptions)
 
         def ImportFromDatabase(self, filename = '', registrationname = '', destinationcell = '', sqlcommand = '',
                                directsql = False):
-            return self.Execute(self.vbMethod, 'ImportFromDatabase', filename, registrationname,
-                                destinationcell, sqlcommand, directsql)
+            return self.ExecMethod(self.vbMethod, 'ImportFromDatabase', filename, registrationname,
+                                   destinationcell, sqlcommand, directsql)
 
         def InsertSheet(self, sheetname, beforesheet = 32768):
-            return self.Execute(self.vbMethod, 'InsertSheet', sheetname, beforesheet)
+            return self.ExecMethod(self.vbMethod, 'InsertSheet', sheetname, beforesheet)
 
         def MoveRange(self, source, destination):
-            return self.Execute(self.vbMethod, 'MoveRange', source, destination)
+            return self.ExecMethod(self.vbMethod, 'MoveRange', source, destination)
 
         def MoveSheet(self, sheetname, beforesheet = 32768):
-            return self.Execute(self.vbMethod, 'MoveSheet', sheetname, beforesheet)
+            return self.ExecMethod(self.vbMethod, 'MoveSheet', sheetname, beforesheet)
 
         def Offset(self, range, rows = 0, columns = 0, height = ScriptForge.cstSymEmpty,
                    width = ScriptForge.cstSymEmpty):
-            return self.Execute(self.vbMethod, 'Offset', range, rows, columns, height, width)
+            return self.ExecMethod(self.vbMethod, 'Offset', range, rows, columns, height, width)
 
         def RemoveSheet(self, sheetname):
-            return self.Execute(self.vbMethod, 'RemoveSheet', sheetname)
+            return self.ExecMethod(self.vbMethod, 'RemoveSheet', sheetname)
 
         def RenameSheet(self, sheetname, newname):
-            return self.Execute(self.vbMethod, 'RenameSheet', sheetname, newname)
+            return self.ExecMethod(self.vbMethod, 'RenameSheet', sheetname, newname)
 
         def SetArray(self, targetcell, value):
-            return self.Execute(self.vbMethod + self.flgArrayArg, 'SetArray', targetcell, value)
+            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetArray', targetcell, value)
 
         def SetCellStyle(self, targetrange, style):
-            return self.Execute(self.vbMethod, 'SetCellStyle', targetrange, style)
+            return self.ExecMethod(self.vbMethod, 'SetCellStyle', targetrange, style)
 
         def SetFormula(self, targetrange, formula):
-            return self.Execute(self.vbMethod + self.flgArrayArg, 'SetFormula', targetrange, formula)
+            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetFormula', targetrange, formula)
 
         def SetValue(self, targetrange, value):
-            return self.Execute(self.vbMethod + self.flgArrayArg, 'SetValue', targetrange, value)
+            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetValue', targetrange, value)
 
         def SortRange(self, range, sortkeys, sortorder = 'ASC', destinationcell = ScriptForge.cstSymEmpty,
                       containsheader = False, casesensitive = False, sortcolumns = False):
-            return self.Execute(self.vbMethod, 'SortRange', range, sortkeys, sortorder, destinationcell,
-                                containsheader, casesensitive, sortcolumns)
+            return self.ExecMethod(self.vbMethod, 'SortRange', range, sortkeys, sortorder, destinationcell,
+                                   containsheader, casesensitive, sortcolumns)
 
     # #########################################################################
     # SF_CalcReference CLASS
@@ -1677,37 +1804,37 @@ class SFDocuments:
                                  OrderBy = True, Parent = False, RecordSource = True, XForm = False)
 
         def Activate(self):
-            return self.Execute(self.vbMethod, 'Activate')
+            return self.ExecMethod(self.vbMethod, 'Activate')
 
         def CloseFormDocument(self):
-            return self.Execute(self.vbMethod, 'CloseFormDocument')
+            return self.ExecMethod(self.vbMethod, 'CloseFormDocument')
 
         def Controls(self, controlname = ''):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
 
         def GetDatabase(self, user = '', password = ''):
-            return self.Execute(self.vbMethod, 'GetDatabase', user, password)
+            return self.ExecMethod(self.vbMethod, 'GetDatabase', user, password)
 
         def MoveFirst(self):
-            return self.Execute(self.vbMethod, 'MoveFirst')
+            return self.ExecMethod(self.vbMethod, 'MoveFirst')
 
         def MoveLast(self):
-            return self.Execute(self.vbMethod, 'MoveLast')
+            return self.ExecMethod(self.vbMethod, 'MoveLast')
 
         def MoveNew(self):
-            return self.Execute(self.vbMethod, 'MoveNew')
+            return self.ExecMethod(self.vbMethod, 'MoveNew')
 
         def MoveNext(self, offset = 1):
-            return self.Execute(self.vbMethod, 'MoveNext', offset)
+            return self.ExecMethod(self.vbMethod, 'MoveNext', offset)
 
         def MovePrevious(self, offset = 1):
-            return self.Execute(self.vbMethod, 'MovePrevious', offset)
+            return self.ExecMethod(self.vbMethod, 'MovePrevious', offset)
 
         def Requery(self):
-            return self.Execute(self.vbMethod, 'Requery')
+            return self.ExecMethod(self.vbMethod, 'Requery')
 
         def Subforms(self, subform = ''):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'Subforms', subform)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Subforms', subform)
 
     # #########################################################################
     # SF_FormControl CLASS
@@ -1738,10 +1865,10 @@ class SFDocuments:
                                  Visible = True, XControlModel = False, XControlView = False)
 
         def Controls(self, controlname = ''):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
 
         def SetFocus(self):
-            return self.Execute(self.vbMethod, 'SetFocus')
+            return self.ExecMethod(self.vbMethod, 'SetFocus')
 
 
 # ##############################################False##################################################################
@@ -1791,7 +1918,15 @@ def CreateScriptService(service, *args):
         # Check if the service is a predefined standard Basic service
         elif scriptservice in ScriptForge.servicesmodules:
             return serv(ScriptForge.servicesmodules[scriptservice], classmodule = SFServices.moduleStandard)
+    else:
+        serv = None
     # The requested service is to be found in the Basic world
+    # Check if the service must review the arguments
+    if serv is not None:
+        if hasattr(serv, 'PreProcessArgs'):
+            # PreProcessArgs() must be a class method
+            args = serv.PreProcessArgs(args)
+    # Get the service object back from Basic
     if len(args) == 0:
         serv = ScriptForge.InvokeBasicService('SF_Services', SFServices.vbMethod, 'CreateScriptService', service)
     else:

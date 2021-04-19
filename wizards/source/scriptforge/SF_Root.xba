@@ -38,6 +38,12 @@ Private DisplayEnabled		As Boolean	&apos; When True, display of console or error
 Private StopWhenError		As Boolean	&apos; When True, process stops after error &gt; &quot;WARNING&quot;
 Private DebugMode			As Boolean	&apos; When True, log enter/exit each official Sub
 
+&apos;	Progress and status bars
+Private ProgressBarDialog	As Object	&apos; SFDialogs.Dialog object
+Private ProgressBarText		As Object	&apos; SFDialogs.DialogControl object
+Private ProgressBarBar		As Object	&apos; SFDialogs.DialogControl object
+Private Statusbar			As Object
+
 &apos;	Services management
 Private ServicesList		As Variant	&apos; Dictionary of provided services
 
@@ -93,6 +99,10 @@ Private Sub Class_Initialize()
 	DisplayEnabled = True
 	StopWhenError = True
 	DebugMode = False
+	Set ProgressBarDialog = Nothing
+	Set ProgressBarText = Nothing
+	Set progressBarBar = Nothing
+	Set Statusbar = Nothing
 	ServicesList = Empty
 	Set FunctionAccess = Nothing
 	Set PathSettings = Nothing

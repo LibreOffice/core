@@ -531,6 +531,8 @@ Public Function Properties() As Variant
 					, &quot;Page&quot; _
 					, &quot;Visible&quot; _
 					, &quot;Width&quot; _
+					, &quot;XDialogModel&quot; _
+					, &quot;XDialogView&quot; _
 					)
 
 End Function	&apos;	SFDialogs.SF_Dialog.Properties
@@ -658,8 +660,7 @@ Public Sub _Initialize()
 &apos;&apos;&apos;		- Initialisation of persistent storage for controls
 
 Try:
-	&apos;	Create the graphical interface
-	Set _DialogControl = CreateUnoDialog(_DialogProvider)
+	&apos;	Keep reference to model
 	Set _DialogModel = _DialogControl.Model
 
 	&apos;	Add dialog reference to cache

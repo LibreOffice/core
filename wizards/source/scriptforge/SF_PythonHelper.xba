@@ -710,6 +710,8 @@ Try:
 				Select Case sServiceName
 					Case &quot;SFDatabases.Database&quot;
 						If Script = &quot;GetRows&quot; Then		vReturn = vBasicObject.GetRows(vArgs(0), vArgs(1), vArgs(2), vArgs(3))
+					Case &quot;SFDialogs.Dialog&quot;
+						If Script = &quot;Controls&quot; Then		vReturn = vBasicObject.Controls(vArgs(0))
 					Case &quot;SFDocuments.Document&quot;
 						If Script = &quot;Forms&quot; Then		vReturn = vBasicObject.Forms(vArgs(0))
 					Case &quot;SFDocuments.Base&quot;

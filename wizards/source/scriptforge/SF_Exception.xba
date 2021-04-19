@@ -243,11 +243,14 @@ Catch:
 End Sub    &apos;   ScriptForge.SF_Exception.Clear
 
 REM -----------------------------------------------------------------------------
-Public Sub Console(Optional ByVal Modal As Variant)
+Public Sub Console(Optional ByVal Modal As Variant, _
+					Optional ByRef _Context As Variant _
+					)
 &apos;&apos;&apos;	Display the console messages in a modal or non-modal dialog
 &apos;&apos;&apos;	If the dialog is already active, when non-modal, it is brought to front
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Modal: Boolean. Default = True
+&apos;&apos;&apos;		_Context: From Python, the XComponentXontext (FOR INTERNAL USE ONLY)
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		SF_Exception.Console()
 
@@ -262,6 +265,7 @@ Const cstSubArgs = &quot;[Modal=True]&quot;
 
 Check:
 	If IsMissing(Modal) Or IsEmpty(Modal) Then Modal = True
+	If IsMissing(_Context) Or IsEmpty(_Context) Then _Context = Nothing
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._Validate(Modal, &quot;Modal&quot;, V_BOOLEAN) Then GoTo Finally
 	End If
@@ -278,7 +282,7 @@ Try:
 			&apos;	The dual modes (modal and non-modal) require to have 2 close buttons o/w only 1 is visible
 			&apos;		- a usual OK button
 			&apos;		- a Default button triggering the Close action
-			Set .ConsoleDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, &quot;GlobalScope&quot;, &quot;ScriptForge&quot;, &quot;dlgConsole&quot;)
+			Set .ConsoleDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, &quot;GlobalScope&quot;, &quot;ScriptForge&quot;, &quot;dlgConsole&quot;, _Context)
 			&apos;	Setup labels and visibility
 			sClose = .Interface.GetText(&quot;CLOSEBUTTON&quot;)
 			Set oModalBtn = .ConsoleDialog.Controls(&quot;CloseModalButton&quot;)

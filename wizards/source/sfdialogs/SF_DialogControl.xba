@@ -576,6 +576,7 @@ Public Function AddSubTree(Optional ByRef ParentNode As Variant _
 &apos;&apos;&apos;			Typically, such an array can be issued by the GetRows method applied on the SFDatabases.Database service
 &apos;&apos;&apos;			when an array item containing the text to be displayed is = &quot;&quot; or is empty/null,
 &apos;&apos;&apos;				no new subnode is created and the remainder of the row is skipped
+&apos;&apos;&apos;			When AddSubTree() is called from a Python script, FlatTree may be an array of arrays
 &apos;&apos;&apos;		WithDataValue:
 &apos;&apos;&apos;			When False (default), every column of FlatTree contains the text to be displayed in the tree control
 &apos;&apos;&apos;			When True, the texts to be displayed (DisplayValue) are in columns 0, 2, 4, ...
@@ -597,6 +598,13 @@ Dim oNode As Object					&apos;	com.sun.star.awt.tree.XMutableTreeNode
 Dim oNewNode As Object				&apos;	com.sun.star.awt.tree.XMutableTreeNode
 Dim lChildCount As Long				&apos;	Number of children nodes of a parent node
 Dim iStep As Integer				&apos;	1 when WithDataValue = False, 2 otherwise
+Dim iDims As Integer				&apos;	Number of dimensions of FlatTree
+Dim lMin1 As Long					&apos;	Lower bound (rows)
+Dim lMin2 As Long					&apos;	Lower bounds (cols)
+Dim lMax1 As Long					&apos;	Upper bound (rows)
+Dim lMax2 As Long					&apos;	Upper bounds (cols)
+Dim vFlatItem As Variant			&apos;	A single FlatTree item: FlatTree(i, j)
+Dim vFlatItem2 As Variant			&apos;	A single FlatTree item
 Dim bChange As Boolean				&apos;	When True, the item in FlatTree is different from the item above
 Dim sValue As String				&apos;	Alias for display values
 Dim i As Long, j As Long
@@ -612,7 +620,7 @@ Check:
 		If _ControlType &lt;&gt; CTLTREECONTROL Then GoTo CatchType
 		If Not ScriptForge.SF_Utils._Validate(ParentNode, &quot;ParentNode&quot;, V_OBJECT) Then GoTo Catch
 		If ScriptForge.SF_Session.UnoObjectType(ParentNode) &lt;&gt; &quot;toolkit.MutableTreeNode&quot; Then GoTo Catch
-		If Not ScriptForge.SF_Utils._ValidateArray(FlatTree, &quot;FlatTree&quot;, 2) Then GoTo Catch
+		If Not ScriptForge.SF_Utils._ValidateArray(FlatTree, &quot;FlatTree&quot;) Then GoTo Catch	&apos;	Dimensions checked below
 		If Not ScriptForge.SF_Utils._Validate(WithDataValue, &quot;WithDataValue&quot;, V_BOOLEAN) Then GoTo Catch
 	End If
 
@@ -623,34 +631,55 @@ Try:
 		For i = 1 To lChildCount
 			ParentNode.removeChildByIndex(0)		&apos;	This cleans all subtrees too
 		Next i
+
+		&apos;	Determine bounds
+		iDims = ScriptForge.SF_Array.CountDims(FlatTree)
+		Select Case iDims
+			Case -1, 0		:	GoTo Catch
+			Case 1					&apos;	Called probably from Python
+				lMin1 = LBound(FlatTree, 1)			:	lMax1 = UBound(FlatTree, 1)
+				If Not IsArray(FlatTree(0)) Then GoTo Catch
+				If UBound(FlatTree(0)) &lt; LBound(FlatTree(0)) Then GoTo Catch	&apos;	No columns
+				lMin2 = LBound(FlatTree(0))			:	lMax2 = UBound(FlatTree(0))
+			Case 2
+				lMin1 = LBound(FlatTree, 1)			:	lMax1 = UBound(FlatTree, 1)
+				lMin2 = LBound(FlatTree, 2)			:	lMax2 = UBound(FlatTree, 2)
+			Case Else		:	GoTo Catch
+		End Select
+
 		&apos;	Build a new subtree
-		If UBound(FlatTree, 1) &lt; LBound(FlatTree, 1) Then		&apos;Array is empty
-		Else
-			iStep = Iif(WithDataValue, 2, 1)
-			For i = LBound(FlatTree, 1) To UBound(FlatTree, 1)					&apos;	Array rows
-				bChange = ( i = 0 )
-				&apos;	Restart from the parent node at each i-iteration
-				Set oNode = ParentNode
-				For j = LBound(FlatTree, 2) To UBound(FlatTree, 2) Step iStep	&apos;	Array columns
-					If FlatTree(i, j) = &quot;&quot; Or IsNull(FlatTree(i, j)) Or IsEmpty(FlatTree(i, j)) Then
-						Set oNode = Nothing
-						Exit For		&apos;	Exit j-loop
+		iStep = Iif(WithDataValue, 2, 1)
+		For i = lMin1 To lMax1
+			bChange = ( i = 0 )
+			&apos;	Restart from the parent node at each i-iteration
+			Set oNode = ParentNode
+			For j = lMin2 To lMax2 Step iStep	&apos;	Array columns
+				If iDims = 1 Then vFlatItem = FlatTree(i)(j) Else vFlatItem = FlatTree(i, j)
+				If vFlatItem = &quot;&quot; Or IsNull(vFlatItem) Or IsEmpty(vFlatItem) Then
+					Set oNode = Nothing
+					Exit For		&apos;	Exit j-loop
+				End If
+				If Not bChange Then
+					If iDims = 1 Then vFlatItem2 = FlatTree(i - 1)(j) Else vFlatItem2 = FlatTree(i - 1, j)
+					bChange = ( vFlatItem &lt;&gt; vFlatItem2 )
+				End If
+				If bChange Then		&apos;	Create new subnode at tree depth = j
+					If VarType(vFlatItem) = V_STRING Then sValue = vFlatItem Else sValue = ScriptForge.SF_String.Represent(vFlatItem)
+					Set oNewNode = .createNode(sValue, True)
+					If WithDataValue Then
+						If iDims = 1 Then vFlatItem2 = FlatTree(i)(j + 1) Else vFlatItem2 = FlatTree(i, j + 1)
+						oNewNode.DataValue = vFlatItem2
 					End If
-					If Not bChange Then bChange = ( FlatTree(i, j) &lt;&gt; FlatTree(i - 1, j) )
-					If bChange Then		&apos;	Create new subnode at tree depth = j
-						If VarType(FlatTree(i, j)) = V_STRING Then sValue = FlatTree(i, j) Else sValue = ScriptForge.SF_String.Represent(FlatTree(i, j))
-						Set oNewNode = .createNode(sValue, True)
-						If WithDataValue Then oNewNode.DataValue = FlatTree(i, j + 1)
-						oNode.appendChild(oNewNode)
-						Set oNode = oNewNode
-					Else
-						&apos;	Position next current node on last child of actual current node
-						lChildCount = oNode.getChildCount()
-						If lChildCount &gt; 0 Then Set oNode = oNode.getChildAt(lChildCount - 1) Else Set oNode = Nothing
-					End If
-				Next j
-			Next i
-		End If			
+					oNode.appendChild(oNewNode)
+					Set oNode = oNewNode
+				Else
+					&apos;	Position next current node on last child of actual current node
+					lChildCount = oNode.getChildCount()
+					If lChildCount &gt; 0 Then Set oNode = oNode.getChildAt(lChildCount - 1) Else Set oNode = Nothing
+				End If
+			Next j
+		Next i
+		bSubTree = True
 	End With
 
 Finally:
@@ -854,6 +883,7 @@ Public Function Properties() As Variant
 					, &quot;Page&quot; _
 					, &quot;Parent&quot; _
 					, &quot;Picture&quot; _
+					, &quot;RootNode&quot; _
 					, &quot;RowSource&quot; _
 					, &quot;Text&quot; _
 					, &quot;TipText&quot; _
