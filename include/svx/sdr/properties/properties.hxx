@@ -84,7 +84,7 @@ namespace sdr::properties
             virtual void applyDefaultStyleSheetFromSdrModel();
 
             // create a new object specific itemset with object specific ranges.
-            virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;
+            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;
 
             // internal access to SdrObject
             const SdrObject& GetSdrObject() const;

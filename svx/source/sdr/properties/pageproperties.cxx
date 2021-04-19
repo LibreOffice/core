@@ -29,10 +29,10 @@
 namespace sdr::properties
 {
         // create a new itemset
-        std::unique_ptr<SfxItemSet> PageProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet PageProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // override to legally return a valid ItemSet
-            return std::make_unique<SfxItemSet>(rPool);
+            return SfxItemSet(rPool);
         }
 
         PageProperties::PageProperties(SdrObject& rObj)
@@ -58,14 +58,14 @@ namespace sdr::properties
         // without asserting
         const SfxItemSet& PageProperties::GetObjectItemSet() const
         {
-            if(!mpEmptyItemSet)
+            if(!mxEmptyItemSet)
             {
-                const_cast<PageProperties*>(this)->mpEmptyItemSet = const_cast<PageProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
+                mxEmptyItemSet.emplace(const_cast<PageProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
             }
 
-            DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");
+            DBG_ASSERT(mxEmptyItemSet, "Could not create an SfxItemSet(!)");
 
-            return *mpEmptyItemSet;
+            return *mxEmptyItemSet;
         }
 
         void PageProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
@@ -86,8 +86,8 @@ namespace sdr::properties
 
         void PageProperties::PostItemChange(const sal_uInt16 nWhich )
         {
-            if( (nWhich == XATTR_FILLSTYLE) && (mpEmptyItemSet != nullptr) )
-                CleanupFillProperties(*mpEmptyItemSet);
+            if( (nWhich == XATTR_FILLSTYLE) && mxEmptyItemSet )
+                CleanupFillProperties(*mxEmptyItemSet);
         }
 
         void PageProperties::ClearObjectItem(const sal_uInt16 /*nWhich*/)

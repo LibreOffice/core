@@ -150,7 +150,7 @@ namespace sdr::properties
         {
         protected:
             // create a new itemset
-            std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
+            SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             const svx::ITextProvider& getTextProvider() const override;
 
@@ -177,9 +177,9 @@ namespace sdr::properties
         };
 
         // create a new itemset
-        std::unique_ptr<SfxItemSet> CellProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet CellProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return std::make_unique<SfxItemSet>(rPool,
+            return SfxItemSet(rPool,
 
                 // range from SdrAttrObj
                 svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -278,7 +278,7 @@ namespace sdr::properties
                             GetObjectItemSet();
 
                             SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
-                            mpItemSet->Put(aNewSet);
+                            mxItemSet->Put(aNewSet);
                         }
 
                         std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);

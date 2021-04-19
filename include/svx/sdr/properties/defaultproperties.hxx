@@ -22,10 +22,11 @@
 
 #include <sal/config.h>
 
-#include <memory>
+#include <optional>
 
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/svxdllapi.h>
+#include <svl/itemset.hxx>
 
 struct _xmlTextWriter;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
@@ -36,10 +37,10 @@ namespace sdr::properties
         {
         protected:
             // the to be used ItemSet
-            std::unique_ptr<SfxItemSet> mpItemSet;
+            mutable std::optional<SfxItemSet> mxItemSet;
 
             // create a new itemset
-            virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
+            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             // test changeability for a single item
             virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const override;
@@ -54,7 +55,7 @@ namespace sdr::properties
             virtual void ItemSetChanged(const SfxItemSet& rSet) override;
 
             // check if SfxItemSet exists
-            bool HasSfxItemSet() const { return bool(mpItemSet); }
+            bool HasSfxItemSet() const { return bool(mxItemSet); }
 
         public:
             // basic constructor
