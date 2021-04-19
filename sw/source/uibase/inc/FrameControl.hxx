@@ -46,6 +46,7 @@ public:
     ~SwFrameControl();
 
     vcl::Window* GetWindow()  { return mxWindow.get(); }
+    ISwFrameControl* GetIFacePtr() { return mpIFace; }
 
     void SetReadonly( bool bReadonly ) { mpIFace->SetReadonly( bReadonly ); }
     void ShowAll( bool bShow )         { mpIFace->ShowAll( bShow ); }

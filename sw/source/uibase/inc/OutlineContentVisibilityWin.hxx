@@ -32,8 +32,6 @@ private:
     bool m_bDestroyed;
     size_t m_nOutlinePos;
 
-    void ToggleOutlineContentVisibility(const bool bSubs);
-
 public:
     SwOutlineContentVisibilityWin(SwEditWin* pEditWin, const SwFrame* pFrame);
     virtual ~SwOutlineContentVisibilityWin() override { disposeOnce(); }
