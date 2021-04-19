@@ -1022,9 +1022,6 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
                         if(pRead->HasPalette() && 2 == pRead->GetPaletteEntryCount())
                         {
                             const BitmapPalette& rPalette = pRead->GetPalette();
-
-                            // #i123564# background and foreground were exchanged; of course
-                            // rPalette[0] is the background color
                             o_rFront = rPalette[1];
                             o_rBack = rPalette[0];
 
@@ -1033,6 +1030,40 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
                         Bitmap::ReleaseAccess(pRead);
                     }
+                }
+                else
+                {
+                    // Historical 1bpp images are getting really historical,
+                    // even to the point that e.g. the png loader actually loads
+                    // them as RGB. But the pattern code in svx relies on this
+                    // assumption that any 2-color 1bpp bitmap is a pattern, and so it would
+                    // get confused by RGB. Try to detect if this image is really
+                    // just two colors and say it's a pattern bitmap if so.
+                    Bitmap::ScopedReadAccess access(aBitmap);
+                    o_rBack = access->GetColor(0,0);
+                    bool foundSecondColor = false;;
+                    for(tools::Long y = 0; y < access->Height(); ++y)
+                        for(tools::Long x = 0; x < access->Width(); ++x)
+                        {
+                            if(!foundSecondColor)
+                            {
+                                if( access->GetColor(y,x) != o_rBack )
+                                {
+                                    o_rFront = access->GetColor(y,x);
+                                    foundSecondColor = true;
+                                    // Hard to know which of the two colors is the background,
+                                    // select the lighter one.
+                                    if( o_rFront.GetLuminance() > o_rBack.GetLuminance())
+                                        std::swap( o_rFront, o_rBack );
+                                }
+                            }
+                            else
+                            {
+                                if( access->GetColor(y,x) != o_rBack && access->GetColor(y,x) != o_rFront)
+                                    return false;
+                            }
+                        }
+                    return true;
                 }
             }
         }
