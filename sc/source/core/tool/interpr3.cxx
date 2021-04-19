@@ -4603,7 +4603,9 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
         }
         if ( _bPearson )
         {
-            if (fSumSqrDeltaX == 0.0 || ( !_bStexy && fSumSqrDeltaY == 0.0) )
+            // tdf#94962 - Values below the numerical limit lead to unexpected results
+            if (fSumSqrDeltaX < ::std::numeric_limits<double>::min()
+                || (!_bStexy && fSumSqrDeltaY < ::std::numeric_limits<double>::min()))
                 PushError( FormulaError::DivisionByZero);
             else if ( _bStexy )
                 PushDouble( sqrt( (fSumSqrDeltaY - fSumDeltaXDeltaY *
