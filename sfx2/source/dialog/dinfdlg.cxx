@@ -1313,6 +1313,7 @@ CustomPropertiesWindow::CustomPropertiesWindow(weld::Container& rParent, weld::L
     , m_rHeaderAccName(rHeaderAccName)
     , m_rHeaderAccType(rHeaderAccType)
     , m_rHeaderAccValue(rHeaderAccValue)
+    , m_aEditLoseFocusIdle("sfx2 CustomPropertiesWindow loseFocusIdle")
 {
     m_aEditLoseFocusIdle.SetPriority( TaskPriority::LOWEST );
     m_aEditLoseFocusIdle.SetInvokeHandler( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );

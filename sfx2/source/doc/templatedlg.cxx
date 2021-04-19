@@ -174,6 +174,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     , mxListViewButton(m_xBuilder->weld_toggle_button("list_view_btn"))
     , mxThumbnailViewButton(m_xBuilder->weld_toggle_button("thumbnail_view_btn"))
     , mViewMode(TemplateViewMode::eThumbnailView)
+    , maIdle("sfx2 TemplateManager maIdle")
 {
     // Create popup menus
     mxActionBar->insert_item(0, MNI_ACTION_NEW_FOLDER, SfxResId(STR_CATEGORY_NEW), nullptr, nullptr, TRISTATE_INDET);
