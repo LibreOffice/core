@@ -799,33 +799,25 @@ bool WeldViewForwarder::IsValid() const { return m_rEditAcc.GetEditView() != nul
 Point WeldViewForwarder::LogicToPixel(const Point& rPoint, const MapMode& rMapMode) const
 {
     EditView* pEditView = m_rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
-
-    if (pOutDev)
-    {
-        MapMode aMapMode(pOutDev->GetMapMode());
-        Point aPoint(OutputDevice::LogicToLogic(rPoint, rMapMode, MapMode(aMapMode.GetMapUnit())));
-        aMapMode.SetOrigin(Point());
-        return pOutDev->LogicToPixel(aPoint, aMapMode);
-    }
-
-    return Point();
+    if (!pEditView)
+        return Point();
+    OutputDevice& rOutDev = pEditView->GetOutputDevice();
+    MapMode aMapMode(rOutDev.GetMapMode());
+    Point aPoint(OutputDevice::LogicToLogic(rPoint, rMapMode, MapMode(aMapMode.GetMapUnit())));
+    aMapMode.SetOrigin(Point());
+    return rOutDev.LogicToPixel(aPoint, aMapMode);
 }
 
 Point WeldViewForwarder::PixelToLogic(const Point& rPoint, const MapMode& rMapMode) const
 {
     EditView* pEditView = m_rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
-
-    if (pOutDev)
-    {
-        MapMode aMapMode(pOutDev->GetMapMode());
-        aMapMode.SetOrigin(Point());
-        Point aPoint(pOutDev->PixelToLogic(rPoint, aMapMode));
-        return OutputDevice::LogicToLogic(aPoint, MapMode(aMapMode.GetMapUnit()), rMapMode);
-    }
-
-    return Point();
+    if (!pEditView)
+        return Point();
+    OutputDevice& rOutDev = pEditView->GetOutputDevice();
+    MapMode aMapMode(rOutDev.GetMapMode());
+    aMapMode.SetOrigin(Point());
+    Point aPoint(rOutDev.PixelToLogic(rPoint, aMapMode));
+    return OutputDevice::LogicToLogic(aPoint, MapMode(aMapMode.GetMapUnit()), rMapMode);
 }
 
 WeldTextForwarder::WeldTextForwarder(WeldEditAccessible& rAcc, WeldEditSource& rSource)
@@ -1372,33 +1364,25 @@ bool WeldEditViewForwarder::IsValid() const { return m_rEditAcc.GetEditView() !=
 Point WeldEditViewForwarder::LogicToPixel(const Point& rPoint, const MapMode& rMapMode) const
 {
     EditView* pEditView = m_rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
-
-    if (pOutDev)
-    {
-        MapMode aMapMode(pOutDev->GetMapMode());
-        Point aPoint(OutputDevice::LogicToLogic(rPoint, rMapMode, MapMode(aMapMode.GetMapUnit())));
-        aMapMode.SetOrigin(Point());
-        return pOutDev->LogicToPixel(aPoint, aMapMode);
-    }
-
-    return Point();
+    if (!pEditView)
+        return Point();
+    OutputDevice& rOutDev = pEditView->GetOutputDevice();
+    MapMode aMapMode(rOutDev.GetMapMode());
+    Point aPoint(OutputDevice::LogicToLogic(rPoint, rMapMode, MapMode(aMapMode.GetMapUnit())));
+    aMapMode.SetOrigin(Point());
+    return rOutDev.LogicToPixel(aPoint, aMapMode);
 }
 
 Point WeldEditViewForwarder::PixelToLogic(const Point& rPoint, const MapMode& rMapMode) const
 {
     EditView* pEditView = m_rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
-
-    if (pOutDev)
-    {
-        MapMode aMapMode(pOutDev->GetMapMode());
-        aMapMode.SetOrigin(Point());
-        Point aPoint(pOutDev->PixelToLogic(rPoint, aMapMode));
-        return OutputDevice::LogicToLogic(aPoint, MapMode(aMapMode.GetMapUnit()), rMapMode);
-    }
-
-    return Point();
+    if (!pEditView)
+        return Point();
+    OutputDevice& rOutDev = pEditView->GetOutputDevice();
+    MapMode aMapMode(rOutDev.GetMapMode());
+    aMapMode.SetOrigin(Point());
+    Point aPoint(rOutDev.PixelToLogic(rPoint, aMapMode));
+    return OutputDevice::LogicToLogic(aPoint, MapMode(aMapMode.GetMapUnit()), rMapMode);
 }
 
 bool WeldEditViewForwarder::GetSelection(ESelection& rSelection) const
