@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c583eb7_4fcf02e8",
+        "filename": "oox/source/ppt/presentationfragmenthandler.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-19T10:48:20Z",
+      "side": 1,
+      "message": "It\u0027s not guarantied, that this will be accessible in the final build.\n\nAccessing to a different module is set by gb_Library_use_libraries part of Library_oox.mk.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 30
+      },
+      "revId": "8539ddc98df5e8c8765130f719052f032e1d48ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
