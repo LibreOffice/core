@@ -52,7 +52,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
 #define ROOTNODE_ADDONMENU                              "Office.Addons"
-#define PATHDELIMITER                                   OUString("/"             )
+constexpr OUStringLiteral PATHDELIMITER = u"/";
 #define SEPARATOR_URL                                   "private:separator"
 
 #define PROPERTYNAME_URL                                ADDONSMENUITEM_STRING_URL

@@ -85,7 +85,7 @@ namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 #define STR_ORDER_BY    " ORDER BY "
 #define STR_AND         " AND "
 #define STR_OR          " OR "
-#define STR_LIKE        OUString(" LIKE ")
+constexpr OUStringLiteral STR_LIKE = u" LIKE ";
 #define L_BRACKET       "("
 #define R_BRACKET       ")"
 #define COMMA           ","

@@ -74,43 +74,43 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_TRANSPARENTSELECTIONPERCENT         75
 #define DEFAULT_SELECTIONMAXIMUMLUMINANCEPERCENT    70
 
-#define PROPERTYNAME_OVERLAYBUFFER      OUString("OverlayBuffer"    )
-#define PROPERTYNAME_PAINTBUFFER        OUString("PaintBuffer"      )
-#define PROPERTYNAME_STRIPE_COLOR_A     OUString("StripeColorA"     )
-#define PROPERTYNAME_STRIPE_COLOR_B     OUString("StripeColorB"     )
-#define PROPERTYNAME_STRIPE_LENGTH      OUString("StripeLength"     )
+constexpr OUStringLiteral PROPERTYNAME_OVERLAYBUFFER      = u"OverlayBuffer";
+constexpr OUStringLiteral PROPERTYNAME_PAINTBUFFER        = u"PaintBuffer";
+constexpr OUStringLiteral PROPERTYNAME_STRIPE_COLOR_A     = u"StripeColorA";
+constexpr OUStringLiteral PROPERTYNAME_STRIPE_COLOR_B     = u"StripeColorB";
+constexpr OUStringLiteral PROPERTYNAME_STRIPE_LENGTH      = u"StripeLength";
 
 // #i73602#
-#define PROPERTYNAME_OVERLAYBUFFER_CALC         OUString("OverlayBuffer_Calc")
-#define PROPERTYNAME_OVERLAYBUFFER_WRITER       OUString("OverlayBuffer_Writer")
-#define PROPERTYNAME_OVERLAYBUFFER_DRAWIMPRESS  OUString("OverlayBuffer_DrawImpress")
+constexpr OUStringLiteral PROPERTYNAME_OVERLAYBUFFER_CALC         = u"OverlayBuffer_Calc";
+constexpr OUStringLiteral PROPERTYNAME_OVERLAYBUFFER_WRITER       = u"OverlayBuffer_Writer";
+constexpr OUStringLiteral PROPERTYNAME_OVERLAYBUFFER_DRAWIMPRESS  = u"OverlayBuffer_DrawImpress";
 
 // #i74769#, #i75172#
-#define PROPERTYNAME_PAINTBUFFER_CALC           OUString("PaintBuffer_Calc")
-#define PROPERTYNAME_PAINTBUFFER_WRITER         OUString("PaintBuffer_Writer")
-#define PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS    OUString("PaintBuffer_DrawImpress")
+constexpr OUStringLiteral PROPERTYNAME_PAINTBUFFER_CALC           = u"PaintBuffer_Calc";
+constexpr OUStringLiteral PROPERTYNAME_PAINTBUFFER_WRITER         = u"PaintBuffer_Writer";
+constexpr OUStringLiteral PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS    = u"PaintBuffer_DrawImpress";
 
 // #i4219#
-#define PROPERTYNAME_MAXIMUMPAPERWIDTH OUString("MaximumPaperWidth")
-#define PROPERTYNAME_MAXIMUMPAPERHEIGHT OUString("MaximumPaperHeight")
-#define PROPERTYNAME_MAXIMUMPAPERLEFTMARGIN OUString("MaximumPaperLeftMargin")
-#define PROPERTYNAME_MAXIMUMPAPERRIGHTMARGIN OUString("MaximumPaperRightMargin")
-#define PROPERTYNAME_MAXIMUMPAPERTOPMARGIN OUString("MaximumPaperTopMargin")
-#define PROPERTYNAME_MAXIMUMPAPERBOTTOMMARGIN OUString("MaximumPaperBottomMargin")
+constexpr OUStringLiteral PROPERTYNAME_MAXIMUMPAPERWIDTH = u"MaximumPaperWidth";
+constexpr OUStringLiteral PROPERTYNAME_MAXIMUMPAPERHEIGHT = u"MaximumPaperHeight";
+constexpr OUStringLiteral PROPERTYNAME_MAXIMUMPAPERLEFTMARGIN = u"MaximumPaperLeftMargin";
+constexpr OUStringLiteral PROPERTYNAME_MAXIMUMPAPERRIGHTMARGIN = u"MaximumPaperRightMargin";
+constexpr OUStringLiteral PROPERTYNAME_MAXIMUMPAPERTOPMARGIN = u"MaximumPaperTopMargin";
+constexpr OUStringLiteral PROPERTYNAME_MAXIMUMPAPERBOTTOMMARGIN = u"MaximumPaperBottomMargin";
 
 // primitives
-#define PROPERTYNAME_ANTIALIASING OUString("AntiAliasing")
-#define PROPERTYNAME_SNAPHORVERLINESTODISCRETE OUString("SnapHorVerLinesToDiscrete")
-#define PROPERTYNAME_SOLIDDRAGCREATE OUString("SolidDragCreate")
-#define PROPERTYNAME_RENDERDECORATEDTEXTDIRECT OUString("RenderDecoratedTextDirect")
-#define PROPERTYNAME_RENDERSIMPLETEXTDIRECT OUString("RenderSimpleTextDirect")
-#define PROPERTYNAME_QUADRATIC3DRENDERLIMIT OUString("Quadratic3DRenderLimit")
-#define PROPERTYNAME_QUADRATICFORMCONTROLRENDERLIMIT OUString("QuadraticFormControlRenderLimit")
+constexpr OUStringLiteral PROPERTYNAME_ANTIALIASING = u"AntiAliasing";
+constexpr OUStringLiteral PROPERTYNAME_SNAPHORVERLINESTODISCRETE = u"SnapHorVerLinesToDiscrete";
+constexpr OUStringLiteral PROPERTYNAME_SOLIDDRAGCREATE = u"SolidDragCreate";
+constexpr OUStringLiteral PROPERTYNAME_RENDERDECORATEDTEXTDIRECT = u"RenderDecoratedTextDirect";
+constexpr OUStringLiteral PROPERTYNAME_RENDERSIMPLETEXTDIRECT = u"RenderSimpleTextDirect";
+constexpr OUStringLiteral PROPERTYNAME_QUADRATIC3DRENDERLIMIT = u"Quadratic3DRenderLimit";
+constexpr OUStringLiteral PROPERTYNAME_QUADRATICFORMCONTROLRENDERLIMIT = u"QuadraticFormControlRenderLimit";
 
 // #i97672# selection settings
-#define PROPERTYNAME_TRANSPARENTSELECTION OUString("TransparentSelection")
-#define PROPERTYNAME_TRANSPARENTSELECTIONPERCENT OUString("TransparentSelectionPercent")
-#define PROPERTYNAME_SELECTIONMAXIMUMLUMINANCEPERCENT OUString("SelectionMaximumLuminancePercent")
+constexpr OUStringLiteral PROPERTYNAME_TRANSPARENTSELECTION = u"TransparentSelection";
+constexpr OUStringLiteral PROPERTYNAME_TRANSPARENTSELECTIONPERCENT = u"TransparentSelectionPercent";
+constexpr OUStringLiteral PROPERTYNAME_SELECTIONMAXIMUMLUMINANCEPERCENT = u"SelectionMaximumLuminancePercent";
 
 #define PROPERTYHANDLE_OVERLAYBUFFER                0
 #define PROPERTYHANDLE_PAINTBUFFER                  1
