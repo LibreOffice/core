@@ -2516,8 +2516,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
 
     WW8_FC nStartFc;
     void* pF0;
-    pPF->Get(nStartFc, pF0);
-    if (!pF0)
+    if (!pPF->Get(nStartFc, pF0))
     {
         OSL_ENSURE( false, "+Where is the graphic (2) ?" );
         return nullptr;
