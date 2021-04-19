@@ -126,6 +126,24 @@
       "revId": "2191651f91f9f15ba63e21be3dff6e9b4faaf792",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c917ccb4_5c3d5e1c",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-19T09:57:29Z",
+      "side": 1,
+      "message": "maybe, but at the cost of causing ODR violation, as LIBO_INTERNAL_ONLY and !LIBO_INTERNAL_ONLY code may end up in the same process",
+      "parentUuid": "27145108_1f1efad1",
+      "revId": "2191651f91f9f15ba63e21be3dff6e9b4faaf792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
