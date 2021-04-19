@@ -32,6 +32,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <svx/AccessibleTextHelper.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/unohelp2.hxx>
@@ -59,50 +60,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-
-static awt::Rectangle lcl_GetBounds( vcl::Window const *pWin )
-{
-    // !! see VCLXAccessibleComponent::implGetBounds()
-
-    //! the coordinates returned are relative to the parent window !
-    //! Thus the top-left point may be different from (0, 0) !
-
-    awt::Rectangle aBounds;
-    if (pWin)
-    {
-        tools::Rectangle aRect = pWin->GetWindowExtentsRelative( nullptr );
-        aBounds.X       = aRect.Left();
-        aBounds.Y       = aRect.Top();
-        aBounds.Width   = aRect.GetWidth();
-        aBounds.Height  = aRect.GetHeight();
-        vcl::Window* pParent = pWin->GetAccessibleParentWindow();
-        if (pParent)
-        {
-            tools::Rectangle aParentRect = pParent->GetWindowExtentsRelative( nullptr );
-            awt::Point aParentScreenLoc( aParentRect.Left(), aParentRect.Top() );
-            aBounds.X -= aParentScreenLoc.X;
-            aBounds.Y -= aParentScreenLoc.Y;
-        }
-    }
-    return aBounds;
-}
-
-static awt::Point lcl_GetLocationOnScreen( vcl::Window const *pWin )
-{
-    // !! see VCLXAccessibleComponent::getLocationOnScreen()
-
-    awt::Point aPos;
-    if (pWin)
-    {
-        tools::Rectangle aRect = pWin->GetWindowExtentsRelative( nullptr );
-        aPos.X = aRect.Left();
-        aPos.Y = aRect.Top();
-    }
-    return aPos;
-}
-
-
-SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
+SmGraphicAccessible::SmGraphicAccessible(SmGraphicWidget *pGraphicWin) :
     aAccName            (SmResId(RID_DOCUMENTSTR)),
     nClientId           (0),
     pWin                (pGraphicWin)
@@ -114,10 +72,9 @@ SmGraphicAccessible::~SmGraphicAccessible()
 {
 }
 
-
 SmDocShell * SmGraphicAccessible::GetDoc_Impl()
 {
-    SmViewShell *pView = pWin ? pWin->GetView() : nullptr;
+    SmViewShell *pView = pWin ? &pWin->GetView() : nullptr;
     return pView ? pView->GetDoc() : nullptr;
 }
 
@@ -171,7 +128,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::containsPoint( const awt::Point& aPoint )
     if (!pWin)
         throw RuntimeException();
 
-    Size aSz( pWin->GetSizePixel() );
+    Size aSz( pWin->GetOutputSizePixel() );
     return  aPoint.X >= 0  &&  aPoint.Y >= 0  &&
             aPoint.X < aSz.Width()  &&  aPoint.Y < aSz.Height();
 }
@@ -191,9 +148,17 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getBounds()
     SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
-            "mismatch of window parent and accessible parent" );
-    return lcl_GetBounds( pWin );
+
+    const Point aOutPos;
+    const Size aOutSize(pWin->GetOutputSizePixel());
+    css::awt::Rectangle aRet;
+
+    aRet.X = aOutPos.X();
+    aRet.Y = aOutPos.Y();
+    aRet.Width = aOutSize.Width();
+    aRet.Height = aOutSize.Height();
+
+    return aRet;
 }
 
 awt::Point SAL_CALL SmGraphicAccessible::getLocation()
@@ -201,10 +166,14 @@ awt::Point SAL_CALL SmGraphicAccessible::getLocation()
     SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
-            "mismatch of window parent and accessible parent" );
-    awt::Rectangle aRect( lcl_GetBounds( pWin ) );
-    return awt::Point( aRect.X, aRect.Y );
+
+    const css::awt::Rectangle aRect(getBounds());
+    css::awt::Point aRet;
+
+    aRet.X = aRect.X;
+    aRet.Y = aRect.Y;
+
+    return aRet;
 }
 
 awt::Point SAL_CALL SmGraphicAccessible::getLocationOnScreen()
@@ -212,9 +181,28 @@ awt::Point SAL_CALL SmGraphicAccessible::getLocationOnScreen()
     SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
-            "mismatch of window parent and accessible parent" );
-    return lcl_GetLocationOnScreen( pWin );
+
+    css::awt::Point aScreenLoc(0, 0);
+
+    css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
+    if (xParent)
+    {
+        css::uno::Reference<css::accessibility::XAccessibleContext> xParentContext(
+            xParent->getAccessibleContext());
+        css::uno::Reference<css::accessibility::XAccessibleComponent> xParentComponent(
+            xParentContext, css::uno::UNO_QUERY);
+        OSL_ENSURE(xParentComponent.is(),
+                   "WeldEditAccessible::getLocationOnScreen: no parent component!");
+        if (xParentComponent.is())
+        {
+            css::awt::Point aParentScreenLoc(xParentComponent->getLocationOnScreen());
+            css::awt::Point aOwnRelativeLoc(getLocation());
+            aScreenLoc.X = aParentScreenLoc.X + aOwnRelativeLoc.X;
+            aScreenLoc.Y = aParentScreenLoc.Y + aOwnRelativeLoc.Y;
+        }
+    }
+
+    return aScreenLoc;
 }
 
 awt::Size SAL_CALL SmGraphicAccessible::getSize()
@@ -222,16 +210,8 @@ awt::Size SAL_CALL SmGraphicAccessible::getSize()
     SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
-            "mismatch of window parent and accessible parent" );
-
-    Size aSz( pWin->GetSizePixel() );
-#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    awt::Rectangle aRect( lcl_GetBounds( pWin ) );
-    Size aSz2( aRect.Width, aRect.Height );
-    assert(aSz == aSz2 && "mismatch in width" );
-#endif
-    return awt::Size( aSz.Width(), aSz.Height() );
+    Size aSz(pWin->GetOutputSizePixel());
+    return css::awt::Size(aSz.Width(), aSz.Height());
 }
 
 void SAL_CALL SmGraphicAccessible::grabFocus()
@@ -246,22 +226,28 @@ void SAL_CALL SmGraphicAccessible::grabFocus()
 sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
 {
     SolarMutexGuard aGuard;
-
     if (!pWin)
         throw RuntimeException();
-    return static_cast<sal_Int32>(pWin->GetTextColor());
+
+    weld::DrawingArea* pDrawingArea = pWin->GetDrawingArea();
+    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+
+    return static_cast<sal_Int32>(rDevice.GetTextColor());
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
 {
     SolarMutexGuard aGuard;
-
     if (!pWin)
         throw RuntimeException();
-    Wallpaper aWall( pWin->GetDisplayBackground() );
+
+    weld::DrawingArea* pDrawingArea = pWin->GetDrawingArea();
+    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+
+    Wallpaper aWall(rDevice.GetBackground());
     Color nCol;
     if (aWall.IsBitmap() || aWall.IsGradient())
-        nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor();
+        nCol = Application::GetSettings().GetStyleSettings().GetWindowColor();
     else
         nCol = aWall.GetColor();
     return static_cast<sal_Int32>(nCol);
@@ -284,24 +270,44 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
     if (!pWin)
         throw RuntimeException();
 
-    vcl::Window *pAccParent = pWin->GetAccessibleParentWindow();
-    OSL_ENSURE( pAccParent, "accessible parent missing" );
-    return pAccParent ? pAccParent->GetAccessible() : Reference< XAccessible >();
+    return pWin->GetDrawingArea()->get_accessible_parent();
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nIdx = -1;
-    vcl::Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : nullptr;
-    if (pAccParent)
+
+    // -1 for child not found/no parent (according to specification)
+    sal_Int32 nRet = -1;
+
+    css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
+    if (!xParent)
+        return nRet;
+
+    try
     {
-        sal_uInt16 nCnt = pAccParent->GetAccessibleChildWindowCount();
-        for (sal_uInt16 i = 0;  i < nCnt  &&  nIdx == -1;  ++i)
-            if (pAccParent->GetAccessibleChildWindow( i ) == pWin)
-                nIdx = i;
+        css::uno::Reference<css::accessibility::XAccessibleContext> xParentContext(
+            xParent->getAccessibleContext());
+
+        //  iterate over parent's children and search for this object
+        if (xParentContext.is())
+        {
+            sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
+            for (sal_Int32 nChild = 0; (nChild < nChildCount) && (-1 == nRet); ++nChild)
+            {
+                css::uno::Reference<css::accessibility::XAccessible> xChild(
+                    xParentContext->getAccessibleChild(nChild));
+                if (xChild.get() == this)
+                    nRet = nChild;
+            }
+        }
     }
-    return nIdx;
+    catch (const css::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("svx", "WeldEditAccessible::getAccessibleIndexInParent");
+    }
+
+    return nRet;
 }
 
 sal_Int16 SAL_CALL SmGraphicAccessible::getAccessibleRole()
@@ -349,7 +355,9 @@ Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStat
             pStateSet->AddState( AccessibleStateType::SHOWING );
         if (pWin->IsReallyVisible())
             pStateSet->AddState( AccessibleStateType::VISIBLE );
-        if (COL_TRANSPARENT != pWin->GetBackground().GetColor())
+        weld::DrawingArea* pDrawingArea = pWin->GetDrawingArea();
+        OutputDevice& rDevice = pDrawingArea->get_ref_device();
+        if (COL_TRANSPARENT != rDevice.GetBackground().GetColor())
             pStateSet->AddState( AccessibleStateType::OPAQUE );
     }
 
@@ -443,8 +451,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
         throw RuntimeException();
 
     // get accessible text
-    SmViewShell *pView = pWin->GetView();
-    SmDocShell  *pDoc  = pView ? pView->GetDoc() : nullptr;
+    SmDocShell* pDoc  = pWin->GetView().GetDoc();
     if (!pDoc)
         throw RuntimeException();
     OUString aTxt( GetAccessibleText_Impl() );
@@ -477,15 +484,18 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
             Size  aSize (pNode->GetSize());
 
+            weld::DrawingArea* pDrawingArea = pWin->GetDrawingArea();
+            OutputDevice& rDevice = pDrawingArea->get_ref_device();
+
             std::unique_ptr<tools::Long[]> pXAry(new tools::Long[ aNodeText.getLength() ]);
-            pWin->SetFont( pNode->GetFont() );
-            pWin->GetTextArray( aNodeText, pXAry.get(), 0, aNodeText.getLength() );
+            rDevice.SetFont( pNode->GetFont() );
+            rDevice.GetTextArray( aNodeText, pXAry.get(), 0, aNodeText.getLength() );
             aTLPos.AdjustX(nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0 );
             aSize.setWidth( nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex] );
             pXAry.reset();
 
-            aTLPos = pWin->LogicToPixel( aTLPos );
-            aSize  = pWin->LogicToPixel( aSize );
+            aTLPos = rDevice.LogicToPixel( aTLPos );
+            aSize  = rDevice.LogicToPixel( aSize );
             aRes.X = aTLPos.X();
             aRes.Y = aTLPos.Y();
             aRes.Width  = aSize.Width();
@@ -513,15 +523,18 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
     sal_Int32 nRes = -1;
     if (pWin)
     {
-        const SmNode *pTree = pWin->GetView()->GetDoc()->GetFormulaTree();
+        const SmNode *pTree = pWin->GetView().GetDoc()->GetFormulaTree();
         // can be NULL! e.g. if one clicks within the window already during loading of the
         // document (before the parser even started)
         if (!pTree)
             return nRes;
 
+        weld::DrawingArea* pDrawingArea = pWin->GetDrawingArea();
+        OutputDevice& rDevice = pDrawingArea->get_ref_device();
+
         // get position relative to formula draw position
         Point  aPos( aPoint.X, aPoint.Y );
-        aPos = pWin->PixelToLogic( aPos );
+        aPos = rDevice.PixelToLogic( aPos );
         aPos -= pWin->GetFormulaDrawPos();
 
         // if it was inside the formula then get the appropriate node
@@ -548,8 +561,8 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
                 tools::Long nNodeX = pNode->GetLeft();
 
                 std::unique_ptr<tools::Long[]> pXAry(new tools::Long[ aTxt.getLength() ]);
-                pWin->SetFont( pNode->GetFont() );
-                pWin->GetTextArray( aTxt, pXAry.get(), 0, aTxt.getLength() );
+                rDevice.SetFont( pNode->GetFont() );
+                rDevice.GetTextArray( aTxt, pXAry.get(), 0, aTxt.getLength() );
                 for (sal_Int32 i = 0;  i < aTxt.getLength()  &&  nRes == -1;  ++i)
                 {
                     if (pXAry[i] + nNodeX > aPos.X())
@@ -691,7 +704,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
     if (!pWin)
         throw RuntimeException();
 
-    Reference< datatransfer::clipboard::XClipboard > xClipboard = pWin->GetClipboard();
+    Reference< datatransfer::clipboard::XClipboard > xClipboard = GetSystemClipboard();
     if ( xClipboard.is() )
     {
         OUString sText( getTextRange(nStartIndex, nEndIndex) );

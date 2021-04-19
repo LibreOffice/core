@@ -174,7 +174,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
             Repaint();
         }
         else
-            pViewSh->GetGraphicWindow().Invalidate();
+            pViewSh->GetGraphicWidget().Invalidate();
     }
 
     if ( bIsEnabled )
@@ -182,7 +182,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
     SetModified();
 
     // launch accessible event if necessary
-    SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessible_Impl() : nullptr;
+    SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWidget().GetAccessible_Impl() : nullptr;
     if (pAcc)
     {
         Any aOldValue, aNewValue;
@@ -260,7 +260,7 @@ void SmDocShell::ArrangeFormula()
     {
         SmViewShell *pView = SmGetActiveView();
         if (pView)
-            pOutDev = &pView->GetGraphicWindow();
+            pOutDev = &pView->GetGraphicWidget().GetDrawingArea()->get_ref_device();
         else
         {
             pOutDev = &SM_MOD()->GetDefaultVirtualDev();
@@ -622,7 +622,7 @@ void SmDocShell::Repaint()
     SetVisAreaSize(aVisSize);
     SmViewShell* pViewSh = SmGetActiveView();
     if (pViewSh)
-        pViewSh->GetGraphicWindow().Invalidate();
+        pViewSh->GetGraphicWidget().Invalidate();
 
     if (bIsEnabled)
         EnableSetModified(bIsEnabled);
@@ -1145,7 +1145,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
             break;
 
         case SID_GRAPHIC_SM:
-            //! very old (pre UNO) and ugly hack to invalidate the SmGraphicWindow.
+            //! very old (pre UNO) and ugly hack to invalidate the SmGraphicWidget.
             //! If mnModifyCount gets changed then the call below will implicitly notify
             //! SmGraphicController::StateChanged and there the window gets invalidated.
             //! Thus all the 'mnModifyCount++' before invalidating this slot.

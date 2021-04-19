@@ -265,7 +265,7 @@ IMPL_LINK_NOARG(SmEditTextWindow, CursorMoveTimerHdl, Timer *, void)
             sal_Int32  nRow;
             sal_uInt16 nCol;
             SmGetLeftSelectionPart(aNewSelection, nRow, nCol);
-            pViewSh->GetGraphicWindow().SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
+            pViewSh->GetGraphicWidget().SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
             aOldSelection = aNewSelection;
         }
     }
@@ -424,7 +424,7 @@ bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
             // SFX has maybe called a slot of the view and thus (because of a hack in SFX)
             // set the focus to the view
             SmViewShell* pVShell = mrEditWindow.GetView();
-            if ( pVShell && pVShell->GetGraphicWindow().HasFocus() )
+            if ( pVShell && pVShell->GetGraphicWidget().HasFocus() )
             {
                 GrabFocus();
             }
