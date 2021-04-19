@@ -656,7 +656,7 @@ void InitCore()
     TextInit_();
 
     SwSelPaintRects::s_pMapMode = new MapMode;
-    SwFntObj::pPixMap = new MapMode;
+    SwFntObj::s_pPixMap = new MapMode;
 
     pGlobalOLEExcludeList = new std::vector<SvGlobalName>;
 
@@ -688,7 +688,7 @@ void FinitCore()
     delete SwTableAutoFormat::s_pDefaultBoxAutoFormat;
 
     delete SwSelPaintRects::s_pMapMode;
-    delete SwFntObj::pPixMap;
+    delete SwFntObj::s_pPixMap;
 
     delete SwEditShell::s_pAutoFormatFlags;
 

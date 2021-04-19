@@ -56,7 +56,7 @@ public:
 // All these objects are an SwXFrame, so they can use a common implementation
 class SwFrameEventDescriptor final : public SvEventDescriptor
 {
-    SwXFrame& rFrame;
+    SwXFrame& m_rFrame;
 
 public:
     SwFrameEventDescriptor(SwXTextFrame& rFrameRef);
