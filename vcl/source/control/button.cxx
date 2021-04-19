@@ -825,7 +825,11 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFl
             nSymbolSize = aSize.Width() / 2;
 
         nSeparatorX = aInRect.Right() - 2*nSymbolSize;
-        aSize.AdjustWidth( -(2*nSymbolSize) );
+
+        // tdf#141761 Minimum width should be (1) Pixel, see comment
+        // with same task number above for more info
+        const tools::Long nWidthAdjust(2*nSymbolSize);
+        aSize.setWidth(std::max(static_cast<tools::Long>(1), aSize.getWidth() - nWidthAdjust));
 
         // center symbol rectangle in the separated area
         aSymbolRect.AdjustRight( -(nSymbolSize/2) );
@@ -1960,6 +1964,66 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
     }
 }
 
+<<<<<<< HEAD   (06d5d6 tdf#95554 fix ScDocument::GetClipArea() for rows: use > inst)
+=======
+// for drawing RadioButton or CheckButton that has Text and/or Image
+void Button::ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, DrawFlags nDrawFlags,
+                                const Point& rPos, const Size& rSize,
+                                const Size& rImageSize, tools::Rectangle& rStateRect,
+                                tools::Rectangle& rMouseRect)
+{
+    DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nDrawFlags );
+
+    const tools::Long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
+    Size aSize( rSize );
+    Point aPos( rPos );
+    aPos.AdjustX(rImageSize.Width() + nImageSep );
+
+    // tdf#141761 Old (convenience?) adjustment of width may lead to empty
+    // or negative(!) Size, that needs to be avoided. The coordinate context
+    // is pixel-oriented (all Paints of Controls are, historically), so
+    // the minimum width should be '1' Pixel.
+    // Hint: nImageSep is based on Zoom (using Window::CalcZoom) and
+    // MapModes (using Window::GetDrawPixel) - so potenially a wide range
+    // of unpredictable values is possible
+    const tools::Long nWidthAdjust(rImageSize.Width() + nImageSep);
+    aSize.setWidth(std::max(static_cast<tools::Long>(1), aSize.getWidth() - nWidthAdjust));
+
+    // if the text rect height is smaller than the height of the image
+    // then for single lines the default should be centered text
+    if( (nWinStyle & (WB_TOP|WB_VCENTER|WB_BOTTOM)) == 0 &&
+        (rImageSize.Height() > rSize.Height() || ! (nWinStyle & WB_WORDBREAK) ) )
+    {
+        nTextStyle &= ~DrawTextFlags(DrawTextFlags::Top|DrawTextFlags::Bottom);
+        nTextStyle |= DrawTextFlags::VCenter;
+        aSize.setHeight( rImageSize.Height() );
+    }
+
+    ImplDrawAlignedImage( pDev, aPos, aSize, 1, nTextStyle );
+
+    rMouseRect = tools::Rectangle( aPos, aSize );
+    rMouseRect.SetLeft( rPos.X() );
+
+    rStateRect.SetLeft( rPos.X() );
+    rStateRect.SetTop( rMouseRect.Top() );
+
+    if ( aSize.Height() > rImageSize.Height() )
+        rStateRect.AdjustTop(( aSize.Height() - rImageSize.Height() ) / 2 );
+    else
+    {
+        rStateRect.AdjustTop( -(( rImageSize.Height() - aSize.Height() ) / 2) );
+        if( rStateRect.Top() < 0 )
+            rStateRect.SetTop( 0 );
+    }
+
+    rStateRect.SetRight( rStateRect.Left()+rImageSize.Width()-1 );
+    rStateRect.SetBottom( rStateRect.Top()+rImageSize.Height()-1 );
+
+    if ( rStateRect.Bottom() > rMouseRect.Bottom() )
+        rMouseRect.SetBottom( rStateRect.Bottom() );
+}
+
+>>>>>>> CHANGE (35e4a4 tdf#141761 Avoid vanishing FormControls)
 void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                             const Point& rPos, const Size& rSize,
                             const Size& rImageSize, tools::Rectangle& rStateRect,
