@@ -745,6 +745,13 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     verify();
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf94326_notOutlineNumbering, "tdf94326_notOutlineNumbering.doc")
+{
+    // The directly applied numbering list must not be lost.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, u"ОБЩИЕ ПОЛОЖЕНИЯ"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf120394, "tdf120394.doc")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
