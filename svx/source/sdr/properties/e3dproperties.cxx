@@ -28,9 +28,9 @@
 namespace sdr::properties
 {
         // create a new itemset
-        std::unique_ptr<SfxItemSet> E3dProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet E3dProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return std::make_unique<SfxItemSet>(rPool,
+            return SfxItemSet(rPool,
 
                 // ranges from SdrAttrObj
                 svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,

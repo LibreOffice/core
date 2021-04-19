@@ -30,9 +30,9 @@
 namespace sdr::properties
 {
         // create a new itemset
-        std::unique_ptr<SfxItemSet> ConnectorProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet ConnectorProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return std::make_unique<SfxItemSet>(
+            return SfxItemSet(
                 rPool,
                 svl::Items<
                     // Ranges from SdrAttrObj, SdrEdgeObj:
