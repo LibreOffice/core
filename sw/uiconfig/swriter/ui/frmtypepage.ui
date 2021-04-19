@@ -103,7 +103,6 @@
                     <property name="receives-default">False</property>
                     <property name="margin-start">12</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="relwidth-atkobject">
@@ -140,7 +139,6 @@
                     <property name="receives-default">False</property>
                     <property name="margin-start">12</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="autowidth-atkobject">
@@ -221,7 +219,6 @@
                     <property name="receives-default">False</property>
                     <property name="margin-start">12</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="relheight-atkobject">
@@ -258,7 +255,6 @@
                     <property name="receives-default">False</property>
                     <property name="margin-start">12</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="autoheight-atkobject">
@@ -279,7 +275,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="ratio-atkobject">
@@ -355,7 +350,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
@@ -376,7 +370,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">topage</property>
                     <child internal-child="accessible">
@@ -397,7 +390,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">topage</property>
                     <child internal-child="accessible">
@@ -418,7 +410,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">topage</property>
                     <child internal-child="accessible">
@@ -439,7 +430,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">topage</property>
                   </object>
