@@ -16,6 +16,24 @@
       "revId": "6a6cd129f34220fadf5d134a2dc2c1e368acbc4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b804aef_6ab2cc9c",
+        "filename": "cui/uiconfig/ui/fileextcheckdialog.ui",
+        "patchSetId": 15
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-04-19T23:09:45Z",
+      "side": 1,
+      "message": "The title is set in FileExtCheckDialog::FileExtCheckDialog in cui\\source\\dialogs\\fileextcheckdlg.cxx, and is passed in from CheckFileExtRegistration in vcl\\win\\app\\fileregistration.cxx.",
+      "parentUuid": "2452529b_471233d2",
+      "revId": "6a6cd129f34220fadf5d134a2dc2c1e368acbc4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
