@@ -160,6 +160,7 @@ public:
 
     void            SetWindow( vcl::Window* pWin );
     vcl::Window*    GetWindow() const;
+    OutputDevice&   GetOutputDevice() const;
 
     bool            HasOtherViewWindow( vcl::Window* pWin );
     bool            AddOtherViewWindow( vcl::Window* pWin );
