@@ -88,8 +88,8 @@ class SwFntObj : public SwCacheObj
     /// Cache of already calculated layout glyphs and text widths.
     std::map<SwTextGlyphsKey, SwTextGlyphsData> m_aTextGlyphs;
 
-    static tools::Long nPixWidth;
-    static MapMode *pPixMap;
+    static tools::Long s_nPixWidth;
+    static MapMode *s_pPixMap;
 
 public:
     SwFntObj( const SwSubFont &rFont, std::uintptr_t nFontCacheId,

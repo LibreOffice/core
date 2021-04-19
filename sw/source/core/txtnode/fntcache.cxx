@@ -67,8 +67,8 @@ SwFntObj *pLastFont = nullptr;
 
 constexpr Color gWaveCol(COL_GRAY);
 
-tools::Long SwFntObj::nPixWidth;
-MapMode* SwFntObj::pPixMap = nullptr;
+tools::Long SwFntObj::s_nPixWidth;
+MapMode* SwFntObj::s_pPixMap = nullptr;
 static vcl::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut( new VclPtr<OutputDevice> );
 
 /**
@@ -1007,15 +1007,15 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     Point aTextOriginPos( rInf.GetPos() );
     if( !bPrt )
     {
-        if( rInf.GetpOut() != *s_pFntObjPixOut.get() || rInf.GetOut().GetMapMode() != *pPixMap )
+        if( rInf.GetpOut() != *s_pFntObjPixOut.get() || rInf.GetOut().GetMapMode() != *s_pPixMap )
         {
-            *pPixMap = rInf.GetOut().GetMapMode();
+            *s_pPixMap = rInf.GetOut().GetMapMode();
             (*s_pFntObjPixOut.get()) = rInf.GetpOut();
             Size aTmp( 1, 1 );
-            nPixWidth = rInf.GetOut().PixelToLogic( aTmp ).Width();
+            s_nPixWidth = rInf.GetOut().PixelToLogic( aTmp ).Width();
         }
 
-        aTextOriginPos.AdjustX(rInf.GetFrame()->IsRightToLeft() ? 0 : nPixWidth );
+        aTextOriginPos.AdjustX(rInf.GetFrame()->IsRightToLeft() ? 0 : s_nPixWidth );
     }
 
     Color aOldColor( pTmpFont->GetColor() );

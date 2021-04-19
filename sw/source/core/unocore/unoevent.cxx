@@ -153,21 +153,21 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextFrame& rFrameRef ) :
         SvEventDescriptor(static_cast<text::XTextFrame&>(rFrameRef), aFrameEvents),
-        rFrame(rFrameRef)
+        m_rFrame(rFrameRef)
 {
 }
 
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextGraphicObject& rGraphicRef ) :
         SvEventDescriptor(static_cast<text::XTextContent&>(rGraphicRef), aGraphicEvents),
-        rFrame(static_cast<SwXFrame&>(rGraphicRef))
+        m_rFrame(static_cast<SwXFrame&>(rGraphicRef))
 {
 }
 
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextEmbeddedObject& rObjectRef ) :
         SvEventDescriptor(static_cast<text::XTextContent&>(rObjectRef), aOLEEvents),
-        rFrame(static_cast<SwXFrame&>(rObjectRef))
+        m_rFrame(static_cast<SwXFrame&>(rObjectRef))
 {
 }
 
@@ -177,12 +177,12 @@ SwFrameEventDescriptor::~SwFrameEventDescriptor()
 
 void SwFrameEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
 {
-    rFrame.GetFrameFormat()->SetFormatAttr(rItem);
+    m_rFrame.GetFrameFormat()->SetFormatAttr(rItem);
 }
 
 const SvxMacroItem& SwFrameEventDescriptor::getMacroItem()
 {
-    return rFrame.GetFrameFormat()->GetFormatAttr(RES_FRMMACRO);
+    return m_rFrame.GetFrameFormat()->GetFormatAttr(RES_FRMMACRO);
 }
 
 sal_uInt16 SwFrameEventDescriptor::getMacroItemWhich() const
