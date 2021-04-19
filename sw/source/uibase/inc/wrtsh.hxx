@@ -494,6 +494,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool IsOutlineContentVisible(const size_t nPos);
     void ToggleOutlineContentVisibility(SwNode* pNd, const bool bForceNotVisible = false);
     void ToggleOutlineContentVisibility(const size_t nPos, const bool bForceNotVisible = false);
+    void InvalidateOutlineContentVisibility();
 
 private:
 

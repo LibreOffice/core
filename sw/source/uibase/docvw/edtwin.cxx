@@ -1366,32 +1366,6 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         }
     }
 
-    if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
-    {
-        // not allowed if outline content visibility is false
-        sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
-        if ((rSh.IsSttPara() && (nKey == KEY_BACKSPACE || nKey == KEY_LEFT))
-                || (rSh.IsEndOfPara() && (nKey == KEY_DELETE || nKey == KEY_RETURN || nKey == KEY_RIGHT)))
-        {
-            SwContentNode* pContentNode = rSh.GetCurrentShellCursor().GetContentNode();
-            SwOutlineNodes::size_type nPos;
-            if (rSh.GetDoc()->GetNodes().GetOutLineNds().Seek_Entry(pContentNode, &nPos))
-            {
-                bool bOutlineContentVisibleAttr = true;
-                pContentNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                if (!bOutlineContentVisibleAttr)
-                    return; // outline content visibility is false
-                if (rSh.IsSttPara() && (nKey == KEY_BACKSPACE || nKey == KEY_LEFT) && (nPos-1 != SwOutlineNodes::npos))
-                {
-                    bOutlineContentVisibleAttr = true;
-                    rSh.GetDoc()->GetNodes().GetOutLineNds()[nPos-1]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                    if (!bOutlineContentVisibleAttr)
-                        return; // previous outline node has content visibility false
-                }
-            }
-        }
-    }
-
     if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
         m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard )
     {
@@ -2706,7 +2680,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
     // x11 backend doesn't like not having this
     if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
-        GetFrameControlsManager().SetOutlineContentVisibilityButtons();
+        rSh.InvalidateOutlineContentVisibility();
 
     // update the page number in the statusbar
     sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
@@ -3536,16 +3510,16 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     {
                         if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
                         {
+                            // ctrl+left-click on outline node frame
                             SwContentAtPos aContentAtPos(IsAttrAtPos::Outline);
                             if(rSh.GetContentAtPos(aDocPos, aContentAtPos))
                             {
-                                // move cursor to outline para start and toggle outline content visibility
-                                MoveCursor(rSh, aDocPos, bOnlyText, bLockView);
-                                SwPaM aPam(*rSh.GetCurrentShellCursor().GetPoint());
                                 SwOutlineNodes::size_type nPos;
-                                if (rSh.GetNodes().GetOutLineNds().Seek_Entry(&aPam.GetPoint()->nNode.GetNode(), &nPos))
-                                    rSh.ToggleOutlineContentVisibility(nPos);
-                                return;
+                                if (rSh.GetNodes().GetOutLineNds().Seek_Entry(aContentAtPos.aFnd.pNode, &nPos))
+                                {
+                                    ToggleOutlineContentVisibility(nPos, false);
+                                    return;
+                                }
                             }
                         }
                         if ( !m_bInsDraw && IsDrawObjSelectable( rSh, aDocPos ) && !lcl_urlOverBackground( rSh, aDocPos ) )
@@ -3784,29 +3758,14 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton()
             && aMEvt.GetModifier() == KEY_MOD1)
         {
+            // ctrl+right-click on outline node frame
             SwContentAtPos aContentAtPos(IsAttrAtPos::Outline);
             if(rSh.GetContentAtPos(aDocPos, aContentAtPos))
             {
-                // move cursor to para start toggle outline content visibility and set the same visibility for subs
-                MoveCursor(rSh, aDocPos, false, true);
-                SwPaM aPam(*rSh.GetCurrentShellCursor().GetPoint());
                 SwOutlineNodes::size_type nPos;
-                if (rSh.GetNodes().GetOutLineNds().Seek_Entry(&aPam.GetPoint()->nNode.GetNode(), &nPos))
+                if (rSh.GetNodes().GetOutLineNds().Seek_Entry(aContentAtPos.aFnd.pNode, &nPos))
                 {
-                    if (rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
-                        rSh.ToggleOutlineContentVisibility(nPos);
-                    else
-                    {
-                        SwOutlineNodes::size_type nOutlineNodesCount = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
-                        int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
-                        bool bVisible = rSh.IsOutlineContentVisible(nPos);
-                        do
-                        {
-                            if (rSh.IsOutlineContentVisible(nPos) == bVisible)
-                                rSh.ToggleOutlineContentVisibility(nPos);
-                        } while (++nPos < nOutlineNodesCount
-                                 && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel);
-                    }
+                    ToggleOutlineContentVisibility(nPos, !rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent());
                     return;
                 }
             }
@@ -6666,6 +6625,43 @@ void SwEditWin::SetGraphicTwipPosition(bool bStart, const Point& rPosition)
 SwFrameControlsManager& SwEditWin::GetFrameControlsManager()
 {
     return *m_pFrameControlsManager;
+}
+
+void SwEditWin::ToggleOutlineContentVisibility(const size_t nOutlinePos, const bool bSubs)
+{
+    SwWrtShell& rSh = GetView().GetWrtShell();
+
+    if (GetView().GetDrawView()->IsTextEdit())
+        rSh.EndTextEdit();
+    if (GetView().IsDrawMode())
+        GetView().LeaveDrawCreate();
+    rSh.EnterStdMode();
+
+    if (!bSubs || rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
+    {
+        SwNode* pNode = rSh.GetNodes().GetOutLineNds()[nOutlinePos];
+        bool bVisible = true;
+        pNode->GetTextNode()->GetAttrOutlineContentVisible(bVisible);
+        pNode->GetTextNode()->SetAttrOutlineContentVisible(!bVisible);
+    }
+    else if (bSubs)
+    {
+        // toggle including sub levels
+        SwOutlineNodes::size_type nPos = nOutlinePos;
+        SwOutlineNodes::size_type nOutlineNodesCount
+                = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+        int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos);
+        bool bVisible = rSh.IsOutlineContentVisible(nOutlinePos);
+        do
+        {
+            if (rSh.IsOutlineContentVisible(nPos) == bVisible)
+                rSh.GetNodes().GetOutLineNds()[nPos]->GetTextNode()->SetAttrOutlineContentVisible(!bVisible);
+        } while (++nPos < nOutlineNodesCount
+                 && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel);
+    }
+
+    Invalidate();
+    rSh.GotoOutline(nOutlinePos);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

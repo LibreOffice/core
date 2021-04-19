@@ -68,6 +68,8 @@ using namespace ::com::sun::star;
 #include <memory>
 #include <swabstdlg.hxx>
 
+#include <FrameControlsManager.hxx>
+
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {
     if (utl::ConfigManager::IsFuzzing() || SvtModuleOptions().IsWriter())
@@ -603,33 +605,71 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
         SwWrtShell &rSh = GetWrtShell();
 
-        // move cursor to top of document
         if (rSh.IsSelFrameMode())
         {
             rSh.UnSelectFrame();
             rSh.LeaveSelFrameMode();
         }
         rSh.EnterStdMode();
-        rSh.SttEndDoc(true);
+
+        SwOutlineNodes::size_type nPos = rSh.GetOutlinePos();
 
         if (!bFlag)
         {
             // make all content visible
-            const SwOutlineNodes& rOutlineNds = rSh.GetNodes().GetOutLineNds();
-            for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
+
+            // When shortcut is assigned to the show outline content visibility button and used to
+            // toggle the feature and the mouse pointer is on an outline frame the button will not
+            // be removed. An easy way to make sure the button does not remain shown is to use the
+            // HideControls function.
+            GetEditWin().GetFrameControlsManager().HideControls(FrameControlType::Outline);
+
+            // set outline content visibile attribute true for folded outline nodes
+            std::vector<SwNode*> aFoldedOutlineNodeArray;
+            for (SwNode* pNd: rSh.GetNodes().GetOutLineNds())
             {
-                SwNode* pNd = rOutlineNds[nPos];
                 bool bOutlineContentVisibleAttr = true;
                 pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
                 if (!bOutlineContentVisibleAttr)
                 {
-                    rSh.ToggleOutlineContentVisibility(nPos);
-                    pNd->GetTextNode()->SetAttrOutlineContentVisible(false);
+                    aFoldedOutlineNodeArray.push_back(pNd);
+                    pNd->GetTextNode()->SetAttrOutlineContentVisible(true);
                 }
             }
+
+            rSh.StartAction();
+            rSh.InvalidateOutlineContentVisibility();
+            rSh.EndAction();
+
+            // restore outline content visible attribute for folded outline nodes
+            for (SwNode* pNd: aFoldedOutlineNodeArray)
+                pNd->GetTextNode()->SetAttrOutlineContentVisible(false);
         }
 
         pOpt->SetShowOutlineContentVisibilityButton(bFlag);
+
+        // Apply option change here so if toggling the outline folding feature ON
+        // the invalidate function will see this.
+        rSh.StartAction();
+        rSh.ApplyViewOptions(*pOpt);
+        rSh.EndAction();
+
+        if (bFlag)
+        {
+            rSh.StartAction();
+            rSh.InvalidateOutlineContentVisibility();
+            rSh.EndAction();
+
+            // If needed, find visible outline node to place cursor.
+            if (nPos != SwOutlineNodes::npos && !rSh.IsOutlineContentVisible(nPos))
+            {
+                while (nPos != SwOutlineNodes::npos && !rSh.GetNodes().GetOutLineNds()[nPos]->GetTextNode()->getLayoutFrame(nullptr))
+                    --nPos;
+                if (nPos != SwOutlineNodes::npos)
+                    rSh.GotoOutline(nPos);
+            }
+        }
+
         break;
     }
 
