@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <mutex>
 #include <set>
 
 using namespace ::com::sun::star;
@@ -99,14 +100,14 @@ public:
 
 private:
     static std::shared_ptr<TimerScheduler> mpInstance;
-    static ::osl::Mutex maInstanceMutex;
+    static std::mutex maInstanceMutex;
     std::shared_ptr<TimerScheduler> mpLateDestroy; // for clean exit
     static sal_Int32 mnTaskId;
 
-    ::osl::Mutex maTaskContainerMutex;
+    std::mutex maTaskContainerMutex;
     typedef ::std::set<SharedTimerTask,TimerTaskComparator> TaskContainer;
     TaskContainer maScheduledTasks;
-    ::osl::Mutex maCurrentTaskMutex;
+    std::mutex maCurrentTaskMutex;
     SharedTimerTask mpCurrentTask;
     ::osl::Condition m_Shutdown;
 
@@ -177,13 +178,13 @@ void PresenterTimer::CancelTask (const sal_Int32 nTaskId)
 //===== TimerScheduler ========================================================
 
 std::shared_ptr<TimerScheduler> TimerScheduler::mpInstance;
-::osl::Mutex TimerScheduler::maInstanceMutex;
+std::mutex TimerScheduler::maInstanceMutex;
 sal_Int32 TimerScheduler::mnTaskId = PresenterTimer::NotAValidTaskId;
 
 std::shared_ptr<TimerScheduler> TimerScheduler::Instance(
     uno::Reference<uno::XComponentContext> const& xContext)
 {
-    ::osl::MutexGuard aGuard (maInstanceMutex);
+    std::lock_guard aGuard (maInstanceMutex);
     if (mpInstance == nullptr)
     {
         if (!xContext.is())
@@ -225,7 +226,7 @@ void TimerScheduler::ScheduleTask (const SharedTimerTask& rpTask)
         return;
 
     {
-        osl::MutexGuard aTaskGuard (maTaskContainerMutex);
+        std::lock_guard aTaskGuard (maTaskContainerMutex);
         maScheduledTasks.insert(rpTask);
     }
 }
@@ -236,7 +237,7 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
     // task ids.  Therefore we have to do a linear search for the task to
     // cancel.
     {
-        ::osl::MutexGuard aGuard (maTaskContainerMutex);
+        std::lock_guard aGuard (maTaskContainerMutex);
         auto iTask = std::find_if(maScheduledTasks.begin(), maScheduledTasks.end(),
             [nTaskId](const SharedTimerTask& rxTask) { return rxTask->mnTaskId == nTaskId; });
         if (iTask != maScheduledTasks.end())
@@ -247,7 +248,7 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
     // processed.  Mark it with a flag that a) prevents a repeating task
     // from being scheduled again and b) tries to prevent its execution.
     {
-        ::osl::MutexGuard aGuard (maCurrentTaskMutex);
+        std::lock_guard aGuard (maCurrentTaskMutex);
         if (mpCurrentTask
             && mpCurrentTask->mnTaskId == nTaskId)
             mpCurrentTask->mbIsCanceled = true;
@@ -265,12 +266,12 @@ void TimerScheduler::NotifyTermination()
     }
 
     {
-        ::osl::MutexGuard aGuard(pInstance->maTaskContainerMutex);
+        std::lock_guard aGuard(pInstance->maTaskContainerMutex);
         pInstance->maScheduledTasks.clear();
     }
 
     {
-        ::osl::MutexGuard aGuard(pInstance->maCurrentTaskMutex);
+        std::lock_guard aGuard(pInstance->maCurrentTaskMutex);
         if (pInstance->mpCurrentTask)
         {
             pInstance->mpCurrentTask->mbIsCanceled = true;
@@ -302,7 +303,7 @@ void SAL_CALL TimerScheduler::run()
         SharedTimerTask pTask;
         sal_Int64 nDifference = 0;
         {
-            ::osl::MutexGuard aGuard (maTaskContainerMutex);
+            std::lock_guard aGuard (maTaskContainerMutex);
 
             // There are no more scheduled task.  Leave this loop, function and
             // live of the TimerScheduler.
@@ -321,7 +322,7 @@ void SAL_CALL TimerScheduler::run()
 
         // Acquire a reference to the current task.
         {
-            ::osl::MutexGuard aGuard (maCurrentTaskMutex);
+            std::lock_guard aGuard (maCurrentTaskMutex);
             mpCurrentTask = pTask;
         }
 
@@ -355,13 +356,13 @@ void SAL_CALL TimerScheduler::run()
 
         // Release reference to the current task.
         {
-            ::osl::MutexGuard aGuard (maCurrentTaskMutex);
+            std::lock_guard aGuard (maCurrentTaskMutex);
             mpCurrentTask.reset();
         }
     }
 
     // While holding maInstanceMutex
-    osl::Guard< osl::Mutex > aInstance( maInstanceMutex );
+    std::lock_guard aInstance( maInstanceMutex );
     mpLateDestroy = mpInstance;
     mpInstance.reset();
 }
