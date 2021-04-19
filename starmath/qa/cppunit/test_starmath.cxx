@@ -459,7 +459,7 @@ void Test::viewZoom()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Strings must match", sFinalText, sStringOne);
     }
 
-    SmGraphicWindow &rGraphicWindow = m_pViewShell->GetGraphicWindow();
+    SmGraphicWidget &rGraphicWindow = m_pViewShell->GetGraphicWidget();
     rGraphicWindow.SetSizePixel(Size(1024, 800));
     nOrigZoom = rGraphicWindow.GetZoom();
 

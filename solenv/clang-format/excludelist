@@ -10977,7 +10977,6 @@ starmath/inc/helpids.h
 starmath/inc/node.hxx
 starmath/inc/parse.hxx
 starmath/inc/rect.hxx
-starmath/inc/scrwin.hxx
 starmath/inc/smmod.hxx
 starmath/inc/symbol.hxx
 starmath/inc/unomodel.hxx
@@ -11009,7 +11008,6 @@ starmath/source/ooxmlimport.cxx
 starmath/source/ooxmlimport.hxx
 starmath/source/parse.cxx
 starmath/source/rect.cxx
-starmath/source/scrwin.cxx
 starmath/source/smdetect.cxx
 starmath/source/smdetect.hxx
 starmath/source/smdll.cxx

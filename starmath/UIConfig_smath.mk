@@ -36,6 +36,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/smath,\
 	starmath/uiconfig/smath/ui/fontdialog \
 	starmath/uiconfig/smath/ui/fontsizedialog \
 	starmath/uiconfig/smath/ui/fonttypedialog \
+	starmath/uiconfig/smath/ui/mathwindow \
 	starmath/uiconfig/smath/ui/printeroptions \
 	starmath/uiconfig/smath/ui/savedefaultsdialog \
 	starmath/uiconfig/smath/ui/smathsettings \
