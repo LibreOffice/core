@@ -65,7 +65,7 @@ namespace dbaui
         //void      setURL( const OUString& _rURL, OConnectionURLEdit* _m_pConnection );
 
         OUString    getURLNoPrefix( ) const;
-        void        setURLNoPrefix( const OUString& _rURL );
+        void        setURLNoPrefix( std::u16string_view _rURL );
 
         /** checks if the path is existence
             @param  _rURL
@@ -84,7 +84,7 @@ namespace dbaui
         void askForFileName(::sfx2::FileDialogHelper& _aFileOpen);
 
     protected:
-        void            setURL( const OUString& _rURL );
+        void            setURL( std::u16string_view _rURL );
         virtual bool    checkTestConnection();
 
     private:
@@ -93,7 +93,7 @@ namespace dbaui
         DECL_LINK(GetFocusHdl, weld::Widget&, void);
         DECL_LINK(LoseFocusHdl, weld::Widget&, void);
         OUString    impl_getURL() const;
-        void        impl_setURL( const OUString& _rURL, bool _bPrefix );
+        void        impl_setURL( std::u16string_view _rURL, bool _bPrefix );
         void        implUpdateURLDependentStates() const;
     };
 

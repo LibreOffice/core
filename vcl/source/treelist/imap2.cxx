@@ -241,7 +241,7 @@ void ImageMap::ImpReadCERN( SvStream& rIStm )
         ImpReadCERNLine( aStr );
 }
 
-void ImageMap::ImpReadCERNLine( const OString& rLine  )
+void ImageMap::ImpReadCERNLine( std::string_view rLine  )
 {
     OString aStr = comphelper::string::stripStart(rLine, ' ');
     aStr = comphelper::string::stripStart(aStr, '\t');
@@ -376,7 +376,7 @@ void ImageMap::ImpReadNCSA( SvStream& rIStm )
         ImpReadNCSALine( aStr );
 }
 
-void ImageMap::ImpReadNCSALine( const OString& rLine )
+void ImageMap::ImpReadNCSALine( std::string_view rLine )
 {
     OString aStr = comphelper::string::stripStart(rLine, ' ');
     aStr = comphelper::string::stripStart(aStr, '\t');

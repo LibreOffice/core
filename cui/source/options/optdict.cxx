@@ -43,7 +43,7 @@ using namespace linguistic;
 
 // static function -------------------------------------------------------
 
-static OUString getNormDicEntry_Impl(const OUString &rText)
+static OUString getNormDicEntry_Impl(std::u16string_view rText)
 {
     OUString aTmp(comphelper::string::stripEnd(rText, '.'));
     // non-standard hyphenation
@@ -73,7 +73,7 @@ enum CDE_RESULT { CDE_EQUAL, CDE_SIMILAR, CDE_DIFFERENT };
 
 }
 
-static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rText2 )
+static CDE_RESULT cmpDicEntry_Impl( std::u16string_view rText1, std::u16string_view rText2 )
 {
     CDE_RESULT eRes = CDE_DIFFERENT;
 
@@ -355,7 +355,7 @@ void SvxEditDictionaryDialog::SetLanguage_Impl(LanguageType nLanguage)
     m_xLangLB->set_active_id(nLanguage);
 }
 
-int SvxEditDictionaryDialog::GetLBInsertPos(const OUString &rDicWord)
+int SvxEditDictionaryDialog::GetLBInsertPos(std::u16string_view rDicWord)
 {
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     const CollatorWrapper* pCollator = aIntlWrapper.getCollator();

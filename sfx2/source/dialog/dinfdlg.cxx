@@ -145,7 +145,7 @@ OUString CreateSizeText( sal_Int64 nSize )
     return aSizeStr;
 }
 
-OUString ConvertDateTime_Impl( const OUString& rName,
+OUString ConvertDateTime_Impl( std::u16string_view rName,
     const util::DateTime& uDT, const LocaleDataWrapper& rWrapper )
 {
      Date aD(uDT);
@@ -1030,7 +1030,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
             }
 
             util::DateTime uDT;
-            OUString emptyDate = ConvertDateTime_Impl( "", uDT, rLocaleWrapper );
+            OUString emptyDate = ConvertDateTime_Impl( u"", uDT, rLocaleWrapper );
             if ( rCmisProp.Id == "cmis:creationDate" &&
                  (m_xCreateValFt->get_label() == emptyDate ||
                   m_xCreateValFt->get_label().isEmpty()))
@@ -1039,7 +1039,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
                 rCmisProp.Value >>= seqValue;
                 if ( seqValue.hasElements() )
                 {
-                    m_xCreateValFt->set_label( ConvertDateTime_Impl( "", seqValue[0], rLocaleWrapper ) );
+                    m_xCreateValFt->set_label( ConvertDateTime_Impl( u"", seqValue[0], rLocaleWrapper ) );
                 }
             }
             if ( rCmisProp.Id == "cmis:lastModificationDate" &&
@@ -1050,7 +1050,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
                 rCmisProp.Value >>= seqValue;
                 if ( seqValue.hasElements() )
                 {
-                    m_xChangeValFt->set_label( ConvertDateTime_Impl( "", seqValue[0], rLocaleWrapper ) );
+                    m_xChangeValFt->set_label( ConvertDateTime_Impl( u"", seqValue[0], rLocaleWrapper ) );
                 }
             }
         }

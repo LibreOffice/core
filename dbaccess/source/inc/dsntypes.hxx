@@ -121,7 +121,7 @@ public:
     OUString getTypeDisplayName(std::u16string_view _sURL) const;
 
     /// on a given string, cut the type prefix and return the result
-    OUString cutPrefix(const OUString& _sURL) const;
+    OUString cutPrefix(std::u16string_view _sURL) const;
 
     /// on a given string, return the type prefix
     OUString getPrefix(const OUString& _sURL) const;
@@ -175,9 +175,9 @@ public:
     /// get access to the (last + 1st) element of the types collection
     inline TypeIterator    end() const;
 
-    void fillPageIds(const OUString& _sURL,std::vector<sal_Int16>& _rOutPathIds) const;
+    void fillPageIds(std::u16string_view _sURL,std::vector<sal_Int16>& _rOutPathIds) const;
 
-    DATASOURCE_TYPE determineType(const OUString& _rDsn) const;
+    DATASOURCE_TYPE determineType(std::u16string_view _rDsn) const;
 
     sal_Int32 getIndexOf(std::u16string_view _sURL) const;
     sal_Int32 size() const;

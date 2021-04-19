@@ -61,7 +61,7 @@ bool ScDPUtil::isDuplicateDimension(const OUString& rName)
     return rName.endsWith("*");
 }
 
-OUString ScDPUtil::getSourceDimensionName(const OUString& rName)
+OUString ScDPUtil::getSourceDimensionName(std::u16string_view rName)
 {
     return comphelper::string::stripEnd(rName, '*');
 }

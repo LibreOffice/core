@@ -332,7 +332,7 @@ HashStr::HashStr( const OUString& rName, const OUString& rText,
 }
 
 /// Look up the Name, if it is present, return its String, otherwise return an empty String
-OUString LookString( SwHashTable<HashStr> const & rTable, const OUString& rName )
+OUString LookString( SwHashTable<HashStr> const & rTable, std::u16string_view rName )
 {
     HashStr* pFnd = rTable.Find( comphelper::string::strip(rName, ' ') );
     if( pFnd )

@@ -490,7 +490,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
                  rComment.endsWith(">") &&
                  rComment.startsWithIgnoreAsciiCase( "HTML:" ) )
         {
-            OUString sComment(comphelper::string::stripStart(rComment.copy(5), ' '));
+            OUString sComment(comphelper::string::stripStart(rComment.subView(5), ' '));
             if( '<' == sComment[0] )
             {
                 sComment = convertLineEnd(sComment, GetSystemLineEnd());

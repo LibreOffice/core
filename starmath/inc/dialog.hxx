@@ -435,7 +435,7 @@ class SmSymDefineDialog final : public weld::GenericDialogController
     void    SetOrigSymbol(const SmSym *pSymbol, const OUString &rSymbolSetName);
     void    UpdateButtons();
 
-    bool    SelectSymbolSet(weld::ComboBox &rComboBox, const OUString &rSymbolSetName,
+    bool    SelectSymbolSet(weld::ComboBox &rComboBox, std::u16string_view rSymbolSetName,
                             bool bDeleteText);
     bool    SelectSymbol(weld::ComboBox& rComboBox, const OUString &rSymbolName,
                             bool bDeleteText);
@@ -454,7 +454,7 @@ public:
 
     virtual short run() override;
 
-    void SelectOldSymbolSet(const OUString &rSymbolSetName)
+    void SelectOldSymbolSet(std::u16string_view rSymbolSetName)
     {
         SelectSymbolSet(*m_xOldSymbolSets, rSymbolSetName, false);
     }
@@ -464,7 +464,7 @@ public:
         SelectSymbol(*m_xOldSymbols, rSymbolName, false);
     }
 
-    bool SelectSymbolSet(const OUString &rSymbolSetName)
+    bool SelectSymbolSet(std::u16string_view rSymbolSetName)
     {
         return SelectSymbolSet(*m_xSymbolSets, rSymbolSetName, false);
     }

@@ -77,7 +77,7 @@ OUString ODsnTypeCollection::getTypeDisplayName(std::u16string_view _sURL) const
     return m_aDriverConfig.getDriverTypeDisplayName(_sURL);
 }
 
-OUString ODsnTypeCollection::cutPrefix(const OUString& _sURL) const
+OUString ODsnTypeCollection::cutPrefix(std::u16string_view _sURL) const
 {
     OUString sRet;
     OUString sOldPattern;
@@ -292,7 +292,7 @@ OUString ODsnTypeCollection::getEmbeddedDatabase()
 }
 
 
-DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
+DATASOURCE_TYPE ODsnTypeCollection::determineType(std::u16string_view _rDsn) const
 {
     OUString sDsn(comphelper::string::stripEnd(_rDsn, '*'));
     sal_Int32 nSeparator = sDsn.indexOf(u':');
@@ -403,7 +403,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
     return DST_UNKNOWN;
 }
 
-void ODsnTypeCollection::fillPageIds(const OUString& _sURL,std::vector<sal_Int16>& _rOutPathIds) const
+void ODsnTypeCollection::fillPageIds(std::u16string_view _sURL,std::vector<sal_Int16>& _rOutPathIds) const
 {
     DATASOURCE_TYPE eType = determineType(_sURL);
     switch(eType)

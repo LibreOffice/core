@@ -884,7 +884,7 @@ bool OAppDetailPageHelper::isPreviewEnabled() const
 
 namespace
 {
-    OUString stripTrailingDots(const OUString& rStr)
+    OUString stripTrailingDots(std::u16string_view rStr)
     {
         return comphelper::string::stripEnd(rStr, '.');
     }

@@ -297,7 +297,7 @@ namespace dbaui
     // representative for all MySQl databases)
     // Also, embedded databases (embedded HSQL, at the moment), are not to appear in the list of
     // databases to connect to.
-    bool OGeneralPage::approveDatasourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName )
+    bool OGeneralPage::approveDatasourceType( std::u16string_view _sURLPrefix, OUString& _inout_rDisplayName )
     {
         return approveDatasourceType( m_pCollection->determineType(_sURLPrefix), _inout_rDisplayName );
     }

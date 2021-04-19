@@ -99,7 +99,7 @@ private:
                             css::linguistic2::XDictionary > const &xDic );
 
     void            RemoveDictEntry(int nEntry);
-    int             GetLBInsertPos(const OUString &rDicWord);
+    int             GetLBInsertPos(std::u16string_view rDicWord);
 
 public:
     SvxEditDictionaryDialog(weld::Window* pParent, std::u16string_view rName);

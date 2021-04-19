@@ -99,7 +99,7 @@ static bool getTag(const OString &rLine, const char *pTagName,
     if (nPos == -1)
         return false;
 
-    rTagValue = comphelper::string::strip(rLine.copy(nPos + rtl_str_getLength(pTagName)),
+    rTagValue = comphelper::string::strip(rLine.subView(nPos + strlen(pTagName)),
         ' ');
     return true;
 }

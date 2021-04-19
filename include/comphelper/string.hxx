@@ -70,7 +70,7 @@ inline OUStringBuffer& remove(OUStringBuffer &rIn,
 
     @return         The resulting OString
  */
-COMPHELPER_DLLPUBLIC OString stripStart(const OString &rIn,
+COMPHELPER_DLLPUBLIC OString stripStart(std::string_view rIn,
     char c);
 
 /** Strips occurrences of a character from the start of the source string
@@ -80,7 +80,7 @@ COMPHELPER_DLLPUBLIC OString stripStart(const OString &rIn,
 
     @return         The resulting OUString
  */
-COMPHELPER_DLLPUBLIC OUString stripStart(const OUString &rIn,
+COMPHELPER_DLLPUBLIC OUString stripStart(std::u16string_view rIn,
     sal_Unicode c);
 
 /** Strips occurrences of a character from the end of the source string
@@ -90,7 +90,7 @@ COMPHELPER_DLLPUBLIC OUString stripStart(const OUString &rIn,
 
     @return         The resulting OString
  */
-COMPHELPER_DLLPUBLIC OString stripEnd(const OString &rIn,
+COMPHELPER_DLLPUBLIC OString stripEnd(std::string_view rIn,
     char c);
 
 /** Strips occurrences of a character from the end of the source string
@@ -100,7 +100,7 @@ COMPHELPER_DLLPUBLIC OString stripEnd(const OString &rIn,
 
     @return         The resulting OUString
  */
-COMPHELPER_DLLPUBLIC OUString stripEnd(const OUString &rIn,
+COMPHELPER_DLLPUBLIC OUString stripEnd(std::u16string_view rIn,
     sal_Unicode c);
 
 /** Strips occurrences of a character from the start and end of the source string
@@ -110,7 +110,7 @@ COMPHELPER_DLLPUBLIC OUString stripEnd(const OUString &rIn,
 
     @return         The resulting OString
  */
-COMPHELPER_DLLPUBLIC OString strip(const OString &rIn,
+COMPHELPER_DLLPUBLIC OString strip(std::string_view rIn,
     char c);
 
 /** Strips occurrences of a character from the start and end of the source string
@@ -120,7 +120,7 @@ COMPHELPER_DLLPUBLIC OString strip(const OString &rIn,
 
     @return         The resulting OUString
  */
-COMPHELPER_DLLPUBLIC OUString strip(const OUString &rIn,
+COMPHELPER_DLLPUBLIC OUString strip(std::u16string_view rIn,
     sal_Unicode c);
 
 /** Returns number of tokens in an OUString
@@ -129,7 +129,7 @@ COMPHELPER_DLLPUBLIC OUString strip(const OUString &rIn,
   @param    cTok    the character which separate the tokens.
   @return   the number of tokens
 */
-COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OString &rIn, char cTok);
+COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(std::string_view rIn, char cTok);
 
 /** Returns number of tokens in an OUString
 
@@ -137,21 +137,21 @@ COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OString &rIn, char cTok);
   @param    cTok    the character which separate the tokens.
   @return   the number of tokens
 */
-COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OUString &rIn, sal_Unicode cTok);
+COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(std::u16string_view rIn, sal_Unicode cTok);
 
 /** Reverse an OUString
 
   @param    rIn     the input OUString
   @return   the reversed input
 */
-COMPHELPER_DLLPUBLIC OUString reverseString(const OUString &rStr);
+COMPHELPER_DLLPUBLIC OUString reverseString(std::u16string_view rStr);
 
 /** Reverse an OString
 
   @param    rIn     the input OString
   @return   the reversed input
 */
-COMPHELPER_DLLPUBLIC OString reverseString(const OString &rStr);
+COMPHELPER_DLLPUBLIC OString reverseString(std::string_view rStr);
 
 
 namespace detail
@@ -244,7 +244,7 @@ COMPHELPER_DLLPUBLIC OUString setToken(const OUString& rIn, sal_Int32 nToken, sa
     @return position of first occurrence of any of the elements of pChars
             or -1 if none of the code units occur in the string
  */
-COMPHELPER_DLLPUBLIC sal_Int32 indexOfAny(OUString const& rIn,
+COMPHELPER_DLLPUBLIC sal_Int32 indexOfAny(std::u16string_view rIn,
         sal_Unicode const*const pChars, sal_Int32 const nPos);
 
 /** Remove any of a list of code units in the string.
@@ -253,7 +253,7 @@ COMPHELPER_DLLPUBLIC sal_Int32 indexOfAny(OUString const& rIn,
 
     @return OUString that has all of the pChars code units removed
  */
-COMPHELPER_DLLPUBLIC OUString removeAny(OUString const& rIn,
+COMPHELPER_DLLPUBLIC OUString removeAny(std::u16string_view rIn,
         sal_Unicode const*const pChars);
 
 /** Convert a sequence of strings to a single comma separated string.
@@ -353,7 +353,7 @@ public:
                     the ASCII '0'-'9' range
                     true otherwise, including for empty string
  */
-COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OString &rString);
+COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::string_view rString);
 
 /** Determine if an OUString contains solely ASCII numeric digits
 
@@ -363,7 +363,7 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OString &rString);
                     the ASCII '0'-'9' range
                     true otherwise, including for empty string
  */
-COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OUString &rString);
+COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::u16string_view rString);
 
 }
 

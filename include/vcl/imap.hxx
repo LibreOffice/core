@@ -49,12 +49,12 @@ private:
     void                ImpReadCERN( SvStream& rOStm );
     void                ImpReadNCSA( SvStream& rOStm );
 
-    void                ImpReadCERNLine( const OString& rLine );
+    void                ImpReadCERNLine( std::string_view rLine );
     static Point        ImpReadCERNCoords( const char** ppStr );
     static tools::Long         ImpReadCERNRadius( const char** ppStr );
     static OUString     ImpReadCERNURL( const char** ppStr );
 
-    void                ImpReadNCSALine( const OString& rLine );
+    void                ImpReadNCSALine( std::string_view rLine );
     static OUString     ImpReadNCSAURL( const char** ppStr );
     static Point        ImpReadNCSACoords( const char** ppStr );
 

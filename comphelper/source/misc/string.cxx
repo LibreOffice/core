@@ -47,30 +47,30 @@ namespace
     template <typename T, typename C> T tmpl_stripStart(const T &rIn,
         const C cRemove)
     {
-        if (rIn.isEmpty())
+        if (rIn.empty())
             return rIn;
 
-        sal_Int32 i = 0;
+        std::string_view::size_type i = 0;
 
-        while (i < rIn.getLength())
+        while (i < rIn.size())
         {
             if (rIn[i] != cRemove)
                 break;
             ++i;
         }
 
-        return rIn.copy(i);
+        return rIn.substr(i);
     }
 }
 
-OString stripStart(const OString &rIn, char c)
+OString stripStart(std::string_view rIn, char c)
 {
-    return tmpl_stripStart<OString, char>(rIn, c);
+    return OString(tmpl_stripStart<std::string_view, char>(rIn, c));
 }
 
-OUString stripStart(const OUString &rIn, sal_Unicode c)
+OUString stripStart(std::u16string_view rIn, sal_Unicode c)
 {
-    return tmpl_stripStart<OUString, sal_Unicode>(rIn, c);
+    return OUString(tmpl_stripStart<std::u16string_view, sal_Unicode>(rIn, c));
 }
 
 namespace
@@ -78,10 +78,10 @@ namespace
     template <typename T, typename C> T tmpl_stripEnd(const T &rIn,
         const C cRemove)
     {
-        if (rIn.isEmpty())
+        if (rIn.empty())
             return rIn;
 
-        sal_Int32 i = rIn.getLength();
+        std::u16string_view::size_type i = rIn.size();
 
         while (i > 0)
         {
@@ -90,41 +90,43 @@ namespace
             --i;
         }
 
-        return rIn.copy(0, i);
+        return rIn.substr(0, i);
     }
 }
 
-OString stripEnd(const OString &rIn, char c)
+OString stripEnd(std::string_view rIn, char c)
 {
-    return tmpl_stripEnd<OString, char>(rIn, c);
+    return OString(tmpl_stripEnd<std::string_view, char>(rIn, c));
 }
 
-OUString stripEnd(const OUString &rIn, sal_Unicode c)
+OUString stripEnd(std::u16string_view rIn, sal_Unicode c)
 {
-    return tmpl_stripEnd<OUString, sal_Unicode>(rIn, c);
+    return OUString(tmpl_stripEnd<std::u16string_view, sal_Unicode>(rIn, c));
 }
 
-OString strip(const OString &rIn, char c)
+OString strip(std::string_view rIn, char c)
 {
-    return stripEnd(stripStart(rIn, c), c);
+    auto x = tmpl_stripStart<std::string_view, char>(rIn, c);
+    return stripEnd(x, c);
 }
 
-OUString strip(const OUString &rIn, sal_Unicode c)
+OUString strip(std::u16string_view rIn, sal_Unicode c)
 {
-    return stripEnd(stripStart(rIn, c), c);
+    auto x = tmpl_stripStart<std::u16string_view, sal_Unicode>(rIn, c);
+    return stripEnd(x, c);
 }
 
 namespace
 {
-    template <typename T, typename C> sal_Int32 tmpl_getTokenCount(const T &rIn,
+    template <typename T, typename C> sal_Int32 tmpl_getTokenCount( T rIn,
         C cTok)
     {
         // Empty String: TokenCount by Definition is 0
-        if (rIn.isEmpty())
+        if (rIn.empty())
             return 0;
 
         sal_Int32 nTokCount = 1;
-        for (sal_Int32 i = 0; i < rIn.getLength(); ++i)
+        for (std::u16string_view::size_type i = 0; i < rIn.size(); ++i)
         {
             if (rIn[i] == cTok)
                 ++nTokCount;
@@ -133,14 +135,14 @@ namespace
     }
 }
 
-sal_Int32 getTokenCount(const OString &rIn, char cTok)
+sal_Int32 getTokenCount(std::string_view rIn, char cTok)
 {
-    return tmpl_getTokenCount<OString, char>(rIn, cTok);
+    return tmpl_getTokenCount<std::string_view, char>(rIn, cTok);
 }
 
-sal_Int32 getTokenCount(const OUString &rIn, sal_Unicode cTok)
+sal_Int32 getTokenCount(std::u16string_view rIn, sal_Unicode cTok)
 {
-    return tmpl_getTokenCount<OUString, sal_Unicode>(rIn, cTok);
+    return tmpl_getTokenCount<std::u16string_view, sal_Unicode>(rIn, cTok);
 }
 
 static sal_uInt32 decimalStringToNumber(
@@ -370,49 +372,49 @@ NaturalStringSorter::NaturalStringSorter(
     m_xBI = i18n::BreakIterator::create( rContext );
 }
 
-bool isdigitAsciiString(const OString &rString)
+bool isdigitAsciiString(std::string_view rString)
 {
     return std::all_of(
-        rString.getStr(), rString.getStr() + rString.getLength(),
+        rString.data(), rString.data() + rString.size(),
         [](unsigned char c){ return rtl::isAsciiDigit(c); });
 }
 
-bool isdigitAsciiString(const OUString &rString)
+bool isdigitAsciiString(std::u16string_view rString)
 {
     return std::all_of(
-        rString.getStr(), rString.getStr() + rString.getLength(),
+        rString.data(), rString.data() + rString.size(),
         [](sal_Unicode c){ return rtl::isAsciiDigit(c); });
 }
 
 namespace
 {
-    template <typename T, typename O> T tmpl_reverseString(const T &rIn)
+    template <typename T, typename I, typename O> T tmpl_reverseString(I rIn)
     {
-        if (rIn.isEmpty())
-            return rIn;
+        if (rIn.empty())
+            return T();
 
-        sal_Int32 i = rIn.getLength();
-        O sBuf(i);
+        std::u16string_view::size_type i = rIn.size();
+        O sBuf(static_cast<sal_Int32>(i));
         while (i)
             sBuf.append(rIn[--i]);
         return sBuf.makeStringAndClear();
     }
 }
 
-OUString reverseString(const OUString &rStr)
+OUString reverseString(std::u16string_view rStr)
 {
-    return tmpl_reverseString<OUString, OUStringBuffer>(rStr);
+    return tmpl_reverseString<OUString, std::u16string_view, OUStringBuffer>(rStr);
 }
 
-OString reverseString(const OString &rStr)
+OString reverseString(std::string_view rStr)
 {
-    return tmpl_reverseString<OString, OStringBuffer>(rStr);
+    return tmpl_reverseString<OString, std::string_view, OStringBuffer>(rStr);
 }
 
-sal_Int32 indexOfAny(OUString const& rIn,
+sal_Int32 indexOfAny(std::u16string_view rIn,
         sal_Unicode const*const pChars, sal_Int32 const nPos)
 {
-    for (sal_Int32 i = nPos; i < rIn.getLength(); ++i)
+    for (std::u16string_view::size_type i = nPos; i < rIn.size(); ++i)
     {
         sal_Unicode const c = rIn[i];
         for (sal_Unicode const* pChar = pChars; *pChar; ++pChar)
@@ -426,12 +428,12 @@ sal_Int32 indexOfAny(OUString const& rIn,
     return -1;
 }
 
-OUString removeAny(OUString const& rIn,
+OUString removeAny(std::u16string_view rIn,
         sal_Unicode const*const pChars)
 {
     OUStringBuffer buf;
     bool isFound(false);
-    for (sal_Int32 i = 0; i < rIn.getLength(); ++i)
+    for (std::u16string_view::size_type i = 0; i < rIn.size(); ++i)
     {
         sal_Unicode const c = rIn[i];
         bool removeC(false);
@@ -449,7 +451,7 @@ OUString removeAny(OUString const& rIn,
             {
                 if (i > 0)
                 {
-                    buf.append(rIn.subView(0, i));
+                    buf.append(rIn.substr(0, i));
                 }
                 isFound = true;
             }
@@ -459,7 +461,7 @@ OUString removeAny(OUString const& rIn,
             buf.append(c);
         }
     }
-    return isFound ? buf.makeStringAndClear() : rIn;
+    return isFound ? buf.makeStringAndClear() : OUString(rIn);
 }
 
 OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,

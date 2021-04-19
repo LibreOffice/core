@@ -1713,7 +1713,7 @@ bool isAtStart(
 bool ScDPObject::ParseFilters(
     OUString& rDataFieldName,
     std::vector<sheet::DataPilotFieldFilter>& rFilters,
-    std::vector<sal_Int16>& rFilterFuncs, const OUString& rFilterList )
+    std::vector<sal_Int16>& rFilterFuncs, std::u16string_view rFilterList )
 {
     // parse the string rFilterList into parameters for GetPivotData
 
