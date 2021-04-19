@@ -907,7 +907,7 @@ Public Sub SetStatusbar(Optional ByVal Text As Variant _
 
 Dim oComp As Object
 Dim oControl As Object
-Static oStatusbar As Object
+Dim oStatusbar As Object
 Const cstThisSub = &quot;UI.SetStatusbar&quot;
 Const cstSubArgs = &quot;[Text], [Percentage]&quot;
 
@@ -922,6 +922,7 @@ Check:
 	End If
 
 Try:
+	Set oStatusbar = _SF_.Statusbar
 	With oStatusbar
 		If IsNull(oStatusbar) Then		&apos;	Initial call
 			Set oComp = StarDesktop.CurrentComponent
@@ -939,6 +940,7 @@ Try:
 		If Not IsNull(oStatusbar) Then
 			If Len(Text) = 0 And Percentage = -1 Then
 				.end()
+				Set oStatusbar = Nothing
 			Else
 				If Len(Text) &gt; 0 Then .setText(Text)
 				If Percentage &gt;= 0 And Percentage &lt;= 100 Then .setValue(Percentage)
@@ -947,6 +949,7 @@ Try:
 	End With
 
 Finally:
+	Set _SF_.Statusbar = oStatusbar
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Sub
 Catch:
@@ -957,6 +960,7 @@ REM ----------------------------------------------------------------------------
 Public Sub ShowProgressBar(Optional Title As Variant _
 					, Optional ByVal Text As Variant _
 					, Optional ByVal Percentage As Variant _
+					, Optional ByRef _Context As Variant _
 					)
 &apos;&apos;&apos; Display a non-modal dialog box. Specify its title, an explicatory text and the progress on a progressbar
 &apos;&apos;&apos;	A call without arguments erases the progress bar dialog.
@@ -965,6 +969,7 @@ Public Sub ShowProgressBar(Optional Title As Variant _
 &apos;&apos;&apos;		Title: the title appearing on top of the dialog box (Default = &quot;ScriptForge&quot;)
 &apos;&apos;&apos;		Text: the optional text to be displayed above the progress bar (default = zero-length string)
 &apos;&apos;&apos;		Percentage: the degree of progress between 0 and 100. Default = 0
+&apos;&apos;&apos;		_Context: from Python, the XComponentXontext (FOR INTERNAL USE ONLY)
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		Dim i As Integer
 &apos;&apos;&apos;			For i = 0 To 100
@@ -974,9 +979,9 @@ Public Sub ShowProgressBar(Optional Title As Variant _
 &apos;&apos;&apos;			ui.ShowProgressBar
 
 Dim bFirstCall As Boolean				&apos;	True at first invocation of method
-Static oDialog As Object				&apos;	SFDialogs.Dialog object
-Static oFixedText As Object				&apos;	SFDialogs.DialogControl object
-Static oProgressBar As Object			&apos;	SFDialogs.DialogControl object
+Dim oDialog As Object					&apos;	SFDialogs.Dialog object
+Dim oFixedText As Object				&apos;	SFDialogs.DialogControl object
+Dim oProgressBar As Object				&apos;	SFDialogs.DialogControl object
 Dim sTitle As String					&apos;	Alias of Title
 Const cstThisSub = &quot;UI.ShowProgressBar&quot;
 Const cstSubArgs = &quot;[Title], [Text], [Percentage]&quot;
@@ -987,6 +992,7 @@ Check:
 	If IsMissing(Title) Or IsEmpty(Title) Then Title = &quot;&quot;
 	If IsMissing(Text) Or IsEmpty(Text) Then Text = &quot;&quot;
 	If IsMissing(Percentage) Or IsEmpty(Percentage) Then Percentage = -1
+	If IsMissing(_Context) Or IsEmpty(_Context) Then _Context = Nothing
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._Validate(Title, &quot;Title&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(Text, &quot;Text&quot;, V_STRING) Then GoTo Finally
@@ -994,10 +1000,15 @@ Check:
 	End If
 
 Try:
+	With _SF_
+		Set oDialog = .ProgressBarDialog
+		Set oFixedText = .ProgressBarText
+		Set oProgressBar = .ProgressBarBar
+	End With
 	With oDialog
 		bFirstCall = ( IsNull(oDialog) )
 		If Not bFirstCall Then bFirstCall = Not ._IsStillAlive(False)	&apos;	False to not raise an error
-		If bFirstCall Then Set oDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, &quot;GlobalScope&quot;, &quot;ScriptForge&quot;, &quot;dlgProgress&quot;)
+		If bFirstCall Then Set oDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, &quot;GlobalScope&quot;, &quot;ScriptForge&quot;, &quot;dlgProgress&quot;, _Context)
 
 		If Not IsNull(oDialog) Then
 			If Len(Title) = 0 And Len(Text) = 0 And Percentage = -1 Then
@@ -1017,6 +1028,11 @@ Try:
 	End With
 
 Finally:
+	With _SF_
+		Set .ProgressBarDialog = oDialog
+		Set .ProgressBarText = oFixedText
+		Set .ProgressBarBar = oProgressBar
+	End With
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Sub
 Catch:
