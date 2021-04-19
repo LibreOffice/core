@@ -311,7 +311,7 @@ public:
       */
     bool IsDark() const
     {
-        return sal_uInt8((B * 29UL + G * 151UL + R * 76UL) >> 8) <= 60;
+        return GetLuminance() <= 60;
     }
 
     /** Comparison with luminance thresholds.
@@ -319,7 +319,7 @@ public:
       */
     bool IsBright() const
     {
-        return sal_uInt8((B * 29UL + G * 151UL + R * 76UL) >> 8) >= 245;
+        return GetLuminance() >= 245;
     }
 
     /* Color filters */
