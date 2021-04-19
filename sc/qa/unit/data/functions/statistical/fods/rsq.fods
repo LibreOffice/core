@@ -4129,9 +4129,21 @@
      <table:table-cell table:style-name="ce23"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce45"/>
-     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:formula="of:=RSQ([.L12:.L15];[.M12:.M15])" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#DIV/0!</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=#DIV/0!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#DIV/0!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" table:formula="of:=ISERROR([.A9])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAHR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=RSQ(L12:L15;M12:M15)" calcext:value-type="string">
+      <text:p>=RSQ(L12:L15;M12:M15)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#94962</text:p>
+     </table:table-cell>
      <table:table-cell office:value-type="float" office:value="9" calcext:value-type="float">
       <text:p>9</text:p>
      </table:table-cell>
@@ -4228,8 +4240,13 @@
       <text:p>899999989</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce46" table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="float" office:value="7.149E-166" calcext:value-type="float">
+      <text:p>7.149E-166</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4.998E-163" calcext:value-type="float">
+      <text:p>4.998E-163</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce46"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce27" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="2"/>
@@ -4249,7 +4266,13 @@
       <text:p>899999988</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce38" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce39" office:value-type="float" office:value="3.963E-165" calcext:value-type="float">
+      <text:p>3.963E-165</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce39" office:value-type="float" office:value="6.232E-163" calcext:value-type="float">
+      <text:p>6.232E-163</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce38"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce27" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
@@ -4267,8 +4290,14 @@
      <table:table-cell office:value-type="float" office:value="899999987" calcext:value-type="float">
       <text:p>899999987</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19" table:number-columns-repeated="2"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce39" office:value-type="float" office:value="6.609E-165" calcext:value-type="float">
+      <text:p>6.609E-165</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce39" office:value-type="float" office:value="7.724E-163" calcext:value-type="float">
+      <text:p>7.724E-163</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce27" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
@@ -4286,8 +4315,14 @@
      <table:table-cell office:value-type="float" office:value="899999986" calcext:value-type="float">
       <text:p>899999986</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19" table:number-columns-repeated="2"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce39" office:value-type="float" office:value="3.056E-165" calcext:value-type="float">
+      <text:p>3.056E-165</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce39" office:value-type="float" office:value="4.955E-163" calcext:value-type="float">
+      <text:p>4.955E-163</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce27" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
