@@ -144,6 +144,24 @@
       "revId": "2191651f91f9f15ba63e21be3dff6e9b4faaf792",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5be01145_f526ab80",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-19T09:59:52Z",
+      "side": 1,
+      "message": "Is that would be bad then to treat the gap as part of the buffer, having the secondary buffer smaller size by that amount? Will that be a UB?",
+      "parentUuid": "c917ccb4_5c3d5e1c",
+      "revId": "2191651f91f9f15ba63e21be3dff6e9b4faaf792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
