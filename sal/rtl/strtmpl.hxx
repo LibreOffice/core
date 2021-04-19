@@ -1005,7 +1005,7 @@ template <typename IMPL_RTL_STRINGDATA> IMPL_RTL_STRINGDATA* Alloc( sal_Int32 nL
            <= ((SAL_MAX_UINT32 - sizeof (IMPL_RTL_STRINGDATA))
                / sizeof (STRCODE<IMPL_RTL_STRINGDATA>)))
         ? static_cast<IMPL_RTL_STRINGDATA *>(rtl_allocateString(
-            sizeof (IMPL_RTL_STRINGDATA) + nLen * sizeof (STRCODE<IMPL_RTL_STRINGDATA>)))
+            sizeof (IMPL_RTL_STRINGDATA) + (nLen + 1) * sizeof (STRCODE<IMPL_RTL_STRINGDATA>)))
         : nullptr;
     if (pData != nullptr) {
         pData->refCount = 1;
@@ -1073,9 +1073,14 @@ template <typename IMPL_RTL_STRINGDATA> void release( IMPL_RTL_STRINGDATA* pThis
 
 /* ----------------------------------------------------------------------- */
 
+template <typename IMPL_RTL_STRINGDATA> struct EmptyStringData
+{
+    IMPL_RTL_STRINGDATA str; // defined in respective units
+    STRCODE<IMPL_RTL_STRINGDATA> singleCharBuffer;
+};
 template <typename IMPL_RTL_STRINGDATA> struct EmptyStringImpl
 {
-    static IMPL_RTL_STRINGDATA data; // defined in respective units
+    static EmptyStringData<IMPL_RTL_STRINGDATA> data;
 };
 
 template <typename IMPL_RTL_STRINGDATA> void new_( IMPL_RTL_STRINGDATA** ppThis )
@@ -1084,7 +1089,7 @@ template <typename IMPL_RTL_STRINGDATA> void new_( IMPL_RTL_STRINGDATA** ppThis 
     if ( *ppThis)
         release( *ppThis );
 
-    *ppThis = &EmptyStringImpl<IMPL_RTL_STRINGDATA>::data;
+    *ppThis = &EmptyStringImpl<IMPL_RTL_STRINGDATA>::data.str;
 }
 
 /* ----------------------------------------------------------------------- */

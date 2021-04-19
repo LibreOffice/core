@@ -1206,7 +1206,11 @@ typedef struct SAL_DLLPUBLIC_RTTI _rtl_uString
 {
     oslInterlockedCount refCount; /* opaque */
     sal_Int32           length;
+#ifdef LIBO_INTERNAL_ONLY
+    sal_Unicode         buffer[0];
+#else
     sal_Unicode         buffer[1];
+#endif
 } rtl_uString;
 /** @endcond */
 

@@ -45,12 +45,15 @@
  * the refCount is predefined to 1 and must never become 0 !
  */
 template<>
-rtl_String rtl::str::EmptyStringImpl<rtl_String>::data =
+rtl::str::EmptyStringData<rtl_String> rtl::str::EmptyStringImpl<rtl_String>::data =
 {
-    SAL_STRING_STATIC_FLAG|1,
+    {
+        SAL_STRING_STATIC_FLAG|1,
             /* sal_Int32    refCount;   */
-    0,      /* sal_Int32    length;     */
-    { 0 }   /* char     buffer[1];  */
+        0,      /* sal_Int32    length;     */
+        {}
+    },
+    0  /* char     buffer[1];  */
 };
 
 /* ======================================================================= */
