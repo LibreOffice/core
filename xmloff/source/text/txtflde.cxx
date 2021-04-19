@@ -2731,8 +2731,13 @@ void XMLTextFieldExport::ProcessBibliographyData(
 
             if (!sStr.isEmpty())
             {
+                XMLTokenEnum eElement = MapBibliographyFieldName(rProp.Name);
+                if (eElement == XML_URL)
+                {
+                    sStr = GetExport().GetRelativeReference(sStr);
+                }
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                     MapBibliographyFieldName(rProp.Name),
+                                     eElement,
                                      sStr);
             }
         }
