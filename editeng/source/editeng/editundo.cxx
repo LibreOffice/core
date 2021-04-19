@@ -67,6 +67,8 @@ bool EditUndoManager::Undo()
 
     mpEditEngine->SetUndoMode( true );
     bool bDone = SfxUndoManager::Undo();
+    if (!mpEditEngine)
+        return bDone;
     mpEditEngine->SetUndoMode( false );
 
     EditSelection aNewSel( mpEditEngine->GetActiveView()->GetImpEditView()->GetEditSelection() );

@@ -1460,6 +1460,12 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     }
     else
     {
+        if (pTEObj && pTextEditOutliner)
+        {
+            pTextEditOutliner->SetUndoManager(mpOldTextEditUndoManager);
+            mpOldTextEditUndoManager = nullptr;
+        }
+
         assert(nullptr == mpOldTextEditUndoManager); // cannot be restored!
     }
 

@@ -1360,7 +1360,6 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
 
         if( bUndo )
         {
-            getSdrDragView().EndTextEditAllViews();
             if(!getSdrDragView().IsInsObjPoint() && pObj->IsInserted() )
             {
                 if (DragStat().IsEndDragChangesAttributes())
