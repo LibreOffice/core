@@ -459,14 +459,11 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
     return pRetval;
 }
 
-bool WinSalBitmap::Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle )
+bool WinSalBitmap::Create( HANDLE hBitmap )
 {
     bool bRet = true;
 
-    if( bDIB )
-        mhDIB = static_cast<HGLOBAL>( bCopyHandle ? ImplCopyDIBOrDDB( hBitmap, true ) : hBitmap );
-    else
-        mhDDB = static_cast<HBITMAP>( bCopyHandle ? ImplCopyDIBOrDDB( hBitmap, false ) : hBitmap );
+    mhDDB = static_cast<HBITMAP>( hBitmap );
 
     if( mhDIB )
     {
@@ -656,7 +653,7 @@ bool WinSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCan
             sal_Int64 aHBmp64;
 
             if( args[0] >>= aHBmp64 ) {
-                return Create( reinterpret_cast<HANDLE>(aHBmp64), false, false );
+                return Create( reinterpret_cast<HANDLE>(aHBmp64) );
             }
         }
     }
