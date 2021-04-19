@@ -4240,6 +4240,14 @@ void SwFlyFrame::PaintDecorators() const
     }
 }
 
+void SwTextFrame::PaintOutlineContentVisibilityButton() const
+{
+    SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(gProp.pSGlobalShell);
+    if (pWrtSh && pWrtSh->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        UpdateOutlineContentVisibilityButton(pWrtSh);
+}
+
+
 void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     const SwViewOption* pViewOption = gProp.pSGlobalShell->GetViewOptions();

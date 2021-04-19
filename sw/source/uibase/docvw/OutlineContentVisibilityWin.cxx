@@ -107,28 +107,17 @@ void SwOutlineContentVisibilityWin::SetSymbol(ButtonSymbol eStyle)
 void SwOutlineContentVisibilityWin::Set()
 {
     const SwTextFrame* pTextFrame = static_cast<const SwTextFrame*>(GetFrame());
-
-    // outline node frame containing folded outline node content might be folded so need to hide it
-    if (!pTextFrame || pTextFrame->IsInDtor())
-    {
-        SetSymbol(ButtonSymbol::NONE);
-        Hide();
-        return;
-    }
     const SwTextNode* pTextNode = pTextFrame->GetTextNodeFirst();
     SwWrtShell& rSh = GetEditWin()->GetView().GetWrtShell();
     const SwOutlineNodes& rOutlineNodes = rSh.GetNodes().GetOutLineNds();
-    if (!pTextNode
-        || !rOutlineNodes.Seek_Entry(static_cast<SwNode*>(const_cast<SwTextNode*>(pTextNode)),
-                                     &m_nOutlinePos)
-        || m_nOutlinePos == SwOutlineNodes::npos)
-    {
-        assert(false); // should never get here
-        return;
-    }
+
+    rOutlineNodes.Seek_Entry(static_cast<SwNode*>(const_cast<SwTextNode*>(pTextNode)),
+                             &m_nOutlinePos);
 
     // set symbol displayed on button
-    SetSymbol(rSh.IsOutlineContentVisible(m_nOutlinePos) ? ButtonSymbol::HIDE : ButtonSymbol::SHOW);
+    bool bVisible = true;
+    const_cast<SwTextNode*>(pTextNode)->GetAttrOutlineContentVisible(bVisible);
+    SetSymbol(bVisible ? ButtonSymbol::HIDE : ButtonSymbol::SHOW);
 
     // set quick help
     SwOutlineNodes::size_type nOutlineNodesCount
@@ -147,11 +136,11 @@ void SwOutlineContentVisibilityWin::Set()
     SwRect aCharRect;
     GetFrame()->GetCharRect(aCharRect, SwPosition(*pTextNode));
     Point aPxPt(GetEditWin()->GetOutDev()->LogicToPixel(
-        Point(aCharRect.Right(), aFrameAreaRect.Center().getY())));
+        Point(aCharRect.Left(), aFrameAreaRect.Center().getY())));
     if (GetFrame()->IsRightToLeft())
-        aPxPt.AdjustX(5);
+        aPxPt.AdjustX(2);
     else
-        aPxPt.AdjustX(-(GetSizePixel().getWidth() + 5));
+        aPxPt.AdjustX(-(GetSizePixel().getWidth() + 2));
     aPxPt.AdjustY(-GetSizePixel().getHeight() / 2);
     SetPosPixel(aPxPt);
 }
@@ -176,39 +165,6 @@ bool SwOutlineContentVisibilityWin::Contains(const Point& rDocPt) const
     if (aRect.IsInside(rDocPt))
         return true;
     return false;
-}
-
-void SwOutlineContentVisibilityWin::ToggleOutlineContentVisibility(const bool bSubs)
-{
-    SwWrtShell& rSh = GetEditWin()->GetView().GetWrtShell();
-    rSh.LockView(true);
-    if (GetEditWin()->GetView().GetDrawView()->IsTextEdit())
-        rSh.EndTextEdit();
-    if (GetEditWin()->GetView().IsDrawMode())
-        GetEditWin()->GetView().LeaveDrawCreate();
-    rSh.EnterStdMode();
-    if (rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
-        rSh.ToggleOutlineContentVisibility(m_nOutlinePos);
-    else if (bSubs)
-    {
-        // toggle including sub levels
-        SwOutlineNodes::size_type nPos = m_nOutlinePos;
-        SwOutlineNodes::size_type nOutlineNodesCount
-            = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
-        int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(m_nOutlinePos);
-        bool bVisible = rSh.IsOutlineContentVisible(m_nOutlinePos);
-        do
-        {
-            if (rSh.IsOutlineContentVisible(nPos) == bVisible)
-                rSh.ToggleOutlineContentVisibility(nPos);
-        } while (++nPos < nOutlineNodesCount
-                 && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel);
-    }
-    else
-        rSh.ToggleOutlineContentVisibility(m_nOutlinePos);
-    // set cursor position to the toggled outline node
-    rSh.GotoOutline(m_nOutlinePos);
-    rSh.LockView(false);
 }
 
 IMPL_LINK(SwOutlineContentVisibilityWin, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
@@ -264,27 +220,17 @@ IMPL_LINK(SwOutlineContentVisibilityWin, MouseMoveHdl, const MouseEvent&, rMEvt,
     return false;
 }
 
+// Toggle the outline content visibility on mouse press
 IMPL_LINK(SwOutlineContentVisibilityWin, MousePressHdl, const MouseEvent&, rMEvt, bool)
 {
     Hide();
-    // Crash occurs if control does not have focus when toggling from hidden to shown.
-    // Seems to happen due to the control being disposed in the toggle process.
-    // Does NOT crash in debugger with GrabFocus and GrabFocusToDocument commented out.
-    // DOES crash in debugger on GrabFocusToDocument when GrabFocus is commented out.
-    // Until light is shed on why this happens, prevent crash by doing the following:
-    //  1) grab focus to the control
-    //  2) toggle content visibility
-    //  3) grab focus to the document
-    if (!ControlHasFocus())
-        GrabFocus();
-    ToggleOutlineContentVisibility(rMEvt.IsRight());
-    GrabFocusToDocument();
+    GetEditWin()->ToggleOutlineContentVisibility(m_nOutlinePos, rMEvt.IsRight());
     return false;
 }
 
 IMPL_LINK_NOARG(SwOutlineContentVisibilityWin, DelayAppearHandler, Timer*, void)
 {
-    const int TICKS_BEFORE_WE_APPEAR = 5;
+    const int TICKS_BEFORE_WE_APPEAR = 3;
     if (m_nDelayAppearing < TICKS_BEFORE_WE_APPEAR)
     {
         ++m_nDelayAppearing;

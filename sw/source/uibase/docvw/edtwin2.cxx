@@ -467,9 +467,6 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
     if( bPaintShadowCursor )
         m_pShadCursor->Paint();
-
-    if (pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
-        GetFrameControlsManager().SetOutlineContentVisibilityButtons();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
