@@ -61,7 +61,7 @@ class SmGraphicAccessible final :
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          nClientId;
 
-    VclPtr<SmGraphicWindow>             pWin;
+    SmGraphicWidget*                    pWin;
 
     SmGraphicAccessible( const SmGraphicAccessible & ) = delete;
     SmGraphicAccessible & operator = ( const SmGraphicAccessible & ) = delete;
@@ -70,7 +70,7 @@ class SmGraphicAccessible final :
     OUString        GetAccessibleText_Impl();
 
 public:
-    explicit SmGraphicAccessible( SmGraphicWindow *pGraphicWin );
+    explicit SmGraphicAccessible( SmGraphicWidget *pGraphicWin );
     virtual ~SmGraphicAccessible() override;
 
     void                ClearWin();     // to be called when view is destroyed
