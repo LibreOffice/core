@@ -1320,7 +1320,7 @@ void SmCursor::RequestRepaint(){
         if ( SfxObjectCreateMode::EMBEDDED == mpDocShell->GetCreateMode() )
             mpDocShell->Repaint();
         else
-            pViewSh->GetGraphicWindow().Invalidate();
+            pViewSh->GetGraphicWidget().Invalidate();
     }
 }
 
