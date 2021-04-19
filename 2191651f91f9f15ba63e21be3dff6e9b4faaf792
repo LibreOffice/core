@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4fffd6f_80a820ee",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-19T09:48:12Z",
+      "side": 1,
+      "message": "See this.",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 84,
+        "endChar": 26
+      },
+      "revId": "2191651f91f9f15ba63e21be3dff6e9b4faaf792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72bd95db_961b50d7",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-19T09:48:12Z",
+      "side": 1,
+      "message": "There\u0027s a static assert that N is not 0, and it\u0027s an unsigned type, so no need for the check here.",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 18
+      },
+      "revId": "2191651f91f9f15ba63e21be3dff6e9b4faaf792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02717802_75f1faa7",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-19T09:48:12Z",
+      "side": 1,
+      "message": "This will fail, because of padding inside the rtl_uString. I tried to make rtl_uString a base class, but even that needs to make it non-POD, or to have its buffer to fill the padding...",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 100,
+        "endChar": 9
+      },
+      "revId": "2191651f91f9f15ba63e21be3dff6e9b4faaf792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
