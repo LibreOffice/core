@@ -162,6 +162,29 @@
       "revId": "2191651f91f9f15ba63e21be3dff6e9b4faaf792",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a863ec2_eb38a1ef",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-19T10:05:31Z",
+      "side": 1,
+      "message": "By the way, N-1 may be 0 - will it break then? Do we need a template parameter and specialization for \"less than rtl_uString buffer size\" cases (taking padding into account), or is some \"std::min(N-1, 1)\" is enough, with space overhead for the small strings?",
+      "range": {
+        "startLine": 116,
+        "startChar": 23,
+        "endLine": 116,
+        "endChar": 26
+      },
+      "revId": "2191651f91f9f15ba63e21be3dff6e9b4faaf792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
