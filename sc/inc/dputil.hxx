@@ -22,7 +22,7 @@ class ScDPUtil
 public:
     static bool isDuplicateDimension(const OUString& rName);
 
-    SC_DLLPUBLIC static OUString getSourceDimensionName(const OUString& rName);
+    SC_DLLPUBLIC static OUString getSourceDimensionName(std::u16string_view rName);
 
     /**
      * Get a duplicate index in case the dimension is a duplicate.  It returns

@@ -285,7 +285,7 @@ OUString  ParaWin::GetActiveArgName() const
 }
 
 
-void ParaWin::SetArgument(sal_uInt16 no, const OUString& aString)
+void ParaWin::SetArgument(sal_uInt16 no, std::u16string_view aString)
 {
     if (no < aParaArray.size())
         aParaArray[no] = comphelper::string::stripStart(aString, ' ');

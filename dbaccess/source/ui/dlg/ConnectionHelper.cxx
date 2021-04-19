@@ -364,7 +364,7 @@ namespace dbaui
         return true;
     }
 
-    void OConnectionHelper::impl_setURL( const OUString& _rURL, bool _bPrefix )
+    void OConnectionHelper::impl_setURL( std::u16string_view _rURL, bool _bPrefix )
     {
         OUString sURL( comphelper::string::stripEnd(_rURL, '*') );
         OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
@@ -436,7 +436,7 @@ namespace dbaui
         return sURL;
     }
 
-    void OConnectionHelper::setURL( const OUString& _rURL )
+    void OConnectionHelper::setURL( std::u16string_view _rURL )
     {
         impl_setURL( _rURL, true );
     }
@@ -446,7 +446,7 @@ namespace dbaui
         return impl_getURL();
     }
 
-    void OConnectionHelper::setURLNoPrefix( const OUString& _rURL )
+    void OConnectionHelper::setURLNoPrefix( std::u16string_view _rURL )
     {
         impl_setURL( _rURL, false );
     }

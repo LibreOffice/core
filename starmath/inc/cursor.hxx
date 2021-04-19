@@ -124,7 +124,7 @@ public:
      * For more complex expressions use InsertCommandText, this method doesn't
      * use SmParser, this means that it's faster, but not as strong.
      */
-    void InsertSpecial(const OUString& aString);
+    void InsertSpecial(std::u16string_view aString);
 
     /** Create sub-/super script
      *

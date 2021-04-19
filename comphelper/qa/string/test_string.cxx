@@ -75,11 +75,11 @@ void TestString::testDecimalStringToNumber()
 
 void TestString::testIsdigitAsciiString()
 {
-    CPPUNIT_ASSERT_EQUAL(true, comphelper::string::isdigitAsciiString(OString("1234")));
+    CPPUNIT_ASSERT_EQUAL(true, comphelper::string::isdigitAsciiString("1234"));
 
-    CPPUNIT_ASSERT_EQUAL(false, comphelper::string::isdigitAsciiString(OString("1A34")));
+    CPPUNIT_ASSERT_EQUAL(false, comphelper::string::isdigitAsciiString("1A34"));
 
-    CPPUNIT_ASSERT_EQUAL(true, comphelper::string::isdigitAsciiString(OString()));
+    CPPUNIT_ASSERT_EQUAL(true, comphelper::string::isdigitAsciiString(""));
 }
 
 using namespace ::com::sun::star;
@@ -360,13 +360,13 @@ void TestString::testTokenCount()
     nOut = ::comphelper::string::getTokenCount(aIn, 'X');
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nOut);
 
-    nOut = ::comphelper::string::getTokenCount(OString(), 'X');
+    nOut = ::comphelper::string::getTokenCount("", 'X');
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nOut);
 }
 
 void TestString::testReverseString()
 {
-    OString aOut = ::comphelper::string::reverseString(OString("ABC"));
+    OString aOut = ::comphelper::string::reverseString("ABC");
 
     CPPUNIT_ASSERT_EQUAL(OString("CBA"), aOut);
 }

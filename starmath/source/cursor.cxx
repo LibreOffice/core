@@ -981,7 +981,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
     EndEdit();
 }
 
-void SmCursor::InsertSpecial(const OUString& _aString)
+void SmCursor::InsertSpecial(std::u16string_view _aString)
 {
     BeginEdit();
     Delete();

@@ -46,7 +46,7 @@ namespace dbaui
 
         Link<OGeneralPage&,void>   m_aTypeSelectHandler;   /// to be called if a new type is selected
         bool                m_bInitTypeList : 1;
-        bool                approveDatasourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName );
+        bool                approveDatasourceType( std::u16string_view _sURLPrefix, OUString& _inout_rDisplayName );
         void                insertDatasourceTypeEntryData( const OUString& _sType, const OUString& sDisplayName );
 
     protected:

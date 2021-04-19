@@ -526,7 +526,7 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara )
         }
 
         sal_Int32 nPos = nHeadingNumberStart ? nHeadingNumberStart : nNumberingNumberStart;
-        OUString aLevel = comphelper::string::stripStart(aName.copy(nPos), ' ');
+        OUString aLevel = comphelper::string::stripStart(aName.subView(nPos), ' ');
         nTabs = aLevel.toInt32();
         if( nTabs )
             nTabs--; // Level 0 = "heading 1"

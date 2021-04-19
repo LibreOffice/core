@@ -195,7 +195,7 @@ public:
         OUString& rDataFieldName,
         std::vector<css::sheet::DataPilotFieldFilter>& rFilters,
         std::vector<sal_Int16>& rFilterFuncs,
-        const OUString& rFilterList );
+        std::u16string_view rFilterList );
 
     void GetMemberResultNames(ScDPUniqueStringSet& rNames, tools::Long nDimension);
 

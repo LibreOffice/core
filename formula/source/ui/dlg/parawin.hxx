@@ -124,7 +124,7 @@ public:
         OUString        GetActiveArgName() const;
 
         OUString        GetArgument(sal_uInt16 no);
-        void            SetArgument(sal_uInt16 no, const OUString& aString);
+        void            SetArgument(sal_uInt16 no, std::u16string_view aString);
         void            SetArgumentFonts(const vcl::Font& aBoldFont,const vcl::Font& aLightFont);
 
         void            SetEdFocus(); // visible edit lines

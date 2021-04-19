@@ -1808,7 +1808,7 @@ void SmSymDefineDialog::SetSymbolSetManager(const SmSymbolManager &rMgr)
 }
 
 bool SmSymDefineDialog::SelectSymbolSet(weld::ComboBox& rComboBox,
-        const OUString &rSymbolSetName, bool bDeleteText)
+        std::u16string_view rSymbolSetName, bool bDeleteText)
 {
     assert((&rComboBox == m_xOldSymbolSets.get() || &rComboBox == m_xSymbolSets.get()) && "Sm : wrong ComboBox");
 
