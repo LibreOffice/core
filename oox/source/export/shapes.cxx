@@ -400,7 +400,9 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp));
 
     tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
-    tools::Rectangle aRect( aPolyPolygon.GetBoundRect() );
+    awt::Point aPos = xShape->getPosition();
+    awt::Size aSize = xShape->getSize();
+    tools::Rectangle aRect(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height));
 
 #if OSL_DEBUG_LEVEL > 0
     awt::Size size = MapSize( awt::Size( aRect.GetWidth(), aRect.GetHeight() ) );
@@ -425,7 +427,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
 
     // visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
-    WriteTransformation( aRect, XML_a );
+    WriteTransformation( xShape, aRect, XML_a );
     WritePolyPolygon(xShape, aPolyPolygon, bClosed);
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() ) {
@@ -1352,7 +1354,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
 
     // visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
-    WriteTransformation( aRect, XML_a, bFlipH, bFlipV );
+    WriteTransformation( xShape, aRect, XML_a, bFlipH, bFlipV );
     // TODO: write adjustments (ppt export doesn't work well there either)
     WritePresetShape( sGeometry );
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );

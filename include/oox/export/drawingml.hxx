@@ -255,7 +255,7 @@ public:
 
     void WriteShapeTransformation(const css::uno::Reference< css::drawing::XShape >& rXShape,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, bool bSuppressRotation = false, bool bSuppressFlipping = false, bool bFlippedBeforeRotation = false);
-    void WriteTransformation(const tools::Rectangle& rRectangle,
+    void WriteTransformation(const css::uno::Reference< css::drawing::XShape >& xShape, const tools::Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0, bool bIsGroupShape = false);
 
     void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0);

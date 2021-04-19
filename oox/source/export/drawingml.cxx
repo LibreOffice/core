@@ -1706,7 +1706,22 @@ void DrawingML::WriteXGraphicStretch(uno::Reference<beans::XPropertySet> const &
     mpFS->endElementNS(XML_a, XML_stretch);
 }
 
-void DrawingML::WriteTransformation(const tools::Rectangle& rRect,
+namespace
+{
+bool IsTopGroupObj(const uno::Reference<drawing::XShape>& xShape)
+{
+    SdrObject* pObject = GetSdrObjectFromXShape(xShape);
+    if (!pObject)
+        return false;
+
+    if (pObject->getParentSdrObjectFromSdrObject())
+        return false;
+
+    return pObject->IsGroupObject();
+}
+}
+
+void DrawingML::WriteTransformation(const Reference< XShape >& xShape, const tools::Rectangle& rRect,
         sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, sal_Int32 nRotation, bool bIsGroupShape)
 {
 
@@ -1716,7 +1731,9 @@ void DrawingML::WriteTransformation(const tools::Rectangle& rRect,
                           XML_rot, sax_fastparser::UseIf(OString::number(nRotation), nRotation % 21600000 != 0));
 
     sal_Int32 nLeft = rRect.Left();
+    sal_Int32 nChildLeft = nLeft;
     sal_Int32 nTop = rRect.Top();
+    sal_Int32 nChildTop = nTop;
     if (GetDocumentType() == DOCUMENT_DOCX && !m_xParent.is())
     {
         nLeft = 0;
@@ -1730,11 +1747,11 @@ void DrawingML::WriteTransformation(const tools::Rectangle& rRect,
         XML_cx, OString::number(oox::drawingml::convertHmmToEmu(rRect.GetWidth())),
         XML_cy, OString::number(oox::drawingml::convertHmmToEmu(rRect.GetHeight())));
 
-    if (GetDocumentType() != DOCUMENT_DOCX && bIsGroupShape)
+    if (bIsGroupShape && (GetDocumentType() != DOCUMENT_DOCX || IsTopGroupObj(xShape)))
     {
         mpFS->singleElementNS(XML_a, XML_chOff,
-            XML_x, OString::number(oox::drawingml::convertHmmToEmu(nLeft)),
-            XML_y, OString::number(oox::drawingml::convertHmmToEmu(nTop)));
+            XML_x, OString::number(oox::drawingml::convertHmmToEmu(nChildLeft)),
+            XML_y, OString::number(oox::drawingml::convertHmmToEmu(nChildTop)));
         mpFS->singleElementNS(XML_a, XML_chExt,
             XML_cx, OString::number(oox::drawingml::convertHmmToEmu(rRect.GetWidth())),
             XML_cy, OString::number(oox::drawingml::convertHmmToEmu(rRect.GetHeight())));
@@ -1823,7 +1840,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     if(bFlipH != bFlipV)
         nRotation = Degree100(nRotation.get() * -1 + 36000);
 
-    WriteTransformation(tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
+    WriteTransformation(rXShape, tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
             bFlipHWrite, bFlipVWrite, ExportRotateClockwisify(nRotation + nCameraRotation), IsGroupShape( rXShape ));
 }
 
@@ -4824,7 +4841,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
             awt::Point aPos = xShapeBg->getPosition();
             awt::Size aSize = xShapeBg->getSize();
             WriteTransformation(
-                tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)),
+                xShapeBg, tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)),
                 XML_p, false, false, 0, false);
         }
 
