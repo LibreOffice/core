@@ -43,6 +43,8 @@
 
 #include "viewfunc.hxx"
 
+#include <FrameControlsManager.hxx>
+
 // The SetVisArea of the DocShell must not be called from InnerResizePixel.
 // But our adjustments must take place.
 static bool bProtectDocShellVisArea = false;
@@ -300,6 +302,9 @@ void SwView::SetVisArea( const Point &rPt, bool bUpdateScrollbar )
 
     if ( aPt == m_aVisArea.TopLeft() )
         return;
+
+    if (m_pWrtShell && m_pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        GetEditWin().GetFrameControlsManager().HideControls(FrameControlType::Outline);
 
     const tools::Long lXDiff = m_aVisArea.Left() - aPt.X();
     const tools::Long lYDiff = m_aVisArea.Top()  - aPt.Y();

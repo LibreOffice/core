@@ -71,6 +71,10 @@
 #include <ftnidx.hxx>
 #include <ftnfrm.hxx>
 
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
+#include <FrameControlsManager.hxx>
 
 namespace sw {
 
@@ -876,6 +880,12 @@ void SwTextFrame::DestroyImpl()
                 sw::RemoveFootnotesForNode(*getRootFrame(), *pNode, nullptr);
             }
         }
+    }
+
+    if (!GetDoc().IsInDtor())
+    {
+        if (SwView* pView = GetActiveView())
+            pView->GetEditWin().GetFrameControlsManager().RemoveControls(this);
     }
 
     SwContentFrame::DestroyImpl();
@@ -4021,6 +4031,17 @@ void SwTextFrame::repaintTextFrames( const SwTextNode& rNode )
         SwViewShell *pCurShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
         if( pCurShell )
             pCurShell->InvalidateWindows( aRec );
+    }
+}
+
+void SwTextFrame::UpdateOutlineContentVisibilityButton(SwWrtShell* pWrtSh) const
+{
+    if (pWrtSh && pWrtSh->GetViewOptions()->IsShowOutlineContentVisibilityButton() &&
+            GetTextNodeFirst()->IsOutline())
+    {
+        SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+        SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
+        rMngr.SetOutlineContentVisibilityButton(this);
     }
 }
 

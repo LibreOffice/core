@@ -261,51 +261,23 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 
     // Elements - interpret Item
-    std::vector<SwNode*> aFoldedOutlineNdsArray;
-    bool bShow = false;
+    bool bFlag = true;
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_ELEM, false, &pItem ) )
     {
         const SwElemItem* pElemItem = static_cast<const SwElemItem*>(pItem);
         pElemItem->FillViewOptions( aViewOpt );
 
         SwWrtShell* pWrtShell = GetActiveWrtShell();
-        bShow = pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton();
+        bFlag = pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton();
         bool bTreatSubsChanged = aViewOpt.IsTreatSubOutlineLevelsAsContent()
                 != pWrtShell->GetViewOptions()->IsTreatSubOutlineLevelsAsContent();
-
-        // move cursor to top if something with the outline mode changed
-        if ((bShow != aViewOpt.IsShowOutlineContentVisibilityButton()) ||
-                (pWrtShell->GetViewOptions()->IsTreatSubOutlineLevelsAsContent() !=
-                 aViewOpt.IsTreatSubOutlineLevelsAsContent()))
-        {
-            // move cursor to top of document
-            if (pWrtShell->IsSelFrameMode())
-            {
-                pWrtShell->UnSelectFrame();
-                pWrtShell->LeaveSelFrameMode();
-            }
-            pWrtShell->EnterStdMode();
-            pWrtShell->SttEndDoc(true);
-        }
-
-        if (bShow && (!aViewOpt.IsShowOutlineContentVisibilityButton() || bTreatSubsChanged))
+        if (bFlag && (!aViewOpt.IsShowOutlineContentVisibilityButton() || bTreatSubsChanged))
         {
             // outline mode options have change which require to show all content
-            const SwOutlineNodes& rOutlineNds = pWrtShell->GetNodes().GetOutLineNds();
-            for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
-            {
-                SwNode* pNd = rOutlineNds[nPos];
-                if (pNd->IsTextNode()) // should always be true
-                {
-                    bool bOutlineContentVisibleAttr = true;
-                    pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                    if (!bOutlineContentVisibleAttr)
-                    {
-                        aFoldedOutlineNdsArray.push_back(pNd);
-                        pWrtShell->ToggleOutlineContentVisibility(nPos);
-                    }
-                }
-            }
+            pWrtShell->MakeAllFoldedOutlineContentVisible();
+
+            if (bTreatSubsChanged)
+                bFlag = false; // folding method changed, set bFlag false to refold below
         }
     }
 
@@ -429,21 +401,8 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if (SfxItemState::SET != rSet.GetItemState(FN_PARAM_ELEM, false))
         return;
 
-    if (!GetActiveWrtShell()->GetViewOptions()->IsShowOutlineContentVisibilityButton())
-    {
-        // outline mode is no longer active
-        // set outline content visible attribute to false for nodes in the array
-        for (SwNode* pNd : aFoldedOutlineNdsArray)
-            pNd->GetTextNode()->SetAttrOutlineContentVisible(false);
-    }
-    else if (bShow)
-    {
-        // outline mode remained active
-        // sub level treatment might have changed
-        // ToggleOutlineContentVisibility only knows sub level treatment after ApplyUserPref
-        for (SwNode* pNd : aFoldedOutlineNdsArray)
-            GetActiveWrtShell()->ToggleOutlineContentVisibility(pNd, true);
-    }
+    if (!bFlag)
+        GetActiveWrtShell()->MakeAllFoldedOutlineContentVisible(false);
 }
 
 std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet )

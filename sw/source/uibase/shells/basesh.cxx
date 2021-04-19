@@ -99,6 +99,8 @@
 #include <shellres.hxx>
 #include <UndoTable.hxx>
 
+#include <ndtxt.hxx>
+
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
 // These variables keep the state of Gallery (slot SID_GALLERY_BG_BRUSH)
@@ -195,11 +197,53 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
     switch(rReq.GetSlot())
     {
         case SID_DELETE:
+            if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
+            {
+                if (rSh.IsEndPara())
+                {
+                    SwNodeIndex aIdx(rSh.GetCursor()->GetNode());
+                    // disallow if this is am outline node having folded content
+                    bool bVisible = true;
+                    aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
+                    if (!bVisible)
+                        return;
+                    // disallow if the next text node is an outline node having folded content
+                    ++aIdx;
+                    SwNodeType aNodeType;
+                    while ((aNodeType = aIdx.GetNode().GetNodeType()) != SwNodeType::Text)
+                        ++aIdx;
+                    if (aIdx.GetNode().IsTextNode())
+                    {
+                        bVisible = true;
+                        aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
+                        if (!bVisible)
+                            return;
+                    }
+                }
+            }
             rSh.DelRight();
             break;
 
         case FN_BACKSPACE:
-
+            if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
+            {
+                if (rSh.IsSttPara())
+                {
+                    SwNodeIndex aIdx(rSh.GetCursor()->GetNode());
+                    // disallow if this is a folded outline node
+                    bool bVisible = true;
+                    aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
+                    if (!bVisible)
+                        return;
+                    // disallow if previous text node does not have a layout frame
+                    --aIdx;
+                    SwNodeType aNodeType;
+                    while ((aNodeType = aIdx.GetNode().GetNodeType()) != SwNodeType::Text)
+                        --aIdx;
+                    if (aIdx.GetNode().IsContentNode() && !aIdx.GetNode().GetContentNode()->getLayoutFrame(nullptr))
+                        return;
+                }
+            }
             if( rSh.IsNoNum() )
             {
                 rSh.SttCursorMove();
@@ -234,6 +278,8 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
 
 void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 {
+    MakeAllOutlineContentTemporarilyVisible a(GetShell().GetDoc());
+
     // Attention: At risk of suicide!
     // After paste, paste special the shell can be destroy.
 
@@ -523,6 +569,8 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 
 void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
+    MakeAllOutlineContentTemporarilyVisible a(GetShell().GetDoc());
+
     SwWrtShell &rWrtShell = GetShell();
 
     SwUndoId nUndoId(SwUndoId::EMPTY);

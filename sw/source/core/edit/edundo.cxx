@@ -35,6 +35,8 @@
 #include <docsh.hxx>
 #include <pagefrm.hxx>
 
+#include <wrtsh.hxx>
+
 /** helper function to select all objects in an SdrMarkList;
  * implementation: see below */
 static void lcl_SelectSdrMarkList( SwEditShell* pShell,
@@ -96,6 +98,8 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
 
 void SwEditShell::Undo(sal_uInt16 const nCount)
 {
+    MakeAllOutlineContentTemporarilyVisible a(GetDoc());
+
     CurrShell aCurr( this );
 
     // current undo state was not saved
@@ -152,6 +156,8 @@ void SwEditShell::Undo(sal_uInt16 const nCount)
 
 void SwEditShell::Redo(sal_uInt16 const nCount)
 {
+    MakeAllOutlineContentTemporarilyVisible a(GetDoc());
+
     CurrShell aCurr( this );
 
     bool bRet = false;
