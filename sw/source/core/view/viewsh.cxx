@@ -79,6 +79,8 @@
 #include <sfx2/lokhelper.hxx>
 #include <tools/UnitConversion.hxx>
 
+#include <FrameControlsManager.hxx>
+
 #if !HAVE_FEATURE_DESKTOP
 #include <vcl/sysdata.hxx>
 #endif
@@ -297,6 +299,11 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
          maInvalidRect.HasArea() ||
          bExtraData )
     {
+        if (GetViewOptions()->IsShowOutlineContentVisibilityButton() &&
+                GetDoc()->GetDocShell() && GetDoc()->GetDocShell()->GetView())
+            GetDoc()->GetDocShell()->GetView()->GetEditWin().GetFrameControlsManager().
+                    HideControls(FrameControlType::Outline);
+
         if ( !mnLockPaint )
         {
             SolarMutexGuard aGuard;
