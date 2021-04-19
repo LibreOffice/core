@@ -136,9 +136,6 @@ public:
     void SelPrevMark();
 
     void DeleteEditView();
-
-    void HideScrollbars();
-    void ShowScrollbars();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
