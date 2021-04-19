@@ -33,6 +33,12 @@
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
 
+#include "doc.hxx"
+#include "viewopt.hxx"
+#include "cmdid.h"
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
+
 namespace tools { class PolyPolygon; }
 class SwDoc;
 class CommandExtTextInputData;
@@ -1027,6 +1033,37 @@ class SwMvContext {
 public:
     SwMvContext(SwEditShell *pShell);
     ~SwMvContext() COVERITY_NOEXCEPT_FALSE;
+};
+
+class MakeAllOutlineContentTemporarilyVisible
+{
+private:
+    SwDoc* m_pDoc;
+    bool m_bDone = false;
+public:
+    MakeAllOutlineContentTemporarilyVisible(SwDoc* pDoc)
+        : m_pDoc(pDoc)
+    {
+        if (SwEditShell* pEditShell = pDoc->GetEditShell())
+            if (const SwViewOption* pViewOpt = pEditShell->GetViewOptions())
+                if (pViewOpt->IsShowOutlineContentVisibilityButton())
+                {
+                    pEditShell->StartAllAction();
+                    SfxViewFrame::Current()->GetDispatcher()->
+                            Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON, SfxCallMode::SYNCHRON);
+                    m_bDone = true;
+                }
+    }
+
+    ~MakeAllOutlineContentTemporarilyVisible() COVERITY_NOEXCEPT_FALSE
+    {
+        if (m_bDone)
+        {
+            SfxViewFrame::Current()->GetDispatcher()->
+                    Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON, SfxCallMode::SYNCHRON);
+            m_pDoc->GetEditShell()->EndAllAction();
+        }
+    }
 };
 
 #endif

@@ -96,6 +96,8 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
 
 void SwEditShell::Undo(sal_uInt16 const nCount)
 {
+    MakeAllOutlineContentTemporarilyVisible a(GetDoc());
+
     CurrShell aCurr( this );
 
     // current undo state was not saved
@@ -152,6 +154,8 @@ void SwEditShell::Undo(sal_uInt16 const nCount)
 
 void SwEditShell::Redo(sal_uInt16 const nCount)
 {
+    MakeAllOutlineContentTemporarilyVisible a(GetDoc());
+
     CurrShell aCurr( this );
 
     bool bRet = false;

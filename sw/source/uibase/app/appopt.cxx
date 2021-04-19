@@ -261,8 +261,8 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 
     // Elements - interpret Item
-    std::vector<SwNode*> aFoldedOutlineNdsArray;
-    bool bShow = false;
+    bool bShow = true;
+    SwOutlineNodes::size_type nPos = SwOutlineNodes::npos;
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_ELEM, false, &pItem ) )
     {
         const SwElemItem* pElemItem = static_cast<const SwElemItem*>(pItem);
@@ -273,39 +273,45 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         bool bTreatSubsChanged = aViewOpt.IsTreatSubOutlineLevelsAsContent()
                 != pWrtShell->GetViewOptions()->IsTreatSubOutlineLevelsAsContent();
 
-        // move cursor to top if something with the outline mode changed
-        if ((bShow != aViewOpt.IsShowOutlineContentVisibilityButton()) ||
-                (pWrtShell->GetViewOptions()->IsTreatSubOutlineLevelsAsContent() !=
-                 aViewOpt.IsTreatSubOutlineLevelsAsContent()))
+        if ((bShow != aViewOpt.IsShowOutlineContentVisibilityButton()) || bTreatSubsChanged)
         {
-            // move cursor to top of document
             if (pWrtShell->IsSelFrameMode())
             {
                 pWrtShell->UnSelectFrame();
                 pWrtShell->LeaveSelFrameMode();
             }
             pWrtShell->EnterStdMode();
-            pWrtShell->SttEndDoc(true);
         }
+
+        nPos = pWrtShell->GetOutlinePos();
 
         if (bShow && (!aViewOpt.IsShowOutlineContentVisibilityButton() || bTreatSubsChanged))
         {
             // outline mode options have change which require to show all content
-            const SwOutlineNodes& rOutlineNds = pWrtShell->GetNodes().GetOutLineNds();
-            for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
+
+            // set outline content visibile attribute true for folded outline node
+            std::vector<SwNode*> aFoldedOutlineNodeArray;
+            for (SwNode* pNd: pWrtShell->GetNodes().GetOutLineNds())
             {
-                SwNode* pNd = rOutlineNds[nPos];
-                if (pNd->IsTextNode()) // should always be true
+                bool bOutlineContentVisibleAttr = true;
+                pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                if (!bOutlineContentVisibleAttr)
                 {
-                    bool bOutlineContentVisibleAttr = true;
-                    pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                    if (!bOutlineContentVisibleAttr)
-                    {
-                        aFoldedOutlineNdsArray.push_back(pNd);
-                        pWrtShell->ToggleOutlineContentVisibility(nPos);
-                    }
+                    aFoldedOutlineNodeArray.push_back(pNd);
+                    pNd->GetTextNode()->SetAttrOutlineContentVisible(true);
                 }
             }
+
+            pWrtShell->StartAction();
+            pWrtShell->InvalidateOutlineContentVisibility();
+            pWrtShell->EndAction();
+
+            // restore outline content visible attribute for folded outline nodes
+            for (SwNode* pNd: aFoldedOutlineNodeArray)
+                pNd->GetTextNode()->SetAttrOutlineContentVisible(false);
+
+            if (bTreatSubsChanged)
+                bShow = !bShow;
         }
     }
 
@@ -429,20 +435,21 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if (SfxItemState::SET != rSet.GetItemState(FN_PARAM_ELEM, false))
         return;
 
-    if (!GetActiveWrtShell()->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    if (!bShow)
     {
-        // outline mode is no longer active
-        // set outline content visible attribute to false for nodes in the array
-        for (SwNode* pNd : aFoldedOutlineNdsArray)
-            pNd->GetTextNode()->SetAttrOutlineContentVisible(false);
-    }
-    else if (bShow)
-    {
-        // outline mode remained active
-        // sub level treatment might have changed
-        // ToggleOutlineContentVisibility only knows sub level treatment after ApplyUserPref
-        for (SwNode* pNd : aFoldedOutlineNdsArray)
-            GetActiveWrtShell()->ToggleOutlineContentVisibility(pNd, true);
+        SwWrtShell* pWrtSh = GetActiveWrtShell();
+        pWrtSh->StartAction();
+        pWrtSh->InvalidateOutlineContentVisibility();
+        pWrtSh->EndAction();
+
+        // If needed, find visible outline node to place cursor.
+        if (nPos != SwOutlineNodes::npos && !pWrtSh->IsOutlineContentVisible(nPos))
+        {
+            while (nPos != SwOutlineNodes::npos && !pWrtSh->GetNodes().GetOutLineNds()[nPos]->GetTextNode()->getLayoutFrame(nullptr))
+                --nPos;
+            if (nPos != SwOutlineNodes::npos)
+                pWrtSh->GotoOutline(nPos);
+        }
     }
 }
 

@@ -57,6 +57,8 @@
 #include <comphelper/lok.hxx>
 #include <editsh.hxx>
 
+#include <viewopt.hxx>
+
 using namespace ::com::sun::star::i18n;
 
 const sal_uInt16 coSrchRplcThreshold = 60000;
@@ -1798,7 +1800,13 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         }
 
         if ( !Move( fnMove, fnGo ) )
+        {
+            SwEditShell* rSh = GetDoc().GetEditShell();
+            if (rSh && rSh->GetViewOptions() &&
+                    rSh->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+                RestoreSavePos();
             break;
+        }
 
         if (pFrame)
         {
