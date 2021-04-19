@@ -46,9 +46,9 @@ using namespace com::sun::star;
 
 namespace sdr::properties
 {
-        std::unique_ptr<SfxItemSet> TextProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet TextProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return std::make_unique<SfxItemSet>(rPool,
+            return SfxItemSet(rPool,
 
                 // range from SdrAttrObj
                 svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -126,7 +126,7 @@ namespace sdr::properties
                             GetObjectItemSet();
 
                             SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
-                            mpItemSet->Put(aNewSet);
+                            mxItemSet->Put(aNewSet);
                         }
 
                         std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
@@ -367,15 +367,15 @@ namespace sdr::properties
 
             if(bTextFrame)
             {
-                mpItemSet->Put(XLineStyleItem(drawing::LineStyle_NONE));
-                mpItemSet->Put(XFillColorItem(OUString(), COL_WHITE));
-                mpItemSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
+                mxItemSet->Put(XLineStyleItem(drawing::LineStyle_NONE));
+                mxItemSet->Put(XFillColorItem(OUString(), COL_WHITE));
+                mxItemSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
             }
             else
             {
-                mpItemSet->Put(SvxAdjustItem(SvxAdjust::Center, EE_PARA_JUST));
-                mpItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
-                mpItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+                mxItemSet->Put(SvxAdjustItem(SvxAdjust::Center, EE_PARA_JUST));
+                mxItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
+                mxItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
             }
         }
 
@@ -387,7 +387,7 @@ namespace sdr::properties
             // #i61284# push hard ObjectItemSet to OutlinerParaObject attributes
             // using existing functionality
             GetObjectItemSet(); // force ItemSet
-            ItemSetChanged(*mpItemSet);
+            ItemSetChanged(*mxItemSet);
 
             // now the standard TextProperties stuff
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
@@ -525,7 +525,7 @@ namespace sdr::properties
         void TextProperties::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
         {
             GetObjectItemSet();
-            mpItemSet->Put(rItem);
+            mxItemSet->Put(rItem);
         }
 
 

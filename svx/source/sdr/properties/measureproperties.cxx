@@ -38,9 +38,9 @@
 namespace sdr::properties
 {
         // create a new itemset
-        std::unique_ptr<SfxItemSet> MeasureProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet MeasureProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return std::make_unique<SfxItemSet>(
+            return SfxItemSet(
                 rPool,
                 svl::Items<
                     // Ranges from SdrAttrObj, SdrMeasureObj:
@@ -109,7 +109,7 @@ namespace sdr::properties
             //#71958# by default, the show units Bool-Item is set as hard
             // attribute to sal_True to avoid confusion when copying SdrMeasureObj's
             // from one application to another
-            mpItemSet->Put(SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, true));
+            mxItemSet->Put(SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, true));
 
             basegfx::B2DPolygon aNewPolygon;
             aNewPolygon.append(basegfx::B2DPoint(100.0, 0.0));
@@ -117,11 +117,11 @@ namespace sdr::properties
             aNewPolygon.append(basegfx::B2DPoint(0.0, 400.0));
             aNewPolygon.setClosed(true);
 
-            mpItemSet->Put(XLineStartItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
-            mpItemSet->Put(XLineStartWidthItem(200));
-            mpItemSet->Put(XLineEndItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
-            mpItemSet->Put(XLineEndWidthItem(200));
-            mpItemSet->Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
+            mxItemSet->Put(XLineStartItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
+            mxItemSet->Put(XLineStartWidthItem(200));
+            mxItemSet->Put(XLineEndItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
+            mxItemSet->Put(XLineEndWidthItem(200));
+            mxItemSet->Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
         }
 } // end of namespace
 

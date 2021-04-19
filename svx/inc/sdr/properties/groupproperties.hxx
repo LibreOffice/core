@@ -28,7 +28,7 @@ namespace sdr::properties
         class GroupProperties final : public DefaultProperties
         {
             // create a new itemset
-            virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
+            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             // test changeability for a single item
             virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const override;

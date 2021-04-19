@@ -85,7 +85,7 @@ class TableProperties : public TextProperties
 {
 protected:
     // create a new itemset
-    std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
+    SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
 public:
     // basic constructor
@@ -126,9 +126,9 @@ void TableProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNe
 }
 
 // create a new itemset
-std::unique_ptr<SfxItemSet> TableProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+SfxItemSet TableProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
 {
-    return std::make_unique<SfxItemSet>(rPool,
+    return SfxItemSet(rPool,
 
         // range from SdrAttrObj
         svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,

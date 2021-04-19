@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <memory>
+#include <optional>
 
 #include <svx/sdr/properties/properties.hxx>
 #include <svl/itemset.hxx>
@@ -34,10 +34,10 @@ namespace sdr::properties
         {
         protected:
             // the to be used ItemSet
-            std::unique_ptr<SfxItemSet> mpEmptyItemSet;
+            mutable std::optional<SfxItemSet> mxEmptyItemSet;
 
             // create a new itemset
-            virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
+            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             // test changeability for a single item
             virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const override;
