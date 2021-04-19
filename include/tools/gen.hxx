@@ -568,8 +568,9 @@ constexpr inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _
                              tools::Long _nRight, tools::Long _nBottom )
     : nLeft( _nLeft )
     , nTop( _nTop )
-    , nRight( _nRight )
-    , nBottom( _nBottom )
+    // tdf#141761 do check for RECT_EMPTY in Width/Height
+    , nRight( _nRight == _nLeft ? RECT_EMPTY : _nRight )
+    , nBottom( _nBottom == _nTop ? RECT_EMPTY : _nBottom )
 {}
 
 constexpr inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop )

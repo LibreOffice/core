@@ -375,8 +375,17 @@ Size OutputDevice::ImplLogicToDevicePixel( const Size& rLogicSize ) const
 
 tools::Rectangle OutputDevice::ImplLogicToDevicePixel( const tools::Rectangle& rLogicRect ) const
 {
-    if ( rLogicRect.IsEmpty() )
-        return rLogicRect;
+    // tdf#141761 IsEmpty() removed
+    // Even if rLogicRect.IsEmpty(), transform of the Position contained
+    // in the Rectangle is necessary. Due to Rectangle::Right() returning
+    // Left() when IsEmpty(), the code *could* stay unchanged (same for Bottom),
+    // but:
+    // The Rectangle constructor used with the four tools::Long values does not
+    // check for IsEmpty(), so to keep that state correct there are two possibilities:
+    // (1) Add a test to the Rectangle constructor in question
+    // (2) Do it handish here
+    // I will try (1) first, being aware that this might be dangerous for other cases,
+    // so switching to (2) might be needed
 
     if ( !mbMap )
     {
@@ -476,8 +485,7 @@ LineInfo OutputDevice::ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const
 
 tools::Rectangle OutputDevice::ImplDevicePixelToLogic( const tools::Rectangle& rPixelRect ) const
 {
-    if ( rPixelRect.IsEmpty() )
-        return rPixelRect;
+    // tdf#141761 see comments above, IsEmpty() removed
 
     if ( !mbMap )
     {
@@ -823,8 +831,8 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize ) const
 
 tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect ) const
 {
-
-    if ( !mbMap || rLogicRect.IsEmpty() )
+    // tdf#141761 see comments above, IsEmpty() removed
+    if ( !mbMap )
         return rLogicRect;
 
     return tools::Rectangle( ImplLogicToPixel( rLogicRect.Left() + maMapRes.mnMapOfsX, mnDPIX,
@@ -959,8 +967,8 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize,
 tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect,
                                       const MapMode& rMapMode ) const
 {
-
-    if ( rMapMode.IsDefault() || rLogicRect.IsEmpty() )
+    // tdf#141761 see comments above, IsEmpty() removed
+    if ( rMapMode.IsDefault() )
         return rLogicRect;
 
     // convert MapMode resolution and convert
@@ -1044,8 +1052,8 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize ) const
 
 tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect ) const
 {
-
-    if ( !mbMap || rDeviceRect.IsEmpty() )
+    // tdf#141761 see comments above, IsEmpty() removed
+    if ( !mbMap )
         return rDeviceRect;
 
     return tools::Rectangle( ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
@@ -1182,9 +1190,9 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize,
 tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect,
                                       const MapMode& rMapMode ) const
 {
-
     // calculate nothing if default-MapMode
-    if ( rMapMode.IsDefault() || rDeviceRect.IsEmpty() )
+    // tdf#141761 see comments above, IsEmpty() removed
+    if ( rMapMode.IsDefault() )
         return rDeviceRect;
 
     // calculate MapMode-resolution and convert
@@ -1650,8 +1658,8 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
 
         auto left = fn3(rRectSource.Left(), eFrom, eTo);
         auto top = fn3(rRectSource.Top(), eFrom, eTo);
-        if (rRectSource.IsEmpty())
-            return tools::Rectangle( left, top );
+
+        // tdf#141761 see comments above, IsEmpty() removed
 
         auto right = fn3(rRectSource.Right(), eFrom, eTo);
         auto bottom = fn3(rRectSource.Bottom(), eFrom, eTo);
@@ -1669,8 +1677,8 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
                                aMapResSource.mnMapScNumY, aMapResDest.mnMapScDenomY,
                                aMapResSource.mnMapScDenomY, aMapResDest.mnMapScNumY ) -
                           aMapResDest.mnMapOfsY;
-        if (rRectSource.IsEmpty())
-            return tools::Rectangle(left, top);
+
+        // tdf#141761 see comments above, IsEmpty() removed
 
         auto right = fn5( rRectSource.Right() + aMapResSource.mnMapOfsX,
                                aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
