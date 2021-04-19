@@ -828,18 +828,6 @@ void SmEditWindow::InsertText(const OUString& rText)
     mxTextControl->InsertText(rText);
 }
 
-void SmEditWindow::HideScrollbars()
-{
-    mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
-    mxScrolledWindow->set_hpolicy(VclPolicyType::NEVER);
-}
-
-void SmEditWindow::ShowScrollbars()
-{
-    mxScrolledWindow->set_vpolicy(VclPolicyType::ALWAYS);
-    mxScrolledWindow->set_hpolicy(VclPolicyType::ALWAYS);
-}
-
 void SmEditTextWindow::InsertText(const OUString& rText)
 {
     EditView* pEditView = GetEditView();
@@ -871,15 +859,7 @@ void SmEditTextWindow::InsertText(const OUString& rText)
     if (aSelection.nStartPos > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
         string = " " + string;
 
-    /*
-      fdo#65588 -  Elements Dock: Scrollbar moves into input window
-      This change "solves" the visual problem. But I don't think so
-      this is the best solution.
-    */
-    mrEditWindow.HideScrollbars();
     pEditView->InsertText(string);
-    mrEditWindow.AdjustScrollBars();
-    mrEditWindow.ShowScrollbars();
 
     // Remember start of the selection and move the cursor there afterwards.
     aSelection.nEndPara = aSelection.nStartPara;
