@@ -3645,7 +3645,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             if (pContext && pContext->GetFootnote().is())
             {
                 pContext->GetFootnote()->setLabel( sText );
-                //otherwise ignore sText
+                // tdf#141548 don't lose footnote/endnote text of the run with uFtnEdnRef
+                // (i.e. when footnoteRef/endnoteRef is followed by some text in the same run)
+                m_pImpl->appendTextPortion( sText, pContext );
             }
             else if (m_pImpl->IsOpenFieldCommand() && !m_pImpl->IsForceGenericFields())
             {

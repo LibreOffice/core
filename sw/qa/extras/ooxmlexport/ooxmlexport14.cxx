@@ -1178,6 +1178,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf141172, "tdf141172.docx")
     assertXPath(pXml, "/w:endnotes/w:endnote/w:tbl", 2);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf141548, "tdf141548.docx")
+{
+    xmlDocUniquePtr pXml = parseExport("word/endnotes.xml");
+    CPPUNIT_ASSERT(pXml);
+    // This was 0 (lost text content of the run with endnoteRef)
+    assertXPath(pXml, "/w:endnotes/w:endnote[4]/w:p/w:r[2]/w:t", 2);
+    assertXPathContent(pXml, "/w:endnotes/w:endnote[4]/w:p/w:r[2]/w:t[1]", "another endnote");
+    assertXPathContent(pXml, "/w:endnotes/w:endnote[4]/w:p/w:r[2]/w:t[2]", "new line");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-footer.docx")
 {
     // Load a document with a continuous section break on page 2.
