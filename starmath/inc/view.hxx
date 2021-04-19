@@ -30,16 +30,57 @@
 #include <vcl/timer.hxx>
 #include "document.hxx"
 #include "edit.hxx"
-#include "scrwin.hxx"
 
 class SmViewShell;
 class SmPrintUIOptions;
 class SmGraphicAccessible;
+class SmGraphicWidget;
 class SmElementsDockingWindow;
 
 namespace svtools { class ColorConfig; }
 
-class SmGraphicWindow final : public ScrollableWindow
+class SmGraphicWindow final : public InterimItemWindow
+{
+private:
+    Point aPixOffset; // offset to virtual window (pixel)
+    Size aTotPixSz; // total size of virtual window (pixel)
+    tools::Long nLinePixH; // size of a line/column (pixel)
+    tools::Long nColumnPixW;
+
+    std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
+    std::unique_ptr<SmGraphicWidget> mxGraphic;
+    std::unique_ptr<weld::CustomWeld> mxGraphicWin;
+
+    SmViewShell* pViewShell;
+
+    DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
+
+    void SetGraphicMapMode(const MapMode& rNewMapMode);
+    MapMode GetGraphicMapMode() const;
+
+public:
+    explicit SmGraphicWindow(SmViewShell* pShell);
+    virtual void dispose() override;
+    virtual ~SmGraphicWindow() override;
+
+    void SetTotalSize(const Size& rNewSize);
+    Size GetTotalSize() const;
+
+    virtual void Resize() override;
+    virtual void Command(const CommandEvent& rCEvt) override;
+
+    SmGraphicWidget& GetGraphicWidget()
+    {
+        return *mxGraphic;
+    }
+
+    const SmGraphicWidget& GetGraphicWidget() const
+    {
+        return *mxGraphic;
+    }
+};
+
+class SmGraphicWidget final : public weld::CustomWidgetController
 {
 public:
     bool IsCursorVisible() const
@@ -54,14 +95,13 @@ public:
     void ShowLine(bool bShow);
     const SmNode * SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol);
 
-    explicit SmGraphicWindow(SmViewShell* pShell);
-    virtual ~SmGraphicWindow() override;
-    virtual void dispose() override;
+    explicit SmGraphicWidget(SmViewShell* pShell, SmGraphicWindow& rGraphicWindow);
+    virtual ~SmGraphicWidget() override;
 
-    // Window
-    virtual void ApplySettings(vcl::RenderContext&) override;
-    virtual void MouseButtonDown(const MouseEvent &rMEvt) override;
-    virtual void MouseMove(const MouseEvent &rMEvt) override;
+    // CustomWidgetController
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual bool MouseButtonDown(const MouseEvent &rMEvt) override;
+    virtual bool MouseMove(const MouseEvent &rMEvt) override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
 
@@ -70,9 +110,7 @@ public:
         return pViewShell;
     }
 
-    using Window::SetZoom;
     void SetZoom(sal_uInt16 Factor);
-    using Window::GetZoom;
     sal_uInt16 GetZoom() const
     {
         return nZoom;
@@ -84,13 +122,11 @@ public:
     }
 
     void ZoomToFitInWindow();
-    using ScrollableWindow::SetTotalSize;
     void SetTotalSize();
 
     // for Accessibility
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
-    using Window::GetAccessible;
     SmGraphicAccessible* GetAccessible_Impl()
     {
         return mxAccessible.get();
@@ -101,21 +137,21 @@ private:
     {
         bIsCursorVisible = bVis;
     }
-    using Window::SetCursor;
     void SetCursor(const SmNode *pNode);
     void SetCursor(const tools::Rectangle &rRect);
     static bool IsInlineEditEnabled();
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual void KeyInput(const KeyEvent& rKEvt) override;
-    virtual void Command(const CommandEvent& rCEvt) override;
-    virtual void StateChanged( StateChangedType eChanged ) override;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    virtual bool Command(const CommandEvent& rCEvt) override;
 
     void RepaintViewShellDoc();
     DECL_LINK(CaretBlinkTimerHdl, Timer *, void);
     void CaretBlinkInit();
     void CaretBlinkStart();
     void CaretBlinkStop();
+
+    SmGraphicWindow& mrGraphicWindow;
 
     Point aFormulaDrawPos;
     // old style editing pieces
@@ -130,9 +166,9 @@ private:
 
 class SmGraphicController final : public SfxControllerItem
 {
-    SmGraphicWindow &rGraphic;
+    SmGraphicWidget &rGraphic;
 public:
-    SmGraphicController(SmGraphicWindow &, sal_uInt16, SfxBindings & );
+    SmGraphicController(SmGraphicWidget &, sal_uInt16, SfxBindings & );
     virtual void StateChanged(sal_uInt16             nSID,
                               SfxItemState       eState,
                               const SfxPoolItem* pState) override;
@@ -209,7 +245,7 @@ class SmViewShell: public SfxViewShell
 {
     std::unique_ptr<sfx2::DocumentInserter> mpDocInserter;
     std::unique_ptr<SfxRequest> mpRequest;
-    VclPtr<SmGraphicWindow> mpGraphic;
+    VclPtr<SmGraphicWindow> mxGraphicWindow;
     SmGraphicController maGraphicController;
     OUString maStatusText;
     bool mbPasteState;
@@ -266,13 +302,13 @@ public:
 
     SmEditWindow * GetEditWindow();
 
-    SmGraphicWindow& GetGraphicWindow()
+    SmGraphicWidget& GetGraphicWidget()
     {
-        return *mpGraphic;
+        return mxGraphicWindow->GetGraphicWidget();
     }
-    const SmGraphicWindow& GetGraphicWindow() const
+    const SmGraphicWidget& GetGraphicWidget() const
     {
-        return *mpGraphic;
+        return mxGraphicWindow->GetGraphicWidget();
     }
 
     SmElementsDockingWindow* GetDockingWindow();
@@ -299,7 +335,7 @@ public:
 
     /** Set bInsertIntoEditWindow so we know where to insert
      *
-     * This method is called whenever SmGraphicWindow or SmEditWindow gets focus,
+     * This method is called whenever SmGraphicWidget or SmEditWindow gets focus,
      * so that when text is inserted from catalog or elsewhere we know whether to
      * insert for the visual editor, or the text editor.
      */
