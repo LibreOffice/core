@@ -467,6 +467,7 @@
                   <object class="GtkEntry" id="shortnamecontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -477,6 +478,7 @@
                 <child>
                   <object class="GtkEntry" id="titlecontrol">
                     <property name="visible">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="can-focus">True</property>
                   </object>
                   <packing>
@@ -489,6 +491,7 @@
                   <object class="GtkEntry" id="yearcontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -500,6 +503,7 @@
                   <object class="GtkEntry" id="authorscontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -511,6 +515,7 @@
                   <object class="GtkEntry" id="publishercontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -522,6 +527,7 @@
                   <object class="GtkEntry" id="addresscontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -533,6 +539,7 @@
                   <object class="GtkEntry" id="isbncontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -554,6 +561,7 @@
                   <object class="GtkEntry" id="chaptercontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -565,6 +573,7 @@
                   <object class="GtkEntry" id="pagescontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -576,6 +585,7 @@
                   <object class="GtkEntry" id="editorcontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -587,6 +597,7 @@
                   <object class="GtkEntry" id="editioncontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -598,6 +609,7 @@
                   <object class="GtkEntry" id="booktitlecontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -609,6 +621,7 @@
                   <object class="GtkEntry" id="volumecontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -620,6 +633,7 @@
                   <object class="GtkEntry" id="publicationtypecontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -631,6 +645,7 @@
                   <object class="GtkEntry" id="organizationcontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -642,6 +657,7 @@
                   <object class="GtkEntry" id="institutioncontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -653,6 +669,7 @@
                   <object class="GtkEntry" id="universitycontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -664,6 +681,7 @@
                   <object class="GtkEntry" id="reporttypecontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -675,6 +693,7 @@
                   <object class="GtkEntry" id="monthcontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -686,6 +705,7 @@
                   <object class="GtkEntry" id="journalcontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -697,6 +717,7 @@
                   <object class="GtkEntry" id="annotationcontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -708,6 +729,7 @@
                   <object class="GtkEntry" id="numbercontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -719,6 +741,7 @@
                   <object class="GtkEntry" id="notecontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -730,6 +753,7 @@
                   <object class="GtkEntry" id="seriescontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -741,6 +765,7 @@
                   <object class="GtkEntry" id="urlcontrol">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -752,6 +777,7 @@
                   <object class="GtkEntry" id="custom1control">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -763,6 +789,7 @@
                   <object class="GtkEntry" id="custom4control">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -774,6 +801,7 @@
                   <object class="GtkEntry" id="custom2control">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -785,6 +813,7 @@
                   <object class="GtkEntry" id="custom5control">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -796,6 +825,7 @@
                   <object class="GtkEntry" id="custom3control">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
