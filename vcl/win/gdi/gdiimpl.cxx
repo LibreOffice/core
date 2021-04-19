@@ -820,7 +820,7 @@ std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( tools::Long nX, tools:
     {
         pSalBitmap = std::make_shared<WinSalBitmap>();
 
-        if( !pSalBitmap->Create( hBmpBitmap, false, false ) )
+        if( !pSalBitmap->Create( hBmpBitmap ) )
         {
             pSalBitmap.reset();
         }
