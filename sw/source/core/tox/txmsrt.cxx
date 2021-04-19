@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <txtfld.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -878,6 +879,36 @@ void SwTOXAuthority::FillText(SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt1
     if (nAuthField == AUTH_FIELD_URL)
     {
         aText = GetSourceURL(aText);
+
+        // Convert URL to a relative one if requested.
+        SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(m_rField.GetField()->GetTyp())->GetDoc();
+        SwDocShell* pDocShell = pDoc->GetDocShell();
+        OUString aBaseURL = pDocShell->getDocumentBaseURL();
+        OUString aBaseURIScheme;
+        sal_Int32 nSep = aBaseURL.indexOf(':');
+        if (nSep != -1)
+        {
+            aBaseURIScheme = aBaseURL.copy(0, nSep);
+        }
+
+        uno::Reference<uri::XUriReferenceFactory> xUriReferenceFactory
+            = uri::UriReferenceFactory::create(comphelper::getProcessComponentContext());
+        uno::Reference<uri::XUriReference> xUriRef;
+        try
+        {
+            xUriRef = xUriReferenceFactory->parse(aText);
+        }
+        catch (const uno::Exception& rException)
+        {
+            SAL_WARN("sw.core",
+                     "SwTOXAuthority::FillText: failed to parse url: " << rException.Message);
+        }
+
+        bool bSaveRelFSys = officecfg::Office::Common::Save::URL::FileSystem::get();
+        if (xUriRef.is() && bSaveRelFSys && xUriRef->getScheme() == aBaseURIScheme)
+        {
+            aText = INetURLObject::GetRelURL(aBaseURL, aText);
+        }
     }
 
     rNd.InsertText(aText, rInsPos);
