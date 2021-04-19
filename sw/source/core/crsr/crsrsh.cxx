@@ -3344,6 +3344,46 @@ void SwCursorShell::SetReadOnlyAvailable( bool bFlag )
 
 bool SwCursorShell::HasReadonlySel() const
 {
+    if (GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        // treat folded outline nodes and the outline node following folded outline nodes as read only
+        SwWrtShell* pSh = GetDoc()->GetDocShell()->GetWrtShell();
+        if (pSh)
+        {
+            for(SwPaM& rPaM : GetCursor()->GetRingContainer())
+            {
+                rPaM.Normalize();
+                // previous outline node only needs to be checked once so do first node separate
+                SwNodeIndex aIdx(rPaM.GetNode());
+                if (aIdx.GetNode().IsTextNode())
+                {
+                    SwTextNode* pTextNd = aIdx.GetNode().GetTextNode();
+                    SwOutlineNodes::size_type nPos;
+                    if (GetDoc()->GetNodes().GetOutLineNds().Seek_Entry(pTextNd, &nPos) &&
+                            ((!pSh->IsOutlineContentVisible(nPos) ||
+                              (nPos - 1 != SwOutlineNodes::npos && !pSh->IsOutlineContentVisible(nPos - 1)))))
+                        // selection has folded outline node or previous outline node is folded
+                        // or is a child of a folded outline node
+                        return true;
+                }
+                aIdx++;
+                SwNodeIndex aIdxEnd(rPaM.GetNode(false), +1);
+                while (&aIdx.GetNode() != &aIdxEnd.GetNode())
+                {
+                    if (aIdx.GetNode().IsTextNode())
+                    {
+                        SwTextNode* pTextNd = aIdx.GetNode().GetTextNode();
+                        SwOutlineNodes::size_type nPos;
+                        if (GetDoc()->GetNodes().GetOutLineNds().Seek_Entry(pTextNd, &nPos) &&
+                                !pSh->IsOutlineContentVisible(nPos))
+                            // selection has folded outline node
+                            return true;
+                    }
+                    aIdx++;
+                }
+            }
+        }
+    }
     bool bRet = false;
     // If protected area is to be ignored, then selections are never read-only.
     if ((IsReadOnlyAvailable() || GetViewOptions()->IsFormView() ||
