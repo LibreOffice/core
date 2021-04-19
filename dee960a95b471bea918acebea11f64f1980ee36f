@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0567483_8a2d51e3",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-19T12:03:22Z",
+      "side": 1,
+      "message": "The active member of literal is more, not str, so a later dereference of \u0026literal.str (aka pData) will have UB, at least strictly speaking.\n\n(Computing \u0026literal.str itself, without dereferencing it, should not have UB, though, so it shouldn\u0027t cause this constexpr function invocation to not actually be consteval.)",
+      "revId": "dee960a95b471bea918acebea11f64f1980ee36f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
