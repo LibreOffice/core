@@ -86,7 +86,7 @@ namespace {
 sal_Unicode const LF = 0x000A;
 sal_Unicode const CR = 0x000D;
 
-#define IGNORED_UPDATES     OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates")
+constexpr OUStringLiteral IGNORED_UPDATES = u"/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates";
 #define PROPERTY_VERSION    "Version"
 
 enum Kind { ENABLED_UPDATE, DISABLED_UPDATE, SPECIFIC_ERROR };
@@ -766,7 +766,7 @@ void UpdateDialog::getIgnoredUpdates()
 {
     uno::Reference< lang::XMultiServiceFactory > xConfig(
         configuration::theDefaultProvider::get(m_context));
-    beans::NamedValue aValue( "nodepath", uno::Any( IGNORED_UPDATES ) );
+    beans::NamedValue aValue( "nodepath", uno::Any( OUString(IGNORED_UPDATES) ) );
     uno::Sequence< uno::Any > args(1);
     args[0] <<= aValue;
 

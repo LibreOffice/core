@@ -35,17 +35,17 @@ using namespace ::com::sun::star;
 
 #define ROOTNODE_SLIDESORTERBAR                "Office.Impress/MultiPaneGUI/SlideSorterBar/Visible"
 
-#define PROPERTYNAME_VISIBLE_IMPRESSVIEW       OUString("ImpressView")
+constexpr OUStringLiteral PROPERTYNAME_VISIBLE_IMPRESSVIEW = u"ImpressView";
 #define PROPERTYHANDLE_VISIBLE_IMPRESSVIEW     0
-#define PROPERTYNAME_VISIBLE_OUTLINEVIEW       OUString("OutlineView")
+constexpr OUStringLiteral PROPERTYNAME_VISIBLE_OUTLINEVIEW = u"OutlineView";
 #define PROPERTYHANDLE_VISIBLE_OUTLINEVIEW     1
-#define PROPERTYNAME_VISIBLE_NOTESVIEW         OUString("NotesView")
+constexpr OUStringLiteral PROPERTYNAME_VISIBLE_NOTESVIEW = u"NotesView";
 #define PROPERTYHANDLE_VISIBLE_NOTESVIEW       2
-#define PROPERTYNAME_VISIBLE_HANDOUTVIEW       OUString("HandoutView")
+constexpr OUStringLiteral PROPERTYNAME_VISIBLE_HANDOUTVIEW = u"HandoutView";
 #define PROPERTYHANDLE_VISIBLE_HANDOUTVIEW     3
-#define PROPERTYNAME_VISIBLE_SLIDESORTERVIEW   OUString("SlideSorterView")
+constexpr OUStringLiteral PROPERTYNAME_VISIBLE_SLIDESORTERVIEW = u"SlideSorterView";
 #define PROPERTYHANDLE_VISIBLE_SLIDESORTERVIEW 4
-#define PROPERTYNAME_VISIBLE_DRAWVIEW          OUString("DrawView")
+constexpr OUStringLiteral PROPERTYNAME_VISIBLE_DRAWVIEW = u"DrawView";
 #define PROPERTYHANDLE_VISIBLE_DRAWVIEW        5
 
 class SvtSlideSorterBarOptions_Impl : public ConfigItem

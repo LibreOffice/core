@@ -445,7 +445,7 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
 #define DEFAULT_STYLES_COUNT 16
 
 // Names of the storage streams
-#define sMainStream OUString("WordDocument")
+constexpr OUStringLiteral sMainStream  = u"WordDocument";
 #define sCompObj "\1CompObj"
 
 static void WriteDop( WW8Export& rWrt )
