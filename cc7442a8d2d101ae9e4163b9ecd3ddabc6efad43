@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "30c29d71_0feaed8f",
+        "filename": "include/rtl/ustring.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-19T10:58:36Z",
+      "side": 1,
+      "message": "But can\u0027t this break the ABI?",
+      "revId": "cc7442a8d2d101ae9e4163b9ecd3ddabc6efad43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "977c69e4_51dfe88b",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 4
@@ -13,6 +30,30 @@
       "writtenOn": "2021-04-19T10:54:57Z",
       "side": 1,
       "message": "I think these static_asserts are no longer interesting, and what would rather be interesting is that offsetof buffer \u003d\u003d offsetof data.buffer + 1",
+      "range": {
+        "startLine": 114,
+        "startChar": 8,
+        "endLine": 120,
+        "endChar": 70
+      },
+      "revId": "cc7442a8d2d101ae9e4163b9ecd3ddabc6efad43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7019f5cc_4219160d",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-19T10:58:36Z",
+      "side": 1,
+      "message": "\u003e offsetof buffer \u003d\u003d offsetof data.buffer + 1\n\nI suppose you mean \"+ sizeof(sal_Unicode)\"",
+      "parentUuid": "977c69e4_51dfe88b",
       "range": {
         "startLine": 114,
         "startChar": 8,
