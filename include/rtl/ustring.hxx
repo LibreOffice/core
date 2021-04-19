@@ -83,6 +83,7 @@ This class is not part of public API and is meant to be used only in LibreOffice
 template<std::size_t N> class SAL_WARN_UNUSED OUStringLiteral {
     static_assert(N != 0);
     static_assert(N - 1 <= std::numeric_limits<sal_Int32>::max(), "literal too long");
+    friend class OUString;
 
 public:
 #if HAVE_CPP_CONSTEVAL
@@ -95,35 +96,44 @@ public:
         assert(literal[N - 1] == '\0');
         //TODO: Use C++20 constexpr std::copy_n (P0202R3):
         for (std::size_t i = 0; i != N; ++i) {
-            buffer[i] = literal[i];
+            more.buffer[i] = literal[i];
         }
     }
 
-    constexpr sal_Int32 getLength() const { return length; }
+    constexpr sal_Int32 getLength() const { return more.length; }
 
-    constexpr sal_Unicode const * getStr() const SAL_RETURNS_NONNULL { return buffer; }
+    constexpr sal_Unicode const * getStr() const SAL_RETURNS_NONNULL { return more.buffer; }
 
-    constexpr operator std::u16string_view() const { return {buffer, sal_uInt32(length)}; }
+    constexpr operator std::u16string_view() const { return {more.buffer, sal_uInt32(more.length)}; }
 
 private:
     static constexpr void assertLayout() {
         // These static_asserts verifying the layout compatibility with rtl_uString cannot be class
         // member declarations, as offsetof requires a complete type, so defer them to here:
-        static_assert(offsetof(OUStringLiteral, refCount) == offsetof(rtl_uString, refCount));
-        static_assert(std::is_same_v<decltype(refCount), decltype(rtl_uString::refCount)>);
-        static_assert(offsetof(OUStringLiteral, length) == offsetof(rtl_uString, length));
-        static_assert(std::is_same_v<decltype(length), decltype(rtl_uString::length)>);
-        static_assert(offsetof(OUStringLiteral, buffer) == offsetof(rtl_uString, buffer));
-        static_assert(
-            std::is_same_v<
-                std::remove_extent_t<decltype(buffer)>,
-                std::remove_extent_t<decltype(rtl_uString::buffer)>>);
+        static_assert(offsetof(OUStringLiteral, str.refCount) == offsetof(OUStringLiteral, more.refCount));
+        static_assert(offsetof(OUStringLiteral, str.length) == offsetof(OUStringLiteral, more.length));
+        static_assert(offsetof(OUStringLiteral, str.buffer) == offsetof(OUStringLiteral, more.buffer));
     }
 
-    // Same layout as rtl_uString (include/rtl/ustring.h):
-    oslInterlockedCount refCount = 0x40000000; // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
-    sal_Int32 length = N - 1;
-    sal_Unicode buffer[N] = {}; //TODO: drop initialization for C++20 (P1331R2)
+#if defined(_WIN32)
+#pragma pack(push, 4)
+#endif
+    union {
+        rtl_uString str;
+        struct {
+            oslInterlockedCount refCount;
+            sal_Int32 length;
+            sal_Unicode buffer[N];
+        } more =
+            {
+                0x40000000, // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
+                N - 1,
+                {} //TODO: drop initialization for C++20 (P1331R2)
+            };
+    };
+#if defined(_WIN32)
+#pragma pack(pop)
+#endif
 };
 
 #if defined RTL_STRING_UNITTEST
@@ -385,8 +395,8 @@ public:
 
       @since LibreOffice 5.0
     */
-    template<std::size_t N> OUString(OUStringLiteral<N> const & literal):
-        pData(const_cast<rtl_uString *>(reinterpret_cast<rtl_uString const *>(&literal))) {}
+    template<std::size_t N> constexpr OUString(OUStringLiteral<N> const & literal):
+        pData(const_cast<rtl_uString *>(&literal.str)) {}
     template<std::size_t N> OUString(OUStringLiteral<N> &&) = delete;
     /// @endcond
 #endif
