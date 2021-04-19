@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8158ce3e_d12e6c1f",
+        "filename": "include/rtl/ustring.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-19T11:31:13Z",
+      "side": 1,
+      "message": "yes, as it changes rtl_uStrings alignment (see e.g., \u003chttps://devblogs.microsoft.com/oldnewthing/20200103-00/?p\u003d103290\u003e \"Anybody who writes #pragma pack(1) may as well just wear a sign on their forehead that says \u0027I hate RISC\u0027\")",
+      "parentUuid": "30c29d71_0feaed8f",
+      "revId": "cc7442a8d2d101ae9e4163b9ecd3ddabc6efad43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "977c69e4_51dfe88b",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 4
