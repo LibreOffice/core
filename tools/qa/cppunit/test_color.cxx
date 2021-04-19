@@ -25,6 +25,7 @@ public:
     void testGetColorError();
     void testInvert();
     void testBColor();
+    void testLuminance();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testVariables);
@@ -33,6 +34,7 @@ public:
     CPPUNIT_TEST(testGetColorError);
     CPPUNIT_TEST(testInvert);
     CPPUNIT_TEST(testBColor);
+    CPPUNIT_TEST(testLuminance);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -216,6 +218,18 @@ void Test::testBColor()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.250, aColor.getBColor().getGreen(), 1E-2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.125, aColor.getBColor().getBlue(), 1E-2);
 
+}
+
+void Test::testLuminance()
+{
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), COL_BLACK.GetLuminance());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), COL_WHITE.GetLuminance());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(128), Color(128, 128, 128).GetLuminance());
+    CPPUNIT_ASSERT(COL_WHITE.IsBright());
+    CPPUNIT_ASSERT(COL_BLACK.IsDark());
+    CPPUNIT_ASSERT(Color(249, 250, 251).IsBright());
+    CPPUNIT_ASSERT(Color(9, 10, 11).IsDark());
+    CPPUNIT_ASSERT(COL_WHITE.GetLuminance() > COL_BLACK.GetLuminance());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
