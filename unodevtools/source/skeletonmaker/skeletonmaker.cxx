@@ -236,7 +236,7 @@ SAL_IMPLEMENT_MAIN()
             const OString sPrt = sTmp.copy(0, nIndex);
             std::vector< OString > vCmds;
             while (nIndex>=0)
-                vCmds.push_back(sTmp.getToken( 0, ',', nIndex ));
+                vCmds.push_back(OString(sTmp.getToken( 0, ',', nIndex )));
             options.protocolCmdMap.emplace(sPrt, vCmds);
             continue;
         }

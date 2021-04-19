@@ -266,8 +266,7 @@ std::vector<OUString>
     sal_Int32 idx = 0;
     do
     {
-        OUString kw =
-            rStr.getToken(0, cSeparator, idx);
+        OUString kw( rStr.getToken(0, cSeparator, idx) );
         kw = kw.trim();
         if (!kw.isEmpty())
         {

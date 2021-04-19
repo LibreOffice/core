@@ -312,7 +312,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
 {
     INetContentType eTypeID = CONTENT_TYPE_UNKNOWN;
     sal_Int32 nIdx{ 0 };
-    OUString aToken = rURL.getToken(0, ':', nIdx);
+    OUString aToken( rURL.getToken(0, ':', nIdx) );
     if (!aToken.isEmpty())
     {
         if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_FILE))

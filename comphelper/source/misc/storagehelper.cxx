@@ -643,7 +643,7 @@ static void splitPath( std::vector<OUString> &rElems,
                        const OUString& rPath )
 {
     for (sal_Int32 i = 0; i >= 0;)
-        rElems.push_back( rPath.getToken( 0, '/', i ) );
+        rElems.push_back( OUString(rPath.getToken( 0, '/', i )) );
 }
 
 static uno::Reference< embed::XStorage > LookupStorageAtPath(

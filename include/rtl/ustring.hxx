@@ -2732,12 +2732,22 @@ public:
       @return   the token; if either token or index is negative, an empty token
                 is returned (and index is set to -1)
     */
+#if defined LIBO_INTERNAL_ONLY
+    std::u16string_view getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const
+    {
+        sal_Unicode const *pToken;
+        int nTokenLen;
+        index = rtl_uString_getToken2( &pToken, &nTokenLen, pData, token, cTok, index );
+        return std::u16string_view(pToken, nTokenLen);
+    }
+#else
     OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const
     {
         rtl_uString * pNew = NULL;
         index = rtl_uString_getToken( &pNew, pData, token, cTok, index );
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
+#endif
 
     /**
       Returns a token from the string.
@@ -2752,10 +2762,17 @@ public:
 
       @since LibreOffice 3.6
      */
+#if defined LIBO_INTERNAL_ONLY
+    std::u16string_view getToken(sal_Int32 count, sal_Unicode separator) const {
+        sal_Int32 n = 0;
+        return getToken(count, separator, n);
+    }
+#else
     OUString getToken(sal_Int32 count, sal_Unicode separator) const {
         sal_Int32 n = 0;
         return getToken(count, separator, n);
     }
+#endif
 
     /**
       Returns the Boolean value from this string.

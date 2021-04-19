@@ -489,15 +489,15 @@ bool decodeOutput(const OString& s, OUString* out)
     sal_Int32 nIndex = 0;
     do
     {
-        OString aToken = s.getToken( 0, ' ', nIndex );
-        if (!aToken.isEmpty())
+        std::string_view aToken = s.getToken( 0, ' ', nIndex );
+        if (!aToken.empty())
         {
-            for (sal_Int32 i = 0; i < aToken.getLength(); ++i)
+            for (sal_Int32 i = 0; i < static_cast<sal_Int32>(aToken.size()); ++i)
             {
                 if (aToken[i] < '0' || aToken[i] > '9')
                     return false;
             }
-            sal_Unicode value = static_cast<sal_Unicode>(aToken.toInt32());
+            sal_Unicode value = static_cast<sal_Unicode>(OString(aToken).toInt32());
             buff.append(value);
         }
     } while (nIndex >= 0);
@@ -1042,7 +1042,7 @@ void addJavaInfosFromPath(
     sal_Int32 nIndex = 0;
     do
     {
-        OUString usToken = usAllPath.getToken( 0, SAL_PATHSEPARATOR, nIndex );
+        OUString usToken( usAllPath.getToken( 0, SAL_PATHSEPARATOR, nIndex ) );
         OUString usTokenUrl;
         if(File::getFileURLFromSystemPath(usToken, usTokenUrl) == File::E_None)
         {

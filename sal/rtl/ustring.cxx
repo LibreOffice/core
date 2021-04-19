@@ -1888,4 +1888,10 @@ sal_Int32 SAL_CALL rtl_uString_getToken(rtl_uString** ppThis, rtl_uString* pStr,
     return rtl::str::getToken(ppThis, pStr, nToken, cTok, nIndex);
 }
 
+sal_Int32 SAL_CALL rtl_uString_getToken2(sal_Unicode const **ppToken, sal_Int32 * pTokenLen, rtl_uString* pStr, sal_Int32 nToken,
+                                        sal_Unicode cTok, sal_Int32 nIndex) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::getToken2(ppToken, pTokenLen, pStr, nToken, cTok, nIndex);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -50,7 +50,7 @@ OString scopedCppName(OString const & type, bool ns_alias)
     nPos = 0;
     do
     {
-        tmpBuf.append("::" + type.getToken(0, c, nPos));
+        tmpBuf.append(OString::Concat("::") + type.getToken(0, c, nPos));
     } while( nPos != -1 );
 
     OString s(tmpBuf.makeStringAndClear());

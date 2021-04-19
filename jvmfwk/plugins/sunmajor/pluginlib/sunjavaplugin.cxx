@@ -190,7 +190,7 @@ OUString getRuntimeLib(const rtl::ByteSequence & data)
     OUString sData(chars, len / 2);
     //the runtime lib is on the first line
     sal_Int32 index = 0;
-    OUString aToken = sData.getToken( 0, '\n', index);
+    OUString aToken(sData.getToken( 0, '\n', index));
 
     return aToken;
 }

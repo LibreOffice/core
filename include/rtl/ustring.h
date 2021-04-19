@@ -2154,6 +2154,10 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newTrim(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_uString_getToken(
         rtl_uString ** newStr , rtl_uString * str, sal_Int32 token, sal_Unicode cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
+#if defined LIBO_INTERNAL_ONLY
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_uString_getToken2(
+        sal_Unicode const **ppToken, sal_Int32 * pTokenLen, rtl_uString * str, sal_Int32 token, sal_Unicode cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
+#endif
 
 /* ======================================================================= */
 

@@ -350,13 +350,13 @@ bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
     sal_Int32 nDay     = 30;
 
     sal_Int32 nIdx {0};
-    if ( !convertNumber32( nYear, aDateStr.getToken( 0, '-', nIdx ), 0, 9999 ) )
+    if ( !convertNumber32( nYear, OUString(aDateStr.getToken( 0, '-', nIdx )), 0, 9999 ) )
         return false;
     if ( nDateTokens >= 2 )
-        if ( !convertNumber32( nMonth, aDateStr.getToken( 0, '-', nIdx ), 0, 12 ) )
+        if ( !convertNumber32( nMonth, OUString(aDateStr.getToken( 0, '-', nIdx )), 0, 12 ) )
             return false;
     if ( nDateTokens >= 3 )
-        if ( !convertNumber32( nDay, aDateStr.getToken( 0, '-', nIdx ), 0, 31 ) )
+        if ( !convertNumber32( nDay, OUString(aDateStr.getToken( 0, '-', nIdx )), 0, 31 ) )
             return false;
 
     rDate.Year = static_cast<sal_uInt16>(nYear);

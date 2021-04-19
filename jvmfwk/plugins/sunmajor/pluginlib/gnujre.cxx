@@ -144,7 +144,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         else if (!bJavaLibraryPath && sJavaLibraryPathProperty == prop.first)
         {
             sal_Int32 nIndex = 0;
-            osl_getFileURLFromSystemPath(prop.second.getToken(0, ':', nIndex).pData, &sJavaLibraryPath.pData);
+            osl_getFileURLFromSystemPath(OUString(prop.second.getToken(0, ':', nIndex)).pData, &sJavaLibraryPath.pData);
             bJavaLibraryPath = true;
         }
         if (bVendor && bVersion && bHome && bJavaHome && bJavaLibraryPath) {

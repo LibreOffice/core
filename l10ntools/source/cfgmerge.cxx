@@ -178,8 +178,8 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         case ANYTOKEN:
         case CFG_TEXT_START:
         {
-            sTokenName = sToken.getToken(1, '<').getToken(0, '>').
-                getToken(0, ' ');
+            sTokenName = OString(OString(OString(sToken.getToken(1, '<')).getToken(0, '>')).
+                getToken(0, ' '));
 
             if ( !IsTokenClosed( sToken )) {
                 OString sSearch;
@@ -210,7 +210,7 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                         sCurrentResTyp = sTokenName;
 
                         OString sTemp = sToken.copy( sToken.indexOf( "xml:lang=" ));
-                        sCurrentIsoLang = sTemp.getToken(1, '"');
+                        sCurrentIsoLang = OString(sTemp.getToken(1, '"'));
 
                         if ( sCurrentIsoLang == NO_TRANSLATE_ISO )
                             bLocalize = false;
@@ -225,7 +225,7 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 if ( !sSearch.isEmpty())
                 {
                     OString sTemp = sToken.copy( sToken.indexOf( sSearch ));
-                    sTokenId = sTemp.getToken(1, '"');
+                    sTokenId = OString(sTemp.getToken(1, '"'));
                 }
                 pStackData = aStack.Push( sTokenName, sTokenId );
 
@@ -245,8 +245,8 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         break;
         case CFG_CLOSETAG:
         {
-            sTokenName = sToken.getToken(1, '/').getToken(0, '>').
-                getToken(0, ' ');
+            sTokenName = OString(OString(OString(sToken.getToken(1, '/')).getToken(0, '>')).
+                getToken(0, ' '));
             if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName ))
             {
                 if (sCurrentText.isEmpty())

@@ -338,7 +338,7 @@ OString const & PoEntry::getSourceFile() const
 OString PoEntry::getGroupId() const
 {
     assert( m_bIsInitialized );
-    return m_pGenPo->getMsgCtxt().getToken(0,'\n');
+    return OString(m_pGenPo->getMsgCtxt().getToken(0,'\n'));
 }
 
 OString PoEntry::getLocalId() const
@@ -348,7 +348,7 @@ OString PoEntry::getLocalId() const
     if (sMsgCtxt.indexOf('\n')==sMsgCtxt.lastIndexOf('\n'))
         return OString();
     else
-        return sMsgCtxt.getToken(1,'\n');
+        return OString(sMsgCtxt.getToken(1,'\n'));
 }
 
 OString PoEntry::getResourceType() const
@@ -356,9 +356,9 @@ OString PoEntry::getResourceType() const
     assert( m_bIsInitialized );
     const OString sMsgCtxt = m_pGenPo->getMsgCtxt();
     if (sMsgCtxt.indexOf('\n')==sMsgCtxt.lastIndexOf('\n'))
-        return sMsgCtxt.getToken(1,'\n').getToken(0,'.');
+        return OString(OString(sMsgCtxt.getToken(1,'\n')).getToken(0,'.'));
     else
-        return sMsgCtxt.getToken(2,'\n').getToken(0,'.');
+        return OString(OString(sMsgCtxt.getToken(2,'\n')).getToken(0,'.'));
 }
 
 PoEntry::TYPE PoEntry::getType() const

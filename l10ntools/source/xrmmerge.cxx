@@ -267,7 +267,7 @@ OString XRMResParser::GetAttribute( const OString &rToken, std::string_view rAtt
     if ( nPos<0 )
         return OString();
 
-    return sTmp.getToken(1, '"', nPos);
+    return OString(sTmp.getToken(1, '"', nPos));
 }
 
 

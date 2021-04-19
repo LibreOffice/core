@@ -243,7 +243,7 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
             {
                 buf.append(
                     comphelper::getExpandedUri(
-                        ctx, aPathValue.getToken(0, ';', i)));
+                        ctx, OUString(aPathValue.getToken(0, ';', i))));
                 if (i == -1) {
                     break;
                 }
@@ -734,7 +734,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, SvtPathOptions::Paths ePath
             sal_Int32 nIniIndex = 0;
             do
             {
-                OUString aToken = aIniFile.getToken( 0, '/', nIniIndex );
+                OUString aToken( aIniFile.getToken( 0, '/', nIniIndex ) );
                 aObj.insertName(aToken);
             }
             while ( nIniIndex >= 0 );
@@ -793,7 +793,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, SvtPathOptions::Paths ePath
             do
             {
                 bool bIsURL = true;
-                OUString aPathToken = aPath.getToken( 0, SEARCHPATH_DELIMITER, nPathIndex );
+                OUString aPathToken( aPath.getToken( 0, SEARCHPATH_DELIMITER, nPathIndex ) );
                 INetURLObject aObj( aPathToken );
                 if ( aObj.HasError() )
                 {
@@ -813,7 +813,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, SvtPathOptions::Paths ePath
                 sal_Int32 nIniIndex = 0;
                 do
                 {
-                    OUString aToken = aIniFile.getToken( 0, '/', nIniIndex );
+                    OUString aToken( aIniFile.getToken( 0, '/', nIniIndex ) );
                     aObj.insertName(aToken);
                 }
                 while ( nIniIndex >= 0 );

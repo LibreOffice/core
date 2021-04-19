@@ -34,7 +34,7 @@ bool lcl_isNextGroup(OString &sGroup_out, const OString &sLineTrim)
 {
     if (sLineTrim.startsWith("[") && sLineTrim.endsWith("]"))
     {
-        sGroup_out = sLineTrim.getToken(1, '[').getToken(0, ']').trim();
+        sGroup_out = OString(OString(sLineTrim.getToken(1, '[')).getToken(0, ']')).trim();
         return true;
     }
     return false;
@@ -135,7 +135,7 @@ void LngParser::ReadLine(const OString &rLine_in,
 {
     if (!rLine_in.match(" *") && !rLine_in.match("/*"))
     {
-        OString sLang(rLine_in.getToken(0, '=').trim());
+        OString sLang = OString(rLine_in.getToken(0, '=')).trim();
         if (!sLang.isEmpty()) {
             OString sText(rLine_in.getToken(1, '"'));
             rText_inout[sLang] = sText;

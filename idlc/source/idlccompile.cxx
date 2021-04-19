@@ -259,24 +259,26 @@ sal_Int32 compileFile(const OString * pathname)
 
     if ( pOptions->isValid("-D") )
     {
-        OString token, dOpt = pOptions->getOption("-D");
+        std::string_view token;
+        OString dOpt = pOptions->getOption("-D");
         sal_Int32 nIndex = 0;
         do
         {
             token = dOpt.getToken( 0, ' ', nIndex );
-            if (token.getLength())
+            if (token.size())
                 lCppArgs.push_back("-D" + OStringToOUString(token, RTL_TEXTENCODING_UTF8));
         } while( nIndex != -1 );
     }
 
     if ( pOptions->isValid("-I") )
     {
-        OString token, incOpt = pOptions->getOption("-I");
+        std::string_view token;
+        OString incOpt = pOptions->getOption("-I");
         sal_Int32 nIndex = 0;
         do
         {
             token = incOpt.getToken( 0, ' ', nIndex );
-            if (token.getLength())
+            if (token.size())
                 lCppArgs.push_back("-I" + OStringToOUString(token, RTL_TEXTENCODING_UTF8));
         } while( nIndex != -1 );
     }

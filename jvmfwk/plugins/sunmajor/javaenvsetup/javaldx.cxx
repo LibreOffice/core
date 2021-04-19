@@ -118,7 +118,7 @@ OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData)
     OUString sData(chars, len / 2);
     //the runtime lib is on the first line
     sal_Int32 index = 0;
-    OUString aToken = sData.getToken( 1, '\n', index);
+    OUString aToken( sData.getToken( 1, '\n', index) );
 
     OString paths =
         OUStringToOString(aToken, osl_getThreadTextEncoding());

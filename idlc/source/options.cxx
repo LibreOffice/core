@@ -267,7 +267,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
 #ifdef _WIN32
             OString incpath = convertIncPathtoShortWindowsPath(param.getToken(0, ';', k));
 #else
-            OString incpath = param.getToken(0, ';', k);
+            OString incpath(param.getToken(0, ';', k));
 #endif
             buffer.append(incpath);
 //          buffer.append("\"");

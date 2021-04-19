@@ -1308,6 +1308,10 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newTrim(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getToken(
         rtl_String ** newStr , rtl_String * str, sal_Int32 token, char cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
+#if defined LIBO_INTERNAL_ONLY
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getToken2(
+        char const **ppToken, sal_Int32 * pTokenLen, rtl_String * str, sal_Int32 token, char cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
+#endif
 
 /* ======================================================================= */
 

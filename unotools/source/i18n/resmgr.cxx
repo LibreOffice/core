@@ -238,7 +238,7 @@ namespace Translate
         sal_Int32 nIndex = 0;
         do
         {
-            aContextIdId.push_back(sContextIdId.getToken(0, '\004', nIndex));
+            aContextIdId.push_back(OString(sContextIdId.getToken(0, '\004', nIndex)));
         }
         while (nIndex >= 0);
         assert(aContextIdId.size() == 3 && "should be using get, not nget");

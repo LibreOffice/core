@@ -1845,7 +1845,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         OUString aDisable(pDisable, strlen(pDisable), RTL_TEXTENCODING_UTF8);
         for (sal_Int32 i = 0; i >= 0; )
         {
-            OUString tok = aDisable.getToken(0, ' ', i);
+            OUString tok( aDisable.getToken(0, ' ', i) );
             tok = tok.trim();
             if (!tok.isEmpty())
                 aDisabled.push_back(tok);
