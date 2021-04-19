@@ -503,27 +503,56 @@ Size OutputDevice::ImplLogicToDevicePixel( const Size& rLogicSize ) const
 
 tools::Rectangle OutputDevice::ImplLogicToDevicePixel( const tools::Rectangle& rLogicRect ) const
 {
-    if ( rLogicRect.IsEmpty() )
-        return rLogicRect;
+    // tdf#141761 IsEmpty() removed
+    // Even if rLogicRect.IsEmpty(), transform of the Position contained
+    // in the Rectangle is necessary. Due to Rectangle::Right() returning
+    // Left() when IsEmpty(), the code *could* stay unchanged (same for Bottom),
+    // but:
+    // The Rectangle constructor used with the four tools::Long values does not
+    // check for IsEmpty(), so to keep that state correct there are two possibilities:
+    // (1) Add a test to the Rectangle constructor in question
+    // (2) Do it handish here
+    // I have tried (1) first, but test Test::test_rectangle() claims that for
+    //  tools::Rectangle aRect(1, 1, 1, 1);
+    //    tools::Long(1) == aRect.GetWidth()
+    //    tools::Long(0) == aRect.getWidth()
+    // (remember: this means Left == Right == 1 -> GetWidth => 1, getWidth == 0)
+    // so indeed tthe 1's have to go uncommened/unchecked into the data body
+    // of rectangle. Switching to (2) *is* needed, doing so
+    tools::Rectangle aRetval;
 
     if ( !mbMap )
     {
-        return tools::Rectangle( rLogicRect.Left()+mnOutOffX, rLogicRect.Top()+mnOutOffY,
-                          rLogicRect.Right()+mnOutOffX, rLogicRect.Bottom()+mnOutOffY );
+        aRetval = tools::Rectangle(
+            rLogicRect.Left()+mnOutOffX,
+            rLogicRect.Top()+mnOutOffY,
+            rLogicRect.IsWidthEmpty() ? 0 : rLogicRect.Right()+mnOutOffX,
+            rLogicRect.IsHeightEmpty() ? 0 : rLogicRect.Bottom()+mnOutOffY );
     }
-
-    return tools::Rectangle( ImplLogicToPixel( rLogicRect.Left()+maMapRes.mnMapOfsX, mnDPIX,
+    else
+    {
+        aRetval = tools::Rectangle(
+            ImplLogicToPixel( rLogicRect.Left()+maMapRes.mnMapOfsX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX,
-                      ImplLogicToPixel( rLogicRect.Top()+maMapRes.mnMapOfsY, mnDPIY,
+            ImplLogicToPixel( rLogicRect.Top()+maMapRes.mnMapOfsY, mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                         maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY,
-                      ImplLogicToPixel( rLogicRect.Right()+maMapRes.mnMapOfsX, mnDPIX,
+            rLogicRect.IsWidthEmpty() ? 0 : ImplLogicToPixel( rLogicRect.Right()+maMapRes.mnMapOfsX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX,
-                      ImplLogicToPixel( rLogicRect.Bottom()+maMapRes.mnMapOfsY, mnDPIY,
+            rLogicRect.IsHeightEmpty() ? 0 : ImplLogicToPixel( rLogicRect.Bottom()+maMapRes.mnMapOfsY, mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                         maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY );
+    }
+
+    if(rLogicRect.IsWidthEmpty())
+        aRetval.SetWidthEmpty();
+
+    if(rLogicRect.IsHeightEmpty())
+        aRetval.SetHeightEmpty();
+
+    return aRetval;
 }
 
 tools::Polygon OutputDevice::ImplLogicToDevicePixel( const tools::Polygon& rLogicPoly ) const
@@ -611,27 +640,41 @@ LineInfo OutputDevice::ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const
 
 tools::Rectangle OutputDevice::ImplDevicePixelToLogic( const tools::Rectangle& rPixelRect ) const
 {
-    if ( rPixelRect.IsEmpty() )
-        return rPixelRect;
+    // tdf#141761 see comments above, IsEmpty() removed
+    tools::Rectangle aRetval;
 
     if ( !mbMap )
     {
-        return tools::Rectangle( rPixelRect.Left()-mnOutOffX, rPixelRect.Top()-mnOutOffY,
-                          rPixelRect.Right()-mnOutOffX, rPixelRect.Bottom()-mnOutOffY );
+        aRetval = tools::Rectangle(
+            rPixelRect.Left()-mnOutOffX,
+            rPixelRect.Top()-mnOutOffY,
+            rPixelRect.IsWidthEmpty() ? 0 : rPixelRect.Right()-mnOutOffX,
+            rPixelRect.IsHeightEmpty() ? 0 : rPixelRect.Bottom()-mnOutOffY );
     }
-
-    return tools::Rectangle( ImplPixelToLogic( rPixelRect.Left()-mnOutOffX-mnOutOffOrigX, mnDPIX,
+    else
+    {
+        aRetval = tools::Rectangle(
+            ImplPixelToLogic( rPixelRect.Left()-mnOutOffX-mnOutOffOrigX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresPixToLogX )-maMapRes.mnMapOfsX,
-                      ImplPixelToLogic( rPixelRect.Top()-mnOutOffY-mnOutOffOrigY, mnDPIY,
+            ImplPixelToLogic( rPixelRect.Top()-mnOutOffY-mnOutOffOrigY, mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                         maThresRes.mnThresPixToLogY )-maMapRes.mnMapOfsY,
-                      ImplPixelToLogic( rPixelRect.Right()-mnOutOffX-mnOutOffOrigX, mnDPIX,
+            rPixelRect.IsWidthEmpty() ? 0 : ImplPixelToLogic( rPixelRect.Right()-mnOutOffX-mnOutOffOrigX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresPixToLogX )-maMapRes.mnMapOfsX,
-                      ImplPixelToLogic( rPixelRect.Bottom()-mnOutOffY-mnOutOffOrigY, mnDPIY,
+            rPixelRect.IsHeightEmpty() ? 0 : ImplPixelToLogic( rPixelRect.Bottom()-mnOutOffY-mnOutOffOrigY, mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                         maThresRes.mnThresPixToLogY )-maMapRes.mnMapOfsY );
+    }
+
+    if(rPixelRect.IsWidthEmpty())
+        aRetval.SetWidthEmpty();
+
+    if(rPixelRect.IsHeightEmpty())
+        aRetval.SetHeightEmpty();
+
+    return aRetval;
 }
 
 vcl::Region OutputDevice::ImplPixelToDevicePixel( const vcl::Region& rRegion ) const
@@ -967,22 +1010,31 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize ) const
 
 tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect ) const
 {
-
-    if ( !mbMap || rLogicRect.IsEmpty() )
+    // tdf#141761 see comments above, IsEmpty() removed
+    if ( !mbMap )
         return rLogicRect;
 
-    return tools::Rectangle( ImplLogicToPixel( rLogicRect.Left() + maMapRes.mnMapOfsX, mnDPIX,
+    tools::Rectangle aRetval(
+        ImplLogicToPixel( rLogicRect.Left() + maMapRes.mnMapOfsX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresLogToPixX )+mnOutOffOrigX,
-                      ImplLogicToPixel( rLogicRect.Top() + maMapRes.mnMapOfsY, mnDPIY,
+        ImplLogicToPixel( rLogicRect.Top() + maMapRes.mnMapOfsY, mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                         maThresRes.mnThresLogToPixY )+mnOutOffOrigY,
-                      ImplLogicToPixel( rLogicRect.Right() + maMapRes.mnMapOfsX, mnDPIX,
+        rLogicRect.IsWidthEmpty() ? 0 : ImplLogicToPixel( rLogicRect.Right() + maMapRes.mnMapOfsX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresLogToPixX )+mnOutOffOrigX,
-                      ImplLogicToPixel( rLogicRect.Bottom() + maMapRes.mnMapOfsY, mnDPIY,
+        rLogicRect.IsHeightEmpty() ? 0 : ImplLogicToPixel( rLogicRect.Bottom() + maMapRes.mnMapOfsY, mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                         maThresRes.mnThresLogToPixY )+mnOutOffOrigY );
+
+    if(rLogicRect.IsWidthEmpty())
+        aRetval.SetWidthEmpty();
+
+    if(rLogicRect.IsHeightEmpty())
+        aRetval.SetHeightEmpty();
+
+    return aRetval;
 }
 
 tools::Polygon OutputDevice::LogicToPixel( const tools::Polygon& rLogicPoly ) const
@@ -1115,8 +1167,8 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize,
 tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect,
                                       const MapMode& rMapMode ) const
 {
-
-    if ( rMapMode.IsDefault() || rLogicRect.IsEmpty() )
+    // tdf#141761 see comments above, IsEmpty() removed
+    if ( rMapMode.IsDefault() )
         return rLogicRect;
 
     // convert MapMode resolution and convert
@@ -1124,18 +1176,27 @@ tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect,
     ImplThresholdRes    aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
-    return tools::Rectangle( ImplLogicToPixel( rLogicRect.Left() + aMapRes.mnMapOfsX, mnDPIX,
+    tools::Rectangle aRetval(
+        ImplLogicToPixel( rLogicRect.Left() + aMapRes.mnMapOfsX, mnDPIX,
                                         aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
                                         aThresRes.mnThresLogToPixX )+mnOutOffOrigX,
-                      ImplLogicToPixel( rLogicRect.Top() + aMapRes.mnMapOfsY, mnDPIY,
+        ImplLogicToPixel( rLogicRect.Top() + aMapRes.mnMapOfsY, mnDPIY,
                                         aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
                                         aThresRes.mnThresLogToPixY )+mnOutOffOrigY,
-                      ImplLogicToPixel( rLogicRect.Right() + aMapRes.mnMapOfsX, mnDPIX,
+        rLogicRect.IsWidthEmpty() ? 0 : ImplLogicToPixel( rLogicRect.Right() + aMapRes.mnMapOfsX, mnDPIX,
                                         aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
                                         aThresRes.mnThresLogToPixX )+mnOutOffOrigX,
-                      ImplLogicToPixel( rLogicRect.Bottom() + aMapRes.mnMapOfsY, mnDPIY,
+        rLogicRect.IsHeightEmpty() ? 0 : ImplLogicToPixel( rLogicRect.Bottom() + aMapRes.mnMapOfsY, mnDPIY,
                                         aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
                                         aThresRes.mnThresLogToPixY )+mnOutOffOrigY );
+
+    if(rLogicRect.IsWidthEmpty())
+        aRetval.SetWidthEmpty();
+
+    if(rLogicRect.IsHeightEmpty())
+        aRetval.SetHeightEmpty();
+
+    return aRetval;
 }
 
 tools::Polygon OutputDevice::LogicToPixel( const tools::Polygon& rLogicPoly,
@@ -1212,22 +1273,31 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize ) const
 
 tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect ) const
 {
-
-    if ( !mbMap || rDeviceRect.IsEmpty() )
+    // tdf#141761 see comments above, IsEmpty() removed
+    if ( !mbMap )
         return rDeviceRect;
 
-    return tools::Rectangle( ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
+    tools::Rectangle aRetval(
+        ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX - mnOutOffLogicX,
-                      ImplPixelToLogic( rDeviceRect.Top(), mnDPIY,
+        ImplPixelToLogic( rDeviceRect.Top(), mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                         maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY - mnOutOffLogicY,
-                      ImplPixelToLogic( rDeviceRect.Right(), mnDPIX,
+        rDeviceRect.IsWidthEmpty() ? 0 : ImplPixelToLogic( rDeviceRect.Right(), mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX - mnOutOffLogicX,
-                      ImplPixelToLogic( rDeviceRect.Bottom(), mnDPIY,
+        rDeviceRect.IsHeightEmpty() ? 0 : ImplPixelToLogic( rDeviceRect.Bottom(), mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                         maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
+
+    if(rDeviceRect.IsWidthEmpty())
+        aRetval.SetWidthEmpty();
+
+    if(rDeviceRect.IsHeightEmpty())
+        aRetval.SetHeightEmpty();
+
+    return aRetval;
 }
 
 tools::Polygon OutputDevice::PixelToLogic( const tools::Polygon& rDevicePoly ) const
@@ -1362,9 +1432,9 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize,
 tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect,
                                       const MapMode& rMapMode ) const
 {
-
     // calculate nothing if default-MapMode
-    if ( rMapMode.IsDefault() || rDeviceRect.IsEmpty() )
+    // tdf#141761 see comments above, IsEmpty() removed
+    if ( rMapMode.IsDefault() )
         return rDeviceRect;
 
     // calculate MapMode-resolution and convert
@@ -1372,18 +1442,27 @@ tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect
     ImplThresholdRes    aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
-    return tools::Rectangle( ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
+    tools::Rectangle aRetval(
+        ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
                                         aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
                                         aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX - mnOutOffLogicX,
-                      ImplPixelToLogic( rDeviceRect.Top(), mnDPIY,
+        ImplPixelToLogic( rDeviceRect.Top(), mnDPIY,
                                         aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
                                         aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY - mnOutOffLogicY,
-                      ImplPixelToLogic( rDeviceRect.Right(), mnDPIX,
+        rDeviceRect.IsWidthEmpty() ? 0 : ImplPixelToLogic( rDeviceRect.Right(), mnDPIX,
                                         aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
                                         aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX - mnOutOffLogicX,
-                      ImplPixelToLogic( rDeviceRect.Bottom(), mnDPIY,
+        rDeviceRect.IsHeightEmpty() ? 0 : ImplPixelToLogic( rDeviceRect.Bottom(), mnDPIY,
                                         aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
                                         aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY - mnOutOffLogicY );
+
+    if(rDeviceRect.IsWidthEmpty())
+        aRetval.SetWidthEmpty();
+
+    if(rDeviceRect.IsHeightEmpty())
+        aRetval.SetHeightEmpty();
+
+    return aRetval;
 }
 
 tools::Polygon OutputDevice::PixelToLogic( const tools::Polygon& rDevicePoly,
@@ -1859,40 +1938,55 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
     MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
     verifyUnitSourceDest( eUnitSource, eUnitDest );
 
+    tools::Rectangle aRetval;
+
     if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
         ENTER3( eUnitSource, eUnitDest );
 
         auto left = fn3( rRectSource.Left(), nNumerator, nDenominator );
         auto top = fn3( rRectSource.Top(), nNumerator, nDenominator );
-        if (rRectSource.IsEmpty())
-            return tools::Rectangle( left, top );
 
-        auto right = fn3( rRectSource.Right(), nNumerator, nDenominator );
-        auto bottom = fn3( rRectSource.Bottom(), nNumerator, nDenominator );
+        // tdf#141761 see comments above, IsEmpty() removed
+        auto right = rRectSource.IsWidthEmpty() ? 0 : fn3( rRectSource.Right(), nNumerator, nDenominator );
+        auto bottom = rRectSource.IsHeightEmpty() ? 0 : fn3( rRectSource.Bottom(), nNumerator, nDenominator );
+
+        aRetval = tools::Rectangle(left, top, right, bottom);
         return tools::Rectangle(left, top, right, bottom);
     }
     else
     {
         ENTER4( rMapModeSource, rMapModeDest );
 
-        return tools::Rectangle( fn5( rRectSource.Left() + aMapResSource.mnMapOfsX,
+        auto left = fn5( rRectSource.Left() + aMapResSource.mnMapOfsX,
                                aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
                                aMapResSource.mnMapScDenomX, aMapResDest.mnMapScNumX ) -
-                          aMapResDest.mnMapOfsX,
-                          fn5( rRectSource.Top() + aMapResSource.mnMapOfsY,
+                          aMapResDest.mnMapOfsX;
+        auto top = fn5( rRectSource.Top() + aMapResSource.mnMapOfsY,
                                aMapResSource.mnMapScNumY, aMapResDest.mnMapScDenomY,
                                aMapResSource.mnMapScDenomY, aMapResDest.mnMapScNumY ) -
-                          aMapResDest.mnMapOfsY,
-                          fn5( rRectSource.Right() + aMapResSource.mnMapOfsX,
+                          aMapResDest.mnMapOfsY;
+
+        // tdf#141761 see comments above, IsEmpty() removed
+        auto right = rRectSource.IsWidthEmpty() ? 0 : fn5( rRectSource.Right() + aMapResSource.mnMapOfsX,
                                aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
                                aMapResSource.mnMapScDenomX, aMapResDest.mnMapScNumX ) -
-                          aMapResDest.mnMapOfsX,
-                          fn5( rRectSource.Bottom() + aMapResSource.mnMapOfsY,
+                          aMapResDest.mnMapOfsX;
+        auto bottom = rRectSource.IsHeightEmpty() ? 0 : fn5( rRectSource.Bottom() + aMapResSource.mnMapOfsY,
                                aMapResSource.mnMapScNumY, aMapResDest.mnMapScDenomY,
                                aMapResSource.mnMapScDenomY, aMapResDest.mnMapScNumY ) -
-                          aMapResDest.mnMapOfsY );
+                          aMapResDest.mnMapOfsY;
+
+        aRetval = tools::Rectangle(left, top, right, bottom);
     }
+
+    if(rRectSource.IsWidthEmpty())
+        aRetval.SetWidthEmpty();
+
+    if(rRectSource.IsHeightEmpty())
+        aRetval.SetHeightEmpty();
+
+    return aRetval;
 }
 
 long OutputDevice::LogicToLogic( long nLongSource,
