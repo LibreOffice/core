@@ -857,7 +857,11 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFl
             nSymbolSize = aSize.Width() / 2;
 
         nSeparatorX = aInRect.Right() - 2*nSymbolSize;
-        aSize.AdjustWidth( -(2*nSymbolSize) );
+
+        // tdf#141761 Minimum width should be (1) Pixel, see comment
+        // with same task number above for more info
+        const tools::Long nWidthAdjust(2*nSymbolSize);
+        aSize.setWidth(std::max(static_cast<tools::Long>(1), aSize.getWidth() - nWidthAdjust));
 
         // center symbol rectangle in the separated area
         aSymbolRect.AdjustRight( -(nSymbolSize/2) );
@@ -2010,7 +2014,16 @@ void Button::ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, DrawFlags
     Size aSize( rSize );
     Point aPos( rPos );
     aPos.AdjustX(rImageSize.Width() + nImageSep );
-    aSize.AdjustWidth( -(rImageSize.Width() + nImageSep) );
+
+    // tdf#141761 Old (convenience?) adjustment of width may lead to empty
+    // or negative(!) Size, that needs to be avoided. The coordinate context
+    // is pixel-oriented (all Paints of Controls are, historically), so
+    // the minimum width should be '1' Pixel.
+    // Hint: nImageSep is based on Zoom (using Window::CalcZoom) and
+    // MapModes (using Window::GetDrawPixel) - so potenially a wide range
+    // of unpredictable values is possible
+    const tools::Long nWidthAdjust(rImageSize.Width() + nImageSep);
+    aSize.setWidth(std::max(static_cast<tools::Long>(1), aSize.getWidth() - nWidthAdjust));
 
     // if the text rect height is smaller than the height of the image
     // then for single lines the default should be centered text
