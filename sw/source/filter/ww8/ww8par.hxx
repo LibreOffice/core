@@ -1306,6 +1306,7 @@ private:
 
     sal_uInt8 m_nSwNumLevel;           // level number for outline / enumeration
     sal_uInt8 m_nWwNumType;            // outline / number / enumeration
+    const SwNumRule* m_pChosenWW8OutlineStyle; // copied to the "Outline" Chapter Numbering style
     sal_uInt8 m_nListLevel;
 
     bool m_bNewDoc;          // new document?

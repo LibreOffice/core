@@ -4313,6 +4313,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_nWantedVersion(nVersionPara)
     , m_nSwNumLevel(0xff)
     , m_nWwNumType(0xff)
+    , m_pChosenWW8OutlineStyle(nullptr)
     , m_nListLevel(WW8ListManager::nMaxLevel)
     , m_bNewDoc(bNewDoc)
     , m_bSkipImages(bSkipImages)
@@ -5973,7 +5974,6 @@ void SwWW8ImplReader::SetOutlineStyles()
     // - Populate temporary list of WW8 Built-In Heading Styles for further
     // iteration
     std::vector<SwWW8StyInf*> aWW8BuiltInHeadingStyles;
-    const SwNumRule* pChosenWW8ListStyle = nullptr;
     {
         std::map<const SwNumRule*, int> aWW8ListStyleCounts;
         for (SwWW8StyInf & rSI : m_vColl)
@@ -6007,7 +6007,7 @@ void SwWW8ImplReader::SetOutlineStyles()
             if (rEntry.second > nCurrentMaxCount)
             {
                 nCurrentMaxCount = rEntry.second;
-                pChosenWW8ListStyle = rEntry.first;
+                m_pChosenWW8OutlineStyle = rEntry.first;
             }
         }
     }
@@ -6037,11 +6037,11 @@ void SwWW8ImplReader::SetOutlineStyles()
             continue;
         }
 
-        if (pChosenWW8ListStyle != nullptr && pStyleInf->mnWW8OutlineLevel
-                                           == pStyleInf->m_nListLevel)
+        if (m_pChosenWW8OutlineStyle != nullptr
+            && pStyleInf->mnWW8OutlineLevel == pStyleInf->m_nListLevel)
         {
             const SwNumFormat& rRule
-                = pChosenWW8ListStyle->Get(pStyleInf->mnWW8OutlineLevel);
+                = m_pChosenWW8OutlineStyle->Get(pStyleInf->mnWW8OutlineLevel);
             aOutlineRule.Set(pStyleInf->mnWW8OutlineLevel, rRule);
             bAppliedChangedOutlineStyle = true;
         }
@@ -6051,7 +6051,7 @@ void SwWW8ImplReader::SetOutlineStyles()
             |= nOutlineStyleListLevelOfWW8BuiltInHeadingStyle;
 
         SwTextFormatColl* pTextFormatColl = static_cast<SwTextFormatColl*>(pStyleInf->m_pFormat);
-        if (pStyleInf->GetOutlineNumrule() != pChosenWW8ListStyle
+        if (pStyleInf->GetOutlineNumrule() != m_pChosenWW8OutlineStyle
             || (pStyleInf->m_nListLevel < WW8ListManager::nMaxLevel
                 && pStyleInf->mnWW8OutlineLevel != pStyleInf->m_nListLevel))
         {
