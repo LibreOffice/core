@@ -801,32 +801,6 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
         PBITMAPINFO         pBI = static_cast<PBITMAPINFO>(GlobalLock( mhDIB ));
         PBITMAPINFOHEADER   pBIH = &pBI->bmiHeader;
 
-        if( ( pBIH->biCompression == BI_RLE4 ) || ( pBIH->biCompression == BI_RLE8 ) )
-        {
-            Size    aSizePix( pBIH->biWidth, pBIH->biHeight );
-            HGLOBAL hNewDIB = ImplCreateDIB(aSizePix, vcl::bitDepthToPixelFormat(pBIH->biBitCount), BitmapPalette());
-
-            if( hNewDIB )
-            {
-                PBITMAPINFO         pNewBI = static_cast<PBITMAPINFO>(GlobalLock( hNewDIB ));
-                PBITMAPINFOHEADER   pNewBIH = &pNewBI->bmiHeader;
-                const sal_uInt16        nColorCount = ImplGetDIBColorCount( hNewDIB );
-                const sal_uLong         nOffset = pBI->bmiHeader.biSize + nColorCount * sizeof( RGBQUAD );
-                BYTE*               pOldBits = reinterpret_cast<PBYTE>(pBI) + nOffset;
-                BYTE*               pNewBits = reinterpret_cast<PBYTE>(pNewBI) + nOffset;
-
-                memcpy( pNewBI, pBI, nOffset );
-                pNewBIH->biCompression = 0;
-                ImplDecodeRLEBuffer( pOldBits, pNewBits, aSizePix, pBIH->biCompression == BI_RLE4 );
-
-                GlobalUnlock( mhDIB );
-                GlobalFree( mhDIB );
-                mhDIB = hNewDIB;
-                pBI = pNewBI;
-                pBIH = pNewBIH;
-            }
-        }
-
         if( pBIH->biPlanes == 1 )
         {
             pBuffer.reset(new BitmapBuffer);
@@ -928,99 +902,6 @@ void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode 
     }
     if( nMode == BitmapAccessMode::Write )
         InvalidateChecksum();
-}
-
-void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
-                                     const Size& rSizePixel, bool bRLE4 )
-{
-    sal_uInt8 const * pRLE = pSrcBuf;
-    sal_uInt8*      pDIB = pDstBuf;
-    sal_uInt8*      pRow = pDstBuf;
-    sal_uLong       nWidthAl = AlignedWidth4Bytes( rSizePixel.Width() * ( bRLE4 ? 4UL : 8UL ) );
-    sal_uInt8*      pLast = pDIB + rSizePixel.Height() * nWidthAl - 1;
-    sal_uLong       nCountByte;
-    sal_uLong       nRunByte;
-    sal_uLong       i;
-    BYTE            cTmp;
-    bool            bEndDecoding = false;
-
-    if( pRLE && pDIB )
-    {
-        sal_uLong nX = 0;
-        do
-        {
-            if( ( nCountByte = *pRLE++ ) == 0 )
-            {
-                nRunByte = *pRLE++;
-
-                if( nRunByte > 2 )
-                {
-                    if( bRLE4 )
-                    {
-                        nCountByte = nRunByte >> 1;
-
-                        for( i = 0; i < nCountByte; i++ )
-                        {
-                            cTmp = *pRLE++;
-                            ImplSetPixel4( pDIB, nX++, cTmp >> 4 );
-                            ImplSetPixel4( pDIB, nX++, cTmp & 0x0f );
-                        }
-
-                        if( nRunByte & 1 )
-                            ImplSetPixel4( pDIB, nX++, *pRLE++ >> 4 );
-
-                        if( ( ( nRunByte + 1 ) >> 1 ) & 1 )
-                            pRLE++;
-                    }
-                    else
-                    {
-                        memcpy( &pDIB[ nX ], pRLE, nRunByte );
-                        pRLE += nRunByte;
-                        nX += nRunByte;
-
-                        if( nRunByte & 1 )
-                            pRLE++;
-                    }
-                }
-                else if( !nRunByte )
-                {
-                    pDIB = ( pRow += nWidthAl );
-                    nX = 0;
-                }
-                else if( nRunByte == 1 )
-                    bEndDecoding = true;
-                else
-                {
-                    nX += *pRLE++;
-                    pDIB = ( pRow += ( *pRLE++ ) * nWidthAl );
-                }
-            }
-            else
-            {
-                cTmp = *pRLE++;
-
-                if( bRLE4 )
-                {
-                    nRunByte = nCountByte >> 1;
-
-                    for( i = 0; i < nRunByte; i++ )
-                    {
-                        ImplSetPixel4( pDIB, nX++, cTmp >> 4 );
-                        ImplSetPixel4( pDIB, nX++, cTmp & 0x0f );
-                    }
-
-                    if( nCountByte & 1 )
-                        ImplSetPixel4( pDIB, nX++, cTmp >> 4 );
-                }
-                else
-                {
-                    for( i = 0; i < nCountByte; i++ )
-                        pDIB[ nX++ ] = cTmp;
-                }
-            }
-        }
-        while( !bEndDecoding && ( pDIB <= pLast ) );
-    }
 }
 
 bool WinSalBitmap::GetSystemData( BitmapSystemData& rData )
