@@ -12,7 +12,7 @@ on IRC (jopsen) or e-mail me at jopsen@gmail.com.
 
 Easy
 ----
-1. SmGraphicWindow::KeyInput relies on comparison of char, a better way must be available for CTRL+c
+1. SmGraphicWidget::KeyInput relies on comparison of char, a better way must be available for CTRL+c
 2. Code style (missing spaces, linebreaks and a few renames)
 3. More documentation
 4. Extend NodeToTextVisitor to update token offsets so SmNode::GetRow and SmNode::GetColumn will work.
