@@ -1239,12 +1239,21 @@ void GraphicTest::testAvailableThreaded()
     Graphic pngGraphic1 = importUnloadedGraphic(u"TypeDetectionExample.png");
     Graphic pngGraphic2 = importUnloadedGraphic(u"testBasicMorphology.png");
     std::vector<Graphic*> graphics = { &jpgGraphic1, &jpgGraphic2, &pngGraphic1, &pngGraphic2 };
+    std::vector<Size> sizes;
     for (auto& graphic : graphics)
+    {
         CPPUNIT_ASSERT(!graphic->isAvailable());
+        sizes.push_back(graphic->GetSizePixel());
+    }
     GraphicFilter& graphicFilter = GraphicFilter::GetGraphicFilter();
     graphicFilter.MakeGraphicsAvailableThreaded(graphics);
+    int i = 0;
     for (auto& graphic : graphics)
+    {
         CPPUNIT_ASSERT(graphic->isAvailable());
+        CPPUNIT_ASSERT_EQUAL(sizes[i], graphic->GetSizePixel());
+        ++i;
+    }
 }
 
 } // namespace

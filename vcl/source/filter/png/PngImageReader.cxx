@@ -477,7 +477,8 @@ bool ImportPNG(SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFla
     BitmapEx bitmap;
     if (reader(rInputStream, bitmap, nImportFlags, pAccess, pAlphaAccess))
     {
-        rGraphic = bitmap;
+        if (!(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap))
+            rGraphic = bitmap;
         return true;
     }
     return false;
