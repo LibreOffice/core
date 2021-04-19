@@ -40,7 +40,6 @@ SwFrameControlsManager::~SwFrameControlsManager()
 void SwFrameControlsManager::dispose()
 {
     m_aControls.clear();
-    m_aTextNodeContentFrameMap.clear();
 }
 
 SwFrameControlPtr SwFrameControlsManager::GetControl( FrameControlType eType, const SwFrame* pFrame )
@@ -188,64 +187,8 @@ SwFrameMenuButtonBase::SwFrameMenuButtonBase(SwEditWin* pEditWin, const SwFrame*
 {
 }
 
-void SwFrameControlsManager::SetOutlineContentVisibilityButtons()
+void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwContentFrame* pContentFrame)
 {
-    // remove entries with outline node keys that are not in the outline nodes list
-    IDocumentOutlineNodes::tSortedOutlineNodeList aOutlineNodes;
-    m_pEditWin->GetView().GetWrtShell().getIDocumentOutlineNodesAccess()->getOutlineNodes(aOutlineNodes);
-    std::map<const SwTextNode*, const SwContentFrame*>::iterator it = m_aTextNodeContentFrameMap.begin();
-    while(it != m_aTextNodeContentFrameMap.end())
-    {
-        const SwNode* pNd = it->first;
-        IDocumentOutlineNodes::tSortedOutlineNodeList::iterator i = std::find(aOutlineNodes.begin(), aOutlineNodes.end(), pNd);
-        if (i == aOutlineNodes.end())
-        {
-            RemoveControlsByType(FrameControlType::Outline, it->second);
-            it = m_aTextNodeContentFrameMap.erase(it);
-        }
-        else
-            ++it;
-    }
-    for (SwNode* pNd : m_pEditWin->GetView().GetWrtShell().GetNodes().GetOutLineNds())
-    {
-        bool bOutlineContentVisibleAttr = true;
-        pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-        if (!bOutlineContentVisibleAttr)
-            SetOutlineContentVisibilityButton(pNd->GetTextNode());
-    }
-}
-
-void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwTextNode* pTextNd)
-{
-    const SwContentFrame* pContentFrame = pTextNd->getLayoutFrame(nullptr);
-
-    // has node frame changed or been deleted?
-    std::map<const SwTextNode*, const SwContentFrame*>::iterator iter = m_aTextNodeContentFrameMap.find(pTextNd);
-    if (iter != m_aTextNodeContentFrameMap.end())
-    {
-        const SwContentFrame* pFrameWas = iter->second;
-        if (pContentFrame != pFrameWas)
-        {
-            // frame does not match frame in map for node
-            RemoveControlsByType(FrameControlType::Outline, pFrameWas);
-            m_aTextNodeContentFrameMap.erase(iter);
-        }
-    }
-    if (pContentFrame && !pContentFrame->IsInDtor())
-    {
-        // frame is not being destroyed and isn't in map
-        m_aTextNodeContentFrameMap.insert(make_pair(pTextNd, pContentFrame));
-    }
-    else
-    {
-        if (pContentFrame)
-        {
-            // frame is being destroyed
-            RemoveControlsByType(FrameControlType::Outline, pContentFrame);
-        }
-        return;
-    }
-
     // Check if we already have the control
     SwFrameControlPtr pControl;
 
@@ -266,48 +209,10 @@ void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwTextNode*
     }
 
     SwOutlineContentVisibilityWin* pWin = dynamic_cast<SwOutlineContentVisibilityWin *>(pControl->GetWindow());
-    assert(pWin != nullptr) ;
     pWin->Set();
 
     if (pWin->GetSymbol() == ButtonSymbol::SHOW)
-    {
-        // show expand button immediately
-        pWin->Show();
-        /*
-           The outline content might be visible here. This happens on document load,
-           undo outline moves, and show of outline content that itself has outline nodes
-           having outline content visibility attribute false, for example tables and text
-           frames containing outline nodes.
-        */
-        SwOutlineNodes::size_type nPos;
-        SwOutlineNodes rOutlineNds = m_pEditWin->GetView().GetWrtShell().GetNodes().GetOutLineNds();
-        if (rOutlineNds.Seek_Entry(const_cast<SwTextNode*>(pTextNd), &nPos))
-        {
-            SwNodeIndex aIdx(*pTextNd, +1);
-            // there shouldn't be a layout frame
-            // if there is then force visibility false
-            if (!m_pEditWin->GetView().GetWrtShell().GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
-            {
-                if (!(aIdx.GetNode().IsEndNode() ||
-                      (nPos + 1 < rOutlineNds.size() && &aIdx.GetNode() == rOutlineNds[nPos +1]))
-                        && aIdx.GetNode().IsContentNode()
-                        // this determines if the content is really visible
-                        && aIdx.GetNode().GetContentNode()->getLayoutFrame(nullptr))
-                {
-                    // force outline content visibility false
-                    m_pEditWin->GetView().GetWrtShell().ToggleOutlineContentVisibility(nPos, true);
-                }
-            }
-            else if (!aIdx.GetNode().IsEndNode()
-                     && aIdx.GetNode().IsContentNode()
-                     // this determines if the content is really visible
-                     && aIdx.GetNode().GetContentNode()->getLayoutFrame(nullptr))
-            {
-                // force outline content visibility false
-                m_pEditWin->GetView().GetWrtShell().ToggleOutlineContentVisibility(nPos, true);
-            }
-        }
-    }
+        pWin->Show(); // show the SHOW button immediately
     else if (!pWin->IsVisible() && pWin->GetSymbol() == ButtonSymbol::HIDE)
         pWin->ShowAll(true);
 }
