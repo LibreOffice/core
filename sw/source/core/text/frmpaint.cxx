@@ -305,6 +305,8 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     if( getFrameArea().Top() > rRect.Bottom() || getFrameArea().Bottom() < rRect.Top() )
         return;
 
+    PaintOutlineContentVisibilityButton();
+
     SwDoc const& rDoc(GetDoc());
     const IDocumentRedlineAccess& rIDRA = rDoc.getIDocumentRedlineAccess();
     const SwLineNumberInfo &rLineInf = rDoc.GetLineNumberInfo();
@@ -768,6 +770,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
     OSL_ENSURE( ! IsSwapped(), "A frame is swapped after Paint" );
 
+    PaintOutlineContentVisibilityButton();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
