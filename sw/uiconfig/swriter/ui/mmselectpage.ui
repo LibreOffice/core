@@ -23,7 +23,6 @@
             <property name="row_spacing">6</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
-
             <child>
               <object class="GtkRadioButton" id="currentdoc">
                 <property name="label" translatable="yes" context="mmselectpage|currentdoc">Use the current _document</property>

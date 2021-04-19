@@ -584,9 +584,9 @@
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
                     <child internal-child="accessible">
-                     <object class="AtkObject" id="add-atkobject">
-                       <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|add">Adds the unknown word to a user-defined dictionary.</property>
-                     </object>
+                      <object class="AtkObject" id="add-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|add">Adds the unknown word to a user-defined dictionary.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
