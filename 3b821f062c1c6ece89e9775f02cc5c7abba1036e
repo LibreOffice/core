@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ce6488a_ed011391",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-19T06:34:40Z",
+      "side": 1,
+      "message": "this doesn\u0027t buy anything, as a constant expression cannot contain a reinterpret_cast, not even in the latest C++23 draft",
+      "range": {
+        "startLine": 388,
+        "startChar": 28,
+        "endLine": 388,
+        "endChar": 37
+      },
+      "revId": "3b821f062c1c6ece89e9775f02cc5c7abba1036e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
