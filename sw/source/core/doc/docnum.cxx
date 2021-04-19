@@ -55,6 +55,7 @@
 #include <map>
 #include <stdlib.h>
 
+#include <wrtsh.hxx>
 
 namespace {
     void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam, sal_uInt16 marker,
@@ -1825,6 +1826,8 @@ bool SwDoc::NumUpDown(const SwPaM& rPam, bool bDown, SwRootFrame const*const pLa
 // it will expand its selection to include full SwTextFrames.
 bool SwDoc::MoveParagraph(SwPaM& rPam, tools::Long nOffset, bool const bIsOutlMv)
 {
+    MakeAllOutlineContentTemporarilyVisible a(this);
+
     // sw_redlinehide: as long as a layout with Hide mode exists, only
     // move nodes that have merged frames *completely*
     SwRootFrame const* pLayout(nullptr);

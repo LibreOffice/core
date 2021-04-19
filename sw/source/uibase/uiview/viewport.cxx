@@ -43,6 +43,8 @@
 
 #include "viewfunc.hxx"
 
+#include <FrameControlsManager.hxx>
+
 // The SetVisArea of the DocShell must not be called from InnerResizePixel.
 // But our adjustments must take place.
 static bool bProtectDocShellVisArea = false;
@@ -228,6 +230,9 @@ void SwView::SetVisArea( const tools::Rectangle &rRect, bool bUpdateScrollbar )
     const Size aSize( aLR.GetSize() );
     if( aSize.IsEmpty() )
         return;
+
+    if (m_pWrtShell && m_pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        GetEditWin().GetFrameControlsManager().HideControls(FrameControlType::Outline);
 
     // Before the data can be changed, call an update if necessary. This
     // ensures that adjacent Paints in document coordinates are converted
