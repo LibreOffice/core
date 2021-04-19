@@ -137,9 +137,6 @@ public:
 
     void DeleteEditView();
 
-    void HideScrollbars();
-    void ShowScrollbars();
-
     static bool HandleWheelCommands(const CommandEvent& rCEvt);
 };
 
