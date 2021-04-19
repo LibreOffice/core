@@ -311,7 +311,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="templatedialog16|outline">Outline</property>
-                 <property name="tooltip_text" translatable="yes" context="templatedialog16|outline">Choose a predefined outline format</property>
+                <property name="tooltip_text" translatable="yes" context="templatedialog16|outline">Choose a predefined outline format</property>
               </object>
               <packing>
                 <property name="position">3</property>

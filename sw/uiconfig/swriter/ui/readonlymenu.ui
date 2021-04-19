@@ -155,7 +155,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="readonlymenu|backaslink">As Link</property>
                 <property name="use_underline">True</property>
-            </object>
+              </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="backascopy">
