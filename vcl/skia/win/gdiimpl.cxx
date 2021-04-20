@@ -213,8 +213,26 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     GlyphOrientation glyphOrientation = GlyphOrientation::Apply;
     if (!typeface) // fall back to GDI text rendering
     {
+<<<<<<< HEAD   (0734db Colibre: Revise some icons)
         typeface.reset(SkCreateTypefaceFromLOGFONT(logFont));
         glyphOrientation = GlyphOrientation::Ignore;
+=======
+        typeface = createDirectWriteTypeface(mWinParent.getHDC(), hLayoutFont);
+        bool dwrite = true;
+        if (!typeface) // fall back to GDI text rendering
+        {
+            // If lfWidth is kept, then with fHScale != 1 characters get too wide, presumably
+            // because the horizontal scaling gets applied twice if GDI is used for drawing (tdf#141715).
+            // Using lfWidth /= fHScale gives slightly incorrect sizes, for a reason I don't understand.
+            // LOGFONT docs say that 0 means GDI will find out the right value on its own somehow,
+            // and it apparently works.
+            logFont.lfWidth = 0;
+            typeface.reset(SkCreateTypefaceFromLOGFONT(logFont));
+            dwrite = false;
+        }
+        // Cache the typeface.
+        const_cast<SkiaWinFontInstance*>(pWinFont)->SetSkiaTypeface(typeface, dwrite);
+>>>>>>> CHANGE (764360 fix too wide glyphs with Skia/GDI if horizontal scale is use)
     }
     // lfHeight actually depends on DPI, so it's not really font height as such,
     // but for LOGFONT-based typefaces Skia simply sets lfHeight back to this value
