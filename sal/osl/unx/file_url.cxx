@@ -369,23 +369,23 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
 
 oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath, rtl_uString **pustrFileURL )
 {
-    static const sal_Unicode pDoubleSlash[2] = { '/', '/' };
-
     rtl_uString *pTmp = nullptr;
     sal_Int32 nIndex;
 
-    if( ustrSystemPath->length == 0 )
+    auto const & systemPath = OUString::unacquired(&ustrSystemPath);
+
+    if( systemPath.isEmpty() )
         return osl_File_E_INVAL;
 
-    if( rtl_ustr_ascii_shortenedCompare_WithLength( ustrSystemPath->buffer, ustrSystemPath->length,"file:", 5 ) == 0 )
+    if( systemPath.startsWith( "file:" ) )
         return osl_File_E_INVAL;
 
     /* check if system path starts with ~ or ~user and replace it with the appropriate home dir */
-    if( ustrSystemPath->buffer[0] == '~' )
+    if( systemPath.startsWith("~") )
     {
         /* check if another user is specified */
-        if( ( ustrSystemPath->length == 1 ) ||
-            ( ustrSystemPath->buffer[1] == '/' ) )
+        if( ( systemPath.getLength() == 1 ) ||
+            ( systemPath[1] == '/' ) )
         {
             /* osl_getHomeDir returns file URL */
             oslSecurity pSecurity = osl_getCurrentSecurity();
@@ -399,7 +399,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
             rtl_uString_newFromStr_WithLength( &pTmp, pTmp->buffer + 7, pTmp->length - 7 );
 
             /* replace '~' in original string */
-            rtl_uString_newReplaceStrAt( &pTmp, ustrSystemPath, 0, 1, pTmp );
+            rtl_uString_newReplaceStrAt( &pTmp, systemPath.pData, 0, 1, pTmp );
         }
         else
         {
@@ -409,18 +409,18 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     }
 
     /* check if initial string contains repeated '/' characters */
-    nIndex = rtl_ustr_indexOfStr_WithLength( ustrSystemPath->buffer, ustrSystemPath->length, pDoubleSlash, 2 );
+    nIndex = systemPath.indexOf( "//" );
     if( nIndex != -1 )
     {
         sal_Int32 nSrcIndex;
         sal_Int32 nDeleted = 0;
 
-        /* if pTmp is not already allocated, copy ustrSystemPath for modification */
+        /* if pTmp is not already allocated, copy systemPath for modification */
         if( pTmp == nullptr )
-            rtl_uString_newFromString( &pTmp, ustrSystemPath );
+            rtl_uString_newFromString( &pTmp, systemPath.pData );
 
         /* adapt index to pTmp */
-        nIndex += pTmp->length - ustrSystemPath->length;
+        nIndex += pTmp->length - systemPath.getLength();
 
         /* replace repeated '/' characters with a single '/' */
         for( nSrcIndex = nIndex + 1; nSrcIndex < pTmp->length; nSrcIndex++ )
@@ -436,7 +436,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     }
 
     if( pTmp == nullptr )
-        rtl_uString_assign( &pTmp, ustrSystemPath );
+        rtl_uString_assign( &pTmp, systemPath.pData );
 
     /* file URLs must be URI encoded */
     rtl_uriEncode( pTmp, uriCharClass, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8, pustrFileURL );
