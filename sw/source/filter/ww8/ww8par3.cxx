@@ -1872,7 +1872,7 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
     if( nLen < 0 )
     {
         // the current level is finished, what should we do ?
-        m_nListLevel = WW8ListManager::nMaxLevel;
+        m_nListLevel = MAXLEVEL;
         if (m_xStyles && !m_bVer67)
             m_xStyles->mnWwNumLevel = 0;
     }
@@ -1902,7 +1902,7 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
         {
             RegisterNumFormat(m_nLFOPosition, m_nListLevel);
             m_nLFOPosition = USHRT_MAX;
-            m_nListLevel  = WW8ListManager::nMaxLevel;
+            m_nListLevel = MAXLEVEL;
         }
     }
 }
@@ -1917,7 +1917,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
     {
         // the current level is finished, what should we do ?
         m_nLFOPosition = USHRT_MAX;
-        m_nListLevel = WW8ListManager::nMaxLevel;
+        m_nListLevel = MAXLEVEL;
     }
     else
     {
@@ -1992,13 +1992,20 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             // here the stream data is 1-based, we subtract ONE
             if (m_nLFOPosition != 2047-1) //Normal ww8+ list behaviour
             {
-                if (WW8ListManager::nMaxLevel == m_nListLevel)
+                if (WW8ListManager::nMaxLevel <= m_nListLevel)
+                {
+                    // This looks like a mistake. What should happen here?
+                    // If iLvl is undefined, then treat as level 1? (yes - list-nolevel.doc)
+                    // What about inheritance? (good question - inheritance completely ignored)
+                    // What about if iLvl is specified as Body Text(nMaxLevel)?
+                    assert(MAXLEVEL == m_nListLevel && "Looking for proof document showing a specified body text level should not become numbered.");
                     m_nListLevel = 0;
+                }
                 if (WW8ListManager::nMaxLevel > m_nListLevel)
                 {
                     RegisterNumFormat(m_nLFOPosition, m_nListLevel);
                     m_nLFOPosition = USHRT_MAX;
-                    m_nListLevel = WW8ListManager::nMaxLevel;
+                    m_nListLevel = MAXLEVEL;
                 }
             }
             else if (m_xPlcxMan && m_xPlcxMan->HasParaSprm(NS_sprm::LN_PAnld).pSprm)
@@ -2007,6 +2014,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                  #i8114# Horrific backwards compatible ww7- lists in ww8+
                  docs
                 */
+                m_nListLevel = std::min<sal_uInt8>(WW8ListManager::nMaxLevel, m_nListLevel);
                 Read_ANLevelNo(13 /*equiv ww7- sprm no*/, &m_nListLevel, 1);
             }
         }

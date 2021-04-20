@@ -273,7 +273,7 @@ public:
         m_nBase( 0 ),
         m_nFollow( 0 ),
         m_nLFOIndex( USHRT_MAX ),
-        m_nListLevel(WW8ListManager::nMaxLevel),
+        m_nListLevel(MAXLEVEL),
         mnWW8OutlineLevel( MAXLEVEL ),
         m_n81Flags( 0 ),
         m_n81BiDiFlags(0),
