@@ -478,7 +478,7 @@ void SwFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
         return;
-    sal_uInt8 nInvFlags = 0;
+    SwFrameInvFlags eInvFlags = SwFrameInvFlags::NONE;
 
     if(pLegacy->m_pOld && pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
     {
@@ -488,44 +488,45 @@ void SwFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
         const SfxPoolItem* pOItem = aOIter.GetCurItem();
         do
         {
-            UpdateAttrFrame(pOItem, pNItem, nInvFlags);
+            UpdateAttrFrame(pOItem, pNItem, eInvFlags);
             pNItem = aNIter.NextItem();
             pOItem = aOIter.NextItem();
         } while (pNItem);
     }
     else
-        UpdateAttrFrame(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
+        UpdateAttrFrame(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
 
-    if(nInvFlags == 0)
+    if(eInvFlags == SwFrameInvFlags::NONE)
         return;
 
     SwPageFrame* pPage = FindPageFrame();
     InvalidatePage(pPage);
-    if(nInvFlags & 0x01)
+    if(eInvFlags & SwFrameInvFlags::InvalidatePrt)
     {
         InvalidatePrt_();
         if(!GetPrev() && IsTabFrame() && IsInSct())
             FindSctFrame()->InvalidatePrt_();
     }
-    if(nInvFlags & 0x02)
+    if(eInvFlags & SwFrameInvFlags::InvalidateSize)
         InvalidateSize_();
-    if(nInvFlags & 0x04)
+    if(eInvFlags & SwFrameInvFlags::InvalidatePos)
         InvalidatePos_();
-    if(nInvFlags & 0x08)
+    if(eInvFlags & SwFrameInvFlags::SetCompletePaint)
         SetCompletePaint();
     SwFrame *pNxt;
-    if(nInvFlags & 0x30 && nullptr != (pNxt = GetNext()))
+    if (eInvFlags & (SwFrameInvFlags::NextInvalidatePos | SwFrameInvFlags::NextSetCompletePaint)
+        && nullptr != (pNxt = GetNext()))
     {
         pNxt->InvalidatePage(pPage);
-        if(nInvFlags & 0x10)
+        if(eInvFlags & SwFrameInvFlags::NextInvalidatePos)
             pNxt->InvalidatePos_();
-        if(nInvFlags & 0x20)
+        if(eInvFlags & SwFrameInvFlags::NextSetCompletePaint)
             pNxt->SetCompletePaint();
     }
 }
 
 void SwFrame::UpdateAttrFrame( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
-                         sal_uInt8 &rInvFlags )
+                         SwFrameInvFlags &rInvFlags )
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
@@ -537,29 +538,29 @@ void SwFrame::UpdateAttrFrame( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_LR_SPACE:
         case RES_UL_SPACE:
         case RES_RTL_GUTTER:
-            rInvFlags |= 0x0B;
+            rInvFlags |= static_cast<SwFrameInvFlags>(0x0B);
             break;
 
         case RES_HEADER_FOOTER_EAT_SPACING:
-            rInvFlags |= 0x03;
+            rInvFlags |= static_cast<SwFrameInvFlags>(0x03);
             break;
 
         case RES_BACKGROUND:
         case RES_BACKGROUND_FULL_SIZE:
-            rInvFlags |= 0x28;
+            rInvFlags |= static_cast<SwFrameInvFlags>(0x28);
             break;
 
         case RES_KEEP:
-            rInvFlags |= 0x04;
+            rInvFlags |= static_cast<SwFrameInvFlags>(0x04);
             break;
 
         case RES_FRM_SIZE:
             ReinitializeFrameSizeAttrFlags();
-            rInvFlags |= 0x13;
+            rInvFlags |= static_cast<SwFrameInvFlags>(0x13);
             break;
 
         case RES_FMT_CHG:
-            rInvFlags |= 0x0F;
+            rInvFlags |= static_cast<SwFrameInvFlags>(0x0F);
             break;
 
         case RES_ROW_SPLIT:
@@ -585,7 +586,7 @@ void SwFrame::UpdateAttrFrame( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             // the new FillStyle has to do the same as previous RES_BACKGROUND
             if(nWhich >= XATTR_FILL_FIRST && nWhich <= XATTR_FILL_LAST)
             {
-                rInvFlags |= 0x28;
+                rInvFlags |= static_cast<SwFrameInvFlags>(0x28);
             }
             /* do Nothing */;
     }

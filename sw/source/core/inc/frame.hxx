@@ -288,6 +288,21 @@ public:
     void transform(const basegfx::B2DHomMatrix& aTransform);
 };
 
+enum class SwFrameInvFlags : sal_uInt8
+{
+    NONE = 0x00,
+    InvalidatePrt = 0x01,
+    InvalidateSize = 0x02,
+    InvalidatePos = 0x04,
+    SetCompletePaint = 0x08,
+    NextInvalidatePos = 0x10,
+    NextSetCompletePaint = 0x20,
+};
+
+namespace o3tl {
+    template<> struct typed_flags<SwFrameInvFlags> : is_typed_flags<SwFrameInvFlags, 0x003f> {};
+}
+
 /**
  * Base class of the Writer layout elements.
  *
@@ -385,7 +400,7 @@ class SW_DLLPUBLIC SwFrame : public SwFrameAreaDefinition, public SwClient, publ
     */
     SwContentFrame* FindPrevCnt_();
 
-    void UpdateAttrFrame( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 & );
+    void UpdateAttrFrame( const SfxPoolItem*, const SfxPoolItem*, SwFrameInvFlags & );
     SwFrame* GetIndNext_();
     void SetDirFlags( bool bVert );
 
