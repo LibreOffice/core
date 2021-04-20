@@ -315,6 +315,7 @@ private:
     long            mnMaxY;
     bool            bIsOkCancelMode;
     bool            bInResize;
+    long            nOldOutOffYPixel;
 };
 
 class ScInputWindowWrapper : public SfxChildWindow
