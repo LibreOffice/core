@@ -101,7 +101,7 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(weld::Container* pPage, weld::DialogCon
         m_xPosPageBox->connect_clicked(LINK(this, SwEndNoteOptionPage, PosPageHdl));
         m_xPosChapterBox->connect_clicked(LINK(this, SwEndNoteOptionPage, PosChapterHdl));
     }
-
+    m_xParaTemplBox->make_sorted();
 }
 
 SwEndNoteOptionPage::~SwEndNoteOptionPage()
@@ -171,7 +171,6 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
         m_xParaTemplBox->append_text(pStyle->GetName());
         pStyle = pStyleSheetPool->Next();
     }
-    m_xParaTemplBox->make_sorted();
 
     OUString sStr;
     SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(bEndNote ? RES_POOLCOLL_ENDNOTE
