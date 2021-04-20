@@ -12,7 +12,6 @@
   <object class="GtkDialog" id="FileExtCheckDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
-    <property name="title" translatable="yes" context="FileExtCheckDialog|Name"></property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window-position">center-on-parent</property>
