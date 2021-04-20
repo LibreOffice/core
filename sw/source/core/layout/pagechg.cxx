@@ -2008,6 +2008,11 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
         if ( auto pFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
         {
             lcl_MoveAllLowers( pFlyFrame, rOffset );
+            // tdf#138785 update position specific to as-char flys
+            if (pFlyFrame->IsFlyInContentFrame())
+            {
+                static_cast<SwFlyInContentFrame*>(pFlyFrame)->AddRefOfst(rOffset);
+            }
             pFlyFrame->NotifyDrawObj();
             // --> let the active embedded object be moved
             SwFrame* pLower = pFlyFrame->Lower();
