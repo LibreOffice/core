@@ -200,9 +200,9 @@ OUString Qt5Instance::constructToolkitID(std::u16string_view sTKname)
 {
     OUString sID(sTKname + OUStringLiteral(u" ("));
     if (m_bUseCairo)
-        sID += OUStringLiteral(u"cairo+");
+        sID += "cairo+";
     else
-        sID += OUStringLiteral(u"qfont+");
+        sID += "qfont+";
     sID += toOUString(QGuiApplication::platformName()) + OUStringLiteral(u")");
     return sID;
 }

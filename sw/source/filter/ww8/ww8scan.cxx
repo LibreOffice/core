@@ -7463,7 +7463,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
 #ifdef OSL_BIGENDIAN
                     swapEndian(pSecondary);
 #endif
-                    p->sFontname += OUStringLiteral(u";") + pSecondary;
+                    p->sFontname += OUString::Concat(";") + pSecondary;
                 }
 
                 // #i43762# check font name for illegal characters
