@@ -12,7 +12,7 @@ $(eval $(call gb_Package_Package,extras_gallsystemstr,$(call gb_CustomTarget_get
 $(eval $(call gb_Package_use_customtarget,extras_gallsystemstr,extras/gallsysstr))
 
 $(eval $(call gb_Package_add_files,extras_gallsystemstr,$(LIBO_SHARE_FOLDER)/gallery,\
-    $(addsuffix .str,$(filter-out bullets fontwork symbolshapes,$(system_galleries))) \
+    $(addsuffix .str,$(filter-out fontwork symbolshapes,$(system_galleries))) \
 ))
 
 # vim: set noet sw=4 ts=4:
