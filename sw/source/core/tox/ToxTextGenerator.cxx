@@ -268,7 +268,11 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
                     rBase.FillText( *pTOXNd, aIdx, static_cast<sal_uInt16>(eField), pLayout );
                     if (eField == ToxAuthorityField::AUTH_FIELD_URL)
                     {
-                        OUString aURL(rText.subView(nStartCharStyle));
+                        // Get the absolute URL, the text may be a relative one.
+                        const auto& rAuthority = static_cast<const SwTOXAuthority&>(rBase);
+                        OUString aURL = SwTOXAuthority::GetSourceURL(
+                            rAuthority.GetText(AUTH_FIELD_URL, pLayout));
+
                         mLinkProcessor->CloseLink(rText.getLength(), aURL, /*bRelative=*/false);
                     }
                 }
