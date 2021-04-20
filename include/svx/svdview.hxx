@@ -242,7 +242,7 @@ public:
         SdrPageWindow& rPageWindow,
         const char* pDebugName) const;
 
-    // Interactive Move Action programmaticaly
+    // Interactive Move Action programmatically
     bool MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint, const sal_Int32 aObjectOrdNum = -1);
 };
 

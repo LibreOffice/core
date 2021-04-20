@@ -314,7 +314,7 @@ Try:
 			Set oDialogProvider = vContext.getServiceManager().createInstanceWithContext(&quot;com.sun.star.awt.DialogProvider&quot;, Array(oComp))
 	End Select
 
-	&apos;	Create the graphcal interface
+	&apos;	Create the graphical interface
 	sScope = Iif(IsNull(oComp), &quot;application&quot;, &quot;document&quot;)
 	sURI = &quot;vnd.sun.star.script:&quot; &amp; vLibrary &amp; &quot;.&quot; &amp; vDialogName &amp; &quot;?location=&quot; &amp; sScope
 	On Local Error GoTo CatchNotFound
