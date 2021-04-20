@@ -4314,7 +4314,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_nSwNumLevel(0xff)
     , m_nWwNumType(0xff)
     , m_pChosenWW8OutlineStyle(nullptr)
-    , m_nListLevel(WW8ListManager::nMaxLevel)
+    , m_nListLevel(MAXLEVEL)
     , m_bNewDoc(bNewDoc)
     , m_bSkipImages(bSkipImages)
     , m_bReadNoTable(false)
@@ -6038,8 +6038,10 @@ void SwWW8ImplReader::SetOutlineStyles()
         }
 
         if (m_pChosenWW8OutlineStyle != nullptr
+            && pStyleInf->mnWW8OutlineLevel < WW8ListManager::nMaxLevel
             && pStyleInf->mnWW8OutlineLevel == pStyleInf->m_nListLevel)
         {
+            // LibreOffice's Chapter Numbering only works when outlineLevel == listLevel
             const SwNumFormat& rRule
                 = m_pChosenWW8OutlineStyle->Get(pStyleInf->mnWW8OutlineLevel);
             aOutlineRule.Set(pStyleInf->mnWW8OutlineLevel, rRule);

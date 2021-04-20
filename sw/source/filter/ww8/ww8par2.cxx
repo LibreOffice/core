@@ -3885,7 +3885,7 @@ void WW8RStyle::PostStyle(SwWW8StyInf const &rSI, bool bOldNoImp)
     mpIo->m_bNoAttrImport = bOldNoImp;
     // reset the list-remember-fields, if used when reading styles
     mpIo->m_nLFOPosition = USHRT_MAX;
-    mpIo->m_nListLevel = WW8ListManager::nMaxLevel;
+    mpIo->m_nListLevel = MAXLEVEL;
 }
 
 void WW8RStyle::Import1Style( sal_uInt16 nNr )
