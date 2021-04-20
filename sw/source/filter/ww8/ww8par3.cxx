@@ -1727,17 +1727,11 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
     rStyleInf.maWordLR.reset(ItemGet<SvxLRSpaceItem>(*rStyleInf.m_pFormat, RES_LR_SPACE).Clone());
 
     // Phase 2: refresh StyleDef after reading all Lists
-    SwNumRule* pNmRule = nullptr;
-    const sal_uInt16 nLFO = rStyleInf.m_nLFOIndex;
-    const sal_uInt8  nLevel = rStyleInf.m_nListLevel;
-    if (
-         (USHRT_MAX > nLFO) &&
-         (WW8ListManager::nMaxLevel > nLevel)
-       )
+    if (USHRT_MAX > rStyleInf.m_nLFOIndex && WW8ListManager::nMaxLevel > rStyleInf.m_nListLevel)
     {
         std::vector<sal_uInt8> aParaSprms;
-        pNmRule = m_xLstManager->GetNumRuleForActivation(nLFO, nLevel,
-            aParaSprms);
+        SwNumRule* pNmRule = m_xLstManager->GetNumRuleForActivation(
+            rStyleInf.m_nLFOIndex, rStyleInf.m_nListLevel, aParaSprms);
 
         if (pNmRule != nullptr)
         {
@@ -1753,10 +1747,9 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
                 rStyleInf.m_bHasStyNumRule = true;
             }
         }
-    }
 
-    if (pNmRule)
-        SetStyleIndent(rStyleInf, pNmRule->Get(nLevel));
+        SetStyleIndent(rStyleInf, pNmRule->Get(rStyleInf.m_nListLevel));
+    }
 }
 
 void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
