@@ -15,7 +15,7 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
+  */
 
 #include <sal/config.h>
 #include <sal/log.hxx>
@@ -183,15 +183,15 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace formula;
 using namespace com::sun::star;
-using namespace xmloff::token;
-using ::std::vector;
-using ::com::sun::star::uno::UNO_QUERY;
+//using namespace xmloff::token;
+//using ::std::vector;
+//using ::com::sun::star::uno::UNO_QUERY;
 
-namespace
+/*namespace
 {
 OUString lcl_RangeSequenceToString(
     const uno::Sequence< OUString > & rRanges,
-    const uno::Reference< chart2::data::XRangeXMLConversion > & xFormatConverter )
+    //const uno::Reference< chart2::data::XRangeXMLConversion > & xFormatConverter )
 {
     OUStringBuffer aResult;
     const sal_Int32 nMaxIndex( rRanges.getLength() - 1 );
@@ -206,8 +206,8 @@ OUString lcl_RangeSequenceToString(
             aResult.append( cSep );
     }
     return aResult.makeStringAndClear();
-}
-
+}*/
+/*
 OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, const ScAddress& rAddr)
 {
     // return text/edit cell string content, with line feeds in edit cells
@@ -243,11 +243,11 @@ OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, c
     }
 
     return EMPTY_OUSTRING;
-}
+}*/
 
-} // anonymous namespace
+//} // anonymous namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+/*extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLExporter", SvXMLExportFlags::ALL));
@@ -306,13 +306,13 @@ Calc_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* co
 {
     return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisSettingsExporter", SvXMLExportFlags::SETTINGS|SvXMLExportFlags::OASIS));
 }
-
+*/
 namespace {
 
 class ScXMLShapeExport : public XMLShapeExport
 {
 public:
-    explicit ScXMLShapeExport(SvXMLExport& rExp) : XMLShapeExport(rExp) {}
+    /*explicit*/ ScXMLShapeExport(SvXMLExport& rExp) : XMLShapeExport(rExp) {}
 
     /** is called before a shape element for the given XShape is exported */
     virtual void onExport( const uno::Reference < drawing::XShape >& xShape ) override;
@@ -343,7 +343,7 @@ constexpr OUStringLiteral gsLayerID( u"" SC_LAYERID );
 
 ScXMLExport::ScXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
-    OUString const & implementationName, SvXMLExportFlags nExportFlag)
+    const & implementationName, SvXMLExportFlags nExportFlag)
 :   SvXMLExport(
         rContext, implementationName, GetMeasureUnit(), XML_SPREADSHEET, nExportFlag ),
     pDoc(nullptr),
@@ -1623,8 +1623,8 @@ void ScXMLExport::GetColumnRowHeader(bool& rHasColumnHeader, ScRange& rColumnHea
                               rTempRowHeaderRange.EndRow,
                               rTempRowHeaderRange.Sheet);
     ScRange rTempColumnHeaderRange = xPrintAreas->getTitleColumns();
-    rColumnHeaderRange = ScRange(rTempColumnHeaderRange.StartColumn,
-                              rTempColumnHeaderRange.StartRow,
+    rColumnHeaderRange = ScRange(rTempColumnHeaderRange.hashStartColumn,
+                              rTempColumnHeaderRange.aStart,
                               rTempColumnHeaderRange.Sheet,
                               rTempColumnHeaderRange.EndColumn,
                               rTempColumnHeaderRange.EndRow,

@@ -15,7 +15,7 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
+  */
 
 #pragma once
 
@@ -103,7 +103,7 @@ public:
     SCTAB GetLastSheet() const       { return nLastSheet; }
     void SetLastSheet(SCTAB nNew)    { nLastSheet = nNew; }
 
-    void ApplyCondFormat( const css::uno::Sequence<css::table::CellRangeAddress>& xCellRanges );
+    void ApplyCondFormat( const css::uno::Sequence<ScRange>& xCellRanges );
 
 private:
     using XMLPropStyleContext::SetStyle;

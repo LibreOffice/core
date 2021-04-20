@@ -48,8 +48,8 @@ ScMyValidation::ScMyValidation()
     sInputTitle(),
     sFormula1(),
     sFormula2(),
-    aAlertStyle(sheet::ValidationAlertStyle_STOP),
-    aValidationType(sheet::ValidationType_ANY),
+    //aAlertStyle(sheet::ValidationAlertStyle_STOP),
+    //aValidationType(sheet::ValidationType_ANY),
     aOperator(sheet::ConditionOperator_NONE),
     nShowList(0),
     bShowErrorMessage(false),
@@ -379,8 +379,8 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_WARNING);
                     WriteMessage(rExport, rValidation.sErrorTitle, rValidation.sErrorMessage, rValidation.bShowErrorMessage, false);
                 }
-                break;
-                case sheet::ValidationAlertStyle_STOP :
+                //break;
+                //case sheet::ValidationAlertStyle_STOP :
                 {
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_STOP);
                     WriteMessage(rExport, rValidation.sErrorTitle, rValidation.sErrorMessage, rValidation.bShowErrorMessage, false);
@@ -659,11 +659,11 @@ ScMyFormatRange::ScMyFormatRange()
 
 bool ScMyFormatRange::operator<(const ScMyFormatRange& rRange) const
 {
-    if (aRangeAddress.StartRow < rRange.aRangeAddress.StartRow)
+    if (aRangeAddress.aStart.Row < rRange.aRangeAddress.aStart.Row)
         return true;
     else
-        if (aRangeAddress.StartRow == rRange.aRangeAddress.StartRow)
-            return (aRangeAddress.StartColumn < rRange.aRangeAddress.StartColumn);
+        if (aRangeAddress.aStart.Row == rRange.aRangeAddress.aStart.Row)
+            return (aRangeAddress.aStart.Col < rRange.aRangeAddress.aStart.Col;
         else
             return false;
 }
@@ -779,10 +779,10 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
         return -1;
     for (const ScMyFormatRange & rFormatRange : aTables[nTable])
     {
-        if ((rFormatRange.aRangeAddress.StartColumn <= nColumn) &&
-            (rFormatRange.aRangeAddress.EndColumn >= nColumn) &&
+        if ((rFormatRange.aRangeAddress.aStart.Col <= nColumn) &&
+            (rFormatRange.aRangeAddress.aEnd.Col >= nColumn) &&
             (rFormatRange.aRangeAddress.StartRow <= nRow) &&
-            (rFormatRange.aRangeAddress.EndRow >= nRow))
+            (rFormatRange.aRangeAddress.aEnd.Row >= nRow))
         {
             bIsAutoStyle = rFormatRange.bIsAutoStyle;
             return rFormatRange.nStyleNameIndex;
@@ -802,10 +802,10 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const s
     ScMyFormatRangeAddresses::iterator aEndItr(rFormatRanges.end());
     while (aItr != aEndItr)
     {
-        if (((*aItr).aRangeAddress.StartColumn <= nColumn) &&
-            ((*aItr).aRangeAddress.EndColumn >= nColumn) &&
-            ((*aItr).aRangeAddress.StartRow <= nRow) &&
-            ((*aItr).aRangeAddress.EndRow >= nRow))
+        if (((*aItr).aRangeAddress.aStart.Col <= nColumn) &&
+            ((*aItr).aRangeAddress.aEnd.Col; >= nColumn) &&
+            ((*aItr).aRangeAddress.aStart.Row <= nRow) &&
+            ((*aItr).aRangeAddress.aEnd.Row >= nRow))
         {
             bIsAutoStyle = aItr->bIsAutoStyle;
             nValidationIndex = aItr->nValidationIndex;
@@ -821,7 +821,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const s
         }
         else
         {
-            if ((*aItr).aRangeAddress.EndRow < nRemoveBeforeRow)
+            if ((*aItr).aRangeAddress.aEnd.Row < nRemoveBeforeRow)
                 aItr = rFormatRanges.erase(aItr);
             else
                 ++aItr;
@@ -841,50 +841,50 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
     sal_Int32 nColumns = 0;
     while (aItr != aEndItr && nColumns < nTotalColumns)
     {
-        if (((*aItr).aRangeAddress.StartRow <= nRow) &&
-            ((*aItr).aRangeAddress.EndRow >= nRow))
+        if (((*aItr).aRangeAddress.aStart.Row <= nRow) &&
+            ((*aItr).aRangeAddress.aEnd.Row >= nRow))
         {
-            if ((((*aItr).aRangeAddress.StartColumn <= nStartColumn) &&
-                ((*aItr).aRangeAddress.EndColumn >= nStartColumn)) ||
-                (((*aItr).aRangeAddress.StartColumn <= nEndColumn) &&
-                ((*aItr).aRangeAddress.EndColumn >= nEndColumn)) ||
-                (((*aItr).aRangeAddress.StartColumn >= nStartColumn) &&
-                ((*aItr).aRangeAddress.EndColumn <= nEndColumn)))
+            if ((((*aItr).aRangeAddress.aStart.Col <= nStartColumn) &&
+                ((*aItr).aRangeAddress.aEnd.Col >= nStartColumn)) ||
+                (((*aItr).aRangeAddress.aStart.Col <= nEndColumn) &&
+                ((*aItr).aRangeAddress.aEnd.Col >= nEndColumn)) ||
+                (((*aItr).aRangeAddress.aStart.Col >= nStartColumn) &&
+                ((*aItr).aRangeAddress.aEnd.Col <= nEndColumn)))
             {
                 ScMyRowFormatRange aRange;
                 aRange.nIndex = aItr->nStyleNameIndex;
                 aRange.nValidationIndex = aItr->nValidationIndex;
                 aRange.bIsAutoStyle = aItr->bIsAutoStyle;
-                if ((aItr->aRangeAddress.StartColumn < nStartColumn) &&
-                    (aItr->aRangeAddress.EndColumn >= nStartColumn))
+                if ((aItr->aRangeAddress.aStart.Col < nStartColumn) &&
+                    (aItr->aRangeAddress.aEnd.Col >= nStartColumn))
                 {
-                    if (aItr->aRangeAddress.EndColumn >= nEndColumn)
+                    if (aItr->aRangeAddress.aEnd.Col >= nEndColumn)
                         aRange.nRepeatColumns = nTotalColumns;
                     else
-                        aRange.nRepeatColumns = aItr->aRangeAddress.EndColumn - nStartColumn + 1;
+                        aRange.nRepeatColumns = aItr->aRangeAddress.aEnd.Col - nStartColumn + 1;
                     aRange.nStartColumn = nStartColumn;
                 }
-                else if ((aItr->aRangeAddress.StartColumn >= nStartColumn) &&
-                    (aItr->aRangeAddress.EndColumn <= nEndColumn))
+                else if ((aItr->aRangeAddress.aStart.Col >= nStartColumn) &&
+                    (aItr->aRangeAddress.aEnd.Col <= nEndColumn))
                 {
-                    aRange.nRepeatColumns = aItr->aRangeAddress.EndColumn - aItr->aRangeAddress.StartColumn + 1;
-                    aRange.nStartColumn = aItr->aRangeAddress.StartColumn;
+                    aRange.nRepeatColumns = aItr->aRangeAddress.aEnd.Col - aItr->aRangeAddress.aStart.Col + 1;
+                    aRange.nStartColumn = aItr->aRangeAddress.aStart.Col;
                 }
-                else if ((aItr->aRangeAddress.StartColumn >= nStartColumn) &&
-                    (aItr->aRangeAddress.StartColumn <= nEndColumn) &&
-                    (aItr->aRangeAddress.EndColumn > nEndColumn))
+                else if ((aItr->aRangeAddress.aStart.Col >= nStartColumn) &&
+                    (aItr->aRangeAddress.aStart.Col <= nEndColumn) &&
+                    (aItr->aRangeAddress.aEnd.Col > nEndColumn))
                 {
-                    aRange.nRepeatColumns = nEndColumn - aItr->aRangeAddress.StartColumn + 1;
-                    aRange.nStartColumn = aItr->aRangeAddress.StartColumn;
+                    aRange.nRepeatColumns = nEndColumn - aItr->aRangeAddress.aStart.Col + 1;
+                    aRange.nStartColumn = aItr->aRangeAddress.aStart.Col;
                 }
-                aRange.nRepeatRows = aItr->aRangeAddress.EndRow - nRow + 1;
+                aRange.nRepeatRows = aItr->aRangeAddress.EndRowRow - nRow + 1;
                 pRowFormatRanges->AddRange(aRange);
                 nColumns += aRange.nRepeatColumns;
             }
             ++aItr;
         }
         else
-            if(aItr->aRangeAddress.EndRow < nRow)
+            if(aItr->aRangeAddress.Row < nRow)
                 aItr = rFormatRanges.erase(aItr);
             else
                 ++aItr;
@@ -902,8 +902,8 @@ void ScFormatRangeStyles::AddRangeStyleName(const ScRange& rCellRangeAddress,
     aFormatRange.nValidationIndex = nValidationIndex;
     aFormatRange.nNumberFormat = nNumberFormat;
     aFormatRange.bIsAutoStyle = bIsAutoStyle;
-    OSL_ENSURE(o3tl::make_unsigned(rCellRangeAddress.Sheet) < aTables.size(), "wrong table");
-    ScMyFormatRangeAddresses& rFormatRanges(aTables[rCellRangeAddress.Sheet]);
+    OSL_ENSURE(o3tl::make_unsigned(rCellRangeAddress.Tab) < aTables.size(), "wrong table");
+    ScMyFormatRangeAddresses& rFormatRanges(aTables[rCellRangeAddress.Tab]);
     rFormatRanges.push_back(aFormatRange);
 }
 

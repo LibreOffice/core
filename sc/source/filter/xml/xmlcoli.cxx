@@ -15,7 +15,7 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
+  */
 
 #include "xmlcoli.hxx"
 #include "xmlimprt.hxx"
@@ -211,14 +211,14 @@ void SAL_CALL ScXMLTableColsContext::endFastElement( sal_Int32 /*nElement*/ )
                 {
                     xPrintAreas->setPrintTitleColumns(true);
                     ScRange aColumnHeaderRange;
-                    aColumnHeaderRange.StartColumn = nHeaderStartCol;
-                    aColumnHeaderRange.EndColumn = nHeaderEndCol;
+                    aColumnHeaderRange.aStart.Col = nHeaderStartCol;
+                    aColumnHeaderRange.aEnd.Col = nHeaderEndCol;
                     xPrintAreas->setTitleColumns(aColumnHeaderRange);
                 }
                 else
                 {
                     ScRange aColumnHeaderRange(xPrintAreas->getTitleColumns());
-                    aColumnHeaderRange.EndColumn = nHeaderEndCol;
+                    aColumnHeaderRange.aEnd.Col = nHeaderEndCol;
                     xPrintAreas->setTitleColumns(aColumnHeaderRange);
                 }
             }

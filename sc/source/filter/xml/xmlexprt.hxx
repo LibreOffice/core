@@ -141,7 +141,7 @@ class ScXMLExport : public SvXMLExport
 
     void CollectInternalShape( css::uno::Reference< css::drawing::XShape > const & xShape );
 
-    static css::table::CellRangeAddress GetEndAddress(const css::uno::Reference<css::sheet::XSpreadsheet>& xTable);
+    static ScRange GetEndAddress(const css::uno::Reference<css::sheet::XSpreadsheet>& xTable);
     void GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks );
     void GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp );
     void WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,
@@ -170,7 +170,7 @@ class ScXMLExport : public SvXMLExport
     static void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups();
 
-    bool GetMerged (const css::table::CellRangeAddress* pCellRange,
+    bool GetMerged (const ScRange* pCellRange,
         const css::uno::Reference <css::sheet::XSpreadsheet>& xTable);
 
     void WriteTable(sal_Int32 nTable, const css::uno::Reference< css::sheet::XSpreadsheet>& xTable);
