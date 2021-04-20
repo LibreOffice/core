@@ -59,12 +59,14 @@ void init()
     {
         rtl_uString * pArg = nullptr;
         osl_getCommandArg (i, &pArg);
-        if ((pArg->buffer[0] == '-' || pArg->buffer[0] == '/') &&
-             pArg->buffer[1] == 'e' &&
-             pArg->buffer[2] == 'n' &&
-             pArg->buffer[3] == 'v' &&
-             pArg->buffer[4] == ':' &&
-            rtl_ustr_indexOfChar (&(pArg->buffer[5]), '=') >= 0 )
+        bool env;
+        {
+            auto const & arg = OUString::unacquired(&pArg);
+            env = (arg.startsWith("-") || arg.startsWith("/")) &&
+                arg.match("env:", 1) &&
+                arg.indexOf ('=') >= 0;
+        }
+        if (env )
         {
             // ignore.
             rtl_uString_release (pArg);
