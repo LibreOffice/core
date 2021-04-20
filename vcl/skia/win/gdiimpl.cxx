@@ -216,6 +216,12 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
         bool dwrite = true;
         if (!typeface) // fall back to GDI text rendering
         {
+            // If lfWidth is kept, then with fHScale != 1 characters get too wide, presumably
+            // because the horizontal scaling gets applied twice if GDI is used for drawing (tdf#141715).
+            // Using lfWidth /= fHScale gives slightly incorrect sizes, for a reason I don't understand.
+            // LOGFONT docs say that 0 means GDI will find out the right value on its own somehow,
+            // and it apparently works.
+            logFont.lfWidth = 0;
             typeface.reset(SkCreateTypefaceFromLOGFONT(logFont));
             dwrite = false;
         }
