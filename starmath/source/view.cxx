@@ -1346,7 +1346,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
     pDoc->SetModified();
 
     SfxBindings &rBnd = GetViewFrame()->GetBindings();
-    rBnd.Invalidate(SID_GAPHIC_SM);
+    rBnd.Invalidate(SID_GRAPHIC_SM);
     rBnd.Invalidate(SID_TEXT);
 }
 
@@ -1381,7 +1381,7 @@ void SmViewShell::InsertFrom(SfxMedium &rMedium)
     pDoc->SetModified();
 
     SfxBindings& rBnd = GetViewFrame()->GetBindings();
-    rBnd.Invalidate(SID_GAPHIC_SM);
+    rBnd.Invalidate(SID_GRAPHIC_SM);
     rBnd.Invalidate(SID_TEXT);
 }
 
@@ -1890,7 +1890,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
     : SfxViewShell(pFrame_, SfxViewShellFlags::HAS_PRINTOPTIONS)
     , mpGraphic(VclPtr<SmGraphicWindow>::Create(this))
-    , maGraphicController(*mpGraphic, SID_GAPHIC_SM, pFrame_->GetBindings())
+    , maGraphicController(*mpGraphic, SID_GRAPHIC_SM, pFrame_->GetBindings())
     , mbPasteState(false)
     , mbInsertIntoEditWindow(false)
 {
@@ -1962,7 +1962,7 @@ IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, voi
             pDoc->ArrangeFormula();
             pDoc->Repaint();
             // adjust window, repaint, increment ModifyCount,...
-            GetViewFrame()->GetBindings().Invalidate(SID_GAPHIC_SM);
+            GetViewFrame()->GetBindings().Invalidate(SID_GRAPHIC_SM);
         }
     }
 

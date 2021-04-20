@@ -123,7 +123,7 @@ void SmDocShell::Notify(SfxBroadcaster&, const SfxHint& rHint)
     {
         SetFormulaArranged(false);
 
-        mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+        mnModifyCount++;     //! see comment for SID_GRAPHIC_SM in SmDocShell::GetState
 
         Repaint();
     }
@@ -203,14 +203,14 @@ void SmDocShell::SetFormat(SmFormat const & rFormat)
     SetFormulaArranged( false );
     SetModified();
 
-    mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+    mnModifyCount++;     //! see comment for SID_GRAPHIC_SM in SmDocShell::GetState
 
     // don't use SmGetActiveView since the view shell might not be active (0 pointer)
     // if for example the Basic Macro dialog currently has the focus. Thus:
     SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
     while (pFrm)
     {
-        pFrm->GetBindings().Invalidate(SID_GAPHIC_SM);
+        pFrm->GetBindings().Invalidate(SID_GRAPHIC_SM);
         pFrm = SfxViewFrame::GetNext( *pFrm, this );
     }
 }
@@ -236,7 +236,7 @@ void SmDocShell::Parse()
     mpTree.reset();
     ReplaceBadChars();
     mpTree = maParser->Parse(maText);
-    mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+    mnModifyCount++;     //! see comment for SID_GRAPHIC_SM in SmDocShell::GetState
     SetFormulaArranged( false );
     InvalidateCursor();
     maUsedSymbols = maParser->GetUsedSymbols();
@@ -1144,12 +1144,12 @@ void SmDocShell::GetState(SfxItemSet &rSet)
             rSet.Put(SfxStringItem(SID_TEXT, GetText()));
             break;
 
-        case SID_GAPHIC_SM:
+        case SID_GRAPHIC_SM:
             //! very old (pre UNO) and ugly hack to invalidate the SmGraphicWindow.
             //! If mnModifyCount gets changed then the call below will implicitly notify
             //! SmGraphicController::StateChanged and there the window gets invalidated.
             //! Thus all the 'mnModifyCount++' before invalidating this slot.
-            rSet.Put(SfxInt16Item(SID_GAPHIC_SM, mnModifyCount));
+            rSet.Put(SfxInt16Item(SID_GRAPHIC_SM, mnModifyCount));
             break;
 
         case SID_UNDO:
