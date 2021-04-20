@@ -102,10 +102,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLCell::createFastCh
             }
             break;
         case XML_ELEMENT(TEXT, XML_PAGE_NUMBER):
-            m_sText += OUStringLiteral(s_sStringConcat) + " PageNumber()";
+            m_sText += OUString::Concat(s_sStringConcat) + " PageNumber()";
             break;
         case XML_ELEMENT(TEXT, XML_PAGE_COUNT):
-            m_sText += OUStringLiteral(s_sStringConcat) + " PageCount()";
+            m_sText += OUString::Concat(s_sStringConcat) + " PageCount()";
             break;
         case XML_ELEMENT(REPORT, XML_FORMATTED_TEXT):
             {

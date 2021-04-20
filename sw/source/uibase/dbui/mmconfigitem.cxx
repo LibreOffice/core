@@ -302,7 +302,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         sal_Int32 nAssign;
         for(nAssign = 0; nAssign < aAssignProperties.getLength(); nAssign += 4)
         {
-            OUString sAssignPath = OUStringLiteral(cAddressDataAssignments) +
+            OUString sAssignPath = OUString::Concat(cAddressDataAssignments) +
                 "/" +
                 pAssignments[nAssign / 4] +
                 "/";

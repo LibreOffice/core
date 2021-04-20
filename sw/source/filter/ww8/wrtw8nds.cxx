@@ -908,7 +908,7 @@ void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/,
     aStr += OUString::number((aWW8Ruby.GetRubyHeight() + 5) / 10) + " \\o";
     if (aWW8Ruby.GetDirective())
     {
-        aStr += OUStringLiteral(u"\\a") + OUStringChar(aWW8Ruby.GetDirective());
+        aStr += OUString::Concat(u"\\a") + OUStringChar(aWW8Ruby.GetDirective());
     }
     aStr += "(\\s\\up " + OUString::number((aWW8Ruby.GetBaseHeight() + 10) / 20 - 1) + "(";
     aStr += rRuby.GetText() + ")";

@@ -177,7 +177,7 @@ sal_uInt32 SvxConfigPageHelper::generateRandomValue()
 
 OUString SvxConfigPageHelper::generateCustomURL(SvxEntries* entries)
 {
-    OUString url = OUStringLiteral(ITEM_TOOLBAR_URL) + CUSTOM_TOOLBAR_STR +
+    OUString url = OUString::Concat(ITEM_TOOLBAR_URL) + CUSTOM_TOOLBAR_STR +
                    // use a random number to minimize possible clash with existing custom toolbars
                    OUString::number(generateRandomValue(), 16);
 
