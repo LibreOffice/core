@@ -401,7 +401,6 @@ public:
     {
         m_aHChangeHdl = rLink;
     }
-    virtual int get_hscroll_height() const = 0;
 
     virtual void vadjustment_configure(int value, int lower, int upper, int step_increment,
                                        int page_increment, int page_size)

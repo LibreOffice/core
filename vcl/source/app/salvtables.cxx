@@ -2154,11 +2154,6 @@ public:
         return VclPolicyType::NEVER;
     }
 
-    virtual int get_hscroll_height() const override
-    {
-        return m_xScrolledWindow->getHorzScrollBar().get_preferred_size().Height();
-    }
-
     virtual void vadjustment_configure(int value, int lower, int upper, int step_increment,
                                        int page_increment, int page_size) override
     {

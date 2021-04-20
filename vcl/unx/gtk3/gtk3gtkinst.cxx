@@ -5991,13 +5991,6 @@ public:
         return GtkToVcl(eGtkHPolicy);
     }
 
-    virtual int get_hscroll_height() const override
-    {
-        if (gtk_scrolled_window_get_overlay_scrolling(m_pScrolledWindow))
-            return 0;
-        return gtk_widget_get_allocated_height(gtk_scrolled_window_get_hscrollbar(m_pScrolledWindow));
-    }
-
     virtual void vadjustment_configure(int value, int lower, int upper,
                                        int step_increment, int page_increment,
                                        int page_size) override
