@@ -377,8 +377,6 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     if( ustrSystemPath->length == 0 )
         return osl_File_E_INVAL;
 
-    /* temporary hack: if already file url, return ustrSystemPath */
-
     if( rtl_ustr_ascii_shortenedCompare_WithLength( ustrSystemPath->buffer, ustrSystemPath->length,"file:", 5 ) == 0 )
         return osl_File_E_INVAL;
 
