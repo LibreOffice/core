@@ -182,7 +182,7 @@ static void testCachedGlyphs( const OUString& aText, const OUString& aFontName =
     for( int level = 0; level < MAX_FALLBACK; ++level )
     {
         const std::string messageLevel = OString(message.c_str()
-            + OStringLiteral(", level: ") + OString::number(level)).getStr();
+            + OString::Concat(", level: ") + OString::number(level)).getStr();
         if( aGlyphs1.Impl(level) == nullptr)
         {
             CPPUNIT_ASSERT_MESSAGE(messageLevel, aGlyphs2.Impl(level) == nullptr);

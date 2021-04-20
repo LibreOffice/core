@@ -604,8 +604,8 @@ void SwModelTestBase::reload(const char* pFilter, const char* filename, const ch
         else
         {
             OString aMessage
-                = OStringLiteral("validation requested, but don't know how to validate ") + filename
-                  + " (" + OUStringToOString(aFilterName, RTL_TEXTENCODING_UTF8) + ")";
+                = OString::Concat("validation requested, but don't know how to validate ")
+                  + filename + " (" + OUStringToOString(aFilterName, RTL_TEXTENCODING_UTF8) + ")";
             CPPUNIT_FAIL(aMessage.getStr());
         }
     }

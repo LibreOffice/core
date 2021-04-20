@@ -199,7 +199,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
 
             if( pStr )
             {
-                sOut += OStringLiteral(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"") + pStr + "\"";
+                sOut += OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"") + pStr + "\"";
             }
         }
         else if( SVX_NUM_BITMAP == eType )

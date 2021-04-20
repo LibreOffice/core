@@ -923,9 +923,8 @@ static void OutBodyColor( const char* pTag, const SwFormat *pFormat,
 
     if( pColorItem )
     {
-        OStringBuffer sOut;
-        sOut.append(OStringLiteral(" ") + pTag + "=");
-        rHWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+        OString sOut = OString::Concat(" ") + pTag + "=";
+        rHWrt.Strm().WriteOString( sOut );
         Color aColor( pColorItem->GetValue() );
         if( COL_AUTO == aColor )
             aColor = COL_BLACK;

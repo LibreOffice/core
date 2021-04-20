@@ -270,7 +270,7 @@ static int write_addStreamArray( const char* pOutFile, PDFArray* pStreams, PDFFi
             if( pObject )
             {
                 OString aOutStream = pOutFile +
-                    OStringLiteral("_stream_") +
+                    OString::Concat("_stream_") +
                     OString::number( sal_Int32(pStreamRef->m_nNumber) ) +
                     "_" +
                     OString::number( sal_Int32(pStreamRef->m_nGeneration) );
@@ -413,7 +413,7 @@ static int write_objects( const char* i_pInFile, const char* i_pOutFile, PDFFile
         }
 
         OString aOutStream = i_pOutFile +
-            OStringLiteral("_stream_") +
+            OString::Concat("_stream_") +
             OString::number( nObject ) +
             "_"  +
             OString::number( nGeneration );

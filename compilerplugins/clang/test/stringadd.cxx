@@ -36,6 +36,7 @@ void f1(OUString s1, int i, OString o)
     s2 += OUString::number(i);
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
     s2 += XXX1;
+    // expected-error@+2 {{rather use O[U]String::Concat than constructing 'rtl::OUStringLiteral<4>' from 'const char16_t [4]' on LHS of + (where RHS is of type 'const char [4]') [loplugin:stringadd]}}
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
     s2 += OUStringLiteral(XXX1u) + XXX2;
 
@@ -200,9 +201,9 @@ void f1(OUString s, OUString t, int i, const char* pChar)
 {
     // no warning expected
     t = t + "xxx";
-    // expected-error@+1 {{avoid constructing 'rtl::OUString' from 'const char [4]' on RHS of + (where LHS is of type 'rtl::OUString') [loplugin:stringadd]}}
+    // expected-error@+1 {{rather use O[U]String::Concat than constructing 'rtl::OUString' from 'const char [4]' on RHS of + (where LHS is of type 'rtl::OUString') [loplugin:stringadd]}}
     s = s + OUString("xxx");
-    // expected-error@+1 {{avoid constructing 'rtl::OUString' from 'const rtl::OUString' on RHS of + (where LHS is of type 'rtl::OUString') [loplugin:stringadd]}}
+    // expected-error@+1 {{rather use O[U]String::Concat than constructing 'rtl::OUString' from 'const rtl::OUString' on RHS of + (where LHS is of type 'rtl::OUString') [loplugin:stringadd]}}
     s = s + OUString(getByRef());
 
     // no warning expected
@@ -220,9 +221,9 @@ void f1(OUString s, OUString t, int i, const char* pChar)
 void f2(char ch)
 {
     OString s;
-    // expected-error@+1 {{avoid constructing 'rtl::OString' from 'const char [4]' on RHS of + (where LHS is of type 'rtl::OString') [loplugin:stringadd]}}
+    // expected-error@+1 {{rather use O[U]String::Concat than constructing 'rtl::OString' from 'const char [4]' on RHS of + (where LHS is of type 'rtl::OString') [loplugin:stringadd]}}
     s = s + OString("xxx");
-    // expected-error@+1 {{avoid constructing 'rtl::OString' from 'char' on RHS of + (where LHS is of type 'rtl::OString') [loplugin:stringadd]}}
+    // expected-error@+1 {{rather use O[U]String::Concat than constructing 'rtl::OString' from 'char' on RHS of + (where LHS is of type 'rtl::OString') [loplugin:stringadd]}}
     s = s + OString(ch);
 }
 }

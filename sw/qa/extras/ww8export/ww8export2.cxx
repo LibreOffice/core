@@ -983,7 +983,7 @@ DECLARE_WW8EXPORT_TEST(testTdf112118_DOC, "tdf112118.doc")
         for (const auto& side : style.sideParams)
         {
             const OUString sSide = OUString::createFromAscii(side.sideName);
-            const OString sStage = style.styleName + OStringLiteral(" ") + side.sideName;
+            const OString sStage = style.styleName + OString::Concat(" ") + side.sideName;
 
             sal_Int32 nMargin = getProperty<sal_Int32>(xStyle, sSide + "Margin");
             CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(sStage + " margin width").getStr(),

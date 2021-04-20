@@ -104,7 +104,7 @@ rtl::Reference<svt::StatusbarController> SfxStatusBarControllerFactory(
         sal_uInt16 nSlotId = pSlot->GetSlotId();
         if ( nSlotId > 0 )
         {
-            OString aCmd = OStringLiteral(".uno:") + pSlot->GetUnoName();
+            OString aCmd = OString::Concat(".uno:") + pSlot->GetUnoName();
             pStatusBar->SetHelpId( nSlotId, aCmd );
             return SfxStatusBarControl::CreateControl( nSlotId, nID, pStatusBar, pModule );
         }

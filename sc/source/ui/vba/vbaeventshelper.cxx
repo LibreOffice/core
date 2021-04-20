@@ -530,13 +530,13 @@ ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs ) :
 
     // global
     auto registerAutoEvent = [this](sal_Int32 nID, const char* sName)
-    { registerEventHandler(nID, script::ModuleType::NORMAL, OString(OStringLiteral("Auto_") + sName).getStr(), -1, uno::Any(false)); };
+    { registerEventHandler(nID, script::ModuleType::NORMAL, OString(OString::Concat("Auto_") + sName).getStr(), -1, uno::Any(false)); };
     registerAutoEvent(AUTO_OPEN,  "Open");
     registerAutoEvent(AUTO_CLOSE, "Close");
 
     // Workbook
     auto registerWorkbookEvent = [this](sal_Int32 nID, const char* sName, sal_Int32 nCancelIndex)
-    { registerEventHandler(nID, script::ModuleType::DOCUMENT, OString(OStringLiteral("Workbook_") + sName).getStr(), nCancelIndex, uno::Any(false)); };
+    { registerEventHandler(nID, script::ModuleType::DOCUMENT, OString(OString::Concat("Workbook_") + sName).getStr(), nCancelIndex, uno::Any(false)); };
     registerWorkbookEvent( WORKBOOK_ACTIVATE,            "Activate",           -1 );
     registerWorkbookEvent( WORKBOOK_DEACTIVATE,          "Deactivate",         -1 );
     registerWorkbookEvent( WORKBOOK_OPEN,                "Open",               -1 );
@@ -552,10 +552,10 @@ ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs ) :
     // Worksheet events. All events have a corresponding workbook event.
     auto registerWorksheetEvent = [this](sal_Int32 nID, const char* sName, sal_Int32 nCancelIndex)
     {
-        registerEventHandler(nID, script::ModuleType::DOCUMENT, OString(OStringLiteral("Worksheet_") + sName).getStr(),
+        registerEventHandler(nID, script::ModuleType::DOCUMENT, OString(OString::Concat("Worksheet_") + sName).getStr(),
                              nCancelIndex, uno::Any(true));
         registerEventHandler(USERDEFINED_START + nID, script::ModuleType::DOCUMENT,
-                             OString(OStringLiteral("Workbook_Worksheet") + sName).getStr(),
+                             OString(OString::Concat("Workbook_Worksheet") + sName).getStr(),
                              ((nCancelIndex >= 0) ? (nCancelIndex + 1) : -1), uno::Any(false));
     };
     registerWorksheetEvent( WORKSHEET_ACTIVATE,           "Activate",           -1 );

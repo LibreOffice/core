@@ -1315,9 +1315,9 @@ OString SkiaSalBitmap::GetImageKey() const
         ss << std::hex << std::setfill('0') << std::setw(6)
            << static_cast<sal_uInt32>(mEraseColor.GetRGBColor()) << std::setw(2)
            << static_cast<int>(mEraseColor.GetAlpha());
-        return OStringLiteral("E") + ss.str().c_str();
+        return OString::Concat("E") + ss.str().c_str();
     }
-    return OStringLiteral("I") + OString::number(GetSkImage()->uniqueID());
+    return OString::Concat("I") + OString::number(GetSkImage()->uniqueID());
 }
 
 OString SkiaSalBitmap::GetAlphaImageKey() const
@@ -1327,9 +1327,9 @@ OString SkiaSalBitmap::GetAlphaImageKey() const
         std::stringstream ss;
         ss << std::hex << std::setfill('0') << std::setw(2)
            << static_cast<int>(255 - SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)));
-        return OStringLiteral("E") + ss.str().c_str();
+        return OString::Concat("E") + ss.str().c_str();
     }
-    return OStringLiteral("I") + OString::number(GetAlphaSkImage()->uniqueID());
+    return OString::Concat("I") + OString::number(GetAlphaSkImage()->uniqueID());
 }
 
 #ifdef DBG_UTIL

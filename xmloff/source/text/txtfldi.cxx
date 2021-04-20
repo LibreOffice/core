@@ -2695,7 +2695,7 @@ void XMLDdeFieldDeclImportContext::startFastElement(
     try
     {
         Reference<XInterface> xIfc =
-            xFactory->createInstance(OUStringLiteral(sAPI_fieldmaster_prefix) + sAPI_dde);
+            xFactory->createInstance(OUString::Concat(sAPI_fieldmaster_prefix) + sAPI_dde);
         if( xIfc.is() )
         {
             Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );

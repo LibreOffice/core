@@ -426,7 +426,7 @@ void SdExportTest::testSwappedOutImageExport()
     {
         // Load the original file with one image
         ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/document_with_two_images.odp"), ODP);
-        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + aFileFormats[vFormats[nExportFormat]].pFilterName;
+        const OString sFailedMessage = OString::Concat("Failed on filter: ") + aFileFormats[vFormats[nExportFormat]].pFilterName;
 
         // Export the document and import again for a check
         uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
@@ -645,7 +645,7 @@ void SdExportTest::testLinkedGraphicRT()
 
         // Check whether graphic imported well after export
         {
-            const OString sFailedMessage = OStringLiteral("Failed on filter: ") + aFileFormats[vFormats[nExportFormat]].pFilterName;
+            const OString sFailedMessage = OString::Concat("Failed on filter: ") + aFileFormats[vFormats[nExportFormat]].pFilterName;
 
             SdDrawDocument *pDoc = xDocShRef->GetDoc();
             CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDoc != nullptr );
@@ -723,7 +723,7 @@ void SdExportTest::testImageWithSpecialID()
     {
         // Load the original file
         ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/images_with_special_IDs.odp"), ODP);
-        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + aFileFormats[vFormats[nExportFormat]].pFilterName;
+        const OString sFailedMessage = OString::Concat("Failed on filter: ") + aFileFormats[vFormats[nExportFormat]].pFilterName;
 
         // Export the document and import again for a check
         uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
@@ -1068,7 +1068,7 @@ void SdExportTest::testBulletsAsImage()
     for (sal_Int32 nExportFormat : {ODP, PPTX, PPT})
     {
         ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/BulletsAsImage.odp"), ODP);
-        const OString sFailedMessageBase = OStringLiteral("Failed on filter '") + aFileFormats[nExportFormat].pFilterName + "': ";
+        const OString sFailedMessageBase = OString::Concat("Failed on filter '") + aFileFormats[nExportFormat].pFilterName + "': ";
 
         uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
         uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);

@@ -1144,7 +1144,7 @@ void PrintFontManager::Substitute(FontSelectPattern &rPattern, OUString& rMissin
                             sTag = mapToFontConfigLangTag(aOurTag);
                             if (!sTag.isEmpty() && m_aPreviousLangSupportRequests.find(sTag) == m_aPreviousLangSupportRequests.end())
                             {
-                                OString sReq = OStringLiteral(":lang=") + sTag;
+                                OString sReq = OString::Concat(":lang=") + sTag;
                                 m_aCurrentRequests.push_back(OUString::fromUtf8(sReq));
                                 m_aPreviousLangSupportRequests.insert(sTag);
                             }

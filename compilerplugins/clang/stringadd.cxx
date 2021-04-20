@@ -242,10 +242,15 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
             return;
         auto tc3 = loplugin::TypeCheck(e->getType());
         if (!tc3.Class("OUString").Namespace("rtl").GlobalNamespace()
-            && !tc3.Class("OString").Namespace("rtl").GlobalNamespace())
+            && !tc3.Class("OString").Namespace("rtl").GlobalNamespace()
+            && !tc3.Class("OUStringLiteral").Namespace("rtl").GlobalNamespace()
+            && !tc3.Class("OStringLiteral").Namespace("rtl").GlobalNamespace()
+            && !tc3.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+            && !tc3.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
             return;
         report(DiagnosticsEngine::Warning,
-               ("avoid constructing %0 from %1 on %select{L|R}2HS of + (where %select{R|L}2HS is of"
+               ("rather use O[U]String::Concat than constructing %0 from %1 on %select{L|R}2HS of "
+                "+ (where %select{R|L}2HS is of"
                 " type %3)"),
                compat::getBeginLoc(e))
             << e->getType().getLocalUnqualifiedType() << e->getSubExprAsWritten()->getType() << arg
@@ -348,7 +353,8 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
                 return true;
         // Expr::HasSideEffects does not like stuff that passes through OUStringLiteral
         auto dc2 = loplugin::DeclCheck(constructExpr->getConstructor()->getParent());
-        if (dc2.Class("OUStringLiteral").Namespace("rtl").GlobalNamespace())
+        if (dc2.Class("OUStringLiteral").Namespace("rtl").GlobalNamespace()
+            || dc2.Class("OStringLiteral").Namespace("rtl").GlobalNamespace())
             return true;
     }
 
@@ -356,7 +362,8 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
     if (auto functionalCastExpr = dyn_cast<CXXFunctionalCastExpr>(expr))
     {
         auto tc = loplugin::TypeCheck(functionalCastExpr->getType());
-        if (tc.Class("OUStringLiteral").Namespace("rtl").GlobalNamespace())
+        if (tc.Class("OUStringLiteral").Namespace("rtl").GlobalNamespace()
+            || tc.Class("OStringLiteral").Namespace("rtl").GlobalNamespace())
             return isSideEffectFree(functionalCastExpr->getSubExpr());
     }
 

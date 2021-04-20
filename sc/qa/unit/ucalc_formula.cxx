@@ -155,7 +155,7 @@ void Test::testFormulaCreateStringFromTokens()
         bool bInserted = pDBs->getNamedDBs().insert(std::move(pData));
         CPPUNIT_ASSERT_MESSAGE(
             OString(
-                OStringLiteral("Failed to insert \"") + aDBs[i].pName + "\"").getStr(),
+                OString::Concat("Failed to insert \"") + aDBs[i].pName + "\"").getStr(),
             bInserted);
     }
 
@@ -7267,7 +7267,7 @@ void Test::testFuncTableRef()
                     ScAddress(2,4,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
             bool bInserted = pGlobalNames->insert(pName);
             CPPUNIT_ASSERT_MESSAGE(
-                    OString(OStringLiteral("Failed to insert named expression ") + aNames[i].pName +".").getStr(), bInserted);
+                    OString(OString::Concat("Failed to insert named expression ") + aNames[i].pName +".").getStr(), bInserted);
         }
     }
 
@@ -7441,7 +7441,7 @@ void Test::testFuncTableRef()
                     ScAddress(6,12,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
             bool bInserted = pGlobalNames->insert(pName);
             CPPUNIT_ASSERT_MESSAGE(
-                    OString(OStringLiteral("Failed to insert named expression ") + aHlNames[i].pName +".").getStr(), bInserted);
+                    OString(OString::Concat("Failed to insert named expression ") + aHlNames[i].pName +".").getStr(), bInserted);
         }
     }
 
