@@ -170,7 +170,7 @@ class ScXMLExport : public SvXMLExport
     static void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups();
 
-    bool GetMerged (const css::table::CellRangeAddress* pCellRange,
+    bool GetMerged (const ScRange* pCellRange,
         const css::uno::Reference <css::sheet::XSpreadsheet>& xTable);
 
     void WriteTable(sal_Int32 nTable, const css::uno::Reference< css::sheet::XSpreadsheet>& xTable);

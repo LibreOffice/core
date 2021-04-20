@@ -15,7 +15,7 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
+  */
 
 #include <memory>
 #include "XMLExportDatabaseRanges.hxx"
@@ -157,8 +157,8 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
                                     rProp.Value >>= nSourceType;
                             if (nSourceType != sheet::DataImportMode_NONE)
                             {
-                                ScRange aArea = xDatabaseRange->getDataArea();
-                                aSkipRanges.AddNewEmptyDatabaseRange(aArea);
+                                maDestRange = ScRange( aAddressRange.StartColumn, aAddressRange.StartRow, aAddressRange.Sheet,
+                                 aAddressRange.EndColumn, aAddressRange.EndRow, aAddressRange.Sheet );
 
                                 // #105276#; set last row/column so default styles are collected
                                 rExport.GetSharedData()->SetLastColumn(aArea.Sheet, aArea.EndColumn);
