@@ -28,6 +28,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <cairo.h>
+#include <pixman.h>
 
 #include "cairo_spritehelper.hxx"
 
@@ -138,6 +139,37 @@ namespace cairocanvas
         cairo_rectangle( pCairo.get(), 0, 0, floor( aSize.getX() ), floor( aSize.getY() ) );
         cairo_clip( pCairo.get() );
         cairo_set_matrix( pCairo.get(), &aOrigMatrix );
+
+        cairo_matrix_t aInverseMatrix = aOrigMatrix;
+        bool matrixProblem = false;
+        // tdf#125949: Cairo internally uses the pixman library, and _cairo_matrix_to_pixman_matrix()
+        // checks all matrix components to fix PIXMAN_MAX_INT, which is about 32k. Which means that
+        // if our transformation is large, such as an initial step of some zooming animations,
+        // the conversion will fail. To make things worse, once something in cairo fails, it's treated
+        // as a fatal error, the error status of that cairo_t gets set, and there's no way to reset it
+        // besides recreating the whole cairo_t
+        // (https://lists.cairographics.org/archives/cairo/2006-September/007892.html).
+        // So copy&paste PIXMAN_MAX_INT here, and if our matrix could fail, bail out.
+#define PIXMAN_MAX_INT ((pixman_fixed_1 >> 1) - pixman_fixed_e) /* need to ensure deltas also fit */
+        if(cairo_matrix_invert(&aInverseMatrix) == CAIRO_STATUS_SUCCESS)
+        {
+            if(abs(aOrigMatrix.xx) > PIXMAN_MAX_INT || abs(aOrigMatrix.xx) > PIXMAN_MAX_INT
+                || abs(aOrigMatrix.xy) > PIXMAN_MAX_INT || abs(aOrigMatrix.yx) > PIXMAN_MAX_INT
+                || abs(aOrigMatrix.x0) > PIXMAN_MAX_INT || abs(aOrigMatrix.y0) > PIXMAN_MAX_INT
+                || abs(aInverseMatrix.xx) > PIXMAN_MAX_INT || abs(aInverseMatrix.xx) > PIXMAN_MAX_INT
+                || abs(aInverseMatrix.xy) > PIXMAN_MAX_INT || abs(aInverseMatrix.yx) > PIXMAN_MAX_INT
+                || abs(aInverseMatrix.x0) > PIXMAN_MAX_INT || abs(aInverseMatrix.y0) > PIXMAN_MAX_INT)
+                matrixProblem = true;
+#undef PIXMAN_MAX_INT
+        }
+        else
+            matrixProblem = true;
+        if(matrixProblem)
+        {
+            SAL_WARN( "canvas.cairo", "matrix would overflow PIXMAN_MAX_INT, avoiding drawing" );
+            cairo_restore( pCairo.get() );
+            return;
+        }
 
         if( isContentFullyOpaque() )
             cairo_set_operator( pCairo.get(), CAIRO_OPERATOR_SOURCE );
