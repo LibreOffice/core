@@ -1262,7 +1262,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
     if (nStyle & WB_MENUSTYLEVALUESET)
     {
         if (bFocus)
-            DrawFocusRect(rRenderContext, aRect);
+            InvertFocusRect(rRenderContext, aRect);
         if (bDrawSel)
         {
             rRenderContext.SetLineColor(mbBlackSel ? COL_BLACK : aDoubleColor);
@@ -1316,7 +1316,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
         }
         rRenderContext.DrawRect(aRect2);
         if (bFocus)
-            DrawFocusRect(rRenderContext, aRect2);
+            InvertFocusRect(rRenderContext, aRect2);
     }
 
     ImplDrawItemText(rRenderContext, pItem->maText);
