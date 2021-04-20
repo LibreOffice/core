@@ -32,10 +32,6 @@ $(eval $(call gb_Library_use_externals,slideshow,\
  ))
 endif
 
-$(eval $(call gb_Library_use_custom_headers,slideshow,\
-	officecfg/registry \
-))
-
 $(eval $(call gb_Library_use_sdk_api,slideshow))
 
 $(eval $(call gb_Library_use_libraries,slideshow,\
