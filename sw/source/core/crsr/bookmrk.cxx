@@ -701,7 +701,7 @@ namespace sw::mark
             return;
 
         OStringBuffer sPayload;
-        sPayload = OStringLiteral("{\"action\": \"show\","
+        sPayload = OString::Concat("{\"action\": \"show\","
                    " \"type\": \"drop-down\", \"textArea\": \"") +
                    m_aPortionPaintArea.SVRect().toString() + "\",";
         // Add field params to the message

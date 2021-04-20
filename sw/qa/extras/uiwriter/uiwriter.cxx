@@ -4473,7 +4473,7 @@ void SwUiWriterTest::testEmbeddedDataSource()
 
     // Load: should have a component and a data source, too.
     // Path with "#" must not cause issues
-    load(OUString(DATA_DIRECTORY + OUStringLiteral(u"hash%23path/")), "embedded-data-source.odt");
+    load(OUString(DATA_DIRECTORY + OUString::Concat(u"hash%23path/")), "embedded-data-source.odt");
     CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
 
     // Data source has a table named Sheet1.
@@ -8044,12 +8044,12 @@ void SwUiWriterTest::testTdf133589()
     pWrtShell->Insert(u"szÃ©kely");
     pWrtShell->AutoCorrect(corr, ' ');
     sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    OUString sReplaced(u"ğ³¥ğ³‹ğ³“ğ³‰ğ³— ");
+    OUString sReplaced(u"í¢íµ°Ó‹í¢í³°Ó‰í¢í· ");
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // disambiguate consonants: asszony -> asz|szony
     pWrtShell->Insert(u"asszony");
     pWrtShell->AutoCorrect(corr, ' ');
-    sReplaced += u"ğ³€ğ³¥ğ³¥ğ³›ğ³š ";
+    sReplaced += u"í¢Œí°°Ó¥í¢íµ°Ó›í¢íº ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // disambiguate consonants: kosszarv -> kos|szarv
     // (add explicit ZWSP temporarily for consonant disambiguation, because the requested
@@ -8057,12 +8057,12 @@ void SwUiWriterTest::testTdf133589()
     // pWrtShell->Insert(u"kosszarv");
     pWrtShell->Insert(u"kosâ€‹szarv");
     pWrtShell->AutoCorrect(corr, ' ');
-    sReplaced += u"ğ³“ğ³›ğ³¤ğ³¥ğ³€ğ³¢ğ³® ";
+    sReplaced += u"í¢í³°Ó›í¢í´°Ó¥í¢Œí°°Ó¢í¢í¾ ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // transliterate numbers to Old Hungarian
     pWrtShell->Insert(u"2020");
     pWrtShell->AutoCorrect(corr, ' ');
-    sReplaced += u"ğ³ºğ³ºğ³¿ğ³¼ğ³¼ ";
+    sReplaced += u"í¢íº°Óºí¢í¿°Ó¼í¢í¼ ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 

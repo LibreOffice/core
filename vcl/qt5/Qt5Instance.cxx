@@ -198,12 +198,12 @@ void Qt5Instance::RunInMainThread(std::function<void()> func)
 
 OUString Qt5Instance::constructToolkitID(std::u16string_view sTKname)
 {
-    OUString sID(sTKname + OUStringLiteral(u" ("));
+    OUString sID(sTKname + OUString::Concat(u" ("));
     if (m_bUseCairo)
         sID += "cairo+";
     else
         sID += "qfont+";
-    sID += toOUString(QGuiApplication::platformName()) + OUStringLiteral(u")");
+    sID += toOUString(QGuiApplication::platformName()) + OUString::Concat(u")");
     return sID;
 }
 

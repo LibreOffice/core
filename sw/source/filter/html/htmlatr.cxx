@@ -2992,7 +2992,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
             pStr = "ctl";
             break;
         }
-        sOut += pStr + OStringLiteral("\"");
+        sOut += pStr + OString::Concat("\"");
     }
 
     rWrt.Strm().WriteOString( sOut );
@@ -3189,7 +3189,7 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     }
     if( pStr )
     {
-        OString sOut = OStringLiteral(" " OOO_STRING_SVTOOLS_HTML_O_align "=\"") +
+        OString sOut = OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_align "=\"") +
             pStr + "\"";
         rWrt.Strm().WriteOString( sOut );
     }

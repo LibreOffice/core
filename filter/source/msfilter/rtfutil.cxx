@@ -248,7 +248,7 @@ static bool TryOutString(const OUString& rStr, rtl_TextEncoding eDestEnc)
 OString OutStringUpr(const char* pToken, const OUString& rStr, rtl_TextEncoding eDestEnc)
 {
     if (TryOutString(rStr, eDestEnc))
-        return OStringLiteral("{") + pToken + " " + OutString(rStr, eDestEnc) + "}";
+        return OString::Concat("{") + pToken + " " + OutString(rStr, eDestEnc) + "}";
 
     OStringBuffer aRet;
     aRet.append("{" OOO_STRING_SVTOOLS_RTF_UPR "{");

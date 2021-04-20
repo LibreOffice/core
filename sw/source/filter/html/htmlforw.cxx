@@ -504,7 +504,7 @@ void SwHTMLWriter::OutForm( bool bOn,
 
         if( pStr )
         {
-            sOut += OStringLiteral(" " OOO_STRING_SVTOOLS_HTML_O_enctype "=\"") +
+            sOut += OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_enctype "=\"") +
                 pStr + "\"";
         }
     }
@@ -847,7 +847,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                     auto b = o3tl::tryAccess<bool>(aTmp2);
                     pWrapStr = (b && *b) ? OOO_STRING_SVTOOLS_HTML_WW_hard
                                          : OOO_STRING_SVTOOLS_HTML_WW_soft;
-                    sOptions += OStringLiteral(" " OOO_STRING_SVTOOLS_HTML_O_wrap "=\"") +
+                    sOptions += OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_wrap "=\"") +
                         pWrapStr + "\"";
                 }
             }
@@ -925,10 +925,10 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     if( eTag == TAG_NONE )
         return rWrt;
 
-    OString sOut = OStringLiteral("<") + TagNames[eTag];
+    OString sOut = OString::Concat("<") + TagNames[eTag];
     if( eType != TYPE_NONE )
     {
-        sOut += OStringLiteral(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"") +
+        sOut += OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"") +
             TypeNames[eType] + "\"";
     }
 

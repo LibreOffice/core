@@ -166,11 +166,11 @@ static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Option
 
         OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
 
-        name += OStringLiteral("OSL_PIPE_") + Ident + "_" + pszPipeName;
+        name += OString::Concat("OSL_PIPE_") + Ident + "_" + pszPipeName;
     }
     else
     {
-        name += OStringLiteral("OSL_PIPE_") + pszPipeName;
+        name += OString::Concat("OSL_PIPE_") + pszPipeName;
     }
 
     if (o3tl::make_unsigned(name.getLength()) >= sizeof addr.sun_path)

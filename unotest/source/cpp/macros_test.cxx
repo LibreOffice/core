@@ -114,7 +114,7 @@ void MacrosTest::setUpNssGpg(const test::Directories& rDirectories, const OUStri
 #if HAVE_GPGCONF_SOCKETDIR
     auto const ldPath = std::getenv("LIBO_LD_PATH");
     m_gpgconfCommandPrefix
-        = ldPath == nullptr ? OString() : OStringLiteral("LD_LIBRARY_PATH=") + ldPath + " ";
+        = ldPath == nullptr ? OString() : OString::Concat("LD_LIBRARY_PATH=") + ldPath + " ";
     OString path;
     bool ok = aTargetPath.convertToString(&path, osl_getThreadTextEncoding(),
                                           RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR

@@ -79,14 +79,14 @@ inline css::uno::Any DbgGetCaughtException()
                                      OSL_ENSURE(c, m); \
                                      throw css::lang::IllegalArgumentException( \
                                      __func__ \
-                                     + OUStringLiteral(u",\n" m), \
+                                     + OUString::Concat(u",\n" m), \
                                      css::uno::Reference< css::uno::XInterface >(), \
                                      0 ); }
 #define ENSURE_ARG_OR_THROW2(c, m, ifc, arg) if( !(c) ) { \
                                                OSL_ENSURE(c, m); \
                                                throw css::lang::IllegalArgumentException( \
                                                __func__ \
-                                               + OUStringLiteral(u",\n" m), \
+                                               + OUString::Concat(u",\n" m), \
                                                ifc, \
                                                arg ); }
 
@@ -97,14 +97,14 @@ inline css::uno::Any DbgGetCaughtException()
     if( !(c) ){ \
         OSL_ENSURE(c, m); \
         throw css::uno::RuntimeException( \
-        __func__ + OUStringLiteral(u",\n" m), \
+        __func__ + OUString::Concat(u",\n" m), \
         css::uno::Reference< css::uno::XInterface >() ); }
 
 #define ENSURE_OR_THROW2(c, m, ifc) \
     if( !(c) ) { \
         OSL_ENSURE(c, m); \
         throw css::uno::RuntimeException( \
-        __func__ + OUStringLiteral(u",\n" m), \
+        __func__ + OUString::Concat(u",\n" m), \
         ifc ); }
 
 /** This macro asserts the given condition (in debug mode), and

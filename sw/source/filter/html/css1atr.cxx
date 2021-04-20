@@ -344,7 +344,7 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
         sOut.append("; ");
     }
 
-    sOut.append(pProp + OStringLiteral(": "));
+    sOut.append(pProp + OString::Concat(": "));
     if( m_nCSS1OutMode & CSS1_OUTMODE_ENCODE )
     {
         // for STYLE-Option encode string
