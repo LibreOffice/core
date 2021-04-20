@@ -5981,7 +5981,7 @@ public:
     {
         GtkPolicyType eGtkVPolicy;
         gtk_scrolled_window_get_policy(m_pScrolledWindow, nullptr, &eGtkVPolicy);
-        gtk_scrolled_window_set_policy(m_pScrolledWindow, eGtkVPolicy, VclToGtk(eHPolicy));
+        gtk_scrolled_window_set_policy(m_pScrolledWindow, VclToGtk(eHPolicy), eGtkVPolicy);
     }
 
     virtual VclPolicyType get_hpolicy() const override
