@@ -984,8 +984,6 @@ include/vcl/weld.hxx:397
     void weld::ScrolledWindow::hadjustment_set_step_increment(int)
 include/vcl/weld.hxx:399
     enum VclPolicyType weld::ScrolledWindow::get_hpolicy() const
-include/vcl/weld.hxx:404
-    int weld::ScrolledWindow::get_hscroll_height() const
 include/vcl/weld.hxx:531
     struct SystemEnvData weld::Window::get_system_data() const
 include/vcl/weld.hxx:615
