@@ -1695,6 +1695,9 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nCurrentLFO,
     if( !m_pCurrentColl )
         return;
 
+    rStyleInf.m_nLFOIndex  = nCurrentLFO;
+    rStyleInf.m_nListLevel = nCurrentLevel;
+
     // only save the Parameters for now. The actual List will be appended
     // at a later point, when the Listdefinitions is read...
     if (
@@ -1702,9 +1705,6 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nCurrentLFO,
          (WW8ListManager::nMaxLevel > nCurrentLevel)
        )
     {
-        rStyleInf.m_nLFOIndex  = nCurrentLFO;
-        rStyleInf.m_nListLevel = nCurrentLevel;
-
         std::vector<sal_uInt8> aParaSprms;
         SwNumRule* pNmRule = m_xLstManager->GetNumRuleForActivation(
             nCurrentLFO, nCurrentLevel, aParaSprms);
@@ -1898,9 +1898,11 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
 
         if (WW8ListManager::nMaxLevel <= m_nListLevel )
             m_nListLevel = WW8ListManager::nMaxLevel;
-        else if (USHRT_MAX > m_nLFOPosition)
+
+        RegisterNumFormat(m_nLFOPosition, m_nListLevel);
+        if (USHRT_MAX > m_nLFOPosition)
         {
-            RegisterNumFormat(m_nLFOPosition, m_nListLevel);
+            assert(false && "m_nLFOPosition is always reset immediately, so we never get here.");
             m_nLFOPosition = USHRT_MAX;
             m_nListLevel = MAXLEVEL;
         }
