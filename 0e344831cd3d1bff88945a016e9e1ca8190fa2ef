@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ccbf1bf_d4716fc4",
+        "filename": "writerfilter/inc/dmapper/CommentProperties.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-20T10:19:33Z",
+      "side": 1,
+      "message": "Could you please add a one-liner description/doxygen comment for this on master?",
+      "revId": "0e344831cd3d1bff88945a016e9e1ca8190fa2ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9ac5c54_a4a953f3",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1907,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-20T10:19:33Z",
+      "side": 1,
+      "message": "Not sure if c++ is not enough in cp-6.4 to allow this, let\u0027s hope so.",
+      "revId": "0e344831cd3d1bff88945a016e9e1ca8190fa2ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f35df26b_b8f1443f",
+        "filename": "writerfilter/source/ooxml/OOXMLFastContextHandler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-20T10:19:33Z",
+      "side": 1,
+      "message": "Same here, missing comment for a new class.",
+      "revId": "0e344831cd3d1bff88945a016e9e1ca8190fa2ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6e32b7d_ab1f49ec",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 14239,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-20T10:19:33Z",
+      "side": 1,
+      "message": "Yes, that\u0027s just not handled by the python scripts consuming this file, I think. So what you did here looks OK.",
+      "revId": "0e344831cd3d1bff88945a016e9e1ca8190fa2ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
