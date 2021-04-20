@@ -11,6 +11,14 @@
 
 namespace writerfilter
 {
+/**
+ A container for the extended comment properties linked to the last paragraph of a comment
+
+ Corresponds to the data available in w15:commentEx elements from commentsExtended stream
+ ([MS-DOCX]): resolved state and parent (referring to comment that this one answers to; TODO).
+
+ @since 7.2
+*/
 struct CommentProperties
 {
     bool bDone;
