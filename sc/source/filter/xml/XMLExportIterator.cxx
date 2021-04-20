@@ -323,7 +323,7 @@ ScMyEmptyDatabaseRangesContainer::~ScMyEmptyDatabaseRangesContainer()
 {
 }
 
-void ScMyEmptyDatabaseRangesContainer::AddNewEmptyDatabaseRange(const table::CellRangeAddress& aCellRange)
+void ScMyEmptyDatabaseRangesContainer::AddNewEmptyDatabaseRange(const ScRange::& aCellRange)
 {
     SCROW nStartRow(aCellRange.StartRow);
     SCROW nEndRow(aCellRange.EndRow);

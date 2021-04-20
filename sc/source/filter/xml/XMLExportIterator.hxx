@@ -31,7 +31,7 @@
 namespace com::sun::star::drawing { class XShape; }
 namespace com::sun::star::sheet { class XSpreadsheet; }
 namespace com::sun::star::table { class XCellRange; }
-namespace com::sun::star::table { struct CellRangeAddress; }
+namespace com::sun::star::table { struct ScRange; }
 
 class   ScPostIt;
 class   ScHorizontalCellIterator;
@@ -203,7 +203,7 @@ public:
     ScMyEmptyDatabaseRangesContainer & operator =(ScMyEmptyDatabaseRangesContainer const &) = default;
     ScMyEmptyDatabaseRangesContainer & operator =(ScMyEmptyDatabaseRangesContainer &&) = default;
 
-    void                        AddNewEmptyDatabaseRange(const css::table::CellRangeAddress& aCellRangeAddress);
+    void                        AddNewEmptyDatabaseRange(const css::table::ScRange& aCellRangeAddress);
 
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell ) override;

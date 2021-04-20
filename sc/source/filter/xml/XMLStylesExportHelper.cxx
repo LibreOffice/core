@@ -892,7 +892,7 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
     pRowFormatRanges->Sort();
 }
 
-void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress& rCellRangeAddress,
+void ScFormatRangeStyles::AddRangeStyleName(const ScRange& rCellRangeAddress,
     const sal_Int32 nStringIndex, const bool bIsAutoStyle, const sal_Int32 nValidationIndex,
     const sal_Int32 nNumberFormat)
 {

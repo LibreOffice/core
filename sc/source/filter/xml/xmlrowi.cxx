@@ -299,14 +299,14 @@ void SAL_CALL ScXMLTableRowsContext::endFastElement(sal_Int32 /*nElement*/)
                 if (!xPrintAreas->getPrintTitleRows())
                 {
                     xPrintAreas->setPrintTitleRows(true);
-                    table::CellRangeAddress aRowHeaderRange;
+                    ScRange aRowHeaderRange;
                     aRowHeaderRange.StartRow = nHeaderStartRow;
                     aRowHeaderRange.EndRow = nHeaderEndRow;
                     xPrintAreas->setTitleRows(aRowHeaderRange);
                 }
                 else
                 {
-                    table::CellRangeAddress aRowHeaderRange(xPrintAreas->getTitleRows());
+                    ScRange aRowHeaderRange(xPrintAreas->getTitleRows());
                     aRowHeaderRange.EndRow = nHeaderEndRow;
                     xPrintAreas->setTitleRows(aRowHeaderRange);
                 }

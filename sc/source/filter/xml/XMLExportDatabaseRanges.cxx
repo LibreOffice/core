@@ -157,7 +157,7 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
                                     rProp.Value >>= nSourceType;
                             if (nSourceType != sheet::DataImportMode_NONE)
                             {
-                                table::CellRangeAddress aArea = xDatabaseRange->getDataArea();
+                                ScRange aArea = xDatabaseRange->getDataArea();
                                 aSkipRanges.AddNewEmptyDatabaseRange(aArea);
 
                                 // #105276#; set last row/column so default styles are collected

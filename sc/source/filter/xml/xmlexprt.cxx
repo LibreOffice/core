@@ -662,9 +662,9 @@ void ScXMLExport::ExportFontDecls_()
     SvXMLExport::ExportFontDecls_();
 }
 
-table::CellRangeAddress ScXMLExport::GetEndAddress(const uno::Reference<sheet::XSpreadsheet>& xTable)
+ScRange ScXMLExport::GetEndAddress(const uno::Reference<sheet::XSpreadsheet>& xTable)
 {
-    table::CellRangeAddress aCellAddress;
+    ScRange aCellAddress;
     uno::Reference<sheet::XSheetCellCursor> xCursor(xTable->createCursor());
     uno::Reference<sheet::XUsedAreaCursor> xUsedArea (xCursor, uno::UNO_QUERY);
     uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
@@ -1615,21 +1615,21 @@ void ScXMLExport::GetColumnRowHeader(bool& rHasColumnHeader, ScRange& rColumnHea
 
     rHasRowHeader = xPrintAreas->getPrintTitleRows();
     rHasColumnHeader = xPrintAreas->getPrintTitleColumns();
-    table::CellRangeAddress rTempRowHeaderRange = xPrintAreas->getTitleRows();
+    ScRange rTempRowHeaderRange = xPrintAreas->getTitleRows();
     rRowHeaderRange = ScRange(rTempRowHeaderRange.StartColumn,
                               rTempRowHeaderRange.StartRow,
                               rTempRowHeaderRange.Sheet,
                               rTempRowHeaderRange.EndColumn,
                               rTempRowHeaderRange.EndRow,
                               rTempRowHeaderRange.Sheet);
-    table::CellRangeAddress rTempColumnHeaderRange = xPrintAreas->getTitleColumns();
+    ScRange rTempColumnHeaderRange = xPrintAreas->getTitleColumns();
     rColumnHeaderRange = ScRange(rTempColumnHeaderRange.StartColumn,
                               rTempColumnHeaderRange.StartRow,
                               rTempColumnHeaderRange.Sheet,
                               rTempColumnHeaderRange.EndColumn,
                               rTempColumnHeaderRange.EndRow,
                               rTempColumnHeaderRange.Sheet);
-    uno::Sequence< table::CellRangeAddress > aRangeList( xPrintAreas->getPrintAreas() );
+    uno::Sequence< ScRange > aRangeList( xPrintAreas->getPrintAreas() );
     ScRangeStringConverter::GetStringFromRangeList( rPrintRanges, aRangeList, pDoc, FormulaGrammar::CONV_OOO );
 }
 
@@ -2091,9 +2091,9 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
             else
                 nIndex = pCellStyles->GetIndexOfStyleName(sName, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX, bIsAutoStyle);
 
-            const uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
+            const uno::Sequence<ScRange> aAddresses(xCellRanges->getRangeAddresses());
             bool bGetMerge(true);
-            for (table::CellRangeAddress const & address : aAddresses)
+            for (ScRange const & address : aAddresses)
             {
                 pSharedData->SetLastColumn(nTable, address.EndColumn);
                 pSharedData->SetLastRow(nTable, address.EndRow);
@@ -2110,9 +2110,9 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
         pCellStyles->AddStyleName(sEncodedStyleName, nIndex, false);
         if ( !pOldName )
         {
-            const uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
+            const uno::Sequence<ScRange> aAddresses(xCellRanges->getRangeAddresses());
             bool bGetMerge(true);
-            for (table::CellRangeAddress const & address : aAddresses)
+            for (ScRange const & address : aAddresses)
             {
                 if (bGetMerge)
                     bGetMerge = GetMerged(&address, xTable);
@@ -2535,7 +2535,7 @@ void ScXMLExport::collectAutoStyles()
                 {
                     sal_Int32 nColumns(pDoc->GetLastChangedCol(sal::static_int_cast<SCTAB>(nTable)));
                     pSharedData->SetLastColumn(nTable, nColumns);
-                    table::CellRangeAddress aCellAddress(GetEndAddress(xTable));
+                    ScRange aCellAddress(GetEndAddress(xTable));
                     if (aCellAddress.EndColumn > nColumns)
                     {
                         ++nColumns;
@@ -2697,7 +2697,7 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > const 
     }
 }
 
-bool ScXMLExport::GetMerged (const table::CellRangeAddress* pCellAddress,
+bool ScXMLExport::GetMerged (const ScRange* pCellAddress,
                             const uno::Reference <sheet::XSpreadsheet>& xTable)
 {
     bool bReady(false);
@@ -2716,7 +2716,7 @@ bool ScXMLExport::GetMerged (const table::CellRangeAddress* pCellAddress,
             {
                 uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
                 xCursor->collapseToMergedArea();
-                table::CellRangeAddress aCellAddress2(xCellAddress->getRangeAddress());
+                ScRange aCellAddress2(xCellAddress->getRangeAddress());
                 ScRange aScRange( aCellAddress2.StartColumn, aCellAddress2.StartRow, aCellAddress2.Sheet,
                                   aCellAddress2.EndColumn, aCellAddress2.EndRow, aCellAddress2.Sheet );
 
@@ -2907,7 +2907,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
         GetShapeExport()->seekShapes(pSharedData->GetDrawPage(nTable));
         WriteTableShapes();
     }
-    table::CellRangeAddress aRange(GetEndAddress(xTable));
+    ScRange aRange(GetEndAddress(xTable));
     pSharedData->SetLastColumn(nTable, aRange.EndColumn);
     pSharedData->SetLastRow(nTable, aRange.EndRow);
     mpCellsItr->SetCurrentTable(static_cast<SCTAB>(nTable), xCurrentTable);
@@ -4097,7 +4097,7 @@ void ScXMLExport::WriteLabelRanges( const uno::Reference< container::XIndexAcces
         if( xRange.is() )
         {
             OUString sRangeStr;
-            table::CellRangeAddress aCellRange( xRange->getLabelArea() );
+            ScRange aCellRange( xRange->getLabelArea() );
             ScRangeStringConverter::GetStringFromRange( sRangeStr, aCellRange, pDoc, FormulaGrammar::CONV_OOO );
             AddAttribute( XML_NAMESPACE_TABLE, XML_LABEL_CELL_RANGE_ADDRESS, sRangeStr );
             aCellRange = xRange->getDataArea();

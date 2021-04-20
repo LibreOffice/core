@@ -210,14 +210,14 @@ void SAL_CALL ScXMLTableColsContext::endFastElement( sal_Int32 /*nElement*/ )
                 if (!xPrintAreas->getPrintTitleColumns())
                 {
                     xPrintAreas->setPrintTitleColumns(true);
-                    table::CellRangeAddress aColumnHeaderRange;
+                    ScRange aColumnHeaderRange;
                     aColumnHeaderRange.StartColumn = nHeaderStartCol;
                     aColumnHeaderRange.EndColumn = nHeaderEndCol;
                     xPrintAreas->setTitleColumns(aColumnHeaderRange);
                 }
                 else
                 {
-                    table::CellRangeAddress aColumnHeaderRange(xPrintAreas->getTitleColumns());
+                    ScRange aColumnHeaderRange(xPrintAreas->getTitleColumns());
                     aColumnHeaderRange.EndColumn = nHeaderEndCol;
                     xPrintAreas->setTitleColumns(aColumnHeaderRange);
                 }
