@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <memory>
 #include <stack>
 
 #include <systools/win32/uwinapi.h>
@@ -734,24 +735,22 @@ static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
     return bValidEncoded;
 }
 
-static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
+static OString osl_encodeURL_(const OUString& sURL)
 {
     /* Encode non ascii characters within the URL */
 
-    rtl_String      *strUTF8 = nullptr;
-    char           *pszEncodedURL;
     const char     *pURLScan;
     char           *pURLDest;
     sal_Int32       nURLScanLen;
     sal_Int32       nURLScanCount;
 
-    rtl_uString2String( &strUTF8, rtl_uString_getStr( strURL ), rtl_uString_getLength( strURL ), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS );
+    OString sUTF8 = OUStringToOString(sURL, RTL_TEXTENCODING_UTF8);
 
-    pszEncodedURL = static_cast<char*>(malloc( (rtl_string_getLength( strUTF8 ) * 3 + 1)  * sizeof(char) ));
+    std::unique_ptr<char[]> pszEncodedURL(new (std::nothrow) char[(sUTF8.getLength() * 3 + 1) * sizeof(char)]);
     assert(pszEncodedURL); // Don't handle OOM conditions
-    pURLDest = pszEncodedURL;
-    pURLScan = rtl_string_getStr( strUTF8 );
-    nURLScanLen = rtl_string_getLength( strUTF8 );
+    pURLDest = pszEncodedURL.get();
+    pURLScan = sUTF8.getStr();
+    nURLScanLen = sUTF8.getLength();
     nURLScanCount = 0;
 
     while ( nURLScanCount < nURLScanLen )
@@ -798,9 +797,7 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
 
     *pURLDest = 0;
 
-    rtl_string_release( strUTF8 );
-    rtl_string_newFromStr( pstrEncodedURL, pszEncodedURL );
-    free( pszEncodedURL );
+    return OString(pszEncodedURL.get(), pURLDest - pszEncodedURL.get());
 }
 
 oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **pustrPath, bool bAllowRelative )
@@ -944,7 +941,7 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
 oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** pstrURL )
 {
     oslFileError nError = osl_File_E_INVAL; /* Assume failure */
-    rtl_uString *strTempURL = nullptr;
+    OUString sTempURL;
     DWORD dwPathType = PATHTYPE_ERROR;
 
     if (strPath)
@@ -952,96 +949,70 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
 
     if (dwPathType)
     {
-        rtl_uString *strTempPath = nullptr;
+        OUString sTempPath;
+        const OUString& sPath = OUString::unacquired(&strPath);
 
         if ( dwPathType & PATHTYPE_IS_LONGPATH )
         {
-            rtl_uString *strBuffer = nullptr;
-            sal_uInt32 nIgnore = 0;
-            sal_uInt32 nLength = 0;
-
             /* the path has the longpath prefix, lets remove it */
             switch ( dwPathType & PATHTYPE_MASK_TYPE )
             {
                 case PATHTYPE_ABSOLUTE_UNC:
-                    nIgnore = SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX_UNC ) - 1;
                     static_assert(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1 == 8,
                                   "Unexpected long path UNC prefix!");
 
                     /* generate the normal UNC path */
-                    nLength = rtl_uString_getLength( strPath );
-                    rtl_uString_newFromStr_WithLength( &strBuffer, strPath->buffer + nIgnore - 2, nLength - nIgnore + 2 );
-                    strBuffer->buffer[0] = '\\';
-
-                    rtl_uString_newReplace( &strTempPath, strBuffer, '\\', '/' );
-                    rtl_uString_release( strBuffer );
+                    sTempPath = "\\\\" + sPath.copy(8).replace('\\', '/');
                     break;
 
                 case PATHTYPE_ABSOLUTE_LOCAL:
-                    nIgnore = SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX ) - 1;
                     static_assert(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 == 4,
                                   "Unexpected long path prefix!");
 
                     /* generate the normal path */
-                    nLength = rtl_uString_getLength( strPath );
-                    rtl_uString_newFromStr_WithLength( &strBuffer, strPath->buffer + nIgnore, nLength - nIgnore );
-
-                    rtl_uString_newReplace( &strTempPath, strBuffer, '\\', '/' );
-                    rtl_uString_release( strBuffer );
+                    sTempPath = sPath.copy(4).replace('\\', '/');
                     break;
 
                 default:
                     OSL_FAIL( "Unexpected long path format!" );
-                    rtl_uString_newReplace( &strTempPath, strPath, '\\', '/' );
+                    sTempPath = sPath.replace('\\', '/');
                     break;
             }
         }
         else
         {
             /* Replace backslashes */
-            rtl_uString_newReplace( &strTempPath, strPath, '\\', '/' );
+            sTempPath = sPath.replace('\\', '/');
         }
 
         switch ( dwPathType & PATHTYPE_MASK_TYPE )
         {
         case PATHTYPE_RELATIVE:
-            rtl_uString_assign( &strTempURL, strTempPath );
+            sTempURL = sTempPath;
             nError = osl_File_E_None;
             break;
         case PATHTYPE_ABSOLUTE_UNC:
-            rtl_uString_newFromAscii( &strTempURL, "file:" );
-            rtl_uString_newConcat( &strTempURL, strTempURL, strTempPath );
+            sTempURL = "file:" + sTempPath;
             nError = osl_File_E_None;
             break;
         case PATHTYPE_ABSOLUTE_LOCAL:
-            rtl_uString_newFromAscii( &strTempURL, "file:///" );
-            rtl_uString_newConcat( &strTempURL, strTempURL, strTempPath );
+            sTempURL = "file:///" + sTempPath;
             nError = osl_File_E_None;
             break;
         default:
             break;
         }
-
-        /* Release temp path */
-        rtl_uString_release( strTempPath );
     }
 
     if ( osl_File_E_None == nError )
     {
-        rtl_String  *strEncodedURL = nullptr;
-
         /* Encode the URL */
-        osl_encodeURL_( strTempURL, &strEncodedURL );
+        OString sEncodedURL = osl_encodeURL_(sTempURL);
 
         /* Provide URL via unicode string */
-        rtl_string2UString( pstrURL, rtl_string_getStr(strEncodedURL), rtl_string_getLength(strEncodedURL), RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
+        rtl_string2UString( pstrURL, sEncodedURL.getStr(), sEncodedURL.getLength(), RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
         OSL_ASSERT(*pstrURL != nullptr);
-        rtl_string_release( strEncodedURL );
     }
-
-    /* Release temp URL */
-    if ( strTempURL )
-        rtl_uString_release( strTempURL );
 
     SAL_INFO_IF(nError, "sal.osl",
         "osl_getFileURLFromSystemPath: \"" << OUString(strPath) << "\" is not a systemPath");
