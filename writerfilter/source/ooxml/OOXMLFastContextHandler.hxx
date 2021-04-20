@@ -599,6 +599,18 @@ protected:
     virtual void process() override;
 };
 
+/**
+ A class that reads individual w15:commentEx elements from commentsExtended stream [MS-DOCX].
+
+ It is used to pre-populate the extended comment properties in domain mapper. The stream
+ contains information about resolved state of the comments ("done" attribute) and the parent
+ comment (the one that this comment answers to).
+
+ Note that the data is linked to paraId identifiers (also introduced in [MS-DOCX]), which
+ correspond to paragraphs, not directly to comment ids.
+
+ @since 7.2
+*/
 class OOXMLFastContextHandlerCommentEx : public OOXMLFastContextHandler
 {
 public:
