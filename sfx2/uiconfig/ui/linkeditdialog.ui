@@ -10,11 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child internal-child="accessible">
-      <object class="AtkObject" id="LinkEditDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="linkeditdialog|extended_tip|LinkEditDialog"/>
-      </object>
-    </child>
     <child>
       <placeholder/>
     </child>
