@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fcf74403_59a50d55",
+        "filename": "sal/osl/w32/file_url.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-20T19:05:39Z",
+      "side": 1,
+      "message": "could possible use OStringBuffer here",
+      "revId": "4eff6f1b0ad5237af09ff3b825ba52b4b5e4bb99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c957ea72_78f0c450",
+        "filename": "sal/osl/w32/file_url.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-20T19:05:39Z",
+      "side": 1,
+      "message": "would possibly be more efficient if osl_encodeURL_ would produce an OUString and save an intermediate copy",
+      "revId": "4eff6f1b0ad5237af09ff3b825ba52b4b5e4bb99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
