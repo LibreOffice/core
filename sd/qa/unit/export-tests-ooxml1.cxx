@@ -69,6 +69,7 @@ public:
     void testN828390_4();
     void testN828390_5();
     void testFdo71961();
+    void testLostPlaceholders();
     void testN828390();
     void testBnc880763();
     void testBnc862510_5();
@@ -122,6 +123,7 @@ public:
     CPPUNIT_TEST(testN828390_4);
     CPPUNIT_TEST(testN828390_5);
     CPPUNIT_TEST(testFdo71961);
+    CPPUNIT_TEST(testLostPlaceholders);
     CPPUNIT_TEST(testN828390);
     CPPUNIT_TEST(testBnc880763);
     CPPUNIT_TEST(testBnc862510_5);
@@ -370,6 +372,37 @@ void SdOOXMLExportTest1::testN828390_5()
     xDocShRef->DoClose();
 }
 
+void SdOOXMLExportTest1::testLostPlaceholders()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/LostPlaceholder.odp"), ODP);
+    CPPUNIT_ASSERT(xDocShRef.is());
+
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    CPPUNIT_ASSERT(xDocShRef.is());
+
+    auto pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    auto pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT(pPage);
+    auto pObj = pPage->GetObj(1);
+    CPPUNIT_ASSERT(pObj);
+    uno::Reference<drawing::XShape> xShp (pObj->getUnoShape(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShp);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong ShapeType!", OUString(u"com.sun.star.presentation.OutlinerShape"), xShp->getShapeType());
+    uno::Reference<beans::XPropertySet> xShpProps(xShp, uno::UNO_QUERY);
+    // Without the fix in place there will be the following error:
+    // Expected: com.sun.star.presentation.OutlinerShape
+    // Actual: com.sun.star.drawing.CustomShape
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("It must be a placeholder!", true, xShpProps->getPropertyValue("IsPresentationObject").get<bool>());
+    // Without the fix in place this will the following:
+    // Expected: true
+    // Actual: false
+
+    xDocShRef->DoClose();
+}
+
 void SdOOXMLExportTest1::testFdo71961()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/fdo71961.odp"), ODP);
@@ -379,7 +412,7 @@ void SdOOXMLExportTest1::testFdo71961()
 
     // Export to .pptx changes all text frames to custom shape objects, which obey TextWordWrap property
     // (which is false for text frames otherwise and is ignored). Check that frames that should wrap still do.
-    SdrObjCustomShape *pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 1 ));
+    auto  pTxtObj = pPage->GetObj( 1 );
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "Text to be always wrapped" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
     CPPUNIT_ASSERT_EQUAL( true, pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue());
