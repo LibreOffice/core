@@ -107,7 +107,7 @@ VendorSettings::VendorSettings()
     if (m_xmlDocVendorSettings == nullptr)
         throw FrameworkException(
             JFW_E_ERROR,
-            OStringLiteral("[Java framework] Error while parsing file: ")
+            OString::Concat("[Java framework] Error while parsing file: ")
             + sSettingsPath + ".");
 
     m_xmlPathContextVendorSettings = xmlXPathNewContext(m_xmlDocVendorSettings);

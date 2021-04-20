@@ -226,7 +226,7 @@ static PyObject* callCtor( const Runtime &r , const char * clazz, const PyRef & 
     PyRef code( PyDict_GetItemString( r.getImpl()->cargo->getUnoModule().get(), clazz ) );
     if( ! code.is() )
     {
-        OString buf = OStringLiteral("couldn't access uno.") + clazz;
+        OString buf = OString::Concat("couldn't access uno.") + clazz;
         PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
         return nullptr;
     }

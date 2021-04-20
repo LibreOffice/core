@@ -219,7 +219,7 @@ OUString getLibDir()
 
 void raisePySystemException( const char * exceptionType, std::u16string_view message )
 {
-    OString buf = OStringLiteral("Error during bootstrapping uno (") +
+    OString buf = OString::Concat("Error during bootstrapping uno (") +
             exceptionType +
             "):" +
             OUStringToOString( message, osl_getThreadTextEncoding() );
@@ -386,14 +386,14 @@ PyObject * extractOneStringArg( PyObject *args, char const *funcName )
 {
     if( !PyTuple_Check( args ) || PyTuple_Size( args) != 1 )
     {
-        OString buf = funcName + OStringLiteral(": expecting one string argument");
+        OString buf = funcName + OString::Concat(": expecting one string argument");
         PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
         return nullptr;
     }
     PyObject *obj = PyTuple_GetItem( args, 0 );
     if (!PyUnicode_Check(obj))
     {
-        OString buf = funcName + OStringLiteral(": expecting one string argument");
+        OString buf = funcName + OString::Concat(": expecting one string argument");
         PyErr_SetString( PyExc_TypeError, buf.getStr());
         return nullptr;
     }
@@ -504,7 +504,7 @@ static PyObject *getTypeByName(
             }
             else
             {
-                OString buf = OStringLiteral("Type ") + name +  " is unknown";
+                OString buf = OString::Concat("Type ") + name +  " is unknown";
                 PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
             }
         }

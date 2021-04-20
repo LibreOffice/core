@@ -1641,7 +1641,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButton)
     for (const OUString& aTestFile : aTestFiles)
     {
         OString sTestFileName = OUStringToOString(aTestFile, RTL_TEXTENCODING_UTF8);
-        OString sFailureMessage = OStringLiteral("Failure in the test file: ") + sTestFileName;
+        OString sFailureMessage = OString::Concat("Failure in the test file: ") + sTestFileName;
 
         load(FLOATING_TABLE_DATA_DIRECTORY, sTestFileName.getStr());
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -1715,7 +1715,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloating)
     for (const OUString& aTestFile : aTestFiles)
     {
         OString sTestFileName = OUStringToOString(aTestFile, RTL_TEXTENCODING_UTF8);
-        OString sFailureMessage = OStringLiteral("Failure in the test file: ") + sTestFileName;
+        OString sFailureMessage = OString::Concat("Failure in the test file: ") + sTestFileName;
 
         // Test what happens when pushing the unfloat button
         load(FLOATING_TABLE_DATA_DIRECTORY, "unfloatable_floating_table.docx");

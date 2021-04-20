@@ -871,7 +871,7 @@ void SystemQueueInfo::run()
                 << rParm.pQueueCommand
                 << "\" ...");
 #endif
-        OString aCmdLine = rParm.pQueueCommand + OStringLiteral(" 2>/dev/null");
+        OString aCmdLine = rParm.pQueueCommand + OString::Concat(" 2>/dev/null");
         FILE *pPipe;
         if( (pPipe = popen( aCmdLine.getStr(), "r" )) )
         {

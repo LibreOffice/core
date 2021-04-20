@@ -4473,7 +4473,7 @@ void SwUiWriterTest::testEmbeddedDataSource()
 
     // Load: should have a component and a data source, too.
     // Path with "#" must not cause issues
-    load(OUString(DATA_DIRECTORY + OUStringLiteral(u"hash%23path/")), "embedded-data-source.odt");
+    load(OUString(DATA_DIRECTORY + OUString::Concat(u"hash%23path/")), "embedded-data-source.odt");
     CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
 
     // Data source has a table named Sheet1.

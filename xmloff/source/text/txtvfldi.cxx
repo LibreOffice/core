@@ -798,13 +798,13 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
         xTextFieldsSupp->getTextFieldMasters();
 
     OUString sVarServiceName =
-        OUStringLiteral(sAPI_fieldmaster_prefix) +
+        OUString::Concat(sAPI_fieldmaster_prefix) +
         sAPI_set_expression +
         "." +
         sName;
 
     OUString sUserServiceName =
-        OUStringLiteral(sAPI_fieldmaster_prefix) +
+        OUString::Concat(sAPI_fieldmaster_prefix) +
         sAPI_user +
         "." +
         sName;

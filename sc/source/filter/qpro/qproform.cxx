@@ -80,7 +80,7 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const char* pExtString 
         bAddIn = true;
         if( pExtString )
         {
-            OString s = OStringLiteral("QPRO_") + pExtString;
+            OString s = OString::Concat("QPRO_") + pExtString;
             nPush = aPool.Store(eOc, OStringToOUString(s, maIn.GetStreamCharSet()));
             aPool << nPush;
         }

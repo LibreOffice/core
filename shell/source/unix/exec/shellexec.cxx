@@ -180,7 +180,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
         if ( pDesktopLaunch && *pDesktopLaunch )
         {
-            aLaunchBuffer.append( pDesktopLaunch + OStringLiteral(" "));
+            aLaunchBuffer.append( pDesktopLaunch + OString::Concat(" "));
             escapeForShell(aLaunchBuffer, OUStringToOString(aURL, osl_getThreadTextEncoding()));
         }
     } else if ((nFlags & css::system::SystemShellExecuteFlags::URIS_ONLY) != 0)

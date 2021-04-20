@@ -380,7 +380,7 @@ static OString outputError(const OString & returnVal, const OString & rightVal, 
         return OString();
 
     OString aString = msg +
-        OStringLiteral(": the returned value is '") +
+        OString::Concat(": the returned value is '") +
         returnVal +
         "', but the value should be '" +
         rightVal +

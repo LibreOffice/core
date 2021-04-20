@@ -346,7 +346,7 @@ static inline OString lcl_generateJSON(const SfxViewShell* pView, std::string_vi
                                        const OString& rPayload)
 {
     assert(pView != nullptr && "pView must be valid");
-    return OStringLiteral("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView(pView))
+    return OString::Concat("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView(pView))
            + "\", \"part\": \"" + OString::number(pView->getPart()) + "\", \"" + rKey + "\": \""
            + lcl_sanitizeJSONAsValue(rPayload) + "\" }";
 }
@@ -557,7 +557,7 @@ void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisVie
     if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
     {
         OString sHyperlink = rHyperlink.isEmpty() ? "{}" : rHyperlink;
-        sPayload = OStringLiteral("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
+        sPayload = OString::Concat("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
             "\", \"rectangle\": \"" + rRectangle +
             "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
             "\", \"hyperlink\": " + sHyperlink + " }";

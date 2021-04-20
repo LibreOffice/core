@@ -76,7 +76,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             OString tmp("'-O', please check");
                             if (i <= ac - 1)
                             {
-                                tmp += OStringLiteral(" your input '") + av[i+1] + "'";
+                                tmp += OString::Concat(" your input '") + av[i+1] + "'";
                             }
 
                             throw IllegalArgument(tmp);
@@ -92,7 +92,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                 case 'n':
                     if (av[i][2] != 'D' || av[i][3] != '\0')
                     {
-                        OString tmp = OStringLiteral("'-nD', please check your input '") + av[i] + "'";
+                        OString tmp = OString::Concat("'-nD', please check your input '") + av[i] + "'";
                         throw IllegalArgument(tmp);
                     }
 
@@ -111,7 +111,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             OString tmp("'-T', please check");
                             if (i <= ac - 1)
                             {
-                                tmp += OStringLiteral(" your input '") + av[i+1] + "'";
+                                tmp += OString::Concat(" your input '") + av[i+1] + "'";
                             }
 
                             throw IllegalArgument(tmp);
@@ -138,7 +138,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         OString tmp("'-L', please check");
                         if (i <= ac - 1)
                         {
-                            tmp += OStringLiteral(" your input '") + av[i] + "'";
+                            tmp += OString::Concat(" your input '") + av[i] + "'";
                         }
 
                         throw IllegalArgument(tmp);
@@ -158,7 +158,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             OString tmp("'-CS', please check");
                             if (i <= ac - 1)
                             {
-                                tmp += OStringLiteral(" your input '") + av[i] + "'";
+                                tmp += OString::Concat(" your input '") + av[i] + "'";
                             }
 
                             throw IllegalArgument(tmp);
@@ -176,7 +176,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         OString tmp("'-C', please check");
                         if (i <= ac - 1)
                         {
-                            tmp += OStringLiteral(" your input '") + av[i] + "'";
+                            tmp += OString::Concat(" your input '") + av[i] + "'";
                         }
 
                         throw IllegalArgument(tmp);
@@ -196,7 +196,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             OString tmp("'-Gc', please check");
                             if (i <= ac - 1)
                             {
-                                tmp += OStringLiteral(" your input '") + av[i] + "'";
+                                tmp += OString::Concat(" your input '") + av[i] + "'";
                             }
 
                             throw IllegalArgument(tmp);
@@ -210,7 +210,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         OString tmp("'-G', please check");
                         if (i <= ac - 1)
                         {
-                            tmp += OStringLiteral(" your input '") + av[i] + "'";
+                            tmp += OString::Concat(" your input '") + av[i] + "'";
                         }
 
                         throw IllegalArgument(tmp);
@@ -232,7 +232,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             OString tmp("'-X', please check");
                             if (i <= ac - 1)
                             {
-                                tmp += OStringLiteral(" your input '") + av[i+1] + "'";
+                                tmp += OString::Concat(" your input '") + av[i+1] + "'";
                             }
 
                             throw IllegalArgument(tmp);
@@ -248,7 +248,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                 }
 
                 default:
-                    throw IllegalArgument(OStringLiteral("the option is unknown") + av[i]);
+                    throw IllegalArgument(OString::Concat("the option is unknown") + av[i]);
             }
         } else
         {
