@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "7372ea16_bad4dbc2",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-04-20T00:55:30Z",
+      "side": 1,
+      "message": "This is the behavior that was requested in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d127533#c11 .  It doesn\u0027t clutter the dialog that much except to add a new button at the bottom of the dialog where the buttons already are.  It\u0027s a helpful shortcut if the user wants multiple tips and doesn\u0027t know about Help-\u003eShow Tip of the Day.",
+      "parentUuid": "8c2b4bc0_e47975a5",
+      "range": {
+        "startLine": 59,
+        "startChar": 38,
+        "endLine": 59,
+        "endChar": 44
+      },
+      "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c6f3a592_74be43ff",
         "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
         "patchSetId": 4
@@ -105,6 +129,24 @@
       "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fca27098_696093cf",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-04-20T00:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da30c194_6fdaf6e6",
+      "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
