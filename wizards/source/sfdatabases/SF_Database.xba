@@ -754,25 +754,6 @@ Const cstMaxBinlength = 2 * 65535
 End Function	&apos;	SFDatabases.SF_Database.GetColumnValue
 
 REM -----------------------------------------------------------------------------
-Public Sub _Initialize()
-&apos;&apos;&apos;	Complete the object creation process:
-&apos;&apos;&apos;		- Initialization of private members
-&apos;&apos;&apos;		- Creation of the dialog graphical interface
-&apos;&apos;&apos;		- Addition of the new object in the Dialogs buffer
-
-Try:
-	&apos;	Create the graphical interface
-	Set _DialogControl = CreateUnoDialog(_DialogProvider)
-	Set _DialogModel = _DialogControl.Model
-
-	&apos;	Add dialog reference to cache
-	_CacheIndex = SF_Register._AddDialogToCache(_DialogControl, [Me])
-	85
-Finally:
-	Exit Sub
-End Sub			&apos;	SFDatabases.SF_Database._Initialize
-
-REM -----------------------------------------------------------------------------
 Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 &apos;&apos;&apos;	Return the value of the named property
 &apos;&apos;&apos;	Args:
