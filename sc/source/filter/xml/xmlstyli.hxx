@@ -103,7 +103,7 @@ public:
     SCTAB GetLastSheet() const       { return nLastSheet; }
     void SetLastSheet(SCTAB nNew)    { nLastSheet = nNew; }
 
-    void ApplyCondFormat( const css::uno::Sequence<css::table::CellRangeAddress>& xCellRanges );
+    void ApplyCondFormat( const css::uno::Sequence<css::ScRange>& xCellRanges );
 
 private:
     using XMLPropStyleContext::SetStyle;
