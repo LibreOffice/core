@@ -1680,21 +1680,20 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nCurrentLFO,
     if( !m_pCurrentColl )
         return;
 
-    // only save the Parameters for now. The actual List will be appended
-    // at a later point, when the Listdefinitions is read...
-    if (
-         (USHRT_MAX > nCurrentLFO) &&
-         (WW8ListManager::nMaxLevel > nCurrentLevel)
-       )
-    {
+    if (nCurrentLFO < USHRT_MAX)
         rStyleInf.m_nLFOIndex  = nCurrentLFO;
+    if (nCurrentLevel < MAXLEVEL)
         rStyleInf.m_nListLevel = nCurrentLevel;
 
+    // only save the Parameters for now. The actual List will be appended
+    // at a later point, when the Listdefinitions is read...
+    if (rStyleInf.m_nLFOIndex < USHRT_MAX && rStyleInf.m_nListLevel < WW8ListManager::nMaxLevel)
+    {
         std::vector<sal_uInt8> aParaSprms;
         SwNumRule* pNmRule = m_xLstManager->GetNumRuleForActivation(
-            nCurrentLFO, nCurrentLevel, aParaSprms);
+            rStyleInf.m_nLFOIndex, rStyleInf.m_nListLevel, aParaSprms);
         if (pNmRule)
-            UseListIndent(rStyleInf, pNmRule->Get(nCurrentLevel));
+            UseListIndent(rStyleInf, pNmRule->Get(rStyleInf.m_nListLevel));
     }
 }
 
@@ -1881,11 +1880,14 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
             m_xStyles->mnWwNumLevel = m_nListLevel;
         }
 
-        if (WW8ListManager::nMaxLevel <= m_nListLevel )
+        // Treat an invalid level as body-level
+        if (WW8ListManager::nMaxLevel < m_nListLevel)
             m_nListLevel = WW8ListManager::nMaxLevel;
-        else if (USHRT_MAX > m_nLFOPosition)
+
+        RegisterNumFormat(m_nLFOPosition, m_nListLevel);
+        if (USHRT_MAX > m_nLFOPosition)
         {
-            RegisterNumFormat(m_nLFOPosition, m_nListLevel);
+            assert(false && "m_nLFOPosition is usually reset immediately, so we rarely ever get here.");
             m_nLFOPosition = USHRT_MAX;
             m_nListLevel = MAXLEVEL;
         }
