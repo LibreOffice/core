@@ -27,10 +27,7 @@
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <officecfg/Office/Canvas.hxx>
 
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
@@ -311,66 +308,9 @@ bool EffectRewinder::resetEffectCount()
     return false;
 }
 
-bool EffectRewinder::hasBlockedAnimation( const css::uno::Reference<css::animations::XAnimationNode>& xNode)
-{
-    bool isShapeTarget = false;;
-    OUString preset_id;
-    OUString preset_sub_type;
-    OUString preset_property;
-
-    if (xNode->getUserData().getLength())
-    {
-        for(int i = 0; i < xNode->getUserData().getLength(); i++)
-        {
-            if(xNode->getUserData()[i].Name == "preset-id")
-                xNode->getUserData()[i].Value >>= preset_id;
-            if(xNode->getUserData()[i].Name == "preset-sub-type")
-                xNode->getUserData()[i].Value >>= preset_sub_type;
-            if(xNode->getUserData()[i].Name == "preset-property")
-                xNode->getUserData()[i].Value >>= preset_property;
-        }
-    }
-
-    uno::Reference<container::XEnumerationAccess> xEnumerationAccess (xNode, uno::UNO_QUERY);
-    if (xEnumerationAccess.is())
-    {
-        uno::Reference<container::XEnumeration> xEnumeration (
-            xEnumerationAccess->createEnumeration());
-        if (xEnumeration.is())
-            while (xEnumeration->hasMoreElements())
-            {
-                uno::Reference<animations::XAnimationNode> xNext (xEnumeration->nextElement(), uno::UNO_QUERY);
-                uno::Reference<animations::XAnimate> xAnimate( xNext, uno::UNO_QUERY );
-
-                if(xAnimate.is())
-                {
-                    uno::Reference< drawing::XShape > xShape( xAnimate->getTarget(), uno::UNO_QUERY );
-
-                    if (xShape.is() || xAnimate->getTarget().getValueType() == cppu::UnoType<void>::get())
-                        isShapeTarget=true;
-                }
-            }
-    }
-
-    if(isShapeTarget &&
-       ((preset_id == "ooo-entrance-zoom" && preset_sub_type == "in") || // Entrance Zoom In
-        (preset_id == "ooo-entrance-swivel" )                         || // Entrance Swivel
-        (preset_id == "ooo-entrance-spiral-in")                       || // Entrance Spiral-In
-        (preset_id == "ooo-entrance-stretchy")))                         // Entrance Stretchy
-        return true;
-
-    return false;
-}
 
 bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
 {
-    Reference<animations::XAnimationNode> xNode (rpNode->getXAnimationNode());
-
-    if( xNode.is() &&
-        !officecfg::Office::Canvas::ForceSafeServiceImpl::get() &&
-        hasBlockedAnimation(xNode) )
-        skipSingleMainSequenceEffects();
-
     // This notification is only relevant for us when the rpNode belongs to
     // the main sequence.
     BaseNodeSharedPtr pBaseNode (::std::dynamic_pointer_cast<BaseNode>(rpNode));
@@ -385,6 +325,7 @@ bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
     // triggered.
     bool bIsUserTriggered (false);
 
+    Reference<animations::XAnimationNode> xNode (rpNode->getXAnimationNode());
     if (xNode.is())
     {
         animations::Event aEvent;
