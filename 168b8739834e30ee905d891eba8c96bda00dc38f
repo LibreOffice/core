@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "63cc40a4_ada04056",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2021-04-20T09:24:20Z",
+      "side": 1,
+      "message": "You\u0027re right with your assumption. I havn\u0027t found a better way than a timer so far.",
+      "parentUuid": "15d04104_84ab7dd9",
+      "revId": "168b8739834e30ee905d891eba8c96bda00dc38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db924f61_c8b327dd",
         "filename": "sc/source/ui/view/gridwin4.cxx",
         "patchSetId": 14
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "7ff4b6ad_a52e2968",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2021-04-20T09:24:20Z",
+      "side": 1,
+      "message": "I have implemented a function for my new code, the decomposing of this large function should indeed be a separate ticket.",
+      "parentUuid": "db924f61_c8b327dd",
+      "revId": "168b8739834e30ee905d891eba8c96bda00dc38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "460e3ad5_fd6556de",
         "filename": "sc/source/ui/view/tabview5.cxx",
         "patchSetId": 14
@@ -47,6 +83,24 @@
       "writtenOn": "2021-03-21T20:39:49Z",
       "side": 1,
       "message": "Why is 4 such a special number that you would mention it here? And you\u0027re not using i in any sort of arithmetic. If the intention is, as I suspect, simply to call initiatePageBreaks on each non-null element in pGridWin, I think you could communicate that better (and in a less error-prone way) with either std::for_each or a range-based for like:\n\nfor ( auto\u0026 pgw : pGridWin )\n{\n    if ( pgw )\n    {\n        pgw-\u003einitiatePageBreaks();\n    }\n}",
+      "revId": "168b8739834e30ee905d891eba8c96bda00dc38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd004a67_489b91a3",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2021-04-20T09:24:20Z",
+      "side": 1,
+      "message": "There are a lot of pieces of code with this special number 4 (lot of \"\u003c4\" loops), so this should also be done in a separate ticket to clean this up.",
+      "parentUuid": "460e3ad5_fd6556de",
       "revId": "168b8739834e30ee905d891eba8c96bda00dc38f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
