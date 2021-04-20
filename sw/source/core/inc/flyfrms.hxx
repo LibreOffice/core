@@ -227,6 +227,7 @@ public:
 
     //see layact.cxx
     void AddRefOfst( long nOfst ) { aRef.AdjustY( nOfst ); }
+    void AddRefOfst(Point const& rOfst) { aRef += rOfst; }
 
     // #i26791#
     virtual void MakeObjPos() override;
