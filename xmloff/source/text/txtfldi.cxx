@@ -2760,7 +2760,7 @@ void XMLDdeFieldImportContext::endFastElement(sal_Int32 )
         return;
 
     // find master
-    OUString sMasterName = OUStringLiteral(sAPI_fieldmaster_prefix) + sAPI_dde + "." + sName;
+    OUString sMasterName = OUString::Concat(sAPI_fieldmaster_prefix) + sAPI_dde + "." + sName;
 
     Reference<XTextFieldsSupplier> xTextFieldsSupp(GetImport().GetModel(),
                                                    UNO_QUERY);
@@ -2777,7 +2777,7 @@ void XMLDdeFieldImportContext::endFastElement(sal_Int32 )
     xMaster->setPropertyValue( sPropertyContent, uno::makeAny( GetContent()));
     // master exists: create text field and attach
     Reference<XPropertySet> xField;
-    OUString sFieldName = OUStringLiteral(sAPI_textfield_prefix) + sAPI_dde;
+    OUString sFieldName = OUString::Concat(sAPI_textfield_prefix) + sAPI_dde;
     if (!CreateField(xField, sFieldName))
         return;
 

@@ -1753,7 +1753,7 @@ SfxDocumentMetaData::loadFromStorage(
     try {
         xPropArg->getPropertyValue("BaseURI")
             >>= input.sSystemId;
-        input.sSystemId += OUStringLiteral(u"/") + s_meta;
+        input.sSystemId += OUString::Concat("/") + s_meta;
     } catch (const css::uno::Exception &) {
         input.sSystemId = s_meta;
     }

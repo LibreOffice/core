@@ -1376,7 +1376,7 @@ void SVGFilter::implGenerateMetaData()
         {
             for( sal_Int32 i = 0, nSize = aFieldSet.size(); i < nSize; ++i )
             {
-                OUString sElemId = OUStringLiteral(aOOOElemTextField) + "_" + OUString::number( i );
+                OUString sElemId = OUString::Concat(aOOOElemTextField) + "_" + OUString::number( i );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sElemId );
                 aFieldSet[i]->elementExport( mpSVGExport.get() );
             }

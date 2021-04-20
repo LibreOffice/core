@@ -150,11 +150,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLFixedContent::crea
                                                 0x0020, true );
             break;
         case XML_ELEMENT(TEXT, XML_PAGE_NUMBER):
-            m_sPageText += OUStringLiteral(s_sStringConcat) + " PageNumber()";
+            m_sPageText += OUString::Concat(s_sStringConcat) + " PageNumber()";
             m_bFormattedField = true;
             break;
         case XML_ELEMENT(TEXT, XML_PAGE_COUNT):
-            m_sPageText += OUStringLiteral(s_sStringConcat) + " PageCount()";
+            m_sPageText += OUString::Concat(s_sStringConcat) + " PageCount()";
             m_bFormattedField = true;
             break;
         default:

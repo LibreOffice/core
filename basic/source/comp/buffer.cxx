@@ -82,7 +82,7 @@ void SbiBuffer::Chain( sal_uInt32 off )
         if ((i + sizeof(sal_uInt32)) > GetSize())
         {
             m_aErrCode = ERRCODE_BASIC_INTERNAL_ERROR;
-            m_sErrMsg = OUStringLiteral(u"BACKCHAIN");
+            m_sErrMsg = "BACKCHAIN";
             break;
         }
         auto ip = m_aBuf.begin() + i;

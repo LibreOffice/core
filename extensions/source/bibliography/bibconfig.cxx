@@ -123,7 +123,7 @@ BibConfig::BibConfig()
         Sequence<OUString> aHistoryNames(3);
         OUString* pHistoryNames = aHistoryNames.getArray();
 
-        OUString sPrefix = OUStringLiteral(cDataSourceHistory) + "/" + nodeName + "/";
+        OUString sPrefix = OUString::Concat(cDataSourceHistory) + "/" + nodeName + "/";
         pHistoryNames[0] = sPrefix + "DataSourceName";
         pHistoryNames[1] = sPrefix + "Command";
         pHistoryNames[2] = sPrefix + "CommandType";
@@ -215,7 +215,7 @@ void    BibConfig::ImplCommit()
     for(sal_Int32 i = 0; i < static_cast<sal_Int32>(mvMappings.size()); i++)
     {
         const Mapping* pMapping = mvMappings[i].get();
-        OUString sPrefix = OUStringLiteral(cDataSourceHistory) + "/_" + OUString::number(i) + "/";
+        OUString sPrefix = OUString::Concat(cDataSourceHistory) + "/_" + OUString::number(i) + "/";
         pNodeValues[nIndex].Name    = sPrefix + "DataSourceName";
         pNodeValues[nIndex++].Value <<= pMapping->sURL;
         pNodeValues[nIndex].Name    = sPrefix + "Command";

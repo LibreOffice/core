@@ -4840,7 +4840,7 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 // Id == -1: Display implemented interfaces according the ClassProvider
                 if( nId == -1 )     // Property ID_DBG_SUPPORTEDINTERFACES"
                 {
-                    OUString aRet = OUStringLiteral( ID_DBG_SUPPORTEDINTERFACES )
+                    OUString aRet = OUString::Concat( ID_DBG_SUPPORTEDINTERFACES )
                                   + " not available.\n(TypeClass is not TypeClass_INTERFACE)\n";
 
                     pVar->PutString( aRet );
