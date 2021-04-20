@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <optional>
 #include <stack>
 
 #include <systools/win32/uwinapi.h>
@@ -30,6 +31,7 @@
 
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.h>
@@ -37,9 +39,9 @@
 
 #include "path_helper.hxx"
 
-#define WSTR_SYSTEM_ROOT_PATH               L"\\\\.\\"
-#define WSTR_LONG_PATH_PREFIX               L"\\\\?\\"
-#define WSTR_LONG_PATH_PREFIX_UNC           L"\\\\?\\UNC\\"
+#define WSTR_SYSTEM_ROOT_PATH               u"\\\\.\\"
+#define WSTR_LONG_PATH_PREFIX               u"\\\\?\\"
+#define WSTR_LONG_PATH_PREFIX_UNC           u"\\\\?\\UNC\\"
 
 // FileURL functions
 
@@ -313,13 +315,13 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
 
         DWORD   dwCandidatPathType = PATHTYPE_ERROR;
 
-        if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, o3tl::toU(WSTR_LONG_PATH_PREFIX_UNC), SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1 ) )
+        if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, WSTR_LONG_PATH_PREFIX_UNC, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1 ) )
         {
             /* This is long path in UNC notation */
             lpComponent = lpszPath + SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1;
             dwCandidatPathType = PATHTYPE_ABSOLUTE_UNC | PATHTYPE_IS_LONGPATH;
         }
-        else if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, o3tl::toU(WSTR_LONG_PATH_PREFIX), SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 ) )
+        else if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, WSTR_LONG_PATH_PREFIX, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 ) )
         {
             /* This is long path */
             lpComponent = lpszPath + SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1;
@@ -643,11 +645,11 @@ DWORD GetCaseCorrectPathName(
 )
 {
     /* Special handling for "\\.\" as system root */
-    if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
+    if ( lpszShortPath && 0 == wcscmp( lpszShortPath, o3tl::toW(WSTR_SYSTEM_ROOT_PATH) ) )
     {
         if ( cchBuffer >= SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) )
         {
-            wcscpy( lpszLongPath, WSTR_SYSTEM_ROOT_PATH );
+            wcscpy( lpszLongPath, o3tl::toW(WSTR_SYSTEM_ROOT_PATH) );
             return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
         }
         else
@@ -667,22 +669,18 @@ DWORD GetCaseCorrectPathName(
     return 0;
 }
 
-static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
+static std::optional<OUString> osl_decodeURL_(const OString& sUTF8)
 {
-    char        *pBuffer;
     const char  *pSrcEnd;
     const char  *pSrc;
-    char        *pDest;
-    sal_Int32       nSrcLen;
     bool        bValidEncoded = true;   /* Assume success */
 
     /* The resulting decoded string length is shorter or equal to the source length */
 
-    nSrcLen = rtl_string_getLength(strUTF8);
-    pBuffer = static_cast<char*>(malloc((nSrcLen + 1) * sizeof(char)));
+    const sal_Int32 nSrcLen = sUTF8.getLength();
+    OStringBuffer aBuffer(nSrcLen + 1);
 
-    pDest = pBuffer;
-    pSrc = rtl_string_getStr(strUTF8);
+    pSrc = sUTF8.getStr();
     pSrcEnd = pSrc + nSrcLen;
 
     /* Now decode the URL what should result in a UTF-8 string */
@@ -707,7 +705,7 @@ static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
                 if ( 0 == aChar || '\\' == aChar || '/' == aChar || ':' == aChar )
                     bValidEncoded = false;
                 else
-                    *pDest++ = aChar;
+                    aBuffer.append(aChar);
             }
             break;
         case '\0':
@@ -716,42 +714,28 @@ static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
             bValidEncoded = false;
             break;
         default:
-            *pDest++ = *pSrc++;
+            aBuffer.append(*pSrc++);
             break;
         }
     }
 
-    *pDest++ = 0;
-
-    if ( bValidEncoded )
-    {
-        rtl_string2UString( pstrDecodedURL, pBuffer, rtl_str_getLength(pBuffer), RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS );
-        OSL_ASSERT(*pstrDecodedURL != nullptr);
-    }
-
-    free( pBuffer );
-
-    return bValidEncoded;
+    return bValidEncoded ? OUString(aBuffer.getStr(), aBuffer.getLength(), RTL_TEXTENCODING_UTF8)
+                         : std::optional<OUString>();
 }
 
-static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
+static OUString osl_encodeURL_(const OUString& sURL)
 {
     /* Encode non ascii characters within the URL */
 
-    rtl_String      *strUTF8 = nullptr;
-    char           *pszEncodedURL;
     const char     *pURLScan;
-    char           *pURLDest;
     sal_Int32       nURLScanLen;
     sal_Int32       nURLScanCount;
 
-    rtl_uString2String( &strUTF8, rtl_uString_getStr( strURL ), rtl_uString_getLength( strURL ), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS );
+    OString sUTF8 = OUStringToOString(sURL, RTL_TEXTENCODING_UTF8);
 
-    pszEncodedURL = static_cast<char*>(malloc( (rtl_string_getLength( strUTF8 ) * 3 + 1)  * sizeof(char) ));
-    assert(pszEncodedURL); // Don't handle OOM conditions
-    pURLDest = pszEncodedURL;
-    pURLScan = rtl_string_getStr( strUTF8 );
-    nURLScanLen = rtl_string_getLength( strUTF8 );
+    OUStringBuffer sEncodedURL(sUTF8.getLength() * 3 + 1);
+    pURLScan = sUTF8.getStr();
+    nURLScanLen = sUTF8.getLength();
     nURLScanCount = 0;
 
     while ( nURLScanCount < nURLScanLen )
@@ -762,8 +746,9 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
         default:
             if (!( ( cCurrent >= 'a' && cCurrent <= 'z' ) || ( cCurrent >= 'A' && cCurrent <= 'Z' ) || ( cCurrent >= '0' && cCurrent <= '9' ) ) )
             {
-                sprintf( pURLDest, "%%%02X", static_cast<unsigned char>(cCurrent) );
-                pURLDest += 3;
+                char buf[3];
+                sprintf( buf, "%02X", static_cast<unsigned char>(cCurrent) );
+                sEncodedURL.append('%').appendAscii(buf, 2);
                 break;
             }
             [[fallthrough]];
@@ -786,7 +771,7 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
         case '/':
         case '\\':
         case '|':
-            *pURLDest++ = cCurrent;
+            sEncodedURL.appendAscii(&cCurrent, 1);
             break;
         case 0:
             break;
@@ -796,128 +781,97 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
         nURLScanCount++;
     }
 
-    *pURLDest = 0;
-
-    rtl_string_release( strUTF8 );
-    rtl_string_newFromStr( pstrEncodedURL, pszEncodedURL );
-    free( pszEncodedURL );
+    return sEncodedURL.makeStringAndClear();
 }
 
 oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **pustrPath, bool bAllowRelative )
 {
-    rtl_String          *strUTF8 = nullptr;
-    rtl_uString         *strDecodedURL = nullptr;
-    rtl_uString         *strTempPath = nullptr;
-    sal_uInt32          nDecodedLen;
-    bool            bValidEncoded;
+    OUString sTempPath;
     oslFileError        nError = osl_File_E_INVAL;  /* Assume failure */
 
     /*  If someone hasn't encoded the complete URL we convert it to UTF8 now to prevent from
         having a mixed encoded URL later */
 
-    rtl_uString2String( &strUTF8, rtl_uString_getStr( strURL ), rtl_uString_getLength( strURL ), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS );
+    OString sUTF8 = OUStringToOString(OUString::unacquired(&strURL), RTL_TEXTENCODING_UTF8);
 
     /* If the length of strUTF8 and strURL differs it indicates that the URL was not correct encoded */
 
     SAL_WARN_IF(
-        strUTF8->length != strURL->length &&
+        sUTF8.getLength() != strURL->length &&
         0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( strURL->buffer, strURL->length, "file:\\", 6 )
         , "sal.osl"
         ,"osl_getSystemPathFromFileURL: \"" << OUString(strURL) << "\" is not encoded !!!");
 
-    bValidEncoded = osl_decodeURL_( strUTF8, &strDecodedURL );
-
-    /* Release the encoded UTF8 string */
-    rtl_string_release( strUTF8 );
-
-    if ( bValidEncoded )
+    if (auto sDecodedURL = osl_decodeURL_(sUTF8))
     {
         /* Replace backslashes and pipes */
 
-        rtl_uString_newReplace( &strDecodedURL, strDecodedURL, '/', '\\' );
-        rtl_uString_newReplace( &strDecodedURL, strDecodedURL, '|', ':' );
-
-        const sal_Unicode *pDecodedURL = rtl_uString_getStr( strDecodedURL );
-        nDecodedLen = rtl_uString_getLength( strDecodedURL );
+        sDecodedURL = sDecodedURL->replace('/', '\\').replace('|', ':');
 
         /* Must start with "file:/" */
-        if ( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\", 6 ) )
+        if ( sDecodedURL->startsWithIgnoreAsciiCase("file:\\") )
         {
             sal_uInt32  nSkip;
 
-            if ( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\\\", 8 ) )
+            if ( sDecodedURL->startsWithIgnoreAsciiCase("file:\\\\\\") )
                 nSkip = 8;
             else if (
-                0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\localhost\\", 17 ) ||
-                0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\127.0.0.1\\", 17 )
+                sDecodedURL->startsWithIgnoreAsciiCase("file:\\\\localhost\\") ||
+                sDecodedURL->startsWithIgnoreAsciiCase("file:\\\\127.0.0.1\\")
                       )
                 nSkip = 17;
-            else if ( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\", 7 ) )
+            else if ( sDecodedURL->startsWithIgnoreAsciiCase("file:\\\\") )
                 nSkip = 5;
             else
                 nSkip = 6;
 
+            const sal_uInt32 nDecodedLen = sDecodedURL->getLength();
+
             /* Indicates local root */
             if ( nDecodedLen == nSkip )
-                rtl_uString_newFromStr_WithLength( &strTempPath, o3tl::toU(WSTR_SYSTEM_ROOT_PATH), SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1 );
+                sTempPath = WSTR_SYSTEM_ROOT_PATH;
             else
             {
                 /* do not separate the directory and file case, so the maximal path length without prefix is MAX_PATH-12 */
                 if ( nDecodedLen - nSkip <= MAX_PATH - 12 )
                 {
-                    rtl_uString_newFromStr_WithLength( &strTempPath, pDecodedURL + nSkip, nDecodedLen - nSkip );
+                    sTempPath = sDecodedURL->subView(nSkip);
                 }
                 else
                 {
                     ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
-                    sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW(pDecodedURL) + nSkip,
+                    sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW(sDecodedURL->getStr()) + nSkip,
                                                                  o3tl::toW(aBuf),
                                                                  aBuf.getBufSizeInSymbols(),
                                                                  false );
 
                     if ( nNewLen <= MAX_PATH - 12
-                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, o3tl::toU(WSTR_SYSTEM_ROOT_PATH), SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1, SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1 )
-                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, o3tl::toU(WSTR_LONG_PATH_PREFIX), SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 ) )
+                      || sDecodedURL->matchIgnoreAsciiCase(WSTR_SYSTEM_ROOT_PATH, nSkip)
+                      || sDecodedURL->matchIgnoreAsciiCase(WSTR_LONG_PATH_PREFIX, nSkip) )
                     {
-                        rtl_uString_newFromStr_WithLength( &strTempPath, aBuf, nNewLen );
+                        sTempPath = std::u16string_view(aBuf, nNewLen);
                     }
-                    else if ( pDecodedURL[nSkip] == '\\' && pDecodedURL[nSkip+1] == '\\' )
+                    else if ( sDecodedURL->match("\\\\", nSkip) )
                     {
                         /* it should be an UNC path, use the according prefix */
-                        rtl_uString *strSuffix = nullptr;
-                        rtl_uString *strPrefix = nullptr;
-                        rtl_uString_newFromStr_WithLength( &strPrefix, o3tl::toU(WSTR_LONG_PATH_PREFIX_UNC), SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX_UNC ) - 1 );
-                        rtl_uString_newFromStr_WithLength( &strSuffix, aBuf + 2, nNewLen - 2 );
-
-                        rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
-
-                        rtl_uString_release( strPrefix );
-                        rtl_uString_release( strSuffix );
+                        sTempPath = OUString::Concat(WSTR_LONG_PATH_PREFIX_UNC) + std::u16string_view(aBuf + 2, nNewLen - 2);
                     }
                     else
                     {
-                        rtl_uString *strSuffix = nullptr;
-                        rtl_uString *strPrefix = nullptr;
-                        rtl_uString_newFromStr_WithLength( &strPrefix, o3tl::toU(WSTR_LONG_PATH_PREFIX), SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX ) - 1 );
-                        rtl_uString_newFromStr_WithLength( &strSuffix, aBuf, nNewLen );
-
-                        rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
-
-                        rtl_uString_release( strPrefix );
-                        rtl_uString_release( strSuffix );
+                        sTempPath = OUString::Concat(WSTR_LONG_PATH_PREFIX) + std::u16string_view(aBuf, nNewLen);
                     }
                 }
             }
 
-            if ( IsValidFilePath( strTempPath, VALIDATEPATH_ALLOW_ELLIPSE, &strTempPath ) )
+            if ( IsValidFilePath( sTempPath.pData, VALIDATEPATH_ALLOW_ELLIPSE, &sTempPath.pData ) )
                 nError = osl_File_E_None;
         }
         else if ( bAllowRelative )  /* This maybe a relative file URL */
         {
             /* In future the relative path could be converted to absolute if it is too long */
-            rtl_uString_assign( &strTempPath, strDecodedURL );
+            sTempPath = *sDecodedURL;
 
-            if ( IsValidFilePath( strTempPath, VALIDATEPATH_ALLOW_RELATIVE | VALIDATEPATH_ALLOW_ELLIPSE, &strTempPath ) )
+            if ( IsValidFilePath( sTempPath.pData, VALIDATEPATH_ALLOW_RELATIVE | VALIDATEPATH_ALLOW_ELLIPSE, &sTempPath.pData ) )
                 nError = osl_File_E_None;
         }
         else
@@ -926,14 +880,8 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
 
     }
 
-    if ( strDecodedURL )
-        rtl_uString_release( strDecodedURL );
-
     if ( osl_File_E_None == nError )
-        rtl_uString_assign( pustrPath, strTempPath );
-
-    if ( strTempPath )
-        rtl_uString_release( strTempPath );
+        rtl_uString_assign( pustrPath, sTempPath.pData );
 
     SAL_INFO_IF(nError, "sal.osl",
         "osl_getSystemPathFromFileURL: \"" << OUString(strURL) << "\" is not a FileURL");
@@ -944,7 +892,7 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
 oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** pstrURL )
 {
     oslFileError nError = osl_File_E_INVAL; /* Assume failure */
-    rtl_uString *strTempURL = nullptr;
+    OUString sTempURL;
     DWORD dwPathType = PATHTYPE_ERROR;
 
     if (strPath)
@@ -952,96 +900,67 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
 
     if (dwPathType)
     {
-        rtl_uString *strTempPath = nullptr;
+        OUString sTempPath;
+        const OUString& sPath = OUString::unacquired(&strPath);
 
         if ( dwPathType & PATHTYPE_IS_LONGPATH )
         {
-            rtl_uString *strBuffer = nullptr;
-            sal_uInt32 nIgnore = 0;
-            sal_uInt32 nLength = 0;
-
             /* the path has the longpath prefix, lets remove it */
             switch ( dwPathType & PATHTYPE_MASK_TYPE )
             {
                 case PATHTYPE_ABSOLUTE_UNC:
-                    nIgnore = SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX_UNC ) - 1;
                     static_assert(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1 == 8,
                                   "Unexpected long path UNC prefix!");
 
                     /* generate the normal UNC path */
-                    nLength = rtl_uString_getLength( strPath );
-                    rtl_uString_newFromStr_WithLength( &strBuffer, strPath->buffer + nIgnore - 2, nLength - nIgnore + 2 );
-                    strBuffer->buffer[0] = '\\';
-
-                    rtl_uString_newReplace( &strTempPath, strBuffer, '\\', '/' );
-                    rtl_uString_release( strBuffer );
+                    sTempPath = "\\\\" + sPath.copy(8).replace('\\', '/');
                     break;
 
                 case PATHTYPE_ABSOLUTE_LOCAL:
-                    nIgnore = SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX ) - 1;
                     static_assert(SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 == 4,
                                   "Unexpected long path prefix!");
 
                     /* generate the normal path */
-                    nLength = rtl_uString_getLength( strPath );
-                    rtl_uString_newFromStr_WithLength( &strBuffer, strPath->buffer + nIgnore, nLength - nIgnore );
-
-                    rtl_uString_newReplace( &strTempPath, strBuffer, '\\', '/' );
-                    rtl_uString_release( strBuffer );
+                    sTempPath = sPath.copy(4).replace('\\', '/');
                     break;
 
                 default:
                     OSL_FAIL( "Unexpected long path format!" );
-                    rtl_uString_newReplace( &strTempPath, strPath, '\\', '/' );
+                    sTempPath = sPath.replace('\\', '/');
                     break;
             }
         }
         else
         {
             /* Replace backslashes */
-            rtl_uString_newReplace( &strTempPath, strPath, '\\', '/' );
+            sTempPath = sPath.replace('\\', '/');
         }
 
         switch ( dwPathType & PATHTYPE_MASK_TYPE )
         {
         case PATHTYPE_RELATIVE:
-            rtl_uString_assign( &strTempURL, strTempPath );
+            sTempURL = sTempPath;
             nError = osl_File_E_None;
             break;
         case PATHTYPE_ABSOLUTE_UNC:
-            rtl_uString_newFromAscii( &strTempURL, "file:" );
-            rtl_uString_newConcat( &strTempURL, strTempURL, strTempPath );
+            sTempURL = "file:" + sTempPath;
             nError = osl_File_E_None;
             break;
         case PATHTYPE_ABSOLUTE_LOCAL:
-            rtl_uString_newFromAscii( &strTempURL, "file:///" );
-            rtl_uString_newConcat( &strTempURL, strTempURL, strTempPath );
+            sTempURL = "file:///" + sTempPath;
             nError = osl_File_E_None;
             break;
         default:
             break;
         }
-
-        /* Release temp path */
-        rtl_uString_release( strTempPath );
     }
 
     if ( osl_File_E_None == nError )
     {
-        rtl_String  *strEncodedURL = nullptr;
-
         /* Encode the URL */
-        osl_encodeURL_( strTempURL, &strEncodedURL );
-
-        /* Provide URL via unicode string */
-        rtl_string2UString( pstrURL, rtl_string_getStr(strEncodedURL), rtl_string_getLength(strEncodedURL), RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
+        rtl_uString_assign(pstrURL, osl_encodeURL_(sTempURL).pData);
         OSL_ASSERT(*pstrURL != nullptr);
-        rtl_string_release( strEncodedURL );
     }
-
-    /* Release temp URL */
-    if ( strTempURL )
-        rtl_uString_release( strTempURL );
 
     SAL_INFO_IF(nError, "sal.osl",
         "osl_getFileURLFromSystemPath: \"" << OUString(strPath) << "\" is not a systemPath");
