@@ -352,6 +352,7 @@ private:
     tools::Long            mnMaxY;
     bool            bIsOkCancelMode;
     bool            bInResize;
+    long            nOldOutOffYPixel;
 };
 
 class ScInputWindowWrapper : public SfxChildWindow
