@@ -1439,13 +1439,22 @@ ShapeExport& PowerPointShapeExport::WritePageShape(const Reference< XShape >& xS
 bool PowerPointShapeExport::WritePlaceholder(const Reference< XShape >& xShape, PlaceholderType ePlaceholder, bool bMaster)
 {
     SAL_INFO("sd.eppt", "WritePlaceholder " << bMaster << " " << ShapeExport::NonEmptyText(xShape));
-    if (bMaster && ShapeExport::NonEmptyText(xShape))
+    if (!xShape)
+        return false;
+    try
     {
-        WritePlaceholderShape(xShape, ePlaceholder);
+        Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
+        if (xShapeProps->getPropertyValue("IsPresentationObject").get<bool>())
+        {
+            WritePlaceholderShape(xShape, ePlaceholder);
 
-        return true;
+            return true;
+        }
     }
-
+    catch (Exception&)
+    {
+        return false;
+    }
     return false;
 }
 
