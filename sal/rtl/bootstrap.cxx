@@ -161,21 +161,18 @@ static bool getFromCommandLineArgs(
         sal_Int32 nArgCount = osl_getCommandArgCount();
         for(sal_Int32 i = 0; i < nArgCount; ++ i)
         {
-            rtl_uString *pArg = nullptr;
-            osl_getCommandArg( i, &pArg );
-            if( (pArg->buffer[0] == '-' || pArg->buffer[0] == '/' ) &&
-                pArg->buffer[1] == 'e' &&
-                pArg->buffer[2] == 'n' &&
-                pArg->buffer[3] == 'v' &&
-                pArg->buffer[4] == ':' )
+            OUString pArg;
+            osl_getCommandArg( i, &pArg.pData );
+            if( (pArg.startsWith("-") || pArg.startsWith("/") ) &&
+                pArg.match("env:", 1) )
             {
-                sal_Int32 nIndex = rtl_ustr_indexOfChar( pArg->buffer, '=' );
+                sal_Int32 nIndex = pArg.indexOf( '=' );
 
                 if( nIndex >= 0 )
                 {
                     rtl_bootstrap_NameValue nameValue;
-                    nameValue.sName = OUString( &(pArg->buffer[5]), nIndex - 5  );
-                    nameValue.sValue = OUString( &(pArg->buffer[nIndex+1]) );
+                    nameValue.sName = pArg.copy( 5, nIndex - 5  );
+                    nameValue.sValue = pArg.copy( nIndex+1 );
 
                     if( i == nArgCount-1 &&
                         nameValue.sValue.getLength() &&
@@ -190,7 +187,6 @@ static bool getFromCommandLineArgs(
                     tmp.push_back( nameValue );
                 }
             }
-            rtl_uString_release( pArg );
         };
         return tmp;
     }();
