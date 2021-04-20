@@ -40,7 +40,7 @@
 #define SID_IMPORT_FORMULA          (SID_SMA_START + 58)
 #define SID_IMPORT_MATHML_CLIPBOARD (SID_SMA_START + 59)
 #define SID_TEXT                    (SID_SMA_START + 100)
-#define SID_GAPHIC_SM               (SID_SMA_START + 101)
+#define SID_GRAPHIC_SM              (SID_SMA_START + 101)
 /** Command for inserting a symbol specified by a string (Inserts an SmSpecialNode) */
 #define SID_INSERTSPECIAL           (SID_SMA_START + 104)
 /** Command for inserting a math construction */

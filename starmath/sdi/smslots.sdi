@@ -107,7 +107,7 @@ interface FormulaDocument
         StateMethod = GetState ;
     ]
     //idlpp no menu entry, so no texts
-        SID_GAPHIC_SM //idlpp ole : no , status : no
+        SID_GRAPHIC_SM //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

@@ -197,7 +197,7 @@ SfxVoidItem FormelCursor SID_FORMULACURSOR
 ]
 
 
-SfxInt16Item Graphic SID_GAPHIC_SM
+SfxInt16Item Graphic SID_GRAPHIC_SM
 
 [
     AutoUpdate = FALSE,
