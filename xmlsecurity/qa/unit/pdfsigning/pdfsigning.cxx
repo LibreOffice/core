@@ -46,6 +46,8 @@ protected:
      * had nOriginalSignatureCount signatures.
      */
     bool sign(const OUString& rInURL, const OUString& rOutURL, size_t nOriginalSignatureCount);
+
+public:
     /**
      * Read a pdf and make sure that it has the expected number of valid
      * signatures.
@@ -53,7 +55,6 @@ protected:
     std::vector<SignatureInformation> verify(const OUString& rURL, size_t nCount,
                                              const OString& rExpectedSubFilter);
 
-public:
     PDFSigningTest();
     void setUp() override;
 

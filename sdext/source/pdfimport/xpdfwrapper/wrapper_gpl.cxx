@@ -18,6 +18,7 @@
  */
 
 #include "pdfioutdev_gpl.hxx"
+#include <o3tl/make_unique.hxx>
 #ifdef _WIN32
 # include <io.h>
 # include <fcntl.h>  /*_O_BINARY*/
