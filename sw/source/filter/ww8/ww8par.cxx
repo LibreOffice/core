@@ -5914,9 +5914,30 @@ void SwWW8ImplReader::SetOutlineStyles()
     // iteration
     std::vector<SwWW8StyInf*> aWW8BuiltInHeadingStyles;
     {
+        sal_uInt16 nStyle = 0;
         std::map<const SwNumRule*, int> aWW8ListStyleCounts;
-        for (SwWW8StyInf & rSI : m_vColl)
+        for (SwWW8StyInf& rSI : m_vColl)
         {
+            // Copy inherited numbering info since LO drops inheritance after ChapterNumbering
+            // and only applies listLevel via style with the selected ChapterNumbering LFO.
+            bool bReRegister = false;
+            if (rSI.m_nBase && rSI.m_nBase < 10 && rSI.m_nBase < m_vColl.size()
+                && m_vColl[rSI.m_nBase].HasWW8OutlineLevel())
+            {
+                if (rSI.m_nLFOIndex == USHRT_MAX)
+                    rSI.m_nLFOIndex = m_vColl[rSI.m_nBase].m_nLFOIndex;
+                if (rSI.m_nListLevel == MAXLEVEL)
+                    rSI.m_nListLevel = m_vColl[rSI.m_nBase].m_nListLevel;
+                if (rSI.mnWW8OutlineLevel == MAXLEVEL)
+                    rSI.mnWW8OutlineLevel = m_vColl[rSI.m_nBase].mnWW8OutlineLevel;
+                bReRegister = true;
+            }
+
+            if (bReRegister)
+                RegisterNumFormatOnStyle(nStyle);
+
+            ++nStyle; // increment before the first "continue";
+
             if (!rSI.IsWW8BuiltInHeadingStyle() || !rSI.HasWW8OutlineLevel())
             {
                 continue;
