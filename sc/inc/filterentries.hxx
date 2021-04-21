@@ -13,12 +13,15 @@
 #include <sal/config.h>
 #include "typedstrdata.hxx"
 #include <vector>
+#include <tools/color.hxx>
 
 struct ScFilterEntries
 {
     std::vector<ScTypedStrData> maStrData;
     bool                        mbHasDates;
     bool                        mbHasEmpties;
+    std::set<Color>             maTextColors;
+    std::set<Color>             maBackgroundColors;
 
     ScFilterEntries() : mbHasDates(false), mbHasEmpties(false) {}
 
@@ -32,6 +35,13 @@ struct ScFilterEntries
     bool                                        empty() const   { return maStrData.empty(); }
     void                                        push_back( const ScTypedStrData& r ) { maStrData.push_back(r); }
     void                                        push_back( ScTypedStrData&& r )      { maStrData.push_back(r); }
+    std::set<Color>& getTextColors() { return maTextColors; };
+    void addTextColor(const Color& aTextColor) { maTextColors.emplace(aTextColor); }
+    std::set<Color>& getBackgroundColors() { return maBackgroundColors; };
+    void addBackgroundColor(const Color& aBackgroundColor)
+    {
+        maBackgroundColors.emplace(aBackgroundColor);
+    }
 };
 
 #endif
