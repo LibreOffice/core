@@ -28,6 +28,7 @@
 #include <com/sun/star/i18n/IndexEntrySupplier.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <vcl/svapp.hxx>
@@ -69,6 +70,36 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace ::comphelper;
+
+namespace
+{
+bool SplitUrlAndPage(const OUString& rText, OUString& rUrl, int& nPageNumber)
+{
+    uno::Reference<uri::XUriReferenceFactory> xUriReferenceFactory
+        = uri::UriReferenceFactory::create(comphelper::getProcessComponentContext());
+    uno::Reference<uri::XUriReference> xUriRef;
+    try
+    {
+        xUriRef = xUriReferenceFactory->parse(rText);
+    }
+    catch (const uno::Exception& rException)
+    {
+        SAL_WARN("sw.ui", "SplitUrlAndPage: failed to parse url: " << rException.Message);
+        return false;
+    }
+
+    OUString aPagePrefix("page=");
+    if (!xUriRef->getFragment().startsWith(aPagePrefix))
+    {
+        return false;
+    }
+
+    nPageNumber = xUriRef->getFragment().copy(aPagePrefix.getLength()).toInt32();
+    xUriRef->clearFragment();
+    rUrl = xUriRef->getUriReference();
+    return true;
+}
+}
 
 // dialog to insert a directory selection
 SwIndexMarkPane::SwIndexMarkPane(const std::shared_ptr<weld::Dialog>& rDialog, weld::Builder& rBuilder, bool bNewDlg,
@@ -1028,6 +1059,8 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     std::unique_ptr<weld::ComboBox> m_xTypeListBox;
     std::unique_ptr<weld::ComboBox> m_xIdentifierBox;
     std::unique_ptr<weld::Button> m_xBrowseButton;
+    std::unique_ptr<weld::CheckButton> m_xPageCB;
+    std::unique_ptr<weld::SpinButton> m_xPageSB;
 
     DECL_LINK(IdentifierHdl, weld::ComboBox&, void);
     DECL_LINK(ShortNameHdl, weld::Entry&, void);
@@ -1600,7 +1633,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         }
         else
         {
-            m_pBoxes[nIndex] = m_aBuilders.back()->weld_box("hbox");
+            m_pBoxes[nIndex] = m_aBuilders.back()->weld_box("vbox");
             pEdits[nIndex] = m_aBuilders.back()->weld_entry("entry");
             if (bLeft)
                 m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xLeft.get());
@@ -1610,14 +1643,39 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             m_pBoxes[nIndex]->set_grid_left_attach(1);
             m_pBoxes[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
             m_pBoxes[nIndex]->set_hexpand(true);
-            pEdits[nIndex]->set_text(pFields[aCurInfo.nToxField]);
-            pEdits[nIndex]->show();
-            pEdits[nIndex]->set_help_id(aCurInfo.pHelpId);
             if (aCurInfo.nToxField == AUTH_FIELD_URL)
             {
                 m_xBrowseButton = m_aBuilders.back()->weld_button("browse");
                 m_xBrowseButton->connect_clicked(LINK(this, SwCreateAuthEntryDlg_Impl, BrowseHdl));
+                m_xPageCB = m_aBuilders.back()->weld_check_button("pagecb");
+                m_xPageSB = m_aBuilders.back()->weld_spin_button("pagesb");
             }
+
+            // Now that both pEdits[nIndex] and m_xPageSB is initialized, set their values.
+            OUString aText = pFields[aCurInfo.nToxField];
+            if (aCurInfo.nToxField != AUTH_FIELD_URL)
+            {
+                pEdits[nIndex]->set_text(aText);
+            }
+            else
+            {
+                OUString aUrl;
+                int nPageNumber;
+                if (SplitUrlAndPage(aText, aUrl, nPageNumber))
+                {
+                    pEdits[nIndex]->set_text(aUrl);
+                    m_xPageCB->set_active(true);
+                    m_xPageSB->set_sensitive(true);
+                    m_xPageSB->set_value(nPageNumber);
+                }
+                else
+                {
+                    pEdits[nIndex]->set_text(aText);
+                }
+            }
+            pEdits[nIndex]->show();
+            pEdits[nIndex]->set_help_id(aCurInfo.pHelpId);
+
             if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
             {
                 pEdits[nIndex]->connect_changed(LINK(this, SwCreateAuthEntryDlg_Impl, ShortNameHdl));
@@ -1628,10 +1686,14 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                     pEdits[nIndex]->set_sensitive(false);
                 }
             }
-            else if (aCurInfo.nToxField == AUTH_FIELD_URL
-                     && comphelper::isFileUrl(pFields[aCurInfo.nToxField]))
+            else if (aCurInfo.nToxField == AUTH_FIELD_URL)
             {
-                m_xBrowseButton->show();
+                if (comphelper::isFileUrl(pFields[aCurInfo.nToxField]))
+                {
+                    m_xBrowseButton->show();
+                }
+                m_xPageCB->show();
+                m_xPageSB->show();
             }
 
             m_aFixedTexts.back()->set_mnemonic_widget(pEdits[nIndex].get());
