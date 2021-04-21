@@ -48,6 +48,8 @@
 #include <sal/log.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/window.hxx>
+#include <comphelper/lok.hxx>
+
 
 SdrViewEvent::SdrViewEvent()
 :     pHdl(nullptr),
@@ -374,7 +376,9 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                     // for e.g. URL links when hoovering and clicking
                     // them will not work. Tried several other changes,
                     // but this one safely keeps existing behaviour as-is.
-                    eHit = SdrHitKind::UnmarkedObject;
+                    // Except for the LOK. LOK doesn't have hoovering popup
+                    // feature.
+                    eHit = comphelper::LibreOfficeKit::isActive() ? SdrHitKind::TextEditObj : SdrHitKind::UnmarkedObject;
                     break;
                 default:
                     break;
