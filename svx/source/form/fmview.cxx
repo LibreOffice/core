@@ -517,6 +517,7 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
                 if (rI18nHelper.MatchMnemonic(pWindow->GetText(), rKEvt.GetCharCode()))
                 {
                     pWindow->GrabFocus();
+                    pWindow->KeyInput(rKEvt);
                     bDone = true;
                     break;
                 }
