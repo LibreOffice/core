@@ -44,6 +44,8 @@
 #include <sharedformula.hxx>
 #include <listenercontext.hxx>
 #include <filterentries.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
 
 #include <com/sun/star/i18n/LocaleDataItem2.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -2416,16 +2418,26 @@ class FilterEntriesHandler
     ScColumn& mrColumn;
     ScFilterEntries& mrFilterEntries;
 
-    void processCell(SCROW nRow, ScRefCellValue& rCell)
+    void processCell(ScColumn& rColumn, SCROW nRow, ScRefCellValue& rCell)
     {
         SvNumberFormatter* pFormatter = mrColumn.GetDoc().GetFormatTable();
         OUString aStr;
         sal_uLong nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
         ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, mrColumn.GetDoc(), mrColumn.HasFiltering());
 
+        // Colors
+        ScAddress aPos(rColumn.GetCol(), nRow, rColumn.GetTab());
+        const SvxColorItem* pColor = rColumn.GetDoc().GetAttr(aPos, ATTR_FONT_COLOR);
+        Color textColor = pColor->GetValue();
+
+        const SvxBrushItem* pBrush = rColumn.GetDoc().GetAttr(aPos, ATTR_BACKGROUND);
+        Color backgroundColor = pBrush->GetColor();
+
         if (rCell.hasString())
         {
             mrFilterEntries.push_back(ScTypedStrData(aStr));
+            mrFilterEntries.addTextColor(textColor);
+            mrFilterEntries.addBackgroundColor(backgroundColor);
             return;
         }
 
@@ -2448,6 +2460,8 @@ class FilterEntriesHandler
                     if (!aErr.isEmpty())
                     {
                         mrFilterEntries.push_back(ScTypedStrData(aErr));
+                        mrFilterEntries.addTextColor(textColor);
+                        mrFilterEntries.addBackgroundColor(backgroundColor);
                         return;
                     }
                 }
@@ -2483,6 +2497,8 @@ class FilterEntriesHandler
         }
         // maybe extend ScTypedStrData enum is also an option here
         mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value,bDate));
+        mrFilterEntries.addTextColor(textColor);
+        mrFilterEntries.addBackgroundColor(backgroundColor);
     }
 
 public:
@@ -2492,25 +2508,25 @@ public:
     void operator() (size_t nRow, double fVal)
     {
         ScRefCellValue aCell(fVal);
-        processCell(nRow, aCell);
+        processCell(mrColumn, nRow, aCell);
     }
 
     void operator() (size_t nRow, const svl::SharedString& rStr)
     {
         ScRefCellValue aCell(&rStr);
-        processCell(nRow, aCell);
+        processCell(mrColumn, nRow, aCell);
     }
 
     void operator() (size_t nRow, const EditTextObject* p)
     {
         ScRefCellValue aCell(p);
-        processCell(nRow, aCell);
+        processCell(mrColumn, nRow, aCell);
     }
 
     void operator() (size_t nRow, const ScFormulaCell* p)
     {
         ScRefCellValue aCell(const_cast<ScFormulaCell*>(p));
-        processCell(nRow, aCell);
+        processCell(mrColumn, nRow, aCell);
     }
 
     void operator() (const int nElemType, size_t nRow, size_t /* nDataSize */)
@@ -2525,7 +2541,7 @@ public:
             return;
         }
         ScRefCellValue aCell = mrColumn.GetCellValue(nRow);
-        processCell(nRow, aCell);
+        processCell(mrColumn, nRow, aCell);
     }
 };
 
