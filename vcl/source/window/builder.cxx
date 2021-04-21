@@ -3868,7 +3868,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
             }
             else
             {
-                SAL_WARN("vcl.builder", "unknown packing: " << sKey);
+                SAL_WARN_IF(sKey != "shrink", "vcl.builder", "unknown packing: " << sKey);
             }
         }
     }
