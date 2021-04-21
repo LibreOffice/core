@@ -115,6 +115,9 @@ struct _LibreOfficeKitClass
     void (*sendDialogEvent) (LibreOfficeKit* pThis,
                             unsigned long long int nLOKWindowId,
                             const char* pArguments);
+
+    void (*startProfileRecording) ();
+    void (*stopProfileRecording) ();
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
