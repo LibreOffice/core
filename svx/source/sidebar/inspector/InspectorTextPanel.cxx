@@ -120,6 +120,11 @@ static void FillBox_Impl(weld::TreeView& rListBoxStyles, const TreeNode& rCurren
         rListBoxStyles.set_sensitive(*pResult, !rCurrent.isGrey, 1);
         rListBoxStyles.set_text_emphasis(*pResult, false, 1);
     }
+    else
+    {
+        // Necessary, without this the selection line will be truncated.
+        rListBoxStyles.set_text(*pResult, "", 1);
+    }
 
     for (const TreeNode& rChildNode : rCurrent.children)
         FillBox_Impl(rListBoxStyles, rChildNode, pResult.get());
