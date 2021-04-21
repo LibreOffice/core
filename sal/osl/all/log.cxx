@@ -125,7 +125,9 @@ char const* setEnvFromLoggingIniFile(const char* env, const char* key)
 }
 #endif
 
-char const * getLogLevel() {
+char const* pLogSelector = nullptr;
+
+char const* getLogLevelEnvVar() {
     static char const* const pLevel = [] {
         char const* pResult = nullptr;
 
@@ -176,33 +178,36 @@ std::ofstream * getLogFile() {
     return pFile;
 }
 
-void maybeOutputTimestamp(std::ostringstream &s) {
-    static const std::pair<bool, bool> aFlags = [] {
-        char const* env = getLogLevel();
-        bool outputTimestamp = false;
-        bool outputRelativeTimer = false;
-        for (char const* p = env; p && *p;)
+
+std::pair<bool, bool> getTimestampFlags(char const *selector)
+{
+    bool outputTimestamp = false;
+    bool outputRelativeTimer = false;
+    for (char const* p = selector; p && *p;)
         {
             if (*p++ == '+')
-            {
-                char const * p1 = p;
-                while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
-                    ++p1;
+                {
+                    char const * p1 = p;
+                    while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
+                        ++p1;
+                    }
+                    if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")))
+                        outputTimestamp = true;
+                    else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
+                        outputRelativeTimer = true;
+                    char const * p2 = p1;
+                    while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
+                        ++p2;
+                    }
+                    p = p2;
                 }
-                if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")))
-                    outputTimestamp = true;
-                else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
-                    outputRelativeTimer = true;
-                char const * p2 = p1;
-                while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
-                    ++p2;
-                }
-                p = p2;
-            }
         }
-        return std::pair(outputTimestamp, outputRelativeTimer);
-    }();
-    const auto& [outputTimestamp, outputRelativeTimer] = aFlags;
+    return std::pair(outputTimestamp, outputRelativeTimer);
+}
+
+void maybeOutputTimestamp(std::ostringstream &s) {
+    static const std::pair<bool, bool> aEnvFlags = getTimestampFlags(getLogLevelEnvVar());
+    const auto& [outputTimestamp, outputRelativeTimer] = (pLogSelector == nullptr ? aEnvFlags : getTimestampFlags(pLogSelector));
 
     if (outputTimestamp)
     {
@@ -340,6 +345,11 @@ void sal_detail_log(
 #endif
 }
 
+void sal_detail_set_log_selector(char const *logSelector)
+{
+    pLogSelector = logSelector;
+}
+
 void sal_detail_logFormat(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * format, ...)
@@ -372,12 +382,13 @@ unsigned char sal_detail_log_report(sal_detail_LogLevel level, char const * area
         return SAL_DETAIL_LOG_ACTION_LOG;
     }
     assert(area != nullptr);
-    static char const* const env = [] {
-        char const* pResult =  getLogLevel();
+    static char const* const envEnv = [] {
+        char const* pResult =  getLogLevelEnvVar();
         if (!pResult)
             pResult = "+WARN";
         return pResult;
     }();
+    char const* const env = (pLogSelector == nullptr ? envEnv : pLogSelector);
     std::size_t areaLen = std::strlen(area);
     enum Sense { POSITIVE = 0, NEGATIVE = 1 };
     std::size_t senseLen[2] = { 0, 1 };
