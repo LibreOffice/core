@@ -96,6 +96,7 @@ class ScriptForge(object, metaclass = _Singleton):
     port = 0
     componentcontext = None
     scriptprovider = None
+    SCRIPTFORGEINITDONE = False
 
     # #########################################################################
     # Class constants
@@ -146,6 +147,8 @@ class ScriptForge(object, metaclass = _Singleton):
         # All properties and methods of the ScriptForge API are ProperCased
         # Compute their synonyms as lowercased and camelCased names
         ScriptForge.SetAttributeSynonyms()
+        #
+        ScriptForge.SCRIPTFORGEINITDONE = True
 
     @classmethod
     def ConnectToLOProcess(cls, hostname = '', port = 0):
@@ -450,6 +453,9 @@ class SFServices(object):
     # enumerate all types of properties and adapt __getattr__() and __setattr__() according to their type
     internal_attributes = ('objectreference', 'objecttype', 'name', 'internal', 'servicename',
                            'serviceimplementation', 'classmodule', 'EXEC', 'SIMPLEEXEC')
+    # Shortcuts to script provider interfaces
+    SIMPLEEXEC = ScriptForge.InvokeSimpleScript
+    EXEC = ScriptForge.InvokeBasicService
 
     def __init__(self, reference = -1, objtype = None, classmodule = 0, name = ''):
         """
@@ -463,8 +469,6 @@ class SFServices(object):
         self.name = name  # '' when no name
         self.internal = False  # True to exceptionally allow assigning a new value to a read-only property
         self.localProperties = []  # the properties reserved for internal use (often empty)
-        self.SIMPLEEXEC = ScriptForge.InvokeSimpleScript  # Shortcuts to script provider interfaces
-        self.EXEC = ScriptForge.InvokeBasicService
 
     def __getattr__(self, name):
         """
@@ -618,53 +622,63 @@ class SFScriptForge:
         MB_OK, MB_OKCANCEL, MB_RETRYCANCEL, MB_YESNO, MB_YESNOCANCEL = 0, 1, 5, 4, 3
         IDABORT, IDCANCEL, IDIGNORE, IDNO, IDOK, IDRETRY, IDYES = 3, 2, 5, 7, 1, 4, 6
 
-        def ConvertFromUrl(self, url):
-            return self.SIMPLEEXEC(self.module + '.PyConvertFromUrl', url)
+        @classmethod
+        def ConvertFromUrl(cls, url):
+            return cls.SIMPLEEXEC(cls.module + '.PyConvertFromUrl', url)
 
-        def ConvertToUrl(self, systempath):
-            return self.SIMPLEEXEC(self.module + '.PyConvertToUrl', systempath)
+        @classmethod
+        def ConvertToUrl(cls, systempath):
+            return cls.SIMPLEEXEC(cls.module + '.PyConvertToUrl', systempath)
 
-        def CreateUnoService(self, servicename):
-            return self.SIMPLEEXEC(self.module + '.PyCreateUnoService', servicename)
+        @classmethod
+        def CreateUnoService(cls, servicename):
+            return cls.SIMPLEEXEC(cls.module + '.PyCreateUnoService', servicename)
 
-        def DateAdd(self, interval, number, date):
+        @classmethod
+        def DateAdd(cls, interval, number, date):
             if isinstance(date, datetime.datetime):
                 date = date.isoformat()
-            dateadd = self.SIMPLEEXEC(self.module + '.PyDateAdd', interval, number, date)
+            dateadd = cls.SIMPLEEXEC(cls.module + '.PyDateAdd', interval, number, date)
             return datetime.datetime.fromisoformat(dateadd)
 
-        def DateDiff(self, interval, date1, date2, firstdayofweek = 1, firstweekofyear = 1):
+        @classmethod
+        def DateDiff(cls, interval, date1, date2, firstdayofweek = 1, firstweekofyear = 1):
             if isinstance(date1, datetime.datetime):
                 date1 = date1.isoformat()
             if isinstance(date2, datetime.datetime):
                 date2 = date2.isoformat()
-            return self.SIMPLEEXEC(self.module + '.PyDateDiff', interval, date1, date2, firstdayofweek, firstweekofyear)
+            return cls.SIMPLEEXEC(cls.module + '.PyDateDiff', interval, date1, date2, firstdayofweek, firstweekofyear)
 
-        def DatePart(self, interval, date, firstdayofweek = 1, firstweekofyear = 1):
+        @classmethod
+        def DatePart(cls, interval, date, firstdayofweek = 1, firstweekofyear = 1):
             if isinstance(date, datetime.datetime):
                 date = date.isoformat()
-            return self.SIMPLEEXEC(self.module + '.PyDatePart', interval, date, firstdayofweek, firstweekofyear)
+            return cls.SIMPLEEXEC(cls.module + '.PyDatePart', interval, date, firstdayofweek, firstweekofyear)
 
-        def DateValue(self, string):
+        @classmethod
+        def DateValue(cls, string):
             if isinstance(string, datetime.datetime):
                 string = string.isoformat()
-            datevalue = self.SIMPLEEXEC(self.module + '.PyDateValue', string)
+            datevalue = cls.SIMPLEEXEC(cls.module + '.PyDateValue', string)
             return datetime.datetime.fromisoformat(datevalue)
 
-        def Format(self, expression, format = ''):
+        @classmethod
+        def Format(cls, expression, format = ''):
             if isinstance(expression, datetime.datetime):
                 expression = expression.isoformat()
-            return self.SIMPLEEXEC(self.module + '.PyFormat', expression, format)
+            return cls.SIMPLEEXEC(cls.module + '.PyFormat', expression, format)
 
         @classmethod
         def GetDefaultContext(cls):
             return ScriptForge.componentcontext
 
-        def GetGuiType(self):
-            return self.SIMPLEEXEC(self.module + '.PyGetGuiType')
+        @classmethod
+        def GetGuiType(cls):
+            return cls.SIMPLEEXEC(cls.module + '.PyGetGuiType')
 
-        def GetSystemTicks(self):
-            return self.SIMPLEEXEC(self.module + '.PyGetSystemTicks')
+        @classmethod
+        def GetSystemTicks(cls):
+            return cls.SIMPLEEXEC(cls.module + '.PyGetSystemTicks')
 
         @classmethod
         def GetPathSeparator(cls):
@@ -679,13 +693,15 @@ class SFScriptForge:
             def DialogLibraries(cls):
                 return ScriptForge.InvokeSimpleScript(SFScriptForge.SF_Basic.module + '.PyGlobalScope', 'Dialog')
 
-        def InputBox(self, prompt, title = '', default = '', xpostwips = -1, ypostwips = -1):
+        @classmethod
+        def InputBox(cls, prompt, title = '', default = '', xpostwips = -1, ypostwips = -1):
             if xpostwips < 0 or ypostwips < 0:
-                return self.SIMPLEEXEC(self.module + '.PyInputBox', prompt, title, default)
-            return self.SIMPLEEXEC(self.module + '.PyInputBox', prompt, title, default, xpostwips, ypostwips)
+                return cls.SIMPLEEXEC(cls.module + '.PyInputBox', prompt, title, default)
+            return cls.SIMPLEEXEC(cls.module + '.PyInputBox', prompt, title, default, xpostwips, ypostwips)
 
-        def MsgBox(self, prompt, buttons = 0, title = ''):
-            return self.SIMPLEEXEC(self.module + '.PyMsgBox', prompt, buttons, title)
+        @classmethod
+        def MsgBox(cls, prompt, buttons = 0, title = ''):
+            return cls.SIMPLEEXEC(cls.module + '.PyMsgBox', prompt, buttons, title)
 
         @classmethod
         def Now(cls):
@@ -695,8 +711,8 @@ class SFScriptForge:
         def RGB(cls, red, green, blue):
             return int('%02x%02x%02x' % (red, green, blue), 16)
 
-        @classmethod
-        def StarDesktop(cls):
+        @property
+        def StarDesktop(self):
             ctx = ScriptForge.componentcontext
             if ctx is None:
                 return None
@@ -704,9 +720,11 @@ class SFScriptForge:
             DESK = 'com.sun.star.frame.Desktop'
             desktop = smgr.createInstanceWithContext(DESK, ctx)
             return desktop
+        starDesktop, stardesktop = StarDesktop, StarDesktop
 
-        def Xray(self, unoobject = None):
-            return self.SIMPLEEXEC('XrayTool._main.xray', unoobject)
+        @classmethod
+        def Xray(cls, unoobject = None):
+            return cls.SIMPLEEXEC('XrayTool._main.xray', unoobject)
 
     # #########################################################################
     # SF_Dictionary CLASS
@@ -789,6 +807,7 @@ class SFScriptForge:
                         for i in range(len(value)):
                             if isinstance(value[i], dict):
                                 value[i] = None
+                    item = value
                 elif isinstance(value, (datetime.datetime, datetime.date, datetime.time)):
                     item = CDateToUno(value)
                 pv = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
@@ -864,23 +883,25 @@ class SFScriptForge:
             param = '\t'.join(list(map(repr, args))).expandtabs(tabsize = 4)
             return self.ExecMethod(self.vbMethod, 'DebugPrint', param)
 
-        def RaiseFatal(self, errorcode, *args):
+        @classmethod
+        def RaiseFatal(cls, errorcode, *args):
             """
                 Generate a run-time error caused by an anomaly in a user script detected by ScriptForge
                 The message is logged in the console. The execution is STOPPED
                 For INTERNAL USE only
                 """
             # Direct call because RaiseFatal forces an execution stop in Basic
-            return self.SIMPLEEXEC('SF_Exception.RaiseFatal', errorcode, *args)
+            return cls.SIMPLEEXEC('SF_Exception.RaiseFatal', errorcode, *args)
 
-        def _RaiseFatal(self, sub, subargs, errorcode, *args):
+        @classmethod
+        def _RaiseFatal(cls, sub, subargs, errorcode, *args):
             """
                 Wrapper of RaiseFatal(). Includes method and syntax of the failed Python routine
                 to simulate the exact behaviour of the Basic RaiseFatal() method
                 For INTERNAL USE only
                 """
             ScriptForge.InvokeSimpleScript('ScriptForge.SF_Utils._EnterFunction', sub, subargs)
-            self.RaiseFatal(errorcode, *args)
+            cls.RaiseFatal(errorcode, *args)
             raise RuntimeError("The execution of the method '" + sub.split('.')[-1] + "' failed. Execution stops.")
 
     # #########################################################################
@@ -993,9 +1014,10 @@ class SFScriptForge:
         def SubFolders(self, foldername, filter = ''):
             return self.ExecMethod(self.vbMethod, 'SubFolders', foldername, filter)
 
-        def _ConvertFromUrl(self, filename):
+        @classmethod
+        def _ConvertFromUrl(cls, filename):
             # Alias for same function in FileSystem Basic module
-            return self.SIMPLEEXEC('ScriptForge.SF_FileSystem._ConvertFromUrl', filename)
+            return cls.SIMPLEEXEC('ScriptForge.SF_FileSystem._ConvertFromUrl', filename)
 
     # #########################################################################
     # SF_L10N CLASS
@@ -1112,27 +1134,30 @@ class SFScriptForge:
         SCRIPTISSHAROXT = 'share:uno_packages'  # in an extension installed for all users (Python)
         SCRIPTISOXT = 'uno_packages'            # in an extension but the installation parameters are unknown (Python)
 
-        def ExecuteBasicScript(self, scope = '', script = '', *args):
+        @classmethod
+        def ExecuteBasicScript(cls, scope = '', script = '', *args):
             if scope is None or scope == '':
-                scope = self.SCRIPTISAPPLICATION
+                scope = cls.SCRIPTISAPPLICATION
             if len(args) == 0:
                 args = (scope,) + (script,) + (None,)
             else:
                 args = (scope,) + (script,) + args
             # ExecuteBasicScript method has a ParamArray parameter in Basic
-            return self.SIMPLEEXEC('@SF_Session.ExecuteBasicScript', args)
+            return cls.SIMPLEEXEC('@SF_Session.ExecuteBasicScript', args)
 
-        def ExecuteCalcFunction(self, calcfunction, *args):
+        @classmethod
+        def ExecuteCalcFunction(cls, calcfunction, *args):
             if len(args) == 0:
                 # Arguments of Calc functions are strings or numbers. None == Empty is a good alias for no argument
                 args = (calcfunction,) + (None,)
             else:
                 args = (calcfunction,) + args
             # ExecuteCalcFunction method has a ParamArray parameter in Basic
-            return self.SIMPLEEXEC('@SF_Session.ExecuteCalcFunction', args)
+            return cls.SIMPLEEXEC('@SF_Session.ExecuteCalcFunction', args)
 
-        def ExecutePythonScript(self, scope = '', script = '', *args):
-            return self.SIMPLEEXEC(scope + ':' + script, *args)
+        @classmethod
+        def ExecutePythonScript(cls, scope = '', script = '', *args):
+            return cls.SIMPLEEXEC(scope + ':' + script, *args)
 
         def HasUnoMethod(self, unoobject, methodname):
             return self.ExecMethod(self.vbMethod, 'HasUnoMethod', unoobject, methodname)
@@ -1140,9 +1165,10 @@ class SFScriptForge:
         def HasUnoProperty(self, unoobject, propertyname):
             return self.ExecMethod(self.vbMethod, 'HasUnoProperty', unoobject, propertyname)
 
-        def OpenURLInBrowser(self, url):
+        @classmethod
+        def OpenURLInBrowser(cls, url):
             py = ScriptForge.pythonhelpermodule + '$' + '_SF_Session__OpenURLInBrowser'
-            return self.SIMPLEEXEC(py, url)
+            return cls.SIMPLEEXEC(py, url)
 
         def RunApplication(self, command, parameters):
             return self.ExecMethod(self.vbMethod, 'RunApplication', command, parameters)
@@ -1177,9 +1203,10 @@ class SFScriptForge:
         servicesynonyms = ('string', 'scriptforge.string')
         serviceproperties = dict()
 
-        def HashStr(self, inputstr, algorithm):
+        @classmethod
+        def HashStr(cls, inputstr, algorithm):
             py = ScriptForge.pythonhelpermodule + '$' + '_SF_String__HashStr'
-            return self.SIMPLEEXEC(py, inputstr, algorithm.lower())
+            return cls.SIMPLEEXEC(py, inputstr, algorithm.lower())
 
         def IsADate(self, inputstr, dateformat = 'YYYY-MM-DD'):
             return self.ExecMethod(self.vbMethod, 'IsADate', inputstr, dateformat)
@@ -1894,7 +1921,8 @@ def CreateScriptService(service, *args):
     # Init at each CreateScriptService() invocation
     #       CreateScriptService is usually the first statement in user scripts requesting ScriptForge services
     #       ScriptForge() is optional in user scripts when Python process inside LibreOffice process
-    ScriptForge()
+    if ScriptForge.SCRIPTFORGEINITDONE is False:
+        ScriptForge()
 
     def ResolveSynonyms(servicename):
         """

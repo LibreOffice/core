@@ -569,7 +569,7 @@ Const cstObject = 2048		&apos;	1st argument is a Basic object when numeric
 Const objMODULE = 1, objCLASS = 2, objUNO = 3
 
 Check:
-	&apos;If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	_PythonDispatcher = Null
 
 	&apos;	Ignore Null basic objects (Null = Null or Nothing)
@@ -628,6 +628,7 @@ Try:
 &apos;			Requires Python and Basic update in the concerned library but is transparent for this dispatcher
 
 	&apos;	Initialize Python persistent storage at 1st call
+	
 	If IsEmpty(_SF_.PythonStorage) Then _SF_._InitPythonStorage()
 	&apos;	Reset any error
 	_SF_._Stackreset()
