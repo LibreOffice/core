@@ -52,6 +52,24 @@
       "revId": "97351cfe6adcb87ef9076e69312a7208029d6d1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3293cc4e_ab59b929",
+        "filename": "sal/rtl/cmdargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-21T08:47:10Z",
+      "side": 1,
+      "message": ":-) agreed - so the only nitpick left was the \u00275\u0027 from indexOf :-)",
+      "parentUuid": "d1894db0_b427b5f3",
+      "revId": "97351cfe6adcb87ef9076e69312a7208029d6d1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
