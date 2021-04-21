@@ -19,6 +19,8 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -2695,6 +2697,26 @@ public:
         return std::pair<bool,bool>(bOk, bTestEqual);
     }
 
+    std::pair<bool, bool> compareByTextColor(SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                             const ScQueryEntry::Item& rItem)
+    {
+        ScAddress aPos(nCol, nRow, nTab);
+        const SvxColorItem* pColor = mrDoc.GetAttr(aPos, ATTR_FONT_COLOR);
+        Color color = pColor->GetValue();
+        bool bMatch = rItem.maColor == color;
+        return std::pair<bool, bool>(bMatch, false);
+    }
+
+    std::pair<bool, bool> compareByBackgroundColor(SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                                   const ScQueryEntry::Item& rItem)
+    {
+        ScAddress aPos(nCol, nRow, nTab);
+        const SvxBrushItem* pBrush = mrDoc.GetAttr(aPos, ATTR_BACKGROUND);
+        Color color = pBrush->GetColor();
+        bool bMatch = rItem.maColor == color;
+        return std::pair<bool, bool>(bMatch, false);
+    }
+
     // To be called only if both isQueryByValue() and isQueryByString()
     // returned false and range lookup is wanted! In range lookup comparison
     // numbers are less than strings. Nothing else is compared.
@@ -2806,6 +2828,20 @@ bool ScTable::ValidQuery(
                 {
                     std::pair<bool,bool> aThisRes =
                         aEval.compareByString(aCell, nRow, rEntry, rItem, pContext);
+                    aRes.first |= aThisRes.first;
+                    aRes.second |= aThisRes.second;
+                }
+                if (rItem.meType == ScQueryEntry::ByTextColor)
+                {
+                    std::pair<bool, bool> aThisRes
+                        = aEval.compareByTextColor(nCol, nRow, nTab, rItem);
+                    aRes.first |= aThisRes.first;
+                    aRes.second |= aThisRes.second;
+                }
+                if (rItem.meType == ScQueryEntry::ByBackgroundColor)
+                {
+                    std::pair<bool,bool> aThisRes =
+                        aEval.compareByBackgroundColor(nCol, nRow, nTab, rItem);
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }
