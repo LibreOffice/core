@@ -538,29 +538,32 @@ void SwFrame::UpdateAttrFrame( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_LR_SPACE:
         case RES_UL_SPACE:
         case RES_RTL_GUTTER:
-            rInvFlags |= static_cast<SwFrameInvFlags>(0x0B);
+            rInvFlags |= SwFrameInvFlags::InvalidatePrt | SwFrameInvFlags::InvalidateSize
+                         | SwFrameInvFlags::SetCompletePaint;
             break;
 
         case RES_HEADER_FOOTER_EAT_SPACING:
-            rInvFlags |= static_cast<SwFrameInvFlags>(0x03);
+            rInvFlags |= SwFrameInvFlags::InvalidatePrt | SwFrameInvFlags::InvalidateSize;
             break;
 
         case RES_BACKGROUND:
         case RES_BACKGROUND_FULL_SIZE:
-            rInvFlags |= static_cast<SwFrameInvFlags>(0x28);
+            rInvFlags |= SwFrameInvFlags::SetCompletePaint | SwFrameInvFlags::NextSetCompletePaint;
             break;
 
         case RES_KEEP:
-            rInvFlags |= static_cast<SwFrameInvFlags>(0x04);
+            rInvFlags |= SwFrameInvFlags::InvalidatePos;
             break;
 
         case RES_FRM_SIZE:
             ReinitializeFrameSizeAttrFlags();
-            rInvFlags |= static_cast<SwFrameInvFlags>(0x13);
+            rInvFlags |= SwFrameInvFlags::InvalidatePrt | SwFrameInvFlags::InvalidateSize
+                         | SwFrameInvFlags::NextInvalidatePos;
             break;
 
         case RES_FMT_CHG:
-            rInvFlags |= static_cast<SwFrameInvFlags>(0x0F);
+            rInvFlags |= SwFrameInvFlags::InvalidatePrt | SwFrameInvFlags::InvalidateSize
+                         | SwFrameInvFlags::InvalidatePos | SwFrameInvFlags::SetCompletePaint;
             break;
 
         case RES_ROW_SPLIT:
@@ -586,7 +589,8 @@ void SwFrame::UpdateAttrFrame( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             // the new FillStyle has to do the same as previous RES_BACKGROUND
             if(nWhich >= XATTR_FILL_FIRST && nWhich <= XATTR_FILL_LAST)
             {
-                rInvFlags |= static_cast<SwFrameInvFlags>(0x28);
+                rInvFlags
+                    |= SwFrameInvFlags::SetCompletePaint | SwFrameInvFlags::NextSetCompletePaint;
             }
             /* do Nothing */;
     }
