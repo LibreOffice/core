@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0fdec27_bb0c9179",
+        "filename": "sw/qa/extras/ww8export/ww8export3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-21T06:50:54Z",
+      "side": 1,
+      "message": "This is how I try to make .doc bug documents ascii-only: I convert the .doc to .docx, then I can edit the XML files inside the ZIP file. Once the test data is ascii-only, I can convert back to .docx. The test document conversions are best done with Word. Not a blocker, but it\u0027s nice to have only ascii content in test data, unless that\u0027s the point of the test.",
+      "revId": "1246816eadd32f605cd7e598ee3e08db66e6fced",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
