@@ -2142,10 +2142,10 @@ IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bo
                 for (j = 0; j < nParentLevel; j++)
                 {
                     sal_Int32 n = pChildItem->vIndices[j] = pItem->vIndices[j];
-                    aIndexStr.append(OUString::number(n)).append(",");
+                    aIndexStr.append(n).append(",");
                 }
                 pChildItem->vIndices[nParentLevel] = i;
-                aIndexStr.append(OUString::number(i)).append(")");
+                aIndexStr.append(i).append(")");
 
                 OUString aDisplayName;
                 WatchItem* pArrayRootItem = pChildItem->GetRootItem();

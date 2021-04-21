@@ -192,7 +192,7 @@ css::uno::Sequence< OUString > VCLXPrinterPropertySet::getFormDescriptions(  )
         OUStringBuffer aDescr( "*;*;" );
         aDescr.append(GetPrinter()->GetPaperBinName( n ));
         aDescr.append(';');
-        aDescr.append(OUString::number(n));
+        aDescr.append(static_cast<sal_Int32>(n));
         aDescr.append(";*;*");
 
         aDescriptions.getArray()[n] = aDescr.makeStringAndClear();
