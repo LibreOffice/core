@@ -651,10 +651,14 @@ void SmElementsControl::GetFocus()
 {
     CustomWidgetController::GetFocus();
     Invalidate();
+    if (m_xAccessible.is() && m_nCurrentElement != SAL_MAX_UINT16)
+        m_xAccessible->AcquireFocus();
 }
 
 void SmElementsControl::LoseFocus()
 {
+    if (m_xAccessible.is() && m_nCurrentElement != SAL_MAX_UINT16)
+        m_xAccessible->ReleaseFocus(m_nCurrentElement);
     CustomWidgetController::LoseFocus();
     Invalidate();
 }
