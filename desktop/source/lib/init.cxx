@@ -2086,6 +2086,9 @@ static void lo_sendDialogEvent(LibreOfficeKit* pThis,
                                unsigned long long int nLOKWindowId,
                                const char* pArguments);
 
+static void lo_startProfileRecording(LibreOfficeKit* pThis);
+static void lo_stopProfileRecording(LibreOfficeKit* pThis);
+
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
     , maThread(nullptr)
@@ -2111,6 +2114,8 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->signDocument = lo_signDocument;
         m_pOfficeClass->runLoop = lo_runLoop;
         m_pOfficeClass->sendDialogEvent = lo_sendDialogEvent;
+        m_pOfficeClass->startProfileRecording = lo_startProfileRecording;
+        m_pOfficeClass->stopProfileRecording = lo_stopProfileRecording;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -3856,6 +3861,16 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
 static void lo_sendDialogEvent(LibreOfficeKit* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
 {
     lcl_sendDialogEvent(nWindowId, pArguments);
+}
+
+static void lo_startProfileRecording(LibreOfficeKit* /*pThis*/)
+{
+    comphelper::ProfileZone::startRecording();
+}
+
+static void lo_stopProfileRecording(LibreOfficeKit* /*pThis*/)
+{
+    comphelper::ProfileZone::stopRecording();
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
