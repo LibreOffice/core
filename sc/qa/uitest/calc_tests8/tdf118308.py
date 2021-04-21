@@ -22,9 +22,9 @@ class tdf118308(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         self.xUITest.executeCommand(".uno:Copy")
 
-        self.ui_test.close_doc()
+        self.xUITest.executeCommand(".uno:CloseDoc")
 
-        calc_doc = self.ui_test.load_empty_file("calc")
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
