@@ -4358,7 +4358,7 @@ OUString SalInstanceTreeView::get_selected_text() const
 {
     assert(m_xTreeView->IsUpdateMode() && "don't request selection when frozen");
     if (SvTreeListEntry* pEntry = m_xTreeView->FirstSelected())
-        return m_xTreeView->GetEntryText(pEntry);
+        return SvTabListBox::GetEntryText(pEntry, 0);
     return OUString();
 }
 
