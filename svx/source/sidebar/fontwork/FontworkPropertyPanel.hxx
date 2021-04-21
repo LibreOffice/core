@@ -36,6 +36,8 @@ public:
     // constructor/destructor
     FontworkPropertyPanel(vcl::Window* pParent,
                           const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    ~FontworkPropertyPanel();
+    void dispose() override;
 
 private:
     std::unique_ptr<weld::Toolbar> m_pToolbar;

@@ -49,6 +49,16 @@ FontworkPropertyPanel::FontworkPropertyPanel(vcl::Window* pParent,
         m_pToolbar->set_item_visible(".uno:ExtrusionToggle", false);
 }
 
+FontworkPropertyPanel::~FontworkPropertyPanel() { disposeOnce(); }
+
+void FontworkPropertyPanel::dispose()
+{
+    m_xToolbar.reset(nullptr);
+    m_pToolbar.reset(nullptr);
+
+    PanelLayout::dispose();
+}
+
 VclPtr<vcl::Window>
 FontworkPropertyPanel::Create(vcl::Window* pParent,
                               const css::uno::Reference<css::frame::XFrame>& rxFrame)
