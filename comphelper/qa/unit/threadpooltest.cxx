@@ -121,6 +121,8 @@ public:
     }
     virtual void doWork()
     {
+        (void) mThreadId;
+        (void) mCheckEqual;
         assert(mCheckEqual ? osl::Thread::getCurrentIdentifier() == mThreadId
                            : osl::Thread::getCurrentIdentifier() != mThreadId);
     }
