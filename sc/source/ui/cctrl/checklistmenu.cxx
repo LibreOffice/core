@@ -197,9 +197,9 @@ void ScCheckListMenuControl::executeMenuItem(size_t nPos)
         // no action is defined.
         return;
 
-    terminateAllPopupMenus();
-
     maMenuItems[nPos].mxAction->execute();
+
+    terminateAllPopupMenus();
 }
 
 void ScCheckListMenuControl::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer)

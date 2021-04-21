@@ -322,7 +322,18 @@ protected:
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
 public:
-    enum class AutoFilterMode { Normal, Top10, Custom, Empty, NonEmpty, SortAscending, SortDescending };
+    enum class AutoFilterMode
+    {
+        Normal,
+        Top10,
+        Custom,
+        Empty,
+        NonEmpty,
+        TextColor,
+        BackgroundColor,
+        SortAscending,
+        SortDescending,
+    };
 
     ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos eWhichPos );
     virtual ~ScGridWindow() override;

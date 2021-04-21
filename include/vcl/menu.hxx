@@ -24,6 +24,7 @@
 #include <string_view>
 
 #include <vcl/vclenum.hxx>
+#include <tools/color.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <vcl/dllapi.h>
@@ -308,6 +309,9 @@ public:
 
     void SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image GetItemImage( sal_uInt16 nItemId ) const;
+
+    // Instead of an image, draw a color
+    void SetItemColor( sal_uInt16 nItemId, const Color& rColor );
 
     void SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
     OUString GetItemCommand( sal_uInt16 nItemId ) const;

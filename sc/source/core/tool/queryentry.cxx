@@ -29,6 +29,8 @@
 
 #define SC_EMPTYFIELDS      (double(0x0042))
 #define SC_NONEMPTYFIELDS   (double(0x0043))
+#define SC_TEXTCOLOR        (double(0x0044))
+#define SC_BACKGROUNDCOLOR  (double(0x0045))
 
 bool ScQueryEntry::Item::operator== (const Item& r) const
 {
@@ -113,6 +115,28 @@ bool ScQueryEntry::IsQueryByNonEmpty() const
         rItem.meType == ByEmpty &&
         rItem.maString.isEmpty() &&
         rItem.mfVal == SC_NONEMPTYFIELDS;
+}
+
+void ScQueryEntry::SetQueryByTextColor(Color color)
+{
+    eOp = SC_EQUAL;
+    maQueryItems.resize(1);
+    Item& rItem = maQueryItems[0];
+    rItem.meType = ByTextColor;
+    rItem.maString = svl::SharedString();
+    rItem.mfVal = SC_TEXTCOLOR;
+    rItem.maColor = color;
+}
+
+void ScQueryEntry::SetQueryByBackgroundColor(Color color)
+{
+    eOp = SC_EQUAL;
+    maQueryItems.resize(1);
+    Item& rItem = maQueryItems[0];
+    rItem.meType = ByBackgroundColor;
+    rItem.maString = svl::SharedString();
+    rItem.mfVal = SC_BACKGROUNDCOLOR;
+    rItem.maColor = color;
 }
 
 ScQueryEntry::Item& ScQueryEntry::GetQueryItemImpl() const
