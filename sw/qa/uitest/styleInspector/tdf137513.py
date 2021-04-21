@@ -28,8 +28,8 @@ class tdf137513(UITestCase):
 
         # The cursor is on text inside the table with direct formatting
         self.assertEqual(2, len(xListBox.getChild('0').getChildren()))
-        self.assertEqual("Default Paragraph Style", get_state_as_dict(xListBox.getChild('0').getChild('0'))['Text'])
-        self.assertEqual("Table Contents", get_state_as_dict(xListBox.getChild('0').getChild('1'))['Text'])
+        self.assertEqual("Default Paragraph Style\t", get_state_as_dict(xListBox.getChild('0').getChild('0'))['Text'])
+        self.assertEqual("Table Contents\t", get_state_as_dict(xListBox.getChild('0').getChild('1'))['Text'])
         self.assertEqual(136, len(xListBox.getChild('0').getChild('0').getChildren()))
 
         xTableContent = xListBox.getChild('0').getChild('1')

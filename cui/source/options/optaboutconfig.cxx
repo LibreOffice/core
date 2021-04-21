@@ -290,7 +290,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                 OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_vectorUserData.back().get())));
 
                 m_xPrefBox->insert(pParentEntry, -1, &item, &sId, nullptr, nullptr, true, m_xScratchIter.get());
-                //It is needed, without this the selection line will be truncated.
+                // Necessary, without this the selection line will be truncated.
                 m_xPrefBox->set_text(*m_xScratchIter, "", 1);
                 m_xPrefBox->set_text(*m_xScratchIter, "", 2);
                 m_xPrefBox->set_text(*m_xScratchIter, "", 3);
