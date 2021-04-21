@@ -2982,6 +2982,17 @@ void ScTabView::UpdateInputContext()
 
 tools::Long ScTabView::GetGridWidth( ScHSplitPos eWhich )
 {
+    // at present only the size of the current pane is synchronized with
+    // the size of the visible area in Online;
+    // as a workaround we use the same width for all panes independently
+    // from the eWhich value
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScGridWindow* pGridWindow = aViewData.GetActiveWin();
+        if (pGridWindow)
+            return pGridWindow->GetSizePixel().Width();
+    }
+
     ScSplitPos eGridWhich = ( eWhich == SC_SPLIT_LEFT ) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
     if (pGridWin[eGridWhich])
         return pGridWin[eGridWhich]->GetSizePixel().Width();
@@ -2993,6 +3004,17 @@ tools::Long ScTabView::GetGridWidth( ScHSplitPos eWhich )
 
 tools::Long ScTabView::GetGridHeight( ScVSplitPos eWhich )
 {
+    // at present only the size of the current pane is synchronized with
+    // the size of the visible area in Online;
+    // as a workaround we use the same height for all panes independently
+    // from the eWhich value
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScGridWindow* pGridWindow = aViewData.GetActiveWin();
+        if (pGridWindow)
+            return pGridWindow->GetSizePixel().Height();
+    }
+
     ScSplitPos eGridWhich = ( eWhich == SC_SPLIT_TOP ) ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT;
     if (pGridWin[eGridWhich])
         return pGridWin[eGridWhich]->GetSizePixel().Height();
