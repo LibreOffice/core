@@ -288,7 +288,7 @@ SmElementsControl::SmElementsControl(std::unique_ptr<weld::ScrolledWindow> xScro
     : mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
     , m_nCurrentElement(SAL_MAX_UINT16)
     , m_nCurrentRolloverElement(SAL_MAX_UINT16)
-    , m_nCurrentOffset(1) // Default offset of 1 due to the ScrollBar child
+    , m_nCurrentOffset(0)
     , mbVerticalMode(true)
     , mxScroll(std::move(xScrolledWindow))
     , m_bFirstPaintAfterLayout(false)
@@ -1018,7 +1018,7 @@ void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_u
 void SmElementsControl::build()
 {
     // The order is important!
-    // 1. Ensure there are no items left, including the default scrollbar!
+    // 1. Ensure there are no items left
     // 2. Release all the current accessible items.
     //    This will check for new items after releasing them!
     // 3. Set the cursor element
@@ -1033,9 +1033,7 @@ void SmElementsControl::build()
 
     setCurrentElement(SAL_MAX_UINT16);
 
-    // The first element is the scrollbar. We can't change its indexInParent
-    // value, as this is set by being a child of the SmElementsControl.
-    m_nCurrentOffset = 1;
+    m_nCurrentOffset = 0;
     for (sal_uInt16 n = 0; n < SAL_N_ELEMENTS(m_aCategories); ++n)
     {
         if (msCurrentSetId == std::get<0>(m_aCategories[n]))
