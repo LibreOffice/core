@@ -666,9 +666,9 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         sDisplay = sDisplay.replaceFirst( ":", "\\:" );
         sValue = sName + sDisplay ;
         sValue.append(";page-number:");
-        sValue.append(OUString::number(static_cast<sal_Int16>(static_cast<sal_uInt16>((pDrViewSh->getCurrentPage()->GetPageNum()-1)>>1) + 1)) );
+        sValue.append(static_cast<sal_Int32>(static_cast<sal_uInt16>((pDrViewSh->getCurrentPage()->GetPageNum()-1)>>1) + 1));
         sValue.append(";total-pages:");
-        sValue.append(OUString::number(pDrViewSh->GetPageTabControl().GetPageCount()) );
+        sValue.append(static_cast<sal_Int32>(pDrViewSh->GetPageTabControl().GetPageCount()));
         sValue.append(";");
         if(pDrViewSh->IsLayerModeActive() && pDrViewSh->GetLayerTabControl()) // #i87182#
         {
@@ -697,9 +697,9 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             sDisplay = sDisplay.replaceFirst( ":", "\\:" );
             sValue.append(sDisplay);
             sValue.append(";page-number:");
-            sValue.append(OUString::number(pDrViewSh->GetActiveTabLayerIndex()+1) );
+            sValue.append(static_cast<sal_Int32>(pDrViewSh->GetActiveTabLayerIndex()+1));
             sValue.append(";total-pages:");
-            sValue.append(OUString::number(pDrViewSh->GetLayerTabControl()->GetPageCount()) );
+            sValue.append(static_cast<sal_Int32>(pDrViewSh->GetLayerTabControl()->GetPageCount()));
             sValue.append(";");
         }
     }
@@ -747,9 +747,9 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             sDisplay = sDisplay.replaceFirst( ":", "\\:" );
             sValue = "page-name:" + sDisplay;
             sValue.append(";page-number:");
-            sValue.append(OUString::number(static_cast<sal_Int16>(static_cast<sal_uInt16>((pCurrPge->GetPageNum()-1)>>1) + 1)) );
+            sValue.append(static_cast<sal_Int32>(static_cast<sal_uInt16>((pCurrPge->GetPageNum()-1)>>1) + 1));
             sValue.append(";total-pages:");
-            sValue.append(OUString::number(pDoc->GetSdPageCount(PageKind::Standard)) );
+            sValue.append(static_cast<sal_Int32>(pDoc->GetSdPageCount(PageKind::Standard)));
             sValue.append(";");
         }
     }

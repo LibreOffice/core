@@ -432,14 +432,14 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, tools::Long nVal,
     }
 
     sal_Int64 nResult = o3tl::convert(nVal * nFac, o3tl::Length::twip, eTo);
-    rOut.append(OString::number(nResult/nFac));
+    rOut.append(nResult/nFac);
     if ((nResult % nFac) != 0)
     {
         rOut.append('.');
         while (nFac > 1 && (nResult % nFac) != 0)
         {
             nFac /= 10;
-            rOut.append(OString::number((nResult / nFac) % 10));
+            rOut.append((nResult / nFac) % 10);
         }
     }
 

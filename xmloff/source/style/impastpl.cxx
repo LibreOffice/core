@@ -174,7 +174,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
                 if (sXMLName.isEmpty())
                     continue;
                 aStemBuffer.append("-");
-                aStemBuffer.append(OUString::number(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryNameSpace(rState.mnIndex)));
+                aStemBuffer.append(static_cast<sal_Int32>(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryNameSpace(rState.mnIndex)));
                 aStemBuffer.append(":");
                 aStemBuffer.append(sXMLName);
                 aStemBuffer.append("=");
@@ -186,7 +186,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
         // styles always come out in the same order. Will see if this works.
         aStemBuffer.append("-z");
         static sal_Int32 nCounter = 0;
-        aStemBuffer.append(OUString::number(nCounter++));
+        aStemBuffer.append(nCounter++));
 #endif
 
         // create a name that hasn't been used before. The created name has not
@@ -204,7 +204,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
             rFamilyData.mnName++;
             aTry.append( aStemBuffer );
             aTry.append( "-" );
-            aTry.append( OUString::number( rFamilyData.mnName ) );
+            aTry.append( static_cast<sal_Int64>(rFamilyData.mnName) );
             msName = aTry.makeStringAndClear();
         }
         rFamilyData.maNameSet.insert(msName);
@@ -218,7 +218,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
         {
             rFamilyData.mnName++;
             sBuffer.append( rFamilyData.maStrPrefix );
-            sBuffer.append( OUString::number( rFamilyData.mnName ) );
+            sBuffer.append( static_cast<sal_Int64>(rFamilyData.mnName) );
             msName = sBuffer.makeStringAndClear();
         }
         while (rFamilyData.maNameSet.find(msName) != rFamilyData.maNameSet.end() || rFamilyData.maReservedNameSet.find(msName) != rFamilyData.maReservedNameSet.end());

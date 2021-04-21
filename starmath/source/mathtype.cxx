@@ -1815,7 +1815,7 @@ bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
             {
                 nLastSize = nCurSize;
                 rRet.append(" size ");
-                rRet.append(OUString::number(-nLstSize/32));
+                rRet.append(static_cast<sal_Int32>(-nLstSize/32));
                 rRet.append("{");
                 bRet=true;
                 rSetSize++;
@@ -1844,7 +1844,7 @@ bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
             {
                 nLastSize = nCurSize;
                 rRet.append(" size ");
-                rRet.append(OUString::number(nLstSize));
+                rRet.append(static_cast<sal_Int32>(nLstSize));
                 rRet.append("{");
                 bRet=true;
                 rSetSize++;

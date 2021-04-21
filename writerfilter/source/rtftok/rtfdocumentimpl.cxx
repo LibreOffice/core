@@ -2264,7 +2264,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                             aStream.ReadUChar(ch);
                             if (ch < 16)
                                 aBuf.append("0");
-                            aBuf.append(OUString::number(ch, 16));
+                            aBuf.append(static_cast<sal_Int32>(ch), 16);
                         }
                         m_aStates.top().getDestinationText() = aBuf;
                     }
