@@ -705,6 +705,11 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
     rControl.addSeparator();
     rControl.addMenuItem(
+        ScResId(SCSTR_FILTER_TEXT_COLOR), new AutoFilterAction(this, AutoFilterMode::TextColor));
+    rControl.addMenuItem(
+        ScResId(SCSTR_FILTER_BACKGROUND_COLOR), new AutoFilterAction(this, AutoFilterMode::BackgroundColor));
+    rControl.addSeparator();
+    rControl.addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
 
     rControl.initMembers(nMaxTextWidth + 20); // 20 pixel estimated for the checkbox
@@ -868,6 +873,42 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             break;
             case AutoFilterMode::NonEmpty:
                 pEntry->SetQueryByNonEmpty();
+            break;
+            case AutoFilterMode::TextColor:
+            case AutoFilterMode::BackgroundColor:
+            {
+                ScFilterEntries aFilterEntries;
+                rDoc.GetFilterEntries(rPos.Col(), rPos.Row(), rPos.Tab(), aFilterEntries);
+
+                VclPtr<PopupMenu> pColorMenu = VclPtr<PopupMenu>::Create();
+                std::set<Color> aColors = eMode == AutoFilterMode::TextColor
+                                              ? aFilterEntries.getTextColors()
+                                              : aFilterEntries.getBackgroundColors();
+                sal_Int32 i = 1;
+                for (auto& rColor : aColors)
+                {
+                    pColorMenu->InsertItem(i, OUString(), MenuItemBits::CHECKABLE);
+                    pColorMenu->SetItemColor(i, rColor);
+                    i++;
+                }
+
+                sal_uInt16 nSelected = pColorMenu->Execute(this, mpAutoFilterPopup->GetPosPixel());
+                pColorMenu.disposeAndClear();
+
+                if (nSelected == 0)
+                    break;
+
+                // Get selected color from set
+                std::set<Color>::iterator it = aColors.begin();
+                std::advance(it, nSelected - 1);
+                Color selectedColor = *it;
+
+                if (eMode == AutoFilterMode::TextColor)
+                    pEntry->SetQueryByTextColor(selectedColor);
+                else
+                    pEntry->SetQueryByBackgroundColor(selectedColor);
+            }
+
             break;
             default:
                 // We don't know how to handle this!
