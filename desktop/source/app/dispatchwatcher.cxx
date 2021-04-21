@@ -98,9 +98,9 @@ std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( std::u16string_v
     sQuery.append(":module=");
     sQuery.append(rFactory); // use long name here !
     sQuery.append(":iflags=");
-    sQuery.append(OUString::number(static_cast<sal_Int32>(SfxFilterFlags::EXPORT)));
+    sQuery.append(static_cast<sal_Int32>(SfxFilterFlags::EXPORT));
     sQuery.append(":eflags=");
-    sQuery.append(OUString::number(static_cast<int>(SFX_FILTER_NOTINSTALLED)));
+    sQuery.append(sal_Int32(SFX_FILTER_NOTINSTALLED));
 
     const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
     const Reference< XContainerQuery > xFilterFactory(

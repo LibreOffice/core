@@ -938,9 +938,9 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
 {
     SvtViewOptions aViewOpt( EViewType::TabPage, CONFIGNAME_SEARCHPAGE );
     OUStringBuffer aUserData;
-    aUserData.append(OUString::number(m_xFullWordsCB->get_active() ? 1 : 0))
+    aUserData.append(static_cast<sal_Int32>(m_xFullWordsCB->get_active() ? 1 : 0))
         .append(";")
-        .append(OUString::number( m_xScopeCB->get_active() ? 1 : 0 ));
+        .append( static_cast<sal_Int32>(m_xScopeCB->get_active() ? 1 : 0) );
     sal_Int32 nCount = std::min(m_xSearchED->get_count(), 10);  // save only 10 entries
 
     for ( sal_Int32 i = 0; i < nCount; ++i )
