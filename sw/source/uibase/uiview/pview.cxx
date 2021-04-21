@@ -402,9 +402,9 @@ OUString SwPagePreviewWin::GetStatusStr( sal_uInt16 nPageCnt ) const
     const sal_uInt16 nVirtPageNum = mpPgPreviewLayout->GetVirtPageNumByPageNum( nPageNum );
     if( nVirtPageNum && nVirtPageNum != nPageNum )
     {
-        aStatusStr.append( OUString::number(nVirtPageNum) ).append( " " );
+        aStatusStr.append(static_cast<sal_Int32>(nVirtPageNum)).append( " " );
     }
-    aStatusStr.append( OUString::number(nPageNum) ).append( " / " ).append( OUString::number(nPageCnt) );
+    aStatusStr.append(static_cast<sal_Int32>(nPageNum)).append( " / " ).append(static_cast<sal_Int32>(nPageCnt));
     return aStatusStr.makeStringAndClear();
 }
 

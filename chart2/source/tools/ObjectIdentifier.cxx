@@ -525,7 +525,7 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
             {
                 aRet = ObjectIdentifier::createParticleForDiagram();
                 aRet.append(":CS=");
-                aRet.append( OUString::number( nCooSysIndex ) );
+                aRet.append( nCooSysIndex );
                 break;
             }
         }
@@ -553,7 +553,7 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
             {
                 aRet = ObjectIdentifier::createParticleForDiagram();
                 aRet.append(":CS=");
-                aRet.append( OUString::number( nCooSysIndex ) );
+                aRet.append( nCooSysIndex );
                 break;
             }
         }
@@ -607,15 +607,15 @@ OUString ObjectIdentifier::createParticleForSeries(
     OUStringBuffer aRet;
 
     aRet.append("D=");
-    aRet.append( OUString::number( nDiagramIndex ) );
+    aRet.append( nDiagramIndex );
     aRet.append(":CS=");
-    aRet.append( OUString::number( nCooSysIndex ) );
+    aRet.append( nCooSysIndex );
     aRet.append(":CT=");
-    aRet.append( OUString::number( nChartTypeIndex ) );
+    aRet.append( nChartTypeIndex );
     aRet.append(":");
     aRet.append(getStringForType( OBJECTTYPE_DATA_SERIES ));
     aRet.append("=");
-    aRet.append( OUString::number( nSeriesIndex ) );
+    aRet.append( nSeriesIndex );
 
     return aRet.makeStringAndClear();
 }
@@ -1101,7 +1101,7 @@ OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType,
     if( !aRet.isEmpty() )
     {
         aRet.append("=");
-        aRet.append(OUString::number(nIndex));
+        aRet.append(nIndex);
     }
     return aRet.makeStringAndClear();
 }

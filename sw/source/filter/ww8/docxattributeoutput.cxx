@@ -7357,7 +7357,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         {
             aBuffer.append( pPrev, pIt - pPrev );
             aBuffer.append( '%' );
-            aBuffer.append( OUString::number( sal_Int32( *pIt ) + 1 ) );
+            aBuffer.append( sal_Int32( *pIt ) + 1 );
 
             pPrev = pIt + 1;
         }

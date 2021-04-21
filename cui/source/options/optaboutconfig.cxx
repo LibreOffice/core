@@ -395,7 +395,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                             {
                                 sValue.append(",");
                             }
-                            sValue.append(OUString::number( seq[j] ));
+                            sValue.append( static_cast<sal_Int32>(seq[j]) );
                         }
                     }
                     else if( sType == "[]long" )
@@ -407,7 +407,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                             {
                                 sValue.append(",");
                             }
-                            sValue.append(OUString::number( seq[j] ));
+                            sValue.append( seq[j] );
                         }
                     }
                     else if( sType == "[]hyper" )
@@ -419,7 +419,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                             {
                                 sValue.append(",");
                             }
-                            sValue.append(OUString::number( seq[j] ));
+                            sValue.append( seq[j] );
                         }
                     }
                     else if( sType == "[]double" )
@@ -431,7 +431,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                             {
                                 sValue.append(",");
                             }
-                            sValue.append(OUString::number( seq[j] ));
+                            sValue.append( seq[j] );
                         }
                     }
                     else if( sType == "[]string" )

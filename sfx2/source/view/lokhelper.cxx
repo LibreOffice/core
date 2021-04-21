@@ -476,7 +476,7 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
         return;
 
     OStringBuffer aPayload;
-    aPayload.append("{ \"id\": \"").append(OString::number(nLOKWindowId)).append('"');
+    aPayload.append("{ \"id\": \"").append(static_cast<sal_Int64>(nLOKWindowId)).append('"');
     aPayload.append(", \"action\": \"").append(OUStringToOString(rAction, RTL_TEXTENCODING_UTF8)).append('"');
 
     for (const auto& rItem: rPayload)
