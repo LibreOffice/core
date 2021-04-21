@@ -243,7 +243,7 @@ void StringHelper::appendDec( OUStringBuffer& rStr, sal_uInt64 nData, sal_Int32 
         will be written separately. */
     OUStringBuffer aBuffer;
     if( nData > 9 )
-        aBuffer.append( OUString::number( nData / 10 ) );
+        aBuffer.append( static_cast<sal_Int64>(nData / 10 ) );
     aBuffer.append( static_cast< sal_Unicode >( '0' + (nData % 10) ) );
     appendString( rStr, aBuffer.makeStringAndClear(), nWidth, cFill );
 }

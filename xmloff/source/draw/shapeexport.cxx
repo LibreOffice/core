@@ -3799,14 +3799,14 @@ static void ExportParameter( OUStringBuffer& rStrBuffer, const css::drawing::Enh
         {
             case css::drawing::EnhancedCustomShapeParameterType::EQUATION :
             {
-                rStrBuffer.append( "?f" ).append(OUString::number( nValue ) );
+                rStrBuffer.append( "?f" ).append( nValue );
             }
             break;
 
             case css::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
             {
                 rStrBuffer.append( '$' );
-                rStrBuffer.append( OUString::number( nValue ) );
+                rStrBuffer.append( nValue );
             }
             break;
 
@@ -3835,7 +3835,7 @@ static void ExportParameter( OUStringBuffer& rStrBuffer, const css::drawing::Enh
             case css::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT :
                 rStrBuffer.append( GetXMLToken( XML_LOGHEIGHT ) ); break;
             default :
-                rStrBuffer.append( OUString::number( nValue ) );
+                rStrBuffer.append( nValue );
         }
     }
 }

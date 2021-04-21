@@ -1033,7 +1033,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge )
                     {
                         if ( i != j && xSeq[i].formatIndex == nIdx )
                         {
-                            aDupes.append(OUString::number( i ));
+                            aDupes.append( i );
                             aDupes.append("(");
                             aDupes.append(xSeq[i].formatKey);
                             aDupes.append( ") ");

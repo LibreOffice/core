@@ -425,7 +425,7 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
     }
 
     aBuffer.append( ':' );
-    aBuffer.append( OUString::number( nPort ) );
+    aBuffer.append( nPort );
     const OUString aHostAndPort( aBuffer.makeStringAndClear() );
 
     for (auto const& noProxy : m_aNoProxyList)

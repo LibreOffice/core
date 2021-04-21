@@ -43,7 +43,7 @@ OUString FbAlterStmtParser::compose() const
     sSql.append(" RESTART WITH ");
 
     // Firebird: restart with 0 means the first number is 1, not 0.
-    sSql.append(OUString::number(getIdentityParam() - 1));
+    sSql.append(getIdentityParam() - 1);
 
     return sSql.makeStringAndClear();
 }
