@@ -72,14 +72,10 @@ class UITest(object):
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
 
-    def load_file(self, url, eventName="OnLoad"):
-        target = "_default"
-        if eventName == "OnNew":
-            target = "_blank"
-
+    def load_file(self, url):
         desktop = self.get_desktop()
-        with EventListener(self._xContext, eventName) as event:
-            component = desktop.loadComponentFromURL(url, target, 0, tuple())
+        with EventListener(self._xContext, "OnLoad") as event:
+            component = desktop.loadComponentFromURL(url, "_default", 0, tuple())
             time_ = 0
             while time_ < MAX_WAIT:
                 if event.executed:
@@ -90,10 +86,6 @@ class UITest(object):
                     return component
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
-
-    def load_empty_file(self, app):
-        url = "private:factory/s" + app
-        return self.load_file(url, "OnNew")
 
     def execute_dialog_through_command(self, command, printNames=False):
         with EventListener(self._xContext, "DialogExecute", printNames=printNames) as event:

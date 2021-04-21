@@ -37,12 +37,12 @@ class Tdf117899(UITestCase):
     self.xUITest.executeCommand(".uno:Copy")
 
     # Close the Calc document
-    self.ui_test.close_doc()
+    self.xUITest.executeCommand(".uno:CloseDoc")
 
     with TemporaryDirectory() as tempdir:
         xFilePath = os.path.join(tempdir, "tdf117899-temp.ods")
 
-        self.ui_test.load_empty_file("writer")
+        self.ui_test.create_doc_in_start_center("writer")
 
         # Paste as an OLE spreadsheet
         formatProperty = mkPropertyValues({"SelectedFormat": 85})

@@ -19,9 +19,9 @@ class tdf98690(UITestCase):
 
     self.xUITest.executeCommand(".uno:Copy")
 
-    self.ui_test.close_doc()
+    self.xUITest.executeCommand(".uno:CloseDoc")
 
-    self.ui_test.load_empty_file("calc")
+    self.ui_test.create_doc_in_start_center("calc")
     xCalcDoc = self.xUITest.getTopFocusWindow()
     gridwin = xCalcDoc.getChild("grid_window")
     document = self.ui_test.get_component()

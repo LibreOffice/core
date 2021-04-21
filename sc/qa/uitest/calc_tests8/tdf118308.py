@@ -22,9 +22,12 @@ class tdf118308(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         self.xUITest.executeCommand(".uno:Copy")
 
-        self.ui_test.close_doc()
+        self.ui_test.execute_dialog_through_command(".uno:CloseDoc")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xDiscardBtn = xDialog.getChild("discard")
+        self.ui_test.close_dialog_through_button(xDiscardBtn)
 
-        calc_doc = self.ui_test.load_empty_file("calc")
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
