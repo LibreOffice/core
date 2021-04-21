@@ -474,7 +474,7 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
             if (aLineDash.DotLen >= 100)
                 aLineDash.DotLen -= 96;
             if (aLineDash.DashLen >= 100)
-                aLineDash.DashLen -= 99;
+                aLineDash.DashLen -= 96;
         }
 
         if( rPropMap.setProperty( ShapeProperty::LineDash, aLineDash ) )
