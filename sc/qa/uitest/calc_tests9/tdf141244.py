@@ -7,7 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import type_text
+from uitest.uihelper.calc import enter_text_to_cell
 
 class tdf141244(UITestCase):
 
@@ -18,9 +18,7 @@ class tdf141244(UITestCase):
         calcDoc = self.xUITest.getTopFocusWindow()
         gridwin = calcDoc.getChild("grid_window")
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        type_text(gridwin, '=DDE("soffice";"data1.ods";"sheet1.A1")')
-        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+        enter_text_to_cell(gridwin, "A1", '=DDE("soffice";"data1.ods";"sheet1.A1")')
 
         self.ui_test.execute_dialog_through_command(".uno:EditLinks")
         xDialog = self.xUITest.getTopFocusWindow()
