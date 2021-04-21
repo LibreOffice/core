@@ -2418,7 +2418,7 @@ public:
         return std::pair<bool,bool>(bOk, bTestEqual);
     }
 
-   std::pair<bool,bool> compareByString(
+    std::pair<bool,bool> compareByString(
         const ScRefCellValue& rCell, SCROW nRow, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
         const ScInterpreterContext* pContext)
     {
