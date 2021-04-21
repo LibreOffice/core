@@ -253,6 +253,11 @@ public:
         rtl_uStringbuffer_newFromStr_WithLength( &pData, n.buf, n.length );
     }
 #endif
+
+#if defined LIBO_INTERNAL_ONLY
+    operator std::u16string_view() const { return {getStr(), sal_uInt32(getLength())}; }
+#endif
+
     /** Assign to this a copy of value.
      */
     OUStringBuffer& operator = ( const OUStringBuffer& value )
