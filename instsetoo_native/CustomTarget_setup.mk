@@ -135,11 +135,11 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'HideEula=1' \
 		&& echo 'Logo=1' \
 		&& echo 'NativeProgress=false' \
-		&& echo 'ProgressBarColor=0,0,0' \
-		&& echo 'ProgressFrameColor=102,102,102' \
-		&& echo 'ProgressPosition=26,235' \
-		&& echo 'ProgressSize=460,6' \
-		&& echo 'ProgressPositionHigh=46,212' \
+		&& echo 'ProgressBarColor=80,73,153' \
+		&& echo 'ProgressFrameColor=255,255,255' \
+		&& echo 'ProgressPosition=268,106' \
+		&& echo 'ProgressSize=212,4' \
+		&& echo 'ProgressPositionHigh=268,137' \
 		&& echo 'ProgressSizeHigh=617,12' \
 		&& echo 'ProgressTextBaseline=230' \
 		&& echo 'ProgressTextColor=255,255,255' \
