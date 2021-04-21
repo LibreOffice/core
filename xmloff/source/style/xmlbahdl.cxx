@@ -482,9 +482,9 @@ bool XMLColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, cons
         Sequence< double > aHSL;
         if( (rValue >>= aHSL) && (aHSL.getLength() == 3) )
         {
-            aOut.append( "hsl(" ).append( OUString::number(aHSL[0]) ).append( "," )
-                .append( OUString::number(aHSL[1] * 100.0) ).append( "%," )
-                .append( OUString::number(aHSL[2] * 100.0) ).append( "%)" );
+            aOut.append( "hsl(" ).append(aHSL[0]).append( "," )
+                .append(aHSL[1] * 100.0).append( "%," )
+                .append(aHSL[2] * 100.0).append( "%)" );
             rStrExpValue = aOut.makeStringAndClear();
 
             bRet = true;

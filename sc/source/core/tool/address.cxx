@@ -2505,7 +2505,7 @@ OUString ScAddress::GetColRowString() const
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
         lcl_ScColToAlpha( aString, nCol);
-        aString.append(OUString::number(nRow+1));
+        aString.append(nRow+1);
         break;
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
