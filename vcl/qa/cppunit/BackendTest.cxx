@@ -792,6 +792,76 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testLineJoinBevel()
+    {
+        vcl::test::OutputDeviceTestLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLineJoinBevel();
+        auto eResult = vcl::test::OutputDeviceTestLine::checkLineJoinBevel(aBitmap);
+        exportImage("14-01_line_join_bevel_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testLineJoinRound()
+    {
+        vcl::test::OutputDeviceTestLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLineJoinRound();
+        auto eResult = vcl::test::OutputDeviceTestLine::checkLineJoinRound(aBitmap);
+        exportImage("14-02_line_join_round_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testLineJoinMiter()
+    {
+        vcl::test::OutputDeviceTestLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLineJoinMiter();
+        auto eResult = vcl::test::OutputDeviceTestLine::checkLineJoinMiter(aBitmap);
+        exportImage("14-03_line_join_miter_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testLineJoinNone()
+    {
+        vcl::test::OutputDeviceTestLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLineJoinNone();
+        auto eResult = vcl::test::OutputDeviceTestLine::checkLineJoinNone(aBitmap);
+        exportImage("14-04_line_join_none_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testLineCapRound()
+    {
+        vcl::test::OutputDeviceTestLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLineCapRound();
+        auto eResult = vcl::test::OutputDeviceTestLine::checkLineCapRound(aBitmap);
+        exportImage("14-05_line_cap_round_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testLineCapSquare()
+    {
+        vcl::test::OutputDeviceTestLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLineCapSquare();
+        auto eResult = vcl::test::OutputDeviceTestLine::checkLineCapSquare(aBitmap);
+        exportImage("14-06_line_cap_square_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testLineCapButt()
+    {
+        vcl::test::OutputDeviceTestLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLineCapButt();
+        auto eResult = vcl::test::OutputDeviceTestLine::checkLineCapButt(aBitmap);
+        exportImage("14-07_line_cap_butt_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     // Test SalGraphics::blendBitmap() and blendAlphaBitmap() calls.
     void testDrawBlendExtended()
     {
@@ -1039,6 +1109,14 @@ public:
     CPPUNIT_TEST(testAxialGradient);
     CPPUNIT_TEST(testRadialGradient);
     CPPUNIT_TEST(testRadialGradientOfs);
+
+    CPPUNIT_TEST(testLineCapRound);
+    CPPUNIT_TEST(testLineCapSquare);
+    CPPUNIT_TEST(testLineCapButt);
+    CPPUNIT_TEST(testLineJoinBevel);
+    CPPUNIT_TEST(testLineJoinRound);
+    CPPUNIT_TEST(testLineJoinMiter);
+    CPPUNIT_TEST(testLineJoinNone);
 
     CPPUNIT_TEST(testDrawBlendExtended);
     CPPUNIT_TEST(testDrawAlphaBitmapMirrored);

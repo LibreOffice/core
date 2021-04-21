@@ -91,7 +91,7 @@ class VisualBackendTestWindow : public WorkWindow
 private:
     Timer maUpdateTimer;
     std::vector<std::chrono::high_resolution_clock::time_point> mTimePoints;
-    static constexpr unsigned char gnNumberOfTests = 11;
+    static constexpr unsigned char gnNumberOfTests = 12;
     unsigned char mnTest;
     bool mbAnimate;
     ScopedVclPtr<VirtualDevice> mpVDev;
@@ -409,6 +409,64 @@ public:
         }
     }
 
+    static void testLineTypes(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(4, 2, nWidth, nHeight);
+
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestLine aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLineJoinBevel();
+            assertAndSetBackground(vcl::test::OutputDeviceTestLine::checkLineJoinBevel(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestLine aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLineJoinRound();
+            assertAndSetBackground(vcl::test::OutputDeviceTestLine::checkLineJoinRound(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestLine aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLineJoinMiter();
+            assertAndSetBackground(vcl::test::OutputDeviceTestLine::checkLineJoinMiter(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestLine aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLineJoinNone();
+            assertAndSetBackground(vcl::test::OutputDeviceTestLine::checkLineJoinNone(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestLine aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLineCapRound();
+            assertAndSetBackground(vcl::test::OutputDeviceTestLine::checkLineCapRound(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestLine aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLineCapSquare();
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkLineCapSquare(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestLine aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLineCapButt();
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkLineCapButt(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+    }
+
     static void testBitmaps(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
@@ -685,21 +743,25 @@ public:
         }
         else if (mnTest % gnNumberOfTests == 5)
         {
-            testBitmaps(rRenderContext, nWidth, nHeight);
+            testLineTypes(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 6)
         {
-            testInvert(rRenderContext, nWidth, nHeight);
+            testBitmaps(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 7)
         {
-            testClip(rRenderContext, nWidth, nHeight);
+            testInvert(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 8)
         {
-            testGradients(rRenderContext, nWidth, nHeight);
+            testClip(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 9)
+        {
+            testGradients(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 10)
         {
             std::vector<tools::Rectangle> aRegions = setupRegions(2, 1, nWidth, nHeight);
             size_t index = 0;
