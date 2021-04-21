@@ -53,6 +53,12 @@ void checkValue(BitmapScopedWriteAccess& pAccess, int x, int y, Color aExpected,
     }
 }
 
+void checkValue(BitmapScopedWriteAccess& pAccess, const Point& point, Color aExpected,
+                      int& nNumberOfQuirks, int& nNumberOfErrors, bool bQuirkMode, int nColorDeltaThresh = 0)
+{
+    checkValue(pAccess, point.getX(), point.getY(), aExpected, nNumberOfQuirks, nNumberOfErrors, bQuirkMode, nColorDeltaThresh);
+}
+
 void checkValue(BitmapScopedWriteAccess& pAccess, int x, int y, Color aExpected,
                       int& nNumberOfQuirks, int& nNumberOfErrors, int nColorDeltaThresh, int nColorDeltaThreshQuirk = 0)
 {
@@ -714,6 +720,94 @@ TestResult OutputDeviceTestCommon::checkRadialGradientOfs(Bitmap& bitmap)
         checkResult(TestResult::Failed, aResult);
     return aResult;
 }
+
+constexpr int CAPSHRINK = 25;
+constexpr int CAPWIDTH = 20;
+TestResult OutputDeviceTestCommon::checkLineCap(Bitmap& rBitmap, css::drawing::LineCap lineCap)
+{
+    BitmapScopedWriteAccess access(rBitmap);
+    tools::Rectangle rectangle( Point( 0, 0 ), Size( 101, 101 ));
+    rectangle.shrink(CAPSHRINK);
+    rectangle = tools::Rectangle( Point(rectangle.LeftCenter().getX(), rectangle.LeftCenter().getY() - CAPWIDTH / 2),
+        Point(rectangle.RightCenter().getX(), rectangle.RightCenter().getY() + CAPWIDTH / 2));
+    rectangle.shrink(1);
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    // the line itself
+    checkValue(access, rectangle.TopLeft(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle.TopRight(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle.BottomLeft(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle.BottomRight(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+
+    // the cap in the middle
+    Color color = ( lineCap == css::drawing::LineCap_BUTT ) ? constBackgroundColor : constLineColor;
+    checkValue(access, rectangle.LeftCenter() - Point(CAPWIDTH/2, 0), color, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle.RightCenter() + Point(CAPWIDTH/2, 0), color, nNumberOfQuirks, nNumberOfErrors, false);
+
+    // the cap corners
+    color = ( lineCap == css::drawing::LineCap_SQUARE ) ? constLineColor : constBackgroundColor;
+    checkValue(access, rectangle.TopLeft() - Point(CAPWIDTH/2, 0), color, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle.TopRight() + Point(CAPWIDTH/2, 0), color, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle.BottomLeft() - Point(CAPWIDTH/2, 0), color, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle.BottomRight() + Point(CAPWIDTH/2, 0), color, nNumberOfQuirks, nNumberOfErrors, false);
+
+    if (nNumberOfQuirks > 0)
+        checkResult(TestResult::PassedWithQuirks, aResult);
+    if (nNumberOfErrors > 0)
+        checkResult(TestResult::Failed, aResult);
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkLineJoin(Bitmap& rBitmap, basegfx::B2DLineJoin lineJoin)
+{
+    BitmapScopedWriteAccess access(rBitmap);
+    tools::Rectangle rectangle( Point( 0, 0 ), Size( 101, 101 ));
+    rectangle.shrink(CAPSHRINK);
+    tools::Rectangle rectangle1( Point(rectangle.TopLeft().getX(), rectangle.TopLeft().getY() - CAPWIDTH / 2),
+        Point(rectangle.TopRight().getX(), rectangle.TopRight().getY() + CAPWIDTH / 2));
+    tools::Rectangle rectangle2( Point(rectangle.TopRight().getX() - CAPWIDTH / 2, rectangle.TopRight().getY()),
+        Point(rectangle.BottomRight().getX() + CAPWIDTH / 2, rectangle.BottomRight().getY()));
+    rectangle1.shrink(1);
+    rectangle2.shrink(1);
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    // the lines themselves
+    checkValue(access, rectangle1.TopLeft(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle1.TopRight(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle1.BottomLeft(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle1.BottomRight(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle2.TopLeft(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle2.TopRight(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle2.BottomLeft(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+    checkValue(access, rectangle2.BottomRight(), constLineColor, nNumberOfQuirks, nNumberOfErrors, false);
+
+    // Only miter has the corner point.
+    Color color = ( lineJoin == basegfx::B2DLineJoin::Miter ) ? constLineColor : constBackgroundColor;
+    checkValue(access, rectangle2.Right(), rectangle1.Top(), color, nNumberOfQuirks, nNumberOfErrors, false);
+
+    // Round reaches a bit past the diagonal.
+    Point midDiagonal = (Point( rectangle2.Right(), rectangle1.Top()) + rectangle.TopRight()) / 2;
+    if( lineJoin == basegfx::B2DLineJoin::Round)
+        color = constLineColor;
+    checkValue(access, midDiagonal + Point( 2, -2 ), color, nNumberOfQuirks, nNumberOfErrors, false);
+    // Bevel is the diagonal.
+    if( lineJoin == basegfx::B2DLineJoin::Bevel)
+        color = constLineColor;
+    checkValue(access, midDiagonal + Point( -1, 1 ), color, nNumberOfQuirks, nNumberOfErrors, false);
+    // Everything except None has at least some line join.
+    checkValue(access, rectangle.TopRight() + Point( 1, -1 ), color, nNumberOfQuirks, nNumberOfErrors, false);
+
+    if (nNumberOfQuirks > 0)
+        checkResult(TestResult::PassedWithQuirks, aResult);
+    if (nNumberOfErrors > 0)
+        checkResult(TestResult::Failed, aResult);
+    return aResult;
+}
+
 
 } // end namespace vcl::test
 

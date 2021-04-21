@@ -86,6 +86,18 @@ public:
     static tools::Rectangle alignToCenter(tools::Rectangle aRect1, tools::Rectangle aRect2);
 
     static TestResult checkBezier(Bitmap& rBitmap);
+
+    static TestResult checkLineCapRound(Bitmap& rBitmap) { return checkLineCap(rBitmap, css::drawing::LineCap_ROUND); }
+    static TestResult checkLineCapSquare(Bitmap& rBitmap) { return checkLineCap(rBitmap, css::drawing::LineCap_SQUARE); }
+    static TestResult checkLineCapButt(Bitmap& rBitmap) { return checkLineCap(rBitmap, css::drawing::LineCap_BUTT); }
+
+    static TestResult checkLineJoinBevel(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::Bevel); }
+    static TestResult checkLineJoinRound(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::Round); }
+    static TestResult checkLineJoinMiter(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::Miter); }
+    static TestResult checkLineJoinNone(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::NONE); }
+private:
+    static TestResult checkLineCap(Bitmap& rBitmap, css::drawing::LineCap lineCap);
+    static TestResult checkLineJoin(Bitmap& rBitmap, basegfx::B2DLineJoin lineJoin);
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestBitmap : public OutputDeviceTestCommon
@@ -137,6 +149,18 @@ public:
 
     Bitmap setupDashedLine();
     static TestResult checkDashedLine(Bitmap& rBitmap);
+
+    Bitmap setupLineCapRound() { return setupLineCap(css::drawing::LineCap_ROUND); }
+    Bitmap setupLineCapSquare() { return setupLineCap(css::drawing::LineCap_SQUARE); }
+    Bitmap setupLineCapButt() { return setupLineCap(css::drawing::LineCap_BUTT); }
+
+    Bitmap setupLineJoinBevel() { return setupLineJoin(basegfx::B2DLineJoin::Bevel); }
+    Bitmap setupLineJoinRound() { return setupLineJoin(basegfx::B2DLineJoin::Round); }
+    Bitmap setupLineJoinMiter() { return setupLineJoin(basegfx::B2DLineJoin::Miter); }
+    Bitmap setupLineJoinNone() { return setupLineJoin(basegfx::B2DLineJoin::NONE); }
+private:
+    Bitmap setupLineCap( css::drawing::LineCap lineCap );
+    Bitmap setupLineJoin( basegfx::B2DLineJoin lineJoin );
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyLine : public OutputDeviceTestCommon

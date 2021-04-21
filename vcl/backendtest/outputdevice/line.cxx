@@ -195,6 +195,57 @@ TestResult OutputDeviceTestLine::checkDashedLine(Bitmap& rBitmap)
     return returnValue;
 }
 
+constexpr int CAPSHRINK = 25;
+constexpr int CAPWIDTH = 20;
+Bitmap OutputDeviceTestLine::setupLineCap( css::drawing::LineCap lineCap )
+{
+    initialSetup(101, 101, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    tools::Rectangle rectangle = maVDRectangle;
+    rectangle.shrink(CAPSHRINK);
+
+    const basegfx::B2DPolygon poly{
+        basegfx::B2DPoint(rectangle.LeftCenter().getX(), rectangle.LeftCenter().getY()),
+        basegfx::B2DPoint(rectangle.RightCenter().getX(), rectangle.RightCenter().getY())};
+
+    mpVirtualDevice->DrawPolyLineDirect( basegfx::B2DHomMatrix(),poly,
+        CAPWIDTH, 0, nullptr, basegfx::B2DLineJoin::NONE, lineCap );
+
+    mpVirtualDevice->SetLineColor(constFillColor);
+    mpVirtualDevice->DrawPolyLineDirect( basegfx::B2DHomMatrix(), poly,
+        0, 0, nullptr, basegfx::B2DLineJoin::NONE );
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestLine::setupLineJoin( basegfx::B2DLineJoin lineJoin )
+{
+    initialSetup(101, 101, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    tools::Rectangle rectangle = maVDRectangle;
+    rectangle.shrink(CAPSHRINK);
+
+    const basegfx::B2DPolygon poly{
+        basegfx::B2DPoint(rectangle.TopLeft().getX(), rectangle.TopLeft().getY()),
+        basegfx::B2DPoint(rectangle.TopRight().getX(), rectangle.TopRight().getY()),
+        basegfx::B2DPoint(rectangle.BottomRight().getX(), rectangle.BottomRight().getY())};
+
+    mpVirtualDevice->DrawPolyLineDirect( basegfx::B2DHomMatrix(), poly,
+        CAPWIDTH, 0, nullptr, lineJoin );
+
+    mpVirtualDevice->SetLineColor(constFillColor);
+    mpVirtualDevice->DrawPolyLineDirect( basegfx::B2DHomMatrix(), poly,
+        0, 0, nullptr, lineJoin );
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
