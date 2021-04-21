@@ -720,14 +720,11 @@ PPDParser::PPDParser( const OUString& rFile ) :
                 if (aCurLine.matchIgnoreAsciiCase("*include:"))
                 {
                     aCurLine = aCurLine.copy(9);
-                    aCurLine = comphelper::string::stripStart(aCurLine, ' ');
-                    aCurLine = comphelper::string::stripEnd(aCurLine, ' ');
-                    aCurLine = comphelper::string::stripStart(aCurLine, '\t');
-                    aCurLine = comphelper::string::stripEnd(aCurLine, '\t');
+                    aCurLine = comphelper::string::strip(aCurLine, ' ');
+                    aCurLine = comphelper::string::strip(aCurLine, '\t');
                     aCurLine = comphelper::string::stripEnd(aCurLine, '\r');
                     aCurLine = comphelper::string::stripEnd(aCurLine, '\n');
-                    aCurLine = comphelper::string::stripStart(aCurLine, '"');
-                    aCurLine = comphelper::string::stripEnd(aCurLine, '"');
+                    aCurLine = comphelper::string::strip(aCurLine, '"');
                     aStream.Close();
                     aStream.Open(getPPDFile(OStringToOUString(aCurLine, m_aFileEncoding)));
                     continue;
