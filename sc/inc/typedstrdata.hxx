@@ -10,6 +10,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <tools/color.hxx>
 
 #include <set>
 

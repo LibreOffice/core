@@ -46,7 +46,6 @@
 #include <vcl/weldutils.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>
-
 #include <svx/svdview.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svdocapt.hxx>
@@ -62,7 +61,6 @@
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
-
 #include <gridwin.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
@@ -572,6 +570,17 @@ void collectUIInformation(const OUString& aRow, const OUString& aCol , const OUS
     UITestLogger::getInstance().logEvent(aDescription);
 }
 
+void getCellGeometry(Point& rScrPos, Size& rScrSize, const ScViewData& rViewData, SCCOL nCol, SCROW nRow, ScSplitPos eWhich)
+{
+    // Get the screen position of the cell.
+    rScrPos = rViewData.GetScrPos(nCol, nRow, eWhich);
+
+    // Get the screen size of the cell.
+    tools::Long nSizeX, nSizeY;
+    rViewData.GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
+    rScrSize = Size(nSizeX-1, nSizeY-1);
+}
+
 }
 
 void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
@@ -703,6 +712,11 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         ScResId(SCSTR_FILTER_EMPTY), new AutoFilterAction(this, AutoFilterMode::Empty));
     rControl.addMenuItem(
         ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
+    rControl.addSeparator();
+    rControl.addMenuItem(
+        ScResId(SCSTR_FILTER_TEXT_COLOR), new AutoFilterAction(this, AutoFilterMode::TextColor));
+    rControl.addMenuItem(
+        ScResId(SCSTR_FILTER_BACKGROUND_COLOR), new AutoFilterAction(this, AutoFilterMode::BackgroundColor));
     rControl.addSeparator();
     rControl.addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
@@ -869,6 +883,42 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             case AutoFilterMode::NonEmpty:
                 pEntry->SetQueryByNonEmpty();
             break;
+            case AutoFilterMode::TextColor:
+            case AutoFilterMode::BackgroundColor:
+            {
+                ScFilterEntries aFilterEntries;
+                rDoc.GetFilterEntries(rPos.Col(), rPos.Row(), rPos.Tab(), aFilterEntries);
+
+                VclPtr<PopupMenu> pColorMenu = VclPtr<PopupMenu>::Create();
+                std::set<Color> aColors = eMode == AutoFilterMode::TextColor
+                                              ? aFilterEntries.getTextColors()
+                                              : aFilterEntries.getBackgroundColors();
+                sal_Int32 i = 1;
+                for (auto rColor : aColors)
+                {
+                    pColorMenu->InsertItem(i, OUString(), MenuItemBits::CHECKABLE);
+                    pColorMenu->SetItemColor(i, rColor);
+                    i++;
+                }
+
+                sal_uInt16 nSelected = pColorMenu->Execute(this, mpAutoFilterPopup->GetPosPixel());
+                pColorMenu.disposeAndClear();
+
+                if (nSelected == 0)
+                    break;
+
+                // Get selected color from set
+                std::set<Color>::iterator it = aColors.begin();
+                std::advance(it, nSelected - 1);
+                Color selectedColor = *it;
+
+                if (eMode == AutoFilterMode::TextColor)
+                    pEntry->SetQueryByTextColor(selectedColor);
+                else
+                    pEntry->SetQueryByBackgroundColor(selectedColor);
+            }
+
+            break;
             default:
                 // We don't know how to handle this!
                 return;
@@ -877,21 +927,6 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 
     mrViewData.GetView()->Query(aParam, nullptr, true);
     pDBData->SetQueryParam(aParam);
-}
-
-namespace {
-
-void getCellGeometry(Point& rScrPos, Size& rScrSize, const ScViewData& rViewData, SCCOL nCol, SCROW nRow, ScSplitPos eWhich)
-{
-    // Get the screen position of the cell.
-    rScrPos = rViewData.GetScrPos(nCol, nRow, eWhich);
-
-    // Get the screen size of the cell.
-    tools::Long nSizeX, nSizeY;
-    rViewData.GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
-    rScrSize = Size(nSizeX-1, nSizeY-1);
-}
-
 }
 
 void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
