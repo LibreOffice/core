@@ -688,10 +688,10 @@ OUString lcl_getDragParameterString( const OUString& rCID )
 bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
 {
     bool result = false;
-    if (OutputDevice* rOutDev = mpMarkedPV->GetView().GetFirstOutputDevice())
+    if (OutputDevice* pOutDev = mpMarkedPV ? mpMarkedPV->GetView().GetFirstOutputDevice() : nullptr)
     {
         bool bConvertUnit = false;
-        if (rOutDev->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+        if (pOutDev->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
             bConvertUnit = true;
         const SdrObjList* pOL = mpMarkedPV->GetObjList();
         if (!pOL)
