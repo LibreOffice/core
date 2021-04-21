@@ -50,7 +50,7 @@ namespace
         if (rIn.empty())
             return rIn;
 
-        std::string_view::size_type i = 0;
+        typename T::size_type i = 0;
 
         while (i < rIn.size())
         {
@@ -81,7 +81,7 @@ namespace
         if (rIn.empty())
             return rIn;
 
-        std::u16string_view::size_type i = rIn.size();
+        typename T::size_type i = rIn.size();
 
         while (i > 0)
         {
@@ -126,7 +126,7 @@ namespace
             return 0;
 
         sal_Int32 nTokCount = 1;
-        for (std::u16string_view::size_type i = 0; i < rIn.size(); ++i)
+        for (typename T::size_type i = 0; i < rIn.size(); ++i)
         {
             if (rIn[i] == cTok)
                 ++nTokCount;
@@ -393,7 +393,7 @@ namespace
         if (rIn.empty())
             return T();
 
-        std::u16string_view::size_type i = rIn.size();
+        typename I::size_type i = rIn.size();
         O sBuf(static_cast<sal_Int32>(i));
         while (i)
             sBuf.append(rIn[--i]);
