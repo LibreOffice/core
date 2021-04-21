@@ -747,6 +747,7 @@ PRIVATE_1.6 { # LibreOffice 6.4
     global:
         rtl_str_toInt64_WithLength;
         rtl_ustr_toInt64_WithLength;
+        sal_detail_set_log_selector;
 } PRIVATE_1.5;
 
 PRIVATE_1.7 { # LibreOffice 7.1
