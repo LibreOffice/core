@@ -16,6 +16,24 @@
       "revId": "81a5d8f160dbc7e2f51ed833f3cf82d0392fdd75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a87c305_b01123c2",
+        "filename": "sal/osl/w32/file_url.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-21T08:22:08Z",
+      "side": 1,
+      "message": "But this is OStringBuffer, and we need to convert it to OUString. I can\u0027t use OUStringBuffer here, because of calculating UTF-8 code units above. Or do I miss some better method from OString than from OStringBuffer?",
+      "parentUuid": "2547017f_ea3d84b3",
+      "revId": "81a5d8f160dbc7e2f51ed833f3cf82d0392fdd75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
