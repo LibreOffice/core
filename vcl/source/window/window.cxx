@@ -295,7 +295,7 @@ void Window::dispose()
                 aTempStr.append("Window (");
                 aTempStr.append(lcl_createWindowInfo(this));
                 aTempStr.append(") with live SystemWindows destroyed: ");
-                aTempStr.append(aErrorStr.toString());
+                aTempStr.append(aErrorStr);
                 OSL_FAIL(aTempStr.getStr());
                 // abort in debug builds, must be fixed!
                 Application::Abort(OStringToOUString(
@@ -319,7 +319,7 @@ void Window::dispose()
             OStringBuffer aTempStr( "Window (" );
             aTempStr.append(lcl_createWindowInfo(this));
             aTempStr.append(") with live SystemWindows destroyed: ");
-            aTempStr.append(aErrorStr.toString());
+            aTempStr.append(aErrorStr);
             OSL_FAIL( aTempStr.getStr() );
             Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }

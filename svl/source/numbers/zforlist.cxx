@@ -3212,13 +3212,13 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
             if (insertBrackets)
             {
                 sTmpStr.append('(');
-                sTmpStr.append(sString.toString());
+                sTmpStr.append(sString);
                 sTmpStr.append(')');
             }
             else
             {
                 sTmpStr.append('-');
-                sTmpStr.append(sString.toString());
+                sTmpStr.append(sString);
             }
             sString = sTmpStr;
         }
