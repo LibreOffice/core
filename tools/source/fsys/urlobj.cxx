@@ -3526,7 +3526,7 @@ INetURLObject::getAbbreviated(
                 if (pSuffixEnd != pBegin)
                     aResult.append("...");
                 aResult.append(aSegment);
-                aResult.append(aTrailer.toString());
+                aResult.append(aTrailer);
                 aResult.append(aRest);
                 if (rStringWidth->
                             queryStringWidth(aResult.makeStringAndClear())
@@ -3566,7 +3566,7 @@ INetURLObject::getAbbreviated(
                 aResult.append(aSegment);
                 if (pPrefixBegin != pEnd)
                     aResult.append("...");
-                aResult.append(aTrailer.toString());
+                aResult.append(aTrailer);
                 aResult.append(aRest);
                 if (rStringWidth->
                             queryStringWidth(aResult.makeStringAndClear())
@@ -3589,7 +3589,7 @@ INetURLObject::getAbbreviated(
         {
             if (pPrefixBegin != pBegin || pSuffixEnd != pEnd)
                 aBuffer.append("...");
-            aBuffer.append(aTrailer.toString());
+            aBuffer.append(aTrailer);
         }
     }
     if (!bSegment)

@@ -211,7 +211,7 @@ void OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _
                                        " SET " + elem.second.toString());
             OUStringBuffer& rCondition = aKeyConditions[elem.first];
             if ( !rCondition.isEmpty() )
-                sSql.append(" WHERE ").append( rCondition.toString() );
+                sSql.append(" WHERE ").append( rCondition );
 
             executeUpdate(_rInsertRow ,_rOriginalRow,sSql.makeStringAndClear(),elem.first);
         }
