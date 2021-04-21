@@ -1302,7 +1302,7 @@ PDFFileImplData* PDFFile::impl_getData() const
 #if OSL_DEBUG_LEVEL > 0
                     OUStringBuffer aTmp;
                     for( int i = 0; i < m_pData->m_aDocID.getLength(); i++ )
-                        aTmp.append(OUString::number(static_cast<unsigned int>(sal_uInt8(m_pData->m_aDocID[i])), 16));
+                        aTmp.append(static_cast<sal_Int32>(sal_uInt8(m_pData->m_aDocID[i])), 16);
                     SAL_INFO("sdext.pdfimport.pdfparse", "DocId is <" << aTmp.makeStringAndClear() << ">");
 #endif
                 }
@@ -1366,7 +1366,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 {
                                     OUStringBuffer aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        aTmp.append(" ").append(OUString::number(static_cast<unsigned int>(sal_uInt8(aEnt[i])), 16));
+                                        aTmp.append(" ").append(static_cast<sal_Int32>(sal_uInt8(aEnt[i])), 16);
                                     SAL_WARN("sdext.pdfimport.pdfparse",
                                              "O entry has length " << static_cast<int>(aEnt.getLength()) << ", should be 32 <" << aTmp.makeStringAndClear() << ">" );
                                 }
@@ -1386,7 +1386,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 {
                                     OUStringBuffer aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        aTmp.append(" ").append(OUString::number(static_cast<unsigned int>(sal_uInt8(aEnt[i])), 16));
+                                        aTmp.append(" ").append(static_cast<sal_Int32>(sal_uInt8(aEnt[i])), 16);
                                     SAL_WARN("sdext.pdfimport.pdfparse",
                                              "U entry has length " << static_cast<int>(aEnt.getLength()) << ", should be 32 <" << aTmp.makeStringAndClear() << ">" );
                                 }

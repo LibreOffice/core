@@ -100,14 +100,14 @@ void UITestLogger::logCommand(const OUString& rAction,
                 sal_Int32 nValue = 0;
                 rProp.Value >>= nValue;
                 aBuffer.append("\"").append(rProp.Name).append("\": ");
-                aBuffer.append(OUString::number(nValue)).append(", ");
+                aBuffer.append(nValue).append(", ");
             }
             else if (aTypeName == "unsigned long")
             {
                 sal_uInt32 nValue = 0;
                 rProp.Value >>= nValue;
                 aBuffer.append("\"").append(rProp.Name).append("\": ");
-                aBuffer.append(OUString::number(nValue)).append(", ");
+                aBuffer.append(static_cast<sal_Int64>(nValue)).append(", ");
             }
             else if (aTypeName == "boolean")
             {
