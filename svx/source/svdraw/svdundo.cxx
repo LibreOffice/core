@@ -995,7 +995,7 @@ SdrUndoObjSetText::~SdrUndoObjSetText()
 bool SdrUndoObjSetText::IsDifferent() const
 {
     if (!pOldText || !pNewText)
-        return !pOldText && !pNewText;
+        return pOldText || pNewText;
     return !(*pOldText == *pNewText);
 }
 
