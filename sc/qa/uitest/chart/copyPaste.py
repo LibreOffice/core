@@ -33,9 +33,9 @@ class CopyPaste(UITestCase):
 
     self.xUITest.executeCommand(".uno:Copy")
 
-    self.ui_test.close_doc()
+    self.xUITest.executeCommand(".uno:CloseDoc")
 
-    self.ui_test.load_empty_file("calc")
+    self.ui_test.create_doc_in_start_center("calc")
     document = self.ui_test.get_component()
 
     # Rename the sheet to match the same name as the first document

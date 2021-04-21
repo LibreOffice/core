@@ -19,9 +19,9 @@ class tdf114710(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:O7"}))
         self.xUITest.executeCommand(".uno:Copy")
 
-        self.ui_test.close_doc()
+        self.xUITest.executeCommand(".uno:CloseDoc")
 
-        self.ui_test.load_empty_file("writer")
+        self.ui_test.create_doc_in_start_center("writer")
 
         self.xUITest.getTopFocusWindow()
 
