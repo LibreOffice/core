@@ -5981,7 +5981,7 @@ void SwWW8ImplReader::SetOutlineStyles()
         {
             // Copy inherited numbering info from ChapterNumbering since in LO they can't inherit
             bool bReRegister = false;
-            if (rSI.m_nBase && rSI.m_nBase < 10 && rSI.m_nBase < m_vColl.size()
+            if (rSI.m_nBase && rSI.m_nBase < m_vColl.size()
                 && m_vColl[rSI.m_nBase].HasWW8OutlineLevel())
             {
                 if (rSI.m_nLFOIndex == USHRT_MAX)

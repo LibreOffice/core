@@ -768,6 +768,13 @@ DECLARE_WW8EXPORT_TEST(testTdf106541_inheritChapterNumberingB, "tdf106541_inheri
     CPPUNIT_ASSERT_EQUAL(OUString("1.1"), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf106541_inheritOutlineNumbering, "tdf106541_inheritOutlineNumbering.doc")
+{
+    // The level and numbering are inherited from Level2.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, "This should be a sub-point."), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1.1"), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf120394, "tdf120394.doc")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
