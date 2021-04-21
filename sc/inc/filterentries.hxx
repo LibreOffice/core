@@ -19,6 +19,7 @@ struct ScFilterEntries
     std::vector<ScTypedStrData> maStrData;
     bool                        mbHasDates;
     bool                        mbHasEmpties;
+    // TODO: Need to store vector<Color> here maybe?
 
     ScFilterEntries() : mbHasDates(false), mbHasEmpties(false) {}
 

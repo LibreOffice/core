@@ -10,6 +10,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <tools/color.hxx>
 
 #include <set>
 
@@ -31,6 +32,13 @@ public:
     const OUString& GetString() const { return maStrValue;}
     StringType GetStringType() const { return meStrType;}
     double GetValue() const { return mfValue; }
+    Color GetTextColor() { return maTextColor; }
+    Color GetBackgroundColor() { return maBackgroundColor; }
+    void SetColors(Color& aTextColor, Color& aBackgroundColor)
+    {
+        maTextColor = aTextColor;
+        maBackgroundColor = aBackgroundColor;
+    }
 
     struct LessCaseSensitive
     {
@@ -59,6 +67,8 @@ private:
     double mfValue;
     StringType meStrType;
     bool   mbIsDate;
+    Color maTextColor;
+    Color maBackgroundColor;
 };
 
 class FindTypedStrData

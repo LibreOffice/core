@@ -689,6 +689,12 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
             rControl.addMember(aStringVal, bSelected);
     }
 
+    for (const auto& rEntry : aFilterEntries)
+    {
+        //SAL_DEBUG("entry bg color: " << rEntry.GetBackgroundColor());
+        //SAL_DEBUG("entry: text color: " << rEntry.GetTextColor());
+    }
+
     // Populate the menu.
     rControl.addMenuItem(
         ScResId(STR_MENU_SORT_ASC),
@@ -703,6 +709,11 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         ScResId(SCSTR_FILTER_EMPTY), new AutoFilterAction(this, AutoFilterMode::Empty));
     rControl.addMenuItem(
         ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
+    rControl.addSeparator();
+    rControl.addMenuItem(
+        ScResId(SCSTR_FILTER_TEXT_COLOR), new AutoFilterAction(this, AutoFilterMode::TextColor));
+    rControl.addMenuItem(
+        ScResId(SCSTR_FILTER_BACKGROUND_COLOR), new AutoFilterAction(this, AutoFilterMode::BackgroundColor));
     rControl.addSeparator();
     rControl.addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
@@ -868,6 +879,17 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             break;
             case AutoFilterMode::NonEmpty:
                 pEntry->SetQueryByNonEmpty();
+            break;
+            case AutoFilterMode::TextColor:
+                //TODO: Richtige Farbe
+                pEntry->SetQueryByTextColor(Color(COL_BLACK));
+            break;
+            case AutoFilterMode::BackgroundColor:
+            {
+                VclPtr<PopupMenu> pPopupMenu = VclPtr<PopupMenu>::Create();
+                //TODO: Richtige Farbe
+                pEntry->SetQueryByBackgroundColor(Color(COL_BLACK));
+            }
             break;
             default:
                 // We don't know how to handle this!
