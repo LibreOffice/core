@@ -147,9 +147,9 @@ void DrawViewShell::DeleteActualLayer()
 
 bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
-    bool bRet = GetView()->KeyInput(rKEvt, pWin);
+    bool bRet = false;
 
-    if (!bRet && (!IsInputLocked() || (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)))
+    if (!IsInputLocked() || (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE))
     {
         if(KEY_RETURN == rKEvt.GetKeyCode().GetCode()
             && rKEvt.GetKeyCode().IsMod1()
@@ -225,6 +225,9 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
             }
         }
     }
+
+    if (!bRet)
+        bRet = GetView()->KeyInput(rKEvt, pWin);
 
     return bRet;
 }
