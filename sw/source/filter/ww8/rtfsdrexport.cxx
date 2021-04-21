@@ -573,7 +573,7 @@ sal_Int32 RtfSdrExport::StartShape()
         // Order inside the group shape is not relevant for the flat shape list
         // we write.
         m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPZ);
-        m_rAttrOutput.RunText().append(OString::number(m_pSdrObject->GetOrdNum()));
+        m_rAttrOutput.RunText().append(static_cast<sal_Int64>(m_pSdrObject->GetOrdNum()));
     }
 
     for (auto it = m_aShapeProps.rbegin(); it != m_aShapeProps.rend(); ++it)

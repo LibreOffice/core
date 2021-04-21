@@ -163,7 +163,7 @@ OUString FbCreateStmtParser::compose() const
             auto it = params.cbegin();
             while (it != params.end())
             {
-                sSql.append(OUString::number(*it));
+                sSql.append(*it);
                 ++it;
                 if (it != params.end())
                     sSql.append(",");

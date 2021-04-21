@@ -1605,7 +1605,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                 if( nSdPage < (mnSdPageCount-1) || bEndless )
                 {
                     aStr.append("<meta http-equiv=\"refresh\" content=\"");
-                    aStr.append(OUString::number(fSecs));
+                    aStr.append(fSecs);
                     aStr.append("; URL=");
 
                     int nPage = nSdPage + 1;
@@ -2284,7 +2284,7 @@ bool HtmlExport::CreateFrames()
     aStr.append("<script type=\"text/javascript\">\r\n<!--\r\n");
 
     aStr.append("var nCurrentPage = 0;\r\nvar nPageCount = ");
-    aStr.append(OUString::number(mnSdPageCount));
+    aStr.append(static_cast<sal_Int32>(mnSdPageCount));
     aStr.append(";\r\n\r\n");
 
     OUString aFunction = JS_NavigateAbs;
@@ -2318,7 +2318,7 @@ bool HtmlExport::CreateFrames()
     aStr.append("</head>\r\n");
 
     aStr.append("<frameset cols=\"*,");
-    aStr.append(OUString::number((mnWidthPixel + 16)));
+    aStr.append(static_cast<sal_Int32>(mnWidthPixel + 16));
     aStr.append("\">\r\n");
     if(mbImpress)
     {
@@ -2336,7 +2336,7 @@ bool HtmlExport::CreateFrames()
     if(mbNotes)
     {
         aStr.append("  <frameset rows=\"42,");
-        aStr.append(OUString::number(static_cast<int>(static_cast<double>(mnWidthPixel) * 0.75) + 16));
+        aStr.append(static_cast<sal_Int32>(static_cast<double>(mnWidthPixel) * 0.75) + 16);
         aStr.append(",*\">\r\n");
     }
     else
@@ -2788,7 +2788,7 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
 
             aPnt.setX( static_cast<tools::Long>(aPnt.X() * fFactor) );
             aPnt.setY( static_cast<tools::Long>(aPnt.Y() * fFactor) );
-            aStr.append(OUString::number(aPnt.X())).append(",").append(OUString::number(aPnt.Y()));
+            aStr.append(aPnt.X()).append(",").append(aPnt.Y());
 
             if (nPoint < nNoOfPoints - 1)
                 aStr.append(',');
@@ -2952,7 +2952,7 @@ bool HtmlExport::CreateImageFileList()
     OUStringBuffer aStr;
     for( sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
-        aStr.append(OUString::number(nSdPage + 1));
+        aStr.append(static_cast<sal_Int32>(nSdPage + 1));
         aStr.append(';');
         aStr.append(maURLPath);
         aStr.append(maImageFiles[nSdPage]);

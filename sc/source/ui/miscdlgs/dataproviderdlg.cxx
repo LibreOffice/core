@@ -298,10 +298,10 @@ ScMergeColumnTransformationControl::ScMergeColumnTransformationControl(
     OUStringBuffer aBuffer;
 
     // map from zero based to one based column numbers
-    aBuffer.append(OUString::number(nStartCol + 1));
+    aBuffer.append(static_cast<sal_Int32>(nStartCol + 1));
     for ( SCCOL nCol = nStartCol + 1; nCol <= nEndCol; ++nCol)
     {
-        aBuffer.append(";").append(OUString::number(nCol + 1));
+        aBuffer.append(";").append(static_cast<sal_Int32>(nCol + 1));
     }
 
     mxEdColumns->set_text(aBuffer.makeStringAndClear());

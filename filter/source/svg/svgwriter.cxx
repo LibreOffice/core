@@ -1883,9 +1883,9 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
         {
             aPolyPoint = rPoly[ 0 ];
             aPathData.append("M ")
-                     .append(OUString::number( aPolyPoint.X() ))
+                     .append( aPolyPoint.X() )
                      .append(aComma)
-                     .append(OUString::number( aPolyPoint.Y() ));
+                     .append( aPolyPoint.Y() );
 
             char nCurrentMode = 0;
             const bool bClose(!bLine || rPoly[0] == rPoly[nSize - 1]);
@@ -1906,9 +1906,9 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                             aPathData.append(aBlank);
 
                         aPolyPoint = rPoly[ n++ ];
-                        aPathData.append(OUString::number( aPolyPoint.X() ))
+                        aPathData.append( aPolyPoint.X() )
                                  .append(aComma)
-                                 .append(OUString::number( aPolyPoint.Y() ));
+                                 .append( aPolyPoint.Y() );
                     }
                 }
                 else
@@ -1920,9 +1920,9 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                     }
 
                     aPolyPoint = rPoly[ n++ ];
-                    aPathData.append(OUString::number( aPolyPoint.X() ))
+                    aPathData.append( aPolyPoint.X() )
                              .append(aComma)
-                             .append(OUString::number( aPolyPoint.Y() ));
+                             .append( aPolyPoint.Y() );
                 }
             }
 
@@ -2167,7 +2167,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape )
             if( k )
                 aDashArrayStr.append(",");
 
-            aDashArrayStr.append(OUString::number( nDash ));
+            aDashArrayStr.append( nDash );
         }
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "stroke-dasharray", aDashArrayStr.makeStringAndClear() );

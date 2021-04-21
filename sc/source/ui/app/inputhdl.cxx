@@ -1381,7 +1381,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
                     {
                         aPayload.append("{");
                         aPayload.append("\"index\": ");
-                        aPayload.append(OString::number(nCurIndex));
+                        aPayload.append(static_cast<sal_Int64>(nCurIndex));
                         aPayload.append(", ");
                         aPayload.append("\"signature\": \"");
                         aPayload.append(escapeJSON(ppFDesc->getSignature()));

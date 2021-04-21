@@ -1602,7 +1602,7 @@ struct ConventionXL_OOX : public ConventionXL_A1
 
     static void makeExternalDocStr( OUStringBuffer& rBuffer, sal_uInt16 nFileId )
     {
-        rBuffer.append('[').append( OUString::number( nFileId+1)).append(']');
+        rBuffer.append('[').append( static_cast<sal_Int32>(nFileId+1) ).append(']');
     }
 };
 
@@ -1616,10 +1616,10 @@ r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress
     {
         SCCOL nCol = rRef.Col();
         if (nCol != 0)
-            rBuf.append("[").append(OUString::number(nCol)).append("]");
+            rBuf.append("[").append(static_cast<sal_Int32>(nCol)).append("]");
     }
     else
-        rBuf.append( OUString::number( rAbsRef.Col() + 1 ) );
+        rBuf.append( static_cast<sal_Int32>(rAbsRef.Col() + 1) );
 }
 static void
 r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress& rAbsRef )
@@ -1629,11 +1629,11 @@ r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress
     {
         if (rRef.Row() != 0)
         {
-            rBuf.append("[").append( OUString::number(rRef.Row()) ).append("]");
+            rBuf.append("[").append(rRef.Row() ).append("]");
         }
     }
     else
-        rBuf.append( OUString::number( rAbsRef.Row() + 1 ) );
+        rBuf.append( rAbsRef.Row() + 1 );
 }
 
 namespace {
