@@ -358,10 +358,8 @@ OUString ImageMap::ImpReadCERNURL( const char** ppStr )
 {
     OUString aStr(OUString::createFromAscii(*ppStr));
 
-    aStr = comphelper::string::stripStart(aStr, ' ');
-    aStr = comphelper::string::stripStart(aStr, '\t');
-    aStr = comphelper::string::stripEnd(aStr, ' ');
-    aStr = comphelper::string::stripEnd(aStr, '\t');
+    aStr = comphelper::string::strip(aStr, ' ');
+    aStr = comphelper::string::strip(aStr, '\t');
 
     return INetURLObject::GetAbsURL( "", aStr );
 }
