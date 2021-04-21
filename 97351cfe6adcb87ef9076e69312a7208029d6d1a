@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05600189_3841c7f8",
+        "filename": "sal/rtl/cmdargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-21T06:38:17Z",
+      "side": 1,
+      "message": "Just a mention that it could be closer to original code structure this way:\n\n        if (auto const \u0026 arg \u003d OUString::unacquired(\u0026pArg);\n            (arg.startsWith(\"-\") || arg.startsWith(\"/\")) \u0026\u0026\n                arg.match(\"env:\", 1) \u0026\u0026\n                arg.indexOf (\u0027\u003d\u0027, 5) \u003e\u003d 0 )",
+      "revId": "97351cfe6adcb87ef9076e69312a7208029d6d1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
