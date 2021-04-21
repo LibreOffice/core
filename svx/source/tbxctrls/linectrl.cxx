@@ -34,6 +34,7 @@
 
 #include <svx/drawitem.hxx>
 #include <svx/xlineit0.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
@@ -615,6 +616,18 @@ IMPL_LINK_NOARG(SvxLineBox, SelectHdl, ValueSet*, void)
                 aLineDashItem.QueryValue ( a );
                 aArgs[0].Value = a;
                 mxControl->dispatchLineStyleCommand(".uno:LineDash", aArgs);
+
+                // set also cap style using the toolbar line style selection popup
+                css::drawing::DashStyle eStyle = pEntry->GetDash().GetDashStyle();
+                XLineCapItem aLineCapItem(
+                    eStyle == drawing::DashStyle_RECT || eStyle == drawing::DashStyle_RECTRELATIVE
+                                ? css::drawing::LineCap_BUTT
+                                : css::drawing::LineCap_ROUND );
+                Sequence< PropertyValue > aArgs2( 1 );
+                aArgs2[0].Name = "LineCap";
+                aLineCapItem.QueryValue ( a );
+                aArgs2[0].Value = a;
+                mxControl->dispatchLineStyleCommand(".uno:LineCap", aArgs2);
             }
         }
         break;

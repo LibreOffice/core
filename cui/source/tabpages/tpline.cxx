@@ -1312,6 +1312,18 @@ void SvxLineTabPage::ClickInvisibleHdl_Impl()
     }
     else
     {
+        // set cap style associated to the line style
+        sal_Int32 nPos = m_xLbLineStyle->get_active();
+        if( nPos > 1 && m_pDashList->Count() > static_cast<tools::Long>( nPos - 2 ) )
+        {
+            css::drawing::DashStyle eStyle =
+                m_pDashList->GetDash( nPos - 2 )->GetDash().GetDashStyle();
+            if ( eStyle == drawing::DashStyle_RECT || eStyle == drawing::DashStyle_RECTRELATIVE)
+                m_xLBCapStyle->set_active(0);
+            else
+                m_xLBCapStyle->set_active(1);
+        }
+
         m_xBoxColor->set_sensitive(true);
         m_xBoxWidth->set_sensitive(true);
 
