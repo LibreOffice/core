@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "asyncrequests.hxx"
+#include "requests.hxx"
 #include "VistaFilePickerImpl.hxx"
 #include "VistaFilePickerEventHandler.hxx"
 
@@ -211,13 +211,7 @@ public:
 
         css::uno::Sequence< OUString > m_lLastFiles;
 
-        /** execute the COM dialog within a STA thread
-         *  Must be used on the heap ... because it's implemented as OSL thread .-)
-         */
-        RequestHandlerRef m_rDialog;
-        AsyncRequests m_aAsyncExecute;
-
-        oslThreadIdentifier m_nFilePickerThreadId;
+        VistaFilePickerImpl m_rDialog;
 
         bool m_bInitialized;
         const bool m_bFolderPicker;

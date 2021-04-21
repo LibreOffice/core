@@ -19,11 +19,9 @@
 
 #include <sal/config.h>
 
-#include <memory>
-
 #include "VistaFilePickerEventHandler.hxx"
 
-#include "asyncrequests.hxx"
+#include "requests.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -238,21 +236,18 @@ const OUStringLiteral PROP_PICKER_LISTENER = u"picker_listener";
 
 namespace {
 
-class AsyncPickerEvents : public RequestHandler
+class PickerEvents
 {
 public:
 
-    AsyncPickerEvents()
+    PickerEvents()
     {}
 
-    virtual void before() override
-    {}
-
-    virtual void doRequest(const RequestRef& rRequest) override
+    void doRequest(Request& rRequest)
     {
-        const ::sal_Int32 nEventID   = rRequest->getRequest();
-        const ::sal_Int16 nControlID = rRequest->getArgumentOrDefault(PROP_CONTROL_ID, ::sal_Int16(0));
-        const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest->getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
+        const ::sal_Int32 nEventID   = rRequest.getRequest();
+        const ::sal_Int16 nControlID = rRequest.getArgumentOrDefault(PROP_CONTROL_ID, ::sal_Int16(0));
+        const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest.getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
 
         if ( ! xListener.is())
             return;
@@ -285,9 +280,6 @@ public:
             // no default here. Let compiler detect changes on enum set !
         }
     }
-
-    virtual void after() override
-    {}
 };
 
 }
@@ -295,8 +287,7 @@ public:
 void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
                                                  ::sal_Int16  nControlID)
 {
-    // See special handling in ~AsyncRequests for this static
-    static AsyncRequests aNotify(std::make_shared<AsyncPickerEvents>());
+    static PickerEvents aNotify;
 
     ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer( cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get());
     if ( ! pContainer)
@@ -309,14 +300,13 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
         {
             css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener (pIterator.next(), css::uno::UNO_QUERY);
 
-            RequestRef rRequest = std::make_shared<Request>();
-            rRequest->setRequest (eEventType);
-            rRequest->setArgument(PROP_PICKER_LISTENER, xListener);
+            Request rRequest;
+            rRequest.setRequest (eEventType);
+            rRequest.setArgument(PROP_PICKER_LISTENER, xListener);
             if ( nControlID )
-                rRequest->setArgument(PROP_CONTROL_ID, nControlID);
+                rRequest.setArgument(PROP_CONTROL_ID, nControlID);
 
-            aNotify.triggerRequestDirectly(rRequest);
-            //aNotify.triggerRequestNonBlocked(rRequest);
+            aNotify.doRequest(rRequest);
         }
         catch(const css::uno::RuntimeException&)
         {

@@ -23,7 +23,7 @@
 
 #include <shobjidl.h>
 
-#include "asyncrequests.hxx"
+#include "requests.hxx"
 #include "vistatypes.h"
 #include "FilterContainer.hxx"
 #include "VistaFilePickerEventHandler.hxx"
@@ -31,10 +31,8 @@
 #include "resourceprovider.hxx"
 
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/basemutex.hxx>
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
-#include <o3tl/safeCoInitUninit.hxx>
 #include <rtl/ustring.hxx>
 
 namespace fpicker{
@@ -84,12 +82,10 @@ class TDialogImplBase;
 
 /** native implementation of the file picker on Vista and upcoming windows versions.
  *  This dialog uses COM internally. Further it marshall every request so it will
- *  be executed within its own STA thread !
+ *  be executed on the main thread which is an STA thread !
  */
 
-class VistaFilePickerImpl : private ::cppu::BaseMutex
-                          , public  RequestHandler
-                          , public  IVistaFilePickerInternalNotify
+class VistaFilePickerImpl : public  IVistaFilePickerInternalNotify
 {
     public:
 
@@ -131,15 +127,12 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         // ctor/dtor - nothing special
 
                  VistaFilePickerImpl();
-        virtual ~VistaFilePickerImpl() override;
+        ~VistaFilePickerImpl();
 
 
         // RequestHandler
 
-
-        virtual void before() override;
-        virtual void doRequest(const RequestRef& rRequest) override;
-        virtual void after() override;
+        void doRequest(Request& rRequest);
 
 
         // IVistaFilePickerInternalNotify
@@ -152,91 +145,91 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         OUString GetDirectory();
 
         /// implementation of request E_ADD_FILEPICKER_LISTENER
-        void impl_sta_addFilePickerListener(const RequestRef& rRequest);
+        void impl_sta_addFilePickerListener(Request& rRequest);
 
 
         /// implementation of request E_REMOVE_FILEPICKER_LISTENER
-        void impl_sta_removeFilePickerListener(const RequestRef& rRequest);
+        void impl_sta_removeFilePickerListener(Request& rRequest);
 
 
         /// implementation of request E_APPEND_FILTER
-        void impl_sta_appendFilter(const RequestRef& rRequest);
+        void impl_sta_appendFilter(Request& rRequest);
 
 
         /// implementation of request E_APPEND_FILTERGROUP
-        void impl_sta_appendFilterGroup(const RequestRef& rRequest);
+        void impl_sta_appendFilterGroup(Request& rRequest);
 
 
         /// implementation of request E_SET_CURRENT_FILTER
-        void impl_sta_setCurrentFilter(const RequestRef& rRequest);
+        void impl_sta_setCurrentFilter(Request& rRequest);
 
 
         /// implementation of request E_GET_CURRENT_FILTER
-        void impl_sta_getCurrentFilter(const RequestRef& rRequest);
+        void impl_sta_getCurrentFilter(Request& rRequest);
 
 
         /// implementation of request E_CREATE_OPEN_DIALOG
-        void impl_sta_CreateOpenDialog(const RequestRef& rRequest);
+        void impl_sta_CreateOpenDialog(Request& rRequest);
 
 
         /// implementation of request E_CREATE_SAVE_DIALOG
-        void impl_sta_CreateSaveDialog(const RequestRef& rRequest);
+        void impl_sta_CreateSaveDialog(Request& rRequest);
 
 
         /// implementation of request E_CREATE_FOLDER_PICKER
-        void impl_sta_CreateFolderPicker(const RequestRef& rRequest);
+        void impl_sta_CreateFolderPicker(Request& rRequest);
 
 
         /// implementation of request E_SET_MULTISELECTION_MODE
-        void impl_sta_SetMultiSelectionMode(const RequestRef& rRequest);
+        void impl_sta_SetMultiSelectionMode(Request& rRequest);
 
 
         /// implementation of request E_SET_TITLE
-        void impl_sta_SetTitle(const RequestRef& rRequest);
+        void impl_sta_SetTitle(Request& rRequest);
 
 
         /// implementation of request E_SET_FILENAME
-        void impl_sta_SetFileName(const RequestRef& rRequest);
+        void impl_sta_SetFileName(Request& rRequest);
 
 
         /// implementation of request E_SET_DIRECTORY
-        void impl_sta_SetDirectory(const RequestRef& rRequest);
+        void impl_sta_SetDirectory(Request& rRequest);
 
 
         /// implementation of request E_GET_DIRECTORY
-        void impl_sta_GetDirectory(const RequestRef& rRequest);
+        void impl_sta_GetDirectory(Request& rRequest);
 
 
         /// implementation of request E_SET_DEFAULT_NAME
-        void impl_sta_SetDefaultName(const RequestRef& rRequest);
+        void impl_sta_SetDefaultName(Request& rRequest);
 
 
         /// implementation of request E_GET_SELECTED_FILES
-        void impl_sta_getSelectedFiles(const RequestRef& rRequest);
+        void impl_sta_getSelectedFiles(Request& rRequest);
 
 
         /// implementation of request E_SHOW_DIALOG_MODAL
-        void impl_sta_ShowDialogModal(const RequestRef& rRequest);
+        void impl_sta_ShowDialogModal(Request& rRequest);
 
 
         /// implementation of request E_SET_CONTROL_VALUE
-        void impl_sta_SetControlValue(const RequestRef& rRequest);
+        void impl_sta_SetControlValue(Request& rRequest);
 
 
         /// implementation of request E_GET_CONTROL_VALUE
-        void impl_sta_GetControlValue(const RequestRef& rRequest);
+        void impl_sta_GetControlValue(Request& rRequest);
 
 
         /// implementation of request E_SET_CONTROL_LABEL
-        void impl_sta_SetControlLabel(const RequestRef& rRequest);
+        void impl_sta_SetControlLabel(Request& rRequest);
 
 
         /// implementation of request E_GET_CONTROL_LABEL
-        static void impl_sta_GetControlLabel(const RequestRef& rRequest);
+        static void impl_sta_GetControlLabel(Request& rRequest);
 
 
         /// implementation of request E_ENABLE_CONTROL
-        void impl_sta_EnableControl(const RequestRef& rRequest);
+        void impl_sta_EnableControl(Request& rRequest);
 
         /** create all needed (optional!) UI controls addressed by the field nFeatures.
          *  The given number nFeatures is used as a flag field. Use const values FEATURE_XXX
@@ -278,7 +271,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
    private:
         template <class TDialogImplClass> void impl_sta_CreateDialog();
-        void impl_sta_InitDialog(const RequestRef& rRequest, DWORD nOrFlags);
+        void impl_sta_InitDialog(Request& rRequest, DWORD nOrFlags);
 
 
         /// object representing a file dialog
@@ -308,9 +301,6 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
 
         OUString m_sFilename;
-
-        // to put back all the inits with COINIT_MULTITHREADED if needed
-        int mnNbCallCoInitializeExForReinit;
 };
 
 } // namespace vista
