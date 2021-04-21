@@ -494,9 +494,11 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
 {
     // If no page exists yet in the model, (File -> New), insert a page
     sal_uInt16 nPageCount = GetPageCount();
-
     if (nPageCount > 1)
         return;
+
+    const bool bSavedUndoEnabled = IsUndoEnabled();
+    EnableUndo(false);
 
     // #i57181# Paper size depends on Language, like in Writer
     Size aDefSize = SvxPaperInfo::GetDefaultPaperSize( MapUnit::Map100thMM );
@@ -661,6 +663,8 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
     mpWorkStartupTimer->SetInvokeHandler( LINK(this, SdDrawDocument, WorkStartupHdl) );
     mpWorkStartupTimer->SetTimeout(2000);
     mpWorkStartupTimer->Start();
+
+    EnableUndo(bSavedUndoEnabled);
 
     SetChanged(false);
 }
