@@ -990,6 +990,39 @@ public:
     {
         mpThis->pClass->sendDialogEvent(mpThis, nWindowId, pArguments);
     }
+
+    /**
+     * Generic function to toggle and tweak various things in the core LO
+     *
+     * The currently available option names and their allowed values are:
+     *
+     * "profilezonerecording": "start" or "stop"
+     * Start or stop recording profile zone trace data in the process.
+     *
+     * "sallogoverride": "<string>"
+     * Override the SAL_LOG environment variable
+     *
+     * For the syntax of the string see the documentation for "Basic
+     * logging functionality" in LibreOffice internal API
+     * documentation (include/sal/log.hxx). If the logging selector
+     * has been set by this function to a non-empty value, that is used
+     * instead of the environment variable SAL_LOG.
+     *
+     * The parameter is not copied so you should pass a value that
+     * points to memory that will stay valid until you call setOption
+     * with this option name the next time.
+     *
+     * If you pass nullptr or an empty string as value, the
+     * environment variable SAL_LOG is again used as by default. You
+     * can switch back and forth as you like.
+     *
+     * @param pOption the option name
+     * @param pValue its value
+     */
+    void setOption(const char* pOption, const char* pValue)
+    {
+        mpThis->pClass->setOption(mpThis, pOption, pValue);
+    }
 };
 
 /// Factory method to create a lok::Office instance.
