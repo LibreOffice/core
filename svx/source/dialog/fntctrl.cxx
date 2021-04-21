@@ -1008,6 +1008,16 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     rCJKFont.SetTransparent( bTransparent );
     rCTLFont.SetTransparent( bTransparent );
 
+    if( !bPreviewBackgroundToCharacter )
+    {
+        if( GetWhich( rSet, SID_ATTR_BRUSH, nWhich ) )
+        {
+            const SvxBrushItem& rBrush = static_cast<const  SvxBrushItem&>( rSet.Get( nWhich ) );
+            if( GPOS_NONE == rBrush.GetGraphicPos() )
+                pImpl->mxBackColor = rBrush.GetColor();
+        }
+    }
+
     // Font
     SetPrevFont( rSet, SID_ATTR_CHAR_FONT, rFont );
     SetPrevFont( rSet, SID_ATTR_CHAR_CJK_FONT, rCJKFont );
