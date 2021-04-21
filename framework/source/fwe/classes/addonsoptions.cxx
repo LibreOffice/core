@@ -927,7 +927,7 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
     OUString aPopupMenuURL;
     OUStringBuffer aBuf( m_aRootAddonPopupMenuURLPrexfix.getLength() + 3 );
     aBuf.append( m_aRootAddonPopupMenuURLPrexfix );
-    aBuf.append( OUString::number( ++m_nRootAddonPopupMenuId ));
+    aBuf.append( ++m_nRootAddonPopupMenuId );
     aPopupMenuURL = aBuf.makeStringAndClear();
     return aPopupMenuURL;
 }

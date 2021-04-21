@@ -2425,7 +2425,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 if (*p == '.')
                     if (nOctets < 4)
                     {
-                        aTheCanonic.append( OUString::number(nNumber) );
+                        aTheCanonic.append(static_cast<sal_Int64>(nNumber));
                         aTheCanonic.append( '.' );
                         ++nOctets;
                         eState = STATE_IP4_DOT;

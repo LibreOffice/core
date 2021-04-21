@@ -1566,7 +1566,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
                 {
                     OUStringBuffer aNew = aNewUri.getUri();
                     aNew.append( "_" );
-                    aNew.append( OUString::number( ++nTry ) );
+                    aNew.append( ++nTry );
                     aNewUri.setUri( aNew.makeStringAndClear() );
                 }
                 while ( hasData( aNewUri ) && ( nTry < 1000 ) );
@@ -1586,7 +1586,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
                 {
                     OUStringBuffer aNewTitle = m_aProps.getTitle();
                     aNewTitle.append( "_" );
-                    aNewTitle.append( OUString::number( ++nTry ) );
+                    aNewTitle.append( ++nTry );
                     m_aProps.setTitle( aNewTitle.makeStringAndClear() );
                 }
             }
