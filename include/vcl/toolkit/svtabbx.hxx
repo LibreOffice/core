@@ -81,7 +81,7 @@ public:
                                  sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr );
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const override;
-    static OUString  GetEntryText( SvTreeListEntry*, sal_uInt16 nCol );
+    static OUString  GetEntryText( const SvTreeListEntry*, sal_uInt16 nCol );
     OUString         GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
     OUString         GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const;
