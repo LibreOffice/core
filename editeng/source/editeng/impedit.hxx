@@ -471,7 +471,7 @@ public:
 //  ImpEditEngine
 
 
-class ImpEditEngine : public SfxListener
+class ImpEditEngine final : public SfxListener
 {
     friend class EditEngine;
 
