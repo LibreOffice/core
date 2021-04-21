@@ -784,8 +784,9 @@ void SmEditTextWindow::UpdateStatus(bool bSetDocModified)
     SmModule *pMod = SM_MOD();
     if (pMod && pMod->GetConfig()->IsAutoRedraw())
         Flush();
-    if ( bSetDocModified )
-        mrEditWindow.GetDoc()->SetModified();
+    SmDocShell* pDoc = bSetDocModified ? mrEditWindow.GetDoc() : nullptr;
+    if (pDoc)
+        pDoc->SetModified();
 }
 
 void SmEditWindow::Cut()
