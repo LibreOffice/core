@@ -796,12 +796,19 @@ namespace {
 class TransClipHandler
 {
     ScTable& mrClipTab;
+    const ScTable& mrSrcTab;
     SCTAB mnSrcTab;
     SCCOL mnSrcCol;
     size_t mnTopRow;
+    size_t mnEndRow;
     SCROW mnTransRow;
+    SCROW mnFilteredRows = 0;
+    SCROW mnRowDestOffset = 0;
     bool mbAsLink;
     bool mbWasCut;
+    bool mbIncludeFiltered;
+    InsertDeleteFlags mnFlags;
+    std::vector<SCROW>& mrFilteredRows;
 
     ScAddress getDestPos(size_t nRow) const
     {
@@ -822,62 +829,118 @@ class TransClipHandler
 
     void setLink(size_t nRow)
     {
-        SCCOL nTransCol = nRow - mnTopRow;
-        mrClipTab.SetFormulaCell(
-            nTransCol, mnTransRow, createRefCell(nRow, getDestPos(nRow)));
+        SCCOL nTransCol = nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
+        mrClipTab.SetFormulaCell(nTransCol, mnTransRow,
+                                 createRefCell(nRow, getDestPos(nRow)));
     }
 
 public:
-    TransClipHandler(ScTable& rClipTab, SCTAB nSrcTab, SCCOL nSrcCol, size_t nTopRow, SCROW nTransRow, bool bAsLink, bool bWasCut) :
-        mrClipTab(rClipTab), mnSrcTab(nSrcTab), mnSrcCol(nSrcCol),
-        mnTopRow(nTopRow), mnTransRow(nTransRow), mbAsLink(bAsLink), mbWasCut(bWasCut) {}
+    TransClipHandler(ScTable& rClipTab, const ScTable& rSrcTab, SCTAB nSrcTab, SCCOL nSrcCol,
+                     size_t nTopRow, size_t nEndRow, SCROW nTransRow, SCROW nRowDestOffset,
+                     bool bAsLink, bool bWasCut, const InsertDeleteFlags& nFlags,
+                     const bool bIncludeFiltered, std::vector<SCROW>& rFilteredRows)
+        : mrClipTab(rClipTab)
+        , mrSrcTab(rSrcTab)
+        , mnSrcTab(nSrcTab)
+        , mnSrcCol(nSrcCol)
+        , mnTopRow(nTopRow)
+        , mnEndRow(nEndRow)
+        , mnTransRow(nTransRow)
+        , mnRowDestOffset(nRowDestOffset)
+        , mbAsLink(bAsLink)
+        , mbWasCut(bWasCut)
+        , mbIncludeFiltered(bIncludeFiltered)
+        , mnFlags(nFlags)
+        , mrFilteredRows(rFilteredRows)
+    {
+        // Create list of filtered rows.
+        if (!mbIncludeFiltered)
+        {
+            for (SCROW curRow = nTopRow; curRow <= static_cast<SCROW>(mnEndRow); ++curRow)
+            {
+                // maybe this loop could be optimized
+                bool bFiltered = mrSrcTab.RowFiltered(curRow, nullptr, nullptr);
+                if (bFiltered)
+                    mrFilteredRows.push_back(curRow);
+            }
+        }
+    }
 
     void operator() (size_t nRow, double fVal)
     {
+        bool bFiltered = mrSrcTab.RowFiltered(nRow, nullptr, nullptr);
+        if (!mbIncludeFiltered && bFiltered)
+        {
+            mnFilteredRows++;
+            return;
+        }
+
         if (mbAsLink)
         {
             setLink(nRow);
             return;
         }
 
-        SCCOL nTransCol = nRow - mnTopRow;
+        SCCOL nTransCol = nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
         mrClipTab.SetValue(nTransCol, mnTransRow, fVal);
     }
 
     void operator() (size_t nRow, const svl::SharedString& rStr)
     {
+        bool bFiltered = mrSrcTab.RowFiltered(nRow, nullptr, nullptr);
+        if (!mbIncludeFiltered && bFiltered)
+        {
+            mnFilteredRows++;
+            return;
+        }
+
         if (mbAsLink)
         {
             setLink(nRow);
             return;
         }
 
-        SCCOL nTransCol = nRow - mnTopRow;
+        SCCOL nTransCol = nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
         mrClipTab.SetRawString(nTransCol, mnTransRow, rStr);
     }
 
     void operator() (size_t nRow, const EditTextObject* p)
     {
+        bool bFiltered = mrSrcTab.RowFiltered(nRow, nullptr, nullptr);
+        if (!mbIncludeFiltered && bFiltered)
+        {
+            mnFilteredRows++;
+            return;
+        }
+
         if (mbAsLink)
         {
             setLink(nRow);
             return;
         }
 
-        SCCOL nTransCol = nRow - mnTopRow;
+        SCCOL nTransCol = nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
         mrClipTab.SetEditText(nTransCol, mnTransRow, ScEditUtil::Clone(*p, mrClipTab.GetDoc()));
     }
 
     void operator() (size_t nRow, const ScFormulaCell* p)
     {
+        bool bFiltered = mrSrcTab.RowFiltered(nRow, nullptr, nullptr);
+        if (!mbIncludeFiltered && bFiltered)
+        {
+            mnFilteredRows++;
+            return;
+        }
+
         if (mbAsLink)
         {
             setLink(nRow);
             return;
         }
 
-        ScFormulaCell* pNew = new ScFormulaCell(
-            *p, mrClipTab.GetDoc(), getDestPos(nRow), ScCloneFlags::StartListening);
+        ScFormulaCell* pNew = new ScFormulaCell(*p, mrClipTab.GetDoc(),
+                                                getDestPos(nRow - mnFilteredRows + mnRowDestOffset),
+                                                ScCloneFlags::StartListening);
 
         //  rotate reference
         //  for Cut, the references are later adjusted through UpdateTranspose
@@ -885,52 +948,99 @@ public:
         if (!mbWasCut)
             pNew->TransposeReference();
 
-        SCCOL nTransCol = nRow - mnTopRow;
+        SCCOL nTransCol = nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
         mrClipTab.SetFormulaCell(nTransCol, mnTransRow, pNew);
     }
-};
 
+    // empty cells
+    void operator()(const int /*type*/, size_t nRow, size_t nDataSize)
+    {
+        for (size_t curRow = nRow; curRow < nRow + nDataSize; ++curRow)
+        {
+            bool bFiltered = mrSrcTab.RowFiltered(curRow, nullptr, nullptr);
+            if (!mbIncludeFiltered && bFiltered)
+            {
+                mnFilteredRows++;
+                continue;
 }
 
-void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                ScTable* pTransClip, InsertDeleteFlags nFlags, bool bAsLink )
+            if (mbAsLink && mnFlags == InsertDeleteFlags::ALL)
+{
+                //  with InsertDeleteFlags::ALL, also create links (formulas) for empty cells
+                setLink(nRow);
+                continue;
+            }
+        }
+    }
+};
+}
+
+void ScTable::TransposeClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                            SCROW nRowDestOffset, ScTable* pTransClip, InsertDeleteFlags nFlags,
+                            bool bAsLink, bool bIncludeFiltered)
 {
     bool bWasCut = rDocument.IsCutMode();
 
-    ScDocument& rDestDoc = pTransClip->rDocument;
-
     for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
     {
-        SCROW nRow;
-        if ( bAsLink && nFlags == InsertDeleteFlags::ALL )
+        std::vector<SCROW> aFilteredRows;
+
+        TransClipHandler aFunc(*pTransClip, *this, nTab, nCol, nRow1, nRow2,
+                               static_cast<SCROW>(nCol - nCol1), nRowDestOffset, bAsLink, bWasCut,
+                               nFlags, bIncludeFiltered, aFilteredRows);
+
+        const sc::CellStoreType& rCells = aCol[nCol].maCells;
+
+        // Loop through all rows by iterator and call aFunc operators
+        sc::ParseAll(rCells.begin(), rCells, nRow1, nRow2, aFunc,
+                     aFunc);
+
+        //  Attributes
+        if (nFlags & InsertDeleteFlags::ATTRIB)
+            TransposeColPatterns(pTransClip, nCol1, nCol, nRow1, nRow2, bIncludeFiltered,
+                                 aFilteredRows, nRowDestOffset);
+
+        // Cell Notes - fdo#68381 paste cell notes on Transpose
+        if ((nFlags & InsertDeleteFlags::NOTE) && rDocument.HasColNotes(nCol, nTab))
+            TransposeColNotes(pTransClip, nCol1, nCol, nRow1, nRow2, bIncludeFiltered,
+                              nRowDestOffset);
+    }
+}
+
+static void lcl_SetTransposedPatternInRows(ScTable* pTransClip, SCROW nAttrRow1, SCROW nAttrRow2,
+                                           SCCOL nCol1, SCROW nRow1, SCCOL nCol,
+                                           const ScPatternAttr& rPatternAttr, bool bIncludeFiltered,
+                                           const std::vector<SCROW>& rFilteredRows,
+                                           SCROW nRowDestOffset)
+{
+    for (SCROW nRow = nAttrRow1; nRow <= nAttrRow2; nRow++)
+    {
+        size_t nFilteredRowAdjustment = 0;
+        if (!bIncludeFiltered)
         {
-            //  with InsertDeleteFlags::ALL, also create links (formulas) for empty cells
+            // aFilteredRows is sorted thus lower_bound() can be used.
+            // lower_bound() has a logarithmic complexity O(log(n))
+            auto itRow1 = std::lower_bound(rFilteredRows.begin(), rFilteredRows.end(), nRow1);
+            auto itRow = std::lower_bound(rFilteredRows.begin(), rFilteredRows.end(), nRow);
+            bool bRefRowIsFiltered = itRow != rFilteredRows.end() && *itRow == nRow;
+            if (bRefRowIsFiltered)
+                continue;
 
-            for ( nRow=nRow1; nRow<=nRow2; nRow++ )
-            {
-                //  create simple formula, as in ScColumn::CreateRefCell
-
-                ScAddress aDestPos( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
-                ScSingleRefData aRef;
-                aRef.InitAddress(ScAddress(nCol,nRow,nTab));
-                aRef.SetFlag3D(true);
-                ScTokenArray aArr(rDestDoc);
-                aArr.AddSingleReference( aRef );
-
-                pTransClip->SetFormulaCell(
-                    static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1),
-                    new ScFormulaCell(rDestDoc, aDestPos, aArr));
-            }
-        }
-        else
-        {
-            TransClipHandler aFunc(*pTransClip, nTab, nCol, nRow1, static_cast<SCROW>(nCol-nCol1), bAsLink, bWasCut);
-            const sc::CellStoreType& rCells = aCol[nCol].maCells;
-            sc::ParseAllNonEmpty(rCells.begin(), rCells, nRow1, nRow2, aFunc);
+            // How many filtered rows are between the formula cell and the reference?
+            // distance() has a constant complexity O(1) for vectors
+            nFilteredRowAdjustment = std::distance(itRow1, itRow);
         }
 
-        //  Attribute
+        pTransClip->SetPattern(
+            static_cast<SCCOL>(nRow - nRow1 - nFilteredRowAdjustment + nRowDestOffset),
+            static_cast<SCROW>(nCol - nCol1), rPatternAttr);
+    }
+}
 
+void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1,
+                                   SCROW nRow2, bool bIncludeFiltered,
+                                   const std::vector<SCROW>& rFilteredRows, SCROW nRowDestOffset)
+{
         SCROW nAttrRow1 = {}; // spurious -Werror=maybe-uninitialized
         SCROW nAttrRow2 = {}; // spurious -Werror=maybe-uninitialized
         const ScPatternAttr* pPattern;
@@ -944,9 +1054,11 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                      rSet.GetItemState( ATTR_MERGE_FLAG, false ) == SfxItemState::DEFAULT &&
                      rSet.GetItemState( ATTR_BORDER, false ) == SfxItemState::DEFAULT )
                 {
+                    // Set pattern in cells from nAttrRow1 to nAttrRow2
                     // no borders or merge items involved - use pattern as-is
-                    for (nRow = nAttrRow1; nRow<=nAttrRow2; nRow++)
-                        pTransClip->SetPattern( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), *pPattern );
+                    lcl_SetTransposedPatternInRows(pTransClip, nAttrRow1, nAttrRow2, nCol1, nRow1,
+                                                   nCol, *pPattern, bIncludeFiltered, rFilteredRows,
+                                                   nRowDestOffset);
                 }
                 else
                 {
@@ -987,20 +1099,17 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             rNewSet.ClearItem( ATTR_MERGE_FLAG );
                     }
 
-                    for (nRow = nAttrRow1; nRow<=nAttrRow2; nRow++)
-                        pTransClip->SetPattern( static_cast<SCCOL>(nRow-nRow1),
-                                static_cast<SCROW>(nCol-nCol1), aNewPattern);
+                    // Set pattern in cells from nAttrRow1 to nAttrRow2
+                    lcl_SetTransposedPatternInRows(pTransClip, nAttrRow1, nAttrRow2, nCol1, nRow1,
+                                                   nCol, aNewPattern, bIncludeFiltered,
+                                                   rFilteredRows, nRowDestOffset);
                 }
             }
-        }
-
-        // Cell Notes - fdo#68381 paste cell notes on Transpose
-        if ( rDocument.HasColNotes(nCol, nTab) )
-            TransposeColNotes(pTransClip, nCol1, nCol, nRow1, nRow2);
     }
 }
 
-void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1, SCROW nRow2)
+void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1,
+                                SCROW nRow2, bool bIncludeFiltered, SCROW nRowDestOffset)
 {
     sc::CellNoteStoreType::const_iterator itBlk = aCol[nCol].maCellNotes.begin(), itBlkEnd = aCol[nCol].maCellNotes.end();
 
@@ -1023,6 +1132,7 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
         return;
 
     nRowPos = static_cast<size_t>(nRow2); // End row position.
+    SCCOL nFilteredRows = 0;
 
     // Keep processing until we hit the end row position.
     sc::cellnote_block::const_iterator itData, itDataEnd;
@@ -1035,6 +1145,7 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
             itData = sc::cellnote_block::begin(*itBlk->data);
             std::advance(itData, nOffsetInBlock);
 
+            // selected area is smaller than the iteration block
             if (nBlockStart <= nRowPos && nRowPos < nBlockEnd)
             {
                 // This block contains the end row. Only process partially.
@@ -1044,7 +1155,16 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                 size_t curRow = nBlockStart + nOffsetInBlock;
                 for (; itData != itDataEnd; ++itData, ++curRow)
                 {
-                    ScAddress aDestPos( static_cast<SCCOL>(curRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
+                    bool bFiltered = this->RowFiltered(curRow, nullptr, nullptr);
+                    if (!bIncludeFiltered && bFiltered)
+                    {
+                        nFilteredRows++;
+                        continue;
+                    }
+
+                    ScAddress aDestPos(
+                        static_cast<SCCOL>(curRow - nRow1 - nFilteredRows + nRowDestOffset),
+                        static_cast<SCROW>(nCol - nCol1), pTransClip->nTab);
                     pTransClip->rDocument.ReleaseNote(aDestPos);
                     ScPostIt* pNote = *itData;
                     if (pNote)
@@ -1061,7 +1181,16 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                 size_t curRow = nBlockStart + nOffsetInBlock;
                 for (; itData != itDataEnd; ++itData, ++curRow)
                 {
-                    ScAddress aDestPos( static_cast<SCCOL>(curRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
+                    bool bFiltered = this->RowFiltered(curRow, nullptr, nullptr);
+                    if (!bIncludeFiltered && bFiltered)
+                    {
+                        nFilteredRows++;
+                        continue;
+                    }
+
+                    ScAddress aDestPos(
+                        static_cast<SCCOL>(curRow - nRow1 - nFilteredRows + nRowDestOffset),
+                        static_cast<SCROW>(nCol - nCol1), pTransClip->nTab);
                     pTransClip->rDocument.ReleaseNote(aDestPos);
                     ScPostIt* pNote = *itData;
                     if (pNote)
@@ -1072,16 +1201,23 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                 }
             }
         }
-        else
+        else // remove dest notes for rows without notes
         {
-            size_t curRow;
-            for ( curRow = nBlockStart + nOffsetInBlock; curRow <= nBlockEnd && curRow <= nRowPos; ++curRow)
+            for (size_t curRow = nBlockStart + nOffsetInBlock;
+                 curRow <= nBlockEnd && curRow <= nRowPos; ++curRow)
             {
-                ScAddress aDestPos( static_cast<SCCOL>(curRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
+                bool bFiltered = this->RowFiltered(curRow, nullptr, nullptr);
+                if (!bIncludeFiltered && bFiltered && curRow < nBlockEnd)
+                {
+                    nFilteredRows++;
+                    continue;
+                }
+
+                ScAddress aDestPos(
+                    static_cast<SCCOL>(curRow - nRow1 - nFilteredRows + nRowDestOffset),
+                    static_cast<SCROW>(nCol - nCol1), pTransClip->nTab);
                 pTransClip->rDocument.ReleaseNote(aDestPos);
             }
-            if (curRow == nRowPos)
-                break;
         }
     }
 }

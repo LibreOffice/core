@@ -21,6 +21,7 @@
 
 #include "rangelst.hxx"
 #include "charthelper.hxx"
+#include "document.hxx"
 
 /**
  * This struct stores general clipboard parameters associated with a
@@ -52,14 +53,19 @@ struct SC_DLLPUBLIC ScClipParam
      * Same as the above method, but returns the row size of the compressed
      * range.
      */
-    SCROW getPasteRowSize();
+    SCROW getPasteRowSize(const ScDocument& rSrcDoc, bool bIncludeFiltered);
 
     /**
      * Return a single range that encompasses all individual ranges.
      */
     ScRange getWholeRange() const;
 
-    void transpose();
+    /**
+     * Transpose the clip parameters.
+     * Filtered rows are removed from parameters.
+     */
+    void transpose(const ScDocument& rSrcDoc, bool bIncludeFiltered,
+                   bool bIsMultiRangeRowFilteredTranspose);
 
     sal_uInt32 getSourceDocID() const { return mnSourceDocID; }
     void setSourceDocID( sal_uInt32 nVal ) { mnSourceDocID = nVal; }

@@ -905,9 +905,8 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     if (rClipParam.isMultiRange())
     {
         // Source data is multi-range.
-        return PasteMultiRangesFromClip(
-            nFlags, pClipDoc, nFunction, bSkipEmpty, bTranspose, bAsLink, bAllowDialogs,
-            eMoveMode, nUndoFlags);
+        return PasteMultiRangesFromClip(nFlags, pClipDoc, nFunction, bSkipEmpty, false, bTranspose,
+                                        bAsLink, bAllowDialogs, eMoveMode, nUndoFlags);
     }
 
     ScMarkData& rMark = GetViewData().GetMarkData();
@@ -933,7 +932,6 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         SCCOL nX;
         SCROW nY;
         // include filtered rows until TransposeClip can skip them
-        bIncludeFiltered = true;
         pClipDoc->GetClipArea( nX, nY, true );
         if ( nY > static_cast<sal_Int32>(pClipDoc->MaxCol()) )                      // too many lines for transpose
         {
@@ -950,7 +948,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         ScDrawLayer::SetGlobalDrawPersist( aTransShellRef.get() );
 
         xTransClip.reset( new ScDocument( SCDOCMODE_CLIP ));
-        pClipDoc->TransposeClip( xTransClip.get(), nFlags, bAsLink );
+        pClipDoc->TransposeClip(xTransClip.get(), nFlags, bAsLink, bIncludeFiltered);
         pClipDoc = xTransClip.get();
 
         ScDrawLayer::SetGlobalDrawPersist(nullptr);
@@ -1470,10 +1468,11 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     return true;
 }
 
-bool ScViewFunc::PasteMultiRangesFromClip(
-    InsertDeleteFlags nFlags, ScDocument* pClipDoc, ScPasteFunc nFunction,
-    bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
-    InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags)
+bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* pClipDoc,
+                                          ScPasteFunc nFunction, bool bSkipEmpty,
+                                          bool bIncludeFiltered, bool bTranspose, bool bAsLink,
+                                          bool bAllowDialogs, InsCellCmd eMoveMode,
+                                          InsertDeleteFlags nUndoFlags)
 {
     ScViewData& rViewData = GetViewData();
     ScDocument& rDoc = rViewData.GetDocument();
@@ -1482,7 +1481,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     const ScAddress& rCurPos = rViewData.GetCurPos();
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
     SCCOL nColSize = rClipParam.getPasteColSize();
-    SCROW nRowSize = rClipParam.getPasteRowSize();
+    SCROW nRowSize = rClipParam.getPasteRowSize(*pClipDoc, bIncludeFiltered);
 
     if (bTranspose)
     {
@@ -1493,7 +1492,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         }
 
         ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
-        pClipDoc->TransposeClip(pTransClip.get(), nFlags, bAsLink);
+        pClipDoc->TransposeClip(pTransClip.get(), nFlags, bAsLink, bIncludeFiltered);
         pClipDoc = pTransClip.release();
         SCCOL nTempColSize = nColSize;
         nColSize = static_cast<SCCOL>(nRowSize);
@@ -1580,8 +1579,9 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         rDoc.BeginDrawUndo();
 
     InsertDeleteFlags nNoObjFlags = nFlags & ~InsertDeleteFlags::OBJECTS;
-    rDoc.CopyMultiRangeFromClip(rCurPos, aMark, nNoObjFlags, pClipDoc,
-                                 true, bAsLink, false, bSkipEmpty);
+    // in case of transpose, links were added in TransposeClip()
+    rDoc.CopyMultiRangeFromClip(rCurPos, aMark, nNoObjFlags, pClipDoc, true, bAsLink && !bTranspose,
+                                bIncludeFiltered, bSkipEmpty);
 
     if (pMixDoc)
         rDoc.MixDocument(aMarkedRange, nFunction, bSkipEmpty, *pMixDoc);
@@ -1591,8 +1591,8 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     if (nFlags & InsertDeleteFlags::OBJECTS)
     {
         //  Paste the drawing objects after the row heights have been updated.
-        rDoc.CopyMultiRangeFromClip(rCurPos, aMark, InsertDeleteFlags::OBJECTS, pClipDoc,
-                                     true, false, false, true);
+        rDoc.CopyMultiRangeFromClip(rCurPos, aMark, InsertDeleteFlags::OBJECTS, pClipDoc, true,
+                                    false, bIncludeFiltered, true);
     }
 
     if (bRowInfo)

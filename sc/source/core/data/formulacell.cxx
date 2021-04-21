@@ -73,7 +73,6 @@
 
 #include <memory>
 #include <map>
-#include <vector>
 
 using namespace formula;
 
@@ -3754,6 +3753,15 @@ void ScFormulaCell::UpdateCompile( bool bForceIfNameInUse )
     CompileTokenArray();
 }
 
+static void lcl_TransposeReference(ScSingleRefData& rRef)
+{
+    // References to or over filtered rows are not adjusted
+    // analog to the normal (non-transposed) case
+    SCCOLROW nTemp = rRef.Col();
+    rRef.SetRelCol(rRef.Row());
+    rRef.SetRelRow(nTemp);
+}
+
 // Reference transposition is only called in Clipboard Document
 void ScFormulaCell::TransposeReference()
 {
@@ -3769,18 +3777,10 @@ void ScFormulaCell::TransposeReference()
             ScSingleRefData& rRef2 = (bDouble ? t->GetDoubleRef()->Ref2 : rRef1);
             if ( !bDouble || (rRef2.IsColRel() && rRef2.IsRowRel()) )
             {
-                SCCOLROW nTemp;
-
-                nTemp = rRef1.Col();
-                rRef1.SetRelCol(rRef1.Row());
-                rRef1.SetRelRow(nTemp);
+                lcl_TransposeReference(rRef1);
 
                 if ( bDouble )
-                {
-                    nTemp = rRef2.Col();
-                    rRef2.SetRelCol(rRef2.Row());
-                    rRef2.SetRelRow(nTemp);
-                }
+                    lcl_TransposeReference(rRef2);
 
                 bFound = true;
             }

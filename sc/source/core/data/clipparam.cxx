@@ -70,7 +70,7 @@ SCCOL ScClipParam::getPasteColSize()
     return 0;
 }
 
-SCROW ScClipParam::getPasteRowSize()
+SCROW ScClipParam::getPasteRowSize(const ScDocument& rSrcDoc, bool bIncludeFiltered)
 {
     if (maRanges.empty())
         return 0;
@@ -81,7 +81,10 @@ SCROW ScClipParam::getPasteRowSize()
         {
             // We assume that all ranges have identical row size.
             const ScRange& rRange = maRanges.front();
-            return rRange.aEnd.Row() - rRange.aStart.Row() + 1;
+            return bIncludeFiltered
+                       ? rRange.aEnd.Row() - rRange.aStart.Row() + 1
+                       : rSrcDoc.CountNonFilteredRows(rRange.aStart.Row(), rRange.aEnd.Row(),
+                                                      rRange.aStart.Tab());
         }
         case ScClipParam::Row:
         {
@@ -89,7 +92,10 @@ SCROW ScClipParam::getPasteRowSize()
             for ( size_t i = 0, nListSize = maRanges.size(); i < nListSize; ++i )
             {
                 const ScRange& rRange = maRanges[ i ];
-                nRowSize += rRange.aEnd.Row() - rRange.aStart.Row() + 1;
+                nRowSize += bIncludeFiltered ? rRange.aEnd.Row() - rRange.aStart.Row() + 1
+                                             : rSrcDoc.CountNonFilteredRows(rRange.aStart.Row(),
+                                                                            rRange.aEnd.Row(),
+                                                                            rRange.aStart.Tab());
             }
             return nRowSize;
         }
@@ -105,7 +111,8 @@ ScRange ScClipParam::getWholeRange() const
     return maRanges.Combine();
 }
 
-void ScClipParam::transpose()
+void ScClipParam::transpose(const ScDocument& rSrcDoc, bool bIncludeFiltered,
+                            bool bIsMultiRangeRowFilteredTranspose)
 {
     switch (meDirection)
     {
@@ -126,21 +133,48 @@ void ScClipParam::transpose()
         const ScRange & rRange1 = maRanges.front();
         SCCOL nColOrigin = rRange1.aStart.Col();
         SCROW nRowOrigin = rRange1.aStart.Row();
-
+        SCROW nRowCount = 0;
         for ( size_t i = 0, n = maRanges.size(); i < n; ++i )
         {
             const ScRange & rRange = maRanges[ i ];
             SCCOL nColDelta = rRange.aStart.Col() - nColOrigin;
             SCROW nRowDelta = rRange.aStart.Row() - nRowOrigin;
+            SCROW nNonFilteredRows = rSrcDoc.CountNonFilteredRows(
+                rRange.aStart.Row(), rRange.aEnd.Row(), rRange.aStart.Tab());
+            if (!bIsMultiRangeRowFilteredTranspose)
+            {
+                SCCOL nCol1 = 0;
+                SCCOL nCol2 = bIncludeFiltered
+                                  ? static_cast<SCCOL>(rRange.aEnd.Row() - rRange.aStart.Row())
+                                  : nNonFilteredRows - 1;
+                SCROW nRow1 = 0;
+                SCROW nRow2 = static_cast<SCROW>(rRange.aEnd.Col() - rRange.aStart.Col());
+                nCol1 += static_cast<SCCOL>(nRowDelta);
+                nCol2 += static_cast<SCCOL>(nRowDelta);
+                nRow1 += static_cast<SCROW>(nColDelta);
+                nRow2 += static_cast<SCROW>(nColDelta);
+                aNewRanges.push_back( ScRange(nCol1, nRow1, rRange.aStart.Tab(), nCol2, nRow2, rRange.aStart.Tab() ) );
+            }
+            else
+                nRowCount += nNonFilteredRows;
+        }
+
+        // Transpose of filtered multi range row selection is a special case since filtering
+        // and selection are in the same dimension (i.e. row), see ScDocument::TransposeClip()
+        if (bIsMultiRangeRowFilteredTranspose)
+        {
+            SCCOL nColDelta = rRange1.aStart.Col() - nColOrigin;
+            SCROW nRowDelta = rRange1.aStart.Row() - nRowOrigin;
             SCCOL nCol1 = 0;
-            SCCOL nCol2 = static_cast<SCCOL>(rRange.aEnd.Row() - rRange.aStart.Row());
+            SCCOL nCol2 = nRowCount - 1;
             SCROW nRow1 = 0;
-            SCROW nRow2 = static_cast<SCROW>(rRange.aEnd.Col() - rRange.aStart.Col());
+            SCROW nRow2 = static_cast<SCROW>(rRange1.aEnd.Col() - rRange1.aStart.Col());
             nCol1 += static_cast<SCCOL>(nRowDelta);
             nCol2 += static_cast<SCCOL>(nRowDelta);
             nRow1 += static_cast<SCROW>(nColDelta);
             nRow2 += static_cast<SCROW>(nColDelta);
-            aNewRanges.push_back( ScRange(nCol1, nRow1, rRange.aStart.Tab(), nCol2, nRow2, rRange.aStart.Tab() ) );
+            aNewRanges.push_back(
+                ScRange(nCol1, nRow1, rRange1.aStart.Tab(), nCol2, nRow2, rRange1.aStart.Tab()));
         }
     }
     maRanges = aNewRanges;

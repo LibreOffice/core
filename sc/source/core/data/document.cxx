@@ -2317,17 +2317,18 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
     pClipDoc->GetClipParam().mbCutMode = false;
 }
 
-void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags, bool bAsLink )
+void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags, bool bAsLink,
+                               bool bIncludeFiltered)
 {
     OSL_ENSURE( bIsClip && pTransClip && pTransClip->bIsClip,
                     "TransposeClip with wrong Document" );
 
-        // initialize
-        // -> pTransClip has to be deleted before the original document!
+    // initialize
+    // -> pTransClip has to be deleted before the original document!
 
     pTransClip->ResetClip(this, nullptr);     // all
 
-        // Take over range
+    // Take over range
 
     if (pRangeName)
     {
@@ -2341,18 +2342,62 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
         }
     }
 
-    // The data
+    ScRange aCombinedClipRange = GetClipParam().getWholeRange();
 
-    ScRange aClipRange = GetClipParam().getWholeRange();
-    if ( ValidRow(aClipRange.aEnd.Row()-aClipRange.aStart.Row()) )
+    if (!ValidRow(aCombinedClipRange.aEnd.Row() - aCombinedClipRange.aStart.Row()))
     {
-        for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
+        SAL_WARN("sc", "TransposeClip: Too big");
+        return;
+    }
+
+    // Transpose of filtered multi range row selection is a special case since filtering
+    // and selection are in the same dimension (i.e. row).
+    // The filtered row status and the selection ranges are not available at the same time,
+    // handle this case specially, do not use GetClipParam().getWholeRange(),
+    // instead loop through the ranges, calculate the row offest and handle filtered rows and
+    // create in ScClipParam::transpose() an unified range.
+    bool bIsMultiRangeRowFilteredTranspose
+        = !bIncludeFiltered && GetClipParam().isMultiRange()
+          && HasFilteredRows(aCombinedClipRange.aStart.Row(), aCombinedClipRange.aEnd.Row(),
+                             aCombinedClipRange.aStart.Tab())
+          && GetClipParam().meDirection == ScClipParam::Row;
+
+    ScRangeList aClipRanges;
+    if (bIsMultiRangeRowFilteredTranspose)
+        aClipRanges = GetClipParam().maRanges;
+    else
+        aClipRanges = ScRangeList(aCombinedClipRange);
+
+    // The data
+    ScRange aClipRange;
+    SCROW nRowCount = 0; // next consecutive row
+    for (size_t j = 0, n = aClipRanges.size(); j < n; ++j)
+    {
+        aClipRange = aClipRanges[j];
+
+        SCROW nRowOffset = 0;
+        if (bIsMultiRangeRowFilteredTranspose)
+        {
+            // adjust for the rows that are filtered
+            nRowOffset = nRowCount;
+
+            // calculate filtered rows of current clip range
+            SCROW nRowCountAll = aClipRange.aEnd.Row() - aClipRange.aStart.Row() + 1;
+            SCROW nRowCountNonFiltered = CountNonFilteredRows(
+                aClipRange.aStart.Row(), aClipRange.aEnd.Row(), aClipRange.aStart.Tab());
+            SCROW nRowCountInRange = bIncludeFiltered ? nRowCountAll : nRowCountNonFiltered;
+            nRowCount += nRowCountInRange; // for next iteration
+        }
+
+        for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
+        {
             if (maTabs[i])
             {
-                OSL_ENSURE( pTransClip->maTabs[i], "TransposeClip: Table not there" );
-                maTabs[i]->TransposeClip( aClipRange.aStart.Col(), aClipRange.aStart.Row(),
-                                            aClipRange.aEnd.Col(), aClipRange.aEnd.Row(),
-                                            pTransClip->maTabs[i].get(), nFlags, bAsLink );
+                OSL_ENSURE(pTransClip->maTabs[i], "TransposeClip: Table not there");
+                maTabs[i]->TransposeClip(aClipRange.aStart.Col(), aClipRange.aStart.Row(),
+                                         aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), nRowOffset,
+                                         pTransClip->maTabs[i].get(), nFlags, bAsLink,
+                                         bIncludeFiltered);
 
                 if ( mpDrawLayer && ( nFlags & InsertDeleteFlags::OBJECTS ) )
                 {
@@ -2371,14 +2416,12 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
                     pTransClip->mpDrawLayer->CopyFromClip( mpDrawLayer.get(), i, aSourceRect, ScAddress(0,0,i), aDestRect );
                 }
             }
+        }
+    }
 
-        pTransClip->SetClipParam(GetClipParam());
-        pTransClip->GetClipParam().transpose();
-    }
-    else
-    {
-        SAL_WARN("sc", "TransposeClip: Too big");
-    }
+    pTransClip->SetClipParam(GetClipParam());
+    pTransClip->GetClipParam().transpose(*this, bIncludeFiltered,
+                                         bIsMultiRangeRowFilteredTranspose);
 
     // This happens only when inserting...
 
@@ -2711,9 +2754,9 @@ void ScDocument::CopyBlockFromClip(
     }
 }
 
-void ScDocument::CopyNonFilteredFromClip(
-    sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    const ScMarkData& rMark, SCCOL nDx, SCROW & rClipStartRow )
+SCROW ScDocument::CopyNonFilteredFromClip(sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1,
+                                          SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
+                                          SCCOL nDx, SCROW& rClipStartRow, SCROW nClipEndRow)
 {
     //  call CopyBlockFromClip for ranges of consecutive non-filtered rows
     //  nCol1/nRow1 etc. is in target doc
@@ -2725,15 +2768,16 @@ void ScDocument::CopyNonFilteredFromClip(
         ++nFlagTab;
 
     SCROW nSourceRow = rClipStartRow;
-    SCROW nSourceEnd = 0;
-    if (!rCxt.getClipDoc()->GetClipParam().maRanges.empty())
-        nSourceEnd = rCxt.getClipDoc()->GetClipParam().maRanges.front().aEnd.Row();
+    SCROW nSourceEnd = nClipEndRow;
     SCROW nDestRow = nRow1;
+    SCROW nFilteredRows = 0;
 
     while ( nSourceRow <= nSourceEnd && nDestRow <= nRow2 )
     {
         // skip filtered rows
+        SCROW nSourceRowOriginal = nSourceRow;
         nSourceRow = rCxt.getClipDoc()->FirstNonFilteredRow(nSourceRow, nSourceEnd, nFlagTab);
+        nFilteredRows += nSourceRow - nSourceRowOriginal;
 
         if ( nSourceRow <= nSourceEnd )
         {
@@ -2756,6 +2800,7 @@ void ScDocument::CopyNonFilteredFromClip(
         }
     }
     rClipStartRow = nSourceRow;
+    return nFilteredRows;
 }
 
 namespace {
@@ -2936,8 +2981,8 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                 }
                 else
                 {
-                    CopyNonFilteredFromClip(
-                        aCxt, nC1, nR1, nC2, nR2, rMark, nDx, nClipStartRow);
+                    CopyNonFilteredFromClip(aCxt, nC1, nR1, nC2, nR2, rMark, nDx, nClipStartRow,
+                                            nClipEndRow);
                 }
                 nC1 = nC2 + 1;
                 nC2 = std::min(static_cast<SCCOL>(nC1 + nXw), nCol2);
@@ -3004,9 +3049,10 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         pClipDoc->GetClipParam().mbCutMode = false;
 }
 
-void ScDocument::CopyMultiRangeFromClip(
-    const ScAddress& rDestPos, const ScMarkData& rMark, InsertDeleteFlags nInsFlag, ScDocument* pClipDoc,
-    bool bResetCut, bool bAsLink, bool /*bIncludeFiltered*/, bool bSkipAttrForEmpty)
+void ScDocument::CopyMultiRangeFromClip(const ScAddress& rDestPos, const ScMarkData& rMark,
+                                        InsertDeleteFlags nInsFlag, ScDocument* pClipDoc,
+                                        bool bResetCut, bool bAsLink, bool bIncludeFiltered,
+                                        bool bSkipAttrForEmpty)
 {
     if (bIsClip)
         return;
@@ -3035,7 +3081,7 @@ void ScDocument::CopyMultiRangeFromClip(
     {
         // Do the deletion first.
         SCCOL nColSize = rClipParam.getPasteColSize();
-        SCROW nRowSize = rClipParam.getPasteRowSize();
+        SCROW nRowSize = rClipParam.getPasteRowSize(*pClipDoc, bIncludeFiltered);
 
         DeleteArea(nCol1, nRow1, nCol1+nColSize-1, nRow1+nRowSize-1, rMark, InsertDeleteFlags::CONTENTS, false, &aBroadcastSpans);
     }
@@ -3053,15 +3099,27 @@ void ScDocument::CopyMultiRangeFromClip(
         SCROW nDy = static_cast<SCROW>(nRow1 - rRange.aStart.Row());
         SCCOL nCol2 = nCol1 + rRange.aEnd.Col() - rRange.aStart.Col();
         SCROW nEndRow = nRow1 + nRowCount - 1;
+        SCROW nFilteredRows = 0;
 
-        CopyBlockFromClip(aCxt, nCol1, nRow1, nCol2, nEndRow, rMark, nDx, nDy);
+        if (bIncludeFiltered)
+        {
+            CopyBlockFromClip(aCxt, nCol1, nRow1, nCol2, nEndRow, rMark, nDx, nDy);
+        }
+        else
+        {
+            SCROW nClipStartRow = rRange.aStart.Row();
+            SCROW nClipEndRow = rRange.aEnd.Row();
+            nFilteredRows += CopyNonFilteredFromClip(aCxt, nCol1, nRow1, nCol2, nEndRow, rMark, nDx,
+                                                     nClipStartRow, nClipEndRow);
+            nRowCount -= nFilteredRows;
+        }
 
         switch (rClipParam.meDirection)
         {
             case ScClipParam::Row:
                 // Begin row for the next range being pasted.
                 nRow1 += nRowCount;
-            break;
+                break;
             case ScClipParam::Column:
                 nCol1 += rRange.aEnd.Col() - rRange.aStart.Col() + 1;
             break;

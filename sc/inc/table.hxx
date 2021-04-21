@@ -540,10 +540,15 @@ public:
 
     void        CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             SCCOL nDx, SCROW nDy, const ScTable* pTable);
-    void        TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                ScTable* pTransClip, InsertDeleteFlags nFlags, bool bAsLink );
+    /**
+     * @param nRowDestOffset adjustment of destination row position;
+     * used for transposed multi range selection with row direction, otherwise 0
+     */
+    void TransposeClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCROW nRowDestOffset,
+                       ScTable* pTransClip, InsertDeleteFlags nFlags, bool bAsLink,
+                       bool bIncludeFiltered);
 
-                // mark of this document
+    // mark of this document
     void MixMarked(
         sc::MixDocContext& rCxt, const ScMarkData& rMark, ScPasteFunc nFunction,
         bool bSkipEmpty, const ScTable* pSrcTab );
@@ -1246,8 +1251,22 @@ private:
 
     SCCOL       FindNextVisibleCol(SCCOL nCol, bool bRight) const;
 
-    // Clipboard transpose for notes
-    void TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1, SCROW nRow2);
+    /**
+     * Transpose clipboard patterns
+     * @param nRowDestOffset adjustment of destination row position;
+     * used for transposed multi range row selections, otherwise 0
+     */
+    void TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1,
+                              SCROW nRow2, bool bIncludeFiltered,
+                              const std::vector<SCROW>& rFilteredRows, SCROW nRowDestOffset);
+
+    /**
+     * Transpose clipboard notes
+     * @param nRowDestOffset adjustment of destination row position;
+     * used for transposed multi range row selections, otherwise 0
+     */
+    void TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1, SCROW nRow2,
+                           bool bIncludeFiltered, SCROW nRowDestOffset);
 
     ScColumn* FetchColumn( SCCOL nCol );
     const ScColumn* FetchColumn( SCCOL nCol ) const;

@@ -1605,9 +1605,12 @@ public:
     void CopyBlockFromClip( sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1,
                             SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
                             SCCOL nDx, SCROW nDy );
-    void CopyNonFilteredFromClip( sc::CopyFromClipContext& rCxt, SCCOL nCol1,
-                                  SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                  const ScMarkData& rMark, SCCOL nDx, SCROW & rClipStartRow );
+    /**
+     * @return the number of non-filtered rows.
+     */
+    SCROW CopyNonFilteredFromClip(sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1,
+                                  SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark, SCCOL nDx,
+                                  SCROW& rClipStartRow, SCROW nClipEndRow);
 
     void StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                  SCCOL nCol2, SCROW nRow2,
@@ -1642,7 +1645,8 @@ public:
 
     bool                IsClipboardSource() const;
 
-    SC_DLLPUBLIC void   TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags, bool bAsLink );
+    SC_DLLPUBLIC void TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags, bool bAsLink,
+                                    bool bIncludeFiltered);
 
     ScClipParam&        GetClipParam();
     void                SetClipParam(const ScClipParam& rParam);

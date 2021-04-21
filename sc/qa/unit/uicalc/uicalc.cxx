@@ -464,6 +464,51 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 2, 0)));
 }
 
+// Inspired from testTdf117706, test columns instad of rows
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "A1");
+    insertStringToCell(*pModelObj, "C1", "C1");
+
+    // Use Adding Selection
+    dispatchCommand(mxComponent, ".uno:StatusSelectionModeExp", {});
+    Scheduler::ProcessEventsToIdle();
+
+    goToCell("A1");
+    dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+    lcl_AssertCurrentCursorPosition(2, 0);
+
+    dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    mxComponent->dispose();
+
+    // Open a new document
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("C1"), pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(2, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131442)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
