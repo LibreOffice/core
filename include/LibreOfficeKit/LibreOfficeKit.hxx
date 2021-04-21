@@ -993,6 +993,22 @@ public:
     {
         mpThis->pClass->sendDialogEvent(mpThis, nWindowId, pArguments);
     }
+
+    /**
+     * Starts recording profile zone trace data in the process, if not already recording
+     */
+    void startProfileRecording()
+    {
+        mpThis->pClass->startProfileRecording(mpThis);
+    }
+
+    /**
+     * Stops recording profile zone trace data in the process, if currently recording
+     */
+    void stopProfileRecording()
+    {
+        mpThis->pClass->stopProfileRecording(mpThis);
+    }
 };
 
 /// Factory method to create a lok::Office instance.
