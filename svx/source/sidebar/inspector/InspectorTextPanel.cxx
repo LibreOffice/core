@@ -51,7 +51,7 @@ InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent)
     float fWidth = mpListBoxStyles->get_approximate_digit_width();
     std::vector<int> aWidths;
     aWidths.push_back(fWidth * 29);
-    aWidths.push_back(fWidth * 10);
+    // 2nd column will fill remaining space
     mpListBoxStyles->set_column_fixed_widths(aWidths);
 }
 
