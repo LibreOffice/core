@@ -762,7 +762,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                     OUStringBuffer sDxLengthString;
                     for (sal_Int32 i = 0; i < aLength - aIndex; ++i)
                     {
-                        sDxLengthString.append(OUString::number(pMetaTextArrayAction->GetDXArray()[aIndex + i]));
+                        sDxLengthString.append(pMetaTextArrayAction->GetDXArray()[aIndex + i]);
                         sDxLengthString.append(" ");
                     }
                     rWriter.content(sDxLengthString.makeStringAndClear());

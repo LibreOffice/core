@@ -731,7 +731,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                     if (rNumVector[i])
                     {
                         if (bOnlyArabic)
-                            aStr.append(OUString::number(rNumVector[i]));
+                            aStr.append(rNumVector[i]);
                         else
                             aStr.append(rNFormat.GetNumStr(rNumVector[i], aLocale));
                     }
