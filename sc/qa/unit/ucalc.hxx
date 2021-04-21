@@ -14,6 +14,7 @@
 #include <document.hxx>
 #include <stringutil.hxx>
 #include <memory>
+#include <clipparam.hxx>
 
 struct TestImpl;
 class ScUndoPaste;
@@ -385,6 +386,58 @@ public:
     void testCopyPaste();
     void testCopyPasteAsLink();
     void testCopyPasteTranspose();
+    void testCopyPasteSpecialAsLinkTranspose();
+    void testCopyPasteSpecialAsLinkFilteredTranspose();
+    void testCopyPasteSpecialMultiRangeColAsLinkTranspose();
+    void testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose();
+    void testCopyPasteSpecialMultiRangeRowAsLinkTranspose();
+    void testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose();
+    void testCopyPasteSpecialAllAsLinkTranspose();
+    void testCopyPasteSpecialAllAsLinkFilteredTranspose();
+    void testCopyPasteSpecial();
+    void testCopyPasteSpecialFiltered();
+    void testCopyPasteSpecialIncludeFiltered();
+    void testCopyPasteSpecialFilteredIncludeFiltered();
+    void testCopyPasteSpecialTranspose();
+    void testCopyPasteSpecialTransposeIncludeFiltered();
+    void testCopyPasteSpecialFilteredTranspose();
+    void testCopyPasteSpecialMergedCellsTranspose();
+    void testCopyPasteSpecialMergedCellsFilteredTranspose();
+    void testCopyPasteSpecialMultiRangeCol();
+    void testCopyPasteSpecialMultiRangeColFiltered();
+    void testCopyPasteSpecialMultiRangeColIncludeFiltered();
+    void testCopyPasteSpecialMultiRangeColFilteredIncludeFiltered();
+    void testCopyPasteSpecialMultiRangeColTranspose();
+    void testCopyPasteSpecialMultiRangeColFilteredTranspose();
+    void testCopyPasteSpecialMultiRangeColFilteredIncludeFilteredTranspose();
+    void testCopyPasteSpecialMultiRangeRow();
+    void testCopyPasteSpecialMultiRangeRowFiltered();
+    void testCopyPasteSpecialMultiRangeRowIncludeFiltered();
+    void testCopyPasteSpecialMultiRangeRowFilteredIncludeFiltered();
+    void testCopyPasteSpecialMultiRangeRowTranspose();
+    void testCopyPasteSpecialMultiRangeRowFilteredTranspose();
+    void testCopyPasteSpecialMultiRangeRowFilteredIncludeFilteredTranspose();
+    void testCopyPasteSpecialSkipEmpty();
+    void testCopyPasteSpecialSkipEmptyFiltered();
+    void testCopyPasteSpecialSkipEmptyIncludeFiltered();
+    void testCopyPasteSpecialSkipEmptyFilteredIncludeFiltered();
+    void testCopyPasteSpecialSkipEmptyTranspose();
+    void testCopyPasteSpecialSkipEmptyTransposeIncludeFiltered();
+    void testCopyPasteSpecialSkipEmptyFilteredTranspose();
+    void testCopyPasteSpecialSkipEmptyMultiRangeCol();
+    void testCopyPasteSpecialSkipEmptyMultiRangeColFiltered();
+    void testCopyPasteSpecialSkipEmptyMultiRangeColIncludeFiltered();
+    void testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFiltered();
+    void testCopyPasteSpecialSkipEmptyMultiRangeColTranspose();
+    void testCopyPasteSpecialSkipEmptyMultiRangeColFilteredTranspose();
+    void testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFilteredTranspose();
+    void testCopyPasteSpecialSkipEmptyMultiRangeRow();
+    void testCopyPasteSpecialSkipEmptyMultiRangeRowFiltered();
+    void testCopyPasteSpecialSkipEmptyMultiRangeRowIncludeFiltered();
+    void testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFiltered();
+    void testCopyPasteSpecialSkipEmptyMultiRangeRowTranspose();
+    void testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredTranspose();
+    void testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFilteredTranspose();
     void testCopyPasteMultiRange();
     void testCopyPasteSkipEmpty();
     void testCopyPasteSkipEmpty2();
@@ -753,6 +806,58 @@ public:
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testCopyPasteAsLink);
     CPPUNIT_TEST(testCopyPasteTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialAsLinkTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialAllAsLinkTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColAsLinkTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowAsLinkTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialAsLinkFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialAllAsLinkFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMergedCellsTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMergedCellsFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecial);
+    CPPUNIT_TEST(testCopyPasteSpecialFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialFilteredIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialTransposeIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeCol);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColFilteredIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColFilteredIncludeFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRow);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowFilteredIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowFilteredIncludeFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmpty);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyFilteredIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyTransposeIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeCol);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRow);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFiltered);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredTranspose);
+    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFilteredTranspose);
     CPPUNIT_TEST(testCopyPasteMultiRange);
     CPPUNIT_TEST(testCopyPasteSkipEmpty);
     CPPUNIT_TEST(testCopyPasteSkipEmpty2);
@@ -895,6 +1000,23 @@ public:
 private:
     std::unique_ptr<TestImpl> m_pImpl;
     ScDocument* m_pDoc;
+
+    void executeCopyPasteSpecial(bool bApplyFilter, bool bIncludedFiltered, bool bAsLink,
+                                 bool bTranspose, bool bMultiRangeSelection, bool bSkipEmpty,
+                                 ScClipParam::Direction eDirection, bool bCalcAll,
+                                 InsertDeleteFlags aFlags);
+    void checkCopyPasteSpecial(bool bSkipEmpty);
+    void checkCopyPasteSpecialFiltered(bool bSkipEmpty);
+    void checkCopyPasteSpecialTranspose(bool bSkipEmpty);
+    void checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty);
+    void checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty);
+    void checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty);
+    void checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty);
+    void checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSkipEmpty);
+    void checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty);
+    void checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty);
+    void checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty);
+    void checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSkipEmpty);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

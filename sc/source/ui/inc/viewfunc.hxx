@@ -352,9 +352,10 @@ private:
     void            PasteRTF( SCCOL nCol, SCROW nStartRow,
                                 const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
 
-    bool             PasteMultiRangesFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc, ScPasteFunc nFunction,
-                                   bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
-                                   InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags );
+    bool PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* pClipDoc,
+                                  ScPasteFunc nFunction, bool bSkipEmpty, bool bIncludeFiltered,
+                                  bool bTranspose, bool bAsLink, bool bAllowDialogs,
+                                  InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags);
 
     bool             PasteFromClipToMultiRanges( InsertDeleteFlags nFlags, ScDocument* pClipDoc, ScPasteFunc nFunction,
                                      bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
