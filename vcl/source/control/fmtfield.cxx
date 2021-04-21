@@ -1114,8 +1114,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     if (getPrependCurrSym())
     {
         OUString sSymbol = getCurrencySymbol();
-        sSymbol = comphelper::string::stripStart(sSymbol, ' ');
-        sSymbol = comphelper::string::stripEnd(sSymbol, ' ');
+        sSymbol = comphelper::string::strip(sSymbol, ' ');
 
         OUStringBuffer sTemp("[$");
         sTemp.append(sSymbol);
@@ -1136,8 +1135,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     else
     {
         OUString sTemp = getCurrencySymbol();
-        sTemp = comphelper::string::stripStart(sTemp, ' ');
-        sTemp = comphelper::string::stripEnd(sTemp, ' ');
+        sTemp = comphelper::string::strip(sTemp, ' ');
 
         sNewFormat.append(" [$");
         sNewFormat.append(sTemp);
