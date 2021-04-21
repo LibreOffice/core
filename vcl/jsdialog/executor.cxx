@@ -45,11 +45,27 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
 {
     weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
 
+    OUString sControlType = rData["type"];
+    OUString sAction = rData["cmd"];
+
+    if (sControlType == "responsebutton")
+    {
+        if (pWidget == nullptr)
+        {
+            // welded wrapper not found - use response code instead
+            pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, "__DIALOG__");
+            sControlType = "dialog";
+            sAction = "response";
+        }
+        else
+        {
+            // welded wrapper for button found - use it
+            sControlType = "pushbutton";
+        }
+    }
+
     if (pWidget != nullptr)
     {
-        OUString sControlType = rData["type"];
-        OUString sAction = rData["cmd"];
-
         if (sControlType == "tabcontrol")
         {
             auto pNotebook = dynamic_cast<weld::Notebook*>(pWidget);
