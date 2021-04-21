@@ -2076,6 +2076,8 @@ static void lo_sendDialogEvent(LibreOfficeKit* pThis,
                                unsigned long long int nLOKWindowId,
                                const char* pArguments);
 
+static void lo_setOption(LibreOfficeKit* pThis, const char* pOption, const char* pValue);
+
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
     , maThread(nullptr)
@@ -2101,6 +2103,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->signDocument = lo_signDocument;
         m_pOfficeClass->runLoop = lo_runLoop;
         m_pOfficeClass->sendDialogEvent = lo_sendDialogEvent;
+        m_pOfficeClass->setOption = lo_setOption;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -3840,6 +3843,33 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
 static void lo_sendDialogEvent(LibreOfficeKit* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
 {
     lcl_sendDialogEvent(nWindowId, pArguments);
+}
+
+static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const char* pValue)
+{
+    static char* pCurrentSalLogOverride = nullptr;
+
+    if (strcmp(pOption, "profilezonerecording") == 0)
+    {
+        if (strcmp(pValue, "start") == 0)
+            comphelper::ProfileZone::startRecording();
+        else if (strcmp(pValue, "stop") == 0)
+            comphelper::ProfileZone::stopRecording();
+    }
+    else if (strcmp(pOption, "sallogoverride") == 0)
+    {
+        if (pCurrentSalLogOverride != nullptr)
+            free(pCurrentSalLogOverride);
+        if (pValue == nullptr)
+            pCurrentSalLogOverride = nullptr;
+        else
+            pCurrentSalLogOverride = strdup(pValue);
+
+        if (pCurrentSalLogOverride == nullptr || pCurrentSalLogOverride[0] == '\0')
+            sal_detail_set_log_selector(nullptr);
+        else
+            sal_detail_set_log_selector(pCurrentSalLogOverride);
+    }
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
