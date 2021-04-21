@@ -200,7 +200,7 @@ OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFro
                 default:
                     if( c <= 0x1f || c >= 0x7f )
                     {
-                        sReturn.append("\\x").append(OUString::number( c, 16 ));
+                        sReturn.append("\\x").append( c, 16 );
                     }
                     else
                     {

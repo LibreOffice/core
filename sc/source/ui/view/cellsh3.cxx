@@ -125,10 +125,10 @@ void lcl_lokGetWholeFunctionList()
                 {
                     aPayload.append("{");
                     aPayload.append("\"index\": ");
-                    aPayload.append(OString::number(nCurIndex));
+                    aPayload.append(static_cast<sal_Int64>(nCurIndex));
                     aPayload.append(", ");
                     aPayload.append("\"category\": ");
-                    aPayload.append(OString::number(ppFDesc->getCategory()->getNumber()));
+                    aPayload.append(static_cast<sal_Int64>(ppFDesc->getCategory()->getNumber()));
                     aPayload.append(", ");
                     aPayload.append("\"signature\": \"");
                     aPayload.append(escapeJSON(ppFDesc->getSignature()));
