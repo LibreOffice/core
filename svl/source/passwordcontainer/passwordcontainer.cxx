@@ -68,7 +68,7 @@ static OUString createIndex(const std::vector< OUString >& lines)
             }
             else
             {
-                aResult.append("_").append( OUString::number(  *pLine, 16 ) );
+                aResult.append("_").append( *pLine, 16 );
             }
 
             pLine++;

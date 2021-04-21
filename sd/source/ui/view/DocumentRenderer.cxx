@@ -615,7 +615,7 @@ namespace {
                             bFirst = false;
                         else
                             aBuf.append(',');
-                        aBuf.append(OUString::number(pPage->GetPageNum() / 2 + 1));
+                        aBuf.append(pPage->GetPageNum() / 2 + 1);
                     }
                     aPageRange = aBuf.makeStringAndClear();
                     nPrintRange = 1;
