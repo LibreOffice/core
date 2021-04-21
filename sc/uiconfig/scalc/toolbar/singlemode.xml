@@ -50,7 +50,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Bold"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic"/>
- <toolbar:toolbaritem xlink:href=".uno:UnderlineSimple"/>
+ <toolbar:toolbaritem xlink:href=".uno:Underline"/>
  <toolbar:toolbaritem xlink:href=".uno:Color"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>

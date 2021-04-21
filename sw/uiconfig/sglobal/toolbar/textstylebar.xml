@@ -59,7 +59,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:UnderlineSimple" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Underline" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Strikeout"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:visible="false"/>
