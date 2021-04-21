@@ -3164,7 +3164,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
         {
             sString.append(';');
         }
-        sString.append(sNegStr.makeStringAndClear());
+        sString.append(sNegStr);
     }
     else if (eType == SvNumFormatType::FRACTION)
     {

@@ -2755,7 +2755,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                                 // nothing to do here, we always collect the characters needed for these cases.
                                 break;
                         }
-                        aRepresentation.append( sDate.makeStringAndClear() );
+                        aRepresentation.append( sDate );
                     }
                 }
             }

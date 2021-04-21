@@ -376,7 +376,7 @@ void RtfAttributeOutput::StartParagraphProperties()
     if (!m_bBufferSectionHeaders)
         m_rExport.Strm().WriteOString(aPar.makeStringAndClear());
     else
-        m_aSectionHeaders.append(aPar.makeStringAndClear());
+        m_aSectionHeaders.append(aPar);
 }
 
 void RtfAttributeOutput::EndParagraphProperties(
@@ -652,7 +652,7 @@ void RtfAttributeOutput::ParagraphStyle(sal_uInt16 nStyle)
     if (!m_bBufferSectionHeaders)
         m_rExport.Strm().WriteOString(aStyle.makeStringAndClear());
     else
-        m_aSectionHeaders.append(aStyle.makeStringAndClear());
+        m_aSectionHeaders.append(aStyle);
 }
 
 void RtfAttributeOutput::TableInfoCell(
@@ -958,7 +958,7 @@ void RtfAttributeOutput::TableOrientation(
             break;
     }
 
-    m_aRowDefs.append(aTableAdjust.makeStringAndClear());
+    m_aRowDefs.append(aTableAdjust);
 }
 
 void RtfAttributeOutput::TableSpacing(
@@ -4098,7 +4098,7 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat
     OStringBuffer aBuf;
     if (pBase)
         pBase->writeFormulaRtf(aBuf, m_rExport.GetCurrentEncoding());
-    m_aRunText->append(aBuf.makeStringAndClear());
+    m_aRunText->append(aBuf);
     // Replacement graphic.
     m_aRunText->append("{" LO_STRING_SVTOOLS_RTF_MMATHPICT " ");
     FlyFrameOLEReplacement(pFlyFrameFormat, rOLENode, rSize);

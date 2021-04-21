@@ -1470,7 +1470,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         convertValue( eAttributeName, sTmp, pValuePair->First );
         sTmp.append( ',' );
         convertValue( eAttributeName, sTmp2, pValuePair->Second );
-        sTmp.append( sTmp2.makeStringAndClear() );
+        sTmp.append( sTmp2 );
     }
     else if( auto pSequence = o3tl::tryAccess<Sequence<Any>>(rValue) )
     {

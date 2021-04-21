@@ -1767,7 +1767,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         }
     }
 
-    aFormatCode.append( aNumStr.makeStringAndClear() );
+    aFormatCode.append( aNumStr );
 
     if ( ( rInfo.bDecReplace || rInfo.nMinDecimalDigits < rInfo.nDecimals ) && nPrec )     // add decimal replacement (dashes)
     {
