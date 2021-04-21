@@ -473,7 +473,7 @@ void SmXMLExport::ExportContent_()
     if (nSmSyntaxVersion == 5)
         sStrBuf.append(u"5.0");
     else
-        sStrBuf.append(OUString::number(nSmSyntaxVersion));
+        sStrBuf.append(static_cast<sal_Int32>(nSmSyntaxVersion));
 
     AddAttribute(XML_NAMESPACE_MATH, XML_ENCODING, sStrBuf.makeStringAndClear());
     SvXMLElementExport aAnnotation(*this, XML_NAMESPACE_MATH, XML_ANNOTATION, true, false);
