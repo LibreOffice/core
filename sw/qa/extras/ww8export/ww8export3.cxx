@@ -759,6 +759,15 @@ DECLARE_WW8EXPORT_TEST(testTdf106541_inheritChapterNumbering, "tdf106541_inherit
     CPPUNIT_ASSERT_EQUAL(OUString("a."), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf106541_inheritChapterNumberingB, "tdf106541_inheritChapterNumberingB.doc")
+{
+    // The level and numbering are inherited from Heading 1.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, "Chapter 1, level 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(2, "Chapter 1, level 2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1.1"), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf120394, "tdf120394.doc")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
