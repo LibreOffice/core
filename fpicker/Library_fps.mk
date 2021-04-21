@@ -54,7 +54,6 @@ $(eval $(call gb_Library_add_libs,fps,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,fps,\
-	fpicker/source/win32/asyncrequests \
 	fpicker/source/win32/FilterContainer \
 	fpicker/source/win32/VistaFilePicker \
 	fpicker/source/win32/VistaFilePickerEventHandler \

@@ -34,7 +34,6 @@
 #include <fpicker/strings.hrc>
 #include <fpsofficeResMgr.hxx>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/process.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include "WinImplHelper.hxx"
@@ -112,10 +111,13 @@ public:
     virtual sal::systools::COMReference<IShellItemArray> getResult(bool bInExecute)
     {
         sal::systools::COMReference<IShellItem> iItem;
-        if (bInExecute)
-            m_iDialog->GetCurrentSelection(&iItem);
-        else
-            m_iDialog->GetResult(&iItem);
+        if (m_iDialog.is())
+        {
+            if (bInExecute)
+                m_iDialog->GetCurrentSelection(&iItem);
+            else
+                m_iDialog->GetResult(&iItem);
+        }
         void* iItems = nullptr;
         if (iItem.is())
             SHCreateShellItemArrayFromShellItem(iItem.get(), IID_IShellItemArray, &iItems);
@@ -144,8 +146,15 @@ public:
     {
         sal::systools::COMReference<IShellItemArray> iItems;
         TFileOpenDialog iDialog(getComPtr(), sal::systools::COM_QUERY_THROW);
-        if (FAILED(bInExecute ? iDialog->GetSelectedItems(&iItems) : iDialog->GetResults(&iItems)))
+        bool bGetResult = false;
+        if (!iDialog.is())
+            bGetResult = true;
+        else if (FAILED(bInExecute ? iDialog->GetSelectedItems(&iItems) : iDialog->GetResults(&iItems)))
+            bGetResult = true;
+
+        if (bGetResult)
             iItems = TDialogImplBase::getResult(bInExecute);
+
         return iItems;
     }
 };
@@ -249,7 +258,6 @@ VistaFilePickerImpl::VistaFilePickerImpl()
     , m_hParentWindow(nullptr)
     , m_sDirectory   ()
     , m_sFilename    ()
-    , mnNbCallCoInitializeExForReinit(0)
 {
 }
 
@@ -259,24 +267,11 @@ VistaFilePickerImpl::~VistaFilePickerImpl()
 }
 
 
-void VistaFilePickerImpl::before()
-{
-    // SYNCHRONIZED->
-    osl::MutexGuard aLock(m_aMutex);
-
-    // TRICKY .-)
-    // osl::Thread class initializes COm already in MTA mode because it's needed
-    // by VCL and UNO so. There is no way to change that from outside...
-    // but we need a STA environment...
-    o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, mnNbCallCoInitializeExForReinit);
-}
-
-
-void VistaFilePickerImpl::doRequest(const RequestRef& rRequest)
+void VistaFilePickerImpl::doRequest(Request& rRequest)
 {
     try
     {
-        switch(rRequest->getRequest())
+        switch(rRequest.getRequest())
         {
             case E_ADD_PICKER_LISTENER :
                     impl_sta_addFilePickerListener(rRequest);
@@ -374,73 +369,47 @@ void VistaFilePickerImpl::doRequest(const RequestRef& rRequest)
 }
 
 
-void VistaFilePickerImpl::after()
+void VistaFilePickerImpl::impl_sta_addFilePickerListener(Request& rRequest)
 {
-    o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, mnNbCallCoInitializeExForReinit);
-}
-
-
-void VistaFilePickerImpl::impl_sta_addFilePickerListener(const RequestRef& rRequest)
-{
-    // SYNCHRONIZED outside !
-    const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest->getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
+    const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest.getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
     if ( ! xListener.is())
         return;
 
-    // SYNCHRONIZED->
-    osl::ClearableMutexGuard aLock(m_aMutex);
-    TFileDialogEvents iHandler = m_iEventHandler;
-    aLock.clear();
-    // <- SYNCHRONIZED
-
-    if (iHandler.is())
+    if (m_iEventHandler.is())
     {
-        auto* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(iHandler.get());
+        auto* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(m_iEventHandler.get());
         pHandlerImpl->addFilePickerListener(xListener);
     }
 }
 
 
-void VistaFilePickerImpl::impl_sta_removeFilePickerListener(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_removeFilePickerListener(Request& rRequest)
 {
-    // SYNCHRONIZED outside !
-    const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest->getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
+    const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest.getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
     if ( ! xListener.is())
         return;
 
-    // SYNCHRONIZED->
-    osl::ClearableMutexGuard aLock(m_aMutex);
-    TFileDialogEvents iHandler = m_iEventHandler;
-    aLock.clear();
-    // <- SYNCHRONIZED
-
-    if (iHandler.is())
+    if (m_iEventHandler.is())
     {
-        auto* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(iHandler.get());
+        auto* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(m_iEventHandler.get());
         pHandlerImpl->removeFilePickerListener(xListener);
     }
 }
 
 
-void VistaFilePickerImpl::impl_sta_appendFilter(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_appendFilter(Request& rRequest)
 {
-    const OUString sTitle  = rRequest->getArgumentOrDefault(PROP_FILTER_TITLE, OUString());
-    const OUString sFilter = rRequest->getArgumentOrDefault(PROP_FILTER_VALUE, OUString());
-
-    // SYNCHRONIZED->
-    osl::MutexGuard aLock(m_aMutex);
+    const OUString sTitle  = rRequest.getArgumentOrDefault(PROP_FILTER_TITLE, OUString());
+    const OUString sFilter = rRequest.getArgumentOrDefault(PROP_FILTER_VALUE, OUString());
 
     m_lFilters.addFilter(sTitle, sFilter);
 }
 
 
-void VistaFilePickerImpl::impl_sta_appendFilterGroup(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_appendFilterGroup(Request& rRequest)
 {
     const css::uno::Sequence< css::beans::StringPair > aFilterGroup  =
-        rRequest->getArgumentOrDefault(PROP_FILTER_GROUP, css::uno::Sequence< css::beans::StringPair >());
-
-    // SYNCHRONIZED->
-    osl::MutexGuard aLock(m_aMutex);
+        rRequest.getArgumentOrDefault(PROP_FILTER_GROUP, css::uno::Sequence< css::beans::StringPair >());
 
     if ( m_lFilters.numFilter() > 0 && aFilterGroup.getLength() > 0 )
         m_lFilters.addFilter( STRING_SEPARATOR, "", true );
@@ -455,20 +424,20 @@ void VistaFilePickerImpl::impl_sta_appendFilterGroup(const RequestRef& rRequest)
 }
 
 
-void VistaFilePickerImpl::impl_sta_setCurrentFilter(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_setCurrentFilter(Request& rRequest)
 {
-    const OUString sTitle  = rRequest->getArgumentOrDefault(PROP_FILTER_TITLE, OUString());
-
-    // SYNCHRONIZED->
-    osl::MutexGuard aLock(m_aMutex);
+    const OUString sTitle  = rRequest.getArgumentOrDefault(PROP_FILTER_TITLE, OUString());
 
     m_lFilters.setCurrentFilter(sTitle);
 }
 
 
-void VistaFilePickerImpl::impl_sta_getCurrentFilter(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_getCurrentFilter(Request& rRequest)
 {
     TFileDialog iDialog = impl_getBaseDialogInterface();
+    if (!iDialog.is())
+        return;
+
     UINT        nIndex  = UINT_MAX;
     HRESULT     hResult = iDialog->GetFileTypeIndex(&nIndex);
     if (
@@ -477,43 +446,32 @@ void VistaFilePickerImpl::impl_sta_getCurrentFilter(const RequestRef& rRequest)
        )
         return;
 
-    // SYNCHRONIZED->
-    osl::MutexGuard aLock(m_aMutex);
-
     OUString sTitle;
     ::sal_Int32     nRealIndex = nIndex-1; // COM dialog base on 1 ... filter container on 0 .-)
     if (
         (nRealIndex >= 0                         ) &&
         (m_lFilters.getFilterNameByIndex(nRealIndex, sTitle))
        )
-        rRequest->setArgument(PROP_FILTER_TITLE, sTitle);
+        rRequest.setArgument(PROP_FILTER_TITLE, sTitle);
     else if ( nRealIndex == -1 ) // Dialog not visible yet
     {
         sTitle = m_lFilters.getCurrentFilter();
-        rRequest->setArgument(PROP_FILTER_TITLE, sTitle);
+        rRequest.setArgument(PROP_FILTER_TITLE, sTitle);
     }
-    // <- SYNCHRONIZED
 }
 
 
 template <class TDialogImplClass> void VistaFilePickerImpl::impl_sta_CreateDialog()
 {
-    // SYNCHRONIZED->
-    osl::ClearableMutexGuard aLock(m_aMutex);
     m_pDialog = std::make_shared<TDialogImplClass>();
 }
 
 
-void VistaFilePickerImpl::impl_sta_InitDialog(const RequestRef& rRequest, DWORD nOrFlags)
+void VistaFilePickerImpl::impl_sta_InitDialog(Request& rRequest, DWORD nOrFlags)
 {
-    // SYNCHRONIZED->
-    osl::ClearableMutexGuard aLock(m_aMutex);
-
     TFileDialog iDialog = impl_getBaseDialogInterface();
-    TFileDialogEvents iHandler = m_iEventHandler;
-
-    aLock.clear();
-    // <- SYNCHRONIZED
+    if (!iDialog.is())
+        return;
 
     DWORD nFlags = 0;
     iDialog->GetOptions ( &nFlags );
@@ -525,7 +483,7 @@ void VistaFilePickerImpl::impl_sta_InitDialog(const RequestRef& rRequest, DWORD 
 
     iDialog->SetOptions ( nFlags );
 
-    css::uno::Reference<css::awt::XWindow> xWindow = rRequest->getArgumentOrDefault(PROP_PARENT_WINDOW, css::uno::Reference<css::awt::XWindow>());
+    css::uno::Reference<css::awt::XWindow> xWindow = rRequest.getArgumentOrDefault(PROP_PARENT_WINDOW, css::uno::Reference<css::awt::XWindow>());
     if(xWindow.is())
     {
         css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xWindow,css::uno::UNO_QUERY);
@@ -537,39 +495,38 @@ void VistaFilePickerImpl::impl_sta_InitDialog(const RequestRef& rRequest, DWORD 
             aAny >>= tmp;
             if(tmp != 0)
             {
-                osl::MutexGuard aLock2(m_aMutex);
                 m_hParentWindow = reinterpret_cast<HWND>(tmp);
             }
         }
     }
 
-    ::sal_Int32 nFeatures = rRequest->getArgumentOrDefault(PROP_FEATURES, ::sal_Int32(0));
-    ::sal_Int32 nTemplate = rRequest->getArgumentOrDefault(PROP_TEMPLATE_DESCR, ::sal_Int32(0));
+    ::sal_Int32 nFeatures = rRequest.getArgumentOrDefault(PROP_FEATURES, ::sal_Int32(0));
+    ::sal_Int32 nTemplate = rRequest.getArgumentOrDefault(PROP_TEMPLATE_DESCR, ::sal_Int32(0));
     impl_sta_enableFeatures(nFeatures, nTemplate);
 
-    if (iHandler.is())
+    if (m_iEventHandler.is())
     {
-        auto* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(iHandler.get());
+        auto* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(m_iEventHandler.get());
         pHandlerImpl->startListening(iDialog);
     }
 }
 
 
-void VistaFilePickerImpl::impl_sta_CreateOpenDialog(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_CreateOpenDialog(Request& rRequest)
 {
     impl_sta_CreateDialog<TOpenDialogImpl>();
     impl_sta_InitDialog(rRequest, FOS_FILEMUSTEXIST | FOS_OVERWRITEPROMPT);
 }
 
 
-void VistaFilePickerImpl::impl_sta_CreateSaveDialog(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_CreateSaveDialog(Request& rRequest)
 {
     impl_sta_CreateDialog<TSaveDialogImpl>();
     impl_sta_InitDialog(rRequest, FOS_FILEMUSTEXIST | FOS_OVERWRITEPROMPT);
 }
 
 
-void VistaFilePickerImpl::impl_sta_CreateFolderPicker(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_CreateFolderPicker(Request& rRequest)
 {
     impl_sta_CreateDialog<TFolderPickerDialogImpl>();
     impl_sta_InitDialog(rRequest, FOS_PICKFOLDERS);
@@ -638,9 +595,12 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
             break;
     }
     TFileDialog iDialog = impl_getBaseDialogInterface();
-    iDialog->SetClientGuid ( aGUID );
+    if (iDialog.is())
+        iDialog->SetClientGuid ( aGUID );
 
     TFileDialogCustomize iCustom = impl_getCustomizeInterface();
+    if (!iCustom.is())
+        return;
 
     if ((nFeatures & FEATURE_VERSION) == FEATURE_VERSION)
     {
@@ -739,15 +699,13 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
 }
 
 
-void VistaFilePickerImpl::impl_sta_SetMultiSelectionMode(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_SetMultiSelectionMode(Request& rRequest)
 {
-    const bool bMultiSelection = rRequest->getArgumentOrDefault(PROP_MULTISELECTION_MODE, true);
+    const bool bMultiSelection = rRequest.getArgumentOrDefault(PROP_MULTISELECTION_MODE, true);
 
-    // SYNCHRONIZED->
-    osl::ClearableMutexGuard aLock(m_aMutex);
     TFileDialog iDialog = impl_getBaseDialogInterface();
-    aLock.clear();
-    // <- SYNCHRONIZED
+    if (!iDialog.is())
+        return;
 
     DWORD nFlags = 0;
     iDialog->GetOptions(&nFlags);
@@ -761,37 +719,33 @@ void VistaFilePickerImpl::impl_sta_SetMultiSelectionMode(const RequestRef& rRequ
 }
 
 
-void VistaFilePickerImpl::impl_sta_SetTitle(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_SetTitle(Request& rRequest)
 {
-    OUString sTitle = rRequest->getArgumentOrDefault(PROP_TITLE, OUString());
+    OUString sTitle = rRequest.getArgumentOrDefault(PROP_TITLE, OUString());
 
-    // SYNCHRONIZED->
-    osl::ClearableMutexGuard aLock(m_aMutex);
     TFileDialog iDialog = impl_getBaseDialogInterface();
-    aLock.clear();
-    // <- SYNCHRONIZED
+    if (!iDialog.is())
+        return;
 
     iDialog->SetTitle(o3tl::toW(sTitle.getStr()));
 }
 
 
-void VistaFilePickerImpl::impl_sta_SetFileName(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_SetFileName(Request& rRequest)
 {
-    OUString sFileName = rRequest->getArgumentOrDefault(PROP_FILENAME, OUString());
+    OUString sFileName = rRequest.getArgumentOrDefault(PROP_FILENAME, OUString());
 
-    // SYNCHRONIZED->
-    osl::ClearableMutexGuard aLock(m_aMutex);
     TFileDialog iDialog = impl_getBaseDialogInterface();
-    aLock.clear();
-    // <- SYNCHRONIZED
+    if (!iDialog.is())
+        return;
 
     iDialog->SetFileName(o3tl::toW(sFileName.getStr()));
 }
 
 
-void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_SetDirectory(Request& rRequest)
 {
-    OUString sDirectory = rRequest->getArgumentOrDefault(PROP_DIRECTORY, OUString());
+    OUString sDirectory = rRequest.getArgumentOrDefault(PROP_DIRECTORY, OUString());
 
     if( !m_bInExecute)
     {
@@ -803,11 +757,9 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
         m_sDirectory = sDirectory;
     }
 
-    // SYNCHRONIZED->
-    osl::ClearableMutexGuard aLock(m_aMutex);
     TFileDialog iDialog = impl_getBaseDialogInterface();
-    aLock.clear();
-    // <- SYNCHRONIZED
+    if (!iDialog.is())
+        return;
 
     sal::systools::COMReference<IShellItem> pFolder;
     if ( !createFolderItem(sDirectory, pFolder) )
@@ -819,6 +771,8 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
 OUString VistaFilePickerImpl::GetDirectory()
 {
     TFileDialog iDialog = impl_getBaseDialogInterface();
+    if (!iDialog.is())
+        return OUString();
     sal::systools::COMReference<IShellItem> pFolder;
     HRESULT hResult = iDialog->GetFolder( &pFolder );
     if ( FAILED(hResult) )
@@ -826,17 +780,19 @@ OUString VistaFilePickerImpl::GetDirectory()
     return lcl_getURLFromShellItem(pFolder.get());
 }
 
-void VistaFilePickerImpl::impl_sta_GetDirectory(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_GetDirectory(Request& rRequest)
 {
     const OUString sFolder = m_sDirectory.isEmpty() ? GetDirectory() : m_sDirectory;
     if (!sFolder.isEmpty())
-        rRequest->setArgument(PROP_DIRECTORY, sFolder);
+        rRequest.setArgument(PROP_DIRECTORY, sFolder);
 }
 
-void VistaFilePickerImpl::impl_sta_SetDefaultName(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_SetDefaultName(Request& rRequest)
 {
-    OUString sFilename = rRequest->getArgumentOrDefault(PROP_FILENAME, OUString());
+    OUString sFilename = rRequest.getArgumentOrDefault(PROP_FILENAME, OUString());
     TFileDialog iDialog = impl_getBaseDialogInterface();
+    if (!iDialog.is())
+        return;
 
     TFileDialogCustomize iCustom = impl_getCustomizeInterface();
     if ( ! iCustom.is())
@@ -862,19 +818,17 @@ void VistaFilePickerImpl::impl_sta_SetDefaultName(const RequestRef& rRequest)
 
 void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
 {
-    // SYNCHRONIZED->
-    osl::ClearableMutexGuard aLock(m_aMutex);
-
     std::vector<OUString> vStrings; // to hold the adjusted filter names, pointers to which will be
                                     // stored in lFilters
     ::std::vector< COMDLG_FILTERSPEC > lFilters       = lcl_buildFilterList(m_lFilters, vStrings);
     OUString                    sCurrentFilter = m_lFilters.getCurrentFilter();
     sal_Int32                          nCurrentFilter = m_lFilters.getFilterPos(sCurrentFilter);
     TFileDialog                        iDialog        = impl_getBaseDialogInterface();
+    if (!iDialog.is())
+        return;
     TFileDialogCustomize               iCustomize     = impl_getCustomizeInterface();
-
-    aLock.clear();
-    // <- SYNCHRONIZED
+    if (!iCustomize.is())
+        return;
 
     if (lFilters.empty())
         return;
@@ -901,23 +855,14 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
 }
 
 
-void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_getSelectedFiles(Request& rRequest)
 {
-    // SYNCHRONIZED->
-    osl::ClearableMutexGuard aLock(m_aMutex);
-
-    std::shared_ptr<TDialogImplBase> pDialog(m_pDialog);
-    bool bInExecute = m_bInExecute;
-
-    aLock.clear();
-    // <- SYNCHRONIZED
-
-    if (!pDialog)
+    if (m_pDialog == nullptr)
         return;
 
     // ask dialog for results
     // we must react different if dialog is in execute or not .-(
-    sal::systools::COMReference<IShellItemArray> iItems = pDialog->getResult(bInExecute);
+    sal::systools::COMReference<IShellItemArray> iItems = m_pDialog->getResult(m_bInExecute);
     if (!iItems.is())
         return;
 
@@ -936,18 +881,17 @@ void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
         }
     }
 
-    rRequest->setArgument(PROP_SELECTED_FILES, comphelper::containerToSequence(lFiles));
+    rRequest.setArgument(PROP_SELECTED_FILES, comphelper::containerToSequence(lFiles));
 }
 
 
-void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_ShowDialogModal(Request& rRequest)
 {
     impl_sta_setFiltersOnDialog();
 
-    // SYNCHRONIZED->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
-
     TFileDialog iDialog = impl_getBaseDialogInterface();
+    if (!iDialog.is())
+        return;
 
     // it's important to know if we are showing the dialog.
     // Some dialog interface methods can't be called then or some
@@ -955,9 +899,6 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     m_bInExecute = true;
 
     m_bWasExecuted = true;
-
-    aLock.clear();
-    // <- SYNCHRONIZED
 
     // we set the directory only if we have a save dialog and a filename
     // for the other cases, the file dialog remembers its last location
@@ -976,6 +917,8 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                 aFileURL += m_sFilename;
 
                 TFileDialogCustomize iCustom = impl_getCustomizeInterface();
+                if (!iCustom.is())
+                    return;
 
                 BOOL bValue = FALSE;
                 HRESULT hResult = iCustom->GetCheckButtonState( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &bValue);
@@ -1016,32 +959,28 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     }
 
     HRESULT hResult = E_FAIL;
-    HWND hParentWindow;
-    {
-        osl::MutexGuard aLock2(m_aMutex);
-        // Note that there is a potential race between retrieving and
-        // using parent window (window might get destroyed)
-        hParentWindow = m_hParentWindow ? m_hParentWindow : choose_parent_window();
-    }
     try
     {
         // show dialog and wait for user decision
-        hResult = iDialog->Show(hParentWindow); // parent window needed
+        hResult = iDialog->Show(m_hParentWindow ? m_hParentWindow
+                                                : choose_parent_window()); // parent window needed
     }
     catch(...)
     {}
 
-    // SYNCHRONIZED->
-    aLock.reset();
     m_bInExecute = false;
-    aLock.clear();
-    // <- SYNCHRONIZED
+
+    if (m_iEventHandler.is())
+    {
+        auto* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(m_iEventHandler.get());
+        pHandlerImpl->stopListening();
+    }
 
     if ( FAILED(hResult) )
         return;
 
     impl_sta_getSelectedFiles(rRequest);
-    rRequest->setArgument(PROP_DIALOG_SHOW_RESULT, true);
+    rRequest.setArgument(PROP_DIALOG_SHOW_RESULT, true);
 }
 
 
@@ -1049,9 +988,7 @@ TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
 {
     TFileDialog iDialog;
 
-    // SYNCHRONIZED->
-    osl::MutexGuard aLock(m_aMutex);
-    if (m_pDialog)
+    if (m_pDialog != nullptr)
         iDialog = m_pDialog->getComPtr();
 
     return iDialog;
@@ -1060,10 +997,7 @@ TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
 
 TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
 {
-    // SYNCHRONIZED->
-    osl::MutexGuard aLock(m_aMutex);
-
-    if (m_pDialog)
+    if (m_pDialog != nullptr)
         return { m_pDialog->getComPtr(), sal::systools::COM_QUERY_THROW };
 
     return {};
@@ -1081,11 +1015,11 @@ static void lcl_removeControlItemsWorkaround(const TFileDialogCustomize& iCustom
 }
 
 
-void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_SetControlValue(Request& rRequest)
 {
-    ::sal_Int16   nId     = rRequest->getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID    );
-    ::sal_Int16   nAction = rRequest->getArgumentOrDefault(PROP_CONTROL_ACTION, INVALID_CONTROL_ACTION);
-    css::uno::Any aValue  = rRequest->getValue(PROP_CONTROL_VALUE);
+    ::sal_Int16   nId     = rRequest.getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID    );
+    ::sal_Int16   nAction = rRequest.getArgumentOrDefault(PROP_CONTROL_ACTION, INVALID_CONTROL_ACTION);
+    css::uno::Any aValue  = rRequest.getValue(PROP_CONTROL_VALUE);
 
     // don't check for right values here ...
     // most parameters are optional !
@@ -1156,9 +1090,9 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
 }
 
 
-void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_GetControlValue(Request& rRequest)
 {
-    ::sal_Int16 nId     = rRequest->getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID    );
+    ::sal_Int16 nId     = rRequest.getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID    );
 
     // don't check for right values here ...
     // most parameters are optional !
@@ -1202,14 +1136,14 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
         }
 
     if (aValue.hasValue())
-        rRequest->setArgument(PROP_CONTROL_VALUE, aValue);
+        rRequest.setArgument(PROP_CONTROL_VALUE, aValue);
 }
 
 
-void VistaFilePickerImpl::impl_sta_SetControlLabel(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_SetControlLabel(Request& rRequest)
 {
-    ::sal_Int16     nId    = rRequest->getArgumentOrDefault(PROP_CONTROL_ID   , INVALID_CONTROL_ID  );
-    OUString sLabel = rRequest->getArgumentOrDefault(PROP_CONTROL_LABEL, OUString() );
+    ::sal_Int16     nId    = rRequest.getArgumentOrDefault(PROP_CONTROL_ID   , INVALID_CONTROL_ID  );
+    OUString sLabel = rRequest.getArgumentOrDefault(PROP_CONTROL_LABEL, OUString() );
 
     // don't check for right values here ...
     // most parameters are optional !
@@ -1221,15 +1155,15 @@ void VistaFilePickerImpl::impl_sta_SetControlLabel(const RequestRef& rRequest)
 }
 
 
-void VistaFilePickerImpl::impl_sta_GetControlLabel(const RequestRef& /*rRequest*/)
+void VistaFilePickerImpl::impl_sta_GetControlLabel(Request& /*rRequest*/)
 {
 }
 
 
-void VistaFilePickerImpl::impl_sta_EnableControl(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_EnableControl(Request& rRequest)
 {
-    ::sal_Int16 nId      = rRequest->getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID  );
-    bool bEnabled = rRequest->getArgumentOrDefault(PROP_CONTROL_ENABLE, true);
+    ::sal_Int16 nId      = rRequest.getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID  );
+    bool bEnabled = rRequest.getArgumentOrDefault(PROP_CONTROL_ENABLE, true);
 
     // don't check for right values here ...
     // most parameters are optional !
@@ -1250,6 +1184,9 @@ void VistaFilePickerImpl::impl_sta_EnableControl(const RequestRef& rRequest)
 void VistaFilePickerImpl::impl_SetDefaultExtension( const OUString& currentFilter )
 {
    TFileDialog iDialog = impl_getBaseDialogInterface();
+    if (!iDialog.is())
+        return;
+
    if (currentFilter.getLength())
    {
         OUString FilterExt;
@@ -1269,18 +1206,14 @@ void VistaFilePickerImpl::impl_SetDefaultExtension( const OUString& currentFilte
 
 void VistaFilePickerImpl::onAutoExtensionChanged (bool bChecked)
 {
-    // SYNCHRONIZED->
-    osl::ClearableMutexGuard aLock(m_aMutex);
-
     const OUString sFilter = m_lFilters.getCurrentFilter ();
     OUString sExt    ;
     if (!m_lFilters.getFilterByName(sFilter, sExt))
         return;
 
     TFileDialog iDialog = impl_getBaseDialogInterface();
-
-    aLock.clear();
-    // <- SYNCHRONIZED
+    if (!iDialog.is())
+        return;
 
     PCWSTR pExt = nullptr;
     if ( bChecked )
