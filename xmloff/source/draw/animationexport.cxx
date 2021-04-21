@@ -1207,7 +1207,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                     if( !sTmp.isEmpty() )
                         sTmp.append( ';' );
 
-                    sTmp.append( OUString::number(rPair.Time) ).append( "," ).append( OUString::number(rPair.Progress) );
+                    sTmp.append(rPair.Time).append( "," ).append(rPair.Progress);
                 }
 
                 mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_KEYSPLINES, sTmp.makeStringAndClear() );

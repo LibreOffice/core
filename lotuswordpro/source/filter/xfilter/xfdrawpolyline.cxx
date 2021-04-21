@@ -83,7 +83,7 @@ void XFDrawPolyline::ToXml(IXFStream *pStrm)
     {
         double  x = (point.GetX()-rect.GetX())*1000;
         double  y = (point.GetY()-rect.GetY())*1000;
-        strPoints.append(OUString::number(x)).append(",").append(OUString::number(y)).append(" ");
+        strPoints.append(x).append(",").append(y).append(" ");
     }
     strPoints.stripEnd(' ');
     pAttrList->AddAttribute( "draw:points", strPoints.makeStringAndClear());

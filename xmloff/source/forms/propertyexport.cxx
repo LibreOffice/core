@@ -547,7 +547,7 @@ namespace xmloff
                 aBuffer.append(getINT64(_rValue));
                 break;
             case TypeClass_UNSIGNED_HYPER:
-                aBuffer.append(OUString::number(_rValue.get<sal_uInt64>()));
+                aBuffer.append(static_cast<sal_Int64>(_rValue.get<sal_uInt64>()));
                 break;
             case TypeClass_ENUM:
             {
