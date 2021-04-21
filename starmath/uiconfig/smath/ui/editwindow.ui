@@ -25,11 +25,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="editview-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|textviewWND_LEFT">Enter the text to be displayed at the left side of the header or footer.</property>
-                  </object>
-                </child>
               </object>
             </child>
           </object>
