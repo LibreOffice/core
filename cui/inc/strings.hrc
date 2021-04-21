@@ -67,6 +67,11 @@
 #define RID_SVXSTR_LABEL_NEW_NAME                   NC_("RID_SVXSTR_LABEL_NEW_NAME", "~New name")
 #define RID_SVXSTR_RENAME_MENU                      NC_("RID_SVXSTR_RENAME_MENU", "Rename Menu")
 #define RID_SVXSTR_RENAME_TOOLBAR                   NC_("RID_SVXSTR_RENAME_TOOLBAR", "Rename Toolbar")
+#define RID_SVXSTR_ALL_COMMANDS                     NC_("RID_SVXSTR_ALL_COMMANDS", "All Commands")
+#define RID_SVXSTR_TABBED                           NC_("RID_SVXSTR_TABBED", "Tabbed")
+#define RID_SVXSTR_TABBED_COMPACT                   NC_("RID_SVXSTR_TABBED_COMPACT", "Tabbed Compact")
+#define RID_SVXSTR_GROUPEDBAR                       NC_("RID_SVXSTR_GROUPEDBAR", "Groupedbar")
+#define RID_SVXSTR_GROUPEDBAR_COMPACT               NC_("RID_SVXSTR_GROUPEDBAR_COMPACT", "Groupedbar Compact")
 
 #define RID_SVXSTR_HYPDLG_CLOSEBUT                  NC_("RID_SVXSTR_HYPDLG_CLOSEBUT", "Close")
 #define RID_SVXSTR_HYPDLG_MACROACT1                 NC_("RID_SVXSTR_HYPDLG_MACROACT1", "Mouse over object")

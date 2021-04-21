@@ -70,13 +70,13 @@ static OUString charToString(const char* cString)
 static OUString getFileName(std::u16string_view aFileName)
 {
     if (aFileName == u"notebookbar.ui")
-        return "Tabbed";
+        return CuiResId(RID_SVXSTR_TABBED);
     else if (aFileName == u"notebookbar_compact.ui")
-        return "TabbedCompact";
+        return CuiResId(RID_SVXSTR_TABBED_COMPACT);
     else if (aFileName == u"notebookbar_groupedbar_full.ui")
-        return "Groupedbar";
+        return CuiResId(RID_SVXSTR_GROUPEDBAR);
     else if (aFileName == u"notebookbar_groupedbar_compact.ui")
-        return "GroupedbarCompact";
+        return CuiResId(RID_SVXSTR_GROUPEDBAR_COMPACT);
     else
         return "None";
 }
@@ -154,7 +154,7 @@ void SvxNotebookbarConfigPage::Init()
     m_xSaveInListBox->append(sSaveInListBoxID, sScopeName);
     m_xSaveInListBox->set_active_id(sSaveInListBoxID);
 
-    m_xTopLevelListBox->append("NotebookBar", "All Commands");
+    m_xTopLevelListBox->append("NotebookBar", CuiResId(RID_SVXSTR_ALL_COMMANDS));
     m_xTopLevelListBox->set_active_id("NotebookBar");
     SelectElement();
 }
