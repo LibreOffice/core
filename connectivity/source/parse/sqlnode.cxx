@@ -505,7 +505,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
                 else
                     i++;
             }
-            rString.append(aStringPara.makeStringAndClear());
+            rString.append(aStringPara);
         }
         bHandled = true;
         break;

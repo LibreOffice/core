@@ -5339,7 +5339,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
             ;   // nothing
     }
     if ( !aBuffer.isEmpty() )
-        rBuffer.append(aBuffer.makeStringAndClear());
+        rBuffer.append(aBuffer);
     else
         rBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
 }

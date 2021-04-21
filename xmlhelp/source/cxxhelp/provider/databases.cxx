@@ -1455,9 +1455,10 @@ OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
         switch( m_eState )
         {
             case IteratorState::InitialModule:
-                aRetFile = OUStringBuffer(m_rDatabases.getInstallPathAsURL()).
-                    append(m_rDatabases.processLang(m_aLanguage)).append('/').
-                    append(m_aInitialModule).append(".key").makeStringAndClear();
+                aRetFile = m_rDatabases.getInstallPathAsURL() +
+                        m_rDatabases.processLang(m_aLanguage) +
+                        "/" +
+                        m_aInitialModule + ".key";
 
                 o_rbExtension = false;
 

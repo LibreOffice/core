@@ -1898,7 +1898,7 @@ static OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
             else
                 aPropStr.append( "; " );
 
-            aRet.append( aPropStr.makeStringAndClear() );
+            aRet.append( aPropStr );
         }
     }
     return aRet.makeStringAndClear();
@@ -4811,7 +4811,7 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
             {
                 aPropStr.append( "; " );
             }
-            aRet.append( aPropStr.makeStringAndClear() );
+            aRet.append( aPropStr );
         }
     }
     return aRet.makeStringAndClear();

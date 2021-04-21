@@ -80,7 +80,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< 
         if (!aQueryString.isEmpty() && m_aURLObj.GetProtocol() != INetProtocol::File)
         {
             aUTF8QueryURL.append('?');
-            aUTF8QueryURL.append(aQueryString.makeStringAndClear());
+            aUTF8QueryURL.append(aQueryString);
         }
         OUString aQueryURL = OStringToOUString(aUTF8QueryURL.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
         ucbhelper::Content aContent(aQueryURL, aEnvironment, m_xContext);

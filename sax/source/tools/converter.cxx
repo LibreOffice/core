@@ -659,7 +659,7 @@ void Converter::convertDouble(  OUStringBuffer& rBuffer,
             fNumber *= fFactor;
         ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
         if(bWriteUnits)
-            rBuffer.append(sUnit.makeStringAndClear());
+            rBuffer.append(sUnit);
     }
 }
 

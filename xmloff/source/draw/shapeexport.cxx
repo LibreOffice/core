@@ -1365,7 +1365,7 @@ void XMLShapeExport::ImpExportQRCode(const uno::Reference<drawing::XShape>& xSha
             break;
     }
     mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_ERROR_CORRECTION, temp);
-    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_BORDER, OUStringBuffer(20).append(aQRCode.Border).makeStringAndClear());
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_BORDER, OUString::number(aQRCode.Border));
 
     SvXMLElementExport aQRCodeElement(mrExport, XML_NAMESPACE_LO_EXT, XML_QRCODE, true,
                                             true);
