@@ -83,6 +83,8 @@ public:
         return mFncGetPixel(GetScanline(nY), nX, maColorMask);
     }
 
+    BitmapColor GetPixel(const Point& point) const { return GetPixel(point.Y(), point.X()); }
+
     BitmapColor GetColor(tools::Long nY, tools::Long nX) const
     {
         if (HasPalette())
@@ -91,9 +93,16 @@ public:
             return GetPixel(nY, nX);
     }
 
+    BitmapColor GetColor(const Point& point) const { return GetColor(point.Y(), point.X()); }
+
     sal_uInt8 GetPixelIndex(tools::Long nY, tools::Long nX) const
     {
         return GetPixel(nY, nX).GetIndex();
+    }
+
+    sal_uInt8 GetPixelIndex(const Point& point) const
+    {
+        return GetPixelIndex(point.Y(), point.X());
     }
 
     /** Get the interpolated color at coordinates fY, fX; if outside, return rFallback */
