@@ -583,21 +583,14 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
     const double fDotLength(rBoundDotRect.GetWidth());
     const double fDistance(rBoundDotRect.Left() - rBoundDashRect.Right());
 
-    // Because 0% is not possible as dash length (as of June 2020) 1% is used in the fix.
+    // Because 0% is not possible as dash length (as of June 2020) 4% is used in the fix.
     // For that a larger delta is here allowed to the ideal value than needed for
     // rounding errors.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Dot length", 706, fDotLength, 12);
-
-    // tdf#136957 (dotted lines are  disappearing in presentation mode)
-    // Test value used as 2089 instead of 2117 for tdf#136957 workaround.
-    // If this test fails as Expected: 2089 Actual:2117
-    // plaese test tdf#136957 manually and use 2117 as test value again.
+    // Note: 4% was 1% previously, but that resulted invisible dots during presentation,
+    // see tdf#136957 and its follow-up commit. Manual testing of the fix for lost dots:
+    // open tdf134053_dashdot.pptx, set line width equal or less than 2.3 pt and press F5.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Dot length", 736, fDotLength, 12);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Distance", 2089, fDistance, 12);
-
-    // tdf#136957 (dotted lines are  disappearing in presentation mode)
-    // Test value used as 2854 instead of 2822 for tdf#136957 workaround.
-    // If this test fails as Expected: 2854 Actual:2822
-    // plaese test tdf#136957 manually and use 2822 as test value again.
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Dash length", 2854, fDashLength, 12);
 }
 

@@ -977,7 +977,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                 nDistance -= 96;
                 nDotLen += 96;
                 if (nDashLen > 0)
-                    nDashLen += 99;
+                    nDashLen += 96;
             }
             // LO uses length 0 for 100%, if the attribute is missing in ODF.
             // Other applications might write 100%. Make is unique for the conditions.
