@@ -77,7 +77,6 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParen
     m_xEdAssign->SetReferences(this, m_xFtAssign.get());
     m_xRbAssign->SetReferences(this, m_xEdAssign.get());
     maStrInfoDefault = m_xFtInfo->get_label();
-    m_xFtInfo->set_label(OUString());
 
     if (!pRangeMap)
     {
