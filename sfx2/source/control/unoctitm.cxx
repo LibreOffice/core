@@ -538,7 +538,8 @@ void UsageInfo::save()
         OStringBuffer aUsageInfoMsg("Document Type;Command;Count");
 
         for (auto const& elem : maUsage)
-            aUsageInfoMsg.append("\n").append(elem.first.toUtf8()).append(";").append(OString::number(elem.second));
+            aUsageInfoMsg.append("\n").append(elem.first.toUtf8())
+                .append(";").append(static_cast<sal_Int32>(elem.second));
 
         sal_uInt64 written = 0;
         auto s = aUsageInfoMsg.makeStringAndClear();
@@ -1190,7 +1191,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
 
         if (aEvent.IsEnabled && (aEvent.State >>= aInt32))
         {
-            aBuffer.append(OUString::number(aInt32));
+            aBuffer.append(aInt32);
         }
     }
     else if (aEvent.FeatureURL.Path == "TransformPosX" ||
@@ -1267,7 +1268,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
 
         if (aEvent.IsEnabled && (aEvent.State >>= aPoint))
         {
-            aBuffer.append(OUString::number(aPoint.X)).append(" / ").append(OUString::number(aPoint.Y));
+            aBuffer.append(aPoint.X).append(" / ").append(aPoint.Y);
         }
     }
     else if (aEvent.FeatureURL.Path == "Size")
@@ -1276,7 +1277,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
 
         if (aEvent.IsEnabled && (aEvent.State >>= aSize))
         {
-            aBuffer.append(OUString::number(aSize.Width)).append(" x ").append(OUString::number(aSize.Height));
+            aBuffer.append(aSize.Width).append(" x ").append(aSize.Height);
         }
     }
     else if (aEvent.FeatureURL.Path == "LanguageStatus" ||
@@ -1327,7 +1328,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
             float nScaleValue = 1000.0;
             nValue *= nScaleValue;
             sal_Int32 nConvertedValue = OutputDevice::LogicToLogic(nValue, MapUnit::MapTwip, MapUnit::MapInch);
-            aBuffer.append(OUString::number(nConvertedValue / nScaleValue));
+            aBuffer.append(nConvertedValue / nScaleValue);
         }
     }
     else
