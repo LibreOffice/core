@@ -248,6 +248,10 @@ public:
     {}
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+    operator std::string_view() const { return {getStr(), sal_uInt32(getLength())}; }
+#endif
+
     /** Assign to this a copy of value.
      */
     OStringBuffer& operator = ( const OStringBuffer& value )
