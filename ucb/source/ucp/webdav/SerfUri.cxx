@@ -146,7 +146,7 @@ void SerfUri::calculateURI ()
     if ( bAppendPort )
     {
         aBuf.append( ":" );
-        aBuf.append( OUString::number( mPort ) );
+        aBuf.append( mPort );
     }
     aBuf.append( mPath );
 
@@ -240,7 +240,7 @@ OUString SerfUri::makeConnectionEndPointString(
     if ( ( nPort != DEFAULT_HTTP_PORT ) && ( nPort != DEFAULT_HTTPS_PORT ) )
     {
         aBuf.append( ":" );
-        aBuf.append( OUString::number( sal_Int32( nPort ) ) );
+        aBuf.append( sal_Int32( nPort ) );
     }
     return aBuf.makeStringAndClear();
 }
