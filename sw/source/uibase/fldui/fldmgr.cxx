@@ -67,6 +67,7 @@
 #include <strings.hrc>
 #include <tox.hxx>
 #include <viewopt.hxx>
+#include <txmsrt.hxx>
 #include <unotools/useroptions.hxx>
 
 using namespace com::sun::star::uno;
@@ -1644,6 +1645,38 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
             for( sal_Int32 i = 0, nIdx = 0; i < AUTH_FIELD_END; ++i )
                 xTempEntry->SetAuthorField( static_cast<ToxAuthorityField>(i),
                                 rPar1.getToken( 0, TOX_STYLE_DELIMITER, nIdx ));
+
+            // If just the page number of the URL changed, then update the current field and not
+            // others.
+            bool bEquivalent = true;
+            for (int i = 0; i < AUTH_FIELD_END; ++i)
+            {
+                auto eField = static_cast<ToxAuthorityField>(i);
+                if (eField == AUTH_FIELD_URL)
+                {
+                    if (SwTOXAuthority::GetSourceURL(xTempEntry->GetAuthorField(AUTH_FIELD_URL))
+                        != SwTOXAuthority::GetSourceURL(
+                               pAuthorityField->GetFieldText(AUTH_FIELD_URL)))
+                    {
+                        bEquivalent = false;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (xTempEntry->GetAuthorField(eField) != pAuthorityField->GetFieldText(eField))
+                    {
+                        bEquivalent = false;
+                        break;
+                    }
+                }
+            }
+
+            if (bEquivalent)
+            {
+                break;
+            }
+
             if( pAuthorityType->ChangeEntryContent( xTempEntry.get() ) )
             {
                 pType->UpdateFields();
