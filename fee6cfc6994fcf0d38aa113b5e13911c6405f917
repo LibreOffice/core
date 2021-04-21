@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9abc383_5dc70eb0",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-21T14:59:05Z",
+      "side": 1,
+      "message": "Nitpick: this declaration/definition could go into the !bIsMatrix block as nIterError isn\u0027t used earlier or elsewhere. Merging nonetheless.",
+      "range": {
+        "startLine": 1458,
+        "startChar": 0,
+        "endLine": 1458,
+        "endChar": 3
+      },
+      "revId": "fee6cfc6994fcf0d38aa113b5e13911c6405f917",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
