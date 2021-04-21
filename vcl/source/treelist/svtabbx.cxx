@@ -291,7 +291,7 @@ OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry ) const
     return GetEntryText( pEntry, 0xffff );
 }
 
-OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry, sal_uInt16 nCol )
+OUString SvTabListBox::GetEntryText( const SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
     DBG_ASSERT(pEntry,"GetEntryText:Invalid Entry");
     OUStringBuffer aResult;
