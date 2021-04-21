@@ -823,9 +823,9 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             OString handleArrayStr;
 
             aExtraInfo.append("{\"id\":\"");
-            aExtraInfo.append(OString::number(reinterpret_cast<sal_IntPtr>(pO)));
+            aExtraInfo.append(reinterpret_cast<sal_IntPtr>(pO));
             aExtraInfo.append("\",\"type\":");
-            aExtraInfo.append(OString::number(pO->GetObjIdentifier()));
+            aExtraInfo.append(static_cast<sal_Int32>(pO->GetObjIdentifier()));
 
             // In core, the gridOffset is calculated based on the LogicRect's TopLeft coordinate
             // In online, we have the SnapRect and we calculate it based on its TopLeft coordinate
@@ -842,9 +842,9 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 if (convertMapMode)
                     p = OutputDevice::LogicToLogic(p, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
                 aExtraInfo.append(",\"gridOffsetX\":");
-                aExtraInfo.append(OString::number(p.getX()));
+                aExtraInfo.append(p.getX());
                 aExtraInfo.append(",\"gridOffsetY\":");
-                aExtraInfo.append(OString::number(p.getY()));
+                aExtraInfo.append(p.getY());
             }
 
             if (bWriterGraphic)
@@ -909,7 +909,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                     aDragParameters[0] = 100;
 
                                 aExtraInfo.append(", \"initialOffset\": ");
-                                aExtraInfo.append(OString::number(aDragParameters[0]));
+                                aExtraInfo.append(static_cast<sal_Int32>(aDragParameters[0]));
 
                                 // drag direction constraint
                                 Point aMinPos(aDragParameters[1], aDragParameters[2]);

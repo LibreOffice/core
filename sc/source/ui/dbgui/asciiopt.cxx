@@ -192,7 +192,7 @@ OUString ScAsciiOptions::WriteToString() const
         {
             if (i)
                 aOutStr.append("/");
-            aOutStr.append(OUString::number(aFieldSeps[i]));
+            aOutStr.append(aFieldSeps[i]);
         }
         if ( bMergeFieldSeps )
         {
@@ -202,7 +202,7 @@ OUString ScAsciiOptions::WriteToString() const
     }
 
     // Token 1: Text Quote character.
-    aOutStr.append(",").append(OUString::number(cTextSep)).append(",");
+    aOutStr.append(",").append(cTextSep).append(",");
 
     //Token 2: Text encoding.
     if ( bCharSetSystem )           // force "SYSTEM"
@@ -211,16 +211,16 @@ OUString ScAsciiOptions::WriteToString() const
         aOutStr.append(ScGlobal::GetCharsetString( eCharSet ));
 
     //Token 3: Number of start row.
-    aOutStr.append(",").append(OUString::number(nStartRow)).append(",");
+    aOutStr.append(",").append(nStartRow).append(",");
 
     //Token 4: Column info.
     for (size_t nInfo=0; nInfo<mvColStart.size(); nInfo++)
     {
         if (nInfo)
             aOutStr.append("/");
-        aOutStr.append(OUString::number(mvColStart[nInfo]))
+        aOutStr.append(mvColStart[nInfo])
                .append("/")
-               .append(OUString::number(mvColFormat[nInfo]));
+               .append(static_cast<sal_Int32>(mvColFormat[nInfo]));
     }
 
     // #i112025# the options string is used in macros and linked sheets,
@@ -228,7 +228,7 @@ OUString ScAsciiOptions::WriteToString() const
 
     aOutStr.append(",")
                //Token 5: Language
-               .append(OUString::number(static_cast<sal_uInt16>(eLang))).append(",")
+               .append(static_cast<sal_Int32>(static_cast<sal_uInt16>(eLang))).append(",")
                //Token 6: Import quoted field as text.
                .append(OUString::boolean( bQuotedFieldAsText )).append(",")
                //Token 7: Detect special numbers.
