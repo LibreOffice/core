@@ -201,7 +201,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" ArgumentPosition: ");
-            sMessage.append(OString::number(specialized.ArgumentPosition));
+            sMessage.append(static_cast<sal_Int32>(specialized.ArgumentPosition));
         }
     }
     {
@@ -225,7 +225,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" ErrorCode: ");
-            sMessage.append(OString::number(specialized.ErrorCode));
+            sMessage.append(specialized.ErrorCode);
         }
     }
     {
@@ -233,7 +233,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" ErrorCode: ");
-            sMessage.append(OString::number(specialized.ErrorCode));
+            sMessage.append(specialized.ErrorCode);
             sMessage.append(" ErrorMessageArgument: ");
             sMessage.append(toOString(specialized.ErrorMessageArgument));
         }
@@ -245,9 +245,9 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
             sMessage.append(" DestinationTypeClass: ");
             sMessage.append(toOString(comphelper::anyToString(css::uno::Any(specialized.DestinationTypeClass))));
             sMessage.append(" Reason: ");
-            sMessage.append(OString::number(specialized.Reason));
+            sMessage.append(specialized.Reason);
             sMessage.append(" ArgumentIndex: ");
-            sMessage.append(OString::number(specialized.ArgumentIndex));
+            sMessage.append(specialized.ArgumentIndex);
         }
     }
     {
@@ -259,7 +259,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
             sMessage.append(" language: ");
             sMessage.append(toOString(specialized.language));
             sMessage.append(" lineNum: ");
-            sMessage.append(OString::number(specialized.lineNum));
+            sMessage.append(specialized.lineNum);
         }
     }
     {
@@ -279,7 +279,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
             sMessage.append(" language: ");
             sMessage.append(toOString(specialized.language));
             sMessage.append(" errorType: ");
-            sMessage.append(OString::number(specialized.errorType));
+            sMessage.append(specialized.errorType);
         }
     }
     {
@@ -289,7 +289,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
             sMessage.append(" SQLState: ");
             sMessage.append(toOString(specialized.SQLState));
             sMessage.append(" ErrorCode: ");
-            sMessage.append(OString::number(specialized.ErrorCode));
+            sMessage.append(specialized.ErrorCode);
             sMessage.append("\n    wrapped: ");
             sMessage.append(exceptionToString(specialized.NextException));
         }
@@ -299,7 +299,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" PosixError: ");
-            sMessage.append(OString::number(specialized.PosixError));
+            sMessage.append(specialized.PosixError);
         }
     }
     {
@@ -307,7 +307,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" errcode: ");
-            sMessage.append(OString::number( specialized.ErrCode ));
+            sMessage.append( specialized.ErrCode );
         }
     }
     {
@@ -347,7 +347,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" CheckPos: ");
-            sMessage.append(OString::number( specialized.CheckPos ));
+            sMessage.append( specialized.CheckPos );
         }
     }
     {
@@ -383,9 +383,9 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
             sMessage.append(" SystemId: ");
             sMessage.append(toOString( specialized.SystemId ));
             sMessage.append(" LineNumber: ");
-            sMessage.append(OString::number( specialized.LineNumber ));
+            sMessage.append( specialized.LineNumber );
             sMessage.append(" ColumnNumber: ");
-            sMessage.append(OString::number( specialized.ColumnNumber ));
+            sMessage.append( specialized.ColumnNumber );
         }
     }
     {
@@ -393,7 +393,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" Code: ");
-            sMessage.append(OString::number( static_cast<sal_Int32>(specialized.Code) ));
+            sMessage.append( static_cast<sal_Int32>(specialized.Code) );
         }
     }
 }

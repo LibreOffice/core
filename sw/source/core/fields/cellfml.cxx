@@ -463,7 +463,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTable, OUStringBuffer& rNew
     {
         const SwTableBox *pRelLastBox = lcl_RelToBox( rTable, pBox, *pLastBox );
         if ( pRelLastBox )
-            rNewStr.append(OUString::number(reinterpret_cast<sal_PtrDiff>(pRelLastBox)));
+            rNewStr.append(reinterpret_cast<sal_PtrDiff>(pRelLastBox));
         else
             rNewStr.append("0");
         rNewStr.append(":");
@@ -472,7 +472,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTable, OUStringBuffer& rNew
 
     const SwTableBox *pRelFirstBox = lcl_RelToBox( rTable, pBox, rFirstBox );
     if ( pRelFirstBox )
-        rNewStr.append(OUString::number(reinterpret_cast<sal_PtrDiff>(pRelFirstBox)));
+        rNewStr.append(reinterpret_cast<sal_PtrDiff>(pRelFirstBox));
     else
         rNewStr.append("0");
 
@@ -557,13 +557,13 @@ void SwTableFormula::BoxNmsToPtr( const SwTable& rTable, OUStringBuffer& rNewStr
     if( pLastBox )
     {
         pBox = rTable.GetTableBox( *pLastBox );
-        rNewStr.append(OUString::number(reinterpret_cast<sal_PtrDiff>(pBox)))
+        rNewStr.append(reinterpret_cast<sal_PtrDiff>(pBox))
                 .append(":");
         rFirstBox = rFirstBox.copy( pLastBox->getLength()+1 );
     }
 
     pBox = rTable.GetTableBox( rFirstBox );
-    rNewStr.append(OUString::number(reinterpret_cast<sal_PtrDiff>(pBox)))
+    rNewStr.append(reinterpret_cast<sal_PtrDiff>(pBox))
             .append(rFirstBox[ rFirstBox.getLength()-1 ]); // get label for the box
 }
 
@@ -1222,9 +1222,9 @@ void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUStringBuffer& rN
     }
 
     if( pLastBox )
-        rNewStr.append(OUString::number(reinterpret_cast<sal_PtrDiff>(pEndBox))).append(":");
+        rNewStr.append(reinterpret_cast<sal_PtrDiff>(pEndBox)).append(":");
 
-    rNewStr.append(OUString::number(reinterpret_cast<sal_PtrDiff>(pSttBox)))
+    rNewStr.append(reinterpret_cast<sal_PtrDiff>(pSttBox))
             .append(rFirstBox[ rFirstBox.getLength()-1] );
 }
 
