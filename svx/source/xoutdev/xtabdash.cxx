@@ -115,6 +115,9 @@ BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
             for(double & a : aDotDashArray)
             {
                 a *= fScaleValue;
+                // ~zero length dash is a dot-like dot (with line width size round cap), so show it
+                if (a < 0.1)
+                    a += 1.0;
             }
 
             fFullDotDashLen *= fScaleValue;
