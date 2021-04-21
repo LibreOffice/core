@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/lok.hxx>
+#include <bitmapwriteaccess.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/image.hxx>
@@ -1008,6 +1009,17 @@ OUString Menu::GetItemText( sal_uInt16 nItemId ) const
         return pData->aText;
 
     return OUString();
+}
+
+void Menu::SetItemColor(sal_uInt16 nItemId, const Color& rColor)
+{
+    Bitmap aBmp(Size(50, 50), 24);
+    BitmapWriteAccess aBmpAccess(aBmp);
+    aBmpAccess.SetFillColor(rColor);
+    aBmpAccess.FillRect(tools::Rectangle(0, 0, 49, 49));
+    BitmapEx aBmpEx(aBmp);
+    Image aImage(aBmpEx);
+    SetItemImage(nItemId, aImage);
 }
 
 void Menu::SetItemImage( sal_uInt16 nItemId, const Image& rImage )

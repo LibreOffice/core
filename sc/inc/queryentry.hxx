@@ -23,6 +23,7 @@
 #include "global.hxx"
 #include <svl/sharedstring.hxx>
 #include <unotools/textsearch.hxx>
+#include <tools/color.hxx>
 
 #include <memory>
 #include <vector>
@@ -32,7 +33,15 @@
  */
 struct SC_DLLPUBLIC ScQueryEntry
 {
-    enum QueryType { ByValue, ByString, ByDate, ByEmpty };
+    enum QueryType
+    {
+        ByValue,
+        ByString,
+        ByDate,
+        ByEmpty,
+        ByTextColor,
+        ByBackgroundColor,
+    };
 
     struct Item
     {
@@ -40,6 +49,7 @@ struct SC_DLLPUBLIC ScQueryEntry
         double        mfVal;
         svl::SharedString maString;
         bool              mbMatchEmpty;
+        Color maColor;
 
         Item() : meType(ByValue), mfVal(0.0), mbMatchEmpty(false) {}
 
@@ -70,6 +80,8 @@ struct SC_DLLPUBLIC ScQueryEntry
     bool IsQueryByNonEmpty() const;
     const Item& GetQueryItem() const;
     Item& GetQueryItem();
+    void SetQueryByTextColor(Color color);
+    void SetQueryByBackgroundColor(Color color);
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );
     bool            operator==( const ScQueryEntry& r ) const;
