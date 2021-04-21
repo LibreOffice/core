@@ -145,7 +145,6 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_table \
 	UITest_findReplace \
 	UITest_chapterNumbering \
-	UITest_librelogo \
 ))
 endif
 
