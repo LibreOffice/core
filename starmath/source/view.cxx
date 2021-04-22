@@ -100,6 +100,8 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell& rShell)
     , mxGraphic(new SmGraphicWidget(rShell, *this))
     , mxGraphicWin(new weld::CustomWeld(*m_xBuilder, "mathview", *mxGraphic))
 {
+    InitControlBase(mxGraphic->GetDrawingArea());
+
     nColumnPixW = nLinePixH = GetSettings().GetStyleSettings().GetScrollBarSize();
 
     mxScrolledWindow->connect_hadjustment_changed(LINK(this, SmGraphicWindow, ScrollHdl));
@@ -112,6 +114,7 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell& rShell)
 
 void SmGraphicWindow::dispose()
 {
+    InitControlBase(nullptr);
     mxGraphicWin.reset();
     mxGraphic.reset();
     mxScrolledWindow.reset();
