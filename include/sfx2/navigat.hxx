@@ -26,19 +26,16 @@
 class SFX2_DLLPUBLIC SfxNavigatorWrapper : public SfxChildWindow
 {
 protected:
-    void Initialize(SfxChildWinInfo* pInfo);
+    void Initialize();
 public:
-    SfxNavigatorWrapper( vcl::Window* pParent ,
-                            sal_uInt16 nId ,
-                            SfxBindings* pBindings ,
-                            SfxChildWinInfo* pInfo );
+    SfxNavigatorWrapper(vcl::Window* pParent, sal_uInt16 nId);
 };
 
 class SFX2_DLLPUBLIC SfxNavigator : public SfxDockingWindow
 {
 public:
     SfxNavigator(SfxBindings* pBindings, SfxChildWindow* pChildWin,
-                 vcl::Window* pParent);
+                 vcl::Window* pParent, SfxChildWinInfo* pInfo);
 };
 
 #endif
