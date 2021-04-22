@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee4af59c_fd225444",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-04-22T09:11:48Z",
+      "side": 1,
+      "message": "Nitpicking: Sentence should ideally not start with an A and \"template\" shouldn\u0027t be capitalized as second word. For inspiration: \"There is another template with the name $1 in $2.\"",
+      "range": {
+        "startLine": 73,
+        "startChar": 90,
+        "endLine": 73,
+        "endChar": 93
+      },
+      "revId": "a60a1e449adc15f176e45b97d47a57c8b2ff66ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
