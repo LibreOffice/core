@@ -96,7 +96,8 @@ class SwObjectFormatterTextFrame : public SwObjectFormatter
         SwAnchoredObject* GetFirstObjWithMovedFwdAnchor(
                                     const sal_Int16 _nWrapInfluenceOnPosition,
                                     sal_uInt32& _noToPageNum,
-                                    bool& _boInFollow );
+                                    bool& _boInFollow,
+                                    bool& o_rbPageHasFlysAnchoredBelowThis);
 
         /** method to format the anchor frame for checking of the move forward condition
 
@@ -169,6 +170,9 @@ class SwObjectFormatterTextFrame : public SwObjectFormatter
             output parameter - boolean, indicating that anchor text frame is
             currently on the same page, but it's a follow of in a follow row,
             which will move forward. value only relevant, if method return <true>.
+            @param o_rbPageHasFlysAnchoredBelowThis
+            output parameter - indicates that the page has flys anchored
+            somewhere below the anchor of the passed _rAnchoredObj
 
             @return boolean
             indicating, if 'anchor is moved forward'
@@ -177,7 +181,8 @@ class SwObjectFormatterTextFrame : public SwObjectFormatter
                                             const sal_uInt32 _nFromPageNum,
                                             const bool _bAnchoredAtMasterBeforeFormatAnchor,
                                             sal_uInt32& _noToPageNum,
-                                            bool& _boInFollow );
+                                            bool& _boInFollow,
+                                            bool& o_rbPageHasFlysAnchoredBelowThis);
 };
 
 #endif
