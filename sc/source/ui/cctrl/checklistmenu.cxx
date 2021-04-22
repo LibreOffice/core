@@ -408,6 +408,8 @@ ScCheckListMember::ScCheckListMember()
     : mbVisible(true)
     , mbDate(false)
     , mbLeaf(false)
+    , mbValue(false)
+    , mbDuplicated(false)
     , meDatePartType(YEAR)
 {
 }
@@ -975,12 +977,16 @@ void ScCheckListMenuControl::addDateMember(const OUString& rsName, double nVal, 
     mpChecks->thaw();
 }
 
-void ScCheckListMenuControl::addMember(const OUString& rName, bool bVisible)
+void ScCheckListMenuControl::addMember(const OUString& rName, const double nVal, bool bVisible, bool bValue, bool bDuplicated)
 {
     ScCheckListMember aMember;
     aMember.maName = rName;
+    aMember.maRealName = rName;
+    aMember.mnValue = nVal;
     aMember.mbDate = false;
     aMember.mbLeaf = true;
+    aMember.mbValue = bValue;
+    aMember.mbDuplicated = bDuplicated;
     aMember.mbVisible = bVisible;
     aMember.mxParent.reset();
     maMembers.emplace_back(std::move(aMember));
@@ -1339,7 +1345,10 @@ void ScCheckListMenuControl::getResult(ResultType& rResult)
                 aResultEntry.aName = maMembers[i].maRealName;
             else
                 aResultEntry.aName = maMembers[i].maName;
+            aResultEntry.nValue = maMembers[i].mnValue;
             aResultEntry.bDate = maMembers[i].mbDate;
+            aResultEntry.bValue = maMembers[i].mbValue;
+            aResultEntry.bDuplicated = maMembers[i].mbDuplicated;
             aResult.insert(aResultEntry);
         }
     }

@@ -38,9 +38,12 @@ struct ScCheckListMember
 
     OUString                 maName; // node name
     OUString                 maRealName;
+    double                   mnValue; // number value of filter condition
     bool                     mbVisible;
     bool                     mbDate;
     bool                     mbLeaf;
+    bool                     mbValue; // true if the filter condition is value
+    bool                     mbDuplicated; // true if there were duplicated values in the filter list
     DatePartType             meDatePartType;
     // To store Year and Month if the member if DAY type
     std::vector<OUString>    maDateParts;
@@ -69,8 +72,11 @@ public:
     struct ResultEntry
     {
         OUString aName;
+        double nValue; // number value of filter condition
         bool bValid;
         bool bDate;
+        bool bValue; // true if the filter condition is value
+        bool bDuplicated; // true if there were duplicated values in the filter list
 
         bool operator<(const ResultEntry& rhs) const
         {
@@ -81,7 +87,10 @@ public:
         {
             return aName == rhs.aName &&
                    bValid == rhs.bValid &&
-                   bDate == rhs.bDate;
+                   bDate == rhs.bDate &&
+                   bValue == rhs.bValue &&
+                   nValue == rhs.nValue &&
+                   bDuplicated == rhs.bDuplicated;
         }
     };
     typedef std::set<ResultEntry> ResultType;
@@ -129,7 +138,8 @@ public:
 
     void setMemberSize(size_t n);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
-    void addMember(const OUString& rName, bool bVisible);
+    void addMember(const OUString& rName, const double nVal, bool bVisible,
+                   bool bValue = false, bool bDuplicated = false);
     size_t initMembers(int nMaxMemberWidth = -1);
     void setConfig(const Config& rConfig);
 
