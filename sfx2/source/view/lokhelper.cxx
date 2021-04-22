@@ -489,8 +489,7 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     }
     aPayload.append('}');
 
-    const OString s = aPayload.makeStringAndClear();
-    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, s.getStr());
+    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, aPayload.getStr());
 }
 
 void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, std::string_view rPayload)
@@ -506,7 +505,7 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, std::string
         aBuf.append(", ");
         aBuf.append(static_cast<sal_Int32>(pThisView->getPart()));
     }
-    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aBuf.makeStringAndClear().getStr());
+    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aBuf.getStr());
 }
 
 void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll)

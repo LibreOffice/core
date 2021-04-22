@@ -146,8 +146,7 @@ void lcl_lokGetWholeFunctionList()
     aPayload[nLen - 1] = ']';
     aPayload.append(" }");
 
-    OString s = aPayload.makeStringAndClear();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s.getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, aPayload.getStr());
 }
 
 } // end namespace

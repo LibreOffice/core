@@ -6084,9 +6084,8 @@ public:
             aOutput.append(OUStringToOString(s, RTL_TEXTENCODING_UTF8));
             aOutput.append("\n");
         }
-        OString aChunk = aOutput.makeStringAndClear();
         if (gImpl && gImpl->mpCallback)
-            gImpl->mpCallback(LOK_CALLBACK_PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
+            gImpl->mpCallback(LOK_CALLBACK_PROFILE_FRAME, aOutput.getStr(), gImpl->mpCallbackData);
     }
 };
 

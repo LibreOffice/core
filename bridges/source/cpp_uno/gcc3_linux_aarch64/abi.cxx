@@ -94,17 +94,16 @@ std::type_info * Rtti::getRtti(typelib_TypeDescription const & type) {
     osl::MutexGuard g(mutex_);
     Map::iterator i(map_.find(unoName));
     if (i == map_.end()) {
-        OStringBuffer b;
-        b.append("_ZTIN");
+        OStringBuffer sym;
+        sym.append("_ZTIN");
         for (sal_Int32 j = 0; j != -1;) {
             OString t(
                 OUStringToOString(
                     unoName.getToken(0, '.', j), RTL_TEXTENCODING_ASCII_US));
-            b.append(t.getLength());
-            b.append(t);
+            sym.append(t.getLength());
+            sym.append(t);
         }
-        b.append('E');
-        OString sym(b.makeStringAndClear());
+        sym.append('E');
         std::type_info * rtti = static_cast<std::type_info *>(
             dlsym(app_, sym.getStr()));
         if (rtti == nullptr) {

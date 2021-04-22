@@ -176,9 +176,8 @@ private:
                 }
                 b.append(c);
             }
-            OString b2(b.makeStringAndClear());
             if (!rtl_convertStringToUString(
-                    &argument->pData, b2.getStr(), b2.getLength(),
+                    &argument->pData, b.getStr(), b.getLength(),
                     RTL_TEXTENCODING_UTF8,
                     (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
                      RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |

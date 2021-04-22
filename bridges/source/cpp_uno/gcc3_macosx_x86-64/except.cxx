@@ -184,20 +184,19 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
     if (iFind == m_rttis.end())
     {
         // RTTI symbol
-        OStringBuffer buf( 64 );
-        buf.append( "_ZTIN" );
+        OStringBuffer symName( 64 );
+        symName.append( "_ZTIN" );
         sal_Int32 index = 0;
         do
         {
             OUString token( unoName.getToken( 0, '.', index ) );
-            buf.append( token.getLength() );
+            symName.append( token.getLength() );
             OString c_token( OUStringToOString( token, RTL_TEXTENCODING_ASCII_US ) );
-            buf.append( c_token );
+            symName.append( c_token );
         }
         while (index >= 0);
-        buf.append( 'E' );
+        symName.append( 'E' );
 
-        OString symName( buf.makeStringAndClear() );
         rtti = static_cast<std::type_info *>(dlsym( m_hApp, symName.getStr() ));
 
         if (rtti)

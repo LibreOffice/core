@@ -2324,11 +2324,10 @@ void Bridge::map_to_java(
         }
         case typelib_TypeClass_SEQUENCE:
         {
-            OStringBuffer buf( 64 );
+            OStringBuffer class_name( 64 );
             JNI_info::append_sig(
-                &buf, element_type, false /* use class XInterface */,
+                &class_name, element_type, false /* use class XInterface */,
                 false /* '.' instead of '/' */ );
-            OString class_name( buf.makeStringAndClear() );
             JLocalAutoRef jo_seq_class(
                 jni, find_class( jni, class_name.getStr() ) );
 

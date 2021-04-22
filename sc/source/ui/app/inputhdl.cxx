@@ -1399,8 +1399,8 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
             aPayload[nLen - 2] = ' ';
             aPayload[nLen - 1] = ']';
 
-            OString s = aPayload.makeStringAndClear();
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s.getStr());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, aPayload.getStr());
+            aPayload.setLength(0);
         }
         // not tunnel tooltips in the lok case
         return;

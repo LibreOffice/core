@@ -756,8 +756,7 @@ static PyObject * invoke(SAL_UNUSED_PARAMETER PyObject *, PyObject *args)
                 OStringBuffer buf;
                 buf.append("uno.invoke expects a tuple as 3rd argument, got ");
                 buf.append(PyUnicode_AsUTF8(PyObject_Str(item2)));
-                PyErr_SetString(
-                    PyExc_RuntimeError, buf.makeStringAndClear().getStr());
+                PyErr_SetString(PyExc_RuntimeError, buf.getStr());
             }
         }
         else
@@ -765,8 +764,7 @@ static PyObject * invoke(SAL_UNUSED_PARAMETER PyObject *, PyObject *args)
             OStringBuffer buf;
             buf.append("uno.invoke expected a string as 2nd argument, got ");
             buf.append(PyUnicode_AsUTF8(PyObject_Str(item1)));
-            PyErr_SetString(
-                PyExc_RuntimeError, buf.makeStringAndClear().getStr());
+            PyErr_SetString(PyExc_RuntimeError, buf.getStr());
         }
     }
     else
@@ -818,8 +816,7 @@ static PyObject *setCurrentContext(
                 buf.append( "uno.setCurrentContext expects an XComponentContext implementation, got " );
                 buf.append(
                     PyUnicode_AsUTF8(PyObject_Str(PyTuple_GetItem(args, 0))));
-                PyErr_SetString(
-                    PyExc_RuntimeError, buf.makeStringAndClear().getStr() );
+                PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
             }
         }
         else

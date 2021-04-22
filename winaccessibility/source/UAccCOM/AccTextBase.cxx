@@ -186,7 +186,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long
     // #CHECK#
     if(*textAttributes)
         SysFreeString(*textAttributes);
-    *textAttributes = SysAllocString(o3tl::toW(strAttrs.makeStringAndClear().getStr()));
+    *textAttributes = SysAllocString(o3tl::toW(strAttrs..getStr()));
 
     if( offset < GetXInterface()->getCharacterCount() )
     {
