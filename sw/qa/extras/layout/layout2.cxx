@@ -2801,6 +2801,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137185)
     // Before the patch it failed, because the text appeared 2 times on each other.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138782)
+{
+    CPPUNIT_ASSERT(createDoc("tdf138782.docx"));
+    auto pXml = parseLayoutDump();
+    CPPUNIT_ASSERT(pXml);
+
+    // Without the fix it failled because the 3rd shape was outside the page:
+    // Expected less than: 16043
+    // Actual  : 17185
+
+    CPPUNIT_ASSERT_LESS(
+        getXPath(pXml, "/root/page/infos/bounds", "right").toInt32(),
+        getXPath(pXml, "/root/page/body/txt[8]/anchored/SwAnchoredDrawObject/bounds", "right")
+            .toInt32());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf135035)
 {
     createDoc("tdf135035.docx");

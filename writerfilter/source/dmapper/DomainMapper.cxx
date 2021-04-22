@@ -249,6 +249,12 @@ DomainMapper::~DomainMapper()
             aGrabBag.update(aProperties);
             xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
         }
+
+        // Only use this compatibility feature if the file version is older than 14!
+        // See tdf138782 tdf106339 tdf109218 tdf130427 tdf137850 tdf137270 tdf139105 tdf140823
+        m_pImpl->SetDocumentSettingsProperty(
+            "AddFrameOffsets",
+            uno::Any(14 >= m_pImpl->GetSettingsTable()->GetWordCompatibilityMode()));
     }
     catch( const uno::Exception& ) {}
 
