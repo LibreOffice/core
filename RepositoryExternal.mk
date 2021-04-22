@@ -1301,6 +1301,7 @@ $(call gb_LinkTarget_use_external,$(1),freetype_headers)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,cairo) \
 	-I$(call gb_UnpackedTarball_get_dir,cairo)/src \
+	-I$(call gb_UnpackedTarball_get_dir,pixman)/pixman \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
