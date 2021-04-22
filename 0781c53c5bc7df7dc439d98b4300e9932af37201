@@ -16,6 +16,24 @@
       "revId": "0781c53c5bc7df7dc439d98b4300e9932af37201",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "543c998b_efe2ca36",
+        "filename": "compilerplugins/clang/badstatics.cxx",
+        "patchSetId": 41
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-04-22T06:48:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a4da3bf_03450c76",
+      "revId": "0781c53c5bc7df7dc439d98b4300e9932af37201",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
