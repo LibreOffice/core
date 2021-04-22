@@ -12,6 +12,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <document.hxx>
