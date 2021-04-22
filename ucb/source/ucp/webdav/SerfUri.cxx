@@ -90,9 +90,9 @@ SerfUri::SerfUri( const OUString & inUri )
 
 void SerfUri::init( const apr_uri_t * pUri )
 {
-    mScheme   = OStringToOUString( pUri->scheme, RTL_TEXTENCODING_UTF8 );
-    mUserInfo = OStringToOUString( pUri->user, RTL_TEXTENCODING_UTF8 );
-    mHostName = OStringToOUString( pUri->hostname, RTL_TEXTENCODING_UTF8 );
+    mScheme   = pUri->scheme ? OStringToOUString( pUri->scheme, RTL_TEXTENCODING_UTF8 ) : "";
+    mUserInfo = pUri->user ? OStringToOUString( pUri->user, RTL_TEXTENCODING_UTF8 ) : "";
+    mHostName = pUri->hostname ? OStringToOUString( pUri->hostname, RTL_TEXTENCODING_UTF8 ) : "";
     mPort     = pUri->port;
     mPath     = OStringToOUString( pUri->path, RTL_TEXTENCODING_UTF8 );
 
