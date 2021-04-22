@@ -688,9 +688,9 @@ void SdOOXMLExportTest2::testTdf80224()
     uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
     uno::Reference< beans::XPropertySet > xPropSet( xParagraph->getStart(), uno::UNO_QUERY_THROW );
 
-    sal_Int32 nCharColor;
+    Color nCharColor;
     xPropSet->getPropertyValue("CharColor") >>= nCharColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x6562ac), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x6562ac), nCharColor);
     xDocShRef->DoClose();
 }
 
@@ -1862,9 +1862,9 @@ void SdOOXMLExportTest2::testTdf107608()
     xPropSet->getPropertyValue("FillBackground") >>= bBackgroundFill;
     CPPUNIT_ASSERT(bBackgroundFill);
 
-    sal_Int32 nBackgroundColor;
+    Color nBackgroundColor;
     xPropSet->getPropertyValue("FillColor") >>= nBackgroundColor;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x92D050), nBackgroundColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), nBackgroundColor);
 
     xDocShRef->DoClose();
 }
@@ -1879,9 +1879,9 @@ void SdOOXMLExportTest2::testTdf111786()
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
     uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_SET_THROW );
 
-    sal_uInt32 nLineColor;
+    Color nLineColor;
     xPropSet->getPropertyValue("LineColor") >>= nLineColor;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0x3465A4), nLineColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x3465A4), nLineColor);
 
     sal_Int16 nTransparency;
     xPropSet->getPropertyValue("LineTransparence") >>= nTransparency;
@@ -2079,9 +2079,9 @@ void SdOOXMLExportTest2::testTdf130058()
     CPPUNIT_ASSERT_EQUAL(static_cast<double>(0), fShadowDist);
     xShape->getPropertyValue("ShadowYDistance") >>= fShadowDist;
     CPPUNIT_ASSERT_EQUAL(static_cast<double>(141), fShadowDist);
-    sal_Int32 nColor = 0;
+    Color nColor;
     xShape->getPropertyValue("ShadowColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x000000), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
     sal_Int32 nTransparency = 0;
     xShape->getPropertyValue("ShadowTransparence") >>= nTransparency;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(57), nTransparency);
@@ -2113,9 +2113,9 @@ void SdOOXMLExportTest2::testTdf111789()
         CPPUNIT_ASSERT_EQUAL(static_cast<double>(273), fShadowDist);
         xShape->getPropertyValue("ShadowYDistance") >>= fShadowDist;
         CPPUNIT_ASSERT_EQUAL(static_cast<double>(273), fShadowDist);
-        sal_Int32 nColor = 0;
+        Color nColor;
         xShape->getPropertyValue("ShadowColor") >>= nColor;
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xFF0000), nColor);
+        CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), nColor);
         sal_Int32 nTransparency = 0;
         xShape->getPropertyValue("ShadowTransparence") >>= nTransparency;
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7), nTransparency);
@@ -2566,9 +2566,9 @@ void SdOOXMLExportTest2::testTdf125346()
     xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
 
-    sal_Int32 nFillColor;
+    Color nFillColor;
     xPropSet->getPropertyValue("FillColor") >>= nFillColor;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90C226), nFillColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x90C226), nFillColor);
 
     xDocShRef->DoClose();
 }
@@ -2589,9 +2589,9 @@ void SdOOXMLExportTest2::testTdf125346_2()
         xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
 
-        sal_Int32 nFillColor;
+        Color nFillColor;
         xPropSet->getPropertyValue("FillColor") >>= nFillColor;
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90C226), nFillColor);
+        CPPUNIT_ASSERT_EQUAL(Color(0x90C226), nFillColor);
     }
 
     {
@@ -2602,9 +2602,9 @@ void SdOOXMLExportTest2::testTdf125346_2()
         xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
 
-        sal_Int32 nFillColor;
+        Color nFillColor;
         xPropSet->getPropertyValue("FillColor") >>= nFillColor;
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x052F61), nFillColor);
+        CPPUNIT_ASSERT_EQUAL(Color(0x052F61), nFillColor);
     }
 
     {
@@ -2615,9 +2615,9 @@ void SdOOXMLExportTest2::testTdf125346_2()
         xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
 
-        sal_Int32 nFillColor;
+        Color nFillColor;
         xPropSet->getPropertyValue("FillColor") >>= nFillColor;
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90C226), nFillColor);
+        CPPUNIT_ASSERT_EQUAL(Color(0x90C226), nFillColor);
     }
 
     xDocShRef->DoClose();
