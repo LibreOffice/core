@@ -252,7 +252,6 @@ public:
     void grab_focus()
     {
         m_xTreeView->grab_focus();
-        FocusInHdl(*m_xTreeView);
     }
 
     void set_selection_mode(SelectionMode eMode)
@@ -338,7 +337,6 @@ public:
     void grab_focus()
     {
         m_xTreeView->grab_focus();
-        FocusInHdl(*m_xTreeView);
     }
 
     void set_selection_mode(SelectionMode eMode)
