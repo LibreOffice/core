@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-
-
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.WebDAVContentProvider">
+  <implementation name="com.sun.star.comp.WebDAVContentProvider"
+    constructor="ucb_webdav_ContentProvider_get_implementation">
     <service name="com.sun.star.ucb.WebDAVContentProvider"/>
   </implementation>
 </component>
