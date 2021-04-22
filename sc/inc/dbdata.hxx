@@ -124,7 +124,8 @@ public:
     void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
     SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
     void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-    void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                       SCCOL nUpdateCol = -1);
     void        SetByRow(bool bByR)             { bByRow = bByR; }
     bool        HasHeader() const               { return bHasHeader; }
     void        SetHeader(bool bHasH)           { bHasHeader = bHasH; }

@@ -341,7 +341,8 @@ void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     }
 }
 
-void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                      SCCOL nUpdateCol)
 {
     tools::Long nDifX = static_cast<tools::Long>(nCol1) - static_cast<tools::Long>(nStartCol);
     tools::Long nDifY = static_cast<tools::Long>(nRow1) - static_cast<tools::Long>(nStartRow);
@@ -364,6 +365,20 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     {
         ScQueryEntry& rEntry = mpQueryParam->GetEntry(i);
         rEntry.nField += nDifX;
+
+        // tdf#48025 update the column index of the filter criteria,
+        // when the deleted columns are inside the data range
+        if (nUpdateCol != -1)
+        {
+            nUpdateCol += nDifX;
+            tools::Long nDifX2
+                = static_cast<tools::Long>(nCol2) - static_cast<tools::Long>(nEndCol);
+            if (rEntry.nField >= nUpdateCol)
+                rEntry.nField += nDifX2;
+            else if (rEntry.nField >= nUpdateCol + nDifX2)
+                rEntry.Clear();
+        }
+
         if (rEntry.nField > nCol2)
         {
             rEntry.nField = 0;
@@ -595,7 +610,12 @@ void ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefM
         AdjustTableColumnNames( eUpdateRefMode, nDx, nCol1, nOldCol1, nOldCol2, theCol1, theCol2);
         ::std::vector<OUString> aNames( maTableColumnNames);
         bool bTableColumnNamesDirty = mbTableColumnNamesDirty;
-        MoveTo( theTab1, theCol1, theRow1, theCol2, theRow2 );
+        // tdf#48025 update the column index of the filter criteria,
+        // when the deleted columns are inside the data range
+        if (HasAutoFilter() && theCol1 - nOldCol1 > theCol2 - nOldCol2)
+            MoveTo(theTab1, theCol1, theRow1, theCol2, theRow2, nCol1);
+        else
+            MoveTo( theTab1, theCol1, theRow1, theCol2, theRow2 );
         // Do not use SetTableColumnNames() because that resets mbTableColumnNamesDirty.
         maTableColumnNames = aNames;
         mbTableColumnNamesDirty = bTableColumnNamesDirty;
