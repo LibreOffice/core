@@ -2104,6 +2104,7 @@ void ScTextWnd::StyleUpdated()
 void ScTextWnd::TextGrabFocus()
 {
     GrabFocus();
+    GetFocus();
 }
 
 // Position window
