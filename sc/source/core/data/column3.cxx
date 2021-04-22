@@ -2495,8 +2495,10 @@ class FilterEntriesHandler
             sal_uInt32 nIndex = pFormatter->GetFormatIndex(NF_DATETIME_ISO_YYYYMMDD_HHMMSS);
             pFormatter->GetInputLineString(fVal, nIndex, aStr);
         }
-        // maybe extend ScTypedStrData enum is also an option here
-        mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value,bDate));
+        /* use string compare later for formatted and filtered cell values
+        to avoid duplicates in the filter lists with setting the mbIsFormatted */
+        bool bFormFiltVal = mrColumn.HasFiltering() && nFormat;
+        mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value, bDate, bFormFiltVal));
         mrFilterEntries.addTextColor(textColor);
         mrFilterEntries.addBackgroundColor(backgroundColor);
     }
