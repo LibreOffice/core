@@ -26,6 +26,7 @@
 
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <memory>
 #include <string_view>
@@ -415,6 +416,11 @@ void Test::TestCreatePen()
 
 void Test::TestPdfInEmf()
 {
+    if (!vcl::pdf::PDFiumLibrary::get())
+    {
+        return;
+    }
+
     // Load a PPTX file, which has a shape, with a bitmap fill, which is an EMF, containing a PDF.
     OUString aURL = m_directories.getURLFromSrc(u"emfio/qa/cppunit/emf/data/pdf-in-emf.pptx");
     getComponent() = loadFromDesktop(aURL);
