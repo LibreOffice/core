@@ -314,7 +314,8 @@ class ScNavigatorWin : public SfxNavigator
 private:
     std::unique_ptr<ScNavigatorDlg> m_xNavigator;
 public:
-    ScNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* pMgr, vcl::Window* pParent);
+    ScNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* pMgr,
+                   vcl::Window* pParent, SfxChildWinInfo* pInfo);
     virtual void StateChanged(StateChangedType nStateChange) override;
     virtual void dispose() override
     {
@@ -327,8 +328,9 @@ public:
     }
 };
 
-ScNavigatorWin::ScNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* _pParent)
-    : SfxNavigator(_pBindings, _pMgr, _pParent)
+ScNavigatorWin::ScNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
+                               vcl::Window* _pParent, SfxChildWinInfo* pInfo)
+    : SfxNavigator(_pBindings, _pMgr, _pParent, pInfo)
 {
     m_xNavigator = std::make_unique<ScNavigatorDlg>(_pBindings, m_xContainer.get(), this);
     SetMinOutputSizePixel(GetOptimalSize());
@@ -953,10 +955,10 @@ SFX_IMPL_DOCKINGWINDOW(ScNavigatorWrapper, SID_NAVIGATOR);
 
 ScNavigatorWrapper::ScNavigatorWrapper(vcl::Window *_pParent, sal_uInt16 nId,
                                        SfxBindings* pBindings, SfxChildWinInfo* pInfo)
-    : SfxNavigatorWrapper(_pParent, nId, pBindings, pInfo)
+    : SfxNavigatorWrapper(_pParent, nId)
 {
-    SetWindow(VclPtr<ScNavigatorWin>::Create(pBindings, this, _pParent));
-    Initialize(pInfo);
+    SetWindow(VclPtr<ScNavigatorWin>::Create(pBindings, this, _pParent, pInfo));
+    Initialize();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

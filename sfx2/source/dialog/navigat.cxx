@@ -28,32 +28,29 @@
 #include <helpids.h>
 #include <tools/debug.hxx>
 
-SfxNavigatorWrapper::SfxNavigatorWrapper( vcl::Window* pParentWnd ,
-                                                sal_uInt16 nId ,
-                                                SfxBindings* /*pBindings*/ ,
-                                                SfxChildWinInfo* /*pInfo*/ )
-                    : SfxChildWindow( pParentWnd , nId )
+SfxNavigatorWrapper::SfxNavigatorWrapper(vcl::Window* pParentWnd, sal_uInt16 nId)
+    : SfxChildWindow(pParentWnd , nId)
 {
 }
 
-void SfxNavigatorWrapper::Initialize(SfxChildWinInfo* pInfo)
+void SfxNavigatorWrapper::Initialize()
 {
-    GetWindow()->SetHelpId ( HID_NAVIGATOR_WINDOW );
-    GetWindow()->SetOutputSizePixel( Size( 270, 240 ) );
-
-    static_cast<SfxDockingWindow*>( GetWindow() )->Initialize( pInfo );
-    SetHideNotDelete( true );
+    SetHideNotDelete(true);
 }
 
-SfxNavigator::SfxNavigator( SfxBindings* pBind ,
-                            SfxChildWindow* pChildWin ,
-                            vcl::Window* pParent )
+SfxNavigator::SfxNavigator(SfxBindings* pBind ,
+                           SfxChildWindow* pChildWin ,
+                           vcl::Window* pParent,
+                           SfxChildWinInfo* pInfo)
                         : SfxDockingWindow(pBind ,
                                            pChildWin ,
                                            pParent ,
                                            "Navigator", "sfx/ui/navigator.ui")
 {
     SetText(SfxResId(STR_SID_NAVIGATOR));
+    SetHelpId(HID_NAVIGATOR_WINDOW);
+    SetOutputSizePixel(Size(270, 240));
+    Initialize(pInfo);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
