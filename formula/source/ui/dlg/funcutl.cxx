@@ -357,14 +357,6 @@ bool RefEdit::KeyInput(const KeyEvent& rKEvt)
     return false;
 }
 
-void RefEdit::GrabFocus()
-{
-    bool bHadFocus = xEntry->has_focus();
-    xEntry->grab_focus();
-    if (!bHadFocus && xEntry->has_focus())
-        GetFocus();
-}
-
 void RefEdit::GetFocus()
 {
     maGetFocusHdl.Call(*this);
