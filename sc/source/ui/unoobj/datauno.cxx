@@ -1137,7 +1137,8 @@ void fillQueryParam(
                     {
                         OUString aStr;
                         pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, nIndex, aStr);
-                        aItem.maString = rPool.intern(aStr);
+                        if (!aStr.equals("0"))
+                            aItem.maString = rPool.intern(aStr);
                     }
                 }
                 else if (aItem.meType == ScQueryEntry::ByValue)
