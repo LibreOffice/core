@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe1ac4c6_8e6e8d2b",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-22T17:29:35Z",
+      "side": 1,
+      "message": "But this seems to forget to fulfil the end goal: making it constexpr ;-)",
+      "revId": "bca539e889d40e06cb3275442622cb075b2484a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
