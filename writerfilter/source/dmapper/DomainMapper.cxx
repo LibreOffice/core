@@ -249,6 +249,11 @@ DomainMapper::~DomainMapper()
             aGrabBag.update(aProperties);
             xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
         }
+
+        // tdf#138782: for docs created in MS Word 2010 and older (compatibilityMode <= 14)
+        m_pImpl->SetDocumentSettingsProperty(
+            "AddFrameOffsets",
+            uno::Any(14 >= m_pImpl->GetSettingsTable()->GetWordCompatibilityMode()));
     }
     catch( const uno::Exception& ) {}
 
