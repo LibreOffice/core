@@ -1135,9 +1135,14 @@ void fillQueryParam(
                     bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(rVal.StringValue, nIndex, aItem.mfVal);
                     if (bNumber)
                     {
-                        OUString aStr;
-                        pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, nIndex, aStr);
-                        aItem.maString = rPool.intern(aStr);
+                        if (aItem.mfVal != 0.0)
+                        {
+                            OUString aStr;
+                            pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, nIndex, aStr);
+                            aItem.maString = rPool.intern(aStr);
+                        }
+                        else
+                            aItem.meType = ScQueryEntry::ByValue;
                     }
                 }
                 else if (aItem.meType == ScQueryEntry::ByValue)
