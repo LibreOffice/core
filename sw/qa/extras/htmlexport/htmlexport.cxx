@@ -382,7 +382,7 @@ DECLARE_HTMLEXPORT_TEST(testExportOfImages, "textAndImage.docx")
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
-    assertXPath(pDoc, "/html/body/p/img", 1);
+    assertXPath(pDoc, "/html/body/p/span/img", 1);
 }
 
 DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImagesEnabled, "textAndImage.docx")
@@ -391,7 +391,7 @@ DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImagesEnabled, "textAndImage.d
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
-    assertXPath(pDoc, "/html/body/p/img", 0);
+    assertXPath(pDoc, "/html/body/p/span/img", 0);
 }
 
 DECLARE_HTMLEXPORT_TEST(testSkipImagesEmbedded, "skipimage-embedded.doc")
@@ -568,7 +568,7 @@ DECLARE_HTMLEXPORT_TEST(testNormalImageExport, "textAndImage.docx")
     assertXPath(pDoc, "/html/body", 1);
 
     // the HTML export normally does not embed the images
-    OUString imgSrc = getXPath(pDoc, "/html/body/p/img", "src");
+    OUString imgSrc = getXPath(pDoc, "/html/body/p/span/img", "src");
     CPPUNIT_ASSERT(imgSrc.endsWith(".png"));
 }
 
@@ -583,7 +583,7 @@ DECLARE_HTMLEXPORT_TEST(testEmbedImagesEnabled, "textAndImage.docx")
     // name triggers setting of the "EmbedImages" filter option, meaning the
     // image will not be a separate PNG, but an embedded base64 encoded
     // version of that
-    OUString imgSrc = getXPath(pDoc, "/html/body/p/img", "src");
+    OUString imgSrc = getXPath(pDoc, "/html/body/p/span/img", "src");
     CPPUNIT_ASSERT(imgSrc.startsWith("data:image/png;base64,"));
 }
 

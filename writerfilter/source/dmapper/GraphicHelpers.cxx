@@ -112,7 +112,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                         break;
 
                     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_column:
-                        m_nRelation = text::RelOrientation::FRAME;
+                        m_nRelation = text::RelOrientation::FRAME_LEFT;
                         break;
 
                     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_character:
