@@ -115,9 +115,6 @@ private:
         static_assert(offsetof(OUStringLiteral, str.buffer) == offsetof(OUStringLiteral, more.buffer));
     }
 
-#if defined(_WIN32)
-#pragma pack(push, 4)
-#endif
     union {
         rtl_uString str;
         struct {
@@ -131,9 +128,6 @@ private:
                 {} //TODO: drop initialization for C++20 (P1331R2)
             };
     };
-#if defined(_WIN32)
-#pragma pack(pop)
-#endif
 };
 
 #if defined RTL_STRING_UNITTEST
