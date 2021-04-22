@@ -512,7 +512,7 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
 
 static bool lcl_bHasGroupSlantedChild (const SdrObject* pObj)
 {
-    // Returns true, if a child object differs more then 0.02deg from horizontal or vertical.
+    // Returns true, if a child object differs more than 0.02deg from horizontal or vertical.
     // Because lines sometimes are imported as customshapes, a horizontal or vertical line
     // might not have exactly 0, 90, 180, or 270 degree as rotate angle.
     if (!pObj)
@@ -927,7 +927,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         const awt::Point aCentrum(aImportPosition.X + aImportSize.Width / 2,
                                                   aImportPosition.Y + aImportSize.Height / 2);
 
-                        // In case of group and lines, rotations are incorported in the child shapes or
+                        // In case of group and lines, rotations are incorporated in the child shapes or
                         // points respectively in LO. MSO has rotation as separate property. The
                         // position refers to the unrotated rectangle of MSO. We need to adapt it to
                         // the left-top of the rotated shape.

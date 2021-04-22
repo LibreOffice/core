@@ -22,8 +22,8 @@
 #include "def.hxx"
 
 /* All possible data needed to do the job outside mathml limits */
-// Ml prefix means it is part of mathml standar
-// NMl means it is not part of mathml standar but needed info to work
+// Ml prefix means it is part of mathml standard
+// NMl means it is not part of mathml standard but needed info to work
 
 /* Union for storing the mathml attribute value */
 /*************************************************************************************************/
