@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0df608d8_e927c4e5",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2068,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-22T06:47:20Z",
+      "side": 1,
+      "message": "This - and others like this - are logical and correct change by itself - but is unrelated to the bug and new tests you created. These are just refactorings to put \"expected\" to the proper place, and should be separate from your change, to not make reviewing this difficult by unrelated stuff. Please extract these to a separate commit. Thanks!",
+      "revId": "3d44c773e80fc8802ae5879096d9d574a6d40ea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b12de7f2_d27bf44c",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2071,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-22T06:47:20Z",
+      "side": 1,
+      "message": "this",
+      "revId": "3d44c773e80fc8802ae5879096d9d574a6d40ea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98d6df98_5192d63d",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3706,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-22T06:47:20Z",
+      "side": 1,
+      "message": "this",
+      "revId": "3d44c773e80fc8802ae5879096d9d574a6d40ea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa77413a_8c472b2e",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3708,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-22T06:47:20Z",
+      "side": 1,
+      "message": "this",
+      "revId": "3d44c773e80fc8802ae5879096d9d574a6d40ea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6105f34b_adba69dc",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3724,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-22T06:47:20Z",
+      "side": 1,
+      "message": "these",
+      "revId": "3d44c773e80fc8802ae5879096d9d574a6d40ea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
