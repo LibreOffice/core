@@ -97,6 +97,7 @@ public:
     void testTdf123090();
     void testTdf126324();
     void testTdf119187();
+    void testTdf132472();
     void testTdf80224();
     void testExportTransitionsPPTX();
     void testPresetShapesExport();
@@ -224,6 +225,7 @@ public:
     CPPUNIT_TEST(testTdf123090);
     CPPUNIT_TEST(testTdf126324);
     CPPUNIT_TEST(testTdf119187);
+    CPPUNIT_TEST(testTdf132472);
     CPPUNIT_TEST(testTdf80224);
     CPPUNIT_TEST(testExportTransitionsPPTX);
     CPPUNIT_TEST(testPresetShapesExport);
@@ -646,6 +648,35 @@ void SdOOXMLExportTest2::testTdf119187()
         const SdrTextVertAdjust eTVA = rSdrTextVertAdjustItem.GetValue();
         CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_TOP, eTVA);
     }
+}
+
+void SdOOXMLExportTest2::testTdf132472()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf132472.pptx"), PPTX );
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+
+    uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xCell;
+    Color nColor;
+
+    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), nColor);
+
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xCell));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY);
+    xPropSet->getPropertyValue("CharColor") >>= nColor;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Color: R:0 G:0 B:0 A:0
+    // - Actual  : Color: R:255 G:255 B:255 A:0
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
+
+    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf80224()
