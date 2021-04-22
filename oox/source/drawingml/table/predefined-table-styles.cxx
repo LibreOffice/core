@@ -516,11 +516,11 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Themed-Style-2")
     {
-        wholeTblTextColor.setSchemeClr(XML_lt1);
-        firstRowTextColor.setSchemeClr(XML_lt1);
-
         if (!accent_name.isEmpty())
         {
+            wholeTblTextColor.setSchemeClr(XML_lt1);
+            firstRowTextColor.setSchemeClr(XML_lt1);
+
             accent_val = tokens[mStyleIdMap[styleId].second];
 
             pTblBgFillProperties->maFillColor.setSchemeClr(accent_val);
