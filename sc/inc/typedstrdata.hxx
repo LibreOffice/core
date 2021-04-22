@@ -24,13 +24,14 @@ public:
         Header   = 4
     };
 
-    ScTypedStrData( const OUString& rStr, double nVal = 0.0,
-                    StringType eType = Standard, bool bDate = false );
+    ScTypedStrData( const OUString& rStr, double nVal = 0.0, StringType eType = Standard,
+                    bool bDate = false, bool mbIsFormatted = false, bool bDuplicated = false );
 
     bool IsDate() const { return mbIsDate;}
     const OUString& GetString() const { return maStrValue;}
     StringType GetStringType() const { return meStrType;}
     double GetValue() const { return mfValue; }
+    bool IsDuplicated() const { return mbIsDuplicated; }
 
     struct LessCaseSensitive
     {
@@ -59,6 +60,8 @@ private:
     double mfValue;
     StringType meStrType;
     bool   mbIsDate;
+    bool   mbIsFormatted; // true if the cell value is a formatted filter value
+    bool   mbIsDuplicated; // true if the cell has a formatted filter value and has at least one duplicate formatted value.
 };
 
 class FindTypedStrData

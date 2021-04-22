@@ -444,6 +444,9 @@ ScXMLSetItemContext::ScXMLSetItemContext(
     if ( !rAttrList.is() )
         return;
 
+    ScQueryEntry::Item aItem;
+    bool bAddSetItem = false;
+
     for (auto &aIter : *rAttrList)
     {
         switch (aIter.getToken())
@@ -451,15 +454,21 @@ ScXMLSetItemContext::ScXMLSetItemContext(
             case XML_ELEMENT( TABLE, XML_VALUE ):
             {
                 svl::SharedStringPool& rPool = GetScImport().GetDocument()->GetSharedStringPool();
-                ScQueryEntry::Item aItem;
                 aItem.maString = rPool.intern(aIter.toString());
                 aItem.meType = ScQueryEntry::ByString;
                 aItem.mfVal = 0.0;
-                rParent.AddSetItem(aItem);
+                bAddSetItem = true;
+            }
+            break;
+            case XML_ELEMENT( LO_EXT, XML_FORMATTED_VALUE ):
+            {
+                aItem.mbFormattedValue = aIter.toBoolean();
             }
             break;
         }
     }
+    if (bAddSetItem)
+        rParent.AddSetItem(aItem);
 }
 
 ScXMLSetItemContext::~ScXMLSetItemContext()
