@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "d1256655_74abc47f",
+        "filename": "xmloff/source/draw/animationexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-22T11:50:09Z",
+      "side": 0,
+      "message": "This looks odd to me: why not just use sTmp here, instead of creating some temporary buffer, and append its result to sTmp? :/ Interesting code. Noel, what do you think, is there some side-effect that requires this additional buffer?",
+      "revId": "21aded1828b1a401a32b0b960f035370843f3771",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da68931c_8683289b",
         "filename": "xmloff/source/draw/shapeexport.cxx",
         "patchSetId": 2
