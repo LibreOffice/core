@@ -1526,7 +1526,10 @@ void WeldEditView::GetFocus()
 {
     EditView* pEditView = GetEditView();
     if (pEditView)
+    {
         pEditView->ShowCursor(false);
+        Invalidate(); // redraw with cursor
+    }
 
     weld::CustomWidgetController::GetFocus();
 
