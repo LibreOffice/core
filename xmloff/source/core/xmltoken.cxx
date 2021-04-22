@@ -917,6 +917,7 @@ namespace xmloff::token {
         TOKEN( "foreign-object",                  XML_FOREIGN_OBJECT ),
         TOKEN( "format-change",                   XML_FORMAT_CHANGE ),
         TOKEN( "format-source",                   XML_FORMAT_SOURCE ),
+        TOKEN( "formatted-value",                 XML_FORMATTED_VALUE),
         TOKEN( "formatting-entry",                XML_FORMATTING_ENTRY ),
         TOKEN( "forms",                           XML_FORMS ),
         TOKEN( "formula",                         XML_FORMULA ),
