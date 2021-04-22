@@ -121,6 +121,9 @@ struct _LibreOfficeKitClass
 
     /// @see lok::Office::stopProfileRecording
     void (*stopProfileRecording) (LibreOfficeKit* pThis);
+
+    /// @see lok::Office::setLogSelector
+    void (*setLogSelector) (LibreOfficeKit* pThis, const char* pLogSelector);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)

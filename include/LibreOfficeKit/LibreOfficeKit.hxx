@@ -1009,6 +1009,29 @@ public:
     {
         mpThis->pClass->stopProfileRecording(mpThis);
     }
+
+    /**
+     * Sets the logging selector string used by LibreOffice core (if it is built with logging enabled)
+     *
+     * For the syntax of the string see the documentation for "Basic
+     * logging functionality" in LibreOffice internal API
+     * documentation (include/sal/log.hxx). If the logging selector
+     * has been set by this function to a non-null value, that is used
+     * instead of the environment variable SAL_LOG.
+     *
+     * The parameter is not copied so you should pass a value that
+     * points to permanently allocated memory.
+     *
+     * If you pass nullptr to this function, the environment variable
+     * SAL_LOG is again used as by default. You can switch back and
+     * forth as you like.
+     *
+     * @param pLogSelector the new string to use instead of the environment variable SAL_LOG, or nullptr
+     */
+    void setLogSelector(const char *pLogSelector)
+    {
+        mpThis->pClass->setLogSelector(mpThis, pLogSelector);
+    }
 };
 
 /// Factory method to create a lok::Office instance.

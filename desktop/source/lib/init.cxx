@@ -2088,6 +2088,7 @@ static void lo_sendDialogEvent(LibreOfficeKit* pThis,
 
 static void lo_startProfileRecording(LibreOfficeKit* pThis);
 static void lo_stopProfileRecording(LibreOfficeKit* pThis);
+static void lo_setLogSelector(LibreOfficeKit* pThis, const char* pLogSelector);
 
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
@@ -2116,6 +2117,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->sendDialogEvent = lo_sendDialogEvent;
         m_pOfficeClass->startProfileRecording = lo_startProfileRecording;
         m_pOfficeClass->stopProfileRecording = lo_stopProfileRecording;
+        m_pOfficeClass->setLogSelector = lo_setLogSelector;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -3871,6 +3873,11 @@ static void lo_startProfileRecording(LibreOfficeKit* /*pThis*/)
 static void lo_stopProfileRecording(LibreOfficeKit* /*pThis*/)
 {
     comphelper::ProfileZone::stopRecording();
+}
+
+static void lo_setLogSelector(LibreOfficeKit* /*pThis*/, const char* pLogSelector)
+{
+    sal_detail_set_log_selector(pLogSelector);
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)

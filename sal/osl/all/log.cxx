@@ -125,7 +125,9 @@ char const* setEnvFromLoggingIniFile(const char* env, const char* key)
 }
 #endif
 
-char const * getLogLevel() {
+char const* pLogSelector = nullptr;
+
+char const* getLogLevelEnvVar() {
     static char const* const pLevel = [] {
         char const* pResult = nullptr;
 
@@ -147,6 +149,13 @@ char const * getLogLevel() {
     }();
 
     return pLevel;
+}
+
+char const* getLogLevel() {
+    if (pLogSelector == nullptr)
+        return getLogLevelEnvVar();
+    else
+        return pLogSelector;
 }
 
 #if !defined ANDROID
@@ -338,6 +347,11 @@ void sal_detail_log(
         }
     }
 #endif
+}
+
+void sal_detail_set_log_selector(char const *logSelector)
+{
+    pLogSelector = logSelector;
 }
 
 void sal_detail_logFormat(
