@@ -535,8 +535,10 @@ public:
         {
             ScQueryEntry::Item aNew;
             aNew.maString = mrPool.intern(rEntry.aName);
-            aNew.meType = rEntry.bDate ? ScQueryEntry::ByDate : ScQueryEntry::ByString;
-            aNew.mfVal = 0.0;
+            // set the filter type to ByValue, if the filter condition is value and not a duplicated value
+            aNew.meType = rEntry.bDate ? ScQueryEntry::ByDate : rEntry.bValue && !rEntry.bDuplicated ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+            aNew.mbFormattedValue = rEntry.bDuplicated;
+            aNew.mfVal = rEntry.nValue;
             mrItems.push_back(aNew);
         }
     }
@@ -686,7 +688,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         if ( rEntry.IsDate() )
             rControl.addDateMember( aStringVal, rEntry.GetValue(), bSelected );
         else
-            rControl.addMember(aStringVal, bSelected);
+            rControl.addMember( aStringVal, aDoubleVal, bSelected, rEntry.GetStringType() == ScTypedStrData::Value, rEntry.IsDuplicated() );
     }
 
     // Populate the menu.
