@@ -31,18 +31,6 @@ namespace sdr::contact
     {
         class ViewObjectContactOfE3d final : public ViewObjectContactOfSdrObj
         {
-            // Primitive3D sequence of the ViewContact. This contains all necessary information
-            // for the graphical visualisation and needs to be supported by all VCs which
-            // can be visualized.
-            drawinglayer::primitive3d::Primitive3DContainer          mxPrimitive3DContainer;
-
-            // This method is responsible for creating the graphical visualisation data which is
-            // stored/cached in the local primitive. Default gets view-independent Primitive3D
-            // from the ViewContact using ViewContact::getViewIndependentPrimitive3DContainer(), takes care of
-            // visibility and ghosted.
-            // This method will not handle included hierarchies and not check geometric visibility.
-            drawinglayer::primitive3d::Primitive3DContainer createPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const;
-
             // also override the 2d method to deliver a 2d object with embedded 3d and the 3d transformation which is able to
             // answer the get2DRange question accordingly
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
@@ -54,7 +42,7 @@ namespace sdr::contact
             // access to the local primitive sequence. This will ensure that the list is
             // current in comparing the local list content with a fresh created incarnation
             // This method will not handle included hierarchies or visibility.
-            drawinglayer::primitive3d::Primitive3DContainer const & getPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const;
+            drawinglayer::primitive3d::Primitive3DContainer getPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const;
         };
 
 } // end of namespace sdr::contact
