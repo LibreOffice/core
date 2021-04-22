@@ -7204,9 +7204,11 @@ AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
 AC_MSG_CHECKING([whether $CXX_BASE supports a working C++20 consteval])
 dnl ...that does not suffer from <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96994> "Missing code
-dnl from consteval constructor initializing const variable" or
+dnl from consteval constructor initializing const variable",
 dnl <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98752> "wrong 'error: ‘this’ is not a constant
-dnl expression' with consteval constructor":
+dnl expression' with consteval constructor", or <https://bugs.llvm.org/show_bug.cgi?id=50063> "code
+dnl using consteval: 'clang/lib/CodeGen/Address.h:38: llvm::Value*
+dnl clang::CodeGen::Address::getPointer() const: Assertion `isValid()' failed.'":
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -7222,6 +7224,15 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([
             S1 x;
             S2(): x(0) {}
         };
+
+        struct S3 {
+            consteval S3() {}
+            union {
+                int a;
+                unsigned b = 0;
+            };
+        };
+        void f() { S3(); }
     ], [
         return (s.i == 1) ? 0 : 1;
     ])], [
