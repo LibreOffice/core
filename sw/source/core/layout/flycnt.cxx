@@ -421,9 +421,11 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // <SwObjectFormatterTextFrame::CheckMovedFwdCondition(..)>
                     sal_uInt32 nToPageNum( 0 );
                     bool bDummy( false );
+                    bool bPageHasFlysAnchoredBelowThis(false);
                     if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition(
                                         *this, GetPageFrame()->GetPhyPageNum(),
-                                        bAnchoredAtMaster, nToPageNum, bDummy ) )
+                                bAnchoredAtMaster, nToPageNum, bDummy,
+                                bPageHasFlysAnchoredBelowThis) )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
                         // mark anchor text frame
@@ -436,14 +438,22 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                                 rDoc, *pAnchorTextFrame, nAnchorFrameToPageNum ) )
                         {
                             if ( nAnchorFrameToPageNum < nToPageNum )
-                                SwLayouter::RemoveMovedFwdFrame( rDoc, *pAnchorTextFrame );
+                            {
+                                if (!bPageHasFlysAnchoredBelowThis)
+                                {
+                                    SwLayouter::RemoveMovedFwdFrame(rDoc, *pAnchorTextFrame);
+                                }
+                            }
                             else
                                 bInsert = false;
                         }
                         if ( bInsert )
                         {
-                            SwLayouter::InsertMovedFwdFrame( rDoc, *pAnchorTextFrame,
-                                                           nToPageNum );
+                            if (!bPageHasFlysAnchoredBelowThis)
+                            {
+                                SwLayouter::InsertMovedFwdFrame(rDoc, *pAnchorTextFrame,
+                                                                nToPageNum);
+                            }
                         }
                     }
                 }
