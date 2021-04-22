@@ -517,7 +517,7 @@ void SdExportTest::testBnc480256()
     sdr::table::SdrTableObj *pTableObj;
     uno::Reference< table::XCellRange > xTable;
     uno::Reference< beans::XPropertySet > xCell;
-    sal_Int32 nColor;
+    Color nColor;
     table::BorderLine2 aBorderLine;
 
     pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
@@ -526,13 +526,13 @@ void SdExportTest::testBnc480256()
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x9bc3ee), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x9bc3ee), nColor);
     xCell->getPropertyValue("LeftBorder") >>= aBorderLine;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5597d3), aBorderLine.Color);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xc6ddff), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0xc6ddff), nColor);
     xCell->getPropertyValue("TopBorder") >>= aBorderLine;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5597d3), aBorderLine.Color);
 
@@ -542,13 +542,13 @@ void SdExportTest::testBnc480256()
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x6bace6), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x6bace6), nColor);
     xCell->getPropertyValue("LeftBorder") >>= aBorderLine;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xbecfe6), aBorderLine.Color);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4697e0), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x4697e0), nColor);
 
     xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("BottomBorder") >>= aBorderLine;
@@ -1293,9 +1293,9 @@ void SdExportTest::testGlow()
     sal_Int32 nGlowEffectRad = 0;
     CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectRadius") >>= nGlowEffectRad);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(529), nGlowEffectRad); // 15 pt = 529.166... mm/100
-    sal_Int32 nGlowEffectColor = 0;
+    Color nGlowEffectColor;
     CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectColor") >>= nGlowEffectColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00FF4000), nGlowEffectColor); // "Brick"
+    CPPUNIT_ASSERT_EQUAL(Color(0x00FF4000), nGlowEffectColor); // "Brick"
     sal_Int16 nGlowEffectTransparency = 0;
     CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectTransparency") >>= nGlowEffectTransparency);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nGlowEffectTransparency); // 60%
@@ -1416,6 +1416,7 @@ void SdExportTest::testMasterPageBackgroundFullSize()
     //  page margins and the flag synchronized across all master pages)
     uno::Reference<drawing::XMasterPagesSupplier> xMPS(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPages> xMPs(xMPS->getMasterPages());
+    Color nFillColor;
     {
         uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT(!xMP->getPropertyValue("BackgroundFullSize").get<bool>());
@@ -1426,7 +1427,8 @@ void SdExportTest::testMasterPageBackgroundFullSize()
         uno::Reference<beans::XPropertySet> xBackgroundProps(
             xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x729fcf), xBackgroundProps->getPropertyValue("FillColor").get<sal_Int32>());
+        xBackgroundProps->getPropertyValue("FillColor") >>= nFillColor;
+        CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), nFillColor);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
     }
     {
@@ -1439,7 +1441,8 @@ void SdExportTest::testMasterPageBackgroundFullSize()
         uno::Reference<beans::XPropertySet> xBackgroundProps(
             xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x729fcf), xBackgroundProps->getPropertyValue("FillColor").get<sal_Int32>());
+        xBackgroundProps->getPropertyValue("FillColor") >>= nFillColor;
+        CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), nFillColor);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
     }
     {
@@ -1484,7 +1487,8 @@ void SdExportTest::testMasterPageBackgroundFullSize()
         uno::Reference<beans::XPropertySet> xBackgroundProps(
             xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x729fcf), xBackgroundProps->getPropertyValue("FillColor").get<sal_Int32>());
+        xBackgroundProps->getPropertyValue("FillColor") >>= nFillColor;
+        CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), nFillColor);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
     }
     {
@@ -1497,7 +1501,8 @@ void SdExportTest::testMasterPageBackgroundFullSize()
         uno::Reference<beans::XPropertySet> xBackgroundProps(
             xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x729fcf), xBackgroundProps->getPropertyValue("FillColor").get<sal_Int32>());
+        xBackgroundProps->getPropertyValue("FillColor") >>= nFillColor;
+        CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), nFillColor);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
     }
     {
