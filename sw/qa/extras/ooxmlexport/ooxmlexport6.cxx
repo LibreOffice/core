@@ -126,7 +126,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlTextshapeB, "dml-textshapeB.docx")
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(3), uno::UNO_QUERY);
     // Connector was incorrectly shifted towards the top left corner, X was 192, Y was -5743.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3776), xShape->getPosition().X);
-    // Value as of LO7.2. Whole group is still shifted 3mm to rigth and 5mm down.
+    // Value as of LO7.2. Whole group is still shifted 3mm to right and 5mm down.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-5063), xShape->getPosition().Y);
 
     xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);

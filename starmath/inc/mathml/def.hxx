@@ -22,15 +22,15 @@
 #include <tools/color.hxx>
 
 /* All possible data needed to do the job outside mathml limits */
-// Ml prefix means it is part of mathml standar
-// NMl means it is not part of mathml standar but needed info to work
+// Ml prefix means it is part of mathml standard
+// NMl means it is not part of mathml standard but needed info to work
 
 /* For now empty, don't know yet what's needed besides default font size. */
 struct SmGlobalData
 {
 };
 
-/* Mthml length tools */
+/* Mhtml length tools */
 /*************************************************************************************************/
 
 enum class SmLengthUnit : uint_fast8_t
@@ -50,7 +50,7 @@ struct SmLengthValue
 {
     SmLengthUnit m_aLengthUnit;
     double m_aLengthValue;
-    // Keeps original text value to avoid numerial error data loss
+    // Keeps original text value to avoid numerical error data loss
     OUString* m_aOriginalText;
 };
 
