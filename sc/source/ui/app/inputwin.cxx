@@ -170,8 +170,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         mpViewShell     ( nullptr ),
         mnMaxY          (0),
         bIsOkCancelMode ( false ),
-        bInResize       ( false ),
-        nOldOutOffYPixel( GetOutOffYPixel() )
+        bInResize       ( false )
 {
     // #i73615# don't rely on SfxViewShell::Current while constructing the input line
     // (also for GetInputHdl below)
@@ -491,11 +490,6 @@ void ScInputWindow::SetSizePixel( const Size& rNewSize )
 void ScInputWindow::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags)
 {
     ToolBox::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
-
-    // send update only when position changed eg. when notebookbar was opened
-    if (nOldOutOffYPixel == GetOutOffYPixel())
-        return;
-
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
     {
         std::vector<vcl::LOKPayloadItem> aItems;
@@ -504,8 +498,6 @@ void ScInputWindow::setPosSizePixel(long nX, long nY, long nWidth, long nHeight,
         aItems.emplace_back("lines", OString::number(aTextWindow.GetNumLines()));
         pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
     }
-
-    nOldOutOffYPixel = GetOutOffYPixel();
 }
 
 void ScInputWindow::Resize()
