@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a4da3bf_03450c76",
+        "filename": "compilerplugins/clang/badstatics.cxx",
+        "patchSetId": 41
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-22T06:16:18Z",
+      "side": 1,
+      "message": "here and elsewhere in this file: please undo the random reformatting changes",
+      "revId": "0781c53c5bc7df7dc439d98b4300e9932af37201",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
