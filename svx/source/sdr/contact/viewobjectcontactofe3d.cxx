@@ -33,7 +33,7 @@ namespace sdr::contact
         {
         }
 
-        drawinglayer::primitive3d::Primitive3DContainer ViewObjectContactOfE3d::createPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive3d::Primitive3DContainer ViewObjectContactOfE3d::getPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const
         {
             // get the view-independent Primitive from the viewContact
             const ViewContactOfE3d& rViewContactOfE3d(dynamic_cast< const ViewContactOfE3d& >(GetViewContact()));
@@ -66,20 +66,6 @@ namespace sdr::contact
             return rViewContact.impCreateWithGivenPrimitive3DContainer(getPrimitive3DContainer(rDisplayInfo));
         }
 
-        drawinglayer::primitive3d::Primitive3DContainer const & ViewObjectContactOfE3d::getPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const
-        {
-            drawinglayer::primitive3d::Primitive3DContainer xNewPrimitive3DSeq(createPrimitive3DContainer(rDisplayInfo));
-
-            // local up-to-date checks. New list different from local one?
-            if(mxPrimitive3DContainer != xNewPrimitive3DSeq)
-            {
-                // has changed, copy content
-                const_cast< ViewObjectContactOfE3d* >(this)->mxPrimitive3DContainer = xNewPrimitive3DSeq;
-            }
-
-            // return current Primitive2DContainer
-            return mxPrimitive3DContainer;
-        }
 
 } // end of namespace
 
