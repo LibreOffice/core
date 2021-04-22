@@ -610,6 +610,8 @@ void ToolBarManager::Init()
 {
     OSL_ASSERT( m_xContext.is() );
 
+    m_pImpl->Init();
+
     m_xToolbarControllerFactory = frame::theToolbarControllerFactory::get( m_xContext );
     m_xURLTransformer = URLTransformer::create( m_xContext );
 
