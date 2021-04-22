@@ -334,4 +334,37 @@ class AutofilterTest(UITestCase):
         xOkBtn.executeAction("CLICK", tuple())
 
         self.ui_test.close_doc()
+
+    def test_tdf140968(self):
+        doc = self.ui_test.load_file(get_url_for_data_file("tdf140968.xlsx"))
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+        self.assertEqual(4, len(xTreeList.getChildren()))
+        self.assertEqual("0.000", get_state_as_dict(xTreeList.getChild('0'))['Text'])
+        self.assertEqual("0.046", get_state_as_dict(xTreeList.getChild('1'))['Text'])
+        self.assertEqual("0.365", get_state_as_dict(xTreeList.getChild('2'))['Text'])
+        self.assertEqual("0.516", get_state_as_dict(xTreeList.getChild('3'))['Text'])
+
+        xFirstEntry = xTreeList.getChild("0")
+        xFirstEntry.executeAction("CLICK", tuple())
+        xFirstEntry = xTreeList.getChild("1")
+        xFirstEntry.executeAction("CLICK", tuple())
+
+        xOkBtn = xFloatWindow.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        self.assertFalse(is_row_hidden(doc, 0))
+        self.assertTrue(is_row_hidden(doc, 1))
+        self.assertTrue(is_row_hidden(doc, 2))
+        self.assertTrue(is_row_hidden(doc, 3))
+        self.assertTrue(is_row_hidden(doc, 4))
+        self.assertFalse(is_row_hidden(doc, 5))
+        self.assertFalse(is_row_hidden(doc, 6))
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
