@@ -417,11 +417,26 @@ private:
     class WriteSetItem
     {
         ScXMLExport& mrExport;
+        const ScDocument* pDoc;
     public:
-        explicit WriteSetItem(ScXMLExport& r) : mrExport(r) {}
+        explicit WriteSetItem(ScXMLExport& r, const ScDocument* mpDoc) : mrExport(r), pDoc(mpDoc) {}
         void operator() (const ScQueryEntry::Item& rItem) const
         {
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+            if (rItem.meType == ScQueryEntry::ByValue)
+            {
+                OUString aValStr;
+                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                pFormatter->GetInputLineString(rItem.mfVal, 0, aValStr);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aValStr);
+            }
+            else
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+                // if mbFormattedValue true, export the XML_FORMATTED_VALUE in order
+                // to avoid duplicated values in filtering
+                if (rItem.meType == ScQueryEntry::ByString && rItem.mbFormattedValue)
+                    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_FORMATTED_VALUE, XML_TRUE);
+            }
             SvXMLElementExport aElem(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_SET_ITEM, true, true);
         }
     };
@@ -464,11 +479,19 @@ private:
 
             // Store the 1st value for backward compatibility.
             const ScQueryEntry::Item& rItem = rItems.front();
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+            if (rItem.meType == ScQueryEntry::ByValue)
+            {
+                OUString aValStr;
+                SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+                pFormatter->GetInputLineString(rItem.mfVal, 0, aValStr);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aValStr);
+            }
+            else
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, OUString("="));
             SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
 
-            std::for_each(rItems.begin(), rItems.end(), WriteSetItem(mrExport));
+            std::for_each(rItems.begin(), rItems.end(), WriteSetItem(mrExport, mpDoc));
         }
     }
 

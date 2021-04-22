@@ -2639,4 +2639,14 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <define name="table-filter-set-item">
+    <element name="table:filter-set-item">
+      <attribute name="loext:formatted-value">
+        <ref name="boolean"/>
+      </attribute>
+      <empty/>
+    </element>
+  </define>
+
 </rng:grammar>
