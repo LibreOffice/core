@@ -2765,9 +2765,9 @@ OUString OQueryDesignView::getStatement()
         OUString aTmp = "( " + aJoinCrit + " )";
         if(!aCriteriaListStr.isEmpty())
         {
-            aTmp += C_AND + aCriteriaListStr.makeStringAndClear();
+            aTmp += C_AND;
         }
-        aCriteriaListStr = aTmp;
+        aCriteriaListStr.insert(0, aTmp);
     }
     // ----------------- construct statement  ----------------------
     OUStringBuffer aSqlCmd("SELECT ");
