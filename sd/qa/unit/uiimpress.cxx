@@ -17,6 +17,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/table/XMergeableCell.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -442,6 +443,69 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
     Scheduler::ProcessEventsToIdle();
     checkCurrentPageNumber(3);
     CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    CPPUNIT_ASSERT(mxComponent.is());
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::makeAny(sal_Int32(2)) }, { "Columns", uno::makeAny(sal_Int32(2)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // Move to A1 using Alt + Tab and write 'A'
+    for (int i = 0; i < 3; i++)
+    {
+        pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_TAB);
+        pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_SHIFT | KEY_TAB);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'A', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'A', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Move to A2 with Tab and write 'B'
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'B', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'B', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pActualPage->GetObj(2));
+    CPPUNIT_ASSERT(pTableObject);
+
+    uno::Reference<css::table::XTable> xTable(pTableObject->getTable(), uno::UNO_SET_THROW);
+    uno::Reference<css::table::XMergeableCell> xCellA1(xTable->getCellByPosition(0, 0),
+                                                       uno::UNO_QUERY_THROW);
+    uno::Reference<css::table::XMergeableCell> xCellA2(xTable->getCellByPosition(1, 0),
+                                                       uno::UNO_QUERY_THROW);
+
+    uno::Reference<text::XText> xTextA1
+        = uno::Reference<text::XTextRange>(xCellA1, uno::UNO_QUERY_THROW)->getText();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: A
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), xTextA1->getString());
+
+    uno::Reference<text::XText> xTextA2
+        = uno::Reference<text::XTextRange>(xCellA2, uno::UNO_QUERY_THROW)->getText();
+    CPPUNIT_ASSERT_EQUAL(OUString("B"), xTextA2->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
