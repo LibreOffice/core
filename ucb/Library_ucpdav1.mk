@@ -10,8 +10,6 @@
 
 $(eval $(call gb_Library_Library,ucpdav1))
 
-$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav-neon/ucpdav1))
-
 $(eval $(call gb_Library_use_sdk_api,ucpdav1))
 
 $(eval $(call gb_Library_set_include,ucpdav1,\
@@ -30,6 +28,8 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 ))
 
 ifeq ($(WITH_WEBDAV),neon)
+
+$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav-neon/ucpdav1))
 
 $(eval $(call gb_Library_use_externals,ucpdav1,\
 	boost_headers \
@@ -68,6 +68,8 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 ))
 
 else # WITH_WEBDAV == serf
+
+$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav/ucpdav1))
 
 $(eval $(call gb_Library_use_externals,ucpdav1,\
 	boost_headers \
@@ -110,7 +112,6 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav/webdavprovider \
 	ucb/source/ucp/webdav/webdavresponseparser \
 	ucb/source/ucp/webdav/webdavresultset \
-	ucb/source/ucp/webdav/webdavservices \
  ))
 
 endif # WITH_WEBDAV

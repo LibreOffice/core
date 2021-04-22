@@ -173,8 +173,11 @@ $(eval $(call gb_Rdb_add_components,services,\
 		extensions/source/ole/oleautobridge \
 		winaccessibility/source/service/winaccessibility \
 	) \
-	$(if $(WITH_WEBDAV), \
+	$(if $(filter neon,$(WITH_WEBDAV)), \
 		ucb/source/ucp/webdav-neon/ucpdav1 \
+	) \
+	$(if $(filter serf,$(WITH_WEBDAV)), \
+		ucb/source/ucp/webdav/ucpdav1 \
 	) \
 	$(call gb_Helper_optional,SCRIPTING, \
 		basctl/util/basctl \

@@ -82,55 +82,24 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 
 // XServiceInfo methods.
-OUString SAL_CALL ContentProvider::getImplementationName()
-{
-    return getImplementationName_Static();
-}
 
-OUString ContentProvider::getImplementationName_Static()
+OUString
+ContentProvider::getImplementationName()
 {
     return "com.sun.star.comp.WebDAVContentProvider";
 }
 
-sal_Bool SAL_CALL ContentProvider::supportsService( const OUString& ServiceName )
-{
-    return cppu::supportsService( this, ServiceName );
-}
-
-css::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames()
-{
-    return getSupportedServiceNames_Static();
-}
-
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
-{
-    css::lang::XServiceInfo* pX =
-                static_cast<css::lang::XServiceInfo*>(new ContentProvider( comphelper::getComponentContext(rSMgr) ));
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
-}
-
 css::uno::Sequence< OUString >
-ContentProvider::getSupportedServiceNames_Static()
+ContentProvider::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > aSNS { WEBDAV_CONTENT_PROVIDER_SERVICE_NAME };
-    return aSNS;
+    return { WEBDAV_CONTENT_PROVIDER_SERVICE_NAME };
 }
 
-// Service factory implementation.
-
-css::uno::Reference< css::lang::XSingleServiceFactory >
-ContentProvider::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+sal_Bool
+ContentProvider::supportsService(const OUString& s)
 {
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                ContentProvider::getImplementationName_Static(),
-                ContentProvider_CreateInstance,
-                ContentProvider::getSupportedServiceNames_Static() );
+    return cppu::supportsService(this, s);
 }
-
-
 
 // XContentProvider methods.
 
@@ -196,6 +165,13 @@ ContentProvider::queryContent(
         throw ucb::IllegalIdentifierException();
 
     return xContent;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_webdav_ContentProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new ContentProvider(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
