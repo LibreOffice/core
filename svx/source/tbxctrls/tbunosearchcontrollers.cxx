@@ -405,12 +405,6 @@ void FindTextFieldControl::set_entry_message_type(weld::EntryMessageType eType)
     m_xWidget->set_entry_message_type(eType);
 }
 
-void FindTextFieldControl::GetFocus()
-{
-    InterimItemWindow::GetFocus();
-    FocusIn();
-}
-
 namespace {
 
 class SearchToolbarControllersManager
