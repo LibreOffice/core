@@ -752,6 +752,17 @@ DECLARE_WW8EXPORT_TEST(testTdf94326_notOutlineNumbering, "tdf94326_notOutlineNum
     CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf106541_cancelOutline, "tdf106541_cancelOutline.doc")
+{
+    // The ability to cancel numbering must not be lost.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, "Cancelled by style"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(2, "Cancelled by inherited style"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(4, "Cancelled by direct paragraph formatting"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf120394, "tdf120394.doc")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
