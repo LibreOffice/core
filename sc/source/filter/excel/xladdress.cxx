@@ -94,10 +94,21 @@ void XclRangeList::Read( XclImpStream& rStrm, bool bCol16Bit, sal_uInt16 nCountI
         nCount = nCountInStream;
     else
         nCount = rStrm.ReaduInt16();
-    size_t nOldSize = mRanges.size();
-    mRanges.resize( nOldSize + nCount );
-    for( XclRangeVector::iterator aIt = mRanges.begin() + nOldSize; rStrm.IsValid() && (nCount > 0); --nCount, ++aIt )
-        aIt->Read( rStrm, bCol16Bit );
+
+    if (!nCount)
+        return;
+
+    XclRange aRange;
+    while (true)
+    {
+        aRange.Read(rStrm, bCol16Bit);
+        if (!rStrm.IsValid())
+            break;
+        mRanges.emplace_back(aRange);
+        --nCount;
+        if (!nCount)
+            break;
+    }
 }
 
 void XclRangeList::Write( XclExpStream& rStrm, bool bCol16Bit, sal_uInt16 nCountInStream ) const
