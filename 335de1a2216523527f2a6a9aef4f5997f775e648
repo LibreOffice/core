@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d158c739_1f786d12",
+        "filename": "xmloff/source/draw/animationexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-22T11:54:32Z",
+      "side": 1,
+      "message": "Ah, it must be this, so that using the empty buffer makes sure to not add semicolon.",
+      "revId": "335de1a2216523527f2a6a9aef4f5997f775e648",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
