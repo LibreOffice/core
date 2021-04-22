@@ -565,7 +565,7 @@ void TextEditOverlayObject::checkDataChange(const basegfx::B2DRange& rMinTextEdi
 
         if (aNewTextPrimitives != maTextPrimitives)
         {
-            maTextPrimitives = aNewTextPrimitives;
+            maTextPrimitives = std::move(aNewTextPrimitives);
             bObjectChange = true;
         }
     }
