@@ -40,8 +40,9 @@ static void RequestNavigatorUpdate (SfxBindings const * pBindings)
     }
 }
 
-SdNavigatorFloat::SdNavigatorFloat(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* _pParent)
-    : SfxNavigator(_pBindings, _pMgr, _pParent)
+SdNavigatorFloat::SdNavigatorFloat(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
+                                   vcl::Window* _pParent, SfxChildWinInfo* pInfo)
+    : SfxNavigator(_pBindings, _pMgr, _pParent, pInfo)
     , m_xNavWin(std::make_unique<SdNavigatorWin>(m_xContainer.get(), _pBindings, this))
     , m_bSetInitialFocusOnActivate(true)
 {
@@ -88,10 +89,10 @@ SFX_IMPL_DOCKINGWINDOW(SdNavigatorWrapper, SID_NAVIGATOR);
 
 SdNavigatorWrapper::SdNavigatorWrapper(vcl::Window *_pParent, sal_uInt16 nId,
                                        SfxBindings* pBindings, SfxChildWinInfo* pInfo)
-    : SfxNavigatorWrapper(_pParent, nId, pBindings, pInfo)
+    : SfxNavigatorWrapper(_pParent, nId)
 {
-    SetWindow(VclPtr<SdNavigatorFloat>::Create(pBindings, this, _pParent));
-    Initialize(pInfo);
+    SetWindow(VclPtr<SdNavigatorFloat>::Create(pBindings, this, _pParent, pInfo));
+    Initialize();
 }
 
 } // end of namespace sd
