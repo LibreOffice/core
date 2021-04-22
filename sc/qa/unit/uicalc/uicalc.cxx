@@ -18,6 +18,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <conditio.hxx>
 #include <dbfunc.hxx>
 #include <document.hxx>
@@ -742,6 +743,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119793)
     // - Actual  : 5084
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4984), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1381), xShape->getPosition().Y);
+
+    // tdf#141816: Without the fix in place, this test would have failed with
+    // - Expected:
+    // - Actual  : x
+    uno::Reference<text::XText> xText
+        = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xText->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
