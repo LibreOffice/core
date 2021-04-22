@@ -229,10 +229,10 @@ void SdOOXMLExportTest1::testTdf127237()
     CPPUNIT_ASSERT(pTableObj != nullptr);
     uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
 
-    sal_Int32 nFillColor = 0;
+    Color nFillColor;
     uno::Reference< beans::XPropertySet > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nFillColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0070C0), nFillColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), nFillColor);
 
     xDocShRef->DoClose();
 }
@@ -569,10 +569,10 @@ void SdOOXMLExportTest1::testTableCellFillProperties()
     uno::Reference< beans::XPropertySet > xCell;
 
     // Test Solid fill color
-    sal_Int32 nColor;
+    Color nColor;
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x66ffff), nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x66ffff), nColor);
 
     // Test Picture fill type for cell
     drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
