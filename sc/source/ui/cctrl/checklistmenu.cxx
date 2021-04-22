@@ -408,6 +408,8 @@ ScCheckListMember::ScCheckListMember()
     : mbVisible(true)
     , mbDate(false)
     , mbLeaf(false)
+    , mbValue(false)
+    , mbDuplicated(false)
     , meDatePartType(YEAR)
 {
 }
@@ -975,12 +977,21 @@ void ScCheckListMenuControl::addDateMember(const OUString& rsName, double nVal, 
     mpChecks->thaw();
 }
 
-void ScCheckListMenuControl::addMember(const OUString& rName, bool bVisible)
+void ScCheckListMenuControl::addMember(const OUString& rName, const double nVal, bool bVisible, bool bValue, bool bDuplicated)
 {
     ScCheckListMember aMember;
+<<<<<<< HEAD   (2b6611 Weekly version bump and remove branding path from our config)
     aMember.maName = rName;
+=======
+    // tdf#46062 - indicate hidden whitespaces using quotes
+    aMember.maName = rName.trim() != rName ? "\"" + rName + "\"" : rName;
+    aMember.maRealName = rName;
+    aMember.mnValue = nVal;
+>>>>>>> CHANGE (d5c258 Related: tdf#140968 avoid duplicated filter values)
     aMember.mbDate = false;
     aMember.mbLeaf = true;
+    aMember.mbValue = bValue;
+    aMember.mbDuplicated = bDuplicated;
     aMember.mbVisible = bVisible;
     aMember.mxParent.reset();
     maMembers.emplace_back(std::move(aMember));
@@ -1335,11 +1346,18 @@ void ScCheckListMenuControl::getResult(ResultType& rResult)
 
             ResultEntry aResultEntry;
             aResultEntry.bValid = bState;
+<<<<<<< HEAD   (2b6611 Weekly version bump and remove branding path from our config)
             if ( maMembers[i].mbDate )
                 aResultEntry.aName = maMembers[i].maRealName;
             else
                 aResultEntry.aName = maMembers[i].maName;
+=======
+            aResultEntry.aName = maMembers[i].maRealName;
+            aResultEntry.nValue = maMembers[i].mnValue;
+>>>>>>> CHANGE (d5c258 Related: tdf#140968 avoid duplicated filter values)
             aResultEntry.bDate = maMembers[i].mbDate;
+            aResultEntry.bValue = maMembers[i].mbValue;
+            aResultEntry.bDuplicated = maMembers[i].mbDuplicated;
             aResult.insert(aResultEntry);
         }
     }

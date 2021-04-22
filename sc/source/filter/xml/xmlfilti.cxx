@@ -281,7 +281,7 @@ ScXMLConditionContext::ScXMLConditionContext(
     ScXMLImportContext( rImport ),
     mrQueryParam(rParam),
     pFilterContext(pTempFilterContext),
-    sDataType(GetXMLToken(XML_TEXT)),
+    sDataType(OUString()),
     nField(0),
     bIsCaseSensitive(false)
 {
@@ -430,6 +430,8 @@ void SAL_CALL ScXMLConditionContext::endFastElement( sal_Int32 /*nElement*/ )
             svl::SharedStringPool& rPool = GetScImport().GetDocument()->GetSharedStringPool();
             rItem.maString = rPool.intern(sConditionValue);
             rItem.meType = ScQueryEntry::ByString;
+            if (IsXMLToken(sDataType, XML_TEXT))
+                rItem.mbFormattedValue = true;
         }
     }
     else
@@ -444,22 +446,31 @@ ScXMLSetItemContext::ScXMLSetItemContext(
     if ( !rAttrList.is() )
         return;
 
+    ScQueryEntry::Item aItem;
+    bool bAddSetItem = false;
+
     for (auto &aIter : *rAttrList)
     {
         switch (aIter.getToken())
         {
+            case XML_ELEMENT( TABLE, XML_DATA_TYPE ):
+            {
+                aItem.mbFormattedValue = IsXMLToken(aIter.toString(), XML_TEXT);
+            }
+            break;
             case XML_ELEMENT( TABLE, XML_VALUE ):
             {
                 svl::SharedStringPool& rPool = GetScImport().GetDocument()->GetSharedStringPool();
-                ScQueryEntry::Item aItem;
                 aItem.maString = rPool.intern(aIter.toString());
                 aItem.meType = ScQueryEntry::ByString;
                 aItem.mfVal = 0.0;
-                rParent.AddSetItem(aItem);
+                bAddSetItem = true;
             }
             break;
         }
     }
+    if (bAddSetItem)
+        rParent.AddSetItem(aItem);
 }
 
 ScXMLSetItemContext::~ScXMLSetItemContext()
@@ -649,7 +660,7 @@ ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
                                       ScXMLDPFilterContext* pTempFilterContext) :
     ScXMLImportContext( rImport ),
     pFilterContext(pTempFilterContext),
-    sDataType(GetXMLToken(XML_TEXT)),
+    sDataType(OUString()),
     nField(0),
     bIsCaseSensitive(false)
 {
@@ -762,6 +773,8 @@ void SAL_CALL ScXMLDPConditionContext::endFastElement( sal_Int32 /*nElement*/ )
             rItem.maString = rPool.intern(sConditionValue);
             rItem.meType = ScQueryEntry::ByString;
             rItem.mfVal = 0.0;
+            if (IsXMLToken(sDataType, XML_TEXT))
+                rItem.mbFormattedValue = true;
         }
     }
     pFilterContext->AddFilterField(aFilterField);
