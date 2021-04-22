@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c1ec3edb_bc4e927e",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2068,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2021-04-22T07:18:27Z",
+      "side": 1,
+      "message": "Oh wow, with so much improved tests, let\u0027s not nitpick about this ;-)  Would be great to do the next time - cosmetic changes in one commit, functional changes in another; but I don\u0027t think we need to block this work if this is the only concern...",
+      "parentUuid": "0df608d8_e927c4e5",
+      "revId": "3d44c773e80fc8802ae5879096d9d574a6d40ea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b12de7f2_d27bf44c",
         "filename": "sc/qa/unit/ucalc.cxx",
         "patchSetId": 2
