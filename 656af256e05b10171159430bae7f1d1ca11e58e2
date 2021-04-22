@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "d45b6a52_678658be",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-04-22T08:56:31Z",
+      "side": 1,
+      "message": "Don\u0027t see a request to open another dialog from itself. If the dialog is amodal with your patch, you can run Help \u003e Show TotD in order to get a second dialog. And while I still disagree with the need for this after only one person thinks it could be handy a some point, it wouldn\u0027t affect everyone at least if the dialog remains as simple as possible.",
+      "parentUuid": "7372ea16_bad4dbc2",
+      "range": {
+        "startLine": 59,
+        "startChar": 38,
+        "endLine": 59,
+        "endChar": 44
+      },
+      "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c6f3a592_74be43ff",
         "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
         "patchSetId": 4
