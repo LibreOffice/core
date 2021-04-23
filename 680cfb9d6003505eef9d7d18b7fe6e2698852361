@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c985ebbb_12012e71",
+        "filename": "external/icu/ExternalProject_icu.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-04-23T15:22:49Z",
+      "side": 0,
+      "message": "this one seems to remove iOS from the filter?",
+      "revId": "680cfb9d6003505eef9d7d18b7fe6e2698852361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
