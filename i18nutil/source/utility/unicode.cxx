@@ -1066,8 +1066,7 @@ OUString ToggleUnicodeCodepoint::ReplacementString()
             //pad with zeros - minimum length of 4.
             for( sal_Int32 i = 4 - aTmp.getLength(); i > 0; --i )
                 aTmp.insert( 0,"0" );
-            output.append( "U+" );
-            output.append( aTmp );
+            output.append( "U+" + aTmp );
         }
     }
     return output.toString();

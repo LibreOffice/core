@@ -425,9 +425,7 @@ void ScDocument::CreateValidTabName(OUString& rName) const
             do
             {
                 i++;
-                aName = rName;
-                aName.append('_');
-                aName.append(static_cast<sal_Int32>(i));
+                aName = rName + "_" + OUString::number(i);
             }
             while (!ValidNewTabName(aName.toString()) && (i < MAXTAB+1));
             rName = aName.makeStringAndClear();

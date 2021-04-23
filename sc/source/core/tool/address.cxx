@@ -2237,8 +2237,7 @@ OUString ScRange::Format( const ScDocument& rDoc, ScRefFlags nFlags,
             else
                 nFlags |= ScRefFlags::TAB_3D;
             OUString aName(aEnd.Format(nFlags, pDoc, rDetails));
-            r.append(":");
-            r.append(aName);
+            r.append(":" + aName);
         }
         break;
     }

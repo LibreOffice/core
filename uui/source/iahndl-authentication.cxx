@@ -436,8 +436,8 @@ executeMasterPasswordDialog(
     OUStringBuffer aBuffer;
     for (sal_uInt8 i : aKey)
     {
-        aBuffer.append(static_cast< sal_Unicode >('a' + (i >> 4)));
-        aBuffer.append(static_cast< sal_Unicode >('a' + (i & 15)));
+        aBuffer.append(OUStringChar(static_cast< sal_Unicode >('a' + (i >> 4))) +
+            OUStringChar(static_cast< sal_Unicode >('a' + (i & 15))));
     }
     rInfo.SetPassword(aBuffer.makeStringAndClear());
 }

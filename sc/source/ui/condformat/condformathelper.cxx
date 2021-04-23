@@ -142,23 +142,23 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
                     ScConditionMode eMode = pEntry->GetOperation();
                     if(eMode == ScConditionMode::Direct)
                     {
-                        aBuffer.append(getTextForType(FORMULA));
-                        aBuffer.append(" ");
-                        aBuffer.append(pEntry->GetExpression(rPos, 0));
+                        aBuffer.append(getTextForType(FORMULA) +
+                                        " " +
+                                        pEntry->GetExpression(rPos, 0));
                     }
                     else
                     {
-                        aBuffer.append(getTextForType(CONDITION));
-                        aBuffer.append(" ");
-                        aBuffer.append(getExpression(static_cast<sal_Int32>(eMode)));
-                        aBuffer.append(" ");
+                        aBuffer.append(getTextForType(CONDITION) +
+                                    " " +
+                                    getExpression(static_cast<sal_Int32>(eMode)) +
+                                    " ");
                         if(eMode == ScConditionMode::Between || eMode == ScConditionMode::NotBetween)
                         {
-                            aBuffer.append(pEntry->GetExpression(rPos, 0));
-                            aBuffer.append(" ");
-                            aBuffer.append(ScResId(STR_COND_AND));
-                            aBuffer.append(" ");
-                            aBuffer.append(pEntry->GetExpression(rPos, 1));
+                            aBuffer.append(pEntry->GetExpression(rPos, 0) +
+                                        " " +
+                                        ScResId(STR_COND_AND) +
+                                        " " +
+                                        pEntry->GetExpression(rPos, 1));
                         }
                         else if(eMode <= ScConditionMode::NotEqual || eMode >= ScConditionMode::BeginsWith)
                         {
@@ -179,10 +179,8 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
                 break;
             case ScFormatEntry::Type::Date:
                 {
-                    aBuffer.append(getTextForType(DATE));
-                    aBuffer.append(" ");
                     sal_Int32 nDateEntry = static_cast<sal_Int32>(static_cast<const ScCondDateFormatEntry*>(rFormat.GetEntry(0))->GetDateType());
-                    aBuffer.append(getDateString(nDateEntry));
+                    aBuffer.append(getTextForType(DATE) + " " + getDateString(nDateEntry));
                 }
                 break;
         }
@@ -193,8 +191,7 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
 OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
         std::u16string_view aStr1, std::u16string_view aStr2 )
 {
-    OUStringBuffer aBuffer(getTextForType(eType));
-    aBuffer.append(" ");
+    OUStringBuffer aBuffer = getTextForType(eType) + " ";
     if(eType == CONDITION)
     {
         // workaround missing FORMULA option in the conditions case
@@ -207,10 +204,7 @@ OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int
             aBuffer.append(OUString::Concat(" ") + aStr1);
             if(nIndex == 6 || nIndex == 7)
             {
-                aBuffer.append(" ");
-                aBuffer.append(ScResId(STR_COND_AND));
-                aBuffer.append(" ");
-                aBuffer.append(aStr2);
+                aBuffer.append(" " + ScResId(STR_COND_AND) + " " + aStr2);
             }
         }
     }

@@ -523,8 +523,7 @@ OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUStrin
 
     if ( bHasAnchor )
     {
-        aHelpURL.append('#');
-        aHelpURL.append(aAnchor);
+        aHelpURL.append("#" + aAnchor);
     }
 
     return aHelpURL.makeStringAndClear();

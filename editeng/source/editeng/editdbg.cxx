@@ -64,17 +64,17 @@ static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
     switch ( rItem.Which() )
     {
         case EE_PARA_WRITINGDIR:
-            aDebStr.append("WritingDir=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxFrameDirectionItem&>(rItem).GetValue()));
+            aDebStr.append("WritingDir=" +
+                OString::number(static_cast<sal_Int32>(static_cast<const SvxFrameDirectionItem&>(rItem).GetValue())));
         break;
         case EE_PARA_OUTLLRSPACE:
         case EE_PARA_LRSPACE:
-            aDebStr.append("FI=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTextFirstLineOffset()));
-            aDebStr.append(", LI=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTextLeft()));
-            aDebStr.append(", RI=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetRight()));
+            aDebStr.append("FI=" +
+                OString::number(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTextFirstLineOffset())) +
+                ", LI=" +
+                OString::number(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTextLeft())) +
+                ", RI=" +
+                OString::number(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetRight())));
         break;
         case EE_PARA_NUMBULLET:
             aDebStr.append("NumItem ");
@@ -106,41 +106,41 @@ static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
             }
         break;
         case EE_PARA_BULLETSTATE:
-            aDebStr.append("ShowBullet=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SfxBoolItem&>(rItem).GetValue()));
+            aDebStr.append("ShowBullet=" +
+                OString::number(static_cast<sal_Int32>(static_cast<const SfxBoolItem&>(rItem).GetValue())));
         break;
         case EE_PARA_HYPHENATE:
-            aDebStr.append("Hyphenate=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SfxBoolItem&>(rItem).GetValue()));
+            aDebStr.append("Hyphenate=" +
+                OString::number(static_cast<sal_Int32>(static_cast<const SfxBoolItem&>(rItem).GetValue())));
         break;
         case EE_PARA_OUTLLEVEL:
-            aDebStr.append("Level=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SfxInt16Item&>(rItem).GetValue()));
+            aDebStr.append("Level=" +
+                OString::number(static_cast<sal_Int32>(static_cast<const SfxInt16Item&>(rItem).GetValue())));
         break;
         case EE_PARA_ULSPACE:
-            aDebStr.append("SB=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxULSpaceItem&>(rItem).GetUpper()));
-            aDebStr.append(", SA=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxULSpaceItem&>(rItem).GetLower()));
+            aDebStr.append("SB=" +
+                OString::number(static_cast<sal_Int32>(static_cast<const SvxULSpaceItem&>(rItem).GetUpper())) +
+                ", SA=" +
+                OString::number(static_cast<sal_Int32>(static_cast<const SvxULSpaceItem&>(rItem).GetLower())));
         break;
         case EE_PARA_SBL:
             aDebStr.append("SBL=");
             if ( static_cast<const SvxLineSpacingItem&>(rItem).GetLineSpaceRule() == SvxLineSpaceRule::Min )
             {
-                aDebStr.append("Min: ");
-                aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpace()));
+                aDebStr.append("Min: " +
+                    OString::number(static_cast<sal_Int32>(static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpace())));
             }
             else if ( static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
             {
-                aDebStr.append("Prop: ");
-                aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLineSpacingItem&>(rItem).GetPropLineSpace()));
+                aDebStr.append("Prop: " +
+                    OString::number(static_cast<sal_Int32>(static_cast<const SvxLineSpacingItem&>(rItem).GetPropLineSpace())));
             }
             else
                 aDebStr.append("Unsupported Type!");
         break;
         case EE_PARA_JUST:
-            aDebStr.append("SvxAdust=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxAdjustItem&>(rItem).GetAdjust()));
+            aDebStr.append("SvxAdust=" +
+                OString::number(static_cast<sal_Int32>(static_cast<const SvxAdjustItem&>(rItem).GetAdjust())));
         break;
         case EE_PARA_TABS:
         {
@@ -192,9 +192,9 @@ static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
         {
-            aDebStr.append("Font=");
-            aDebStr.append(OUStringToOString(static_cast<const SvxFontItem&>(rItem).GetFamilyName(), RTL_TEXTENCODING_ASCII_US));
-            aDebStr.append(" (CharSet: ");
+            aDebStr.append("Font=" +
+                    OUStringToOString(static_cast<const SvxFontItem&>(rItem).GetFamilyName(), RTL_TEXTENCODING_ASCII_US) +
+                    " (CharSet: ");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxFontItem&>(rItem).GetCharSet()));
             aDebStr.append(')');
         }
@@ -351,8 +351,7 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
         for ( sal_Int32 z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); ++z )
         {
             const std::unique_ptr<EditCharAttrib>& rAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs()[z];
-            OStringBuffer aCharAttribs;
-            aCharAttribs.append("\nA");
+            OStringBuffer aCharAttribs("\nA");
             aCharAttribs.append(nPortion);
             aCharAttribs.append(":  ");
             aCharAttribs.append(static_cast<sal_Int32>(rAttr->GetItem()->Which()));

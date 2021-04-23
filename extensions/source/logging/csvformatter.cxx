@@ -212,14 +212,12 @@ namespace logging
 
         if(m_LogEventNo)
         {
-            aLogEntry.append( record.SequenceNumber );
-            aLogEntry.append(comma_char);
+            aLogEntry.append( record.SequenceNumber + comma_char);
         }
 
         if(m_LogThread)
         {
-            aLogEntry.append( record.ThreadID );
-            aLogEntry.append(comma_char);
+            aLogEntry.append( record.ThreadID + OUStringChar(comma_char));
         }
 
         if(m_LogTimestamp)

@@ -864,8 +864,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
             xFactory(rImport.GetModel(),UNO_QUERY);
         if( xFactory.is() ) {
 
-            OUStringBuffer sService;
-            sService.append(sAPI_fieldmaster_prefix);
+            OUStringBuffer sService = sAPI_fieldmaster_prefix;
             sService.append((eVarType==VarTypeUserField) ?
                                  OUString(sAPI_user) : OUString(sAPI_set_expression));
             Reference<XInterface> xIfc =

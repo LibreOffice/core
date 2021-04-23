@@ -173,8 +173,7 @@ OUString StyleContainer::getStyleName( sal_Int32 nStyle ) const
     }
     else
     {
-        aRet.append( "invalid style id " );
-        aRet.append( nStyle );
+        aRet.append( "invalid style id " + OUString::number(nStyle) );
     }
 
     return aRet.makeStringAndClear();

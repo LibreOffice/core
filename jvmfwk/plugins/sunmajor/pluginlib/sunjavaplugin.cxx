@@ -165,15 +165,11 @@ OString getPluginJarPath(
 std::unique_ptr<JavaInfo> createJavaInfo(
     const rtl::Reference<VendorBase> & info)
 {
-    OUStringBuffer buf(1024);
-    buf.append(info->getRuntimeLibrary());
+    OUString sVendorData = info->getRuntimeLibrary();
     if (!info->getLibraryPath().isEmpty())
     {
-        buf.append("\n");
-        buf.append(info->getLibraryPath());
-        buf.append("\n");
+        sVendorData += "\n" + info->getLibraryPath() + "\n";
     }
-    OUString sVendorData = buf.makeStringAndClear();
     return std::unique_ptr<JavaInfo>(
         new JavaInfo{
             info->getVendor(), info->getHome(), info->getVersion(),

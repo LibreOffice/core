@@ -177,8 +177,7 @@ void logReply(
             val2str( returnValue.getValue(), returnValue.getValueTypeRef(), VAL2STR_MODE_SHALLOW) );
         for( const auto & p : aParams )
         {
-            buf.append( ", " );
-            buf.append( val2str( p.getValue(), p.getValueTypeRef(), VAL2STR_MODE_SHALLOW) );
+            buf.append( ", " + val2str( p.getValue(), p.getValueTypeRef(), VAL2STR_MODE_SHALLOW) );
         }
     }
     log( cargo,LogLevel::CALL, buf.makeStringAndClear() );

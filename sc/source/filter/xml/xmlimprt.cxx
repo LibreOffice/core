@@ -827,15 +827,13 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, std::u16string_vi
                         {
                             ScXMLImport::MutexGuard aGuard(*this);
                             LocaleDataWrapper aLocaleData( comphelper::getProcessComponentContext(), LanguageTag( aLocale) );
-                            OUStringBuffer aBuffer(15);
-                            aBuffer.append("#");
-                            aBuffer.append( aLocaleData.getNumThousandSep() );
-                            aBuffer.append("##0");
-                            aBuffer.append( aLocaleData.getNumDecimalSep() );
-                            aBuffer.append("00 [$");
-                            aBuffer.append(rCurrency);
-                            aBuffer.append("]");
-                            sFormatString = aBuffer.makeStringAndClear();
+                            sFormatString = "#" +
+                                    aLocaleData.getNumThousandSep() +
+                                    "##0" +
+                                    aLocaleData.getNumDecimalSep() +
+                                    "00 [$" +
+                                    rCurrency +
+                                    "]";
                         }
                         sal_Int32 nNewKey = xLocalNumberFormats->queryKey(sFormatString, aLocale, true);
                         if (nNewKey == -1)

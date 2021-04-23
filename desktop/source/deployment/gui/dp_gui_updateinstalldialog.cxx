@@ -372,10 +372,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                     {
                         if (nPos)
                             buf.append("\n");
-                        buf.append("Could not download ");
-                        buf.append(elem.first);
-                        buf.append(". ");
-                        buf.append(elem.second.Message);
+                        buf.append("Could not download " + elem.first + ". " + elem.second.Message);
                         ++nPos;
                     }
                     m_dialog.setError(UpdateInstallDialog::ERROR_DOWNLOAD, updateData.aInstalledPackage->getDisplayName(),

@@ -32,17 +32,17 @@ class SvStream;
 class SvNumberFormatter;
 class ScDocument;
 
-extern const sal_Unicode pKeyTABLE[];
-extern const sal_Unicode pKeyVECTORS[];
-extern const sal_Unicode pKeyTUPLES[];
-extern const sal_Unicode pKeyDATA[];
-extern const sal_Unicode pKeyBOT[];
-extern const sal_Unicode pKeyEOD[];
-extern const sal_Unicode pKeyTRUE[];
-extern const sal_Unicode pKeyFALSE[];
-extern const sal_Unicode pKeyNA[];
-extern const sal_Unicode pKeyV[];
-extern const sal_Unicode pKey1_0[];
+extern const std::u16string_view pKeyTABLE;
+extern const std::u16string_view pKeyVECTORS;
+extern const std::u16string_view pKeyTUPLES;
+extern const std::u16string_view pKeyDATA;
+extern const std::u16string_view pKeyBOT;
+extern const std::u16string_view pKeyEOD;
+extern const std::u16string_view pKeyTRUE;
+extern const std::u16string_view pKeyFALSE;
+extern const std::u16string_view pKeyNA;
+extern const std::u16string_view pKeyV;
+extern const std::u16string_view pKey1_0;
 
 enum TOPIC
 {

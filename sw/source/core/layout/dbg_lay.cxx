@@ -673,8 +673,8 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
                             lcl_Start(aOut, m_aLayer, nAct);
                             if( pParam )
                             {
-                                aOut.append(' ');
-                                aOut.append(static_cast<sal_Int32>(*static_cast<sal_uInt16*>(pParam)));
+                                aOut.append(" " +
+                                    OString::number(*static_cast<sal_uInt16*>(pParam)));
                             }
                             break;
         case PROT::GrowTest:
@@ -701,8 +701,8 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
                             lcl_Start(aOut, m_aLayer, nAct);
                             if( pParam )
                             {
-                                aOut.append(' ');
-                                aOut.append(static_cast<sal_Int64>(*static_cast<tools::Long*>(pParam)));
+                                aOut.append(" " +
+                                    OString::number(*static_cast<tools::Long*>(pParam)));
                             }
                             break;
         case PROT::PrintArea:  aOut.append("PROT::PrintArea");
@@ -749,31 +749,31 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
                                 SwRect& rFrame = *static_cast<SwRect*>(pParam);
                                 if( pFrame->getFrameArea().Pos() != rFrame.Pos() )
                                 {
-                                    aOut.append("PosChg: (");
-                                    aOut.append(static_cast<sal_Int64>(rFrame.Left()));
-                                    aOut.append(", ");
-                                    aOut.append(static_cast<sal_Int64>(rFrame.Top()));
-                                    aOut.append(") -> (");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->getFrameArea().Left()));
-                                    aOut.append(", ");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->getFrameArea().Top()));
-                                    aOut.append(") ");
+                                    aOut.append("PosChg: (" +
+                                        OString::number(rFrame.Left()) +
+                                        ", " +
+                                        OString::number(rFrame.Top()) +
+                                        ") -> (" +
+                                        OString::number(pFrame->getFrameArea().Left()) +
+                                        ", " +
+                                        OString::number(pFrame->getFrameArea().Top()) +
+                                        ") ");
                                 }
                                 if( pFrame->getFrameArea().Height() != rFrame.Height() )
                                 {
-                                    aOut.append("Height: ");
-                                    aOut.append(static_cast<sal_Int64>(rFrame.Height()));
-                                    aOut.append(" -> ");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->getFrameArea().Height()));
-                                    aOut.append(" ");
+                                    aOut.append("Height: " +
+                                        OString::number(rFrame.Height()) +
+                                        " -> " +
+                                        OString::number(pFrame->getFrameArea().Height()) +
+                                        " ");
                                 }
                                 if( pFrame->getFrameArea().Width() != rFrame.Width() )
                                 {
-                                    aOut.append("Width: ");
-                                    aOut.append(static_cast<sal_Int64>(rFrame.Width()));
-                                    aOut.append(" -> ");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->getFrameArea().Width()));
-                                    aOut.append(' ');
+                                    aOut.append("Width: " +
+                                        OString::number(rFrame.Width()) +
+                                        " -> " +
+                                        OString::number(pFrame->getFrameArea().Width()) +
+                                        " ");
                                 }
                                 break;
                             }

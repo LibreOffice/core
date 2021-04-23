@@ -214,8 +214,7 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
                 else
                     bFirst = false;
 
-                sNameSuffix.append(vcl::font::featureCodeAsString(rItem.m_aFeatureCode));
-                sNameSuffix.append("=");
+                sNameSuffix.append(vcl::font::featureCodeAsString(rItem.m_aFeatureCode) + "=");
                 sNameSuffix.append(OUString::number(nSelection));
             }
         }

@@ -709,15 +709,12 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                     {
                         uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
 
-                        OUStringBuffer aBuffer( 60 );
                         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:PrintDefault",
                             vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
-                        aBuffer.append(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
-                        aBuffer.append( " (" );
-                        aBuffer.append( aPrinterName );
-                        aBuffer.append(')');
+                        OUString val = vcl::CommandInfoProvider::GetLabelForCommand(aProperties) +
+                                        " (" + aPrinterName + ")";
 
-                        rSet.Put( SfxStringItem( SID_PRINTDOCDIRECT, aBuffer.makeStringAndClear() ) );
+                        rSet.Put( SfxStringItem( SID_PRINTDOCDIRECT, val ) );
                     }
                 }
                 break;

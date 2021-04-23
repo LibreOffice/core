@@ -681,9 +681,7 @@ namespace pcr
             {
                 if ( strings != _rStrings.begin() )
                     aComposed.append( ';' );
-                aComposed.append( '\"' );
-                aComposed.append( *strings );
-                aComposed.append( '\"' );
+                aComposed.append( "\"" + *strings + "\"" );
             }
             return aComposed.makeStringAndClear();
         }

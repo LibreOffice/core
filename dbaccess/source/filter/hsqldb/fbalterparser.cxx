@@ -32,18 +32,15 @@ OUString FbAlterStmtParser::compose() const
     }
     else if (getActionType() == AlterAction::ADD_FOREIGN)
         return getStatement(); // do nothing with that
-    OUStringBuffer sSql("ALTER TABLE ");
-    sSql.append(getTableName());
+    OUStringBuffer sSql("ALTER TABLE " + getTableName());
 
     if (getActionType() == AlterAction::IDENTITY_RESTART)
     {
         sSql.append(" ALTER COLUMN ");
     }
-    sSql.append(getColumnName());
-    sSql.append(" RESTART WITH ");
-
-    // Firebird: restart with 0 means the first number is 1, not 0.
-    sSql.append(getIdentityParam() - 1);
+    sSql.append(getColumnName() + " RESTART WITH " +
+                // Firebird: restart with 0 means the first number is 1, not 0.
+                OUString::number(getIdentityParam() - 1));
 
     return sSql.makeStringAndClear();
 }

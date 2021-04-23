@@ -118,19 +118,14 @@ SdrObjKind SdrMediaObj::GetObjIdentifier() const
 
 OUString SdrMediaObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(SvxResId(STR_ObjNameSingulMEDIA));
+    OUString sName(SvxResId(STR_ObjNameSingulMEDIA));
 
     OUString aName(GetName());
 
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
+        sName += " '" + aName + "'";
 
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 OUString SdrMediaObj::TakeObjNamePlural() const

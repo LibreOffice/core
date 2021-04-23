@@ -882,10 +882,7 @@ SvXMLExport::EnsureNamespace(OUString const & i_rNamespace)
 
         // add the namespace to the map and as attribute
         mpNamespaceMap->Add( sPrefix, i_rNamespace );
-        buf.append( GetXMLToken(XML_XMLNS) );
-        buf.append( ':' );
-        buf.append( sPrefix );
-        AddAttribute( buf.makeStringAndClear(), i_rNamespace );
+        AddAttribute( GetXMLToken(XML_XMLNS) + ":" + sPrefix, i_rNamespace );
     }
     else
     {

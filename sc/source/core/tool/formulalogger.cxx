@@ -144,8 +144,7 @@ void FormulaLogger::GroupScope::addRefMessage(
     ScRange aRefRange(rRefPos);
     aRefRange.aEnd.IncRow(nLen-1);
     OUString aRangeStr = aRefRange.Format(mpImpl->mrDoc, getRefFlags(rCellPos, rRefPos));
-    aBuf.append(aRangeStr);
-    aBuf.append(": ");
+    aBuf.append(aRangeStr + ": ");
 
     if (rArray.mpNumericArray)
     {
@@ -195,8 +194,7 @@ void FormulaLogger::GroupScope::addRefMessage(
 {
     OUStringBuffer aBuf;
     OUString aPosStr = rRefPos.Format(getRefFlags(rCellPos, rRefPos), &mpImpl->mrDoc);
-    aBuf.append(aPosStr);
-    aBuf.append(": ");
+    aBuf.append(aPosStr + ": ");
 
     switch (rToken.GetType())
     {
@@ -215,8 +213,7 @@ void FormulaLogger::GroupScope::addRefMessage(
 
 void FormulaLogger::GroupScope::addGroupSizeThresholdMessage( const ScFormulaCell& rCell )
 {
-    OUStringBuffer aBuf;
-    aBuf.append("group length below minimum threshold (");
+    OUStringBuffer aBuf("group length below minimum threshold (");
     aBuf.append(rCell.GetWeight());
     aBuf.append(" < ");
     aBuf.append(ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize);

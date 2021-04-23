@@ -196,8 +196,7 @@ OUString ScAsciiOptions::WriteToString() const
         }
         if ( bMergeFieldSeps )
         {
-            aOutStr.append("/");
-            aOutStr.append(pStrMrg);
+            aOutStr.append(OUString::Concat("/") + pStrMrg);
         }
     }
 

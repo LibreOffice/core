@@ -144,8 +144,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
         }
         else
         {
-            OStringBuffer aBuf;
-            aBuf.append(static_cast< char >(nChar));
+            OStringBuffer aBuf = OString::Concat(OStringChar(static_cast<char>(nChar)));
             rtl_TextToUnicodeConverter aConverter
                 = rtl_createTextToUnicodeConverter(eCharset);
             sal_Unicode const * p = *pBegin;

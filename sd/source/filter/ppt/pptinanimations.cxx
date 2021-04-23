@@ -739,8 +739,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
             }
             else
             {
-                OUStringBuffer sBuffer;
-                sBuffer.append( "ppt_" );
+                OUStringBuffer sBuffer( "ppt_" );
                 switch( nEffectPresetClass )
                 {
                 case EffectPresetClass::ENTRANCE: sBuffer.append( "entrance_" ); break;

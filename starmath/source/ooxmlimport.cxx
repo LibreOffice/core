@@ -351,8 +351,7 @@ OUString SmOoxmlImport::handleD()
         opening = "left none ";
     if( closing.isEmpty())
         closing = " right none";
-    OUStringBuffer ret;
-    ret.append( opening );
+    OUStringBuffer ret( opening );
     bool first = true;
     while( m_rStream.findTag( OPENING( M_TOKEN( e ))))
     {
@@ -374,9 +373,9 @@ OUString SmOoxmlImport::handleEqArr()
     { // there must be at least one m:e
         if( !ret.isEmpty())
             ret.append("#");
-        ret.append(" ");
-        ret.append(readOMathArgInElement( M_TOKEN( e )));
-        ret.append(" ");
+        ret.append(" " +
+                    readOMathArgInElement( M_TOKEN( e )) +
+                    " ");
     } while( !m_rStream.atEnd() && m_rStream.findTag( OPENING( M_TOKEN( e ))));
     m_rStream.ensureClosingTag( M_TOKEN( eqArr ));
     return "stack {" + ret.makeStringAndClear() + "}";

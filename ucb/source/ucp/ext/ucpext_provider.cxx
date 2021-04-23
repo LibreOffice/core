@@ -121,8 +121,7 @@ namespace ucb::ucp::ext
         {
             if ( sRemaining[0] != '/' )
             {
-                aComposer.append( '/' );
-                aComposer.append( sRemaining );
+                aComposer.append( "/" + sRemaining );
             }
             else
             {

@@ -231,4 +231,75 @@ void f2(char ch)
     s = s + OString(ch);
 }
 }
+
+// ---------------------------------------------------------------
+// appending to O[U]StringBuffer
+
+namespace test10
+{
+static const char XXX1[] = "xxx";
+static constexpr char16_t XXX1u[] = u"xxx";
+static const char XXX2[] = "xxx";
+void f1(OUString s1, int i, OString o)
+{
+    OUStringBuffer s2 = s1;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append("xxx");
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append("xxx");
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append(s1);
+    s2 = s1 + "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append(s1);
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append(OUString::number(i));
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append(XXX1);
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append(OUString::Concat(XXX1u) + XXX2);
+
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append(OStringToOUString(o, RTL_TEXTENCODING_UTF8));
+}
+void f2(OString s1, int i, OUString u, bool b)
+{
+    OStringBuffer s2 = s1;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append("xxx");
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append("xxx");
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append(s1);
+    s2 = s1 + "xxx";
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append(s1);
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append(OString::number(i));
+
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append(OUStringToOString(u, RTL_TEXTENCODING_ASCII_US));
+
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s2.append(" ").append(s1);
+
+    // no warning expected
+    OStringBuffer s3(32);
+    s3.append("xxx");
+    s3.append(32);
+    s3.append("xxx");
+    s3.append(32.0);
+    s3.append(b ? "xx" : "yyy");
+}
+void f3(OString s1)
+{
+    OStringBuffer s2 = s1;
+    {
+        s2.append("xxx");
+        // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+        s2.append("xxx");
+    }
+}
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

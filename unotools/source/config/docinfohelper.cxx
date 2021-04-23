@@ -58,11 +58,7 @@ OUString DocInfoHelper::GetGeneratorString()
         OUString arch( "$_ARCH" );
         ::rtl::Bootstrap::expandMacros(os);
         ::rtl::Bootstrap::expandMacros(arch);
-        aResult.append( '$' );
-        aResult.append( os );
-        aResult.append( '_' );
-        aResult.append( arch );
-        aResult.append( ' ' );
+        aResult.append( "$" + os + "_" + arch + " " );
     }
 
     // second product: LibreOffice_project/<build_information>

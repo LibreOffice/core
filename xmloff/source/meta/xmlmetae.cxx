@@ -53,9 +53,8 @@ SvXMLMetaExport::GetISODateTimeString( const util::DateTime& rDateTime )
 {
     //  return ISO date string "YYYY-MM-DDThh:mm:ss"
 
-    OUStringBuffer sTmp;
-    sTmp.append( static_cast<sal_Int32>(rDateTime.Year) );
-    sTmp.append( '-' );
+    OUStringBuffer sTmp =
+        OUString::number(rDateTime.Year) + "-";
     lcl_AddTwoDigits( sTmp, rDateTime.Month );
     sTmp.append( '-' );
     lcl_AddTwoDigits( sTmp, rDateTime.Day );

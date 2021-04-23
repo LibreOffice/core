@@ -952,31 +952,26 @@ void AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContaine
 
         for ( sal_uInt32 j = 0; j < nCountAddons; j++ )
         {
-            OUStringBuffer aMergeAddonInstructionBase( aMergeAddonInstructions );
-            aMergeAddonInstructionBase.append( m_aPathDelimiter );
-            aMergeAddonInstructionBase.append( aAddonInstMergeNodesSeq[j] );
-            aMergeAddonInstructionBase.append( m_aPathDelimiter );
+            OUString aMergeAddonInstructionBase =  aMergeAddonInstructions +
+                m_aPathDelimiter +
+                aAddonInstMergeNodesSeq[j] +
+                m_aPathDelimiter;
 
             // Create sequence for data access
-            OUStringBuffer aBuffer( aMergeAddonInstructionBase );
-            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT ] );
-            aNodePropNames[0] = aBuffer.makeStringAndClear();
+            aNodePropNames[0] = aMergeAddonInstructionBase +
+                m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND ] );
-            aNodePropNames[1] = aBuffer.makeStringAndClear();
+            aNodePropNames[1] = aMergeAddonInstructionBase +
+                m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] );
-            aNodePropNames[2] = aBuffer.makeStringAndClear();
+            aNodePropNames[2] = aMergeAddonInstructionBase +
+                m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ] );
-            aNodePropNames[3] = aBuffer.makeStringAndClear();
+            aNodePropNames[3] = aMergeAddonInstructionBase +
+                m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT ] );
-            aNodePropNames[4] = aBuffer.makeStringAndClear();
+            aNodePropNames[4] = aMergeAddonInstructionBase +
+                m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT ];
 
             Sequence< Any > aNodePropValues = GetProperties( aNodePropNames );
 
@@ -987,8 +982,7 @@ void AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContaine
             aNodePropValues[3] >>= aMergeMenuInstruction.aMergeFallback;
             aNodePropValues[4] >>= aMergeMenuInstruction.aMergeContext;
 
-            OUString aMergeMenuBase = aMergeAddonInstructionBase.makeStringAndClear();
-            ReadMergeMenuData( aMergeMenuBase, aMergeMenuInstruction.aMergeMenu );
+            ReadMergeMenuData( aMergeAddonInstructionBase, aMergeMenuInstruction.aMergeMenu );
 
             aContainer.push_back( aMergeMenuInstruction );
         }
@@ -1028,35 +1022,29 @@ void AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruction
 
         for ( sal_uInt32 j = 0; j < nCountAddons; j++ )
         {
-            OUStringBuffer aMergeAddonInstructionBase( aMergeAddonInstructions );
-            aMergeAddonInstructionBase.append( m_aPathDelimiter );
-            aMergeAddonInstructionBase.append( aAddonInstMergeNodesSeq[j] );
-            aMergeAddonInstructionBase.append( m_aPathDelimiter );
+            OUString aMergeAddonInstructionBase = aMergeAddonInstructions +
+                m_aPathDelimiter +
+                aAddonInstMergeNodesSeq[j] +
+                m_aPathDelimiter;
 
             // Create sequence for data access
-            OUStringBuffer aBuffer( aMergeAddonInstructionBase );
-            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBAR ] );
-            aNodePropNames[0] = aBuffer.makeStringAndClear();
+            aNodePropNames[0] = aMergeAddonInstructionBase +
+                m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBAR ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEPOINT ] );
-            aNodePropNames[1] = aBuffer.makeStringAndClear();
+            aNodePropNames[1] = aMergeAddonInstructionBase +
+                m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEPOINT ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMAND ] );
-            aNodePropNames[2] = aBuffer.makeStringAndClear();
+            aNodePropNames[2] = aMergeAddonInstructionBase +
+                m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMAND ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMANDPARAMETER ] );
-            aNodePropNames[3] = aBuffer.makeStringAndClear();
+            aNodePropNames[3] = aMergeAddonInstructionBase +
+                m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMANDPARAMETER ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEFALLBACK ] );
-            aNodePropNames[4] = aBuffer.makeStringAndClear();
+            aNodePropNames[4] = aMergeAddonInstructionBase +
+                m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEFALLBACK ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECONTEXT ] );
-            aNodePropNames[5] = aBuffer.makeStringAndClear();
+            aNodePropNames[5] = aMergeAddonInstructionBase +
+                m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECONTEXT ];
 
             Sequence< Any > aNodePropValues = GetProperties( aNodePropNames );
 
@@ -1068,7 +1056,7 @@ void AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruction
             aNodePropValues[4] >>= aMergeToolbarInstruction.aMergeFallback;
             aNodePropValues[5] >>= aMergeToolbarInstruction.aMergeContext;
 
-            ReadMergeToolbarData( aMergeAddonInstructionBase.makeStringAndClear(),
+            ReadMergeToolbarData( aMergeAddonInstructionBase,
                                   aMergeToolbarInstruction.aMergeToolbarItems );
 
             MergeToolbarInstructionContainer& rVector = rCachedToolbarMergingInstructions[ aMergeToolbarInstruction.aMergeToolbar ];
@@ -1105,36 +1093,29 @@ void AddonsOptions_Impl::ReadNotebookBarMergeInstructions(
 
         for (sal_uInt32 j = 0; j < nCountAddons; j++)
         {
-            OUStringBuffer aMergeAddonInstructionBase(aMergeAddonInstructions);
-            aMergeAddonInstructionBase.append(m_aPathDelimiter);
-            aMergeAddonInstructionBase.append(aAddonInstMergeNodesSeq[j]);
-            aMergeAddonInstructionBase.append(m_aPathDelimiter);
+            OUString aMergeAddonInstructionBase = aMergeAddonInstructions +
+                m_aPathDelimiter +
+                aAddonInstMergeNodesSeq[j] +
+                m_aPathDelimiter;
 
             // Create sequence for data access
-            OUStringBuffer aBuffer(aMergeAddonInstructionBase);
-            aBuffer.append(m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_NOTEBOOKBAR]);
-            aNodePropNames[0] = aBuffer.makeStringAndClear();
+            aNodePropNames[0] = aMergeAddonInstructionBase +
+                m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_NOTEBOOKBAR];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append(m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_MERGEPOINT]);
-            aNodePropNames[1] = aBuffer.makeStringAndClear();
+            aNodePropNames[1] = aMergeAddonInstructionBase +
+                m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_MERGEPOINT];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append(m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_MERGECOMMAND]);
-            aNodePropNames[2] = aBuffer.makeStringAndClear();
+            aNodePropNames[2] = aMergeAddonInstructionBase +
+                m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_MERGECOMMAND];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append(
-                m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_MERGECOMMANDPARAMETER]);
-            aNodePropNames[3] = aBuffer.makeStringAndClear();
+            aNodePropNames[3] = aMergeAddonInstructionBase +
+                m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_MERGECOMMANDPARAMETER];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append(m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_MERGEFALLBACK]);
-            aNodePropNames[4] = aBuffer.makeStringAndClear();
+            aNodePropNames[4] = aMergeAddonInstructionBase +
+                m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_MERGEFALLBACK];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append(m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_MERGECONTEXT]);
-            aNodePropNames[5] = aBuffer.makeStringAndClear();
+            aNodePropNames[5] = aMergeAddonInstructionBase +
+                m_aPropMergeNotebookBarNames[OFFSET_MERGENOTEBOOKBAR_MERGECONTEXT];
 
             Sequence<Any> aNodePropValues = GetProperties(aNodePropNames);
 
@@ -1146,7 +1127,7 @@ void AddonsOptions_Impl::ReadNotebookBarMergeInstructions(
             aNodePropValues[4] >>= aMergeNotebookBarInstruction.aMergeFallback;
             aNodePropValues[5] >>= aMergeNotebookBarInstruction.aMergeContext;
 
-            ReadMergeNotebookBarData(aMergeAddonInstructionBase.makeStringAndClear(),
+            ReadMergeNotebookBarData(aMergeAddonInstructionBase,
                                      aMergeNotebookBarInstruction.aMergeNotebookBarItems);
 
             MergeNotebookBarInstructionContainer& rVector
@@ -1185,31 +1166,26 @@ void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructi
 
         for ( sal_uInt32 j = 0; j < nCountAddons; j++ )
         {
-            OUStringBuffer aMergeAddonInstructionBase( aMergeAddonInstructions );
-            aMergeAddonInstructionBase.append( m_aPathDelimiter );
-            aMergeAddonInstructionBase.append( aAddonInstMergeNodesSeq[j] );
-            aMergeAddonInstructionBase.append( m_aPathDelimiter );
+            OUString aMergeAddonInstructionBase = aMergeAddonInstructions +
+                m_aPathDelimiter +
+                aAddonInstMergeNodesSeq[j] +
+                m_aPathDelimiter;
 
             // Create sequence for data access
-            OUStringBuffer aBuffer( aMergeAddonInstructionBase );
-            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGESTATUSBAR_MERGEPOINT ] );
-            aNodePropNames[0] = aBuffer.makeStringAndClear();
+            aNodePropNames[0] = aMergeAddonInstructionBase +
+                m_aPropMergeMenuNames[ OFFSET_MERGESTATUSBAR_MERGEPOINT ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGESTATUSBAR_MERGECOMMAND ] );
-            aNodePropNames[1] = aBuffer.makeStringAndClear();
+            aNodePropNames[1] = aMergeAddonInstructionBase +
+                m_aPropMergeMenuNames[ OFFSET_MERGESTATUSBAR_MERGECOMMAND ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGESTATUSBAR_MERGECOMMANDPARAMETER ] );
-            aNodePropNames[2] = aBuffer.makeStringAndClear();
+            aNodePropNames[2] = aMergeAddonInstructionBase +
+                m_aPropMergeMenuNames[ OFFSET_MERGESTATUSBAR_MERGECOMMANDPARAMETER ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGESTATUSBAR_MERGEFALLBACK ] );
-            aNodePropNames[3] = aBuffer.makeStringAndClear();
+            aNodePropNames[3] = aMergeAddonInstructionBase +
+                m_aPropMergeMenuNames[ OFFSET_MERGESTATUSBAR_MERGEFALLBACK ];
 
-            aBuffer = aMergeAddonInstructionBase;
-            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGESTATUSBAR_MERGECONTEXT ] );
-            aNodePropNames[4] = aBuffer.makeStringAndClear();
+            aNodePropNames[4] = aMergeAddonInstructionBase +
+                m_aPropMergeMenuNames[ OFFSET_MERGESTATUSBAR_MERGECONTEXT ];
 
             Sequence< Any > aNodePropValues = GetProperties( aNodePropNames );
 
@@ -1220,7 +1196,7 @@ void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructi
             // aNodePropValues[3] >>= aMergeStatusbarInstruction.aMergeFallback;
             aNodePropValues[4] >>= aMergeStatusbarInstruction.aMergeContext;
 
-            ReadMergeStatusbarData( aMergeAddonInstructionBase.makeStringAndClear(),
+            ReadMergeStatusbarData( aMergeAddonInstructionBase,
                                     aMergeStatusbarInstruction.aMergeStatusbarItems );
 
             aContainer.push_back( aMergeStatusbarInstruction );

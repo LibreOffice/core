@@ -159,18 +159,13 @@ SdrPageObj* SdrPageObj::CloneSdrObject(SdrModel& rTargetModel) const
 
 OUString SdrPageObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(SvxResId(STR_ObjNameSingulPAGE));
+    OUString sName(SvxResId(STR_ObjNameSingulPAGE));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
+        sName += " '" + aName + "'";
 
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 OUString SdrPageObj::TakeObjNamePlural() const

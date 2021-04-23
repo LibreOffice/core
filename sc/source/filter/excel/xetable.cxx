@@ -977,11 +977,12 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                 if (rStrm.GetRoot().GetDoc().ValidRange(aMatScRange))
                 {
                     // calculate the cell range.
-                    sFmlaCellRange.append( XclXmlUtils::ToOString(
-                                rStrm.GetRoot().GetStringBuf(), aMatScRange.aStart ).getStr());
-                    sFmlaCellRange.append(":");
-                    sFmlaCellRange.append( XclXmlUtils::ToOString(
-                                rStrm.GetRoot().GetStringBuf(), aMatScRange.aEnd ).getStr());
+                    sFmlaCellRange.append(
+                            XclXmlUtils::ToOString(
+                                rStrm.GetRoot().GetStringBuf(), aMatScRange.aStart ) +
+                            ":" +
+                            XclXmlUtils::ToOString(
+                                rStrm.GetRoot().GetStringBuf(), aMatScRange.aEnd ) );
                 }
 
                 if (    aMatScRange.aStart.Col() == GetXclPos().mnCol &&

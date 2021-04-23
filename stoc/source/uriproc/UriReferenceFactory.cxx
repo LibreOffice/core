@@ -427,8 +427,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
                 OUStringBuffer abs(uriReference->getScheme());
                 abs.append(':');
                 if (uriReference->hasAuthority()) {
-                    abs.append("//");
-                    abs.append(uriReference->getAuthority());
+                    abs.append("//" + uriReference->getAuthority());
                 }
                 for (auto const & i : segments)
                 {
@@ -471,8 +470,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
         OUStringBuffer abs(baseUriReference->getScheme());
         abs.append(':');
         if (baseUriReference->hasAuthority()) {
-            abs.append("//");
-            abs.append(baseUriReference->getAuthority());
+            abs.append("//" + baseUriReference->getAuthority());
         }
         abs.append(baseUriReference->getPath());
         if (uriReference->hasQuery()) {
@@ -492,11 +490,9 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
         abs.append(baseUriReference->getScheme());
         abs.append(':');
         if (uriReference->hasAuthority()) {
-            abs.append("//");
-            abs.append(uriReference->getAuthority());
+            abs.append("//" + uriReference->getAuthority());
         } else if (baseUriReference->hasAuthority()) {
-            abs.append("//");
-            abs.append(baseUriReference->getAuthority());
+            abs.append("//" + baseUriReference->getAuthority());
         }
         if (uriReference->hasRelativePath()) {
             auto path1 = baseUriReference->getPath();
@@ -606,8 +602,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                 uriReference->getAuthority()))
         {
             if (uriReference->hasAuthority()) {
-                rel.append("//");
-                rel.append(uriReference->getAuthority());
+                rel.append("//" + uriReference->getAuthority());
             }
             rel.append(uriReference->getPath());
         } else if ((equalIgnoreEscapeCase(
@@ -653,8 +648,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                 } else {
                     if (uriReference->getPath().startsWith("//")) {
                         assert(uriReference->hasAuthority());
-                        rel.append("//");
-                        rel.append(uriReference->getAuthority());
+                        rel.append("//" + uriReference->getAuthority());
                     }
                     rel.append(uriReference->getPath());
                 }

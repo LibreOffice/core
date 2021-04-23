@@ -546,8 +546,7 @@ OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, bool bUpper )
                     break;
 
         case 4:     {
-                        sRet.append(*cRomanArr);
-                        sRet.append(*(cRomanArr-nDiff));
+                        sRet.append(*cRomanArr + *(cRomanArr-nDiff));
                     }
                     break;
         case 5:     { sRet.append(*(cRomanArr-nDiff)); }

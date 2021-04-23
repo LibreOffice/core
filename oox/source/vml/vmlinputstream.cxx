@@ -138,7 +138,7 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const char* pcBeg, const char* p
     // if no error has occurred, build the resulting attribute list
     if( bOk )
         for (auto const& attrib : aAttributes)
-            rBuffer.append( ' ' ).append( attrib.second );
+            rBuffer.append( " " + attrib.second );
     // on error, just append the complete passed string
     else
         lclAppendToBuffer( rBuffer, pcBeg, pcEnd );

@@ -285,14 +285,11 @@ static OUString getMappingName(
     const Environment & rFrom, const Environment & rTo, std::u16string_view rAddPurpose )
 {
     OUStringBuffer aKey( 64 );
-    aKey.append( rAddPurpose );
-    aKey.append( ';' );
+    aKey.append( OUString::Concat(rAddPurpose) + ";" );
     aKey.append( rFrom.getTypeName() );
     aKey.append( '[' );
     aKey.append( reinterpret_cast< sal_IntPtr >(rFrom.get()), 16 );
-    aKey.append( "];" );
-    aKey.append( rTo.getTypeName() );
-    aKey.append( '[' );
+    aKey.append( "];" + rTo.getTypeName() + "[" );
     aKey.append( reinterpret_cast< sal_IntPtr >(rTo.get()), 16 );
     aKey.append( ']' );
     return aKey.makeStringAndClear();
@@ -304,8 +301,7 @@ static OUString getBridgeName(
     OUStringBuffer aBridgeName( 16 );
     if (!rAddPurpose.empty())
     {
-        aBridgeName.append( rAddPurpose );
-        aBridgeName.append( '_' );
+        aBridgeName.append( OUString::Concat(rAddPurpose) + "_" );
     }
     aBridgeName.append( EnvDcp::getTypeName(rFrom.getTypeName()) );
     aBridgeName.append( '_' );

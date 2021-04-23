@@ -203,12 +203,10 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
         {
             // ...if it's in the xmlns namespace, make the prefix
             // don't bother caching this, it rarely happens
-            OUStringBuffer sQName;
-            sQName.append ( sXMLNS );
+            OUStringBuffer sQName = sXMLNS;
             if (!rLocalName.isEmpty()) // not default namespace
             {
-                sQName.append ( ':' );
-                sQName.append ( rLocalName );
+                sQName.append ( ":" + rLocalName );
             }
             return sQName.makeStringAndClear();
         }
@@ -236,8 +234,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                     OUStringBuffer sQName(prefix.getLength() + 1 + rLocalName.getLength());
                     if (!prefix.isEmpty()) // not default namespace
                     {
-                        sQName.append( prefix );
-                        sQName.append( ':' );
+                        sQName.append( prefix + ":" );
                     }
                     sQName.append ( rLocalName );
                     if (bCache)

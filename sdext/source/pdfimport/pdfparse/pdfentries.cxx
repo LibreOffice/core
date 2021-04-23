@@ -951,10 +951,8 @@ bool PDFTrailer::emit( EmitContext& rWriteContext ) const
                 nLast = section_end->first;
             // write first object number and number of following entries
             OStringBuffer aBuf( 21 );
-            aBuf.append( sal_Int32( section_begin->first ) );
-            aBuf.append( ' ' );
-            aBuf.append( sal_Int32(nLast - section_begin->first + 1) );
-            aBuf.append( "\r\n" );
+            aBuf.append( OString::number( section_begin->first ) + " " +
+                OString::number(nLast - section_begin->first + 1) + "\r\n" );
             if( ! rWriteContext.write( aBuf.getStr(), aBuf.getLength() ) )
                 return false;
             while( section_begin != section_end )
@@ -966,14 +964,12 @@ bool PDFTrailer::emit( EmitContext& rWriteContext ) const
                 int nPad = 10 - aOffset.getLength();
                 for( int i = 0; i < nPad; i++ )
                     aBuf.append( '0' );
-                aBuf.append( aOffset );
-                aBuf.append( ' ' );
+                aBuf.append( aOffset + " " );
                 OString aGeneration( OString::number( section_begin->second.first ) );
                 nPad = 5 - aGeneration.getLength();
                 for( int i = 0; i < nPad; i++ )
                     aBuf.append( '0' );
-                aBuf.append( aGeneration );
-                aBuf.append( " n\r\n" );
+                aBuf.append( aGeneration + " n\r\n" );
                 if( ! rWriteContext.write( aBuf.getStr(), 20 ) )
                     return false;
                 ++section_begin;
@@ -1366,7 +1362,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 {
                                     OUStringBuffer aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        aTmp.append(" ").append(static_cast<sal_Int32>(sal_uInt8(aEnt[i])), 16);
+                                        aTmp.append(" " + OUString::number(sal_uInt8(aEnt[i]), 16));
                                     SAL_WARN("sdext.pdfimport.pdfparse",
                                              "O entry has length " << static_cast<int>(aEnt.getLength()) << ", should be 32 <" << aTmp.makeStringAndClear() << ">" );
                                 }
@@ -1386,7 +1382,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 {
                                     OUStringBuffer aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        aTmp.append(" ").append(static_cast<sal_Int32>(sal_uInt8(aEnt[i])), 16);
+                                        aTmp.append(" " + OUString::number(sal_uInt8(aEnt[i]), 16));
                                     SAL_WARN("sdext.pdfimport.pdfparse",
                                              "U entry has length " << static_cast<int>(aEnt.getLength()) << ", should be 32 <" << aTmp.makeStringAndClear() << ">" );
                                 }

@@ -225,8 +225,7 @@ OUString VbaSiteModel::getSubStorageName() const
 {
     if( mnId >= 0 )
     {
-        OUStringBuffer aBuffer;
-        aBuffer.append( 'i' );
+        OUStringBuffer aBuffer( "i" );
         if( mnId < 10 )
             aBuffer.append( '0' );
         aBuffer.append( mnId );

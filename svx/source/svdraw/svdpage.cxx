@@ -225,8 +225,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         }
         else
         {
-            aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
-            aStr.append(" drawing objects.");
+            aStr.append( OString::number(nCloneErrCnt) + " drawing objects.");
         }
 
         aStr.append(" Not copying connectors.");

@@ -225,28 +225,23 @@ SdrObjGroup* SdrObjGroup::CloneSdrObject(SdrModel& rTargetModel) const
 
 OUString SdrObjGroup::TakeObjNameSingul() const
 {
-    OUStringBuffer sName;
+    OUString sName;
 
     if(0 == GetObjCount())
     {
-        sName.append(SvxResId(STR_ObjNameSingulGRUPEMPTY));
+        sName = SvxResId(STR_ObjNameSingulGRUPEMPTY);
     }
     else
     {
-        sName.append(SvxResId(STR_ObjNameSingulGRUP));
+        sName = SvxResId(STR_ObjNameSingulGRUP);
     }
 
     const OUString aName(GetName());
 
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
+        sName += " '" + aName + "'";
 
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 

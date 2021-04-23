@@ -1671,17 +1671,12 @@ SdrEdgeObj* SdrEdgeObj::CloneSdrObject(SdrModel& rTargetModel) const
 
 OUString SdrEdgeObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(SvxResId(STR_ObjNameSingulEDGE));
+    OUString sName(SvxResId(STR_ObjNameSingulEDGE));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
-    return sName.makeStringAndClear();
+        sName += " '" + aName + "'";
+    return sName;
 }
 
 OUString SdrEdgeObj::TakeObjNamePlural() const

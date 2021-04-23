@@ -253,8 +253,7 @@ void ScDbNameDlg::Init()
 
 void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
 {
-    OUStringBuffer aBuf;
-    aBuf.append(aStrSource);
+    OUStringBuffer aBuf(aStrSource);
     if (pDBData)
     {
         aBuf.append(' ');

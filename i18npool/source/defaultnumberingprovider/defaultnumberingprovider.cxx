@@ -343,7 +343,7 @@ static OUString toRoman( sal_Int32 n )
             case 3: sTmp.append(*cRomanStr);           [[fallthrough]];
             case 2: sTmp.append(*cRomanStr);           [[fallthrough]];
             case 1: sTmp.append(*cRomanStr);           break;
-            case 4: sTmp.append(*cRomanStr).append(*(cRomanStr-nDiff)); break;
+            case 4: sTmp.append(*cRomanStr + *(cRomanStr-nDiff)); break;
             case 5: sTmp.append(*(cRomanStr-nDiff));   break;
         }
 
@@ -1069,8 +1069,7 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
         aProperties[1].Name = "Value";
         for (sal_Int32 j = 1; j <= 3; j++) {
             aProperties[1].Value <<= j;
-            result.append( makeNumberingString( aProperties, aLocale ) );
-            result.append(", ");
+            result.append( makeNumberingString( aProperties, aLocale ) + ", ");
         }
         result.append("...");
         return result.makeStringAndClear();

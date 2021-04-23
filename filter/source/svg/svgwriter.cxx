@@ -1882,10 +1882,8 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
         if( nSize > 1 )
         {
             aPolyPoint = rPoly[ 0 ];
-            aPathData.append("M ")
-                     .append( aPolyPoint.X() )
-                     .append(aComma)
-                     .append( aPolyPoint.Y() );
+            aPathData.append("M " + OUString::number( aPolyPoint.X() ) +
+                aComma + OUString::number( aPolyPoint.Y() ));
 
             char nCurrentMode = 0;
             const bool bClose(!bLine || rPoly[0] == rPoly[nSize - 1]);
@@ -1906,9 +1904,8 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                             aPathData.append(aBlank);
 
                         aPolyPoint = rPoly[ n++ ];
-                        aPathData.append( aPolyPoint.X() )
-                                 .append(aComma)
-                                 .append( aPolyPoint.Y() );
+                        aPathData.append( OUString::number(aPolyPoint.X()) +
+                            aComma + OUString::number( aPolyPoint.Y() ) );
                     }
                 }
                 else
@@ -1920,9 +1917,8 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                     }
 
                     aPolyPoint = rPoly[ n++ ];
-                    aPathData.append( aPolyPoint.X() )
-                             .append(aComma)
-                             .append( aPolyPoint.Y() );
+                    aPathData.append( OUString::number(aPolyPoint.X()) +
+                        aComma + OUString::number( aPolyPoint.Y() ) );
                 }
             }
 
@@ -3013,10 +3009,10 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             sal_uInt16 sz = static_cast<sal_uInt16>((pA->GetDataSize()) / 2);
                             if (sz)
                             {
-                                sType.append("; ");
-                                sType.append(
-                                    reinterpret_cast<sal_Unicode const*>(pData),
-                                    sz);
+                                sType.append(OUString::Concat("; ") +
+                                    std::u16string_view(
+                                        reinterpret_cast<sal_Unicode const*>(pData),
+                                        sz) );
                             }
                         }
                     }

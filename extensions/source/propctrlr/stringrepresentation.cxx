@@ -326,8 +326,7 @@ namespace
         // (separated by a line break)
         for (const auto& rElement : _rElements)
         {
-            sCompose.append(OUString(_rTransformer(rElement)));
-            sCompose.append("\n");
+            sCompose.append(OUString(_rTransformer(rElement)) + "\n");
         }
         sCompose.stripEnd('\n');
 

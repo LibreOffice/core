@@ -5440,21 +5440,21 @@ void SwHTMLParser::ParseMoreMetaOptions()
         return;
     }
 
-    OUStringBuffer sText;
-    sText.append("HTML: <");
-    sText.append(OOO_STRING_SVTOOLS_HTML_meta);
-    sText.append(' ');
+    OUStringBuffer sText =
+        "HTML: <"
+        OOO_STRING_SVTOOLS_HTML_meta
+        " ";
     if( bHTTPEquiv  )
         sText.append(OOO_STRING_SVTOOLS_HTML_O_httpequiv);
     else
         sText.append(OOO_STRING_SVTOOLS_HTML_O_name);
-    sText.append("=\"");
-    sText.append(aName);
-    sText.append("\" ");
-    sText.append(OOO_STRING_SVTOOLS_HTML_O_content);
-    sText.append("=\"");
-    sText.append(aContent);
-    sText.append("\">");
+    sText.append("=\"" +
+            aName +
+            "\" "
+            OOO_STRING_SVTOOLS_HTML_O_content
+            "=\"" +
+            aContent +
+            "\">");
 
     SwPostItField aPostItField(
         static_cast<SwPostItFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Postit )),

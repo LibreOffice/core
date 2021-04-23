@@ -1608,9 +1608,7 @@ static OUString getDbgObjectName(SbUnoObject& rUnoObj)
     {
         aRet.append( "\n" );
     }
-    aRet.append( "\"" );
-    aRet.append( aName );
-    aRet.append( "\":" );
+    aRet.append( "\"" + aName + "\":" );
     return aRet.makeStringAndClear();
 }
 
@@ -1742,16 +1740,16 @@ static OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
     auto x = o3tl::tryAccess<Reference<XInterface>>(aToInspectObj);
     if( !x )
     {
-        aRet.append( ID_DBG_SUPPORTEDINTERFACES );
-        aRet.append( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
+        aRet.append( ID_DBG_SUPPORTEDINTERFACES +
+                    " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
     }
     else
     {
         Reference< XTypeProvider > xTypeProvider( *x, UNO_QUERY );
 
-        aRet.append( "Supported interfaces by object " );
-        aRet.append(getDbgObjectName(rUnoObj));
-        aRet.append( "\n" );
+        aRet.append( "Supported interfaces by object " +
+                    getDbgObjectName(rUnoObj) +
+                    "\n" );
         if( xTypeProvider.is() )
         {
             // get the interfaces of the implementation
@@ -1772,9 +1770,9 @@ static OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
                     typelib_TypeDescription * pTD = nullptr;
                     rType.getDescription( &pTD );
 
-                    aRet.append( "*** ERROR: No IdlClass for type \"" );
-                    aRet.append( pTD->pTypeName );
-                    aRet.append( "\"\n*** Please check type library\n" );
+                    aRet.append( "*** ERROR: No IdlClass for type \"" +
+                                OUString::unacquired(&pTD->pTypeName) +
+                                "\"\n*** Please check type library\n" );
                 }
             }
         }
@@ -1830,9 +1828,9 @@ static OUString Dbg_SbxDataType2String( SbxDataType eType )
 // Debugging help method to display the properties of a SbUnoObjects
 static OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
 {
-    OUStringBuffer aRet;
-    aRet.append("Properties of object ");
-    aRet.append(getDbgObjectName(rUnoObj));
+    OUStringBuffer aRet =
+        "Properties of object " +
+        getDbgObjectName(rUnoObj);
 
     // analyse the Uno-Infos to recognise the arrays
     Reference< XIntrospectionAccess > xAccess = rUnoObj.getIntrospectionAccess();
@@ -1890,8 +1888,7 @@ static OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
             aPropStr.append( Dbg_SbxDataType2String( eType ) );
             if( bMaybeVoid )
                 aPropStr.append( "/void" );
-            aPropStr.append( " " );
-            aPropStr.append( pVar->GetName() );
+            aPropStr.append( " " + pVar->GetName() );
 
             if( i == nPropCount - 1 )
                 aPropStr.append( "\n" );
@@ -1907,9 +1904,9 @@ static OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
 // Debugging help method to display the methods of an SbUnoObjects
 static OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
 {
-    OUStringBuffer aRet;
-    aRet.append("Methods of object ");
-    aRet.append(getDbgObjectName(rUnoObj));
+    OUStringBuffer aRet =
+        "Methods of object " +
+        getDbgObjectName(rUnoObj);
 
     // XIntrospectionAccess, so that the types of the parameter could be outputted
     Reference< XIntrospectionAccess > xAccess = rUnoObj.getIntrospectionAccess();
@@ -1957,9 +1954,7 @@ static OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
             }
             // output the name and the type
             aRet.append( Dbg_SbxDataType2String( eType ) );
-            aRet.append( " " );
-            aRet.append ( pVar->GetName() );
-            aRet.append( " ( " );
+            aRet.append( " " + pVar->GetName() + " ( " );
 
             // the get-method mustn't have a parameter
             Sequence< Reference< XIdlClass > > aParamsSeq = rxMethod->getParameterTypes();
@@ -4763,9 +4758,9 @@ Any SbUnoStructRefObject::getUnoAny()
 
 OUString SbUnoStructRefObject::Impl_DumpProperties()
 {
-    OUStringBuffer aRet;
-    aRet.append("Properties of object ");
-    aRet.append( getDbgObjectName() );
+    OUStringBuffer aRet =
+        "Properties of object " +
+        getDbgObjectName();
 
     sal_uInt32 nPropCount = pProps->Count();
     sal_uInt32 nPropsPerLine = 1 + nPropCount / 30;
@@ -4800,8 +4795,7 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
             }
             aPropStr.append( Dbg_SbxDataType2String( eType ) );
 
-            aPropStr.append( " " );
-            aPropStr.append( pVar->GetName() );
+            aPropStr.append( " " + pVar->GetName() );
 
             if( i == nPropCount - 1 )
             {
@@ -4922,9 +4916,7 @@ OUString SbUnoStructRefObject::getDbgObjectName() const
     {
         aRet.append( "\n" );
     }
-    aRet.append( "\"" );
-    aRet.append( aName );
-    aRet.append( "\":" );
+    aRet.append( "\"" + aName + "\":" );
     return aRet.makeStringAndClear();
 }
 

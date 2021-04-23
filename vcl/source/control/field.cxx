@@ -312,8 +312,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         sal_Int64 nDenom = aStrDenom.makeStringAndClear().toInt64();
         if (nDenom == 0) return false; // Division by zero
         double nFrac2Dec = nWholeNum + static_cast<double>(nNum)/nDenom; // Convert to double for floating point precision
-        OUStringBuffer aStrFrac;
-        aStrFrac.append(nFrac2Dec);
+        OUStringBuffer aStrFrac = OUString::number(nFrac2Dec);
         // Reconvert division result to string and parse
         nDecPos = aStrFrac.indexOf('.');
         if ( nDecPos >= 0)
@@ -381,14 +380,14 @@ void ImplUpdateSeparatorString( OUString& io_rText,
            || (nIndexTh != -1 && nIndexDec == -1)
            )
         {
-            aBuf.append( pBuffer + nIndex, nIndexTh - nIndex );
-            aBuf.append( rNewThSep );
+            aBuf.append( OUString::Concat(std::u16string_view(pBuffer + nIndex, nIndexTh - nIndex )) +
+                rNewThSep );
             nIndex = nIndexTh + rOldThSep.getLength();
         }
         else if( nIndexDec != -1 )
         {
-            aBuf.append( pBuffer + nIndex, nIndexDec - nIndex );
-            aBuf.append( rNewDecSep );
+            aBuf.append( OUString::Concat(std::u16string_view(pBuffer + nIndex, nIndexDec - nIndex )) +
+                rNewDecSep );
             nIndex = nIndexDec + rOldDecSep.getLength();
         }
         else

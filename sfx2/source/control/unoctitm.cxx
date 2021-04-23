@@ -538,7 +538,7 @@ void UsageInfo::save()
         OStringBuffer aUsageInfoMsg("Document Type;Command;Count");
 
         for (auto const& elem : maUsage)
-            aUsageInfoMsg.append("\n" + elem.first.toUtf8() + ";").append(static_cast<sal_Int32>(elem.second));
+            aUsageInfoMsg.append("\n" + elem.first.toUtf8() + ";" + OString::number(elem.second));
 
         sal_uInt64 written = 0;
         auto s = aUsageInfoMsg.makeStringAndClear();
@@ -570,12 +570,9 @@ void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::P
     if (nLastDot >= 0)
         aModule = aModule.copy(nLastDot + 1);
 
-    aBuffer.append(aModule);
-    aBuffer.append(';');
+    aBuffer.append(aModule + ";" + rURL.Protocol + rURL.Path);
 
     // command
-    aBuffer.append(rURL.Protocol);
-    aBuffer.append(rURL.Path);
     sal_Int32 nCount = rArgs.getLength();
 
     // parameters - only their names, not the values (could be sensitive!)
@@ -979,9 +976,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    OUStringBuffer aBuffer;
-    aBuffer.append(aEvent.FeatureURL.Complete);
-    aBuffer.append(u'=');
+    OUStringBuffer aBuffer = aEvent.FeatureURL.Complete + "=";
 
     if (aEvent.FeatureURL.Path == "Bold" ||
         aEvent.FeatureURL.Path == "CenterPara" ||
@@ -1267,7 +1262,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
 
         if (aEvent.IsEnabled && (aEvent.State >>= aPoint))
         {
-            aBuffer.append(aPoint.X).append(" / ").append(aPoint.Y);
+            aBuffer.append( OUString::number(aPoint.X) + "/" + OUString::number(aPoint.Y) );
         }
     }
     else if (aEvent.FeatureURL.Path == "Size")
@@ -1276,7 +1271,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
 
         if (aEvent.IsEnabled && (aEvent.State >>= aSize))
         {
-            aBuffer.append(aSize.Width).append(" x ").append(aSize.Height);
+            aBuffer.append(OUString::number(aSize.Width) + " x " + OUString::number(aSize.Height));
         }
     }
     else if (aEvent.FeatureURL.Path == "LanguageStatus" ||

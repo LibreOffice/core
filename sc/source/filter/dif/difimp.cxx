@@ -32,18 +32,18 @@
 #include <table.hxx>
 #include <memory>
 
-const sal_Unicode pKeyTABLE[]   = { 'T', 'A', 'B', 'L', 'E', 0 };
-const sal_Unicode pKeyVECTORS[] = { 'V', 'E', 'C', 'T', 'O', 'R', 'S', 0 };
-const sal_Unicode pKeyTUPLES[]  = { 'T', 'U', 'P', 'L', 'E', 'S', 0 };
-const sal_Unicode pKeyDATA[]    = { 'D', 'A', 'T', 'A', 0 };
-const sal_Unicode pKeyBOT[]     = { 'B', 'O', 'T', 0 };
-const sal_Unicode pKeyEOD[]     = { 'E', 'O', 'D', 0 };
-const sal_Unicode pKeyERROR[]   = { 'E', 'R', 'R', 'O', 'R', 0 };
-const sal_Unicode pKeyTRUE[]    = { 'T', 'R', 'U', 'E', 0 };
-const sal_Unicode pKeyFALSE[]   = { 'F', 'A', 'L', 'S', 'E', 0 };
-const sal_Unicode pKeyNA[]      = { 'N', 'A', 0 };
-const sal_Unicode pKeyV[]       = { 'V', 0 };
-const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
+const std::u16string_view pKeyTABLE   = u"TABLE";
+const std::u16string_view pKeyVECTORS = u"VECTORS";
+const std::u16string_view pKeyTUPLES  = u"TUPLES";
+const std::u16string_view pKeyDATA    = u"DATA";
+const std::u16string_view pKeyBOT     = u"BOT";
+const std::u16string_view pKeyEOD     = u"EOD";
+const std::u16string_view pKeyERROR   = u"ERROR";
+const std::u16string_view pKeyTRUE    = u"TRUE";
+const std::u16string_view pKeyFALSE   = u"FALSE";
+const std::u16string_view pKeyNA      = u"NA";
+const std::u16string_view pKeyV       = u"V";
+const std::u16string_view pKey1_0     = u"1,0";
 
 ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                         const rtl_TextEncoding eVon )
@@ -244,18 +244,18 @@ TOPIC DifParser::GetNextTopic()
 {
     enum STATE { S_VectorVal, S_Data, S_END, S_START, S_UNKNOWN, S_ERROR_L2 };
 
-    static const sal_Unicode pKeyLABEL[]        = { 'L', 'A', 'B', 'E', 'L', 0 };
-    static const sal_Unicode pKeyCOMMENT[]      = { 'C', 'O', 'M', 'M', 'E', 'N', 'T', 0 };
-    static const sal_Unicode pKeySIZE[]         = { 'S', 'I', 'Z', 'E', 0 };
-    static const sal_Unicode pKeyPERIODICITY[]  = { 'P', 'E', 'R', 'I', 'O', 'D', 'I', 'C', 'I', 'T', 'Y', 0 };
-    static const sal_Unicode pKeyMAJORSTART[]   = { 'M', 'A', 'J', 'O', 'R', 'S', 'T', 'A', 'R', 'T', 0 };
-    static const sal_Unicode pKeyMINORSTART[]   = { 'M', 'I', 'N', 'O', 'R', 'S', 'T', 'A', 'R', 'T', 0 };
-    static const sal_Unicode pKeyTRUELENGTH[]   = { 'T', 'R', 'U', 'E', 'L', 'E', 'N', 'G', 'T', 'H', 0 };
-    static const sal_Unicode pKeyUINITS[]       = { 'U', 'I', 'N', 'I', 'T', 'S', 0 };
-    static const sal_Unicode pKeyDISPLAYUNITS[] = { 'D', 'I', 'S', 'P', 'L', 'A', 'Y', 'U', 'N', 'I', 'T', 'S', 0 };
-    static const sal_Unicode pKeyUNKNOWN[]      = { 0 };
+    static const std::u16string_view pKeyLABEL        = u"LABEL";
+    static const std::u16string_view pKeyCOMMENT      = u"COMMENT";
+    static const std::u16string_view pKeySIZE         = u"SIZE";
+    static const std::u16string_view pKeyPERIODICITY  = u"PERIODICITY";
+    static const std::u16string_view pKeyMAJORSTART   = u"MAJORSTART";
+    static const std::u16string_view pKeyMINORSTART   = u"MINORSTART";
+    static const std::u16string_view pKeyTRUELENGTH   = u"TRUELENGTH";
+    static const std::u16string_view pKeyUINITS       = u"UINITS";
+    static const std::u16string_view pKeyDISPLAYUNITS = u"DISPLAYUNITS";
+    static const std::u16string_view pKeyUNKNOWN      = u"";
 
-    static const sal_Unicode*   ppKeys[] =
+    static const std::u16string_view ppKeys[] =
     {
         pKeyTABLE,              // 0
         pKeyVECTORS,
@@ -310,7 +310,7 @@ TOPIC DifParser::GetNextTopic()
         {
             case S_START:
             {
-                const sal_Unicode*  pRef;
+                std::u16string_view  pRef;
                 sal_uInt16          nCnt = 0;
                 bool            bSearch = true;
 
@@ -327,12 +327,12 @@ TOPIC DifParser::GetNextTopic()
                     {
                         nCnt++;
                         pRef = ppKeys[ nCnt ];
-                        if( !*pRef )
+                        if( pRef.empty() )
                             bSearch = false;
                     }
                 }
 
-                if( *pRef )
+                if( !pRef.empty() )
                     eS = S_VectorVal;
                 else
                     eS = S_UNKNOWN;

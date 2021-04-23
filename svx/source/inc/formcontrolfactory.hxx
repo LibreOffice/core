@@ -93,7 +93,7 @@ namespace svxform
 
         static OUString getUniqueName(
                     const css::uno::Reference< css::container::XNameAccess >& _rxContainer,
-                    const OUString& _rBaseName
+                    std::u16string_view _rBaseName
                 );
 
     private:

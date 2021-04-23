@@ -4084,8 +4084,7 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(c
     aFieldMasterName.append('.');
     if ( bIsMergeField && !sDatabaseDataSourceName.isEmpty() )
     {
-        aFieldMasterName.append(sDatabaseDataSourceName);
-        aFieldMasterName.append('.');
+        aFieldMasterName.append(sDatabaseDataSourceName + ".");
     }
     aFieldMasterName.append(rFieldMasterName);
     OUString sFieldMasterName = aFieldMasterName.makeStringAndClear();

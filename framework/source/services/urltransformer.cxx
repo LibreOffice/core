@@ -227,8 +227,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL )
                 aCompletePath.append( aURL.Name );
             else
             {
-                aCompletePath.append( '/' );
-                aCompletePath.append( aURL.Name );
+                aCompletePath.append( "/" + aURL.Name );
             }
         }
 

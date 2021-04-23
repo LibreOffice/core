@@ -128,7 +128,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
         return rWrt;
 
     OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_marquee);
+    sOut.append(" " OOO_STRING_SVTOOLS_HTML_marquee);
 
     // get attributes of the object
     const SfxItemSet& rItemSet = pTextObj->GetMergedItemSet();

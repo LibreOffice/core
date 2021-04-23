@@ -140,10 +140,8 @@ namespace DOM
     {
         OUStringBuffer buf;
         buf.appendAscii(ctxt->lastError.message);
-        buf.append("Line: ");
-        buf.append(static_cast<sal_Int32>(ctxt->lastError.line));
-        buf.append("\nColumn: ");
-        buf.append(static_cast<sal_Int32>(ctxt->lastError.int2));
+        buf.append("Line: " + OUString::number(ctxt->lastError.line) +
+            "\nColumn: " + OUString::number(ctxt->lastError.int2));
         OUString msg = buf.makeStringAndClear();
         return msg;
     }

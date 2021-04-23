@@ -475,16 +475,16 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     if (nLOKWindowId == 0 || DisableCallbacks::disabled())
         return;
 
-    OStringBuffer aPayload;
-    aPayload.append("{ \"id\": \"").append(static_cast<sal_Int64>(nLOKWindowId)).append('"');
-    aPayload.append(", \"action\": \"" + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8) + "\"");
+    OStringBuffer aPayload =
+        "{ \"id\": \"" + OString::number(nLOKWindowId) + "\""
+        ", \"action\": \"" + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8) + "\"";
 
     for (const auto& rItem: rPayload)
     {
         if (!rItem.first.isEmpty() && !rItem.second.isEmpty())
         {
             aPayload.append(", \"" + rItem.first + "\": \"" +
-                    rItem.second).append('"');
+                    rItem.second + "\"");
         }
     }
     aPayload.append('}');
@@ -503,8 +503,7 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, std::string
     aBuf.append(rPayload);
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
     {
-        aBuf.append(", ");
-        aBuf.append(static_cast<sal_Int32>(pThisView->getPart()));
+        aBuf.append(", " + OString::number(pThisView->getPart()));
     }
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aBuf.makeStringAndClear().getStr());
 }

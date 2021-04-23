@@ -210,8 +210,7 @@ OUString ObjectCopySource::getSelectStatement() const
     }
     else
     {   // table
-        OUStringBuffer aSQL;
-        aSQL.append( "SELECT " );
+        OUStringBuffer aSQL( "SELECT " );
 
         // we need to create the sql stmt with column names
         // otherwise it is possible that names don't match
@@ -369,12 +368,8 @@ OFieldDescription* NamedTableCopySource::createFieldDescription( const OUString&
 
 OUString NamedTableCopySource::getSelectStatement() const
 {
-    OUStringBuffer aSQL;
-    aSQL.append( "SELECT * FROM " );
-
-    aSQL.append( ::dbtools::composeTableNameForSelect( m_xConnection, m_sTableCatalog, m_sTableSchema, m_sTableBareName ) );
-
-    return aSQL.makeStringAndClear();
+    return "SELECT * FROM " +
+        ::dbtools::composeTableNameForSelect( m_xConnection, m_sTableCatalog, m_sTableSchema, m_sTableBareName );
 }
 
 ::utl::SharedUNOComponent< XPreparedStatement > NamedTableCopySource::getPreparedSelectStatement() const

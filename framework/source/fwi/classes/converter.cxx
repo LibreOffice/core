@@ -73,39 +73,27 @@ OUString Converter::convert_DateTime2ISO8601( const DateTime& aSource )
         sBuffer.append("00");
     else if (nYear<1000)
         sBuffer.append("0");
-    sBuffer.append( nYear );
-
-    sBuffer.append("-");
+    sBuffer.append( OUString::number(nYear) + "-");
     // write month formatted as "MM"
     if (nMonth<10)
         sBuffer.append("0");
-    sBuffer.append( nMonth );
-
-    sBuffer.append("-");
+    sBuffer.append( OUString::number(nMonth) + "-");
     // write day formatted as "DD"
     if (nDay<10)
         sBuffer.append("0");
-    sBuffer.append( nDay );
-
-    sBuffer.append("T");
+    sBuffer.append( OUString::number(nDay) + "T");
     // write hours formatted as "hh"
     if (nHour<10)
         sBuffer.append("0");
-    sBuffer.append( nHour );
-
-    sBuffer.append(":");
+    sBuffer.append( OUString::number(nHour) + ":" );
     // write min formatted as "mm"
     if (nMin<10)
         sBuffer.append("0");
-    sBuffer.append( nMin );
-
-    sBuffer.append(":");
+    sBuffer.append( OUString::number(nMin) + ":" );
     // write sec formatted as "ss"
     if (nSec<10)
         sBuffer.append("0");
-    sBuffer.append( nSec );
-
-    sBuffer.append("Z");
+    sBuffer.append( OUString::number(nSec) + "Z" );
 
     return sBuffer.makeStringAndClear();
 }

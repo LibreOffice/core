@@ -145,14 +145,15 @@ OUString SAL_CALL DispatchRecorder::getRecordedMacro()
     aScriptBuffer.ensureCapacity(10000);
     m_nRecordingID = 1;
 
-    aScriptBuffer.append("rem ----------------------------------------------------------------------\n");
-    aScriptBuffer.append("rem define variables\n");
-    aScriptBuffer.append("dim document   as object\n");
-    aScriptBuffer.append("dim dispatcher as object\n");
-    aScriptBuffer.append("rem ----------------------------------------------------------------------\n");
-    aScriptBuffer.append("rem get access to the document\n");
-    aScriptBuffer.append("document   = ThisComponent.CurrentController.Frame\n");
-    aScriptBuffer.append("dispatcher = createUnoService(\"com.sun.star.frame.DispatchHelper\")\n\n");
+    aScriptBuffer.append(
+        "rem ----------------------------------------------------------------------\n"
+        "rem define variables\n"
+        "dim document   as object\n"
+        "dim dispatcher as object\n"
+        "rem ----------------------------------------------------------------------\n"
+        "rem get access to the document\n"
+        "document   = ThisComponent.CurrentController.Frame\n"
+        "dispatcher = createUnoService(\"com.sun.star.frame.DispatchHelper\")\n\n");
 
     for (auto const& statement : m_aStatements)
         implts_recordMacro( statement.aCommand, statement.aArgs, statement.bIsComment, aScriptBuffer );
@@ -320,22 +321,22 @@ void DispatchRecorder::implts_recordMacro( std::u16string_view aURL,
             // add arg().Name
             if(bAsComment)
                 aArgumentBuffer.append(REM_AS_COMMENT);
-            aArgumentBuffer.append     (sArrayName);
-            aArgumentBuffer.append("(");
-            aArgumentBuffer.append     (nValidArgs);
-            aArgumentBuffer.append(").Name = \"");
-            aArgumentBuffer.append     (lArguments[i].Name);
-            aArgumentBuffer.append("\"\n");
+            aArgumentBuffer.append(sArrayName +
+                                   "(" +
+                                   OUString::number(nValidArgs) +
+                                    ").Name = \"" +
+                                   lArguments[i].Name +
+                                   "\"\n");
 
             // add arg().Value
             if(bAsComment)
                 aArgumentBuffer.append(REM_AS_COMMENT);
-            aArgumentBuffer.append     (sArrayName);
-            aArgumentBuffer.append("(");
-            aArgumentBuffer.append     (nValidArgs);
-            aArgumentBuffer.append(").Value = ");
-            aArgumentBuffer.append     (sValBuffer.makeStringAndClear());
-            aArgumentBuffer.append("\n");
+            aArgumentBuffer.append(sArrayName +
+                                    "(" +
+                                    OUString::number(nValidArgs) +
+                                    ").Value = " +
+                                    sValBuffer +
+                                    "\n");
 
             ++nValidArgs;
         }

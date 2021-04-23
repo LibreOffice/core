@@ -625,11 +625,11 @@ OUString PackageManagerImpl::insertToActivationLayer(
         OUStringBuffer buf;
         if (!sourceContent.isFolder())
         {
-            buf.append( "vnd.sun.star.zip://" );
-            buf.append( ::rtl::Uri::encode( sourceContent.getURL(),
-                                            rtl_UriCharClassRegName,
-                                            rtl_UriEncodeIgnoreEscapes,
-                                            RTL_TEXTENCODING_UTF8 ) );
+            buf.append( "vnd.sun.star.zip://" +
+                ::rtl::Uri::encode( sourceContent.getURL(),
+                                    rtl_UriCharClassRegName,
+                                    rtl_UriEncodeIgnoreEscapes,
+                                    RTL_TEXTENCODING_UTF8 ) );
         }
         else
         {
@@ -941,19 +941,18 @@ void PackageManagerImpl::removePackage(
 
 OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
 {
-    OUStringBuffer buf;
-    buf.append( data.temporaryName );
+    OUString buf = data.temporaryName;
     //The bundled extensions are not contained in an additional folder
     //with a unique name. data.temporaryName contains already the
     //UTF8 encoded folder name. See PackageManagerImpl::synchronize
     if (m_context != "bundled")
     {
-        buf.append( "_/" );
-        buf.append( ::rtl::Uri::encode( data.fileName, rtl_UriCharClassPchar,
+        buf += "_/" +
+                ::rtl::Uri::encode( data.fileName, rtl_UriCharClassPchar,
                                     rtl_UriEncodeIgnoreEscapes,
-                                    RTL_TEXTENCODING_UTF8 ) );
+                                    RTL_TEXTENCODING_UTF8 );
     }
-    return makeURL( m_activePackages, buf.makeStringAndClear() );
+    return makeURL( m_activePackages, buf );
 }
 
 

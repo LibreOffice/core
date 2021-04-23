@@ -314,11 +314,12 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
     else
     {
         // direct API call on a specified object
-        OUStringBuffer aCall;
-        aCall.append('[').append(INetURLObject::decode(aMacro.subView(6),
-            INetURLObject::DecodeMechanism::WithCharset));
-        aCall.append(']');
-        pAppMgr->GetLib(0)->Execute(aCall.makeStringAndClear());
+        OUString aCall =
+            "[" +
+            INetURLObject::decode(aMacro.subView(6),
+                    INetURLObject::DecodeMechanism::WithCharset) +
+            "]";
+        pAppMgr->GetLib(0)->Execute(aCall);
         nErr = SbxBase::GetError();
     }
 

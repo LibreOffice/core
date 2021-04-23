@@ -2866,12 +2866,10 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow_Lock( const Reference<
             sCurrentFormName = xNamed->getName();
 
             // the name of the current form
-            OUStringBuffer sCompleteCurrentName( sCurrentFormName );
+            OUString sCompleteCurrentName( sCurrentFormName );
             if ( !_rCurrentLevelPrefix.isEmpty() )
             {
-                sCompleteCurrentName.append( " (" );
-                sCompleteCurrentName.append     ( _rCurrentLevelPrefix );
-                sCompleteCurrentName.append( ")" );
+                sCompleteCurrentName += " (" + _rCurrentLevelPrefix + ")";
             }
 
             // the prefix for the next level
@@ -2882,7 +2880,7 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow_Lock( const Reference<
 
             // remember both the form and its "display name"
             _out_rForms.push_back( xCurrentAsForm );
-            _out_rNames.push_back( sCompleteCurrentName.makeStringAndClear() );
+            _out_rNames.push_back( sCompleteCurrentName );
 
             // and descend
             impl_collectFormSearchContexts_nothrow_Lock(

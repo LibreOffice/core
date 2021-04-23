@@ -114,10 +114,7 @@ namespace rptui
 
     OUString ReportFormula::getEqualUndecoratedContent() const
     {
-        OUStringBuffer aBuffer;
-        aBuffer.append( "=" );
-        aBuffer.append( getUndecoratedContent() );
-        return aBuffer.makeStringAndClear();
+        return "=" + getUndecoratedContent();
     }
 
 

@@ -181,20 +181,16 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
                 {
                     if (*pUCMode != nLen)
                     {
-                        aBuf.append("\\uc");
-                        aBuf.append(nLen);
                         // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.
-                        aBuf.append(' ');
+                        aBuf.append("\\uc" + OString::number(nLen) + " ");
                         *pUCMode = nLen;
                     }
-                    aBuf.append("\\u");
-                    aBuf.append(static_cast<sal_Int32>(c));
+                    aBuf.append("\\u" + OString::number(static_cast<sal_Int32>(c)));
                 }
 
                 for (sal_Int32 nI = 0; nI < nLen; ++nI)
                 {
-                    aBuf.append("\\'");
-                    aBuf.append(OutHex(sConverted[nI], 2));
+                    aBuf.append("\\'" + OutHex(sConverted[nI], 2));
                 }
             }
     }
@@ -223,10 +219,8 @@ OString OutString(const OUString& rStr, rtl_TextEncoding eDestEnc, bool bUnicode
         aBuf.append(OutChar(rStr[n], &nUCMode, eDestEnc, nullptr, bUnicode));
     if (nUCMode != 1)
     {
-        aBuf.append(OOO_STRING_SVTOOLS_RTF_UC);
-        aBuf.append(sal_Int32(1));
-        aBuf.append(
-            " "); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
+        // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
+        aBuf.append(OOO_STRING_SVTOOLS_RTF_UC "1 ");
     }
     return aBuf.makeStringAndClear();
 }
@@ -250,17 +244,10 @@ OString OutStringUpr(const char* pToken, const OUString& rStr, rtl_TextEncoding 
     if (TryOutString(rStr, eDestEnc))
         return OString::Concat("{") + pToken + " " + OutString(rStr, eDestEnc) + "}";
 
-    OStringBuffer aRet;
-    aRet.append("{" OOO_STRING_SVTOOLS_RTF_UPR "{");
-    aRet.append(pToken);
-    aRet.append(" ");
-    aRet.append(OutString(rStr, eDestEnc, /*bUnicode =*/false));
-    aRet.append("}{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_UD "{");
-    aRet.append(pToken);
-    aRet.append(" ");
-    aRet.append(OutString(rStr, eDestEnc));
-    aRet.append("}}}");
-    return aRet.makeStringAndClear();
+    return OString::Concat("{" OOO_STRING_SVTOOLS_RTF_UPR "{") + pToken + " "
+           + OutString(rStr, eDestEnc, /*bUnicode =*/false)
+           + "}{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_UD "{" + pToken + " "
+           + OutString(rStr, eDestEnc) + "}}}";
 }
 
 int AsHex(char ch)

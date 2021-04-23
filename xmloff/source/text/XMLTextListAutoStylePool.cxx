@@ -109,8 +109,7 @@ XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
     do
     {
         rName++;
-        sBuffer.append( rPrefix );
-        sBuffer.append( static_cast<sal_Int32>(rName) );
+        sBuffer.append( rPrefix + OUString::number(rName) );
         sName = sBuffer.makeStringAndClear();
     }
     while (rNames.find(sName) != rNames.end());

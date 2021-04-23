@@ -28,8 +28,7 @@ StringMap EditorWindowUIObject::get_state()
     OUStringBuffer aRes;
     for (i = 0, nParas = pEditEngine->GetParagraphCount(); i < nParas; ++i)
     {
-        aRes.append(pEditEngine->GetText(i));
-        aRes.append("\n");
+        aRes.append(pEditEngine->GetText(i) + "\n");
     }
 
     aMap["Text"] = aRes.makeStringAndClear();

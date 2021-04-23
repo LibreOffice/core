@@ -336,9 +336,7 @@ bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, co
             default:
                 break;
         }
-        aOut.append( GetXMLToken( eStyleToken ) );
-
-        aOut.append( ' ' );
+        aOut.append( GetXMLToken( eStyleToken ) + " " );
 
         ::sax::Converter::convertColor( aOut, aBorderLine.Color );
     }

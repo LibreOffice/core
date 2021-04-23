@@ -1719,18 +1719,16 @@ OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
     const sal_Int32 nMinutes (sal::static_int_cast<sal_Int32>(rTime.Minutes));
     const sal_Int32 nSeconds(sal::static_int_cast<sal_Int32>(rTime.Seconds));
     // Hours
-    sText.append(nHours);
-
-    sText.append(":");
+    sText.append(OUString::number(nHours) + ":");
 
     // Minutes
     const OUString sMinutes (OUString::number(nMinutes));
     if (sMinutes.getLength() == 1)
         sText.append("0");
-    sText.append(sMinutes);
+    sText.append(sMinutes +
 
     // Seconds
-    sText.append(":");
+        ":");
     const OUString sSeconds (OUString::number(nSeconds));
     if (sSeconds.getLength() == 1)
         sText.append("0");
