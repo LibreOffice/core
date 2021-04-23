@@ -132,8 +132,7 @@ OString
 GlyphSet::GetGlyphSetName (sal_Int32 nGlyphSetID)
 {
     OStringBuffer aSetName( maBaseName.getLength() + 32 );
-    aSetName.append( maBaseName );
-    aSetName.append( "FID" );
+    aSetName.append( maBaseName + "FID" );
     aSetName.append( mnFontID );
     aSetName.append( mbVertical ? "VGSet" : "HGSet" );
     aSetName.append( nGlyphSetID );

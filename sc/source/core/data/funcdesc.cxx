@@ -161,8 +161,7 @@ OUString ScFuncDesc::GetParamList() const
                 aSig.append(maDefArgNames[i]);
                 if ( i != nArgCount-1 )
                 {
-                    aSig.append(sep);
-                    aSig.append( " " );
+                    aSig.append(sep + " " );
                 }
             }
             // If only suppressed parameters follow the last added parameter,
@@ -176,8 +175,7 @@ OUString ScFuncDesc::GetParamList() const
             for ( sal_uInt16 nArg = 0; nArg < nVarArgsStart; nArg++ )
             {
                 aSig.append(maDefArgNames[nArg]);
-                aSig.append(sep);
-                aSig.append( " " );
+                aSig.append(sep + " " );
             }
             /* NOTE: Currently there are no suppressed var args parameters. If
              * there were, we'd have to cope with it here and above for the fix
@@ -189,16 +187,13 @@ OUString ScFuncDesc::GetParamList() const
             aSig.append(' ');
             aSig.append(maDefArgNames[nVarArgsStart]);
             aSig.append('2');
-            aSig.append(sep);
-            aSig.append(" ... ");
+            aSig.append(sep + " ... ");
         }
         else
         {
             for ( sal_uInt16 nArg = 0; nArg < nVarArgsStart; nArg++ )
             {
-                aSig.append(maDefArgNames[nArg]);
-                aSig.append(sep);
-                aSig.append( " " );
+                aSig.append(maDefArgNames[nArg] + sep + " " );
             }
 
             aSig.append(maDefArgNames[nVarArgsStart]);
@@ -206,15 +201,13 @@ OUString ScFuncDesc::GetParamList() const
             aSig.append(sep);
             aSig.append(maDefArgNames[nVarArgsStart+1]);
             aSig.append('1');
-            aSig.append(sep);
-            aSig.append( " " );
+            aSig.append(sep + " " );
             aSig.append(maDefArgNames[nVarArgsStart]);
             aSig.append('2');
             aSig.append(sep);
             aSig.append(maDefArgNames[nVarArgsStart+1]);
             aSig.append('2');
-            aSig.append(sep);
-            aSig.append( " ... " );
+            aSig.append(sep + " ... " );
         }
     }
 
@@ -232,8 +225,7 @@ OUString ScFuncDesc::getSignature() const
         OUString aParamList = GetParamList();
         if( !aParamList.isEmpty() )
         {
-            aSig.append( "( " );
-            aSig.append(aParamList);
+            aSig.append( "( "  + aParamList);
             // U+00A0 (NBSP) prevents automatic line break
             aSig.append( u'\x00A0' );
             aSig.append( ")" );
@@ -252,9 +244,7 @@ OUString ScFuncDesc::getFormula( const ::std::vector< OUString >& _aArguments ) 
 
     if(mxFuncName)
     {
-        aFormula.append( *mxFuncName );
-
-        aFormula.append( "(" );
+        aFormula.append( *mxFuncName + "(" );
         if ( nArgCount > 0 && !_aArguments.empty() && !_aArguments[0].isEmpty())
         {
             ::std::vector< OUString >::const_iterator aIter = _aArguments.begin();
@@ -874,14 +864,8 @@ ScFunctionList::ScFunctionList()
         pDesc->nFIndex     = nNextId++; //  ??? OpCode vergeben
         pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
         pDesc->mxFuncName = pLegacyFuncData->GetInternalName().toAsciiUpperCase();
-
-        OUStringBuffer aBuf(aArgDesc);
-        aBuf.append('\n');
-        aBuf.append("( AddIn: ");
-        aBuf.append(pLegacyFuncData->GetModuleName());
-        aBuf.append(" )");
-        pDesc->mxFuncDesc = aBuf.makeStringAndClear();
-
+        pDesc->mxFuncDesc = aArgDesc + "\n"
+             "( AddIn: " + pLegacyFuncData->GetModuleName() + " )";
         pDesc->nArgCount   = nArgs;
         if (nArgs)
         {

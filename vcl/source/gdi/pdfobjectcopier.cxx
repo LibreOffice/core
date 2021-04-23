@@ -110,9 +110,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
             else
                 aLine.append(" ");
 
-            aLine.append("/");
-            aLine.append(rPair.first);
-            aLine.append(" ");
+            aLine.append("/" + rPair.first + " ");
             copyRecursively(aLine, rPair.second, rDocBuffer, rCopiedResources);
         }
 
@@ -121,10 +119,11 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
 
     if (filter::PDFStreamElement* pStream = rObject.GetStream())
     {
-        aLine.append("stream\n");
         SvMemoryStream& rStream = pStream->GetMemory();
-        aLine.append(static_cast<const char*>(rStream.GetData()), rStream.GetSize());
-        aLine.append("\nendstream\n");
+        aLine.append(
+            OString::Concat("stream\n")
+            + std::string_view(static_cast<const char*>(rStream.GetData()), rStream.GetSize())
+            + "\nendstream\n");
     }
 
     if (filter::PDFArrayElement* pArray = rObject.GetArray())

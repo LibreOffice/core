@@ -4032,8 +4032,8 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             {
                 if (nThousand == 1)
                 {
-                    sResString = sStrArray[nNums[0]];
-                    sResString.append(sStrArray[nNums[1]]); // integer part
+                    sResString = sStrArray[nNums[0]] +
+                        sStrArray[nNums[1]]; // integer part
                     fOutNumber = StringToDouble(sResString.makeStringAndClear());
                 }
                 else

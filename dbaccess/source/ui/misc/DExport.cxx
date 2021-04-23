@@ -825,8 +825,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     {
         if ( !elem.isEmpty() )
         {
-            aSql.append(elem);
-            aSql.append(",");
+            aSql.append(elem + ",");
             aValues.append("?,");
         }
     }

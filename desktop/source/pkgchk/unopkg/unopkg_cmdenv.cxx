@@ -324,13 +324,12 @@ void CommandEnvironmentImpl::update_( Any const & Status )
             return;
     }
     else {
-        OUStringBuffer buf;
-        buf.append( "WARNING: " );
+        OUStringBuffer buf = "WARNING: ";
         deployment::DeploymentException dp_exc;
         if (Status >>= dp_exc) {
-            buf.append( dp_exc.Message );
-            buf.append( ", Cause: " );
-            buf.append( ::comphelper::anyToString(dp_exc.Cause) );
+            buf.append( dp_exc.Message +
+                ", Cause: " +
+                ::comphelper::anyToString(dp_exc.Cause) );
         }
         else {
             buf.append( ::comphelper::anyToString(Status) );

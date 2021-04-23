@@ -203,8 +203,7 @@ OUString SwFormatFootnote::GetFootnoteText(SwRootFrame const& rLayout) const
             while ( !aIdx.GetNode().IsEndNode() ) {
                 if ( aIdx.GetNode().IsTextNode() )
                 {
-                    buf.append("  ");
-                    buf.append(aIdx.GetNode().GetTextNode()->GetExpandText(&rLayout));
+                    buf.append("  " + aIdx.GetNode().GetTextNode()->GetExpandText(&rLayout));
                 }
                 ++aIdx;
             }

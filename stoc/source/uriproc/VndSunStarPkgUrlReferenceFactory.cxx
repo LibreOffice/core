@@ -94,15 +94,14 @@ Factory::createVndSunStarPkgUrlReference(
             " XVndSunStarPkgUrlReferenceFactory.createVndSunStarPkgUrlReference");
     }
     if (authority->isAbsolute() && !authority->hasFragment()) {
-        OUStringBuffer buf(128);
-        buf.append("vnd.sun.star.pkg://");
-        buf.append(
+        OUString buf =
+            "vnd.sun.star.pkg://" +
             rtl::Uri::encode(
                 authority->getUriReference(), rtl_UriCharClassRegName,
-                rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8));
+                rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8);
         css::uno::Reference< css::uri::XUriReference > uriRef(
             css::uri::UriReferenceFactory::create(m_context)->parse(
-                buf.makeStringAndClear()));
+                buf));
         return uriRef;
     } else {
         return css::uno::Reference< css::uri::XUriReference >();

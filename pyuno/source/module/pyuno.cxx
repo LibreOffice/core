@@ -102,14 +102,15 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
             OUString::number( reinterpret_cast< sal_IntPtr >(*static_cast<void * const *>(pVal)), 16 ));
         if( VAL2STR_MODE_DEEP == mode )
         {
-            buf.append( "{" );        Reference< XInterface > r = *static_cast<Reference< XInterface > const *>(pVal);
+            buf.append( "{" );
+            Reference< XInterface > r = *static_cast<Reference< XInterface > const *>(pVal);
             Reference< XServiceInfo > serviceInfo( r, UNO_QUERY);
             Reference< XTypeProvider > typeProvider(r,UNO_QUERY);
             if( serviceInfo.is() )
             {
-                buf.append("implementationName=" );
-                buf.append(serviceInfo->getImplementationName() );
-                buf.append(", supportedServices={" );
+                buf.append("implementationName=" +
+                    serviceInfo->getImplementationName() +
+                    ", supportedServices={" );
                 Sequence< OUString > seq = serviceInfo->getSupportedServiceNames();
                 for( int i = 0 ; i < seq.getLength() ; i ++ )
                 {
@@ -208,11 +209,11 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         break;
     }
     case typelib_TypeClass_ANY:
-        buf.append( "{ " );
-        buf.append( val2str( static_cast<uno_Any const *>(pVal)->pData,
-                             static_cast<uno_Any const *>(pVal)->pType ,
-                             mode) );
-        buf.append( " }" );
+        buf.append( "{ " +
+            val2str( static_cast<uno_Any const *>(pVal)->pData,
+                     static_cast<uno_Any const *>(pVal)->pType ,
+                     mode) +
+            " }");
         break;
     case typelib_TypeClass_TYPE:
         buf.append( (*static_cast<typelib_TypeDescriptionReference * const *>(pVal))->pTypeName );
@@ -249,9 +250,9 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
             buf.append( "false" );
         break;
     case typelib_TypeClass_CHAR:
-        buf.append( '\'' );
-        buf.append( *static_cast<sal_Unicode const *>(pVal) );
-        buf.append( '\'' );
+        buf.append( OUString::Concat("\'") +
+            OUStringChar(*static_cast<sal_Unicode const *>(pVal)) +
+            "\'");
         break;
     case typelib_TypeClass_FLOAT:
         buf.append( *static_cast<float const *>(pVal) );

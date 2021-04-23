@@ -196,8 +196,7 @@ static OString OutBorderLine(RtfExport const& rExport, const editeng::SvxBorderL
                              SvxShadowLocation eShadowLocation = SvxShadowLocation::NONE)
 {
     OStringBuffer aRet;
-    aRet.append(OutTBLBorderLine(rExport, pLine, pStr));
-    aRet.append(OOO_STRING_SVTOOLS_RTF_BRSP);
+    aRet.append(OutTBLBorderLine(rExport, pLine, pStr) + OOO_STRING_SVTOOLS_RTF_BRSP);
     aRet.append(static_cast<sal_Int32>(nDist));
     if (eShadowLocation == SvxShadowLocation::BottomRight)
         aRet.append(LO_STRING_SVTOOLS_RTF_BRDRSH);
@@ -369,9 +368,8 @@ void RtfAttributeOutput::StartParagraphProperties()
     OStringBuffer aPar;
     if (!m_rExport.GetRTFFlySyntax())
     {
-        aPar.append(OOO_STRING_SVTOOLS_RTF_PARD);
-        aPar.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
-        aPar.append(' ');
+        aPar.append(OString::Concat(OOO_STRING_SVTOOLS_RTF_PARD)
+                    + OOO_STRING_SVTOOLS_RTF_PLAIN " ");
     }
     if (!m_bBufferSectionHeaders)
         m_rExport.Strm().WriteOString(aPar.makeStringAndClear());
@@ -644,8 +642,7 @@ void RtfAttributeOutput::FormatDrop(const SwTextNode& /*rNode*/,
 void RtfAttributeOutput::ParagraphStyle(sal_uInt16 nStyle)
 {
     OString* pStyle = m_rExport.GetStyle(nStyle);
-    OStringBuffer aStyle;
-    aStyle.append(OOO_STRING_SVTOOLS_RTF_S);
+    OStringBuffer aStyle(OOO_STRING_SVTOOLS_RTF_S);
     aStyle.append(static_cast<sal_Int32>(nStyle));
     if (pStyle)
         aStyle.append(pStyle->getStr());

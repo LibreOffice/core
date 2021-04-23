@@ -198,8 +198,7 @@ OUString normalize(
     OUStringBuffer head(ref->getScheme());
     head.append(':');
     if (ref->hasAuthority()) {
-        head.append("//");
-        head.append(ref->getAuthority());
+        head.append("//" + ref->getAuthority());
     }
     for (sal_Int32 i = count - 1; i > 0; --i) {
         OUStringBuffer buf(head);

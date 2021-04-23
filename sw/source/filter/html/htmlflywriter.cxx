@@ -1370,9 +1370,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         OUString aGraphicInBase64;
         if (XOutBitmap::GraphicToBase64(rGraphic, aGraphicInBase64))
         {
-            sBuffer.append(OOO_STRING_SVTOOLS_HTML_O_data);
-            sBuffer.append(":");
-            sBuffer.append(OUStringToOString(aGraphicInBase64, RTL_TEXTENCODING_UTF8));
+            sBuffer.append(OString::Concat(OOO_STRING_SVTOOLS_HTML_O_data) + ":" +
+                OUStringToOString(aGraphicInBase64, RTL_TEXTENCODING_UTF8));
             aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_src, sBuffer.makeStringAndClear().getStr());
         }
         else

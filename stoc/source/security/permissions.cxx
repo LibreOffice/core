@@ -238,13 +238,10 @@ OUString SocketPermission::toString() const
 {
     OUStringBuffer buf( 48 );
     // host
-    buf.append( "com.sun.star.connection.SocketPermission (host=\"" );
-    buf.append( m_host );
+    buf.append( "com.sun.star.connection.SocketPermission (host=\"" + m_host );
     if (m_resolvedHost)
     {
-        buf.append( '[' );
-        buf.append( m_ip );
-        buf.append( ']' );
+        buf.append( "[" + m_ip + "]" );
     }
     // port
     if (0 != m_lowerPort || 65535 != m_upperPort)
@@ -260,9 +257,9 @@ OUString SocketPermission::toString() const
         }
     }
     // actions
-    buf.append( "\", actions=\"" );
-    buf.append( makeStrings( m_actions, s_actions ) );
-    buf.append( "\")" );
+    buf.append( "\", actions=\"" +
+        makeStrings( m_actions, s_actions ) +
+        "\")" );
     return buf.makeStringAndClear();
 }
 
@@ -311,17 +308,11 @@ FilePermission::FilePermission(
 
     if ( m_url == "*" )
     {
-        OUStringBuffer buf( 64 );
-        buf.append( getWorkingDir() );
-        buf.append( "/*" );
-        m_url = buf.makeStringAndClear();
+        m_url = getWorkingDir() + "/*";
     }
     else if ( m_url == "-" )
     {
-        OUStringBuffer buf( 64 );
-        buf.append( getWorkingDir() );
-        buf.append( "/-" );
-        m_url = buf.makeStringAndClear();
+        m_url = getWorkingDir() + "/-";
     }
     else if (!m_url.startsWith("file:///"))
     {
@@ -401,15 +392,14 @@ bool FilePermission::implies( Permission const & perm ) const
 
 OUString FilePermission::toString() const
 {
-    OUStringBuffer buf( 48 );
-    // url
-    buf.append( "com.sun.star.io.FilePermission (url=\"" );
-    buf.append( m_url );
-    // actions
-    buf.append( "\", actions=\"" );
-    buf.append( makeStrings( m_actions, s_actions ) );
-    buf.append( "\")" );
-    return buf.makeStringAndClear();
+    return
+        // url
+        "com.sun.star.io.FilePermission (url=\"" +
+        m_url +
+        // actions
+        "\", actions=\"" +
+        makeStrings( m_actions, s_actions ) +
+        "\")";
 }
 
 namespace {

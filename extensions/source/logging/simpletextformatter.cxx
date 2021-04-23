@@ -61,17 +61,14 @@ OUString SAL_CALL SimpleTextFormatter::getHead() { return OUString(); }
 
 OUString SAL_CALL SimpleTextFormatter::format(const LogRecord& _rRecord)
 {
-    OUStringBuffer aLogEntry;
+    OUString aLogEntry;
     // Highlight warnings
     if (_rRecord.Level == css::logging::LogLevel::SEVERE)
-        aLogEntry.append("ERROR: ");
-    if (_rRecord.Level == css::logging::LogLevel::WARNING)
-        aLogEntry.append("WARNING: ");
+        aLogEntry = "ERROR: ";
+    else if (_rRecord.Level == css::logging::LogLevel::WARNING)
+        aLogEntry = "WARNING: ";
 
-    aLogEntry.append(_rRecord.Message);
-    aLogEntry.append("\n");
-
-    return aLogEntry.makeStringAndClear();
+    return aLogEntry + _rRecord.Message + "\n";
 }
 
 OUString SAL_CALL SimpleTextFormatter::getTail() { return OUString(); }

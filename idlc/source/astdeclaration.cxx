@@ -33,8 +33,7 @@ static OString convertName(const OString& name)
         OString token( name.getToken( 0, ':', nIndex ) );
         if( !token.isEmpty() )
         {
-            nameBuffer.append('/');
-            nameBuffer.append( token );
+            nameBuffer.append( "/" + token );
         }
     } while( nIndex != -1 );
     return nameBuffer.makeStringAndClear();

@@ -693,8 +693,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
     {
         writeLine( stream, "###################################"
                    "###########################################", pFilter );
-        buf.append( "environment: " );
-        buf.append( pEnv->pTypeName );
+        buf.append( OUString::Concat("environment: ") + OUString::unacquired(&pEnv->pTypeName) );
         writeLine( stream, buf.makeStringAndClear(), pFilter );
         writeLine( stream, "NO INTERFACE INFORMATION AVAILABLE!", pFilter );
         return;
@@ -702,8 +701,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
 
     writeLine( stream, "########################################"
                "######################################", pFilter );
-    buf.append( "environment dump: " );
-    buf.append( pEnv->pTypeName );
+    buf.append( OUString::Concat("environment dump: ") + OUString::unacquired(&pEnv->pTypeName) );
     writeLine( stream, buf.makeStringAndClear(), pFilter );
 
     uno_DefaultEnvironment * that =
@@ -720,9 +718,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
             buf.append( "mixed " );
         buf.append( "object entry: nRef=" );
         buf.append( pOEntry->nRef );
-        buf.append( "; oid=\"" );
-        buf.append( pOEntry->oid );
-        buf.append( '\"' );
+        buf.append( "; oid=\"" + pOEntry->oid + "\"" );
         writeLine( stream, buf.makeStringAndClear(), pFilter );
 
         for ( std::size_t nPos = 0;
@@ -730,8 +726,8 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
         {
             const InterfaceEntry & rIEntry = pOEntry->aInterfaces[nPos];
 
-            buf.append( "  - " );
-            buf.append( rIEntry.pTypeDescr->aBase.pTypeName );
+            buf.append( "  - "  +
+                OUString::unacquired(&rIEntry.pTypeDescr->aBase.pTypeName));
             if (rIEntry.fpFreeProxy)
             {
                 buf.append( "; proxy free=0x" );
@@ -855,8 +851,7 @@ static void unoenv_computeObjectIdentifier(
     oid.append( reinterpret_cast< sal_Int64 >(pUnoI), 16 );
     oid.append( ';' );
     // environment[context]
-    oid.append( pEnv->aBase.pTypeName );
-    oid.append( '[' );
+    oid.append( OUString::unacquired(&pEnv->aBase.pTypeName) + "[" );
     oid.append( reinterpret_cast< sal_Int64 >(
                     reinterpret_cast<
                     uno_Environment * >(pEnv)->pContext ), 16 );

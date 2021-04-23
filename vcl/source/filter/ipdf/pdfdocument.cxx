@@ -134,27 +134,24 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     m_aXRef[nSignatureId] = aSignatureEntry;
     OStringBuffer aSigBuffer;
     aSigBuffer.append(nSignatureId);
-    aSigBuffer.append(" 0 obj\n");
-    aSigBuffer.append("<</Contents <");
+    aSigBuffer.append(" 0 obj\n"
+                      "<</Contents <");
     rContentOffset = aSignatureEntry.GetOffset() + aSigBuffer.getLength();
     // Reserve space for the PKCS#7 object.
     OStringBuffer aContentFiller(MAX_SIGNATURE_CONTENT_LENGTH);
     comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
-    aSigBuffer.append(aContentFiller.makeStringAndClear());
-    aSigBuffer.append(">\n/Type/Sig/SubFilter");
+    aSigBuffer.append(aContentFiller.makeStringAndClear() + ">\n/Type/Sig/SubFilter");
     if (bAdES)
         aSigBuffer.append("/ETSI.CAdES.detached");
     else
         aSigBuffer.append("/adbe.pkcs7.detached");
 
     // Time of signing.
-    aSigBuffer.append(" /M (");
-    aSigBuffer.append(vcl::PDFWriter::GetDateTime());
-    aSigBuffer.append(")");
-
-    // Byte range: we can write offset1-length1 and offset2 right now, will
-    // write length2 later.
-    aSigBuffer.append(" /ByteRange [ 0 ");
+    aSigBuffer.append(" /M (" + vcl::PDFWriter::GetDateTime()
+                      + ")"
+                        // Byte range: we can write offset1-length1 and offset2 right now, will
+                        // write length2 later.
+                        " /ByteRange [ 0 ");
     // -1 and +1 is the leading "<" and the trailing ">" around the hex string.
     aSigBuffer.append(rContentOffset - 1);
     aSigBuffer.append(" ");
@@ -165,9 +162,9 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     // should be enough.
     OStringBuffer aByteRangeFiller;
     comphelper::string::padToLength(aByteRangeFiller, 100, ' ');
-    aSigBuffer.append(aByteRangeFiller.makeStringAndClear());
-    // Finish the Sig obj.
-    aSigBuffer.append(" /Filter/Adobe.PPKMS");
+    aSigBuffer.append(aByteRangeFiller.makeStringAndClear() +
+                      // Finish the Sig obj.
+                      " /Filter/Adobe.PPKMS");
 
     if (!rDescription.isEmpty())
     {

@@ -119,8 +119,8 @@ OUString parsePart(
                     buf.append(static_cast< sal_Unicode >(encoded));
                 } else {
                     buf.append(static_cast< sal_Unicode >(
-                        (encoded >> 10) | 0xD800));
-                    buf.append(static_cast< sal_Unicode >(
+                        (encoded >> 10) | 0xD800)
+                        + static_cast< sal_Unicode >(
                         (encoded & 0x3FF) | 0xDC00));
                 }
             } else {

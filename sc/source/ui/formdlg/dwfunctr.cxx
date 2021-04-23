@@ -169,13 +169,13 @@ void ScFunctionWin::SetDescription()
     {
         pDesc->initArgumentInfo();      // full argument info is needed
 
-        OUStringBuffer aBuf(xFuncList->get_selected_text());
-        aBuf.append(":\n\n");
-        aBuf.append(pDesc->GetParamList());
-        aBuf.append("\n\n");
-        aBuf.append(*pDesc->mxFuncDesc);
+        OUString aBuf = xFuncList->get_selected_text() +
+            ":\n\n" +
+            pDesc->GetParamList() +
+            "\n\n" +
+            *pDesc->mxFuncDesc;
 
-        xFiFuncDesc->set_label(aBuf.makeStringAndClear());
+        xFiFuncDesc->set_label(aBuf);
     }
 }
 

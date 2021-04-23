@@ -57,8 +57,7 @@ static OUString lclGenerateApiString( const OUString& rString )
 static OUString lclGenerateApiArray(const std::vector<Any>& rRow, sal_Int32 nStart, sal_Int32 nCount)
 {
     OSL_ENSURE( !rRow.empty(), "ChartConverter::lclGenerateApiArray - missing matrix values" );
-    OUStringBuffer aBuffer;
-    aBuffer.append( API_TOKEN_ARRAY_OPEN );
+    OUStringBuffer aBuffer = OUStringChar(API_TOKEN_ARRAY_OPEN);
     for (auto aBeg = rRow.begin() + nStart, aIt = aBeg, aEnd = aBeg + nCount; aIt != aEnd; ++aIt)
     {
         double fValue = 0.0;

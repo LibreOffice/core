@@ -190,8 +190,7 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
     aImageURLs.reserve( nImageCounts[index] );
     for ( size_t i=0; i<nImageCounts[index]; ++i )
     {
-        OUStringBuffer aURL;
-        aURL.append( "private:graphicrepository/vcl/res/spinner-" );
+        OUStringBuffer aURL( "private:graphicrepository/vcl/res/spinner-" );
         aURL.appendAscii( pResolutions[index] );
         aURL.append( "-" );
         if ( i < 9 )

@@ -1258,8 +1258,7 @@ ErrCode ImportExcel8::Read()
             SCTAB nTab = 1;
             while ( true )
             {
-                OUStringBuffer aBuf;
-                aBuf.append("Sheet");
+                OUStringBuffer aBuf("Sheet");
                 aBuf.append(static_cast<sal_Int32>(nTab++));
                 OUString sTmpName = aBuf.makeStringAndClear();
 

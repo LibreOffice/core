@@ -381,14 +381,14 @@ void ImplUpdateSeparatorString( OUString& io_rText,
            || (nIndexTh != -1 && nIndexDec == -1)
            )
         {
-            aBuf.append( pBuffer + nIndex, nIndexTh - nIndex );
-            aBuf.append( rNewThSep );
+            aBuf.append( OUString::Concat(std::u16string_view(pBuffer + nIndex, nIndexTh - nIndex )) +
+                rNewThSep );
             nIndex = nIndexTh + rOldThSep.getLength();
         }
         else if( nIndexDec != -1 )
         {
-            aBuf.append( pBuffer + nIndex, nIndexDec - nIndex );
-            aBuf.append( rNewDecSep );
+            aBuf.append( OUString::Concat(std::u16string_view(pBuffer + nIndex, nIndexDec - nIndex )) +
+                rNewDecSep );
             nIndex = nIndexDec + rOldDecSep.getLength();
         }
         else

@@ -247,8 +247,7 @@ void LangSelectionStatusbarController::LangMenu(
     }
     else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
     {
-        aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_" );
-        aBuff.append( aSelectedLang );
+        aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_" + aSelectedLang );
     }
     else if (nId == MID_LANG_PARA_NONE)
     {

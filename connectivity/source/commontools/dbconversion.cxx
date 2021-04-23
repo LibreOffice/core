@@ -109,12 +109,9 @@ namespace dbtools
     OUString DBTypeConversion::toDateTimeString(const css::util::DateTime& _rDateTime)
     {
         css::util::Date aDate(_rDateTime.Day,_rDateTime.Month,_rDateTime.Year);
-        OUStringBuffer aTemp(toDateString(aDate));
-        aTemp.append(" ");
         css::util::Time const aTime(_rDateTime.NanoSeconds, _rDateTime.Seconds,
                 _rDateTime.Minutes, _rDateTime.Hours, _rDateTime.IsUTC);
-        aTemp.append( toTimeString(aTime) );
-        return  aTemp.makeStringAndClear();
+        return toDateString(aDate) + " " + toTimeString(aTime);
     }
 
     css::util::Date DBTypeConversion::toDate(const sal_Int32 _nVal)

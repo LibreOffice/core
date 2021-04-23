@@ -141,12 +141,26 @@ StringAdd::VarDeclAndSummands StringAdd::findAssignOrAdd(Stmt const* stmt)
             {
                 auto tc = loplugin::TypeCheck(varDeclLHS->getType());
                 if (!tc.Class("OUString").Namespace("rtl").GlobalNamespace()
-                    && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
+                    && !tc.Class("OString").Namespace("rtl").GlobalNamespace()
+                    && !tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                    && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
                     return {};
                 if (varDeclLHS->getStorageDuration() == SD_Static)
                     return {};
                 if (!varDeclLHS->hasInit())
                     return {};
+                // ignore the constructor that specifies the size of the string buffer
+                if (tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                    || tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
+                {
+                    if (auto constructExpr = dyn_cast<CXXConstructExpr>(varDeclLHS->getInit()))
+                        if (constructExpr->getNumArgs() != 0
+                            && constructExpr->getConstructor()
+                                   ->getParamDecl(0)
+                                   ->getType()
+                                   ->isIntegerType())
+                            return {};
+                }
                 return { varDeclLHS, (isCompileTimeConstant(varDeclLHS->getInit())
                                           ? Summands::OnlyCompileTimeConstants
                                           : (isSideEffectFree(varDeclLHS->getInit())
@@ -160,7 +174,9 @@ StringAdd::VarDeclAndSummands StringAdd::findAssignOrAdd(Stmt const* stmt)
                 {
                     auto tc = loplugin::TypeCheck(varDeclLHS->getType());
                     if (!tc.Class("OUString").Namespace("rtl").GlobalNamespace()
-                        && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
+                        && !tc.Class("OString").Namespace("rtl").GlobalNamespace()
+                        && !tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                        && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
                         return {};
                     auto rhs = operatorCall->getArg(1);
                     return { varDeclLHS,
@@ -169,6 +185,37 @@ StringAdd::VarDeclAndSummands StringAdd::findAssignOrAdd(Stmt const* stmt)
                                   : (isSideEffectFree(rhs) ? Summands::OnlySideEffectFree
                                                            : Summands::SideEffect)) };
                 }
+    if (auto methodCall = dyn_cast<CXXMemberCallExpr>(stmt))
+        if (auto declRefExprLHS
+            = dyn_cast<DeclRefExpr>(ignore(methodCall->getImplicitObjectArgument())))
+            if (auto varDeclLHS = dyn_cast<VarDecl>(declRefExprLHS->getDecl()))
+            {
+                auto tc = loplugin::TypeCheck(varDeclLHS->getType());
+                if (!tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                    && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
+                    return {};
+                auto methodDecl = methodCall->getMethodDecl();
+                if (!methodDecl->getIdentifier() || methodDecl->getName() != "append"
+                    || methodCall->getNumArgs() == 0)
+                    return {};
+                auto paramType = methodDecl->getParamDecl(0)->getType();
+                // if we convert this, we need to create an extra temporary to hold the string convertion of the integer
+                if (paramType->isIntegerType())
+                    return {};
+                if (paramType->isCharType())
+                    return {};
+                if (paramType->isFloatingType())
+                    return {};
+                auto rhs = methodCall->getArg(0);
+                // I don't think the OUStringAppend functionality can handle this efficiently
+                if (isa<ConditionalOperator>(ignore(rhs)))
+                    return {};
+                return { varDeclLHS, (isCompileTimeConstant(rhs)
+                                          ? Summands::OnlyCompileTimeConstants
+                                          : (isSideEffectFree(rhs) ? Summands::OnlySideEffectFree
+                                                                   : Summands::SideEffect)) };
+            }
+
     return {};
 }
 
@@ -180,19 +227,47 @@ bool StringAdd::checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2,
         stmt2 = exprCleanup->getSubExpr();
     if (auto switchCase = dyn_cast<SwitchCase>(stmt2))
         stmt2 = switchCase->getSubStmt();
-    auto operatorCall = dyn_cast<CXXOperatorCallExpr>(stmt2);
-    if (!operatorCall)
-        return false;
-    if (operatorCall->getOperator() != OO_PlusEqual)
-        return false;
-    auto declRefExprLHS = dyn_cast<DeclRefExpr>(ignore(operatorCall->getArg(0)));
-    if (!declRefExprLHS)
-        return false;
-    if (declRefExprLHS->getDecl() != varDecl.varDecl)
+    const Expr* rhs = nullptr;
+    if (auto operatorCall = dyn_cast<CXXOperatorCallExpr>(stmt2))
+    {
+        if (operatorCall->getOperator() != OO_PlusEqual)
+            return false;
+        auto declRefExprLHS = dyn_cast<DeclRefExpr>(ignore(operatorCall->getArg(0)));
+        if (!declRefExprLHS)
+            return false;
+        if (declRefExprLHS->getDecl() != varDecl.varDecl)
+            return false;
+        rhs = operatorCall->getArg(1);
+    }
+    else if (auto methodCall = dyn_cast<CXXMemberCallExpr>(stmt2))
+    {
+        auto declRefExprLHS
+            = dyn_cast<DeclRefExpr>(ignore(methodCall->getImplicitObjectArgument()));
+        if (!declRefExprLHS)
+            return false;
+        if (declRefExprLHS->getDecl() != varDecl.varDecl)
+            return false;
+        auto methodDecl = methodCall->getMethodDecl();
+        if (!methodDecl->getIdentifier() || methodDecl->getName() != "append"
+            || methodCall->getNumArgs() == 0)
+            return false;
+        auto paramType = methodDecl->getParamDecl(0)->getType();
+        // if we convert one of the number append methods, we need to create an extra temporary to hold the string convertion of the number
+        if (paramType->isIntegerType())
+            return false;
+        if (paramType->isCharType())
+            return false;
+        if (paramType->isFloatingType())
+            return false;
+        rhs = methodCall->getArg(0);
+        // I don't think the OUStringAppend functionality can handle this efficiently
+        if (isa<ConditionalOperator>(rhs))
+            return false;
+    }
+    if (!rhs)
         return false;
     // if either side is a compile-time-constant, then we don't care about
     // side-effects
-    auto rhs = operatorCall->getArg(1);
     auto const ctcRhs = isCompileTimeConstant(rhs);
     if (!ctcRhs)
     {
@@ -296,39 +371,44 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
     {
         // check for calls through OUString::number/OUString::unacquired
         if (auto calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(callExpr->getCalleeDecl()))
-            if (calleeMethodDecl)
+        {
+            if (calleeMethodDecl->getIdentifier())
             {
-                if (calleeMethodDecl->getIdentifier())
+                auto name = calleeMethodDecl->getName();
+                if (callExpr->getNumArgs() > 0
+                    && (name == "number" || name == "unacquired" || name == "boolean"
+                        || name == "copy"))
                 {
-                    auto name = calleeMethodDecl->getName();
-                    if (callExpr->getNumArgs() > 0
-                        && (name == "number" || name == "unacquired" || name == "boolean"
-                            || name == "copy"))
+                    auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+                    if (tc.Class("OUString") || tc.Class("OString"))
                     {
-                        auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
-                        if (tc.Class("OUString") || tc.Class("OString"))
-                        {
-                            if (isSideEffectFree(callExpr->getArg(0)))
-                                return true;
-                        }
+                        if (isSideEffectFree(callExpr->getArg(0)))
+                            return true;
                     }
                 }
-                else if (auto const d = dyn_cast<CXXConversionDecl>(calleeMethodDecl))
+                // check for the O[U]String::Concat stuff
+                if (callExpr->getNumArgs() > 0 && name == "Concat")
                 {
-                    if (loplugin::TypeCheck(d->getConversionType())
-                            .ClassOrStruct("basic_string_view")
-                            .StdNamespace())
+                    if (isSideEffectFree(callExpr->getArg(0)))
+                        return true;
+                }
+            }
+            else if (auto const d = dyn_cast<CXXConversionDecl>(calleeMethodDecl))
+            {
+                if (loplugin::TypeCheck(d->getConversionType())
+                        .ClassOrStruct("basic_string_view")
+                        .StdNamespace())
+                {
+                    auto const tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+                    if (tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+                        || tc.Class("OString").Namespace("rtl").GlobalNamespace())
                     {
-                        auto const tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
-                        if (tc.Class("OUString").Namespace("rtl").GlobalNamespace()
-                            || tc.Class("OString").Namespace("rtl").GlobalNamespace())
-                        {
-                            if (isSideEffectFree(callExpr->getCallee()))
-                                return true;
-                        }
+                        if (isSideEffectFree(callExpr->getCallee()))
+                            return true;
                     }
                 }
             }
+        }
         if (auto calleeFunctionDecl = dyn_cast_or_null<FunctionDecl>(callExpr->getCalleeDecl()))
             if (calleeFunctionDecl && calleeFunctionDecl->getIdentifier())
             {
@@ -348,7 +428,9 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
     if (auto constructExpr = dyn_cast<CXXConstructExpr>(expr))
     {
         auto dc = loplugin::DeclCheck(constructExpr->getConstructor());
-        if (dc.MemberFunction().Class("OUString") || dc.MemberFunction().Class("OString"))
+        if (dc.MemberFunction().Class("OUString") || dc.MemberFunction().Class("OString")
+            || dc.MemberFunction().Class("OUStringBuffer")
+            || dc.MemberFunction().Class("OStringBuffer"))
             if (constructExpr->getNumArgs() == 0 || isSideEffectFree(constructExpr->getArg(0)))
                 return true;
         // Expr::HasSideEffects does not like stuff that passes through OUStringLiteral

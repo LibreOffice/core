@@ -726,8 +726,8 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
                         strNote = strNote.replaceFirst( ";", "\\;" );
                         strNote = strNote.replaceFirst( ",", "\\," );
                         strNote = strNote.replaceFirst( ":", "\\:" );
-                        sValue.append(strNote);
-                        sValue.append(";");//to divide each paragraph
+                        sValue.append(strNote +
+                                      ";");//to divide each paragraph
                     }
                 }
             }

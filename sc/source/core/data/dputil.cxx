@@ -387,19 +387,15 @@ const char* aFuncStrIds[] = {
 
 }
 
-OUString ScDPUtil::getDisplayedMeasureName(std::u16string_view rName, ScSubTotalFunc eFunc)
+OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc)
 {
-    OUStringBuffer aRet;
     assert(unsigned(eFunc) < SAL_N_ELEMENTS(aFuncStrIds));
     const char* pId = aFuncStrIds[eFunc];
-    if (pId)
-    {
-        aRet.append(ScResId(pId));        // function name
-        aRet.append(" - ");
-    }
-    aRet.append(rName);                   // field name
-
-    return aRet.makeStringAndClear();
+    if (!pId)
+        return rName;
+    return ScResId(pId) +        // function name
+            " - " +
+            rName;                   // field name
 }
 
 ScSubTotalFunc ScDPUtil::toSubTotalFunc(ScGeneralFunction eGenFunc)

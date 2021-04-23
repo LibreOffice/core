@@ -1964,8 +1964,8 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
             OUStringBuffer aLeftOverText;
             for (sal_uInt32 i = 1; i < nPara; ++i)
             {
-                aLeftOverText.append("\x0a");    // the manual line break...
-                aLeftOverText.append(m_xEditEngine->GetText(i));
+                aLeftOverText.append("\x0a" +    // the manual line break...
+                            m_xEditEngine->GetText(i));
             }
             if (pError)
             {   // we need to add a new portion containing the left-over text

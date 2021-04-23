@@ -895,16 +895,13 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler, weld::TreeView&, void)
                          i < data.unsatisfiedDependencies.getLength(); ++i)
                     {
                         b.append(LF);
-                        b.append("  ");
+                        b.append("  " +
                             // U+2003 EM SPACE would be better than two spaces,
                             // but some fonts do not contain it
-                        b.append(
                             confineToParagraph(
                                 data.unsatisfiedDependencies[i]));
                     }
-                    b.append(LF);
-                    b.append("  ");
-                    b.append(m_noDependencyCurVer);
+                    b.append(OUStringChar(LF) + "  " + m_noDependencyCurVer);
                 }
                 break;
             }

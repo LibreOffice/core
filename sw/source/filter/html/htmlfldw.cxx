@@ -556,16 +556,15 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
 
             if (bFieldShadings)
             {
-                OStringBuffer sOut;
-                sOut.append("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span);
-                sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_style "=\"");
-                sOut.append(sCSS1_P_background);
-                sOut.append(": ");
-
                 Color& rColor = SwViewOption::GetFieldShadingsColor();
-                sOut.append(GetCSS1_Color(rColor));
-                sOut.append("\">");
-                rWrt.Strm().WriteOString(sOut.makeStringAndClear());
+                OString sOut =
+                    "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span
+                    " " OOO_STRING_SVTOOLS_HTML_O_style "=\"" +
+                    sCSS1_P_background +
+                    ": " +
+                    GetCSS1_Color(rColor) +
+                    "\">";
+                rWrt.Strm().WriteOString(sOut);
             }
 
             OutHTML_SwField( rWrt, pField, pTextField->GetTextNode(),

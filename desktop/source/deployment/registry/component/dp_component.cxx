@@ -83,18 +83,17 @@ bool jarManifestHeaderPresent(
     OUString const & url, OUString const & name,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    OUStringBuffer buf;
-    buf.append( "vnd.sun.star.zip://" );
-    buf.append(
+    OUString buf =
+        "vnd.sun.star.zip://" +
         ::rtl::Uri::encode(
             url, rtl_UriCharClassRegName, rtl_UriEncodeIgnoreEscapes,
-            RTL_TEXTENCODING_UTF8 ) );
-    buf.append( "/META-INF/MANIFEST.MF" );
+            RTL_TEXTENCODING_UTF8 ) +
+        "/META-INF/MANIFEST.MF";
     ::ucbhelper::Content manifestContent;
     OUString line;
     return
         create_ucb_content(
-            &manifestContent, buf.makeStringAndClear(), xCmdEnv,
+            &manifestContent, buf, xCmdEnv,
             false /* no throw */ )
         && readLine( &line, name, manifestContent, RTL_TEXTENCODING_ASCII_US );
 }
@@ -863,13 +862,9 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     if (!m_unorc_inited || !m_unorc_modified)
         return;
 
-    OStringBuffer buf;
-
-    buf.append("ORIGIN=");
     OUString sOrigin = dp_misc::makeRcTerm(m_cachePath);
     OString osOrigin = OUStringToOString(sOrigin, RTL_TEXTENCODING_UTF8);
-    buf.append(osOrigin);
-    buf.append(LF);
+    OStringBuffer buf = "ORIGIN=" + osOrigin + OStringChar(LF);
 
     if (! m_jar_typelibs.empty())
     {
@@ -918,8 +913,8 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
         bool space = false;
         if (!sCommonRDB.isEmpty())
         {
-            buf.append( "?$ORIGIN/" );
-            buf.append( OUStringToOString(
+            buf.append( "?$ORIGIN/" +
+                        OUStringToOString(
                             sCommonRDB, RTL_TEXTENCODING_ASCII_US ) );
             space = true;
         }

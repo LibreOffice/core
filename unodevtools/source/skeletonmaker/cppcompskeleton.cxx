@@ -81,8 +81,7 @@ static short generateNamespace(std::ostream & o,
     OStringBuffer buf;
     if (index == -1) {
         if (serviceobject) {
-            buf.append("comp_");
-            buf.append(implname);
+            buf.append("comp_" + implname);
             nm = buf.makeStringAndClear();
             o << "namespace comp_" << implname << " {\n\n";
             count=1;
@@ -94,13 +93,11 @@ static short generateNamespace(std::ostream & o,
         do {
             OString token(implname.getToken(0, '.', nPos));
             if (nPos < 0 && serviceobject) {
-                buf.append("::comp_");
-                buf.append(token);
+                buf.append("::comp_" + token);
                 o << "namespace comp_" << token << " { ";
                 count++;
             } else {
-                buf.append("::");
-                buf.append(token);
+                buf.append("::" + token);
                 o << "namespace " << token << " { ";
                 count++;
             }
@@ -661,8 +658,7 @@ static OString generateClassDefinition(std::ostream& o,
             "css::uno::RuntimeException);\n";
 
         OStringBuffer buffer(256);
-        buffer.append(parentname.toString());
-        buffer.append("< ");
+        buffer.append(parentname + "< ");
         std::set< OUString >::const_iterator iter = interfaces.begin();
         while (iter != interfaces.end())
         {

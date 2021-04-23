@@ -700,12 +700,11 @@ namespace sw::mark
         if (m_aPortionPaintArea.IsEmpty())
             return;
 
-        OStringBuffer sPayload;
-        sPayload = OString::Concat("{\"action\": \"show\","
+        OStringBuffer sPayload = OString::Concat("{\"action\": \"show\","
                    " \"type\": \"drop-down\", \"textArea\": \"") +
-                   m_aPortionPaintArea.SVRect().toString() + "\",";
-        // Add field params to the message
-        sPayload.append(" \"params\": { \"items\": [");
+            m_aPortionPaintArea.SVRect().toString() + "\","
+            // Add field params to the message
+            " \"params\": { \"items\": [";
 
         // List items
         auto pParameters = this->GetParameters();

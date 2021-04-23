@@ -416,18 +416,12 @@ namespace frm
             const Reference< XDatabaseMetaData >  xMeta( xConnection->getMetaData(), UNO_SET_THROW );
             const OUString sQuoteChar = xMeta->getIdentifierQuoteString();
 
-            aStatement.append( "SELECT DISTINCT " );
-            aStatement.append( sQuoteChar );
-            aStatement.append( sRealFieldName );
-            aStatement.append( sQuoteChar );
+            aStatement.append( "SELECT DISTINCT " + sQuoteChar + sRealFieldName + sQuoteChar );
 
             // if the field had an alias in our form's statement, give it this alias in the new statement, too
             if ( !sFieldName.isEmpty() && ( sFieldName != sRealFieldName ) )
             {
-                aStatement.append(" AS ");
-                aStatement.append( sQuoteChar );
-                aStatement.append( sFieldName );
-                aStatement.append( sQuoteChar );
+                aStatement.append(" AS " + sQuoteChar + sFieldName + sQuoteChar );
             }
 
             aStatement.append( " FROM " );

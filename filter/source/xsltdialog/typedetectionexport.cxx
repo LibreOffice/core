@@ -153,7 +153,9 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
                 xHandler->startElement( sNode, pAttrList );
                 addLocaleProperty( xHandler, sUIName, filter->maInterfaceName );
 
-                OUStringBuffer sValue("0" +
+                const application_info_impl* pAppInfo = getApplicationInfo( filter->maExportService );
+                OUString sValue =
+                    "0" +
                     sComma +
                     filter->maType +
                     sComma +
@@ -166,26 +168,23 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
                     sXSLTFilterService +
                     sDelim +
                     OUString::boolean( filter->mbNeedsXSLT2 ) +
-                    sDelim);
-
-                const application_info_impl* pAppInfo = getApplicationInfo( filter->maExportService );
-                sValue.append(pAppInfo->maXMLImporter +
+                    sDelim +
+                    pAppInfo->maXMLImporter +
                     sDelim +
                     pAppInfo->maXMLExporter +
-                    sDelim);
-
-                sValue.append(createRelativeURL( filter->maFilterName, filter->maImportXSLT ));
-                sValue.append(sDelim);
-                sValue.append(createRelativeURL( filter->maFilterName, filter->maExportXSLT ));
-                sValue.append(sDelim);
-                // entry DTD obsolete and removed, but delimiter kept
-                sValue.append(sDelim);
-                sValue.append(filter->maComment);
-                sValue.append(sComma);
-                sValue.append("0");
-                sValue.append(sComma);
-                sValue.append(createRelativeURL( filter->maFilterName, filter->maImportTemplate ));
-                addProperty( xHandler, sData, sValue.makeStringAndClear() );
+                    sDelim +
+                    createRelativeURL( filter->maFilterName, filter->maImportXSLT ) +
+                    sDelim +
+                    createRelativeURL( filter->maFilterName, filter->maExportXSLT ) +
+                    sDelim +
+                    // entry DTD obsolete and removed, but delimiter kept
+                    sDelim  +
+                    filter->maComment +
+                    sComma +
+                    "0" +
+                    sComma +
+                    createRelativeURL( filter->maFilterName, filter->maImportTemplate );
+                addProperty( xHandler, sData, sValue );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->endElement( sNode );
             }

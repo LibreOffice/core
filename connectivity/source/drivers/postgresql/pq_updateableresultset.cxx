@@ -296,8 +296,7 @@ void UpdateableResultSet::updateRow(  )
                 buf.append( ", " );
             columns ++;
 
-            buf.append( m_columnNames[i] );
-            buf.append( " = " );
+            buf.append( m_columnNames[i] + " = " );
             bufferQuoteAnyConstant( buf, m_updateableField[i].value, *m_ppSettings );
 //             OUString val;
 //             m_updateableField[i].value >>= val;
@@ -342,8 +341,7 @@ void UpdateableResultSet::deleteRow(  )
     OUStringBuffer buf( 128 );
     buf.append( "DELETE FROM " );
     bufferQuoteQualifiedIdentifier( buf, m_schema, m_table, *m_ppSettings );
-    buf.append( " " );
-    buf.append( buildWhereClause() );
+    buf.append( " " + buildWhereClause() );
 
     stmt->executeUpdate( buf.makeStringAndClear() );
 

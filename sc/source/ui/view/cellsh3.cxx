@@ -88,19 +88,19 @@ void lcl_lokGetWholeFunctionList()
     if (!(pFuncManager && aFuncNameOrderedSet.size()))
         return;
 
-    OStringBuffer aPayload;
-    aPayload.append("{ \"wholeList\": true, ");
-    aPayload.append("\"categories\": [ ");
+    OStringBuffer aPayload =
+        "{ \"wholeList\": true, "
+        "\"categories\": [ ";
 
     formula::FormulaHelper aHelper(pFuncManager);
     sal_uInt32 nCategoryCount = pFuncManager->getCount();
     for (sal_uInt32 i = 0; i < nCategoryCount; ++i)
     {
         OUString sCategoryName = ScFunctionMgr::GetCategoryName(i);
-        aPayload.append("{");
-        aPayload.append("\"name\": \"");
-        aPayload.append(escapeJSON(sCategoryName));
-        aPayload.append("\"}, ");
+        aPayload.append("{"
+                        "\"name\": \"" +
+                        escapeJSON(sCategoryName) +
+                        "\"}, ");
     }
     sal_Int32 nLen = aPayload.getLength();
     aPayload[nLen - 2] = ' ';

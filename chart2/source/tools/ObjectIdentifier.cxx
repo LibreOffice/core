@@ -85,15 +85,13 @@ OUString lcl_createClassificationStringForType( ObjectType eObjectType
     {
         if( !aRet.isEmpty() )
             aRet.append(":");
-        aRet.append( m_aDragMethodEquals );
-        aRet.append( rDragMethodServiceName );
+        aRet.append( OUString::Concat(m_aDragMethodEquals) + rDragMethodServiceName );
 
         if( !rDragParameterString.empty() )
         {
             if( !aRet.isEmpty() )
                 aRet.append(":");
-            aRet.append( m_aDragParameterEquals );
-            aRet.append( rDragParameterString );
+            aRet.append( OUString::Concat(m_aDragParameterEquals) + rDragParameterString );
         }
     }
     return aRet.makeStringAndClear();
@@ -510,7 +508,7 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
           const Reference< XCoordinateSystem >& xCooSys
         , ChartModel& rModel )
 {
-    OUStringBuffer aRet;
+    OUString aRet;
 
     Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
     Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
@@ -677,8 +675,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
         aRet.append(":");
 
     aRet.append(getStringForType( eObjectType ));
-    aRet.append("=");
-    aRet.append(rParticleID);
+    aRet.append(OUString::Concat("=") + rParticleID);
 
     return aRet.makeStringAndClear();
 }

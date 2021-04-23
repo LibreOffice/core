@@ -955,15 +955,12 @@ void ScChangeActionDel::GetDescription(
         return;
 
     // Build a string to replace with.
-    OUStringBuffer aBuf;
-    aBuf.append(ScResId(pWhatId));
-    aBuf.append(' ');
-    aBuf.append(GetRefString(aTmpRange, rDoc));
-    OUString aRangeStr = aBuf.makeStringAndClear();
+    OUString aRangeStr = ScResId(pWhatId) +
+        " " +
+        GetRefString(aTmpRange, rDoc);
     aRsc = aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the string.
 
-    aBuf.append(rStr).append(aRsc);
-    rStr = aBuf.makeStringAndClear(); // append to the original.
+    rStr += aRsc; // append to the original.
 }
 
 bool ScChangeActionDel::Reject( ScDocument& rDoc )

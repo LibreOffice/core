@@ -123,10 +123,9 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
     // write header job data
     aStream.WriteLine("JobData 1");
 
-    OStringBuffer aLine;
-
-    aLine.append("printer=");
-    aLine.append(OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
+    OStringBuffer aLine(
+        "printer=" +
+        OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
     aStream.WriteLine(aLine.makeStringAndClear());
 
     aLine.append("orientation=");
@@ -142,8 +141,7 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
 
     if (m_nPDFDevice > 0)
     {
-        aLine.append("collate=");
-        aLine.append(OString::boolean(m_bCollate));
+        aLine.append("collate=" + OString::boolean(m_bCollate));
         aStream.WriteLine(aLine.makeStringAndClear());
     }
 

@@ -1077,8 +1077,8 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
                 aHelpURLBuffer.append("vnd.sun.star.help://smath/start");
             }
             if (bShowHelp) {
-                aHelpURLBuffer.append("?Language=");
-                aHelpURLBuffer.append(utl::ConfigManager::getUILocale());
+                aHelpURLBuffer.append("?Language=" +
+                    utl::ConfigManager::getUILocale());
 #if defined UNX
                 aHelpURLBuffer.append("&System=UNX");
 #elif defined _WIN32

@@ -2315,8 +2315,8 @@ void ScInterpreter::ScCell()
                         OUStringBuffer aBuf;
                         aBuf.append('\'');
                         const INetURLObject& rURLObj = pShell->GetMedium()->GetURLObject();
-                        aBuf.append(rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
-                        aBuf.append("'#$");
+                        aBuf.append(rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous) +
+                            "'#$");
                         OUString aTabName;
                         mrDoc.GetName( nTab, aTabName );
                         aBuf.append(aTabName);

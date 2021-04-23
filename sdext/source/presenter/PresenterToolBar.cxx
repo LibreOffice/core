@@ -1727,10 +1727,10 @@ OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
     const OUString sMinutes (OUString::number(nMinutes));
     if (sMinutes.getLength() == 1)
         sText.append("0");
-    sText.append(sMinutes);
+    sText.append(sMinutes +
 
     // Seconds
-    sText.append(":");
+        ":");
     const OUString sSeconds (OUString::number(nSeconds));
     if (sSeconds.getLength() == 1)
         sText.append("0");

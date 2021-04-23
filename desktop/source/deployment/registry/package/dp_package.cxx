@@ -1001,14 +1001,13 @@ void BackendImpl::PackageImpl::exportTo(
     }
     erase_path( destURL, xCmdEnv );
 
-    OUStringBuffer buf;
-    buf.append( "vnd.sun.star.zip://" );
-    buf.append( ::rtl::Uri::encode( destURL,
-                                    rtl_UriCharClassRegName,
-                                    rtl_UriEncodeIgnoreEscapes,
-                                    RTL_TEXTENCODING_UTF8 ) );
-    buf.append( '/' );
-    OUString destFolder( buf.makeStringAndClear() );
+    OUString destFolder =
+        "vnd.sun.star.zip://" +
+        ::rtl::Uri::encode( destURL,
+                            rtl_UriCharClassRegName,
+                            rtl_UriEncodeIgnoreEscapes,
+                            RTL_TEXTENCODING_UTF8 ) +
+        "/";
 
     ::ucbhelper::Content destFolderContent(
         destFolder, xCmdEnv, getMyBackend()->getComponentContext() );

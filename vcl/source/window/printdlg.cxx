@@ -242,9 +242,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     aBuf.appendAscii( eUnit == MapUnit::MapMM ? "mm" : "in" );
     if( !i_rPaperName.empty() )
     {
-        aBuf.append( " (" );
-        aBuf.append( i_rPaperName );
-        aBuf.append( ')' );
+        aBuf.append( OUString::Concat(" (") + i_rPaperName + ")" );
     }
     maHorzText = aBuf.makeStringAndClear();
 
