@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c854a0b_d2106d8b",
+        "filename": "sw/source/filter/ww8/ww8par3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2001,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-04-23T05:38:23Z",
+      "side": 1,
+      "message": "It is hard to manufacture DOC files with the exact settings you want, so hopefully this will find a proof document for me.",
+      "range": {
+        "startLine": 2001,
+        "startChar": 20,
+        "endLine": 2001,
+        "endChar": 149
+      },
+      "revId": "a87e5ccb78c9eb3d399e68e0dff9daf897b19690",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
