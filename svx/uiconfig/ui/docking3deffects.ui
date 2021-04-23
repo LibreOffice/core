@@ -234,11 +234,6 @@
     <property name="can_focus">False</property>
     <property name="icon_name">svx/res/colordlg.png</property>
   </object>
-  <object class="GtkImage" id="image42">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/blend3d.png</property>
-  </object>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
