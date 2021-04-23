@@ -284,16 +284,14 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
         }
         if( !aName.isEmpty() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
-                append("=\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
             rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
         }
         if( !aValue.isEmpty() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).
-                append("=\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
             rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aValue, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');

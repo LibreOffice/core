@@ -1746,20 +1746,12 @@ void PowerPointExport::WriteDefaultColorSchemes(const FSHelperPtr& pFS)
             break;
         }
 
-        OUString sOpenColorScheme = OUStringBuffer()
-            .append("<a:")
-            .append(sName)
-            .append(">")
-            .makeStringAndClear();
+        OUString sOpenColorScheme = "<a:" + sName + ">";
         pFS->write(sOpenColorScheme);
 
         pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nColor));
 
-        OUString sCloseColorScheme = OUStringBuffer()
-            .append("</a:")
-            .append(sName)
-            .append(">")
-            .makeStringAndClear();
+        OUString sCloseColorScheme = "</a:" + sName + ">";
         pFS->write(sCloseColorScheme);
     }
 }
@@ -1799,20 +1791,12 @@ bool PowerPointExport::WriteColorSchemes(const FSHelperPtr& pFS, const OUString&
                         }
                     }
 
-                    OUString sOpenColorScheme = OUStringBuffer()
-                        .append("<a:")
-                        .append(sName)
-                        .append(">")
-                        .makeStringAndClear();
+                    OUString sOpenColorScheme ="<a:" + sName + ">";
                     pFS->write(sOpenColorScheme);
 
                     pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nColor));
 
-                    OUString sCloseColorScheme = OUStringBuffer()
-                        .append("</a:")
-                        .append(sName)
-                        .append(">")
-                        .makeStringAndClear();
+                    OUString sCloseColorScheme = "</a:" + sName + ">";
                     pFS->write(sCloseColorScheme);
                 }
 

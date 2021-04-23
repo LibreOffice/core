@@ -51,7 +51,7 @@ OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
     {
         SAL_WARN("connectivity.firebird", "ignore fb_interpret exception");
     }
-    buf.append("\ncaused by\n'").append(rCause).append("'\n");
+    buf.append(OUString::Concat("\ncaused by\n'") + rCause + "'\n");
 
     OUString error = buf.makeStringAndClear();
     SAL_WARN("connectivity.firebird", error);

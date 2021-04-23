@@ -1349,7 +1349,7 @@ void ScCheckListMenuControl::getResult(ResultType& rResult)
                 std::unique_ptr<weld::TreeIter> xIter(mpChecks->make_iterator(maMembers[i].mxParent.get()));
                 do
                 {
-                    aLabel.append(";").append(mpChecks->get_text(*xIter));
+                    aLabel.append(";" + mpChecks->get_text(*xIter));
                 }
                 while (mpChecks->iter_parent(*xIter));
             }

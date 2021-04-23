@@ -69,7 +69,7 @@ void lclAppendWebQueryTableName( OUStringBuffer& rTables, std::u16string_view rT
     {
         if( !rTables.isEmpty() )
             rTables.append( ';' );
-        rTables.append( "HTML__" ).append( rTableName );
+        rTables.append( OUString::Concat("HTML__") + rTableName );
     }
 }
 

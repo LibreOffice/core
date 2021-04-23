@@ -436,9 +436,9 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
         aContainerStr = (HtmlContainerFlags::Div == nCntnrMode)
                             ? OOO_STRING_SVTOOLS_HTML_division
                             : OOO_STRING_SVTOOLS_HTML_span;
-        sOut.append('<').append(GetNamespace() + aContainerStr).append(' ')
-            .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"")
-            .append("sd-abs-pos").append('\"');
+        sOut.append("<" + GetNamespace() + aContainerStr + " "
+                OOO_STRING_SVTOOLS_HTML_O_class "=\""
+                "sd-abs-pos\"");
         Strm().WriteOString( sOut.makeStringAndClear() );
 
         // Output a width for non-draw objects
@@ -532,8 +532,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     {
         const char *pStr =
             (nFrameOpts & HtmlFrmOpts::Id) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
-        sOut.append(' ').append(pStr).
-            append("=\"");
+        sOut.append(OString::Concat(" ") + pStr + "=\"");
         Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_String( Strm(), rFrameFormat.GetName(), m_eDestEnc, &m_aNonConvertableCharacters );
         sOut.append('\"');
@@ -550,8 +549,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     // ALT
     if( (nFrameOpts & HtmlFrmOpts::Alt) && !rAlternateText.isEmpty() )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_alt).
-            append("=\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_alt "=\"");
         Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_String( Strm(), rAlternateText, m_eDestEnc, &m_aNonConvertableCharacters );
         sOut.append('\"');
@@ -597,8 +595,8 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     }
     if( pStr )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"").
-            append(pStr).append("\"");
+        sOut.append(OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_align "=\"") +
+                pStr + "\"");
     }
 
     // HSPACE and VSPACE
@@ -634,14 +632,14 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
 
         if( aPixelSpc.Width() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_hspace).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSpc.Width())).append("\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_hspace
+                    "=\"").append(static_cast<sal_Int32>(aPixelSpc.Width())).append("\"");
         }
 
         if( aPixelSpc.Height() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_vspace).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSpc.Height())).append("\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_vspace
+                    "=\"").append(static_cast<sal_Int32>(aPixelSpc.Height())).append("\"");
         }
     }
 
@@ -708,8 +706,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         if( (nFrameOpts & HtmlFrmOpts::Width) &&
             ((nPercentWidth && nPercentWidth!=255) || aPixelSz.Width()) )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-                append("=\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_width "=\"");
             if( nPercentWidth )
                 sOut.append(static_cast<sal_Int32>(nPercentWidth)).append('%');
             else
@@ -720,8 +717,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         if( (nFrameOpts & HtmlFrmOpts::Height) &&
             ((nPercentHeight && nPercentHeight!=255) || aPixelSz.Height()) )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
-                append("=\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_height "=\"");
             if( nPercentHeight )
                 sOut.append(static_cast<sal_Int32>(nPercentHeight)).append('%');
             else
@@ -791,9 +787,9 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
 
         if( pStr )
         {
-            sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_linebreak).
-                append(' ').append(OOO_STRING_SVTOOLS_HTML_O_clear).
-                append("=\"").append(pStr).append("\">");
+            sOut.append("<" OOO_STRING_SVTOOLS_HTML_linebreak
+                    " " OOO_STRING_SVTOOLS_HTML_O_clear
+                    "=\"" + OString::Concat(pStr) + "\">");
             sRetEndTags = sOut.makeStringAndClear();
         }
     }
@@ -1494,17 +1490,17 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
         sOut.append('<').append(pTag);
 
     sOut.append(' ');
-    sOut.append(OOO_STRING_SVTOOLS_HTML_O_style).append("=\"");
+    sOut.append(OOO_STRING_SVTOOLS_HTML_O_style "=\"");
     if(!aLink.isEmpty())
     {
-        sOut.append(OOO_STRING_SVTOOLS_HTML_O_src).append("=\"");
+        sOut.append(OOO_STRING_SVTOOLS_HTML_O_src "=\"");
         rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_String( rWrt.Strm(), aLink, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
     }
     else
     {
-        sOut.append("list-style-image: ").append("url(").
-        append(OOO_STRING_SVTOOLS_HTML_O_data).append(":");
+        sOut.append("list-style-image: url("
+                OOO_STRING_SVTOOLS_HTML_O_data ":");
         rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut.append(");");
@@ -1590,8 +1586,8 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
     sal_uInt16 nCols = rFormatCol.GetNumCols();
     if( nCols )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cols).
-            append("=\"").append(static_cast<sal_Int32>(nCols)).append("\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cols
+                "=\"").append(static_cast<sal_Int32>(nCols)).append("\"");
     }
 
     // the Gutter width (minimum value) as GUTTER
@@ -1604,8 +1600,8 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
                             ->LogicToPixel( Size(nGutter,0),
                                             MapMode(MapUnit::MapTwip) ).Width());
         }
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_gutter).
-            append("=\"").append(static_cast<sal_Int32>(nGutter)).append("\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_gutter
+                "=\"").append(static_cast<sal_Int32>(nGutter)).append("\"");
     }
 
     rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
@@ -1941,8 +1937,8 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     // output as Multicol
     rHTMLWrt.OutNewLine();
     OStringBuffer sOut;
-    sOut.append(OOO_STRING_SVTOOLS_HTML_division).append(' ')
-        .append(OOO_STRING_SVTOOLS_HTML_O_title).append("=\"")
+    sOut.append(OOO_STRING_SVTOOLS_HTML_division " "
+            OOO_STRING_SVTOOLS_HTML_O_title "=\"")
         .append( bHeader ? "header" : "footer" ).append("\"");
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OString(rHTMLWrt.GetNamespace() + sOut) );
 
@@ -1963,11 +1959,11 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
         nSize = static_cast<sal_Int16>(Application::GetDefaultDevice()
             ->LogicToPixel( Size(nSize,0), MapMode(MapUnit::MapTwip) ).Width());
 
-        aSpacer = OStringBuffer(OOO_STRING_SVTOOLS_HTML_spacer).
-            append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type).
-            append("=\"").append(OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical).append("\"").
-            append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).
-            append("=\"").append(static_cast<sal_Int32>(nSize)).append("\"").
+        aSpacer = OStringBuffer(OOO_STRING_SVTOOLS_HTML_spacer
+                " " OOO_STRING_SVTOOLS_HTML_O_type
+                "=\"" OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical "\""
+                " " OOO_STRING_SVTOOLS_HTML_O_size
+                "=\"").append(static_cast<sal_Int32>(nSize)).append("\"").
             makeStringAndClear();
     }
 

@@ -211,7 +211,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                 OUString sRangeAdd = xArea->Address( aAny2, aAny2 , aAny2 , aAny2, aAny2 );
                 if ( nArea > 1 )
                     sTmp.append(",");
-                sTmp.append("'").append(xRange->getWorksheet()->getName()).append("'.").append(sRangeAdd);
+                sTmp.append("'" + xRange->getWorksheet()->getName() + "'." + sRangeAdd);
             }
             mxNames->addNewByName( sName, sTmp.makeStringAndClear(), aCellAddr, 0/*nUnoType*/);
             return Item( uno::makeAny( sName ), uno::Any() );

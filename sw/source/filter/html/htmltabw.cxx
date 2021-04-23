@@ -309,13 +309,13 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     // output ROW- and COLSPAN
     if( nRowSpan>1 )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rowspan).
-            append("=\"").append(static_cast<sal_Int32>(nRowSpan)).append("\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_rowspan
+                "=\"").append(static_cast<sal_Int32>(nRowSpan)).append("\"");
     }
     if( nColSpan > 1 )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_colspan).
-            append("=\"").append(static_cast<sal_Int32>(nColSpan)).append("\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_colspan
+                "=\"").append(static_cast<sal_Int32>(nColSpan)).append("\"");
     }
 
     tools::Long nWidth = 0;
@@ -367,8 +367,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     // output WIDTH: from layout or calculated
     if( bOutWidth )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-            append("=\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_width "=\"");
         if( nPercentWidth != SAL_MAX_UINT32 )
         {
             sOut.append(static_cast<sal_Int32>(nPercentWidth)).append('%');
@@ -388,8 +387,8 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
     if( nHeight )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height)
-            .append("=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_height
+                "=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
     }
 
     const SfxItemSet& rItemSet = pBox->GetFrameFormat()->GetAttrSet();
@@ -403,8 +402,8 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         sal_Int16 eVertOri = pCell->GetVertOri();
         if( text::VertOrientation::TOP==eVertOri || text::VertOrientation::BOTTOM==eVertOri )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_valign)
-                .append("=\"").append(text::VertOrientation::TOP==eVertOri ?
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_valign
+                    "=\"").append(text::VertOrientation::TOP==eVertOri ?
                     OOO_STRING_SVTOOLS_HTML_VA_top :
                     OOO_STRING_SVTOOLS_HTML_VA_bottom)
                 .append("\"");
@@ -544,8 +543,8 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     if( text::VertOrientation::TOP==eRowVertOri || text::VertOrientation::BOTTOM==eRowVertOri )
     {
         OStringBuffer sOut;
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_valign)
-            .append("=\"").append(text::VertOrientation::TOP==eRowVertOri ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_valign
+                "=\"").append(text::VertOrientation::TOP==eRowVertOri ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
             .append("\"");
         rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
     }
@@ -628,25 +627,24 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     // output ALIGN=
     if( text::HoriOrientation::RIGHT == eAlign )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
-            append("=\"").append(OOO_STRING_SVTOOLS_HTML_AL_right).append("\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_align
+                "=\"" OOO_STRING_SVTOOLS_HTML_AL_right "\"");
     }
     else if( text::HoriOrientation::CENTER == eAlign )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
-            append("=\"").append(OOO_STRING_SVTOOLS_HTML_AL_center).append("\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_align
+                "=\"" OOO_STRING_SVTOOLS_HTML_AL_center "\"");
     }
     else if( text::HoriOrientation::LEFT == eAlign )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
-            append("=\"").append(OOO_STRING_SVTOOLS_HTML_AL_left).append("\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_align
+                "=\"" OOO_STRING_SVTOOLS_HTML_AL_left "\"");
     }
 
     // output WIDTH: from layout or calculated
     if( m_nTabWidth )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-            append("=\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_width "=\"");
         if( HasRelWidths() )
             sOut.append(static_cast<sal_Int32>(m_nTabWidth)).append('%');
         else if( Application::GetDefaultDevice() )
@@ -678,24 +676,24 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
         if( aPixelSpc.Width() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_hspace).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSpc.Width())).append("\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_hspace
+                    "=\"").append(static_cast<sal_Int32>(aPixelSpc.Width())).append("\"");
         }
 
         if( aPixelSpc.Height() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_vspace).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSpc.Height())).append("\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_vspace
+                    "=\"").append(static_cast<sal_Int32>(aPixelSpc.Height())).append("\"");
         }
     }
 
     // output CELLPADDING: from layout or calculated
-    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellpadding).
-        append("=\"").append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(m_nCellPadding,false))).append("\"");
+    sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cellpadding
+            "=\"").append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(m_nCellPadding,false))).append("\"");
 
     // output CELLSPACING: from layout or calculated
-    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
-        append("=\"").append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(m_nCellSpacing,false))).append("\"");
+    sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cellspacing
+            "=\"").append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(m_nCellSpacing,false))).append("\"");
 
     rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
 
@@ -718,7 +716,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     {
         rWrt.OutNewLine(); // <CAPTION> in new line
         OStringBuffer sOutStr(OOO_STRING_SVTOOLS_HTML_caption);
-        sOutStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"")
+        sOutStr.append(" " OOO_STRING_SVTOOLS_HTML_O_align "=\"")
                .append(bTopCaption ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
                .append("\"");
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OString(rWrt.GetNamespace() + sOutStr) );

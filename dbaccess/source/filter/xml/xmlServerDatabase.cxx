@@ -74,46 +74,46 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
     OUStringBuffer sURL;
     if  ( sType == "sdbc:mysql:jdbc" || sType == "sdbc:mysqlc" || sType == "sdbc:mysql:mysqlc" )
     {
-        sURL.append( sType ).append( ":" ).append(sHostName);
+        sURL.append( sType + ":" + sHostName);
         if ( !sPortNumber.isEmpty() )
         {
-            sURL.append(":").append(sPortNumber);
+            sURL.append(":" + sPortNumber);
         }
         if ( !sDatabaseName.isEmpty() )
         {
-            sURL.append("/").append(sDatabaseName);
+            sURL.append("/" + sDatabaseName);
         }
     }
     else if ( sType == "jdbc:oracle:thin" )
     {
-        sURL.append("jdbc:oracle:thin:@").append(sHostName);
+        sURL.append("jdbc:oracle:thin:@" + sHostName);
         if ( !sPortNumber.isEmpty() )
         {
-            sURL.append(":").append(sPortNumber);
+            sURL.append(":" + sPortNumber);
         }
         if ( !sDatabaseName.isEmpty() )
         {
-            sURL.append(":").append(sDatabaseName);
+            sURL.append(":" + sDatabaseName);
         }
     }
     else if ( sType == "sdbc:address:ldap" )
     {
-        sURL.append("sdbc:address:ldap:").append(sHostName);
+        sURL.append("sdbc:address:ldap:" + sHostName);
         if ( !sPortNumber.isEmpty() )
         {
-            sURL.append(":").append(sPortNumber);
+            sURL.append(":" + sPortNumber);
         }
     }
     else
     {
-        sURL.append(sType).append(":").append(sHostName);
+        sURL.append(sType + ":" + sHostName);
         if ( !sPortNumber.isEmpty() )
         {
-            sURL.append(":").append(sPortNumber);
+            sURL.append(":" + sPortNumber);
         }
         if ( !sDatabaseName.isEmpty() )
         {
-            sURL.append(":").append(sDatabaseName);
+            sURL.append(":" + sDatabaseName);
         }
     }
     try

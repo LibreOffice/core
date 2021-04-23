@@ -3075,7 +3075,7 @@ void SvxIconSelectorDialog::ImportGraphics(
           fPath = OUString::Concat(rPaths[0].subView(8)) + "/";
     for ( sal_Int32 i = 0; i < rejectedCount; ++i )
     {
-        message.append(fPath).append(rejected[i]).append("\n");
+        message.append(fPath + rejected[i] + "\n");
     }
 
     SvxIconChangeDialog aDialog(m_xDialog.get(), message.makeStringAndClear());

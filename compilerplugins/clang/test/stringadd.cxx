@@ -217,6 +217,10 @@ void f1(OUString s, OUString t, int i, const char* pChar)
     // no warning expected
     OUString c;
     c = c + OUString(pChar, strlen(pChar), RTL_TEXTENCODING_UTF8);
+
+    OUStringBuffer buf;
+    // expected-error@+1 {{chained append, rather use single append call and + operator [loplugin:stringadd]}}
+    buf.append(" ").append(b);
 }
 void f2(char ch)
 {

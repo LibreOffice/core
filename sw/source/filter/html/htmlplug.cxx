@@ -1235,8 +1235,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
 
         if( !aURL.isEmpty() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src)
-                .append("=\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
             rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
@@ -1246,8 +1245,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         aAny = xSet->getPropertyValue("PluginMimeType");
         if( (aAny >>= aType) && !aType.isEmpty() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type)
-                .append("=\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"");
             rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aType, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
@@ -1281,8 +1279,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             OUString sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
             if( !sCodeBase.isEmpty() )
             {
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_codebase)
-                    .append("=\"");
+                sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_codebase "=\"");
                 rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), sCodeBase, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
                 sOut.append('\"');
@@ -1293,8 +1290,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         OUString aClass;
         aAny = xSet->getPropertyValue("AppletCode");
         aAny >>= aClass;
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_code)
-            .append("=\"");
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_code "=\"");
         rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_String( rWrt.Strm(), aClass, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut.append('\"');
@@ -1305,8 +1301,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         aAny >>= aAppletName;
         if( !aAppletName.isEmpty() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
-                .append("=\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
             rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aAppletName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
@@ -1390,13 +1385,12 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             const OUString& rValue = rCommand.GetArgument();
             rHTMLWrt.OutNewLine();
             OStringBuffer sBuf;
-            sBuf.append('<').append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_param)
-                .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
-                .append("=\"");
+            sBuf.append("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_param
+                    " " OOO_STRING_SVTOOLS_HTML_O_name
+                    "=\"");
             rWrt.Strm().WriteOString( sBuf.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
-            sBuf.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_value)
-                .append("=\"");
+            sBuf.append("\" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
             rWrt.Strm().WriteOString( sBuf.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
         }

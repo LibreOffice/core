@@ -204,7 +204,7 @@ OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int
         aBuffer.append(getExpression(nIndex));
         if(nIndex <= 7 || nIndex >= 19)
         {
-            aBuffer.append(" ").append(aStr1);
+            aBuffer.append(OUString::Concat(" ") + aStr1);
             if(nIndex == 6 || nIndex == 7)
             {
                 aBuffer.append(" ");
@@ -216,7 +216,7 @@ OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int
     }
     else if(eType == FORMULA)
     {
-        aBuffer.append(" ").append(aStr1);
+        aBuffer.append(OUString::Concat(" ") + aStr1);
     }
     else if(eType == DATE)
     {

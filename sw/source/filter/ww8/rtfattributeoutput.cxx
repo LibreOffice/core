@@ -451,34 +451,28 @@ OString RtfAttributeOutput::MoveCharacterProperties(bool aAutoWriteRtlLtr)
     {
         if (!aAssocRtlch.isEmpty())
         {
-            aBuf.append(OOO_STRING_SVTOOLS_RTF_LTRCH)
-                .append(aAssocLtrch)
-                .append(' ')
-                .append(OOO_STRING_SVTOOLS_RTF_RTLCH)
-                .append(aAssocRtlch);
+            aBuf.append(OOO_STRING_SVTOOLS_RTF_LTRCH + aAssocLtrch
+                        + " " OOO_STRING_SVTOOLS_RTF_RTLCH + aAssocRtlch);
         }
     }
     else
     {
         if (!aAssocRtlch.isEmpty())
         {
-            aBuf.append(OOO_STRING_SVTOOLS_RTF_RTLCH)
-                .append(aAssocRtlch)
-                .append(' ')
-                .append(OOO_STRING_SVTOOLS_RTF_LTRCH)
-                .append(aAssocLtrch);
+            aBuf.append(OOO_STRING_SVTOOLS_RTF_RTLCH + aAssocRtlch
+                        + " " OOO_STRING_SVTOOLS_RTF_LTRCH + aAssocLtrch);
         }
         if (!aAssocHich.isEmpty())
         {
-            aBuf.append(OOO_STRING_SVTOOLS_RTF_HICH).append(aAssocHich);
+            aBuf.append(OOO_STRING_SVTOOLS_RTF_HICH + aAssocHich);
         }
         if (!aNormal.isEmpty())
         {
-            aBuf.append(OOO_STRING_SVTOOLS_RTF_LOCH).append(aNormal);
+            aBuf.append(OOO_STRING_SVTOOLS_RTF_LOCH + aNormal);
         }
         if (!aAssocDbch.isEmpty())
         {
-            aBuf.append(OOO_STRING_SVTOOLS_RTF_DBCH).append(aAssocDbch);
+            aBuf.append(OOO_STRING_SVTOOLS_RTF_DBCH + aAssocDbch);
         }
     }
 
@@ -1086,7 +1080,7 @@ void RtfAttributeOutput::EndTableRow()
             m_aAfterRuns.append(m_aTables.back());
             m_aTables.pop_back();
         }
-        m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_ROW).append(OOO_STRING_SVTOOLS_RTF_PARD);
+        m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_ROW OOO_STRING_SVTOOLS_RTF_PARD);
     }
     m_bTableRowEnded = true;
 }
@@ -2321,12 +2315,10 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
 
                             xPropSet->getPropertyValue("StringItemList") >>= aStrSeq;
                             for (const auto& rStr : std::as_const(aStrSeq))
-                                m_aRun
-                                    ->append(
-                                        "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFL
-                                        " ")
-                                    .append(OUStringToOString(rStr, m_rExport.GetCurrentEncoding()))
-                                    .append('}');
+                                m_aRun->append(
+                                    "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFL " "
+                                    + OUStringToOString(rStr, m_rExport.GetCurrentEncoding())
+                                    + "}");
 
                             m_aRun->append("}}");
 

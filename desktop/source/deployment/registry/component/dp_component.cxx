@@ -1090,7 +1090,7 @@ Reference<XComponentContext> raise_uno_process(
     catch (...) {
         OUStringBuffer sMsg = "error starting process: " + url;
         for(const auto& arg : args)
-            sMsg.append(" ").append(arg);
+            sMsg.append(" " + arg);
         throw uno::RuntimeException(sMsg.makeStringAndClear());
     }
     try {
