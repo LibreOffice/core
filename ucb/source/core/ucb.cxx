@@ -125,8 +125,7 @@ bool fillPlaceholders(OUString const & rInput,
                 }
                 if (!bFound)
                     return false;
-                aBuffer.append(pCopy, p - 1 - pCopy);
-                aBuffer.append(aValue);
+                aBuffer.append(std::u16string_view(pCopy, p - 1 - pCopy) + aValue);
                 p = q + 1;
                 pCopy = p;
                 break;
@@ -830,8 +829,7 @@ bool UniversalContentBroker::getContentProviderData(
 
                     ContentProviderData aInfo;
 
-                    OUStringBuffer aElemBuffer;
-                    aElemBuffer.append( "['" );
+                    OUStringBuffer aElemBuffer( "['" );
                     makeAndAppendXMLName( aElemBuffer, rElem );
                     aElemBuffer.append( "']" );
 

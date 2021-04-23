@@ -474,8 +474,7 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     aStrBuf.append( "intro_" );
     if ( !_sAppName.isEmpty() )
     {
-        aStrBuf.append( OUStringToOString(_sAppName, RTL_TEXTENCODING_UTF8) );
-        aStrBuf.append( "_" );
+        aStrBuf.append( OUStringToOString(_sAppName, RTL_TEXTENCODING_UTF8) + "_" );
     }
     OString aResBuf = OString::number( nWidth ) + "x" + OString::number( nHeight );
 
@@ -483,8 +482,7 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     if (Application::LoadBrandBitmap (aStrBuf.makeStringAndClear().getStr(), rBitmap))
         return;
 
-    aStrBuf.append( "intro_" );
-    aStrBuf.append( aResBuf.getStr() );
+    aStrBuf.append( "intro_" + aResBuf );
     if (Application::LoadBrandBitmap (aResBuf.getStr(), rBitmap))
         return;
 

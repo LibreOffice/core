@@ -152,10 +152,10 @@ void ODocumentInfoPreview::insertDateTime(
             value.Hours, value.Minutes, value.Seconds, value.NanoSeconds));
     if (aToolsDT.IsValidAndGregorian()) {
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-        OUStringBuffer buf(rLocaleWrapper.getDate(aToolsDT));
-        buf.append(", ");
-        buf.append(rLocaleWrapper.getTime(aToolsDT));
-        insertEntry(SvtDocInfoTable_Impl::GetString(id), buf.makeStringAndClear());
+        OUString buf = rLocaleWrapper.getDate(aToolsDT) +
+            ", " +
+            rLocaleWrapper.getTime(aToolsDT);
+        insertEntry(SvtDocInfoTable_Impl::GetString(id), buf);
     }
 }
 

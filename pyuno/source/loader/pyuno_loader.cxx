@@ -72,8 +72,7 @@ static void raiseRuntimeExceptionWhenNeeded()
         PyErr_Fetch(reinterpret_cast<PyObject **>(&excType), reinterpret_cast<PyObject**>(&excValue), reinterpret_cast<PyObject**>(&excTraceback));
         Runtime runtime;
         css::uno::Any a = runtime.extractUnoException( excType, excValue, excTraceback );
-        OUStringBuffer buf;
-        buf.append( "python-loader:" );
+        OUStringBuffer buf( "python-loader:" );
         if( auto e = o3tl::tryAccess<css::uno::Exception>(a) )
             buf.append( e->Message );
         throw RuntimeException( buf.makeStringAndClear() );

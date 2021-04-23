@@ -90,12 +90,11 @@ namespace connectivity::hsqldb
 
         // create a statement which can be used to re-create the original view, in case
         // dropping it succeeds, but creating it with a new statement fails
-        OUStringBuffer aRestoreCommand;
-        aRestoreCommand.append( "CREATE VIEW " );
-        aRestoreCommand.append     ( sQualifiedName );
-        aRestoreCommand.append( " AS " );
-        aRestoreCommand.append     ( impl_getCommand_throwSQLException() );
-        OUString sRestoreCommand( aRestoreCommand.makeStringAndClear() );
+        OUString sRestoreCommand =
+            "CREATE VIEW " +
+            sQualifiedName +
+            " AS " +
+            impl_getCommand_throwSQLException();
 
         bool bDropSucceeded( false );
         try
@@ -147,8 +146,7 @@ namespace connectivity::hsqldb
 
     OUString HView::impl_getCommand() const
     {
-        OUStringBuffer aCommand;
-        aCommand.append( "SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.SYSTEM_VIEWS " );
+        OUStringBuffer aCommand = "SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.SYSTEM_VIEWS ";
         HTools::appendTableFilterCrit( aCommand, m_CatalogName, m_SchemaName, m_Name, false );
         ::utl::SharedUNOComponent< XStatement > xStatement; xStatement.set( m_xConnection->createStatement(), UNO_QUERY_THROW );
         Reference< XResultSet > xResult( xStatement->executeQuery( aCommand.makeStringAndClear() ), css::uno::UNO_SET_THROW );

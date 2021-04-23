@@ -377,8 +377,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     if (nTxtWidth > nMaxTxtWidth)
     {
         bLeftText = true;
-        OUStringBuffer aBuf(pItem->maOutText);
-        aBuf.append("...");
+        OUStringBuffer aBuf(pItem->maOutText + "...");
         do
         {
             aBuf.remove(aBuf.getLength() - 3 - 1, 1);

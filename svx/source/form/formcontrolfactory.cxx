@@ -167,8 +167,7 @@ namespace svxform
                 sal_Int32 i=2;
                 while ( aUsedLabels.find( sLabel ) != aUsedLabels.end() )
                 {
-                    OUStringBuffer aBuffer( _rBaseLabel );
-                    aBuffer.append( " " );
+                    OUStringBuffer aBuffer( _rBaseLabel + " " );
                     aBuffer.append( i++ );
                     sLabel = aBuffer.makeStringAndClear();
                 }
@@ -690,14 +689,13 @@ namespace svxform
     }
 
 
-    OUString FormControlFactory::getUniqueName( const Reference< XNameAccess >& _rxContainer, const OUString& _rBaseName )
+    OUString FormControlFactory::getUniqueName( const Reference< XNameAccess >& _rxContainer, std::u16string_view _rBaseName )
     {
         sal_Int32 n = 0;
         OUString sName;
         do
         {
-            OUStringBuffer aBuf( _rBaseName );
-            aBuf.append( " " );
+            OUStringBuffer aBuf( OUString::Concat(_rBaseName) + " " );
             aBuf.append( ++n );
             sName = aBuf.makeStringAndClear();
         }

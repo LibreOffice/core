@@ -190,16 +190,13 @@ ScriptingFrameworkURIHelper::getLanguagePath(const OUString& rLanguagePart)
 OUString SAL_CALL
 ScriptingFrameworkURIHelper::getScriptURI(const OUString& rStorageURI)
 {
-    OUStringBuffer buf(120);
-
-    buf.append("vnd.sun.star.script:");
-    buf.append(getLanguagePart(rStorageURI));
-    buf.append("?language=");
-    buf.append(m_sLanguage);
-    buf.append("&location=");
-    buf.append(m_sLocation);
-
-    return buf.makeStringAndClear();
+    return
+        "vnd.sun.star.script:" +
+        getLanguagePart(rStorageURI) +
+        "?language=" +
+        m_sLanguage +
+        "&location=" +
+        m_sLocation;
 }
 
 OUString SAL_CALL
@@ -219,14 +216,7 @@ ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
             uno::Reference< uno::XInterface >(), 1 );
     }
 
-    OUStringBuffer buf(120);
-    buf.append(m_sBaseURI);
-    buf.append("/");
-    buf.append(getLanguagePath(sLanguagePart));
-
-    OUString result = buf.makeStringAndClear();
-
-    return result;
+    return m_sBaseURI + "/" + getLanguagePath(sLanguagePart);
 }
 
 OUString SAL_CALL

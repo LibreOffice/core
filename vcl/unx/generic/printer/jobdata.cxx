@@ -123,10 +123,9 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
     // write header job data
     aStream.WriteLine("JobData 1");
 
-    OStringBuffer aLine;
-
-    aLine.append("printer=");
-    aLine.append(OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
+    OStringBuffer aLine(
+        "printer=" +
+        OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
     aStream.WriteLine(aLine.makeStringAndClear());
 
     aLine.append("orientation=");
@@ -136,29 +135,23 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
         aLine.append("Portrait");
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append("copies=");
-    aLine.append(static_cast<sal_Int32>(m_nCopies));
+    aLine.append("copies=" + OString::number(m_nCopies));
     aStream.WriteLine(aLine.makeStringAndClear());
 
     if (m_nPDFDevice > 0)
     {
-        aLine.append("collate=");
-        aLine.append(OString::boolean(m_bCollate));
+        aLine.append("collate=" + OString::boolean(m_bCollate));
         aStream.WriteLine(aLine.makeStringAndClear());
     }
 
-    aLine.append("marginadjustment=");
-    aLine.append(static_cast<sal_Int32>(m_nLeftMarginAdjust));
-    aLine.append(',');
-    aLine.append(static_cast<sal_Int32>(m_nRightMarginAdjust));
-    aLine.append(',');
-    aLine.append(static_cast<sal_Int32>(m_nTopMarginAdjust));
-    aLine.append(',');
-    aLine.append(static_cast<sal_Int32>(m_nBottomMarginAdjust));
+    aLine.append("marginadjustment=" +
+        OString::number(m_nLeftMarginAdjust) + "," +
+        OString::number(m_nRightMarginAdjust) + "," +
+        OString::number(m_nTopMarginAdjust) + "," +
+        OString::number(m_nBottomMarginAdjust));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append("colordepth=");
-    aLine.append(static_cast<sal_Int32>(m_nColorDepth));
+    aLine.append("colordepth=" + OString::number(m_nColorDepth));
     aStream.WriteLine(aLine.makeStringAndClear());
 
     aLine.append("pslevel=");

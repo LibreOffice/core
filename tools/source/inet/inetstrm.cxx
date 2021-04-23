@@ -159,9 +159,9 @@ int INetMIMEMessageStream::GetMsgLine(char* pData, sal_uInt32 nSize)
                         if (pSourceMsg->IsMultipart())
                         {
                             // Insert multipart delimiter.
-                            OStringBuffer aDelim("--");
-                            aDelim.append(pSourceMsg->GetMultipartBoundary());
-                            aDelim.append("\r\n");
+                            OString aDelim = "--" +
+                                pSourceMsg->GetMultipartBoundary() +
+                                "\r\n";
 
                             memcpy(pData, aDelim.getStr(),
                                 aDelim.getLength());
@@ -177,9 +177,9 @@ int INetMIMEMessageStream::GetMsgLine(char* pData, sal_uInt32 nSize)
                         if (pSourceMsg->IsMultipart())
                         {
                             // Insert close delimiter.
-                            OStringBuffer aDelim("--");
-                            aDelim.append(pSourceMsg->GetMultipartBoundary());
-                            aDelim.append("--\r\n");
+                            OString aDelim = "--" +
+                                pSourceMsg->GetMultipartBoundary() +
+                                "--\r\n";
 
                             memcpy(pData, aDelim.getStr(),
                                 aDelim.getLength());

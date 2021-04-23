@@ -664,8 +664,8 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         sDisplay = sDisplay.replaceFirst( ";", "\\;" );
         sDisplay = sDisplay.replaceFirst( ",", "\\," );
         sDisplay = sDisplay.replaceFirst( ":", "\\:" );
-        sValue = sName + sDisplay ;
-        sValue.append(";page-number:");
+        sValue = sName + sDisplay +
+                    ";page-number:";
         sValue.append(static_cast<sal_Int32>(static_cast<sal_uInt16>((pDrViewSh->getCurrentPage()->GetPageNum()-1)>>1) + 1));
         sValue.append(";total-pages:");
         sValue.append(static_cast<sal_Int32>(pDrViewSh->GetPageTabControl().GetPageCount()));
@@ -695,8 +695,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             sDisplay = sDisplay.replaceFirst( ";", "\\;" );
             sDisplay = sDisplay.replaceFirst( ",", "\\," );
             sDisplay = sDisplay.replaceFirst( ":", "\\:" );
-            sValue.append(sDisplay);
-            sValue.append(";page-number:");
+            sValue.append(sDisplay + ";page-number:");
             sValue.append(static_cast<sal_Int32>(pDrViewSh->GetActiveTabLayerIndex()+1));
             sValue.append(";total-pages:");
             sValue.append(static_cast<sal_Int32>(pDrViewSh->GetLayerTabControl()->GetPageCount()));
@@ -726,8 +725,8 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
                         strNote = strNote.replaceFirst( ";", "\\;" );
                         strNote = strNote.replaceFirst( ",", "\\," );
                         strNote = strNote.replaceFirst( ":", "\\:" );
-                        sValue.append(strNote);
-                        sValue.append(";");//to divide each paragraph
+                        sValue.append(strNote +
+                                      ";");//to divide each paragraph
                     }
                 }
             }
@@ -745,8 +744,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             sDisplay = sDisplay.replaceFirst( ";", "\\;" );
             sDisplay = sDisplay.replaceFirst( ",", "\\," );
             sDisplay = sDisplay.replaceFirst( ":", "\\:" );
-            sValue = "page-name:" + sDisplay;
-            sValue.append(";page-number:");
+            sValue = "page-name:" + sDisplay + ";page-number:";
             sValue.append(static_cast<sal_Int32>(static_cast<sal_uInt16>((pCurrPge->GetPageNum()-1)>>1) + 1));
             sValue.append(";total-pages:");
             sValue.append(static_cast<sal_Int32>(pDoc->GetSdPageCount(PageKind::Standard)));

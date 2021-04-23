@@ -63,8 +63,7 @@ uno::Reference< container::XNameContainer > XHatchList::createInstance()
 
 bool XHatchList::Create()
 {
-    OUStringBuffer aStr(SvxResId(RID_SVXSTR_HATCH));
-    aStr.append(" 1");
+    OUStringBuffer aStr = SvxResId(RID_SVXSTR_HATCH) + " 1";
 
     sal_Int32 nLen = aStr.getLength() - 1;
     Insert(std::make_unique<XHatchEntry>(XHatch(COL_BLACK,css::drawing::HatchStyle_SINGLE,100,  0_deg10),aStr.toString()));

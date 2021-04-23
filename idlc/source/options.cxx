@@ -170,9 +170,8 @@ bool Options::badOption(char const * reason, std::string const & rArg)
 {
   if (reason != nullptr)
   {
-    OStringBuffer message;
-    message.append(reason); message.append(" option '"); message.append(rArg.c_str()); message.append("'");
-    throw IllegalArgument(message.makeStringAndClear());
+    OString message = OString::Concat(reason) + " option '" + rArg.c_str() + "'";
+    throw IllegalArgument(message);
   }
   return false;
 }

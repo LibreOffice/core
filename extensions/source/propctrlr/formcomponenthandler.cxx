@@ -734,8 +734,7 @@ namespace pcr
             else
             {
                 // font name
-                displayName.append( aFont.Name );
-                displayName.append( ", " );
+                displayName.append( aFont.Name + ", " );
 
                 // font style
                 ::FontWeight  eWeight = vcl::unohelper::ConvertFontWeight( aFont.Weight );
@@ -2525,8 +2524,7 @@ namespace pcr
             OUStringBuffer sTemp;
             if ( bAdd )
             {
-                sTemp.append(_sName);
-                sTemp.append("/");
+                sTemp.append(OUString::Concat(_sName) + "/");
             }
             sTemp.append(rQueryName);
             Reference< XNameAccess > xSubQueries(_xQueryNames->getByName(rQueryName),UNO_QUERY);

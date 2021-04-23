@@ -73,13 +73,11 @@ OUString lcl_GetStringItem(const vcl::Font &rFont)
 
     if (IsItalic( rFont ))
     {
-        aString.append(", ");
-        aString.append(SmResId(RID_FONTITALIC));
+        aString.append(", " + SmResId(RID_FONTITALIC));
     }
     if (IsBold( rFont ))
     {
-        aString.append(", ");
-        aString.append(SmResId(RID_FONTBOLD));
+        aString.append(", " + SmResId(RID_FONTBOLD));
     }
 
     return aString.makeStringAndClear();

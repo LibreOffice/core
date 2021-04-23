@@ -84,10 +84,7 @@ public:
         if (sName.indexOf('"') >= 0)
         {
             // Table name with string delimiter
-            OUStringBuffer sMultiName("\"");
-            sMultiName.append(string::split(m_sql, u'"')[1]);
-            sMultiName.append("\"");
-            sName = sMultiName.makeStringAndClear();
+            sName = "\"" + string::split(m_sql, u'"')[1] + "\"";
         }
         return sName;
     }

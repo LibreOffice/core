@@ -217,21 +217,21 @@ void Bridge::call_java(
         jni, jni->CallObjectMethodA(
             jo_method.get(), getJniInfo()->m_method_Object_toString, nullptr ) );
     jni.ensure_no_exception();
-    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) );
-    trace_buf.append( " on " );
+    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) +
+            " on " );
     jo_descr.reset(
         jni->CallObjectMethodA(
             javaI, getJniInfo()->m_method_Object_toString, nullptr ) );
     jni.ensure_no_exception();
-    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) );
-    trace_buf.append( " (" );
+    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) +
+         " (" );
     JLocalAutoRef jo_class( jni, jni->GetObjectClass( javaI ) );
     jo_descr.reset(
         jni->CallObjectMethodA(
             jo_class.get(), getJniInfo()->m_method_Object_toString, nullptr ) );
     jni.ensure_no_exception();
-    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) );
-    trace_buf.append( ")" );
+    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) +
+        ")" );
     SAL_INFO("bridges", trace_buf.makeStringAndClear());
 #endif
 
@@ -776,8 +776,7 @@ void UNO_proxy_dispatch(
                             typelib_InterfaceMemberTypeDescription const * >(
                                 member_td )->pMemberName ) );
         }
-        buf.append( ": " );
-        buf.append( err.m_message );
+        buf.append( ": " + err.m_message );
         // binary identical struct
         ::com::sun::star::uno::RuntimeException exc(
             buf.makeStringAndClear(),

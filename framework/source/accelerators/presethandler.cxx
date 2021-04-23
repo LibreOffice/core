@@ -355,10 +355,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         case E_GLOBAL :
         {
-            sRelPathBuf.append("global");
-            sRelPathBuf.append("/");
-            sRelPathBuf.append(sResource);
-            sRelPathShare = sRelPathBuf.makeStringAndClear();
+            sRelPathShare = OUString::Concat("global/") + sResource;
             sRelPathUser  = sRelPathShare;
 
             xShare = impl_openPathIgnoringErrors(sRelPathShare, eShareMode, true );
@@ -368,12 +365,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
         case E_MODULES :
         {
-            sRelPathBuf.append("modules");
-            sRelPathBuf.append("/");
-            sRelPathBuf.append(sModule);
-            sRelPathBuf.append("/");
-            sRelPathBuf.append(sResource);
-            sRelPathShare = sRelPathBuf.makeStringAndClear();
+            sRelPathShare = OUString::Concat("modules/") + sModule + "/" + sResource;
             sRelPathUser  = sRelPathShare;
 
             xShare = impl_openPathIgnoringErrors(sRelPathShare, eShareMode, true );

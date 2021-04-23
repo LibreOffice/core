@@ -149,21 +149,17 @@ void NeonUri::init( const OString & rUri, const ne_uri * pUri )
 void NeonUri::calculateURI ()
 {
     OUStringBuffer aBuf( 256 );
-    aBuf.append( mScheme );
-    aBuf.append( "://" );
+    aBuf.append( mScheme + "://" );
     if ( !mUserInfo.isEmpty() )
     {
         //TODO! differentiate between empty and missing userinfo
-        aBuf.append( mUserInfo );
-        aBuf.append( "@" );
+        aBuf.append( mUserInfo + "@" );
     }
     // Is host a numeric IPv6 address?
     if ( ( mHostName.indexOf( ':' ) != -1 ) &&
          ( mHostName[ 0 ] != '[' ) )
     {
-        aBuf.append( "[" );
-        aBuf.append( mHostName );
-        aBuf.append( "]" );
+        aBuf.append( "[" + mHostName + "]" );
     }
     else
     {
@@ -271,9 +267,7 @@ OUString NeonUri::makeConnectionEndPointString(
     if ( ( rHostName.indexOf( ':' ) != -1 ) &&
          ( rHostName[ 0 ] != '[' ) )
     {
-        aBuf.append( "[" );
-        aBuf.append( rHostName );
-        aBuf.append( "]" );
+        aBuf.append( "[" + rHostName + "]" );
     }
     else
     {

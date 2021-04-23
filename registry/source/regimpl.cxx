@@ -647,8 +647,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, std::u16string_view keyName,
                 return RegError::CREATE_KEY_FAILED;
             }
 
-            sFullPath.append(token);
-            sFullPath.append('/');
+            sFullPath.append(token + "/");
         }
     } while(nIndex != -1);
 

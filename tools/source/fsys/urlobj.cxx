@@ -3525,9 +3525,7 @@ INetURLObject::getAbbreviated(
                 OUStringBuffer aResult(aBuffer);
                 if (pSuffixEnd != pBegin)
                     aResult.append("...");
-                aResult.append(aSegment);
-                aResult.append(aTrailer);
-                aResult.append(aRest);
+                aResult.append(aSegment + aTrailer + aRest);
                 if (rStringWidth->
                             queryStringWidth(aResult.makeStringAndClear())
                         <= nWidth)
@@ -3562,12 +3560,10 @@ INetURLObject::getAbbreviated(
                                     eMechanism,
                                     eCharset));
                 pPrefixBegin = p;
-                OUStringBuffer aResult(aBuffer);
-                aResult.append(aSegment);
+                OUStringBuffer aResult = aBuffer + aSegment;
                 if (pPrefixBegin != pEnd)
                     aResult.append("...");
-                aResult.append(aTrailer);
-                aResult.append(aRest);
+                aResult.append(aTrailer + aRest);
                 if (rStringWidth->
                             queryStringWidth(aResult.makeStringAndClear())
                         <= nWidth)
@@ -4102,13 +4098,12 @@ bool INetURLObject::setBase(OUString const & rTheBase, sal_Int32 nIndex,
     if (!pExtension)
         pExtension = p;
 
-    OUStringBuffer aNewPath;
-    aNewPath.append(pPathBegin, pSegBegin - pPathBegin);
-    aNewPath.append(encodeText(rTheBase, PART_PCHAR,
-        eMechanism, eCharset, true));
-    aNewPath.append(pExtension, pPathEnd - pExtension);
+    OUString aNewPath =
+        std::u16string_view(pPathBegin, pSegBegin - pPathBegin) +
+        encodeText(rTheBase, PART_PCHAR, eMechanism, eCharset, true) +
+        std::u16string_view(pExtension, pPathEnd - pExtension);
 
-    return setPath(aNewPath.makeStringAndClear(), EncodeMechanism::NotCanonical,
+    return setPath(aNewPath, EncodeMechanism::NotCanonical,
         RTL_TEXTENCODING_UTF8);
 }
 
@@ -4294,8 +4289,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             if (pDelimiter)
                 *pDelimiter = '/';
 
-            OUStringBuffer aSynFSysPath;
-            aSynFSysPath.append("//");
+            OUStringBuffer aSynFSysPath("//");
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
                 aSynFSysPath.append(decode(m_aHost, DecodeMechanism::WithCharset,
                                        RTL_TEXTENCODING_UTF8));
@@ -4325,10 +4319,9 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             OUStringBuffer aSynFSysPath(64);
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
             {
-                aSynFSysPath.append("\\\\");
-                aSynFSysPath.append(decode(m_aHost, DecodeMechanism::WithCharset,
-                                       RTL_TEXTENCODING_UTF8));
-                aSynFSysPath.append('\\');
+                aSynFSysPath.append("\\\\" +
+                    decode(m_aHost, DecodeMechanism::WithCharset, RTL_TEXTENCODING_UTF8) +
+                    "\\");
             }
             sal_Unicode const * p
                 = m_aAbsURIRef.getStr() + m_aPath.getBegin();

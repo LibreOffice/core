@@ -55,8 +55,7 @@ static bool checkOutputPath(const OString& completeName)
         || (token.getLength() >= 2 && token[1] == ':')
         || token.startsWith("."))
     {
-        buffer.append(token);
-        buffer.append(SEPARATOR);
+        buffer.append(token + OStringChar(SEPARATOR));
     }
     else
         nIndex = 0;

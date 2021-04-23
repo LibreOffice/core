@@ -1015,7 +1015,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge )
             const LanguageTag& rLoadedLocale = xLocaleData->getLoadedLanguageTag();
             if ( !rLoadedLocale.equals( maLanguageTag ) )
             {
-                LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( "SvNumberFormatter::ImpGenerateCL: locales don't match:" ));
+                LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( u"SvNumberFormatter::ImpGenerateCL: locales don't match:" ));
             }
             // test XML locale data FormatElement entries
             {
@@ -1034,9 +1034,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge )
                         if ( i != j && xSeq[i].formatIndex == nIdx )
                         {
                             aDupes.append( i );
-                            aDupes.append("(");
-                            aDupes.append(xSeq[i].formatKey);
-                            aDupes.append( ") ");
+                            aDupes.append("(" + xSeq[i].formatKey + ") ");
                         }
                     }
                     if ( !aDupes.isEmpty() )
@@ -2373,7 +2371,7 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
             aMsg.append("\nXML locale data FormatElement group of: ");
             OUString aUMsg(OStringToOUString(aMsg.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US));
             LocaleDataWrapper::outputCheckMessage(
-                xLocaleData->appendLocaleInfo(aUMsg + pFormatArr[0].NameID));
+                xLocaleData->appendLocaleInfo(OUString(aUMsg + pFormatArr[0].NameID)));
         }
     }
     // find the default (medium preferred, then long) and reset all other defaults
@@ -2488,7 +2486,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         if (LocaleDataWrapper::areChecksEnabled() && pStdFormat->GetType() != SvNumFormatType::NUMBER)
         {
             LocaleDataWrapper::outputCheckMessage( xLocaleData->
-                                                   appendLocaleInfo( "SvNumberFormatter::ImpGenerateFormats: General format not NUMBER"));
+                                                   appendLocaleInfo( u"SvNumberFormatter::ImpGenerateFormats: General format not NUMBER"));
         }
         pStdFormat->SetType( SvNumFormatType::NUMBER );
         pStdFormat->SetStandard();
@@ -2499,7 +2497,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         if (LocaleDataWrapper::areChecksEnabled())
         {
             LocaleDataWrapper::outputCheckMessage( xLocaleData->
-                                                   appendLocaleInfo( "SvNumberFormatter::ImpGenerateFormats: General format not insertable, nothing will work"));
+                                                   appendLocaleInfo( u"SvNumberFormatter::ImpGenerateFormats: General format not insertable, nothing will work"));
         }
     }
 
@@ -3173,9 +3171,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
             sString.append( aIntegerFractionDelimiterString );
         else
         {
-            sString.append( '"' );
-            sString.append( aIntegerFractionDelimiterString );
-            sString.append( '"' );
+            sString.append( "\"" + aIntegerFractionDelimiterString + "\"" );
         }
         sString.append( pFormat->GetNumeratorString( 0 ) );
         sString.append( '/' );
@@ -3804,9 +3800,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString
                 if ( aSymbol.indexOf( '-' ) != -1 ||
                         aSymbol.indexOf( ']' ) != -1 )
                 {
-                    sBuff.append('"');
-                    sBuff.append( aSymbol);
-                    sBuff.append('"');
+                    sBuff.append("\"" + aSymbol + "\"");
                 }
                 else
                 {
@@ -3935,7 +3929,7 @@ void SvNumberFormatter::GetCompatibilityCurrency( OUString& rSymbol, OUString& r
         if (LocaleDataWrapper::areChecksEnabled())
         {
             LocaleDataWrapper::outputCheckMessage( xLocaleData->
-                                                   appendLocaleInfo( "GetCompatibilityCurrency: none?"));
+                                                   appendLocaleInfo( u"GetCompatibilityCurrency: none?"));
         }
         rSymbol = xLocaleData->getCurrSymbol();
         rAbbrev = xLocaleData->getCurrBankSymbol();

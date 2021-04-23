@@ -70,9 +70,7 @@ struct2string(void *data,
 {
     assert(type->eTypeClass == typelib_TypeClass_STRUCT);
 
-    OUStringBuffer result;
-
-    result.append("{");
+    OUStringBuffer result("{");
 
     const typelib_CompoundTypeDescription *compoundType =
         &reinterpret_cast<const typelib_StructTypeDescription*>(type)->aBase;
@@ -81,8 +79,7 @@ struct2string(void *data,
     {
         if (i > 0)
             result.append(":");
-        result.append(compoundType->ppMemberNames[i]);
-        result.append("=");
+        result.append(OUString::unacquired(&compoundType->ppMemberNames[i] )+ "=");
         result.append(data2string(static_cast<char *>(data)+compoundType->pMemberOffsets[i],
                                   compoundType->ppTypeRefs[i]));
     }
@@ -161,8 +158,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
 
         if (!rParentName.isEmpty())
             {
-                aStemBuffer.append("-");
-                aStemBuffer.append(rParentName);
+                aStemBuffer.append("-" +rParentName);
             }
 
         // Create a name based on the properties used
@@ -175,10 +171,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
                     continue;
                 aStemBuffer.append("-");
                 aStemBuffer.append(static_cast<sal_Int32>(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryNameSpace(rState.mnIndex)));
-                aStemBuffer.append(":");
-                aStemBuffer.append(sXMLName);
-                aStemBuffer.append("=");
-                aStemBuffer.append(any2string(rState.maValue));
+                aStemBuffer.append(":" + sXMLName + "=" + any2string(rState.maValue));
             }
 
 #if 0
@@ -202,8 +195,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
                 SAL_WARN("xmloff", "Overlapping style name for " << msName);
             bWarned = true;
             rFamilyData.mnName++;
-            aTry.append( aStemBuffer );
-            aTry.append( "-" );
+            aTry.append( aStemBuffer + "-" );
             aTry.append( static_cast<sal_Int64>(rFamilyData.mnName) );
             msName = aTry.makeStringAndClear();
         }

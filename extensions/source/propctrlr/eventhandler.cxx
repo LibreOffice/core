@@ -130,8 +130,7 @@ namespace pcr
         ,sUniqueBrowseId( _sUniqueBrowseId )
         ,nId( _nId )
     {
-        OUStringBuffer aQualifiedListenerClass;
-        aQualifiedListenerClass.append( "com.sun.star." );
+        OUStringBuffer aQualifiedListenerClass( "com.sun.star." );
         aQualifiedListenerClass.appendAscii( _pListenerNamespaceAscii );
         aQualifiedListenerClass.append( "." );
         aQualifiedListenerClass.appendAscii( _pListenerClassAsciiName );
@@ -608,8 +607,7 @@ namespace pcr
                     OSL_ENSURE( !sLocation.isEmpty(), "EventHandler::convertToControlValue: unexpected: no location!" );
                     if ( !sLocation.isEmpty() )
                     {
-                        aComposeBuffer.append( sLocation );
-                        aComposeBuffer.append( ", " );
+                        aComposeBuffer.append( sLocation + ", " );
                     }
 
                     // language

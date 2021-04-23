@@ -132,10 +132,10 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
                         xPropSet->getPropertyValue( aDisplayNameStr ) >>= aDisplayName;
                         xPropSet->getPropertyValue( aHeaderFooterIsOnStr ) >>= bHeaderIsOn;
 
-                        OUStringBuffer aStrBuf( aCmd );
-                        aStrBuf.append( "?PageStyle:string=");
-                        aStrBuf.append( aDisplayName );
-                        aStrBuf.append( "&On:bool=" );
+                        OUStringBuffer aStrBuf = aCmd +
+                            "?PageStyle:string=" +
+                            aDisplayName +
+                            "&On:bool=";
                         if ( !bHeaderIsOn )
                             aStrBuf.append( "true" );
                         else
@@ -168,8 +168,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
                 // Insert special item for all command
                 pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, FwkResId(STR_MENU_HEADFOOTALL), MenuItemBits::NONE, OString(), 0 );
 
-                OUStringBuffer aStrBuf( aCmd );
-                aStrBuf.append( "?On:bool=" );
+                OUStringBuffer aStrBuf( aCmd + "?On:bool=" );
 
                 // Command depends on check state of first menu item entry
                 if ( !bFirstChecked )

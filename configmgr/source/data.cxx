@@ -83,9 +83,9 @@ OUString Data::createSegment(
         return name;
     }
     OUStringBuffer buf(128);
-    buf.append(templateName);
+    buf.append(OUString::Concat(templateName) +
         //TODO: verify template name contains no bad chars?
-    buf.append("['");
+            "['");
     for (sal_Int32 i = 0; i < name.getLength(); ++i) {
         sal_Unicode c = name[i];
         switch (c) {

@@ -3013,10 +3013,10 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             sal_uInt16 sz = static_cast<sal_uInt16>((pA->GetDataSize()) / 2);
                             if (sz)
                             {
-                                sType.append("; ");
-                                sType.append(
-                                    reinterpret_cast<sal_Unicode const*>(pData),
-                                    sz);
+                                sType.append(OUString::Concat("; ") +
+                                    std::u16string_view(
+                                        reinterpret_cast<sal_Unicode const*>(pData),
+                                        sz) );
                             }
                         }
                     }

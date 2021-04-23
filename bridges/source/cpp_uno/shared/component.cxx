@@ -87,18 +87,15 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
         if (xHome.is())
         {
             // interface
-            OUStringBuffer oid( 64 );
-            oid.append( reinterpret_cast< sal_Int64 >(xHome.get()), 16 );
-            oid.append( ';' );
-            // ;environment[context]
-            oid.append( OUString::unacquired(&pEnv->aBase.pTypeName) );
-            oid.append( '[' );
-            oid.append(
-                reinterpret_cast< sal_Int64 >(pEnv->aBase.pContext),
-                16 );
-            // ];good guid
-            oid.append( cppu_cppenv_getStaticOIdPart() );
-            OUString aRet( oid.makeStringAndClear() );
+            OUString aRet =
+                OUString::number( reinterpret_cast< sal_Int64 >(xHome.get()), 16 ) +
+                ";" +
+                // ;environment[context]
+                OUString::unacquired(&pEnv->aBase.pTypeName) +
+                "[" +
+                OUString::number( reinterpret_cast< sal_Int64 >(pEnv->aBase.pContext), 16 ) +
+                // ];good guid
+                cppu_cppenv_getStaticOIdPart();
             *ppOId = aRet.pData;
             ::rtl_uString_acquire( *ppOId );
         }

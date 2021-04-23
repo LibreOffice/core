@@ -393,9 +393,7 @@ namespace dbtools
                     if ( !sAdditionalFilter.isEmpty() )
                         sAdditionalFilter.append(" AND ");
 
-                    sAdditionalFilter.append("( ");
-                    sAdditionalFilter.append(elem);
-                    sAdditionalFilter.append(" )");
+                    sAdditionalFilter.append("( " + elem + " )");
                 }
 
                 // now set this filter at the filter manager
@@ -413,9 +411,7 @@ namespace dbtools
                     if ( !sAdditionalHaving.isEmpty() )
                         sAdditionalHaving.append(" AND ");
 
-                    sAdditionalHaving.append("( ");
-                    sAdditionalHaving.append(elem);
-                    sAdditionalHaving.append(" )");
+                    sAdditionalHaving.append("( " + elem + " )");
                 }
 
                 // now set this having clause at the filter manager

@@ -556,8 +556,7 @@ void IndexTabPage_Impl::InitializeIndex()
 
     try
     {
-        OUStringBuffer aURL = HELP_URL;
-        aURL.append(sFactory);
+        OUStringBuffer aURL = HELP_URL + sFactory;
         AppendConfigToken(aURL, true);
 
         Content aCnt( aURL.makeStringAndClear(), Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -996,9 +995,9 @@ void SearchTabPage_Impl::Search()
     std::unique_ptr<weld::WaitObject> xWaitCursor(new weld::WaitObject(m_pIdxWin->GetFrameWeld()));
     ClearSearchResults();
     RememberSearchText( aSearchText );
-    OUStringBuffer aSearchURL(HELP_URL);
-    aSearchURL.append(aFactory);
-    aSearchURL.append(HELP_SEARCH_TAG);
+    OUStringBuffer aSearchURL = HELP_URL +
+        aFactory +
+        HELP_SEARCH_TAG;
     if (!m_xFullWordsCB->get_active())
         aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
     aSearchURL.append(aSearchText);
@@ -1228,9 +1227,7 @@ OUString SfxHelpWindow_Impl::buildHelpURL(std::u16string_view sFactory        ,
                                           std::u16string_view sAnchor)
 {
     OUStringBuffer sHelpURL(256);
-    sHelpURL.append(HELP_URL);
-    sHelpURL.append(sFactory);
-    sHelpURL.append(sContent);
+    sHelpURL.append(OUString::Concat(HELP_URL) + sFactory + sContent);
     AppendConfigToken(sHelpURL, true/*bUseQuestionMark*/);
     if (!sAnchor.empty())
         sHelpURL.append(sAnchor);

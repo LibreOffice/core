@@ -972,8 +972,7 @@ bool PDFTrailer::emit( EmitContext& rWriteContext ) const
                 nPad = 5 - aGeneration.getLength();
                 for( int i = 0; i < nPad; i++ )
                     aBuf.append( '0' );
-                aBuf.append( aGeneration );
-                aBuf.append( " n\r\n" );
+                aBuf.append( aGeneration + " n\r\n" );
                 if( ! rWriteContext.write( aBuf.getStr(), 20 ) )
                     return false;
                 ++section_begin;

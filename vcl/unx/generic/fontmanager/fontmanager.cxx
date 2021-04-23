@@ -1165,8 +1165,7 @@ SAL_DLLPUBLIC_EXPORT const char * unit_online_get_fonts(void)
     for( auto nId : aFontIDs )
     {
         const OUString& rName = rMgr.getPSName( nId );
-        aBuf.append( OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ) );
-        aBuf.append( "\n" );
+        aBuf.append( OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ) + "\n" );
     }
     static OString aResult = aBuf.makeStringAndClear();
     return aResult.getStr();

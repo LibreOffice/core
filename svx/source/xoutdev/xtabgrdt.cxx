@@ -66,8 +66,7 @@ uno::Reference< container::XNameContainer > XGradientList::createInstance()
 
 bool XGradientList::Create()
 {
-    OUStringBuffer aStr(SvxResId(RID_SVXSTR_GRADIENT));
-    aStr.append(" 1");
+    OUStringBuffer aStr = SvxResId(RID_SVXSTR_GRADIENT) + " 1";
     sal_Int32 nLen = aStr.getLength() - 1;
     Insert(std::make_unique<XGradientEntry>(XGradient(COL_BLACK,   COL_WHITE, css::awt::GradientStyle_LINEAR    ,    0_deg10,10,10, 0,100,100),aStr.toString()));
     aStr[nLen] = '2';

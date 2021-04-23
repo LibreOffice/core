@@ -141,13 +141,13 @@ static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
     aByteStr.append(' ');
     if( nSpan > 1 )
     {
-        aByteStr.append(OOO_STRING_SVTOOLS_HTML_O_span);
-        aByteStr.append("=\"");
+        aByteStr.append(OString::Concat(OOO_STRING_SVTOOLS_HTML_O_span) +
+                    "=\"");
         aByteStr.append(nSpan);
         aByteStr.append("\" ");
     }
-    aByteStr.append(OOO_STRING_SVTOOLS_HTML_O_width);
-    aByteStr.append("=\"");
+    aByteStr.append(OString::Concat(OOO_STRING_SVTOOLS_HTML_O_width) +
+                    "=\"");
     aByteStr.append(nWidth);
     aByteStr.append('"');
     return aByteStr.makeStringAndClear();

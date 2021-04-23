@@ -1558,9 +1558,9 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, OUStri
             sal_Int32 nPos {0};
             for (;;)
             {
-                aBuff.append( "\"" );
-                aBuff.append( sArgs2.getToken(0, ',', nPos) );
-                aBuff.append( "\"" );
+                aBuff.append( "\"" +
+                            sArgs2.getToken(0, ',', nPos) +
+                            "\"" );
                 if (nPos<0)
                     break;
                 aBuff.append( "," );

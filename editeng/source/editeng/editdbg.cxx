@@ -192,9 +192,9 @@ static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
         {
-            aDebStr.append("Font=");
-            aDebStr.append(OUStringToOString(static_cast<const SvxFontItem&>(rItem).GetFamilyName(), RTL_TEXTENCODING_ASCII_US));
-            aDebStr.append(" (CharSet: ");
+            aDebStr.append("Font=" +
+                    OUStringToOString(static_cast<const SvxFontItem&>(rItem).GetFamilyName(), RTL_TEXTENCODING_ASCII_US) +
+                    " (CharSet: ");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxFontItem&>(rItem).GetCharSet()));
             aDebStr.append(')');
         }
@@ -351,8 +351,7 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
         for ( sal_Int32 z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); ++z )
         {
             const std::unique_ptr<EditCharAttrib>& rAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs()[z];
-            OStringBuffer aCharAttribs;
-            aCharAttribs.append("\nA");
+            OStringBuffer aCharAttribs("\nA");
             aCharAttribs.append(nPortion);
             aCharAttribs.append(":  ");
             aCharAttribs.append(static_cast<sal_Int32>(rAttr->GetItem()->Which()));

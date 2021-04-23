@@ -361,12 +361,12 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         dp_misc::TRACE("> [dp_registry.cxx] media-type detection:\n\n" );
         for (auto const& elem : that->m_filter2mediaType)
         {
-            OUStringBuffer buf;
-            buf.append( "extension \"" );
-            buf.append( elem.first );
-            buf.append( "\" maps to media-type \"" );
-            buf.append( elem.second );
-            buf.append( "\" maps to backend " );
+            OUStringBuffer buf =
+                "extension \"" +
+                elem.first +
+                "\" maps to media-type \"" +
+                elem.second +
+                "\" maps to backend ";
             const Reference<deployment::XPackageRegistry> xBackend(
                 that->m_mediaType2backend.find( elem.second )->second );
             allBackends.insert( xBackend );
@@ -378,11 +378,10 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         dp_misc::TRACE( "> [dp_registry.cxx] ambiguous backends:\n\n" );
         for (auto const& ambiguousBackend : that->m_ambiguousBackends)
         {
-            OUStringBuffer buf;
-            buf.append(
+            OUStringBuffer buf =
                 Reference<lang::XServiceInfo>(
-                    ambiguousBackend, UNO_QUERY_THROW )->getImplementationName() );
-            buf.append( ": " );
+                    ambiguousBackend, UNO_QUERY_THROW )->getImplementationName() +
+                ": ";
             const Sequence< Reference<deployment::XPackageTypeInfo> > types(
                 ambiguousBackend->getSupportedPackageTypes() );
             for ( sal_Int32 pos = 0; pos < types.getLength(); ++pos ) {
@@ -391,9 +390,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                 buf.append( xInfo->getMediaType() );
                 const OUString filter( xInfo->getFileFilter() );
                 if (!filter.isEmpty()) {
-                    buf.append( " (" );
-                    buf.append( filter );
-                    buf.append( ")" );
+                    buf.append( " (" + filter + ")" );
                 }
                 if (pos < (types.getLength() - 1))
                     buf.append( ", " );

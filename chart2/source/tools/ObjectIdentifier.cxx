@@ -85,15 +85,13 @@ OUString lcl_createClassificationStringForType( ObjectType eObjectType
     {
         if( !aRet.isEmpty() )
             aRet.append(":");
-        aRet.append( m_aDragMethodEquals );
-        aRet.append( rDragMethodServiceName );
+        aRet.append( OUString::Concat(m_aDragMethodEquals) + rDragMethodServiceName );
 
         if( !rDragParameterString.empty() )
         {
             if( !aRet.isEmpty() )
                 aRet.append(":");
-            aRet.append( m_aDragParameterEquals );
-            aRet.append( rDragParameterString );
+            aRet.append( OUString::Concat(m_aDragParameterEquals) + rDragParameterString );
         }
     }
     return aRet.makeStringAndClear();
@@ -510,7 +508,7 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
           const Reference< XCoordinateSystem >& xCooSys
         , ChartModel& rModel )
 {
-    OUStringBuffer aRet;
+    OUString aRet;
 
     Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
     Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
@@ -523,22 +521,20 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
             Reference< XCoordinateSystem > xCurrentCooSys( aCooSysList[nCooSysIndex] );
             if( xCooSys == xCurrentCooSys )
             {
-                aRet = ObjectIdentifier::createParticleForDiagram();
-                aRet.append(":CS=");
-                aRet.append( nCooSysIndex );
+                aRet = ObjectIdentifier::createParticleForDiagram() + ":CS=" + OUString::number( nCooSysIndex );
                 break;
             }
         }
     }
 
-    return aRet.makeStringAndClear();
+    return aRet;
 }
 
 OUString ObjectIdentifier::createParticleForCoordinateSystem(
           const Reference< XCoordinateSystem >& xCooSys
         , const Reference< frame::XModel >& xChartModel )
 {
-    OUStringBuffer aRet;
+    OUString aRet;
 
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
@@ -551,15 +547,13 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
             Reference< XCoordinateSystem > xCurrentCooSys( aCooSysList[nCooSysIndex] );
             if( xCooSys == xCurrentCooSys )
             {
-                aRet = ObjectIdentifier::createParticleForDiagram();
-                aRet.append(":CS=");
-                aRet.append( nCooSysIndex );
+                aRet = ObjectIdentifier::createParticleForDiagram() + ":CS=" + OUString::number( nCooSysIndex );
                 break;
             }
         }
     }
 
-    return aRet.makeStringAndClear();
+    return aRet;
 }
 
 OUString ObjectIdentifier::createParticleForAxis(
@@ -604,17 +598,13 @@ OUString ObjectIdentifier::createParticleForSeries(
               sal_Int32 nDiagramIndex, sal_Int32 nCooSysIndex
             , sal_Int32 nChartTypeIndex, sal_Int32 nSeriesIndex )
 {
-    OUStringBuffer aRet;
-
-    aRet.append("D=");
+    OUStringBuffer aRet("D=");
     aRet.append( nDiagramIndex );
     aRet.append(":CS=");
     aRet.append( nCooSysIndex );
     aRet.append(":CT=");
     aRet.append( nChartTypeIndex );
-    aRet.append(":");
-    aRet.append(getStringForType( OBJECTTYPE_DATA_SERIES ));
-    aRet.append("=");
+    aRet.append(":" + getStringForType( OBJECTTYPE_DATA_SERIES ) + "=");
     aRet.append( nSeriesIndex );
 
     return aRet.makeStringAndClear();
@@ -622,31 +612,17 @@ OUString ObjectIdentifier::createParticleForSeries(
 
 OUString ObjectIdentifier::createParticleForLegend( ChartModel&  )
 {
-    OUStringBuffer aRet;
-
     //todo: if more than one diagram is implemented, find the correct diagram which is owner of the given legend
 
-    aRet.append( ObjectIdentifier::createParticleForDiagram() );
-    aRet.append(":");
-    aRet.append(getStringForType( OBJECTTYPE_LEGEND ));
-    aRet.append("=");
-
-    return aRet.makeStringAndClear();
+    return ObjectIdentifier::createParticleForDiagram() + ":" + getStringForType( OBJECTTYPE_LEGEND ) + "=";
 }
 
 OUString ObjectIdentifier::createParticleForLegend(
         const Reference< frame::XModel >& )
 {
-    OUStringBuffer aRet;
-
     //todo: if more than one diagram is implemented, find the correct diagram which is owner of the given legend
 
-    aRet.append( ObjectIdentifier::createParticleForDiagram() );
-    aRet.append(":");
-    aRet.append(getStringForType( OBJECTTYPE_LEGEND ));
-    aRet.append("=");
-
-    return aRet.makeStringAndClear();
+    return ObjectIdentifier::createParticleForDiagram() + ":" + getStringForType( OBJECTTYPE_LEGEND ) + "=";
 }
 
 OUString ObjectIdentifier::createClassifiedIdentifier(
@@ -677,8 +653,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
         aRet.append(":");
 
     aRet.append(getStringForType( eObjectType ));
-    aRet.append("=");
-    aRet.append(rParticleID);
+    aRet.append(OUString::Concat("=") + rParticleID);
 
     return aRet.makeStringAndClear();
 }

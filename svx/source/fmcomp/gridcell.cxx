@@ -2993,12 +2993,10 @@ void DbFilterField::Update()
         Reference< XDatabaseMetaData >  xMeta = xConnection->getMetaData();
 
         OUString aQuote(xMeta->getIdentifierQuoteString());
-        OUStringBuffer aStatement("SELECT DISTINCT ");
-        aStatement.append(quoteName(aQuote, aName));
+        OUStringBuffer aStatement = "SELECT DISTINCT " + quoteName(aQuote, aName);
         if (!aFieldName.isEmpty() && aName != aFieldName)
         {
-            aStatement.append(" AS ");
-            aStatement.append(quoteName(aQuote, aFieldName));
+            aStatement.append(" AS " + quoteName(aQuote, aFieldName));
         }
 
         aStatement.append(" FROM ");

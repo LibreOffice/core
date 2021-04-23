@@ -244,8 +244,7 @@ OUString FTPURL::ident(bool withslash,bool internal) const
     // and more important, as one without username and
     // password. ( These are set together with the command. )
 
-    OUStringBuffer bff;
-    bff.append("ftp://");
+    OUStringBuffer bff("ftp://");
 
     if( m_aUsername != "anonymous" ) {
         bff.append(m_aUsername);
@@ -289,9 +288,7 @@ OUString FTPURL::ident(bool withslash,bool internal) const
 
 OUString FTPURL::parent(bool internal) const
 {
-    OUStringBuffer bff;
-
-    bff.append("ftp://");
+    OUStringBuffer bff("ftp://");
 
     if( m_aUsername != "anonymous" ) {
         bff.append(m_aUsername);

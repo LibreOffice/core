@@ -1776,8 +1776,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
     weld::TreeView* pTreeView = mxTreeBox->get_visible() ? mxTreeBox.get() : mxFmtLb.get();
     const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
 
-    OUStringBuffer aMsg;
-    aMsg.append(SfxResId(STR_DELETE_STYLE_USED) + SfxResId(STR_DELETE_STYLE));
+    OUStringBuffer aMsg(SfxResId(STR_DELETE_STYLE_USED) + SfxResId(STR_DELETE_STYLE));
 
     pTreeView->selected_foreach([this, pTreeView, pItem, &aList, &bUsedStyle, &aMsg](weld::TreeIter& rEntry){
         aList.emplace_back(pTreeView->make_iterator(&rEntry));

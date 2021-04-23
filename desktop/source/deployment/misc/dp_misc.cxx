@@ -99,8 +99,7 @@ OUString generateOfficePipeId()
 
     // create hex-value string from the MD5 value to keep
     // the string size minimal
-    OUStringBuffer buf;
-    buf.append( "SingleOfficeIPC_" );
+    OUStringBuffer buf = "SingleOfficeIPC_";
     for ( sal_uInt32 i = 0; i < md5_key_len; ++i ) {
         buf.append( static_cast<sal_Int32>(md5_buf[ i ]), 0x10 );
     }

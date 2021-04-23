@@ -1095,9 +1095,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     OUStringBuffer sNewFormat;
     if (bThSep)
     {
-        sNewFormat.append('#');
-        sNewFormat.append(aLocaleInfo.getNumThousandSep());
-        sNewFormat.append("##0");
+        sNewFormat.append("#" + aLocaleInfo.getNumThousandSep() + "##0");
     }
     else
         sNewFormat.append('0');
@@ -1116,30 +1114,25 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
         OUString sSymbol = getCurrencySymbol();
         sSymbol = comphelper::string::strip(sSymbol, ' ');
 
-        OUStringBuffer sTemp("[$");
-        sTemp.append(sSymbol);
-        sTemp.append("] ");
-        sTemp.append(sNewFormat);
-
+        sNewFormat = "[$" +
+            sSymbol +
+            "] " +
+            sNewFormat +
         // for negative values : $ -0.00, not -$ 0.00...
         // (the real solution would be a possibility to choose a "positive currency format" and a "negative currency format"...
         // But not now... (and hey, you could take a formatted field for this...))
         // FS - 31.03.00 74642
-        sTemp.append(";[$");
-        sTemp.append(sSymbol);
-        sTemp.append("] -");
-        sTemp.append(sNewFormat);
-
-        sNewFormat = sTemp;
+            ";[$" +
+            sSymbol +
+            "] -" +
+            sNewFormat;
     }
     else
     {
         OUString sTemp = getCurrencySymbol();
         sTemp = comphelper::string::strip(sTemp, ' ');
 
-        sNewFormat.append(" [$");
-        sNewFormat.append(sTemp);
-        sNewFormat.append(']');
+        sNewFormat.append(" [$" + sTemp + "]");
     }
 
     // set this new basic format

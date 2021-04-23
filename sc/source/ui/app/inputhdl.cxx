@@ -1163,10 +1163,6 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
 
                             if (nStartPosition > 0)
                             {
-                                OUStringBuffer aBuf;
-                                aBuf.append(aNew.subView(0, nStartPosition));
-                                aBuf.append(u'\x25BA');
-                                aBuf.append(aNew.subView(nStartPosition));
                                 nArgs = ppFDesc->getParameterCount();
                                 sal_Int16 nVarArgsSet = 0;
                                 if ( nArgs >= PAIRED_VAR_ARGS )
@@ -1181,9 +1177,11 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                                 }
                                 if ( nVarArgsSet > 0 && nActive > nArgs )
                                     nActive = nArgs - (nActive - nArgs) % nVarArgsSet;
-                                aBuf.append( " : " );
-                                aBuf.append( ppFDesc->getParameterDescription(nActive-1) );
-                                aNew = aBuf.makeStringAndClear();
+                                aNew = OUString::Concat(aNew.subView(0, nStartPosition)) +
+                                        u"\x25BA" +
+                                        aNew.subView(nStartPosition) +
+                                        " : " +
+                                        ppFDesc->getParameterDescription(nActive-1);
                                 if (eMode != SC_INPUT_TOP)
                                 {
                                     ShowTipBelow( aNew );
@@ -1356,8 +1354,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
 
             OUString aFuncNameStr;
             OUString aDescFuncNameStr;
-            OStringBuffer aPayload;
-            aPayload.append("[ ");
+            OStringBuffer aPayload("[ ");
             for (const OUString& rFunc : rFuncStrVec)
             {
                 if ( rFunc[rFunc.getLength()-1] == cParenthesesReplacement )
@@ -1379,16 +1376,16 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
                 {
                     if ( !ppFDesc->getFunctionName().isEmpty() )
                     {
-                        aPayload.append("{");
-                        aPayload.append("\"index\": ");
+                        aPayload.append("{"
+                                        "\"index\": ");
                         aPayload.append(static_cast<sal_Int64>(nCurIndex));
-                        aPayload.append(", ");
-                        aPayload.append("\"signature\": \"");
-                        aPayload.append(escapeJSON(ppFDesc->getSignature()));
-                        aPayload.append("\", ");
-                        aPayload.append("\"description\": \"");
-                        aPayload.append(escapeJSON(ppFDesc->getDescription()));
-                        aPayload.append("\"}, ");
+                        aPayload.append(", "
+                                        "\"signature\": \"" +
+                                        escapeJSON(ppFDesc->getSignature()) +
+                                        "\", "
+                                        "\"description\": \"" +
+                                        escapeJSON(ppFDesc->getDescription()) +
+                                        "\"}, ");
                     }
                 }
                 ++nCurIndex;

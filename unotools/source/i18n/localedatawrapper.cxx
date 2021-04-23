@@ -332,12 +332,12 @@ std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
 //                      && aDebugLocale != "es-BR"  // ?!? Brazil/es
                     )
                 {
-                    OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n");
-                    aMsg.append(aDebugLocale);
-                    aMsg.append("  ->  0x");
+                    OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n" +
+                        aDebugLocale +
+                        "  ->  0x");
                     aMsg.append(static_cast<sal_Int32>(static_cast<sal_uInt16>(eLang)), 16);
-                    aMsg.append("  ->  ");
-                    aMsg.append(aBackLanguageTag.getBcp47());
+                    aMsg.append("  ->  " +
+                        aBackLanguageTag.getBcp47());
                     outputCheckMessage( aMsg.makeStringAndClear() );
                 }
                 eLang = LANGUAGE_DONTKNOW;
@@ -632,7 +632,7 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
     {
         if (areChecksEnabled())
         {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrSymbolsImpl: no default currency" ) );
+            outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getCurrSymbolsImpl: no default currency" ) );
         }
         pCurr = aCurrSeq.begin();
     }
@@ -728,7 +728,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     {   // bad luck
         if (areChecksEnabled())
         {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrFormatsImpl: no currency formats" ) );
+            outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getCurrFormatsImpl: no currency formats" ) );
         }
         nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
         return;
@@ -775,7 +775,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     scanCurrFormatImpl( pFormatArr[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
     if (areChecksEnabled() && (nNum == -1 || nSym == -1))
     {
-        outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?" ) );
+        outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?" ) );
     }
     if (nBlank == -1)
     {
@@ -802,7 +802,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         scanCurrFormatImpl( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
         if (areChecksEnabled() && (nNum == -1 || nSym == -1 || (nPar == -1 && nSign == -1)))
         {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?" ) );
+            outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?" ) );
         }
         // NOTE: one of nPar or nSign are allowed to be -1
         if (nBlank == -1)
@@ -934,7 +934,7 @@ DateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) const
         {
             if (areChecksEnabled())
             {
-                outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::scanDateOrder: not all DMY present" ) );
+                outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::scanDateOrder: not all DMY present" ) );
             }
             if (nDay == -1)
                 nDay = rCode.getLength();
@@ -955,7 +955,7 @@ DateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) const
     {
         if (areChecksEnabled())
         {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::scanDateOrder: no magic applicable" ) );
+            outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::scanDateOrder: no magic applicable" ) );
         }
         return DateOrder::DMY;
     }
@@ -970,7 +970,7 @@ void LocaleDataWrapper::getDateOrdersImpl()
     {   // bad luck
         if (areChecksEnabled())
         {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getDateOrdersImpl: no date formats" ) );
+            outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getDateOrdersImpl: no date formats" ) );
         }
         nDateOrder = nLongDateOrder = DateOrder::DMY;
         return;
@@ -1013,13 +1013,13 @@ void LocaleDataWrapper::getDateOrdersImpl()
     {
         if (areChecksEnabled())
         {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getDateOrdersImpl: no edit" ) );
+            outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getDateOrdersImpl: no edit" ) );
         }
         if ( nDef == -1 )
         {
             if (areChecksEnabled())
             {
-                outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getDateOrdersImpl: no default" ) );
+                outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getDateOrdersImpl: no default" ) );
             }
             if ( nMedium != -1 )
                 nDef = nMedium;
@@ -1452,7 +1452,7 @@ OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
 }
 
 OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
-        const OUString& rCurrencySymbol, bool bUseThousandSep ) const
+        std::u16string_view rCurrencySymbol, bool bUseThousandSep ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
     sal_Unicode cZeroChar = getCurrZeroChar();
@@ -1460,7 +1460,6 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
     OUStringBuffer aNumBuf(int(nGuess + 16));
-    OUStringBuffer aBuf(int(rCurrencySymbol.getLength() + nGuess + 20 ));
 
     bool bNeg;
     if ( nNumber < 0 )
@@ -1511,27 +1510,22 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         }
     }
 
+    OUString aRet;
     if ( !bNeg )
     {
         switch( getCurrPositiveFormat() )
         {
             case 0:
-                aBuf.append( rCurrencySymbol );
-                aBuf.append( aNumBuf );
+                aRet = rCurrencySymbol + aNumBuf;
                 break;
             case 1:
-                aBuf.append( aNumBuf );
-                aBuf.append( rCurrencySymbol );
+                aRet = aNumBuf + rCurrencySymbol;
                 break;
             case 2:
-                aBuf.append( rCurrencySymbol );
-                aBuf.append( ' ' );
-                aBuf.append( aNumBuf );
+                aRet = OUString::Concat(rCurrencySymbol) + " " + aNumBuf;
                 break;
             case 3:
-                aBuf.append( aNumBuf );
-                aBuf.append( ' ' );
-                aBuf.append( rCurrencySymbol );
+                aRet = aNumBuf + " " + rCurrencySymbol;
                 break;
         }
     }
@@ -1540,101 +1534,57 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         switch( getCurrNegativeFormat() )
         {
             case 0:
-                 aBuf.append( '(' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( ')' );
+                 aRet = OUString::Concat("(") + rCurrencySymbol + aNumBuf + ")";
                 break;
             case 1:
-                 aBuf.append( '-' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( aNumBuf );
+                 aRet = OUString::Concat("-") + rCurrencySymbol + aNumBuf;
                 break;
             case 2:
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( '-' );
-                 aBuf.append( aNumBuf );
+                 aRet = OUString::Concat(rCurrencySymbol) + "-" + aNumBuf;
                 break;
             case 3:
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( '-' );
+                 aRet = rCurrencySymbol + aNumBuf + "-";
                 break;
             case 4:
-                 aBuf.append( '(' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ')' );
+                 aRet = "(" + aNumBuf + rCurrencySymbol + ")";
                 break;
             case 5:
-                 aBuf.append( '-' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( rCurrencySymbol );
+                 aRet = "-" + aNumBuf + rCurrencySymbol;
                 break;
             case 6:
-                 aBuf.append( aNumBuf );
-                 aBuf.append( '-' );
-                 aBuf.append( rCurrencySymbol );
+                 aRet = aNumBuf + "-" + rCurrencySymbol;
                 break;
             case 7:
-                 aBuf.append( aNumBuf );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( '-' );
+                 aRet = aNumBuf + rCurrencySymbol + "-";
                 break;
             case 8:
-                 aBuf.append( '-' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
+                 aRet = "-" + aNumBuf + " " + rCurrencySymbol;
                 break;
             case 9:
-                 aBuf.append( '-' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
-                 aBuf.append( aNumBuf );
+                 aRet = OUString::Concat("-") + rCurrencySymbol + " " + aNumBuf;
                 break;
             case 10:
-                 aBuf.append( aNumBuf );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( '-' );
+                 aRet = aNumBuf + " " + rCurrencySymbol + "-";
                 break;
             case 11:
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
-                 aBuf.append( '-' );
-                 aBuf.append( aNumBuf );
+                 aRet = OUString::Concat(rCurrencySymbol) + " -" + aNumBuf;
                 break;
             case 12:
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( '-' );
+                 aRet = OUString::Concat(rCurrencySymbol) + " " + aNumBuf + "-";
                 break;
             case 13:
-                 aBuf.append( aNumBuf );
-                 aBuf.append( '-' );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
+                 aRet = aNumBuf + "- " + rCurrencySymbol;
                 break;
             case 14:
-                 aBuf.append( '(' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( ')' );
+                 aRet = OUString::Concat("(") + rCurrencySymbol + " " + aNumBuf +  ")";
                 break;
             case 15:
-                 aBuf.append( '(' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ')' );
+                 aRet = "(" + aNumBuf + " " + rCurrencySymbol +  ")";
                 break;
         }
     }
 
-    return aBuf.makeStringAndClear();
+    return aRet;
 }
 
 // --- number parsing -------------------------------------------------
@@ -1685,17 +1635,16 @@ LanguageTag LocaleDataWrapper::getLoadedLanguageTag() const
     return LanguageTag( lang::Locale( aLCInfo.Language, aLCInfo.Country, aLCInfo.Variant ));
 }
 
-OUString LocaleDataWrapper::appendLocaleInfo(const OUString& rDebugMsg) const
+OUString LocaleDataWrapper::appendLocaleInfo(std::u16string_view rDebugMsg) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
-    OUStringBuffer aDebugMsg(rDebugMsg);
-    aDebugMsg.append('\n');
-    aDebugMsg.append(maLanguageTag.getBcp47());
-    aDebugMsg.append(" requested\n");
     LanguageTag aLoaded = getLoadedLanguageTag();
-    aDebugMsg.append(aLoaded.getBcp47());
-    aDebugMsg.append(" loaded");
-    return aDebugMsg.makeStringAndClear();
+    return OUString::Concat(rDebugMsg) +
+        "\n" +
+        maLanguageTag.getBcp47() +
+        " requested\n" +
+        aLoaded.getBcp47() +
+        " loaded";
 }
 
 // static

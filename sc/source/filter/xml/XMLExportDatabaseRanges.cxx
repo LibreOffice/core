@@ -208,11 +208,9 @@ public:
         if (meRangeType == ScDBCollection::GlobalAnonymous)
         {
             // name
-            OUStringBuffer aBuf;
-            aBuf.append(STR_DB_GLOBAL_NONAME);
-            aBuf.append(++mnCounter); // 1-based, for entirely arbitrary reasons.  The numbers are ignored on import.
+            OUString aBuf = STR_DB_GLOBAL_NONAME + OUString::number(++mnCounter); // 1-based, for entirely arbitrary reasons.  The numbers are ignored on import.
 
-            write(aBuf.makeStringAndClear(), rData);
+            write(aBuf, rData);
         }
         else if (meRangeType == ScDBCollection::GlobalNamed)
             write(rData.GetName(), rData);

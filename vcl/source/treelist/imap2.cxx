@@ -95,8 +95,7 @@ void IMapCircleObject::WriteCERN( SvStream& rOStm ) const
     OStringBuffer aStrBuf("circle ");
 
     AppendCERNCoords(aStrBuf, aCenter);
-    aStrBuf.append(nRadius);
-    aStrBuf.append(' ');
+    aStrBuf.append(OString::number(nRadius) + " ");
     AppendCERNURL(aStrBuf);
 
     rOStm.WriteLine(aStrBuf.makeStringAndClear());

@@ -70,8 +70,7 @@
 
 static OString ImplGetDialogText( Dialog* pDialog )
 {
-    OStringBuffer aErrorStr(OUStringToOString(
-        pDialog->GetText(), RTL_TEXTENCODING_UTF8));
+    OUString aErrorStr(pDialog->GetText());
 
     OUString sMessage;
     if (MessageDialog* pMessDialog = dynamic_cast<MessageDialog*>(pDialog))
@@ -81,11 +80,9 @@ static OString ImplGetDialogText( Dialog* pDialog )
 
     if (!sMessage.isEmpty())
     {
-        aErrorStr.append(", ");
-        aErrorStr.append(OUStringToOString(
-            sMessage, RTL_TEXTENCODING_UTF8));
+        aErrorStr += ", " + sMessage;
     }
-    return aErrorStr.makeStringAndClear();
+    return OUStringToOString(aErrorStr, RTL_TEXTENCODING_UTF8);
 }
 
 static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
