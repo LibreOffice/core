@@ -389,7 +389,7 @@ tools::Rectangle OutputDevice::ImplLogicToDevicePixel( const tools::Rectangle& r
     //    tools::Long(1) == aRect.GetWidth()
     //    tools::Long(0) == aRect.getWidth()
     // (remember: this means Left == Right == 1 -> GetWidth => 1, getWidth == 0)
-    // so indeed tthe 1's have to go uncommened/unchecked into the data body
+    // so indeed the 1's have to go uncommented/unchecked into the data body
     // of rectangle. Switching to (2) *is* needed, doing so
     tools::Rectangle aRetval;
 

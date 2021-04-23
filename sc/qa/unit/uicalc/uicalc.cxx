@@ -465,7 +465,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 2, 0)));
 }
 
-// Inspired from testTdf117706, test columns instad of rows
+// Inspired from testTdf117706, test columns instead of rows
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
