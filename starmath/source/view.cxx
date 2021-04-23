@@ -284,6 +284,8 @@ void SmGraphicWindow::ShowContextMenu(const CommandEvent& rCEvt)
 
 SmGraphicWidget::SmGraphicWidget(SmViewShell& rShell, SmGraphicWindow& rGraphicWindow)
     : mrGraphicWindow(rGraphicWindow)
+    , bIsCursorVisible(false)
+    , bIsLineVisible(false)
     , mrViewShell(rShell)
 {
 }
