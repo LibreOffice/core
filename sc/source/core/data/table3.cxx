@@ -3097,7 +3097,7 @@ void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPar
 
 void ScTable::PrepareQuery( ScQueryParam& rQueryParam )
 {
-    lcl_PrepareQuery(&rDocument, this, rQueryParam);
+    lcl_PrepareQuery(pDocument, this, rQueryParam);
 }
 
 SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
