@@ -16,6 +16,24 @@
       "revId": "700fe95fac2e2f592159f189ed3ac9e633bf749d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39d9ba32_602eee84",
+        "filename": "emfio/qa/cppunit/emf/EmfImportTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-23T09:20:31Z",
+      "side": 1,
+      "message": "That\u0027s what we had before, a forest of HAVE_FEATURE_PDFIUM ifdefs, see e.g. commit faf3f18bdc89cc5e04abdefcb12d63e6ef796396. The problem with that approach is that e.g. Fedora builds with pdfium disabled, but pdfium is enabled on ~all tinderboxes, so nobody sees those failures before a release. My hope is that if this is a runtime check, then we don\u0027t have to maintain these stubs in parallel. But if you think even removing HAVE_FEATURE_PDFIUM is going too far, we could introduce it back, just for testcase purposes.\n\nSee e.g. 6546dcda7ee6136d41d56f757fed87f2919c3290 fixing the disable-pdfium build.",
+      "parentUuid": "3059ae89_6f9356cd",
+      "revId": "700fe95fac2e2f592159f189ed3ac9e633bf749d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
