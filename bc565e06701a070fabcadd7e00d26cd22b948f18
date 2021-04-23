@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6805298b_7d7ca31a",
+        "filename": "sd/source/ui/unoidl/unopage.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2110,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-23T08:39:00Z",
+      "side": 1,
+      "message": "Could you give more information about this UNO API change? It seems for me, this is opposite of the role of this function, i.e. it returns with localized(?) name of the slide instead of the API (not localized/inner?) name. This could break the portability of the ODF documents between the localized versions. Is it possible?",
+      "range": {
+        "startLine": 2110,
+        "startChar": 8,
+        "endLine": 2110,
+        "endChar": 37
+      },
+      "revId": "bc565e06701a070fabcadd7e00d26cd22b948f18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
