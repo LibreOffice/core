@@ -561,22 +561,11 @@ public:
 
         css::awt::Point aScreenLoc(0, 0);
 
-        css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
-        if (xParent)
+        if (weld::DrawingArea* pDrawingArea = m_pController->GetDrawingArea())
         {
-            css::uno::Reference<css::accessibility::XAccessibleContext> xParentContext(
-                xParent->getAccessibleContext());
-            css::uno::Reference<css::accessibility::XAccessibleComponent> xParentComponent(
-                xParentContext, css::uno::UNO_QUERY);
-            OSL_ENSURE(xParentComponent.is(),
-                       "WeldEditAccessible::getLocationOnScreen: no parent component!");
-            if (xParentComponent.is())
-            {
-                css::awt::Point aParentScreenLoc(xParentComponent->getLocationOnScreen());
-                css::awt::Point aOwnRelativeLoc(getLocation());
-                aScreenLoc.X = aParentScreenLoc.X + aOwnRelativeLoc.X;
-                aScreenLoc.Y = aParentScreenLoc.Y + aOwnRelativeLoc.Y;
-            }
+            Point aPos = pDrawingArea->get_accessible_location_on_screen();
+            aScreenLoc.X = aPos.X();
+            aScreenLoc.Y = aPos.Y();
         }
 
         return aScreenLoc;
