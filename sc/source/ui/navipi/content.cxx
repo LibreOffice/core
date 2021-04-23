@@ -126,7 +126,7 @@ ScContentTree::ScContentTree(std::unique_ptr<weld::TreeView> xTreeView, ScNaviga
     , nRootType(ScContentId::ROOT)
     , bHiddenDoc(false)
     , pHiddenDocument(nullptr)
-    , bisInNavigatoeDlg(false)
+    , bIsInNavigatorDlg(false)
     , m_bFreeze(false)
     , m_nAsyncMouseReleaseId(nullptr)
 {
@@ -456,7 +456,7 @@ IMPL_LINK(ScContentTree, KeyInputHdl, const KeyEvent&, rKEvt, bool)
         }
     }
     //Make KEY_SPACE has same function as DoubleClick
-    if ( bisInNavigatoeDlg )
+    if ( bIsInNavigatorDlg )
     {
         if(aCode.GetCode() == KEY_SPACE )
         {
@@ -869,7 +869,7 @@ constexpr int MAX_TREE_NODES = 1000;
 
 void ScContentTree::GetDrawNames( ScContentId nType )
 {
-    if (!bisInNavigatoeDlg)
+    if (!bIsInNavigatorDlg)
         return;
 
     if ( nRootType != ScContentId::ROOT && nRootType != nType )              // hidden ?
