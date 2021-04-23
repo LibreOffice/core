@@ -867,6 +867,9 @@ bool ScContentTree::IsPartOfType( ScContentId nContentType, sal_uInt16 nObjIdent
 
 void ScContentTree::GetDrawNames( ScContentId nType )
 {
+    if (!bisInNavigatoeDlg)
+        return;
+
     if ( nRootType != ScContentId::ROOT && nRootType != nType )              // hidden ?
         return;
 
@@ -898,19 +901,15 @@ void ScContentTree::GetDrawNames( ScContentId nType )
                     OUString aName = ScDrawLayer::GetVisibleName( pObject );
                     if (!aName.isEmpty())
                     {
-                        if( bisInNavigatoeDlg )
+                        weld::TreeIter* pParent = m_aRootNodes[nType].get();
+                        if (pParent)
                         {
-                            weld::TreeIter* pParent = m_aRootNodes[nType].get();
-                            if (pParent)
-                            {
-                                m_xTreeView->insert(pParent, -1, &aName, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
-                                m_xTreeView->set_sensitive(*m_xScratchIter, true);
-                            }//end if parent
-                            else
-                                SAL_WARN("sc", "InsertContent without parent");
-                        }
+                            m_xTreeView->insert(pParent, -1, &aName, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+                            m_xTreeView->set_sensitive(*m_xScratchIter, true);
+                        }//end if parent
+                        else
+                            SAL_WARN("sc", "InsertContent without parent");
                     }
-
                 }
 
                 pObject = aIter.Next();
