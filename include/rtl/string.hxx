@@ -337,7 +337,7 @@ public:
 
       @since LibreOffice 7.1
     */
-    template<std::size_t N> OString(OStringLiteral<N> const & literal):
+    template<std::size_t N> constexpr OString(OStringLiteral<N> const & literal):
         pData(const_cast<rtl_String *>(&literal.str)) {}
     template<std::size_t N> OString(OStringLiteral<N> &&) = delete;
     /// @endcond
