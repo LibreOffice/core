@@ -295,15 +295,15 @@ OUString SAXEventKeeperImpl::printBufferNode(
         rc.append("[B]");
     }
 
-    rc.append(" ").append(m_xXMLDocument->getNodeName(pBufferNode->getXMLElement()));
+    rc.append(" " + m_xXMLDocument->getNodeName(pBufferNode->getXMLElement()));
 
     BufferNode* pParent = const_cast<BufferNode*>(pBufferNode->getParent());
     if (pParent != nullptr)
     {
-        rc.append("[").append(m_xXMLDocument->getNodeName(pParent->getXMLElement())).append("]");
+        rc.append("[" + m_xXMLDocument->getNodeName(pParent->getXMLElement()) + "]");
     }
 
-    rc.append(":EC=").append(pBufferNode->printChildren()).append(" BR=");
+    rc.append(":EC=" + pBufferNode->printChildren() + " BR=");
 
     ElementMark * pBlocker = pBufferNode->getBlocker();
     if (pBlocker != nullptr)

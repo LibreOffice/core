@@ -435,10 +435,8 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
             case ESCHER_Prop_fillBlip:
             {
                 OStringBuffer aBuf;
-                aBuf.append('{')
-                    .append(OOO_STRING_SVTOOLS_RTF_PICT)
-                    .append(OOO_STRING_SVTOOLS_RTF_PNGBLIP)
-                    .append(SAL_NEWLINE_STRING);
+                aBuf.append("{" OOO_STRING_SVTOOLS_RTF_PICT OOO_STRING_SVTOOLS_RTF_PNGBLIP
+                                SAL_NEWLINE_STRING);
                 int nHeaderSize
                     = 25; // The first bytes are WW8-specific, we're only interested in the PNG
                 aBuf.append(msfilter::rtfutil::WriteHex(rOpt.nProp.data() + nHeaderSize,
@@ -486,19 +484,15 @@ void RtfSdrExport::AddRectangleDimensions(OStringBuffer& rBuffer,
     rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(rRectangle.Bottom());
 }
 
-static void lcl_AppendSP(OStringBuffer& rRunText, const char cName[], std::string_view rValue)
+static void lcl_AppendSP(OStringBuffer& rRunText, const char* cName, std::string_view rValue)
 {
-    rRunText.append('{')
-        .append(OOO_STRING_SVTOOLS_RTF_SP)
-        .append('{')
-        .append(OOO_STRING_SVTOOLS_RTF_SN " ")
-        .append(cName)
-        .append('}')
-        .append('{')
-        .append(OOO_STRING_SVTOOLS_RTF_SV " ")
-        .append(rValue)
-        .append('}')
-        .append('}');
+    rRunText.append(OString::Concat("{" OOO_STRING_SVTOOLS_RTF_SP "{" OOO_STRING_SVTOOLS_RTF_SN " ")
+                    + cName
+                    + "}"
+                      "{" OOO_STRING_SVTOOLS_RTF_SV " "
+                    + rValue
+                    + "}"
+                      "}");
 }
 
 void RtfSdrExport::impl_writeGraphic()
@@ -536,7 +530,7 @@ void RtfSdrExport::impl_writeGraphic()
 
     // Add it to the properties.
     RtfStringBuffer aBuf;
-    aBuf->append('{').append(OOO_STRING_SVTOOLS_RTF_PICT).append(OOO_STRING_SVTOOLS_RTF_PNGBLIP);
+    aBuf->append("{" OOO_STRING_SVTOOLS_RTF_PICT OOO_STRING_SVTOOLS_RTF_PNGBLIP);
     aBuf->append(OOO_STRING_SVTOOLS_RTF_PICW).append(sal_Int32(aMapped.Width()));
     aBuf->append(OOO_STRING_SVTOOLS_RTF_PICH)
         .append(sal_Int32(aMapped.Height()))
@@ -556,10 +550,8 @@ sal_Int32 RtfSdrExport::StartShape()
         impl_writeGraphic();
 
     m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_SHP);
-    m_rAttrOutput.RunText()
-        .append('{')
-        .append(OOO_STRING_SVTOOLS_RTF_IGNORE)
-        .append(OOO_STRING_SVTOOLS_RTF_SHPINST);
+    m_rAttrOutput.RunText().append(
+        "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
 
     m_rAttrOutput.RunText().append(m_aShapeStyle.makeStringAndClear());
     // Ignore \shpbxpage, \shpbxmargin, and \shpbxcolumn, in favor of the posrelh property.

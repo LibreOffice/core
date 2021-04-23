@@ -72,6 +72,7 @@ public:
 
     bool VisitCompoundStmt(CompoundStmt const*);
     bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const*);
+    bool VisitCXXMemberCallExpr(CXXMemberCallExpr const*);
 
 private:
     enum class Summands
@@ -259,6 +260,63 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
 
     check(0);
     check(1);
+    return true;
+}
+
+bool StringAdd::VisitCXXMemberCallExpr(CXXMemberCallExpr const* methodCall)
+{
+    if (ignoreLocation(methodCall))
+        return true;
+
+    auto methodDecl = methodCall->getMethodDecl();
+    if (!methodDecl || !methodDecl->getIdentifier() || methodDecl->getName() != "append"
+        || methodCall->getNumArgs() == 0)
+        return true;
+    auto tc1 = loplugin::TypeCheck(methodCall->getType());
+    if (!tc1.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+        && !tc1.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
+        return true;
+    auto paramType = methodDecl->getParamDecl(0)->getType();
+    // if we convert one of the number append methods, we need to create an extra temporary to hold the string convertion of the number
+    if (paramType->isIntegerType())
+        return true;
+    if (paramType->isCharType())
+        return true;
+    if (paramType->isFloatingType())
+        return true;
+    auto arg = methodCall->getArg(0);
+    // I don't think the OUStringAppend functionality can handle this efficiently
+    if (isa<ConditionalOperator>(ignore(arg)))
+        return true;
+
+    auto methodCall2 = dyn_cast<CXXMemberCallExpr>(ignore(methodCall->getImplicitObjectArgument()));
+    if (!methodCall2)
+        return true;
+    auto tc = loplugin::TypeCheck(methodCall2->getType());
+    if (!tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+        && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
+        return true;
+    auto methodDecl2 = methodCall2->getMethodDecl();
+    if (!methodDecl2->getIdentifier() || methodDecl2->getName() != "append"
+        || methodCall2->getNumArgs() == 0)
+        return true;
+    auto paramType2 = methodDecl2->getParamDecl(0)->getType();
+    // if we convert one of the number append methods, we need to create an extra temporary to hold the string convertion of the number
+    if (paramType2->isIntegerType())
+        return true;
+    if (paramType2->isCharType())
+        return true;
+    if (paramType2->isFloatingType())
+        return true;
+    arg = methodCall2->getArg(0);
+    // I don't think the OUStringAppend functionality can handle this efficiently
+    if (isa<ConditionalOperator>(ignore(arg)))
+        return true;
+    report(DiagnosticsEngine::Warning,
+           "chained append, rather use single append call and + operator",
+           compat::getBeginLoc(methodCall2))
+        << methodCall2->getSourceRange();
+
     return true;
 }
 

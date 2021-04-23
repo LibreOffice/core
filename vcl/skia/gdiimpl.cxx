@@ -1627,10 +1627,9 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     keyBuf.append(targetSize.Width())
         .append("x")
         .append(targetSize.Height())
-        .append("_")
-        .append(bitmap.GetImageKey());
+        .append("_" + bitmap.GetImageKey());
     if (alphaBitmap)
-        keyBuf.append("_").append(alphaBitmap->GetAlphaImageKey());
+        keyBuf.append("_" + alphaBitmap->GetAlphaImageKey());
     key = keyBuf.makeStringAndClear();
     image = findCachedImage(key);
     if (image)

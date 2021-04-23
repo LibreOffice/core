@@ -370,7 +370,7 @@ void WindowUIObject::execute(const OUString& rAction,
         {
             OStringBuffer buf;
             for (auto const & rPair : rParameters)
-                buf.append(",").append(rPair.first.toUtf8()).append("=").append(rPair.second.toUtf8());
+                buf.append("," + rPair.first.toUtf8() + "=" + rPair.second.toUtf8());
             SAL_WARN("vcl.uitest", "missing parameter TEXT to action TYPE "
                 << buf.makeStringAndClear());
             throw std::logic_error("missing parameter TEXT to action TYPE");
@@ -384,7 +384,7 @@ void WindowUIObject::execute(const OUString& rAction,
     {
         OStringBuffer buf;
         for (auto const & rPair : rParameters)
-            buf.append(",").append(rPair.first.toUtf8()).append("=").append(rPair.second.toUtf8());
+            buf.append("," + rPair.first.toUtf8() + "=" + rPair.second.toUtf8());
         SAL_WARN("vcl.uitest", "unknown action for " << get_name()
             << ". Action: " << rAction << buf.makeStringAndClear());
         throw std::logic_error("unknown action");

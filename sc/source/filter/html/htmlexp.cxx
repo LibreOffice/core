@@ -490,7 +490,7 @@ OString ScHTMLExport::BorderToStyle(const char* pBorderName,
             aOut.append("; ");
 
         // which border
-        aOut.append("border-").append(pBorderName).append(": ");
+        aOut.append(OString::Concat("border-") + pBorderName + ": ");
 
         // thickness
         int nWidth = pLine->GetWidth();
@@ -715,19 +715,18 @@ void ScHTMLExport::WriteTables()
         // more <TABLE ...>
         if ( bTabAlignedLeft )
         {
-            aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
-                append("=\"").
-                append(OOO_STRING_SVTOOLS_HTML_AL_left).append('"');
+            aByteStrOut.append(" " OOO_STRING_SVTOOLS_HTML_O_align
+                    "=\""
+                    OOO_STRING_SVTOOLS_HTML_AL_left "\"");
         }
             // ALIGN=LEFT allow text and graphics to flow around
         // CELLSPACING
-        aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
-            append("=\"").
+        aByteStrOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cellspacing
+                "=\"").
             append(static_cast<sal_Int32>(nCellSpacing)).append('"');
 
         // BORDER=0, we do the styling of the cells in <TD>
-        aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_border).
-            append("=\"0\"");
+        aByteStrOut.append(" " OOO_STRING_SVTOOLS_HTML_O_border "=\"0\"");
         IncIndent(1); TAG_ON_LF( aByteStrOut.makeStringAndClear().getStr() );
 
         // --- <COLGROUP> ----
@@ -877,8 +876,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     const SvxBoxItem* pBorder = pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
     if ( pBorder && (pBorder->GetTop() || pBorder->GetBottom() || pBorder->GetLeft() || pBorder->GetRight()) )
     {
-        aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_style).
-            append("=\"");
+        aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_style "=\"");
 
         bool bInsertSemicolon = false;
         aStrTD.append(BorderToStyle("top", pBorder->GetTop(),
@@ -937,8 +935,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
 
     if ( bTableDataHeight )
     {
-        aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
-            append("=\"").
+        aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_height "=\"").
             append(static_cast<sal_Int32>(nHeightPixel)).append('"');
     }
 
@@ -1016,8 +1013,8 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
         default:                        pChar = OOO_STRING_SVTOOLS_HTML_AL_left;    break;
     }
 
-    aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
-        append("=\"").append(pChar).append('"');
+    aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_align "=\"" +
+        OString::Concat(pChar) + "\"");
 
     switch( rVerJustifyItem.GetValue() )
     {
@@ -1093,8 +1090,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
         OStringBuffer aStr(OOO_STRING_SVTOOLS_HTML_font);
         if ( bSetFontName )
         {
-            aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_face).
-                append("=\"");
+            aStr.append(" " OOO_STRING_SVTOOLS_HTML_O_face "=\"");
 
             if (!rFontItem.GetFamilyName().isEmpty())
             {

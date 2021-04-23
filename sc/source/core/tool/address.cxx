@@ -2185,7 +2185,7 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
         default:
             if (!aDocName.isEmpty())
             {
-                rString.append("[").append(aDocName).append("]");
+                rString.append("[" + aDocName + "]");
             }
             rString.append(aTabName);
         break;

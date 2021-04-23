@@ -402,11 +402,11 @@ void lcl_WriteValues(const std::vector<OUString> *pFields, SvStream* pStream)
     {
         if (aIter==aBegin)
         {
-            sLine.append("\"").append(*aIter).append("\"");
+            sLine.append("\"" + *aIter + "\"");
         }
         else
         {
-            sLine.append("\t\"").append(*aIter).append("\"");
+            sLine.append("\t\"" + *aIter + "\"");
         }
     }
     pStream->WriteByteStringLine( sLine.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );

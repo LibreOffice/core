@@ -416,15 +416,14 @@ static void addFileError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiStr
     OUString sSimpleFileName = _aPath.copy(1 +_aPath.lastIndexOf(cURLSeparator));
 
     _rBuf.append("The configuration file");
-    _rBuf.append(" '").append(sSimpleFileName).append("' ");
+    _rBuf.append(" '" + sSimpleFileName + "' ");
     _rBuf.appendAscii(_sWhat).append(PERIOD);
 }
 
 static void addMissingDirectoryError(OUStringBuffer& _rBuf, std::u16string_view _aPath)
 {
-    _rBuf.append("The configuration directory");
-    _rBuf.append(" '").append(_aPath).append("' ");
-    _rBuf.append(IS_MISSING).append(PERIOD);
+    _rBuf.append(OUString::Concat("The configuration directory '") + _aPath + "' " +
+        IS_MISSING + PERIOD);
 }
 
 static void addUnexpectedError(OUStringBuffer& _rBuf, AsciiString _sExtraInfo = nullptr)

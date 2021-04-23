@@ -220,11 +220,11 @@ namespace
             fullName = OUString::Concat(tblName) + "." + colName;
         if ( _rValue.isNull() )
         {
-            o_buf.append(fullName).append(" IS NULL ");
+            o_buf.append(fullName + " IS NULL ");
         }
         else
         {
-            o_buf.append(fullName).append(" = ? ");
+            o_buf.append(fullName + " = ? ");
         }
     }
 }
@@ -496,7 +496,7 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
         }
         if((*_rInsertRow)[columnName.second.nPosition].isModified())
         {
-            aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName)).append(aPara);
+            aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName) + aPara);
         }
         ++i;
     }
@@ -513,7 +513,7 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
         aSql.append(" WHERE ");
         if(!sKeyCondition.isEmpty() && !sIndexCondition.isEmpty())
         {
-            aSql.append(sKeyCondition.makeStringAndClear()).append(sIndexCondition.makeStringAndClear());
+            aSql.append(sKeyCondition.makeStringAndClear() + sIndexCondition.makeStringAndClear());
         }
         else if(!sKeyCondition.isEmpty())
         {
@@ -611,7 +611,7 @@ void OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLT
             {
                 bRefetch = std::find(m_aFilterColumns.begin(),m_aFilterColumns.end(),columnName.second.sRealName) == m_aFilterColumns.end();
             }
-            aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName)).append(",");
+            aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName) + ",");
             aValues.append("?,");
             bModified = true;
         }
@@ -717,7 +717,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
             SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(autoColumn);
             if ( aFind != aEnd )
             {
-                sMaxStmt.append(" MAX(").append(::dbtools::quoteName( sQuote,aFind->second.sRealName)).append("),");
+                sMaxStmt.append(" MAX(" + ::dbtools::quoteName( sQuote,aFind->second.sRealName) + "),");
             }
         }
 

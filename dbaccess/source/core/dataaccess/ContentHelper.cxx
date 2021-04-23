@@ -123,7 +123,7 @@ OUString OContentHelper::impl_getHierarchicalName( bool _includingRootContainer 
             xProp->getPropertyValue( PROPERTY_NAME ) >>= sName;
 
             OUString sPrevious = aHierarchicalName.makeStringAndClear();
-            aHierarchicalName.append( sName ).append( "/" ).append( sPrevious );
+            aHierarchicalName.append( sName + "/" + sPrevious );
         }
     }
     OUString sHierarchicalName( aHierarchicalName.makeStringAndClear() );
