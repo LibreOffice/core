@@ -665,11 +665,11 @@ draw_constructor_list = [
 # writerperfect/source/draw/wpftdraw.component
     "com_sun_star_comp_Draw_VisioImportFilter_get_implementation",
 # sdext/source/pdfimport/pdfimport.component
-    "sdext_PDFIHybridAdaptor_get_implementation",
-    "sdext_PDFIRawAdaptor_Writer_get_implementation",
-    "sdext_PDFIRawAdaptor_Draw_get_implementation",
-    "sdext_PDFIRawAdaptor_Impress_get_implementation",
-    "sdext_PDFDetector_get_implementation",
+    ("sdext_PDFIHybridAdaptor_get_implementation", "#if HAVE_FEATURE_PDFIMPORT"),
+    ("sdext_PDFIRawAdaptor_Writer_get_implementation", "#if HAVE_FEATURE_PDFIMPORT"),
+    ("sdext_PDFIRawAdaptor_Draw_get_implementation", "#if HAVE_FEATURE_PDFIMPORT"),
+    ("sdext_PDFIRawAdaptor_Impress_get_implementation", "#if HAVE_FEATURE_PDFIMPORT"),
+    ("sdext_PDFDetector_get_implementation", "#if HAVE_FEATURE_PDFIMPORT"),
     ]
 
 writer_factory_list = [
