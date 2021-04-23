@@ -203,7 +203,7 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
                 aPoint1.AdjustY(pDXArray[nStart - nIndex - 1]);
         }
         Point aPoint2(rPoint);
-        DBG_ASSERT(nEnd > nIndex, "RedLine: aPnt2?");
+        assert(nEnd > nIndex && "RedLine: aPnt2?");
         if (!bVertical)
         {
             // since for RTL portions rPoint is on the visual right end of the portion
@@ -603,7 +603,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     ParaPortion* pParaPortion = GetParaPortions()[nPara];
 
     // sal_Bool: Changes in the height of paragraph Yes / No - sal_True/sal_False
-    DBG_ASSERT( pParaPortion->GetNode(), "Portion without Node in CreateLines" );
+    assert( pParaPortion->GetNode() && "Portion without Node in CreateLines" );
     DBG_ASSERT( pParaPortion->IsVisible(), "Invisible paragraphs not formatted!" );
     DBG_ASSERT( pParaPortion->IsInvalid(), "CreateLines: Portion not invalid!" );
 
@@ -857,7 +857,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     nYDiff = -nTextLineHeight;
                 }
                 pTextRanges = GetTextRanger()->GetTextRanges( Range( nYOff, nYOff + nYDiff ) );
-                DBG_ASSERT( pTextRanges, "GetTextRanges?!" );
+                assert( pTextRanges && "GetTextRanges?!" );
                 tools::Long nMaxRangeWidth = 0;
                 // Use the widest range...
                 // The widest range could be a bit confusing, so normally it
@@ -938,7 +938,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     rPrev.GetSize().setWidth( -1 );
                 }
 
-                DBG_ASSERT( nTmpPortion < pParaPortion->GetTextPortions().Count(), "No more Portions left!" );
+                assert( nTmpPortion < pParaPortion->GetTextPortions().Count() && "No more Portions left!" );
                 pPortion = &pParaPortion->GetTextPortions()[nTmpPortion];
             }
 
@@ -1027,7 +1027,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     break;
                     case EE_FEATURE_LINEBR:
                     {
-                        DBG_ASSERT( pPortion, "?!" );
+                        assert( pPortion );
                         pPortion->GetSize().setWidth( 0 );
                         bEOL = true;
                         bLineBreak = true;
@@ -1323,7 +1323,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             bEOL = true;
             bEOC = true;
             pLine->SetEnd( nPortionEnd );
-            DBG_ASSERT( pParaPortion->GetTextPortions().Count(), "No TextPortions?" );
+            assert( pParaPortion->GetTextPortions().Count() && "No TextPortions?" );
             pLine->SetEndPortion( pParaPortion->GetTextPortions().Count() - 1 );
         }
 
@@ -2035,7 +2035,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         // When justification is not SvxAdjust::Left, it's important to compress
         // the trailing space even if there is enough room for the space...
         // Don't check for SvxAdjust::Left, doesn't matter to compress in this case too...
-        DBG_ASSERT( nBreakPos > pLine->GetStart(), "ImpBreakLines - BreakPos not expected!" );
+        assert( nBreakPos > pLine->GetStart() && "ImpBreakLines - BreakPos not expected!" );
         if ( pNode->GetChar( nBreakPos-1 ) == ' ' )
             bCompressBlank = true;
     }
@@ -2081,7 +2081,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine, tools::Long nRemainingSpace )
 {
     DBG_ASSERT( nRemainingSpace > 0, "AdjustBlocks: Somewhat too little..." );
-    DBG_ASSERT( pLine, "AdjustBlocks: Line ?!" );
+    assert( pLine && "AdjustBlocks: Line ?!" );
     if ( ( nRemainingSpace < 0 ) || pLine->IsEmpty() )
         return ;
 
@@ -2318,11 +2318,11 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
 
 sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos, EditLine* pCurLine )
 {
-    DBG_ASSERT( pPortion, "SplitTextPortion: Which ?" );
-
     // The portion at nPos is split, if there is not a transition at nPos anyway
     if ( nPos == 0 )
         return 0;
+
+    assert( pPortion && "SplitTextPortion: Which ?" );
 
     sal_Int32 nSplitPortion;
     sal_Int32 nTmpPos = 0;
@@ -2358,7 +2358,7 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
     if ( pCurLine )
     {
         // No new GetTextSize, instead use values from the Array:
-        DBG_ASSERT( nPos > pCurLine->GetStart(), "SplitTextPortion at the beginning of the line?" );
+        assert( nPos > pCurLine->GetStart() && "SplitTextPortion at the beginning of the line?" );
         pTextPortion->GetSize().setWidth( pCurLine->GetCharPosArray()[ nPos-pCurLine->GetStart()-1 ] );
 
         if ( pTextPortion->GetExtraInfos() && pTextPortion->GetExtraInfos()->bCompressed )
@@ -2543,7 +2543,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
             }
             nPos = nPos + pTP->GetLen();
         }
-        DBG_ASSERT( pTP, "RecalcTextPortion: Portion not found" );
+        assert( pTP && "RecalcTextPortion: Portion not found" );
         if ( ( nPos == nStartPos ) && ( (nPos+pTP->GetLen()) == nEnd ) )
         {
             // Remove portion;
@@ -2993,7 +2993,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
     for ( sal_Int32 n = 0; n < GetParaPortions().Count(); n++ )
     {
         const ParaPortion* pPortion = GetParaPortions()[n];
-        DBG_ASSERT( pPortion, "NULL-Pointer in TokenList in Paint" );
+        assert( pPortion && "NULL-Pointer in TokenList in Paint" );
         // if when typing idle formatting,  asynchronous Paint.
         // Invisible Portions may be invalid.
         if ( pPortion->IsVisible() && pPortion->IsInvalid() )
@@ -3038,8 +3038,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
             for ( sal_Int32 nLine = 0; nLine < nLines; nLine++ )
             {
                 pLine = &pPortion->GetLines()[nLine];
+                assert( pLine && "NULL-Pointer in the line iterator in UpdateViews" );
                 nIndex = pLine->GetStart();
-                DBG_ASSERT( pLine, "NULL-Pointer in the line iterator in UpdateViews" );
                 aTmpPos = aStartPos;
                 if ( !IsVertical() )
                 {
@@ -3296,8 +3296,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                 else if ( rTextPortion.GetKind() == PortionKind::FIELD )
                                 {
                                     const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
-                                    DBG_ASSERT( pAttr, "Field not found");
-                                    DBG_ASSERT( pAttr && dynamic_cast< const SvxFieldItem* >( pAttr->GetItem() ) !=  nullptr, "Field of the wrong type! ");
+                                    assert( pAttr && "Field not found");
+                                    DBG_ASSERT( dynamic_cast< const SvxFieldItem* >( pAttr->GetItem() ) !=  nullptr, "Field of the wrong type! ");
                                     aText = static_cast<const EditCharAttribField*>(pAttr)->GetFieldValue();
                                     nTextStart = 0;
                                     nTextLen = aText.getLength();
@@ -3666,14 +3666,14 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 
                                 if ( rTextPortion.GetKind() == PortionKind::FIELD )
                                 {
-                                    const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
-                                    DBG_ASSERT( pAttr, "Field not found" );
-                                    DBG_ASSERT( pAttr && dynamic_cast< const SvxFieldItem* >( pAttr->GetItem() ) !=  nullptr, "Wrong type of field!" );
-
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
                                     {
+                                        const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
+                                        assert( pAttr && "Field not found" );
+
                                         const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
+                                        DBG_ASSERT( pFieldItem !=  nullptr, "Wrong type of field!" );
 
                                         if( pFieldItem )
                                         {
@@ -3848,10 +3848,10 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 
 void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
-    DBG_ASSERT( pView, "No View - No Paint!" );
-
     if ( !GetUpdateMode() || IsInUndo() )
         return;
+
+    assert( pView && "No View - No Paint!" );
 
     // Intersection of paint area and output area.
     tools::Rectangle aClipRect( pView->GetOutputArea() );
