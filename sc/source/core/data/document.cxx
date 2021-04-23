@@ -3192,7 +3192,7 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, bool bIncludeFiltered
             nStartRow = rRange2.aStart.Row();
         if (rRange2.aEnd.Col() > nEndCol)
             nEndCol = rRange2.aEnd.Col();
-        if (rRange2.aEnd.Row() < nEndRow)
+        if (rRange2.aEnd.Row() > nEndRow)
             nEndRow = rRange2.aEnd.Row();
     }
 
