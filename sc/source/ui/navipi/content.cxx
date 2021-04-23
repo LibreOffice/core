@@ -879,52 +879,51 @@ void ScContentTree::GetDrawNames( ScContentId nType )
     if (!pDoc)
         return;
 
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    if (!pDrawLayer)
+        return;
+
+    SfxObjectShell* pShell = pDoc->GetDocumentShell();
+    if (!pShell)
+        return;
+
     // iterate in flat mode for groups
     SdrIterMode eIter = ( nType == ScContentId::DRAWING ) ? SdrIterMode::Flat : SdrIterMode::DeepNoGroups;
 
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-    SfxObjectShell* pShell = pDoc->GetDocumentShell();
-    if (!(pDrawLayer && pShell))
-        return;
-
+    std::vector<OUString> aNames;
     SCTAB nTabCount = pDoc->GetTableCount();
-    int treeNodeCount = 0;
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         OSL_ENSURE(pPage,"Page ?");
-        if (pPage)
+        if (!pPage)
+            continue;
+        SdrObjListIter aIter(pPage, eIter);
+        SdrObject* pObject = aIter.Next();
+        while (pObject)
         {
-            SdrObjListIter aIter( pPage, eIter );
-            SdrObject* pObject = aIter.Next();
-            while (pObject)
+            if (IsPartOfType(nType, pObject->GetObjIdentifier()))
             {
-                if ( IsPartOfType( nType, pObject->GetObjIdentifier() ) )
+                OUString aName = ScDrawLayer::GetVisibleName(pObject);
+                if (!aName.isEmpty())
+                    aNames.push_back(aName);
+                if (aNames.size() > MAX_TREE_NODES)
                 {
-                    OUString aName = ScDrawLayer::GetVisibleName( pObject );
-                    if (!aName.isEmpty())
-                    {
-                        weld::TreeIter* pParent = m_aRootNodes[nType].get();
-                        if (pParent)
-                        {
-                            m_xTreeView->insert(pParent, -1, &aName, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
-                            m_xTreeView->set_sensitive(*m_xScratchIter, true);
-                            treeNodeCount++;
-                            if (treeNodeCount > MAX_TREE_NODES)
-                            {
-                                SAL_WARN("sc", "too many tree nodes, ignoring the rest");
-                                return;
-                            }
-                        }//end if parent
-                        else
-                            SAL_WARN("sc", "InsertContent without parent");
-                    }
+                    SAL_WARN("sc", "too many tree nodes, ignoring the rest");
+                    break;
                 }
-
-                pObject = aIter.Next();
             }
+            pObject = aIter.Next();
         }
     }
+
+    weld::TreeIter* pParent = m_aRootNodes[nType].get();
+    assert(pParent && "InsertContent without parent");
+    // insert all of these in one go under pParent
+    m_xTreeView->bulk_insert_for_each(aNames.size(), [this, &aNames](weld::TreeIter& rIter, int nIndex) {
+        m_xTreeView->set_text(rIter, aNames[nIndex]);
+        m_xTreeView->set_sensitive(rIter, true);
+    }, pParent);
 }
 
 void ScContentTree::GetGraphicNames()

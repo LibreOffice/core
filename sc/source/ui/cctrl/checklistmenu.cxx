@@ -802,7 +802,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
                 size_t nIndex = aShownIndexes[i];
                 insertMember(*mpChecks, rIter, maMembers[nIndex], true);
                 ++nSelCount;
-            }, &aFixedWidths);
+            }, nullptr, &aFixedWidths);
         }
     }
 
@@ -1256,7 +1256,7 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
             insertMember(*mpChecks, rIter, maMembers[i], maMembers[i].mbVisible);
             if (maMembers[i].mbVisible)
                 ++nVisMemCount;
-        }, &aFixedWidths);
+        }, nullptr, &aFixedWidths);
     }
     else
     {

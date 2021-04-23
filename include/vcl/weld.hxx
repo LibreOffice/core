@@ -1133,7 +1133,8 @@ public:
     virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
     // call func on each visible element until func returns true or we run out of elements
     virtual void visible_foreach(const std::function<bool(TreeIter&)>& func) = 0;
-    // clear the tree, then add nSourceCount rows, call func on each row
+    // clear the children of pParent (whole tree if nullptr),
+    // then add nSourceCount rows under pParent, call func on each row
     // inserted with an arg of the index that this row will be when bulk insert
     // ends.
     //
@@ -1145,6 +1146,7 @@ public:
     // be scrolled into view horizontally.
     virtual void bulk_insert_for_each(int nSourceCount,
                                       const std::function<void(TreeIter&, int nSourceIndex)>& func,
+                                      const weld::TreeIter* pParent = nullptr,
                                       const std::vector<int>* pFixedWidths = nullptr)
         = 0;
 
