@@ -4735,8 +4735,7 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
     OUString sFileName = "media/hdphoto" + OUString::number( mnWdpImageCounter++ ) + ".wdp";
     Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
                                                                       .appendAscii( GetComponentDir() )
-                                                                      .append( "/" )
-                                                                      .append( sFileName )
+                                                                      .append( "/" + sFileName )
                                                                       .makeStringAndClear(),
                                                                       "image/vnd.ms-photo" );
     OUString sId;

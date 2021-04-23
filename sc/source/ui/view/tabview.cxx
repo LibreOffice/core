@@ -2411,11 +2411,11 @@ void lcl_createGroupsData(
                 bool bGroupHidden = pEntry->IsHidden();
 
                 rGroupsBuffer
-                    .append("{ \"level\": ").append(sal_Int32(nLevel + 1)).append(", ")
-                    .append("\"index\": ").append(sal_Int32(nIndex)).append(", ")
-                    .append("\"startPos\": ").append(rGroupStartPositions[nLevel]).append(", ")
-                    .append("\"endPos\": ").append(nTotalPx).append(", ")
-                    .append("\"hidden\": ").append(sal_Int32(bGroupHidden ? 1 : 0)).append(" }");
+                    .append("{ \"level\": ").append(sal_Int32(nLevel + 1)).append(", "
+                        "\"index\": ").append(sal_Int32(nIndex)).append(", "
+                        "\"startPos\": ").append(rGroupStartPositions[nLevel]).append(", "
+                        "\"endPos\": ").append(nTotalPx).append(", "
+                        "\"hidden\": ").append(sal_Int32(bGroupHidden ? 1 : 0)).append(" }");
 
                 // look for the next visible group control at level nLevel
                 bool bFound = false;

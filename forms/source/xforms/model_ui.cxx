@@ -287,7 +287,7 @@ OUString Model::getNodeDisplayName( const css::uno::Reference<css::xml::dom::XNo
             OUString sContent = xNode->getNodeValue();
             if( bDetail || ! lcl_isWhitespace( sContent ) )
             {
-                aBuffer.append("\"").append(Convert::collapseWhitespace( sContent )).append("\"");
+                aBuffer.append("\"" + Convert::collapseWhitespace( sContent ) + "\"");
             }
         }
         break;

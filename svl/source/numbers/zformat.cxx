@@ -5136,7 +5136,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         // lcl_insertLCID() below, in practice as long as it is used for system
         // time and date modifiers it shouldn't (i.e. there is no calendar or
         // numeral specified as well).
-        aStr.append("[$-").append( maLocale.generateCode()).append(']');
+        aStr.append("[$-" + maLocale.generateCode() + "]");
     }
     bool bDefault[4];
     // 1 subformat matches all if no condition specified,

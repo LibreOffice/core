@@ -1296,7 +1296,7 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
         if ( (rItem.GetType() == SvLBoxItemType::String) &&
              !static_cast<SvLBoxString&>( rItem ).GetText().isEmpty() )
         {
-            sRet.append(static_cast<SvLBoxString&>( rItem ).GetText()).append(",");
+            sRet.append(static_cast<SvLBoxString&>( rItem ).GetText() + ",");
         }
         nCur++;
     }

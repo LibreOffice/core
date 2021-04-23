@@ -78,7 +78,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
             {
                 OUStringBuffer aBuffer( aUrlComp.first );
                 if( !aUrlComp.second.isEmpty() )
-                    aBuffer.append( " - " ).append( aUrlComp.second );
+                    aBuffer.append( " - " + aUrlComp.second );
                 aTextToDisplay = aBuffer.makeStringAndClear();
             }
         }

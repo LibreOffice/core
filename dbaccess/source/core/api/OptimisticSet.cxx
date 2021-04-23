@@ -188,7 +188,7 @@ void OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _
             OUStringBuffer& rPart = aSql[columnName.second.sTableName];
             if ( !rPart.isEmpty() )
                 rPart.append(", ");
-            rPart.append(sQuotedColumnName).append(" = ?");
+            rPart.append(sQuotedColumnName + " = ?");
         }
     }
 
@@ -211,7 +211,7 @@ void OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _
                                        " SET " + elem.second.toString());
             OUStringBuffer& rCondition = aKeyConditions[elem.first];
             if ( !rCondition.isEmpty() )
-                sSql.append(" WHERE ").append( rCondition );
+                sSql.append(" WHERE " + rCondition );
 
             executeUpdate(_rInsertRow ,_rOriginalRow,sSql.makeStringAndClear(),elem.first);
         }

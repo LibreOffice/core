@@ -428,7 +428,7 @@ OUString LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
     //Append args
     for (auto const& elem : m_aArgs)
     {
-        aFormula.append(elem->ToArgString(pCellsMap)).append("|"); //separator
+        aFormula.append(elem->ToArgString(pCellsMap) + "|"); //separator
     }
 
     //erase the last "|"

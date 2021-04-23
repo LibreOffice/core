@@ -205,10 +205,9 @@ namespace pcr
             if (!::comphelper::hasProperty(PROPERTY_LABEL, xAsSet))
                 continue;
 
-            OUString sDisplayName = OUStringBuffer(
-                ::comphelper::getString(xAsSet->getPropertyValue(PROPERTY_LABEL))).
-                append(" (").append(sName).append(')').
-                makeStringAndClear();
+            OUString sDisplayName =
+                ::comphelper::getString(xAsSet->getPropertyValue(PROPERTY_LABEL)) +
+                " (" + sName + ")";
 
             // all requirements met -> insert
             m_xUserData.emplace_back(new Reference<XPropertySet>(xAsSet));

@@ -739,7 +739,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                                  (aFontData.mbItalic != aNewData.mbItalic);
                 if( bNewFont || (bNewStyle && pFontList) )
                 {
-                    aParaText.append("&\"").append(aNewData.maName);
+                    aParaText.append("&\"" + aNewData.maName);
                     if( pFontList )
                     {
                         FontMetric aFontMetric( pFontList->Get(
@@ -748,7 +748,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                             aNewData.mbItalic ? ITALIC_NORMAL : ITALIC_NONE ) );
                         aNewData.maStyle = pFontList->GetStyleName( aFontMetric );
                         if( !aNewData.maStyle.isEmpty() )
-                            aParaText.append(",").append(aNewData.maStyle);
+                            aParaText.append("," + aNewData.maStyle);
                     }
                     aParaText.append("\"");
                 }
@@ -784,7 +784,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 aNewData.maColor = aFont.GetColor();
                 if ( !aFontData.maColor.IsRGBEqual( aNewData.maColor ) )
                 {
-                    aParaText.append("&K").append(aNewData.maColor.AsRGBHexString());
+                    aParaText.append("&K" + aNewData.maColor.AsRGBHexString());
                 }
 
                 // strikeout

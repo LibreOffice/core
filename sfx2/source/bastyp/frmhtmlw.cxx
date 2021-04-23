@@ -61,13 +61,13 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
         rStrm.WriteCharPtr( pIndent );
 
     OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta).append(' ')
+    sOut.append("<" OOO_STRING_SVTOOLS_HTML_meta " ")
         .append(bHTTPEquiv ? OOO_STRING_SVTOOLS_HTML_O_httpequiv : OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
     rStrm.WriteOString( sOut.makeStringAndClear() );
 
     HTMLOutFuncs::Out_String( rStrm, rName, eDestEnc, pNonConvertableChars );
 
-    sOut.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content).append("=\"");
+    sOut.append("\" " OOO_STRING_SVTOOLS_HTML_O_content "=\"");
     rStrm.WriteOString( sOut.makeStringAndClear() );
 
     HTMLOutFuncs::Out_String( rStrm, rContent, eDestEnc, pNonConvertableChars ).WriteCharPtr( "\"/>" );
@@ -239,8 +239,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             {
                 aURL = URIHelper::simpleNormalizedMakeRelative(
                     rBaseURL, aURL );
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src)
-                    .append("=\"");
+                sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
                 rOut.WriteOString( sOut.makeStringAndClear() );
                 HTMLOutFuncs::Out_String( rOut, aURL, eDestEnc, pNonConvertableChars );
                 sOut.append('\"');
@@ -250,8 +249,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         aAny = xSet->getPropertyValue("FrameName");
         if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
-                .append("=\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
             rOut.WriteOString( sOut.makeStringAndClear() );
             HTMLOutFuncs::Out_String( rOut, aStr, eDestEnc, pNonConvertableChars );
             sOut.append('\"');
@@ -279,8 +277,8 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             if ( aAny >>= bVal )
             {
                 const char *pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrolling)
-                    .append(pStr);
+                sOut.append(OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_scrolling) +
+                        pStr);
             }
         }
 

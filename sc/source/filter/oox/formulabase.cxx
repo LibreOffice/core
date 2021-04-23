@@ -1292,9 +1292,9 @@ bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rT
         }
         return true;
     }
-    OSL_FAIL( OStringBuffer( "OpCodeProviderImpl::initOpCode - opcode for \"" ).
-        append( OUStringToOString( rOdfName, RTL_TEXTENCODING_ASCII_US ) ).
-        append( "\" not found" ).getStr() );
+    OSL_FAIL( OStringBuffer( "OpCodeProviderImpl::initOpCode - opcode for \"" +
+            OUStringToOString( rOdfName, RTL_TEXTENCODING_ASCII_US ) +
+            "\" not found" ).getStr() );
     return false;
 }
 

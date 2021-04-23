@@ -4643,7 +4643,7 @@ void SbRtl_Partition(StarBASIC *, SbxArray & rPar, bool)
             aRetStr.append(" ");
         }
     }
-    aRetStr.append( aLowerValue ).append(":");
+    aRetStr.append( aLowerValue + ":");
     if( nLen > nLen2 )
     {
         // appending the leading spaces for the uppervalue

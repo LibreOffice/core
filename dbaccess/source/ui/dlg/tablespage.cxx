@@ -381,7 +381,7 @@ namespace dbaui
                                 bCatalogWildcard = m_xTablesList->isWildcardChecked(*xCatalog);
                                 if (m_bCatalogAtStart)
                                 {
-                                    sComposedName.append(m_xTablesList->GetWidget().get_text(*xCatalog)).append(m_sCatalogSeparator);
+                                    sComposedName.append(m_xTablesList->GetWidget().get_text(*xCatalog) + m_sCatalogSeparator);
                                     if (bCatalogWildcard)
                                         sComposedName.append(sWildcard);
                                 }
@@ -396,7 +396,7 @@ namespace dbaui
                             }
                         }
                         bSchemaWildcard = m_xTablesList->isWildcardChecked(*xSchema);
-                        sComposedName.append(m_xTablesList->GetWidget().get_text(*xSchema)).append(".");
+                        sComposedName.append(m_xTablesList->GetWidget().get_text(*xSchema) + ".");
                     }
 
                     if (bSchemaWildcard)

@@ -2103,7 +2103,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         if( !aToken.isEmpty() )
         {
             UnescapeToken();
-            aComment.append(" ").append(aToken);
+            aComment.append(" " + aToken);
         }
         aComment.append(">");
         InsertComment( aComment.makeStringAndClear() );

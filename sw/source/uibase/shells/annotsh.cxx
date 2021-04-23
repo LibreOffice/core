@@ -1647,7 +1647,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                     if( nCount )
                     {
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            sList.append( (pUndoManager->*fnGetComment)( n, SfxUndoManager::TopLevel ) ).append("\n");
+                            sList.append( (pUndoManager->*fnGetComment)( n, SfxUndoManager::TopLevel ) + "\n");
                     }
 
                     SfxStringListItem aItem( nWhich );
