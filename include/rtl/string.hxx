@@ -114,7 +114,7 @@ public:
         assert(literal[N - 1] == '\0');
         //TODO: Use C++20 constexpr std::copy_n (P0202R3):
         for (std::size_t i = 0; i != N; ++i) {
-            buffer[i] = literal[i];
+            more.buffer[i] = literal[i];
         }
     }
 #endif
