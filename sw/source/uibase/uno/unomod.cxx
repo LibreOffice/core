@@ -905,11 +905,9 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
                 throw UnknownPropertyException();
 
             bBool = false;
-            OUStringBuffer sHelpURL;
-            sHelpURL.append ( INET_HID_SCHEME );
             SwEditWin &rEditWin = pView->GetEditWin();
-            sHelpURL.append( OUString::fromUtf8( rEditWin.GetHelpId() ) );
-            rValue <<= sHelpURL.makeStringAndClear();
+            OUString sHelpURL = INET_HID_SCHEME + OUString::fromUtf8( rEditWin.GetHelpId() );
+            rValue <<= sHelpURL;
         }
         break;
         case HANDLE_VIEWSET_HORI_RULER_METRIC:

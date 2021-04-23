@@ -83,8 +83,7 @@ OString generateMD5(const void* pData, size_t length)
     const char* const pString = "0123456789ABCDEF";
     for(sal_uInt8 val : pBuffer)
     {
-        aBuffer.append(pString[val/16]);
-        aBuffer.append(pString[val%16]);
+        aBuffer.append(OStringChar(pString[val/16]) + OStringChar(pString[val%16]));
     }
     return aBuffer.makeStringAndClear();
 }

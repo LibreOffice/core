@@ -318,8 +318,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
 
         // assemble
 
-        aResult.append(aSep);
-        aResult.append(aExpr);
+        aResult.append(aSep + aExpr);
 
         nLoopStart = nEEnd;
     }

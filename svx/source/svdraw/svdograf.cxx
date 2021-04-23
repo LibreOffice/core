@@ -671,9 +671,7 @@ OUString SdrGrafObj::TakeObjNameSingul() const
 
     if (!aName.isEmpty())
     {
-        sName.append(" '");
-        sName.append(aName);
-        sName.append('\'' );
+        sName.append(" '" + aName + "\'" );
     }
 
     return sName.makeStringAndClear();
@@ -746,9 +744,7 @@ OUString SdrGrafObj::TakeObjNamePlural() const
 
     if (!aName.isEmpty())
     {
-        sName.append(" '");
-        sName.append(aName);
-        sName.append('\'');
+        sName.append(" '" + aName + "\'");
     }
 
     return sName.makeStringAndClear();

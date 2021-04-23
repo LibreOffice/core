@@ -453,8 +453,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
         sTitle.append      (xModelTitle->getTitle ());
         if ( nLeasedNumber > 1 )
         {
-            sTitle.append(" : ");
-            sTitle.append(nLeasedNumber);
+            sTitle.append(" : " + OUString::number(nLeasedNumber));
         }
         if (xModel.is ())
         {

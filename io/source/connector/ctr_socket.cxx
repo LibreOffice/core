@@ -108,13 +108,10 @@ namespace stoc_connector {
         OUStringBuffer buf( 256 );
         buf.append( ",peerPort=" );
         buf.append( nPort );
-        buf.append( ",peerHost=" );
-        buf.append( m_socket.getPeerHost() );
-
-        buf.append( ",localPort=" );
+        buf.append( ",peerHost="  + m_socket.getPeerHost() +
+                    ",localPort=" );
         buf.append( nPort );
-        buf.append( ",localHost=" );
-        buf.append( m_socket.getLocalHost( ) );
+        buf.append( ",localHost=" + m_socket.getLocalHost( ) );
 
         m_sDescription += buf;
     }

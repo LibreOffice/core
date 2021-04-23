@@ -95,9 +95,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
         pObjectStream = &rDocBuffer;
     }
 
-    OStringBuffer aLine;
-    aLine.append(nObject);
-    aLine.append(" 0 obj\n");
+    OStringBuffer aLine = OString::number(nObject) + " 0 obj\n";
 
     if (rObject.GetDictionary())
     {
@@ -110,9 +108,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
             else
                 aLine.append(" ");
 
-            aLine.append("/");
-            aLine.append(rPair.first);
-            aLine.append(" ");
+            aLine.append("/" + rPair.first + " ");
             copyRecursively(aLine, rPair.second, rDocBuffer, rCopiedResources);
         }
 
@@ -121,10 +117,11 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
 
     if (filter::PDFStreamElement* pStream = rObject.GetStream())
     {
-        aLine.append("stream\n");
         SvMemoryStream& rStream = pStream->GetMemory();
-        aLine.append(static_cast<const char*>(rStream.GetData()), rStream.GetSize());
-        aLine.append("\nendstream\n");
+        aLine.append(
+            OString::Concat("stream\n")
+            + std::string_view(static_cast<const char*>(rStream.GetData()), rStream.GetSize())
+            + "\nendstream\n");
     }
 
     if (filter::PDFArrayElement* pArray = rObject.GetArray())
@@ -230,7 +227,7 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
     OStringBuffer sRet("/" + rKind + "<<");
     for (const auto& rPair : aRet)
     {
-        sRet.append("/" + rPair.first + " ").append(rPair.second).append(" 0 R");
+        sRet.append("/" + rPair.first + " " + OString::number(rPair.second) + " 0 R");
     }
     sRet.append(">>");
 

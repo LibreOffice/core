@@ -1069,8 +1069,7 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
         aProperties[1].Name = "Value";
         for (sal_Int32 j = 1; j <= 3; j++) {
             aProperties[1].Value <<= j;
-            result.append( makeNumberingString( aProperties, aLocale ) );
-            result.append(", ");
+            result.append( makeNumberingString( aProperties, aLocale ) + ", ");
         }
         result.append("...");
         return result.makeStringAndClear();

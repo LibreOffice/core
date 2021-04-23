@@ -253,10 +253,10 @@ static void raiseSQLException(
         buf.append( "]" );
     }
     buf.append(
-        OUString( errorMsg, strlen(errorMsg) , ConnectionSettings::encoding ) );
-    buf.append( " (caused by statement '" );
-    buf.append( OStringToOUString( sql, ConnectionSettings::encoding ) );
-    buf.append( "')" );
+        OUString( errorMsg, strlen(errorMsg) , ConnectionSettings::encoding ) +
+        " (caused by statement '" +
+        OStringToOUString( sql, ConnectionSettings::encoding ) +
+        "')" );
     OUString error = buf.makeStringAndClear();
     SAL_WARN("connectivity.postgresql", error);
     throw SQLException( error, owner, OUString(), 1, Any() );
@@ -456,15 +456,13 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                 }
                 else if( !sourceTableKeys.empty() )
                 {
-                    OStringBuffer buf( 128 );
-                    buf.append( "can't support updateable resultset for table " );
-                    buf.append( OUStringToOString( schema, ConnectionSettings::encoding ) );
-                    buf.append( "." );
-                    buf.append( OUStringToOString( table, ConnectionSettings::encoding ) );
-                    buf.append( ", because resultset does not contain a part of the primary key ( column " );
-                    buf.append( OUStringToOString( sourceTableKeys[i], ConnectionSettings::encoding ) );
-                    buf.append( " is missing )" );
-                    aReason = buf.makeStringAndClear();
+                    aReason = "can't support updateable resultset for table " +
+                        OUStringToOString( schema, ConnectionSettings::encoding ) +
+                        "." +
+                        OUStringToOString( table, ConnectionSettings::encoding ) +
+                        ", because resultset does not contain a part of the primary key ( column " +
+                        OUStringToOString( sourceTableKeys[i], ConnectionSettings::encoding ) +
+                        " is missing )";
                 }
                 else
                 {
@@ -703,8 +701,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                 if( bAdditionalCondition )
                     buf.append( " AND " );
                 bufferQuoteIdentifier( buf, columnNameUnicode, pConnectionSettings );
-                buf.append( " = " );
-                buf.append( value );
+                buf.append( " = " + value );
                 bAdditionalCondition = true;
             }
             query = buf.makeStringAndClear();

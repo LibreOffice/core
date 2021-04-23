@@ -457,16 +457,14 @@ void LinkManager::InsertFileLink(
         return;
 
     OUStringBuffer aBuf(64);
-    aBuf.append(rFileNm);
-    aBuf.append(sfx2::cTokenSeparator);
+    aBuf.append(OUString::Concat(rFileNm) + OUStringChar(sfx2::cTokenSeparator));
 
     if (pRange)
         aBuf.append(*pRange);
 
     if (pFilterNm)
     {
-        aBuf.append(sfx2::cTokenSeparator);
-        aBuf.append(*pFilterNm);
+        aBuf.append(OUStringChar(sfx2::cTokenSeparator) + *pFilterNm);
     }
 
     OUString aCmd = aBuf.makeStringAndClear();

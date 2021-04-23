@@ -177,8 +177,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             }
             else
             {
-                aMenuShortCut.append( sal_Int32( i + 1 ) );
-                aMenuShortCut.append( ". " );
+                aMenuShortCut.append( OUString::number( i + 1 ) + ". " );
             }
 
             OUString aURLString = "vnd.sun.star.popup:RecentFileList?entry=" + OUString::number(i);

@@ -132,13 +132,9 @@ OUString createLabelString( const ScDocument& rDoc, SCCOL nCol, const ScRefCellV
     if (aDocStr.isEmpty())
     {
         // Replace an empty label string with column name.
-        OUStringBuffer aBuf;
-        aBuf.append(ScResId(STR_COLUMN));
-        aBuf.append(' ');
 
         ScAddress aColAddr(nCol, 0, 0);
-        aBuf.append(aColAddr.Format(ScRefFlags::COL_VALID));
-        aDocStr = aBuf.makeStringAndClear();
+        aDocStr = ScResId(STR_COLUMN) + " " + aColAddr.Format(ScRefFlags::COL_VALID);
     }
     return aDocStr;
 }

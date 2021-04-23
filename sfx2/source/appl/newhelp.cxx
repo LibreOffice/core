@@ -556,8 +556,7 @@ void IndexTabPage_Impl::InitializeIndex()
 
     try
     {
-        OUStringBuffer aURL = HELP_URL;
-        aURL.append(sFactory);
+        OUStringBuffer aURL = HELP_URL + sFactory;
         AppendConfigToken(aURL, true);
 
         Content aCnt( aURL.makeStringAndClear(), Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -584,7 +583,6 @@ void IndexTabPage_Impl::InitializeIndex()
             {
                 int ndx,tmp;
                 OUString aIndex, aTempString;
-                OUStringBuffer aData( 128 );            // Capacity of up to 128 characters
                 sfx2::KeywordInfo::iterator it;
 
                 for ( int i = 0; i < aKeywordList.getLength(); ++i )
@@ -629,8 +627,8 @@ void IndexTabPage_Impl::InitializeIndex()
                     {
                         if ( aAnchorList[0].getLength() > 0 )
                         {
-                            aData.append( aRefList[0] ).append( '#' ).append( aAnchorList[0] );
-                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aData.makeStringAndClear(), insert)));
+                            OUString aData = aRefList[0] + "#" + aAnchorList[0];
+                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aData, insert)));
                         }
                         else
                             sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aRefList[0], insert)));
@@ -645,19 +643,12 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     for ( sal_uInt32 j = 1; j < nRefListLen ; ++j )
                     {
-                        aData
-                            .append( aKeywordPair )
-                            .append( ' ' )
-                            .append( '-' )
-                            .append( ' ' )
-                            .append( aTitleList[j] );
-
-                        aTempString = aData.makeStringAndClear();
+                        aTempString = aKeywordPair + " - " + aTitleList[j];
 
                         if ( aAnchorList[j].getLength() > 0 )
                         {
-                            aData.append( aRefList[j] ).append( '#' ).append( aAnchorList[j] );
-                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aData.makeStringAndClear(), insert)));
+                            OUString aData = aRefList[j] + "#" + aAnchorList[j];
+                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aData, insert)));
                         }
                         else
                             sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aRefList[j], insert)));
@@ -996,9 +987,9 @@ void SearchTabPage_Impl::Search()
     std::unique_ptr<weld::WaitObject> xWaitCursor(new weld::WaitObject(m_pIdxWin->GetFrameWeld()));
     ClearSearchResults();
     RememberSearchText( aSearchText );
-    OUStringBuffer aSearchURL(HELP_URL);
-    aSearchURL.append(aFactory);
-    aSearchURL.append(HELP_SEARCH_TAG);
+    OUStringBuffer aSearchURL = HELP_URL +
+        aFactory +
+        HELP_SEARCH_TAG;
     if (!m_xFullWordsCB->get_active())
         aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
     aSearchURL.append(aSearchText);
@@ -1228,9 +1219,7 @@ OUString SfxHelpWindow_Impl::buildHelpURL(std::u16string_view sFactory        ,
                                           std::u16string_view sAnchor)
 {
     OUStringBuffer sHelpURL(256);
-    sHelpURL.append(HELP_URL);
-    sHelpURL.append(sFactory);
-    sHelpURL.append(sContent);
+    sHelpURL.append(OUString::Concat(HELP_URL) + sFactory + sContent);
     AppendConfigToken(sHelpURL, true/*bUseQuestionMark*/);
     if (!sAnchor.empty())
         sHelpURL.append(sAnchor);

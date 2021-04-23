@@ -389,14 +389,13 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
 static OString formatForSave(const uno::Reference< XDictionaryEntry > &xEntry,
     rtl_TextEncoding eEnc )
 {
-   OStringBuffer aStr(OUStringToOString(xEntry->getDictionaryWord(), eEnc));
+   OUStringBuffer aStr(xEntry->getDictionaryWord());
 
    if (xEntry->isNegative() || !xEntry->getReplacementText().isEmpty())
    {
-       aStr.append("==");
-       aStr.append(OUStringToOString(xEntry->getReplacementText(), eEnc));
+       aStr.append("==" + xEntry->getReplacementText());
    }
-   return aStr.makeStringAndClear();
+   return OUStringToOString(aStr, eEnc);
 }
 
 ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
@@ -438,9 +437,8 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
         pStream->WriteLine("lang: <none>");
     else
     {
-        OStringBuffer aLine("lang: ");
-        aLine.append(OUStringToOString(LanguageTag::convertToBcp47(nLanguage), eEnc));
-        pStream->WriteLine(aLine.makeStringAndClear());
+        OString aLine = "lang: " + OUStringToOString(LanguageTag::convertToBcp47(nLanguage), eEnc);
+        pStream->WriteLine(aLine);
     }
     if (ERRCODE_NONE != (nErr = pStream->GetError()))
         return nErr;

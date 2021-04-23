@@ -80,16 +80,14 @@ static OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElemen
     uno::Reference< report::XReportControlModel> xReportModel(_xElement,uno::UNO_QUERY);
     if ( xFixedText.is() )
     {
-        sName.append(" : ");
-        sName.append(xFixedText->getLabel());
+        sName.append(" : " + xFixedText->getLabel());
     }
     else if ( xReportModel.is() && _xElement->getPropertySetInfo()->hasPropertyByName(PROPERTY_DATAFIELD) )
     {
         ReportFormula aFormula( xReportModel->getDataField() );
         if ( aFormula.isValid() )
         {
-            sName.append(" : ");
-            sName.append( aFormula.getUndecoratedContent() );
+            sName.append(" : " + aFormula.getUndecoratedContent() );
         }
     }
     return sName.makeStringAndClear();

@@ -148,8 +148,8 @@ void Entry_Impl::checkDependencies()
             OUStringBuffer aMissingDep( DpResId( RID_STR_ERROR_MISSING_DEPENDENCIES ) );
             for ( const auto& i : std::as_const(depExc.UnsatisfiedDependencies) )
             {
-                aMissingDep.append("\n");
-                aMissingDep.append(dp_misc::Dependencies::getErrorText(i));
+                aMissingDep.append("\n" +
+                        dp_misc::Dependencies::getErrorText(i));
             }
             aMissingDep.append("\n");
             m_sErrorText = aMissingDep.makeStringAndClear();

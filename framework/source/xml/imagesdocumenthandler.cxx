@@ -279,10 +279,9 @@ OUString OReadImagesDocumentHandler::getErrorLineString()
     SolarMutexGuard g;
     if ( m_xLocator.is() )
     {
-        OUStringBuffer buffer("Line: ");
-        buffer.append(m_xLocator->getLineNumber());
-        buffer.append(" - ");
-        return buffer.makeStringAndClear();
+        return "Line: " +
+            OUString::number(m_xLocator->getLineNumber()) +
+            " - ";
     }
     else
         return OUString();

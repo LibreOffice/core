@@ -537,14 +537,14 @@ void OComboBoxModel::loadData( bool _bForce )
                     OUString sCatalog, sSchema, sTable;
                     qualifiedNameComponents( xMeta, m_aListSource, sCatalog, sSchema, sTable, EComposeRule::InDataManipulation );
 
-                    OUStringBuffer aStatement;
-                    aStatement.append( "SELECT DISTINCT " );
-                    aStatement.append     ( quoteName( aQuote, aFieldName ) );
-                    aStatement.append( " FROM " );
-                    aStatement.append     ( composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable ) );
+                    OUString aStatement =
+                        "SELECT DISTINCT " +
+                        quoteName( aQuote, aFieldName ) +
+                        " FROM "  +
+                        composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable );
 
                     m_aListRowSet.setEscapeProcessing( false );
-                    m_aListRowSet.setCommand( aStatement.makeStringAndClear() );
+                    m_aListRowSet.setCommand( aStatement );
                     bExecuteRowSet = true;
                 }
             }   break;

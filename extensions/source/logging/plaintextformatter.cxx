@@ -105,14 +105,13 @@ namespace logging
 
         if ( !(_rRecord.SourceClassName.isEmpty() || _rRecord.SourceMethodName.isEmpty()) )
         {
-            aLogEntry.append( _rRecord.SourceClassName );
-            aLogEntry.append( "::" );
-            aLogEntry.append( _rRecord.SourceMethodName );
-            aLogEntry.append( ": " );
+            aLogEntry.append( _rRecord.SourceClassName +
+                    "::" +
+                    _rRecord.SourceMethodName +
+                    ": " );
         }
 
-        aLogEntry.append( _rRecord.Message );
-        aLogEntry.append( "\n" );
+        aLogEntry.append( _rRecord.Message + "\n" );
 
         return aLogEntry.makeStringAndClear();
     }

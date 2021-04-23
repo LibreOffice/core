@@ -58,8 +58,7 @@ OUString UriReference::getUriReference()
     }
     appendSchemeSpecificPart(buf);
     if (m_hasFragment) {
-        buf.append('#');
-        buf.append(m_fragment);
+        buf.append("#" + m_fragment);
     }
     return buf.makeStringAndClear();
 }

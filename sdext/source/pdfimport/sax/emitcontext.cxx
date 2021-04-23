@@ -114,11 +114,11 @@ void SaxEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     aBuf.append( pTag );
     for( const auto& rProperty : rProperties )
     {
-        aBuf.append( ' ' );
-        aBuf.append( OUStringToOString( rProperty.first, RTL_TEXTENCODING_UTF8 ) );
-        aBuf.append( "=\"" );
-        aBuf.append( OUStringToOString( rProperty.second, RTL_TEXTENCODING_UTF8 ) );
-        aBuf.append( "\"" );
+        aBuf.append( " " +
+            OUStringToOString( rProperty.first, RTL_TEXTENCODING_UTF8 ) +
+            "=\"" +
+            OUStringToOString( rProperty.second, RTL_TEXTENCODING_UTF8 ) +
+            "\"" );
     }
     aBuf.append( ">\n" );
     pStream->write( aBuf.getStr(), aBuf.getLength(), nWritten );

@@ -586,7 +586,7 @@ SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
             rOStm.WriteUInt32(nDummy32); // Unused
             rOStm.WriteUInt32(nDummy32); // Unused
             rOStm.WriteUInt32(nDummy32); // Unused
-            write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, OString()); // dummy
+            write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, ""); // dummy
             rOStm.WriteUInt16(nRest); // Count of remaining structures
         }
     }

@@ -1353,13 +1353,13 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 const OUString aModulName = aStrMacro.getToken(0, '.', nIdx);
                 const OUString aMacroName = aStrMacro.getToken(0, '.', nIdx);
 
-                OUStringBuffer sBuffer;
-                sBuffer.append( aMacroName );
-                sBuffer.append( '.' );
-                sBuffer.append( aModulName );
-                sBuffer.append( '.' );
-                sBuffer.append( aLibName );
-                sBuffer.append( '.' );
+                OUStringBuffer sBuffer =
+                    aMacroName +
+                    "." +
+                    aModulName +
+                    "." +
+                    aLibName +
+                    ".";
 
                 if ( aStrLibrary == "StarOffice" )
                 {

@@ -181,9 +181,9 @@ public:
 #define ENTERREGISTRATIONS() EnterRegistrations(__FILE__, __LINE__)
 #define LEAVEREGISTRATIONS() LeaveRegistrations(__FILE__, __LINE__)
 #define DENTERREGISTRATIONS() \
-        EnterRegistrations( OStringBuffer(__FILE__).append('(').append(reinterpret_cast<sal_Int64>(this)).append(')').getStr(), __LINE__ )
+        EnterRegistrations( OString::Concat(__FILE__) + "(" + OString::number(reinterpret_cast<sal_Int64>(this)) + ")", __LINE__ )
 #define DLEAVEREGISTRATIONS(  ) \
-        LeaveRegistrations( OStringBuffer(__FILE__).append('(').append(reinterpret_cast<sal_Int64>(this)).append(')').getStr(), __LINE__ )
+        LeaveRegistrations( OString(OString::Concat(__FILE__) + "(" + OString::number(reinterpret_cast<sal_Int64>(this)) + ")"), __LINE__ )
 #else
 #define ENTERREGISTRATIONS() EnterRegistrations()
 #define LEAVEREGISTRATIONS() LeaveRegistrations()

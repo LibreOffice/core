@@ -141,15 +141,14 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
             {
                 Any aError( ::cppu::getCaughtException() );
 
-                OUStringBuffer buf;
-                buf.append( "MasterScriptProvider::initialize: caught " );
-                buf.append( aError.getValueTypeName() );
-                buf.append( ":" );
-
                 Exception aException;
                 aError >>= aException;
-                buf.append     ( aException.Message );
-                throw lang::WrappedTargetException( buf.makeStringAndClear(), *this, aError );
+                OUString buf =
+                    "MasterScriptProvider::initialize: caught " +
+                    aError.getValueTypeName() +
+                    ":" +
+                    aException.Message;
+                throw lang::WrappedTargetException( buf, *this, aError );
             }
 
             if ( m_xInvocationContext.is() && m_xInvocationContext != m_xModel )

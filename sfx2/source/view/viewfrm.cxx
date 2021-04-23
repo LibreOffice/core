@@ -2832,11 +2832,9 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         }
 
         // append new method
-        sRoutine.append( "\nsub " );
-        sRoutine.append(aMacroName);
-        sRoutine.append( "\n" );
-        sRoutine.append(sMacro);
-        sRoutine.append( "\nend sub\n" );
+        sRoutine.append( "\nsub " + aMacroName + "\n" +
+                         sMacro +
+                         "\nend sub\n" );
 
         // create the module inside the library and insert the macro routine
         aTemp <<= sRoutine.makeStringAndClear();

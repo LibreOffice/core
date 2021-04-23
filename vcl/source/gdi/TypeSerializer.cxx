@@ -392,7 +392,7 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
                     mrStream.WriteBytes(pVectorGraphicData->getBinaryDataContainer().getData(),
                                         nSize);
                     // For backwards compatibility, used to serialize path
-                    mrStream.WriteUniOrByteString(OUString(), mrStream.GetStreamCharSet());
+                    mrStream.WriteUniOrByteString(u"", mrStream.GetStreamCharSet());
                 }
                 else if (aGraphic.IsAnimated())
                 {

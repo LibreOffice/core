@@ -203,8 +203,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
         {
             // ...if it's in the xmlns namespace, make the prefix
             // don't bother caching this, it rarely happens
-            OUStringBuffer sQName;
-            sQName.append ( sXMLNS );
+            OUStringBuffer sQName = sXMLNS;
             if (!rLocalName.isEmpty()) // not default namespace
             {
                 sQName.append ( ':' );

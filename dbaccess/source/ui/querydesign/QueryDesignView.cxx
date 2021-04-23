@@ -290,11 +290,12 @@ namespace
                 {
                     if(!aCondition.isEmpty())
                         aCondition.append(C_AND);
-                    aCondition.append(quoteTableAlias(true,pData->GetAliasName(JTCS_FROM),aQuote));
-                    aCondition.append(::dbtools::quoteName(aQuote, lineData->GetFieldName(JTCS_FROM) ));
-                    aCondition.append(" = ");
-                    aCondition.append(quoteTableAlias(true,pData->GetAliasName(JTCS_TO),aQuote));
-                    aCondition.append(::dbtools::quoteName(aQuote, lineData->GetFieldName(JTCS_TO) ));
+                    aCondition.append(
+                        quoteTableAlias(true,pData->GetAliasName(JTCS_FROM),aQuote) +
+                        ::dbtools::quoteName(aQuote, lineData->GetFieldName(JTCS_FROM) ) +
+                        " = " +
+                        quoteTableAlias(true,pData->GetAliasName(JTCS_TO),aQuote) +
+                        ::dbtools::quoteName(aQuote, lineData->GetFieldName(JTCS_TO) ));
                 }
             }
             catch(SQLException&)
@@ -658,10 +659,10 @@ namespace
                     if  ( field->isAggregateFunction() )
                     {
                         OSL_ENSURE(!field->GetFunction().isEmpty(),"Function name must not be empty! ;-(");
-                        OUStringBuffer aTmpStr2( field->GetFunction());
-                        aTmpStr2.append("(");
-                        aTmpStr2.append(aTmpStr.makeStringAndClear());
-                        aTmpStr2.append(")");
+                        OUString aTmpStr2 = field->GetFunction() +
+                            "(" +
+                            aTmpStr +
+                            ")";
                         aTmpStr = aTmpStr2;
                     }
 
@@ -670,11 +671,9 @@ namespace
                         field->isNumericOrAggregateFunction()      ||
                         field->isOtherFunction()))
                     {
-                        aTmpStr.append(" AS ");
-                        aTmpStr.append(::dbtools::quoteName(aQuote, rFieldAlias));
+                        aTmpStr.append(" AS " + ::dbtools::quoteName(aQuote, rFieldAlias));
                     }
-                    aFieldListStr.append(aTmpStr.makeStringAndClear());
-                    aFieldListStr.append(", ");
+                    aFieldListStr.append(aTmpStr + ", ");
                 }
             }
             if(!aFieldListStr.isEmpty())
@@ -2773,14 +2772,11 @@ OUString OQueryDesignView::getStatement()
     OUStringBuffer aSqlCmd("SELECT ");
     if(rController.isDistinct())
         aSqlCmd.append(" DISTINCT ");
-    aSqlCmd.append(aFieldListStr);
-    aSqlCmd.append(" FROM ");
-    aSqlCmd.append(aTableListStr);
+    aSqlCmd.append(aFieldListStr + " FROM " + aTableListStr);
 
     if (!aCriteriaListStr.isEmpty())
     {
-        aSqlCmd.append(" WHERE ");
-        aSqlCmd.append(aCriteriaListStr.makeStringAndClear());
+        aSqlCmd.append(" WHERE " + aCriteriaListStr);
     }
     Reference<XDatabaseMetaData> xMeta;
     if ( xConnection.is() )
@@ -2793,8 +2789,7 @@ OUString OQueryDesignView::getStatement()
     // ----------------- construct GroupBy and attach ------------
     if(!aHavingStr.isEmpty())
     {
-        aSqlCmd.append(" HAVING ");
-        aSqlCmd.append(aHavingStr.makeStringAndClear());
+        aSqlCmd.append(" HAVING " + aHavingStr);
     }
     // ----------------- construct sorting and attach ------------
     OUString sOrder;

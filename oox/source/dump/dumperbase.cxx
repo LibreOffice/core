@@ -1089,8 +1089,7 @@ OUString FlagsList::implGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
     setFlag( nKey, nFound, false );
     if( nKey != 0 )
     {
-        OUStringBuffer aUnknown( OOX_DUMP_UNKNOWN );
-        aUnknown.append( OOX_DUMP_ITEMSEP );
+        OUStringBuffer aUnknown = OUString::Concat(OOX_DUMP_UNKNOWN) + OUStringChar(OOX_DUMP_ITEMSEP);
         StringHelper::appendShortHex( aUnknown, nKey );
         StringHelper::enclose( aUnknown, '(', ')' );
         StringHelper::appendToken( aName, aUnknown.makeStringAndClear() );

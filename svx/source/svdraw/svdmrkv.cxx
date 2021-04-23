@@ -871,9 +871,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                             nPos += rProp.getLength() + 1; // '='
                             if (aExtraInfo.getLength() > 2) // != "{ "
                                 aExtraInfo.append(", ");
-                            aExtraInfo.append("\"is");
-                            aExtraInfo.append(rProp);
-                            aExtraInfo.append("\": ");
+                            aExtraInfo.append("\"is" + rProp + "\": ");
                             aExtraInfo.append(OString::boolean(aObjectCID[nPos] == '1'));
                         }
 
@@ -886,10 +884,10 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                             OUString sDragParameters = lcl_getDragParameterString(aValue);
                             if (!sDragParameters.isEmpty())
                             {
-                                aExtraInfo.append(", \"dragInfo\": { ");
-                                aExtraInfo.append("\"dragMethod\": \"");
-                                aExtraInfo.append(sDragMethod.toUtf8());
-                                aExtraInfo.append("\"");
+                                aExtraInfo.append(OString::Concat(", \"dragInfo\": { ") +
+                                                "\"dragMethod\": \"" +
+                                                sDragMethod.toUtf8() +
+                                                "\"");
 
                                 OUString sParam;
                                 sal_Int32 nStartIndex = 0;
@@ -917,9 +915,9 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                 Point aDragDirection = aMaxPos - aMinPos;
                                 aDragDirection = OutputDevice::LogicToLogic(aDragDirection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
 
-                                aExtraInfo.append(", \"dragDirection\": [");
-                                aExtraInfo.append(aDragDirection.toString());
-                                aExtraInfo.append("]");
+                                aExtraInfo.append(", \"dragDirection\": [" +
+                                                  aDragDirection.toString() +
+                                                  "]");
 
                                 // polygon approximating the pie segment or donut segment
                                 if (pO->GetObjIdentifier() == OBJ_PATHFILL)
@@ -959,12 +957,12 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                                     aSelection.toString() +
                                                     R"elem(\" preserveAspectRatio=\"xMidYMid\" xmlns=\"http://www.w3.org/2000/svg\">)elem";
 
-                                                aExtraInfo.append(", \"svg\": \"");
-                                                aExtraInfo.append(sSVGElem);
-                                                aExtraInfo.append("\\n  ");
-                                                aExtraInfo.append(sPolygonElem);
-                                                aExtraInfo.append("\\n</svg>");
-                                                aExtraInfo.append("\""); // svg
+                                                aExtraInfo.append(", \"svg\": \"" +
+                                                                sSVGElem +
+                                                                "\\n  " +
+                                                                sPolygonElem +
+                                                                "\\n</svg>"
+                                                                "\""); // svg
                                             }
                                         }
                                     }
@@ -1050,8 +1048,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             if (!aExtraInfo.isEmpty())
             {
                 sSelectionTextView = sSelectionText + ", " + aExtraInfo.toString() + "}";
-                aExtraInfo.append(handleArrayStr);
-                aExtraInfo.append("}");
+                aExtraInfo.append(handleArrayStr + "}");
                 sSelectionText += ", " + aExtraInfo.makeStringAndClear();
             }
         }

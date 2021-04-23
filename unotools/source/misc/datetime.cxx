@@ -260,12 +260,10 @@ void typeConvert(const css::util::DateTime& _rDateTime, DateTime& _rOut)
 OUString toISO8601(const css::util::DateTime& rDateTime)
 {
     OUStringBuffer rBuffer(32);
-    rBuffer.append(static_cast<sal_Int32>(rDateTime.Year));
-    rBuffer.append('-');
+    rBuffer.append(OUString::number(rDateTime.Year) + "-");
     if( rDateTime.Month < 10 )
         rBuffer.append('0');
-    rBuffer.append(static_cast<sal_Int32>(rDateTime.Month));
-    rBuffer.append('-');
+    rBuffer.append(OUString::number(rDateTime.Month) + "-");
     if( rDateTime.Day < 10 )
         rBuffer.append('0');
     rBuffer.append(static_cast<sal_Int32>(rDateTime.Day));
@@ -278,12 +276,10 @@ OUString toISO8601(const css::util::DateTime& rDateTime)
         rBuffer.append('T');
         if( rDateTime.Hours < 10 )
             rBuffer.append('0');
-        rBuffer.append(static_cast<sal_Int32>(rDateTime.Hours));
-        rBuffer.append(':');
+        rBuffer.append(OUString::number(rDateTime.Hours) + ":");
         if( rDateTime.Minutes < 10 )
             rBuffer.append('0');
-        rBuffer.append(static_cast<sal_Int32>(rDateTime.Minutes));
-        rBuffer.append(':');
+        rBuffer.append(OUString::number(rDateTime.Minutes) + ":");
         if( rDateTime.Seconds < 10 )
             rBuffer.append('0');
         rBuffer.append(static_cast<sal_Int32>(rDateTime.Seconds));

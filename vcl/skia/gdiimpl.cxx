@@ -1623,11 +1623,8 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     if (targetSize.Width() * targetSize.Height() * 4 > maxImageCacheSize() * 0.7)
         return image;
     OString key;
-    OStringBuffer keyBuf;
-    keyBuf.append(targetSize.Width())
-        .append("x")
-        .append(targetSize.Height())
-        .append("_" + bitmap.GetImageKey());
+    OStringBuffer keyBuf = OString::number(targetSize.Width()) + "x"
+                           + OString::number(targetSize.Height()) + "_" + bitmap.GetImageKey();
     if (alphaBitmap)
         keyBuf.append("_" + alphaBitmap->GetAlphaImageKey());
     key = keyBuf.makeStringAndClear();

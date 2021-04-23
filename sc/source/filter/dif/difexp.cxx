@@ -105,34 +105,34 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     // TABLE
     OSL_ENSURE( pDoc->HasTable( nTab ), "*ScExportDif(): Table not existent!" );
 
-    aOS.append(pKeyTABLE);
-    aOS.append("\n0,1\n\"");
+    aOS.append(OUString::Concat(pKeyTABLE) +
+                "\n0,1\n\"");
 
     pDoc->GetName( nTab, aString );
-    aOS.append(aString);
-    aOS.append("\"\n");
+    aOS.append(aString +
+                "\"\n");
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     // VECTORS
-    aOS.append(pKeyVECTORS);
-    aOS.append("\n0,");
+    aOS.append(OUString::Concat(pKeyVECTORS) +
+            "\n0,");
     aOS.append(static_cast<sal_Int32>(nNumCols));
     aOS.append('\n');
     aOS.append(p2DoubleQuotes_LF);
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     // TUPLES
-    aOS.append(pKeyTUPLES);
-    aOS.append("\n0,");
+    aOS.append(OUString::Concat(pKeyTUPLES) +
+            "\n0,");
     aOS.append(static_cast<sal_Int32>(nNumRows));
     aOS.append('\n');
     aOS.append(p2DoubleQuotes_LF);
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     // DATA
-    aOS.append(pKeyDATA);
-    aOS.append("\n0,0\n");
-    aOS.append(p2DoubleQuotes_LF);
+    aOS.append(OUString::Concat(pKeyDATA) +
+            "\n0,0\n" +
+            p2DoubleQuotes_LF);
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     SCCOL               nColCnt;
@@ -141,8 +141,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     for( nRowCnt = rRange.aStart.Row() ; nRowCnt <= nEndRow ; nRowCnt++ )
     {
         assert( aOS.isEmpty() && "aOS should be empty");
-        aOS.append(pSpecDataType_LF);
-        aOS.append(pKeyBOT);
+        aOS.append(OUString::Concat(pSpecDataType_LF) +
+                    pKeyBOT);
         aOS.append('\n');
         rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
         for( nColCnt = rRange.aStart.Col() ; nColCnt <= nEndCol ; nColCnt++ )
@@ -159,8 +159,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                 case CELLTYPE_VALUE:
                     aOS.append(pNumData);
                     pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
-                    aOS.append(aString);
-                    aOS.append("\nV\n");
+                    aOS.append(aString +
+                            "\nV\n");
                 break;
                 case CELLTYPE_EDIT:
                 case CELLTYPE_STRING:
@@ -174,8 +174,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     {
                         aOS.append(pNumData);
                         pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
-                        aOS.append(aString);
-                        aOS.append("\nV\n");
+                        aOS.append(aString +
+                                    "\nV\n");
                     }
                     else
                     {
@@ -257,8 +257,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     }
 
     assert( aOS.isEmpty() && "aOS should be empty");
-    aOS.append(pSpecDataType_LF);
-    aOS.append(pKeyEOD);
+    aOS.append(OUString::Concat(pSpecDataType_LF) +
+                pKeyEOD);
     aOS.append('\n');
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 

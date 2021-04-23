@@ -1397,9 +1397,7 @@ OUString SdrOle2Obj::TakeObjNameSingul() const
 
     if (!aName.isEmpty())
     {
-        sName.append(" '");
-        sName.append(aName);
-        sName.append('\'');
+        sName.append(" '" + aName + "\'");
     }
 
     return sName.makeStringAndClear();

@@ -61,8 +61,7 @@ using namespace cppu;
 
 static OUString makeHierarchalNameSegment( const OUString & rIn  )
 {
-    OUStringBuffer aBuffer;
-    aBuffer.append( "['" );
+    OUStringBuffer aBuffer( "['" );
 
     sal_Int32 nCount = rIn.getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )

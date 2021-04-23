@@ -4654,30 +4654,27 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         break;
                     case ScConditionMode::EqLess:
-                        aCond.append("<=");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append("<=" + pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         break;
                     case ScConditionMode::EqGreater:
-                        aCond.append(">=");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append(">=" + pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         break;
                     case ScConditionMode::NotEqual:
-                        aCond.append("!=");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append("!=" + pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         break;
                     case ScConditionMode::Between:
-                        aCond.append("between(");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                        aCond.append(',');
-                        aCond.append(pEntry->GetExpression(aPos, 1, 0, formula::FormulaGrammar::GRAM_ODFF));
-                        aCond.append(')');
+                        aCond.append("between(" +
+                            pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF) +
+                            "," +
+                            pEntry->GetExpression(aPos, 1, 0, formula::FormulaGrammar::GRAM_ODFF) +
+                            ")");
                         break;
                     case ScConditionMode::NotBetween:
-                        aCond.append("not-between(");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                        aCond.append(',');
-                        aCond.append(pEntry->GetExpression(aPos, 1, 0, formula::FormulaGrammar::GRAM_ODFF));
-                        aCond.append(')');
+                        aCond.append("not-between(" +
+                                pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF) +
+                                "," +
+                                pEntry->GetExpression(aPos, 1, 0, formula::FormulaGrammar::GRAM_ODFF) +
+                                ")");
                         break;
                     case ScConditionMode::Duplicate:
                         aCond.append("duplicate");
@@ -4686,28 +4683,28 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         aCond.append("unique");
                         break;
                     case ScConditionMode::Direct:
-                        aCond.append("formula-is(");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append("formula-is(" +
+                                    pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         aCond.append(')');
                         break;
                     case ScConditionMode::Top10:
-                        aCond.append("top-elements(");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append("top-elements(" +
+                                    pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         aCond.append(")");
                         break;
                     case ScConditionMode::Bottom10:
-                        aCond.append("bottom-elements(");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append("bottom-elements(" +
+                                    pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         aCond.append(")");
                         break;
                     case ScConditionMode::TopPercent:
-                        aCond.append("top-percent(");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append("top-percent(" +
+                                pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         aCond.append(")");
                         break;
                     case ScConditionMode::BottomPercent:
-                        aCond.append("bottom-percent(");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append("bottom-percent(" +
+                                    pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         aCond.append(")");
                         break;
                     case ScConditionMode::AboveAverage:
@@ -4729,23 +4726,23 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         aCond.append("is-no-error");
                         break;
                     case ScConditionMode::BeginsWith:
-                        aCond.append("begins-with(");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append("begins-with(" +
+                                    pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         aCond.append(")");
                         break;
                     case ScConditionMode::EndsWith:
-                        aCond.append("ends-with(");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append("ends-with(" +
+                                    pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         aCond.append(")");
                         break;
                     case ScConditionMode::ContainsText:
-                        aCond.append("contains-text(");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append("contains-text(" +
+                                    pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         aCond.append(")");
                         break;
                     case ScConditionMode::NotContainsText:
-                        aCond.append("not-contains-text(");
-                        aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                        aCond.append("not-contains-text(" +
+                                    pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                         aCond.append(")");
                         break;
                     case ScConditionMode::NONE:

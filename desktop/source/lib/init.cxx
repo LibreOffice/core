@@ -6081,8 +6081,8 @@ public:
         OStringBuffer aOutput;
         for (const auto &s : aEvents)
         {
-            aOutput.append(OUStringToOString(s, RTL_TEXTENCODING_UTF8));
-            aOutput.append("\n");
+            aOutput.append(OUStringToOString(s, RTL_TEXTENCODING_UTF8) +
+                "\n");
         }
         OString aChunk = aOutput.makeStringAndClear();
         if (gImpl && gImpl->mpCallback)

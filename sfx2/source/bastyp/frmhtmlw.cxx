@@ -259,14 +259,12 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         aAny = xSet->getPropertyValue("FrameMarginWidth");
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_marginwidth)
-                .append('=').append(nVal);
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_marginwidth "="  + OString::number(nVal));
         }
         aAny = xSet->getPropertyValue("FrameMarginHeight");
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_marginheight)
-                .append('=').append(nVal);
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_marginheight "=" + OString::number(nVal));
         }
 
         bool bVal = true;
@@ -290,8 +288,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             if ( aAny >>= bVal )
             {
                 const char* pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_frameborder)
-                    .append('=').append(pStr);
+                sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_frameborder "=" + OString::Concat(pStr));
             }
         }
         rOut.WriteOString( sOut.makeStringAndClear() );

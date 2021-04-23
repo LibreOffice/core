@@ -574,8 +574,7 @@ void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::P
     aBuffer.append(';');
 
     // command
-    aBuffer.append(rURL.Protocol);
-    aBuffer.append(rURL.Path);
+    aBuffer.append(rURL.Protocol + rURL.Path);
     sal_Int32 nCount = rArgs.getLength();
 
     // parameters - only their names, not the values (could be sensitive!)
@@ -979,9 +978,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    OUStringBuffer aBuffer;
-    aBuffer.append(aEvent.FeatureURL.Complete);
-    aBuffer.append(u'=');
+    OUStringBuffer aBuffer = aEvent.FeatureURL.Complete + "=";
 
     if (aEvent.FeatureURL.Path == "Bold" ||
         aEvent.FeatureURL.Path == "CenterPara" ||

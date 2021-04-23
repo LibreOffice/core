@@ -348,7 +348,7 @@ public:
 
                         /// "Secure" currency formatted string.
     OUString       getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
-                            const OUString& rCurrencySymbol,
+                            std::u16string_view rCurrencySymbol,
                             bool bUseThousandSep = true ) const;
 
     // dummy returns, to be implemented
@@ -390,7 +390,7 @@ public:
 
     /** Append locale info to string, used with locale data checking.
         A string similar to "de_DE requested\n en_US loaded" is appended. */
-    OUString appendLocaleInfo(const OUString& rDebugMsg) const;
+    OUString appendLocaleInfo(std::u16string_view rDebugMsg) const;
 
     /** Output a message during locale data checking. The (UTF-8) string is
         written to stderr and in a non-product build or if DBG_UTIL is enabled

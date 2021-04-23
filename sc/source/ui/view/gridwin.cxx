@@ -4286,29 +4286,29 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     // TODO: we could define ocQuote for "
                     const OUString aQuote('"');
                     const OUString& sSep = ScCompiler::GetNativeSymbol( ocSep);
-                    OUStringBuffer aFormula;
-                    aFormula.append('=');
-                    aFormula.append(ScCompiler::GetNativeSymbol(ocDde));
-                    aFormula.append(ScCompiler::GetNativeSymbol(ocOpen));
-                    aFormula.append(aQuote);
-                    aFormula.append(aApp);
-                    aFormula.append(aQuote);
-                    aFormula.append(sSep);
-                    aFormula.append(aQuote);
-                    aFormula.append(aTopic);
-                    aFormula.append(aQuote);
-                    aFormula.append(sSep);
-                    aFormula.append(aQuote);
-                    aFormula.append(aItem);
-                    aFormula.append(aQuote);
-                    aFormula.append(ScCompiler::GetNativeSymbol(ocClose));
+                    OUString aFormula =
+                            "=" +
+                            ScCompiler::GetNativeSymbol(ocDde) +
+                            ScCompiler::GetNativeSymbol(ocOpen) +
+                            aQuote +
+                            aApp +
+                            aQuote +
+                            sSep +
+                            aQuote +
+                            aTopic +
+                            aQuote +
+                            sSep +
+                            aQuote +
+                            aItem +
+                            aQuote +
+                            ScCompiler::GetNativeSymbol(ocClose);
 
                     pView->DoneBlockMode();
                     pView->InitBlockMode( nDestPosX, nDestPosY, nThisTab );
                     pView->MarkCursor( nDestPosX + nSizeX - 1,
                                        nDestPosY + nSizeY - 1, nThisTab );
 
-                    pView->EnterMatrix( aFormula.makeStringAndClear(), ::formula::FormulaGrammar::GRAM_NATIVE );
+                    pView->EnterMatrix( aFormula, ::formula::FormulaGrammar::GRAM_NATIVE );
 
                     pView->MarkRange( aDest, false );
                     pView->SetCursor( aDest.aStart.Col(), aDest.aStart.Row() );
