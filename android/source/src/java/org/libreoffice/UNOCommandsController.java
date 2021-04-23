@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import static org.libreoffice.SearchController.addProperty;
 
 class UNOCommandsController implements View.OnClickListener {
-    private LibreOfficeMainActivity mActivity;
+    private final LibreOfficeMainActivity mActivity;
     private JSONObject mRootJSON = new JSONObject();
 
 
@@ -72,7 +72,7 @@ class UNOCommandsController implements View.OnClickListener {
                     })
                     .setIcon(android.R.drawable.ic_dialog_info)
                     .show();
-            TextView textView = (TextView) dialog.findViewById(android.R.id.message);
+            TextView textView = dialog.findViewById(android.R.id.message);
             if (textView != null) {
                 textView.setScroller(new Scroller(mActivity));
                 textView.setVerticalScrollBarEnabled(true);

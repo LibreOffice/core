@@ -71,7 +71,7 @@ public class ThumbnailCreator {
 
     class ThumbnailCreationTask{
         private final WeakReference<ImageView> imageViewReference;
-        private int partNumber;
+        private final int partNumber;
         private boolean cancelled = false;
 
         public ThumbnailCreationTask(ImageView imageView, int partNumber) {

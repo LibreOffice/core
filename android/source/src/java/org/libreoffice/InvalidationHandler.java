@@ -25,12 +25,12 @@ import java.util.List;
  * Parses (interprets) and handles invalidation messages from LibreOffice.
  */
 public class InvalidationHandler implements Document.MessageCallback, Office.MessageCallback {
-    private static String LOGTAG = InvalidationHandler.class.getSimpleName();
+    private static final String LOGTAG = InvalidationHandler.class.getSimpleName();
     private final DocumentOverlay mDocumentOverlay;
     private final GeckoLayerClient mLayerClient;
     private OverlayState mState;
     private boolean mKeyEvent = false;
-    private LibreOfficeMainActivity mContext;
+    private final LibreOfficeMainActivity mContext;
 
     private int currentTotalPageNumber = 0; // total page number of the current document
 

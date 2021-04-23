@@ -24,8 +24,6 @@ import org.mozilla.gecko.gfx.ComposedTileLayer;
  * Common static LOKit functions, functions to send events.
  */
 public class LOKitShell {
-    private static final String LOGTAG = LOKitShell.class.getSimpleName();
-
     public static float getDpi(Context context) {
         LOKitTileProvider tileProvider = ((LibreOfficeMainActivity)context).getTileProvider();
         if (tileProvider != null && tileProvider.isSpreadsheet())

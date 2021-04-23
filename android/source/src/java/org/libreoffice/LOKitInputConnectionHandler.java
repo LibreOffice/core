@@ -19,7 +19,7 @@ import org.mozilla.gecko.gfx.InputConnectionHandler;
  * directed to this class which is then directed further to LOKitThread.
  */
 public class LOKitInputConnectionHandler implements InputConnectionHandler {
-    private static String LOGTAG = LOKitInputConnectionHandler.class.getSimpleName();
+    private static final String LOGTAG = LOKitInputConnectionHandler.class.getSimpleName();
 
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
