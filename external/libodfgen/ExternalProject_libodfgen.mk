@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,libodfgen,build) :
 	$(call gb_Trace_StartRange,libodfgen,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
-		&& ./configure \
+		&& $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic \
 			$(if $(DISABLE_DYNLOADING), \
 				--enable-static --disable-shared \

@@ -95,11 +95,11 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(if $(liborcus_LIBS),LIBS='$(liborcus_LIBS)') \
 		$(if $(liborcus_CXXFLAGS),CXXFLAGS='$(liborcus_CXXFLAGS)') \
-		$(if $(liborcus_CPPFLAGS),CPPFLAGS='$(liborcus_CPPFLAGS)') \
+		$(if $(liborcus_CPPFLAGS),CPPFLAGS='$(liborcus_CPPFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS)') \
 		$(if $(liborcus_LDFLAGS),LDFLAGS='$(liborcus_LDFLAGS)') \
 		MDDS_CFLAGS='$(MDDS_CFLAGS)' \
 		MDDS_LIBS=' ' \
-		MAKE=$(MAKE) ./configure \
+		MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic \
 			$(if $(DISABLE_DYNLOADING), \
 				--enable-static --disable-shared \

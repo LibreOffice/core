@@ -26,7 +26,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 	$(call gb_ExternalProject_run,build, \
 		$(gb_WIN_GPG_cross_setup_exports) \
 		&& autoreconf \
-		&& ./configure \
+		&& $(gb_RUN_CONFIGURE) ./configure \
 		   --disable-shared \
 		   --disable-languages \
 		   --disable-gpgconf-test \
@@ -48,7 +48,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 	$(call gb_Trace_StartRange,gpgmepp,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
-		&& ./configure \
+		&& $(gb_RUN_CONFIGURE) ./configure \
 		   --disable-gpgconf-test \
 		   --disable-gpg-test \
 		   --disable-gpgsm-test \

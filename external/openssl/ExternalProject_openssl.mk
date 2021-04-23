@@ -49,6 +49,8 @@ OPENSSL_PLATFORM := \
           $(if $(filter MACOSX,$(OS)),\
             $(if $(filter X86_64,$(CPUNAME)),darwin64-x86_64-cc)\
             $(if $(filter AARCH64,$(CPUNAME)),darwin64-arm64-cc)\
+	  ,\
+	    $(if $(filter EMSCRIPTEN,$(OS)),no-engine no-dso no-dgram no-srtp no-err no-ocsp no-psk no-ts no-asm) \
           )\
         )\
       )\
