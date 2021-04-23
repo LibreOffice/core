@@ -74,6 +74,8 @@ extern "C" {
 #   elif defined _BIG_ENDIAN
 #       define OSL_BIGENDIAN
 #   endif
+#elif defined EMSCRIPTEN
+#   define OSL_LITENDIAN
 #else
 #   error "Target platform not specified !"
 #endif

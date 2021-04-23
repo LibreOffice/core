@@ -51,7 +51,7 @@ endif
 
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	boost_headers \
-	gpgmepp \
+	$(if $(ENABLE_GPGMEPP),gpgmepp) \
 	libxml2 \
 	xmlsec \
 ))
@@ -65,9 +65,6 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl \
 	xmlsecurity/source/xmlsec/xmlsec_init \
 	xmlsecurity/source/xmlsec/xmlstreamio \
-	xmlsecurity/source/xmlsec/nss/ciphercontext \
-	xmlsecurity/source/xmlsec/nss/digestcontext \
-	xmlsecurity/source/xmlsec/nss/nssinitializer \
 ))
 
 ifeq ($(ENABLE_GPGMEPP),TRUE)
@@ -110,24 +107,36 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/mscrypt/xmlsignature_mscryptimpl \
 ))
 
-else
+ifeq ($(ENABLE_NSS),TRUE)
 
-$(eval $(call gb_Library_add_defs,xsec_xmlsec,\
-	-DXMLSEC_CRYPTO_NSS \
+$(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
+	xmlsecurity/source/xmlsec/nss/ciphercontext \
+	xmlsecurity/source/xmlsec/nss/digestcontext \
+	xmlsecurity/source/xmlsec/nss/nssinitializer \
 ))
+
+# nss3 after static libs to appease --as-needed linkers
+$(eval $(call gb_Library_use_externals,xsec_xmlsec,\
+	nss3 \
+))
+
+endif
+
+else # !$(OS),WNT
 
 ifeq ($(SYSTEM_XMLSEC),)
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
-	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/nss/.libs/libxmlsec1-nss.a \
-	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/.libs/libxmlsec1.a \
+       $(call gb_UnpackedTarball_get_dir,xmlsec)/src/nss/.libs/libxmlsec1-nss.a \
+       $(call gb_UnpackedTarball_get_dir,xmlsec)/src/.libs/libxmlsec1.a \
 ))
 endif
 
-$(eval $(call gb_Library_use_externals,xsec_xmlsec,\
-	plc4 \
-))
+ifeq ($(ENABLE_NSS),TRUE)
 
 $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
+	xmlsecurity/source/xmlsec/nss/ciphercontext \
+	xmlsecurity/source/xmlsec/nss/digestcontext \
+	xmlsecurity/source/xmlsec/nss/nssinitializer \
 	xmlsecurity/source/xmlsec/nss/sanextension_nssimpl \
 	xmlsecurity/source/xmlsec/nss/secerror \
 	xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl \
@@ -137,17 +146,32 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/nss/xmlsignature_nssimpl \
 ))
 
-endif
+$(eval $(call gb_Library_add_defs,xsec_xmlsec,\
+	-DXMLSEC_CRYPTO_NSS \
+))
 
+$(eval $(call gb_Library_use_externals,xsec_xmlsec,\
+	plc4 \
+))
 # nss3 after static libs to appease --as-needed linkers
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	nss3 \
 ))
+
+else # ! $(ENABLE_NSS)
+
+ifeq ($(ENABLE_OPENSSL),TRUE)
+$(eval $(call gb_Library_use_external,xsec_xmlsec,openssl))
+endif
+
+endif # !$(ENABLE_NSS)
 
 ifeq ($(OS),SOLARIS)
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
 	-ldl \
 ))
 endif
+
+endif # !$(OS),WNT
 
 # vim: set noet sw=4 ts=4:

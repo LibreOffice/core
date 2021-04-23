@@ -53,8 +53,13 @@ double power(const double& fVal1, const double& fVal2)
     }
     // The pow() call must had been the most recent call to check errno or exception.
     if ((((math_errhandling & MATH_ERRNO) != 0) && (errno == EDOM || errno == ERANGE))
+// emscripten is currently broken by https://github.com/emscripten-core/emscripten/pull/11087
+// While the removal is correct for C99, it's not for C++11 (see http://www.cplusplus.com/reference/cfenv/FE_INEXACT/)
+// But since emscripten currently doesn't support any math exceptions, we simply ignore them
+#ifndef __EMSCRIPTEN__
         || (((math_errhandling & MATH_ERREXCEPT) != 0)
             && std::fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
+#endif
         || !std::isfinite(fPow))
     {
         fPow = CreateDoubleError(FormulaError::IllegalFPOperation);

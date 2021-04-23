@@ -13,6 +13,10 @@ $(eval $(call gb_ExternalProject_register_targets,libxml2,\
 	build \
 ))
 
+ifeq ($(OS),EMSCRIPTEN)
+$(call gb_ExternalProject_use_external_project,libxml2,icu)
+endif
+
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_use_external_project,libxml2,icu)
 
@@ -31,7 +35,7 @@ else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,libxml2,build):
 	$(call gb_Trace_StartRange,libxml2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
+		$(gb_RUN_CONFIGURE) ./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
 			--without-lzma \
 			$(if $(debug),--with-run-debug) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \

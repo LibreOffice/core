@@ -33,7 +33,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2 $(LIBXML_LIBS)" \
 		RASQAL_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,rasqal)/src" \
 		RASQAL_LIBS="-L$(call gb_UnpackedTarball_get_dir,rasqal)/src/.libs -lrasqal" \
-		./configure --disable-gtk-doc \
+		$(gb_RUN_CONFIGURE) ./configure --disable-gtk-doc \
 			--disable-modular \
 			--without-threads \
 			--without-bdb --without-sqlite --without-mysql \

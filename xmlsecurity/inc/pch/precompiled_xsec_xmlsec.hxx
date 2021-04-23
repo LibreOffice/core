@@ -33,7 +33,9 @@
 #include <memory>
 #include <new>
 #include <ostream>
+#ifdef XMLSEC_CRYPTO_NSS
 #include <pk11pub.h>
+#endif
 #include <stddef.h>
 #include <string.h>
 #include <string>
