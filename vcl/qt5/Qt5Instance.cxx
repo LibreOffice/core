@@ -54,6 +54,11 @@
 #include <mutex>
 #include <condition_variable>
 
+#ifdef EMSCRIPTEN
+#include <QtCore/QtPlugin>
+Q_IMPORT_PLUGIN(QWasmIntegrationPlugin)
+#endif
+
 namespace
 {
 /// TODO: not much Qt5 specific here? could be generalised, esp. for OSX...
@@ -427,7 +432,7 @@ OUString Qt5Instance::GetConnectionIdentifier() { return OUString(); }
 
 void Qt5Instance::AddToRecentDocumentList(const OUString&, const OUString&, const OUString&) {}
 
-OpenGLContext* Qt5Instance::CreateOpenGLContext() { return new Qt5OpenGLContext; }
+OpenGLContext* Qt5Instance::CreateOpenGLContext() { return nullptr; }
 
 bool Qt5Instance::IsMainThread() const
 {
@@ -570,7 +575,7 @@ void* Qt5Instance::CreateGStreamerSink(const SystemChildWindow* pWindow)
 
     return pVideosink;
 #else
-    (void*)pWindow;
+    Q_UNUSED(pWindow);
     return nullptr;
 #endif
 }
