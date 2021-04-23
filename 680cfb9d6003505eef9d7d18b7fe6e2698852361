@@ -34,6 +34,24 @@
       "revId": "680cfb9d6003505eef9d7d18b7fe6e2698852361",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd185b68_da819ef2",
+        "filename": "external/icu/ExternalProject_icu.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-04-23T15:41:48Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "682e9e3f_5a448398",
+      "revId": "680cfb9d6003505eef9d7d18b7fe6e2698852361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
