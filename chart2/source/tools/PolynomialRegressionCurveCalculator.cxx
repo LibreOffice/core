@@ -345,7 +345,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         {
             if ( bFindValue ) // if it is not the first aValue
                 aTmpBuf.append( " " );
-            aTmpBuf.append( OUStringChar(aMinusSign) ).append(" ");
+            aTmpBuf.append( OUStringChar(aMinusSign) + " ");
             aValue = - aValue;
         }
         else

@@ -100,9 +100,9 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
             bool bSuccess =
                 ::sax::Converter::convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
-                    OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
-                append("\" into a boolean!").getStr());
+                    OStringBuffer("PropertyConversion::convertString: could not convert \"" +
+                        OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
+                        "\" into a boolean!").getStr());
             aReturn <<= (_bInvertBoolean ? !bValue : bValue);
         }
         break;
@@ -114,9 +114,9 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                 bool bSuccess =
                     ::sax::Converter::convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
-                        OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                    append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
-                    append("\" into an integer!").getStr());
+                        OStringBuffer("PropertyConversion::convertString: could not convert \"" +
+                            OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
+                            "\" into an integer!").getStr());
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
                     aReturn <<= static_cast<sal_Int16>(nValue);
                 else
@@ -151,9 +151,9 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
             bool bSuccess =
                 ::sax::Converter::convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
-                    OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
-                append("\" into a double!").getStr());
+                    OStringBuffer(OString::Concat("PropertyConversion::convertString: could not convert \"") +
+                        OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
+                        "\" into a double!").getStr());
             aReturn <<= nValue;
         }
         break;
@@ -177,9 +177,9 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                 bool bSuccess =
                     ::sax::Converter::convertDouble(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
-                        OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                    append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
-                    append("\" into a double!").getStr());
+                        OStringBuffer("PropertyConversion::convertString: could not convert \"" +
+                            OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
+                            "\" into a double!").getStr());
 
                 // then convert it into the target type
                 switch (nType)

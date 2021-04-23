@@ -172,10 +172,9 @@ void Keys::refresh()
 
             if( css::sdbcx::KeyType::FOREIGN == keyType )
             {
-                OUStringBuffer buf( 128 );
-                buf.append( xRow->getString( 6 ) ).append( "." ).append( xRow->getString( 5 ) );
+                OUString buf = xRow->getString( 6 ) + "." + xRow->getString( 5 );
                 pKey->setPropertyValue_NoBroadcast_public(
-                    st.REFERENCED_TABLE, makeAny( buf.makeStringAndClear() ) );
+                    st.REFERENCED_TABLE, makeAny( buf ) );
 
                 Int2StringMap foreignMap;
                 fillAttnum2attnameMap( foreignMap, m_origin, xRow->getString(6), xRow->getString(5));

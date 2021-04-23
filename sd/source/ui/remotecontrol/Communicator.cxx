@@ -82,13 +82,12 @@ void Communicator::execute()
                                       Transmitter::PRIORITY_HIGH );
         }
 
-        OStringBuffer aBuffer;
-        aBuffer
-          .append( "slideshow_info\n" )
-          .append( OUStringToOString( ::comphelper::DocumentInfo::getDocumentTitle( xFrame->getController()->getModel() ), RTL_TEXTENCODING_UTF8 ) )
-          .append("\n\n");
+        OString aBuffer =
+            "slideshow_info\n" +
+            OUStringToOString( ::comphelper::DocumentInfo::getDocumentTitle( xFrame->getController()->getModel() ), RTL_TEXTENCODING_UTF8 ) +
+            "\n\n";
 
-        pTransmitter->addMessage( aBuffer.makeStringAndClear(), Transmitter::PRIORITY_LOW );
+        pTransmitter->addMessage( aBuffer.getStr(), Transmitter::PRIORITY_LOW );
     }
     catch (uno::RuntimeException &)
     {

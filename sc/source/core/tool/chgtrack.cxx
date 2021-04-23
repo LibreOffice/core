@@ -426,20 +426,15 @@ void ScChangeAction::GetDescription(
     // not properly restored in formulas. See specification at
     // http://specs.openoffice.org/calc/ease-of-use/redlining_comment.sxw
 
-    OUStringBuffer aBuf(rStr); // Take the original string.
     if (GetType() == SC_CAT_MOVE)
     {
-        aBuf.append(
-            ScResId(STR_CHANGED_MOVE_REJECTION_WARNING)).append(" ");
-        rStr = aBuf.makeStringAndClear();
+        rStr += ScResId(STR_CHANGED_MOVE_REJECTION_WARNING) + " ";
         return;
     }
 
     if (IsInsertType())
     {
-        aBuf.append(
-            ScResId(STR_CHANGED_DELETE_REJECTION_WARNING)).append(" ");
-        rStr = aBuf.makeStringAndClear();
+        rStr += ScResId(STR_CHANGED_DELETE_REJECTION_WARNING) + " ";
         return;
     }
 
@@ -454,19 +449,13 @@ void ScChangeAction::GetDescription(
 
     if (pReject->GetType() == SC_CAT_MOVE)
     {
-        aBuf.append(
-            ScResId(STR_CHANGED_MOVE_REJECTION_WARNING));
-        aBuf.append(' ');
-        rStr = aBuf.makeStringAndClear();
+        rStr += ScResId(STR_CHANGED_MOVE_REJECTION_WARNING) + " ";
         return;
     }
 
     if (pReject->IsDeleteType())
     {
-        aBuf.append(
-            ScResId(STR_CHANGED_DELETE_REJECTION_WARNING));
-        aBuf.append(' ');
-        rStr = aBuf.makeStringAndClear();
+        rStr += ScResId(STR_CHANGED_DELETE_REJECTION_WARNING) + " ";
         return;
     }
 
@@ -482,15 +471,9 @@ void ScChangeAction::GetDescription(
         return;
 
     if( itChangeAction->second->GetType() == SC_CAT_MOVE)
-        aBuf.append(
-            ScResId(STR_CHANGED_MOVE_REJECTION_WARNING));
+        rStr += ScResId(STR_CHANGED_MOVE_REJECTION_WARNING) + " ";
     else
-        aBuf.append(
-            ScResId(STR_CHANGED_DELETE_REJECTION_WARNING));
-
-    aBuf.append(' ');
-    rStr = aBuf.makeStringAndClear();
-    return;
+        rStr += ScResId(STR_CHANGED_DELETE_REJECTION_WARNING) + " ";
 }
 
 OUString ScChangeAction::GetRefString(
@@ -707,15 +690,13 @@ void ScChangeActionIns::GetDescription(
         return;
 
     // Construct a range string to replace '#1' first.
-    OUStringBuffer aBuf(ScResId(pWhatId));
-    aBuf.append(' ');
-    aBuf.append(GetRefString(GetBigRange(), rDoc));
-    OUString aRangeStr = aBuf.makeStringAndClear();
+    OUString aRangeStr = ScResId(pWhatId) +
+        " " +
+        GetRefString(GetBigRange(), rDoc);
 
     aRsc = aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the range string.
 
-    aBuf.append(rStr).append(aRsc);
-    rStr = aBuf.makeStringAndClear();
+    rStr += aRsc;
 }
 
 bool ScChangeActionIns::IsEndOfList() const
@@ -955,15 +936,11 @@ void ScChangeActionDel::GetDescription(
         return;
 
     // Build a string to replace with.
-    OUStringBuffer aBuf;
-    aBuf.append(ScResId(pWhatId));
-    aBuf.append(' ');
-    aBuf.append(GetRefString(aTmpRange, rDoc));
-    OUString aRangeStr = aBuf.makeStringAndClear();
+    OUString aRangeStr = ScResId(pWhatId) + " " +
+        GetRefString(aTmpRange, rDoc);
     aRsc = aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the string.
 
-    aBuf.append(rStr).append(aRsc);
-    rStr = aBuf.makeStringAndClear(); // append to the original.
+    rStr += aRsc; // append to the original.
 }
 
 bool ScChangeActionDel::Reject( ScDocument& rDoc )

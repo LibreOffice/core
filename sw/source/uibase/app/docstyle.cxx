@@ -1006,10 +1006,10 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         {
             if (!aDesc.isEmpty())
                 aDesc.append(sPlus);
-            aDesc.append(SwResId(STR_PAGEBREAK)).append(sPlus).append(sModel);
+            aDesc.append(SwResId(STR_PAGEBREAK) + sPlus + sModel);
             if (sPageNum != "0")
             {
-                aDesc.append(sPlus).append(SwResId(STR_PAGEOFFSET)).append(sPageNum);
+                aDesc.append(sPlus + SwResId(STR_PAGEOFFSET) + sPageNum);
             }
         }
         else if (!sBreak.isEmpty()) // Break can be valid only when NO Model

@@ -228,17 +228,17 @@ OUString ScAsciiOptions::WriteToString() const
 
     aOutStr.append(",")
                //Token 5: Language
-               .append(static_cast<sal_Int32>(static_cast<sal_uInt16>(eLang))).append(",")
+               .append(static_cast<sal_Int32>(static_cast<sal_uInt16>(eLang))).append("," +
                //Token 6: Import quoted field as text.
-               .append(OUString::boolean( bQuotedFieldAsText )).append(",")
+               OUString::boolean( bQuotedFieldAsText ) + "," +
                //Token 7: Detect special numbers.
-               .append(OUString::boolean( bDetectSpecialNumber )).append(",")
+               OUString::boolean( bDetectSpecialNumber ) + "," +
                // Token 8: used for "Save as shown" in export options
-               .append(OUString::boolean( bSaveAsShown )).append(",")
+               OUString::boolean( bSaveAsShown ) +"," +
                // Token 9: used for "Save cell formulas" in export options
-               .append(OUString::boolean( bSaveFormulas )).append(",")
+               OUString::boolean( bSaveFormulas ) + "," +
                //Token 10: Trim Space
-               .append(OUString::boolean( bRemoveSpace ));
+               OUString::boolean( bRemoveSpace ));
     return aOutStr.makeStringAndClear();
 }
 

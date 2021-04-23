@@ -345,7 +345,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
         sal_Int32       i = 0;
         for (i = 0; i < c - 1; ++i)
         {
-            sParentPath.append(lFolders[i]).append(PATH_SEPARATOR);
+            sParentPath.append(lFolders[i] + PATH_SEPARATOR);
         }
 
         auto pParent = m_lStorages.find(sParentPath.makeStringAndClear());

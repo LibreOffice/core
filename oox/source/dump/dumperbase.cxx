@@ -2409,7 +2409,7 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
                 matching end element on the same line in the next iteration. */
             if( bStartElem )
             {
-                aOldStartElem.append( aElem ).append( aText );
+                aOldStartElem.append( aElem + aText );
             }
             else
             {

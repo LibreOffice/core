@@ -325,9 +325,9 @@ OUString getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
 void lclAppendStyle(OUStringBuffer& aBuffer, std::u16string_view aTag, std::u16string_view aStyle)
 {
     if (aStyle.empty())
-        aBuffer.append("<").append(aTag).append(">");
+        aBuffer.append(OUString::Concat("<") + aTag + ">");
     else
-        aBuffer.append("<").append(aTag).append(" style=\"").append(aStyle).append("\">");
+        aBuffer.append(OUString::Concat("<") + aTag + " style=\"" + aStyle + "\">");
 }
 
 } // anonymous namespace
@@ -1334,7 +1334,7 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
             lclAppendStyle(aStr, aTag, getParagraphStyle(pOutliner, nIndex));
 
             aStr.append(aParaText);
-            aStr.append("</").append(aTag).append(">\r\n");
+            aStr.append("</" + aTag + ">\r\n");
         }
         else
         {
@@ -1578,7 +1578,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         // HTML Head
         OUStringBuffer aStr(gaHTMLHeader);
         aStr.append(CreateMetaCharset());
-        aStr.append("  <title>" ).append( StringToHTMLString(maPageNames[nSdPage]) ).append("</title>\r\n");
+        aStr.append("  <title>" + StringToHTMLString(maPageNames[nSdPage]) + "</title>\r\n");
 
         // insert timing information
         pPage = maPages[ nSdPage ];
@@ -2793,7 +2793,7 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
             if (nPoint < nNoOfPoints - 1)
                 aStr.append(',');
         }
-        aStr.append("\" href=\"").append(rHRef).append("\">\n");
+        aStr.append(OUString::Concat("\" href=\"") + rHRef + "\">\n");
     }
 
     return aStr.makeStringAndClear();

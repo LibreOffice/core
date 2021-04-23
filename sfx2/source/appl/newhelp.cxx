@@ -945,10 +945,11 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
 
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        aUserData.append(";").append(INetURLObject::encode(
-            m_xSearchED->get_text(i),
-            INetURLObject::PART_UNO_PARAM_VALUE,
-            INetURLObject::EncodeMechanism::All ));
+        aUserData.append(";" +
+            INetURLObject::encode(
+                m_xSearchED->get_text(i),
+                INetURLObject::PART_UNO_PARAM_VALUE,
+                INetURLObject::EncodeMechanism::All ));
     }
 
     Any aUserItem = makeAny( aUserData.makeStringAndClear() );

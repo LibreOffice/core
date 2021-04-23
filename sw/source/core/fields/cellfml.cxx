@@ -1115,17 +1115,17 @@ void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUStringBuffer& rN
                 if( pFnd == rTableUpd.m_aData.pDelTable )
                 {
                     if( rTableUpd.m_pTable != &rTable ) // not the current one
-                        rNewStr.append(rTableUpd.m_pTable->GetFrameFormat()->GetName()).append("."); // set new table name
+                        rNewStr.append(rTableUpd.m_pTable->GetFrameFormat()->GetName() + "."); // set new table name
                     rTableUpd.m_bModified = true;
                 }
                 else if( pFnd != rTableUpd.m_pTable ||
                     ( rTableUpd.m_pTable != &rTable && &rTable != rTableUpd.m_aData.pDelTable))
-                    rNewStr.append(sTableNm).append("."); // keep table name
+                    rNewStr.append(sTableNm + "."); // keep table name
                 else
                     rTableUpd.m_bModified = true;
             }
             else
-                rNewStr.append(sTableNm).append(".");     // keep table name
+                rNewStr.append(sTableNm + ".");     // keep table name
         }
     }
     if( pTableNmBox == pLastBox )
@@ -1207,18 +1207,18 @@ void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUStringBuffer& rN
             if( !bInNewTable )
             {
                 rTableUpd.m_bModified = true;
-                rNewStr.append(rTableUpd.m_pTable->GetFrameFormat()->GetName()).append(".");
+                rNewStr.append(rTableUpd.m_pTable->GetFrameFormat()->GetName() + ".");
             }
             else if( !sTableNm.isEmpty() )
-                rNewStr.append(sTableNm).append(".");
+                rNewStr.append(sTableNm + ".");
         }
         else if( bInNewTable )
         {
             rTableUpd.m_bModified = true;
-            rNewStr.append(*rTableUpd.m_aData.pNewTableNm).append(".");
+            rNewStr.append(*rTableUpd.m_aData.pNewTableNm + ".");
         }
         else if( !sTableNm.isEmpty() )
-            rNewStr.append(sTableNm).append(".");
+            rNewStr.append(sTableNm + ".");
     }
 
     if( pLastBox )

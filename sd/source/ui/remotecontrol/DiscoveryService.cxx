@@ -164,10 +164,9 @@ void SAL_CALL DiscoveryService::run()
             OString aString( aBuffer, strlen( "LOREMOTE_SEARCH" ) );
             if ( aString == "LOREMOTE_SEARCH" )
             {
-                OStringBuffer aStringBuffer("LOREMOTE_ADVERTISE\n");
-                aStringBuffer.append( OUStringToOString(
-                                              osl::SocketAddr::getLocalHostname(), RTL_TEXTENCODING_UTF8 ) )
-                    .append( "\n\n" );
+                OString aStringBuffer = "LOREMOTE_ADVERTISE\n" +
+                    OUStringToOString(osl::SocketAddr::getLocalHostname(), RTL_TEXTENCODING_UTF8 ) +
+                    "\n\n";
                 if ( sendto( mSocket, aStringBuffer.getStr(),
                              aStringBuffer.getLength(), 0, reinterpret_cast<sockaddr*>(&aAddr),
                              sizeof(aAddr) ) <= 0 )

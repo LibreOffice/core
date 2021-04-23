@@ -332,7 +332,7 @@ OUString FTPURL::parent(bool internal) const
     if(last.isEmpty())
         bff.append("..");
     else if ( last == ".." )
-        bff.append(last).append("/..");
+        bff.append(last + "/..");
 
     bff.append(m_aType);
     return bff.makeStringAndClear();

@@ -90,7 +90,7 @@ namespace cmis
 
                 if ( !sSegment.isEmpty( ) )
                 {
-                    sEncodedPath.append("/").append(rtl::Uri::encode( sSegment,
+                    sEncodedPath.append("/" + rtl::Uri::encode( sSegment,
                             rtl_UriCharClassRelSegment,
                             rtl_UriEncodeKeepEscapes,
                             RTL_TEXTENCODING_UTF8 ));

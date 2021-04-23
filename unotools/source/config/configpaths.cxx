@@ -53,7 +53,7 @@ void lcl_resolveCharEntities(OUString & aLocalString)
         OSL_ENSURE(ch,"Configuration path contains '&' that is not part of a valid character escape");
         if (ch)
         {
-            aResult.append(aLocalString.subView(nStart,nEscapePos-nStart)).append(ch);
+            aResult.append(aLocalString.subView(nStart,nEscapePos-nStart) + OUStringChar(ch));
 
             sal_Int32 nEscapeEnd=aLocalString.indexOf(';',nEscapePos);
             nStart = nEscapeEnd+1;
@@ -245,7 +245,7 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
     OUStringBuffer aNormalized(_sType.getLength() + _sContent.getLength() + 4); // reserve approximate size initially
 
     // prefix: type, opening bracket and quote
-    aNormalized.append( _sType ).append( "['" );
+    aNormalized.append( _sType + "['" );
 
     // content: copy over each char and handle escaping
     for(const sal_Unicode* pCur = pBeginContent; pCur != pEndContent; ++pCur)

@@ -316,7 +316,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             break;
         case 0x2208: // in
         case 0x2209: // notin
-            rRet.append(" func ").append(OUStringChar(nChar)).append(" ");
+            rRet.append(" func " + OUStringChar(nChar) + " ");
             break;
         case 0x220d: // owns
             rRet.append(u" func \u220b ");
@@ -432,7 +432,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
         case 0x2289: // nsupseteq
         case 0x22b2: // NORMAL SUBGROUP OF
         case 0x22b3: // CONTAINS AS NORMAL SUBGROUP
-            rRet.append(" func ").append(OUStringChar(nChar)).append(" ");
+            rRet.append(" func " + OUStringChar(nChar) + " ");
             break;
         case 0x22a5:
             pC = " ortho ";
@@ -1438,7 +1438,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 else if (nPart == 1)
                                 {
                                     rRet.insert(0, sPush);
-                                    rRet.append(" over ").append(sMainTerm);
+                                    rRet.append(" over " + sMainTerm);
                                     sPush.clear();
                                     sMainTerm.clear();
                                 }
@@ -2891,7 +2891,7 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
 
                 aStr.clear();
                 TypeFaceToString(aStr,nTypeFace);
-                rRet.append(aStr).append("{");
+                rRet.append(aStr + "{");
             }
             else
                 rRet.append(" {");
@@ -2935,7 +2935,7 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
 
     if ((xfEMBELL(nTag)) && (!bSilent))
     {
-        rRet.append("}}").append(sPost);  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
+        rRet.append("}}" + sPost);  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
         rTextStart = rRet.getLength();
     }
     return bRet;

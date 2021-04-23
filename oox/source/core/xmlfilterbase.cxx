@@ -602,7 +602,7 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const Sequence< OU
 
     for( const OUString& rItem : aItems )
     {
-        sRep.append( " " ).append( rItem );
+        sRep.append( " " + rItem );
     }
 
     writeElement( pDoc, nXmlElement, sRep.makeStringAndClear() );
