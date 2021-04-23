@@ -19,7 +19,9 @@ Qt5MainWindow::Qt5MainWindow(Qt5Frame& rFrame, Qt::WindowFlags f)
     : QMainWindow(nullptr, f)
     , m_rFrame(rFrame)
 {
+#ifndef EMSCRIPTEN
     QAccessible::installFactory(Qt5AccessibleWidget::customFactory);
+#endif
 }
 
 void Qt5MainWindow::closeEvent(QCloseEvent* pEvent)
