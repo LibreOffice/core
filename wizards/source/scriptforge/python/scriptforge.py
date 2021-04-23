@@ -105,7 +105,7 @@ class ScriptForge(object, metaclass = _Singleton):
     Version = '7.2'  # Actual version number
     #
     # Basic dispatcher for Python scripts
-    basicdispatcher = '@application:ScriptForge.SF_PythonHelper._PythonDispatcher'
+    basicdispatcher = '@application#ScriptForge.SF_PythonHelper._PythonDispatcher'
     # Python helper functions module
     pythonhelpermodule = 'ScriptForgeHelper.py'
     #
@@ -170,7 +170,7 @@ class ScriptForge(object, metaclass = _Singleton):
                 url = 'uno:%s;urp;StarOffice.ComponentContext' % conn
                 ctx = resolver.resolve(url)
             except Exception:  # thrown when LibreOffice specified instance isn't started
-                raise ConnectionError(
+                raise SystemExit(
                     'Connection to LibreOffice failed (host = ' + hostname + ', port = ' + str(port) + ')')
             return ctx
         elif len(hostname) == 0 and port == 0:  # Usual interactive mode
@@ -198,9 +198,9 @@ class ScriptForge(object, metaclass = _Singleton):
                 "application"            a shared library                               (BASIC)
                 "share"                  a library of LibreOffice Macros                (PYTHON)
             :param script: Either
-                    [@][scope:][library.]module.method - Must not be a class module or method
+                    [@][scope#][library.]module.method - Must not be a class module or method
                         [@] means that the targeted method accepts ParamArray arguments (Basic only)
-                    [scope:][directory/]module.py$method - Must be a method defined at module level
+                    [scope#][directory/]module.py$method - Must be a method defined at module level
             :return: the value returned by the invoked script, or an error if the script was not found
             """
 
@@ -218,26 +218,26 @@ class ScriptForge(object, metaclass = _Singleton):
                 script = script[1:]
                 paramarray = True
             scope = ''
-            if ':' in script:
-                scope, script = script.split(':')
+            if '#' in script:
+                scope, script = script.split('#')
             if '.py$' in script.lower():  # Python
                 if len(scope) == 0:
                     scope = 'share'     # Default for Python
-                uri = 'vnd.sun.star.script:' + script + '?language=Python&location=' + scope
+                uri = 'vnd.sun.star.script:{0}?language=Python&location={1}'.format(script, scope)
             else:  # Basic
                 if len(scope) == 0:
                     scope = 'application'     # Default for Basic
                 lib = ''
                 if len(script.split('.')) < 3:
                     lib = cls.library + '.'     # Default library = ScriptForge
-                uri = 'vnd.sun.star.script:' + lib + script + '?language=Basic&location=' + scope
+                uri = 'vnd.sun.star.script:{0}{1}?language=Basic&location={2}'.format(lib, script, scope)
             # Get the script object
             fullscript = ('@' if paramarray else '') + scope + ':' + script
             try:
                 xscript = cls.scriptprovider.getScript(uri)
             except Exception:
-                raise SystemExit('The script ' + "'" + script + "'"
-                                 + ' could not be located in your LibreOffice installation')
+                raise RuntimeError(
+                    'The script \'{0}\' could not be located in your LibreOffice installation'.format(script))
         else:  # Should not happen
             return None
 
@@ -884,6 +884,30 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'DebugPrint', param)
 
         @classmethod
+        def PythonShell(cls, variables = None):
+            """
+                Open an APSO python shell window - Thanks to its author Hanya
+                :param variables: Use PythonShell.(loc = globals()) to push the global dictionary to the shell window
+                """
+            if variables is None:
+                variables = locals()
+            # Is APSO installed ?
+            ctx = ScriptForge.componentcontext
+            ext = ctx.getByName('/singletons/com.sun.star.deployment.PackageInformationProvider')
+            apso = 'apso.python.script.organizer'
+            if len(ext.getPackageLocation(apso)) > 0:
+                # Directly derived from apso.oxt|python|scripts|tools.py$console
+                # we need to load apso before import statement
+                ctx.ServiceManager.createInstance('apso.python.script.organizer.impl')
+                # now we can use apso_utils library
+                from apso_utils import console
+                kwargs = {'loc': variables}
+                kwargs['loc'].setdefault('XSCRIPTCONTEXT', uno)
+                console(**kwargs)
+            else:
+                raise RuntimeError('The APSO extension could not be located in your LibreOffice installation')
+
+        @classmethod
         def RaiseFatal(cls, errorcode, *args):
             """
                 Generate a run-time error caused by an anomaly in a user script detected by ScriptForge
@@ -1157,7 +1181,7 @@ class SFScriptForge:
 
         @classmethod
         def ExecutePythonScript(cls, scope = '', script = '', *args):
-            return cls.SIMPLEEXEC(scope + ':' + script, *args)
+            return cls.SIMPLEEXEC(scope + '#' + script, *args)
 
         def HasUnoMethod(self, unoobject, methodname):
             return self.ExecMethod(self.vbMethod, 'HasUnoMethod', unoobject, methodname)
@@ -1958,7 +1982,8 @@ def CreateScriptService(service, *args):
     if len(args) == 0:
         serv = ScriptForge.InvokeBasicService('SF_Services', SFServices.vbMethod, 'CreateScriptService', service)
     else:
-        serv = ScriptForge.InvokeBasicService('SF_Services', SFServices.vbMethod, 'CreateScriptService', service, *args)
+        serv = ScriptForge.InvokeBasicService('SF_Services', SFServices.vbMethod, 'CreateScriptService',
+                                              service, *args)
     return serv
 
 
