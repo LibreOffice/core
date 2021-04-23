@@ -7,8 +7,8 @@ import android.net.Uri;
  */
 public class RecentFile {
 
-    private Uri uri;
-    private String displayName;
+    private final Uri uri;
+    private final String displayName;
 
     public RecentFile(Uri docUri, String name) {
         uri = docUri;

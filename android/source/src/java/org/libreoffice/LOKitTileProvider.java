@@ -12,7 +12,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.os.Build;
-import android.os.Environment;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
@@ -26,7 +25,6 @@ import org.libreoffice.kit.DirectBufferAllocator;
 import org.libreoffice.kit.Document;
 import org.libreoffice.kit.LibreOfficeKit;
 import org.libreoffice.kit.Office;
-import org.libreoffice.ui.FileUtilities;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.IntSize;
@@ -39,22 +37,22 @@ import java.nio.ByteBuffer;
  */
 class LOKitTileProvider implements TileProvider {
     private static final String LOGTAG = LOKitTileProvider.class.getSimpleName();
-    private static int TILE_SIZE = 256;
+    private static final int TILE_SIZE = 256;
     private final float mTileWidth;
     private final float mTileHeight;
     private String mInputFile;
     private Office mOffice;
     private Document mDocument;
-    private boolean mIsReady = false;
-    private LibreOfficeMainActivity mContext;
+    private final boolean mIsReady;
+    private final LibreOfficeMainActivity mContext;
 
-    private float mDPI;
+    private final float mDPI;
     private float mWidthTwip;
     private float mHeightTwip;
 
-    private Document.MessageCallback mMessageCallback;
+    private final Document.MessageCallback mMessageCallback;
 
-    private long objectCreationTime = System.currentTimeMillis();
+    private final long objectCreationTime = System.currentTimeMillis();
 
     /**
      * Initialize LOKit and load the document.
@@ -73,7 +71,6 @@ class LOKitTileProvider implements TileProvider {
         mOffice.setOptionalFeatures(Document.LOK_FEATURE_DOCUMENT_PASSWORD);
         mContext.setTileProvider(this);
         mInputFile = input;
-        File f = new File(mInputFile);
 
         Log.i(LOGTAG, "====> Loading file '" + input + "'");
 
@@ -251,7 +248,7 @@ class LOKitTileProvider implements TileProvider {
 
     public void removePart() {
         try{
-            if(isSpreadsheet() == false && isPresentation() == false) {
+            if (!isSpreadsheet() && !isPresentation()) {
                 //document must be spreadsheet or presentation
                 return;
             }

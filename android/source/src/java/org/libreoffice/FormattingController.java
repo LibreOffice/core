@@ -40,7 +40,7 @@ class FormattingController implements View.OnClickListener {
     private static final int SELECT_PHOTO = 2;
     private static final int IMAGE_BUFFER_SIZE = 4 * 1024;
 
-    private LibreOfficeMainActivity mContext;
+    private final LibreOfficeMainActivity mContext;
     private String mCurrentPhotoPath;
 
     FormattingController(LibreOfficeMainActivity context) {

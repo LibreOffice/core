@@ -23,8 +23,8 @@ import java.util.List;
 
 class RecentFilesAdapter extends RecyclerView.Adapter<RecentFilesAdapter.ViewHolder> {
 
-    private LibreOfficeUIActivity mActivity;
-    private List<RecentFile> recentFiles;
+    private final LibreOfficeUIActivity mActivity;
+    private final List<RecentFile> recentFiles;
 
     RecentFilesAdapter(LibreOfficeUIActivity activity, List<RecentFile> recentFiles) {
         this.mActivity = activity;

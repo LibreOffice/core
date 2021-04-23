@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SearchController implements View.OnClickListener {
-    private LibreOfficeMainActivity mActivity;
+    private final LibreOfficeMainActivity mActivity;
 
     private enum SearchDirection {
         UP, DOWN

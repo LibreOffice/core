@@ -26,8 +26,6 @@ import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
-import java.io.File;
-
 public class AboutDialogFragment extends DialogFragment {
 
     @NonNull @Override

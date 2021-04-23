@@ -79,7 +79,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     Toolbar toolbarTop;
 
     private ListView mDrawerList;
-    private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
+    private final List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private DocumentOverlay mDocumentOverlay;
     /** URI to save the document to. */

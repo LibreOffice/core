@@ -19,7 +19,6 @@ import android.widget.TextView;
 import java.util.List;
 
 public class DocumentPartViewListAdapter extends ArrayAdapter<DocumentPartView> {
-    private static final String LOGTAG = DocumentPartViewListAdapter.class.getSimpleName();
 
     private final Activity activity;
     private final ThumbnailCreator thumbnailCollector;

@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import org.libreoffice.canvas.SelectionHandle;
-import org.libreoffice.ui.LibreOfficeUIActivity;
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
@@ -26,13 +25,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 class LOKitThread extends Thread {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();
 
-    private LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
+    private final LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
 
     private TileProvider mTileProvider;
     private InvalidationHandler mInvalidationHandler;
     private ImmutableViewportMetrics mViewportMetrics;
     private GeckoLayerClient mLayerClient;
-    private LibreOfficeMainActivity mContext;
+    private final LibreOfficeMainActivity mContext;
 
     LOKitThread(LibreOfficeMainActivity context) {
         mContext = context;

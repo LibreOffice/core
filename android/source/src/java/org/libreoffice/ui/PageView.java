@@ -17,7 +17,7 @@ import android.view.View;
 public class PageView extends View{
     private Bitmap bmp;
     private Paint mPaintBlack;
-    private String tag = "PageView";
+    private static final String LOGTAG = "PageView";
 
     public PageView(Context context ) {
         super(context);
@@ -27,7 +27,7 @@ public class PageView extends View{
     public PageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.dummy_page);
-        Log.d( tag , bmp.toString());
+        Log.d(LOGTAG, bmp.toString());
         intialise();
     }
     public PageView(Context context, AttributeSet attrs, int defStyle) {
@@ -39,7 +39,7 @@ public class PageView extends View{
     private void intialise(){
         mPaintBlack = new Paint();
         mPaintBlack.setARGB(255, 0, 0, 0);
-        Log.d(tag, " Doing some set-up");
+        Log.d(LOGTAG, " Doing some set-up");
     }
 
     public void setBitmap(Bitmap bmp){
@@ -49,8 +49,8 @@ public class PageView extends View{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d(tag, "Draw");
-        Log.d(tag, Integer.toString(bmp.getHeight()));
+        Log.d(LOGTAG, "Draw");
+        Log.d(LOGTAG, Integer.toString(bmp.getHeight()));
         if( bmp != null ){
             int horizontalMargin = (int) (canvas.getWidth()*0.1);
             //int verticalMargin = (int) (canvas.getHeight()*0.1);
