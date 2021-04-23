@@ -743,6 +743,22 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
         return;
     }
 
+    uno::Reference<io::XSeekable> xNewSeekable(xNewObjectStream, uno::UNO_QUERY);
+    if (xNewSeekable.is() && xNewSeekable->getLength() == 0)
+    {
+        uno::Reference<io::XSeekable> xOldSeekable(m_xObjectStream, uno::UNO_QUERY);
+        if (xOldSeekable.is() && xOldSeekable->getLength() > 0)
+        {
+            SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::SwitchOwnPersistence(stream version): "
+                                        "empty new stream, reusing old one");
+            uno::Reference<io::XInputStream> xInput = m_xObjectStream->getInputStream();
+            uno::Reference<io::XOutputStream> xOutput = xNewObjectStream->getOutputStream();
+            xOldSeekable->seek(0);
+            comphelper::OStorageHelper::CopyInputToOutput(xInput, xOutput);
+            xNewSeekable->seek(0);
+        }
+    }
+
     try {
         uno::Reference< lang::XComponent > xComponent( m_xObjectStream, uno::UNO_QUERY );
         OSL_ENSURE( !m_xObjectStream.is() || xComponent.is(), "Wrong stream implementation!" );
