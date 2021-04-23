@@ -34,6 +34,24 @@
       "revId": "700fe95fac2e2f592159f189ed3ac9e633bf749d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a054dbb8_65445b0c",
+        "filename": "emfio/qa/cppunit/emf/EmfImportTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-23T09:44:04Z",
+      "side": 1,
+      "message": "\u003e That\u0027s what we had before, a forest of HAVE_FEATURE_PDFIUM ifdefs, see e.g. commit faf3f18bdc89cc5e04abdefcb12d63e6ef796396. The problem with that approach is that e.g. Fedora builds with pdfium disabled, but pdfium is enabled on ~all tinderboxes, so nobody sees those failures before a release. My hope is that if this is a runtime check, then we don\u0027t have to maintain these stubs in parallel. But if you think even removing HAVE_FEATURE_PDFIUM is going too far, we could introduce it back, just for testcase purposes.\n\nAh, so we had HAVE_FEATURE_PDFIUM until \u003chttps://git.libreoffice.org/core/+/9e63e22c4d584e49577d08d3ecb94233be680bbf%5E!/\u003e \"vcl PDFiumLibraryTest: clean up not needed HAVE_FEATURE_PDFIUM ifdefs\" removed it.  Yes, I think it would arguably be better to bring it back and use it here.  I can eventually take care of that.",
+      "parentUuid": "39d9ba32_602eee84",
+      "revId": "700fe95fac2e2f592159f189ed3ac9e633bf749d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
