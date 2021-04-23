@@ -31,7 +31,7 @@ else
 $(call gb_ExternalProject_get_state_target,apr_util,build):
 	$(call gb_Trace_StartRange,apr_util,EXTERNAL)
 	+$(call gb_ExternalProject_run,build,\
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 			--enable-static --disable-shared \
 			--with-pic \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\

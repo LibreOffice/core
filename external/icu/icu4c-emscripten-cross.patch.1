@@ -1,0 +1,99 @@
+--- icu/source/acinclude.m4.orig	2020-04-22 22:04:20.000000000 +0200
++++ icu/source/acinclude.m4	2020-11-04 06:10:29.993070072 +0100
+@@ -84,6 +84,7 @@
+ *-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
+ *-*-nto*)	icu_cv_host_frag=mh-qnx ;;
+ *-ncr-*)	icu_cv_host_frag=mh-mpras ;;
++wasm*-*-emscripten*)	icu_cv_host_frag=mh-emscripten ;;
+ *) 		icu_cv_host_frag=mh-unknown ;;
+ esac
+ 		]
+--- /dev/null
++++ icu/source/config/mh-emscripten	2015-10-06 12:01:00.497972406 +0200
+@@ -0,0 +1,86 @@
++## Emscripten-specific setup
++## Copyright (c) 1999-2013, International Business Machines Corporation and
++## others. All Rights Reserved.
++## Commands to generate dependency files
++GEN_DEPS.c=  $(CC) -E -MM $(DEFS) $(CPPFLAGS)
++GEN_DEPS.cc= $(CXX) -E -MM $(DEFS) $(CPPFLAGS) $(CXXFLAGS)
++ 
++## Flags for position independent code
++SHAREDLIBCFLAGS = -fPIC
++SHAREDLIBCXXFLAGS = -fPIC
++SHAREDLIBCPPFLAGS = -DPIC
++
++## Additional flags when building libraries and with threads
++THREADSCPPFLAGS = -D_REENTRANT
++LIBCPPFLAGS =
++
++## Compiler switch to embed a runtime search path
++LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN
++LD_RPATH_PRE = -Wl,-rpath,
++
++## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH:
++ENABLE_RPATH=YES
++RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN'
++
++## These are the library specific LDFLAGS
++#LDFLAGSICUDT=-nodefaultlibs -nostdlib
++# Debian change: linking icudata as data only causes too many problems.
++LDFLAGSICUDT=
++
++## Compiler switch to embed a library name
++# The initial tab in the next line is to prevent icu-config from reading it.
++	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
++#SH# # We can't depend on MIDDLE_SO_TARGET being set.
++#SH# LD_SONAME=
++
++## Shared library options
++LD_SOOPTIONS= -Wl,-Bsymbolic-functions
++
++## Shared object suffix
++SO = so
++## Non-shared intermediate object suffix
++STATIC_O = o
++
++## Compilation rules
++# WASM needs -pthread for atomics support
++%.$(STATIC_O): $(srcdir)/%.c
++	$(call SILENT_COMPILE,$(strip $(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS)) -pthread -o $@ $<)
++
++%.$(STATIC_O): $(srcdir)/%.cpp
++	$(call SILENT_COMPILE,$(strip $(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS)) -pthread -o $@ $<)
++
++
++## Dependency rules
++%.d: $(srcdir)/%.c
++	$(call ICU_MSG,(deps)) $<
++	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
++		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
++		[ -s $@ ] || rm -f $@'
++
++%.d: $(srcdir)/%.cpp
++	$(call ICU_MSG,(deps)) $<
++	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
++		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
++		[ -s $@ ] || rm -f $@'
++
++## Versioned libraries rules
++
++%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
++	$(RM) $@ && ln -s ${<F} $@
++%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
++	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
++
++##  Bind internal references
++
++# LDflags that pkgdata will use
++BIR_LDFLAGS= -Wl,-Bsymbolic
++
++# Dependencies [i.e. map files] for the final library
++BIR_DEPS=
++
++## Remove shared library 's'
++STATIC_PREFIX_WHEN_USED =
++STATIC_PREFIX =
++
++## without assembly
++PKGDATA_OPTS = -O $(top_builddir)/data/icupkg.inc -w

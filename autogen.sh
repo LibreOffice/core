@@ -295,15 +295,21 @@ if (defined $ENV{NOCONFIGURE}) {
     push @args, "--srcdir=$src_path";
     push @args, "--enable-option-checking=$option_checking";
 
-    print "Running ./configure with '" . join (" ", @args), "'\n";
-
     # When running a shell script from Perl on WSL, weirdly named
     # environment variables like the "ProgramFiles(x86)" one don't get
     # imported by the shell. So export it as PROGRAMFILESX86 instead.
     my $building_for_linux = 0;
+    my $building_with_emscripten = 0;
     foreach my $arg (@args) {
         $building_for_linux = 1 if ($arg =~ /--host=x86_64.*linux/);
+        $building_with_emscripten = 1 if ($arg =~ /^--host=wasm.*-emscripten$/);
     }
+
+    unshift @args, "./configure";
+    unshift @args, "emconfigure" if ($building_with_emscripten);
+
+    print "Running '" . join (" ", @args), "'\n";
+
     if (`wslsys 2>/dev/null` ne "" && !$building_for_linux) {
         if (!$ENV{"ProgramFiles(x86)"}) {
             print STDERR "To build for Windows on WSL, you need to set the WSLENV environment variable in the Control Panel to 'ProgramFiles(x86)'\n";
@@ -313,7 +319,7 @@ if (defined $ENV{NOCONFIGURE}) {
         $ENV{"PROGRAMFILESX86"} = $ENV{"ProgramFiles(x86)"};
     }
 
-    system ("./configure", @args) && die "Error running configure";
+    system (@args) && die "Error running configure";
 }
 
 # Local Variables:
