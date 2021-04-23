@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9cf1742_c5a8bf53",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-23T11:48:13Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/c/core/+/114540\u003e \"Step 1 of removing cargo-cult pragma pack around rtl_[u]String\"",
+      "range": {
+        "startLine": 24,
+        "startChar": 74,
+        "endLine": 25,
+        "endChar": 60
+      },
+      "revId": "9eba8aa38db3a0dc2f7dfaf24a003c16418aef18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
