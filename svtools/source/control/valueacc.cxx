@@ -352,7 +352,7 @@ awt::Point SAL_CALL ValueItemAcc::getLocationOnScreen()
     if( mpParent )
     {
         const Point aPos = mpParent->mrParent.GetItemRect(mpParent->mnId).TopLeft();
-        const Point aScreenPos( mpParent->mrParent.GetDrawingArea()->get_accessible_location() );
+        const Point aScreenPos(mpParent->mrParent.GetDrawingArea()->get_accessible_location_on_screen());
 
         aRet.X = aPos.X() + aScreenPos.X();
         aRet.Y = aPos.Y() + aScreenPos.Y();

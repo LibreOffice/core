@@ -14032,12 +14032,12 @@ public:
         return uno::Reference<css::accessibility::XAccessibleRelationSet>();
     }
 
-    virtual Point get_accessible_location() override
+    virtual Point get_accessible_location_on_screen() override
     {
         AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
         gint x(0), y(0);
         if (pAtkObject && ATK_IS_COMPONENT(pAtkObject))
-            atk_component_get_extents(ATK_COMPONENT(pAtkObject), &x, &y, nullptr, nullptr, ATK_XY_WINDOW);
+            atk_component_get_extents(ATK_COMPONENT(pAtkObject), &x, &y, nullptr, nullptr, ATK_XY_SCREEN);
         return Point(x, y);
     }
 

@@ -542,7 +542,7 @@ tools::Rectangle ScAccessibleEditControlObject::GetBoundingBoxOnScreen() const
 
     if (m_pController && m_pController->GetDrawingArea())
     {
-        aScreenBounds = tools::Rectangle(m_pController->GetDrawingArea()->get_accessible_location(),
+        aScreenBounds = tools::Rectangle(m_pController->GetDrawingArea()->get_accessible_location_on_screen(),
                                          m_pController->GetOutputSizePixel());
     }
 

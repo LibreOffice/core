@@ -2210,7 +2210,7 @@ public:
 
     virtual a11yref get_accessible_parent() = 0;
     virtual a11yrelationset get_accessible_relation_set() = 0;
-    virtual Point get_accessible_location() = 0;
+    virtual Point get_accessible_location_on_screen() = 0;
 
 private:
     friend class ::LOKTrigger;

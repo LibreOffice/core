@@ -5980,7 +5980,7 @@ a11yrelationset SalInstanceDrawingArea::get_accessible_relation_set()
     return pRelationSetHelper;
 }
 
-Point SalInstanceDrawingArea::get_accessible_location()
+Point SalInstanceDrawingArea::get_accessible_location_on_screen()
 {
     return m_xDrawingArea->OutputToAbsoluteScreenPixel(Point());
 }
