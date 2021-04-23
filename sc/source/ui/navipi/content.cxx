@@ -865,6 +865,8 @@ bool ScContentTree::IsPartOfType( ScContentId nContentType, sal_uInt16 nObjIdent
     return bRet;
 }
 
+constexpr int MAX_TREE_NODES = 1000;
+
 void ScContentTree::GetDrawNames( ScContentId nType )
 {
     if ( nRootType != ScContentId::ROOT && nRootType != nType )              // hidden ?
@@ -883,6 +885,7 @@ void ScContentTree::GetDrawNames( ScContentId nType )
         return;
 
     SCTAB nTabCount = pDoc->GetTableCount();
+    int treeNodeCount = 0;
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
@@ -905,6 +908,12 @@ void ScContentTree::GetDrawNames( ScContentId nType )
                             {
                                 m_xTreeView->insert(pParent, -1, &aName, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
                                 m_xTreeView->set_sensitive(*m_xScratchIter, true);
+                                treeNodeCount++;
+                                if (treeNodeCount > MAX_TREE_NODES)
+                                {
+                                    SAL_WARN("sc", "too many tree nodes, ignoring the rest");
+                                    return;
+                                }
                             }//end if parent
                             else
                                 SAL_WARN("sc", "InsertContent without parent");
