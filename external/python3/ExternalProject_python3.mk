@@ -100,9 +100,9 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			--enable-shared \
 			$(if $(filter 1090 101000 101100 101200,$(MAC_OS_X_VERSION_MIN_REQUIRED)),ac_cv_func_utimensat=no) \
 		) \
-		$(if $(SYSTEM_OPENSSL)$(DISABLE_OPENSSL),,\
+		$(if $(ENABLE_OPENSSL),$(if $(SYSTEM_OPENSSL),,\
 			--with-openssl=$(call gb_UnpackedTarball_get_dir,openssl) \
-		) \
+		) ) \
 		$(if $(filter LINUX,$(OS)), \
 			PKG_CONFIG_LIBDIR="$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)$${PKG_CONFIG_LIBDIR:+:$$PKG_CONFIG_LIBDIR}" \
 		) \

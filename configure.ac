@@ -10688,10 +10688,11 @@ fi
 dnl ===================================================================
 dnl Check for system openssl
 dnl ===================================================================
-DISABLE_OPENSSL=
+ENABLE_OPENSSL=
 AC_MSG_CHECKING([whether to disable OpenSSL usage])
 if test "$enable_openssl" = "yes"; then
     AC_MSG_RESULT([no])
+    ENABLE_OPENSSL=TRUE
     if test "$_os" = Darwin ; then
         # OpenSSL is deprecated when building for 10.7 or later.
         #
@@ -10719,16 +10720,15 @@ if test "$enable_openssl" = "yes"; then
     fi
 else
     AC_MSG_RESULT([yes])
-    DISABLE_OPENSSL=TRUE
 
     # warn that although OpenSSL is disabled, system libraries may depend on it
     AC_MSG_WARN([OpenSSL has been disabled. No code compiled here will make use of it but system libraries may create indirect dependencies])
     add_warning "OpenSSL has been disabled. No code compiled here will make use of it but system libraries may create indirect dependencies"
 fi
 
-AC_SUBST([DISABLE_OPENSSL])
+AC_SUBST([ENABLE_OPENSSL])
 
-if test "$enable_cipher_openssl_backend" = yes && test "$DISABLE_OPENSSL" = TRUE; then
+if test "$enable_cipher_openssl_backend" = yes && test "$ENABLE_OPENSSL" != TRUE; then
     if test "$libo_fuzzed_enable_cipher_openssl_backend" = yes; then
         AC_MSG_NOTICE([Resetting --enable-cipher-openssl-backend=no])
         enable_cipher_openssl_backend=no

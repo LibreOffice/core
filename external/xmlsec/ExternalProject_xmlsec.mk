@@ -9,9 +9,10 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,xmlsec))
 
-$(eval $(call gb_ExternalProject_use_external,xmlsec,libxml2))
-
-$(eval $(call gb_ExternalProject_use_external,xmlsec,nss3))
+$(eval $(call gb_ExternalProject_use_externals,xmlsec,\
+    libxml2 \
+    $(if $(ENABLE_NSS),nss3,$(if $(ENABLE_OPENSSL),openssl)) \
+))
 
 $(eval $(call gb_ExternalProject_register_targets,xmlsec,\
 	build \
@@ -44,11 +45,21 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --without-gcrypt --disable-apps --disable-docs \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS)) $(gb_VISIBILITY_FLAGS)" \
-			--without-openssl \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-			$(if $(SYSTEM_NSS),,$(if $(filter MACOSX,$(OS_FOR_BUILD)),--disable-pkgconfig)) \
-			$(if $(SYSTEM_NSS),,NSPR_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" NSPR_LIBS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lnspr4") \
-			$(if $(SYSTEM_NSS),,NSS_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss" NSS_LIBS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lsmime3 -lnss3 -lnssutil3") \
+			$(if $(ENABLE_NSS), \
+				--without-openssl \
+				$(if $(SYSTEM_NSS),, \
+					$(if $(filter MACOSX,$(OS_FOR_BUILD)),--disable-pkgconfig) \
+					NSPR_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" NSPR_LIBS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lnspr4" \
+					NSS_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss" NSS_LIBS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lsmime3 -lnss3 -lnssutil3" \
+			), \
+				$(if $(ENABLE_OPENSSL), \
+					$(if $(SYSTEM_OPENSSL),, \
+						OPENSSL_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,openssl)/include" \
+						OPENSSL_LIBS="-L$(call gb_UnpackedTarball_get_dir,openssl) -lcrypto -lssl" \
+					), \
+					--without-openssl) \
+			) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(SYSBASE),CFLAGS="-I$(SYSBASE)/usr/include" \
 			LDFLAGS="-L$(SYSBASE)/usr/lib $(if $(filter-out LINUX FREEBSD,$(OS)),",-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN)) \
