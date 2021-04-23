@@ -34,6 +34,24 @@
       "revId": "d52241edfaff08124802810fea85f59a70dfb307",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48d93656_51fc33e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-23T11:59:51Z",
+      "side": 1,
+      "message": "Ah, sorry, I was confused:  You asked why we should remove the static_asserts again.  Well, we don\u0027t have such for any other types (even if they are part of the stable URE interface), either, and it would look odd to me (esp. in the future when the #pragma pack lines have long since been removed) to have them just for these two types.",
+      "parentUuid": "00b45202_78e08716",
+      "revId": "d52241edfaff08124802810fea85f59a70dfb307",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
