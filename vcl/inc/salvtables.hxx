@@ -1164,7 +1164,7 @@ public:
 
     virtual a11yrelationset get_accessible_relation_set() override;
 
-    virtual Point get_accessible_location() override;
+    virtual Point get_accessible_location_on_screen() override;
 
     virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper,
                                     sal_uInt8 eDNDConstants) override;
