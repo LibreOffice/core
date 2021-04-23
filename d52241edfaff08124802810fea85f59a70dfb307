@@ -52,6 +52,24 @@
       "revId": "d52241edfaff08124802810fea85f59a70dfb307",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e3a3778_fbf10b57",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-23T12:00:13Z",
+      "side": 1,
+      "message": "You must be right. :-)",
+      "parentUuid": "00b45202_78e08716",
+      "revId": "d52241edfaff08124802810fea85f59a70dfb307",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
