@@ -339,7 +339,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), mDocumentUri);
         toolbarTop.setTitle(displayName);
-        // make sure that "Save" menu item is enabled
+        mbISReadOnlyMode = !isExperimentalMode();
         getToolbarController().setupToolbars();
     }
 
