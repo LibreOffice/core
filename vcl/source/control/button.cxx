@@ -2020,7 +2020,7 @@ void Button::ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, DrawFlags
     // is pixel-oriented (all Paints of Controls are, historically), so
     // the minimum width should be '1' Pixel.
     // Hint: nImageSep is based on Zoom (using Window::CalcZoom) and
-    // MapModes (using Window::GetDrawPixel) - so potenially a wide range
+    // MapModes (using Window::GetDrawPixel) - so potentially a wide range
     // of unpredictable values is possible
     const tools::Long nWidthAdjust(rImageSize.Width() + nImageSep);
     aSize.setWidth(std::max(static_cast<tools::Long>(1), aSize.getWidth() - nWidthAdjust));

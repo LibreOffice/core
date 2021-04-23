@@ -2354,8 +2354,8 @@ void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags,
     // and selection are in the same dimension (i.e. row).
     // The filtered row status and the selection ranges are not available at the same time,
     // handle this case specially, do not use GetClipParam().getWholeRange(),
-    // instead loop through the ranges, calculate the row offest and handle filtered rows and
-    // create in ScClipParam::transpose() an unified range.
+    // instead loop through the ranges, calculate the row offset and handle filtered rows and
+    // create in ScClipParam::transpose() a unified range.
     bool bIsMultiRangeRowFilteredTranspose
         = !bIncludeFiltered && GetClipParam().isMultiRange()
           && HasFilteredRows(aCombinedClipRange.aStart.Row(), aCombinedClipRange.aEnd.Row(),

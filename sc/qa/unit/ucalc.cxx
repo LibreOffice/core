@@ -4170,7 +4170,7 @@ void Test::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
     rEntry.bDoQuery = true;
     rEntry.nField = 0;
     rEntry.eOp = SC_GREATER_EQUAL;
-    rEntry.GetQueryItem().mfVal = 0; // filtering neative values -> filtering row 1 and 2
+    rEntry.GetQueryItem().mfVal = 0; // filtering negative values -> filtering row 1 and 2
     // add queryParam to database range.
     pDBData->SetQueryParam(aParam);
 
