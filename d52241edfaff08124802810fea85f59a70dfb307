@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8dede294_57fb13ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-23T11:50:22Z",
+      "side": 1,
+      "message": "Why step 3? The asserts document/protect ABI, so what is wrong with their existence?",
+      "revId": "d52241edfaff08124802810fea85f59a70dfb307",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
