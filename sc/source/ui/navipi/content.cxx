@@ -869,6 +869,9 @@ constexpr int MAX_TREE_NODES = 1000;
 
 void ScContentTree::GetDrawNames( ScContentId nType )
 {
+    if (!bisInNavigatoeDlg)
+        return;
+
     if ( nRootType != ScContentId::ROOT && nRootType != nType )              // hidden ?
         return;
 
@@ -901,25 +904,21 @@ void ScContentTree::GetDrawNames( ScContentId nType )
                     OUString aName = ScDrawLayer::GetVisibleName( pObject );
                     if (!aName.isEmpty())
                     {
-                        if( bisInNavigatoeDlg )
+                        weld::TreeIter* pParent = m_aRootNodes[nType].get();
+                        if (pParent)
                         {
-                            weld::TreeIter* pParent = m_aRootNodes[nType].get();
-                            if (pParent)
+                            m_xTreeView->insert(pParent, -1, &aName, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+                            m_xTreeView->set_sensitive(*m_xScratchIter, true);
+                            treeNodeCount++;
+                            if (treeNodeCount > MAX_TREE_NODES)
                             {
-                                m_xTreeView->insert(pParent, -1, &aName, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
-                                m_xTreeView->set_sensitive(*m_xScratchIter, true);
-                                treeNodeCount++;
-                                if (treeNodeCount > MAX_TREE_NODES)
-                                {
-                                    SAL_WARN("sc", "too many tree nodes, ignoring the rest");
-                                    return;
-                                }
-                            }//end if parent
-                            else
-                                SAL_WARN("sc", "InsertContent without parent");
-                        }
+                                SAL_WARN("sc", "too many tree nodes, ignoring the rest");
+                                return;
+                            }
+                        }//end if parent
+                        else
+                            SAL_WARN("sc", "InsertContent without parent");
                     }
-
                 }
 
                 pObject = aIter.Next();
