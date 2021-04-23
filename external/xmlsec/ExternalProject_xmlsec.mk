@@ -41,7 +41,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		$(if $(filter iOS MACOSX,$(OS_FOR_BUILD)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
 		$(if $(filter AIX,$(OS)),ACLOCAL="aclocal -I /opt/freeware/share/aclocal") \
 		autoreconf \
-		&& ./configure \
+		&& $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --without-gcrypt --disable-apps --disable-docs \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS)) $(gb_VISIBILITY_FLAGS)" \
@@ -52,7 +52,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 					$(if $(filter MACOSX,$(OS_FOR_BUILD)),--disable-pkgconfig) \
 					NSPR_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" NSPR_LIBS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lnspr4" \
 					NSS_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss" NSS_LIBS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lsmime3 -lnss3 -lnssutil3" \
-			), \
+				), \
 				$(if $(ENABLE_OPENSSL), \
 					$(if $(SYSTEM_OPENSSL),, \
 						OPENSSL_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,openssl)/include" \

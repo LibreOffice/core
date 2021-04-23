@@ -49,6 +49,7 @@ gb_COMPILERDEFS := \
 	-DBOOST_ERROR_CODE_HEADER_ONLY \
 	-DBOOST_SYSTEM_NO_DEPRECATED \
 	-DCPPU_ENV=$(gb_CPPU_ENV) \
+	$(if $(filter EMSCRIPTEN,$(OS)),-U_FORTIFY_SOURCE) \
 
 gb_CFLAGS_COMMON := \
 	-Wall \
@@ -63,7 +64,7 @@ gb_CFLAGS_COMMON := \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
-	-fstack-protector-strong \
+	$(if $(filter EMSCRIPTEN,$(OS)),-fno-stack-protector,-fstack-protector-strong) \
 	$(if $(gb_COLOR),-fdiagnostics-color=always) \
 
 gb_CXXFLAGS_COMMON := \
@@ -80,7 +81,7 @@ gb_CXXFLAGS_COMMON := \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
-	-fstack-protector-strong \
+	$(if $(filter EMSCRIPTEN,$(OS)),-fno-stack-protector,-fstack-protector-strong) \
 	$(if $(gb_COLOR),-fdiagnostics-color=always) \
 
 ifeq ($(HAVE_WDEPRECATED_COPY_DTOR),TRUE)
@@ -109,7 +110,9 @@ endif
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 gb_CFLAGS_COMMON += -ffunction-sections -fdata-sections
 gb_CXXFLAGS_COMMON += -ffunction-sections -fdata-sections
+ifneq ($(OS),EMSCRIPTEN)
 gb_LinkTarget_LDFLAGS += -Wl,--gc-sections
+endif
 endif
 
 ifeq ($(COM_IS_CLANG),TRUE)
@@ -143,7 +146,7 @@ endif
 gb_VISIBILITY_FLAGS_CXX := -fvisibility-inlines-hidden
 gb_CXXFLAGS_COMMON += $(gb_VISIBILITY_FLAGS_CXX)
 
-gb_LinkTarget_LDFLAGS += -fstack-protector-strong
+gb_LinkTarget_LDFLAGS += $(if $(filter EMSCRIPTEN,$(OS)),-fno-stack-protector,-fstack-protector-strong)
 
 ifneq ($(gb_ENABLE_PCH),)
 ifeq ($(COM_IS_CLANG),TRUE)
