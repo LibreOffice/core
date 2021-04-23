@@ -163,7 +163,12 @@ css::uno::Sequence<OUString> UIObjectUnoObj::getChildren()
     if (!mpObj)
         throw css::uno::RuntimeException();
 
-    std::set<OUString> aChildren = mpObj->get_children();
+    std::set<OUString> aChildren;
+
+    {
+        SolarMutexGuard aGuard;
+        aChildren = mpObj->get_children();
+    }
 
     css::uno::Sequence<OUString> aRet(aChildren.size());
     sal_Int32 i = 0;
@@ -181,6 +186,7 @@ OUString SAL_CALL UIObjectUnoObj::getType()
     if (!mpObj)
         throw css::uno::RuntimeException();
 
+    SolarMutexGuard aGuard;
     return mpObj->get_type();
 }
 
