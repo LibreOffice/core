@@ -43,7 +43,7 @@ endif
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	$(call gb_Trace_StartRange,cppunit,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-dependency-tracking \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 			--disable-doxygen \
@@ -55,7 +55,8 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 			$(if $(filter WNT,$(OS)),LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
 			$(if $(filter SOLARIS,$(OS)),LIBS="-lm") \
 			$(if $(filter ANDROID,$(OS)),LIBS="$(gb_STDLIBS)") \
-			CXXFLAGS="$(cppunit_CXXFLAGS)" \
+			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
+			CXXFLAGS="$(cppunit_CXXFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS)" \
 		&& cd src \
 		&& $(MAKE) \
 	)

@@ -26,7 +26,7 @@ $(call gb_ExternalProject_get_state_target,libassuan,build): $(call gb_Executabl
 	$(call gb_ExternalProject_run,build,\
 	  $(gb_WIN_GPG_cross_setup_exports) \
 	  && autoreconf \
-	  && ./configure \
+	  && $(gb_RUN_CONFIGURE) ./configure \
 		--enable-static \
 		--disable-shared \
 		--disable-doc \
@@ -44,7 +44,7 @@ $(call gb_ExternalProject_get_state_target,libassuan,build):
 	$(call gb_Trace_StartRange,libassuan,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
-		&& ./configure \
+		&& $(gb_RUN_CONFIGURE) ./configure \
 		   --disable-doc \
 		   GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		   GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \

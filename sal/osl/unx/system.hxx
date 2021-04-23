@@ -269,13 +269,33 @@ int macxp_resolveAlias(char *path, int buflen);
 #   define  NO_PTHREAD_RTL
 #endif
 
+#ifdef EMSCRIPTEN
+#   ifndef ETIME
+#       define  ETIME ETIMEDOUT
+#   endif
+#   include <pthread.h>
+#   include <sys/file.h>
+#   include <sys/ioctl.h>
+#   include <sys/uio.h>
+#   include <sys/un.h>
+#   include <netinet/tcp.h>
+#   include <dlfcn.h>
+#   include <endian.h>
+#   include <sys/time.h>
+#   define  IORESOURCE_TRANSFER_BSD
+#   define  IOCHANNEL_TRANSFER_BSD_RENO
+#   define  pthread_testcancel()
+#   define  NO_PTHREAD_PRIORITY
+#   define INIT_GROUPS(name, gid) false
+#endif
+
 #if !defined(_WIN32)  && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && \
     !defined(AIX)     && \
     !defined(__sun) && !defined(MACOSX) && \
     !defined(OPENBSD) && !defined(DRAGONFLY) && \
     !defined(IOS) && !defined(ANDROID) && \
-    !defined(HAIKU)
+    !defined(HAIKU) && !defined(EMSCRIPTEN)
 #   error "Target platform not specified!"
 #endif
 

@@ -84,7 +84,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 				ac_cv_func_clock_gettime=no \
 			) \
 		) \
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		$(if $(ENABLE_VALGRIND),--with-valgrind) \
 		$(if $(ENABLE_DBGUTIL),--with-pydebug) \
@@ -102,7 +102,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		) \
 		$(if $(ENABLE_OPENSSL),$(if $(SYSTEM_OPENSSL),,\
 			--with-openssl=$(call gb_UnpackedTarball_get_dir,openssl) \
-		) \
+		) ) \
 		$(if $(filter LINUX,$(OS)), \
 			PKG_CONFIG_LIBDIR="$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)$${PKG_CONFIG_LIBDIR:+:$$PKG_CONFIG_LIBDIR}" \
 		) \
