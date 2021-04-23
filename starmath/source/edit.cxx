@@ -340,7 +340,7 @@ bool SmEditTextWindow::Command(const CommandEvent& rCEvt)
         // purely for "ExecutePopup" taking a vcl::Window and
         // we assume SmEditTextWindow 0,0 is at SmEditWindow 0,0
         mrEditWindow.Command(rCEvt);
-        return false;
+        return true;
     }
 
     bool bConsumed = WeldEditView::Command(rCEvt);
