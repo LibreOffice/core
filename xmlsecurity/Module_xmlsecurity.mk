@@ -9,11 +9,9 @@
 
 $(eval $(call gb_Module_Module,xmlsecurity))
 
-ifeq ($(ENABLE_NSS),TRUE)
-
 $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	Library_xmlsecurity \
-	Library_xsec_xmlsec \
+	$(if $(ENABLE_NSS)$(ENABLE_OPENSSL),Library_xsec_xmlsec) \
 	UIConfig_xmlsec \
 ))
 
@@ -40,13 +38,9 @@ $(eval $(call gb_Module_add_screenshot_targets,xmlsecurity,\
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-
 $(eval $(call gb_Module_add_targets,xmlsecurity,\
     Executable_pdfverify \
 ))
-
-endif
-
 endif
 
 # vim: set noet sw=4 ts=4:
