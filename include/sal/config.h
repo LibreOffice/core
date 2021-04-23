@@ -83,6 +83,17 @@
 #define SAL_CONFIGFILE(name) name "rc"
 #endif
 
+#ifdef EMSCRIPTEN
+#define SAL_UNX
+#define SAL_DLLEXTENSION ".bc"
+#define SAL_EXEEXTENSION ""
+#define SAL_DLLPREFIX "lib"
+#define SAL_PATHSEPARATOR ':'
+#define SAL_PATHDELIMITER '/'
+#define SAL_NEWLINE_STRING "\n"
+#define SAL_CONFIGFILE(name) name "rc"
+#endif
+
 /* The following spell is for Solaris and its descendants.
  * See the "Solaris" section of
  * <http://sourceforge.net/p/predef/wiki/OperatingSystems/>, and

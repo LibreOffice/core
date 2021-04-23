@@ -18,7 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,mythes,\
 $(call gb_ExternalProject_get_state_target,mythes,build):
 	$(call gb_Trace_StartRange,mythes,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		LIBS="$(gb_STDLIBS) $(LIBS)" ./configure --disable-shared --with-pic \
+		LIBS="$(gb_STDLIBS) $(LIBS)" $(gb_RUN_CONFIGURE) ./configure --disable-shared --with-pic \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
 		&& $(MAKE) \
 	)

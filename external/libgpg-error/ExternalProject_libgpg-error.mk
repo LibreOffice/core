@@ -20,7 +20,7 @@ $(call gb_ExternalProject_get_state_target,libgpg-error,build): $(call gb_Execut
 	$(call gb_Trace_StartRange,libgpg-error,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(gb_WIN_GPG_cross_setup_exports) \
-		&& MAKE=$(MAKE) ./configure \
+		&& MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--enable-static \
 			--disable-shared \
 			--disable-rpath \
@@ -35,7 +35,7 @@ else
 $(call gb_ExternalProject_get_state_target,libgpg-error,build):
 	$(call gb_Trace_StartRange,libgpg-error,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		MAKE=$(MAKE) ./configure \
+		MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--disable-rpath \
 			--disable-languages \
 			--disable-doc \

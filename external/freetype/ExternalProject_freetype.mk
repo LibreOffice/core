@@ -25,7 +25,7 @@ else
 $(call gb_ExternalProject_get_state_target,freetype,build) :
 	$(call gb_Trace_StartRange,freetype,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-shared \
 			--without-zlib \
 			--without-bzip2 \
