@@ -52,7 +52,7 @@ class ScContentTree
     OUString                aHiddenName;        // URL to load
     OUString                aHiddenTitle;       // for display
     ScDocument*             pHiddenDocument;    // temporary
-    bool                    bisInNavigatoeDlg;
+    bool                    bIsInNavigatorDlg;
     bool                    m_bFreeze;
     OUString                sKeyString;
     ImplSVEvent*            m_nAsyncMouseReleaseId;
@@ -124,7 +124,7 @@ public:
     ~ScContentTree();
 
     void     ObjectFresh(ScContentId nType, const weld::TreeIter* pEntry = nullptr);
-    void     SetNavigatorDlgFlag(bool isInNavigateDlg){ bisInNavigatoeDlg=isInNavigateDlg;};
+    void     SetNavigatorDlgFlag(bool isInNavigateDlg){ bIsInNavigatorDlg=isInNavigateDlg;};
 
     void    hide()
     {
