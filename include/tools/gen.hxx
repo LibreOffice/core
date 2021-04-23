@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <ostream>
 #include <config_options.h>
+#include <o3tl/unit_conversion.hxx>
 
 class SvStream;
 namespace rtl
@@ -172,6 +173,18 @@ inline bool operator !=(Point const & p1, Point const & p2)
     return !(p1 == p2);
 }
 
+namespace o3tl
+{
+
+constexpr Point convert(const Point& rPoint, o3tl::Length eFrom, o3tl::Length eTo)
+{
+    return Point(
+            o3tl::convert(rPoint.getX(), eFrom, eTo),
+            o3tl::convert(rPoint.getY(), eFrom, eTo));
+}
+
+} // end o3tl
+
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const Point& point )
@@ -281,6 +294,17 @@ inline Size operator/( const Size &rVal1, const tools::Long nVal2 )
     return Size( rVal1.nA/nVal2, rVal1.nB/nVal2 );
 }
 
+namespace o3tl
+{
+
+constexpr Size convert(const Size& rSize, o3tl::Length eFrom, o3tl::Length eTo)
+{
+        return Size(
+            o3tl::convert(rSize.Width(), eFrom, eTo),
+            o3tl::convert(rSize.Height(), eFrom, eTo));
+}
+
+} // end o3tl
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
@@ -460,15 +484,28 @@ public:
     void                SetTop(tools::Long v)     { nTop = v;    }
     void                SetBottom(tools::Long v)  { nBottom = v; }
 
-    inline Point        TopLeft() const;
-    inline Point        TopRight() const;
-    inline Point        TopCenter() const;
-    inline Point        BottomLeft() const;
-    inline Point        BottomRight() const;
-    inline Point        BottomCenter() const;
-    inline Point        LeftCenter() const;
-    inline Point        RightCenter() const;
-    inline Point        Center() const;
+    constexpr Point TopLeft() const
+    {
+        return Point( nLeft, nTop );
+    }
+    constexpr Point TopRight() const
+    {
+        return Point( (nRight == RECT_EMPTY) ? nLeft : nRight, nTop );
+    }
+    constexpr Point TopCenter() const
+    {
+        if (IsEmpty())
+            return Point(nLeft, nTop);
+        else
+            return Point(std::min(nLeft, nRight) + std::abs((nRight - nLeft) / 2),
+                         std::min(nTop,  nBottom));
+    }
+    inline Point BottomLeft() const;
+    inline Point BottomRight() const;
+    inline Point BottomCenter() const;
+    inline Point LeftCenter() const;
+    inline Point RightCenter() const;
+    inline Point Center() const;
 
     /// Move the top and left edges by a delta, preserving width and height
     inline void         Move( tools::Long nHorzMoveDelta, tools::Long nVertMoveDelta );
@@ -479,12 +516,45 @@ public:
     tools::Long         AdjustBottom( tools::Long nVertMoveDelta );
     inline void         SetPos( const Point& rPoint );
     void                SetSize( const Size& rSize );
-    inline Size         GetSize() const;
+
+    constexpr Size GetSize() const
+    {
+        return Size(GetWidth(), GetHeight());
+    }
 
     /// Returns the difference between right and left, assuming the range is inclusive.
-    inline tools::Long         GetWidth() const;
+    constexpr tools::Long GetWidth() const
+    {
+        tools::Long n = 0;
+
+        if (nRight != RECT_EMPTY)
+        {
+            n = nRight - nLeft;
+            if (n < 0)
+                n--;
+            else
+                n++;
+        }
+
+        return n;
+    }
+
     /// Returns the difference between bottom and top, assuming the range is inclusive.
-    inline tools::Long         GetHeight() const;
+    constexpr tools::Long GetHeight() const
+    {
+        tools::Long n = 0;
+
+        if (nBottom != RECT_EMPTY)
+        {
+            n = nBottom - nTop;
+            if (n < 0)
+                n--;
+            else
+                n++;
+        }
+
+        return n;
+    }
 
     tools::Rectangle&          Union( const tools::Rectangle& rRect );
     tools::Rectangle&          Intersection( const tools::Rectangle& rRect );
@@ -500,7 +570,7 @@ public:
     void                SetEmpty() { nRight = nBottom = RECT_EMPTY; }
     void                SetWidthEmpty() { nRight = RECT_EMPTY; }
     void                SetHeightEmpty() { nBottom = RECT_EMPTY; }
-    inline bool         IsEmpty() const;
+    constexpr bool IsEmpty() const;
     bool                IsWidthEmpty() const { return nRight == RECT_EMPTY; }
     bool                IsHeightEmpty() const { return nBottom == RECT_EMPTY; }
 
@@ -586,19 +656,9 @@ constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSiz
     , nBottom( rSize.Height() ? nTop+(rSize.Height()-1) : RECT_EMPTY )
 {}
 
-inline bool tools::Rectangle::IsEmpty() const
+constexpr inline bool tools::Rectangle::IsEmpty() const
 {
     return (nRight == RECT_EMPTY) || (nBottom == RECT_EMPTY);
-}
-
-inline Point tools::Rectangle::TopLeft() const
-{
-    return Point( nLeft, nTop );
-}
-
-inline Point tools::Rectangle::TopRight() const
-{
-    return Point( (nRight == RECT_EMPTY) ? nLeft : nRight, nTop );
 }
 
 inline Point tools::Rectangle::BottomLeft() const
@@ -610,15 +670,6 @@ inline Point tools::Rectangle::BottomRight() const
 {
     return Point( (nRight  == RECT_EMPTY) ? nLeft : nRight,
                   (nBottom == RECT_EMPTY) ? nTop  : nBottom );
-}
-
-inline Point tools::Rectangle::TopCenter() const
-{
-    if ( IsEmpty() )
-        return Point( nLeft, nTop );
-    else
-        return Point( std::min( nLeft, nRight ) + std::abs( (nRight - nLeft)/2 ),
-                      std::min( nTop,  nBottom) );
 }
 
 inline Point tools::Rectangle::BottomCenter() const
@@ -672,45 +723,6 @@ inline void tools::Rectangle::SetPos( const Point& rPoint )
         nBottom += rPoint.Y() - nTop;
     nLeft = rPoint.X();
     nTop  = rPoint.Y();
-}
-
-inline tools::Long tools::Rectangle::GetWidth() const
-{
-    tools::Long n;
-    if ( nRight == RECT_EMPTY )
-        n = 0;
-    else
-    {
-        n = nRight - nLeft;
-        if( n < 0 )
-            n--;
-        else
-            n++;
-    }
-
-    return n;
-}
-
-inline tools::Long tools::Rectangle::GetHeight() const
-{
-    tools::Long n;
-    if ( nBottom == RECT_EMPTY )
-        n = 0;
-    else
-    {
-        n = nBottom - nTop;
-        if ( n < 0 )
-            n--;
-        else
-            n++;
-    }
-
-    return n;
-}
-
-inline Size tools::Rectangle::GetSize() const
-{
-    return Size( GetWidth(), GetHeight() );
 }
 
 inline tools::Rectangle tools::Rectangle::GetUnion( const tools::Rectangle& rRect ) const
@@ -780,7 +792,19 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
         : Rectangle( rRect.nLeft - rPt.X(),  rRect.nTop - rPt.Y(),
                      rRect.nRight - rPt.X(), rRect.nBottom - rPt.Y() );
 }
+
 }
+
+namespace o3tl
+{
+
+constexpr tools::Rectangle convert(const tools::Rectangle& rRectangle, o3tl::Length eFrom, o3tl::Length eTo)
+{
+    return tools::Rectangle(o3tl::convert(rRectangle.TopLeft(), eFrom, eTo),
+                            o3tl::convert(rRectangle.GetSize(), eFrom, eTo));
+}
+
+} // end o3tl
 
 namespace tools
 {
