@@ -1448,6 +1448,7 @@ public:
     virtual void
     bulk_insert_for_each(int nSourceCount,
                          const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
+                         const weld::TreeIter* pParent = nullptr,
                          const std::vector<int>* pFixedWidths = nullptr) override;
 
     virtual void set_font_color(int pos, const Color& rColor) override;

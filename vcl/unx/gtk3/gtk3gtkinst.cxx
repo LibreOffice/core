@@ -9950,14 +9950,14 @@ void list_store_clear(GtkTreeModel* pTreeModel)
     gtk_list_store_clear(GTK_LIST_STORE(pTreeModel));
 }
 
-void tree_store_remove(GtkTreeModel* pTreeModel, GtkTreeIter *pIter)
+bool tree_store_remove(GtkTreeModel* pTreeModel, GtkTreeIter *pIter)
 {
-    gtk_tree_store_remove(GTK_TREE_STORE(pTreeModel), pIter);
+    return gtk_tree_store_remove(GTK_TREE_STORE(pTreeModel), pIter);
 }
 
-void list_store_remove(GtkTreeModel* pTreeModel, GtkTreeIter *pIter)
+bool list_store_remove(GtkTreeModel* pTreeModel, GtkTreeIter *pIter)
 {
-    gtk_list_store_remove(GTK_LIST_STORE(pTreeModel), pIter);
+    return gtk_list_store_remove(GTK_LIST_STORE(pTreeModel), pIter);
 }
 
 void tree_store_swap(GtkTreeModel* pTreeModel, GtkTreeIter* pIter1, GtkTreeIter* pIter2)
@@ -10006,7 +10006,7 @@ private:
     typedef void(*clearFnc)(GtkTreeModel*);
     clearFnc m_Clear;
 
-    typedef void(*removeFnc)(GtkTreeModel*, GtkTreeIter*);
+    typedef bool(*removeFnc)(GtkTreeModel*, GtkTreeIter*);
     removeFnc m_Remove;
 
     typedef void(*swapFnc)(GtkTreeModel*, GtkTreeIter*, GtkTreeIter*);
@@ -11093,10 +11093,23 @@ public:
     }
 
     virtual void bulk_insert_for_each(int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
+                                      const weld::TreeIter* pParent,
                                       const std::vector<int>* pFixedWidths) override
     {
+        GtkInstanceTreeIter* pGtkIter = const_cast<GtkInstanceTreeIter*>(static_cast<const GtkInstanceTreeIter*>(pParent));
+
         freeze();
-        clear();
+        if (!pGtkIter)
+            clear();
+        else
+        {
+            GtkTreeIter restore(pGtkIter->iter);
+
+            if (iter_children(*pGtkIter))
+                while (m_Remove(m_pTreeModel, &pGtkIter->iter));
+
+            pGtkIter->iter = restore;
+        }
         GtkInstanceTreeIter aGtkIter(nullptr);
 
         if (pFixedWidths)
@@ -11105,7 +11118,7 @@ public:
         while (nSourceCount)
         {
             // tdf#125241 inserting backwards is massively faster
-            m_Prepend(m_pTreeModel, &aGtkIter.iter, nullptr);
+            m_Prepend(m_pTreeModel, &aGtkIter.iter, pGtkIter ? &pGtkIter->iter : nullptr);
             func(aGtkIter, --nSourceCount);
         }
 
