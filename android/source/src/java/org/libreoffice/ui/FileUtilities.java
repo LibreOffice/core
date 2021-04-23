@@ -8,7 +8,6 @@
  */
 package org.libreoffice.ui;
 
-import java.io.File;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -17,13 +16,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 
 public class FileUtilities {
 
-    private static String LOGTAG = FileUtilities.class.getSimpleName();
-
-    static final int ALL = -1;
+    private static final String LOGTAG = FileUtilities.class.getSimpleName();
 
     // These have to be in sync with the file_view_modes resource.
     static final int DOC = 0;
@@ -40,7 +36,6 @@ public class FileUtilities {
     public static final String MIMETYPE_PDF = "application/pdf";
 
     private static final Map<String, Integer> mExtnMap = new HashMap<String, Integer>();
-    private static final Map<String, String> extensionToMimeTypeMap = new HashMap<String, String>();
     static {
         // Please keep this in sync with AndroidManifest.xml
         // and 'SUPPORTED_MIME_TYPES' in LibreOfficeUIActivity.java
@@ -97,22 +92,6 @@ public class FileUtilities {
         mExtnMap.put(".svm",  DRAWING);
         mExtnMap.put(".wmf",  DRAWING);
         mExtnMap.put(".svg",  DRAWING);
-
-        // Some basic MIME types
-        // Android's MimeTypeMap lacks some types that we need
-        extensionToMimeTypeMap.put("odb", "application/vnd.oasis.opendocument.database");
-        extensionToMimeTypeMap.put("odf", "application/vnd.oasis.opendocument.formula");
-        extensionToMimeTypeMap.put("odg", MIMETYPE_OPENDOCUMENT_GRAPHICS);
-        extensionToMimeTypeMap.put("otg", "application/vnd.oasis.opendocument.graphics-template");
-        extensionToMimeTypeMap.put("odi", "application/vnd.oasis.opendocument.image");
-        extensionToMimeTypeMap.put("odp", MIMETYPE_OPENDOCUMENT_PRESENTATION);
-        extensionToMimeTypeMap.put("otp", "application/vnd.oasis.opendocument.presentation-template");
-        extensionToMimeTypeMap.put("ods", MIMETYPE_OPENDOCUMENT_SPREADSHEET);
-        extensionToMimeTypeMap.put("ots", "application/vnd.oasis.opendocument.spreadsheet-template");
-        extensionToMimeTypeMap.put("odt", MIMETYPE_OPENDOCUMENT_TEXT);
-        extensionToMimeTypeMap.put("odm", "application/vnd.oasis.opendocument.text-master");
-        extensionToMimeTypeMap.put("ott", "application/vnd.oasis.opendocument.text-template");
-        extensionToMimeTypeMap.put("oth", "application/vnd.oasis.opendocument.text-web");
     }
 
     public static String getExtension(String filename) {
@@ -135,25 +114,6 @@ public class FileUtilities {
         int type = lookupExtension (filename);
         Log.d(LOGTAG, "extn : " + filename + " -> " + type);
         return type;
-    }
-
-    static String getMimeType(String filename) {
-        String extension = MimeTypeMap.getFileExtensionFromUrl(filename);
-        String mime = extensionToMimeTypeMap.get(extension);
-        if (mime == null) {
-            //fallback to Android's MimeTypeMap
-            mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    extension);
-        }
-        return mime;
-    }
-
-    static boolean isHidden(File file) {
-        return file.getName().startsWith(".");
-    }
-
-    static boolean isThumbnail(File file) {
-        return isHidden(file) && file.getName().endsWith(".png");
     }
 
     /**
