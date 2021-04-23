@@ -363,7 +363,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
                         if ( !aStrField.isEmpty() )
                         {
-                            aStrList.append(aStrField).append("\n");
+                            aStrList.append(aStrField + "\n");
                         }
                     }
                     else
@@ -386,7 +386,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
                         if ( !aStrField.isEmpty() )
                         {
-                            aStrList.append(aStrField).append("\n");
+                            aStrList.append(aStrField + "\n");
                         }
                     }
                     else

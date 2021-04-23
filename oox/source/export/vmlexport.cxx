@@ -1120,15 +1120,9 @@ void VMLExport::AddLineDimensions( const tools::Rectangle& rRectangle )
         aBottom = OString::number( rRectangle.Bottom() );
     }
 
-    m_pShapeAttrList->add( XML_from,
-            OStringBuffer( 20 ).append( aLeft )
-            .append( "," ).append( aTop )
-            .makeStringAndClear() );
+    m_pShapeAttrList->add( XML_from, aLeft + "," + aTop );
 
-    m_pShapeAttrList->add( XML_to,
-            OStringBuffer( 20 ).append( aRight )
-            .append( "," ).append( aBottom )
-            .makeStringAndClear() );
+    m_pShapeAttrList->add( XML_to, aRight + "," + aBottom );
 }
 
 void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const tools::Rectangle& rRectangle, bool rbAbsolutePos)

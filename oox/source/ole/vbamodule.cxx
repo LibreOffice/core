@@ -301,8 +301,7 @@ void VbaModule::createModule( std::u16string_view rVBASourceCode,
     else
     {
         // add a subroutine named after the module itself
-        aSourceCode.append( "Sub " ).
-            append( maName.replace( ' ', '_' ) ).append( '\n' );
+        aSourceCode.append( "Sub " + maName.replace( ' ', '_' ) + "\n" );
     }
 
     // append passed VBA source code

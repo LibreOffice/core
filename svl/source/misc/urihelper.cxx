@@ -786,16 +786,16 @@ OUString URIHelper::resolveIdnaHost(OUString const & url) {
         return url;
     }
     OUStringBuffer buf(uri->getScheme());
-    buf.append("://").append(auth.subView(0, hostStart));
+    buf.append(OUString::Concat("://") + auth.subView(0, hostStart));
     buf.append(
         reinterpret_cast<sal_Unicode const *>(ascii.getBuffer()),
         ascii.length());
-    buf.append(auth.subView(hostEnd)).append(uri->getPath());
+    buf.append(auth.subView(hostEnd) + uri->getPath());
     if (uri->hasQuery()) {
-        buf.append('?').append(uri->getQuery());
+        buf.append("?" + uri->getQuery());
     }
     if (uri->hasFragment()) {
-        buf.append('#').append(uri->getFragment());
+        buf.append("#" + uri->getFragment());
     }
     return buf.makeStringAndClear();
 }

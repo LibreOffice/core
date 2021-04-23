@@ -576,7 +576,7 @@ OUString SwEditShell::Calculate()
                                                   pStart->nContent.GetIndex() );
                             bValidFields = true;
                         }
-                        aFormel.append("(").append(aCalc.GetStrResult( aCalc.VarLook( sVar )->nValue )).append(")");
+                        aFormel.append("(" + aCalc.GetStrResult( aCalc.VarLook( sVar )->nValue ) + ")");
                     }
                     else
                         aFormel.append(sVar);

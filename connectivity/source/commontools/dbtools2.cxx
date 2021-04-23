@@ -261,8 +261,8 @@ namespace
         for(sal_Int32 i=0;i<nColCount;++i)
         {
             if ( (_xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
-                sSql.append( ::dbtools::quoteName(sQuote,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))) )
-                        .append(",");
+                sSql.append( ::dbtools::quoteName(sQuote,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))) +
+                            ",");
         }
 
         if ( nColCount )

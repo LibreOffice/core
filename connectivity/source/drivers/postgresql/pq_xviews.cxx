@@ -149,7 +149,7 @@ void Views::appendByDescriptor(
 
     buf.append( "CREATE VIEW ");
     bufferQuoteQualifiedIdentifier( buf, schema, name, m_pSettings );
-    buf.append(" AS " ).append( command );
+    buf.append(" AS " + command );
 
     stmt->executeUpdate( buf.makeStringAndClear() );
 

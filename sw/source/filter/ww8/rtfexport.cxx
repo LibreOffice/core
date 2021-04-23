@@ -352,28 +352,23 @@ void RtfExport::DoFormText(const SwInputField* pField)
     m_pAttrOutput->RunText().append(OOO_STRING_SVTOOLS_RTF_FFTYPETXT "0");
 
     if (!sName.isEmpty())
-        m_pAttrOutput->RunText()
-            .append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ")
-            .append(msfilter::rtfutil::OutString(sName, m_eDefaultEncoding))
-            .append("}");
+        m_pAttrOutput->RunText().append(
+            "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " "
+            + msfilter::rtfutil::OutString(sName, m_eDefaultEncoding) + "}");
     if (!rHelp.isEmpty())
-        m_pAttrOutput->RunText()
-            .append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ")
-            .append(msfilter::rtfutil::OutString(rHelp, m_eDefaultEncoding))
-            .append("}");
-    m_pAttrOutput->RunText()
-        .append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFDEFTEXT " ")
-        .append(msfilter::rtfutil::OutString(sResult, m_eDefaultEncoding))
-        .append("}");
+        m_pAttrOutput->RunText().append(
+            "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " "
+            + msfilter::rtfutil::OutString(rHelp, m_eDefaultEncoding) + "}");
+    m_pAttrOutput->RunText().append(
+        "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFDEFTEXT " "
+        + msfilter::rtfutil::OutString(sResult, m_eDefaultEncoding) + "}");
     if (!rStatus.isEmpty())
-        m_pAttrOutput->RunText()
-            .append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ")
-            .append(msfilter::rtfutil::OutString(rStatus, m_eDefaultEncoding))
-            .append("}");
+        m_pAttrOutput->RunText().append(
+            "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " "
+            + msfilter::rtfutil::OutString(rStatus, m_eDefaultEncoding) + "}");
     m_pAttrOutput->RunText().append("}}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
-    m_pAttrOutput->RunText()
-        .append(msfilter::rtfutil::OutString(sResult, m_eDefaultEncoding))
-        .append("}}");
+    m_pAttrOutput->RunText().append(msfilter::rtfutil::OutString(sResult, m_eDefaultEncoding)
+                                    + "}}");
 }
 
 sal_uLong RtfExport::ReplaceCr(sal_uInt8 /*nChar*/)

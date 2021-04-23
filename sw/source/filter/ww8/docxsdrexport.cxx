@@ -1622,11 +1622,7 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
     if (!bTextBoxOnly)
     {
         OString sRotation(OString::number(m_pImpl->getDMLandVMLTextFrameRotation().get() / -100));
-        m_pImpl->getExport()
-            .SdrExporter()
-            .getTextFrameStyle()
-            .append(";rotation:")
-            .append(sRotation);
+        m_pImpl->getExport().SdrExporter().getTextFrameStyle().append(";rotation:" + sRotation);
     }
     m_pImpl->getExport().OutputFormat(pParentFrame->GetFrameFormat(), false, false, true);
     m_pImpl->getFlyAttrList()->add(XML_style, m_pImpl->getTextFrameStyle().makeStringAndClear());

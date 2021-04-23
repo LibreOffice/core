@@ -1384,13 +1384,13 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
     switch ( getLongDateOrder() )
     {
         case DateOrder::DMY :
-            aStr.append(aDay).append(getLongDateDaySep()).append(aMonth).append(getLongDateMonthSep()).append(aYear);
+            aStr.append(aDay + getLongDateDaySep() + aMonth + getLongDateMonthSep() + aYear);
         break;
         case DateOrder::MDY :
-            aStr.append(aMonth).append(getLongDateMonthSep()).append(aDay).append(getLongDateDaySep()).append(aYear);
+            aStr.append(aMonth + getLongDateMonthSep() + aDay + getLongDateDaySep() + aYear);
         break;
         default:    // YMD
-            aStr.append(aYear).append(getLongDateYearSep()).append(aMonth).append(getLongDateMonthSep()).append(aDay);
+            aStr.append(aYear + getLongDateYearSep() + aMonth + getLongDateMonthSep() + aDay);
     }
     return aStr.makeStringAndClear();
 }

@@ -70,7 +70,7 @@ bool StringView::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOperator
         if (!memberCallExpr)
             return;
         auto methodDecl = memberCallExpr->getMethodDecl();
-        if (!methodDecl->getIdentifier() || methodDecl->getName() != "copy")
+        if (!methodDecl || !methodDecl->getIdentifier() || methodDecl->getName() != "copy")
             return;
         report(DiagnosticsEngine::Warning, "rather than copy, pass with a view using subView()",
                compat::getBeginLoc(expr))

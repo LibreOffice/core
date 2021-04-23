@@ -222,13 +222,9 @@ namespace connectivity
 
     OUString SQLError_Impl::impl_getErrorMessage( ErrorCondition _eCondition )
     {
-        OUStringBuffer aMessage;
-
         OUString sResMessage(Translate::get(lcl_getResourceErrorID(_eCondition), m_aResources));
         OSL_ENSURE( !sResMessage.isEmpty(), "SQLError_Impl::impl_getErrorMessage: illegal error condition, or invalid resource!" );
-        aMessage.append( getMessagePrefix() ).append( " " ).append( sResMessage );
-
-        return aMessage.makeStringAndClear();
+        return getMessagePrefix() + " " + sResMessage;
     }
 
     OUString SQLError_Impl::impl_getSQLState( ErrorCondition _eCondition )

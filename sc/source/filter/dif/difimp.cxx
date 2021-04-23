@@ -502,9 +502,7 @@ DATASET DifParser::GetNextDataset()
                 ReadNextLine( aTmpLine );
                 if ( eRet == D_SYNT_ERROR )
                 {   // for broken records write "#ERR: data" to cell
-                    m_aData = "#ERR: ";
-                    m_aData.append(pCurrentBuffer).append(" (");
-                    m_aData.append(aTmpLine).append(')');
+                    m_aData = OUString::Concat("#ERR: ") + pCurrentBuffer + " (" +  aTmpLine + ")";
                     eRet = D_STRING;
                 }
                 else

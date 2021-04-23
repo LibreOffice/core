@@ -174,28 +174,28 @@ namespace
         switch( i_nFilterOperator )
         {
             case SQLFilterOperator::EQUAL:
-                o_sRet.append(" = " ).append( i_sValue);
+                o_sRet.append(OUString::Concat(" = ") + i_sValue);
                 break;
             case SQLFilterOperator::NOT_EQUAL:
-                o_sRet.append(" <> " ).append( i_sValue);
+                o_sRet.append(OUString::Concat(" <> ") + i_sValue);
                 break;
             case SQLFilterOperator::LESS:
-                o_sRet.append(" < " ).append( i_sValue);
+                o_sRet.append(OUString::Concat(" < ") + i_sValue);
                 break;
             case SQLFilterOperator::GREATER:
-                o_sRet.append(" > " ).append( i_sValue);
+                o_sRet.append(OUString::Concat(" > ") + i_sValue);
                 break;
             case SQLFilterOperator::LESS_EQUAL:
-                o_sRet.append(" <= " ).append( i_sValue);
+                o_sRet.append(OUString::Concat(" <= ") + i_sValue);
                 break;
             case SQLFilterOperator::GREATER_EQUAL:
-                o_sRet.append(" >= " ).append( i_sValue);
+                o_sRet.append(OUString::Concat(" >= ") + i_sValue);
                 break;
             case SQLFilterOperator::LIKE:
-                o_sRet.append(" LIKE " ).append( i_sValue);
+                o_sRet.append(OUString::Concat(" LIKE ") + i_sValue);
                 break;
             case SQLFilterOperator::NOT_LIKE:
-                o_sRet.append(" NOT LIKE " ).append( i_sValue);
+                o_sRet.append(OUString::Concat(" NOT LIKE ") + i_sValue);
                 break;
             case SQLFilterOperator::SQLNULL:
                 o_sRet.append(" IS NULL");
@@ -759,7 +759,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
         OUString sOriginalWhereClause = getSQLPart( Where, m_aSqlIterator, false );
         if ( !sOriginalWhereClause.isEmpty() )
         {
-            aSQL.append( " AND ( " ).append( sOriginalWhereClause ).append( " ) " );
+            aSQL.append( " AND ( " + sOriginalWhereClause + " ) " );
         }
 
         OUString sGroupBy = getSQLPart( Group, m_aSqlIterator, true );
@@ -1665,7 +1665,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                         const ::sal_Int64 nLength = xClob->length();
                         if ( sal_Int64(nLength + aSQL.getLength() + STR_LIKE.getLength() ) < sal_Int64(SAL_MAX_INT32) )
                         {
-                            aSQL.append("'").append(xClob->getSubString(1,static_cast<sal_Int32>(nLength))).append("'");
+                            aSQL.append("'" + xClob->getSubString(1,static_cast<sal_Int32>(nLength)) + "'");
                         }
                     }
                     else

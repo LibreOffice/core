@@ -258,7 +258,7 @@ namespace dbaui
                 for (;;)
                 {
                     // be dumb, treat everything as a string
-                    out.append(xRow->getString(i)).append(",");
+                    out.append(xRow->getString(i) + ",");
                     i++;
                 }
             }

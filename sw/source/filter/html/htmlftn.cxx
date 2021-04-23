@@ -434,18 +434,18 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote,
     }
 
     OStringBuffer sOut;
-    sOut.append('<').append(GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
-        .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"");
+    sOut.append("<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor " "
+            OOO_STRING_SVTOOLS_HTML_O_class "=\"");
     Strm().WriteOString( sOut.makeStringAndClear() );
     HTMLOutFuncs::Out_String( Strm(), sClass, m_eDestEnc, &m_aNonConvertableCharacters );
-    sOut.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
+    sOut.append("\" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
     Strm().WriteOString( sOut.makeStringAndClear() );
     HTMLOutFuncs::Out_String( Strm(), sFootnoteName, m_eDestEnc, &m_aNonConvertableCharacters );
-    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol).append("\" ")
-        .append(OOO_STRING_SVTOOLS_HTML_O_href).append("=\"#");
+    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol "\" "
+            OOO_STRING_SVTOOLS_HTML_O_href "=\"#");
     Strm().WriteOString( sOut.makeStringAndClear() );
     HTMLOutFuncs::Out_String( Strm(), sFootnoteName, m_eDestEnc, &m_aNonConvertableCharacters );
-    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_anchor).append("\">");
+    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_anchor "\">");
     Strm().WriteOString( sOut.makeStringAndClear() );
 
     HTMLOutFuncs::Out_String( Strm(), rNum, m_eDestEnc, &m_aNonConvertableCharacters );
