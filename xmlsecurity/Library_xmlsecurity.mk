@@ -91,6 +91,7 @@ $(eval $(call gb_Library_use_system_win32_libs,xmlsecurity,\
 ))
 else
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE))$(filter ANDROID,$(OS)))
+ifeq (TRUE,$(ENABLE_NSS))
 $(eval $(call gb_Library_add_defs,xmlsecurity,\
     -DXMLSEC_CRYPTO_NSS \
 ))
@@ -98,6 +99,7 @@ $(eval $(call gb_Library_use_externals,xmlsecurity,\
     nss3 \
     plc4 \
 ))
+endif
 endif # BUILD_TYPE=DESKTOP
 endif
 
