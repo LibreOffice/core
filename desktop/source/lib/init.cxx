@@ -1536,6 +1536,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_WINDOW:
         case LOK_CALLBACK_CALC_FUNCTION_LIST:
         case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+        case LOK_CALLBACK_REFERENCE_MARKS:
+        case LOK_CALLBACK_CELL_AUTO_FILL_AREA:
         {
             const auto& pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
             auto pos2 = toQueue2(pos);
