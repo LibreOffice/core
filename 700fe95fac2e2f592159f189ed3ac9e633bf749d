@@ -52,6 +52,24 @@
       "revId": "700fe95fac2e2f592159f189ed3ac9e633bf749d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46c2f9d2_c7633d47",
+        "filename": "emfio/qa/cppunit/emf/EmfImportTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-23T09:52:01Z",
+      "side": 1,
+      "message": "\u003e I can eventually take care of that.\n\nOK, thanks. As long as those stub implementations are not returning, I don\u0027t think there is a problem with the ifdef.",
+      "parentUuid": "a054dbb8_65445b0c",
+      "revId": "700fe95fac2e2f592159f189ed3ac9e633bf749d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
