@@ -17,7 +17,8 @@
 #include <xmlsec/xmlstreamio.hxx>
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
 #include <xmlsec/mscng/crypto.h>
-#else
+#endif
+#ifdef XMLSEC_CRYPTO_NSS
 #include <xmlsec/nss/crypto.h>
 #endif
 
@@ -36,7 +37,8 @@ XSECXMLSEC_DLLPUBLIC void initXmlSec()
         xmlSecShutdown();
         throw RuntimeException();
     }
-#else
+#endif
+#ifdef XMLSEC_CRYPTO_NSS
     if( xmlSecNssInit() < 0 ) {
         xmlSecShutdown();
         throw RuntimeException();
@@ -47,7 +49,8 @@ XSECXMLSEC_DLLPUBLIC void initXmlSec()
     if( xmlEnableStreamInputCallbacks() < 0 ) {
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
         xmlSecMSCngShutdown();
-#else
+#endif
+#ifdef XMLSEC_CRYPTO_NSS
         xmlSecNssShutdown();
 #endif
         xmlSecShutdown() ;
@@ -60,7 +63,8 @@ XSECXMLSEC_DLLPUBLIC void deInitXmlSec()
     xmlDisableStreamInputCallbacks();
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
     xmlSecMSCngShutdown();
-#else
+#endif
+#ifdef XMLSEC_CRYPTO_NSS
     xmlSecNssShutdown();
 #endif
     xmlSecShutdown();
