@@ -16,6 +16,24 @@
       "revId": "680cfb9d6003505eef9d7d18b7fe6e2698852361",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "682e9e3f_5a448398",
+        "filename": "external/icu/ExternalProject_icu.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-04-23T15:27:51Z",
+      "side": 0,
+      "message": "Nope. The whole line is removed, because ultimately --disable-dyload is set 4 lines below for DISABLE_DYNLOADING.",
+      "parentUuid": "c985ebbb_12012e71",
+      "revId": "680cfb9d6003505eef9d7d18b7fe6e2698852361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
