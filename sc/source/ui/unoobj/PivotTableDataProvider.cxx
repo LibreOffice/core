@@ -615,7 +615,7 @@ PivotTableDataProvider::assignLabelsToDataSequence(size_t nIndex)
             }
             else
             {
-                aLabel.append(" - ").append(rItem.m_aString);
+                aLabel.append(" - " + rItem.m_aString);
             }
         }
     }

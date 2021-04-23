@@ -2150,9 +2150,9 @@ librdf_TypeConverter::extractResourceToCacheKey_NoLock(
     }
     uno::Reference< rdf::XBlankNode > xBlankNode(i_xResource, uno::UNO_QUERY);
     if (xBlankNode.is()) {
-        rBuffer.append("BlankNode ").append(xBlankNode->getStringValue());
+        rBuffer.append("BlankNode " + xBlankNode->getStringValue());
     } else { // assumption: everything else is URI
-        rBuffer.append("URI ").append(i_xResource->getStringValue());
+        rBuffer.append("URI " + i_xResource->getStringValue());
     }
 }
 
@@ -2242,10 +2242,10 @@ librdf_TypeConverter::extractNodeToCacheKey_NoLock(
     if (!xLiteral.is()) {
         return;
     }
-    rBuffer.append("Literal ").append(xLiteral->getValue()).append("\t").append(xLiteral->getLanguage());
+    rBuffer.append("Literal " + xLiteral->getValue() + "\t" + xLiteral->getLanguage());
     const uno::Reference< rdf::XURI > xType(xLiteral->getDatatype());
     if (xType.is())
-        rBuffer.append("\t").append(xType->getStringValue());
+        rBuffer.append("\t" + xType->getStringValue());
 }
 
 // create blank or URI or literal node

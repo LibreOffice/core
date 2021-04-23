@@ -4335,7 +4335,7 @@ OUString NfCurrencyEntry::BuildSymbolString(bool bBank,
         if ( aSymbol.indexOf( '-' ) >= 0 ||
              aSymbol.indexOf( ']' ) >= 0)
         {
-            aBuf.append('"').append(aSymbol).append('"');
+            aBuf.append("\"" + aSymbol + "\"");
         }
         else
         {
@@ -4355,7 +4355,7 @@ OUString NfCurrencyEntry::Impl_BuildFormatStringNumChars( const LocaleDataWrappe
                                                           sal_uInt16 nDecimalFormat) const
 {
     OUStringBuffer aBuf;
-    aBuf.append('#').append(rLoc.getNumThousandSep()).append("##0");
+    aBuf.append("#" + rLoc.getNumThousandSep() + "##0");
     if (nDecimalFormat && nDigits)
     {
         aBuf.append(rLoc.getNumDecimalSep());

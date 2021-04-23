@@ -183,13 +183,13 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
         // if nValueLength not calculated then nullptr
     sal_Int32* pValueLength = nValueLength ? &nValueLength : nullptr;
     if ( m_fSign < 0.0 )
-        aTmpBuf.append( OUStringChar(aMinusSign) ).append( " " );
+        aTmpBuf.append( OUStringChar(aMinusSign) + " " );
     if ( bHasIntercept )
     {
         OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fIntercept, pValueLength );
         if ( aValueString != "1" )  // aValueString may be rounded to 1 if nValueLength is small
         {
-            aTmpBuf.append( aValueString ).append( " " );
+            aTmpBuf.append( aValueString + " " );
             addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
             aTmpBuf.truncate();
         }
@@ -208,16 +208,16 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
         }
     }
     if ( m_fLogSlope < 0.0 )
-        aTmpBuf.append( OUStringChar(aMinusSign) ).append( " " );
+        aTmpBuf.append( OUStringChar(aMinusSign) + " " );
     if ( bHasLogSlope )
     {
         OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope), pValueLength );
         if ( aValueString != "1" )  // aValueString may be rounded to 1 if nValueLength is small
         {
-            aTmpBuf.append( aValueString ).append( " " );
+            aTmpBuf.append( aValueString + " " );
         }
     }
-    aTmpBuf.append( mXName ).append(" )");
+    aTmpBuf.append( mXName + " )");
     addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
 
     return aBuf.makeStringAndClear();

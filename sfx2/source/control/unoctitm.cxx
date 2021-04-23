@@ -538,8 +538,7 @@ void UsageInfo::save()
         OStringBuffer aUsageInfoMsg("Document Type;Command;Count");
 
         for (auto const& elem : maUsage)
-            aUsageInfoMsg.append("\n").append(elem.first.toUtf8())
-                .append(";").append(static_cast<sal_Int32>(elem.second));
+            aUsageInfoMsg.append("\n" + elem.first.toUtf8() + ";").append(static_cast<sal_Int32>(elem.second));
 
         sal_uInt64 written = 0;
         auto s = aUsageInfoMsg.makeStringAndClear();
@@ -1309,7 +1308,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
                 aBuffer.append(u'{');
                 for (sal_Int32 itSeq = 0; itSeq < aSeq.getLength(); itSeq++)
                 {
-                    aBuffer.append("\"").append(aSeq[itSeq]);
+                    aBuffer.append("\"" + aSeq[itSeq]);
                     if (itSeq != aSeq.getLength() - 1)
                         aBuffer.append("\":true,");
                     else

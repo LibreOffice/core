@@ -1455,7 +1455,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
     {
         if ( !ppFDesc->getFunctionName().isEmpty() )
         {
-            aTipStr.append(" : ").append(ppFDesc->getDescription());
+            aTipStr.append(" : " + ppFDesc->getDescription());
         }
     }
     ShowTip( aTipStr.makeStringAndClear() );

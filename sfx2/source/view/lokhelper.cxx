@@ -477,14 +477,14 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
 
     OStringBuffer aPayload;
     aPayload.append("{ \"id\": \"").append(static_cast<sal_Int64>(nLOKWindowId)).append('"');
-    aPayload.append(", \"action\": \"").append(OUStringToOString(rAction, RTL_TEXTENCODING_UTF8)).append('"');
+    aPayload.append(", \"action\": \"" + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8) + "\"");
 
     for (const auto& rItem: rPayload)
     {
         if (!rItem.first.isEmpty() && !rItem.second.isEmpty())
         {
-            aPayload.append(", \"").append(rItem.first).append("\": \"")
-                .append(rItem.second).append('"');
+            aPayload.append(", \"" + rItem.first + "\": \"" +
+                    rItem.second).append('"');
         }
     }
     aPayload.append('}');

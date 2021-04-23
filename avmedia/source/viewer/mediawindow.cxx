@@ -225,7 +225,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
             if( !aAllTypes.isEmpty() )
                 aAllTypes.append(aSeparator);
 
-            aAllTypes.append(aWildcard).append(aFilters[ i ].second.getToken( 0, ';', nIndex ));
+            aAllTypes.append(aWildcard + aFilters[ i ].second.getToken( 0, ';', nIndex ));
         }
     }
 
@@ -241,7 +241,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
             if( !aTypes.isEmpty() )
                 aTypes.append(aSeparator);
 
-            aTypes.append(aWildcard).append(aFilters[ i ].second.getToken( 0, ';', nIndex ));
+            aTypes.append(aWildcard + aFilters[ i ].second.getToken( 0, ';', nIndex ));
         }
 
         // add single filters

@@ -135,7 +135,7 @@ void MergeColumnTransformation::Transform(ScDocument& rDoc) const
         {
             if (itr != nTargetCol)
             {
-                aStr.append(maMergeString).append(rDoc.GetString(itr, nRow, 0));
+                aStr.append(maMergeString + rDoc.GetString(itr, nRow, 0));
             }
         }
         rDoc.SetString(nTargetCol, nRow, 0, aStr.makeStringAndClear());

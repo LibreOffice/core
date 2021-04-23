@@ -722,7 +722,7 @@ void ProgressMonitor::impl_rebuildFixedText ()
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
         for (auto const & pSearchItem : maTextlist_Top)
         {
-            aCollectString.append(pSearchItem->sTopic).append("\n");
+            aCollectString.append(pSearchItem->sTopic + "\n");
         }
 
         m_xTopic_Top->setText ( aCollectString.makeStringAndClear() );
@@ -737,7 +737,7 @@ void ProgressMonitor::impl_rebuildFixedText ()
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
         for (auto const & pSearchItem : maTextlist_Top)
         {
-            aCollectString.append(pSearchItem->sText).append("\n");
+            aCollectString.append(pSearchItem->sText + "\n");
         }
 
         m_xText_Top->setText ( aCollectString.makeStringAndClear() );
@@ -754,7 +754,7 @@ void ProgressMonitor::impl_rebuildFixedText ()
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
         for (auto const & pSearchItem : maTextlist_Bottom)
         {
-            aCollectString.append(pSearchItem->sTopic).append("\n");
+            aCollectString.append(pSearchItem->sTopic + "\n");
         }
 
         m_xTopic_Bottom->setText ( aCollectString.makeStringAndClear() );
@@ -770,7 +770,7 @@ void ProgressMonitor::impl_rebuildFixedText ()
     // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
     for (auto const & pSearchItem : maTextlist_Bottom)
     {
-        aCollectString.append(pSearchItem->sText).append("\n");
+        aCollectString.append(pSearchItem->sText + "\n");
     }
 
     m_xText_Bottom->setText ( aCollectString.makeStringAndClear() );

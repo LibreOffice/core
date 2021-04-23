@@ -160,7 +160,7 @@ void OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQ
     connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->end();
     for(; aIter != aEnd;++aIter)
     {
-        aSql.append(::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++)) ).append(",");
+        aSql.append(::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++)) + ",");
         aValues.append("?,");
     }
 
@@ -261,7 +261,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
         }
         if(aIter->isModified())
         {
-            _sParameter.append(::dbtools::quoteName( aQuote,aColumnName) ).append("?,");
+            _sParameter.append(::dbtools::quoteName( aQuote,aColumnName) + "?,");
         }
     }
 }
@@ -282,7 +282,7 @@ void OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOri
     {
         aCondition.setLength(aCondition.getLength()-5);
 
-        aSql.append(" WHERE " ).append( aCondition.makeStringAndClear());
+        aSql.append(" WHERE " + aCondition.makeStringAndClear());
     }
     else
         ::dbtools::throwSQLException(

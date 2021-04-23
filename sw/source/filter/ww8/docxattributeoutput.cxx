@@ -9038,8 +9038,8 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyV
     {
         m_rExport.SdrExporter().getTextFrameStyle().append(";margin-top:").append(double(rFlyVert.GetPos()) / 20).append("pt");
         if ( !sAlign.isEmpty() )
-            m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-vertical:").append(sAlign);
-        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-vertical-relative:").append(sVAnchor);
+            m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-vertical:" + sAlign);
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-vertical-relative:" + sVAnchor);
     }
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
@@ -9064,8 +9064,8 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFly
     {
         m_rExport.SdrExporter().getTextFrameStyle().append(";margin-left:").append(double(rFlyHori.GetPos()) / 20).append("pt");
         if ( !sAlign.isEmpty() )
-            m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-horizontal:").append(sAlign);
-        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-horizontal-relative:").append(sHAnchor);
+            m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-horizontal:" + sAlign);
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-horizontal-relative:" + sHAnchor);
     }
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {

@@ -995,13 +995,13 @@ void FilterCache::impl_validateAndOptimize()
         aType[PROPNAME_NAME] >>= sInternalTypeNameCheck;
         if (sInternalTypeNameCheck != sType)
         {
-            sLog.append("Warning\t:\t" "The type \"").append(sType).append("\" does support the property \"Name\" correctly.\n");
+            sLog.append("Warning\t:\t" "The type \"" + sType + "\" does support the property \"Name\" correctly.\n");
             ++nWarnings;
         }
 
         if (!ce && !cu)
         {
-            sLog.append("Warning\t:\t" "The type \"").append(sType).append("\" does not contain any URL pattern nor any extensions.\n");
+            sLog.append("Warning\t:\t" "The type \"" + sType + "\" does not contain any URL pattern nor any extensions.\n");
             ++nWarnings;
         }
 #endif
@@ -1077,7 +1077,7 @@ void FilterCache::impl_validateAndOptimize()
                 (!bReferencedByHandler)
                )
             {
-                sLog.append("Warning\t:\t" "The type \"").append(sType).append("\" is not used by any filter, loader or content handler.\n");
+                sLog.append("Warning\t:\t" "The type \"" + sType + "\" is not used by any filter, loader or content handler.\n");
                 ++nWarnings;
             }
         }
@@ -1098,7 +1098,7 @@ void FilterCache::impl_validateAndOptimize()
                     sLog.append("warning\t:\t");
                 }
 
-                sLog.append("The type \"").append(sType).append("\" points to an invalid filter \"").append(sPrefFilter).append("\".\n");
+                sLog.append("The type \"" + sType + "\" points to an invalid filter \"" + sPrefFilter + "\".\n");
                 continue;
             }
 
@@ -1107,10 +1107,10 @@ void FilterCache::impl_validateAndOptimize()
             aPrefFilter[PROPNAME_TYPE] >>= sFilterTypeReg;
             if (sFilterTypeReg != sType)
             {
-                sLog.append("error\t:\t" "The preferred filter \"")
-                    .append(sPrefFilter).append("\" of type \"").append(sType)
-                    .append("\" is registered for another type \"").append(sFilterTypeReg)
-                    .append("\".\n");
+                sLog.append("error\t:\t" "The preferred filter \"" +
+                        sPrefFilter + "\" of type \"" + sType +
+                        "\" is registered for another type \"" + sFilterTypeReg +
+                        "\".\n");
                 ++nErrors;
             }
 
@@ -1118,8 +1118,8 @@ void FilterCache::impl_validateAndOptimize()
             aPrefFilter[PROPNAME_FLAGS] >>= nFlags;
             if (!(static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::IMPORT))
             {
-                sLog.append("error\t:\t" "The preferred filter \"").append(sPrefFilter).append("\" of type \"")
-                            .append(sType).append("\" is not an IMPORT filter!\n");
+                sLog.append("error\t:\t" "The preferred filter \"" + sPrefFilter + "\" of type \"" +
+                                sType + "\" is not an IMPORT filter!\n");
                 ++nErrors;
             }
 
@@ -1127,8 +1127,8 @@ void FilterCache::impl_validateAndOptimize()
             aPrefFilter[PROPNAME_NAME] >>= sInternalFilterNameCheck;
             if (sInternalFilterNameCheck !=  sPrefFilter)
             {
-                sLog.append("Warning\t:\t" "The filter \"").append(sPrefFilter)
-                            .append("\" does support the property \"Name\" correctly.\n");
+                sLog.append("Warning\t:\t" "The filter \"" + sPrefFilter +
+                                "\" does support the property \"Name\" correctly.\n");
                 ++nWarnings;
             }
         }

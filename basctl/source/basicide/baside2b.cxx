@@ -1885,7 +1885,7 @@ void StackWindow::UpdateCalls()
             OUStringBuffer aEntry( OUString::number(nScope ));
             if ( aEntry.getLength() < 2 )
                 aEntry.insert(0, " ");
-            aEntry.append(": ").append(pMethod->GetName());
+            aEntry.append(": " + pMethod->GetName());
             SbxArray* pParams = pMethod->GetParameters();
             SbxInfo* pInfo = pMethod->GetInfo();
             if ( pParams )

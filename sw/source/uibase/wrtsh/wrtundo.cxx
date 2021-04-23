@@ -130,7 +130,7 @@ void SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
     for (const OUString & comment : comments)
     {
         OSL_ENSURE(!comment.isEmpty(), "no Undo/Redo Text set");
-        buf.append(comment).append("\n");
+        buf.append(comment + "\n");
     }
     rStrs.SetString(buf.makeStringAndClear());
 }

@@ -2040,9 +2040,9 @@ void NumberFormatsBuffer::insertBuiltinFormats()
     BuiltinVec aBuiltinVec;
     BuiltinMap::const_iterator aMIt = aBuiltinMap.find( maLocaleStr ), aMEnd = aBuiltinMap.end();
     OSL_ENSURE( aMIt != aMEnd,
-        OStringBuffer( "NumberFormatsBuffer::insertBuiltinFormats - locale '" ).
-        append( OUStringToOString( maLocaleStr, RTL_TEXTENCODING_ASCII_US ) ).
-        append( "' not supported (#i29949#)" ).getStr() );
+        OStringBuffer( "NumberFormatsBuffer::insertBuiltinFormats - locale '"  +
+            OUStringToOString( maLocaleStr, RTL_TEXTENCODING_ASCII_US ) +
+            "' not supported (#i29949#)" ).getStr() );
     // start with default table, if no table has been found
     if( aMIt == aMEnd )
         aMIt = aBuiltinMap.find( "*" );
