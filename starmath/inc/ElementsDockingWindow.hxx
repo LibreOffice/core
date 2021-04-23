@@ -185,6 +185,7 @@ public:
 
     virtual void EndDocking( const tools::Rectangle& rReactangle, bool bFloatMode) override;
     virtual void ToggleFloatingMode() override;
+    virtual void GetFocus() override;
 
     void setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
 };

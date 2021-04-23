@@ -1211,6 +1211,13 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
     mxElementsControl->SetSelectHdl(LINK(this, SmElementsDockingWindow, SelectClickHandler));
 }
 
+void SmElementsDockingWindow::GetFocus()
+{
+    SfxDockingWindow::GetFocus();
+    if (mxElementListBox)
+        mxElementListBox->grab_focus();
+}
+
 SmElementsDockingWindow::~SmElementsDockingWindow ()
 {
     disposeOnce();
