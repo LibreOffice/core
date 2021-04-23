@@ -72,6 +72,8 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
     void switchToEditMode() {
         if (!LOKitShell.isEditingEnabled())
             return;
+
+        setEditModeOn(true);
         // Ensure the change is done on UI thread
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
@@ -89,7 +91,6 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 }
                 mToolbarTop.setNavigationIcon(R.drawable.ic_check);
                 mToolbarTop.setLogo(null);
-                setEditModeOn(true);
             }
         });
     }
@@ -251,7 +252,7 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
             if (LibreOfficeMainActivity.isReadOnlyMode()) {
                 // show message in case experimental mode is enabled (i.e. editing is supported in general),
                 // but current document is readonly
-                Toast.makeText(mContext, mContext.getString(R.string.temp_file_saving_disabled), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, mContext.getString(R.string.readonly_file), Toast.LENGTH_LONG).show();
             }
         }
         mMainMenu.findItem(R.id.action_parts).setVisible(mContext.isDrawerEnabled());

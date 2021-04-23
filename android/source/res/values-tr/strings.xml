@@ -9,7 +9,7 @@
     <string name="app_description">LibreOffice Görüntüleyici LibreOffice tabanlı bir belge görüntüleyicisidir.</string>
     <string name="app_credits">https://www.libreoffice.org</string>
     <string name="app_vendor">Bu sürüm $VENDOR tarafından derlenmiştir.</string>
-    <string name="temp_file_saving_disabled">Bu dosya salt okunabilir haldedir. Kaydetme devredışı.</string>
+    <string name="readonly_file">Bu dosya salt okunabilir haldedir.</string>
 
     <string name="about_license">Lisansı Görüntüle</string>
     <string name="about_notice">Bildiriyi Görüntüle</string>

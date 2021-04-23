@@ -38,15 +38,16 @@
         <item android:id="@+id/action_save"
             android:title="@string/action_save"
             android:orderInCategory="100" />
-
-        <item android:id="@+id/action_save_as"
-            android:title="@string/action_save_as"
-            android:orderInCategory="100" />
     </group>
 
     <group android:id="@+id/group_misc_actions"
            tools:visible="true"
            android:visible="false">
+
+        <item android:id="@+id/action_save_as"
+            android:title="@string/action_save_as"
+            android:orderInCategory="100"
+            android:visible="true" />
 
         <item android:id="@+id/action_exportToPDF"
             android:title="@string/action_exportToPDF"
