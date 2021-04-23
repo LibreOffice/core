@@ -66,7 +66,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		" \
 		&& export LIBREOFFICE_ICU_LIB="$(call gb_UnpackedTarball_get_dir,icu)/source/lib" \
 		&& export MSVC_USE_INDIVIDUAL_PDBS=TRUE \
-		&& MAKE=$(MAKE) ./configure \
+		&& MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--without-editline \
 			--with-wire-compress=no \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \

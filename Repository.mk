@@ -552,9 +552,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	) \
 	log_uno_uno \
 	unsafe_uno_uno \
-	$(if $(filter MSC,$(COM)), \
-        $(if $(filter INTEL,$(CPUNAME)),msci, \
-		$(if $(filter AARCH64,$(CPUNAME)),msca,mscx)),gcc3)_uno \
+	$(if $(filter EMSCRIPTEN,$(OS)),, \
+		$(if $(filter MSC,$(COM)), \
+			$(if $(filter INTEL,$(CPUNAME)),msci_uno) \
+			$(if $(filter X86_64,$(CPUNAME)),mscx_uno) \
+			$(if $(filter AARCH64,$(CPUNAME)),msca_uno) \
+		, gcc3_uno) \
+	) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \

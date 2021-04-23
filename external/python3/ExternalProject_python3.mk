@@ -84,7 +84,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 				ac_cv_func_clock_gettime=no \
 			) \
 		) \
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		$(if $(ENABLE_VALGRIND),--with-valgrind) \
 		$(if $(ENABLE_DBGUTIL),--with-pydebug) \
