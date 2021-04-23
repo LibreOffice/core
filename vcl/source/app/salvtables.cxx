@@ -3819,10 +3819,19 @@ void SalInstanceTreeView::insert_separator(int pos, const OUString& /*rId*/)
 
 void SalInstanceTreeView::bulk_insert_for_each(
     int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
-    const std::vector<int>* pFixedWidths)
+    const weld::TreeIter* pParent, const std::vector<int>* pFixedWidths)
 {
+    const SalInstanceTreeIter* pVclIter = static_cast<const SalInstanceTreeIter*>(pParent);
+    SvTreeListEntry* pVclParent = pVclIter ? pVclIter->iter : nullptr;
+
     freeze();
-    clear();
+    if (!pVclParent)
+        clear();
+    else
+    {
+        while (SvTreeListEntry* pChild = m_xTreeView->FirstChild(pVclParent))
+            m_xTreeView->RemoveEntry(pChild);
+    }
     SalInstanceTreeIter aVclIter(static_cast<SvTreeListEntry*>(nullptr));
 
     m_xTreeView->nTreeFlags |= SvTreeFlags::MANINS;
@@ -3840,7 +3849,7 @@ void SalInstanceTreeView::bulk_insert_for_each(
         if (bHasAutoCheckButton)
             AddStringItem(aVclIter.iter, "", -1);
         aVclIter.iter->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
-        m_xTreeView->Insert(aVclIter.iter, nullptr, TREELIST_APPEND);
+        m_xTreeView->Insert(aVclIter.iter, pVclParent, TREELIST_APPEND);
         func(aVclIter, i);
 
         if (!pFixedWidths)

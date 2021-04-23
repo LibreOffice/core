@@ -836,7 +836,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             {
                 aFormatText.insert(rDouble.sShort);
             }
-        }, &m_aReplaceFixedWidths);
+        }, nullptr, &m_aReplaceFixedWidths);
     }
     else
     {
@@ -862,7 +862,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             {
                 aFormatText.insert(elem.GetShort());
             }
-        }, &m_aReplaceFixedWidths);
+        }, nullptr, &m_aReplaceFixedWidths);
         m_xNewReplacePB->set_sensitive(false);
         m_xDeleteReplacePB->set_sensitive(false);
     }
