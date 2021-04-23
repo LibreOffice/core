@@ -2986,7 +2986,7 @@ namespace
 void SvxIconSelectorDialog::ImportGraphics(
     const uno::Sequence< OUString >& rPaths )
 {
-    uno::Sequence< OUString > rejected( rPaths.getLength() );
+    std::vector< OUString > rejected( rPaths.getLength() );
     sal_Int32 rejectedCount = 0;
 
     sal_uInt16 ret = 0;
