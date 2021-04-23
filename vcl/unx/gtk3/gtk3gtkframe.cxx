@@ -3267,10 +3267,12 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
             if (bHandled)
                 return true;
 
-            // Is focus inside a full-app InterimItemWindow? In which case find
-            // that InterimItemWindow and send unconsumed keystrokes to it to
-            // support ctrl-q etc shortcuts
-            if (pThis->IsCycleFocusOutDisallowed())
+            // Is focus inside an InterimItemWindow? In which case find that
+            // InterimItemWindow and send unconsumed keystrokes to it to
+            // support ctrl-q etc shortcuts. Only bother to search for the
+            // InterimItemWindow if it is a toplevel that fills its frame, or
+            // the keystroke is F6 to switch between task-panels
+            if (pThis->IsCycleFocusOutDisallowed() || pEvent->keyval == GDK_KEY_F6)
             {
                 GtkWidget* pSearch = pFocusWindow;
                 while (pSearch)
@@ -3371,19 +3373,28 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
     }
     else
     {
+        bool bRestoreDisallowCycleFocusOut = false;
+
+        VclPtr<vcl::Window> xOrigFrameFocusWin;
         VclPtr<vcl::Window> xOrigFocusWin;
         if (xTopLevelInterimWindow)
         {
-            // Focus is inside a full-app InterimItemWindow send unconsumed
+            // Focus is inside an InterimItemWindow so send unconsumed
             // keystrokes to by setting it as the mpFocusWin
             VclPtr<vcl::Window> xVclWindow = pThis->GetWindow();
             ImplFrameData* pFrameData = xVclWindow->ImplGetWindowImpl()->mpFrameData;
-            xOrigFocusWin = pFrameData->mpFocusWin;
+            xOrigFrameFocusWin = pFrameData->mpFocusWin;
             pFrameData->mpFocusWin = xTopLevelInterimWindow;
-            if (pEvent->keyval == GDK_KEY_F6)
+
+            ImplSVData* pSVData = ImplGetSVData();
+            xOrigFocusWin = pSVData->mpWinData->mpFocusWin;
+            pSVData->mpWinData->mpFocusWin = xTopLevelInterimWindow;
+
+            if (pEvent->keyval == GDK_KEY_F6 && pThis->IsCycleFocusOutDisallowed())
             {
                 // For F6, allow the focus to leave the InterimItemWindow
                 pThis->AllowCycleFocusOut();
+                bRestoreDisallowCycleFocusOut = true;
             }
         }
 
@@ -3400,14 +3411,19 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
 
             if (xTopLevelInterimWindow)
             {
-                // Focus was inside a full-app InterimItemWindow, restore the original
-                // focus win, unless the focus was changed away from the InterimItemWindow
-                // which should only be possible with F6
+                // Focus was inside an InterimItemWindow, restore the original
+                // focus win, unless the focus was changed away from the
+                // InterimItemWindow which should only be possible with F6
                 VclPtr<vcl::Window> xVclWindow = pThis->GetWindow();
                 ImplFrameData* pFrameData = xVclWindow->ImplGetWindowImpl()->mpFrameData;
                 if (pFrameData->mpFocusWin == xTopLevelInterimWindow)
-                    pFrameData->mpFocusWin = xOrigFocusWin;
-                if (pEvent->keyval == GDK_KEY_F6)
+                    pFrameData->mpFocusWin = xOrigFrameFocusWin;
+
+                ImplSVData* pSVData = ImplGetSVData();
+                if (pSVData->mpWinData->mpFocusWin == xTopLevelInterimWindow)
+                    pSVData->mpWinData->mpFocusWin = xOrigFocusWin;
+
+                if (bRestoreDisallowCycleFocusOut)
                 {
                     // undo the above AllowCycleFocusOut for F6
                     pThis->DisallowCycleFocusOut();
