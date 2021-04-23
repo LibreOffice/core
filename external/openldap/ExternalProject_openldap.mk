@@ -29,7 +29,7 @@ endif
 $(call gb_ExternalProject_get_state_target,openldap,build) :
 	$(call gb_Trace_StartRange,openldap,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-slapd \
 			--with-pic \
 			--with-tls=moznss \

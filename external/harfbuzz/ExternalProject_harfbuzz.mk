@@ -27,7 +27,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 		$(if $(SYSTEM_ICU),,ICU_CONFIG=$(SRCDIR)/external/icu/cross-bin/icu-config) \
 		GRAPHITE2_CFLAGS="$(GRAPHITE_CFLAGS)" \
 		GRAPHITE2_LIBS="$(GRAPHITE_LIBS)" \
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 			--enable-static \
 			--disable-shared \
 			--disable-gtk-doc \

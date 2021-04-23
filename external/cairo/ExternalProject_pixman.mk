@@ -34,11 +34,12 @@ else
 $(call gb_ExternalProject_get_state_target,pixman,build) :
 	$(call gb_Trace_StartRange,pixman,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,$(if $(filter ANDROID,$(OS)),--disable-shared,--disable-static)) \
 		$(if $(filter ANDROID,$(OS)),--disable-arm-simd --disable-arm-neon --disable-arm-iwmmxt) \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 		$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
+		$(if $(filter EMSCRIPTEN,$(OS)),CFLAGS="-pthread") \
 		&& $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,pixman,EXTERNAL)

@@ -23,7 +23,7 @@ $(call gb_ExternalProject_get_state_target,libmwaw,build) :
 	$(call gb_Trace_StartRange,libmwaw,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
-		&& ./configure \
+		&& $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic \
 			$(if $(DISABLE_DYNLOADING), \
 				--enable-static --disable-shared \
