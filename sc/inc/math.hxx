@@ -21,6 +21,7 @@
 
 #include <formula/errorcodes.hxx>
 #include <rtl/math.hxx>
+#include "kahan.hxx"
 
 namespace sc {
 
