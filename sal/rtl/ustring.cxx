@@ -42,6 +42,13 @@
 
 #include <rtl/math.h>
 
+#if defined _WIN32
+// Temporary check to verify that the #pragma pack around rtl_uString is indeed cargo cult and can
+// safely be removed:
+static_assert(alignof (rtl_uString) == 4);
+static_assert(sizeof (rtl_uString) == 12);
+#endif
+
 /* ======================================================================= */
 
 #if USE_SDT_PROBES
