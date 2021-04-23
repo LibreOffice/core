@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <ostream>
 #include <config_options.h>
+#include <o3tl/unit_conversion.hxx>
 
 class SvStream;
 namespace rtl
@@ -172,6 +173,18 @@ inline bool operator !=(Point const & p1, Point const & p2)
     return !(p1 == p2);
 }
 
+namespace o3tl
+{
+
+constexpr Point convert(const Point& rPoint, o3tl::Length eFrom, o3tl::Length eTo)
+{
+    return Point(
+            o3tl::convert(rPoint.getX(), eFrom, eTo),
+            o3tl::convert(rPoint.getY(), eFrom, eTo));
+}
+
+} // end o3tl
+
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const Point& point )
@@ -281,6 +294,17 @@ inline Size operator/( const Size &rVal1, const tools::Long nVal2 )
     return Size( rVal1.nA/nVal2, rVal1.nB/nVal2 );
 }
 
+namespace o3tl
+{
+
+constexpr Size convert(const Size& rSize, o3tl::Length eFrom, o3tl::Length eTo)
+{
+        return Size(
+            o3tl::convert(rSize.Width(), eFrom, eTo),
+            o3tl::convert(rSize.Height(), eFrom, eTo));
+}
+
+} // end o3tl
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
@@ -780,7 +804,19 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
         : Rectangle( rRect.nLeft - rPt.X(),  rRect.nTop - rPt.Y(),
                      rRect.nRight - rPt.X(), rRect.nBottom - rPt.Y() );
 }
+
 }
+
+namespace o3tl
+{
+
+constexpr tools::Rectangle convert(const tools::Rectangle& rRectangle, o3tl::Length eFrom, o3tl::Length eTo)
+{
+    return tools::Rectangle(o3tl::convert(rRectangle.TopLeft(), eFrom, eTo),
+                            o3tl::convert(rRectangle.GetSize(), eFrom, eTo));
+}
+
+} // end o3tl
 
 namespace tools
 {
