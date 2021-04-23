@@ -16,6 +16,24 @@
       "revId": "d52241edfaff08124802810fea85f59a70dfb307",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00b45202_78e08716",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-23T11:54:47Z",
+      "side": 1,
+      "message": "But what do they actually document or protect?  As argued, they have no impact on the types\u0027 alignments and sizes, and they smell just like long-since irrelevant cargo cult that /may/ have had some relevance decades ago (esp. given the odd discrepancy in actual values 4 vs. 8).  To me, this all feels like e.g. some obsolete __far pointer annotations that we would have gotten rid of by now, too.",
+      "parentUuid": "8dede294_57fb13ef",
+      "revId": "d52241edfaff08124802810fea85f59a70dfb307",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
