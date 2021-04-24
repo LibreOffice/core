@@ -2356,7 +2356,7 @@ void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags,
     // handle this case specially, do not use GetClipParam().getWholeRange(),
     // instead loop through the ranges, calculate the row offset and handle filtered rows and
     // create in ScClipParam::transpose() a unified range.
-    bool bIsMultiRangeRowFilteredTranspose
+    const bool bIsMultiRangeRowFilteredTranspose
         = !bIncludeFiltered && GetClipParam().isMultiRange()
           && HasFilteredRows(aCombinedClipRange.aStart.Row(), aCombinedClipRange.aEnd.Row(),
                              aCombinedClipRange.aStart.Tab())
@@ -2382,10 +2382,10 @@ void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags,
             nRowOffset = nRowCount;
 
             // calculate filtered rows of current clip range
-            SCROW nRowCountAll = aClipRange.aEnd.Row() - aClipRange.aStart.Row() + 1;
             SCROW nRowCountNonFiltered = CountNonFilteredRows(
                 aClipRange.aStart.Row(), aClipRange.aEnd.Row(), aClipRange.aStart.Tab());
-            SCROW nRowCountInRange = bIncludeFiltered ? nRowCountAll : nRowCountNonFiltered;
+            assert(!bIncludeFiltered && "bIsMultiRangeRowFilteredTranspose can only be true if bIncludeFiltered is false");
+            SCROW nRowCountInRange = nRowCountNonFiltered;
             nRowCount += nRowCountInRange; // for next iteration
         }
 
