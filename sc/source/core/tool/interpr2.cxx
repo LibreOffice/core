@@ -1550,10 +1550,10 @@ void ScInterpreter::ScMIRR()
         PushError( nGlobalError );
     else
     {
-        double fNPV_reinvest = 0.0;
-        double fPow_reinvest = 1.0;
-        double fNPV_invest = 0.0;
-        double fPow_invest = 1.0;
+        ksum fNPV_reinvest = 0.0;
+        ksum fPow_reinvest = 1.0;
+        ksum fNPV_invest = 0.0;
+        ksum fPow_invest = 1.0;
         sal_uLong nCount = 0;
         bool bHasPosValue = false;
         bool bHasNegValue = false;
@@ -2360,8 +2360,8 @@ void ScInterpreter::ScCumPrinc()
     else
     {
         bool bPayInAdvance = static_cast<bool>(fFlag);
-        double fPmt = ScGetPMT(fRate, fNper, fPv, 0.0, bPayInAdvance);
-        double fPpmt = 0.0;
+        ksum fPmt = ScGetPMT(fRate, fNper, fPv, 0.0, bPayInAdvance);
+        ksum fPpmt = 0.0;
         sal_uLong nStart = static_cast<sal_uLong>(fStart);
         sal_uLong nEnd = static_cast<sal_uLong>(fEnd);
         if (nStart == 1)

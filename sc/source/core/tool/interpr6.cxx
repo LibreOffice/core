@@ -514,7 +514,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     const SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
     ScMatrixRef xResMat, xResCount;
     const double ResInitVal = (eFunc == ifPRODUCT) ? 1.0 : 0.0;
-    double fRes = ResInitVal;
+    ksum fRes = ResInitVal;
     double fVal = 0.0;
     double fMem = 0.0;  // first numeric value != 0.0
     sal_uLong nCount = 0;
