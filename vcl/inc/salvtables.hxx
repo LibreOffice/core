@@ -185,6 +185,7 @@ private:
     bool m_bKeyEventListener;
     bool m_bMouseEventListener;
     int m_nBlockNotify;
+    int m_nFreezeCount;
 
 protected:
     void ensure_event_listener();
@@ -197,6 +198,9 @@ protected:
     // we want the ability to know about mouse events that happen in our children
     // so use this variant, we will need to filter them later
     void ensure_mouse_listener();
+
+    bool IsFirstFreeze() const { return m_nFreezeCount == 0; }
+    bool IsLastThaw() const { return m_nFreezeCount == 1; }
 
     virtual void HandleEventListener(VclWindowEvent& rEvent);
     virtual bool HandleKeyEventListener(VclWindowEvent& rEvent);
