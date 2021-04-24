@@ -11,6 +11,7 @@
 
 
 #include <functional>
+#include "math.hxx"
 
 namespace sc::op {
 
@@ -35,19 +36,19 @@ using Op = Op_<std::function<void(double&, double)>>;
 struct Sum
 {
     static const double InitVal;
-    void operator()(double& rAccum, double fVal) const;
+    void operator()(KahanSum& rAccum, double fVal) const;
 };
 
 struct SumSquare
 {
     static const double InitVal;
-    void operator()(double& rAccum, double fVal) const;
+    void operator()(KahanSum& rAccum, double fVal) const;
 };
 
 struct Product
 {
     static const double InitVal;
-    void operator()(double& rAccum, double fVal) const;
+    void operator()(KahanSum& rAccum, double fVal) const;
 };
 
 }

@@ -4197,11 +4197,11 @@
      <table:table-cell table:style-name="ce33"/>
     </table:table-row>
     <table:table-row table:style-name="ro7">
-     <table:table-cell office:value-type="float" office:value="129.554682838848" calcext:value-type="float">
-      <text:p>129.554682838848</text:p>
+     <table:table-cell office:value-type="float" office:value="129.554682838849" calcext:value-type="float">
+      <text:p>129.554682838849</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="129.554682838848" calcext:value-type="float">
-      <text:p>129.554682838848</text:p>
+     <table:table-cell office:value-type="float" office:value="129.554682838849" calcext:value-type="float">
+      <text:p>129.554682838849</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A34];12)=ROUND([.B34];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
