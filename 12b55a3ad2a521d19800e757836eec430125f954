@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a88267d3_00b68800",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8020,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-24T21:15:31Z",
+      "side": 1,
+      "message": "Are you sure? The existing implementation using the mean is the two-pass algorithm from https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Two-pass_algorithm\n\nThe change reintroduces the naïve algorithm but with KahanSum. Nevertheless the final fSum2 (should be named fSumSq) and (fSum*fSum)/n can be very similar, leading to the same problem.\n\nShouldn\u0027t rather the two-pass algorithm be kept but use a KahanSum instead?",
+      "range": {
+        "startLine": 8020,
+        "startChar": 33,
+        "endLine": 8020,
+        "endChar": 67
+      },
+      "revId": "12b55a3ad2a521d19800e757836eec430125f954",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05befde6_aa758151",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8060,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-24T21:15:31Z",
+      "side": 1,
+      "message": "This doesn\u0027t calculate a variance ...",
+      "revId": "12b55a3ad2a521d19800e757836eec430125f954",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
