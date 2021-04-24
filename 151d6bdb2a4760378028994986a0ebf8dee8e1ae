@@ -69,6 +69,24 @@
       "revId": "151d6bdb2a4760378028994986a0ebf8dee8e1ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e3db6a9_3a1d0a0f",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-24T20:37:26Z",
+      "side": 1,
+      "message": "Probably because it should be\n\n  constexpr KahanSum\u0026 operator\u003d(const KahanSum\u0026 fSum)\n\ninstead.",
+      "parentUuid": "c497a242_3c0a27e9",
+      "revId": "151d6bdb2a4760378028994986a0ebf8dee8e1ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
