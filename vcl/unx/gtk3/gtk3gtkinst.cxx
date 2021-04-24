@@ -1984,6 +1984,9 @@ protected:
 
     DECL_LINK(async_drag_cancel, void*, void);
 
+    bool IsFirstFreeze() const { return m_nFreezeCount == 0; }
+    bool IsLastThaw() const { return m_nFreezeCount == 1; }
+
     static gboolean signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
@@ -2110,6 +2113,7 @@ private:
     bool m_bTakeOwnership;
     bool m_bDraggedOver;
     int m_nWaitCount;
+    int m_nFreezeCount;
     sal_uInt16 m_nLastMouseButton;
     sal_uInt16 m_nLastMouseClicks;
     int m_nPressedButton;
@@ -2482,6 +2486,7 @@ public:
         , m_bTakeOwnership(bTakeOwnership)
         , m_bDraggedOver(false)
         , m_nWaitCount(0)
+        , m_nFreezeCount(0)
         , m_nLastMouseButton(0)
         , m_nLastMouseClicks(0)
         , m_nPressedButton(-1)
@@ -3011,12 +3016,14 @@ public:
 
     virtual void freeze() override
     {
+        ++m_nFreezeCount;
         gtk_widget_freeze_child_notify(m_pWidget);
         g_object_freeze_notify(G_OBJECT(m_pWidget));
     }
 
     virtual void thaw() override
     {
+        --m_nFreezeCount;
         g_object_thaw_notify(G_OBJECT(m_pWidget));
         gtk_widget_thaw_child_notify(m_pWidget);
     }
@@ -12092,20 +12099,24 @@ public:
     virtual void freeze() override
     {
         disable_notify_events();
+        bool bIsFirstFreeze = IsFirstFreeze();
         GtkInstanceContainer::freeze();
-        g_object_ref(m_pTreeModel);
-        gtk_tree_view_set_model(m_pTreeView, nullptr);
-        g_object_freeze_notify(G_OBJECT(m_pTreeModel));
-        if (m_xSorter)
+        if (bIsFirstFreeze)
         {
-            int nSortColumn;
-            GtkSortType eSortType;
-            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
-            gtk_tree_sortable_get_sort_column_id(pSortable, &nSortColumn, &eSortType);
-            gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, eSortType);
+            g_object_ref(m_pTreeModel);
+            gtk_tree_view_set_model(m_pTreeView, nullptr);
+            g_object_freeze_notify(G_OBJECT(m_pTreeModel));
+            if (m_xSorter)
+            {
+                int nSortColumn;
+                GtkSortType eSortType;
+                GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
+                gtk_tree_sortable_get_sort_column_id(pSortable, &nSortColumn, &eSortType);
+                gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, eSortType);
 
-            m_aSavedSortColumns.push_back(nSortColumn);
-            m_aSavedSortTypes.push_back(eSortType);
+                m_aSavedSortColumns.push_back(nSortColumn);
+                m_aSavedSortTypes.push_back(eSortType);
+            }
         }
         enable_notify_events();
     }
@@ -12113,16 +12124,19 @@ public:
     virtual void thaw() override
     {
         disable_notify_events();
-        if (m_xSorter)
+        if (IsLastThaw())
         {
-            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
-            gtk_tree_sortable_set_sort_column_id(pSortable, m_aSavedSortColumns.back(), m_aSavedSortTypes.back());
-            m_aSavedSortTypes.pop_back();
-            m_aSavedSortColumns.pop_back();
+            if (m_xSorter)
+            {
+                GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
+                gtk_tree_sortable_set_sort_column_id(pSortable, m_aSavedSortColumns.back(), m_aSavedSortTypes.back());
+                m_aSavedSortTypes.pop_back();
+                m_aSavedSortColumns.pop_back();
+            }
+            g_object_thaw_notify(G_OBJECT(m_pTreeModel));
+            gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pTreeModel));
+            g_object_unref(m_pTreeModel);
         }
-        g_object_thaw_notify(G_OBJECT(m_pTreeModel));
-        gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pTreeModel));
-        g_object_unref(m_pTreeModel);
         GtkInstanceContainer::thaw();
         enable_notify_events();
     }
@@ -12742,19 +12756,26 @@ public:
     virtual void freeze() override
     {
         disable_notify_events();
+        bool bIsFirstFreeze = IsFirstFreeze();
         GtkInstanceContainer::freeze();
-        g_object_ref(m_pTreeStore);
-        gtk_icon_view_set_model(m_pIconView, nullptr);
-        g_object_freeze_notify(G_OBJECT(m_pTreeStore));
+        if (bIsFirstFreeze)
+        {
+            g_object_ref(m_pTreeStore);
+            gtk_icon_view_set_model(m_pIconView, nullptr);
+            g_object_freeze_notify(G_OBJECT(m_pTreeStore));
+        }
         enable_notify_events();
     }
 
     virtual void thaw() override
     {
         disable_notify_events();
-        g_object_thaw_notify(G_OBJECT(m_pTreeStore));
-        gtk_icon_view_set_model(m_pIconView, GTK_TREE_MODEL(m_pTreeStore));
-        g_object_unref(m_pTreeStore);
+        if (IsLastThaw())
+        {
+            g_object_thaw_notify(G_OBJECT(m_pTreeStore));
+            gtk_icon_view_set_model(m_pIconView, GTK_TREE_MODEL(m_pTreeStore));
+            g_object_unref(m_pTreeStore);
+        }
         GtkInstanceContainer::thaw();
         enable_notify_events();
     }
@@ -15920,14 +15941,18 @@ public:
     virtual void freeze() override
     {
         disable_notify_events();
+        bool bIsFirstFreeze = IsFirstFreeze();
         GtkInstanceContainer::freeze();
-        g_object_ref(m_pTreeModel);
-        gtk_tree_view_set_model(m_pTreeView, nullptr);
-        g_object_freeze_notify(G_OBJECT(m_pTreeModel));
-        if (m_xSorter)
+        if (bIsFirstFreeze)
         {
-            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
-            gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
+            g_object_ref(m_pTreeModel);
+            gtk_tree_view_set_model(m_pTreeView, nullptr);
+            g_object_freeze_notify(G_OBJECT(m_pTreeModel));
+            if (m_xSorter)
+            {
+                GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
+                gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
+            }
         }
         enable_notify_events();
     }
@@ -15935,15 +15960,17 @@ public:
     virtual void thaw() override
     {
         disable_notify_events();
-        if (m_xSorter)
+        if (IsLastThaw())
         {
-            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
-            gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
+            if (m_xSorter)
+            {
+                GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
+                gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
+            }
+            g_object_thaw_notify(G_OBJECT(m_pTreeModel));
+            gtk_tree_view_set_model(m_pTreeView, m_pTreeModel);
+            g_object_unref(m_pTreeModel);
         }
-        g_object_thaw_notify(G_OBJECT(m_pTreeModel));
-        gtk_tree_view_set_model(m_pTreeView, m_pTreeModel);
-        g_object_unref(m_pTreeModel);
-
         GtkInstanceContainer::thaw();
         enable_notify_events();
     }
