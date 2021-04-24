@@ -90,15 +90,14 @@ struct MatrixPow
 void lcl_MFastMult(const ScMatrixRef& pA, const ScMatrixRef& pB, const ScMatrixRef& pR,
                    SCSIZE n, SCSIZE m, SCSIZE l)
 {
-    double sum;
     for (SCSIZE row = 0; row < n; row++)
     {
         for (SCSIZE col = 0; col < l; col++)
         {   // result element(col, row) =sum[ (row of A) * (column of B)]
-            sum = 0.0;
+            KahanSum sum = 0.0;
             for (SCSIZE k = 0; k < m; k++)
                 sum += pA->GetDouble(k,row) * pB->GetDouble(col,k);
-            pR->PutDouble(sum, col, row);
+            pR->PutDouble(sum.get(), col, row);
         }
     }
 }
@@ -886,7 +885,7 @@ static void lcl_LUP_solve( const ScMatrix* mLU, const SCSIZE n,
     // Define y=Ux and solve for y in Ly=Pb using forward substitution.
     for (SCSIZE i=0; i < n; ++i)
     {
-        double fSum = B[P[i]];
+        KahanSum fSum = B[P[i]];
         // Matrix inversion comes with a lot of zeros in the B vectors, we
         // don't have to do all the computing with results multiplied by zero.
         // Until then, simply lookout for the position of the first nonzero
@@ -896,17 +895,17 @@ static void lcl_LUP_solve( const ScMatrix* mLU, const SCSIZE n,
             for (SCSIZE j = nFirst; j < i; ++j)
                 fSum -= mLU->GetDouble( j, i) * X[j];   // X[j] === y[j]
         }
-        else if (fSum)
+        else if (fSum.get())
             nFirst = i;
-        X[i] = fSum;                                    // X[i] === y[i]
+        X[i] = fSum.get();                                    // X[i] === y[i]
     }
     // Solve for x in Ux=y using back substitution.
     for (SCSIZE i = n; i--; )
     {
-        double fSum = X[i];                             // X[i] === y[i]
+        KahanSum fSum = X[i];                             // X[i] === y[i]
         for (SCSIZE j = i+1; j < n; ++j)
             fSum -= mLU->GetDouble( j, i) * X[j];       // X[j] === x[j]
-        X[i] = fSum / mLU->GetDouble( i, i);            // X[i] === x[i]
+        X[i] = fSum.get() / mLU->GetDouble( i, i);            // X[i] === x[i]
     }
 #ifdef DEBUG_SC_LUP_DECOMPOSITION
     fprintf( stderr, "\n%s\n", "lcl_LUP_solve():");
@@ -1098,17 +1097,16 @@ void ScInterpreter::ScMatMult()
                 pRMat = GetNewMat(nC2, nR1, /*bEmpty*/true);
                 if (pRMat)
                 {
-                    double sum;
                     for (SCSIZE i = 0; i < nR1; i++)
                     {
                         for (SCSIZE j = 0; j < nC2; j++)
                         {
-                            sum = 0.0;
+                            KahanSum sum = 0.0;
                             for (SCSIZE k = 0; k < nC1; k++)
                             {
                                 sum += pMat1->GetDouble(k,i)*pMat2->GetDouble(j,k);
                             }
-                            pRMat->PutDouble(sum, j, i);
+                            pRMat->PutDouble(sum.get(), j, i);
                         }
                     }
                     PushMatrix(pRMat);
@@ -1822,7 +1820,8 @@ void ScInterpreter::CalculateSumX2MY2SumX2DY2(bool _bSumX2DY2)
         PushNoValue();
         return;
     }
-    double fVal, fSum = 0.0;
+    double fVal;
+    KahanSum fSum = 0.0;
     for (i = 0; i < nC1; i++)
         for (j = 0; j < nR1; j++)
             if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
@@ -1835,7 +1834,7 @@ void ScInterpreter::CalculateSumX2MY2SumX2DY2(bool _bSumX2DY2)
                 else
                     fSum -= fVal * fVal;
             }
-    PushDouble(fSum);
+    PushDouble(fSum.get());
 }
 
 void ScInterpreter::ScSumX2DY2()
@@ -1871,8 +1870,7 @@ void ScInterpreter::ScSumXMY2()
     }
     else
     {
-        ScMatrix::IterateResult aRes = pResMat->SumSquare(false);
-        double fSum = aRes.mfFirst + aRes.mfRest;
+        double fSum = pResMat->SumSquare(false).get();
         PushDouble(fSum);
     }
 }
@@ -2156,13 +2154,13 @@ void lcl_SolveWithUpperRightTriangle(const ScMatrixRef& pMatA,
     for (SCSIZE rowp1 = nK; rowp1>0; rowp1--)
     {
         row = rowp1-1;
-        double fSum = pMatS->GetDouble(row);
+        KahanSum fSum = pMatS->GetDouble(row);
         for (SCSIZE col = rowp1; col<nK ; col++)
             if (bIsTransposed)
                 fSum -= pMatA->GetDouble(row,col) * pMatS->GetDouble(col);
             else
                 fSum -= pMatA->GetDouble(col,row) * pMatS->GetDouble(col);
-        pMatS->PutDouble( fSum / pVecR[row] , row);
+        pMatS->PutDouble( fSum.get() / pVecR[row] , row);
     }
 }
 
@@ -2179,7 +2177,7 @@ void lcl_SolveWithLowerLeftTriangle(const ScMatrixRef& pMatA,
     // ScMatrix matrices are zero based, index access (column,row)
     for (SCSIZE row = 0; row < nK; row++)
     {
-        double fSum = pMatT -> GetDouble(row);
+        KahanSum fSum = pMatT -> GetDouble(row);
         for (SCSIZE col=0; col < row; col++)
         {
             if (bIsTransposed)
@@ -2187,7 +2185,7 @@ void lcl_SolveWithLowerLeftTriangle(const ScMatrixRef& pMatA,
             else
                 fSum -= pMatA->GetDouble(row,col) * pMatT->GetDouble(col);
         }
-        pMatT->PutDouble( fSum / pVecR[row] , row);
+        pMatT->PutDouble( fSum.get() / pVecR[row] , row);
     }
 }
 

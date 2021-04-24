@@ -5327,7 +5327,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
     }
 
-    double fSum = 0.0;
+    KahanSum fSum = 0.0;
     double fMem = 0.0;
     double fRes = 0.0;
     double fCount = 0.0;
@@ -5597,8 +5597,8 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
 
         switch( eFunc )
         {
-            case ifSUMIF:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
-            case ifAVERAGEIF: fRes = div( ::rtl::math::approxAdd( fSum, fMem ), fCount); break;
+            case ifSUMIF:     fRes = ::rtl::math::approxAdd( fSum.get(), fMem ); break;
+            case ifAVERAGEIF: fRes = div( ::rtl::math::approxAdd( fSum.get(), fMem ), fCount); break;
         }
         if (xResMat)
         {
@@ -5609,7 +5609,8 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                 xResMat->PutError( nGlobalError, 0, nRefListArrayPos);
                 nGlobalError = FormulaError::NONE;
             }
-            fRes = fSum = fMem = fCount = 0.0;
+            fRes = fMem = fCount = 0.0;
+            fSum = 0;
         }
     }
     if (xResMat)
@@ -8016,14 +8017,20 @@ void ScInterpreter::ScDBProduct()
     DBIterator( ifPRODUCT );
 }
 
+/**
+  * Insert this code in LO math. This increases numerical stability.
+  * "" v = 1 over N sum ( x_i - bar x ) ( x_i - bar x ) newline
+  * "" v = 1 over N sum x_i x_i - 1 over N sum 2 x_i bar x + 1 over N sum bar x bar x newline
+  * "" v = 1 over N N bar x^2 - 1 over N 2 N bar x bar x + 1 over N N  bar x bar x newline
+  * "" v = bar x^2 - bar x bar x
+  */
 void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 {
     std::vector<double> values;
-    double vSum    = 0.0;
-    double vMean    = 0.0;
+    KahanSum fSum    = 0.0;
+    KahanSum fSum2   = 0.0;
 
     rValCount = 0.0;
-    double fSum    = 0.0;
     bool bMissingField = false;
     unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam)
@@ -8042,6 +8049,7 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
                 rValCount++;
                 values.push_back(aValue.mfValue);
                 fSum += aValue.mfValue;
+                fSum2 += aValue.mfValue * aValue.mfValue;
             }
             while ((aValue.mnError == FormulaError::NONE) && aValIter.GetNext(aValue));
         }
@@ -8050,12 +8058,7 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     else
         SetError( FormulaError::IllegalParameter);
 
-    vMean = fSum / values.size();
-
-    for (double v : values)
-        vSum += (v - vMean) * (v - vMean);
-
-    rVal = vSum;
+    rVal = ( fSum2.get() - fSum.get() ) / values.size();
 }
 
 void ScInterpreter::ScDBStdDev()
