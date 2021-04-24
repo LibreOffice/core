@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e678cb3b_db461512",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-24T10:35:59Z",
+      "side": 1,
+      "message": "I suggest to use default initializers here, so that default initialization would make constructors cleaner (and even allow to use default constructors).\n\nSo having\n\n  private:\n    double m_fSum \u003d 0;\n    double m_fError \u003d 0;\n    double m_fErrorError \u003d 0;\n\nwould allow e.g.\n\n  public:\n    constexpr ksum() \u003d default;\n\n    constexpr ksum(double x_0)\n        : m_fSum(x_0)\n    {\n    }\n\n    constexpr ksum(const ksum\u0026 fSum) \u003d default;\n\nAnother suggestion: please consider moving the private section to the end of the class, so that the first section is its public interface (and reader sees what one may use in the client code), and implementation details are at the bottom.\n\nThanks!",
+      "revId": "194a99a7e9ff9b1d4c041ac39f4fdf7e4e423af8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
