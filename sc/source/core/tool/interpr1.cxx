@@ -5327,7 +5327,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
     }
 
-    double fSum = 0.0;
+    KahanSum fSum = 0.0;
     double fMem = 0.0;
     double fRes = 0.0;
     double fCount = 0.0;
@@ -5597,8 +5597,8 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
 
         switch( eFunc )
         {
-            case ifSUMIF:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
-            case ifAVERAGEIF: fRes = div( ::rtl::math::approxAdd( fSum, fMem ), fCount); break;
+            case ifSUMIF:     fRes = ::rtl::math::approxAdd( fSum.get(), fMem ); break;
+            case ifAVERAGEIF: fRes = div( ::rtl::math::approxAdd( fSum.get(), fMem ), fCount); break;
         }
         if (xResMat)
         {
@@ -5609,7 +5609,8 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                 xResMat->PutError( nGlobalError, 0, nRefListArrayPos);
                 nGlobalError = FormulaError::NONE;
             }
-            fRes = fSum = fMem = fCount = 0.0;
+            fRes = fMem = fCount = 0.0;
+            fSum = 0;
         }
     }
     if (xResMat)
