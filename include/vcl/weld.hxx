@@ -284,7 +284,19 @@ public:
     virtual bool get_direction() const = 0;
     virtual void set_direction(bool bRTL) = 0;
 
+    /* Increases the freeze count on widget.
+
+       If the freeze count is non-zero, emission of the widget's notifications
+       is stopped. The notifications are queued until the freeze count is
+       decreased to zero. Duplicate notifications may be squashed together.
+    */
     virtual void freeze() = 0;
+
+    /* Reverts the effect of a previous call to freeze.
+
+       The freeze count is decreased on the widget and when it reaches zero,
+       queued notifications are emitted.
+    */
     virtual void thaw() = 0;
 
     /* push/pop busy mouse cursor state
