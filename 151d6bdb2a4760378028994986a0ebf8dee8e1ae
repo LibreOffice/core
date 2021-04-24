@@ -87,6 +87,24 @@
       "revId": "151d6bdb2a4760378028994986a0ebf8dee8e1ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "10f3753f_e80a1139",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-24T21:51:44Z",
+      "side": 1,
+      "message": "What\u0027s the point of returning something I won\u0027t use?",
+      "parentUuid": "9e3db6a9_3a1d0a0f",
+      "revId": "151d6bdb2a4760378028994986a0ebf8dee8e1ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
