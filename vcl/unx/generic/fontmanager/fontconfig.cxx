@@ -113,9 +113,6 @@ typedef std::unique_ptr<FcPattern, FcPatternDeleter> FcPatternUniquePtr;
 class CachedFontConfigFontOptions
 {
 private:
-    FontOptionsKey m_aKey;
-    std::unique_ptr<FontConfigFontOptions> m_xLastFontOptions;
-
     o3tl::lru_map<FontOptionsKey, FcPatternUniquePtr> lru_options_cache;
 
 public:
@@ -137,10 +134,6 @@ public:
         lru_options_cache.insert(std::make_pair(rKey, FcPatternUniquePtr(FcPatternDuplicate(pPattern))));
     }
 
-    void clear()
-    {
-        m_xLastFontOptions.reset();
-    }
 };
 
 typedef std::pair<FcChar8*, FcChar8*> lang_and_element;
@@ -460,7 +453,6 @@ void FontCfgWrapper::clear()
         m_pFontSet = nullptr;
     }
     m_pLanguageTag.reset();
-    m_aCachedFontOptions.clear();
 }
 
 /*
@@ -1232,11 +1224,6 @@ std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const Fo
     return pOptions;
 }
 
-void PrintFontManager::clearFontOptionsCache()
-{
-    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    rWrapper.m_aCachedFontOptions.clear();
-}
 
 void PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale )
 {

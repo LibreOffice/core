@@ -3310,17 +3310,15 @@ struct MatOp
 private:
     TOp maOp;
     ScInterpreter* mpErrorInterpreter;
-    svl::SharedString maString;
     double mfVal;
 
 public:
     typedef double number_value_type;
 
     MatOp( TOp aOp, ScInterpreter* pErrorInterpreter,
-            double fVal = 0.0, const svl::SharedString& rString = svl::SharedString() ):
+            double fVal = 0.0 ):
         maOp(aOp),
         mpErrorInterpreter(pErrorInterpreter),
-        maString(rString),
         mfVal(fVal)
     {
         if (mpErrorInterpreter)

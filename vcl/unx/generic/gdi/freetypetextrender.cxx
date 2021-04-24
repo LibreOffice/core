@@ -101,7 +101,6 @@ bool FreeTypeTextRenderImpl::AddTempDevFont( PhysicalFontCollection* pFontCollec
 void FreeTypeTextRenderImpl::ClearDevFontCache()
 {
     FreetypeManager::get().ClearFontCache();
-    psp::PrintFontManager::clearFontOptionsCache();
 }
 
 void FreeTypeTextRenderImpl::GetDevFontList( PhysicalFontCollection* pFontCollection )
