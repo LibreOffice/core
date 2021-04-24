@@ -106,17 +106,6 @@ struct SfxItemPropertySimpleEntry
 
 };
 
-struct SfxItemPropertyNamedEntry : public SfxItemPropertySimpleEntry
-{
-    OUString sName;
-    SfxItemPropertyNamedEntry( const OUString& rName, const SfxItemPropertySimpleEntry& rSimpleEntry)
-        : SfxItemPropertySimpleEntry( rSimpleEntry )
-        , sName( rName )
-    {
-    }
-};
-
-
 struct SfxItemPropertyMapCompare
 {
     bool operator() ( const SfxItemPropertyMapEntry * lhs, const SfxItemPropertyMapEntry * rhs ) const
@@ -140,8 +129,6 @@ public:
     bool hasPropertyByName( std::u16string_view rName ) const;
 
     const o3tl::sorted_vector< const SfxItemPropertyMapEntry*, SfxItemPropertyMapCompare >& getPropertyEntries() const { return m_aMap; }
-    sal_uInt32 getSize() const;
-
 };
 
 class SVL_DLLPUBLIC SfxItemPropertySet final

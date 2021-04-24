@@ -82,11 +82,6 @@ public:
     }
 
     /**
-     * Returns true, if the time slot is already exceeded
-     **/
-    bool exceededRuntime() { return !nextIter(true); }
-
-    /**
      * Returns true, if another iteration will probably pass in the time slot
      **/
     bool continueIter() { return nextIter(false); }

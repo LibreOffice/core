@@ -109,11 +109,6 @@ bool SfxItemPropertyMap::hasPropertyByName( std::u16string_view rName ) const
     return getByName(rName) != nullptr;
 }
 
-sal_uInt32 SfxItemPropertyMap::getSize() const
-{
-    return m_aMap.size();
-}
-
 SfxItemPropertySet::~SfxItemPropertySet()
 {
 }
