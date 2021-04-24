@@ -249,6 +249,7 @@ SalInstanceWidget::SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* p
     , m_bKeyEventListener(false)
     , m_bMouseEventListener(false)
     , m_nBlockNotify(0)
+    , m_nFreezeCount(0)
 {
 }
 
@@ -484,9 +485,19 @@ bool SalInstanceWidget::get_direction() const { return m_xWidget->IsRTLEnabled()
 
 void SalInstanceWidget::set_direction(bool bRTL) { m_xWidget->EnableRTL(bRTL); }
 
-void SalInstanceWidget::freeze() { m_xWidget->SetUpdateMode(false); }
+void SalInstanceWidget::freeze()
+{
+    if (m_nFreezeCount == 0)
+        m_xWidget->SetUpdateMode(false);
+    ++m_nFreezeCount;
+}
 
-void SalInstanceWidget::thaw() { m_xWidget->SetUpdateMode(true); }
+void SalInstanceWidget::thaw()
+{
+    --m_nFreezeCount;
+    if (m_nFreezeCount == 0)
+        m_xWidget->SetUpdateMode(true);
+}
 
 void SalInstanceWidget::set_busy_cursor(bool bBusy)
 {
@@ -3704,15 +3715,23 @@ void SalInstanceTreeView::columns_autosize()
 
 void SalInstanceTreeView::freeze()
 {
+    bool bIsFirstFreeze = IsFirstFreeze();
     SalInstanceWidget::freeze();
-    m_xTreeView->SetUpdateMode(false);
-    m_xTreeView->GetModel()->EnableInvalidate(false);
+    if (bIsFirstFreeze)
+    {
+        m_xTreeView->SetUpdateMode(false);
+        m_xTreeView->GetModel()->EnableInvalidate(false);
+    }
 }
 
 void SalInstanceTreeView::thaw()
 {
-    m_xTreeView->GetModel()->EnableInvalidate(true);
-    m_xTreeView->SetUpdateMode(true);
+    bool bIsLastThaw = IsLastThaw();
+    if (bIsLastThaw)
+    {
+        m_xTreeView->GetModel()->EnableInvalidate(true);
+        m_xTreeView->SetUpdateMode(true);
+    }
     SalInstanceWidget::thaw();
 }
 
@@ -5144,13 +5163,17 @@ SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuild
 
 void SalInstanceIconView::freeze()
 {
+    bool bIsFirstFreeze = IsFirstFreeze();
     SalInstanceWidget::freeze();
-    m_xIconView->SetUpdateMode(false);
+    if (bIsFirstFreeze)
+        m_xIconView->SetUpdateMode(false);
 }
 
 void SalInstanceIconView::thaw()
 {
-    m_xIconView->SetUpdateMode(true);
+    bool bIsLastThaw = IsLastThaw();
+    if (bIsLastThaw)
+        m_xIconView->SetUpdateMode(true);
     SalInstanceWidget::thaw();
 }
 
