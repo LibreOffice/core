@@ -47,7 +47,6 @@
 #include <svl/stritem.hxx>
 #include <svl/undo.hxx>
 #include <svl/whiter.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -291,93 +290,21 @@ void SmDocShell::ArrangeFormula()
     maAccText.clear();
 }
 
-void SmDocShell::UpdateEditEngineDefaultFonts(const Color& aTextColor)
+void SmDocShell::UpdateEditEngineDefaultFonts()
 {
-    assert(mpEditEngineItemPool);
-    if (!mpEditEngineItemPool)
-        return;
-
-    // set fonts to be used
-    struct FontDta {
-        LanguageType    nFallbackLang;
-        LanguageType    nLang;
-        DefaultFontType nFontType;
-        sal_uInt16      nFontInfoId;
-        } aTable[3] =
-    {
-        // info to get western font to be used
-        {   LANGUAGE_ENGLISH_US,    LANGUAGE_NONE,
-            DefaultFontType::FIXED,      EE_CHAR_FONTINFO },
-        // info to get CJK font to be used
-        {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
-            DefaultFontType::CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
-        // info to get CTL font to be used
-        {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
-            DefaultFontType::CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
-    };
-
-    aTable[0].nLang = maLinguOptions.nDefaultLanguage;
-    aTable[1].nLang = maLinguOptions.nDefaultLanguage_CJK;
-    aTable[2].nLang = maLinguOptions.nDefaultLanguage_CTL;
-
-    for (const FontDta & rFntDta : aTable)
-    {
-        LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
-                rFntDta.nFallbackLang : rFntDta.nLang;
-        vcl::Font aFont = OutputDevice::GetDefaultFont(
-                    rFntDta.nFontType, nLang, GetDefaultFontFlags::OnlyOne );
-        aFont.SetColor(aTextColor);
-        mpEditEngineItemPool->SetPoolDefaultItem(
-                SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
-                    aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
-                    rFntDta.nFontInfoId ) );
-    }
-
-    // set font heights
-    SvxFontHeightItem aFontHeigt(
-                    Application::GetDefaultDevice()->LogicToPixel(
-                    Size( 0, 11 ), MapMode( MapUnit::MapPoint ) ).Height(), 100,
-                    EE_CHAR_FONTHEIGHT );
-    mpEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
-    aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CJK );
-    mpEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
-    aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CTL );
-    mpEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
+    SmEditEngine::getSmItemPool(mpEditEngineItemPool.get(), maLinguOptions);
 }
 
-EditEngine& SmDocShell::GetEditEngine()
+EditEngine* SmDocShell::GetEditEngine()
 {
     if (!mpEditEngine)
     {
         //!
         //! see also SmEditWindow::DataChanged !
         //!
-
         mpEditEngineItemPool = EditEngine::CreatePool();
-
-        const StyleSettings& rStyleSettings = Application::GetDefaultDevice()->GetSettings().GetStyleSettings();
-        UpdateEditEngineDefaultFonts(rStyleSettings.GetFieldTextColor());
-
-        mpEditEngine.reset( new EditEngine( mpEditEngineItemPool.get() ) );
-
-        mpEditEngine->SetAddExtLeading(true);
-
-        mpEditEngine->EnableUndo( true );
-        mpEditEngine->SetDefTab( sal_uInt16(
-            Application::GetDefaultDevice()->GetTextWidth("XXXX")) );
-
-        mpEditEngine->SetBackgroundColor(rStyleSettings.GetFieldColor());
-
-        mpEditEngine->SetControlWord(
-                (mpEditEngine->GetControlWord() | EEControlBits::AUTOINDENTING) &
-                EEControlBits(~EEControlBits::UNDOATTRIBS) &
-                EEControlBits(~EEControlBits::PASTESPECIAL) );
-
-        mpEditEngine->SetWordDelimiters(" .=+-*/(){}[];\"");
-        mpEditEngine->SetRefMapMode(MapMode(MapUnit::MapPixel));
-
-        mpEditEngine->SetPaperSize( Size( 800, 0 ) );
-
+        SmEditEngine::getSmItemPool(mpEditEngineItemPool.get(), maLinguOptions);
+        mpEditEngine.reset( new SmEditEngine( mpEditEngineItemPool.get() ) );
         mpEditEngine->EraseVirtualDevice();
 
         // set initial text if the document already has some...
@@ -385,11 +312,9 @@ EditEngine& SmDocShell::GetEditEngine()
         OUString aTxt( GetText() );
         if (!aTxt.isEmpty())
             mpEditEngine->SetText( aTxt );
-
         mpEditEngine->ClearModifyFlag();
-
     }
-    return *mpEditEngine;
+    return static_cast<EditEngine*>(mpEditEngine.get());
 }
 
 
