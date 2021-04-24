@@ -405,7 +405,7 @@ public:
 
 static void IterateMatrix(
     const ScMatrixRef& pMat, ScIterFunc eFunc, bool bTextAsZero, SubtotalFlags nSubTotalFlags,
-    sal_uLong& rCount, SvNumFormatType& rFuncFmtType, double& fRes, double& fMem )
+    sal_uLong& rCount, SvNumFormatType& rFuncFmtType, KahanSum& fRes )
 {
     if (!pMat)
         return;
@@ -417,24 +417,10 @@ static void IterateMatrix(
         case ifAVERAGE:
         case ifSUM:
         {
-            ScMatrix::IterateResult aRes = pMat->Sum(bTextAsZero, bIgnoreErrVal);
+            ScMatrix::KahanIterateResult aRes = pMat->Sum(bTextAsZero, bIgnoreErrVal);
             // If the first value is a NaN, it probably means it was an empty cell,
             // and should be treated as zero.
-            if ( !std::isfinite(aRes.mfFirst) )
-            {
-                sal_uInt32 nErr = reinterpret_cast< sal_math_Double * >(&aRes.mfFirst)->nan_parts.fraction_lo;
-                if (nErr & 0xffff0000)
-                {
-                    aRes.mfFirst = 0;
-                }
-            }
-            if ( fMem )
-                fRes += aRes.mfFirst + aRes.mfRest;
-            else
-            {
-                fMem = aRes.mfFirst;
-                fRes += aRes.mfRest;
-            }
+            fRes += aRes.mfRest;
             rCount += aRes.mnCount;
         }
         break;
@@ -447,16 +433,14 @@ static void IterateMatrix(
         break;
         case ifPRODUCT:
         {
-            ScMatrix::IterateResult aRes = pMat->Product(bTextAsZero, bIgnoreErrVal);
-            fRes *= aRes.mfFirst;
-            fRes *= aRes.mfRest;
+            ScMatrix::KahanIterateResult aRes = pMat->Product(bTextAsZero, bIgnoreErrVal);
+            fRes *= aRes.mfRest.get();
             rCount += aRes.mnCount;
         }
         break;
         case ifSUMSQ:
         {
-            ScMatrix::IterateResult aRes = pMat->SumSquare(bTextAsZero, bIgnoreErrVal);
-            fRes += aRes.mfFirst;
+            ScMatrix::KahanIterateResult aRes = pMat->SumSquare(bTextAsZero, bIgnoreErrVal);
             fRes += aRes.mfRest;
             rCount += aRes.mnCount;
         }
@@ -514,7 +498,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     const SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
     ScMatrixRef xResMat, xResCount;
     const double ResInitVal = (eFunc == ifPRODUCT) ? 1.0 : 0.0;
-    double fRes = ResInitVal;
+    KahanSum fRes = ResInitVal;
     double fVal = 0.0;
     double fMem = 0.0;  // first numeric value != 0.0
     sal_uLong nCount = 0;
@@ -740,7 +724,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     nRefArrayPos = nRefInList;
                     if ((eFunc == ifSUM || eFunc == ifAVERAGE) && fMem != 0.0)
                     {
-                        fRes = rtl::math::approxAdd( fRes, fMem);
+                        fRes += fMem;
                         fMem = 0.0;
                     }
                     // The "one value to all references of an array" seems to
@@ -751,7 +735,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         // Create and init all elements with current value.
                         assert(nMatRows > 0);
                         xResMat = GetNewMat( 1, nMatRows, true);
-                        xResMat->FillDouble( fRes, 0,0, 0,nMatRows-1);
+                        xResMat->FillDouble( fRes.get(), 0,0, 0,nMatRows-1);
                         if (eFunc != ifSUM)
                         {
                             xResCount = GetNewMat( 1, nMatRows, true);
@@ -775,9 +759,9 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                             {
                                 double fVecRes = xResMat->GetDouble(0,i);
                                 if (eFunc == ifPRODUCT)
-                                    fVecRes *= fRes;
+                                    fVecRes *= fRes.get();
                                 else
-                                    fVecRes += fRes;
+                                    fVecRes += fRes.get();
                                 xResMat->PutDouble( fVecRes, 0,i);
                             }
                         }
@@ -952,16 +936,16 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     // Update vector element with current value.
                     if ((eFunc == ifSUM || eFunc == ifAVERAGE) && fMem != 0.0)
                     {
-                        fRes = rtl::math::approxAdd( fRes, fMem);
+                        fRes += fMem;
                         fMem = 0.0;
                     }
                     if (xResCount)
                         xResCount->PutDouble( xResCount->GetDouble(0,nRefArrayPos) + nCount, 0,nRefArrayPos);
                     double fVecRes = xResMat->GetDouble(0,nRefArrayPos);
                     if (eFunc == ifPRODUCT)
-                        fVecRes *= fRes;
+                        fVecRes *= fRes.get();
                     else
-                        fVecRes += fRes;
+                        fVecRes += fRes.get();
                     xResMat->PutDouble( fVecRes, 0,nRefArrayPos);
                     // Reset.
                     fRes = ResInitVal;
@@ -977,14 +961,14 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 if ( nGlobalError != FormulaError::NONE && !( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) )
                     break;
 
-                IterateMatrix( pMat, eFunc, bTextAsZero, mnSubTotalFlags, nCount, nFuncFmtType, fRes, fMem );
+                IterateMatrix( pMat, eFunc, bTextAsZero, mnSubTotalFlags, nCount, nFuncFmtType, fRes );
             }
             break;
             case svMatrix :
             {
                 ScMatrixRef pMat = PopMatrix();
 
-                IterateMatrix( pMat, eFunc, bTextAsZero, mnSubTotalFlags, nCount, nFuncFmtType, fRes, fMem );
+                IterateMatrix( pMat, eFunc, bTextAsZero, mnSubTotalFlags, nCount, nFuncFmtType, fRes );
             }
             break;
             case svError:
@@ -1021,9 +1005,9 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             sal_uLong nVecCount = (xResCount ? nCount + xResCount->GetDouble(0,i) : nCount);
             double fVecRes = xResMat->GetDouble(0,i);
             if (eFunc == ifPRODUCT)
-                fVecRes *= fRes;
+                fVecRes *= fRes.get();
             else
-                fVecRes += fRes;
+                fVecRes += fRes.get();
             fVecRes = lcl_IterResult( eFunc, fVecRes, fMem, nVecCount);
             xResMat->PutDouble( fVecRes, 0,i);
         }
@@ -1031,7 +1015,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     }
     else
     {
-        PushDouble( lcl_IterResult( eFunc, fRes, fMem, nCount));
+        PushDouble( lcl_IterResult( eFunc, fRes.get(), fMem, nCount));
     }
 }
 

@@ -12,21 +12,21 @@
 
 namespace sc::op {
 
-void Sum::operator()(double& rAccum, double fVal) const
+void Sum::operator()(KahanSum& rAccum, double fVal) const
 {
     rAccum += fVal;
 }
 
 const double Sum::InitVal = 0.0;
 
-void SumSquare::operator()(double& rAccum, double fVal) const
+void SumSquare::operator()(KahanSum& rAccum, double fVal) const
 {
     rAccum += fVal * fVal;
 }
 
 const double SumSquare::InitVal = 0.0;
 
-void Product::operator()(double& rAccum, double fVal) const
+void Product::operator()(KahanSum& rAccum, double fVal) const
 {
     rAccum *= fVal;
 }
