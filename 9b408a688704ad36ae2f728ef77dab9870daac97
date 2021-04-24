@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1bdfedf_c8da1496",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2388,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-04-24T19:43:35Z",
+      "side": 1,
+      "message": "The variable nRowCountInRange is not necessary anymore. So, this line could also be removed if in the next line is written as\nnRowCount +\u003d nRowCountNonFiltered",
+      "revId": "9b408a688704ad36ae2f728ef77dab9870daac97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
