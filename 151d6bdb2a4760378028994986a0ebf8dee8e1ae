@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7d753cf_79387b29",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-24T12:26:58Z",
+      "side": 1,
+      "message": "This comment seems off :-)",
+      "revId": "151d6bdb2a4760378028994986a0ebf8dee8e1ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5f6da63_9dca97bb",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-24T12:26:58Z",
+      "side": 1,
+      "message": "This may also be default",
+      "revId": "151d6bdb2a4760378028994986a0ebf8dee8e1ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
