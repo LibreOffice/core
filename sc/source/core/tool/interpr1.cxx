@@ -5327,7 +5327,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
     }
 
-    double fSum = 0.0;
+    ksum fSum = 0.0;
     double fMem = 0.0;
     double fRes = 0.0;
     double fCount = 0.0;
@@ -5597,8 +5597,8 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
 
         switch( eFunc )
         {
-            case ifSUMIF:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
-            case ifAVERAGEIF: fRes = div( ::rtl::math::approxAdd( fSum, fMem ), fCount); break;
+            case ifSUMIF:     fRes = ::rtl::math::approxAdd( fSum.get(), fMem ); break;
+            case ifAVERAGEIF: fRes = div( ::rtl::math::approxAdd( fSum.get(), fMem ), fCount); break;
         }
         if (xResMat)
         {
@@ -5609,7 +5609,8 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                 xResMat->PutError( nGlobalError, 0, nRefListArrayPos);
                 nGlobalError = FormulaError::NONE;
             }
-            fRes = fSum = fMem = fCount = 0.0;
+            fRes = fMem = fCount = 0.0;
+            fSum = 0;
         }
     }
     if (xResMat)
@@ -8019,11 +8020,10 @@ void ScInterpreter::ScDBProduct()
 void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 {
     std::vector<double> values;
-    double vSum    = 0.0;
+    ksum fSum    = 0.0;
     double vMean    = 0.0;
 
     rValCount = 0.0;
-    double fSum    = 0.0;
     bool bMissingField = false;
     unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam)
@@ -8050,12 +8050,13 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     else
         SetError( FormulaError::IllegalParameter);
 
-    vMean = fSum / values.size();
+    vMean = fSum.get() / values.size();
+    fSum = 0;
 
     for (double v : values)
-        vSum += (v - vMean) * (v - vMean);
+        fSum += (v - vMean) * (v - vMean);
 
-    rVal = vSum;
+    rVal = fSum.get();
 }
 
 void ScInterpreter::ScDBStdDev()
