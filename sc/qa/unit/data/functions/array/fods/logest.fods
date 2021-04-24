@@ -2270,8 +2270,8 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce9" table:formula="of:=[.L17]" office:value-type="float" office:value="82.5576827252647" calcext:value-type="float">
-      <text:p>82.5576827252647</text:p>
+     <table:table-cell table:style-name="ce9" table:formula="of:=[.L17]" office:value-type="float" office:value="82.5576827252648" calcext:value-type="float">
+      <text:p>82.5576827252648</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="82.5576827252647" calcext:value-type="float">
       <text:p>82.5576827252647</text:p>
@@ -2627,8 +2627,8 @@
      <table:table-cell table:number-matrix-columns-spanned="2" table:number-matrix-rows-spanned="5" table:formula="of:=LOGEST([.L2:.L8];[.J2:.J8];1;1)" office:value-type="float" office:value="1.04333180072885" calcext:value-type="float">
       <text:p>1.04333180072885</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="82.5576827252647" calcext:value-type="float">
-      <text:p>82.5576827252647</text:p>
+     <table:table-cell office:value-type="float" office:value="82.5576827252648" calcext:value-type="float">
+      <text:p>82.5576827252648</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
      <table:table-cell table:style-name="ce9" office:value-type="float" office:value="1732393319" calcext:value-type="float">
@@ -2734,7 +2734,7 @@
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.K33]" office:value-type="float" office:value="0.0779638724932393" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.K33]" office:value-type="float" office:value="0.0779638724932392" calcext:value-type="float">
       <text:p>0.077963872493239</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="0.0779638724932393" calcext:value-type="float">
@@ -2781,7 +2781,7 @@
      <table:table-cell table:number-columns-repeated="14"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.L31]" office:value-type="float" office:value="0.00601404236086587" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.L31]" office:value-type="float" office:value="0.00601404236086586" calcext:value-type="float">
       <text:p>0.006014042360866</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="0.00601404236086587" calcext:value-type="float">
@@ -2879,8 +2879,8 @@
      <table:table-cell office:value-type="float" office:value="1.00017437377135" calcext:value-type="float">
       <text:p>1.00017437377135</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="80387.1472131758" calcext:value-type="float">
-      <text:p>80387.1472131758</text:p>
+     <table:table-cell office:value-type="float" office:value="80387.1472131755" calcext:value-type="float">
+      <text:p>80387.1472131755</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="13"/>
     </table:table-row>
@@ -2932,7 +2932,7 @@
      <table:table-cell office:value-type="float" office:value="0.997224228993195" calcext:value-type="float">
       <text:p>0.997224228993195</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="0.00601404236086587" calcext:value-type="float">
+     <table:table-cell office:value-type="float" office:value="0.00601404236086586" calcext:value-type="float">
       <text:p>0.006014042360866</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
@@ -2991,7 +2991,7 @@
       <text:p>=N29</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell office:value-type="float" office:value="0.0779638724932393" calcext:value-type="float">
+     <table:table-cell office:value-type="float" office:value="0.0779638724932392" calcext:value-type="float">
       <text:p>0.077963872493239</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="0.000217012233109734" calcext:value-type="float">
@@ -3071,11 +3071,11 @@
      <table:table-cell table:number-columns-repeated="24"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce11" table:formula="of:=[.O29]" office:value-type="float" office:value="80387.1472131758" calcext:value-type="float">
-      <text:p>80387.1472131758</text:p>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.O29]" office:value-type="float" office:value="80387.1472131755" calcext:value-type="float">
+      <text:p>80387.1472131755</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="80387.1472131758" calcext:value-type="float">
-      <text:p>80387.1472131758</text:p>
+     <table:table-cell office:value-type="float" office:value="80387.1472131755" calcext:value-type="float">
+      <text:p>80387.1472131755</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A38];12)=ROUND([.B38];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>

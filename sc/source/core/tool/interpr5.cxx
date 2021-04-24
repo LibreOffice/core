@@ -1942,10 +1942,10 @@ namespace {
 // <A;B> over all elements; uses the matrices as vectors of length M
 double lcl_GetSumProduct(const ScMatrixRef& pMatA, const ScMatrixRef& pMatB, SCSIZE nM)
 {
-    double fSum = 0.0;
+    KahanSum fSum = 0.0;
     for (SCSIZE i=0; i<nM; i++)
         fSum += pMatA->GetDouble(i) * pMatB->GetDouble(i);
-    return fSum;
+    return fSum.get();
 }
 
 // Special version for use within QR decomposition.
@@ -1953,20 +1953,20 @@ double lcl_GetSumProduct(const ScMatrixRef& pMatA, const ScMatrixRef& pMatB, SCS
 // matrix A has count N rows.
 double lcl_GetColumnEuclideanNorm(const ScMatrixRef& pMatA, SCSIZE nC, SCSIZE nR, SCSIZE nN)
 {
-    double fNorm = 0.0;
+    KahanSum fNorm = 0.0;
     for (SCSIZE row=nR; row<nN; row++)
         fNorm  += (pMatA->GetDouble(nC,row)) * (pMatA->GetDouble(nC,row));
-    return sqrt(fNorm);
+    return sqrt(fNorm.get());
 }
 
 // Euclidean norm of row index R starting in column index C;
 // matrix A has count N columns.
 double lcl_TGetColumnEuclideanNorm(const ScMatrixRef& pMatA, SCSIZE nR, SCSIZE nC, SCSIZE nN)
 {
-    double fNorm = 0.0;
+    KahanSum fNorm = 0.0;
     for (SCSIZE col=nC; col<nN; col++)
         fNorm  += (pMatA->GetDouble(col,nR)) * (pMatA->GetDouble(col,nR));
-    return sqrt(fNorm);
+    return sqrt(fNorm.get());
 }
 
 // Special version for use within QR decomposition.
@@ -2004,10 +2004,10 @@ double lcl_TGetColumnMaximumNorm(const ScMatrixRef& pMatA, SCSIZE nR, SCSIZE nC,
 double lcl_GetColumnSumProduct(const ScMatrixRef& pMatA, SCSIZE nCa,
                                const ScMatrixRef& pMatB, SCSIZE nCb, SCSIZE nR, SCSIZE nN)
 {
-    double fResult = 0.0;
+    KahanSum fResult = 0.0;
     for (SCSIZE row=nR; row<nN; row++)
         fResult += pMatA->GetDouble(nCa,row) * pMatB->GetDouble(nCb,row);
-    return fResult;
+    return fResult.get();
 }
 
 // <A(Ra);B(Rb)> starting in column index C;
@@ -2015,10 +2015,10 @@ double lcl_GetColumnSumProduct(const ScMatrixRef& pMatA, SCSIZE nCa,
 double lcl_TGetColumnSumProduct(const ScMatrixRef& pMatA, SCSIZE nRa,
                                 const ScMatrixRef& pMatB, SCSIZE nRb, SCSIZE nC, SCSIZE nN)
 {
-    double fResult = 0.0;
+    KahanSum fResult = 0.0;
     for (SCSIZE col=nC; col<nN; col++)
         fResult += pMatA->GetDouble(col,nRa) * pMatB->GetDouble(col,nRb);
-    return fResult;
+    return fResult.get();
 }
 
 // no mathematical signum, but used to switch between adding and subtracting
@@ -2156,13 +2156,13 @@ void lcl_SolveWithUpperRightTriangle(const ScMatrixRef& pMatA,
     for (SCSIZE rowp1 = nK; rowp1>0; rowp1--)
     {
         row = rowp1-1;
-        double fSum = pMatS->GetDouble(row);
+        KahanSum fSum = pMatS->GetDouble(row);
         for (SCSIZE col = rowp1; col<nK ; col++)
             if (bIsTransposed)
                 fSum -= pMatA->GetDouble(row,col) * pMatS->GetDouble(col);
             else
                 fSum -= pMatA->GetDouble(col,row) * pMatS->GetDouble(col);
-        pMatS->PutDouble( fSum / pVecR[row] , row);
+        pMatS->PutDouble( fSum.get() / pVecR[row] , row);
     }
 }
 
@@ -2179,7 +2179,7 @@ void lcl_SolveWithLowerLeftTriangle(const ScMatrixRef& pMatA,
     // ScMatrix matrices are zero based, index access (column,row)
     for (SCSIZE row = 0; row < nK; row++)
     {
-        double fSum = pMatT -> GetDouble(row);
+        KahanSum fSum = pMatT -> GetDouble(row);
         for (SCSIZE col=0; col < row; col++)
         {
             if (bIsTransposed)
@@ -2187,7 +2187,7 @@ void lcl_SolveWithLowerLeftTriangle(const ScMatrixRef& pMatA,
             else
                 fSum -= pMatA->GetDouble(row,col) * pMatT->GetDouble(col);
         }
-        pMatT->PutDouble( fSum / pVecR[row] , row);
+        pMatT->PutDouble( fSum.get() / pVecR[row] , row);
     }
 }
 
@@ -2204,22 +2204,22 @@ void lcl_ApplyUpperRightTriangle(const ScMatrixRef& pMatA,
     // ScMatrix matrices are zero based, index access (column,row)
     for (SCSIZE row = 0; row < nK; row++)
     {
-        double fSum = pVecR[row] * pMatB->GetDouble(row);
+        KahanSum fSum = pVecR[row] * pMatB->GetDouble(row);
         for (SCSIZE col = row+1; col < nK; col++)
             if (bIsTransposed)
                 fSum += pMatA->GetDouble(row,col) * pMatB->GetDouble(col);
             else
                 fSum += pMatA->GetDouble(col,row) * pMatB->GetDouble(col);
-        pMatZ->PutDouble( fSum, row);
+        pMatZ->PutDouble( fSum.get(), row);
     }
 }
 
 double lcl_GetMeanOverAll(const ScMatrixRef& pMat, SCSIZE nN)
 {
-    double fSum = 0.0;
+    KahanSum fSum = 0.0;
     for (SCSIZE i=0 ; i<nN; i++)
         fSum += pMat->GetDouble(i);
-    return fSum/static_cast<double>(nN);
+    return fSum.get()/static_cast<double>(nN);
 }
 
 // Calculates means of the columns of matrix X. X is a RxC matrix;
@@ -2229,10 +2229,10 @@ void lcl_CalculateColumnMeans(const ScMatrixRef& pX, const ScMatrixRef& pResMat,
 {
     for (SCSIZE i=0; i < nC; i++)
     {
-        double fSum =0.0;
+        KahanSum fSum =0.0;
         for (SCSIZE k=0; k < nR; k++)
             fSum += pX->GetDouble(i,k);   // GetDouble(Column,Row)
-        pResMat ->PutDouble( fSum/static_cast<double>(nR),i);
+        pResMat ->PutDouble( fSum.get()/static_cast<double>(nR),i);
     }
 }
 
@@ -2243,10 +2243,10 @@ void lcl_CalculateRowMeans(const ScMatrixRef& pX, const ScMatrixRef& pResMat,
 {
     for (SCSIZE k=0; k < nR; k++)
     {
-        double fSum = 0.0;
+        KahanSum fSum = 0.0;
         for (SCSIZE i=0; i < nC; i++)
             fSum += pX->GetDouble(i,k);   // GetDouble(Column,Row)
-        pResMat ->PutDouble( fSum/static_cast<double>(nC),k);
+        pResMat ->PutDouble( fSum.get()/static_cast<double>(nC),k);
     }
 }
 
@@ -2274,13 +2274,13 @@ void lcl_CalculateRowsDelta(const ScMatrixRef& pMat, const ScMatrixRef& pRowMean
 double lcl_GetSSresid(const ScMatrixRef& pMatX, const ScMatrixRef& pMatY, double fSlope,
                       SCSIZE nN)
 {
-    double fSum = 0.0;
+    KahanSum fSum = 0.0;
     for (SCSIZE i=0; i<nN; i++)
     {
         const double fTemp = pMatY->GetDouble(i) - fSlope * pMatX->GetDouble(i);
         fSum += fTemp * fTemp;
     }
-    return fSum;
+    return fSum.get();
 }
 
 }
