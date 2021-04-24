@@ -39,7 +39,6 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
     xDocShRef->DoHardRecalc();
 
     ScDocument& rDoc = xDocShRef->GetDocument();
-
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, rDoc.GetValue(1, 2, 0), 1e-14);
 
     xDocShRef->DoClose();

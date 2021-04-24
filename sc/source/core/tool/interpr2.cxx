@@ -1550,9 +1550,9 @@ void ScInterpreter::ScMIRR()
         PushError( nGlobalError );
     else
     {
-        double fNPV_reinvest = 0.0;
+        ksum fNPV_reinvest = 0.0;
         double fPow_reinvest = 1.0;
-        double fNPV_invest = 0.0;
+        ksum fNPV_invest = 0.0;
         double fPow_invest = 1.0;
         sal_uLong nCount = 0;
         bool bHasPosValue = false;
@@ -1623,7 +1623,7 @@ void ScInterpreter::ScMIRR()
             PushError( nGlobalError );
         else
         {
-            double fResult = -fNPV_reinvest / fNPV_invest;
+            double fResult = -fNPV_reinvest.get() / fNPV_invest.get();
             fResult *= pow( fRate1_reinvest, static_cast<double>( nCount - 1 ) );
             fResult = pow( fResult, div( 1.0, (nCount - 1)) );
             PushDouble( fResult - 1.0 );
@@ -2321,7 +2321,7 @@ void ScInterpreter::ScCumIpmt()
         sal_uLong nStart = static_cast<sal_uLong>(fStart);
         sal_uLong nEnd = static_cast<sal_uLong>(fEnd) ;
         double fPmt = ScGetPMT(fRate, fNper, fPv, 0.0, bPayInAdvance);
-        double fIpmt = 0.0;
+        ksum fIpmt = 0.0;
         if (nStart == 1)
         {
             if (!bPayInAdvance)
@@ -2336,7 +2336,7 @@ void ScInterpreter::ScCumIpmt()
                 fIpmt += ScGetFV(fRate, static_cast<double>(i-1), fPmt, fPv, false);
         }
         fIpmt *= fRate;
-        PushDouble(fIpmt);
+        PushDouble(fIpmt.get());
     }
 }
 
@@ -2361,7 +2361,7 @@ void ScInterpreter::ScCumPrinc()
     {
         bool bPayInAdvance = static_cast<bool>(fFlag);
         double fPmt = ScGetPMT(fRate, fNper, fPv, 0.0, bPayInAdvance);
-        double fPpmt = 0.0;
+        ksum fPpmt = 0.0;
         sal_uLong nStart = static_cast<sal_uLong>(fStart);
         sal_uLong nEnd = static_cast<sal_uLong>(fEnd);
         if (nStart == 1)
@@ -2379,7 +2379,7 @@ void ScInterpreter::ScCumPrinc()
             else
                 fPpmt += fPmt - ScGetFV(fRate, static_cast<double>(i-1), fPmt, fPv, false) * fRate;
         }
-        PushDouble(fPpmt);
+        PushDouble(fPpmt.get());
     }
 }
 
