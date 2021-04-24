@@ -2049,7 +2049,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
     SetStatusText(OUString());
     SetWindow(mxGraphicWindow.get());
     SfxShell::SetName("SmView");
-    SfxShell::SetUndoManager( &GetDoc()->GetEditEngine().GetUndoManager() );
+    SfxShell::SetUndoManager( &GetDoc()->GetEditEngine()->GetUndoManager() );
 }
 
 SmViewShell::~SmViewShell()
@@ -2084,7 +2084,7 @@ void SmViewShell::Activate( bool bIsMDIActivate )
         //! synchronize the GraphicWindow display with the text in the
         //! EditEngine.
         SmDocShell *pDoc = GetDoc();
-        pDoc->SetText( pDoc->GetEditEngine().GetText() );
+        pDoc->SetText( pDoc->GetEditEngine()->GetText() );
 
         if ( bIsMDIActivate )
             pEdit->GrabFocus();
