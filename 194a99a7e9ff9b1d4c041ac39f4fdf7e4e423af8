@@ -16,6 +16,24 @@
       "revId": "194a99a7e9ff9b1d4c041ac39f4fdf7e4e423af8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d86afc01_1ca614b1",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-24T12:13:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e678cb3b_db461512",
+      "revId": "194a99a7e9ff9b1d4c041ac39f4fdf7e4e423af8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
