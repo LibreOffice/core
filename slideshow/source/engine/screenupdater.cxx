@@ -124,13 +124,13 @@ namespace slideshow::internal
             mpImpl->maUpdaters.apply(
                 std::mem_fn(&ViewUpdate::needsUpdate)) );
 
-        if( bViewUpdatesNeeded )
+        if( true || bViewUpdatesNeeded )
         {
             mpImpl->maUpdaters.applyAll(
                 std::mem_fn(&ViewUpdate::update) );
         }
 
-        if( bViewUpdatesNeeded ||
+        if( true || bViewUpdatesNeeded ||
             mpImpl->mbUpdateAllRequest )
         {
             // unconditionally update all views

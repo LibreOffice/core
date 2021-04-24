@@ -52,11 +52,11 @@
 namespace sd {
 
 #define SCROLL_LINE_FACT   0.05     ///< factor for line scrolling
-#define SCROLL_PAGE_FACT   0.5      ///< factor for page scrolling
+#define SCROLL_PAGE_FACT   0.01      ///< factor for page scrolling
 #define SCROLL_SENSITIVE   20       ///< sensitive area in pixel
 #define ZOOM_MULTIPLICATOR 10000    ///< multiplier to avoid rounding errors
 #define MIN_ZOOM           5        ///< minimal zoom factor
-#define MAX_ZOOM           3000     ///< maximal zoom factor
+#define MAX_ZOOM           30000     ///< maximal zoom factor
 
 Window::Window(vcl::Window* pParent)
     : vcl::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),

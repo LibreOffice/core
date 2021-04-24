@@ -211,6 +211,7 @@
 #define SID_CONNECTOR_LINES_CIRCLES         (SID_SD_START+145)
 #define SID_BEHIND_OBJ                      (SID_SD_START+146)
     // FREE
+// #define SID_ADD_TRANSITION_TO_LIST          (SID_SD_START+147) sfxids.hrc
 // Option pane slot IDs
 #define SID_SOLID_CREATE                    (SID_SD_START+151)
 #define SID_HELPLINES_USE                   (SID_SD_START+152)

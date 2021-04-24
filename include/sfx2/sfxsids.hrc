@@ -663,6 +663,7 @@ class SvxSearchItem;
 #define SID_MODIFIED                        TypedWhichId<SfxBoolItem>(SID_SD_START+89)
 #define ID_VAL_DUMMY0                       (SID_SD_START+230)
 #define SID_SIZE_OPTIMAL                    (SID_SD_START+99)
+#define SID_ADD_TRANSITION_TO_LIST          (SID_SD_START+147)
 
 #define SID_ZOOM_OPTIMAL                    (SID_SIZE_OPTIMAL)
 #define SID_ZOOM_ENTIRE_PAGE                (SID_SIZE_PAGE)

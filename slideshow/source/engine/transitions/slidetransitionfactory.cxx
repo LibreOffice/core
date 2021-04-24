@@ -35,7 +35,7 @@
 #include "combtransition.hxx"
 #include <tools.hxx>
 #include <memory>
-
+#include <math.h> 
 
 /***************************************************
  ***                                             ***
@@ -578,6 +578,13 @@ public:
         const ViewEntry&                           rViewEntry,
         const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
         double                                     t ) override;
+
+    void myScaleThing(
+        const ::cppcanvas::CustomSpriteSharedPtr& rSprite,
+        const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
+        double t,
+        const ViewEntry& rViewEntry
+        );
 };
 
 void MovingSlideChange::prepareForRun(
@@ -588,6 +595,21 @@ void MovingSlideChange::prepareForRun(
         renderBitmap( getLeavingBitmap( rViewEntry ), rDestinationCanvas );
     else if ( maEnteringDirection.equalZero() )
         renderBitmap( getEnteringBitmap( rViewEntry ), rDestinationCanvas );
+}
+
+void MovingSlideChange::myScaleThing(
+    const ::cppcanvas::CustomSpriteSharedPtr& rSprite,
+    const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
+    double t,
+    const ViewEntry& rViewEntry
+    )
+{
+    const double sizeConst = 10;
+    basegfx::B2DHomMatrix aViewTransform(rDestinationCanvas->getTransformation());
+    aViewTransform.scale(10 + t * sizeConst, 10 + t * sizeConst);
+    const basegfx::B2DPoint aPageOrigin(aViewTransform * basegfx::B2DPoint());
+    rSprite->movePixel(aPageOrigin + ((t - 1.0) * ::basegfx::B2DSize(getEnteringSlideSizePixel(rViewEntry.mpView))));
+    rSprite->transform(aViewTransform);
 }
 
 void MovingSlideChange::performIn(
@@ -609,17 +631,13 @@ void MovingSlideChange::performIn(
     // transformations! If the canvas is rotated, we still
     // move the sprite unrotated (which might or might not
     // produce the intended effect).
-    const basegfx::B2DHomMatrix aViewTransform(
-        rDestinationCanvas->getTransformation() );
-    const basegfx::B2DPoint aPageOrigin(
-        aViewTransform * basegfx::B2DPoint() );
-
+    myScaleThing(rSprite, rDestinationCanvas, t, rViewEntry);
     // move sprite
-    rSprite->movePixel(
+    /* rSprite->movePixel(
         aPageOrigin +
         ((t - 1.0) *
          ::basegfx::B2DSize( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
-         maEnteringDirection) );
+         maEnteringDirection) ); */
 }
 
 void MovingSlideChange::performOut(
@@ -641,16 +659,12 @@ void MovingSlideChange::performOut(
     // transformations! If the canvas is rotated, we still
     // move the sprite unrotated (which might or might not
     // produce the intended effect).
-    const basegfx::B2DHomMatrix aViewTransform(
-        rDestinationCanvas->getTransformation() );
-    const basegfx::B2DPoint aPageOrigin(
-        aViewTransform * basegfx::B2DPoint() );
-
+    myScaleThing(rSprite, rDestinationCanvas, t, rViewEntry);
     // move sprite
-    rSprite->movePixel(
+   /*  rSprite->movePixel(
         aPageOrigin + (t *
                        ::basegfx::B2DSize( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
-                       maLeavingDirection) );
+                       maLeavingDirection) ); */
 }
 
 

@@ -17,6 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/mutex.hxx>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
+
 
 #include <tools/diagnose_ex.h>
 
@@ -82,7 +90,21 @@
 #include <map>
 #include <vector>
 #include <algorithm>
-
+#include <DrawViewShell.hxx>
+#include <sal/log.hxx>
+#include <singletonservice/Service.hxx>
+#include "ZoomingAnimation.hxx"
+#include <slideshow/FrameSynchronization.hxx>
+#include <exception>
+#include <optional>
+#include <random>
+class InvalidArgumentException: public std::exception
+{
+    virtual const char* what() const throw()
+    {
+        return "My exception happened";
+    }
+} InvalidArgumentException;
 using namespace com::sun::star;
 using namespace ::slideshow::internal;
 
@@ -97,57 +119,7 @@ namespace {
     synchronizing the display of new frames and thus keeping the frame rate
     steady.
 */
-class FrameSynchronization
-{
-public:
-    /** Create new object with a predefined duration between two frames.
-        @param nFrameDuration
-            The preferred duration between the display of two frames in
-            seconds.
-    */
-    explicit FrameSynchronization (const double nFrameDuration);
 
-    /** Set the current time as the time at which the current frame is
-        displayed.  From this the target time of the next frame is derived.
-    */
-    void MarkCurrentFrame();
-
-    /** When there is time left until the next frame is due then wait.
-        Otherwise return without delay.
-    */
-    void Synchronize();
-
-    /** Activate frame synchronization when an animation is active and
-        frames are to be displayed in a steady rate.  While active
-        Synchronize() will wait until the frame duration time has passed.
-    */
-    void Activate();
-
-    /** Deactivate frame synchronization when no animation is active and the
-        time between frames depends on user actions and other external
-        sources.  While deactivated Synchronize() will return without delay.
-    */
-    void Deactivate();
-
-private:
-    /** The timer that is used for synchronization is independent from the
-        one used by SlideShowImpl: it is not paused or modified by
-        animations.
-    */
-    canvas::tools::ElapsedTime maTimer;
-    /** Time between the display of frames.  Enforced only when mbIsActive
-        is <TRUE/>.
-    */
-    const double mnFrameDuration;
-    /** Time (of maTimer) when the next frame shall be displayed.
-        Synchronize() will wait until this time.
-    */
-    double mnNextFrameTargetTime;
-    /** Synchronize() will wait only when this flag is <TRUE/>.  Otherwise
-        it returns immediately.
-    */
-    bool mbIsActive;
-};
 
 /******************************************************************************
 
@@ -471,6 +443,13 @@ private:
 
     EffectRewinder                          maEffectRewinder;
     FrameSynchronization                    maFrameSynchronization;
+    void SaveZoomSdrObjectCenters();
+    bool nextCenter(tools::silverdev::S& s);
+    bool previousCenter(tools::silverdev::S& s);
+    bool isAtLast(tools::silverdev::S& s);
+    bool isAtFirst(tools::silverdev::S& s);
+    bool isFinishedWithTransitions(tools::silverdev::S& s);
+    void queueZoomActivity(const basegfx::B2DPoint centerPoint, double requestedZoom);
 };
 
 /** Separate event listener for animation, view and hyperlink events.
@@ -535,7 +514,8 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
         return mrShow.handleAnimationEvent(rNode);
     }
 };
-
+std::optional<basegfx::B2DPoint> getCurrentCenter(tools::silverdev::S& s);
+std::optional<long double> getCurrentRequestedZoomLevel(tools::silverdev::S& s);
 SlideShowImpl::SlideShowImpl(
     uno::Reference<uno::XComponentContext> const& xContext )
     : SlideShowImplBase(m_aMutex),
@@ -586,36 +566,195 @@ SlideShowImpl::SlideShowImpl(
     // keep care not constructing any UNO references to this inside ctor,
     // shift that code to create()!
 
-    uno::Reference<lang::XMultiComponentFactory> xFactory(
-        mxComponentContext->getServiceManager() );
+    uno::Reference<lang::XMultiComponentFactory> xFactory(mxComponentContext->getServiceManager());
 
-    if( xFactory.is() )
+    if (xFactory.is())
     {
         try
-    {
+        {
             // #i82460# try to retrieve special transition factory
             mxOptionalTransitionFactory.set(
-                xFactory->createInstanceWithContext(
-                    "com.sun.star.presentation.TransitionFactory",
-                    mxComponentContext ),
-                uno::UNO_QUERY );
+                xFactory->createInstanceWithContext("com.sun.star.presentation.TransitionFactory",
+                                                    mxComponentContext),
+                uno::UNO_QUERY);
         }
         catch (loader::CannotActivateFactoryException const&)
-    {
-    }
+        {
+        }
     }
 
-    mpListener = std::make_shared<SeparateListenerImpl>(
-                          *this,
-                          maScreenUpdater,
-                          maEventQueue );
-    maEventMultiplexer.addSlideAnimationsEndHandler( mpListener );
-    maEventMultiplexer.addViewRepaintHandler( mpListener );
-    maEventMultiplexer.addHyperlinkHandler( mpListener, 0.0 );
-    maEventMultiplexer.addAnimationStartHandler( mpListener );
-    maEventMultiplexer.addAnimationEndHandler( mpListener );
+    mpListener = std::make_shared<SeparateListenerImpl>(*this, maScreenUpdater, maEventQueue);
+    maEventMultiplexer.addSlideAnimationsEndHandler(mpListener);
+    maEventMultiplexer.addViewRepaintHandler(mpListener);
+    maEventMultiplexer.addHyperlinkHandler(mpListener, 0.0);
+    maEventMultiplexer.addAnimationStartHandler(mpListener);
+    maEventMultiplexer.addAnimationEndHandler(mpListener);
+    // This is the end of slideshowimpl constructor and here's my part of it -- silver_est
+    using namespace ::tools::silverdev;
+    S& s = getInstance2();
+    s.isFirstZoom=true;
+    s.centersOfObjects.clear();
+    s.requestedZooms.clear();
+    SaveZoomSdrObjectCenters();
+    s.requestedZoomIterator = s.requestedZooms.begin();
+    s.zoomIterator = s.zoomings.begin();
+    s.centerIterator = s.centersOfObjects.begin();
+    s.notificationCenter.clearListeners<PreviousZoomEvent>();
+    s.notificationCenter.clearListeners<NextZoomEvent>();
+    s.notificationCenter.addListener<PreviousZoomEvent>(
+        [this, &s](PreviousZoomEvent& event) {
+        if(previousCenter(s)){
+            if(auto center = getCurrentCenter(s)){
+                if(auto zoom = getCurrentRequestedZoomLevel(s)){
+                    queueZoomActivity(center.value(), zoom.value());
+                }
+            }
+        } else {
+            maListenerContainer.forEach<presentation::XSlideShowListener>(
+                [this](const uno::Reference<presentation::XSlideShowListener>& xListener)
+                {
+                });
+        }
+    });
+    // I don't use this right now
+    s.notificationCenter.addListener<ViewUpdateEvent>([this](ViewUpdateEvent& event)
+                                                      { maEventMultiplexer.notifyViewsChanged(); });
+
+    s.notificationCenter.addListener<NextZoomEvent>(
+        [this, &s](NextZoomEvent& event)
+        {
+            SAL_DEBUG("Trying to fire next event;");
+          if(isFinishedWithTransitions(getInstance2())){
+              SAL_DEBUG("Transitions are finished");
+              maListenerContainer.forEach<presentation::XSlideShowListener>(
+                  [this](const uno::Reference<presentation::XSlideShowListener>& xListener)
+                  {
+                    xListener->slideEnded(false);
+                  });
+          }
+            if(auto center = getCurrentCenter(s)){
+                if(auto zoom = getCurrentRequestedZoomLevel(s)){
+                    queueZoomActivity(center.value(), zoom.value());
+                }
+                nextCenter(s);
+            }
+
+        });
+
 }
+void SlideShowImpl::SaveZoomSdrObjectCenters(){
+    using namespace ::tools::silverdev;
+    S& s = getInstance2();
+    short count = 0;
+    double lower_bound = 0.0;
+    double upper_bound = 1.0;
+    Point previousPoint;
+    long double previousZoom;
+    srand ( time ( NULL));
+    for(auto& zooming : s.zoomings){
+        auto x = zooming->GetCurrentBoundRect().Center();
+        long double a_random_double = (long double)rand()/RAND_MAX;
+        SAL_DEBUG("Generated random double: " << a_random_double);
+        if(count > 0){
+            SAL_DEBUG("Subtraction occurs");
+            s.centersOfObjects.push_back(basegfx::B2DPoint(x.getX()-previousPoint.getX(), x.getY()-previousPoint.getY()));
+            s.requestedZooms.push_back(a_random_double - previousZoom);
+        } else {
+            s.centersOfObjects.push_back(basegfx::B2DPoint(x.getX(), x.getY()));
+            s.requestedZooms.push_back(a_random_double);
+        }
+        previousPoint = x;
+        previousZoom = a_random_double;
+        count++;
+    }
+}
+void SlideShowImpl::queueZoomActivity(const basegfx::B2DPoint centerPoint, double requestedZoom)
+{
+    // Get screensize here and pass screensize into ZoomAnimation later here
+/*    uno::Reference<beans::XPropertySet> xPropSet(
+        , uno::UNO_QUERY_THROW);*/
 
+/*    sal_Int32 nDocWidth = 0;
+    sal_Int32 nDocHeight = 0;
+    xPropSet->getPropertyValue("Width") >>= nDocWidth;
+    xPropSet->getPropertyValue("Height") >>= nDocHeight;*/
+    using namespace ::tools::silverdev;
+    S& s = getInstance2();
+    EventSharedPtr ZoomEndEvent(makeEvent(
+        [this]()
+        {
+          getInstance2().isFirstZoom=false;
+        },
+        "ZoomEndEvent"));
+    double nTransitionDuration(1.0);
+    sal_Int32 nMinFrames(60);
+    basegfx::B2ISize d1 = mpCurrentSlide->getSlideSize();
+    basegfx::B2DVector SlideSizeB2D = basegfx::B2DSize(d1);
+    ZoomingParameters zp {centerPoint, 0, &maViewContainer,
+                          mpCurrentSlide, &maEventMultiplexer,
+                          &maScreenUpdater, &maFrameSynchronization,
+                          SlideSizeB2D, s.isFirstZoom, requestedZoom };
+    const std::shared_ptr<ZoomingAnimation>& ptr = std::make_shared<ZoomingAnimation>(zp);
+    NumberAnimationSharedPtr pAnimation(ptr);
+    auto parameters = ActivitiesFactory::CommonParameters(
+        ZoomEndEvent, maEventQueue, maActivitiesQueue, nTransitionDuration, nMinFrames,
+        false, // autoreverse
+        std::optional<double>(1.0), // repeats
+        0, // acceleration
+        0, // deceleration
+        ShapeSharedPtr(),
+        SlideSizeB2D // slide bounds
+    );
+
+
+    ActivitySharedPtr pZoomActivity(
+        ActivitiesFactory::createSimpleActivity(parameters, pAnimation, true
+                                                /* is direction forward? */));
+    maActivitiesQueue.addActivity(pZoomActivity);
+}
+std::optional<long double> getCurrentRequestedZoomLevel(tools::silverdev::S& s){
+    if(std::distance(s.requestedZoomIterator, s.requestedZooms.end()) >= 1){
+        double requestedZoom(*s.requestedZoomIterator);
+        return requestedZoom;
+    } else {
+        return std::nullopt;
+    }
+}
+std::optional<basegfx::B2DPoint> getCurrentCenter(tools::silverdev::S& s){
+    if(std::distance(s.centerIterator, s.centersOfObjects.end()) >= 1){
+        basegfx::B2DPoint center(*s.centerIterator);
+        return center;
+    } else {
+        return std::nullopt;
+    }
+}
+bool SlideShowImpl::isFinishedWithTransitions(tools::silverdev::S& s){
+    return std::distance(s.centerIterator, s.centersOfObjects.end()) == 0;
+}
+bool SlideShowImpl::isAtLast(tools::silverdev::S& s) {
+    return std::distance(s.centerIterator, s.centersOfObjects.end()) <= 1;
+}
+bool SlideShowImpl::isAtFirst(tools::silverdev::S& s) {
+    return std::distance(s.centerIterator, s.centersOfObjects.begin()) == 0;
+}
+bool SlideShowImpl::nextCenter(tools::silverdev::S& s) {
+    if(std::distance(s.centerIterator, s.centersOfObjects.end()) >= 1) {
+        ++s.centerIterator;
+        ++s.requestedZoomIterator;
+        return true;
+    } else {
+        return false;
+    }
+}
+bool SlideShowImpl::previousCenter(tools::silverdev::S& s) {
+    if(s.centersOfObjects.size() > 1 && std::distance(s.centerIterator, s.centersOfObjects.begin()) >= 1) {
+        --s.centerIterator;
+        --s.requestedZoomIterator;
+        return true;
+    } else {
+        return false;
+    }
+}
 // we are about to be disposed (someone call dispose() on us)
 void SlideShowImpl::disposing()
 {
@@ -858,6 +997,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                         pTransition->prefetch(); },
             "Animation::prefetch"));
 
+    const basegfx::B2DVector& enteringSlideBounds = basegfx::B2DSize(rEnteringSlide->getSlideSize());
     return ActivitySharedPtr(
         ActivitiesFactory::createSimpleActivity(
             ActivitiesFactory::CommonParameters(
@@ -866,14 +1006,15 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                 maActivitiesQueue,
                 nTransitionDuration,
                 nMinFrames,
-                false,
-                std::optional<double>(1.0),
-                0.0,
-                0.0,
+                false, // autoreverse
+                std::optional<double>(1.0), // repeats
+                0.0, // acceleration
+                0.0, // deceleration
                 ShapeSharedPtr(),
-                basegfx::B2DSize( rEnteringSlide->getSlideSize() ) ),
+                enteringSlideBounds // slide bounds
+                 ),
             pTransition,
-            true ));
+            true /* is direction forward? */ ));
 }
 
 PolygonMap::iterator SlideShowImpl::findPolygons( uno::Reference<drawing::XDrawPage> const& xDrawPage)
@@ -1122,18 +1263,17 @@ void SlideShowImpl::displaySlide(
                 // repaint slide which is not necessary.
                 maEventMultiplexer.notifyViewsChanged();
             }
-
+            // TODO: check if zooms have next zoom
             // create slide transition, and add proper end event
             // (which then starts the slide effects
             // via CURRENT_SLIDE.show())
+            // Verified to run when slide opens and not only when next slide is toggled. This is important because the SlideChangeBase constructor needs to be called when slideshow starts
             ActivitySharedPtr pSlideChangeActivity (
                 createSlideTransition(
                     mpCurrentSlide->getXDrawPage(),
                     mpPreviousSlide,
                     mpCurrentSlide,
-                    makeEvent(
-                        [this] () { this->notifySlideTransitionEnded(false); },
-                        "SlideShowImpl::notifySlideTransitionEnded")));
+                    makeEvent([this] () { this->notifySlideTransitionEnded(false); }, "SlideShowImpl::notifySlideTransitionEnded")));
 
             if (bSkipSlideTransition)
             {
@@ -1147,6 +1287,7 @@ void SlideShowImpl::displaySlide(
             if (pSlideChangeActivity)
             {
                 // factory generated a slide transition - activate it!
+                // TODO: Create a new type of activity for zooming
                 maActivitiesQueue.addActivity( pSlideChangeActivity );
             }
             else
@@ -1177,7 +1318,7 @@ void SlideShowImpl::displaySlide(
 void SlideShowImpl::redisplayCurrentSlide()
 {
     osl::MutexGuard const guard( m_aMutex );
-
+    SAL_DEBUG("sal_Bool SlideShowImpl::redisplayCurrentSlide()");
     if (isDisposed())
         return;
 
@@ -1205,7 +1346,9 @@ void SlideShowImpl::redisplayCurrentSlide()
 sal_Bool SlideShowImpl::nextEffect()
 {
     osl::MutexGuard const guard( m_aMutex );
-
+    ::tools::silverdev::S& s = ::tools::silverdev::getInstance2();
+    ::tools::silverdev::NextZoomEvent zoomEvent{};
+    s.notificationCenter.fireEvent<::tools::silverdev::NextZoomEvent>(zoomEvent);
     if (isDisposed())
         return false;
 
@@ -1328,7 +1471,6 @@ sal_Bool SlideShowImpl::addView(
     uno::Reference<presentation::XSlideShowView> const& xView )
 {
     osl::MutexGuard const guard( m_aMutex );
-
     if (isDisposed())
         return false;
 
@@ -1361,7 +1503,7 @@ sal_Bool SlideShowImpl::addView(
     // clear view area (since it's newly added,
     // we need a clean slate)
     pView->clearAll();
-
+//    pView->setViewSize(basegfx::B2DSize(120., 120.));
     // broadcast newly added view
     maEventMultiplexer.notifyViewAdded( pView );
 
@@ -1931,7 +2073,6 @@ void SlideShowImpl::resetCursor()
 sal_Bool SlideShowImpl::update( double & nNextTimeout )
 {
     osl::MutexGuard const guard( m_aMutex );
-
     if (isDisposed())
         return false;
 
@@ -1979,9 +2120,11 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
                 scopeGuard.dismiss();
                 return false;
             }
-
             maActivitiesQueue.process();
-
+            /*mpCurrentSlide = makeSlide( mxPrefetchSlide, mxDrawPagesSupplier,
+                                         mxPrefetchAnimationNode );
+            mpCurrentSlide->getCurrentSlideBitmap( *maViewContainer.begin() );*/
+            //mpCurrentSlide->prefetch();
             // commit frame to screen
             maFrameSynchronization.Synchronize();
             maScreenUpdater.commitUpdates();
@@ -2061,7 +2204,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
         // exactly once after a previous animation sequence finished -
         // this might trigger screen dumps on some canvas
         // implementations
-        if( !mbSlideShowIdle &&
+        if( true || !mbSlideShowIdle &&
             (!bRet ||
              nNextTimeout > 1.0) )
         {
@@ -2099,10 +2242,13 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
 void SlideShowImpl::notifySlideTransitionEnded( bool bPaintSlide )
 {
     osl::MutexGuard const guard( m_aMutex );
-
+    // tools::silverdev::S& reference1 = tools::silverdev::getInstance2();
+    // SAL_DEBUG("address in notifySlideTransitionEnded" << &reference1);
+    // SAL_DEBUG(reference1.zoomings.size());
     OSL_ENSURE( !isDisposed(), "### already disposed!" );
     OSL_ENSURE( mpCurrentSlide,
                 "notifySlideTransitionEnded(): Invalid current slide" );
+
     if (mpCurrentSlide)
     {
         mpCurrentSlide->update_settings( !!maUserPaintColor, maUserPaintColor ? *maUserPaintColor : RGBColor(), maUserPaintStrokeWidth );
@@ -2171,7 +2317,9 @@ void SlideShowImpl::notifySlideAnimationsEnded()
         // schedule a slide end event, with automatic mode's
         // delay
         aNotificationEvents = makeInterruptableDelay(
-            [this]() { return this->notifySlideEnded( false ); },
+            [this]() {
+                return this->notifySlideEnded( false );
+            },
             maEventMultiplexer.getAutomaticTimeout() );
     }
     else
@@ -2258,38 +2406,67 @@ void SlideShowImpl::notifySlideAnimationsEnded()
             xListener->slideAnimationsEnded();
         });
 }
-
+/* void printSomeInfo(){
+    SAL_DEBUG("printSomeInfo. YEAH SLIDE WAS DISPLAYED");
+    S& reference1 = getInstance2();
+    SAL_DEBUG(reference1.zoomings.size());
+    if(reference1.hasZooms()){
+        for ( auto zooming : reference1.zoomings){
+// https://stackoverflow.com/questions/11510128/how-to-identify-failed-casts-using-dynamic-cast-operator
+            SdrRectObj* rectobject1 = dynamic_cast<SdrRectObj*>(zooming);
+            tools::Rectangle aR1(zooming->GetSnapRect());
+            SAL_DEBUG("getX() = " << aR1.getX());
+            SdrTextObj* textobject1 = dynamic_cast<SdrTextObj*>(zooming);
+            if(textobject1 != NULL){
+                if(textobject1->HasText()){
+                    OutlinerParaObject* pOutlinerParagraphObject = textobject1->GetOutlinerParaObject();
+                    const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
+                    OUString sText = aEdit.GetText(0);
+                    //SdrText* text{textobject1->getText(0)};
+                    SAL_DEBUG(sText);
+                } else {
+                    SAL_DEBUG("SdrText doesn't have text though.");
+                }
+            } else {
+                SAL_DEBUG("Cast failed. SILVER");
+            }
+        }
+    } else {
+        SAL_DEBUG("doesn't have zooms");
+    }
+} */
 void SlideShowImpl::notifySlideEnded (const bool bReverse)
 {
+
     osl::MutexGuard const guard( m_aMutex );
 
     OSL_ENSURE( !isDisposed(), "### already disposed!" );
 
-    if (mpRehearseTimingsActivity && !bReverse)
-    {
-        const double time = mpRehearseTimingsActivity->stop();
-        if (mpRehearseTimingsActivity->hasBeenClicked())
-        {
-            // save time at current drawpage:
-            uno::Reference<beans::XPropertySet> xPropSet(
-                mpCurrentSlide->getXDrawPage(), uno::UNO_QUERY );
-            OSL_ASSERT( xPropSet.is() );
-            if (xPropSet.is())
-            {
-                xPropSet->setPropertyValue(
-                    "Change",
-                    uno::Any( static_cast<sal_Int32>(1) ) );
-                xPropSet->setPropertyValue(
-                    "Duration",
-                    uno::Any( static_cast<sal_Int32>(time) ) );
-            }
-        }
-    }
+//    if (mpRehearseTimingsActivity && !bReverse)
+//    {
+//        const double time = mpRehearseTimingsActivity->stop();
+//        if (mpRehearseTimingsActivity->hasBeenClicked())
+//        {
+//            // save time at current drawpage:
+//            uno::Reference<beans::XPropertySet> xPropSet(
+//                mpCurrentSlide->getXDrawPage(), uno::UNO_QUERY );
+//            OSL_ASSERT( xPropSet.is() );
+//            if (xPropSet.is())
+//            {
+//                xPropSet->setPropertyValue(
+//                    "Change",
+//                    uno::Any( static_cast<sal_Int32>(1) ) );
+//                xPropSet->setPropertyValue(
+//                    "Duration",
+//                    uno::Any( static_cast<sal_Int32>(time) ) );
+//            }
+//        }
+//    }
 
-    if (bReverse)
-        maEventMultiplexer.notifySlideEndEvent();
+  /*  if (bReverse)
+        maEventMultiplexer.notifySlideEndEvent();*/
 
-    stopShow();  // MUST call that: results in
+    /*stopShow();*/  // MUST call that: results in
                  // maUserEventQueue.clear(). What's more,
                  // stopShow()'s currSlide->hide() call is
                  // now also required, notifySlideEnded()
@@ -2297,10 +2474,16 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
                  // unconditionally. Otherwise, genuine
                  // shape animations (drawing layer and
                  // GIF) will not be stopped.
-
-    maListenerContainer.forEach<presentation::XSlideShowListener>(
-        [&bReverse]( const uno::Reference< presentation::XSlideShowListener >& xListener )
-        { return xListener->slideEnded( bReverse ); } );
+    using namespace ::tools::silverdev;
+    S& s = getInstance2();
+    if(isFinishedWithTransitions(s)){
+        maListenerContainer.forEach<presentation::XSlideShowListener>(
+            [&bReverse](const uno::Reference<presentation::XSlideShowListener>& xListener)
+            {
+//              return xListener->slideEnded( bReverse );
+            }
+        );
+    }
 }
 
 bool SlideShowImpl::notifyHyperLinkClicked( OUString const& hyperLink )
@@ -2376,51 +2559,10 @@ std::shared_ptr<avmedia::MediaTempFile> SlideShowImpl::getMediaTempFile(const OU
     return aRet;
 }
 
+
 //===== FrameSynchronization ==================================================
 
-FrameSynchronization::FrameSynchronization (const double nFrameDuration)
-    : maTimer(),
-      mnFrameDuration(nFrameDuration),
-      mnNextFrameTargetTime(0),
-      mbIsActive(false)
-{
-    MarkCurrentFrame();
-}
 
-void FrameSynchronization::MarkCurrentFrame()
-{
-    mnNextFrameTargetTime = maTimer.getElapsedTime() + mnFrameDuration;
-}
-
-void FrameSynchronization::Synchronize()
-{
-    if (mbIsActive)
-    {
-        // Do busy waiting for now.
-        for(;;)
-        {
-            double remainingTime = mnNextFrameTargetTime - maTimer.getElapsedTime();
-            if(remainingTime <= 0)
-                break;
-            // Try to sleep most of it.
-            int remainingMilliseconds = remainingTime * 1000;
-            if(remainingMilliseconds > 2)
-                osl::Thread::wait(std::chrono::milliseconds(remainingMilliseconds - 2));
-        }
-    }
-
-    MarkCurrentFrame();
-}
-
-void FrameSynchronization::Activate()
-{
-    mbIsActive = true;
-}
-
-void FrameSynchronization::Deactivate()
-{
-    mbIsActive = false;
-}
 
 } // anon namespace
 
