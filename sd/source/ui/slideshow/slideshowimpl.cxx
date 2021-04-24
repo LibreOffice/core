@@ -93,6 +93,7 @@
 #include <app.hrc>
 #include <cusshow.hxx>
 #include <optsitem.hxx>
+#include <singletonservice/Service.hxx>
 
 #define CM_SLIDES       21
 
@@ -181,6 +182,9 @@ private:
     sal_Int32 mnCurrentSlideIndex;
     sal_Int32 mnHiddenSlideNumber;
     Reference< XIndexAccess > mxSlides;
+    bool getSlide(sal_Int32 n, Reference<XDrawPage>& xSlide);
+    bool getSlideAnimationController(Reference<XDrawPage>& xSlide,
+                                     Reference<XAnimationNode>& xAnimNode);
 };
 
 Reference< XDrawPage > AnimationSlideController::getSlideByNumber( sal_Int32 nSlideNumber ) const
@@ -305,30 +309,34 @@ void AnimationSlideController::insertSlideNumber( sal_Int32 nSlideNumber, bool b
         maSlideVisited.push_back( false );
     }
 }
-
+bool AnimationSlideController::getSlide(sal_Int32 n, Reference<XDrawPage>& xSlide) {
+    if(!isValidSlideNumber(n)) return false;
+    try {
+        xSlide.set(mxSlides->getByIndex(n), UNO_QUERY_THROW);
+    } catch( Exception& ) {
+        TOOLS_WARN_EXCEPTION( "sd", "sd::AnimationSlideController::getSlideAPI()" );
+    }
+}
+bool AnimationSlideController::getSlideAnimationController(Reference<XDrawPage>& xSlide, Reference< XAnimationNode >& xAnimNode){
+    if (meMode == PREVIEW) {
+        xAnimNode = mxPreviewNode;
+    } else {
+        Reference<animations::XAnimationNodeSupplier> xAnimNodeSupplier(xSlide, UNO_QUERY_THROW);
+        xAnimNode = xAnimNodeSupplier->getAnimationNode();
+    }
+}
 bool AnimationSlideController::getSlideAPI( sal_Int32 nSlideNumber, Reference< XDrawPage >& xSlide, Reference< XAnimationNode >& xAnimNode )
 {
     if( isValidSlideNumber( nSlideNumber ) ) try
     {
         xSlide.set( mxSlides->getByIndex(nSlideNumber), UNO_QUERY_THROW );
-
-        if( meMode == PREVIEW )
-        {
-            xAnimNode = mxPreviewNode;
-        }
-        else
-        {
-            Reference< animations::XAnimationNodeSupplier > xAnimNodeSupplier( xSlide, UNO_QUERY_THROW );
-            xAnimNode = xAnimNodeSupplier->getAnimationNode();
-        }
-
+        getSlideAnimationController(xSlide, xAnimNode);
         return true;
     }
     catch( Exception& )
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::AnimationSlideController::getSlideAPI()" );
     }
-
     return false;
 }
 
@@ -1333,7 +1341,6 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
         mpViewShell->NotifyAccUpdate();
     }
 }
-
 void SlideshowImpl::endPresentation()
 {
     if( maPresSettings.mbMouseAsPen)

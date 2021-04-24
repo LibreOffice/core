@@ -28,6 +28,7 @@
 #include <unotools/caserotate.hxx>
 #include <unotools/options.hxx>
 #include <sddllapi.h>
+#include <vector>
 
 namespace svx::sidebar { class SelectionChangeHandler; }
 namespace com::sun::star::lang { class XEventListener; }
@@ -375,6 +376,8 @@ public:
 
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
+    // Zooming presentations
+    void AddToTransitionList(SfxRequest& rReq);
 protected:
     std::unique_ptr<DrawView> mpDrawView;
     SdPage*             mpActualPage;
@@ -501,6 +504,7 @@ private:
 
     // The colour of the area behind the slide (used to be called "Wiese")
     Color mnAppBackgroundColor;
+
 };
 
     /// Merge the background properties together and deposit the result in rMergeAttr

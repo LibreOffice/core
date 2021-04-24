@@ -28,6 +28,8 @@
 
 #include <algorithm>
 
+#include <singletonservice/Service.hxx>
+
 using namespace com::sun::star;
 
 namespace slideshow::internal {
@@ -56,6 +58,7 @@ SlideChangeBase::SlideChangeBase( std::optional<SlideSharedPtr> const & leavingS
     ENSURE_OR_THROW(
         pEnteringSlide,
         "SlideChangeBase::SlideChangeBase(): Invalid entering slide!" );
+    
 }
 
 SlideBitmapSharedPtr SlideChangeBase::getLeavingBitmap( const ViewEntry& rViewEntry ) const
@@ -248,7 +251,37 @@ void SlideChangeBase::end()
     // remove also from event multiplexer, we're dead anyway
     mrEventMultiplexer.removeViewHandler( std::dynamic_pointer_cast<ViewEventHandler>(shared_from_this()) );
 }
-
+/* void doZoom(const ::cppcanvas::CustomSpriteSharedPtr& rSprite,
+    const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
+    double t,
+    const ViewEntry& rViewEntry){
+{
+    const std::size_t nEntries( maViewData.size() );
+    ViewEntry& rViewEntry( maViewData[i] );
+    const ::cppcanvas::CanvasSharedPtr& rCanvas( rViewEntry.mpView->getCanvas() );
+    ::cppcanvas::CustomSpriteSharedPtr& rInSprite( rViewEntry.mpInSprite );
+    ::cppcanvas::CustomSpriteSharedPtr& rOutSprite( rViewEntry.mpOutSprite );
+    const double sizeConst = 10;
+    basegfx::B2DHomMatrix aViewTransform(rDestinationCanvas->getTransformation());
+    aViewTransform.scale(10 + t * sizeConst, 10 + t * sizeConst);
+    const basegfx::B2DPoint aPageOrigin(aViewTransform * basegfx::B2DPoint());
+    rSprite->movePixel(aPageOrigin + ((t - 1.0) * ::basegfx::B2DSize(getEnteringSlideSizePixel(rViewEntry.mpView))));
+    rSprite->transform(aViewTransform);
+} */
+// TODO: Find out who calls this
+// This is called by someone who uses the operator on NumberAnimation
+/* This is exactly where it is used and I hate that it's so difficult to find
+ slideshow/source/engine/activities/activitiesfactory.cxx line 895
+ 
+/// perform override for ContinuousActivityBase
+    virtual void perform( double nModifiedTime, sal_uInt32 ) const override
+    {
+        if (this->isDisposed() || !mpAnim)
+            return;
+        // no cumulation, simple [0,1] range
+        (*mpAnim)( 1.0 - Direction + nModifiedTime*(2.0*Direction - 1.0) );
+    }
+*/
 bool SlideChangeBase::operator()( double nValue )
 {
     if( mbFinished )

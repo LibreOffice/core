@@ -9123,6 +9123,22 @@ SfxVoidItem ZoomObjects SID_SIZE_OPTIMAL
     GroupId = SfxGroupId::View;
 ]
 
+SfxVoidItem AddToTransitionList SID_ADD_TRANSITION_TO_LIST
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
 
 SfxVoidItem ZoomOptimal SID_SIZE_ALL
 ()

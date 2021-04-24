@@ -92,6 +92,8 @@
 #include <fuformatpaintbrush.hxx>
 #include <fuzoom.hxx>
 #include <sdmod.hxx>
+#include <sal/log.hxx>
+#include <singletonservice/Service.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -721,6 +723,26 @@ void DrawViewShell::FuDeleteSelectedObjects()
 
     if (!bConsumed)
         mpDrawView->DeleteMarked();
+}
+
+void DrawViewShell::AddToTransitionList(SfxRequest& rReq){
+    sal_uInt16 nSId = rReq.GetSlot();
+    if(!mpDrawView->AreObjectsMarked()){return;}
+    switch(nSId)
+    {
+        case SID_ADD_TRANSITION_TO_LIST:
+        {
+            if (mpDrawView->GetMarkedObjectList().GetMarkCount() > 0) {
+                ::tools::silverdev::S& s = ::tools::silverdev::getInstance2();
+                auto name = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj()->GetName();
+                SAL_DEBUG(name << " was added to Transitions list.");
+                SdrObject* sdrObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                s.zoomings.push_back(sdrObj);
+                rReq.Ignore();
+            }
+        }
+        break;
+    }
 }
 
 void DrawViewShell::FuSupport(SfxRequest& rReq)

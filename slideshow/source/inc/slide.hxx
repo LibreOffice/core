@@ -203,7 +203,7 @@ namespace slideshow::internal
                                     bool                                                bUserPaintEnabled,
                                     bool                                                bIntrinsicAnimationsAllowed,
                                     bool                                                bDisableAnimationZOrder );
-}
+        }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SLIDE_HXX
 

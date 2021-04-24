@@ -34,7 +34,7 @@
 
 namespace slideshow::internal
     {
-        /* Definition of Transitionfactory class */
+        /* STUPID COMMENTS DO NOT DESERVE TO EXIST -> Definition of Transitionfactory class */
         namespace TransitionFactory
         {
             /** Create a transition effect for shapes.
