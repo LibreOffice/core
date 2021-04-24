@@ -39,6 +39,7 @@
 #include <view.hxx>
 #include <document.hxx>
 #include <cfgitem.hxx>
+#include <editengine.hxx>
 #include "accessibility.hxx"
 
 using namespace com::sun::star::accessibility;
@@ -88,7 +89,7 @@ EditEngine* SmEditTextWindow::GetEditEngine() const
 {
     SmDocShell *pDoc = mrEditWindow.GetDoc();
     assert(pDoc);
-    return &pDoc->GetEditEngine();
+    return pDoc->GetEditEngine();
 }
 
 void SmEditTextWindow::EditViewScrollStateChange()
@@ -173,7 +174,7 @@ EditView * SmEditWindow::GetEditView() const
 EditEngine * SmEditWindow::GetEditEngine()
 {
     if (SmDocShell *pDoc = GetDoc())
-        return &pDoc->GetEditEngine();
+        return pDoc->GetEditEngine();
     return nullptr;
 }
 
@@ -190,7 +191,7 @@ void SmEditTextWindow::StyleUpdated()
         //!
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-        pDoc->UpdateEditEngineDefaultFonts(rStyleSettings.GetFieldTextColor());
+        pDoc->UpdateEditEngineDefaultFonts();
         pEditEngine->SetBackgroundColor(rStyleSettings.GetFieldColor());
         pEditEngine->SetDefTab(sal_uInt16(GetTextWidth("XXXX")));
 
@@ -203,6 +204,9 @@ void SmEditTextWindow::StyleUpdated()
 
         Resize();
     }
+
+    // Apply zoom to smeditwindow text
+    static_cast<SmEditEngine*>(GetEditEngine())->executeZoom(GetEditView());
 }
 
 IMPL_LINK_NOARG(SmEditTextWindow, ModifyTimerHdl, Timer *, void)
@@ -522,6 +526,8 @@ void SmEditTextWindow::SetText(const OUString& rText)
     // math tasks
     aModifyIdle.Start();
 
+    // Apply zoom to smeditwindow text
+    static_cast<SmEditEngine*>(pEditView->GetEditEngine())->executeZoom(pEditView);
     pEditView->SetSelection(eSelection);
 }
 
