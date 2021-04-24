@@ -720,7 +720,7 @@ private:
     std::list< GradientEmit >           m_aGradients;
     /* contains bitmap tiling patterns */
     std::vector< TilingEmit >           m_aTilings;
-    std::list< TransparencyEmit >       m_aTransparentObjects;
+    std::vector< TransparencyEmit >     m_aTransparentObjects;
     /*  contains all font subsets in use */
     std::map<const PhysicalFontFace*, FontSubset> m_aSubsets;
     std::map<const PhysicalFontFace*, EmbedFont> m_aSystemFonts;
