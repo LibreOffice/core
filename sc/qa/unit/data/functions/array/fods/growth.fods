@@ -1938,11 +1938,11 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce10" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="6" table:formula="of:=GROWTH([.J2:.J7];[.I2:.I7])" office:value-type="float" office:value="32618.2037735397" calcext:value-type="float">
-      <text:p>32618.2037735397</text:p>
+     <table:table-cell table:style-name="ce10" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="6" table:formula="of:=GROWTH([.J2:.J7];[.I2:.I7])" office:value-type="float" office:value="32618.2037735398" calcext:value-type="float">
+      <text:p>32618.2037735398</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="32618.2037735397" calcext:value-type="float">
-      <text:p>32618.2037735397</text:p>
+     <table:table-cell office:value-type="float" office:value="32618.2037735398" calcext:value-type="float">
+      <text:p>32618.2037735398</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A2];12)=ROUND([.B2];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1986,11 +1986,11 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" office:value-type="float" office:value="47729.4226147478" calcext:value-type="float">
-      <text:p>47729.4226147478</text:p>
+     <table:table-cell table:style-name="ce12" office:value-type="float" office:value="47729.4226147479" calcext:value-type="float">
+      <text:p>47729.4226147479</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="47729.4226147478" calcext:value-type="float">
-      <text:p>47729.4226147478</text:p>
+     <table:table-cell office:value-type="float" office:value="47729.4226147479" calcext:value-type="float">
+      <text:p>47729.4226147479</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A3];12)=ROUND([.B3];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2029,11 +2029,11 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" office:value-type="float" office:value="69841.3008562174" calcext:value-type="float">
-      <text:p>69841.3008562174</text:p>
+     <table:table-cell table:style-name="ce12" office:value-type="float" office:value="69841.3008562177" calcext:value-type="float">
+      <text:p>69841.3008562177</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="69841.3008562174" calcext:value-type="float">
-      <text:p>69841.3008562174</text:p>
+     <table:table-cell office:value-type="float" office:value="69841.3008562177" calcext:value-type="float">
+      <text:p>69841.3008562177</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A4];12)=ROUND([.B4];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2074,11 +2074,11 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" office:value-type="float" office:value="102197.073378832" calcext:value-type="float">
-      <text:p>102197.073378832</text:p>
+     <table:table-cell table:style-name="ce12" office:value-type="float" office:value="102197.073378833" calcext:value-type="float">
+      <text:p>102197.073378833</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="102197.073378832" calcext:value-type="float">
-      <text:p>102197.073378832</text:p>
+     <table:table-cell office:value-type="float" office:value="102197.073378833" calcext:value-type="float">
+      <text:p>102197.073378833</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A5];9)=ROUND([.B5];9)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2197,11 +2197,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro8">
-     <table:table-cell table:style-name="ce10" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="2" table:formula="of:=GROWTH([.J2:.J7];[.I2:.I7];[.I9:.I10])" office:value-type="float" office:value="320196.718363473" calcext:value-type="float">
-      <text:p>320196.718363473</text:p>
+     <table:table-cell table:style-name="ce10" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="2" table:formula="of:=GROWTH([.J2:.J7];[.I2:.I7];[.I9:.I10])" office:value-type="float" office:value="320196.718363474" calcext:value-type="float">
+      <text:p>320196.718363474</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="320196.718363473" calcext:value-type="float">
-      <text:p>320196.718363473</text:p>
+     <table:table-cell office:value-type="float" office:value="320196.718363474" calcext:value-type="float">
+      <text:p>320196.718363474</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A8];12)=ROUND([.B8];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2232,11 +2232,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="float" office:value="468536.054184048" calcext:value-type="float">
-      <text:p>468536.054184048</text:p>
+     <table:table-cell office:value-type="float" office:value="468536.05418405" calcext:value-type="float">
+      <text:p>468536.05418405</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="468536.054184048" calcext:value-type="float">
-      <text:p>468536.054184048</text:p>
+     <table:table-cell office:value-type="float" office:value="468536.05418405" calcext:value-type="float">
+      <text:p>468536.05418405</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A9];12)=ROUND([.B9];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2264,11 +2264,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="6" table:formula="of:=GROWTH([.J2:.J7])" office:value-type="float" office:value="32618.2037735398" calcext:value-type="float">
-      <text:p>32618.2037735398</text:p>
+     <table:table-cell table:style-name="ce12" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="6" table:formula="of:=GROWTH([.J2:.J7])" office:value-type="float" office:value="32618.2037735399" calcext:value-type="float">
+      <text:p>32618.2037735399</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="32618.2037735398" calcext:value-type="float">
-      <text:p>32618.2037735398</text:p>
+     <table:table-cell office:value-type="float" office:value="32618.2037735399" calcext:value-type="float">
+      <text:p>32618.2037735399</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A10];12)=ROUND([.B10];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2297,11 +2297,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" office:value-type="float" office:value="47729.4226147478" calcext:value-type="float">
-      <text:p>47729.4226147478</text:p>
+     <table:table-cell table:style-name="ce12" office:value-type="float" office:value="47729.422614748" calcext:value-type="float">
+      <text:p>47729.422614748</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="47729.4226147478" calcext:value-type="float">
-      <text:p>47729.4226147478</text:p>
+     <table:table-cell office:value-type="float" office:value="47729.422614748" calcext:value-type="float">
+      <text:p>47729.422614748</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A11];12)=ROUND([.B11];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2325,11 +2325,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="float" office:value="69841.3008562174" calcext:value-type="float">
-      <text:p>69841.3008562174</text:p>
+     <table:table-cell office:value-type="float" office:value="69841.3008562177" calcext:value-type="float">
+      <text:p>69841.3008562177</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="69841.3008562174" calcext:value-type="float">
-      <text:p>69841.3008562174</text:p>
+     <table:table-cell office:value-type="float" office:value="69841.3008562177" calcext:value-type="float">
+      <text:p>69841.3008562177</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A12];12)=ROUND([.B12];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2350,11 +2350,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="float" office:value="102197.073378832" calcext:value-type="float">
-      <text:p>102197.073378832</text:p>
+     <table:table-cell office:value-type="float" office:value="102197.073378833" calcext:value-type="float">
+      <text:p>102197.073378833</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="102197.073378832" calcext:value-type="float">
-      <text:p>102197.073378832</text:p>
+     <table:table-cell office:value-type="float" office:value="102197.073378833" calcext:value-type="float">
+      <text:p>102197.073378833</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A13];9)=ROUND([.B13];9)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2413,11 +2413,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="6" table:formula="of:=GROWTH([.J2:.J7];[.I2:.I7])" office:value-type="float" office:value="32618.2037735397" calcext:value-type="float">
-      <text:p>32618.2037735397</text:p>
+     <table:table-cell table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="6" table:formula="of:=GROWTH([.J2:.J7];[.I2:.I7])" office:value-type="float" office:value="32618.2037735398" calcext:value-type="float">
+      <text:p>32618.2037735398</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="32618.2037735397" calcext:value-type="float">
-      <text:p>32618.2037735397</text:p>
+     <table:table-cell office:value-type="float" office:value="32618.2037735398" calcext:value-type="float">
+      <text:p>32618.2037735398</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A16];12)=ROUND([.B16];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2432,11 +2432,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="float" office:value="47729.4226147478" calcext:value-type="float">
-      <text:p>47729.4226147478</text:p>
+     <table:table-cell office:value-type="float" office:value="47729.4226147479" calcext:value-type="float">
+      <text:p>47729.4226147479</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="47729.4226147478" calcext:value-type="float">
-      <text:p>47729.4226147478</text:p>
+     <table:table-cell office:value-type="float" office:value="47729.4226147479" calcext:value-type="float">
+      <text:p>47729.4226147479</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A17];12)=ROUND([.B17];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2451,11 +2451,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="float" office:value="69841.3008562174" calcext:value-type="float">
-      <text:p>69841.3008562174</text:p>
+     <table:table-cell office:value-type="float" office:value="69841.3008562177" calcext:value-type="float">
+      <text:p>69841.3008562177</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="69841.3008562174" calcext:value-type="float">
-      <text:p>69841.3008562174</text:p>
+     <table:table-cell office:value-type="float" office:value="69841.3008562177" calcext:value-type="float">
+      <text:p>69841.3008562177</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A18];12)=ROUND([.B18];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2470,11 +2470,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="float" office:value="102197.073378832" calcext:value-type="float">
-      <text:p>102197.073378832</text:p>
+     <table:table-cell office:value-type="float" office:value="102197.073378833" calcext:value-type="float">
+      <text:p>102197.073378833</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="102197.073378832" calcext:value-type="float">
-      <text:p>102197.073378832</text:p>
+     <table:table-cell office:value-type="float" office:value="102197.073378833" calcext:value-type="float">
+      <text:p>102197.073378833</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A19];9)=ROUND([.B19];9)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2546,11 +2546,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro7">
-     <table:table-cell office:value-type="float" office:value="3254137.27894144" calcext:value-type="float">
-      <text:p>3254137.27894144</text:p>
+     <table:table-cell office:value-type="float" office:value="3254137.27894143" calcext:value-type="float">
+      <text:p>3254137.27894143</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="3254137.27894144" calcext:value-type="float">
-      <text:p>3254137.27894144</text:p>
+     <table:table-cell office:value-type="float" office:value="3254137.27894143" calcext:value-type="float">
+      <text:p>3254137.27894143</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A23];12)=ROUND([.B23];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
