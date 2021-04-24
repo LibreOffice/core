@@ -102,8 +102,8 @@ const TransitionInfo lcl_transitionInfo[] =
         animations::TransitionSubType::TOPLEFT, // (3)
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
         0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        2.0, // no scaling
+        2.0, // no scaling
         TransitionInfo::ReverseMethod::Ignore, // possible via bottomRight
         true, // 'out' by parameter sweep inversion
         false // scale isotropically to target size

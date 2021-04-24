@@ -52,7 +52,7 @@ namespace slideshow::internal
                 accounted for with the nRepeatCount parameter.
 
                 @param nRepeatCount
-                Number of full repeats already performed
+                Number of full repeats already performed.
             */
             virtual void simplePerform( double nSimpleTime, sal_uInt32 nRepeatCount ) const = 0;
 

@@ -33,7 +33,7 @@ namespace slideshow::internal
 
         ActivityBase::ActivityBase( const ActivityParameters& rParms ) :
             mpEndEvent( rParms.mrEndEvent ),
-            mrEventQueue( rParms.mrEventQueue ),
+            mrEventQueue( rParms.mrEventQueue ), // To queue the end event it needs the mrEventQueue
             mpShape(),
             mpAttributeLayer(),
             maRepeats( rParms.mrRepeats ),

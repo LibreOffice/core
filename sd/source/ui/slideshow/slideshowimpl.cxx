@@ -1333,7 +1333,6 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
         mpViewShell->NotifyAccUpdate();
     }
 }
-
 void SlideshowImpl::endPresentation()
 {
     if( maPresSettings.mbMouseAsPen)

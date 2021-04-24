@@ -12,6 +12,8 @@ $(eval $(call gb_Library_Library,slideshow))
 $(eval $(call gb_Library_set_include,slideshow,\
     $$(INCLUDE) \
     -I$(SRCDIR)/slideshow/source/inc \
+    -I$(SRCDIR)/sd/source/ui/inc \
+    -I$(SRCDIR)/sd/inc \
 ))
 
 ifneq ($(strip $(debug)$(DEBUG)),)
@@ -50,6 +52,8 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
     tl \
     utl \
     vcl \
+    sdui \
+    editeng \
 ))
 
 $(eval $(call gb_Library_set_componentfile,slideshow,slideshow/util/slideshow))
@@ -81,6 +85,7 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/animationnodes/paralleltimecontainer \
     slideshow/source/engine/animationnodes/propertyanimationnode \
     slideshow/source/engine/animationnodes/sequentialtimecontainer \
+    slideshow/source/engine/animationnodes/ZoomingAnimation \
     slideshow/source/engine/attributemap \
     slideshow/source/engine/box2dtools \
     slideshow/source/engine/color \
@@ -153,6 +158,7 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/waitsymbol \
     slideshow/source/engine/pointersymbol \
     slideshow/source/engine/wakeupevent \
+    slideshow/source/engine/slide/FrameSynchronization \
 ))
 
 # vim: set noet sw=4 ts=4:

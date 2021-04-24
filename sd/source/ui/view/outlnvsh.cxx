@@ -96,7 +96,7 @@ using namespace sd;
 namespace sd {
 
 #define MIN_ZOOM           10      // minimum zoom factor
-#define MAX_ZOOM         1000      // maximum zoom factor
+#define MAX_ZOOM         20000      // maximum zoom factor
 
 /**
  * Declare SFX-Slotmap and standard interface

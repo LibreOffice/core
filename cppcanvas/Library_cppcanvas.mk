@@ -21,6 +21,8 @@ $(eval $(call gb_Library_Library,cppcanvas))
 
 $(eval $(call gb_Library_set_include,cppcanvas,\
 	-I$(SRCDIR)/cppcanvas/source/inc \
+	-I$(SRCDIR)/sd/source/ui/inc \
+    -I$(SRCDIR)/sd/inc \
 	$$(INCLUDE) \
 ))
 

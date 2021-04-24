@@ -17,6 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/mutex.hxx>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
+
 
 #include <tools/diagnose_ex.h>
 
@@ -82,6 +90,11 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <DrawViewShell.hxx>
+#include <sal/log.hxx>
+#include <singletonservice/Service.hxx>
+#include "ZoomingAnimation.hxx"
+#include <slideshow/FrameSynchronization.hxx>
 
 using namespace com::sun::star;
 using namespace ::slideshow::internal;
@@ -97,57 +110,7 @@ namespace {
     synchronizing the display of new frames and thus keeping the frame rate
     steady.
 */
-class FrameSynchronization
-{
-public:
-    /** Create new object with a predefined duration between two frames.
-        @param nFrameDuration
-            The preferred duration between the display of two frames in
-            seconds.
-    */
-    explicit FrameSynchronization (const double nFrameDuration);
 
-    /** Set the current time as the time at which the current frame is
-        displayed.  From this the target time of the next frame is derived.
-    */
-    void MarkCurrentFrame();
-
-    /** When there is time left until the next frame is due then wait.
-        Otherwise return without delay.
-    */
-    void Synchronize();
-
-    /** Activate frame synchronization when an animation is active and
-        frames are to be displayed in a steady rate.  While active
-        Synchronize() will wait until the frame duration time has passed.
-    */
-    void Activate();
-
-    /** Deactivate frame synchronization when no animation is active and the
-        time between frames depends on user actions and other external
-        sources.  While deactivated Synchronize() will return without delay.
-    */
-    void Deactivate();
-
-private:
-    /** The timer that is used for synchronization is independent from the
-        one used by SlideShowImpl: it is not paused or modified by
-        animations.
-    */
-    canvas::tools::ElapsedTime maTimer;
-    /** Time between the display of frames.  Enforced only when mbIsActive
-        is <TRUE/>.
-    */
-    const double mnFrameDuration;
-    /** Time (of maTimer) when the next frame shall be displayed.
-        Synchronize() will wait until this time.
-    */
-    double mnNextFrameTargetTime;
-    /** Synchronize() will wait only when this flag is <TRUE/>.  Otherwise
-        it returns immediately.
-    */
-    bool mbIsActive;
-};
 
 /******************************************************************************
 
@@ -471,6 +434,8 @@ private:
 
     EffectRewinder                          maEffectRewinder;
     FrameSynchronization                    maFrameSynchronization;
+    SdrObject* nextZoom(tools::silverdev::S& s) const;
+    SdrObject* previousZoom(tools::silverdev::S& s) const;
 };
 
 /** Separate event listener for animation, view and hyperlink events.
@@ -614,6 +579,66 @@ SlideShowImpl::SlideShowImpl(
     maEventMultiplexer.addHyperlinkHandler( mpListener, 0.0 );
     maEventMultiplexer.addAnimationStartHandler( mpListener );
     maEventMultiplexer.addAnimationEndHandler( mpListener );
+	// This is the end of slideshowimpl constructor and here's my part of it -- silver_est
+    using namespace ::tools::silverdev;
+    S& s = getInstance2();
+    s.zoomIterator = s.zoomings.begin();
+    s.notificationCenter.clearListeners<PreviousZoomEvent>();
+    s.notificationCenter.clearListeners<NextZoomEvent>();
+    s.notificationCenter.addListener<PreviousZoomEvent>(
+        [this, &s](PreviousZoomEvent& event) {
+
+        });
+    s.notificationCenter.addListener<ViewUpdateEvent>(
+        [this](ViewUpdateEvent& event) {
+            maEventMultiplexer.notifyViewsChanged();
+        });
+    s.notificationCenter.addListener<NextZoomEvent>(
+        [this, &s](NextZoomEvent& event)
+        {
+            auto pObj = nextZoom(s);
+            EventSharedPtr ZoomEndEvent(makeEvent([this]() {}, "ZoomEndEvent"));
+            double nTransitionDuration(5.0);
+            sal_Int32 nMinFrames(5);
+            NumberAnimationSharedPtr pAnimation(
+                std::make_shared<ZoomingAnimation>(pObj, 1.0, &maViewContainer, mpCurrentSlide, &maEventMultiplexer, &maScreenUpdater, &maFrameSynchronization));
+            auto d1 = mpCurrentSlide->getSlideSize();
+            auto d = basegfx::B2DSize(d1);
+            auto parameters = ActivitiesFactory::CommonParameters(
+                ZoomEndEvent, maEventQueue, maActivitiesQueue, nTransitionDuration, nMinFrames,
+                false, // autoreverse
+                std::optional<double>(1.0), // repeats
+                0.0, // acceleration
+                0.0, // deceleration
+                ShapeSharedPtr(),
+                d // slide bounds
+            );
+            ActivitySharedPtr pZoomActivity(
+                ActivitiesFactory::createSimpleActivity(parameters, pAnimation, true
+                                                        /* is direction forward? */));
+            maActivitiesQueue.addActivity(pZoomActivity);
+        });
+
+}
+SdrObject* SlideShowImpl::previousZoom(tools::silverdev::S& s) const
+{
+    if (s.zoomings.size() != 0){
+        SdrObject* pObj(*s.zoomIterator);
+        if(s.zoomIterator + 1 != s.zoomings.end()){
+            s.zoomIterator++;
+        }
+        return pObj;
+    }
+}
+SdrObject* SlideShowImpl::nextZoom(tools::silverdev::S& s) const
+{
+    if (s.zoomings.size() != 0){
+        SdrObject* pObj(*s.zoomIterator);
+        if(s.zoomIterator + 1 != s.zoomings.end()){
+            s.zoomIterator++;
+        }
+        return pObj;
+    }
 }
 
 // we are about to be disposed (someone call dispose() on us)
@@ -655,6 +680,7 @@ void SlideShowImpl::disposing()
     }
 
     maUserEventQueue.clear();
+    SAL_DEBUG("MAACTIVITIESQUEUE WAS CLEARED!!!");
     maActivitiesQueue.clear();
     maEventMultiplexer.clear();
     maEventQueue.clear();
@@ -866,14 +892,15 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                 maActivitiesQueue,
                 nTransitionDuration,
                 nMinFrames,
-                false,
-                std::optional<double>(1.0),
-                0.0,
-                0.0,
+                false, // autoreverse
+                std::optional<double>(1.0), // repeats
+                0.0, // acceleration
+                0.0, // deceleration
                 ShapeSharedPtr(),
-                basegfx::B2DSize( rEnteringSlide->getSlideSize() ) ),
+                basegfx::B2DSize( rEnteringSlide->getSlideSize() ) // slide bounds
+                 ),
             pTransition,
-            true ));
+            true /* is direction forward? */ ));
 }
 
 PolygonMap::iterator SlideShowImpl::findPolygons( uno::Reference<drawing::XDrawPage> const& xDrawPage)
@@ -1122,18 +1149,17 @@ void SlideShowImpl::displaySlide(
                 // repaint slide which is not necessary.
                 maEventMultiplexer.notifyViewsChanged();
             }
-
+            // TODO: check if zooms have next zoom
             // create slide transition, and add proper end event
             // (which then starts the slide effects
             // via CURRENT_SLIDE.show())
+            // Verified to run when slide opens and not only when next slide is toggled. This is important because the SlideChangeBase constructor needs to be called when slideshow starts
             ActivitySharedPtr pSlideChangeActivity (
                 createSlideTransition(
                     mpCurrentSlide->getXDrawPage(),
                     mpPreviousSlide,
                     mpCurrentSlide,
-                    makeEvent(
-                        [this] () { this->notifySlideTransitionEnded(false); },
-                        "SlideShowImpl::notifySlideTransitionEnded")));
+                    makeEvent([this] () { this->notifySlideTransitionEnded(false); }, "SlideShowImpl::notifySlideTransitionEnded")));
 
             if (bSkipSlideTransition)
             {
@@ -1147,6 +1173,7 @@ void SlideShowImpl::displaySlide(
             if (pSlideChangeActivity)
             {
                 // factory generated a slide transition - activate it!
+                // TODO: Create a new type of activity for zooming
                 maActivitiesQueue.addActivity( pSlideChangeActivity );
             }
             else
@@ -1177,7 +1204,7 @@ void SlideShowImpl::displaySlide(
 void SlideShowImpl::redisplayCurrentSlide()
 {
     osl::MutexGuard const guard( m_aMutex );
-
+    SAL_DEBUG("sal_Bool SlideShowImpl::redisplayCurrentSlide()");
     if (isDisposed())
         return;
 
@@ -1311,6 +1338,7 @@ sal_Bool SlideShowImpl::pause( sal_Bool bPauseShow )
 uno::Reference<drawing::XDrawPage> SlideShowImpl::getCurrentSlide()
 {
     osl::MutexGuard const guard( m_aMutex );
+    SAL_DEBUG("uno::Reference<drawing::XDrawPage> SlideShowImpl::getCurrentSlide()");
 
     if (isDisposed())
         return uno::Reference<drawing::XDrawPage>();
@@ -1328,7 +1356,8 @@ sal_Bool SlideShowImpl::addView(
     uno::Reference<presentation::XSlideShowView> const& xView )
 {
     osl::MutexGuard const guard( m_aMutex );
-
+    SAL_DEBUG("sal_Bool SlideShowImpl::addView(\n"
+              "    uno::Reference<presentation::XSlideShowView> const& xView )");
     if (isDisposed())
         return false;
 
@@ -1361,7 +1390,7 @@ sal_Bool SlideShowImpl::addView(
     // clear view area (since it's newly added,
     // we need a clean slate)
     pView->clearAll();
-
+//    pView->setViewSize(basegfx::B2DSize(120., 120.));
     // broadcast newly added view
     maEventMultiplexer.notifyViewAdded( pView );
 
@@ -1930,8 +1959,8 @@ void SlideShowImpl::resetCursor()
 
 sal_Bool SlideShowImpl::update( double & nNextTimeout )
 {
+    SAL_DEBUG("sal_Bool SlideShowImpl::update( double & nNextTimeout )");
     osl::MutexGuard const guard( m_aMutex );
-
     if (isDisposed())
         return false;
 
@@ -1979,12 +2008,15 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
                 scopeGuard.dismiss();
                 return false;
             }
-
             maActivitiesQueue.process();
-
+            /*mpCurrentSlide = makeSlide( mxPrefetchSlide, mxDrawPagesSupplier,
+                                         mxPrefetchAnimationNode );
+            mpCurrentSlide->getCurrentSlideBitmap( *maViewContainer.begin() );*/
+            //mpCurrentSlide->prefetch();
             // commit frame to screen
             maFrameSynchronization.Synchronize();
             maScreenUpdater.commitUpdates();
+            SAL_DEBUG("commit updates called!");
 
             // TODO(Q3): remove need to call dequeued() from
             // activities. feels like a wart.
@@ -2099,10 +2131,13 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
 void SlideShowImpl::notifySlideTransitionEnded( bool bPaintSlide )
 {
     osl::MutexGuard const guard( m_aMutex );
-
+    // tools::silverdev::S& reference1 = tools::silverdev::getInstance2();
+    // SAL_DEBUG("address in notifySlideTransitionEnded" << &reference1);
+    // SAL_DEBUG(reference1.zoomings.size());
     OSL_ENSURE( !isDisposed(), "### already disposed!" );
     OSL_ENSURE( mpCurrentSlide,
                 "notifySlideTransitionEnded(): Invalid current slide" );
+
     if (mpCurrentSlide)
     {
         mpCurrentSlide->update_settings( !!maUserPaintColor, maUserPaintColor ? *maUserPaintColor : RGBColor(), maUserPaintStrokeWidth );
@@ -2258,9 +2293,38 @@ void SlideShowImpl::notifySlideAnimationsEnded()
             xListener->slideAnimationsEnded();
         });
 }
-
+/* void printSomeInfo(){
+    SAL_DEBUG("printSomeInfo. YEAH SLIDE WAS DISPLAYED");
+    S& reference1 = getInstance2();
+    SAL_DEBUG(reference1.zoomings.size());
+    if(reference1.hasZooms()){
+        for ( auto zooming : reference1.zoomings){
+// https://stackoverflow.com/questions/11510128/how-to-identify-failed-casts-using-dynamic-cast-operator
+            SdrRectObj* rectobject1 = dynamic_cast<SdrRectObj*>(zooming);
+            tools::Rectangle aR1(zooming->GetSnapRect());
+            SAL_DEBUG("getX() = " << aR1.getX());
+            SdrTextObj* textobject1 = dynamic_cast<SdrTextObj*>(zooming);
+            if(textobject1 != NULL){
+                if(textobject1->HasText()){
+                    OutlinerParaObject* pOutlinerParagraphObject = textobject1->GetOutlinerParaObject();
+                    const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
+                    OUString sText = aEdit.GetText(0);
+                    //SdrText* text{textobject1->getText(0)};
+                    SAL_DEBUG(sText);
+                } else {
+                    SAL_DEBUG("SdrText doesn't have text though.");
+                }
+            } else {
+                SAL_DEBUG("Cast failed. SILVER");
+            }
+        }
+    } else {
+        SAL_DEBUG("doesn't have zooms");
+    }
+} */
 void SlideShowImpl::notifySlideEnded (const bool bReverse)
 {
+
     osl::MutexGuard const guard( m_aMutex );
 
     OSL_ENSURE( !isDisposed(), "### already disposed!" );
@@ -2287,7 +2351,7 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
     }
 
     if (bReverse)
-        maEventMultiplexer.notifySlideEndEvent();
+        //maEventMultiplexer.notifySlideEndEvent();
 
     stopShow();  // MUST call that: results in
                  // maUserEventQueue.clear(). What's more,
@@ -2300,7 +2364,20 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
 
     maListenerContainer.forEach<presentation::XSlideShowListener>(
         [&bReverse]( const uno::Reference< presentation::XSlideShowListener >& xListener )
-        { return xListener->slideEnded( bReverse ); } );
+        {
+            // Hijacking next slide in case we have zoomings to do
+            ::tools::silverdev::S& s = ::tools::silverdev::getInstance2();
+            /* SAL_DEBUG(s.zoomings.size());
+            if(s.hasZooms()){
+                tools::Rectangle aR1(s.zoomings[0]->GetSnapRect());
+                SAL_DEBUG("getX() = " << aR1.getX());
+            } */
+            ::tools::silverdev::NextZoomEvent zoomEvent{};
+            s.notificationCenter.fireEvent<::tools::silverdev::NextZoomEvent>(zoomEvent);
+            return NULL;
+//            return xListener->slideEnded( bReverse );
+        }
+    );
 }
 
 bool SlideShowImpl::notifyHyperLinkClicked( OUString const& hyperLink )
@@ -2378,49 +2455,7 @@ std::shared_ptr<avmedia::MediaTempFile> SlideShowImpl::getMediaTempFile(const OU
 
 //===== FrameSynchronization ==================================================
 
-FrameSynchronization::FrameSynchronization (const double nFrameDuration)
-    : maTimer(),
-      mnFrameDuration(nFrameDuration),
-      mnNextFrameTargetTime(0),
-      mbIsActive(false)
-{
-    MarkCurrentFrame();
-}
 
-void FrameSynchronization::MarkCurrentFrame()
-{
-    mnNextFrameTargetTime = maTimer.getElapsedTime() + mnFrameDuration;
-}
-
-void FrameSynchronization::Synchronize()
-{
-    if (mbIsActive)
-    {
-        // Do busy waiting for now.
-        for(;;)
-        {
-            double remainingTime = mnNextFrameTargetTime - maTimer.getElapsedTime();
-            if(remainingTime <= 0)
-                break;
-            // Try to sleep most of it.
-            int remainingMilliseconds = remainingTime * 1000;
-            if(remainingMilliseconds > 2)
-                osl::Thread::wait(std::chrono::milliseconds(remainingMilliseconds - 2));
-        }
-    }
-
-    MarkCurrentFrame();
-}
-
-void FrameSynchronization::Activate()
-{
-    mbIsActive = true;
-}
-
-void FrameSynchronization::Deactivate()
-{
-    mbIsActive = false;
-}
 
 } // anon namespace
 

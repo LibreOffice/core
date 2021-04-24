@@ -18,6 +18,10 @@
 
 interface DrawView
 {
+    SID_ADD_TRANSITION_TO_LIST
+    [
+        ExecMethod = AddToTransitionList;
+    ]
     SID_JUMPTOMARK // ole : no, status : ?
     [
         ExecMethod = ExecCtrl ;
