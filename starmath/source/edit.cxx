@@ -39,6 +39,7 @@
 #include <view.hxx>
 #include <document.hxx>
 #include <cfgitem.hxx>
+#include <smediteng.hxx>
 #include "accessibility.hxx"
 
 using namespace com::sun::star::accessibility;
@@ -88,7 +89,7 @@ EditEngine* SmEditTextWindow::GetEditEngine() const
 {
     SmDocShell *pDoc = mrEditWindow.GetDoc();
     assert(pDoc);
-    return &pDoc->GetEditEngine();
+    return pDoc->GetEditEngine();
 }
 
 void SmEditTextWindow::EditViewScrollStateChange()
@@ -118,6 +119,10 @@ void SmEditTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pEditEngine->SetStatusEventHdl(LINK(this, SmEditTextWindow, EditStatusHdl));
 
     InitAccessible();
+
+    //Apply zoom to smeditwindow text
+    if(GetEditView())
+        static_cast<SmEditEngine*>(GetEditEngine())->executeZoom(GetEditView());
 }
 
 SmEditWindow::SmEditWindow(SmCmdBoxWindow &rMyCmdBoxWin, weld::Builder& rBuilder)
@@ -173,7 +178,7 @@ EditView * SmEditWindow::GetEditView() const
 EditEngine * SmEditWindow::GetEditEngine()
 {
     if (SmDocShell *pDoc = GetDoc())
-        return &pDoc->GetEditEngine();
+        return pDoc->GetEditEngine();
     return nullptr;
 }
 
@@ -190,7 +195,7 @@ void SmEditTextWindow::StyleUpdated()
         //!
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-        pDoc->UpdateEditEngineDefaultFonts(rStyleSettings.GetFieldTextColor());
+        pDoc->UpdateEditEngineDefaultFonts();
         pEditEngine->SetBackgroundColor(rStyleSettings.GetFieldColor());
         pEditEngine->SetDefTab(sal_uInt16(GetTextWidth("XXXX")));
 
@@ -203,6 +208,9 @@ void SmEditTextWindow::StyleUpdated()
 
         Resize();
     }
+
+    // Apply zoom to smeditwindow text
+    static_cast<SmEditEngine*>(GetEditEngine())->executeZoom(GetEditView());
 }
 
 IMPL_LINK_NOARG(SmEditTextWindow, ModifyTimerHdl, Timer *, void)
@@ -522,6 +530,8 @@ void SmEditTextWindow::SetText(const OUString& rText)
     // math tasks
     aModifyIdle.Start();
 
+    // Apply zoom to smeditwindow text
+    static_cast<SmEditEngine*>(pEditView->GetEditEngine())->executeZoom(pEditView);
     pEditView->SetSelection(eSelection);
 }
 
@@ -704,6 +714,8 @@ void SmEditTextWindow::UpdateStatus(bool bSetDocModified)
     SmDocShell* pDoc = bSetDocModified ? mrEditWindow.GetDoc() : nullptr;
     if (pDoc)
         pDoc->SetModified();
+
+    static_cast<SmEditEngine*>(GetEditEngine())->executeZoom(GetEditView());
 }
 
 void SmEditWindow::Cut()
