@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d40cdfb3_4a3fdc61",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T13:32:25Z",
+      "side": 1,
+      "message": "By the way, does this file really derive from an Apache-licensed file? I think you made it from scratch, all yourself; even no include guards present (as well as no #pragma once - a hint ;-))",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 64
+      },
+      "revId": "4a749e5bed089fd89f636abd23b7c3b9084d2d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
