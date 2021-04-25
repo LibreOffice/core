@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7cc0db6d_631d5a79",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 5600,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T08:22:30Z",
+      "side": 1,
+      "message": "Eike: this (and below) kind of defeats the improvement: we do not use Kahan on this operation. Do you have an idea how we may use Kahan here, and still allow the approxAdd-specific behavior (if first is different sign than rest, and similar in abs value, return 0)?",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b6515fd_6ddfb970",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 2621,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T08:22:30Z",
+      "side": 1,
+      "message": "The negation could still benefit from Kahan here and below?",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bcb719f_1b29253d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 2701,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T08:22:30Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2108909_46407d88",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 4610,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T08:22:30Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43ab754c_e619ad5a",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T08:22:30Z",
+      "side": 1,
+      "message": "And here we drop the approxAdd effect. Do we need to keep it? Possibly we should introduce the approxAdd member of Kahan sum (for such final operations)?",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f01f446f_d998b9b8",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T08:22:30Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68d3104c_79f69509",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T08:22:30Z",
+      "side": 1,
+      "message": "And if we add approx* methods to Kahan, we would restore this?",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
