@@ -150,6 +150,20 @@ public:
             mfFirst(fFirst), mfRest(fRest), mnCount(nCount) {}
     };
 
+    /**
+      * Version of IterateResult for using Kahan sum.
+      */
+    struct KahanIterateResult
+    {
+        KahanSum mfRest;
+        size_t mnCount;
+
+        KahanIterateResult(double fRest, size_t nCount) : mfRest(fRest), mnCount(nCount) {}
+
+        double get() { return mfRest.get(); }
+    };
+
+
     /** Checks nC or nR for zero and uses GetElementsMax() whether a matrix of
         the size of nC*nR could be allocated. A zero size (both nC and nR zero)
         matrix is allowed for later resize.
@@ -361,9 +375,9 @@ public:
     double Or() const ;        // logical OR of all matrix values, or NAN
     double Xor() const ;       // logical XOR of all matrix values, or NAN
 
-    IterateResult Sum( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
-    IterateResult SumSquare( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
-    IterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    KahanIterateResult Sum( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    KahanIterateResult SumSquare( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    KahanIterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
     size_t Count(bool bCountStrings, bool bCountErrors, bool bIgnoreEmptyStrings = false) const ;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const ;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const ;
