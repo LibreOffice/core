@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "32021b18_cc722454",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 2621,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-25T09:10:22Z",
+      "side": 1,
+      "message": "I don\u0027t really understand your comment.\nThis may be able to benefict from an adaptation of two pass algorith.\nAnd maybe the builtin methods in scmatrix could be used instead for the sum.\nHowever, the purpose of this is just to provide kahan sum.\nhttps://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Two-pass_algorithm",
+      "parentUuid": "1b6515fd_6ddfb970",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0bcb719f_1b29253d",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 14
@@ -87,6 +105,24 @@
     },
     {
       "key": {
+        "uuid": "a329ba6c_efb4bc21",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-25T09:10:22Z",
+      "side": 1,
+      "message": "We can\u0027t use approx add with Kahan class. \nWould need to make changes in rtl::math.\nThis patch tries to not change code structure.\nOnly used Kahan in sum loops.\nSo can\u0027t really tell why the approxAdd.",
+      "parentUuid": "43ab754c_e619ad5a",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f01f446f_d998b9b8",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 14
@@ -115,6 +151,24 @@
       "writtenOn": "2021-04-25T08:22:30Z",
       "side": 1,
       "message": "And if we add approx* methods to Kahan, we would restore this?",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edd0e1ef_3d6417c1",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-25T09:10:22Z",
+      "side": 1,
+      "message": "On the IterateResult definition there is this comment:\n\n    /**\n     * When adding all numerical matrix elements for a scalar result such as\n     * summation, the interpreter wants to separate the first non-zero value\n     * with the rest of the summed values. This is necessary for better\n     * numerical stability, unless we sort all by absolute values before\n     * summing (not really an option) or use another algorithm, e.g. Kahan\u0027s\n     * summation algorithm,\n     * https://en.wikipedia.org/wiki/Kahan_summation_algorithm\n     */\n\nBy that I understand that by implementing Kahan we don\u0027t need anymore that first term.",
+      "parentUuid": "68d3104c_79f69509",
       "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
