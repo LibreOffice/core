@@ -123,6 +123,24 @@
       "revId": "151d6bdb2a4760378028994986a0ebf8dee8e1ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b1f109c3_d21b28ba",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T07:37:55Z",
+      "side": 1,
+      "message": "Oh, of course operator\u003d is meant :-)",
+      "parentUuid": "d903074a_0e72d7a5",
+      "revId": "151d6bdb2a4760378028994986a0ebf8dee8e1ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
