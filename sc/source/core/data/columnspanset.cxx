@@ -359,7 +359,7 @@ void RangeColumnSpanSet::executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet
     }
 }
 
-void RangeColumnSpanSet::executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac, double& fMem) const
+void RangeColumnSpanSet::executeColumnSum(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac) const
 {
     for (SCTAB nTab = range.aStart.Tab(); nTab <= range.aEnd.Tab(); ++nTab)
     {
@@ -375,7 +375,7 @@ void RangeColumnSpanSet::executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet
 
             ScColumn& rColumn = pTab->aCol[nCol];
             ac.startColumn(&rColumn);
-            ac.executeSum( range.aStart.Row(), range.aEnd.Row(), true, fMem );
+            ac.executeSum( range.aStart.Row(), range.aEnd.Row(), true);
         }
     }
 }

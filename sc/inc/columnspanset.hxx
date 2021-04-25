@@ -80,7 +80,7 @@ public:
         virtual ~ColumnAction() = 0;
         virtual void startColumn(ScColumn* pCol) = 0;
         virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal) = 0;
-        virtual void executeSum(SCROW, SCROW, bool, double& )  { return; } ;
+        virtual void executeSum(SCROW, SCROW, bool)  { return; } ;
     };
 
     ColumnSpanSet();
@@ -161,8 +161,8 @@ class RangeColumnSpanSet
 public:
     RangeColumnSpanSet( const ScRange& spanRange )
          : range( spanRange ) {}
+    void executeColumnSum(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac) const;
     void executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac) const;
-    void executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac, double& fMem) const;
 private:
     ScRange range;
 };
