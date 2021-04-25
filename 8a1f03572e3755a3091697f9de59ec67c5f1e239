@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9be9bc38_f8e50b1d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 2621,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T09:23:59Z",
+      "side": 1,
+      "message": "fSumSqr1 is a Kahan sum, having extra precision. It is used in yet another summation (negation), and thus this operation could still benefit from knowing the error. Thus it could be written (*without* changing code structure!) like this:\n\n        double fS1 \u003d (fSumSqr1-fSum1.get()*fSum1.get()/fCount1).get()/(fCount1-1.0)/fCount1;\n\n... provided that you implement binary operator + on two Kahan sums, returning Kahan sum itself.",
+      "parentUuid": "32021b18_cc722454",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0bcb719f_1b29253d",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 14
@@ -169,6 +187,24 @@
       "side": 1,
       "message": "On the IterateResult definition there is this comment:\n\n    /**\n     * When adding all numerical matrix elements for a scalar result such as\n     * summation, the interpreter wants to separate the first non-zero value\n     * with the rest of the summed values. This is necessary for better\n     * numerical stability, unless we sort all by absolute values before\n     * summing (not really an option) or use another algorithm, e.g. Kahan\u0027s\n     * summation algorithm,\n     * https://en.wikipedia.org/wiki/Kahan_summation_algorithm\n     */\n\nBy that I understand that by implementing Kahan we don\u0027t need anymore that first term.",
       "parentUuid": "68d3104c_79f69509",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a31cdef_745a77a8",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T09:23:59Z",
+      "side": 1,
+      "message": "Ah - good point! Then we need to drop all such cases, e.g. my comment on line 5600 of interpr1.cxx",
+      "parentUuid": "edd0e1ef_3d6417c1",
       "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
