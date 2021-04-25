@@ -46,6 +46,30 @@
       "revId": "4a749e5bed089fd89f636abd23b7c3b9084d2d68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df2c365b_f6976791",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T18:18:17Z",
+      "side": 1,
+      "message": "\u003e Do I remove the yellow stuff?\n\nYes. Generally it\u0027s better not to use existing files to copy license headers, but there\u0027s /TEMPLATE.SOURCECODE.HEADER specifically for that, with the explanation and the current version of heading and trailing text, including vim formatting codes. Please make sure to use that text.",
+      "parentUuid": "c14e982a_50b10c22",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 64
+      },
+      "revId": "4a749e5bed089fd89f636abd23b7c3b9084d2d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
