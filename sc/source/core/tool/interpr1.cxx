@@ -2172,7 +2172,21 @@ void ScInterpreter::ScType()
                         nType = 1;
                         break;
                     case CELLTYPE_FORMULA :
-                        nType = 8;
+                    {
+                        // tdf#73085 - Evaluate result of the formula
+                        sc::FormulaResultValue aRes = aCell.mpFormula->GetResult();
+                        switch (aRes.meType)
+                        {
+                            case sc::FormulaResultValue::String:
+                                nType = 2;
+                                break;
+                            case sc::FormulaResultValue::Value:
+                                nType = 1;
+                                break;
+                            default:
+                                PushIllegalArgument();
+                        }
+                    }
                         break;
                     default:
                         PushIllegalArgument();
