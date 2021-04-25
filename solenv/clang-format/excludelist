@@ -7992,7 +7992,6 @@ sc/inc/markarr.hxx
 sc/inc/markdata.hxx
 sc/inc/markmulti.hxx
 sc/inc/math.hxx
-sc/inc/matrixoperators.hxx
 sc/inc/miscuno.hxx
 sc/inc/mtvcellfunc.hxx
 sc/inc/mtvelements.hxx
@@ -8311,7 +8310,6 @@ sc/source/core/tool/interpr8.cxx
 sc/source/core/tool/jumpmatrix.cxx
 sc/source/core/tool/listenerquery.cxx
 sc/source/core/tool/lookupcache.cxx
-sc/source/core/tool/matrixoperators.cxx
 sc/source/core/tool/navicfg.cxx
 sc/source/core/tool/numformat.cxx
 sc/source/core/tool/odffmap.cxx
