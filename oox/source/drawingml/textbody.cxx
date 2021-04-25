@@ -35,6 +35,7 @@ TextBody::TextBody()
 }
 
 TextBody::TextBody( const TextBodyPtr& pBody )
+    : mbHasNoninheritedBodyProperties( false )
 {
     if( pBody ) {
         maTextProperties = pBody->maTextProperties;
