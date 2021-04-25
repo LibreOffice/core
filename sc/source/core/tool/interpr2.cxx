@@ -1025,7 +1025,7 @@ void ScInterpreter::RoundSignificant( double fX, double fDigits, double &fRes )
         fRes *= -1.0;
 }
 
-// tdf#106931
+// tdf#105931
 void ScInterpreter::ScRoundSignificant()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
