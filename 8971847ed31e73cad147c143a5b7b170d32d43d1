@@ -52,6 +52,24 @@
       "revId": "8971847ed31e73cad147c143a5b7b170d32d43d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c862db14_849f605f",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5360,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-04-25T22:55:40Z",
+      "side": 1,
+      "message": "VclReferenceBase::isDisposed() returns true here. So what is the correct check? I also don\u0027t know, if forwarding the command to Window::Command is correct at this point. Basically I just know, that rSh is invalid at this point.\n\nAny more insight on this?",
+      "parentUuid": "af2a8bb0_46560f11",
+      "revId": "8971847ed31e73cad147c143a5b7b170d32d43d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
