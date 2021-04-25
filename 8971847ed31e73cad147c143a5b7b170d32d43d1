@@ -16,6 +16,24 @@
       "revId": "8971847ed31e73cad147c143a5b7b170d32d43d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51df671c_fb52d163",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5360,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-04-25T10:55:12Z",
+      "side": 1,
+      "message": "IsDisposed() returns false at this point. Originally I also tried checking mpWindowImpl-\u003embInDispose, which would work. That\u0027s because vcl::Window::dispose is { return !mpWindowImpl; }. And I don\u0027t want to touch that.",
+      "parentUuid": "5aefc330_98769ed7",
+      "revId": "8971847ed31e73cad147c143a5b7b170d32d43d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
