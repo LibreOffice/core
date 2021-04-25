@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aefc330_98769ed7",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5360,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-25T10:46:59Z",
+      "side": 1,
+      "message": "could alternatively call isDisposed() here, since the primary problem is that we are inside the dispose of this object",
+      "revId": "8971847ed31e73cad147c143a5b7b170d32d43d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
