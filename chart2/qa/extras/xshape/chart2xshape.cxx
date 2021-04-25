@@ -183,8 +183,8 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
 void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
 {
     load("chart2/qa/extras/xshape/data/pptx/", "tdf88154_LabelRotatedLayout.pptx");
-    uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromDrawImpress(0,6);
-    uno::Reference< qa::XDumper > xDumper( xChartDoc, UNO_QUERY_THROW );
+    uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 5);
+    uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
     OUString rDump = xDumper->dump();
     OString aXmlDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
     xmlDocPtr pXmlDoc = xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr()));
