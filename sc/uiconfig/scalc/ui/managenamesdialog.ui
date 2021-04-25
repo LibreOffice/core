@@ -345,7 +345,7 @@
               <object class="GtkExpander" id="more">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="resize_toplevel">True</property>
+                <property name="resize_toplevel">False</property>
                 <child>
                   <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="grid1">
