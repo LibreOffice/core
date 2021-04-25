@@ -821,7 +821,7 @@ void Chart2ImportTest::testBnc864396()
 void Chart2ImportTest::testBnc889755()
 {
     load("/chart2/qa/extras/data/pptx/", "bnc889755.pptx");
-    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 6), uno::UNO_QUERY_THROW);
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 5), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
 
     uno::Reference< chart2::XInternalDataProvider > xDataProvider( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
@@ -849,7 +849,7 @@ void Chart2ImportTest::testBnc889755()
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
     // Shape "Title 3"
-    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(5), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(4), uno::UNO_QUERY_THROW);
     awt::Gradient aTransparence;
     xShapeProps->getPropertyValue("FillTransparenceGradient") >>= aTransparence;
     CPPUNIT_ASSERT(aTransparence.StartColor != aTransparence.EndColor);
