@@ -5357,14 +5357,14 @@ void SwEditWin::LoseFocus()
 
 void SwEditWin::Command( const CommandEvent& rCEvt )
 {
-    SwWrtShell &rSh = m_rView.GetWrtShell();
-
-    if ( !m_rView.GetViewFrame() )
+    if (!m_rView.GetViewFrame() || isDisposed())
     {
         // If ViewFrame dies shortly, no popup anymore!
         Window::Command(rCEvt);
         return;
     }
+
+    SwWrtShell &rSh = m_rView.GetWrtShell();
 
     // The command event is send to the window after a possible context
     // menu from an inplace client has been closed. Now we have the chance
