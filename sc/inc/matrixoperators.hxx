@@ -9,25 +9,21 @@
 
 #pragma once
 
-
 #include <functional>
+#include "math.hxx"
 
-namespace sc::op {
-
-
-template<typename T>
-struct Op_
+namespace sc::op
+{
+template <typename T> struct Op_
 {
     const double mInitVal;
     const T maOp;
-    Op_(double InitVal, T aOp):
-        mInitVal(InitVal), maOp(aOp)
+    Op_(double InitVal, T aOp)
+        : mInitVal(InitVal)
+        , maOp(aOp)
     {
     }
-    void operator()(double& rAccum, double fVal) const
-    {
-        maOp(rAccum, fVal);
-    }
+    void operator()(double& rAccum, double fVal) const { maOp(rAccum, fVal); }
 };
 
 using Op = Op_<std::function<void(double&, double)>>;
@@ -35,23 +31,20 @@ using Op = Op_<std::function<void(double&, double)>>;
 struct Sum
 {
     static const double InitVal;
-    void operator()(double& rAccum, double fVal) const;
+    void operator()(KahanSum& rAccum, double fVal) const;
 };
 
 struct SumSquare
 {
     static const double InitVal;
-    void operator()(double& rAccum, double fVal) const;
+    void operator()(KahanSum& rAccum, double fVal) const;
 };
 
 struct Product
 {
     static const double InitVal;
-    void operator()(double& rAccum, double fVal) const;
+    void operator()(KahanSum& rAccum, double fVal) const;
 };
-
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
