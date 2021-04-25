@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "83952d06_92b4512f",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 2621,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-25T19:57:09Z",
+      "side": 1,
+      "message": "I see. Gonna take care in the patch wich will containt this fraction of code.",
+      "parentUuid": "9be9bc38_f8e50b1d",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0bcb719f_1b29253d",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 14
@@ -205,6 +223,24 @@
       "side": 1,
       "message": "Ah - good point! Then we need to drop all such cases, e.g. my comment on line 5600 of interpr1.cxx",
       "parentUuid": "edd0e1ef_3d6417c1",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b840732_dbc359f9",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-25T19:57:09Z",
+      "side": 1,
+      "message": "I took care of it over here: https://gerrit.libreoffice.org/c/core/+/114627/3\nHave used Kahan sum for scmatrix carefully updating the code.\nThe changes for interpr1 will go in another patch.",
+      "parentUuid": "7a31cdef_745a77a8",
       "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
