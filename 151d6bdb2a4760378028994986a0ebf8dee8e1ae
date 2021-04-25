@@ -105,6 +105,24 @@
       "revId": "151d6bdb2a4760378028994986a0ebf8dee8e1ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d903074a_0e72d7a5",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T07:37:22Z",
+      "side": 1,
+      "message": "Standard operator+ is defined such that it\u0027s usable in operations like \u0027a \u003d b \u003d c\u0027, where \u0027b \u003d c\u0027 returns a value assignable to \u0027a\u0027. It is harmless to use this convention, and it allows for the \u0027default\u0027 simplification here.",
+      "parentUuid": "10f3753f_e80a1139",
+      "revId": "151d6bdb2a4760378028994986a0ebf8dee8e1ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
