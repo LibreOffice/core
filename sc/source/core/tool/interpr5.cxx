@@ -1871,9 +1871,7 @@ void ScInterpreter::ScSumXMY2()
     }
     else
     {
-        ScMatrix::IterateResult aRes = pResMat->SumSquare(false);
-        double fSum = aRes.mfFirst + aRes.mfRest;
-        PushDouble(fSum);
+        PushDouble(pResMat->SumSquare(false).get());
     }
 }
 

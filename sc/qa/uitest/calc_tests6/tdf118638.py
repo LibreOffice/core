@@ -47,8 +47,8 @@ class Subtotals(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 0, 15).getString(), "5408 Sum")
         self.assertEqual(get_cell_by_position(document, 0, 0, 16).getString(), "Grand Sum")
 
-        self.assertEqual(get_cell_by_position(document, 0, 1, 15).getValue(), 238.89)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 16).getValue(), 238.89)
+        self.assertEqual(round(get_cell_by_position(document, 0, 1, 15).getValue(),12), 238.89)
+        self.assertEqual(round(get_cell_by_position(document, 0, 1, 16).getValue(),12), 238.89)
 
         self.assertEqual(get_cell_by_position(document, 0, 1, 15).getString(), "$238.89")
         self.assertEqual(get_cell_by_position(document, 0, 1, 16).getString(), "$238.89")
