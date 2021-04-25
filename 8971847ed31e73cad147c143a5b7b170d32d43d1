@@ -34,6 +34,24 @@
       "revId": "8971847ed31e73cad147c143a5b7b170d32d43d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af2a8bb0_46560f11",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5360,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-04-25T18:58:35Z",
+      "side": 1,
+      "message": "FWIW there\u0027s both a Window::IsDisposed and a VclReferenceBase::isDisposed.",
+      "parentUuid": "51df671c_fb52d163",
+      "revId": "8971847ed31e73cad147c143a5b7b170d32d43d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
