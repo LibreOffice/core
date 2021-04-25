@@ -22,6 +22,30 @@
       "revId": "4a749e5bed089fd89f636abd23b7c3b9084d2d68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c14e982a_50b10c22",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-25T17:19:56Z",
+      "side": 1,
+      "message": "I copied the license from a preexisting file.\nDo I remove the yellow stuff?\n\nPragma once is now available.\nThere where no multiple includes so did not notice.",
+      "parentUuid": "d40cdfb3_4a3fdc61",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 64
+      },
+      "revId": "4a749e5bed089fd89f636abd23b7c3b9084d2d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
