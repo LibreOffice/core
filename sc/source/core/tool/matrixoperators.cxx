@@ -9,30 +9,19 @@
 
 #include <matrixoperators.hxx>
 
-
-namespace sc::op {
-
-void Sum::operator()(double& rAccum, double fVal) const
+namespace sc::op
 {
-    rAccum += fVal;
-}
+void Sum::operator()(KahanSum& rAccum, double fVal) const { rAccum += fVal; }
 
 const double Sum::InitVal = 0.0;
 
-void SumSquare::operator()(double& rAccum, double fVal) const
-{
-    rAccum += fVal * fVal;
-}
+void SumSquare::operator()(KahanSum& rAccum, double fVal) const { rAccum += fVal * fVal; }
 
 const double SumSquare::InitVal = 0.0;
 
-void Product::operator()(double& rAccum, double fVal) const
-{
-    rAccum *= fVal;
-}
+void Product::operator()(KahanSum& rAccum, double fVal) const { rAccum *= fVal; }
 
 const double Product::InitVal = 1.0;
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
