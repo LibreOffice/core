@@ -794,7 +794,7 @@ void Chart2ImportTest::testBnc864396()
 void Chart2ImportTest::testBnc889755()
 {
     load("/chart2/qa/extras/data/pptx/", "bnc889755.pptx");
-    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 6), uno::UNO_QUERY_THROW);
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 5), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
 
     uno::Reference< chart2::XInternalDataProvider > xDataProvider( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
