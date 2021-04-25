@@ -359,27 +359,6 @@ void RangeColumnSpanSet::executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet
     }
 }
 
-void RangeColumnSpanSet::executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac, double& fMem) const
-{
-    for (SCTAB nTab = range.aStart.Tab(); nTab <= range.aEnd.Tab(); ++nTab)
-    {
-        ScTable* pTab = rDoc.FetchTable(nTab);
-        if (!pTab)
-            continue;
-
-        SCCOL nEndCol = pTab->ClampToAllocatedColumns(range.aEnd.Col());
-        for (SCCOL nCol = range.aStart.Col(); nCol <= nEndCol; ++nCol)
-        {
-            if (!rDoc.ValidCol(nCol))
-                break;
-
-            ScColumn& rColumn = pTab->aCol[nCol];
-            ac.startColumn(&rColumn);
-            ac.executeSum( range.aStart.Row(), range.aEnd.Row(), true, fMem );
-        }
-    }
-}
-
 } // namespace sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

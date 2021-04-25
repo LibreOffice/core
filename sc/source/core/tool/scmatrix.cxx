@@ -302,9 +302,9 @@ public:
     double Or() const;
     double Xor() const;
 
-    ScMatrix::IterateResult Sum( bool bTextAsZero, bool bIgnoreErrorValues ) const;
-    ScMatrix::IterateResult SumSquare( bool bTextAsZero, bool bIgnoreErrorValues ) const;
-    ScMatrix::IterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues ) const;
+    ScMatrix::KahanIterateResult Sum( bool bTextAsZero, bool bIgnoreErrorValues ) const;
+    ScMatrix::KahanIterateResult SumSquare( bool bTextAsZero, bool bIgnoreErrorValues ) const;
+    ScMatrix::KahanIterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues ) const;
     size_t Count(bool bCountStrings, bool bCountErrors, bool bIgnoreEmptyStrings) const;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const;
@@ -1111,17 +1111,16 @@ template<typename Op>
 class WalkElementBlocks
 {
     Op maOp;
-    ScMatrix::IterateResult maRes;
-    bool mbFirst:1;
+    ScMatrix::KahanIterateResult maRes;
     bool mbTextAsZero:1;
     bool mbIgnoreErrorValues:1;
 public:
     WalkElementBlocks(bool bTextAsZero, bool bIgnoreErrorValues) :
-        maRes(Op::InitVal, Op::InitVal, 0), mbFirst(true),
+        maRes(Op::InitVal, 0),
         mbTextAsZero(bTextAsZero), mbIgnoreErrorValues(bIgnoreErrorValues)
     {}
 
-    const ScMatrix::IterateResult& getResult() const { return maRes; }
+    const ScMatrix::KahanIterateResult& getResult() const { return maRes; }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
@@ -1141,16 +1140,7 @@ public:
                         ++nIgnored;
                         continue;
                     }
-
-                    if (mbFirst)
-                    {
-                        maOp(maRes.mfFirst, *it);
-                        mbFirst = false;
-                    }
-                    else
-                    {
-                        maOp(maRes.mfRest, *it);
-                    }
+                    maOp(maRes.maAccumulator, *it);
                 }
                 maRes.mnCount += node.size - nIgnored;
             }
@@ -1163,15 +1153,7 @@ public:
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                 {
-                    if (mbFirst)
-                    {
-                        maOp(maRes.mfFirst, *it);
-                        mbFirst = false;
-                    }
-                    else
-                    {
-                        maOp(maRes.mfRest, *it);
-                    }
+                    maOp(maRes.maAccumulator, *it);
                 }
                 maRes.mnCount += node.size;
             }
@@ -2099,7 +2081,7 @@ public:
 namespace {
 
 template<typename TOp>
-ScMatrix::IterateResult GetValueWithCount(bool bTextAsZero, bool bIgnoreErrorValues, const MatrixImplType& maMat)
+ScMatrix::KahanIterateResult GetValueWithCount(bool bTextAsZero, bool bIgnoreErrorValues, const MatrixImplType& maMat)
 {
     WalkElementBlocks<TOp> aFunc(bTextAsZero, bIgnoreErrorValues);
     aFunc = maMat.walk(aFunc);
@@ -2108,17 +2090,17 @@ ScMatrix::IterateResult GetValueWithCount(bool bTextAsZero, bool bIgnoreErrorVal
 
 }
 
-ScMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::KahanIterateResult ScMatrixImpl::Sum(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
     return GetValueWithCount<sc::op::Sum>(bTextAsZero, bIgnoreErrorValues, maMat);
 }
 
-ScMatrix::IterateResult ScMatrixImpl::SumSquare(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::KahanIterateResult ScMatrixImpl::SumSquare(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
     return GetValueWithCount<sc::op::SumSquare>(bTextAsZero, bIgnoreErrorValues, maMat);
 }
 
-ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::KahanIterateResult ScMatrixImpl::Product(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
     return GetValueWithCount<sc::op::Product>(bTextAsZero, bIgnoreErrorValues, maMat);
 }
@@ -3226,17 +3208,17 @@ double ScMatrix::Xor() const
     return pImpl->Xor();
 }
 
-ScMatrix::IterateResult ScMatrix::Sum(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::KahanIterateResult ScMatrix::Sum(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
     return pImpl->Sum(bTextAsZero, bIgnoreErrorValues);
 }
 
-ScMatrix::IterateResult ScMatrix::SumSquare(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::KahanIterateResult ScMatrix::SumSquare(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
     return pImpl->SumSquare(bTextAsZero, bIgnoreErrorValues);
 }
 
-ScMatrix::IterateResult ScMatrix::Product(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::KahanIterateResult ScMatrix::Product(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
     return pImpl->Product(bTextAsZero, bIgnoreErrorValues);
 }
