@@ -74,43 +74,21 @@ autogen.sh is patched to use emconfigure. That basically sets various environmen
 especially EMMAKEN_JUST_CONFIGURE, which will create the correct output file names, checked by
 configure (a.out).
 
+There's a distro config for WASM (work in progress), that gets your
+defaults right (and currently disables a ton of 3rd party stuff which
+is not essential).
+
+Recommended configure setup is thusly:
+
+# grab defaults
+--with-distro=LibreOfficeWASM32
+
+# local config
 QT5DIR=/dir/of/git_qt5/qtbase
 
---host=wasm64-local-emscripten
---disable-coinmp
---disable-cups
---disable-dbus
---disable-dconf
---disable-dynamic-loading
---disable-extension-integration
---disable-extensions
---disable-extension-update
---disable-firebird-sdbc
---disable-gio
---disable-gstreamer-1-0
---disable-ldap
---disable-lpsolve
---disable-mariadb-sdbc
---disable-nss
---disable-odk
---disable-online-update
---disable-opencl
---disable-pdfimport
---disable-postgresql-sdbc
---disable-python
---disable-randr
---disable-report-builder
---disable-scripting
---disable-sdremote-bluetooth
+# if you want to use ccache on both sides of the build
+--with-build-platform-configure-options=--enable-ccache
 --enable-ccache
---without-helppack-integration
---without-java
---without-junit
---without-system-dicts
---with-fonts
---with-theme=no
-
-Many will also be encoded in configure.ac at some point, some already is.
 
 
 == Using Docker to cross-build with emscripten ==
