@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfd44d1f_12f59dd9",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-25T18:20:32Z",
+      "side": 1,
+      "message": "This comment is better after the include guard (#pragma once). Also since we agreed to use first-order error, it needs adjusting to reflect that.",
+      "revId": "96c8907cae63a0510260e64d235fe4859b4fbfc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
