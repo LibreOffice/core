@@ -63,11 +63,14 @@
 
 #include "lwplayout.hxx"
 #include <xfilter/xftable.hxx>
+#include <svl/hint.hxx>
+#include <svl/lstner.hxx>
+
+#include <mdds/rtree.hpp>
 
 #include <vector>
 #include <map>
 #include <memory>
-#include <unordered_map>
 
 class XFTableStyle;
 class XFTable;
@@ -92,6 +95,31 @@ struct TableConvertAttempt
     TableConvertAttempt(sal_uInt16 nStartRow, sal_uInt16 nEndRow, sal_uInt8 nStartCol, sal_uInt8 nEndCol)
         : mnStartRow(nStartRow), mnEndRow(nEndRow), mnStartCol(nStartCol), mnEndCol(nEndCol)
     {
+    }
+};
+
+class XFCellListener : public SfxListener
+{
+public:
+    XFCellListener(XFCell* pCell)
+        : m_pCell(pCell)
+    {
+        if (m_pCell)
+            StartListening(*m_pCell);
+    }
+
+    XFCell* GetCell()
+    {
+        return m_pCell;
+    }
+
+private:
+    XFCell* m_pCell;
+
+    virtual void Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint) override
+    {
+        if (rHint.GetId() == SfxHintId::Dying)
+            m_pCell = nullptr;
     }
 };
 
@@ -148,7 +176,7 @@ public:
     void ConvertTable(rtl::Reference<XFTable> const & pXFTable, sal_uInt16 nStartRow,
                 sal_uInt16 nEndRow,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
     const OUString& GetDefaultRowStyleName() const {return m_DefaultRowStyleName;}
-    void SetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol,XFCell* pXFCell);
+    void SetCellsMap(sal_uInt16 nRow1, sal_uInt8 nCol1, sal_uInt16 nRow2, sal_uInt8 nCol2, XFCell* pXFCell);
     XFCell* GetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol);
    const  std::map<sal_uInt16,LwpRowLayout*>& GetRowsMap() const {return m_RowsMap;}
     LwpRowLayout* GetRowLayout(sal_uInt16 nRow);
@@ -165,11 +193,13 @@ private:
     void SplitConflictCells();
     rtl::Reference<XFTable> m_pXFTable;
     bool m_bConverted;
-    typedef sal_Int32 RowCol;
-    std::unordered_map<RowCol, XFCell*> m_CellsMap;
+
+    using rt_type = mdds::rtree<int, XFCellListener>;
+    rt_type m_CellsMap;
 
     void PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID);
 };
+
 /**
  * @brief
  * VO_SUPERTABLELAYOUT object
