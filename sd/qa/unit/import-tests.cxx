@@ -1822,7 +1822,7 @@ void SdImportTest::testTdf95932()
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf95932.pptx"), PPTX);
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
-    SdrObject *const pObj = pPage->GetObj(2);
+    SdrObject *const pObj = pPage->GetObj(1);
     CPPUNIT_ASSERT(pObj);
 
     const XFillStyleItem& rStyleItem = dynamic_cast<const XFillStyleItem&>(

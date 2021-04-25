@@ -20,8 +20,12 @@
 #include <oox/ppt/pptshape.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <drawingml/textbody.hxx>
+#include <drawingml/textparagraph.hxx>
+#include <drawingml/textfield.hxx>
 #include <drawingml/table/tableproperties.hxx>
+#include <editeng/flditem.hxx>
 
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -82,6 +86,19 @@ static const char* lclDebugSubType( sal_Int32 nType )
     }
 
     return "unknown - please extend lclDebugSubType";
+}
+
+namespace
+{
+bool ShapeHasNoVisualPropertiesOnImport(oox::ppt::PPTShape& rPPTShape)
+{
+    return  !rPPTShape.hasNonInheritedShapeProperties()
+            && !rPPTShape.hasShapeStyleRefs()
+            && !rPPTShape.getTextBody()->hasVisualRunProperties()
+            && !rPPTShape.getTextBody()->hasNoninheritedBodyProperties()
+            && !rPPTShape.getTextBody()->hasListStyleOnImport()
+            && !rPPTShape.getTextBody()->hasParagraphProperties();
+}
 }
 
 oox::drawingml::TextListStylePtr PPTShape::getSubTypeTextListStyle( const SlidePersist& rSlidePersist, sal_Int32 nSubType )
@@ -176,6 +193,37 @@ void PPTShape::addShape(
                 }
                 break;
                 case XML_dt :
+                    if ( meShapeLocation == Slide && !rSlidePersist.isNotesPage()
+                         && getTextBody()->getParagraphs().size() == 1
+                         && getTextBody()->getParagraphs().front()->getRuns().size() == 1
+                         && ShapeHasNoVisualPropertiesOnImport(*this) )
+                    {
+                        TextRunPtr& pTextRun = getTextBody()->getParagraphs().front()->getRuns().front();
+                        oox::drawingml::TextField* pTextField = dynamic_cast<oox::drawingml::TextField*>(pTextRun.get());
+                        if (pTextField)
+                        {
+                            OUString aType = pTextField->getType();
+                            if ( aType.startsWith("datetime") )
+                            {
+                                SvxDateFormat eDateFormat = drawingml::TextField::getLODateFormat(aType);
+                                SvxTimeFormat eTimeFormat = drawingml::TextField::getLOTimeFormat(aType);
+                                Reference< XPropertySet > xPropertySet( rSlidePersist.getPage(), UNO_QUERY );
+
+                                if( eDateFormat != SvxDateFormat::AppDefault
+                                    || eTimeFormat != SvxTimeFormat::AppDefault )
+                                {
+                                    // DateTimeFormat property looks for the date in 4 LSBs
+                                    // and looks for time format in the 4 bits after that
+                                    sal_Int32 nDateTimeFormat = static_cast<sal_Int32>(eDateFormat) |
+                                                                static_cast<sal_Int32>(eTimeFormat) << 4;
+                                    xPropertySet->setPropertyValue( "IsDateTimeVisible", Any(true) );
+                                    xPropertySet->setPropertyValue( "IsDateTimeFixed", Any(false) );
+                                    xPropertySet->setPropertyValue( "DateTimeFormat", Any(nDateTimeFormat) );
+                                    return;
+                                }
+                            }
+                        }
+                    }
                     sServiceName = "com.sun.star.presentation.DateTimeShape";
                     bClearText = true;
                 break;
@@ -184,10 +232,46 @@ void PPTShape::addShape(
                     bClearText = true;
                 break;
                 case XML_ftr :
+                    if ( meShapeLocation == Slide && !rSlidePersist.isNotesPage()
+                         && getTextBody()->getParagraphs().size() == 1
+                         && getTextBody()->getParagraphs().front()->getRuns().size() == 1
+                         && ShapeHasNoVisualPropertiesOnImport(*this) )
+                    {
+                        const OUString& rFooterText = getTextBody()->toString();
+
+                        if( !rFooterText.isEmpty() )
+                        {
+                            // if it is possible to get the footer as a property the LO way,
+                            // get it and discard the shape
+                            Reference< XPropertySet > xPropertySet( rSlidePersist.getPage(), UNO_QUERY );
+                            xPropertySet->setPropertyValue( "IsFooterVisible", Any( true ) );
+                            xPropertySet->setPropertyValue( "FooterText", Any(rFooterText) );
+                            return;
+                        }
+                    }
                     sServiceName = "com.sun.star.presentation.FooterShape";
                     bClearText = true;
                 break;
                 case XML_sldNum :
+                    if (meShapeLocation == Slide && !rSlidePersist.isNotesPage()
+                        && getTextBody()->getParagraphs().size() == 1
+                        && getTextBody()->getParagraphs().front()->getRuns().size() == 1
+                        && ShapeHasNoVisualPropertiesOnImport(*this))
+                    {
+                        TextRunPtr& pTextRun
+                            = getTextBody()->getParagraphs().front()->getRuns().front();
+                        oox::drawingml::TextField* pTextField
+                            = dynamic_cast<oox::drawingml::TextField*>(pTextRun.get());
+                        if (pTextField && pTextField->getType() == "slidenum")
+                        {
+                            // if it is possible to get the slidenum placeholder as a property
+                            // do that and discard the shape
+                            Reference<XPropertySet> xPropertySet(rSlidePersist.getPage(),
+                                                                 UNO_QUERY);
+                            xPropertySet->setPropertyValue("IsPageNumberVisible", Any(true));
+                            return;
+                        }
+                    }
                     sServiceName = "com.sun.star.presentation.SlideNumberShape";
                     bClearText = true;
                 break;
@@ -373,6 +457,26 @@ void PPTShape::addShape(
                 else if (!msId.isEmpty())
                 {
                     (*pShapeMap)[ msId ] = shared_from_this();
+                }
+            }
+
+            // we will be losing whatever information there is in the footer placeholder on master/layout slides
+            // since they should have the "<footer>" textfield in them in order to make LibreOffice process them as expected
+            // likewise DateTime placeholder data on master/layout slides will be lost and replaced
+            if( (mnSubType == XML_ftr || mnSubType == XML_dt) && meShapeLocation != Slide )
+            {
+                OUString aFieldType;
+                if( mnSubType == XML_ftr )
+                    aFieldType = "com.sun.star.presentation.TextField.Footer";
+                else
+                    aFieldType = "com.sun.star.presentation.TextField.DateTime";
+                Reference < XTextField > xField( xServiceFact->createInstance( aFieldType ), UNO_QUERY );
+                Reference < XText > xText(mxShape, UNO_QUERY);
+                if(xText.is())
+                {
+                    xText->setString("");
+                    Reference < XTextCursor > xTextCursor = xText->createTextCursor();
+                    xText->insertTextContent( xTextCursor, xField, false);
                 }
             }
 
