@@ -1480,16 +1480,18 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 // Since LO7.0/tdf#131321 fixed the loss of numbering in styles, this OUGHT to be obsolete,
                 // but now other new/critical LO7.0 code expects it, and perhaps some corner cases still need it as well.
                 // So we skip it only for default outline styles, which are recognized by NumberingManager.
-                if (!GetCurrentParaStyleName().startsWith("Heading ") || nListLevel >= pList->GetDefaultParentLevels())
+               assert (!pList->isOutlineNumbering(nListLevel));
+                if (!(nListId == 1 && pList->GetAbstractDefinition() && GetCurrentParaStyleName().startsWith("Heading ") && (nListLevel == -1 || (pList->GetAbstractDefinition()->isOutlineNumbering(nListLevel) && pStyleSheetProperties->GetOutlineLevel() == pStyleSheetProperties->GetListLevel()))))
                     pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(pList->GetStyleName()), true );
             }
-            else if ( !pList->isOutlineNumbering(nListLevel) )
+            else if ( true )
             {
                 // After ignoring anything related to the special Outline levels,
                 // we have direct numbering, as well as paragraph-style numbering.
                 // Apply the style if it uses the same list as the direct numbering,
                 // otherwise the directly-applied-to-paragraph status will be lost,
                 // and the priority of the numbering-style-indents will be lowered. tdf#133000
+                assert(!pList->isOutlineNumbering(nListLevel));
                 if ( nListId == pParaContext->GetListId() )
                     pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(pList->GetStyleName()), true );
             }

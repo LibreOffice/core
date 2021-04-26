@@ -571,17 +571,23 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             m_xNumRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
 
             // Handle the outline level here
-            if (pAbsLevel && pAbsLevel->isOutlineNumbering())
+            // Chapter Numbering is an aweful limitation of LibreOffice (not a DOCX format thing)
+            // Only set Chapter Numbering if can confidently be considered a round-tripped document.
+            if (pAbsLevel && GetId() == 1 && pAbsLevel->isOutlineNumbering())
             {
-                uno::Reference< text::XChapterNumberingSupplier > xOutlines (
-                    xFactory, uno::UNO_QUERY_THROW );
-                uno::Reference< container::XIndexReplace > xOutlineRules =
-                    xOutlines->getChapterNumberingRules( );
-
                 StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
-                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEADING_STYLE_NAME), pParaStyle->sConvertedStyleName));
+                StyleSheetPropertyMap& rProps = *dynamic_cast<StyleSheetPropertyMap*>(pParaStyle->pProperties.get());
+                if (rProps.GetListLevel() == -1 || rProps.GetListLevel() == rProps.GetOutlineLevel())
+                {
+                    uno::Reference< text::XChapterNumberingSupplier > xOutlines (
+                        xFactory, uno::UNO_QUERY_THROW );
+                    uno::Reference< container::XIndexReplace > xOutlineRules =
+                        xOutlines->getChapterNumberingRules( );
 
-                xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
+                    aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEADING_STYLE_NAME), pParaStyle->sConvertedStyleName));
+
+                    xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
+                }
             }
 
             if (pAbsLevel)
