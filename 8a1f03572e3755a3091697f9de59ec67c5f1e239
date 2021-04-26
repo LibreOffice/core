@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "eed04f18_5b312117",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 5600,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-26T10:42:39Z",
+      "side": 1,
+      "message": "When using KahanSum the fMem remembering the first non-null value workaround can be eliminated, also from the loops above.",
+      "range": {
+        "startLine": 5600,
+        "startChar": 73,
+        "endLine": 5600,
+        "endChar": 77
+      },
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1b6515fd_6ddfb970",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 14
@@ -159,6 +182,24 @@
     },
     {
       "key": {
+        "uuid": "154cb05a_0a04963e",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-26T10:42:39Z",
+      "side": 1,
+      "message": "All this fMem remembering the first non-null value can be dropped if KahanSum is used. Note it also cooks down to the ScMatrix sum operations.",
+      "parentUuid": "a329ba6c_efb4bc21",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f01f446f_d998b9b8",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 14
@@ -241,6 +282,24 @@
       "side": 1,
       "message": "I took care of it over here: https://gerrit.libreoffice.org/c/core/+/114627/3\nHave used Kahan sum for scmatrix carefully updating the code.\nThe changes for interpr1 will go in another patch.",
       "parentUuid": "7a31cdef_745a77a8",
+      "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "346ad4a7_4a99101a",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-26T10:42:39Z",
+      "side": 1,
+      "message": "The mbFirst and ScMatrix::KahanIterateResult.mfFirst can be eliminated.",
+      "parentUuid": "4b840732_dbc359f9",
       "revId": "8a1f03572e3755a3091697f9de59ec67c5f1e239",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
