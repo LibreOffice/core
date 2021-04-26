@@ -16,6 +16,24 @@
       "revId": "19e42bd4111de4c631f59c1658f03122a95d6b90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "722d189f_9cab593a",
+        "filename": "include/tools/gen.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T07:31:09Z",
+      "side": 1,
+      "message": "Well yes, but I thought to keep it aligned with \"vertical center\" here e.g. in LeftCenter :-)",
+      "parentUuid": "a5e4d990_945a11cf",
+      "revId": "19e42bd4111de4c631f59c1658f03122a95d6b90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
