@@ -517,7 +517,7 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
             case 23: pValues[nProp] <<= m_sMailPassword;        break;
             case 24 :pValues[nProp] <<= m_aDBData.sDataSource;           break;
             case 25 :pValues[nProp] <<= m_aDBData.sCommand;              break;
-            case 26 :pValues[nProp] <<= static_cast<short>(m_aDBData.nCommandType);   break;
+            case 26 :pValues[nProp] <<= m_aDBData.nCommandType;   break;
             case 27 :pValues[nProp] <<= m_sFilter; break;
             case 28 :pValues[nProp] <<= m_aSavedDocuments; break;
             case 29: pValues[nProp] <<= m_bIsEMailSupported; break;
