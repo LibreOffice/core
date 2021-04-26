@@ -137,6 +137,24 @@
     },
     {
       "key": {
+        "uuid": "9705d96d_c6ace3eb",
+        "filename": "sc/source/core/tool/arraysumSSE2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T18:39:54Z",
+      "side": 1,
+      "message": "OK. Thank you.",
+      "parentUuid": "b14c0255_d9ac03e4",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0232f083_62399131",
         "filename": "sc/source/core/tool/interpr5.cxx",
         "patchSetId": 7
@@ -205,6 +223,30 @@
       "revId": "b7179c63281533255227e3c4d2e499e354537bac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21358c5f_11d043d7",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T18:39:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "184ed342_14c55668",
+      "range": {
+        "startLine": 1874,
+        "startChar": 45,
+        "endLine": 1874,
+        "endChar": 57
+      },
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
