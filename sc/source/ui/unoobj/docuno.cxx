@@ -79,6 +79,7 @@
 #endif
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/lokcharthelper.hxx>
+#include <sfx2/LokControlHandler.hxx>
 
 #include <cellsuno.hxx>
 #include <columnspanset.hxx>
@@ -563,6 +564,14 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
 
     LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+    // Draw Form controls
+    ScDrawLayer* pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(pViewData->GetTabNo()));
+    SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView();
+    tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
+    Size aOutputSize(nOutputWidth, nOutputHeight);
+    LokControlHandler::paintControlTile(pPage, pDrawView, *pGridWindow, rDevice, aOutputSize, aTileRect);
 }
 
 void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
@@ -715,22 +724,33 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     if (aChartHelper.postMouseEvent(nType, nX, nY,
                                     nCount, nButtons, nModifier,
                                     pViewData->GetPPTX(), pViewData->GetPPTY()))
+    {
         return;
+    }
+
+    Point aPointTwip(nX, nY);
 
     // check if the user hit a chart which is being edited by someone else
     // and, if so, skip current mouse event
     if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
     {
-        if (LokChartHelper::HitAny(Point(nX, nY)))
+        if (LokChartHelper::HitAny(aPointTwip))
             return;
     }
 
-    // Calc operates in pixels...
-    const Point aPos(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
+    // Check if a control is hit
+    Point aPointHMM = o3tl::convert(aPointTwip, o3tl::Length::twip, o3tl::Length::mm100);
+    ScDrawLayer* pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(pViewData->GetTabNo()));
+    SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView();
+    if (LokControlHandler::postMouseEvent(pPage, pDrawView, *pGridWindow, nType, aPointHMM, nCount, nButtons, nModifier))
+        return;
 
-    LokMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
+    // Calc operates in pixels...
+    const Point aPosition(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
+    LokMouseEventData aMouseEventData(nType, aPosition, nCount, MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
-    aMouseEventData.maLogicPosition = Point(convertTwipToMm100(nX), convertTwipToMm100(nY));
+    aMouseEventData.maLogicPosition = aPointHMM;
     SfxLokHelper::postMouseEventAsync(pGridWindow, aMouseEventData);
 }
 
