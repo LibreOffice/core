@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9180211b_8e0bc7d7",
+        "filename": "sc/qa/uitest/calc_tests6/tdf118638.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T16:31:15Z",
+      "side": 1,
+      "message": "Thanks for the clarification in the commit message; please also increase the precision of the test here, since using 12 decimals would make sure that only unimportant noise is filtered out, while using 2 decimals would let actual problems like 238.894 to go unnoticed.",
+      "range": {
+        "startLine": 50,
+        "startChar": 83,
+        "endLine": 50,
+        "endChar": 84
+      },
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
