@@ -50,8 +50,8 @@ public:
     sal_uLong        nListPos;
     SvBOOL           aReadOnlyDoc;
 
-    void            WriteSlot( const OString& rShellName,
-                            sal_uInt16 nCount, const OString& rSlotId,
+    void            WriteSlot( std::string_view rShellName,
+                            sal_uInt16 nCount, std::string_view rSlotId,
                             SvSlotElementList &rList,
                             size_t nStart,
                             SvIdlDataBase & rBase, SvStream & rOutStm );
@@ -115,10 +115,10 @@ public:
                                              SvTokenStream & rInStm ) override;
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     virtual void        Insert( SvSlotElementList& ) override;
-    void                WriteSlotStubs( const OString& rShellName,
+    void                WriteSlotStubs( std::string_view rShellName,
                                     std::vector<OString> & rList,
                                     SvStream & rOutStm ) const;
-    sal_uInt16          WriteSlotMap( const OString& rShellName,
+    sal_uInt16          WriteSlotMap( std::string_view rShellName,
                                     sal_uInt16 nCount,
                                     SvSlotElementList&,
                                     size_t nStart,

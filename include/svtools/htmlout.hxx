@@ -58,7 +58,7 @@ struct HTMLOutFuncs
                         rtl_TextEncoding eDestEnc,
                         OUString *pNonConvertableChars );
 
-    SVT_DLLPUBLIC static SvStream& Out_AsciiTag( SvStream&, const OString& rStr,
+    SVT_DLLPUBLIC static SvStream& Out_AsciiTag( SvStream&, std::string_view rStr,
                                    bool bOn = true);
     SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_uInt32 cChar,
                         HTMLOutContext& rContext,
@@ -107,7 +107,7 @@ struct HTMLOutFuncs
 
 struct HtmlWriterHelper
 {
-    SVT_DLLPUBLIC static void applyColor( HtmlWriter& rHtmlWriter, const OString &aAttributeName, const Color& rColor);
+    SVT_DLLPUBLIC static void applyColor( HtmlWriter& rHtmlWriter, std::string_view aAttributeName, const Color& rColor);
     SVT_DLLPUBLIC static void applyEvents(HtmlWriter& rHtmlWriter, const SvxMacroTableDtor& rMacroTable, const HTMLOutEvent* pEventTable, bool bOutStarBasic);
 };
 

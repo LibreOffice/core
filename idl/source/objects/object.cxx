@@ -148,7 +148,7 @@ sal_uInt16 SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
     return nCount;
 }
 
-sal_uInt16 SvMetaClass::WriteSlots( const OString& rShellName,
+sal_uInt16 SvMetaClass::WriteSlots( std::string_view rShellName,
                                 SvSlotElementList & rSlotList,
                                 SvIdlDataBase & rBase,
                                 SvStream & rOutStm )
@@ -250,7 +250,7 @@ void SvMetaClass::FillClasses( SvMetaClassList & rList )
 }
 
 
-void SvMetaClass::WriteSlotStubs( const OString& rShellName,
+void SvMetaClass::WriteSlotStubs( std::string_view rShellName,
                                 SvSlotElementList & rSlotList,
                                 std::vector<OString> & rList,
                                 SvStream & rOutStm )

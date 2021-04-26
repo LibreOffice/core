@@ -450,9 +450,9 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
         pStream->WriteLine("type: negative");
     if (aDicName.endsWith(EXTENSION_FOR_TITLE_TEXT))
     {
-        pStream->WriteLine("title: " + OUStringToOString(
+        pStream->WriteLine(OString("title: " + OUStringToOString(
             // strip EXTENSION_FOR_TITLE_TEXT
-            aDicName.subView(0, aDicName.lastIndexOf(EXTENSION_FOR_TITLE_TEXT)), eEnc));
+            aDicName.subView(0, aDicName.lastIndexOf(EXTENSION_FOR_TITLE_TEXT)), eEnc)));
     }
     if (ERRCODE_NONE != (nErr = pStream->GetError()))
         return nErr;

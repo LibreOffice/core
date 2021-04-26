@@ -414,7 +414,7 @@ void FontNameBox::SaveMRUEntries(const OUString& aFontMRUEntriesFile) const
 
     aStream.SetLineDelimiter( LINEEND_LF );
     aStream.WriteLine( aEntries );
-    aStream.WriteLine( OString() );
+    aStream.WriteLine( "" );
 }
 
 void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile )

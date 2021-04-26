@@ -664,19 +664,19 @@ OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStream, rtl_TextEncodi
 
 /** Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
     returned value is number of bytes written */
-std::size_t write_uInt16s_FromOUString(SvStream& rStrm, const OUString& rStr,
+std::size_t write_uInt16s_FromOUString(SvStream& rStrm, std::u16string_view rStr,
     std::size_t nUnits)
 {
     DBG_ASSERT( sizeof(sal_Unicode) == sizeof(sal_uInt16), "write_uInt16s_FromOUString: swapping sizeof(sal_Unicode) not implemented" );
     std::size_t nWritten;
     if (!rStrm.IsEndianSwap())
-        nWritten = rStrm.WriteBytes(rStr.getStr(), nUnits * sizeof(sal_Unicode));
+        nWritten = rStrm.WriteBytes(rStr.data(), nUnits * sizeof(sal_Unicode));
     else
     {
         std::size_t nLen = nUnits;
         sal_Unicode aBuf[384];
         sal_Unicode* const pTmp = ( nLen > 384 ? new sal_Unicode[nLen] : aBuf);
-        memcpy( pTmp, rStr.getStr(), nLen * sizeof(sal_Unicode) );
+        memcpy( pTmp, rStr.data(), nLen * sizeof(sal_Unicode) );
         sal_Unicode* p = pTmp;
         const sal_Unicode* const pStop = pTmp + nLen;
         while ( p < pStop )
@@ -691,11 +691,11 @@ std::size_t write_uInt16s_FromOUString(SvStream& rStrm, const OUString& rStr,
     return nWritten;
 }
 
-bool SvStream::WriteUnicodeOrByteText( const OUString& rStr, rtl_TextEncoding eDestCharSet )
+bool SvStream::WriteUnicodeOrByteText( std::u16string_view rStr, rtl_TextEncoding eDestCharSet )
 {
     if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
     {
-        write_uInt16s_FromOUString(*this, rStr, rStr.getLength());
+        write_uInt16s_FromOUString(*this, rStr, rStr.size());
         return m_nError == ERRCODE_NONE;
     }
     else
@@ -711,9 +711,9 @@ bool SvStream::WriteByteStringLine( std::u16string_view rStr, rtl_TextEncoding e
     return WriteLine(OUStringToOString(rStr, eDestCharSet));
 }
 
-bool SvStream::WriteLine(const OString& rStr)
+bool SvStream::WriteLine(std::string_view rStr)
 {
-    WriteBytes(rStr.getStr(), rStr.getLength());
+    WriteBytes(rStr.data(), rStr.size());
     endl(*this);
     return m_nError == ERRCODE_NONE;
 }
@@ -1208,7 +1208,7 @@ OUString SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
     return read_uInt16_lenPrefixed_uInt8s_ToOUString(*this, eSrcCharSet);
 }
 
-SvStream& SvStream::WriteUniOrByteString( const OUString& rStr, rtl_TextEncoding eDestCharSet )
+SvStream& SvStream::WriteUniOrByteString( std::u16string_view rStr, rtl_TextEncoding eDestCharSet )
 {
     // write UTF-16 string directly into stream ?
     if (eDestCharSet == RTL_TEXTENCODING_UNICODE)
@@ -2082,11 +2082,11 @@ OUString convertLineEnd(const OUString &rIn, LineEnd eLineEnd)
 }
 
 std::size_t write_uInt32_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
-                                                const OUString &rStr)
+                                                std::u16string_view rStr)
 {
     std::size_t nWritten = 0;
-    sal_uInt32 nUnits = std::min<std::size_t>(rStr.getLength(), std::numeric_limits<sal_uInt32>::max());
-    SAL_WARN_IF(static_cast<std::size_t>(nUnits) != static_cast<std::size_t>(rStr.getLength()),
+    sal_uInt32 nUnits = std::min<std::size_t>(rStr.size(), std::numeric_limits<sal_uInt32>::max());
+    SAL_WARN_IF(static_cast<std::size_t>(nUnits) != static_cast<std::size_t>(rStr.size()),
         "tools.stream",
         "string too long for prefix count to fit in output type");
     rStrm.WriteUInt32(nUnits);
@@ -2099,11 +2099,11 @@ std::size_t write_uInt32_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
 }
 
 std::size_t write_uInt16_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
-                                                const OUString &rStr)
+                                                std::u16string_view rStr)
 {
     std::size_t nWritten = 0;
-    sal_uInt16 nUnits = std::min<std::size_t>(rStr.getLength(), std::numeric_limits<sal_uInt16>::max());
-    SAL_WARN_IF(nUnits != rStr.getLength(),
+    sal_uInt16 nUnits = std::min<std::size_t>(rStr.size(), std::numeric_limits<sal_uInt16>::max());
+    SAL_WARN_IF(nUnits != rStr.size(),
         "tools.stream",
         "string too long for prefix count to fit in output type");
     rStrm.WriteUInt16(nUnits);
@@ -2116,11 +2116,11 @@ std::size_t write_uInt16_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
 }
 
 std::size_t write_uInt16_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
-                                              const OString &rStr)
+                                              std::string_view rStr)
 {
     std::size_t nWritten = 0;
-    sal_uInt16 nUnits = std::min<std::size_t>(rStr.getLength(), std::numeric_limits<sal_uInt16>::max());
-    SAL_WARN_IF(static_cast<std::size_t>(nUnits) != static_cast<std::size_t>(rStr.getLength()),
+    sal_uInt16 nUnits = std::min<std::size_t>(rStr.size(), std::numeric_limits<sal_uInt16>::max());
+    SAL_WARN_IF(static_cast<std::size_t>(nUnits) != static_cast<std::size_t>(rStr.size()),
         "tools.stream",
         "string too long for sal_uInt16 count to fit in output type");
     rStrm.WriteUInt16( nUnits );

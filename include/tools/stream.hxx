@@ -247,8 +247,8 @@ public:
     SvStream&       WriteInt64( sal_Int64 nInt64 );
     SvStream&       WriteUInt8( sal_uInt8 nuInt8 );
     SvStream&       WriteUnicode( sal_Unicode );
-    SvStream&       WriteOString(const OString& rStr)
-                        { WriteBytes(rStr.getStr(), rStr.getLength()); return *this; }
+    SvStream&       WriteOString(std::string_view rStr)
+                        { WriteBytes(rStr.data(), rStr.size()); return *this; }
     SvStream&       WriteStream( SvStream& rStream );
     sal_uInt64      WriteStream( SvStream& rStream, sal_uInt64 nSize );
 
@@ -291,7 +291,7 @@ public:
               causing endless loops ...
     */
     bool            ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
-    bool            WriteLine( const OString& rStr );
+    bool            WriteLine( std::string_view rStr );
 
     /** Read a line of bytes.
 
@@ -339,7 +339,7 @@ public:
     /** Write a 32bit length prefixed sequence of utf-16 if
         eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise convert to eSrcCharSet
         and write a 16bit length prefixed sequence of bytes */
-    SvStream&       WriteUniOrByteString( const OUString& rStr, rtl_TextEncoding eDestCharSet );
+    SvStream&       WriteUniOrByteString( std::u16string_view rStr, rtl_TextEncoding eDestCharSet );
 
     /** Read a line of Unicode if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
         otherwise read a line of Bytecode and convert from eSrcCharSet
@@ -361,8 +361,8 @@ public:
     /** Write a sequence of Unicode characters if
         eDestCharSet==RTL_TEXTENCODING_UNICODE, otherwise write a sequence of
         Bytecodes converted to eDestCharSet */
-    bool            WriteUnicodeOrByteText( const OUString& rStr, rtl_TextEncoding eDestCharSet );
-    bool            WriteUnicodeOrByteText( const OUString& rStr )
+    bool            WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding eDestCharSet );
+    bool            WriteUnicodeOrByteText(std::u16string_view rStr )
                     { return WriteUnicodeOrByteText( rStr, GetStreamCharSet() ); }
 
     /** Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
@@ -471,25 +471,25 @@ inline OUString read_uInt32_lenPrefixed_uInt16s_ToOUString(SvStream& rStrm)
 /// Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
 /// returned value is number of bytes written
 TOOLS_DLLPUBLIC std::size_t write_uInt16s_FromOUString(SvStream& rStrm,
-    const OUString& rStr, std::size_t nUnits);
+    std::u16string_view rStr, std::size_t nUnits);
 
 inline std::size_t write_uInt16s_FromOUString(SvStream& rStrm,
-    const OUString& rStr)
+    std::u16string_view rStr)
 {
-    return write_uInt16s_FromOUString(rStrm, rStr, rStr.getLength());
+    return write_uInt16s_FromOUString(rStrm, rStr, rStr.size());
 }
 
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 16bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
 std::size_t write_uInt32_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
-                                                const OUString &rStr);
+                                                std::u16string_view rStr);
 
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 16bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
 TOOLS_DLLPUBLIC std::size_t write_uInt16_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
-                                                const OUString &rStr);
+                                                std::u16string_view rStr);
 
 /// Attempt to read 8bit units to an OString until a zero terminator is
 /// encountered, returned OString's length is number of units *definitely*
@@ -539,22 +539,22 @@ inline OUString read_uInt8_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
 
 /// Attempt to write a prefixed sequence of nUnits 8bit units from an OString,
 /// returned value is number of bytes written
-inline std::size_t write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr,
+inline std::size_t write_uInt8s_FromOString(SvStream& rStrm, std::string_view rStr,
                                                          std::size_t nUnits)
 {
-    return rStrm.WriteBytes(rStr.getStr(), nUnits);
+    return rStrm.WriteBytes(rStr.data(), nUnits);
 }
 
-inline std::size_t write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr)
+inline std::size_t write_uInt8s_FromOString(SvStream& rStrm, std::string_view rStr)
 {
-    return write_uInt8s_FromOString(rStrm, rStr, rStr.getLength());
+    return write_uInt8s_FromOString(rStrm, rStr, rStr.size());
 }
 
 /// Attempt to write a pascal-style length (of type prefix) prefixed
 /// sequence of units from a string-type, returned value is number of bytes
 /// written (including byte-count of prefix)
 TOOLS_DLLPUBLIC std::size_t write_uInt16_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
-                                              const OString &rStr);
+                                              std::string_view rStr);
 
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 8bit units from an OUString, returned value is number of bytes written

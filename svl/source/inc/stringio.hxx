@@ -40,7 +40,7 @@ OUString readByteString(SvStream& rStream);
 
     @param rString  Some Unicode string.
  */
-void writeByteString(SvStream& rStream, const OUString& rString);
+void writeByteString(SvStream& rStream, std::u16string_view rString);
 
 #endif // INCLUDED_SVL_SOURCE_INC_STRINGIO_HXX
 

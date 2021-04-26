@@ -471,7 +471,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         // old readers will not read this data after having read legacy data, and will proceed
         // straight to the end of the record. So no version restriction here.
         r.WriteUInt32(nUnicodeDataMagicNumber);
-        write_uInt16s_FromOUString(r, OUString(pStrings.get(), nStringSize));
+        write_uInt16s_FromOUString(r, std::u16string_view(pStrings.get(), nStringSize));
 
         SbiCloseRecord( r, nPos );
     }

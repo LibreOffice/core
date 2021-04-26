@@ -51,7 +51,7 @@ void HtmlWriter::start(const OString& aElement)
     }
 
     mrStream.WriteChar('<');
-    mrStream.WriteOString(maNamespace + aElement);
+    mrStream.WriteOString(OString(maNamespace + aElement));
     mbElementOpen = true;
 }
 
@@ -98,7 +98,7 @@ void HtmlWriter::end()
             }
         }
         mrStream.WriteCharPtr("</");
-        mrStream.WriteOString(maNamespace + maElementStack.back());
+        mrStream.WriteOString(OString(maNamespace + maElementStack.back()));
         mrStream.WriteCharPtr(">");
         if (mbPrettyPrint)
             mrStream.WriteCharPtr("\n");
@@ -108,9 +108,9 @@ void HtmlWriter::end()
     mbCharactersWritten = false;
 }
 
-void HtmlWriter::attribute(const OString &aAttribute, const OString& aValue)
+void HtmlWriter::attribute(std::string_view aAttribute, std::string_view aValue)
 {
-    if (mbElementOpen && !aAttribute.isEmpty() && !aValue.isEmpty())
+    if (mbElementOpen && !aAttribute.empty() && !aValue.empty())
     {
         mrStream.WriteChar(' ');
         mrStream.WriteOString(aAttribute);
@@ -121,31 +121,31 @@ void HtmlWriter::attribute(const OString &aAttribute, const OString& aValue)
     }
 }
 
-void HtmlWriter::attribute(const OString& aAttribute, const sal_Int32 aValue)
+void HtmlWriter::attribute(std::string_view aAttribute, const sal_Int32 aValue)
 {
     attribute(aAttribute, OString::number(aValue));
 }
 
-void HtmlWriter::attribute(const OString& aAttribute, const char* pValue)
+void HtmlWriter::attribute(std::string_view aAttribute, const char* pValue)
 {
-    attribute(aAttribute, OString(pValue));
+    attribute(aAttribute, std::string_view(pValue));
 }
 
-void HtmlWriter::attribute(const OString& aAttribute, std::u16string_view aValue)
+void HtmlWriter::attribute(std::string_view aAttribute, std::u16string_view aValue)
 {
     attribute(aAttribute, OUStringToOString(aValue, RTL_TEXTENCODING_UTF8));
 }
 
-void HtmlWriter::attribute(const OString& aAttribute)
+void HtmlWriter::attribute(std::string_view aAttribute)
 {
-    if (mbElementOpen && !aAttribute.isEmpty())
+    if (mbElementOpen && !aAttribute.empty())
     {
         mrStream.WriteChar(' ');
         mrStream.WriteOString(aAttribute);
     }
 }
 
-void HtmlWriter::characters(const OString& rChars)
+void HtmlWriter::characters(std::string_view rChars)
 {
     if (!mbCharactersWritten)
         mrStream.WriteCharPtr(">");

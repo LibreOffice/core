@@ -139,7 +139,7 @@ class ScHTMLExport : public ScExportBase
     void WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow, SCTAB nTab );
     void WriteGraphEntry( ScHTMLGraphEntry* );
     void WriteImage( OUString& rLinkName,
-                     const Graphic&, const OString& rImgOptions,
+                     const Graphic&, std::string_view rImgOptions,
                      XOutFlags nXOutFlags = XOutFlags::NONE );
             // nXOutFlags for XOutBitmap::WriteGraphic
 
