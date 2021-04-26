@@ -975,7 +975,7 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
 
     if ( rUrl.getLength() > 1 && rUrl[0] == '#' )
     {
-        sMark = BookmarkToWriter( rUrl.copy(1) );
+        sMark = BookmarkToWriter( rUrl.subView(1) );
 
         const sal_Int32 nPos = sMark.lastIndexOf( cMarkSeparator );
 
@@ -1221,7 +1221,7 @@ OUString BookmarkToWord(const OUString &rBookmark)
     return TruncateBookmark(sRet);
 }
 
-OUString BookmarkToWriter(const OUString &rBookmark)
+OUString BookmarkToWriter(std::u16string_view rBookmark)
 {
     return INetURLObject::decode(rBookmark,
         INetURLObject::DecodeMechanism::Unambiguous, RTL_TEXTENCODING_ASCII_US);
