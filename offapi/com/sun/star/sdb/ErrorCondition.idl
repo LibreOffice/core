@@ -143,7 +143,7 @@ constants ErrorCondition
 
         <p>Some database drivers are not able to <code>SELECT</code> from a table if the
         statement does not contain a <code>WHERE</code> clause. In this case, a statement
-        like <code>SELECT * FROM "table"</code> with fail with the error code
+        like <code>SELECT * FROM "table"</code> will fail with the error code
         <code>DATA_CANNOT_SELECT_UNFILTERED</code>.</p>
 
         <p>It is also legitimate for the driver to report this error condition as warning, and provide
