@@ -394,7 +394,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     // tdf#89841 Use blue row numbers when Autofilter selected
     std::vector<sc::ColRowSpan> aSpans;
-    if (bVertical)
+    if (bVertical && pTabView)
     {
         SCTAB nTab = pTabView->GetViewData().GetTabNo();
         ScDocument& rDoc = pTabView->GetViewData().GetDocument();
