@@ -433,7 +433,6 @@ Public Function RunSql(Optional ByVal SQLCommand As Variant _
 
 Dim bResult As Boolean			&apos;	Return value
 Dim oStatement As Object		&apos;	com.sun.star.sdbc.XStatement
-Dim iCommandType				&apos;	1 = Table, 2 = Query, 3 = SQL
 Dim oQuery As Object			&apos;	com.sun.star.ucb.XContent
 Dim sSql As String				&apos;	SQL statement
 Dim bDirect						&apos;	Alias of DirectSQL

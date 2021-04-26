@@ -1400,7 +1400,7 @@ Private Function _PropertySet(Optional ByVal psProperty As String _
 
 Dim bSet As Boolean							&apos;	Return value
 Dim oDatabase As Object						&apos;	Database class instance
-Dim iCommandType As Integer					&apos;	Record source type: 0 = Table, 1 = Query, 2 = SELECT
+Dim lCommandType As Long					&apos;	Record source type: 0 = Table, 1 = Query, 2 = SELECT
 Dim sCommand As String						&apos;	Record source
 Static oSession As Object					&apos;	Alias of SF_Session
 Dim cstThisSub As String
@@ -1488,16 +1488,16 @@ Const cstSubArgs = &quot;Value&quot;
 					With oDatabase
 						If ScriptForge.SF_Array.Contains(.Tables, pvValue, CaseSensitive := True) Then
 							sCommand = pvValue
-							iCommandType = com.sun.star.sdb.CommandType.TABLE
+							lCommandType = com.sun.star.sdb.CommandType.TABLE
 						ElseIf ScriptForge.SF_Array.Contains(.Queries, pvValue, CaseSensitive := True) Then
 							sCommand = pvValue
-							iCommandType = com.sun.star.sdb.CommandType.QUERY
+							lCommandType = com.sun.star.sdb.CommandType.QUERY
 						ElseIf ScriptForge.SF_String.StartsWith(pvValue, &quot;SELECT&quot;, CaseSensitive := False) Then
 							sCommand = .ReplaceSquareBrackets(pvValue)
-							iCommandType = com.sun.star.sdb.CommandType.COMMAND
+							lCommandType = com.sun.star.sdb.CommandType.COMMAND
 						End If
 						_Form.Command = sCommand
-						_Form.CommandType = iCommandType
+						_Form.CommandType = lCommandType
 					End With
 				End If
 			End If
