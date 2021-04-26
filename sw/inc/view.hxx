@@ -591,7 +591,7 @@ public:
     void SetCursorAtTop( bool bFlag, bool bCenter = false )
         { m_bTopCursor = bFlag; m_bCenterCursor = bCenter; }
 
-    bool JumpToSwMark( const OUString& rMark );
+    bool JumpToSwMark( std::u16string_view rMark );
 
     tools::Long InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName,
                     const OUString& rFilterName, sal_Int16 nVersion = 0 );

@@ -150,7 +150,7 @@ public:
     virtual void ExportGrfBullet(const SwTextNode&) override;
 
     /// Returns the relationd id
-    OString AddRelation( const OUString& rType, const OUString& rTarget );
+    OString AddRelation( const OUString& rType, std::u16string_view rTarget );
 
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/ ) override { /* FIXME no-op for docx, most probably should not even be in MSWordExportBase */ }
     virtual void WriteChar( sal_Unicode ) override { SAL_WARN("sw.ww8", "FIXME: WriteChar() has nothing to do for docx."); }

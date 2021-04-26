@@ -1837,7 +1837,7 @@ public:     // really private, but can only be done public
     void Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, short nLen);
     tools::Long MapBookmarkVariables(const WW8FieldDesc* pF, OUString &rOrigName,
         const OUString &rData);
-    OUString GetMappedBookmark(const OUString &rOrigName);
+    OUString GetMappedBookmark(std::u16string_view rOrigName);
 
     // fields
     eF_ResT Read_F_Input(WW8FieldDesc*, OUString& rStr);
@@ -1932,7 +1932,7 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
                          const bool bFirstLineOfStSet,
                          const bool bLeftIndentSet );
 tools::Long GetListFirstLineIndent(const SwNumFormat &rFormat);
-OUString BookmarkToWriter(const OUString &rBookmark);
+OUString BookmarkToWriter(std::u16string_view rBookmark);
 bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
     sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize);

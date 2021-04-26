@@ -1087,7 +1087,7 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
         if( nTitleStart != -1 )
         {
             OUString sTitle( INetURLObject::decode(
-                                aFolderName.copy( nTitleStart + 1 ),
+                                aFolderName.subView( nTitleStart + 1 ),
                                 INetURLObject::DecodeMechanism::WithCharset ) );
 
             if( rFolder.mbIsFolder )

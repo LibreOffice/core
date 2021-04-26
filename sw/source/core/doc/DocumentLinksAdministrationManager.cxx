@@ -442,7 +442,7 @@ DocumentLinksAdministrationManager::~DocumentLinksAdministrationManager()
 {
 }
 
-bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, SwPaM*& rpPam, std::unique_ptr<SwNodeRange>& rpRange ) const
+bool DocumentLinksAdministrationManager::SelectServerObj( std::u16string_view rStr, SwPaM*& rpPam, std::unique_ptr<SwNodeRange>& rpRange ) const
 {
     // Do we actually have the Item?
     rpPam = nullptr;
