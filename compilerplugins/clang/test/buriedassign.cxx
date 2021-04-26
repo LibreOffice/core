@@ -43,6 +43,7 @@ struct MyInt
         : x(i)
     {
     }
+    MyInt(MyInt const&) = default;
     MyInt& operator=(MyInt const&) = default;
     MyInt& operator=(int) { return *this; }
     bool operator<(MyInt const& other) const { return x < other.x; }
