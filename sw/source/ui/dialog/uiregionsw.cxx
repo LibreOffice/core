@@ -172,7 +172,7 @@ public:
     size_t              GetArrPos() const { return m_nArrPos; }
     OUString            GetFile() const;
     OUString            GetSubRegion() const;
-    void                SetFile(OUString const& rFile);
+    void                SetFile(std::u16string_view rFile);
     void                SetFilter(std::u16string_view rFilter);
     void                SetSubRegion(std::u16string_view rSubRegion);
 
@@ -209,17 +209,17 @@ SectRepr::SectRepr( size_t nPos, SwSection& rSect )
     }
 }
 
-void SectRepr::SetFile( const OUString& rFile )
+void SectRepr::SetFile( std::u16string_view rFile )
 {
     OUString sNewFile( INetURLObject::decode( rFile,
                                            INetURLObject::DecodeMechanism::Unambiguous ));
     const OUString sOldFileName( m_SectionData.GetLinkFileName() );
     const OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
 
-    if( !rFile.isEmpty() || !sSub.isEmpty() )
+    if( !rFile.empty() || !sSub.isEmpty() )
     {
         sNewFile += OUStringChar(sfx2::cTokenSeparator);
-        if( !rFile.isEmpty() ) // Filter only with FileName
+        if( !rFile.empty() ) // Filter only with FileName
             sNewFile += sOldFileName.getToken( 1, sfx2::cTokenSeparator );
 
         sNewFile += OUStringChar(sfx2::cTokenSeparator) + sSub;
@@ -227,7 +227,7 @@ void SectRepr::SetFile( const OUString& rFile )
 
     m_SectionData.SetLinkFileName( sNewFile );
 
-    if( !rFile.isEmpty() || !sSub.isEmpty() )
+    if( !rFile.empty() || !sSub.isEmpty() )
     {
         m_SectionData.SetType( SectionType::FileLink );
     }
@@ -943,7 +943,7 @@ IMPL_LINK(SwEditRegionDlg, UseFileHdl, weld::ToggleButton&, rButton, void)
                 pSectRepr->SetContent(false);
             else
             {
-                pSectRepr->SetFile(OUString());
+                pSectRepr->SetFile(u"");
                 pSectRepr->SetSubRegion(std::u16string_view());
                 pSectRepr->GetSectionData().SetLinkFilePassword(OUString());
             }
@@ -1151,7 +1151,7 @@ IMPL_LINK(SwEditRegionDlg, DDEHdl, weld::ToggleButton&, rButton, void)
         m_xSubRegionED->hide();
         if (SectionType::FileLink == rData.GetType())
         {
-            pSectRepr->SetFile(OUString());
+            pSectRepr->SetFile(u"");
             m_xFileNameED->set_text(OUString());
             rData.SetLinkFilePassword(OUString());
         }
@@ -1170,7 +1170,7 @@ IMPL_LINK(SwEditRegionDlg, DDEHdl, weld::ToggleButton&, rButton, void)
         if (SectionType::DdeLink == rData.GetType())
         {
             rData.SetType(SectionType::FileLink);
-            pSectRepr->SetFile(OUString());
+            pSectRepr->SetFile(u"");
             rData.SetLinkFilePassword(OUString());
             m_xFileNameED->set_text(OUString());
         }

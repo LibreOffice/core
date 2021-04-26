@@ -839,12 +839,7 @@ public:
         @return  The text, decoded according to the given mechanism and
         charset (escape sequences replaced by 'raw' characters).
      */
-    static inline OUString decode(OUString const & rText,
-                                   DecodeMechanism eMechanism,
-                                   rtl_TextEncoding eCharset
-                                       = RTL_TEXTENCODING_UTF8);
-
-    static inline OUString decode(OUStringBuffer const & rText,
+    static inline OUString decode(std::u16string_view rText,
                                    DecodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset
                                        = RTL_TEXTENCODING_UTF8);
@@ -1298,19 +1293,11 @@ inline OUString INetURLObject::encode(OUString const & rText, Part ePart,
 }
 
 // static
-inline OUString INetURLObject::decode(OUString const & rText,
+inline OUString INetURLObject::decode(std::u16string_view rText,
                                        DecodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset)
 {
-    return decode(rText.getStr(), rText.getStr() + rText.getLength(),
-                  eMechanism, eCharset);
-}
-
-inline OUString INetURLObject::decode(OUStringBuffer const & rText,
-                                       DecodeMechanism eMechanism,
-                                       rtl_TextEncoding eCharset)
-{
-    return decode(rText.getStr(), rText.getStr() + rText.getLength(),
+    return decode(rText.data(), rText.data() + rText.size(),
                   eMechanism, eCharset);
 }
 

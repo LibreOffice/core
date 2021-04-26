@@ -2155,10 +2155,10 @@ static auto JumpToTOXMark(SwWrtShell & rSh, OUString const& rName) -> bool
     }
 }
 
-bool SwView::JumpToSwMark( const OUString& rMark )
+bool SwView::JumpToSwMark( std::u16string_view rMark )
 {
     bool bRet = false;
-    if( !rMark.isEmpty() )
+    if( !rMark.empty() )
     {
         // place bookmark at top-center
         bool bSaveCC = m_bCenterCursor;
