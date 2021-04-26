@@ -70,6 +70,24 @@
       "revId": "8971847ed31e73cad147c143a5b7b170d32d43d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c21810f1_40ba5cca",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5360,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-26T07:34:37Z",
+      "side": 1,
+      "message": "isDisposed is a better check here (I\u0027d like to get rid of IsDisposed, but there are some side effects I\u0027m still chasing)\n\nWindow::Command should be doing it\u0027s own isDisposed() checks",
+      "parentUuid": "c862db14_849f605f",
+      "revId": "8971847ed31e73cad147c143a5b7b170d32d43d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
