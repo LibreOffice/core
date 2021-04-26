@@ -54,7 +54,6 @@ class ScContentTree
     ScDocument*             pHiddenDocument;    // temporary
     bool                    bIsInNavigatorDlg;
     bool                    m_bFreeze;
-    OUString                sKeyString;
     ImplSVEvent*            m_nAsyncMouseReleaseId;
 
     o3tl::enumarray<ScContentId, sal_uInt16> pPosList;     // for the sequence
@@ -123,7 +122,6 @@ public:
     ScContentTree(std::unique_ptr<weld::TreeView> xTreeView, ScNavigatorDlg* pNavigatorDlg);
     ~ScContentTree();
 
-    void     ObjectFresh(ScContentId nType, const weld::TreeIter* pEntry = nullptr);
     void     SetNavigatorDlgFlag(bool isInNavigateDlg){ bIsInNavigatorDlg=isInNavigateDlg;};
 
     void    hide()

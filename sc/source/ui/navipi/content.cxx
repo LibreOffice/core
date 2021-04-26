@@ -455,7 +455,8 @@ IMPL_LINK(ScContentTree, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             break;
         }
     }
-    //Make KEY_SPACE has same function as DoubleClick
+    //Make KEY_SPACE has same function as DoubleClick, and realize
+    //multi-selection.
     if ( bIsInNavigatorDlg )
     {
         if(aCode.GetCode() == KEY_SPACE )
@@ -473,7 +474,6 @@ IMPL_LINK(ScContentTree, KeyInputHdl, const KeyEvent&, rKEvt, bool)
                 if ( bHiddenDoc )
                     return true;                //! later...
                 OUString aText(m_xTreeView->get_text(*xEntry));
-                sKeyString = aText;
                 if (!aManualDoc.isEmpty())
                     pParentWindow->SetCurrentDoc( aManualDoc );
                 switch (nType)
@@ -507,7 +507,6 @@ IMPL_LINK(ScContentTree, KeyInputHdl, const KeyEvent&, rKEvt, bool)
                             }
                             if (!bHasMakredObject && pScTabViewShell)
                                 pScTabViewShell->SetDrawShell(false);
-                            ObjectFresh(nType, xEntry.get());
                         }
                         break;
                     }
@@ -665,56 +664,6 @@ ScDocument* ScContentTree::GetSourceDocument()
 
     }
     return nullptr;
-}
-
-//Move along and draw "*" sign .
-void ScContentTree::ObjectFresh(ScContentId nType, const weld::TreeIter* pEntry)
-{
-    if (bHiddenDoc && !pHiddenDocument)
-        return;     // other document displayed
-
-    if (!(nType == ScContentId::GRAPHIC || nType == ScContentId::OLEOBJECT || nType == ScContentId::DRAWING))
-        return;
-
-    auto nOldChildren = m_aRootNodes[nType] ? m_xTreeView->iter_n_children(*m_aRootNodes[nType]) : 0;
-    auto nOldPos = m_xTreeView->vadjustment_get_value();
-
-    freeze();
-    ClearType( nType );
-    GetDrawNames( nType/*, nId*/ );
-    thaw();
-
-    auto nNewChildren = m_aRootNodes[nType] ? m_xTreeView->iter_n_children(*m_aRootNodes[nType]) : 0;
-    bool bRestorePos = nOldChildren == nNewChildren;
-
-    if (!pEntry)
-        ApplyNavigatorSettings(bRestorePos, nOldPos);
-    if (!pEntry)
-        return;
-
-    weld::TreeIter* pParent = m_aRootNodes[nType].get();
-    std::unique_ptr<weld::TreeIter> xOldEntry;
-    std::unique_ptr<weld::TreeIter> xBeginEntry(m_xTreeView->make_iterator(pParent));
-    bool bBeginEntry = false;
-    if( pParent )
-        bBeginEntry = m_xTreeView->iter_children(*xBeginEntry);
-    while (bBeginEntry)
-    {
-        OUString aTempText(m_xTreeView->get_text(*xBeginEntry));
-        if (aTempText == sKeyString)
-        {
-            xOldEntry = m_xTreeView->make_iterator(xBeginEntry.get());
-            break;
-        }
-        bBeginEntry = m_xTreeView->iter_next(*xBeginEntry);
-    }
-    if (xOldEntry)
-    {
-        m_xTreeView->expand_row(*pParent);
-        m_xTreeView->select(*xOldEntry);
-        m_xTreeView->set_cursor(*xOldEntry);
-        StoreNavigatorSettings();
-    }
 }
 
 void ScContentTree::Refresh( ScContentId nType )

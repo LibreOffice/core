@@ -541,11 +541,6 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 case SfxHintId::ScAnyDataChanged:
                     aContentIdle.Start();      // Do not search notes immediately
                     break;
-                case SfxHintId::ScKillEditView:
-                    m_xLbEntries->ObjectFresh( ScContentId::OLEOBJECT );
-                    m_xLbEntries->ObjectFresh( ScContentId::DRAWING );
-                    m_xLbEntries->ObjectFresh( ScContentId::GRAPHIC );
-                    break;
                 case SfxHintId::ScSelectionChanged:
                     UpdateSelection();
                     break;
