@@ -56,6 +56,7 @@ public:
     void testRhbz1390776();
     void testTdf104310();
     void testTdf31231();
+    void testTdf141914();
     void testTdf128951();
     void testTdf129789();
     void testTdf130725();
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(testRhbz1390776);
     CPPUNIT_TEST(testTdf104310);
     CPPUNIT_TEST(testTdf31231);
+    CPPUNIT_TEST(testTdf141914);
     CPPUNIT_TEST(testTdf128951);
     CPPUNIT_TEST(testTdf129789);
     CPPUNIT_TEST(testTdf130725);
@@ -526,6 +528,17 @@ void ScFiltersTest::testTdf31231()
     // We must open it read-write to allow setting modified flag
     ScDocShellRef xDocSh = loadDoc(u"tdf31231.", FORMAT_ODS, true);
     xDocSh->DoHardRecalc();
+
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state", xDocSh->IsEnableSetModified());
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", !xDocSh->IsModified());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf141914()
+{
+    // We must open it read-write to allow setting modified flag
+    ScDocShellRef xDocSh = loadDoc(u"tdf141914.", FORMAT_ODS, true);
 
     CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state", xDocSh->IsEnableSetModified());
     CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", !xDocSh->IsModified());
