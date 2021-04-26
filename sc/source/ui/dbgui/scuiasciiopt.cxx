@@ -36,6 +36,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <miscuno.hxx>
 #include <osl/diagnose.h>
+#include <vcl/svapp.hxx>
 
 #include <unicode/ucsdet.h>
 
@@ -527,6 +528,12 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
         mxCkbSkipEmptyCells->set_active(false);
         mxCkbSkipEmptyCells->hide();
     }
+    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, ScImportAsciiDlg, InstallLOKNotifierHdl));
+}
+
+IMPL_STATIC_LINK_NOARG(ScImportAsciiDlg, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+{
+    return GetpApp();
 }
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
