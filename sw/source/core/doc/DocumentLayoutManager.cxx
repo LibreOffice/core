@@ -474,6 +474,14 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         // presumably these anchors are supported though not sure
         assert(RndStdIds::FLY_AT_CHAR == boxAnchor.GetAnchorId() || RndStdIds::FLY_AT_PARA == boxAnchor.GetAnchorId()
         || boxAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE);
+
+        if (!bMakeFrames && rNewAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+        {
+            // If the draw format is as-char, then it will be copied with bMakeFrames=false, but
+            // doing the same for the fly format would result in not making fly frames at all.
+            bMakeFrames = true;
+        }
+
         SwFrameFormat* pDestTextBox = CopyLayoutFormat(*pSourceTextBox,
                 boxAnchor, bSetTextFlyAtt, bMakeFrames);
         SwAttrSet aSet(pDest->GetAttrSet());
