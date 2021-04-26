@@ -152,6 +152,23 @@
       "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "139358df_7fa7d2ac",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T18:23:19Z",
+      "side": 0,
+      "message": "So should we drop this special NaN handling in the first cell? Eike?",
+      "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

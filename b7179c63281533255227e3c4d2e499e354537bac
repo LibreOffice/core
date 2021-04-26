@@ -119,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "b14c0255_d9ac03e4",
+        "filename": "sc/source/core/tool/arraysumSSE2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T18:23:19Z",
+      "side": 1,
+      "message": "I reverted this file change. You may do that in command line like this:\n\n  git checkout origin/master sc/source/core/tool/arraysumSSE2.cxx",
+      "parentUuid": "4db430c3_d864c185",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0232f083_62399131",
         "filename": "sc/source/core/tool/interpr5.cxx",
         "patchSetId": 7
@@ -154,6 +172,30 @@
       "side": 1,
       "message": "Is there something wrong?",
       "parentUuid": "0232f083_62399131",
+      "range": {
+        "startLine": 1874,
+        "startChar": 45,
+        "endLine": 1874,
+        "endChar": 57
+      },
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "184ed342_14c55668",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T18:23:19Z",
+      "side": 1,
+      "message": "I meant that it\u0027s easier to just write\n\n        PushDouble(pResMat-\u003eSumSquare(false).get());",
+      "parentUuid": "ed676ade_b177428f",
       "range": {
         "startLine": 1874,
         "startChar": 45,
