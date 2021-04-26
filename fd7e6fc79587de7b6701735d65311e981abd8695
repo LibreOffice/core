@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db07f6bc_e746db6f",
+        "filename": "sc/inc/column.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-04-26T06:43:20Z",
+      "side": 1,
+      "message": "I\u0027m no C++ expert.\nI have to make known the MixDataHandler for the friend declaration. As this class is in the anonymous namespace I declared it like this. But I\u0027m not sure if this a good solution or not. Is it OK or is there a better solution?",
+      "revId": "fd7e6fc79587de7b6701735d65311e981abd8695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3a188c8_6440adb7",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1803,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-04-26T06:43:20Z",
+      "side": 1,
+      "message": "C++ has always surprises for non-C++ programmers.\n\nDespite having e.g maNewCells with 3 cells, the loop may only pass once!\nI cannot fully understand it.\n\nIs it because of\n- sc::numeric_block::end(*rNewCell.data);\n- sc::string_block::end(*rNewCell.data);\n- sc::edittext_block::end(*rNewCell.data);\n- sc::formula_block::end(*rNewCell.data);\ncalls?\n\nDoes the iterator end() call advance the loop elements?",
+      "revId": "fd7e6fc79587de7b6701735d65311e981abd8695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd87f082_d20993fc",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1857,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-04-26T06:43:20Z",
+      "side": 1,
+      "message": "Get number of cells of \"loop jumps\".\nI tested several cases in unit tests. This solution passes.",
+      "revId": "fd7e6fc79587de7b6701735d65311e981abd8695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
