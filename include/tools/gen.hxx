@@ -497,8 +497,7 @@ public:
         if (IsEmpty())
             return Point(nLeft, nTop);
         else
-            return Point(std::min(nLeft, nRight) + std::abs((nRight - nLeft) / 2),
-                         std::min(nTop,  nBottom));
+            return Point((nLeft + nRight) / 2, std::min(nTop, nBottom));
     }
     inline Point BottomLeft() const;
     inline Point BottomRight() const;
@@ -677,8 +676,7 @@ inline Point tools::Rectangle::BottomCenter() const
     if ( IsEmpty() )
         return Point( nLeft, nTop );
     else
-        return Point( std::min( nLeft, nRight ) + std::abs( (nRight - nLeft)/2 ),
-                      std::max( nTop,  nBottom) );
+        return Point((nLeft + nRight) / 2, std::max(nTop, nBottom));
 }
 
 inline Point tools::Rectangle::LeftCenter() const
@@ -686,7 +684,7 @@ inline Point tools::Rectangle::LeftCenter() const
     if ( IsEmpty() )
         return Point( nLeft, nTop );
     else
-        return Point( std::min( nLeft, nRight ), nTop + (nBottom - nTop)/2 );
+        return Point(std::min(nLeft, nRight), (nTop + nBottom) / 2);
 }
 
 inline Point tools::Rectangle::RightCenter() const
@@ -694,7 +692,7 @@ inline Point tools::Rectangle::RightCenter() const
     if ( IsEmpty() )
         return Point( nLeft, nTop );
     else
-        return Point( std::max( nLeft, nRight ), nTop + (nBottom - nTop)/2 );
+        return Point(std::max(nLeft, nRight), (nTop + nBottom) / 2);
 }
 
 inline Point tools::Rectangle::Center() const
@@ -702,7 +700,7 @@ inline Point tools::Rectangle::Center() const
     if ( IsEmpty() )
         return Point( nLeft, nTop );
     else
-        return Point( nLeft+(nRight-nLeft)/2 , nTop+(nBottom-nTop)/2 );
+        return Point((nLeft + nRight) / 2, (nTop + nBottom) / 2);
 }
 
 inline void tools::Rectangle::Move( tools::Long nHorzMove, tools::Long nVertMove )
