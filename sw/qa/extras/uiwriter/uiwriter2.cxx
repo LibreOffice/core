@@ -3157,6 +3157,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageCommentAtChar)
     CPPUNIT_ASSERT_EQUAL(*pImageAnchor, rAnnotationMarkStart);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTrackImageDeletion)
+{
+    // load a document with an image anchored to paragraph in it
+    SwDoc* pDoc = createDoc("image.odt");
+    SwView* pView = pDoc->GetDocShell()->GetView();
+
+    // select the image
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+
+    // turn on red-lining and show changes
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+
+    rIDRA.SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // now delete the image with track changes
+    pView->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
+
+    const SwRedlineTable& rTable = rIDRA.GetRedlineTable();
+    // this was 0 (missing recording of deletion of images)
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338)
 {
     load(DATA_DIRECTORY, "tdf120338.docx");
