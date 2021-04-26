@@ -88,6 +88,24 @@
       "revId": "8971847ed31e73cad147c143a5b7b170d32d43d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e156cdb2_b8621dc8",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5360,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-04-26T10:45:34Z",
+      "side": 1,
+      "message": "I assumed isDisposed() was a typo of IsDisposed(). /me hopes noel can get rid of the latter...\n\nDone",
+      "parentUuid": "c21810f1_40ba5cca",
+      "revId": "8971847ed31e73cad147c143a5b7b170d32d43d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
