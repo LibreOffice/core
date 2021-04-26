@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4fa68b7_1cd7570d",
+        "filename": "sc/inc/matrixoperators.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T16:37:36Z",
+      "side": 0,
+      "message": "Please no unrelated whitespace changes. This whole part is just a cosmetic re-formatting, and I needed to read it carefully to make sure it doesn\u0027t change logic. This is valid as a separate commit, but not where you expect reviewer to follow the code change.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 2
+      },
+      "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

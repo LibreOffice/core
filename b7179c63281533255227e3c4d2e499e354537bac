@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "984cc71f_c68701c5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T16:37:36Z",
+      "side": 1,
+      "message": "Please expand on this (which functions you mean), or maybe just make the mentioned changes?",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9180211b_8e0bc7d7",
         "filename": "sc/qa/uitest/calc_tests6/tdf118638.py",
         "patchSetId": 7
@@ -19,6 +36,40 @@
         "endLine": 50,
         "endChar": 84
       },
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39398bf8_8d56c33a",
+        "filename": "sc/source/core/tool/arraysumSSE2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T16:37:36Z",
+      "side": 1,
+      "message": "This file is unchanged at all - except for this trailing newline.",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cf0f007_7cbc77cd",
+        "filename": "sc/source/core/tool/matrixoperators.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T16:37:36Z",
+      "side": 1,
+      "message": "Since the whitespace changes here cover almost exclusively the lines that also have functional changes, I suppose it\u0027s OK to keep this file formatted as you did.",
       "revId": "b7179c63281533255227e3c4d2e499e354537bac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
