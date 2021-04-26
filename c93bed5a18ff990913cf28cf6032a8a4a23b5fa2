@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28ec8886_165902a1",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T07:10:13Z",
+      "side": 1,
+      "message": "This should be a trailing (last in file before last newline) line, right?",
+      "revId": "c93bed5a18ff990913cf28cf6032a8a4a23b5fa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
