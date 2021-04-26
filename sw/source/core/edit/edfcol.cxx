@@ -2205,7 +2205,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
     {
         OUString aName;
         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(pLocal->GetName(), SwGetPoolIdFromName::TxtColl);
-        SwStyleNameMapper::FillProgName(nId, aName);
+        SwStyleNameMapper::GetUIName(nId, aName);
         if (!aName.isEmpty())
             pLocal->SetName(aName);
     }
