@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28fe449c_e0f0fb73",
+        "filename": "sw/qa/uitest/writer_tests7/tdf140731.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-04-26T11:13:41Z",
+      "side": 1,
+      "message": "you can replace these with UNO commands. For instance: self.xUITest.executeCommand(\".uno:SelectAll\")",
+      "revId": "0a8b06de52d56eec1d0aacc3ce4092c575204264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
