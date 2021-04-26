@@ -22,6 +22,46 @@
       "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "371e20e5_62ea982c",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T17:00:15Z",
+      "side": 0,
+      "message": "sc::div does more than just division: it also sets proper error status. Is it actually not needed here now?",
+      "range": {
+        "startLine": 495,
+        "startChar": 19,
+        "endLine": 495,
+        "endChar": 26
+      },
+      "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6cbdcae_6835444a",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T17:00:15Z",
+      "side": 0,
+      "message": "This comment is still valid",
+      "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

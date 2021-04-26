@@ -59,6 +59,69 @@
     },
     {
       "key": {
+        "uuid": "0232f083_62399131",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T17:00:15Z",
+      "side": 1,
+      "message": "SumSquare returns KahanIterateResult, which has its own get().",
+      "range": {
+        "startLine": 1874,
+        "startChar": 45,
+        "endLine": 1874,
+        "endChar": 57
+      },
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fb075e9_637da2ac",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T17:00:15Z",
+      "side": 1,
+      "message": "This comment is unrelated. Please file a bug if you think it\u0027s so (to allow discussion), and then propose a change; but leaving this comment here may be dangerous, if it turns out that there\u0027s e.g. a standard requirement to return 0, and someone will be confused by this.",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41fce26b_a8546784",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T17:00:15Z",
+      "side": 1,
+      "message": "This change is unrelated.",
+      "range": {
+        "startLine": 466,
+        "startChar": 8,
+        "endLine": 466,
+        "endChar": 13
+      },
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9cf0f007_7cbc77cd",
         "filename": "sc/source/core/tool/matrixoperators.cxx",
         "patchSetId": 7
