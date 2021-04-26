@@ -1341,7 +1341,7 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pField,
     return pRet;
 }
 
-OUString SwWW8ImplReader::GetMappedBookmark(const OUString &rOrigName)
+OUString SwWW8ImplReader::GetMappedBookmark(std::u16string_view rOrigName)
 {
     OUString sName(BookmarkToWriter(rOrigName));
     OSL_ENSURE(m_xPlcxMan, "no pPlcxMan");

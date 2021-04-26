@@ -49,7 +49,7 @@ void RepaintPagePreview( SwViewShell const * pVwSh, const SwRect& rRect );
 // Read ChgMode for tables from configuration.
 TableChgMode GetTableChgDefaultMode();
 
-bool JumpToSwMark( SwViewShell const * pVwSh, const OUString& rMark );
+bool JumpToSwMark( SwViewShell const * pVwSh, std::u16string_view rMark );
 
 #endif
 

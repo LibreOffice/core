@@ -3121,12 +3121,12 @@ void WW8Export::StoreDoc1()
     WriteFkpPlcUsw();                   // FKP, PLC, ...
 }
 
-void MSWordExportBase::AddLinkTarget(const OUString& rURL)
+void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
 {
-    if( rURL.isEmpty() || rURL[0] != '#' )
+    if( rURL.empty() || rURL[0] != '#' )
         return;
 
-    OUString aURL( BookmarkToWriter( rURL.copy( 1 ) ) );
+    OUString aURL( BookmarkToWriter( rURL.substr( 1 ) ) );
     sal_Int32 nPos = aURL.lastIndexOf( cMarkSeparator );
 
     if( nPos < 2 )
@@ -3143,7 +3143,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     if( sCmp == "outline" )
     {
         SwPosition aPos(*m_pCurPam->GetPoint());
-        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
+        OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
         // If we can find the outline this bookmark refers to
         // save the name of the bookmark and the
         // node index number of where it points to
@@ -3156,7 +3156,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     else if( sCmp == "graphic" )
     {
         SwNodeIndex* pIdx;
-        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
+        OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
         const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Grf);
         if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
         {
@@ -3167,7 +3167,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     else if( sCmp == "frame" )
     {
         SwNodeIndex* pIdx;
-        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
+        OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
         const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Text);
         if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
         {
@@ -3178,7 +3178,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     else if( sCmp == "ole" )
     {
         SwNodeIndex* pIdx;
-        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
+        OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
         const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Ole);
         if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
         {
@@ -3189,7 +3189,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     else if( sCmp == "region" )
     {
         SwNodeIndex* pIdx;
-        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
+        OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
         for (const SwSectionFormat* pFormat : m_rDoc.GetSections())
         {
             if (aName == pFormat->GetSection()->GetSectionName()
@@ -3203,7 +3203,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     }
     else if( sCmp == "table" )
     {
-        OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
+        OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
         const SwTable* pTable = SwTable::FindTable(m_rDoc.FindTableFormatByName(aName));
         if (pTable)
         {

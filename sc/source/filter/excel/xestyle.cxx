@@ -3189,7 +3189,7 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr aStyleSheet = rStrm.CreateOutputStream(
             "xl/styles.xml",
-            "styles.xml",
+            u"styles.xml",
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml",
             oox::getRelationship(Relationship::STYLES));

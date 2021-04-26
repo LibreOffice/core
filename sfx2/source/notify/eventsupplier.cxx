@@ -431,7 +431,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
             sal_Int32 nArgsPos = aScript.indexOf( '(' );
             if ( ( nThirdSlashPos != -1 ) && ( nArgsPos == -1 || nThirdSlashPos < nArgsPos ) )
             {
-                OUString aBasMgrName( INetURLObject::decode( aScript.copy( 8, nThirdSlashPos-8 ), INetURLObject::DecodeMechanism::WithCharset ) );
+                OUString aBasMgrName( INetURLObject::decode( aScript.subView( 8, nThirdSlashPos-8 ), INetURLObject::DecodeMechanism::WithCharset ) );
                 if (pDoc && aBasMgrName == ".")
                     aLibrary = pDoc->GetTitle();
                 else

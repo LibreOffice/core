@@ -939,7 +939,7 @@ void XclExpXmlStream::WriteAttribute(sal_Int32 nAttr, std::u16string_view sVal)
 
 sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     const OUString& sFullStream,
-    const OUString& sRelativeStream,
+    std::u16string_view sRelativeStream,
     const uno::Reference< XOutputStream >& xParentRelation,
     const char* sContentType,
     std::u16string_view sRelationshipType,
@@ -1093,7 +1093,7 @@ bool XclExpXmlStream::exportDocument()
                 openFragmentStream("xl/vbaProject.bin", "application/vnd.ms-office.vbaProject");
             comphelper::OStorageHelper::CopyInputToOutput(xVBAStream, xVBAOutput);
 
-            addRelation(GetCurrentStream()->getOutputStream(), oox::getRelationship(Relationship::VBAPROJECT), "vbaProject.bin");
+            addRelation(GetCurrentStream()->getOutputStream(), oox::getRelationship(Relationship::VBAPROJECT), u"vbaProject.bin");
         }
     }
 
