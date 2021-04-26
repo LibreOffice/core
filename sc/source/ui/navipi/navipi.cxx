@@ -484,8 +484,14 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if (pHint->GetEventId() == SfxEventHintId::ActivateDoc)
         {
             UpdateSheetLimits();
-            m_xLbEntries->ActiveDocChanged();
-            UpdateAll();
+            bool bRefreshed = m_xLbEntries->ActiveDocChanged();
+            // UpdateAll just possibly calls Refresh (and always
+            // ContentUpdated) so if ActiveDocChanged already called Refresh
+            // skip re-calling it
+            if (bRefreshed)
+                ContentUpdated();
+            else
+                UpdateAll();
         }
     }
     else
@@ -750,7 +756,12 @@ void ScNavigatorDlg::UpdateAll()
             break;
     }
 
-    aContentIdle.Stop();       // not again
+    ContentUpdated();       // not again
+}
+
+void ScNavigatorDlg::ContentUpdated()
+{
+    aContentIdle.Stop();
 }
 
 void ScNavigatorDlg::SetListMode(NavListMode eMode)
