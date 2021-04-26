@@ -497,7 +497,7 @@ public:
         if (IsEmpty())
             return Point(nLeft, nTop);
         else
-            return Point(std::min(nLeft, nRight) + std::abs((nRight - nLeft) / 2),
+            return Point(nLeft + (nRight - nLeft) / 2,
                          std::min(nTop,  nBottom));
     }
     inline Point BottomLeft() const;
@@ -677,7 +677,7 @@ inline Point tools::Rectangle::BottomCenter() const
     if ( IsEmpty() )
         return Point( nLeft, nTop );
     else
-        return Point( std::min( nLeft, nRight ) + std::abs( (nRight - nLeft)/2 ),
+        return Point( nLeft + (nRight - nLeft)/2,
                       std::max( nTop,  nBottom) );
 }
 
