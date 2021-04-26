@@ -229,7 +229,7 @@ sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities()
                                       static_cast<XClipboardEx*>(this));
 
     using namespace datatransfer::clipboard::RenderingCapabilities;
-    return (Delayed | Persistant);
+    return (Delayed | Persistent);
 }
 
 // XClipboardNotifier
