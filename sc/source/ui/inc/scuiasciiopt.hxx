@@ -121,6 +121,8 @@ private:
                                 DECL_LINK( LbColTypeHdl, weld::ComboBox&, void );
                                 DECL_LINK( UpdateTextHdl, ScCsvTableBox&, void );
                                 DECL_LINK( ColTypeHdl, ScCsvTableBox&, void );
+                                DECL_STATIC_LINK(ScImportAsciiDlg, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+
 };
 
 inline bool ScImportAsciiDlg::Seek(sal_uLong nPos)
