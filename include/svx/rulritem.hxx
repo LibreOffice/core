@@ -46,6 +46,7 @@ public:
     static SfxPoolItem* CreateDefault();
     SvxLongLRSpaceItem(tools::Long lLeft, tools::Long lRight, sal_uInt16 nId);
     SvxLongLRSpaceItem();
+    SvxLongLRSpaceItem(SvxLongLRSpaceItem const &) = default;
 
     tools::Long GetLeft() const { return mlLeft;}
     tools::Long GetRight() const { return mlRight;}
@@ -75,6 +76,7 @@ public:
     static SfxPoolItem* CreateDefault();
     SvxLongULSpaceItem(tools::Long lUpper, tools::Long lLower, sal_uInt16 nId);
     SvxLongULSpaceItem();
+    SvxLongULSpaceItem(SvxLongULSpaceItem const &) = default;
 
     tools::Long GetUpper() const { return mlLeft;}
     tools::Long GetLower() const { return mlRight;}
@@ -105,6 +107,7 @@ public:
     static SfxPoolItem* CreateDefault();
     SvxPagePosSizeItem(const Point &rPos, tools::Long lWidth, tools::Long lHeight);
     SvxPagePosSizeItem();
+    SvxPagePosSizeItem(SvxPagePosSizeItem const &) = default;
 
     const Point &GetPos() const { return aPos; }
     tools::Long    GetWidth() const { return lWidth; }
@@ -215,6 +218,7 @@ public:
     static SfxPoolItem* CreateDefault();
     SvxObjectItem(tools::Long nStartX, tools::Long nEndX,
                   tools::Long nStartY, tools::Long nEndY);
+    SvxObjectItem(SvxObjectItem const &) = default;
 
     tools::Long GetStartX() const { return nStartX;}
     tools::Long GetEndX() const { return nEndX;}

@@ -315,6 +315,7 @@ namespace sw
             SwDoc &mrDoc;
         public:
             explicit SetInDocAndDelete(SwDoc &rDoc) : mrDoc(rDoc) {}
+            SetInDocAndDelete(SetInDocAndDelete const &) = default;
             void operator()(std::unique_ptr<SwFltStackEntry> & pEntry);
         private:
             SetInDocAndDelete& operator=(const SetInDocAndDelete&) = delete;
@@ -331,6 +332,7 @@ namespace sw
                 if (pEntry->bOpen)
                     pEntry->SetEndPos(mrPos);
             }
+            SetEndIfOpen(SetEndIfOpen const &) = default;
         private:
             SetEndIfOpen& operator=(const SetEndIfOpen&) = delete;
         };
