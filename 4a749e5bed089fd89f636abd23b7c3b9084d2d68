@@ -70,6 +70,30 @@
       "revId": "4a749e5bed089fd89f636abd23b7c3b9084d2d68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f63eea0b_4023612a",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T07:11:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df2c365b_f6976791",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 64
+      },
+      "revId": "4a749e5bed089fd89f636abd23b7c3b9084d2d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
