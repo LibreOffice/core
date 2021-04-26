@@ -1616,7 +1616,7 @@ static void lcl_WriteUserNamesXml( XclExpXmlStream& rWorkbookStrm )
 {
     sax_fastparser::FSHelperPtr pUserNames = rWorkbookStrm.CreateOutputStream(
             "xl/revisions/userNames.xml",
-            "revisions/userNames.xml",
+            u"revisions/userNames.xml",
             rWorkbookStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.userNames+xml",
             CREATE_OFFICEDOC_RELATION_TYPE("usernames"));
@@ -1639,7 +1639,7 @@ void XclExpChangeTrack::WriteXml( XclExpXmlStream& rWorkbookStrm )
 
     sax_fastparser::FSHelperPtr pRevisionHeaders = rWorkbookStrm.CreateOutputStream(
             "xl/revisions/revisionHeaders.xml",
-            "revisions/revisionHeaders.xml",
+            u"revisions/revisionHeaders.xml",
             rWorkbookStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.revisionHeaders+xml",
             CREATE_OFFICEDOC_RELATION_TYPE("revisionHeaders"));
