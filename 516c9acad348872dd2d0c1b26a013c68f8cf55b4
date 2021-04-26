@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f977f26f_1c8f56e3",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-04-26T11:46:46Z",
+      "side": 1,
+      "message": "This is still in the code..",
+      "revId": "516c9acad348872dd2d0c1b26a013c68f8cf55b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
