@@ -2195,16 +2195,6 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
 
     SwRewriter aRewriter;
 
-    // in online we can have multiple languages, use universal name then
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        OUString aName;
-        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(pLocal->GetName(), SwGetPoolIdFromName::TxtColl);
-        SwStyleNameMapper::FillProgName(nId, aName);
-        if (!aName.isEmpty())
-            pLocal->SetName(aName);
-    }
-
     aRewriter.AddRule(UndoArg1, pLocal->GetName());
 
     GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::SETFMTCOLL, &aRewriter);
