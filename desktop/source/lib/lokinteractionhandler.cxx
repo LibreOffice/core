@@ -40,6 +40,8 @@
 #include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 #include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
 
+#include <com/sun/star/document/FilterOptionsRequest.hpp>
+
 #include "../../inc/lib/init.hxx"
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -341,6 +343,23 @@ bool LOKInteractionHandler::handleMacroConfirmationRequest(const uno::Reference<
     if (request >>= aConfirmRequest)
     {
         auto xInteraction(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr));
+        if (xInteraction.is())
+            xInteraction->handleInteractionRequest(xRequest);
+
+        return true;
+    }
+    return false;
+}
+
+bool LOKInteractionHandler::handleFilterOptionsRequest(const uno::Reference<task::XInteractionRequest>& xRequest)
+{
+    document::FilterOptionsRequest aFilterOptionsRequest;
+    uno::Any const request(xRequest->getRequest());
+    if (request >>= aFilterOptionsRequest)
+    {
+        uno::Reference< task::XInteractionHandler2 > xInteraction(
+            task::InteractionHandler::createWithParent(
+                ::comphelper::getProcessComponentContext(), nullptr));
 
         if (xInteraction.is())
             xInteraction->handleInteractionRequest(xRequest);
@@ -363,6 +382,9 @@ sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
         return true;
 
     if (handlePasswordRequest(rContinuations, request))
+        return true;
+
+    if (handleFilterOptionsRequest(xRequest))
         return true;
 
     if (handleMacroConfirmationRequest(xRequest))
