@@ -311,7 +311,7 @@ Try:
 		Case Not IsNull(vContext) And IsNull(oComp)		&apos;	Python and GlobalScope
 			Set oDialogProvider = vContext.getServiceManager().createInstanceWithContext(&quot;com.sun.star.awt.DialogProvider&quot;, vContext)
 		Case Not IsNull(vContext) And Not IsNull(oComp)	&apos;	Python and Document
-			Set oDialogProvider = vContext.getServiceManager().createInstanceWithContext(&quot;com.sun.star.awt.DialogProvider&quot;, Array(oComp))
+			Set oDialogProvider = vContext.getServiceManager().createInstanceWithArguments(&quot;com.sun.star.awt.DialogProvider&quot;, Array(oComp))
 	End Select
 
 	&apos;	Create the graphical interface
