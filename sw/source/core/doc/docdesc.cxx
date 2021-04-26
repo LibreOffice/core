@@ -498,9 +498,6 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
                 lDelHFFormat(&rDescLeftFooterFormat, rDescLeftFooterFormat.GetFooterFormat());
             else if (rDescFirstLeftFooterFormat.GetFooterFormat() && rDescFirstLeftFooterFormat != rChgedFirstLeftFooterFormat)
                 lDelHFFormat(&rDescFirstLeftFooterFormat, rDescFirstLeftFooterFormat.GetFooterFormat());
-
-            // FIXME: Disable redoing this change until we figure out how
-            GetIDocumentUndoRedo().ClearRedo();
         }
     }
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
