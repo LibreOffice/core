@@ -1184,7 +1184,7 @@ struct ConventionXL
         return lcl_makeExternalNameStr( rFile, rName, '!', false);
     }
 
-    static void makeExternalDocStr( OUStringBuffer& rBuffer, const OUString& rFullName )
+    static void makeExternalDocStr( OUStringBuffer& rBuffer, std::u16string_view rFullName )
     {
         // Format that is easier to deal with inside OOo, because we use file
         // URL, and all characters are allowed.  Check if it makes sense to do

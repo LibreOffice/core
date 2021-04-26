@@ -507,7 +507,7 @@ TextFieldStack& XmlFilterBase::getTextFieldStack() const
 
 namespace {
 
-OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal_Int32 nId, const OUString& rType, const OUString& rTarget, bool bExternal )
+OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal_Int32 nId, const OUString& rType, std::u16string_view rTarget, bool bExternal )
 {
     OUString sId = "rId" + OUString::number( nId );
 
@@ -528,7 +528,7 @@ OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal
 
 } // namespace
 
-OUString XmlFilterBase::addRelation( const OUString& rType, const OUString& rTarget )
+OUString XmlFilterBase::addRelation( const OUString& rType, std::u16string_view rTarget )
 {
     Reference< XRelationshipAccess > xRelations( getStorage()->getXStorage(), UNO_QUERY );
     if( xRelations.is() )
@@ -537,7 +537,7 @@ OUString XmlFilterBase::addRelation( const OUString& rType, const OUString& rTar
     return OUString();
 }
 
-OUString XmlFilterBase::addRelation( const Reference< XOutputStream >& rOutputStream, const OUString& rType, const OUString& rTarget, bool bExternal )
+OUString XmlFilterBase::addRelation( const Reference< XOutputStream >& rOutputStream, const OUString& rType, std::u16string_view rTarget, bool bExternal )
 {
     sal_Int32 nId = 0;
 
@@ -631,7 +631,7 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
     else
         sValue = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 
-    rSelf.addRelation( sValue, "docProps/core.xml" );
+    rSelf.addRelation( sValue, u"docProps/core.xml" );
     FSHelperPtr pCoreProps = rSelf.openFragmentStreamWithSerializer(
             "docProps/core.xml",
             "application/vnd.openxmlformats-package.core-properties+xml" );
@@ -705,7 +705,7 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
 {
     rSelf.addRelation(
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
-            "docProps/app.xml" );
+            u"docProps/app.xml" );
     FSHelperPtr pAppProps = rSelf.openFragmentStreamWithSerializer(
             "docProps/app.xml",
             "application/vnd.openxmlformats-officedocument.extended-properties+xml" );
@@ -845,7 +845,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
 
     rSelf.addRelation(
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
-            "docProps/custom.xml" );
+            u"docProps/custom.xml" );
     FSHelperPtr pAppProps = rSelf.openFragmentStreamWithSerializer(
             "docProps/custom.xml",
             "application/vnd.openxmlformats-officedocument.custom-properties+xml" );
@@ -1177,7 +1177,7 @@ void XmlFilterBase::exportCustomFragments()
         const OUString fragmentPath = "customXml/item" + OUString::number((j+1)) + ".xml";
         if (customXmlDom.is())
         {
-            addRelation(oox::getRelationship(Relationship::CUSTOMXML), "../" + fragmentPath);
+            addRelation(oox::getRelationship(Relationship::CUSTOMXML), OUString("../" + fragmentPath));
 
             uno::Reference<xml::sax::XSAXSerializable> serializer(customXmlDom, uno::UNO_QUERY);
             uno::Reference<xml::sax::XWriter> writer = xml::sax::Writer::create(comphelper::getProcessComponentContext());
@@ -1198,7 +1198,7 @@ void XmlFilterBase::exportCustomFragments()
             // Adding itemprops's relationship entry to item.xml.rels file
             addRelation(openFragmentStream(fragmentPath, "application/xml"),
                         oox::getRelationship(Relationship::CUSTOMXMLPROPS),
-                        "itemProps"+OUString::number((j+1))+".xml");
+                        OUString("itemProps"+OUString::number((j+1))+".xml"));
         }
     }
 

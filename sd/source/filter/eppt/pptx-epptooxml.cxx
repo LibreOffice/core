@@ -384,7 +384,7 @@ bool PowerPointExport::exportDocument()
     //write document properties
     writeDocumentProperties();
 
-    addRelation(oox::getRelationship(Relationship::OFFICEDOCUMENT), "ppt/presentation.xml");
+    addRelation(oox::getRelationship(Relationship::OFFICEDOCUMENT), u"ppt/presentation.xml");
 
     OUString aMediaType;
     if (mbPptm)
@@ -414,7 +414,7 @@ bool PowerPointExport::exportDocument()
 
     addRelation(mPresentationFS->getOutputStream(),
                 oox::getRelationship(Relationship::THEME),
-                "theme/theme1.xml");
+                u"theme/theme1.xml");
 
     mPresentationFS->startElementNS(XML_p, XML_presentation, PNMSS);
 
@@ -953,7 +953,7 @@ void PowerPointExport::WriteAuthors()
                       "application/vnd.openxmlformats-officedocument.presentationml.commentAuthors+xml");
     addRelation(mPresentationFS->getOutputStream(),
                 oox::getRelationship(Relationship::COMMENTAUTHORS),
-                "commentAuthors.xml");
+                u"commentAuthors.xml");
 
     pFS->startElementNS(XML_p, XML_cmAuthorLst,
                         FSNS(XML_xmlns, XML_p), getNamespaceURL(OOX_NS(ppt)));
@@ -1070,7 +1070,7 @@ void PowerPointExport::WriteVBA()
     comphelper::OStorageHelper::CopyInputToOutput(xMacrosStream, xOutputStream);
 
     // Write the relationship.
-    addRelation(mPresentationFS->getOutputStream(), oox::getRelationship(Relationship::VBAPROJECT), "vbaProject.bin");
+    addRelation(mPresentationFS->getOutputStream(), oox::getRelationship(Relationship::VBAPROJECT), u"vbaProject.bin");
 }
 
 void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 /* nMode */,
@@ -1205,7 +1205,7 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
     // add implicit relation to notes master
     addRelation(pFS->getOutputStream(),
                 oox::getRelationship(Relationship::NOTESMASTER),
-                "../notesMasters/notesMaster1.xml");
+                u"../notesMasters/notesMaster1.xml");
 
     SAL_INFO("sd.eppt", "-----------------");
 }
@@ -1879,7 +1879,7 @@ void PowerPointExport::WriteNotesMaster()
 
     OUString sRelId = addRelation(mPresentationFS->getOutputStream(),
                                   oox::getRelationship(Relationship::NOTESMASTER),
-                                  "notesMasters/notesMaster1.xml");
+                                  u"notesMasters/notesMaster1.xml");
 
     mPresentationFS->singleElementNS(XML_p, XML_notesMasterId,
                                      FSNS(XML_r, XML_id), sRelId);

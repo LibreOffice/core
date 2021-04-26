@@ -309,7 +309,7 @@ public:
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,
-                                        const OUString& sRelativeStream,
+                                        std::u16string_view sRelativeStream,
                                         const css::uno::Reference< css::io::XOutputStream >& xParentRelation,
                                         const char* sContentType,
                                         std::u16string_view sRelationshipType,

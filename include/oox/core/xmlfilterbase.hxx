@@ -163,7 +163,7 @@ public:
 
         @return  Added relation Id.
      */
-    OUString     addRelation( const OUString& rType, const OUString& rTarget );
+    OUString     addRelation( const OUString& rType, std::u16string_view rTarget );
 
     /** Adds new relation to part's relations.
 
@@ -178,7 +178,7 @@ public:
 
         @return  Added relation Id.
      */
-    OUString     addRelation( const css::uno::Reference< css::io::XOutputStream >& rOutputStream, const OUString& rType, const OUString& rTarget, bool bExternal = false );
+    OUString     addRelation( const css::uno::Reference< css::io::XOutputStream >& rOutputStream, const OUString& rType, std::u16string_view rTarget, bool bExternal = false );
 
     /** Returns a stack of used textfields, used by the pptx importer to replace links to slidepages with the real page name */
     TextFieldStack& getTextFieldStack() const;

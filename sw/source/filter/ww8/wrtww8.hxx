@@ -834,7 +834,7 @@ protected:
     /// Setup the chapter fields (maChapterFieldLocs).
     void GatherChapterFields();
 
-    void AddLinkTarget( const OUString& rURL );
+    void AddLinkTarget( std::u16string_view rURL );
     void CollectOutlineBookmarks( const SwDoc &rDoc );
 
     bool SetCurrentPageDescFromNode(const SwNode &rNd);
