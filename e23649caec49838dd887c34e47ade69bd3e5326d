@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "c4d15f8b_f380ecef",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T18:24:31Z",
+      "side": 0,
+      "message": "Something with gerrit went wrong.\nIf you check patch 7 to 8 it\u0027s unchanged.\nIf you check patch 8 to 9 it\u0027s unchanged.\nIf you check patch 7 to 9 it\u0027s changed.",
+      "parentUuid": "47f19510_a052c531",
+      "range": {
+        "startLine": 495,
+        "startChar": 19,
+        "endLine": 495,
+        "endChar": 26
+      },
+      "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6cbdcae_6835444a",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 7

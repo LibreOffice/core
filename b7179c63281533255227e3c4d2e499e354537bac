@@ -261,6 +261,24 @@
     },
     {
       "key": {
+        "uuid": "f0f157b9_9fac420b",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T18:24:31Z",
+      "side": 1,
+      "message": "Yes it is:\nhttps://en.wikipedia.org/wiki/Product_(mathematics)#Product_of_a_sequence\nIt\u0027s defined that way because:\nn! \u003d prod from i\u003d1 to n i\nSo with 0 terms it\u0027s 0! \u003d 1.\nIt\u0027s an arbitrary definition used for simplification.",
+      "parentUuid": "addeb432_e15ade56",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41fce26b_a8546784",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 7
@@ -332,6 +350,30 @@
     },
     {
       "key": {
+        "uuid": "2b9d94cb_939292e1",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T18:24:31Z",
+      "side": 1,
+      "message": "Something with gerrit went wrong.\nIf you check patch 7 to 8 it\u0027s unchanged.\nIf you check patch 8 to 9 it\u0027s unchanged.\nIf you check patch 7 to 9 it\u0027s changed.",
+      "parentUuid": "e6e76550_d1959143",
+      "range": {
+        "startLine": 466,
+        "startChar": 8,
+        "endLine": 466,
+        "endChar": 13
+      },
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f28a05d_fc9f71e9",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 7
@@ -346,6 +388,24 @@
       "revId": "b7179c63281533255227e3c4d2e499e354537bac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e26cd902_9c7e4d70",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T18:24:31Z",
+      "side": 1,
+      "message": "OK.",
+      "parentUuid": "5f28a05d_fc9f71e9",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
