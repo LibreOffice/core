@@ -16,6 +16,24 @@
       "revId": "818b7e508bcabae48cb1c96c987a9f83d83ff6e0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f35182f8_a787e1e0",
+        "filename": "starmath/source/mathml/element.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T20:23:41Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "d91bdac3_eee0034f",
+      "revId": "818b7e508bcabae48cb1c96c987a9f83d83ff6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
