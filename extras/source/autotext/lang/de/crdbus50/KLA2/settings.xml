@@ -25,7 +25,7 @@
    <config:config-item config:name="SaveGlobalDocumentLinks" config:type="boolean">false</config:config-item>
    <config:config-item config:name="CurrentDatabaseDataSource" config:type="string"/>
    <config:config-item config:name="CurrentDatabaseCommand" config:type="string"/>
-   <config:config-item config:name="CurrentDatabaseCommandType" config:type="short">0</config:config-item>
+   <config:config-item config:name="CurrentDatabaseCommandType" config:type="int">0</config:config-item>
   </config:config-item-set>
  </office:settings>
 </office:document-settings>

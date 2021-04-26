@@ -254,7 +254,7 @@
           <desc>Specifies the name of the database table or query.</desc>
         </info>
       </prop>
-      <prop oor:name="CommandType" oor:type="xs:short">
+      <prop oor:name="CommandType" oor:type="xs:int">
         <info>
           <desc>Specifies whether the data comes from a table or a query</desc>
         </info>
@@ -356,7 +356,7 @@
           <label>Data table or query name</label>
         </info>
       </prop>
-      <prop oor:name="DataCommandType" oor:type="xs:short" oor:nillable="false">
+      <prop oor:name="DataCommandType" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>CommandType of the data source.</desc>
           <label>Data CommandType</label>

@@ -67,7 +67,7 @@
           <desc>Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
         </info>
       </prop>
-      <prop oor:name="CommandType" oor:type="xs:short">
+      <prop oor:name="CommandType" oor:type="xs:int">
         <info>
           <desc>Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
         </info>
@@ -276,7 +276,7 @@
         <value/>
         <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
       </prop>
-      <prop oor:name="CommandType" oor:type="xs:short">
+      <prop oor:name="CommandType" oor:type="xs:int">
         <info>
           <desc>Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
         </info>
