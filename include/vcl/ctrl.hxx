@@ -179,6 +179,10 @@ public:
 
     vcl::Font       GetUnzoomedControlPointFont() const;
     void            SetShowAccelerator (bool val);
+
+    void LogicMouseButtonDown(const MouseEvent& rMouseEvent) override;
+    void LogicMouseButtonUp(const MouseEvent& rMouseEvent) override;
+    void LogicMouseMove(const MouseEvent& rMouseEvent) override;
 };
 
 #endif // INCLUDED_VCL_CTRL_HXX
