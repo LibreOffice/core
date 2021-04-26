@@ -3608,8 +3608,8 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
             }
         }
     }
-    //Make KEY_SPACE has same function as DoubleClick ,
-    //and realize multi-selection .
+    //Make KEY_SPACE has same function as DoubleClick, and realize
+    //multi-selection.
     else if (aCode.GetCode() == KEY_SPACE && 0 == aCode.GetModifier())
     {
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
