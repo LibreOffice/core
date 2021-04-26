@@ -1247,7 +1247,7 @@ uno::Sequence< OUString > SwXTextTableRow::getSupportedServiceNames()
 
 SwXTextTableRow::SwXTextTableRow(SwFrameFormat* pFormat, SwTableLine* pLn) :
     m_pFormat(pFormat),
-    pLine(pLn),
+    m_pLine(pLn),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_ROW))
 {
     StartListening(m_pFormat->GetNotifier());
@@ -1270,7 +1270,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
     SwTable* pTable = SwTable::FindTable( pFormat );
-    SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
+    SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, m_pLine);
     if(!pLn)
         return;
 
@@ -1327,7 +1327,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
             {
                 UnoActionContext aContext(pDoc);
                 SwTable* pTable2 = SwTable::FindTable( pFormat );
-                lcl_SetTableSeparators(aValue, pTable2, pLine->GetTabBoxes()[0], true, pDoc);
+                lcl_SetTableSeparators(aValue, pTable2, m_pLine->GetTabBoxes()[0], true, pDoc);
             }
             break;
 
@@ -1348,7 +1348,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
     SwTable* pTable = SwTable::FindTable( pFormat );
-    SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
+    SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, m_pLine);
     if(pLn)
     {
         const SfxItemPropertyMapEntry* pEntry =
@@ -1373,7 +1373,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName)
 
             case FN_UNO_TABLE_COLUMN_SEPARATORS:
             {
-                lcl_GetTableSeparators(aRet, pTable, pLine->GetTabBoxes()[0], true);
+                lcl_GetTableSeparators(aRet, pTable, m_pLine->GetTabBoxes()[0], true);
             }
             break;
 
@@ -1406,7 +1406,7 @@ void SwXTextTableRow::Notify(const SfxHint& rHint)
         m_pFormat = nullptr;
     } else if(auto pFindHint = dynamic_cast<const FindUnoInstanceHint<SwTableLine, SwXTextTableRow>*>(&rHint))
     {
-        if(!pFindHint->m_pCore && pFindHint->m_pCore == pLine)
+        if(!pFindHint->m_pCore && pFindHint->m_pCore == m_pLine)
             pFindHint->m_pResult = this;
     }
 }

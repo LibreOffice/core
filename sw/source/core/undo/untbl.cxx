@@ -148,9 +148,9 @@ class SaveLine
     friend SaveTable;
     friend class SaveBox;
 
-    SaveLine* pNext;
-    SaveBox* pBox;
-    sal_uInt16 nItemSet;
+    SaveLine* m_pNext;
+    SaveBox* m_pBox;
+    sal_uInt16 m_nItemSet;
 
     SaveLine(const SaveLine&) = delete;
     SaveLine& operator=(const SaveLine&) = delete;
@@ -169,15 +169,15 @@ class SaveBox
 {
     friend class SaveLine;
 
-    SaveBox* pNext;
-    sal_uLong nSttNode;
-    sal_Int32 nRowSpan;
-    sal_uInt16 nItemSet;
+    SaveBox* m_pNext;
+    sal_uLong m_nStartNode;
+    sal_Int32 m_nRowSpan;
+    sal_uInt16 m_nItemSet;
     union
     {
         SfxItemSets* pContentAttrs;
         SaveLine* pLine;
-    } Ptrs;
+    } m_Ptrs;
 
 public:
     SaveBox( SaveBox* pPrev, const SwTableBox& rBox, SaveTable& rSTable );
@@ -963,7 +963,7 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
         : m_nLineCount;
 
     SaveLine* pLn = m_pLine.get();
-    for( size_t n = 0; n < nLnCnt; ++n, pLn = pLn->pNext )
+    for (size_t n = 0; n < nLnCnt; ++n, pLn = pLn->m_pNext)
     {
         if( !pLn )
         {
@@ -1103,32 +1103,32 @@ void SaveTable::NewFrameFormatForBox(const SwTableBox& rTableBx, sal_uInt16 nFor
     KillEmptyFrameFormat(*pOldFormat);
 }
 
-SaveLine::SaveLine( SaveLine* pPrev, const SwTableLine& rLine, SaveTable& rSTable )
-    : pNext( nullptr )
+SaveLine::SaveLine(SaveLine* pPrev, const SwTableLine& rLine, SaveTable& rSTable)
+    : m_pNext(nullptr)
 {
     if( pPrev )
-        pPrev->pNext = this;
+        pPrev->m_pNext = this;
 
-    nItemSet = rSTable.AddFormat( rLine.GetFrameFormat(), true );
+    m_nItemSet = rSTable.AddFormat(rLine.GetFrameFormat(), true);
 
-    pBox = new SaveBox( nullptr, *rLine.GetTabBoxes()[ 0 ], rSTable );
-    SaveBox* pBx = pBox;
+    m_pBox = new SaveBox(nullptr, *rLine.GetTabBoxes()[0], rSTable);
+    SaveBox* pBx = m_pBox;
     for( size_t n = 1; n < rLine.GetTabBoxes().size(); ++n )
         pBx = new SaveBox( pBx, *rLine.GetTabBoxes()[ n ], rSTable );
 }
 
 SaveLine::~SaveLine()
 {
-    delete pBox;
-    delete pNext;
+    delete m_pBox;
+    delete m_pNext;
 }
 
 void SaveLine::RestoreAttr( SwTableLine& rLine, SaveTable& rSTable )
 {
-    rSTable.NewFrameFormatForLine( rLine, nItemSet, rLine.GetFrameFormat() );
+    rSTable.NewFrameFormatForLine(rLine, m_nItemSet, rLine.GetFrameFormat());
 
-    SaveBox* pBx = pBox;
-    for( size_t n = 0; n < rLine.GetTabBoxes().size(); ++n, pBx = pBx->pNext )
+    SaveBox* pBx = m_pBox;
+    for (size_t n = 0; n < rLine.GetTabBoxes().size(); ++n, pBx = pBx->m_pNext)
     {
         if( !pBx )
         {
@@ -1141,51 +1141,54 @@ void SaveLine::RestoreAttr( SwTableLine& rLine, SaveTable& rSTable )
 
 void SaveLine::SaveContentAttrs( SwDoc* pDoc )
 {
-    pBox->SaveContentAttrs( pDoc );
-    if( pNext )
-        pNext->SaveContentAttrs( pDoc );
+    m_pBox->SaveContentAttrs(pDoc);
+    if (m_pNext)
+        m_pNext->SaveContentAttrs(pDoc);
 }
 
 void SaveLine::CreateNew( SwTable& rTable, SwTableBox& rParent, SaveTable& rSTable )
 {
-    SwTableLineFormat* pFormat = static_cast<SwTableLineFormat*>(rSTable.m_aFrameFormats[ nItemSet ]);
+    SwTableLineFormat* pFormat
+        = static_cast<SwTableLineFormat*>(rSTable.m_aFrameFormats[m_nItemSet]);
     if( !pFormat )
     {
         SwDoc* pDoc = rTable.GetFrameFormat()->GetDoc();
         pFormat = pDoc->MakeTableLineFormat();
-        pFormat->SetFormatAttr(*rSTable.m_aSets[nItemSet]);
-        rSTable.m_aFrameFormats[nItemSet] = pFormat;
+        pFormat->SetFormatAttr(*rSTable.m_aSets[m_nItemSet]);
+        rSTable.m_aFrameFormats[m_nItemSet] = pFormat;
     }
     SwTableLine* pNew = new SwTableLine( pFormat, 1, &rParent );
 
     rParent.GetTabLines().push_back( pNew );
 
-    pBox->CreateNew( rTable, *pNew, rSTable );
+    m_pBox->CreateNew(rTable, *pNew, rSTable);
 
-    if( pNext )
-        pNext->CreateNew( rTable, rParent, rSTable );
+    if (m_pNext)
+        m_pNext->CreateNew(rTable, rParent, rSTable);
 }
 
-SaveBox::SaveBox( SaveBox* pPrev, const SwTableBox& rBox, SaveTable& rSTable )
-    : pNext( nullptr ), nSttNode( ULONG_MAX ), nRowSpan(0)
+SaveBox::SaveBox(SaveBox* pPrev, const SwTableBox& rBox, SaveTable& rSTable)
+    : m_pNext(nullptr)
+    , m_nStartNode(ULONG_MAX)
+    , m_nRowSpan(0)
 {
-    Ptrs.pLine = nullptr;
+    m_Ptrs.pLine = nullptr;
 
     if( pPrev )
-        pPrev->pNext = this;
+        pPrev->m_pNext = this;
 
-    nItemSet = rSTable.AddFormat( rBox.GetFrameFormat(), false );
+    m_nItemSet = rSTable.AddFormat(rBox.GetFrameFormat(), false);
 
     if( rBox.GetSttNd() )
     {
-        nSttNode = rBox.GetSttIdx();
-        nRowSpan = rBox.getRowSpan();
+        m_nStartNode = rBox.GetSttIdx();
+        m_nRowSpan = rBox.getRowSpan();
     }
     else
     {
-        Ptrs.pLine = new SaveLine( nullptr, *rBox.GetTabLines()[ 0 ], rSTable );
+        m_Ptrs.pLine = new SaveLine(nullptr, *rBox.GetTabLines()[0], rSTable);
 
-        SaveLine* pLn = Ptrs.pLine;
+        SaveLine* pLn = m_Ptrs.pLine;
         for( size_t n = 1; n < rBox.GetTabLines().size(); ++n )
             pLn = new SaveLine( pLn, *rBox.GetTabLines()[ n ], rSTable );
     }
@@ -1193,18 +1196,18 @@ SaveBox::SaveBox( SaveBox* pPrev, const SwTableBox& rBox, SaveTable& rSTable )
 
 SaveBox::~SaveBox()
 {
-    if( ULONG_MAX == nSttNode )     // no EndBox
-        delete Ptrs.pLine;
+    if (ULONG_MAX == m_nStartNode) // no EndBox
+        delete m_Ptrs.pLine;
     else
-        delete Ptrs.pContentAttrs;
-    delete pNext;
+        delete m_Ptrs.pContentAttrs;
+    delete m_pNext;
 }
 
 void SaveBox::RestoreAttr( SwTableBox& rBox, SaveTable& rSTable )
 {
-    rSTable.NewFrameFormatForBox( rBox, nItemSet, rBox.GetFrameFormat() );
+    rSTable.NewFrameFormatForBox(rBox, m_nItemSet, rBox.GetFrameFormat());
 
-    if( ULONG_MAX == nSttNode )     // no EndBox
+    if (ULONG_MAX == m_nStartNode) // no EndBox
     {
         if( rBox.GetTabLines().empty() )
         {
@@ -1212,8 +1215,8 @@ void SaveBox::RestoreAttr( SwTableBox& rBox, SaveTable& rSTable )
         }
         else
         {
-            SaveLine* pLn = Ptrs.pLine;
-            for( size_t n = 0; n < rBox.GetTabLines().size(); ++n, pLn = pLn->pNext )
+            SaveLine* pLn = m_Ptrs.pLine;
+            for (size_t n = 0; n < rBox.GetTabLines().size(); ++n, pLn = pLn->m_pNext)
             {
                 if( !pLn )
                 {
@@ -1225,19 +1228,19 @@ void SaveBox::RestoreAttr( SwTableBox& rBox, SaveTable& rSTable )
             }
         }
     }
-    else if( rBox.GetSttNd() && rBox.GetSttIdx() == nSttNode )
+    else if (rBox.GetSttNd() && rBox.GetSttIdx() == m_nStartNode)
     {
-        if( Ptrs.pContentAttrs )
+        if (m_Ptrs.pContentAttrs)
         {
             SwNodes& rNds = rBox.GetFrameFormat()->GetDoc()->GetNodes();
             sal_uInt16 nSet = 0;
             sal_uLong nEnd = rBox.GetSttNd()->EndOfSectionIndex();
-            for( sal_uLong n = nSttNode + 1; n < nEnd; ++n )
+            for (sal_uLong n = m_nStartNode + 1; n < nEnd; ++n)
             {
                 SwContentNode* pCNd = rNds[ n ]->GetContentNode();
                 if( pCNd )
                 {
-                    std::shared_ptr<SfxItemSet> pSet( (*Ptrs.pContentAttrs)[ nSet++ ] );
+                    std::shared_ptr<SfxItemSet> pSet((*m_Ptrs.pContentAttrs)[nSet++]);
                     if( pSet )
                     {
                         sal_uInt16 const *pRstAttr = aSave_BoxContentSet;
@@ -1262,16 +1265,16 @@ void SaveBox::RestoreAttr( SwTableBox& rBox, SaveTable& rSTable )
 
 void SaveBox::SaveContentAttrs( SwDoc* pDoc )
 {
-    if( ULONG_MAX == nSttNode )     // no EndBox
+    if (ULONG_MAX == m_nStartNode) // no EndBox
     {
         // continue in current line
-        Ptrs.pLine->SaveContentAttrs( pDoc );
+        m_Ptrs.pLine->SaveContentAttrs(pDoc);
     }
     else
     {
-        sal_uLong nEnd = pDoc->GetNodes()[ nSttNode ]->EndOfSectionIndex();
-        Ptrs.pContentAttrs = new SfxItemSets;
-        for( sal_uLong n = nSttNode + 1; n < nEnd; ++n )
+        sal_uLong nEnd = pDoc->GetNodes()[m_nStartNode]->EndOfSectionIndex();
+        m_Ptrs.pContentAttrs = new SfxItemSets;
+        for (sal_uLong n = m_nStartNode + 1; n < nEnd; ++n)
         {
             SwContentNode* pCNd = pDoc->GetNodes()[ n ]->GetContentNode();
             if( pCNd )
@@ -1284,36 +1287,36 @@ void SaveBox::SaveContentAttrs( SwDoc* pDoc )
                     pSet->Put( *pCNd->GetpSwAttrSet() );
                 }
 
-                Ptrs.pContentAttrs->push_back( pSet );
+                m_Ptrs.pContentAttrs->push_back(pSet);
             }
         }
     }
-    if( pNext )
-        pNext->SaveContentAttrs( pDoc );
+    if (m_pNext)
+        m_pNext->SaveContentAttrs(pDoc);
 }
 
 void SaveBox::CreateNew( SwTable& rTable, SwTableLine& rParent, SaveTable& rSTable )
 {
-    SwTableBoxFormat* pFormat = static_cast<SwTableBoxFormat*>(rSTable.m_aFrameFormats[ nItemSet ]);
+    SwTableBoxFormat* pFormat = static_cast<SwTableBoxFormat*>(rSTable.m_aFrameFormats[m_nItemSet]);
     if( !pFormat )
     {
         SwDoc* pDoc = rTable.GetFrameFormat()->GetDoc();
         pFormat = pDoc->MakeTableBoxFormat();
-        pFormat->SetFormatAttr(*rSTable.m_aSets[nItemSet]);
-        rSTable.m_aFrameFormats[nItemSet] = pFormat;
+        pFormat->SetFormatAttr(*rSTable.m_aSets[m_nItemSet]);
+        rSTable.m_aFrameFormats[m_nItemSet] = pFormat;
     }
 
-    if( ULONG_MAX == nSttNode )     // no EndBox
+    if (ULONG_MAX == m_nStartNode) // no EndBox
     {
         SwTableBox* pNew = new SwTableBox( pFormat, 1, &rParent );
         rParent.GetTabBoxes().push_back( pNew );
 
-        Ptrs.pLine->CreateNew( rTable, *pNew, rSTable );
+        m_Ptrs.pLine->CreateNew(rTable, *pNew, rSTable);
     }
     else
     {
         // search box for StartNode in old table
-        SwTableBox* pBox = rTable.GetTableBox( nSttNode );
+        SwTableBox* pBox = rTable.GetTableBox(m_nStartNode);
         if (pBox)
         {
             SwFrameFormat* pOld = pBox->GetFrameFormat();
@@ -1321,7 +1324,7 @@ void SaveBox::CreateNew( SwTable& rTable, SwTableLine& rParent, SaveTable& rSTab
             if( !pOld->HasWriterListeners() )
                 delete pOld;
 
-            pBox->setRowSpan( nRowSpan );
+            pBox->setRowSpan(m_nRowSpan);
 
             SwTableBoxes* pTBoxes = &pBox->GetUpper()->GetTabBoxes();
             pTBoxes->erase( std::find( pTBoxes->begin(), pTBoxes->end(), pBox ) );
@@ -1332,8 +1335,8 @@ void SaveBox::CreateNew( SwTable& rTable, SwTableLine& rParent, SaveTable& rSTab
         }
     }
 
-    if( pNext )
-        pNext->CreateNew( rTable, rParent, rSTable );
+    if (m_pNext)
+        m_pNext->CreateNew(rTable, rParent, rSTable);
 }
 
 // UndoObject for attribute changes on table

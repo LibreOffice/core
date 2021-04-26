@@ -48,17 +48,17 @@ class SW_DLLPUBLIC SwDocStyleSheet final : public SfxStyleSheetBase
     friend class SwDocStyleSheetPool;
     friend class SwStyleSheetIterator;
 
-    SwCharFormat*          pCharFormat;
-    SwTextFormatColl*       pColl;
-    SwFrameFormat*           pFrameFormat;
-    const SwPageDesc*   pDesc;
-    const SwNumRule*    pNumRule;
-    SwTableAutoFormat*  pTableFormat;
-    const SwBoxAutoFormat*   pBoxFormat;
-    SwDoc&              rDoc;
-    SfxItemSet          aCoreSet;
+    SwCharFormat*          m_pCharFormat;
+    SwTextFormatColl*       m_pColl;
+    SwFrameFormat*           m_pFrameFormat;
+    const SwPageDesc*   m_pDesc;
+    const SwNumRule*    m_pNumRule;
+    SwTableAutoFormat*  m_pTableFormat;
+    const SwBoxAutoFormat*   m_pBoxFormat;
+    SwDoc&              m_rDoc;
+    SfxItemSet          m_aCoreSet;
 
-    bool                bPhysical;
+    bool                m_bPhysical;
 
     /// Make empty shell a real StyleSheet (Core).
     SAL_DLLPRIVATE void              Create();
@@ -86,7 +86,7 @@ public:
 
     void                    SetFamily(SfxStyleFamily eFam)  { nFamily = eFam;   }
 
-    bool                    IsPhysical() const              { return bPhysical; }
+    bool                    IsPhysical() const              { return m_bPhysical; }
     void                    SetPhysical(bool bPhys);
 
     virtual void            SetHidden( bool bHidden ) override;

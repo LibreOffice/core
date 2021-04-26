@@ -153,7 +153,7 @@ class SwXTextTableRow final
     , public SvtListener
 {
     SwFrameFormat* m_pFormat;
-    SwTableLine* pLine;
+    SwTableLine* m_pLine;
     const SfxItemPropertySet* m_pPropSet;
 
     SwFrameFormat* GetFrameFormat() { return m_pFormat; }

@@ -455,15 +455,15 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
                                     SwDocStyleSheetPool&  rPool) :
 
     SfxStyleSheetBase( OUString(), &rPool, SfxStyleFamily::Char, SfxStyleSearchBits::Auto ),
-    pCharFormat(nullptr),
-    pColl(nullptr),
-    pFrameFormat(nullptr),
-    pDesc(nullptr),
-    pNumRule(nullptr),
-    pTableFormat(nullptr),
-    pBoxFormat(nullptr),
-    rDoc(rDocument),
-    aCoreSet(
+    m_pCharFormat(nullptr),
+    m_pColl(nullptr),
+    m_pFrameFormat(nullptr),
+    m_pDesc(nullptr),
+    m_pNumRule(nullptr),
+    m_pTableFormat(nullptr),
+    m_pBoxFormat(nullptr),
+    m_rDoc(rDocument),
+    m_aCoreSet(
         rPool.GetPool(),
         svl::Items<
             RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
@@ -487,7 +487,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
             SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE,
             FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
             FN_COND_COLL, FN_COND_COLL>{}),
-    bPhysical(false)
+    m_bPhysical(false)
 {
     nHelpId = UCHAR_MAX;
 }
@@ -507,14 +507,14 @@ void  SwDocStyleSheet::Reset()
 void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
 {
     bool bChg = false;
-    if (!bPhysical)
+    if (!m_bPhysical)
         FillStyleSheet(FillPhysical);
 
     SwFormat* pFormat = nullptr;
     switch (nFamily)
     {
         case SfxStyleFamily::Char:
-            pFormat = rDoc.FindCharFormatByName(aName);
+            pFormat = m_rDoc.FindCharFormatByName(aName);
             if (pFormat)
             {
                 pFormat->SetGrabBagItem(rVal);
@@ -522,7 +522,7 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
             }
             break;
         case SfxStyleFamily::Para:
-            pFormat = rDoc.FindTextFormatCollByName(aName);
+            pFormat = m_rDoc.FindTextFormatCollByName(aName);
             if (pFormat)
             {
                 pFormat->SetGrabBagItem(rVal);
@@ -531,7 +531,7 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
             break;
         case SfxStyleFamily::Pseudo:
             {
-                SwNumRule* pRule = rDoc.FindNumRulePtr(aName);
+                SwNumRule* pRule = m_rDoc.FindNumRulePtr(aName);
                 if (pRule)
                 {
                     pRule->SetGrabBagItem(rVal);
@@ -547,7 +547,7 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
     {
         dynamic_cast<SwDocStyleSheetPool&>(*m_pPool).InvalidateIterator();
         m_pPool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetModified, *this));
-        SwEditShell* pSh = rDoc.GetEditShell();
+        SwEditShell* pSh = m_rDoc.GetEditShell();
         if (pSh)
             pSh->CallChgLnk();
     }
@@ -559,18 +559,18 @@ void SwDocStyleSheet::GetGrabBagItem(uno::Any& rVal) const
     switch (nFamily)
     {
         case SfxStyleFamily::Char:
-            pFormat = rDoc.FindCharFormatByName(aName);
+            pFormat = m_rDoc.FindCharFormatByName(aName);
             if (pFormat)
                 pFormat->GetGrabBagItem(rVal);
             break;
         case SfxStyleFamily::Para:
-            pFormat = rDoc.FindTextFormatCollByName(aName);
+            pFormat = m_rDoc.FindTextFormatCollByName(aName);
             if (pFormat)
                 pFormat->GetGrabBagItem(rVal);
             break;
         case SfxStyleFamily::Pseudo:
             {
-                SwNumRule* pRule = rDoc.FindNumRulePtr(aName);
+                SwNumRule* pRule = m_rDoc.FindNumRulePtr(aName);
                 if (pRule)
                     pRule->GetGrabBagItem(rVal);
             }
@@ -583,14 +583,14 @@ void SwDocStyleSheet::GetGrabBagItem(uno::Any& rVal) const
 void SwDocStyleSheet::SetHidden( bool bValue )
 {
     bool bChg = false;
-    if(!bPhysical)
+    if(!m_bPhysical)
         FillStyleSheet( FillPhysical );
 
     SwFormat* pFormat = nullptr;
     switch(nFamily)
     {
         case SfxStyleFamily::Char:
-            pFormat = rDoc.FindCharFormatByName( aName );
+            pFormat = m_rDoc.FindCharFormatByName( aName );
             if ( pFormat )
             {
                 pFormat->SetHidden( bValue );
@@ -599,7 +599,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
             break;
 
         case SfxStyleFamily::Para:
-            pFormat = rDoc.FindTextFormatCollByName( aName );
+            pFormat = m_rDoc.FindTextFormatCollByName( aName );
             if ( pFormat )
             {
                 pFormat->SetHidden( bValue );
@@ -608,7 +608,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
             break;
 
         case SfxStyleFamily::Frame:
-            pFormat = rDoc.FindFrameFormatByName( aName );
+            pFormat = m_rDoc.FindFrameFormatByName( aName );
             if ( pFormat )
             {
                 pFormat->SetHidden( bValue );
@@ -618,7 +618,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
 
         case SfxStyleFamily::Page:
             {
-                SwPageDesc* pPgDesc = rDoc.FindPageDesc(aName);
+                SwPageDesc* pPgDesc = m_rDoc.FindPageDesc(aName);
                 if ( pPgDesc )
                 {
                     pPgDesc->SetHidden( bValue );
@@ -629,7 +629,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
 
         case SfxStyleFamily::Pseudo:
             {
-                SwNumRule* pRule = rDoc.FindNumRulePtr( aName );
+                SwNumRule* pRule = m_rDoc.FindNumRulePtr( aName );
                 if ( pRule )
                 {
                     pRule->SetHidden( bValue );
@@ -640,7 +640,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
 
         case SfxStyleFamily::Table:
             {
-                SwTableAutoFormat* pTableAutoFormat = rDoc.GetTableStyles().FindAutoFormat( aName );
+                SwTableAutoFormat* pTableAutoFormat = m_rDoc.GetTableStyles().FindAutoFormat( aName );
                 if ( pTableAutoFormat )
                 {
                     pTableAutoFormat->SetHidden( bValue );
@@ -658,7 +658,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
         // calling pPool->First() here would be quite slow...
         dynamic_cast<SwDocStyleSheetPool&>(*m_pPool).InvalidateIterator(); // internal list has to be updated
         m_pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
-        SwEditShell* pSh = rDoc.GetEditShell();
+        SwEditShell* pSh = m_rDoc.GetEditShell();
         if( pSh )
             pSh->CallChgLnk();
     }
@@ -672,35 +672,35 @@ bool SwDocStyleSheet::IsHidden( ) const
     switch(nFamily)
     {
         case SfxStyleFamily::Char:
-            pFormat = rDoc.FindCharFormatByName( aName );
+            pFormat = m_rDoc.FindCharFormatByName( aName );
             bRet = pFormat && pFormat->IsHidden( );
             break;
 
         case SfxStyleFamily::Para:
-            pFormat = rDoc.FindTextFormatCollByName( aName );
+            pFormat = m_rDoc.FindTextFormatCollByName( aName );
             bRet = pFormat && pFormat->IsHidden( );
             break;
 
         case SfxStyleFamily::Frame:
-            pFormat = rDoc.FindFrameFormatByName( aName );
+            pFormat = m_rDoc.FindFrameFormatByName( aName );
             bRet = pFormat && pFormat->IsHidden( );
             break;
 
         case SfxStyleFamily::Page:
             {
-                SwPageDesc* pPgDesc = rDoc.FindPageDesc(aName);
+                SwPageDesc* pPgDesc = m_rDoc.FindPageDesc(aName);
                 bRet = pPgDesc && pPgDesc->IsHidden( );
             }
             break;
         case SfxStyleFamily::Pseudo:
             {
-                SwNumRule* pRule = rDoc.FindNumRulePtr( aName );
+                SwNumRule* pRule = m_rDoc.FindNumRulePtr( aName );
                 bRet = pRule && pRule->IsHidden( );
             }
             break;
         case SfxStyleFamily::Table:
             {
-                SwTableAutoFormat* pTableAutoFormat = rDoc.GetTableStyles().FindAutoFormat( aName );
+                SwTableAutoFormat* pTableAutoFormat = m_rDoc.GetTableStyles().FindAutoFormat( aName );
                 bRet = pTableAutoFormat && pTableAutoFormat->IsHidden( );
             }
             break;
@@ -713,7 +713,7 @@ bool SwDocStyleSheet::IsHidden( ) const
 
 const OUString&  SwDocStyleSheet::GetParent() const
 {
-    if( !bPhysical )
+    if( !m_bPhysical )
     {
         // check if it's already in document
         SwFormat* pFormat = nullptr;
@@ -721,17 +721,17 @@ const OUString&  SwDocStyleSheet::GetParent() const
         switch(nFamily)
         {
         case SfxStyleFamily::Char:
-            pFormat = rDoc.FindCharFormatByName( aName );
+            pFormat = m_rDoc.FindCharFormatByName( aName );
             eGetType = SwGetPoolIdFromName::ChrFmt;
             break;
 
         case SfxStyleFamily::Para:
-            pFormat = rDoc.FindTextFormatCollByName( aName );
+            pFormat = m_rDoc.FindTextFormatCollByName( aName );
             eGetType = SwGetPoolIdFromName::TxtColl;
             break;
 
         case SfxStyleFamily::Frame:
-            pFormat = rDoc.FindFrameFormatByName( aName );
+            pFormat = m_rDoc.FindFrameFormatByName( aName );
             eGetType = SwGetPoolIdFromName::FrmFmt;
             break;
 
@@ -767,7 +767,7 @@ const OUString&  SwDocStyleSheet::GetParent() const
 // Follower
 const OUString&  SwDocStyleSheet::GetFollow() const
 {
-    if( !bPhysical )
+    if( !m_bPhysical )
     {
         SwDocStyleSheet* pThis = const_cast<SwDocStyleSheet*>(this);
         pThis->FillStyleSheet( FillAllInfo );
@@ -1040,7 +1040,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
         if( !SfxStyleSheetBase::SetName(rStr, bReindexNow))
             return false;
     }
-    else if(!bPhysical)
+    else if(!m_bPhysical)
         FillStyleSheet( FillPhysical );
 
     bool bChg = false;
@@ -1048,13 +1048,13 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
     {
         case SfxStyleFamily::Char :
         {
-            OSL_ENSURE(pCharFormat, "SwCharFormat missing!");
-            if( pCharFormat && pCharFormat->GetName() != rStr )
+            OSL_ENSURE(m_pCharFormat, "SwCharFormat missing!");
+            if( m_pCharFormat && m_pCharFormat->GetName() != rStr )
             {
-                if (!pCharFormat->GetName().isEmpty())
-                    rDoc.RenameFormat(*pCharFormat, rStr);
+                if (!m_pCharFormat->GetName().isEmpty())
+                    m_rDoc.RenameFormat(*m_pCharFormat, rStr);
                 else
-                    pCharFormat->SetName(rStr);
+                    m_pCharFormat->SetName(rStr);
 
                 bChg = true;
             }
@@ -1062,13 +1062,13 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
         }
         case SfxStyleFamily::Para :
         {
-            OSL_ENSURE(pColl, "Collection missing!");
-            if( pColl && pColl->GetName() != rStr )
+            OSL_ENSURE(m_pColl, "Collection missing!");
+            if( m_pColl && m_pColl->GetName() != rStr )
             {
-                if (!pColl->GetName().isEmpty())
-                    rDoc.RenameFormat(*pColl, rStr);
+                if (!m_pColl->GetName().isEmpty())
+                    m_rDoc.RenameFormat(*m_pColl, rStr);
                 else
-                    pColl->SetName(rStr);
+                    m_pColl->SetName(rStr);
 
                 bChg = true;
             }
@@ -1076,53 +1076,53 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
         }
         case SfxStyleFamily::Frame:
         {
-            OSL_ENSURE(pFrameFormat, "FrameFormat missing!");
-            if( pFrameFormat && pFrameFormat->GetName() != rStr )
+            OSL_ENSURE(m_pFrameFormat, "FrameFormat missing!");
+            if( m_pFrameFormat && m_pFrameFormat->GetName() != rStr )
             {
-                if (!pFrameFormat->GetName().isEmpty())
-                    rDoc.RenameFormat(*pFrameFormat, rStr);
+                if (!m_pFrameFormat->GetName().isEmpty())
+                    m_rDoc.RenameFormat(*m_pFrameFormat, rStr);
                 else
-                    pFrameFormat->SetName( rStr );
+                    m_pFrameFormat->SetName( rStr );
 
                 bChg = true;
             }
             break;
         }
         case SfxStyleFamily::Page :
-            OSL_ENSURE(pDesc, "PageDesc missing!");
-            if( pDesc && pDesc->GetName() != rStr )
+            OSL_ENSURE(m_pDesc, "PageDesc missing!");
+            if( m_pDesc && m_pDesc->GetName() != rStr )
             {
                 // Set PageDesc - copy with earlier one - probably not
                 // necessary for setting the name. So here we allow a
                 // cast.
-                SwPageDesc aPageDesc(*const_cast<SwPageDesc*>(pDesc));
+                SwPageDesc aPageDesc(*const_cast<SwPageDesc*>(m_pDesc));
                 const OUString aOldName(aPageDesc.GetName());
 
                 aPageDesc.SetName( rStr );
-                bool const bDoesUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
+                bool const bDoesUndo = m_rDoc.GetIDocumentUndoRedo().DoesUndo();
 
-                rDoc.GetIDocumentUndoRedo().DoUndo(!aOldName.isEmpty());
-                rDoc.ChgPageDesc(aOldName, aPageDesc);
-                rDoc.GetIDocumentUndoRedo().DoUndo(bDoesUndo);
+                m_rDoc.GetIDocumentUndoRedo().DoUndo(!aOldName.isEmpty());
+                m_rDoc.ChgPageDesc(aOldName, aPageDesc);
+                m_rDoc.GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 
-                rDoc.getIDocumentState().SetModified();
+                m_rDoc.getIDocumentState().SetModified();
                 bChg = true;
             }
             break;
         case SfxStyleFamily::Pseudo:
-            OSL_ENSURE(pNumRule, "NumRule missing!");
+            OSL_ENSURE(m_pNumRule, "NumRule missing!");
 
-            if (pNumRule)
+            if (m_pNumRule)
             {
-                OUString aOldName = pNumRule->GetName();
+                OUString aOldName = m_pNumRule->GetName();
 
                 if (!aOldName.isEmpty())
                 {
                     if ( aOldName != rStr &&
-                         rDoc.RenameNumRule(aOldName, rStr))
+                         m_rDoc.RenameNumRule(aOldName, rStr))
                     {
-                        pNumRule = rDoc.FindNumRulePtr(rStr);
-                        rDoc.getIDocumentState().SetModified();
+                        m_pNumRule = m_rDoc.FindNumRulePtr(rStr);
+                        m_rDoc.getIDocumentState().SetModified();
 
                         bChg = true;
                     }
@@ -1130,8 +1130,8 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
                 else
                 {
                     // #i91400#
-                    const_cast<SwNumRule*>(pNumRule)->SetName( rStr, rDoc.getIDocumentListsAccess() );
-                    rDoc.getIDocumentState().SetModified();
+                    const_cast<SwNumRule*>(m_pNumRule)->SetName( rStr, m_rDoc.getIDocumentListsAccess() );
+                    m_rDoc.getIDocumentState().SetModified();
 
                     bChg = true;
                 }
@@ -1147,7 +1147,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
     {
         m_pPool->First(nFamily);  // internal list has to be updated
         m_pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
-        SwEditShell* pSh = rDoc.GetEditShell();
+        SwEditShell* pSh = m_rDoc.GetEditShell();
         if( pSh )
             pSh->CallChgLnk();
     }
@@ -1161,21 +1161,21 @@ bool   SwDocStyleSheet::SetParent( const OUString& rStr)
     switch(nFamily)
     {
         case SfxStyleFamily::Char :
-            OSL_ENSURE( pCharFormat, "SwCharFormat missing!" );
-            if( nullptr != ( pFormat = pCharFormat ) && !rStr.isEmpty() )
-                pParent = lcl_FindCharFormat(rDoc, rStr);
+            OSL_ENSURE( m_pCharFormat, "SwCharFormat missing!" );
+            if( nullptr != ( pFormat = m_pCharFormat ) && !rStr.isEmpty() )
+                pParent = lcl_FindCharFormat(m_rDoc, rStr);
             break;
 
         case SfxStyleFamily::Para :
-            OSL_ENSURE( pColl, "Collection missing!");
-            if( nullptr != ( pFormat = pColl ) && !rStr.isEmpty() )
-                pParent = lcl_FindParaFormat( rDoc, rStr );
+            OSL_ENSURE( m_pColl, "Collection missing!");
+            if( nullptr != ( pFormat = m_pColl ) && !rStr.isEmpty() )
+                pParent = lcl_FindParaFormat( m_rDoc, rStr );
             break;
 
         case SfxStyleFamily::Frame:
-            OSL_ENSURE(pFrameFormat, "FrameFormat missing!");
-            if( nullptr != ( pFormat = pFrameFormat ) && !rStr.isEmpty() )
-                pParent = lcl_FindFrameFormat( rDoc, rStr );
+            OSL_ENSURE(m_pFrameFormat, "FrameFormat missing!");
+            if( nullptr != ( pFormat = m_pFrameFormat ) && !rStr.isEmpty() )
+                pParent = lcl_FindFrameFormat( m_rDoc, rStr );
             break;
 
         case SfxStyleFamily::Page:
@@ -1190,7 +1190,7 @@ bool   SwDocStyleSheet::SetParent( const OUString& rStr)
         pFormat->DerivedFrom()->GetName() != rStr )
     {
         {
-            SwImplShellAction aTmp( rDoc );
+            SwImplShellAction aTmp( m_rDoc );
             bRet = pFormat->SetDerivedFrom( pParent );
         }
 
@@ -1211,37 +1211,37 @@ bool   SwDocStyleSheet::SetFollow( const OUString& rStr)
     if( !rStr.isEmpty() && !SfxStyleSheetBase::SetFollow( rStr ))
         return false;
 
-    SwImplShellAction aTmpSh( rDoc );
+    SwImplShellAction aTmpSh( m_rDoc );
     switch(nFamily)
     {
     case SfxStyleFamily::Para :
     {
-        OSL_ENSURE(pColl, "Collection missing!");
-        if( pColl )
+        OSL_ENSURE(m_pColl, "Collection missing!");
+        if( m_pColl )
         {
-            SwTextFormatColl* pFollow = pColl;
-            if( !rStr.isEmpty() && nullptr == (pFollow = lcl_FindParaFormat(rDoc, rStr) ))
-                pFollow = pColl;
+            SwTextFormatColl* pFollow = m_pColl;
+            if( !rStr.isEmpty() && nullptr == (pFollow = lcl_FindParaFormat(m_rDoc, rStr) ))
+                pFollow = m_pColl;
 
-            pColl->SetNextTextFormatColl(*pFollow);
+            m_pColl->SetNextTextFormatColl(*pFollow);
         }
         break;
     }
     case SfxStyleFamily::Page :
     {
-        OSL_ENSURE(pDesc, "PageDesc missing!");
-        if( pDesc )
+        OSL_ENSURE(m_pDesc, "PageDesc missing!");
+        if( m_pDesc )
         {
             const SwPageDesc* pFollowDesc = !rStr.isEmpty()
-                                            ? lcl_FindPageDesc(rDoc, rStr)
+                                            ? lcl_FindPageDesc(m_rDoc, rStr)
                                             : nullptr;
             size_t nId = 0;
-            if (pFollowDesc != pDesc->GetFollow() && rDoc.FindPageDesc(pDesc->GetName(), &nId))
+            if (pFollowDesc != m_pDesc->GetFollow() && m_rDoc.FindPageDesc(m_pDesc->GetName(), &nId))
             {
-                SwPageDesc aDesc( *pDesc );
+                SwPageDesc aDesc( *m_pDesc );
                 aDesc.SetFollow( pFollowDesc );
-                rDoc.ChgPageDesc( nId, aDesc );
-                pDesc = &rDoc.GetPageDesc( nId );
+                m_rDoc.ChgPageDesc( nId, aDesc );
+                m_pDesc = &m_rDoc.GetPageDesc( nId );
             }
         }
         break;
@@ -1285,7 +1285,7 @@ std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
         SAL_WARN("sw.ui", "GetItemSetForPreview not implemented for page or number or table style");
         return std::unique_ptr<SfxItemSet>();
     }
-    if (!bPhysical)
+    if (!m_bPhysical)
     {
         // because not only this style, but also any number of its parents
         // (or follow style) may not actually exist in the document at this
@@ -1293,12 +1293,12 @@ std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
         // all parents.
         std::unique_ptr<SfxItemSet> pRet;
 
-        bool bModifiedEnabled = rDoc.getIDocumentState().IsEnableSetModified();
-        rDoc.getIDocumentState().SetEnableSetModified(false);
+        bool bModifiedEnabled = m_rDoc.getIDocumentState().IsEnableSetModified();
+        m_rDoc.getIDocumentState().SetEnableSetModified(false);
 
         FillStyleSheet(FillPreview, &pRet);
 
-        rDoc.getIDocumentState().SetEnableSetModified(bModifiedEnabled);
+        m_rDoc.getIDocumentState().SetEnableSetModified(bModifiedEnabled);
 
         assert(pRet);
         return pRet;
@@ -1308,11 +1308,11 @@ std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
         switch (nFamily)
         {
             case SfxStyleFamily::Char:
-                return lcl_SwFormatToFlatItemSet(pCharFormat);
+                return lcl_SwFormatToFlatItemSet(m_pCharFormat);
             case SfxStyleFamily::Para:
-                return lcl_SwFormatToFlatItemSet(pColl);
+                return lcl_SwFormatToFlatItemSet(m_pColl);
             case SfxStyleFamily::Frame:
-                return lcl_SwFormatToFlatItemSet(pFrameFormat);
+                return lcl_SwFormatToFlatItemSet(m_pFrameFormat);
             default:
                 std::abort();
         }
@@ -1323,7 +1323,7 @@ std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
 
 SfxItemSet&   SwDocStyleSheet::GetItemSet()
 {
-    if(!bPhysical)
+    if(!m_bPhysical)
         FillStyleSheet( FillPhysical );
 
     switch(nFamily)
@@ -1342,42 +1342,42 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
                 if( nFamily == SfxStyleFamily::Char )
                 {
-                    SAL_WARN_IF(!pCharFormat, "sw.ui", "Where's SwCharFormat");
-                    aCoreSet.Put(pCharFormat->GetAttrSet());
-                    aCoreSet.Put( aBoxInfo );
+                    SAL_WARN_IF(!m_pCharFormat, "sw.ui", "Where's SwCharFormat");
+                    m_aCoreSet.Put(m_pCharFormat->GetAttrSet());
+                    m_aCoreSet.Put( aBoxInfo );
 
-                    if(pCharFormat->DerivedFrom())
-                        aCoreSet.SetParent(&pCharFormat->DerivedFrom()->GetAttrSet());
+                    if(m_pCharFormat->DerivedFrom())
+                        m_aCoreSet.SetParent(&m_pCharFormat->DerivedFrom()->GetAttrSet());
                 }
                 else if ( nFamily == SfxStyleFamily::Para )
                 {
-                    OSL_ENSURE(pColl, "Where's Collection");
-                    aCoreSet.Put(pColl->GetAttrSet());
-                    aCoreSet.Put( aBoxInfo );
-                    aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, pColl->IsAutoUpdateFormat()));
+                    OSL_ENSURE(m_pColl, "Where's Collection");
+                    m_aCoreSet.Put(m_pColl->GetAttrSet());
+                    m_aCoreSet.Put( aBoxInfo );
+                    m_aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pColl->IsAutoUpdateFormat()));
 
-                    if(pColl->DerivedFrom())
-                        aCoreSet.SetParent(&pColl->DerivedFrom()->GetAttrSet());
+                    if(m_pColl->DerivedFrom())
+                        m_aCoreSet.SetParent(&m_pColl->DerivedFrom()->GetAttrSet());
                 }
                 else
                 {
-                    OSL_ENSURE(pFrameFormat, "Where's FrameFormat");
-                    aCoreSet.Put(pFrameFormat->GetAttrSet());
-                    aCoreSet.Put( aBoxInfo );
-                    aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, pFrameFormat->IsAutoUpdateFormat()));
+                    OSL_ENSURE(m_pFrameFormat, "Where's FrameFormat");
+                    m_aCoreSet.Put(m_pFrameFormat->GetAttrSet());
+                    m_aCoreSet.Put( aBoxInfo );
+                    m_aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pFrameFormat->IsAutoUpdateFormat()));
 
-                    if(pFrameFormat->DerivedFrom())
-                        aCoreSet.SetParent(&pFrameFormat->DerivedFrom()->GetAttrSet());
+                    if(m_pFrameFormat->DerivedFrom())
+                        m_aCoreSet.SetParent(&m_pFrameFormat->DerivedFrom()->GetAttrSet());
 
                     // create needed items for XPropertyList entries from the DrawModel so that
                     // the Area TabPage can access them
-                    const SwDrawModel* pDrawModel = rDoc.getIDocumentDrawModelAccess().GetDrawModel();
+                    const SwDrawModel* pDrawModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
 
-                    aCoreSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
-                    aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));
-                    aCoreSet.Put(SvxHatchListItem(pDrawModel->GetHatchList(), SID_HATCH_LIST));
-                    aCoreSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
-                    aCoreSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
+                    m_aCoreSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
+                    m_aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));
+                    m_aCoreSet.Put(SvxHatchListItem(pDrawModel->GetHatchList(), SID_HATCH_LIST));
+                    m_aCoreSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
+                    m_aCoreSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
                 }
             }
             break;
@@ -1385,21 +1385,21 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
         case SfxStyleFamily::Page :
             {
                 // set correct parent to get the drawing::FillStyle_NONE FillStyle as needed
-                if(!aCoreSet.GetParent())
+                if(!m_aCoreSet.GetParent())
                 {
-                    aCoreSet.SetParent(&rDoc.GetDfltFrameFormat()->GetAttrSet());
+                    m_aCoreSet.SetParent(&m_rDoc.GetDfltFrameFormat()->GetAttrSet());
                 }
 
-                OSL_ENSURE(pDesc, "No PageDescriptor");
-                ::PageDescToItemSet(*const_cast<SwPageDesc*>(pDesc), aCoreSet);
+                OSL_ENSURE(m_pDesc, "No PageDescriptor");
+                ::PageDescToItemSet(*const_cast<SwPageDesc*>(m_pDesc), m_aCoreSet);
             }
             break;
 
         case SfxStyleFamily::Pseudo:
             {
-                OSL_ENSURE(pNumRule, "No NumRule");
-                SvxNumRule aRule = pNumRule->MakeSvxNumRule();
-                aCoreSet.Put(SvxNumBulletItem(aRule));
+                OSL_ENSURE(m_pNumRule, "No NumRule");
+                SvxNumRule aRule = m_pNumRule->MakeSvxNumRule();
+                m_aCoreSet.Put(SvxNumBulletItem(aRule));
             }
             break;
 
@@ -1407,9 +1407,9 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
             OSL_ENSURE(false, "unknown style family");
     }
     // Member of Baseclass
-    pSet = &aCoreSet;
+    pSet = &m_aCoreSet;
 
-    return aCoreSet;
+    return m_aCoreSet;
 }
 
 void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
@@ -1419,17 +1419,17 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
         return;
     }
 
-    OSL_ENSURE( pColl, "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - missing paragraph style");
-    if ( !pColl->AreListLevelIndentsApplicable() )
+    OSL_ENSURE( m_pColl, "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - missing paragraph style");
+    if ( !m_pColl->AreListLevelIndentsApplicable() )
         return;
 
-    OSL_ENSURE( pColl->GetItemState( RES_PARATR_NUMRULE ) == SfxItemState::SET,
+    OSL_ENSURE( m_pColl->GetItemState( RES_PARATR_NUMRULE ) == SfxItemState::SET,
             "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - list level indents are applicable at paragraph style, but no list style found. Serious defect." );
-    const OUString sNumRule = pColl->GetNumRule().GetValue();
+    const OUString sNumRule = m_pColl->GetNumRule().GetValue();
     if (sNumRule.isEmpty())
         return;
 
-    const SwNumRule* pRule = rDoc.FindNumRulePtr( sNumRule );
+    const SwNumRule* pRule = m_rDoc.FindNumRulePtr( sNumRule );
     if( pRule )
     {
         const SwNumFormat& rFormat = pRule->Get( 0 );
@@ -1448,18 +1448,18 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                                   const bool bResetIndentAttrsAtParagraphStyle )
 {
     // if applicable determine format first
-    if(!bPhysical)
+    if(!m_bPhysical)
         FillStyleSheet( FillPhysical );
 
-    SwImplShellAction aTmpSh( rDoc );
+    SwImplShellAction aTmpSh( m_rDoc );
 
-    OSL_ENSURE( &rSet != &aCoreSet, "SetItemSet with own Set is not allowed" );
+    OSL_ENSURE( &rSet != &m_aCoreSet, "SetItemSet with own Set is not allowed" );
 
-    if (rDoc.GetIDocumentUndoRedo().DoesUndo())
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         SwRewriter aRewriter;
         aRewriter.AddRule( UndoArg1, GetName() );
-        rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::INSFMTATTR, &aRewriter );
+        m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::INSFMTATTR, &aRewriter );
     }
 
     SwFormat* pFormat = nullptr;
@@ -1470,18 +1470,18 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     {
         case SfxStyleFamily::Char :
             {
-                OSL_ENSURE(pCharFormat, "Where's CharFormat");
-                pFormat = pCharFormat;
+                OSL_ENSURE(m_pCharFormat, "Where's CharFormat");
+                pFormat = m_pCharFormat;
             }
             break;
 
         case SfxStyleFamily::Para :
         {
-            OSL_ENSURE(pColl, "Where's Collection");
+            OSL_ENSURE(m_pColl, "Where's Collection");
             const SfxPoolItem* pAutoUpdate;
             if(SfxItemState::SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
             {
-                pColl->SetAutoUpdateFormat(static_cast<const SfxBoolItem*>(pAutoUpdate)->GetValue());
+                m_pColl->SetAutoUpdateFormat(static_cast<const SfxBoolItem*>(pAutoUpdate)->GetValue());
             }
 
             const SwCondCollItem* pCondItem;
@@ -1489,37 +1489,37 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 reinterpret_cast<const SfxPoolItem**>(&pCondItem) ))
                 pCondItem = nullptr;
 
-            if( RES_CONDTXTFMTCOLL == pColl->Which() && pCondItem )
+            if( RES_CONDTXTFMTCOLL == m_pColl->Which() && pCondItem )
             {
                 const CommandStruct* pCmds = SwCondCollItem::GetCmds();
                 for(sal_uInt16 i = 0; i < COND_COMMAND_COUNT; i++)
                 {
                     SwCollCondition aCond( nullptr, pCmds[ i ].nCnd, pCmds[ i ].nSubCond );
-                    static_cast<SwConditionTextFormatColl*>(pColl)->RemoveCondition( aCond );
+                    static_cast<SwConditionTextFormatColl*>(m_pColl)->RemoveCondition( aCond );
                     const OUString sStyle = pCondItem->GetStyle( i );
                     if (sStyle.isEmpty())
                         continue;
-                    SwFormat *const pFindFormat = lcl_FindParaFormat( rDoc, sStyle );
+                    SwFormat *const pFindFormat = lcl_FindParaFormat( m_rDoc, sStyle );
                     if (pFindFormat)
                     {
                         aCond.RegisterToFormat( *pFindFormat );
-                        static_cast<SwConditionTextFormatColl*>(pColl)->InsertCondition( aCond );
+                        static_cast<SwConditionTextFormatColl*>(m_pColl)->InsertCondition( aCond );
                     }
                 }
 
-                pColl->GetNotifier().Broadcast(sw::CondCollCondChg(*pColl));
+                m_pColl->GetNotifier().Broadcast(sw::CondCollCondChg(*m_pColl));
             }
-            else if( pCondItem && !pColl->HasWriterListeners() )
+            else if( pCondItem && !m_pColl->HasWriterListeners() )
             {
                 // no conditional template, then first create and adopt
                 // all important values
-                SwConditionTextFormatColl* pCColl = rDoc.MakeCondTextFormatColl(
-                        pColl->GetName(), static_cast<SwTextFormatColl*>(pColl->DerivedFrom()) );
-                if( pColl != &pColl->GetNextTextFormatColl() )
-                    pCColl->SetNextTextFormatColl( pColl->GetNextTextFormatColl() );
+                SwConditionTextFormatColl* pCColl = m_rDoc.MakeCondTextFormatColl(
+                        m_pColl->GetName(), static_cast<SwTextFormatColl*>(m_pColl->DerivedFrom()) );
+                if( m_pColl != &m_pColl->GetNextTextFormatColl() )
+                    pCColl->SetNextTextFormatColl( m_pColl->GetNextTextFormatColl() );
 
-                if( pColl->IsAssignedToListLevelOfOutlineStyle())
-                    pCColl->AssignToListLevelOfOutlineStyle(pColl->GetAssignedOutlineStyleLevel());
+                if( m_pColl->IsAssignedToListLevelOfOutlineStyle())
+                    pCColl->AssignToListLevelOfOutlineStyle(m_pColl->GetAssignedOutlineStyleLevel());
                 else
                     pCColl->DeleteAssignmentToListLevelOfOutlineStyle();
 
@@ -1529,7 +1529,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     const OUString sStyle = pCondItem->GetStyle( i );
                     if (sStyle.isEmpty())
                         continue;
-                    SwTextFormatColl *const pFindFormat = lcl_FindParaFormat( rDoc, sStyle );
+                    SwTextFormatColl *const pFindFormat = lcl_FindParaFormat( m_rDoc, sStyle );
                     if (pFindFormat)
                     {
                         pCColl->InsertCondition( SwCollCondition( pFindFormat,
@@ -1537,15 +1537,15 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     }
                 }
 
-                rDoc.DelTextFormatColl( pColl );
-                pColl = pCColl;
+                m_rDoc.DelTextFormatColl( m_pColl );
+                m_pColl = pCColl;
             }
             if ( bResetIndentAttrsAtParagraphStyle &&
                  rSet.GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::SET &&
                  rSet.GetItemState( RES_LR_SPACE, false ) != SfxItemState::SET &&
-                 pColl->GetItemState( RES_LR_SPACE, false ) == SfxItemState::SET )
+                 m_pColl->GetItemState( RES_LR_SPACE, false ) == SfxItemState::SET )
             {
-                rDoc.ResetAttrAtFormat( RES_LR_SPACE, *pColl );
+                m_rDoc.ResetAttrAtFormat( RES_LR_SPACE, *m_pColl );
             }
 
             // #i56252: If a standard numbering style is assigned to a standard paragraph style
@@ -1558,21 +1558,21 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 const OUString sNumRule = static_cast<const SwNumRuleItem*>(pNumRuleItem)->GetValue();
                 if (!sNumRule.isEmpty())
                 {
-                    SwNumRule* pRule = rDoc.FindNumRulePtr( sNumRule );
+                    SwNumRule* pRule = m_rDoc.FindNumRulePtr( sNumRule );
                     if( !pRule )
                     {   // Numbering rule not in use yet.
                         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sNumRule, SwGetPoolIdFromName::NumRule );
                         if( USHRT_MAX != nPoolId ) // It's a standard numbering rule
                         {
-                            rDoc.getIDocumentStylePoolAccess().GetNumRuleFromPool( nPoolId ); // Create numbering rule (physical)
+                            m_rDoc.getIDocumentStylePoolAccess().GetNumRuleFromPool( nPoolId ); // Create numbering rule (physical)
                         }
                     }
                 }
             }
 
-            pFormat = pColl;
+            pFormat = m_pColl;
 
-            sal_uInt16 nId = pColl->GetPoolFormatId() &
+            sal_uInt16 nId = m_pColl->GetPoolFormatId() &
                             ~ ( COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID );
             switch( GetMask() & ( static_cast<SfxStyleSearchBits>(0x0fff) & ~SfxStyleSearchBits::SwCondColl ) )
             {
@@ -1596,32 +1596,32 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     break;
                 default: break;
             }
-            pColl->SetPoolFormatId( nId );
+            m_pColl->SetPoolFormatId( nId );
             break;
         }
         case SfxStyleFamily::Frame:
         {
-            OSL_ENSURE(pFrameFormat, "Where's FrameFormat");
+            OSL_ENSURE(m_pFrameFormat, "Where's FrameFormat");
             const SfxPoolItem* pAutoUpdate;
             if(SfxItemState::SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
             {
-                pFrameFormat->SetAutoUpdateFormat(static_cast<const SfxBoolItem*>(pAutoUpdate)->GetValue());
+                m_pFrameFormat->SetAutoUpdateFormat(static_cast<const SfxBoolItem*>(pAutoUpdate)->GetValue());
             }
-            pFormat = pFrameFormat;
+            pFormat = m_pFrameFormat;
         }
         break;
 
         case SfxStyleFamily::Page :
             {
-                OSL_ENSURE(pDesc, "Where's PageDescriptor");
+                OSL_ENSURE(m_pDesc, "Where's PageDescriptor");
 
-                if (rDoc.FindPageDesc(pDesc->GetName(), &nPgDscPos))
+                if (m_rDoc.FindPageDesc(m_pDesc->GetName(), &nPgDscPos))
                 {
-                    pNewDsc.reset( new SwPageDesc( *pDesc ) );
+                    pNewDsc.reset( new SwPageDesc( *m_pDesc ) );
                     // #i48949# - no undo actions for the
                     // copy of the page style
-                    ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
-                    rDoc.CopyPageDesc(*pDesc, *pNewDsc); // #i7983#
+                    ::sw::UndoGuard const ug(m_rDoc.GetIDocumentUndoRedo());
+                    m_rDoc.CopyPageDesc(*m_pDesc, *pNewDsc); // #i7983#
 
                     pFormat = &pNewDsc->GetMaster();
                 }
@@ -1630,9 +1630,9 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
         case SfxStyleFamily::Pseudo:
             {
-                OSL_ENSURE(pNumRule, "Where's NumRule");
+                OSL_ENSURE(m_pNumRule, "Where's NumRule");
 
-                if (!pNumRule)
+                if (!m_pNumRule)
                     break;
 
                 const SfxPoolItem* pItem;
@@ -1642,19 +1642,19 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 {
                     SvxNumRule* pSetRule = static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule();
                     pSetRule->UnLinkGraphics();
-                    SwNumRule aSetRule(*pNumRule);
-                    aSetRule.SetSvxRule(*pSetRule, &rDoc);
-                    rDoc.ChgNumRuleFormats( aSetRule );
+                    SwNumRule aSetRule(*m_pNumRule);
+                    aSetRule.SetSvxRule(*pSetRule, &m_rDoc);
+                    m_rDoc.ChgNumRuleFormats( aSetRule );
                 }
                 break;
                 case SfxItemState::DONTCARE:
                 // set NumRule to default values
                 // what are the default values?
                 {
-                    SwNumRule aRule( pNumRule->GetName(),
+                    SwNumRule aRule( m_pNumRule->GetName(),
                                      // #i89178#
                                      numfunc::GetDefaultPositionAndSpaceMode() );
-                    rDoc.ChgNumRuleFormats( aRule );
+                    m_rDoc.ChgNumRuleFormats( aRule );
                 }
                 break;
                 default: break;
@@ -1676,7 +1676,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             {
                 // use method <SwDoc::ResetAttrAtFormat(..)> in order to
                 // create an Undo object for the attribute reset.
-                rDoc.ResetAttrAtFormat( rSet.GetWhichByPos(aIter.GetCurPos()),
+                m_rDoc.ResetAttrAtFormat( rSet.GetWhichByPos(aIter.GetCurPos()),
                                         *pFormat );
             }
 
@@ -1690,35 +1690,35 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             // Need to check for unique item for DrawingLayer items of type NameOrIndex
             // and evtl. correct that item to ensure unique names for that type. This call may
             // modify/correct entries inside of the given SfxItemSet
-            rDoc.CheckForUniqueItemForLineFillNameOrIndex(aSet);
+            m_rDoc.CheckForUniqueItemForLineFillNameOrIndex(aSet);
         }
 
-        aCoreSet.ClearItem();
+        m_aCoreSet.ClearItem();
 
         if( pNewDsc )
         {
             ::ItemSetToPageDesc( aSet, *pNewDsc );
-            rDoc.ChgPageDesc( nPgDscPos, *pNewDsc );
-            pDesc = &rDoc.GetPageDesc( nPgDscPos );
-            rDoc.PreDelPageDesc(pNewDsc.get()); // #i7983#
+            m_rDoc.ChgPageDesc( nPgDscPos, *pNewDsc );
+            m_pDesc = &m_rDoc.GetPageDesc( nPgDscPos );
+            m_rDoc.PreDelPageDesc(pNewDsc.get()); // #i7983#
             pNewDsc.reset();
         }
         else
-            rDoc.ChgFormat(*pFormat, aSet);       // put all that is set
+            m_rDoc.ChgFormat(*pFormat, aSet);       // put all that is set
     }
     else
     {
-        aCoreSet.ClearItem();
+        m_aCoreSet.ClearItem();
         if( pNewDsc )       // we still need to delete it
         {
-            rDoc.PreDelPageDesc(pNewDsc.get()); // #i7983#
+            m_rDoc.PreDelPageDesc(pNewDsc.get()); // #i7983#
             pNewDsc.reset();
         }
     }
 
-    if (rDoc.GetIDocumentUndoRedo().DoesUndo())
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
+        m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
     }
 }
 
@@ -1870,24 +1870,24 @@ bool SwDocStyleSheet::FillStyleSheet(
     bool bDeleteInfo = false;
     bool bFillOnlyInfo = FillAllInfo == eFType || FillPreview == eFType;
     std::vector<void*> aDelArr;
-    bool const isModified(rDoc.getIDocumentState().IsModified());
+    bool const isModified(m_rDoc.getIDocumentState().IsModified());
 
     switch(nFamily)
     {
     case SfxStyleFamily::Char:
-        pCharFormat = lcl_FindCharFormat(rDoc, aName, this, bCreate );
-        bPhysical = nullptr != pCharFormat;
-        if( bFillOnlyInfo && !bPhysical )
+        m_pCharFormat = lcl_FindCharFormat(m_rDoc, aName, this, bCreate );
+        m_bPhysical = nullptr != m_pCharFormat;
+        if( bFillOnlyInfo && !m_bPhysical )
         {
             // create style (plus all needed parents) and clean it up
             // later - without affecting the undo/redo stack
-            ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
+            ::sw::UndoGuard const ug(m_rDoc.GetIDocumentUndoRedo());
             bDeleteInfo = true;
-            ::lcl_SaveStyles( nFamily, aDelArr, rDoc );
-            pCharFormat = lcl_FindCharFormat(rDoc, aName, this );
+            ::lcl_SaveStyles( nFamily, aDelArr, m_rDoc );
+            m_pCharFormat = lcl_FindCharFormat(m_rDoc, aName, this );
         }
 
-        pFormat = pCharFormat;
+        pFormat = m_pCharFormat;
         if( !bCreate && !pFormat )
         {
             if( aName == SwResId(STR_POOLCHR_STANDARD))
@@ -1896,74 +1896,74 @@ bool SwDocStyleSheet::FillStyleSheet(
                 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::ChrFmt );
         }
 
-        bRet = nullptr != pCharFormat || USHRT_MAX != nPoolId;
+        bRet = nullptr != m_pCharFormat || USHRT_MAX != nPoolId;
 
         if( bDeleteInfo )
-            pCharFormat = nullptr;
+            m_pCharFormat = nullptr;
         break;
 
     case SfxStyleFamily::Para:
         {
-            pColl = lcl_FindParaFormat(rDoc, aName, this, bCreate);
-            bPhysical = nullptr != pColl;
-            if( bFillOnlyInfo && !bPhysical )
+            m_pColl = lcl_FindParaFormat(m_rDoc, aName, this, bCreate);
+            m_bPhysical = nullptr != m_pColl;
+            if( bFillOnlyInfo && !m_bPhysical )
             {
-                ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
+                ::sw::UndoGuard const ug(m_rDoc.GetIDocumentUndoRedo());
                 bDeleteInfo = true;
-                ::lcl_SaveStyles( nFamily, aDelArr, rDoc );
-                pColl = lcl_FindParaFormat(rDoc, aName, this );
+                ::lcl_SaveStyles( nFamily, aDelArr, m_rDoc );
+                m_pColl = lcl_FindParaFormat(m_rDoc, aName, this );
             }
 
-            pFormat = pColl;
-            if( pColl )
-                PresetFollow( pColl->GetNextTextFormatColl().GetName() );
+            pFormat = m_pColl;
+            if( m_pColl )
+                PresetFollow( m_pColl->GetNextTextFormatColl().GetName() );
             else if( !bCreate )
                 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::TxtColl );
 
-            bRet = nullptr != pColl || USHRT_MAX != nPoolId;
+            bRet = nullptr != m_pColl || USHRT_MAX != nPoolId;
 
             if( bDeleteInfo )
-                pColl = nullptr;
+                m_pColl = nullptr;
         }
         break;
 
     case SfxStyleFamily::Frame:
-        pFrameFormat = lcl_FindFrameFormat(rDoc,  aName, this, bCreate);
-        bPhysical = nullptr != pFrameFormat;
-        if (bFillOnlyInfo && !bPhysical)
+        m_pFrameFormat = lcl_FindFrameFormat(m_rDoc,  aName, this, bCreate);
+        m_bPhysical = nullptr != m_pFrameFormat;
+        if (bFillOnlyInfo && !m_bPhysical)
         {
-            ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
+            ::sw::UndoGuard const ug(m_rDoc.GetIDocumentUndoRedo());
             bDeleteInfo = true;
-            ::lcl_SaveStyles( nFamily, aDelArr, rDoc );
-            pFrameFormat = lcl_FindFrameFormat(rDoc, aName, this );
+            ::lcl_SaveStyles( nFamily, aDelArr, m_rDoc );
+            m_pFrameFormat = lcl_FindFrameFormat(m_rDoc, aName, this );
         }
-        pFormat = pFrameFormat;
+        pFormat = m_pFrameFormat;
         if( !bCreate && !pFormat )
             nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::FrmFmt );
 
-        bRet = nullptr != pFrameFormat || USHRT_MAX != nPoolId;
+        bRet = nullptr != m_pFrameFormat || USHRT_MAX != nPoolId;
 
         if( bDeleteInfo )
-            pFrameFormat = nullptr;
+            m_pFrameFormat = nullptr;
         break;
 
     case SfxStyleFamily::Page:
-        pDesc = lcl_FindPageDesc(rDoc, aName, this, bCreate);
-        bPhysical = nullptr != pDesc;
-        if( bFillOnlyInfo && !pDesc )
+        m_pDesc = lcl_FindPageDesc(m_rDoc, aName, this, bCreate);
+        m_bPhysical = nullptr != m_pDesc;
+        if( bFillOnlyInfo && !m_pDesc )
         {
-            ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
+            ::sw::UndoGuard const ug(m_rDoc.GetIDocumentUndoRedo());
             bDeleteInfo = true;
-            ::lcl_SaveStyles( nFamily, aDelArr, rDoc );
-            pDesc = lcl_FindPageDesc( rDoc, aName, this );
+            ::lcl_SaveStyles( nFamily, aDelArr, m_rDoc );
+            m_pDesc = lcl_FindPageDesc( m_rDoc, aName, this );
         }
 
-        if( pDesc )
+        if( m_pDesc )
         {
-            nPoolId = pDesc->GetPoolFormatId();
-            nHelpId = pDesc->GetPoolHelpId();
-            if( pDesc->GetPoolHlpFileId() != UCHAR_MAX )
-                aHelpFile = *rDoc.GetDocPattern( pDesc->GetPoolHlpFileId() );
+            nPoolId = m_pDesc->GetPoolFormatId();
+            nHelpId = m_pDesc->GetPoolHelpId();
+            if( m_pDesc->GetPoolHlpFileId() != UCHAR_MAX )
+                aHelpFile = *m_rDoc.GetDocPattern( m_pDesc->GetPoolHlpFileId() );
             else
                 aHelpFile.clear();
         }
@@ -1971,28 +1971,28 @@ bool SwDocStyleSheet::FillStyleSheet(
             nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::PageDesc );
         SetMask( (USER_FMT & nPoolId) ? SfxStyleSearchBits::UserDefined : SfxStyleSearchBits::Auto );
 
-        bRet = nullptr != pDesc || USHRT_MAX != nPoolId;
+        bRet = nullptr != m_pDesc || USHRT_MAX != nPoolId;
         if( bDeleteInfo )
-            pDesc = nullptr;
+            m_pDesc = nullptr;
         break;
 
     case SfxStyleFamily::Pseudo:
-        pNumRule = lcl_FindNumRule(rDoc, aName, this, bCreate);
-        bPhysical = nullptr != pNumRule;
-        if( bFillOnlyInfo && !pNumRule )
+        m_pNumRule = lcl_FindNumRule(m_rDoc, aName, this, bCreate);
+        m_bPhysical = nullptr != m_pNumRule;
+        if( bFillOnlyInfo && !m_pNumRule )
         {
-            ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
+            ::sw::UndoGuard const ug(m_rDoc.GetIDocumentUndoRedo());
             bDeleteInfo = true;
-            ::lcl_SaveStyles( nFamily, aDelArr, rDoc );
-            pNumRule = lcl_FindNumRule( rDoc, aName, this );
+            ::lcl_SaveStyles( nFamily, aDelArr, m_rDoc );
+            m_pNumRule = lcl_FindNumRule( m_rDoc, aName, this );
         }
 
-        if( pNumRule )
+        if( m_pNumRule )
         {
-            nPoolId = pNumRule->GetPoolFormatId();
-            nHelpId = pNumRule->GetPoolHelpId();
-            if( pNumRule->GetPoolHlpFileId() != UCHAR_MAX )
-                aHelpFile = *rDoc.GetDocPattern( pNumRule->GetPoolHlpFileId() );
+            nPoolId = m_pNumRule->GetPoolFormatId();
+            nHelpId = m_pNumRule->GetPoolHelpId();
+            if( m_pNumRule->GetPoolHlpFileId() != UCHAR_MAX )
+                aHelpFile = *m_rDoc.GetDocPattern( m_pNumRule->GetPoolHlpFileId() );
             else
                 aHelpFile.clear();
         }
@@ -2000,21 +2000,21 @@ bool SwDocStyleSheet::FillStyleSheet(
             nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::NumRule );
         SetMask( (USER_FMT & nPoolId) ? SfxStyleSearchBits::UserDefined : SfxStyleSearchBits::Auto );
 
-        bRet = nullptr != pNumRule || USHRT_MAX != nPoolId;
+        bRet = nullptr != m_pNumRule || USHRT_MAX != nPoolId;
 
         if( bDeleteInfo )
-            pNumRule = nullptr;
+            m_pNumRule = nullptr;
         break;
 
     case SfxStyleFamily::Table:
-        pTableFormat = lcl_FindTableStyle(rDoc, aName, this, bCreate);
-        SetMask((pTableFormat && pTableFormat->IsUserDefined()) ? SfxStyleSearchBits::UserDefined : SfxStyleSearchBits::Auto);
-        bRet = bPhysical = (nullptr != pTableFormat);
+        m_pTableFormat = lcl_FindTableStyle(m_rDoc, aName, this, bCreate);
+        SetMask((m_pTableFormat && m_pTableFormat->IsUserDefined()) ? SfxStyleSearchBits::UserDefined : SfxStyleSearchBits::Auto);
+        bRet = m_bPhysical = (nullptr != m_pTableFormat);
         break;
 
     case SfxStyleFamily::Cell:
-        pBoxFormat = lcl_FindCellStyle(rDoc, aName, this);
-        bRet = bPhysical = (nullptr != pBoxFormat);
+        m_pBoxFormat = lcl_FindCellStyle(m_rDoc, aName, this);
+        bRet = m_bPhysical = (nullptr != m_pBoxFormat);
         break;
         default:; //prevent warning
     }
@@ -2027,7 +2027,7 @@ bool SwDocStyleSheet::FillStyleSheet(
             nPoolId = pFormat->GetPoolFormatId();
 
         SfxStyleSearchBits _nMask = SfxStyleSearchBits::Auto;
-        if( pFormat == rDoc.GetDfltCharFormat() )
+        if( pFormat == m_rDoc.GetDfltCharFormat() )
             _nMask |= SfxStyleSearchBits::ReadOnly;
         else if( USER_FMT & nPoolId )
             _nMask |= SfxStyleSearchBits::UserDefined;
@@ -2044,11 +2044,11 @@ bool SwDocStyleSheet::FillStyleSheet(
 
         if( pFormat )
         {
-            OSL_ENSURE( bPhysical, "Format not found" );
+            OSL_ENSURE( m_bPhysical, "Format not found" );
 
             nHelpId = pFormat->GetPoolHelpId();
             if( pFormat->GetPoolHlpFileId() != UCHAR_MAX )
-                aHelpFile = *rDoc.GetDocPattern( pFormat->GetPoolHlpFileId() );
+                aHelpFile = *m_rDoc.GetDocPattern( pFormat->GetPoolHlpFileId() );
             else
                 aHelpFile.clear();
 
@@ -2066,11 +2066,11 @@ bool SwDocStyleSheet::FillStyleSheet(
     }
     if( bDeleteInfo && bFillOnlyInfo )
     {
-        ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
-        ::lcl_DeleteInfoStyles( nFamily, aDelArr, rDoc );
+        ::sw::UndoGuard const ug(m_rDoc.GetIDocumentUndoRedo());
+        ::lcl_DeleteInfoStyles( nFamily, aDelArr, m_rDoc );
         if (!isModified)
         {
-            rDoc.getIDocumentState().ResetModified();
+            m_rDoc.getIDocumentState().ResetModified();
         }
     }
     return bRet;
@@ -2082,117 +2082,117 @@ void SwDocStyleSheet::Create()
     switch(nFamily)
     {
         case SfxStyleFamily::Char :
-            pCharFormat = lcl_FindCharFormat( rDoc, aName );
-            if( !pCharFormat )
-                pCharFormat = rDoc.MakeCharFormat(aName,
-                                            rDoc.GetDfltCharFormat());
-            pCharFormat->SetAuto(false);
+            m_pCharFormat = lcl_FindCharFormat( m_rDoc, aName );
+            if( !m_pCharFormat )
+                m_pCharFormat = m_rDoc.MakeCharFormat(aName,
+                                            m_rDoc.GetDfltCharFormat());
+            m_pCharFormat->SetAuto(false);
             break;
 
         case SfxStyleFamily::Para :
-            pColl = lcl_FindParaFormat( rDoc, aName );
-            if( !pColl )
+            m_pColl = lcl_FindParaFormat( m_rDoc, aName );
+            if( !m_pColl )
             {
-                SwTextFormatColl *pPar = (*rDoc.GetTextFormatColls())[0];
+                SwTextFormatColl *pPar = (*m_rDoc.GetTextFormatColls())[0];
                 if( nMask & SfxStyleSearchBits::SwCondColl )
-                    pColl = rDoc.MakeCondTextFormatColl( aName, pPar );
+                    m_pColl = m_rDoc.MakeCondTextFormatColl( aName, pPar );
                 else
-                    pColl = rDoc.MakeTextFormatColl( aName, pPar );
+                    m_pColl = m_rDoc.MakeTextFormatColl( aName, pPar );
             }
             break;
 
         case SfxStyleFamily::Frame:
-            pFrameFormat = lcl_FindFrameFormat( rDoc, aName );
-            if( !pFrameFormat )
-                pFrameFormat = rDoc.MakeFrameFormat(aName, rDoc.GetDfltFrameFormat(), false, false);
+            m_pFrameFormat = lcl_FindFrameFormat( m_rDoc, aName );
+            if( !m_pFrameFormat )
+                m_pFrameFormat = m_rDoc.MakeFrameFormat(aName, m_rDoc.GetDfltFrameFormat(), false, false);
 
             break;
 
         case SfxStyleFamily::Page :
-            pDesc = lcl_FindPageDesc( rDoc, aName );
-            if( !pDesc )
+            m_pDesc = lcl_FindPageDesc( m_rDoc, aName );
+            if( !m_pDesc )
             {
-                pDesc = rDoc.MakePageDesc(aName);
+                m_pDesc = m_rDoc.MakePageDesc(aName);
             }
             break;
 
         case SfxStyleFamily::Pseudo:
-            pNumRule = lcl_FindNumRule( rDoc, aName );
-            if( !pNumRule )
+            m_pNumRule = lcl_FindNumRule( m_rDoc, aName );
+            if( !m_pNumRule )
             {
-                const OUString sTmpNm( aName.isEmpty() ? rDoc.GetUniqueNumRuleName() : aName );
-                SwNumRule* pRule = rDoc.GetNumRuleTable()[
-                    rDoc.MakeNumRule( sTmpNm, nullptr, false,
+                const OUString sTmpNm( aName.isEmpty() ? m_rDoc.GetUniqueNumRuleName() : aName );
+                SwNumRule* pRule = m_rDoc.GetNumRuleTable()[
+                    m_rDoc.MakeNumRule( sTmpNm, nullptr, false,
                                       // #i89178#
                                       numfunc::GetDefaultPositionAndSpaceMode() ) ];
                 pRule->SetAutoRule( false );
                 if( aName.isEmpty() )
                 {
                     // #i91400#
-                    pRule->SetName( aName, rDoc.getIDocumentListsAccess() );
+                    pRule->SetName( aName, m_rDoc.getIDocumentListsAccess() );
                 }
-                pNumRule = pRule;
+                m_pNumRule = pRule;
             }
             break;
 
         case SfxStyleFamily::Table:
             if (aName.isEmpty())
                 return;
-            pTableFormat = lcl_FindTableStyle(rDoc, aName);
-            if (!pTableFormat)
+            m_pTableFormat = lcl_FindTableStyle(m_rDoc, aName);
+            if (!m_pTableFormat)
             {
-                rDoc.MakeTableStyle(aName);
-                pTableFormat = rDoc.GetTableStyles().FindAutoFormat(aName);
-                SAL_WARN_IF(!pTableFormat, "sw.ui", "Recently added auto format not found");
+                m_rDoc.MakeTableStyle(aName);
+                m_pTableFormat = m_rDoc.GetTableStyles().FindAutoFormat(aName);
+                SAL_WARN_IF(!m_pTableFormat, "sw.ui", "Recently added auto format not found");
             }
             break;
         default:; //prevent warning
     }
-    bPhysical = true;
-    aCoreSet.ClearItem();
+    m_bPhysical = true;
+    m_aCoreSet.ClearItem();
 }
 
 SwCharFormat* SwDocStyleSheet::GetCharFormat()
 {
-    if(!bPhysical)
+    if(!m_bPhysical)
         FillStyleSheet( FillPhysical );
-    return pCharFormat;
+    return m_pCharFormat;
 }
 
 SwTextFormatColl* SwDocStyleSheet::GetCollection()
 {
-    if(!bPhysical)
+    if(!m_bPhysical)
         FillStyleSheet( FillPhysical );
-    return pColl;
+    return m_pColl;
 }
 
 const SwPageDesc* SwDocStyleSheet::GetPageDesc()
 {
-    if(!bPhysical)
+    if(!m_bPhysical)
         FillStyleSheet( FillPhysical );
-    return pDesc;
+    return m_pDesc;
 }
 
 const SwNumRule * SwDocStyleSheet::GetNumRule()
 {
-    if(!bPhysical)
+    if(!m_bPhysical)
         FillStyleSheet( FillPhysical );
-    return pNumRule;
+    return m_pNumRule;
 }
 
 
 void SwDocStyleSheet::SetNumRule(const SwNumRule& rRule)
 {
-    OSL_ENSURE(pNumRule, "Where is the NumRule");
-    rDoc.ChgNumRuleFormats( rRule );
+    OSL_ENSURE(m_pNumRule, "Where is the NumRule");
+    m_rDoc.ChgNumRuleFormats( rRule );
 }
 
 SwTableAutoFormat* SwDocStyleSheet::GetTableFormat()
 {
-    if(!bPhysical)
+    if(!m_bPhysical)
         FillStyleSheet( FillPhysical );
-    assert(pTableFormat && "SwDocStyleSheet table style, SwTableAutoFormat not found");
-    return pTableFormat;
+    assert(m_pTableFormat && "SwDocStyleSheet table style, SwTableAutoFormat not found");
+    return m_pTableFormat;
 }
 
 // re-generate Name AND Family from String
@@ -2215,59 +2215,59 @@ void SwDocStyleSheet::PresetNameAndFamily(const OUString& rName)
 // Is the format physically present yet
 void SwDocStyleSheet::SetPhysical(bool bPhys)
 {
-    bPhysical = bPhys;
+    m_bPhysical = bPhys;
 
     if(!bPhys)
     {
-        pCharFormat = nullptr;
-        pColl    = nullptr;
-        pFrameFormat  = nullptr;
-        pDesc    = nullptr;
+        m_pCharFormat = nullptr;
+        m_pColl    = nullptr;
+        m_pFrameFormat  = nullptr;
+        m_pDesc    = nullptr;
     }
 }
 
 SwFrameFormat* SwDocStyleSheet::GetFrameFormat()
 {
-    if(!bPhysical)
+    if(!m_bPhysical)
         FillStyleSheet( FillPhysical );
-    return pFrameFormat;
+    return m_pFrameFormat;
 }
 
 bool  SwDocStyleSheet::IsUsed() const
 {
-    if( !bPhysical )
+    if( !m_bPhysical )
     {
         SwDocStyleSheet* pThis = const_cast<SwDocStyleSheet*>(this);
         pThis->FillStyleSheet( FillOnlyName );
     }
 
-    if( !bPhysical )
+    if( !m_bPhysical )
         return false;
 
     const sw::BroadcastingModify* pMod;
     switch( nFamily )
     {
-    case SfxStyleFamily::Char : pMod = pCharFormat;   break;
-    case SfxStyleFamily::Para : pMod = pColl;      break;
-    case SfxStyleFamily::Frame: pMod = pFrameFormat;    break;
-    case SfxStyleFamily::Page : pMod = pDesc;      break;
+    case SfxStyleFamily::Char : pMod = m_pCharFormat;   break;
+    case SfxStyleFamily::Para : pMod = m_pColl;      break;
+    case SfxStyleFamily::Frame: pMod = m_pFrameFormat;    break;
+    case SfxStyleFamily::Page : pMod = m_pDesc;      break;
 
     case SfxStyleFamily::Pseudo:
-            return pNumRule && rDoc.IsUsed(*pNumRule);
+            return m_pNumRule && m_rDoc.IsUsed(*m_pNumRule);
 
     case SfxStyleFamily::Table:
-            return pTableFormat && rDoc.IsUsed( *pTableFormat );
+            return m_pTableFormat && m_rDoc.IsUsed( *m_pTableFormat );
 
     default:
         OSL_ENSURE(false, "unknown style family");
         return false;
     }
-    return rDoc.IsUsed( *pMod );
+    return m_rDoc.IsUsed( *pMod );
 }
 
 OUString SwDocStyleSheet::GetUsedBy()
 {
-    return pNumRule ? pNumRule->MakeParagraphStyleListString() : OUString();
+    return m_pNumRule ? m_pNumRule->MakeParagraphStyleListString() : OUString();
 }
 
 sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
@@ -2282,59 +2282,59 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
     switch( nFamily )
     {
     case SfxStyleFamily::Char :
-        if( !pCharFormat &&
-            nullptr == (pCharFormat = lcl_FindCharFormat( rDoc, aName, nullptr, false )) )
+        if( !m_pCharFormat &&
+            nullptr == (m_pCharFormat = lcl_FindCharFormat( m_rDoc, aName, nullptr, false )) )
         {
             nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::ChrFmt );
             return USHRT_MAX == nId ? 0 : nId;
         }
-        pTmpFormat = pCharFormat;
+        pTmpFormat = m_pCharFormat;
         break;
 
     case SfxStyleFamily::Para:
-        if( !pColl &&
-            nullptr == ( pColl = lcl_FindParaFormat( rDoc, aName, nullptr, false )) )
+        if( !m_pColl &&
+            nullptr == ( m_pColl = lcl_FindParaFormat( m_rDoc, aName, nullptr, false )) )
         {
             nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::TxtColl );
             return USHRT_MAX == nId ? 0 : nId;
         }
-        pTmpFormat = pColl;
+        pTmpFormat = m_pColl;
         break;
 
     case SfxStyleFamily::Frame:
-        if( !pFrameFormat &&
-            nullptr == ( pFrameFormat = lcl_FindFrameFormat( rDoc, aName, nullptr, false ) ) )
+        if( !m_pFrameFormat &&
+            nullptr == ( m_pFrameFormat = lcl_FindFrameFormat( m_rDoc, aName, nullptr, false ) ) )
         {
             nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::FrmFmt );
             return USHRT_MAX == nId ? 0 : nId;
         }
-        pTmpFormat = pFrameFormat;
+        pTmpFormat = m_pFrameFormat;
         break;
 
     case SfxStyleFamily::Page:
-        if( !pDesc &&
-            nullptr == ( pDesc = lcl_FindPageDesc( rDoc, aName, nullptr, false ) ) )
+        if( !m_pDesc &&
+            nullptr == ( m_pDesc = lcl_FindPageDesc( m_rDoc, aName, nullptr, false ) ) )
         {
             nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::PageDesc );
             return USHRT_MAX == nId ? 0 : nId;
         }
 
-        nId = pDesc->GetPoolHelpId();
-        nFileId = pDesc->GetPoolHlpFileId();
-        nPoolId = pDesc->GetPoolFormatId();
+        nId = m_pDesc->GetPoolHelpId();
+        nFileId = m_pDesc->GetPoolHlpFileId();
+        nPoolId = m_pDesc->GetPoolFormatId();
         break;
 
     case SfxStyleFamily::Pseudo:
-        if( !pNumRule &&
-            nullptr == ( pNumRule = lcl_FindNumRule( rDoc, aName, nullptr, false ) ) )
+        if( !m_pNumRule &&
+            nullptr == ( m_pNumRule = lcl_FindNumRule( m_rDoc, aName, nullptr, false ) ) )
         {
             nId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::NumRule );
             return USHRT_MAX == nId ? 0 : nId;
         }
 
-        nId = pNumRule->GetPoolHelpId();
-        nFileId = pNumRule->GetPoolHlpFileId();
-        nPoolId = pNumRule->GetPoolFormatId();
+        nId = m_pNumRule->GetPoolHelpId();
+        nFileId = m_pNumRule->GetPoolHlpFileId();
+        nPoolId = m_pNumRule->GetPoolFormatId();
         break;
 
     default:
@@ -2351,7 +2351,7 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
 
     if( UCHAR_MAX != nFileId )
     {
-        const OUString *pTemplate = rDoc.GetDocPattern( nFileId );
+        const OUString *pTemplate = m_rDoc.GetDocPattern( nFileId );
         if( pTemplate )
         {
             rFile = *pTemplate;
@@ -2371,23 +2371,23 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
 
 void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
 {
-    sal_uInt8 nFileId = static_cast< sal_uInt8 >(rDoc.SetDocPattern( r ));
+    sal_uInt8 nFileId = static_cast< sal_uInt8 >(m_rDoc.SetDocPattern( r ));
     sal_uInt16 nHId = static_cast< sal_uInt16 >(nId); //!! SFX changed over to ULONG arbitrarily!
 
     SwFormat* pTmpFormat = nullptr;
     switch( nFamily )
     {
-    case SfxStyleFamily::Char : pTmpFormat = pCharFormat;    break;
-    case SfxStyleFamily::Para : pTmpFormat = pColl;       break;
-    case SfxStyleFamily::Frame: pTmpFormat = pFrameFormat;     break;
+    case SfxStyleFamily::Char : pTmpFormat = m_pCharFormat;    break;
+    case SfxStyleFamily::Para : pTmpFormat = m_pColl;       break;
+    case SfxStyleFamily::Frame: pTmpFormat = m_pFrameFormat;     break;
     case SfxStyleFamily::Page :
-        const_cast<SwPageDesc*>(pDesc)->SetPoolHelpId( nHId );
-        const_cast<SwPageDesc*>(pDesc)->SetPoolHlpFileId( nFileId );
+        const_cast<SwPageDesc*>(m_pDesc)->SetPoolHelpId( nHId );
+        const_cast<SwPageDesc*>(m_pDesc)->SetPoolHlpFileId( nFileId );
         break;
 
     case SfxStyleFamily::Pseudo:
-        const_cast<SwNumRule*>(pNumRule)->SetPoolHelpId( nHId );
-        const_cast<SwNumRule*>(pNumRule)->SetPoolHlpFileId( nFileId );
+        const_cast<SwNumRule*>(m_pNumRule)->SetPoolHelpId( nHId );
+        const_cast<SwNumRule*>(m_pNumRule)->SetPoolHlpFileId( nFileId );
         break;
 
     default:
