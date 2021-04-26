@@ -470,9 +470,9 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
             // Cannot use -100 because that results in 0 length in some cases and
             // LibreOffice interprets 0 length as 100%.
             if (aLineDash.DotLen >= 100 || aLineDash.DashLen >= 100)
-                aLineDash.Distance += 96;
+                aLineDash.Distance += 99;
             if (aLineDash.DotLen >= 100)
-                aLineDash.DotLen -= 96;
+                aLineDash.DotLen -= 99;
             if (aLineDash.DashLen >= 100)
                 aLineDash.DashLen -= 99;
         }
