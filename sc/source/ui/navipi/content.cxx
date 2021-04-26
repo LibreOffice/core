@@ -1421,10 +1421,15 @@ void ScContentTree::ResetManualDoc()
     ActiveDocChanged();
 }
 
-void ScContentTree::ActiveDocChanged()
+bool ScContentTree::ActiveDocChanged()
 {
+    bool bRefreshed = false;
+
     if ( !bHiddenDoc && aManualDoc.isEmpty() )
+    {
         Refresh();                                  // content only if automatic
+        bRefreshed = true;
+    }
 
         //  if flag active Listbox must be updated
 
@@ -1442,12 +1447,15 @@ void ScContentTree::ActiveDocChanged()
 
             aManualDoc.clear();             // again automatically
             Refresh();
+            bRefreshed = true;
             pSh = GetManualOrCurrent();     // should be active now
             if (pSh)
                 aCurrent = pSh->GetTitle();
         }
     }
     pParentWindow->GetDocNames( &aCurrent );        // select
+
+    return bRefreshed;
 }
 
 void ScContentTree::SetManualDoc(const OUString& rName)
