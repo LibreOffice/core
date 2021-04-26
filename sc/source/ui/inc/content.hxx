@@ -140,7 +140,9 @@ public:
     void    SetRootType( ScContentId nNew );
     ScContentId  GetRootType() const             { return nRootType; }
 
-    void    ActiveDocChanged();
+    // return true if Refresh was called to allow detecting that the navigator
+    // tree is now up to date
+    bool    ActiveDocChanged();
     void    ResetManualDoc();
     void    SetManualDoc(const OUString& rName);
     void    LoadFile(const OUString& rUrl);
