@@ -424,6 +424,90 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
 
         GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoPageDesc>(rDesc, rChged, this));
     }
+    else
+    {
+        SwUndoId nBeingUndone;
+        GetIDocumentUndoRedo().GetFirstRedoInfo(nullptr, &nBeingUndone);
+        if (SwUndoId::HEADER_FOOTER == nBeingUndone)
+        {
+            // The last format change is currently being undone. Remove header/footer and corresponding nodes.
+            auto rDescMasterHeaderFormat = rDesc.GetMaster().GetFormatAttr(RES_HEADER);
+            auto rDescLeftHeaderFormat = rDesc.GetLeft().GetFormatAttr(RES_HEADER);
+            auto rDescFirstLeftHeaderFormat = rDesc.GetFirstLeft().GetFormatAttr(RES_HEADER);
+            auto rDescMasterFooterFormat = rDesc.GetMaster().GetFormatAttr(RES_FOOTER);
+            auto rDescLeftFooterFormat = rDesc.GetLeft().GetFormatAttr(RES_FOOTER);
+            auto rDescFirstLeftFooterFormat = rDesc.GetFirstLeft().GetFormatAttr(RES_FOOTER);
+
+            auto rChgedMasterHeaderFormat = rChged.GetMaster().GetFormatAttr(RES_HEADER);
+            auto rChgedLeftHeaderFormat = rChged.GetLeft().GetFormatAttr(RES_HEADER);
+            auto rChgedFirstLeftHeaderFormat = rChged.GetFirstLeft().GetFormatAttr(RES_HEADER);
+            auto rChgedMasterFooterFormat = rChged.GetMaster().GetFormatAttr(RES_FOOTER);
+            auto rChgedLeftFooterFormat = rChged.GetLeft().GetFormatAttr(RES_FOOTER);
+            auto rChgedFirstLeftFooterFormat = rChged.GetFirstLeft().GetFormatAttr(RES_FOOTER);
+
+            rDesc.GetMaster().ResetFormatAttr(RES_HEADER);
+            rDesc.GetLeft().ResetFormatAttr(RES_HEADER);
+            rDesc.GetFirstLeft().ResetFormatAttr(RES_HEADER);
+            rDesc.GetMaster().ResetFormatAttr(RES_FOOTER);
+            rDesc.GetLeft().ResetFormatAttr(RES_FOOTER);
+            rDesc.GetFirstLeft().ResetFormatAttr(RES_FOOTER);
+
+            auto lDelHFFormat = [this](SwClient* pToRemove, SwFrameFormat* pFormat)
+            {
+                // Code taken from lcl_DelHFFormat
+                pFormat->Remove(pToRemove);
+                SwFormatContent& rCnt = const_cast<SwFormatContent&>(pFormat->GetContent());
+                if (rCnt.GetContentIdx())
+                {
+                    SwNode* pNode = nullptr;
+                    {
+                        SwNodeIndex aIdx(*rCnt.GetContentIdx(), 0);
+                        pNode = &aIdx.GetNode();
+                        sal_uInt32 nEnd = pNode->EndOfSectionIndex();
+                        while (aIdx < nEnd)
+                        {
+                            if (pNode->IsContentNode() &&
+                                static_cast<SwContentNode*>(pNode)->HasWriterListeners())
+                            {
+                                SwCursorShell* pShell = SwIterator<SwCursorShell, SwContentNode>(*static_cast<SwContentNode*>(pNode)).First();
+                                if (pShell)
+                                {
+                                    pShell->ParkCursor(aIdx);
+                                    aIdx = nEnd - 1;
+                                }
+                            }
+                            ++aIdx;
+                            pNode = &aIdx.GetNode();
+                        }
+                    }
+                    rCnt.SetNewContentIdx(nullptr);
+
+                    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+
+                    assert(pNode);
+                    getIDocumentContentOperations().DeleteSection(pNode);
+                }
+                delete pFormat;
+            };
+
+            if (rDescMasterHeaderFormat.GetHeaderFormat() && rDescMasterHeaderFormat != rChgedMasterHeaderFormat)
+                lDelHFFormat(&rDescMasterHeaderFormat, rDescMasterHeaderFormat.GetHeaderFormat());
+            else if (rDescLeftHeaderFormat.GetHeaderFormat() && rDescLeftHeaderFormat != rChgedLeftHeaderFormat)
+                lDelHFFormat(&rDescLeftHeaderFormat, rDescLeftHeaderFormat.GetHeaderFormat());
+            else if (rDescFirstLeftHeaderFormat.GetHeaderFormat() && rDescFirstLeftHeaderFormat != rChgedFirstLeftHeaderFormat)
+                lDelHFFormat(&rDescFirstLeftHeaderFormat, rDescFirstLeftHeaderFormat.GetHeaderFormat());
+
+            else if (rDescMasterFooterFormat.GetFooterFormat() && rDescMasterFooterFormat != rChgedMasterFooterFormat)
+                lDelHFFormat(&rDescMasterFooterFormat, rDescMasterFooterFormat.GetFooterFormat());
+            else if (rDescLeftFooterFormat.GetFooterFormat() && rDescLeftFooterFormat != rChgedLeftFooterFormat)
+                lDelHFFormat(&rDescLeftFooterFormat, rDescLeftFooterFormat.GetFooterFormat());
+            else if (rDescFirstLeftFooterFormat.GetFooterFormat() && rDescFirstLeftFooterFormat != rChgedFirstLeftFooterFormat)
+                lDelHFFormat(&rDescFirstLeftFooterFormat, rDescFirstLeftFooterFormat.GetFooterFormat());
+
+            // FIXME: Disable redoing this change until we figure out how
+            GetIDocumentUndoRedo().ClearRedo();
+        }
+    }
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     // Mirror at first if needed.
