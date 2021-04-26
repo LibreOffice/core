@@ -193,6 +193,24 @@
       "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3a26c7e_c8181c68",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-26T21:33:23Z",
+      "side": 0,
+      "message": "Yes. It probably was necessary because determining the first non-null value comparing NaN!\u003d0.0 yields also true, which wasn\u0027t catered for in ScMatrix::Sum().",
+      "parentUuid": "139358df_7fa7d2ac",
+      "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

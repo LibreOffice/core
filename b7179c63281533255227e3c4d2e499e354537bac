@@ -321,6 +321,24 @@
     },
     {
       "key": {
+        "uuid": "1ef6c5bc_db4caed0",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-26T21:33:23Z",
+      "side": 1,
+      "message": "Gnumeric returns 0 for PRODUCT(B1:B2) where B1:B2 are both empty cells, Excel probably does the same. Just keep things as they are.",
+      "parentUuid": "f0f157b9_9fac420b",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41fce26b_a8546784",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 7

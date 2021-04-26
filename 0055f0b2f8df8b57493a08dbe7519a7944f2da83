@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ef43099_78bde907",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-26T21:33:23Z",
+      "side": 1,
+      "message": "Please mention the tdf#... bug number in the commit summary, so the commit will be added in a message in the corresponding bug once merged.",
+      "revId": "0055f0b2f8df8b57493a08dbe7519a7944f2da83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3720a062_07e646a5",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-26T21:33:23Z",
+      "side": 1,
+      "message": "While at it and eliminating the mfFirst handling (corresponding to the first fMem non-null value) from ScMatrix::KahanIterateResult we should also rename mfRest to proper mfSum (or rather maSum because it\u0027s a KahanSum object instance) to make things less confusing.",
+      "range": {
+        "startLine": 401,
+        "startChar": 0,
+        "endLine": 401,
+        "endChar": 1
+      },
+      "revId": "0055f0b2f8df8b57493a08dbe7519a7944f2da83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
