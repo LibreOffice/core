@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d91bdac3_eee0034f",
+        "filename": "starmath/source/mathml/element.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-26T14:26:13Z",
+      "side": 0,
+      "message": "This newline between the license block and the include looked nice :-)",
+      "revId": "818b7e508bcabae48cb1c96c987a9f83d83ff6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
