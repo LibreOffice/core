@@ -64,7 +64,10 @@ class CompileFormulaContext;
 struct SetFormulaDirtyContext;
 enum class MatrixEdge;
 class ColumnIterator;
+}
 
+namespace {
+    class MixDataHandler;
 }
 
 class Fraction;
@@ -156,6 +159,7 @@ friend class sc::EditTextIterator;
 friend class sc::CellValues;
 friend class sc::TableValues;
 friend class sc::CellStoreEvent;
+friend class MixDataHandler;
 
     ScColumn(const ScColumn&) = delete;
     ScColumn& operator= (const ScColumn&) = delete;
