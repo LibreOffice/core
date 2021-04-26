@@ -57,14 +57,14 @@ public:
                                      SvMetaAttribute & rAttr ) const;
 private:
 
-    static void             WriteSlotStubs( const OString& rShellName,
+    static void             WriteSlotStubs( std::string_view rShellName,
                                         SvSlotElementList & rSlotList,
                                         std::vector<OString> & rList,
                                         SvStream & rOutStm );
     static sal_uInt16       WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvSlotElementList & rSlotList,
                                             SvStream & rOutStm );
-    static sal_uInt16       WriteSlots( const OString& rShellName,
+    static sal_uInt16       WriteSlots( std::string_view rShellName,
                                     SvSlotElementList & rSlotList,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );

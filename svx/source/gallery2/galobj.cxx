@@ -276,7 +276,7 @@ void SgaObjectBmp::WriteData( SvStream& rOut, const OUString& rDestDir ) const
     SgaObject::WriteData( rOut, rDestDir );
     char const aDummy[ 10 ] = { 0 };
     rOut.WriteBytes(aDummy, 10);
-    write_uInt16_lenPrefixed_uInt8s_FromOString(rOut, OString()); //dummy
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rOut, ""); //dummy
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, aTitle, RTL_TEXTENCODING_UTF8);
 }
 

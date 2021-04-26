@@ -516,7 +516,7 @@ OString HTMLOutFuncs::ConvertStringToHTML( const OUString& rSrc,
     return aDest.makeStringAndClear();
 }
 
-SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const OString& rStr,
+SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, std::string_view rStr,
                                       bool bOn )
 {
     if(bOn)
@@ -993,7 +993,7 @@ bool HTMLOutFuncs::PrivateURLToInternalImg( OUString& rURL )
     return false;
 }
 
-void HtmlWriterHelper::applyColor(HtmlWriter& rHtmlWriter, const OString &aAttributeName, const Color& rColor)
+void HtmlWriterHelper::applyColor(HtmlWriter& rHtmlWriter, std::string_view aAttributeName, const Color& rColor)
 {
     OStringBuffer sBuffer;
 

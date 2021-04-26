@@ -42,18 +42,18 @@ public:
 
     void flushStack();
 
-    void attribute(const OString& aAttribute, const char* aValue);
-    void attribute(const OString& aAttribute, sal_Int32 aValue);
-    void attribute(const OString& aAttribute, const OString& aValue);
-    void attribute(const OString& aAttribute, std::u16string_view aValue);
+    void attribute(std::string_view aAttribute, const char* aValue);
+    void attribute(std::string_view aAttribute, sal_Int32 aValue);
+    void attribute(std::string_view aAttribute, std::string_view aValue);
+    void attribute(std::string_view aAttribute, std::u16string_view aValue);
     // boolean attribute e.g. <img ismap>
-    void attribute(const OString& aAttribute);
+    void attribute(std::string_view aAttribute);
 
     void single(const OString& aContent);
     void endAttribute();
 
     /// Writes character data.
-    void characters(const OString& rChars);
+    void characters(std::string_view rChars);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -429,13 +429,13 @@ public:
         : maStream(aFileName, StreamMode::WRITE)
     {}
 
-    void text(const OString& rText)
+    void text(std::string_view rText)
     {
         maStream.WriteOString(rText);
         maStream.WriteChar('\n');
     }
 
-    void log(const OString& rKey, const OString& rValue)
+    void log(std::string_view rKey, std::string_view rValue)
     {
         maStream.WriteOString(rKey);
         maStream.WriteCharPtr(": ");
@@ -443,12 +443,12 @@ public:
         maStream.WriteChar('\n');
     }
 
-    void log(const OString& rKey, int rValue)
+    void log(std::string_view rKey, int rValue)
     {
         log(rKey, OString::number(rValue));
     }
 
-    void log(const OString& rKey, bool rValue)
+    void log(std::string_view rKey, bool rValue)
     {
         log(rKey, OString::boolean(rValue));
     }

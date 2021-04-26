@@ -26,7 +26,7 @@ OUString readByteString(SvStream& rStream)
     return rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
 }
 
-void writeByteString(SvStream& rStream, const OUString& rString)
+void writeByteString(SvStream& rStream, std::u16string_view rString)
 {
     rStream.WriteUniOrByteString(rString, rStream.GetStreamCharSet());
 }

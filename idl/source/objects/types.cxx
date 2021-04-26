@@ -218,10 +218,10 @@ size_t SvMetaType::MakeSfx( OStringBuffer& rAttrArray )
 }
 
 void SvMetaType::WriteSfxItem(
-    const OString& rItemName, SvIdlDataBase const & rBase, SvStream& rOutStm )
+    std::string_view rItemName, SvIdlDataBase const & rBase, SvStream& rOutStm )
 {
     WriteStars( rOutStm );
-    OString aVarName = " a" + rItemName + "_Impl";
+    OString aVarName = OString::Concat(" a") + rItemName + "_Impl";
 
     OStringBuffer aAttrArray(1024);
     size_t   nAttrCount = MakeSfx( aAttrArray );

@@ -930,7 +930,7 @@ void ImageMap::Write( SvStream& rOStm ) const
     rOStm.WriteCharPtr( IMAPMAGIC );
     rOStm.WriteUInt16( IMAGE_MAP_VERSION );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
-    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, OString()); //dummy
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, ""); //dummy
     rOStm.WriteUInt16( nCount );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
 

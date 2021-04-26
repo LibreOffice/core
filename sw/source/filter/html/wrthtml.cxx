@@ -492,13 +492,13 @@ ErrCode SwHTMLWriter::WriteStream()
         OutNewLine();
     if (!mbSkipHeaderFooter)
     {
-        HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_body, false );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_body), false );
         OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_html, false );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_html), false );
     }
     else if (mbReqIF)
         // ReqIF: end xhtml.BlkStruct.class.
-        HTMLOutFuncs::Out_AsciiTag(Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_division, false);
+        HTMLOutFuncs::Out_AsciiTag(Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false);
 
     // delete the table with floating frames
     OSL_ENSURE( !m_pHTMLPosFlyFrames, "Were not all frames output?" );
@@ -709,7 +709,7 @@ static void lcl_html_OutSectionEndTag( SwHTMLWriter& rHTMLWrt )
     rHTMLWrt.DecIndentLevel();
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division, false );
+    HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), OString(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false );
     rHTMLWrt.m_bLFPossible = true;
 }
 
@@ -992,10 +992,10 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         // build prelude
         OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_html );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_html) );
 
         OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_head );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_head) );
 
         IncIndentLevel();   // indent content of <HEAD>
 
@@ -1064,7 +1064,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         DecIndentLevel();   // indent content of <HEAD>
         OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_head, false );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_head), false );
 
         // the body won't be indented, because then everything would be indented!
         OutNewLine();
@@ -1108,7 +1108,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     }
     else if (mbReqIF)
         // ReqIF: start xhtml.BlkStruct.class.
-        HTMLOutFuncs::Out_AsciiTag(Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_division);
+        HTMLOutFuncs::Out_AsciiTag(Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_division));
 
     return pPageDesc;
 }
@@ -1131,7 +1131,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
         Strm().WriteOString( sOut.makeStringAndClear() );
         HTMLOutFuncs::Out_String( Strm(), rName.replace(' ', '_'), m_eDestEnc, &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
     }
-    HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor, false );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor), false );
 }
 
 void SwHTMLWriter::OutBookmarks()

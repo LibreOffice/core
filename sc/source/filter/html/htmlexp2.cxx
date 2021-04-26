@@ -171,7 +171,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
 }
 
 void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
-            const OString& rImgOptions, XOutFlags nXOutFlags )
+            std::string_view rImgOptions, XOutFlags nXOutFlags )
 {
     // Embedded graphic -> create an image file
     if( rLinkName.isEmpty() )
@@ -216,7 +216,7 @@ void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
         HTMLOutFuncs::Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(
                     aBaseURL,
                     rLinkName ), eDestEnc ).WriteChar( '\"' );
-        if ( !rImgOptions.isEmpty() )
+        if ( !rImgOptions.empty() )
             rStrm.WriteOString( rImgOptions );
         rStrm.WriteChar( '>' ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() );
     }

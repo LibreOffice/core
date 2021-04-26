@@ -333,7 +333,7 @@ static OString MakeSlotName( SvStringHashEntry const * pEntry )
     return "SfxSlotMode::" + pEntry->GetName().toAsciiUpperCase();
 };
 
-void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
+void SvMetaSlot::WriteSlotStubs( std::string_view rShellName,
                                 std::vector<OString> & rList,
                                 SvStream & rOutStm ) const
 {
@@ -387,8 +387,8 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
     }
 }
 
-void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
-                            const OString& rSlotId,
+void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
+                            std::string_view rSlotId,
                             SvSlotElementList& rSlotList,
                             size_t nStart,
                             SvIdlDataBase & rBase, SvStream & rOutStm )
@@ -599,7 +599,7 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
     return 0;
 }
 
-sal_uInt16 SvMetaSlot::WriteSlotMap( const OString& rShellName, sal_uInt16 nCount,
+sal_uInt16 SvMetaSlot::WriteSlotMap( std::string_view rShellName, sal_uInt16 nCount,
                                 SvSlotElementList& rSlotList,
                                 size_t nStart,
                                 SvIdlDataBase & rBase,
