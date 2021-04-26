@@ -315,7 +315,10 @@ namespace emfio
 
     struct EMFIO_DLLPUBLIC GDIObj
     {
+        GDIObj() = default;
+        GDIObj(GDIObj const &) = default;
         virtual ~GDIObj() = default; // Polymorphic base class
+        GDIObj & operator =(GDIObj const &) = default;
     };
 
     struct UNLESS_MERGELIBS(EMFIO_DLLPUBLIC) WinMtfFontStyle final : GDIObj

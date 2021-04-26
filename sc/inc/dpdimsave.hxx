@@ -164,6 +164,7 @@ class SC_DLLPUBLIC ScDPDimensionSaveData
 {
 public:
             ScDPDimensionSaveData();
+    ScDPDimensionSaveData(ScDPDimensionSaveData const &) = default;
 
     bool    operator==( const ScDPDimensionSaveData& r ) const;
 
