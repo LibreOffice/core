@@ -874,7 +874,8 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
     SfxItemSet* pSet = pMedium->GetItemSet();
     const SfxStringItem* pOptions = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_FILE_FILTEROPTIONS, false);
     const SfxUnoAnyItem* pData = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_FILTER_DATA, false);
-    if ( !pData && !pOptions )
+    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
+    if ( !pData && (bTiledRendering || !pOptions) )
     {
         css::uno::Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
         css::uno::Reference< XNameAccess > xFilterCFG;
