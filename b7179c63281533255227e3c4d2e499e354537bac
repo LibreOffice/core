@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4c53b403_47fd575e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T17:26:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "984cc71f_c68701c5",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9180211b_8e0bc7d7",
         "filename": "sc/qa/uitest/calc_tests6/tdf118638.py",
         "patchSetId": 7
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "8157b40c_04cae7c7",
+        "filename": "sc/qa/uitest/calc_tests6/tdf118638.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T17:26:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9180211b_8e0bc7d7",
+      "range": {
+        "startLine": 50,
+        "startChar": 83,
+        "endLine": 50,
+        "endChar": 84
+      },
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39398bf8_8d56c33a",
         "filename": "sc/source/core/tool/arraysumSSE2.cxx",
         "patchSetId": 7
@@ -53,6 +95,24 @@
       "writtenOn": "2021-04-26T16:37:36Z",
       "side": 1,
       "message": "This file is unchanged at all - except for this trailing newline.",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4db430c3_d864c185",
+        "filename": "sc/source/core/tool/arraysumSSE2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T17:26:06Z",
+      "side": 1,
+      "message": "I do know. However in my text editor (gedit) that line does not exist.\nNot even after refreshing the code several times nor in another copy.\nHaven\u0027t figured how to solve this yet.",
+      "parentUuid": "39398bf8_8d56c33a",
       "revId": "b7179c63281533255227e3c4d2e499e354537bac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "ed676ade_b177428f",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T17:26:06Z",
+      "side": 1,
+      "message": "Is there something wrong?",
+      "parentUuid": "0232f083_62399131",
+      "range": {
+        "startLine": 1874,
+        "startChar": 45,
+        "endLine": 1874,
+        "endChar": 57
+      },
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3fb075e9_637da2ac",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 7
@@ -96,6 +180,24 @@
       "revId": "b7179c63281533255227e3c4d2e499e354537bac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85805945_5fe24005",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T17:26:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3fb075e9_637da2ac",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "c205e7b2_cf3074bf",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T17:26:06Z",
+      "side": 1,
+      "message": "Removing them.\nUsed those to better follow the code.",
+      "parentUuid": "41fce26b_a8546784",
+      "range": {
+        "startLine": 466,
+        "startChar": 8,
+        "endLine": 466,
+        "endChar": 13
+      },
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9cf0f007_7cbc77cd",
         "filename": "sc/source/core/tool/matrixoperators.cxx",
         "patchSetId": 7
@@ -136,6 +262,24 @@
       "revId": "b7179c63281533255227e3c4d2e499e354537bac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c86471c_a786f0a3",
+        "filename": "sc/source/core/tool/matrixoperators.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T17:26:06Z",
+      "side": 1,
+      "message": "OK.",
+      "parentUuid": "9cf0f007_7cbc77cd",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

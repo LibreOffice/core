@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a050ada9_50b69363",
+        "filename": "sc/inc/matrixoperators.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T17:26:06Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "e4fa68b7_1cd7570d",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 2
+      },
+      "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "371e20e5_62ea982c",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a7dd6733_c449e890",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T17:26:06Z",
+      "side": 0,
+      "message": "Chacked out. Calc does allow you to use average() with a div0 error.\nSo partially revert.",
+      "parentUuid": "371e20e5_62ea982c",
+      "range": {
+        "startLine": 495,
+        "startChar": 19,
+        "endLine": 495,
+        "endChar": 26
+      },
+      "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6cbdcae_6835444a",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 7
@@ -62,6 +110,24 @@
       "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a480fee_f721f7ad",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-26T17:26:06Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "f6cbdcae_6835444a",
+      "revId": "e23649caec49838dd887c34e47ade69bd3e5326d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
