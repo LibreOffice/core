@@ -669,11 +669,15 @@ sal_Bool SAL_CALL ChartModel::isModified()
 
 void SAL_CALL ChartModel::setModified( sal_Bool bModified )
 {
-    // tdf#77007: honor parent's IsEnableSetModified
-    // Check it before LifeTimeGuard, to avoid deadlocking solar mutex and this guard
-    if (auto pParentShell = SfxObjectShell::GetShellFromComponent(getParent());
-        pParentShell && !pParentShell->IsEnableSetModified())
-        return;
+    // tdf#141914: allow to set *unmodified* when parent does not allow to set modified
+    if (bModified)
+    {
+        // tdf#77007: honor parent's IsEnableSetModified
+        // Check it before LifeTimeGuard, to avoid deadlocking solar mutex and this guard
+        if (auto pParentShell = SfxObjectShell::GetShellFromComponent(getParent());
+            pParentShell && !pParentShell->IsEnableSetModified())
+            return;
+    }
 
     apphelper::LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())//@todo ? is this a long lasting call??
