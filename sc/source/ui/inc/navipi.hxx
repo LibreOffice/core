@@ -143,6 +143,7 @@ private:
     void    SetCurrentObject( const OUString& rName );
     void    SetCurrentDoc( const OUString& rDocName );
     void    UpdateSelection();
+    void    ContentUpdated(); // stop aContentIdle because content is up to date
 
     static ScTabViewShell*  GetTabViewShell();
     static ScNavigatorSettings* GetNavigatorSettings();
