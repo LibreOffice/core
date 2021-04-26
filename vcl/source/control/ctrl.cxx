@@ -492,4 +492,19 @@ Control::GetUnzoomedControlPointFont() const
     return aFont;
 }
 
+void Control::LogicMouseButtonDown(const MouseEvent& rEvent)
+{
+    MouseButtonDown(rEvent);
+}
+
+void Control::LogicMouseButtonUp(const MouseEvent& rEvent)
+{
+    MouseButtonUp(rEvent);
+}
+
+void Control::LogicMouseMove(const MouseEvent& rEvent)
+{
+    MouseMove(rEvent);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
