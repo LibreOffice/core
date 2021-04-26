@@ -1444,24 +1444,19 @@ namespace emfio
                             bStatus = false;
                         else
                         {
-                            sal_Int32 nClippingMode(0), cbRgnData(0);
-                            mpInputStream->ReadInt32(cbRgnData);
-                            mpInputStream->ReadInt32(nClippingMode);
+                            sal_uInt32 nClippingMode(0), cbRgnDataSize(0);
+                            mpInputStream->ReadUInt32(cbRgnDataSize);
+                            mpInputStream->ReadUInt32(nClippingMode);
                             nRemainingRecSize -= 8;
 
-                            // This record's region data should be ignored if mode
-                            // is RGN_COPY - see EMF spec section 2.3.2.2
-                            if (nClippingMode == RGN_COPY)
-                            {
-                                SetDefaultClipPath();
-                            }
-                            else
-                            {
-                                tools::PolyPolygon aPolyPoly;
-                                if (cbRgnData)
-                                    ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize);
-                                SetClipPath(aPolyPoly, nClippingMode, false);
-                            }
+                            // According to documentation record's region data should be ignored
+                            // if RegionMode is RGN_COPY - see EMF spec section 2.3.2.2
+                            // Unfortunately it is not true in Microsoft implementation
+                            // and without that the image is displayed wrongly.
+                            tools::PolyPolygon aPolyPoly;
+                            if (cbRgnDataSize)
+                                ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize);
+                            SetClipPath(aPolyPoly, nClippingMode, false);
                         }
                     }
                     break;
