@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43912dd4_f02ed3ef",
+        "filename": "vcl/win/dtrans/WinClipboard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-26T13:47:38Z",
+      "side": 1,
+      "message": "both of these are constants with the same value (2, see offapi/com/sun/star/datatransfer/clipboard/RenderingCapabilities.idl), so it suffices to have one of them here",
+      "range": {
+        "startLine": 232,
+        "startChar": 22,
+        "endLine": 232,
+        "endChar": 45
+      },
+      "revId": "e08161d49b39ee015152bfcb1d7b37dd1032100e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
