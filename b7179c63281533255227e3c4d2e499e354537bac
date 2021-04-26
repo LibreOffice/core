@@ -201,6 +201,24 @@
     },
     {
       "key": {
+        "uuid": "addeb432_e15ade56",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-26T17:32:47Z",
+      "side": 1,
+      "message": "Apart from that, the product of nothing is not 1, is it?",
+      "parentUuid": "3fb075e9_637da2ac",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41fce26b_a8546784",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 7
@@ -245,6 +263,47 @@
       "revId": "b7179c63281533255227e3c4d2e499e354537bac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e6e76550_d1959143",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-26T17:32:47Z",
+      "side": 1,
+      "message": "And unnecessary. There is no case following.",
+      "parentUuid": "41fce26b_a8546784",
+      "range": {
+        "startLine": 466,
+        "startChar": 8,
+        "endLine": 466,
+        "endChar": 13
+      },
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f28a05d_fc9f71e9",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-04-26T17:32:47Z",
+      "side": 1,
+      "message": "This should *not* be changed to KahanSum. The purpose of RAWSUBTRACT() is exactly to not apply any error correction, approximation etc. but use the \"raw\" IEEE 754 double subtraction.",
+      "revId": "b7179c63281533255227e3c4d2e499e354537bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     },
     {
       "key": {
