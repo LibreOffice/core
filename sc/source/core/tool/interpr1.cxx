@@ -3935,13 +3935,14 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
     struct ArrayRefListValue
     {
         std::vector<double> mvValues;
-        double mfSum;
-        ArrayRefListValue() : mfSum(0.0) {}
+        KahanSum mfSum;
+        ArrayRefListValue() = default;
+        double get() { return mfSum.get(); }
     };
     std::vector<ArrayRefListValue> vArrayValues;
 
     std::vector<double> values;
-    double fSum    = 0.0;
+    KahanSum fSum    = 0.0;
     double fVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3990,7 +3991,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
                         // Create and init all elements with current value.
                         assert(nMatRows > 0);
                         vArrayValues.resize(nMatRows);
-                        for (auto & it : vArrayValues)
+                        for (ArrayRefListValue & it : vArrayValues)
                         {
                             it.mvValues = values;
                             it.mfSum = fSum;
@@ -4000,7 +4001,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
                     {
                         // Current value and values from vector are operands
                         // for each vector position.
-                        for (auto & it : vArrayValues)
+                        for (ArrayRefListValue & it : vArrayValues)
                         {
                             it.mvValues.insert( it.mvValues.end(), values.begin(), values.end());
                             it.mfSum += fSum;
@@ -4122,7 +4123,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
             {
                 ArrayRefListValue& rArrayValue = vArrayValues[r];
                 double vSum = 0.0;
-                const double vMean = rArrayValue.mfSum / n;
+                const double vMean = rArrayValue.get() / n;
                 for (::std::vector<double>::size_type i = 0; i < n; i++)
                     vSum += ::rtl::math::approxSub( rArrayValue.mvValues[i], vMean) *
                         ::rtl::math::approxSub( rArrayValue.mvValues[i], vMean);
@@ -4139,7 +4140,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
         double vSum = 0.0;
         if (nGlobalError == FormulaError::NONE)
         {
-            const double vMean = fSum / n;
+            const double vMean = fSum.get() / n;
             for (::std::vector<double>::size_type i = 0; i < n; i++)
                 vSum += ::rtl::math::approxSub( values[i], vMean) * ::rtl::math::approxSub( values[i], vMean);
         }
@@ -5327,11 +5328,9 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
     }
 
-    double fSum = 0.0;
-    double fMem = 0.0;
+    KahanSum fSum = 0.0;
     double fRes = 0.0;
     double fCount = 0.0;
-    bool bNull = true;
     short nParam = 1;
     const SCSIZE nMatRows = GetRefListArrayMaxSize( nParam);
     // There's either one RefList and nothing else, or none.
@@ -5498,13 +5497,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                                 {
                                     fVal = pSumExtraMatrix->GetDouble( nC, nR);
                                     ++fCount;
-                                    if ( bNull && fVal != 0.0 )
-                                    {
-                                        bNull = false;
-                                        fMem = fVal;
-                                    }
-                                    else
-                                        fSum += fVal;
+                                    fSum += fVal;
                                 }
                             }
                         }
@@ -5525,13 +5518,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                                 {
                                     fVal = GetCellValue(aAdr, aCell);
                                     ++fCount;
-                                    if ( bNull && fVal != 0.0 )
-                                    {
-                                        bNull = false;
-                                        fMem = fVal;
-                                    }
-                                    else
-                                        fSum += fVal;
+                                    fSum += fVal;
                                 }
                             }
                         }
@@ -5555,13 +5542,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                             {
                                 fVal = pSumExtraMatrix->GetDouble( nC, nR);
                                 ++fCount;
-                                if ( bNull && fVal != 0.0 )
-                                {
-                                    bNull = false;
-                                    fMem = fVal;
-                                }
-                                else
-                                    fSum += fVal;
+                                fSum += fVal;
                             }
                         } while ( aCellIter.GetNext() );
                     }
@@ -5576,13 +5557,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                             {
                                 fVal = GetCellValue(aAdr, aCell);
                                 ++fCount;
-                                if ( bNull && fVal != 0.0 )
-                                {
-                                    bNull = false;
-                                    fMem = fVal;
-                                }
-                                else
-                                    fSum += fVal;
+                                fSum += fVal;
                             }
                         } while ( aCellIter.GetNext() );
                     }
@@ -5597,8 +5572,8 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
 
         switch( eFunc )
         {
-            case ifSUMIF:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
-            case ifAVERAGEIF: fRes = div( ::rtl::math::approxAdd( fSum, fMem ), fCount); break;
+            case ifSUMIF:     fRes = fSum.get(); break;
+            case ifAVERAGEIF: fRes = div( fSum.get(), fCount ); break;
         }
         if (xResMat)
         {
@@ -5609,7 +5584,8 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                 xResMat->PutError( nGlobalError, 0, nRefListArrayPos);
                 nGlobalError = FormulaError::NONE;
             }
-            fRes = fSum = fMem = fCount = 0.0;
+            fRes = fCount = 0.0;
+            fSum = 0;
         }
     }
     if (xResMat)
@@ -6233,7 +6209,6 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
         bool bRefArrayMain = false;
         while (nParam-- == nParamCount)
         {
-            bool bNull = true;
             SCCOL nMainCol1 = 0;
             SCROW nMainRow1 = 0;
             SCTAB nMainTab1 = 0;
@@ -6387,13 +6362,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                             continue;
 
                         ++aRes.mfCount;
-                        if (bNull && fVal != 0.0)
-                        {
-                            bNull = false;
-                            aRes.mfMem = fVal;
-                        }
-                        else
-                            aRes.mfSum += fVal;
+                        aRes.mfSum += fVal;
                         if ( aRes.mfMin > fVal )
                             aRes.mfMin = fVal;
                         if ( aRes.mfMax < fVal )
@@ -6430,13 +6399,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                                 {
                                     fVal = GetCellValue(aAdr, aCell);
                                     ++aRes.mfCount;
-                                    if ( bNull && fVal != 0.0 )
-                                    {
-                                        bNull = false;
-                                        aRes.mfMem = fVal;
-                                    }
-                                    else
-                                        aRes.mfSum += fVal;
+                                    aRes.mfSum += fVal;
                                     if ( aRes.mfMin > fVal )
                                         aRes.mfMin = fVal;
                                     if ( aRes.mfMax < fVal )
@@ -6501,7 +6464,7 @@ void ScInterpreter::ScSumIfs()
 
     auto ResultFunc = []( const sc::ParamIfsResult& rRes )
     {
-        return rtl::math::approxAdd(rRes.mfSum, rRes.mfMem);
+        return rRes.mfSum.get();
     };
     IterateParametersIfs(ResultFunc);
 }
@@ -6518,7 +6481,7 @@ void ScInterpreter::ScAverageIfs()
 
     auto ResultFunc = []( const sc::ParamIfsResult& rRes )
     {
-        return sc::div( rtl::math::approxAdd( rRes.mfSum, rRes.mfMem), rRes.mfCount);
+        return sc::div( rRes.mfSum.get(), rRes.mfCount);
     };
     IterateParametersIfs(ResultFunc);
 }
@@ -7832,8 +7795,8 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
 
 void ScInterpreter::DBIterator( ScIterFunc eFunc )
 {
-    double nErg = 0.0;
-    double fMem = 0.0;
+    double fRes = 0;
+    KahanSum fErg = 0;
     sal_uLong nCount = 0;
     bool bMissingField = false;
     unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
@@ -7850,13 +7813,12 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
         {
             switch( eFunc )
             {
-                case ifPRODUCT: nErg = 1; break;
-                case ifMAX:     nErg = -MAXDOUBLE; break;
-                case ifMIN:     nErg = MAXDOUBLE; break;
+                case ifPRODUCT: fRes = 1; break;
+                case ifMAX:     fRes = -MAXDOUBLE; break;
+                case ifMIN:     fRes = MAXDOUBLE; break;
                 default: ; // nothing
             }
 
-            bool bNull = true;
             do
             {
                 nCount++;
@@ -7864,25 +7826,19 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
                 {
                     case ifAVERAGE:
                     case ifSUM:
-                        if ( bNull && aValue.mfValue != 0.0 )
-                        {
-                            bNull = false;
-                            fMem = aValue.mfValue;
-                        }
-                        else
-                            nErg += aValue.mfValue;
+                        fErg += aValue.mfValue;
                         break;
                     case ifSUMSQ:
-                        nErg += aValue.mfValue * aValue.mfValue;
+                        fErg += aValue.mfValue * aValue.mfValue;
                         break;
                     case ifPRODUCT:
-                        nErg *= aValue.mfValue;
+                        fRes *= aValue.mfValue;
                         break;
                     case ifMAX:
-                        if( aValue.mfValue > nErg ) nErg = aValue.mfValue;
+                        if( aValue.mfValue > fRes ) fRes = aValue.mfValue;
                         break;
                     case ifMIN:
-                        if( aValue.mfValue < nErg ) nErg = aValue.mfValue;
+                        if( aValue.mfValue < fRes ) fRes = aValue.mfValue;
                         break;
                     default: ; // nothing
                 }
@@ -7895,12 +7851,13 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
         SetError( FormulaError::IllegalParameter);
     switch( eFunc )
     {
-        case ifCOUNT:   nErg = nCount; break;
-        case ifSUM:     nErg = ::rtl::math::approxAdd( nErg, fMem ); break;
-        case ifAVERAGE: nErg = div(::rtl::math::approxAdd(nErg, fMem), nCount); break;
+        case ifCOUNT:   fRes = nCount; break;
+        case ifSUM:     fRes = fErg.get(); break;
+        case ifSUMSQ:   fRes = fErg.get(); break;
+        case ifAVERAGE: fRes = div(fErg.get(), nCount); break;
         default: ; // nothing
     }
-    PushDouble( nErg );
+    PushDouble( fRes );
 }
 
 void ScInterpreter::ScDBSum()
@@ -8019,11 +7976,10 @@ void ScInterpreter::ScDBProduct()
 void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 {
     std::vector<double> values;
-    double vSum    = 0.0;
-    double vMean    = 0.0;
+    KahanSum vSum    = 0.0;
+    KahanSum fSum    = 0.0;
 
     rValCount = 0.0;
-    double fSum    = 0.0;
     bool bMissingField = false;
     unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam)
@@ -8050,12 +8006,12 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     else
         SetError( FormulaError::IllegalParameter);
 
-    vMean = fSum / values.size();
+    double vMean = fSum.get() / values.size();
 
     for (double v : values)
         vSum += (v - vMean) * (v - vMean);
 
-    rVal = vSum;
+    rVal = vSum.get();
 }
 
 void ScInterpreter::ScDBStdDev()
