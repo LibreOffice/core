@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cmdid.h>
 #include <wrtsh.hxx>
 #include <swcrsr.hxx>
 #include <editeng/lrspitem.hxx>
@@ -416,30 +417,55 @@ bool SwWrtShell::DelRight()
     case SelectionType::DrawObjectEditMode:
     case SelectionType::DbForm:
         {
+            // Group deletion of the object and its comment together
+            // (also as-character anchor conversion at track changes)
+            mxDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
+
             // #108205# Remember object's position.
             Point aTmpPt = GetObjRect().TopLeft();
 
             // Remember the anchor of the selected object before deletion.
             std::unique_ptr<SwPosition> pAnchor;
+            RndStdIds eAnchorId = RndStdIds::FLY_AT_PARA;
             SwFlyFrame* pFly = GetSelectedFlyFrame();
             if (pFly)
             {
                 SwFrameFormat* pFormat = pFly->GetFormat();
                 if (pFormat)
                 {
-                    RndStdIds eAnchorId = pFormat->GetAnchor().GetAnchorId();
+                    eAnchorId = pFormat->GetAnchor().GetAnchorId();
+                    // as-character anchor conversion at track changes
+                    if ( IsRedlineOn() && eAnchorId != RndStdIds::FLY_AS_CHAR )
+                    {
+                        SfxItemSet aSet(GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{});
+                        GetFlyFrameAttr(aSet);
+                        SwFormatAnchor aAnch(RndStdIds::FLY_AS_CHAR);
+                        aSet.Put(aAnch);
+                        SetFlyFrameAttr(aSet);
+                        eAnchorId = pFormat->GetAnchor().GetAnchorId();
+                    }
                     if ((eAnchorId == RndStdIds::FLY_AS_CHAR || eAnchorId == RndStdIds::FLY_AT_CHAR)
                         && pFormat->GetAnchor().GetContentAnchor())
                     {
                         pAnchor.reset(new SwPosition(*pFormat->GetAnchor().GetContentAnchor()));
+                        // set cursor before the anchor point
+                        if ( IsRedlineOn() )
+                            *GetCurrentShellCursor().GetPoint() = *pAnchor;
                     }
                 }
             }
 
-            // Group deletion of the object and its comment together.
-            mxDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
-
-            DelSelectedObj();
+            // track changes: delete the anchor point of the image to record the deletion
+            if ( IsRedlineOn() && pAnchor && SelectionType::Graphic & nSelection
+                && eAnchorId == RndStdIds::FLY_AS_CHAR )
+            {
+                OpenMark();
+                SwCursorShell::Right(1, CRSR_SKIP_CHARS);
+                bRet = Delete();
+                CloseMark( bRet );
+            }
+            else
+                DelSelectedObj();
 
             if (pAnchor)
             {
