@@ -60,8 +60,8 @@ struct CompareOptions;
 
 struct ParamIfsResult
 {
-    double mfSum = 0.0;
-    double mfMem = 0.0;
+    KahanSum mfSum = 0.0;
+    //double mfMem = 0.0;
     double mfCount = 0.0;
     double mfMin = std::numeric_limits<double>::max();
     double mfMax = std::numeric_limits<double>::lowest();
@@ -71,8 +71,8 @@ template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ParamIfsResult& rRes)
 {
     stream << "{" <<
-        "sum=" << rRes.mfSum << "," <<
-        "mem=" << rRes.mfMem << "," <<
+        "sum=" << rRes.mfSum.m_fSum << "+-" << rRes.mfSum.m_fError << "," <<
+        //"mem=" << rRes.mfMem << "," <<
         "count=" << rRes.mfCount << "," <<
         "min=" << rRes.mfMin << "," <<
         "max=" << rRes.mfMax << "," <<
