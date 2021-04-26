@@ -218,6 +218,11 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
             {
                 pTextBox->LockModify();
             }
+            else
+            {
+                // Otherwise delete fly frames on anchor change.
+                pTextBox->DelFrames();
+            }
 
             pTextBox->SetFormatAttr(aTextBoxAnchor);
 
@@ -226,6 +231,10 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
                 pOldNode->RemoveAnchoredFly(pTextBox);
                 aPos.nNode.GetNode().AddAnchoredFly(pTextBox);
                 pTextBox->UnlockModify();
+            }
+            else
+            {
+                pTextBox->MakeFrames();
             }
         }
     }
