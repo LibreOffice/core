@@ -28,16 +28,12 @@ int ProfileZone::s_nNesting = 0; // level of overlapped zones
 namespace
 {
     std::vector<OUString> g_aRecording; // recorded data
-    long long g_nStartTime;   // start time of recording
     ::osl::Mutex g_aMutex;
 }
 
 void ProfileZone::startRecording()
 {
-    TimeValue aSystemTime;
-    osl_getSystemTime(&aSystemTime );
     ::osl::MutexGuard aGuard(g_aMutex);
-    g_nStartTime = static_cast<long long>(aSystemTime.Seconds) * 1000000 + aSystemTime.Nanosec/1000;
     s_nNesting = 0;
     s_bRecording = true;
 }
