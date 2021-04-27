@@ -1124,7 +1124,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         pSourceAction = pSourceAction->GetNext();
     }
 
-    rMarkData = aOldMarkData;
+    rMarkData = std::move(aOldMarkData);
     pThisTrack->SetUser(aOldUser);
     pThisTrack->SetUseFixDateTime( false );
 

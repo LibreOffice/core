@@ -187,8 +187,7 @@ namespace sdr::contact
                 {
                     // get logic clip range and create discrete one
                     const tools::Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
-                    basegfx::B2DRange aLogicClipRange = vcl::unotools::b2DRectangleFromRectangle(aLogicClipRectangle);
-                    basegfx::B2DRange aDiscreteClipRange(aLogicClipRange);
+                    basegfx::B2DRange aDiscreteClipRange = vcl::unotools::b2DRectangleFromRectangle(aLogicClipRectangle);
                     aDiscreteClipRange.transform(rTargetOutDev.GetViewTransformation());
 
                     // align the discrete one to discrete boundaries (pixel bounds). Also

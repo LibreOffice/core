@@ -999,8 +999,7 @@ void ScHelperFunctions::FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner
 void ScHelperFunctions::FillBorderLine( table::BorderLine& rStruct, const ::editeng::SvxBorderLine* pLine )
 {
     // Convert from Twips to 1/100mm.
-    table::BorderLine2 aStruct( SvxBoxItem::SvxLineToLine( pLine, true));
-    rStruct = aStruct;
+    rStruct = SvxBoxItem::SvxLineToLine( pLine, true);
 }
 
 void ScHelperFunctions::FillBorderLine( table::BorderLine2& rStruct, const ::editeng::SvxBorderLine* pLine )

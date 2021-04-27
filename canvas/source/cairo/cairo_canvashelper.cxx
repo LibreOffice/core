@@ -364,14 +364,13 @@ namespace cairocanvas
                 tools::Long nHeight;
                 vcl::bitmap::CanvasCairoExtractBitmapData(aBmpEx, aBitmap, data, bHasAlpha, nWidth, nHeight);
 
-                SurfaceSharedPtr pImageSurface = rSurfaceProvider->getOutputDevice()->CreateSurface(
+                pSurface = rSurfaceProvider->getOutputDevice()->CreateSurface(
                     CairoSurfaceSharedPtr(
                         cairo_image_surface_create_for_data(
                             data,
                             bHasAlpha ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24,
                             nWidth, nHeight, nWidth*4 ),
                         &cairo_surface_destroy) );
-                pSurface = pImageSurface;
 
                 SAL_INFO( "canvas.cairo","image: " << nWidth << " x " << nHeight << " alpha: " << bHasAlpha);
             }

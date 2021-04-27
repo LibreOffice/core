@@ -719,10 +719,9 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
             case REF_PMONTHS:
                 for (CalendarItem2& rItem : aItems)
                 {
-                    CalendarItem2 item{ OUString(allCalendars[rnOffset]),
+                    rItem = CalendarItem2{ OUString(allCalendars[rnOffset]),
                             OUString(allCalendars[rnOffset+1]),
                             OUString(allCalendars[rnOffset+2]), OUString(allCalendars[rnOffset+3])};
-                    rItem = item;
                     rnOffset += 4;
                 }
                 break;
@@ -730,10 +729,9 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
                 // Absent narrow name.
                 for (CalendarItem2& rItem : aItems)
                 {
-                    CalendarItem2 item{ OUString(allCalendars[rnOffset]),
+                    rItem = CalendarItem2{ OUString(allCalendars[rnOffset]),
                             OUString(allCalendars[rnOffset+1]),
                             OUString(allCalendars[rnOffset+2]), OUString()};
-                    rItem = item;
                     rnOffset += 3;
                 }
                 break;

@@ -414,8 +414,7 @@ void B3dCamera::DeviceRectangleChange()
 
 void B3dCamera::CalcNewViewportValues()
 {
-    basegfx::B3DVector aViewVector(aPosition - aLookAt);
-    basegfx::B3DVector aNewVPN(aViewVector);
+    basegfx::B3DVector aNewVPN(aPosition - aLookAt);
 
     basegfx::B3DVector aNewVUV(0.0, 1.0, 0.0);
     if(aNewVPN.getLength() < aNewVPN.getY())
