@@ -16,6 +16,24 @@
       "revId": "785062e7582126f805b7ba16ea81241eae1fba37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32d483cb_377da227",
+        "filename": "sc/qa/unit/data/functions/mathematical/fods/.~lock.aggregate.fods#",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-27T13:02:48Z",
+      "side": 1,
+      "message": "Yes it is.",
+      "parentUuid": "2a38b1f6_c79093ff",
+      "revId": "785062e7582126f805b7ba16ea81241eae1fba37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
