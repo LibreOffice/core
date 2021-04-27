@@ -660,7 +660,7 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        sal_uInt8 nInvFlags = 0;
+        SwFlyFrameInvFlags eInvFlags = SwFlyFrameInvFlags::NONE;
         if(pLegacy->m_pNew && pLegacy->m_pOld && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
         {
             SfxItemIter aNIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet());
@@ -671,7 +671,7 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SwAttrSetChg aNewSet(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew));
             do
             {
-                UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
+                UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
                 pNItem = aNIter.NextItem();
                 pOItem = aOIter.NextItem();
             } while(pNItem);
@@ -679,37 +679,37 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
         }
         else
-            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
+            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
 
-        if(nInvFlags == 0)
+        if(eInvFlags == SwFlyFrameInvFlags::NONE)
             return;
 
         Invalidate_();
-        if(nInvFlags & 0x01)
+        if(eInvFlags & SwFlyFrameInvFlags::InvalidatePos)
         {
             InvalidatePos_();
             // #i68520#
             InvalidateObjRectWithSpaces();
         }
-        if(nInvFlags & 0x02)
+        if(eInvFlags & SwFlyFrameInvFlags::InvalidateSize)
         {
             InvalidateSize_();
             // #i68520#
             InvalidateObjRectWithSpaces();
         }
-        if(nInvFlags & 0x04)
+        if(eInvFlags & SwFlyFrameInvFlags::InvalidatePrt)
             InvalidatePrt_();
-        if(nInvFlags & 0x08)
+        if(eInvFlags & SwFlyFrameInvFlags::SetNotifyBack)
             SetNotifyBack();
-        if(nInvFlags & 0x10)
+        if(eInvFlags & SwFlyFrameInvFlags::SetCompletePaint)
             SetCompletePaint();
-        if((nInvFlags & 0x40) && Lower() && Lower()->IsNoTextFrame())
+        if((eInvFlags & SwFlyFrameInvFlags::ClearContourCache) && Lower() && Lower()->IsNoTextFrame())
             ClrContourCache( GetVirtDrawObj() );
         SwRootFrame *pRoot;
-        if(nInvFlags & 0x20 && nullptr != (pRoot = getRootFrame()))
+        if(eInvFlags & SwFlyFrameInvFlags::InvalidateBrowseWidth && nullptr != (pRoot = getRootFrame()))
             pRoot->InvalidateBrowseWidth();
         // #i28701#
-        if(nInvFlags & 0x80)
+        if(eInvFlags & SwFlyFrameInvFlags::UpdateObjInSortedList)
         {
             // update sorted object lists, the Writer fly frame is registered at.
             UpdateObjInSortedList();
@@ -733,7 +733,7 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 }
 
 void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
-                            sal_uInt8 &rInvFlags,
+                            SwFlyFrameInvFlags &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
     bool bClear = true;
@@ -747,21 +747,20 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_FOLLOW_TEXT_FLOW:
         {
             // ATTENTION: Always also change Action in ChgRePos()!
-            rInvFlags |= 0x09;
+            rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x09);
         }
         break;
         // #i28701# - consider new option 'wrap influence on position'
         case RES_WRAP_INFLUENCE_ON_OBJPOS:
         {
-            rInvFlags |= 0x89;
+            rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x89);
         }
         break;
         case RES_SURROUND:
         {
             //#i28701# - invalidate position on change of
             // wrapping style.
-            //rInvFlags |= 0x40;
-            rInvFlags |= 0x41;
+            rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x41);
             // The background needs to be messaged and invalidated
             const SwRect aTmp( GetObjRectWithSpaces() );
             NotifyBackground( FindPageFrame(), aTmp, PrepareHint::FlyFrameAttributesChanged );
@@ -769,7 +768,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             // By changing the flow of frame-bound Frames, a vertical alignment
             // can be activated/deactivated => MakeFlyPos
             if( RndStdIds::FLY_AT_FLY == GetFormat()->GetAnchor().GetAnchorId() )
-                rInvFlags |= 0x09;
+                rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x09);
 
             // Delete contour in the Node if necessary
             if ( Lower() && Lower()->IsNoTextFrame() &&
@@ -781,7 +780,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             }
             // #i28701# - perform reorder of object lists
             // at anchor frame and at page frame.
-            rInvFlags |= 0x80;
+            rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x80);
         }
         break;
 
@@ -806,7 +805,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 const SwFormatFrameSize &rNew = GetFormat()->GetFrameSize();
                 if ( FrameSizeChg( rNew ) )
                     NotifyDrawObj();
-                rInvFlags |= 0x1A;
+                rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x1A);
             }
             break;
 
@@ -816,7 +815,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             const SwFormatFrameSize &rNew = GetFormat()->GetFrameSize();
             if ( FrameSizeChg( rNew ) )
                 NotifyDrawObj();
-            rInvFlags |= 0x7F;
+            rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x7F);
             if (pOld && RES_FMT_CHG == nWhich)
             {
                 SwRect aNew( GetObjRectWithSpaces() );
@@ -907,14 +906,14 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 
             // #i28701# - perform reorder of object lists
             // at anchor frame and at page frame.
-            rInvFlags |= 0x80;
+            rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x80);
 
             break;
         }
         case RES_UL_SPACE:
         case RES_LR_SPACE:
         {
-            rInvFlags |= 0x41;
+            rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x41);
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
                 getRootFrame()->InvalidateBrowseWidth();
             SwRect aNew( GetObjRectWithSpaces() );
@@ -942,13 +941,13 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_TEXT_VERT_ADJUST:
         {
             InvalidateContentPos();
-            rInvFlags |= 0x10;
+            rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x10);
         }
         break;
 
         case RES_BOX:
         case RES_SHADOW:
-            rInvFlags |= 0x17;
+            rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x17);
             break;
 
         case RES_FRAMEDIR :
@@ -979,7 +978,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 }
                 // #i28701# - perform reorder of object lists
                 // at anchor frame and at page frame.
-                rInvFlags |= 0x80;
+                rInvFlags |= static_cast<SwFlyFrameInvFlags>(0x80);
             }
             break;
 

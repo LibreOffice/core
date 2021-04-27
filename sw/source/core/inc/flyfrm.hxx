@@ -53,6 +53,24 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
 /** calculate rectangle in that the object can be moved or rather be resized */
 bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove = true );
 
+enum class SwFlyFrameInvFlags : sal_uInt8
+{
+    NONE = 0x00,
+    InvalidatePos = 0x01,
+    InvalidateSize = 0x02,
+    InvalidatePrt = 0x04,
+    SetNotifyBack = 0x08,
+    SetCompletePaint = 0x10,
+    InvalidateBrowseWidth = 0x20,
+    ClearContourCache = 0x40,
+    UpdateObjInSortedList = 0x80,
+};
+
+namespace o3tl {
+    template<> struct typed_flags<SwFlyFrameInvFlags> : is_typed_flags<SwFlyFrameInvFlags, 0x00ff> {};
+}
+
+
 /** general base class for all free-flowing frames
 
     #i26791# - inherit also from <SwAnchoredFlyFrame>
@@ -67,7 +85,7 @@ class SW_DLLPUBLIC SwFlyFrame : public SwLayoutFrame, public SwAnchoredObject
     void InitDrawObj(SwFrame const&); // these to methods are called in the
     void FinitDrawObj();    // constructors
 
-    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
+    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, SwFlyFrameInvFlags &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
 
     using SwLayoutFrame::CalcRel;
