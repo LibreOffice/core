@@ -2562,12 +2562,12 @@ void SAL_CALL VCLXToolkit::pause(sal_Int32 nMilliseconds)
 
 void SAL_CALL VCLXToolkit::startRecording()
 {
-    comphelper::ProfileZone::startRecording();
+    comphelper::TraceEvent::startRecording();
 }
 
 void SAL_CALL VCLXToolkit::stopRecording()
 {
-    comphelper::ProfileZone::stopRecording();
+    comphelper::TraceEvent::stopRecording();
 }
 
 css::uno::Sequence< OUString > VCLXToolkit::getRecordingAndClear()
