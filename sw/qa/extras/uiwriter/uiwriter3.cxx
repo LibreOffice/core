@@ -22,6 +22,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <fmtanchr.hxx>
+#include <fmtornt.hxx>
+#include <fmtfsize.hxx>
 #include <frameformats.hxx>
 #include <swdtflvr.hxx>
 #include <textboxhelper.hxx>
