@@ -3852,9 +3852,9 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
     if (strcmp(pOption, "profilezonerecording") == 0)
     {
         if (strcmp(pValue, "start") == 0)
-            comphelper::ProfileZone::startRecording();
+            comphelper::TraceEvent::startRecording();
         else if (strcmp(pValue, "stop") == 0)
-            comphelper::ProfileZone::stopRecording();
+            comphelper::TraceEvent::stopRecording();
     }
     else if (strcmp(pOption, "sallogoverride") == 0)
     {
@@ -6107,7 +6107,7 @@ public:
     virtual void Invoke() override
     {
         const css::uno::Sequence<OUString> aEvents =
-            comphelper::ProfileZone::getRecordingAndClear();
+            comphelper::TraceEvent::getRecordingAndClear();
         OStringBuffer aOutput;
         for (const auto &s : aEvents)
         {
@@ -6189,7 +6189,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     // Turn profile zones on early
     if (bProfileZones && eStage == SECOND_INIT)
     {
-        comphelper::ProfileZone::startRecording();
+        comphelper::TraceEvent::startRecording();
         new ProfileZoneDumper();
     }
 
