@@ -22,8 +22,11 @@
 
 namespace comphelper
 {
+#ifdef DBG_UTIL
+std::atomic<bool> TraceEvent::s_bRecording = (getenv("TRACE_EVENT_RECORDING") != nullptr);
+#else
 std::atomic<bool> TraceEvent::s_bRecording = false;
-
+#endif
 int ProfileZone::s_nNesting = 0;
 
 namespace
