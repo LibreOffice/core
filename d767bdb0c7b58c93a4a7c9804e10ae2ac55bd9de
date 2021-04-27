@@ -16,6 +16,24 @@
       "revId": "d767bdb0c7b58c93a4a7c9804e10ae2ac55bd9de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ddc603b_74a22ef3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-27T08:51:01Z",
+      "side": 1,
+      "message": "Thanks for spotting.  Some `git commit --amend --edit` disaster on my part :)",
+      "parentUuid": "03783ff9_f2f4087d",
+      "revId": "d767bdb0c7b58c93a4a7c9804e10ae2ac55bd9de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
