@@ -348,17 +348,14 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
         return;
     }
 
-    // create temporary VDev and render to it
+    // create temporary VDev with requested Size and DPI.
+    // CAUTION: DPI *is* important here - it DIFFRERS from 75x75, usually 600x600 is used
     ScopedVclPtrInstance<VirtualDevice> pPrerenderVDev(*Application::GetDefaultDevice());
     pPrerenderVDev->SetOutputSizePixel(aScaledSize, false);
     pPrerenderVDev->SetReferenceDevice( mnDPIX, mnDPIY );
-    pPrerenderVDev->EnableOutput();
-    pPrerenderVDev->SetBackground( Wallpaper(COL_WHITE) );
 
-    GDIMetaFile aMtf( maMtf );
-
-    Size aVDevSize( pPrerenderVDev->GetOutputSizePixel() );
-    const Size aLogicSize( pPrerenderVDev->PixelToLogic( aVDevSize, MapMode( MapUnit::Map100thMM ) ) );
+    // calculate needed Scale for Metafile (using Size and DPI from VDev)
+    Size aLogicSize( pPrerenderVDev->PixelToLogic( pPrerenderVDev->GetOutputSizePixel(), MapMode( MapUnit::Map100thMM ) ) );
     Size aOrigSize( maOrigSize );
     if( aOrigSize.Width() < 1 )
         aOrigSize.setWidth( aLogicSize.Width() );
@@ -366,30 +363,85 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
         aOrigSize.setHeight( aLogicSize.Height() );
     double fScale = double(aLogicSize.Width())/double(aOrigSize.Width());
 
+    // tdf#141761
+    // The display quality of the Preview is pretty ugly when
+    // FormControls are used. I made a deep-dive why this happens,
+    // and in principle the reason is the Mteafile::Scale used
+    // below. Since Metafile actions are integer, that floating point
+    // scale leads to rounduing errors that make the lines painting
+    // the FormControls disappear in the surrounding ClipRegions.
+    // That Scale cannot be avoided since the Metafile contains it's
+    // own SetMapMode commands which *will* be executed on ::Play,
+    // so the ::Scale is the only possibility fr Metafile currently:
+    // Giving a Size as parameter in ::Play will *not* work due to
+    // the relativeMapMode that gets created will fail on
+    // ::SetMapMode actions in the Metafile - and FormControls DO
+    // use ::SetMapMode(MapPixel).
+    // This can only be solved better in the future using Primitives
+    // which would allow any scale by embedding to a Transformation,
+    // but that would be a bigger rework.
+    // Until then, use this little 'trick' to improve qulatity.
+    // It uses the fact to empirically having tested that the quality
+    // gets really bad for FormControls starting by a scale factor
+    // smaller than 0.2 - that makes the ClipRegion overlap start.
+    // So - for now - try not to go below that.
+    static double fMinimumScale(0.2);
+    double fFactor(0.0);
+    if(fScale < fMinimumScale)
+    {
+        fFactor = fMinimumScale / fScale;
+        fScale = fMinimumScale;
+
+        double fWidth(aScaledSize.getWidth() * fFactor);
+        double fHeight(aScaledSize.getHeight() * fFactor);
+        const double fNewNeededPixels(fWidth * fHeight);
+
+        // to not risk using too big bitmaps and runninig into
+        // memory problems, still limit to a useful factor is
+        // necessary, also empirically estimated to
+        // avoid the quality from collapsing (using a direct
+        // in-between , ceil'd result)
+        static double fMaximumQualitySquare(1396221.0);
+
+        if(fNewNeededPixels > fMaximumQualitySquare)
+        {
+            const double fCorrection(fMaximumQualitySquare/fNewNeededPixels);
+            fWidth *= fCorrection;
+            fHeight *= fCorrection;
+            fScale *= fCorrection;
+        }
+
+        const Size aScaledSize2(basegfx::fround(fWidth), basegfx::fround(fHeight));
+        pPrerenderVDev->SetOutputSizePixel(aScaledSize2, false);
+        aLogicSize = pPrerenderVDev->PixelToLogic( aScaledSize2, MapMode( MapUnit::Map100thMM ) );
+    }
+
+    pPrerenderVDev->EnableOutput();
+    pPrerenderVDev->SetBackground( Wallpaper(COL_WHITE) );
     pPrerenderVDev->Erase();
-    pPrerenderVDev->Push();
     pPrerenderVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
-    DrawModeFlags nOldDrawMode = pPrerenderVDev->GetDrawMode();
     if( mbGreyscale )
         pPrerenderVDev->SetDrawMode( pPrerenderVDev->GetDrawMode() |
                                 ( DrawModeFlags::GrayLine | DrawModeFlags::GrayFill | DrawModeFlags::GrayText |
                                   DrawModeFlags::GrayBitmap | DrawModeFlags::GrayGradient ) );
+
+    // Copy, Scale and Paint Metafile
+    GDIMetaFile aMtf( maMtf );
     aMtf.WindStart();
     aMtf.Scale( fScale, fScale );
     aMtf.WindStart();
-
-    const AntialiasingFlags nOriginalAA(pPrerenderVDev->GetAntialiasing());
-    pPrerenderVDev->SetAntialiasing(nOriginalAA | AntialiasingFlags::Enable);
     aMtf.Play( pPrerenderVDev.get(), Point( 0, 0 ), aLogicSize );
-    pPrerenderVDev->SetAntialiasing(nOriginalAA);
-
-    pPrerenderVDev->Pop();
 
     pPrerenderVDev->SetMapMode(MapMode(MapUnit::MapPixel));
+    maPreviewBitmap = pPrerenderVDev->GetBitmapEx(Point(0, 0), pPrerenderVDev->GetOutputSizePixel());
 
-    maPreviewBitmap = pPrerenderVDev->GetBitmapEx(Point(0, 0), aVDevSize);
-
-    pPrerenderVDev->SetDrawMode( nOldDrawMode );
+    if(0.0 != fFactor)
+    {
+        // Correct to needed size, BmpScaleFlag::Interpolate is acceptable,
+        // but BmpScaleFlag::BestQuality is just better. In case of time
+        // constraints, change to Interpolate would be possible
+        maPreviewBitmap.Scale(aScaledSize, BmpScaleFlag::BestQuality);
+    }
 }
 
 PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow()
