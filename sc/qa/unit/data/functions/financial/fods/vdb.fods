@@ -2535,11 +2535,11 @@
      <table:table-cell table:number-columns-repeated="6"/>
     </table:table-row>
     <table:table-row table:style-name="ro7">
-     <table:table-cell table:style-name="ce11" table:formula="of:=VDB(100000;20000;10;7;8)" office:value-type="currency" office:currency="USD" office:value="971.519999999989" calcext:value-type="currency">
+     <table:table-cell table:style-name="ce11" table:formula="of:=VDB(100000;20000;10;7;8)" office:value-type="currency" office:currency="USD" office:value="971.520000000004" calcext:value-type="currency">
       <text:p>$971.52</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="971.519999999989" calcext:value-type="float">
-      <text:p>971.519999999989</text:p>
+     <table:table-cell office:value-type="float" office:value="971.520000000004" calcext:value-type="float">
+      <text:p>971.520000000004</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=ROUND([.A11];12)=ROUND([.B11];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2948,11 +2948,11 @@
      <table:table-cell table:number-columns-repeated="12"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=VDB(100000;20000;10;7.25;7.75)" office:value-type="float" office:value="485.759999999995" calcext:value-type="float">
-      <text:p>485.759999999995</text:p>
+     <table:table-cell table:formula="of:=VDB(100000;20000;10;7.25;7.75)" office:value-type="float" office:value="485.760000000002" calcext:value-type="float">
+      <text:p>$485.76</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="485.759999999995" calcext:value-type="float">
-      <text:p>485.759999999995</text:p>
+     <table:table-cell office:value-type="float" office:value="485.760000000002" calcext:value-type="float">
+      <text:p>485.760000000002</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A33];12)=ROUND([.B33];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -3118,11 +3118,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G41];[.$G42])" office:value-type="float" office:value="971.519999999989" calcext:value-type="float">
-      <text:p>971.519999999989</text:p>
+     <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G41];[.$G42])" office:value-type="float" office:value="971.520000000004" calcext:value-type="float">
+      <text:p>$971.52</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="971.519999999989" calcext:value-type="float">
-      <text:p>971.519999999989</text:p>
+     <table:table-cell office:value-type="float" office:value="971.520000000004" calcext:value-type="float">
+      <text:p>971.520000000004</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A41];12)=ROUND([.B41];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -3536,10 +3536,10 @@
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G49];[.G50])" office:value-type="float" office:value="242.879999999997" calcext:value-type="float">
-      <text:p>242.879999999997</text:p>
+     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G49];[.G50])" office:value-type="float" office:value="242.880000000001" calcext:value-type="float">
+      <text:p>$242.88</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="242.879999999997" calcext:value-type="float">
+     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="242.880000000001" calcext:value-type="float">
       <text:p>242.880000</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A64];12)=ROUND([.B64];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
@@ -3551,10 +3551,10 @@
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G50];[.G51])" office:value-type="float" office:value="485.759999999995" calcext:value-type="float">
-      <text:p>485.759999999995</text:p>
+     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G50];[.G51])" office:value-type="float" office:value="485.760000000002" calcext:value-type="float">
+      <text:p>$485.76</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="485.759999999995" calcext:value-type="float">
+     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="485.760000000002" calcext:value-type="float">
       <text:p>485.760000</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A65];12)=ROUND([.B65];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
@@ -3566,10 +3566,10 @@
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G49];[.G51])" office:value-type="float" office:value="728.639999999992" calcext:value-type="float">
-      <text:p>728.639999999992</text:p>
+     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G49];[.G51])" office:value-type="float" office:value="728.640000000003" calcext:value-type="float">
+      <text:p>$728.64</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="728.639999999992" calcext:value-type="float">
+     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="728.640000000003" calcext:value-type="float">
       <text:p>728.640000</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A66];12)=ROUND([.B66];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
