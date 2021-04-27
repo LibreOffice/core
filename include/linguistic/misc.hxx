@@ -118,7 +118,7 @@ std::vector< OUString > GetDictionaryPaths();
 
 /// @returns a URL for a new and writable dictionary rDicName.
 ///     The URL will point to the path given by 'GetDictionaryWriteablePath'
-LNG_DLLPUBLIC OUString  GetWritableDictionaryURL( const OUString &rDicName );
+LNG_DLLPUBLIC OUString  GetWritableDictionaryURL( std::u16string_view rDicName );
 
 LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPos );
 

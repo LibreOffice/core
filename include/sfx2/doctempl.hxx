@@ -59,8 +59,8 @@ public:
     OUString            GetPath(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
 
     // Allows to retrieve the target template URL from the UCB
-    OUString     GetTemplateTargetURLFromComponent( const OUString& aGroupName,
-                                                         const OUString& aTitle );
+    OUString     GetTemplateTargetURLFromComponent(std::u16string_view aGroupName,
+                                                         std::u16string_view aTitle );
 
     // Convert a resource string - a template name - to its localised pair
     // if it exists in sfx2/inc/strings.hxx

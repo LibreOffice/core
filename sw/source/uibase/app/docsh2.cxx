@@ -1657,7 +1657,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
 
     // 1. Does the file already exist in the list of all Documents?
     INetURLObject aTmpObj( rFileName );
-    aTmpObj.SetMark( OUString() );
+    aTmpObj.SetMark( u"" );
 
     // Iterate over the DocShell and get the ones with the name
 

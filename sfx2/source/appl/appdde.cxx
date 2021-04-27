@@ -422,7 +422,7 @@ bool SfxApplication::InitializeDde()
 
         // Config path as a topic because of multiple starts
         INetURLObject aOfficeLockFile( SvtPathOptions().GetUserConfigPath() );
-        aOfficeLockFile.insertName( "soffice.lck" );
+        aOfficeLockFile.insertName( u"soffice.lck" );
         OUString aService( SfxDdeServiceName_Impl(
                     aOfficeLockFile.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) ) );
         aService = aService.toAsciiUpperCase();

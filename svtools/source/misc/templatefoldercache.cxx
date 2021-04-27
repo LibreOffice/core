@@ -707,7 +707,7 @@ namespace svt
         }
 
         // append our name
-        aStorageURL.Append( ".templdir.cache" );
+        aStorageURL.Append( u".templdir.cache" );
 
         // open the stream
         m_pCacheStream = UcbStreamHelper::CreateStream( aStorageURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ),

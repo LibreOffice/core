@@ -111,7 +111,7 @@ namespace toolkit
             INetURLObject aURL( i_imageURL );
             if ( aURL.GetProtocol() != INetProtocol::PrivSoffice )
             {
-                OSL_VERIFY( aURL.insertName( "sifr", false, 0 ) );
+                OSL_VERIFY( aURL.insertName( u"sifr", false, 0 ) );
                 return aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
             // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the

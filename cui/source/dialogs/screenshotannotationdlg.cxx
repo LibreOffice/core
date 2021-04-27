@@ -322,7 +322,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
 
     if (aCurrentExtension.isEmpty())
     {
-        aConfirmedURL.setExtension("png");
+        aConfirmedURL.setExtension(u"png");
     }
 
     // open stream

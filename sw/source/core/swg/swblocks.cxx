@@ -87,7 +87,7 @@ SwImpBlocks::SwImpBlocks( const OUString& rFile )
     FStatHelper::GetModifiedDateTimeOfFile( rFile,
                                             &m_aDateModified, &m_aTimeModified );
     INetURLObject aObj(rFile);
-    aObj.setExtension( OUString() );
+    aObj.setExtension( u"" );
     m_aName = aObj.GetBase();
 }
 

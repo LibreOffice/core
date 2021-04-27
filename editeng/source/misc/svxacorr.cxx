@@ -2530,7 +2530,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         aDest = INetURLObject ( sUserAutoCorrFile );
         if ( SotStorage::IsOLEStorage ( sShareAutoCorrFile ) )
         {
-            aDest.SetExtension ( "bak" );
+            aDest.SetExtension ( u"bak" );
             bConvert = true;
         }
         bCopy = true;
@@ -2539,7 +2539,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
     {
         aSource = INetURLObject ( sUserAutoCorrFile );
         aDest = INetURLObject ( sUserAutoCorrFile );
-        aDest.SetExtension ( "bak" );
+        aDest.SetExtension ( u"bak" );
         bCopy = bConvert = true;
     }
     if (bCopy)

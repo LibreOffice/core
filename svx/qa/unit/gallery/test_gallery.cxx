@@ -261,10 +261,10 @@ void GalleryObjTest::TestGalleryThemeEntry()
     INetURLObject aURL(aGalleryURL);
     aURL.Append(myThemeName);
     INetURLObject aThemeURL(aURL), aSdvURL(aURL), aSdgURL(aURL), aStrURL(aURL);
-    aThemeURL.setExtension("thm");
-    aSdvURL.setExtension("sdv");
-    aSdgURL.setExtension("sdg");
-    aStrURL.setExtension("str");
+    aThemeURL.setExtension(u"thm");
+    aSdvURL.setExtension(u"sdv");
+    aSdgURL.setExtension(u"sdg");
+    aStrURL.setExtension(u"str");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Theme URL doesn't match",
                                  aGalleryBinaryStorageLocations.GetThmURL().GetMainURL(
                                      INetURLObject::DecodeMechanism::Unambiguous),

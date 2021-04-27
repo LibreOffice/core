@@ -493,9 +493,9 @@ void ODbaseTable::construct()
     // nyi: Ugly for Unix and Mac!
 
         if ( m_aHeader.type == FoxProMemo || m_aHeader.type == VisualFoxPro || m_aHeader.type == VisualFoxProAuto) // foxpro uses another extension
-            aURL.SetExtension("fpt");
+            aURL.SetExtension(u"fpt");
         else
-            aURL.SetExtension("dbt");
+            aURL.SetExtension(u"dbt");
 
         // If the memo file isn't found, the data will be displayed anyhow.
         // However, updates can't be done
@@ -656,7 +656,7 @@ void ODbaseTable::refreshIndexes()
         INetURLObject aURL;
         aURL.SetURL(getEntry(m_pConnection,m_Name));
 
-        aURL.setExtension("inf");
+        aURL.setExtension(u"inf");
         Config aInfFile(aURL.getFSysPath(FSysStyle::Detect));
         aInfFile.SetGroup(dBASE_III_GROUP);
         sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
@@ -1047,7 +1047,7 @@ bool ODbaseTable::CreateImpl()
     if (bMemoFile)
     {
         OUString aExt = aURL.getExtension();
-        aURL.setExtension("dbt");                      // extension for memo file
+        aURL.setExtension(u"dbt");                      // extension for memo file
 
         bool bMemoAlreadyExists = false;
         try
@@ -1394,7 +1394,7 @@ bool ODbaseTable::Drop_Static(const OUString& _sUrl, bool _bHasMemoFields, OColl
     {
         if (_bHasMemoFields)
         {  // delete the memo fields
-            aURL.setExtension("dbt");
+            aURL.setExtension(u"dbt");
             bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         }
 
@@ -1414,7 +1414,7 @@ bool ODbaseTable::Drop_Static(const OUString& _sUrl, bool _bHasMemoFields, OColl
                 {
                 }
             }
-            aURL.setExtension("inf");
+            aURL.setExtension(u"inf");
 
             // as the inf file does not necessarily exist, we aren't allowed to use UCBContentHelper::Kill
             try
@@ -2272,7 +2272,7 @@ void SAL_CALL ODbaseTable::rename( const OUString& newName )
 namespace
 {
     void renameFile(file::OConnection const * _pConnection,std::u16string_view oldName,
-                    const OUString& newName,const OUString& _sExtension)
+                    const OUString& newName, std::u16string_view _sExtension)
     {
         OUString aName = ODbaseTable::getEntry(_pConnection,oldName);
         if(aName.isEmpty())
@@ -2319,7 +2319,7 @@ void ODbaseTable::renameImpl( const OUString& newName )
     renameFile(m_pConnection,m_Name,newName,m_pConnection->getExtension());
     if ( HasMemoFields() )
     {  // delete the memo fields
-        renameFile(m_pConnection,m_Name,newName,"dbt");
+        renameFile(m_pConnection,m_Name,newName,u"dbt");
     }
 }
 

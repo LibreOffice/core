@@ -3338,7 +3338,7 @@ we check in the following sequence:
                     else if( aFileExtension.equalsIgnoreAsciiCase( "ods" ) )
                         bChangeFileExtensionToPDF = true;
                     if( bChangeFileExtensionToPDF )
-                        aTargetURL.setExtension("pdf" );
+                        aTargetURL.setExtension(u"pdf" );
                 }
                 //check if extension is pdf, see if GoToR should be forced
                 bTargetHasPDFExtension = aTargetURL.GetFileExtension().equalsIgnoreAsciiCase( "pdf" );
