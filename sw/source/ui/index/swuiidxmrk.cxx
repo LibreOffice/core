@@ -99,6 +99,31 @@ bool SplitUrlAndPage(const OUString& rText, OUString& rUrl, int& nPageNumber)
     rUrl = xUriRef->getUriReference();
     return true;
 }
+
+OUString MergeUrlAndPage(const OUString& rUrl, const std::unique_ptr<weld::SpinButton>& xPageSB)
+{
+    if (!xPageSB->get_sensitive())
+    {
+        return rUrl;
+    }
+
+    uno::Reference<uri::XUriReferenceFactory> xUriReferenceFactory
+        = uri::UriReferenceFactory::create(comphelper::getProcessComponentContext());
+    uno::Reference<uri::XUriReference> xUriRef;
+    try
+    {
+        xUriRef = xUriReferenceFactory->parse(rUrl);
+    }
+    catch (const uno::Exception& rException)
+    {
+        SAL_WARN("sw.ui", "MergeUrlAndPage: failed to parse url: " << rException.Message);
+        return rUrl;
+    }
+
+    OUString aFragment("page=" + OUString::number(xPageSB->get_value()));
+    xUriRef->setFragment(aFragment);
+    return xUriRef->getUriReference();
+}
 }
 
 // dialog to insert a directory selection
@@ -1732,7 +1757,14 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
         if(aCurInfo.nToxField == eField)
         {
-            return pEdits[nIndex]->get_text();
+            if (aCurInfo.nToxField != AUTH_FIELD_URL)
+            {
+                return pEdits[nIndex]->get_text();
+            }
+            else
+            {
+                return MergeUrlAndPage(pEdits[nIndex]->get_text(), m_xPageSB);
+            }
         }
     }
 
