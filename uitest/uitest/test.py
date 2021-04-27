@@ -112,11 +112,14 @@ class UITest(object):
         raise DialogNotExecutedException(command)
 
     def execute_dialog_through_action(self, ui_object, action, parameters = None, event_name = "DialogExecute"):
+        print("debug, execute_dialog_through_action start")
         if parameters is None:
             parameters = tuple()
 
         with EventListener(self._xContext, event_name) as event:
+            print("debug, execute_dialog_through_action, before executeAction()")
             ui_object.executeAction(action, parameters)
+            print("debug, execute_dialog_through_action, after executeAction()")
             time_ = 0
             while time_ < MAX_WAIT:
                 if event.executed:

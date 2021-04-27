@@ -1091,6 +1091,7 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     DECL_LINK(ShortNameHdl, weld::Entry&, void);
     DECL_LINK(EnableHdl, weld::ComboBox&, void);
     DECL_LINK(BrowseHdl, weld::Button&, void);
+    DECL_LINK(PageNumHdl, weld::ToggleButton&, void);
 
 public:
     SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
@@ -1673,6 +1674,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                 m_xBrowseButton = m_aBuilders.back()->weld_button("browse");
                 m_xBrowseButton->connect_clicked(LINK(this, SwCreateAuthEntryDlg_Impl, BrowseHdl));
                 m_xPageCB = m_aBuilders.back()->weld_check_button("pagecb");
+                // Distinguish different instances of this for ui-testing.
+                m_xPageCB->set_buildable_name(m_xPageCB->get_buildable_name() + "-visible");
                 m_xPageSB = m_aBuilders.back()->weld_spin_button("pagesb");
             }
 
@@ -1718,6 +1721,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                     m_xBrowseButton->show();
                 }
                 m_xPageCB->show();
+                m_xPageCB->connect_toggled(LINK(this, SwCreateAuthEntryDlg_Impl, PageNumHdl));
                 m_xPageSB->show();
             }
 
@@ -1851,6 +1855,19 @@ IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
         }
     }
 };
+
+IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, PageNumHdl, weld::ToggleButton&, void)
+{
+    if (m_xPageCB->get_active())
+    {
+        m_xPageSB->set_sensitive(true);
+        m_xPageSB->set_value(1);
+    }
+    else
+    {
+        m_xPageSB->set_sensitive(false);
+    }
+}
 
 SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
                                        SfxChildWindow* pChild,
