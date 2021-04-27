@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2e33abf_a885a068",
+        "filename": "uitest/uitest/test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-27T15:10:50Z",
+      "side": 1,
+      "message": "Oops, leftover debug print",
+      "revId": "ca9512d35e6c278cb8eee5aa3ba1c7b414e4bb80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
