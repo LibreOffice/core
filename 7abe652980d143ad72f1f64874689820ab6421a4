@@ -16,6 +16,24 @@
       "revId": "7abe652980d143ad72f1f64874689820ab6421a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2880d751_9ec9a6d2",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-04-27T20:42:07Z",
+      "side": 1,
+      "message": "It calls the new code CuiAbstractTipController_Impl::StartExecuteAsync added in cui/source/factory/dlgfact.cxx, there is no CuiAbstractController_Impl::StartExecuteAsync.  Otherwise it would assert false in VclAbstractDialog::StartExecuteAsync, which I think you meant rather than VclReferenceBase.",
+      "parentUuid": "ae4e177e_6ac27e84",
+      "revId": "7abe652980d143ad72f1f64874689820ab6421a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
