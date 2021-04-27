@@ -447,10 +447,10 @@
                     "dest-filename": "external/tarballs/Amiri-0.111.zip"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/culmus-0.131.tar.gz",
-                    "sha256": "dcf112cfcccb76328dcfc095f4d7c7f4d2f7e48d0eed5e78b100d1d77ce2ed1b",
+                    "url": "https://dev-www.libreoffice.org/src/culmus-0.133.tar.gz",
+                    "sha256": "c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05",
                     "type": "file",
-                    "dest-filename": "external/tarballs/culmus-0.131.tar.gz"
+                    "dest-filename": "external/tarballs/culmus-0.133.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libre-hebrew-1.0.tar.gz",

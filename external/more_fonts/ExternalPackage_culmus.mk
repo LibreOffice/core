@@ -10,10 +10,10 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_culmus,font_culmus))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_culmus,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
-	DavidCLM-Bold.ttf \
-	DavidCLM-BoldItalic.ttf \
-	DavidCLM-Medium.ttf \
-	DavidCLM-MediumItalic.ttf \
+	DavidCLM-Bold.otf \
+	DavidCLM-BoldItalic.otf \
+	DavidCLM-Medium.otf \
+	DavidCLM-MediumItalic.otf \
 	FrankRuehlCLM-Bold.ttf \
 	FrankRuehlCLM-BoldOblique.ttf \
 	FrankRuehlCLM-Medium.ttf \
