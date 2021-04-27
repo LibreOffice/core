@@ -469,6 +469,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
     assertXPath(pXmlDoc, "/root/page[1]/header/txt[2]/infos/bounds", "bottom", "2819");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestNestedTableMoveFwd)
+{
+    SwDoc* pDoc = createDoc("tabellen_test_windows_1.odt");
+    CPPUNIT_ASSERT(pDoc);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // the row with the nested table should not be split but be the first row on page 2
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[last()]/cell[1]/txt[1]/Text", "Portion",
+                "Tabelle 1");
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/tab[1]/row[1]/cell[1]/txt/Text",
+                "Portion", "Tabelle 2");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136613)
 {
     SwDoc* pDoc = createDoc("tdf136613.docx");
