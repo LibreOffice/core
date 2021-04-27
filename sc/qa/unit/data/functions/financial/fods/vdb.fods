@@ -2538,8 +2538,8 @@
      <table:table-cell table:style-name="ce11" table:formula="of:=VDB(100000;20000;10;7;8)" office:value-type="currency" office:currency="USD" office:value="971.519999999989" calcext:value-type="currency">
       <text:p>$971.52</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="971.519999999989" calcext:value-type="float">
-      <text:p>971.519999999989</text:p>
+     <table:table-cell office:value-type="float" office:value="971.520000000004" calcext:value-type="float">
+      <text:p>971.520000000004</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=ROUND([.A11];12)=ROUND([.B11];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2948,11 +2948,11 @@
      <table:table-cell table:number-columns-repeated="12"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=VDB(100000;20000;10;7.25;7.75)" office:value-type="float" office:value="485.759999999995" calcext:value-type="float">
-      <text:p>485.759999999995</text:p>
+     <table:table-cell table:formula="of:=VDB(100000;20000;10;7.25;7.75)" office:value-type="float" office:value="485.760000000002" calcext:value-type="float">
+      <text:p>$485.76</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="485.759999999995" calcext:value-type="float">
-      <text:p>485.759999999995</text:p>
+     <table:table-cell office:value-type="float" office:value="485.760000000002" calcext:value-type="float">
+      <text:p>485.760000000002</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A33];12)=ROUND([.B33];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2968,7 +2968,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G34];[.$G35])" office:value-type="float" office:value="20000" calcext:value-type="float">
-      <text:p>20000</text:p>
+      <text:p>$20,000.00</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="20000" calcext:value-type="float">
       <text:p>20000</text:p>
@@ -2990,7 +2990,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G35];[.$G36])" office:value-type="float" office:value="16000" calcext:value-type="float">
-      <text:p>16000</text:p>
+      <text:p>$16,000.00</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="16000" calcext:value-type="float">
       <text:p>16000</text:p>
@@ -3011,7 +3011,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G36];[.$G37])" office:value-type="float" office:value="12800" calcext:value-type="float">
-      <text:p>12800</text:p>
+      <text:p>$12,800.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="12800" calcext:value-type="float">
       <text:p>12800.000000</text:p>
@@ -3033,7 +3033,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G37];[.$G38])" office:value-type="float" office:value="10240" calcext:value-type="float">
-      <text:p>10240</text:p>
+      <text:p>$10,240.00</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="10240" calcext:value-type="float">
       <text:p>10240</text:p>
@@ -3054,7 +3054,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G38];[.$G39])" office:value-type="float" office:value="8192" calcext:value-type="float">
-      <text:p>8192</text:p>
+      <text:p>$8,192.00</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="8192" calcext:value-type="float">
       <text:p>8192</text:p>
@@ -3075,7 +3075,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G39];[.$G40])" office:value-type="float" office:value="6553.6" calcext:value-type="float">
-      <text:p>6553.6</text:p>
+      <text:p>$6,553.60</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="6553.6" calcext:value-type="float">
       <text:p>6553.6</text:p>
@@ -3096,7 +3096,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G40];[.$G41])" office:value-type="float" office:value="5242.88" calcext:value-type="float">
-      <text:p>5242.88</text:p>
+      <text:p>$5,242.88</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="5242.88" calcext:value-type="float">
       <text:p>5242.88</text:p>
@@ -3119,10 +3119,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G41];[.$G42])" office:value-type="float" office:value="971.519999999989" calcext:value-type="float">
-      <text:p>971.519999999989</text:p>
+      <text:p>$971.52</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="971.519999999989" calcext:value-type="float">
-      <text:p>971.519999999989</text:p>
+     <table:table-cell office:value-type="float" office:value="971.520000000004" calcext:value-type="float">
+      <text:p>971.520000000004</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A41];12)=ROUND([.B41];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -3140,7 +3140,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G42];[.$G43])" office:value-type="float" office:value="0" calcext:value-type="float">
-      <text:p>0</text:p>
+      <text:p>$0.00</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0</text:p>
@@ -3159,7 +3159,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G43];[.$G44])" office:value-type="float" office:value="0" calcext:value-type="float">
-      <text:p>0</text:p>
+      <text:p>$0.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0.000000</text:p>
@@ -3178,7 +3178,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G34];[.$G35];2;1)" office:value-type="float" office:value="20000" calcext:value-type="float">
-      <text:p>20000</text:p>
+      <text:p>$20,000.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="20000" calcext:value-type="float">
       <text:p>20000.000000</text:p>
@@ -3197,7 +3197,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G35];[.$G36];2;1)" office:value-type="float" office:value="16000" calcext:value-type="float">
-      <text:p>16000</text:p>
+      <text:p>$16,000.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="16000" calcext:value-type="float">
       <text:p>16000.000000</text:p>
@@ -3218,7 +3218,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G36];[.$G37];2;1)" office:value-type="float" office:value="12800" calcext:value-type="float">
-      <text:p>12800</text:p>
+      <text:p>$12,800.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="12800" calcext:value-type="float">
       <text:p>12800.000000</text:p>
@@ -3235,7 +3235,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G37];[.$G38];2;1)" office:value-type="float" office:value="10240" calcext:value-type="float">
-      <text:p>10240</text:p>
+      <text:p>$10,240.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="10240" calcext:value-type="float">
       <text:p>10240.000000</text:p>
@@ -3254,7 +3254,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G38];[.$G39];2;1)" office:value-type="float" office:value="8192" calcext:value-type="float">
-      <text:p>8192</text:p>
+      <text:p>$8,192.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="8192" calcext:value-type="float">
       <text:p>8192.000000</text:p>
@@ -3273,7 +3273,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G39];[.$G40];2;1)" office:value-type="float" office:value="6553.6" calcext:value-type="float">
-      <text:p>6553.6</text:p>
+      <text:p>$6,553.60</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="6553.6" calcext:value-type="float">
       <text:p>6553.600000</text:p>
@@ -3296,7 +3296,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G40];[.$G41];2;1)" office:value-type="float" office:value="5242.88" calcext:value-type="float">
-      <text:p>5242.88</text:p>
+      <text:p>$5,242.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="5242.88" calcext:value-type="float">
       <text:p>5242.880000</text:p>
@@ -3319,7 +3319,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G41];[.$G42];2;1)" office:value-type="float" office:value="971.520000000008" calcext:value-type="float">
-      <text:p>971.520000000008</text:p>
+      <text:p>$971.52</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="971.520000000008" calcext:value-type="float">
       <text:p>971.520000</text:p>
@@ -3342,7 +3342,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G42];[.$G43];2;1)" office:value-type="float" office:value="0" calcext:value-type="float">
-      <text:p>0</text:p>
+      <text:p>$0.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0.000000</text:p>
@@ -3360,7 +3360,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.$G43];[.$G44];2;1)" office:value-type="float" office:value="0" calcext:value-type="float">
-      <text:p>0</text:p>
+      <text:p>$0.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0.000000</text:p>
@@ -3375,7 +3375,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB([.G30];[.G31];[.G32];[.$G$34];[.$G35])" office:value-type="float" office:value="80000" calcext:value-type="float">
-      <text:p>80000</text:p>
+      <text:p>$80,000.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="80000" calcext:value-type="float">
       <text:p>80000.000000</text:p>
@@ -3395,7 +3395,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB([.G30];[.G31];[.G32];[.$G$34];[.$G36])" office:value-type="float" office:value="64000" calcext:value-type="float">
-      <text:p>64000</text:p>
+      <text:p>$64,000.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="64000" calcext:value-type="float">
       <text:p>64000.000000</text:p>
@@ -3417,7 +3417,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB([.G30];[.G31];[.G32];[.$G$34];[.$G37])" office:value-type="float" office:value="51200" calcext:value-type="float">
-      <text:p>51200</text:p>
+      <text:p>$51,200.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="51200" calcext:value-type="float">
       <text:p>51200.000000</text:p>
@@ -3432,7 +3432,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB([.G30];[.G31];[.G32];[.$G$34];[.$G38])" office:value-type="float" office:value="40960" calcext:value-type="float">
-      <text:p>40960</text:p>
+      <text:p>$40,960.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="40960" calcext:value-type="float">
       <text:p>40960.000000</text:p>
@@ -3447,7 +3447,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB([.G30];[.G31];[.G32];[.$G$34];[.$G39])" office:value-type="float" office:value="32768" calcext:value-type="float">
-      <text:p>32768</text:p>
+      <text:p>$32,768.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="32768" calcext:value-type="float">
       <text:p>32768.000000</text:p>
@@ -3462,7 +3462,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB([.G30];[.G31];[.G32];[.$G$34];[.$G40])" office:value-type="float" office:value="26214.4" calcext:value-type="float">
-      <text:p>26214.4</text:p>
+      <text:p>$26,214.40</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="26214.4" calcext:value-type="float">
       <text:p>26214.400000</text:p>
@@ -3477,7 +3477,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB([.G30];[.G31];[.G32];[.$G$34];[.$G41])" office:value-type="float" office:value="20971.52" calcext:value-type="float">
-      <text:p>20971.52</text:p>
+      <text:p>$20,971.52</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="20971.52" calcext:value-type="float">
       <text:p>20971.520000</text:p>
@@ -3492,7 +3492,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB([.G30];[.G31];[.G32];[.$G$34];[.$G42])" office:value-type="float" office:value="20000" calcext:value-type="float">
-      <text:p>20000</text:p>
+      <text:p>$20,000.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="20000" calcext:value-type="float">
       <text:p>20000.000000</text:p>
@@ -3507,7 +3507,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB([.G30];[.G31];[.G32];[.$G$34];[.$G43])" office:value-type="float" office:value="20000" calcext:value-type="float">
-      <text:p>20000</text:p>
+      <text:p>$20,000.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="20000" calcext:value-type="float">
       <text:p>20000.000000</text:p>
@@ -3522,7 +3522,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB([.G30];[.G31];[.G32];[.$G$34];[.$G44])" office:value-type="float" office:value="20000" calcext:value-type="float">
-      <text:p>20000</text:p>
+      <text:p>$20,000.00</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="20000" calcext:value-type="float">
       <text:p>20000.000000</text:p>
@@ -3536,10 +3536,10 @@
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G49];[.G50])" office:value-type="float" office:value="242.879999999997" calcext:value-type="float">
-      <text:p>242.879999999997</text:p>
+     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G49];[.G50])" office:value-type="float" office:value="242.880000000001" calcext:value-type="float">
+      <text:p>$242.88</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="242.879999999997" calcext:value-type="float">
+     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="242.880000000001" calcext:value-type="float">
       <text:p>242.880000</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A64];12)=ROUND([.B64];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
@@ -3551,10 +3551,10 @@
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G50];[.G51])" office:value-type="float" office:value="485.759999999995" calcext:value-type="float">
-      <text:p>485.759999999995</text:p>
+     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G50];[.G51])" office:value-type="float" office:value="485.760000000002" calcext:value-type="float">
+      <text:p>$485.76</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="485.759999999995" calcext:value-type="float">
+     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="485.760000000002" calcext:value-type="float">
       <text:p>485.760000</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A65];12)=ROUND([.B65];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
@@ -3566,10 +3566,10 @@
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G49];[.G51])" office:value-type="float" office:value="728.639999999992" calcext:value-type="float">
-      <text:p>728.639999999992</text:p>
+     <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G49];[.G51])" office:value-type="float" office:value="728.640000000003" calcext:value-type="float">
+      <text:p>$728.64</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="728.639999999992" calcext:value-type="float">
+     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="728.640000000003" calcext:value-type="float">
       <text:p>728.640000</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A66];12)=ROUND([.B66];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
@@ -3581,8 +3581,8 @@
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.G54];[.G55])" office:value-type="float" office:value="4777.216" calcext:value-type="float">
-      <text:p>4777.216</text:p>
+     <table:table-cell table:formula="of:=VDB([.G30];[.G31];[.G32];[.G54];[.G55])" office:value-type="float" office:value="4777.21600000001" calcext:value-type="float">
+      <text:p>$4,777.22</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="4777.216" calcext:value-type="float">
       <text:p>4777.216000</text:p>
@@ -3599,7 +3599,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G49];[.G50];2;1)" office:value-type="float" office:value="242.880000000002" calcext:value-type="float">
-      <text:p>242.880000000002</text:p>
+      <text:p>$242.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="242.880000000002" calcext:value-type="float">
       <text:p>242.880000</text:p>
@@ -3616,7 +3616,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB(100000;20000;10;[.G50];[.G51];2;1)" office:value-type="float" office:value="485.760000000004" calcext:value-type="float">
-      <text:p>485.760000000004</text:p>
+      <text:p>$485.76</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="485.760000000004" calcext:value-type="float">
       <text:p>485.760000</text:p>
@@ -3633,7 +3633,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB(100000;20000;10;[.G$34];[.G50])" office:value-type="float" office:value="20728.64" calcext:value-type="float">
-      <text:p>20728.64</text:p>
+      <text:p>$20,728.64</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="20728.64" calcext:value-type="float">
       <text:p>20728.640000</text:p>
@@ -3650,7 +3650,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=[.G30]-VDB(100000;20000;10;[.G$34];[.G51])" office:value-type="float" office:value="20242.88" calcext:value-type="float">
-      <text:p>20242.88</text:p>
+      <text:p>$20,242.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="20242.88" calcext:value-type="float">
       <text:p>20242.880000</text:p>
@@ -3667,7 +3667,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:formula="of:=VDB(100000;20000;10;4;5;1;0)" office:value-type="float" office:value="7557.14285714286" calcext:value-type="float">
-      <text:p>7557.14285714286</text:p>
+      <text:p>$7,557.14</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="7557.14285714286" calcext:value-type="float">
       <text:p>7557.14285714286</text:p>
