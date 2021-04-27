@@ -70,6 +70,7 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public TraceEvent
             startConsole();
         }
     }
+
     ~ProfileZone()
     {
         if (s_bRecording)
@@ -82,6 +83,9 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public TraceEvent
             stopConsole();
         }
     }
+
+    ProfileZone(const ProfileZone&) = delete;
+    void operator=(const ProfileZone&) = delete;
 
     static void startRecording();
     static void stopRecording();
