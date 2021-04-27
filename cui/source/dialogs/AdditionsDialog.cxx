@@ -476,8 +476,8 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
         this->set_title(titlePrefix);
         m_sTag = "allextensions"; // Means empty parameter
     }
-    //FIXME: Temporary URL
-    OUString rURL = "https://libreoffice.yusufketen.com/api/" + m_sTag + ".json";
+    //FIXME: Temporary URL - v0 is not using actual api
+    OUString rURL = "https://extensions.libreoffice.org/api/v0/" + m_sTag + ".json";
     m_sURL = rURL;
 
     m_xExtensionManager
