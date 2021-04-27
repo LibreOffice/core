@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7438e1e9_0723303f",
+        "filename": "extensions/source/ole/unoconversionutilities.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-27T07:03:40Z",
+      "side": 1,
+      "message": "We use OUString::Concat with a 8-bit string here, but isn\u0027t it less efficient than both OUStringLiteral *and* a Concat over 16-bit string, where plain memcpy could be used instead of per-character copy?",
+      "revId": "5dbf1cd06a90ad16209aba5e55eaef9c817a4415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
