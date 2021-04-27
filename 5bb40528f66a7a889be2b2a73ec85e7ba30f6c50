@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be8fd724_232a72bd",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-27T11:45:22Z",
+      "side": 1,
+      "message": "Please remove unneeded lines, don\u0027t comment them out - we have git history in case we need to know what was there before :-)",
+      "revId": "5bb40528f66a7a889be2b2a73ec85e7ba30f6c50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44eeea7f_9d67d163",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3939,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-27T11:45:22Z",
+      "side": 1,
+      "message": "this may be \u0027\u003d default;\u0027 now, since default ctor of KahanSum initializes it with 0",
+      "range": {
+        "startLine": 3939,
+        "startChar": 28,
+        "endLine": 3939,
+        "endChar": 43
+      },
+      "revId": "5bb40528f66a7a889be2b2a73ec85e7ba30f6c50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37e863fc_7617323b",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3994,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-27T11:45:22Z",
+      "side": 1,
+      "message": "Why this change?",
+      "revId": "5bb40528f66a7a889be2b2a73ec85e7ba30f6c50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3132c9b_5a4c03c1",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4004,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-27T11:45:22Z",
+      "side": 1,
+      "message": "And this",
+      "revId": "5bb40528f66a7a889be2b2a73ec85e7ba30f6c50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
