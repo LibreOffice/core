@@ -204,10 +204,13 @@ class ScXMLExport : public SvXMLExport
 
     void CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib);
 
-    void AddStyleFromCells(
+    /*void AddStyleFromCells(
         const css::uno::Reference< css::beans::XPropertySet >& xProperties,
         const css::uno::Reference< css::sheet::XSpreadsheet >& xTable,
-        sal_Int32 nTable, const OUString* pOldName );
+        sal_Int32 nTable, const OUString* pOldName );*/
+        void AddStyleFromCells(
+        const css::uno::Reference< css::beans::XPropertySet >& xProperties,
+        const OUString* pOldName );
     void AddStyleFromColumn(
         const css::uno::Reference< css::beans::XPropertySet >& xColumnProperties,
         const OUString* pOldName, sal_Int32& rIndex, bool& rIsVisible );

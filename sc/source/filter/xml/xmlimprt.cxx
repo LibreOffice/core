@@ -1019,11 +1019,11 @@ void ScXMLImport::SetStyleToRanges()
                 }
 
                 // store first cell of first range for each style, once per sheet
-                uno::Sequence<table::CellRangeAddress> aAddresses(xSheetCellRanges->getRangeAddresses());
+                /*ScRange aAddresses(xSheetCellRanges->getRangeAddresses());
                 pStyle->ApplyCondFormat(aAddresses);
                 if ( aAddresses.hasElements() )
                 {
-                    const table::CellRangeAddress& rRange = aAddresses[0];
+                    ScRange& rRange = aAddresses[0];
                     if ( rRange.Sheet != pStyle->GetLastSheet() )
                     {
                         ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(GetModel())->GetSheetSaveData();
@@ -1031,7 +1031,7 @@ void ScXMLImport::SetStyleToRanges()
                             ScAddress( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), static_cast<SCTAB>(rRange.Sheet) ) );
                         pStyle->SetLastSheet(rRange.Sheet);
                     }
-                }
+                }*/
             }
             else
             {
