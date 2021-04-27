@@ -52,6 +52,24 @@
       "revId": "5dbf1cd06a90ad16209aba5e55eaef9c817a4415",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "199f2c38_a1adcf62",
+        "filename": "extensions/source/ole/unoconversionutilities.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-27T07:29:45Z",
+      "side": 1,
+      "message": "\u003e Unrelated to this change, I suppose we could possibly drop the 8-bit char Concat support for OUString (now that C++ has that u\"\" literals)? That would be a large-scale change, and I don\u0027t know if that is worth it, though.\n\nI guess its always a weighing of larger static object size vs. faster dynamic performance.  (Plus, if we dropped support for OUString::Concat(\"...\")+... we should arguably also drop support for naked \"...\"+... in OUString concatenation contexts.)",
+      "parentUuid": "135523e8_f6998e17",
+      "revId": "5dbf1cd06a90ad16209aba5e55eaef9c817a4415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
