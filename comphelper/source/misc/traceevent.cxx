@@ -67,14 +67,30 @@ void TraceEvent::addInstantEvent(const char* sProfileId)
                  + OUString::number(osl_getThreadIdentifier(nullptr)) + "},");
 }
 
-void ProfileZone::startRecording()
+void TraceEvent::startRecording()
 {
     ::osl::MutexGuard aGuard(g_aMutex);
     s_nNesting = 0;
     s_bRecording = true;
 }
 
-void ProfileZone::stopRecording() { s_bRecording = false; }
+void TraceEvent::stopRecording() { s_bRecording = false; }
+
+css::uno::Sequence<OUString> TraceEvent::getRecordingAndClear()
+{
+    bool bRecording;
+    std::vector<OUString> aRecording;
+    {
+        ::osl::MutexGuard aGuard(g_aMutex);
+        bRecording = s_bRecording;
+        stopRecording();
+        aRecording.swap(g_aRecording);
+    }
+    // reset start time and nesting level
+    if (bRecording)
+        startRecording();
+    return ::comphelper::containerToSequence(aRecording);
+}
 
 void ProfileZone::addRecording()
 {
@@ -102,22 +118,6 @@ void ProfileZone::addRecording()
                              + ","
                                "\"tid\":"
                              + OUString::number(osl_getThreadIdentifier(nullptr)) + "},");
-}
-
-css::uno::Sequence<OUString> ProfileZone::getRecordingAndClear()
-{
-    bool bRecording;
-    std::vector<OUString> aRecording;
-    {
-        ::osl::MutexGuard aGuard(g_aMutex);
-        bRecording = s_bRecording;
-        stopRecording();
-        aRecording.swap(g_aRecording);
-    }
-    // reset start time and nesting level
-    if (bRecording)
-        startRecording();
-    return ::comphelper::containerToSequence(aRecording);
 }
 
 void ProfileZone::startConsole() { m_nCreateTime = osl_getGlobalTimer(); }
