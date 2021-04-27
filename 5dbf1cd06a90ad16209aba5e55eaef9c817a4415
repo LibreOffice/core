@@ -34,6 +34,24 @@
       "revId": "5dbf1cd06a90ad16209aba5e55eaef9c817a4415",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "135523e8_f6998e17",
+        "filename": "extensions/source/ole/unoconversionutilities.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-27T07:18:36Z",
+      "side": 1,
+      "message": "\u003e so I changed this back to the narrow string literal it had been before\n\nOK, no problem in that - but honestly I fail how changing back has any advantage over making a better change, when the volume of the change is same, and the noise in the line will be same?\n\nUnrelated to this change, I suppose we could possibly drop the 8-bit char Concat support for OUString (now that C++ has that u\"\" literals)? That would be a large-scale change, and I don\u0027t know if that is worth it, though.",
+      "parentUuid": "5efe6aaa_50d052b0",
+      "revId": "5dbf1cd06a90ad16209aba5e55eaef9c817a4415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
