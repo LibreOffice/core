@@ -1576,17 +1576,6 @@ void VclMetafileProcessor2D::processPolygonStrokePrimitive2D(
             const attribute::StrokeAttribute& rStroke = rStrokePrimitive.getStrokeAttribute();
             basegfx::B2DPolyPolygon aHairLinePolyPolygon;
 
-            if (0.0 == rStroke.getFullDotDashLen())
-            {
-                aHairLinePolyPolygon.append(rBasePolygon);
-            }
-            else
-            {
-                basegfx::utils::applyLineDashing(rBasePolygon, rStroke.getDotDashArray(),
-                                                 &aHairLinePolyPolygon, nullptr,
-                                                 rStroke.getFullDotDashLen());
-            }
-
             const basegfx::BColor aHairlineColor(
                 maBColorModifierStack.getModifiedColor(rLine.getColor()));
             mpOutputDevice->SetLineColor(Color(aHairlineColor));
@@ -1598,6 +1587,46 @@ void VclMetafileProcessor2D::processPolygonStrokePrimitive2D(
                                basegfx::fround(getTransformedLineWidth(rLine.getWidth())));
             aLineInfo.SetLineJoin(rLine.getLineJoin());
             aLineInfo.SetLineCap(rLine.getLineCap());
+
+            if (0.0 == rStroke.getFullDotDashLen())
+            {
+                aHairLinePolyPolygon.append(rBasePolygon);
+            }
+            else if (rStroke.getDotDashArray().size() == 2)
+            {
+                aHairLinePolyPolygon.append(rBasePolygon);
+                // This will be used by setupStrokeAttributes() in cppcanvas.
+                aLineInfo.SetStyle(LineStyle::Dash);
+                aLineInfo.SetDashCount(1);
+                aLineInfo.SetDashLen(
+                    basegfx::fround(getTransformedLineWidth(rStroke.getDotDashArray()[0])));
+                aLineInfo.SetDistance(
+                    basegfx::fround(getTransformedLineWidth(rStroke.getDotDashArray()[1])));
+            }
+            else if (rStroke.getDotDashArray().size() == 4
+                     && rStroke.getDotDashArray()[1] == rStroke.getDotDashArray()[3])
+            {
+                aHairLinePolyPolygon.append(rBasePolygon);
+                // This will be used by setupStrokeAttributes() in cppcanvas.
+                aLineInfo.SetStyle(LineStyle::Dash);
+                aLineInfo.SetDashCount(1);
+                aLineInfo.SetDashLen(
+                    basegfx::fround(getTransformedLineWidth(rStroke.getDotDashArray()[0])));
+                aLineInfo.SetDistance(
+                    basegfx::fround(getTransformedLineWidth(rStroke.getDotDashArray()[1])));
+                aLineInfo.SetDotCount(1);
+                aLineInfo.SetDotLen(
+                    basegfx::fround(getTransformedLineWidth(rStroke.getDotDashArray()[2])));
+            }
+            else
+            {
+                // LineInfo can hold only limited info about dashing, apply dashing manually
+                // if LineInfo cannot describe it. That should not happen though.
+                SAL_WARN("drawinglayer", "dotdash array cannot be converted to LineInfo");
+                basegfx::utils::applyLineDashing(rBasePolygon, rStroke.getDotDashArray(),
+                                                 &aHairLinePolyPolygon, nullptr,
+                                                 rStroke.getFullDotDashLen());
+            }
 
             for (sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
             {

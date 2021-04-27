@@ -400,12 +400,12 @@ sal_uInt16 XLineStyleItem::GetValueCount() const
     return 3;
 }
 
-XDash::XDash(css::drawing::DashStyle eTheDash, sal_uInt16 nTheDots, sal_uInt32 nTheDotLen,
-             sal_uInt16 nTheDashes, sal_uInt32 nTheDashLen, sal_uInt32 nTheDistance) :
+XDash::XDash(css::drawing::DashStyle eTheDash, sal_uInt16 nTheDots, double nTheDotLen,
+             sal_uInt16 nTheDashes, double nTheDashLen, double nTheDistance) :
     eDash(eTheDash),
-    nDotLen(nTheDotLen),
     nDots(nTheDots),
     nDashes(nTheDashes),
+    nDotLen(nTheDotLen),
     nDashLen(nTheDashLen),
     nDistance(nTheDistance)
 {
@@ -433,9 +433,9 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
     rDotDashArray.resize( nNumDotDashArray, 0.0 );
     sal_uInt16 a;
     sal_uInt16 nIns(0);
-    double fDashDotDistance = static_cast<double>(GetDistance());
-    double fSingleDashLen = static_cast<double>(GetDashLen());
-    double fSingleDotLen = static_cast<double>(GetDotLen());
+    double fDashDotDistance = GetDistance();
+    double fSingleDashLen = GetDashLen();
+    double fSingleDotLen = GetDotLen();
 
     if (fLineWidth == 0.0)
         fLineWidth = SMALLEST_DASH_WIDTH;

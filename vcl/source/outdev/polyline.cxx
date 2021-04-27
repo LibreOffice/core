@@ -122,7 +122,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rL
     {
         DrawPolyLine(
             rPoly.getB2DPolygon(),
-            static_cast< double >(rLineInfo.GetWidth()),
+            rLineInfo.GetWidth(),
             rLineInfo.GetLineJoin(),
             rLineInfo.GetLineCap(),
             basegfx::deg2rad(15.0) /* default fMiterMinimumAngle, value not available in LineInfo */);
@@ -147,7 +147,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
     {
         LineInfo aLineInfo;
         if( fLineWidth != 0.0 )
-            aLineInfo.SetWidth( static_cast<tools::Long>(fLineWidth+0.5) );
+            aLineInfo.SetWidth( fLineWidth );
 
         const tools::Polygon aToolsPolygon( rB2DPolygon );
         mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
@@ -235,7 +235,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         const tools::Polygon aToolsPolygon( rB2DPolygon );
         LineInfo aLineInfo;
         if( fLineWidth != 0.0 )
-            aLineInfo.SetWidth( static_cast<tools::Long>(fLineWidth+0.5) );
+            aLineInfo.SetWidth( fLineWidth );
 
         drawPolyLine( aToolsPolygon, aLineInfo );
     }
@@ -310,7 +310,7 @@ bool OutputDevice::DrawPolyLineDirect(
         {
             LineInfo aLineInfo;
             if( fLineWidth != 0.0 )
-                aLineInfo.SetWidth( static_cast<tools::Long>(fLineWidth+0.5) );
+                aLineInfo.SetWidth( fLineWidth );
             // Transport known information, might be needed
             aLineInfo.SetLineJoin(eLineJoin);
             aLineInfo.SetLineCap(eLineCap);
