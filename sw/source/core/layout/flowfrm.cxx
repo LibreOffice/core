@@ -1951,8 +1951,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
         // Allow the MoveFwd even if we do not have an IndPrev in these cases:
         if ( m_rThis.IsInTab() &&
             ( !m_rThis.IsTabFrame() ||
-                ( m_rThis.GetUpper()->IsInTab() &&
-                  m_rThis.GetUpper()->FindTabFrame()->IsFwdMoveAllowed() ) ) &&
+              m_rThis.GetUpper()->IsInTab() ) &&
              nullptr != m_rThis.GetNextCellLeaf() )
         {
             bNoFwd = false;
