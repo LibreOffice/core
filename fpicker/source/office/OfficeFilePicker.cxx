@@ -144,8 +144,7 @@ void SvtFilePicker::prepareExecute()
                 aPath = givenPath;
             else
             {
-                INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
-                aPath = aStdDirObj;
+                aPath = INetURLObject( SvtPathOptions().GetWorkPath() );
             }
             if ( !m_aDefaultName.isEmpty() )
             {

@@ -70,14 +70,13 @@ namespace emfplushelper
 
             const ::basegfx::B2DPoint mappedStartPoint(rR.Map(dx, dy));
             const ::basegfx::B2DPoint mappedEndPoint(rR.Map(dx + dw, dy + dh));
-            const ::basegfx::B2DPolyPolygon polyPolygon(
+            polygon = ::basegfx::B2DPolyPolygon(
                     ::basegfx::utils::createPolygonFromRect(
                         ::basegfx::B2DRectangle(
                             mappedStartPoint.getX(),
                             mappedStartPoint.getY(),
                             mappedEndPoint.getX(),
                             mappedEndPoint.getY())));
-            polygon = polyPolygon;
             break;
         }
         case RegionNodeDataTypePath:

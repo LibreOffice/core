@@ -841,7 +841,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
                         XPolygon aXP(ImpCalcEdgeTrack(aPt1,nA1,aBoundRect1,aBewareRect1,aPt2,nA2,aBoundRect2,aBewareRect2,&nQual,&aInfo));
                         if (nQual<nBestQual)
                         {
-                            aBestXP=aXP;
+                            aBestXP=std::move(aXP);
                             nBestQual=nQual;
                             aBestInfo=aInfo;
                             nBestAuto1=nNum1;
