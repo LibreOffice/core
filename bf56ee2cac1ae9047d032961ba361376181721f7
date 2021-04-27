@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8a2ed0d_605c5372",
+        "filename": "vcl/skia/gdiimpl.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-04-27T10:58:46Z",
+      "side": 1,
+      "message": "There are more kDstOut cases in Skia than these two, did you check it\u0027s only these two that need altering? The Skia backend has a fairly good unittest coverage, so \"SAL_SKIA\u003draster SAL_ENABLESKIA\u003d1 SAL_USE_VCLPLUGIN\u003dgen omake vcl.unitcheck\" should help.",
+      "revId": "bf56ee2cac1ae9047d032961ba361376181721f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05068065_25aa1bc7",
+        "filename": "vcl/source/bitmap/BitmapEx.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-04-27T10:58:46Z",
+      "side": 1,
+      "message": "Code like this could really benefit from some kind of COL_ALPHA_OPAQUE or whatever, so it\u0027d be obvious what the meaning is.",
+      "revId": "bf56ee2cac1ae9047d032961ba361376181721f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
