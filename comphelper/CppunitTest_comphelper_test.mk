@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_test, \
     comphelper/qa/unit/base64_test \
     comphelper/qa/unit/types_test \
     comphelper/qa/unit/test_guards \
+    comphelper/qa/unit/test_traceevent \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,comphelper_test))
