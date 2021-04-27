@@ -16,6 +16,24 @@
       "revId": "5dbf1cd06a90ad16209aba5e55eaef9c817a4415",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5efe6aaa_50d052b0",
+        "filename": "extensions/source/ole/unoconversionutilities.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-27T07:12:55Z",
+      "side": 1,
+      "message": "Maybe.  But that\u0027s what we use in tons of other places (with and without a requirement to use the OUString::Concat marker) too,\n\n  foo + \"bar\" + baz + \"boz\"\n\nso I changed this back to the narrow string literal it had been before \u003chttps://git.libreoffice.org/core/+/33ecd0d5c4fff9511a8436513936a3f7044a775a%5E!/\u003e \"Change OUStringLiteral from char[] to char16_t[]\".",
+      "parentUuid": "7438e1e9_0723303f",
+      "revId": "5dbf1cd06a90ad16209aba5e55eaef9c817a4415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
