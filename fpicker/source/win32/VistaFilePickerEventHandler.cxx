@@ -236,59 +236,49 @@ const OUStringLiteral PROP_PICKER_LISTENER = u"picker_listener";
 
 namespace {
 
-class PickerEvents
+void doRequest(Request& rRequest)
 {
-public:
+    const ::sal_Int32 nEventID   = rRequest.getRequest();
+    const ::sal_Int16 nControlID = rRequest.getArgumentOrDefault(PROP_CONTROL_ID, ::sal_Int16(0));
+    const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest.getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
 
-    PickerEvents()
-    {}
+    if ( ! xListener.is())
+        return;
 
-    void doRequest(Request& rRequest)
+    css::ui::dialogs::FilePickerEvent aEvent;
+    aEvent.ElementId = nControlID;
+
+    switch (nEventID)
     {
-        const ::sal_Int32 nEventID   = rRequest.getRequest();
-        const ::sal_Int16 nControlID = rRequest.getArgumentOrDefault(PROP_CONTROL_ID, ::sal_Int16(0));
-        const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest.getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
+        case VistaFilePickerEventHandler::E_FILE_SELECTION_CHANGED :
+                xListener->fileSelectionChanged(aEvent);
+                break;
 
-        if ( ! xListener.is())
-            return;
+        case VistaFilePickerEventHandler::E_DIRECTORY_CHANGED :
+                xListener->directoryChanged(aEvent);
+                break;
 
-        css::ui::dialogs::FilePickerEvent aEvent;
-        aEvent.ElementId = nControlID;
+        case VistaFilePickerEventHandler::E_HELP_REQUESTED :
+                xListener->helpRequested(aEvent);
+                break;
 
-        switch (nEventID)
-        {
-            case VistaFilePickerEventHandler::E_FILE_SELECTION_CHANGED :
-                    xListener->fileSelectionChanged(aEvent);
-                    break;
+        case VistaFilePickerEventHandler::E_CONTROL_STATE_CHANGED :
+                xListener->controlStateChanged(aEvent);
+                break;
 
-            case VistaFilePickerEventHandler::E_DIRECTORY_CHANGED :
-                    xListener->directoryChanged(aEvent);
-                    break;
+        case VistaFilePickerEventHandler::E_DIALOG_SIZE_CHANGED :
+                xListener->dialogSizeChanged();
+                break;
 
-            case VistaFilePickerEventHandler::E_HELP_REQUESTED :
-                    xListener->helpRequested(aEvent);
-                    break;
-
-            case VistaFilePickerEventHandler::E_CONTROL_STATE_CHANGED :
-                    xListener->controlStateChanged(aEvent);
-                    break;
-
-            case VistaFilePickerEventHandler::E_DIALOG_SIZE_CHANGED :
-                    xListener->dialogSizeChanged();
-                    break;
-
-            // no default here. Let compiler detect changes on enum set !
-        }
+        // no default here. Let compiler detect changes on enum set !
     }
-};
+}
 
 }
 
 void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
                                                  ::sal_Int16  nControlID)
 {
-    static PickerEvents aNotify;
-
     ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer( cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get());
     if ( ! pContainer)
         return;
@@ -306,7 +296,7 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
             if ( nControlID )
                 rRequest.setArgument(PROP_CONTROL_ID, nControlID);
 
-            aNotify.doRequest(rRequest);
+            doRequest(rRequest);
         }
         catch(const css::uno::RuntimeException&)
         {
