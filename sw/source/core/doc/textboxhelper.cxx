@@ -28,6 +28,7 @@
 #include <fmtsrnd.hxx>
 #include <frmfmt.hxx>
 #include <frameformats.hxx>
+#include <IDocumentUndoRedo.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/memberids.h>
@@ -1078,6 +1079,7 @@ bool SwTextBoxHelper::setWrapThrough(SwFrameFormat* pShape)
             if (auto xFrame = SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat))
                 try
                 {
+                    ::sw::UndoGuard const UndoGuard(pShape->GetDoc()->GetIDocumentUndoRedo());
                     uno::Reference<beans::XPropertySet> const xPropertySet(xFrame, uno::UNO_QUERY);
                     xPropertySet->setPropertyValue(UNO_NAME_SURROUND,
                                                    uno::makeAny(text::WrapTextMode_THROUGH));
@@ -1126,6 +1128,7 @@ bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape)
             {
                 try
                 {
+                    ::sw::UndoGuard const UndoGuard(pShape->GetDoc()->GetIDocumentUndoRedo());
                     uno::Reference<beans::XPropertySet> const xPropertySet(
                         SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat),
                         uno::UNO_QUERY);
@@ -1211,6 +1214,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape)
     {
         if (auto pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
         {
+            ::sw::UndoGuard const UndoGuard(pShape->GetDoc()->GetIDocumentUndoRedo());
             if (pShape->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
             {
                 tools::Rectangle aRect(getTextRectangle(pShape, false));
