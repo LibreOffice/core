@@ -12,23 +12,14 @@
 
 #include <sal/config.h>
 
-#include <atomic>
-
-#include <osl/process.h>
-#include <osl/time.h>
-#include <com/sun/star/uno/Sequence.h>
-#include <comphelper/comphelperdllapi.h>
-#include <rtl/ustring.hxx>
+#include <comphelper/traceevent.hxx>
 
 // implementation of XToolkitExperimental profiling API
 
 namespace comphelper
 {
-class COMPHELPER_DLLPUBLIC ProfileZone
+class COMPHELPER_DLLPUBLIC ProfileZone : public TraceEvent
 {
-private:
-    static std::atomic<bool> s_bRecording; // true during recording
-    static int s_nNesting;
     const char* m_sProfileId;
     long long m_nCreateTime;
     bool m_bConsole;
