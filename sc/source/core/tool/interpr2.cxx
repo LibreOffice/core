@@ -248,11 +248,7 @@ void ScInterpreter::ScGetWeekOfYear()
     if ( !MustHaveParamCount( nParamCount, 1, 2 ) )
         return;
 
-    sal_Int16 nFlag;
-    if (nParamCount == 1)
-        nFlag = 1;
-    else
-        nFlag = GetInt16();
+    sal_Int16 nFlag = nParamCount == 1 ? 1 : GetInt16();
 
     Date aDate = pFormatter->GetNullDate();
     aDate.AddDays( GetInt32());
@@ -308,8 +304,7 @@ void ScInterpreter::ScEasterSunday()
     if ( !MustHaveParamCount( GetByte(), 1 ) )
         return;
 
-    sal_Int16 nDay, nMonth, nYear;
-    nYear = GetInt16();
+    sal_Int16 nYear = GetInt16();
     if (nGlobalError != FormulaError::NONE)
     {
         PushError( nGlobalError);
@@ -338,8 +333,8 @@ void ScInterpreter::ScEasterSunday()
     L = (32 + 2 * E + 2 * I - H - K) % 7;
     M = int((N + 11 * H + 22 * L) / 451);
     O = H + L - 7 * M + 114;
-    nDay = sal::static_int_cast<sal_Int16>( O % 31 + 1 );
-    nMonth = sal::static_int_cast<sal_Int16>( int(O / 31) );
+    sal_Int16 nDay = sal::static_int_cast<sal_Int16>( O % 31 + 1 );
+    sal_Int16 nMonth = sal::static_int_cast<sal_Int16>( int(O / 31) );
     PushDouble( GetDateSerial( nYear, nMonth, nDay, true ) );
 }
 
@@ -646,9 +641,7 @@ void ScInterpreter::ScGetDate()
     if (nGlobalError != FormulaError::NONE || nYear < 0)
         PushIllegalArgument();
     else
-    {
         PushDouble(GetDateSerial(nYear, nMonth, nDay, false));
-    }
 }
 
 void ScInterpreter::ScGetTime()
@@ -708,11 +701,7 @@ void ScInterpreter::ScGetDiffDate360()
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
 
-    bool bFlag;
-    if (nParamCount == 3)
-        bFlag = GetBool();
-    else
-        bFlag = false;
+    bool bFlag = nParamCount == 3 && GetBool();
     sal_Int32 nDate2 = GetInt32();
     sal_Int32 nDate1 = GetInt32();
     if (nGlobalError != FormulaError::NONE)
@@ -956,7 +945,7 @@ void ScInterpreter::ScPlusMinus()
 
 void ScInterpreter::ScAbs()
 {
-    PushDouble(fabs(GetDouble()));
+    PushDouble(std::abs(GetDouble()));
 }
 
 void ScInterpreter::ScInt()
@@ -1016,13 +1005,8 @@ void ScInterpreter::ScRoundUp()
 
 void ScInterpreter::RoundSignificant( double fX, double fDigits, double &fRes )
 {
-    bool bNegVal = ( fX < 0 );
-    if ( bNegVal )
-        fX *= -1.0;
-    double fTemp = ::rtl::math::approxFloor( log10( fX ) ) + 1.0 - fDigits;
+    double fTemp = ::rtl::math::approxFloor( log10( fX > 0 ? fX : -fX ) ) + 1.0 - fDigits;
     fRes = ::rtl::math::round( pow(10.0, -fTemp ) * fX ) * pow( 10.0, fTemp );
-    if ( bNegVal )
-        fRes *= -1.0;
 }
 
 // tdf#105931
@@ -1128,7 +1112,7 @@ void ScInterpreter::ScCeil_Precise()
     }
     else
     {
-        fDec = fabs( GetDoubleWithDefault( 1.0 ));
+        fDec = std::abs( GetDoubleWithDefault( 1.0 ));
         fVal = GetDouble();
     }
     if ( fDec == 0.0 || fVal == 0.0 )
@@ -1211,17 +1195,8 @@ void ScInterpreter::ScFloor_Precise()
     if ( !MustHaveParamCount( nParamCount, 1, 2 ) )
         return;
 
-    double fDec, fVal;
-    if ( nParamCount == 1 )
-    {
-        fVal = GetDouble();
-        fDec = 1.0;
-    }
-    else
-    {
-        fDec = fabs( GetDoubleWithDefault( 1.0 ) );
-        fVal = GetDouble();
-    }
+    double fDec = nParamCount == 1 ? 1.0 : std::abs( GetDoubleWithDefault( 1.0 ) );
+    double fVal = GetDouble();
     if ( fDec == 0.0 || fVal == 0.0 )
         PushInt( 0 );
     else
@@ -1244,13 +1219,13 @@ void ScInterpreter::ScOdd()
     {
         fVal = ::rtl::math::approxCeil(fVal);
         if (fmod(fVal, 2.0) == 0.0)
-            fVal += 1.0;
+            fVal ++;
     }
     else
     {
         fVal = ::rtl::math::approxFloor(fVal);
         if (fmod(fVal, 2.0) == 0.0)
-            fVal -= 1.0;
+            fVal --;
     }
     PushDouble(fVal);
 }
@@ -1271,11 +1246,7 @@ void ScInterpreter::ScLog()
     if ( !MustHaveParamCount( nParamCount, 1, 2 ) )
         return;
 
-    double fBase;
-    if (nParamCount == 2)
-        fBase = GetDouble();
-    else
-        fBase = 10.0;
+    double fBase = nParamCount == 2 ? GetDouble() : 10.0;
     double fVal = GetDouble();
     if (fVal > 0.0 && fBase > 0.0 && fBase != 1.0)
         PushDouble(log(fVal) / log(fBase));
@@ -1401,21 +1372,15 @@ void ScInterpreter::ScNPV()
 
 void ScInterpreter::ScIRR()
 {
-    double fEstimated;
     nFuncFmtType = SvNumFormatType::PERCENT;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 2 ) )
         return;
-    if (nParamCount == 2)
-        fEstimated = GetDouble();
-    else
-        fEstimated = 0.1;
+    double fEstimated = nParamCount == 2 ? GetDouble() : 0.1;
     double fEps = 1.0;
-    double x, fValue;
-    if (fEstimated == -1.0)
-        x = 0.1;                           // default result for division by zero
-    else
-        x = fEstimated;                    // startvalue
+    // If it's -1 the default result for division by zero else startvalue
+    double x = fEstimated == -1.0 ? 0.1 : fEstimated;
+    double fValue;
 
     ScRange aRange;
     ScMatrixRef pMat;
@@ -1495,10 +1460,10 @@ void ScInterpreter::ScIRR()
         }
         double xNew = x - fNom.get() / fDenom.get();  // x(i+1) = x(i)-f(x(i))/f'(x(i))
         nItCount++;
-        fEps = fabs(xNew - x);
+        fEps = std::abs(xNew - x);
         x = xNew;
     }
-    if (fEstimated == 0.0 && fabs(x) < SCdEpsilon)
+    if (fEstimated == 0.0 && std::abs(x) < SCdEpsilon)
         x = 0.0;                        // adjust to zero
     if (fEps < SCdEpsilon)
         PushDouble(x);
@@ -1670,18 +1635,15 @@ double ScInterpreter::ScGetPV(double fRate, double fNper, double fPmt,
 void ScInterpreter::ScPV()
 {
     nFuncFmtType = SvNumFormatType::CURRENCY;
-    double fPmt, fNper, fRate, fFv = 0;
-    bool bPayInAdvance = false;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
-    if (nParamCount == 5)
-        bPayInAdvance = GetBool();
-    if (nParamCount >= 4)
-        fFv   = GetDouble();
-    fPmt   = GetDouble();
-    fNper  = GetDouble();
-    fRate = GetDouble();
+
+    bool bPayInAdvance = nParamCount == 5 && GetBool();
+    double fFv   = nParamCount >= 4 ? GetDouble() : 0;
+    double fPmt  = GetDouble();
+    double fNper = GetDouble();
+    double fRate = GetDouble();
     PushDouble(ScGetPV(fRate, fNper, fPmt, fFv, bPayInAdvance));
 }
 
@@ -1708,22 +1670,14 @@ double ScInterpreter::ScGetDDB(double fCost, double fSalvage, double fLife,
     if (fRate >= 1.0)
     {
         fRate = 1.0;
-        if (fPeriod == 1.0)
-            fOldValue = fCost;
-        else
-            fOldValue = 0.0;
+        fOldValue = fPeriod == 1.0 ? fCost : 0;
     }
     else
         fOldValue = fCost * pow(1.0 - fRate, fPeriod - 1.0);
     fNewValue = fCost * pow(1.0 - fRate, fPeriod);
 
-    if (fNewValue < fSalvage)
-        fDdb = fOldValue - fSalvage;
-    else
-        fDdb = fOldValue - fNewValue;
-    if (fDdb < 0.0)
-        fDdb = 0.0;
-    return fDdb;
+    fDdb = fNewValue < fSalvage ? fOldValue - fSalvage : fOldValue - fNewValue;
+    return fDdb < 0 ? 0 : fDdb;
 }
 
 void ScInterpreter::ScDDB()
@@ -1733,11 +1687,7 @@ void ScInterpreter::ScDDB()
     if ( !MustHaveParamCount( nParamCount, 4, 5 ) )
         return;
 
-    double fFactor;
-    if (nParamCount == 5)
-        fFactor = GetDouble();
-    else
-        fFactor = 2.0;
+    double fFactor = nParamCount == 5 ? GetDouble() : 2.0;
     double fPeriod = GetDouble();
     double fLife   = GetDouble();
     double fSalvage    = GetDouble();
@@ -1755,11 +1705,7 @@ void ScInterpreter::ScDB()
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 5 ) )
         return ;
-    double fMonths;
-    if (nParamCount == 4)
-        fMonths = 12.0;
-    else
-        fMonths = ::rtl::math::approxFloor(GetDouble());
+    double fMonths = nParamCount == 4 ? 12.0 : ::rtl::math::approxFloor(GetDouble());
     double fPeriod = GetDouble();
     double fLife = GetDouble();
     double fSalvage = GetDouble();
@@ -1801,13 +1747,12 @@ double ScInterpreter::ScInterVDB(double fCost, double fSalvage, double fLife,
     double fIntEnd   = ::rtl::math::approxCeil(fPeriod);
     sal_uLong nLoopEnd   = static_cast<sal_uLong>(fIntEnd);
 
-    double fTerm, fSln; // SLN: Straight-Line Depreciation
+    double fTerm, fSln = 0; // SLN: Straight-Line Depreciation
     double fSalvageValue = fCost - fSalvage;
     bool bNowSln = false;
 
     double fDdb;
     sal_uLong i;
-    fSln=0;
     for ( i = 1; i <= nLoopEnd; i++)
     {
         if(!bNowSln)
@@ -1927,7 +1872,7 @@ void ScInterpreter::ScPDuration()
         if ( fFuture <= 0.0 || fPresent <= 0.0 || fRate <= 0.0 )
             PushIllegalArgument();
         else
-            PushDouble( log( fFuture / fPresent ) / rtl::math::log1p( fRate ) );
+            PushDouble( std::log( fFuture / fPresent ) / rtl::math::log1p( fRate ) );
     }
 }
 
@@ -1963,19 +1908,15 @@ double ScInterpreter::ScGetPMT(double fRate, double fNper, double fPv,
 
 void ScInterpreter::ScPMT()
 {
-    double fRate, fNper, fPv, fFv = 0;
-    bool bPayInAdvance = false;
     nFuncFmtType = SvNumFormatType::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
-    if (nParamCount == 5)
-        bPayInAdvance = GetBool();
-    if (nParamCount >= 4)
-        fFv   = GetDouble();
-    fPv    = GetDouble();
-    fNper  = GetDouble();
-    fRate = GetDouble();
+    bool bPayInAdvance = nParamCount == 5 && GetBool();
+    double fFv   = nParamCount >= 4 ? GetDouble() : 0;
+    double fPv   = GetDouble();
+    double fNper = GetDouble();
+    double fRate = GetDouble();
     PushDouble(ScGetPMT(fRate, fNper, fPv, fFv, bPayInAdvance));
 }
 
@@ -2013,36 +1954,28 @@ double ScInterpreter::ScGetFV(double fRate, double fNper, double fPmt,
 
 void ScInterpreter::ScFV()
 {
-    double fRate, fNper, fPmt, fPv = 0;
-    bool bPayInAdvance = false;
     nFuncFmtType = SvNumFormatType::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
-    if (nParamCount == 5)
-        bPayInAdvance = GetBool();
-    if (nParamCount >= 4)
-        fPv   = GetDouble();
-    fPmt   = GetDouble();
-    fNper  = GetDouble();
-    fRate = GetDouble();
+    bool bPayInAdvance = nParamCount == 5 && GetBool();
+    double fPv   = nParamCount >= 4 ? GetDouble() : 0;
+    double fPmt  = GetDouble();
+    double fNper = GetDouble();
+    double fRate = GetDouble();
     PushDouble(ScGetFV(fRate, fNper, fPmt, fPv, bPayInAdvance));
 }
 
 void ScInterpreter::ScNper()
 {
-    double fRate, fPmt, fPV, fFV = 0;
-    bool bPayInAdvance = false;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
-    if (nParamCount == 5)
-        bPayInAdvance = GetBool();
-    if (nParamCount >= 4)
-        fFV   = GetDouble();  // Future Value
-    fPV   = GetDouble();      // Present Value
-    fPmt  = GetDouble();      // Payment
-    fRate = GetDouble();
+    bool bPayInAdvance = nParamCount == 5 && GetBool();
+    double fFV   = nParamCount >= 4 ? GetDouble() : 0;
+    double fPV   = GetDouble();      // Present Value
+    double fPmt  = GetDouble();      // Payment
+    double fRate = GetDouble();
     // Note that due to the function specification in ODFF1.2 (and Excel) the
     // amount to be paid to get from fPV to fFV is fFV_+_fPV.
     if ( fPV + fFV == 0.0 )
@@ -2096,7 +2029,7 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
             }
             fTerm = fFv + fPv *fPowN+ fPayment * fGeoSeries;
             fTermDerivation = fPv * fNper * fPowNminus1 + fPayment * fGeoSeriesDerivation;
-            if (fabs(fTerm) < fEpsilonSmall)
+            if (std::abs(fTerm) < fEpsilonSmall)
                 bFound = true;  // will catch root which is at an extreme
             else
             {
@@ -2106,7 +2039,7 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
                     fXnew = fX - fTerm / fTermDerivation;
                 nCount++;
                 // more accuracy not possible in oscillating cases
-                bFound = (fabs(fXnew - fX) < SCdEpsilon);
+                bFound = (std::abs(fXnew - fX) < SCdEpsilon);
                 fX = fXnew;
             }
         }
@@ -2135,7 +2068,7 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
             }
             fTerm = fFv + fPv *pow(1.0 + fX,fNper)+ fPayment * fGeoSeries;
             fTermDerivation = fPv * fNper * pow( 1.0+fX, fNper-1.0) + fPayment * fGeoSeriesDerivation;
-            if (fabs(fTerm) < fEpsilonSmall)
+            if (std::abs(fTerm) < fEpsilonSmall)
                 bFound = true;  // will catch root which is at an extreme
             else
             {
@@ -2145,7 +2078,7 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
                     fXnew = fX - fTerm / fTermDerivation;
                 nCount++;
                 // more accuracy not possible in oscillating cases
-                bFound = (fabs(fXnew - fX) < SCdEpsilon);
+                bFound = (std::abs(fXnew - fX) < SCdEpsilon);
                 fX = fXnew;
                 bValid = (fX >= -1.0);  // otherwise pow(1.0+fX,fNper) will fail
             }
@@ -2158,33 +2091,28 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
 // In Calc UI it is the function RATE(Nper;Pmt;Pv;Fv;Type;Guess)
 void ScInterpreter::ScRate()
 {
-    double fPv, fPayment, fNper;
-    // defaults for missing arguments, see ODFF spec
-    double fFv = 0, fGuess = 0.1, fOrigGuess = 0.1;
-    bool bPayType = false, bValid = true;
-    bool bDefaultGuess = true;
     nFuncFmtType = SvNumFormatType::PERCENT;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 6 ) )
         return;
-    if (nParamCount == 6)
-    {
-        fOrigGuess = fGuess = GetDouble();
-        bDefaultGuess = false;
-    }
-    if (nParamCount >= 5)
-        bPayType = GetBool();
-    if (nParamCount >= 4)
-        fFv = GetDouble();
-    fPv = GetDouble();
-    fPayment = GetDouble();
-    fNper = GetDouble();
+
+    // defaults for missing arguments, see ODFF spec
+    double fGuess = nParamCount == 6 ? GetDouble() : 0.1;
+    bool bDefaultGuess = nParamCount != 6;
+    bool bPayType = nParamCount >= 5 && GetBool();
+    double fFv = nParamCount >= 4 ? GetDouble() : 0;
+    double fPv = GetDouble();
+    double fPayment = GetDouble();
+    double fNper = GetDouble();
+    double fOrigGuess = fGuess;
+
     if (fNper <= 0.0) // constraint from ODFF spec
     {
         PushIllegalArgument();
         return;
     }
-    bValid = RateIteration(fNper, fPayment, fPv, fFv, bPayType, fGuess);
+    bool bValid = RateIteration(fNper, fPayment, fPv, fFv, bPayType, fGuess);
+
     if (!bValid)
     {
         /* TODO: try also for specified guess values, not only default? As is,
@@ -2223,12 +2151,7 @@ double ScInterpreter::ScGetIpmt(double fRate, double fPer, double fNper, double 
     double fIpmt;
     nFuncFmtType = SvNumFormatType::CURRENCY;
     if (fPer == 1.0)
-    {
-        if (bPayInAdvance)
-            fIpmt = 0.0;
-        else
-            fIpmt = -fPv;
-    }
+        fIpmt = bPayInAdvance ? 0.0 : -fPv;
     else
     {
         if (bPayInAdvance)
@@ -2241,20 +2164,16 @@ double ScInterpreter::ScGetIpmt(double fRate, double fPer, double fNper, double 
 
 void ScInterpreter::ScIpmt()
 {
-    double fRate, fPer, fNper, fPv, fFv = 0;
-    bool bPayInAdvance = false;
     nFuncFmtType = SvNumFormatType::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
         return;
-    if (nParamCount == 6)
-        bPayInAdvance = GetBool();
-    if (nParamCount >= 5)
-        fFv   = GetDouble();
-    fPv    = GetDouble();
-    fNper  = GetDouble();
-    fPer   = GetDouble();
-    fRate = GetDouble();
+    bool bPayInAdvance = nParamCount == 6 && GetBool();
+    double fFv   = nParamCount >= 5 ? GetDouble() : 0;
+    double fPv   = GetDouble();
+    double fNper = GetDouble();
+    double fPer  = GetDouble();
+    double fRate = GetDouble();
     if (fPer < 1.0 || fPer > fNper)
         PushIllegalArgument();
     else
@@ -2266,20 +2185,16 @@ void ScInterpreter::ScIpmt()
 
 void ScInterpreter::ScPpmt()
 {
-    double fRate, fPer, fNper, fPv, fFv = 0;
-    bool bPayInAdvance = false;
     nFuncFmtType = SvNumFormatType::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
         return;
-    if (nParamCount == 6)
-        bPayInAdvance = GetBool();
-    if (nParamCount >= 5)
-        fFv   = GetDouble();
-    fPv    = GetDouble();
-    fNper  = GetDouble();
-    fPer   = GetDouble();
-    fRate = GetDouble();
+    bool bPayInAdvance = nParamCount == 6 && GetBool();
+    double fFv   = nParamCount >= 5 ? GetDouble() : 0;
+    double fPv   = GetDouble();
+    double fNper = GetDouble();
+    double fPer  = GetDouble();
+    double fRate = GetDouble();
     if (fPer < 1.0 || fPer > fNper)
         PushIllegalArgument();
     else
@@ -2296,13 +2211,12 @@ void ScInterpreter::ScCumIpmt()
     if ( !MustHaveParamCount( GetByte(), 6 ) )
         return;
 
-    double fRate, fNper, fPv, fStart, fEnd;
-    double fFlag = GetDoubleWithDefault( -1.0 );
-    fEnd   = ::rtl::math::approxFloor(GetDouble());
-    fStart = ::rtl::math::approxFloor(GetDouble());
-    fPv    = GetDouble();
-    fNper  = GetDouble();
-    fRate   = GetDouble();
+    double fFlag  = GetDoubleWithDefault( -1.0 );
+    double fEnd   = ::rtl::math::approxFloor(GetDouble());
+    double fStart = ::rtl::math::approxFloor(GetDouble());
+    double fPv    = GetDouble();
+    double fNper  = GetDouble();
+    double fRate  = GetDouble();
     if (fStart < 1.0 || fEnd < fStart || fRate <= 0.0 ||
         fEnd > fNper  || fNper <= 0.0 || fPv <= 0.0 ||
         ( fFlag != 0.0 && fFlag != 1.0 ))
@@ -2338,13 +2252,12 @@ void ScInterpreter::ScCumPrinc()
     if ( !MustHaveParamCount( GetByte(), 6 ) )
         return;
 
-    double fRate, fNper, fPv, fStart, fEnd;
-    double fFlag = GetDoubleWithDefault( -1.0 );
-    fEnd   = ::rtl::math::approxFloor(GetDouble());
-    fStart = ::rtl::math::approxFloor(GetDouble());
-    fPv    = GetDouble();
-    fNper  = GetDouble();
-    fRate   = GetDouble();
+    double fFlag  = GetDoubleWithDefault( -1.0 );
+    double fEnd   = ::rtl::math::approxFloor(GetDouble());
+    double fStart = ::rtl::math::approxFloor(GetDouble());
+    double fPv    = GetDouble();
+    double fNper  = GetDouble();
+    double fRate  = GetDouble();
     if (fStart < 1.0 || fEnd < fStart || fRate <= 0.0 ||
         fEnd > fNper  || fNper <= 0.0 || fPv <= 0.0 ||
         ( fFlag != 0.0 && fFlag != 1.0 ))
@@ -2358,10 +2271,7 @@ void ScInterpreter::ScCumPrinc()
         sal_uLong nEnd = static_cast<sal_uLong>(fEnd);
         if (nStart == 1)
         {
-            if (bPayInAdvance)
-                fPpmt = fPmt;
-            else
-                fPpmt = fPmt + fPv * fRate;
+            fPpmt = bPayInAdvance ? fPmt : fPmt + fPv * fRate;
             nStart++;
         }
         for (sal_uLong i = nStart; i <= nEnd; i++)
@@ -2885,10 +2795,8 @@ void ScInterpreter::ScBase()
         double fLen = ::rtl::math::approxFloor( GetDouble() );
         if ( 1.0 <= fLen && fLen < SAL_MAX_UINT16 )
             nMinLen = static_cast<sal_Int32>(fLen);
-        else if ( fLen == 0.0 )
-            nMinLen = 1;
         else
-            nMinLen = 0;    // Error
+            nMinLen = fLen == 0.0 ? 1 : 0; // 0 means error
     }
     else
         nMinLen = 1;
@@ -3359,9 +3267,8 @@ void ScInterpreter::ScEuroConvert()
             return;
         }
     }
-    bool bFullPrecision = false;
-    if ( nParamCount >= 4 )
-        bFullPrecision = GetBool();
+
+    bool bFullPrecision = nParamCount >= 4 && GetBool();
     OUString aToUnit = GetString().getString();
     OUString aFromUnit = GetString().getString();
     double fVal = GetDouble();
@@ -3530,7 +3437,7 @@ void ScInterpreter::ScBahtText()
 
     // sign
     bool bMinus = fValue < 0.0;
-    fValue = fabs( fValue );
+    fValue = std::abs( fValue );
 
     // round to 2 digits after decimal point, fValue contains Satang as integer
     fValue = ::rtl::math::approxFloor( fValue * 100.0 + 0.5 );
