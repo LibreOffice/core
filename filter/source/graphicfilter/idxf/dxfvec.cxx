@@ -207,10 +207,10 @@ LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
     aLineInfo.SetStyle( aDXFLineInfo.eStyle );
     aLineInfo.SetWidth( 0 );
     aLineInfo.SetDashCount( static_cast< sal_uInt16 >( aDXFLineInfo.nDashCount ) );
-    aLineInfo.SetDashLen( static_cast<sal_Int32>(aDXFLineInfo.fDashLen * scale + 0.5) );
+    aLineInfo.SetDashLen( aDXFLineInfo.fDashLen * scale );
     aLineInfo.SetDotCount( static_cast< sal_uInt16 >( aDXFLineInfo.nDotCount ) );
-    aLineInfo.SetDotLen( static_cast<sal_Int32>(aDXFLineInfo.fDotLen * scale + 0.5) );
-    aLineInfo.SetDistance( static_cast<sal_Int32>(aDXFLineInfo.fDistance * scale + 0.5) );
+    aLineInfo.SetDotLen( aDXFLineInfo.fDotLen * scale );
+    aLineInfo.SetDistance( aDXFLineInfo.fDistance * scale );
 
     if ( aLineInfo.GetDashCount() > 0 && aLineInfo.GetDashLen() == 0 )
         aLineInfo.SetDashLen(1);
