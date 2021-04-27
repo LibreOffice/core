@@ -244,6 +244,12 @@ en-US = "Latvian"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_LV]
 en-US = "Latvian spelling dictionary, and hyphenation rules"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_MN]
+en-US = "Mongolian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_MN]
+en-US = "Mongolian spelling dictionary, and hyphenation rules"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_NE]
 en-US = "Nepali"
 

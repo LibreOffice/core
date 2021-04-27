@@ -500,6 +500,17 @@ Module gid_Module_Root_Extension_Dictionary_Lv
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Mn
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_MN );
+    Files = (gid_File_Extension_Dictionary_Mn);
+    InstallOrder = "2000";
+    Sortkey = "637";
+    Spellcheckerlanguage = "mn";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Ne
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_NE );
     Files = (gid_File_Extension_Dictionary_Ne);
