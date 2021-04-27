@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "33703651_f4f242d8",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-04-27T00:07:17Z",
+      "side": 1,
+      "message": "OK, removed the button.",
+      "parentUuid": "d45b6a52_678658be",
+      "range": {
+        "startLine": 59,
+        "startChar": 38,
+        "endLine": 59,
+        "endChar": 44
+      },
+      "revId": "656af256e05b10171159430bae7f1d1ca11e58e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c6f3a592_74be43ff",
         "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
         "patchSetId": 4
