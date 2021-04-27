@@ -53,22 +53,6 @@
 #undef max
 #endif
 
-static void ImplSetPixel4( sal_uInt8* pScanline, tools::Long nX, const BYTE cIndex )
-{
-    BYTE& rByte = pScanline[ nX >> 1 ];
-
-    if ( nX & 1 )
-    {
-        rByte &= 0xf0;
-        rByte |= cIndex & 0x0f;
-    }
-    else
-    {
-        rByte &= 0x0f;
-        rByte |= cIndex << 4;
-    }
-}
-
 WinSalBitmap::WinSalBitmap()
 :   SalBitmap(),
     basegfx::SystemDependentDataHolder(),
