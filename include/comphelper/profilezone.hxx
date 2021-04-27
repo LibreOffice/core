@@ -19,11 +19,10 @@
 namespace comphelper
 {
 
-class COMPHELPER_DLLPUBLIC ProfileZone : public TraceEvent
+class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
 {
     static int s_nNesting; // level of nested zones.
 
-    const char *m_sProfileId;
     long long m_nCreateTime;
     int m_nPid;
     int m_nNesting;
@@ -35,8 +34,8 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public TraceEvent
     // Note that the char pointer is stored as such in the ProfileZone object and used in the
     // destructor, so be sure to pass a pointer that stays valid for the duration of the object's
     // lifetime.
-    ProfileZone(const char *sProfileId)
-        : m_sProfileId(sProfileId ? sProfileId : "(null)")
+    ProfileZone(const char* sName)
+        : NamedEvent(sName)
     {
         if (s_bRecording)
         {

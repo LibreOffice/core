@@ -13,6 +13,8 @@
 #include <sal/config.h>
 
 #include <atomic>
+#include <memory>
+#include <set>
 
 #include <osl/process.h>
 #include <osl/time.h>
@@ -32,12 +34,23 @@ protected:
     static void addRecording(const OUString& sObject);
 
 public:
-    static void addInstantEvent(const char* sProfileId);
+    static void addInstantEvent(const char* sName);
 
     static void startRecording();
     static void stopRecording();
 
     static css::uno::Sequence<OUString> getRecordingAndClear();
+};
+
+class COMPHELPER_DLLPUBLIC NamedEvent : public TraceEvent
+{
+protected:
+    const char* m_sName;
+
+    NamedEvent(const char* sName)
+        : m_sName(sName ? sName : "(null)")
+    {
+    }
 };
 
 } // namespace comphelper
