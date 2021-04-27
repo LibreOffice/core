@@ -87,11 +87,6 @@ public:
 
     ProfileZone(const ProfileZone&) = delete;
     void operator=(const ProfileZone&) = delete;
-
-    static void startRecording();
-    static void stopRecording();
-
-    static css::uno::Sequence<OUString> getRecordingAndClear();
 };
 
 } // namespace comphelper
