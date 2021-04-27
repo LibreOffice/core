@@ -77,6 +77,7 @@ private:
 class SvxBorderTabPage : public SfxTabPage
 {
     static const sal_uInt16 pRanges[];
+    static const std::vector<int> m_aLineWidths;
 
 public:
     SvxBorderTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs);
@@ -128,6 +129,7 @@ private:
 
     std::unique_ptr<SvtLineListBox> m_xLbLineStyle;
     std::unique_ptr<ColorListBox> m_xLbLineColor;
+    std::unique_ptr<weld::ComboBox> m_xLineWidthLB;
     std::unique_ptr<weld::MetricSpinButton> m_xLineWidthMF;
 
     std::unique_ptr<weld::Container> m_xSpacingFrame;
@@ -165,9 +167,10 @@ private:
     DECL_LINK(SelSdwHdl_Impl, SvtValueSet*, void);
     DECL_LINK(LinesChanged_Impl, LinkParamNone*, void);
     DECL_LINK(ModifyDistanceHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(ModifyWidthHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(SyncHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(RemoveAdjacentCellBorderHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(ModifyWidthLBHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(ModifyWidthMFHdl_Impl, weld::MetricSpinButton&, void);
 
     sal_uInt16          GetPresetImageId(sal_uInt16 nValueSetIdx) const;
     const char*         GetPresetStringId(sal_uInt16 nValueSetIdx) const;
@@ -175,6 +178,7 @@ private:
     void                FillPresetVS();
     void                FillShadowVS();
     void                FillValueSets();
+    void                SetLineWidth(sal_Int64 nWidth);
 
     // Filler
     void                FillLineListBox_Impl();
