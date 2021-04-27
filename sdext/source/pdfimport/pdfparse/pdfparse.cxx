@@ -581,7 +581,7 @@ std::unique_ptr<PDFEntry> PDFReader::read( const char* pBuffer, unsigned int nLe
         OString aTmp;
         unsigned int nElem = aGrammar.m_aObjectStack.size();
         for( unsigned int i = 0; i < nElem; i++ )
-            aTmp += OStringLiteral("   ") + typeid( *(aGrammar.m_aObjectStack[i]) ).name();
+            aTmp += OString::Concat("   ") + typeid( *(aGrammar.m_aObjectStack[i]) ).name();
 
         SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - pBuffer << ", object stack: " << aTmp);
 #else
