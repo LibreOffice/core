@@ -2854,10 +2854,10 @@ void SdOOXMLExportTest2::testTdf126741()
 
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_DASH, rStyleItem.GetValue());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rDashItem.GetDashValue().GetDots());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(800), rDashItem.GetDashValue().GetDotLen());
+    CPPUNIT_ASSERT_EQUAL(800.0, rDashItem.GetDashValue().GetDotLen());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rDashItem.GetDashValue().GetDashes());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(100), rDashItem.GetDashValue().GetDashLen());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(300), rDashItem.GetDashValue().GetDistance());
+    CPPUNIT_ASSERT_EQUAL(100.0, rDashItem.GetDashValue().GetDashLen());
+    CPPUNIT_ASSERT_EQUAL(300.0, rDashItem.GetDashValue().GetDistance());
 
     xDocShRef->DoClose();
 }
