@@ -2029,7 +2029,7 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
 }
 
 // static
-bool INetURLObject::convertIntToExt(OUString const & rTheIntURIRef,
+bool INetURLObject::convertIntToExt(std::u16string_view rTheIntURIRef,
                                     OUString & rTheExtURIRef,
                                     DecodeMechanism eDecodeMechanism,
                                     rtl_TextEncoding eCharset)
@@ -2052,7 +2052,7 @@ bool INetURLObject::convertIntToExt(OUString const & rTheIntURIRef,
 }
 
 // static
-bool INetURLObject::convertExtToInt(OUString const & rTheExtURIRef,
+bool INetURLObject::convertExtToInt(std::u16string_view rTheExtURIRef,
                                     OUString & rTheIntURIRef,
                                     DecodeMechanism eDecodeMechanism,
                                     rtl_TextEncoding eCharset)
@@ -2227,7 +2227,7 @@ INetURLObject::SubString INetURLObject::getAuthority() const
     return SubString(nBegin, nEnd - nBegin);
 }
 
-bool INetURLObject::setUser(OUString const & rTheUser,
+bool INetURLObject::setUser(std::u16string_view rTheUser,
                             rtl_TextEncoding eCharset)
 {
     if (
@@ -2287,7 +2287,7 @@ bool INetURLObject::clearPassword()
     return true;
 }
 
-bool INetURLObject::setPassword(OUString const & rThePassword,
+bool INetURLObject::setPassword(std::u16string_view rThePassword,
                                 rtl_TextEncoding eCharset)
 {
     if (!getSchemeInfo().m_bPassword)
@@ -3147,7 +3147,7 @@ bool INetURLObject::checkHierarchical() const {
     }
 }
 
-bool INetURLObject::Append(OUString const & rTheSegment,
+bool INetURLObject::Append(std::u16string_view rTheSegment,
                            EncodeMechanism eMechanism,
                            rtl_TextEncoding eCharset)
 {
@@ -3200,7 +3200,7 @@ INetURLObject::SubString INetURLObject::getSegment(sal_Int32 nIndex,
                      pSegEnd - pSegBegin);
 }
 
-bool INetURLObject::insertName(OUString const & rTheName,
+bool INetURLObject::insertName(std::u16string_view rTheName,
                                bool bAppendFinalSlash, sal_Int32 nIndex,
                                EncodeMechanism eMechanism,
                                rtl_TextEncoding eCharset)
@@ -3298,7 +3298,7 @@ void INetURLObject::clearQuery()
     }
 }
 
-bool INetURLObject::setQuery(OUString const & rTheQuery,
+bool INetURLObject::setQuery(std::u16string_view rTheQuery,
                              EncodeMechanism eMechanism,
                              rtl_TextEncoding eCharset)
 {
@@ -3331,7 +3331,7 @@ bool INetURLObject::clearFragment()
     return true;
 }
 
-bool INetURLObject::setFragment(OUString const & rTheFragment,
+bool INetURLObject::setFragment(std::u16string_view rTheFragment,
                                 EncodeMechanism eMechanism,
                                 rtl_TextEncoding eCharset)
 {
@@ -3689,8 +3689,8 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
 }
 
 bool INetURLObject::ConcatData(INetProtocol eTheScheme,
-                               OUString const & rTheUser,
-                               OUString const & rThePassword,
+                               std::u16string_view rTheUser,
+                               std::u16string_view rThePassword,
                                OUString const & rTheHost,
                                sal_uInt32 nThePort,
                                OUString const & rThePath)
@@ -3708,7 +3708,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
         bool bUserInfo = false;
         if (getSchemeInfo().m_bUser)
         {
-            if (!rTheUser.isEmpty())
+            if (!rTheUser.empty())
             {
                 m_aUser.set(m_aAbsURIRef,
                             encodeText(rTheUser, PART_USER_PASSWORD,
@@ -3717,12 +3717,12 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                 bUserInfo = true;
             }
         }
-        else if (!rTheUser.isEmpty())
+        else if (!rTheUser.empty())
         {
             setInvalid();
             return false;
         }
-        if (!rThePassword.isEmpty())
+        if (!rThePassword.empty())
         {
             if (getSchemeInfo().m_bPassword)
             {
@@ -4004,7 +4004,7 @@ OUString INetURLObject::getName(sal_Int32 nIndex, bool bIgnoreFinalSlash,
     return decode(pSegBegin, p, eMechanism, eCharset);
 }
 
-bool INetURLObject::setName(OUString const& rTheName, EncodeMechanism eMechanism,
+bool INetURLObject::setName(std::u16string_view rTheName, EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
 {
     SubString aSegment(getSegment(LAST_SEGMENT, true));
@@ -4077,7 +4077,7 @@ OUString INetURLObject::getBase(sal_Int32 nIndex, bool bIgnoreFinalSlash,
     return decode(pSegBegin, pExtension, eMechanism, eCharset);
 }
 
-bool INetURLObject::setBase(OUString const & rTheBase, sal_Int32 nIndex,
+bool INetURLObject::setBase(std::u16string_view rTheBase, sal_Int32 nIndex,
                             EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
 {
@@ -4139,7 +4139,7 @@ OUString INetURLObject::getExtension(sal_Int32 nIndex,
     return decode(pExtension + 1, p, eMechanism, eCharset);
 }
 
-bool INetURLObject::setExtension(OUString const & rTheExtension,
+bool INetURLObject::setExtension(std::u16string_view rTheExtension,
                                  sal_Int32 nIndex, bool bIgnoreFinalSlash,
                                  rtl_TextEncoding eCharset)
 {
@@ -4740,7 +4740,7 @@ OUString INetURLObject::GetPath() const
     return aTemp.PathToFileName();
 }
 
-void INetURLObject::SetBase(OUString const & rTheBase)
+void INetURLObject::SetBase(std::u16string_view rTheBase)
 {
     setBase(rTheBase, LAST_SEGMENT, EncodeMechanism::All);
 }
@@ -4750,7 +4750,7 @@ OUString INetURLObject::GetBase() const
     return getBase(LAST_SEGMENT, true, DecodeMechanism::WithCharset);
 }
 
-void INetURLObject::SetExtension(OUString const & rTheExtension)
+void INetURLObject::SetExtension(std::u16string_view rTheExtension)
 {
     setExtension(rTheExtension, LAST_SEGMENT, false);
 }

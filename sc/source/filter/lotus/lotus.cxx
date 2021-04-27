@@ -66,7 +66,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
     {
         // try to load *.FM3 file
         INetURLObject aURL( rMedium.GetURLObject() );
-        aURL.setExtension( "FM3" );
+        aURL.setExtension( u"FM3" );
         SfxMedium aMedium( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::STD_READ );
         pStream = aMedium.GetInStream();
         if ( pStream )

@@ -2761,7 +2761,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
 }
 
 // Construct vnd.sun.star.pkg:// URL
-OUString ConstructVndSunStarPkgUrl(const OUString& rMainURL, const OUString& rStreamRelPath)
+OUString ConstructVndSunStarPkgUrl(const OUString& rMainURL, std::u16string_view rStreamRelPath)
 {
     auto xContext(comphelper::getProcessComponentContext());
     auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(rMainURL);

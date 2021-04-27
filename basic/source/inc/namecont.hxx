@@ -227,12 +227,12 @@ protected:
     } meInitMode;
 
     void implStoreLibrary( SfxLibrary* pLib,
-                            const OUString& rName,
+                            std::u16string_view rName,
                             const css::uno::Reference< css::embed::XStorage >& rStorage );
 
     // New variant for library export
     void implStoreLibrary( SfxLibrary* pLib,
-                            const OUString& rName,
+                            std::u16string_view rName,
                             const css::uno::Reference< css::embed::XStorage >& rStorage,
                             const OUString& rTargetURL,
                             const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI,
@@ -302,7 +302,7 @@ protected:
 
     // Interface to get the BasicManager (Hack for password implementation)
     BasicManager* getBasicManager();
-    OUString createAppLibraryFolder( SfxLibrary* pLib, const OUString& aName );
+    OUString createAppLibraryFolder( SfxLibrary* pLib, std::u16string_view aName );
 
     void init( const OUString& rInitialDocumentURL,
                const css::uno::Reference< css::embed::XStorage >& _rxInitialStorage );

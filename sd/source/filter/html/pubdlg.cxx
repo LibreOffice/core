@@ -1418,7 +1418,7 @@ void SdPublishingDlg::Load()
     m_bDesignListDirty = false;
 
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
-    aURL.Append( "designs.sod" );
+    aURL.Append( u"designs.sod" );
 
     // check if file exists, SfxMedium shows an errorbox else
     {
@@ -1472,7 +1472,7 @@ void SdPublishingDlg::Load()
 bool SdPublishingDlg::Save()
 {
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
-    aURL.Append( "designs.sod" );
+    aURL.Append( u"designs.sod" );
     SfxMedium aMedium( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC );
 
     SvStream* pStream = aMedium.GetOutStream();

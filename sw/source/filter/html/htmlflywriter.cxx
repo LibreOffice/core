@@ -1874,7 +1874,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             aURL.getExtension() + "_" +
             OUString::number(aGraphic.GetChecksum(), 16);
         aURL.setBase(aName);
-        aURL.setExtension("ole");
+        aURL.setExtension(u"ole");
         aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
         SvFileStream aOutStream(aFileName, StreamMode::WRITE);

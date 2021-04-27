@@ -2470,7 +2470,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     {
         // Generate a relative file path.
         INetURLObject aBaseURL(getOwnDocumentName());
-        aBaseURL.insertName("content.xml");
+        aBaseURL.insertName(u"content.xml");
 
         OUString aStr = URIHelper::simpleNormalizedMakeRelative(
             aBaseURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), aFile);
@@ -2657,7 +2657,7 @@ void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const OUString& 
     // Formulate the absolute file path from the relative path.
     const OUString& rRelPath = maRelativeName;
     INetURLObject aBaseURL(rOwnDocName);
-    aBaseURL.insertName("content.xml");
+    aBaseURL.insertName(u"content.xml");
     bool bWasAbs = false;
     maRealFileName = aBaseURL.smartRel2Abs(rRelPath, bWasAbs).GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }

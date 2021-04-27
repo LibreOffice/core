@@ -170,7 +170,7 @@ void NBOTypeMgrBase::SetItems(const SfxItemSet* pArg) {
     }
 }
 
-void NBOTypeMgrBase::ImplLoad(const OUString& filename)
+void NBOTypeMgrBase::ImplLoad(std::u16string_view filename)
 {
     bIsLoading = true;
     MapUnit      eOldCoreUnit=eCoreUnit;
@@ -208,7 +208,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
     eCoreUnit = eOldCoreUnit;
     bIsLoading = false;
 }
-void NBOTypeMgrBase::ImplStore(const OUString& filename)
+void NBOTypeMgrBase::ImplStore(std::u16string_view filename)
 {
     if (bIsLoading) return;
     MapUnit      eOldCoreUnit=eCoreUnit;
@@ -379,7 +379,7 @@ NumberingTypeMgr::NumberingTypeMgr()
 {
     Init();
     maDefaultNumberSettingsArr = maNumberSettingsArr;
-    ImplLoad("standard.syb");
+    ImplLoad(u"standard.syb");
 }
 
 NumberingTypeMgr::~NumberingTypeMgr()
@@ -503,7 +503,7 @@ void NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_
     if (!_pSet->bIsCustomized) {
         _pSet->sDescription = GetDescription(nIndex,true);
     }
-    ImplStore("standard.syb");
+    ImplStore(u"standard.syb");
 }
 
 void NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault, bool isResetSize)
@@ -572,7 +572,7 @@ OutlineTypeMgr::OutlineTypeMgr()
     }
     //Initial the first time to store the default value. Then do it again for customized value
     Init();
-    ImplLoad("standard.syc");
+    ImplLoad(u"standard.syc");
 }
 
 namespace {
@@ -764,7 +764,7 @@ void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
     if (!pItemArr->bIsCustomized) {
         pItemArr->sDescription = GetDescription(nIndex,true);
     }
-    ImplStore("standard.syc");
+    ImplStore(u"standard.syc");
 }
 
 void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 /*mLevel*/, bool isDefault, bool isResetSize)

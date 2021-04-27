@@ -27,7 +27,7 @@
 
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 
-static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
+static bool FileExists(const INetURLObject& rURL, std::u16string_view rExt)
 {
     INetURLObject aURL(rURL);
     aURL.setExtension(rExt);
@@ -56,11 +56,11 @@ void GalleryBinaryEngineEntry::CreateUniqueURL(const INetURLObject& rBaseURL, IN
     INetURLObject aBaseNoCase(GalleryBinaryStorageLocations::ImplGetURLIgnoreCase(rBaseURL));
     aURL = aBaseNoCase;
     static sal_Int32 nIdx = 0;
-    while (FileExists(aURL, "thm"))
+    while (FileExists(aURL, u"thm"))
     { // create new URLs
         nIdx++;
         aURL = aBaseNoCase;
-        aURL.setName(aURL.getName() + OUString::number(nIdx));
+        aURL.setName(OUString(aURL.getName() + OUString::number(nIdx)));
     }
 }
 

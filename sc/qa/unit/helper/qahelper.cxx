@@ -642,7 +642,7 @@ OUString EnsureSeparator(const OUStringBuffer& rFilePath)
 }
 
 void ScBootstrapFixture::createFileURL(
-    std::u16string_view aFileBase, const OUString& aFileExtension, OUString& rFilePath)
+    std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath)
 {
     // m_aBaseString and aFileBase may contain multiple segments, so use
     // GetNewAbsURL instead of insertName for them:
@@ -650,7 +650,7 @@ void ScBootstrapFixture::createFileURL(
     url.setFinalSlash();
     url.GetNewAbsURL(m_aBaseString, &url);
     url.insertName(aFileExtension, true);
-    url.GetNewAbsURL(aFileBase + aFileExtension, &url);
+    url.GetNewAbsURL(OUString::Concat(aFileBase) + aFileExtension, &url);
     rFilePath = url.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
 

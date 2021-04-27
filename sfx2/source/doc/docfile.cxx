@@ -2469,7 +2469,7 @@ void SfxMedium::DoBackup_Impl()
             // save as ".bak" file
             INetURLObject aDest( aBakDir );
             aDest.insertName( aSource.getName() );
-            aDest.setExtension( "bak" );
+            aDest.setExtension( u"bak" );
             OUString aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
 
             // create a content for the source file
@@ -3370,7 +3370,7 @@ const INetURLObject& SfxMedium::GetURLObject() const
     if (!pImpl->m_pURLObj)
     {
         pImpl->m_pURLObj.reset( new INetURLObject( pImpl->m_aLogicName ) );
-        pImpl->m_pURLObj->SetMark("");
+        pImpl->m_pURLObj->SetMark(u"");
     }
 
     return *pImpl->m_pURLObj;

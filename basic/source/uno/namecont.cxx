@@ -552,8 +552,8 @@ void SAL_CALL SfxLibraryContainer::storeLibraries(  )
 
 static void checkAndCopyFileImpl( const INetURLObject& rSourceFolderInetObj,
                                   const INetURLObject& rTargetFolderInetObj,
-                                  const OUString& rCheckFileName,
-                                  const OUString& rCheckExtension,
+                                  std::u16string_view rCheckFileName,
+                                  std::u16string_view rCheckExtension,
                                   const Reference< XSimpleFileAccess3 >& xSFI )
 {
     INetURLObject aTargetFolderInetObj( rTargetFolderInetObj );
@@ -755,7 +755,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     pLibInfoInetObj.reset(new INetURLObject( maLibraryPath.getToken(1, ';') ));
                 }
                 pLibInfoInetObj->insertName( maInfoFileName, false, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
-                pLibInfoInetObj->setExtension( "xlc" );
+                pLibInfoInetObj->setExtension( u"xlc" );
                 aFileName = pLibInfoInetObj->GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
 
@@ -774,7 +774,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             {
                 INetURLObject aLibInfoInetObj( maLibraryPath.getToken(1, ';') );
                 aLibInfoInetObj.insertName( maOldInfoFileName, false, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
-                aLibInfoInetObj.setExtension( "xli" );
+                aLibInfoInetObj.setExtension( u"xli" );
                 aFileName = aLibInfoInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                 try
@@ -993,8 +993,8 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     INetURLObject aPrevUserBasicInetObj_1( aUserBasicInetObj );
     aPrevUserBasicInetObj_1.removeSegment();
     INetURLObject aPrevUserBasicInetObj_2 = aPrevUserBasicInetObj_1;
-    aPrevUserBasicInetObj_1.Append( "__basic_80" );
-    aPrevUserBasicInetObj_2.Append( "__basic_80_2" );
+    aPrevUserBasicInetObj_1.Append( u"__basic_80" );
+    aPrevUserBasicInetObj_2.Append( u"__basic_80_2" );
 
     // #i93163
     bool bCleanUp = false;
@@ -1033,7 +1033,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 aCheckFileName = "Module1";
                 checkAndCopyFileImpl( aUserBasicStandardInetObj,
                                       aPrevUserBasicStandardInetObj,
-                                      aCheckFileName, "xba", mxSFI );
+                                      aCheckFileName, u"xba", mxSFI );
             }
             else
             {
@@ -1057,7 +1057,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             OUString aFolderUserBasic = aUserBasicInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             INetURLObject aUserBasicTmpInetObj( aUserBasicInetObj );
             aUserBasicTmpInetObj.removeSegment();
-            aUserBasicTmpInetObj.Append( "__basic_tmp" );
+            aUserBasicTmpInetObj.Append( u"__basic_tmp" );
             OUString aFolderTmp = aUserBasicTmpInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
             mxSFI->move( aFolderUserBasic, aFolderTmp );
@@ -1081,7 +1081,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             INetURLObject aPrevUserBasicLibInfoInetObj( aUserBasicInetObj );
             aPrevUserBasicLibInfoInetObj.insertName( maInfoFileName, false, INetURLObject::LAST_SEGMENT,
                                                 INetURLObject::EncodeMechanism::All );
-            aPrevUserBasicLibInfoInetObj.setExtension( "xlc");
+            aPrevUserBasicLibInfoInetObj.setExtension( u"xlc");
             OUString aLibInfoFileName = aPrevUserBasicLibInfoInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             Sequence<Any> aInitSeq( 1 );
             aInitSeq.getArray()[0] <<= aLibInfoFileName;
@@ -1181,7 +1181,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
     INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
     aPrevUserBasicInetObj_Err.removeSegment();
-    aPrevUserBasicInetObj_Err.Append( "__basic_80_err" );
+    aPrevUserBasicInetObj_Err.Append( u"__basic_80_err" );
     OUString aPrevFolder_Err = aPrevUserBasicInetObj_Err.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     bool bSaved = false;
@@ -1285,7 +1285,7 @@ void SfxLibraryContainer::checkStorageURL( const OUString& aSourceURL,
         // URL to library folder
         aStorageURL = aExpandedSourceURL;
         aInetObj.insertName( maInfoFileName, false, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
-        aInetObj.setExtension( "xlb" );
+        aInetObj.setExtension( u"xlb" );
         aLibInfoFileURL = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
 }
@@ -1330,7 +1330,7 @@ bool SfxLibraryContainer::implLoadPasswordLibrary(
     return true;
 }
 
-OUString SfxLibraryContainer::createAppLibraryFolder( SfxLibrary* pLib, const OUString& aName )
+OUString SfxLibraryContainer::createAppLibraryFolder( SfxLibrary* pLib, std::u16string_view aName )
 {
     OUString aLibDirPath = pLib->maStorageURL;
     if( aLibDirPath.isEmpty() )
@@ -1357,7 +1357,7 @@ OUString SfxLibraryContainer::createAppLibraryFolder( SfxLibrary* pLib, const OU
 
 // Storing
 void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
-                                            const OUString& aName,
+                                            std::u16string_view aName,
                                             const uno::Reference< embed::XStorage >& xStorage )
 {
     Reference< XSimpleFileAccess3 > xDummySFA;
@@ -1367,7 +1367,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
 // New variant for library export
 void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
-                                            const OUString& aName,
+                                            std::u16string_view aName,
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& aTargetURL,
                                             const Reference< XSimpleFileAccess3 >& rToUseSFI,
@@ -1580,7 +1580,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                 xSFI->createFolder( aLibDirPath );
             }
             aInetObj.insertName( maInfoFileName, false, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
-            aInetObj.setExtension( "xlb" );
+            aInetObj.setExtension( u"xlb" );
             aLibInfoPath = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         }
         else
@@ -2070,7 +2070,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         // Create Output stream
         INetURLObject aLibInfoInetObj( maLibraryPath.getToken(1, ';') );
         aLibInfoInetObj.insertName( maInfoFileName, false, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
-        aLibInfoInetObj.setExtension( "xlc" );
+        aLibInfoInetObj.setExtension( u"xlc" );
         OUString aLibInfoPath( aLibInfoInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         try

@@ -212,7 +212,7 @@ void PrinterInfoManager::initialize()
     for (auto const& printDir : aDirList)
     {
         INetURLObject aFile( printDir, INetProtocol::File, INetURLObject::EncodeMechanism::All );
-        aFile.Append( PRINT_FILENAME );
+        aFile.Append( u"" PRINT_FILENAME );
         Config aConfig( aFile.PathToFileName() );
         if( aConfig.HasGroup( GLOBAL_DEFAULTS_GROUP ) )
         {
@@ -282,7 +282,7 @@ void PrinterInfoManager::initialize()
     {
         INetURLObject aDir( printDir, INetProtocol::File, INetURLObject::EncodeMechanism::All );
         INetURLObject aFile( aDir );
-        aFile.Append( PRINT_FILENAME );
+        aFile.Append( u"" PRINT_FILENAME );
 
         // check directory validity
         OUString aUniPath;

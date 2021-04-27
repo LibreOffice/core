@@ -142,7 +142,7 @@ namespace
  * itself and a wanted extension.
  */
 OUString lcl_CalculateFileName(const OUString* pOrigFileName, const Graphic& rGraphic,
-                               const OUString& rExtension)
+                               std::u16string_view rExtension)
 {
     OUString aFileName;
 
@@ -1522,7 +1522,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
 
         // Calculate the file name, which is meant to be the same as the
         // replacement image, just with a .ole extension.
-        OUString aFileName = lcl_CalculateFileName(rHTMLWrt.GetOrigFileName(), aGraphic, "ole");
+        OUString aFileName = lcl_CalculateFileName(rHTMLWrt.GetOrigFileName(), aGraphic, u"ole");
 
         // Write the data.
         SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
@@ -1631,7 +1631,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             if (aGraphic.GetType() == GraphicType::NONE)
             {
                 // The OLE Object has no replacement image, write a stub.
-                aGraphicURL = lcl_CalculateFileName(rHTMLWrt.GetOrigFileName(), aGraphic, "png");
+                aGraphicURL = lcl_CalculateFileName(rHTMLWrt.GetOrigFileName(), aGraphic, u"png");
                 osl::File aFile(aGraphicURL);
                 aFile.open(osl_File_OpenFlag_Create);
                 aFile.close();
