@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03783ff9_f2f4087d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-04-27T08:28:10Z",
+      "side": 1,
+      "message": "I guess this is ignored, because there is no empty line before it, so can be removed?",
+      "revId": "d767bdb0c7b58c93a4a7c9804e10ae2ac55bd9de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
