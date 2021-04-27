@@ -57,11 +57,7 @@ public:
             m_nCreateTime
                 = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec / 1000;
 
-            oslProcessInfo aProcessInfo;
-            aProcessInfo.Size = sizeof(oslProcessInfo);
-            if (osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &aProcessInfo)
-                == osl_Process_E_None)
-                m_nPid = aProcessInfo.Ident;
+            m_nPid = getPid();
 
             m_nNesting = s_nNesting++;
         }
