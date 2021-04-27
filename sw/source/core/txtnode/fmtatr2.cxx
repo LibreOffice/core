@@ -143,7 +143,10 @@ void SwFormatAutoFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatAutoFormat"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    mpHandle->dumpAsXml(pWriter);
+    if (mpHandle) // pool default doesn't have one
+    {
+        mpHandle->dumpAsXml(pWriter);
+    }
     (void)xmlTextWriterEndElement(pWriter);
 }
 
