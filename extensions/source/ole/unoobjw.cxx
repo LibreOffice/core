@@ -2898,7 +2898,7 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
             Type type;
             if (!getType(arg.bstrVal, type))
             {
-                writeExcepinfo(pexcepinfo, OUStringLiteral(u"[automation bridge] A UNO type with the name ") +
+                writeExcepinfo(pexcepinfo, OUString::Concat("[automation bridge] A UNO type with the name ") +
                                            o3tl::toU(arg.bstrVal) + " does not exist!");
                 return DISP_E_EXCEPTION;
             }
