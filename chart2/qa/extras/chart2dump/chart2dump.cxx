@@ -230,7 +230,7 @@ protected:
         OUStringBuffer aBuffer;
         for (const OUString& seqItem : rSeq)
         {
-            aBuffer.append(seqItem).append(";");
+            aBuffer.append(seqItem + ";");
         }
         return aBuffer.makeStringAndClear();
     }

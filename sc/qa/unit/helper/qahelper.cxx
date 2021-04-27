@@ -657,16 +657,22 @@ void ScBootstrapFixture::createFileURL(
 void ScBootstrapFixture::createCSVPath(const char* aFileBase, OUString& rCSVPath)
 {
     OUStringBuffer aBuffer( m_directories.getSrcRootPath());
-    aBuffer.append(EnsureSeparator(aBuffer)).append(m_aBaseString);
-    aBuffer.append(EnsureSeparator(aBuffer)).append("contentCSV/").appendAscii(aFileBase).append("csv");
+    aBuffer.append(EnsureSeparator(aBuffer));
+    aBuffer.append(m_aBaseString);
+    aBuffer.append(EnsureSeparator(aBuffer));
+    aBuffer.append("contentCSV/").appendAscii(aFileBase).append("csv");
     rCSVPath = aBuffer.makeStringAndClear();
 }
 
 void ScBootstrapFixture::createCSVPath(std::u16string_view aFileBase, OUString& rCSVPath)
 {
     OUStringBuffer aBuffer( m_directories.getSrcRootPath());
-    aBuffer.append(EnsureSeparator(aBuffer)).append(m_aBaseString);
-    aBuffer.append(EnsureSeparator(aBuffer)).append("contentCSV/").append(aFileBase).append("csv");
+    aBuffer.append(EnsureSeparator(aBuffer));
+    aBuffer.append(m_aBaseString);
+    aBuffer.append(EnsureSeparator(aBuffer));
+    aBuffer.append("contentCSV/");
+    aBuffer.append(aFileBase);
+    aBuffer.append("csv");
     rCSVPath = aBuffer.makeStringAndClear();
 }
 
