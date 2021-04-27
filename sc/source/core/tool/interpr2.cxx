@@ -1308,7 +1308,7 @@ void ScInterpreter::ScNPV()
     if ( !MustHaveParamCountMin( nParamCount, 2) )
         return;
 
-    double fVal = 0.0;
+    KahanSum fVal = 0.0;
     // We turn the stack upside down!
     ReverseStack( nParamCount);
     if (nGlobalError == FormulaError::NONE)
@@ -1324,7 +1324,7 @@ void ScInterpreter::ScNPV()
             {
                 case svDouble :
                 {
-                    fVal += (GetDouble() / pow(1.0 + fRate, fCount));
+                    fVal += GetDouble() / pow(1.0 + fRate, fCount);
                     fCount++;
                 }
                 break;
@@ -1336,7 +1336,7 @@ void ScInterpreter::ScNPV()
                     if (!aCell.hasEmptyValue() && aCell.hasNumeric())
                     {
                         double fCellVal = GetCellValue(aAdr, aCell);
-                        fVal += (fCellVal / pow(1.0 + fRate, fCount));
+                        fVal += fCellVal / pow(1.0 + fRate, fCount);
                         fCount++;
                     }
                 }
@@ -1350,7 +1350,7 @@ void ScInterpreter::ScNPV()
                     ScHorizontalValueIterator aValIter( mrDoc, aRange );
                     while ((nErr == FormulaError::NONE) && aValIter.GetNext(fCellVal, nErr))
                     {
-                        fVal += (fCellVal / pow(1.0 + fRate, fCount));
+                        fVal += fCellVal / pow(1.0 + fRate, fCount);
                         fCount++;
                     }
                     if ( nErr != FormulaError::NONE )
@@ -1384,7 +1384,7 @@ void ScInterpreter::ScNPV()
                                         return;
                                     }
                                     fx = pMat->GetDouble(j,k);
-                                    fVal += (fx / pow(1.0 + fRate, fCount));
+                                    fVal += fx / pow(1.0 + fRate, fCount);
                                     fCount++;
                                 }
                             }
@@ -1396,7 +1396,7 @@ void ScInterpreter::ScNPV()
             }
         }
     }
-    PushDouble(fVal);
+    PushDouble(fVal.get());
 }
 
 void ScInterpreter::ScIRR()
@@ -1458,8 +1458,8 @@ void ScInterpreter::ScIRR()
     FormulaError nIterError = FormulaError::NONE;
     while (fEps > SCdEpsilon && nItCount < nIterationsMax && nGlobalError == FormulaError::NONE)
     {                                       // Newtons method:
-        double fNom = 0.0;
-        double fDenom = 0.0;
+        KahanSum fNom = 0.0;
+        KahanSum fDenom = 0.0;
         double fCount = 0.0;
         if (bIsMatrix)
         {
@@ -1493,7 +1493,7 @@ void ScInterpreter::ScIRR()
             }
             SetError(nIterError);
         }
-        double xNew = x - fNom / fDenom;  // x(i+1) = x(i)-f(x(i))/f'(x(i))
+        double xNew = x - fNom.get() / fDenom.get();  // x(i+1) = x(i)-f(x(i))/f'(x(i))
         nItCount++;
         fEps = fabs(xNew - x);
         x = xNew;
@@ -1550,9 +1550,9 @@ void ScInterpreter::ScMIRR()
         PushError( nGlobalError );
     else
     {
-        double fNPV_reinvest = 0.0;
+        KahanSum fNPV_reinvest = 0.0;
         double fPow_reinvest = 1.0;
-        double fNPV_invest = 0.0;
+        KahanSum fNPV_invest = 0.0;
         double fPow_invest = 1.0;
         sal_uLong nCount = 0;
         bool bHasPosValue = false;
@@ -1623,7 +1623,7 @@ void ScInterpreter::ScMIRR()
             PushError( nGlobalError );
         else
         {
-            double fResult = -fNPV_reinvest / fNPV_invest;
+            double fResult = -fNPV_reinvest.get() / fNPV_invest.get();
             fResult *= pow( fRate1_reinvest, static_cast<double>( nCount - 1 ) );
             fResult = pow( fResult, div( 1.0, (nCount - 1)) );
             PushDouble( fResult - 1.0 );
@@ -1779,17 +1779,17 @@ void ScInterpreter::ScDB()
         fDb = fFirstOffRate;
     else
     {
-        double fSumOffRate = fFirstOffRate;
+        KahanSum fSumOffRate = fFirstOffRate;
         double fMin = fLife;
         if (fMin > fPeriod) fMin = fPeriod;
         sal_uInt16 iMax = static_cast<sal_uInt16>(::rtl::math::approxFloor(fMin));
         for (sal_uInt16 i = 2; i <= iMax; i++)
         {
-            fDb = (fCost - fSumOffRate) * fOffRate;
+            fDb = -(fSumOffRate - fCost).get() * fOffRate;
             fSumOffRate += fDb;
         }
         if (fPeriod > fLife)
-            fDb = ((fCost - fSumOffRate) * fOffRate * (12.0 - fMonths)) / 12.0;
+            fDb = (-(fSumOffRate - fCost).get() * fOffRate * (12.0 - fMonths)) / 12.0;
     }
     PushDouble(fDb);
 }
@@ -1797,7 +1797,7 @@ void ScInterpreter::ScDB()
 double ScInterpreter::ScInterVDB(double fCost, double fSalvage, double fLife,
                              double fLife1, double fPeriod, double fFactor)
 {
-    double fVdb=0;
+    KahanSum fVdb = 0.0;
     double fIntEnd   = ::rtl::math::approxCeil(fPeriod);
     sal_uLong nLoopEnd   = static_cast<sal_uLong>(fIntEnd);
 
@@ -1836,7 +1836,7 @@ double ScInterpreter::ScInterVDB(double fCost, double fSalvage, double fLife,
 
         fVdb += fTerm;
     }
-    return fVdb;
+    return fVdb.get();
 }
 
 void ScInterpreter::ScVDB()
@@ -1846,21 +1846,14 @@ void ScInterpreter::ScVDB()
     if ( !MustHaveParamCount( nParamCount, 5, 7 ) )
         return;
 
-    double fCost, fSalvage, fLife, fStart, fEnd, fFactor, fVdb = 0.0;
-    bool bNoSwitch;
-    if (nParamCount == 7)
-        bNoSwitch = GetBool();
-    else
-        bNoSwitch = false;
-    if (nParamCount >= 6)
-        fFactor = GetDouble();
-    else
-        fFactor = 2.0;
-    fEnd   = GetDouble();
-    fStart = GetDouble();
-    fLife  = GetDouble();
-    fSalvage   = GetDouble();
-    fCost   = GetDouble();
+    KahanSum fVdb = 0.0;
+    bool bNoSwitch = nParamCount == 7 && GetBool();
+    double  fFactor = nParamCount >= 6 ? GetDouble() : 2.0;
+    double fEnd   = GetDouble();
+    double fStart = GetDouble();
+    double fLife  = GetDouble();
+    double fSalvage   = GetDouble();
+    double fCost   = GetDouble();
     if (fStart < 0.0 || fEnd < fStart || fEnd > fLife || fCost < 0.0
                       || fSalvage > fCost || fFactor <= 0.0)
         PushIllegalArgument();
@@ -1871,7 +1864,6 @@ void ScInterpreter::ScVDB()
         sal_uLong nLoopStart = static_cast<sal_uLong>(fIntStart);
         sal_uLong nLoopEnd   = static_cast<sal_uLong>(fIntEnd);
 
-        fVdb = 0.0;
         if (bNoSwitch)
         {
             for (sal_uLong i = nLoopStart + 1; i <= nLoopEnd; i++)
@@ -1922,7 +1914,7 @@ void ScInterpreter::ScVDB()
             fVdb -= fPart;
         }
     }
-    PushDouble(fVdb);
+    PushDouble(fVdb.get());
 }
 
 void ScInterpreter::ScPDuration()
@@ -2321,7 +2313,7 @@ void ScInterpreter::ScCumIpmt()
         sal_uLong nStart = static_cast<sal_uLong>(fStart);
         sal_uLong nEnd = static_cast<sal_uLong>(fEnd) ;
         double fPmt = ScGetPMT(fRate, fNper, fPv, 0.0, bPayInAdvance);
-        double fIpmt = 0.0;
+        KahanSum fIpmt = 0.0;
         if (nStart == 1)
         {
             if (!bPayInAdvance)
@@ -2336,7 +2328,7 @@ void ScInterpreter::ScCumIpmt()
                 fIpmt += ScGetFV(fRate, static_cast<double>(i-1), fPmt, fPv, false);
         }
         fIpmt *= fRate;
-        PushDouble(fIpmt);
+        PushDouble(fIpmt.get());
     }
 }
 
@@ -2361,7 +2353,7 @@ void ScInterpreter::ScCumPrinc()
     {
         bool bPayInAdvance = static_cast<bool>(fFlag);
         double fPmt = ScGetPMT(fRate, fNper, fPv, 0.0, bPayInAdvance);
-        double fPpmt = 0.0;
+        KahanSum fPpmt = 0.0;
         sal_uLong nStart = static_cast<sal_uLong>(fStart);
         sal_uLong nEnd = static_cast<sal_uLong>(fEnd);
         if (nStart == 1)
@@ -2379,7 +2371,7 @@ void ScInterpreter::ScCumPrinc()
             else
                 fPpmt += fPmt - ScGetFV(fRate, static_cast<double>(i-1), fPmt, fPv, false) * fRate;
         }
-        PushDouble(fPpmt);
+        PushDouble(fPpmt.get());
     }
 }
 

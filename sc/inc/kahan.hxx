@@ -79,6 +79,20 @@ public:
 
     inline void operator-=(double fSum) { add(-fSum); }
 
+    inline KahanSum operator+(double fSum) const
+    {
+        KahanSum fNSum(*this);
+        fNSum.add(fSum);
+        return fNSum;
+    }
+
+    inline KahanSum operator-(double fSum) const
+    {
+        KahanSum fNSum(*this);
+        fNSum.add(-fSum);
+        return fNSum;
+    }
+
     /**
       * In some parts of the code of interpr_.cxx this may be used for
       * product instead of sum. This operator shall be used for that task.
