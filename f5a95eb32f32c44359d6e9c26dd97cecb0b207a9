@@ -16,6 +16,24 @@
       "revId": "f5a95eb32f32c44359d6e9c26dd97cecb0b207a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35c8d00f_f5e5f590",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-27T07:07:50Z",
+      "side": 0,
+      "message": "My point is, shrug, the formatting is this way now, so leave it at that and produce a minimal change to silence the loplugin warning.  (If the current formatting were a serious issue, the review of the change that introduced it should have addressed that.)",
+      "parentUuid": "89161e5b_ee3aea64",
+      "revId": "f5a95eb32f32c44359d6e9c26dd97cecb0b207a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
