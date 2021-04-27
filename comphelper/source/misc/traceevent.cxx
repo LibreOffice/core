@@ -24,7 +24,7 @@ namespace comphelper
 {
 std::atomic<bool> TraceEvent::s_bRecording = false;
 
-int TraceEvent::s_nNesting = 0; // level of overlapped zones
+int ProfileZone::s_nNesting = 0;
 
 namespace
 {
@@ -70,7 +70,6 @@ void TraceEvent::addInstantEvent(const char* sProfileId)
 void TraceEvent::startRecording()
 {
     ::osl::MutexGuard aGuard(g_aMutex);
-    s_nNesting = 0;
     s_bRecording = true;
 }
 
