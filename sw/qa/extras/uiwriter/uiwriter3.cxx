@@ -22,6 +22,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <fmtanchr.hxx>
+#include <fmtornt.hxx>
+#include <fmtfsize.hxx>
 #include <frameformats.hxx>
 #include <swdtflvr.hxx>
 #include <textboxhelper.hxx>
@@ -2725,6 +2727,57 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138897)
     dispatchCommand(mxComponent, ".uno:Undo", {});
     dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140208)
+{
+    // Load the desired bugdoc and check its success
+    load(DATA_DIRECTORY, "tdf140208.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Get the shape
+    auto xShp = getShape(1);
+    CPPUNIT_ASSERT(xShp);
+
+    // Check the shape has AS_CHAR anchor
+    uno::Reference<beans::XPropertySet> xSP(xShp, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER,
+                         xSP->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+
+    // Set the anchor to AT_CHAR
+    xSP->setPropertyValue(
+        "AnchorType", uno::Any(text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER));
+    Scheduler::ProcessEventsToIdle();
+
+    // Check the set is success
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER,
+                         xSP->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+
+    // Undo the anchor change
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Check the anchor state
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER,
+                         xSP->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+
+    // And get the layout dump of the textbox and check it not separated.
+    // Without the fix in place it is separated.
+
+    auto pXmlDoc = parseLayoutDump();
+
+    // Is the textframe inside of the shape? If not, there is a separation like before.
+    const OString sSXP = "/root/page/body/txt[2]/anchored/SwAnchoredDrawObject/bounds";
+    const SwRect ShpRect(
+        getXPath(pXmlDoc, sSXP, "left").toInt32(), getXPath(pXmlDoc, sSXP, "top").toInt32(),
+        getXPath(pXmlDoc, sSXP, "width").toInt32(), getXPath(pXmlDoc, sSXP, "height").toInt32());
+    const OString sFXP = "/root/page/body/txt[2]/anchored/fly/infos/bounds";
+    const SwRect FrmRect(
+        getXPath(pXmlDoc, sFXP, "left").toInt32(), getXPath(pXmlDoc, sFXP, "top").toInt32(),
+        getXPath(pXmlDoc, sFXP, "width").toInt32(), getXPath(pXmlDoc, sFXP, "height").toInt32());
+
+    CPPUNIT_ASSERT(ShpRect.IsInside(FrmRect));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136740)
