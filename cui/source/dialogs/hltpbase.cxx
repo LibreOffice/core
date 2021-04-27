@@ -56,7 +56,7 @@ OUString CreateUiNameFromURL( const OUString& aStrURL )
             {
                 //remove password from name
                 INetURLObject   aTmpURL(aURLObj);
-                aTmpURL.SetPass("");
+                aTmpURL.SetPass(u"");
                 aStrUiURL = aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
             }
             break;

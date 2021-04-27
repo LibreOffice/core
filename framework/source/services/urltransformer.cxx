@@ -101,8 +101,8 @@ void lcl_ParserHelper(INetURLObject& _rParser, css::util::URL& _rURL,bool _bUseI
     if ( _bUseIntern )
         _rURL.Complete   = _rURL.Complete.intern();
 
-    _rParser.SetMark    ( OUString() );
-    _rParser.SetParam( OUString() );
+    _rParser.SetMark( u"" );
+    _rParser.SetParam( u"" );
 
     _rURL.Main       = _rParser.GetMainURL( INetURLObject::DecodeMechanism::NONE           );
 }

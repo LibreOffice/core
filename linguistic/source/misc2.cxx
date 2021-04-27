@@ -144,7 +144,7 @@ std::vector< OUString > GetDictionaryPaths()
     return GetMultiPaths_Impl( u"Dictionary", PATH_FLAG_ALL );
 }
 
-OUString  GetWritableDictionaryURL( const OUString &rDicName )
+OUString  GetWritableDictionaryURL( std::u16string_view rDicName )
 {
     // new user writable dictionaries should be created in the 'writable' path
     OUString aDirName( GetDictionaryWriteablePath() );

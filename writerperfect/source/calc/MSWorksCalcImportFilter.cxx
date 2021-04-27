@@ -376,7 +376,7 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
                     INetURLObject aTmpUrl(sUrl);
                     sWM3Name = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true,
                                                INetURLObject::DecodeMechanism::WithCharset);
-                    aTmpUrl.setExtension("FM3");
+                    aTmpUrl.setExtension(u"FM3");
                     const OUString& sTestFM3Name
                         = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true,
                                           INetURLObject::DecodeMechanism::WithCharset);

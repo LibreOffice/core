@@ -71,7 +71,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 
 namespace
 {
-    sal_Int16 isCaseSensitiveParentFolder( const OUString& _rFolderOrDoc, const OUString& _rDocName )
+    sal_Int16 isCaseSensitiveParentFolder( const OUString& _rFolderOrDoc, std::u16string_view _rDocName )
     {
         sal_Int16 nIsCS = 1;
         try

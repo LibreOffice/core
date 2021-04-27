@@ -140,8 +140,8 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         const OUString& GetNumCharFmtName() const { return aNumCharFmtName;}
         MapUnit GetMapUnit() const { return eCoreUnit;}
     protected:
-        void    ImplLoad(const OUString& filename);
-        void    ImplStore(const OUString& filename);
+        void    ImplLoad(std::u16string_view filename);
+        void    ImplStore(std::u16string_view filename);
 
 };
 

@@ -2450,7 +2450,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
         INetURLObject aTmpFile( rMed.GetPhysicalName(), INetProtocol::File );
         if ( bHasMemo )
-            aTmpFile.setExtension("dbt");
+            aTmpFile.setExtension(u"dbt");
         if ( eError != ERRCODE_NONE && !eError.IsWarning() )
         {
             if (!GetError())
@@ -2465,7 +2465,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             {
                 const SfxStringItem* pNameItem = rMed.GetItemSet()->GetItem<SfxStringItem>( SID_FILE_NAME );
                 INetURLObject aDbtFile( pNameItem->GetValue(), INetProtocol::File );
-                aDbtFile.setExtension("dbt");
+                aDbtFile.setExtension(u"dbt");
 
                 // tdf#40713: don't lose dbt file
                 // if aDbtFile corresponds exactly to aTmpFile, we just have to return

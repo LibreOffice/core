@@ -1038,7 +1038,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
     Sequence< OUString > aFiles = xFP->getSelectedFiles();
     INetURLObject aURL( aFiles[0] );
     if( aURL.getExtension().isEmpty() )
-        aURL.setExtension( "oxt" );
+        aURL.setExtension( u"oxt" );
 
     OUString aPackageURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
@@ -1071,7 +1071,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
         OUString(), NameClash::OVERWRITE );
 
     INetURLObject aMetaInfInetObj( aTmpPath );
-    aMetaInfInetObj.insertName( "META-INF",
+    aMetaInfInetObj.insertName( u"META-INF",
         true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
     OUString aMetaInfFolder = aMetaInfInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     if( xSFA->exists( aMetaInfFolder ) )
@@ -1095,7 +1095,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
         xPipe, Sequence< Sequence<beans::PropertyValue> >(
             manifest.data(), manifest.size() ) );
 
-    aMetaInfInetObj.insertName( "manifest.xml",
+    aMetaInfInetObj.insertName( u"manifest.xml",
         true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
 
     // write buffered pipe data to content:

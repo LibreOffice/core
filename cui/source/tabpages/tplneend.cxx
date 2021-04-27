@@ -579,7 +579,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl, weld::Button&, void)
         aFile.Append( pLineEndList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( "soe" );
+            aFile.SetExtension( u"soe" );
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );

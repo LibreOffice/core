@@ -307,7 +307,7 @@ void ScFiltersTest::testContentLotus123()
 void ScFiltersTest::testContentofz9704()
 {
     OUString aFileName;
-    createFileURL(u"ofz9704.", "123", aFileName);
+    createFileURL(u"ofz9704.", u"123", aFileName);
     SvFileStream aFileStream(aFileName, StreamMode::READ);
     TestImportWKS(aFileStream);
 }

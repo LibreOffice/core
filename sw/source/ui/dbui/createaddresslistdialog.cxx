@@ -431,7 +431,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl, weld::Button&, void)
         {
             m_sURL = xFP->getSelectedFiles().getConstArray()[0];
             INetURLObject aResult( m_sURL );
-            aResult.setExtension("csv");
+            aResult.setExtension(u"csv");
             m_sURL = aResult.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         }
     }

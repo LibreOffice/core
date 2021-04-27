@@ -1567,8 +1567,8 @@ void UCBStorage_Impl::Init()
                 if ( m_nError == ERRCODE_NONE )
                 {
                     // read the manifest.xml file
-                    aObj.Append( "META-INF" );
-                    aObj.Append( "manifest.xml" );
+                    aObj.Append( u"META-INF" );
+                    aObj.Append( u"manifest.xml" );
 
                     // create input stream
                     std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::STD_READ ));

@@ -422,10 +422,10 @@ INetURLObject GalleryBinaryEngine::implCreateUniqueURL(SgaObjKind eObjKind,
     char const* pExt = nullptr;
     bool bExists;
 
-    aDir.Append("dragdrop");
+    aDir.Append(u"dragdrop");
     CreateDir(aDir);
 
-    aInfoFileURL.Append("sdddndx1");
+    aInfoFileURL.Append(u"sdddndx1");
 
     // read next possible number
     if (FileExists(aInfoFileURL))
