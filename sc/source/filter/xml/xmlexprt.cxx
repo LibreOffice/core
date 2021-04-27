@@ -2091,16 +2091,16 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
             else
                 nIndex = pCellStyles->GetIndexOfStyleName(sName, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX, bIsAutoStyle);
 
-            const uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
+            /*ScRange aAddresses(xCellRanges->getRangeAddresses());
             bool bGetMerge(true);
-            for (table::CellRangeAddress const & address : aAddresses)
+            for (ScRange const & address : aAddresses)
             {
                 pSharedData->SetLastColumn(nTable, address.EndColumn);
                 pSharedData->SetLastRow(nTable, address.EndRow);
                 pCellStyles->AddRangeStyleName(address, nIndex, bIsAutoStyle, nValidationIndex, nNumberFormat);
                 if (bGetMerge)
                     bGetMerge = GetMerged(&address, xTable);
-            }
+            }*/
         }
     }
     else
@@ -2108,11 +2108,11 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
         OUString sEncodedStyleName(EncodeStyleName(sStyleName));
         sal_Int32 nIndex(0);
         pCellStyles->AddStyleName(sEncodedStyleName, nIndex, false);
-        if ( !pOldName )
+        /*if ( !pOldName )
         {
-            const uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
+            ScRange aAddresses(xCellRanges->getRangeAddresses());
             bool bGetMerge(true);
-            for (table::CellRangeAddress const & address : aAddresses)
+            for (ScRange const & address : aAddresses)
             {
                 if (bGetMerge)
                     bGetMerge = GetMerged(&address, xTable);
@@ -2123,7 +2123,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                     pSharedData->SetLastRow(nTable, address.EndRow);
                 }
             }
-        }
+        }*/
     }
 }
 

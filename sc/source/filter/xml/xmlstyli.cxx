@@ -464,17 +464,14 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableStyleContext::
     return xContext;
 }
 
-void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRangeAddress>& xCellRanges )
+void XMLTableStyleContext::ApplyCondFormat( ScRange& aAddress )
 {
     if(!mpCondFormat || GetScImport().HasNewCondFormatData())
         return;
 
     ScRangeList aRangeList;
-    for(const table::CellRangeAddress& aAddress : xCellRanges)
-    {
-        ScRange aRange( aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet, aAddress.EndColumn, aAddress.EndRow, aAddress.Sheet );
-        aRangeList.Join( aRange );
-    }
+    ScRange aRange( aAddress.aStart.Col(), aAddress.aStart.Row(), aAddress.aStart.Tab(), aAddress.aEnd.Col(), aAddress.aEnd.Row(), aAddress.aEnd.Tab() );
+    aRangeList.Join( aRange );
 
     ScDocument* pDoc = GetScImport().GetDocument();
     SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();

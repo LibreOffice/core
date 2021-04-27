@@ -36,7 +36,7 @@
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::sheet { class XSheetCellRangeContainer; }
-namespace com::sun::star::table { struct CellRangeAddress; }
+namespace com::sun::star::table { struct ScRange; }
 namespace com::sun::star::util { class XNumberFormatTypes; }
 namespace com::sun::star::util { class XNumberFormats; }
 namespace sax_fastparser { class FastAttributeList; }
