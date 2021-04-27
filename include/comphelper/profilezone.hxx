@@ -18,11 +18,10 @@
 
 namespace comphelper
 {
-class COMPHELPER_DLLPUBLIC ProfileZone : public TraceEvent
+class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
 {
     static int s_nNesting; // level of nested zones.
 
-    const char* m_sProfileId;
     long long m_nCreateTime;
     bool m_bConsole;
     void stopConsole();
@@ -47,8 +46,8 @@ public:
      * Similar to the DEBUG macro in sal/log.hxx, don't forget to remove these lines before
      * committing.
      */
-    ProfileZone(const char* sProfileId, bool bConsole = false)
-        : m_sProfileId(sProfileId ? sProfileId : "(null)")
+    ProfileZone(const char* sName, bool bConsole = false)
+        : NamedEvent(sName)
         , m_bConsole(bConsole)
     {
         if (s_bRecording || m_bConsole)
