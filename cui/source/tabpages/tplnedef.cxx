@@ -759,7 +759,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl, weld::Button&, void)
         aFile.Append( pDashList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( "sod" );
+            aFile.SetExtension( u"sod" );
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );

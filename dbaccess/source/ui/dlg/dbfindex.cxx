@@ -276,7 +276,7 @@ void ODbaseIndexDialog::Init()
             OTableInfo& rTabInfo = m_aTableInfoList.back();
 
             // open the INF file
-            aURL.setExtension("inf");
+            aURL.setExtension(u"inf");
             OFileNotation aTransformer(aURL.GetURLNoPass(), OFileNotation::N_URL);
             Config aInfFile( aTransformer.get(OFileNotation::N_SYSTEM) );
             aInfFile.SetGroup( aGroupIdent );
@@ -363,7 +363,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
     }
     aURL.SetSmartURL(aDsn);
     aURL.Append(aTableName);
-    aURL.setExtension("inf");
+    aURL.setExtension(u"inf");
 
     OFileNotation aTransformer(aURL.GetURLNoPass(), OFileNotation::N_URL);
     Config aInfFile( aTransformer.get(OFileNotation::N_SYSTEM) );

@@ -62,7 +62,7 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     for( OUString* pS : { &sSharePath, &sUserPath } )
     {
         INetURLObject aPath( *pS );
-        aPath.insertName("acor");
+        aPath.insertName(u"acor");
         *pS = aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
     }
     pAutoCorrect.reset( new SvxAutoCorrect( sSharePath, sUserPath ) );

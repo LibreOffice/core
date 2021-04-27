@@ -52,7 +52,7 @@ void SwChapterNumRules::Save()
     SvtPathOptions aPathOpt;
     aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
     aURL.setFinalSlash();
-    aURL.Append(CHAPTER_FILENAME);
+    aURL.Append(u"" CHAPTER_FILENAME);
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE );
     SvStream* pStream = aMedium.GetOutStream();

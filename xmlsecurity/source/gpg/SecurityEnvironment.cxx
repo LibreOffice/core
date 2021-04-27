@@ -60,7 +60,7 @@ SecurityEnvironmentGpg::SecurityEnvironmentGpg()
         OUString sPath;
         osl_getExecutableFile(&sPath.pData);
         INetURLObject aPathUrl(sPath);
-        aPathUrl.setName("gpgme-w32spawn.exe");
+        aPathUrl.setName(u"gpgme-w32spawn.exe");
         if (!accessUrl(aPathUrl))
         {
             sPath = "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/gpgme-w32spawn.exe";

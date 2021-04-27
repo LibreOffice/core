@@ -106,7 +106,7 @@ bool SwDoc::IsVisitedURL( const OUString& rURL )
         if( '#' == rURL[0] && mpDocShell && mpDocShell->GetMedium() )
         {
             INetURLObject aIObj( mpDocShell->GetMedium()->GetURLObject() );
-            aIObj.SetMark( rURL.copy( 1 ) );
+            aIObj.SetMark( rURL.subView( 1 ) );
             bRet = pHist->QueryUrl( aIObj );
         }
         else

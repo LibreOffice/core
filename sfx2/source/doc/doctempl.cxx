@@ -423,8 +423,8 @@ OUString SfxDocumentTemplates::GetPath
 }
 
 
-OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString& aGroupName,
-                                                                         const OUString& aTitle )
+OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( std::u16string_view aGroupName,
+                                                                    std::u16string_view aTitle )
 {
     DocTemplLocker_Impl aLocker( *pImp );
 

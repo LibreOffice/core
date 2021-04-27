@@ -620,7 +620,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                 INetURLObject aFilePathObj( aTempDir.GetURL() );
                 aFilePathObj.insertName( aFileName );
-                aFilePathObj.setExtension( "htm" );
+                aFilePathObj.setExtension( u"htm" );
 
                 OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 

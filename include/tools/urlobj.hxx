@@ -295,8 +295,8 @@ public:
                        EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    bool ConcatData(INetProtocol eTheScheme, OUString const & rTheUser,
-                    OUString const & rThePassword,
+    bool ConcatData(INetProtocol eTheScheme, std::u16string_view rTheUser,
+                    std::u16string_view rThePassword,
                     OUString const & rTheHost, sal_uInt32 nThePort,
                     OUString const & rThePath);
 
@@ -359,14 +359,14 @@ public:
 
     OUString getExternalURL() const;
 
-    static inline bool translateToExternal(OUString const & rTheIntURIRef,
+    static inline bool translateToExternal(std::u16string_view rTheIntURIRef,
                                            OUString & rTheExtURIRef,
                                            DecodeMechanism eDecodeMechanism
                                                = DecodeMechanism::ToIUri,
                                            rtl_TextEncoding eCharset
                                                = RTL_TEXTENCODING_UTF8);
 
-    static inline bool translateToInternal(OUString const & rTheExtURIRef,
+    static inline bool translateToInternal(std::u16string_view rTheExtURIRef,
                                            OUString & rTheIntURIRef,
                                            DecodeMechanism eDecodeMechanism
                                                = DecodeMechanism::ToIUri,
@@ -423,13 +423,13 @@ public:
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aAuth, eMechanism, eCharset); }
 
-    bool SetUser(OUString const & rTheUser)
+    bool SetUser(std::u16string_view rTheUser)
     { return setUser(rTheUser, RTL_TEXTENCODING_UTF8); }
 
-    inline bool SetPass(OUString const & rThePassword);
+    inline bool SetPass(std::u16string_view rThePassword);
 
-    inline bool SetUserAndPass(OUString const & rTheUser,
-                               OUString const & rThePassword);
+    inline bool SetUserAndPass(std::u16string_view rTheUser,
+                               std::u16string_view rThePassword);
 
     // Host and Port:
 
@@ -541,7 +541,7 @@ public:
         the specified place to insert the new segment does not exist, false is
         returned.  If false is returned, the object is not modified.
      */
-    bool insertName(OUString const & rTheName,
+    bool insertName(std::u16string_view rTheName,
                            bool bAppendFinalSlash = false,
                            sal_Int32 nIndex = LAST_SEGMENT,
                            EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
@@ -583,7 +583,7 @@ public:
         a last segment does not exist, false is returned.  If false is
         returned, the object is not modified.
      */
-    bool setName(OUString const& rTheName,
+    bool setName(std::u16string_view rTheName,
                  EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
@@ -627,7 +627,7 @@ public:
         the specified segment does not exist, false is returned.  If false is
         returned, the object is not modified.
      */
-    bool setBase(OUString const & rTheBase,
+    bool setBase(std::u16string_view rTheBase,
                  sal_Int32 nIndex = LAST_SEGMENT,
                  EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
@@ -680,7 +680,7 @@ public:
         the specified segment does not exist, false is returned.  If false is
         returned, the object is not modified.
      */
-    bool setExtension(OUString const & rTheExtension,
+    bool setExtension(std::u16string_view rTheExtension,
                       sal_Int32 nIndex = LAST_SEGMENT,
                       bool bIgnoreFinalSlash = true,
                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
@@ -736,7 +736,7 @@ public:
                                   = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aQuery, DecodeMechanism::NONE, eCharset); }
 
-    inline bool SetParam(OUString const & rTheQuery,
+    inline bool SetParam(std::u16string_view rTheQuery,
                          EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
@@ -749,7 +749,7 @@ public:
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aFragment, eMechanism, eCharset); }
 
-    inline bool SetMark(OUString const & rTheFragment,
+    inline bool SetMark(std::u16string_view rTheFragment,
                         EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
@@ -823,7 +823,7 @@ public:
         @return  The text, encoded according to the given mechanism and
         charset ('forbidden' characters replaced by escape sequences).
      */
-    static inline OUString encode(OUString const & rText, Part ePart,
+    static inline OUString encode(std::u16string_view rText, Part ePart,
                                    EncodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset
                                        = RTL_TEXTENCODING_UTF8);
@@ -889,7 +889,7 @@ public:
      */
     OUString GetFileExtension() const;
 
-    bool Append(OUString const & rTheSegment,
+    bool Append(std::u16string_view rTheSegment,
                        EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
@@ -903,11 +903,11 @@ public:
 
     OUString GetPath() const;
 
-    void SetBase(OUString const & rTheBase);
+    void SetBase(std::u16string_view rTheBase);
 
     OUString GetBase() const;
 
-    void SetExtension(OUString const & rTheExtension);
+    void SetExtension(std::u16string_view rTheExtension);
 
     OUString CutExtension();
 
@@ -994,12 +994,12 @@ private:
     // External URLs:
 
     static bool convertIntToExt(
-        OUString const & rTheIntURIRef,
+        std::u16string_view rTheIntURIRef,
         OUString & rTheExtURIRef, DecodeMechanism eDecodeMechanism,
         rtl_TextEncoding eCharset);
 
     static bool convertExtToInt(
-        OUString const & rTheExtURIRef,
+        std::u16string_view rTheExtURIRef,
         OUString & rTheIntURIRef, DecodeMechanism eDecodeMechanism,
         rtl_TextEncoding eCharset);
 
@@ -1024,13 +1024,13 @@ private:
     // User Info:
 
     bool setUser(
-        OUString const & rTheUser,
+        std::u16string_view rTheUser,
         rtl_TextEncoding eCharset);
 
     bool clearPassword();
 
     bool setPassword(
-        OUString const & rThePassword,
+        std::u16string_view rThePassword,
         rtl_TextEncoding eCharset);
 
     // Host and Port:
@@ -1074,7 +1074,7 @@ private:
     void clearQuery();
 
     bool setQuery(
-        OUString const & rTheQuery,
+        std::u16string_view rTheQuery,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     // Fragment:
@@ -1082,7 +1082,7 @@ private:
     bool clearFragment();
 
     bool setFragment(
-        OUString const & rTheMark,
+        std::u16string_view rTheMark,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     // FILE URLs:
@@ -1100,7 +1100,7 @@ private:
         bool bKeepVisibleEscapes);
 
     static inline OUString encodeText(
-        OUString const & rTheText, Part ePart,
+        std::u16string_view rTheText, Part ePart,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
         bool bKeepVisibleEscapes);
 
@@ -1119,14 +1119,14 @@ private:
 };
 
 // static
-inline OUString INetURLObject::encodeText(OUString const & rTheText,
+inline OUString INetURLObject::encodeText(std::u16string_view rTheText,
                                            Part ePart,
                                            EncodeMechanism eMechanism,
                                            rtl_TextEncoding eCharset,
                                            bool bKeepVisibleEscapes)
 {
-    return encodeText(rTheText.getStr(),
-                      rTheText.getStr() + rTheText.getLength(), ePart,
+    return encodeText(rTheText.data(),
+                      rTheText.data() + rTheText.size(), ePart,
                       eMechanism, eCharset, bKeepVisibleEscapes);
 }
 
@@ -1224,7 +1224,7 @@ inline OUString INetURLObject::GetRelURL(OUString const & rTheBaseURIRef,
 }
 
 // static
-inline bool INetURLObject::translateToExternal(OUString const &
+inline bool INetURLObject::translateToExternal(std::u16string_view
                                                    rTheIntURIRef,
                                                OUString & rTheExtURIRef,
                                                DecodeMechanism
@@ -1236,7 +1236,7 @@ inline bool INetURLObject::translateToExternal(OUString const &
 }
 
 // static
-inline bool INetURLObject::translateToInternal(OUString const &
+inline bool INetURLObject::translateToInternal(std::u16string_view
                                                    rTheExtURIRef,
                                                OUString & rTheIntURIRef,
                                                DecodeMechanism
@@ -1247,27 +1247,27 @@ inline bool INetURLObject::translateToInternal(OUString const &
                            eDecodeMechanism, eCharset);
 }
 
-inline bool INetURLObject::SetPass(OUString const & rThePassword)
+inline bool INetURLObject::SetPass(std::u16string_view rThePassword)
 {
-    return rThePassword.isEmpty() ?
+    return rThePassword.empty() ?
                clearPassword() :
                setPassword(rThePassword, RTL_TEXTENCODING_UTF8);
 }
 
-inline bool INetURLObject::SetUserAndPass(OUString const & rTheUser,
-                                          OUString const & rThePassword)
+inline bool INetURLObject::SetUserAndPass(std::u16string_view rTheUser,
+                                          std::u16string_view rThePassword)
 {
     return setUser(rTheUser, RTL_TEXTENCODING_UTF8)
-           && (rThePassword.isEmpty() ?
+           && (rThePassword.empty() ?
                    clearPassword() :
                    setPassword(rThePassword, RTL_TEXTENCODING_UTF8));
 }
 
-inline bool INetURLObject::SetParam(OUString const & rTheQuery,
+inline bool INetURLObject::SetParam(std::u16string_view rTheQuery,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset)
 {
-    if (rTheQuery.isEmpty())
+    if (rTheQuery.empty())
     {
         clearQuery();
         return false;
@@ -1275,17 +1275,17 @@ inline bool INetURLObject::SetParam(OUString const & rTheQuery,
     return setQuery(rTheQuery, eMechanism, eCharset);
 }
 
-inline bool INetURLObject::SetMark(OUString const & rTheFragment,
+inline bool INetURLObject::SetMark(std::u16string_view rTheFragment,
                                    EncodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset)
 {
-    return rTheFragment.isEmpty() ?
+    return rTheFragment.empty() ?
                clearFragment() :
                setFragment(rTheFragment, eMechanism, eCharset);
 }
 
 // static
-inline OUString INetURLObject::encode(OUString const & rText, Part ePart,
+inline OUString INetURLObject::encode(std::u16string_view rText, Part ePart,
                                        EncodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset)
 {

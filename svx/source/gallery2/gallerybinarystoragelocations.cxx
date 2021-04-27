@@ -42,25 +42,25 @@ INetURLObject GalleryBinaryStorageLocations::ImplGetURLIgnoreCase(const INetURLO
 
 void GalleryBinaryStorageLocations::SetThmExtension(INetURLObject& aURL)
 {
-    aURL.setExtension("thm");
+    aURL.setExtension(u"thm");
     maThmURL = ImplGetURLIgnoreCase(aURL);
 }
 
 void GalleryBinaryStorageLocations::SetSdgExtension(INetURLObject& aURL)
 {
-    aURL.setExtension("sdg");
+    aURL.setExtension(u"sdg");
     maSdgURL = ImplGetURLIgnoreCase(aURL);
 }
 
 void GalleryBinaryStorageLocations::SetSdvExtension(INetURLObject& aURL)
 {
-    aURL.setExtension("sdv");
+    aURL.setExtension(u"sdv");
     maSdvURL = ImplGetURLIgnoreCase(aURL);
 }
 
 void GalleryBinaryStorageLocations::SetStrExtension(INetURLObject& aURL)
 {
-    aURL.setExtension("str");
+    aURL.setExtension(u"str");
     maStrURL = ImplGetURLIgnoreCase(aURL);
 }
 
