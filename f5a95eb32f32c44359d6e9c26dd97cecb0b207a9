@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89161e5b_ee3aea64",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-27T06:57:17Z",
+      "side": 0,
+      "message": "Isn\u0027t it better to change the three-character indentation of the other lines here in this method instead, to a usual 4-character indentation used elsewhere?",
+      "revId": "f5a95eb32f32c44359d6e9c26dd97cecb0b207a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
