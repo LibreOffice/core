@@ -71,6 +71,7 @@ public:
             startConsole();
         }
     }
+
     ~ProfileZone()
     {
         if (s_bRecording)
@@ -83,6 +84,9 @@ public:
             stopConsole();
         }
     }
+
+    ProfileZone(const ProfileZone&) = delete;
+    void operator=(const ProfileZone&) = delete;
 
     static void startRecording();
     static void stopRecording();
