@@ -410,7 +410,10 @@ void SwFormatField::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mpTextField"), "%p", mpTextField);
 
     SfxPoolItem::dumpAsXml(pWriter);
-    mpField->dumpAsXml(pWriter);
+    if (mpField) // pool default doesn't have one
+    {
+        mpField->dumpAsXml(pWriter);
+    }
 
     (void)xmlTextWriterEndElement(pWriter);
 }
