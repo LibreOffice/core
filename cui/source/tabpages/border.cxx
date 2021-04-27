@@ -77,6 +77,8 @@ const WhichRangesContainer SvxBorderTabPage::pRanges(
         SID_SW_COLLAPSING_BORDERS,  SID_SW_COLLAPSING_BORDERS,
         SID_ATTR_BORDER_DIAG_TLBR,  SID_ATTR_BORDER_DIAG_BLTR>);
 
+const std::vector<int> SvxBorderTabPage::m_aLineWidths = { 75, 200, 400, -1 };
+
 static void lcl_SetDecimalDigitsTo1(weld::MetricSpinButton& rField)
 {
     auto nMin = rField.denormalize(rField.get_min(FieldUnit::TWIP));
@@ -292,6 +294,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xLbLineStyle(new SvtLineListBox(m_xBuilder->weld_menu_button("linestylelb")))
     , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"),
                 [this]{ return GetDialogController()->getDialog(); }))
+    , m_xLineWidthLB(m_xBuilder->weld_combo_box("linewidthlb"))
     , m_xLineWidthMF(m_xBuilder->weld_metric_spin_button("linewidthmf", FieldUnit::POINT))
     , m_xSpacingFrame(m_xBuilder->weld_container("spacing"))
     , m_xLeftFT(m_xBuilder->weld_label("leftft"))
@@ -416,7 +419,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     {
         // The caller specifies default line width.  Honor it.
         const SfxInt64Item* p = static_cast<const SfxInt64Item*>(pItem);
-        m_xLineWidthMF->set_value(p->GetValue(), FieldUnit::POINT);
+        SetLineWidth(p->GetValue());
     }
 
     // set metric
@@ -516,12 +519,16 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     m_aFrameSel.SetSelectHdl(LINK(this, SvxBorderTabPage, LinesChanged_Impl));
     m_xLbLineStyle->SetSelectHdl( LINK( this, SvxBorderTabPage, SelStyleHdl_Impl ) );
     m_xLbLineColor->SetSelectHdl( LINK( this, SvxBorderTabPage, SelColHdl_Impl ) );
-    m_xLineWidthMF->connect_value_changed( LINK( this, SvxBorderTabPage, ModifyWidthHdl_Impl ) );
+    m_xLineWidthLB->connect_changed(LINK(this, SvxBorderTabPage, ModifyWidthLBHdl_Impl));
+    m_xLineWidthMF->connect_value_changed(LINK(this, SvxBorderTabPage, ModifyWidthMFHdl_Impl));
     m_xWndPresets->SetSelectHdl( LINK( this, SvxBorderTabPage, SelPreHdl_Impl ) );
     m_xWndShadows->SetSelectHdl( LINK( this, SvxBorderTabPage, SelSdwHdl_Impl ) );
 
     FillValueSets();
     FillLineListBox_Impl();
+
+    // Reapply line width: probably one of prefefined values should be selected
+    SetLineWidth(m_xLineWidthMF->get_value(FieldUnit::NONE));
 
     // connections
     if (rCoreAttrs.HasItem(GetWhich(SID_ATTR_PARA_GRABBAG), &pItem))
@@ -779,7 +786,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
             sal_Int64 nWidthPt =  static_cast<sal_Int64>(vcl::ConvertDoubleValue(
                         sal_Int64( nWidth ), m_xLineWidthMF->get_digits(),
                         MapUnit::MapTwip, FieldUnit::POINT ));
-            m_xLineWidthMF->set_value(nWidthPt, FieldUnit::POINT);
+            SetLineWidth(nWidthPt);
             m_xLbLineStyle->SetWidth(nWidth);
 
             // then set the style
@@ -1217,7 +1224,17 @@ IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, ColorListBox&, rColorBox, void)
     m_aFrameSel.SetColorToSelection(aColor);
 }
 
-IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, weld::MetricSpinButton&, void)
+IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthLBHdl_Impl, weld::ComboBox&, void)
+{
+    sal_Int32 nPos = m_xLineWidthLB->get_active();
+
+    SetLineWidth(m_aLineWidths[nPos]);
+
+    // Call the spinner handler to trigger all related modifications
+    ModifyWidthMFHdl_Impl(*m_xLineWidthMF);
+}
+
+IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthMFHdl_Impl, weld::MetricSpinButton&, void)
 {
     sal_Int64 nVal = m_xLineWidthMF->get_value(FieldUnit::NONE);
     nVal = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
@@ -1254,7 +1271,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
             m_xLineWidthMF->get_digits(),
             MapUnit::MapTwip,
             FieldUnit::POINT));
-        m_xLineWidthMF->set_value(nNewWidthPt, FieldUnit::POINT);
+        SetLineWidth(nNewWidthPt);
     }
 
     // set value inside style box
@@ -1381,6 +1398,27 @@ void SvxBorderTabPage::FillValueSets()
     FillShadowVS();
 }
 
+void SvxBorderTabPage::SetLineWidth( sal_Int64 nWidth )
+{
+    if ( nWidth >= 0 )
+        m_xLineWidthMF->set_value( nWidth, FieldUnit::POINT );
+
+    auto it = std::find_if( m_aLineWidths.begin(), m_aLineWidths.end(),
+                            [nWidth](const int val) -> bool { return val == nWidth; } );
+
+    if ( it != m_aLineWidths.end() && *it >= 0 )
+    {
+        // Select predefined value in combobox
+        m_xLineWidthMF->hide();
+        m_xLineWidthLB->set_active(std::distance(m_aLineWidths.begin(), it));
+    }
+    else
+    {
+        // This is not one of predefined values. Show spinner
+        m_xLineWidthLB->set_active(m_aLineWidths.size()-1);
+        m_xLineWidthMF->show();
+    }
+}
 
 static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 {

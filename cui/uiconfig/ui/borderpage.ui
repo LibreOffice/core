@@ -251,15 +251,43 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="linewidthmf">
+              <object class="GtkGrid" id="gridlinewidth">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="halign">start</property>
-                <property name="activates_default">True</property>
-                <property name="adjustment">adjustment1</property>
-                <property name="digits">2</property>
-                <property name="truncate-multiline">True</property>
-                <property name="value">0.05</property>
+                <property name="can_focus">False</property>
+                <property name="row_spacing">0</property>
+                <property name="column_spacing">6</property>
+                <property name="margin-start">0</property>
+                <property name="margin-top">0</property>
+                <child>
+                  <object class="GtkComboBoxText" id="linewidthlb">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <items>
+                      <item translatable="yes" context="borderpage|linewidthlb">Thin</item>
+                      <item translatable="yes" context="borderpage|linewidthlb">Medium</item>
+                      <item translatable="yes" context="borderpage|linewidthlb">Thick</item>
+                      <item translatable="yes" context="borderpage|linewidthlb">Custom</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="linewidthmf">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">start</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment1</property>
+                    <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="value">0.05</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
