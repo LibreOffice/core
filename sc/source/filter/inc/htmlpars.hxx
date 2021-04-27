@@ -338,6 +338,8 @@ public:
 
     /** Returns the name of the table, specified in the TABLE tag. */
     const OUString& GetTableName() const { return maTableName; }
+    /** Returns the caption of the table, specified in the <caption> tag. */
+    const OUString GetTableCaption() const { return maCaption.toString(); }
     /** Returns the unique identifier of the table. */
     ScHTMLTableId GetTableId() const { return maTableId.mnTableId; }
     /** Returns the cell spanning of the specified cell. */
@@ -368,6 +370,10 @@ public:
     /** Closes *this* table (</table> tag).
         @return  Pointer to the parent table. */
     ScHTMLTable*        TableOff( const HtmlImportInfo& rInfo );
+    /** Processes the caption of the table (<caption> tag). */
+    void                CaptionOn();
+    /** Processes the caption of the table (</caption> tag). */
+    void                CaptionOff();
     /** Starts a *new* table based on preformatted text (<pre> tag).
         @return  Pointer to the new table. */
     ScHTMLTable*        PreOn( const HtmlImportInfo& rInfo );
@@ -517,6 +523,7 @@ private:
     ScHTMLTable*        mpParentTable;      /// Pointer to parent table.
     ScHTMLTableMapPtr   mxNestedTables;     /// Table of nested HTML tables.
     OUString       maTableName;        /// Table name from <table id> option.
+    OUStringBuffer      maCaption;          /// Caption name of the table from <caption> </caption>
     ScHTMLTableAutoId   maTableId;          /// Unique identifier of this table.
     SfxItemSet          maTableItemSet;     /// Items for the entire table.
     SfxItemSetPtr       mxRowItemSet;       /// Items for the current table row.
@@ -539,6 +546,7 @@ private:
     bool                mbRowOn:1;          /// true = Inside of <tr> </tr>.
     bool                mbDataOn:1;         /// true = Inside of <td> </td> or <th> </th>.
     bool                mbPushEmptyLine:1;  /// true = Insert empty line before current entry.
+    bool                mbCaptionOn:1;      /// true = Inside of <caption> </caption>
 };
 
 /** The "global table" representing the entire HTML document. */

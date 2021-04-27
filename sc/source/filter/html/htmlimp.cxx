@@ -181,14 +181,17 @@ void ScHTMLImport::WriteToDocument(
             assert(!"can't move");
         }
         // insert table number as name
-        InsertRangeName( *mpDoc, ScfTools::GetNameFromHTMLIndex( nTableId ), aNewRange );
-        // insert table id as name
+        OUStringBuffer aName(ScfTools::GetNameFromHTMLIndex(nTableId));
+        // append table id
         if (!pTable->GetTableName().isEmpty())
-        {
-            OUString aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
-            if (!mpDoc->GetRangeName()->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName)))
-                InsertRangeName( *mpDoc, aName, aNewRange );
-        }
+            aName.append(" - " + pTable->GetTableName());
+        // append table caption
+        if (!pTable->GetTableCaption().isEmpty())
+            aName.append(" - " + pTable->GetTableCaption());
+        if (!mpDoc->GetRangeName()->findByUpperName(
+                ScGlobal::getCharClassPtr()->uppercase(aName.toString())))
+            InsertRangeName(*mpDoc, aName.toString(), aNewRange);
+
     }
 }
 
