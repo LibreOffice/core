@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4544b20e_0f6c38c5",
+        "filename": "sc/source/filter/html/htmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-04-27T13:18:59Z",
+      "side": 1,
+      "message": "Is calling toString twice ok or should I add a new OUString above?",
+      "revId": "893cba7b1446ba0249b52cb639fc18c67a32c4da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8ca45ee_129da7aa",
+        "filename": "sc/source/filter/html/htmlpars.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1968,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-04-27T13:18:59Z",
+      "side": 1,
+      "message": "Does that have its raison d\u0027etre?",
+      "revId": "893cba7b1446ba0249b52cb639fc18c67a32c4da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
