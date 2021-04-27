@@ -2564,6 +2564,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="DetectWebDAVRedirection" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines whether to use WebDAV when a file is loaded from a mapped WebDAV drive.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Security">
       <info>
