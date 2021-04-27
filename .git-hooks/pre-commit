@@ -19,7 +19,7 @@ sub check_whitespaces($)
     my $src_full = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|mk|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml|xsl|py";
 
     my %modules = (basctl=>'basctl', chart2=>'chart', cui=>'cui', dbaccess=>'dba', desktop=>'dkt', editeng=>'editeng',
-                   extensions=>'pcr', filter=>'flt', formula=>'"for"', fpicker=>'fps', framework=>'fwk', reportdesign=>'rpt',
+                   extensions=>'pcr', filter=>'flt', formula=>'for', fpicker=>'fps', framework=>'fwk', reportdesign=>'rpt',
                    sc=>'sc', sd=>'sd', sfx2=>'sfx', starmath=>'sm', svtools=>'svt', svx=>'svx', sw=>'sw', uui=>'uui',
                    vcl=>'vcl', writerperfect=>'wpt', xmlsecurity=>'xsc');
 
