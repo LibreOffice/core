@@ -2390,16 +2390,15 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rS
     o3tl::sorted_vector< sal_Int32 > aPositions;
     aPositions.insert( 0 );
 
-    sal_uInt16 nAttr = 0;
-    EditCharAttrib* pAttrib = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
-    while ( pAttrib )
+    for (sal_uInt16 nAttr = 0;; ++nAttr)
     {
         // Insert Start and End into the Array...
         // The Insert method does not allow for duplicate values...
+        EditCharAttrib* pAttrib = GetAttrib(pNode->GetCharAttribs().GetAttribs(), nAttr);
+        if (!pAttrib)
+            break;
         aPositions.insert( pAttrib->GetStart() );
         aPositions.insert( pAttrib->GetEnd() );
-        nAttr++;
-        pAttrib = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
     }
     aPositions.insert( pNode->Len() );
 
