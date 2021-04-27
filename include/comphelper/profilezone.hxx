@@ -23,7 +23,6 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public TraceEvent
     const char *m_sProfileId;
     long long m_nCreateTime;
     bool m_bConsole;
-    void startConsole();
     void stopConsole();
     int m_nPid;
 
@@ -50,24 +49,23 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public TraceEvent
         : m_sProfileId(sProfileId ? sProfileId : "(null)")
         , m_bConsole(bConsole)
     {
-        if (s_bRecording)
+        if (s_bRecording || m_bConsole)
         {
             TimeValue systemTime;
             osl_getSystemTime( &systemTime );
             m_nCreateTime = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec/1000;
+        }
+        else
+            m_nCreateTime = 0;
 
+        if (s_bRecording)
+        {
             oslProcessInfo aProcessInfo;
             aProcessInfo.Size = sizeof(oslProcessInfo);
             if (osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &aProcessInfo) == osl_Process_E_None)
                 m_nPid = aProcessInfo.Ident;
 
             s_nNesting++;
-        }
-        else
-            m_nCreateTime = 0;
-        if (m_bConsole)
-        {
-            startConsole();
         }
     }
 
