@@ -136,7 +136,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="labelComments1">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="additionsEntry|labelComments">Downloads:</property>
@@ -154,7 +154,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="labelDownloadNumber">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">label</property>
