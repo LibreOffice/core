@@ -312,17 +312,19 @@ static uno::Any GetParaListAutoFormat(SwTextNode const& rNode)
     {
         return uno::Any();
     }
-    SfxItemSet const& rSet(*pFormat->GetStyleHandle());
+    const auto pSet(pFormat->GetStyleHandle());
+    if (!pSet)
+        return {};
     SfxItemPropertySet const& rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE));
     SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
     std::vector<beans::NamedValue> props;
     // have to iterate the map, not the item set?
     for (auto const& rEntry : rMap.getPropertyEntries())
     {
-        if (rPropSet.getPropertyState(rEntry, rSet) == PropertyState_DIRECT_VALUE)
+        if (rPropSet.getPropertyState(rEntry, *pSet) == PropertyState_DIRECT_VALUE)
         {
             Any value;
-            rPropSet.getPropertyValue(rEntry, rSet, value);
+            rPropSet.getPropertyValue(rEntry, *pSet, value);
             props.emplace_back(rEntry.sName, value);
         }
     }
