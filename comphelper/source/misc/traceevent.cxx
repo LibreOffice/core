@@ -42,7 +42,7 @@ void TraceEvent::addRecording(const OUString& sObject)
     g_aRecording.emplace_back(sObject);
 }
 
-void TraceEvent::addInstantEvent(const char* sProfileId)
+void TraceEvent::addInstantEvent(const char* sName)
 {
     TimeValue aSystemTime;
     osl_getSystemTime(&aSystemTime);
@@ -57,7 +57,7 @@ void TraceEvent::addInstantEvent(const char* sProfileId)
 
     addRecording("{"
                  "\"name:\""
-                 + OUString(sProfileId, strlen(sProfileId), RTL_TEXTENCODING_UTF8)
+                 + OUString(sName, strlen(sName), RTL_TEXTENCODING_UTF8)
                  + "\","
                    "\"ph\":\"i\","
                    "\"ts\":"
@@ -106,7 +106,7 @@ void ProfileZone::addRecording()
     // Generate a single "Complete Event" (type X)
     TraceEvent::addRecording("{"
                              "\"name\":\""
-                             + OUString(m_sProfileId, strlen(m_sProfileId), RTL_TEXTENCODING_UTF8)
+                             + OUString(m_sName, strlen(m_sName), RTL_TEXTENCODING_UTF8)
                              + "\","
                                "\"ph\":\"X\","
                                "\"ts\":"
@@ -125,7 +125,7 @@ void ProfileZone::addRecording()
 void ProfileZone::stopConsole()
 {
     sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cerr << "comphelper::ProfileZone: " << m_sProfileId << " finished in "
+    std::cerr << "comphelper::ProfileZone: " << m_sName << " finished in "
               << nEndTime - m_nCreateTime << " ms" << std::endl;
 }
 
