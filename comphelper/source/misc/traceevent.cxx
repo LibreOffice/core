@@ -120,8 +120,6 @@ void ProfileZone::addRecording()
                              + OUString::number(osl_getThreadIdentifier(nullptr)) + "},");
 }
 
-void ProfileZone::startConsole() { m_nCreateTime = osl_getGlobalTimer(); }
-
 void ProfileZone::stopConsole()
 {
     sal_uInt32 nEndTime = osl_getGlobalTimer();
