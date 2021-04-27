@@ -2959,18 +2959,15 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
     tools::Long nFirstVisXPos = - pOutDev->GetMapMode().GetOrigin().X();
     tools::Long nFirstVisYPos = - pOutDev->GetMapMode().GetOrigin().Y();
 
-    const EditLine* pLine = nullptr;
-    Point aTmpPos;
-    Point aRedLineTmpPos;
     DBG_ASSERT( GetParaPortions().Count(), "No ParaPortion?!" );
     SvxFont aTmpFont( GetParaPortions()[0]->GetNode()->GetCharAttribs().GetDefFont() );
-    vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( pOutDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* const pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( pOutDev->GetExtOutDevData() );
 
     // In the case of rotated text is aStartPos considered TopLeft because
     // other information is missing, and since the whole object is shown anyway
     // un-scrolled.
     // The rectangle is infinite.
-    Point aOrigin( aStartPos );
+    const Point aOrigin( aStartPos );
     double nCos = 0.0, nSin = 0.0;
     if ( nOrientation )
     {
@@ -2984,14 +2981,14 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
     GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
     const bool bMetafileValid( pMtf != nullptr );
 
-    tools::Long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
+    const tools::Long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
 
 
     // Over all the paragraphs...
 
     for ( sal_Int32 n = 0; n < GetParaPortions().Count(); n++ )
     {
-        const ParaPortion* pPortion = GetParaPortions()[n];
+        const ParaPortion* const pPortion = GetParaPortions()[n];
         assert( pPortion && "NULL-Pointer in TokenList in Paint" );
         // if when typing idle formatting,  asynchronous Paint.
         // Invisible Portions may be invalid.
@@ -3001,19 +2998,19 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
         if ( pPDFExtOutDevData )
             pPDFExtOutDevData->BeginStructureElement( vcl::PDFWriter::Paragraph );
 
-        tools::Long nParaHeight = pPortion->GetHeight();
-        sal_Int32 nIndex = 0;
+        const tools::Long nParaHeight = pPortion->GetHeight();
         if ( pPortion->IsVisible() && (
                 ( !IsVertical() && ( ( aStartPos.Y() + nParaHeight ) > aClipRect.Top() ) ) ||
                 ( IsVertical() && IsTopToBottom() && ( ( aStartPos.X() - nParaHeight ) < aClipRect.Right() ) ) ||
                 ( IsVertical() && !IsTopToBottom() && ( ( aStartPos.X() + nParaHeight ) > aClipRect.Left() ) ) ) )
 
         {
+            Point aTmpPos;
 
             // Over the lines of the paragraph...
 
-            sal_Int32 nLines = pPortion->GetLines().Count();
-            sal_Int32 nLastLine = nLines-1;
+            const sal_Int32 nLines = pPortion->GetLines().Count();
+            const sal_Int32 nLastLine = nLines-1;
 
             bool bEndOfParagraphWritten(false);
 
@@ -3027,7 +3024,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                     aStartPos.AdjustX(pPortion->GetFirstLineOffset() );
             }
 
-            Point aParaStart( aStartPos );
+            const Point aParaStart( aStartPos );
 
             const SvxLineSpacingItem& rLSItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
             sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
@@ -3036,9 +3033,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 
             for ( sal_Int32 nLine = 0; nLine < nLines; nLine++ )
             {
-                pLine = &pPortion->GetLines()[nLine];
+                const EditLine* const pLine = &pPortion->GetLines()[nLine];
                 assert( pLine && "NULL-Pointer in the line iterator in UpdateViews" );
-                nIndex = pLine->GetStart();
+                sal_Int32 nIndex = pLine->GetStart();
                 aTmpPos = aStartPos;
                 if ( !IsVertical() )
                 {
@@ -3098,7 +3095,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                         DBG_ASSERT( pPortion->GetTextPortions().Count(), "Line without Textportion in Paint!" );
                         const TextPortion& rTextPortion = pPortion->GetTextPortions()[nPortion];
 
-                        tools::Long nPortionXOffset = GetPortionXOffset( pPortion, pLine, nPortion );
+                        const tools::Long nPortionXOffset = GetPortionXOffset( pPortion, pLine, nPortion );
                         if ( !IsVertical() )
                         {
                             aTmpPos.setX( aStartPos.X() + nPortionXOffset );
@@ -3394,7 +3391,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                 tools::Long nTxtWidth = rTextPortion.GetSize().Width();
 
                                 Point aOutPos( aTmpPos );
-                                aRedLineTmpPos = aTmpPos;
+                                Point aRedLineTmpPos = aTmpPos;
                                 // In RTL portions spell markup pos should be at the start of the
                                 // first chara as well. That is on the right end of the portion
                                 if (rTextPortion.IsRightToLeft())
