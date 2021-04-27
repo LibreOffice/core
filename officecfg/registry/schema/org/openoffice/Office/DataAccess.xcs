@@ -297,12 +297,12 @@
       <info>
         <desc>Specifies settings of the bibliography component</desc>
       </info>
-      <prop oor:name="BeamerHeight" oor:type="xs:int">
+      <prop oor:name="BeamerHeight" oor:type="xs:long">
         <info>
           <desc>Specifies the height of the database beamer</desc>
         </info>
       </prop>
-      <prop oor:name="ViewHeight" oor:type="xs:int">
+      <prop oor:name="ViewHeight" oor:type="xs:long">
         <info>
           <desc>Specifies the height of the view window</desc>
         </info>
