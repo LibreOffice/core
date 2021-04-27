@@ -119,10 +119,17 @@ public:
     /// this function, and returns true in that case too.
     static std::optional<bool> isAnchorTypeDifferent(SwFrameFormat* pShape);
 
-    /// Returns true if the given shape has a valid textframe.
+    /// Returns true if the given shape has a valid textframe, so it is a textbox.
     static bool isTextBoxShapeHasValidTextFrame(SwFrameFormat* pShape);
-    /// Returns true if the given shape has a valid textframe.
+    /// Returns true if the given shape has a valid textframe, so it is a textbox.
     static bool isTextBoxShapeHasValidTextFrame(css::uno::Reference<css::drawing::XShape> xShape);
+
+    /// Returns true on success. Sets the Zorder of the textframe one level higher than the given,
+    /// shape.
+    static bool DoTextBoxZOrderCorrection(SwFrameFormat* pShape);
+    /// Returns true on success. Sets the Zorder of the textframe one level higher than the given,
+    /// shape.
+    static bool DoTextBoxZOrderCorrection(css::uno::Reference<css::drawing::XShape> xShape);
 
     /**
      * If we have an associated TextFrame, then return that.
