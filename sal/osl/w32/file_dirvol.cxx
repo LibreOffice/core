@@ -247,7 +247,7 @@ struct Directory_Impl
 {
     UINT uType = 0;
     union {
-        HANDLE  hDirectory = 0;
+        HANDLE  hDirectory = nullptr;
         HANDLE  hEnumDrives;
     };
     OUString    m_sDirectoryPath;
