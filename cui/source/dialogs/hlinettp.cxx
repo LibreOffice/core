@@ -101,7 +101,7 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
 
         //do not show password and user in url
         if(!aURL.GetUser().isEmpty() || !aURL.GetPass().isEmpty() )
-            aURL.SetUserAndPass("", "");
+            aURL.SetUserAndPass(u"", u"");
     }
 
     // set URL-field

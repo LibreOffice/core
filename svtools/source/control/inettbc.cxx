@@ -608,8 +608,8 @@ void SvtMatchContext_Impl::doExecute()
                                 aMatch = aCurObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                             else
                             {
-                                aCurObj.SetMark( "" );
-                                aCurObj.SetParam( "" );
+                                aCurObj.SetMark( u"" );
+                                aCurObj.SetParam( u"" );
                                 aCurObj.SetURLPath( "" );
                                 aMatch = aCurObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                             }
@@ -627,8 +627,8 @@ void SvtMatchContext_Impl::doExecute()
                             aMatch = aCurObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                         else
                         {
-                            aCurObj.SetMark( "" );
-                            aCurObj.SetParam( "" );
+                            aCurObj.SetMark( u"" );
+                            aCurObj.SetParam( u"" );
                             aCurObj.SetURLPath( "" );
                             aMatch = aCurObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                         }

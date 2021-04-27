@@ -176,7 +176,7 @@ tools::SvRef<SotStorageStream> SdModule::GetOptionStream( std::u16string_view rO
         {
             INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
 
-            aURL.Append( "drawing.cfg" );
+            aURL.Append( u"drawing.cfg" );
 
             std::unique_ptr<SvStream> pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READWRITE );
 

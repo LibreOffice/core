@@ -54,7 +54,7 @@ void ScDataProvidersTest::testCSVImport()
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
-    createFileURL(u"test1.", "csv", aFileURL);
+    createFileURL(u"test1.", u"csv", aFileURL);
     sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", m_pDoc);
     aDataSource.setDBData(pDBData->GetName());
 
@@ -82,7 +82,7 @@ void ScDataProvidersTest::testDataLargerThanDB()
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
-    createFileURL(u"test1.", "csv", aFileURL);
+    createFileURL(u"test1.", u"csv", aFileURL);
     sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", m_pDoc);
     aDataSource.setDBData(pDBData->GetName());
 
@@ -110,7 +110,7 @@ void ScDataProvidersTest::testHTMLImport()
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
-    createFileURL(u"test1.", "html", aFileURL);
+    createFileURL(u"test1.", u"html", aFileURL);
     sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.html", m_pDoc);
     aDataSource.setID("//table");
     aDataSource.setDBData(pDBData->GetName());
@@ -160,7 +160,7 @@ void ScDataProvidersTest::testXMLImport()
     aRangeLink.maRowGroups.push_back("/bookstore/book");
     aParam.maRangeLinks.push_back(aRangeLink);
 
-    createFileURL(u"test1.", "xml", aFileURL);
+    createFileURL(u"test1.", u"xml", aFileURL);
     sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.xml", m_pDoc);
     aDataSource.setDBData("testDB");
     aDataSource.setXMLImportParam(aParam);

@@ -249,26 +249,26 @@ namespace tools_urlobj
         void testSetName() {
             {
                 INetURLObject obj("file:///");
-                bool ok = obj.setName("foo");
+                bool ok = obj.setName(u"foo");
                 CPPUNIT_ASSERT(!ok);
             }
             {
                 INetURLObject obj("file:///foo");
-                bool ok = obj.setName("bar");
+                bool ok = obj.setName(u"bar");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
                     OUString("file:///bar"), obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             }
             {
                 INetURLObject obj("file:///foo/");
-                bool ok = obj.setName("bar");
+                bool ok = obj.setName(u"bar");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
                     OUString("file:///bar/"), obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             }
             {
                 INetURLObject obj("file:///foo/bar");
-                bool ok = obj.setName("baz");
+                bool ok = obj.setName(u"baz");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
                     OUString("file:///foo/baz"),
@@ -276,7 +276,7 @@ namespace tools_urlobj
             }
             {
                 INetURLObject obj("file:///foo/bar/");
-                bool ok = obj.setName("baz");
+                bool ok = obj.setName(u"baz");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
                     OUString("file:///foo/baz/"),
@@ -287,7 +287,7 @@ namespace tools_urlobj
         void testSetExtension() {
             INetURLObject obj("file:///foo/bar.baz/");
             bool ok = obj.setExtension(
-                "other", INetURLObject::LAST_SEGMENT, false);
+                u"other", INetURLObject::LAST_SEGMENT, false);
             CPPUNIT_ASSERT(ok);
             CPPUNIT_ASSERT_EQUAL(
                 OUString("file:///foo/bar.baz/.other"),

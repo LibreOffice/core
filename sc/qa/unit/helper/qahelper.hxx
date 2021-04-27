@@ -186,7 +186,7 @@ public:
     explicit ScBootstrapFixture( const OUString& rsBaseString );
     virtual ~ScBootstrapFixture() override;
 
-    void createFileURL(std::u16string_view aFileBase, const OUString& aFileExtension, OUString& rFilePath);
+    void createFileURL(std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath);
     void createCSVPath(const char* aFileBase, OUString& rCSVPath);
     void createCSVPath(std::u16string_view aFileBase, OUString& rCSVPath);
 

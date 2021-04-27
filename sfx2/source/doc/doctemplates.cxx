@@ -291,15 +291,15 @@ public:
     bool                        addTemplate( const OUString& rGroupName,
                                              const OUString& rTemplateName,
                                              const OUString& rSourceURL );
-    bool                        removeTemplate( const OUString& rGroupName,
-                                                const OUString& rTemplateName );
-    bool                        renameTemplate( const OUString& rGroupName,
-                                                const OUString& rOldName,
+    bool                        removeTemplate( std::u16string_view rGroupName,
+                                                std::u16string_view rTemplateName );
+    bool                        renameTemplate( std::u16string_view rGroupName,
+                                                std::u16string_view rOldName,
                                                 const OUString& rNewName );
 
     bool                        addGroup( const OUString& rGroupName );
-    bool                        removeGroup( const OUString& rGroupName );
-    bool                        renameGroup( const OUString& rOldName,
+    bool                        removeGroup( std::u16string_view rGroupName );
+    bool                        renameGroup( std::u16string_view rOldName,
                                              const OUString& rNewName );
 
     void                        update();
@@ -1197,7 +1197,7 @@ void SfxDocTplService_Impl::doUpdate()
 std::vector< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplateDir_Impl( const OUString& aUserPath )
 {
     INetURLObject aLocObj( aUserPath );
-    aLocObj.insertName( "groupuinames.xml", false,
+    aLocObj.insertName( u"groupuinames.xml", false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
     Content aLocContent;
@@ -1464,7 +1464,7 @@ bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
 }
 
 
-bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
+bool SfxDocTplService_Impl::removeGroup( std::u16string_view rGroupName )
 {
     // remove all the elements that have the prefix aTargetURL
     // if the group does not have other elements remove it
@@ -1570,7 +1570,7 @@ bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 }
 
 
-bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
+bool SfxDocTplService_Impl::renameGroup( std::u16string_view rOldName,
                                              const OUString& rNewName )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -2005,8 +2005,8 @@ OUString SfxDocTplService_Impl::findParentTemplateDir(const OUString& rURL) cons
     return OUString();
 }
 
-bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
-                                                const OUString& rTemplateName )
+bool SfxDocTplService_Impl::removeTemplate( std::u16string_view rGroupName,
+                                                std::u16string_view rTemplateName )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -2054,8 +2054,8 @@ bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
 }
 
 
-bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
-                                                const OUString& rOldName,
+bool SfxDocTplService_Impl::renameTemplate( std::u16string_view rGroupName,
+                                                std::u16string_view rOldName,
                                                 const OUString& rNewName )
 {
     ::osl::MutexGuard aGuard( maMutex );

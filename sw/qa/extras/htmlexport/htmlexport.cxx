@@ -280,8 +280,8 @@ OUString SwHtmlDomExportTest::GetOlePath()
     OUString aOleSuffix(".ole");
     CPPUNIT_ASSERT(aOlePath.endsWith(aOleSuffix));
     INetURLObject aUrl(maTempFile.GetURL());
-    aUrl.setBase(aOlePath.copy(0, aOlePath.getLength() - aOleSuffix.getLength()));
-    aUrl.setExtension("ole");
+    aUrl.setBase(aOlePath.subView(0, aOlePath.getLength() - aOleSuffix.getLength()));
+    aUrl.setExtension(u"ole");
     return aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
 
@@ -853,8 +853,8 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
         OUString aOleSuffix(".ole");
         CPPUNIT_ASSERT(aOlePath.endsWith(aOleSuffix));
         INetURLObject aUrl(maTempFile.GetURL());
-        aUrl.setBase(aOlePath.copy(0, aOlePath.getLength() - aOleSuffix.getLength()));
-        aUrl.setExtension("ole");
+        aUrl.setBase(aOlePath.subView(0, aOlePath.getLength() - aOleSuffix.getLength()));
+        aUrl.setExtension(u"ole");
         OUString aOleUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
         // Search for \result in the RTF data.
