@@ -28,7 +28,6 @@ class COMPHELPER_DLLPUBLIC TraceEvent
 {
 protected:
     static std::atomic<bool> s_bRecording; // true during recording
-    static int s_nNesting;
 
     static void addRecording(const OUString& sObject);
 
