@@ -34,6 +34,11 @@ protected:
 
 public:
     static void addInstantEvent(const char* sProfileId);
+
+    static void startRecording();
+    static void stopRecording();
+
+    static css::uno::Sequence<OUString> getRecordingAndClear();
 };
 
 } // namespace comphelper
