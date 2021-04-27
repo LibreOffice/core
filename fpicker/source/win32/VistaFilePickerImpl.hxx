@@ -127,7 +127,7 @@ class VistaFilePickerImpl : public  IVistaFilePickerInternalNotify
         // ctor/dtor - nothing special
 
                  VistaFilePickerImpl();
-        ~VistaFilePickerImpl();
+        virtual ~VistaFilePickerImpl();
 
 
         // RequestHandler
