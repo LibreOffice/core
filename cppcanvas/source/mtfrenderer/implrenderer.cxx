@@ -161,13 +161,13 @@ namespace
         // interpret dash info only if explicitly enabled as
         // style
         const ::basegfx::B2DSize aDistance( rLineInfo.GetDistance(), 0 );
-        const double nDistance( (rState.mapModeTransform * aDistance).getX() );
+        const double nDistance( (rState.mapModeTransform * aDistance).getLength() );
 
         const ::basegfx::B2DSize aDashLen( rLineInfo.GetDashLen(), 0 );
-        const double nDashLen( (rState.mapModeTransform * aDashLen).getX() );
+        const double nDashLen( (rState.mapModeTransform * aDashLen).getLength() );
 
         const ::basegfx::B2DSize aDotLen( rLineInfo.GetDotLen(), 0 );
-        const double nDotLen( (rState.mapModeTransform * aDotLen).getX() );
+        const double nDotLen( (rState.mapModeTransform * aDotLen).getLength() );
 
         const sal_Int32 nNumArryEntries( 2*rLineInfo.GetDashCount() +
                                          2*rLineInfo.GetDotCount() );

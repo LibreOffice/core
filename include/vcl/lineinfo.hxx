@@ -32,10 +32,10 @@ namespace basegfx { class B2DPolyPolygon; }
 
 struct ImplLineInfo
 {
-    sal_Int32               mnWidth;
-    sal_Int32               mnDashLen;
-    sal_Int32               mnDotLen;
-    sal_Int32               mnDistance;
+    double                  mnWidth;
+    double                  mnDashLen;
+    double                  mnDotLen;
+    double                  mnDistance;
 
     basegfx::B2DLineJoin    meLineJoin;
     css::drawing::LineCap   meLineCap;
@@ -53,7 +53,7 @@ struct ImplLineInfo
 class VCL_DLLPUBLIC LineInfo
 {
 public:
-                    LineInfo( LineStyle eLineStyle = LineStyle::Solid, sal_Int32 nWidth = 0 );
+                    LineInfo( LineStyle eLineStyle = LineStyle::Solid, double nWidth = 0 );
                     LineInfo( const LineInfo& rLineInfo );
                     LineInfo( LineInfo&& rLineInfo );
                     ~LineInfo();
@@ -66,23 +66,23 @@ public:
     void            SetStyle( LineStyle eStyle );
     LineStyle       GetStyle() const { return mpImplLineInfo->meStyle; }
 
-    void            SetWidth( sal_Int32 nWidth );
-    sal_Int32       GetWidth() const { return mpImplLineInfo->mnWidth; }
+    void            SetWidth( double nWidth );
+    double          GetWidth() const { return mpImplLineInfo->mnWidth; }
 
     void            SetDashCount( sal_uInt16 nDashCount );
     sal_uInt16      GetDashCount() const { return mpImplLineInfo->mnDashCount; }
 
-    void            SetDashLen( sal_Int32 nDashLen );
-    sal_Int32       GetDashLen() const { return mpImplLineInfo->mnDashLen; }
+    void            SetDashLen( double nDashLen );
+    double          GetDashLen() const { return mpImplLineInfo->mnDashLen; }
 
     void            SetDotCount( sal_uInt16 nDotCount );
     sal_uInt16      GetDotCount() const { return mpImplLineInfo->mnDotCount; }
 
-    void            SetDotLen( sal_Int32 nDotLen );
-    sal_Int32       GetDotLen() const { return mpImplLineInfo->mnDotLen; }
+    void            SetDotLen( double nDotLen );
+    double          GetDotLen() const { return mpImplLineInfo->mnDotLen; }
 
-    void            SetDistance( sal_Int32 nDistance );
-    sal_Int32       GetDistance() const { return mpImplLineInfo->mnDistance; }
+    void            SetDistance( double nDistance );
+    double          GetDistance() const { return mpImplLineInfo->mnDistance; }
 
     void SetLineJoin(basegfx::B2DLineJoin eLineJoin);
     basegfx::B2DLineJoin GetLineJoin() const { return mpImplLineInfo->meLineJoin; }
