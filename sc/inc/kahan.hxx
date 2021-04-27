@@ -30,7 +30,7 @@ public:
 
 public:
     /**
-      * Adds a value to the sum using Kahan sumation.
+      * Adds a value to the sum using Kahan summation.
       * @param x_i
       */
     void add(double x_i)
@@ -44,7 +44,7 @@ public:
     }
 
     /**
-      * Adds a value to the sum using Kahan sumation.
+      * Adds a value to the sum using Kahan summation.
       * @param fSum
       */
     inline void add(const KahanSum& fSum)
@@ -81,7 +81,7 @@ public:
 
     /**
       * In some parts of the code of interpr_.cxx this may be used for
-      * productory instead of sum. This operator shall be used for that task.
+      * product instead of sum. This operator shall be used for that task.
       */
     constexpr void operator*=(double fTimes)
     {
