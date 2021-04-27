@@ -1804,7 +1804,8 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const HtmlImportInfo& rInfo
     mbPreFormText( bPreFormText ),
     mbRowOn( false ),
     mbDataOn( false ),
-    mbPushEmptyLine( false )
+    mbPushEmptyLine( false ),
+    mbCaptionOn ( false )
 {
     if( mbPreFormText )
     {
@@ -1851,7 +1852,8 @@ ScHTMLTable::ScHTMLTable(
     mbPreFormText( false ),
     mbRowOn( false ),
     mbDataOn( false ),
-    mbPushEmptyLine( false )
+    mbPushEmptyLine( false ),
+    mbCaptionOn ( false )
 {
     // open the first "cell" of the document
     ImplRowOn();
@@ -1901,6 +1903,9 @@ void ScHTMLTable::PutText( const HtmlImportInfo& rInfo )
             mxCurrEntry->AdjustStart( rInfo );
         else
             mxCurrEntry->AdjustEnd( rInfo );
+        if (mbCaptionOn)
+            maCaption.append(rInfo.aText);
+
     }
 }
 
@@ -1948,6 +1953,20 @@ ScHTMLTable* ScHTMLTable::TableOn( const HtmlImportInfo& rInfo )
 ScHTMLTable* ScHTMLTable::TableOff( const HtmlImportInfo& rInfo )
 {
     return mbPreFormText ? this : CloseTable( rInfo );
+}
+
+void ScHTMLTable::CaptionOn()
+{
+    mbCaptionOn = true;
+    maCaption.setLength(0);
+}
+
+void ScHTMLTable::CaptionOff()
+{
+    if( !mbCaptionOn )
+        return;
+    maCaption = maCaption.makeStringAndClear().trim();
+    mbCaptionOn = false;
 }
 
 ScHTMLTable* ScHTMLTable::PreOn( const HtmlImportInfo& rInfo )
@@ -2823,6 +2842,8 @@ void ScHTMLQueryParser::ProcessToken( const HtmlImportInfo& rInfo )
 // --- table handling ---
         case HtmlTokenId::TABLE_ON:         TableOn( rInfo );               break;  // <table>
         case HtmlTokenId::TABLE_OFF:        TableOff( rInfo );              break;  // </table>
+        case HtmlTokenId::CAPTION_ON:       mpCurrTable->CaptionOn();       break;  // <caption>
+        case HtmlTokenId::CAPTION_OFF:      mpCurrTable->CaptionOff();      break;  // </caption>
         case HtmlTokenId::TABLEROW_ON:      mpCurrTable->RowOn( rInfo );    break;  // <tr>
         case HtmlTokenId::TABLEROW_OFF:     mpCurrTable->RowOff( rInfo );   break;  // </tr>
         case HtmlTokenId::TABLEHEADER_ON:                                           // <th>
