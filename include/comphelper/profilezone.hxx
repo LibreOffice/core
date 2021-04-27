@@ -20,11 +20,14 @@ namespace comphelper
 {
 class COMPHELPER_DLLPUBLIC ProfileZone : public TraceEvent
 {
+    static int s_nNesting; // level of nested zones.
+
     const char* m_sProfileId;
     long long m_nCreateTime;
     bool m_bConsole;
     void stopConsole();
     int m_nPid;
+    int m_nNesting;
 
     void addRecording();
 
@@ -54,32 +57,31 @@ public:
             osl_getSystemTime(&systemTime);
             m_nCreateTime
                 = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec / 1000;
-        }
-        else
-            m_nCreateTime = 0;
 
-        if (s_bRecording)
-        {
             oslProcessInfo aProcessInfo;
             aProcessInfo.Size = sizeof(oslProcessInfo);
             if (osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &aProcessInfo)
                 == osl_Process_E_None)
                 m_nPid = aProcessInfo.Ident;
 
-            s_nNesting++;
+            m_nNesting = s_nNesting++;
         }
+        else
+            m_nCreateTime = 0;
     }
 
     ~ProfileZone()
     {
-        if (s_bRecording)
+        if (m_nCreateTime > 0)
         {
             s_nNesting--;
-            addRecording();
-        }
-        if (m_bConsole)
-        {
-            stopConsole();
+            assert(m_nNesting == s_nNesting);
+
+            if (s_bRecording)
+                addRecording();
+
+            if (m_bConsole)
+                stopConsole();
         }
     }
 
