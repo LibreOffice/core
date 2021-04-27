@@ -18,6 +18,11 @@ sub check_whitespaces($)
     my $src_limited = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml|xsl|py";
     my $src_full = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|mk|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml|xsl|py";
 
+    my %modules = (basctl=>'basctl', chart2=>'chart', cui=>'cui', dbaccess=>'dba', desktop=>'dkt', editeng=>'editeng',
+                   extensions=>'pcr', filter=>'flt', formula=>'"for"', fpicker=>'fps', framework=>'fwk', reportdesign=>'rpt',
+                   sc=>'sc', sd=>'sd', sfx2=>'sfx', starmath=>'sm', svtools=>'svt', svx=>'svx', sw=>'sw', uui=>'uui',
+                   vcl=>'vcl', writerperfect=>'wpt', xmlsecurity=>'xsc');
+
     my $found_bad = 0;
     my $filename;
     my $reported_filename = "";
@@ -136,6 +141,15 @@ sub check_whitespaces($)
             if ((/<interface/) and not(/domain=/))
             {
                 bad_line(".ui file without translation domain", $_, "ui");
+            }
+            if (/<interface domain=/)
+            {
+                foreach my $key (keys %modules) {
+                    if ((rindex($filename, $key, 0) == 0) and not (/$modules{$key}/))
+                    {
+                        bad_line("interface domain should be '$modules{$key}'", $_, "ui");
+                    }
+                }
             }
         }
     }
