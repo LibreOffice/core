@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <optional>
 #include <stack>
+#include <string_view>
 
 #include <systools/win32/uwinapi.h>
 
@@ -723,7 +724,7 @@ static std::optional<OUString> osl_decodeURL_(const OString& sUTF8)
                          : std::optional<OUString>();
 }
 
-static OUString osl_encodeURL_(const OUString& sURL)
+static OUString osl_encodeURL_(std::u16string_view sURL)
 {
     /* Encode non ascii characters within the URL */
 
