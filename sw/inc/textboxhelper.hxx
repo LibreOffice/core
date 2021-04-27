@@ -124,6 +124,13 @@ public:
     /// Returns true if the given shape has a valid textframe.
     static bool isTextBoxShapeHasValidTextFrame(css::uno::Reference<css::drawing::XShape> xShape);
 
+    /// Returns true on success. Sets the Zorder of the textframe one level higher than the given,
+    /// shape.
+    static bool DoTextBoxZOrderCorrection(SwFrameFormat* pShape);
+    /// Returns true on success. Sets the Zorder of the textframe one level higher than the given,
+    /// shape.
+    static bool DoTextBoxZOrderCorrection(css::uno::Reference<css::drawing::XShape> xShape);
+
     /**
      * If we have an associated TextFrame, then return that.
      *

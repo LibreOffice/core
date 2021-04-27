@@ -1056,6 +1056,18 @@ void SwFEShell::SelectionToTop( bool bTop )
     else
         Imp()->GetDrawView()->MovMarkedToTop();
     ::lcl_NotifyNeighbours( &rMrkList );
+    for (size_t i = 0; i < rMrkList.GetMarkCount(); i++)
+        if (auto pObj = rMrkList.GetMark(i)->GetMarkedSdrObj())
+            if (auto pFormat = FindFrameFormat(pObj))
+            {
+                if (!SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(pFormat))
+                    continue;
+                if (auto pDrwModel
+                    = pFormat->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel())
+                    if (auto pPage = pDrwModel->GetPage(0))
+                        pPage->SetObjectOrdNum(pObj->GetOrdNum(), pObj->GetOrdNum() + 2);
+                SwTextBoxHelper::DoTextBoxZOrderCorrection(pFormat);
+            }
     GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
 }
@@ -1076,6 +1088,10 @@ void SwFEShell::SelectionToBottom( bool bBottom )
     else
         Imp()->GetDrawView()->MovMarkedToBtm();
     ::lcl_NotifyNeighbours( &rMrkList );
+    for(size_t i = 0; i < rMrkList.GetMarkCount(); i++)
+        if (auto pObj = rMrkList.GetMark(i)->GetMarkedSdrObj())
+            if (auto pFormat = FindFrameFormat(pObj))
+                SwTextBoxHelper::DoTextBoxZOrderCorrection(pFormat);
     GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
 }
@@ -1139,6 +1155,8 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
                 SvxOpaqueItem aOpa( pFormat->GetOpaque() );
                 aOpa.SetValue(  nLayerId == rIDDMA.GetHellId() );
                 pFormat->SetFormatAttr( aOpa );
+                if (auto pTextBx = dynamic_cast<SwFrameFormat*>(FindFrameFormat(pObj)))
+                    SwTextBoxHelper::DoTextBoxZOrderCorrection(pTextBx);
             }
         }
     }
