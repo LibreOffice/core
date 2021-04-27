@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a0ac5d61_9840c798",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-27T09:51:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ef43099_78bde907",
+      "revId": "0055f0b2f8df8b57493a08dbe7519a7944f2da83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3720a062_07e646a5",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 10
@@ -30,6 +48,30 @@
       "writtenOn": "2021-04-26T21:33:23Z",
       "side": 1,
       "message": "While at it and eliminating the mfFirst handling (corresponding to the first fMem non-null value) from ScMatrix::KahanIterateResult we should also rename mfRest to proper mfSum (or rather maSum because it\u0027s a KahanSum object instance) to make things less confusing.",
+      "range": {
+        "startLine": 401,
+        "startChar": 0,
+        "endLine": 401,
+        "endChar": 1
+      },
+      "revId": "0055f0b2f8df8b57493a08dbe7519a7944f2da83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "280765e0_9ff2ec91",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-27T09:51:37Z",
+      "side": 1,
+      "message": "Maybe a name change is required, but can\u0027t think of anything better.\nKahanIterateResult is used for both, sum and product.\nSo can\u0027t rename it after the sum.",
+      "parentUuid": "3720a062_07e646a5",
       "range": {
         "startLine": 401,
         "startChar": 0,
