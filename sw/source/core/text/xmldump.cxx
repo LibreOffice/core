@@ -592,7 +592,8 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
     (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
 
     (void)xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
-    GetObjBoundRect().dumpAsXmlAttributes(writer);
+    // don't call GetObjBoundRect(), it modifies the layout
+    SwRect(GetDrawObj()->GetLastBoundRect()).dumpAsXmlAttributes(writer);
     (void)xmlTextWriterEndElement( writer );
 
     if (const SdrObject* pObject = GetDrawObj())
