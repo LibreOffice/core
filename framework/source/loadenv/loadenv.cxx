@@ -251,7 +251,8 @@ void LoadEnv::startLoading(const OUString& sURL, const uno::Sequence<beans::Prop
     m_bLoaded = false;
 
     OUString aRealURL;
-    if (!tools::IsMappedWebDAVPath(sURL, &aRealURL))
+    if (!officecfg::Office::Common::Load::DetectWebDAVRedirection::get()
+        || !tools::IsMappedWebDAVPath(sURL, &aRealURL))
         aRealURL = sURL;
 
     // try to find out, if it's really a content, which can be loaded or must be "handled"
