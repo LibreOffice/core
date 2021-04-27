@@ -1184,7 +1184,7 @@ void VistaFilePickerImpl::impl_sta_EnableControl(Request& rRequest)
 void VistaFilePickerImpl::impl_SetDefaultExtension( const OUString& currentFilter )
 {
    TFileDialog iDialog = impl_getBaseDialogInterface();
-    if (!iDialog.is())
+   if (!iDialog.is())
         return;
 
    if (currentFilter.getLength())
