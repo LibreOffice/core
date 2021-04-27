@@ -17,9 +17,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/traceevent.hxx>
 
-#include <osl/time.h>
-#include <osl/thread.h>
-
 namespace comphelper
 {
 #ifdef DBG_UTIL
@@ -27,27 +24,25 @@ std::atomic<bool> TraceEvent::s_bRecording = (getenv("TRACE_EVENT_RECORDING") !=
 #else
 std::atomic<bool> TraceEvent::s_bRecording = false;
 #endif
+int AsyncEvent::s_nIdCounter = 0;
 int ProfileZone::s_nNesting = 0;
 
 namespace
 {
 std::vector<OUString> g_aRecording; // recorded data
-::osl::Mutex g_aMutex;
+osl::Mutex g_aMutex;
 }
 
 void TraceEvent::addRecording(const OUString& sObject)
 {
-    ::osl::MutexGuard aGuard(g_aMutex);
+    osl::MutexGuard aGuard(g_aMutex);
 
     g_aRecording.emplace_back(sObject);
 }
 
 void TraceEvent::addInstantEvent(const char* sName)
 {
-    TimeValue aSystemTime;
-    osl_getSystemTime(&aSystemTime);
-    long long nNow
-        = static_cast<long long>(aSystemTime.Seconds) * 1000000 + aSystemTime.Nanosec / 1000;
+    long long nNow = getNow();
 
     int nPid = 0;
     oslProcessInfo aProcessInfo;
@@ -72,18 +67,18 @@ void TraceEvent::addInstantEvent(const char* sName)
 
 void TraceEvent::startRecording()
 {
-    ::osl::MutexGuard aGuard(g_aMutex);
+    osl::MutexGuard aGuard(g_aMutex);
     s_bRecording = true;
 }
 
 void TraceEvent::stopRecording() { s_bRecording = false; }
 
-css::uno::Sequence<OUString> TraceEvent::getRecordingAndClear()
+std::vector<OUString> TraceEvent::getEventVectorAndClear()
 {
     bool bRecording;
     std::vector<OUString> aRecording;
     {
-        ::osl::MutexGuard aGuard(g_aMutex);
+        osl::MutexGuard aGuard(g_aMutex);
         bRecording = s_bRecording;
         stopRecording();
         aRecording.swap(g_aRecording);
@@ -91,17 +86,19 @@ css::uno::Sequence<OUString> TraceEvent::getRecordingAndClear()
     // reset start time and nesting level
     if (bRecording)
         startRecording();
-    return ::comphelper::containerToSequence(aRecording);
+    return aRecording;
+}
+
+css::uno::Sequence<OUString> TraceEvent::getRecordingAndClear()
+{
+    return comphelper::containerToSequence(getEventVectorAndClear());
 }
 
 void ProfileZone::addRecording()
 {
     assert(s_bRecording);
 
-    TimeValue aSystemTime;
-    osl_getSystemTime(&aSystemTime);
-    long long nNow
-        = static_cast<long long>(aSystemTime.Seconds) * 1000000 + aSystemTime.Nanosec / 1000;
+    long long nNow = getNow();
 
     // Generate a single "Complete Event" (type X)
     TraceEvent::addRecording("{"
