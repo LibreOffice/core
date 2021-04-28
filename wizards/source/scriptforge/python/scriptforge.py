@@ -57,6 +57,7 @@
 import uno
 
 import datetime
+import time
 import os
 
 
@@ -318,11 +319,8 @@ class ScriptForge(object, metaclass = _Singleton):
             if isinstance(returntuple[cstValue], uno.ByteSequence):
                 return ()
         elif returntuple[cstVarType] == ScriptForge.V_DATE:
-            dat = None
-            try:    # Anticipate fromisoformat('00:00:00') and alike
-                dat = datetime.datetime.fromisoformat(returntuple[cstValue])
-            finally:
-                return dat
+            dat = SFScriptForge.SF_Basic.CDateFromUnoDateTime(returntuple[cstValue])
+            return dat
         else:         # All other scalar values
             pass
         return returntuple[cstValue]
@@ -562,9 +560,13 @@ class SFServices(object):
             Set the given property to a new value in the Basic world
             """
         if self.serviceimplementation == 'basic':
+            flag = self.vbLet
             if isinstance(value, datetime.datetime):
-                value = value.isoformat()
-            return self.EXEC(self.objectreference, self.vbLet + self.flgDateArg, propertyname, value)
+                value = SFScriptForge.SF_Basic.CDateToUnoDateTime(value)
+                flag += self.flgDateArg
+            if repr(type(value)) == "<class 'pyuno'>":
+                flag += self.flgUno
+            return self.EXEC(self.objectreference, flag, propertyname, value)
 
 
 # #####################################################################################################################
@@ -622,6 +624,61 @@ class SFScriptForge:
         MB_OK, MB_OKCANCEL, MB_RETRYCANCEL, MB_YESNO, MB_YESNOCANCEL = 0, 1, 5, 4, 3
         IDABORT, IDCANCEL, IDIGNORE, IDNO, IDOK, IDRETRY, IDYES = 3, 2, 5, 7, 1, 4, 6
 
+        @staticmethod
+        def CDateFromUnoDateTime(unodate):
+            """
+                Converts a UNO date/time representation to a datetime.datetime Python native object
+                :param unodate: com.sun.star.util.DateTime, com.sun.star.util.Date or com.sun.star.util.Time
+                :return: the equivalent datetime.datetime
+                """
+            date = datetime.datetime(1899, 12, 30, 0, 0, 0, 0)      # Idem as Basic builtin TimeSeria() function
+            datetype = repr(type(unodate))
+            if 'com.sun.star.util.DateTime' in datetype:
+                if 1900 <= unodate.Year <= datetime.MAXYEAR:
+                    date = datetime.datetime(unodate.Year, unodate.Month, unodate.Day, unodate.Hours,
+                                             unodate.Minutes, unodate.Seconds, int(unodate.NanoSeconds / 1000))
+            elif 'com.sun.star.util.Date' in datetype:
+                if 1900 <= unodate.Year <= datetime.MAXYEAR:
+                    date = datetime.datetime(unodate.Year, unodate.Month, unodate.Day)
+            elif 'com.sun.star.util.Time' in datetype:
+                date = datetime.datetime(unodate.Hours, unodate.Minutes, unodate.Seconds,
+                                         int(unodate.NanoSeconds / 1000))
+            else:
+                return unodate  # Not recognized as a UNO date structure
+            return date
+
+        @staticmethod
+        def CDateToUnoDateTime(date):
+            """
+                Converts a date representation into the ccom.sun.star.util.DateTime date format
+                Acceptable boundaries: year >= 1900 and <= 32767
+                :param date: datetime.datetime, datetime.date, datetime.time, float (time.time) or time.struct_time
+                :return: a com.sun.star.util.DateTime
+                """
+            unodate = uno.createUnoStruct('com.sun.star.util.DateTime')
+            unodate.Year, unodate.Month, unodate.Day, unodate.Hours, unodate.Minutes, unodate.Seconds, \
+                unodate.NanoSeconds, unodate.IsUTC = \
+                1899, 12, 30, 0, 0, 0, 0, False    # Identical to Basic TimeSerial() function
+
+            if isinstance(date, float):
+                date = time.localtime(date)
+            if isinstance(date, time.struct_time):
+                if 1900 <= date[0] <= 32767:
+                    unodate.Year, unodate.Month, unodate.Day, unodate.Hours, unodate.Minutes, unodate.Seconds =\
+                        date[0:6]
+                else:   # Copy only the time related part
+                    unodate.Hours, unodate.Minutes, unodate.Seconds = date[3:3]
+            elif isinstance(date, (datetime.datetime, datetime.date, datetime.time)):
+                if isinstance(date, (datetime.datetime, datetime.date)):
+                    if 1900 <= date.year <= 32767:
+                        unodate.Year, unodate.Month, unodate.Day = date.year, date.month, date.day
+                if isinstance(date, (datetime.datetime, datetime.time)):
+                    unodate.Hours, unodate.Minutes, unodate.Seconds, unodate.NanoSeconds = \
+                        date.hour, date.minute, date.second, date.microsecond * 1000
+            else:
+                return date     # Not recognized as a date
+            return unodate
+
         @classmethod
         def ConvertFromUrl(cls, url):
             return cls.SIMPLEEXEC(cls.module + '.PyConvertFromUrl', url)
@@ -637,22 +694,22 @@ class SFScriptForge:
         @classmethod
         def DateAdd(cls, interval, number, date):
             if isinstance(date, datetime.datetime):
-                date = date.isoformat()
+                date = cls.CDateToUnoDateTime(date)
             dateadd = cls.SIMPLEEXEC(cls.module + '.PyDateAdd', interval, number, date)
-            return datetime.datetime.fromisoformat(dateadd)
+            return cls.CDateFromUnoDateTime(dateadd)
 
         @classmethod
         def DateDiff(cls, interval, date1, date2, firstdayofweek = 1, firstweekofyear = 1):
             if isinstance(date1, datetime.datetime):
-                date1 = date1.isoformat()
+                date1 = cls.CDateToUnoDateTime(date1)
             if isinstance(date2, datetime.datetime):
-                date2 = date2.isoformat()
+                date2 = cls.CDateToUnoDateTime(date2)
             return cls.SIMPLEEXEC(cls.module + '.PyDateDiff', interval, date1, date2, firstdayofweek, firstweekofyear)
 
         @classmethod
         def DatePart(cls, interval, date, firstdayofweek = 1, firstweekofyear = 1):
             if isinstance(date, datetime.datetime):
-                date = date.isoformat()
+                date = cls.CDateToUnoDateTime(date)
             return cls.SIMPLEEXEC(cls.module + '.PyDatePart', interval, date, firstdayofweek, firstweekofyear)
 
         @classmethod
@@ -660,12 +717,12 @@ class SFScriptForge:
             if isinstance(string, datetime.datetime):
                 string = string.isoformat()
             datevalue = cls.SIMPLEEXEC(cls.module + '.PyDateValue', string)
-            return datetime.datetime.fromisoformat(datevalue)
+            return cls.CDateFromUnoDateTime(datevalue)
 
         @classmethod
         def Format(cls, expression, format = ''):
             if isinstance(expression, datetime.datetime):
-                expression = expression.isoformat()
+                expression = cls.CDateToUnoDateTime(expression)
             return cls.SIMPLEEXEC(cls.module + '.PyFormat', expression, format)
 
         @classmethod
@@ -770,30 +827,6 @@ class SFScriptForge:
 
                 The resulting array is empty when the dictionary is empty.
                 """
-            def CDateToUno(date):
-                """
-                Converts a datetime object into the corresponding com.sun.star.util.x date format
-                :param date: datetime.datetime, date or time
-                :return: a com.sun.star.util.DateTime, Date or Time
-                """
-                pvdate = None
-                if isinstance(date, datetime.datetime):
-                    pvdate = uno.createUnoStruct('com.sun.star.util.DateTime')
-                elif isinstance(date, datetime.date):
-                    pvdate = uno.createUnoStruct('com.sun.star.util.Date')
-                elif isinstance(date, datetime.time):
-                    pvdate = uno.createUnoStruct('com.sun.star.util.Time')
-                if isinstance(date, (datetime.datetime, datetime.date)):
-                    pvdate.Year = date.year
-                    pvdate.Month = date.month
-                    pvdate.Day = date.day
-                if isinstance(date, (datetime.datetime, datetime.time)):
-                    pvdate.Hours = date.hour
-                    pvdate.Minutes = date.minute
-                    pvdate.Seconds = date.second
-                    pvdate.NanoSeconds = date.microsecond
-                return pvdate
-
             result = []
             for key in iter(self):
                 value = self[key]
@@ -809,7 +842,7 @@ class SFScriptForge:
                                 value[i] = None
                     item = value
                 elif isinstance(value, (datetime.datetime, datetime.date, datetime.time)):
-                    item = CDateToUno(value)
+                    item = SFScriptForge.SF_Basic.CDateToUnoDateTime(value)
                 pv = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
                 pv.Name = key
                 pv.Value = item
@@ -820,6 +853,7 @@ class SFScriptForge:
             """
                 nserts the contents of an array of PropertyValue objects into the current dictionary.
                 PropertyValue Names are used as keys in the dictionary, whereas Values contain the corresponding values.
+                Date-type values are converted to datetime.datetime instances.
                 :param propertyvalues: a list.tuple containing com.sun.star.beans.PropertyValue objects
                 :param overwrite: When True, entries with same name may exist in the dictionary and their values
                     are overwritten. When False (default), repeated keys are not overwritten.
@@ -832,11 +866,11 @@ class SFScriptForge:
                     item = pv.Value
                     if 'com.sun.star.util.DateTime' in repr(type(item)):
                         item = datetime.datetime(item.Year, item.Month, item.Day,
-                                                 item.Hours, item.Minutes, item.Seconds, item.NanoSeconds)
+                                                 item.Hours, item.Minutes, item.Seconds, int(item.NanoSeconds / 1000))
                     elif 'com.sun.star.util.Date' in repr(type(item)):
                         item = datetime.datetime(item.Year, item.Month, item.Day)
                     elif 'com.sun.star.util.Time' in repr(type(item)):
-                        item = datetime.datetime(item.Hours, item.Minutes, item.Seconds, item.NanoSeconds)
+                        item = datetime.datetime(item.Hours, item.Minutes, item.Seconds, int(item.NanoSeconds / 1000))
                     result.append((key, item))
             self.update(result)
             return True

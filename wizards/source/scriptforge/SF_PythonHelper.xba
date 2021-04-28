@@ -177,11 +177,15 @@ Check:
 	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
 
 Try:
-	vDate = SF_Utils._CStrToDate(DateArg)
+	If VarType(DateArg) = V_OBJECT Then
+		vDate = CDateFromUnoDateTime(DateArg)
+	Else
+		vDate = SF_Utils._CStrToDate(DateArg)
+	End If
 	vNewDate = DateAdd(Add, Count, vDate)
 
 Finally:
-	If VarType(vNewDate) = V_DATE Then PyDateAdd = SF_Utils._CDateToIso(vNewDate) Else PyDateAdd = vNewDate
+	If VarType(vNewDate) = V_DATE Then PyDateAdd = CDateToUnoDateTime(vNewDate) Else PyDateAdd = vNewDate
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
@@ -219,8 +223,16 @@ Check:
 	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
 
 Try:
-	vDate1 = SF_Utils._CStrToDate(Date1)
-	vDate2 = SF_Utils._CStrToDate(Date2)
+	If VarType(Date1) = V_OBJECT Then
+		vDate1 = CDateFromUnoDateTime(Date1)
+	Else
+		vDate1 = SF_Utils._CStrToDate(Date1)
+	End If
+	If VarType(Date2) = V_OBJECT Then
+		vDate2 = CDateFromUnoDateTime(Date2)
+	Else
+		vDate2 = SF_Utils._CStrToDate(Date2)
+	End If
 	lDiff = DateDiff(Add, vDate1, vDate2, WeekStart, YearStart)
 
 
@@ -261,7 +273,11 @@ Check:
 	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
 
 Try:
-	vDate = SF_Utils._CStrToDate(DateArg)
+	If VarType(DateArg) = V_OBJECT Then
+		vDate = CDateFromUnoDateTime(DateArg)
+	Else
+		vDate = SF_Utils._CStrToDate(DateArg)
+	End If
 	lPart = DatePart(Add, vDate, WeekStart, YearStart)
 
 
@@ -297,7 +313,7 @@ Try:
 	vDate = DateValue(DateArg)
 
 Finally:
-	If VarType(vDate) = V_DATE Then PyDateValue = SF_Utils._CDateToIso(vDate) Else PyDateValue = vDate
+	If VarType(vDate) = V_DATE Then PyDateValue = CDateToUnoDateTime(vDate) Else PyDateValue = vDate
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
@@ -329,7 +345,7 @@ Check:
 	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
 
 Try:
-	If VarType(Value) = V_DATE Then vValue = SF_Utils._CStrToDate(Value) ELse vValue = Value
+	If VarType(Value) = V_OBJECT Then vValue = CDateFromUnoDateTime(Value) ELse vValue = Value
 	If IsEmpty(Pattern) Or Len(Pattern) = 0 Then sFormat = Str(vValue) Else sFormat = Format(vValue, Pattern)
 
 
@@ -600,10 +616,9 @@ Check:
 					vArg = Null
 				ElseIf vArg = cstSymMissing Then
 					Exit For	&apos;	Next arguments must be missing also
-				ElseIf ( CallType And cstDateArg ) = cstDateArg Then		&apos;	Arguments might be dates
-					vArg = SF_Utils._CStrToDate(vArg)
-					If vArg &lt; 0 Then vArg = Args(i)	&apos;	Conversion of iso format failed =&gt; reset
 				End If
+			ElseIf  VarType(vArg) = V_OBJECT Then
+				If ( CallType And cstDateArg ) = cstDateArg Then vArg = CDateFromUnoDateTime(vArg)
 			End If
 			iNbArgs = iNbArgs + 1
 
@@ -810,7 +825,7 @@ Try:
 		End If
 	Else	&apos;	Scalar or Nothing
 		ReDim vReturnArray(0 To 1)
-		If VarType(vReturn) = V_DATE Then vReturnArray(0) = SF_Utils._CDateToIso(vReturn) Else vReturnArray(0) = vReturn
+		If VarType(vReturn) = V_DATE Then vReturnArray(0) = CDateToUnoDateTime(vReturn) Else vReturnArray(0) = vReturn
 		vReturnArray(1) = VarType(vReturn)
 	End If
 
