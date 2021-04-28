@@ -235,6 +235,11 @@ void SvxCharacterMap::getRecentCharacterList()
     {
         maRecentCharFontList.push_back(s);
     }
+
+    // tdf#135997: make sure that the two lists are same length
+    const auto nCommonLength = std::min(maRecentCharList.size(), maRecentCharFontList.size());
+    maRecentCharList.resize(nCommonLength);
+    maRecentCharFontList.resize(nCommonLength);
 }
 
 
@@ -255,11 +260,49 @@ void SvxCharacterMap::getFavCharacterList()
     {
         maFavCharFontList.push_back(s);
     }
+
+    // tdf#135997: make sure that the two lists are same length
+    const auto nCommonLength = std::min(maFavCharList.size(), maFavCharFontList.size());
+    maFavCharList.resize(nCommonLength);
+    maFavCharFontList.resize(nCommonLength);
+}
+
+
+std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
+SvxCharacterMap::getRecentChar(const OUString& sTitle, const OUString& rFont) const
+{
+    assert(maRecentCharList.size() == maRecentCharFontList.size());
+
+    if (auto itChar = std::find(maRecentCharList.begin(), maRecentCharList.end(), sTitle);
+        itChar != maRecentCharList.end())
+    {
+        auto itFont = maRecentCharFontList.begin() + (itChar - maRecentCharList.begin());
+        if (*itFont == rFont)
+            return { itChar, itFont };
+    }
+    return {maRecentCharList.end(), maRecentCharFontList.end()};
+}
+
+std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
+SvxCharacterMap::getFavChar(const OUString& sTitle, const OUString& rFont) const
+{
+    assert(maFavCharList.size() == maFavCharFontList.size());
+
+    if (auto itChar = std::find(maFavCharList.begin(), maFavCharList.end(), sTitle);
+        itChar != maFavCharList.end())
+    {
+        auto itFont = maFavCharFontList.begin() + (itChar - maFavCharList.begin());
+        if (*itFont == rFont)
+            return { itChar, itFont };
+    }
+    return { maFavCharList.end(), maFavCharFontList.end() };
 }
 
 
 void SvxCharacterMap::updateRecentCharControl()
 {
+    assert(maRecentCharList.size() == maRecentCharFontList.size());
+
     int i = 0;
     for ( std::deque< OUString >::iterator it = maRecentCharList.begin(), it2 = maRecentCharFontList.begin();
         it != maRecentCharList.end() && it2 != maRecentCharFontList.end();
@@ -281,12 +324,9 @@ void SvxCharacterMap::updateRecentCharControl()
 
 void SvxCharacterMap::updateRecentCharacterList(const OUString& sTitle, const OUString& rFont)
 {
-    auto itChar = std::find(maRecentCharList.begin(), maRecentCharList.end(), sTitle);
-
-    auto itChar2 = std::find(maRecentCharFontList.begin(), maRecentCharFontList.end(), rFont);
-
     // if recent char to be added is already in list, remove it
-    if( itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
+    if( const auto& [itChar, itChar2] = getRecentChar(sTitle, rFont);
+        itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
     {
         maRecentCharList.erase( itChar );
         maRecentCharFontList.erase( itChar2);
@@ -321,12 +361,9 @@ void SvxCharacterMap::updateRecentCharacterList(const OUString& sTitle, const OU
 
 void SvxCharacterMap::updateFavCharacterList(const OUString& sTitle, const OUString& rFont)
 {
-    auto itChar = std::find(maFavCharList.begin(), maFavCharList.end(), sTitle);
-
-    auto itChar2 = std::find(maFavCharFontList.begin(), maFavCharFontList.end(), rFont);
-
     // if Fav char to be added is already in list, remove it
-    if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
+    if( const auto& [itChar, itChar2] = getFavChar(sTitle, rFont);
+        itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
     {
         maFavCharList.erase( itChar );
         maFavCharFontList.erase( itChar2);
@@ -359,6 +396,8 @@ void SvxCharacterMap::updateFavCharacterList(const OUString& sTitle, const OUStr
 
 void SvxCharacterMap::updateFavCharControl()
 {
+    assert(maFavCharList.size() == maFavCharFontList.size());
+
     int i = 0;
     for ( std::deque< OUString >::iterator it = maFavCharList.begin(), it2 = maFavCharFontList.begin();
         it != maFavCharList.end() && it2 != maFavCharFontList.end();
@@ -382,12 +421,9 @@ void SvxCharacterMap::updateFavCharControl()
 
 void SvxCharacterMap::deleteFavCharacterFromList(const OUString& sTitle, const OUString& rFont)
 {
-    auto itChar = std::find(maFavCharList.begin(), maFavCharList.end(), sTitle);
-
-    auto itChar2 = std::find(maFavCharFontList.begin(), maFavCharFontList.end(), rFont);
-
-    // if Fav char to be added is already in list, remove it
-    if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
+    // if Fav char is found, remove it
+    if( const auto& [itChar, itChar2] = getFavChar(sTitle, rFont);
+        itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
     {
         maFavCharList.erase( itChar );
         maFavCharFontList.erase( itChar2);
@@ -531,16 +567,8 @@ void SvxCharacterMap::init()
 
 bool SvxCharacterMap::isFavChar(const OUString& sTitle, const OUString& rFont)
 {
-    auto isFavCharTitleExists = std::any_of(maFavCharList.begin(),
-         maFavCharList.end(),
-         [sTitle] (const OUString & a) { return a == sTitle; });
-
-    auto isFavCharFontExists = std::any_of(maFavCharFontList.begin(),
-         maFavCharFontList.end(),
-         [rFont] (const OUString & a) { return a == rFont; });
-
-    // if Fav char to be added is already in list, remove it
-    return isFavCharTitleExists && isFavCharFontExists;
+    const auto& [itChar, itFont] = getFavChar(sTitle, rFont);
+    return itChar != maFavCharList.end() && itFont != maFavCharFontList.end();
 }
 
 
@@ -746,13 +774,11 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, weld::ComboBox&, void)
 IMPL_LINK(SvxCharacterMap, RecentClearClickHdl, SvxCharView*, rView, void)
 {
     const OUString& sTitle = rView->GetText();
-    auto itChar = std::find(maRecentCharList.begin(), maRecentCharList.end(), sTitle);
-
     OUString sFont = rView->GetFont().GetFamilyName();
-    auto itChar2 = std::find(maRecentCharFontList.begin(), maRecentCharFontList.end(), sFont);
 
     // if recent char to be added is already in list, remove it
-    if( itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
+    if( const auto& [itChar, itChar2] = getRecentChar(sTitle, sFont);
+        itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
     {
         maRecentCharList.erase( itChar );
         maRecentCharFontList.erase( itChar2);
