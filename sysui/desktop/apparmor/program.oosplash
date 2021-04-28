@@ -14,7 +14,7 @@
 
 #include <tunables/global>
 
-profile libreoffice-oopslash INSTDIR-program/oosplash {
+profile libreoffice-oosplash INSTDIR-program/oosplash {
   #include <abstractions/base>
   #include <abstractions/X>
 
