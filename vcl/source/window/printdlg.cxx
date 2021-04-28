@@ -349,7 +349,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     }
 
     // create temporary VDev with requested Size and DPI.
-    // CAUTION: DPI *is* important here - it DIFFRERS from 75x75, usually 600x600 is used
+    // CAUTION: DPI *is* important here - it DIFFERS from 75x75, usually 600x600 is used
     ScopedVclPtrInstance<VirtualDevice> pPrerenderVDev(*Application::GetDefaultDevice());
     pPrerenderVDev->SetOutputSizePixel(aScaledSize, false);
     pPrerenderVDev->SetReferenceDevice( mnDPIX, mnDPIY );
@@ -368,7 +368,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     // FormControls are used. I made a deep-dive why this happens,
     // and in principle the reason is the Mteafile::Scale used
     // below. Since Metafile actions are integer, that floating point
-    // scale leads to rounduing errors that make the lines painting
+    // scale leads to rounding errors that make the lines painting
     // the FormControls disappear in the surrounding ClipRegions.
     // That Scale cannot be avoided since the Metafile contains it's
     // own SetMapMode commands which *will* be executed on ::Play,
@@ -380,7 +380,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     // This can only be solved better in the future using Primitives
     // which would allow any scale by embedding to a Transformation,
     // but that would be a bigger rework.
-    // Until then, use this little 'trick' to improve qulatity.
+    // Until then, use this little 'trick' to improve quality.
     // It uses the fact to empirically having tested that the quality
     // gets really bad for FormControls starting by a scale factor
     // smaller than 0.2 - that makes the ClipRegion overlap start.
@@ -396,7 +396,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
         double fHeight(aScaledSize.getHeight() * fFactor);
         const double fNewNeededPixels(fWidth * fHeight);
 
-        // to not risk using too big bitmaps and runninig into
+        // to not risk using too big bitmaps and running into
         // memory problems, still limit to a useful factor is
         // necessary, also empirically estimated to
         // avoid the quality from collapsing (using a direct
