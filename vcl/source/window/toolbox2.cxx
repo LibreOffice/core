@@ -1739,11 +1739,20 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         {
             auto childNode = rJsonWriter.startStruct();
             int nId = GetItemId(i);
-            if (!IsItemVisible(nId))
-                continue;
-            rJsonWriter.put("type", "toolitem");
-            rJsonWriter.put("text", GetItemText(nId));
-            rJsonWriter.put("command", GetItemCommand(nId));
+
+            vcl::Window* pWindow = GetItemWindow(nId);
+            if (pWindow)
+            {
+                pWindow->DumpAsPropertyTree(rJsonWriter);
+            }
+            else
+            {
+                if (!IsItemVisible(nId))
+                    continue;
+                rJsonWriter.put("type", "toolitem");
+                rJsonWriter.put("text", GetItemText(nId));
+                rJsonWriter.put("command", GetItemCommand(nId));
+            }
         }
     }
 }
