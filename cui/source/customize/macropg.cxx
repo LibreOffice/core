@@ -319,7 +319,10 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
     // have to use the original XNameReplace since the hash iterators do
     // not guarantee the order in which the elements are returned
     if(!nameReplace.is())
+    {
+        mpImpl->xEventLB->thaw();
         return;
+    }
 
     for (auto const& displayableEvent : aDisplayNames)
     {
