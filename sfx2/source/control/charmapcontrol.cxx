@@ -131,7 +131,7 @@ void SfxCharmapCtrl::updateFavCharControl()
 {
     int i = 0;
     for ( std::deque< OUString >::iterator it = m_aFavCharList.begin(), it2 = m_aFavCharFontList.begin();
-        it != m_aFavCharList.end() || it2 != m_aFavCharFontList.end();
+        it != m_aFavCharList.end() && it2 != m_aFavCharFontList.end();
         ++it, ++it2, i++)
     {
         m_aFavCharView[i].SetText(*it);
@@ -163,7 +163,7 @@ void SfxCharmapCtrl::updateRecentCharControl()
 {
     int i = 0;
     for ( std::deque< OUString >::iterator it = m_aRecentCharList.begin(), it2 = m_aRecentCharFontList.begin();
-        it != m_aRecentCharList.end() || it2 != m_aRecentCharFontList.end();
+        it != m_aRecentCharList.end() && it2 != m_aRecentCharFontList.end();
         ++it, ++it2, i++)
     {
         m_aRecentCharView[i].SetText(*it);
