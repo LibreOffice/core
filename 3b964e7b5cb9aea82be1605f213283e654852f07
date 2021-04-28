@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "cd101454_e9e6ef75",
+        "filename": "sc/inc/columnspanset.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T11:14:49Z",
+      "side": 1,
+      "message": "By the way, the only reason why these two existed, and also why sc::ColumnSpanSet::ColumnAction had the two execute and executeSum, was the hack in question. It looks like all derived classes only implement one *or* the other method, and we may from the executeColumnSum from here, executeSum from ColumnAction, and unify everywhere on executeColumnAction/execute.",
+      "revId": "3b964e7b5cb9aea82be1605f213283e654852f07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c448a69a_c2609ae6",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 15
