@@ -1065,11 +1065,8 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     preDraw();
     SAL_INFO("vcl.skia.trace", "drawpolyline(" << this << "): " << rPolyLine << ":" << mLineColor);
 
-    // tdf#124848 get correct LineWidth in discrete coordinates,
-    if (fLineWidth == 0) // hairline
-        fLineWidth = 1.0;
-    else // Adjust line width for object-to-device scale.
-        fLineWidth = (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();
+    // Adjust line width for object-to-device scale.
+    fLineWidth = (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();
 
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
     basegfx::B2DPolyPolygon aPolyPolygonLine;
