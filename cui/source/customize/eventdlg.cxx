@@ -123,7 +123,6 @@ IMPL_LINK_NOARG( SvxEventConfigPage, SelectHdl_Impl, weld::ComboBox&, void )
 {
     bool bApp = m_xSaveInListBox->get_active_id().toBoolean();
 
-    mpImpl->xEventLB->freeze();
     if (bApp)
     {
         SetReadOnly( false );
@@ -155,8 +154,6 @@ IMPL_LINK_NOARG( SvxEventConfigPage, SelectHdl_Impl, weld::ComboBox&, void )
         SetReadOnly( isReadonly );
         SvxMacroTabPage_::DisplayAppEvents( false );
     }
-
-    mpImpl->xEventLB->thaw();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
