@@ -104,7 +104,7 @@ class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
                                        ","
                                        "\"id\":"
                                      + OUString::number(m_nId)
-                                     + "\","
+                                     + ","
                                        "\"ts\":"
                                      + OUString::number(nNow)
                                      + ","
@@ -139,7 +139,7 @@ public:
                                        ","
                                        "\"id\":"
                                      + OUString::number(m_nId)
-                                     + "\","
+                                     + ","
                                        "\"ts\":"
                                      + OUString::number(nNow)
                                      + ","
