@@ -31,6 +31,10 @@
 #include <cui/cuidllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 
+#include <deque>
+#include <memory>
+#include <utility>
+
 using namespace ::com::sun::star;
 class SubsetMap;
 
@@ -165,8 +169,8 @@ public:
 
     void getFavCharacterList(); //gets both Fav char and Fav char font list
     void updateFavCharacterList(const OUString& rChar, const OUString& rFont);
-    void deleteFavCharacterFromList(const OUString& rChar, const OUString& rFont);
-    bool isFavChar(const OUString& sTitle, const OUString& rFont);
+    void deleteFavCharacterFromList(std::u16string_view rChar, std::u16string_view rFont);
+    bool isFavChar(std::u16string_view sTitle, std::u16string_view rFont);
 
     void updateRecentCharControl();
     void insertCharToDoc(const OUString& sChar);
@@ -177,6 +181,13 @@ public:
     void setCharName(sal_UCS4 nDecimalValue);
 
     void toggleSearchView(bool state);
+
+private:
+    std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
+    getRecentChar(std::u16string_view sTitle, std::u16string_view rFont) const;
+
+    std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
+    getFavChar(std::u16string_view sTitle, std::u16string_view rFont) const;
 };
 
 #endif
