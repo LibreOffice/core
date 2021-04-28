@@ -25,7 +25,7 @@ namespace svgio::svgreader
         SvgTrefNode::SvgTrefNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenTref, rDocument, pParent),
+        :   SvgNode(SVGToken::Tref, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maXLink()
         {
@@ -51,12 +51,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenXlinkHref:
+                case SVGToken::XlinkHref:
                 {
                     const sal_Int32 nLen(aContent.getLength());
 

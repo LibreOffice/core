@@ -30,7 +30,7 @@ namespace svgio::svgreader
         :   SvgNode(aType, rDocument, pParent),
             maText()
         {
-            OSL_ENSURE(aType == SVGTokenTitle || aType == SVGTokenDesc, "SvgTitleDescNode should only be used for Title and Desc (!)");
+            OSL_ENSURE(aType == SVGToken::Title || aType == SVGToken::Desc, "SvgTitleDescNode should only be used for Title and Desc (!)");
         }
 
         SvgTitleDescNode::~SvgTitleDescNode()

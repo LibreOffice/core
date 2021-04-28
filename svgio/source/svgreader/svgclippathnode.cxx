@@ -31,7 +31,7 @@ namespace svgio::svgreader
         SvgClipPathNode::SvgClipPathNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenClipPathNode, rDocument, pParent),
+        :   SvgNode(SVGToken::ClipPathNode, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maClipPathUnits(userSpaceOnUse)
         {
@@ -57,12 +57,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 
@@ -72,7 +72,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenClipPathUnits:
+                case SVGToken::ClipPathUnits:
                 {
                     if(!aContent.isEmpty())
                     {

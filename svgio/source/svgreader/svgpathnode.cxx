@@ -25,7 +25,7 @@ namespace svgio::svgreader
         SvgPathNode::SvgPathNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenPath, rDocument, pParent),
+        :   SvgNode(SVGToken::Path, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maPathLength()
         {
@@ -51,12 +51,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenD:
+                case SVGToken::D:
                 {
                     basegfx::B2DPolyPolygon aPath;
 
@@ -69,7 +69,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 
@@ -79,7 +79,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenPathLength:
+                case SVGToken::PathLength:
                 {
                     SvgNumber aNum;
 

@@ -28,7 +28,7 @@ namespace svgio::svgreader
             SvgDocument& rDocument,
             SvgNode* pParent,
             bool bIsPolyline)
-        :   SvgNode(SVGTokenPolygon, rDocument, pParent),
+        :   SvgNode(SVGToken::Polygon, rDocument, pParent),
             maSvgStyleAttributes(*this),
             mbIsPolyline(bIsPolyline)
         {
@@ -54,12 +54,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenPoints:
+                case SVGToken::Points:
                 {
                     basegfx::B2DPolygon aPath;
 
@@ -77,7 +77,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 

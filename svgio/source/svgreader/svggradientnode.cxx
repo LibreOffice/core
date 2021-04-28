@@ -52,7 +52,7 @@ namespace svgio::svgreader
             maXLink(),
             mpXLink(nullptr)
         {
-            OSL_ENSURE(aType == SVGTokenLinearGradient || aType == SVGTokenRadialGradient, "SvgGradientNode should only be used for Linear and Radial gradient (!)");
+            OSL_ENSURE(aType == SVGToken::LinearGradient || aType == SVGToken::RadialGradient, "SvgGradientNode should only be used for Linear and Radial gradient (!)");
         }
 
         SvgGradientNode::~SvgGradientNode()
@@ -63,7 +63,7 @@ namespace svgio::svgreader
         const SvgStyleAttributes* SvgGradientNode::getSvgStyleAttributes() const
         {
             return checkForCssStyle(
-                SVGTokenLinearGradient == getType() ? OUString("linearGradient") : OUString("radialGradient"),
+                SVGToken::LinearGradient == getType() ? OUString("linearGradient") : OUString("radialGradient"),
                 maSvgStyleAttributes);
         }
 
@@ -78,12 +78,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenX1:
+                case SVGToken::X1:
                 {
                     SvgNumber aNum;
 
@@ -93,7 +93,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenY1:
+                case SVGToken::Y1:
                 {
                     SvgNumber aNum;
 
@@ -103,7 +103,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenX2:
+                case SVGToken::X2:
                 {
                     SvgNumber aNum;
 
@@ -113,7 +113,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenY2:
+                case SVGToken::Y2:
                 {
                     SvgNumber aNum;
 
@@ -123,7 +123,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenCx:
+                case SVGToken::Cx:
                 {
                     SvgNumber aNum;
 
@@ -133,7 +133,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenCy:
+                case SVGToken::Cy:
                 {
                     SvgNumber aNum;
 
@@ -143,7 +143,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenFx:
+                case SVGToken::Fx:
                 {
                     SvgNumber aNum;
 
@@ -153,7 +153,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenFy:
+                case SVGToken::Fy:
                 {
                     SvgNumber aNum;
 
@@ -163,7 +163,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenR:
+                case SVGToken::R:
                 {
                     SvgNumber aNum;
 
@@ -176,7 +176,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenGradientUnits:
+                case SVGToken::GradientUnits:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -191,7 +191,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenSpreadMethod:
+                case SVGToken::SpreadMethod:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -210,7 +210,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenGradientTransform:
+                case SVGToken::GradientTransform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 
@@ -220,7 +220,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenXlinkHref:
+                case SVGToken::XlinkHref:
                 {
                     const sal_Int32 nLen(aContent.getLength());
 

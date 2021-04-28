@@ -24,7 +24,7 @@ namespace svgio::svgreader
         SvgSymbolNode::SvgSymbolNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenSvg, rDocument, pParent),
+        :   SvgNode(SVGToken::Svg, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maSvgAspectRatio()
         {
@@ -50,17 +50,17 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenViewBox:
+                case SVGToken::ViewBox:
                 {
                     readViewBox(aContent, *this);
                     break;
                 }
-                case SVGTokenPreserveAspectRatio:
+                case SVGToken::PreserveAspectRatio:
                 {
                     maSvgAspectRatio = readSvgAspectRatio(aContent);
                     break;

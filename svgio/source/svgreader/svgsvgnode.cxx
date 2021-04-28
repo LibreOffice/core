@@ -33,7 +33,7 @@ namespace svgio::svgreader
         SvgSvgNode::SvgSvgNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenSvg, rDocument, pParent),
+        :   SvgNode(SVGToken::Svg, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maSvgAspectRatio(),
             maX(),
@@ -123,12 +123,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenViewBox:
+                case SVGToken::ViewBox:
                 {
                     const basegfx::B2DRange aRange(readViewBox(aContent, *this));
 
@@ -138,12 +138,12 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenPreserveAspectRatio:
+                case SVGToken::PreserveAspectRatio:
                 {
                     maSvgAspectRatio = readSvgAspectRatio(aContent);
                     break;
                 }
-                case SVGTokenX:
+                case SVGToken::X:
                 {
                     SvgNumber aNum;
 
@@ -153,7 +153,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenY:
+                case SVGToken::Y:
                 {
                     SvgNumber aNum;
 
@@ -163,7 +163,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenWidth:
+                case SVGToken::Width:
                 {
                     SvgNumber aNum;
 
@@ -176,7 +176,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenHeight:
+                case SVGToken::Height:
                 {
                     SvgNumber aNum;
 
@@ -189,7 +189,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenVersion:
+                case SVGToken::Version:
                 {
                     SvgNumber aNum;
 

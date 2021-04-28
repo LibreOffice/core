@@ -39,7 +39,7 @@ namespace svgio::svgreader
         SvgImageNode::SvgImageNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenRect, rDocument, pParent),
+        :   SvgNode(SVGToken::Rect, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maSvgAspectRatio(),
             maX(0),
@@ -73,17 +73,17 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenPreserveAspectRatio:
+                case SVGToken::PreserveAspectRatio:
                 {
                     maSvgAspectRatio = readSvgAspectRatio(aContent);
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 
@@ -93,7 +93,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenX:
+                case SVGToken::X:
                 {
                     SvgNumber aNum;
 
@@ -103,7 +103,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenY:
+                case SVGToken::Y:
                 {
                     SvgNumber aNum;
 
@@ -113,7 +113,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenWidth:
+                case SVGToken::Width:
                 {
                     SvgNumber aNum;
 
@@ -126,7 +126,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenHeight:
+                case SVGToken::Height:
                 {
                     SvgNumber aNum;
 
@@ -139,7 +139,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenXlinkHref:
+                case SVGToken::XlinkHref:
                 {
                     const sal_Int32 nLen(aContent.getLength());
 

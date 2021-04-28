@@ -24,7 +24,7 @@ namespace svgio::svgreader
         SvgGradientStopNode::SvgGradientStopNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenStop, rDocument, pParent),
+        :   SvgNode(SVGToken::Stop, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maOffset()
         {
@@ -50,12 +50,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenOffset:
+                case SVGToken::Offset:
                 {
                     SvgNumber aNum;
 

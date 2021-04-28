@@ -49,6 +49,9 @@
 
 using namespace com::sun::star;
 
+namespace svgio::svgreader
+{
+
 namespace
 {
     svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode, svgio::svgreader::SvgCharacterNode* pLast)
@@ -66,7 +69,7 @@ namespace
                 {
                     switch(pCandidate->getType())
                     {
-                        case svgio::svgreader::SVGTokenCharacter:
+                        case SVGToken::Character:
                         {
                             // clean whitespace in text span
                             svgio::svgreader::SvgCharacterNode* pCharNode = static_cast< svgio::svgreader::SvgCharacterNode* >(pCandidate);
@@ -108,9 +111,9 @@ namespace
                             }
                             break;
                         }
-                        case svgio::svgreader::SVGTokenTspan:
-                        case svgio::svgreader::SVGTokenTextPath:
-                        case svgio::svgreader::SVGTokenTref:
+                        case SVGToken::Tspan:
+                        case SVGToken::TextPath:
+                        case SVGToken::Tref:
                         {
                             // recursively clean whitespaces in subhierarchy
                             pLast = whiteSpaceHandling(pCandidate, pLast);
@@ -128,11 +131,8 @@ namespace
 
         return pLast;
     }
-}
+} // end anonymous namespace
 
-
-namespace svgio::svgreader
-{
         SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
         :   maDocument(aAbsolutePath),
             mpTarget(nullptr),
@@ -179,10 +179,10 @@ namespace svgio::svgreader
 
             const SVGToken aSVGToken(StrToSVGToken(aName, false));
 
-            switch(aSVGToken)
+            switch (aSVGToken)
             {
                 /// structural elements
-                case SVGTokenSymbol:
+                case SVGToken::Symbol:
                 {
                     /// new basic node for Symbol. Content gets scanned, but
                     /// will not be decomposed (see SvgNode::decomposeSvgNode and bReferenced)
@@ -190,29 +190,29 @@ namespace svgio::svgreader
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenDefs:
-                case SVGTokenG:
+                case SVGToken::Defs:
+                case SVGToken::G:
                 {
                     /// new node for Defs/G
                     mpTarget = new SvgGNode(aSVGToken, maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenSvg:
+                case SVGToken::Svg:
                 {
                     /// new node for Svg
                     mpTarget = new SvgSvgNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenUse:
+                case SVGToken::Use:
                 {
                     /// new node for Use
                     mpTarget = new SvgUseNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenA:
+                case SVGToken::A:
                 {
                     /// new node for A
                     mpTarget = new SvgANode(maDocument, mpTarget);
@@ -221,56 +221,56 @@ namespace svgio::svgreader
                 }
 
                 /// shape elements
-                case SVGTokenCircle:
+                case SVGToken::Circle:
                 {
                     /// new node for Circle
                     mpTarget = new SvgCircleNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenEllipse:
+                case SVGToken::Ellipse:
                 {
                     /// new node for Ellipse
                     mpTarget = new SvgEllipseNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenLine:
+                case SVGToken::Line:
                 {
                     /// new node for Line
                     mpTarget = new SvgLineNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenPath:
+                case SVGToken::Path:
                 {
                     /// new node for Path
                     mpTarget = new SvgPathNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenPolygon:
+                case SVGToken::Polygon:
                 {
                     /// new node for Polygon
                     mpTarget = new SvgPolyNode(maDocument, mpTarget, false);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenPolyline:
+                case SVGToken::Polyline:
                 {
                     /// new node for Polyline
                     mpTarget = new SvgPolyNode(maDocument, mpTarget, true);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenRect:
+                case SVGToken::Rect:
                 {
                     /// new node for Rect
                     mpTarget = new SvgRectNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenImage:
+                case SVGToken::Image:
                 {
                     /// new node for Image
                     mpTarget = new SvgImageNode(maDocument, mpTarget);
@@ -279,8 +279,8 @@ namespace svgio::svgreader
                 }
 
                 /// title and description
-                case SVGTokenTitle:
-                case SVGTokenDesc:
+                case SVGToken::Title:
+                case SVGToken::Desc:
                 {
                     /// new node for Title and/or Desc
                     mpTarget = new SvgTitleDescNode(aSVGToken, maDocument, mpTarget);
@@ -288,8 +288,8 @@ namespace svgio::svgreader
                 }
 
                 /// gradients
-                case SVGTokenLinearGradient:
-                case SVGTokenRadialGradient:
+                case SVGToken::LinearGradient:
+                case SVGToken::RadialGradient:
                 {
                     mpTarget = new SvgGradientNode(aSVGToken, maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
@@ -297,7 +297,7 @@ namespace svgio::svgreader
                 }
 
                 /// gradient stops
-                case SVGTokenStop:
+                case SVGToken::Stop:
                 {
                     mpTarget = new SvgGradientStopNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
@@ -305,25 +305,25 @@ namespace svgio::svgreader
                 }
 
                 /// text
-                case SVGTokenText:
+                case SVGToken::Text:
                 {
                     mpTarget = new SvgTextNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenTspan:
+                case SVGToken::Tspan:
                 {
                     mpTarget = new SvgTspanNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenTref:
+                case SVGToken::Tref:
                 {
                     mpTarget = new SvgTrefNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenTextPath:
+                case SVGToken::TextPath:
                 {
                     mpTarget = new SvgTextPathNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
@@ -331,7 +331,7 @@ namespace svgio::svgreader
                 }
 
                 /// styles (as stylesheets)
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     SvgStyleNode* pNew = new SvgStyleNode(maDocument, mpTarget);
                     mpTarget = pNew;
@@ -362,14 +362,14 @@ namespace svgio::svgreader
 
                 /// structural elements clip-path and mask. Content gets scanned, but
                 /// will not be decomposed (see SvgNode::decomposeSvgNode and bReferenced)
-                case SVGTokenClipPathNode:
+                case SVGToken::ClipPathNode:
                 {
                     /// new node for ClipPath
                     mpTarget = new SvgClipPathNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGTokenMask:
+                case SVGToken::Mask:
                 {
                     /// new node for Mask
                     mpTarget = new SvgMaskNode(maDocument, mpTarget);
@@ -378,7 +378,7 @@ namespace svgio::svgreader
                 }
 
                 /// structural element marker
-                case SVGTokenMarker:
+                case SVGToken::Marker:
                 {
                     /// new node for marker
                     mpTarget = new SvgMarkerNode(maDocument, mpTarget);
@@ -387,7 +387,7 @@ namespace svgio::svgreader
                 }
 
                 /// structural element pattern
-                case SVGTokenPattern:
+                case SVGToken::Pattern:
                 {
                     /// new node for pattern
                     mpTarget = new SvgPatternNode(maDocument, mpTarget);
@@ -396,7 +396,7 @@ namespace svgio::svgreader
                 }
 
                 // ignore FlowRoot and child nodes
-                case SVGTokenFlowRoot:
+                case SVGToken::FlowRoot:
                 {
                     bSkip = true;
                     break;
@@ -417,68 +417,68 @@ namespace svgio::svgreader
                 return;
 
             const SVGToken aSVGToken(StrToSVGToken(aName, false));
-            SvgNode* pWhitespaceCheck(SVGTokenText == aSVGToken ? mpTarget : nullptr);
-            SvgStyleNode* pCssStyle(SVGTokenStyle == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : nullptr);
-            SvgTitleDescNode* pSvgTitleDescNode(SVGTokenTitle == aSVGToken || SVGTokenDesc == aSVGToken ? static_cast< SvgTitleDescNode* >(mpTarget) : nullptr);
+            SvgNode* pWhitespaceCheck(SVGToken::Text == aSVGToken ? mpTarget : nullptr);
+            SvgStyleNode* pCssStyle(SVGToken::Style == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : nullptr);
+            SvgTitleDescNode* pSvgTitleDescNode(SVGToken::Title == aSVGToken || SVGToken::Desc == aSVGToken ? static_cast< SvgTitleDescNode* >(mpTarget) : nullptr);
 
             // if we are in skipping mode and we reach the flowRoot end tag: stop skipping mode
-            if(bSkip && aSVGToken == SVGTokenFlowRoot)
+            if(bSkip && aSVGToken == SVGToken::FlowRoot)
                 bSkip = false;
             // we are in skipping mode: do nothing until we found the flowRoot end tag
             else if(bSkip)
                 return;
 
-            switch(aSVGToken)
+            switch (aSVGToken)
             {
                 /// valid tokens for which a new one was created
 
                 /// structural elements
-                case SVGTokenDefs:
-                case SVGTokenG:
-                case SVGTokenSvg:
-                case SVGTokenSymbol:
-                case SVGTokenUse:
-                case SVGTokenA:
+                case SVGToken::Defs:
+                case SVGToken::G:
+                case SVGToken::Svg:
+                case SVGToken::Symbol:
+                case SVGToken::Use:
+                case SVGToken::A:
 
                 /// shape elements
-                case SVGTokenCircle:
-                case SVGTokenEllipse:
-                case SVGTokenLine:
-                case SVGTokenPath:
-                case SVGTokenPolygon:
-                case SVGTokenPolyline:
-                case SVGTokenRect:
-                case SVGTokenImage:
+                case SVGToken::Circle:
+                case SVGToken::Ellipse:
+                case SVGToken::Line:
+                case SVGToken::Path:
+                case SVGToken::Polygon:
+                case SVGToken::Polyline:
+                case SVGToken::Rect:
+                case SVGToken::Image:
 
                 /// title and description
-                case SVGTokenTitle:
-                case SVGTokenDesc:
+                case SVGToken::Title:
+                case SVGToken::Desc:
 
                 /// gradients
-                case SVGTokenLinearGradient:
-                case SVGTokenRadialGradient:
+                case SVGToken::LinearGradient:
+                case SVGToken::RadialGradient:
 
                 /// gradient stops
-                case SVGTokenStop:
+                case SVGToken::Stop:
 
                 /// text
-                case SVGTokenText:
-                case SVGTokenTspan:
-                case SVGTokenTextPath:
-                case SVGTokenTref:
+                case SVGToken::Text:
+                case SVGToken::Tspan:
+                case SVGToken::TextPath:
+                case SVGToken::Tref:
 
                 /// styles (as stylesheets)
-                case SVGTokenStyle:
+                case SVGToken::Style:
 
                 /// structural elements clip-path and mask
-                case SVGTokenClipPathNode:
-                case SVGTokenMask:
+                case SVGToken::ClipPathNode:
+                case SVGToken::Mask:
 
                 /// structural element marker
-                case SVGTokenMarker:
+                case SVGToken::Marker:
 
                 /// structural element pattern
-                case SVGTokenPattern:
+                case SVGToken::Pattern:
 
                 /// content handling after parsing
                 {
@@ -510,7 +510,7 @@ namespace svgio::svgreader
 
                 if(!aText.isEmpty())
                 {
-                    if(SVGTokenTitle == aSVGToken)
+                    if(SVGToken::Title == aSVGToken)
                     {
                         mpTarget->parseAttribute(getStrTitle(), aSVGToken, aText);
                     }
@@ -561,9 +561,9 @@ namespace svgio::svgreader
 
             switch(mpTarget->getType())
             {
-                case SVGTokenText:
-                case SVGTokenTspan:
-                case SVGTokenTextPath:
+                case SVGToken::Text:
+                case SVGToken::Tspan:
+                case SVGToken::TextPath:
                 {
                     const auto& rChilds = mpTarget->getChildren();
                     SvgCharacterNode* pTarget = nullptr;
@@ -586,7 +586,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     SvgStyleNode& rSvgStyleNode = static_cast< SvgStyleNode& >(*mpTarget);
 
@@ -610,8 +610,8 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTitle:
-                case SVGTokenDesc:
+                case SVGToken::Title:
+                case SVGToken::Desc:
                 {
                     SvgTitleDescNode& rSvgTitleDescNode = static_cast< SvgTitleDescNode& >(*mpTarget);
 

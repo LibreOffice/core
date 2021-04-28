@@ -27,7 +27,7 @@ namespace svgio::svgreader
         SvgEllipseNode::SvgEllipseNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenEllipse, rDocument, pParent),
+        :   SvgNode(SVGToken::Ellipse, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maCx(0),
             maCy(0),
@@ -56,12 +56,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenCx:
+                case SVGToken::Cx:
                 {
                     SvgNumber aNum;
 
@@ -71,7 +71,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenCy:
+                case SVGToken::Cy:
                 {
                     SvgNumber aNum;
 
@@ -81,7 +81,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenRx:
+                case SVGToken::Rx:
                 {
                     SvgNumber aNum;
 
@@ -94,7 +94,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenRy:
+                case SVGToken::Ry:
                 {
                     SvgNumber aNum;
 
@@ -107,7 +107,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 

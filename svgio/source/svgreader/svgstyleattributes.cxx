@@ -361,7 +361,7 @@ namespace svgio::svgreader
                 aGeoToUnit.scale(1.0 / rGeoRange.getWidth(), 1.0 / rGeoRange.getHeight());
             }
 
-            if(SVGTokenLinearGradient == rFillGradient.getType())
+            if(SVGToken::LinearGradient == rFillGradient.getType())
             {
                 basegfx::B2DPoint aStart(0.0, 0.0);
                 basegfx::B2DPoint aEnd(1.0, 0.0);
@@ -914,7 +914,7 @@ namespace svgio::svgreader
 
             // remember prepared marker; pStart, pMid and pEnd may all be equal when
             // only 'marker' was used instead of 'marker-start', 'marker-mid' or 'marker-end',
-            // see 'case SVGTokenMarker' in this file; thus in this case only one common
+            // see 'case SVGToken::Marker' in this file; thus in this case only one common
             // marker in primitive form will be prepared
             const SvgMarkerNode* pPrepared = nullptr;
 
@@ -1116,7 +1116,7 @@ namespace svgio::svgreader
             {
                 // create fill
                 basegfx::B2DPolyPolygon aPath(rPath);
-                const bool bNeedToCheckClipRule(SVGTokenPath == mrOwner.getType() || SVGTokenPolygon == mrOwner.getType());
+                const bool bNeedToCheckClipRule(SVGToken::Path == mrOwner.getType() || SVGToken::Polygon == mrOwner.getType());
                 const bool bClipPathIsNonzero(bNeedToCheckClipRule && mbIsClipPathContent && FillRule_nonzero == maClipRule);
                 const bool bFillRuleIsNonzero(bNeedToCheckClipRule && !mbIsClipPathContent && FillRule_nonzero == getFillRule());
 
@@ -1137,9 +1137,9 @@ namespace svgio::svgreader
             add_stroke(rPath, rTarget, aGeoRange);
 
             // Svg supports markers for path, polygon, polyline and line
-            if(SVGTokenPath == mrOwner.getType() ||         // path
-                SVGTokenPolygon == mrOwner.getType() ||     // polygon, polyline
-                SVGTokenLine == mrOwner.getType())          // line
+            if(SVGToken::Path == mrOwner.getType() ||         // path
+                SVGToken::Polygon == mrOwner.getType() ||     // polygon, polyline
+                SVGToken::Line == mrOwner.getType())          // line
             {
                 // try to add markers
                 add_markers(rPath, rTarget, pHelpPointIndices);
@@ -1213,7 +1213,7 @@ namespace svgio::svgreader
             // class="Page" set, has a parent that also is a GroupNode
             // at which class="Slide" is set.
             // Multiple Slides/Pages are possible for Draw and Impress.
-            if(SVGTokenG == mrOwner.getType() && mrOwner.getClass())
+            if(SVGToken::G == mrOwner.getType() && mrOwner.getClass())
             {
                 const OUString aOwnerClass(*mrOwner.getClass());
 
@@ -1221,7 +1221,7 @@ namespace svgio::svgreader
                 {
                     const SvgNode* pParent(mrOwner.getParent());
 
-                    if(nullptr != pParent && SVGTokenG == pParent->getType() && pParent->getClass())
+                    if(nullptr != pParent && SVGToken::G == pParent->getType() && pParent->getClass())
                     {
                         const OUString aParentClass(*pParent->getClass());
 
@@ -1290,7 +1290,7 @@ namespace svgio::svgreader
             maBaselineShift(BaselineShift_Baseline),
             maBaselineShiftNumber(0),
             maResolvingParent(30, 0),
-            mbIsClipPathContent(SVGTokenClipPathNode == mrOwner.getType()),
+            mbIsClipPathContent(SVGToken::ClipPathNode == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
             const SvgStyleAttributes* pParentStyle = getParentStyle();
@@ -1314,7 +1314,7 @@ namespace svgio::svgreader
         {
             switch(aSVGToken)
             {
-                case SVGTokenFill:
+                case SVGToken::Fill:
                 {
                     SvgPaint aSvgPaint;
                     OUString aURL;
@@ -1334,7 +1334,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenFillOpacity:
+                case SVGToken::FillOpacity:
                 {
                     SvgNumber aNum;
 
@@ -1344,7 +1344,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenFillRule:
+                case SVGToken::FillRule:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1359,7 +1359,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenStroke:
+                case SVGToken::Stroke:
                 {
                     SvgPaint aSvgPaint;
                     OUString aURL;
@@ -1379,7 +1379,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenStrokeDasharray:
+                case SVGToken::StrokeDasharray:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1400,7 +1400,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenStrokeDashoffset:
+                case SVGToken::StrokeDashoffset:
                 {
                     SvgNumber aNum;
 
@@ -1413,7 +1413,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenStrokeLinecap:
+                case SVGToken::StrokeLinecap:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1432,7 +1432,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenStrokeLinejoin:
+                case SVGToken::StrokeLinejoin:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1451,7 +1451,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenStrokeMiterlimit:
+                case SVGToken::StrokeMiterlimit:
                 {
                     SvgNumber aNum;
 
@@ -1464,7 +1464,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenStrokeOpacity:
+                case SVGToken::StrokeOpacity:
                 {
 
                     SvgNumber aNum;
@@ -1475,7 +1475,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenStrokeWidth:
+                case SVGToken::StrokeWidth:
                 {
                     SvgNumber aNum;
 
@@ -1488,7 +1488,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenStopColor:
+                case SVGToken::StopColor:
                 {
                     SvgPaint aSvgPaint;
                     OUString aURL;
@@ -1504,7 +1504,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenStopOpacity:
+                case SVGToken::StopOpacity:
                 {
                     SvgNumber aNum;
 
@@ -1517,11 +1517,11 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenFont:
+                case SVGToken::Font:
                 {
                     break;
                 }
-                case SVGTokenFontFamily:
+                case SVGToken::FontFamily:
                 {
                     SvgStringVector aSvgStringVector;
 
@@ -1531,7 +1531,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenFontSize:
+                case SVGToken::FontSize:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1587,11 +1587,11 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenFontSizeAdjust:
+                case SVGToken::FontSizeAdjust:
                 {
                     break;
                 }
-                case SVGTokenFontStretch:
+                case SVGToken::FontStretch:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1642,7 +1642,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenFontStyle:
+                case SVGToken::FontStyle:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1661,11 +1661,11 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenFontVariant:
+                case SVGToken::FontVariant:
                 {
                     break;
                 }
-                case SVGTokenFontWeight:
+                case SVGToken::FontWeight:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1716,15 +1716,15 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenDirection:
+                case SVGToken::Direction:
                 {
                     break;
                 }
-                case SVGTokenLetterSpacing:
+                case SVGToken::LetterSpacing:
                 {
                     break;
                 }
-                case SVGTokenTextDecoration:
+                case SVGToken::TextDecoration:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1751,15 +1751,15 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenUnicodeBidi:
+                case SVGToken::UnicodeBidi:
                 {
                     break;
                 }
-                case SVGTokenWordSpacing:
+                case SVGToken::WordSpacing:
                 {
                     break;
                 }
-                case SVGTokenTextAnchor:
+                case SVGToken::TextAnchor:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1778,7 +1778,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTextAlign:
+                case SVGToken::TextAlign:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1801,7 +1801,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenColor:
+                case SVGToken::Color:
                 {
                     SvgPaint aSvgPaint;
                     OUString aURL;
@@ -1817,7 +1817,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenOpacity:
+                case SVGToken::Opacity:
                 {
                     SvgNumber aNum;
 
@@ -1827,7 +1827,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenVisibility:
+                case SVGToken::Visibility:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1850,27 +1850,27 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTitle:
+                case SVGToken::Title:
                 {
                     maTitle = aContent;
                     break;
                 }
-                case SVGTokenDesc:
+                case SVGToken::Desc:
                 {
                     maDesc = aContent;
                     break;
                 }
-                case SVGTokenClipPathProperty:
+                case SVGToken::ClipPathProperty:
                 {
                     readLocalUrl(aContent, maClipPathXLink);
                     break;
                 }
-                case SVGTokenMask:
+                case SVGToken::Mask:
                 {
                     readLocalUrl(aContent, maMaskXLink);
                     break;
                 }
-                case SVGTokenClipRule:
+                case SVGToken::ClipRule:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -1885,7 +1885,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenMarker:
+                case SVGToken::Marker:
                 {
                     if(bCaseIndependent)
                     {
@@ -1894,22 +1894,22 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenMarkerStart:
+                case SVGToken::MarkerStart:
                 {
                     readLocalUrl(aContent, maMarkerStartXLink);
                     break;
                 }
-                case SVGTokenMarkerMid:
+                case SVGToken::MarkerMid:
                 {
                     readLocalUrl(aContent, maMarkerMidXLink);
                     break;
                 }
-                case SVGTokenMarkerEnd:
+                case SVGToken::MarkerEnd:
                 {
                     readLocalUrl(aContent, maMarkerEndXLink);
                     break;
                 }
-                case SVGTokenDisplay:
+                case SVGToken::Display:
                 {
                     // There may be display:none statements inside of style defines, e.g. the following line:
                     // style="display:none"
@@ -1921,7 +1921,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenBaselineShift:
+                case SVGToken::BaselineShift:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -2097,7 +2097,7 @@ namespace svgio::svgreader
 
                     if(pNode)
                     {
-                        if(SVGTokenLinearGradient == pNode->getType() || SVGTokenRadialGradient == pNode->getType())
+                        if(SVGToken::LinearGradient == pNode->getType() || SVGToken::RadialGradient == pNode->getType())
                         {
                             return static_cast< const SvgGradientNode* >(pNode);
                         }
@@ -2127,7 +2127,7 @@ namespace svgio::svgreader
 
                     if(pNode)
                     {
-                        if(SVGTokenLinearGradient == pNode->getType() || SVGTokenRadialGradient  == pNode->getType())
+                        if(SVGToken::LinearGradient == pNode->getType() || SVGToken::RadialGradient  == pNode->getType())
                         {
                             return static_cast< const SvgGradientNode* >(pNode);
                         }
@@ -2158,7 +2158,7 @@ namespace svgio::svgreader
 
                     if(pNode)
                     {
-                        if(SVGTokenPattern == pNode->getType())
+                        if(SVGToken::Pattern == pNode->getType())
                         {
                             return static_cast< const SvgPatternNode* >(pNode);
                         }
@@ -2189,7 +2189,7 @@ namespace svgio::svgreader
 
                     if(pNode)
                     {
-                        if(SVGTokenPattern == pNode->getType())
+                        if(SVGToken::Pattern == pNode->getType())
                         {
                             return static_cast< const SvgPatternNode* >(pNode);
                         }
@@ -2311,19 +2311,19 @@ namespace svgio::svgreader
             // single slides into <g visibility="hidden">. Not sure why
             // this happens, but this leads (correctly) to empty imported
             // Graphics.
-            // Thus, if Visibility_hidden is active and owner is a SVGTokenG
-            // and it's parent is also a SVGTokenG and it has a Class 'SlideGroup'
+            // Thus, if Visibility_hidden is active and owner is a SVGToken::G
+            // and it's parent is also a SVGToken::G and it has a Class 'SlideGroup'
             // set, check if we are an Impress export.
             // We are an Impress export if an SVG-Node titled 'ooo:meta_slides'
             // exists.
             // All together gives:
             if(Visibility_hidden == maVisibility
-                && SVGTokenG == mrOwner.getType()
+                && SVGToken::G == mrOwner.getType()
                 && nullptr != mrOwner.getDocument().findSvgNodeById("ooo:meta_slides"))
             {
                 const SvgNode* pParent(mrOwner.getParent());
 
-                if(nullptr != pParent && SVGTokenG == pParent->getType() && pParent->getClass())
+                if(nullptr != pParent && SVGToken::G == pParent->getType() && pParent->getClass())
                 {
                     const OUString aClass(*pParent->getClass());
 

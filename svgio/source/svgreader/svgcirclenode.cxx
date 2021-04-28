@@ -27,7 +27,7 @@ namespace svgio::svgreader
         SvgCircleNode::SvgCircleNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenCircle, rDocument, pParent),
+        :   SvgNode(SVGToken::Circle, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maCx(0),
             maCy(0),
@@ -55,12 +55,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenCx:
+                case SVGToken::Cx:
                 {
                     SvgNumber aNum;
 
@@ -70,7 +70,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenCy:
+                case SVGToken::Cy:
                 {
                     SvgNumber aNum;
 
@@ -80,7 +80,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenR:
+                case SVGToken::R:
                 {
                     SvgNumber aNum;
 
@@ -93,7 +93,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 

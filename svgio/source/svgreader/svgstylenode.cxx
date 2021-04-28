@@ -26,7 +26,7 @@ namespace svgio::svgreader
         SvgStyleNode::SvgStyleNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenStyle, rDocument, pParent),
+        :   SvgNode(SVGToken::Style, rDocument, pParent),
             maSvgStyleAttributes(),
             mbTextCss(false)
         {
@@ -62,7 +62,7 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenType:
+                case SVGToken::Type:
                 {
                     if(!aContent.isEmpty())
                     {
