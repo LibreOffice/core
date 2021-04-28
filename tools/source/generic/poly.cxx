@@ -227,14 +227,14 @@ ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long n
 ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
     PolyStyle eStyle )
 {
-    const tools::Long  nWidth = rBound.GetWidth();
-    const tools::Long  nHeight = rBound.GetHeight();
+    const auto nWidth = rBound.GetWidth();
+    const auto nHeight = rBound.GetHeight();
 
     if( ( nWidth > 1 ) && ( nHeight > 1 ) )
     {
         const Point aCenter( rBound.Center() );
-        const tools::Long  nRadX = aCenter.X() - rBound.Left();
-        const tools::Long  nRadY = aCenter.Y() - rBound.Top();
+        const auto nRadX = o3tl::saturating_sub(aCenter.X(), rBound.Left());
+        const auto nRadY = o3tl::saturating_sub(aCenter.Y(), rBound.Top());
         sal_uInt16  nPoints;
 
         tools::Long nRadXY;
