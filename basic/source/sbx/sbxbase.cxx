@@ -178,16 +178,25 @@ SbxObject* SbxBase::CreateObject( const OUString& rClass )
     return pNew;
 }
 
+namespace {
+
+// coverity[ -taint_source ]
+[[nodiscard]] SbxFlagBits CorrectFlags(SbxFlagBits nFlags)
+{
+    // Correcting a foolishness of mine:
+    if (nFlags & SbxFlagBits::Reserved)
+        nFlags |= SbxFlagBits::GlobalSearch;
+    return nFlags & ~SbxFlagBits::Reserved;
+}
+
+}
+
 SbxBase* SbxBase::Load( SvStream& rStrm )
 {
     sal_uInt16 nSbxId(0), nFlagsTmp(0), nVer(0);
     sal_uInt32 nCreator(0), nSize(0);
     rStrm.ReadUInt32( nCreator ).ReadUInt16( nSbxId ).ReadUInt16( nFlagsTmp ).ReadUInt16( nVer );
-    SbxFlagBits nFlags = static_cast<SbxFlagBits>(nFlagsTmp);
-
-    // Correcting a foolishness of mine:
-    if( nFlags & SbxFlagBits::Reserved )
-        nFlags = ( nFlags & ~SbxFlagBits::Reserved ) | SbxFlagBits::GlobalSearch;
+    SbxFlagBits nFlags = CorrectFlags(static_cast<SbxFlagBits>(nFlagsTmp));
 
     sal_uInt64 nOldPos = rStrm.Tell();
     rStrm.ReadUInt32( nSize );
