@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6ed1df91_937de1eb",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T18:29:12Z",
+      "side": 1,
+      "message": "If we pass KahanSum by reference we pass 64 bits pointer.\nIf we pass it back by value we pass 128 bits.\nThat\u0027s my reasoning.\nIf desired I can just return a Kahan sum.",
+      "parentUuid": "7f05ef15_a41afd10",
+      "range": {
+        "startLine": 93,
+        "startChar": 60,
+        "endLine": 93,
+        "endChar": 74
+      },
+      "revId": "7a85988a42e67766e73022db15de7b186741a1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f65c75d1_24c22697",
         "filename": "sc/source/core/inc/arraysumfunctor.hxx",
         "patchSetId": 9
@@ -39,6 +63,24 @@
       "revId": "7a85988a42e67766e73022db15de7b186741a1d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87895118_65e63b21",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T18:29:12Z",
+      "side": 1,
+      "message": "It\u0027s said pair wise summation has less error than normal summation.\nhttps://en.wikipedia.org/wiki/Pairwise_summation\nWe gain precision just by the order of the sum.\nThe purpose is to max out the precision of the sum while making same number of operations.",
+      "parentUuid": "f65c75d1_24c22697",
+      "revId": "7a85988a42e67766e73022db15de7b186741a1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "7a85988a42e67766e73022db15de7b186741a1d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0675f40_246b5b5d",
+        "filename": "sc/source/core/tool/arraysumSSE2.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T18:29:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f247617f_a013d39f",
+      "range": {
+        "startLine": 72,
+        "startChar": 21,
+        "endLine": 72,
+        "endChar": 22
+      },
+      "revId": "7a85988a42e67766e73022db15de7b186741a1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
