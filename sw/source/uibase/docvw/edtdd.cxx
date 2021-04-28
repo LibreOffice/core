@@ -84,7 +84,8 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     bool bStart = false, bDelSelect = false;
     SdrObject *pObj = nullptr;
     Point aDocPos( PixelToLogic( rPosPixel ) );
-    if ( !rSh.IsInSelect() && rSh.TestCurrPam( aDocPos, true))
+    const bool bInSelect = rSh.IsInSelect();
+    if (!bInSelect && rSh.TestCurrPam(aDocPos, true))
         //We are not selecting and aren't at a selection
         bStart = true;
     else if ( !g_bFrameDrag && rSh.IsSelFrameMode() &&
@@ -110,7 +111,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         else
             rSh.UnlockPaint();
     }
-    else
+    else if (!bInSelect)// tdf#116384 only drag hyperlink if user's not currently setting the selection
     {
         SwContentAtPos aSwContentAtPos( IsAttrAtPos::InetAttr );
         bStart = rSh.GetContentAtPos( aDocPos,
