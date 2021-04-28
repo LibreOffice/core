@@ -72,6 +72,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <vcl/errinf.hxx>
+#include <vcl/threadex.hxx>
 #include <unotools/configmgr.hxx>
 
 namespace framework{
@@ -619,7 +620,25 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
 
-    return LoadEnv::loadComponentFromURL(xThis, m_xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
+    utl::MediaDescriptor aDescriptor(lArguments);
+    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+
+    if (bOnMainThread)
+    {
+        // Make sure that we own the solar mutex, otherwise later
+        // vcl::SolarThreadExecutor::execute() will release the solar mutex, even if it's owned by
+        // another thread, leading to an std::abort() at the end.
+        SolarMutexGuard g;
+
+        return vcl::solarthread::syncExecute(std::bind(&LoadEnv::loadComponentFromURL, xThis,
+                                                       m_xContext, sURL, sTargetFrameName,
+                                                       nSearchFlags, lArguments));
+    }
+    else
+    {
+        return LoadEnv::loadComponentFromURL(xThis, m_xContext, sURL, sTargetFrameName,
+                                             nSearchFlags, lArguments);
+    }
 }
 
 /*-************************************************************************************************************
