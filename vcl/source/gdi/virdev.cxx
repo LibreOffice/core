@@ -157,20 +157,9 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
             css::uno::Reference< css::uno::XInterface >() );
     }
 
-    switch (meFormat)
-    {
-        case DeviceFormat::BITMASK:
-            mnBitCount = 1;
-            break;
-        default:
-            mnBitCount = pOutDev->GetBitCount();
-            break;
-    }
+    mnBitCount = pOutDev->GetBitCount();
     mnOutWidth      = nDX;
     mnOutHeight     = nDY;
-
-    if (meFormat == DeviceFormat::BITMASK)
-        SetAntialiasing( AntialiasingFlags::DisableText );
 
     mbScreenComp    = pOutDev->IsScreenComp();
 

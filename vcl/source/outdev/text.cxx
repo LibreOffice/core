@@ -215,7 +215,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     // cache virtual device for rotation
     if (!mpOutDevData->mpRotateDev)
-        mpOutDevData->mpRotateDev = VclPtr<VirtualDevice>::Create(*this, DeviceFormat::BITMASK);
+        mpOutDevData->mpRotateDev = VclPtr<VirtualDevice>::Create(*this);
     VirtualDevice* pVDev = mpOutDevData->mpRotateDev;
 
     // size it accordingly

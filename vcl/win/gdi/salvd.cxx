@@ -102,8 +102,7 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
     if (!hDC)
         return nullptr;
 
-    sal_uInt16 nBitCount = (eFormat == DeviceFormat::BITMASK) ? 1 : 0;
-
+    sal_uInt16 nBitCount = 0;
     HBITMAP hBmp = nullptr;
     if (!pData)
     {

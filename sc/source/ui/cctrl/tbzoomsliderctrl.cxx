@@ -395,7 +395,7 @@ void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
     Size aSliderWindowSize(GetOutputSizePixel());
     tools::Rectangle aRect(Point(0, 0), aSliderWindowSize);
 
-    ScopedVclPtrInstance< VirtualDevice > pVDev(rRenderContext, DeviceFormat::DEFAULT, DeviceFormat::BITMASK);
+    ScopedVclPtrInstance< VirtualDevice > pVDev(rRenderContext);
     pVDev->SetOutputSizePixel(aSliderWindowSize);
     pVDev->SetFillColor( COL_TRANSPARENT );
     pVDev->SetLineColor( COL_TRANSPARENT );

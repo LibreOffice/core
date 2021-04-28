@@ -77,12 +77,7 @@ void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
         cairo_surface_destroy(m_pSurface);
     }
 
-    if (m_eFormat == DeviceFormat::BITMASK)
-    {
-        m_pSurface = cairo_surface_create_similar(m_pRefSurface, CAIRO_CONTENT_ALPHA,
-                            nNewDX, nNewDY);
-    }
-    else if (pBuffer)
+    if (pBuffer)
     {
         double fXScale, fYScale;
         if (comphelper::LibreOfficeKit::isActive())

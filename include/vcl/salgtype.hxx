@@ -28,7 +28,6 @@
 enum class DeviceFormat {
                             NONE = -1,
                             DEFAULT = 0,
-                            BITMASK = 1,
 #ifdef IOS
                             GRAYSCALE = 8
 #endif

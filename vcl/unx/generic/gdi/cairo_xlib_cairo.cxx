@@ -302,13 +302,8 @@ namespace cairo
     {
         if (!maSysData.pRenderFormat)
             return DeviceFormat::DEFAULT;
-        switch (static_cast<XRenderPictFormat*>(maSysData.pRenderFormat)->depth)
-        {
-            case 1:
-                return DeviceFormat::BITMASK;
-            default:
-                return DeviceFormat::DEFAULT;
-        }
+        assert (static_cast<XRenderPictFormat*>(maSysData.pRenderFormat)->depth != 1 && "unsupported");
+        return DeviceFormat::DEFAULT;
     }
 }
 

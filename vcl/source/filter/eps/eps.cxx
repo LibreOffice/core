@@ -2001,7 +2001,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const to
         vcl::Font    aNotRotatedFont( maFont );
         aNotRotatedFont.SetOrientation( 0_deg10 );
 
-        ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::BITMASK);
+        ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::DEFAULT);
         pVirDev->SetMapMode( rVDev.GetMapMode() );
         pVirDev->SetFont( aNotRotatedFont );
         pVirDev->SetTextAlign( eTextAlign );

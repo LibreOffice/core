@@ -72,7 +72,7 @@ void LifecycleTest::testVirtualDevice()
     VclPtr<VirtualDevice> pVDev = VclPtr< VirtualDevice >::Create();
     ScopedVclPtrInstance< VirtualDevice > pVDev2;
     VclPtrInstance<VirtualDevice> pVDev3;
-    VclPtrInstance<VirtualDevice> pVDev4(DeviceFormat::BITMASK);
+    VclPtrInstance<VirtualDevice> pVDev4(DeviceFormat::DEFAULT);
     CPPUNIT_ASSERT(!!pVDev);
     CPPUNIT_ASSERT(!!pVDev2);
     CPPUNIT_ASSERT(!!pVDev3);

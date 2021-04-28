@@ -185,7 +185,7 @@ VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
 #ifdef IOS
         mpVirtualDevice_100th_mm = VclPtr<VirtualDevice>::Create(DeviceFormat::GRAYSCALE);
 #else
-        mpVirtualDevice_100th_mm = VclPtr<VirtualDevice>::Create(DeviceFormat::BITMASK);
+        mpVirtualDevice_100th_mm = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
 #endif
         mpVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::RefDevMode::MSO1);
         MapMode aMapMode( mpVirtualDevice_100th_mm->GetMapMode() );

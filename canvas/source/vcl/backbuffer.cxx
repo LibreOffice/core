@@ -27,14 +27,9 @@
 
 namespace vclcanvas
 {
-    BackBuffer::BackBuffer( const OutputDevice& rRefDevice,
-                            bool                bMonochromeBuffer ) :
-        maVDev( VclPtr<VirtualDevice>::Create( rRefDevice,
-                                   bMonochromeBuffer ? DeviceFormat::BITMASK : DeviceFormat::DEFAULT ) )
+    BackBuffer::BackBuffer( const OutputDevice& rRefDevice ) :
+        maVDev( VclPtr<VirtualDevice>::Create( rRefDevice, DeviceFormat::DEFAULT ) )
     {
-        if( bMonochromeBuffer )
-            return;
-
         tools::SetDefaultDeviceAntiAliasing( maVDev );
     }
 

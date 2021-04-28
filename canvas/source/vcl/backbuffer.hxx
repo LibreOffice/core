@@ -31,15 +31,8 @@ namespace vclcanvas
     class BackBuffer : public OutDevProvider
     {
     public:
-        /** Create a backbuffer for given reference device
-
-            @param bMonochromeBuffer
-            When false, default depth of reference device is
-            chosen. When true, the buffer will be monochrome, i.e. one
-            bit deep.
-         */
-        BackBuffer( const OutputDevice& rRefDevice,
-                    bool                bMonochromeBuffer=false );
+        /** Create a backbuffer for given reference device */
+        BackBuffer( const OutputDevice& rRefDevice );
         virtual ~BackBuffer() override;
 
         virtual OutputDevice&       getOutDev() override;

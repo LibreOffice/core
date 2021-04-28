@@ -367,7 +367,7 @@ namespace drawinglayer::primitive2d
             maGraphic(rGraphic),
             maAnimation(rGraphic.GetAnimation()),
             maVirtualDevice(*Application::GetDefaultDevice()),
-            maVirtualDeviceMask(*Application::GetDefaultDevice(), DeviceFormat::BITMASK),
+            maVirtualDeviceMask(*Application::GetDefaultDevice()),
             mnNextFrameToPrepare(SAL_MAX_UINT32),
             maBufferedFirstFrame(),
             maBufferedPrimitives(),

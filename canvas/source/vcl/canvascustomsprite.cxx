@@ -58,9 +58,8 @@ namespace vclcanvas
         BackBufferSharedPtr pBackBuffer = std::make_shared<BackBuffer>( rOutDevProvider->getOutDev() );
         pBackBuffer->setSize( aSize );
 
-        // create mask backbuffer, with one bit color depth
-        BackBufferSharedPtr pBackBufferMask = std::make_shared<BackBuffer>( rOutDevProvider->getOutDev(),
-                                                             true );
+        // create mask backbuffer
+        BackBufferSharedPtr pBackBufferMask = std::make_shared<BackBuffer>( rOutDevProvider->getOutDev() );
         pBackBufferMask->setSize( aSize );
 
         // TODO(F1): Implement alpha vdev (could prolly enable

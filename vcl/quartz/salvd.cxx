@@ -116,9 +116,6 @@ AquaSalVirtualDevice::AquaSalVirtualDevice(
         mpGraphics = new AquaSalGraphics(); // never fails
         switch (eFormat)
         {
-            case DeviceFormat::BITMASK:
-                mnBitmapDepth = 1;
-                break;
 #ifdef IOS
             case DeviceFormat::GRAYSCALE:
                 mnBitmapDepth = 8;

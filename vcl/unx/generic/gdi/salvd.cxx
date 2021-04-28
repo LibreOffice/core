@@ -96,18 +96,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, tools::L
     SalColormap* pColormap = nullptr;
     bool bDeleteColormap = false;
 
-    sal_uInt16 nBitCount;
-    switch (eFormat)
-    {
-        case DeviceFormat::BITMASK:
-            nBitCount = 1;
-            break;
-        default:
-            nBitCount = pGraphics->GetBitCount();
-            break;
-
-    }
-
+    sal_uInt16 nBitCount = pGraphics->GetBitCount();
     pDisplay_               = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     nDepth_                 = nBitCount;
 
