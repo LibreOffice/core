@@ -31,6 +31,10 @@
 #include <cui/cuidllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 
+#include <deque>
+#include <memory>
+#include <utility>
+
 using namespace ::com::sun::star;
 class SubsetMap;
 
@@ -177,6 +181,13 @@ public:
     void setCharName(sal_UCS4 nDecimalValue);
 
     void toggleSearchView(bool state);
+
+private:
+    std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
+    getRecentChar(const OUString& sTitle, const OUString& rFont) const;
+
+    std::pair<std::deque<OUString>::const_iterator, std::deque<OUString>::const_iterator>
+    getFavChar(const OUString& sTitle, const OUString& rFont) const;
 };
 
 #endif
