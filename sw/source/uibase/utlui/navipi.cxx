@@ -1121,7 +1121,7 @@ SwNavigatorWin::SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
     {
         m_xNavi->m_xContentTree->SetRootType(nRootType);
         m_xNavi->m_xContent5ToolBox->set_item_active("root", true);
-        if (nRootType == ContentTypeId::OUTLINE)
+        if (nRootType == ContentTypeId::OUTLINE || nRootType == ContentTypeId::DRAWOBJECT)
         {
             m_xNavi->m_xContentTree->set_selection_mode(SelectionMode::Multiple);
         }
@@ -1132,6 +1132,8 @@ SwNavigatorWin::SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
     SetMinOutputSizePixel(GetOptimalSize());
     if (pNaviConfig->IsSmall())
         m_xNavi->ZoomIn();
+
+    m_xNavi->m_xContentTree->UpdateTracking();
 }
 
 void SwNavigatorWin::StateChanged(StateChangedType nStateChange)

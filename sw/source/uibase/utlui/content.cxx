@@ -2428,11 +2428,11 @@ void SwContentTree::ToggleToRoot()
             }
             m_nRootType = pCntType->GetType();
             m_bIsRoot = true;
-            Display(State::HIDDEN != m_eState);
-            if (m_nRootType == ContentTypeId::OUTLINE)
+            if (m_nRootType == ContentTypeId::OUTLINE || m_nRootType == ContentTypeId::DRAWOBJECT)
             {
                 m_xTreeView->set_selection_mode(SelectionMode::Multiple);
             }
+            Display(State::HIDDEN != m_eState);
         }
     }
     else
@@ -2446,6 +2446,7 @@ void SwContentTree::ToggleToRoot()
     m_pConfig->SetRootType( m_nRootType );
     weld::Toolbar* pBox = GetParentWindow()->m_xContent5ToolBox.get();
     pBox->set_item_active("root", m_bIsRoot);
+    UpdateTracking();
 }
 
 bool SwContentTree::HasContentChanged()
@@ -3201,6 +3202,31 @@ static void lcl_SelectByContentTypeAndName(SwContentTree* pThis, weld::TreeView&
     }
 }
 
+static void lcl_SelectDrawObjectByName(weld::TreeView& rContentTree, std::u16string_view rName)
+{
+    if (rName.empty())
+        return;
+
+    // find content type entry
+    std::unique_ptr<weld::TreeIter> xIter(rContentTree.make_iterator());
+    bool bFoundEntry = rContentTree.get_iter_first(*xIter);
+    while (bFoundEntry && SwResId(STR_CONTENT_TYPE_DRAWOBJECT) != rContentTree.get_text(*xIter))
+        bFoundEntry = rContentTree.iter_next_sibling(*xIter);
+    // find content type content entry and select it
+    if (bFoundEntry)
+    {
+        rContentTree.expand_row(*xIter); // assure content type entry is expanded
+        while (rContentTree.iter_next(*xIter) && lcl_IsContent(*xIter, rContentTree))
+        {
+            if (rName == rContentTree.get_text(*xIter))
+            {
+                rContentTree.select(*xIter);
+                break;
+            }
+        }
+    }
+}
+
 /** No idle with focus or while dragging */
 IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
 {
@@ -3263,27 +3289,24 @@ void SwContentTree::UpdateTracking()
                                                SelectionType::DbForm)) &&
             !(m_bIsRoot && m_nRootType != ContentTypeId::DRAWOBJECT))
     {
+        m_xTreeView->unselect_all();
         SdrView* pSdrView = m_pActiveShell->GetDrawView();
-        if(pSdrView && 1 == pSdrView->GetMarkedObjectCount())
+        if (pSdrView)
         {
-            SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
-            OUString aName(pSelected->GetName());
-            if (!aName.isEmpty())
-                lcl_SelectByContentTypeAndName(this, *m_xTreeView,
-                                               SwResId(STR_CONTENT_TYPE_DRAWOBJECT), aName);
-            else
+            for (size_t nIdx(0); nIdx < pSdrView->GetMarkedObjectCount(); nIdx++)
             {
-                // clear treeview selections
-                m_xTreeView->unselect_all();
-                Select();
+                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(nIdx);
+                OUString aName(pSelected->GetName());
+                if (!aName.isEmpty())
+                    lcl_SelectDrawObjectByName(*m_xTreeView, aName);
             }
         }
         else
         {
             // clear treeview selections
             m_xTreeView->unselect_all();
-            Select();
         }
+        Select();
         return;
     }
     // graphic, frame, and ole
