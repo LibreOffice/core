@@ -835,7 +835,7 @@ private:
     void ScSumX2DY2();
     void ScSumXMY2();
     void ScGrowth();
-    bool CalculateSkew(double& fSum,double& fCount,double& vSum,std::vector<double>& values);
+    bool CalculateSkew(KahanSum& fSum, double& fCount, std::vector<double>& values);
     void CalculateSkewOrSkewp( bool bSkewp );
     void CalculateSlopeIntercept(bool bSlope);
     void CalculateSmallLarge(bool bSmall);
