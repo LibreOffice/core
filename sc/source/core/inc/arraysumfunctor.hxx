@@ -17,6 +17,7 @@
 #include <sal/types.h>
 #include <tools/simd.hxx>
 #include <tools/cpuid.hxx>
+#include <kahan.hxx>
 
 namespace sc
 {
@@ -33,11 +34,11 @@ public:
     {
     }
 
-    double operator()()
+    KahanSum operator()()
     {
         const static bool hasSSE2 = cpuid::hasSSE2();
 
-        double fSum = 0.0;
+        KahanSum fSum = 0.0;
         size_t i = 0;
         const double* pCurrent = mpArray;
 
@@ -54,7 +55,7 @@ public:
             }
         }
         else
-            fSum += executeUnrolled(i, pCurrent);
+            executeUnrolled(i, pCurrent, fSum);
 
         // sum rest of the array
 
@@ -63,9 +64,10 @@ public:
 
         // If the sum is a NaN, some of the terms were empty cells, probably.
         // Re-calculate, carefully
-        if (!std::isfinite(fSum))
+        if (!std::isfinite(fSum.get()))
         {
-            sal_uInt32 nErr = reinterpret_cast<sal_math_Double*>(&fSum)->nan_parts.fraction_lo;
+            double fVal = fSum.get();
+            sal_uInt32 nErr = reinterpret_cast<sal_math_Double*>(&fVal)->nan_parts.fraction_lo;
             if (nErr & 0xffff0000)
             {
                 fSum = 0;
@@ -88,17 +90,17 @@ public:
 
 private:
     double executeSSE2(size_t& i, const double* pCurrent) const;
-    double executeUnrolled(size_t& i, const double* pCurrent) const
+    void executeUnrolled(size_t& i, const double* pCurrent, KahanSum& fSum) const
     {
         size_t nRealSize = mnSize - i;
         size_t nUnrolledSize = nRealSize - (nRealSize % 4);
 
         if (nUnrolledSize > 0)
         {
-            double sum0 = 0.0;
-            double sum1 = 0.0;
-            double sum2 = 0.0;
-            double sum3 = 0.0;
+            KahanSum sum0 = 0.0;
+            KahanSum sum1 = 0.0;
+            KahanSum sum2 = 0.0;
+            KahanSum sum3 = 0.0;
 
             for (; i < nUnrolledSize; i += 4)
             {
@@ -107,9 +109,9 @@ private:
                 sum2 += *pCurrent++;
                 sum3 += *pCurrent++;
             }
-            return sum0 + sum1 + sum2 + sum3;
+            // We are using pairwise summation alongside Kahan
+            fSum = (sum0 + sum1) + (sum2 + sum3);
         }
-        return 0.0;
     }
 };
 
