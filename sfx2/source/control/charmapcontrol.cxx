@@ -125,10 +125,17 @@ void SfxCharmapCtrl::getFavCharacterList()
     //retrieve recent character font list
     css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
     m_aFavCharFontList.insert( m_aFavCharFontList.end(), rFavCharFontList.begin(), rFavCharFontList.end() );
+
+    // tdf#135997: make sure that the two lists are same length
+    const auto nCommonLength = std::min(m_aFavCharList.size(), m_aFavCharFontList.size());
+    m_aFavCharList.resize(nCommonLength);
+    m_aFavCharFontList.resize(nCommonLength);
 }
 
 void SfxCharmapCtrl::updateFavCharControl()
 {
+    assert(m_aFavCharList.size() == m_aFavCharFontList.size());
+
     int i = 0;
     for ( std::deque< OUString >::iterator it = m_aFavCharList.begin(), it2 = m_aFavCharFontList.begin();
         it != m_aFavCharList.end() && it2 != m_aFavCharFontList.end();
@@ -157,10 +164,16 @@ void SfxCharmapCtrl::getRecentCharacterList()
     //retrieve recent character font list
     css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
     m_aRecentCharFontList.insert( m_aRecentCharFontList.end(), rRecentCharFontList.begin(), rRecentCharFontList.end() );
+
+    // tdf#135997: make sure that the two lists are same length
+    const auto nCommonLength = std::min(m_aRecentCharList.size(), m_aRecentCharFontList.size());
+    m_aRecentCharList.resize(nCommonLength);
+    m_aRecentCharFontList.resize(nCommonLength);
 }
 
 void SfxCharmapCtrl::updateRecentCharControl()
 {
+    assert(m_aRecentCharList.size() == m_aRecentCharFontList.size());
     int i = 0;
     for ( std::deque< OUString >::iterator it = m_aRecentCharList.begin(), it2 = m_aRecentCharFontList.begin();
         it != m_aRecentCharList.end() && it2 != m_aRecentCharFontList.end();
