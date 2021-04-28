@@ -12,9 +12,9 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <atomic>
 #include <memory>
-#include <set>
 #include <vector>
 
 #include <osl/process.h>
@@ -74,7 +74,25 @@ protected:
     }
 };
 
-// An AsyncEvent generates a 'b' (begin) event when constructed and an 'e' (end) event when destructed
+// An AsyncEvent generates a 'b' (begin) event when constructed and an 'e' (end) event when it
+// itself or its nesting parent (if there is one) is destructed (or earlier, if requested)
+
+// There are two kinds of async event pairs: Freestanding ones that are not related to other events
+// at all, and nested ones that have to be nested between the 'b' and 'e' events of a parent Async
+// event.
+
+// To generate a pair of 'b' and 'e' events, create an AsyncEvent object using the AsyncEvent(const
+// char* sName) constructor when you want the 'b' event to be generated, and destroy it when you
+// want the corresponding 'e' event to be generated.
+
+// To generate a pair of 'b' and 'e' events that is nested inside an outer 'b' and 'e' event pair,
+// create an AsyncEvent object using the createWithParent() function. It returns a weak reference
+// (weak_ptr) to the AsyncEvent. The parent keeps a strong reference (shared_ptr) to it.
+
+// The 'e' event will be generated when the parent is about to go away, before the parent's 'e'
+// event. When the parent has gone away, the weak reference will have expired. You can also generate
+// it explicitly by calling the finish() function. (But in that case you could as well have used a
+// freestanding AsyncEvent object, I think.)
 
 class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
                                         public std::enable_shared_from_this<AsyncEvent>
@@ -82,7 +100,7 @@ class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
     static int s_nIdCounter;
     int m_nId;
     int m_nPid;
-    std::set<std::shared_ptr<AsyncEvent>> m_aChildren;
+    std::vector<std::shared_ptr<AsyncEvent>> m_aChildren;
     std::weak_ptr<AsyncEvent> m_pParent;
     bool m_bBeginRecorded;
 
@@ -119,16 +137,18 @@ class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
         }
     }
 
-public:
-    AsyncEvent(const char* sName)
-        : AsyncEvent(sName, s_nIdCounter++)
-    {
-    }
-
-    ~AsyncEvent()
+    void generateEnd()
     {
         if (m_bBeginRecorded)
         {
+            m_bBeginRecorded = false;
+
+            // In case somebody is holding on to a hard reference to a child we need to tell the
+            // children to finish up explicitly, we can't rely on our pointers to them being the
+            // only ones.
+            for (auto& i : m_aChildren)
+                i->generateEnd();
+
             m_aChildren.clear();
 
             long long nNow = getNow();
@@ -153,6 +173,14 @@ public:
         }
     }
 
+public:
+    AsyncEvent(const char* sName)
+        : AsyncEvent(sName, s_nIdCounter++)
+    {
+    }
+
+    ~AsyncEvent() { generateEnd(); }
+
     static std::weak_ptr<AsyncEvent> createWithParent(const char* sName,
                                                       std::shared_ptr<AsyncEvent> pParent)
     {
@@ -161,7 +189,7 @@ public:
         if (s_bRecording && pParent->m_bBeginRecorded)
         {
             pResult.reset(new AsyncEvent(sName, pParent->m_nId));
-            pParent->m_aChildren.insert(pResult);
+            pParent->m_aChildren.push_back(pResult);
             pResult->m_pParent = pParent;
         }
 
@@ -170,13 +198,16 @@ public:
 
     void finish()
     {
-        // This makes sense to call only for a nested AsyncEvent. To finish up a non-nested AsyncEvent you
-        // just need to release your sole owning pointer to it.
+        generateEnd();
+
         auto pParent = m_pParent.lock();
         if (!pParent)
             return;
-        pParent->m_aChildren.erase(shared_from_this());
-        m_aChildren.clear();
+
+        pParent->m_aChildren.erase(std::remove(pParent->m_aChildren.begin(),
+                                               pParent->m_aChildren.end(), shared_from_this()),
+                                   pParent->m_aChildren.end());
+        m_pParent.reset();
     }
 };
 
