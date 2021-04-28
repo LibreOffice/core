@@ -31,21 +31,21 @@
  <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DefaultParaStyle" toolbar:text="Default"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultParaStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:TitleParaStyle" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SubtitleParaStyle" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Heading1ParaStyle" toolbar:text="H1"/>
- <toolbar:toolbaritem xlink:href=".uno:Heading2ParaStyle" toolbar:text="H2"/>
- <toolbar:toolbaritem xlink:href=".uno:Heading3ParaStyle" toolbar:text="H3"/>
- <toolbar:toolbaritem xlink:href=".uno:Heading4ParaStyle" toolbar:text="H4" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Heading5ParaStyle" toolbar:text="H5" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Heading6ParaStyle" toolbar:text="H6" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:TextBodyParaStyle" toolbar:text="Text"/>
- <toolbar:toolbaritem xlink:href=".uno:QuoteParaStyle" toolbar:text="Quote"/>
- <toolbar:toolbaritem xlink:href=".uno:PreformattedParaStyle" toolbar:text="Pre"/>
+ <toolbar:toolbaritem xlink:href=".uno:Heading1ParaStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:Heading2ParaStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:Heading3ParaStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:Heading4ParaStyle" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Heading5ParaStyle" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Heading6ParaStyle" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:TextBodyParaStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:QuoteParaStyle" />
+ <toolbar:toolbaritem xlink:href=".uno:PreformattedParaStyle"/>
  <toolbar:toolbarseparator/>
  <!-- These commands can be enabled when tdf#88512 and tdf#106782 are fixed -->
- <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:text="Character Styles" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleUpdateByExample" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleNewByExample" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:EditStyle" toolbar:visible="false"/>
@@ -54,7 +54,7 @@
  <toolbar:toolbaritem xlink:href=".uno:EmphasisCharStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:StrongEmphasisCharStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:QuoteCharStyle" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SourceCharStyle" toolbar:text="Code"/>
+ <toolbar:toolbaritem xlink:href=".uno:SourceCharStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=User Entry&amp;FamilyName:string=CharacterStyles" toolbar:text="User" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:visible="false"/>
@@ -71,7 +71,7 @@
  <toolbar:toolbaritem xlink:href=".uno:ResetAttributes"/>
  <toolbar:toolbarseparator/>
  <!-- These command can be enabled when tdf#107000 is fixed -->
- <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:text="List Styles" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
