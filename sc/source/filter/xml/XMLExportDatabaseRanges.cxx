@@ -446,6 +446,18 @@ private:
             const ScQueryEntry::Item& rItem = rItems.front();
             if (rItem.meType == ScQueryEntry::ByString)
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+            else if (rItem.meType == ScQueryEntry::ByTextColor
+                     || rItem.meType == ScQueryEntry::ByBackgroundColor)
+            {
+                if (rItem.meType == ScQueryEntry::ByTextColor)
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_TEXT_COLOR);
+                else
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_BACKGROUND_COLOR);
+
+                OUStringBuffer buffer;
+                sax::Converter::convertColor(buffer, rItem.maColor);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, buffer.makeStringAndClear());
+            }
             else
             {
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);

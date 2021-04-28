@@ -26,6 +26,7 @@
 #include <document.hxx>
 
 #include <o3tl/safeint.hxx>
+#include <sax/tools/converter.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -424,6 +425,13 @@ void SAL_CALL ScXMLConditionContext::endFastElement( sal_Int32 /*nElement*/ )
         {
             rItem.mfVal = sConditionValue.toDouble();
             rItem.meType = ScQueryEntry::ByValue;
+        }
+        else if (IsXMLToken(sDataType, XML_TEXT_COLOR)
+                 || IsXMLToken(sDataType, XML_BACKGROUND_COLOR))
+        {
+            rItem.meType = IsXMLToken(sDataType, XML_TEXT_COLOR) ? ScQueryEntry::ByTextColor
+                                                                 : ScQueryEntry::ByBackgroundColor;
+            sax::Converter::convertColor(rItem.maColor, sConditionValue);
         }
         else
         {
