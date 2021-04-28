@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "36d96d3e_93c93382",
+        "filename": "sc/inc/columnspanset.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T11:30:00Z",
+      "side": 1,
+      "message": "\u003e and we may from the executeColumnSum from here ...\n\nSorry, I meant \"and we may *drop* executeColumnSum from here, executeSum from ColumnAction, and unify everywhere on executeColumnAction/execute\"",
+      "parentUuid": "cd101454_e9e6ef75",
+      "revId": "3b964e7b5cb9aea82be1605f213283e654852f07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c448a69a_c2609ae6",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 15
