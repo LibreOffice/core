@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05ab1237_ca3d833a",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T19:37:22Z",
+      "side": 1,
+      "message": "IIUC this may be kept as it was:\n\n        return 0.0;\n\nIt is expressive and clear.",
+      "range": {
+        "startLine": 115,
+        "startChar": 15,
+        "endLine": 115,
+        "endChar": 26
+      },
+      "revId": "9f52641151022d14bb4edd7d267b5d5241afa59e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
