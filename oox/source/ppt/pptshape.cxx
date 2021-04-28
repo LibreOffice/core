@@ -26,6 +26,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -370,10 +372,27 @@ void PPTShape::addShape(
                     OUString aTitleText;
                     Reference<XTextRange> xText(xShape, UNO_QUERY_THROW);
                     aTitleText = xText->getString();
+
+                    Reference<drawing::XDrawPagesSupplier> xDPS(rFilterBase.getModel(),uno::UNO_QUERY_THROW);
+                    Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(),uno::UNO_SET_THROW);
+                    sal_uInt32 nMaxPages = xDrawPages->getCount();
+                    sal_uInt32 nPage = 0;
+                    bool bUniqueSlideName = true;
+                    while (nPage < nMaxPages)
+                    {
+                        Reference<XDrawPage> xDrawPage(xDrawPages->getByIndex(nPage), uno::UNO_QUERY);
+                        Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
+                        if (xDrawPage && xNamed->getName() == aTitleText)
+                            bUniqueSlideName = false;
+                        nPage++;
+                    }
+
                     if (!aTitleText.isEmpty() && (aTitleText.getLength() < 64))    // just a magic value, but we don't want to set slide names which are too long
                     {
                         Reference<container::XNamed> xName(rSlidePersist.getPage(), UNO_QUERY_THROW);
-                        xName->setName(aTitleText);
+                        bUniqueSlideName ? xName->setName(aTitleText)
+                                         : xName->setName(aTitleText + " ("
+                                                          + OUString::number(nPage - 1) + ")");
                     }
                 }
                 catch (uno::Exception&)
