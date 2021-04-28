@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7af7cd09_43f7390b",
+        "filename": "sc/inc/columnspanset.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T11:39:38Z",
+      "side": 1,
+      "message": "It seems the introduction of Kahan sum has ended simplifying the code when I expected to make it more complex.",
+      "parentUuid": "cd101454_e9e6ef75",
+      "revId": "3b964e7b5cb9aea82be1605f213283e654852f07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c448a69a_c2609ae6",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 15
@@ -57,6 +75,30 @@
       "revId": "3b964e7b5cb9aea82be1605f213283e654852f07",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c28ac49a_440c59c8",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T11:39:38Z",
+      "side": 1,
+      "message": "Reordered the code so we check if the array has non null length before we continue.",
+      "parentUuid": "c448a69a_c2609ae6",
+      "range": {
+        "startLine": 225,
+        "startChar": 16,
+        "endLine": 232,
+        "endChar": 27
+      },
+      "revId": "3b964e7b5cb9aea82be1605f213283e654852f07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
