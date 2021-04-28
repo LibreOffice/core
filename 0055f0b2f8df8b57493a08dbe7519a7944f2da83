@@ -81,6 +81,30 @@
       "revId": "0055f0b2f8df8b57493a08dbe7519a7944f2da83",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83e0def9_3e8ed97c",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T06:12:11Z",
+      "side": 1,
+      "message": "E.g., maAccumulator",
+      "parentUuid": "280765e0_9ff2ec91",
+      "range": {
+        "startLine": 401,
+        "startChar": 0,
+        "endLine": 401,
+        "endChar": 1
+      },
+      "revId": "0055f0b2f8df8b57493a08dbe7519a7944f2da83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

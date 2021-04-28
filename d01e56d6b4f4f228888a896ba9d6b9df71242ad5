@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b4e2ea2_210b7ef0",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T06:12:11Z",
+      "side": 1,
+      "message": "Please address https://gerrit.libreoffice.org/c/core/+/114627/10/sc/source/core/tool/interpr6.cxx#401",
+      "range": {
+        "startLine": 210,
+        "startChar": 13,
+        "endLine": 210,
+        "endChar": 19
+      },
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e000cda_92bbe727",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T06:12:11Z",
+      "side": 1,
+      "message": "Please split it to three lines:\n\n                for (i \u003d 0; i \u003c nDataSize; ++i)\n                    if (p[i] !\u003d 0)\n                        break;",
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61d22339_7dbac023",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T06:12:11Z",
+      "side": 1,
+      "message": "And of course, while renaming mfRest, it\u0027s reasonable to rename this to e.g. getResult(). Don\u0027t hesitate to do this, even though you will need to replace the function name in several places.",
+      "range": {
+        "startLine": 270,
+        "startChar": 13,
+        "endLine": 270,
+        "endChar": 20
+      },
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb0e9d59_251781d4",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T06:12:11Z",
+      "side": 1,
+      "message": "AFAICT the executeSum is only redefined in this FuncSum, so it looks reasonable to from the newly unused parameter from the sc::ColumnSpanSet::ColumnAction::executeSum completely, instead of just making it unnamed here.",
+      "range": {
+        "startLine": 360,
+        "startChar": 65,
+        "endLine": 360,
+        "endChar": 72
+      },
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36cc5a5c_fac39fac",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T06:12:11Z",
+      "side": 1,
+      "message": "Please undo this change.",
+      "range": {
+        "startLine": 427,
+        "startChar": 8,
+        "endLine": 427,
+        "endChar": 13
+      },
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4593019f_c91e07b6",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T06:12:11Z",
+      "side": 1,
+      "message": "This looks indented one space too much",
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
