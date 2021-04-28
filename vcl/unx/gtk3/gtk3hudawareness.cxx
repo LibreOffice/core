@@ -15,7 +15,7 @@ namespace {
 
 struct HudAwarenessHandle
 {
-  GDBusConnection *connection;
+  gpointer connection;
   HudAwarenessCallback callback;
   gpointer user_data;
   GDestroyNotify notify;
@@ -92,7 +92,7 @@ hud_awareness_register (GDBusConnection       *connection,
       return 0;
     }
 
-  handle->connection = static_cast<GDBusConnection*>(g_object_ref (connection));
+  handle->connection = g_object_ref(connection);
   handle->callback = callback;
   handle->user_data = user_data;
   handle->notify = notify;
