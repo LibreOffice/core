@@ -148,13 +148,10 @@ BitmapEx XLineEndList::CreateBitmapForUI( tools::Long nIndex )
             *pVirtualDevice,
             aNewViewInformation2D));
 
-        if(pProcessor2D)
-        {
-            const drawinglayer::primitive2d::Primitive2DContainer aSequence { aLineStartEndPrimitive };
+        const drawinglayer::primitive2d::Primitive2DContainer aSequence { aLineStartEndPrimitive };
 
-            pProcessor2D->process(aSequence);
-            pProcessor2D.reset();
-        }
+        pProcessor2D->process(aSequence);
+        pProcessor2D.reset();
 
         // get result bitmap and scale
         aRetval = pVirtualDevice->GetBitmapEx(Point(0, 0), pVirtualDevice->GetOutputSizePixel());

@@ -695,11 +695,8 @@ void FrameSelectorImpl::DrawAllFrameBorders()
             *mpVirDev,
             aNewViewInformation2D));
 
-    if (pProcessor2D)
-    {
-        pProcessor2D->process(maArray.CreateB2DPrimitiveArray());
-        pProcessor2D.reset();
-    }
+    pProcessor2D->process(maArray.CreateB2DPrimitiveArray());
+    pProcessor2D.reset();
 }
 
 void FrameSelectorImpl::DrawVirtualDevice()

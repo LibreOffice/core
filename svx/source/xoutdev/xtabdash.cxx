@@ -161,13 +161,10 @@ BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
         *pVirtualDevice,
         aNewViewInformation2D));
 
-    if(pProcessor2D)
-    {
-        const drawinglayer::primitive2d::Primitive2DContainer aSequence { aLinePrimitive };
+    const drawinglayer::primitive2d::Primitive2DContainer aSequence { aLinePrimitive };
 
-        pProcessor2D->process(aSequence);
-        pProcessor2D.reset();
-    }
+    pProcessor2D->process(aSequence);
+    pProcessor2D.reset();
 
     // get result bitmap and scale
     BitmapEx aRetval(pVirtualDevice->GetBitmapEx(Point(0, 0), pVirtualDevice->GetOutputSizePixel()));

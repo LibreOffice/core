@@ -85,87 +85,84 @@ namespace drawinglayer
                 *pContent,
                 rViewInformation2D);
 
-            if(pContentProcessor)
+#ifdef DBG_UTIL
+            static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
+#endif
+            // render content
+            pContentProcessor->process(aSequence);
+
+            // get content
+            pContent->EnableMapMode(false);
+            const Bitmap aContent(pContent->GetBitmap(aEmptyPoint, aSizePixel));
+
+#ifdef DBG_UTIL
+            if(bDoSaveForVisualControl)
             {
-#ifdef DBG_UTIL
-                static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
-#endif
-                // render content
-                pContentProcessor->process(aSequence);
-
-                // get content
-                pContent->EnableMapMode(false);
-                const Bitmap aContent(pContent->GetBitmap(aEmptyPoint, aSizePixel));
-
-#ifdef DBG_UTIL
-                if(bDoSaveForVisualControl)
-                {
-                    SvFileStream aNew(
+                SvFileStream aNew(
 #ifdef _WIN32
-                    "c:\\test_content.png"
+                "c:\\test_content.png"
 #else
-                    "~/test_content.png"
+                "~/test_content.png"
 #endif
-                    , StreamMode::WRITE|StreamMode::TRUNC);
-                    BitmapEx aContentEx(aContent);
-                    vcl::PNGWriter aPNGWriter(aContentEx);
-                    aPNGWriter.Write(aNew);
-                }
-#endif
-                // prepare for mask creation
-                pContent->SetMapMode(aMapModePixel);
-
-                // set alpha to all white (fully transparent)
-                pContent->Erase();
-
-                // embed primitives to paint them black
-                const primitive2d::Primitive2DReference xRef(
-                    new primitive2d::ModifiedColorPrimitive2D(
-                        aSequence,
-                        std::make_shared<basegfx::BColorModifier_replace>(
-                                basegfx::BColor(0.0, 0.0, 0.0))));
-                const primitive2d::Primitive2DContainer xSeq { xRef };
-
-                // render
-                pContentProcessor->process(xSeq);
-                pContentProcessor.reset();
-
-                // get alpha channel from vdev
-                pContent->EnableMapMode(false);
-                const Bitmap aAlpha(pContent->GetBitmap(aEmptyPoint, aSizePixel));
-#ifdef DBG_UTIL
-                if(bDoSaveForVisualControl)
-                {
-                    SvFileStream aNew(
-#ifdef _WIN32
-                    "c:\\test_alpha.png"
-#else
-                    "~/test_alpha.png"
-#endif
-                    , StreamMode::WRITE|StreamMode::TRUNC);
-                    BitmapEx aAlphaEx(aAlpha);
-                    vcl::PNGWriter aPNGWriter(aAlphaEx);
-                    aPNGWriter.Write(aNew);
-                }
-#endif
-
-                // create BitmapEx result
-                aRetval = BitmapEx(aContent, AlphaMask(aAlpha));
-#ifdef DBG_UTIL
-                if(bDoSaveForVisualControl)
-                {
-                    SvFileStream aNew(
-#ifdef _WIN32
-                    "c:\\test_combined.png"
-#else
-                    "~/test_combined.png"
-#endif
-                    , StreamMode::WRITE|StreamMode::TRUNC);
-                    vcl::PNGWriter aPNGWriter(aRetval);
-                    aPNGWriter.Write(aNew);
-                }
-#endif
+                , StreamMode::WRITE|StreamMode::TRUNC);
+                BitmapEx aContentEx(aContent);
+                vcl::PNGWriter aPNGWriter(aContentEx);
+                aPNGWriter.Write(aNew);
             }
+#endif
+            // prepare for mask creation
+            pContent->SetMapMode(aMapModePixel);
+
+            // set alpha to all white (fully transparent)
+            pContent->Erase();
+
+            // embed primitives to paint them black
+            const primitive2d::Primitive2DReference xRef(
+                new primitive2d::ModifiedColorPrimitive2D(
+                    aSequence,
+                    std::make_shared<basegfx::BColorModifier_replace>(
+                            basegfx::BColor(0.0, 0.0, 0.0))));
+            const primitive2d::Primitive2DContainer xSeq { xRef };
+
+            // render
+            pContentProcessor->process(xSeq);
+            pContentProcessor.reset();
+
+            // get alpha channel from vdev
+            pContent->EnableMapMode(false);
+            const Bitmap aAlpha(pContent->GetBitmap(aEmptyPoint, aSizePixel));
+#ifdef DBG_UTIL
+            if(bDoSaveForVisualControl)
+            {
+                SvFileStream aNew(
+#ifdef _WIN32
+                "c:\\test_alpha.png"
+#else
+                "~/test_alpha.png"
+#endif
+                , StreamMode::WRITE|StreamMode::TRUNC);
+                BitmapEx aAlphaEx(aAlpha);
+                vcl::PNGWriter aPNGWriter(aAlphaEx);
+                aPNGWriter.Write(aNew);
+            }
+#endif
+
+            // create BitmapEx result
+            aRetval = BitmapEx(aContent, AlphaMask(aAlpha));
+#ifdef DBG_UTIL
+            if(bDoSaveForVisualControl)
+            {
+                SvFileStream aNew(
+#ifdef _WIN32
+                "c:\\test_combined.png"
+#else
+                "~/test_combined.png"
+#endif
+                , StreamMode::WRITE|StreamMode::TRUNC);
+                vcl::PNGWriter aPNGWriter(aRetval);
+                aPNGWriter.Write(aNew);
+            }
+#endif
         }
 
         return aRetval;
