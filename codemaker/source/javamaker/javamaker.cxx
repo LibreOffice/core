@@ -36,6 +36,7 @@
 #include "javaoptions.hxx"
 #include "javatype.hxx"
 
+// coverity[tainted_data] - this is a build time tool
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     JavaOptions options;
     try {
