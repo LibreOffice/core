@@ -85,6 +85,7 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
@@ -233,6 +234,7 @@ public:
     void testTdf106638();
     void testTdf113198();
     void testTdf49856();
+    void testTdf103347();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -349,6 +351,7 @@ public:
     CPPUNIT_TEST(testMirroredGraphic);
     CPPUNIT_TEST(testGreysScaleGraphic);
     CPPUNIT_TEST(testTdf134210CropPosition);
+    CPPUNIT_TEST(testTdf103347);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3440,6 +3443,28 @@ void SdImportTest::testGreysScaleGraphic()
     Graphic aGraphic(xGraphic);
     BitmapEx aBitmap(aGraphic.GetBitmapEx());
     CPPUNIT_ASSERT_EQUAL( Color(0x3c3c3c), aBitmap.GetPixelColor( 0, 0 ));
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf103347()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf103347.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY_THROW);
+
+    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xNamed1(xPage1, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello"), xNamed1->getName());
+
+    uno::Reference<drawing::XDrawPage> xPage2(xDoc->getDrawPages()->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xNamed2(xPage2, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("page2"), xNamed2->getName());
+
+    uno::Reference<drawing::XDrawPage> xPage3(xDoc->getDrawPages()->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xNamed3(xPage3, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("page3"), xNamed3->getName());
+
     xDocShRef->DoClose();
 }
 

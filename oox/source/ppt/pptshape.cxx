@@ -26,6 +26,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -363,14 +365,29 @@ void PPTShape::addShape(
                 setMasterTextListStyle( aMasterTextListStyle );
 
             Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, bClearText, bool(mpPlaceholder), aTransformation, getFillProperties() ) );
+            // if exists and not duplicated, try to use the title text as slide name to help its re-use on UI
             if (!rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && mnSubType == XML_title)
-             {
+            {
                 try
                 {
                     OUString aTitleText;
                     Reference<XTextRange> xText(xShape, UNO_QUERY_THROW);
                     aTitleText = xText->getString();
-                    if (!aTitleText.isEmpty() && (aTitleText.getLength() < 64))    // just a magic value, but we don't want to set slide names which are too long
+                    Reference<drawing::XDrawPagesSupplier> xDPS(rFilterBase.getModel(), uno::UNO_QUERY_THROW);
+                    Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
+                    sal_uInt32 nMaxPages = xDrawPages->getCount();
+                    bool bUseTitleAsSlideName = !aTitleText.isEmpty() &&
+                          // just a magic value, but we don't want to set slide names which are too long
+                          aTitleText.getLength() < 64;
+                    // check duplicated title name
+                    for (sal_uInt32 nPage = 0; bUseTitleAsSlideName && nPage < nMaxPages; ++nPage)
+                    {
+                        Reference<XDrawPage> xDrawPage(xDrawPages->getByIndex(nPage), uno::UNO_QUERY);
+                        Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
+                        if ( xNamed->getName() == aTitleText )
+                            bUseTitleAsSlideName = false;
+                    }
+                    if ( bUseTitleAsSlideName )
                     {
                         Reference<container::XNamed> xName(rSlidePersist.getPage(), UNO_QUERY_THROW);
                         xName->setName(aTitleText);
