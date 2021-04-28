@@ -36,6 +36,7 @@
 #include "cppuoptions.hxx"
 #include "cpputype.hxx"
 
+// coverity[tainted_data] - this is a build time tool
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     CppuOptions options;
     try {
