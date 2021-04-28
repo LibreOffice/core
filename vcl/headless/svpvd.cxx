@@ -31,9 +31,8 @@
 
 using namespace basegfx;
 
-SvpSalVirtualDevice::SvpSalVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface, cairo_surface_t* pPreExistingTarget)
-    : m_eFormat(eFormat)
-    , m_pRefSurface(pRefSurface)
+SvpSalVirtualDevice::SvpSalVirtualDevice(cairo_surface_t* pRefSurface, cairo_surface_t* pPreExistingTarget)
+    : m_pRefSurface(pRefSurface)
     , m_pSurface(pPreExistingTarget)
     , m_bOwnsSurface(!pPreExistingTarget)
 {
@@ -77,12 +76,7 @@ void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
         cairo_surface_destroy(m_pSurface);
     }
 
-    if (m_eFormat == DeviceFormat::BITMASK)
-    {
-        m_pSurface = cairo_surface_create_similar(m_pRefSurface, CAIRO_CONTENT_ALPHA,
-                            nNewDX, nNewDY);
-    }
-    else if (pBuffer)
+    if (pBuffer)
     {
         double fXScale, fYScale;
         if (comphelper::LibreOfficeKit::isActive())

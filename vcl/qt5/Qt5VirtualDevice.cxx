@@ -24,9 +24,8 @@
 
 #include <QtGui/QImage>
 
-Qt5VirtualDevice::Qt5VirtualDevice(DeviceFormat eFormat, double fScale)
-    : m_eFormat(eFormat)
-    , m_fScale(fScale)
+Qt5VirtualDevice::Qt5VirtualDevice(double fScale)
+    : m_fScale(fScale)
 {
 }
 
@@ -67,17 +66,10 @@ bool Qt5VirtualDevice::SetSizeUsingBuffer(tools::Long nNewDX, tools::Long nNewDY
     nNewDX *= m_fScale;
     nNewDY *= m_fScale;
 
-    if (m_eFormat == DeviceFormat::BITMASK)
-    {
-        m_pImage.reset(new QImage(nNewDX, nNewDY, QImage::Format_Mono));
-    }
+    if (pBuffer)
+        m_pImage.reset(new QImage(pBuffer, nNewDX, nNewDY, Qt5_DefaultFormat32));
     else
-    {
-        if (pBuffer)
-            m_pImage.reset(new QImage(pBuffer, nNewDX, nNewDY, Qt5_DefaultFormat32));
-        else
-            m_pImage.reset(new QImage(nNewDX, nNewDY, Qt5_DefaultFormat32));
-    }
+        m_pImage.reset(new QImage(nNewDX, nNewDY, Qt5_DefaultFormat32));
 
     m_pImage->fill(Qt::transparent);
     m_pImage->setDevicePixelRatio(m_fScale);
