@@ -24,18 +24,15 @@ A stripped down version with extended comments:
      std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
          drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(...));
 
-     if (pProcessor2D)
-     {
-         // Fill-in the display list.
-         drawinglayer::primitive2d::Primitive2DSequence aSequence(2);
+     // Fill-in the display list.
+     drawinglayer::primitive2d::Primitive2DSequence aSequence(2);
 
-         aSequence[0] = aHatchPrimitive;
-         aSequence[1] = aBlackRectanglePrimitive;
+     aSequence[0] = aHatchPrimitive;
+     aSequence[1] = aBlackRectanglePrimitive;
 
-         // Render it to the virtual device.
-         pProcessor2D->process(aSequence);
-         pProcessor2D.reset();
-     }
+     // Render it to the virtual device.
+     pProcessor2D->process(aSequence);
+     pProcessor2D.reset();
 
      // Obtain the bitmap that was rendered from the virtual device, to re-use
      // it in the widget.

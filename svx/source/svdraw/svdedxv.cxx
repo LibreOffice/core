@@ -764,27 +764,22 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
             drawinglayer::processor2d::createProcessor2DFromOutputDevice(rTargetDevice,
                                                                          aViewInformation2D));
 
-        if (xProcessor)
-        {
-            const bool bMapModeEnabled(rTargetDevice.IsMapModeEnabled());
-            const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aPixRect);
-            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-            const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
-            const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent()
-                                       * 0.01);
-            const sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
-            const drawinglayer::primitive2d::Primitive2DReference xReference(
-                new drawinglayer::primitive2d::OverlayRectanglePrimitive(
-                    aRange, aHilightColor.getBColor(), fTransparence,
-                    std::max(6, nPixSiz - 2), // grow
-                    0.0, // shrink
-                    0.0));
-            const drawinglayer::primitive2d::Primitive2DContainer aSequence{ xReference };
+        const bool bMapModeEnabled(rTargetDevice.IsMapModeEnabled());
+        const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aPixRect);
+        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+        const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+        const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+        const sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
+        const drawinglayer::primitive2d::Primitive2DReference xReference(
+            new drawinglayer::primitive2d::OverlayRectanglePrimitive(
+                aRange, aHilightColor.getBColor(), fTransparence, std::max(6, nPixSiz - 2), // grow
+                0.0, // shrink
+                0.0));
+        const drawinglayer::primitive2d::Primitive2DContainer aSequence{ xReference };
 
-            rTargetDevice.EnableMapMode(false);
-            xProcessor->process(aSequence);
-            rTargetDevice.EnableMapMode(bMapModeEnabled);
-        }
+        rTargetDevice.EnableMapMode(false);
+        xProcessor->process(aSequence);
+        rTargetDevice.EnableMapMode(bMapModeEnabled);
     }
 
     rOutlView.ShowCursor(/*bGotoCursor=*/true, /*bActivate=*/true);

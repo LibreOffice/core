@@ -123,10 +123,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
             *pTargetDevice,
             getViewInformation2D()));
 
-        if(pProcessor2D)
-        {
-            pProcessor2D->process(xPrimitiveSequence);
-        }
+        pProcessor2D->process(xPrimitiveSequence);
     }
 }
 

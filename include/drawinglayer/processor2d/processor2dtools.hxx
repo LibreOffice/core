@@ -39,8 +39,7 @@ namespace drawinglayer::processor2d
             The ViewInformation to use
 
             @return
-            the created BaseProcessor2D (ownership change) or null if
-            something went wrong
+            the created BaseProcessor2D (ownership change)
         */
         DRAWINGLAYER_DLLPUBLIC std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
@@ -58,8 +57,7 @@ namespace drawinglayer::processor2d
             The ViewInformation to use
 
             @return
-            the created BaseProcessor2D (ownership change) or null if
-            something went wrong
+            the created BaseProcessor2D (ownership change)
         */
         DRAWINGLAYER_DLLPUBLIC std::unique_ptr<BaseProcessor2D> createProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,

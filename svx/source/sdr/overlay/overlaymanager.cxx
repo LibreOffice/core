@@ -50,38 +50,35 @@ namespace sdr::overlay
                 rDestinationDevice,
                 getCurrentViewInformation2D()));
 
-            if(pProcessor)
+            for(const auto& rpOverlayObject : maOverlayObjects)
             {
-                for(const auto& rpOverlayObject : maOverlayObjects)
+                OSL_ENSURE(rpOverlayObject, "Corrupted OverlayObject List (!)");
+                const OverlayObject& rCandidate = *rpOverlayObject;
+
+                if(rCandidate.isVisible())
                 {
-                    OSL_ENSURE(rpOverlayObject, "Corrupted OverlayObject List (!)");
-                    const OverlayObject& rCandidate = *rpOverlayObject;
+                    const drawinglayer::primitive2d::Primitive2DContainer& rSequence = rCandidate.getOverlayObjectPrimitive2DSequence();
 
-                    if(rCandidate.isVisible())
+                    if(!rSequence.empty())
                     {
-                        const drawinglayer::primitive2d::Primitive2DContainer& rSequence = rCandidate.getOverlayObjectPrimitive2DSequence();
-
-                        if(!rSequence.empty())
+                        if(rRange.overlaps(rCandidate.getBaseRange()))
                         {
-                            if(rRange.overlaps(rCandidate.getBaseRange()))
+                            if(bIsAntiAliasing && rCandidate.allowsAntiAliase())
                             {
-                                if(bIsAntiAliasing && rCandidate.allowsAntiAliase())
-                                {
-                                    rDestinationDevice.SetAntialiasing(nOriginalAA | AntialiasingFlags::Enable);
-                                }
-                                else
-                                {
-                                    rDestinationDevice.SetAntialiasing(nOriginalAA & ~AntialiasingFlags::Enable);
-                                }
-
-                                pProcessor->process(rSequence);
+                                rDestinationDevice.SetAntialiasing(nOriginalAA | AntialiasingFlags::Enable);
                             }
+                            else
+                            {
+                                rDestinationDevice.SetAntialiasing(nOriginalAA & ~AntialiasingFlags::Enable);
+                            }
+
+                            pProcessor->process(rSequence);
                         }
                     }
                 }
-
-                pProcessor.reset();
             }
+
+            pProcessor.reset();
 
             // restore AA settings
             rDestinationDevice.SetAntialiasing(nOriginalAA);

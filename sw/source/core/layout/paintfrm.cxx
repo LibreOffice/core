@@ -1800,11 +1800,8 @@ bool DrawFillAttributes(
                 std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                     rOut,
                     aViewInformation2D) );
-                if(pProcessor)
-                {
-                    pProcessor->process(*pPrimitives);
-                    return true;
-                }
+                pProcessor->process(*pPrimitives);
+                return true;
             }
         }
     }

@@ -363,12 +363,8 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
 
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
         drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext, aViewInformation2D));
-    if (pProcessor)
-    {
-        pProcessor->process(aSequence);
-    }
+    pProcessor->process(aSequence);
 }
-
 
 void SvxPageWindow::EnableFrameDirection(bool bEnable)
 {

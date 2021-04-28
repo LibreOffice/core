@@ -276,10 +276,7 @@ namespace sdr::contact
                     drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                         rTargetOutDev, getViewInformation2D()));
 
-                if(pProcessor2D)
-                {
-                    pProcessor2D->process(xPrimitiveSequence);
-                }
+                pProcessor2D->process(xPrimitiveSequence);
             }
 
             // #114359# restore old ClipReghion
