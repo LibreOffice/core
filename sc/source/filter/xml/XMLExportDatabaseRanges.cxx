@@ -448,10 +448,6 @@ private:
             return;
         }
 
-        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(rEntry.nField - nFieldStart));
-        if (bCaseSens)
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-
         if (rItems.size() == 1)
         {
             // Single item condition.
@@ -463,6 +459,22 @@ private:
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_TEXT);
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             }
+            else if (rItem.meType == ScQueryEntry::ByTextColor
+                     || rItem.meType == ScQueryEntry::ByBackgroundColor)
+            {
+                if (mrExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+                {
+                    if (rItem.meType == ScQueryEntry::ByTextColor)
+                        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_TYPE, XML_TEXT_COLOR);
+                    else
+                        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_TYPE,
+                                              XML_BACKGROUND_COLOR);
+                }
+
+                OUStringBuffer buffer;
+                sax::Converter::convertColor(buffer, rItem.maColor);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, buffer.makeStringAndClear());
+            }
             else
             {
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
@@ -472,6 +484,9 @@ private:
             }
 
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(rEntry, eSearchType));
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(rEntry.nField - nFieldStart));
+            if (bCaseSens)
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
             SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
         }
         else
@@ -495,6 +510,9 @@ private:
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             }
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, OUString("="));
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(rEntry.nField - nFieldStart));
+            if (bCaseSens)
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
             SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
 
             std::for_each(rItems.begin(), rItems.end(), WriteSetItem(mrExport, mpDoc));

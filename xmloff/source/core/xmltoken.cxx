@@ -1920,6 +1920,7 @@ namespace xmloff::token {
         TOKEN( "text-background-color",           XML_TEXT_BACKGROUND_COLOR ),
         TOKEN( "text-blinking",                   XML_TEXT_BLINKING ),
         TOKEN( "text-box",                        XML_TEXT_BOX ),
+        TOKEN( "text-color",                      XML_TEXT_COLOR ),
         TOKEN( "text-combine",                    XML_TEXT_COMBINE ),
         TOKEN( "text-combine-end-char",           XML_TEXT_COMBINE_END_CHAR ),
         TOKEN( "text-combine-start-char",         XML_TEXT_COMBINE_START_CHAR ),
