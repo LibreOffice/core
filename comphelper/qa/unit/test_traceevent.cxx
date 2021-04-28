@@ -104,16 +104,16 @@ void TestTraceEvent::test()
     }
 
     CPPUNIT_ASSERT(aEvents[0].startsWith("{\"name:\"instant 1\",\"ph\":\"i\","));
-    CPPUNIT_ASSERT(aEvents[1].startsWith("{\"name\":\"async 2.5\",\"ph\":\"b\",\"id\":1\","));
+    CPPUNIT_ASSERT(aEvents[1].startsWith("{\"name\":\"async 2.5\",\"ph\":\"b\",\"id\":1,"));
     CPPUNIT_ASSERT(aEvents[2].startsWith("{\"name\":\"block 2\",\"ph\":\"X\","));
-    CPPUNIT_ASSERT(aEvents[3].startsWith("{\"name\":\"async 3\",\"ph\":\"b\",\"id\":2\","));
-    CPPUNIT_ASSERT(aEvents[4].startsWith("{\"name\":\"async 4\",\"ph\":\"b\",\"id\":2\","));
+    CPPUNIT_ASSERT(aEvents[3].startsWith("{\"name\":\"async 3\",\"ph\":\"b\",\"id\":2,"));
+    CPPUNIT_ASSERT(aEvents[4].startsWith("{\"name\":\"async 4\",\"ph\":\"b\",\"id\":2,"));
     CPPUNIT_ASSERT(aEvents[5].startsWith("{\"name\":\"block 3\",\"ph\":\"X\","));
-    CPPUNIT_ASSERT(aEvents[6].startsWith("{\"name\":\"async 2.5\",\"ph\":\"e\",\"id\":1\","));
+    CPPUNIT_ASSERT(aEvents[6].startsWith("{\"name\":\"async 2.5\",\"ph\":\"e\",\"id\":1,"));
     CPPUNIT_ASSERT(aEvents[7].startsWith("{\"name:\"instant 2\",\"ph\":\"i\","));
     CPPUNIT_ASSERT(aEvents[8].startsWith("{\"name\":\"test().2\",\"ph\":\"X\""));
-    CPPUNIT_ASSERT(aEvents[9].startsWith("{\"name\":\"async 4\",\"ph\":\"e\",\"id\":2\","));
-    CPPUNIT_ASSERT(aEvents[10].startsWith("{\"name\":\"async 3\",\"ph\":\"e\",\"id\":2\","));
+    CPPUNIT_ASSERT(aEvents[9].startsWith("{\"name\":\"async 4\",\"ph\":\"e\",\"id\":2,"));
+    CPPUNIT_ASSERT(aEvents[10].startsWith("{\"name\":\"async 3\",\"ph\":\"e\",\"id\":2,"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestTraceEvent);
