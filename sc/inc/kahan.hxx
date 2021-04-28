@@ -93,6 +93,20 @@ public:
         return fNSum;
     }
 
+    inline KahanSum operator+(const KahanSum& fSum) const
+    {
+        KahanSum fNSum(*this);
+        fNSum.add(fSum);
+        return fNSum;
+    }
+
+    inline KahanSum operator-(const KahanSum& fSum) const
+    {
+        KahanSum fNSum(*this);
+        fNSum.add(-fSum);
+        return fNSum;
+    }
+
     /**
       * In some parts of the code of interpr_.cxx this may be used for
       * productory instead of sum. This operator shall be used for that task.

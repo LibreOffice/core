@@ -1324,7 +1324,7 @@ void ScInterpreter::ScNPV()
             {
                 case svDouble :
                 {
-                    fVal += (GetDouble() / pow(1.0 + fRate, fCount));
+                    fVal += GetDouble() / pow(1.0 + fRate, fCount);
                     fCount++;
                 }
                 break;
@@ -1336,7 +1336,7 @@ void ScInterpreter::ScNPV()
                     if (!aCell.hasEmptyValue() && aCell.hasNumeric())
                     {
                         double fCellVal = GetCellValue(aAdr, aCell);
-                        fVal += (fCellVal / pow(1.0 + fRate, fCount));
+                        fVal += fCellVal / pow(1.0 + fRate, fCount);
                         fCount++;
                     }
                 }
@@ -1350,7 +1350,7 @@ void ScInterpreter::ScNPV()
                     ScHorizontalValueIterator aValIter( mrDoc, aRange );
                     while ((nErr == FormulaError::NONE) && aValIter.GetNext(fCellVal, nErr))
                     {
-                        fVal += (fCellVal / pow(1.0 + fRate, fCount));
+                        fVal += fCellVal / pow(1.0 + fRate, fCount);
                         fCount++;
                     }
                     if ( nErr != FormulaError::NONE )
@@ -1384,7 +1384,7 @@ void ScInterpreter::ScNPV()
                                         return;
                                     }
                                     fx = pMat->GetDouble(j,k);
-                                    fVal += (fx / pow(1.0 + fRate, fCount));
+                                    fVal += fx / pow(1.0 + fRate, fCount);
                                     fCount++;
                                 }
                             }
