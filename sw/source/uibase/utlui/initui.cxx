@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <unotools/localedatawrapper.hxx>
 #include <viewsh.hxx>
 #include <initui.hxx>
@@ -284,6 +286,23 @@ OUString const & SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
             pAuthFieldTypeList->push_back(SwResId(STR_AUTH_TYPE_ARY[i]));
     }
     return (*pAuthFieldTypeList)[static_cast< sal_uInt16 >(eType)];
+}
+
+void SwAuthorityFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwAuthorityFieldType"));
+    SwFieldType::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("DataArr"));
+    for (const auto& xAuthEntry : m_DataArr)
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("AuthEntry"));
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", xAuthEntry.get());
+        (void)xmlTextWriterEndElement(pWriter);
+    }
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

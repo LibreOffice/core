@@ -101,7 +101,7 @@ void SwAuthorityFieldType::RemoveField(const SwAuthEntry* pEntry)
             return;
         }
     }
-    SAL_WARN("sw.core", "SwAuthorityFieldType::RemoveField: pEntry is not my field");
+    assert(false && "SwAuthorityFieldType::RemoveField: pEntry was not added previously");
 }
 
 SwAuthEntry* SwAuthorityFieldType::AddField(const OUString& rFieldContents)
@@ -167,18 +167,18 @@ bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
     return false;
 }
 
-/// appends a new entry (if new) and returns the array position
-sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
+/// appends a new entry (if new) and returns the copied entry
+SwAuthEntry* SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
 {
     for( SwAuthDataArr::size_type nRet = 0; nRet < m_DataArr.size(); ++nRet )
     {
         if( *m_DataArr[ nRet ] == rInsert )
-            return nRet;
+            return m_DataArr[ nRet ].get();
     }
 
     //if it is a new Entry - insert
     m_DataArr.push_back(new SwAuthEntry(rInsert));
-    return m_DataArr.size()-1;
+    return m_DataArr.back().get();
 }
 
 std::unique_ptr<SwTOXInternational> SwAuthorityFieldType::CreateTOXInternational() const
@@ -770,7 +770,7 @@ SwFieldType* SwAuthorityField::ChgTyp( SwFieldType* pFieldTyp )
     if( pSrcTyp != pDstTyp )
     {
         const SwAuthEntry* pSrcEntry = m_xAuthEntry.get();
-        pDstTyp->AppendField( *pSrcEntry );
+        m_xAuthEntry = pDstTyp->AppendField( *pSrcEntry );
         pSrcTyp->RemoveField( pSrcEntry );
         SwField::ChgTyp( pFieldTyp );
     }
