@@ -491,7 +491,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
     vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
     const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
-    : InterimItemWindow(pParent, "svx/ui/stylespreview.ui", "ApplyStyleBox",
+    : InterimItemWindow(pParent, "svx/ui/stylespreview.ui", "ApplyStyleBox", true,
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , StylesPreviewWindow_Base(*m_xBuilder, aDefaultStyles, xDispatchProvider)
 {
