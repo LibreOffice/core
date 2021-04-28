@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c448a69a_c2609ae6",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T11:10:44Z",
+      "side": 1,
+      "message": "Now I look at this part, and think that it is likely obsolete now as a whole, only trying to skip some contiguous block of zeroes. Previously this was reasonable, since we needed to find first non-0 value, store it, and then use in approx*(). But now I doubt that this would result in any speed up (the only reason that could be thought of after elimination of the approx* hack).",
+      "range": {
+        "startLine": 225,
+        "startChar": 16,
+        "endLine": 232,
+        "endChar": 27
+      },
+      "revId": "3b964e7b5cb9aea82be1605f213283e654852f07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
