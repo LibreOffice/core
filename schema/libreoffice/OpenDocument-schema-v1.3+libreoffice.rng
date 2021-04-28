@@ -2639,4 +2639,16 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <rng:define name="table-filter-condition-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:data-type">
+        <rng:choice>
+          <rng:value>background-color</rng:value>
+          <rng:value>text-color</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
 </rng:grammar>
