@@ -1739,11 +1739,16 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         auto childrenNode = rJsonWriter.startArray("children");
         for (ToolBox::ImplToolItems::size_type i = 0; i < GetItemCount(); ++i)
         {
-            ToolBoxItemType type = GetItemType(i);
-            if (type == ToolBoxItemType::BUTTON)
+            auto childNode = rJsonWriter.startStruct();
+            ToolBoxItemId nId = GetItemId(i);
+
+            vcl::Window* pWindow = GetItemWindow(nId);
+            if (pWindow)
             {
-                auto childNode = rJsonWriter.startStruct();
-                ToolBoxItemId nId = GetItemId(i);
+                pWindow->DumpAsPropertyTree(rJsonWriter);
+            }
+            else
+            {
                 if (!IsItemVisible(nId))
                     continue;
                 rJsonWriter.put("type", "toolitem");
