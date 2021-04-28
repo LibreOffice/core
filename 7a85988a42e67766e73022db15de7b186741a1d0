@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f05ef15_a41afd10",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T18:01:10Z",
+      "side": 1,
+      "message": "Why making it void and take an out parameter? IMO just return a Kahan sum.",
+      "range": {
+        "startLine": 93,
+        "startChar": 60,
+        "endLine": 93,
+        "endChar": 74
+      },
+      "revId": "7a85988a42e67766e73022db15de7b186741a1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f65c75d1_24c22697",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T18:01:10Z",
+      "side": 1,
+      "message": "Why pairwise?",
+      "revId": "7a85988a42e67766e73022db15de7b186741a1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f247617f_a013d39f",
+        "filename": "sc/source/core/tool/arraysumSSE2.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T18:01:10Z",
+      "side": 1,
+      "message": "a typo: p \u003d\u003e b",
+      "range": {
+        "startLine": 72,
+        "startChar": 21,
+        "endLine": 72,
+        "endChar": 22
+      },
+      "revId": "7a85988a42e67766e73022db15de7b186741a1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
