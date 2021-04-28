@@ -1827,6 +1827,7 @@ text-autospace
 text-background-color
 text-blinking
 text-box
+text-color
 text-combine
 text-combine-end-char
 text-combine-start-char
