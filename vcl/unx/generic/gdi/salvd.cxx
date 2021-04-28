@@ -87,7 +87,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreEx
 }
 
 X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, tools::Long &nDX, tools::Long &nDY,
-                                         DeviceFormat eFormat, const SystemGraphicsData *pData,
+                                         DeviceFormat /*eFormat*/, const SystemGraphicsData *pData,
                                          std::unique_ptr<X11SalGraphics> pNewGraphics) :
     pGraphics_(std::move(pNewGraphics)),
     m_nXScreen(0),
@@ -96,18 +96,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, tools::L
     SalColormap* pColormap = nullptr;
     bool bDeleteColormap = false;
 
-    sal_uInt16 nBitCount;
-    switch (eFormat)
-    {
-        case DeviceFormat::BITMASK:
-            nBitCount = 1;
-            break;
-        default:
-            nBitCount = pGraphics->GetBitCount();
-            break;
-
-    }
-
+    sal_uInt16 nBitCount = pGraphics->GetBitCount();
     pDisplay_               = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     nDepth_                 = nBitCount;
 

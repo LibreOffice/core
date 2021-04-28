@@ -31,7 +31,6 @@ typedef struct _cairo_surface cairo_surface_t;
 
 class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
 {
-    DeviceFormat                        m_eFormat;
     cairo_surface_t*                    m_pRefSurface;
     cairo_surface_t*                    m_pSurface;
     bool                                m_bOwnsSurface; // nearly always true, except for edge case of tdf#127529
@@ -44,7 +43,7 @@ protected:
     SvpSalGraphics* AddGraphics(SvpSalGraphics* aGraphics);
 
 public:
-    SvpSalVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface, cairo_surface_t* pPreExistingTarget);
+    SvpSalVirtualDevice(cairo_surface_t* pRefSurface, cairo_surface_t* pPreExistingTarget);
     virtual ~SvpSalVirtualDevice() override;
 
     // SalVirtualDevice

@@ -321,7 +321,7 @@ Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, tools::Long& nDX, tools
         cairo_surface_t* pPreExistingTarget
             = pGd ? static_cast<cairo_surface_t*>(pGd->pSurface) : nullptr;
         std::unique_ptr<SalVirtualDevice> pVD(
-            new Qt5SvpVirtualDevice(eFormat, pSvpSalGraphics->getSurface(), pPreExistingTarget));
+            new Qt5SvpVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
         pVD->SetSize(nDX, nDY);
         return pVD;
     }

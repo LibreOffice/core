@@ -73,7 +73,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, to
 
 std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
                                                        tools::Long &nDX, tools::Long &nDY,
-                                                       DeviceFormat eFormat,
+                                                       DeviceFormat /*eFormat*/,
                                                        const SystemGraphicsData* pData )
 {
     WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
@@ -102,8 +102,7 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
     if (!hDC)
         return nullptr;
 
-    sal_uInt16 nBitCount = (eFormat == DeviceFormat::BITMASK) ? 1 : 0;
-
+    sal_uInt16 nBitCount = 0;
     HBITMAP hBmp = nullptr;
     if (!pData)
     {
