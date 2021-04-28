@@ -328,6 +328,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141550, "tdf141550.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf140137, "tdf140137.docx")
 {
     // Don't throw exception during load
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf105688, "tdf105688.docx")
+{
+    // Don't throw exception during load
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCommentDone, "CommentDone.docx")
