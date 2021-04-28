@@ -34,12 +34,11 @@ class Qt5VirtualDevice final : public SalVirtualDevice
 {
     std::vector<Qt5Graphics*> m_aGraphics;
     std::unique_ptr<QImage> m_pImage;
-    DeviceFormat m_eFormat;
     QSize m_aFrameSize;
     double m_fScale;
 
 public:
-    Qt5VirtualDevice(DeviceFormat eFormat, double fScale);
+    Qt5VirtualDevice(double fScale);
 
     // SalVirtualDevice
     virtual SalGraphics* AcquireGraphics() override;

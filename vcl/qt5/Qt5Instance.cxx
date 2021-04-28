@@ -311,7 +311,7 @@ void Qt5Instance::DestroyObject(SalObject* pObject)
 
 std::unique_ptr<SalVirtualDevice>
 Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, tools::Long& nDX, tools::Long& nDY,
-                                 DeviceFormat eFormat, const SystemGraphicsData* pGd)
+                                 DeviceFormat /*eFormat*/, const SystemGraphicsData* pGd)
 {
     if (m_bUseCairo)
     {
@@ -321,13 +321,13 @@ Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, tools::Long& nDX, tools
         cairo_surface_t* pPreExistingTarget
             = pGd ? static_cast<cairo_surface_t*>(pGd->pSurface) : nullptr;
         std::unique_ptr<SalVirtualDevice> pVD(
-            new Qt5SvpVirtualDevice(eFormat, pSvpSalGraphics->getSurface(), pPreExistingTarget));
+            new Qt5SvpVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
         pVD->SetSize(nDX, nDY);
         return pVD;
     }
     else
     {
-        std::unique_ptr<SalVirtualDevice> pVD(new Qt5VirtualDevice(eFormat, 1));
+        std::unique_ptr<SalVirtualDevice> pVD(new Qt5VirtualDevice(/*scale*/ 1));
         pVD->SetSize(nDX, nDY);
         return pVD;
     }

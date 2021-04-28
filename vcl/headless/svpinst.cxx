@@ -243,7 +243,7 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
 
 std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
                                                        tools::Long &nDX, tools::Long &nDY,
-                                                       DeviceFormat eFormat,
+                                                       DeviceFormat /*eFormat*/,
                                                        const SystemGraphicsData* pGd)
 {
     SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);
@@ -258,7 +258,7 @@ std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphic
     (void)pGd;
     cairo_surface_t* pPreExistingTarget = nullptr;
 #endif
-    std::unique_ptr<SalVirtualDevice> pNew(new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface(), pPreExistingTarget));
+    std::unique_ptr<SalVirtualDevice> pNew(new SvpSalVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
     pNew->SetSize( nDX, nDY );
     return pNew;
 }

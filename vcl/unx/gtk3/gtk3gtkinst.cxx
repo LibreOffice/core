@@ -335,7 +335,7 @@ void GtkYieldMutex::ThreadsLeave()
 
 std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics *pG,
                                                     tools::Long &nDX, tools::Long &nDY,
-                                                    DeviceFormat eFormat,
+                                                    DeviceFormat /*eFormat*/,
                                                     const SystemGraphicsData* pGd )
 {
     EnsureInit();
@@ -343,7 +343,7 @@ std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics 
     assert(pSvpSalGraphics);
     // tdf#127529 see SvpSalInstance::CreateVirtualDevice for the rare case of a non-null pPreExistingTarget
     cairo_surface_t* pPreExistingTarget = pGd ? static_cast<cairo_surface_t*>(pGd->pSurface) : nullptr;
-    std::unique_ptr<SalVirtualDevice> pNew(new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface(), pPreExistingTarget));
+    std::unique_ptr<SalVirtualDevice> pNew(new SvpSalVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
     pNew->SetSize( nDX, nDY );
     return pNew;
 }
