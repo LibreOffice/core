@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "af73d6ba_e7028ffd",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-28T19:18:47Z",
+      "side": 1,
+      "message": "Copying two 64-bit values is trivial, please don\u0027t worry about that. Pass Kahan sum by value without worries. We now do same for e.g. std::string_view, which is a pair of pointers or a pointer and a length, which is again two 64-bit values on most systems.",
+      "parentUuid": "6ed1df91_937de1eb",
+      "range": {
+        "startLine": 93,
+        "startChar": 60,
+        "endLine": 93,
+        "endChar": 74
+      },
+      "revId": "7a85988a42e67766e73022db15de7b186741a1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f65c75d1_24c22697",
         "filename": "sc/source/core/inc/arraysumfunctor.hxx",
         "patchSetId": 9
