@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39d4ad8d_262a54f1",
+        "filename": "sc/source/filter/xml/XMLExportDatabaseRanges.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-28T16:52:11Z",
+      "side": 1,
+      "message": "i\u0027m afraid this needs to be a LO_EXT namespace, the schema is restricted to an enumeration of values.\n\nif you add a unit test the validator should complain :)\n\nalso it needs a version check.",
+      "revId": "1f06e2bd2656a9d1baf2a5001e8b3912b66f22cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e8b2196_621076cc",
+        "filename": "sc/source/filter/xml/XMLExportDatabaseRanges.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-28T16:52:11Z",
+      "side": 1,
+      "message": "value is of type string so this should be fine.\n\nalthouhg, existing LO versions will then compare it as a string probably? hope that can\u0027t cause problems.",
+      "revId": "1f06e2bd2656a9d1baf2a5001e8b3912b66f22cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
