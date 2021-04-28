@@ -490,10 +490,13 @@ std::unique_ptr<UIObject> WindowUIObject::get_visible_child(const OUString& rID)
 
 std::set<OUString> WindowUIObject::get_children() const
 {
-    vcl::Window* pDialogParent = get_top_parent(mxWindow.get());
     std::set<OUString> aChildren;
-    aChildren.insert(pDialogParent->get_id());
-    addChildren(pDialogParent, aChildren);
+    vcl::Window* pDialogParent = get_top_parent(mxWindow.get());
+    if (!pDialogParent->isDisposed())
+    {
+        aChildren.insert(pDialogParent->get_id());
+        addChildren(pDialogParent, aChildren);
+    }
     return aChildren;
 }
 
