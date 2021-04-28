@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a2bf9581_6b8faeb2",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T10:50:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b4e2ea2_210b7ef0",
+      "range": {
+        "startLine": 210,
+        "startChar": 13,
+        "endLine": 210,
+        "endChar": 19
+      },
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e000cda_92bbe727",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 14
@@ -39,6 +63,24 @@
       "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47514eee_18322272",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T10:50:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e000cda_92bbe727",
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "406dcdd9_f651baf3",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T10:50:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61d22339_7dbac023",
+      "range": {
+        "startLine": 270,
+        "startChar": 13,
+        "endLine": 270,
+        "endChar": 20
+      },
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb0e9d59_251781d4",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 14
@@ -85,6 +151,30 @@
       "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e7534b7_0f1e1683",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T10:50:18Z",
+      "side": 1,
+      "message": "Traced back the original class and removed from the source.\nHad to do a little renaming do to naming conflicts.\nOn: sc/source/core/tool/interpr6.cxx",
+      "parentUuid": "cb0e9d59_251781d4",
+      "range": {
+        "startLine": 360,
+        "startChar": 65,
+        "endLine": 360,
+        "endChar": 72
+      },
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "41f538cf_29307bf4",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T10:50:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36cc5a5c_fac39fac",
+      "range": {
+        "startLine": 427,
+        "startChar": 8,
+        "endLine": 427,
+        "endChar": 13
+      },
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4593019f_c91e07b6",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 14
@@ -125,6 +239,24 @@
       "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac86ce76_22092034",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T10:50:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4593019f_c91e07b6",
+      "revId": "d01e56d6b4f4f228888a896ba9d6b9df71242ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
