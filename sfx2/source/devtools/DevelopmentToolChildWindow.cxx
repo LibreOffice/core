@@ -23,6 +23,7 @@ DevelopmentToolChildWindow::DevelopmentToolChildWindow(vcl::Window* pParentWindo
         = VclPtr<DevelopmentToolDockingWindow>::Create(pBindings, this, pParentWindow);
     SetWindow(pWin);
     SetAlignment(SfxChildAlignment::BOTTOM);
+    pWin->SetSizePixel(Size(0, 290));
     pWin->Initialize(pInfo);
 }
 
