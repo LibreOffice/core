@@ -99,7 +99,7 @@ public:
 
     bool                ChangeEntryContent(const SwAuthEntry* pNewEntry);
     // import interface
-    sal_uInt16          AppendField(const SwAuthEntry& rInsert);
+    SwAuthEntry*        AppendField(const SwAuthEntry& rInsert);
 
     sal_uInt16          GetSequencePos(const SwAuthEntry* pAuthEntry, SwRootFrame const* pLayout);
     std::unique_ptr<SwTOXInternational> CreateTOXInternational() const;
@@ -139,6 +139,7 @@ public:
 
     const OUString& GetSortAlgorithm() const {return m_sSortAlgorithm;}
     void            SetSortAlgorithm(const OUString& rSet) {m_sSortAlgorithm = rSet;}
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 };
 
