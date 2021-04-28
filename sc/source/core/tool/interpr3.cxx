@@ -2872,9 +2872,10 @@ void ScInterpreter::ScChiTest()
 
 void ScInterpreter::ScKurt()
 {
-    double fSum,fCount,vSum;
+    KahanSum fSum;
+    double fCount;
     std::vector<double> values;
-    if ( !CalculateSkew(fSum,fCount,vSum,values) )
+    if ( !CalculateSkew(fSum, fCount, values) )
         return;
 
     // ODF 1.2 constraints: # of numbers >= 4
@@ -2885,31 +2886,30 @@ void ScInterpreter::ScKurt()
         return;
     }
 
-    double fMean = fSum / fCount;
-
+    KahanSum vSum;
+    double fMean = fSum.get() / fCount;
     for (double v : values)
         vSum += (v - fMean) * (v - fMean);
 
-    double fStdDev = sqrt(vSum / (fCount - 1.0));
-    double xpower4 = 0.0;
-
+    double fStdDev = sqrt(vSum.get() / (fCount - 1.0));
     if (fStdDev == 0.0)
     {
         PushError( FormulaError::DivisionByZero);
         return;
     }
 
+    KahanSum xpower4 = 0.0;
     for (double v : values)
     {
         double dx = (v - fMean) / fStdDev;
-        xpower4 = xpower4 + (dx * dx * dx * dx);
+        xpower4 += (dx * dx) * (dx * dx);
     }
 
     double k_d = (fCount - 2.0) * (fCount - 3.0);
     double k_l = fCount * (fCount + 1.0) / ((fCount - 1.0) * k_d);
     double k_t = 3.0 * (fCount - 1.0) * (fCount - 1.0) / k_d;
 
-    PushDouble(xpower4 * k_l - k_t);
+    PushDouble(xpower4.get() * k_l - k_t);
 }
 
 void ScInterpreter::ScHarMean()
@@ -3220,7 +3220,7 @@ void ScInterpreter::ScStandard()
             PushDouble((x-mue)/sigma);
     }
 }
-bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::vector<double>& values)
+bool ScInterpreter::CalculateSkew(KahanSum& fSum, double& fCount, std::vector<double>& values)
 {
     short nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 )  )
@@ -3228,7 +3228,6 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
 
     fSum   = 0.0;
     fCount = 0.0;
-    vSum   = 0.0;
     double fVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3328,9 +3327,10 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
 
 void ScInterpreter::CalculateSkewOrSkewp( bool bSkewp )
 {
-    double fSum, fCount, vSum;
+    KahanSum fSum;
+    double fCount;
     std::vector<double> values;
-    if (!CalculateSkew( fSum, fCount, vSum, values))
+    if (!CalculateSkew( fSum, fCount, values))
         return;
      // SKEW/SKEWP's constraints: they require at least three numbers
     if (fCount < 3.0)
@@ -3340,30 +3340,29 @@ void ScInterpreter::CalculateSkewOrSkewp( bool bSkewp )
         return;
     }
 
-    double fMean = fSum / fCount;
-
+    KahanSum vSum;
+    double fMean = fSum.get() / fCount;
     for (double v : values)
         vSum += (v - fMean) * (v - fMean);
 
-    double fStdDev = sqrt( vSum / (bSkewp ? fCount : (fCount - 1.0)));
-    double xcube = 0.0;
-
+    double fStdDev = sqrt( vSum.get() / (bSkewp ? fCount : (fCount - 1.0)));
     if (fStdDev == 0)
     {
         PushIllegalArgument();
         return;
     }
 
+    KahanSum xcube = 0.0;
     for (double v : values)
     {
         double dx = (v - fMean) / fStdDev;
-        xcube = xcube + (dx * dx * dx);
+        xcube += dx * dx * dx;
     }
 
     if (bSkewp)
-        PushDouble( xcube / fCount );
+        PushDouble( xcube.get() / fCount );
     else
-        PushDouble( ((xcube * fCount) / (fCount - 1.0)) / (fCount - 2.0) );
+        PushDouble( ((xcube.get() * fCount) / (fCount - 1.0)) / (fCount - 2.0) );
 }
 
 void ScInterpreter::ScSkew()
