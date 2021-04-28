@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28e5de70_19f24ae6",
+        "filename": "sc/source/core/tool/typedstrdata.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-28T09:54:16Z",
+      "side": 1,
+      "message": "It\u0027s compact, but very ugly, especially without commenting why this works (e.g. because this is called only on values of a filter).",
+      "range": {
+        "startLine": 60,
+        "startChar": 8,
+        "endLine": 60,
+        "endChar": 54
+      },
+      "revId": "095a04fc788fcefadeb409d7dd9137ec78e897e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea41885a_15e4fb76",
+        "filename": "sc/source/filter/xml/XMLExportDatabaseRanges.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-04-28T09:54:16Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 435,
+        "startChar": 94,
+        "endLine": 435,
+        "endChar": 100
+      },
+      "revId": "095a04fc788fcefadeb409d7dd9137ec78e897e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
