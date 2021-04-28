@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "8ceae006_81b7f4c5",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T19:42:51Z",
+      "side": 1,
+      "message": "OK.",
+      "parentUuid": "af73d6ba_e7028ffd",
+      "range": {
+        "startLine": 93,
+        "startChar": 60,
+        "endLine": 93,
+        "endChar": 74
+      },
+      "revId": "7a85988a42e67766e73022db15de7b186741a1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f65c75d1_24c22697",
         "filename": "sc/source/core/inc/arraysumfunctor.hxx",
         "patchSetId": 9

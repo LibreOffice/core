@@ -22,6 +22,30 @@
       "revId": "9f52641151022d14bb4edd7d267b5d5241afa59e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "017093ca_e0bef9c5",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-28T19:42:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05ab1237_ca3d833a",
+      "range": {
+        "startLine": 115,
+        "startChar": 15,
+        "endLine": 115,
+        "endChar": 26
+      },
+      "revId": "9f52641151022d14bb4edd7d267b5d5241afa59e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
