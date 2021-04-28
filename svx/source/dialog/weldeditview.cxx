@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -26,6 +27,8 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -36,10 +39,13 @@
 #include <osl/diagnose.h>
 #include <svl/itemset.hxx>
 #include <sal/log.hxx>
+#include <svx/sdr/overlay/overlayselection.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/weldeditview.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -170,12 +176,32 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         pEditView->GetSelectionRectangles(aLogicRects);
     }
 
-    rRenderContext.SetLineColor();
-    rRenderContext.SetFillColor(COL_BLACK);
-    rRenderContext.SetRasterOp(RasterOp::Invert);
+    if (!aLogicRects.empty())
+    {
+        std::vector<basegfx::B2DRange> aLogicRanges;
+        aLogicRanges.reserve(aLogicRects.size());
 
-    for (const auto& rSelectionRect : aLogicRects)
-        rRenderContext.DrawRect(rSelectionRect);
+        for (const auto& aRect : aLogicRects)
+            aLogicRanges.emplace_back(vcl::unotools::b2DRectangleFromRectangle(aRect));
+
+        // get the system's highlight color
+        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+        const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
+
+        auto xCursorOverlay = std::make_unique<sdr::overlay::OverlaySelection>(
+            sdr::overlay::OverlayType::Transparent, aHighlight, aLogicRanges, true);
+
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
+            basegfx::B2DHomMatrix(), rRenderContext.GetViewTransformation(),
+            vcl::unotools::b2DRectangleFromRectangle(rRect), nullptr, 0.0,
+            css::uno::Sequence<css::beans::PropertyValue>());
+
+        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
+            drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext,
+                                                                         aViewInformation2D));
+
+        xProcessor->process(xCursorOverlay->getOverlayObjectPrimitive2DSequence());
+    }
 
     rRenderContext.Pop();
 }
