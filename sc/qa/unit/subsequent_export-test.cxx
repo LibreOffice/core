@@ -201,6 +201,7 @@ public:
     void testTdf95640_ods_to_xlsx();
     void testTdf95640_ods_to_xlsx_with_standard_list();
     void testTdf95640_xlsx_to_xlsx();
+    void testAutofilterColorsODF();
 
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
@@ -337,6 +338,7 @@ public:
     CPPUNIT_TEST(testTdf95640_ods_to_xlsx);
     CPPUNIT_TEST(testTdf95640_ods_to_xlsx_with_standard_list);
     CPPUNIT_TEST(testTdf95640_xlsx_to_xlsx);
+    CPPUNIT_TEST(testAutofilterColorsODF);
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
@@ -4048,9 +4050,24 @@ void ScExportTest::testConditionalFormatContainsTextXLSX()
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+
     CPPUNIT_ASSERT(pDoc);
 
     assertXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula", "NOT(ISERROR(SEARCH(\"test\",A1)))");
+}
+
+void ScExportTest::testAutofilterColorsODF()
+{
+    ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "content.xml", FORMAT_ODS);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[1]", "value", "#e8f2a1");
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[1][@loext:data-type='background-color']");
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[2]", "value", "#3465a4");
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[2][@loext:data-type='text-color']");
 }
 
 void ScExportTest::testConditionalFormatPriorityCheckXLSX()
