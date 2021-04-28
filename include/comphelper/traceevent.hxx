@@ -14,6 +14,7 @@
 
 #include <atomic>
 #include <memory>
+#include <set>
 #include <vector>
 
 #include <osl/process.h>
@@ -81,7 +82,8 @@ class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
     static int s_nIdCounter;
     int m_nId;
     int m_nPid;
-    std::vector<std::shared_ptr<AsyncEvent>> m_aChildren;
+    std::set<std::shared_ptr<AsyncEvent>> m_aChildren;
+    std::weak_ptr<AsyncEvent> m_pParent;
     bool m_bBeginRecorded;
 
     AsyncEvent(const char* sName, int nId)
@@ -159,10 +161,22 @@ public:
         if (s_bRecording && pParent->m_bBeginRecorded)
         {
             pResult.reset(new AsyncEvent(sName, pParent->m_nId));
-            pParent->m_aChildren.push_back(pResult);
+            pParent->m_aChildren.insert(pResult);
+            pResult->m_pParent = pParent;
         }
 
         return pResult;
+    }
+
+    void finish()
+    {
+        // This makes sense to call only for a nested AsyncEvent. To finish up a non-nested AsyncEvent you
+        // just need to release your sole owning pointer to it.
+        auto pParent = m_pParent.lock();
+        if (!pParent)
+            return;
+        pParent->m_aChildren.erase(shared_from_this());
+        m_aChildren.clear();
     }
 };
 
