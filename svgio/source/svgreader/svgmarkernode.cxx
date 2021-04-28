@@ -24,7 +24,7 @@ namespace svgio::svgreader
         SvgMarkerNode::SvgMarkerNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenMarker, rDocument, pParent),
+        :   SvgNode(SVGToken::Marker, rDocument, pParent),
             aPrimitives(),
             maSvgStyleAttributes(*this),
             maSvgAspectRatio(),
@@ -58,12 +58,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenViewBox:
+                case SVGToken::ViewBox:
                 {
                     const basegfx::B2DRange aRange(readViewBox(aContent, *this));
 
@@ -73,12 +73,12 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenPreserveAspectRatio:
+                case SVGToken::PreserveAspectRatio:
                 {
                     maSvgAspectRatio = readSvgAspectRatio(aContent);
                     break;
                 }
-                case SVGTokenRefX:
+                case SVGToken::RefX:
                 {
                     SvgNumber aNum;
 
@@ -88,7 +88,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenRefY:
+                case SVGToken::RefY:
                 {
                     SvgNumber aNum;
 
@@ -98,7 +98,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenMarkerUnits:
+                case SVGToken::MarkerUnits:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -113,7 +113,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenMarkerWidth:
+                case SVGToken::MarkerWidth:
                 {
                     SvgNumber aNum;
 
@@ -126,7 +126,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenMarkerHeight:
+                case SVGToken::MarkerHeight:
                 {
                     SvgNumber aNum;
 
@@ -139,7 +139,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenOrient:
+                case SVGToken::Orient:
                 {
                     const sal_Int32 nLen(aContent.getLength());
 

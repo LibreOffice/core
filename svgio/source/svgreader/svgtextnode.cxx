@@ -30,7 +30,7 @@ namespace svgio::svgreader
         SvgTextNode::SvgTextNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenText, rDocument, pParent),
+        :   SvgNode(SVGToken::Text, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maSvgTextPositions()
         {
@@ -59,12 +59,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 
@@ -108,14 +108,14 @@ namespace svgio::svgreader
         {
             switch(rCandidate.getType())
             {
-                case SVGTokenCharacter:
+                case SVGToken::Character:
                 {
                     // direct SvgTextPathNode derivates, decompose them
                     const SvgCharacterNode& rSvgCharacterNode = static_cast< const SvgCharacterNode& >(rCandidate);
                     rSvgCharacterNode.decomposeText(rTarget, rSvgTextPosition);
                     break;
                 }
-                case SVGTokenTextPath:
+                case SVGToken::TextPath:
                 {
                     // direct TextPath decompose
                     const SvgTextPathNode& rSvgTextPathNode = static_cast< const SvgTextPathNode& >(rCandidate);
@@ -151,7 +151,7 @@ namespace svgio::svgreader
 
                     break;
                 }
-                case SVGTokenTspan:
+                case SVGToken::Tspan:
                 {
                     // Tspan may have children, call recursively
                     const SvgTspanNode& rSvgTspanNode = static_cast< const SvgTspanNode& >(rCandidate);
@@ -177,7 +177,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTref:
+                case SVGToken::Tref:
                 {
                     const SvgTrefNode& rSvgTrefNode = static_cast< const SvgTrefNode& >(rCandidate);
                     const SvgTextNode* pRefText = rSvgTrefNode.getReferencedSvgTextNode();
@@ -218,8 +218,8 @@ namespace svgio::svgreader
 
         void SvgTextNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool /*bReferenced`*/) const
         {
-            // text has a group of child nodes, allowed are SVGTokenCharacter, SVGTokenTspan,
-            // SVGTokenTref and SVGTokenTextPath. These increase a given current text position
+            // text has a group of child nodes, allowed are SVGToken::Character, SVGToken::Tspan,
+            // SVGToken::Tref and SVGToken::TextPath. These increase a given current text position
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
             if(!pStyle || getChildren().empty())

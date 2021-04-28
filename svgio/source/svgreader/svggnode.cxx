@@ -29,7 +29,7 @@ namespace svgio::svgreader
         :   SvgNode(aType, rDocument, pParent),
             maSvgStyleAttributes(*this)
         {
-            OSL_ENSURE(aType == SVGTokenDefs || aType == SVGTokenG, "SvgGNode should only be used for Group and Defs (!)");
+            OSL_ENSURE(aType == SVGToken::Defs || aType == SVGToken::G, "SvgGNode should only be used for Group and Defs (!)");
         }
 
         SvgGNode::~SvgGNode()
@@ -38,14 +38,14 @@ namespace svgio::svgreader
 
         const SvgStyleAttributes* SvgGNode::getSvgStyleAttributes() const
         {
-            if (SVGTokenDefs == getType())
+            if (SVGToken::Defs == getType())
             {
                 // tdf#98599 attributes may be inherit by the children, therefore read them
                 return checkForCssStyle("defs", maSvgStyleAttributes);
             }
             else
             {
-                // #i125258# for SVGTokenG take CssStyles into account
+                // #i125258# for SVGToken::G take CssStyles into account
                 return checkForCssStyle("g", maSvgStyleAttributes);
             }
         }
@@ -61,12 +61,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 
@@ -85,7 +85,7 @@ namespace svgio::svgreader
 
         void SvgGNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const
         {
-            if(SVGTokenDefs == getType())
+            if(SVGToken::Defs == getType())
             {
                 // #i125258# no decompose needed for defs element, call parent for SVGTokenDefs
                 SvgNode::decomposeSvgNode(rTarget, bReferenced);

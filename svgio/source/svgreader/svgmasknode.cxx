@@ -32,7 +32,7 @@ namespace svgio::svgreader
         SvgMaskNode::SvgMaskNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenMask, rDocument, pParent),
+        :   SvgNode(SVGToken::Mask, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maX(SvgNumber(-10.0, Unit_percent, true)),
             maY(SvgNumber(-10.0, Unit_percent, true)),
@@ -63,12 +63,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenX:
+                case SVGToken::X:
                 {
                     SvgNumber aNum;
 
@@ -78,7 +78,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenY:
+                case SVGToken::Y:
                 {
                     SvgNumber aNum;
 
@@ -88,7 +88,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenWidth:
+                case SVGToken::Width:
                 {
                     SvgNumber aNum;
 
@@ -101,7 +101,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenHeight:
+                case SVGToken::Height:
                 {
                     SvgNumber aNum;
 
@@ -114,7 +114,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 
@@ -124,7 +124,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenMaskUnits:
+                case SVGToken::MaskUnits:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -139,7 +139,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenMaskContentUnits:
+                case SVGToken::MaskContentUnits:
                 {
                     if(!aContent.isEmpty())
                     {

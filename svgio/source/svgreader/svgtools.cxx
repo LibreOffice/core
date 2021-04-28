@@ -1300,78 +1300,78 @@ namespace svgio::svgreader
                     {
                         switch(StrToSVGToken(aTokenName.makeStringAndClear(), false))
                         {
-                            case SVGTokenDefer:
+                            case SVGToken::Defer:
                             {
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenNone:
+                            case SVGToken::None:
                             {
                                 aSvgAlign = Align_none;
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenXMinYMin:
+                            case SVGToken::XMinYMin:
                             {
                                 aSvgAlign = Align_xMinYMin;
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenXMidYMin:
+                            case SVGToken::XMidYMin:
                             {
                                 aSvgAlign = Align_xMidYMin;
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenXMaxYMin:
+                            case SVGToken::XMaxYMin:
                             {
                                 aSvgAlign = Align_xMaxYMin;
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenXMinYMid:
+                            case SVGToken::XMinYMid:
                             {
                                 aSvgAlign = Align_xMinYMid;
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenXMidYMid:
+                            case SVGToken::XMidYMid:
                             {
                                 aSvgAlign = Align_xMidYMid;
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenXMaxYMid:
+                            case SVGToken::XMaxYMid:
                             {
                                 aSvgAlign = Align_xMaxYMid;
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenXMinYMax:
+                            case SVGToken::XMinYMax:
                             {
                                 aSvgAlign = Align_xMinYMax;
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenXMidYMax:
+                            case SVGToken::XMidYMax:
                             {
                                 aSvgAlign = Align_xMidYMax;
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenXMaxYMax:
+                            case SVGToken::XMaxYMax:
                             {
                                 aSvgAlign = Align_xMaxYMax;
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenMeet:
+                            case SVGToken::Meet:
                             {
                                 bMeetOrSlice = true;
                                 bChanged = true;
                                 break;
                             }
-                            case SVGTokenSlice:
+                            case SVGToken::Slice:
                             {
                                 bMeetOrSlice = false;
                                 bChanged = true;

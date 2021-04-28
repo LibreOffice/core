@@ -241,7 +241,7 @@ namespace svgio::svgreader
         SvgTextPathNode::SvgTextPathNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenTextPath, rDocument, pParent),
+        :   SvgNode(SVGToken::TextPath, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maXLink(),
             maStartOffset()
@@ -268,12 +268,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenStartOffset:
+                case SVGToken::StartOffset:
                 {
                     SvgNumber aNum;
 
@@ -286,15 +286,15 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenMethod:
+                case SVGToken::Method:
                 {
                     break;
                 }
-                case SVGTokenSpacing:
+                case SVGToken::Spacing:
                 {
                     break;
                 }
-                case SVGTokenXlinkHref:
+                case SVGToken::XlinkHref:
                 {
                     const sal_Int32 nLen(aContent.getLength());
 

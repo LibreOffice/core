@@ -29,7 +29,7 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
 {
     switch (rNode.getType())
     {
-        case svgio::svgreader::SVGTokenSvg:
+        case svgio::svgreader::SVGToken::Svg:
         {
             auto const& rSvgNode = static_cast<svgio::svgreader::SvgSvgNode const&>(rNode);
 
@@ -38,7 +38,7 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
             static_cast<gfx::DrawRoot*>(mpCurrent.get())->maRectangle = aRange;
         }
         break;
-        case svgio::svgreader::SVGTokenRect:
+        case svgio::svgreader::SVGToken::Rect:
         {
             auto const& rRectNode = static_cast<svgio::svgreader::SvgRectNode const&>(rNode);
 
@@ -104,7 +104,7 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
             mpCurrent->maChildren.push_back(pRectangle);
         }
         break;
-        case svgio::svgreader::SVGTokenPath:
+        case svgio::svgreader::SVGToken::Path:
         {
             auto const& rPathNode = static_cast<svgio::svgreader::SvgPathNode const&>(rNode);
 

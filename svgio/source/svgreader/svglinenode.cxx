@@ -26,7 +26,7 @@ namespace svgio::svgreader
         SvgLineNode::SvgLineNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenLine, rDocument, pParent),
+        :   SvgNode(SVGToken::Line, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maX1(0),
             maY1(0),
@@ -55,12 +55,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenX1:
+                case SVGToken::X1:
                 {
                     SvgNumber aNum;
 
@@ -70,7 +70,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenY1:
+                case SVGToken::Y1:
                 {
                     SvgNumber aNum;
 
@@ -80,7 +80,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenX2:
+                case SVGToken::X2:
                 {
                     SvgNumber aNum;
 
@@ -90,7 +90,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenY2:
+                case SVGToken::Y2:
                 {
                     SvgNumber aNum;
 
@@ -100,7 +100,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 

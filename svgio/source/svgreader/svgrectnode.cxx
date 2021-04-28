@@ -27,7 +27,7 @@ namespace svgio::svgreader
         SvgRectNode::SvgRectNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenRect, rDocument, pParent),
+        :   SvgNode(SVGToken::Rect, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maX(0),
             maY(0),
@@ -58,12 +58,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenX:
+                case SVGToken::X:
                 {
                     SvgNumber aNum;
 
@@ -73,7 +73,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenY:
+                case SVGToken::Y:
                 {
                     SvgNumber aNum;
 
@@ -83,7 +83,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenWidth:
+                case SVGToken::Width:
                 {
                     SvgNumber aNum;
 
@@ -96,7 +96,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenHeight:
+                case SVGToken::Height:
                 {
                     SvgNumber aNum;
 
@@ -109,7 +109,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenRx:
+                case SVGToken::Rx:
                 {
                     SvgNumber aNum;
 
@@ -122,7 +122,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenRy:
+                case SVGToken::Ry:
                 {
                     SvgNumber aNum;
 
@@ -135,7 +135,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 

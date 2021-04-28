@@ -24,7 +24,7 @@ namespace svgio::svgreader
         SvgTspanNode::SvgTspanNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenTspan, rDocument, pParent),
+        :   SvgNode(SVGToken::Tspan, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maSvgTextPositions()
         {
@@ -54,7 +54,7 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;

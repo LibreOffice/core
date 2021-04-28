@@ -24,7 +24,7 @@ namespace svgio::svgreader
         SvgANode::SvgANode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenA, rDocument, pParent),
+        :   SvgNode(SVGToken::A, rDocument, pParent),
             maSvgStyleAttributes(*this)
         {
         }
@@ -49,12 +49,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 
@@ -64,7 +64,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenXlinkHref:
+                case SVGToken::XlinkHref:
                     //TODO: add support for xlink:href
                     break;
                 default:

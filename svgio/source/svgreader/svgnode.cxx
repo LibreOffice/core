@@ -193,7 +193,7 @@ namespace svgio::svgreader
             // meaning its parent is <svg>
             const SvgNode* pParent = this->getParent();
 
-            if(pParent && pParent->getType() == SVGTokenSvg)
+            if(pParent && pParent->getType() == SVGToken::Svg)
             {
                 // #i125329# find Css selector '*', add as last element if found
                 const SvgStyleAttributes* pNew = getDocument().findGlobalCssStyleAttributes("*");
@@ -274,7 +274,7 @@ namespace svgio::svgreader
             mbDecomposing(false),
             mbCssStyleVectorBuilt(false)
         {
-            OSL_ENSURE(SVGTokenUnknown != maType, "SvgNode with unknown type created (!)");
+            OSL_ENSURE(SVGToken::Unknown != maType, "SvgNode with unknown type created (!)");
 
             if(pParent)
             {
@@ -283,7 +283,7 @@ namespace svgio::svgreader
             else
             {
 #ifdef DBG_UTIL
-                if(SVGTokenSvg != getType())
+                if(SVGToken::Svg != getType())
                 {
                     OSL_ENSURE(false, "No parent for this node (!)");
                 }
@@ -421,7 +421,7 @@ namespace svgio::svgreader
         {
             switch(aSVGToken)
             {
-                case SVGTokenId:
+                case SVGToken::Id:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -429,7 +429,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenClass:
+                case SVGToken::Class:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -437,7 +437,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenXmlSpace:
+                case SVGToken::XmlSpace:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -452,7 +452,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenDisplay:
+                case SVGToken::Display:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -479,12 +479,12 @@ namespace svgio::svgreader
 
             if(!bReferenced)
             {
-                if(SVGTokenDefs == getType() ||
-                    SVGTokenSymbol == getType() ||
-                    SVGTokenClipPathNode == getType() ||
-                    SVGTokenMask == getType() ||
-                    SVGTokenMarker == getType() ||
-                    SVGTokenPattern == getType())
+                if(SVGToken::Defs == getType() ||
+                    SVGToken::Symbol == getType() ||
+                    SVGToken::ClipPathNode == getType() ||
+                    SVGToken::Mask == getType() ||
+                    SVGToken::Marker == getType() ||
+                    SVGToken::Pattern == getType())
                 {
                     // do not decompose defs or symbol nodes (these hold only style-like
                     // objects which may be used by referencing them) except when doing
@@ -555,7 +555,7 @@ namespace svgio::svgreader
                         OUString aObjectName;
 
                         // use path as object name when outmost element
-                        if(SVGTokenSvg == getType())
+                        if (SVGToken::Svg == getType())
                         {
                             aObjectName = getDocument().getAbsolutePath();
 

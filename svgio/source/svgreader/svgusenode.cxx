@@ -26,7 +26,7 @@ namespace svgio::svgreader
         SvgUseNode::SvgUseNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenUse, rDocument, pParent),
+        :   SvgNode(SVGToken::Use, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maX(),
             maY(),
@@ -57,12 +57,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenTransform:
+                case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 
@@ -72,7 +72,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenX:
+                case SVGToken::X:
                 {
                     SvgNumber aNum;
 
@@ -82,7 +82,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenY:
+                case SVGToken::Y:
                 {
                     SvgNumber aNum;
 
@@ -92,7 +92,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenWidth:
+                case SVGToken::Width:
                 {
                     SvgNumber aNum;
 
@@ -105,7 +105,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenHeight:
+                case SVGToken::Height:
                 {
                     SvgNumber aNum;
 
@@ -118,7 +118,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenXlinkHref:
+                case SVGToken::XlinkHref:
                 {
                     const sal_Int32 nLen(aContent.getLength());
 
@@ -146,7 +146,7 @@ namespace svgio::svgreader
             // decompose children
             drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
 
-            // todo: in case mpXLink is a SVGTokenSvg or SVGTokenSymbol the
+            // todo: in case mpXLink is a SVGToken::Svg or SVGToken::Symbol the
             // SVG docs want the getWidth() and getHeight() from this node
             // to be valid for the subtree.
             mbDecomposingSvgNode = true;

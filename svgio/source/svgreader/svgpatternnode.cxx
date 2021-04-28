@@ -33,7 +33,7 @@ namespace svgio::svgreader
         SvgPatternNode::SvgPatternNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGTokenPattern, rDocument, pParent),
+        :   SvgNode(SVGToken::Pattern, rDocument, pParent),
             aPrimitives(),
             maSvgStyleAttributes(*this),
             maSvgAspectRatio(),
@@ -67,12 +67,12 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenStyle:
+                case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
                     break;
                 }
-                case SVGTokenViewBox:
+                case SVGToken::ViewBox:
                 {
                     const basegfx::B2DRange aRange(readViewBox(aContent, *this));
 
@@ -82,12 +82,12 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenPreserveAspectRatio:
+                case SVGToken::PreserveAspectRatio:
                 {
                     maSvgAspectRatio = readSvgAspectRatio(aContent);
                     break;
                 }
-                case SVGTokenX:
+                case SVGToken::X:
                 {
                     SvgNumber aNum;
 
@@ -97,7 +97,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenY:
+                case SVGToken::Y:
                 {
                     SvgNumber aNum;
 
@@ -107,7 +107,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenWidth:
+                case SVGToken::Width:
                 {
                     SvgNumber aNum;
 
@@ -120,7 +120,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenHeight:
+                case SVGToken::Height:
                 {
                     SvgNumber aNum;
 
@@ -133,7 +133,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenPatternUnits:
+                case SVGToken::PatternUnits:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -148,7 +148,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenPatternContentUnits:
+                case SVGToken::PatternContentUnits:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -163,7 +163,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenPatternTransform:
+                case SVGToken::PatternTransform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
 
@@ -173,7 +173,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenXlinkHref:
+                case SVGToken::XlinkHref:
                 {
                     const sal_Int32 nLen(aContent.getLength());
 

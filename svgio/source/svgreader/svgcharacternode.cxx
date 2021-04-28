@@ -43,7 +43,7 @@ namespace svgio::svgreader
             // parse own
             switch(aSVGToken)
             {
-                case SVGTokenX:
+                case SVGToken::X:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -56,7 +56,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenY:
+                case SVGToken::Y:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -69,7 +69,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenDx:
+                case SVGToken::Dx:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -82,7 +82,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenDy:
+                case SVGToken::Dy:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -95,7 +95,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenRotate:
+                case SVGToken::Rotate:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -108,7 +108,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenTextLength:
+                case SVGToken::TextLength:
                 {
                     SvgNumber aNum;
 
@@ -121,7 +121,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
-                case SVGTokenLengthAdjust:
+                case SVGToken::LengthAdjust:
                 {
                     if(!aContent.isEmpty())
                     {
@@ -187,7 +187,7 @@ namespace svgio::svgreader
             SvgDocument& rDocument,
             SvgNode* pParent,
             const OUString& rText)
-        :   SvgNode(SVGTokenCharacter, rDocument, pParent),
+        :   SvgNode(SVGToken::Character, rDocument, pParent),
             maText(rText)
         {
         }
