@@ -12,6 +12,8 @@
 
 #include <sal/config.h>
 
+#include <sal/log.hxx>
+
 #include <comphelper/traceevent.hxx>
 
 // implementation of XToolkitExperimental profiling API
@@ -70,10 +72,16 @@ public:
         if (m_nCreateTime > 0)
         {
             s_nNesting--;
-            assert(m_nNesting == s_nNesting);
 
-            if (s_bRecording)
-                addRecording();
+            if (m_nNesting != s_nNesting)
+            {
+                SAL_WARN("comphelper.traceevent", "Incorrect ProfileZone nesting for " << m_sName);
+            }
+            else
+            {
+                if (s_bRecording)
+                    addRecording();
+            }
 
             if (m_bConsole)
                 stopConsole();
