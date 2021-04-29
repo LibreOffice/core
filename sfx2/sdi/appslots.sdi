@@ -95,7 +95,7 @@ interface Application
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-    SID_TEMPLATE_ADDRESSBOKSOURCE // ole(no) api(final/play/rec)
+    SID_TEMPLATE_ADDRESSBOOKSOURCE // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;

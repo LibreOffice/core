@@ -633,7 +633,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
-        case SID_TEMPLATE_ADDRESSBOKSOURCE:
+        case SID_TEMPLATE_ADDRESSBOOKSOURCE:
         {
             svt::AddressBookSourceDialog aDialog(rReq.GetFrameWeld(), ::comphelper::getProcessComponentContext());
             aDialog.run();
@@ -1046,7 +1046,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
         {
             switch(nWhich)
             {
-                case SID_TEMPLATE_ADDRESSBOKSOURCE:
+                case SID_TEMPLATE_ADDRESSBOOKSOURCE:
                     if ( !SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DATABASE) )
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                     break;

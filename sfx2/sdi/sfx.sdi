@@ -265,7 +265,7 @@ SfxVoidItem CharmapControl SID_CHARMAP_CONTROL
 ]
 
 
-SfxVoidItem AddressBookSource SID_TEMPLATE_ADDRESSBOKSOURCE
+SfxVoidItem AddressBookSource SID_TEMPLATE_ADDRESSBOOKSOURCE
 ()
 [
     AutoUpdate = FALSE,
