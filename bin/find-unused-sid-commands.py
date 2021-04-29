@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # Find potentially unused UNO command entries in SDI files.
 #

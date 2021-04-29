@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 
 # Produce a dump of name->constant of the poolitem values, to make interpreting things in the debugger easier

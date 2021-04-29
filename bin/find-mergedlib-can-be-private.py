@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 #
 # Generate a custom linker script/map file for the --enabled-mergedlibs merged library
 # which reduces the startup time and enables further optimisations with --enable-lto because 60% or more

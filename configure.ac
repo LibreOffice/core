@@ -9319,7 +9319,7 @@ AC_SUBST(XMLLINT)
 # =====================================================================
 # Checking for a Python interpreter with version >= 3.3.
 # Optionally user can pass an option to configure, i. e.
-# ./configure PYTHON=/usr/bin/python
+# ./configure PYTHON=/usr/bin/python3
 # =====================================================================
 if test $_os = Darwin -a "$enable_python" != no -a "$enable_python" != fully-internal -a "$enable_python" != internal -a "$enable_python" != system; then
     # Only allowed choices for macOS are 'no', 'internal' (default), and 'fully-internal'

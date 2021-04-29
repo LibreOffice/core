@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # Find the top 100 functions that are repeated in multiple .o files, so we can out-of-line those
 #
