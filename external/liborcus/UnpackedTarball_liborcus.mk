@@ -38,6 +38,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/forcepoint-87.patch.1 \
 	external/liborcus/forcepoint-95.patch.1 \
 	external/liborcus/overrun.patch.0 \
+	external/liborcus/allow-utf-8-in-xml-names.patch \
 ))
 
 ifeq ($(OS),WNT)
