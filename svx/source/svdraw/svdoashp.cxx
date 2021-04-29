@@ -2782,16 +2782,11 @@ SdrObjCustomShape* SdrObjCustomShape::CloneSdrObject(SdrModel& rTargetModel) con
 
 OUString SdrObjCustomShape::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(SvxResId(STR_ObjNameSingulCUSTOMSHAPE));
+    OUString sName(SvxResId(STR_ObjNameSingulCUSTOMSHAPE));
     OUString aNm(GetName());
     if (!aNm.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aNm);
-        sName.append('\'');
-    }
-    return sName.makeStringAndClear();
+        sName += " '" + aNm + "'";
+    return sName;
 }
 
 OUString SdrObjCustomShape::TakeObjNamePlural() const

@@ -1892,11 +1892,7 @@ OUString SAL_CALL ODocumentDefinition::getHierarchicalName()
 
 OUString SAL_CALL ODocumentDefinition::composeHierarchicalName( const OUString& i_rRelativeName )
 {
-    OUStringBuffer aBuffer;
-    aBuffer.append( getHierarchicalName() );
-    aBuffer.append( '/' );
-    aBuffer.append( i_rRelativeName );
-    return aBuffer.makeStringAndClear();
+    return getHierarchicalName() + "/" + i_rRelativeName;
 }
 
 void SAL_CALL ODocumentDefinition::rename( const OUString& _rNewName )

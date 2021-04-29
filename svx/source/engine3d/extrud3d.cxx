@@ -132,17 +132,14 @@ void E3dExtrudeObj::SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew)
 
 OUString E3dExtrudeObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(SvxResId(STR_ObjNameSingulExtrude3d));
+    OUString sName(SvxResId(STR_ObjNameSingulExtrude3d));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
     {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
+        sName += " '" + aName + "'";
     }
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 // Get the name of the object (plural)

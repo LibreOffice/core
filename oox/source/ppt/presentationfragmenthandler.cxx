@@ -474,10 +474,7 @@ void PresentationFragmentHandler::finalizeImport()
 
     if( !aPageRange.getLength() )
     {
-        aPageRange = OUStringBuffer()
-            .append( static_cast< sal_Int32 >( 1 ) )
-            .append( '-' )
-            .append( nPageCount ).makeStringAndClear();
+        aPageRange = "1-" + OUString::number( nPageCount );
     }
 
     StringRangeEnumerator aRangeEnumerator( aPageRange, 0, nPageCount - 1 );

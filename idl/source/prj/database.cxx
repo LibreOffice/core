@@ -328,9 +328,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                 }
             }
 
-            OStringBuffer aStr("Not found : ");
-            aStr.append(rTok.GetString());
-            OSL_FAIL(aStr.getStr());
+            OSL_FAIL(OString("Not found : " + rTok.GetString()).getStr());
         }
     }
 

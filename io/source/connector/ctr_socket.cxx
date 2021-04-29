@@ -105,18 +105,11 @@ namespace stoc_connector {
 
         nPort = m_socket.getPeerPort();
 
-        OUStringBuffer buf( 256 );
-        buf.append( ",peerPort=" );
-        buf.append( nPort );
-        buf.append( ",peerHost=" );
-        buf.append( m_socket.getPeerHost() );
-
-        buf.append( ",localPort=" );
-        buf.append( nPort );
-        buf.append( ",localHost=" );
-        buf.append( m_socket.getLocalHost( ) );
-
-        m_sDescription += buf;
+        m_sDescription +=
+            ",peerPort=" + OUString::number( nPort ) +
+            ",peerHost=" + m_socket.getPeerHost() +
+            ",localPort=" + OUString::number( nPort ) +
+            ",localHost=" + m_socket.getLocalHost( );
     }
 
     sal_Int32 SocketConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )

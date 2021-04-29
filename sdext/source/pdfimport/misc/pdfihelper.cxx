@@ -107,20 +107,12 @@ OUString pdfi::getPercentString(double value)
 
 OUString pdfi::unitMMString( double fMM )
 {
-    OUStringBuffer aBuf( 32 );
-    aBuf.append( rtl_math_round( fMM, 2, rtl_math_RoundingMode_Floor ) );
-    aBuf.append( "mm" );
-
-    return aBuf.makeStringAndClear();
+    return OUString::number(rtl_math_round( fMM, 2, rtl_math_RoundingMode_Floor )) + "mm";
 }
 
 OUString pdfi::convertPixelToUnitString( double fPix )
 {
-    OUStringBuffer aBuf( 32 );
-    aBuf.append( rtl_math_round( convPx2mm( fPix ), 2, rtl_math_RoundingMode_Floor ) );
-    aBuf.append( "mm" );
-
-    return aBuf.makeStringAndClear();
+    return OUString::number( rtl_math_round( convPx2mm( fPix ), 2, rtl_math_RoundingMode_Floor ) ) + "mm";
 }
 
 

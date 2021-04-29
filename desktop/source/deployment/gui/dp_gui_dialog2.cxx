@@ -640,11 +640,8 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             supportedFilters.append(filter);
             if ( ! insertion.second )
             { // already existing, append extensions:
-                OUStringBuffer buf;
-                buf.append( insertion.first->second );
-                buf.append( ';' );
-                buf.append( filter );
-                insertion.first->second = buf.makeStringAndClear();
+                insertion.first->second = insertion.first->second +
+                    ";" + filter;
             }
         }
     }

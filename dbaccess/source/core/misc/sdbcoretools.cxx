@@ -95,12 +95,9 @@ namespace dbaccess
             Exception aExcept;
             _rError >>= aExcept;
 
-            OUStringBuffer aBuffer;
-            aBuffer.append( _rError.getValueTypeName() );
-            aBuffer.append( ":\n" );
-            aBuffer.append( aExcept.Message );
-
-            sDisplayMessage = aBuffer.makeStringAndClear();
+            sDisplayMessage = _rError.getValueTypeName() +
+                ":\n" +
+                aExcept.Message;
         }
 
         return sDisplayMessage;

@@ -334,12 +334,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForType(const ElementType eTy
                 bool bParent = rTreeView.iter_parent(*xParent);
                 while (bParent)
                 {
-                    OUStringBuffer buffer;
-                    buffer.append(rTreeView.get_text(*xParent));
-                    buffer.append('/');
-                    buffer.append(sName);
-                    sName = buffer.makeStringAndClear();
-
+                    sName = rTreeView.get_text(*xParent) + "/" + sName;
                     bParent = rTreeView.iter_parent(*xParent);
                 }
 

@@ -192,11 +192,11 @@ OUString OReportEngineJFree::getNewOutputName()
 
     // some meta data
     SvtUserOptions aUserOpts;
-    OUStringBuffer sAuthor(aUserOpts.GetFirstName());
-    sAuthor.append(" ");
-    sAuthor.append(aUserOpts.GetLastName());
+    OUString sAuthor = aUserOpts.GetFirstName() +
+        " " +
+        aUserOpts.GetLastName();
     aConvertedProperties[nPos].Name = "Author";
-    aConvertedProperties[nPos++].Value <<= sAuthor.makeStringAndClear();
+    aConvertedProperties[nPos++].Value <<= sAuthor;
 
     aConvertedProperties[nPos].Name = "Title";
     aConvertedProperties[nPos++].Value <<= m_xReport->getCaption();

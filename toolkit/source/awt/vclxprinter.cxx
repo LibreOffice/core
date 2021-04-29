@@ -189,13 +189,10 @@ css::uno::Sequence< OUString > VCLXPrinterPropertySet::getFormDescriptions(  )
     for ( sal_uInt16 n = 0; n < nPaperBinCount; n++ )
     {
         // Format: <DisplayFormName;FormNameId;DisplayPaperBinName;PaperBinNameId;DisplayPaperName;PaperNameId>
-        OUStringBuffer aDescr( "*;*;" );
-        aDescr.append(GetPrinter()->GetPaperBinName( n ));
-        aDescr.append(';');
-        aDescr.append(static_cast<sal_Int32>(n));
-        aDescr.append(";*;*");
+        OUString aDescr =  "*;*;" + GetPrinter()->GetPaperBinName( n ) + ";" +
+            OUString::number(n) + ";*;*";
 
-        aDescriptions.getArray()[n] = aDescr.makeStringAndClear();
+        aDescriptions.getArray()[n] = aDescr;
     }
     return aDescriptions;
 }
