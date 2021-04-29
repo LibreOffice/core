@@ -49,6 +49,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/mapindex \
     compilerplugins/clang/test/makeshared \
     compilerplugins/clang/test/namespaceindentation \
+    compilerplugins/clang/test/noexcept \
     compilerplugins/clang/test/noexceptmove \
     compilerplugins/clang/test/nullptr \
     compilerplugins/clang/test/oncevar \
