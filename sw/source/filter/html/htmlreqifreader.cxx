@@ -341,8 +341,8 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, s
     rOle1.WriteUInt32(nWidth);
     // Height.
     rOle1.WriteUInt32(nHeight * -1);
-    // PresentationDataSize
-    rOle1.WriteUInt32(8 + nPresentationData);
+    // PresentationDataSize: size of (reserved fields + pBytes).
+    rOle1.WriteUInt32(8 + nBytes);
     // Reserved1-4.
     rOle1.WriteUInt16(0x0008);
     rOle1.WriteUInt16(0x31b1);

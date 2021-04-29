@@ -255,6 +255,8 @@ public:
     OUString GetOlePath();
     /// Parse the ole1 data out of an RTF fragment URL.
     void ParseOle1FromRtfUrl(const OUString& rRtfUrl, SvMemoryStream& rOle1);
+    /// Export using the C++ HTML export filter, with xhtmlns=reqif-xhtml.
+    void ExportToReqif();
 };
 
 OUString SwHtmlDomExportTest::GetOlePath()
@@ -281,6 +283,16 @@ void SwHtmlDomExportTest::ParseOle1FromRtfUrl(const OUString& rRtfUrl, SvMemoryS
     CPPUNIT_ASSERT(xReader->CallParser() != SvParserState::Error);
     CPPUNIT_ASSERT(xReader->WriteObjectData(rOle1));
     CPPUNIT_ASSERT(rOle1.Tell());
+}
+
+void SwHtmlDomExportTest::ExportToReqif()
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
 }
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/htmlexport/data/";
@@ -1352,6 +1364,29 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifAscharObjsize)
     // i.e. the aspect ratio was 1:1, while the PNG aspect ratio was correctly not 1:1.
     CPPUNIT_ASSERT_EQUAL(static_cast<long>(7344), xReader->GetObjw());
     CPPUNIT_ASSERT_EQUAL(static_cast<long>(4116), xReader->GetObjh());
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifObjdataPresentationDataSize)
+{
+    // Given a document with an OLE2 embedded object, containing a preview:
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reqif-objdata-presentationdatasize.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+
+    // When exporting to ReqIF:
+    ExportToReqif();
+
+    // Then make sure that the PresentationDataSize in the RTF's objdata blob is correct:
+    OUString aRtfUrl = GetOlePath();
+    SvMemoryStream aOle1;
+    ParseOle1FromRtfUrl(aRtfUrl, aOle1);
+    OLE1Reader aOle1Reader(aOle1);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 565994
+    // - Actual  : 330240 (Linux)
+    // - Actual  : 566034 (Windows, when Word is installed)
+    // because PresentationData was taken from the OLE2 stream but its size was taken from RTF.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(565994), aOle1Reader.m_nPresentationDataSize);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
