@@ -134,17 +134,14 @@ void E3dCubeObj::SetPosIsCenter(bool bNew)
 
 OUString E3dCubeObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(SvxResId(STR_ObjNameSingulCube3d));
+    OUString sName = SvxResId(STR_ObjNameSingulCube3d);
 
     OUString aName(GetName());
     if (!aName.isEmpty())
     {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
+        sName += " \'" + aName + "'";
     }
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 // Get the name of the object (plural)

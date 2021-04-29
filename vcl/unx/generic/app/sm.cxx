@@ -224,9 +224,7 @@ static void BuildSmPropertyList()
     pSmProps[ eRestartCommand ].vals      = new SmPropValue[3];
     pSmProps[ eRestartCommand ].vals[0].length    = aExec.getLength()+1;
     pSmProps[ eRestartCommand ].vals[0].value = strdup( aExec.getStr() );
-    OStringBuffer aRestartOption;
-    aRestartOption.append("--session=");
-    aRestartOption.append(SessionManagerClient::getSessionID());
+    OString aRestartOption = "--session=" + SessionManagerClient::getSessionID();
     pSmProps[ eRestartCommand ].vals[1].length    = aRestartOption.getLength()+1;
     pSmProps[ eRestartCommand ].vals[1].value = strdup(aRestartOption.getStr());
     OString aRestartOptionNoLogo("--nologo");

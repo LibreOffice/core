@@ -267,18 +267,13 @@ void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
 
 OUString SdrUnoObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(SvxResId(STR_ObjNameSingulUno));
+    OUString sName(SvxResId(STR_ObjNameSingulUno));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
+        sName += " '" + aName + "'";
 
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 OUString SdrUnoObj::TakeObjNamePlural() const

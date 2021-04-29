@@ -408,11 +408,7 @@ void LwpFormulaFunc::AddArg(std::unique_ptr<LwpFormulaArg> pArg)
 */
 OUString LwpFormulaFunc::ToArgString(LwpTableLayout* pCellsMap)
 {
-    OUStringBuffer aFormula;
-    aFormula.append('(');
-    aFormula.append(ToString(pCellsMap));
-    aFormula.append(')');
-    return aFormula.makeStringAndClear();
+    return "(" + ToString(pCellsMap) + ")";
 }
 /**
 *   Convert the function to a formula string.
@@ -422,8 +418,8 @@ OUString LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
     OUStringBuffer aFormula;
 
     OUString aFuncName = LwpFormulaTools::GetName(m_nTokenType);
-    aFormula.append(aFuncName);
-    aFormula.append(" ");//Append a blank space
+    aFormula.append(aFuncName +
+                    " ");//Append a blank space
 
     //Append args
     for (auto const& elem : m_aArgs)

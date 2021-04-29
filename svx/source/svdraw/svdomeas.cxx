@@ -714,18 +714,13 @@ SdrMeasureObj* SdrMeasureObj::CloneSdrObject(SdrModel& rTargetModel) const
 
 OUString SdrMeasureObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(SvxResId(STR_ObjNameSingulMEASURE));
+    OUString sName(SvxResId(STR_ObjNameSingulMEASURE));
 
     OUString aName( GetName() );
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
+        sName += " '" + aName + "'";
 
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 OUString SdrMeasureObj::TakeObjNamePlural() const

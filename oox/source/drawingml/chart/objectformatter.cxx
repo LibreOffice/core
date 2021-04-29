@@ -1117,8 +1117,8 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
     }
     catch( Exception& )
     {
-        OSL_FAIL( OStringBuffer( "ObjectFormatter::convertNumberFormat - cannot create number format '" ).
-            append( OUStringToOString( rNumberFormat.maFormatCode, osl_getThreadTextEncoding() ) ).append( '\'' ).getStr() );
+        OSL_FAIL( OStringBuffer( "ObjectFormatter::convertNumberFormat - cannot create number format '" +
+                OUStringToOString( rNumberFormat.maFormatCode, osl_getThreadTextEncoding() )  + "'" ).getStr() );
     }
 
     // Setting "LinkNumberFormatToSource" does not really work, at least not for axis :-/

@@ -1017,18 +1017,13 @@ OUString SdrTextObj::TakeObjNameSingul() const
         }
     }
 
-    OUStringBuffer sName(aStr);
+    OUString sName(aStr);
 
     OUString aName(GetName());
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
+        sName += " '" + aName + "'";
 
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 OUString SdrTextObj::TakeObjNamePlural() const

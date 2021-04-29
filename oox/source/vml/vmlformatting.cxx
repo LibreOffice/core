@@ -294,8 +294,8 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
         }
     }
 
-    OSL_FAIL( OStringBuffer( "lclGetColor - invalid VML color name '" ).
-        append( OUStringToOString( roVmlColor.get(), RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
+    OSL_FAIL( OStringBuffer( "lclGetColor - invalid VML color name '" +
+            OUStringToOString( roVmlColor.get(), RTL_TEXTENCODING_ASCII_US ) + "'" ).getStr() );
     aDmlColor.setSrgbClr( nDefaultRgb );
     return aDmlColor;
 }

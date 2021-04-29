@@ -408,8 +408,8 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
         }
         catch( Exception& )
         {
-            OSL_FAIL( OStringBuffer( "XmlFilterBase::importFragment - XML parser failed in fragment '" ).
-                append( OUStringToOString( aFragmentPath, RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
+            OSL_FAIL( OStringBuffer( "XmlFilterBase::importFragment - XML parser failed in fragment '"  +
+                     OUStringToOString( aFragmentPath, RTL_TEXTENCODING_ASCII_US ) + "'" ).getStr() );
         }
     }
     catch( Exception& )

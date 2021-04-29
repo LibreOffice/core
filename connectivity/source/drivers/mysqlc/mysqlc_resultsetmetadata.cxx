@@ -80,11 +80,11 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
 {
     //   MYSQL_FIELD::charsetnr is the collation identifier
     //   _ci postfix means it's insensitive
-    OUStringBuffer sql{ "SHOW COLLATION WHERE Id =" };
-    sql.append(static_cast<sal_Int32>(m_fields.at(column - 1).charsetNumber));
+    OUString sql
+        = "SHOW COLLATION WHERE Id =" + OUString::number(m_fields.at(column - 1).charsetNumber);
 
     Reference<XStatement> stmt = m_rConnection.createStatement();
-    Reference<XResultSet> rs = stmt->executeQuery(sql.makeStringAndClear());
+    Reference<XResultSet> rs = stmt->executeQuery(sql);
     Reference<XRow> xRow(rs, UNO_QUERY_THROW);
 
     if (!rs->next()) // fetch first and only row

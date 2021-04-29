@@ -89,16 +89,10 @@ void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
         aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 
     // Start the writing
-    OStringBuffer aBuffer;
-
-    aBuffer.append( "slide_preview\n" );
-
-    aBuffer.append( static_cast<sal_Int32>(aSlideNumber) );
-    aBuffer.append( "\n" );
-
-    aBuffer.append( aEncodedShortString.getStr() );
-    aBuffer.append( "\n\n" );
-    pTransmitter->addMessage( aBuffer.makeStringAndClear(),
+    OString aBuffer =  "slide_preview\n" +
+        OString::number(aSlideNumber) +
+        "\n" + aEncodedShortString + "\n\n";
+    pTransmitter->addMessage( aBuffer,
         Transmitter::PRIORITY_LOW );
 
 }

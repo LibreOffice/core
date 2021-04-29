@@ -727,12 +727,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
                 eCurrentApp = vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xCurrentFrame ) );
 
-                OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
-                aPath.append( lcl_getAppName( eCurrentApp ) );
+                OUString aPath = "org.openoffice.Office.UI.ToolbarMode/Applications/" +
+                    lcl_getAppName( eCurrentApp );
 
                 const utl::OConfigurationTreeRoot aAppNode(
                                                     xContext,
-                                                    aPath.makeStringAndClear(),
+                                                    aPath,
                                                     true);
                 if ( !aAppNode.isValid() )
                 {
@@ -793,14 +793,14 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     std::vector<OUString> aBackupList;
                     OUString aSidebarMode;
 
-                    OUStringBuffer aPath( "org.openoffice.Office.UI.ToolbarMode/Applications/" );
-                    aPath.append( lcl_getAppName( eApp ) );
-                    aPath.append( "/Modes" );
+                    OUString aPath = "org.openoffice.Office.UI.ToolbarMode/Applications/" +
+                        lcl_getAppName( eApp ) +
+                        "/Modes";
 
                     // Read mode settings
                     const utl::OConfigurationTreeRoot aModesNode(
                                             xContext,
-                                            aPath.makeStringAndClear(),
+                                            aPath,
                                             true);
                     if ( !aModesNode.isValid() )
                     {
@@ -965,11 +965,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 if ( xLayoutManager.is() )
                 {
-                    OUStringBuffer aBuf( "private:resource/toolbar/" );
-                    aBuf.append( pToolbarName->GetValue() );
+                    OUString aToolbarName = "private:resource/toolbar/" +
+                        pToolbarName->GetValue();
 
                     // Evaluate Parameter
-                    OUString aToolbarName( aBuf.makeStringAndClear() );
                     bool bShow( !xLayoutManager->isElementVisible( aToolbarName ));
 
                     if ( bShow )

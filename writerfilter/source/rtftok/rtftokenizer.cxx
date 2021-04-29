@@ -318,11 +318,8 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
 
 OUString RTFTokenizer::getPosition()
 {
-    OUStringBuffer aRet;
-    aRet.append(m_nLineNumber + 1);
-    aRet.append(",");
-    aRet.append(sal_Int32(Strm().Tell() - m_nLineStartPos + 1));
-    return aRet.makeStringAndClear();
+    return OUString::number(m_nLineNumber + 1) + ","
+           + OUString::number(Strm().Tell() - m_nLineStartPos + 1);
 }
 
 } // namespace writerfilter::rtftok

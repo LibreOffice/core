@@ -247,18 +247,13 @@ SdrCaptionObj* SdrCaptionObj::CloneSdrObject(SdrModel& rTargetModel) const
 
 OUString SdrCaptionObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(SvxResId(STR_ObjNameSingulCAPTION));
+    OUString sName(SvxResId(STR_ObjNameSingulCAPTION));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
+        sName += " '" + aName + "'";
 
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 OUString SdrCaptionObj::TakeObjNamePlural() const

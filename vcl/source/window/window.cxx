@@ -124,18 +124,14 @@ namespace
              pWindow = pTempWin;
          }
 
-         OStringBuffer aErrorString;
-         aErrorString.append(' ');
-         aErrorString.append(typeid( *pWindow ).name());
-         aErrorString.append("(");
-         aErrorString.append(
-                 OUStringToOString(
-                     pWindow->GetText(),
-                     RTL_TEXTENCODING_UTF8
-                     )
-                 );
-         aErrorString.append(")");
-         return aErrorString.makeStringAndClear();
+         return OString::Concat(" ") +
+            typeid( *pWindow ).name() +
+            "(" +
+             OUStringToOString(
+                 pWindow->GetText(),
+                 RTL_TEXTENCODING_UTF8
+                 ) +
+            ")";
      }
 }
 #endif
@@ -264,9 +260,9 @@ void Window::dispose()
 
         if ( mpWindowImpl->mpFirstChild )
         {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(lcl_createWindowInfo(this));
-            aTempStr.append(") with live children destroyed: ");
+            OStringBuffer aTempStr = "Window (" +
+                lcl_createWindowInfo(this) +
+                ") with live children destroyed: ";
             pTempWin = mpWindowImpl->mpFirstChild;
             while ( pTempWin )
             {
@@ -291,15 +287,14 @@ void Window::dispose()
             }
             if ( bError )
             {
-                OStringBuffer aTempStr;
-                aTempStr.append("Window (");
-                aTempStr.append(lcl_createWindowInfo(this));
-                aTempStr.append(") with live SystemWindows destroyed: ");
-                aTempStr.append(aErrorStr);
+                OString aTempStr =
+                    "Window (" +
+                    lcl_createWindowInfo(this) +
+                    ") with live SystemWindows destroyed: " +
+                    aErrorStr;
                 OSL_FAIL(aTempStr.getStr());
                 // abort in debug builds, must be fixed!
-                Application::Abort(OStringToOUString(
-                                     aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+                Application::Abort(OStringToOUString(aTempStr, RTL_TEXTENCODING_UTF8));
             }
         }
 
@@ -316,19 +311,19 @@ void Window::dispose()
         }
         if ( bError )
         {
-            OStringBuffer aTempStr( "Window (" );
-            aTempStr.append(lcl_createWindowInfo(this));
-            aTempStr.append(") with live SystemWindows destroyed: ");
-            aTempStr.append(aErrorStr);
+            OString aTempStr =  "Window (" +
+                lcl_createWindowInfo(this) +
+                ") with live SystemWindows destroyed: " +
+                aErrorStr;
             OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            Application::Abort(OStringToOUString(aTempStr, RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }
 
         if ( mpWindowImpl->mpFirstOverlap )
         {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(lcl_createWindowInfo(this));
-            aTempStr.append(") with live SystemWindows destroyed: ");
+            OStringBuffer aTempStr = "Window (" +
+                lcl_createWindowInfo(this) +
+                ") with live SystemWindows destroyed: ";
             pTempWin = mpWindowImpl->mpFirstOverlap;
             while ( pTempWin )
             {
@@ -352,11 +347,11 @@ void Window::dispose()
         }
         if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
         {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(lcl_createWindowInfo(this));
-            aTempStr.append(") still in TaskPanelList!");
+            OString aTempStr = "Window (" +
+                lcl_createWindowInfo(this) +
+                ") still in TaskPanelList!";
             OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            Application::Abort(OStringToOUString(aTempStr, RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }
     }
 #endif

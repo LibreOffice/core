@@ -874,14 +874,8 @@ ScFunctionList::ScFunctionList()
         pDesc->nFIndex     = nNextId++; //  ??? OpCode vergeben
         pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
         pDesc->mxFuncName = pLegacyFuncData->GetInternalName().toAsciiUpperCase();
-
-        OUStringBuffer aBuf(aArgDesc);
-        aBuf.append('\n');
-        aBuf.append("( AddIn: ");
-        aBuf.append(pLegacyFuncData->GetModuleName());
-        aBuf.append(" )");
-        pDesc->mxFuncDesc = aBuf.makeStringAndClear();
-
+        pDesc->mxFuncDesc = aArgDesc + "\n"
+             "( AddIn: " + pLegacyFuncData->GetModuleName() + " )";
         pDesc->nArgCount   = nArgs;
         if (nArgs)
         {
