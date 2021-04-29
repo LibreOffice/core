@@ -181,8 +181,37 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         std::vector<basegfx::B2DRange> aLogicRanges;
         aLogicRanges.reserve(aLogicRects.size());
 
+        tools::Long nMinX(LONG_MAX), nMaxX(0), nMinY(LONG_MAX), nMaxY(0);
         for (const auto& aRect : aLogicRects)
-            aLogicRanges.emplace_back(vcl::unotools::b2DRectangleFromRectangle(aRect));
+        {
+            nMinX = std::min(nMinX, aRect.Left());
+            nMinY = std::min(nMinY, aRect.Top());
+            nMaxX = std::max(nMaxX, aRect.Right());
+            nMaxY = std::max(nMaxY, aRect.Bottom());
+        }
+
+        const Size aLogicPixel(rRenderContext.PixelToLogic(Size(1, 1)));
+        for (const auto& aRect : aLogicRects)
+        {
+            // Extend each range by one pixel so multiple lines touch each
+            // other if adjacent, so the whole set is drawn with a single
+            // border around the lot. But keep the selection within the
+            // original max extents.
+            auto nTop = aRect.Top();
+            if (nTop > nMinY)
+                nTop -= aLogicPixel.Height();
+            auto nBottom = aRect.Bottom();
+            if (nBottom < nMaxY)
+                nBottom += aLogicPixel.Height();
+            auto nLeft = aRect.Left();
+            if (nLeft > nMinX)
+                nLeft -= aLogicPixel.Width();
+            auto nRight = aRect.Right();
+            if (nRight < nMaxX)
+                nRight += aLogicPixel.Width();
+
+            aLogicRanges.emplace_back(nLeft, nTop, nRight, nBottom);
+        }
 
         // get the system's highlight color
         const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
