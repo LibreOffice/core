@@ -94,6 +94,12 @@ sal_uInt16 GtkSalFrame::GetMouseModCode( guint state )
     return nCode;
 }
 
+// KEY_F26 is the last function key known to keycodes.hxx
+static bool IsFunctionKeyVal(guint keyval)
+{
+    return keyval >= GDK_KEY_F1 && keyval <= GDK_KEY_F26;
+}
+
 sal_uInt16 GtkSalFrame::GetKeyCode(guint keyval)
 {
     sal_uInt16 nCode = 0;
@@ -105,8 +111,7 @@ sal_uInt16 GtkSalFrame::GetKeyCode(guint keyval)
         nCode = KEY_A + (keyval-GDK_KEY_A );
     else if( keyval >= GDK_KEY_a && keyval <= GDK_KEY_z )
         nCode = KEY_A + (keyval-GDK_KEY_a );
-    else if( keyval >= GDK_KEY_F1 && keyval <= GDK_KEY_F26 )
-    // KEY_F26 is the last function key known to keycodes.hxx
+    else if (IsFunctionKeyVal(keyval))
     {
         switch( keyval )
         {
@@ -3271,8 +3276,9 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
             // InterimItemWindow and send unconsumed keystrokes to it to
             // support ctrl-q etc shortcuts. Only bother to search for the
             // InterimItemWindow if it is a toplevel that fills its frame, or
-            // the keystroke is F6 to switch between task-panels
-            if (pThis->IsCycleFocusOutDisallowed() || pEvent->keyval == GDK_KEY_F6)
+            // the keystroke is sufficiently special its worth passing on,
+            // e.g. F6 to switch between task-panels or F5 to close a navigator
+            if (pThis->IsCycleFocusOutDisallowed() || IsFunctionKeyVal(pEvent->keyval))
             {
                 GtkWidget* pSearch = pFocusWindow;
                 while (pSearch)
