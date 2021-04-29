@@ -122,6 +122,13 @@ void trace_event_test()
         // object that has already had its 'e' event generated.
     }
 
+    // This incorrect use of overlapping (not nested) ProfileZones
+    // will generate a SAL_WARN but should not crash
+    auto p1 = new comphelper::ProfileZone("error1");
+    auto p2 = new comphelper::ProfileZone("error2");
+    delete p1;
+    delete p2;
+
     // Nothing is generated from this
     pAsync7Locked.reset();
 }
