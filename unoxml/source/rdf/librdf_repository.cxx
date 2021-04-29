@@ -1091,10 +1091,10 @@ void addChaffWhenEncryptedStorage(const uno::Reference< io::XOutputStream > &rSt
                 reinterpret_cast<sal_Int8*>(pBuffer), preamblelen);
             rStream->writeBytes(buf);
 
-            OStringBuffer aComment;
-            aComment.append("<!--");
-            aComment.append(comphelper::xml::makeXMLChaff());
-            aComment.append("-->");
+            OString aComment =
+                "<!--" +
+                comphelper::xml::makeXMLChaff() +
+                "-->";
 
             buf = uno::Sequence<sal_Int8>(
                 reinterpret_cast<const sal_Int8*>(aComment.getStr()), aComment.getLength());

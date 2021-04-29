@@ -574,17 +574,12 @@ void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
 
 OUString E3dScene::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(SvxResId(STR_ObjNameSingulScene3d));
+    OUString sName(SvxResId(STR_ObjNameSingulScene3d));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
-    return sName.makeStringAndClear();
+        sName += " '" + aName + "'";
+    return sName;
 }
 
 OUString E3dScene::TakeObjNamePlural() const

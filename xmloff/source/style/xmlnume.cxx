@@ -242,8 +242,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
     // text:level
     OUStringBuffer sTmp;
-    sTmp.append( nLevel + 1 );
-    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL, sTmp.makeStringAndClear() );
+    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL, OUString::number( nLevel + 1 ) );
     // #i110694#: no style-name on list-level-style-image
     // #i116149#: neither prefix/suffix
     if (NumberingType::BITMAP != eType)

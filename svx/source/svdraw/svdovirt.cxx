@@ -145,28 +145,18 @@ SdrVirtObj* SdrVirtObj::CloneSdrObject(SdrModel& rTargetModel) const
 
 OUString SdrVirtObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(rRefObj.TakeObjNameSingul());
-    sName.insert(0, '[');
-    sName.append(']');
+    OUString sName = "[" + rRefObj.TakeObjNameSingul() + "]";
 
     OUString aName(GetName());
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
+        sName += " '" + aName + "'";
 
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 OUString SdrVirtObj::TakeObjNamePlural() const
 {
-    OUStringBuffer sName(rRefObj.TakeObjNamePlural());
-    sName.insert(0, '[');
-    sName.append(']');
-    return sName.makeStringAndClear();
+    return "[" + rRefObj.TakeObjNamePlural() + "]";
 }
 
 bool SdrVirtObj::HasLimitedRotation() const

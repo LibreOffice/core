@@ -338,17 +338,12 @@ OUString SdrCircObj::TakeObjNameSingul() const
             default: break;
         }
     }
-    OUStringBuffer sName(SvxResId(pID));
+    OUString sName(SvxResId(pID));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
-    return sName.makeStringAndClear();
+        sName += " '" + aName + "'";
+    return sName;
 }
 
 OUString SdrCircObj::TakeObjNamePlural() const
@@ -621,12 +616,10 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         {
             const Degree100 nAngle(1 == rDrag.GetHdl()->GetPointNum() ? nStartAngle : nEndAngle);
 
-            OUStringBuffer aBuf(ImpGetDescriptionStr(STR_DragCircAngle));
-            aBuf.append(" (");
-            aBuf.append(SdrModel::GetAngleString(nAngle));
-            aBuf.append(')');
-
-            return aBuf.makeStringAndClear();
+            return ImpGetDescriptionStr(STR_DragCircAngle) +
+                " (" +
+                SdrModel::GetAngleString(nAngle) +
+                ")";
         }
         else
         {

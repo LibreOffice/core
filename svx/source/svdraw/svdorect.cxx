@@ -207,8 +207,6 @@ OUString SdrRectObj::TakeObjNameSingul() const
         return SdrTextObj::TakeObjNameSingul();
     }
 
-    OUStringBuffer sName;
-
     bool bRounded = GetEckenradius() != 0; // rounded down
     const char* pResId = bRounded ? STR_ObjNameSingulRECTRND : STR_ObjNameSingulRECT;
     if (aGeo.nShearAngle)
@@ -219,18 +217,13 @@ OUString SdrRectObj::TakeObjNameSingul() const
     {
         pResId = bRounded ? STR_ObjNameSingulQUADRND : STR_ObjNameSingulQUAD; // square
     }
-    sName.append(SvxResId(pResId));
+    OUString sName(SvxResId(pResId));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
+        sName += " '" + aName + "'";
 
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 OUString SdrRectObj::TakeObjNamePlural() const
@@ -422,12 +415,10 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             if(nRad < 0)
                 nRad = 0;
 
-            OUStringBuffer aBuf(ImpGetDescriptionStr(STR_DragRectEckRad));
-            aBuf.append(" (");
-            aBuf.append(GetMetrStr(nRad));
-            aBuf.append(')');
-
-            return aBuf.makeStringAndClear();
+            return ImpGetDescriptionStr(STR_DragRectEckRad) +
+                " (" +
+                GetMetrStr(nRad) +
+                ")";
         }
         else
         {

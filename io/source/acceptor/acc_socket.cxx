@@ -146,18 +146,11 @@ namespace io_acceptor {
 
     void SocketConnection::completeConnectionString()
     {
-        OUStringBuffer buf( 256 );
-        buf.append( ",peerPort=" );
-        buf.append( m_socket.getPeerPort() );
-        buf.append( ",peerHost=" );
-        buf.append( m_socket.getPeerHost( ) );
-
-        buf.append( ",localPort=" );
-        buf.append( m_socket.getLocalPort() );
-        buf.append( ",localHost=" );
-        buf.append( m_socket.getLocalHost() );
-
-        m_sDescription += buf;
+        m_sDescription +=
+            ",peerPort=" + OUString::number(m_socket.getPeerPort()) +
+            ",peerHost=" + m_socket.getPeerHost( ) +
+            ",localPort=" + OUString::number( m_socket.getLocalPort() ) +
+            ",localHost=" + m_socket.getLocalHost();
     }
 
     sal_Int32 SocketConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )

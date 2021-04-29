@@ -162,14 +162,11 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const tools::Recta
     if ( pRect && ( mnGroupLevel == 1 ) )
     {
         pAttrList->add( XML_coordorigin,
-                OStringBuffer( 20 ).append( sal_Int32( pRect->Left() ) )
-                .append( "," ).append( sal_Int32( pRect->Top() ) )
-                .makeStringAndClear() );
+                OString::number( pRect->Left() ) + "," + OString::number( pRect->Top() ) );
 
         pAttrList->add( XML_coordsize,
-                OStringBuffer( 20 ).append( sal_Int32( pRect->Right() ) - sal_Int32( pRect->Left() ) )
-                .append( "," ).append( sal_Int32( pRect->Bottom() ) - sal_Int32( pRect->Top() ) )
-                .makeStringAndClear() );
+                OString::number( pRect->Right() - pRect->Left() ) + "," +
+                OString::number( pRect->Bottom() - pRect->Top() ) );
     }
 
     m_pSerializer->startElementNS( XML_v, XML_group, pAttrList );
@@ -516,9 +513,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     }
                     if(nTop!=0 && nLeft!=0)
                         m_pShapeAttrList->add( XML_coordorigin,
-                                OStringBuffer( 20 ).append( sal_Int32( nLeft ) )
-                                .append( "," ).append( sal_Int32( nTop ) )
-                                .makeStringAndClear() );
+                                OString::number( nLeft ) + "," + OString::number( nTop ) );
                 }
                 bAlreadyWritten[ ESCHER_Prop_geoLeft ] = true;
                 bAlreadyWritten[ ESCHER_Prop_geoTop ] = true;
@@ -545,9 +540,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                     if(nBottom!=0 &&  nRight!=0 )
                         m_pShapeAttrList->add( XML_coordsize,
-                                OStringBuffer( 20 ).append( sal_Int32( nRight ) - sal_Int32( nLeft ) )
-                                .append( "," ).append( sal_Int32( nBottom ) - sal_Int32( nTop ) )
-                                .makeStringAndClear() );
+                                OString::number( nRight - nLeft ) + "," + OString::number( nBottom - nTop ) );
                 }
                 bAlreadyWritten[ ESCHER_Prop_geoRight ] = true;
                 bAlreadyWritten[ ESCHER_Prop_geoBottom ] = true;

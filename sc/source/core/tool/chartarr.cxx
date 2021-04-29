@@ -235,14 +235,9 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartSingle()
             aString = rDocument.GetString(aCols[nCol], nStrRow, nTab1);
         if (aString.isEmpty())
         {
-            OUStringBuffer aBuf;
-            aBuf.append(ScResId(STR_COLUMN));
-            aBuf.append(' ');
-
             ScAddress aPos( aCols[ nCol ], 0, 0 );
-            aBuf.append(aPos.Format(ScRefFlags::COL_VALID));
-
-            aString = aBuf.makeStringAndClear();
+            aString = ScResId(STR_COLUMN) + " " +
+                aPos.Format(ScRefFlags::COL_VALID);
         }
         pMemChart->SetColText( nCol, aString);
     }

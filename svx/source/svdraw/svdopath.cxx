@@ -1832,7 +1832,7 @@ SdrPathObj* SdrPathObj::CloneSdrObject(SdrModel& rTargetModel) const
 
 OUString SdrPathObj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName;
+    OUString sName;
 
     if(OBJ_LINE == meKind)
     {
@@ -1867,7 +1867,7 @@ OUString SdrPathObj::TakeObjNameSingul() const
             }
         }
 
-        sName.append(SvxResId(pId));
+        sName = SvxResId(pId);
     }
     else if(OBJ_PLIN == meKind || OBJ_POLY == meKind)
     {
@@ -1885,7 +1885,7 @@ OUString SdrPathObj::TakeObjNameSingul() const
                 pId = STR_ObjNameSingulPLIN;
             }
 
-            sName.append(SvxResId(pId));
+            sName = SvxResId(pId);
         }
         else
         {
@@ -1906,35 +1906,29 @@ OUString SdrPathObj::TakeObjNameSingul() const
                 pId = STR_ObjNameSingulPLIN_PointCount;
             }
 
-            OUString sTemp(SvxResId(pId));
             // #i96537#
-            sName.append(sTemp.replaceFirst("%2", OUString::number(nPointCount)));
+            sName = SvxResId(pId).replaceFirst("%2", OUString::number(nPointCount));
         }
     }
     else
     {
         switch (meKind)
         {
-            case OBJ_PATHLINE: sName.append(SvxResId(STR_ObjNameSingulPATHLINE)); break;
-            case OBJ_FREELINE: sName.append(SvxResId(STR_ObjNameSingulFREELINE)); break;
-            case OBJ_SPLNLINE: sName.append(SvxResId(STR_ObjNameSingulNATSPLN)); break;
-            case OBJ_PATHFILL: sName.append(SvxResId(STR_ObjNameSingulPATHFILL)); break;
-            case OBJ_FREEFILL: sName.append(SvxResId(STR_ObjNameSingulFREEFILL)); break;
-            case OBJ_SPLNFILL: sName.append(SvxResId(STR_ObjNameSingulPERSPLN)); break;
+            case OBJ_PATHLINE: sName = SvxResId(STR_ObjNameSingulPATHLINE); break;
+            case OBJ_FREELINE: sName = SvxResId(STR_ObjNameSingulFREELINE); break;
+            case OBJ_SPLNLINE: sName = SvxResId(STR_ObjNameSingulNATSPLN); break;
+            case OBJ_PATHFILL: sName = SvxResId(STR_ObjNameSingulPATHFILL); break;
+            case OBJ_FREEFILL: sName = SvxResId(STR_ObjNameSingulFREEFILL); break;
+            case OBJ_SPLNFILL: sName = SvxResId(STR_ObjNameSingulPERSPLN); break;
             default: break;
         }
     }
 
     OUString aName(GetName());
     if (!aName.isEmpty())
-    {
-        sName.append(' ');
-        sName.append('\'');
-        sName.append(aName);
-        sName.append('\'');
-    }
+        sName += " '" + aName + "'";
 
-    return sName.makeStringAndClear();
+    return sName;
 }
 
 OUString SdrPathObj::TakeObjNamePlural() const

@@ -248,13 +248,11 @@ OUString AcceleratorConfigurationReader::implts_getErrorLineString()
     if (!m_xLocator.is())
         return "Error during parsing XML. (No further info available ...)";
 
-    OUStringBuffer sMsg(256);
-    sMsg.append("Error during parsing XML in\nline = ");
-    sMsg.append     (m_xLocator->getLineNumber()           );
-    sMsg.append("\ncolumn = "                         );
-    sMsg.append     (m_xLocator->getColumnNumber()         );
-    sMsg.append("."                                   );
-    return sMsg.makeStringAndClear();
+    return "Error during parsing XML in\nline = " +
+        OUString::number(m_xLocator->getLineNumber()) +
+        "\ncolumn = " +
+        OUString::number(m_xLocator->getColumnNumber()) +
+        ".";
 }
 
 } // namespace framework
