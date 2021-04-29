@@ -83,7 +83,7 @@ public:
     void StartCursorMove();
 };
 
-class SmEditWindow final : public InterimItemWindow, public DropTargetHelper
+class SmEditWindow final : public InterimItemWindow
 {
     SmCmdBoxWindow& rCmdBox;
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
@@ -92,9 +92,6 @@ class SmEditWindow final : public InterimItemWindow, public DropTargetHelper
 
     virtual void ApplySettings(vcl::RenderContext&) override;
     virtual void DataChanged(const DataChangedEvent&) override;
-
-    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
-    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override;
 
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
 

@@ -123,7 +123,6 @@ void SmEditTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 SmEditWindow::SmEditWindow(SmCmdBoxWindow &rMyCmdBoxWin)
     : InterimItemWindow(&rMyCmdBoxWin, "modules/smath/ui/editwindow.ui", "EditWindow")
-    , DropTargetHelper(this)
     , rCmdBox(rMyCmdBoxWin)
     , mxScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow", true))
 {
@@ -158,7 +157,6 @@ void SmEditWindow::dispose()
 
     mxScrolledWindow.reset();
 
-    DropTargetHelper::dispose();
     InterimItemWindow::dispose();
 }
 
@@ -731,16 +729,6 @@ void SmEditWindow::SelPrevMark()
 static bool HasMark(const OUString& rText)
 {
     return rText.indexOf("<?>") != -1;
-}
-
-sal_Int8 SmEditWindow::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
-{
-    return DND_ACTION_NONE;
-}
-
-sal_Int8 SmEditWindow::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
-{
-    return DND_ACTION_NONE;
 }
 
 ESelection SmEditWindow::GetSelection() const
