@@ -321,6 +321,8 @@ public:
 
     static const char* GetAlignment( css::style::ParagraphAdjust nAlignment );
 
+    OUString GetTarget(OUString& rURL);
+
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,
                                         std::u16string_view sRelativeStream,
