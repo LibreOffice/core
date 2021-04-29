@@ -16,6 +16,24 @@
       "revId": "9fda4405605c56df51e98ad3158cca9ac2b9d9c4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9306e3d1_f673c083",
+        "filename": "solenv/gdb/libreoffice/tl.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-04-29T16:25:06Z",
+      "side": 1,
+      "message": "thanks, good spotting",
+      "parentUuid": "92ceedee_5ceaa0eb",
+      "revId": "9fda4405605c56df51e98ad3158cca9ac2b9d9c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
