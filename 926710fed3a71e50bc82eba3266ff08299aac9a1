@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e871716_d6e43805",
+        "filename": "cui/source/tabpages/border.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-04-29T14:00:22Z",
+      "side": 1,
+      "message": "Where do these values come from?",
+      "range": {
+        "startLine": 82,
+        "startChar": 59,
+        "endLine": 82,
+        "endChar": 71
+      },
+      "revId": "926710fed3a71e50bc82eba3266ff08299aac9a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
