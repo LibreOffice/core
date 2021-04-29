@@ -22,6 +22,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/fix-pch.patch.0 \
 ))
 
+$(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
+	external/liborcus/allow-utf-8-in-xml-names.patch \
+))
+
 ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/windows-constants-hack.patch \
