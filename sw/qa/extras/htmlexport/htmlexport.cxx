@@ -1363,6 +1363,29 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifAscharObjsize)
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(4116), xReader->GetObjh());
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifObjdataPresentationDataSize)
+{
+    // Given a document with an OLE2 embedded object, containing a preview:
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reqif-objdata-presentationdatasize.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+
+    // When exporting to ReqIF:
+    ExportToReqif();
+
+    // Then make sure that the PresentationDataSize in the RTF's objdata blob is correct:
+    OUString aRtfUrl = GetOlePath();
+    SvMemoryStream aOle1;
+    ParseOle1FromRtfUrl(aRtfUrl, aOle1);
+    OLE1Reader aOle1Reader(aOle1);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 565994
+    // - Actual  : 330240 (Linux)
+    // - Actual  : 566034 (Windows, when Word is installed)
+    // because PresentationData was taken from the OLE2 stream but its size was taken from RTF.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(565994), aOle1Reader.m_nPresentationDataSize);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
