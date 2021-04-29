@@ -582,7 +582,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
                     nGlyphFlags |= GlyphItemFlags::IS_VERTICAL;
-
+#if 0               // Mark - I felt this wasn't really correct.
                     // We have glyph offsets that is relative to h origin now,
                     // add the origin back so it is relative to v origin.
                     hb_font_add_glyph_origin_for_direction(pHbFont,
@@ -590,6 +590,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
                             HB_DIRECTION_TTB,
                             &pHbPositions[i].x_offset ,
                             &pHbPositions[i].y_offset );
+#endif
                     nAdvance = -pHbPositions[i].y_advance;
                     nXOffset = -pHbPositions[i].y_offset;
                     nYOffset = -pHbPositions[i].x_offset;

@@ -2100,6 +2100,20 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     SkPaint paint;
     paint.setColor(toSkColor(textColor));
     getDrawCanvas()->drawTextBlob(textBlob, 0, 0, paint);
+
+    if (pGlyph->IsVertical())
+    {
+        SkPaint aPaint;
+        aPaint.setColor(toSkColor(COL_RED));
+        for (sal_Int32 i = 0; i < glyphForms.size(); ++i)
+        {
+            double fTx = glyphForms[i].fTx;
+            double fTy = glyphForms[i].fTy;
+
+            getDrawCanvas()->drawLine(fTx - 5.0, fTy - 5.0, fTx + 5.0, fTy + 5.0, aPaint);
+            getDrawCanvas()->drawLine(fTx + 5.0, fTy - 5.0, fTx - 5.0, fTy + 5.0, aPaint);
+        }
+    }
     postDraw();
 }
 
