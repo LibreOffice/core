@@ -52,6 +52,24 @@
       "revId": "e02cbe10b0a6e8b04642879c1c8899944f92523a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3025cd2b_174f3b3f",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-29T19:04:56Z",
+      "side": 1,
+      "message": "Here are my thoughts:\nWe don\u0027t need an iterator for just a function.\nIt just makes extra code to maintain.\nSo we get rid of it.\nThen we use the advantages of being inside a ScInterpreter function.\nI believe this is what the iterator makes.",
+      "parentUuid": "1ee5e8ab_19c86e07",
+      "revId": "e02cbe10b0a6e8b04642879c1c8899944f92523a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
