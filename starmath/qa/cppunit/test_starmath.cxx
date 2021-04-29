@@ -99,7 +99,6 @@ private:
     SfxBindings m_aBindings;
     std::unique_ptr<SfxDispatcher> m_pDispatcher;
     VclPtr<SmCmdBoxWindow> m_pSmCmdBoxWindow;
-    VclPtr<SmEditWindow> m_pEditWindow;
     SmDocShellRef m_xDocShRef;
     SmViewShell *m_pViewShell;
 };
@@ -130,14 +129,12 @@ void Test::setUp()
     m_aBindings.EnterRegistrations();
     m_pSmCmdBoxWindow.reset(VclPtr<SmCmdBoxWindow>::Create(&m_aBindings, nullptr, nullptr));
     m_aBindings.LeaveRegistrations();
-    m_pEditWindow = VclPtr<SmEditWindow>::Create(*m_pSmCmdBoxWindow);
-    m_pViewShell = m_pEditWindow->GetView();
+    m_pViewShell = m_pSmCmdBoxWindow->GetView();
     CPPUNIT_ASSERT_MESSAGE("Should have a SmViewShell", m_pViewShell);
 }
 
 void Test::tearDown()
 {
-    m_pEditWindow.disposeAndClear();
     m_pSmCmdBoxWindow.disposeAndClear();
     m_pDispatcher.reset();
     m_xDocShRef->DoClose();
@@ -179,54 +176,55 @@ void Test::testSmTmpDeviceRestoreFont()
 
 void Test::editMarker()
 {
+    SmEditWindow& rEditWindow = m_pSmCmdBoxWindow->GetEditWindow();
     {
         OUString sMarkedText("<?> under <?> under <?>");
-        m_pEditWindow->SetText(sMarkedText);
-        m_pEditWindow->Flush();
-        OUString sFinalText = m_pEditWindow->GetText();
+        rEditWindow.SetText(sMarkedText);
+        rEditWindow.Flush();
+        OUString sFinalText = rEditWindow.GetText();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be equal text", sMarkedText, sFinalText);
     }
 
     {
         ESelection aSelection;
 
-        m_pEditWindow->SelNextMark();
-        m_pEditWindow->Delete();
-        m_pEditWindow->InsertText("a");
+        rEditWindow.SelNextMark();
+        rEditWindow.Delete();
+        rEditWindow.InsertText("a");
 
-        m_pEditWindow->SelNextMark();
-        m_pEditWindow->SelNextMark();
-        m_pEditWindow->Delete();
-        m_pEditWindow->InsertText("c");
+        rEditWindow.SelNextMark();
+        rEditWindow.SelNextMark();
+        rEditWindow.Delete();
+        rEditWindow.InsertText("c");
 
         // should be safe i.e. do nothing
-        m_pEditWindow->SelNextMark();
-        aSelection = m_pEditWindow->GetSelection();
+        rEditWindow.SelNextMark();
+        aSelection = rEditWindow.GetSelection();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nStartPara);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aSelection.nStartPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nEndPara);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aSelection.nEndPos);
 
-        m_pEditWindow->SelPrevMark();
-        m_pEditWindow->Delete();
-        m_pEditWindow->InsertText("b");
+        rEditWindow.SelPrevMark();
+        rEditWindow.Delete();
+        rEditWindow.InsertText("b");
 
         // tdf#106116: should be safe i.e. do nothing
-        m_pEditWindow->SelPrevMark();
-        aSelection = m_pEditWindow->GetSelection();
+        rEditWindow.SelPrevMark();
+        aSelection = rEditWindow.GetSelection();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nStartPara);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aSelection.nStartPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nEndPara);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aSelection.nEndPos);
 
-        m_pEditWindow->Flush();
-        OUString sFinalText = m_pEditWindow->GetText();
+        rEditWindow.Flush();
+        OUString sFinalText = rEditWindow.GetText();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a under b under c", OUString("a under b under c"), sFinalText);
     }
 
     {
-        m_pEditWindow->SetText(OUString());
-        m_pEditWindow->Flush();
+        rEditWindow.SetText(OUString());
+        rEditWindow.Flush();
     }
 }
 
@@ -436,12 +434,13 @@ void Test::editUndoRedo()
 
 void Test::replacePlaceholder()
 {
+    SmEditWindow& rEditWindow = m_pSmCmdBoxWindow->GetEditWindow();
     // Test the placeholder replacement. In this case, testing 'a + b', it
     // should return '+a + b' when selecting '+<?>' in ElementsDock
-    m_pEditWindow->SetText("a + b");
-    m_pEditWindow->SelectAll();
-    m_pEditWindow->InsertText("+<?>");
-    OUString sFinalText = m_pEditWindow->GetText();
+    rEditWindow.SetText("a + b");
+    rEditWindow.SelectAll();
+    rEditWindow.InsertText("+<?>");
+    OUString sFinalText = rEditWindow.GetText();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be '+a + b'", OUString("+a + b"), sFinalText);
 }
 
