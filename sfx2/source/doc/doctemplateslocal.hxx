@@ -60,6 +60,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     static OUString GetStandardGroupString();
+    static std::vector<OUString> GetBuiltInGroupNames();
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument() override;

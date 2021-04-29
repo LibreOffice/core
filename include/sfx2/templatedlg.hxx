@@ -22,7 +22,6 @@
 
 #include <sfx2/templatedlglocalview.hxx>
 
-class TemplateSearchView;
 class ThumbnailViewItem;
 
 namespace com
@@ -61,10 +60,9 @@ protected:
     DECL_LINK(SelectRegionHdl, weld::ComboBox&, void);
 
     DECL_LINK(OkClickHdl, weld::Button&, void);
-    DECL_LINK(MoveClickHdl, weld::Button&, void);
-    DECL_LINK(ExportClickHdl, weld::Button&, void);
-    DECL_LINK(ImportClickHdl, weld::Button&, void);
-    DECL_STATIC_LINK(SfxTemplateManagerDlg, LinkClickHdl, weld::Button&, void);
+    void ImportActionHdl();
+    void ExportActionHdl();
+    static void ExtensionsActionHdl();
 
     DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
 
@@ -75,10 +73,13 @@ protected:
     DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
     DECL_LINK(EditTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK(DeleteTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK(DeleteTemplateHdl, void*, void);
     DECL_LINK(DefaultTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK(MoveTemplateHdl, void*, void);
+    DECL_LINK(ExportTemplateHdl, void*, void);
 
     void SearchUpdate();
+    void FilterSearch();
 
     DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_LINK(GetFocusHdl, weld::Widget&, void);
@@ -89,7 +90,6 @@ protected:
     DECL_LINK(ListViewHdl, weld::Toggleable&, void);
     DECL_LINK(ThumbnailViewHdl, weld::Toggleable&, void);
     DECL_LINK(FocusRectLocalHdl, weld::Widget&, tools::Rectangle);
-    DECL_LINK(FocusRectSearchHdl, weld::Widget&, tools::Rectangle);
 
     void OnTemplateImportCategory(std::u16string_view sCategory);
     //    static void OnTemplateLink ();
@@ -102,7 +102,7 @@ protected:
     void OnCategoryRename();
     void OnCategoryDelete();
 
-    void createDefaultTemplateMenu();
+    void updateMenuItems();
 
     /**
      *
@@ -111,14 +111,6 @@ protected:
      **/
 
     void localMoveTo(sal_uInt16 nMenuId);
-
-    /**
-     *
-     * Move search result templates stored in the filesystem to another folder.
-     *
-     **/
-
-    void localSearchMoveTo(sal_uInt16 nMenuId);
 
     /// Return filter according to the currently selected application filter.
     FILTER_APPLICATION getCurrentApplicationFilter() const;
@@ -135,16 +127,10 @@ protected:
     std::unique_ptr<weld::ComboBox> mxCBFolder;
 
     std::unique_ptr<weld::Button> mxOKButton;
-    std::unique_ptr<weld::Button> mxMoveButton;
-    std::unique_ptr<weld::Button> mxExportButton;
-    std::unique_ptr<weld::Button> mxImportButton;
-    std::unique_ptr<weld::Button> mxMoreTemplatesButton;
     std::unique_ptr<weld::CheckButton> mxCBXHideDlg;
     std::unique_ptr<weld::MenuButton> mxActionBar;
-    std::unique_ptr<TemplateSearchView> mxSearchView;
     std::unique_ptr<TemplateDlgLocalView> mxLocalView;
     std::unique_ptr<weld::Menu> mxTemplateDefaultMenu;
-    std::unique_ptr<weld::CustomWeld> mxSearchViewWeld;
     std::unique_ptr<weld::CustomWeld> mxLocalViewWeld;
     std::unique_ptr<weld::Toggleable> mxListViewButton;
     std::unique_ptr<weld::Toggleable> mxThumbnailViewButton;

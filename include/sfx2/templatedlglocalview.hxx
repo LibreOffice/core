@@ -30,7 +30,8 @@ public:
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
 
-    void createContextMenu(const bool bIsDefault, const bool bIsBuiltIn);
+    void createContextMenu(const bool bIsDefault, const bool bIsBuiltIn, const bool bIsSingleSel,
+                           const OUString& rDefaultImg);
 
     virtual void Show() override;
 
@@ -44,6 +45,9 @@ public:
     }
 
     void MakeItemVisible(sal_uInt16 nId) { ThumbnailView::MakeItemVisible(nId); }
+
+    void insertItems(const std::vector<TemplateItemProperties>& rTemplates, bool isRegionSelected,
+                     bool bShowCategoryInTooltip);
 
 private:
     void ContextMenuSelectHdl(std::string_view rIdent);
