@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0773705b_b40b8cd5",
+        "filename": "sc/source/filter/xml/XMLExportDatabaseRanges.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-04-29T05:38:59Z",
+      "side": 1,
+      "message": "Should the whole table:filter-condition element be in loext namespace then? Or just the data-type and value attributes?",
+      "parentUuid": "39d4ad8d_262a54f1",
+      "revId": "1f06e2bd2656a9d1baf2a5001e8b3912b66f22cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e8b2196_621076cc",
         "filename": "sc/source/filter/xml/XMLExportDatabaseRanges.cxx",
         "patchSetId": 2
