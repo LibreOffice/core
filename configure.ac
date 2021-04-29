@@ -1895,6 +1895,12 @@ AC_ARG_ENABLE(curl,
         [Disable CURL support.]),
 ,enable_curl=yes)
 
+AC_ARG_ENABLE(wasm-strip,
+    AS_HELP_STRING([--enable-wasm-strip],
+        [Strip the static build like for WASM/emscripten platform.]),
+,enable_wasm_strip=yes)
+
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -3721,13 +3727,19 @@ if test "$_os" = "iOS" -o "$build_cpu" != "$host_cpu"; then
         cross_compiling="yes"
     fi
 fi
+
+ENABLE_WASM_STRIP=''
 if test "$cross_compiling" = "yes"; then
     export CROSS_COMPILING=TRUE
+    if test "$enable_dynamic_loading" != yes -a "$enable_wasm_strip" = yes; then
+        ENABLE_WASM_STRIP=TRUE
+    fi
 else
     CROSS_COMPILING=
     BUILD_TYPE="$BUILD_TYPE NATIVE"
 fi
 AC_SUBST(CROSS_COMPILING)
+AC_SUBST(ENABLE_WASM_STRIP)
 
 # Use -isystem (gcc) if possible, to avoid warnings in 3rd party headers.
 # NOTE: must _not_ be used for bundled external libraries!
@@ -5302,6 +5314,7 @@ if test "$cross_compiling" = "yes"; then
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
     test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no"
+    test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
 
     # Don't bother having configure look for stuff not needed for the build platform anyway
