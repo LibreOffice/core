@@ -84,36 +84,38 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
 
     //  find enclosing interval
 
+    KahanSum fTemp;
+    KahanSum kfAx = fAx;
+    KahanSum kfBx = fBx;
     double fAy = rFunction.GetValue(fAx);
     double fBy = rFunction.GetValue(fBx);
-    double fTemp;
     unsigned short nCount;
     for (nCount = 0; nCount < 1000 && !lcl_HasChangeOfSign(fAy,fBy); nCount++)
     {
         if (fabs(fAy) <= fabs(fBy))
         {
-            fTemp = fAx;
-            fAx += 2.0 * (fAx - fBx);
-            if (fAx < 0.0)
-                fAx = 0.0;
-            fBx = fTemp;
+            fTemp = kfAx;
+            kfAx += (kfAx - kfBx) * 2.0;
+            if (kfAx < 0.0)
+                kfAx = 0.0;
+            kfBx = fTemp;
             fBy = fAy;
-            fAy = rFunction.GetValue(fAx);
+            fAy = rFunction.GetValue(kfAx.get());
         }
         else
         {
-            fTemp = fBx;
-            fBx += 2.0 * (fBx - fAx);
-            fAx = fTemp;
+            fTemp = kfBx;
+            kfBx += (kfBx - kfAx) * 2.0;
+            kfAx = fTemp;
             fAy = fBy;
-            fBy = rFunction.GetValue(fBx);
+            fBy = rFunction.GetValue(kfBx.get());
         }
     }
 
     if (fAy == 0.0)
-        return fAx;
+        return kfAx.get();
     if (fBy == 0.0)
-        return fBx;
+        return kfBx.get();
     if (!lcl_HasChangeOfSign( fAy, fBy))
     {
         rConvError = true;
@@ -121,17 +123,17 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
     }
     // inverse quadric interpolation with additional brackets
     // set three points
-    double fPx = fAx;
+    double fPx = kfAx.get();
     double fPy = fAy;
-    double fQx = fBx;
+    double fQx = kfBx.get();
     double fQy = fBy;
-    double fRx = fAx;
+    double fRx = kfAx.get();
     double fRy = fAy;
-    double fSx = 0.5 * (fAx + fBx); // potential next point
+    KahanSum fSx = (kfAx + kfBx) * 0.5; // potential next point
     bool bHasToInterpolate = true;
     nCount = 0;
     while ( nCount < 500 && fabs(fRy) > fYEps &&
-            (fBx-fAx) > ::std::max( fabs(fAx), fabs(fBx)) * fXEps )
+            (kfBx-kfAx).get() > std::max( std::abs(kfAx.get()), std::abs(kfBx.get())) * fXEps )
     {
         if (bHasToInterpolate)
         {
@@ -140,29 +142,29 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
                 fSx = fPx * fRy * fQy / (fRy-fPy) / (fQy-fPy)
                     + fRx * fQy * fPy / (fQy-fRy) / (fPy-fRy)
                     + fQx * fPy * fRy / (fPy-fQy) / (fRy-fQy);
-                bHasToInterpolate = (fAx < fSx) && (fSx < fBx); // inside the brackets?
+                bHasToInterpolate = (kfAx < fSx) && (fSx < kfBx); // inside the brackets?
             }
             else
                 bHasToInterpolate = false;
         }
         if(!bHasToInterpolate)
         {
-            fSx = 0.5 * (fAx + fBx);
+            fSx = (kfAx + kfBx)*0.5;
             // reset points
-            fQx = fBx; fQy = fBy;
+            fQx = kfBx.get(); fQy = fBy;
             bHasToInterpolate = true;
         }
         // shift points for next interpolation
-        fPx = fQx; fQx = fRx; fRx = fSx;
-        fPy = fQy; fQy = fRy; fRy = rFunction.GetValue(fSx);
+        fPx = fQx; fQx = fRx; fRx = fSx.get();
+        fPy = fQy; fQy = fRy; fRy = rFunction.GetValue(fSx.get());
         // update brackets
         if (lcl_HasChangeOfSign( fAy, fRy))
         {
-            fBx = fRx; fBy = fRy;
+            kfBx = fRx; fBy = fRy;
         }
         else
         {
-            fAx = fRx; fAy = fRy;
+            kfAx = fRx; fAy = fRy;
         }
         // if last iteration brought too small advance, then do bisection next
         // time, for safety
@@ -948,10 +950,11 @@ static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
         fnorm = 1.0/b2;
         cf = a2*fnorm;
     }
-    cfnew = 1.0;
-    double rm = 1.0;
 
-    const double fMaxIter = 50000.0;
+    cfnew = 1.0;
+    size_t rm = 1;
+    size_t fMaxIter = 50000;
+
     // loop security, normal cases converge in less than 100 iterations.
     // FIXME: You will get so much iterations for fX near mean,
     // I do not know a better algorithm.
@@ -972,7 +975,7 @@ static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
             bfinished = (fabs(cf-cfnew) < fabs(cf)*fMachEps);
         }
         cf = cfnew;
-        rm += 1.0;
+        rm ++;
     }
     while (rm < fMaxIter && !bfinished);
     return cf;
@@ -1259,19 +1262,18 @@ static double lcl_GetBinomDistRange(double n, double xs,double xe,
 //preconditions: 0.0 <= xs < xe <= n; xs,xe,n integral although double
 {
     sal_uInt32 i;
-    double fSum;
     // skip summands index 0 to xs-1, start sum with index xs
     sal_uInt32 nXs = static_cast<sal_uInt32>( xs );
     for (i = 1; i <= nXs && fFactor > 0.0; i++)
         fFactor *= (n-i+1)/i * p/q;
-    fSum = fFactor; // Summand xs
+    KahanSum fSum = fFactor; // Summand xs
     sal_uInt32 nXe = static_cast<sal_uInt32>(xe);
     for (i = nXs+1; i <= nXe && fFactor > 0.0; i++)
     {
         fFactor *= (n-i+1)/i * p/q;
         fSum += fFactor;
     }
-    return std::min(fSum,1.0);
+    return std::min(fSum.get(), 1.0);
 }
 
 void ScInterpreter::ScB()
@@ -1386,14 +1388,15 @@ void ScInterpreter::ScBinomDist()
                 {
                     if (fFactor > fMachEps)
                     {
-                        double fSum = 1.0 - fFactor;
+                        KahanSum fSum = 1.0;
+                        fSum -= fFactor;
                         sal_uInt32 max = static_cast<sal_uInt32> (n - x) - 1;
                         for (sal_uInt32 i = 0; i < max && fFactor > 0.0; i++)
                         {
                             fFactor *= (n-i)/(i+1)*q/p;
                             fSum -= fFactor;
                         }
-                        PushDouble( (fSum < 0.0) ? 0.0 : fSum );
+                        PushDouble( (fSum < 0.0) ? 0.0 : fSum.get() );
                     }
                     else
                         PushDouble(lcl_GetBinomDistRange(n,n-x,n,fFactor,q,p));
@@ -1429,7 +1432,7 @@ void ScInterpreter::ScCritBinom()
             fFactor = pow(q,n);
             if (fFactor > ::std::numeric_limits<double>::min())
             {
-                double fSum = fFactor;
+                KahanSum fSum = fFactor;
                 sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                 for (i = 0; i < max && fSum < alpha; i++)
                 {
@@ -1441,15 +1444,13 @@ void ScInterpreter::ScCritBinom()
             else
             {
                 // accumulate BinomDist until accumulated BinomDist reaches alpha
-                double fSum = 0.0;
+                KahanSum fSum = 0.0;
                 sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                 for (i = 0; i < max && fSum < alpha; i++)
                 {
                     const double x = GetBetaDistPDF( p, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
                     if ( nGlobalError == FormulaError::NONE )
-                    {
                         fSum += x;
-                    }
                     else
                     {
                         PushNoValue();
@@ -1465,7 +1466,8 @@ void ScInterpreter::ScCritBinom()
             fFactor = pow(p, n);
             if (fFactor > ::std::numeric_limits<double>::min())
             {
-                double fSum = 1.0 - fFactor;
+                KahanSum fSum = 1.0;
+                fSum -= fFactor;
                 sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                 for (i = 0; i < max && fSum >= alpha; i++)
                 {
@@ -1477,16 +1479,14 @@ void ScInterpreter::ScCritBinom()
             else
             {
                 // accumulate BinomDist until accumulated BinomDist reaches alpha
-                double fSum = 0.0;
+                KahanSum fSum = 0.0;
                 sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                 alpha = 1 - alpha;
                 for (i = 0; i < max && fSum < alpha; i++)
                 {
                     const double x = GetBetaDistPDF( q, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
                     if ( nGlobalError == FormulaError::NONE )
-                    {
                         fSum += x;
-                    }
                     else
                     {
                         PushNoValue();
@@ -1818,14 +1818,14 @@ void ScInterpreter::ScPoissonDist( bool bODFF )
             else
             {
                 double fSummand = exp(-lambda);
-                double fSum = fSummand;
+                KahanSum fSum = fSummand;
                 int nEnd = sal::static_int_cast<int>( x );
                 for (int i = 1; i <= nEnd; i++)
                 {
                     fSummand = (fSummand * lambda)/static_cast<double>(i);
                     fSum += fSummand;
                 }
-                PushDouble(fSum);
+                PushDouble(fSum.get());
             }
         }
     }
@@ -1873,15 +1873,14 @@ void ScInterpreter::ScHypGeomDist( int nMinParamCount )
         return;
     }
 
-    double fVal = 0.0;
-
+    KahanSum fVal = 0.0;
     for ( int i = ( bCumulative ? 0 : x ); i <= x && nGlobalError == FormulaError::NONE; i++ )
     {
         if ( (n - i <= N - M) && (i <= M) )
             fVal +=  GetHypGeomDist( i, n, M, N );
     }
 
-    PushDouble( fVal );
+    PushDouble( fVal.get() );
 }
 
 /** Calculates a value of the hypergeometric distribution.
@@ -2469,8 +2468,8 @@ void ScInterpreter::ScZTest()
     }
     x = GetDouble();
 
-    double fSum    = 0.0;
-    double fSumSqr = 0.0;
+    KahanSum fSum    = 0.0;
+    KahanSum fSumSqr = 0.0;
     double fVal;
     double rValCount = 0.0;
     switch (GetStackType())
@@ -2562,11 +2561,11 @@ void ScInterpreter::ScZTest()
         PushError( FormulaError::DivisionByZero);
     else
     {
-        double mue = fSum/rValCount;
+        double mue = fSum.get()/rValCount;
 
         if (nParamCount != 3)
         {
-            sigma = (fSumSqr - fSum*fSum/rValCount)/(rValCount-1.0);
+            sigma = (fSumSqr - fSum.get()*fSum.get()/rValCount).get()/(rValCount-1.0);
             if (sigma == 0.0)
             {
                 PushError(FormulaError::DivisionByZero);
@@ -2586,10 +2585,10 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
 {
     double fCount1  = 0.0;
     double fCount2  = 0.0;
-    double fSum1    = 0.0;
-    double fSumSqr1 = 0.0;
-    double fSum2    = 0.0;
-    double fSumSqr2 = 0.0;
+    KahanSum fSum1    = 0.0;
+    KahanSum fSumSqr1 = 0.0;
+    KahanSum fSum2    = 0.0;
+    KahanSum fSumSqr2 = 0.0;
     double fVal;
     SCSIZE i,j;
     for (i = 0; i < nC1; i++)
@@ -2621,14 +2620,14 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
     } // if (fCount1 < 2.0 || fCount2 < 2.0)
     if ( _bTemplin )
     {
-        double fS1 = (fSumSqr1-fSum1*fSum1/fCount1)/(fCount1-1.0)/fCount1;
-        double fS2 = (fSumSqr2-fSum2*fSum2/fCount2)/(fCount2-1.0)/fCount2;
+        double fS1 = (fSumSqr1-fSum1.get()*fSum1.get()/fCount1).get()/(fCount1-1.0)/fCount1;
+        double fS2 = (fSumSqr2-fSum2.get()*fSum2.get()/fCount2).get()/(fCount2-1.0)/fCount2;
         if (fS1 + fS2 == 0.0)
         {
             PushNoValue();
             return false;
         }
-        fT = fabs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
+        fT = fabs(fSum1.get()/fCount1 - fSum2.get()/fCount2)/sqrt(fS1+fS2);
         double c = fS1/(fS1+fS2);
     //  GetTDist is calculated via GetBetaDist and also works with non-integral
     // degrees of freedom. The result matches Excel
@@ -2637,9 +2636,9 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
     else
     {
         //  according to Bronstein-Semendjajew
-        double fS1 = (fSumSqr1 - fSum1*fSum1/fCount1) / (fCount1 - 1.0);    // Variance
-        double fS2 = (fSumSqr2 - fSum2*fSum2/fCount2) / (fCount2 - 1.0);
-        fT = fabs( fSum1/fCount1 - fSum2/fCount2 ) /
+        double fS1 = (fSumSqr1 - fSum1.get()*fSum1.get()/fCount1).get() / (fCount1 - 1.0);    // Variance
+        double fS2 = (fSumSqr2 - fSum2.get()*fSum2.get()/fCount2).get() / (fCount2 - 1.0);
+        fT = fabs( fSum1.get()/fCount1 - fSum2.get()/fCount2 ) /
              sqrt( (fCount1-1.0)*fS1 + (fCount2-1.0)*fS2 ) *
              sqrt( fCount1*fCount2*(fCount1+fCount2-2)/(fCount1+fCount2) );
         fF = fCount1 + fCount2 - 2;
@@ -2679,9 +2678,9 @@ void ScInterpreter::ScTTest()
             return;
         }
         double fCount   = 0.0;
-        double fSum1    = 0.0;
-        double fSum2    = 0.0;
-        double fSumSqrD = 0.0;
+        KahanSum fSum1    = 0.0;
+        KahanSum fSum2    = 0.0;
+        KahanSum fSumSqrD = 0.0;
         double fVal1, fVal2;
         for (i = 0; i < nC1; i++)
             for (j = 0; j < nR1; j++)
@@ -2701,8 +2700,8 @@ void ScInterpreter::ScTTest()
             PushNoValue();
             return;
         }
-        double fSumD = fSum1 - fSum2;
-        double fDivider = fCount*fSumSqrD - fSumD*fSumD;
+        double fSumD = (fSum1 - fSum2).get();
+        double fDivider = fCount*fSumSqrD.get() - fSumD*fSumD;
         if ( fDivider == 0.0 )
         {
             PushError(FormulaError::DivisionByZero);
@@ -2744,34 +2743,50 @@ void ScInterpreter::ScFTest()
     SCSIZE nR1, nR2;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
-    double fCount1  = 0.0;
-    double fCount2  = 0.0;
-    double fSum1    = 0.0;
-    double fSumSqr1 = 0.0;
-    double fSum2    = 0.0;
-    double fSumSqr2 = 0.0;
+    ScMatrix::KahanIterateResult aRes(0, 0);
+    //double fCount1  = 0.0;
+    //double fCount2  = 0.0;
+    //KahanSum fSum1    = 0.0;
+    //KahanSum fSumSqr1 = 0.0;
+    //KahanSum fSum2    = 0.0;
+    //KahanSum fSumSqr2 = 0.0;
 
-    std::vector<sc::op::Op> aOp;
-    aOp.emplace_back(sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal;}));
-    aOp.emplace_back(sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal * fVal;}));
+    //std::vector<sc::op::Op> aOp;
+    //aOp.emplace_back(sc::op::Op(0.0, [](KahanSum& rAccum, double fVal){rAccum += fVal;}));
+    //aOp.emplace_back(sc::op::Op(0.0, [](KahanSum& rAccum, double fVal){rAccum += fVal * fVal;}));
 
-    auto aVal1 = pMat1->Collect(aOp);
-    fSum1 = aVal1[0].mfFirst + aVal1[0].mfRest;
-    fSumSqr1 = aVal1[1].mfFirst + aVal1[1].mfRest;
-    fCount1 = aVal1[2].mnCount;
+    //auto aVal1 = pMat1->Collect(aOp);
+    aRes = pMat1->Sum(true);
+    KahanSum fSum1 = aRes.maAccumulator;
+    aRes = pMat1->SumSquare(true);
+    KahanSum fSumSqr1 = aRes.maAccumulator;
+    double fCount1 = aRes.mnCount;
 
+    aRes = pMat2->Sum(true);
+    KahanSum fSum2 = aRes.maAccumulator;
+    aRes = pMat2->SumSquare(true);
+    KahanSum fSumSqr2 = aRes.maAccumulator;
+    double fCount2 = aRes.mnCount;
+
+
+    //fSum1 = aVal1[0].mfFirst + aVal1[0].mfRest;
+    //fSumSqr1 = aVal1[1].mfFirst + aVal1[1].mfRest;
+    //fCount1 = aVal1[2].mnCount;
+
+    /*
     auto aVal2 = pMat2->Collect(aOp);
     fSum2 = aVal2[0].mfFirst + aVal2[0].mfRest;
     fSumSqr2 = aVal2[1].mfFirst + aVal2[1].mfRest;
     fCount2 = aVal2[2].mnCount;
+    */
 
     if (fCount1 < 2.0 || fCount2 < 2.0)
     {
         PushNoValue();
         return;
     }
-    double fS1 = (fSumSqr1-fSum1*fSum1/fCount1)/(fCount1-1.0);
-    double fS2 = (fSumSqr2-fSum2*fSum2/fCount2)/(fCount2-1.0);
+    double fS1 = (fSumSqr1-fSum1.get()*fSum1.get()/fCount1).get()/(fCount1-1.0);
+    double fS2 = (fSumSqr2-fSum2.get()*fSum2.get()/fCount2).get()/(fCount2-1.0);
     if (fS1 == 0.0 || fS2 == 0.0)
     {
         PushNoValue();
@@ -2814,7 +2829,7 @@ void ScInterpreter::ScChiTest()
         PushIllegalArgument();
         return;
     }
-    double fChi = 0.0;
+    KahanSum fChi = 0.0;
     bool bEmpty = true;
     for (SCSIZE i = 0; i < nC1; i++)
     {
@@ -2867,7 +2882,7 @@ void ScInterpreter::ScChiTest()
     }
     else
         fDF = static_cast<double>(nC1-1)*static_cast<double>(nR1-1);
-    PushDouble(GetChiDist(fChi, fDF));
+    PushDouble(GetChiDist(fChi.get(), fDF));
 }
 
 void ScInterpreter::ScKurt()
@@ -2915,7 +2930,7 @@ void ScInterpreter::ScKurt()
 void ScInterpreter::ScHarMean()
 {
     short nParamCount = GetByte();
-    double nVal = 0.0;
+    KahanSum nVal = 0.0;
     double nValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3028,7 +3043,7 @@ void ScInterpreter::ScHarMean()
         }
     }
     if (nGlobalError == FormulaError::NONE)
-        PushDouble( nValCount / nVal );
+        PushDouble( nValCount / nVal.get() );
     else
         PushError( nGlobalError);
 }
@@ -3036,7 +3051,7 @@ void ScInterpreter::ScHarMean()
 void ScInterpreter::ScGeoMean()
 {
     short nParamCount = GetByte();
-    double nVal = 0.0;
+    KahanSum nVal = 0.0;
     double nValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3200,7 +3215,7 @@ void ScInterpreter::ScGeoMean()
         }
     }
     if (nGlobalError == FormulaError::NONE)
-        PushDouble(exp(nVal / nValCount));
+        PushDouble(exp(nVal.get() / nValCount));
     else
         PushError( nGlobalError);
 }
@@ -3846,10 +3861,10 @@ void ScInterpreter::ScTrimMean()
             nIndex--;
         nIndex /= 2;
         OSL_ENSURE(nIndex < nSize, "ScTrimMean: wrong index");
-        double fSum = 0.0;
+        KahanSum fSum = 0.0;
         for (SCSIZE i = nIndex; i < nSize-nIndex; i++)
             fSum += aSortArray[i];
-        PushDouble(fSum/static_cast<double>(nSize-2*nIndex));
+        PushDouble(fSum.get()/static_cast<double>(nSize-2*nIndex));
     }
 }
 
@@ -4285,7 +4300,7 @@ void ScInterpreter::ScAveDev()
         return;
     sal_uInt16 SaveSP = sp;
     double nMiddle = 0.0;
-    double rVal = 0.0;
+    KahanSum rVal = 0.0;
     double rValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -4369,7 +4384,7 @@ void ScInterpreter::ScAveDev()
         PushError( nGlobalError);
         return;
     }
-    nMiddle = rVal / rValCount;
+    nMiddle = rVal.get() / rValCount;
     sp = SaveSP;
     rVal = 0.0;
     nParam = nParamCount;
@@ -4477,8 +4492,8 @@ void ScInterpreter::ScProbability()
             PushNA();
         else
         {
-            double fSum = 0.0;
-            double fRes = 0.0;
+            KahanSum fSum = 0.0;
+            KahanSum fRes = 0.0;
             bool bStop = false;
             double fP, fW;
             for ( SCSIZE i = 0; i < nC1 && !bStop; i++ )
@@ -4502,10 +4517,10 @@ void ScInterpreter::ScProbability()
                         SetError( FormulaError::IllegalArgument);
                 }
             }
-            if (bStop || fabs(fSum -1.0) > 1.0E-7)
+            if (bStop || fabs((fSum -1.0).get()) > 1.0E-7)
                 PushNoValue();
             else
-                PushDouble(fRes);
+                PushDouble(fRes.get());
         }
     }
 }
@@ -4557,8 +4572,8 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
      * for example above 10^8
      */
     double fCount           = 0.0;
-    double fSumX            = 0.0;
-    double fSumY            = 0.0;
+    KahanSum fSumX            = 0.0;
+    KahanSum fSumY            = 0.0;
 
     for (SCSIZE i = 0; i < nC1; i++)
     {
@@ -4578,11 +4593,11 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
         PushNoValue();
     else
     {
-        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
-        double fSumSqrDeltaY    = 0.0; // sum of (ValY-MeanY)^2
-        const double fMeanX = fSumX / fCount;
-        const double fMeanY = fSumY / fCount;
+        KahanSum fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+        KahanSum fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+        KahanSum fSumSqrDeltaY    = 0.0; // sum of (ValY-MeanY)^2
+        const double fMeanX = fSumX.get() / fCount;
+        const double fMeanY = fSumY.get() / fCount;
         for (SCSIZE i = 0; i < nC1; i++)
         {
             for (SCSIZE j = 0; j < nR1; j++)
@@ -4607,17 +4622,17 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
                 || (!_bStexy && fSumSqrDeltaY < ::std::numeric_limits<double>::min()))
                 PushError( FormulaError::DivisionByZero);
             else if ( _bStexy )
-                PushDouble( sqrt( (fSumSqrDeltaY - fSumDeltaXDeltaY *
-                            fSumDeltaXDeltaY / fSumSqrDeltaX) / (fCount-2)));
+                PushDouble( sqrt( (fSumSqrDeltaY - fSumDeltaXDeltaY.get() *
+                            fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get()).get() / (fCount-2)));
             else
-                PushDouble( fSumDeltaXDeltaY / sqrt( fSumSqrDeltaX * fSumSqrDeltaY));
+                PushDouble( fSumDeltaXDeltaY.get() / sqrt( fSumSqrDeltaX.get() * fSumSqrDeltaY.get()));
         }
         else
         {
             if ( _bSample )
-                PushDouble( fSumDeltaXDeltaY / ( fCount - 1 ) );
+                PushDouble( fSumDeltaXDeltaY.get() / ( fCount - 1 ) );
             else
-                PushDouble( fSumDeltaXDeltaY / fCount);
+                PushDouble( fSumDeltaXDeltaY.get() / fCount);
         }
     }
 }
@@ -4669,8 +4684,8 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
     }
     // #i78250# numerical stability improved
     double fCount           = 0.0;
-    double fSumX            = 0.0;
-    double fSumY            = 0.0;
+    KahanSum fSumX          = 0.0;
+    KahanSum fSumY          = 0.0;
 
     for (SCSIZE i = 0; i < nC1; i++)
     {
@@ -4678,10 +4693,8 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         {
             if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
             {
-                double fValX = pMat1->GetDouble(i,j);
-                double fValY = pMat2->GetDouble(i,j);
-                fSumX += fValX;
-                fSumY += fValY;
+                fSumX += pMat1->GetDouble(i,j);
+                fSumY += pMat2->GetDouble(i,j);
                 fCount++;
             }
         }
@@ -4690,10 +4703,10 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         PushNoValue();
     else
     {
-        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
-        double fMeanX = fSumX / fCount;
-        double fMeanY = fSumY / fCount;
+        KahanSum fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+        KahanSum fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+        double fMeanX = fSumX.get() / fCount;
+        double fMeanY = fSumY.get() / fCount;
         for (SCSIZE i = 0; i < nC1; i++)
         {
             for (SCSIZE j = 0; j < nR1; j++)
@@ -4712,9 +4725,9 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         else
         {
             if ( bSlope )
-                PushDouble( fSumDeltaXDeltaY / fSumSqrDeltaX);
+                PushDouble( fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get());
             else
-                PushDouble( fMeanY - fSumDeltaXDeltaY / fSumSqrDeltaX * fMeanX);
+                PushDouble( fMeanY - fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get() * fMeanX);
         }
     }
 }
@@ -4752,8 +4765,8 @@ void ScInterpreter::ScForecast()
     double fVal = GetDouble();
     // #i78250# numerical stability improved
     double fCount           = 0.0;
-    double fSumX            = 0.0;
-    double fSumY            = 0.0;
+    KahanSum fSumX          = 0.0;
+    KahanSum fSumY          = 0.0;
 
     for (SCSIZE i = 0; i < nC1; i++)
     {
@@ -4761,10 +4774,8 @@ void ScInterpreter::ScForecast()
         {
             if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
             {
-                double fValX = pMat1->GetDouble(i,j);
-                double fValY = pMat2->GetDouble(i,j);
-                fSumX += fValX;
-                fSumY += fValY;
+                fSumX += pMat1->GetDouble(i,j);
+                fSumY += pMat2->GetDouble(i,j);
                 fCount++;
             }
         }
@@ -4773,10 +4784,10 @@ void ScInterpreter::ScForecast()
         PushNoValue();
     else
     {
-        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
-        double fMeanX = fSumX / fCount;
-        double fMeanY = fSumY / fCount;
+        KahanSum fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+        KahanSum fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+        double fMeanX = fSumX.get() / fCount;
+        double fMeanY = fSumY.get() / fCount;
         for (SCSIZE i = 0; i < nC1; i++)
         {
             for (SCSIZE j = 0; j < nR1; j++)
@@ -4793,7 +4804,7 @@ void ScInterpreter::ScForecast()
         if (fSumSqrDeltaX == 0.0)
             PushError( FormulaError::DivisionByZero);
         else
-            PushDouble( fMeanY + fSumDeltaXDeltaY / fSumSqrDeltaX * (fVal - fMeanX));
+            PushDouble( fMeanY + fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get() * (fVal - fMeanX));
     }
 }
 
