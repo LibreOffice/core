@@ -51,6 +51,8 @@ public:
     ProfileZone(const char* sName, bool bConsole = false)
         : NamedEvent(sName)
         , m_bConsole(bConsole)
+        , m_nPid(-1)
+        , m_nNesting(-1)
     {
         if (s_bRecording || m_bConsole)
         {
