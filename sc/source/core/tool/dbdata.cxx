@@ -366,8 +366,8 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         ScQueryEntry& rEntry = mpQueryParam->GetEntry(i);
         rEntry.nField += nDifX;
 
-        // tdf#48025 update the column index of the filter criteria,
-        // when the deleted columns are inside the data range
+        // tdf#48025, tdf#141946: update the column index of the filter criteria,
+        // when the deleted/inserted columns are inside the data range
         if (nUpdateCol != -1)
         {
             nUpdateCol += nDifX;
@@ -610,9 +610,9 @@ void ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefM
         AdjustTableColumnNames( eUpdateRefMode, nDx, nCol1, nOldCol1, nOldCol2, theCol1, theCol2);
         ::std::vector<OUString> aNames( maTableColumnNames);
         bool bTableColumnNamesDirty = mbTableColumnNamesDirty;
-        // tdf#48025 update the column index of the filter criteria,
-        // when the deleted columns are inside the data range
-        if (HasAutoFilter() && theCol1 - nOldCol1 > theCol2 - nOldCol2)
+        // tdf#48025, tdf#141946: update the column index of the filter criteria,
+        // when the deleted/inserted columns are inside the data range
+        if (HasAutoFilter() && theCol1 - nOldCol1 != theCol2 - nOldCol2)
             MoveTo(theTab1, theCol1, theRow1, theCol2, theRow2, nCol1);
         else
             MoveTo( theTab1, theCol1, theRow1, theCol2, theRow2 );
