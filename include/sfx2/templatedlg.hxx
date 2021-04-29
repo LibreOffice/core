@@ -61,10 +61,14 @@ protected:
     DECL_LINK(SelectRegionHdl, weld::ComboBox&, void);
 
     DECL_LINK(OkClickHdl, weld::Button&, void);
-    DECL_LINK(MoveClickHdl, weld::Button&, void);
-    DECL_LINK(ExportClickHdl, weld::Button&, void);
-    DECL_LINK(ImportClickHdl, weld::Button&, void);
-    DECL_STATIC_LINK(SfxTemplateManagerDlg, LinkClickHdl, weld::Button&, void);
+    //DECL_LINK(MoveClickHdl, weld::Button&, void);
+    //DECL_LINK(ExportClickHdl, weld::Button&, void);
+    //DECL_LINK(ImportClickHdl, weld::Button&, void);
+    //DECL_STATIC_LINK(SfxTemplateManagerDlg, LinkClickHdl, weld::Button&, void);
+    void MoveActionHdl();
+    void ImportActionHdl();
+    void ExportActionHdl();
+    static void ExtensionsActionHdl();
 
     DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
 
@@ -102,7 +106,7 @@ protected:
     void OnCategoryRename();
     void OnCategoryDelete();
 
-    void createDefaultTemplateMenu();
+    void updateMenuItems();
 
     /**
      *
@@ -135,10 +139,10 @@ protected:
     std::unique_ptr<weld::ComboBox> mxCBFolder;
 
     std::unique_ptr<weld::Button> mxOKButton;
-    std::unique_ptr<weld::Button> mxMoveButton;
+    /* std::unique_ptr<weld::Button> mxMoveButton;
     std::unique_ptr<weld::Button> mxExportButton;
     std::unique_ptr<weld::Button> mxImportButton;
-    std::unique_ptr<weld::Button> mxMoreTemplatesButton;
+    std::unique_ptr<weld::Button> mxMoreTemplatesButton; */
     std::unique_ptr<weld::CheckButton> mxCBXHideDlg;
     std::unique_ptr<weld::MenuButton> mxActionBar;
     std::unique_ptr<TemplateSearchView> mxSearchView;

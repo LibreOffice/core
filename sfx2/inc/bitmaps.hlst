@@ -91,7 +91,17 @@
 #define SFX_BMP_CLOSE_DOC                   "sfx2/res/closedoc.png"
 
 #define SIDEBAR_CLOSE_INDICATOR             "cmd/lc_decrementlevel.png"
-
+#define BMP_ACTION_DEFAULT_WRITER           "res/odt_16_8.png"
+#define BMP_ACTION_DEFAULT_CALC             "res/ods_16_8.png"
+#define BMP_ACTION_DEFAULT_IMPRESS          "res/odp_16_8.png"
+#define BMP_ACTION_DEFAULT_DRAW             "res/odg_16_8.png"
+#define BMP_ACTION_MOVE                     "cmd/sc_move.png"
+#define BMP_ACTION_IMPORT                   "cmd/sc_dataimport.png"
+#define BMP_ACTION_EXPORT                   "cmd/sc_exportto.png"
+#define BMP_ACTION_EXTENSIONS               "cmd/sc_additionsdialog.png"
+#define BMP_ACTION_DELETE_CATEGORY          "cmd/sc_delete.png"
+#define BMP_ACTION_NEW_CATEGORY             "cmd/sc_add.png"
+#define BMP_ACTION_RENAME                   "cmd/sc_editdoc.png"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
