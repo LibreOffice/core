@@ -27,6 +27,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/0001-Prevent-unsigned-integer-underflow.patch \
 ))
 
+$(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
+	external/liborcus/allow-utf-8-in-xml-names.patch \
+))
+
 ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/windows-constants-hack.patch \
