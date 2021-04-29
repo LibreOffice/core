@@ -23,6 +23,10 @@ core_factory_list = [
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
+    ("libscriptframe.a", "scriptframe_component_getFactory"),
+    ("libbasprovlo.a", "basprov_component_getFactory"),
+    ("libucppkg1.a", "ucppkg1_component_getFactory"),
+    ("libiolo.a", "io_component_getFactory"),
     ]
 
 core_constructor_list = [
@@ -606,6 +610,7 @@ math_constructor_list = [
     ]
 
 calc_factory_list = [
+    ("libvbaobjlo.a", "vbaobj_component_getFactory"),
     ]
 
 calc_constructor_list = [
@@ -644,6 +649,7 @@ calc_constructor_list = [
     "scaddins_ScaPricingAddIn_get_implementation",
 # scripting/source/vbaevents/vbaevents.component
     ("ooo_vba_VBAToOOEventDesc_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("ooo_vba_EventListener_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # svl/util/svl.component
     "com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation",
     "com_sun_star_uno_util_numbers_SvNumberFormatterServiceObject_get_implementation",
