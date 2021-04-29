@@ -38,7 +38,7 @@ class BigIntPrinter(object):
         return num
 
 class ColorPrinter(object):
-    '''Prints color as rgb(r, g, b) or rgba(r, g, b, a)'''
+    '''Prints color as rgb(r, g, b) or rgbt(r, g, b, t)'''
 
     def __init__(self, typename, val):
         self.val = val
@@ -47,9 +47,9 @@ class ColorPrinter(object):
         r = self.val['R']
         g = self.val['G']
         b = self.val['B']
-        a = self.val['A']
+        t = self.val['T']
         if a:
-            return "rgba(%d, %d, %d, %d)" % (r, g, b, a)
+            return "rgbt(%d, %d, %d, %d)" % (r, g, b, t)
         else:
             return "rgb(%d, %d, %d)" % (r, g, b)
 
