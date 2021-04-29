@@ -34,6 +34,24 @@
       "revId": "e02cbe10b0a6e8b04642879c1c8899944f92523a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ee5e8ab_19c86e07",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-29T15:57:43Z",
+      "side": 1,
+      "message": "I might have been unclear, sorry for that. Of course, currently error propagation works as intended, since the NaN is assigned to the plain double value, and then read from it and checked (when it\u0027s set, it\u0027s not modified anymore - see line 1730). But when you change mfSum to be KahanSum, and assign NaN to it, the NaN will go to the mfSum.m_fSum, and mfSum.m_fError will be 0. Then mfSum.get() will compute (m_fSum + m_fError) , which is what I am worried: will that NaN \u0027plus\u0027 0 somehow modify the NaN?",
+      "parentUuid": "8fa63354_4dbbb291",
+      "revId": "e02cbe10b0a6e8b04642879c1c8899944f92523a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
