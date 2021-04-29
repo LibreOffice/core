@@ -18,6 +18,7 @@
  */
 
 #include <config_feature_desktop.h>
+#include <config_features.h>
 
 #ifdef IOS
 #include <premac.h>
@@ -1037,7 +1038,7 @@ short Dialog::Execute()
 // Once the Android app is based on same idea as the iOS one currently
 // being developed, no conditional should be needed here. Until then,
 // play it safe.
-#if HAVE_FEATURE_DESKTOP || defined IOS
+#if HAVE_FEATURE_DESKTOP || defined IOS || HAVE_FEATURE_ANDROID_LOK
     VclPtr<vcl::Window> xWindow = this;
 
     mbInSyncExecute = true;
