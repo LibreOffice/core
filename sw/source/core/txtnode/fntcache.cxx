@@ -1865,6 +1865,22 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray.get(),
                                              nTmpIdx , nLen, SalLayoutFlags::NONE, pGlyphs );
+
+                // Draw a plus sign here
+                if (bSwitchH2V)
+                {
+                    Color aPrevColor = rInf.GetOut().GetLineColor();
+                    rInf.GetOut().SetLineColor( COL_RED );
+                    Point aS1( aTextOriginPos.X() , aTextOriginPos.Y() - 60);
+                    Point aE1( aTextOriginPos.X() , aTextOriginPos.Y() + 60);
+                    Point aS2( aTextOriginPos.X() - 60, aTextOriginPos.Y() );
+                    Point aE2( aTextOriginPos.X() + 60, aTextOriginPos.Y() );
+                    LineInfo aLineInfo( LineStyle::Solid, 2 );
+                    rInf.GetOut().DrawLine( aS1, aE1, aLineInfo );
+                    rInf.GetOut().DrawLine( aS2, aE2, aLineInfo );
+                    rInf.GetOut().SetLineColor( aPrevColor );
+                }
+
                 if (bBullet)
                 {
                     rInf.GetOut().Push();
