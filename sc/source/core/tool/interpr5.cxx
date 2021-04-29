@@ -1719,10 +1719,10 @@ namespace {
 
 class SumValues
 {
-    double mfSum;
-    bool   mbError;
+    KahanSum mfSum;
+    bool mbError = false;
 public:
-    SumValues() : mfSum(0.0), mbError(false) {}
+    SumValues() = default;
 
     void operator() (double f)
     {
@@ -1741,7 +1741,7 @@ public:
         }
     }
 
-    double getValue() const { return mfSum; }
+    double getValue() const { return mfSum.get(); }
 };
 
 }
