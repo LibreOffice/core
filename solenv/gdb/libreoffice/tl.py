@@ -47,9 +47,9 @@ class ColorPrinter(object):
         r = self.val['R']
         g = self.val['G']
         b = self.val['B']
-        a = self.val['A']
-        if a:
-            return "rgba(%d, %d, %d, %d)" % (r, g, b, a)
+        t = self.val['T']
+        if t:
+            return "rgba(%d, %d, %d, %d)" % (r, g, b, 255 - t)
         else:
             return "rgb(%d, %d, %d)" % (r, g, b)
 
