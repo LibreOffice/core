@@ -271,6 +271,11 @@ void SvxRubyDialog::Close()
 void SvxRubyDialog::Activate()
 {
     SfxModelessDialogController::Activate();
+    if (!m_xContentArea)
+    {
+        // tdf#141967 if Activate is called during tear down bail early
+        return;
+    }
     //get selection from current view frame
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
     Reference<XController> xCtrl = pCurFrm->GetFrame().GetController();
