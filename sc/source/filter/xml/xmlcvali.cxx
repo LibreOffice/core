@@ -62,6 +62,10 @@ public:
     ScXMLContentValidationContext( ScXMLImport& rImport,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
+                                     const OUString& rLocalName,
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
@@ -87,9 +91,9 @@ public:
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
+                                     const OUString& rLocalName,
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
@@ -110,9 +114,9 @@ public:
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
+                                     const OUString& rLocalName,
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
@@ -128,9 +132,9 @@ public:
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
+                                     const OUString& rLocalName,
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
@@ -214,6 +218,24 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
     }
 }
 
+SvXMLImportContextRef ScXMLContentValidationContext::CreateChildContext( sal_uInt16 nPrefix,
+                                            const OUString& rLName,
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttrList*/ )
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetContentValidationElemTokenMap();
+    switch( rTokenMap.Get( nPrefix, rLName ) )
+    {
+        case XML_TOK_CONTENT_VALIDATION_ELEM_EVENT_LISTENERS:
+            pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName );
+            xEventContext = pContext;
+        break;
+    }
+
+    return pContext;
+}
+
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
@@ -232,9 +254,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationC
     case XML_ELEMENT( TABLE, XML_ERROR_MACRO ):
         pContext = new ScXMLErrorMacroContext( GetScImport(), pAttribList, this);
         break;
-    case XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS):
-        pContext = new XMLEventsImportContext( GetImport() );
-        xEventContext = pContext;
     }
 
     return pContext;
@@ -436,20 +455,21 @@ ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLHelpMessageContext::createFastChildContext(
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+SvXMLImportContextRef ScXMLHelpMessageContext::CreateChildContext( sal_uInt16 nPrefix,
+                                            const OUString& rLName,
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    switch( nElement )
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetContentValidationMessageElemTokenMap();
+    switch( rTokenMap.Get( nPrefix, rLName ) )
     {
-        case XML_ELEMENT(TEXT, XML_P):
+        case XML_TOK_P:
         {
             if(nParagraphCount)
                 sMessage.append('\n');
             ++nParagraphCount;
-            pContext = new ScXMLContentContext( GetScImport(), sMessage );
+            pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, sMessage);
         }
         break;
     }
@@ -493,20 +513,21 @@ ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLErrorMessageContext::createFastChildContext(
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+SvXMLImportContextRef ScXMLErrorMessageContext::CreateChildContext( sal_uInt16 nPrefix,
+                                            const OUString& rLName,
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    switch( nElement )
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetContentValidationMessageElemTokenMap();
+    switch( rTokenMap.Get( nPrefix, rLName ) )
     {
-        case XML_ELEMENT(TEXT, XML_P):
+        case XML_TOK_P:
         {
             if(nParagraphCount)
                 sMessage.append('\n');
             ++nParagraphCount;
-            pContext = new ScXMLContentContext( GetScImport(), sMessage);
+            pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, sMessage);
         }
         break;
     }
@@ -542,14 +563,15 @@ ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler >  ScXMLErrorMacroContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+SvXMLImportContextRef ScXMLErrorMacroContext::CreateChildContext( sal_uInt16 nPrefix,
+                                            const OUString& rLName,
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if (nElement == XML_ELEMENT(SCRIPT, XML_EVENTS))
+    if ((nPrefix == XML_NAMESPACE_SCRIPT) && IsXMLToken(rLName, XML_EVENTS))
     {
-        pContext = new XMLEventsImportContext(GetImport());
+        pContext = new XMLEventsImportContext(GetImport(), nPrefix, rLName);
     }
 
     return pContext;
