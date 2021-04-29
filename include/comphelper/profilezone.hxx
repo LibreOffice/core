@@ -38,6 +38,8 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
     // lifetime.
     ProfileZone(const char* sName)
         : NamedEvent(sName)
+        , m_nPid(-1)
+        , m_nNesting(-1)
     {
         if (s_bRecording)
         {
