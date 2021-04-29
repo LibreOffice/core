@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92ceedee_5ceaa0eb",
+        "filename": "solenv/gdb/libreoffice/tl.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-04-29T14:27:10Z",
+      "side": 1,
+      "message": "should this be \u0027if t:\u0027 ?",
+      "revId": "9fda4405605c56df51e98ad3158cca9ac2b9d9c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
