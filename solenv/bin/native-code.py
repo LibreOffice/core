@@ -70,9 +70,16 @@ core_factory_list = [
     ("libguesslanglo.a", "guesslang_component_getFactory"),
     ("libbiblo.a", "bib_component_getFactory"),
     ("libdbalo.a", "dba_component_getFactory"),
-    ]
+    ("libscriptframe.a", "scriptframe_component_getFactory"),
+    ("libbasprovlo.a", "basprov_component_getFactory"),
+    ("libucppkg1.a", "ucppkg1_component_getFactory"),
+    ("libiolo.a", "io_component_getFactory"),
+]
 
 core_constructor_list = [
+# basic/util/sb.component
+    ("com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # canvas/source/factory/canvasfactory.component
     "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
 # chart2/source/chartcore.component
@@ -396,6 +403,7 @@ calc_factory_list = [
     ("libanalysislo.a", "analysis_component_getFactory"),
     ("libdatelo.a", "date_component_getFactory"),
     ("libpricinglo.a", "pricing_component_getFactory"),
+    ("libvbaobjlo.a", "vbaobj_component_getFactory"),
     ]
 
 calc_constructor_list = [
@@ -411,9 +419,14 @@ calc_constructor_list = [
     "com_sun_star_comp_oox_xls_FormulaParser_get_implementation",
 # scripting/source/vbaevents/vbaevents.component
     ("ooo_vba_VBAToOOEventDesc_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("ooo_vba_EventListener_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # svl/util/svl.component
     "com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation",
     "com_sun_star_uno_util_numbers_SvNumberFormatterServiceObject_get_implementation",
+# sc/util/vbaobj.component
+    "ScVbaEventsHelper_get_implementation",
+    "ScVbaGlobals_get_implementation",
+    "ScVbaTextFrame_get_implementation"
     ]
 
 draw_factory_list = [
@@ -459,8 +472,6 @@ writer_factory_list = [
     ]
 
 writer_constructor_list = [
-# basic/util/sb.component
-    ("com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # filter/source/textfilterdetect/textfd.component
     "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation",
 # sw/util/sw.component
