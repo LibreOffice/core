@@ -52,9 +52,9 @@ static OString impl_getHostname()
        hostname by using the netbios name
        */
     DWORD sz = MAX_COMPUTERNAME_LENGTH + 1;
-    auto szHost = std::make_unique<char[]>(sz);
-    if (GetComputerNameA(szHost.get(), &sz))
-        aHost = OString(szHost.get());
+    TCHAR szHost[MAX_COMPUTERNAME_LENGTH + 1];
+    if (GetComputerNameA(szHost, &sz))
+        aHost = OString(szHost);
     else
         aHost = OString("UNKNOWN");
 #else
