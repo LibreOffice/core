@@ -16,6 +16,24 @@
       "revId": "e02cbe10b0a6e8b04642879c1c8899944f92523a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fa63354_4dbbb291",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-29T15:35:52Z",
+      "side": 1,
+      "message": "That\u0027s what pops out in bugzilla if you look for sumproduct:\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d85539\nIt seems to be related with sumproduc across multiple sheets.\nAnd it\u0027s very old. Don\u0027t even know if it stills valid.\nBut nothing about error propagations.\nSo seems to work. But you may want to add a reviewer who know about calc error propagation.",
+      "parentUuid": "45141c95_b4bcb3cb",
+      "revId": "e02cbe10b0a6e8b04642879c1c8899944f92523a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
