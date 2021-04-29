@@ -49,6 +49,8 @@ public:
 
 protected:
     bool m_bAcceptsTab;
+    // m_xDropTarget must outlive m_xEditView
+    css::uno::Reference<css::datatransfer::dnd::XDropTarget> m_xDropTarget;
     std::unique_ptr<EditEngine> m_xEditEngine;
     std::unique_ptr<EditView> m_xEditView;
     rtl::Reference<WeldEditAccessible> m_xAccessible;
@@ -68,6 +70,8 @@ protected:
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
     virtual void Resize() override;
+
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
 
     // Whether Tab will result in entering a tab or not
     bool GetAcceptsTab() const { return m_bAcceptsTab; }

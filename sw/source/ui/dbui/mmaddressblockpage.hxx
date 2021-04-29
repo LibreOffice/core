@@ -140,8 +140,6 @@ class AddressMultiLineEdit : public WeldEditView
     Link<AddressMultiLineEdit&,void> m_aModifyLink;
     SwCustomizeAddressBlockDialog*  m_pParentDialog;
 
-    css::uno::Reference<css::datatransfer::dnd::XDropTarget> m_xDropTarget;
-
     virtual void EditViewSelectionChange() override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
 
