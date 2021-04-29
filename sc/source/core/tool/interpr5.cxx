@@ -1715,37 +1715,6 @@ void ScInterpreter::ScPow()
     }
 }
 
-namespace {
-
-class SumValues
-{
-    double mfSum;
-    bool   mbError;
-public:
-    SumValues() : mfSum(0.0), mbError(false) {}
-
-    void operator() (double f)
-    {
-        if (mbError)
-            return;
-
-        FormulaError nErr = GetDoubleErrorValue(f);
-        if (nErr == FormulaError::NONE)
-            mfSum += f;
-        else if (nErr != FormulaError::ElementNaN)
-        {
-            // Propagate the first error encountered, ignore "this is not a
-            // number" elements.
-            mfSum = f;
-            mbError = true;
-        }
-    }
-
-    double getValue() const { return mfSum; }
-};
-
-}
-
 void ScInterpreter::ScSumProduct()
 {
     short nParamCount = GetByte();
@@ -1790,8 +1759,21 @@ void ScInterpreter::ScSumProduct()
         pMat->MergeDoubleArrayMultiply(aResArray);
     }
 
-    double fSum = std::for_each(aResArray.begin(), aResArray.end(), SumValues()).getValue();
-    PushDouble(fSum);
+    KahanSum fSum = 0.0;
+    for( double fPosArray : aResArray )
+    {
+        FormulaError nErr = GetDoubleErrorValue(fPosArray);
+        if (nErr == FormulaError::NONE)
+            fSum += fPosArray;
+        else if (nErr != FormulaError::ElementNaN)
+        {
+            // Propagate the first error encountered, ignore "this is not a number" elements.
+            PushDouble(fPosArray);
+            return;
+        }
+    }
+
+    PushDouble(fSum.get());
 }
 
 void ScInterpreter::ScSumX2MY2()
