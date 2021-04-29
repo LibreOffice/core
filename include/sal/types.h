@@ -319,13 +319,21 @@ typedef struct _sal_Sequence
 #pragma pack(pop)
 #endif
 
-#if defined __cplusplus
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 /** Nothrow specification for C functions.
 
     This is a macro so it can expand to nothing in C code.
 */
+#if defined __cplusplus
 #define SAL_THROW_EXTERN_C() throw ()
+#else
+#define SAL_THROW_EXTERN_C()
+#endif
+
+#ifdef __cplusplus
 
 /** To markup destructors that coverity warns might throw exceptions
     which won't throw in practice, or where std::terminate is
@@ -336,18 +344,6 @@ typedef struct _sal_Sequence
 #else
 #   define COVERITY_NOEXCEPT_FALSE
 #endif
-
-#else
-
-#define SAL_THROW_EXTERN_C()
-
-#endif
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#ifdef __cplusplus
 
 enum __sal_NoAcquire
 {
