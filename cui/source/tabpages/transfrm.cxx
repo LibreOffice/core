@@ -73,8 +73,8 @@ const sal_uInt16 SvxAngleTabPage::pAngleRanges[] =
 
 const sal_uInt16 SvxSlantTabPage::pSlantRanges[] =
 {
-    SDRATTR_ECKENRADIUS,
-    SDRATTR_ECKENRADIUS,
+    SDRATTR_CORNER_RADIUS,
+    SDRATTR_CORNER_RADIUS,
     SID_ATTR_TRANSFORM_SHEAR,
     SID_ATTR_TRANSFORM_SHEAR_VERTICAL,
     SID_ATTR_TRANSFORM_INTERN,
@@ -578,7 +578,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
     }
     else
     {
-        pItem = GetItem( *rAttrs, SDRATTR_ECKENRADIUS );
+        pItem = GetItem( *rAttrs, SDRATTR_CORNER_RADIUS );
 
         if( pItem )
         {

@@ -24,7 +24,7 @@
 
 inline SdrMetricItem makeSdrEckenradiusItem(tools::Long nRadius)
 {
-    return SdrMetricItem(SDRATTR_ECKENRADIUS, nRadius);
+    return SdrMetricItem(SDRATTR_CORNER_RADIUS, nRadius);
 }
 
 #endif

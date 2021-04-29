@@ -1342,7 +1342,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
     SfxItemSet aRetSet(
         mpModel->GetItemPool(),
         svl::Items< // SID_ATTR_TRANSFORM_... from s:svxids.hrc
-            SDRATTR_ECKENRADIUS, SDRATTR_ECKENRADIUS,
+            SDRATTR_CORNER_RADIUS, SDRATTR_CORNER_RADIUS,
             SID_ATTR_TRANSFORM_POS_X, SID_ATTR_TRANSFORM_ANGLE,
             SID_ATTR_TRANSFORM_PROTECT_POS, SID_ATTR_TRANSFORM_AUTOHEIGHT>{});
 
@@ -1444,10 +1444,10 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
             aRetSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_AUTOHEIGHT,bAutoGrow));
         }
 
-        eState=aMarkAttr.GetItemState(SDRATTR_ECKENRADIUS);
-        tools::Long nRadius=aMarkAttr.Get(SDRATTR_ECKENRADIUS).GetValue();
+        eState=aMarkAttr.GetItemState(SDRATTR_CORNER_RADIUS);
+        tools::Long nRadius=aMarkAttr.Get(SDRATTR_CORNER_RADIUS).GetValue();
         if (eState==SfxItemState::DONTCARE) {
-            aRetSet.InvalidateItem(SDRATTR_ECKENRADIUS);
+            aRetSet.InvalidateItem(SDRATTR_CORNER_RADIUS);
         } else if (eState==SfxItemState::SET) {
             aRetSet.Put(makeSdrEckenradiusItem(nRadius));
         }
@@ -1668,7 +1668,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
     }
 
     // corner radius
-    if (m_bEdgeRadiusAllowed && SfxItemState::SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,true,&pPoolItem)) {
+    if (m_bEdgeRadiusAllowed && SfxItemState::SET==rAttr.GetItemState(SDRATTR_CORNER_RADIUS,true,&pPoolItem)) {
         tools::Long nRadius=static_cast<const SdrMetricItem*>(pPoolItem)->GetValue();
         aSetAttr.Put(makeSdrEckenradiusItem(nRadius));
         bSetAttr=true;

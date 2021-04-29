@@ -204,7 +204,7 @@ constexpr TypedWhichId<SdrCaptionFitLineLenItem> SDRATTR_CAPTIONFITLINELEN (SDRA
 constexpr sal_uInt16                             SDRATTR_CAPTION_LAST      (SDRATTR_CAPTIONFITLINELEN);      /* 1094   */ /* 1094   */ /* 1077   */ /* Pool V1: 1050 */
 
 constexpr sal_uInt16                               SDRATTR_MISC_FIRST              (SDRATTR_CAPTION_LAST + 1);   /* 1097   */ /* 1097   */ /* 1080   */ /* Pool V1: 1053 */
-constexpr TypedWhichId<SdrMetricItem>              SDRATTR_ECKENRADIUS             (SDRATTR_MISC_FIRST + 0);     /*   1097 */ /*   1097 */ /*   1080 long, def=0       */
+constexpr TypedWhichId<SdrMetricItem>              SDRATTR_CORNER_RADIUS           (SDRATTR_MISC_FIRST + 0);     /*   1097 */ /*   1097 */ /*   1080 long, def=0       */
 constexpr TypedWhichId<SdrMetricItem>              SDRATTR_TEXT_MINFRAMEHEIGHT     (SDRATTR_MISC_FIRST + 1);     /*   1098 */ /*   1098 */ /*   1081 long, def=0       */
 constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_AUTOGROWHEIGHT     (SDRATTR_MISC_FIRST + 2);     /*   1099 */ /*   1099 */ /*   1082 sal_Bool, def=sal_True    */
 constexpr TypedWhichId<SdrTextFitToSizeTypeItem>   SDRATTR_TEXT_FITTOSIZE          (SDRATTR_MISC_FIRST + 3);     /*   1100 */ /*   1100 */ /*   1083 enum, def=css::drawing::TextFitToSizeType_NONE */
