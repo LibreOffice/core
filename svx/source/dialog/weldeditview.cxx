@@ -1603,6 +1603,13 @@ void WeldEditView::LoseFocus()
     }
 }
 
+css::uno::Reference<css::datatransfer::dnd::XDropTarget> WeldEditView::GetDropTarget()
+{
+    if (!m_xDropTarget)
+        m_xDropTarget = weld::CustomWidgetController::GetDropTarget();
+    return m_xDropTarget;
+}
+
 namespace
 {
 class WeldEditViewUIObject final : public DrawingAreaUIObject
