@@ -123,6 +123,20 @@ public:
         m_fError /= fDivides;
     }
 
+    inline KahanSum operator*(double fTimes) const
+    {
+        KahanSum fSum = m_fSum * fTimes;
+        fSum += m_fError * fTimes;
+        return fSum;
+    }
+
+    inline KahanSum operator/(double fTimes) const
+    {
+        KahanSum fSum = m_fSum / fTimes;
+        fSum += m_fError / fTimes;
+        return fSum;
+    }
+
     constexpr bool operator<(const KahanSum& fSum) const { return get() < fSum.get(); }
 
     constexpr bool operator<(double fSum) const { return get() < fSum; }
