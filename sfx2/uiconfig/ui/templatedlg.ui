@@ -2,38 +2,9 @@
 <!-- Generated with glade 3.38.2 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkMenu" id="contextmenu1">
+  <object class="GtkMenu" id="contextmenu">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-  </object>
-  <object class="GtkMenu" id="contextmenu2">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">sfx2/res/actiontemplates020.png</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">sfx2/res/actiontemplates017.png</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">sfx2/res/actionview010.png</property>
-  </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">cmd/lc_additionsdialog.png</property>
-  </object>
-  <object class="GtkImage" id="image7">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">open-menu-symbolic</property>
   </object>
   <object class="GtkImage" id="image8">
     <property name="visible">True</property>
@@ -48,20 +19,6 @@
   <object class="GtkMenu" id="menu1">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="default">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="colsmenu|insert">Reset Default Template</property>
-        <property name="use-underline">True</property>
-        <child type="submenu">
-          <object class="GtkMenu" id="submenu">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-          </object>
-        </child>
-      </object>
-    </child>
   </object>
   <object class="GtkTreeStore" id="tree_store">
     <columns>
@@ -206,35 +163,29 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
-                          <object class="GtkToggleButton" id="thumbnail_view_btn">
+                          <object class="GtkMenuButton" id="action_menu">
+                            <property name="label" translatable="yes" context="templatedlg|action_menu|label">_Manage</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="tooltip-text" translatable="yes" context="templatedlg|thumbnail_view_btn|tooltip_text">Thumbnail View</property>
-                            <property name="image">image8</property>
-                            <property name="relief">none</property>
+                            <property name="receives-default">False</property>
+                            <property name="use-underline">True</property>
                             <property name="always-show-image">True</property>
+                            <property name="draw-indicator">True</property>
+                            <property name="popup">menu1</property>
+                            <property name="use-popover">False</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="action_menu-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="templatedlg|extended_tip|action_menu">Provides commands to create, rename and delete categories, reset default templates, and refresh the template manager.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToggleButton" id="list_view_btn">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="tooltip-text" translatable="yes" context="templatedlg|list_view_btn|tooltip_text">List View</property>
-                            <property name="image">image9</property>
-                            <property name="relief">none</property>
-                            <property name="always-show-image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
@@ -369,37 +320,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkScrolledWindow" id="scrollsearch">
-                        <property name="can-focus">True</property>
-                        <property name="no-show-all">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow-type">in</property>
-                        <child>
-                          <object class="GtkViewport">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <child>
-                              <object class="GtkDrawingArea" id="search_view">
-                                <property name="can-focus">True</property>
-                                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                                <property name="no-show-all">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkScrolledWindow">
                         <property name="can-focus">True</property>
                         <property name="no-show-all">True</property>
@@ -516,127 +436,7 @@
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="can-focus">True</property>
-                        <property name="no-show-all">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow-type">in</property>
-                        <child>
-                          <object class="GtkTreeView" id="treesearch_list">
-                            <property name="can-focus">True</property>
-                            <property name="no-show-all">True</property>
-                            <property name="has-tooltip">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="model">tree_store</property>
-                            <property name="enable-search">False</property>
-                            <property name="search-column">0</property>
-                            <property name="show-expanders">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection">
-                                <property name="mode">multiple</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn">
-                                <child>
-                                  <object class="GtkCellRendererPixbuf" id="cellrenderer7"/>
-                                  <attributes>
-                                    <attribute name="pixbuf">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn6">
-                                <property name="resizable">True</property>
-                                <property name="spacing">6</property>
-                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn1">Name</property>
-                                <property name="expand">True</property>
-                                <property name="clickable">True</property>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderer8">
-                                    <property name="ypad">3</property>
-                                  </object>
-                                  <attributes>
-                                    <attribute name="text">1</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn7">
-                                <property name="resizable">True</property>
-                                <property name="spacing">6</property>
-                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn2">Category</property>
-                                <property name="clickable">True</property>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderer9">
-                                    <property name="ypad">3</property>
-                                  </object>
-                                  <attributes>
-                                    <attribute name="text">2</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn8">
-                                <property name="resizable">True</property>
-                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn3">Application</property>
-                                <property name="clickable">True</property>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderer10">
-                                    <property name="ypad">3</property>
-                                  </object>
-                                  <attributes>
-                                    <attribute name="text">3</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn9">
-                                <property name="resizable">True</property>
-                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn4">Modified</property>
-                                <property name="clickable">True</property>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderer11">
-                                    <property name="ypad">3</property>
-                                  </object>
-                                  <attributes>
-                                    <attribute name="text">4</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn10">
-                                <property name="resizable">True</property>
-                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn5">Size</property>
-                                <property name="clickable">True</property>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderer12">
-                                    <property name="ypad">3</property>
-                                  </object>
-                                  <attributes>
-                                    <attribute name="text">5</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -659,20 +459,14 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
-                  <object class="GtkMenuButton" id="action_menu">
+                  <object class="GtkToggleButton" id="thumbnail_view_btn">
+                    <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes" context="templatedlg|action_menu|tooltip_text">Tools</property>
-                    <property name="image">image7</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="templatedlg|thumbnail_view_btn|tooltip_text">Thumbnail View</property>
+                    <property name="image">image8</property>
                     <property name="relief">none</property>
                     <property name="always-show-image">True</property>
-                    <property name="popup">menu1</property>
-                    <property name="use-popover">False</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="action_menu-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="templatedlg|extended_tip|action_menu">Provides commands to create, rename and delete categories, reset default templates, and refresh the template manager.</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -681,80 +475,20 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="btnMoreTemplates">
-                    <property name="label" translatable="yes" context="templatedlg|extensions_btn">_Extensions</property>
+                  <object class="GtkToggleButton" id="list_view_btn">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes" context="templatedlg|online_link|tooltip_text">Add more templates via extension</property>
-                    <property name="image">image5</property>
+                    <property name="tooltip-text" translatable="yes" context="templatedlg|list_view_btn|tooltip_text">List View</property>
+                    <property name="image">image9</property>
                     <property name="relief">none</property>
-                    <property name="use-underline">True</property>
                     <property name="always-show-image">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="pack-type">end</property>
                     <property name="position">1</property>
                   </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="import_btn">
-                    <property name="label" translatable="yes" context="templatedlg|import_btn">Import</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes" context="templatedlg|import_btn|tooltip_text">Import Templates</property>
-                    <property name="image">image4</property>
-                    <property name="relief">none</property>
-                    <property name="always-show-image">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="export_btn">
-                    <property name="label" translatable="yes" context="templatedlg|export_btn">Export</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes" context="templatedlg|export_btn|tooltip_text">Export Templates</property>
-                    <property name="image">image1</property>
-                    <property name="relief">none</property>
-                    <property name="always-show-image">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="move_btn">
-                    <property name="label" translatable="yes" context="templatedlg|move_btn">Move</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes" context="templatedlg|move_btn|tooltip_text">Move Templates</property>
-                    <property name="image">image3</property>
-                    <property name="relief">none</property>
-                    <property name="always-show-image">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>

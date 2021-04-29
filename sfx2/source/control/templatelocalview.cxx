@@ -30,6 +30,7 @@
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <unotools/ucbhelper.hxx>
 #include <sfxurlrelocator.hxx>
+#include <../doc/doctemplateslocal.hxx>
 
 using namespace ::com::sun::star;
 
@@ -760,7 +761,6 @@ bool TemplateLocalView::Command(const CommandEvent& rCEvt)
 
     if (rCEvt.IsMouseEvent())
     {
-        deselectItems();
         size_t nPos = ImplGetItem(rCEvt.GetMousePosPixel());
         Point aPosition(rCEvt.GetMousePosPixel());
         maPosition = aPosition;
@@ -769,6 +769,12 @@ bool TemplateLocalView::Command(const CommandEvent& rCEvt)
 
         if(pViewItem)
         {
+            if(!pItem->isSelected())
+            {
+                deselectItems();
+                pItem->setSelection(true);
+                maItemStateHdl.Call(pItem);
+            }
             maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
             maCreateContextMenuHdl.Call(pItem);
         }
@@ -777,12 +783,8 @@ bool TemplateLocalView::Command(const CommandEvent& rCEvt)
     {
         for (ThumbnailViewItem* pItem : mFilteredItemList)
         {
-            //create context menu for the first selected item
             if (pItem->isSelected())
             {
-                deselectItems();
-                pItem->setSelection(true);
-                maItemStateHdl.Call(pItem);
                 tools::Rectangle aRect = pItem->getDrawArea();
                 maPosition = aRect.Center();
                 maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
@@ -856,7 +858,7 @@ void TemplateLocalView::setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &
     maEditTemplateHdl = rLink;
 }
 
-void TemplateLocalView::setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+void TemplateLocalView::setDeleteTemplateHdl(const Link<void*,void> &rLink)
 {
     maDeleteTemplateHdl = rLink;
 }
@@ -864,6 +866,16 @@ void TemplateLocalView::setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void>
 void TemplateLocalView::setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
 {
     maDefaultTemplateHdl = rLink;
+}
+
+void TemplateLocalView::setMoveTemplateHdl(const Link<void*,void> &rLink)
+{
+    maMoveTemplateHdl = rLink;
+}
+
+void TemplateLocalView::setExportTemplateHdl(const Link<void*,void> &rLink)
+{
+    maExportTemplateHdl = rLink;
 }
 
 BitmapEx TemplateLocalView::scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height)
@@ -961,4 +973,27 @@ bool TemplateLocalView::IsInternalTemplate(const OUString& rPath)
     return false;
 }
 
+bool TemplateLocalView::IsBuiltInRegion(const OUString& rRegionName)
+{
+    bool isBuiltInCategory = false;
+    auto aGroupNames = DocTemplLocaleHelper::GetBuiltInGroupNames();
+    isBuiltInCategory = std::find(aGroupNames.begin(), aGroupNames.end(),
+                                  rRegionName) != aGroupNames.end();
+    if(isBuiltInCategory)
+        return true;
+    //check if it contains any internal template
+    for(const auto& rItem : maRegions)
+    {
+        if(rItem->maTitle == rRegionName)
+        {
+            for(const auto& rTemplateItem : rItem->maTemplates)
+            {
+                if(IsInternalTemplate(rTemplateItem.aPath))
+                    return true;
+            }
+            break;
+        }
+    }
+    return false;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

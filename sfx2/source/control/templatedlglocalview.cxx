@@ -19,6 +19,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <sfx2/doctempl.hxx>
+#include <bitmaps.hlst>
 
 TemplateDlgLocalView::TemplateDlgLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
                                            std::unique_ptr<weld::Menu> xMenu,
@@ -39,7 +40,6 @@ void TemplateDlgLocalView::showAllTemplates()
     mnCurRegionId = 0;
 
     insertItems(maAllTemplates, false, true);
-    insertFilteredItems();
 
     maOpenRegionHdl.Call(nullptr);
 }
@@ -48,8 +48,7 @@ void TemplateDlgLocalView::showRegion(TemplateContainerItem const* pItem)
 {
     mnCurRegionId = pItem->mnRegionId + 1;
 
-    insertItems(pItem->maTemplates);
-    insertFilteredItems();
+    insertItems(pItem->maTemplates, true, false);
 
     maOpenRegionHdl.Call(nullptr);
 }
@@ -95,31 +94,39 @@ void TemplateDlgLocalView::reload()
     ListView::unselect_all();
 }
 
-void TemplateDlgLocalView::createContextMenu(const bool bIsDefault, const bool bIsBuiltIn)
+void TemplateDlgLocalView::createContextMenu(const bool bIsDefault, const bool bIsBuiltIn,
+                                             const bool bIsSingleSel, const OUString& rDefaultImg)
 {
     mxContextMenu->clear();
-    mxContextMenu->append("open", SfxResId(STR_OPEN));
-    mxContextMenu->append("edit", SfxResId(STR_EDIT_TEMPLATE));
+    mxContextMenu->append("open", SfxResId(STR_OPEN), BMP_MENU_OPEN);
+    mxContextMenu->append("edit", SfxResId(STR_EDIT_TEMPLATE), BMP_MENU_EDIT);
 
     if (!bIsDefault)
-        mxContextMenu->append("default", SfxResId(STR_DEFAULT_TEMPLATE));
+        mxContextMenu->append("default", SfxResId(STR_DEFAULT_TEMPLATE), rDefaultImg);
     else
-        mxContextMenu->append("default", SfxResId(STR_RESET_DEFAULT));
+        mxContextMenu->append("default", SfxResId(STR_RESET_DEFAULT), rDefaultImg);
 
-    mxContextMenu->append_separator("separator");
-    mxContextMenu->append("rename", SfxResId(STR_SFX_RENAME));
-    mxContextMenu->append("delete", SfxResId(STR_DELETE));
+    mxContextMenu->append_separator("separator1");
+    mxContextMenu->append("rename", SfxResId(STR_SFX_RENAME), BMP_MENU_RENAME);
+    mxContextMenu->append("delete", SfxResId(STR_DELETE_TEMPLATE), BMP_MENU_DELETE);
+    mxContextMenu->append_separator("separator2");
+    mxContextMenu->append("move", SfxResId(STR_MOVE), BMP_MENU_MOVE);
+    mxContextMenu->append("export", SfxResId(STR_EXPORT), BMP_MENU_EXPORT);
+
+    if (!bIsSingleSel)
+    {
+        mxContextMenu->set_sensitive("open", false);
+        mxContextMenu->set_sensitive("edit", false);
+        mxContextMenu->set_sensitive("default", false);
+        mxContextMenu->set_sensitive("rename", false);
+    }
     if (bIsBuiltIn)
     {
         mxContextMenu->set_sensitive("rename", false);
-        mxContextMenu->set_sensitive("edit", false);
         mxContextMenu->set_sensitive("delete", false);
     }
     if (mViewMode == TemplateViewMode::eThumbnailView)
     {
-        deselectItems();
-        maSelectedItem->setSelection(true);
-        maItemStateHdl.Call(maSelectedItem);
         ContextMenuSelectHdl(mxContextMenu->popup_at_rect(
             GetDrawingArea(), tools::Rectangle(maPosition, Size(1, 1))));
         Invalidate();
@@ -138,6 +145,7 @@ void TemplateDlgLocalView::ContextMenuSelectHdl(std::string_view rIdent)
     else if (rIdent == "rename")
     {
         InputDialog aTitleEditDlg(GetDrawingArea(), SfxResId(STR_RENAME_TEMPLATE));
+        aTitleEditDlg.set_title(SfxResId(STR_WINDOW_TITLE_RENAME_TEMPLATE));
         OUString sOldTitle = maSelectedItem->getTitle();
         aTitleEditDlg.SetEntryText(sOldTitle);
         aTitleEditDlg.HideHelpBtn();
@@ -186,6 +194,14 @@ void TemplateDlgLocalView::ContextMenuSelectHdl(std::string_view rIdent)
         maDefaultTemplateHdl.Call(maSelectedItem);
         ListView::refreshDefaultColumn();
     }
+    else if (rIdent == "move")
+    {
+        maMoveTemplateHdl.Call(maSelectedItem);
+    }
+    else if (rIdent == "export")
+    {
+        maExportTemplateHdl.Call(maSelectedItem);
+    }
 }
 
 void TemplateDlgLocalView::insertFilteredItems()
@@ -202,6 +218,14 @@ void TemplateDlgLocalView::insertFilteredItems()
                              pViewItem->getPath(), isDefault);
     }
     ListView::sort();
+}
+
+void TemplateDlgLocalView::insertItems(const std::vector<TemplateItemProperties>& rTemplates,
+                                       bool isRegionSelected = true,
+                                       bool bShowCategoryInTooltip = false)
+{
+    TemplateLocalView::insertItems(rTemplates, isRegionSelected, bShowCategoryInTooltip);
+    insertFilteredItems();
 }
 
 void TemplateDlgLocalView::setTemplateViewMode(TemplateViewMode eMode) { mViewMode = eMode; }
@@ -313,10 +337,6 @@ IMPL_LINK(TemplateDlgLocalView, PopupMenuHdl, const CommandEvent&, rCEvt, bool)
     {
         if (ListView::get_selected_rows().empty())
             return true;
-        int nIndex = ListView::get_cursor_index();
-        ListView::unselect_all();
-        ListView::select(nIndex);
-        ListView::set_cursor(nIndex);
         Point aPosition(rCEvt.GetMousePosPixel());
         maPosition = aPosition;
         updateSelection();
@@ -328,10 +348,6 @@ IMPL_LINK(TemplateDlgLocalView, PopupMenuHdl, const CommandEvent&, rCEvt, bool)
     {
         if (ListView::get_selected_rows().empty())
             return true;
-        int nIndex = ListView::get_cursor_index();
-        ListView::unselect_all();
-        ListView::select(nIndex);
-        ListView::set_cursor(nIndex);
         maPosition = Point(0, 0);
         updateSelection();
         if (maSelectedItem)
@@ -372,16 +388,7 @@ bool TemplateDlgLocalView::KeyInput(const KeyEvent& rKEvt)
         if (xQueryDlg->run() != RET_YES)
             return true;
 
-        //copy to avoid changing filtered item list during deletion
-        ThumbnailValueItemList mFilteredItemListCopy = mFilteredItemList;
-
-        for (ThumbnailViewItem* pItem : mFilteredItemListCopy)
-        {
-            if (pItem->isSelected())
-            {
-                maDeleteTemplateHdl.Call(pItem);
-            }
-        }
+        maDeleteTemplateHdl.Call(maSelectedItem);
         reload();
     }
 
@@ -401,17 +408,7 @@ IMPL_LINK(TemplateDlgLocalView, KeyPressHdl, const KeyEvent&, rKEvt, bool)
         if (xQueryDlg->run() != RET_YES)
             return true;
 
-        //copy to avoid changing filtered item list during deletion
-        ThumbnailValueItemList mFilteredItemListCopy = mFilteredItemList;
-
-        for (ThumbnailViewItem* pItem : mFilteredItemListCopy)
-        {
-            if (pItem->isSelected())
-            {
-                maDeleteTemplateHdl.Call(pItem);
-            }
-        }
-
+        maDeleteTemplateHdl.Call(maSelectedItem);
         reload();
     }
     return false;

@@ -137,13 +137,19 @@ public:
 
     void setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
-    void setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+    void setDeleteTemplateHdl(const Link<void*,void> &rLink);
 
     void setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+
+    void setMoveTemplateHdl(const Link<void*,void> &rLink);
+
+    void setExportTemplateHdl(const Link<void*,void> &rLink);
 
     void updateThumbnailDimensions(tools::Long itemMaxSize);
 
     void RemoveDefaultTemplateIcon( std::u16string_view rPath);
+
+    bool IsBuiltInRegion(const OUString& rRegionName);
 
     static BitmapEx scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height);
 
@@ -171,8 +177,10 @@ protected:
     Link<ThumbnailViewItem*,void> maCreateContextMenuHdl;
     Link<ThumbnailViewItem*,void> maOpenTemplateHdl;
     Link<ThumbnailViewItem*,void> maEditTemplateHdl;
-    Link<ThumbnailViewItem*,void> maDeleteTemplateHdl;
+    Link<void*,void> maDeleteTemplateHdl;
     Link<ThumbnailViewItem*,void> maDefaultTemplateHdl;
+    Link<void*,void> maMoveTemplateHdl;
+    Link<void*,void> maExportTemplateHdl;
 
     std::unique_ptr<SfxDocumentTemplates> mpDocTemplates;
     std::vector<std::unique_ptr<TemplateContainerItem> > maRegions;
