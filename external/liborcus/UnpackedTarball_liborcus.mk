@@ -21,6 +21,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/0001-protect-the-self-closing-xml-element-code-against-se.patch \
 ))
 
+$(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
+	external/liborcus/allow-utf-8-in-xml-names.patch \
+))
+
 ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/windows-constants-hack.patch \
