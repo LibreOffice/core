@@ -93,6 +93,10 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <comphelper/random.hxx>
 #include <comphelper/seqstream.hxx>
@@ -156,9 +160,12 @@ OUString URLTransformer::getTransformedString(const OUString& rString) const
     return rString;
 }
 
-bool URLTransformer::isExternalURL(const OUString& /*rURL*/) const
+bool URLTransformer::isExternalURL(const OUString& rURL) const
 {
-    return true;
+    bool bExternal = true;
+    if (rURL.startsWith("#"))
+        bExternal = false;
+    return bExternal;
 }
 
 static css::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName )
@@ -2179,16 +2186,60 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         OUString sURL;
 
         mAny >>= sURL;
-        if( !sURL.isEmpty() ) {
-            OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-                                  oox::getRelationship(Relationship::HYPERLINK),
-                                  sURL, true );
+        if (!sURL.isEmpty())
+        {
+            if (!sURL.match("#action?jump="))
+            {
+                bool bExtURL = URLTransformer().isExternalURL(sURL);
+                sURL = bExtURL ? sURL : GetTarget(sURL);
 
-            mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+                OUString sRelId
+                    = mpFB->addRelation(mpFS->getOutputStream(),
+                                        bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
+                                                : oox::getRelationship(Relationship::SLIDE),
+                                        sURL, bExtURL);
+
+                if (bExtURL)
+                    mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+                else
+                    mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId,
+                                          XML_action, "ppaction://hlinksldjump");
+            }
+            else
+            {
+                sal_Int32 nIndex = sURL.indexOf('=');
+                OUString aDestination(sURL.copy(nIndex + 1));
+                mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), "", XML_action,
+                                      "ppaction://hlinkshowjump?jump=" + aDestination);
+            }
         }
     }
 
     mpFS->endElementNS( XML_a, nElement );
+}
+
+OUString DrawingML::GetTarget(OUString& rURL)
+{
+    const Reference<frame::XModel>& xModel(GetFB()->getModel());
+    Reference<drawing::XDrawPagesSupplier> xDPS(xModel, uno::UNO_QUERY_THROW);
+    Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
+    sal_uInt32 nPageCount = xDrawPages->getCount();
+    OUString sTarget;
+
+    for (sal_uInt32 i = 0; i < nPageCount; ++i)
+    {
+        Reference<XDrawPage> xDrawPage;
+        xDrawPages->getByIndex(i) >>= xDrawPage;
+        Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
+        OUString sSlideName = "#" + xNamed->getName();
+        if (rURL == sSlideName)
+        {
+            sTarget = "slide" + OUString::number(i + 1) + ".xml";
+            break;
+        }
+    }
+
+    return sTarget;
 }
 
 OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRange >& rRun, bool& bIsURLField )
