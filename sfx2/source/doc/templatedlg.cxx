@@ -358,6 +358,7 @@ void SfxTemplateManagerDlg::fillFolderComboBox()
         mxCBFolder->append_text(aFolderNames[i]);
     mxCBFolder->set_active(0);
     mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, false);
+    mxActionBar->set_item_visible(MNI_ACTION_DELETE_FOLDER, false);
 }
 
 void SfxTemplateManagerDlg::getApplicationSpecificSettings()
@@ -367,6 +368,7 @@ void SfxTemplateManagerDlg::getApplicationSpecificSettings()
         mxCBApp->set_active(0);
         mxCBFolder->set_active(0);
         mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, false);
+        mxActionBar->set_item_visible(MNI_ACTION_DELETE_FOLDER, false);
         mxLocalView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
         mxLocalView->showAllTemplates();
         return;
@@ -398,6 +400,7 @@ void SfxTemplateManagerDlg::getApplicationSpecificSettings()
     mxLocalView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
     mxCBFolder->set_active(0);
     mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, false);
+    mxActionBar->set_item_visible(MNI_ACTION_DELETE_FOLDER, false);
     mxLocalView->showAllTemplates();
 }
 
@@ -445,6 +448,7 @@ void SfxTemplateManagerDlg::readSettings ()
         //show all categories
         mxCBFolder->set_active(0);
         mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, false);
+        mxActionBar->set_item_visible(MNI_ACTION_DELETE_FOLDER, false);
         mxLocalView->showAllTemplates();
     }
     else
@@ -452,6 +456,8 @@ void SfxTemplateManagerDlg::readSettings ()
         mxCBFolder->set_active_text(aLastFolder);
         mxLocalView->showRegion(aLastFolder);
         mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, true);
+        bool bIsBuiltInRegion = mxLocalView->IsBuiltInRegion(aLastFolder);
+        mxActionBar->set_item_visible(MNI_ACTION_DELETE_FOLDER, !bIsBuiltInRegion);
     }
 
     if(nViewMode == static_cast<sal_Int16>(TemplateViewMode::eListView) ||
@@ -495,6 +501,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SelectApplicationHdl, weld::ComboBox&, vo
         mxLocalView->showAllTemplates();
         mxCBFolder->set_active(0);
         mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, false);
+        mxActionBar->set_item_visible(MNI_ACTION_DELETE_FOLDER, false);
     }
     if (mxSearchView->IsVisible())
         SearchUpdate();
@@ -508,11 +515,14 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SelectRegionHdl, weld::ComboBox&, void)
     {
         mxLocalView->showAllTemplates();
         mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, false);
+        mxActionBar->set_item_visible(MNI_ACTION_DELETE_FOLDER, false);
     }
     else
     {
         mxLocalView->showRegion(sSelectedRegion);
         mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, true);
+        bool bIsBuiltInRegion = mxLocalView->IsBuiltInRegion(sSelectedRegion);
+        mxActionBar->set_item_visible(MNI_ACTION_DELETE_FOLDER, !bIsBuiltInRegion);
     }
     if (mxSearchView->IsVisible())
         SearchUpdate();
@@ -652,6 +662,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, ImportClickHdl, weld::Button&, void)
     mxCBApp->set_active(0);
     mxCBFolder->set_active(0);
     mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, false);
+    mxActionBar->set_item_visible(MNI_ACTION_DELETE_FOLDER, false);
 }
 
 IMPL_STATIC_LINK_NOARG(SfxTemplateManagerDlg, LinkClickHdl, weld::Button&, void)
@@ -1213,35 +1224,26 @@ void SfxTemplateManagerDlg::OnCategoryRename()
 
 void SfxTemplateManagerDlg::OnCategoryDelete()
 {
-    SfxTemplateCategoryDialog aDlg(m_xDialog.get());
-    aDlg.SetCategoryLBEntries(mxLocalView->getFolderNames());
-    aDlg.HideNewCategoryOption();
-    aDlg.set_title(MnemonicGenerator::EraseAllMnemonicChars(SfxResId(STR_CATEGORY_DELETE)));
-    aDlg.SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT));
+    const OUString& sCategory = mxCBFolder->get_active_text();
+    std::unique_ptr<weld::MessageDialog> popupDlg(Application::CreateMessageDialog(m_xDialog.get(),
+                                                VclMessageType::Question, VclButtonsType::YesNo,
+                                                SfxResId(STR_QMSG_SEL_FOLDER_DELETE).replaceFirst("$1",sCategory)));
+    if (popupDlg->run() != RET_YES)
+        return;
 
-    if (aDlg.run() == RET_OK)
+    sal_Int16 nItemId = mxLocalView->getRegionId(sCategory);
+
+    if (!mxLocalView->removeRegion(nItemId))
     {
-        const OUString& sCategory = aDlg.GetSelectedCategory();
-        std::unique_ptr<weld::MessageDialog> popupDlg(Application::CreateMessageDialog(m_xDialog.get(),
-                                                      VclMessageType::Question, VclButtonsType::YesNo,
-                                                      SfxResId(STR_QMSG_SEL_FOLDER_DELETE)));
-        if (popupDlg->run() != RET_YES)
-            return;
-
-        sal_Int16 nItemId = mxLocalView->getRegionId(sCategory);
-
-        if (!mxLocalView->removeRegion(nItemId))
-        {
-            OUString sMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER) );
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                      VclMessageType::Warning, VclButtonsType::Ok,
-                                                      sMsg.replaceFirst("$1",sCategory)));
-            xBox->run();
-        }
-        else
-        {
-            mxCBFolder->remove_text(sCategory);
-        }
+        OUString sMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER) );
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                VclMessageType::Warning, VclButtonsType::Ok,
+                                                sMsg.replaceFirst("$1",sCategory)));
+        xBox->run();
+    }
+    else
+    {
+        mxCBFolder->remove_text(sCategory);
     }
 
     mxLocalView->reload();
@@ -1249,6 +1251,7 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
     mxCBApp->set_active(0);
     mxCBFolder->set_active(0);
     mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, false);
+    mxActionBar->set_item_visible(MNI_ACTION_DELETE_FOLDER, false);
 }
 
 void SfxTemplateManagerDlg::createDefaultTemplateMenu ()
