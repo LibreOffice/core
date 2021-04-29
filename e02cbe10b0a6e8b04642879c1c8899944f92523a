@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45141c95_b4bcb3cb",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-29T15:17:05Z",
+      "side": 1,
+      "message": "I\u0027m a bit worried with this. A NaN is assigned to one of the members, and the other is 0; what worries me is what would happen when we add that NaN to 0 in get()? Will NaN stay intact, or will it become another NaN? (Sorry, I don\u0027t know much about NaN handling rules.)\n\nIf this sum would result in a different NaN, we would break correct propagation of the errors (which we encode as specially crafted NaNs).",
+      "revId": "e02cbe10b0a6e8b04642879c1c8899944f92523a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
