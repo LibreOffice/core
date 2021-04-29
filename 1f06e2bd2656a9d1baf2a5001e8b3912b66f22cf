@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d3b78553_f55e6f72",
+        "filename": "sc/source/filter/xml/XMLExportDatabaseRanges.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-29T09:23:08Z",
+      "side": 1,
+      "message": "hmm...\n\n  \u003crng:define name\u003d\"table-filter-condition-attlist\"\u003e\n    \u003crng:interleave\u003e\n      \u003crng:attribute name\u003d\"table:field-number\"\u003e\n        \u003crng:ref name\u003d\"nonNegativeInteger\"/\u003e\n      \u003c/rng:attribute\u003e\n      \u003crng:attribute name\u003d\"table:value\"\u003e\n        \u003crng:choice\u003e\n          \u003crng:ref name\u003d\"string\"/\u003e\n          \u003crng:ref name\u003d\"double\"/\u003e\n        \u003c/rng:choice\u003e\n      \u003c/rng:attribute\u003e\n      \u003crng:attribute name\u003d\"table:operator\"\u003e\n        \u003crng:ref name\u003d\"string\"/\u003e\n      \u003c/rng:attribute\u003e\n      \u003crng:optional\u003e\n        \u003crng:attribute name\u003d\"table:case-sensitive\"\u003e\n          \u003crng:ref name\u003d\"string\"/\u003e\n        \u003c/rng:attribute\u003e\n      \u003c/rng:optional\u003e\n      \u003crng:optional\u003e\n        \u003crng:attribute name\u003d\"table:data-type\"\u003e\n          \u003crng:choice\u003e\n            \u003crng:value\u003etext\u003c/rng:value\u003e\n            \u003crng:value\u003enumber\u003c/rng:value\u003e\n          \u003c/rng:choice\u003e\n        \u003c/rng:attribute\u003e\n      \u003c/rng:optional\u003e\n    \u003c/rng:interleave\u003e\n  \u003c/rng:define\u003e\n\nand\n\n\"For a \u003ctable:filter-condition\u003e 9.5.5 element the default value for this attribute is text.\"\n\nso table:value is mandatory and table:data-type is optional. if you use \u003ctable:filter-condition loext:data-type table:value/\u003e it will be valid and an ODF 1.3 consumer should ignore the loext:data-type and interpret the value as text.\n\nin case that isn\u0027t a sensible approach, another alternative is to use \u003cloext:filter-condition\u003e element but then the parent element would also need to be loext:filter because table:filter must have a table:filter-* child.\n\nanother idea is something like \u003ctable:filter-condition loext:data-type\u003d\"color\" loext:value\u003d\"#00000\" table:data-type\u003d\"text\" table:value\u003d\"\"/\u003e but what value would table:value have then?",
+      "parentUuid": "0773705b_b40b8cd5",
+      "revId": "1f06e2bd2656a9d1baf2a5001e8b3912b66f22cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e8b2196_621076cc",
         "filename": "sc/source/filter/xml/XMLExportDatabaseRanges.cxx",
         "patchSetId": 2
