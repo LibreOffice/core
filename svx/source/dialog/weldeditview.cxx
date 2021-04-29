@@ -188,8 +188,8 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
         const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
 
-        auto xCursorOverlay = std::make_unique<sdr::overlay::OverlaySelection>(
-            sdr::overlay::OverlayType::Transparent, aHighlight, aLogicRanges, true);
+        sdr::overlay::OverlaySelection aCursorOverlay(sdr::overlay::OverlayType::Transparent,
+                                                      aHighlight, aLogicRanges, true);
 
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
             basegfx::B2DHomMatrix(), rRenderContext.GetViewTransformation(),
@@ -200,7 +200,7 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
             drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext,
                                                                          aViewInformation2D));
 
-        xProcessor->process(xCursorOverlay->getOverlayObjectPrimitive2DSequence());
+        xProcessor->process(aCursorOverlay.getOverlayObjectPrimitive2DSequence());
     }
 
     rRenderContext.Pop();
