@@ -765,7 +765,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                gradients (rectangles) in the gallery with corner
                                radius of 0. We should not use that on the
                                object. */
-                            aSet.ClearItem( SDRATTR_ECKENRADIUS );
+                            aSet.ClearItem( SDRATTR_CORNER_RADIUS );
 
                             const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
 

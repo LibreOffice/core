@@ -288,7 +288,7 @@
     { u"" UNO_NAME_GRAPHIC_GRAPHICCROP, SDRATTR_GRAFCROP      , ::cppu::UnoType<css::text::GraphicCrop>::get(), 0, 0 },
 
 #define EDGERADIUS_PROPERTIES \
-    { u"" UNO_NAME_EDGERADIUS,        SDRATTR_ECKENRADIUS     , ::cppu::UnoType<sal_Int32>::get()  ,            0,     0, PropertyMoreFlags::METRIC_ITEM},
+    { u"" UNO_NAME_EDGERADIUS,        SDRATTR_CORNER_RADIUS   , ::cppu::UnoType<sal_Int32>::get()  ,            0,     0, PropertyMoreFlags::METRIC_ITEM},
 
 #define TEXT_PROPERTIES_DEFAULTS\
     { u"" UNO_NAME_TEXT_WRITINGMODE,      SDRATTR_TEXTDIRECTION,          ::cppu::UnoType<css::text::WritingMode>::get(),      0,      0},\

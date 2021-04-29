@@ -1639,7 +1639,7 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
 
     bool bIsNotPersist = pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST && pMap->nWID != SDRATTR_TEXTDIRECTION;
 
-    if( pMap->nWID == SDRATTR_ECKENRADIUS )
+    if( pMap->nWID == SDRATTR_CORNER_RADIUS )
     {
         sal_Int32 nCornerRadius = 0;
         if( !(rVal >>= nCornerRadius) || (nCornerRadius < 0) || (nCornerRadius > 5000000))

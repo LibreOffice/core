@@ -144,7 +144,7 @@ SdrItemPool::SdrItemPool(
     rPoolDefaults[SDRATTR_CAPTIONESCABS    -SDRATTR_START]=new SdrCaptionEscAbsItem    ;
     rPoolDefaults[SDRATTR_CAPTIONLINELEN   -SDRATTR_START]=new SdrCaptionLineLenItem   ;
     rPoolDefaults[SDRATTR_CAPTIONFITLINELEN-SDRATTR_START]=new SdrCaptionFitLineLenItem;
-    rPoolDefaults[SDRATTR_ECKENRADIUS            -SDRATTR_START]=new SdrMetricItem(SDRATTR_ECKENRADIUS, 0);
+    rPoolDefaults[SDRATTR_CORNER_RADIUS    -SDRATTR_START]=new SdrMetricItem(SDRATTR_CORNER_RADIUS, 0);
     rPoolDefaults[SDRATTR_TEXT_MINFRAMEHEIGHT    -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, 0);
     rPoolDefaults[SDRATTR_TEXT_AUTOGROWHEIGHT    -SDRATTR_START]=new SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, true);
     rPoolDefaults[SDRATTR_TEXT_FITTOSIZE     -SDRATTR_START]=new SdrTextFitToSizeTypeItem;
@@ -477,7 +477,7 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
         case SDRATTR_CAPTIONLINELEN   : pResId = SIP_SA_CAPTIONLINELEN;break;
         case SDRATTR_CAPTIONFITLINELEN: pResId = SIP_SA_CAPTIONFITLINELEN;break;
 
-        case SDRATTR_ECKENRADIUS            : pResId = SIP_SA_ECKENRADIUS;break;
+        case SDRATTR_CORNER_RADIUS          : pResId = SIP_SA_CORNER_RADIUS;break;
         case SDRATTR_TEXT_MINFRAMEHEIGHT    : pResId = SIP_SA_TEXT_MINFRAMEHEIGHT;break;
         case SDRATTR_TEXT_AUTOGROWHEIGHT    : pResId = SIP_SA_TEXT_AUTOGROWHEIGHT;break;
         case SDRATTR_TEXT_FITTOSIZE         : pResId = SIP_SA_TEXT_FITTOSIZE;break;

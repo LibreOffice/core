@@ -1709,7 +1709,7 @@ bool SdrTextObj::IsReallyEdited() const
 
 tools::Long SdrTextObj::GetEckenradius() const
 {
-    return GetObjectItemSet().Get(SDRATTR_ECKENRADIUS).GetValue();
+    return GetObjectItemSet().Get(SDRATTR_CORNER_RADIUS).GetValue();
 }
 
 tools::Long SdrTextObj::GetMinTextFrameHeight() const

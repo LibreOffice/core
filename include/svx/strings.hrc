@@ -380,7 +380,7 @@
 #define SIP_SA_CAPTIONESCABS                                NC_("SIP_SA_CAPTIONESCABS", "Absolute exit of legend")
 #define SIP_SA_CAPTIONLINELEN                               NC_("SIP_SA_CAPTIONLINELEN", "Legend line length")
 #define SIP_SA_CAPTIONFITLINELEN                            NC_("SIP_SA_CAPTIONFITLINELEN", "AutoLength of legend lines")
-#define SIP_SA_ECKENRADIUS                                  NC_("SIP_SA_ECKENRADIUS", "Corner radius")
+#define SIP_SA_CORNER_RADIUS                                NC_("SIP_SA_CORNER_RADIUS", "Corner radius")
 #define SIP_SA_TEXT_MINFRAMEHEIGHT                          NC_("SIP_SA_TEXT_MINFRAMEHEIGHT", "Minimal frame height")
 #define SIP_SA_TEXT_AUTOGROWHEIGHT                          NC_("SIP_SA_TEXT_AUTOGROWHEIGHT", "AutoFit height")
 #define SIP_SA_TEXT_FITTOSIZE                               NC_("SIP_SA_TEXT_FITTOSIZE", "Fit text to frame")
