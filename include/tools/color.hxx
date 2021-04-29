@@ -55,7 +55,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color
         struct
         {
 #ifdef OSL_BIGENDIAN
-                sal_uInt8 A;
+                sal_uInt8 T;
                 sal_uInt8 R;
                 sal_uInt8 G;
                 sal_uInt8 B;
@@ -63,7 +63,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color
                 sal_uInt8 B;
                 sal_uInt8 G;
                 sal_uInt8 R;
-                sal_uInt8 A;
+                sal_uInt8 T;
 #endif
         };
     };
@@ -163,7 +163,7 @@ public:
       */
     sal_uInt8 GetAlpha() const
     {
-        return 255 - A;
+        return 255 - T;
     }
 
     /** Is the color transparent?
@@ -177,7 +177,7 @@ public:
      */
     bool IsFullyTransparent() const
     {
-        return A == 255;
+        return T == 255;
     }
 
     /** Sets the red value.
@@ -209,7 +209,7 @@ public:
       */
     void SetAlpha(sal_uInt8 nAlpha)
     {
-        A = 255 - nAlpha;
+        T = 255 - nAlpha;
     }
 
     /** Returns the same color but ignoring the transparency value.
@@ -495,7 +495,7 @@ template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, traits>& rStream, const Color& rColor)
 {
     std::ios_base::fmtflags nOrigFlags = rStream.flags();
-    rStream << "c[" << std::hex << std::setfill ('0')
+    rStream << "rgba[" << std::hex << std::setfill ('0')
             << std::setw(2) << static_cast<int>(rColor.GetRed())
             << std::setw(2) << static_cast<int>(rColor.GetGreen())
             << std::setw(2) << static_cast<int>(rColor.GetBlue())
