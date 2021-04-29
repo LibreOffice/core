@@ -47,11 +47,6 @@ XMLEventsImportContext::XMLEventsImportContext(
 {
 }
 
-XMLEventsImportContext::XMLEventsImportContext(SvXMLImport& rImport) :
-    SvXMLImportContext(rImport)
-{
-}
-
 
 XMLEventsImportContext::XMLEventsImportContext(
     SvXMLImport& rImport,

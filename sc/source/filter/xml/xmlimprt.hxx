@@ -55,6 +55,18 @@ struct ImportPostProcessData;
 struct PivotTableSources;
 }
 
+enum ScXMLContentValidationElemTokens
+{
+    XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE,
+    XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE,
+    XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO,
+    XML_TOK_CONTENT_VALIDATION_ELEM_EVENT_LISTENERS
+};
+
+enum ScXMLContentValidationMessageElemTokens
+{
+    XML_TOK_P
+};
 
 enum ScXMLTableTokens
 {
@@ -217,6 +229,8 @@ class ScXMLImport: public SvXMLImport
     rtl::Reference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
     rtl::Reference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
 
+    std::unique_ptr<SvXMLTokenMap>           pContentValidationElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>           pContentValidationMessageElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>           pTableElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>           pTableRowsElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>           pTableRowElemTokenMap;
@@ -308,6 +322,8 @@ public:
     const rtl::Reference < XMLPropertySetMapper >& GetRowStylesPropertySetMapper() const { return xRowStylesPropertySetMapper; }
     const rtl::Reference < XMLPropertySetMapper >& GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
 
+    const SvXMLTokenMap& GetContentValidationElemTokenMap();
+    const SvXMLTokenMap& GetContentValidationMessageElemTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();
     const SvXMLTokenMap& GetTableRowsElemTokenMap();
     const SvXMLTokenMap& GetTableRowElemTokenMap();

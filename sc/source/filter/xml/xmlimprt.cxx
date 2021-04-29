@@ -398,6 +398,41 @@ void SAL_CALL ScXMLDocContext_Impl::characters(const OUString &)
 {
 }
 
+const SvXMLTokenMap& ScXMLImport::GetContentValidationElemTokenMap()
+{
+    if( !pContentValidationElemTokenMap )
+    {
+        static const SvXMLTokenMapEntry aContentValidationElemTokenMap[] =
+        {
+            { XML_NAMESPACE_TABLE,  XML_HELP_MESSAGE,    XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE    },
+            { XML_NAMESPACE_TABLE,  XML_ERROR_MESSAGE,   XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE   },
+            { XML_NAMESPACE_TABLE,  XML_ERROR_MACRO,     XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO     },
+            { XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, XML_TOK_CONTENT_VALIDATION_ELEM_EVENT_LISTENERS },
+            XML_TOKEN_MAP_END
+        };
+
+        pContentValidationElemTokenMap.reset(new SvXMLTokenMap( aContentValidationElemTokenMap ));
+    } // if( !pContentValidationElemTokenMap )
+
+    return *pContentValidationElemTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetContentValidationMessageElemTokenMap()
+{
+    if( !pContentValidationMessageElemTokenMap )
+    {
+        static const SvXMLTokenMapEntry aContentValidationMessageElemTokenMap[] =
+        {
+            { XML_NAMESPACE_TEXT, XML_P,    XML_TOK_P   },
+            XML_TOKEN_MAP_END
+        };
+
+        pContentValidationMessageElemTokenMap.reset(new SvXMLTokenMap( aContentValidationMessageElemTokenMap ));
+    } // if( !pContentValidationMessageElemTokenMap )
+
+    return *pContentValidationMessageElemTokenMap;
+}
+
 const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
 {
     if( !pTableElemTokenMap )
@@ -616,6 +651,8 @@ ScXMLImport::ScXMLImport(
 ScXMLImport::~ScXMLImport() throw()
 {
     //  delete pI18NMap;
+    pContentValidationElemTokenMap.reset();
+    pContentValidationMessageElemTokenMap.reset();
     pTableElemTokenMap.reset();
     pTableRowsElemTokenMap.reset();
     pTableRowElemTokenMap.reset();
