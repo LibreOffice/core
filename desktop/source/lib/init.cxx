@@ -3849,7 +3849,7 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
 {
     static char* pCurrentSalLogOverride = nullptr;
 
-    if (strcmp(pOption, "profilezonerecording") == 0)
+    if (strcmp(pOption, "traceeventrecording") == 0)
     {
         if (strcmp(pValue, "start") == 0)
             comphelper::TraceEvent::startRecording();
