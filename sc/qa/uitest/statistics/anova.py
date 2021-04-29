@@ -98,7 +98,7 @@ class anova(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 6, 5).getValue(), 10)
         self.assertEqual(get_cell_by_position(document, 0, 6, 6).getValue(), 10)
         self.assertEqual(get_cell_by_position(document, 0, 6, 8).getString(), "SS")
-        self.assertEqual(round(get_cell_by_position(document, 0, 6, 9).getValue(),11), 1876.56832844573)
+        self.assertEqual(round(get_cell_by_position(document, 0, 6, 9).getValue(),11), 1876.56832844575)
         self.assertEqual(round(get_cell_by_position(document, 0, 6, 10).getValue(),10), 6025.1090909091)
         #bug 80583
         self.assertEqual(round(get_cell_by_position(document, 0, 6, 11).getValue(),11), 7901.67741935484)
@@ -128,7 +128,7 @@ class anova(UITestCase):
         self.assertEqual(round(get_cell_by_position(document, 0, 9, 9).getValue(),13), 4.3604117704492)
 
         self.assertEqual(get_cell_by_position(document, 0, 10, 8).getString(), "P-value")
-        self.assertEqual(round(get_cell_by_position(document, 0, 10, 9).getValue(),14), 0.02246149518799)
+        self.assertEqual(round(get_cell_by_position(document, 0, 10, 9).getValue(),14), 0.02246149518798)
 
         self.assertEqual(get_cell_by_position(document, 0, 11, 8).getString(), "F critical")
         self.assertEqual(round(get_cell_by_position(document, 0, 11, 9).getValue(),13), 3.3403855582378)
