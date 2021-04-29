@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e66a9b13_f2849b24",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-29T19:32:15Z",
+      "side": 0,
+      "message": "Please keep this comment in the new code.",
+      "range": {
+        "startLine": 1737,
+        "startChar": 12,
+        "endLine": 1738,
+        "endChar": 32
+      },
+      "revId": "ddd6f61a79c668c723e398978f622aec945ec63e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
