@@ -69,6 +69,8 @@ protected:
     virtual void LoseFocus() override;
     virtual void Resize() override;
 
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
+
     // Whether Tab will result in entering a tab or not
     bool GetAcceptsTab() const { return m_bAcceptsTab; }
 
