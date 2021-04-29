@@ -181,8 +181,17 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         std::vector<basegfx::B2DRange> aLogicRanges;
         aLogicRanges.reserve(aLogicRects.size());
 
-        for (const auto& aRect : aLogicRects)
-            aLogicRanges.emplace_back(vcl::unotools::b2DRectangleFromRectangle(aRect));
+        const Size aLogicPixel(rRenderContext.PixelToLogic(Size(1, 1)));
+
+        for (auto& aRect : aLogicRects)
+        {
+            // extend each range by one pixel so multiple lines touch each other
+            // if adjacent so the whole set is drawn with a single border around
+            // the lot
+            aLogicRanges.emplace_back(aRect.Left(), aRect.Top(),
+                                      aRect.Right() + aLogicPixel.Width(),
+                                      aRect.Bottom() + aLogicPixel.Height());
+        }
 
         // get the system's highlight color
         const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
