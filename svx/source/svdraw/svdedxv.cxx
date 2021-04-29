@@ -394,7 +394,7 @@ class TextEditOverlayObject : public sdr::overlay::OverlayObject
 {
 protected:
     /// local access to associated sdr::overlay::OverlaySelection
-    sdr::overlay::OverlaySelection* mpOverlaySelection;
+    std::unique_ptr<sdr::overlay::OverlaySelection> mxOverlaySelection;
 
     /// local definition depends on active OutlinerView
     OutlinerView& mrOutlinerView;
@@ -420,7 +420,10 @@ public:
     virtual ~TextEditOverlayObject() override;
 
     // data read access
-    const sdr::overlay::OverlaySelection* getOverlaySelection() const { return mpOverlaySelection; }
+    const sdr::overlay::OverlaySelection* getOverlaySelection() const
+    {
+        return mxOverlaySelection.get();
+    }
     const OutlinerView& getOutlinerView() const { return mrOutlinerView; }
 
     /// override to check conditions for last createOverlayObjectPrimitive2DSequence
@@ -460,7 +463,6 @@ TextEditOverlayObject::createOverlayObjectPrimitive2DSequence()
 TextEditOverlayObject::TextEditOverlayObject(const Color& rColor, OutlinerView& rOutlinerView,
                                              bool bVisualizeSurroundingFrame)
     : OverlayObject(rColor)
-    , mpOverlaySelection(nullptr)
     , mrOutlinerView(rOutlinerView)
     , maLastRange()
     , maRange()
@@ -474,17 +476,13 @@ TextEditOverlayObject::TextEditOverlayObject(const Color& rColor, OutlinerView& 
     // create local OverlaySelection - this is an integral part of EditText
     // visualization
     const std::vector<basegfx::B2DRange> aEmptySelection{};
-    mpOverlaySelection = new sdr::overlay::OverlaySelection(sdr::overlay::OverlayType::Transparent,
-                                                            rColor, aEmptySelection, true);
+    mxOverlaySelection.reset(new sdr::overlay::OverlaySelection(
+        sdr::overlay::OverlayType::Transparent, rColor, aEmptySelection, true));
 }
 
 TextEditOverlayObject::~TextEditOverlayObject()
 {
-    if (getOverlaySelection())
-    {
-        delete mpOverlaySelection;
-        mpOverlaySelection = nullptr;
-    }
+    mxOverlaySelection.reset();
 
     if (getOverlayManager())
     {
@@ -604,7 +602,7 @@ void TextEditOverlayObject::checkSelectionChange()
             aRect.Right() + aLogicPixel.Width(), aRect.Bottom() + aLogicPixel.Height());
     }
 
-    mpOverlaySelection->setRanges(aLogicRanges);
+    mxOverlaySelection->setRanges(aLogicRanges);
 }
 } // end of anonymous namespace
 
