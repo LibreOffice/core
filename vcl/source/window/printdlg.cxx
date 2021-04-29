@@ -732,15 +732,6 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
         mxScrolledWindow->get_preferred_size().Width() + mxScrolledWindow->get_scroll_thickness(),
         450);
 
-    // restore dialog size
-    std::optional<sal_Int32> aWidth = officecfg::Office::Common::Print::Dialog::Width::get();
-    std::optional<sal_Int32> aHeight = officecfg::Office::Common::Print::Dialog::Height::get();
-    WindowStateData aState;
-    if (aWidth) aState.SetWidth(*aWidth); else aWidth = -1;
-    if (aHeight) aState.SetHeight(*aHeight); else aHeight = -1;
-    aState.SetMask(WindowStateMask::Width | WindowStateMask::Height);
-    m_xDialog->set_window_state(aState.ToStr());
-
     m_xDialog->set_centered_on_parent(true);
 }
 
@@ -749,8 +740,6 @@ PrintDialog::~PrintDialog()
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Print::Dialog::RangeSectionExpanded::set(mxRangeExpander->get_expanded(), batch);
     officecfg::Office::Common::Print::Dialog::LayoutSectionExpanded::set(mxLayoutExpander->get_expanded(), batch);
-    officecfg::Office::Common::Print::Dialog::Width::set(m_xDialog->get_size().getWidth(), batch);
-    officecfg::Office::Common::Print::Dialog::Height::set(m_xDialog->get_size().getHeight(), batch);
     batch->commit();
 }
 
