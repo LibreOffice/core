@@ -145,6 +145,8 @@ public:
 
     void RemoveDefaultTemplateIcon( std::u16string_view rPath);
 
+    bool IsBuiltInRegion(const OUString& rRegionName);
+
     static BitmapEx scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height);
 
     static BitmapEx getDefaultThumbnail( const OUString& rPath );

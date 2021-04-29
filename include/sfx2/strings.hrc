@@ -33,7 +33,7 @@
 #define STR_RESET_DEFAULT                       NC_("STR_RESET_DEFAULT", "Reset Default")
 #define STR_DELETE                              NC_("STR_DELETE", "Delete")
 #define STR_SFX_RENAME                          NC_("STR_SFX_RENAME", "Rename")
-#define STR_CATEGORY_RENAME                     NC_("STR_CATEGORY_RENAME", "Rename Category")
+#define STR_CATEGORY_RENAME                     NC_("STR_CATEGORY_RENAME", "Ren~ame Category")
 #define STR_RENAME_TEMPLATE                     NC_("STR_RENAME_TEMPLATE", "Enter new template name:")
 #define STR_TEMPLATE_TOOLTIP                    NC_("STR_TEMPLATE_TOOLTIP", "Title: $1\nCategory: $2")
 #define STR_TEMPLATE_SELECTION                  NC_("STR_TEMPLATE_SELECTION", "Select a Template")
@@ -351,6 +351,16 @@
 #define STR_RECENT                              NC_("STR_RECENT", "Recently used")
 #define STR_NORECENT                            NC_("STR_NORECENT", "No recent characters")
 
+#define STR_ACTION_RESET_ALL_DEAULT_TEMPLATES   NC_("STR_ACTION_RESET_ALL_DEAULT_TEMPLATES","Reset All De~fault Templates")
+#define STR_ACTION_RESET_WRITER_TEMPLATE        NC_("STR_ACTION_RESET_WRITER_TEMPLATE","Reset De~fault Text Document")
+#define STR_ACTION_RESET_CALC_TEMPLATE          NC_("STR_ACTION_RESET_CALC_TEMPLATE","Reset De~fault Spreadsheet")
+#define STR_ACTION_RESET_IMPRESS_TEMPLATE       NC_("STR_ACTION_RESET_IMPRESS_TEMPLATE","Reset De~fault Presentation")
+#define STR_ACTION_RESET_DRAW_TEMPLATE          NC_("STR_ACTION_RESET_DRAW_TEMPLATE","Reset De~fault Drawing")
+
+#define STR_ACTION_MOVE                         NC_("STR_ACTION_MOVE","~Move")
+#define STR_ACTION_IMPORT                       NC_("STR_ACTION_IMPORT","~Import")
+#define STR_ACTION_EXPORT                       NC_("STR_ACTION_EXPORT","~Export")
+#define STR_ACTION_EXTENSIONS                   NC_("STR_ACTION_EXTENSIONS","E~xtensions")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
