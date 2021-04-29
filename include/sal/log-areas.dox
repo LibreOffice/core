@@ -97,6 +97,7 @@ certain functionality.
 @li @c comphelper.container - EmbeddedObjectContainer
 @li @c comphelper.crypto
 @li @c comphelper.lok
+@li @c comphelper.traceevent
 
 @section cppu
 
