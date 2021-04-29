@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ca3a6e9_1ae8390f",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-29T05:47:19Z",
+      "side": 1,
+      "message": "It might not be important in practice, and modern compilers might still do the optimization anyway, but formally, this might be improved by using the C++ language *mandatory* copy elision [1], which is only guaranteed in the return statement when a *temporary* (prvalue) is created and returned. This code does not create a temporary, but a local variable fNSum (with automatic duration), that is operated and then returned. It might be re-written like this:\n\n        return KahanSum(*this).add(fSum);\n\nprovided that add() is changed to return a reference to *this (which is usual for all assignment operators anyway [2]). This creates the temporary right inside the return statement, and thus language is *required* to not create any separate object and then copy, but in an expression like\n\n    KahanSum s \u003d kSum1 + kSum2;\n\nthe operator would work directly in \u0027s\u0027. In the current form, the copy elision is non-mandatory (although I assume that compilers would do it anyway).\n\n[1] https://en.cppreference.com/w/cpp/language/copy_elision\n[2] https://en.cppreference.com/w/cpp/language/operator_assignment",
+      "revId": "33876d4b12773dae8e05096030944fd47e84c842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
