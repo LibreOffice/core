@@ -61,6 +61,7 @@ using namespace css;
 class SdOOXMLExportTest1 : public SdModelTestBaseXML
 {
 public:
+    void testTdf54037();
     void testFdo90607();
     void testTdf127237();
     void testBnc887230();
@@ -115,6 +116,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
+    CPPUNIT_TEST(testTdf54037);
     CPPUNIT_TEST(testFdo90607);
     CPPUNIT_TEST(testTdf127237);
     CPPUNIT_TEST(testBnc887230);
@@ -217,6 +219,26 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
     }
 }
 
+}
+
+void SdOOXMLExportTest1::testTdf54037()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf54037.pptx"), PPTX );
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pRelsDoc = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
+
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:r/a:rPr/a:hlinkClick",
+                "action", "ppaction://hlinksldjump");
+
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[2]/a:r/a:rPr/a:hlinkClick",
+                "action", "ppaction://hlinkshowjump?jump=nextslide");
+
+    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+                "slide2.xml");
 }
 
 void SdOOXMLExportTest1::testTdf127237()
