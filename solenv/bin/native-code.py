@@ -362,6 +362,7 @@ edit_constructor_list = [
     "Calc_XMLOasisMetaExporter_get_implementation",
     "Calc_XMLOasisSettingsExporter_get_implementation",
     "Calc_XMLOasisStylesExporter_get_implementation",
+    "Calc_FilterOptionsDialog_get_implementation",
 # starmath/util/sm.component
     "Math_XMLOasisMetaExporter_get_implementation",
     "Math_XMLOasisSettingsExporter_get_implementation",
