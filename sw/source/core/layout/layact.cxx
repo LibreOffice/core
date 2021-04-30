@@ -2088,7 +2088,10 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
         while( pCnt && pPage->IsAnLower( pCnt ) )
         {
             if ( DoIdleJob_( pCnt, eJob ) )
+            {
+                SAL_INFO("sw.idle", "DoIdleJob " << eJob << " interrupted on page " << pPage->GetPhyPageNum());
                 return true;
+            }
             pCnt = pCnt->GetNextContentFrame();
         }
         if ( pPage->GetSortedObjs() )
@@ -2105,7 +2108,10 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
                         if ( pC->IsTextFrame() )
                         {
                             if ( DoIdleJob_( pC, eJob ) )
+                            {
+                                SAL_INFO("sw.idle", "DoIdleJob " << eJob << " interrupted on page " << pPage->GetPhyPageNum());
                                 return true;
+                            }
                         }
                         pC = pC->GetNextContentFrame();
                     }
