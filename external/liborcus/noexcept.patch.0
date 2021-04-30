@@ -1,0 +1,107 @@
+--- include/orcus/csv_parser_base.hpp
++++ include/orcus/csv_parser_base.hpp
+@@ -59,8 +59,8 @@
+     std::string m_msg;
+ public:
+     parse_error(const std::string& msg);
+-    virtual ~parse_error() throw();
+-    virtual const char* what() const throw();
++    virtual ~parse_error() noexcept;
++    virtual const char* what() const noexcept;
+ };
+ 
+ class ORCUS_PSR_DLLPUBLIC parser_base : public ::orcus::parser_base
+--- include/orcus/exception.hpp
++++ include/orcus/exception.hpp
+@@ -20,8 +20,8 @@
+ public:
+     explicit general_error(const std::string& msg);
+     explicit general_error(const std::string& cls, const std::string& msg);
+-    virtual ~general_error() throw();
+-    virtual const char* what() const throw();
++    virtual ~general_error() noexcept;
++    virtual const char* what() const noexcept;
+ 
+ protected:
+     void append_msg(const std::string& s);
+@@ -34,35 +34,35 @@
+ {
+ public:
+     explicit invalid_arg_error(const std::string& msg);
+-    virtual ~invalid_arg_error() throw();
++    virtual ~invalid_arg_error() noexcept;
+ };
+ 
+ class ORCUS_PSR_DLLPUBLIC xml_structure_error : public general_error
+ {
+ public:
+     explicit xml_structure_error(const ::std::string& msg);
+-    virtual ~xml_structure_error() throw();
++    virtual ~xml_structure_error() noexcept;
+ };
+ 
+ class ORCUS_PSR_DLLPUBLIC json_structure_error : public general_error
+ {
+ public:
+     explicit json_structure_error(const ::std::string& msg);
+-    virtual ~json_structure_error() throw();
++    virtual ~json_structure_error() noexcept;
+ };
+ 
+ class ORCUS_PSR_DLLPUBLIC invalid_map_error : public general_error
+ {
+ public:
+     explicit invalid_map_error(const ::std::string& msg);
+-    virtual ~invalid_map_error() throw();
++    virtual ~invalid_map_error() noexcept;
+ };
+ 
+ class ORCUS_PSR_DLLPUBLIC value_error : public general_error
+ {
+ public:
+     explicit value_error(const std::string& msg);
+-    virtual ~value_error() throw();
++    virtual ~value_error() noexcept;
+ };
+ 
+ /**
+@@ -72,7 +72,7 @@
+ {
+ public:
+     xpath_error(const std::string& msg);
+-    virtual ~xpath_error() throw();
++    virtual ~xpath_error() noexcept;
+ };
+ 
+ namespace detail {
+--- include/orcus/json_document_tree.hpp
++++ include/orcus/json_document_tree.hpp
+@@ -33,7 +33,7 @@
+ {
+ public:
+     document_error(const std::string& msg);
+-    virtual ~document_error() throw();
++    virtual ~document_error() noexcept;
+ };
+ 
+ /**
+@@ -45,7 +45,7 @@
+ {
+ public:
+     key_value_error(const std::string& msg);
+-    virtual ~key_value_error() throw();
++    virtual ~key_value_error() noexcept;
+ };
+ 
+ enum class node_t : uint8_t
+--- include/orcus/sax_parser_base.hpp
++++ include/orcus/sax_parser_base.hpp
+@@ -35,7 +35,7 @@
+ public:
+     malformed_xml_error() = delete;
+     malformed_xml_error(const std::string& msg, std::ptrdiff_t offset);
+-    virtual ~malformed_xml_error() throw();
++    virtual ~malformed_xml_error() noexcept;
+ };
+ 
+ /**

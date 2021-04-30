@@ -57,6 +57,7 @@ gb_CFLAGS_COMMON := \
 	-Wstrict-prototypes \
 	-Wundef \
 	-Wunreachable-code \
+	-Wdeprecated \
 	$(if $(or $(and $(COM_IS_CLANG),$(or $(findstring icecc,$(CC)),$(findstring icecc,$(CCACHE_PREFIX)))),$(findstring sccache,$(CC))),,-Wunused-macros) \
 	$(if $(COM_IS_CLANG),-Wembedded-directive) \
 	-finput-charset=UTF-8 \
@@ -74,6 +75,7 @@ gb_CXXFLAGS_COMMON := \
 	-Wextra \
 	-Wundef \
 	-Wunreachable-code \
+	-Wdeprecated \
 	$(if $(or $(and $(COM_IS_CLANG),$(or $(findstring icecc,$(CXX)),$(findstring icecc,$(CCACHE_PREFIX)))),$(findstring sccache,$(CXX))),,-Wunused-macros) \
 	$(if $(COM_IS_CLANG),-Wembedded-directive) \
 	-finput-charset=UTF-8 \

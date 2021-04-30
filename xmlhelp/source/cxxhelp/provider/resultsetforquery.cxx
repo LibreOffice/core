@@ -31,7 +31,14 @@
 #if defined(__GNUC__)
 #  pragma GCC visibility push (default)
 #endif
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-dynamic-exception-spec"
+#endif
 #include <CLucene.h>
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 #if defined(__GNUC__)
 #  pragma GCC visibility pop
 #endif

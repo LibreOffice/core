@@ -1,0 +1,36 @@
+--- include/cppunit/Exception.h
++++ include/cppunit/Exception.h
+@@ -41,13 +41,13 @@
+   Exception( const Exception &other );
+ 
+   /// Destructs the exception
+-  virtual ~Exception() throw();
++  virtual ~Exception() noexcept;
+ 
+   /// Performs an assignment
+   Exception &operator =( const Exception &other );
+ 
+   /// Returns descriptive message
+-  const char *what() const throw();
++  const char *what() const noexcept;
+ 
+   /// Location where the error occured
+   SourceLine sourceLine() const;
+--- include/cppunit/plugin/DynamicLibraryManagerException.h
++++ include/cppunit/plugin/DynamicLibraryManagerException.h
+@@ -32,13 +32,13 @@
+                                   const std::string &errorDetail,
+                                   Cause cause );
+ 
+-  ~DynamicLibraryManagerException() throw()
++  ~DynamicLibraryManagerException() noexcept
+   {
+   }
+ 
+   Cause getCause() const;
+ 
+-  const char *what() const throw();
++  const char *what() const noexcept;
+ 
+ private:
+   std::string m_message;

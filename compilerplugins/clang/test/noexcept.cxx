@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#pragma clang diagnostic ignored "-Wdeprecated-dynamic-exception-spec"
+
 // expected-error@+1 {{Replace legacy dynamic 'throw ()' exception specification with 'noexcept' [loplugin:noexcept]}}
 void f() throw();
 

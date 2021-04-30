@@ -49,10 +49,6 @@ struct NoExSpecDerived: VirtualBase {
     ~NoExSpecDerived() override {} // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
 };
 
-struct NoThrowDerived: VirtualBase {
-    ~NoThrowDerived() throw () override {} // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
-};
-
 struct NoexceptDerived: VirtualBase {
     ~NoexceptDerived() noexcept override {} // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
 };
