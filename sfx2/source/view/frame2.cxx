@@ -381,7 +381,7 @@ bool SfxFrame::IsMenuBarOn_Impl() const
 
 void SfxFrame::PrepareForDoc_Impl( SfxObjectShell& i_rDoc )
 {
-    const ::comphelper::NamedValueCollection aDocumentArgs( i_rDoc.GetModel()->getArgs() );
+    const ::comphelper::NamedValueCollection aDocumentArgs( i_rDoc.GetModel()->getArgs2( { "Hidden", "PluginMode" } ) );
 
     // hidden?
     OSL_ENSURE( !pImpl->bHidden, "when does this happen?" );

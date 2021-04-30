@@ -1871,48 +1871,48 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions(std::u16string_view aErr
 
 bool SfxObjectShell::isEditDocLocked() const
 {
-    Reference<XModel> xModel = GetModel();
+    Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
     if (!officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
         return true;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockEditDoc" } ));
     return aArgs.getOrDefault("LockEditDoc", false);
 }
 
 bool SfxObjectShell::isContentExtractionLocked() const
 {
-    Reference<XModel> xModel = GetModel();
+    Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockContentExtraction" } ));
     return aArgs.getOrDefault("LockContentExtraction", false);
 }
 
 bool SfxObjectShell::isExportLocked() const
 {
-    Reference<XModel> xModel = GetModel();
+    Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockExport" } ));
     return aArgs.getOrDefault("LockExport", false);
 }
 
 bool SfxObjectShell::isPrintLocked() const
 {
-    Reference<XModel> xModel = GetModel();
+    Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockPrint" } ));
     return aArgs.getOrDefault("LockPrint", false);
 }
 
 bool SfxObjectShell::isSaveLocked() const
 {
-    Reference<XModel> xModel = GetModel();
+    Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockSave" } ));
     return aArgs.getOrDefault("LockSave", false);
 }
 

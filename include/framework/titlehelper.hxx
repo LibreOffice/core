@@ -37,7 +37,7 @@
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::frame { class XModel3; }
 namespace com::sun::star::frame { class XUntitledNumbers; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { class XInterface; }
@@ -138,7 +138,7 @@ class FWK_DLLPUBLIC TitleHelper final : private ::cppu::BaseMutex
         void impl_sendTitleChangedEvent ();
 
         void impl_updateTitle (bool init = false);
-        void impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel >& xModel, bool init);
+        void impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel3 >& xModel, bool init);
         void impl_updateTitleForController (const css::uno::Reference< css::frame::XController >& xController, bool init);
         void impl_updateTitleForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame, bool init);
 

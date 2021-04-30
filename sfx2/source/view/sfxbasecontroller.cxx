@@ -1224,7 +1224,8 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
 
         if ( i_eConnect == E_CONNECT )
         {
-            ::comphelper::NamedValueCollection aDocumentArgs( getModel()->getArgs() );
+            css::uno::Reference<css::frame::XModel3> xModel(getModel(), css::uno::UNO_QUERY_THROW);
+            ::comphelper::NamedValueCollection aDocumentArgs( xModel->getArgs2( { "PluginMode" } ) );
 
             const sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
             const bool bHasPluginMode = ( nPluginMode != 0 );

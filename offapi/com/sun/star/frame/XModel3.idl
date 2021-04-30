@@ -1,0 +1,51 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_frame_XModel3_idl__
+#define __com_sun_star_frame_XModel3_idl__
+
+#include <com/sun/star/frame/XModel2.idl>
+
+
+ module com {  module sun {  module star {  module frame {
+
+/** extends interface XModel2 with optimised read access getArgs().
+
+ */
+interface XModel3 : com::sun::star::frame::XModel2
+{
+    /** Provides optimised read access
+        (so we don't need to fetch expensive properties that we are not interested in)
+        on currently representation of the
+        com::sun::star::document::MediaDescriptor
+        of this model which describes the model and its state.
+        Returns only the selected args.
+
+        @param requestedArgs
+        @returns the requested and possibly some more arguments with which the model was originally created or
+            stored the last time.
+     */
+    sequence< com::sun::star::beans::PropertyValue > getArgs2([in] sequence< string > requestedArgs);
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

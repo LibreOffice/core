@@ -157,7 +157,7 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
     sd::DrawDocShellRef xDocSh = loadURL(rURL, nFormat);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.is());
 
-    uno::Reference< frame::XModel2 > xModel2(xDocSh->GetModel(), uno::UNO_QUERY);
+    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
     CPPUNIT_ASSERT(xModel2.is());
 
     uno::Reference< frame::XController2 > xController = xModel2->createDefaultViewController(xTargetFrame);

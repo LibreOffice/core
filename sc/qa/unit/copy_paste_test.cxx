@@ -94,7 +94,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     ScDocShellRef xDocSh = loadDoc(u"chartx2.", FORMAT_XLS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load chartx2.xls.", xDocSh.is());
 
-    uno::Reference< frame::XModel2 > xModel2 ( xDocSh->GetModel(), UNO_QUERY );
+    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
     CPPUNIT_ASSERT( xModel2.is() );
 
     Reference< frame::XController2 > xController = xModel2->createDefaultViewController( xTargetFrame );
@@ -217,7 +217,7 @@ void ScCopyPasteTest::testTdf84411()
     ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
     CPPUNIT_ASSERT(xDocSh);
 
-    uno::Reference< frame::XModel2 > xModel2 ( xDocSh->GetModel(), UNO_QUERY );
+    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
     CPPUNIT_ASSERT( xModel2.is() );
 
     Reference< frame::XController2 > xController = xModel2->createDefaultViewController( xTargetFrame );
@@ -286,7 +286,7 @@ void ScCopyPasteTest::testTdf124565()
     Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame( "_blank", 0 );
     CPPUNIT_ASSERT( xTargetFrame.is() );
 
-    uno::Reference< frame::XModel2 > xModel2 ( xDocSh->GetModel(), UNO_QUERY );
+    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
     CPPUNIT_ASSERT( xModel2.is() );
 
     Reference< frame::XController2 > xController = xModel2->createDefaultViewController( xTargetFrame );
@@ -357,7 +357,7 @@ void ScCopyPasteTest::testTdf126421()
     ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
     CPPUNIT_ASSERT(xDocSh);
 
-    uno::Reference<frame::XModel2> xModel2(xDocSh->GetModel(), UNO_QUERY);
+    uno::Reference<frame::XModel2> xModel2 = xDocSh->GetModel();
     CPPUNIT_ASSERT(xModel2.is());
 
     Reference<frame::XController2> xController = xModel2->createDefaultViewController(xTargetFrame);
@@ -477,7 +477,7 @@ ScDocShellRef ScCopyPasteTest::loadDocAndSetupModelViewController(std::u16string
     ScDocShellRef xDocSh = loadDoc(rFileName, nFormat, bReadWrite);
     CPPUNIT_ASSERT_MESSAGE(OString("Failed to load " + OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8)).getStr(), xDocSh.is());
 
-    uno::Reference< frame::XModel2 > xModel2(xDocSh->GetModel(), UNO_QUERY);
+    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
     CPPUNIT_ASSERT(xModel2.is());
 
     Reference< frame::XController2 > xController = xModel2->createDefaultViewController(xTargetFrame);
