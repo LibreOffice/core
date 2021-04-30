@@ -16,6 +16,24 @@
       "revId": "38645fd0fddf350047a5043eb1a46c8a595f8f0f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8504f3b7_0d6e16b4",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-30T08:24:43Z",
+      "side": 1,
+      "message": "OK. But doesn\u0027t that mean we do have to reget the error code which we already have?",
+      "parentUuid": "1b5c782f_2cd310dd",
+      "revId": "38645fd0fddf350047a5043eb1a46c8a595f8f0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
