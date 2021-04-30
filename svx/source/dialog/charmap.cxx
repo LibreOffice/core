@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <vcl/event.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/svapp.hxx>
@@ -732,6 +734,7 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
     if( nSelectedIndex >= 0 )
     {
         getSelectedChar() = mxFontCharMap->GetCharFromIndex( nSelectedIndex );
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         if( m_xAccessible.is() )
         {
             svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
@@ -751,6 +754,7 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
             aNewAny <<= AccessibleStateType::SELECTED;
             pItem->m_xItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
+#endif
     }
     aHighHdl.Call( this );
 }
@@ -785,6 +789,7 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, weld::ScrolledWindow&, void)
     }
     else if( nSelectedIndex > LastInView() )
     {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         if( m_xAccessible.is() )
         {
             css::uno::Any aOldAny, aNewAny;
@@ -795,6 +800,7 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, weld::ScrolledWindow&, void)
                 m_xAccessible ->fireEvent( AccessibleEventId::CHILD, aOldAny, aNewAny );
             }
         }
+#endif
         SelectIndex( (LastInView() - COLUMN_COUNT + 1) + (nSelectedIndex % COLUMN_COUNT) );
     }
 
@@ -803,18 +809,22 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, weld::ScrolledWindow&, void)
 
 SvxShowCharSet::~SvxShowCharSet()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (m_xAccessible.is())
     {
         m_aItems.clear();
         m_xAccessible->clearCharSetControl();
         m_xAccessible.clear();
     }
+#endif
 }
 
 css::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     OSL_ENSURE(!m_xAccessible.is(),"Accessible already created!");
     m_xAccessible = new svx::SvxShowCharSetAcc(this);
+#endif
     return m_xAccessible;
 }
 
@@ -823,7 +833,9 @@ svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
     ItemsMap::iterator aFind = m_aItems.find(_nPos);
     if ( aFind == m_aItems.end() )
     {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         OSL_ENSURE(m_xAccessible.is(), "Who wants to create a child of my table without a parent?");
+#endif
         auto xItem = std::make_shared<svx::SvxShowCharSetItem>(*this,
             m_xAccessible.get(), sal::static_int_cast< sal_uInt16 >(_nPos));
         aFind = m_aItems.emplace(_nPos, xItem).first;

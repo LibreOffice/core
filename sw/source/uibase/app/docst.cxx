@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <memory>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -1561,9 +1563,13 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
 
 sfx::AccessibilityIssueCollection SwDocShell::runAccessibilityCheck()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     sw::AccessibilityCheck aCheck(m_xDoc.get());
     aCheck.check();
     return aCheck.getIssueCollection();
+#else
+    return sfx::AccessibilityIssueCollection();
+#endif
 }
 
 std::set<Color> SwDocShell::GetDocColors()

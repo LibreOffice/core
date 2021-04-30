@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_wasm_strip.h>
 
 #include <SwSpellDialogChildWindow.hxx>
 #include <svl/eitem.hxx>
@@ -115,11 +116,14 @@ view::XSelectionSupplier* SwView::GetUNOObject()
 
 void SwView::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessibilityOptions)
 {
+#ifdef ENABLE_WASM_STRIP_ACCESSIBILITY
+    (void)rAccessibilityOptions;
+#else
     m_pWrtShell->ApplyAccessibilityOptions(rAccessibilityOptions);
     //to enable the right state of the selection cursor in readonly documents
     if(GetDocShell()->IsReadOnly())
         m_pWrtShell->ShowCursor();
-
+#endif
 }
 
 void SwView::SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem> const & rConfigItem)

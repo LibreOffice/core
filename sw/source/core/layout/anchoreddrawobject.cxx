@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <dcontact.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
@@ -123,11 +125,13 @@ SwPosNotify::~SwPosNotify() COVERITY_NOEXCEPT_FALSE
         }
     }
     // tdf#101464 notify SwAccessibleMap about new drawing object position
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (mpOldPageFrame && mpOldPageFrame->getRootFrame()->IsAnyShellAccessible())
     {
         mpOldPageFrame->getRootFrame()->GetCurrShell()->Imp()->MoveAccessible(
                 nullptr, mpAnchoredDrawObj->GetDrawObj(), maOldObjRect);
     }
+#endif
 }
 
 // --> #i32795#

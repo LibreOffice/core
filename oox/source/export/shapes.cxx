@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
+#include <config_wasm_strip.h>
 
+#include <sal/config.h>
 #include <sal/log.hxx>
+
 #include <filter/msfilter/util.hxx>
 #include <o3tl/string_view.hxx>
 #include <oox/core/xmlfilterbase.hxx>
@@ -2171,9 +2173,14 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         xPropSet->getPropertyValue("Model") >>= xChartDoc;
         assert(xChartDoc.is());
         //export the chart
+#ifndef ENABLE_WASM_STRIP_CHART
+        // WASM_CHART change
+        // TODO: With Chart extracted this cannot really happen since
+        // no Chart could've been added at all
         ChartExport aChartExport( mnXmlNamespace, GetFS(), xChartDoc, GetFB(), GetDocumentType() );
         static sal_Int32 nChartCount = 0;
         aChartExport.WriteChartObj( xShape, GetNewShapeID( xShape ), ++nChartCount );
+#endif
         return *this;
     }
 

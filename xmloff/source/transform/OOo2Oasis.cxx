@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -1552,14 +1554,16 @@ XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
         return new XMLControlOOoTransformerContext( *this, rQName );
     case XML_ETACTION_FORM_PROPERTY:
         return new XMLFormPropOOoTransformerContext( *this, rQName );
+#ifndef ENABLE_WASM_STRIP_CHART
     case XML_ETACTION_CHART:
         return new XMLChartOOoTransformerContext( *this, rQName );
+    case XML_ETACTION_CHART_PLOT_AREA:
+        return new XMLChartPlotAreaOOoTContext( *this, rQName );
+#endif
     case XML_ETACTION_TRACKED_CHANGES:
         return new XMLTrackedChangesOOoTContext_Impl( *this, rQName,
                                rAction.GetQNamePrefixFromParam1(),
                             rAction.GetQNameTokenFromParam1() );
-    case XML_ETACTION_CHART_PLOT_AREA:
-        return new XMLChartPlotAreaOOoTContext( *this, rQName );
     case XML_ETACTION_TABLE:
         return new XMLTableOOoTransformerContext_Impl( *this, rQName );
     default:

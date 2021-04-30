@@ -9,6 +9,12 @@
 
 $(eval $(call gb_Pagein_Pagein,common))
 
+ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
+$(eval $(call gb_Pagein_add_objects,common,\
+    helplinker \
+))
+endif
+
 # sorted in approx. reverse load order (ld.so.1)
 $(eval $(call gb_Pagein_add_objects,common,\
     $(if $(MERGELIBS),merged) \
@@ -56,7 +62,6 @@ $(eval $(call gb_Pagein_add_objects,common,\
     svt \
     spl \
     avmedia \
-    helplinker \
     sax \
     fsstorage \
     desktopbe1 \

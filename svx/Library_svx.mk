@@ -24,6 +24,10 @@ $(eval $(call gb_Library_set_componentfiles,svx, \
     svx/util/svx \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_RECOVERYUI),TRUE)
+$(eval $(call gb_Library_set_componentfile,svx,svx/util/svx.extended))
+endif
+
 $(eval $(call gb_Library_set_include,svx,\
     -I$(SRCDIR)/svx/inc \
     -I$(SRCDIR)/svx/source/inc \
@@ -82,10 +86,17 @@ $(eval $(call gb_Library_use_externals,svx,\
 	icu_headers \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_RECOVERYUI),TRUE)
+$(eval $(call gb_Library_add_exception_objects,svx,\
+    svx/source/dialog/docrecovery \
+    svx/source/unodraw/recoveryui \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/AccessibleControlShape \
     svx/source/accessibility/AccessibleEmptyEditSource \
-    svx/source/accessibility/AccessibleFrameSelector \
     svx/source/accessibility/AccessibleGraphicShape \
     svx/source/accessibility/AccessibleOLEShape \
     svx/source/accessibility/AccessibleShape \
@@ -99,15 +110,20 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/GraphCtlAccessibleContext \
     svx/source/accessibility/ShapeTypeHandler \
     svx/source/accessibility/SvxShapeTypes \
-    svx/source/accessibility/charmapacc \
     svx/source/accessibility/lookupcolorname \
-	svx/source/accessibility/svxpixelctlaccessiblecontext \
+    svx/source/dialog/AccessibilityCheckDialog \
+))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,svx,\
+    svx/source/accessibility/AccessibleFrameSelector \
+    svx/source/accessibility/charmapacc \
+    svx/source/accessibility/svxpixelctlaccessiblecontext \
     svx/source/accessibility/svxrectctaccessiblecontext \
     svx/source/customshapes/EnhancedCustomShape3d \
     svx/source/customshapes/EnhancedCustomShapeEngine \
     svx/source/customshapes/EnhancedCustomShapeFontWork \
     svx/source/customshapes/EnhancedCustomShapeHandle \
-    svx/source/dialog/AccessibilityCheckDialog \
     svx/source/dialog/_bmpmask \
     svx/source/dialog/charmap \
     svx/source/dialog/searchcharmap \
@@ -126,7 +142,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/dialcontrol \
     svx/source/dialog/dlgctl3d \
     svx/source/dialog/dlgctrl \
-    svx/source/dialog/docrecovery \
     svx/source/dialog/fntctrl \
     svx/source/dialog/fontwork \
     svx/source/dialog/frmdirlbox \
@@ -258,7 +273,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/tbxctrls/tbxdrctl \
     svx/source/tbxctrls/verttexttbxctrl \
     svx/source/uitest/uiobject \
-    svx/source/unodraw/recoveryui \
     svx/source/unodraw/unoctabl \
     svx/source/unodraw/UnoNamespaceMap \
     svx/source/unodraw/unopool \

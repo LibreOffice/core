@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
@@ -249,6 +251,9 @@ void SvxSpellWrapper::InsertHyphen( const sal_Int32 )
 // Testing of the document areas in the order specified by the flags
 void SvxSpellWrapper::SpellDocument( )
 {
+#ifdef ENABLE_WASM_STRIP_HUNSPELL
+    return;
+#else
     if ( bOtherCntnt )
     {
         bReverse = false;
@@ -275,6 +280,7 @@ void SvxSpellWrapper::SpellDocument( )
                         xHyph, this ));
         pDlg->Execute();
     }
+#endif
 }
 
 

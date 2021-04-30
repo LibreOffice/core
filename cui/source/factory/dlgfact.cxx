@@ -18,6 +18,7 @@
  */
 
 #include <config_extensions.h>
+#include <config_wasm_strip.h>
 
 #include <align.hxx>
 #include "dlgfact.hxx"
@@ -134,7 +135,11 @@ short AbstractFmShowColsDialog_Impl::Execute()
 
 short AbstractHyphenWordDialog_Impl::Execute()
 {
+#ifndef ENABLE_WASM_STRIP_HUNSPELL
     return m_xDlg->run();
+#else
+    return 0;
+#endif
 }
 
 short AbstractThesaurusDialog_Impl::Execute()
@@ -1095,7 +1100,16 @@ VclPtr<AbstractHyphenWordDialog> AbstractDialogFactory_Impl::CreateHyphenWordDia
                                                 css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper)
 {
+#ifndef ENABLE_WASM_STRIP_EXTRA
     return VclPtr<AbstractHyphenWordDialog_Impl>::Create(std::make_unique<SvxHyphenWordDialog>(rWord, nLang, pParent, xHyphen, pWrapper));
+#else
+    (void) pParent;
+    (void) rWord;
+    (void) nLang;
+    (void) xHyphen;
+    (void) pWrapper;
+    return nullptr;
+#endif
 }
 
 VclPtr<AbstractFmShowColsDialog> AbstractDialogFactory_Impl::CreateFmShowColsDialog(weld::Window* pParent)
@@ -1683,7 +1697,7 @@ VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialo
 #else
     (void) pParent;
     (void) sAdditionsTag;
-    return VclPtr<AbstractAdditionsDialog>(nullptr);
+    return nullptr;
 #endif
 }
 
@@ -1697,8 +1711,13 @@ AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
 VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
 {
+#ifndef ENABLE_WASM_STRIP_PINGUSER
     return VclPtr<CuiAbstractTipController_Impl>::Create(
         std::make_shared<TipOfTheDayDialog>(pParent));
+#else
+    (void) pParent;
+    return nullptr;
+#endif
 }
 
 VclPtr<VclAbstractDialog>

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
@@ -235,8 +237,10 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     mbBLTR( false ),
     mbFullRepaint( true ),
     mbAutoSelect( true ),
-    mbHCMode( false ),
-    maChildVec( 8 )
+    mbHCMode( false )
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
+    ,maChildVec( 8 )
+#endif
 {
     maAllBorders.resize( FRAMEBORDERTYPE_COUNT, nullptr );
     maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::Left   ) ] = &maLeft;
@@ -268,11 +272,12 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
 }
 
 FrameSelectorImpl::~FrameSelectorImpl()
-
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     for( auto& rpChild : maChildVec )
         if( rpChild.is() )
             rpChild->Invalidate();
+#endif
 }
 
 // initialization
@@ -753,17 +758,24 @@ void FrameSelectorImpl::SetBorderState( FrameBorder& rBorder, FrameBorderState e
     Any aNew;
     Any& rMod = eState == FrameBorderState::Show ? aNew : aOld;
     rMod <<= AccessibleStateType::CHECKED;
+
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     rtl::Reference< a11y::AccFrameSelectorChild > xRet;
     size_t nVecIdx = static_cast< size_t >( rBorder.GetType() );
     if( GetBorder(rBorder.GetType()).IsEnabled() && (1 <= nVecIdx) && (nVecIdx <= maChildVec.size()) )
         xRet = maChildVec[ --nVecIdx ].get();
+#endif
 
     if( eState == FrameBorderState::Show )
         SetBorderCoreStyle( rBorder, &maCurrStyle );
     else
         rBorder.SetState( eState );
+
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (xRet.is())
         xRet->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOld, aNew );
+#endif
+
     DoInvalidate( true );
 }
 
@@ -837,8 +849,10 @@ void FrameSelector::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 FrameSelector::~FrameSelector()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if( mxAccess.is() )
         mxAccess->Invalidate();
+#endif
 }
 
 void FrameSelector::Initialize( FrameSelFlags nFlags )
@@ -971,6 +985,7 @@ bool FrameSelector::IsBorderSelected( FrameBorderType eBorder ) const
 void FrameSelector::SelectBorder( FrameBorderType eBorder )
 {
     mxImpl->SelectBorder( mxImpl->GetBorderAccess( eBorder ), true/*bSelect*/ );
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     // MT: bFireFox as API parameter is ugly...
     // if (bFocus)
     {
@@ -982,6 +997,7 @@ void FrameSelector::SelectBorder( FrameBorderType eBorder )
             xRet->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
     }
+#endif
 }
 
 bool FrameSelector::IsAnyBorderSelected() const
@@ -1025,8 +1041,10 @@ SvxBorderLineStyle FrameSelector::getCurrentStyleLineStyle() const
 // accessibility
 Reference< XAccessible > FrameSelector::CreateAccessible()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if( !mxAccess.is() )
         mxAccess = new a11y::AccFrameSelector(*this);
+#endif
     return mxAccess;
 }
 

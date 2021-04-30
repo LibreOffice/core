@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <memory>
 #include <fesh.hxx>
 #include <hintids.hxx>
@@ -2426,6 +2428,7 @@ void SwTableNode::MakeOwnFrames(SwNodeIndex* pIdxBehind)
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for next paragraph will change
         // and relation CONTENT_FLOWS_TO for previous paragraph will change.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         {
             SwViewShell* pViewShell( pNew->getRootFrame()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
@@ -2438,6 +2441,7 @@ void SwTableNode::MakeOwnFrames(SwNodeIndex* pIdxBehind)
                             pPrev ? pPrev->DynCastTextFrame() : nullptr );
             }
         }
+#endif
         pNew->RegistFlys();
     }
 }
@@ -2463,6 +2467,7 @@ void SwTableNode::DelFrames(SwRootFrame const*const pLayout)
                 // CONTENT_FLOWS_FROM/_TO relation.
                 // Relation CONTENT_FLOWS_FROM for current next paragraph will change
                 // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
                 {
                     SwViewShell* pViewShell( pFrame->getRootFrame()->GetCurrShell() );
                     if ( pViewShell && pViewShell->GetLayout() &&
@@ -2475,6 +2480,7 @@ void SwTableNode::DelFrames(SwRootFrame const*const pLayout)
                             pPrev ? pPrev->DynCastTextFrame() : nullptr );
                     }
                 }
+#endif
                 if (pFrame->GetUpper())
                     pFrame->Cut();
                 SwFrame::DestroyFrame(pFrame);

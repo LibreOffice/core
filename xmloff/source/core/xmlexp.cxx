@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <memory>
 #include <sal/config.h>
 #include <sal/log.hxx>
@@ -1693,7 +1695,14 @@ XMLPageExport* SvXMLExport::CreatePageExport()
 
 SchXMLExportHelper* SvXMLExport::CreateChartExport()
 {
+// WASM_CHART change
+// TODO: With Chart extracted this cannot really happen since
+// no Chart could've been added at all
+#ifndef ENABLE_WASM_STRIP_CHART
     return new SchXMLExportHelper(*this, *GetAutoStylePool());
+#else
+    return nullptr;
+#endif
 }
 
 XMLFontAutoStylePool* SvXMLExport::CreateFontAutoStylePool()

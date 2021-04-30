@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -1193,7 +1195,14 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 OUString sCLSID;
                 if(xPropSet->getPropertyValue("CLSID") >>= sCLSID)
                 {
+#ifndef ENABLE_WASM_STRIP_CHART
+                    // WASM_CHART change
+                    // TODO: With Chart extracted this cannot really happen since
+                    // no Chart could've been added at all
                     if (sCLSID == mrExport.GetChartExport()->getChartCLSID() ||
+#else
+                    if(
+#endif
                         sCLSID == SvGlobalName( SO3_RPTCH_CLASSID ).GetHexName() )
                     {
                         eShapeType = XmlShapeTypeDrawChartShape;
