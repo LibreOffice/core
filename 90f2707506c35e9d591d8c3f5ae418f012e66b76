@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17affc8c_0364b0d0",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4112,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T05:24:49Z",
+      "side": 1,
+      "message": "Please don\u0027t use base type \u0027sal_uInt16\u0027, and literal \u00279\u0027. Use proper rtl_TextEncoding. For \u0027system\u0027 encoding, use either thread encoding, or (better) encoding from program locale.",
+      "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
