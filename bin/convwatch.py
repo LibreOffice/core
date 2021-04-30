@@ -280,6 +280,7 @@ def loadFromURL(xContext, url):
     xDoc = None
     try:
         xDoc = xDesktop.loadComponentFromURL(url, "_blank", 0, loadProps)
+        log("...loadComponentFromURL done")
         if xDoc is None:
             raise Exception("No document loaded?")
         time_ = 0
@@ -328,6 +329,7 @@ class LoadPrintFileTest:
             else:
                 url = "file://" + quote(self.file)
             xDoc = loadFromURL(xContext, url)
+            log("loadFromURL in: "  + str(datetime.datetime.now() - start))
             printDoc(xContext, xDoc, url + self.prtsuffix)
         finally:
             if xDoc:
