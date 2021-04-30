@@ -908,7 +908,7 @@ OUString WinSalInstance::getOSVersion()
                                 + OUString::number(vi2.dwMinorVersion));
                 aVer.append(" ");
                 if (vi2.szCSDVersion[0])
-                    aVer.append(o3tl::toU(vi2.szCSDVersion)).append(" ");
+                    aVer.append(OUString::Concat(o3tl::toU(vi2.szCSDVersion)) + " ");
                 aVer.append("Build " + OUString::number(vi2.dwBuildNumber));
                 bHaveVerFromRtlGetVersion = true;
             }
