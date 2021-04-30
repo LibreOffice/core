@@ -34,6 +34,24 @@
       "revId": "38645fd0fddf350047a5043eb1a46c8a595f8f0f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b32facb_8831770a",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T08:41:43Z",
+      "side": 1,
+      "message": "Yes it does, but since the code is different, I prefer to not have a logic change here. If you want, please propose this simplification separately, so that if it happens to matter in the end, it would be a localized change that caused this.",
+      "parentUuid": "8504f3b7_0d6e16b4",
+      "revId": "38645fd0fddf350047a5043eb1a46c8a595f8f0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
