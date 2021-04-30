@@ -23,6 +23,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/transfer.hxx>
+#include "editengine.hxx"
 
 class SmDocShell;
 class SmViewShell;
