@@ -34,6 +34,24 @@
       "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa9844e8_e7a91a93",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4112,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T05:44:31Z",
+      "side": 1,
+      "message": "1. Default is not what we care about; we care about actual configuration, which is not always default.\n2. Even if we cared only about default, you may see that value 9 is not defined. FullTextEncodingData does not handle it.",
+      "parentUuid": "bfbd5496_905dab2c",
+      "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
