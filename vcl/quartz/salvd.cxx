@@ -36,7 +36,7 @@
 #include <quartz/salvd.h>
 #include <quartz/utils.h>
 
-std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
+std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraphics& rGraphics,
                                                         tools::Long &nDX, tools::Long &nDY,
                                                         DeviceFormat eFormat,
                                                         const SystemGraphicsData *pData )
@@ -47,7 +47,7 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
 #ifdef IOS
     if( pData )
     {
-        return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ),
+        return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice(static_cast<AquaSalGraphics&>(&Graphics),
                                          nDX, nDY, eFormat, pData ));
     }
     else
@@ -57,13 +57,13 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
         return pNew;
     }
 #else
-    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ),
+    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice(static_cast<AquaSalGraphics&>(rGraphics),
                                      nDX, nDY, eFormat, pData ));
 #endif
 }
 
 AquaSalVirtualDevice::AquaSalVirtualDevice(
-    AquaSalGraphics* pGraphic, tools::Long &nDX, tools::Long &nDY,
+    AquaSalGraphics& rGraphic, tools::Long &nDX, tools::Long &nDY,
     DeviceFormat eFormat, const SystemGraphicsData *pData )
   : mbGraphicsUsed( false )
   , mnBitmapDepth( 0 )
@@ -74,7 +74,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice(
               << " size=(" << nDX << "x" << nDY << ") bitcount=" << static_cast<int>(eFormat) <<
               " pData=" << pData << " context=" << (pData ? pData->rCGContext : nullptr) );
 
-    if( pGraphic && pData && pData->rCGContext )
+    if (pData && pData->rCGContext)
     {
         // Create virtual device based on existing SystemGraphicsData
         // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData.
@@ -127,14 +127,11 @@ AquaSalVirtualDevice::AquaSalVirtualDevice(
         }
 #ifdef MACOSX
         // inherit resolution from reference device
-        if( pGraphic )
+        AquaSalFrame* pFrame = rGraphic.getGraphicsFrame();
+        if( pFrame && AquaSalFrame::isAlive( pFrame ) )
         {
-            AquaSalFrame* pFrame = pGraphic->getGraphicsFrame();
-            if( pFrame && AquaSalFrame::isAlive( pFrame ) )
-            {
-                mpGraphics->setGraphicsFrame( pFrame );
-                mpGraphics->copyResolution( *pGraphic );
-            }
+            mpGraphics->setGraphicsFrame( pFrame );
+            mpGraphics->copyResolution( rGraphic );
         }
 #endif
         if( nDX && nDY )

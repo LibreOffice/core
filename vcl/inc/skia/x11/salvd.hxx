@@ -22,7 +22,7 @@ class X11SkiaSalVirtualDevice : public SalVirtualDevice
     int mnHeight;
 
 public:
-    X11SkiaSalVirtualDevice(SalGraphics const* pGraphics, tools::Long nDX, tools::Long nDY,
+    X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
                             const SystemGraphicsData* pData,
                             std::unique_ptr<X11SalGraphics> pNewGraphics);
     virtual ~X11SkiaSalVirtualDevice() override;

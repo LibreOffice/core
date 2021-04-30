@@ -32,7 +32,7 @@ void X11SalGraphics::Init(X11SkiaSalVirtualDevice* pDevice)
     mxImpl->Init();
 }
 
-X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(SalGraphics const* pGraphics, tools::Long nDX,
+X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, tools::Long nDX,
                                                  tools::Long nDY, const SystemGraphicsData* pData,
                                                  std::unique_ptr<X11SalGraphics> pNewGraphics)
     : mpGraphics(std::move(pNewGraphics))
@@ -46,8 +46,7 @@ X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(SalGraphics const* pGraphics, t
     (void)pData;
 
     mpDisplay = vcl_sal::getSalDisplay(GetGenericUnixSalData());
-    mnXScreen = pGraphics ? static_cast<X11SalGraphics const*>(pGraphics)->GetScreenNumber()
-                          : vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDefaultXScreen();
+    mnXScreen = static_cast<const X11SalGraphics&>(rGraphics).GetScreenNumber();
     mnWidth = nDX;
     mnHeight = nDY;
     mpGraphics->Init(this);
