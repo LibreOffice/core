@@ -9,6 +9,7 @@
 
 #include <tools/fileutil.hxx>
 #if defined _WIN32
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #define WIN32_LEAN_AND_MEAN
@@ -22,14 +23,13 @@ namespace
 OUString UNCToDavURL(LPCWSTR sUNC)
 {
     DWORD nSize = 1024;
-    auto bufURL(std::make_unique<wchar_t[]>(nSize));
-    DWORD nResult = DavGetHTTPFromUNCPath(sUNC, bufURL.get(), &nSize);
+    wchar_t bufURL[1024];
+    DWORD nResult = DavGetHTTPFromUNCPath(sUNC, bufURL, &nSize);
     if (nResult == ERROR_INSUFFICIENT_BUFFER)
     {
-        bufURL = std::make_unique<wchar_t[]>(nSize);
-        nResult = DavGetHTTPFromUNCPath(sUNC, bufURL.get(), &nSize);
+        SAL_WARN("tools", "UNCToDavURL: Buffer not big enough to retrieve HTTP from UNC path");
     }
-    return nResult == ERROR_SUCCESS ? OUString(o3tl::toU(bufURL.get())) : OUString();
+    return nResult == ERROR_SUCCESS ? OUString(o3tl::toU(bufURL)) : OUString();
 }
 #endif
 }
@@ -45,14 +45,13 @@ bool IsMappedWebDAVPath([[maybe_unused]] const OUString& rURL, [[maybe_unused]] 
         if (osl::FileBase::getSystemPathFromFileURL(rURL, aSystemPath) == osl::FileBase::E_None)
         {
             DWORD nSize = MAX_PATH;
-            auto bufUNC(std::make_unique<char[]>(nSize));
+            char bufUNC[MAX_PATH];
             DWORD nResult = WNetGetUniversalNameW(o3tl::toW(aSystemPath.getStr()),
-                                                  UNIVERSAL_NAME_INFO_LEVEL, bufUNC.get(), &nSize);
+                                                  UNIVERSAL_NAME_INFO_LEVEL, bufUNC, &nSize);
             if (nResult == ERROR_MORE_DATA)
             {
-                bufUNC = std::make_unique<char[]>(nSize);
-                nResult = WNetGetUniversalNameW(o3tl::toW(aSystemPath.getStr()),
-                                                UNIVERSAL_NAME_INFO_LEVEL, bufUNC.get(), &nSize);
+                SAL_WARN("tools",
+                         "IsMappedWebDAVPath: Buffer not big enough to retrieve UniversalNameW");
             }
             if (nResult == NO_ERROR || nResult == ERROR_BAD_DEVICE)
             {
@@ -65,13 +64,13 @@ bool IsMappedWebDAVPath([[maybe_unused]] const OUString& rURL, [[maybe_unused]] 
                     aReq.lpRemoteName = pInfo->lpUniversalName;
                 }
                 nSize = 1024;
-                auto bufInfo(std::make_unique<char[]>(nSize));
+                char bufInfo[1024];
                 LPWSTR pSystem = nullptr;
-                nResult = WNetGetResourceInformationW(&aReq, bufInfo.get(), &nSize, &pSystem);
+                nResult = WNetGetResourceInformationW(&aReq, bufInfo, &nSize, &pSystem);
                 if (nResult == ERROR_MORE_DATA)
                 {
-                    bufInfo = std::make_unique<char[]>(nSize);
-                    nResult = WNetGetResourceInformationW(&aReq, bufInfo.get(), &nSize, &pSystem);
+                    SAL_WARN("tools", "IsMappedWebDAVPath: Buffer not big enough to retrieve "
+                                      "ResourceInformationW");
                 }
                 if (nResult == NO_ERROR)
                 {
