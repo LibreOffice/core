@@ -93,6 +93,8 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, tools::L
     m_nXScreen(0),
     bGraphics_(false)
 {
+    assert(pGraphics);
+
     SalColormap* pColormap = nullptr;
     bool bDeleteColormap = false;
 
@@ -127,8 +129,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, tools::L
     {
         nDX_ = nDX;
         nDY_ = nDY;
-        m_nXScreen = pGraphics ? static_cast<X11SalGraphics const *>(pGraphics)->GetScreenNumber() :
-                                 vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDefaultXScreen();
+        m_nXScreen = static_cast<X11SalGraphics const *>(pGraphics)->GetScreenNumber();
         hDrawable_ = limitXCreatePixmap( GetXDisplay(),
                                          pDisplay_->GetDrawable( m_nXScreen ),
                                          nDX_, nDY_,
