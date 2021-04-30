@@ -275,6 +275,26 @@ CommandLineArgs::CommandLineArgs( Supplier& supplier )
 
 void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 {
+#ifdef ENABLE_WASM_STRIP
+    // use hard-coded init-params for wasm '-nolockcheck -norestore -nologo -writer'
+    // no restore tries
+    m_norestore = true;
+    // no logo needed
+    m_nologo = true;
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+    // no lock-checks needed
+    m_nolockcheck = true;
+#endif
+    // start with writer only
+    m_writer = true;
+    m_bDocumentArgs = true;
+
+    m_bEmpty = false;
+
+    // return to avoid #elif
+    return;
+#endif
+
     m_cwdUrl = supplier.getCwdUrl();
     CommandLineEvent eCurrentEvent = CommandLineEvent::Open;
 

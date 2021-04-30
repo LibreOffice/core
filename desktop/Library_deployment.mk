@@ -39,6 +39,15 @@ $(eval $(call gb_Library_use_libraries,deployment,\
 
 $(eval $(call gb_Library_set_componentfile,deployment,desktop/source/deployment/deployment))
 
+ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
+$(eval $(call gb_Library_set_componentfile,deployment,desktop/source/deployment/deployment.extended))
+
+$(eval $(call gb_Library_add_exception_objects,deployment,\
+    desktop/source/deployment/registry/help/dp_help \
+    desktop/source/deployment/registry/component/dp_component \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,deployment,\
     desktop/source/deployment/dp_log \
     desktop/source/deployment/dp_persmap \
@@ -51,7 +60,6 @@ $(eval $(call gb_Library_add_exception_objects,deployment,\
     desktop/source/deployment/manager/dp_managerfac \
     desktop/source/deployment/manager/dp_properties \
     desktop/source/deployment/registry/component/dp_compbackenddb \
-    desktop/source/deployment/registry/component/dp_component \
     desktop/source/deployment/registry/configuration/dp_configuration \
     desktop/source/deployment/registry/configuration/dp_configurationbackenddb \
     desktop/source/deployment/registry/dp_backend \
@@ -59,7 +67,6 @@ $(eval $(call gb_Library_add_exception_objects,deployment,\
     desktop/source/deployment/registry/dp_registry \
     desktop/source/deployment/registry/executable/dp_executable \
     desktop/source/deployment/registry/executable/dp_executablebackenddb \
-    desktop/source/deployment/registry/help/dp_help \
     desktop/source/deployment/registry/help/dp_helpbackenddb \
     desktop/source/deployment/registry/package/dp_extbackenddb \
     desktop/source/deployment/registry/package/dp_package \
@@ -71,11 +78,9 @@ $(eval $(call gb_Library_add_exception_objects,deployment,\
 ))
 
 ifneq (,$(filter XMLHELP,$(BUILD_TYPE)))
-
 $(eval $(call gb_Library_use_libraries,deployment,\
     helplinker \
 ))
-
 endif
 
 # vim: set ts=4 sw=4 et:

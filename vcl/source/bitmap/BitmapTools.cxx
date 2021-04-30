@@ -300,7 +300,9 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
     cairo_surface_flush(pPixels);
     unsigned char *pSrc = cairo_image_surface_get_data( pPixels );
     unsigned int nStride = cairo_image_surface_get_stride( pPixels );
+#ifndef ENABLE_WASM_STRIP_PREMULTIPLY
     vcl::bitmap::lookup_table const & unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
+#endif
     for( tools::Long y = 0; y < aSize.Height(); y++ )
     {
         sal_uInt32 *pPix = reinterpret_cast<sal_uInt32 *>(pSrc + nStride * y);
@@ -320,9 +322,15 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
             if( nAlpha != 0 && nAlpha != 255 )
             {
                 // Cairo uses pre-multiplied alpha - we do not => re-multiply
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                nR = vcl::bitmap::unpremultiply(nAlpha, nR);
+                nG = vcl::bitmap::unpremultiply(nAlpha, nG);
+                nB = vcl::bitmap::unpremultiply(nAlpha, nB);
+#else
                 nR = unpremultiply_table[nAlpha][nR];
                 nG = unpremultiply_table[nAlpha][nG];
                 nB = unpremultiply_table[nAlpha][nB];
+#endif
             }
             pRGBWrite->SetPixel( y, x, BitmapColor( nR, nG, nB ) );
             pMaskWrite->SetPixelIndex( y, x, 255 - nAlpha );
@@ -693,7 +701,9 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
     ::Color aColor;
     unsigned int nAlpha = 255;
 
+#ifndef ENABLE_WASM_STRIP_PREMULTIPLY
     vcl::bitmap::lookup_table const & premultiply_table = vcl::bitmap::get_premultiply_table();
+#endif
     for( nY = 0; nY < nHeight; nY++ )
     {
         ::Scanline pReadScan;
@@ -722,16 +732,28 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
                 aColor = pBitmapReadAcc->GetPaletteColor(*pReadScan++);
 
 #ifdef OSL_BIGENDIAN
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetRed());
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetGreen());
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetBlue());
+#else
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetRed()];
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetGreen()];
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetBlue()];
+#endif
+#else
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetBlue());
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetGreen());
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetRed());
 #else
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetBlue()];
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetGreen()];
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetRed()];
+#endif
                 nOff++;
 #endif
-            }
+        }
             break;
         case ScanlineFormat::N24BitTcBgr:
             pReadScan = pBitmapReadAcc->GetScanline( nY );
@@ -746,18 +768,30 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
                     nAlpha = data[ nOff ];
                 else
                     nAlpha = data[ nOff ] = 255;
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff + 3 ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+                data[ nOff + 2 ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+                data[ nOff + 1 ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+#else
                 data[ nOff + 3 ] = premultiply_table[nAlpha][*pReadScan++];
                 data[ nOff + 2 ] = premultiply_table[nAlpha][*pReadScan++];
                 data[ nOff + 1 ] = premultiply_table[nAlpha][*pReadScan++];
+#endif
                 nOff += 4;
 #else
                 if( pAlphaReadAcc )
                     nAlpha = data[ nOff + 3 ];
                 else
                     nAlpha = data[ nOff + 3 ] = 255;
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+#else
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
+#endif
                 nOff++;
 #endif
             }
@@ -775,17 +809,29 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
                     nAlpha = data[ nOff++ ];
                 else
                     nAlpha = data[ nOff++ ] = 255;
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+#else
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
+#endif
 #else
                 if( pAlphaReadAcc )
                     nAlpha = data[ nOff + 3 ];
                 else
                     nAlpha = data[ nOff + 3 ] = 255;
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, pReadScan[ 2 ]);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, pReadScan[ 1 ]);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, pReadScan[ 0 ]);
+#else
                 data[ nOff++ ] = premultiply_table[nAlpha][pReadScan[ 2 ]];
                 data[ nOff++ ] = premultiply_table[nAlpha][pReadScan[ 1 ]];
                 data[ nOff++ ] = premultiply_table[nAlpha][pReadScan[ 0 ]];
+#endif
                 pReadScan += 3;
                 nOff++;
 #endif
@@ -804,18 +850,30 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
                     nAlpha = data[ nOff++ ];
                 else
                     nAlpha = data[ nOff++ ] = 255;
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, pReadScan[ 2 ]);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, pReadScan[ 1 ]);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, pReadScan[ 0 ]);
+#else
                 data[ nOff++ ] = premultiply_table[nAlpha][pReadScan[ 2 ]];
                 data[ nOff++ ] = premultiply_table[nAlpha][pReadScan[ 1 ]];
                 data[ nOff++ ] = premultiply_table[nAlpha][pReadScan[ 0 ]];
+#endif
                 pReadScan += 4;
 #else
                 if( pAlphaReadAcc )
                     nAlpha = data[ nOff + 3 ];
                 else
                     nAlpha = data[ nOff + 3 ] = 255;
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+#else
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
+#endif
                 pReadScan++;
                 nOff++;
 #endif
@@ -834,18 +892,30 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
                     nAlpha = data[ nOff ++ ];
                 else
                     nAlpha = data[ nOff ++ ] = 255;
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, *pReadScan++);
+#else
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
                 data[ nOff++ ] = premultiply_table[nAlpha][*pReadScan++];
+#endif
                 pReadScan++;
 #else
                 if( pAlphaReadAcc )
                     nAlpha = data[ nOff + 3 ];
                 else
                     nAlpha = data[ nOff + 3 ] = 255;
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, pReadScan[ 2 ]);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, pReadScan[ 1 ]);
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, pReadScan[ 0 ]);
+#else
                 data[ nOff++ ] = premultiply_table[nAlpha][pReadScan[ 2 ]];
                 data[ nOff++ ] = premultiply_table[nAlpha][pReadScan[ 1 ]];
                 data[ nOff++ ] = premultiply_table[nAlpha][pReadScan[ 0 ]];
+#endif
                 pReadScan += 4;
                 nOff++;
 #endif
@@ -869,17 +939,29 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
                     nAlpha = data[ nOff++ ];
                 else
                     nAlpha = data[ nOff++ ] = 255;
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetRed());
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetGreen());
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetBlue());
+#else
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetRed()];
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetGreen()];
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetBlue()];
+#endif
 #else
                 if( pAlphaReadAcc )
                     nAlpha = data[ nOff + 3 ];
                 else
                     nAlpha = data[ nOff + 3 ] = 255;
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetBlue());
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetGreen());
+                data[ nOff++ ] = vcl::bitmap::premultiply(nAlpha, aColor.GetRed());
+#else
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetBlue()];
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetGreen()];
                 data[ nOff++ ] = premultiply_table[nAlpha][aColor.GetRed()];
+#endif
                 nOff ++;
 #endif
             }
@@ -1043,6 +1125,17 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
         return bRet;
     }
 
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+    sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
+    {
+        return (a == 0) ? 0 : (c * 255 + a / 2) / a;
+    }
+
+    sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
+    {
+        return (c * a + 127) / 255;
+    }
+#else
     sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
     {
         return get_unpremultiply_table()[a][c];
@@ -1100,6 +1193,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
             std::make_integer_sequence<int, 256>{});
         return premultiply_table;
     }
+#endif
 
 bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
 {
