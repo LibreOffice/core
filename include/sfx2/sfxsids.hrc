@@ -435,6 +435,7 @@ class SvxSearchItem;
 #define SID_PASTE_ONLY_FORMULA              (SID_SFX_START + 803)
 #define SID_PASTE_ONLY_VALUE                (SID_SFX_START + 804)
 #define SID_PASTE_TEXTIMPORT_DIALOG         (SID_SFX_START + 805)
+#define SID_PASTE_TRANSPOSED                (SID_SFX_START + 812)
 
 // Used for redaction
 #define SID_SHAPE_NAME                      (SID_SFX_START + 808)

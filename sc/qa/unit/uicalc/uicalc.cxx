@@ -510,6 +510,40 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(2, 0, 0)));
 }
 
+// Test the call of .uno:PasteTransposed (tdf#102255)
+// Note: the transpose functionaly is tested in ucalc
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "1");
+    insertStringToCell(*pModelObj, "A2", "2");
+    insertStringToCell(*pModelObj, "A3", "3");
+
+    goToCell("A1:A3");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    mxComponent->dispose();
+
+    // Open a new document
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:PasteTransposed", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(0, 0, 0))); // A1
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), pDoc->GetString(ScAddress(1, 0, 0))); // B1
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), pDoc->GetString(ScAddress(2, 0, 0))); // C1
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131442)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
