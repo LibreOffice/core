@@ -29,6 +29,7 @@ endif
 $(call gb_ExternalProject_get_state_target,openldap,build) :
 	$(call gb_ExternalProject_run,build,\
 		./configure \
+			 ol_cv_dcl_sys_errlist=no \
 			--disable-slapd \
 			--with-pic \
 			--with-tls=moznss \
