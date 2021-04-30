@@ -56,6 +56,30 @@
       "revId": "b166f236fc05993f52d797a054fabad1044ae917",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7decdf5_6f739ab8",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T16:33:34Z",
+      "side": 1,
+      "message": "Oh, checking what module svt is, (it is for UI elements, dialogs, etc.) - it seems that it\u0027s better to not use it here, but switch to use of LanguageTag directly. SvtLanguageTable is just not a good match for the job, since it\u0027s intended to provide user-visible strings, not API strings.",
+      "parentUuid": "404decb2_0e121dc3",
+      "range": {
+        "startLine": 4117,
+        "startChar": 25,
+        "endLine": 4117,
+        "endChar": 71
+      },
+      "revId": "b166f236fc05993f52d797a054fabad1044ae917",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
