@@ -51,11 +51,14 @@ $(eval $(call gb_Library_use_libraries,utl,\
     ucbhelper \
 ))
 
-# add all source files that shall be compiled with exceptions enabled
-# the name is relative to $(SRCROOT) and must not contain an extension
 $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/accessibility/accessiblerelationsethelper \
     unotools/source/accessibility/accessiblestatesethelper \
+))
+
+# add all source files that shall be compiled with exceptions enabled
+# the name is relative to $(SRCROOT) and must not contain an extension
+$(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/bootstrap \
     unotools/source/config/cmdoptions \
     unotools/source/config/compatibility \

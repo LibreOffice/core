@@ -56,6 +56,8 @@ $(eval $(call gb_Library_use_libraries,xo,\
     vcl \
 ))
 
+# WASM_CHART change
+ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/chart/ColorPropertySet \
     xmloff/source/chart/PropertyMaps \
@@ -87,6 +89,10 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/chart/XMLTextOrientationHdl \
     xmloff/source/chart/contexts \
     xmloff/source/chart/transporttypes \
+))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/DocumentSettingsContext \
     xmloff/source/core/DomBuilderContext \
     xmloff/source/core/DomExport \

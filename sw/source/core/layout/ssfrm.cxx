@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <dcontact.hxx>
@@ -329,6 +331,7 @@ void SwFrame::DestroyImpl()
 
     // accessible objects for fly and cell frames have been already disposed
     // by the destructors of the derived classes.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (IsAccessibleFrame() && !(IsFlyFrame() || IsCellFrame())
         && (GetDep() || IsTextFrame())) // sw_redlinehide: text frame may not have Dep!
     {
@@ -344,6 +347,7 @@ void SwFrame::DestroyImpl()
             }
         }
     }
+#endif
 
     if (!m_pDrawObjs)
         return;

@@ -29,11 +29,16 @@ $(eval $(call gb_Library_use_externals,drawinglayer,\
 	libxml2 \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+$(eval $(call gb_Library_use_libraries,drawinglayer,\
+    canvastools \
+    cppcanvas \
+))
+endif
+
 $(eval $(call gb_Library_use_libraries,drawinglayer,\
     basegfx \
-    canvastools \
     comphelper \
-    cppcanvas \
     cppu \
     cppuhelper \
     i18nlangtag \
