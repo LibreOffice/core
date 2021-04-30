@@ -16,6 +16,24 @@
       "revId": "34b710eb8f58193fb3e824cedcfff844c409d66c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0fe9892_e3702c33",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-04-30T09:47:58Z",
+      "side": 1,
+      "message": "This one: https://gerrit.libreoffice.org/c/core/+/111155\nGonna split it in two parts.",
+      "parentUuid": "540c1219_c1d94f88",
+      "revId": "34b710eb8f58193fb3e824cedcfff844c409d66c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
