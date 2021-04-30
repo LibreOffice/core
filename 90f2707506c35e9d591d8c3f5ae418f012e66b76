@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "475ce96f_8edd39f0",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T07:41:53Z",
+      "side": 1,
+      "message": "A trailing whitespace - please remove",
+      "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b68a7b2b_8780df1b",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T07:41:53Z",
+      "side": 1,
+      "message": "Why did you uncomment this, and not test it in a useful way? This string doesn\u0027t provide a useful conversion. I suggest just keep it commented, until we can do it properly?",
+      "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebc47fe2_82474349",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T07:41:53Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "672e2429_1599a8a6",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T07:41:53Z",
+      "side": 1,
+      "message": "You are getting third argument unconditionally here, and only check the arg count below.",
+      "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "17affc8c_0364b0d0",
         "filename": "basic/source/runtime/methods.cxx",
         "patchSetId": 2
@@ -49,6 +117,24 @@
       "side": 1,
       "message": "1. Default is not what we care about; we care about actual configuration, which is not always default.\n2. Even if we cared only about default, you may see that value 9 is not defined. FullTextEncodingData does not handle it.",
       "parentUuid": "bfbd5496_905dab2c",
+      "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b17be6f_1be49c70",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4112,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T07:41:53Z",
+      "side": 1,
+      "message": "I suppose that you may just use\n\n   LanguageType nLanguage \u003d LANGUAGE_SYSTEM;\n\nand then in case of three arguments, assign the passed value to it. That would unify the code, and would let you avoid an explicit call to app settings. Then you could use the nLanguage below, instead of separate checks.",
+      "parentUuid": "aa9844e8_e7a91a93",
       "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
