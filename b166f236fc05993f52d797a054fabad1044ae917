@@ -33,6 +33,29 @@
       "revId": "b166f236fc05993f52d797a054fabad1044ae917",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "404decb2_0e121dc3",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T16:27:11Z",
+      "side": 1,
+      "message": "Please check (just in case) that SvtLanguageTable::GetLanguageString does return a usable language code for LANGUAGE_SYSTEM case (e.g., set your LO to some specific non-en-US language, and check that the result is indeed the correct string like \"en-CA\"). Failing that, we might need to use LanguageTag to get the string, instead of SvtLanguageTable::GetLanguageString:\n\n    OUString sLanguage \u003d LanguageTag(nLanguage).getLanguage();",
+      "range": {
+        "startLine": 4117,
+        "startChar": 25,
+        "endLine": 4117,
+        "endChar": 71
+      },
+      "revId": "b166f236fc05993f52d797a054fabad1044ae917",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
