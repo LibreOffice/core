@@ -106,6 +106,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141966_chapterNumbering, "tdf141966_chapterNumbe
     CPPUNIT_ASSERT_EQUAL(OUString("2nd"), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf141966_chapterNumberTortureTest, "tdf141966_chapterNumberTortureTest.docx")
+{
+    // There is no point in identifying what the wrong values where in this test,
+    //because EVERYTHING was wrong, and MANY different fixes are required to solve the problems.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, "No numId in style or paragraph"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+
+    xPara.set(getParagraph(2, "Paragraph cancels numbering(0)"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+
+    xPara.set(getParagraph(3, "First numbered line"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1st.i.a.1.I"), getProperty<OUString>(xPara, "ListLabelString"));
+
+    xPara.set(getParagraph(7, "inheritOnly: inherit outlineLvl and listLvl."), uno::UNO_QUERY);
+    // 2nd.iii in MS Word 2003.  2nd.ii in MS Word 2010/2016 where para5 is not numbered. Why not?
+    CPPUNIT_ASSERT_EQUAL(OUString("2nd.iii"), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara, "NumberingLevel")); // Level 2
+}
+
 DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
 {
     uno::Reference<beans::XPropertySet> xPageStyle;
