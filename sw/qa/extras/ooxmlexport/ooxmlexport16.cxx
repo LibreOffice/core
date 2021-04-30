@@ -128,6 +128,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141966_chapterNumberTortureTest, "tdf141966_chap
     // 2nd.iii in MS Word 2003.  2nd.ii in MS Word 2010/2016 where para5 is not numbered. Why not?
     CPPUNIT_ASSERT_EQUAL(OUString("2nd.iii"), getProperty<OUString>(xPara, "ListLabelString"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara, "NumberingLevel")); // Level 2
+
+    xPara.set(getParagraph(9, "outline with Body listLvl(9)."), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+
+    xPara.set(getParagraph(10, "outline with Body listLvl(9) #2."), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+
+    xPara.set(getParagraph(11, "direct formatting - Body listLvl(9)."), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+
+    xPara.set(getParagraph(13, "Style numId0 cancels inherited numbering."), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf132752, "tdf132752.docx")
