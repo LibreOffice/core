@@ -4557,8 +4557,8 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
      * for example above 10^8
      */
     double fCount           = 0.0;
-    double fSumX            = 0.0;
-    double fSumY            = 0.0;
+    KahanSum fSumX          = 0.0;
+    KahanSum fSumY          = 0.0;
 
     for (SCSIZE i = 0; i < nC1; i++)
     {
@@ -4566,10 +4566,8 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
         {
             if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
             {
-                double fValX = pMat1->GetDouble(i,j);
-                double fValY = pMat2->GetDouble(i,j);
-                fSumX += fValX;
-                fSumY += fValY;
+                fSumX += pMat1->GetDouble(i,j);
+                fSumY += pMat2->GetDouble(i,j);
                 fCount++;
             }
         }
@@ -4578,11 +4576,11 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
         PushNoValue();
     else
     {
-        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
-        double fSumSqrDeltaY    = 0.0; // sum of (ValY-MeanY)^2
-        const double fMeanX = fSumX / fCount;
-        const double fMeanY = fSumY / fCount;
+        KahanSum fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+        KahanSum fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+        KahanSum fSumSqrDeltaY    = 0.0; // sum of (ValY-MeanY)^2
+        const double fMeanX = fSumX.get() / fCount;
+        const double fMeanY = fSumY.get() / fCount;
         for (SCSIZE i = 0; i < nC1; i++)
         {
             for (SCSIZE j = 0; j < nR1; j++)
@@ -4607,17 +4605,17 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
                 || (!_bStexy && fSumSqrDeltaY < ::std::numeric_limits<double>::min()))
                 PushError( FormulaError::DivisionByZero);
             else if ( _bStexy )
-                PushDouble( sqrt( (fSumSqrDeltaY - fSumDeltaXDeltaY *
-                            fSumDeltaXDeltaY / fSumSqrDeltaX) / (fCount-2)));
+                PushDouble( sqrt( ( fSumSqrDeltaY - fSumDeltaXDeltaY.get() *
+                            fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get() ).get() / (fCount-2)));
             else
-                PushDouble( fSumDeltaXDeltaY / sqrt( fSumSqrDeltaX * fSumSqrDeltaY));
+                PushDouble( fSumDeltaXDeltaY.get() / sqrt( fSumSqrDeltaX.get() * fSumSqrDeltaY.get() ));
         }
         else
         {
             if ( _bSample )
-                PushDouble( fSumDeltaXDeltaY / ( fCount - 1 ) );
+                PushDouble( fSumDeltaXDeltaY.get() / ( fCount - 1 ) );
             else
-                PushDouble( fSumDeltaXDeltaY / fCount);
+                PushDouble( fSumDeltaXDeltaY.get() / fCount);
         }
     }
 }
