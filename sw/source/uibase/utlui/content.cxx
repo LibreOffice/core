@@ -3383,21 +3383,43 @@ void SwContentTree::UpdateTracking()
             m_xTreeView->expand_row(*xIter); // assure content type entry is expanded
             while (m_xTreeView->iter_next(*xIter) && lcl_IsContent(*xIter, *m_xTreeView))
             {
-                SwTextFieldContent* pCnt = reinterpret_cast<SwTextFieldContent*>(m_xTreeView->get_id(*xIter).toInt64());
-                if (pCnt && pField == pCnt->GetFormatField()->GetField())
+                if (pField->GetTypeId() == SwFieldTypesEnum::Postit)
                 {
-                    // get first selected for comparison
-                    std::unique_ptr<weld::TreeIter> xFirstSelected(m_xTreeView->make_iterator());
-                    if (!m_xTreeView->get_selected(xFirstSelected.get()))
-                        xFirstSelected.reset();
-                    if (m_xTreeView->count_selected_rows() != 1 ||
-                            m_xTreeView->iter_compare(*xIter, *xFirstSelected) != 0)
+                    SwPostItContent* pCnt = reinterpret_cast<SwPostItContent*>(m_xTreeView->get_id(*xIter).toInt64());
+                    if (pCnt && pField == pCnt->GetPostIt()->GetField())
                     {
-                        // unselect all entries and make passed entry visible and selected
-                        m_xTreeView->set_cursor(*xIter);
-                        Select();
+                        // get first selected for comparison
+                        std::unique_ptr<weld::TreeIter> xFirstSelected(m_xTreeView->make_iterator());
+                        if (!m_xTreeView->get_selected(xFirstSelected.get()))
+                            xFirstSelected.reset();
+                        if (m_xTreeView->count_selected_rows() != 1 ||
+                                m_xTreeView->iter_compare(*xIter, *xFirstSelected) != 0)
+                        {
+                            // unselect all entries and make passed entry visible and selected
+                            m_xTreeView->set_cursor(*xIter);
+                            Select();
+                        }
+                        break;
                     }
-                    break;
+                }
+                else
+                {
+                    SwTextFieldContent* pCnt = reinterpret_cast<SwTextFieldContent*>(m_xTreeView->get_id(*xIter).toInt64());
+                    if (pCnt && pField == pCnt->GetFormatField()->GetField())
+                    {
+                        // get first selected for comparison
+                        std::unique_ptr<weld::TreeIter> xFirstSelected(m_xTreeView->make_iterator());
+                        if (!m_xTreeView->get_selected(xFirstSelected.get()))
+                            xFirstSelected.reset();
+                        if (m_xTreeView->count_selected_rows() != 1 ||
+                                m_xTreeView->iter_compare(*xIter, *xFirstSelected) != 0)
+                        {
+                            // unselect all entries and make passed entry visible and selected
+                            m_xTreeView->set_cursor(*xIter);
+                            Select();
+                        }
+                        break;
+                    }
                 }
             }
         }
