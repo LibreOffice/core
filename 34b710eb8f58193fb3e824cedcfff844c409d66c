@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "540c1219_c1d94f88",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T09:39:37Z",
+      "side": 1,
+      "message": "What old change is meant? It\u0027s odd even today, but what information this line will give in the future to anybody reading the commit message?",
+      "revId": "34b710eb8f58193fb3e824cedcfff844c409d66c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
