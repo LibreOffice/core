@@ -23,6 +23,10 @@ $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 
 $(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))
 
+ifneq ($(ENABLE_WASM_STRIP_RECENT),TRUE)
+$(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx.extended))
+endif
+
 $(eval $(call gb_Library_set_precompiled_header,sfx,sfx2/inc/pch/precompiled_sfx))
 
 $(eval $(call gb_Library_use_custom_headers,sfx,\
@@ -80,9 +84,23 @@ $(eval $(call gb_Library_use_externals,sfx,\
     orcus-parser\
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_RECENT),TRUE)
+$(eval $(call gb_Library_add_exception_objects,sfx,\
+    sfx2/source/dialog/backingcomp \
+    sfx2/source/dialog/backingwindow \
+    sfx2/source/control/recentdocsview \
+    sfx2/source/control/recentdocsviewitem \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/accessibility/AccessibilityCheck \
     sfx2/source/accessibility/AccessibilityIssue \
+))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/app \
     sfx2/source/appl/appbas \
     sfx2/source/appl/appbaslib \
@@ -141,8 +159,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/msg \
     sfx2/source/control/msgpool \
     sfx2/source/control/objface \
-    sfx2/source/control/recentdocsview \
-    sfx2/source/control/recentdocsviewitem \
     sfx2/source/control/request \
     sfx2/source/control/sfxstatuslistener \
     sfx2/source/control/shell \
@@ -169,8 +185,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/devtools/DocumentModelTreeHandler \
     sfx2/source/devtools/ObjectInspectorTreeHandler \
     sfx2/source/dialog/alienwarn \
-    sfx2/source/dialog/backingcomp \
-    sfx2/source/dialog/backingwindow \
     sfx2/source/dialog/basedlgs \
     sfx2/source/dialog/checkin \
     sfx2/source/dialog/dialoghelper \

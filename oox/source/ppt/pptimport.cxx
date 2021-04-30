@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <sal/config.h>
 #include <sal/log.hxx>
 
@@ -60,8 +62,12 @@ XmlFilterBase* PowerPointImport::mpDebugFilterBase = nullptr;
 
 PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxContext ) :
     XmlFilterBase( rxContext ),
+#ifdef ENABLE_WASM_STRIP_CHART
+    // WASM_CHART change
+    mxChartConv( )
+#else
     mxChartConv( std::make_shared<::oox::drawingml::chart::ChartConverter>() )
-
+#endif
 {
 #if OSL_DEBUG_LEVEL > 0
     mpDebugFilterBase = this;

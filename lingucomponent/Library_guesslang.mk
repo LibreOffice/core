@@ -12,9 +12,14 @@ $(eval $(call gb_Library_Library,guesslang))
 
 $(eval $(call gb_Library_set_componentfile,guesslang,lingucomponent/source/languageguessing/guesslang))
 
+ifneq ($(ENABLE_WASM_STRIP_GUESSLANG),TRUE)
+$(eval $(call gb_Library_use_externals,guesslang,\
+	libexttextcat \
+))
+endif
+
 $(eval $(call gb_Library_use_externals,guesslang,\
 	boost_headers \
-	libexttextcat \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,guesslang))
