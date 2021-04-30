@@ -1959,17 +1959,21 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
     Search( nLastData, nPos );
     while ( nPos < mvData.size() )
     {
+        SCROW nAttrStartRow = ( nPos > 0 ) ? ( mvData[nPos-1].nEndRow + 1 ) : 0;
+        if ( nAttrStartRow <= nLastData )
+            nAttrStartRow = nLastData + 1;
         // find range of visually equal formats
         SCSIZE nEndPos = nPos;
         while ( nEndPos < mvData.size()-1 &&
                 mvData[nEndPos].pPattern->IsVisibleEqual( *mvData[nEndPos+1].pPattern))
+        {
+            if ( (mvData[nEndPos].nEndRow + 1 - nAttrStartRow) >= SC_VISATTR_STOP )
+                return false; // ignore this range and below
             ++nEndPos;
-        SCROW nAttrStartRow = ( nPos > 0 ) ? ( mvData[nPos-1].nEndRow + 1 ) : 0;
-        if ( nAttrStartRow <= nLastData )
-            nAttrStartRow = nLastData + 1;
+        }
         SCROW nAttrSize = mvData[nEndPos].nEndRow + 1 - nAttrStartRow;
         if ( nAttrSize >= SC_VISATTR_STOP )
-            break;  // while, ignore this range and below
+            return false; // ignore this range and below
         else if ( mvData[nEndPos].pPattern->IsVisible() )
         {
             rLastRow = mvData[nEndPos].nEndRow;
