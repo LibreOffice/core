@@ -180,14 +180,14 @@ namespace svgio::svgreader
                     }
                     default:
                     {
-                        OSL_ENSURE(false, "Do not use with percentage! ");
+                        assert(false && "Do not use with percentage!");
                         return 0.0;
                     }
                 }
             }
 
             /// not set
-            OSL_ENSURE(false, "SvgNumber not set (!)");
+            assert(false && "SvgNumber not set (!)");
             return 0.0;
         }
 
@@ -263,7 +263,7 @@ namespace svgio::svgreader
             }
 
             /// not set
-            OSL_ENSURE(false, "SvgNumber not set (!)");
+            assert(false && "SvgNumber not set (!)");
             return 0.0;
         }
 
@@ -1183,7 +1183,7 @@ namespace svgio::svgreader
 
                     if(nInitPos == nPos)
                     {
-                        OSL_ENSURE(false, "Could not interpret on current position (!)");
+                        assert(false && "Could not interpret on current position (!)");
                         nPos++;
                     }
                 }
@@ -1386,7 +1386,7 @@ namespace svgio::svgreader
 
                     if(nInitPos == nPos)
                     {
-                        OSL_ENSURE(false, "Could not interpret on current position (!)");
+                        assert(false && "Could not interpret on current position (!)");
                         nPos++;
                     }
                 }
