@@ -39,6 +39,7 @@
 #include <view.hxx>
 #include <document.hxx>
 #include <cfgitem.hxx>
+#include <editengine.hxx>
 #include "accessibility.hxx"
 
 #define SCROLL_LINE         24
@@ -91,7 +92,7 @@ EditEngine* SmEditTextWindow::GetEditEngine() const
 {
     SmDocShell *pDoc = mrEditWindow.GetDoc();
     assert(pDoc);
-    return &pDoc->GetEditEngine();
+    return pDoc->GetEditEngine();
 }
 
 void SmEditTextWindow::EditViewScrollStateChange()
@@ -195,7 +196,7 @@ EditView * SmEditWindow::GetEditView() const
 EditEngine * SmEditWindow::GetEditEngine()
 {
     if (SmDocShell *pDoc = GetDoc())
-        return &pDoc->GetEditEngine();
+        return pDoc->GetEditEngine();
     return nullptr;
 }
 
@@ -225,7 +226,8 @@ void SmEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
         //!
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-        pDoc->UpdateEditEngineDefaultFonts(rStyleSettings.GetFieldTextColor());
+        //pDoc->UpdateEditEngineDefaultFonts(rStyleSettings.GetFieldTextColor());
+        pDoc->UpdateEditEngineDefaultFonts();
         pEditEngine->SetBackgroundColor(rStyleSettings.GetFieldColor());
         pEditEngine->SetDefTab(sal_uInt16(GetTextWidth("XXXX")));
 
@@ -239,6 +241,9 @@ void SmEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
         AdjustScrollBars();
         Resize();
     }
+
+    // Apply zoom to smeditwindow text
+    static_cast<SmEditEngine*>(GetEditEngine())->executeZoom(static_cast<EditView*>(GetEditView()));
 }
 
 IMPL_LINK_NOARG(SmEditTextWindow, ModifyTimerHdl, Timer *, void)
@@ -475,7 +480,7 @@ void SmEditWindow::CreateEditView()
 {
     assert(!mxTextControl);
 
-    EditEngine *pEditEngine = GetEditEngine();
+    EditEngine* pEditEngine = GetEditEngine();
     //! pEditEngine may be 0.
     //! For example when the program is used by the document-converter
     if (!pEditEngine)
@@ -595,6 +600,7 @@ void SmEditTextWindow::SetText(const OUString& rText)
     // math tasks
     aModifyIdle.Start();
 
+    static_cast<SmEditEngine*>(pEditView->GetEditEngine())->executeZoom(pEditView);
     pEditView->SetSelection(eSelection);
 }
 
