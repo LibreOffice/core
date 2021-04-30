@@ -22,8 +22,9 @@
 
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/dllapi.h>
-#include <o3tl/cow_wrapper.hxx>
 
 class Gradient;
 class BitmapEx;
@@ -50,15 +51,11 @@ enum class WallpaperStyle
 class VCL_DLLPUBLIC Wallpaper
 {
 public:
-    typedef o3tl::cow_wrapper<ImplWallpaper> ImplType;
-
     SAL_DLLPRIVATE void             ImplSetCachedBitmap( BitmapEx& rBmp ) const;
     SAL_DLLPRIVATE const BitmapEx*  ImplGetCachedBitmap() const;
     SAL_DLLPRIVATE void             ImplReleaseCachedBitmap() const;
 
 private:
-    ImplType  mpImplWallpaper;
-
     SAL_DLLPRIVATE static Gradient  ImplGetApplicationGradient();
 
 public:
@@ -70,21 +67,21 @@ public:
                     ~Wallpaper();
 
     void            SetColor( const Color& rColor );
-    const Color&    GetColor() const;
+    const Color&    GetColor() const { return maColor; }
 
     void            SetStyle( WallpaperStyle eStyle );
-    WallpaperStyle  GetStyle() const;
+    WallpaperStyle  GetStyle() const { return meStyle; }
 
     void            SetBitmap( const BitmapEx& rBitmap );
-    BitmapEx        GetBitmap() const;
+    const BitmapEx & GetBitmap() const;
     bool            IsBitmap() const;
 
     void            SetGradient( const Gradient& rGradient );
     Gradient        GetGradient() const;
     bool            IsGradient() const;
 
-    void            SetRect( const tools::Rectangle& rRect );
-    tools::Rectangle       GetRect() const;
+    void            SetRect( const tools::Rectangle& rRect ) { maRect = rRect; }
+    const tools::Rectangle & GetRect() const { return maRect; }
     bool            IsRect() const;
 
     bool            IsFixed() const;
@@ -105,6 +102,13 @@ public:
 
     friend SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper );
     friend SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper );
+private:
+    tools::Rectangle            maRect;
+    BitmapEx                    maBitmap;
+    std::optional<Gradient>     mpGradient;
+    mutable BitmapEx            maCache;
+    Color                       maColor;
+    WallpaperStyle              meStyle;
 };
 
 #endif // INCLUDED_VCL_WALL_HXX
