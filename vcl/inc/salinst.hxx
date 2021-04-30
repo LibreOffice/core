@@ -105,7 +105,7 @@ public:
     // if a system context is passed in nDX and nDY are updated to reflect
     // its size; otherwise these remain unchanged.
     virtual std::unique_ptr<SalVirtualDevice>
-                            CreateVirtualDevice( SalGraphics* pGraphics,
+                            CreateVirtualDevice( SalGraphics& rGraphics,
                                                  tools::Long &rDX, tools::Long &rDY,
                                                  DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) = 0;
 

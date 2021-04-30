@@ -101,7 +101,7 @@ public:
                                           bool bShow ) override;
     virtual void            DestroyObject( SalObject* pObject ) override;
     virtual std::unique_ptr<SalVirtualDevice>
-                            CreateVirtualDevice( SalGraphics* pGraphics,
+                            CreateVirtualDevice( SalGraphics& rGraphics,
                                                    tools::Long &nDX, tools::Long &nDY,
                                                    DeviceFormat eFormat,
                                                    const SystemGraphicsData *pData = nullptr ) override;

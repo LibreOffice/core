@@ -241,12 +241,12 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
 
 #ifndef IOS
 
-std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
+std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
                                                        tools::Long &nDX, tools::Long &nDY,
                                                        DeviceFormat /*eFormat*/,
                                                        const SystemGraphicsData* pGd)
 {
-    SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);
+    SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(&rGraphics);
     assert(pSvpSalGraphics);
 #ifndef ANDROID
     // tdf#127529 normally pPreExistingTarget is null and we are a true virtualdevice drawing to a backing buffer.
