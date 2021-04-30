@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "1986f855_7fe1266d",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-04-30T13:36:19Z",
+      "side": 1,
+      "message": "\u003e Why did you uncomment this, and not test it in a useful way? This string doesn\u0027t provide a useful conversion. I suggest just keep it commented, until we can do it properly?\n\nYess seems right. I will do it.",
+      "parentUuid": "b68a7b2b_8780df1b",
+      "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ebc47fe2_82474349",
         "filename": "basic/qa/vba_tests/strconv.vb",
         "patchSetId": 2
