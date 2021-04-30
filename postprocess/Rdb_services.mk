@@ -271,7 +271,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	desktop/source/migration/services/migrationoo2 \
 	desktop/source/migration/services/migrationoo3 \
 	desktop/source/offacc/offacc \
-	$(if $(DISABLE_GUI),,desktop/source/splash/spl) \
+	$(if $(DISABLE_GUI) || $(ENABLE_WASM_STRIP),,desktop/source/splash/spl) \
 	$(if $(ENABLE_LDAP),extensions/source/config/ldap/ldapbe2) \
 	$(if $(filter WNT,$(OS)),\
 		extensions/source/config/WinUserInfo/WinUserInfoBe \

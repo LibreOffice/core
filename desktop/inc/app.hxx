@@ -142,8 +142,10 @@ class Desktop final : public Application
         static OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const OUString& aFileURL );
 
+#ifndef ENABLE_WASM_STRIP
         css::uno::Reference<css::task::XStatusIndicator> m_rSplashScreen;
         void                    OpenSplashScreen();
+#endif
         void                    CloseSplashScreen();
 
         DECL_STATIC_LINK( Desktop, ImplInitFilterHdl, ::ConvertData&, bool );
