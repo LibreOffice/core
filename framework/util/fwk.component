@@ -32,6 +32,7 @@
       single-instance="true">
     <service name="com.sun.star.frame.AutoRecovery"/>
     <singleton name="com.sun.star.frame.theAutoRecovery"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.ControlMenuController"
       constructor="com_sun_star_comp_framework_ControlMenuController_get_implementation">

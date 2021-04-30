@@ -19,10 +19,15 @@
 
 $(eval $(call gb_Module_Module,vcl))
 
+ifneq ($(ENABLE_WASM_STRIP_PINGUSER),TRUE)
+$(eval $(call gb_Module_add_targets,vcl,\
+    Package_tipoftheday \
+))
+endif
+
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vcl \
     Package_theme_definitions \
-    Package_tipoftheday \
     Package_toolbarmode \
     UIConfig_vcl \
     $(if $(filter WNT,$(OS)), \
