@@ -32,6 +32,7 @@
 #include "format.hxx"
 #include "parse.hxx"
 #include "smdllapi.hxx"
+#include "editengine.hxx"
 
 class SfxPrinter;
 class Printer;
@@ -177,7 +178,7 @@ public:
 
     OUString const & GetAccessibleText();
 
-    EditEngine &    GetEditEngine();
+    EditEngine *    GetEditEngine();
 
     void        DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSelection = false);
     Size        GetSize();
@@ -210,7 +211,7 @@ public:
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
     void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
-    void UpdateEditEngineDefaultFonts(const Color& aTextColor);
+    void UpdateEditEngineDefaultFonts();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
