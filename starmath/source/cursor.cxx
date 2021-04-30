@@ -1310,8 +1310,8 @@ void SmCursor::EndEdit(){
     OUString formula;
     SmNodeToTextVisitor(mpTree, formula);
     mpDocShell->maText = formula;
-    mpDocShell->GetEditEngine().QuickInsertText( formula, ESelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL ) );
-    mpDocShell->GetEditEngine().QuickFormatDoc();
+    mpDocShell->GetEditEngine()->QuickInsertText( formula, ESelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL ) );
+    mpDocShell->GetEditEngine()->QuickFormatDoc();
 }
 
 void SmCursor::RequestRepaint(){
