@@ -298,11 +298,10 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
     else if ( bMod1 && nCode == KEY_F )
         m_xWidget->select_entry_region(0, -1);
 
-    // Execute the search when Return, Ctrl-G or F3 pressed
-    else if ( KEY_RETURN == nCode || (bMod1 && (KEY_G == nCode)) || (KEY_F3 == nCode) )
+    // Execute the search when Ctrl-G or F3 pressed (in addition to ActivateHdl conditions)
+    else if ( (bMod1 && (KEY_G == nCode)) || (KEY_F3 == nCode) )
     {
         ActivateFind(bShift);
-        m_xWidget->grab_focus();
         bRet = true;
     }
     else
@@ -324,8 +323,11 @@ void FindTextFieldControl::ActivateFind(bool bShift)
     ToolBox* pToolBox = static_cast<ToolBox*>(pWindow);
 
     impl_executeSearch(m_xContext, m_xFrame, pToolBox, bShift);
+
+    m_xWidget->grab_focus();
 }
 
+// Execute the search when activated, typically due to "Return"
 IMPL_LINK_NOARG(FindTextFieldControl, ActivateHdl, weld::ComboBox&, bool)
 {
     if (isDisposed())
