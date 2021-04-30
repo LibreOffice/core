@@ -406,7 +406,7 @@ namespace css = ::com::sun::star;
 
 /** Macro for C++11 "noexcept" vs. "throw ()" exception specification.
 
-    The latter has has been removed completely from C++20.
+    The latter has been removed completely from C++20.
 
     @since LibreOffice 7.2
  */
