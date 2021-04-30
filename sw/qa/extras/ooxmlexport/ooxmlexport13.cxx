@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -105,6 +106,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf140182_extraPagebreak, "tdf140182_extraPagebreak
     // that canceled the page break + section break special case handling, resulting 3 pages.
     // The accompanying fix eliminates this cancelation.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121659_loseColumnBrNextToShape, "tdf121659_loseColumnBrNextToShape.docx")
+{
+    // 3. paragraph have a manual column break and a shape.
+    // The column break was absorbed into the shape on import (+moved the shape),
+    // and lost on the 2. import. (iport,export,import)
+    // Splitting the paragraph resolve the problem (even the shape position), but move the break to the 4. paragraph.
+    // Kept the 3. paragraph check, as that would be even better if it could be fixed without a paragraph split.
+    reload("Office Open XML Text", "tdf121659_loseColumnBrNextToShape.docx");
+    bool bBreakOnPara3 = getProperty<style::BreakType>(getParagraph(3), "BreakType") == style::BreakType_COLUMN_BEFORE;
+    bool bBreakOnPara4 = getProperty<style::BreakType>(getParagraph(4), "BreakType") == style::BreakType_COLUMN_BEFORE;
+    CPPUNIT_ASSERT(bBreakOnPara3 || bBreakOnPara4);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
