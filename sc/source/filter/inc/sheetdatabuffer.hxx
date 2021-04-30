@@ -22,6 +22,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <o3tl/sorted_vector.hxx>
 
 #include "richstring.hxx"
 #include "worksheethelper.hxx"
@@ -165,7 +166,8 @@ private:
 
     /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
     void                applyCellMerging( const ScRange& rRange );
-    void                addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const ScRange& rAddress, bool bProcessRowRange = false );
+    void                addColXfStyles();
+    void                addColXfStyleProcessRowRanges();
 private:
     /** Stores cell range address and formula token array of an array formula. */
     typedef std::pair< ScRange, ApiTokenSequence > ArrayFormula;
@@ -200,7 +202,7 @@ private:
             return lhs.mnEndRow<rhs.mnStartRow;
         }
     };
-    typedef ::std::set< RowRangeStyle, StyleRowRangeComp > RowStyles;
+    typedef ::o3tl::sorted_vector< RowRangeStyle, StyleRowRangeComp > RowStyles;
     typedef ::std::map< sal_Int32, RowStyles > ColStyles;
     /** Stores information about a merged cell range. */
     struct MergedRange
