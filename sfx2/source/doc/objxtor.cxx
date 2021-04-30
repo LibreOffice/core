@@ -827,7 +827,7 @@ uno::Sequence< OUString > SfxObjectShell::GetEventNames()
 }
 
 
-css::uno::Reference< css::frame::XModel > SfxObjectShell::GetModel() const
+css::uno::Reference< css::frame::XModel3 > SfxObjectShell::GetModel() const
 {
     return GetBaseModel();
 }
@@ -843,7 +843,7 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 }
 
 
-css::uno::Reference< css::frame::XModel > SfxObjectShell::GetBaseModel() const
+css::uno::Reference< css::frame::XModel3 > SfxObjectShell::GetBaseModel() const
 {
     return pImpl->pBaseModel;
 }
