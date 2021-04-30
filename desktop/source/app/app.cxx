@@ -1153,8 +1153,10 @@ void Desktop::Exception(ExceptionCategory nCategory)
             osl_removeSignalHandler( pSignalHandler );
 
         restartOnMac(false);
+#ifndef ENABLE_WASM_STRIP
         if ( m_rSplashScreen.is() )
             m_rSplashScreen->reset();
+#endif
 
         _exit( EXITHELPER_CRASH_WITH_RESTART );
     }
@@ -1257,7 +1259,9 @@ int Desktop::Main()
     Translate::SetReadStringHook(ReplaceStringHookProc);
 
     // Startup screen
+#ifndef ENABLE_WASM_STRIP
     OpenSplashScreen();
+#endif
 
     SetSplashScreenProgress(10);
 
@@ -1697,8 +1701,10 @@ int Desktop::doShutdown()
     if ( bRR )
     {
         restartOnMac(true);
+#ifndef ENABLE_WASM_STRIP
         if ( m_rSplashScreen.is() )
             m_rSplashScreen->reset();
+#endif
 
         return EXITHELPER_NORMAL_RESTART;
     }
@@ -2377,6 +2383,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     }
 }
 
+#ifndef ENABLE_WASM_STRIP
 void Desktop::OpenSplashScreen()
 {
     const CommandLineArgs &rCmdLine = GetCommandLineArgs();
@@ -2426,33 +2433,39 @@ void Desktop::OpenSplashScreen()
 
     if(m_rSplashScreen.is())
             m_rSplashScreen->start("SplashScreen", 100);
-
 }
+#endif
 
 void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
 {
+#ifndef ENABLE_WASM_STRIP
     if(m_rSplashScreen.is())
     {
         m_rSplashScreen->setValue(iProgress);
     }
+#endif
 }
 
 void Desktop::SetSplashScreenText( const OUString& rText )
 {
+#ifndef ENABLE_WASM_STRIP
     if( m_rSplashScreen.is() )
     {
         m_rSplashScreen->setText( rText );
     }
+#endif
 }
 
 void Desktop::CloseSplashScreen()
 {
+#ifndef ENABLE_WASM_STRIP
     if(m_rSplashScreen.is())
     {
         SolarMutexGuard ensureSolarMutex;
         m_rSplashScreen->end();
         m_rSplashScreen = nullptr;
     }
+#endif
 }
 
 
