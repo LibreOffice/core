@@ -33,7 +33,7 @@ namespace svgio::svgreader
             SvgNode* pParent)
         :   SvgNode(SVGToken::ClipPathNode, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            maClipPathUnits(userSpaceOnUse)
+            maClipPathUnits(SvgUnits::userSpaceOnUse)
         {
         }
 
@@ -78,11 +78,11 @@ namespace svgio::svgreader
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse))
                         {
-                            setClipPathUnits(userSpaceOnUse);
+                            setClipPathUnits(SvgUnits::userSpaceOnUse);
                         }
                         else if(aContent.match(commonStrings::aStrObjectBoundingBox))
                         {
-                            setClipPathUnits(objectBoundingBox);
+                            setClipPathUnits(SvgUnits::objectBoundingBox);
                         }
                     }
                     break;
@@ -158,7 +158,7 @@ namespace svgio::svgreader
 
             if(aClipPolyPolygon.count())
             {
-                if(objectBoundingBox == getClipPathUnits())
+                if (SvgUnits::objectBoundingBox == getClipPathUnits())
                 {
                     // clip is object-relative, transform using content transformation
                     const basegfx::B2DRange aContentRange(rContent.getB2DRange(aViewInformation2D));

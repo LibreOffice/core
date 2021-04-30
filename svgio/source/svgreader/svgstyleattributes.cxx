@@ -355,7 +355,7 @@ namespace svgio::svgreader
                 aGradientTransform = *rFillGradient.getGradientTransform();
             }
 
-            if(userSpaceOnUse == rFillGradient.getGradientUnits())
+            if (SvgUnits::userSpaceOnUse == rFillGradient.getGradientUnits())
             {
                 aGeoToUnit.translate(-rGeoRange.getMinX(), -rGeoRange.getMinY());
                 aGeoToUnit.scale(1.0 / rGeoRange.getWidth(), 1.0 / rGeoRange.getHeight());
@@ -366,13 +366,13 @@ namespace svgio::svgreader
                 basegfx::B2DPoint aStart(0.0, 0.0);
                 basegfx::B2DPoint aEnd(1.0, 0.0);
 
-                if(userSpaceOnUse == rFillGradient.getGradientUnits())
+                if (SvgUnits::userSpaceOnUse == rFillGradient.getGradientUnits())
                 {
                     // all possible units
-                    aStart.setX(rFillGradient.getX1().solve(mrOwner, xcoordinate));
-                    aStart.setY(rFillGradient.getY1().solve(mrOwner, ycoordinate));
-                    aEnd.setX(rFillGradient.getX2().solve(mrOwner, xcoordinate));
-                    aEnd.setY(rFillGradient.getY2().solve(mrOwner, ycoordinate));
+                    aStart.setX(rFillGradient.getX1().solve(mrOwner, NumberType::xcoordinate));
+                    aStart.setY(rFillGradient.getY1().solve(mrOwner, NumberType::ycoordinate));
+                    aEnd.setX(rFillGradient.getX2().solve(mrOwner, NumberType::xcoordinate));
+                    aEnd.setY(rFillGradient.getY2().solve(mrOwner, NumberType::ycoordinate));
                 }
                 else
                 {
@@ -382,10 +382,10 @@ namespace svgio::svgreader
                     const SvgNumber X2(rFillGradient.getX2());
                     const SvgNumber Y2(rFillGradient.getY2());
 
-                    aStart.setX(Unit_percent == X1.getUnit() ? X1.getNumber() * 0.01 : X1.getNumber());
-                    aStart.setY(Unit_percent == Y1.getUnit() ? Y1.getNumber() * 0.01 : Y1.getNumber());
-                    aEnd.setX(Unit_percent == X2.getUnit() ? X2.getNumber() * 0.01 : X2.getNumber());
-                    aEnd.setY(Unit_percent == Y2.getUnit() ? Y2.getNumber() * 0.01 : Y2.getNumber());
+                    aStart.setX(SvgUnit::percent == X1.getUnit() ? X1.getNumber() * 0.01 : X1.getNumber());
+                    aStart.setY(SvgUnit::percent == Y1.getUnit() ? Y1.getNumber() * 0.01 : Y1.getNumber());
+                    aEnd.setX(SvgUnit::percent == X2.getUnit() ? X2.getNumber() * 0.01 : X2.getNumber());
+                    aEnd.setY(SvgUnit::percent == Y2.getUnit() ? Y2.getNumber() * 0.01 : Y2.getNumber());
                 }
 
                 if(!aGeoToUnit.isIdentity())
@@ -401,7 +401,7 @@ namespace svgio::svgreader
                         aSvgGradientEntryVector,
                         aStart,
                         aEnd,
-                        userSpaceOnUse != rFillGradient.getGradientUnits(),
+                        SvgUnits::userSpaceOnUse != rFillGradient.getGradientUnits(),
                         rFillGradient.getSpreadMethod()));
             }
             else
@@ -413,17 +413,17 @@ namespace svgio::svgreader
                 const SvgNumber* pFy = rFillGradient.getFy();
                 const bool bFocal(pFx || pFy);
 
-                if(userSpaceOnUse == rFillGradient.getGradientUnits())
+                if (SvgUnits::userSpaceOnUse == rFillGradient.getGradientUnits())
                 {
                     // all possible units
-                    aStart.setX(rFillGradient.getCx().solve(mrOwner, xcoordinate));
-                    aStart.setY(rFillGradient.getCy().solve(mrOwner, ycoordinate));
+                    aStart.setX(rFillGradient.getCx().solve(mrOwner, NumberType::xcoordinate));
+                    aStart.setY(rFillGradient.getCy().solve(mrOwner, NumberType::ycoordinate));
                     fRadius = rFillGradient.getR().solve(mrOwner);
 
                     if(bFocal)
                     {
-                        aFocal.setX(pFx ? pFx->solve(mrOwner, xcoordinate) : aStart.getX());
-                        aFocal.setY(pFy ? pFy->solve(mrOwner, ycoordinate) : aStart.getY());
+                        aFocal.setX(pFx ? pFx->solve(mrOwner, NumberType::xcoordinate) : aStart.getX());
+                        aFocal.setY(pFy ? pFy->solve(mrOwner, NumberType::ycoordinate) : aStart.getY());
                     }
                 }
                 else
@@ -433,14 +433,14 @@ namespace svgio::svgreader
                     const SvgNumber Cy(rFillGradient.getCy());
                     const SvgNumber R(rFillGradient.getR());
 
-                    aStart.setX(Unit_percent == Cx.getUnit() ? Cx.getNumber() * 0.01 : Cx.getNumber());
-                    aStart.setY(Unit_percent == Cy.getUnit() ? Cy.getNumber() * 0.01 : Cy.getNumber());
-                    fRadius = (Unit_percent == R.getUnit()) ? R.getNumber() * 0.01 : R.getNumber();
+                    aStart.setX(SvgUnit::percent == Cx.getUnit() ? Cx.getNumber() * 0.01 : Cx.getNumber());
+                    aStart.setY(SvgUnit::percent == Cy.getUnit() ? Cy.getNumber() * 0.01 : Cy.getNumber());
+                    fRadius = (SvgUnit::percent == R.getUnit()) ? R.getNumber() * 0.01 : R.getNumber();
 
                     if(bFocal)
                     {
-                        aFocal.setX(pFx ? (Unit_percent == pFx->getUnit() ? pFx->getNumber() * 0.01 : pFx->getNumber()) : aStart.getX());
-                        aFocal.setY(pFy ? (Unit_percent == pFy->getUnit() ? pFy->getNumber() * 0.01 : pFy->getNumber()) : aStart.getY());
+                        aFocal.setX(pFx ? (SvgUnit::percent == pFx->getUnit() ? pFx->getNumber() * 0.01 : pFx->getNumber()) : aStart.getX());
+                        aFocal.setY(pFy ? (SvgUnit::percent == pFy->getUnit() ? pFy->getNumber() * 0.01 : pFy->getNumber()) : aStart.getY());
                     }
                 }
 
@@ -462,7 +462,7 @@ namespace svgio::svgreader
                         aSvgGradientEntryVector,
                         aStart,
                         fRadius,
-                        userSpaceOnUse != rFillGradient.getGradientUnits(),
+                        SvgUnits::userSpaceOnUse != rFillGradient.getGradientUnits(),
                         rFillGradient.getSpreadMethod(),
                         bFocal ? &aFocal : nullptr));
             }
@@ -558,9 +558,9 @@ namespace svgio::svgreader
             else
             {
                 // use patternContentUnits
-                const SvgUnits aPatternContentUnits(rFillPattern.getPatternContentUnits() ? *rFillPattern.getPatternContentUnits() : userSpaceOnUse);
+                const SvgUnits aPatternContentUnits(rFillPattern.getPatternContentUnits() ? *rFillPattern.getPatternContentUnits() : SvgUnits::userSpaceOnUse);
 
-                if(userSpaceOnUse == aPatternContentUnits)
+                if (SvgUnits::userSpaceOnUse == aPatternContentUnits)
                 {
                     // create relative mapping to unit coordinates
                     aMapPrimitivesToUnitRange.scale(1.0 / (fW * fTargetWidth), 1.0 / (fH * fTargetHeight));
@@ -829,8 +829,8 @@ namespace svgio::svgreader
 
                 if(aPrimitiveRange.getWidth() > 0.0 && aPrimitiveRange.getHeight() > 0.0)
                 {
-                    double fTargetWidth(rMarker.getMarkerWidth().isSet() ? rMarker.getMarkerWidth().solve(mrOwner, xcoordinate) : 3.0);
-                    double fTargetHeight(rMarker.getMarkerHeight().isSet() ? rMarker.getMarkerHeight().solve(mrOwner, xcoordinate) : 3.0);
+                    double fTargetWidth(rMarker.getMarkerWidth().isSet() ? rMarker.getMarkerWidth().solve(mrOwner, NumberType::xcoordinate) : 3.0);
+                    double fTargetHeight(rMarker.getMarkerHeight().isSet() ? rMarker.getMarkerHeight().solve(mrOwner, NumberType::xcoordinate) : 3.0);
                     const bool bStrokeWidth(SvgMarkerNode::MarkerUnits::strokeWidth == rMarker.getMarkerUnits());
                     const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner) : 1.0);
 
@@ -877,8 +877,8 @@ namespace svgio::svgreader
 
                         // get and apply reference point. Initially it's in marker local coordinate system
                         basegfx::B2DPoint aRefPoint(
-                            rMarker.getRefX().isSet() ? rMarker.getRefX().solve(mrOwner, xcoordinate) : 0.0,
-                            rMarker.getRefY().isSet() ? rMarker.getRefY().solve(mrOwner, ycoordinate) : 0.0);
+                            rMarker.getRefX().isSet() ? rMarker.getRefX().solve(mrOwner, NumberType::xcoordinate) : 0.0,
+                            rMarker.getRefY().isSet() ? rMarker.getRefY().solve(mrOwner, NumberType::ycoordinate) : 0.0);
 
                         // apply MarkerTransform to have it in mapped coordinates
                         aRefPoint *= rMarkerTransform;
@@ -1189,7 +1189,7 @@ namespace svgio::svgreader
             const SvgClipPathNode* pClip = accessClipPathXLink();
             while(pClip)
             {
-                // #i124852# transform may be needed when userSpaceOnUse
+                // #i124852# transform may be needed when SvgUnits::userSpaceOnUse
                 pClip->apply(aSource, pTransform);
                 pClip = pClip->getSvgStyleAttributes()->accessClipPathXLink();
             }
@@ -1199,7 +1199,7 @@ namespace svgio::svgreader
                 const SvgMaskNode* pMask = accessMaskXLink();
                 if(pMask)
                 {
-                    // #i124852# transform may be needed when userSpaceOnUse
+                    // #i124852# transform may be needed when SvgUnits::userSpaceOnUse
                     pMask->apply(aSource, pTransform);
                 }
             }
@@ -1458,8 +1458,8 @@ namespace svgio::svgreader
                     if(readSingleNumber(aContent, aNum))
                     {
                         if(basegfx::fTools::moreOrEqual(aNum.getNumber(), 1.0))
-                        { //readSingleNumber sets Unit_px as default, if unit is missing. Correct it here.
-                            maStrokeMiterLimit = SvgNumber(aNum.getNumber(), Unit_none);
+                        { //readSingleNumber sets SvgUnit::px as default, if unit is missing. Correct it here.
+                            maStrokeMiterLimit = SvgNumber(aNum.getNumber(), SvgUnit::none);
                         }
                     }
                     break;
@@ -1939,7 +1939,7 @@ namespace svgio::svgreader
                         {
                             maBaselineShiftNumber = aNum;
 
-                            if(Unit_percent == aNum.getUnit())
+                            if(SvgUnit::percent == aNum.getUnit())
                             {
                                 setBaselineShift(BaselineShift_Percentage);
                             }
@@ -2467,7 +2467,7 @@ namespace svgio::svgreader
             }
 
             // default is 4
-            return SvgNumber(4.0, Unit_none);
+            return SvgNumber(4.0, SvgUnit::none);
         }
 
         SvgNumber SvgStyleAttributes::getStrokeOpacity() const
@@ -2523,10 +2523,10 @@ namespace svgio::svgreader
                 if(!maFontSizeNumber.isPositive())
                     return aDefaultSize;
 
-                // #122524# Handle Unit_percent relative to parent FontSize (see SVG1.1
+                // #122524# Handle SvgUnit::percent relative to parent FontSize (see SVG1.1
                 // spec 10.10 Font selection properties \91font-size\92, lastline (click 'normative
                 // definition of the property')
-                if(Unit_percent == maFontSizeNumber.getUnit())
+                if(SvgUnit::percent == maFontSizeNumber.getUnit())
                 {
                     const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -2542,9 +2542,9 @@ namespace svgio::svgreader
                     // if there's no parent style, set the font size based on the default size
                     // 100% = 16px
                     return SvgNumber(
-                        maFontSizeNumber.getNumber() * aDefaultSize / 100.0, Unit_px, true);
+                        maFontSizeNumber.getNumber() * aDefaultSize / 100.0, SvgUnit::px, true);
                 }
-                else if((Unit_em == maFontSizeNumber.getUnit()) || (Unit_ex == maFontSizeNumber.getUnit()))
+                else if((SvgUnit::em == maFontSizeNumber.getUnit()) || (SvgUnit::ex == maFontSizeNumber.getUnit()))
                 {
                     const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -2987,8 +2987,8 @@ namespace svgio::svgreader
 
         SvgNumber SvgStyleAttributes::getBaselineShiftNumber() const
         {
-            // #122524# Handle Unit_percent relative to parent BaselineShift
-            if(Unit_percent == maBaselineShiftNumber.getUnit())
+            // #122524# Handle SvgUnit::percent relative to parent BaselineShift
+            if(SvgUnit::percent == maBaselineShiftNumber.getUnit())
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 

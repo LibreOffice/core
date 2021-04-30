@@ -53,7 +53,7 @@ namespace svgio::svgreader
         {
             // removed !isSet() from below. Due to correct defaults in the constructor an instance
             // of this class is perfectly useful without being set by any importer
-            if(Align_none == getSvgAlign())
+            if(SvgAlign::none == getSvgAlign())
             {
                 // create linear mapping (default)
                 return createLinearMapping(rTarget, rSource);
@@ -79,18 +79,18 @@ namespace svgio::svgreader
 
             switch(getSvgAlign())
             {
-                case Align_xMidYMin:
-                case Align_xMidYMid:
-                case Align_xMidYMax:
+                case SvgAlign::xMidYMin:
+                case SvgAlign::xMidYMid:
+                case SvgAlign::xMidYMax:
                 {
                     // centerX
                     const double fFreeSpace(rTarget.getWidth() - fNewWidth);
                     fTransX = fFreeSpace * 0.5;
                     break;
                 }
-                case Align_xMaxYMin:
-                case Align_xMaxYMid:
-                case Align_xMaxYMax:
+                case SvgAlign::xMaxYMin:
+                case SvgAlign::xMaxYMid:
+                case SvgAlign::xMaxYMax:
                 {
                     // Right align
                     const double fFreeSpace(rTarget.getWidth() - fNewWidth);
@@ -106,18 +106,18 @@ namespace svgio::svgreader
 
             switch(getSvgAlign())
             {
-                case Align_xMinYMid:
-                case Align_xMidYMid:
-                case Align_xMaxYMid:
+                case SvgAlign::xMinYMid:
+                case SvgAlign::xMidYMid:
+                case SvgAlign::xMaxYMid:
                 {
                     // centerY
                     const double fFreeSpace(rTarget.getHeight() - fNewHeight);
                     fTransY = fFreeSpace * 0.5;
                     break;
                 }
-                case Align_xMinYMax:
-                case Align_xMidYMax:
-                case Align_xMaxYMax:
+                case SvgAlign::xMinYMax:
+                case SvgAlign::xMidYMax:
+                case SvgAlign::xMaxYMax:
                 {
                     // Bottom align
                     const double fFreeSpace(rTarget.getHeight() - fNewHeight);
@@ -141,39 +141,39 @@ namespace svgio::svgreader
             {
                 switch(meUnit)
                 {
-                    case Unit_em:
+                    case SvgUnit::em:
                     {
                         return mfNumber * rInfoProvider.getCurrentFontSizeInherited();
                     }
-                    case Unit_ex:
+                    case SvgUnit::ex:
                     {
                         return mfNumber * rInfoProvider.getCurrentXHeightInherited() * 0.5;
                     }
-                    case Unit_px:
+                    case SvgUnit::px:
                     {
                         return mfNumber;
                     }
-                    case Unit_pt:
-                    case Unit_pc:
-                    case Unit_cm:
-                    case Unit_mm:
-                    case Unit_in:
+                    case SvgUnit::pt:
+                    case SvgUnit::pc:
+                    case SvgUnit::cm:
+                    case SvgUnit::mm:
+                    case SvgUnit::in:
                     {
                         double fRetval(mfNumber);
 
                         switch(meUnit)
                         {
-                            case Unit_pt: fRetval *= F_SVG_PIXEL_PER_INCH / 72.0; break;
-                            case Unit_pc: fRetval *= F_SVG_PIXEL_PER_INCH / 6.0; break;
-                            case Unit_cm: fRetval *= F_SVG_PIXEL_PER_INCH / 2.54; break;
-                            case Unit_mm: fRetval *= 0.1 * F_SVG_PIXEL_PER_INCH / 2.54; break;
-                            case Unit_in: fRetval *= F_SVG_PIXEL_PER_INCH; break;
+                            case SvgUnit::pt: fRetval *= F_SVG_PIXEL_PER_INCH / 72.0; break;
+                            case SvgUnit::pc: fRetval *= F_SVG_PIXEL_PER_INCH / 6.0; break;
+                            case SvgUnit::cm: fRetval *= F_SVG_PIXEL_PER_INCH / 2.54; break;
+                            case SvgUnit::mm: fRetval *= 0.1 * F_SVG_PIXEL_PER_INCH / 2.54; break;
+                            case SvgUnit::in: fRetval *= F_SVG_PIXEL_PER_INCH; break;
                             default: break;
                         }
 
                         return fRetval;
                     }
-                    case Unit_none:
+                    case SvgUnit::none:
                     {
                         SAL_WARN("svgio", "Design error, this case should have been handled in the caller");
                         return mfNumber;
@@ -197,22 +197,22 @@ namespace svgio::svgreader
             {
                 switch(meUnit)
                 {
-                    case Unit_px:
+                    case SvgUnit::px:
                     {
                         return mfNumber;
                     }
-                    case Unit_pt:
-                    case Unit_pc:
-                    case Unit_cm:
-                    case Unit_mm:
-                    case Unit_in:
-                    case Unit_em:
-                    case Unit_ex:
-                    case Unit_none:
+                    case SvgUnit::pt:
+                    case SvgUnit::pc:
+                    case SvgUnit::cm:
+                    case SvgUnit::mm:
+                    case SvgUnit::in:
+                    case SvgUnit::em:
+                    case SvgUnit::ex:
+                    case SvgUnit::none:
                     {
                         return solveNonPercentage( rInfoProvider);
                     }
-                    case Unit_percent:
+                    case SvgUnit::percent:
                     {
                         double fRetval(mfNumber * 0.01);
                         basegfx::B2DRange aViewPort = rInfoProvider.getCurrentViewPort();
@@ -231,12 +231,12 @@ namespace svgio::svgreader
 
                         if ( !aViewPort.isEmpty() )
                         {
-                            if(xcoordinate == aNumberType)
+                            if (NumberType::xcoordinate == aNumberType)
                             {
                                 // it's a x-coordinate, relative to current width (w)
                                 fRetval *= aViewPort.getWidth();
                             }
-                            else if(ycoordinate == aNumberType)
+                            else if (NumberType::ycoordinate == aNumberType)
                             {
                                 // it's a y-coordinate, relative to current height (h)
                                 fRetval *= aViewPort.getHeight();
@@ -423,7 +423,7 @@ namespace svgio::svgreader
 
         SvgUnit readUnit(std::u16string_view rCandidate, sal_Int32& nPos, const sal_Int32 nLen)
         {
-            SvgUnit aRetval(Unit_px);
+            SvgUnit aRetval(SvgUnit::px);
 
             if(nPos < nLen)
             {
@@ -441,13 +441,13 @@ namespace svgio::svgreader
                             if('m' == aCharB)
                             {
                                 // 'em' Relative to current font size
-                                aRetval = Unit_em;
+                                aRetval = SvgUnit::em;
                                 bTwoCharValid = true;
                             }
                             else if('x' == aCharB)
                             {
                                 // 'ex' Relative to current font x-height
-                                aRetval = Unit_ex;
+                                aRetval = SvgUnit::ex;
                                 bTwoCharValid = true;
                             }
                             break;
@@ -462,13 +462,13 @@ namespace svgio::svgreader
                             else if('t' == aCharB)
                             {
                                 // 'pt' == 4/3 px
-                                aRetval = Unit_pt;
+                                aRetval = SvgUnit::pt;
                                 bTwoCharValid = true;
                             }
                             else if('c' == aCharB)
                             {
                                 // 'pc' == 16 px
-                                aRetval = Unit_pc;
+                                aRetval = SvgUnit::pc;
                                 bTwoCharValid = true;
                             }
                             break;
@@ -478,7 +478,7 @@ namespace svgio::svgreader
                             if('n' == aCharB)
                             {
                                 // 'in' == 96 px, since CSS 2.1
-                                aRetval = Unit_in;
+                                aRetval = SvgUnit::in;
                                 bTwoCharValid = true;
                             }
                             break;
@@ -488,7 +488,7 @@ namespace svgio::svgreader
                             if('m' == aCharB)
                             {
                                 // 'cm' == 37.79527559 px
-                                aRetval = Unit_cm;
+                                aRetval = SvgUnit::cm;
                                 bTwoCharValid = true;
                             }
                             break;
@@ -498,7 +498,7 @@ namespace svgio::svgreader
                             if('m' == aCharB)
                             {
                                 // 'mm' == 3.779528 px
-                                aRetval = Unit_mm;
+                                aRetval = SvgUnit::mm;
                                 bTwoCharValid = true;
                             }
                             break;
@@ -516,7 +516,7 @@ namespace svgio::svgreader
                     {
                         // percent used, relative to current
                         nPos++;
-                        aRetval = Unit_percent;
+                        aRetval = SvgUnit::percent;
                     }
                 }
             }
@@ -973,10 +973,10 @@ namespace svgio::svgreader
 
                             if(readNumberAndUnit(rCandidate, nPos, aHeight, nLen))
                             {
-                                double fX(aMinX.solve(rInfoProvider, xcoordinate));
-                                double fY(aMinY.solve(rInfoProvider, ycoordinate));
-                                double fW(aWidth.solve(rInfoProvider,xcoordinate));
-                                double fH(aHeight.solve(rInfoProvider,ycoordinate));
+                                double fX(aMinX.solve(rInfoProvider, NumberType::xcoordinate));
+                                double fY(aMinY.solve(rInfoProvider, NumberType::ycoordinate));
+                                double fW(aWidth.solve(rInfoProvider, NumberType::xcoordinate));
+                                double fH(aHeight.solve(rInfoProvider, NumberType::ycoordinate));
                                 return basegfx::B2DRange(fX,fY,fX+fW,fY+fH);
                             }
                         }
@@ -1042,12 +1042,12 @@ namespace svgio::svgreader
 
                                                 if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                                 {
-                                                    aNew.set(0, 2, aVal.solve(rInfoProvider, xcoordinate)); // Element E
+                                                    aNew.set(0, 2, aVal.solve(rInfoProvider, NumberType::xcoordinate)); // Element E
                                                     skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                                     if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                                     {
-                                                        aNew.set(1, 2, aVal.solve(rInfoProvider, ycoordinate)); // Element F
+                                                        aNew.set(1, 2, aVal.solve(rInfoProvider, NumberType::ycoordinate)); // Element F
                                                         skip_char(rCandidate, ' ', ')', nPos, nLen);
                                                         skip_char(rCandidate, ' ', ',', nPos, nLen);
 
@@ -1082,8 +1082,8 @@ namespace svgio::svgreader
                                     skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                     aMatrix = aMatrix * basegfx::utils::createTranslateB2DHomMatrix(
-                                        aTransX.solve(rInfoProvider, xcoordinate),
-                                        aTransY.solve(rInfoProvider, ycoordinate));
+                                        aTransX.solve(rInfoProvider, NumberType::xcoordinate),
+                                        aTransY.solve(rInfoProvider, NumberType::ycoordinate));
                                 }
                             }
                             break;
@@ -1162,8 +1162,8 @@ namespace svgio::svgreader
                                     skip_char(rCandidate, ' ', ')', nPos, nLen);
                                     skip_char(rCandidate, ' ', ',', nPos, nLen);
 
-                                    const double fX(aX.isSet() ? aX.solve(rInfoProvider, xcoordinate) : 0.0);
-                                    const double fY(aY.isSet() ? aY.solve(rInfoProvider, ycoordinate) : 0.0);
+                                    const double fX(aX.isSet() ? aX.solve(rInfoProvider, NumberType::xcoordinate) : 0.0);
+                                    const double fY(aY.isSet() ? aY.solve(rInfoProvider, NumberType::ycoordinate) : 0.0);
 
                                     if(!basegfx::fTools::equalZero(fX) || !basegfx::fTools::equalZero(fY))
                                     {
@@ -1285,7 +1285,7 @@ namespace svgio::svgreader
             if(nLen)
             {
                 sal_Int32 nPos(0);
-                SvgAlign aSvgAlign(Align_xMidYMid);
+                SvgAlign aSvgAlign(SvgAlign::xMidYMid);
                 bool bMeetOrSlice(true);
                 bool bChanged(false);
 
@@ -1307,61 +1307,61 @@ namespace svgio::svgreader
                             }
                             case SVGToken::None:
                             {
-                                aSvgAlign = Align_none;
+                                aSvgAlign = SvgAlign::none;
                                 bChanged = true;
                                 break;
                             }
                             case SVGToken::XMinYMin:
                             {
-                                aSvgAlign = Align_xMinYMin;
+                                aSvgAlign = SvgAlign::xMinYMin;
                                 bChanged = true;
                                 break;
                             }
                             case SVGToken::XMidYMin:
                             {
-                                aSvgAlign = Align_xMidYMin;
+                                aSvgAlign = SvgAlign::xMidYMin;
                                 bChanged = true;
                                 break;
                             }
                             case SVGToken::XMaxYMin:
                             {
-                                aSvgAlign = Align_xMaxYMin;
+                                aSvgAlign = SvgAlign::xMaxYMin;
                                 bChanged = true;
                                 break;
                             }
                             case SVGToken::XMinYMid:
                             {
-                                aSvgAlign = Align_xMinYMid;
+                                aSvgAlign = SvgAlign::xMinYMid;
                                 bChanged = true;
                                 break;
                             }
                             case SVGToken::XMidYMid:
                             {
-                                aSvgAlign = Align_xMidYMid;
+                                aSvgAlign = SvgAlign::xMidYMid;
                                 bChanged = true;
                                 break;
                             }
                             case SVGToken::XMaxYMid:
                             {
-                                aSvgAlign = Align_xMaxYMid;
+                                aSvgAlign = SvgAlign::xMaxYMid;
                                 bChanged = true;
                                 break;
                             }
                             case SVGToken::XMinYMax:
                             {
-                                aSvgAlign = Align_xMinYMax;
+                                aSvgAlign = SvgAlign::xMinYMax;
                                 bChanged = true;
                                 break;
                             }
                             case SVGToken::XMidYMax:
                             {
-                                aSvgAlign = Align_xMidYMax;
+                                aSvgAlign = SvgAlign::xMidYMax;
                                 bChanged = true;
                                 break;
                             }
                             case SVGToken::XMaxYMax:
                             {
-                                aSvgAlign = Align_xMaxYMax;
+                                aSvgAlign = SvgAlign::xMaxYMax;
                                 bChanged = true;
                                 break;
                             }

@@ -131,8 +131,8 @@ namespace svgio::svgreader
             if(!(pStyle && getRx().isSet() && getRy().isSet()))
                 return;
 
-            const double fRx(getRx().solve(*this, xcoordinate));
-            const double fRy(getRy().solve(*this, ycoordinate));
+            const double fRx(getRx().solve(*this, NumberType::xcoordinate));
+            const double fRy(getRy().solve(*this, NumberType::ycoordinate));
 
             if(fRx <= 0.0 || fRy <= 0.0)
                 return;
@@ -140,8 +140,8 @@ namespace svgio::svgreader
             const basegfx::B2DPolygon aPath(
                 basegfx::utils::createPolygonFromEllipse(
                     basegfx::B2DPoint(
-                        getCx().isSet() ? getCx().solve(*this, xcoordinate) : 0.0,
-                        getCy().isSet() ? getCy().solve(*this, ycoordinate) : 0.0),
+                        getCx().isSet() ? getCx().solve(*this, NumberType::xcoordinate) : 0.0,
+                        getCy().isSet() ? getCy().solve(*this, NumberType::ycoordinate) : 0.0),
                     fRx, fRy));
 
             drawinglayer::primitive2d::Primitive2DContainer aNewTarget;

@@ -163,8 +163,8 @@ namespace svgio::svgreader
             if(getX().isSet() || getY().isSet())
             {
                 aTransform.translate(
-                    getX().solve(*this, xcoordinate),
-                    getY().solve(*this, ycoordinate));
+                    getX().solve(*this, NumberType::xcoordinate),
+                    getY().solve(*this, NumberType::ycoordinate));
             }
 
             if(getTransform())

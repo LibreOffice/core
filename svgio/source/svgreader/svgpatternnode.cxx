@@ -139,11 +139,11 @@ namespace svgio::svgreader
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse))
                         {
-                            setPatternUnits(userSpaceOnUse);
+                            setPatternUnits(SvgUnits::userSpaceOnUse);
                         }
                         else if(aContent.match(commonStrings::aStrObjectBoundingBox))
                         {
-                            setPatternUnits(objectBoundingBox);
+                            setPatternUnits(SvgUnits::objectBoundingBox);
                         }
                     }
                     break;
@@ -154,11 +154,11 @@ namespace svgio::svgreader
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse))
                         {
-                            setPatternContentUnits(userSpaceOnUse);
+                            setPatternContentUnits(SvgUnits::userSpaceOnUse);
                         }
                         else if(aContent.match(commonStrings::aStrObjectBoundingBox))
                         {
-                            setPatternContentUnits(objectBoundingBox);
+                            setPatternContentUnits(SvgUnits::objectBoundingBox);
                         }
                     }
                     break;
@@ -199,27 +199,27 @@ namespace svgio::svgreader
             if(fTargetWidth <= 0.0 || fTargetHeight <= 0.0)
                 return;
 
-            const SvgUnits aPatternUnits(getPatternUnits() ? *getPatternUnits() : objectBoundingBox);
+            const SvgUnits aPatternUnits(getPatternUnits() ? *getPatternUnits() : SvgUnits::objectBoundingBox);
 
-            if(objectBoundingBox == aPatternUnits)
+            if (SvgUnits::objectBoundingBox == aPatternUnits)
             {
                 rfW = (getWidth().isSet()) ? getWidth().getNumber() : 0.0;
                 rfH = (getHeight().isSet()) ? getHeight().getNumber() : 0.0;
 
-                if(Unit_percent == getWidth().getUnit())
+                if(SvgUnit::percent == getWidth().getUnit())
                 {
                     rfW *= 0.01;
                 }
 
-                if(Unit_percent == getHeight().getUnit())
+                if(SvgUnit::percent == getHeight().getUnit())
                 {
                     rfH *= 0.01;
                 }
             }
             else
             {
-                rfW = (getWidth().isSet()) ? getWidth().solve(rUser, xcoordinate) : 0.0;
-                rfH = (getHeight().isSet()) ? getHeight().solve(rUser, ycoordinate) : 0.0;
+                rfW = (getWidth().isSet()) ? getWidth().solve(rUser, NumberType::xcoordinate) : 0.0;
+                rfH = (getHeight().isSet()) ? getHeight().solve(rUser, NumberType::ycoordinate) : 0.0;
 
                 // make relative to rGeoRange
                 rfW /= fTargetWidth;
@@ -229,25 +229,25 @@ namespace svgio::svgreader
             if(rfW <= 0.0 || rfH <= 0.0)
                 return;
 
-            if(objectBoundingBox == aPatternUnits)
+            if (SvgUnits::objectBoundingBox == aPatternUnits)
             {
                 rfX = (getX().isSet()) ? getX().getNumber() : 0.0;
                 rfY = (getY().isSet()) ? getY().getNumber() : 0.0;
 
-                if(Unit_percent == getX().getUnit())
+                if(SvgUnit::percent == getX().getUnit())
                 {
                     rfX *= 0.01;
                 }
 
-                if(Unit_percent == getY().getUnit())
+                if(SvgUnit::percent == getY().getUnit())
                 {
                     rfY *= 0.01;
                 }
             }
             else
             {
-                rfX = (getX().isSet()) ? getX().solve(rUser, xcoordinate) : 0.0;
-                rfY = (getY().isSet()) ? getY().solve(rUser, ycoordinate) : 0.0;
+                rfX = (getX().isSet()) ? getX().solve(rUser, NumberType::xcoordinate) : 0.0;
+                rfY = (getY().isSet()) ? getY().solve(rUser, NumberType::ycoordinate) : 0.0;
 
                 // make relative to rGeoRange
                 rfX = (rfX - rGeoRange.getMinX()) / fTargetWidth;
