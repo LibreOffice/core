@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
-#include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -636,7 +636,7 @@ private:
 
         @threadsafe
      */
-    void implts_registerDocument(const css::uno::Reference< css::frame::XModel >& xDocument);
+    void implts_registerDocument(const css::uno::Reference< css::frame::XModel3 >& xDocument);
 
     /** @short  remove the specified document from our internal document list.
 
@@ -1537,7 +1537,7 @@ void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css:
 
 void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEvent& aEvent)
 {
-    css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XModel3 > xDocument(aEvent.Source, css::uno::UNO_QUERY);
 
     // new document => put it into the internal list
     if (
@@ -2361,7 +2361,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch, LinkParamNone*, void)
     }
 }
 
-void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame::XModel >& xDocument)
+void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame::XModel3 > & xDocument)
 {
     // ignore corrupted events, where no document is given ... Runtime Error ?!
     if (!xDocument.is())
@@ -2386,7 +2386,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     aCacheLock.unlock();
 
-    utl::MediaDescriptor lDescriptor(xDocument->getArgs());
+    utl::MediaDescriptor lDescriptor(xDocument->getArgs2( { utl::MediaDescriptor::PROP_FILTERNAME(), utl::MediaDescriptor::PROP_NOAUTOSAVE() } ));
 
     // check if this document must be ignored for recovery !
     // Some use cases don't wish support for AutoSave/Recovery ... as e.g. OLE-Server / ActiveX Control etcpp.
@@ -4004,11 +4004,11 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
             // extract the model from the frame.
             // Ignore "view only" frames, which does not have a model.
             css::uno::Reference< css::frame::XController > xController;
-            css::uno::Reference< css::frame::XModel >      xModel;
+            css::uno::Reference< css::frame::XModel3 >     xModel;
 
             xController = xFrame->getController();
             if (xController.is())
-                xModel = xController->getModel();
+                xModel.set( xController->getModel(), UNO_QUERY_THROW );
             if (!xModel.is())
                 continue;
 

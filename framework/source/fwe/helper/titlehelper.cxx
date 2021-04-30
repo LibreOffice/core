@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 
 #include <unotools/configmgr.hxx>
@@ -302,7 +303,7 @@ void TitleHelper::impl_sendTitleChangedEvent ()
 
 void TitleHelper::impl_updateTitle (bool init)
 {
-    css::uno::Reference< css::frame::XModel >      xModel;
+    css::uno::Reference< css::frame::XModel3 >     xModel;
     css::uno::Reference< css::frame::XController > xController;
     css::uno::Reference< css::frame::XFrame >      xFrame;
     // SYNCHRONIZED ->
@@ -329,7 +330,7 @@ void TitleHelper::impl_updateTitle (bool init)
     }
 }
 
-void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel >& xModel, bool init)
+void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel3 >& xModel, bool init)
 {
     css::uno::Reference< css::uno::XInterface >         xOwner;
     css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
@@ -363,7 +364,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
     if (xURLProvider.is())
         sURL = xURLProvider->getLocation ();
 
-    utl::MediaDescriptor aDescriptor(xModel->getArgs());
+    utl::MediaDescriptor aDescriptor(xModel->getArgs2( { utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME() } ));
     const OUString sSuggestedSaveAsName = aDescriptor.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME(), OUString());
 

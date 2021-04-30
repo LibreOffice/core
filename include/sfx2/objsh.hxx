@@ -26,6 +26,7 @@
 #include <vcl/errcode.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <vcl/bitmapex.hxx>
 
 #include <svl/poolitem.hxx>
@@ -565,11 +566,11 @@ public:
 
     virtual SfxObjectShell*     GetObjectShell() override;
 
-    css::uno::Reference< css::frame::XModel >
+    css::uno::Reference< css::frame::XModel3 >
                                 GetModel() const;
     // Only temporarily for the applications!
     void                        SetBaseModel( SfxBaseModel* pModel );
-    css::uno::Reference< css::frame::XModel > GetBaseModel() const;
+    css::uno::Reference< css::frame::XModel3 > GetBaseModel() const;
     // Only temporarily for the applications!
 
     virtual css::uno::Sequence< OUString > GetEventNames();

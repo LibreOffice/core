@@ -931,8 +931,14 @@ OUString SAL_CALL SfxBaseModel::getURL()
 
 //  frame::XModel
 
-
 Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs()
+{
+    return getArgs2({});
+}
+
+//  frame::XModel3
+
+Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<OUString> & requestedArgsSeq )
 {
     SfxModelGuard aGuard( *this );
 
@@ -941,6 +947,10 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs()
         SAL_WARN("sfx.appl", "Unexpected operations on model");
         return m_pData->m_seqArguments;
     }
+
+    std::set<std::u16string_view> requestedArgs;
+    for (OUString const & s : requestedArgsSeq)
+        requestedArgs.insert(s);
 
     if ( m_pData->m_pObjectShell.is() )
     {
@@ -958,67 +968,79 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs()
 
         sal_Int32 nNewLength = seqArgsNew.getLength();
 
-        // "WinExtent" property should be updated always.
-        // We can store it now to overwrite an old value
-        // since it is not from ItemSet
-        tools::Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
-        aTmpRect = OutputDevice::LogicToLogic(aTmpRect, MapMode(m_pData->m_pObjectShell->GetMapUnit()), MapMode(MapUnit::Map100thMM));
-
-        Sequence< sal_Int32 > aRectSeq(4);
-        aRectSeq[0] = aTmpRect.Left();
-        aRectSeq[1] = aTmpRect.Top();
-        aRectSeq[2] = aTmpRect.IsWidthEmpty() ? aTmpRect.Left() : aTmpRect.Right();
-        aRectSeq[3] = aTmpRect.IsHeightEmpty() ? aTmpRect.Top() : aTmpRect.Bottom();
-
-        seqArgsNew.realloc( ++nNewLength );
-        seqArgsNew[ nNewLength - 1 ].Name = "WinExtent";
-        seqArgsNew[ nNewLength - 1 ].Value <<= aRectSeq;
-
-        if ( !m_pData->m_aPreusedFilterName.isEmpty() )
+        if (requestedArgs.empty() || requestedArgs.count(u"WinExtent"))
         {
-            seqArgsNew.realloc( ++nNewLength );
-            seqArgsNew[ nNewLength - 1 ].Name = "PreusedFilterName";
-            seqArgsNew[ nNewLength - 1 ].Value <<= m_pData->m_aPreusedFilterName;
-        }
+            // "WinExtent" property should be updated always.
+            // We can store it now to overwrite an old value
+            // since it is not from ItemSet
+            tools::Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
+            aTmpRect = OutputDevice::LogicToLogic(aTmpRect, MapMode(m_pData->m_pObjectShell->GetMapUnit()), MapMode(MapUnit::Map100thMM));
 
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell.get() );
-        if ( pFrame )
-        {
-            SvBorder aBorder = pFrame->GetBorderPixelImpl();
-
-            Sequence< sal_Int32 > aBorderSeq(4);
-            aBorderSeq[0] = aBorder.Left();
-            aBorderSeq[1] = aBorder.Top();
-            aBorderSeq[2] = aBorder.Right();
-            aBorderSeq[3] = aBorder.Bottom();
+            Sequence< sal_Int32 > aRectSeq(4);
+            aRectSeq[0] = aTmpRect.Left();
+            aRectSeq[1] = aTmpRect.Top();
+            aRectSeq[2] = aTmpRect.IsWidthEmpty() ? aTmpRect.Left() : aTmpRect.Right();
+            aRectSeq[3] = aTmpRect.IsHeightEmpty() ? aTmpRect.Top() : aTmpRect.Bottom();
 
             seqArgsNew.realloc( ++nNewLength );
-            seqArgsNew[ nNewLength - 1 ].Name = "DocumentBorder";
-            seqArgsNew[ nNewLength - 1 ].Value <<= aBorderSeq;
+            seqArgsNew[ nNewLength - 1 ].Name = "WinExtent";
+            seqArgsNew[ nNewLength - 1 ].Value <<= aRectSeq;
         }
 
-        // only the values that are not supported by the ItemSet must be cached here
-        Sequence< beans::PropertyValue > aFinalCache;
-        sal_Int32 nFinalLength = 0;
-
-        for ( const auto& rOrg : std::as_const(m_pData->m_seqArguments) )
+        if (requestedArgs.empty() || requestedArgs.count(u"PreusedFilterName"))
         {
-            auto bNew = std::none_of(seqArgsOld.begin(), seqArgsOld.end(),
-                [&rOrg](const beans::PropertyValue& rOld){ return rOld.Name == rOrg.Name; });
-            if ( bNew )
+            if ( !m_pData->m_aPreusedFilterName.isEmpty() )
             {
-                // the entity with this name should be new for seqArgsNew
-                // since it is not supported by transformer
-
                 seqArgsNew.realloc( ++nNewLength );
-                seqArgsNew[ nNewLength - 1 ] = rOrg;
-
-                aFinalCache.realloc( ++nFinalLength );
-                aFinalCache[ nFinalLength - 1 ] = rOrg;
+                seqArgsNew[ nNewLength - 1 ].Name = "PreusedFilterName";
+                seqArgsNew[ nNewLength - 1 ].Value <<= m_pData->m_aPreusedFilterName;
             }
         }
 
-        m_pData->m_seqArguments = aFinalCache;
+        if (requestedArgs.empty() || requestedArgs.count(u"DocumentBorder"))
+        {
+            SfxViewFrame* pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell.get() );
+            if ( pFrame )
+            {
+                SvBorder aBorder = pFrame->GetBorderPixelImpl();
+
+                Sequence< sal_Int32 > aBorderSeq(4);
+                aBorderSeq[0] = aBorder.Left();
+                aBorderSeq[1] = aBorder.Top();
+                aBorderSeq[2] = aBorder.Right();
+                aBorderSeq[3] = aBorder.Bottom();
+
+                seqArgsNew.realloc( ++nNewLength );
+                seqArgsNew[ nNewLength - 1 ].Name = "DocumentBorder";
+                seqArgsNew[ nNewLength - 1 ].Value <<= aBorderSeq;
+            }
+        }
+
+        if (requestedArgs.empty())
+        {
+            // only the values that are not supported by the ItemSet must be cached here
+            Sequence< beans::PropertyValue > aFinalCache;
+            sal_Int32 nFinalLength = 0;
+
+            for ( const auto& rOrg : std::as_const(m_pData->m_seqArguments) )
+            {
+                auto bNew = std::none_of(seqArgsOld.begin(), seqArgsOld.end(),
+                    [&rOrg](const beans::PropertyValue& rOld){ return rOld.Name == rOrg.Name; });
+                if ( bNew )
+                {
+                    // the entity with this name should be new for seqArgsNew
+                    // since it is not supported by transformer
+
+                    seqArgsNew.realloc( ++nNewLength );
+                    seqArgsNew[ nNewLength - 1 ] = rOrg;
+
+                    aFinalCache.realloc( ++nFinalLength );
+                    aFinalCache[ nFinalLength - 1 ] = rOrg;
+                }
+            }
+
+            m_pData->m_seqArguments = aFinalCache;
+        }
 
         return seqArgsNew;
     }
@@ -4228,7 +4250,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
     pBaseController->SetCreationArguments_Impl( i_rArguments );
 
     // some initial view settings, coming from our most recent attachResource call
-    ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs() );
+    ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs2( { "ViewOnly", "PluginMode" } ) );
     if ( aDocumentLoadArgs.getOrDefault( "ViewOnly", false ) )
         pViewFrame->GetFrame().SetMenuBarOn_Impl( false );
 
