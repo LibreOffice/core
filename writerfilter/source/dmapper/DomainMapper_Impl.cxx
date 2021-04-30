@@ -1510,14 +1510,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         if (nListLevel == -1 && nListId > 0)
             nListLevel = 0;
 
-        if ( !bNoNumbering && !isNumberingViaRule && nListLevel >= 0 )
+        if (!bNoNumbering && !isNumberingViaRule && nListLevel >= 0 && nListLevel < 9)
             pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(nListLevel), false );
 
         auto const pList(GetListTable()->GetList(nListId));
         if (pList && nListId >= 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
         {
-            if ( bNoNumbering )
-                pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(OUString()) );
+            // ListLevel 9 means Body Level/no numbering.  numId 0 means no numbering.
+            if (bNoNumbering || nListLevel == 9 || (!isNumberingViaRule && !nListId))
+                pParaContext->Insert(PROP_NUMBERING_STYLE_NAME, uno::makeAny(OUString()), true);
             else if ( !isNumberingViaRule )
             {
                 isNumberingViaStyle = true;
