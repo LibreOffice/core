@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c1314d5_5f66229e",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-30T15:56:14Z",
+      "side": 0,
+      "message": "this whole loop here is kinda nonsense anyway because if the previous pages aren\u0027t done then the visible pages won\u0027t have the right result... ideally it should start formatting at the last page break before the visible pages... but even that isn\u0027t right because it could use the wrong side (left vs right pages)",
+      "revId": "6e6e531b564cdc9d5b25287c215cdc5a1fcbb346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

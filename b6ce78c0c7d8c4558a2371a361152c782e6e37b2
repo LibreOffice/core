@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1734dc38_01d7ec21",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-30T15:56:14Z",
+      "side": 1,
+      "message": "to guarantee that at least 1 page is finished, shouldn\u0027t this be the only place that checks IsInterrupt() ?",
+      "revId": "b6ce78c0c7d8c4558a2371a361152c782e6e37b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
