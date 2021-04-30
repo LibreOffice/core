@@ -55,7 +55,7 @@ public:
         OUString const & name);
 
 private:
-    virtual ~TypeManager() throw () override;
+    virtual ~TypeManager() noexcept override;
 
     virtual void SAL_CALL disposing() override;
 

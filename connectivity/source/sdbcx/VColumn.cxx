@@ -114,12 +114,12 @@ OColumn::~OColumn()
     return *OColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 
-void SAL_CALL OColumn::acquire() throw()
+void SAL_CALL OColumn::acquire() noexcept
 {
     OColumnDescriptor_BASE::acquire();
 }
 
-void SAL_CALL OColumn::release() throw()
+void SAL_CALL OColumn::release() noexcept
 {
     OColumnDescriptor_BASE::release();
 }

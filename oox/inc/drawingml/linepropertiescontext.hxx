@@ -32,7 +32,7 @@ class LinePropertiesContext final : public ::oox::core::ContextHandler2
 public:
     LinePropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
             const ::oox::AttributeList& rAttributes,
-            LineProperties& rLineProperties ) throw();
+            LineProperties& rLineProperties ) noexcept;
     virtual ~LinePropertiesContext() override;
 
     virtual ::oox::core::ContextHandlerRef

@@ -47,10 +47,10 @@ class SdLayer : public ::cppu::WeakImplHelper< css::drawing::XLayer,
 {
 public:
     SdLayer(SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_);
-    virtual ~SdLayer() throw() override;
+    virtual ~SdLayer() noexcept override;
 
     // intern
-    SdrLayer* GetSdrLayer() const throw() { return pLayer; }
+    SdrLayer* GetSdrLayer() const noexcept { return pLayer; }
 
     // uno helper
     UNO3_GETIMPLEMENTATION_DECL( SdLayer )
@@ -90,8 +90,8 @@ private:
     SdrLayer*                          pLayer;
     const SvxItemPropertySet*          pPropSet;
 
-    bool get( LayerAttribute what ) throw();
-    void set( LayerAttribute what, bool flag ) throw();
+    bool get( LayerAttribute what ) noexcept;
+    void set( LayerAttribute what, bool flag ) noexcept;
 
 };
 
@@ -108,8 +108,8 @@ class SdLayerManager : public ::cppu::WeakImplHelper< css::drawing::XLayerManage
     friend class SdLayer;
 
 public:
-    explicit SdLayerManager( SdXImpressDocument& rMyModel ) throw();
-    virtual ~SdLayerManager() throw() override;
+    explicit SdLayerManager( SdXImpressDocument& rMyModel ) noexcept;
+    virtual ~SdLayerManager() noexcept override;
 
     // uno helper
     UNO3_GETIMPLEMENTATION_DECL( SdLayerManager )
@@ -161,9 +161,9 @@ private:
     SdXImpressDocument* mpModel;
     std::unique_ptr<SvUnoWeakContainer> mpLayers;
 
-    ::sd::View* GetView() const throw();
-    ::sd::DrawDocShell* GetDocShell() const throw() { return mpModel->mpDocShell; }
-    void UpdateLayerView() const throw();
+    ::sd::View* GetView() const noexcept;
+    ::sd::DrawDocShell* GetDocShell() const noexcept { return mpModel->mpDocShell; }
+    void UpdateLayerView() const noexcept;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

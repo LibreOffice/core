@@ -435,7 +435,7 @@ getQualifier(const char* i_name) {
 
 // get namespace for standard qualified names
 // NB: only call this with statically known strings!
-OUString getNameSpace(const char* i_qname) throw ()
+OUString getNameSpace(const char* i_qname) noexcept
 {
     assert(i_qname);
     OUString ns;
@@ -451,7 +451,7 @@ OUString getNameSpace(const char* i_qname) throw ()
 bool
 textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
         bool & o_rIsDateTime, std::optional<sal_Int16> & o_rTimeZone,
-        const OUString& i_text) throw ()
+        const OUString& i_text) noexcept
 {
     if (::sax::Converter::parseDateOrDateTime(
                 &io_rd, io_rdt, o_rIsDateTime, &o_rTimeZone, i_text)) {
@@ -464,7 +464,7 @@ textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
 
 // convert string to date/time
 bool
-textToDateTime(css::util::DateTime & io_rdt, const OUString& i_text) throw ()
+textToDateTime(css::util::DateTime & io_rdt, const OUString& i_text) noexcept
 {
     if (::sax::Converter::parseDateTime(io_rdt, i_text)) {
         return true;
@@ -476,7 +476,7 @@ textToDateTime(css::util::DateTime & io_rdt, const OUString& i_text) throw ()
 
 // convert string to date/time with default return value
 css::util::DateTime
-textToDateTimeDefault(const OUString& i_text) throw ()
+textToDateTimeDefault(const OUString& i_text) noexcept
 {
     css::util::DateTime dt;
     static_cast<void> (textToDateTime(dt, i_text));
@@ -487,7 +487,7 @@ textToDateTimeDefault(const OUString& i_text) throw ()
 // convert date to string
 OUString
 dateToText(css::util::Date const& i_rd,
-           sal_Int16 const*const pTimeZone) throw ()
+           sal_Int16 const*const pTimeZone) noexcept
 {
     if (isValidDate(i_rd)) {
         OUStringBuffer buf;
@@ -502,7 +502,7 @@ dateToText(css::util::Date const& i_rd,
 // convert date/time to string
 OUString
 dateTimeToText(css::util::DateTime const& i_rdt,
-               sal_Int16 const*const pTimeZone = nullptr) throw ()
+               sal_Int16 const*const pTimeZone = nullptr) noexcept
 {
     if (isValidDateTime(i_rdt)) {
         OUStringBuffer buf(32);
@@ -516,7 +516,7 @@ dateTimeToText(css::util::DateTime const& i_rdt,
 // convert string to duration
 bool
 textToDuration(css::util::Duration& io_rDur, OUString const& i_rText)
-throw ()
+noexcept
 {
     if (::sax::Converter::convertDuration(io_rDur, i_rText)) {
         return true;
@@ -526,7 +526,7 @@ throw ()
     }
 }
 
-sal_Int32 textToDuration(OUString const& i_rText) throw ()
+sal_Int32 textToDuration(OUString const& i_rText) noexcept
 {
     css::util::Duration d;
     if (textToDuration(d, i_rText)) {
@@ -540,7 +540,7 @@ sal_Int32 textToDuration(OUString const& i_rText) throw ()
 }
 
 // convert duration to string
-OUString durationToText(css::util::Duration const& i_rDur) throw ()
+OUString durationToText(css::util::Duration const& i_rDur) noexcept
 {
     OUStringBuffer buf;
     ::sax::Converter::convertDuration(buf, i_rDur);
@@ -548,7 +548,7 @@ OUString durationToText(css::util::Duration const& i_rDur) throw ()
 }
 
 // convert duration to string
-OUString durationToText(sal_Int32 i_value) throw ()
+OUString durationToText(sal_Int32 i_value) noexcept
 {
     css::util::Duration ud;
     ud.Days    = static_cast<sal_Int16>(i_value / (24 * 3600));

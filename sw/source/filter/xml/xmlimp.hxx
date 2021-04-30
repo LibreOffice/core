@@ -110,14 +110,14 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlags);
 
-    virtual ~SwXMLImport() throw() override;
+    virtual ~SwXMLImport() noexcept override;
 
     // css::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
 
     // XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept;
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XInitialization

@@ -2098,12 +2098,12 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL OStorage::acquire() throw()
+void SAL_CALL OStorage::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL OStorage::release() throw()
+void SAL_CALL OStorage::release() noexcept
 {
     OWeakObject::release();
 }

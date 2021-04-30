@@ -64,7 +64,7 @@ public:
             rxResourceId,
         const Mode eMode);
 
-    virtual ~GenericConfigurationChangeRequest() throw() override;
+    virtual ~GenericConfigurationChangeRequest() noexcept override;
 
     // XConfigurationChangeOperation
 

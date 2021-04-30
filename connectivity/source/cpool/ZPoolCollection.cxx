@@ -307,7 +307,7 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
     return xInterface;
 }
 
-Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Reference<XInterface>& _xTreeNode) throw()
+Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Reference<XInterface>& _xTreeNode) noexcept
 {
     Reference< XHierarchicalNameAccess > xHierarchyAccess(_xTreeNode, UNO_QUERY);
     Reference< XNameAccess > xDirectAccess(_xTreeNode, UNO_QUERY);
@@ -345,7 +345,7 @@ Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Ref
     return xNode;
 }
 
-Any OPoolCollection::getNodeValue(const OUString& _rPath,const Reference<XInterface>& _xTreeNode) throw()
+Any OPoolCollection::getNodeValue(const OUString& _rPath,const Reference<XInterface>& _xTreeNode) noexcept
 {
     Reference< XHierarchicalNameAccess > xHierarchyAccess(_xTreeNode, UNO_QUERY);
     Reference< XNameAccess > xDirectAccess(_xTreeNode, UNO_QUERY);

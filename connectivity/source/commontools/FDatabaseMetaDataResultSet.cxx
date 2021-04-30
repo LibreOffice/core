@@ -118,12 +118,12 @@ void ODatabaseMetaDataResultSet::disposing()
     m_aRowsIter = m_aRows.end();
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw()
+void SAL_CALL ODatabaseMetaDataResultSet::acquire() noexcept
 {
     ODatabaseMetaDataResultSet_BASE::acquire();
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::release() throw()
+void SAL_CALL ODatabaseMetaDataResultSet::release() noexcept
 {
     ODatabaseMetaDataResultSet_BASE::release();
 }

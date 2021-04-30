@@ -45,7 +45,7 @@ namespace oox::ppt {
     {
     }
 
-    CommonBehaviorContext::~CommonBehaviorContext( ) throw( )
+    CommonBehaviorContext::~CommonBehaviorContext( ) noexcept
     {
     }
 

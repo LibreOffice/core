@@ -100,8 +100,8 @@ public:
 
     virtual ~Statement() override;
 public: // XInterface
-    virtual void SAL_CALL acquire() throw() override { Statement_BASE::acquire(); }
-    virtual void SAL_CALL release() throw() override { Statement_BASE::release(); }
+    virtual void SAL_CALL acquire() noexcept override { Statement_BASE::acquire(); }
+    virtual void SAL_CALL release() noexcept override { Statement_BASE::release(); }
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & reqType ) override;
 
 public: // XCloseable

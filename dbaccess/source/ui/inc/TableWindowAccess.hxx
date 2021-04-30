@@ -50,11 +50,11 @@ namespace dbaui
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire(  ) throw () override
+        virtual void SAL_CALL acquire(  ) noexcept override
         { // here inline is allowed because we do not use this class outside this dll
             VCLXAccessibleComponent::acquire(  );
         }
-        virtual void SAL_CALL release(  ) throw () override
+        virtual void SAL_CALL release(  ) noexcept override
         { // here inline is allowed because we do not use this class outside this dll
             VCLXAccessibleComponent::release(  );
         }

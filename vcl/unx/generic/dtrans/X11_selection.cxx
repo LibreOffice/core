@@ -3817,7 +3817,7 @@ void SelectionManager::run( void* pThis )
 #endif
 }
 
-void SelectionManager::shutdown() throw()
+void SelectionManager::shutdown() noexcept
 {
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("vcl.unx.dtrans", "SelectionManager got app termination event.");
@@ -4057,21 +4057,21 @@ void SelectionManager::deregisterDropTarget( ::Window aWindow )
  *  SelectionAdaptor
  */
 
-css::uno::Reference< XTransferable > SelectionManager::getTransferable() throw()
+css::uno::Reference< XTransferable > SelectionManager::getTransferable() noexcept
 {
     return m_xDragSourceTransferable;
 }
 
-void SelectionManager::clearTransferable() throw()
+void SelectionManager::clearTransferable() noexcept
 {
     m_xDragSourceTransferable.clear();
 }
 
-void SelectionManager::fireContentsChanged() throw()
+void SelectionManager::fireContentsChanged() noexcept
 {
 }
 
-css::uno::Reference< XInterface > SelectionManager::getReference() throw()
+css::uno::Reference< XInterface > SelectionManager::getReference() noexcept
 {
     return css::uno::Reference< XInterface >( static_cast<OWeakObject*>(this) );
 }

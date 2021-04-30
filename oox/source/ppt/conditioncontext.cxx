@@ -94,7 +94,7 @@ namespace oox::ppt {
         }
     }
 
-    CondContext::~CondContext( ) throw( )
+    CondContext::~CondContext( ) noexcept
     {
         if( maCond.mnType == 0 || maCond.mnType == PPT_TOKEN(tn))
         {
@@ -159,7 +159,7 @@ namespace oox::ppt {
     }
 
     CondListContext::~CondListContext( )
-        throw( )
+        noexcept
     {
     }
 

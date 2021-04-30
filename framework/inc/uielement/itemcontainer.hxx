@@ -44,7 +44,7 @@ class ItemContainer final : public ::cppu::WeakImplHelper< css::container::XInde
         //  XInterface, XTypeProvider
 
         // XUnoTunnel
-        static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() throw();
+        static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() noexcept;
 
         // XIndexContainer
         virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;

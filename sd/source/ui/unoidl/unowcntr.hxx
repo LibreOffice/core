@@ -30,11 +30,11 @@ private:
     std::vector< css::uno::WeakReference< css::uno::XInterface > > maVector;
 
 public:
-    SvUnoWeakContainer() throw();
-    ~SvUnoWeakContainer() throw();
+    SvUnoWeakContainer() noexcept;
+    ~SvUnoWeakContainer() noexcept;
 
     /** inserts the given ref into this container */
-    void insert( const css::uno::WeakReference< css::uno::XInterface >& xRef ) throw();
+    void insert( const css::uno::WeakReference< css::uno::XInterface >& xRef ) noexcept;
 
     /** searches the container for a ref that returns true on the given
         search function

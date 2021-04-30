@@ -212,8 +212,8 @@ public:
 
     void NotifyRefreshListeners();
     virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) throw() override;
-    virtual void SAL_CALL release(  ) throw() override;
+    virtual void SAL_CALL acquire(  ) noexcept override;
+    virtual void SAL_CALL release(  ) noexcept override;
 
     //XWeak
     virtual css::uno::Reference< css::uno::XAdapter > SAL_CALL queryAdapter(  ) override;

@@ -109,15 +109,15 @@ namespace comphelper
 
     public:
         ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, SolarMutex* pMutex )
-            throw();
+            noexcept;
         virtual ~ChainablePropertySet()
-            throw() override;
+            noexcept override;
 
         css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override
         { return ChainablePropertySetBase::queryInterface( aType ); }
-        void SAL_CALL acquire(  ) throw () override
+        void SAL_CALL acquire(  ) noexcept override
         { ChainablePropertySetBase::acquire( ); }
-        void SAL_CALL release(  ) throw () override
+        void SAL_CALL release(  ) noexcept override
         { ChainablePropertySetBase::release( ); }
 
         // XPropertySet

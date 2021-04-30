@@ -47,8 +47,8 @@ namespace dbaui
     public:
         OSbaWeakSubObject(::cppu::OWeakObject& rParent) : m_rParent(rParent) { }
 
-        virtual void SAL_CALL acquire() throw() override { m_rParent.acquire(); }
-        virtual void SAL_CALL release() throw() override { m_rParent.release(); }
+        virtual void SAL_CALL acquire() noexcept override { m_rParent.acquire(); }
+        virtual void SAL_CALL release() noexcept override { m_rParent.release(); }
     };
 
     // declaration of a listener multiplexer class

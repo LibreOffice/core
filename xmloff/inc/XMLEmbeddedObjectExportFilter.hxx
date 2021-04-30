@@ -34,8 +34,8 @@ class XMLEmbeddedObjectExportFilter final : public cppu::WeakImplHelper<
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtHandler;
 
 public:
-    XMLEmbeddedObjectExportFilter( const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler ) throw();
-    virtual ~XMLEmbeddedObjectExportFilter () throw() override;
+    XMLEmbeddedObjectExportFilter( const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler ) noexcept;
+    virtual ~XMLEmbeddedObjectExportFilter () noexcept override;
 
     // css::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument() override;

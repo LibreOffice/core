@@ -40,7 +40,7 @@ public:
         const void* pBuffer,
         size_t size,
         size_t nmemb
-    ) throw();
+    ) noexcept;
 
 
     sal_uInt32 m_nLen,m_nWritePos;

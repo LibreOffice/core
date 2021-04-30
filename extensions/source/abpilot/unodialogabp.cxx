@@ -48,12 +48,12 @@ namespace abp
         return aReturn.hasValue() ? aReturn : OABSPilotUno_JBase::queryInterface( aType );
     }
 
-    void SAL_CALL OABSPilotUno::acquire(  ) throw ()
+    void SAL_CALL OABSPilotUno::acquire(  ) noexcept
     {
         svt::OGenericUnoDialog::acquire();
     }
 
-    void SAL_CALL OABSPilotUno::release(  ) throw ()
+    void SAL_CALL OABSPilotUno::release(  ) noexcept
     {
         svt::OGenericUnoDialog::release();
     }

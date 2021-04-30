@@ -59,7 +59,7 @@ public:
     virtual ~PowerPointExport() override;
 
     // from FilterBase
-    virtual bool importDocument() throw() override;
+    virtual bool importDocument() noexcept override;
     virtual bool exportDocument() override;
 
     // only needed for import, leave them empty, refactor later XmlFilterBase to export and import base?

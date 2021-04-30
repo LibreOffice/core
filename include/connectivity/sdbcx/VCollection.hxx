@@ -176,8 +176,8 @@ namespace connectivity::sdbcx
             // only the name is identical to ::cppu::OComponentHelper
             virtual void disposing();
             // dispatch the refcounting to the parent
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
+            virtual void SAL_CALL acquire() noexcept override;
+            virtual void SAL_CALL release() noexcept override;
 
             // XInterface
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;

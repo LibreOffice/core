@@ -423,7 +423,7 @@ Cell::Cell(
 }
 
 
-Cell::~Cell() throw()
+Cell::~Cell() noexcept
 {
     dispose();
 }
@@ -877,13 +877,13 @@ Any SAL_CALL Cell::queryInterface( const Type & rType )
 }
 
 
-void SAL_CALL Cell::acquire() throw ()
+void SAL_CALL Cell::acquire() noexcept
 {
     ::cppu::OWeakObject::acquire();
 }
 
 
-void SAL_CALL Cell::release() throw ()
+void SAL_CALL Cell::release() noexcept
 {
     ::cppu::OWeakObject::release();
 }

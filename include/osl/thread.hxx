@@ -152,7 +152,7 @@ public:
         osl_yieldThread();
     }
 
-    static void setName(char const * name) throw () {
+    static void setName(char const * name) SAL_NOEXCEPT {
         osl_setThreadName(name);
     }
 

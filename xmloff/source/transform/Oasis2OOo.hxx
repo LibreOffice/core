@@ -40,8 +40,8 @@ protected:
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n ) override;
 
 public:
-    Oasis2OOoTransformer () throw();
-    virtual ~Oasis2OOoTransformer() throw() override;
+    Oasis2OOoTransformer () noexcept;
+    virtual ~Oasis2OOoTransformer() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -49,7 +49,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XUnoTunnel
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() throw();
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() noexcept;
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     virtual OUString GetEventName( const OUString& rName,

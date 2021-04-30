@@ -30,7 +30,7 @@ public:
         const override;
 
 private:
-    virtual ~LegacyProvider() throw () override;
+    virtual ~LegacyProvider() noexcept override;
 
     Manager & manager_;
     mutable RegistryKey ucr_;

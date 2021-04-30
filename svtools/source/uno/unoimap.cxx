@@ -89,8 +89,8 @@ public:
     // XInterface
     virtual Any SAL_CALL queryAggregation( const Type & rType ) override;
     virtual Any SAL_CALL queryInterface( const Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes(  ) override;
@@ -328,12 +328,12 @@ Any SAL_CALL SvUnoImageMapObject::queryAggregation( const Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvUnoImageMapObject::acquire() throw()
+void SAL_CALL SvUnoImageMapObject::acquire() noexcept
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL SvUnoImageMapObject::release() throw()
+void SAL_CALL SvUnoImageMapObject::release() noexcept
 {
     OWeakAggObject::release();
 }

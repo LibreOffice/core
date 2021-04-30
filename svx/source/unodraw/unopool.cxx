@@ -52,7 +52,7 @@ SvxUnoDrawPool::SvxUnoDrawPool(SdrModel* pModel)
     init();
 }
 
-SvxUnoDrawPool::~SvxUnoDrawPool() throw()
+SvxUnoDrawPool::~SvxUnoDrawPool() noexcept
 {
     if (mpDefaultsPool)
     {
@@ -73,7 +73,7 @@ void SvxUnoDrawPool::init()
     mpDefaultsPool->FreezeIdRanges();
 }
 
-SfxItemPool* SvxUnoDrawPool::getModelPool( bool bReadOnly ) throw()
+SfxItemPool* SvxUnoDrawPool::getModelPool( bool bReadOnly ) noexcept
 {
     if( mpModel )
     {

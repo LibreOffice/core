@@ -56,12 +56,12 @@ ToolBarWrapper::~ToolBarWrapper()
 }
 
 // XInterface
-void SAL_CALL ToolBarWrapper::acquire() throw()
+void SAL_CALL ToolBarWrapper::acquire() noexcept
 {
     UIConfigElementWrapperBase::acquire();
 }
 
-void SAL_CALL ToolBarWrapper::release() throw()
+void SAL_CALL ToolBarWrapper::release() noexcept
 {
     UIConfigElementWrapperBase::release();
 }

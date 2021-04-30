@@ -35,14 +35,14 @@ class SvxAccessibleTextPropertySet final : public SvxUnoTextRangeBase,
 {
 public:
     SvxAccessibleTextPropertySet(const SvxEditSource*, const SvxItemPropertySet*);
-    virtual ~SvxAccessibleTextPropertySet() throw() override;
+    virtual ~SvxAccessibleTextPropertySet() noexcept override;
 
     // XTextRange
     virtual css::uno::Reference<css::text::XText> SAL_CALL getText() override;
 
     virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

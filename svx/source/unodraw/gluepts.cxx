@@ -45,7 +45,7 @@ private:
     tools::WeakReference<SdrObject>    mpObject;
 
 public:
-    explicit SvxUnoGluePointAccess( SdrObject* pObject ) throw();
+    explicit SvxUnoGluePointAccess( SdrObject* pObject ) noexcept;
 
     // XIdentifierContainer
     virtual sal_Int32 SAL_CALL insert( const uno::Any& aElement ) override;
@@ -79,7 +79,7 @@ public:
 
 }
 
-static void convert( const SdrGluePoint& rSdrGlue, drawing::GluePoint2& rUnoGlue ) throw()
+static void convert( const SdrGluePoint& rSdrGlue, drawing::GluePoint2& rUnoGlue ) noexcept
 {
     rUnoGlue.Position.X = rSdrGlue.GetPos().X();
     rUnoGlue.Position.Y = rSdrGlue.GetPos().Y();
@@ -133,7 +133,7 @@ static void convert( const SdrGluePoint& rSdrGlue, drawing::GluePoint2& rUnoGlue
     }
 }
 
-static void convert( const drawing::GluePoint2& rUnoGlue, SdrGluePoint& rSdrGlue ) throw()
+static void convert( const drawing::GluePoint2& rUnoGlue, SdrGluePoint& rSdrGlue ) noexcept
 {
     rSdrGlue.SetPos( Point( rUnoGlue.Position.X, rUnoGlue.Position.Y ) );
     rSdrGlue.SetPercent( rUnoGlue.IsRelative );
@@ -196,7 +196,7 @@ static void convert( const drawing::GluePoint2& rUnoGlue, SdrGluePoint& rSdrGlue
     }
 }
 
-SvxUnoGluePointAccess::SvxUnoGluePointAccess( SdrObject* pObject ) throw()
+SvxUnoGluePointAccess::SvxUnoGluePointAccess( SdrObject* pObject ) noexcept
 : mpObject( pObject )
 {
 }

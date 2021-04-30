@@ -43,17 +43,17 @@ protected:
     css::drawing::XDrawPage* mpPage;
 
     css::uno::Reference< css::text::XTextRange >  Search( const css::uno::Reference< css::text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr );
-    bool Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) throw();
-    static ESelection GetSelection( const css::uno::Reference< css::text::XTextRange >&  xTextRange ) throw();
-    static css::uno::Reference< css::drawing::XShape >  GetShape( const css::uno::Reference< css::text::XTextRange >&  xTextRange ) throw();
-    css::uno::Reference< css::drawing::XShape >  GetNextShape( const css::uno::Reference< css::container::XIndexAccess >&  xShapes, const css::uno::Reference< css::drawing::XShape >&  xCurrentShape ) throw();
-    css::uno::Reference< css::drawing::XShape >  GetCurrentShape() const throw();
+    bool Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) noexcept;
+    static ESelection GetSelection( const css::uno::Reference< css::text::XTextRange >&  xTextRange ) noexcept;
+    static css::uno::Reference< css::drawing::XShape >  GetShape( const css::uno::Reference< css::text::XTextRange >&  xTextRange ) noexcept;
+    css::uno::Reference< css::drawing::XShape >  GetNextShape( const css::uno::Reference< css::container::XIndexAccess >&  xShapes, const css::uno::Reference< css::drawing::XShape >&  xCurrentShape ) noexcept;
+    css::uno::Reference< css::drawing::XShape >  GetCurrentShape() const noexcept;
 
 public:
     // danger, this c'tor is only usable if the given shape or page is derived
     // from this class!!!
-    SdUnoSearchReplaceShape( css::drawing::XDrawPage* xPage ) throw();
-    virtual ~SdUnoSearchReplaceShape() throw();
+    SdUnoSearchReplaceShape( css::drawing::XDrawPage* xPage ) noexcept;
+    virtual ~SdUnoSearchReplaceShape() noexcept;
 
     // XReplaceable
     virtual css::uno::Reference< css::util::XReplaceDescriptor > SAL_CALL createReplaceDescriptor(  ) override;
@@ -86,7 +86,7 @@ protected:
 public:
     /// @throws css::uno::RuntimeException
     SdUnoSearchReplaceDescriptor();
-    virtual ~SdUnoSearchReplaceDescriptor() throw() override;
+    virtual ~SdUnoSearchReplaceDescriptor() noexcept override;
 
     bool IsCaseSensitive() const { return mbCaseSensitive; }
     bool IsWords() const { return mbWords; }
@@ -120,8 +120,8 @@ class SdUnoFindAllAccess final : public ::cppu::WeakImplHelper< css::container::
     css::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > maSequence;
 
 public:
-    SdUnoFindAllAccess( css::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > const & rSequence ) throw();
-    virtual ~SdUnoFindAllAccess() throw() override;
+    SdUnoFindAllAccess( css::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > const & rSequence ) noexcept;
+    virtual ~SdUnoFindAllAccess() noexcept override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;

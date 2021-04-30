@@ -71,24 +71,24 @@ namespace offapp
         }
     }
 
-    ODriverEnumeration::ODriverEnumeration() throw()
+    ODriverEnumeration::ODriverEnumeration() noexcept
         :m_pImpl(new ODriverEnumerationImpl)
     {
     }
 
 
-    ODriverEnumeration::~ODriverEnumeration() throw()
+    ODriverEnumeration::~ODriverEnumeration() noexcept
     {
     }
 
 
-    ODriverEnumeration::const_iterator ODriverEnumeration::begin() const throw()
+    ODriverEnumeration::const_iterator ODriverEnumeration::begin() const noexcept
     {
         return m_pImpl->getDriverImplNames().begin();
     }
 
 
-    ODriverEnumeration::const_iterator ODriverEnumeration::end() const throw()
+    ODriverEnumeration::const_iterator ODriverEnumeration::end() const noexcept
     {
         return m_pImpl->getDriverImplNames().end();
     }

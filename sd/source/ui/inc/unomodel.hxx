@@ -128,7 +128,7 @@ protected:
 public:
     SdXImpressDocument(::sd::DrawDocShell* pShell, bool bClipBoard);
     SdXImpressDocument(SdDrawDocument* pDoc, bool bClipBoard);
-    virtual ~SdXImpressDocument() throw() override;
+    virtual ~SdXImpressDocument() noexcept override;
 
     static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument const & rDoc );
 
@@ -140,7 +140,7 @@ public:
     SdDrawDocument* GetDoc() const { return mpDoc; }
     bool IsImpressDocument() const { return mbImpressDoc; }
 
-    void SetModified() throw();
+    void SetModified() noexcept;
 
     css::uno::Reference< css::i18n::XForbiddenCharacters > getForbiddenCharsTable();
 
@@ -151,8 +151,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XModel
     virtual void SAL_CALL lockControllers(  ) override;
@@ -298,8 +298,8 @@ private:
     SdXImpressDocument* mpModel;
 
 public:
-    SdDrawPagesAccess( SdXImpressDocument&  rMyModel ) throw();
-    virtual ~SdDrawPagesAccess() throw() override;
+    SdDrawPagesAccess( SdXImpressDocument&  rMyModel ) noexcept;
+    virtual ~SdDrawPagesAccess() noexcept override;
 
     // XDrawPages
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL insertNewByIndex( sal_Int32 nIndex ) override;
@@ -339,8 +339,8 @@ private:
     SdXImpressDocument* mpModel;
 
 public:
-    SdMasterPagesAccess( SdXImpressDocument& rMyModel ) throw();
-    virtual ~SdMasterPagesAccess() throw() override;
+    SdMasterPagesAccess( SdXImpressDocument& rMyModel ) noexcept;
+    virtual ~SdMasterPagesAccess() noexcept override;
 
     // XDrawPages
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL insertNewByIndex( sal_Int32 nIndex ) override;
@@ -376,8 +376,8 @@ private:
     SdXImpressDocument* mpModel;
 
 public:
-    SdDocLinkTargets( SdXImpressDocument&   rMyModel ) throw();
-    virtual ~SdDocLinkTargets() throw() override;
+    SdDocLinkTargets( SdXImpressDocument&   rMyModel ) noexcept;
+    virtual ~SdDocLinkTargets() noexcept override;
 
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;

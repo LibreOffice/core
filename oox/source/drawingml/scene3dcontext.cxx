@@ -30,7 +30,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox::drawingml {
 
-Scene3DPropertiesContext::Scene3DPropertiesContext( ContextHandler2Helper const & rParent, Shape3DProperties& r3DProperties ) throw()
+Scene3DPropertiesContext::Scene3DPropertiesContext( ContextHandler2Helper const & rParent, Shape3DProperties& r3DProperties ) noexcept
 : ContextHandler2( rParent )
 , mr3DProperties( r3DProperties )
 {
@@ -63,7 +63,7 @@ ContextHandlerRef Scene3DPropertiesContext::onCreateContext( sal_Int32 aElementT
     return nullptr;
 }
 
-SceneText3DPropertiesContext::SceneText3DPropertiesContext( ContextHandler2Helper const & rParent, Text3DProperties& r3DProperties ) throw()
+SceneText3DPropertiesContext::SceneText3DPropertiesContext( ContextHandler2Helper const & rParent, Text3DProperties& r3DProperties ) noexcept
 : ContextHandler2( rParent )
 , mr3DProperties( r3DProperties )
 {
@@ -120,7 +120,7 @@ ContextHandlerRef SceneText3DPropertiesContext::onCreateContext( sal_Int32 aElem
     return nullptr;
 }
 
-Shape3DPropertiesContext::Shape3DPropertiesContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, Shape3DProperties& r3DProperties ) throw()
+Shape3DPropertiesContext::Shape3DPropertiesContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, Shape3DProperties& r3DProperties ) noexcept
 : ContextHandler2( rParent )
 , mr3DProperties( r3DProperties )
 {
@@ -165,7 +165,7 @@ ContextHandlerRef Shape3DPropertiesContext::onCreateContext( sal_Int32 aElementT
     return nullptr;
 }
 
-Scene3DRotationPropertiesContext::Scene3DRotationPropertiesContext( ContextHandler2Helper const & rParent, RotationProperties& rRotationProperties ) throw()
+Scene3DRotationPropertiesContext::Scene3DRotationPropertiesContext( ContextHandler2Helper const & rParent, RotationProperties& rRotationProperties ) noexcept
 : ContextHandler2( rParent )
 , mrRotationProperties( rRotationProperties )
 {

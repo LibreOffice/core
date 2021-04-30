@@ -182,12 +182,12 @@ namespace chart
     {
     }
 
-    void SAL_CALL UndoManager::acquire() throw ()
+    void SAL_CALL UndoManager::acquire() noexcept
     {
         m_pImpl->getParent().acquire();
     }
 
-    void SAL_CALL UndoManager::release() throw ()
+    void SAL_CALL UndoManager::release() noexcept
     {
         m_pImpl->getParent().release();
     }

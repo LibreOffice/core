@@ -276,12 +276,12 @@ Any SAL_CALL AccessibleBrowseBoxHeaderBar::queryInterface( const uno::Type& rTyp
         aAny : AccessibleBrowseBoxHeaderBarImplHelper::queryInterface( rType );
 }
 
-void SAL_CALL AccessibleBrowseBoxHeaderBar::acquire() throw ()
+void SAL_CALL AccessibleBrowseBoxHeaderBar::acquire() noexcept
 {
     AccessibleBrowseBoxTableBase::acquire();
 }
 
-void SAL_CALL AccessibleBrowseBoxHeaderBar::release() throw ()
+void SAL_CALL AccessibleBrowseBoxHeaderBar::release() noexcept
 {
     AccessibleBrowseBoxTableBase::release();
 }

@@ -1881,7 +1881,7 @@ cppuhelper::TypeManager::resolve(OUString const & name) {
     return desc;
 }
 
-cppuhelper::TypeManager::~TypeManager() throw () {}
+cppuhelper::TypeManager::~TypeManager() noexcept {}
 
 void cppuhelper::TypeManager::disposing() {} //TODO
 

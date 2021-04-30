@@ -49,7 +49,7 @@ ResultSetBase::~ResultSetBase()
 
 void SAL_CALL
 ResultSetBase::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
@@ -57,7 +57,7 @@ ResultSetBase::acquire()
 
 void SAL_CALL
 ResultSetBase::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }
@@ -342,14 +342,14 @@ public:
     }
 
     void SAL_CALL acquire()
-        throw() override
+        noexcept override
     {
         OWeakObject::acquire();
     }
 
 
     void SAL_CALL release()
-        throw() override
+        noexcept override
     {
         OWeakObject::release();
     }

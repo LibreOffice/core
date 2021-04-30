@@ -41,7 +41,7 @@ protected:
     virtual SdrModel& getSdrModelFromUnoModel() const = 0; //TTTT make reference return
 
 public:
-    SvxUnoDrawMSFactory() throw() {};
+    SvxUnoDrawMSFactory() noexcept {};
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override;

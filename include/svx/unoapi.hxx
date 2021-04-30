@@ -44,34 +44,34 @@ enum class SdrInventor : sal_uInt32;
 SVXCORE_DLLPUBLIC rtl::Reference<SvxShape> CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInventor, OUString const & referer);
 
 /** Returns a StarOffice API wrapper for the given SdrObject */
-SVXCORE_DLLPUBLIC css::uno::Reference< css::drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw ();
+SVXCORE_DLLPUBLIC css::uno::Reference< css::drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) noexcept;
 
 /** Returns the SdrObject from the given StarOffice API wrapper */
-SVXCORE_DLLPUBLIC SdrObject* GetSdrObjectFromXShape( const css::uno::Reference< css::drawing::XShape >& xShape ) throw() ;
+SVXCORE_DLLPUBLIC SdrObject* GetSdrObjectFromXShape( const css::uno::Reference< css::drawing::XShape >& xShape ) noexcept ;
 
 /** Returns a StarOffice API wrapper for the given SdrPage */
-SVXCORE_DLLPUBLIC css::uno::Reference< css::drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) throw ();
+SVXCORE_DLLPUBLIC css::uno::Reference< css::drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) noexcept;
 
 /** Returns the SdrPage from the given StarOffice API wrapper */
-SVXCORE_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage ) throw() ;
+SVXCORE_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage ) noexcept ;
 
 /**
  * Maps the vcl MapUnit enum to an API constant MeasureUnit.
  * Returns false if conversion is not supported.
  */
-SVXCORE_DLLPUBLIC bool SvxMapUnitToMeasureUnit( const MapUnit nVcl, short& eApi ) throw();
+SVXCORE_DLLPUBLIC bool SvxMapUnitToMeasureUnit( const MapUnit nVcl, short& eApi ) noexcept;
 
 /**
  * Maps the API constant MeasureUnit to a vcl MapUnit enum.
  * Returns false if conversion is not supported.
  */
-SVXCORE_DLLPUBLIC bool SvxMeasureUnitToFieldUnit( const short eApi, FieldUnit& nVcl ) throw();
+SVXCORE_DLLPUBLIC bool SvxMeasureUnitToFieldUnit( const short eApi, FieldUnit& nVcl ) noexcept;
 
 /**
  * Maps the vcl MapUnit enum to an API constant MeasureUnit.
  * Returns false if conversion is not supported.
  */
-SVXCORE_DLLPUBLIC bool SvxFieldUnitToMeasureUnit( const FieldUnit nVcl, short& eApi ) throw();
+SVXCORE_DLLPUBLIC bool SvxFieldUnitToMeasureUnit( const FieldUnit nVcl, short& eApi ) noexcept;
 
 /**
  * If the given name is a predefined name for the current language it is replaced by

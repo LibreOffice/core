@@ -531,12 +531,12 @@ Any ODatabaseSource::queryInterface( const Type & rType )
     return aIface;
 }
 
-void ODatabaseSource::acquire() throw ()
+void ODatabaseSource::acquire() noexcept
 {
     ODatabaseSource_Base::acquire();
 }
 
-void ODatabaseSource::release() throw ()
+void ODatabaseSource::release() noexcept
 {
     ODatabaseSource_Base::release();
 }

@@ -113,12 +113,12 @@ namespace dbaccess
     {
     }
 
-    void SAL_CALL DocumentEvents::acquire() throw()
+    void SAL_CALL DocumentEvents::acquire() noexcept
     {
         m_pData->rParent.acquire();
     }
 
-    void SAL_CALL DocumentEvents::release() throw()
+    void SAL_CALL DocumentEvents::release() noexcept
     {
         m_pData->rParent.release();
     }

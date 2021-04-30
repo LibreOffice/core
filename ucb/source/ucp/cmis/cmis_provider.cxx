@@ -92,13 +92,13 @@ ContentProvider::~ContentProvider()
 
 //XInterface
 void SAL_CALL ContentProvider::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL ContentProvider::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

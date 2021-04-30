@@ -67,8 +67,8 @@ namespace dbaccess
 
     // css::uno::XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire() throw() override;
-        virtual void SAL_CALL release() throw() override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
     // css::beans::XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -190,8 +190,8 @@ namespace dbaccess
 
         //XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire() throw() override { OColumns_BASE::acquire(); }
-        virtual void SAL_CALL release() throw() override { OColumns_BASE::release(); }
+        virtual void SAL_CALL acquire() noexcept override { OColumns_BASE::acquire(); }
+        virtual void SAL_CALL release() noexcept override { OColumns_BASE::release(); }
         //XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 

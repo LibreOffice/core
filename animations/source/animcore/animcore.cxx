@@ -133,8 +133,8 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes() override;
@@ -301,7 +301,7 @@ public:
 private:
     OInterfaceContainerHelper2   maChangeListener;
 
-    static void initTypeProvider( sal_Int16 nNodeType ) throw();
+    static void initTypeProvider( sal_Int16 nNodeType ) noexcept;
 
     const sal_Int16 mnNodeType;
 
@@ -742,7 +742,7 @@ Any SAL_CALL AnimationNode::queryInterface( const Type& aType )
 }
 
 
-void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
+void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) noexcept
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
@@ -837,14 +837,14 @@ Sequence< sal_Int8 > AnimationNode::getImplementationId()
 
 
 // XInterface
-void SAL_CALL AnimationNode::acquire(  ) throw ()
+void SAL_CALL AnimationNode::acquire(  ) noexcept
 {
     OWeakObject::acquire();
 }
 
 
 // XInterface
-void SAL_CALL AnimationNode::release(  ) throw ()
+void SAL_CALL AnimationNode::release(  ) noexcept
 {
     OWeakObject::release();
 }

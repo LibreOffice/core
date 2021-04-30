@@ -62,7 +62,7 @@ void * allocate(sal_Size size) {
 
 std::vector< BinaryAny >::iterator copyMemberValues(
     css::uno::TypeDescription const & type,
-    std::vector< BinaryAny >::iterator const & it, void * buffer) throw ()
+    std::vector< BinaryAny >::iterator const & it, void * buffer) noexcept
 {
     assert(
         type.is() &&

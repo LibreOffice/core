@@ -1599,12 +1599,12 @@ void OResultSet::fillColumn(const sal_Int32 _nColumn)
     }
 }
 
-void SAL_CALL OResultSet::acquire() throw()
+void SAL_CALL OResultSet::acquire() noexcept
 {
     OResultSet_BASE::acquire();
 }
 
-void SAL_CALL OResultSet::release() throw()
+void SAL_CALL OResultSet::release() noexcept
 {
     OResultSet_BASE::release();
 }

@@ -64,8 +64,8 @@ class SFX2_DLLPUBLIC SfxStatusBarControl: public svt::StatusbarController
 public:
     // new controller API
     // XInterface
-    virtual void               SAL_CALL acquire() throw() override;
-    virtual void               SAL_CALL release() throw() override;
+    virtual void               SAL_CALL acquire() noexcept override;
+    virtual void               SAL_CALL release() noexcept override;
 
 protected:
     // XEventListener

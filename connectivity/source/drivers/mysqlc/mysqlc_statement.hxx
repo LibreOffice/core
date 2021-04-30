@@ -93,8 +93,8 @@ public:
     void SAL_CALL disposing() override;
 
     // XInterface
-    void SAL_CALL release() throw() override;
-    void SAL_CALL acquire() throw() override;
+    void SAL_CALL release() noexcept override;
+    void SAL_CALL acquire() noexcept override;
     Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
 
     //XTypeProvider
@@ -146,8 +146,8 @@ public:
 
     //XInterface
     Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
-    void SAL_CALL acquire() throw() override;
-    void SAL_CALL release() throw() override;
+    void SAL_CALL acquire() noexcept override;
+    void SAL_CALL release() noexcept override;
 
     //XTypeProvider
     css::uno::Sequence<Type> SAL_CALL getTypes() override;

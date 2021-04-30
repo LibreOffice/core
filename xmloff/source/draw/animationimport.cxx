@@ -1195,8 +1195,8 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XAnimationNodeSupplier
     Reference< XAnimationNode > SAL_CALL getAnimationNode() override;
@@ -1229,12 +1229,12 @@ Any SAL_CALL AnimationsImport::queryInterface( const Type& aType )
     }
 }
 
-void SAL_CALL AnimationsImport::acquire() throw ()
+void SAL_CALL AnimationsImport::acquire() noexcept
 {
     SvXMLImport::acquire();
 }
 
-void SAL_CALL AnimationsImport::release() throw ()
+void SAL_CALL AnimationsImport::release() noexcept
 {
     SvXMLImport::release();
 }

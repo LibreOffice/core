@@ -65,7 +65,7 @@ public:
     Pane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
         vcl::Window* pWindow)
-        throw ();
+        noexcept;
     virtual ~Pane() override;
 
     virtual void SAL_CALL disposing() override;

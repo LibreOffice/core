@@ -379,13 +379,13 @@ Any SAL_CALL AccessibleTableShape::queryInterface( const Type& aType )
 }
 
 
-void SAL_CALL AccessibleTableShape::acquire(  ) throw ()
+void SAL_CALL AccessibleTableShape::acquire(  ) noexcept
 {
     AccessibleTableShape_Base::acquire();
 }
 
 
-void SAL_CALL AccessibleTableShape::release(  ) throw ()
+void SAL_CALL AccessibleTableShape::release(  ) noexcept
 {
     AccessibleTableShape_Base::release();
 }

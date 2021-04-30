@@ -125,7 +125,7 @@ Any SAL_CALL OMRCListenerMultiplexerHelper::queryInterface( const Type& rType )
 
 //  XInterface
 
-void SAL_CALL OMRCListenerMultiplexerHelper::acquire() throw()
+void SAL_CALL OMRCListenerMultiplexerHelper::acquire() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -136,7 +136,7 @@ void SAL_CALL OMRCListenerMultiplexerHelper::acquire() throw()
 
 //  XInterface
 
-void SAL_CALL OMRCListenerMultiplexerHelper::release() throw()
+void SAL_CALL OMRCListenerMultiplexerHelper::release() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.

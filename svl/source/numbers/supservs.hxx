@@ -48,8 +48,8 @@ public:
     virtual ~SvNumberFormatsSupplierServiceObject() override;
 
     // XInterface
-    virtual void SAL_CALL acquire() throw() override { SvNumberFormatsSupplierObj::acquire(); }
-    virtual void SAL_CALL release() throw() override { SvNumberFormatsSupplierObj::release(); }
+    virtual void SAL_CALL acquire() noexcept override { SvNumberFormatsSupplierObj::acquire(); }
+    virtual void SAL_CALL release() noexcept override { SvNumberFormatsSupplierObj::release(); }
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override
         { return SvNumberFormatsSupplierObj::queryInterface(_rType); }
 

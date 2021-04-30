@@ -127,13 +127,13 @@ uno::Any SAL_CALL VCLXHatchWindow::queryInterface( const uno::Type & rType )
 }
 
 void SAL_CALL VCLXHatchWindow::acquire()
-    throw()
+    noexcept
 {
     VCLXWindow::acquire();
 }
 
 void SAL_CALL VCLXHatchWindow::release()
-    throw()
+    noexcept
 {
     VCLXWindow::release();
 }

@@ -103,7 +103,7 @@ public:
 
     ~AttachThread();
 
-    const rtl::ByteSequence& getTid() const throw () { return tid_;}
+    const rtl::ByteSequence& getTid() const noexcept { return tid_;}
 
 private:
     AttachThread(const AttachThread&) = delete;
@@ -546,7 +546,7 @@ void Bridge::freeProxy(Proxy & proxy) {
     terminateWhenUnused(unused);
 }
 
-void Bridge::incrementCalls(bool normalCall) throw () {
+void Bridge::incrementCalls(bool normalCall) noexcept {
     osl::MutexGuard g(mutex_);
     assert(calls_ < std::numeric_limits< std::size_t >::max());
     ++calls_;
@@ -564,7 +564,7 @@ void Bridge::decrementCalls() {
     terminateWhenUnused(unused);
 }
 
-void Bridge::incrementActiveCalls() throw () {
+void Bridge::incrementActiveCalls() noexcept {
     osl::MutexGuard g(mutex_);
     assert(
         activeCalls_ <= calls_ &&
@@ -573,7 +573,7 @@ void Bridge::incrementActiveCalls() throw () {
     passive_.reset();
 }
 
-void Bridge::decrementActiveCalls() throw () {
+void Bridge::decrementActiveCalls() noexcept {
     osl::MutexGuard g(mutex_);
     assert(activeCalls_ <= calls_ && activeCalls_ > 0);
     --activeCalls_;

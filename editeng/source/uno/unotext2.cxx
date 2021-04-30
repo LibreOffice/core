@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 // SvxUnoTextContentEnumeration
 
 
-SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase& rText, const ESelection& rSel ) throw()
+SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase& rText, const ESelection& rSel ) noexcept
 {
     mxParentText = const_cast<SvxUnoTextBase*>(&rText);
     if( rText.GetEditSource() )
@@ -86,7 +86,7 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
     }
 }
 
-SvxUnoTextContentEnumeration::~SvxUnoTextContentEnumeration() throw()
+SvxUnoTextContentEnumeration::~SvxUnoTextContentEnumeration() noexcept
 {
 }
 
@@ -115,7 +115,7 @@ uno::Any SvxUnoTextContentEnumeration::nextElement()
 
 
 
-SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw()
+SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPara ) noexcept
 :   SvxUnoTextRangeBase(rText)
 ,   mnParagraph(nPara)
 ,   mrParentText(rText)
@@ -125,7 +125,7 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPa
     mxParentText = const_cast<SvxUnoTextBase*>(&rText);
 }
 
-SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw()
+SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) noexcept
 :   SvxUnoTextRangeBase(rContent)
 ,   text::XTextContent()
 ,   container::XEnumerationAccess()
@@ -140,7 +140,7 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw(
     SetSelection( rContent.GetSelection() );
 }
 
-SvxUnoTextContent::~SvxUnoTextContent() throw()
+SvxUnoTextContent::~SvxUnoTextContent() noexcept
 {
 }
 
@@ -169,12 +169,12 @@ uno::Any SAL_CALL SvxUnoTextContent::queryInterface( const uno::Type & rType )
     return OWeakAggObject::queryInterface(rType);
 }
 
-void SAL_CALL SvxUnoTextContent::acquire() throw( )
+void SAL_CALL SvxUnoTextContent::acquire() noexcept
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL SvxUnoTextContent::release() throw( )
+void SAL_CALL SvxUnoTextContent::release() noexcept
 {
     OWeakAggObject::release();
 }
@@ -422,7 +422,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rPa
     }
 }
 
-SvxUnoTextRangeEnumeration::~SvxUnoTextRangeEnumeration() throw()
+SvxUnoTextRangeEnumeration::~SvxUnoTextRangeEnumeration() noexcept
 {
 }
 
@@ -447,13 +447,13 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
     return uno::makeAny( xRange );
 }
 
-SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextBase& rText ) throw()
+SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextBase& rText ) noexcept
 :   SvxUnoTextRangeBase(rText),
     mxParentText( const_cast<SvxUnoTextBase*>(&rText) )
 {
 }
 
-SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) throw()
+SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) noexcept
 :   SvxUnoTextRangeBase(rCursor)
 ,   text::XTextCursor()
 ,   lang::XTypeProvider()
@@ -462,7 +462,7 @@ SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) throw()
 {
 }
 
-SvxUnoTextCursor::~SvxUnoTextCursor() throw()
+SvxUnoTextCursor::~SvxUnoTextCursor() noexcept
 {
 }
 
@@ -491,12 +491,12 @@ uno::Any SAL_CALL SvxUnoTextCursor::queryInterface( const uno::Type & rType )
     return OWeakAggObject::queryInterface(rType);
 }
 
-void SAL_CALL SvxUnoTextCursor::acquire() throw ( )
+void SAL_CALL SvxUnoTextCursor::acquire() noexcept
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL SvxUnoTextCursor::release() throw ( )
+void SAL_CALL SvxUnoTextCursor::release() noexcept
 {
     OWeakAggObject::release();
 }

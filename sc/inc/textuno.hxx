@@ -218,7 +218,7 @@ class ScCellTextCursor final : public SvxUnoTextCursor
 
 public:
                             ScCellTextCursor(ScCellObj& rText);
-        virtual             ~ScCellTextCursor() throw() override;
+        virtual             ~ScCellTextCursor() noexcept override;
 
     ScCellTextCursor(ScCellTextCursor const &) = default;
     ScCellTextCursor(ScCellTextCursor &&) = default;
@@ -246,7 +246,7 @@ private:
 
 public:
                             ScHeaderFooterTextCursor(rtl::Reference<ScHeaderFooterTextObj> const & rText);
-        virtual             ~ScHeaderFooterTextCursor() throw() override;
+        virtual             ~ScHeaderFooterTextCursor() noexcept override;
 
     ScHeaderFooterTextCursor(ScHeaderFooterTextCursor const &) = default;
     ScHeaderFooterTextCursor(ScHeaderFooterTextCursor &&) = default;
@@ -273,7 +273,7 @@ private:
 public:
                             ScDrawTextCursor( const css::uno::Reference< css::text::XText >& xParent,
                                             const SvxUnoTextBase& rText );
-    virtual                  ~ScDrawTextCursor() throw() override;
+    virtual                  ~ScDrawTextCursor() noexcept override;
 
     ScDrawTextCursor(ScDrawTextCursor const &) = default;
     ScDrawTextCursor(ScDrawTextCursor &&) = default;
@@ -315,7 +315,7 @@ class ScEditEngineTextObj final : public ScSimpleEditSourceHelper, public SvxUno
 {
 public:
                         ScEditEngineTextObj();
-        virtual         ~ScEditEngineTextObj() throw() override;
+        virtual         ~ScEditEngineTextObj() noexcept override;
 
     void                SetText( const EditTextObject& rTextObject );
     std::unique_ptr<EditTextObject> CreateTextObject();

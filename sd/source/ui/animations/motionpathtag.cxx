@@ -1187,12 +1187,12 @@ Any SAL_CALL MotionPathTag::queryInterface( const css::uno::Type& aType )
     return Any();
 }
 
-void SAL_CALL MotionPathTag::acquire() throw ()
+void SAL_CALL MotionPathTag::acquire() noexcept
 {
     SimpleReferenceComponent::acquire();
 }
 
-void SAL_CALL MotionPathTag::release(  ) throw ()
+void SAL_CALL MotionPathTag::release(  ) noexcept
 {
     SimpleReferenceComponent::release();
 }

@@ -321,7 +321,7 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
     return pRet;
 }
 
-const css::uno::Sequence< sal_Int8 > & SdGenericDrawPage::getUnoTunnelId() throw()
+const css::uno::Sequence< sal_Int8 > & SdGenericDrawPage::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSdGenericDrawPageUnoTunnelId;
     return theSdGenericDrawPageUnoTunnelId.getSeq();
@@ -354,7 +354,7 @@ SdGenericDrawPage::SdGenericDrawPage(SdXImpressDocument* _pModel, SdPage* pInPag
 
 }
 
-SdGenericDrawPage::~SdGenericDrawPage() throw()
+SdGenericDrawPage::~SdGenericDrawPage() noexcept
 {
 }
 
@@ -1833,14 +1833,14 @@ void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
 }
 
 // XInterface
-void SdGenericDrawPage::release() throw()
+void SdGenericDrawPage::release() noexcept
 {
 
     OWeakAggObject::release();
 }
 
 // XComponent
-void SdGenericDrawPage::disposing() throw()
+void SdGenericDrawPage::disposing() noexcept
 {
     mpDocModel = nullptr;
     SvxFmDrawPage::disposing();
@@ -1859,13 +1859,13 @@ Reference< XAnimationNode > SAL_CALL SdGenericDrawPage::getAnimationNode()
 }
 
 // SdPageLinkTargets
-SdPageLinkTargets::SdPageLinkTargets( SdGenericDrawPage* pUnoPage ) throw()
+SdPageLinkTargets::SdPageLinkTargets( SdGenericDrawPage* pUnoPage ) noexcept
 {
     mxPage = pUnoPage;
     mpUnoPage = pUnoPage;
 }
 
-SdPageLinkTargets::~SdPageLinkTargets() throw()
+SdPageLinkTargets::~SdPageLinkTargets() noexcept
 {
 }
 
@@ -1970,7 +1970,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasByName( const OUString& aName )
     return FindObject( aName ) != nullptr;
 }
 
-SdrObject* SdPageLinkTargets::FindObject( std::u16string_view rName ) const throw()
+SdrObject* SdPageLinkTargets::FindObject( std::u16string_view rName ) const noexcept
 {
     SdPage* pPage = mpUnoPage->GetPage();
     if( pPage == nullptr )
@@ -2014,7 +2014,7 @@ SdDrawPage::SdDrawPage(SdXImpressDocument* pModel, SdPage* pPage)
 {
 }
 
-SdDrawPage::~SdDrawPage() throw()
+SdDrawPage::~SdDrawPage() noexcept
 {
 }
 
@@ -2038,12 +2038,12 @@ Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
     return SdGenericDrawPage::queryInterface( rType );
 }
 
-void SAL_CALL SdDrawPage::acquire() throw()
+void SAL_CALL SdDrawPage::acquire() noexcept
 {
     SvxDrawPage::acquire();
 }
 
-void SAL_CALL SdDrawPage::release() throw()
+void SAL_CALL SdDrawPage::release() noexcept
 {
     SvxDrawPage::release();
 }
@@ -2612,7 +2612,7 @@ SdMasterPage::SdMasterPage(SdXImpressDocument* pModel, SdPage* pPage)
 {
 }
 
-SdMasterPage::~SdMasterPage() throw()
+SdMasterPage::~SdMasterPage() noexcept
 {
 }
 
@@ -2641,12 +2641,12 @@ Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SdMasterPage::acquire() throw()
+void SAL_CALL SdMasterPage::acquire() noexcept
 {
     SvxDrawPage::acquire();
 }
 
-void SAL_CALL SdMasterPage::release() throw()
+void SAL_CALL SdMasterPage::release() noexcept
 {
     SvxDrawPage::release();
 }

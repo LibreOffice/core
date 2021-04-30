@@ -53,7 +53,7 @@ OutgoingRequest OutgoingRequests::top(rtl::ByteSequence const & tid) {
     return i->second.back();
 }
 
-void OutgoingRequests::pop(rtl::ByteSequence const & tid) throw () {
+void OutgoingRequests::pop(rtl::ByteSequence const & tid) noexcept {
     osl::MutexGuard g(mutex_);
     Map::iterator i(map_.find(tid));
     assert(i != map_.end());

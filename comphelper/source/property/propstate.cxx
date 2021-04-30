@@ -210,13 +210,13 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OStatefulPropertySet::acquire() throw()
+    void SAL_CALL OStatefulPropertySet::acquire() noexcept
     {
         ::cppu::OWeakObject::acquire();
     }
 
 
-    void SAL_CALL OStatefulPropertySet::release() throw()
+    void SAL_CALL OStatefulPropertySet::release() noexcept
     {
         ::cppu::OWeakObject::release();
     }

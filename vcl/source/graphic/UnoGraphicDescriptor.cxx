@@ -66,7 +66,7 @@ GraphicDescriptor::GraphicDescriptor() :
 }
 
 GraphicDescriptor::~GraphicDescriptor()
-    throw()
+    noexcept
 {
 }
 
@@ -181,14 +181,14 @@ uno::Any SAL_CALL GraphicDescriptor::queryInterface( const uno::Type & rType )
 
 
 void SAL_CALL GraphicDescriptor::acquire()
-    throw()
+    noexcept
 {
     OWeakAggObject::acquire();
 }
 
 
 void SAL_CALL GraphicDescriptor::release()
-    throw()
+    noexcept
 {
     OWeakAggObject::release();
 }

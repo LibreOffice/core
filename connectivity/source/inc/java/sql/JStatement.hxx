@@ -162,8 +162,8 @@ namespace connectivity
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
         // XInterface
-        virtual void SAL_CALL acquire() throw() override;
-        virtual void SAL_CALL release() throw() override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         //XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -222,8 +222,8 @@ namespace connectivity
         java_sql_Statement( JNIEnv * pEnv, java_sql_Connection& _rCon ) : OStatement_BASE2( pEnv, _rCon){};
 
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire() throw() override;
-        virtual void SAL_CALL release() throw() override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
         // XBatchExecution
         virtual void SAL_CALL addBatch( const OUString& sql ) override;
         virtual void SAL_CALL clearBatch(  ) override;

@@ -93,11 +93,11 @@ public:
         return css::uno::Any();
     }
 
-    virtual void SAL_CALL acquire() throw () override {
+    virtual void SAL_CALL acquire() noexcept override {
         Base::acquire();
     }
 
-    virtual void SAL_CALL release() throw () override {
+    virtual void SAL_CALL release() noexcept override {
         Base::release();
     }
 };
@@ -127,11 +127,11 @@ public:
         return css::uno::Any();
     }
 
-    virtual void SAL_CALL acquire() throw () override {
+    virtual void SAL_CALL acquire() noexcept override {
         Base::acquire();
     }
 
-    virtual void SAL_CALL release() throw () override {
+    virtual void SAL_CALL release() noexcept override {
         Base::release();
     }
 };
@@ -161,11 +161,11 @@ public:
         return css::uno::Any();
     }
 
-    virtual void SAL_CALL acquire() throw () override {
+    virtual void SAL_CALL acquire() noexcept override {
         Base::acquire();
     }
 
-    virtual void SAL_CALL release() throw () override {
+    virtual void SAL_CALL release() noexcept override {
         Base::release();
     }
 };

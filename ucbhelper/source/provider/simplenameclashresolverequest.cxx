@@ -47,9 +47,9 @@ public:
     virtual css::uno::Any SAL_CALL
     queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
-        throw() override;
+        noexcept override;
     virtual void SAL_CALL release()
-        throw() override;
+        noexcept override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
@@ -75,13 +75,13 @@ public:
 };
 
 void SAL_CALL InteractionSupplyName::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL InteractionSupplyName::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

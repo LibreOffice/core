@@ -152,12 +152,12 @@ void SAL_CALL OGroup::setName( const OUString& /*aName*/ )
 }
 
 // XInterface
-void SAL_CALL OGroup::acquire() throw()
+void SAL_CALL OGroup::acquire() noexcept
 {
     OGroup_BASE::acquire();
 }
 
-void SAL_CALL OGroup::release() throw()
+void SAL_CALL OGroup::release() noexcept
 {
     OGroup_BASE::release();
 }

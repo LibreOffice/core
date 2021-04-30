@@ -303,9 +303,9 @@ public:
         SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL,
         const css::uno::Sequence< OUString > & sSupportedServiceNames = {});
 
-    void cleanup() throw();
+    void cleanup() noexcept;
 
-    virtual ~SvXMLImport() throw() override;
+    virtual ~SvXMLImport() noexcept override;
 
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
@@ -353,7 +353,7 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XUnoTunnel
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() throw();
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() noexcept;
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XServiceInfo

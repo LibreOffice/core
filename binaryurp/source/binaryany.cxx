@@ -50,18 +50,18 @@ void moveInternals(uno_Any & from, uno_Any & to) {
 
 }
 
-BinaryAny::BinaryAny() throw () {
+BinaryAny::BinaryAny() noexcept {
     uno_any_construct(&data_, nullptr, nullptr, nullptr);
 }
 
 BinaryAny::BinaryAny(css::uno::TypeDescription const & type, void * value)
-    throw ()
+    noexcept
 {
     assert(type.is());
     uno_any_construct(&data_, value, type.get(), nullptr);
 }
 
-BinaryAny::BinaryAny(uno_Any const & raw) throw () {
+BinaryAny::BinaryAny(uno_Any const & raw) noexcept {
     assert(raw.pType != nullptr);
     data_.pType = raw.pType;
     typelib_typedescriptionreference_acquire(data_.pType);
@@ -69,37 +69,37 @@ BinaryAny::BinaryAny(uno_Any const & raw) throw () {
     data_.pReserved = raw.pReserved;
 }
 
-BinaryAny::BinaryAny(BinaryAny const & other) throw () {
+BinaryAny::BinaryAny(BinaryAny const & other) noexcept {
     uno_type_any_construct(&data_, other.data_.pData, other.data_.pType, nullptr);
 }
 
-BinaryAny::BinaryAny(BinaryAny && other) throw () {
+BinaryAny::BinaryAny(BinaryAny && other) noexcept {
     moveInternals(other.data_, data_);
 }
 
-BinaryAny::~BinaryAny() throw () {
+BinaryAny::~BinaryAny() noexcept {
     uno_any_destruct(&data_, nullptr);
 }
 
-BinaryAny & BinaryAny::operator =(BinaryAny const & other) throw () {
+BinaryAny & BinaryAny::operator =(BinaryAny const & other) noexcept {
     if (&other != this) {
         uno_type_any_assign(&data_, other.data_.pData, other.data_.pType, nullptr, nullptr);
     }
     return *this;
 }
 
-BinaryAny & BinaryAny::operator =(BinaryAny && other) throw () {
+BinaryAny & BinaryAny::operator =(BinaryAny && other) noexcept {
     uno_any_destruct(&data_, nullptr);
     moveInternals(other.data_, data_);
     return *this;
 }
 
-css::uno::TypeDescription BinaryAny::getType() const throw () {
+css::uno::TypeDescription BinaryAny::getType() const noexcept {
     return css::uno::TypeDescription(data_.pType);
 }
 
 void * BinaryAny::getValue(css::uno::TypeDescription const & type) const
-    throw ()
+    noexcept
 {
     assert(type.is());
     assert(

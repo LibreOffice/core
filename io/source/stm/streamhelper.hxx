@@ -42,7 +42,7 @@ public:
     void    writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &);
     /// @throws css::io::BufferSizeExceededException
     void    readAt( sal_Int32 nPos, Sequence<sal_Int8> & , sal_Int32 nBytesToRead ) const;
-    sal_Int32   getSize() const throw();
+    sal_Int32   getSize() const noexcept;
     /// @throws css::io::BufferSizeExceededException
     void    forgetFromStart(sal_Int32 nBytesToForget);
 
@@ -75,7 +75,7 @@ public:
     void          read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead );
     /// @throws css::io::BufferSizeExceededException
     void          skip( sal_Int32 nBytesToSkip );
-    sal_Int32     getSize() const throw()
+    sal_Int32     getSize() const noexcept
                   { return MemRingBuffer::getSize(); }
 
 };

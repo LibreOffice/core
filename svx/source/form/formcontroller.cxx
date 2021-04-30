@@ -609,13 +609,13 @@ FormController::~FormController()
 }
 
 
-void SAL_CALL FormController::acquire() throw ()
+void SAL_CALL FormController::acquire() noexcept
 {
     FormController_BASE::acquire();
 }
 
 
-void SAL_CALL FormController::release() throw ()
+void SAL_CALL FormController::release() noexcept
 {
     FormController_BASE::release();
 }

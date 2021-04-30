@@ -403,13 +403,13 @@ uno::Any SAL_CALL
 
 void SAL_CALL
     AccessibleDrawDocumentView::acquire()
-    throw ()
+    noexcept
 {
     AccessibleDocumentViewBase::acquire ();
 }
 void SAL_CALL
     AccessibleDrawDocumentView::release()
-    throw ()
+    noexcept
 {
     AccessibleDocumentViewBase::release ();
 }

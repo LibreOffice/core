@@ -3191,12 +3191,12 @@ SwXTextFrame::CreateXTextFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
     return CreateXFrame<text::XTextFrame, SwXTextFrame>(rDoc, pFrameFormat);
 }
 
-void SAL_CALL SwXTextFrame::acquire(  )throw()
+void SAL_CALL SwXTextFrame::acquire(  )noexcept
 {
     SwXFrame::acquire();
 }
 
-void SAL_CALL SwXTextFrame::release(  )throw()
+void SAL_CALL SwXTextFrame::release(  )noexcept
 {
     SwXFrame::release();
 }

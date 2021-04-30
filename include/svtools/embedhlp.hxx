@@ -64,7 +64,7 @@ public:
                                         sal_Int64 nViewAspect,
                                         const css::uno::Reference < css::embed::XEmbeddedObject >&,
                                         OUString* pMediaType )
-                            throw();
+                            noexcept;
 
     static bool IsChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj);
 

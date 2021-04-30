@@ -73,9 +73,9 @@ OPreparedStatement::OPreparedStatement(OConnection* _pConnection, MYSQL_STMT* pS
 
 OPreparedStatement::~OPreparedStatement() {}
 
-void SAL_CALL OPreparedStatement::acquire() throw() { OCommonStatement::acquire(); }
+void SAL_CALL OPreparedStatement::acquire() noexcept { OCommonStatement::acquire(); }
 
-void SAL_CALL OPreparedStatement::release() throw() { OCommonStatement::release(); }
+void SAL_CALL OPreparedStatement::release() noexcept { OCommonStatement::release(); }
 
 Any SAL_CALL OPreparedStatement::queryInterface(const Type& rType)
 {

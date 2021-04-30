@@ -33,7 +33,7 @@ SvxAccessibleTextPropertySet::SvxAccessibleTextPropertySet( const SvxEditSource*
 {
 }
 
-SvxAccessibleTextPropertySet::~SvxAccessibleTextPropertySet() throw()
+SvxAccessibleTextPropertySet::~SvxAccessibleTextPropertySet() noexcept
 {
 }
 
@@ -49,13 +49,13 @@ uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryInterface( const uno::Type 
 }
 
 void SAL_CALL SvxAccessibleTextPropertySet::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL SvxAccessibleTextPropertySet::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

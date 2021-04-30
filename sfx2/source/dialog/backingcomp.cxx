@@ -82,8 +82,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void          SAL_CALL acquire       (                             ) throw(                          ) override;
-    virtual void          SAL_CALL release       (                             ) throw(                          ) override;
+    virtual void          SAL_CALL acquire       (                             ) noexcept override;
+    virtual void          SAL_CALL release       (                             ) noexcept override;
 
     // XTypeProvide
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes           () override;
@@ -186,7 +186,7 @@ css::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const css::uno::Type&
  */
 
 void SAL_CALL BackingComp::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
@@ -196,7 +196,7 @@ void SAL_CALL BackingComp::acquire()
  */
 
 void SAL_CALL BackingComp::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

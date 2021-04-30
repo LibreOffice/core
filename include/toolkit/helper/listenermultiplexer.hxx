@@ -68,8 +68,8 @@ public:
 
     // css::uno::XInterface
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { mrContext.acquire(); }
-    void                        SAL_CALL release() throw() override  { mrContext.release(); }
+    void                        SAL_CALL acquire() noexcept override  { mrContext.acquire(); }
+    void                        SAL_CALL release() noexcept override  { mrContext.release(); }
 };
 
 

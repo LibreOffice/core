@@ -255,9 +255,9 @@ public:
 
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType ) override;
-    void SAL_CALL acquire() throw() override
+    void SAL_CALL acquire() noexcept override
         { OComponentHelper::acquire(); }
-    void SAL_CALL release() throw() override
+    void SAL_CALL release() noexcept override
         { OComponentHelper::release(); }
 
     // XSingleServiceFactory
@@ -454,8 +454,8 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( Type const & type ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes() override;
     // XPropertySet
@@ -519,13 +519,13 @@ Any SAL_CALL ORegistryFactoryHelper::queryInterface(
 }
 
 
-void ORegistryFactoryHelper::acquire() throw ()
+void ORegistryFactoryHelper::acquire() noexcept
 {
     OFactoryComponentHelper::acquire();
 }
 
 
-void ORegistryFactoryHelper::release() throw ()
+void ORegistryFactoryHelper::release() noexcept
 {
     OFactoryComponentHelper::release();
 }

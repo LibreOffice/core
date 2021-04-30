@@ -621,12 +621,12 @@ Any SAL_CALL ScAccessibleCsvRuler::queryInterface( const css::uno::Type& rType )
     return aAny.hasValue() ? aAny : ScAccessibleCsvControl::queryInterface( rType );
 }
 
-void SAL_CALL ScAccessibleCsvRuler::acquire() throw ()
+void SAL_CALL ScAccessibleCsvRuler::acquire() noexcept
 {
     ScAccessibleCsvControl::acquire();
 }
 
-void SAL_CALL ScAccessibleCsvRuler::release() throw ()
+void SAL_CALL ScAccessibleCsvRuler::release() noexcept
 {
     ScAccessibleCsvControl::release();
 }
@@ -1109,12 +1109,12 @@ Any SAL_CALL ScAccessibleCsvGrid::queryInterface( const css::uno::Type& rType )
     return aAny.hasValue() ? aAny : ScAccessibleCsvControl::queryInterface( rType );
 }
 
-void SAL_CALL ScAccessibleCsvGrid::acquire() throw ()
+void SAL_CALL ScAccessibleCsvGrid::acquire() noexcept
 {
     ScAccessibleCsvControl::acquire();
 }
 
-void SAL_CALL ScAccessibleCsvGrid::release() throw ()
+void SAL_CALL ScAccessibleCsvGrid::release() noexcept
 {
     ScAccessibleCsvControl::release();
 }

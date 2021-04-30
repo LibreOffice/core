@@ -47,12 +47,12 @@ Any SAL_CALL JavaContext::queryInterface(const Type& aType )
     return Any();
 }
 
-void SAL_CALL JavaContext::acquire(  ) throw ()
+void SAL_CALL JavaContext::acquire(  ) noexcept
 {
     osl_atomic_increment( &m_aRefCount );
 }
 
-void SAL_CALL JavaContext::release(  ) throw ()
+void SAL_CALL JavaContext::release(  ) noexcept
 {
     if (! osl_atomic_decrement( &m_aRefCount ))
         delete this;

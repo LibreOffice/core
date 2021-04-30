@@ -53,14 +53,14 @@ private:
     bool bDisposing;
 
 public:
-    SdXCustomPresentation() throw();
-    explicit SdXCustomPresentation( SdCustomShow* mpSdCustomShow ) throw();
-    virtual ~SdXCustomPresentation() throw() override;
+    SdXCustomPresentation() noexcept;
+    explicit SdXCustomPresentation( SdCustomShow* mpSdCustomShow ) noexcept;
+    virtual ~SdXCustomPresentation() noexcept override;
 
     // internal
-    SdCustomShow* GetSdCustomShow() const throw() { return mpSdCustomShow; }
-    void SetSdCustomShow( SdCustomShow* pShow ) throw() { mpSdCustomShow = pShow; }
-    SdXImpressDocument* GetModel() const throw() { return mpModel; }
+    SdCustomShow* GetSdCustomShow() const noexcept { return mpSdCustomShow; }
+    void SetSdCustomShow( SdCustomShow* pShow ) noexcept { mpSdCustomShow = pShow; }
+    SdXImpressDocument* GetModel() const noexcept { return mpModel; }
 
     // uno helper
     UNO3_GETIMPLEMENTATION_DECL(SdXCustomPresentation)
@@ -103,12 +103,12 @@ private:
     SdXImpressDocument& mrModel;
 
     // intern
-    inline SdCustomShowList* GetCustomShowList() const throw();
-    SdCustomShow * getSdCustomShow( std::u16string_view Name ) const throw();
+    inline SdCustomShowList* GetCustomShowList() const noexcept;
+    SdCustomShow * getSdCustomShow( std::u16string_view Name ) const noexcept;
 
 public:
-    explicit SdXCustomPresentationAccess(SdXImpressDocument& rMyModel) throw();
-    virtual ~SdXCustomPresentationAccess() throw() override;
+    explicit SdXCustomPresentationAccess(SdXImpressDocument& rMyModel) noexcept;
+    virtual ~SdXCustomPresentationAccess() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -136,7 +136,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements() override;
 };
 
-inline SdCustomShowList* SdXCustomPresentationAccess::GetCustomShowList() const throw()
+inline SdCustomShowList* SdXCustomPresentationAccess::GetCustomShowList() const noexcept
 {
     if(mrModel.GetDoc())
         return mrModel.GetDoc()->GetCustomShowList();

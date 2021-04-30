@@ -88,7 +88,7 @@ Any SAL_CALL BaseControl::queryInterface( const Type& rType )
 
 //  XInterface
 
-void SAL_CALL BaseControl::acquire() throw()
+void SAL_CALL BaseControl::acquire() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -99,7 +99,7 @@ void SAL_CALL BaseControl::acquire() throw()
 
 //  XInterface
 
-void SAL_CALL BaseControl::release() throw()
+void SAL_CALL BaseControl::release() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.

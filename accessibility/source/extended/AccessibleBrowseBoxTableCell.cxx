@@ -95,13 +95,13 @@ namespace accessibility
     }
 
     /** Acquires the object (calls acquire() on base class). */
-    void SAL_CALL AccessibleBrowseBoxTableCell::acquire() throw ()
+    void SAL_CALL AccessibleBrowseBoxTableCell::acquire() noexcept
     {
         AccessibleBrowseBoxCell::acquire();
     }
 
     /** Releases the object (calls release() on base class). */
-    void SAL_CALL AccessibleBrowseBoxTableCell::release() throw ()
+    void SAL_CALL AccessibleBrowseBoxTableCell::release() noexcept
     {
         AccessibleBrowseBoxCell::release();
     }

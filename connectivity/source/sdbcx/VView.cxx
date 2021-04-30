@@ -118,12 +118,12 @@ void SAL_CALL OView::setName( const OUString& )
 {
 }
 
-void SAL_CALL OView::acquire() throw()
+void SAL_CALL OView::acquire() noexcept
 {
     OView_BASE::acquire();
 }
 
-void SAL_CALL OView::release() throw()
+void SAL_CALL OView::release() noexcept
 {
     OView_BASE::release();
 }

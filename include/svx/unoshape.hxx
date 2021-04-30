@@ -132,20 +132,20 @@ private:
 
 protected:
     // translations for writer, which works in TWIPS
-    void ForceMetricToItemPoolMetric(Pair& rPoint) const throw();
-    void ForceMetricToItemPoolMetric(Point& rPoint) const throw() { ForceMetricToItemPoolMetric(rPoint.toPair()); }
-    void ForceMetricToItemPoolMetric(Size& rPoint) const throw() { ForceMetricToItemPoolMetric(rPoint.toPair()); }
-    void ForceMetricTo100th_mm(Pair& rPoint) const throw();
-    void ForceMetricTo100th_mm(Point& rPoint) const throw() { ForceMetricTo100th_mm(rPoint.toPair()); }
-    void ForceMetricTo100th_mm(Size& rPoint) const throw() { ForceMetricTo100th_mm(rPoint.toPair()); }
+    void ForceMetricToItemPoolMetric(Pair& rPoint) const noexcept;
+    void ForceMetricToItemPoolMetric(Point& rPoint) const noexcept { ForceMetricToItemPoolMetric(rPoint.toPair()); }
+    void ForceMetricToItemPoolMetric(Size& rPoint) const noexcept { ForceMetricToItemPoolMetric(rPoint.toPair()); }
+    void ForceMetricTo100th_mm(Pair& rPoint) const noexcept;
+    void ForceMetricTo100th_mm(Point& rPoint) const noexcept { ForceMetricTo100th_mm(rPoint.toPair()); }
+    void ForceMetricTo100th_mm(Size& rPoint) const noexcept { ForceMetricTo100th_mm(rPoint.toPair()); }
 
     // version for basegfx::B2DPolyPolygon
-    void ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
-    void ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
+    void ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const noexcept;
+    void ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const noexcept;
 
     // tdf#117145 version for basegfx::B2DHomMatrix
-    void ForceMetricToItemPoolMetric(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw();
-    void ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw();
+    void ForceMetricToItemPoolMetric(basegfx::B2DHomMatrix& rB2DHomMatrix) const noexcept;
+    void ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const noexcept;
 
     css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry* pMap ) const;
 
@@ -188,7 +188,7 @@ public:
     SvxShape( SdrObject* pObj );
     /// @throws css::uno::RuntimeException
     SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet );
-    virtual ~SvxShape() throw () override;
+    virtual ~SvxShape() noexcept override;
 
     // Internals
     void ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet);
@@ -262,7 +262,7 @@ public:
     void setMaster( SvxShapeMaster* pMaster );
 
     // SfxListener
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw () override;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override;
 
     // XAggregation
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
@@ -367,16 +367,16 @@ protected:
 public:
     SvxShapeText(SdrObject* pObj);
     SvxShapeText(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet);
-    virtual ~SvxShapeText() throw () override;
+    virtual ~SvxShapeText() noexcept override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override
+    virtual void SAL_CALL acquire() noexcept override
     { SvxShape::acquire(); }
-    virtual void SAL_CALL release() throw() override
+    virtual void SAL_CALL release() noexcept override
     { SvxShape::release(); }
 
     // XServiceInfo
@@ -402,14 +402,14 @@ class SvxShapeRect final : public SvxShapeText
 {
 public:
     SvxShapeRect(SdrObject* pObj);
-    virtual ~SvxShapeRect() throw () override;
+    virtual ~SvxShapeRect() noexcept override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override
+    virtual void SAL_CALL acquire() noexcept override
     { OWeakAggObject::acquire(); }
-    virtual void SAL_CALL release() throw() override
+    virtual void SAL_CALL release() noexcept override
     { OWeakAggObject::release(); }
 
     // XServiceInfo
@@ -431,16 +431,16 @@ private:
 
 public:
     SvxShapeGroup(SdrObject* pObj,SvxDrawPage* pDrawPage);
-    virtual ~SvxShapeGroup() throw () override;
+    virtual ~SvxShapeGroup() noexcept override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override
+    virtual void SAL_CALL acquire() noexcept override
     { SvxShape::acquire(); }
-    virtual void SAL_CALL release() throw() override
+    virtual void SAL_CALL release() noexcept override
     { SvxShape::release(); }
 
     // XShapes
@@ -484,14 +484,14 @@ class SvxShapeConnector : public css::drawing::XConnectorShape,
 {
 public:
     SvxShapeConnector(SdrObject* pObj);
-    virtual ~SvxShapeConnector() throw() override;
+    virtual ~SvxShapeConnector() noexcept override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override
+    virtual void SAL_CALL acquire() noexcept override
     { SvxShapeText::acquire(); }
-    virtual void SAL_CALL release() throw() override
+    virtual void SAL_CALL release() noexcept override
     { SvxShapeText::release(); }
 
     // XShapeDescriptor
@@ -525,14 +525,14 @@ protected:
 
 public:
     SvxShapeControl(SdrObject* pObj);
-    virtual ~SvxShapeControl() throw() override;
+    virtual ~SvxShapeControl() noexcept override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override
+    virtual void SAL_CALL acquire() noexcept override
     { SvxShapeText::acquire(); }
-    virtual void SAL_CALL release() throw() override
+    virtual void SAL_CALL release() noexcept override
     { SvxShapeText::release(); }
 
     // XPropertySet
@@ -569,7 +569,7 @@ class SvxShapeDimensioning final : public SvxShapeText
 {
 public:
     SvxShapeDimensioning(SdrObject* pObj);
-    virtual ~SvxShapeDimensioning() throw() override;
+    virtual ~SvxShapeDimensioning() noexcept override;
 };
 
 /***********************************************************************
@@ -579,7 +579,7 @@ class SvxShapeCircle final : public SvxShapeText
 {
 public:
     SvxShapeCircle(SdrObject* pObj);
-    virtual ~SvxShapeCircle() throw () override;
+    virtual ~SvxShapeCircle() noexcept override;
 };
 
 /***********************************************************************
@@ -600,7 +600,7 @@ protected:
 public:
     SvxOle2Shape(SdrObject* pObj);
     SvxOle2Shape(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet);
-    virtual ~SvxOle2Shape() throw() override;
+    virtual ~SvxOle2Shape() noexcept override;
 
     bool createObject( const SvGlobalName &aClassName );
 
@@ -627,12 +627,12 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::beans::PropertyVetoException
     SvxShapePolyPolygon( SdrObject* pObj );
-    virtual ~SvxShapePolyPolygon() throw() override;
+    virtual ~SvxShapePolyPolygon() noexcept override;
 
     // Local support functions
     /// @throws css::uno::RuntimeException
     void SetPolygon(const basegfx::B2DPolyPolygon& rNew);
-    basegfx::B2DPolyPolygon GetPolygon() const throw();
+    basegfx::B2DPolyPolygon GetPolygon() const noexcept;
 };
 
 /***********************************************************************
@@ -650,7 +650,7 @@ class SvxGraphicObject final : public SvxShapeText
 
 public:
     SvxGraphicObject(SdrObject* pObj);
-    virtual ~SvxGraphicObject() throw() override;
+    virtual ~SvxGraphicObject() noexcept override;
 };
 
 /***********************************************************************
@@ -672,16 +672,16 @@ public:
     virtual bool getPropertyValueImpl(const OUString& rName, const SfxItemPropertyMapEntry* pProperty,
         css::uno::Any& rValue ) override;
 
-    virtual ~Svx3DSceneObject() throw() override;
+    virtual ~Svx3DSceneObject() noexcept override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override
+    virtual void SAL_CALL acquire() noexcept override
     { SvxShape::acquire(); }
-    virtual void SAL_CALL release() throw() override
+    virtual void SAL_CALL release() noexcept override
     { SvxShape::release(); }
 
     // XShapes
@@ -714,7 +714,7 @@ class Svx3DCubeObject final : public SvxShape
 
 public:
     Svx3DCubeObject(SdrObject* pObj);
-    virtual ~Svx3DCubeObject() throw() override;
+    virtual ~Svx3DCubeObject() noexcept override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
@@ -732,7 +732,7 @@ private:
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
-    virtual ~Svx3DSphereObject() throw() override;
+    virtual ~Svx3DSphereObject() noexcept override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
@@ -749,7 +749,7 @@ class Svx3DLatheObject final : public SvxShape
 
 public:
     Svx3DLatheObject(SdrObject* pObj);
-    virtual ~Svx3DLatheObject() throw() override;
+    virtual ~Svx3DLatheObject() noexcept override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
@@ -767,7 +767,7 @@ private:
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
-    virtual ~Svx3DExtrudeObject() throw() override;
+    virtual ~Svx3DExtrudeObject() noexcept override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
@@ -784,7 +784,7 @@ class Svx3DPolygonObject final : public SvxShape
 
 public:
     Svx3DPolygonObject(SdrObject* pObj);
-    virtual ~Svx3DPolygonObject() throw() override;
+    virtual ~Svx3DPolygonObject() noexcept override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
@@ -805,14 +805,14 @@ public:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
 
-    virtual ~SvxCustomShape() throw () override;
+    virtual ~SvxCustomShape() noexcept override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override
+    virtual void SAL_CALL acquire() noexcept override
     { SvxShapeText::acquire(); }
-    virtual void SAL_CALL release() throw() override
+    virtual void SAL_CALL release() noexcept override
     { SvxShapeText::release(); }
 
     // XShape
@@ -836,7 +836,7 @@ class SvxMediaShape final : public SvxShape
 {
 public:
     SvxMediaShape(SdrObject* pObj, OUString const & referer);
-    virtual     ~SvxMediaShape() throw() override;
+    virtual     ~SvxMediaShape() noexcept override;
 
 private:
     // override these for special property handling in subcasses. Return true if property is handled

@@ -53,9 +53,9 @@ class UIElementWrapperBase : private cppu::BaseMutex,
         virtual  ~UIElementWrapperBase() override;
 
         // XInterface
-        virtual void SAL_CALL acquire() throw () override
+        virtual void SAL_CALL acquire() noexcept override
             { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() throw () override
+        virtual void SAL_CALL release() noexcept override
             { OWeakObject::release(); }
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
 

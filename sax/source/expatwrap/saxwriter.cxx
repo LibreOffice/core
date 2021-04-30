@@ -148,7 +148,7 @@ public:
     bool writeString(const OUString& rWriteOutString, bool bDoNormalization,
                      bool bNormalizeWhitespace);
 
-    sal_uInt32 GetLastColumnCount() const throw()
+    sal_uInt32 GetLastColumnCount() const noexcept
     {
         return static_cast<sal_uInt32>(nCurrentPos - nLastLineFeedPos);
     }
@@ -1069,7 +1069,7 @@ public: // XServiceInfo
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
 private:
-    sal_Int32 getIndentPrefixLength(sal_Int32 nFirstLineBreakOccurrence) throw();
+    sal_Int32 getIndentPrefixLength(sal_Int32 nFirstLineBreakOccurrence) noexcept;
 
     Reference<XOutputStream> m_out;
     std::unique_ptr<SaxWriterHelper> m_pSaxWriterHelper;
@@ -1082,7 +1082,7 @@ private:
     sal_Int32 m_nLevel;
 };
 
-sal_Int32 SAXWriter::getIndentPrefixLength(sal_Int32 nFirstLineBreakOccurrence) throw()
+sal_Int32 SAXWriter::getIndentPrefixLength(sal_Int32 nFirstLineBreakOccurrence) noexcept
 {
     sal_Int32 nLength = -1;
     if (m_pSaxWriterHelper)
@@ -1098,7 +1098,7 @@ sal_Int32 SAXWriter::getIndentPrefixLength(sal_Int32 nFirstLineBreakOccurrence) 
     return nLength;
 }
 
-bool isFirstCharWhitespace(const sal_Unicode* p) throw() { return *p == ' '; }
+bool isFirstCharWhitespace(const sal_Unicode* p) noexcept { return *p == ' '; }
 
 // XServiceInfo
 OUString SAXWriter::getImplementationName() { return "com.sun.star.extensions.xml.sax.Writer"; }

@@ -178,12 +178,12 @@ uno::Any SAL_CALL UnoEditControl::queryInterface( const uno::Type & rType )
     return UnoControlBase::queryInterface( rType );
 }
 
-void SAL_CALL UnoEditControl::acquire(  ) throw ()
+void SAL_CALL UnoEditControl::acquire(  ) noexcept
 {
     UnoControlBase::acquire();
 }
 
-void SAL_CALL UnoEditControl::release(  ) throw ()
+void SAL_CALL UnoEditControl::release(  ) noexcept
 {
     UnoControlBase::release();
 }

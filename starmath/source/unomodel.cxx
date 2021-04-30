@@ -312,7 +312,7 @@ SmModel::SmModel( SfxObjectShell *pObjSh )
 {
 }
 
-SmModel::~SmModel() throw ()
+SmModel::~SmModel() noexcept
 {
 }
 
@@ -333,12 +333,12 @@ uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-void SAL_CALL SmModel::acquire() throw()
+void SAL_CALL SmModel::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL SmModel::release() throw()
+void SAL_CALL SmModel::release() noexcept
 {
     OWeakObject::release();
 }

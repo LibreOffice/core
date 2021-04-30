@@ -39,8 +39,8 @@ class PropertySetContainer : public css::container::XIndexContainer    ,
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() throw () override;
-        virtual void SAL_CALL release() throw () override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
         // XIndexContainer
         virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;

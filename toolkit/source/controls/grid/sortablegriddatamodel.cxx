@@ -127,8 +127,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) throw () final override;
-    virtual void SAL_CALL release(  ) throw () override;
+    virtual void SAL_CALL acquire(  ) noexcept final override;
+    virtual void SAL_CALL release(  ) noexcept override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -269,13 +269,13 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SAL_CALL SortableGridDataModel::acquire(  ) throw ()
+    void SAL_CALL SortableGridDataModel::acquire(  ) noexcept
     {
         SortableGridDataModel_Base::acquire();
     }
 
 
-    void SAL_CALL SortableGridDataModel::release(  ) throw ()
+    void SAL_CALL SortableGridDataModel::release(  ) noexcept
     {
         SortableGridDataModel_Base::release();
     }

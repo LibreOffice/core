@@ -59,7 +59,7 @@ public:
     XMLVersionListImport(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         css::uno::Sequence < css::util::RevisionTag >& rVersions );
-    virtual ~XMLVersionListImport() throw() override;
+    virtual ~XMLVersionListImport() noexcept override;
 
     css::uno::Sequence < css::util::RevisionTag >&
         GetList() { return maVersions; }

@@ -23,7 +23,7 @@
 
 namespace ww
 {
-    const char *GetEnglishFieldName(eField eIndex) throw()
+    const char *GetEnglishFieldName(eField eIndex) noexcept
     {
         //0 Signifies the field names I can't find.
         // #i43956# - field <eFOOTREF> = 5 should be mapped to "REF"

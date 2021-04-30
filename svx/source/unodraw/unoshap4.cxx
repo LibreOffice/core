@@ -73,7 +73,7 @@ SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, const SfxItemPropertyMapEntry* pP
 {
 }
 
-SvxOle2Shape::~SvxOle2Shape() throw()
+SvxOle2Shape::~SvxOle2Shape() noexcept
 {
 }
 
@@ -554,7 +554,7 @@ SvxAppletShape::SvxAppletShape(SdrObject* pObject)
     SetShapeType( "com.sun.star.drawing.AppletShape" );
 }
 
-SvxAppletShape::~SvxAppletShape() throw()
+SvxAppletShape::~SvxAppletShape() noexcept
 {
 }
 
@@ -625,7 +625,7 @@ SvxPluginShape::SvxPluginShape(SdrObject* pObject)
     SetShapeType( "com.sun.star.drawing.PluginShape" );
 }
 
-SvxPluginShape::~SvxPluginShape() throw()
+SvxPluginShape::~SvxPluginShape() noexcept
 {
 }
 
@@ -697,7 +697,7 @@ SvxFrameShape::SvxFrameShape(SdrObject* pObject)
     SetShapeType( "com.sun.star.drawing.FrameShape" );
 }
 
-SvxFrameShape::~SvxFrameShape() throw()
+SvxFrameShape::~SvxFrameShape() noexcept
 {
 }
 
@@ -770,7 +770,7 @@ SvxMediaShape::SvxMediaShape(SdrObject* pObj, OUString const & referer)
 }
 
 
-SvxMediaShape::~SvxMediaShape() throw()
+SvxMediaShape::~SvxMediaShape() noexcept
 {
 }
 

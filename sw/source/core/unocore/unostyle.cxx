@@ -434,8 +434,8 @@ public:
         SwXStyle(&rPool, SfxStyleFamily::Frame, pDoc, rStyleName){}
     explicit SwXFrameStyle(SwDoc *pDoc);
 
-    virtual void SAL_CALL acquire(  ) throw() override {SwXStyle::acquire();}
-    virtual void SAL_CALL release(  ) throw() override {SwXStyle::release();}
+    virtual void SAL_CALL acquire(  ) noexcept override {SwXStyle::acquire();}
+    virtual void SAL_CALL release(  ) noexcept override {SwXStyle::release();}
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;

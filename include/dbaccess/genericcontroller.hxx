@@ -429,8 +429,8 @@ namespace dbaui
         virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;
 
         // XInterface
-        virtual void SAL_CALL acquire(  ) throw () override;
-        virtual void SAL_CALL release(  ) throw () override;
+        virtual void SAL_CALL acquire(  ) noexcept override;
+        virtual void SAL_CALL release(  ) noexcept override;
 
         // css::frame::XController2
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() override;

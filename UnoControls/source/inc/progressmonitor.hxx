@@ -85,7 +85,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL acquire() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
 
     /**
         @short      decrement refcount
@@ -94,7 +94,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL release() noexcept override;
 
     //  XTypeProvider
 

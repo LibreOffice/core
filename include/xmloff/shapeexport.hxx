@@ -255,7 +255,7 @@ public:
         @see exportShapes
     */
     void seekShapes(
-        const css::uno::Reference< css::drawing::XShapes >& xShapes ) throw();
+        const css::uno::Reference< css::drawing::XShapes >& xShapes ) noexcept;
 
     void exportAutoStyles();
 

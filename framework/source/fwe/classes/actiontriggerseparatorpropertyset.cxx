@@ -82,12 +82,12 @@ Any SAL_CALL ActionTriggerSeparatorPropertySet::queryInterface( const Type& aTyp
     return OWeakObject::queryInterface( aType );
 }
 
-void ActionTriggerSeparatorPropertySet::acquire() throw()
+void ActionTriggerSeparatorPropertySet::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void ActionTriggerSeparatorPropertySet::release() throw()
+void ActionTriggerSeparatorPropertySet::release() noexcept
 {
     OWeakObject::release();
 }

@@ -199,8 +199,8 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageControl, ControlContainerBase, "com.sun.star.awt.UnoControlMultiPage" )
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return ControlContainerBase::queryInterface(rType); }
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
     // css::lang::XTypeProvider
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
     css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;

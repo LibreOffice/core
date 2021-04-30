@@ -139,7 +139,7 @@ namespace connectivity::file
             virtual void SAL_CALL disposing() override;
             // XInterface
             //      virtual void SAL_CALL release() throw(css::uno::RuntimeException) = 0;
-            virtual void SAL_CALL acquire() throw() override;
+            virtual void SAL_CALL acquire() noexcept override;
             // XInterface
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             //XTypeProvider
@@ -164,7 +164,7 @@ namespace connectivity::file
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XInterface
-            virtual void SAL_CALL release() throw() override;
+            virtual void SAL_CALL release() noexcept override;
         };
 
         typedef ::cppu::ImplHelper2< css::sdbc::XStatement,css::lang::XServiceInfo > OStatement_XStatement;
@@ -181,8 +181,8 @@ namespace connectivity::file
             DECLARE_SERVICE_INFO();
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
+            virtual void SAL_CALL acquire() noexcept override;
+            virtual void SAL_CALL release() noexcept override;
 
             // XStatement
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) override ;

@@ -49,12 +49,12 @@ namespace cmis
         return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
     }
 
-    void SAL_CALL StdInputStream::acquire( ) throw( )
+    void SAL_CALL StdInputStream::acquire( ) noexcept
     {
         OWeakObject::acquire();
     }
 
-    void SAL_CALL StdInputStream::release( ) throw( )
+    void SAL_CALL StdInputStream::release( ) noexcept
     {
         OWeakObject::release();
     }

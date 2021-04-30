@@ -68,8 +68,8 @@ namespace dbaccess
         }
 
         // IEventProcessor
-        virtual void SAL_CALL acquire() throw () override;
-        virtual void SAL_CALL release() throw () override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
         void addLegacyEventListener( const Reference< document::XEventListener >& Listener )
         {
@@ -122,12 +122,12 @@ namespace dbaccess
         void impl_notifyEventAsync_nothrow( const DocumentEvent& _rEvent );
     };
 
-    void SAL_CALL DocumentEventNotifier_Impl::acquire() throw ()
+    void SAL_CALL DocumentEventNotifier_Impl::acquire() noexcept
     {
         osl_atomic_increment( &m_refCount );
     }
 
-    void SAL_CALL DocumentEventNotifier_Impl::release() throw ()
+    void SAL_CALL DocumentEventNotifier_Impl::release() noexcept
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
             delete this;

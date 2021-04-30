@@ -141,12 +141,12 @@ Any SAL_CALL AccessibleBrowseBoxTableBase::queryInterface( const uno::Type& rTyp
         aAny : AccessibleBrowseBoxTableImplHelper::queryInterface( rType );
 }
 
-void SAL_CALL AccessibleBrowseBoxTableBase::acquire() throw ()
+void SAL_CALL AccessibleBrowseBoxTableBase::acquire() noexcept
 {
     BrowseBoxAccessibleElement::acquire();
 }
 
-void SAL_CALL AccessibleBrowseBoxTableBase::release() throw ()
+void SAL_CALL AccessibleBrowseBoxTableBase::release() noexcept
 {
     BrowseBoxAccessibleElement::release();
 }

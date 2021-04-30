@@ -82,8 +82,8 @@ namespace connectivity::sdbcx
             DECLARE_SERVICE_INFO();
             //XInterface
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
+            virtual void SAL_CALL acquire() noexcept override;
+            virtual void SAL_CALL release() noexcept override;
             //XTypeProvider
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
             // ODescriptor

@@ -59,13 +59,13 @@ Any WeakComponentImplHelperBase::queryInterface( Type const & rType )
 }
 
 void WeakComponentImplHelperBase::acquire()
-    throw ()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void WeakComponentImplHelperBase::release()
-    throw ()
+    noexcept
 {
     if (osl_atomic_decrement( &m_refCount ) != 0)
         return;
@@ -182,13 +182,13 @@ Any WeakAggComponentImplHelperBase::queryAggregation( Type const & rType )
 }
 
 void WeakAggComponentImplHelperBase::acquire()
-    throw ()
+    noexcept
 {
     OWeakAggObject::acquire();
 }
 
 void WeakAggComponentImplHelperBase::release()
-    throw ()
+    noexcept
 {
     Reference<XInterface> const xDelegator_(xDelegator);
     if (xDelegator_.is()) {

@@ -78,8 +78,8 @@ public:
     virtual ~OBookmarkContainer() override;
 
 // css::uno::XInterface
-    virtual void SAL_CALL acquire(  ) throw() override;
-    virtual void SAL_CALL release(  ) throw() override;
+    virtual void SAL_CALL acquire(  ) noexcept override;
+    virtual void SAL_CALL release(  ) noexcept override;
 
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;

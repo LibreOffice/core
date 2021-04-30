@@ -107,7 +107,7 @@ namespace oox::ppt {
         OSL_ENSURE( mpTarget, "no valid target passed" );
     }
 
-    TimeTargetElementContext::~TimeTargetElementContext( ) throw( )
+    TimeTargetElementContext::~TimeTargetElementContext( ) noexcept
     {
     }
 

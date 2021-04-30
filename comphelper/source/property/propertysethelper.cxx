@@ -30,7 +30,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-static PropertyMapEntry const * find( rtl::Reference<PropertySetInfo>& mxInfo, const OUString& aName ) throw()
+static PropertyMapEntry const * find( rtl::Reference<PropertySetInfo>& mxInfo, const OUString& aName ) noexcept
 {
     PropertyMap::const_iterator aIter = mxInfo->getPropertyMap().find( aName );
 
@@ -41,12 +41,12 @@ static PropertyMapEntry const * find( rtl::Reference<PropertySetInfo>& mxInfo, c
 }
 
 
-PropertySetHelper::PropertySetHelper( rtl::Reference<comphelper::PropertySetInfo> const & xInfo ) throw()
+PropertySetHelper::PropertySetHelper( rtl::Reference<comphelper::PropertySetInfo> const & xInfo ) noexcept
     : mxInfo(xInfo)
 {
 }
 
-PropertySetHelper::~PropertySetHelper() throw()
+PropertySetHelper::~PropertySetHelper() noexcept
 {
 }
 

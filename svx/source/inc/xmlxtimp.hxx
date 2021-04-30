@@ -37,12 +37,12 @@ public:
         const css::uno::Reference< css::container::XNameContainer > & rTable,
         css::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler);
 
-    virtual ~SvxXMLXTableImport() throw () override;
+    virtual ~SvxXMLXTableImport() noexcept override;
 
     static bool load( const OUString &rPath, const OUString &rReferer,
                       const css::uno::Reference < css::embed::XStorage > &xStorage,
                       const css::uno::Reference< css::container::XNameContainer >& xTable,
-                      bool *bOptLoadedFromStorage ) throw();
+                      bool *bOptLoadedFromStorage ) noexcept;
 protected:
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;

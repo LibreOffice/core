@@ -39,8 +39,8 @@ class SdUnoDrawView final
 public:
     SdUnoDrawView (
         DrawViewShell& rViewShell,
-        View& rView) throw();
-    virtual ~SdUnoDrawView() throw() override;
+        View& rView) noexcept;
+    virtual ~SdUnoDrawView() noexcept override;
 
     // XSelectionSupplier
 
@@ -84,10 +84,10 @@ public:
     css::uno::Reference< css::drawing::XLayer> getActiveLayer() const;
 
 private:
-    bool getMasterPageMode() const throw();
-    void setMasterPageMode(bool MasterPageMode_) throw();
-    bool getLayerMode() const throw();
-    void setLayerMode(bool LayerMode_) throw();
+    bool getMasterPageMode() const noexcept;
+    void setMasterPageMode(bool MasterPageMode_) noexcept;
+    bool getLayerMode() const noexcept;
+    void setLayerMode(bool LayerMode_) noexcept;
     /** Make the specified object the active layer.
         @param rxLayer
             The new layer object.
@@ -105,7 +105,7 @@ private:
 
     css::uno::Any getDrawViewMode() const;
 
-    SdXImpressDocument* GetModel() const throw();
+    SdXImpressDocument* GetModel() const noexcept;
 
     DrawViewShell& mrDrawViewShell;
     sd::View& mrView;

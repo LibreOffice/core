@@ -31,7 +31,7 @@ class SdXImpressDocument;
 namespace sd
 {
 css::uno::Reference<css::uno::XInterface>
-DocumentSettings_createInstance(SdXImpressDocument* pDoc) throw();
+DocumentSettings_createInstance(SdXImpressDocument* pDoc) noexcept;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

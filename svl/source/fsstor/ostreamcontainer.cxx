@@ -121,13 +121,13 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
 }
 
 void SAL_CALL OFSStreamContainer::acquire()
-        throw()
+        noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL OFSStreamContainer::release()
-        throw()
+        noexcept
 {
     OWeakObject::release();
 }

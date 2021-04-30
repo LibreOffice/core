@@ -89,12 +89,12 @@ public:
     page or a given sdrobj
   */
 
-SdUnoSearchReplaceShape::SdUnoSearchReplaceShape( drawing::XDrawPage* pPage ) throw()
+SdUnoSearchReplaceShape::SdUnoSearchReplaceShape( drawing::XDrawPage* pPage ) noexcept
     : mpPage(pPage)
 {
 }
 
-SdUnoSearchReplaceShape::~SdUnoSearchReplaceShape() throw()
+SdUnoSearchReplaceShape::~SdUnoSearchReplaceShape() noexcept
 {
 }
 
@@ -285,7 +285,7 @@ uno::Reference< css::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findFir
     return uno::Reference< uno::XInterface > ();
 }
 
-uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() const throw()
+uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() const noexcept
 {
     uno::Reference< drawing::XShape >  xShape;
 
@@ -346,7 +346,7 @@ uno::Reference< css::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNex
 /** this method returns the shape that follows xCurrentShape in the shape collection xShapes.
     It steps recursive into groupshapes and returns the xCurrentShape if it is the last
     shape in this collection */
-uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetNextShape( const uno::Reference< container::XIndexAccess >&  xShapes, const uno::Reference< drawing::XShape >&  xCurrentShape ) throw()
+uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetNextShape( const uno::Reference< container::XIndexAccess >&  xShapes, const uno::Reference< drawing::XShape >&  xCurrentShape ) noexcept
 {
     uno::Reference< drawing::XShape >  xFound;
 
@@ -564,7 +564,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
     return xFound;
 }
 
-bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) throw()
+bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) noexcept
 {
     OUString aSearchStr( pDescr->getSearchString() );
     OUString aText( rText );
@@ -597,7 +597,7 @@ bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nStartPo
         return false;
 }
 
-ESelection SdUnoSearchReplaceShape::GetSelection( const uno::Reference< text::XTextRange >&  xTextRange ) throw()
+ESelection SdUnoSearchReplaceShape::GetSelection( const uno::Reference< text::XTextRange >&  xTextRange ) noexcept
 {
     ESelection aSel;
     SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( xTextRange );
@@ -608,7 +608,7 @@ ESelection SdUnoSearchReplaceShape::GetSelection( const uno::Reference< text::XT
     return aSel;
 }
 
-uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetShape( const uno::Reference< text::XTextRange >&  xTextRange ) throw()
+uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetShape( const uno::Reference< text::XTextRange >&  xTextRange ) noexcept
 {
     uno::Reference< drawing::XShape >  xShape;
 
@@ -652,7 +652,7 @@ SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor()
     mbWords = false;
 }
 
-SdUnoSearchReplaceDescriptor::~SdUnoSearchReplaceDescriptor() throw()
+SdUnoSearchReplaceDescriptor::~SdUnoSearchReplaceDescriptor() noexcept
 {
 }
 
@@ -745,12 +745,12 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const 
 
 /* ================================================================= */
 
-SdUnoFindAllAccess::SdUnoFindAllAccess( uno::Sequence< uno::Reference< uno::XInterface >  > const & rSequence ) throw()
+SdUnoFindAllAccess::SdUnoFindAllAccess( uno::Sequence< uno::Reference< uno::XInterface >  > const & rSequence ) noexcept
 :maSequence( rSequence )
 {
 }
 
-SdUnoFindAllAccess::~SdUnoFindAllAccess() throw()
+SdUnoFindAllAccess::~SdUnoFindAllAccess() noexcept
 {
 }
 

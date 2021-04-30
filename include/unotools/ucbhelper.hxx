@@ -63,7 +63,7 @@ UNOTOOLS_DLLPUBLIC bool MakeFolder(
 UNOTOOLS_DLLPUBLIC bool ensureFolder(
     const css::uno::Reference< css::uno::XComponentContext >& xCtx,
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
-    const OUString& rFolder, ucbhelper::Content & result) throw();
+    const OUString& rFolder, ucbhelper::Content & result) noexcept;
 
 UNOTOOLS_DLLPUBLIC bool IsYounger(
     OUString const & younger, OUString const & older);

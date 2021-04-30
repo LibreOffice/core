@@ -47,8 +47,8 @@ namespace toolkit
 
     public:
         // XInterface
-        virtual void SAL_CALL acquire() throw() override;
-        virtual void SAL_CALL release() throw() override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
         // XGridDataListener
         virtual void SAL_CALL rowsInserted( const css::awt::grid::GridDataEvent& Event ) override;

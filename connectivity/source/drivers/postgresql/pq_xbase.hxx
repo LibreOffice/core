@@ -81,8 +81,8 @@ public: // for initialization purposes only, not exported via an interface !
         const OUString & name, const css::uno::Any & value );
 
 public: //XInterface
-    virtual void SAL_CALL acquire() throw() override { ReflectionBase_BASE::acquire(); }
-    virtual void SAL_CALL release() throw() override { ReflectionBase_BASE::release(); }
+    virtual void SAL_CALL acquire() noexcept override { ReflectionBase_BASE::acquire(); }
+    virtual void SAL_CALL release() noexcept override { ReflectionBase_BASE::release(); }
     virtual css::uno::Any  SAL_CALL queryInterface(
         const css::uno::Type & reqType ) override;
 

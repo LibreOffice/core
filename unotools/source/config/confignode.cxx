@@ -182,7 +182,7 @@ namespace utl
         return sName;
     }
 
-    Sequence< OUString > OConfigurationNode::getNodeNames() const throw()
+    Sequence< OUString > OConfigurationNode::getNodeNames() const noexcept
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::getNodeNames: object is invalid!");
         Sequence< OUString > aReturn;
@@ -204,7 +204,7 @@ namespace utl
         return aReturn;
     }
 
-    bool OConfigurationNode::removeNode(const OUString& _rName) const throw()
+    bool OConfigurationNode::removeNode(const OUString& _rName) const noexcept
     {
         OSL_ENSURE(m_xContainerAccess.is(), "OConfigurationNode::removeNode: object is invalid!");
         if (m_xContainerAccess.is())
@@ -227,7 +227,7 @@ namespace utl
         return false;
     }
 
-    OConfigurationNode OConfigurationNode::insertNode(const OUString& _rName,const Reference< XInterface >& _xNode) const throw()
+    OConfigurationNode OConfigurationNode::insertNode(const OUString& _rName,const Reference< XInterface >& _xNode) const noexcept
     {
         if(_xNode.is())
         {
@@ -252,7 +252,7 @@ namespace utl
         return OConfigurationNode();
     }
 
-    OConfigurationNode OConfigurationNode::createNode(const OUString& _rName) const throw()
+    OConfigurationNode OConfigurationNode::createNode(const OUString& _rName) const noexcept
     {
         Reference< XSingleServiceFactory > xChildFactory(m_xContainerAccess, UNO_QUERY);
         OSL_ENSURE(xChildFactory.is(), "OConfigurationNode::createNode: object is invalid or read-only!");
@@ -274,7 +274,7 @@ namespace utl
         return OConfigurationNode();
     }
 
-    OConfigurationNode OConfigurationNode::openNode(const OUString& _rPath) const throw()
+    OConfigurationNode OConfigurationNode::openNode(const OUString& _rPath) const noexcept
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::openNode: object is invalid!");
         OSL_ENSURE(m_xHierarchyAccess.is(), "OConfigurationNode::openNode: object is invalid!");
@@ -324,7 +324,7 @@ namespace utl
         return bIsSet;
     }
 
-    bool OConfigurationNode::hasByHierarchicalName( const OUString& _rName ) const throw()
+    bool OConfigurationNode::hasByHierarchicalName( const OUString& _rName ) const noexcept
     {
         OSL_ENSURE( m_xHierarchyAccess.is(), "OConfigurationNode::hasByHierarchicalName: no hierarchy access!" );
         try
@@ -341,7 +341,7 @@ namespace utl
         return false;
     }
 
-    bool OConfigurationNode::hasByName(const OUString& _rName) const throw()
+    bool OConfigurationNode::hasByName(const OUString& _rName) const noexcept
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
         try
@@ -356,7 +356,7 @@ namespace utl
         return false;
     }
 
-    bool OConfigurationNode::setNodeValue(const OUString& _rPath, const Any& _rValue) const throw()
+    bool OConfigurationNode::setNodeValue(const OUString& _rPath, const Any& _rValue) const noexcept
     {
         bool bResult = false;
 
@@ -403,7 +403,7 @@ namespace utl
         return bResult;
     }
 
-    Any OConfigurationNode::getNodeValue(const OUString& _rPath) const throw()
+    Any OConfigurationNode::getNodeValue(const OUString& _rPath) const noexcept
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
         OSL_ENSURE(m_xHierarchyAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
@@ -427,7 +427,7 @@ namespace utl
         return aReturn;
     }
 
-    void OConfigurationNode::clear() throw()
+    void OConfigurationNode::clear() noexcept
     {
         m_xHierarchyAccess.clear();
         m_xDirectAccess.clear();
@@ -500,13 +500,13 @@ namespace utl
         }
     }
 
-    void OConfigurationTreeRoot::clear() throw()
+    void OConfigurationTreeRoot::clear() noexcept
     {
         OConfigurationNode::clear();
         m_xCommitter.clear();
     }
 
-    bool OConfigurationTreeRoot::commit() const throw()
+    bool OConfigurationTreeRoot::commit() const noexcept
     {
         OSL_ENSURE(isValid(), "OConfigurationTreeRoot::commit: object is invalid!");
         if (!isValid())

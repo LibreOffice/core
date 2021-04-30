@@ -50,7 +50,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
         const vcl::Window* pViewShellWindow);
-    virtual ~FullScreenPane() throw() override;
+    virtual ~FullScreenPane() noexcept override;
 
     virtual void SAL_CALL disposing() override;
 

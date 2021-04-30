@@ -199,12 +199,12 @@ Any SAL_CALL ODatabaseDocument::queryInterface( const Type& _rType )
     return aReturn;
 }
 
-void SAL_CALL ODatabaseDocument::acquire(  ) throw ()
+void SAL_CALL ODatabaseDocument::acquire(  ) noexcept
 {
     ODatabaseDocument_OfficeDocument::acquire();
 }
 
-void SAL_CALL ODatabaseDocument::release(  ) throw ()
+void SAL_CALL ODatabaseDocument::release(  ) noexcept
 {
     ODatabaseDocument_OfficeDocument::release();
 }

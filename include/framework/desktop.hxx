@@ -122,9 +122,9 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
         // XInterface
-        virtual void SAL_CALL acquire() throw () override
+        virtual void SAL_CALL acquire() noexcept override
             { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() throw () override
+        virtual void SAL_CALL release() noexcept override
             { OWeakObject::release(); }
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
 

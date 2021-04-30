@@ -223,7 +223,7 @@ SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries,
 }
 
 
-SvxShape::~SvxShape() throw()
+SvxShape::~SvxShape() noexcept
 {
     ::SolarMutexGuard aGuard;
 
@@ -308,7 +308,7 @@ uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type& rType )
     return SvxShape_UnoImplHelper::queryAggregation(rType);
 }
 
-const css::uno::Sequence< sal_Int8 > & SvxShape::getUnoTunnelId() throw()
+const css::uno::Sequence< sal_Int8 > & SvxShape::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSvxShapeUnoTunnelId;
     return theSvxShapeUnoTunnelId.getSeq();
@@ -449,7 +449,7 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     }
 }
 
-void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
+void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const noexcept
 {
     DBG_TESTSOLARMUTEX();
     if(!HasSdrObject())
@@ -470,7 +470,7 @@ void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
     }
 }
 
-void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
+void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const noexcept
 {
     DBG_TESTSOLARMUTEX();
     if(!HasSdrObject())
@@ -491,7 +491,7 @@ void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon
     }
 }
 
-void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw()
+void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DHomMatrix& rB2DHomMatrix) const noexcept
 {
     DBG_TESTSOLARMUTEX();
     if(!HasSdrObject())
@@ -517,7 +517,7 @@ void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DHomMatrix& rB2DHomMatrix)
     }
 }
 
-void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
+void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const noexcept
 {
     DBG_TESTSOLARMUTEX();
     if(!HasSdrObject())
@@ -538,7 +538,7 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
     }
 }
 
-void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
+void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const noexcept
 {
     DBG_TESTSOLARMUTEX();
     if(!HasSdrObject())
@@ -559,7 +559,7 @@ void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) cons
     }
 }
 
-void SvxShape::ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw()
+void SvxShape::ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const noexcept
 {
     DBG_TESTSOLARMUTEX();
     if(!HasSdrObject())
@@ -989,7 +989,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
+void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
 {
     DBG_TESTSOLARMUTEX();
 
@@ -3745,7 +3745,7 @@ SvxShapeText::SvxShapeText(SdrObject* pObject, const SfxItemPropertyMapEntry* pP
 }
 
 
-SvxShapeText::~SvxShapeText() throw ()
+SvxShapeText::~SvxShapeText() noexcept
 {
     // check if only this instance is registered at the ranges
     DBG_ASSERT( (nullptr == GetEditSource()) || (GetEditSource()->getRanges().size()==1),
@@ -3929,7 +3929,7 @@ SvxShapeRect::SvxShapeRect(SdrObject* pObj)
 {
 }
 
-SvxShapeRect::~SvxShapeRect() throw()
+SvxShapeRect::~SvxShapeRect() noexcept
 {
 }
 
@@ -3951,14 +3951,14 @@ uno::Sequence< OUString > SvxShapeRect::getSupportedServiceNames()
 }
 
 /** returns a StarOffice API wrapper for the given SdrObject */
-uno::Reference< drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw ()
+uno::Reference< drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) noexcept
 {
     uno::Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
     return xShape;
 }
 
 /** returns the SdrObject from the given StarOffice API wrapper */
-SdrObject* GetSdrObjectFromXShape( const uno::Reference< drawing::XShape >& xShape ) throw()
+SdrObject* GetSdrObjectFromXShape( const uno::Reference< drawing::XShape >& xShape ) noexcept
 {
     SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
     return pShape ? pShape->GetSdrObject() : nullptr;

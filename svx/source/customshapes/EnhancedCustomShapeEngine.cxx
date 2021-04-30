@@ -73,8 +73,8 @@ public:
                             EnhancedCustomShapeEngine();
 
     // XInterface
-    virtual void SAL_CALL   acquire() throw() override;
-    virtual void SAL_CALL   release() throw() override;
+    virtual void SAL_CALL   acquire() noexcept override;
+    virtual void SAL_CALL   release() noexcept override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
@@ -97,11 +97,11 @@ EnhancedCustomShapeEngine::EnhancedCustomShapeEngine() :
 }
 
 // XInterface
-void SAL_CALL EnhancedCustomShapeEngine::acquire() throw()
+void SAL_CALL EnhancedCustomShapeEngine::acquire() noexcept
 {
     OWeakObject::acquire();
 }
-void SAL_CALL EnhancedCustomShapeEngine::release() throw()
+void SAL_CALL EnhancedCustomShapeEngine::release() noexcept
 {
     OWeakObject::release();
 }

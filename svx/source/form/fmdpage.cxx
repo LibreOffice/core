@@ -32,7 +32,7 @@ SvxFmDrawPage::SvxFmDrawPage( SdrPage* pInPage ) :
 {
 }
 
-SvxFmDrawPage::~SvxFmDrawPage() throw ()
+SvxFmDrawPage::~SvxFmDrawPage() noexcept
 {
 }
 

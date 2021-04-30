@@ -43,8 +43,8 @@ public:
     SwXRedlineText(SwDoc* pDoc, const SwNodeIndex& aNodeIndex);
 
     virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) throw() override {OWeakObject::acquire();}
-    virtual void SAL_CALL release(  ) throw() override {OWeakObject::release();}
+    virtual void SAL_CALL acquire(  ) noexcept override {OWeakObject::acquire();}
+    virtual void SAL_CALL release(  ) noexcept override {OWeakObject::release();}
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
@@ -76,8 +76,8 @@ public:
 
 
     virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) throw() override {OWeakObject::acquire();}
-    virtual void SAL_CALL release(  ) throw() override {OWeakObject::release();}
+    virtual void SAL_CALL acquire(  ) noexcept override {OWeakObject::acquire();}
+    virtual void SAL_CALL release(  ) noexcept override {OWeakObject::release();}
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;

@@ -90,7 +90,7 @@ private:
     ModuleController (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     ModuleController (const ModuleController&) = delete;
-    virtual ~ModuleController() throw() override;
+    virtual ~ModuleController() noexcept override;
 
     /** Called for every entry in the ResourceFactories configuration entry.
     */

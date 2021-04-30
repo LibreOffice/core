@@ -30,7 +30,7 @@ using ::oox::core::ContextHandlerRef;
 namespace oox::drawingml {
 
 /** context to import a CT_Transform2D */
-Transform2DContext::Transform2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, Shape& rShape, bool btxXfrm ) throw()
+Transform2DContext::Transform2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, Shape& rShape, bool btxXfrm ) noexcept
 : ContextHandler2( rParent )
 , mrShape( rShape )
 , mbtxXfrm ( btxXfrm )

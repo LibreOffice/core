@@ -50,8 +50,8 @@ namespace connectivity::firebird
 
             DECLARE_SERVICE_INFO();
 
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
+            virtual void SAL_CALL acquire() noexcept override;
+            virtual void SAL_CALL release() noexcept override;
 
             // XStatement
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL

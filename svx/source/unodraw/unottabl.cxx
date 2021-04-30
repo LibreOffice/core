@@ -33,7 +33,7 @@ namespace
 class SvxUnoTransGradientTable : public SvxUnoNameItemTable
 {
 public:
-    explicit SvxUnoTransGradientTable(SdrModel* pModel) throw();
+    explicit SvxUnoTransGradientTable(SdrModel* pModel) noexcept;
 
     virtual NameOrIndex* createItem() const override;
 
@@ -46,7 +46,7 @@ public:
 };
 }
 
-SvxUnoTransGradientTable::SvxUnoTransGradientTable(SdrModel* pModel) throw()
+SvxUnoTransGradientTable::SvxUnoTransGradientTable(SdrModel* pModel) noexcept
     : SvxUnoNameItemTable(pModel, XATTR_FILLFLOATTRANSPARENCE, MID_FILLGRADIENT)
 {
 }

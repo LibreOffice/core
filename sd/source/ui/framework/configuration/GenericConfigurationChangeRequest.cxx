@@ -42,7 +42,7 @@ GenericConfigurationChangeRequest::GenericConfigurationChangeRequest (
         throw css::lang::IllegalArgumentException();
 }
 
-GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest() throw()
+GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest() noexcept
 {
 }
 

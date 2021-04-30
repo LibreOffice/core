@@ -264,7 +264,7 @@ SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)
 }
 
 SwXPrintSettings::~SwXPrintSettings()
-    throw()
+    noexcept
 {
 }
 
@@ -539,7 +539,7 @@ SwXViewSettings::SwXViewSettings(SwView* pVw)
 }
 
 SwXViewSettings::~SwXViewSettings()
-    throw()
+    noexcept
 {
 
 }

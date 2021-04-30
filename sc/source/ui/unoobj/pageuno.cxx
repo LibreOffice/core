@@ -29,7 +29,7 @@ ScPageObj::ScPageObj( SdrPage* pPage ) :
 {
 }
 
-ScPageObj::~ScPageObj() throw()
+ScPageObj::~ScPageObj() noexcept
 {
 }
 

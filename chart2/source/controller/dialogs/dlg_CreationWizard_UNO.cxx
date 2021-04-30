@@ -71,11 +71,11 @@ uno::Any SAL_CALL CreationWizardUnoDlg::queryInterface( const uno::Type& aType )
 {
     return OComponentHelper::queryInterface( aType );
 }
-void SAL_CALL CreationWizardUnoDlg::acquire() throw ()
+void SAL_CALL CreationWizardUnoDlg::acquire() noexcept
 {
     OComponentHelper::acquire();
 }
-void SAL_CALL CreationWizardUnoDlg::release() throw ()
+void SAL_CALL CreationWizardUnoDlg::release() noexcept
 {
     OComponentHelper::release();
 }

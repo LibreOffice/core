@@ -83,7 +83,7 @@ SdLayer::SdLayer(SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_)
     // from view.
 }
 
-SdLayer::~SdLayer() throw()
+SdLayer::~SdLayer() noexcept
 {
 }
 
@@ -227,7 +227,7 @@ void SAL_CALL SdLayer::removePropertyChangeListener( const OUString& , const uno
 void SAL_CALL SdLayer::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) {}
 void SAL_CALL SdLayer::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) {}
 
-bool SdLayer::get( LayerAttribute what ) throw()
+bool SdLayer::get( LayerAttribute what ) noexcept
 {
     if(pLayer && mxLayerManager.is())
     {
@@ -273,7 +273,7 @@ bool SdLayer::get( LayerAttribute what ) throw()
     return false; //TODO: uno::Exception?
 }
 
-void SdLayer::set( LayerAttribute what, bool flag ) throw()
+void SdLayer::set( LayerAttribute what, bool flag ) noexcept
 {
     if(!(pLayer && mxLayerManager.is()))
         return;
@@ -367,13 +367,13 @@ void SAL_CALL SdLayer::removeEventListener( const uno::Reference< lang::XEventLi
 }
 
 // class SdLayerManager
-SdLayerManager::SdLayerManager( SdXImpressDocument& rMyModel ) throw()
+SdLayerManager::SdLayerManager( SdXImpressDocument& rMyModel ) noexcept
 :mpModel( &rMyModel)
 {
     mpLayers.reset(new SvUnoWeakContainer);
 }
 
-SdLayerManager::~SdLayerManager() throw()
+SdLayerManager::~SdLayerManager() noexcept
 {
     dispose();
 }
@@ -618,7 +618,7 @@ sal_Bool SAL_CALL SdLayerManager::hasElements()
  * If something was changed at the layers, this methods takes care that the
  * changes are made visible in sdbcx::View.
  */
-void SdLayerManager::UpdateLayerView() const throw()
+void SdLayerManager::UpdateLayerView() const noexcept
 {
     if(!mpModel->mpDocShell)
         return;
@@ -636,7 +636,7 @@ void SdLayerManager::UpdateLayerView() const throw()
 }
 
 /** */
-::sd::View* SdLayerManager::GetView() const throw()
+::sd::View* SdLayerManager::GetView() const noexcept
 {
     if( mpModel->mpDocShell )
     {

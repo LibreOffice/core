@@ -74,12 +74,12 @@ Any SAL_CALL RootActionTriggerContainer::queryInterface( const Type& aType )
     return PropertySetContainer::queryInterface( aType );
 }
 
-void SAL_CALL RootActionTriggerContainer::acquire() throw ()
+void SAL_CALL RootActionTriggerContainer::acquire() noexcept
 {
     PropertySetContainer::acquire();
 }
 
-void SAL_CALL RootActionTriggerContainer::release() throw ()
+void SAL_CALL RootActionTriggerContainer::release() noexcept
 {
     PropertySetContainer::release();
 }

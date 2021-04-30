@@ -71,8 +71,8 @@ namespace connectivity::sdbcx
 
             virtual ~OColumn() override;
         public:
-            virtual void    SAL_CALL acquire() throw() override;
-            virtual void    SAL_CALL release() throw() override;
+            virtual void    SAL_CALL acquire() noexcept override;
+            virtual void    SAL_CALL release() noexcept override;
 
             OColumn(    bool _bCase);
             OColumn(    const OUString& Name,

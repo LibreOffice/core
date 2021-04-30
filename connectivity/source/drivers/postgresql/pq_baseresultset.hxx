@@ -103,8 +103,8 @@ protected:
     virtual ~BaseResultSet() override;
 
 public: // XInterface
-    virtual void SAL_CALL acquire() throw() override { BaseResultSet_BASE::acquire(); }
-    virtual void SAL_CALL release() throw() override { BaseResultSet_BASE::release(); }
+    virtual void SAL_CALL acquire() noexcept override { BaseResultSet_BASE::acquire(); }
+    virtual void SAL_CALL release() noexcept override { BaseResultSet_BASE::release(); }
     virtual css::uno::Any  SAL_CALL queryInterface(
         const css::uno::Type & reqType ) override;
 

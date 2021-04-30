@@ -152,8 +152,8 @@ struct SfxItemPropertySimpleEntry;
 class SvxFieldItem;
 class SvxFieldData;
 
-EDITENG_DLLPUBLIC void GetSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) throw();
-EDITENG_DLLPUBLIC void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) throw();
+EDITENG_DLLPUBLIC void GetSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) noexcept;
+EDITENG_DLLPUBLIC void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) noexcept;
 
 
 // This class implements a SvxEditSource and SvxTextForwarder and does
@@ -287,7 +287,7 @@ protected:
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
     void _setPropertyToDefault( SvxTextForwarder* pForwarder, const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara );
-    void SetEditSource( SvxEditSource* _pEditSource ) throw();
+    void SetEditSource( SvxEditSource* _pEditSource ) noexcept;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
@@ -299,35 +299,35 @@ protected:
     SvxUnoTextRangeBase(const SvxItemPropertySet* _pSet);
     SvxUnoTextRangeBase(const SvxEditSource* pSource, const SvxItemPropertySet* _pSet);
     SvxUnoTextRangeBase(const SvxUnoTextRangeBase& rRange);
-    virtual ~SvxUnoTextRangeBase() throw();
+    virtual ~SvxUnoTextRangeBase() noexcept;
 
 public:
     // Internal
-    const ESelection& GetSelection() const throw()
+    const ESelection& GetSelection() const noexcept
     {
         const SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
         CheckSelection(const_cast<SvxUnoTextRangeBase*>(this)->maSelection, pForwarder);
         return maSelection;
     }
-    void                    SetSelection( const ESelection& rSelection ) throw();
+    void                    SetSelection( const ESelection& rSelection ) noexcept;
 
-    void            CollapseToStart() throw();
-    void            CollapseToEnd() throw();
-    bool            IsCollapsed() throw();
-    bool            GoLeft(sal_Int16 nCount, bool Expand) throw();
-    bool            GoRight(sal_Int16 nCount, bool Expand) throw();
-    void            GotoStart(bool Expand) throw();
-    void            GotoEnd(bool Expand) throw();
+    void            CollapseToStart() noexcept;
+    void            CollapseToEnd() noexcept;
+    bool            IsCollapsed() noexcept;
+    bool            GoLeft(sal_Int16 nCount, bool Expand) noexcept;
+    bool            GoRight(sal_Int16 nCount, bool Expand) noexcept;
+    void            GotoStart(bool Expand) noexcept;
+    void            GotoEnd(bool Expand) noexcept;
 
     //const SfxItemPropertyMapEntry*   getPropertyMapEntries() const throw() { return maPropSet.getPropertyMapEntries(); }
-    const SvxItemPropertySet*   getPropertySet() const throw() { return mpPropSet; }
-    SvxEditSource*              GetEditSource() const throw() { return mpEditSource.get(); }
+    const SvxItemPropertySet*   getPropertySet() const noexcept { return mpPropSet; }
+    SvxEditSource*              GetEditSource() const noexcept { return mpEditSource.get(); }
 
     static bool SetPropertyValueHelper( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = nullptr, SvxEditSource* pEditSource = nullptr );
     /// @throws css::uno::RuntimeException
     static bool GetPropertyValueHelper(  SfxItemSet const & rSet, const SfxItemPropertyMapEntry* pMap, css::uno::Any& aAny, const ESelection* pSelection = nullptr,  SvxEditSource* pEditSource = nullptr  );
 
-    void attachField( std::unique_ptr<SvxFieldData> pData ) throw();
+    void attachField( std::unique_ptr<SvxFieldData> pData ) noexcept;
 
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextRangeBase )
 
@@ -388,13 +388,13 @@ private:
 
 public:
     SvxUnoTextRange(const SvxUnoTextBase& rParent, bool bPortion = false);
-    virtual ~SvxUnoTextRange() throw() override;
+    virtual ~SvxUnoTextRange() noexcept override;
 
     // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // css::text::XTextRange
     virtual css::uno::Reference< css::text::XText > SAL_CALL getText() override;
@@ -420,7 +420,7 @@ protected:
     SvxUnoTextBase(const SvxItemPropertySet* _pSet);
     SvxUnoTextBase(const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > const & xParent);
     SvxUnoTextBase(const SvxUnoTextBase& rText);
-    virtual ~SvxUnoTextBase() throw() override;
+    virtual ~SvxUnoTextBase() noexcept override;
 
 public:
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextBase )
@@ -485,20 +485,20 @@ class EDITENG_DLLPUBLIC SvxUnoText : public SvxUnoTextBase,
                     public ::cppu::OWeakAggObject
 {
 public:
-    SvxUnoText( const SvxItemPropertySet* _pSet ) throw();
-    SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > const & xParent ) throw();
-    SvxUnoText( const SvxUnoText& rText ) throw();
-    virtual ~SvxUnoText() throw() override;
+    SvxUnoText( const SvxItemPropertySet* _pSet ) noexcept;
+    SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > const & xParent ) noexcept;
+    SvxUnoText( const SvxUnoText& rText ) noexcept;
+    virtual ~SvxUnoText() noexcept override;
 
     // Internal
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept;
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // css::lang::XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -528,15 +528,15 @@ protected:
     using SvxUnoTextRangeBase::getPropertyValue;
 
 public:
-    SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw();
-    SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw();
-    virtual ~SvxUnoTextContent() throw() override;
+    SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPara ) noexcept;
+    SvxUnoTextContent( const SvxUnoTextContent& rContent ) noexcept;
+    virtual ~SvxUnoTextContent() noexcept override;
 
     // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // css::text::XTextRange
     virtual css::uno::Reference< css::text::XText > SAL_CALL getText(  ) override;
@@ -589,8 +589,8 @@ private:
     std::vector< rtl::Reference<SvxUnoTextContent> >  maContents;
 
 public:
-    SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText, const ESelection& rSel ) throw();
-    virtual ~SvxUnoTextContentEnumeration() throw() override;
+    SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText, const ESelection& rSel ) noexcept;
+    virtual ~SvxUnoTextContentEnumeration() noexcept override;
 
     // css::container::XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
@@ -608,7 +608,7 @@ private:
 
 public:
     SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rText, sal_Int32 nPara, const ESelection& rSel);
-    virtual ~SvxUnoTextRangeEnumeration() throw() override;
+    virtual ~SvxUnoTextRangeEnumeration() noexcept override;
 
     // css::container::XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
@@ -625,15 +625,15 @@ private:
     css::uno::Reference< css::text::XText > mxParentText;
 
 public:
-    SvxUnoTextCursor( const SvxUnoTextBase& rText ) throw();
-    SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) throw();
-    virtual ~SvxUnoTextCursor() throw() override;
+    SvxUnoTextCursor( const SvxUnoTextBase& rText ) noexcept;
+    SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) noexcept;
+    virtual ~SvxUnoTextCursor() noexcept override;
 
     // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // css::text::XTextRange
     virtual css::uno::Reference< css::text::XText > SAL_CALL getText() override;

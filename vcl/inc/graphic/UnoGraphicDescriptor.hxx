@@ -68,7 +68,7 @@ class GraphicDescriptor : public ::cppu::OWeakAggObject,
 public:
 
     GraphicDescriptor();
-    virtual ~GraphicDescriptor() throw() override;
+    virtual ~GraphicDescriptor() noexcept override;
 
     void init( const ::Graphic& rGraphic );
     void init( const OUString& rURL );
@@ -79,8 +79,8 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
 protected:
     // XServiceInfo

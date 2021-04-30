@@ -52,7 +52,7 @@ class ConstItemContainer final : public ::cppu::WeakImplHelper<
         virtual ~ConstItemContainer() override;
 
         // XUnoTunnel
-        static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() throw();
+        static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() noexcept;
         sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
         // XIndexAccess

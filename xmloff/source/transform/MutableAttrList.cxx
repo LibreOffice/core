@@ -57,7 +57,7 @@ XMLMutableAttributeList::~XMLMutableAttributeList()
     m_xAttrList = nullptr;
 }
 
-const css::uno::Sequence<sal_Int8>& XMLMutableAttributeList::getUnoTunnelId() throw()
+const css::uno::Sequence<sal_Int8>& XMLMutableAttributeList::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theXMLMutableAttributeListUnoTunnelId;
     return theXMLMutableAttributeListUnoTunnelId.getSeq();

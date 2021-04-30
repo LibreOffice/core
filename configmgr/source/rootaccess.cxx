@@ -90,11 +90,11 @@ void RootAccess::initBroadcaster(
     }
 }
 
-void RootAccess::acquire() throw () {
+void RootAccess::acquire() noexcept {
     Access::acquire();
 }
 
-void RootAccess::release() throw () {
+void RootAccess::release() noexcept {
     Access::release();
 }
 
@@ -273,7 +273,7 @@ void RootAccess::initDisposeBroadcaster(Broadcaster * broadcaster) {
     Access::initDisposeBroadcaster(broadcaster);
 }
 
-void RootAccess::clearListeners() throw() {
+void RootAccess::clearListeners() noexcept {
     changesListeners_.clear();
     Access::clearListeners();
 }

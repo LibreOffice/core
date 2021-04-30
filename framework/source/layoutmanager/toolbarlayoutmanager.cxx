@@ -79,12 +79,12 @@ ToolbarLayoutManager::~ToolbarLayoutManager()
 
 //  XInterface
 
-void SAL_CALL ToolbarLayoutManager::acquire() throw()
+void SAL_CALL ToolbarLayoutManager::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ToolbarLayoutManager::release() throw()
+void SAL_CALL ToolbarLayoutManager::release() noexcept
 {
     OWeakObject::release();
 }

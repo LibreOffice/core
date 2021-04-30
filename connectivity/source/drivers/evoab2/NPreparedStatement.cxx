@@ -67,13 +67,13 @@ OEvoabPreparedStatement::~OEvoabPreparedStatement()
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::acquire() throw()
+void SAL_CALL OEvoabPreparedStatement::acquire() noexcept
 {
     OCommonStatement::acquire();
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::release() throw()
+void SAL_CALL OEvoabPreparedStatement::release() noexcept
 {
     OCommonStatement::release();
 }

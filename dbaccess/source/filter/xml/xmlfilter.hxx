@@ -79,7 +79,7 @@ protected:
     virtual SvXMLImportContext *CreateFastContext(sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual ~ODBFilter()  throw() override;
+    virtual ~ODBFilter()  noexcept override;
 public:
 
     explicit ODBFilter( const Reference< XComponentContext >& _rxContext );

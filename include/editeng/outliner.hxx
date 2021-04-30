@@ -374,7 +374,7 @@ public:
     virtual vcl::Window* GetEditWindowForActiveOLEObj() const = 0;
 
 protected:
-    ~OutlinerViewShell() throw () {}
+    ~OutlinerViewShell() noexcept {}
 };
 
 // some thesaurus functionality to avoid code duplication in different projects...

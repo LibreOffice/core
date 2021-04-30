@@ -58,8 +58,8 @@ public:
     SdHtmlOptionsDialog();
 
     // XInterface
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any > & aArguments ) override;
@@ -89,12 +89,12 @@ SdHtmlOptionsDialog::SdHtmlOptionsDialog() :
 {
 }
 
-void SAL_CALL SdHtmlOptionsDialog::acquire() throw()
+void SAL_CALL SdHtmlOptionsDialog::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL SdHtmlOptionsDialog::release() throw()
+void SAL_CALL SdHtmlOptionsDialog::release() noexcept
 {
     OWeakObject::release();
 }

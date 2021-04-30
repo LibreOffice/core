@@ -274,13 +274,13 @@
     }
 
 
-    void SAL_CALL OGeometryControlModel_Base::acquire(  ) throw()
+    void SAL_CALL OGeometryControlModel_Base::acquire(  ) noexcept
     {
         OGCM_Base::acquire();
     }
 
 
-    void SAL_CALL OGeometryControlModel_Base::release(  ) throw()
+    void SAL_CALL OGeometryControlModel_Base::release(  ) noexcept
     {
         OGCM_Base::release();
     }

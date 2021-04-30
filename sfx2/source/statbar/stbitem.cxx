@@ -158,12 +158,12 @@ SfxStatusBarControl::~SfxStatusBarControl()
 
 
 // XInterface
-void SAL_CALL SfxStatusBarControl::acquire() throw()
+void SAL_CALL SfxStatusBarControl::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL SfxStatusBarControl::release() throw()
+void SAL_CALL SfxStatusBarControl::release() noexcept
 {
     OWeakObject::release();
 }

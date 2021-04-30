@@ -63,13 +63,13 @@ HierarchyContentProvider::~HierarchyContentProvider()
 // XInterface methods.
 
 void SAL_CALL HierarchyContentProvider::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL HierarchyContentProvider::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

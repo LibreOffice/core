@@ -139,12 +139,12 @@ uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-void SAL_CALL ScShapeObj::acquire() throw()
+void SAL_CALL ScShapeObj::acquire() noexcept
 {
         OWeakObject::acquire();
 }
 
-void SAL_CALL ScShapeObj::release() throw()
+void SAL_CALL ScShapeObj::release() noexcept
 {
         OWeakObject::release();
 }
@@ -1304,7 +1304,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-SdrObject* ScShapeObj::GetSdrObject() const throw()
+SdrObject* ScShapeObj::GetSdrObject() const noexcept
 {
     if(mxShapeAgg.is())
         return SdrObject::getSdrObjectFromXShape( mxShapeAgg );

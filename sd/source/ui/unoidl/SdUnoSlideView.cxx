@@ -37,13 +37,13 @@ using namespace ::com::sun::star::uno;
 namespace sd {
 
 SdUnoSlideView::SdUnoSlideView (
-    slidesorter::SlideSorter& rSlideSorter) throw()
+    slidesorter::SlideSorter& rSlideSorter) noexcept
     : DrawSubControllerInterfaceBase(m_aMutex),
       mrSlideSorter(rSlideSorter)
 {
 }
 
-SdUnoSlideView::~SdUnoSlideView() throw()
+SdUnoSlideView::~SdUnoSlideView() noexcept
 {
 }
 

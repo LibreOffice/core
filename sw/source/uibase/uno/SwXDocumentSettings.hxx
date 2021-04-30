@@ -54,16 +54,16 @@ class SwXDocumentSettings final :
     virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, css::uno::Any & rValue ) override;
     virtual void _postGetValues () override;
     virtual ~SwXDocumentSettings()
-        throw() override;
+        noexcept override;
 public:
     SwXDocumentSettings( SwXTextDocument* pModel );
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  )
-        throw () override;
+        noexcept override;
     virtual void SAL_CALL release(  )
-        throw () override;
+        noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;

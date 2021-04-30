@@ -118,8 +118,8 @@ namespace toolkit
 
     css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlRoadmapModel_Base::queryInterface(rType); }
     css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void          SAL_CALL acquire() throw() override  { UnoControlRoadmapModel_Base::acquire(); }
-    void          SAL_CALL release() throw() override  { UnoControlRoadmapModel_Base::release(); }
+    void          SAL_CALL acquire() noexcept override  { UnoControlRoadmapModel_Base::acquire(); }
+    void          SAL_CALL release() noexcept override  { UnoControlRoadmapModel_Base::release(); }
 
 
     // css::beans::XPropertySet

@@ -35,7 +35,7 @@ ScDrawDefaultsObj::ScDrawDefaultsObj(ScDocShell* pDocSh) :
     pDocShell->GetDocument().AddUnoObject(*this);
 }
 
-ScDrawDefaultsObj::~ScDrawDefaultsObj() throw ()
+ScDrawDefaultsObj::~ScDrawDefaultsObj() noexcept
 {
     SolarMutexGuard g;
 
@@ -51,7 +51,7 @@ void ScDrawDefaultsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-SfxItemPool* ScDrawDefaultsObj::getModelPool( bool bReadOnly ) throw()
+SfxItemPool* ScDrawDefaultsObj::getModelPool( bool bReadOnly ) noexcept
 {
     SfxItemPool* pRet = nullptr;
 

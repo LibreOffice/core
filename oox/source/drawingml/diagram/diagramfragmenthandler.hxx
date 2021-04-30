@@ -30,7 +30,7 @@ class DiagramDataFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     DiagramDataFragmentHandler(oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramDataPtr& rDataPtr);
-    virtual ~DiagramDataFragmentHandler() throw() override;
+    virtual ~DiagramDataFragmentHandler() noexcept override;
 
     virtual void SAL_CALL endDocument() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
@@ -44,7 +44,7 @@ class DiagramLayoutFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     DiagramLayoutFragmentHandler(oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramLayoutPtr& rDataPtr);
-    virtual ~DiagramLayoutFragmentHandler() throw() override;
+    virtual ~DiagramLayoutFragmentHandler() noexcept override;
 
     virtual void SAL_CALL endDocument() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;

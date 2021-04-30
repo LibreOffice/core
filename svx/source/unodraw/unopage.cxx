@@ -71,7 +71,7 @@ SvxDrawPage::SvxDrawPage(SdrPage* pInPage) // TTTT should be reference
     mpView->SetDesignMode();
 }
 
-SvxDrawPage::~SvxDrawPage() throw()
+SvxDrawPage::~SvxDrawPage() noexcept
 {
     if( !mrBHelper.bDisposed )
     {
@@ -82,13 +82,13 @@ SvxDrawPage::~SvxDrawPage() throw()
 }
 
 // XInterface
-void SvxDrawPage::release() throw()
+void SvxDrawPage::release() noexcept
 {
     OWeakAggObject::release();
 }
 
 // XComponent
-void SvxDrawPage::disposing() throw()
+void SvxDrawPage::disposing() noexcept
 {
     if( mpModel )
     {
@@ -396,7 +396,7 @@ namespace
 
 // ATTENTION: SelectObjectsInView selects the css::drawing::Shapes
 // only in the given SdrPageView. It hasn't to be the visible SdrPageView.
-void SvxDrawPage::SelectObjectsInView( const Reference< drawing::XShapes > & aShapes, SdrPageView* pPageView ) throw ()
+void SvxDrawPage::SelectObjectsInView( const Reference< drawing::XShapes > & aShapes, SdrPageView* pPageView ) noexcept
 {
     SAL_WARN_IF(!pPageView, "svx", "SdrPageView is NULL!");
     SAL_WARN_IF(!mpView, "svx", "SdrView is NULL!");
@@ -418,7 +418,7 @@ void SvxDrawPage::SelectObjectsInView( const Reference< drawing::XShapes > & aSh
 
 // ATTENTION: SelectObjectInView selects the shape only in the given SdrPageView.
 // It hasn't to be the visible SdrPageView.
-void SvxDrawPage::SelectObjectInView( const Reference< drawing::XShape > & xShape, SdrPageView* pPageView ) throw()
+void SvxDrawPage::SelectObjectInView( const Reference< drawing::XShape > & xShape, SdrPageView* pPageView ) noexcept
 {
     SAL_WARN_IF(!pPageView, "svx", "SdrPageView is NULL!");
     SAL_WARN_IF(!mpView, "svx", "SdrView is NULL!");
@@ -561,7 +561,7 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     return pNewObj;
 }
 
-void SvxDrawPage::GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor, const OUString& aName ) throw()
+void SvxDrawPage::GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor, const OUString& aName ) noexcept
 {
     sal_uInt32 nTempType = UHashMap::getId( aName );
 
@@ -827,7 +827,7 @@ Reference< drawing::XShape >  SvxDrawPage::CreateShape( SdrObject *pObj ) const
     return xShape;
 }
 
-SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xShape, bool bBeginning ) throw()
+SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xShape, bool bBeginning ) noexcept
 {
     SdrObject* pObj = CreateSdrObject_( xShape );
     if( pObj)
@@ -867,7 +867,7 @@ rtl::Reference<SvxShape> CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrIn
 }
 
 /** returns a StarOffice API wrapper for the given SdrPage */
-uno::Reference< drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) throw ()
+uno::Reference< drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) noexcept
 {
     if(pPage)
     {
@@ -880,7 +880,7 @@ uno::Reference< drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) th
 }
 
 /** returns the SdrObject from the given StarOffice API wrapper */
-SdrPage* GetSdrPageFromXDrawPage( const uno::Reference< drawing::XDrawPage >& xDrawPage ) throw()
+SdrPage* GetSdrPageFromXDrawPage( const uno::Reference< drawing::XDrawPage >& xDrawPage ) noexcept
 {
     if(xDrawPage.is())
     {

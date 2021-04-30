@@ -30,7 +30,7 @@ FrameWindowPane::FrameWindowPane(const Reference<XResourceId>& rxPaneId, vcl::Wi
 {
 }
 
-FrameWindowPane::~FrameWindowPane() throw() {}
+FrameWindowPane::~FrameWindowPane() noexcept {}
 
 sal_Bool SAL_CALL FrameWindowPane::isAnchorOnly() { return false; }
 

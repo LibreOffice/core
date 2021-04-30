@@ -393,7 +393,7 @@ bool utl::UCBContentHelper::EqualURLs(
 bool utl::UCBContentHelper::ensureFolder(
     const css::uno::Reference< css::uno::XComponentContext >& xCtx,
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
-    const OUString& rFolder, ucbhelper::Content & result) throw()
+    const OUString& rFolder, ucbhelper::Content & result) noexcept
 {
     try
     {

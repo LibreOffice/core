@@ -118,12 +118,12 @@ OPreparedStatement::~OPreparedStatement()
 {
 }
 
-void SAL_CALL OPreparedStatement::acquire() throw()
+void SAL_CALL OPreparedStatement::acquire() noexcept
 {
     OStatementCommonBase::acquire();
 }
 
-void SAL_CALL OPreparedStatement::release() throw()
+void SAL_CALL OPreparedStatement::release() noexcept
 {
     OStatementCommonBase::release();
 }

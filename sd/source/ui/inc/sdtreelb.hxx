@@ -361,7 +361,7 @@ public:
         NavigatorDragType   GetDragType() const { return meDragType;}
 
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-        static SdPageObjsTransferable* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
+        static SdPageObjsTransferable* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) noexcept;
         /** Return a temporary transferable data flavor that is used
             internally in the navigator for reordering entries.  Its
             lifetime ends with the office application.

@@ -108,7 +108,7 @@ XMLVersionListImport::XMLVersionListImport(
 {
 }
 
-XMLVersionListImport::~XMLVersionListImport() throw()
+XMLVersionListImport::~XMLVersionListImport() noexcept
 {}
 
 SvXMLImportContext *XMLVersionListImport::CreateFastContext( sal_Int32 nElement,

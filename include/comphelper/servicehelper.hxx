@@ -73,11 +73,11 @@ inline bool isUnoTunnelId(const css::uno::Sequence< sal_Int8 >& rId)
         done by this macro.
 */
 #define UNO3_GETIMPLEMENTATION_DECL( classname ) \
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw(); \
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept; \
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
 #define UNO3_GETIMPLEMENTATION_BASE_IMPL( classname ) \
-const css::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() throw() \
+const css::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() noexcept \
 { \
     static const UnoTunnelIdInit aId; \
     return aId.getSeq(); \

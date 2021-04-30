@@ -35,7 +35,7 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
 {
 }
 
-SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport() throw ()
+SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport() noexcept
 {
 }
 
@@ -108,7 +108,7 @@ SvXMLExceptionListImport::SvXMLExceptionListImport(
 {
 }
 
-SvXMLExceptionListImport::~SvXMLExceptionListImport() throw ()
+SvXMLExceptionListImport::~SvXMLExceptionListImport() noexcept
 {
 }
 

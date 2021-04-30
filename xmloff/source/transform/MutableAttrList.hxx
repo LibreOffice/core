@@ -47,7 +47,7 @@ public:
     virtual ~XMLMutableAttributeList() override;
 
     // XUnoTunnel
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() throw();
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() noexcept;
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // css::xml::sax::XAttributeList

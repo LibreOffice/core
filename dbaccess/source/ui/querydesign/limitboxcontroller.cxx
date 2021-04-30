@@ -198,12 +198,12 @@ uno::Any SAL_CALL LimitBoxController::queryInterface( const uno::Type& aType )
     return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ));
 }
 
-void SAL_CALL LimitBoxController::acquire() throw ()
+void SAL_CALL LimitBoxController::acquire() noexcept
 {
     ToolboxController::acquire();
 }
 
-void SAL_CALL LimitBoxController::release() throw ()
+void SAL_CALL LimitBoxController::release() noexcept
 {
     ToolboxController::release();
 }

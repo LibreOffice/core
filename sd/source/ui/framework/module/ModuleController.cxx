@@ -100,7 +100,7 @@ ModuleController::ModuleController (const Reference<XComponentContext>& rxContex
     }
 }
 
-ModuleController::~ModuleController() throw()
+ModuleController::~ModuleController() noexcept
 {
 }
 

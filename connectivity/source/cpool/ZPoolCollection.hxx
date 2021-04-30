@@ -85,7 +85,7 @@ namespace connectivity
         static css::uno::Reference< css::uno::XInterface > createWithProvider(   const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
                                                                                                     const OUString& _rPath);
         static css::uno::Reference< css::uno::XInterface > openNode( const OUString& _rPath,
-                                                                                        const css::uno::Reference< css::uno::XInterface >& _xTreeNode) throw();
+                                                                                        const css::uno::Reference< css::uno::XInterface >& _xTreeNode) noexcept;
         bool isPoolingEnabled();
         bool isDriverPoolingEnabled(std::u16string_view _sDriverImplName,
                                         css::uno::Reference< css::uno::XInterface >& _rxDriverNode);
@@ -104,7 +104,7 @@ namespace connectivity
     public:
 
         static css::uno::Any getNodeValue( const OUString& _rPath,
-                                                        const css::uno::Reference< css::uno::XInterface>& _xTreeNode)throw();
+                                                        const css::uno::Reference< css::uno::XInterface>& _xTreeNode)noexcept;
 
     // XDriverManager
         virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) override;

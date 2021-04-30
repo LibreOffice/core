@@ -156,13 +156,13 @@ css::uno::Any SAL_CALL
 }
 void SAL_CALL
     ScAccessibleEditObject::acquire()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::acquire ();
 }
 void SAL_CALL
     ScAccessibleEditObject::release()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::release ();
 }

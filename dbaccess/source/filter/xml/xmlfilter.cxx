@@ -188,7 +188,7 @@ ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
 }
 
 
-ODBFilter::~ODBFilter() throw()
+ODBFilter::~ODBFilter() noexcept
 {
 
 }

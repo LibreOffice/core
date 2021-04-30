@@ -84,10 +84,10 @@ namespace accessibility
         css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
 
         /** Acquires the object (calls acquire() on base class). */
-        virtual void SAL_CALL acquire() throw () override;
+        virtual void SAL_CALL acquire() noexcept override;
 
         /** Releases the object (calls release() on base class). */
-        virtual void SAL_CALL release() throw () override;
+        virtual void SAL_CALL release() noexcept override;
 
         /** @return  The index of this object among the parent's children. */
         virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;

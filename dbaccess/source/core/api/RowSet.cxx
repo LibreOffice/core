@@ -424,12 +424,12 @@ Any SAL_CALL ORowSet::queryInterface( const Type & rType )
     return ORowSet_BASE1::queryInterface( rType);
 }
 
-void SAL_CALL ORowSet::acquire() throw()
+void SAL_CALL ORowSet::acquire() noexcept
 {
     ORowSet_BASE1::acquire();
 }
 
-void SAL_CALL ORowSet::release() throw()
+void SAL_CALL ORowSet::release() noexcept
 {
     ORowSet_BASE1::release();
 }
@@ -2837,12 +2837,12 @@ Any ORowSetClone::queryInterface( const Type & rType )
     return aRet;
 }
 
-void ORowSetClone::acquire() throw()
+void ORowSetClone::acquire() noexcept
 {
     OSubComponent::acquire();
 }
 
-void ORowSetClone::release() throw()
+void ORowSetClone::release() noexcept
 {
     OSubComponent::release();
 }

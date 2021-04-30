@@ -69,7 +69,7 @@ Svx3DSceneObject::Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage)
 }
 
 
-Svx3DSceneObject::~Svx3DSceneObject() throw()
+Svx3DSceneObject::~Svx3DSceneObject() noexcept
 {
 }
 
@@ -408,7 +408,7 @@ Svx3DCubeObject::Svx3DCubeObject(SdrObject* pObj)
 {
 }
 
-Svx3DCubeObject::~Svx3DCubeObject() throw()
+Svx3DCubeObject::~Svx3DCubeObject() noexcept
 {
 }
 
@@ -529,7 +529,7 @@ Svx3DSphereObject::Svx3DSphereObject(SdrObject* pObj)
 {
 }
 
-Svx3DSphereObject::~Svx3DSphereObject() throw()
+Svx3DSphereObject::~Svx3DSphereObject() noexcept
 {
 }
 
@@ -634,7 +634,7 @@ Svx3DLatheObject::Svx3DLatheObject(SdrObject* pObj)
 {
 }
 
-Svx3DLatheObject::~Svx3DLatheObject() throw()
+Svx3DLatheObject::~Svx3DLatheObject() noexcept
 {
 }
 
@@ -814,7 +814,7 @@ Svx3DExtrudeObject::Svx3DExtrudeObject(SdrObject* pObj)
 {
 }
 
-Svx3DExtrudeObject::~Svx3DExtrudeObject() throw()
+Svx3DExtrudeObject::~Svx3DExtrudeObject() noexcept
 {
 }
 
@@ -897,7 +897,7 @@ Svx3DPolygonObject::Svx3DPolygonObject(SdrObject* pObj)
 {
 }
 
-Svx3DPolygonObject::~Svx3DPolygonObject() throw()
+Svx3DPolygonObject::~Svx3DPolygonObject() noexcept
 {
 }
 

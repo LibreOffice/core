@@ -60,16 +60,16 @@ protected:
     virtual SdrModel& getSdrModelFromUnoModel() const override;
 
 public:
-    SvxUnoDrawingModel( SdrModel* pDoc ) throw();
-    virtual ~SvxUnoDrawingModel() throw() override;
+    SvxUnoDrawingModel( SdrModel* pDoc ) noexcept;
+    virtual ~SvxUnoDrawingModel() noexcept override;
 
     SdrModel* GetDoc() const { return mpDoc; }
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override
+    virtual void SAL_CALL acquire() noexcept override
     {  SfxBaseModel::acquire(); }
-    virtual void SAL_CALL release() throw() override
+    virtual void SAL_CALL release() noexcept override
     {  SfxBaseModel::release(); }
 
     // XModel

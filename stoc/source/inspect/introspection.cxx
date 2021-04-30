@@ -710,8 +710,8 @@ public:
 
     // Methods from XInterface
     virtual Any SAL_CALL queryInterface( const Type& rType ) override;
-    virtual void        SAL_CALL acquire() throw() override { OWeakObject::acquire(); }
-    virtual void        SAL_CALL release() throw() override { OWeakObject::release(); }
+    virtual void        SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
+    virtual void        SAL_CALL release() noexcept override { OWeakObject::release(); }
 
     // Methods from XPropertySet
     virtual Reference<XPropertySetInfo> SAL_CALL getPropertySetInfo() override;

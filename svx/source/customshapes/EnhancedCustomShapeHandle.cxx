@@ -35,13 +35,13 @@ EnhancedCustomShapeHandle::~EnhancedCustomShapeHandle()
 }
 
 
-void SAL_CALL EnhancedCustomShapeHandle::acquire() throw()
+void SAL_CALL EnhancedCustomShapeHandle::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
 
-void SAL_CALL EnhancedCustomShapeHandle::release() throw()
+void SAL_CALL EnhancedCustomShapeHandle::release() noexcept
 {
     OWeakObject::release();
 }

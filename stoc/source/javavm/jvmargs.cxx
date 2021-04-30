@@ -22,7 +22,7 @@
 
 namespace stoc_javavm
 {
-JVM::JVM() throw() //: _enabled(sal_False)
+JVM::JVM() noexcept //: _enabled(sal_False)
 {
 }
 

@@ -54,8 +54,8 @@ struct ExceptionThrower : public uno_Interface, XExceptionThrower
 
     // XInterface
     virtual Any SAL_CALL queryInterface( Type const & type ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XExceptionThrower
     virtual void SAL_CALL throwException( Any const & exc ) override;
@@ -139,11 +139,11 @@ Any ExceptionThrower::queryInterface( Type const & type )
 }
 
 
-void ExceptionThrower::acquire() throw ()
+void ExceptionThrower::acquire() noexcept
 {
 }
 
-void ExceptionThrower::release() throw ()
+void ExceptionThrower::release() noexcept
 {
 }
 

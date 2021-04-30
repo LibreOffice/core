@@ -27,7 +27,7 @@ public:
     {}
 
 private:
-    virtual ~Cursor() throw () override {}
+    virtual ~Cursor() noexcept override {}
 
     virtual rtl::Reference< Entity > getNext(OUString * name) override;
 
@@ -53,7 +53,7 @@ public:
     std::map< OUString, rtl::Reference<Entity> > map;
 
 private:
-    virtual ~Module() throw () override {}
+    virtual ~Module() noexcept override {}
 
     virtual std::vector<OUString> getMemberNames() const override;
 
@@ -128,7 +128,7 @@ rtl::Reference<Entity> SourceFileProvider::findEntity(OUString const & name)
     }
 }
 
-SourceFileProvider::~SourceFileProvider() throw () {}
+SourceFileProvider::~SourceFileProvider() noexcept {}
 
 }
 

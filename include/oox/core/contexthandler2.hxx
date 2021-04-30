@@ -77,8 +77,8 @@ public:
     virtual             ~ContextHandler2Helper();
 
     // allow instances to be stored in ::rtl::Reference
-    virtual void SAL_CALL acquire() throw() = 0;
-    virtual void SAL_CALL release() throw() = 0;
+    virtual void SAL_CALL acquire() noexcept = 0;
+    virtual void SAL_CALL release() noexcept = 0;
 
     // interface --------------------------------------------------------------
 
@@ -231,8 +231,8 @@ public:
     ContextHandler2 & operator =(ContextHandler2 &&) = delete; // due to ContextHandler
 
     // resolve ambiguity from base classes
-    virtual void SAL_CALL acquire() throw() override { ContextHandler::acquire(); }
-    virtual void SAL_CALL release() throw() override { ContextHandler::release(); }
+    virtual void SAL_CALL acquire() noexcept override { ContextHandler::acquire(); }
+    virtual void SAL_CALL release() noexcept override { ContextHandler::release(); }
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 

@@ -49,9 +49,9 @@ namespace tdoc_ucp
         // XInterface
         virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType ) override;
         virtual void SAL_CALL acquire()
-            throw () override;
+            noexcept override;
         virtual void SAL_CALL release()
-            throw () override;
+            noexcept override;
 
         // XTypeProvider
         virtual uno::Sequence< uno::Type > SAL_CALL getTypes() override;
@@ -81,7 +81,7 @@ namespace tdoc_ucp
 
 // virtual
 void SAL_CALL InteractionSupplyPassword::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
@@ -89,7 +89,7 @@ void SAL_CALL InteractionSupplyPassword::acquire()
 
 // virtual
 void SAL_CALL InteractionSupplyPassword::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

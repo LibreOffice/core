@@ -94,7 +94,7 @@ Any SAL_CALL FrameControl::queryInterface( const Type& rType )
 
 //  XInterface
 
-void SAL_CALL FrameControl::acquire() throw()
+void SAL_CALL FrameControl::acquire() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -105,7 +105,7 @@ void SAL_CALL FrameControl::acquire() throw()
 
 //  XInterface
 
-void SAL_CALL FrameControl::release() throw()
+void SAL_CALL FrameControl::release() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.

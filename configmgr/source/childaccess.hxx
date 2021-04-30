@@ -75,8 +75,8 @@ public:
     virtual rtl::Reference< RootAccess > getRootAccess() override;
     virtual rtl::Reference< Access > getParentAccess() override;
 
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     virtual css::uno::Reference< css::uno::XInterface >
     SAL_CALL getParent() override;
@@ -90,9 +90,9 @@ public:
     void bind(
         rtl::Reference< RootAccess > const & root,
         rtl::Reference< Access > const & parent, OUString const & name)
-        throw ();
+        noexcept;
 
-    void unbind() throw ();
+    void unbind() noexcept;
 
     bool isInTransaction() const { return inTransaction_; }
     void committed();

@@ -194,7 +194,7 @@ void SAL_CALL ParaLRSpacingControl::notifyContextChangeEvent(const css::ui::Cont
     return ::cppu::queryInterface(aType, static_cast<css::ui::XContextChangeEventListener*>(this));
 }
 
-void SAL_CALL ParaLRSpacingControl::acquire() throw ()
+void SAL_CALL ParaLRSpacingControl::acquire() noexcept
 {
     SfxToolBoxControl::acquire();
 }
@@ -204,7 +204,7 @@ void SAL_CALL ParaLRSpacingControl::disposing(const ::css::lang::EventObject&)
     SfxToolBoxControl::disposing();
 }
 
-void SAL_CALL ParaLRSpacingControl::release() throw ()
+void SAL_CALL ParaLRSpacingControl::release() noexcept
 {
     SfxToolBoxControl::release();
 }

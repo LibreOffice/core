@@ -76,13 +76,13 @@ uno::Any SAL_CALL OInputSeekStream::queryInterface( const uno::Type& rType )
 }
 
 void SAL_CALL OInputSeekStream::acquire()
-        throw()
+        noexcept
 {
     OInputCompStream::acquire();
 }
 
 void SAL_CALL OInputSeekStream::release()
-        throw()
+        noexcept
 {
     OInputCompStream::release();
 }

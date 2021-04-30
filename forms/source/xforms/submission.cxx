@@ -90,7 +90,7 @@ Submission::Submission() :
     initializePropertySet();
 }
 
-Submission::~Submission() throw()
+Submission::~Submission() noexcept
 {
 }
 

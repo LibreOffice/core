@@ -52,7 +52,7 @@ private:
     tools::Long getCount() const { return mpList ? mpList->Count() : 0; }
     const XPropertyEntry* get(tools::Long index) const;
 public:
-    SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) throw();
+    SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) noexcept;
 
     /// @throws uno::RuntimeException
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const = 0;
@@ -81,7 +81,7 @@ public:
 
 }
 
-SvxUnoXPropertyTable::SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) throw()
+SvxUnoXPropertyTable::SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) noexcept
 : mpList( pList ), mnWhich( nWhich )
 {
 }
@@ -237,10 +237,10 @@ namespace {
 class SvxUnoXColorTable : public SvxUnoXPropertyTable
 {
 public:
-    explicit SvxUnoXColorTable( XPropertyList* pList ) throw() : SvxUnoXPropertyTable( XATTR_LINECOLOR, pList ) {};
+    explicit SvxUnoXColorTable( XPropertyList* pList ) noexcept : SvxUnoXPropertyTable( XATTR_LINECOLOR, pList ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() override;
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
 
     // XElementAccess
@@ -253,13 +253,13 @@ public:
 
 }
 
-uno::Reference< uno::XInterface > SvxUnoXColorTable_createInstance( XPropertyList* pList ) throw()
+uno::Reference< uno::XInterface > SvxUnoXColorTable_createInstance( XPropertyList* pList ) noexcept
 {
     return static_cast<OWeakObject*>(new SvxUnoXColorTable( pList ));
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const noexcept
 {
     return uno::Any( static_cast<sal_Int32>(static_cast<const XColorEntry*>(pEntry)->GetColor()) );
 }
@@ -295,10 +295,10 @@ namespace {
 class SvxUnoXLineEndTable : public SvxUnoXPropertyTable
 {
 public:
-    explicit SvxUnoXLineEndTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_LINEEND, pTable ) {};
+    explicit SvxUnoXLineEndTable( XPropertyList* pTable ) noexcept : SvxUnoXPropertyTable( XATTR_LINEEND, pTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() override;
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
 
     // XElementAccess
@@ -311,13 +311,13 @@ public:
 
 }
 
-uno::Reference< uno::XInterface > SvxUnoXLineEndTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SvxUnoXLineEndTable_createInstance( XPropertyList* pTable ) noexcept
 {
     return static_cast<OWeakObject*>(new SvxUnoXLineEndTable( pTable ));
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const noexcept
 {
     drawing::PolyPolygonBezierCoords aBezier;
     basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords( static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd(),
@@ -363,10 +363,10 @@ namespace {
 class SvxUnoXDashTable : public SvxUnoXPropertyTable
 {
 public:
-    explicit SvxUnoXDashTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_LINEDASH, pTable ) {};
+    explicit SvxUnoXDashTable( XPropertyList* pTable ) noexcept : SvxUnoXPropertyTable( XATTR_LINEDASH, pTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() override;
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
 
     // XElementAccess
@@ -379,13 +379,13 @@ public:
 
 }
 
-uno::Reference< uno::XInterface > SvxUnoXDashTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SvxUnoXDashTable_createInstance( XPropertyList* pTable ) noexcept
 {
     return static_cast<OWeakObject*>(new SvxUnoXDashTable( pTable ));
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const noexcept
 {
     const XDash& rXD = static_cast<const XDashEntry*>(pEntry)->GetDash();
 
@@ -441,10 +441,10 @@ namespace {
 class SvxUnoXHatchTable : public SvxUnoXPropertyTable
 {
 public:
-    explicit SvxUnoXHatchTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLHATCH, pTable ) {};
+    explicit SvxUnoXHatchTable( XPropertyList* pTable ) noexcept : SvxUnoXPropertyTable( XATTR_FILLHATCH, pTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() override;
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
 
     // XElementAccess
@@ -457,13 +457,13 @@ public:
 
 }
 
-uno::Reference< uno::XInterface > SvxUnoXHatchTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SvxUnoXHatchTable_createInstance( XPropertyList* pTable ) noexcept
 {
     return static_cast<OWeakObject*>(new SvxUnoXHatchTable( pTable ));
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const noexcept
 {
     const XHatch& aHatch = static_cast<const XHatchEntry*>(pEntry)->GetHatch();
 
@@ -514,10 +514,10 @@ namespace {
 class SvxUnoXGradientTable : public SvxUnoXPropertyTable
 {
 public:
-    explicit SvxUnoXGradientTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLGRADIENT, pTable ) {};
+    explicit SvxUnoXGradientTable( XPropertyList* pTable ) noexcept : SvxUnoXPropertyTable( XATTR_FILLGRADIENT, pTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() override;
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
 
     // XElementAccess
@@ -530,13 +530,13 @@ public:
 
 }
 
-uno::Reference< uno::XInterface > SvxUnoXGradientTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SvxUnoXGradientTable_createInstance( XPropertyList* pTable ) noexcept
 {
     return static_cast<OWeakObject*>(new SvxUnoXGradientTable( pTable ));
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const noexcept
 {
     const XGradient& aXGradient = static_cast<const XGradientEntry*>(pEntry)->GetGradient();
     awt::Gradient aGradient;
@@ -599,7 +599,7 @@ namespace {
 class SvxUnoXBitmapTable : public SvxUnoXPropertyTable
 {
 public:
-    explicit SvxUnoXBitmapTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLBITMAP, pTable ) {};
+    explicit SvxUnoXBitmapTable( XPropertyList* pTable ) noexcept : SvxUnoXPropertyTable( XATTR_FILLBITMAP, pTable ) {};
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const override;
@@ -615,7 +615,7 @@ public:
 
 }
 
-uno::Reference< uno::XInterface > SvxUnoXBitmapTable_createInstance( XPropertyList* pTable ) throw()
+uno::Reference< uno::XInterface > SvxUnoXBitmapTable_createInstance( XPropertyList* pTable ) noexcept
 {
     return static_cast<OWeakObject*>(new SvxUnoXBitmapTable( pTable ));
 }

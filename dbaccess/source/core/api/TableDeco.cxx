@@ -604,12 +604,12 @@ Reference< XPropertySet > ODBTableDecorator::createColumnDescriptor()
     return xRet;
 }
 
-void SAL_CALL ODBTableDecorator::acquire() throw()
+void SAL_CALL ODBTableDecorator::acquire() noexcept
 {
     OTableDescriptor_BASE::acquire();
 }
 
-void SAL_CALL ODBTableDecorator::release() throw()
+void SAL_CALL ODBTableDecorator::release() noexcept
 {
     OTableDescriptor_BASE::release();
 }

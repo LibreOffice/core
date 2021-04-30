@@ -52,7 +52,7 @@ class SwTextAPIObject final : public SvxUnoText
     std::unique_ptr<SwTextAPIEditSource> m_pSource;
 public:
                         SwTextAPIObject( std::unique_ptr<SwTextAPIEditSource> p);
-    virtual             ~SwTextAPIObject() throw() override;
+    virtual             ~SwTextAPIObject() noexcept override;
     void                DisposeEditSource() { m_pSource->Dispose(); }
     std::unique_ptr<OutlinerParaObject> CreateText() { return m_pSource->CreateText(); }
     void                SetString( const OUString& rText ) { m_pSource->SetString( rText ); }

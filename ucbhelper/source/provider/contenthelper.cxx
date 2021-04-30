@@ -139,7 +139,7 @@ ContentImplHelper::~ContentImplHelper()
 }
 
 void SAL_CALL ContentImplHelper::release()
-    throw()
+    noexcept
 {
     // #144882# - Call to OWeakObject::release may destroy m_xProvider.
     //            Prevent this.

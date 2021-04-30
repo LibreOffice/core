@@ -90,8 +90,8 @@ public:
 
     // XInterface:
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override;
-    virtual void SAL_CALL acquire() throw () override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::acquire(); }
-    virtual void SAL_CALL release() throw () override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::release(); }
+    virtual void SAL_CALL acquire() noexcept override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::acquire(); }
+    virtual void SAL_CALL release() noexcept override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::release(); }
 
     // css::beans::XPropertySet:
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;

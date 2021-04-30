@@ -64,23 +64,23 @@ class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
     SdrModel*       mpModel;    // TTTT probably not needed -> use from SdrPage
     std::unique_ptr<SdrView> mpView;
 
-    void    SelectObjectsInView( const css::uno::Reference< css::drawing::XShapes >& aShapes, SdrPageView*   pPageView ) throw ();
-    void    SelectObjectInView( const css::uno::Reference< css::drawing::XShape >& xShape, SdrPageView*  pPageView ) throw();
+    void    SelectObjectsInView( const css::uno::Reference< css::drawing::XShapes >& aShapes, SdrPageView*   pPageView ) noexcept;
+    void    SelectObjectInView( const css::uno::Reference< css::drawing::XShape >& xShape, SdrPageView*  pPageView ) noexcept;
 
-    virtual void disposing() throw();
+    virtual void disposing() noexcept;
 
  public:
     SvxDrawPage(SdrPage* pPage);
-    virtual ~SvxDrawPage() throw() override;
+    virtual ~SvxDrawPage() noexcept override;
 
     // Internals
     SdrPage* GetSdrPage() const { return mpPage; }
 
     // Creation of a SdrObject and insertion into the SdrPage
-    SdrObject *CreateSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape, bool bBeginning = false ) throw();
+    SdrObject *CreateSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape, bool bBeginning = false ) noexcept;
 
     // Determine Type and Inventor
-    static void GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor, const OUString& aName ) throw();
+    static void GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor, const OUString& aName ) noexcept;
 
     // Creating a SdrObject using it's Description.
     // Can be used by derived classes to support their owen Shapes (e.g. Controls).
@@ -98,7 +98,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
     UNO3_GETIMPLEMENTATION_DECL( SvxDrawPage )
 
     // XInterface
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XShapes
     virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;

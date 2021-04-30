@@ -65,7 +65,7 @@ namespace frm
     }
 
 
-    ORichTextUnoWrapper::~ORichTextUnoWrapper() throw()
+    ORichTextUnoWrapper::~ORichTextUnoWrapper() noexcept
     {
     }
 

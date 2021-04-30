@@ -57,22 +57,22 @@ private:
     bool IsEmptyPresObj() const;
     void SetEmptyPresObj(bool bEmpty);
 
-    bool IsMasterDepend() const throw();
-    void SetMasterDepend( bool bDepend ) throw();
+    bool IsMasterDepend() const noexcept;
+    void SetMasterDepend( bool bDepend ) noexcept;
 
     OUString GetPlaceholderText() const;
 
 public:
     SdXShape(SvxShape* pShape, SdXImpressDocument* pModel);
-    virtual ~SdXShape() throw();
+    virtual ~SdXShape() noexcept;
 
     virtual bool queryAggregation( const css::uno::Type & rType, css::uno::Any& aAny ) override;
     virtual void dispose() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;

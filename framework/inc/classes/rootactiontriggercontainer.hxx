@@ -45,8 +45,8 @@ class RootActionTriggerContainer final : public PropertySetContainer,
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() throw () override;
-        virtual void SAL_CALL release() throw () override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
         // XMultiServiceFactory
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;

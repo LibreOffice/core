@@ -51,8 +51,8 @@ namespace dbaccess
         static bool needsSynchronousNotification( const OUString& _rEventName );
 
         // XInterface
-        virtual void SAL_CALL acquire() throw() override;
-        virtual void SAL_CALL release() throw() override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
         // XNameReplace
         virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;

@@ -36,7 +36,7 @@ EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreate
 css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule();
 /// @throws css::lang::IllegalArgumentException
 const SvxNumRule& SvxGetNumRule( css::uno::Reference< css::container::XIndexReplace > const & xRule );
-EDITENG_DLLPUBLIC css::uno::Reference< css::ucb::XAnyCompare > SvxCreateNumRuleCompare() throw();
+EDITENG_DLLPUBLIC css::uno::Reference< css::ucb::XAnyCompare > SvxCreateNumRuleCompare() noexcept;
 
 class SvxUnoNumberingRules final : public ::cppu::WeakAggImplHelper5< css::container::XIndexReplace, css::ucb::XAnyCompare,
     css::lang::XUnoTunnel, css::util::XCloneable, css::lang::XServiceInfo >
@@ -45,7 +45,7 @@ private:
     SvxNumRule maRule;
 public:
     SvxUnoNumberingRules(const SvxNumRule& rRule);
-    virtual ~SvxUnoNumberingRules() throw() override;
+    virtual ~SvxUnoNumberingRules() noexcept override;
 
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoNumberingRules )
 

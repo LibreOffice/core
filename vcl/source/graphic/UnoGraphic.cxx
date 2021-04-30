@@ -38,7 +38,7 @@ Graphic::Graphic() :
 {
 }
 
-Graphic::~Graphic() throw()
+Graphic::~Graphic() noexcept
 {
 }
 
@@ -72,12 +72,12 @@ uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
 }
 
 void SAL_CALL Graphic::acquire()
-    throw()
+    noexcept
 {
     unographic::GraphicDescriptor::acquire();
 }
 
-void SAL_CALL Graphic::release() throw()
+void SAL_CALL Graphic::release() noexcept
 {
     unographic::GraphicDescriptor::release();
 }

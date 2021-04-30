@@ -475,7 +475,7 @@ void SwXMLExport::ExportContent_()
     GetTextParagraphExport()->exportText( xText, m_bShowProgress );
 }
 
-const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() throw()
+const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSwXMLExportUnoTunnelId;
     return theSwXMLExportUnoTunnelId.getSeq();

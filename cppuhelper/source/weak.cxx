@@ -66,8 +66,8 @@ public:
 
     // XInterface
     Any SAL_CALL        queryInterface( const Type & rType ) override;
-    void SAL_CALL       acquire() throw() override;
-    void SAL_CALL       release() throw() override;
+    void SAL_CALL       acquire() noexcept override;
+    void SAL_CALL       release() noexcept override;
 
     // XAdapter
     css::uno::Reference< css::uno::XInterface > SAL_CALL queryAdapted() override;
@@ -98,7 +98,7 @@ Any SAL_CALL OWeakConnectionPoint::queryInterface( const Type & rType )
 }
 
 // XInterface
-void SAL_CALL OWeakConnectionPoint::acquire() throw()
+void SAL_CALL OWeakConnectionPoint::acquire() noexcept
 {
 #ifdef DBG_UTIL
     // catch things early which have been deleted and then re-acquired
@@ -108,7 +108,7 @@ void SAL_CALL OWeakConnectionPoint::acquire() throw()
 }
 
 // XInterface
-void SAL_CALL OWeakConnectionPoint::release() throw()
+void SAL_CALL OWeakConnectionPoint::release() noexcept
 {
     if (! osl_atomic_decrement( &m_aRefCount ))
     {
@@ -226,13 +226,13 @@ Any SAL_CALL OWeakObject::queryInterface( const Type & rType )
 }
 
 // XInterface
-void SAL_CALL OWeakObject::acquire() throw()
+void SAL_CALL OWeakObject::acquire() noexcept
 {
     osl_atomic_increment( &m_refCount );
 }
 
 // XInterface
-void SAL_CALL OWeakObject::release() throw()
+void SAL_CALL OWeakObject::release() noexcept
 {
     if (osl_atomic_decrement( &m_refCount ) == 0) {
         // notify/clear all weak-refs before object's dtor is executed
@@ -289,7 +289,7 @@ OWeakAggObject::~OWeakAggObject()
 }
 
 // XInterface
-void OWeakAggObject::acquire() throw()
+void OWeakAggObject::acquire() noexcept
 {
     Reference<XInterface > x( xDelegator );
     if (x.is())
@@ -299,7 +299,7 @@ void OWeakAggObject::acquire() throw()
 }
 
 // XInterface
-void OWeakAggObject::release() throw()
+void OWeakAggObject::release() noexcept
 {
     Reference<XInterface > x( xDelegator );
     if (x.is())
@@ -352,8 +352,8 @@ public:
 
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType ) override;
-    void SAL_CALL acquire() throw() override;
-    void SAL_CALL release() throw() override;
+    void SAL_CALL acquire() noexcept override;
+    void SAL_CALL release() noexcept override;
 
     // XReference
     void SAL_CALL   dispose() override;
@@ -406,13 +406,13 @@ Any SAL_CALL OWeakRefListener::queryInterface( const Type & rType )
 }
 
 // XInterface
-void SAL_CALL OWeakRefListener::acquire() throw()
+void SAL_CALL OWeakRefListener::acquire() noexcept
 {
     osl_atomic_increment( &m_aRefCount );
 }
 
 // XInterface
-void SAL_CALL OWeakRefListener::release() throw()
+void SAL_CALL OWeakRefListener::release() noexcept
 {
     if( ! osl_atomic_decrement( &m_aRefCount ) )
         delete this;

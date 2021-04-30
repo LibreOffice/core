@@ -54,8 +54,8 @@ public:
 
     // css::uno::XInterface
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 

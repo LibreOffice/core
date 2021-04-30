@@ -31,14 +31,14 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 ChainablePropertySet::ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, comphelper::SolarMutex* pMutex )
-    throw()
+    noexcept
 : mpMutex ( pMutex )
 , mxInfo ( pInfo )
 {
 }
 
 ChainablePropertySet::~ChainablePropertySet()
-    throw()
+    noexcept
 {
 }
 

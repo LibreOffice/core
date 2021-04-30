@@ -82,7 +82,7 @@ class CannotDumpException final {
 public:
     CannotDumpException(OUString const & message): message_(message) {}
 
-    ~CannotDumpException() throw ();
+    ~CannotDumpException() noexcept;
 
     const OUString& getMessage() const { return message_; }
 

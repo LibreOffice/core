@@ -71,8 +71,8 @@ public:
     FragmentHandler2 & operator =(FragmentHandler2 &&) = delete; // due to FragmentHandler
 
     // resolve ambiguity from base classes
-    virtual void SAL_CALL acquire() throw() override { FragmentHandler::acquire(); }
-    virtual void SAL_CALL release() throw() override { FragmentHandler::release(); }
+    virtual void SAL_CALL acquire() noexcept override { FragmentHandler::acquire(); }
+    virtual void SAL_CALL release() noexcept override { FragmentHandler::release(); }
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 

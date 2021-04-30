@@ -94,9 +94,9 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
-        throw() override;
+        noexcept override;
     virtual void SAL_CALL release()
-        throw() override;
+        noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -496,13 +496,13 @@ HierarchyDataAccess::HierarchyDataAccess( const uno::Reference<
 
 // XInterface methods.
 void SAL_CALL HierarchyDataAccess::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL HierarchyDataAccess::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

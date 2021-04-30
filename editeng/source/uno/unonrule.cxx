@@ -96,7 +96,7 @@ SvxUnoNumberingRules::SvxUnoNumberingRules(const SvxNumRule& rRule)
 {
 }
 
-SvxUnoNumberingRules::~SvxUnoNumberingRules() throw()
+SvxUnoNumberingRules::~SvxUnoNumberingRules() noexcept
 {
 }
 
@@ -546,7 +546,7 @@ sal_Int16 SvxUnoNumberingRules::Compare( const Any& Any1, const Any& Any2 )
     return -1;
 }
 
-Reference< XAnyCompare > SvxCreateNumRuleCompare() throw()
+Reference< XAnyCompare > SvxCreateNumRuleCompare() noexcept
 {
     return new SvxUnoNumberingRulesCompare;
 }

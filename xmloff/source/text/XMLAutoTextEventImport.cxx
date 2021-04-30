@@ -46,7 +46,7 @@ XMLAutoTextEventImport::XMLAutoTextEventImport(
 {
 }
 
-XMLAutoTextEventImport::~XMLAutoTextEventImport() throw() {}
+XMLAutoTextEventImport::~XMLAutoTextEventImport() noexcept {}
 
 void XMLAutoTextEventImport::initialize(const Sequence<Any>& rArguments)
 {

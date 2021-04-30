@@ -48,8 +48,8 @@ namespace dbaccess
 
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
-        virtual void SAL_CALL acquire() throw() override { OSharedConnection_BASE::acquire(); }
-        virtual void SAL_CALL release() throw() override { OSharedConnection_BASE::release(); }
+        virtual void SAL_CALL acquire() noexcept override { OSharedConnection_BASE::acquire(); }
+        virtual void SAL_CALL release() noexcept override { OSharedConnection_BASE::release(); }
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override
         {
             return ::comphelper::concatSequences(

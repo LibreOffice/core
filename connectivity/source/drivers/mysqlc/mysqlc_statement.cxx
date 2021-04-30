@@ -386,13 +386,13 @@ sal_Bool OStatement::supportsService(OUString const& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-void SAL_CALL OCommonStatement::acquire() throw() { OCommonStatement_IBase::acquire(); }
+void SAL_CALL OCommonStatement::acquire() noexcept { OCommonStatement_IBase::acquire(); }
 
-void SAL_CALL OCommonStatement::release() throw() { OCommonStatement_IBase::release(); }
+void SAL_CALL OCommonStatement::release() noexcept { OCommonStatement_IBase::release(); }
 
-void SAL_CALL OStatement::acquire() throw() { OCommonStatement::acquire(); }
+void SAL_CALL OStatement::acquire() noexcept { OCommonStatement::acquire(); }
 
-void SAL_CALL OStatement::release() throw() { OCommonStatement::release(); }
+void SAL_CALL OStatement::release() noexcept { OCommonStatement::release(); }
 
 Reference<css::beans::XPropertySetInfo> SAL_CALL OCommonStatement::getPropertySetInfo()
 {

@@ -250,12 +250,12 @@ Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  )
     return Reference<XParametersSupplier>(m_xComposer,UNO_QUERY_THROW)->getParameters();
 }
 
-void SAL_CALL OQueryComposer::acquire() throw()
+void SAL_CALL OQueryComposer::acquire() noexcept
 {
     OSubComponent::acquire();
 }
 
-void SAL_CALL OQueryComposer::release() throw()
+void SAL_CALL OQueryComposer::release() noexcept
 {
     OSubComponent::release();
 }

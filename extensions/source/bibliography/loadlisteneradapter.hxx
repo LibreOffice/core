@@ -85,8 +85,8 @@ namespace bib
         void Init( OComponentListener* _pListener );
 
     // base for ref-counting, implemented by OComponentAdapter
-        virtual void SAL_CALL acquire(  ) throw () = 0;
-        virtual void SAL_CALL release(  ) throw () = 0;
+        virtual void SAL_CALL acquire(  ) noexcept = 0;
+        virtual void SAL_CALL release(  ) noexcept = 0;
 
         /// dispose the object - stop listening and such
         void dispose();
@@ -129,8 +129,8 @@ namespace bib
         );
 
 
-        virtual void SAL_CALL acquire(  ) throw () override;
-        virtual void SAL_CALL release(  ) throw () override;
+        virtual void SAL_CALL acquire(  ) noexcept override;
+        virtual void SAL_CALL release(  ) noexcept override;
 
     protected:
     // XEventListener

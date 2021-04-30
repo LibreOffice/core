@@ -161,12 +161,12 @@ Any SAL_CALL AccessibleGridControlTableBase::queryInterface( const uno::Type& rT
         aAny : AccessibleGridControlTableImplHelper::queryInterface( rType );
 }
 
-void SAL_CALL AccessibleGridControlTableBase::acquire() throw ()
+void SAL_CALL AccessibleGridControlTableBase::acquire() noexcept
 {
     GridControlAccessibleElement::acquire();
 }
 
-void SAL_CALL AccessibleGridControlTableBase::release() throw ()
+void SAL_CALL AccessibleGridControlTableBase::release() noexcept
 {
     GridControlAccessibleElement::release();
 }

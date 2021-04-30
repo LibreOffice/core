@@ -544,7 +544,7 @@ ScCellTextCursor::ScCellTextCursor(ScCellObj& rText) :
 {
 }
 
-ScCellTextCursor::~ScCellTextCursor() throw()
+ScCellTextCursor::~ScCellTextCursor() noexcept
 {
 }
 
@@ -596,7 +596,7 @@ ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(rtl::Reference<ScHeaderFooter
     rTextObj( rText )
 {}
 
-ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() throw() {};
+ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() noexcept {};
 
 // SvxUnoTextCursor methods reimplemented here to return the right objects:
 
@@ -650,7 +650,7 @@ ScDrawTextCursor::ScDrawTextCursor( const uno::Reference<text::XText>& xParent,
 {
 }
 
-ScDrawTextCursor::~ScDrawTextCursor() throw()
+ScDrawTextCursor::~ScDrawTextCursor() noexcept
 {
 }
 
@@ -723,7 +723,7 @@ ScEditEngineTextObj::ScEditEngineTextObj() :
 {
 }
 
-ScEditEngineTextObj::~ScEditEngineTextObj() throw()
+ScEditEngineTextObj::~ScEditEngineTextObj() noexcept
 {
 }
 

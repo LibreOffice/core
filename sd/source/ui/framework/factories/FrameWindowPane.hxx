@@ -36,7 +36,7 @@ class FrameWindowPane : public Pane
 public:
     FrameWindowPane(const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
                     vcl::Window* pWindow);
-    virtual ~FrameWindowPane() throw() override;
+    virtual ~FrameWindowPane() noexcept override;
 
     /** A frame window typically can (and should) exists on its own without
         children, if only to visualize that something (a view) is missing.

@@ -59,13 +59,13 @@ uno::Any SAL_CALL SIDEModel::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-void SAL_CALL SIDEModel::acquire() throw()
+void SAL_CALL SIDEModel::acquire() noexcept
 {
     SolarMutexGuard aGuard;
     OWeakObject::acquire();
 }
 
-void SAL_CALL SIDEModel::release() throw()
+void SAL_CALL SIDEModel::release() noexcept
 {
     SolarMutexGuard aGuard;
     OWeakObject::release();

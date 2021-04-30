@@ -954,7 +954,7 @@ const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(sal_uInt16 n
 /** maps the vcl MapUnit enum to an API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
-bool SvxMapUnitToMeasureUnit( const MapUnit eVcl, short& eApi ) throw()
+bool SvxMapUnitToMeasureUnit( const MapUnit eVcl, short& eApi ) noexcept
 {
     switch( eVcl )
     {
@@ -980,7 +980,7 @@ bool SvxMapUnitToMeasureUnit( const MapUnit eVcl, short& eApi ) throw()
     Returns false if conversion is not supported.
 */
 
-bool SvxMeasureUnitToFieldUnit( const short eApi, FieldUnit& eVcl ) throw()
+bool SvxMeasureUnitToFieldUnit( const short eApi, FieldUnit& eVcl ) noexcept
 {
     switch( eApi )
     {
@@ -1006,7 +1006,7 @@ bool SvxMeasureUnitToFieldUnit( const short eApi, FieldUnit& eVcl ) throw()
 /** maps the vcl MapUnit enum to an API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
-bool SvxFieldUnitToMeasureUnit( const FieldUnit eVcl, short& eApi ) throw()
+bool SvxFieldUnitToMeasureUnit( const FieldUnit eVcl, short& eApi ) noexcept
 {
     switch( eVcl )
     {
@@ -1575,7 +1575,7 @@ static const char* RID_SVXSTR_TRASNGR[] =
     RID_SVXSTR_TRASNGR0
 };
 
-static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApiResIds, const char**& pIntResIds, int& nCount ) throw()
+static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApiResIds, const char**& pIntResIds, int& nCount ) noexcept
 {
     switch( nWhich )
     {
@@ -2013,7 +2013,7 @@ OUString SvxUnogetInternalNameForItem(const sal_uInt16 nWhich, const OUString& r
 }
 
 
-rtl::Reference<comphelper::PropertySetInfo> const & SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) throw()
+rtl::Reference<comphelper::PropertySetInfo> const & SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) noexcept
 {
     SolarMutexGuard aGuard;
 

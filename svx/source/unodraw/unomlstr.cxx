@@ -24,12 +24,12 @@
 
 using namespace ::com::sun::star;
 
-SvxUnoShapeModifyListener::SvxUnoShapeModifyListener( SdrObject* pObj ) throw()
+SvxUnoShapeModifyListener::SvxUnoShapeModifyListener( SdrObject* pObj ) noexcept
 {
     mpObj = pObj;
 }
 
-SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() throw()
+SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() noexcept
 {
 }
 
@@ -51,7 +51,7 @@ void SvxUnoShapeModifyListener::disposing(const lang::EventObject& )
 }
 
 // internal
-void SvxUnoShapeModifyListener::invalidate() throw()
+void SvxUnoShapeModifyListener::invalidate() noexcept
 {
     mpObj = nullptr;
 }

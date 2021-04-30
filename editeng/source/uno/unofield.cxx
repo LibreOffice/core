@@ -229,7 +229,7 @@ static tools::Time setTime( util::DateTime const & rDate )
 
 
 
-const css::uno::Sequence< sal_Int8 > & SvxUnoTextField::getUnoTunnelId() throw()
+const css::uno::Sequence< sal_Int8 > & SvxUnoTextField::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSvxUnoTextFieldUnoTunnelId;
     return theSvxUnoTextFieldUnoTunnelId.getSeq();
@@ -244,7 +244,7 @@ sal_Int64 SAL_CALL SvxUnoTextField::getSomething( const css::uno::Sequence< sal_
     return 0;
 }
 
-SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
+SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) noexcept
 :   OComponentHelper( m_aMutex )
 ,   mpPropSet(nullptr)
 ,   mnServiceId(nServiceId)
@@ -310,7 +310,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
     }
 }
 
-SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAnchor, const OUString& rPresentation, const SvxFieldData* pData ) throw()
+SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAnchor, const OUString& rPresentation, const SvxFieldData* pData ) noexcept
 :   OComponentHelper( m_aMutex )
 ,   mxAnchor( xAnchor )
 ,   mpPropSet(nullptr)
@@ -402,11 +402,11 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
     mpPropSet = ImplGetFieldItemPropertySet(mnServiceId);
 }
 
-SvxUnoTextField::~SvxUnoTextField() throw()
+SvxUnoTextField::~SvxUnoTextField() noexcept
 {
 }
 
-std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const throw()
+std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const noexcept
 {
     std::unique_ptr<SvxFieldData> pData;
 
@@ -591,12 +591,12 @@ uno::Any SAL_CALL SvxUnoTextField::queryInterface( const uno::Type & rType )
     return OComponentHelper::queryInterface(rType);
 }
 
-void SAL_CALL SvxUnoTextField::acquire() throw( )
+void SAL_CALL SvxUnoTextField::acquire() noexcept
 {
     OComponentHelper::acquire();
 }
 
-void SAL_CALL SvxUnoTextField::release() throw( )
+void SAL_CALL SvxUnoTextField::release() noexcept
 {
     OComponentHelper::release();
 }

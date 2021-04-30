@@ -94,12 +94,12 @@ void OTable::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),            PROPERTY_ID_TYPE,       nAttrib,&m_Type,        ::cppu::UnoType<OUString>::get());
 }
 
-void SAL_CALL OTable::acquire() throw()
+void SAL_CALL OTable::acquire() noexcept
 {
     OTableDescriptor_BASE::acquire();
 }
 
-void SAL_CALL OTable::release() throw()
+void SAL_CALL OTable::release() noexcept
 {
     OTableDescriptor_BASE::release();
 }

@@ -79,7 +79,7 @@ public:
         RegistryKey const & key);
 
 private:
-    virtual ~Cursor() throw () override {}
+    virtual ~Cursor() noexcept override {}
 
     virtual rtl::Reference< Entity > getNext(OUString * name) override;
 
@@ -135,7 +135,7 @@ public:
     {}
 
 private:
-    virtual ~Module() throw () override {}
+    virtual ~Module() noexcept override {}
 
     virtual std::vector< OUString > getMemberNames() const override;
 
@@ -821,7 +821,7 @@ rtl::Reference< Entity > LegacyProvider::findEntity(OUString const & name)
         : rtl::Reference< Entity >();
 }
 
-LegacyProvider::~LegacyProvider() throw () {}
+LegacyProvider::~LegacyProvider() noexcept {}
 
 }
 

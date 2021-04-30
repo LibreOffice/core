@@ -206,8 +206,8 @@ namespace svxform
 
     // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
-        virtual void SAL_CALL acquire() throw () override;
-        virtual void SAL_CALL release() throw () override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;

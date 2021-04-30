@@ -261,7 +261,7 @@ uno::Reference< beans::XPropertySetInfo > const &  SvxItemPropertySet::getProper
 
 
 /** converts the given any with a metric to 100th/mm if needed */
-void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) throw()
+void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) noexcept
 {
     // map the metric of the itempool to 100th mm
     switch(eSourceMapUnit)
@@ -300,7 +300,7 @@ void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) throw
 
 
 /** converts the given any with a metric from 100th/mm to the given metric if needed */
-void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, uno::Any & rMetric ) throw()
+void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, uno::Any & rMetric ) noexcept
 {
     switch(eDestinationMapUnit)
     {

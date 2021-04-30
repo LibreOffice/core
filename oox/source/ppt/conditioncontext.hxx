@@ -36,7 +36,7 @@ namespace oox::ppt {
         CondContext( ::oox::core::FragmentHandler2 const & rParent,
                      const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs,
                      const TimeNodePtr & pNode, AnimationCondition & aCond );
-        virtual ~CondContext( ) throw( ) override;
+        virtual ~CondContext( ) noexcept override;
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
     private:
@@ -52,7 +52,7 @@ namespace oox::ppt {
         CondListContext( ::oox::core::FragmentHandler2 const & rParent,
              sal_Int32  aElement,
              const TimeNodePtr & pNode, AnimationConditionList & aCondList );
-        virtual ~CondListContext( ) throw( ) override;
+        virtual ~CondListContext( ) noexcept override;
 
        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 

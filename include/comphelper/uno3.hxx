@@ -29,15 +29,15 @@ namespace comphelper
     /** used for declaring UNO3-Defaults, i.e. acquire/release
     */
     #define DECLARE_UNO3_DEFAULTS(classname, baseclass) \
-        virtual void    SAL_CALL acquire() throw() override { baseclass::acquire(); }    \
-        virtual void    SAL_CALL release() throw() override { baseclass::release(); }
+        virtual void    SAL_CALL acquire() noexcept override { baseclass::acquire(); }    \
+        virtual void    SAL_CALL release() noexcept override { baseclass::release(); }
 
     /** used for declaring UNO3-Defaults, i.e. acquire/release if you want to forward all queryInterfaces to the base class,
         (e.g. if you override queryAggregation)
     */
     #define DECLARE_UNO3_AGG_DEFAULTS(classname, baseclass) \
-        virtual void            SAL_CALL acquire() throw() override { baseclass::acquire(); } \
-        virtual void            SAL_CALL release() throw() override { baseclass::release(); }    \
+        virtual void            SAL_CALL acquire() noexcept override { baseclass::acquire(); } \
+        virtual void            SAL_CALL release() noexcept override { baseclass::release(); }    \
         virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override \
             { return baseclass::queryInterface(_rType); }
 
@@ -64,8 +64,8 @@ namespace comphelper
         that would be ::cppu::WeakComponentImplHelperBase
     */
     #define DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS(classname, baseclass, implhelper) \
-        virtual void SAL_CALL acquire() throw() override { baseclass::acquire(); }   \
-        virtual void SAL_CALL release() throw() override { baseclass::release(); }   \
+        virtual void SAL_CALL acquire() noexcept override { baseclass::acquire(); }   \
+        virtual void SAL_CALL release() noexcept override { baseclass::release(); }   \
         virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override \
             { return baseclass::queryInterface(_rType); }                               \
         virtual void SAL_CALL dispose() override \
@@ -89,12 +89,12 @@ namespace comphelper
 
     #define DECLARE_XINTERFACE( )   \
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override; \
-        virtual void SAL_CALL acquire() throw() override; \
-        virtual void SAL_CALL release() throw() override;
+        virtual void SAL_CALL acquire() noexcept override; \
+        virtual void SAL_CALL release() noexcept override;
 
     #define IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        void SAL_CALL classname::acquire() throw() { refcountbase::acquire(); } \
-        void SAL_CALL classname::release() throw() { refcountbase::release(); }
+        void SAL_CALL classname::acquire() noexcept { refcountbase::acquire(); } \
+        void SAL_CALL classname::release() noexcept { refcountbase::release(); }
 
     #define IMPLEMENT_FORWARD_XINTERFACE2( classname, refcountbase, baseclass2 ) \
         IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \

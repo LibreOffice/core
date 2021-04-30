@@ -52,8 +52,8 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type & rType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes() override;
@@ -83,12 +83,12 @@ Any IdlCompFieldImpl::queryInterface( const Type & rType )
     return (aRet.hasValue() ? aRet : IdlMemberImpl::queryInterface( rType ));
 }
 
-void IdlCompFieldImpl::acquire() throw()
+void IdlCompFieldImpl::acquire() noexcept
 {
     IdlMemberImpl::acquire();
 }
 
-void IdlCompFieldImpl::release() throw()
+void IdlCompFieldImpl::release() noexcept
 {
     IdlMemberImpl::release();
 }

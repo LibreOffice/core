@@ -134,7 +134,7 @@ Reference< XIndexAccess > ItemContainer::deepCopyContainer( const Reference< XIn
     return xReturn;
 }
 
-const Sequence< sal_Int8 >& ItemContainer::getUnoTunnelId() throw()
+const Sequence< sal_Int8 >& ItemContainer::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theItemContainerUnoTunnelId;
     return theItemContainerUnoTunnelId.getSeq();

@@ -110,9 +110,9 @@ public:
     css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override
     { return WeakImplHelper_query(aType, cd::get(), this, this); }
 
-    void SAL_CALL acquire() throw () override { OWeakObject::acquire(); }
+    void SAL_CALL acquire() SAL_NOEXCEPT override { OWeakObject::acquire(); }
 
-    void SAL_CALL release() throw () override { OWeakObject::release(); }
+    void SAL_CALL release() SAL_NOEXCEPT override { OWeakObject::release(); }
 
     css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
     { return WeakImplHelper_getTypes(cd::get()); }
@@ -166,9 +166,9 @@ public:
         return ret.hasValue() ? ret : BaseClass::queryInterface(aType);
     }
 
-    void SAL_CALL acquire() throw () override { BaseClass::acquire(); }
+    void SAL_CALL acquire() SAL_NOEXCEPT override { BaseClass::acquire(); }
 
-    void SAL_CALL release() throw () override { BaseClass::release(); }
+    void SAL_CALL release() SAL_NOEXCEPT override { BaseClass::release(); }
 
     css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
     { return ImplInhHelper_getTypes(cd::get(), BaseClass::getTypes()); }

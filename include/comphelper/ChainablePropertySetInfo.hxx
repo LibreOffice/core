@@ -45,7 +45,7 @@ namespace comphelper
 
     private:
         virtual ~ChainablePropertySetInfo()
-            throw() override;
+            noexcept override;
 
         // XPropertySetInfo
         virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;

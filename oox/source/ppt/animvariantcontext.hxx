@@ -33,7 +33,7 @@ namespace oox::ppt {
     {
     public:
         AnimVariantContext( ::oox::core::FragmentHandler2 const & rParent, ::sal_Int32 aElement, css::uno::Any & aValue );
-        virtual ~AnimVariantContext( ) throw( ) override;
+        virtual ~AnimVariantContext( ) noexcept override;
         virtual void onEndElement() override;
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 

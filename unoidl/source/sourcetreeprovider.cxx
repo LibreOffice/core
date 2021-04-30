@@ -97,7 +97,7 @@ public:
     Cursor() {}
 
 private:
-    virtual ~Cursor() throw () override {}
+    virtual ~Cursor() noexcept override {}
 
     virtual rtl::Reference<Entity> getNext(OUString *) override
     { return rtl::Reference<Entity>(); } //TODO
@@ -108,7 +108,7 @@ public:
     SourceModuleEntity() {}
 
 private:
-    virtual ~SourceModuleEntity() throw () override {}
+    virtual ~SourceModuleEntity() noexcept override {}
 
     virtual std::vector<OUString> getMemberNames() const override
     { return std::vector<OUString>(); } //TODO
@@ -203,7 +203,7 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
     return ent;
 }
 
-SourceTreeProvider::~SourceTreeProvider() throw () {}
+SourceTreeProvider::~SourceTreeProvider() noexcept {}
 
 }
 

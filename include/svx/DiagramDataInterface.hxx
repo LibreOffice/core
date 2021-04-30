@@ -44,7 +44,7 @@ public:
     virtual bool removeNode(const OUString& rNodeId) = 0;
 
 protected:
-    ~DiagramDataInterface() throw() {}
+    ~DiagramDataInterface() noexcept {}
 };
 
 #endif // INCLUDED_SVX_DIAGRAMDATAINTERFACE_HXX

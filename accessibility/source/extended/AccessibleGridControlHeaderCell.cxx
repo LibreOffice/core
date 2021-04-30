@@ -95,13 +95,13 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleC
     }
 
     /** Acquires the object (calls acquire() on base class). */
-    void SAL_CALL AccessibleGridControlHeaderCell::acquire() throw ()
+    void SAL_CALL AccessibleGridControlHeaderCell::acquire() noexcept
     {
         AccessibleGridControlCell::acquire();
     }
 
     /** Releases the object (calls release() on base class). */
-    void SAL_CALL AccessibleGridControlHeaderCell::release() throw ()
+    void SAL_CALL AccessibleGridControlHeaderCell::release() noexcept
     {
         AccessibleGridControlCell::release();
     }

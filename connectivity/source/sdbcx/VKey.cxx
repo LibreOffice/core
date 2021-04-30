@@ -188,12 +188,12 @@ void SAL_CALL OKey::setName( const OUString& /*aName*/ )
 }
 
 // XInterface
-void SAL_CALL OKey::acquire() throw()
+void SAL_CALL OKey::acquire() noexcept
 {
     ODescriptor_BASE::acquire();
 }
 
-void SAL_CALL OKey::release() throw()
+void SAL_CALL OKey::release() noexcept
 {
     ODescriptor_BASE::release();
 }

@@ -458,12 +458,12 @@ void SAL_CALL OCollection::removeContainerListener( const Reference< XContainerL
     m_aContainerListeners.removeInterface(_rxListener);
 }
 
-void SAL_CALL OCollection::acquire() throw()
+void SAL_CALL OCollection::acquire() noexcept
 {
     m_rParent.acquire();
 }
 
-void SAL_CALL OCollection::release() throw()
+void SAL_CALL OCollection::release() noexcept
 {
     m_rParent.release();
 }

@@ -76,13 +76,13 @@ void CachedDynamicResultSet
 
 // XInterface methods.
 void SAL_CALL CachedDynamicResultSet::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL CachedDynamicResultSet::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

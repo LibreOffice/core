@@ -30,9 +30,9 @@ SwSvxUnoDrawPool::SwSvxUnoDrawPool(SwDoc& rDoc)
 {
 }
 
-SwSvxUnoDrawPool::~SwSvxUnoDrawPool() throw() {}
+SwSvxUnoDrawPool::~SwSvxUnoDrawPool() noexcept {}
 
-SfxItemPool* SwSvxUnoDrawPool::getModelPool(bool /*bReadOnly*/) throw()
+SfxItemPool* SwSvxUnoDrawPool::getModelPool(bool /*bReadOnly*/) noexcept
 {
     // DVO, OD 01.10.2003 #i18732# - return item pool of writer document;
     // it contains draw model item pool as secondary pool.

@@ -52,7 +52,7 @@ class WindowUpdater : public utl::ConfigurationListener
 {
 public:
     explicit WindowUpdater();
-    virtual ~WindowUpdater() throw() override;
+    virtual ~WindowUpdater() noexcept override;
 
     /** Add the given device to the list of devices which will be updated
         when one of the monitored values changes.

@@ -52,8 +52,8 @@ class ConfigurationController
       public ConfigurationControllerInterfaceBase
 {
 public:
-    ConfigurationController() throw();
-    virtual ~ConfigurationController() throw() override;
+    ConfigurationController() noexcept;
+    virtual ~ConfigurationController() noexcept override;
     ConfigurationController(const ConfigurationController&) = delete;
     ConfigurationController& operator=(const ConfigurationController&) = delete;
 

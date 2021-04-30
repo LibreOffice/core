@@ -137,7 +137,7 @@ public:
     virtual ~SdUnoForbiddenCharsTable() override;
 
     // SfxListener
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw () override;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override;
 protected:
     virtual void onChange() override;
 
@@ -169,7 +169,7 @@ SdUnoForbiddenCharsTable::~SdUnoForbiddenCharsTable()
         EndListening( *mpModel );
 }
 
-void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
+void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
 {
     if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;
@@ -262,7 +262,7 @@ SdXImpressDocument::SdXImpressDocument(SdDrawDocument* pDoc, bool bClipBoard)
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-SdXImpressDocument::~SdXImpressDocument() throw()
+SdXImpressDocument::~SdXImpressDocument() noexcept
 {
 }
 
@@ -305,12 +305,12 @@ uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SdXImpressDocument::acquire() throw ( )
+void SAL_CALL SdXImpressDocument::acquire() noexcept
 {
     SfxBaseModel::acquire();
 }
 
-void SAL_CALL SdXImpressDocument::release() throw ( )
+void SAL_CALL SdXImpressDocument::release() noexcept
 {
     if (osl_atomic_decrement( &m_refCount ) != 0)
         return;
@@ -333,7 +333,7 @@ void SAL_CALL SdXImpressDocument::release() throw ( )
 }
 
 // XUnoTunnel
-const css::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() throw()
+const css::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSdXImpressDocumentUnoTunnelId;
     return theSdXImpressDocumentUnoTunnelId.getSeq();
@@ -548,7 +548,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
     return pStandardPage.get();
 }
 
-void SdXImpressDocument::SetModified() throw()
+void SdXImpressDocument::SetModified() noexcept
 {
     if( mpDoc )
         mpDoc->SetChanged();
@@ -2773,12 +2773,12 @@ void SAL_CALL SdXImpressDocument::dispose()
 }
 
 
-SdDrawPagesAccess::SdDrawPagesAccess( SdXImpressDocument& rMyModel )  throw()
+SdDrawPagesAccess::SdDrawPagesAccess( SdXImpressDocument& rMyModel )  noexcept
 :   mpModel( &rMyModel)
 {
 }
 
-SdDrawPagesAccess::~SdDrawPagesAccess() throw()
+SdDrawPagesAccess::~SdDrawPagesAccess() noexcept
 {
 }
 
@@ -3013,12 +3013,12 @@ void SAL_CALL SdDrawPagesAccess::removeEventListener( const uno::Reference< lang
 }
 
 
-SdMasterPagesAccess::SdMasterPagesAccess( SdXImpressDocument& rMyModel ) throw()
+SdMasterPagesAccess::SdMasterPagesAccess( SdXImpressDocument& rMyModel ) noexcept
 :   mpModel(&rMyModel)
 {
 }
 
-SdMasterPagesAccess::~SdMasterPagesAccess() throw()
+SdMasterPagesAccess::~SdMasterPagesAccess() noexcept
 {
 }
 
@@ -3244,12 +3244,12 @@ uno::Sequence< OUString > SAL_CALL SdMasterPagesAccess::getSupportedServiceNames
 }
 
 
-SdDocLinkTargets::SdDocLinkTargets( SdXImpressDocument& rMyModel ) throw()
+SdDocLinkTargets::SdDocLinkTargets( SdXImpressDocument& rMyModel ) noexcept
 : mpModel( &rMyModel )
 {
 }
 
-SdDocLinkTargets::~SdDocLinkTargets() throw()
+SdDocLinkTargets::~SdDocLinkTargets() noexcept
 {
 }
 

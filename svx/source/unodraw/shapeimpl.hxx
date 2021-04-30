@@ -26,7 +26,7 @@ class SvxShapeCaption : public SvxShapeText
 {
 public:
     explicit SvxShapeCaption(SdrObject* pObj);
-    virtual ~SvxShapeCaption() throw() override;
+    virtual ~SvxShapeCaption() noexcept override;
 };
 class SvxPluginShape : public SvxOle2Shape
 {
@@ -37,7 +37,7 @@ protected:
 
 public:
     explicit SvxPluginShape(SdrObject* pObj);
-    virtual ~SvxPluginShape() throw() override;
+    virtual ~SvxPluginShape() noexcept override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
     using SvxUnoTextRangeBase::setPropertyValue;
@@ -55,7 +55,7 @@ protected:
 
 public:
     explicit SvxAppletShape(SdrObject* pObj);
-    virtual ~SvxAppletShape() throw() override;
+    virtual ~SvxAppletShape() noexcept override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
     using SvxUnoTextRangeBase::setPropertyValue;
@@ -74,7 +74,7 @@ protected:
 
 public:
     explicit SvxFrameShape(SdrObject* pObj);
-    virtual ~SvxFrameShape() throw() override;
+    virtual ~SvxFrameShape() noexcept override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
     using SvxUnoTextRangeBase::setPropertyValue;
@@ -98,7 +98,7 @@ protected:
 public:
 
     explicit SvxTableShape(SdrObject* pObj);
-    virtual ~SvxTableShape() throw() override;
+    virtual ~SvxTableShape() noexcept override;
 };
 
 SvxUnoPropertyMapProvider& getSvxMapProvider();

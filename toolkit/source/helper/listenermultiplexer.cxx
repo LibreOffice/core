@@ -47,11 +47,11 @@ EventListenerMultiplexer::EventListenerMultiplexer( ::cppu::OWeakObject& rSource
 {
 }
 
-void SAL_CALL EventListenerMultiplexer::acquire() throw ()
+void SAL_CALL EventListenerMultiplexer::acquire() noexcept
 {
     return ListenerMultiplexerBase::acquire();
 }
-void SAL_CALL EventListenerMultiplexer::release() throw ()
+void SAL_CALL EventListenerMultiplexer::release() noexcept
 {
     return ListenerMultiplexerBase::release();
 }

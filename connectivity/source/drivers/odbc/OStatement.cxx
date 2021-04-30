@@ -1043,22 +1043,22 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement");
 
-void SAL_CALL OStatement_Base::acquire() throw()
+void SAL_CALL OStatement_Base::acquire() noexcept
 {
     OStatement_BASE::acquire();
 }
 
-void SAL_CALL OStatement_Base::release() throw()
+void SAL_CALL OStatement_Base::release() noexcept
 {
     OStatement_BASE::release();
 }
 
-void SAL_CALL OStatement::acquire() throw()
+void SAL_CALL OStatement::acquire() noexcept
 {
     OStatement_BASE2::acquire();
 }
 
-void SAL_CALL OStatement::release() throw()
+void SAL_CALL OStatement::release() noexcept
 {
     OStatement_BASE2::release();
 }

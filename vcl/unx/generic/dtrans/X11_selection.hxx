@@ -82,10 +82,10 @@ namespace x11 {
         virtual ~DropTarget() override;
 
         // convenience functions that loop over listeners
-        void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde ) throw();
-        void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) throw();
-        void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw();
-        void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) throw();
+        void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde ) noexcept;
+        void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) noexcept;
+        void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) noexcept;
+        void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) noexcept;
 
         // XInitialization
         virtual void        SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& args ) override;
@@ -451,7 +451,7 @@ namespace x11 {
         void setCursor( sal_Int32 cursor, ::Window aDropXLIB_Window );
         void transferablesFlavorsChanged();
 
-        void shutdown() throw();
+        void shutdown() noexcept;
 
         // XInitialization
         virtual void        SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& arguments ) override;
@@ -470,10 +470,10 @@ namespace x11 {
             ) override;
 
         // SelectionAdaptor for XdndSelection Drag (we are drag source)
-        virtual css::uno::Reference< css::datatransfer::XTransferable > getTransferable() throw() override;
-        virtual void clearTransferable() throw() override;
-        virtual void fireContentsChanged() throw() override;
-        virtual css::uno::Reference< css::uno::XInterface > getReference() throw() override;
+        virtual css::uno::Reference< css::datatransfer::XTransferable > getTransferable() noexcept override;
+        virtual void clearTransferable() noexcept override;
+        virtual void fireContentsChanged() noexcept override;
+        virtual css::uno::Reference< css::uno::XInterface > getReference() noexcept override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

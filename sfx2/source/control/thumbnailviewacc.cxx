@@ -53,7 +53,7 @@ const uno::Sequence< sal_Int8 >& ThumbnailViewAcc::getUnoTunnelId()
 }
 
 ThumbnailViewAcc* ThumbnailViewAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
-    throw()
+    noexcept
 {
     try
     {
@@ -553,7 +553,7 @@ const uno::Sequence< sal_Int8 >& ThumbnailViewItemAcc::getUnoTunnelId()
 }
 
 ThumbnailViewItemAcc* ThumbnailViewItemAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
-    throw()
+    noexcept
 {
     try
     {

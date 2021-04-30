@@ -331,12 +331,12 @@ Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-void SAL_CALL SwXTextDocument::acquire()throw()
+void SAL_CALL SwXTextDocument::acquire()noexcept
 {
     SfxBaseModel::acquire();
 }
 
-void SAL_CALL SwXTextDocument::release()throw()
+void SAL_CALL SwXTextDocument::release()noexcept
 {
     SfxBaseModel::release();
 }

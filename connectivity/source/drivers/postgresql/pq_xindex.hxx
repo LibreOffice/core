@@ -65,8 +65,8 @@ public:
            const OUString &tableName);
 
 public: // XInterface
-    virtual void SAL_CALL acquire() throw() override { ReflectionBase::acquire(); }
-    virtual void SAL_CALL release() throw() override { ReflectionBase::release(); }
+    virtual void SAL_CALL acquire() noexcept override { ReflectionBase::acquire(); }
+    virtual void SAL_CALL release() noexcept override { ReflectionBase::release(); }
     virtual css::uno::Any  SAL_CALL queryInterface(
         const css::uno::Type & reqType ) override;
 
@@ -97,8 +97,8 @@ public:
         ConnectionSettings *pSettings);
 
 public: // XInterface
-    virtual void SAL_CALL acquire() throw() override { ReflectionBase::acquire(); }
-    virtual void SAL_CALL release() throw() override { ReflectionBase::release(); }
+    virtual void SAL_CALL acquire() noexcept override { ReflectionBase::acquire(); }
+    virtual void SAL_CALL release() noexcept override { ReflectionBase::release(); }
     virtual css::uno::Any  SAL_CALL queryInterface(
         const css::uno::Type & reqType ) override;
 

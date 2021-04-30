@@ -394,8 +394,8 @@ public:
     virtual                 ~ScCellRangesObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL   acquire() throw() override;
-    virtual void SAL_CALL   release() throw() override;
+    virtual void SAL_CALL   acquire() noexcept override;
+    virtual void SAL_CALL   release() noexcept override;
 
     virtual void            RefChanged() override;
 
@@ -502,8 +502,8 @@ public:
 
     virtual css::uno::Any SAL_CALL queryInterface(
                                 const css::uno::Type & rType ) override;
-    virtual void SAL_CALL   acquire() throw() override;
-    virtual void SAL_CALL   release() throw() override;
+    virtual void SAL_CALL   acquire() noexcept override;
+    virtual void SAL_CALL   release() noexcept override;
 
     virtual void            RefChanged() override;
 
@@ -664,8 +664,8 @@ public:
     virtual                 ~ScCellObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL   acquire() throw() override;
-    virtual void SAL_CALL   release() throw() override;
+    virtual void SAL_CALL   acquire() noexcept override;
+    virtual void SAL_CALL   release() noexcept override;
 
     virtual void            RefChanged() override;
 
@@ -802,8 +802,8 @@ public:
     void                    InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab);
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL   acquire() throw() override;
-    virtual void SAL_CALL   release() throw() override;
+    virtual void SAL_CALL   acquire() noexcept override;
+    virtual void SAL_CALL   release() noexcept override;
 
                             // XSpreadsheet
     virtual css::uno::Reference< css::sheet::XSheetCellCursor >
@@ -978,8 +978,8 @@ public:
 
     virtual css::uno::Any SAL_CALL queryInterface(
                                 const css::uno::Type & rType ) override;
-    virtual void SAL_CALL   acquire() throw() override;
-    virtual void SAL_CALL   release() throw() override;
+    virtual void SAL_CALL   acquire() noexcept override;
+    virtual void SAL_CALL   release() noexcept override;
 
                             // XNamed
     virtual OUString SAL_CALL getName() override;

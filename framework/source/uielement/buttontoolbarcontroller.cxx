@@ -75,12 +75,12 @@ uno::Any SAL_CALL ButtonToolbarController::queryInterface( const uno::Type& rTyp
     return cppu::OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL ButtonToolbarController::acquire() throw ()
+void SAL_CALL ButtonToolbarController::acquire() noexcept
 {
     cppu::OWeakObject::acquire();
 }
 
-void SAL_CALL ButtonToolbarController::release() throw ()
+void SAL_CALL ButtonToolbarController::release() noexcept
 {
     cppu::OWeakObject::release();
 }

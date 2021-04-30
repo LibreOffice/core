@@ -35,8 +35,8 @@ public:
 
     // css::uno::XInterface
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;

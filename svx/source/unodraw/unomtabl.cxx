@@ -61,13 +61,13 @@ private:
     ItemPoolVector maItemSetVector;
 
 public:
-    explicit SvxUnoMarkerTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoMarkerTable() throw() override;
+    explicit SvxUnoMarkerTable( SdrModel* pModel ) noexcept;
+    virtual ~SvxUnoMarkerTable() noexcept override;
 
     void dispose();
 
     // SfxListener
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw () override;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override;
 
     void ImplInsertByName( const OUString& aName, const uno::Any& aElement );
 
@@ -95,7 +95,7 @@ public:
 
 }
 
-SvxUnoMarkerTable::SvxUnoMarkerTable( SdrModel* pModel ) throw()
+SvxUnoMarkerTable::SvxUnoMarkerTable( SdrModel* pModel ) noexcept
 : mpModel( pModel ),
   mpModelPool( pModel ? &pModel->GetItemPool() : nullptr )
 {
@@ -103,7 +103,7 @@ SvxUnoMarkerTable::SvxUnoMarkerTable( SdrModel* pModel ) throw()
         StartListening( *pModel );
 }
 
-SvxUnoMarkerTable::~SvxUnoMarkerTable() throw()
+SvxUnoMarkerTable::~SvxUnoMarkerTable() noexcept
 {
     if( mpModel )
         EndListening( *mpModel );
@@ -116,7 +116,7 @@ void SvxUnoMarkerTable::dispose()
 }
 
 // SfxListener
-void SvxUnoMarkerTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
+void SvxUnoMarkerTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
 {
     if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
     {

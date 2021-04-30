@@ -128,12 +128,12 @@ void OStatement_BASE2::disposing()
     OStatement_Base::disposing();
 }
 
-void SAL_CALL OStatement_Base::acquire() throw()
+void SAL_CALL OStatement_Base::acquire() noexcept
 {
     OStatement_BASE::acquire();
 }
 
-void SAL_CALL OStatement_BASE2::release() throw()
+void SAL_CALL OStatement_BASE2::release() noexcept
 {
     OStatement_BASE::release();
 }
@@ -223,12 +223,12 @@ rtl::Reference<OResultSet> OStatement::createResultSet()
 
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbc.driver.file.Statement","com.sun.star.sdbc.Statement");
 
-void SAL_CALL OStatement::acquire() throw()
+void SAL_CALL OStatement::acquire() noexcept
 {
     OStatement_BASE2::acquire();
 }
 
-void SAL_CALL OStatement::release() throw()
+void SAL_CALL OStatement::release() noexcept
 {
     OStatement_BASE2::release();
 }

@@ -80,7 +80,7 @@ public:
     explicit MGuard( std::unique_ptr<Mutex> const & pMutex )
         : m_pMutex( pMutex.get() )
         { if (m_pMutex) m_pMutex->acquire(); }
-    ~MGuard() throw ()
+    ~MGuard() noexcept
         { if (m_pMutex) m_pMutex->release(); }
 };
 

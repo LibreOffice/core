@@ -590,8 +590,8 @@ class NavElementToolBoxControl : public svt::ToolboxController,
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() throw () override;
-        virtual void SAL_CALL release() throw () override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
@@ -816,12 +816,12 @@ css::uno::Any SAL_CALL NavElementToolBoxControl::queryInterface( const css::uno:
     return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ) );
 }
 
-void SAL_CALL NavElementToolBoxControl::acquire() throw ()
+void SAL_CALL NavElementToolBoxControl::acquire() noexcept
 {
     ToolboxController::acquire();
 }
 
-void SAL_CALL NavElementToolBoxControl::release() throw ()
+void SAL_CALL NavElementToolBoxControl::release() noexcept
 {
     ToolboxController::release();
 }
@@ -966,8 +966,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -1005,12 +1005,12 @@ css::uno::Any SAL_CALL PrevNextScrollToolboxController::queryInterface( const cs
     return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
 }
 
-void SAL_CALL PrevNextScrollToolboxController::acquire() throw ()
+void SAL_CALL PrevNextScrollToolboxController::acquire() noexcept
 {
     ToolboxController::acquire();
 }
 
-void SAL_CALL PrevNextScrollToolboxController::release() throw ()
+void SAL_CALL PrevNextScrollToolboxController::release() noexcept
 {
     ToolboxController::release();
 }

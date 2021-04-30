@@ -52,10 +52,10 @@ private:
     cppu::OBroadcastHelper mrBHelper;
 
 public:
-    SvxShapeCollection() throw();
+    SvxShapeCollection() noexcept;
 
     // XInterface
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XComponent
     virtual void SAL_CALL dispose() override;
@@ -80,13 +80,13 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-SvxShapeCollection::SvxShapeCollection() throw()
+SvxShapeCollection::SvxShapeCollection() noexcept
 : maShapeContainer( maMutex ), mrBHelper( maMutex )
 {
 }
 
 // XInterface
-void SvxShapeCollection::release() throw()
+void SvxShapeCollection::release() noexcept
 {
     uno::Reference< uno::XInterface > x( xDelegator );
     if (! x.is())

@@ -23,7 +23,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox::drawingml {
 
 EffectPropertiesContext::EffectPropertiesContext( ContextHandler2Helper const& rParent,
-    EffectProperties& rEffectProperties ) throw()
+    EffectProperties& rEffectProperties ) noexcept
 : ContextHandler2( rParent )
 , mrEffectProperties( rEffectProperties )
 {

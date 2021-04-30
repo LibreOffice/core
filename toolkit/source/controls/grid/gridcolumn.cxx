@@ -292,7 +292,7 @@ namespace toolkit
     }
 
 
-    Sequence< sal_Int8 > GridColumn::getUnoTunnelId() throw()
+    Sequence< sal_Int8 > GridColumn::getUnoTunnelId() noexcept
     {
         static ::cppu::OImplementationId const aId;
         return aId.getImplementationId();

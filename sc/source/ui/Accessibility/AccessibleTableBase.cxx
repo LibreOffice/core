@@ -75,13 +75,13 @@ uno::Any SAL_CALL ScAccessibleTableBase::queryInterface( uno::Type const & rType
 }
 
 void SAL_CALL ScAccessibleTableBase::acquire()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::acquire();
 }
 
 void SAL_CALL ScAccessibleTableBase::release()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::release();
 }

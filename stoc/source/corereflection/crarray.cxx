@@ -39,12 +39,12 @@ Any ArrayIdlClassImpl::queryInterface( const Type & rType )
     return (aRet.hasValue() ? aRet : IdlClassImpl::queryInterface( rType ));
 }
 
-void ArrayIdlClassImpl::acquire() throw()
+void ArrayIdlClassImpl::acquire() noexcept
 {
     IdlClassImpl::acquire();
 }
 
-void ArrayIdlClassImpl::release() throw()
+void ArrayIdlClassImpl::release() noexcept
 {
     IdlClassImpl::release();
 }

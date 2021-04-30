@@ -46,7 +46,7 @@ namespace stoc_javavm {
         ::std::vector<OUString> _props;
 
     public:
-        JVM() throw();
+        JVM() noexcept;
 
         void pushProp(const OUString & uString);
         const ::std::vector< OUString> & getProperties() const { return _props;}

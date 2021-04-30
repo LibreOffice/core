@@ -79,13 +79,13 @@ uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const uno::Type& rTyp
 }
 
 void SAL_CALL OFSInputStreamContainer::acquire()
-        throw()
+        noexcept
 {
     ::cppu::OWeakObject::acquire();
 }
 
 void SAL_CALL OFSInputStreamContainer::release()
-        throw()
+        noexcept
 {
     ::cppu::OWeakObject::release();
 }

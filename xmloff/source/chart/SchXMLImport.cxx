@@ -248,7 +248,7 @@ SchXMLImport::SchXMLImport(
     GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
 }
 
-SchXMLImport::~SchXMLImport() throw ()
+SchXMLImport::~SchXMLImport() noexcept
 {
     uno::Reference< chart2::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
     if( xChartDoc.is() && xChartDoc->hasControllersLocked() )

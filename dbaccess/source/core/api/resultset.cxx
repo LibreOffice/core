@@ -119,12 +119,12 @@ Any OResultSet::queryInterface( const Type & rType )
     return aIface;
 }
 
-void OResultSet::acquire() throw ()
+void OResultSet::acquire() noexcept
 {
     OResultSetBase::acquire();
 }
 
-void OResultSet::release() throw ()
+void OResultSet::release() noexcept
 {
     OResultSetBase::release();
 }

@@ -79,7 +79,7 @@ css::uno::Any SAL_CALL
 
 void SAL_CALL
     AccessibleGraphicShape::acquire()
-    throw ()
+    noexcept
 {
     AccessibleShape::acquire ();
 }
@@ -87,7 +87,7 @@ void SAL_CALL
 
 void SAL_CALL
     AccessibleGraphicShape::release()
-    throw ()
+    noexcept
 {
     AccessibleShape::release ();
 }

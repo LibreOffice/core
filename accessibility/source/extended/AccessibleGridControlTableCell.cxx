@@ -118,13 +118,13 @@ namespace accessibility
     }
 
     /** Acquires the object (calls acquire() on base class). */
-    void SAL_CALL AccessibleGridControlTableCell::acquire() throw ()
+    void SAL_CALL AccessibleGridControlTableCell::acquire() noexcept
     {
         AccessibleGridControlCell::acquire();
     }
 
     /** Releases the object (calls release() on base class). */
-    void SAL_CALL AccessibleGridControlTableCell::release() throw ()
+    void SAL_CALL AccessibleGridControlTableCell::release() noexcept
     {
         AccessibleGridControlCell::release();
     }

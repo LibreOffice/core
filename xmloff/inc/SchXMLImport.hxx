@@ -35,7 +35,7 @@ public:
     SchXMLImport(const css::uno::Reference<css::uno::XComponentContext>& xContext,
                  OUString const& implementationName, SvXMLImportFlags nImportFlags);
 
-    virtual ~SchXMLImport() throw() override;
+    virtual ~SchXMLImport() noexcept override;
 
     SvXMLImportContext* CreateStylesContext();
 

@@ -182,7 +182,7 @@ public:
         OUString const & implementationName, SvXMLImportFlags nImportFlag,
         const css::uno::Sequence< OUString > & sSupportedServiceNames = {});
 
-    virtual ~ScXMLImport() throw() override;
+    virtual ~ScXMLImport() noexcept override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments ) override;

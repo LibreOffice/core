@@ -23,7 +23,7 @@
 
 namespace
 {
-    const char **GetStiNames() throw()
+    const char **GetStiNames() noexcept
     {
         static const char *stiName[] =
         {
@@ -128,7 +128,7 @@ namespace
 
 namespace ww
 {
-    const char* GetEnglishNameFromSti(sti eSti) throw()
+    const char* GetEnglishNameFromSti(sti eSti) noexcept
     {
         if (eSti >= stiMax)
             return nullptr;
@@ -136,7 +136,7 @@ namespace ww
             return GetStiNames()[eSti];
     }
 
-    bool StandardStiIsCharStyle(sti eSti) throw()
+    bool StandardStiIsCharStyle(sti eSti) noexcept
     {
         switch (eSti)
         {
@@ -152,7 +152,7 @@ namespace ww
         }
     }
 
-    sti GetCanonicalStiFromStc(sal_uInt8 stc) throw()
+    sti GetCanonicalStiFromStc(sal_uInt8 stc) noexcept
     {
         if (stc == 0)
             return stiNormal;

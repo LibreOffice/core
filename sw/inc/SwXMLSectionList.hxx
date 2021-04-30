@@ -30,7 +30,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         std::vector<OUString> & rNewSectionList);
 
-    virtual ~SwXMLSectionList ( ) throw() override;
+    virtual ~SwXMLSectionList ( ) noexcept override;
 
 private:
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,

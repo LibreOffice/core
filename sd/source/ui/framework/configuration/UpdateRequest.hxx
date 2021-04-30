@@ -46,8 +46,8 @@ class UpdateRequest
       public UpdateRequestInterfaceBase
 {
 public:
-    UpdateRequest() throw();
-    virtual ~UpdateRequest() throw() override;
+    UpdateRequest() noexcept;
+    virtual ~UpdateRequest() noexcept override;
 
     // XConfigurationChangeOperation
 

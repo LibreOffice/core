@@ -4029,12 +4029,12 @@ uno::Any SAL_CALL ScCellRangesObj::queryInterface( const uno::Type& rType )
     return ScCellRangesBase::queryInterface( rType );
 }
 
-void SAL_CALL ScCellRangesObj::acquire() throw()
+void SAL_CALL ScCellRangesObj::acquire() noexcept
 {
     ScCellRangesBase::acquire();
 }
 
-void SAL_CALL ScCellRangesObj::release() throw()
+void SAL_CALL ScCellRangesObj::release() noexcept
 {
     ScCellRangesBase::release();
 }
@@ -4616,12 +4616,12 @@ uno::Any SAL_CALL ScCellRangeObj::queryInterface( const uno::Type& rType )
     return ScCellRangesBase::queryInterface( rType );
 }
 
-void SAL_CALL ScCellRangeObj::acquire() throw()
+void SAL_CALL ScCellRangeObj::acquire() noexcept
 {
     ScCellRangesBase::acquire();
 }
 
-void SAL_CALL ScCellRangeObj::release() throw()
+void SAL_CALL ScCellRangeObj::release() noexcept
 {
     ScCellRangesBase::release();
 }
@@ -5848,12 +5848,12 @@ uno::Any SAL_CALL ScCellObj::queryInterface( const uno::Type& rType )
     return ScCellRangeObj::queryInterface( rType );
 }
 
-void SAL_CALL ScCellObj::acquire() throw()
+void SAL_CALL ScCellObj::acquire() noexcept
 {
     ScCellRangeObj::acquire();
 }
 
-void SAL_CALL ScCellObj::release() throw()
+void SAL_CALL ScCellObj::release() noexcept
 {
     ScCellRangeObj::release();
 }
@@ -6610,12 +6610,12 @@ uno::Any SAL_CALL ScTableSheetObj::queryInterface( const uno::Type& rType )
     return ScCellRangeObj::queryInterface( rType );
 }
 
-void SAL_CALL ScTableSheetObj::acquire() throw()
+void SAL_CALL ScTableSheetObj::acquire() noexcept
 {
     ScCellRangeObj::acquire();
 }
 
-void SAL_CALL ScTableSheetObj::release() throw()
+void SAL_CALL ScTableSheetObj::release() noexcept
 {
     ScCellRangeObj::release();
 }
@@ -8328,12 +8328,12 @@ uno::Any SAL_CALL ScTableColumnObj::queryInterface( const uno::Type& rType )
     return ScCellRangeObj::queryInterface( rType );
 }
 
-void SAL_CALL ScTableColumnObj::acquire() throw()
+void SAL_CALL ScTableColumnObj::acquire() noexcept
 {
     ScCellRangeObj::acquire();
 }
 
-void SAL_CALL ScTableColumnObj::release() throw()
+void SAL_CALL ScTableColumnObj::release() noexcept
 {
     ScCellRangeObj::release();
 }

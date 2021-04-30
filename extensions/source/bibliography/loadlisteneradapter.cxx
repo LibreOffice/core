@@ -120,13 +120,13 @@ namespace bib
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::acquire(  ) throw ()
+    void SAL_CALL OLoadListenerAdapter::acquire(  ) noexcept
     {
         OLoadListenerAdapter_Base::acquire();
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::release(  ) throw ()
+    void SAL_CALL OLoadListenerAdapter::release(  ) noexcept
     {
         OLoadListenerAdapter_Base::release();
     }

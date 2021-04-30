@@ -48,7 +48,7 @@ public:
 
     OutgoingRequest top(rtl::ByteSequence const& tid);
 
-    void pop(rtl::ByteSequence const& tid) throw();
+    void pop(rtl::ByteSequence const& tid) noexcept;
 
 private:
     OutgoingRequests(const OutgoingRequests&) = delete;

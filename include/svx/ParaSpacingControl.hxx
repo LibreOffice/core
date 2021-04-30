@@ -85,11 +85,11 @@ public:
 
     virtual ::css::uno::Any SAL_CALL queryInterface(const ::css::uno::Type& aType) override;
 
-    virtual void SAL_CALL acquire() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
 
     virtual void SAL_CALL disposing(const ::css::lang::EventObject&) override;
 
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL release() noexcept override;
 
 private:
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> m_xMultiplexer;

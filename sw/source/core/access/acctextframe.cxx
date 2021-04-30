@@ -138,14 +138,14 @@ css::uno::Any SAL_CALL
 
 void SAL_CALL
     SwAccessibleTextFrame::acquire()
-    throw ()
+    noexcept
 {
     SwAccessibleContext::acquire ();
 }
 
 void SAL_CALL
     SwAccessibleTextFrame::release()
-    throw ()
+    noexcept
 {
     SwAccessibleContext::release ();
 }

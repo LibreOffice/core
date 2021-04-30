@@ -48,8 +48,8 @@ public:
             cppu::UnoType<task::XInteractionContinuation>::get().isAssignableFrom(m_type) ); }
 
     // XInterface
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
     virtual Any SAL_CALL queryInterface( Type const & type ) override;
 
     // XInteractionContinuation
@@ -58,13 +58,13 @@ public:
 
 // XInterface
 
-void InteractionContinuationImpl::acquire() throw ()
+void InteractionContinuationImpl::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
 
-void InteractionContinuationImpl::release() throw ()
+void InteractionContinuationImpl::release() noexcept
 {
     OWeakObject::release();
 }

@@ -96,9 +96,9 @@ public:
 
     /** Create a new DrawController object for the given ViewShellBase.
     */
-    explicit DrawController (ViewShellBase& rBase) throw();
+    explicit DrawController (ViewShellBase& rBase) noexcept;
 
-    virtual ~DrawController() throw() override;
+    virtual ~DrawController() noexcept override;
 
     /** Replace the currently used sub controller with the given one.  This
         new sub controller is used from now on for the view (that is the
@@ -115,33 +115,33 @@ public:
 
     /** Call this method when the VisArea has changed.
     */
-    void FireVisAreaChanged (const ::tools::Rectangle& rVisArea) throw();
+    void FireVisAreaChanged (const ::tools::Rectangle& rVisArea) noexcept;
 
     /** Call this method when the selection has changed.
     */
-    void FireSelectionChangeListener() throw();
+    void FireSelectionChangeListener() noexcept;
 
     /** Call this method when the edit mode has changed.
     */
-    void FireChangeEditMode (bool bMasterPageMode) throw();
+    void FireChangeEditMode (bool bMasterPageMode) noexcept;
 
     /** Call this method when the layer mode has changed.
     */
-    void FireChangeLayerMode (bool bLayerMode) throw();
+    void FireChangeLayerMode (bool bLayerMode) noexcept;
 
     /** Call this method when there is a new current page.
     */
-    void FireSwitchCurrentPage (SdPage* pCurrentPage) throw();
+    void FireSwitchCurrentPage (SdPage* pCurrentPage) noexcept;
 
     /** Broadcast a sidebar context change that is caused by a view
         switch.
     */
     void BroadcastContextChange() const;
     void NotifyAccUpdate();
-    void fireChangeLayer( css::uno::Reference< css::drawing::XLayer>* pCurrentLayer ) throw();
+    void fireChangeLayer( css::uno::Reference< css::drawing::XLayer>* pCurrentLayer ) noexcept;
     // change the parameter to int
     //void fireSwitchCurrentPage( String pageName) throw();
-    void fireSwitchCurrentPage( sal_Int32 pageIndex) throw();
+    void fireSwitchCurrentPage( sal_Int32 pageIndex) noexcept;
     bool IsDisposing() const { return mbDisposing; }
 
     /** Return a pointer to the ViewShellBase object that the DrawController

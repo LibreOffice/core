@@ -210,11 +210,11 @@ public:
 
     virtual void SAL_CALL
     acquire()
-        throw() override;
+        noexcept override;
 
     virtual void SAL_CALL
     release()
-        throw() override;
+        noexcept override;
 
 
     virtual Sequence< Property > SAL_CALL
@@ -254,7 +254,7 @@ XPropertySetInfoImpl2::XPropertySetInfoImpl2()
 
 void SAL_CALL
 XPropertySetInfoImpl2::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
@@ -262,7 +262,7 @@ XPropertySetInfoImpl2::acquire()
 
 void SAL_CALL
 XPropertySetInfoImpl2::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

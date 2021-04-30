@@ -85,7 +85,7 @@ const uno::Sequence< sal_Int8 >& ValueItemAcc::getUnoTunnelId()
 
 
 ValueItemAcc* ValueItemAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
-    throw()
+    noexcept
 {
     try
     {
@@ -470,7 +470,7 @@ const uno::Sequence< sal_Int8 >& ValueSetAcc::getUnoTunnelId()
 
 
 ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
-    throw()
+    noexcept
 {
     try
     {

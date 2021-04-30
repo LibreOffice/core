@@ -22,7 +22,7 @@ ShapeDrawingFragmentHandler::ShapeDrawingFragmentHandler(oox::core::XmlFilterBas
 {
 }
 
-ShapeDrawingFragmentHandler::~ShapeDrawingFragmentHandler() throw()
+ShapeDrawingFragmentHandler::~ShapeDrawingFragmentHandler() noexcept
 {
 }
 

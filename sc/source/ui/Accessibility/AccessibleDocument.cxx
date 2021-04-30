@@ -1615,13 +1615,13 @@ uno::Any SAL_CALL ScAccessibleDocument::queryInterface( uno::Type const & rType 
 }
 
 void SAL_CALL ScAccessibleDocument::acquire()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::acquire();
 }
 
 void SAL_CALL ScAccessibleDocument::release()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::release();
 }
