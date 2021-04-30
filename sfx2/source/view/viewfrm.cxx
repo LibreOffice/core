@@ -18,6 +18,8 @@
  */
 
 #include <config_feature_desktop.h>
+#include <config_wasm_strip.h>
+
 #include <osl/file.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/infobar.hxx>
@@ -47,7 +49,9 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
+#if !ENABLE_WASM_STRIP_PINGUSER
 #include <unotools/VersionConfig.hxx>
+#endif
 #include <svtools/miscopt.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -1396,6 +1400,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
 
+#if !ENABLE_WASM_STRIP_PINGUSER
                 bool bIsHeadlessOrUITest = SfxApplication::IsHeadlessOrUITest(); //uitest.uicheck fails when the dialog is open
 
                 //what's new infobar
@@ -1476,6 +1481,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     officecfg::Setup::Product::LastTimeDonateShown::set(nNow, batch);
                     batch->commit();
                 }
+#endif
 
                 // read-only infobar if necessary
                 const SfxViewShell *pVSh;
@@ -1628,6 +1634,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
+#if !ENABLE_WASM_STRIP_PINGUSER
 IMPL_LINK_NOARG(SfxViewFrame, WhatsNewHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_WHATSNEW);
@@ -1642,6 +1649,7 @@ IMPL_LINK_NOARG(SfxViewFrame, DonationHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_DONATION);
 }
+#endif
 
 IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, weld::Button&, rButton, void)
 {

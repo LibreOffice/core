@@ -23,6 +23,7 @@
       constructor="com_sun_star_comp_sfx2_BackingComp_get_implementation">
     <service name="com.sun.star.frame.StartModule"/>
     <service name="com.sun.star.frame.ProtocolHandler"/>
+    <optional/>
   </implementation>
   <implementation name="SfxDocumentMetaData"
       constructor="SfxDocumentMetaData_get_implementation">

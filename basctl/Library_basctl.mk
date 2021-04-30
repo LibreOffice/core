@@ -62,9 +62,14 @@ $(eval $(call gb_Library_use_libraries,basctl,\
 	xmlscript \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/accessibility/accessibledialogcontrolshape \
 	basctl/source/accessibility/accessibledialogwindow \
+))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/basicide/basdoc \
 	basctl/source/basicide/IDEComboBox \
 	basctl/source/basicide/basicrenderable \

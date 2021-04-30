@@ -20,31 +20,58 @@ $(eval $(call gb_Module_add_targets,libreoffice,\
 ))
 endif
 
+# WASM_CHART change
+ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
+	chart2 \
+))
+endif
+
+# WASM_CANVAS change
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
+	canvas \
+	cppcanvas \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
+	dbaccess \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
+	winaccessibility \
+))
+endif
+
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	android \
+    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
 	animations \
+    ) \
 	apple_remote \
 	avmedia \
+    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
 	basctl \
+    ) \
 	basegfx \
 	basic \
 	bean \
 	binaryurp \
 	bridges \
-	canvas \
-	chart2 \
 	cli_ure \
     codemaker \
 	comphelper \
 	configmgr \
 	connectivity \
-	cppcanvas \
 	cppu \
 	cppuhelper \
 	cpputools \
 	cui \
-	dbaccess \
 	desktop \
 	$(call gb_Helper_optional,DICTIONARIES,dictionaries) \
 	drawinglayer \
@@ -103,22 +130,30 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	sal \
 	salhelper \
 	sax \
+    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
 	sc \
 	scaddins \
 	sccomp \
+    ) \
 	$(call gb_Helper_optional,DESKTOP,scp2) \
 	scripting \
+    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
 	sd \
 	sdext \
+    ) \
 	$(call gb_Helper_optional,DESKTOP,setup_native) \
 	sfx2 \
 	shell \
+    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
 	slideshow \
+    ) \
 	smoketest \
 	solenv \
 	soltools \
 	sot \
+    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
 	starmath \
+    ) \
     $(if $(ENABLE_CUSTOMTARGET_COMPONENTS),static) \
 	stoc \
 	store \
@@ -149,7 +184,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	uui \
 	vbahelper \
 	vcl \
-	winaccessibility \
 	wizards \
 	writerfilter \
 	writerperfect \

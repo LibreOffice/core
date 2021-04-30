@@ -61,6 +61,14 @@ $(eval $(call gb_Library_use_libraries,fwk,\
     vcl \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_RECOVERYUI),TRUE)
+$(eval $(call gb_Library_add_exception_objects,fwk,\
+    framework/source/services/autorecovery \
+))
+
+$(eval $(call gb_Library_add_componentimpl,fwk,autorecovery))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/accelerators/acceleratorcache \
     framework/source/accelerators/acceleratorconfiguration \
@@ -149,7 +157,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/recording/dispatchrecorder \
     framework/source/recording/dispatchrecordersupplier \
     framework/source/services/ContextChangeEventMultiplexer \
-    framework/source/services/autorecovery \
     framework/source/services/desktop \
     framework/source/services/dispatchhelper \
     framework/source/services/frame \

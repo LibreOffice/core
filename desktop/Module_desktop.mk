@@ -20,7 +20,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     $(if $(ENABLE_BREAKPAD), \
         Library_crashreport \
         ) \
-    $(if $(DISABLE_GUI),,Library_spl) \
+    $(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,Library_spl) \
     Package_branding \
     $(if $(CUSTOM_BRAND_DIR),Package_branding_custom) \
     UIConfig_deployment \
@@ -103,7 +103,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
 ))
 endif
 
-endif
+endif # $(OS)
 
 ifneq (,$(filter Extension_test-active,$(MAKECMDGOALS)))
 $(eval $(call gb_Module_add_targets,desktop, \

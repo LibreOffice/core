@@ -20,6 +20,12 @@ $(eval $(call gb_StaticLibrary_add_defs,hunspell,\
 	-DOPENOFFICEORG \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_HUNSPELL),TRUE)
+$(eval $(call gb_StaticLibrary_add_generated_exception_objects,hunspell,\
+	UnpackedTarball/hunspell/src/hunspell/hunspell \
+))
+endif
+
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,hunspell,\
 	UnpackedTarball/hunspell/src/hunspell/affentry \
 	UnpackedTarball/hunspell/src/hunspell/affixmgr \
@@ -30,7 +36,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,hunspell,\
 	UnpackedTarball/hunspell/src/hunspell/hunzip \
 	UnpackedTarball/hunspell/src/hunspell/filemgr \
 	UnpackedTarball/hunspell/src/hunspell/replist \
-	UnpackedTarball/hunspell/src/hunspell/hunspell \
 ))
 
 # vim: set noet sw=4 ts=4:
