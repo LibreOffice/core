@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 #include <config_fuzzers.h>
+#include <config_wasm_strip.h>
 
 #include <sal/config.h>
 

@@ -21,6 +21,10 @@ $(eval $(call gb_Library_Library,svxcore))
 
 $(eval $(call gb_Library_set_componentfile,svxcore,svx/util/svxcore,services))
 
+$(eval $(call gb_Library_add_componentimpls,svxcore, \
+    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),,draw) \
+))
+
 $(eval $(call gb_Library_add_sdi_headers,svxcore,svx/sdi/svxslots))
 
 $(eval $(call gb_Library_use_custom_headers,svxcore,\

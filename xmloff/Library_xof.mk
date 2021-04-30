@@ -47,11 +47,19 @@ $(eval $(call gb_Library_use_libraries,xof,\
     xo \
 ))
 
+# WASM_CHART change
+ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Library_add_exception_objects,xof,\
     xmloff/source/transform/ChartOASISTContext \
     xmloff/source/transform/ChartOOoTContext \
     xmloff/source/transform/ChartPlotAreaOASISTContext \
     xmloff/source/transform/ChartPlotAreaOOoTContext \
+))
+
+$(eval $(call gb_Library_add_componentimpl,xof,chart))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,xof,\
     xmloff/source/transform/ControlOASISTContext \
     xmloff/source/transform/ControlOOoTContext \
     xmloff/source/transform/CreateElemTContext \

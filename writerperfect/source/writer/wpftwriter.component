@@ -22,31 +22,37 @@
       constructor="com_sun_star_comp_Writer_AbiWordImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.MSWorksImportFilter"
       constructor="com_sun_star_comp_Writer_MSWorksImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.MWAWImportFilter"
       constructor="com_sun_star_comp_Writer_MWAWImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.WordPerfectImportFilter"
       constructor="com_sun_star_comp_Writer_WordPerfectImportFilter_get_implementation">
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
     <service name="com.sun.star.document.ImportFilter"/>
+    <optional/>
   </implementation>
   <implementation name="org.libreoffice.comp.Writer.EBookImportFilter"
       constructor="org_libreoffice_comp_Writer_EBookImportFilter_get_implementation">
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
     <service name="com.sun.star.document.ImportFilter"/>
+    <optional/>
   </implementation>
   <implementation name="org.libreoffice.comp.Writer.PagesImportFilter"
       constructor="org_libreoffice_comp_Writer_PagesImportFilter_get_implementation">
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
     <service name="com.sun.star.document.ImportFilter"/>
+    <optional/>
   </implementation>
   <implementation name="org.libreoffice.comp.Writer.StarOfficeWriterImportFilter"
       constructor="org_libreoffice_comp_Writer_StarOfficeWriterImportFilter_get_implementation">
@@ -56,9 +62,11 @@
   <implementation name="com.sun.star.comp.Writer.EPUBExportFilter"
       constructor="com_sun_star_comp_Writer_EPUBExportFilter_get_implementation">
     <service name="com.sun.star.document.ExportFilter"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.EPUBExportUIComponent"
       constructor="com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation">
     <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
+    <optional/>
   </implementation>
 </component>

@@ -128,6 +128,23 @@ endif
 
 $(eval $(call gb_Library_set_componentfile,sd,sd/util/sd,services))
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
+$(eval $(call gb_Library_add_exception_objects,sd,\
+	sd/source/ui/accessibility/AccessibleDocumentViewBase \
+	sd/source/ui/accessibility/AccessibleDrawDocumentView \
+	sd/source/ui/accessibility/AccessibleOutlineEditSource \
+	sd/source/ui/accessibility/AccessibleOutlineView \
+	sd/source/ui/accessibility/AccessiblePageShape \
+	sd/source/ui/accessibility/AccessiblePresentationGraphicShape \
+	sd/source/ui/accessibility/AccessiblePresentationOLEShape \
+	sd/source/ui/accessibility/AccessiblePresentationShape \
+	sd/source/ui/accessibility/AccessibleSlideSorterObject \
+	sd/source/ui/accessibility/AccessibleSlideSorterView \
+	sd/source/ui/accessibility/AccessibleViewForwarder \
+	sd/source/ui/accessibility/SdShapeTypes \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/core/CustomAnimationCloner \
 	sd/source/core/CustomAnimationEffect \
@@ -171,18 +188,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/filter/xml/sdtransform \
 	sd/source/filter/xml/sdxmlwrp \
 	sd/source/helper/simplereferencecomponent \
-	sd/source/ui/accessibility/AccessibleDocumentViewBase \
-	sd/source/ui/accessibility/AccessibleDrawDocumentView \
-	sd/source/ui/accessibility/AccessibleOutlineEditSource \
-	sd/source/ui/accessibility/AccessibleOutlineView \
-	sd/source/ui/accessibility/AccessiblePageShape \
-	sd/source/ui/accessibility/AccessiblePresentationGraphicShape \
-	sd/source/ui/accessibility/AccessiblePresentationOLEShape \
-	sd/source/ui/accessibility/AccessiblePresentationShape \
-	sd/source/ui/accessibility/AccessibleSlideSorterObject \
-	sd/source/ui/accessibility/AccessibleSlideSorterView \
-	sd/source/ui/accessibility/AccessibleViewForwarder \
-	sd/source/ui/accessibility/SdShapeTypes \
 	sd/source/ui/animations/CustomAnimationDialog \
 	sd/source/ui/animations/CustomAnimationList \
 	sd/source/ui/animations/CustomAnimationPane \

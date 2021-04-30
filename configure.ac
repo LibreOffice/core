@@ -3015,6 +3015,8 @@ if test "$enable_wasm_strip" = "yes"; then
 
     test "${with_fonts+set}" = set || with_fonts=yes
     test "${with_locales+set}" = set || with_locales=en
+
+    AC_DEFINE(HAVE_FEATURE_WASM_STRIP)
 fi
 
 if test "$enable_wasm_exceptions" = yes; then
@@ -14623,6 +14625,7 @@ AC_CONFIG_HEADERS([config_host/config_oauth2.h])
 AC_CONFIG_HEADERS([config_host/config_poppler.h])
 AC_CONFIG_HEADERS([config_host/config_python.h])
 AC_CONFIG_HEADERS([config_host/config_writerperfect.h])
+AC_CONFIG_HEADERS([config_host/config_wasm_strip.h])
 AC_CONFIG_HEADERS([solenv/lockfile/autoconf.h])
 AC_OUTPUT
 

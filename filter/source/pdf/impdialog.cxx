@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include "impdialog.hxx"
 #include <strings.hrc>
 #include <officecfg/Office/Common.hxx>
@@ -349,7 +351,6 @@ short ImpPDFTabDialog::Ok( )
 {
     // here the whole mechanism of the base class is not used
     // when Ok is hit, the user means 'convert to PDF', so simply close with ok
-
     if (getGeneralPage()->IsPdfUaSelected())
     {
         SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(mrDoc);
@@ -363,6 +364,7 @@ short ImpPDFTabDialog::Ok( )
             }
         }
     }
+
     return RET_OK;
 }
 

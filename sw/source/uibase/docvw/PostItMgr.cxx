@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <boost/property_tree/json_parser.hpp>
 
 #include <PostItMgr.hxx>
@@ -2406,6 +2408,7 @@ void SwPostItMgr::ToggleInsModeOnActiveSidebarWin()
     }
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 void SwPostItMgr::ConnectSidebarWinToFrame( const SwFrame& rFrame,
                                           const SwFormatField& rFormatField,
                                           SwAnnotationWin& rSidebarWin )
@@ -2436,6 +2439,7 @@ void SwPostItMgr::DisconnectSidebarWinFromFrame( const SwFrame& rFrame,
         }
     }
 }
+#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
 
 bool SwPostItMgr::HasFrameConnectedSidebarWins( const SwFrame& rFrame )
 {

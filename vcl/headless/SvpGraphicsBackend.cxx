@@ -431,7 +431,9 @@ void SvpGraphicsBackend::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBi
     }
     sal_Int32 nStride;
     unsigned char* mask_data = aSurface.getBits(nStride);
+#ifndef ENABLE_WASM_STRIP_PREMULTIPLY
     vcl::bitmap::lookup_table const& unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
+#endif
     for (tools::Long y = rTR.mnSrcY; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
     {
         unsigned char* row = mask_data + (nStride * y);
@@ -439,9 +441,15 @@ void SvpGraphicsBackend::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBi
         for (tools::Long x = rTR.mnSrcX; x < rTR.mnSrcX + rTR.mnSrcWidth; ++x)
         {
             sal_uInt8 a = data[SVP_CAIRO_ALPHA];
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+            sal_uInt8 b = vcl::bitmap::unpremultiply(a, data[SVP_CAIRO_BLUE]);
+            sal_uInt8 g = vcl::bitmap::unpremultiply(a, data[SVP_CAIRO_GREEN]);
+            sal_uInt8 r = vcl::bitmap::unpremultiply(a, data[SVP_CAIRO_RED]);
+#else
             sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
             sal_uInt8 g = unpremultiply_table[a][data[SVP_CAIRO_GREEN]];
             sal_uInt8 r = unpremultiply_table[a][data[SVP_CAIRO_RED]];
+#endif
             if (r == 0 && g == 0 && b == 0)
             {
                 data[0] = nMaskColor.GetBlue();
@@ -554,12 +562,20 @@ Color SvpGraphicsBackend::getPixel(tools::Long nX, tools::Long nY)
     cairo_destroy(cr);
 
     cairo_surface_flush(target);
-    vcl::bitmap::lookup_table const& unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
-    unsigned char* data = cairo_image_surface_get_data(target);
+#ifndef ENABLE_WASM_STRIP_PREMULTIPLY
+    vcl::bitmap::lookup_table const & unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
+#endif
+    unsigned char *data = cairo_image_surface_get_data(target);
     sal_uInt8 a = data[SVP_CAIRO_ALPHA];
+#ifdef ENABLE_WASM_STRIP_PREMULTIPLY
+    sal_uInt8 b = vcl::bitmap::unpremultiply(a, data[SVP_CAIRO_BLUE]);
+    sal_uInt8 g = vcl::bitmap::unpremultiply(a, data[SVP_CAIRO_GREEN]);
+    sal_uInt8 r = vcl::bitmap::unpremultiply(a, data[SVP_CAIRO_RED]);
+#else
     sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
     sal_uInt8 g = unpremultiply_table[a][data[SVP_CAIRO_GREEN]];
     sal_uInt8 r = unpremultiply_table[a][data[SVP_CAIRO_RED]];
+#endif
     Color aColor(ColorAlpha, a, r, g, b);
     cairo_surface_destroy(target);
 

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <sal/config.h>
 #include <sal/log.hxx>
 
@@ -202,6 +204,7 @@ void SwSectionFrame::DelEmpty( bool bRemove )
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for current next paragraph will change
         // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         {
             SwViewShell* pViewShell( getRootFrame()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
@@ -214,6 +217,7 @@ void SwSectionFrame::DelEmpty( bool bRemove )
                                 pPrev ? pPrev->DynCastTextFrame() : nullptr );
             }
         }
+#endif
         Cut_( bRemove );
     }
     SwSectionFrame *pMaster = IsFollow() ? FindMaster() : nullptr;
@@ -2718,11 +2722,13 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
             break;
 
         case RES_PROTECT:
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
             {
                 SwViewShell *pSh = getRootFrame()->GetCurrShell();
                 if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
                     pSh->Imp()->InvalidateAccessibleEditableState( true, this );
             }
+#endif
             break;
 
         default:

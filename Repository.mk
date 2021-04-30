@@ -17,13 +17,18 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+$(eval $(call gb_Helper_register_executables,NONE, \
+	canvasdemo \
+))
+endif
+
 $(eval $(call gb_Helper_register_executables,NONE, \
     $(call gb_Helper_optional,HELPTOOLS, \
 	HelpIndexer \
 	HelpLinker \
     ) \
 	bestreversemap \
-	canvasdemo \
 	cfgex \
 	concat-deps \
 	cpp \
@@ -92,6 +97,12 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 	$(if $(filter ODK,$(BUILD_TYPE)),uno-skeletonmaker) \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
+$(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
+	$(if $(filter-out ANDROID HAIKU iOS MACOSX WNT,$(OS)),oosplash) \
+))
+endif
+
 $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(if $(ENABLE_ONLINE_UPDATE_MAR),\
 		mar \
@@ -146,7 +157,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,FUZZERS,htmlfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,sftfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,dbffuzzer) \
-	$(if $(filter-out ANDROID HAIKU iOS MACOSX WNT,$(OS)),oosplash) \
 	soffice_bin \
     $(call gb_CondExeUnopkg, \
         unopkg_bin \
@@ -323,6 +333,37 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ogltrans, \
 	OGLTrans \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
+	canvastools \
+	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
+	canvasfactory \
+	cppcanvas \
+	$(if $(filter WNT,$(OS)),directx9canvas) \
+	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
+	$(if $(filter WNT,$(OS)),gdipluscanvas) \
+	simplecanvas \
+	vclcanvas \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_GUESSLANG),TRUE)
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
+	guesslang \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_HUNSPELL),TRUE)
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
+	hyphen \
+	lnth \
+	spell \
+	$(if $(filter iOS MACOSX,$(OS)), \
+		MacOSXSpell \
+	) \
+))
+endif
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
     avmedia \
     $(call gb_Helper_optional,AVMEDIA, \
@@ -336,14 +377,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	) \
 	basegfx \
 	bib \
-	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
-	canvasfactory \
-	canvastools \
 	chartcore \
 	chartcontroller \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
-	cppcanvas \
 	configmgr \
 	ctl \
 	dba \
@@ -355,8 +392,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
-	$(if $(filter WNT,$(OS)),directx9canvas) \
-	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
 	drawinglayercore \
 	drawinglayer \
 	editeng \
@@ -373,19 +408,15 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	frm \
 	fsstorage \
 	fwk \
-	$(if $(filter WNT,$(OS)),gdipluscanvas) \
-	guesslang \
     $(call gb_Helper_optionals_or,HELPTOOLS XMLHELP,helplinker) \
 	i18npool \
 	i18nsearch \
-	hyphen \
 	$(if $(ENABLE_JAVA),jdbc) \
 	$(if $(ENABLE_LDAP),ldapbe2) \
 	$(if $(filter WNT,$(OS)),WinUserInfoBe) \
 	localebe1 \
 	log \
 	lng \
-	lnth \
 	$(if $(filter $(OS),MACOSX),macbe1) \
 	$(if $(MERGELIBS),merged) \
 	migrationoo2 \
@@ -414,11 +445,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	sdd \
 	sdfilt \
 	sfx \
-	simplecanvas \
 	slideshow \
 	sot \
-	spell \
-	$(if $(DISABLE_GUI),,spl) \
+	$(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,spl) \
 	storagefd \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
 	svgio \
@@ -448,7 +477,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		vbahelper \
 	) \
 	vcl \
-	vclcanvas \
 	writerperfect \
 	xmlscript \
 	xmlfa \
@@ -468,9 +496,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 			AppleRemote \
 		) \
 		fps_aqua \
-	) \
-	$(if $(filter iOS MACOSX,$(OS)), \
-		MacOSXSpell \
 	) \
 ))
 
@@ -605,6 +630,14 @@ $(eval $(call gb_Helper_register_plugins_for_install,PRIVATELIBS_URE,ure, \
     $(call gb_CondLibSalTextenc,sal_textenc) \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
+	$(if $(filter WNT,$(OS)), \
+		winaccessibility \
+	) \
+))
+endif
+
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
     $(call gb_Helper_optional,AVMEDIA, \
         $(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
@@ -649,7 +682,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 		fps \
 		inprocserv \
 		UAccCOM \
-		winaccessibility \
 	) \
 ))
 
@@ -883,6 +915,18 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	) \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_PINGUSER),TRUE)
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	tipoftheday_images \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	$(if $(ENABLE_OPENGL_CANVAS),canvas_opengl_shader) \
+))
+endif
+
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(SYSTEM_LIBEXTTEXTCAT),,libexttextcat_fingerprint) \
 	officecfg_misc \
@@ -967,13 +1011,11 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	wizards_basicusr \
 	wizards_properties \
 	wizards_wizardshare \
-	tipoftheday_images \
 	toolbarmode_images \
 	vcl_theme_definitions \
 	$(if $(filter WNT,$(OS)), \
 		vcl_opengl_denylist \
 	) \
-	$(if $(ENABLE_OPENGL_CANVAS),canvas_opengl_shader) \
 	$(if $(filter SKIA,$(BUILD_TYPE)), \
 		vcl_skia_denylist ) \
 	$(if $(DISABLE_PYTHON),,$(if $(filter-out AIX,$(OS)), \
@@ -1164,9 +1206,14 @@ $(eval $(call gb_Helper_register_mos,\
 ))
 
 # UI configuration
+ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)
+$(eval $(call gb_Helper_register_uiconfigs,\
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbaccess) \
+))
+endif
+
 $(eval $(call gb_Helper_register_uiconfigs,\
 	cui \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbaccess) \
 	desktop \
 	editeng \
 	filter \

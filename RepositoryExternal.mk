@@ -567,6 +567,7 @@ endef
 gb_ExternalProject__use_hunspell :=
 
 else # !SYSTEM_HUNSPELL
+ifneq ($(ENABLE_WASM_STRIP_HUNSPELL),TRUE)
 
 define gb_LinkTarget__use_hunspell
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -594,6 +595,7 @@ $(call gb_ExternalProject_use_external_project,$(1),hunspell)
 
 endef
 
+endif # ENABLE_WASM_STRIP_HUNSPELL
 endif # SYSTEM_HUNSPELL
 
 
@@ -1756,6 +1758,7 @@ endef
 gb_ExternalProject__use_epubgen :=
 
 else # !SYSTEM_EPUBGEN
+ifneq ($(ENABLE_WASM_STRIP_EPUB),TRUE)
 
 define gb_LinkTarget__use_epubgen
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1773,6 +1776,7 @@ $(call gb_ExternalProject_use_external_project,$(1),libepubgen)
 
 endef
 
+endif # ENABLE_WASM_STRIP_EPUB
 endif # SYSTEM_EPUBGEN
 
 ifneq ($(SYSTEM_REVENGE),)
@@ -2716,7 +2720,6 @@ endef
 endif # SYSTEM_POPPLER
 
 endif # ENABLE_POPPLER
-
 
 ifneq ($(SYSTEM_CLUCENE),)
 
