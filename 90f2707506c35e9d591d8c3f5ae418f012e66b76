@@ -16,6 +16,24 @@
       "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfbd5496_905dab2c",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4112,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-04-30T05:36:21Z",
+      "side": 1,
+      "message": "LO uses system locale by default.That\u0027s why I have used encoding of system locale.\nRight ?",
+      "parentUuid": "17affc8c_0364b0d0",
+      "revId": "90f2707506c35e9d591d8c3f5ae418f012e66b76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
