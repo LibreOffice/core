@@ -346,57 +346,99 @@ static void addIfNotInMyMap( const StylesBuffer& rStyles, std::map< FormatKeyPai
     rMap[ FormatKeyPair( nXfId, nFormatId ) ] = rRangeList;
 }
 
-void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const ScRange& rAddress, bool bProcessRowRange )
+void SheetDataBuffer::addColXfStyles()
 {
-    RowRangeStyle aStyleRows;
-    aStyleRows.mnNumFmt.first = nXfId;
-    aStyleRows.mnNumFmt.second = nFormatId;
-    aStyleRows.mnStartRow = rAddress.aStart.Row();
-    aStyleRows.mnEndRow = rAddress.aEnd.Row();
-    for ( sal_Int32 nCol = rAddress.aStart.Col(); nCol <= rAddress.aEnd.Col(); ++nCol )
+    std::map< FormatKeyPair, ScRangeList > rangeStyleListMap;
+    for( const auto& [rFormatKeyPair, rRangeList] : maXfIdRangeLists )
     {
-        if ( !bProcessRowRange )
-            maStylesPerColumn[ nCol ].insert( aStyleRows );
-        else
+        addIfNotInMyMap( getStyles(), rangeStyleListMap, rFormatKeyPair.first, rFormatKeyPair.second, rRangeList );
+    }
+    // gather all ranges that have the same style and apply them in bulk
+    for ( const auto& [rFormatKeyPair, rRanges] : rangeStyleListMap )
+    {
+        for (const ScRange & rAddress : rRanges)
         {
-            RowStyles& rRowStyles = maStylesPerColumn[ nCol ];
-            // Reset row range for each column
+            RowRangeStyle aStyleRows;
+            aStyleRows.mnNumFmt.first = rFormatKeyPair.first;
+            aStyleRows.mnNumFmt.second = rFormatKeyPair.second;
             aStyleRows.mnStartRow = rAddress.aStart.Row();
             aStyleRows.mnEndRow = rAddress.aEnd.Row();
+            for ( sal_Int32 nCol = rAddress.aStart.Col(); nCol <= rAddress.aEnd.Col(); ++nCol )
+               maStylesPerColumn[ nCol ].insert( aStyleRows );
+        }
+    }
+}
 
-            // If aStyleRows includes rows already allocated to a style
-            // in rRowStyles, then we need to split it into parts.
-            // ( to occupy only rows that have no style definition)
-
-            // Start iterating at the first element that is not completely before aStyleRows
-            RowStyles::iterator rows_it = rRowStyles.lower_bound(aStyleRows);
-            RowStyles::iterator rows_end = rRowStyles.end();
-            bool bAddRange = true;
-            for ( ; rows_it != rows_end; ++rows_it )
+void SheetDataBuffer::addColXfStyleProcessRowRanges()
+{
+    // count the number of row-range-styles we have
+    AddressConverter& rAddrConv = getAddressConverter();
+    int cnt = 0;
+    for ( const auto& [nXfId, rRowRangeList] : maXfIdRowRangeList )
+    {
+        if ( nXfId == -1 ) // it's a dud skip it
+            continue;
+        cnt += rRowRangeList.size();
+    }
+    // pre-allocate space in the sorted_vector
+    for ( sal_Int32 nCol = 0; nCol <= rAddrConv.getMaxApiAddress().Col(); ++nCol )
+    {
+       RowStyles& rRowStyles = maStylesPerColumn[ nCol ];
+       rRowStyles.reserve(rRowStyles.size() + cnt);
+    }
+    const auto nMaxCol = rAddrConv.getMaxApiAddress().Col();
+    for ( sal_Int32 nCol = 0; nCol <= nMaxCol; ++nCol )
+    {
+        RowStyles& rRowStyles = maStylesPerColumn[ nCol ];
+        for ( const auto& [nXfId, rRowRangeList] : maXfIdRowRangeList )
+        {
+            if ( nXfId == -1 ) // it's a dud skip it
+                continue;
+            // get all row ranges for id
+            for ( const auto& rRange : rRowRangeList )
             {
-                const RowRangeStyle& r = *rows_it;
+                RowRangeStyle aStyleRows;
+                aStyleRows.mnNumFmt.first = nXfId;
+                aStyleRows.mnNumFmt.second = -1;
+                aStyleRows.mnStartRow = rRange.mnFirst;
+                aStyleRows.mnEndRow = rRange.mnLast;
 
-                // Add the part of aStyleRows that does not overlap with r
-                if ( aStyleRows.mnStartRow < r.mnStartRow )
+                // Reset row range for each column
+                aStyleRows.mnStartRow = rRange.mnFirst;
+                aStyleRows.mnEndRow = rRange.mnLast;
+
+                // If aStyleRows includes rows already allocated to a style
+                // in rRowStyles, then we need to split it into parts.
+                // ( to occupy only rows that have no style definition)
+
+                // Start iterating at the first element that is not completely before aStyleRows
+                RowStyles::const_iterator rows_it = rRowStyles.lower_bound(aStyleRows);
+                bool bAddRange = true;
+                for ( ; rows_it != rRowStyles.end(); ++rows_it )
                 {
-                    RowRangeStyle aSplit = aStyleRows;
-                    aSplit.mnEndRow = std::min(aStyleRows.mnEndRow, r.mnStartRow - 1);
-                    // Insert with hint that aSplit comes directly before the current position
-                    rRowStyles.insert( rows_it, aSplit );
-                }
+                    const RowRangeStyle& r = *rows_it;
 
-                // Done if no part of aStyleRows extends beyond r
-                if ( aStyleRows.mnEndRow <= r.mnEndRow )
-                {
-                    bAddRange = false;
-                    break;
-                }
+                    // Add the part of aStyleRows that does not overlap with r
+                    if ( aStyleRows.mnStartRow < r.mnStartRow )
+                    {
+                        RowRangeStyle aSplit = aStyleRows;
+                        aSplit.mnEndRow = std::min(aStyleRows.mnEndRow, r.mnStartRow - 1);
+                        rows_it = rRowStyles.insert( aSplit ).first;
+                    }
 
-                // Cut off the part aStyleRows that was handled above
-                aStyleRows.mnStartRow = r.mnEndRow + 1;
+                    // Done if no part of aStyleRows extends beyond r
+                    if ( aStyleRows.mnEndRow <= r.mnEndRow )
+                    {
+                        bAddRange = false;
+                        break;
+                    }
+
+                    // Cut off the part aStyleRows that was handled above
+                    aStyleRows.mnStartRow = r.mnEndRow + 1;
+                }
+                if ( bAddRange )
+                    rRowStyles.insert( aStyleRows );
             }
-            if ( bAddRange )
-                rRowStyles.insert( aStyleRows );
         }
     }
 }
@@ -414,32 +456,9 @@ void SheetDataBuffer::finalizeImport()
     // write default formatting of remaining row range
     maXfIdRowRangeList[ maXfIdRowRange.mnXfId ].push_back( maXfIdRowRange.maRowRange );
 
-    std::map< FormatKeyPair, ScRangeList > rangeStyleListMap;
-    for( const auto& [rFormatKeyPair, rRangeList] : maXfIdRangeLists )
-    {
-        addIfNotInMyMap( getStyles(), rangeStyleListMap, rFormatKeyPair.first, rFormatKeyPair.second, rRangeList );
-    }
-    // gather all ranges that have the same style and apply them in bulk
-    for ( const auto& [rFormatKeyPair, rRanges] : rangeStyleListMap )
-    {
-        for (size_t i = 0, nSize = rRanges.size(); i < nSize; ++i)
-            addColXfStyle( rFormatKeyPair.first, rFormatKeyPair.second, rRanges[i]);
-    }
+    addColXfStyles();
 
-    for ( const auto& [rXfId, rRowRangeList] : maXfIdRowRangeList )
-    {
-        if ( rXfId == -1 ) // it's a dud skip it
-            continue;
-        AddressConverter& rAddrConv = getAddressConverter();
-        // get all row ranges for id
-        for ( const auto& rRange : rRowRangeList )
-        {
-            ScRange aRange( 0, rRange.mnFirst, getSheetIndex(),
-                            rAddrConv.getMaxApiAddress().Col(), rRange.mnLast, getSheetIndex() );
-
-            addColXfStyle( rXfId, -1, aRange, true );
-        }
-    }
+    addColXfStyleProcessRowRanges();
 
     ScDocumentImport& rDocImport = getDocImport();
     ScDocument& rDoc = rDocImport.getDoc();
