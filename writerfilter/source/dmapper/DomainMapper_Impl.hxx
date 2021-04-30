@@ -1017,6 +1017,8 @@ public:
     /// If the current paragraph has a numbering style associated, this method returns its numbering rules
     css::uno::Reference<css::container::XIndexAccess> GetCurrentNumberingRules(sal_Int32* pListLevel);
 
+    sal_Int16 GetListLevel(const StyleSheetEntryPtr& pEntry, const PropertyMapPtr& pParaContext = nullptr);
+
     /**
      Used for attributes/sprms which cannot be evaluated immediately (e.g. they depend
      on another one that comes in the same CONTEXT_CHARACTER). The property will be processed

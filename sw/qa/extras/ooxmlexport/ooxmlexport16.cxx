@@ -92,6 +92,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141231_arabicHebrewNumbering, "tdf141231_arabicH
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_ARABIC_ABJAD, nActual);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf141966_chapterNumberTortureTest, "tdf141966_chapterNumberTortureTest.docx")
+{
+    // There is no point in identifying what the wrong values where in this test,
+    //because EVERYTHING was wrong, and MANY different fixes are required to solve the problems.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, "No numId in style or paragraph"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+
+    xPara.set(getParagraph(2, "Paragraph cancels numbering(0)"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+
+    xPara.set(getParagraph(3, "First numbered line"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1st.i.a.1.I"), getProperty<OUString>(xPara, "ListLabelString"));
+
+    xPara.set(getParagraph(7, "inheritOnly: inherit outlineLvl and listLvl."), uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(OUString("2nd.ii"), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara, "NumberingLevel")); // Level 2
+}
+
 DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
 {
     uno::Reference<beans::XPropertySet> xPageStyle;

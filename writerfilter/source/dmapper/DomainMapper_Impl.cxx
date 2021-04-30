@@ -1409,6 +1409,45 @@ static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleShee
     return lcl_getListId(pParent, rStyleTable, rNumberingFromBaseStyle);
 }
 
+/// Return the paragraph's list level (from styles, unless pParacontext is provided).
+/// -1 indicates the level is not set anywhere. [In that case, with a numId, use 0 (level 1)]
+///  9 indicates that numbering should be at body level (aka disabled) - rarely used by MSWord.
+///  0-8 are the nine valid numbering levels.
+sal_Int16 DomainMapper_Impl::GetListLevel(const StyleSheetEntryPtr& pEntry,
+                                  const PropertyMapPtr& pParaContext)
+{
+    sal_Int16 nListLevel = -1;
+    if (pParaContext)
+    {
+        GetAnyProperty(PROP_NUMBERING_LEVEL, pParaContext) >>= nListLevel;
+        if (nListLevel != -1)
+            return nListLevel;
+    }
+
+    if (!pEntry.get())
+        return -1;
+
+    const StyleSheetPropertyMap* pEntryProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry->pProperties.get());
+    if (!pEntryProperties)
+        return -1;
+
+    nListLevel = pEntryProperties->GetListLevel();
+    // The style itself has a list level.
+    if (nListLevel >= 0)
+        return nListLevel;
+
+    // The style has no parent.
+    if (pEntry->sBaseStyleIdentifier.isEmpty())
+        return -1;
+
+    const StyleSheetEntryPtr pParent = GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
+    // No such parent style or loop in the style hierarchy.
+    if (!pParent || pParent == pEntry)
+        return -1;
+
+    return GetListLevel(pParent);
+}
+
 void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, const bool bRemove, const bool bNoNumbering )
 {
     if (m_bDiscardHeaderFooter)
@@ -1461,14 +1500,19 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     sal_Int32 nListId = -1;
     if ( !bRemove && pStyleSheetProperties && pParaContext )
     {
+        bool bNumberingFromBaseStyle = false;
+        nListId = lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle);
+
         //apply numbering level/style to paragraph if it was set at the style, but only if the paragraph itself
         //does not specify the numbering
-        const sal_Int16 nListLevel = pStyleSheetProperties->GetListLevel();
+        sal_Int16 nListLevel = GetListLevel(pEntry, pParaContext);
+        // Undefined listLevel with a valid numId is treated as a first level numbering.
+        if (nListLevel == -1 && nListId > 0)
+            nListLevel = 0;
+
         if ( !bNoNumbering && !isNumberingViaRule && nListLevel >= 0 )
             pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(nListLevel), false );
 
-        bool bNumberingFromBaseStyle = false;
-        nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle) : -1;
         auto const pList(GetListTable()->GetList(nListId));
         if (pList && nListId >= 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
         {
@@ -1480,11 +1524,12 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 // Since LO7.0/tdf#131321 fixed the loss of numbering in styles, this OUGHT to be obsolete,
                 // but now other new/critical LO7.0 code expects it, and perhaps some corner cases still need it as well.
                 // So we skip it only for default outline styles, which are recognized by NumberingManager.
-                if (!GetCurrentParaStyleName().startsWith("Heading ") || nListLevel >= pList->GetDefaultParentLevels())
+                if (!GetCurrentParaStyleName().startsWith("Heading ") || pStyleSheetProperties->GetListLevel() >= pList->GetDefaultParentLevels())
                     pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(pList->GetStyleName()), true );
             }
-            else if ( !pList->isOutlineNumbering(nListLevel) )
+            else //if ( !pList->isOutlineNumbering(nListLevel) )
             {
+                assert(!pList->isOutlineNumbering(nListLevel) && !pList->isOutlineNumbering(pStyleSheetProperties->GetListLevel()) &&  "Probably can remove that clause, since it tests for a fake condition. Otherwise, we need to decide if this listLevel should include potential paragraph-defined-listLevel.");
                 // After ignoring anything related to the special Outline levels,
                 // we have direct numbering, as well as paragraph-style numbering.
                 // Apply the style if it uses the same list as the direct numbering,
@@ -2032,7 +2077,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 xParaProps->setPropertyValue("ParaLeftMargin", aMargin);
                             else if (isNumberingViaStyle)
                             {
-                                const sal_Int32 nParaLeftMargin = getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "IndentAt");
+                                const sal_Int32 nParaLeftMargin = getNumberingProperty(nListId, GetListLevel(pEntry, pPropertyMap), "IndentAt");
                                 if (nParaLeftMargin != 0)
                                     xParaProps->setPropertyValue("ParaLeftMargin", uno::makeAny(nParaLeftMargin));
                             }
@@ -2050,7 +2095,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 xParaProps->setPropertyValue("ParaFirstLineIndent", aMargin);
                             else if (isNumberingViaStyle)
                             {
-                                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "FirstLineIndent");
+                                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, GetListLevel(pEntry, pPropertyMap), "FirstLineIndent");
                                 if (nFirstLineIndent != 0)
                                     xParaProps->setPropertyValue("ParaFirstLineIndent", uno::makeAny(nFirstLineIndent));
                             }
@@ -7392,7 +7437,7 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
         if (nListId < 0)
             return xRet;
         if (pListLevel)
-            *pListLevel = pStyleSheetProperties->GetListLevel();
+            *pListLevel = GetListLevel(pEntry, GetTopContextOfType(CONTEXT_PARAGRAPH));
 
         // So we are in a paragraph style and it has numbering. Look up the relevant numbering rules.
         auto const pList(GetListTable()->GetList(nListId));
@@ -7443,6 +7488,8 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
             }
 
             // In case numbering rules is not found via a style, try the direct formatting instead.
+            // WHAT??? Shouldn't direct formatting supercede a style value?
+            //         And DOCX doesn't even check at all for direct formatting?
             std::optional<PropertyMap::Property> oProp = pContext->getProperty(PROP_NUMBERING_RULES);
             if (oProp)
             {
