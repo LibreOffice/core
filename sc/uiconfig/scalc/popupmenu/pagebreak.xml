@@ -19,6 +19,8 @@
       <menu:menuitem menu:id=".uno:PasteOnlyValue"/>
       <menu:menuitem menu:id=".uno:PasteOnlyFormula"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:PasteTransposed"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:PasteSpecial"/>
     </menu:menupopup>
   </menu:menu>

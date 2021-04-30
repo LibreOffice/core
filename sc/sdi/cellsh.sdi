@@ -177,6 +177,7 @@ interface CellSelection
     SID_PASTE_ONLY_TEXT   [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_PASTE_ONLY_FORMULA   [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_PASTE_ONLY_VALUE   [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
+    SID_PASTE_TRANSPOSED   [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_PASTE_TEXTIMPORT_DIALOG [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_CLIPBOARD_FORMAT_ITEMS  [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_EXTERNAL_SOURCE [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
