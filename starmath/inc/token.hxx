@@ -44,7 +44,7 @@
 // TokenGroups
 enum class TG
 {
-    NONE = 0x000000,
+    // Old style
     Oper = 0x000001,
     Relation = 0x000002,
     Sum = 0x000004,
@@ -61,7 +61,14 @@ enum class TG
     Font = 0x002000,
     Standalone = 0x004000,
     Limit = 0x010000,
-    FontAttr = 0x020000
+    FontAttr = 0x020000,
+    // Both styles
+    NONE = 0x000000,
+    // Mathml style
+    LargeOp = 0x000001,
+    BinMo = 0x000004,
+    UnMo = 0x000010,
+    BinUnMo = 0x000004 | 0x000010
 };
 
 namespace o3tl
@@ -222,12 +229,14 @@ struct SmToken
     // parse-help info
     TG nGroup;
     sal_uInt16 nLevel;
+    sal_uInt16 nPriority;
 
     SmToken()
         : eType(TUNKNOWN)
         , cMathChar('\0')
         , nGroup(TG::NONE)
         , nLevel(0)
+        , nPriority(0)
     {
     }
 
@@ -238,6 +247,7 @@ struct SmToken
         , cMathChar(cMath)
         , nGroup(nTokenGroup)
         , nLevel(nTokenLevel)
+        , nPriority(0)
     {
     }
 
