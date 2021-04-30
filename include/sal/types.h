@@ -328,7 +328,11 @@ typedef struct _sal_Sequence
     This is a macro so it can expand to nothing in C code.
 */
 #if defined __cplusplus
+#if __cplusplus >= 201103L
+#define SAL_THROW_EXTERN_C() noexcept
+#else
 #define SAL_THROW_EXTERN_C() throw ()
+#endif
 #else
 #define SAL_THROW_EXTERN_C()
 #endif
@@ -398,6 +402,18 @@ namespace css = ::com::sun::star;
 #define SAL_CONSTEXPR constexpr
 #else
 #define SAL_CONSTEXPR
+#endif
+
+/** Macro for C++11 "noexcept" vs. "throw ()" exception specification.
+
+    The latter has has been removed completely from C++20.
+
+    @since LibreOffice 7.2
+ */
+#if __cplusplus >= 201103L
+#define SAL_NOEXCEPT noexcept
+#else
+#define SAL_NOEXCEPT throw ()
 #endif
 
 #endif /* __cplusplus */
