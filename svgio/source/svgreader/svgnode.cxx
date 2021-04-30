@@ -268,8 +268,8 @@ namespace svgio::svgreader
             mpParent(pParent),
             mpAlternativeParent(nullptr),
             maChildren(),
-            maXmlSpace(XmlSpace_notset),
-            maDisplay(Display_inline),
+            maXmlSpace(XmlSpace::NotSet),
+            maDisplay(Display::Inline),
             maCssStyleVector(),
             mbDecomposing(false),
             mbCssStyleVectorBuilt(false)
@@ -341,80 +341,80 @@ namespace svgio::svgreader
             {
                 if(aContent.startsWith("inline"))
                 {
-                    return Display_inline;
+                    return Display::Inline;
                 }
                 else if(aContent.startsWith("none"))
                 {
-                    return Display_none;
+                    return Display::None;
                 }
                 else if(aContent.startsWith("inherit"))
                 {
-                    return Display_inherit;
+                    return Display::Inherit;
                 }
                 else if(aContent.startsWith("block"))
                 {
-                    return Display_block;
+                    return Display::Block;
                 }
                 else if(aContent.startsWith("list-item"))
                 {
-                    return Display_list_item;
+                    return Display::ListItem;
                 }
                 else if(aContent.startsWith("run-in"))
                 {
-                    return Display_run_in;
+                    return Display::RunIn;
                 }
                 else if(aContent.startsWith("compact"))
                 {
-                    return Display_compact;
+                    return Display::Compact;
                 }
                 else if(aContent.startsWith("marker"))
                 {
-                    return Display_marker;
+                    return Display::Marker;
                 }
                 else if(aContent.startsWith("table"))
                 {
-                    return Display_table;
+                    return Display::Table;
                 }
                 else if(aContent.startsWith("inline-table"))
                 {
-                    return Display_inline_table;
+                    return Display::InlineTable;
                 }
                 else if(aContent.startsWith("table-row-group"))
                 {
-                    return Display_table_row_group;
+                    return Display::TableRowGroup;
                 }
                 else if(aContent.startsWith("table-header-group"))
                 {
-                    return Display_table_header_group;
+                    return Display::TableHeaderGroup;
                 }
                 else if(aContent.startsWith("table-footer-group"))
                 {
-                    return Display_table_footer_group;
+                    return Display::TableFooterGroup;
                 }
                 else if(aContent.startsWith("table-row"))
                 {
-                    return Display_table_row;
+                    return Display::TableRow;
                 }
                 else if(aContent.startsWith("table-column-group"))
                 {
-                    return Display_table_column_group;
+                    return Display::TableColumnGroup;
                 }
                 else if(aContent.startsWith("table-column"))
                 {
-                    return Display_table_column;
+                    return Display::TableColumn;
                 }
                 else if(aContent.startsWith("table-cell"))
                 {
-                    return Display_table_cell;
+                    return Display::TableCell;
                 }
                 else if(aContent.startsWith("table-caption"))
                 {
-                    return Display_table_caption;
+                    return Display::TableCaption;
                 }
             }
 
             // return the default
-            return Display_inline;
+            return Display::Inline;
         }
 
         void SvgNode::parseAttribute(const OUString& /*rTokenName*/, SVGToken aSVGToken, const OUString& aContent)
@@ -443,11 +443,11 @@ namespace svgio::svgreader
                     {
                         if(aContent.startsWith("default"))
                         {
-                            setXmlSpace(XmlSpace_default);
+                            setXmlSpace(XmlSpace::Default);
                         }
                         else if(aContent.startsWith("preserve"))
                         {
-                            setXmlSpace(XmlSpace_preserve);
+                            setXmlSpace(XmlSpace::Preserve);
                         }
                     }
                     break;
@@ -472,7 +472,7 @@ namespace svgio::svgreader
             if (mbDecomposing) //guard against infinite recurse
                 return;
 
-            if(Display_none == getDisplay())
+            if(Display::None == getDisplay())
             {
                 return;
             }
@@ -516,7 +516,7 @@ namespace svgio::svgreader
             {
                 SvgNode* pCandidate = rChildren[a].get();
 
-                if(pCandidate && Display_none != pCandidate->getDisplay())
+                if(pCandidate && Display::None != pCandidate->getDisplay())
                 {
                     const auto& rGrandChildren = pCandidate->getChildren();
                     const SvgStyleAttributes* pChildStyles = pCandidate->getSvgStyleAttributes();
@@ -664,7 +664,7 @@ namespace svgio::svgreader
 
         XmlSpace SvgNode::getXmlSpace() const
         {
-            if(maXmlSpace != XmlSpace_notset)
+            if(maXmlSpace != XmlSpace::NotSet)
             {
                 return maXmlSpace;
             }
@@ -674,8 +674,8 @@ namespace svgio::svgreader
                 return getParent()->getXmlSpace();
             }
 
-            // default is XmlSpace_default
-            return XmlSpace_default;
+            // default is XmlSpace::Default
+            return XmlSpace::Default;
         }
 
         void SvgNode::accept(Visitor & rVisitor)

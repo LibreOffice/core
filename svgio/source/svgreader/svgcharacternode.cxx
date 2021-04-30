@@ -524,7 +524,7 @@ namespace svgio::svgreader
 
         void SvgCharacterNode::whiteSpaceHandling()
         {
-            if(XmlSpace_default == getXmlSpace())
+            if (XmlSpace::Default == getXmlSpace())
             {
                 maText = whiteSpaceHandlingDefault(maText);
             }

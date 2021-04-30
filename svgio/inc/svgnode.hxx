@@ -40,34 +40,34 @@ namespace svgio::svgreader
 
 namespace svgio::svgreader
     {
-        enum XmlSpace
+        enum class XmlSpace
         {
-            XmlSpace_notset,
-            XmlSpace_default,
-            XmlSpace_preserve
+            NotSet,
+            Default,
+            Preserve
         };
 
         // display property (see SVG 1.1. 11.5), not inheritable
-        enum Display // #i121656#
+        enum class Display // #i121656#
         {
-            Display_inline, // the default
-            Display_block,
-            Display_list_item,
-            Display_run_in,
-            Display_compact,
-            Display_marker,
-            Display_table,
-            Display_inline_table,
-            Display_table_row_group,
-            Display_table_header_group,
-            Display_table_footer_group,
-            Display_table_row,
-            Display_table_column_group,
-            Display_table_column,
-            Display_table_cell,
-            Display_table_caption,
-            Display_none,
-            Display_inherit
+            Inline, // the default
+            Block,
+            ListItem,
+            RunIn,
+            Compact,
+            Marker,
+            Table,
+            InlineTable,
+            TableRowGroup,
+            TableHeaderGroup,
+            TableFooterGroup,
+            TableRow,
+            TableColumnGroup,
+            TableColumn,
+            TableCell,
+            TableCaption,
+            None,
+            Inherit
         };
 
         // helper to convert a string associated with a token of type SVGTokenDisplay

@@ -131,7 +131,7 @@ namespace svgio::svgreader
                 // decompose to primitives
                 for(std::unique_ptr<SvgNode> const & pCandidate : pSvgDocHdl->getSvgDocument().getSvgNodeVector())
                 {
-                    if(Display_none != pCandidate->getDisplay())
+                    if (Display::None != pCandidate->getDisplay())
                     {
                         pCandidate->decomposeSvgNode(aRetval, false);
                     }
@@ -160,7 +160,7 @@ namespace svgio::svgreader
             // decompose to primitives
             for (std::unique_ptr<SvgNode> const & pCandidate : pSvgDocHdl->getSvgDocument().getSvgNodeVector())
             {
-                if (Display_none != pCandidate->getDisplay())
+                if (Display::None != pCandidate->getDisplay())
                 {
                     mpVisitor = std::make_shared<SvgDrawVisitor>();
                     pCandidate->accept(*mpVisitor);
