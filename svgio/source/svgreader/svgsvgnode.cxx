@@ -233,7 +233,7 @@ namespace svgio::svgreader
                         // take absolute value or cumulate percentage
                         if (pParentSvgSvgNode->getWidth().isSet())
                         {
-                            if (Unit_percent == pParentSvgSvgNode->getWidth().getUnit())
+                            if (SvgUnit::percent == pParentSvgSvgNode->getWidth().getUnit())
                             {
                                 fPercentage *= pParentSvgSvgNode->getWidth().getNumber() * 0.01;
                             }
@@ -275,7 +275,7 @@ namespace svgio::svgreader
                         // take absolute value or cumulate percentage
                         if (pParentSvgSvgNode->getHeight().isSet())
                         {
-                            if (Unit_percent == pParentSvgSvgNode->getHeight().getUnit())
+                            if (SvgUnit::percent == pParentSvgSvgNode->getHeight().getUnit())
                             {
                                 fPercentage *= pParentSvgSvgNode->getHeight().getNumber() * 0.01;
                             }
@@ -327,17 +327,17 @@ namespace svgio::svgreader
 
                     // If width or height is not provided, the default 100% is used, see SVG 1.1 section 5.1.2
                     // value 0.0 here is only to initialize variable
-                    bool bWidthIsAbsolute(getWidth().isSet() && Unit_percent != getWidth().getUnit());
+                    bool bWidthIsAbsolute(getWidth().isSet() && SvgUnit::percent != getWidth().getUnit());
                     double fW( bWidthIsAbsolute ? getWidth().solveNonPercentage(*this) : 0.0);
 
-                    bool bHeightIsAbsolute(getHeight().isSet() && Unit_percent != getHeight().getUnit());
+                    bool bHeightIsAbsolute(getHeight().isSet() && SvgUnit::percent != getHeight().getUnit());
                     double fH( bHeightIsAbsolute ? getHeight().solveNonPercentage(*this) : 0.0);
 
                     // If x or y not provided, then default 0.0 is used, see SVG 1.1 Section 5.1.2
-                    bool bXIsAbsolute((getX().isSet() && Unit_percent != getX().getUnit()) || !getX().isSet());
+                    bool bXIsAbsolute((getX().isSet() && SvgUnit::percent != getX().getUnit()) || !getX().isSet());
                     double fX( bXIsAbsolute && getX().isSet() ? getX().solveNonPercentage(*this) : 0.0);
 
-                    bool bYIsAbsolute((getY().isSet() && Unit_percent != getY().getUnit()) || !getY().isSet());
+                    bool bYIsAbsolute((getY().isSet() && SvgUnit::percent != getY().getUnit()) || !getY().isSet());
                     double fY( bYIsAbsolute && getY().isSet() ? getY().solveNonPercentage(*this) : 0.0);
 
                     if ( !bXIsAbsolute || !bWidthIsAbsolute)
@@ -428,7 +428,7 @@ namespace svgio::svgreader
                                 // create mapping
                                 // #i122610 SVG 1.1 defines in section 5.1.2 that if the attribute preserveAspectRatio is not specified,
                                 // then the effect is as if a value of 'xMidYMid meet' were specified.
-                                SvgAspectRatio aRatioDefault(Align_xMidYMid,true);
+                                SvgAspectRatio aRatioDefault(SvgAlign::xMidYMid,true);
                                 const SvgAspectRatio& rRatio = getSvgAspectRatio().isSet()? getSvgAspectRatio() : aRatioDefault;
 
                                 // let mapping be created from SvgAspectRatio
@@ -511,8 +511,8 @@ namespace svgio::svgreader
                                 // or by the width and height of the viewBox, if svg width or svg height is relative.
                                 // see SVG 1.1 section 7.12
                                 bool bNeedsMapping(true);
-                                const bool bWidthIsAbsolute(getWidth().isSet() && Unit_percent != getWidth().getUnit());
-                                const bool bHeightIsAbsolute(getHeight().isSet() && Unit_percent != getHeight().getUnit());
+                                const bool bWidthIsAbsolute(getWidth().isSet() && SvgUnit::percent != getWidth().getUnit());
+                                const bool bHeightIsAbsolute(getHeight().isSet() && SvgUnit::percent != getHeight().getUnit());
                                 const double fViewBoxRatio(fViewBoxWidth/fViewBoxHeight);
                                 if(bWidthIsAbsolute && bHeightIsAbsolute)
                                 {
@@ -562,7 +562,7 @@ namespace svgio::svgreader
                                     // create mapping
                                     // SVG 1.1 defines in section 5.1.2 that if the attribute preserveAspectRatio is not specified,
                                     // then the effect is as if a value of 'xMidYMid meet' were specified.
-                                    SvgAspectRatio aRatioDefault(Align_xMidYMid,true);
+                                    SvgAspectRatio aRatioDefault(SvgAlign::xMidYMid, true);
                                     const SvgAspectRatio& rRatio = getSvgAspectRatio().isSet()? getSvgAspectRatio() : aRatioDefault;
 
                                     basegfx::B2DHomMatrix aViewBoxMapping = rRatio.createMapping(aSvgCanvasRange, *pBox);
@@ -581,8 +581,8 @@ namespace svgio::svgreader
                         }
                         else // no viewbox => no mapping
                         {
-                            const bool bWidthIsAbsolute(getWidth().isSet() && Unit_percent != getWidth().getUnit());
-                            const bool bHeightIsAbsolute(getHeight().isSet() && Unit_percent != getHeight().getUnit());
+                            const bool bWidthIsAbsolute(getWidth().isSet() && SvgUnit::percent != getWidth().getUnit());
+                            const bool bHeightIsAbsolute(getHeight().isSet() && SvgUnit::percent != getHeight().getUnit());
                             if (bWidthIsAbsolute && bHeightIsAbsolute)
                             {
                                 fW =getWidth().solveNonPercentage(*this);
@@ -738,16 +738,16 @@ namespace svgio::svgreader
                     {
                     // If width or height is not provided, the default 100% is used, see SVG 1.1 section 5.1.2
                     // value 0.0 here is only to initialize variable
-                    bool bWidthIsAbsolute(getWidth().isSet() && Unit_percent != getWidth().getUnit());
+                    bool bWidthIsAbsolute(getWidth().isSet() && SvgUnit::percent != getWidth().getUnit());
                     double fW( bWidthIsAbsolute ? getWidth().solveNonPercentage(*this) : 0.0);
-                    bool bHeightIsAbsolute(getHeight().isSet() && Unit_percent != getHeight().getUnit());
+                    bool bHeightIsAbsolute(getHeight().isSet() && SvgUnit::percent != getHeight().getUnit());
                     double fH( bHeightIsAbsolute ? getHeight().solveNonPercentage(*this) : 0.0);
 
                     // If x or y not provided, then default 0.0 is used, see SVG 1.1 Section 5.1.2
-                    bool bXIsAbsolute((getX().isSet() && Unit_percent != getX().getUnit()) || !getX().isSet());
+                    bool bXIsAbsolute((getX().isSet() && SvgUnit::percent != getX().getUnit()) || !getX().isSet());
                     double fX( bXIsAbsolute && getX().isSet() ? getX().solveNonPercentage(*this) : 0.0);
 
-                    bool bYIsAbsolute((getY().isSet() && Unit_percent != getY().getUnit()) || !getY().isSet());
+                    bool bYIsAbsolute((getY().isSet() && SvgUnit::percent != getY().getUnit()) || !getY().isSet());
                     double fY( bYIsAbsolute && getY().isSet() ? getY().solveNonPercentage(*this) : 0.0);
 
                     if (bXIsAbsolute && bYIsAbsolute && bWidthIsAbsolute && bHeightIsAbsolute)
@@ -808,8 +808,8 @@ namespace svgio::svgreader
                     // If width or height is not provided, the default would be 100%, see SVG 1.1 section 5.1.2
                     // But here it cannot be resolved and no fallback exists.
                     // SVG 1.1 defines in section 5.1.2 that x,y has no meaning for the outermost SVG element.
-                    bool bWidthIsAbsolute(getWidth().isSet() && Unit_percent != getWidth().getUnit());
-                    bool bHeightIsAbsolute(getHeight().isSet() && Unit_percent != getHeight().getUnit());
+                    bool bWidthIsAbsolute(getWidth().isSet() && SvgUnit::percent != getWidth().getUnit());
+                    bool bHeightIsAbsolute(getHeight().isSet() && SvgUnit::percent != getHeight().getUnit());
                     if (bWidthIsAbsolute && bHeightIsAbsolute)
                     {
                         double fW( getWidth().solveNonPercentage(*this) );

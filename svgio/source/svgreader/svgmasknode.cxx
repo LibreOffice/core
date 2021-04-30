@@ -34,12 +34,12 @@ namespace svgio::svgreader
             SvgNode* pParent)
         :   SvgNode(SVGToken::Mask, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            maX(SvgNumber(-10.0, Unit_percent, true)),
-            maY(SvgNumber(-10.0, Unit_percent, true)),
-            maWidth(SvgNumber(120.0, Unit_percent, true)),
-            maHeight(SvgNumber(120.0, Unit_percent, true)),
-            maMaskUnits(objectBoundingBox),
-            maMaskContentUnits(userSpaceOnUse)
+            maX(SvgNumber(-10.0, SvgUnit::percent, true)),
+            maY(SvgNumber(-10.0, SvgUnit::percent, true)),
+            maWidth(SvgNumber(120.0, SvgUnit::percent, true)),
+            maHeight(SvgNumber(120.0, SvgUnit::percent, true)),
+            maMaskUnits(SvgUnits::objectBoundingBox),
+            maMaskContentUnits(SvgUnits::userSpaceOnUse)
         {
         }
 
@@ -130,11 +130,11 @@ namespace svgio::svgreader
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse))
                         {
-                            setMaskUnits(userSpaceOnUse);
+                            setMaskUnits(SvgUnits::userSpaceOnUse);
                         }
                         else if(aContent.match(commonStrings::aStrObjectBoundingBox))
                         {
-                            setMaskUnits(objectBoundingBox);
+                            setMaskUnits(SvgUnits::objectBoundingBox);
                         }
                     }
                     break;
@@ -145,11 +145,11 @@ namespace svgio::svgreader
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse))
                         {
-                            setMaskContentUnits(userSpaceOnUse);
+                            setMaskContentUnits(SvgUnits::userSpaceOnUse);
                         }
                         else if(aContent.match(commonStrings::aStrObjectBoundingBox))
                         {
-                            setMaskContentUnits(objectBoundingBox);
+                            setMaskContentUnits(SvgUnits::objectBoundingBox);
                         }
                     }
                     break;
@@ -212,13 +212,13 @@ namespace svgio::svgreader
                     // create OffscreenBufferRange
                     basegfx::B2DRange aOffscreenBufferRange;
 
-                    if(objectBoundingBox == maMaskUnits)
+                    if (SvgUnits::objectBoundingBox == maMaskUnits)
                     {
                         // fractions or percentages of the bounding box of the element to which the mask is applied
-                        const double fX(Unit_percent == getX().getUnit() ? getX().getNumber() * 0.01 : getX().getNumber());
-                        const double fY(Unit_percent == getY().getUnit() ? getY().getNumber() * 0.01 : getY().getNumber());
-                        const double fW(Unit_percent == getWidth().getUnit() ? getWidth().getNumber() * 0.01 : getWidth().getNumber());
-                        const double fH(Unit_percent == getHeight().getUnit() ? getHeight().getNumber() * 0.01 : getHeight().getNumber());
+                        const double fX(SvgUnit::percent == getX().getUnit() ? getX().getNumber() * 0.01 : getX().getNumber());
+                        const double fY(SvgUnit::percent == getY().getUnit() ? getY().getNumber() * 0.01 : getY().getNumber());
+                        const double fW(SvgUnit::percent == getWidth().getUnit() ? getWidth().getNumber() * 0.01 : getWidth().getNumber());
+                        const double fH(SvgUnit::percent == getHeight().getUnit() ? getHeight().getNumber() * 0.01 : getHeight().getNumber());
 
                         aOffscreenBufferRange = basegfx::B2DRange(
                             aContentRange.getMinX() + (fX * fContentWidth),
@@ -228,17 +228,17 @@ namespace svgio::svgreader
                     }
                     else
                     {
-                        const double fX(getX().isSet() ? getX().solve(*this, xcoordinate) : 0.0);
-                        const double fY(getY().isSet() ? getY().solve(*this, ycoordinate) : 0.0);
+                        const double fX(getX().isSet() ? getX().solve(*this, NumberType::xcoordinate) : 0.0);
+                        const double fY(getY().isSet() ? getY().solve(*this, NumberType::ycoordinate) : 0.0);
 
                         aOffscreenBufferRange = basegfx::B2DRange(
                             fX,
                             fY,
-                            fX + (getWidth().isSet() ? getWidth().solve(*this, xcoordinate) : 0.0),
-                            fY + (getHeight().isSet() ? getHeight().solve(*this, ycoordinate) : 0.0));
+                            fX + (getWidth().isSet() ? getWidth().solve(*this, NumberType::xcoordinate) : 0.0),
+                            fY + (getHeight().isSet() ? getHeight().solve(*this, NumberType::ycoordinate) : 0.0));
                     }
 
-                    if(objectBoundingBox == maMaskContentUnits)
+                    if (SvgUnits::objectBoundingBox == maMaskContentUnits)
                     {
                         // mask is object-relative, embed in content transformation
                         const drawinglayer::primitive2d::Primitive2DReference xTransform(

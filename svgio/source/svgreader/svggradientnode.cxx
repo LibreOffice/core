@@ -46,7 +46,7 @@ namespace svgio::svgreader
             maR(),
             maFx(),
             maFy(),
-            maGradientUnits(objectBoundingBox),
+            maGradientUnits(SvgUnits::objectBoundingBox),
             maSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Pad),
             mbResolvingLink(false),
             maXLink(),
@@ -182,11 +182,11 @@ namespace svgio::svgreader
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse))
                         {
-                            setGradientUnits(userSpaceOnUse);
+                            setGradientUnits(SvgUnits::userSpaceOnUse);
                         }
                         else if(aContent.match(commonStrings::aStrObjectBoundingBox))
                         {
-                            setGradientUnits(objectBoundingBox);
+                            setGradientUnits(SvgUnits::objectBoundingBox);
                         }
                     }
                     break;
@@ -268,7 +268,7 @@ namespace svgio::svgreader
                             const SvgNumber aOffset(pCandidate->getOffset());
                             double fOffset(0.0);
 
-                            if(Unit_percent == aOffset.getUnit())
+                            if(SvgUnit::percent == aOffset.getUnit())
                             {
                                 // percent is not relative to distances in ColorStop context, solve locally
                                 fOffset = aOffset.getNumber() * 0.01;
@@ -321,7 +321,7 @@ namespace svgio::svgreader
             }
 
             // default is 0%
-            return SvgNumber(0.0, Unit_percent);
+            return SvgNumber(0.0, SvgUnit::percent);
         }
 
         SvgNumber SvgGradientNode::getY1() const
@@ -342,7 +342,7 @@ namespace svgio::svgreader
             }
 
             // default is 0%
-            return SvgNumber(0.0, Unit_percent);
+            return SvgNumber(0.0, SvgUnit::percent);
         }
 
         SvgNumber SvgGradientNode::getX2() const
@@ -363,7 +363,7 @@ namespace svgio::svgreader
             }
 
             // default is 100%
-            return SvgNumber(100.0, Unit_percent);
+            return SvgNumber(100.0, SvgUnit::percent);
         }
 
         SvgNumber SvgGradientNode::getY2() const
@@ -384,7 +384,7 @@ namespace svgio::svgreader
             }
 
             // default is 0%
-            return SvgNumber(0.0, Unit_percent);
+            return SvgNumber(0.0, SvgUnit::percent);
         }
 
         SvgNumber SvgGradientNode::getCx() const
@@ -405,7 +405,7 @@ namespace svgio::svgreader
             }
 
             // default is 50%
-            return SvgNumber(50.0, Unit_percent);
+            return SvgNumber(50.0, SvgUnit::percent);
         }
 
         SvgNumber SvgGradientNode::getCy() const
@@ -426,7 +426,7 @@ namespace svgio::svgreader
             }
 
             // default is 50%
-            return SvgNumber(50.0, Unit_percent);
+            return SvgNumber(50.0, SvgUnit::percent);
         }
 
         SvgNumber SvgGradientNode::getR() const
@@ -447,7 +447,7 @@ namespace svgio::svgreader
             }
 
             // default is 50%
-            return SvgNumber(50.0, Unit_percent);
+            return SvgNumber(50.0, SvgUnit::percent);
         }
 
         const SvgNumber* SvgGradientNode::getFx() const

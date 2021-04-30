@@ -160,21 +160,21 @@ namespace svgio::svgreader
             if(!(pStyle && getWidth().isSet() && getHeight().isSet()))
                 return;
 
-            const double fWidth(getWidth().solve(*this, xcoordinate));
-            const double fHeight(getHeight().solve(*this, ycoordinate));
+            const double fWidth(getWidth().solve(*this, NumberType::xcoordinate));
+            const double fHeight(getHeight().solve(*this, NumberType::ycoordinate));
 
             if(fWidth <= 0.0 || fHeight <= 0.0)
                 return;
 
-            const double fX(getX().isSet() ? getX().solve(*this, xcoordinate) : 0.0);
-            const double fY(getY().isSet() ? getY().solve(*this, ycoordinate) : 0.0);
+            const double fX(getX().isSet() ? getX().solve(*this, NumberType::xcoordinate) : 0.0);
+            const double fY(getY().isSet() ? getY().solve(*this, NumberType::ycoordinate) : 0.0);
             const basegfx::B2DRange aRange(fX, fY, fX + fWidth, fY + fHeight);
             basegfx::B2DPolygon aPath;
 
             if(getRx().isSet() || getRy().isSet())
             {
-                double frX(getRx().isSet() ? getRx().solve(*this, xcoordinate) : 0.0);
-                double frY(getRy().isSet() ? getRy().solve(*this, ycoordinate) : 0.0);
+                double frX(getRx().isSet() ? getRx().solve(*this, NumberType::xcoordinate) : 0.0);
+                double frY(getRy().isSet() ? getRy().solve(*this, NumberType::ycoordinate) : 0.0);
 
                 frX = std::max(0.0, frX);
                 frY = std::max(0.0, frY);

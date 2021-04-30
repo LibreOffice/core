@@ -385,7 +385,7 @@ namespace svgio::svgreader
 
             if(getStartOffset().isSet())
             {
-                if(Unit_percent == getStartOffset().getUnit())
+                if (SvgUnit::percent == getStartOffset().getUnit())
                 {
                     // percent are relative to path length
                     fPosition = getStartOffset().getNumber() * 0.01 * fBasegfxPathLength;

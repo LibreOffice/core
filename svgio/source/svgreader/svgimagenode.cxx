@@ -193,8 +193,8 @@ namespace svgio::svgreader
             if(!(pStyle && getWidth().isSet() && getHeight().isSet()))
                 return;
 
-            const double fWidth(getWidth().solve(*this, xcoordinate));
-            const double fHeight(getHeight().solve(*this, ycoordinate));
+            const double fWidth(getWidth().solve(*this, NumberType::xcoordinate));
+            const double fHeight(getHeight().solve(*this, NumberType::ycoordinate));
 
             if(fWidth <= 0.0 || fHeight <= 0.0)
                 return;
@@ -203,8 +203,8 @@ namespace svgio::svgreader
             drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
 
             // prepare Target and ViewBox for evtl. AspectRatio mappings
-            const double fX(getX().isSet() ? getX().solve(*this, xcoordinate) : 0.0);
-            const double fY(getY().isSet() ? getY().solve(*this, ycoordinate) : 0.0);
+            const double fX(getX().isSet() ? getX().solve(*this, NumberType::xcoordinate) : 0.0);
+            const double fY(getY().isSet() ? getY().solve(*this, NumberType::ycoordinate) : 0.0);
             const basegfx::B2DRange aTarget(fX, fY, fX + fWidth, fY + fHeight);
             basegfx::B2DRange aViewBox(aTarget);
 

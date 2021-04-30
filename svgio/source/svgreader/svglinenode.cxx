@@ -125,11 +125,11 @@ namespace svgio::svgreader
                 return;
 
             const basegfx::B2DPoint X(
-                getX1().isSet() ? getX1().solve(*this, xcoordinate) : 0.0,
-                getY1().isSet() ? getY1().solve(*this, ycoordinate) : 0.0);
+                getX1().isSet() ? getX1().solve(*this, NumberType::xcoordinate) : 0.0,
+                getY1().isSet() ? getY1().solve(*this, NumberType::ycoordinate) : 0.0);
             const basegfx::B2DPoint Y(
-                getX2().isSet() ? getX2().solve(*this, xcoordinate) : 0.0,
-                getY2().isSet() ? getY2().solve(*this, ycoordinate) : 0.0);
+                getX2().isSet() ? getX2().solve(*this, NumberType::xcoordinate) : 0.0,
+                getY2().isSet() ? getY2().solve(*this, NumberType::ycoordinate) : 0.0);
 
             // X and Y may be equal, do not drop them. Markers or linecaps 'round' and 'square'
             // need to be drawn for zero-length lines too.

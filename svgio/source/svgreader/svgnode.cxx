@@ -612,7 +612,7 @@ namespace svgio::svgreader
         double SvgNode::getCurrentFontSize() const
         {
             if(getSvgStyleAttributes())
-                return getSvgStyleAttributes()->getFontSizeNumber().solve(*this, xcoordinate);
+                return getSvgStyleAttributes()->getFontSizeNumber().solve(*this, NumberType::xcoordinate);
 
             return getCurrentFontSizeInherited();
         }
@@ -633,7 +633,7 @@ namespace svgio::svgreader
         {
             if(getSvgStyleAttributes())
                 // for XHeight, use FontSize currently
-                return getSvgStyleAttributes()->getFontSizeNumber().solve(*this, ycoordinate);
+                return getSvgStyleAttributes()->getFontSizeNumber().solve(*this, NumberType::ycoordinate);
 
             return getCurrentXHeightInherited();
         }

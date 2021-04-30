@@ -44,13 +44,13 @@ namespace svgio::svgreader
             static constexpr OUStringLiteral aStrEvenOdd = u"evenodd";
         };
 
-        enum SvgUnits
+        enum class SvgUnits
         {
             userSpaceOnUse,
             objectBoundingBox
         };
 
-        enum NumberType
+        enum class NumberType
         {
             xcoordinate,
             ycoordinate,
@@ -68,20 +68,20 @@ namespace svgio::svgreader
             virtual double getCurrentXHeightInherited() const = 0;
         };
 
-        enum SvgUnit
+        enum class SvgUnit
         {
-            Unit_em = 0,    // relative to current font size
-            Unit_ex,        // relative to current x-height
+            em = 0,    // relative to current font size
+            ex,        // relative to current x-height
 
-            Unit_px,        // 'user unit'
-            Unit_pt,        // points, 1.25 px
-            Unit_pc,        // 15.0 px
-            Unit_cm,        // 35.43307 px
-            Unit_mm,        // 3.543307 px
-            Unit_in,        // 90 px
+            px,        // 'user unit'
+            pt,        // points, 1.25 px
+            pc,        // 15.0 px
+            cm,        // 35.43307 px
+            mm,        // 3.543307 px
+            in,        // 90 px
 
-            Unit_percent,   // relative to range
-            Unit_none       // for stroke-miterlimit, which has no unit
+            percent,   // relative to range
+            none       // for stroke-miterlimit, which has no unit
         };
 
         class SvgNumber
@@ -95,12 +95,12 @@ namespace svgio::svgreader
         public:
             SvgNumber()
             :   mfNumber(0.0),
-                meUnit(Unit_px),
+                meUnit(SvgUnit::px),
                 mbSet(false)
             {
             }
 
-            SvgNumber(double fNum, SvgUnit aSvgUnit = Unit_px, bool bSet = true)
+            SvgNumber(double fNum, SvgUnit aSvgUnit = SvgUnit::px, bool bSet = true)
             :   mfNumber(fNum),
                 meUnit(aSvgUnit),
                 mbSet(bSet)
@@ -124,28 +124,28 @@ namespace svgio::svgreader
 
             bool isPositive() const;
 
-            // Only usable in cases, when the unit is not Unit_percent, otherwise use method solve
+            // Only usable in cases, when the unit is not SvgUnit::percent, otherwise use method solve
             double solveNonPercentage(const InfoProvider& rInfoProvider) const;
 
-            double solve(const InfoProvider& rInfoProvider, NumberType aNumberType = length) const;
+            double solve(const InfoProvider& rInfoProvider, NumberType aNumberType = NumberType::length) const;
 
 
         };
 
         typedef ::std::vector< SvgNumber > SvgNumberVector;
 
-        enum SvgAlign
+        enum class SvgAlign
         {
-            Align_none,
-            Align_xMinYMin,
-            Align_xMidYMin,
-            Align_xMaxYMin,
-            Align_xMinYMid,
-            Align_xMidYMid, // default
-            Align_xMaxYMid,
-            Align_xMinYMax,
-            Align_xMidYMax,
-            Align_xMaxYMax
+            none,
+            xMinYMin,
+            xMidYMin,
+            xMaxYMin,
+            xMinYMid,
+            xMidYMid, // default
+            xMaxYMid,
+            xMinYMax,
+            xMidYMax,
+            xMaxYMax
         };
 
         class SvgAspectRatio
@@ -158,7 +158,7 @@ namespace svgio::svgreader
 
         public:
             SvgAspectRatio()
-            :   maSvgAlign(Align_xMidYMid),
+            :   maSvgAlign(SvgAlign::xMidYMid),
                 mbMeetOrSlice(true),
                 mbSet(false)
             {
