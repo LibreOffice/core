@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <hintids.hxx>
 #include <editeng/protitem.hxx>
 #include <osl/diagnose.h>
@@ -1385,6 +1387,7 @@ void SwContentNode::MakeFramesForAdjacentContentNode(SwContentNode& rNode)
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for next paragraph will change
         // and relation CONTENT_FLOWS_TO for previous paragraph will change.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         if ( pNew->IsTextFrame() )
         {
             SwViewShell* pViewShell( pNew->getRootFrame()->GetCurrShell() );
@@ -1398,6 +1401,7 @@ void SwContentNode::MakeFramesForAdjacentContentNode(SwContentNode& rNode)
                             pPrev ? pPrev->DynCastTextFrame() : nullptr );
             }
         }
+#endif
     }
 }
 
@@ -1482,6 +1486,7 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for current next paragraph will change
         // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
             SwViewShell* pViewShell( pFrame->getRootFrame()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
@@ -1492,6 +1497,7 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                             pNext ? pNext->DynCastTextFrame() : nullptr,
                             pPrev ? pPrev->DynCastTextFrame() : nullptr );
             }
+#endif
         }
 
         if( pFrame->IsFollow() )

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <sal/config.h>
 
 #include <cstddef>
@@ -1397,15 +1399,18 @@ bool SwAnnotationWin::IsScrollbarVisible() const
 
 void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     const bool bAnchorChanged = mpAnchorFrame != rSidebarItem.maLayoutInfo.mpAnchorFrame;
     if ( bAnchorChanged )
     {
         mrMgr.DisconnectSidebarWinFromFrame( *mpAnchorFrame, *this );
     }
+#endif
 
     mrSidebarItem = rSidebarItem;
     mpAnchorFrame = mrSidebarItem.maLayoutInfo.mpAnchorFrame;
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (mxSidebarWinAccessible)
         mxSidebarWinAccessible->ChangeSidebarItem( mrSidebarItem );
 
@@ -1415,10 +1420,12 @@ void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
                                       mrSidebarItem.GetFormatField(),
                                       *this );
     }
+#endif
 }
 
 css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAccessible()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     // This is rather dodgy code. Normally in CreateAccessible, if we want a custom
     // object, we return a custom object, but we do no override the default toolkit
     // window peer.
@@ -1426,6 +1433,7 @@ css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAc
         mxSidebarWinAccessible = new SidebarWinAccessible( *this,
                                                           mrView.GetWrtShell(),
                                                           mrSidebarItem );
+#endif
     return mxSidebarWinAccessible;
 }
 

@@ -18,6 +18,8 @@
  */
 
 #include <officecfg/Office/Common.hxx>
+#include <config_wasm_strip.h>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>
@@ -251,10 +253,12 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
         UISizeNotify();
         // tdf#101464 print preview may generate events if another view shell
         // performs layout...
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         if (IsPreview() && Imp()->IsAccessible())
         {
             Imp()->FireAccessibleEvents();
         }
+#endif
         return;
     }
 
@@ -459,8 +463,10 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
     UISizeNotify();
     ++mnStartAction;
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if( Imp()->IsAccessible() )
         Imp()->FireAccessibleEvents();
+#endif
 }
 
 void SwViewShell::ImplStartAction()
@@ -1334,8 +1340,10 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
     if ( !bScrolled && pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         pPostItMgr->CorrectPositions();
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if( Imp()->IsAccessible() )
         Imp()->UpdateAccessible();
+#endif
 }
 
 bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const tools::Rectangle *pRect )
@@ -2484,8 +2492,10 @@ void SwViewShell::SetReadonlyOption(bool bSet)
     }
     else if ( GetWin() )
         GetWin()->Invalidate();
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if( Imp()->IsAccessible() )
         Imp()->InvalidateAccessibleEditableState( false );
+#endif
 }
 
 void  SwViewShell::SetPDFExportOption(bool bSet)
@@ -2538,6 +2548,7 @@ bool SwViewShell::IsNewLayout() const
     return GetLayout()->IsNewLayout();
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 uno::Reference< css::accessibility::XAccessible > SwViewShell::CreateAccessible()
 {
     uno::Reference< css::accessibility::XAccessible > xAcc;
@@ -2641,6 +2652,7 @@ void SwViewShell::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAcc
         mpOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
     }
 }
+#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
 
 ShellResource* SwViewShell::GetShellRes()
 {

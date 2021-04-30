@@ -27,12 +27,6 @@
       constructor="com_sun_star_comp_framework_AddonsToolBarFactory_get_implementation">
     <service name="com.sun.star.ui.ToolBarFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.AutoRecovery"
-      constructor="com_sun_star_comp_framework_AutoRecovery_get_implementation"
-      single-instance="true">
-    <service name="com.sun.star.frame.AutoRecovery"/>
-    <singleton name="com.sun.star.frame.theAutoRecovery"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.ControlMenuController"
       constructor="com_sun_star_comp_framework_ControlMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>

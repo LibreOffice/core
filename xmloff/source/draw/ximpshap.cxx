@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <cassert>
 
 #include <sal/log.hxx>
@@ -2447,7 +2449,13 @@ void SdXMLChartShapeContext::startFastElement (sal_Int32 nElement,
             uno::Reference< frame::XModel > xChartModel;
             if( aAny >>= xChartModel )
             {
+#ifndef ENABLE_WASM_STRIP_CHART
+                // WASM_CHART change
+                // TODO: Maybe use SdXMLGraphicObjectShapeContext completely instead
+                // or try to create as mbIsPlaceholder object adding a Chart visuailzation
+                // that should be available somehow
                 mxChartContext.set( GetImport().GetChartImport()->CreateChartContext( GetImport(), xChartModel ) );
+#endif
             }
         }
     }

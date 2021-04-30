@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <svl/itemiter.hxx>
 #include <vcl/imap.hxx>
 #include <tools/helpers.hxx>
@@ -262,6 +264,7 @@ void SwFlyFrame::DestroyImpl()
     // For frames bound as char or frames that don't have an anchor we have
     // to do that ourselves. For any other frame the call RemoveFly at the
     // anchor will do that.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if( IsAccessibleFrame() && GetFormat() && (IsFlyInContentFrame() || !GetAnchorFrame()) )
     {
         SwRootFrame *pRootFrame = getRootFrame();
@@ -276,6 +279,7 @@ void SwFlyFrame::DestroyImpl()
             }
         }
     }
+#endif
 
     if( GetFormat() && !GetFormat()->GetDoc()->IsInDtor() )
     {
@@ -485,6 +489,7 @@ void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
     }
 
     // invalidate accessible relation set (accessibility wrapper)
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     SwViewShell* pSh = pMaster->getRootFrame()->GetCurrShell();
     if( pSh )
     {
@@ -492,6 +497,7 @@ void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
         if( pLayout && pLayout->IsAnyShellAccessible() )
             pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
     }
+#endif
 }
 
 void SwFlyFrame::UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
@@ -531,6 +537,7 @@ void SwFlyFrame::UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
                   pFollow->GetFormat()->GetDoc(), ++nIndex );
 
     // invalidate accessible relation set (accessibility wrapper)
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     SwViewShell* pSh = pMaster->getRootFrame()->GetCurrShell();
     if( pSh )
     {
@@ -538,6 +545,7 @@ void SwFlyFrame::UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
         if( pLayout && pLayout->IsAnyShellAccessible() )
             pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
     }
+#endif
 }
 
 SwFlyFrame *SwFlyFrame::FindChainNeighbour( SwFrameFormat const &rChain, SwFrame *pAnch )
@@ -794,12 +802,14 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 const SvxProtectItem *pP = static_cast<const SvxProtectItem*>(pNew);
                 GetVirtDrawObj()->SetMoveProtect( pP->IsPosProtected()   );
                 GetVirtDrawObj()->SetResizeProtect( pP->IsSizeProtected() );
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
                 if( pSh )
                 {
                     SwRootFrame* pLayout = getRootFrame();
                     if( pLayout && pLayout->IsAnyShellAccessible() )
                         pSh->Imp()->InvalidateAccessibleEditableState( true, this );
                 }
+#endif
             }
             break;
         case RES_COL:
@@ -977,6 +987,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                                     rIDDMA.GetHeavenId() :
                                     rIDDMA.GetHellId();
                 GetVirtDrawObj()->SetLayer( nId );
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
                 if( pSh )
                 {
                     SwRootFrame* pLayout = getRootFrame();
@@ -986,6 +997,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                         pSh->Imp()->AddAccessibleFrame( this );
                     }
                 }
+#endif
                 // #i28701# - perform reorder of object lists
                 // at anchor frame and at page frame.
                 rInvFlags |= SwFlyFrameInvFlags::UpdateObjInSortedList;
@@ -2204,6 +2216,7 @@ void SwFrame::RemoveFly( SwFlyFrame *pToRemove )
         pPage->RemoveFlyFromPage( pToRemove );
     }
     // #i73201#
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     else
     {
         if ( pToRemove->IsAccessibleFrame() &&
@@ -2221,6 +2234,7 @@ void SwFrame::RemoveFly( SwFlyFrame *pToRemove )
             }
         }
     }
+#endif
 
     m_pDrawObjs->Remove(*pToRemove);
     if (!m_pDrawObjs->size())
@@ -2302,6 +2316,7 @@ void SwFrame::AppendDrawObj( SwAnchoredObject& _rNewObj )
     }
 
     // Notify accessible layout.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     SwViewShell* pSh = getRootFrame()->GetCurrShell();
     if( pSh )
     {
@@ -2311,6 +2326,7 @@ void SwFrame::AppendDrawObj( SwAnchoredObject& _rNewObj )
             pSh->Imp()->AddAccessibleObj( _rNewObj.GetDrawObj() );
         }
     }
+#endif
 
     assert(!m_pDrawObjs || m_pDrawObjs->is_sorted());
 }
@@ -2318,6 +2334,7 @@ void SwFrame::AppendDrawObj( SwAnchoredObject& _rNewObj )
 void SwFrame::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
 {
     // Notify accessible layout.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     SwViewShell* pSh = getRootFrame()->GetCurrShell();
     if( pSh )
     {
@@ -2325,6 +2342,7 @@ void SwFrame::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
         if (pLayout && pLayout->IsAnyShellAccessible())
             pSh->Imp()->DisposeAccessibleObj(_rToRemoveObj.GetDrawObj(), false);
     }
+#endif
 
     // deregister from page frame
     SwPageFrame* pPage = _rToRemoveObj.GetPageFrame();

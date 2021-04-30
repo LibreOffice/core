@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -394,7 +396,9 @@ svx::SvxShowCharSetItem* SvxSearchCharSet::ImplGetItem( int _nPos )
     ItemsMap::iterator aFind = m_aItems.find(_nPos);
     if ( aFind == m_aItems.end() )
     {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         OSL_ENSURE(m_xAccessible.is(), "Who wants to create a child of my table without a parent?");
+#endif
         auto xItem = std::make_shared<svx::SvxShowCharSetItem>(*this,
             m_xAccessible.get(), sal::static_int_cast< sal_uInt16 >(_nPos));
         aFind = m_aItems.emplace(_nPos, xItem).first;
