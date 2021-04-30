@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f09cbf21_dcba660c",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T16:16:50Z",
+      "side": 1,
+      "message": "We possibly may try to use this to make this a useful test?\n\nカタカナ \u003d\u003e かたかな (this is \"Katakana\" in Katakana and Hiragana)\n\nInteresting, if this conversion would work.",
+      "revId": "b166f236fc05993f52d797a054fabad1044ae917",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "534ca748_a280115f",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T16:16:50Z",
+      "side": 1,
+      "message": "So this now would pass on all systems. We now don\u0027t get the thread encoding (that would be UTF-8 on most Linuxes), but instead we take the LibreOffice language (which is configured to be en-US for unit tests explicitly IIRC), and picks the encoding corresponding to MS codepage associated with that language - for en-US, it would be Win-1252, giving us 1-byte string. I suppose that we may even assert on the content of the byte string now. And add a comment here explaining these details.\n\nThis looks like a reasonable change for me. Using that \"system encoding\" (which on Windows means \"default encoding for non-Unicode applications\") in a different way is just meaningless here.",
+      "revId": "b166f236fc05993f52d797a054fabad1044ae917",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
