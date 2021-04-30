@@ -2023,6 +2023,10 @@ bool SwTextNode::CountWords( SwDocStat& rStat,
 
     if( nStt == nEnd && !bCountNumbering)
     {   // unnumbered empty node or empty selection
+        if (bCountAll)
+        {
+            SetWordCountDirty( false ); // reset flag to speed up DoIdleJob
+        }
         return false;
     }
 
@@ -2051,6 +2055,10 @@ bool SwTextNode::CountWords( SwDocStat& rStat,
 
     if (aExpandText.isEmpty() && !bCountNumbering)
     {
+        if (bCountAll)
+        {
+            SetWordCountDirty( false ); // reset flag to speed up DoIdleJob
+        }
         return false;
     }
 
