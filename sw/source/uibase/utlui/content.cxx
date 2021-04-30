@@ -91,7 +91,6 @@
 
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <ndtxt.hxx>
 #include <docfld.hxx>
 #include <txtfld.hxx>
 #include <expfld.hxx>
