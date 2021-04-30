@@ -380,11 +380,11 @@ void Test::ParseErrorDoubleSubsupscript()
 
 void Test::editUndoRedo()
 {
-    EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
+    EditEngine* rEditEngine = m_xDocShRef->GetEditEngine();
 
     OUString sStringOne("a under b");
     {
-        rEditEngine.SetText(0, sStringOne);
+        rEditEngine->SetText(0, sStringOne);
         m_xDocShRef->UpdateText();
         OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Strings must match", sFinalText, sStringOne);
@@ -392,7 +392,7 @@ void Test::editUndoRedo()
 
     {
         OUString sStringTwo("a over b");
-        rEditEngine.SetText(0, sStringTwo);
+        rEditEngine->SetText(0, sStringTwo);
         m_xDocShRef->UpdateText();
         OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Strings must match", sFinalText, sStringTwo);
@@ -423,9 +423,9 @@ void Test::editUndoRedo()
     }
 
     {
-        rEditEngine.SetText(0, OUString());
+        rEditEngine->SetText(0, OUString());
         m_xDocShRef->UpdateText();
-        rEditEngine.ClearModifyFlag();
+        rEditEngine->ClearModifyFlag();
         OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Must be empty", sFinalText.isEmpty());
     }
@@ -448,11 +448,11 @@ void Test::viewZoom()
 {
     sal_uInt16 nOrigZoom, nFinalZoom;
 
-    EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
+    EditEngine* rEditEngine = m_xDocShRef->GetEditEngine();
 
     {
         OUString sStringOne("a under b");
-        rEditEngine.SetText(0, sStringOne);
+        rEditEngine->SetText(0, sStringOne);
         m_xDocShRef->UpdateText();
         OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Strings must match", sFinalText, sStringOne);
