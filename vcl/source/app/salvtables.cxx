@@ -271,7 +271,12 @@ void SalInstanceWidget::set_can_focus(bool bCanFocus)
     m_xWidget->SetStyle(nStyle);
 }
 
-void SalInstanceWidget::grab_focus() { m_xWidget->GrabFocus(); }
+void SalInstanceWidget::grab_focus()
+{
+    if (has_focus())
+        return;
+    m_xWidget->GrabFocus();
+}
 
 bool SalInstanceWidget::has_focus() const { return m_xWidget->HasFocus(); }
 
