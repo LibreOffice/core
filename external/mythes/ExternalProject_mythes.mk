@@ -9,7 +9,9 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,mythes))
 
+ifneq ($(ENABLE_WASM_STRIP_HUNSPELL),TRUE)
 $(eval $(call gb_ExternalProject_use_external,mythes,hunspell))
+endif
 
 $(eval $(call gb_ExternalProject_register_targets,mythes,\
 	build \

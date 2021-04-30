@@ -18,6 +18,7 @@
  */
 
 #include <config_feature_desktop.h>
+#include <config_wasm_strip.h>
 
 #include <ctime>
 #include <rootfrm.hxx>
@@ -2390,8 +2391,10 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
 
     m_pImp->GetShell()->EnableSmooth( true );
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if( m_pImp->IsAccessible() )
         m_pImp->FireAccessibleEvents();
+#endif
 
     SAL_INFO("sw.idle", "SwLayIdle() return");
 

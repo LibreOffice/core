@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 #include <config_fuzzers.h>
+#include <config_wasm_strip.h>
 
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/dispatch.hxx>
@@ -945,13 +946,10 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
     {
         m_bAuthorInitialised = false;
     }
-    else if ( pBrdCst == m_pColorConfig.get() || pBrdCst == m_pAccessibilityOptions.get() )
+    else if ( pBrdCst == m_pColorConfig.get() )
     {
-        bool bAccessibility = false;
         if( pBrdCst == m_pColorConfig.get() )
             SwViewOption::ApplyColorConfigValues(*m_pColorConfig);
-        else
-            bAccessibility = true;
 
         //invalidate all edit windows
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -963,19 +961,38 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
                    dynamic_cast< const SwPagePreview *>( pViewShell ) !=  nullptr ||
                    dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
                 {
-                    if(bAccessibility)
-                    {
-                        if(auto pSwView = dynamic_cast<SwView *>( pViewShell ))
-                            pSwView->ApplyAccessibilityOptions(*m_pAccessibilityOptions);
-                        else if(auto pPagePreview = dynamic_cast<SwPagePreview *>( pViewShell ))
-                            pPagePreview->ApplyAccessibilityOptions(*m_pAccessibilityOptions);
-                    }
                     pViewShell->GetWindow()->Invalidate();
                 }
             }
             pViewShell = SfxViewShell::GetNext( *pViewShell );
         }
     }
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
+    else if ( pBrdCst == m_pAccessibilityOptions.get() )
+    {
+        //set Accessibility options
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while(pViewShell)
+        {
+            if(pViewShell->GetWindow())
+            {
+                auto pSwView = dynamic_cast<SwView *>( pViewShell );
+                auto pPagePreview = dynamic_cast<SwPagePreview *>( pViewShell );
+
+                if(pSwView)
+                    pSwView->ApplyAccessibilityOptions(*m_pAccessibilityOptions);
+                else if(pPagePreview)
+                    pPagePreview->ApplyAccessibilityOptions(*m_pAccessibilityOptions);
+
+                if(pSwView || pPagePreview || dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
+                {
+                    pViewShell->GetWindow()->Invalidate();
+                }
+            }
+            pViewShell = SfxViewShell::GetNext( *pViewShell );
+        }
+    }
+#endif
     else if( pBrdCst == m_pCTLOptions.get() )
     {
         const SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <svl/itempool.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -74,11 +76,14 @@ GraphCtrl::~GraphCtrl()
 {
     aUpdateIdle.Stop();
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if( mpAccContext.is() )
     {
         mpAccContext->disposing();
         mpAccContext.clear();
     }
+#endif
+
     pView.reset();
     pModel.reset();
     pUserCall.reset();
@@ -142,9 +147,11 @@ void GraphCtrl::InitSdrModel()
     pView->SetBufferedOutputAllowed(true);
     pView->SetBufferedOverlayAllowed(true);
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     // Tell the accessibility object about the changes.
     if (mpAccContext.is())
         mpAccContext->setModelAndView (pModel.get(), pView.get());
+#endif
 }
 
 void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
@@ -829,12 +836,14 @@ Point GraphCtrl::GetPositionInDialog() const
 
 css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessible()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if(mpAccContext == nullptr )
     {
         // Disable accessibility if no model/view data available
         if (pView && pModel)
             mpAccContext = new SvxGraphCtrlAccessibleContext(*this);
     }
+#endif
     return mpAccContext;
 }
 

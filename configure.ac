@@ -2958,6 +2958,47 @@ if test "$enable_services_rdb_from_build" = yes; then
     fi
 fi
 AC_SUBST(ENABLE_SERVICES_RDB_FROM_BUILD)
+# explicitly doesn't include enable_gtk3=no and enable_qt5=yes, so it should
+# also work with the default gtk3 plugin.
+if test "$enable_wasm_strip" = "yes"; then
+    enable_avmedia=no
+    enable_cmis=no
+    enable_coinmp=no
+    enable_cups=no
+    enable_curl=no
+    enable_database_connectivity=no
+    enable_dbus=no
+    enable_dconf=no
+    test "${enable_dynamic_loading+set}" = set || enable_dynamic_loading=no
+    enable_extension_integration=no
+    enable_extensions=no
+    enable_extension_update=no
+    enable_gio=no
+    enable_gpgmepp=no
+    enable_ldap=no
+    enable_lpsolve=no
+    enable_nss=no
+    enable_odk=no
+    enable_online_update=no
+    enable_opencl=no
+    enable_pdfimport=no
+    enable_randr=no
+    enable_report_builder=no
+    enable_scripting=no
+    enable_sdremote_bluetooth=no
+    enable_skia=no
+    enable_xmlhelp=no
+    enable_zxing=no
+    test_libepubgen=no
+    with_galleries=no
+    with_webdav=no
+    with_x=no
+
+    test "${with_fonts+set}" = set || with_fonts=yes
+    test "${with_locales+set}" = set || with_locales=en
+
+    AC_DEFINE(HAVE_FEATURE_WASM_STRIP)
+fi
 
 # Whether to build "avmedia" functionality or not.
 
@@ -14669,6 +14710,7 @@ AC_CONFIG_HEADERS([config_host/config_oauth2.h])
 AC_CONFIG_HEADERS([config_host/config_poppler.h])
 AC_CONFIG_HEADERS([config_host/config_python.h])
 AC_CONFIG_HEADERS([config_host/config_writerperfect.h])
+AC_CONFIG_HEADERS([config_host/config_wasm_strip.h])
 AC_CONFIG_HEADERS([solenv/lockfile/autoconf.h])
 AC_OUTPUT
 

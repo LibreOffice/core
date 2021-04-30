@@ -22,6 +22,7 @@
 #include <string_view>
 
 #include <config_features.h>
+#include <config_wasm_strip.h>
 
 #include <stdlib.h>
 #include <hintids.hxx>
@@ -973,7 +974,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     m_pWrtShell->SetUIOptions( aUsrPref );
     m_pWrtShell->SetReadOnlyAvailable( aUsrPref.IsCursorInProtectedArea() );
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     m_pWrtShell->ApplyAccessibilityOptions(SW_MOD()->GetAccessibilityOptions());
+#endif
 
     if( m_pWrtShell->GetDoc()->getIDocumentState().IsUpdateExpField() )
     {

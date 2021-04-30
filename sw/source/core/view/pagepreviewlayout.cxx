@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <pagepreviewlayout.hxx>
 #include <prevwpage.hxx>
 
@@ -1127,6 +1129,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools:
 
     // OD 17.11.2003 #i22014# - no update of accessible preview, if a new
     // print preview layout is created during paint.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if ( !mbNewLayoutDuringPaint )
     {
         // update at accessibility interface
@@ -1136,6 +1139,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools:
                         mrLayoutRootFrame.GetPageByPageNum( mnSelectedPageNum ),
                         maWinSize );
     }
+#endif
 
     pOutputDev->SetMapMode( aSavedMapMode );
     mrParentViewShell.maVisArea.Clear();

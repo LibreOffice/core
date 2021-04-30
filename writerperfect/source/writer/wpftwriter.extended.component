@@ -18,9 +18,12 @@
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="org.libreoffice.comp.Writer.StarOfficeWriterImportFilter"
-      constructor="org_libreoffice_comp_Writer_StarOfficeWriterImportFilter_get_implementation">
-    <service name="com.sun.star.document.ImportFilter"/>
-    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  <implementation name="com.sun.star.comp.Writer.EPUBExportFilter"
+      constructor="com_sun_star_comp_Writer_EPUBExportFilter_get_implementation">
+    <service name="com.sun.star.document.ExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.EPUBExportUIComponent"
+      constructor="com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation">
+    <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
   </implementation>
 </component>

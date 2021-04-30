@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <memory>
 #include <optional>
 
@@ -1073,7 +1075,16 @@ XMLShapeImportHelper* SvXMLImport::CreateShapeImport()
 
 SchXMLImportHelper* SvXMLImport::CreateChartImport()
 {
+// WASM_CHART change
+// TODO: Instead of importing the ChartModel an alternative may be
+// added to convert not to Chart/OLE SdrObejct, but to GraphicObject
+// with the Chart visualization. There should be a preiew available
+// in the imported chart data
+#ifndef ENABLE_WASM_STRIP_CHART
     return new SchXMLImportHelper();
+#else
+    return nullptr;
+#endif
 }
 
 ::xmloff::OFormLayerXMLImport* SvXMLImport::CreateFormImport()

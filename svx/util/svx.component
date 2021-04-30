@@ -28,10 +28,6 @@
     <service name="com.sun.star.comp.svx.FindbarDispatcher"/>
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svx.RecoveryUI"
-      constructor="com_sun_star_comp_svx_RecoveryUI_get_implementation">
-    <service name="com.sun.star.dialog.RecoveryUI"/>
-  </implementation>
   <implementation name="com.sun.star.comp.svx.SafeModeUI"
       constructor="com_sun_star_comp_svx_SafeModeUI_get_implementation">
     <service name="com.sun.star.dialog.SafeModeUI"/>

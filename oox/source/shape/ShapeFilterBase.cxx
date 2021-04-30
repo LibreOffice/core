@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <oox/shape/ShapeFilterBase.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
@@ -34,7 +36,12 @@ using namespace ::com::sun::star;
 
 ShapeFilterBase::ShapeFilterBase( const uno::Reference< uno::XComponentContext >& rxContext ) :
     XmlFilterBase( rxContext ),
+#ifdef ENABLE_WASM_STRIP_CHART
+    // WASM_CHART change
+    mxChartConv( )
+#else
     mxChartConv( std::make_shared<::oox::drawingml::chart::ChartConverter>() )
+#endif
 {
 }
 

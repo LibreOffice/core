@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <tools/fract.hxx>
 #include <osl/diagnose.h>
 #include <viewsh.hxx>
@@ -37,7 +39,11 @@ SwPagePreviewLayout* SwViewShell::PagePreviewLayout()
 
 void SwViewShell::ShowPreviewSelection( sal_uInt16 nSelPage )
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     Imp()->InvalidateAccessiblePreviewSelection( nSelPage );
+#else
+    (void)nSelPage;
+#endif
 }
 
 // adjust view options for page preview

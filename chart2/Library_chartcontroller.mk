@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_libraries,chartcontroller,\
 
 $(eval $(call gb_Library_set_componentfile,chartcontroller,chart2/source/controller/chartcontroller))
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/accessibility/AccessibleBase \
     chart2/source/controller/accessibility/AccessibleChartElement \
@@ -60,6 +61,10 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/accessibility/AccessibleTextHelper \
     chart2/source/controller/accessibility/AccessibleViewForwarder \
     chart2/source/controller/accessibility/ChartElementFactory \
+))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/chartapiwrapper/AreaWrapper \
     chart2/source/controller/chartapiwrapper/AxisWrapper \
     chart2/source/controller/chartapiwrapper/Chart2ModelContact \

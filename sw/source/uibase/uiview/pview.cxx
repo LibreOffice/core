@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <sfx2/objface.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandevent.hxx>
@@ -1121,7 +1123,9 @@ void SwPagePreview::Init()
     aOpt.SetHideWhitespaceMode( false );
 
     GetViewShell()->ApplyViewOptions( aOpt );
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     GetViewShell()->ApplyAccessibilityOptions(SW_MOD()->GetAccessibilityOptions());
+#endif
 
     // adjust view shell option to the same as for print
     SwPrintData const aPrintOptions = *SW_MOD()->GetPrtOptions(false);
@@ -1815,7 +1819,7 @@ uno::Reference< css::accessibility::XAccessible >
     SwPagePreviewWin::CreateAccessible()
 {
     SolarMutexGuard aGuard; // this should have happened already!!!
-
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     OSL_ENSURE( GetViewShell() != nullptr, "We need a view shell" );
     css::uno::Reference< css::accessibility::XAccessible > xAcc = GetAccessible( false );
     if (xAcc.is())
@@ -1827,6 +1831,7 @@ uno::Reference< css::accessibility::XAccessible >
         css::uno::Reference< css::accessibility::XAccessible > xAccPreview = mpViewShell->CreateAccessiblePreview();
         SetAccessible(xAccPreview);
     }
+#endif
     return GetAccessible( false );
 }
 

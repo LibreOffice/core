@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -846,18 +848,22 @@ public:
 
 css::uno::Reference<css::accessibility::XAccessible> WeldEditView::CreateAccessible()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (!m_xAccessible.is())
         m_xAccessible.set(new WeldEditAccessible(this));
+#endif
     return m_xAccessible;
 }
 
 WeldEditView::~WeldEditView()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (m_xAccessible.is())
     {
         m_xAccessible->ClearWin(); // make Accessible nonfunctional
         m_xAccessible.clear();
     }
+#endif
 }
 
 bool WeldViewForwarder::IsValid() const { return m_rEditAcc.GetEditView() != nullptr; }
@@ -1566,14 +1572,18 @@ void WeldEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     pDrawingArea->set_cursor(PointerStyle::Text);
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     InitAccessible();
+#endif
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 void WeldEditView::InitAccessible()
 {
     if (m_xAccessible.is())
         m_xAccessible->Init(GetEditEngine(), GetEditView());
 }
+#endif
 
 int WeldEditView::GetSurroundingText(OUString& rSurrounding)
 {
@@ -1603,6 +1613,7 @@ void WeldEditView::GetFocus()
 
     weld::CustomWidgetController::GetFocus();
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (m_xAccessible.is())
     {
         // Note: will implicitly send the AccessibleStateType::FOCUSED event
@@ -1610,6 +1621,7 @@ void WeldEditView::GetFocus()
         if (pHelper)
             pHelper->SetFocus();
     }
+#endif
 }
 
 void WeldEditView::LoseFocus()
@@ -1617,6 +1629,7 @@ void WeldEditView::LoseFocus()
     weld::CustomWidgetController::LoseFocus();
     Invalidate(); // redraw without cursor
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (m_xAccessible.is())
     {
         // Note: will implicitly send the AccessibleStateType::FOCUSED event
@@ -1624,6 +1637,7 @@ void WeldEditView::LoseFocus()
         if (pHelper)
             pHelper->SetFocus(false);
     }
+#endif
 }
 
 bool WeldEditView::CanFocus() const { return true; }

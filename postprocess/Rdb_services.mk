@@ -15,9 +15,8 @@ ifeq (,$(ENABLE_SERVICES_RDB_FROM_BUILD))
 #
 # "minimal" list of services for cross-compiling build tools
 #
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\
-	$(if $(DISABLE_GUI),,$(call gb_Helper_optional,AVMEDIA,avmedia/util/avmedia)) \
-	$(call gb_Helper_optional,SCRIPTING,basic/util/sb) \
 	canvas/source/factory/canvasfactory \
 	canvas/source/simplecanvas/simplecanvas \
 	canvas/source/vcl/vclcanvas \
@@ -27,13 +26,19 @@ $(eval $(call gb_Rdb_add_components,services,\
 		canvas/source/directx/directx9canvas \
 		canvas/source/directx/gdipluscanvas \
 	) \
+	cppcanvas/source/uno/mtfrenderer \
+))
+endif
+
+$(eval $(call gb_Rdb_add_components,services,\
+	$(call gb_Helper_optional,AVMEDIA,avmedia/util/avmedia) \
+	$(call gb_Helper_optional,SCRIPTING,basic/util/sb) \
 	comphelper/util/comphelp \
 	configmgr/source/configmgr \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)), \
 		connectivity/source/dbtools/dbtools \
 		connectivity/source/drivers/dbase/dbase \
 	) \
-	cppcanvas/source/uno/mtfrenderer \
 	drawinglayer/drawinglayer \
 	emfio/emfio \
 	filter/source/config/cache/filterconfig1 \
@@ -72,10 +77,45 @@ $(eval $(call gb_Rdb_add_components,services,\
 
 ifeq ($(gb_Side),host)
 
+# WASM_CHART change
+ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\
-	animations/source/animcore/animcore \
 	chart2/source/controller/chartcontroller \
 	chart2/source/chartcore \
+	writerperfect/source/calc/wpftcalc \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	desktop/source/deployment/deployment.extended \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	$(if $(filter WNT,$(OS)), \
+		winaccessibility/source/service/winaccessibility \
+	) \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_GUESSLANG),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	lingucomponent/source/languageguessing/guesslang \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_HUNSPELL),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	lingucomponent/source/hyphenator/hyphen/hyphen \
+	lingucomponent/source/thesaurus/libnth/lnth \
+	lingucomponent/source/spellcheck/spell/spell \
+))
+endif
+
+$(eval $(call gb_Rdb_add_components,services,\
+	animations/source/animcore/animcore \
 	cui/util/cui \
 	desktop/source/deployment/deployment \
 	embeddedobj/util/embobj \
@@ -94,10 +134,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(call gb_Helper_optional,DESKTOP,fpicker/source/office/fps_office) \
 	$(if $(filter MACOSX,$(OS)),fpicker/source/aqua/fps_aqua) \
 	hwpfilter/source/hwp \
-	lingucomponent/source/hyphenator/hyphen/hyphen \
-	lingucomponent/source/languageguessing/guesslang \
-	lingucomponent/source/spellcheck/spell/spell \
-	lingucomponent/source/thesaurus/libnth/lnth \
 	lingucomponent/source/numbertext/numbertext \
 	linguistic/source/lng \
 	$(if $(ENABLE_LWP), \
@@ -153,7 +189,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	writerperfect/source/draw/wpftdraw \
 	writerperfect/source/impress/wpftimpress \
 	writerperfect/source/writer/wpftwriter \
-	writerperfect/source/calc/wpftcalc \
 	$(if $(filter MACOSX,$(OS)), \
 		$(call gb_Helper_optional,AVMEDIA,avmedia/source/macavf/avmediaMacAVF) \
 		shell/source/backends/macbe/macbe1 \
@@ -232,12 +267,25 @@ $(eval $(call gb_Rdb_add_components,services,\
     $(call gb_Helper_optional,XMLHELP,xmlhelp/util/ucpchelp1) \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	dbaccess/util/dba \
+))
+endif
+
 $(eval $(call gb_Rdb_add_components,services,\
 	extensions/source/bibliography/bib \
-	dbaccess/util/dba \
 ))
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+
+ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	dbaccess/source/filter/xml/dbaxml \
+	dbaccess/util/dbu \
+	dbaccess/util/sdbt \
+))
+endif
 
 $(eval $(call gb_Rdb_add_components,services,\
 	extensions/source/dbpilots/dbp \
@@ -267,9 +315,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	connectivity/source/drivers/mysql_jdbc/mysql_jdbc \
 	connectivity/source/manager/sdbc2 \
 	connectivity/source/drivers/writer/writer \
-	dbaccess/source/filter/xml/dbaxml \
-	dbaccess/util/dbu \
-	dbaccess/util/sdbt \
 	forms/util/frm \
 	reportdesign/util/rpt \
 	reportdesign/util/rptui \
@@ -296,8 +341,8 @@ $(eval $(call gb_Rdb_add_components,services,\
 	desktop/source/migration/services/migrationoo2 \
 	desktop/source/migration/services/migrationoo3 \
 	desktop/source/offacc/offacc \
-	$(if $(DISABLE_GUI),,desktop/source/splash/spl) \
-	extensions/source/abpilot/abp \
+	$(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,desktop/source/splash/spl) \
+	$(if $(DISABLE_DYNLOADING),,extensions/source/abpilot/abp) \
 	$(if $(ENABLE_LDAP),extensions/source/config/ldap/ldapbe2) \
 	$(if $(filter WNT,$(OS)),\
 		extensions/source/config/WinUserInfo/WinUserInfoBe \

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <swtypes.hxx>
 #include <hintids.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -5280,14 +5282,18 @@ void SwEditWin::GetFocus()
     {
         m_rView.GotFocus();
         Window::GetFocus();
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         m_rView.GetWrtShell().InvalidateAccessibleFocus();
+#endif
     }
 }
 
 void SwEditWin::LoseFocus()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (m_rView.GetWrtShellPtr())
         m_rView.GetWrtShell().InvalidateAccessibleFocus();
+#endif
     Window::LoseFocus();
     if( s_pQuickHlpData && s_pQuickHlpData->m_bIsDisplayed )
         s_pQuickHlpData->Stop( m_rView.GetWrtShell() );
@@ -5979,6 +5985,7 @@ void SwEditWin::SetChainMode( bool bOn )
 
 uno::Reference< css::accessibility::XAccessible > SwEditWin::CreateAccessible()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     SolarMutexGuard aGuard;   // this should have happened already!!!
     SwWrtShell *pSh = m_rView.GetWrtShellPtr();
     OSL_ENSURE( pSh, "no writer shell, no accessible object" );
@@ -5988,6 +5995,9 @@ uno::Reference< css::accessibility::XAccessible > SwEditWin::CreateAccessible()
         xAcc = pSh->CreateAccessible();
 
     return xAcc;
+#else
+    return nullptr;
+#endif
 }
 
 void QuickHelpData::Move( QuickHelpData& rCpy )

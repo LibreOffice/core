@@ -93,6 +93,18 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_PINGUSER),TRUE)
+$(eval $(call gb_Library_add_exception_objects,cui,\
+    cui/source/dialogs/tipofthedaydlg \
+))
+endif
+
+ifneq ($(ENABLE_WASM_STRIP_HUNSPELL),TRUE)
+$(eval $(call gb_Library_add_exception_objects,cui,\
+    cui/source/dialogs/hyphen \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/customize/acccfg \
     cui/source/customize/cfg \
@@ -126,9 +138,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/hlmailtp \
     cui/source/dialogs/hlmarkwn \
     cui/source/dialogs/hltpbase \
-    cui/source/dialogs/hyphen \
     cui/source/dialogs/iconcdlg \
-    cui/source/dialogs/tipofthedaydlg \
     cui/source/dialogs/insdlg \
     cui/source/dialogs/insrc \
     cui/source/dialogs/linkdlg \
