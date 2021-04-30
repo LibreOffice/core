@@ -359,6 +359,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
     bool bHasBlankPortion = false;
     bool bHasOnlyBlankPortions = true;
+    bool bHasFlyContentPortion = false;
 
     if( mpNextPortion )
     {
@@ -445,6 +446,8 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     SetHanging(true);
                     rInf.GetParaPortion()->SetMargin();
                 }
+                else if( !bHasFlyContentPortion && pPos->IsFlyCntPortion() )
+                     bHasFlyContentPortion = true;
 
                 // To prevent that a paragraph-end-character does not change
                 // the line height through a Descent and thus causing the line
@@ -623,6 +626,38 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         }
     }
     SetRedline( bHasRedline );
+
+    // set redline for as-char anchored portions
+    if ( bHasFlyContentPortion )
+    {
+        SwLinePortion *pPos = mpNextPortion;
+        TextFrameIndex nLineLength;
+        while ( pPos )
+        {
+            TextFrameIndex const nPorSttIdx = rInf.GetLineStart() + nLineLength;
+            nLineLength += pPos->GetLen();
+            if( pPos->IsFlyCntPortion() )
+            {
+                bool bDeleted = false;
+                if ( bHasRedline )
+                {
+                    OUString sRedlineText;
+                    bool bHasRedlineEnd;
+                    enum RedlineType eRedlineEnd;
+                    std::pair<SwTextNode const*, sal_Int32> const flyStart(
+                        rInf.GetTextFrame()->MapViewToModel(nPorSttIdx));
+                    std::pair<SwTextNode const*, sal_Int32> const flyEnd(
+                        rInf.GetTextFrame()->MapViewToModel(nPorSttIdx + pPos->GetLen()));
+                    bool bHasFlyRedline = rLine.GetRedln()->CheckLine(flyStart.first->GetIndex(),
+                        flyStart.second, flyEnd.first->GetIndex(), flyEnd.second, sRedlineText,
+                        bHasRedlineEnd, eRedlineEnd);
+                    bDeleted = bHasFlyRedline && eRedlineEnd == RedlineType::Delete;
+                }
+                static_cast<SwFlyCntPortion*>(pPos)->SetDeleted(bDeleted);
+            }
+            pPos = pPos->GetNextPortion();
+        }
+    }
 }
 
 // #i47162# - add optional parameter <_bNoFlyCntPorAndLinePor>
