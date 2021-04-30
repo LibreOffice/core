@@ -434,13 +434,13 @@ DynamicResultSetWrapperListener::~DynamicResultSetWrapperListener()
 // XInterface methods.
 
 void SAL_CALL DynamicResultSetWrapperListener::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL DynamicResultSetWrapperListener::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

@@ -31,7 +31,7 @@ class Transform2DContext final : public ::oox::core::ContextHandler2
 {
 public:
     Transform2DContext( ::oox::core::ContextHandler2Helper const & rParent,
-                        const ::oox::AttributeList& rAttributes, Shape& rShape, bool btxXfrm = false ) throw();
+                        const ::oox::AttributeList& rAttributes, Shape& rShape, bool btxXfrm = false ) noexcept;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:

@@ -268,7 +268,7 @@ SdXShape::SdXShape(SvxShape* pShape, SdXImpressDocument* pModel)
     pShape->setMaster( this );
 }
 
-SdXShape::~SdXShape() throw()
+SdXShape::~SdXShape() noexcept
 {
 }
 
@@ -283,12 +283,12 @@ uno::Any SAL_CALL SdXShape::queryInterface( const uno::Type & rType )
     return mpShape->queryInterface( rType );
 }
 
-void SAL_CALL SdXShape::acquire() throw()
+void SAL_CALL SdXShape::acquire() noexcept
 {
     mpShape->acquire();
 }
 
-void SAL_CALL SdXShape::release() throw()
+void SAL_CALL SdXShape::release() noexcept
 {
     mpShape->release();
 }
@@ -957,13 +957,13 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
     pObj->SetEmptyPresObj(bEmpty);
 }
 
-bool SdXShape::IsMasterDepend() const throw()
+bool SdXShape::IsMasterDepend() const noexcept
 {
     SdrObject* pObj = mpShape->GetSdrObject();
     return pObj && pObj->GetUserCall() != nullptr;
 }
 
-void SdXShape::SetMasterDepend( bool bDepend ) throw()
+void SdXShape::SetMasterDepend( bool bDepend ) noexcept
 {
     if( IsMasterDepend() == bDepend )
         return;
@@ -1033,7 +1033,7 @@ private:
     SdXShape*   mpShape;
 
 public:
-    explicit SdUnoEventsAccess(SdXShape* pShape) throw();
+    explicit SdUnoEventsAccess(SdXShape* pShape) noexcept;
 
     // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
@@ -1075,7 +1075,7 @@ constexpr OUStringLiteral gaStrSpeed( u"Speed" );
 constexpr OUStringLiteral gaStrStarBasic( u"StarBasic" );
 constexpr OUStringLiteral gaStrScript( u"Script" );
 
-SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
+SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) noexcept
   : mpShape( pShape )
 {
 }

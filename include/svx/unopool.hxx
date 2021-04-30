@@ -45,12 +45,12 @@ public:
 
     /** deprecated */
     SvxUnoDrawPool(SdrModel* pModel);
-    virtual ~SvxUnoDrawPool() throw() override;
+    virtual ~SvxUnoDrawPool() noexcept override;
 
     /** This returns the item pool from the given model, or the default pool if there is no model and bReadOnly is true.
         If bReadOnly is false and there is no model the default implementation returns NULL.
     */
-    virtual SfxItemPool* getModelPool( bool bReadOnly ) throw();
+    virtual SfxItemPool* getModelPool( bool bReadOnly ) noexcept;
 
     // overridden helpers from comphelper::PropertySetHelper
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) override;
@@ -63,9 +63,9 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override
+    virtual void SAL_CALL acquire() noexcept override
     { OWeakAggObject::acquire(); }
-    virtual void SAL_CALL release() throw() override
+    virtual void SAL_CALL release() noexcept override
     { OWeakAggObject::release(); }
 
     // XTypeProvider

@@ -152,8 +152,8 @@ namespace pcr
         */
         void setNotificationMode( NotificationMode _eMode );
 
-        virtual void SAL_CALL acquire() throw() override;
-        virtual void SAL_CALL release() throw() override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
     protected:
         virtual ~PropertyControlContext_Impl() override;
@@ -251,12 +251,12 @@ namespace pcr
         impl_notify_throw( CurrentControl, ACTIVATE_NEXT );
     }
 
-    void SAL_CALL PropertyControlContext_Impl::acquire() throw()
+    void SAL_CALL PropertyControlContext_Impl::acquire() noexcept
     {
         PropertyControlContext_Impl_Base::acquire();
     }
 
-    void SAL_CALL PropertyControlContext_Impl::release() throw()
+    void SAL_CALL PropertyControlContext_Impl::release() noexcept
     {
         PropertyControlContext_Impl_Base::release();
     }

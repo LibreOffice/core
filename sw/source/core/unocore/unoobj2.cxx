@@ -412,7 +412,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
 
     virtual ~SwXParagraphEnumerationImpl() override
         { m_pCursor.reset(nullptr); }
-    virtual void SAL_CALL release() throw () override
+    virtual void SAL_CALL release() noexcept override
     {
         SolarMutexGuard g;
         OWeakObject::release();
@@ -1570,7 +1570,7 @@ struct SwXTextRangesImpl final : public SwXTextRanges
         }
         MakeRanges();
     }
-    virtual void SAL_CALL release() throw () override
+    virtual void SAL_CALL release() noexcept override
     {
         SolarMutexGuard g;
         OWeakObject::release();
@@ -1677,7 +1677,7 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
     virtual css::uno::Any SAL_CALL nextElement() override;
 
     SwXParaFrameEnumerationImpl(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat);
-    virtual void SAL_CALL release() throw () override
+    virtual void SAL_CALL release() noexcept override
     {
         SolarMutexGuard g;
         OWeakObject::release();

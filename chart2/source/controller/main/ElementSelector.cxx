@@ -274,11 +274,11 @@ Any SAL_CALL ElementSelectorToolbarController::queryInterface( const Type& _rTyp
         aReturn = ElementSelectorToolbarController_BASE::queryInterface(_rType);
     return aReturn;
 }
-void SAL_CALL ElementSelectorToolbarController::acquire() throw ()
+void SAL_CALL ElementSelectorToolbarController::acquire() noexcept
 {
     ToolboxController::acquire();
 }
-void SAL_CALL ElementSelectorToolbarController::release() throw ()
+void SAL_CALL ElementSelectorToolbarController::release() noexcept
 {
     ToolboxController::release();
 }

@@ -38,7 +38,7 @@ ChainablePropertySetInfo::ChainablePropertySetInfo( PropertyInfo const * pMap )
 }
 
 ChainablePropertySetInfo::~ChainablePropertySetInfo()
-    throw()
+    noexcept
 {
 }
 

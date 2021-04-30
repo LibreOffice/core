@@ -85,11 +85,11 @@ public:
 
     virtual void SAL_CALL
         acquire()
-        throw () override;
+        noexcept override;
 
     virtual void SAL_CALL
         release()
-        throw () override;
+        noexcept override;
 
     //=====  XAccessibleGroupPosition  =========================================
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL

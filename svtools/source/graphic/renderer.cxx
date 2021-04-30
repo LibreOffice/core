@@ -58,8 +58,8 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -122,14 +122,14 @@ uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType )
 
 
 void SAL_CALL GraphicRendererVCL::acquire()
-    throw()
+    noexcept
 {
     OWeakAggObject::acquire();
 }
 
 
 void SAL_CALL GraphicRendererVCL::release()
-    throw()
+    noexcept
 {
     OWeakAggObject::release();
 }

@@ -45,7 +45,7 @@ struct SAL_WARN_UNUSED OOO_DLLPUBLIC_XMLREADER Span {
         begin(literal), length(N - 1)
     {}
 
-    void clear() throw() { begin = nullptr; }
+    void clear() noexcept { begin = nullptr; }
 
     bool is() const { return begin != nullptr; }
 

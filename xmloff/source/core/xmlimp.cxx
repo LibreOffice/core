@@ -433,7 +433,7 @@ SvXMLImport::SvXMLImport(
     maNamespaceAttrList = new comphelper::AttributeList;
 }
 
-void SvXMLImport::cleanup() throw ()
+void SvXMLImport::cleanup() noexcept
 {
     if (mxEventListener.is() && mxModel.is())
         mxModel->removeEventListener(mxEventListener);
@@ -451,7 +451,7 @@ void SvXMLImport::cleanup() throw ()
     DisposingModel();
 }
 
-SvXMLImport::~SvXMLImport() throw ()
+SvXMLImport::~SvXMLImport() noexcept
 {
     cleanup();
 }
@@ -465,7 +465,7 @@ bool SvXMLImport::addEmbeddedFont(const css::uno::Reference< css::io::XInputStre
     return mxEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key, eot);
 }
 
-const css::uno::Sequence<sal_Int8>& SvXMLImport::getUnoTunnelId() throw()
+const css::uno::Sequence<sal_Int8>& SvXMLImport::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSvXMLImportUnoTunnelId;
     return theSvXMLImportUnoTunnelId.getSeq();

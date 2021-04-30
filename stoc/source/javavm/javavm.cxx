@@ -383,7 +383,7 @@ void getJavaPropsFromSafetySettings(
     xConfRegistry_simple->close();
 }
 
-void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
+void setTimeZone(stoc_javavm::JVM * pjvm) noexcept {
     /* A Bug in the Java function
     ** struct Hjava_util_Properties * java_lang_System_initProperties(
     ** struct Hjava_lang_System *this,

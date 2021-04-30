@@ -61,16 +61,16 @@ class StringEmitContext : public EmitContext
     public:
     StringEmitContext() : EmitContext(), m_aBuf(256) {}
 
-    virtual bool write( const void* pBuf, unsigned int nLen ) throw() override
+    virtual bool write( const void* pBuf, unsigned int nLen ) noexcept override
     {
         m_aBuf.append( static_cast<const char*>(pBuf), nLen );
         return true;
     }
-    virtual unsigned int getCurPos() throw() override { return m_aBuf.getLength(); }
-    virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) throw() override
+    virtual unsigned int getCurPos() noexcept override { return m_aBuf.getLength(); }
+    virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) noexcept override
     { return (nOrigOffset+nLen < o3tl::make_unsigned(m_aBuf.getLength()) ) &&
              write( m_aBuf.getStr() + nOrigOffset, nLen ); }
-    virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) throw() override
+    virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) noexcept override
     {
         if( nOrigOffset+nLen < o3tl::make_unsigned(m_aBuf.getLength()) )
         {

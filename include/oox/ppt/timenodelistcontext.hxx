@@ -38,12 +38,12 @@ namespace oox::ppt {
     class TimeNodeContext : public ::oox::core::FragmentHandler2
     {
     public:
-        virtual ~TimeNodeContext() throw() override;
+        virtual ~TimeNodeContext() noexcept override;
 
         static rtl::Reference<TimeNodeContext> makeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode );
 
     protected:
-        TimeNodeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, const TimeNodePtr & pNode ) throw();
+        TimeNodeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, const TimeNodePtr & pNode ) noexcept;
 
         sal_Int32 mnElement;
         TimeNodePtr mpNode;
@@ -54,9 +54,9 @@ namespace oox::ppt {
 class TimeNodeListContext final : public ::oox::core::FragmentHandler2
 {
 public:
-    TimeNodeListContext( ::oox::core::FragmentHandler2 const & rParent, TimeNodePtrList & aList ) throw();
+    TimeNodeListContext( ::oox::core::FragmentHandler2 const & rParent, TimeNodePtrList & aList ) noexcept;
 
-    virtual ~TimeNodeListContext() throw() override;
+    virtual ~TimeNodeListContext() noexcept override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
 

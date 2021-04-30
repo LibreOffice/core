@@ -44,13 +44,13 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-void SAL_CALL MenuBarWrapper::acquire() throw()                                                                          \
+void SAL_CALL MenuBarWrapper::acquire() noexcept                                                                          \
 {                                                                                                                                                       \
     /* Don't use mutex in methods of XInterface! */                                                                                                     \
     UIConfigElementWrapperBase::acquire();                                                                                                                               \
 }                                                                                                                                                       \
                                                                                                                                                         \
-void SAL_CALL MenuBarWrapper::release() throw()                                                                          \
+void SAL_CALL MenuBarWrapper::release() noexcept                                                                          \
 {                                                                                                                                                       \
     /* Don't use mutex in methods of XInterface! */                                                                                                     \
     UIConfigElementWrapperBase::release();                                                                                                                               \

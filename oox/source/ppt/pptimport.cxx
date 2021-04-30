@@ -133,7 +133,7 @@ bool PowerPointImport::importDocument()
 
 }
 
-bool PowerPointImport::exportDocument() throw()
+bool PowerPointImport::exportDocument() noexcept
 {
     return false;
 }

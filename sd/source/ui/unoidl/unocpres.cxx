@@ -40,21 +40,21 @@ uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )
     return static_cast<cppu::OWeakObject*>(new SdXCustomPresentation( pShow ));
 }
 
-SdXCustomPresentation::SdXCustomPresentation() throw()
+SdXCustomPresentation::SdXCustomPresentation() noexcept
 :   mpSdCustomShow(nullptr), mpModel(nullptr),
     aDisposeListeners( aDisposeContainerMutex ),
     bDisposing( false )
 {
 }
 
-SdXCustomPresentation::SdXCustomPresentation( SdCustomShow* pShow) throw()
+SdXCustomPresentation::SdXCustomPresentation( SdCustomShow* pShow) noexcept
 :   mpSdCustomShow(pShow), mpModel(nullptr),
     aDisposeListeners( aDisposeContainerMutex ),
     bDisposing( false )
 {
 }
 
-SdXCustomPresentation::~SdXCustomPresentation() throw()
+SdXCustomPresentation::~SdXCustomPresentation() noexcept
 {
 }
 
@@ -260,12 +260,12 @@ void SAL_CALL SdXCustomPresentation::removeEventListener( const uno::Reference< 
  *                                      public UsrObject                     *
  *===========================================================================*/
 
-SdXCustomPresentationAccess::SdXCustomPresentationAccess(SdXImpressDocument& rMyModel) throw()
+SdXCustomPresentationAccess::SdXCustomPresentationAccess(SdXImpressDocument& rMyModel) noexcept
 : mrModel(rMyModel)
 {
 }
 
-SdXCustomPresentationAccess::~SdXCustomPresentationAccess() throw()
+SdXCustomPresentationAccess::~SdXCustomPresentationAccess() noexcept
 {
 }
 
@@ -429,7 +429,7 @@ sal_Bool SAL_CALL SdXCustomPresentationAccess::hasElements()
     return pList && !pList->empty();
 }
 
-SdCustomShow * SdXCustomPresentationAccess::getSdCustomShow( std::u16string_view rName ) const throw()
+SdCustomShow * SdXCustomPresentationAccess::getSdCustomShow( std::u16string_view rName ) const noexcept
 {
     sal_uInt32 nIdx = 0;
 

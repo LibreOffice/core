@@ -420,12 +420,12 @@ uno::Any SAL_CALL ScViewPaneObj::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-void SAL_CALL ScViewPaneObj::acquire() throw()
+void SAL_CALL ScViewPaneObj::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ScViewPaneObj::release() throw()
+void SAL_CALL ScViewPaneObj::release() noexcept
 {
     OWeakObject::release();
 }
@@ -485,12 +485,12 @@ uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-void SAL_CALL ScTabViewObj::acquire() throw()
+void SAL_CALL ScTabViewObj::acquire() noexcept
 {
     SfxBaseController::acquire();
 }
 
-void SAL_CALL ScTabViewObj::release() throw()
+void SAL_CALL ScTabViewObj::release() noexcept
 {
     SfxBaseController::release();
 }
@@ -2162,12 +2162,12 @@ uno::Any ScPreviewObj::queryInterface(const uno::Type& rType)
     return SfxBaseController::queryInterface(rType);
 }
 
-void ScPreviewObj::acquire() throw()
+void ScPreviewObj::acquire() noexcept
 {
     SfxBaseController::acquire();
 }
 
-void ScPreviewObj::release() throw()
+void ScPreviewObj::release() noexcept
 {
     SfxBaseController::release();
 }

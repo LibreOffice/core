@@ -38,7 +38,7 @@ MasterPropertySetInfo::MasterPropertySetInfo( PropertyInfo const * pMap )
 }
 
 MasterPropertySetInfo::~MasterPropertySetInfo()
-    throw()
+    noexcept
 {
     for( const auto& rObj : maMap )
         delete rObj.second;

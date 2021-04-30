@@ -30,7 +30,7 @@ struct Shape3DProperties;
 class Scene3DRotationPropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
-    Scene3DRotationPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, RotationProperties& rRotationProperties ) throw();
+    Scene3DRotationPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, RotationProperties& rRotationProperties ) noexcept;
 
     ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
@@ -41,7 +41,7 @@ private:
 class Scene3DPropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
-    Scene3DPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, Shape3DProperties& rShape3DProperties ) throw();
+    Scene3DPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, Shape3DProperties& rShape3DProperties ) noexcept;
     ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
@@ -51,7 +51,7 @@ private:
 class SceneText3DPropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
-    SceneText3DPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, Text3DProperties& rText3DProperties ) throw();
+    SceneText3DPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, Text3DProperties& rText3DProperties ) noexcept;
     ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
@@ -61,7 +61,7 @@ private:
 class Shape3DPropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
-    Shape3DPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttribs, Shape3DProperties& r3DProperties ) throw();
+    Shape3DPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttribs, Shape3DProperties& r3DProperties ) noexcept;
 
     ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

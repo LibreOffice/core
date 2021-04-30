@@ -33,7 +33,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox::ppt {
 
-SlideTransitionContext::SlideTransitionContext( FragmentHandler2 const & rParent, const AttributeList& rAttribs, PropertyMap & aProperties ) throw()
+SlideTransitionContext::SlideTransitionContext( FragmentHandler2 const & rParent, const AttributeList& rAttribs, PropertyMap & aProperties ) noexcept
 : FragmentHandler2( rParent )
 , maSlideProperties( aProperties )
 , mbHasTransition( false )
@@ -62,7 +62,7 @@ SlideTransitionContext::SlideTransitionContext( FragmentHandler2 const & rParent
         maTransition.setOoxAdvanceTime( rAttribs.getInteger( XML_advTm, -1 ) );
 }
 
-SlideTransitionContext::~SlideTransitionContext() throw()
+SlideTransitionContext::~SlideTransitionContext() noexcept
 {
 
 }

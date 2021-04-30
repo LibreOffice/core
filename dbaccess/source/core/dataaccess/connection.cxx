@@ -426,13 +426,13 @@ Any OConnection::queryInterface( const Type & rType )
     return aReturn;
 }
 
-void OConnection::acquire() throw ()
+void OConnection::acquire() noexcept
 {
     // include this one when you want to see who calls it (call graph)
     OSubComponent::acquire();
 }
 
-void OConnection::release() throw ()
+void OConnection::release() noexcept
 {
     // include this one when you want to see who calls it (call graph)
     OSubComponent::release();

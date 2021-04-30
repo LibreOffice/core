@@ -46,13 +46,13 @@ namespace toolkit
     }
 
 
-    void SAL_CALL GridEventForwarder::acquire() throw()
+    void SAL_CALL GridEventForwarder::acquire() noexcept
     {
         m_parent.acquire();
     }
 
 
-    void SAL_CALL GridEventForwarder::release() throw()
+    void SAL_CALL GridEventForwarder::release() noexcept
     {
         m_parent.release();
     }

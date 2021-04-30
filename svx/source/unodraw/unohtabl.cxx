@@ -34,7 +34,7 @@ namespace {
 class SvxUnoHatchTable : public SvxUnoNameItemTable
 {
 public:
-    explicit SvxUnoHatchTable( SdrModel* pModel ) throw();
+    explicit SvxUnoHatchTable( SdrModel* pModel ) noexcept;
 
     virtual NameOrIndex* createItem() const override;
 
@@ -48,7 +48,7 @@ public:
 
 }
 
-SvxUnoHatchTable::SvxUnoHatchTable( SdrModel* pModel ) throw()
+SvxUnoHatchTable::SvxUnoHatchTable( SdrModel* pModel ) noexcept
 : SvxUnoNameItemTable( pModel, XATTR_FILLHATCH, MID_FILLHATCH )
 {
 }

@@ -35,7 +35,7 @@ namespace sd::framework {
 Pane::Pane (
     const Reference<XResourceId>& rxPaneId,
     vcl::Window* pWindow)
-    throw ()
+    noexcept
     : PaneInterfaceBase(MutexOwner::maMutex),
       mxPaneId(rxPaneId),
       mpWindow(pWindow),

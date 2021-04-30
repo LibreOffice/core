@@ -160,7 +160,7 @@ uno::Any SAL_CALL Storage::queryInterface( const uno::Type& aType )
 
 // virtual
 void SAL_CALL Storage::acquire()
-    throw ()
+    noexcept
 {
     osl_atomic_increment( &m_refCount );
 }
@@ -168,7 +168,7 @@ void SAL_CALL Storage::acquire()
 
 // virtual
 void SAL_CALL Storage::release()
-    throw ()
+    noexcept
 {
     //#i120738, Storage::release overrides OWeakObject::release(),
     //need call OWeakObject::release() to release OWeakObject::m_pWeakConnectionPoint

@@ -573,10 +573,10 @@ class WW8FieldEntry
         sw::hack::Position maStartPos;
         sal_uInt16 mnFieldId;
         sal_uLong mnObjLocFc;
-        WW8FieldEntry(SwPosition const &rPos, sal_uInt16 nFieldId) throw();
-        WW8FieldEntry(const WW8FieldEntry &rOther) throw();
-        WW8FieldEntry &operator=(const WW8FieldEntry &rOther) throw();
-        void Swap(WW8FieldEntry &rOther) throw();
+        WW8FieldEntry(SwPosition const &rPos, sal_uInt16 nFieldId) noexcept;
+        WW8FieldEntry(const WW8FieldEntry &rOther) noexcept;
+        WW8FieldEntry &operator=(const WW8FieldEntry &rOther) noexcept;
+        void Swap(WW8FieldEntry &rOther) noexcept;
 
         SwNodeIndex GetPtNode() const { return maStartPos.GetPtNode(); };
         sal_Int32 GetPtContent() const { return maStartPos.GetPtContent(); };

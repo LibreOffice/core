@@ -1270,7 +1270,7 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
     }
 }
 
-void Access::clearListeners() throw() {
+void Access::clearListeners() noexcept {
     disposeListeners_.clear();
     containerListeners_.clear();
     propertyChangeListeners_.clear();

@@ -42,7 +42,7 @@ namespace oox::ppt {
         CommonBehaviorContext( ::oox::core::FragmentHandler2 const & rParent,
              const TimeNodePtr & pNode );
         virtual ~CommonBehaviorContext( )
-            throw( ) override;
+            noexcept override;
 
         virtual void onEndElement() override;
 

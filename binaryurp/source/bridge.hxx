@@ -121,13 +121,13 @@ public:
 
     void freeProxy(Proxy & proxy);
 
-    void incrementCalls(bool normalCall) throw ();
+    void incrementCalls(bool normalCall) noexcept;
 
     void decrementCalls();
 
-    void incrementActiveCalls() throw ();
+    void incrementActiveCalls() noexcept;
 
-    void decrementActiveCalls() throw ();
+    void decrementActiveCalls() noexcept;
 
     bool makeCall(
         OUString const & oid,

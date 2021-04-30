@@ -92,7 +92,7 @@ FullScreenPane::FullScreenPane (
     mpWindow->GrabFocus();
 }
 
-FullScreenPane::~FullScreenPane() throw()
+FullScreenPane::~FullScreenPane() noexcept
 {
 }
 

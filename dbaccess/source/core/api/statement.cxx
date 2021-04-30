@@ -106,12 +106,12 @@ Any OStatementBase::queryInterface( const Type & rType )
     return aIface;
 }
 
-void OStatementBase::acquire() throw ()
+void OStatementBase::acquire() noexcept
 {
     OSubComponent::acquire();
 }
 
-void OStatementBase::release() throw ()
+void OStatementBase::release() noexcept
 {
     OSubComponent::release();
 }

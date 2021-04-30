@@ -150,12 +150,12 @@ Sequence< sal_Int8 > SAL_CALL SwXTextView::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL SwXTextView::acquire(  )throw()
+void SAL_CALL SwXTextView::acquire(  )noexcept
 {
     SfxBaseController::acquire();
 }
 
-void SAL_CALL SwXTextView::release(  )throw()
+void SAL_CALL SwXTextView::release(  )noexcept
 {
     SfxBaseController::release();
 }

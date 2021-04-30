@@ -107,13 +107,13 @@ uno::Any SAL_CALL ScAccessibleContextBase::queryInterface( uno::Type const & rTy
 }
 
 void SAL_CALL ScAccessibleContextBase::acquire()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBaseWeakImpl::acquire();
 }
 
 void SAL_CALL ScAccessibleContextBase::release()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBaseWeakImpl::release();
 }

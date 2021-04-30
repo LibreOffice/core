@@ -139,7 +139,7 @@ TextApiObject::TextApiObject( std::unique_ptr<TextAPIEditSource> pEditSource )
 {
 }
 
-TextApiObject::~TextApiObject() throw()
+TextApiObject::~TextApiObject() noexcept
 {
     dispose();
 }

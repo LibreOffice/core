@@ -1016,12 +1016,12 @@ Any SAL_CALL ScDataPilotTableObj::queryInterface( const uno::Type& rType )
     return ScDataPilotDescriptorBase::queryInterface( rType );
 }
 
-void SAL_CALL ScDataPilotTableObj::acquire() throw()
+void SAL_CALL ScDataPilotTableObj::acquire() noexcept
 {
     ScDataPilotDescriptorBase::acquire();
 }
 
-void SAL_CALL ScDataPilotTableObj::release() throw()
+void SAL_CALL ScDataPilotTableObj::release() noexcept
 {
     ScDataPilotDescriptorBase::release();
 }

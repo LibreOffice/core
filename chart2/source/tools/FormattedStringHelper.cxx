@@ -34,7 +34,7 @@ Sequence< Reference< chart2::XFormattedString2 > >
             FormattedStringHelper::createFormattedStringSequence(
                      const Reference< uno::XComponentContext > & xContext
                     , const OUString & rString
-                    , const Reference< beans::XPropertySet > & xTextProperties ) throw()
+                    , const Reference< beans::XPropertySet > & xTextProperties ) noexcept
 {
     Reference< XFormattedString2 > xFormStr;
     try

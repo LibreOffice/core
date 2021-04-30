@@ -110,7 +110,7 @@ public:
 
     /// create a new model with an empty, default instance
     Model();
-    virtual ~Model() throw() override;
+    virtual ~Model() noexcept override;
 
     xforms::EvaluationContext getEvaluationContext();
 

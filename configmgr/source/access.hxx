@@ -312,7 +312,7 @@ protected:
         std::vector<OUString> * services) = 0;
 
     virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
-    virtual void clearListeners() throw ();
+    virtual void clearListeners() noexcept;
 
     virtual css::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & aType) override;

@@ -56,9 +56,9 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual ~RootItemContainer() override;
 
         // XInterface
-        virtual void SAL_CALL acquire() throw () override
+        virtual void SAL_CALL acquire() noexcept override
             { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() throw () override
+        virtual void SAL_CALL release() noexcept override
             { OWeakObject::release(); }
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
 
@@ -66,7 +66,7 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XUnoTunnel
-        static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() throw();
+        static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() noexcept;
         sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
         // XIndexContainer

@@ -96,7 +96,7 @@ const char s_nsOOo  [] = "http://openoffice.org/2004/office/rdfa/";
 
 
 //FIXME: this approach is not ideal. can we use blank nodes instead?
-bool isInternalContext(librdf_node *i_pNode) throw ()
+bool isInternalContext(librdf_node *i_pNode) noexcept
 {
     OSL_ENSURE(i_pNode, "isInternalContext: context null");
     OSL_ENSURE(librdf_node_is_resource(i_pNode),
@@ -638,7 +638,7 @@ class NodeArray : private std::vector<librdf_node*>
 public:
     NodeArray(int cnt) : std::vector<librdf_node*>(cnt) {}
 
-    ~NodeArray() throw ()
+    ~NodeArray() noexcept
     {
         std::for_each(begin(), end(), safe_librdf_free_node);
     }

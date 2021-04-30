@@ -41,8 +41,8 @@ namespace DOM
     }
 
     // there is just 1 static instance, so these must not delete it!
-    void SAL_CALL CDOMImplementation::acquire() throw () { }
-    void SAL_CALL CDOMImplementation::release() throw () { }
+    void SAL_CALL CDOMImplementation::acquire() noexcept { }
+    void SAL_CALL CDOMImplementation::release() noexcept { }
 
     /**
     Creates a DOM Document object of the specified type with its document element.

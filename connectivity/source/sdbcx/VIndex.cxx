@@ -181,12 +181,12 @@ void SAL_CALL OIndex::setName( const OUString& /*aName*/ )
 }
 
 // XInterface
-void SAL_CALL OIndex::acquire() throw()
+void SAL_CALL OIndex::acquire() noexcept
 {
     ODescriptor_BASE::acquire();
 }
 
-void SAL_CALL OIndex::release() throw()
+void SAL_CALL OIndex::release() noexcept
 {
     ODescriptor_BASE::release();
 }

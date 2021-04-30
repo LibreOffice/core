@@ -57,13 +57,13 @@ CachedContentResultSetStub::~CachedContentResultSetStub()
 
 // XInterface methods.
 void SAL_CALL CachedContentResultSetStub::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL CachedContentResultSetStub::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

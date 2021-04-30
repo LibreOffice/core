@@ -65,8 +65,8 @@ public:
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType ) override;
     virtual Any SAL_CALL queryAggregation( Type const & rType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
 protected:
     // XTypeProvider
@@ -145,13 +145,13 @@ Any SAL_CALL XMLFilterDialogComponent::queryAggregation( Type const & rType )
 }
 
 
-void SAL_CALL XMLFilterDialogComponent::acquire() throw ()
+void SAL_CALL XMLFilterDialogComponent::acquire() noexcept
 {
     OComponentHelper::acquire();
 }
 
 
-void SAL_CALL XMLFilterDialogComponent::release() throw ()
+void SAL_CALL XMLFilterDialogComponent::release() noexcept
 {
     OComponentHelper::release();
 }

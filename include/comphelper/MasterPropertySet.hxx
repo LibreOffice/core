@@ -101,11 +101,11 @@ namespace comphelper
 
     public:
         MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, SolarMutex* pMutex )
-            throw();
+            noexcept;
         virtual ~MasterPropertySet()
-            throw();
+            noexcept;
         void registerSlave ( ChainablePropertySet *pNewSet )
-            throw();
+            noexcept;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;

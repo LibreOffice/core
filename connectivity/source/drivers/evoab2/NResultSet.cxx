@@ -1119,12 +1119,12 @@ sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const OUString& columnName )
     return *getArrayHelper();
 }
 
-void SAL_CALL OEvoabResultSet::acquire() throw()
+void SAL_CALL OEvoabResultSet::acquire() noexcept
 {
     OResultSet_BASE::acquire();
 }
 
-void SAL_CALL OEvoabResultSet::release() throw()
+void SAL_CALL OEvoabResultSet::release() noexcept
 {
     OResultSet_BASE::release();
 }

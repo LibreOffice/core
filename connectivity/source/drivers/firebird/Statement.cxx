@@ -58,12 +58,12 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch()
 
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement");
 
-void SAL_CALL OStatement::acquire() throw()
+void SAL_CALL OStatement::acquire() noexcept
 {
     OStatementCommonBase::acquire();
 }
 
-void SAL_CALL OStatement::release() throw()
+void SAL_CALL OStatement::release() noexcept
 {
     OStatementCommonBase::release();
 }

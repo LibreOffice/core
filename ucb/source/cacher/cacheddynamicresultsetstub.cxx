@@ -77,13 +77,13 @@ void CachedDynamicResultSetStub
 
 // XInterface methods.
 void SAL_CALL CachedDynamicResultSetStub::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL CachedDynamicResultSetStub::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

@@ -66,12 +66,12 @@ Any SAL_CALL FrameStatusListener::queryInterface( const Type& rType )
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL FrameStatusListener::acquire() throw ()
+void SAL_CALL FrameStatusListener::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL FrameStatusListener::release() throw ()
+void SAL_CALL FrameStatusListener::release() noexcept
 {
     OWeakObject::release();
 }

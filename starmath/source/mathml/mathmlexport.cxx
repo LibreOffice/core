@@ -329,7 +329,7 @@ sal_Int64 SAL_CALL SmXMLExport::getSomething(const uno::Sequence<sal_Int8>& rId)
     return SvXMLExport::getSomething(rId);
 }
 
-const uno::Sequence<sal_Int8>& SmXMLExport::getUnoTunnelId() throw()
+const uno::Sequence<sal_Int8>& SmXMLExport::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSmXMLExportUnoTunnelId;
     return theSmXMLExportUnoTunnelId.getSeq();

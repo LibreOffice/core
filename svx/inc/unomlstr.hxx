@@ -31,8 +31,8 @@ class SvxUnoShapeModifyListener final
     SdrObject* mpObj;
 
 public:
-    SvxUnoShapeModifyListener(SdrObject* pObj) throw();
-    virtual ~SvxUnoShapeModifyListener() throw() override;
+    SvxUnoShapeModifyListener(SdrObject* pObj) noexcept;
+    virtual ~SvxUnoShapeModifyListener() noexcept override;
 
     // css::util::XModifyListener
     virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;
@@ -41,7 +41,7 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
     // internal
-    void invalidate() throw();
+    void invalidate() noexcept;
 };
 
 #endif

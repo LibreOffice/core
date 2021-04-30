@@ -319,7 +319,7 @@ public:
     virtual bool exportDocument() override;
 
     // only needed for import; ignore
-    virtual bool importDocument() throw() override;
+    virtual bool importDocument() noexcept override;
     virtual oox::vml::Drawing* getVmlDrawing() override;
     virtual const oox::drawingml::Theme* getCurrentTheme() const override;
     virtual oox::drawingml::table::TableStyleListPtr getTableStyles() override;

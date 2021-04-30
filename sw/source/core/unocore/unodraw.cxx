@@ -256,7 +256,7 @@ SwFmDrawPage::SwFmDrawPage( SdrPage* pPage ) :
 {
 }
 
-SwFmDrawPage::~SwFmDrawPage() throw ()
+SwFmDrawPage::~SwFmDrawPage() noexcept
 {
     while (!m_vShapes.empty())
         m_vShapes.back()->dispose();
@@ -2709,12 +2709,12 @@ uno::Any SwXGroupShape::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-void SwXGroupShape::acquire(  ) throw()
+void SwXGroupShape::acquire(  ) noexcept
 {
     SwXShape::acquire();
 }
 
-void SwXGroupShape::release(  ) throw()
+void SwXGroupShape::release(  ) noexcept
 {
     SwXShape::release();
 }

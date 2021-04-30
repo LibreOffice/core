@@ -31,7 +31,7 @@ public:
     SAL_DLLPRIVATE NoSuchFileException(NoSuchFileException const & other):
         uri_(other.uri_) {}
 
-    SAL_DLLPRIVATE ~NoSuchFileException() throw ();
+    SAL_DLLPRIVATE ~NoSuchFileException() noexcept;
 
     const OUString& getUri() const { return uri_; }
 
@@ -52,7 +52,7 @@ public:
         uri_(other.uri_), detail_(other.detail_)
     {}
 
-    SAL_DLLPRIVATE ~FileFormatException() throw ();
+    SAL_DLLPRIVATE ~FileFormatException() noexcept;
 
     const OUString& getUri() const { return uri_; }
 
@@ -92,7 +92,7 @@ public:
 protected:
     explicit SAL_DLLPRIVATE Entity(Sort sort): sort_(sort) {}
 
-    virtual SAL_DLLPRIVATE ~Entity() throw () override;
+    virtual SAL_DLLPRIVATE ~Entity() noexcept override;
 
 private:
     Sort sort_;
@@ -106,7 +106,7 @@ public:
 protected:
     SAL_DLLPRIVATE MapCursor() {}
 
-    virtual SAL_DLLPRIVATE ~MapCursor() throw() override;
+    virtual SAL_DLLPRIVATE ~MapCursor() noexcept override;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ModuleEntity: public Entity {
@@ -120,7 +120,7 @@ public:
 protected:
     SAL_DLLPRIVATE ModuleEntity(): Entity(SORT_MODULE) {}
 
-    virtual SAL_DLLPRIVATE ~ModuleEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~ModuleEntity() noexcept override;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL PublishableEntity: public Entity {
@@ -137,7 +137,7 @@ protected:
         Entity(sort), published_(published), annotations_(annotations)
     {}
 
-    virtual SAL_DLLPRIVATE ~PublishableEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~PublishableEntity() noexcept override;
 
 private:
     bool published_;
@@ -171,7 +171,7 @@ public:
     std::vector< Member > const & getMembers() const { return members_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~EnumTypeEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~EnumTypeEntity() noexcept override;
 
     std::vector< Member > members_;
 };
@@ -205,7 +205,7 @@ public:
     { return directMembers_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~PlainStructTypeEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~PlainStructTypeEntity() noexcept override;
 
     OUString directBase_;
     std::vector< Member > directMembers_;
@@ -248,7 +248,7 @@ public:
     std::vector< Member > const & getMembers() const { return members_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~PolymorphicStructTypeTemplateEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~PolymorphicStructTypeTemplateEntity() noexcept override;
 
     std::vector< OUString > typeParameters_;
     std::vector< Member > members_;
@@ -284,7 +284,7 @@ public:
     { return directMembers_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~ExceptionTypeEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~ExceptionTypeEntity() noexcept override;
 
     OUString directBase_;
     std::vector< Member > directMembers_;
@@ -382,7 +382,7 @@ public:
     { return directMethods_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~InterfaceTypeEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~InterfaceTypeEntity() noexcept override;
 
     std::vector< AnnotatedReference > directMandatoryBases_;
     std::vector< AnnotatedReference > directOptionalBases_;
@@ -401,7 +401,7 @@ public:
     const OUString& getType() const { return type_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~TypedefEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~TypedefEntity() noexcept override;
 
     OUString type_;
 };
@@ -480,7 +480,7 @@ public:
     std::vector< Member > const & getMembers() const { return members_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~ConstantGroupEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~ConstantGroupEntity() noexcept override;
 
     std::vector< Member > members_;
 };
@@ -542,7 +542,7 @@ public:
     { return constructors_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~SingleInterfaceBasedServiceEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~SingleInterfaceBasedServiceEntity() noexcept override;
 
     OUString base_;
     std::vector< Constructor > constructors_;
@@ -619,7 +619,7 @@ public:
     { return directProperties_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~AccumulationBasedServiceEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~AccumulationBasedServiceEntity() noexcept override;
 
     std::vector< AnnotatedReference > directMandatoryBaseServices_;
     std::vector< AnnotatedReference > directOptionalBaseServices_;
@@ -643,7 +643,7 @@ public:
     const OUString& getBase() const { return base_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~InterfaceBasedSingletonEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~InterfaceBasedSingletonEntity() noexcept override;
 
     OUString base_;
 };
@@ -661,7 +661,7 @@ public:
     const OUString& getBase() const { return base_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~ServiceBasedSingletonEntity() throw () override;
+    virtual SAL_DLLPRIVATE ~ServiceBasedSingletonEntity() noexcept override;
 
     OUString base_;
 };
@@ -678,7 +678,7 @@ public:
 protected:
     SAL_DLLPRIVATE Provider() {}
 
-    virtual SAL_DLLPRIVATE ~Provider() throw () override;
+    virtual SAL_DLLPRIVATE ~Provider() noexcept override;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL Manager final : public salhelper::SimpleReferenceObject {
@@ -695,7 +695,7 @@ public:
     rtl::Reference< MapCursor > createCursor(OUString const & name) const;
 
 private:
-    virtual SAL_DLLPRIVATE ~Manager() throw () override;
+    virtual SAL_DLLPRIVATE ~Manager() noexcept override;
 
     SAL_DLLPRIVATE rtl::Reference< Provider > loadProvider(
         OUString const & uri);

@@ -104,12 +104,12 @@ namespace dbaui
         return aReturn;
     }
 
-    void SAL_CALL OJoinExchObj::acquire(  ) throw()
+    void SAL_CALL OJoinExchObj::acquire(  ) noexcept
     {
         TransferDataContainer::acquire( );
     }
 
-    void SAL_CALL OJoinExchObj::release(  ) throw()
+    void SAL_CALL OJoinExchObj::release(  ) noexcept
     {
         TransferDataContainer::release( );
     }

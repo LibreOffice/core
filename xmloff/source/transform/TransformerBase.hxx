@@ -77,8 +77,8 @@ protected:
 
 public:
     XMLTransformerBase( XMLTransformerActionInit const *pInit,
-                           ::xmloff::token::XMLTokenEnum const *pTKMapInit ) throw();
-    virtual ~XMLTransformerBase() throw() override;
+                           ::xmloff::token::XMLTokenEnum const *pTKMapInit ) noexcept;
+    virtual ~XMLTransformerBase() noexcept override;
 
     // css::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument() override;

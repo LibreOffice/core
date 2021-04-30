@@ -51,7 +51,7 @@ public:
     std::vector<unoidl::EnumTypeEntity::Member> members;
 
 private:
-    virtual ~SourceProviderEnumTypeEntityPad() throw () override {}
+    virtual ~SourceProviderEnumTypeEntityPad() noexcept override {}
 };
 
 class SourceProviderPlainStructTypeEntityPad: public SourceProviderEntityPad {
@@ -68,7 +68,7 @@ public:
     std::vector<unoidl::PlainStructTypeEntity::Member> members;
 
 private:
-    virtual ~SourceProviderPlainStructTypeEntityPad() throw () override {}
+    virtual ~SourceProviderPlainStructTypeEntityPad() noexcept override {}
 };
 
 class SourceProviderPolymorphicStructTypeTemplateEntityPad:
@@ -83,7 +83,7 @@ public:
     std::vector<unoidl::PolymorphicStructTypeTemplateEntity::Member> members;
 
 private:
-    virtual ~SourceProviderPolymorphicStructTypeTemplateEntityPad() throw () override {}
+    virtual ~SourceProviderPolymorphicStructTypeTemplateEntityPad() noexcept override {}
 };
 
 class SourceProviderExceptionTypeEntityPad: public SourceProviderEntityPad {
@@ -100,7 +100,7 @@ public:
     std::vector<unoidl::ExceptionTypeEntity::Member> members;
 
 private:
-    virtual ~SourceProviderExceptionTypeEntityPad() throw () override {}
+    virtual ~SourceProviderExceptionTypeEntityPad() noexcept override {}
 };
 
 class SourceProviderInterfaceTypeEntityPad: public SourceProviderEntityPad {
@@ -151,7 +151,7 @@ public:
     std::map<OUString, Member> allMembers;
 
 private:
-    virtual ~SourceProviderInterfaceTypeEntityPad() throw () override {}
+    virtual ~SourceProviderInterfaceTypeEntityPad() noexcept override {}
 
     bool checkBaseClashes(
         YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
@@ -186,7 +186,7 @@ public:
     std::vector<unoidl::ConstantGroupEntity::Member> members;
 
 private:
-    virtual ~SourceProviderConstantGroupEntityPad() throw () override {}
+    virtual ~SourceProviderConstantGroupEntityPad() noexcept override {}
 };
 
 class SourceProviderSingleInterfaceBasedServiceEntityPad:
@@ -232,7 +232,7 @@ public:
     std::vector<Constructor> constructors;
 
 private:
-    virtual ~SourceProviderSingleInterfaceBasedServiceEntityPad() throw () override {}
+    virtual ~SourceProviderSingleInterfaceBasedServiceEntityPad() noexcept override {}
 };
 
 class SourceProviderAccumulationBasedServiceEntityPad:
@@ -251,7 +251,7 @@ public:
         directProperties;
 
 private:
-    virtual ~SourceProviderAccumulationBasedServiceEntityPad() throw () override {}
+    virtual ~SourceProviderAccumulationBasedServiceEntityPad() noexcept override {}
 };
 
 struct SourceProviderEntity {

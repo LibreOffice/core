@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 
 namespace oox::ppt {
 
-    SoundActionContext::SoundActionContext( FragmentHandler2 const & rParent, PropertyMap & aProperties ) throw()
+    SoundActionContext::SoundActionContext( FragmentHandler2 const & rParent, PropertyMap & aProperties ) noexcept
     : FragmentHandler2( rParent )
     , maSlideProperties( aProperties )
     , mbHasStartSound( false )
@@ -47,7 +47,7 @@ namespace oox::ppt {
     {
     }
 
-    SoundActionContext::~SoundActionContext() throw()
+    SoundActionContext::~SoundActionContext() noexcept
     {
     }
 

@@ -302,12 +302,12 @@ Reference< css::sdbc::XRef > SAL_CALL java_sql_CallableStatement::getRef( sal_In
     return out==nullptr ? nullptr : new java_sql_Ref( t.pEnv, out );
 }
 
-void SAL_CALL java_sql_CallableStatement::acquire() throw()
+void SAL_CALL java_sql_CallableStatement::acquire() noexcept
 {
     java_sql_PreparedStatement::acquire();
 }
 
-void SAL_CALL java_sql_CallableStatement::release() throw()
+void SAL_CALL java_sql_CallableStatement::release() noexcept
 {
     java_sql_PreparedStatement::release();
 }

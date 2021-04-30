@@ -51,23 +51,23 @@ namespace sd {
 
 SdUnoDrawView::SdUnoDrawView(
     DrawViewShell& rViewShell,
-    View& rView) throw()
+    View& rView) noexcept
     :   DrawSubControllerInterfaceBase(m_aMutex),
         mrDrawViewShell(rViewShell),
         mrView(rView)
 {
 }
 
-SdUnoDrawView::~SdUnoDrawView() throw()
+SdUnoDrawView::~SdUnoDrawView() noexcept
 {
 }
 
-bool SdUnoDrawView::getMasterPageMode() const throw()
+bool SdUnoDrawView::getMasterPageMode() const noexcept
 {
     return (mrDrawViewShell.GetEditMode() == EditMode::MasterPage);
 }
 
-void SdUnoDrawView::setMasterPageMode (bool bMasterPageMode) throw()
+void SdUnoDrawView::setMasterPageMode (bool bMasterPageMode) noexcept
 {
     if ((mrDrawViewShell.GetEditMode() == EditMode::MasterPage) != bMasterPageMode)
     {
@@ -77,12 +77,12 @@ void SdUnoDrawView::setMasterPageMode (bool bMasterPageMode) throw()
     }
 }
 
-bool SdUnoDrawView::getLayerMode() const throw()
+bool SdUnoDrawView::getLayerMode() const noexcept
 {
     return mrDrawViewShell.IsLayerModeActive();
 }
 
-void SdUnoDrawView::setLayerMode (bool bLayerMode) throw()
+void SdUnoDrawView::setLayerMode (bool bLayerMode) noexcept
 {
     if (mrDrawViewShell.IsLayerModeActive() != bLayerMode)
     {
@@ -505,7 +505,7 @@ void SdUnoDrawView::SetZoomType ( sal_Int16 nType )
             { &aZoomItem });
 }
 
-SdXImpressDocument* SdUnoDrawView::GetModel() const throw()
+SdXImpressDocument* SdUnoDrawView::GetModel() const noexcept
 {
     if (mrView.GetDocSh()!=nullptr)
     {

@@ -64,7 +64,7 @@ SdUnoPageBackground::SdUnoPageBackground(
     }
 }
 
-SdUnoPageBackground::~SdUnoPageBackground() throw()
+SdUnoPageBackground::~SdUnoPageBackground() noexcept
 {
     SolarMutexGuard g;
 
@@ -403,7 +403,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
 }
 
 /** this is used because our property map is not sorted yet */
-const SfxItemPropertyMapEntry* SdUnoPageBackground::getPropertyMapEntry( std::u16string_view rPropertyName ) const throw()
+const SfxItemPropertyMapEntry* SdUnoPageBackground::getPropertyMapEntry( std::u16string_view rPropertyName ) const noexcept
 {
     return mpPropSet->getPropertyMap().getByName(rPropertyName);
 }

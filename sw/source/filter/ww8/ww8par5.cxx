@@ -711,23 +711,23 @@ static bool AcceptableNestedField(sal_uInt16 nFieldCode)
     }
 }
 
-WW8FieldEntry::WW8FieldEntry(SwPosition const &rPos, sal_uInt16 nFieldId) throw()
+WW8FieldEntry::WW8FieldEntry(SwPosition const &rPos, sal_uInt16 nFieldId) noexcept
     : maStartPos(rPos), mnFieldId(nFieldId), mnObjLocFc(0)
 {
 }
 
-WW8FieldEntry::WW8FieldEntry(const WW8FieldEntry &rOther) throw()
+WW8FieldEntry::WW8FieldEntry(const WW8FieldEntry &rOther) noexcept
     : maStartPos(rOther.maStartPos), mnFieldId(rOther.mnFieldId), mnObjLocFc(rOther.mnObjLocFc)
 {
 }
 
-void WW8FieldEntry::Swap(WW8FieldEntry &rOther) throw()
+void WW8FieldEntry::Swap(WW8FieldEntry &rOther) noexcept
 {
     std::swap(maStartPos, rOther.maStartPos);
     std::swap(mnFieldId, rOther.mnFieldId);
 }
 
-WW8FieldEntry &WW8FieldEntry::operator=(const WW8FieldEntry &rOther) throw()
+WW8FieldEntry &WW8FieldEntry::operator=(const WW8FieldEntry &rOther) noexcept
 {
     WW8FieldEntry aTemp(rOther);
     Swap(aTemp);

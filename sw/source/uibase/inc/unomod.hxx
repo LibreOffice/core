@@ -86,7 +86,7 @@ class SwXPrintSettings final : public comphelper::ChainablePropertySet
     virtual void _postGetValues () override;
 
     virtual ~SwXPrintSettings()
-        throw() override;
+        noexcept override;
 public:
     SwXPrintSettings( SwXPrintSettingsType eType, SwDoc * pDoc = nullptr );
 
@@ -119,7 +119,7 @@ class SwXViewSettings final : public comphelper::ChainablePropertySet
     virtual void _postGetValues () override;
 
     virtual ~SwXViewSettings()
-        throw() override;
+        noexcept override;
 public:
     SwXViewSettings(SwView*  pView);
 

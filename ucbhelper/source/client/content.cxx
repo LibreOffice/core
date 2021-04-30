@@ -134,9 +134,9 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
-        throw() override;
+        noexcept override;
     virtual void SAL_CALL release()
-        throw() override;
+        noexcept override;
 
     // XContentEventListener
     virtual void SAL_CALL contentEvent( const ContentEvent& evt ) override;
@@ -1285,13 +1285,13 @@ void Content_Impl::inserted()
 // XInterface methods.
 
 void SAL_CALL ContentEventListener_Impl::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL ContentEventListener_Impl::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

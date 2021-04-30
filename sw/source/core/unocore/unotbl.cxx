@@ -781,12 +781,12 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXCell::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL SwXCell::acquire(  ) throw()
+void SAL_CALL SwXCell::acquire(  ) noexcept
 {
     SwXCellBaseClass::acquire();
 }
 
-void SAL_CALL SwXCell::release(  ) throw()
+void SAL_CALL SwXCell::release(  ) noexcept
 {
     SolarMutexGuard aGuard;
 
@@ -1427,12 +1427,12 @@ OUString SwXTextTableCursor::getImplementationName()
 sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
-void SwXTextTableCursor::acquire() throw()
+void SwXTextTableCursor::acquire() noexcept
 {
     SwXTextTableCursor_Base::acquire();
 }
 
-void SwXTextTableCursor::release() throw()
+void SwXTextTableCursor::release() noexcept
 {
     SolarMutexGuard aGuard;
     SwXTextTableCursor_Base::release();

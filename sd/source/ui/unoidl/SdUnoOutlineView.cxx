@@ -33,13 +33,13 @@ using namespace ::com::sun::star::uno;
 namespace sd {
 
 SdUnoOutlineView::SdUnoOutlineView(
-    OutlineViewShell& rViewShell) throw()
+    OutlineViewShell& rViewShell) noexcept
     :   DrawSubControllerInterfaceBase(m_aMutex),
         mrOutlineViewShell(rViewShell)
 {
 }
 
-SdUnoOutlineView::~SdUnoOutlineView() throw()
+SdUnoOutlineView::~SdUnoOutlineView() noexcept
 {
 }
 

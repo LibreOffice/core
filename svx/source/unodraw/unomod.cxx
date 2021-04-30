@@ -71,7 +71,7 @@ private:
     SvxUnoDrawingModel& mrModel;
 
 public:
-    explicit SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel ) throw();
+    explicit SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel ) noexcept;
 
     // XDrawPages
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL insertNewByIndex( sal_Int32 nIndex ) override;
@@ -225,7 +225,7 @@ SdrModel& SvxUnoDrawingModel::getSdrModelFromUnoModel() const
     return *mpDoc;
 }
 
-SvxUnoDrawingModel::SvxUnoDrawingModel(SdrModel* pDoc) throw()
+SvxUnoDrawingModel::SvxUnoDrawingModel(SdrModel* pDoc) noexcept
 :   SfxBaseModel(nullptr),
     SvxFmMSFactory(),
     css::drawing::XDrawPagesSupplier(),
@@ -243,7 +243,7 @@ SvxUnoDrawingModel::SvxUnoDrawingModel(SdrModel* pDoc) throw()
 {
 }
 
-SvxUnoDrawingModel::~SvxUnoDrawingModel() throw()
+SvxUnoDrawingModel::~SvxUnoDrawingModel() noexcept
 {
 }
 
@@ -530,7 +530,7 @@ uno::Reference< css::ucb::XAnyCompare > SAL_CALL SvxUnoDrawingModel::createAnyCo
     return SvxCreateNumRuleCompare();
 }
 
-SvxUnoDrawPagesAccess::SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel )  throw()
+SvxUnoDrawPagesAccess::SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel )  noexcept
 :   mrModel(rMyModel)
 {
 }

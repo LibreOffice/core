@@ -161,12 +161,12 @@ namespace pcr
         }
 
         // XInterface
-        virtual void SAL_CALL acquire(  ) throw () override
+        virtual void SAL_CALL acquire(  ) noexcept override
         {
             m_rParent.acquire();
         }
 
-        virtual void SAL_CALL release(  ) throw () override
+        virtual void SAL_CALL release(  ) noexcept override
         {
             m_rParent.release();
         }

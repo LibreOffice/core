@@ -1768,7 +1768,7 @@ OUString OOo2OasisTransformer::GetEventName( const OUString& rName, bool )
 
 OOo2OasisTransformer::OOo2OasisTransformer( OUString const & rImplName,
                                             OUString const & rSubServiceName )
-        throw() :
+        noexcept :
     XMLTransformerBase( aActionTable, aTokenMap ),
     m_aImplName(rImplName),
     m_aSubServiceName(rSubServiceName),
@@ -1823,7 +1823,7 @@ OOo2OasisTransformer::OOo2OasisTransformer( OUString const & rImplName,
         rp.reset();
 }
 
-OOo2OasisTransformer::~OOo2OasisTransformer() throw()
+OOo2OasisTransformer::~OOo2OasisTransformer() noexcept
 {
     for(auto & rp : m_aActions)
         rp.reset();
@@ -1944,7 +1944,7 @@ void OOo2OasisTransformer::Initialize(
     }
 }
 
-const css::uno::Sequence<sal_Int8>& OOo2OasisTransformer::getUnoTunnelId() throw()
+const css::uno::Sequence<sal_Int8>& OOo2OasisTransformer::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theOOo2OasisTransformerUnoTunnelId;
     return theOOo2OasisTransformerUnoTunnelId.getSeq();

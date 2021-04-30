@@ -68,10 +68,10 @@ class FileEmitContext : public EmitContext
     FileEmitContext( const char* pFileName, const char* pOrigName, const PDFContainer* pTop );
     virtual ~FileEmitContext() override;
 
-    virtual bool write( const void* pBuf, unsigned int nLen ) throw() override;
-    virtual unsigned int getCurPos() throw() override;
-    virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) throw() override;
-    virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) throw() override;
+    virtual bool write( const void* pBuf, unsigned int nLen ) noexcept override;
+    virtual unsigned int getCurPos() noexcept override;
+    virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) noexcept override;
+    virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) noexcept override;
 };
 
 }
@@ -154,7 +154,7 @@ void FileEmitContext::openReadFile( const char* pInFile )
     m_nReadLen = static_cast<unsigned int>(nFileSize);
 }
 
-bool FileEmitContext::write( const void* pBuf, unsigned int nLen ) throw()
+bool FileEmitContext::write( const void* pBuf, unsigned int nLen ) noexcept
 {
     if( ! m_aHandle )
         return false;
@@ -165,7 +165,7 @@ bool FileEmitContext::write( const void* pBuf, unsigned int nLen ) throw()
            && nWrite == nWritten;
 }
 
-unsigned int FileEmitContext::getCurPos() throw()
+unsigned int FileEmitContext::getCurPos() noexcept
 {
     sal_uInt64 nFileSize = 0;
     if( m_aHandle )
@@ -176,7 +176,7 @@ unsigned int FileEmitContext::getCurPos() throw()
     return static_cast<unsigned int>(nFileSize);
 }
 
-bool FileEmitContext::copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) throw()
+bool FileEmitContext::copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) noexcept
 {
     if( nOrigOffset + nLen > m_nReadLen )
         return false;
@@ -202,7 +202,7 @@ bool FileEmitContext::copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen
     return bRet;
 }
 
-unsigned int FileEmitContext::readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) throw()
+unsigned int FileEmitContext::readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) noexcept
 {
     if( nOrigOffset + nLen > m_nReadLen )
         return 0;

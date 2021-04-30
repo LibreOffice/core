@@ -84,7 +84,7 @@ SvxShapeGroup::SvxShapeGroup(SdrObject* pObj, SvxDrawPage* pDrawPage)
 {
 }
 
-SvxShapeGroup::~SvxShapeGroup() throw()
+SvxShapeGroup::~SvxShapeGroup() noexcept
 {
 }
 
@@ -338,7 +338,7 @@ SvxShapeConnector::SvxShapeConnector(SdrObject* pObj)
 }
 
 
-SvxShapeConnector::~SvxShapeConnector() throw()
+SvxShapeConnector::~SvxShapeConnector() noexcept
 {
 }
 
@@ -461,7 +461,7 @@ SvxShapeControl::SvxShapeControl(SdrObject* pObj)
 }
 
 
-SvxShapeControl::~SvxShapeControl() throw()
+SvxShapeControl::~SvxShapeControl() noexcept
 {
 }
 
@@ -869,7 +869,7 @@ SvxShapeDimensioning::SvxShapeDimensioning(SdrObject* pObj)
 {
 }
 
-SvxShapeDimensioning::~SvxShapeDimensioning() throw()
+SvxShapeDimensioning::~SvxShapeDimensioning() noexcept
 {
 }
 
@@ -878,7 +878,7 @@ SvxShapeCircle::SvxShapeCircle(SdrObject* pObj)
 {
 }
 
-SvxShapeCircle::~SvxShapeCircle() throw()
+SvxShapeCircle::~SvxShapeCircle() noexcept
 {
 }
 
@@ -893,7 +893,7 @@ SvxShapePolyPolygon::SvxShapePolyPolygon(
 {
 }
 
-SvxShapePolyPolygon::~SvxShapePolyPolygon() throw()
+SvxShapePolyPolygon::~SvxShapePolyPolygon() noexcept
 {
 }
 
@@ -1144,7 +1144,7 @@ void SvxShapePolyPolygon::SetPolygon(const basegfx::B2DPolyPolygon& rNew)
 }
 
 
-basegfx::B2DPolyPolygon SvxShapePolyPolygon::GetPolygon() const throw()
+basegfx::B2DPolyPolygon SvxShapePolyPolygon::GetPolygon() const noexcept
 {
     ::SolarMutexGuard aGuard;
 
@@ -1165,7 +1165,7 @@ SvxGraphicObject::SvxGraphicObject(SdrObject* pObj)
 {
 }
 
-SvxGraphicObject::~SvxGraphicObject() throw()
+SvxGraphicObject::~SvxGraphicObject() noexcept
 {
 }
 
@@ -1556,7 +1556,7 @@ SvxShapeCaption::SvxShapeCaption(SdrObject* pObj)
 {
 }
 
-SvxShapeCaption::~SvxShapeCaption() throw()
+SvxShapeCaption::~SvxShapeCaption() noexcept
 {
 }
 
@@ -1565,7 +1565,7 @@ SvxCustomShape::SvxCustomShape(SdrObject* pObj)
 {
 }
 
-SvxCustomShape::~SvxCustomShape() throw()
+SvxCustomShape::~SvxCustomShape() noexcept
 {
 }
 

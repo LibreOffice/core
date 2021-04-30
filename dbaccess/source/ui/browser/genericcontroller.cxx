@@ -268,12 +268,12 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     }
 }
 
-void SAL_CALL OGenericUnoController::acquire(  ) throw ()
+void SAL_CALL OGenericUnoController::acquire(  ) noexcept
 {
     OGenericUnoController_Base::acquire();
 }
 
-void SAL_CALL OGenericUnoController::release(  ) throw ()
+void SAL_CALL OGenericUnoController::release(  ) noexcept
 {
     OGenericUnoController_Base::release();
 }

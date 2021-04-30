@@ -153,12 +153,12 @@ bool OComponentResultSet::fillIndexValues(const Reference< XColumnsSupplier> &/*
 }
 
 
-void SAL_CALL OComponentResultSet::acquire() throw()
+void SAL_CALL OComponentResultSet::acquire() noexcept
 {
     OComponentResultSet_BASE2::acquire();
 }
 
-void SAL_CALL OComponentResultSet::release() throw()
+void SAL_CALL OComponentResultSet::release() noexcept
 {
     OComponentResultSet_BASE2::release();
 }

@@ -43,7 +43,7 @@ public:
         SvxAutoCorrect &rNewAutoCorrect,
         const css::uno::Reference < css::embed::XStorage >& rNewStorage);
 
-    virtual ~SvXMLAutoCorrectImport() throw () override;
+    virtual ~SvXMLAutoCorrectImport() noexcept override;
 };
 
 class SvXMLWordListContext : public SvXMLImportContext
@@ -84,7 +84,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         SvStringsISortDtor & rNewList );
 
-    virtual ~SvXMLExceptionListImport() throw () override;
+    virtual ~SvXMLExceptionListImport() noexcept override;
 };
 
 class SvXMLExceptionListContext : public SvXMLImportContext

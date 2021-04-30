@@ -74,11 +74,11 @@ public:
 
     virtual void SAL_CALL
         acquire()
-        throw () override;
+        noexcept override;
 
     virtual void SAL_CALL
         release()
-        throw () override;
+        noexcept override;
 
     //=====  XServiceInfo  ====================================================
 

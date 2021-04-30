@@ -147,7 +147,7 @@ void MemRingBuffer::writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &seq )
 }
 
 
-sal_Int32 MemRingBuffer::getSize()  const throw()
+sal_Int32 MemRingBuffer::getSize()  const noexcept
 {
     return m_nOccupiedBuffer;
 }

@@ -86,7 +86,7 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
     return USHRT_MAX;
 }
 
-const css::uno::Sequence< sal_Int8 > & SvUnoAttributeContainer::getUnoTunnelId() throw()
+const css::uno::Sequence< sal_Int8 > & SvUnoAttributeContainer::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSvUnoAttributeContainerUnoTunnelId;
     return theSvUnoAttributeContainerUnoTunnelId.getSeq();

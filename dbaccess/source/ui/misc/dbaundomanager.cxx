@@ -166,12 +166,12 @@ namespace dbaui
         return m_xImpl->aUndoManager;
     }
 
-    void SAL_CALL UndoManager::acquire(  ) throw ()
+    void SAL_CALL UndoManager::acquire(  ) noexcept
     {
         m_xImpl->rParent.acquire();
     }
 
-    void SAL_CALL UndoManager::release(  ) throw ()
+    void SAL_CALL UndoManager::release(  ) noexcept
     {
         m_xImpl->rParent.release();
     }

@@ -25,13 +25,13 @@ using namespace ::com::sun::star::xml::sax;
 
 
 XMLEmbeddedObjectExportFilter::XMLEmbeddedObjectExportFilter(
-        const Reference< XDocumentHandler > & rHandler ) throw() :
+        const Reference< XDocumentHandler > & rHandler ) noexcept :
     xHandler( rHandler ),
     xExtHandler( rHandler, UNO_QUERY )
 {
 }
 
-XMLEmbeddedObjectExportFilter::~XMLEmbeddedObjectExportFilter () throw()
+XMLEmbeddedObjectExportFilter::~XMLEmbeddedObjectExportFilter () noexcept
 {
 }
 

@@ -50,12 +50,12 @@ uno::Any SAL_CALL ScCellCursorObj::queryInterface( const uno::Type& rType )
     return ScCellRangeObj::queryInterface( rType );
 }
 
-void SAL_CALL ScCellCursorObj::acquire() throw()
+void SAL_CALL ScCellCursorObj::acquire() noexcept
 {
     ScCellRangeObj::acquire();
 }
 
-void SAL_CALL ScCellCursorObj::release() throw()
+void SAL_CALL ScCellCursorObj::release() noexcept
 {
     ScCellRangeObj::release();
 }

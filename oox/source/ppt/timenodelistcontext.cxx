@@ -223,7 +223,7 @@ namespace oox::ppt {
 
             }
 
-        virtual ~SetTimeNodeContext() throw () override
+        virtual ~SetTimeNodeContext() noexcept override
             {
                 if(maTo.hasValue())
                 {
@@ -442,7 +442,7 @@ namespace oox::ppt {
     public:
         AnimColorContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
-                            const TimeNodePtr & pNode ) throw()
+                            const TimeNodePtr & pNode ) noexcept
             : TimeNodeContext( rParent, aElement, pNode )
             , mnColorSpace( xAttribs->getOptionalValueToken( XML_clrSpc, 0 ) )
             , mnDir( xAttribs->getOptionalValueToken( XML_dir, 0 ) )
@@ -533,7 +533,7 @@ namespace oox::ppt {
     public:
         AnimContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                      const Reference< XFastAttributeList >& xAttribs,
-                      const TimeNodePtr & pNode ) throw()
+                      const TimeNodePtr & pNode ) noexcept
             : TimeNodeContext( rParent, aElement, pNode )
             {
                 NodePropertyMap & aProps( pNode->getNodeProperties() );
@@ -565,7 +565,7 @@ namespace oox::ppt {
                 mnValueType = xAttribs->getOptionalValueToken( XML_valueType, 0 );
             }
 
-        virtual ~AnimContext() throw () override
+        virtual ~AnimContext() noexcept override
             {
                 if (!msFrom.isEmpty())
                 {
@@ -652,7 +652,7 @@ namespace oox::ppt {
     public:
         AnimScaleContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
-                            const TimeNodePtr & pNode ) throw()
+                            const TimeNodePtr & pNode ) noexcept
             : TimeNodeContext( rParent, aElement, pNode )
                 , mbZoomContents( false )
             {
@@ -730,7 +730,7 @@ namespace oox::ppt {
     public:
         AnimRotContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                         const Reference< XFastAttributeList >& xAttribs,
-                         const TimeNodePtr & pNode ) throw()
+                         const TimeNodePtr & pNode ) noexcept
             : TimeNodeContext( rParent, aElement, pNode )
             {
                 AttributeList attribs( xAttribs );
@@ -777,7 +777,7 @@ namespace oox::ppt {
     public:
         AnimMotionContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                          const Reference< XFastAttributeList >& xAttribs,
-                          const TimeNodePtr & pNode ) throw()
+                          const TimeNodePtr & pNode ) noexcept
             : TimeNodeContext( rParent, aElement, pNode )
             {
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
@@ -872,7 +872,7 @@ namespace oox::ppt {
     public:
         AnimEffectContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                              const Reference< XFastAttributeList >& xAttribs,
-                             const TimeNodePtr & pNode ) throw()
+                             const TimeNodePtr & pNode ) noexcept
             : TimeNodeContext( rParent, aElement, pNode )
             {
                 sal_Int32 nDir = xAttribs->getOptionalValueToken( XML_transition, 0 );
@@ -961,26 +961,26 @@ namespace oox::ppt {
     }
 
     TimeNodeContext::TimeNodeContext( FragmentHandler2 const & rParent, sal_Int32 aElement,
-            const TimeNodePtr & pNode ) throw()
+            const TimeNodePtr & pNode ) noexcept
         : FragmentHandler2( rParent )
         , mnElement( aElement )
         , mpNode( pNode )
     {
     }
 
-    TimeNodeContext::~TimeNodeContext( ) throw()
+    TimeNodeContext::~TimeNodeContext( ) noexcept
     {
 
     }
 
     TimeNodeListContext::TimeNodeListContext( FragmentHandler2 const & rParent, TimeNodePtrList & aList )
-        throw()
+        noexcept
         : FragmentHandler2( rParent )
             , maList( aList )
     {
     }
 
-    TimeNodeListContext::~TimeNodeListContext( ) throw()
+    TimeNodeListContext::~TimeNodeListContext( ) noexcept
     {
     }
 

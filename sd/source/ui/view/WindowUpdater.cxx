@@ -34,7 +34,7 @@ WindowUpdater::WindowUpdater()
     maCTLOptions.AddListener(this);
 }
 
-WindowUpdater::~WindowUpdater() throw ()
+WindowUpdater::~WindowUpdater() noexcept
 {
     maCTLOptions.RemoveListener(this);
 }

@@ -34,18 +34,18 @@ namespace comphelper
 class PropertyMapImpl final
 {
 public:
-    PropertyMapImpl() throw();
+    PropertyMapImpl() noexcept;
 
-    void add(PropertyMapEntry const * pMap) throw();
-    void remove( const OUString& aName ) throw();
+    void add(PropertyMapEntry const * pMap) noexcept;
+    void remove( const OUString& aName ) noexcept;
 
-    std::vector< Property > const & getProperties() throw();
+    std::vector< Property > const & getProperties() noexcept;
 
-    const PropertyMap& getPropertyMap() const throw() { return maPropertyMap;}
+    const PropertyMap& getPropertyMap() const noexcept { return maPropertyMap;}
 
         /// @throws UnknownPropertyException
     Property getPropertyByName( const OUString& aName );
-    bool hasPropertyByName( const OUString& aName ) throw();
+    bool hasPropertyByName( const OUString& aName ) noexcept;
 
 private:
     PropertyMap maPropertyMap;
@@ -53,11 +53,11 @@ private:
 };
 }
 
-PropertyMapImpl::PropertyMapImpl() throw()
+PropertyMapImpl::PropertyMapImpl() noexcept
 {
 }
 
-void PropertyMapImpl::add(PropertyMapEntry const * pMap) throw()
+void PropertyMapImpl::add(PropertyMapEntry const * pMap) noexcept
 {
     while (!pMap->maName.isEmpty())
     {
@@ -72,14 +72,14 @@ void PropertyMapImpl::add(PropertyMapEntry const * pMap) throw()
     }
 }
 
-void PropertyMapImpl::remove( const OUString& aName ) throw()
+void PropertyMapImpl::remove( const OUString& aName ) noexcept
 {
     maPropertyMap.erase( aName );
 
     maProperties.clear();
 }
 
-std::vector< Property > const & PropertyMapImpl::getProperties() throw()
+std::vector< Property > const & PropertyMapImpl::getProperties() noexcept
 {
     // maybe we have to generate the properties after
     // a change in the property map or at first call
@@ -118,24 +118,24 @@ Property PropertyMapImpl::getPropertyByName( const OUString& aName )
     return Property( aName, pEntry->mnHandle, pEntry->maType, pEntry->mnAttributes );
 }
 
-bool PropertyMapImpl::hasPropertyByName( const OUString& aName ) throw()
+bool PropertyMapImpl::hasPropertyByName( const OUString& aName ) noexcept
 {
     return maPropertyMap.find( aName ) != maPropertyMap.end();
 }
 
 
-PropertySetInfo::PropertySetInfo() throw()
+PropertySetInfo::PropertySetInfo() noexcept
     : mpImpl(new PropertyMapImpl)
 {
 }
 
-PropertySetInfo::PropertySetInfo( PropertyMapEntry const * pMap ) throw()
+PropertySetInfo::PropertySetInfo( PropertyMapEntry const * pMap ) noexcept
     : mpImpl(new PropertyMapImpl)
 {
     mpImpl->add( pMap );
 }
 
-PropertySetInfo::PropertySetInfo(uno::Sequence<beans::Property> const& rProps) throw()
+PropertySetInfo::PropertySetInfo(uno::Sequence<beans::Property> const& rProps) noexcept
     : mpImpl(new PropertyMapImpl)
 {
     PropertyMapEntry * pEntries(new PropertyMapEntry[rProps.getLength() + 1]);
@@ -153,16 +153,16 @@ PropertySetInfo::PropertySetInfo(uno::Sequence<beans::Property> const& rProps) t
     mpImpl->add(pEntries);
 }
 
-PropertySetInfo::~PropertySetInfo() throw()
+PropertySetInfo::~PropertySetInfo() noexcept
 {
 }
 
-void PropertySetInfo::add( PropertyMapEntry const * pMap ) throw()
+void PropertySetInfo::add( PropertyMapEntry const * pMap ) noexcept
 {
     mpImpl->add( pMap );
 }
 
-void PropertySetInfo::remove( const OUString& aName ) throw()
+void PropertySetInfo::remove( const OUString& aName ) noexcept
 {
     mpImpl->remove( aName );
 }
@@ -182,7 +182,7 @@ sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name )
     return mpImpl->hasPropertyByName( Name );
 }
 
-const PropertyMap& PropertySetInfo::getPropertyMap() const throw()
+const PropertyMap& PropertySetInfo::getPropertyMap() const noexcept
 {
     return mpImpl->getPropertyMap();
 }

@@ -115,8 +115,8 @@ namespace sfx2
         bool    isInContext() const;
 
         // XInterface
-        virtual void SAL_CALL acquire(  ) throw () override;
-        virtual void SAL_CALL release(  ) throw () override;
+        virtual void SAL_CALL acquire(  ) noexcept override;
+        virtual void SAL_CALL release(  ) noexcept override;
 
         // XUndoManager
         virtual void SAL_CALL enterUndoContext( const OUString& i_title ) override;

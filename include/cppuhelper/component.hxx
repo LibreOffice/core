@@ -68,9 +68,9 @@ public:
     virtual css::uno::Any SAL_CALL queryAggregation(
         css::uno::Type const & rType ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
-        throw () SAL_OVERRIDE;
+        SAL_NOEXCEPT SAL_OVERRIDE;
     virtual void SAL_CALL release()
-        throw () SAL_OVERRIDE;
+        SAL_NOEXCEPT SAL_OVERRIDE;
 
     /** @attention
         XTypeProvider::getImplementationId() has to be implemented separately!

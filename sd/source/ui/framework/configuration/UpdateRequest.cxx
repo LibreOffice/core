@@ -25,12 +25,12 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework
 {
-UpdateRequest::UpdateRequest() throw()
+UpdateRequest::UpdateRequest() noexcept
     : UpdateRequestInterfaceBase(MutexOwner::maMutex)
 {
 }
 
-UpdateRequest::~UpdateRequest() throw() {}
+UpdateRequest::~UpdateRequest() noexcept {}
 
 void SAL_CALL UpdateRequest::execute(const Reference<XConfiguration>&)
 {

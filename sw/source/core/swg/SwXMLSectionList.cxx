@@ -88,7 +88,7 @@ SwXMLSectionList::SwXMLSectionList(const css::uno::Reference< css::uno::XCompone
 }
 
 SwXMLSectionList::~SwXMLSectionList()
-    throw()
+    noexcept
 {
 }
 

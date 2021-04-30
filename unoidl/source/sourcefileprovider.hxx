@@ -31,7 +31,7 @@ public:
     virtual rtl::Reference<Entity> findEntity(OUString const& name) const override;
 
 private:
-    virtual ~SourceFileProvider() throw() override;
+    virtual ~SourceFileProvider() noexcept override;
 
     std::map<OUString, rtl::Reference<Entity>> rootMap_;
 };

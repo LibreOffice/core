@@ -1051,7 +1051,7 @@ void FixZOrder(uno::Reference<drawing::XShapes> const& xShapes,
 
 } // namespace xmloff
 
-void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShapes ) throw()
+void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShapes ) noexcept
 {
     if( xShapes.is() )
     {

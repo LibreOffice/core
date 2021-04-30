@@ -173,13 +173,13 @@ uno::Any SAL_CALL ScAccessibleCellBase::queryInterface( uno::Type const & rType 
 }
 
 void SAL_CALL ScAccessibleCellBase::acquire()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::acquire();
 }
 
 void SAL_CALL ScAccessibleCellBase::release()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::release();
 }

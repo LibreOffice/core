@@ -124,14 +124,14 @@ public:
 
     // css::uno::XInterface
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
-    void                        SAL_CALL acquire() throw() override;
-    void                        SAL_CALL release() throw() override;
+    void                        SAL_CALL acquire() noexcept override;
+    void                        SAL_CALL release() noexcept override;
 
     // css::uno::XAggregation
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
     // css::lang::XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() throw();
+    static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() noexcept;
     sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
     // css::util::XCloneable

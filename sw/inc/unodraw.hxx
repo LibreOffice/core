@@ -46,7 +46,7 @@ class SwFmDrawPage final : public SvxFmDrawPage
     std::vector<SwXShape*> m_vShapes;
 public:
     SwFmDrawPage( SdrPage* pPage );
-    virtual ~SwFmDrawPage() throw () override;
+    virtual ~SwFmDrawPage() noexcept override;
 
     const SdrMarkList&  PreGroup(const css::uno::Reference< css::drawing::XShapes >& rShapes);
     void                PreUnGroup(const css::uno::Reference< css::drawing::XShapeGroup >& rShapeGroup);
@@ -271,8 +271,8 @@ public:
     SwXGroupShape(css::uno::Reference<css::uno::XInterface> & xShape, SwDoc const* pDoc);
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) throw() override;
-    virtual void SAL_CALL release(  ) throw() override;
+    virtual void SAL_CALL acquire(  ) noexcept override;
+    virtual void SAL_CALL release(  ) noexcept override;
 
     //XShapes
     virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;

@@ -1086,9 +1086,9 @@ void OResultSet::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) const
     }
 }
 
-void SAL_CALL OResultSet::acquire() throw() { OResultSet_BASE::acquire(); }
+void SAL_CALL OResultSet::acquire() noexcept { OResultSet_BASE::acquire(); }
 
-void SAL_CALL OResultSet::release() throw() { OResultSet_BASE::release(); }
+void SAL_CALL OResultSet::release() noexcept { OResultSet_BASE::release(); }
 
 css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL OResultSet::getPropertySetInfo()
 {

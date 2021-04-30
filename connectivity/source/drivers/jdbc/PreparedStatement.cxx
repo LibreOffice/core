@@ -640,12 +640,12 @@ css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL java_sql_PreparedS
     return out==nullptr ? nullptr : new java_sql_ResultSetMetaData( t.pEnv, out, *m_pConnection );
 }
 
-void SAL_CALL java_sql_PreparedStatement::acquire() throw()
+void SAL_CALL java_sql_PreparedStatement::acquire() noexcept
 {
     OStatement_BASE2::acquire();
 }
 
-void SAL_CALL java_sql_PreparedStatement::release() throw()
+void SAL_CALL java_sql_PreparedStatement::release() noexcept
 {
     OStatement_BASE2::release();
 }

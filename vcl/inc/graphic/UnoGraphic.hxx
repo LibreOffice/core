@@ -39,7 +39,7 @@ class Graphic final : public css::graphic::XGraphic,
 {
 public:
     Graphic();
-    virtual ~Graphic() throw() override;
+    virtual ~Graphic() noexcept override;
 
     using ::unographic::GraphicDescriptor::init;
     void init(const ::Graphic& rGraphic);
@@ -47,8 +47,8 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 private:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

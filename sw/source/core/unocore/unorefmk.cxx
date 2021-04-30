@@ -514,8 +514,8 @@ public:
     using SwXText::Invalidate;
 
     // XInterface
-    virtual void SAL_CALL acquire() throw() override { cppu::OWeakObject::acquire(); }
-    virtual void SAL_CALL release() throw() override { cppu::OWeakObject::release(); }
+    virtual void SAL_CALL acquire() noexcept override { cppu::OWeakObject::acquire(); }
+    virtual void SAL_CALL release() noexcept override { cppu::OWeakObject::release(); }
 
     // XTypeProvider
     virtual uno::Sequence< sal_Int8 > SAL_CALL

@@ -49,7 +49,7 @@ ChildrenManager::~ChildrenManager()
     SAL_INFO("svx", "~ChildrenManager");
 }
 
-tools::Long ChildrenManager::GetChildCount() const throw ()
+tools::Long ChildrenManager::GetChildCount() const noexcept
 {
     return mpImpl->GetChildCount();
 }

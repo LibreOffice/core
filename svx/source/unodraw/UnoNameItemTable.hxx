@@ -49,8 +49,8 @@ private:
     void ImplInsertByName( const OUString& aName, const css::uno::Any& aElement );
 
 public:
-    SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) throw();
-    virtual ~SvxUnoNameItemTable() throw() override;
+    SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) noexcept;
+    virtual ~SvxUnoNameItemTable() noexcept override;
 
     virtual NameOrIndex* createItem() const = 0;
     virtual bool isValid( const NameOrIndex* pItem ) const;
@@ -58,7 +58,7 @@ public:
     void dispose();
 
     // SfxListener
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw () override;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override;
 
     // XServiceInfo
     virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) override;

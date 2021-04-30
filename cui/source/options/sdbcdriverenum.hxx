@@ -40,12 +40,12 @@ namespace offapp
         std::unique_ptr<ODriverEnumerationImpl> m_pImpl;
 
     public:
-        ODriverEnumeration() throw();
-        ~ODriverEnumeration() throw();
+        ODriverEnumeration() noexcept;
+        ~ODriverEnumeration() noexcept;
         typedef std::vector< OUString >::const_iterator const_iterator;
 
-        const_iterator  begin() const throw();
-        const_iterator  end() const throw();
+        const_iterator  begin() const noexcept;
+        const_iterator  end() const noexcept;
     };
 
 

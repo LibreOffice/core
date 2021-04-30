@@ -34,7 +34,7 @@ class TextApiObject final : public SvxUnoText
 public:
     static rtl::Reference< TextApiObject > create( SdDrawDocument* pDoc );
 
-    virtual             ~TextApiObject() throw() override;
+    virtual             ~TextApiObject() noexcept override;
 
     /// @throws css::uno::RuntimeException
     void dispose();

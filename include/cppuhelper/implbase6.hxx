@@ -103,7 +103,7 @@ namespace cppu
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
-        ~ImplHelper6() throw () {}
+        ~ImplHelper6() SAL_NOEXCEPT {}
 #if defined _MSC_VER && defined __clang__
 #pragma clang diagnostic pop
 #endif
@@ -126,9 +126,9 @@ namespace cppu
     public:
         virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakImplHelper_query( rType, cd::get(), this, static_cast<OWeakObject *>(this) ); }
-        virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
+        virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() throw () SAL_OVERRIDE
+        virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { OWeakObject::release(); }
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakImplHelper_getTypes( cd::get() ); }
@@ -160,9 +160,9 @@ namespace cppu
             { return OWeakAggObject::queryInterface( rType ); }
         virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakAggImplHelper_queryAgg( rType, cd::get(), this, static_cast<OWeakAggObject *>(this) ); }
-        virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
+        virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { OWeakAggObject::acquire(); }
-        virtual void SAL_CALL release() throw () SAL_OVERRIDE
+        virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { OWeakAggObject::release(); }
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakAggImplHelper_getTypes( cd::get() ); }
@@ -227,9 +227,9 @@ namespace cppu
                     return aRet;
                 return BaseClass::queryInterface( rType );
             }
-        virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
+        virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { BaseClass::acquire(); }
-        virtual void SAL_CALL release() throw () SAL_OVERRIDE
+        virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { BaseClass::release(); }
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return ImplInhHelper_getTypes( cd::get(), BaseClass::getTypes() ); }
@@ -297,9 +297,9 @@ namespace cppu
                     return aRet;
                 return BaseClass::queryAggregation( rType );
             }
-        virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
+        virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { BaseClass::acquire(); }
-        virtual void SAL_CALL release() throw () SAL_OVERRIDE
+        virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { BaseClass::release(); }
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return ImplInhHelper_getTypes( cd::get(), BaseClass::getTypes() ); }

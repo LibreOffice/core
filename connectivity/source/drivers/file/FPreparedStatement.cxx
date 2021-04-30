@@ -379,12 +379,12 @@ void OPreparedStatement::initResultSet(OResultSet *pResultSet)
     pResultSet->setMetaData(getMetaData());
 }
 
-void SAL_CALL OPreparedStatement::acquire() throw()
+void SAL_CALL OPreparedStatement::acquire() noexcept
 {
     OStatement_BASE2::acquire();
 }
 
-void SAL_CALL OPreparedStatement::release() throw()
+void SAL_CALL OPreparedStatement::release() noexcept
 {
     OStatement_BASE2::release();
 }

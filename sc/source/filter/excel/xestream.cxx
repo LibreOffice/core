@@ -961,7 +961,7 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     return p;
 }
 
-bool XclExpXmlStream::importDocument() throw()
+bool XclExpXmlStream::importDocument() noexcept
 {
     return false;
 }

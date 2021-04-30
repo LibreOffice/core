@@ -150,12 +150,12 @@ IPropertyArrayHelper & OFlatResultSet::getInfoHelper()
     return *OFlatResultSet_BASE3::getArrayHelper();
 }
 
-void SAL_CALL OFlatResultSet::acquire() throw()
+void SAL_CALL OFlatResultSet::acquire() noexcept
 {
     OFlatResultSet_BASE2::acquire();
 }
 
-void SAL_CALL OFlatResultSet::release() throw()
+void SAL_CALL OFlatResultSet::release() noexcept
 {
     OFlatResultSet_BASE2::release();
 }

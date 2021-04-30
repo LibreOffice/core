@@ -62,7 +62,7 @@ public:
 
     bool HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
-    static ThumbnailViewAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
+    static ThumbnailViewAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) noexcept;
 
 public:
     /** Called by the corresponding ValueSet when it gets the focus.
@@ -175,7 +175,7 @@ public:
 
     void    ParentDestroyed();
 
-    static ThumbnailViewItemAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
+    static ThumbnailViewItemAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) noexcept;
 
 public:
 

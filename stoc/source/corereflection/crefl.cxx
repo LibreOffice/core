@@ -68,12 +68,12 @@ Any IdlReflectionServiceImpl::queryInterface( const Type & rType )
     return (aRet.hasValue() ? aRet : OComponentHelper::queryInterface( rType ));
 }
 
-void IdlReflectionServiceImpl::acquire() throw()
+void IdlReflectionServiceImpl::acquire() noexcept
 {
     OComponentHelper::acquire();
 }
 
-void IdlReflectionServiceImpl::release() throw()
+void IdlReflectionServiceImpl::release() noexcept
 {
     OComponentHelper::release();
 }

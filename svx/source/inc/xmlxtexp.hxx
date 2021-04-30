@@ -54,7 +54,7 @@ public:
     virtual void ExportContent_() override;
 
 private:
-    bool exportTable() throw();
+    bool exportTable() noexcept;
     const css::uno::Reference< css::container::XNameContainer > & mxTable;
 };
 

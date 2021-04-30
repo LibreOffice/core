@@ -61,9 +61,9 @@ public:
     virtual void initBroadcaster(
         Modifications::Node const & modifications, Broadcaster * broadcaster) override;
 
-    virtual void SAL_CALL acquire() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
 
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL release() noexcept override;
 
     OUString const & getAbsolutePathRepresentation();
 
@@ -112,7 +112,7 @@ private:
 
     virtual void initDisposeBroadcaster(Broadcaster * broadcaster) override;
 
-    virtual void clearListeners() throw () override;
+    virtual void clearListeners() noexcept override;
 
     virtual css::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & aType) override;

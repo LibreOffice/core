@@ -42,7 +42,7 @@ protected:
 
 public:
     SvxFmDrawPage( SdrPage* pPage );
-    virtual ~SvxFmDrawPage() throw () override;
+    virtual ~SvxFmDrawPage() noexcept override;
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(SvxFmDrawPage, SvxDrawPage)

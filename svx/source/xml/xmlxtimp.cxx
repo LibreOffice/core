@@ -312,7 +312,7 @@ SvxXMLXTableImport::SvxXMLXTableImport(
                         XML_NAMESPACE_DRAW );
 }
 
-SvxXMLXTableImport::~SvxXMLXTableImport() throw ()
+SvxXMLXTableImport::~SvxXMLXTableImport() noexcept
 {
 }
 
@@ -328,7 +328,7 @@ static void openStorageStream( xml::sax::InputSource *pParserInput,
 bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
                                const uno::Reference < embed::XStorage > &xStorage,
                                const uno::Reference< XNameContainer >& xTable,
-                               bool *bOptLoadedFromStorage ) throw()
+                               bool *bOptLoadedFromStorage ) noexcept
 {
     bool bRet = true;
     rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;

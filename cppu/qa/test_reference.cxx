@@ -60,12 +60,12 @@ public:
         return Any();
     }
 
-    virtual void SAL_CALL acquire() throw () override
+    virtual void SAL_CALL acquire() noexcept override
     {
         osl_atomic_increment( &m_refCount );
     }
 
-    virtual void SAL_CALL release() throw () override
+    virtual void SAL_CALL release() noexcept override
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
             delete this;

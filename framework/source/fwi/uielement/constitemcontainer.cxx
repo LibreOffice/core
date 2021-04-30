@@ -169,7 +169,7 @@ sal_Int64 ConstItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >
     return 0;
 }
 
-const Sequence< sal_Int8 >& ConstItemContainer::getUnoTunnelId() throw()
+const Sequence< sal_Int8 >& ConstItemContainer::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theConstItemContainerUnoTunnelId;
     return theConstItemContainerUnoTunnelId.getSeq();

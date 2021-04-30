@@ -59,8 +59,8 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() throw () override;
-        virtual void SAL_CALL release() throw () override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
@@ -381,12 +381,12 @@ css::uno::Any SAL_CALL FontHeightToolBoxControl::queryInterface( const css::uno:
     return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ));
 }
 
-void SAL_CALL FontHeightToolBoxControl::acquire() throw ()
+void SAL_CALL FontHeightToolBoxControl::acquire() noexcept
 {
     ToolboxController::acquire();
 }
 
-void SAL_CALL FontHeightToolBoxControl::release() throw ()
+void SAL_CALL FontHeightToolBoxControl::release() noexcept
 {
     ToolboxController::release();
 }

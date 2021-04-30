@@ -389,7 +389,7 @@ ScXMLImport::ScXMLImport(
         XML_NAMESPACE_PRESENTATION );
 }
 
-ScXMLImport::~ScXMLImport() throw()
+ScXMLImport::~ScXMLImport() noexcept
 {
     pChangeTrackingImportHelper.reset();
     pNumberFormatAttributesExportHelper.reset();

@@ -978,12 +978,12 @@ void java_sql_ResultSet::getFastPropertyValue(
     }
 }
 
-void SAL_CALL java_sql_ResultSet::acquire() throw()
+void SAL_CALL java_sql_ResultSet::acquire() noexcept
 {
     java_sql_ResultSet_BASE::acquire();
 }
 
-void SAL_CALL java_sql_ResultSet::release() throw()
+void SAL_CALL java_sql_ResultSet::release() noexcept
 {
     java_sql_ResultSet_BASE::release();
 }

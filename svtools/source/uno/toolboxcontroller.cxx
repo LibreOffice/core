@@ -142,12 +142,12 @@ Any SAL_CALL ToolboxController::queryInterface( const Type& rType )
     return a.hasValue() ? a : OPropertyContainer::queryInterface(rType);
 }
 
-void SAL_CALL ToolboxController::acquire() throw ()
+void SAL_CALL ToolboxController::acquire() noexcept
 {
     ToolboxController_Base::acquire();
 }
 
-void SAL_CALL ToolboxController::release() throw ()
+void SAL_CALL ToolboxController::release() noexcept
 {
     ToolboxController_Base::release();
 }

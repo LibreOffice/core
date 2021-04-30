@@ -29,31 +29,31 @@ namespace binaryurp {
 
 class BinaryAny {
 public:
-    BinaryAny() throw ();
+    BinaryAny() noexcept;
 
     BinaryAny(com::sun::star::uno::TypeDescription const & type, void * value)
-        throw ();
+        noexcept;
 
-    explicit BinaryAny(uno_Any const & raw) throw ();
+    explicit BinaryAny(uno_Any const & raw) noexcept;
         // takes over raw.pData (but copies raw.pType); raw must not be passed
         // to uno_any_destruct
 
-    BinaryAny(BinaryAny const & other) throw ();
+    BinaryAny(BinaryAny const & other) noexcept;
 
-    BinaryAny(BinaryAny && other) throw ();
+    BinaryAny(BinaryAny && other) noexcept;
 
-    ~BinaryAny() throw ();
+    ~BinaryAny() noexcept;
 
-    BinaryAny & operator =(BinaryAny const & other) throw ();
+    BinaryAny & operator =(BinaryAny const & other) noexcept;
 
-    BinaryAny & operator =(BinaryAny && other) throw ();
+    BinaryAny & operator =(BinaryAny && other) noexcept;
 
-    uno_Any& get() throw () { return data_; }
+    uno_Any& get() noexcept { return data_; }
 
-    com::sun::star::uno::TypeDescription getType() const throw ();
+    com::sun::star::uno::TypeDescription getType() const noexcept;
 
     void * getValue(com::sun::star::uno::TypeDescription const & type) const
-        throw ();
+        noexcept;
 
 private:
     mutable uno_Any data_;

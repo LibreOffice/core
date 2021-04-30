@@ -162,7 +162,7 @@ namespace DOM
         }
     }
 
-    const css::uno::Sequence< sal_Int8 > & CNode::getUnoTunnelId() throw()
+    const css::uno::Sequence< sal_Int8 > & CNode::getUnoTunnelId() noexcept
     {
         static const UnoTunnelIdInit theCNodeUnoTunnelId;
         return theCNodeUnoTunnelId.getSeq();

@@ -61,7 +61,7 @@ SlaveData::SlaveData ( ChainablePropertySet *pSlave)
 }
 
 MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, comphelper::SolarMutex* pMutex )
-    throw()
+    noexcept
 : mpMutex ( pMutex )
 , mnLastId ( 0 )
 , mxInfo ( pInfo )
@@ -69,7 +69,7 @@ MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, 
 }
 
 MasterPropertySet::~MasterPropertySet()
-    throw()
+    noexcept
 {
     for( const auto& rSlave : maSlaveMap )
         delete rSlave.second;
@@ -82,7 +82,7 @@ Reference< XPropertySetInfo > SAL_CALL MasterPropertySet::getPropertySetInfo(  )
 }
 
 void MasterPropertySet::registerSlave ( ChainablePropertySet *pNewSet )
-    throw()
+    noexcept
 {
     maSlaveMap [ ++mnLastId ] = new SlaveData ( pNewSet );
     mxInfo->add ( pNewSet->mxInfo->maMap, mnLastId );

@@ -121,8 +121,8 @@ public:
         const std::vector< OUString > &primaryKey );
 
 public: // XInterface
-    virtual void SAL_CALL acquire() throw() override { SequenceResultSet::acquire(); }
-    virtual void SAL_CALL release() throw() override { SequenceResultSet::release(); }
+    virtual void SAL_CALL acquire() noexcept override { SequenceResultSet::acquire(); }
+    virtual void SAL_CALL release() noexcept override { SequenceResultSet::release(); }
     virtual css::uno::Any  SAL_CALL queryInterface(
         const css::uno::Type & reqType ) override;
 

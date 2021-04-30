@@ -309,7 +309,7 @@ bool SvxXMLXTableExportComponent::save(
     return bRet;
 }
 
-bool SvxXMLXTableExportComponent::exportTable() throw()
+bool SvxXMLXTableExportComponent::exportTable() noexcept
 {
     bool bRet = false;
 

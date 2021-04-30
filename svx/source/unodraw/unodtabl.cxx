@@ -34,7 +34,7 @@ namespace
 class SvxUnoDashTable : public SvxUnoNameItemTable
 {
 public:
-    explicit SvxUnoDashTable(SdrModel* pModel) throw();
+    explicit SvxUnoDashTable(SdrModel* pModel) noexcept;
 
     virtual NameOrIndex* createItem() const override;
 
@@ -47,7 +47,7 @@ public:
 };
 }
 
-SvxUnoDashTable::SvxUnoDashTable(SdrModel* pModel) throw()
+SvxUnoDashTable::SvxUnoDashTable(SdrModel* pModel) noexcept
     : SvxUnoNameItemTable(pModel, XATTR_LINEDASH, MID_LINEDASH)
 {
 }

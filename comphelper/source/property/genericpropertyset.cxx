@@ -64,13 +64,13 @@ namespace comphelper
         virtual void _getPropertyValues( const PropertyMapEntry** ppEntries,  Any* pValue ) override;
 
     public:
-        explicit GenericPropertySet( PropertySetInfo* pInfo ) throw();
+        explicit GenericPropertySet( PropertySetInfo* pInfo ) noexcept;
 
         // XInterface
         virtual  Any SAL_CALL queryAggregation( const  Type & rType ) override;
         virtual  Any SAL_CALL queryInterface( const  Type & rType ) override;
-        virtual void SAL_CALL acquire() throw() override;
-        virtual void SAL_CALL release() throw() override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
         // XTypeProvider
         virtual  Sequence<  Type > SAL_CALL getTypes(  ) override;
@@ -90,7 +90,7 @@ namespace comphelper
 }
 
 
-GenericPropertySet::GenericPropertySet( PropertySetInfo* pInfo ) throw()
+GenericPropertySet::GenericPropertySet( PropertySetInfo* pInfo ) noexcept
 : PropertySetHelper( pInfo )
 ,m_aListener(maMutex)
 {
@@ -205,12 +205,12 @@ Any SAL_CALL GenericPropertySet::queryAggregation( const Type & rType )
     return aAny;
 }
 
-void SAL_CALL GenericPropertySet::acquire() throw()
+void SAL_CALL GenericPropertySet::acquire() noexcept
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL GenericPropertySet::release() throw()
+void SAL_CALL GenericPropertySet::release() noexcept
 {
     OWeakAggObject::release();
 }

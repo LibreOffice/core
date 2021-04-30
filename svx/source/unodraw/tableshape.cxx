@@ -41,7 +41,7 @@ SvxTableShape::SvxTableShape(SdrObject* pObj)
     SetShapeType( "com.sun.star.drawing.TableShape" );
 }
 
-SvxTableShape::~SvxTableShape() throw()
+SvxTableShape::~SvxTableShape() noexcept
 {
 }
 

@@ -1230,13 +1230,13 @@ ContentResultSetWrapperListener::~ContentResultSetWrapperListener()
 
 // XInterface methods.
 void SAL_CALL ContentResultSetWrapperListener::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL ContentResultSetWrapperListener::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

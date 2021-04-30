@@ -104,7 +104,7 @@ Model::Model() :
     DBG_INVARIANT();
 }
 
-Model::~Model() throw()
+Model::~Model() noexcept
 {
 }
 

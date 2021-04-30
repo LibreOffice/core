@@ -316,7 +316,7 @@ void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
 
 
 static OUString getMimetypeForDocument( const Reference< XComponentContext >& xContext,
-                                        const Reference< XComponent >& xDoc ) throw()
+                                        const Reference< XComponent >& xDoc ) noexcept
 {
     OUString aDocMimetype;
     try

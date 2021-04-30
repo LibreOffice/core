@@ -69,8 +69,8 @@ namespace toolkit
 
         css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
         css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-        void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-        void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+        void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+        void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
         void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
         void SAL_CALL disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
         void SAL_CALL dispose(  ) override;

@@ -134,7 +134,7 @@ static const SfxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSfxPropertySet()
 // helper for Item/Property conversion
 
 
-void GetSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) throw()
+void GetSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) noexcept
 {
     DBG_ASSERT( pForwarder, "I need a valid SvxTextForwarder!" );
     if( pForwarder )
@@ -147,7 +147,7 @@ void GetSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder 
     }
 }
 
-void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) throw()
+void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) noexcept
 {
     DBG_ASSERT( pForwarder, "I need a valid SvxTextForwarder!" );
     if( !pForwarder )
@@ -196,7 +196,7 @@ void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarde
     }
 }
 
-static void CheckSelection( struct ESelection& rSel, SvxEditSource *pEdit ) throw()
+static void CheckSelection( struct ESelection& rSel, SvxEditSource *pEdit ) noexcept
 {
     if (!pEdit)
         return;
@@ -259,13 +259,13 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxUnoTextRangeBase& rRange)
         mpEditSource->addRange( this );
 }
 
-SvxUnoTextRangeBase::~SvxUnoTextRangeBase() throw()
+SvxUnoTextRangeBase::~SvxUnoTextRangeBase() noexcept
 {
     if( mpEditSource )
         mpEditSource->removeRange( this );
 }
 
-void SvxUnoTextRangeBase::SetEditSource( SvxEditSource* pSource ) throw()
+void SvxUnoTextRangeBase::SetEditSource( SvxEditSource* pSource ) noexcept
 {
     DBG_ASSERT(pSource,"SvxUnoTextRangeBase: I need a valid SvxEditSource!");
     DBG_ASSERT(mpEditSource==nullptr,"SvxUnoTextRangeBase::SetEditSource called while SvxEditSource already set" );
@@ -280,7 +280,7 @@ void SvxUnoTextRangeBase::SetEditSource( SvxEditSource* pSource ) throw()
 
 /** puts a field item with a copy of the given FieldData into the itemset
     corresponding with this range */
-void SvxUnoTextRangeBase::attachField( std::unique_ptr<SvxFieldData> pData ) throw()
+void SvxUnoTextRangeBase::attachField( std::unique_ptr<SvxFieldData> pData ) noexcept
 {
     SolarMutexGuard aGuard;
 
@@ -292,7 +292,7 @@ void SvxUnoTextRangeBase::attachField( std::unique_ptr<SvxFieldData> pData ) thr
     }
 }
 
-void SvxUnoTextRangeBase::SetSelection( const ESelection& rSelection ) throw()
+void SvxUnoTextRangeBase::SetSelection( const ESelection& rSelection ) noexcept
 {
     SolarMutexGuard aGuard;
 
@@ -1297,7 +1297,7 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::getPropertyDefaults( con
 }
 
 // internal
-void SvxUnoTextRangeBase::CollapseToStart() throw()
+void SvxUnoTextRangeBase::CollapseToStart() noexcept
 {
     CheckSelection( maSelection, mpEditSource.get() );
 
@@ -1305,7 +1305,7 @@ void SvxUnoTextRangeBase::CollapseToStart() throw()
     maSelection.nEndPos  = maSelection.nStartPos;
 }
 
-void SvxUnoTextRangeBase::CollapseToEnd() throw()
+void SvxUnoTextRangeBase::CollapseToEnd() noexcept
 {
     CheckSelection( maSelection, mpEditSource.get() );
 
@@ -1313,7 +1313,7 @@ void SvxUnoTextRangeBase::CollapseToEnd() throw()
     maSelection.nStartPos  = maSelection.nEndPos;
 }
 
-bool SvxUnoTextRangeBase::IsCollapsed() throw()
+bool SvxUnoTextRangeBase::IsCollapsed() noexcept
 {
     CheckSelection( maSelection, mpEditSource.get() );
 
@@ -1321,7 +1321,7 @@ bool SvxUnoTextRangeBase::IsCollapsed() throw()
              maSelection.nStartPos  == maSelection.nEndPos );
 }
 
-bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, bool Expand) throw()
+bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, bool Expand) noexcept
 {
     CheckSelection( maSelection, mpEditSource.get() );
 
@@ -1359,7 +1359,7 @@ bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, bool Expand) throw()
     return bOk;
 }
 
-bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, bool Expand)  throw()
+bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, bool Expand)  noexcept
 {
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
@@ -1398,7 +1398,7 @@ bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, bool Expand)  throw()
     return false;
 }
 
-void SvxUnoTextRangeBase::GotoStart(bool Expand) throw()
+void SvxUnoTextRangeBase::GotoStart(bool Expand) noexcept
 {
     maSelection.nStartPara = 0;
     maSelection.nStartPos  = 0;
@@ -1407,7 +1407,7 @@ void SvxUnoTextRangeBase::GotoStart(bool Expand) throw()
         CollapseToStart();
 }
 
-void SvxUnoTextRangeBase::GotoEnd(bool Expand) throw()
+void SvxUnoTextRangeBase::GotoEnd(bool Expand) noexcept
 {
     CheckSelection( maSelection, mpEditSource.get() );
 
@@ -1500,7 +1500,7 @@ SvxUnoTextRange::SvxUnoTextRange(const SvxUnoTextBase& rParent, bool bPortion /*
     xParentText =  static_cast<text::XText*>(const_cast<SvxUnoTextBase *>(&rParent));
 }
 
-SvxUnoTextRange::~SvxUnoTextRange() throw()
+SvxUnoTextRange::~SvxUnoTextRange() noexcept
 {
 }
 
@@ -1528,13 +1528,13 @@ uno::Any SAL_CALL SvxUnoTextRange::queryInterface( const uno::Type & rType )
 }
 
 void SAL_CALL SvxUnoTextRange::acquire()
-    throw( )
+    noexcept
 {
     OWeakAggObject::acquire();
 }
 
 void SAL_CALL SvxUnoTextRange::release()
-    throw( )
+    noexcept
 {
     OWeakAggObject::release();
 }
@@ -1618,7 +1618,7 @@ SvxUnoTextBase::SvxUnoTextBase(const SvxUnoTextBase& rText)
     xParentText = rText.xParentText;
 }
 
-SvxUnoTextBase::~SvxUnoTextBase() throw()
+SvxUnoTextBase::~SvxUnoTextBase() noexcept
 {
 }
 
@@ -2161,7 +2161,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames_Stat
         std::initializer_list<std::u16string_view>{ u"com.sun.star.text.Text" });
 }
 
-const uno::Sequence< sal_Int8 > & SvxUnoTextBase::getUnoTunnelId() throw()
+const uno::Sequence< sal_Int8 > & SvxUnoTextBase::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSvxUnoTextBaseUnoTunnelId;
     return theSvxUnoTextBaseUnoTunnelId.getSeq();
@@ -2179,23 +2179,23 @@ sal_Int64 SAL_CALL SvxUnoTextBase::getSomething( const uno::Sequence< sal_Int8 >
     }
 }
 
-SvxUnoText::SvxUnoText( const SvxItemPropertySet* _pSet ) throw()
+SvxUnoText::SvxUnoText( const SvxItemPropertySet* _pSet ) noexcept
 : SvxUnoTextBase( _pSet )
 {
 }
 
-SvxUnoText::SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, uno::Reference < text::XText > const & xParent ) throw()
+SvxUnoText::SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, uno::Reference < text::XText > const & xParent ) noexcept
 : SvxUnoTextBase( pSource, _pSet, xParent )
 {
 }
 
-SvxUnoText::SvxUnoText( const SvxUnoText& rText ) throw()
+SvxUnoText::SvxUnoText( const SvxUnoText& rText ) noexcept
 : SvxUnoTextBase( rText )
 , cppu::OWeakAggObject()
 {
 }
 
-SvxUnoText::~SvxUnoText() throw()
+SvxUnoText::~SvxUnoText() noexcept
 {
 }
 
@@ -2214,12 +2214,12 @@ uno::Any SAL_CALL SvxUnoText::queryInterface( const uno::Type & rType )
     return OWeakAggObject::queryInterface( rType );
 }
 
-void SAL_CALL SvxUnoText::acquire() throw( )
+void SAL_CALL SvxUnoText::acquire() noexcept
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL SvxUnoText::release() throw( )
+void SAL_CALL SvxUnoText::release() noexcept
 {
     OWeakAggObject::release();
 }
@@ -2235,7 +2235,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxUnoText::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-const uno::Sequence< sal_Int8 > & SvxUnoText::getUnoTunnelId() throw()
+const uno::Sequence< sal_Int8 > & SvxUnoText::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSvxUnoTextUnoTunnelId;
     return theSvxUnoTextUnoTunnelId.getSeq();

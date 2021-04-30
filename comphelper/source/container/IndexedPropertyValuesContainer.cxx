@@ -39,7 +39,7 @@ namespace {
 class IndexedPropertyValuesContainer : public cppu::WeakImplHelper< container::XIndexContainer, lang::XServiceInfo >
 {
 public:
-    IndexedPropertyValuesContainer() throw();
+    IndexedPropertyValuesContainer() noexcept;
 
     // XIndexContainer
     virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, const css::uno::Any& aElement ) override;
@@ -67,7 +67,7 @@ private:
 
 }
 
-IndexedPropertyValuesContainer::IndexedPropertyValuesContainer() throw()
+IndexedPropertyValuesContainer::IndexedPropertyValuesContainer() noexcept
 {
 }
 

@@ -39,7 +39,7 @@ DiagramDataFragmentHandler::DiagramDataFragmentHandler( XmlFilterBase& rFilter,
 {
 }
 
-DiagramDataFragmentHandler::~DiagramDataFragmentHandler( ) throw ()
+DiagramDataFragmentHandler::~DiagramDataFragmentHandler( ) noexcept
 {
 
 }
@@ -72,7 +72,7 @@ DiagramLayoutFragmentHandler::DiagramLayoutFragmentHandler( XmlFilterBase& rFilt
 {
 }
 
-DiagramLayoutFragmentHandler::~DiagramLayoutFragmentHandler( ) throw ()
+DiagramLayoutFragmentHandler::~DiagramLayoutFragmentHandler( ) noexcept
 {
 
 }

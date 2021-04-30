@@ -80,12 +80,12 @@ Any SAL_CALL JavaInteractionHandler::queryInterface(const Type& aType )
     return Any();
 }
 
-void SAL_CALL JavaInteractionHandler::acquire(  ) throw ()
+void SAL_CALL JavaInteractionHandler::acquire(  ) noexcept
 {
     osl_atomic_increment( &m_aRefCount );
 }
 
-void SAL_CALL JavaInteractionHandler::release(  ) throw ()
+void SAL_CALL JavaInteractionHandler::release(  ) noexcept
 {
     if (! osl_atomic_decrement( &m_aRefCount ))
         delete this;

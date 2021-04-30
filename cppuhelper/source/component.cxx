@@ -63,12 +63,12 @@ Any OComponentHelper::queryAggregation( Type const & rType )
     }
     return OWeakAggObject::queryAggregation( rType );
 }
-void OComponentHelper::acquire() throw ()
+void OComponentHelper::acquire() noexcept
 {
     OWeakAggObject::acquire();
 }
 
-void OComponentHelper::release() throw()
+void OComponentHelper::release() noexcept
 {
     Reference<XInterface > x( xDelegator );
     if (! x.is())

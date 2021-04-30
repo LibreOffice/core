@@ -72,8 +72,8 @@ public:
     explicit SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& _rxORB );
 
     // XInterface
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const uno::Sequence< uno::Any > & aArguments ) override;
@@ -104,13 +104,13 @@ SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< uno::XCompon
 {
 }
 
-void SAL_CALL SvFilterOptionsDialog::acquire() throw()
+void SAL_CALL SvFilterOptionsDialog::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
 
-void SAL_CALL SvFilterOptionsDialog::release() throw()
+void SAL_CALL SvFilterOptionsDialog::release() noexcept
 {
     OWeakObject::release();
 }

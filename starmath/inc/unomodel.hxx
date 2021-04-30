@@ -54,12 +54,12 @@ class SmModel final : public SfxBaseModel,
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue ) override;
 public:
     explicit SmModel( SfxObjectShell *pObjSh );
-    virtual ~SmModel() throw () override;
+    virtual ~SmModel() noexcept override;
 
     //XInterface
     virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) throw() override;
-    virtual void SAL_CALL release(  ) throw() override;
+    virtual void SAL_CALL acquire(  ) noexcept override;
+    virtual void SAL_CALL release(  ) noexcept override;
 
     //XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;

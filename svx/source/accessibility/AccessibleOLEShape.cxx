@@ -86,7 +86,7 @@ css::uno::Any SAL_CALL
 
 void SAL_CALL
     AccessibleOLEShape::acquire()
-    throw ()
+    noexcept
 {
     AccessibleShape::acquire ();
 }
@@ -94,7 +94,7 @@ void SAL_CALL
 
 void SAL_CALL
     AccessibleOLEShape::release()
-    throw ()
+    noexcept
 {
     AccessibleShape::release ();
 }

@@ -109,7 +109,7 @@ void ChildrenManagerImpl::Init()
 }
 
 
-tools::Long ChildrenManagerImpl::GetChildCount() const throw ()
+tools::Long ChildrenManagerImpl::GetChildCount() const noexcept
 {
     return maVisibleChildren.size();
 }

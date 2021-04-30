@@ -51,7 +51,7 @@ public:
         return m_rBlockList;
     }
     virtual ~SwXMLBlockListImport()
-        throw() override;
+        noexcept override;
 };
 
 class SwXMLTextBlockImport final : public SvXMLImport
@@ -69,7 +69,7 @@ public:
         OUString &rNewText, bool bNewTextOnly );
 
     virtual ~SwXMLTextBlockImport()
-        throw() override;
+        noexcept override;
     virtual void SAL_CALL endDocument() override;
 };
 

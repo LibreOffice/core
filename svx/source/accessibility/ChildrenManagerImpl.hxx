@@ -116,7 +116,7 @@ public:
         @return
             If there are no children a 0 is returned.
     */
-    tools::Long GetChildCount() const throw ();
+    tools::Long GetChildCount() const noexcept;
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException

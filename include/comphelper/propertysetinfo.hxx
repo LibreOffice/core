@@ -93,23 +93,23 @@ class COMPHELPER_DLLPUBLIC PropertySetInfo final
 private:
     std::unique_ptr<PropertyMapImpl> mpImpl;
 public:
-    PropertySetInfo() throw();
-    PropertySetInfo( PropertyMapEntry const * pMap ) throw();
-    PropertySetInfo(css::uno::Sequence<css::beans::Property> const &) throw();
-    virtual ~PropertySetInfo() throw() override;
+    PropertySetInfo() noexcept;
+    PropertySetInfo( PropertyMapEntry const * pMap ) noexcept;
+    PropertySetInfo(css::uno::Sequence<css::beans::Property> const &) noexcept;
+    virtual ~PropertySetInfo() noexcept override;
 
     /** returns a stl map with all PropertyMapEntry pointer.<p>
         The key is the property name.
     */
-    const PropertyMap& getPropertyMap() const throw();
+    const PropertyMap& getPropertyMap() const noexcept;
 
     /** adds an array of PropertyMapEntry to this instance.<p>
         The end is marked with a PropertyMapEntry where mpName equals NULL</p>
     */
-    void add( PropertyMapEntry const * pMap ) throw();
+    void add( PropertyMapEntry const * pMap ) noexcept;
 
     /** removes an already added PropertyMapEntry which string in mpName equals to aName */
-    void remove( const OUString& aName ) throw();
+    void remove( const OUString& aName ) noexcept;
 
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
     virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;

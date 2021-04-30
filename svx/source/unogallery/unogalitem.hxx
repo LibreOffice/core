@@ -46,7 +46,7 @@ class GalleryItem final : public ::cppu::OWeakAggObject,
 public:
 
             GalleryItem( ::unogallery::GalleryTheme& rTheme, const GalleryObject& rObject );
-            virtual ~GalleryItem() throw() override;
+            virtual ~GalleryItem() noexcept override;
 
     bool    isValid() const;
 
@@ -55,8 +55,8 @@ private:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -91,8 +91,8 @@ class GalleryDrawingModel : public SvxUnoDrawingModel
 {
 public:
 
-    explicit    GalleryDrawingModel( SdrModel* pDoc ) throw();
-    virtual     ~GalleryDrawingModel() throw() override;
+    explicit    GalleryDrawingModel( SdrModel* pDoc ) noexcept;
+    virtual     ~GalleryDrawingModel() noexcept override;
 
                 UNO3_GETIMPLEMENTATION_DECL( GalleryDrawingModel )
 };

@@ -313,7 +313,7 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext, O
 }
 
 
-ORptFilter::~ORptFilter() throw()
+ORptFilter::~ORptFilter() noexcept
 {
 }
 

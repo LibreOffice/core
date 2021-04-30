@@ -528,12 +528,12 @@ void SAL_CALL OCommonStatement::clearWarnings(  )
 }
 
 
-void SAL_CALL OCommonStatement::acquire() throw()
+void SAL_CALL OCommonStatement::acquire() noexcept
 {
     OCommonStatement_IBase::acquire();
 }
 
-void SAL_CALL OCommonStatement::release() throw()
+void SAL_CALL OCommonStatement::release() noexcept
 {
     OCommonStatement_IBase::release();
 }

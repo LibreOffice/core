@@ -665,7 +665,7 @@ public:
     {}
 
 private:
-    virtual ~UnoidlCursor() throw () override {}
+    virtual ~UnoidlCursor() noexcept override {}
 
     virtual rtl::Reference< Entity > getNext(OUString * name) override;
 
@@ -707,7 +707,7 @@ public:
     }
 
 private:
-    virtual ~UnoidlModuleEntity() throw () override {}
+    virtual ~UnoidlModuleEntity() noexcept override {}
 
     virtual std::vector< OUString > getMemberNames() const override;
 
@@ -1401,7 +1401,7 @@ rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
     }
 }
 
-UnoidlProvider::~UnoidlProvider() throw () {}
+UnoidlProvider::~UnoidlProvider() noexcept {}
 
 }
 

@@ -40,7 +40,7 @@ namespace oox::ppt {
     {
     }
 
-    AnimVariantContext::~AnimVariantContext( ) throw( )
+    AnimVariantContext::~AnimVariantContext( ) noexcept
     {
     }
 

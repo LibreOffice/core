@@ -50,7 +50,7 @@ namespace utl
                     m_xContainerAccess;     /// modifying set nodes  (optional interface of our UNO object)
         bool        m_bEscapeNames;         /// escape names before accessing children ?
 
-        OConfigurationNode  insertNode(const OUString& _rName,const css::uno::Reference< css::uno::XInterface >& _xNode) const throw();
+        OConfigurationNode  insertNode(const OUString& _rName,const css::uno::Reference< css::uno::XInterface >& _xNode) const noexcept;
 
     protected:
         /// constructs a node object with an interface representing a node
@@ -79,7 +79,7 @@ namespace utl
         /** open a sub node
             @param      _rPath      access path of the to-be-opened sub node. May be a hierarchical path.
         */
-        OConfigurationNode  openNode(const OUString& _rPath) const throw();
+        OConfigurationNode  openNode(const OUString& _rPath) const noexcept;
 
         OConfigurationNode  openNode( const char* _pAsciiPath ) const
         {
@@ -94,14 +94,14 @@ namespace utl
             becomes a part of its hierarchy, no explicit insertion is necessary.
             @param      _rName      name for the new child. Must be level-1-depth.
         */
-        OConfigurationNode  createNode(const OUString& _rName) const throw();
+        OConfigurationNode  createNode(const OUString& _rName) const noexcept;
 
         /** remove an existent child nod
 
             If the object represents a set node, this method may be used to delete an existent child. For non-set-nodes,
             the method will fail.
         */
-        bool            removeNode(const OUString& _rName) const throw();
+        bool            removeNode(const OUString& _rName) const noexcept;
 
         /** retrieves the content of a descendant
 
@@ -110,7 +110,7 @@ namespace utl
             Unfortunately, this implies that if a void value is returned, you won't have a clue if this means
             "the path does not exist" (besides the assertion made :), or if the value is really void.
         */
-        css::uno::Any       getNodeValue(const OUString& _rPath) const throw();
+        css::uno::Any       getNodeValue(const OUString& _rPath) const noexcept;
 
         css::uno::Any       getNodeValue( const char* _pAsciiPath ) const
         {
@@ -123,7 +123,7 @@ namespace utl
             node.
             @return     sal_True if and only if the write was successful.
         */
-        bool            setNodeValue(const OUString& _rPath, const css::uno::Any& _rValue) const throw();
+        bool            setNodeValue(const OUString& _rPath, const css::uno::Any& _rValue) const noexcept;
 
         bool            setNodeValue( const char* _pAsciiPath, const css::uno::Any& _rValue ) const
         {
@@ -132,10 +132,10 @@ namespace utl
 
         /// return the names of the existing children
         css::uno::Sequence< OUString >
-                            getNodeNames() const throw();
+                            getNodeNames() const noexcept;
 
         /// invalidate the object
-        virtual void clear() throw();
+        virtual void clear() noexcept;
 
         // meta information about the node
 
@@ -143,10 +143,10 @@ namespace utl
         bool isSetNode() const;
 
         /// checks whether or not a direct child with a given name exists
-        bool hasByName(const OUString& _rName) const throw();
+        bool hasByName(const OUString& _rName) const noexcept;
 
         /// checks whether or not a descendent (no matter if direct or indirect) with the given name exists
-        bool hasByHierarchicalName( const OUString& _rName ) const throw();
+        bool hasByHierarchicalName( const OUString& _rName ) const noexcept;
 
         /// check if the objects represents a valid configuration node
         bool isValid() const { return m_xHierarchyAccess.is(); }
@@ -259,10 +259,10 @@ namespace utl
             object are committed when calling this method.
             @return     sal_True if and only if the commit was successful
         */
-        bool commit() const throw();
+        bool commit() const noexcept;
 
         /// invalidate the object
-        virtual void clear() throw() override;
+        virtual void clear() noexcept override;
     };
 
 }   // namespace utl

@@ -20,7 +20,7 @@ class EffectPropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
     EffectPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
-            EffectProperties& rEffectProperties ) throw();
+            EffectProperties& rEffectProperties ) noexcept;
     virtual ~EffectPropertiesContext() override;
 
     virtual ::oox::core::ContextHandlerRef

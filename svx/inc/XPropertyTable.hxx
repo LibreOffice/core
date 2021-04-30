@@ -24,12 +24,12 @@
 
 // FIXME: should have a single factory method with an enumeration here [!]
 
-css::uno::Reference< css::uno::XInterface > SvxUnoXColorTable_createInstance( XPropertyList* pList ) throw();
-css::uno::Reference< css::uno::XInterface > SvxUnoXLineEndTable_createInstance( XPropertyList* pList ) throw();
-css::uno::Reference< css::uno::XInterface > SvxUnoXDashTable_createInstance( XPropertyList* pList ) throw();
-css::uno::Reference< css::uno::XInterface > SvxUnoXHatchTable_createInstance( XPropertyList* pList ) throw();
-css::uno::Reference< css::uno::XInterface > SvxUnoXGradientTable_createInstance( XPropertyList* pList ) throw();
-css::uno::Reference< css::uno::XInterface > SvxUnoXBitmapTable_createInstance( XPropertyList* pList ) throw();
+css::uno::Reference< css::uno::XInterface > SvxUnoXColorTable_createInstance( XPropertyList* pList ) noexcept;
+css::uno::Reference< css::uno::XInterface > SvxUnoXLineEndTable_createInstance( XPropertyList* pList ) noexcept;
+css::uno::Reference< css::uno::XInterface > SvxUnoXDashTable_createInstance( XPropertyList* pList ) noexcept;
+css::uno::Reference< css::uno::XInterface > SvxUnoXHatchTable_createInstance( XPropertyList* pList ) noexcept;
+css::uno::Reference< css::uno::XInterface > SvxUnoXGradientTable_createInstance( XPropertyList* pList ) noexcept;
+css::uno::Reference< css::uno::XInterface > SvxUnoXBitmapTable_createInstance( XPropertyList* pList ) noexcept;
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -172,7 +172,7 @@ public:
         getPropertyState(const OUString& rName, const SfxItemSet& rSet)const;
     css::beans::PropertyState
         getPropertyState(const SfxItemPropertyMapEntry& rEntry, const SfxItemSet& rSet) const
-                                    throw();
+                                    noexcept;
 
     css::uno::Reference<css::beans::XPropertySetInfo> const &
         getPropertySetInfo() const;

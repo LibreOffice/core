@@ -108,13 +108,13 @@ UcbContentProviderProxy::~UcbContentProviderProxy()
 
 // XInterface methods.
 void SAL_CALL UcbContentProviderProxy::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL UcbContentProviderProxy::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

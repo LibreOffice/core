@@ -59,7 +59,7 @@ public:
 
     // from FilterBase
     virtual bool importDocument() override;
-    virtual bool exportDocument() throw() override;
+    virtual bool exportDocument() noexcept override;
 
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const override;
     virtual ::oox::vml::Drawing* getVmlDrawing() override;

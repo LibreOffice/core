@@ -36,13 +36,13 @@ namespace avmedia{
 //  XInterface, XTypeProvider, XServiceInfo
 
 
-void SAL_CALL SoundHandler::acquire() throw()
+void SAL_CALL SoundHandler::acquire() noexcept
 {
        /* Don't use mutex in methods of XInterface! */
        OWeakObject::acquire();
 }
 
-void SAL_CALL SoundHandler::release() throw()
+void SAL_CALL SoundHandler::release() noexcept
 {
        /* Don't use mutex in methods of XInterface! */
        OWeakObject::release();

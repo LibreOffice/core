@@ -406,7 +406,7 @@ SmXMLImport::SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>&
 {
 }
 
-const uno::Sequence<sal_Int8>& SmXMLImport::getUnoTunnelId() throw()
+const uno::Sequence<sal_Int8>& SmXMLImport::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSmXMLImportUnoTunnelId;
     return theSmXMLImportUnoTunnelId.getSeq();
@@ -2573,7 +2573,7 @@ SmXMLImport::CreateFastContext(sal_Int32 nElement,
     return pContext;
 }
 
-SmXMLImport::~SmXMLImport() throw() { cleanup(); }
+SmXMLImport::~SmXMLImport() noexcept { cleanup(); }
 
 void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
 {

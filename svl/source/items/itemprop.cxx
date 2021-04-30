@@ -197,7 +197,7 @@ void SfxItemPropertySet::setPropertyValue( const OUString &rName,
 }
 
 PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertyMapEntry& rEntry, const SfxItemSet& rSet) const
-    throw()
+    noexcept
 {
     PropertyState eRet = PropertyState_DIRECT_VALUE;
     sal_uInt16 nWhich = rEntry.nWID;

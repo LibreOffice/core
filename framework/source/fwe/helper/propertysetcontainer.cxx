@@ -45,12 +45,12 @@ PropertySetContainer::~PropertySetContainer()
 }
 
 // XInterface
-void SAL_CALL PropertySetContainer::acquire() throw ()
+void SAL_CALL PropertySetContainer::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL PropertySetContainer::release() throw ()
+void SAL_CALL PropertySetContainer::release() noexcept
 {
     OWeakObject::release();
 }

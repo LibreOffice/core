@@ -43,7 +43,7 @@ public:
     explicit XMLAutoTextEventImport(
         const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-    virtual ~XMLAutoTextEventImport() throw() override;
+    virtual ~XMLAutoTextEventImport() noexcept override;
 
     // XInitialization
     virtual void SAL_CALL initialize(

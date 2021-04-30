@@ -135,11 +135,11 @@ public:
     /** increasing m_refCount
     */
     virtual void SAL_CALL acquire()
-        throw () SAL_OVERRIDE;
+        SAL_NOEXCEPT SAL_OVERRIDE;
     /** decreasing m_refCount
     */
     virtual void SAL_CALL release()
-        throw () SAL_OVERRIDE;
+        SAL_NOEXCEPT SAL_OVERRIDE;
 
     /** XWeak::queryAdapter() implementation
 

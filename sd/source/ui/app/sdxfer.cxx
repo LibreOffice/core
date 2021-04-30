@@ -749,7 +749,7 @@ const css::uno::Sequence< sal_Int8 >& SdTransferable::getUnoTunnelId()
     return theSdTransferableUnoTunnelId.getSeq();
 }
 
-SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >& rxData ) throw()
+SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >& rxData ) noexcept
 {
     try
     {

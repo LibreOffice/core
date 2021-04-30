@@ -1069,12 +1069,12 @@ Any SAL_CALL ResourceListener::queryInterface( const Type& rType )
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL ResourceListener::acquire() throw ()
+void SAL_CALL ResourceListener::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ResourceListener::release() throw ()
+void SAL_CALL ResourceListener::release() noexcept
 {
     OWeakObject::release();
 }

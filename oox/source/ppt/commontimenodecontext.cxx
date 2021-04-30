@@ -579,7 +579,7 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
         xAttribs->getOptionalValue( XML_tmFilter );
     }
 
-    CommonTimeNodeContext::~CommonTimeNodeContext( ) throw ( )
+    CommonTimeNodeContext::~CommonTimeNodeContext( ) noexcept
     {
     }
 

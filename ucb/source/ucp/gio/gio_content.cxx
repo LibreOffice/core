@@ -1314,12 +1314,12 @@ css::uno::Sequence< css::ucb::CommandInfo > Content::getCommands( const css::uno
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
-void SAL_CALL Content::acquire() throw()
+void SAL_CALL Content::acquire() noexcept
 {
     ContentImplHelper::acquire();
 }
 
-void SAL_CALL Content::release() throw()
+void SAL_CALL Content::release() noexcept
 {
     ContentImplHelper::release();
 }

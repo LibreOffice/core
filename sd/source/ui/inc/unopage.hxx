@@ -82,7 +82,7 @@ protected:
 
     bool IsImpressDocument() const;
 
-    virtual void disposing() throw() override;
+    virtual void disposing() noexcept override;
 
     css::uno::Any getNavigationOrder();
     void setNavigationOrder( const css::uno::Any& rValue );
@@ -92,7 +92,7 @@ protected:
 
 public:
     SdGenericDrawPage(SdXImpressDocument* pModel, SdPage* pInPage, const SvxItemPropertySet* pSet);
-    virtual ~SdGenericDrawPage() throw() override;
+    virtual ~SdGenericDrawPage() noexcept override;
 
     // intern
     bool isValid() const { return (SvxDrawPage::mpPage != nullptr) && (mpModel != nullptr); }
@@ -100,7 +100,7 @@ public:
     SdPage* GetPage() const { return static_cast<SdPage*>(SvxDrawPage::mpPage); }
     SdXImpressDocument* GetModel() const;
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept;
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // this is called whenever a SdrObject must be created for an empty api shape wrapper
@@ -111,7 +111,7 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XShapeCombiner
     virtual css::uno::Reference< css::drawing::XShape > SAL_CALL combine( const css::uno::Reference< css::drawing::XShapes >& xShapes ) override;
@@ -168,7 +168,7 @@ protected:
     virtual void getBackground( css::uno::Any& rValue ) override;
 public:
     SdDrawPage(SdXImpressDocument* pModel, SdPage* pInPage);
-    virtual ~SdDrawPage() throw() override;
+    virtual ~SdDrawPage() noexcept override;
 
     UNO3_GETIMPLEMENTATION_DECL( SdDrawPage )
 
@@ -178,8 +178,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
@@ -229,14 +229,14 @@ protected:
 
 public:
     SdMasterPage(SdXImpressDocument* pModel, SdPage* pInPage);
-    virtual ~SdMasterPage() throw() override;
+    virtual ~SdMasterPage() noexcept override;
 
     UNO3_GETIMPLEMENTATION_DECL(SdMasterPage)
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
@@ -279,11 +279,11 @@ private:
     SdGenericDrawPage* mpUnoPage;
 
 public:
-    SdPageLinkTargets( SdGenericDrawPage* pUnoPage ) throw();
-    virtual ~SdPageLinkTargets() throw() override;
+    SdPageLinkTargets( SdGenericDrawPage* pUnoPage ) noexcept;
+    virtual ~SdPageLinkTargets() noexcept override;
 
     // intern
-    SdrObject* FindObject( std::u16string_view rName ) const throw();
+    SdrObject* FindObject( std::u16string_view rName ) const noexcept;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

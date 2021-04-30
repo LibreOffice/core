@@ -56,7 +56,7 @@ GalleryItem::GalleryItem( ::unogallery::GalleryTheme& rTheme, const GalleryObjec
 
 
 GalleryItem::~GalleryItem()
-    throw()
+    noexcept
 {
     if( mpTheme )
         mpTheme->implDeregisterGalleryItem( *this );
@@ -99,14 +99,14 @@ uno::Any SAL_CALL GalleryItem::queryInterface( const uno::Type & rType )
 
 
 void SAL_CALL GalleryItem::acquire()
-    throw()
+    noexcept
 {
     OWeakAggObject::acquire();
 }
 
 
 void SAL_CALL GalleryItem::release()
-    throw()
+    noexcept
 {
     OWeakAggObject::release();
 }
@@ -350,14 +350,14 @@ void GalleryItem::implSetInvalid()
 
 
 GalleryDrawingModel::GalleryDrawingModel( SdrModel* pDoc )
-    throw() :
+    noexcept :
     SvxUnoDrawingModel( pDoc )
 {
 }
 
 
 GalleryDrawingModel::~GalleryDrawingModel()
-    throw()
+    noexcept
 {
     delete GetDoc();
 }

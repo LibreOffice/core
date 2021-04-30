@@ -165,8 +165,8 @@ namespace connectivity::odbc
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XInterface
-            virtual void SAL_CALL release() throw() override;
-            virtual void SAL_CALL acquire() throw() override;
+            virtual void SAL_CALL release() noexcept override;
+            virtual void SAL_CALL acquire() noexcept override;
             // XInterface
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             //XTypeProvider
@@ -231,8 +231,8 @@ namespace connectivity::odbc
             DECLARE_SERVICE_INFO();
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
+            virtual void SAL_CALL acquire() noexcept override;
+            virtual void SAL_CALL release() noexcept override;
             // XBatchExecution
             virtual void SAL_CALL addBatch( const OUString& sql ) override;
             virtual void SAL_CALL clearBatch(  ) override;

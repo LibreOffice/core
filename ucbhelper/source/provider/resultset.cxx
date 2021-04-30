@@ -104,9 +104,9 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
-        throw() override;
+        noexcept override;
     virtual void SAL_CALL release()
-        throw() override;
+        noexcept override;
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
@@ -1427,13 +1427,13 @@ PropertySetInfo::PropertySetInfo(
 
 // XInterface methods.
 void SAL_CALL PropertySetInfo::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL PropertySetInfo::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

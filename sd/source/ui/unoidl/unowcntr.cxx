@@ -23,16 +23,16 @@
 
 using namespace ::com::sun::star;
 
-SvUnoWeakContainer::SvUnoWeakContainer() throw()
+SvUnoWeakContainer::SvUnoWeakContainer() noexcept
 {
 }
 
-SvUnoWeakContainer::~SvUnoWeakContainer() throw()
+SvUnoWeakContainer::~SvUnoWeakContainer() noexcept
 {
 }
 
 /** inserts the given ref into this container */
-void SvUnoWeakContainer::insert( const uno::WeakReference< uno::XInterface >& xRef ) throw()
+void SvUnoWeakContainer::insert( const uno::WeakReference< uno::XInterface >& xRef ) noexcept
 {
     for ( auto it = maVector.begin(); it != maVector.end(); )
     {

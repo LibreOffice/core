@@ -53,7 +53,7 @@ Sequence< Type > OSubComponent::getTypes()
 
 // XInterface
 
-void OSubComponent::release() throw ( )
+void OSubComponent::release() noexcept
 {
     Reference< XInterface > x( xDelegator );
     if (! x.is())

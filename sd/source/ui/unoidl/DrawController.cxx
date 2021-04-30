@@ -58,7 +58,7 @@ using vcl::EnumContext;
 
 namespace sd {
 
-DrawController::DrawController (ViewShellBase& rBase) throw()
+DrawController::DrawController (ViewShellBase& rBase) noexcept
     : DrawControllerInterfaceBase(&rBase),
       BroadcastHelperOwner(SfxBaseController::m_aMutex),
       OPropertySetHelper(BroadcastHelperOwner::maBroadcastHelper),
@@ -78,7 +78,7 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
     ProvideFrameworkControllers();
 }
 
-DrawController::~DrawController() throw()
+DrawController::~DrawController() noexcept
 {
 }
 
@@ -326,7 +326,7 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage()
     return xPage;
 }
 
-void DrawController::FireVisAreaChanged (const ::tools::Rectangle& rVisArea) throw()
+void DrawController::FireVisAreaChanged (const ::tools::Rectangle& rVisArea) noexcept
 {
     if( maLastVisArea == rVisArea )
         return;
@@ -350,7 +350,7 @@ void DrawController::FireVisAreaChanged (const ::tools::Rectangle& rVisArea) thr
     maLastVisArea = rVisArea;
 }
 
-void DrawController::FireSelectionChangeListener() throw()
+void DrawController::FireSelectionChangeListener() noexcept
 {
     OInterfaceContainerHelper * pLC = BroadcastHelperOwner::maBroadcastHelper.getContainer(
         m_aSelectionTypeIdentifier);
@@ -377,7 +377,7 @@ void DrawController::FireSelectionChangeListener() throw()
     }
 }
 
-void DrawController::FireChangeEditMode (bool bMasterPageMode) throw()
+void DrawController::FireChangeEditMode (bool bMasterPageMode) noexcept
 {
     if (bMasterPageMode != mbMasterPageMode )
     {
@@ -390,7 +390,7 @@ void DrawController::FireChangeEditMode (bool bMasterPageMode) throw()
     }
 }
 
-void DrawController::FireChangeLayerMode (bool bLayerMode) throw()
+void DrawController::FireChangeLayerMode (bool bLayerMode) noexcept
 {
     if (bLayerMode != mbLayerMode)
     {
@@ -403,7 +403,7 @@ void DrawController::FireChangeLayerMode (bool bLayerMode) throw()
     }
 }
 
-void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
+void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) noexcept
 {
     rtl::Reference<SdrPage> pCurrentPage  = mpCurrentPage.get();
     if (pNewCurrentPage == pCurrentPage.get())
@@ -438,7 +438,7 @@ void DrawController::NotifyAccUpdate()
     fire (&nHandle, &aNewValue, &aOldValue, 1, false);
 }
 
-void DrawController::fireChangeLayer( css::uno::Reference< css::drawing::XLayer>* pCurrentLayer ) throw()
+void DrawController::fireChangeLayer( css::uno::Reference< css::drawing::XLayer>* pCurrentLayer ) noexcept
 {
     if( pCurrentLayer != mpCurrentLayer )
     {
@@ -456,7 +456,7 @@ void DrawController::fireChangeLayer( css::uno::Reference< css::drawing::XLayer>
 
 // This method is only called in slide show and outline view
 //void DrawController::fireSwitchCurrentPage(String pageName ) throw()
-void DrawController::fireSwitchCurrentPage(sal_Int32 pageIndex ) throw()
+void DrawController::fireSwitchCurrentPage(sal_Int32 pageIndex ) noexcept
 {
         Any aNewValue;
         Any aOldValue;

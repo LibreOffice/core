@@ -279,12 +279,12 @@ Any SAL_CALL AccessibleGridControlTable::queryInterface( const uno::Type& rType 
         aAny : AccessibleGridControlTableSelectionImplHelper::queryInterface( rType );
 }
 
-void SAL_CALL AccessibleGridControlTable::acquire() throw ()
+void SAL_CALL AccessibleGridControlTable::acquire() noexcept
 {
     AccessibleGridControlTableBase::acquire();
 }
 
-void SAL_CALL AccessibleGridControlTable::release() throw ()
+void SAL_CALL AccessibleGridControlTable::release() noexcept
 {
     AccessibleGridControlTableBase::release();
 }

@@ -133,11 +133,11 @@ rtl::Reference< Access > ChildAccess::getParentAccess() {
     return parent_;
 }
 
-void ChildAccess::acquire() throw () {
+void ChildAccess::acquire() noexcept {
     Access::acquire();
 }
 
-void ChildAccess::release() throw () {
+void ChildAccess::release() noexcept {
     Access::release();
 }
 
@@ -171,7 +171,7 @@ sal_Int64 ChildAccess::getSomething(
 void ChildAccess::bind(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Access > const & parent, OUString const & name)
-    throw ()
+    noexcept
 {
     assert(!parent_.is() && root.is() && parent.is() && !name.isEmpty());
     root_ = root;
@@ -179,7 +179,7 @@ void ChildAccess::bind(
     name_ = name;
 }
 
-void ChildAccess::unbind() throw () {
+void ChildAccess::unbind() noexcept {
     assert(parent_.is());
     parent_->releaseChild(name_);
     parent_.clear();

@@ -154,7 +154,7 @@ HierarchyContent::~HierarchyContent()
 
 // virtual
 void SAL_CALL HierarchyContent::acquire()
-    throw( )
+    noexcept
 {
     ContentImplHelper::acquire();
 }
@@ -162,7 +162,7 @@ void SAL_CALL HierarchyContent::acquire()
 
 // virtual
 void SAL_CALL HierarchyContent::release()
-    throw( )
+    noexcept
 {
     ContentImplHelper::release();
 }

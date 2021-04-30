@@ -1245,12 +1245,12 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-void SAL_CALL ScModelObj::acquire() throw()
+void SAL_CALL ScModelObj::acquire() noexcept
 {
     SfxBaseModel::acquire();
 }
 
-void SAL_CALL ScModelObj::release() throw()
+void SAL_CALL ScModelObj::release() noexcept
 {
     SfxBaseModel::release();
 }

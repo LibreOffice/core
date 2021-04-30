@@ -107,12 +107,12 @@ Any SAL_CALL StatusbarController::queryInterface( const Type& rType )
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL StatusbarController::acquire() throw ()
+void SAL_CALL StatusbarController::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL StatusbarController::release() throw ()
+void SAL_CALL StatusbarController::release() noexcept
 {
     OWeakObject::release();
 }

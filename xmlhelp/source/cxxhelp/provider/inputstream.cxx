@@ -54,7 +54,7 @@ XInputStream_impl::queryInterface( const uno::Type& rType )
 
 void SAL_CALL
 XInputStream_impl::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
@@ -62,7 +62,7 @@ XInputStream_impl::acquire()
 
 void SAL_CALL
 XInputStream_impl::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

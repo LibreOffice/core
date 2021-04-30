@@ -75,7 +75,7 @@ Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType )
 
 //  XInterface
 
-void SAL_CALL OConnectionPointHelper::acquire() throw()
+void SAL_CALL OConnectionPointHelper::acquire() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -86,7 +86,7 @@ void SAL_CALL OConnectionPointHelper::acquire() throw()
 
 //  XInterface
 
-void SAL_CALL OConnectionPointHelper::release() throw()
+void SAL_CALL OConnectionPointHelper::release() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.

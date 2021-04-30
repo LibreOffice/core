@@ -36,7 +36,7 @@ namespace comphelper
 
     private:
         virtual ~MasterPropertySetInfo()
-            throw() override;
+            noexcept override;
 
         void add( PropertyInfoHash &rHash, sal_uInt8 nMapId );
 

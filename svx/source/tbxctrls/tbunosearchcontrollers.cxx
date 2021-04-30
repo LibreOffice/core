@@ -531,8 +531,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -584,12 +584,12 @@ css::uno::Any SAL_CALL FindTextToolbarController::queryInterface( const css::uno
     return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
 }
 
-void SAL_CALL FindTextToolbarController::acquire() throw ()
+void SAL_CALL FindTextToolbarController::acquire() noexcept
 {
     ToolboxController::acquire();
 }
 
-void SAL_CALL FindTextToolbarController::release() throw ()
+void SAL_CALL FindTextToolbarController::release() noexcept
 {
     ToolboxController::release();
 }
@@ -709,8 +709,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -751,12 +751,12 @@ css::uno::Any SAL_CALL UpDownSearchToolboxController::queryInterface( const css:
     return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
 }
 
-void SAL_CALL UpDownSearchToolboxController::acquire() throw ()
+void SAL_CALL UpDownSearchToolboxController::acquire() noexcept
 {
     ToolboxController::acquire();
 }
 
-void SAL_CALL UpDownSearchToolboxController::release() throw ()
+void SAL_CALL UpDownSearchToolboxController::release() noexcept
 {
     ToolboxController::release();
 }
@@ -827,8 +827,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -869,12 +869,12 @@ css::uno::Any SAL_CALL MatchCaseToolboxController::queryInterface( const css::un
     return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
 }
 
-void SAL_CALL MatchCaseToolboxController::acquire() throw ()
+void SAL_CALL MatchCaseToolboxController::acquire() noexcept
 {
     ToolboxController::acquire();
 }
 
-void SAL_CALL MatchCaseToolboxController::release() throw ()
+void SAL_CALL MatchCaseToolboxController::release() noexcept
 {
     ToolboxController::release();
 }
@@ -943,8 +943,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -985,12 +985,12 @@ css::uno::Any SAL_CALL SearchFormattedToolboxController::queryInterface( const c
     return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
 }
 
-void SAL_CALL SearchFormattedToolboxController::acquire() throw ()
+void SAL_CALL SearchFormattedToolboxController::acquire() noexcept
 {
     ToolboxController::acquire();
 }
 
-void SAL_CALL SearchFormattedToolboxController::release() throw ()
+void SAL_CALL SearchFormattedToolboxController::release() noexcept
 {
     ToolboxController::release();
 }
@@ -1059,8 +1059,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -1097,12 +1097,12 @@ css::uno::Any SAL_CALL FindAllToolboxController::queryInterface( const css::uno:
     return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
 }
 
-void SAL_CALL FindAllToolboxController::acquire() throw ()
+void SAL_CALL FindAllToolboxController::acquire() noexcept
 {
     ToolboxController::acquire();
 }
 
-void SAL_CALL FindAllToolboxController::release() throw ()
+void SAL_CALL FindAllToolboxController::release() noexcept
 {
     ToolboxController::release();
 }
@@ -1166,8 +1166,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -1204,12 +1204,12 @@ css::uno::Any SAL_CALL ExitSearchToolboxController::queryInterface( const css::u
     return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
 }
 
-void SAL_CALL ExitSearchToolboxController::acquire() throw ()
+void SAL_CALL ExitSearchToolboxController::acquire() noexcept
 {
     ToolboxController::acquire();
 }
 
-void SAL_CALL ExitSearchToolboxController::release() throw ()
+void SAL_CALL ExitSearchToolboxController::release() noexcept
 {
     ToolboxController::release();
 }
@@ -1284,8 +1284,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -1325,12 +1325,12 @@ css::uno::Any SAL_CALL SearchLabelToolboxController::queryInterface( const css::
     return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
 }
 
-void SAL_CALL SearchLabelToolboxController::acquire() throw ()
+void SAL_CALL SearchLabelToolboxController::acquire() noexcept
 {
     ToolboxController::acquire();
 }
 
-void SAL_CALL SearchLabelToolboxController::release() throw ()
+void SAL_CALL SearchLabelToolboxController::release() noexcept
 {
     ToolboxController::release();
 }
@@ -1411,8 +1411,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -1461,12 +1461,12 @@ css::uno::Any SAL_CALL FindbarDispatcher::queryInterface( const css::uno::Type& 
     return OWeakObject::queryInterface( aType );
 }
 
-void SAL_CALL FindbarDispatcher::acquire() throw()
+void SAL_CALL FindbarDispatcher::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL FindbarDispatcher::release() throw()
+void SAL_CALL FindbarDispatcher::release() noexcept
 {
     OWeakObject::release();
 }

@@ -36,8 +36,8 @@ namespace oox::ppt {
 class SoundActionContext final : public ::oox::core::FragmentHandler2
 {
 public:
-    SoundActionContext( ::oox::core::FragmentHandler2 const & rParent, PropertyMap & aProperties ) throw();
-    virtual ~SoundActionContext() throw() override;
+    SoundActionContext( ::oox::core::FragmentHandler2 const & rParent, PropertyMap & aProperties ) noexcept;
+    virtual ~SoundActionContext() noexcept override;
 
     virtual void onEndElement() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;

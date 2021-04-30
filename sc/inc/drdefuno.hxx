@@ -31,12 +31,12 @@ private:
 
 public:
                             ScDrawDefaultsObj(ScDocShell* pDocSh);
-    virtual                 ~ScDrawDefaultsObj() throw () override;
+    virtual                 ~ScDrawDefaultsObj() noexcept override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // from SvxUnoDrawPool
-    virtual SfxItemPool*    getModelPool( bool bReadOnly ) throw() override;
+    virtual SfxItemPool*    getModelPool( bool bReadOnly ) noexcept override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

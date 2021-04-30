@@ -99,8 +99,8 @@ public:
 
     // XInterface
     SVX_DLLPRIVATE virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& Type ) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL acquire() throw () override;
-    SVX_DLLPRIVATE virtual void SAL_CALL release() throw () override;
+    SVX_DLLPRIVATE virtual void SAL_CALL acquire() noexcept override;
+    SVX_DLLPRIVATE virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
     SVX_DLLPRIVATE virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -190,7 +190,7 @@ protected:
 private:
     /// @throws css::uno::RuntimeException
     SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj );
-    SVX_DLLPRIVATE virtual ~Cell() throw() override;
+    SVX_DLLPRIVATE virtual ~Cell() noexcept override;
 
     Cell(Cell const &) = delete;
     void operator =(Cell const &) = delete;

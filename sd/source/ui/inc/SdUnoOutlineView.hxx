@@ -34,8 +34,8 @@ class SdUnoOutlineView
 {
 public:
     SdUnoOutlineView (
-        OutlineViewShell& rViewShell) throw();
-    virtual ~SdUnoOutlineView() throw() override;
+        OutlineViewShell& rViewShell) noexcept;
+    virtual ~SdUnoOutlineView() noexcept override;
 
     virtual void SAL_CALL disposing() override;
 

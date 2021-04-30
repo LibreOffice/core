@@ -36,8 +36,8 @@ class SdUnoSlideView
 {
 public:
     SdUnoSlideView (
-        slidesorter::SlideSorter& rSlideSorter) throw();
-    virtual ~SdUnoSlideView() throw() override;
+        slidesorter::SlideSorter& rSlideSorter) noexcept;
+    virtual ~SdUnoSlideView() noexcept override;
 
     // XSelectionSupplier
 

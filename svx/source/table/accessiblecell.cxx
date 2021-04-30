@@ -134,13 +134,13 @@ Any SAL_CALL AccessibleCell::queryInterface( const Type& aType )
 }
 
 
-void SAL_CALL AccessibleCell::acquire(  ) throw ()
+void SAL_CALL AccessibleCell::acquire(  ) noexcept
 {
     AccessibleCellBase::acquire();
 }
 
 
-void SAL_CALL AccessibleCell::release(  ) throw ()
+void SAL_CALL AccessibleCell::release(  ) noexcept
 {
     AccessibleCellBase::release();
 }

@@ -55,21 +55,21 @@ class EDITENG_DLLPUBLIC SvxUnoTextField final : public cppu::BaseMutex,
     css::uno::Sequence< css::uno::Type > maTypeSequence;
 
 public:
-    SvxUnoTextField( sal_Int32 nServiceId ) throw();
-    SvxUnoTextField( css::uno::Reference< css::text::XTextRange > const & xAnchor, const OUString& rPresentation, const SvxFieldData* pFieldData ) throw();
-    virtual ~SvxUnoTextField() throw() override;
+    SvxUnoTextField( sal_Int32 nServiceId ) noexcept;
+    SvxUnoTextField( css::uno::Reference< css::text::XTextRange > const & xAnchor, const OUString& rPresentation, const SvxFieldData* pFieldData ) noexcept;
+    virtual ~SvxUnoTextField() noexcept override;
 
     // Internal
-    std::unique_ptr<SvxFieldData> CreateFieldData() const throw();
+    std::unique_ptr<SvxFieldData> CreateFieldData() const noexcept;
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept;
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // css::lang::XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;

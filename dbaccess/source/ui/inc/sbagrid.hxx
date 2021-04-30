@@ -100,8 +100,8 @@ namespace dbaui
         virtual ~SbaXGridPeer() override;
 
         // UNO
-        virtual void SAL_CALL  acquire() throw() override { FmXGridPeer::acquire(); }
-        virtual void SAL_CALL release() throw() override { FmXGridPeer::release(); }
+        virtual void SAL_CALL  acquire() noexcept override { FmXGridPeer::acquire(); }
+        virtual void SAL_CALL release() noexcept override { FmXGridPeer::release(); }
         virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;

@@ -37,7 +37,7 @@ namespace {
 class NamedPropertyValuesContainer : public cppu::WeakImplHelper< container::XNameContainer, lang::XServiceInfo >
 {
 public:
-    NamedPropertyValuesContainer() throw();
+    NamedPropertyValuesContainer() noexcept;
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
@@ -66,7 +66,7 @@ private:
 
 }
 
-NamedPropertyValuesContainer::NamedPropertyValuesContainer() throw()
+NamedPropertyValuesContainer::NamedPropertyValuesContainer() noexcept
 {
 }
 

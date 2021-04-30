@@ -95,7 +95,7 @@ PresentationFragmentHandler::PresentationFragmentHandler(XmlFilterBase& rFilter,
     }
 }
 
-PresentationFragmentHandler::~PresentationFragmentHandler() throw()
+PresentationFragmentHandler::~PresentationFragmentHandler() noexcept
 {
 }
 

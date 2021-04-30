@@ -45,12 +45,12 @@ OBookmarkContainer::OBookmarkContainer(OWeakObject& _rParent, Mutex& _rMutex)
 }
 
 
-void SAL_CALL OBookmarkContainer::acquire(  ) throw()
+void SAL_CALL OBookmarkContainer::acquire(  ) noexcept
 {
     m_rParent.acquire();
 }
 
-void SAL_CALL OBookmarkContainer::release(  ) throw()
+void SAL_CALL OBookmarkContainer::release(  ) noexcept
 {
     m_rParent.release();
 }

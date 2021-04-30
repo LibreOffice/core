@@ -115,13 +115,13 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::queryInterface( uno::Type const
 }
 
 void SAL_CALL ScAccessiblePreviewHeaderCell::acquire()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::acquire();
 }
 
 void SAL_CALL ScAccessiblePreviewHeaderCell::release()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::release();
 }

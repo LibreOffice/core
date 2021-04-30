@@ -34,13 +34,13 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox::ppt {
 
-SlideTimingContext::SlideTimingContext( FragmentHandler2 const & rParent, TimeNodePtrList & aTimeNodeList ) throw()
+SlideTimingContext::SlideTimingContext( FragmentHandler2 const & rParent, TimeNodePtrList & aTimeNodeList ) noexcept
     : FragmentHandler2( rParent )
     , maTimeNodeList( aTimeNodeList )
 {
 }
 
-SlideTimingContext::~SlideTimingContext() throw()
+SlideTimingContext::~SlideTimingContext() noexcept
 {
 
 }

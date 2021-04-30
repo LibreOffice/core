@@ -330,7 +330,7 @@ SwXMLImport::SwXMLImport(
     InitItemImport();
 }
 
-SwXMLImport::~SwXMLImport() throw ()
+SwXMLImport::~SwXMLImport() noexcept
 {
     if (HasShapeImport())
     {
@@ -359,7 +359,7 @@ void SwXMLImport::setStyleInsertMode( SfxStyleFamily nFamilies,
     m_bLoadDoc = false;
 }
 
-const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() throw()
+const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theSwXMLImportUnoTunnelId;
     return theSwXMLImportUnoTunnelId.getSeq();

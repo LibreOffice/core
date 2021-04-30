@@ -147,7 +147,7 @@ namespace ww
         @return the sti that word would give it. stiUser if word would treat
         it as a user defined style.
     */
-    sti GetCanonicalStiFromStc(sal_uInt8 stc) throw();
+    sti GetCanonicalStiFromStc(sal_uInt8 stc) noexcept;
 
     /** Find the WinWord english name from a sti index
 
@@ -159,7 +159,7 @@ namespace ww
         @return the name word would give it if it's an inbuilt name, otherwise
         NULL
     */
-    const char* GetEnglishNameFromSti(sti eSti) throw();
+    const char* GetEnglishNameFromSti(sti eSti) noexcept;
 
     /** Determine if the WinWord sti is standard Character Style
 
@@ -168,7 +168,7 @@ namespace ww
 
         @return true if a known inbuild character style
     */
-    bool StandardStiIsCharStyle(sti eSti) throw();
+    bool StandardStiIsCharStyle(sti eSti) noexcept;
 } // namespace ww
 
 #endif

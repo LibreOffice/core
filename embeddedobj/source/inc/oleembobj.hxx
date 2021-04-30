@@ -270,7 +270,7 @@ protected:
     css::uno::Reference< css::io::XStream > TryToRetrieveCachedVisualRepresentation_Impl(
                     const css::uno::Reference< css::io::XStream >& xStream,
                     bool bAllowRepair50 = false )
-        throw ();
+        noexcept;
 #ifdef _WIN32
     bool SaveObject_Impl();
     bool OnShowWindow_Impl( bool bShow );

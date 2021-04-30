@@ -37,8 +37,8 @@ class ClassName final : public ListenerMultiplexerBase, public InterfaceName \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override; \
-    void                        SAL_CALL acquire() throw() override; \
-    void                        SAL_CALL release() throw() override; \
+    void                        SAL_CALL acquire() noexcept override; \
+    void                        SAL_CALL release() noexcept override; \
     void                        SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 
@@ -48,8 +48,8 @@ class TOOLKIT_DLLPUBLIC ClassName final : public ListenerMultiplexerBase, public
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override; \
-    void                        SAL_CALL acquire() throw() override; \
-    void                        SAL_CALL release() throw() override; \
+    void                        SAL_CALL acquire() noexcept override; \
+    void                        SAL_CALL release() noexcept override; \
     void                        SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 
@@ -62,8 +62,8 @@ ClassName::ClassName( ::cppu::OWeakObject& rSource ) \
     : ListenerMultiplexerBase( rSource ) \
 { \
 } \
-void SAL_CALL ClassName::acquire() throw() { ListenerMultiplexerBase::acquire(); } \
-void SAL_CALL ClassName::release() throw() { ListenerMultiplexerBase::release(); } \
+void SAL_CALL ClassName::acquire() noexcept { ListenerMultiplexerBase::acquire(); } \
+void SAL_CALL ClassName::release() noexcept { ListenerMultiplexerBase::release(); } \
 css::uno::Any ClassName::queryInterface( const css::uno::Type & rType ) \
 { \
     css::uno::Any aRet = ::cppu::queryInterface( rType, \

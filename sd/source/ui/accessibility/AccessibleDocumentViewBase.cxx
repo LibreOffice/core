@@ -384,14 +384,14 @@ uno::Any SAL_CALL
 
 void SAL_CALL
     AccessibleDocumentViewBase::acquire()
-    throw ()
+    noexcept
 {
     AccessibleContextBase::acquire ();
 }
 
 void SAL_CALL
     AccessibleDocumentViewBase::release()
-    throw ()
+    noexcept
 {
     AccessibleContextBase::release ();
 }

@@ -369,7 +369,7 @@ void PowerPointExport::writeDocumentProperties()
     exportCustomFragments();
 }
 
-bool PowerPointExport::importDocument() throw()
+bool PowerPointExport::importDocument() noexcept
 {
     return false;
 }

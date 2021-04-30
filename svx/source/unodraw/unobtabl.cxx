@@ -34,7 +34,7 @@ namespace {
 class SvxUnoBitmapTable : public SvxUnoNameItemTable
 {
 public:
-    explicit SvxUnoBitmapTable( SdrModel* pModel ) throw();
+    explicit SvxUnoBitmapTable( SdrModel* pModel ) noexcept;
 
     virtual NameOrIndex* createItem() const override;
     virtual bool isValid( const NameOrIndex* pItem ) const override;
@@ -49,7 +49,7 @@ public:
 
 }
 
-SvxUnoBitmapTable::SvxUnoBitmapTable( SdrModel* pModel ) throw()
+SvxUnoBitmapTable::SvxUnoBitmapTable( SdrModel* pModel ) noexcept
 : SvxUnoNameItemTable( pModel, XATTR_FILLBITMAP, MID_BITMAP )
 {
 }

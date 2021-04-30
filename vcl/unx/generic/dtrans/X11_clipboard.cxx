@@ -208,7 +208,7 @@ void X11Clipboard::fireContentsChanged()
     fireChangedContentsEvent();
 }
 
-Reference< XInterface > X11Clipboard::getReference() throw()
+Reference< XInterface > X11Clipboard::getReference() noexcept
 {
     return Reference< XInterface >( static_cast< OWeakObject* >(this) );
 }

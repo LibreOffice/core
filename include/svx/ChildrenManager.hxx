@@ -118,7 +118,7 @@ public:
         @return
             If there are no children a 0 is returned.
     */
-    tools::Long GetChildCount() const throw();
+    tools::Long GetChildCount() const noexcept;
 
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.

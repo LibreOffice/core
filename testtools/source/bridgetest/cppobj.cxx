@@ -158,11 +158,11 @@ public:
                   m_bSequenceOfCallTestPassed( true )
         {}
 
-    void SAL_CALL acquire() throw () override
+    void SAL_CALL acquire() noexcept override
     {
         OWeakObject::acquire();
     }
-    void SAL_CALL release() throw () override
+    void SAL_CALL release() noexcept override
     {
         OWeakObject::release();
      }

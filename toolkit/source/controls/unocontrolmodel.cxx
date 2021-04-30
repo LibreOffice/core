@@ -423,7 +423,7 @@ css::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
 
 // css::lang::XUnoTunnel
 
-const css::uno::Sequence< sal_Int8 >& UnoControlModel::getUnoTunnelId() throw()
+const css::uno::Sequence< sal_Int8 >& UnoControlModel::getUnoTunnelId() noexcept
 {
     static const UnoTunnelIdInit theUnoControlModelUnoTunnelId;
     return theUnoControlModelUnoTunnelId.getSeq();

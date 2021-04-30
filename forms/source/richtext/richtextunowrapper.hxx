@@ -42,7 +42,7 @@ namespace frm
         ORichTextUnoWrapper( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener );
 
     protected:
-        virtual ~ORichTextUnoWrapper() throw() override;
+        virtual ~ORichTextUnoWrapper() noexcept override;
 
 
     private:

@@ -601,7 +601,7 @@ bool OleEmbeddedObject::HasVisReplInStream()
 uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation_Impl(
         const uno::Reference< io::XStream >& xStream,
         bool bAllowToRepair50 )
-    throw ()
+    noexcept
 {
     uno::Reference< io::XStream > xResult;
 

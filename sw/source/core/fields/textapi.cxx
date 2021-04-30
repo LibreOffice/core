@@ -64,7 +64,7 @@ SwTextAPIObject::SwTextAPIObject( std::unique_ptr<SwTextAPIEditSource> p )
 {
 }
 
-SwTextAPIObject::~SwTextAPIObject() throw()
+SwTextAPIObject::~SwTextAPIObject() noexcept
 {
     m_pSource->Dispose();
     m_pSource.reset();

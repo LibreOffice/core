@@ -48,7 +48,7 @@ public:
 
 // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL release() noexcept override;
 
     operator css::uno::Reference< css::uno::XInterface > () const
         { return static_cast<css::uno::XWeak *>(const_cast<OSubComponent *>(this)); }

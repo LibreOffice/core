@@ -36,7 +36,7 @@ public:
             createFormattedStringSequence(
                      const css::uno::Reference< css::uno::XComponentContext > & xContext
                     , const OUString & rString
-                    , const css::uno::Reference< css::beans::XPropertySet > & xTextProperties ) throw();
+                    , const css::uno::Reference< css::beans::XPropertySet > & xTextProperties ) noexcept;
 };
 
 } //namespace chart

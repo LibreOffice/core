@@ -1810,12 +1810,12 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL OWriteStream::acquire() throw()
+void SAL_CALL OWriteStream::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL OWriteStream::release() throw()
+void SAL_CALL OWriteStream::release() noexcept
 {
     OWeakObject::release();
 }

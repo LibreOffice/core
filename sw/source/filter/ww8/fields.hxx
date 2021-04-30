@@ -40,7 +40,7 @@ namespace ww
     @return 0 if not found, otherwise the fieldname as a C style ASCII
     string
 */
-const char* GetEnglishFieldName(eField eIndex) throw();
+const char* GetEnglishFieldName(eField eIndex) noexcept;
 }
 
 #endif

@@ -360,6 +360,6 @@ FileStream & operator <<(FileStream & out, std::u16string_view s) {
     return out << OUStringToOString(s, RTL_TEXTENCODING_UTF8);
 }
 
-CannotDumpException::~CannotDumpException() throw () {}
+CannotDumpException::~CannotDumpException() noexcept {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

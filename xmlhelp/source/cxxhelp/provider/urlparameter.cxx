@@ -294,8 +294,8 @@ public:
                             bool isRoot );
 
     virtual Any SAL_CALL queryInterface( const Type& rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead ) override;
 
@@ -888,13 +888,13 @@ Any SAL_CALL InputStreamTransformer::queryInterface( const Type& rType )
 }
 
 
-void SAL_CALL InputStreamTransformer::acquire() throw()
+void SAL_CALL InputStreamTransformer::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
 
-void SAL_CALL InputStreamTransformer::release() throw()
+void SAL_CALL InputStreamTransformer::release() noexcept
 {
     OWeakObject::release();
 }

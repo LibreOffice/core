@@ -175,7 +175,7 @@ XMLTransformerActions *XMLTransformerBase::GetUserDefinedActions( sal_uInt16 )
 
 XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit const *pInit,
                                     ::xmloff::token::XMLTokenEnum const *pTKMapInit )
-    throw () :
+    noexcept :
     m_pNamespaceMap( new SvXMLNamespaceMap ),
     m_ElemActions( pInit ),
     m_TokenMap( pTKMapInit )
@@ -189,7 +189,7 @@ XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit const *pInit,
     GetNamespaceMap().Add( GetXMLToken(XML_NP_OOOC), GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
 }
 
-XMLTransformerBase::~XMLTransformerBase() throw ()
+XMLTransformerBase::~XMLTransformerBase() noexcept
 {
 }
 

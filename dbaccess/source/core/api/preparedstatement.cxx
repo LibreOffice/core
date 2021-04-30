@@ -93,12 +93,12 @@ Any OPreparedStatement::queryInterface( const Type & rType )
     return aIface;
 }
 
-void OPreparedStatement::acquire() throw ()
+void OPreparedStatement::acquire() noexcept
 {
     OStatementBase::acquire();
 }
 
-void OPreparedStatement::release() throw ()
+void OPreparedStatement::release() noexcept
 {
     OStatementBase::release();
 }

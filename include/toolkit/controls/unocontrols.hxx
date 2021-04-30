@@ -577,8 +577,8 @@ public:
 
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void SAL_CALL dispose(  ) override;
@@ -646,8 +646,8 @@ public:
 
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
@@ -944,8 +944,8 @@ public:
 
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoEditControl::queryInterface(rType); }
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
 
     // css::lang::XTypeProvider
@@ -1002,8 +1002,8 @@ public:
 
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoEditControl::queryInterface(rType); }
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
@@ -1065,8 +1065,8 @@ public:
 
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
@@ -1141,8 +1141,8 @@ public:
 
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
@@ -1215,8 +1215,8 @@ public:
 
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
@@ -1291,8 +1291,8 @@ public:
 
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
@@ -1365,8 +1365,8 @@ public:
 
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
@@ -1422,8 +1422,8 @@ public:
 
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    void                        SAL_CALL acquire() throw() override  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw() override  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;

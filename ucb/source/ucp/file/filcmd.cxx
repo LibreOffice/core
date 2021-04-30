@@ -47,7 +47,7 @@ XCommandInfo_impl::~XCommandInfo_impl()
 
 void SAL_CALL
 XCommandInfo_impl::acquire()
-  throw()
+  noexcept
 {
   OWeakObject::acquire();
 }
@@ -55,7 +55,7 @@ XCommandInfo_impl::acquire()
 
 void SAL_CALL
 XCommandInfo_impl::release()
-  throw()
+  noexcept
 {
     OWeakObject::release();
 }

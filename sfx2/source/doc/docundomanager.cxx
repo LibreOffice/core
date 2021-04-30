@@ -224,14 +224,14 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::acquire() throw()
+    void SAL_CALL DocumentUndoManager::acquire() noexcept
     {
         OWeakObject::acquire();
         SfxModelSubComponent::acquireModel();
     }
 
 
-    void SAL_CALL DocumentUndoManager::release() throw()
+    void SAL_CALL DocumentUndoManager::release() noexcept
     {
         SfxModelSubComponent::releaseModel();
         OWeakObject::release();

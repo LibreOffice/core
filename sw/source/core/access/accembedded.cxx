@@ -57,14 +57,14 @@ css::uno::Any SAL_CALL
 
 void SAL_CALL
     SwAccessibleEmbeddedObject::acquire()
-    throw ()
+    noexcept
 {
     SwAccessibleNoTextFrame::acquire ();
 }
 
 void SAL_CALL
     SwAccessibleEmbeddedObject::release()
-    throw ()
+    noexcept
 {
     SwAccessibleNoTextFrame::release ();
 }

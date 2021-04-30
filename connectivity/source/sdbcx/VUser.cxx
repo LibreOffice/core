@@ -166,12 +166,12 @@ void SAL_CALL OUser::setName( const OUString& /*aName*/ )
 }
 
 // XInterface
-void SAL_CALL OUser::acquire() throw()
+void SAL_CALL OUser::acquire() noexcept
 {
     OUser_BASE::acquire();
 }
 
-void SAL_CALL OUser::release() throw()
+void SAL_CALL OUser::release() noexcept
 {
     OUser_BASE::release();
 }

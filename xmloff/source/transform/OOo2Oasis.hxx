@@ -47,8 +47,8 @@ protected:
 
 public:
     OOo2OasisTransformer( OUString const & rImplName,
-                          OUString const & rSubServiceName ) throw();
-    virtual ~OOo2OasisTransformer() throw() override;
+                          OUString const & rSubServiceName ) noexcept;
+    virtual ~OOo2OasisTransformer() noexcept override;
 
     // XInterface
 
@@ -59,10 +59,10 @@ public:
     virtual css::uno::Any SAL_CALL queryInterface(
         const css::uno::Type& aType ) override;
 
-    virtual void SAL_CALL acquire(  ) throw () override
+    virtual void SAL_CALL acquire(  ) noexcept override
         { XMLTransformerBase::acquire(); };
 
-    virtual void SAL_CALL release(  ) throw () override
+    virtual void SAL_CALL release(  ) noexcept override
         { XMLTransformerBase::release(); };
 
     // XInitialization
@@ -78,7 +78,7 @@ public:
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     // XUnoTunnel
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() throw();
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() noexcept;
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XImporter

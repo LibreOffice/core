@@ -187,12 +187,12 @@ bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xInde
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-void SAL_CALL ODbaseResultSet::acquire() throw()
+void SAL_CALL ODbaseResultSet::acquire() noexcept
 {
     ODbaseResultSet_BASE2::acquire();
 }
 
-void SAL_CALL ODbaseResultSet::release() throw()
+void SAL_CALL ODbaseResultSet::release() noexcept
 {
     ODbaseResultSet_BASE2::release();
 }

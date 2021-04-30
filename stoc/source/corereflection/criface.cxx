@@ -73,8 +73,8 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes() override;
@@ -108,12 +108,12 @@ Any IdlAttributeFieldImpl::queryInterface( const Type & rType )
     return (aRet.hasValue() ? aRet : IdlMemberImpl::queryInterface( rType ));
 }
 
-void IdlAttributeFieldImpl::acquire() throw()
+void IdlAttributeFieldImpl::acquire() noexcept
 {
     IdlMemberImpl::acquire();
 }
 
-void IdlAttributeFieldImpl::release() throw()
+void IdlAttributeFieldImpl::release() noexcept
 {
     IdlMemberImpl::release();
 }
@@ -337,8 +337,8 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes() override;
@@ -366,12 +366,12 @@ Any IdlInterfaceMethodImpl::queryInterface( const Type & rType )
     return (aRet.hasValue() ? aRet : IdlMemberImpl::queryInterface( rType ));
 }
 
-void IdlInterfaceMethodImpl::acquire() throw()
+void IdlInterfaceMethodImpl::acquire() noexcept
 {
     IdlMemberImpl::acquire();
 }
 
-void IdlInterfaceMethodImpl::release() throw()
+void IdlInterfaceMethodImpl::release() noexcept
 {
     IdlMemberImpl::release();
 }

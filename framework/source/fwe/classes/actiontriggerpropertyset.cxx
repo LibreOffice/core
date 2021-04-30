@@ -87,12 +87,12 @@ Any SAL_CALL ActionTriggerPropertySet::queryInterface( const Type& aType )
     return OWeakObject::queryInterface( aType );
 }
 
-void SAL_CALL ActionTriggerPropertySet::acquire() throw ()
+void SAL_CALL ActionTriggerPropertySet::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ActionTriggerPropertySet::release() throw ()
+void SAL_CALL ActionTriggerPropertySet::release() noexcept
 {
     OWeakObject::release();
 }

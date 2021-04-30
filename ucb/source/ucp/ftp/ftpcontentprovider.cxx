@@ -56,13 +56,13 @@ FTPContentProvider::~FTPContentProvider()
 
 // XInterface methods.
 void SAL_CALL FTPContentProvider::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL FTPContentProvider::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

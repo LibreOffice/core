@@ -61,12 +61,12 @@ Any SAL_CALL Controller::queryInterface( const Type & rType )
     return aReturn;
 }
 
-void SAL_CALL Controller::acquire() throw()
+void SAL_CALL Controller::acquire() noexcept
 {
     SfxBaseController::acquire();
 }
 
-void SAL_CALL Controller::release() throw()
+void SAL_CALL Controller::release() noexcept
 {
     SfxBaseController::release();
 }

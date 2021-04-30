@@ -101,14 +101,14 @@ ConfigurationController::Lock::~Lock()
 
 //===== ConfigurationController ===============================================
 
-ConfigurationController::ConfigurationController() throw()
+ConfigurationController::ConfigurationController() noexcept
     : ConfigurationControllerInterfaceBase(MutexOwner::maMutex)
     , mpImplementation()
     , mbIsDisposed(false)
 {
 }
 
-ConfigurationController::~ConfigurationController() throw()
+ConfigurationController::~ConfigurationController() noexcept
 {
 }
 

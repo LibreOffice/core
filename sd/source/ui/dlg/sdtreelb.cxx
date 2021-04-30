@@ -133,7 +133,7 @@ const css::uno::Sequence<sal_Int8>& SdPageObjsTLV::SdPageObjsTransferable::getUn
 }
 
 SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData )
-    throw()
+    noexcept
 {
     try
     {

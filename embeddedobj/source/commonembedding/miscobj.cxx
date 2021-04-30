@@ -424,14 +424,14 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
 
 
 void SAL_CALL OCommonEmbeddedObject::acquire()
-        throw()
+        noexcept
 {
     ::cppu::OWeakObject::acquire() ;
 }
 
 
 void SAL_CALL OCommonEmbeddedObject::release()
-        throw()
+        noexcept
 {
     ::cppu::OWeakObject::release() ;
 }

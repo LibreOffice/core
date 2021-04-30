@@ -81,7 +81,7 @@ protected:
 
     virtual XMLShapeImportHelper* CreateShapeImport() override;
 
-    virtual ~ORptFilter()  throw() override;
+    virtual ~ORptFilter()  noexcept override;
 public:
 
     ORptFilter( const Reference< XComponentContext >& _rxContext, OUString const & rImplementationName, SvXMLImportFlags nImportFlags );

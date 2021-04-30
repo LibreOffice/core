@@ -116,13 +116,13 @@ FTPContent::~FTPContent()
 // XInterface methods.
 
 void SAL_CALL FTPContent::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL FTPContent::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

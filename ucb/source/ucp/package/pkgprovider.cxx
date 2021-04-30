@@ -68,10 +68,10 @@ public:
     queryInterface( const uno::Type& aType ) override
     { return m_xNA->queryInterface( aType ); }
     virtual void SAL_CALL
-    acquire() throw() override
+    acquire() noexcept override
     { OWeakObject::acquire(); }
     virtual void SAL_CALL
-    release() throw() override
+    release() noexcept override
     { OWeakObject::release(); }
 
     // XHierarchicalNameAccess
@@ -107,13 +107,13 @@ ContentProvider::~ContentProvider()
 
 // XInterface methods.
 void SAL_CALL ContentProvider::acquire()
-    throw()
+    noexcept
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL ContentProvider::release()
-    throw()
+    noexcept
 {
     OWeakObject::release();
 }

@@ -794,22 +794,22 @@ void java_sql_Statement::createStatement(JNIEnv* _pEnv)
 
 IMPLEMENT_SERVICE_INFO(java_sql_Statement,"com.sun.star.sdbcx.JStatement","com.sun.star.sdbc.Statement");
 
-void SAL_CALL java_sql_Statement_Base::acquire() throw()
+void SAL_CALL java_sql_Statement_Base::acquire() noexcept
 {
     java_sql_Statement_BASE::acquire();
 }
 
-void SAL_CALL java_sql_Statement_Base::release() throw()
+void SAL_CALL java_sql_Statement_Base::release() noexcept
 {
     java_sql_Statement_BASE::release();
 }
 
-void SAL_CALL java_sql_Statement::acquire() throw()
+void SAL_CALL java_sql_Statement::acquire() noexcept
 {
     OStatement_BASE2::acquire();
 }
 
-void SAL_CALL java_sql_Statement::release() throw()
+void SAL_CALL java_sql_Statement::release() noexcept
 {
     OStatement_BASE2::release();
 }

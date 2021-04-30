@@ -77,8 +77,8 @@ namespace sd
 
         // XInterface
         virtual Any SAL_CALL queryInterface( const Type& aType ) override;
-        virtual void SAL_CALL acquire(  ) throw () override;
-        virtual void SAL_CALL release(  ) throw () override;
+        virtual void SAL_CALL acquire(  ) noexcept override;
+        virtual void SAL_CALL release(  ) noexcept override;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -126,7 +126,7 @@ namespace sd
     }
 
     Reference< XInterface > DocumentSettings_createInstance( SdXImpressDocument* pModel )
-        throw ()
+        noexcept
     {
         DBG_ASSERT( pModel, "I need a model for the DocumentSettings!" );
         return static_cast<XWeak*>(new DocumentSettings( pModel ));
@@ -1313,12 +1313,12 @@ Any SAL_CALL DocumentSettings::queryInterface( const Type& aType )
     return WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >::queryInterface( aType );
 }
 
-void SAL_CALL DocumentSettings::acquire(  ) throw ()
+void SAL_CALL DocumentSettings::acquire(  ) noexcept
 {
     WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >::acquire();
 }
 
-void SAL_CALL DocumentSettings::release(  ) throw ()
+void SAL_CALL DocumentSettings::release(  ) noexcept
 {
     WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >::release();
 }

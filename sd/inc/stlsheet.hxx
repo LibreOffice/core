@@ -84,7 +84,7 @@ public:
     virtual bool SetName(const OUString& rNewName, bool bReindexNow = true) override;
 
     // XInterface
-    virtual void SAL_CALL release(  ) throw () override;
+    virtual void SAL_CALL release(  ) noexcept override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

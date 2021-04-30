@@ -58,12 +58,12 @@ Any OCallableStatement::queryInterface( const Type & rType )
     return aIface;
 }
 
-void OCallableStatement::acquire() throw ()
+void OCallableStatement::acquire() noexcept
 {
     OPreparedStatement::acquire();
 }
 
-void OCallableStatement::release() throw ()
+void OCallableStatement::release() noexcept
 {
     OPreparedStatement::release();
 }

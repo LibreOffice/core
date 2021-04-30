@@ -342,12 +342,12 @@ void OStatementCommonBase::getFastPropertyValue(Any&,sal_Int32 nHandle) const
     }
 }
 
-void SAL_CALL OStatementCommonBase::acquire() throw()
+void SAL_CALL OStatementCommonBase::acquire() noexcept
 {
     OStatementCommonBase_Base::acquire();
 }
 
-void SAL_CALL OStatementCommonBase::release() throw()
+void SAL_CALL OStatementCommonBase::release() noexcept
 {
     OStatementCommonBase_Base::release();
 }

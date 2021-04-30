@@ -804,7 +804,7 @@ uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStrea
                                                                 sal_Int64 nViewAspect,
                                                                 const uno::Reference< embed::XEmbeddedObject >& xObj,
                                                                 OUString* pMediaType )
-    throw()
+    noexcept
 {
     return ::comphelper::EmbeddedObjectContainer::GetGraphicReplacementStream(nViewAspect,xObj,pMediaType);
 }

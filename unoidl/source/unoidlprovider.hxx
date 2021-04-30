@@ -45,7 +45,7 @@ public:
         const override;
 
 private:
-    virtual ~UnoidlProvider() throw () override;
+    virtual ~UnoidlProvider() noexcept override;
 
     rtl::Reference< detail::MappedFile > file_;
     NestedMap map_;

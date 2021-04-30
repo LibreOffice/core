@@ -110,13 +110,13 @@ uno::Any SAL_CALL ScAccessiblePreviewTable::queryInterface( uno::Type const & rT
 }
 
 void SAL_CALL ScAccessiblePreviewTable::acquire()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::acquire();
 }
 
 void SAL_CALL ScAccessiblePreviewTable::release()
-    throw ()
+    noexcept
 {
     ScAccessibleContextBase::release();
 }

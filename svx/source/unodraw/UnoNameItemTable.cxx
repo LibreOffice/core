@@ -57,7 +57,7 @@ namespace
 }
 
 
-SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) throw()
+SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) noexcept
 : mpModel( pModel ),
   mpModelPool( pModel ? &pModel->GetItemPool() : nullptr ),
   mnWhich( nWhich ), mnMemberId( nMemberId )
@@ -66,7 +66,7 @@ SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, s
         StartListening( *pModel );
 }
 
-SvxUnoNameItemTable::~SvxUnoNameItemTable() throw()
+SvxUnoNameItemTable::~SvxUnoNameItemTable() noexcept
 {
     if( mpModel )
         EndListening( *mpModel );
@@ -83,7 +83,7 @@ void SvxUnoNameItemTable::dispose()
     maItemSetVector.clear();
 }
 
-void SvxUnoNameItemTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
+void SvxUnoNameItemTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
 {
     if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;

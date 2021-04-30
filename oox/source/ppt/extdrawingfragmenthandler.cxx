@@ -33,7 +33,7 @@ ExtDrawingFragmentHandler::ExtDrawingFragmentHandler( XmlFilterBase& rFilter,
 {
 }
 
-ExtDrawingFragmentHandler::~ExtDrawingFragmentHandler( ) throw ()
+ExtDrawingFragmentHandler::~ExtDrawingFragmentHandler( ) noexcept
 {
     // Empty DrawingML fallback, need to warn the user at the end.
     if (mpShapePtr && mpShapePtr->getChildren().empty())

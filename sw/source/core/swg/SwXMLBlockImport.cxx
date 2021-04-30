@@ -294,7 +294,7 @@ SwXMLBlockListImport::SwXMLBlockListImport(
 }
 
 SwXMLBlockListImport::~SwXMLBlockListImport()
-    throw ()
+    noexcept
 {
 }
 
@@ -317,7 +317,7 @@ SwXMLTextBlockImport::SwXMLTextBlockImport(
 }
 
 SwXMLTextBlockImport::~SwXMLTextBlockImport()
-    throw()
+    noexcept
 {
 }
 

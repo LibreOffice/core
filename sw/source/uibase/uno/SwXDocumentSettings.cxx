@@ -284,7 +284,7 @@ SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
 }
 
 SwXDocumentSettings::~SwXDocumentSettings()
-    throw()
+    noexcept
 {
 }
 
@@ -302,12 +302,12 @@ Any SAL_CALL SwXDocumentSettings::queryInterface( const Type& rType )
                                       &dynamic_cast<XTypeProvider&>(*this));
 }
 void SwXDocumentSettings::acquire ()
-    throw ()
+    noexcept
 {
     OWeakObject::acquire();
 }
 void SwXDocumentSettings::release ()
-    throw ()
+    noexcept
 {
     OWeakObject::release();
 }

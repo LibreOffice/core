@@ -280,7 +280,7 @@ Content::~Content()
 
 // virtual
 void SAL_CALL Content::acquire()
-    throw( )
+    noexcept
 {
     ContentImplHelper::acquire();
 }
@@ -288,7 +288,7 @@ void SAL_CALL Content::acquire()
 
 // virtual
 void SAL_CALL Content::release()
-    throw( )
+    noexcept
 {
     ContentImplHelper::release();
 }

@@ -38,8 +38,8 @@ namespace DOM
         static CDOMImplementation* get();
 
         // there is just 1 static instance, so these must not delete it!
-        virtual void SAL_CALL acquire() throw () override;
-        virtual void SAL_CALL release() throw () override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
         /**
         Creates a DOM Document object of the specified type with its document element.

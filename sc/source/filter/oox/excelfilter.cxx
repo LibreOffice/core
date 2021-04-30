@@ -175,7 +175,7 @@ bool ExcelFilter::importDocument()
     return false;
 }
 
-bool ExcelFilter::exportDocument() throw()
+bool ExcelFilter::exportDocument() noexcept
 {
     return false;
 }

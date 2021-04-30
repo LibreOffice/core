@@ -76,14 +76,14 @@ namespace svx
     }
 
     static Sequence< OUString > NamespaceMap_getSupportedServiceNames()
-        throw()
+        noexcept
     {
         Sequence<OUString> aSupportedServiceNames { "com.sun.star.xml.NamespaceMap" };
         return aSupportedServiceNames;
     }
 
     static OUString NamespaceMap_getImplementationName()
-        throw()
+        noexcept
     {
         return "com.sun.star.comp.Svx.NamespaceMap";
     }

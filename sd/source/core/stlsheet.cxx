@@ -690,7 +690,7 @@ rtl::Reference<SdStyleSheet> SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBa
 
 // XInterface
 
-void SAL_CALL SdStyleSheet::release(  ) throw ()
+void SAL_CALL SdStyleSheet::release(  ) noexcept
 {
     if (osl_atomic_decrement( &m_refCount ) != 0)
         return;
