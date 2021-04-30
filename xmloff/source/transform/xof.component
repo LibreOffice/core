@@ -42,14 +42,17 @@
   <implementation name="com.sun.star.comp.Chart.XMLContentImporter"
     constructor="xmloff_XMLChartContentImportOOO_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLContentImporter"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.comp.Chart.XMLImporter"
     constructor="xmloff_XMLChartImportOOO_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLImporter"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.comp.Chart.XMLStylesImporter"
     constructor="xmloff_XMLChartStylesImportOOO_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLStylesImporter"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.comp.Draw.XMLContentImporter"
     constructor="xmloff_XMLDrawContentImportOOO_get_implementation">
@@ -102,10 +105,12 @@
   <implementation name="com.sun.star.comp.OOo2OasisTransformer"
     constructor="xmloff_OOo2OasisTransformer_get_implementation">
     <service name="com.sun.star.comp.OOo2OasisTransformer"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.comp.Oasis2OOoTransformer"
     constructor="xmloff_Oasis2OOoTransformer_get_implementation">
     <service name="com.sun.star.comp.Oasis2OOoTransformer"/>
+    <optional/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.XMLAutotextEventsImporter"
     constructor="xmloff_XMLAutoTextEventImportOOO_get_implementation">

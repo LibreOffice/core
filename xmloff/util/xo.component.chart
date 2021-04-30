@@ -1,0 +1,17 @@
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+SchXMLExport.Compact
+SchXMLExport.Content
+SchXMLExport.Oasis.Compact
+SchXMLExport.Oasis.Content
+SchXMLExport.Oasis.Meta
+SchXMLExport.Oasis.Styles
+SchXMLExport.Styles
+SchXMLImport
+SchXMLImport.Content
+SchXMLImport.Meta
+SchXMLImport.Styles

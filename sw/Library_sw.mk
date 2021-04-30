@@ -94,11 +94,8 @@ $(eval $(call gb_Library_use_externals,sw,\
 	libxml2 \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Library_add_exception_objects,sw,\
-    sw/source/core/SwNumberTree/SwNodeNum \
-    sw/source/core/SwNumberTree/SwNumberTree \
-    sw/source/core/access/AccessibilityCheck \
-    sw/source/core/access/AccessibilityIssue \
     sw/source/core/access/acccell \
     sw/source/core/access/acccontext \
     sw/source/core/access/accdoc \
@@ -125,6 +122,15 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/access/acctextframe \
     sw/source/core/access/parachangetrackinginfo \
     sw/source/core/access/textmarkuphelper \
+    sw/source/uibase/docvw/SidebarWinAcc \
+))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,sw,\
+    sw/source/core/SwNumberTree/SwNodeNum \
+    sw/source/core/SwNumberTree/SwNumberTree \
+    sw/source/core/access/AccessibilityCheck \
+    sw/source/core/access/AccessibilityIssue \
     sw/source/core/attr/BorderCacheOwner \
     sw/source/core/attr/calbck \
     sw/source/core/attr/cellatr \
@@ -626,7 +632,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/docvw/PostItMgr \
     sw/source/uibase/docvw/ShadowOverlayObject \
     sw/source/uibase/docvw/SidebarTxtControl \
-    sw/source/uibase/docvw/SidebarWinAcc \
     sw/source/uibase/docvw/HeaderFooterWin \
     sw/source/uibase/docvw/OutlineContentVisibilityWin \
     sw/source/uibase/docvw/edtdd \
