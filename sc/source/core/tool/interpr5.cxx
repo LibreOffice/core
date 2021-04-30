@@ -1767,7 +1767,7 @@ void ScInterpreter::ScSumProduct()
         else if (nErr != FormulaError::ElementNaN)
         {
             // Propagate the first error encountered, ignore "this is not a number" elements.
-            PushDouble(fPosArray);
+            PushError(nErr);
             return;
         }
     }
