@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b5c782f_2cd310dd",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-30T06:27:33Z",
+      "side": 1,
+      "message": "Please replace it with PushDouble, because the latter not only does what PushError does, but also IfErrorPushError. This would be consistent with the previous behavior, when the value in the end was passed to PushDouble.",
+      "revId": "38645fd0fddf350047a5043eb1a46c8a595f8f0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
