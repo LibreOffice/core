@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "411a995d_57a58f22",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-04-30T18:41:40Z",
+      "side": 1,
+      "message": "\u003e We possibly may try to use this to make this a useful test?\n\u003e \n\u003e カタカナ \u003d\u003e かたかな (this is \"Katakana\" in Katakana and Hiragana)\n\u003e \n\u003e Interesting, if this conversion would work.\n\nI checked it. These 2 conversions are working correctly with given string.I will make the required change.",
+      "parentUuid": "f09cbf21_dcba660c",
+      "revId": "b166f236fc05993f52d797a054fabad1044ae917",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "534ca748_a280115f",
         "filename": "basic/qa/vba_tests/strconv.vb",
         "patchSetId": 3
@@ -89,6 +107,30 @@
       "side": 1,
       "message": "Oh, checking what module svt is, (it is for UI elements, dialogs, etc.) - it seems that it\u0027s better to not use it here, but switch to use of LanguageTag directly. SvtLanguageTable is just not a good match for the job, since it\u0027s intended to provide user-visible strings, not API strings.",
       "parentUuid": "404decb2_0e121dc3",
+      "range": {
+        "startLine": 4117,
+        "startChar": 25,
+        "endLine": 4117,
+        "endChar": 71
+      },
+      "revId": "b166f236fc05993f52d797a054fabad1044ae917",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c30c9199_b5c8d14d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4117,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-04-30T18:41:40Z",
+      "side": 1,
+      "message": "\u003e Oh, checking what module svt is, (it is for UI elements, dialogs, etc.) - it seems that it\u0027s better to not use it here, but switch to use of LanguageTag directly. SvtLanguageTable is just not a good match for the job, since it\u0027s intended to provide user-visible strings, not API strings.\n\nOkay.Thanks for the information.",
+      "parentUuid": "e7decdf5_6f739ab8",
       "range": {
         "startLine": 4117,
         "startChar": 25,
