@@ -177,7 +177,7 @@ public:
 
     OUString const & GetAccessibleText();
 
-    EditEngine &    GetEditEngine();
+    EditEngine *    GetEditEngine();
 
     void        DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSelection = false);
     Size        GetSize();

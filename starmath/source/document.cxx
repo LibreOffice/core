@@ -345,7 +345,7 @@ void SmDocShell::UpdateEditEngineDefaultFonts(const Color& aTextColor)
     mpEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
 }
 
-EditEngine& SmDocShell::GetEditEngine()
+EditEngine* SmDocShell::GetEditEngine()
 {
     if (!mpEditEngine)
     {
@@ -389,7 +389,7 @@ EditEngine& SmDocShell::GetEditEngine()
         mpEditEngine->ClearModifyFlag();
 
     }
-    return *mpEditEngine;
+    return mpEditEngine.get();
 }
 
 

@@ -88,7 +88,7 @@ EditEngine* SmEditTextWindow::GetEditEngine() const
 {
     SmDocShell *pDoc = mrEditWindow.GetDoc();
     assert(pDoc);
-    return &pDoc->GetEditEngine();
+    return pDoc->GetEditEngine();
 }
 
 void SmEditTextWindow::EditViewScrollStateChange()
@@ -173,7 +173,7 @@ EditView * SmEditWindow::GetEditView() const
 EditEngine * SmEditWindow::GetEditEngine()
 {
     if (SmDocShell *pDoc = GetDoc())
-        return &pDoc->GetEditEngine();
+        return pDoc->GetEditEngine();
     return nullptr;
 }
 
