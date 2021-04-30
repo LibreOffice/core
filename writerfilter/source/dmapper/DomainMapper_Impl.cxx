@@ -1510,7 +1510,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         if (nListLevel == -1 && nListId > 0)
             nListLevel = 0;
 
-        if (!bNoNumbering && !isNumberingViaRule && nListLevel >= 0 && nListLevel < 9)
+        if (!bNoNumbering && nListLevel >= 0 && nListLevel < 9)
             pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(nListLevel), false );
 
         auto const pList(GetListTable()->GetList(nListId));
