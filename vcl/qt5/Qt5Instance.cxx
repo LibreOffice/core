@@ -310,12 +310,12 @@ void Qt5Instance::DestroyObject(SalObject* pObject)
 }
 
 std::unique_ptr<SalVirtualDevice>
-Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, tools::Long& nDX, tools::Long& nDY,
+Qt5Instance::CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY,
                                  DeviceFormat /*eFormat*/, const SystemGraphicsData* pGd)
 {
     if (m_bUseCairo)
     {
-        SvpSalGraphics* pSvpSalGraphics = dynamic_cast<Qt5SvpGraphics*>(pGraphics);
+        SvpSalGraphics* pSvpSalGraphics = dynamic_cast<Qt5SvpGraphics*>(&rGraphics);
         assert(pSvpSalGraphics);
         // tdf#127529 see SvpSalInstance::CreateVirtualDevice for the rare case of a non-null pPreExistingTarget
         cairo_surface_t* pPreExistingTarget

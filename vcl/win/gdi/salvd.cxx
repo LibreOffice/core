@@ -71,12 +71,12 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, to
     return hBitmap;
 }
 
-std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
+std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphics& rSGraphics,
                                                        tools::Long &nDX, tools::Long &nDY,
                                                        DeviceFormat /*eFormat*/,
                                                        const SystemGraphicsData* pData )
 {
-    WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
+    WinSalGraphics& rGraphics = static_cast<WinSalGraphics&>(rSGraphics);
     HDC hDC = nullptr;
 
     if( pData )
@@ -95,7 +95,7 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
     }
     else
     {
-        hDC = CreateCompatibleDC( pGraphics->getHDC() );
+        hDC = CreateCompatibleDC( rGraphics.getHDC() );
         SAL_WARN_IF( !hDC, "vcl", "CreateCompatibleDC failed: " << WindowsErrorString( GetLastError() ) );
     }
 
@@ -109,7 +109,7 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
         // #124826# continue even if hBmp could not be created
         // if we would return a failure in this case, the process
         // would terminate which is not required
-        hBmp = WinSalVirtualDevice::ImplCreateVirDevBitmap(pGraphics->getHDC(),
+        hBmp = WinSalVirtualDevice::ImplCreateVirDevBitmap(rGraphics.getHDC(),
                                                            nDX, nDY, nBitCount,
                                                            &o3tl::temporary<void*>(nullptr));
     }
@@ -121,7 +121,7 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
                                                          bForeignDC, nDX, nDY);
 
     WinSalGraphics* pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE,
-                                                      pGraphics->isScreen(), nullptr, pVDev);
+                                                      rGraphics.isScreen(), nullptr, pVDev);
 
     // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
     pVirGraphics->SetLayout( SalLayoutFlags::NONE );

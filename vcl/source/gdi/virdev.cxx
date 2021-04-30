@@ -146,7 +146,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         (void)pOutDev->AcquireGraphics();
     pGraphics = pOutDev->mpGraphics;
     if ( pGraphics )
-        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(pGraphics, nDX, nDY, meFormat, pData);
+        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(*pGraphics, nDX, nDY, meFormat, pData);
     else
         mpVirDev = nullptr;
     if ( !mpVirDev )
@@ -295,7 +295,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 
         assert(mpGraphics);
 
-        pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice(mpGraphics, nNewWidth, nNewHeight, meFormat);
+        pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice(*mpGraphics, nNewWidth, nNewHeight, meFormat);
         if ( pNewVirDev )
         {
             SalGraphics* pGraphics = pNewVirDev->AcquireGraphics();

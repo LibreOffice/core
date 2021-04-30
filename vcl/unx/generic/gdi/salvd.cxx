@@ -34,23 +34,23 @@
 #include <skia/x11/salvd.hxx>
 #endif
 
-std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(SalGraphics const * pGraphics,
+std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(const SalGraphics& rGraphics,
         tools::Long &nDX, tools::Long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
         std::unique_ptr<X11SalGraphics> pNewGraphics)
 {
     assert(pNewGraphics);
 #if HAVE_FEATURE_SKIA
     if (SkiaHelper::isVCLSkiaEnabled())
-        return std::unique_ptr<SalVirtualDevice>(new X11SkiaSalVirtualDevice( pGraphics, nDX, nDY, pData, std::move(pNewGraphics) ));
+        return std::unique_ptr<SalVirtualDevice>(new X11SkiaSalVirtualDevice(rGraphics, nDX, nDY, pData, std::move(pNewGraphics)));
     else
 #endif
-        return std::unique_ptr<SalVirtualDevice>(new X11SalVirtualDevice(pGraphics, nDX, nDY, eFormat, pData, std::move(pNewGraphics)));
+        return std::unique_ptr<SalVirtualDevice>(new X11SalVirtualDevice(rGraphics, nDX, nDY, eFormat, pData, std::move(pNewGraphics)));
 }
 
-std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
+std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
         tools::Long &nDX, tools::Long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData)
 {
-    return CreateX11VirtualDevice(pGraphics, nDX, nDY, eFormat, pData, std::make_unique<X11SalGraphics>());
+    return CreateX11VirtualDevice(rGraphics, nDX, nDY, eFormat, pData, std::make_unique<X11SalGraphics>());
 }
 
 void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreExistingTarget, SalColormap* pColormap,
@@ -86,19 +86,17 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreEx
     mxImpl->Init();
 }
 
-X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, tools::Long &nDX, tools::Long &nDY,
+X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Long &nDX, tools::Long &nDY,
                                          DeviceFormat /*eFormat*/, const SystemGraphicsData *pData,
                                          std::unique_ptr<X11SalGraphics> pNewGraphics) :
     pGraphics_(std::move(pNewGraphics)),
     m_nXScreen(0),
     bGraphics_(false)
 {
-    assert(pGraphics);
-
     SalColormap* pColormap = nullptr;
     bool bDeleteColormap = false;
 
-    sal_uInt16 nBitCount = pGraphics->GetBitCount();
+    sal_uInt16 nBitCount = rGraphics.GetBitCount();
     pDisplay_               = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     nDepth_                 = nBitCount;
 
@@ -129,7 +127,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, tools::L
     {
         nDX_ = nDX;
         nDY_ = nDY;
-        m_nXScreen = static_cast<X11SalGraphics const *>(pGraphics)->GetScreenNumber();
+        m_nXScreen = static_cast<const X11SalGraphics&>(rGraphics).GetScreenNumber();
         hDrawable_ = limitXCreatePixmap( GetXDisplay(),
                                          pDisplay_->GetDrawable( m_nXScreen ),
                                          nDX_, nDY_,

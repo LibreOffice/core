@@ -36,7 +36,7 @@
 #include <quartz/salvd.h>
 #include <quartz/utils.h>
 
-std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
+std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraphics& rGraphics,
                                                         tools::Long &nDX, tools::Long &nDY,
                                                         DeviceFormat eFormat,
                                                         const SystemGraphicsData *pData )
@@ -47,7 +47,7 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
 #ifdef IOS
     if( pData )
     {
-        return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ),
+        return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >(&rGraphics),
                                          nDX, nDY, eFormat, pData ));
     }
     else
@@ -57,7 +57,7 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
         return pNew;
     }
 #else
-    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ),
+    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >(&rGraphics),
                                      nDX, nDY, eFormat, pData ));
 #endif
 }

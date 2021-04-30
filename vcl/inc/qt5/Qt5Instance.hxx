@@ -111,7 +111,7 @@ public:
     virtual void DestroyObject(SalObject* pObject) override;
 
     virtual std::unique_ptr<SalVirtualDevice>
-    CreateVirtualDevice(SalGraphics* pGraphics, tools::Long& nDX, tools::Long& nDY,
+    CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY,
                         DeviceFormat eFormat, const SystemGraphicsData* pData = nullptr) override;
 
     virtual SalInfoPrinter* CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,

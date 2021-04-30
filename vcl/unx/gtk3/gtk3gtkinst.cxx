@@ -333,13 +333,13 @@ void GtkYieldMutex::ThreadsLeave()
     release(true);
 }
 
-std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics *pG,
+std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics &rG,
                                                     tools::Long &nDX, tools::Long &nDY,
                                                     DeviceFormat /*eFormat*/,
                                                     const SystemGraphicsData* pGd )
 {
     EnsureInit();
-    SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pG);
+    SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(&rG);
     assert(pSvpSalGraphics);
     // tdf#127529 see SvpSalInstance::CreateVirtualDevice for the rare case of a non-null pPreExistingTarget
     cairo_surface_t* pPreExistingTarget = pGd ? static_cast<cairo_surface_t*>(pGd->pSurface) : nullptr;
