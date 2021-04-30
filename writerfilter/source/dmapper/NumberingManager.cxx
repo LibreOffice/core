@@ -1145,6 +1145,8 @@ AbstractListDef::Pointer ListsManager::GetAbstractList( sal_Int32 nId )
 ListDef::Pointer ListsManager::GetList( sal_Int32 nId )
 {
     ListDef::Pointer pList;
+    if (nId == -1)
+        return pList;
 
     int nLen = m_aLists.size( );
     int i = 0;
@@ -1154,6 +1156,9 @@ ListDef::Pointer ListsManager::GetList( sal_Int32 nId )
             pList = m_aLists[i];
         i++;
     }
+
+    // nId 0 is only valid for abstractNum, not numId (which has an abstract definition)
+    assert(nId || !pList || !pList->GetAbstractDefinition());
 
     return pList;
 }

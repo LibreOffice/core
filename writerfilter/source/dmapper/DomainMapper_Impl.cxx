@@ -1497,11 +1497,12 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
     bool isNumberingViaStyle(false);
     bool isNumberingViaRule = pParaContext && pParaContext->GetListId() > -1;
-    sal_Int32 nListId = -1;
+    sal_Int32 nListId = isNumberingViaRule ? pParaContext->GetListId() : -1;
     if ( !bRemove && pStyleSheetProperties && pParaContext )
     {
         bool bNumberingFromBaseStyle = false;
-        nListId = lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle);
+        if (!isNumberingViaRule)
+            nListId = lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle);
 
         //apply numbering level/style to paragraph if it was set at the style, but only if the paragraph itself
         //does not specify the numbering
@@ -1514,10 +1515,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(nListLevel), false );
 
         auto const pList(GetListTable()->GetList(nListId));
-        if (pList && nListId >= 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
+        if (pList && nListId > 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
         {
             // ListLevel 9 means Body Level/no numbering.  numId 0 means no numbering.
-            if (bNoNumbering || nListLevel == 9 || (!isNumberingViaRule && !nListId))
+            if (bNoNumbering || nListLevel == 9)
                 pParaContext->Insert(PROP_NUMBERING_STYLE_NAME, uno::makeAny(OUString()), true);
             else if ( !isNumberingViaRule )
             {
@@ -1530,13 +1531,14 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             }
             else //if ( !pList->isOutlineNumbering(nListLevel) )
             {
-                assert(!pList->isOutlineNumbering(nListLevel) && !pList->isOutlineNumbering(pStyleSheetProperties->GetListLevel()) &&  "Probably can remove that clause, since it tests for a fake condition. Otherwise, we need to decide if this listLevel should include potential paragraph-defined-listLevel.");
+                assert(!pList->isOutlineNumbering(nListLevel) && !pList->isOutlineNumbering(pStyleSheetProperties->GetListLevel()) &&  "Probably can remove that clause, since it tests for a fake condition (which always seems to be true). Otherwise, we need to decide if this listLevel should include potential paragraph-defined-listLevel.");
                 // After ignoring anything related to the special Outline levels,
                 // we have direct numbering, as well as paragraph-style numbering.
                 // Apply the style if it uses the same list as the direct numbering,
                 // otherwise the directly-applied-to-paragraph status will be lost,
                 // and the priority of the numbering-style-indents will be lowered. tdf#133000
-                if ( nListId == pParaContext->GetListId() )
+                bool bDummy;
+                if (nListId == lcl_getListId(pEntry, GetStyleSheetTable(), bDummy))
                     pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(pList->GetStyleName()), true );
             }
         }
@@ -1587,10 +1589,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             {
                 pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, aRightMargin, /*bOverwrite=*/false);
 
-                sal_Int32 nListId2(pParaContext->GetListId());
-
-                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId2, nListLevel, "FirstLineIndent");
-                const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId2, nListLevel, "IndentAt");
+                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, nListLevel, "FirstLineIndent");
+                const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId, nListLevel, "IndentAt");
                 if (nFirstLineIndent != 0)
                     pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent), /*bOverwrite=*/false);
                 if (nParaLeftMargin != 0)
@@ -1887,12 +1887,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         (isNumberingViaStyle || isNumberingViaRule))
                     {
                         assert(pParaContext);
-                        // Use lcl_getListId(), so we find the list ID in parent styles as well.
-                        bool bNumberingFromBaseStyle = false;
-                        sal_Int32 const nListId2( isNumberingViaStyle
-                            ? lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle)
-                            : pParaContext->GetListId());
-                        if (ListDef::Pointer const& pList = m_pListTable->GetList(nListId2))
+                        if (ListDef::Pointer const& pList = m_pListTable->GetList(nListId))
                         {   // styles could refer to non-existing lists...
                             AbstractListDef::Pointer const& pAbsList =
                                     pList->GetAbstractDefinition();
@@ -1914,7 +1909,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             if (pList->GetCurrentLevel())
                             {
                                 sal_Int16 nOverrideLevel = pList->GetCurrentLevel()->GetStartOverride();
-                                if (nOverrideLevel != -1 && m_aListOverrideApplied.find(nListId2) == m_aListOverrideApplied.end())
+                                if (nOverrideLevel != -1 && m_aListOverrideApplied.find(nListId) == m_aListOverrideApplied.end())
                                 {
                                     // Apply override: we have override instruction for this level
                                     // And this was not done for this list before: we can do this only once on first occurrence
@@ -1924,7 +1919,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     // and we need to register level overrides separately.
                                     m_xPreviousParagraph->setPropertyValue("ParaIsNumberingRestart", uno::makeAny(true));
                                     m_xPreviousParagraph->setPropertyValue("NumberingStartValue", uno::makeAny(nOverrideLevel));
-                                    m_aListOverrideApplied.insert(nListId2);
+                                    m_aListOverrideApplied.insert(nListId);
                                 }
                             }
                         }
