@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "e16bf69b_5ec86bc4",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-04-30T18:39:41Z",
+      "side": 1,
+      "message": "\u003eI suppose that we may even assert on the content of the byte string now.\n\nYess we can use AssertEqualApprox(defined in basic/qa/vba_tests/_test_asserts.vb) in individual characters of string by comparing with their ASCII values.\n\nI have obtained The actual output(that is ascii value of each character) using Excel VBA StrConv function.\nFor example -\n\nDim x() As Byte\nx \u003d StrConv(\"ÉÏº£ÊÐABC\", vbFromUnicode)\n\nModule1.AssertEqualApprox(x(0),201,0,\"TestName\")  \n.\nAnd similarly for all 8 characters.\n\nLooks good ?",
+      "parentUuid": "534ca748_a280115f",
+      "revId": "b166f236fc05993f52d797a054fabad1044ae917",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "404decb2_0e121dc3",
         "filename": "basic/source/runtime/methods.cxx",
         "patchSetId": 3
