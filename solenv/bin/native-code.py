@@ -26,6 +26,9 @@ core_factory_list = [
     ]
 
 core_constructor_list = [
+# basic/util/sb.component
+    ("com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation","#if HAVE_FEATURE_SCRIPTING"),
+    ("com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # UnoControls/util/ctl.component
     "stardiv_UnoControls_FrameControl_get_implementation",
     "stardiv_UnoControls_ProgressBar_get_implementation",
@@ -272,6 +275,19 @@ core_constructor_list = [
     ("i18npool_NumToTextUpper_zh_TW_get_implementation", "#if WITH_LOCALE_ALL || WITH_LOCALE_zh"),
 # i18nsearch/sourceh/search/i18nsearch.component
     "i18npool_TextSearch_get_implementation",
+# io/source/io.component
+    "io_Pump_get_implementation",
+    "io_ODataInputStream_get_implementation",
+    "io_ODataOutputStream_get_implementation",
+    "io_OMarkableInputStream_get_implementation",
+    "io_OMarkableOutputStream_get_implementation",
+    "io_OObjectInputStream_get_implementation",
+    "io_OObjectOutputStream_get_implementation",
+    "io_OPipeImpl_get_implementation",
+    "io_OAcceptor_get_implementation",
+    "io_OConnector_get_implementation",
+    "io_OTextInputStream_get_implementation",
+    "io_OTextOutputStream_get_implementation",
 # linguistic/source/lng.component
     "linguistic_ConvDicList_get_implementation",
     "linguistic_DicList_get_implementation",
@@ -296,6 +312,13 @@ core_constructor_list = [
     "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation",
     "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",
     "com_sun_star_extensions_xml_sax_Writer_get_implementation",
+# scripting/util/scriptframe.component
+    ("scripting_BrowseNodeFactoryImpl_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("scripting_MasterScriptProvider_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("scripting_MasterScriptProviderFactory_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("scripting_ScriptingFrameworkURIHelper_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+# scripting/source/basprov/basprov.component
+    ("scripting_BasicProviderImpl_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # sfx2/util/sfx.component
     "SfxDocumentMetaData_get_implementation",
     "com_sun_star_comp_office_FrameLoader_get_implementation",
@@ -406,6 +429,8 @@ core_constructor_list = [
 # ucb/source/ucp/ucphier1.component
     "ucb_HierarchyContentProvider_get_implementation",
     "ucb_HierarchyDataSource_get_implementation",
+# ucb/source/ucp/package/ucppkg1
+    "ucb_package_ContentProvider_get_implementation",
 # unotools/util/utl.component
     "unotools_ServiceDocument_get_implementation",
     "unotools_OTempFileService_get_implementation",
@@ -590,6 +615,16 @@ calc_constructor_list = [
 # sc/util/scfilt.component
     "com_sun_star_comp_oox_xls_ExcelFilter_get_implementation",
     "com_sun_star_comp_oox_xls_FormulaParser_get_implementation",
+# sc/util/vbaobj.component
+    ("Calc_ScVbaApplication_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("ScVbaEventsHelper_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("ScVbaGlobals_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("Calc_ScVbaHyperlink_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("ScVbaTextFrame_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("Calc_ScVbaWindow_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("Calc_ScVbaWorkbook_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("Calc_ScVbaWorksheet_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("Calc_ScVbaRange_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # scaddins/source/analysis/analysis.component
     "scaddins_AnalysisAddIn_get_implementation",
 # scaddins/source/datefunc/date.component
@@ -601,6 +636,9 @@ calc_constructor_list = [
 # svl/util/svl.component
     "com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation",
     "com_sun_star_uno_util_numbers_SvNumberFormatterServiceObject_get_implementation",
+# scripting/source/vbaevents/vbaevents.component
+    ("ooo_vba_VBAToOOEventDesc_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("ooo_vba_EventListener_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
     ]
 
 draw_factory_list = [
@@ -676,9 +714,6 @@ writer_factory_list = [
     ]
 
 writer_constructor_list = [
-# basic/util/sb.component
-    ("com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation","#if HAVE_FEATURE_SCRIPTING"),
-    ("com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # filter/source/textfilterdetect/textfd.component
     "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation",
 # sw/util/sw.component
