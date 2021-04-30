@@ -118,6 +118,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141966_chapterNumberTortureTest, "tdf141966_chap
     xPara.set(getParagraph(11, "direct formatting - Body listLvl(9)."), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
 
+    xPara.set(getParagraph(12, "direct numId, inherit listLvl."), uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(OUString("2nd.ii.a.1.I"), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(4), getProperty<sal_Int16>(xPara, "NumberingLevel")); // Level 5
+
     xPara.set(getParagraph(13, "Style numId0 cancels inherited numbering."), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
 }
