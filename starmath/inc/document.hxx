@@ -31,6 +31,7 @@
 #include "format.hxx"
 #include "parse.hxx"
 #include "smdllapi.hxx"
+#include "editengine.hxx"
 
 class SfxPrinter;
 class Printer;
@@ -81,7 +82,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     SvtLinguOptions     maLinguOptions;
     std::unique_ptr<SmTableNode> mpTree;
     SfxItemPool        *mpEditEngineItemPool;
-    std::unique_ptr<EditEngine> mpEditEngine;
+    std::unique_ptr<SmEditEngine> mpEditEngine;
     VclPtr<SfxPrinter>  mpPrinter;       //q.v. comment to SmPrinter Access!
     VclPtr<Printer>     mpTmpPrinter;    //ditto
     sal_uInt16          mnModifyCount;
@@ -209,7 +210,7 @@ public:
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
     void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
-    void UpdateEditEngineDefaultFonts(const Color& aTextColor);
+    void UpdateEditEngineDefaultFonts();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
