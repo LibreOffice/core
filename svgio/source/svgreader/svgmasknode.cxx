@@ -190,7 +190,7 @@ namespace svgio::svgreader
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
             const basegfx::B2DHomMatrix* pTransform) const
         {
-            if(rTarget.empty() || Display_none == getDisplay())
+            if(rTarget.empty() || Display::None == getDisplay())
                 return;
 
             drawinglayer::primitive2d::Primitive2DContainer aMaskTarget;

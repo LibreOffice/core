@@ -259,7 +259,7 @@ namespace svgio::svgreader
             {
                 const SvgNode* pXLink = getDocument().findSvgNodeById(maXLink);
 
-                if(pXLink && Display_none != pXLink->getDisplay())
+                if(pXLink && Display::None != pXLink->getDisplay())
                 {
                     pXLink->decomposeSvgNode(aNewTarget, true);
 

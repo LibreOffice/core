@@ -257,7 +257,7 @@ namespace svgio::svgreader
 
         const drawinglayer::primitive2d::Primitive2DContainer& SvgPatternNode::getPatternPrimitives() const
         {
-            if(aPrimitives.empty() && Display_none != getDisplay())
+            if(aPrimitives.empty() && Display::None != getDisplay())
             {
                 decomposeSvgNode(const_cast< SvgPatternNode* >(this)->aPrimitives, true);
             }
