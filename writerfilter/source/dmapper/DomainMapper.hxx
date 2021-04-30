@@ -176,6 +176,7 @@ private:
     static sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
     bool mbIsSplitPara;
     bool mbHasControls;
+    bool mbWasShapeInPara;
     std::unique_ptr< GraphicZOrderHelper > zOrderHelper;
     std::unique_ptr<GraphicNamingHelper> m_pGraphicNamingHelper;
     OUString m_sGlossaryEntryName;

@@ -109,8 +109,9 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     LoggedTable("DomainMapper"),
     LoggedStream("DomainMapper"),
     m_pImpl(new DomainMapper_Impl(*this, xContext, xModel, eDocumentType, rMediaDesc)),
-    mbIsSplitPara(false)
-    ,mbHasControls(false)
+    mbIsSplitPara(false),
+    mbHasControls(false),
+    mbWasShapeInPara(false)
 {
     // #i24363# tab stops relative to indent
     m_pImpl->SetDocumentSettingsProperty(
@@ -3066,7 +3067,6 @@ void DomainMapper::lcl_endSectionGroup()
     m_pImpl->SetIsTextFrameInserted( false );
     m_pImpl->PopProperties(CONTEXT_SECTION);
 }
-
 void DomainMapper::lcl_startParagraphGroup()
 {
     if (m_pImpl->hasTableManager())
@@ -3089,18 +3089,21 @@ void DomainMapper::lcl_startParagraphGroup()
             const OUString& sDefaultParaStyle = m_pImpl->GetDefaultParaStyleName();
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( sDefaultParaStyle ) );
             m_pImpl->SetCurrentParaStyleName( sDefaultParaStyle );
+
+            if (m_pImpl->isBreakDeferred(PAGE_BREAK))
+                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
+            else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
+                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
+            mbWasShapeInPara = false;
         }
-        if (m_pImpl->isBreakDeferred(PAGE_BREAK))
-            m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
-        else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
-            m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
 
         if (m_pImpl->isParaSdtEndDeferred())
             m_pImpl->GetTopContext()->Insert(PROP_PARA_SDT_END_BEFORE, uno::makeAny(true), true, PARA_GRAB_BAG);
     }
     m_pImpl->SetIsFirstRun(true);
     m_pImpl->SetIsOutsideAParagraph(false);
-    m_pImpl->clearDeferredBreaks();
+    if (!m_pImpl->IsInShape())
+        m_pImpl->clearDeferredBreaks();
     m_pImpl->setParaSdtEndDeferred(false);
 }
 
@@ -3154,7 +3157,7 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
     }
 
     m_pImpl->SetIsFirstParagraphInShape(true);
-
+    mbWasShapeInPara = true;
 }
 
 void DomainMapper::lcl_endShape( )
@@ -3631,8 +3634,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 }
                 else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
                 {
-                    if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun())
+                    if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() || mbWasShapeInPara)
                     {
+                        mbWasShapeInPara = false;
                         mbIsSplitPara = true;
                         finishParagraph();
                         lcl_startParagraphGroup();
