@@ -16,6 +16,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,serf,serf))
 $(eval $(call gb_StaticLibrary_use_externals,serf,\
     apr \
     openssl \
+    openssl_headers \
     zlib \
 ))
 
