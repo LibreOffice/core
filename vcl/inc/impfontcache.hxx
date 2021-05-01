@@ -20,10 +20,10 @@
 #ifndef INCLUDED_VCL_INC_IMPFONTCACHE_HXX
 #define INCLUDED_VCL_INC_IMPFONTCACHE_HXX
 
-#include <boost/functional/hash.hpp>
 
 #include <rtl/ref.hxx>
 #include <o3tl/lru_map.hxx>
+#include <o3tl/hash_combine.hxx>
 #include <tools/gen.hxx>
 #include <vcl/glyphitem.hxx>
 
@@ -53,8 +53,8 @@ struct GlyphBoundRectCacheHash
     std::size_t operator()(GlyphBoundRectCacheKey const& aCache) const
     {
         std::size_t seed = 0;
-        boost::hash_combine(seed, aCache.m_pFont);
-        boost::hash_combine(seed, aCache.m_nId);
+        o3tl::hash_combine(seed, aCache.m_pFont);
+        o3tl::hash_combine(seed, aCache.m_nId);
         return seed;
     }
 };
