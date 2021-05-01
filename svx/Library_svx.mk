@@ -85,6 +85,7 @@ $(eval $(call gb_Library_use_externals,svx,\
 
 ifneq ($(ENABLE_WASM_STRIP),TRUE)
 $(eval $(call gb_Library_add_exception_objects,svx,\
+    svx/source/dialog/docrecovery \
     svx/source/unodraw/recoveryui \
 ))
 endif
@@ -133,7 +134,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/dialcontrol \
     svx/source/dialog/dlgctl3d \
     svx/source/dialog/dlgctrl \
-    svx/source/dialog/docrecovery \
     svx/source/dialog/fntctrl \
     svx/source/dialog/fontwork \
     svx/source/dialog/frmdirlbox \
