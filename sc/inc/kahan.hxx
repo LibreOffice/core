@@ -53,6 +53,16 @@ public:
         add(fSum.m_fError);
     }
 
+    /**
+      * Substracts a value to the sum using Kahan summation.
+      * @param fSum
+      */
+    inline void subtract(const KahanSum& fSum)
+    {
+        add(-fSum.m_fSum);
+        add(-fSum.m_fError);
+    }
+
 public:
     constexpr KahanSum operator-() const
     {
@@ -75,7 +85,7 @@ public:
 
     inline void operator+=(double fSum) { add(fSum); }
 
-    inline void operator-=(const KahanSum& fSum) { add(-fSum); }
+    inline void operator-=(const KahanSum& fSum) { subtract(fSum); }
 
     inline void operator-=(double fSum) { add(-fSum); }
 
@@ -86,10 +96,24 @@ public:
         return fNSum;
     }
 
+    inline KahanSum operator+(const KahanSum& fSum) const
+    {
+        KahanSum fNSum(*this);
+        fNSum += fSum;
+        return fNSum;
+    }
+
     inline KahanSum operator-(double fSum) const
     {
         KahanSum fNSum(*this);
         fNSum.add(-fSum);
+        return fNSum;
+    }
+
+    inline KahanSum operator-(const KahanSum& fSum) const
+    {
+        KahanSum fNSum(*this);
+        fNSum -= fSum;
         return fNSum;
     }
 
@@ -107,6 +131,20 @@ public:
     {
         m_fSum /= fDivides;
         m_fError /= fDivides;
+    }
+
+    constexpr KahanSum operator*(double fTimes) const
+    {
+        KahanSum fSum(*this);
+        fSum *= fTimes;
+        return fSum;
+    }
+
+    constexpr KahanSum operator/(double fTimes) const
+    {
+        KahanSum fSum(*this);
+        fSum /= fTimes;
+        return fSum;
     }
 
     constexpr bool operator<(const KahanSum& fSum) const { return get() < fSum.get(); }
