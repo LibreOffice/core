@@ -23,6 +23,7 @@
 #include <config_version.h>
 
 #include <o3tl/lru_map.hxx>
+#include <o3tl/hash_combine.hxx>
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
 #include <vcl/bitmapex.hxx>
@@ -41,7 +42,6 @@
 #include <mutex>
 #include <vector>
 #include <unordered_map>
-#include <boost/functional/hash.hpp>
 #include "ControlCacheKey.hxx"
 #include "schedulerimpl.hxx"
 #include <basegfx/DrawCommands.hxx>
@@ -194,9 +194,9 @@ template <> struct hash<ScaleCacheKey>
     std::size_t operator()(ScaleCacheKey const& k) const noexcept
     {
         std::size_t seed = 0;
-        boost::hash_combine(seed, k.mpBitmap);
-        boost::hash_combine(seed, k.maDestSize.getWidth());
-        boost::hash_combine(seed, k.maDestSize.getHeight());
+        o3tl::hash_combine(seed, k.mpBitmap);
+        o3tl::hash_combine(seed, k.maDestSize.getWidth());
+        o3tl::hash_combine(seed, k.maDestSize.getHeight());
         return seed;
     }
 };
