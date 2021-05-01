@@ -1424,12 +1424,6 @@ interface BaseText
         StateMethod = GetTextCtrlState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    SID_ATTR_FLASH // status(final|play)
-    [
-        ExecMethod = ExecTextCtrl;
-        StateMethod = GetTextCtrlState;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
     SID_ATTR_CHAR_STRIKEOUT // status(final|play)
     [
         ExecMethod = ExecTextCtrl;
