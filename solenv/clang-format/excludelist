@@ -11107,6 +11107,7 @@ svgio/inc/svglinenode.hxx
 svgio/inc/svgmarkernode.hxx
 svgio/inc/svgmasknode.hxx
 svgio/inc/svgnode.hxx
+svgio/inc/SvgNumber.hxx
 svgio/inc/svgpaint.hxx
 svgio/inc/svgpathnode.hxx
 svgio/inc/svgpatternnode.hxx
