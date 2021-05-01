@@ -74,7 +74,7 @@ static bool lcl_HasChangeOfSign( double u, double w )
     return (u < 0.0 && w > 0.0) || (u > 0.0 && w < 0.0);
 }
 
-static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, double fBx, bool& rConvError )
+static double lcl_IterateInverse( const ScDistFunc& rFunction, KahanSum fAx, KahanSum fBx, bool& rConvError )
 {
     rConvError = false;
     const double fYEps = 1.0E-307;
@@ -84,36 +84,36 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
 
     //  find enclosing interval
 
-    double fAy = rFunction.GetValue(fAx);
-    double fBy = rFunction.GetValue(fBx);
-    double fTemp;
+    double fAy = rFunction.GetValue(fAx.get());
+    double fBy = rFunction.GetValue(fBx.get());
+    KahanSum fTemp;
     unsigned short nCount;
     for (nCount = 0; nCount < 1000 && !lcl_HasChangeOfSign(fAy,fBy); nCount++)
     {
         if (fabs(fAy) <= fabs(fBy))
         {
             fTemp = fAx;
-            fAx += 2.0 * (fAx - fBx);
+            fAx += (fAx - fBx) * 2.0;
             if (fAx < 0.0)
                 fAx = 0.0;
             fBx = fTemp;
             fBy = fAy;
-            fAy = rFunction.GetValue(fAx);
+            fAy = rFunction.GetValue(fAx.get());
         }
         else
         {
             fTemp = fBx;
-            fBx += 2.0 * (fBx - fAx);
+            fBx += (fBx - fAx) * 2.0;
             fAx = fTemp;
             fAy = fBy;
-            fBy = rFunction.GetValue(fBx);
+            fBy = rFunction.GetValue(fBx.get());
         }
     }
 
     if (fAy == 0.0)
-        return fAx;
+        return fAx.get();
     if (fBy == 0.0)
-        return fBx;
+        return fBx.get();
     if (!lcl_HasChangeOfSign( fAy, fBy))
     {
         rConvError = true;
@@ -121,17 +121,17 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
     }
     // inverse quadric interpolation with additional brackets
     // set three points
-    double fPx = fAx;
+    double fPx = fAx.get();
     double fPy = fAy;
-    double fQx = fBx;
+    double fQx = fBx.get();
     double fQy = fBy;
-    double fRx = fAx;
+    double fRx = fAx.get();
     double fRy = fAy;
-    double fSx = 0.5 * (fAx + fBx); // potential next point
+    double fSx = ((fAx + fBx) * 0.5).get(); // potential next point
     bool bHasToInterpolate = true;
     nCount = 0;
-    while ( nCount < 500 && fabs(fRy) > fYEps &&
-            (fBx-fAx) > ::std::max( fabs(fAx), fabs(fBx)) * fXEps )
+    while ( nCount < 500 && std::abs(fRy) > fYEps &&
+            (fBx-fAx) > ::std::max( std::abs(fAx.get()), std::abs(fBx.get())) * fXEps )
     {
         if (bHasToInterpolate)
         {
@@ -140,16 +140,16 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
                 fSx = fPx * fRy * fQy / (fRy-fPy) / (fQy-fPy)
                     + fRx * fQy * fPy / (fQy-fRy) / (fPy-fRy)
                     + fQx * fPy * fRy / (fPy-fQy) / (fRy-fQy);
-                bHasToInterpolate = (fAx < fSx) && (fSx < fBx); // inside the brackets?
+                bHasToInterpolate = (fAx < fSx) && (fBx >= fSx); // inside the brackets?
             }
             else
                 bHasToInterpolate = false;
         }
         if(!bHasToInterpolate)
         {
-            fSx = 0.5 * (fAx + fBx);
+            fSx = ((fAx + fBx) * 0.5).get();
             // reset points
-            fQx = fBx; fQy = fBy;
+            fQx = fBx.get(); fQy = fBy;
             bHasToInterpolate = true;
         }
         // shift points for next interpolation
