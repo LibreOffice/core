@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fd1e9d9a_0abd4c49",
+        "filename": "sc/inc/column.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-05-01T08:45:18Z",
+      "side": 1,
+      "message": "I\u0027ve discussed this issue with Mike on irc. He suggested to use a public method as a workaround, see ScColumn::AccessAttachNewFormulaCellsForMixDataHandler().",
+      "parentUuid": "db07f6bc_e746db6f",
+      "revId": "fd7e6fc79587de7b6701735d65311e981abd8695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3a188c8_6440adb7",
         "filename": "sc/source/core/data/column3.cxx",
         "patchSetId": 1
