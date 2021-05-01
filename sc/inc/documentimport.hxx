@@ -21,6 +21,7 @@
 class EditTextObject;
 class ScDocument;
 class ScColumn;
+class ScPatternAttr;
 class ScTokenArray;
 class ScFormulaCell;
 class ScStyleSheet;
@@ -131,6 +132,10 @@ public:
         ScDocument::CalcFormulaTree().
      */
     void broadcastRecalcAfterImport();
+
+    /** small cache for hot call during import */
+    bool isLatinScript(sal_uInt32 nFormat);
+    bool isLatinScript(const ScPatternAttr&);
 
 private:
     void initColumn(ScColumn& rCol);

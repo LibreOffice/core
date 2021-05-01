@@ -2028,6 +2028,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
 {
     createPattern();
     ScPatternAttr& rPat = *mpPattern;
+    ScDocumentImport& rDocImport = getDocImport();
     ScDocument& rDoc = getScDocument();
     if ( isCellXf() )
     {
@@ -2061,7 +2062,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
         rPat.GetItemSet().Put(aNumPat.GetItemSet());
     }
 
-    if (!sc::NumFmtUtil::isLatinScript(mnScNumFmt, rDoc))
+    if (!rDocImport.isLatinScript(mnScNumFmt))
         rAttrs.mbLatinNumFmtOnly = false;
 
     if (!rPat.GetStyleName())
@@ -2085,7 +2086,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
         rAttrs.maAttrs.push_back(aEntry);
 
         // Check if the default pattern is 'General'.
-        if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc))
+        if (!rDocImport.isLatinScript(*aEntry.pPattern))
             rAttrs.mbLatinNumFmtOnly = false;
     }
 
@@ -2094,7 +2095,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
     aEntry.pPattern = &rDoc.GetPool()->Put(rPat);
     rAttrs.maAttrs.push_back(aEntry);
 
-    if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc))
+    if (!rDocImport.isLatinScript(*aEntry.pPattern))
         rAttrs.mbLatinNumFmtOnly = false;
 }
 
