@@ -1,0 +1,15 @@
+Add newline at end of KRHangulMapping.h
+
+without this, compiling output of GCC 11 -E -fdirectives-only fails with:
+
+ooxml_tokens.inl:3524:32: error: stray '#' in program
+
+--- liborcus/src/liborcus/ooxml_tokens.inl.orig	2021-05-01 18:12:37.490131155 +0200
++++ liborcus/src/liborcus/ooxml_tokens.inl	2021-05-01 18:12:50.994119453 +0200
+@@ -3521,4 +3521,4 @@
+     "zoomToFit"  // 3517
+ };
+ 
+-size_t token_name_count = 3518;
+\ No newline at end of file
++size_t token_name_count = 3518;
