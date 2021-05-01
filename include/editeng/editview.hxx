@@ -218,7 +218,7 @@ public:
                         // Document position.
                         // A size change also affects the VisArea
     void                SetVisArea( const tools::Rectangle& rRect );
-    const tools::Rectangle&    GetVisArea() const;
+    tools::Rectangle    GetVisArea() const;
 
     PointerStyle    GetPointer() const;
 

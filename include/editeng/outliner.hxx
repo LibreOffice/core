@@ -231,7 +231,7 @@ public:
     void        SetOutputArea( const tools::Rectangle& rRect );
     tools::Rectangle const & GetOutputArea() const;
 
-    tools::Rectangle const & GetVisArea() const;
+    tools::Rectangle GetVisArea() const;
 
     void        CreateSelectionList (std::vector<Paragraph*> &aSelList) ;
 
