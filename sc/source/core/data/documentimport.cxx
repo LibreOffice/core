@@ -23,11 +23,13 @@
 #include <sharedformula.hxx>
 #include <bcaslot.hxx>
 #include <scopetools.hxx>
+#include <numformat.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/languageoptions.hxx>
 #include <unotools/configmgr.hxx>
+#include <unordered_map>
 
 namespace {
 
@@ -52,6 +54,7 @@ struct ScDocumentImportImpl
     std::vector<sc::TableColumnBlockPositionSet> maBlockPosSet;
     SvtScriptType mnDefaultScriptNumeric;
     std::vector<TabAttr> maTabAttrs;
+    std::unordered_map<sal_uInt32, bool> maIsLatinScriptMap;
 
     explicit ScDocumentImportImpl(ScDocument& rDoc) :
         mrDoc(rDoc),
@@ -806,6 +809,24 @@ void ScDocumentImport::broadcastRecalcAfterImportColumn(ScColumn& rCol)
 {
     CellStoreAfterImportBroadcaster aFunc;
     std::for_each(rCol.maCells.begin(), rCol.maCells.end(), aFunc);
+}
+
+
+bool ScDocumentImport::isLatinScript(const ScPatternAttr& rPatAttr)
+{
+    SvNumberFormatter* pFormatter = mpImpl->mrDoc.GetFormatTable();
+    sal_uInt32 nKey = rPatAttr.GetNumberFormat(pFormatter);
+    return isLatinScript(nKey);
+}
+
+bool ScDocumentImport::isLatinScript(sal_uInt32 nFormat)
+{
+    auto it = mpImpl->maIsLatinScriptMap.find(nFormat);
+    if (it != mpImpl->maIsLatinScriptMap.end())
+        return it->second;
+    bool b = sc::NumFmtUtil::isLatinScript(nFormat, mpImpl->mrDoc);
+    mpImpl->maIsLatinScriptMap.emplace(nFormat, b);
+    return b;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
