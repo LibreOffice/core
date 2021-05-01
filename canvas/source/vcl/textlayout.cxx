@@ -169,7 +169,7 @@ namespace vclcanvas
         std::unique_ptr< ::tools::Long []> aOffsets(new ::tools::Long[maLogicalAdvancements.getLength()]);
         setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
 
-        MetricVector aMetricVector;
+        std::vector< ::tools::Rectangle > aMetricVector;
         uno::Sequence<geometry::RealRectangle2D> aBoundingBoxes;
         if (pVDev->GetGlyphBoundRects(
             Point(0,0),

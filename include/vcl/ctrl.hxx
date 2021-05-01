@@ -86,7 +86,7 @@ protected:
     */
     tools::Rectangle DrawControlText( OutputDevice& _rTargetDevice, const tools::Rectangle& _rRect,
                                const OUString& _rStr, DrawTextFlags _nStyle,
-                               MetricVector* _pVector, OUString* _pDisplayText,
+                               std::vector< tools::Rectangle >* _pVector, OUString* _pDisplayText,
                                const Size* i_pDeviceSize = nullptr ) const;
 
     tools::Rectangle GetControlTextRect( OutputDevice& _rTargetDevice, const tools::Rectangle & rRect,

@@ -431,7 +431,7 @@ void Control::ImplInitSettings()
 }
 
 tools::Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const tools::Rectangle& rRect, const OUString& _rStr,
-    DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText, const Size* i_pDeviceSize ) const
+    DrawTextFlags _nStyle, std::vector< tools::Rectangle >* _pVector, OUString* _pDisplayText, const Size* i_pDeviceSize ) const
 {
     OUString rPStr = _rStr;
     DrawTextFlags nPStyle = _nStyle;
