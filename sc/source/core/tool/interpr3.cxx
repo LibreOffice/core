@@ -1263,19 +1263,18 @@ static double lcl_GetBinomDistRange(double n, double xs,double xe,
 //preconditions: 0.0 <= xs < xe <= n; xs,xe,n integral although double
 {
     sal_uInt32 i;
-    double fSum;
     // skip summands index 0 to xs-1, start sum with index xs
     sal_uInt32 nXs = static_cast<sal_uInt32>( xs );
     for (i = 1; i <= nXs && fFactor > 0.0; i++)
         fFactor *= (n-i+1)/i * p/q;
-    fSum = fFactor; // Summand xs
+    KahanSum fSum = fFactor; // Summand xs
     sal_uInt32 nXe = static_cast<sal_uInt32>(xe);
     for (i = nXs+1; i <= nXe && fFactor > 0.0; i++)
     {
         fFactor *= (n-i+1)/i * p/q;
         fSum += fFactor;
     }
-    return std::min(fSum,1.0);
+    return std::min(fSum.get(), 1.0);
 }
 
 void ScInterpreter::ScB()
@@ -1433,7 +1432,7 @@ void ScInterpreter::ScCritBinom()
             fFactor = pow(q,n);
             if (fFactor > ::std::numeric_limits<double>::min())
             {
-                double fSum = fFactor;
+                KahanSum fSum = fFactor;
                 sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                 for (i = 0; i < max && fSum < alpha; i++)
                 {
@@ -1445,15 +1444,13 @@ void ScInterpreter::ScCritBinom()
             else
             {
                 // accumulate BinomDist until accumulated BinomDist reaches alpha
-                double fSum = 0.0;
+                KahanSum fSum = 0.0;
                 sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                 for (i = 0; i < max && fSum < alpha; i++)
                 {
                     const double x = GetBetaDistPDF( p, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
                     if ( nGlobalError == FormulaError::NONE )
-                    {
                         fSum += x;
-                    }
                     else
                     {
                         PushNoValue();
@@ -1469,7 +1466,7 @@ void ScInterpreter::ScCritBinom()
             fFactor = pow(p, n);
             if (fFactor > ::std::numeric_limits<double>::min())
             {
-                double fSum = 1.0 - fFactor;
+                KahanSum fSum = 1.0 - fFactor;
                 sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                 for (i = 0; i < max && fSum >= alpha; i++)
                 {
@@ -1481,16 +1478,14 @@ void ScInterpreter::ScCritBinom()
             else
             {
                 // accumulate BinomDist until accumulated BinomDist reaches alpha
-                double fSum = 0.0;
+                KahanSum fSum = 0.0;
                 sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                 alpha = 1 - alpha;
                 for (i = 0; i < max && fSum < alpha; i++)
                 {
                     const double x = GetBetaDistPDF( q, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
                     if ( nGlobalError == FormulaError::NONE )
-                    {
                         fSum += x;
-                    }
                     else
                     {
                         PushNoValue();
@@ -1821,15 +1816,15 @@ void ScInterpreter::ScPoissonDist( bool bODFF )
                 PushDouble (1.0);
             else
             {
-                double fSummand = exp(-lambda);
-                double fSum = fSummand;
+                double fSummand = std::exp(-lambda);
+                KahanSum fSum = fSummand;
                 int nEnd = sal::static_int_cast<int>( x );
                 for (int i = 1; i <= nEnd; i++)
                 {
                     fSummand = (fSummand * lambda)/static_cast<double>(i);
                     fSum += fSummand;
                 }
-                PushDouble(fSum);
+                PushDouble(fSum.get());
             }
         }
     }
@@ -1877,7 +1872,7 @@ void ScInterpreter::ScHypGeomDist( int nMinParamCount )
         return;
     }
 
-    double fVal = 0.0;
+    KahanSum fVal = 0.0;
 
     for ( int i = ( bCumulative ? 0 : x ); i <= x && nGlobalError == FormulaError::NONE; i++ )
     {
@@ -1885,7 +1880,7 @@ void ScInterpreter::ScHypGeomDist( int nMinParamCount )
             fVal +=  GetHypGeomDist( i, n, M, N );
     }
 
-    PushDouble( fVal );
+    PushDouble( fVal.get() );
 }
 
 /** Calculates a value of the hypergeometric distribution.
@@ -2473,8 +2468,8 @@ void ScInterpreter::ScZTest()
     }
     x = GetDouble();
 
-    double fSum    = 0.0;
-    double fSumSqr = 0.0;
+    KahanSum fSum    = 0.0;
+    KahanSum fSumSqr = 0.0;
     double fVal;
     double rValCount = 0.0;
     switch (GetStackType())
@@ -2566,11 +2561,11 @@ void ScInterpreter::ScZTest()
         PushError( FormulaError::DivisionByZero);
     else
     {
-        double mue = fSum/rValCount;
+        double mue = fSum.get()/rValCount;
 
         if (nParamCount != 3)
         {
-            sigma = (fSumSqr - fSum*fSum/rValCount)/(rValCount-1.0);
+            sigma = (fSumSqr - fSum*fSum/rValCount).get()/(rValCount-1.0);
             if (sigma == 0.0)
             {
                 PushError(FormulaError::DivisionByZero);
@@ -2588,12 +2583,12 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
                                   ,const ScMatrixRef& pMat1,const ScMatrixRef& pMat2
                                   ,double& fT,double& fF)
 {
-    double fCount1  = 0.0;
-    double fCount2  = 0.0;
-    double fSum1    = 0.0;
-    double fSumSqr1 = 0.0;
-    double fSum2    = 0.0;
-    double fSumSqr2 = 0.0;
+    double fCount1    = 0.0;
+    double fCount2    = 0.0;
+    KahanSum fSum1    = 0.0;
+    KahanSum fSumSqr1 = 0.0;
+    KahanSum fSum2    = 0.0;
+    KahanSum fSumSqr2 = 0.0;
     double fVal;
     SCSIZE i,j;
     for (i = 0; i < nC1; i++)
@@ -2625,14 +2620,14 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
     } // if (fCount1 < 2.0 || fCount2 < 2.0)
     if ( _bTemplin )
     {
-        double fS1 = (fSumSqr1-fSum1*fSum1/fCount1)/(fCount1-1.0)/fCount1;
-        double fS2 = (fSumSqr2-fSum2*fSum2/fCount2)/(fCount2-1.0)/fCount2;
+        double fS1 = (fSumSqr1-fSum1*fSum1/fCount1).get() / (fCount1-1.0) / fCount1;
+        double fS2 = (fSumSqr2-fSum2*fSum2/fCount2).get() / (fCount2-1.0) / fCount2;
         if (fS1 + fS2 == 0.0)
         {
             PushNoValue();
             return false;
         }
-        fT = std::abs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
+        fT = std::abs(( fSum1/fCount1 - fSum2/fCount2 ).get())/sqrt(fS1+fS2);
         double c = fS1/(fS1+fS2);
     //  GetTDist is calculated via GetBetaDist and also works with non-integral
     // degrees of freedom. The result matches Excel
@@ -2641,9 +2636,9 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
     else
     {
         //  according to Bronstein-Semendjajew
-        double fS1 = (fSumSqr1 - fSum1*fSum1/fCount1) / (fCount1 - 1.0);    // Variance
-        double fS2 = (fSumSqr2 - fSum2*fSum2/fCount2) / (fCount2 - 1.0);
-        fT = std::abs( fSum1/fCount1 - fSum2/fCount2 ) /
+        double fS1 = (fSumSqr1 - fSum1*fSum1/fCount1).get() / (fCount1 - 1.0);    // Variance
+        double fS2 = (fSumSqr2 - fSum2*fSum2/fCount2).get() / (fCount2 - 1.0);
+        fT = std::abs( fSum1.get()/fCount1 - fSum2.get()/fCount2 ) /
              sqrt( (fCount1-1.0)*fS1 + (fCount2-1.0)*fS2 ) *
              sqrt( fCount1*fCount2*(fCount1+fCount2-2)/(fCount1+fCount2) );
         fF = fCount1 + fCount2 - 2;
@@ -2683,9 +2678,9 @@ void ScInterpreter::ScTTest()
             return;
         }
         double fCount   = 0.0;
-        double fSum1    = 0.0;
-        double fSum2    = 0.0;
-        double fSumSqrD = 0.0;
+        KahanSum fSum1    = 0.0;
+        KahanSum fSum2    = 0.0;
+        KahanSum fSumSqrD = 0.0;
         double fVal1, fVal2;
         for (i = 0; i < nC1; i++)
             for (j = 0; j < nR1; j++)
@@ -2705,14 +2700,14 @@ void ScInterpreter::ScTTest()
             PushNoValue();
             return;
         }
-        double fSumD = fSum1 - fSum2;
-        double fDivider = fCount*fSumSqrD - fSumD*fSumD;
+        KahanSum fSumD = fSum1 - fSum2;
+        double fDivider = ( fSumSqrD*fCount - fSumD*fSumD ).get();
         if ( fDivider == 0.0 )
         {
             PushError(FormulaError::DivisionByZero);
             return;
         }
-        fT = std::abs(fSumD) * sqrt((fCount-1.0) / fDivider);
+        fT = std::abs(fSumD.get()) * sqrt((fCount-1.0) / fDivider);
         fF = fCount - 1.0;
     }
     else if (fTyp == 2.0)
@@ -2818,7 +2813,7 @@ void ScInterpreter::ScChiTest()
         PushIllegalArgument();
         return;
     }
-    double fChi = 0.0;
+    KahanSum fChi = 0.0;
     bool bEmpty = true;
     for (SCSIZE i = 0; i < nC1; i++)
     {
@@ -2843,6 +2838,11 @@ void ScInterpreter::ScChiTest()
                     // not, instead the result of divide() then was 1e+308.
                     volatile double fTemp1 = (fValX - fValE) * (fValX - fValE);
                     double fTemp2 = fTemp1;
+                    if (std::isinf(fTemp2))
+                    {
+                        PushError(FormulaError::NoConvergence);
+                        return;
+                    }
                     fChi += sc::divide( fTemp2, fValE);
                 }
                 else
@@ -2871,7 +2871,7 @@ void ScInterpreter::ScChiTest()
     }
     else
         fDF = static_cast<double>(nC1-1)*static_cast<double>(nR1-1);
-    PushDouble(GetChiDist(fChi, fDF));
+    PushDouble(GetChiDist(fChi.get(), fDF));
 }
 
 void ScInterpreter::ScKurt()
