@@ -45,7 +45,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <tools/stream.hxx>
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 
 namespace basctl
 {
@@ -679,8 +679,8 @@ bool LibInfo::Key::operator == (Key const& rKey) const
 size_t LibInfo::Key::Hash::operator () (Key const& rKey) const
 {
     std::size_t seed = 0;
-    boost::hash_combine(seed, rKey.m_aDocument.hashCode());
-    boost::hash_combine(seed, rKey.m_aLibName.hashCode());
+    o3tl::hash_combine(seed, rKey.m_aDocument.hashCode());
+    o3tl::hash_combine(seed, rKey.m_aLibName.hashCode());
     return seed;
 }
 
