@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string_view>
 
 #include <i18nlangtag/languagetag.hxx>
