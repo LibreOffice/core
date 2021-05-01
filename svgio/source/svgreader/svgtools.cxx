@@ -540,12 +540,12 @@ namespace svgio::svgreader
             {
                 skip_char(rCandidate, ' ', nPos, nLen);
 
-                enum DegreeType
+                enum class DegreeType
                 {
                     deg,
                     grad,
                     rad
-                } aType(deg); // degrees is default
+                } aType(DegreeType::deg); // degrees is default
 
                 if(nPos < nLen)
                 {
@@ -562,7 +562,7 @@ namespace svgio::svgreader
                             {
                                 // angle in grad
                                 nPos += strlen(aStrGrad);
-                                aType = grad;
+                                aType = DegreeType::grad;
                             }
                             break;
                         }
@@ -573,7 +573,7 @@ namespace svgio::svgreader
                             {
                                 // angle in radians
                                 nPos += strlen(aStrRad);
-                                aType = rad;
+                                aType = DegreeType::rad;
                             }
                             break;
                         }
@@ -581,11 +581,11 @@ namespace svgio::svgreader
                 }
 
                 // convert to radians
-                if(deg == aType)
+                if (DegreeType::deg == aType)
                 {
                     fAngle = basegfx::deg2rad(fAngle);
                 }
-                else if(grad == aType)
+                else if (DegreeType::grad == aType)
                 {
                     // looks like 100 grad is 90 degrees
                     fAngle *= F_PI / 200.0;
