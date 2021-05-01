@@ -133,10 +133,28 @@ public:
         m_fError /= fDivides;
     }
 
+    inline KahanSum operator*(const KahanSum& fTimes) const
+    {
+        KahanSum fSum(m_fSum * fTimes.m_fSum);
+        fSum += m_fSum * fTimes.m_fError;
+        fSum += m_fError * fTimes.m_fSum;
+        fSum += m_fError * fTimes.m_fError;
+        return fSum;
+    }
+
     constexpr KahanSum operator*(double fTimes) const
     {
         KahanSum fSum(*this);
         fSum *= fTimes;
+        return fSum;
+    }
+
+    inline KahanSum operator/(const KahanSum& fDivides) const
+    {
+        KahanSum fSum(m_fSum / fDivides.m_fSum);
+        fSum += m_fSum / fDivides.m_fError;
+        fSum += m_fError / fDivides.m_fSum;
+        fSum += m_fError / fDivides.m_fError;
         return fSum;
     }
 
