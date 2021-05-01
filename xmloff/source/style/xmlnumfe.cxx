@@ -1623,7 +1623,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         if ( nElemType == NF_KEY_NNNN )
                         {
                             //  write additional text element for separator
-                            pLocaleData->setLanguageTag( LanguageTag( nLang ) );
+                            pLocaleData.reset( new LocaleDataWrapper( pFormatter->GetComponentContext(),
+                                LanguageTag( nLang ) ) );
                             AddToTextElement_Impl( pLocaleData->getLongDateDayOfWeekSep() );
                         }
                     }

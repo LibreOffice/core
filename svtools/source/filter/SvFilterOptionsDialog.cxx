@@ -267,7 +267,7 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
         FilterConfigItem aConfigItem( aConfigPath );
         OUString aPropertyName;
         SvtSysLocale aSysLocale;
-        if ( aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum() == MeasurementSystem::Metric )
+        if ( aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric )
             aPropertyName = "Metric";
         else
             aPropertyName = "NonMetric";

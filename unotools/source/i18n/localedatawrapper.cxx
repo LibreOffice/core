@@ -37,11 +37,11 @@
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
-const sal_uInt16 nCurrFormatInvalid = 0xffff;
 const sal_uInt16 nCurrFormatDefault = 0;
 
 using namespace ::com::sun::star;
@@ -61,21 +61,6 @@ namespace
     {};
 }
 
-bool LocaleDataWrapper::Locale_Compare::operator()(const css::lang::Locale& rLocale1, const css::lang::Locale& rLocale2) const
-{
-    if (rLocale1.Language < rLocale2.Language)
-        return true;
-    else if (rLocale1.Language > rLocale2.Language)
-        return false;
-
-    if (rLocale1.Country < rLocale2.Country)
-        return true;
-    else if (rLocale1.Country > rLocale2.Country)
-        return false;
-
-    return rLocale1.Variant < rLocale2.Variant;
-}
-
 sal_uInt8 LocaleDataWrapper::nLocaleDataChecking = 0;
 
 LocaleDataWrapper::LocaleDataWrapper(
@@ -85,76 +70,152 @@ LocaleDataWrapper::LocaleDataWrapper(
         :
         m_xContext( rxContext ),
         xLD( LocaleData2::create(rxContext) ),
-        maLanguageTag( rLanguageTag ),
-        bLocaleDataItemValid( false ),
-        bReservedWordValid( false ),
-        bSecondaryCalendarValid( false )
+        maLanguageTag( rLanguageTag )
 {
-    invalidateData();
+    loadData();
+    loadDateAcceptancePatterns({});
 }
 
 LocaleDataWrapper::LocaleDataWrapper(
-            const LanguageTag& rLanguageTag
+            const LanguageTag& rLanguageTag,
+            const std::vector<OUString> & rOverrideDateAcceptancePatterns
             )
         :
         m_xContext( comphelper::getProcessComponentContext() ),
         xLD( LocaleData2::create(m_xContext) ),
-        maLanguageTag( rLanguageTag ),
-        bLocaleDataItemValid( false ),
-        bReservedWordValid( false ),
-        bSecondaryCalendarValid( false )
+        maLanguageTag( rLanguageTag )
 {
-    invalidateData();
+    loadData();
+    loadDateAcceptancePatterns(rOverrideDateAcceptancePatterns);
 }
 
 LocaleDataWrapper::~LocaleDataWrapper()
 {
 }
 
-void LocaleDataWrapper::setLanguageTag( const LanguageTag& rLanguageTag )
-{
-    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::CriticalChange );
-    maLanguageTag = rLanguageTag;
-    invalidateData();
-}
-
 const LanguageTag& LocaleDataWrapper::getLanguageTag() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
     return maLanguageTag;
 }
 
 const css::lang::Locale& LocaleDataWrapper::getMyLocale() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
     return maLanguageTag.getLocale();
 }
 
-void LocaleDataWrapper::invalidateData()
+void LocaleDataWrapper::loadData()
 {
-    aCurrSymbol.clear();
-    aCurrBankSymbol.clear();
-    nDateOrder = nLongDateOrder = DateOrder::Invalid;
-    nCurrPositiveFormat = nCurrNegativeFormat = nCurrDigits = nCurrFormatInvalid;
-    if ( bLocaleDataItemValid )
+    const css::lang::Locale& rMyLocale = maLanguageTag.getLocale();
+
     {
-        for (OUString & j : aLocaleItem)
-            j.clear();
-        bLocaleDataItemValid = false;
+        Sequence< Currency2 > aCurrSeq = getAllCurrencies();
+        if ( !aCurrSeq.hasElements() )
+        {
+            if (areChecksEnabled())
+                outputCheckMessage("LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles");
+            aCurrSymbol = "ShellsAndPebbles";
+            aCurrBankSymbol = aCurrSymbol;
+            nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
+            nCurrDigits = 2;
+        }
+        else
+        {
+            auto pCurr = std::find_if(aCurrSeq.begin(), aCurrSeq.end(),
+                [](const Currency2& rCurr) { return rCurr.Default; });
+            if ( pCurr == aCurrSeq.end() )
+            {
+                if (areChecksEnabled())
+                {
+                    outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrSymbolsImpl: no default currency" ) );
+                }
+                pCurr = aCurrSeq.begin();
+            }
+            aCurrSymbol = pCurr->Symbol;
+            aCurrBankSymbol = pCurr->BankSymbol;
+            nCurrDigits = pCurr->DecimalPlaces;
+        }
     }
-    if ( bReservedWordValid )
+
+    loadCurrencyFormats();
+
     {
-        for (OUString & j : aReservedWord)
-            j.clear();
-        bReservedWordValid = false;
+        xDefaultCalendar.reset();
+        xSecondaryCalendar.reset();
+        Sequence< Calendar2 > xCals = getAllCalendars();
+        if (xCals.getLength() > 1)
+        {
+            auto pCal = std::find_if(xCals.begin(), xCals.end(),
+                [](const Calendar2& rCal) { return !rCal.Default; });
+            if (pCal != xCals.end())
+                xSecondaryCalendar = std::make_shared<Calendar2>( *pCal);
+        }
+        auto pCal = xCals.begin();
+        if (xCals.getLength() > 1)
+        {
+            pCal = std::find_if(xCals.begin(), xCals.end(),
+                [](const Calendar2& rCal) { return rCal.Default; });
+            if (pCal == xCals.end())
+                pCal = xCals.begin();
+        }
+        xDefaultCalendar = std::make_shared<Calendar2>( *pCal);
     }
-    xDefaultCalendar.reset();
-    xSecondaryCalendar.reset();
-    bSecondaryCalendarValid = false;
-    if (aGrouping.hasElements())
-        aGrouping[0] = 0;
-    if (aDateAcceptancePatterns.hasElements())
-        aDateAcceptancePatterns = Sequence<OUString>();
+
+    loadDateOrders();
+
+    try
+    {
+        aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( rMyLocale );
+    }
+    catch (const Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getDateAcceptancePatterns" );
+        aDateAcceptancePatterns = css::uno::Sequence< OUString >(0);
+    }
+
+
+    loadDigitGrouping();
+
+    try
+    {
+        aReservedWordSeq = xLD->getReservedWord( rMyLocale );
+    }
+    catch ( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getReservedWord" );
+        aReservedWordSeq = css::uno::Sequence< OUString >(0);
+    }
+    for (int i=0; i < css::i18n::reservedWords::COUNT; ++i)
+        aReservedWord[i] = aReservedWordSeq[i];
+
+    try
+    {
+        aLocaleDataItem = xLD->getLocaleItem2( rMyLocale );
+    }
+    catch (const Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getLocaleItem" );
+        static const css::i18n::LocaleDataItem2 aEmptyItem;
+        aLocaleDataItem = aEmptyItem;
+    }
+
+    aLocaleItem[LocaleItem::DATE_SEPARATOR] = aLocaleDataItem.dateSeparator;
+    aLocaleItem[LocaleItem::THOUSAND_SEPARATOR] = aLocaleDataItem.thousandSeparator;
+    aLocaleItem[LocaleItem::DECIMAL_SEPARATOR] = aLocaleDataItem.decimalSeparator;
+    aLocaleItem[LocaleItem::TIME_SEPARATOR] = aLocaleDataItem.timeSeparator;
+    aLocaleItem[LocaleItem::TIME_100SEC_SEPARATOR] = aLocaleDataItem.time100SecSeparator;
+    aLocaleItem[LocaleItem::LIST_SEPARATOR] = aLocaleDataItem.listSeparator;
+    aLocaleItem[LocaleItem::SINGLE_QUOTATION_START] = aLocaleDataItem.quotationStart;
+    aLocaleItem[LocaleItem::SINGLE_QUOTATION_END] = aLocaleDataItem.quotationEnd;
+    aLocaleItem[LocaleItem::DOUBLE_QUOTATION_START] = aLocaleDataItem.doubleQuotationStart;
+    aLocaleItem[LocaleItem::DOUBLE_QUOTATION_END] = aLocaleDataItem.doubleQuotationEnd;
+    aLocaleItem[LocaleItem::MEASUREMENT_SYSTEM] = aLocaleDataItem.measurementSystem;
+    aLocaleItem[LocaleItem::TIME_AM] = aLocaleDataItem.timeAM;
+    aLocaleItem[LocaleItem::TIME_PM] = aLocaleDataItem.timePM;
+    aLocaleItem[LocaleItem::LONG_DATE_DAY_OF_WEEK_SEPARATOR] = aLocaleDataItem.LongDateDayOfWeekSeparator;
+    aLocaleItem[LocaleItem::LONG_DATE_DAY_SEPARATOR] = aLocaleDataItem.LongDateDaySeparator;
+    aLocaleItem[LocaleItem::LONG_DATE_MONTH_SEPARATOR] = aLocaleDataItem.LongDateMonthSeparator;
+    aLocaleItem[LocaleItem::LONG_DATE_YEAR_SEPARATOR] = aLocaleDataItem.LongDateYearSeparator;
+    aLocaleItem[LocaleItem::DECIMAL_SEPARATOR_ALTERNATIVE] = aLocaleDataItem.decimalSeparatorAlternative;
 }
 
 /* FIXME-BCP47: locale data should provide a language tag instead that could be
@@ -174,30 +235,7 @@ css::i18n::LanguageCountryInfo LocaleDataWrapper::getLanguageCountryInfo() const
 
 const css::i18n::LocaleDataItem2& LocaleDataWrapper::getLocaleItem() const
 {
-    {
-        ::utl::ReadWriteGuard aGuard( aMutex );
-        const css::lang::Locale& rLocal = getMyLocale();
-        auto itr = maDataItemCache.find(rLocal);
-        if (itr != maDataItemCache.end())
-            return itr->second;
-    }
-
-    try
-    {
-        ::utl::ReadWriteGuard aGuard( aMutex );
-
-        const css::lang::Locale& rLocal = getMyLocale();
-        css::i18n::LocaleDataItem2 aItem = xLD->getLocaleItem2( rLocal );
-        auto aRet = maDataItemCache.insert(std::make_pair(rLocal, aItem));
-        assert(aRet.second);
-        return aRet.first->second;
-    }
-    catch (const Exception&)
-    {
-        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getLocaleItem" );
-    }
-    static css::i18n::LocaleDataItem2 aEmptyItem;
-    return aEmptyItem;
+    return aLocaleDataItem;
 }
 
 css::uno::Sequence< css::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies() const
@@ -353,112 +391,20 @@ std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
 
 const OUString& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nItem >= LocaleItem::COUNT2 )
     {
         SAL_WARN( "unotools.i18n", "getOneLocaleItem: bounds" );
         return aLocaleItem[0];
     }
-    if (aLocaleItem[nItem].isEmpty())
-    {   // no cached content
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getOneLocaleItemImpl( nItem );
-    }
     return aLocaleItem[nItem];
-}
-
-void LocaleDataWrapper::getOneLocaleItemImpl( sal_Int16 nItem )
-{
-    if ( !bLocaleDataItemValid )
-    {
-        aLocaleDataItem = getLocaleItem();
-        bLocaleDataItemValid = true;
-    }
-    switch ( nItem )
-    {
-        case LocaleItem::DATE_SEPARATOR :
-            aLocaleItem[nItem] = aLocaleDataItem.dateSeparator;
-        break;
-        case LocaleItem::THOUSAND_SEPARATOR :
-            aLocaleItem[nItem] = aLocaleDataItem.thousandSeparator;
-        break;
-        case LocaleItem::DECIMAL_SEPARATOR :
-            aLocaleItem[nItem] = aLocaleDataItem.decimalSeparator;
-        break;
-        case LocaleItem::TIME_SEPARATOR :
-            aLocaleItem[nItem] = aLocaleDataItem.timeSeparator;
-        break;
-        case LocaleItem::TIME_100SEC_SEPARATOR :
-            aLocaleItem[nItem] = aLocaleDataItem.time100SecSeparator;
-        break;
-        case LocaleItem::LIST_SEPARATOR :
-            aLocaleItem[nItem] = aLocaleDataItem.listSeparator;
-        break;
-        case LocaleItem::SINGLE_QUOTATION_START :
-            aLocaleItem[nItem] = aLocaleDataItem.quotationStart;
-        break;
-        case LocaleItem::SINGLE_QUOTATION_END :
-            aLocaleItem[nItem] = aLocaleDataItem.quotationEnd;
-        break;
-        case LocaleItem::DOUBLE_QUOTATION_START :
-            aLocaleItem[nItem] = aLocaleDataItem.doubleQuotationStart;
-        break;
-        case LocaleItem::DOUBLE_QUOTATION_END :
-            aLocaleItem[nItem] = aLocaleDataItem.doubleQuotationEnd;
-        break;
-        case LocaleItem::MEASUREMENT_SYSTEM :
-            aLocaleItem[nItem] = aLocaleDataItem.measurementSystem;
-        break;
-        case LocaleItem::TIME_AM :
-            aLocaleItem[nItem] = aLocaleDataItem.timeAM;
-        break;
-        case LocaleItem::TIME_PM :
-            aLocaleItem[nItem] = aLocaleDataItem.timePM;
-        break;
-        case LocaleItem::LONG_DATE_DAY_OF_WEEK_SEPARATOR :
-            aLocaleItem[nItem] = aLocaleDataItem.LongDateDayOfWeekSeparator;
-        break;
-        case LocaleItem::LONG_DATE_DAY_SEPARATOR :
-            aLocaleItem[nItem] = aLocaleDataItem.LongDateDaySeparator;
-        break;
-        case LocaleItem::LONG_DATE_MONTH_SEPARATOR :
-            aLocaleItem[nItem] = aLocaleDataItem.LongDateMonthSeparator;
-        break;
-        case LocaleItem::LONG_DATE_YEAR_SEPARATOR :
-            aLocaleItem[nItem] = aLocaleDataItem.LongDateYearSeparator;
-        break;
-        case LocaleItem::DECIMAL_SEPARATOR_ALTERNATIVE :
-            aLocaleItem[nItem] = aLocaleDataItem.decimalSeparatorAlternative;
-        break;
-        default:
-            SAL_WARN( "unotools.i18n", "getOneLocaleItemImpl: which one?" );
-    }
-}
-
-void LocaleDataWrapper::getOneReservedWordImpl( sal_Int16 nWord )
-{
-    if ( !bReservedWordValid )
-    {
-        aReservedWordSeq = getReservedWord();
-        bReservedWordValid = true;
-    }
-    DBG_ASSERT( nWord < aReservedWordSeq.getLength(), "getOneReservedWordImpl: which one?" );
-    if ( nWord < aReservedWordSeq.getLength() )
-        aReservedWord[nWord] = aReservedWordSeq[nWord];
 }
 
 const OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nWord < 0 || nWord >= reservedWords::COUNT )
     {
         SAL_WARN( "unotools.i18n", "getOneReservedWord: bounds" );
         nWord = reservedWords::FALSE_WORD;
-    }
-    if (aReservedWord[nWord].isEmpty())
-    {   // no cached content
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getOneReservedWordImpl( nWord );
     }
     return aReservedWord[nWord];
 }
@@ -470,22 +416,6 @@ MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const OUString&
         return MeasurementSystem::Metric;
 //! TODO: other measurement systems? => extend enum MeasurementSystem
     return MeasurementSystem::US;
-}
-
-void LocaleDataWrapper::getSecondaryCalendarImpl()
-{
-    if (!xSecondaryCalendar && !bSecondaryCalendarValid)
-    {
-        Sequence< Calendar2 > xCals = getAllCalendars();
-        if (xCals.getLength() > 1)
-        {
-            auto pCal = std::find_if(xCals.begin(), xCals.end(),
-                [](const Calendar2& rCal) { return !rCal.Default; });
-            if (pCal != xCals.end())
-                xSecondaryCalendar = std::make_shared<Calendar2>( *pCal);
-        }
-        bSecondaryCalendarValid = true;
-    }
 }
 
 bool LocaleDataWrapper::doesSecondaryCalendarUseEC( std::u16string_view rName ) const
@@ -503,13 +433,6 @@ bool LocaleDataWrapper::doesSecondaryCalendarUseEC( std::u16string_view rName ) 
             aBcp47 != "zh-TW")
         return false;
 
-    ::utl::ReadWriteGuard aGuard( aMutex );
-
-    if (!bSecondaryCalendarValid)
-    {   // no cached content
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getSecondaryCalendarImpl();
-    }
     if (!xSecondaryCalendar)
         return false;
     if (!xSecondaryCalendar->Name.equalsIgnoreAsciiCase( rName))
@@ -518,31 +441,8 @@ bool LocaleDataWrapper::doesSecondaryCalendarUseEC( std::u16string_view rName ) 
     return true;
 }
 
-void LocaleDataWrapper::getDefaultCalendarImpl()
-{
-    if (xDefaultCalendar)
-        return;
-
-    Sequence< Calendar2 > xCals = getAllCalendars();
-    auto pCal = xCals.begin();
-    if (xCals.getLength() > 1)
-    {
-        pCal = std::find_if(xCals.begin(), xCals.end(),
-            [](const Calendar2& rCal) { return rCal.Default; });
-        if (pCal == xCals.end())
-            pCal = xCals.begin();
-    }
-    xDefaultCalendar = std::make_shared<Calendar2>( *pCal);
-}
-
 const std::shared_ptr< css::i18n::Calendar2 >& LocaleDataWrapper::getDefaultCalendar() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
-    if (!xDefaultCalendar)
-    {   // no cached content
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getDefaultCalendarImpl();
-    }
     return xDefaultCalendar;
 }
 
@@ -560,85 +460,27 @@ css::uno::Sequence< css::i18n::CalendarItem2 > const & LocaleDataWrapper::getDef
 
 const OUString& LocaleDataWrapper::getCurrSymbol() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
-    if (aCurrSymbol.isEmpty())
-    {
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getCurrSymbolsImpl();
-    }
     return aCurrSymbol;
 }
 
 const OUString& LocaleDataWrapper::getCurrBankSymbol() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
-    if (aCurrBankSymbol.isEmpty())
-    {
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getCurrSymbolsImpl();
-    }
     return aCurrBankSymbol;
 }
 
 sal_uInt16 LocaleDataWrapper::getCurrPositiveFormat() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
-    if ( nCurrPositiveFormat == nCurrFormatInvalid )
-    {
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getCurrFormatsImpl();
-    }
     return nCurrPositiveFormat;
 }
 
 sal_uInt16 LocaleDataWrapper::getCurrNegativeFormat() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
-    if ( nCurrNegativeFormat == nCurrFormatInvalid )
-    {
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getCurrFormatsImpl();
-    }
     return nCurrNegativeFormat;
 }
 
 sal_uInt16 LocaleDataWrapper::getCurrDigits() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
-    if ( nCurrDigits == nCurrFormatInvalid )
-    {
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getCurrSymbolsImpl();
-    }
     return nCurrDigits;
-}
-
-void LocaleDataWrapper::getCurrSymbolsImpl()
-{
-    Sequence< Currency2 > aCurrSeq = getAllCurrencies();
-    if ( !aCurrSeq.hasElements() )
-    {
-        if (areChecksEnabled())
-            outputCheckMessage("LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles");
-        aCurrSymbol = "ShellsAndPebbles";
-        aCurrBankSymbol = aCurrSymbol;
-        nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
-        nCurrDigits = 2;
-        return;
-    }
-    auto pCurr = std::find_if(aCurrSeq.begin(), aCurrSeq.end(),
-        [](const Currency2& rCurr) { return rCurr.Default; });
-    if ( pCurr == aCurrSeq.end() )
-    {
-        if (areChecksEnabled())
-        {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrSymbolsImpl: no default currency" ) );
-        }
-        pCurr = aCurrSeq.begin();
-    }
-    aCurrSymbol = pCurr->Symbol;
-    aCurrBankSymbol = pCurr->BankSymbol;
-    nCurrDigits = pCurr->DecimalPlaces;
 }
 
 void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
@@ -719,10 +561,10 @@ void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
     }
 }
 
-void LocaleDataWrapper::getCurrFormatsImpl()
+void LocaleDataWrapper::loadCurrencyFormats()
 {
     css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
-    uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::CURRENCY, getMyLocale() );
+    uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::CURRENCY, maLanguageTag.getLocale() );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
     {   // bad luck
@@ -764,9 +606,6 @@ void LocaleDataWrapper::getCurrFormatsImpl()
                 nNeg = nElem;
         }
     }
-
-    // make sure it's loaded
-    getCurrSymbol();
 
     sal_Int32 nSign, nPar, nNum, nBlank, nSym;
 
@@ -862,23 +701,11 @@ void LocaleDataWrapper::getCurrFormatsImpl()
 
 DateOrder LocaleDataWrapper::getDateOrder() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
-    if ( nDateOrder == DateOrder::Invalid )
-    {
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getDateOrdersImpl();
-    }
     return nDateOrder;
 }
 
 DateOrder LocaleDataWrapper::getLongDateOrder() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
-    if ( nLongDateOrder == DateOrder::Invalid )
-    {
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getDateOrdersImpl();
-    }
     return nLongDateOrder;
 }
 
@@ -961,10 +788,10 @@ DateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) const
     }
 }
 
-void LocaleDataWrapper::getDateOrdersImpl()
+void LocaleDataWrapper::loadDateOrders()
 {
     css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
-    uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::DATE, getMyLocale() );
+    uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::DATE, maLanguageTag.getLocale() );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
     {   // bad luck
@@ -1047,7 +874,7 @@ void LocaleDataWrapper::getDateOrdersImpl()
 
 // --- digit grouping -------------------------------------------------
 
-void LocaleDataWrapper::getDigitGroupingImpl()
+void LocaleDataWrapper::loadDigitGrouping()
 {
     /* TODO: This is a very simplified grouping setup that only serves its
      * current purpose for Indian locales. A free-form flexible one would
@@ -1081,12 +908,6 @@ void LocaleDataWrapper::getDigitGroupingImpl()
 
 css::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGrouping() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
-    if (!aGrouping.hasElements() || aGrouping[0] == 0)
-    {   // no cached content
-        aGuard.changeReadToWrite();
-        const_cast<LocaleDataWrapper*>(this)->getDigitGroupingImpl();
-    }
     return aGrouping;
 }
 
@@ -1224,7 +1045,7 @@ void LocaleDataWrapper::ImplAddFormatNum( OUStringBuffer& rBuf,
             }
 
             // append decimal separator
-            rBuf.append( getNumDecimalSep() );
+            rBuf.append( aLocaleDataItem.decimalSeparator );
 
             // fill with zeros
             sal_uInt16 i = 0;
@@ -1240,7 +1061,7 @@ void LocaleDataWrapper::ImplAddFormatNum( OUStringBuffer& rBuf,
     }
     else
     {
-        const OUString& rThoSep = getNumThousandSep();
+        const OUString& rThoSep = aLocaleDataItem.thousandSeparator;
 
         // copy number to buffer (excluding decimals)
         sal_uInt16 nNumLen2 = nNumLen-nDecimals;
@@ -1261,7 +1082,7 @@ void LocaleDataWrapper::ImplAddFormatNum( OUStringBuffer& rBuf,
         // append decimals
         if ( nDecimals )
         {
-            rBuf.append( getNumDecimalSep() );
+            rBuf.append( aLocaleDataItem.decimalSeparator );
 
             bool bNullEnd = true;
             while ( i < nNumLen )
@@ -1284,7 +1105,6 @@ void LocaleDataWrapper::ImplAddFormatNum( OUStringBuffer& rBuf,
 
 OUString LocaleDataWrapper::getDate( const Date& rDate ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
 //!TODO: leading zeros et al
     OUStringBuffer aBuf(128);
     sal_uInt16  nDay    = rDate.GetDay();
@@ -1304,23 +1124,23 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
     {
         case DateOrder::DMY :
             ImplAdd2UNum( aBuf, nDay, true /* IsDateDayLeadingZero() */ );
-            aBuf.append( getDateSep() );
+            aBuf.append( aLocaleDataItem.dateSeparator );
             ImplAdd2UNum( aBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
-            aBuf.append( getDateSep() );
+            aBuf.append( aLocaleDataItem.dateSeparator );
             ImplAddNum( aBuf, nYear, nYearLen );
         break;
         case DateOrder::MDY :
             ImplAdd2UNum( aBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
-            aBuf.append( getDateSep() );
+            aBuf.append( aLocaleDataItem.dateSeparator );
             ImplAdd2UNum( aBuf, nDay, true /* IsDateDayLeadingZero() */ );
-            aBuf.append( getDateSep() );
+            aBuf.append( aLocaleDataItem.dateSeparator );
             ImplAddNum( aBuf, nYear, nYearLen );
         break;
         default:
             ImplAddNum( aBuf, nYear, nYearLen );
-            aBuf.append( getDateSep() );
+            aBuf.append( aLocaleDataItem.dateSeparator );
             ImplAdd2UNum( aBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
-            aBuf.append( getDateSep() );
+            aBuf.append( aLocaleDataItem.dateSeparator );
             ImplAdd2UNum( aBuf, nDay, true /* IsDateDayLeadingZero() */ );
     }
 
@@ -1329,7 +1149,6 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
 
 OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b100Sec ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
 //!TODO: leading zeros et al
     OUStringBuffer aBuf(128);
     sal_uInt16  nHour = rTime.GetHour();
@@ -1337,16 +1156,16 @@ OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b
     nHour %= 24;
 
     ImplAdd2UNum( aBuf, nHour, true /* IsTimeLeadingZero() */ );
-    aBuf.append( getTimeSep() );
+    aBuf.append( aLocaleDataItem.timeSeparator );
     ImplAdd2UNum( aBuf, rTime.GetMin(), true );
     if ( bSec )
     {
-        aBuf.append( getTimeSep() );
+        aBuf.append( aLocaleDataItem.timeSeparator );
         ImplAdd2UNum( aBuf, rTime.GetSec(), true );
 
         if ( b100Sec )
         {
-            aBuf.append( getTime100SecSep() );
+            aBuf.append( aLocaleDataItem.time100SecSeparator );
             ImplAdd9UNum( aBuf, rTime.GetNanoSec() );
         }
     }
@@ -1357,7 +1176,6 @@ OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b
 OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
         bool bTwoDigitYear ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
     OUStringBuffer aBuf(20);
     OUStringBuffer aStr(120); // complete guess
     sal_Int16 nVal;
@@ -1365,7 +1183,7 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
     // day of week
     nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
     aStr.append(rCal.getDisplayName( CalendarDisplayIndex::DAY, nVal, 1 ));
-    aStr.append(getLongDateDayOfWeekSep());
+    aStr.append(aLocaleDataItem.LongDateDayOfWeekSeparator);
     // day of month
     nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
     ImplAdd2UNum( aBuf, nVal, false/*bDayOfMonthWithLeadingZero*/ );
@@ -1384,20 +1202,19 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
     switch ( getLongDateOrder() )
     {
         case DateOrder::DMY :
-            aStr.append(aDay + getLongDateDaySep() + aMonth + getLongDateMonthSep() + aYear);
+            aStr.append(aDay + aLocaleDataItem.LongDateDaySeparator + aMonth + aLocaleDataItem.LongDateMonthSeparator + aYear);
         break;
         case DateOrder::MDY :
-            aStr.append(aMonth + getLongDateMonthSep() + aDay + getLongDateDaySep() + aYear);
+            aStr.append(aMonth + aLocaleDataItem.LongDateMonthSeparator + aDay + aLocaleDataItem.LongDateDaySeparator + aYear);
         break;
         default:    // YMD
-            aStr.append(aYear + getLongDateYearSep() + aMonth + getLongDateMonthSep() + aDay);
+            aStr.append(aYear + aLocaleDataItem.LongDateYearSeparator + aMonth + aLocaleDataItem.LongDateMonthSeparator + aDay);
     }
     return aStr.makeStringAndClear();
 }
 
 OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bool b100Sec ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
     OUStringBuffer aBuf(128);
 
     if ( rTime < tools::Time( 0 ) )
@@ -1407,16 +1224,16 @@ OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bo
         ImplAddUNum( aBuf, rTime.GetHour(), 2 );
     else
         ImplAddUNum( aBuf, rTime.GetHour() );
-    aBuf.append( getTimeSep() );
+    aBuf.append( aLocaleDataItem.timeSeparator );
     ImplAdd2UNum( aBuf, rTime.GetMin(), true );
     if ( bSec )
     {
-        aBuf.append( getTimeSep() );
+        aBuf.append( aLocaleDataItem.timeSeparator );
         ImplAdd2UNum( aBuf, rTime.GetSec(), true );
 
         if ( b100Sec )
         {
-            aBuf.append( getTime100SecSep() );
+            aBuf.append( aLocaleDataItem.time100SecSeparator );
             ImplAdd9UNum( aBuf, rTime.GetNanoSec() );
         }
     }
@@ -1426,23 +1243,22 @@ OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bo
 
 // --- simple number formatting ---------------------------------------
 
-static size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, sal_uInt16 nDecimals )
+static size_t ImplGetNumberStringLengthGuess( const css::i18n::LocaleDataItem2& rLocaleDataItem, sal_uInt16 nDecimals )
 {
     // approximately 3.2 bits per digit
     const size_t nDig = ((sizeof(sal_Int64) * 8) / 3) + 1;
     // digits, separators (pessimized for insane "every digit may be grouped"), leading zero, sign
     size_t nGuess = ((nDecimals < nDig) ?
-        (((nDig - nDecimals) * rLoc.getNumThousandSep().getLength()) + nDig) :
-        nDecimals) + rLoc.getNumDecimalSep().getLength() + 3;
+        (((nDig - nDecimals) * rLocaleDataItem.thousandSeparator.getLength()) + nDig) :
+        nDecimals) + rLocaleDataItem.decimalSeparator.getLength() + 3;
     return nGuess;
 }
 
 OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
         bool bUseThousandSep, bool bTrailingZeros ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
     // check if digits and separators will fit into fixed buffer or allocate
-    size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
+    size_t nGuess = ImplGetNumberStringLengthGuess( aLocaleDataItem, nDecimals );
     OUStringBuffer aBuf(int(nGuess + 16));
 
     ImplAddFormatNum( aBuf, nNumber, nDecimals,
@@ -1454,11 +1270,10 @@ OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
 OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         const OUString& rCurrencySymbol, bool bUseThousandSep ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
     sal_Unicode cZeroChar = getCurrZeroChar();
 
     // check if digits and separators will fit into fixed buffer or allocate
-    size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
+    size_t nGuess = ImplGetNumberStringLengthGuess( aLocaleDataItem, nDecimals );
     OUStringBuffer aNumBuf(int(nGuess + 16));
     OUStringBuffer aBuf(int(rCurrencySymbol.getLength() + nGuess + 20 ));
 
@@ -1642,15 +1457,15 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
 double LocaleDataWrapper::stringToDouble( const OUString& rString, bool bUseGroupSep,
         rtl_math_ConversionStatus* pStatus, sal_Int32* pParseEnd ) const
 {
-    const sal_Unicode cGroupSep = (bUseGroupSep ? getNumThousandSep()[0] : 0);
+    const sal_Unicode cGroupSep = (bUseGroupSep ? aLocaleDataItem.thousandSeparator[0] : 0);
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     sal_Int32 nParseEnd = 0;
-    double fValue = rtl::math::stringToDouble( rString, getNumDecimalSep()[0], cGroupSep, &eStatus, &nParseEnd);
-    bool bTryAlt = (nParseEnd < rString.getLength() && !getNumDecimalSepAlt().isEmpty() &&
-            rString[nParseEnd] == getNumDecimalSepAlt().toChar());
+    double fValue = rtl::math::stringToDouble( rString, aLocaleDataItem.decimalSeparator[0], cGroupSep, &eStatus, &nParseEnd);
+    bool bTryAlt = (nParseEnd < rString.getLength() && !aLocaleDataItem.decimalSeparatorAlternative.isEmpty() &&
+            rString[nParseEnd] == aLocaleDataItem.decimalSeparatorAlternative.toChar());
     // Try re-parsing with alternative if that was the reason to stop.
     if (bTryAlt)
-        fValue = rtl::math::stringToDouble( rString, getNumDecimalSepAlt().toChar(), cGroupSep, &eStatus, &nParseEnd);
+        fValue = rtl::math::stringToDouble( rString, aLocaleDataItem.decimalSeparatorAlternative.toChar(), cGroupSep, &eStatus, &nParseEnd);
     if (pStatus)
         *pStatus = eStatus;
     if (pParseEnd)
@@ -1661,15 +1476,15 @@ double LocaleDataWrapper::stringToDouble( const OUString& rString, bool bUseGrou
 double LocaleDataWrapper::stringToDouble( const sal_Unicode* pBegin, const sal_Unicode* pEnd, bool bUseGroupSep,
         rtl_math_ConversionStatus* pStatus, const sal_Unicode** ppParseEnd ) const
 {
-    const sal_Unicode cGroupSep = (bUseGroupSep ? getNumThousandSep()[0] : 0);
+    const sal_Unicode cGroupSep = (bUseGroupSep ? aLocaleDataItem.thousandSeparator[0] : 0);
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     const sal_Unicode* pParseEnd = nullptr;
-    double fValue = rtl_math_uStringToDouble( pBegin, pEnd, getNumDecimalSep()[0], cGroupSep, &eStatus, &pParseEnd);
-    bool bTryAlt = (pParseEnd < pEnd && !getNumDecimalSepAlt().isEmpty() &&
-            *pParseEnd == getNumDecimalSepAlt().toChar());
+    double fValue = rtl_math_uStringToDouble( pBegin, pEnd, aLocaleDataItem.decimalSeparator[0], cGroupSep, &eStatus, &pParseEnd);
+    bool bTryAlt = (pParseEnd < pEnd && !aLocaleDataItem.decimalSeparatorAlternative.isEmpty() &&
+            *pParseEnd == aLocaleDataItem.decimalSeparatorAlternative.toChar());
     // Try re-parsing with alternative if that was the reason to stop.
     if (bTryAlt)
-        fValue = rtl_math_uStringToDouble( pBegin, pEnd, getNumDecimalSepAlt().toChar(), cGroupSep, &eStatus, &pParseEnd);
+        fValue = rtl_math_uStringToDouble( pBegin, pEnd, aLocaleDataItem.decimalSeparatorAlternative.toChar(), cGroupSep, &eStatus, &pParseEnd);
     if (pStatus)
         *pStatus = eStatus;
     if (ppParseEnd)
@@ -1687,7 +1502,6 @@ LanguageTag LocaleDataWrapper::getLoadedLanguageTag() const
 
 OUString LocaleDataWrapper::appendLocaleInfo(const OUString& rDebugMsg) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
     OUStringBuffer aDebugMsg(rDebugMsg);
     aDebugMsg.append('\n');
     aDebugMsg.append(maLanguageTag.getBcp47());
@@ -1763,60 +1577,41 @@ css::uno::Sequence< css::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() 
 
 css::uno::Sequence< OUString > LocaleDataWrapper::getDateAcceptancePatterns() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
-
-    if (aDateAcceptancePatterns.hasElements())
-        return aDateAcceptancePatterns;
-
-    aGuard.changeReadToWrite();
-
-    try
-    {
-        const_cast<LocaleDataWrapper*>(this)->aDateAcceptancePatterns =
-            xLD->getDateAcceptancePatterns( getMyLocale() );
-        return aDateAcceptancePatterns;
-    }
-    catch (const Exception&)
-    {
-        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getDateAcceptancePatterns" );
-    }
-    return css::uno::Sequence< OUString >(0);
+    return aDateAcceptancePatterns;
 }
 
 // --- Override layer --------------------------------------------------------
 
-void LocaleDataWrapper::setDateAcceptancePatterns(
-        const css::uno::Sequence< OUString > & rPatterns )
+void LocaleDataWrapper::loadDateAcceptancePatterns(
+        const std::vector<OUString> & rPatterns )
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::Write );
-
-    if (!aDateAcceptancePatterns.hasElements() || !rPatterns.hasElements())
+    if (!aDateAcceptancePatterns.hasElements() || rPatterns.empty())
     {
         try
         {
-            aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( getMyLocale() );
+            aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( maLanguageTag.getLocale() );
         }
         catch (const Exception&)
         {
             TOOLS_WARN_EXCEPTION( "unotools.i18n", "setDateAcceptancePatterns" );
         }
-        if (!rPatterns.hasElements())
+        if (rPatterns.empty())
             return;     // just a reset
         if (!aDateAcceptancePatterns.hasElements())
         {
-            aDateAcceptancePatterns = rPatterns;
+            aDateAcceptancePatterns = comphelper::containerToSequence(rPatterns);
             return;
         }
     }
 
     // Never overwrite the locale's full date pattern! The first.
     if (aDateAcceptancePatterns[0] == rPatterns[0])
-        aDateAcceptancePatterns = rPatterns;    // sane
+        aDateAcceptancePatterns = comphelper::containerToSequence(rPatterns);    // sane
     else
     {
         // Copy existing full date pattern and append the sequence passed.
         /* TODO: could check for duplicates and shrink target sequence */
-        Sequence< OUString > aTmp( rPatterns.getLength() + 1 );
+        Sequence< OUString > aTmp( rPatterns.size() + 1 );
         aTmp[0] = aDateAcceptancePatterns[0];
         std::copy(rPatterns.begin(), rPatterns.end(), std::next(aTmp.begin()));
         aDateAcceptancePatterns = aTmp;

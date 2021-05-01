@@ -218,7 +218,6 @@ SwCalc::SwCalc( SwDoc& rD )
     , m_aErrExpr( OUString(), SwSbxValue(), nullptr )
     , m_nCommandPos(0)
     , m_rDoc( rD )
-    , m_pLocaleDataWrapper( m_aSysLocale.GetLocaleDataPtr() )
     , m_pCharClass( &GetAppCharClass() )
     , m_nListPor( 0 )
     , m_bHasNumber( false )
@@ -228,16 +227,15 @@ SwCalc::SwCalc( SwDoc& rD )
 {
     m_aErrExpr.aStr = "~C_ERR~";
     LanguageType eLang = GetDocAppScriptLang( m_rDoc );
+    LanguageTag aLanguageTag( eLang );
 
-    if( eLang != m_pLocaleDataWrapper->getLanguageTag().getLanguageType() ||
-        eLang != m_pCharClass->getLanguageTag().getLanguageType() )
+    if( eLang != m_pCharClass->getLanguageTag().getLanguageType() )
     {
-        LanguageTag aLanguageTag( eLang );
         m_pCharClass = new CharClass( ::comphelper::getProcessComponentContext(), aLanguageTag );
-        m_pLocaleDataWrapper = new LocaleDataWrapper( aLanguageTag );
     }
+    m_xLocaleDataWrapper.reset(new LocaleDataWrapper( aLanguageTag ));
 
-    m_sCurrSym = comphelper::string::strip(m_pLocaleDataWrapper->getCurrSymbol(), ' ');
+    m_sCurrSym = comphelper::string::strip(m_xLocaleDataWrapper->getCurrSymbol(), ' ');
     m_sCurrSym  = m_pCharClass->lowercase( m_sCurrSym );
 
     static char const
@@ -349,8 +347,6 @@ SwCalc::SwCalc( SwDoc& rD )
 
 SwCalc::~SwCalc() COVERITY_NOEXCEPT_FALSE
 {
-    if( m_pLocaleDataWrapper != m_aSysLocale.GetLocaleDataPtr() )
-        delete m_pLocaleDataWrapper;
     if( m_pCharClass != &GetAppCharClass() )
         delete m_pCharClass;
 }
@@ -410,7 +406,7 @@ OUString SwCalc::GetStrResult( double nValue )
                         nValue,
                         rtl_math_StringFormat_Automatic,
                         nDecPlaces,
-                        m_pLocaleDataWrapper->getNumDecimalSep()[0],
+                        m_xLocaleDataWrapper->getNumDecimalSep()[0],
                         true ));
     return aRetStr;
 }
@@ -532,7 +528,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
             OUString sResult;
             double nNumber = DBL_MAX;
 
-            LanguageType nLang = m_pLocaleDataWrapper->getLanguageTag().getLanguageType();
+            LanguageType nLang = m_xLocaleDataWrapper->getLanguageTag().getLanguageType();
             if(pMgr->GetColumnCnt( sSourceName, sTableName, sColumnName,
                                     nTmpRec, nLang, sResult, &nNumber ))
             {
@@ -1376,7 +1372,7 @@ bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
                          double& rVal )
 {
     const SvtSysLocale aSysLocale;
-    return lcl_Str2Double( rCommand, rCommandPos, rVal, aSysLocale.GetLocaleDataPtr() );
+    return lcl_Str2Double( rCommand, rCommandPos, rVal, &aSysLocale.GetLocaleData() );
 }
 
 bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
@@ -1394,7 +1390,7 @@ bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
     }
 
     bool const bRet = lcl_Str2Double(rCommand, rCommandPos, rVal,
-                                     pLclD ? pLclD.get() : aSysLocale.GetLocaleDataPtr());
+                                     pLclD ? pLclD.get() : &aSysLocale.GetLocaleData());
 
     return bRet;
 }

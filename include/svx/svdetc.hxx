@@ -182,7 +182,6 @@ public:
 class SVXCORE_DLLPUBLIC SdrGlobalData
 {
     const SvtSysLocale*         pSysLocale;     // follows always locale settings
-    const LocaleDataWrapper*    pLocaleData;    // follows always SysLocale
 public:
     std::vector<Link<SdrObjCreatorParams, SdrObject*>>
                         aUserMakeObjHdl;

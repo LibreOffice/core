@@ -1003,7 +1003,7 @@ const LocaleDataWrapper* ScGlobal::getLocaleDataPtr()
         xSysLocale,
         "ScGlobal::getLocaleDataPtr() called before ScGlobal::Init()");
 
-    return xSysLocale->GetLocaleDataPtr();
+    return &xSysLocale->GetLocaleData();
 }
 
 const CharClass* ScGlobal::getCharClassPtr()

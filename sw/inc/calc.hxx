@@ -202,7 +202,7 @@ class SwCalc
 
     SwDoc&      m_rDoc;
     SvtSysLocale m_aSysLocale;
-    const LocaleDataWrapper* m_pLocaleDataWrapper;
+    std::unique_ptr<LocaleDataWrapper> m_xLocaleDataWrapper;
     CharClass*  m_pCharClass;
 
     sal_uInt16      m_nListPor;
