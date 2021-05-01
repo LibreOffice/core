@@ -3797,11 +3797,11 @@
      <table:table-cell table:style-name="ce46"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce19" table:formula="of:=LEGACY.CHITEST([.F1:.F11];[.G1:.G11])" office:value-type="float" office:value="1.16440189336067E-029" calcext:value-type="float">
-      <text:p>1.16440189336067E-29</text:p>
+     <table:table-cell table:style-name="ce19" table:formula="of:=LEGACY.CHITEST([.F1:.F11];[.G1:.G11])" office:value-type="float" office:value="1.16440189336065E-029" calcext:value-type="float">
+      <text:p>1.16440189336065E-29</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" office:value-type="float" office:value="1.16440189336067E-029" calcext:value-type="float">
-      <text:p>1.16440189336067E-29</text:p>
+     <table:table-cell table:style-name="ce19" office:value-type="float" office:value="1.16440189336065E-029" calcext:value-type="float">
+      <text:p>1.16440189336065E-29</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A2];15)=ORG.LIBREOFFICE.ROUNDSIG([.B2];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -3860,11 +3860,11 @@
      <table:table-cell table:style-name="ce46"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce66" table:formula="of:=LEGACY.CHITEST([.F1:.F11];[.H1:.H11])" office:value-type="float" office:value="0.000000000903490480352966" calcext:value-type="float">
-      <text:p>9.03490480352966E-010</text:p>
+     <table:table-cell table:style-name="ce66" table:formula="of:=LEGACY.CHITEST([.F1:.F11];[.H1:.H11])" office:value-type="float" office:value="0.000000000903490480352969" calcext:value-type="float">
+      <text:p>9.03490480352969E-010</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" office:value-type="float" office:value="0.000000000903490480352966" calcext:value-type="float">
-      <text:p>9.03490480352966E-10</text:p>
+     <table:table-cell table:style-name="ce19" office:value-type="float" office:value="0.000000000903490480352969" calcext:value-type="float">
+      <text:p>9.03490480352969E-10</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A3];15)=ORG.LIBREOFFICE.ROUNDSIG([.B3];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
