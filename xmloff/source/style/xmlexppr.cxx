@@ -267,8 +267,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 const beans::GetDirectPropertyTolerantResult *pResults = aResults.getConstArray();
                 FilterPropertyInfoList_Impl::iterator aPropIter(aPropInfos.begin());
                 XMLPropertyState aNewProperty( -1 );
-                size_t i = 0;
-                while (nResultCount > 0 && i < aPropInfos.size())
+                while (nResultCount > 0 && aPropIter != aPropInfos.end())
                 {
                     if (pResults->Name == aPropIter->GetApiName())
                     {
@@ -284,7 +283,6 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                         --nResultCount;
                     }
                     ++aPropIter;
-                    ++i;
                 }
             }
         }
