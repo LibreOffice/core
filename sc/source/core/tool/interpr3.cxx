@@ -84,32 +84,36 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
 
     //  find enclosing interval
 
+    KahanSum fkAx = fAx;
+    KahanSum fkBx = fBx;
     double fAy = rFunction.GetValue(fAx);
     double fBy = rFunction.GetValue(fBx);
-    double fTemp;
+    KahanSum fTemp;
     unsigned short nCount;
     for (nCount = 0; nCount < 1000 && !lcl_HasChangeOfSign(fAy,fBy); nCount++)
     {
         if (std::abs(fAy) <= std::abs(fBy))
         {
-            fTemp = fAx;
-            fAx += 2.0 * (fAx - fBx);
-            if (fAx < 0.0)
-                fAx = 0.0;
-            fBx = fTemp;
+            fTemp = fkAx;
+            fkAx += (fkAx - fkBx) * 2.0;
+            if (fkAx < 0.0)
+                fkAx = 0.0;
+            fkBx = fTemp;
             fBy = fAy;
-            fAy = rFunction.GetValue(fAx);
+            fAy = rFunction.GetValue(fkAx.get());
         }
         else
         {
-            fTemp = fBx;
-            fBx += 2.0 * (fBx - fAx);
-            fAx = fTemp;
+            fTemp = fkBx;
+            fkBx += (fkBx - fkAx) * 2.0;
+            fkAx = fTemp;
             fAy = fBy;
-            fBy = rFunction.GetValue(fBx);
+            fBy = rFunction.GetValue(fkBx.get());
         }
     }
 
+    fAx = fkAx.get();
+    fBx = fkBx.get();
     if (fAy == 0.0)
         return fAx;
     if (fBy == 0.0)
