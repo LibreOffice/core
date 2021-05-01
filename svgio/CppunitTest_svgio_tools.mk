@@ -22,14 +22,22 @@ $(eval $(call gb_CppunitTest_use_externals,svgio_tools,\
     boost_headers \
 ))
 
+$(eval $(call gb_CppunitTest_use_library_objects,svgio_tools,\
+    svgio \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,svgio_tools,\
     basegfx \
     drawinglayer \
+    comphelper \
+    cppu \
+    cppuhelper \
     sal \
     sax \
     svt \
+    tk \
+    tl \
     vcl \
-    svgio \
 ))
 
 # vim: set noet sw=4 ts=4:
