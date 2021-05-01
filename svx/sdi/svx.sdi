@@ -2933,25 +2933,6 @@ SfxBoolItem FirstRecord SID_FM_RECORD_FIRST
 ]
 
 
-SvxBlinkItem Flash SID_ATTR_FLASH
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Format;
-]
-
-
 SfxObjectItem FmExplorerController SID_FM_FMEXPLORER_CONTROL
 
 [
