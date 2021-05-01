@@ -102,7 +102,7 @@ public:
                                             }
                                             else if ( eLastAnyLanguage != eLang )
                                             {
-                                                pAny->setLanguageTag( rLanguageTag );
+                                                pAny.reset( new LocaleDataWrapper( m_xContext, rLanguageTag ) );
                                                 eLastAnyLanguage = eLang;
                                             }
                                             pCurrent = pAny.get();

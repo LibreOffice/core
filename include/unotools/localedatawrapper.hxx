@@ -30,7 +30,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/math.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <unotools/readwritemutexguard.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <memory>
 #include <map>
@@ -58,6 +57,10 @@ enum class MeasurementSystem {
     US
 };
 
+/**
+ * This class can be accessed without locking because we load
+ * all of the data in the constructor.
+ */
 class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 {
     static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
@@ -81,54 +84,44 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     sal_uInt16              nCurrPositiveFormat;
     sal_uInt16              nCurrNegativeFormat;
     sal_uInt16              nCurrDigits;
-    bool                    bLocaleDataItemValid;
-    bool                    bReservedWordValid;
-    bool                    bSecondaryCalendarValid;
-    mutable ::utl::ReadWriteMutex   aMutex;
-    struct SAL_DLLPRIVATE Locale_Compare
-    {
-        bool operator()(const css::lang::Locale& rLocale1, const css::lang::Locale& rLocale2) const;
-    };
-    mutable std::map<css::lang::Locale, css::i18n::LocaleDataItem2, Locale_Compare> maDataItemCache;
 
-                                // whenever Locale changes
-    void                invalidateData();
+    void                loadData();
+    void                loadDateAcceptancePatterns(const std::vector<OUString> & rOverrideDateAcceptancePatterns);
 
-    void                getOneLocaleItemImpl( sal_Int16 nItem );
     const OUString&     getOneLocaleItem( sal_Int16 nItem ) const;
 
-    void                getOneReservedWordImpl( sal_Int16 nWord );
     const OUString&     getOneReservedWord( sal_Int16 nWord ) const;
 
-    void                getCurrSymbolsImpl();
-    void                getCurrFormatsImpl();
+    void                loadCurrencyFormats();
 
     void                scanCurrFormatImpl( const OUString& rCode,
                             sal_Int32 nStart, sal_Int32& nSign,
                             sal_Int32& nPar, sal_Int32& nNum,
                             sal_Int32& nBlank, sal_Int32& nSym ) const;
 
-    void                getDateOrdersImpl();
+    void                loadDateOrders();
     DateOrder           scanDateOrderImpl( const OUString& rCode ) const;
-
-    void                getDefaultCalendarImpl();
-    void                getSecondaryCalendarImpl();
 
     void                ImplAddFormatNum( rtl::OUStringBuffer& rBuf,
                             sal_Int64 nNumber, sal_uInt16 nDecimals,
                             bool bUseThousandSep, bool bTrailingZeros ) const;
 
-    void                getDigitGroupingImpl();
+    void                loadDigitGrouping();
 
 public:
-                                LocaleDataWrapper(
-                                    const css::uno::Reference< css::uno::XComponentContext > & rxContext,
-                                    const LanguageTag& rLanguageTag
-                                    );
-                                LocaleDataWrapper(
-                                    const LanguageTag& rLanguageTag
-                                    );
-                                ~LocaleDataWrapper();
+    LocaleDataWrapper(
+        const css::uno::Reference< css::uno::XComponentContext > & rxContext,
+        const LanguageTag& rLanguageTag
+        );
+    /**
+        @param rOverrideDateAcceptancePatterns Override locale's date acceptance patterns.
+            An empty sequence resets the patterns to the locale's pattern sequence.
+     */
+    LocaleDataWrapper(
+        const LanguageTag& rLanguageTag,
+        const std::vector<OUString> & rOverrideDateAcceptancePatterns = {}
+        );
+    ~LocaleDataWrapper();
 
     /** Get the service factory, meant to be able to create a CalendarWrapper
         from a LocaleDataWrapper. Note that the service factory may be
@@ -138,9 +131,6 @@ public:
     const css::uno::Reference<
         css::uno::XComponentContext > & getComponentContext()
         const { return m_xContext; }
-
-    /// set a new Locale to request
-            void                setLanguageTag( const LanguageTag& rLanguageTag );
 
     /// get current requested Locale
     const   LanguageTag&        getLanguageTag() const;
@@ -163,10 +153,6 @@ public:
     css::uno::Sequence< css::lang::Locale > getAllInstalledLocaleNames() const;
     css::uno::Sequence< OUString > getDateAcceptancePatterns() const;
 
-    /** Override locale's date acceptance patterns.
-        An empty sequence resets the patterns to the locale's pattern sequence.
-     */
-    void setDateAcceptancePatterns( const css::uno::Sequence< OUString > & rPatterns );
 
     /// same as the wrapper implementation but static
     static css::uno::Sequence< css::lang::Locale > getInstalledLocaleNames();

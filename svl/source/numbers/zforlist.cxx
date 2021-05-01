@@ -4035,7 +4035,9 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     {
         LanguageType eLang = LanguageTag::convertToLanguageType( rLocale, false);
         rInstalledLocales.insert( eLang);
-        pLocaleData->setLanguageTag( LanguageTag( rLocale) );
+        pLocaleData.reset(new LocaleDataWrapper(
+            ::comphelper::getProcessComponentContext(),
+            LanguageTag(rLocale) ));
         Sequence< Currency2 > aCurrSeq = pLocaleData->getAllCurrencies();
         sal_Int32 nCurrencyCount = aCurrSeq.getLength();
         Currency2 const * const pCurrencies = aCurrSeq.getConstArray();
