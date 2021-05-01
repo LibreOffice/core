@@ -571,7 +571,7 @@ void OutlinerView::AdjustHeight( tools::Long nDY )
     pEditView->MoveParagraphs( nDY );
 }
 
-tools::Rectangle const & OutlinerView::GetVisArea() const
+tools::Rectangle OutlinerView::GetVisArea() const
 {
     return pEditView->GetVisArea();
 }

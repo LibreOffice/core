@@ -389,12 +389,9 @@ void EditView::SetVisArea( const tools::Rectangle& rRect )
     pImpEditView->SetVisDocStartPos( rRect.TopLeft() );
 }
 
-const tools::Rectangle& EditView::GetVisArea() const
+tools::Rectangle EditView::GetVisArea() const
 {
-    // Change return value to Rectangle in next incompatible build !!!
-    static tools::Rectangle aRect;
-    aRect = pImpEditView->GetVisDocArea();
-    return aRect;
+    return pImpEditView->GetVisDocArea();
 }
 
 void EditView::SetOutputArea( const tools::Rectangle& rRect )
