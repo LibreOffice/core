@@ -484,6 +484,8 @@ public:
     void testFormulaWizardSubformula();
 
     void testMixData();
+    void testMixDataAsLinkTdf116413();
+    void testMixDataWithFormulaTdf116413();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -902,6 +904,8 @@ public:
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testFormulaWizardSubformula);
     CPPUNIT_TEST(testMixData);
+    CPPUNIT_TEST(testMixDataAsLinkTdf116413);
+    CPPUNIT_TEST(testMixDataWithFormulaTdf116413);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);

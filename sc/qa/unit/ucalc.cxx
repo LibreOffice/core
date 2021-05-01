@@ -11952,6 +11952,368 @@ void Test::testMixData()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testMixDataAsLinkTdf116413()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+
+    const SCTAB nTab = 0;
+    m_pDoc->InsertTab(nTab, "Test");
+
+    // Scenario 1: Past "As Link" and "Add" operation (as described in tdf#116413)
+    m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
+    m_pDoc->SetValue(0, 1, nTab, 1000.0); // A2
+
+    // Copy A1 to the clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0, 0, nTab, 0, 0, nTab), &aClipDoc); // A1
+
+    ScRange aDestRange(0, 1, nTab, 0, 1, nTab);
+    // Copy A2 to the mix document (for arithmetic paste).
+    ScDocument aMixDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, aDestRange, &aMixDoc); // A2
+
+    // Paste A1 to A2 "As Link" and perform addition.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SetMarkArea(aDestRange);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc, true, true);
+
+    m_pDoc->MixDocument(aDestRange, ScPasteFunc::ADD, false, aMixDoc);
+
+    OUString aFormula;
+
+    // Test precondition
+    CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(0, 1, nTab)); // A2
+    m_pDoc->GetFormula(0, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+
+    // Change A1 from 1.0 to 2.0 (auto calculation is triggered)
+    m_pDoc->SetValue(0, 0, nTab, 2.0); // A1
+
+    // Without the fix in place, this would have failed with
+    // - Expected: =1002
+    // - Actual  : =1001
+    CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(0, 1, nTab)); // A2
+    m_pDoc->GetFormula(0, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+
+    // Clear everything and start over.
+    clearSheet(m_pDoc, nTab);
+    clearSheet(&aClipDoc, nTab);
+    clearSheet(&aMixDoc, nTab);
+
+    // Scenario 2: Like Scenario 1, but with a range (3 columns)
+    m_pDoc->InsertTab(nTab, "Test");
+
+    m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
+    m_pDoc->SetValue(0, 1, nTab, 1000.0); // A2
+    m_pDoc->SetValue(1, 0, nTab, 1.0); // B1
+    m_pDoc->SetValue(1, 1, nTab, 1000.0); // B2
+    m_pDoc->SetValue(2, 0, nTab, 1.0); // C1
+    m_pDoc->SetValue(2, 1, nTab, 1000.0); // C2
+
+    // Copy A1:C1 to the clip document.
+    copyToClip(m_pDoc, ScRange(0, 0, nTab, 2, 0, nTab), &aClipDoc); // A1:C1
+
+    aDestRange = ScRange(0, 1, nTab, 2, 1, nTab);
+    // Copy A2:C2 to the mix document (for arithmetic paste).
+    copyToClip(m_pDoc, aDestRange, &aMixDoc); // A2:C2
+
+    // Paste A1:C1 to A2:C2 "As Link" and perform addition.
+    aMark = ScMarkData(m_pDoc->GetSheetLimits());
+    aMark.SetMarkArea(aDestRange);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc, true, true);
+
+    m_pDoc->MixDocument(aDestRange, ScPasteFunc::ADD, false, aMixDoc);
+
+    // Test precondition
+    CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(0, 1, nTab)); // A2
+    m_pDoc->GetFormula(0, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 1, nTab)); // B2
+    m_pDoc->GetFormula(1, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$B$1)"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(2, 1, nTab)); // C2
+    m_pDoc->GetFormula(2, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$C$1)"), aFormula);
+
+    // Change A1:C1 from 1.0 to 2.0 (auto calculation is triggered)
+    m_pDoc->SetValue(0, 0, nTab, 2.0); // A1
+    m_pDoc->SetValue(1, 0, nTab, 2.0); // B1
+    m_pDoc->SetValue(2, 0, nTab, 2.0); // C1
+
+    // Without the fix in place, this would have failed with
+    // - Expected: =1002
+    // - Actual  : =1001
+    CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(0, 1, nTab)); // A2
+    m_pDoc->GetFormula(0, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 1, nTab)); // B2
+    m_pDoc->GetFormula(1, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$B$1)"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(2, 1, nTab)); // C2
+    m_pDoc->GetFormula(2, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$C$1)"), aFormula);
+
+    // Scenario 3: Like Scenario 2, but transposed
+    m_pDoc->InsertTab(nTab, "Test");
+
+    m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
+    m_pDoc->SetValue(1, 0, nTab, 1000.0); // B1
+    m_pDoc->SetValue(0, 1, nTab, 1.0); // A2
+    m_pDoc->SetValue(1, 1, nTab, 1000.0); // B2
+    m_pDoc->SetValue(0, 2, nTab, 1.0); // A3
+    m_pDoc->SetValue(1, 2, nTab, 1000.0); // B3
+
+    // Copy A1:A3 to the clip document.
+    copyToClip(m_pDoc, ScRange(0, 0, nTab, 0, 2, nTab), &aClipDoc); // A1:A3
+
+    aDestRange = ScRange(1, 0, nTab, 1, 2, nTab);
+    // Copy B1:B3 to the mix document (for arithmetic paste).
+    copyToClip(m_pDoc, aDestRange, &aMixDoc); // B1:B3
+
+    // Paste A1:A3 to B1:B3 "As Link" and perform addition.
+    aMark = ScMarkData(m_pDoc->GetSheetLimits());
+    aMark.SetMarkArea(aDestRange);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc, true, true);
+
+    m_pDoc->MixDocument(aDestRange, ScPasteFunc::ADD, false, aMixDoc);
+
+    // Test precondition
+    CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 0, nTab)); // B1
+    m_pDoc->GetFormula(1, 0, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 1, nTab)); // B2
+    m_pDoc->GetFormula(1, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$2)"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 2, nTab)); // B3
+    m_pDoc->GetFormula(1, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$3)"), aFormula);
+
+    // Change A1:C1 from 1.0 to 2.0 (auto calculation is triggered)
+    m_pDoc->SetValue(0, 0, nTab, 2.0); // A1
+    m_pDoc->SetValue(0, 1, nTab, 2.0); // A2
+    m_pDoc->SetValue(0, 2, nTab, 2.0); // A3
+
+    // Without the fix in place, this would have failed with
+    // - Expected: =1002
+    // - Actual  : =1001
+    CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 0, nTab)); // B1
+    m_pDoc->GetFormula(1, 0, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 1, nTab)); // B2
+    m_pDoc->GetFormula(1, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$2)"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 2, nTab)); // B3
+    m_pDoc->GetFormula(1, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$3)"), aFormula);
+
+    m_pDoc->DeleteTab(nTab);
+}
+
+void Test::testMixDataWithFormulaTdf116413()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+
+    const SCTAB nTab = 0;
+    m_pDoc->InsertTab(nTab, "Test");
+
+    // Scenario 1: There is already a reference in destination cell
+    m_pDoc->InsertTab(nTab, "Test");
+
+    m_pDoc->SetValue(0, 0, nTab, 100.0); // A1
+    m_pDoc->SetValue(0, 1, nTab, 1.0); // A2
+    m_pDoc->SetString(0, 2, nTab, "=A2"); // A3
+
+    // Copy A1 to the clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0, 0, nTab, 0, 0, nTab), &aClipDoc); // A1
+
+    ScRange aDestRange(0, 2, nTab, 0, 2, nTab);
+    ScDocument aMixDoc(SCDOCMODE_CLIP);
+    // Copy A3 to the mix document (for arithmetic paste).
+    copyToClip(m_pDoc, aDestRange, &aMixDoc); // A3
+
+    // Paste A1 to A3 and perform addition.
+    pasteFromClip(m_pDoc, aDestRange, &aClipDoc);
+    m_pDoc->MixDocument(aDestRange, ScPasteFunc::ADD, false, aMixDoc);
+
+    OUString aFormula;
+
+    // Test precondition
+    CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(0, 2, nTab)); // A3
+    m_pDoc->GetFormula(0, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(A2)+100"), aFormula);
+
+    // Change A2 from 1.0 to 2.0 (auto calculation is triggered)
+    m_pDoc->SetValue(0, 1, nTab, 2.0); // A2
+
+    // Without the fix in place, this would have failed with
+    // - Expected: =102
+    // - Actual  : =101
+    CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(0, 2, nTab)); // A3
+    m_pDoc->GetFormula(0, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(A2)+100"), aFormula);
+
+    // Clear everything and start over.
+    clearSheet(m_pDoc, nTab);
+    clearSheet(&aClipDoc, nTab);
+    clearSheet(&aMixDoc, nTab);
+
+    // Scenario 2: Similar to scenario 1, but a range of 4 cells and 2 of them have references
+    m_pDoc->InsertTab(nTab, "Test");
+
+    m_pDoc->SetValue(0, 0, nTab, 100.0); // A1
+    m_pDoc->SetValue(0, 1, nTab, 1.0); // A2
+    m_pDoc->SetValue(0, 2, nTab, 1000.0); // A3
+
+    m_pDoc->SetValue(1, 0, nTab, 100.0); // B1
+    m_pDoc->SetValue(1, 1, nTab, 1.0); // B2
+    m_pDoc->SetString(1, 2, nTab, "=B2"); // B3
+
+    m_pDoc->SetValue(2, 0, nTab, 100.0); // C1
+    m_pDoc->SetValue(2, 1, nTab, 1.0); // C2
+    m_pDoc->SetString(2, 2, nTab, "=C2"); // C3
+
+    m_pDoc->SetValue(3, 0, nTab, 100.0); // D1
+    m_pDoc->SetValue(3, 1, nTab, 1.0); // D2
+    m_pDoc->SetValue(3, 2, nTab, 1000.0); // D3
+
+    // Copy A1:D1 to the clip document.
+    copyToClip(m_pDoc, ScRange(0, 0, nTab, 3, 0, nTab), &aClipDoc); // A1:D1
+
+    aDestRange = ScRange(0, 2, nTab, 3, 2, nTab);
+    // Copy A3:D3 to the mix document (for arithmetic paste).
+    copyToClip(m_pDoc, aDestRange, &aMixDoc); // A3:D3
+
+    // Paste A1:D1 to A3:D3 and perform addition.
+    pasteFromClip(m_pDoc, aDestRange, &aClipDoc);
+    m_pDoc->MixDocument(aDestRange, ScPasteFunc::ADD, false, aMixDoc);
+
+    // Test precondition
+    CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(0, 2, nTab)); // A3
+    m_pDoc->GetFormula(0, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(1, 2, nTab)); // B3
+    m_pDoc->GetFormula(1, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(2, 2, nTab)); // C3
+    m_pDoc->GetFormula(2, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(C2)+100"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(3, 2, nTab)); // D3
+    m_pDoc->GetFormula(3, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+
+    // Change A2:D2 from 1.0 to 2.0 (auto calculation is triggered)
+    m_pDoc->SetValue(0, 1, nTab, 2.0); // A2
+    m_pDoc->SetValue(1, 1, nTab, 2.0); // B2
+    m_pDoc->SetValue(2, 1, nTab, 2.0); // C2
+    m_pDoc->SetValue(3, 1, nTab, 2.0); // D2
+
+    CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(0, 2, nTab)); // A3
+    m_pDoc->GetFormula(0, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+
+    // Without the fix in place, this would have failed with
+    // - Expected: =102
+    // - Actual  : =101
+    CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(1, 2, nTab)); // B3
+    m_pDoc->GetFormula(1, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(2, 2, nTab)); // C3
+    m_pDoc->GetFormula(2, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(C2)+100"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(3, 2, nTab)); // D3
+    m_pDoc->GetFormula(3, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+
+    // Scenario 3: Similar to scenario 2, but transposed
+    m_pDoc->InsertTab(nTab, "Test");
+
+    m_pDoc->SetValue(0, 0, nTab, 100.0); // A1
+    m_pDoc->SetValue(1, 0, nTab, 1.0); // B1
+    m_pDoc->SetValue(2, 0, nTab, 1000.0); // C1
+
+    m_pDoc->SetValue( 0, 1, nTab, 100.0); // A2
+    m_pDoc->SetValue( 1, 1, nTab, 1.0); // B2
+    m_pDoc->SetString(2, 1, nTab, "=B2"); // C2
+
+    m_pDoc->SetValue( 0, 2, nTab, 100.0); // A3
+    m_pDoc->SetValue( 1, 2, nTab, 1.0); // B3
+    m_pDoc->SetString(2, 2, nTab, "=B3"); // C3
+
+    m_pDoc->SetValue(0, 3, nTab, 100.0); // A4
+    m_pDoc->SetValue(1, 3, nTab, 1.0); // B4
+    m_pDoc->SetValue(2, 3, nTab, 1000.0); // C4
+
+    // Copy A1:A4 to the clip document.
+    copyToClip(m_pDoc, ScRange(0, 0, nTab, 0, 3, nTab), &aClipDoc); // A1:A4
+
+    aDestRange = ScRange(2, 0, nTab, 2, 3, nTab);
+    // Copy C1:C4 to the mix document (for arithmetic paste).
+    copyToClip(m_pDoc, aDestRange, &aMixDoc); // C1:C4
+
+    // Paste A1:A4 to C1:C4 and perform addition.
+    pasteFromClip(m_pDoc, aDestRange, &aClipDoc);
+    m_pDoc->MixDocument(aDestRange, ScPasteFunc::ADD, false, aMixDoc);
+
+    // Test precondition
+    CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 0, nTab)); // C1
+    m_pDoc->GetFormula(2, 0, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(2, 1, nTab)); // C2
+    m_pDoc->GetFormula(2, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(2, 2, nTab)); // C3
+    m_pDoc->GetFormula(2, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B3)+100"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 3, nTab)); // C4
+    m_pDoc->GetFormula(2, 3, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+
+    // Change B1:B4 from 1.0 to 2.0 (auto calculation is triggered)
+    m_pDoc->SetValue(1, 0, nTab, 2.0); // B1
+    m_pDoc->SetValue(1, 1, nTab, 2.0); // B2
+    m_pDoc->SetValue(1, 2, nTab, 2.0); // B3
+    m_pDoc->SetValue(1, 3, nTab, 2.0); // B4
+
+    CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 0, nTab)); // C1
+    m_pDoc->GetFormula(2, 0, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+
+    // Without the fix in place, this would have failed with
+    // - Expected: =102
+    // - Actual  : =101
+    CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(2, 1, nTab)); // C2
+    m_pDoc->GetFormula(2, 1, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(2, 2, nTab)); // C3
+    m_pDoc->GetFormula(2, 2, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(B3)+100"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 3, nTab)); // C4
+    m_pDoc->GetFormula(2, 3, nTab, aFormula);
+    CPPUNIT_ASSERT_EQUAL(EMPTY_OUSTRING, aFormula);
+
+    m_pDoc->DeleteTab(nTab);
+}
+
 void Test::testFormulaWizardSubformula()
 {
     m_pDoc->InsertTab(0, "Test");
