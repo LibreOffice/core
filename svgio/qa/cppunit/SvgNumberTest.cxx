@@ -20,15 +20,30 @@ namespace
 {
 class TestNumber : public CppUnit::TestFixture
 {
-    void test();
+    void testSetting();
+    void testSolve();
 
 public:
     CPPUNIT_TEST_SUITE(TestNumber);
-    CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testSetting);
+    CPPUNIT_TEST(testSolve);
     CPPUNIT_TEST_SUITE_END();
 };
 
-void TestNumber::test()
+class TestInfoProvider : public svgio::svgreader::InfoProvider
+{
+public:
+    basegfx::B2DRange getCurrentViewPort() const override
+    {
+        return basegfx::B2DRange(0.0, 0.0, 0.0, 0.0);
+    }
+
+    double getCurrentFontSizeInherited() const override { return 12.0; }
+
+    double getCurrentXHeightInherited() const override { return 5.0; }
+};
+
+void TestNumber::testSetting()
 {
     {
         svgio::svgreader::SvgNumber aNumber;
@@ -47,6 +62,28 @@ void TestNumber::test()
         CPPUNIT_ASSERT_EQUAL(svgio::svgreader::SvgUnit::cm, aNumber.getUnit());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(1.01, aNumber.getNumber(), 1e-8);
         CPPUNIT_ASSERT_EQUAL(true, aNumber.isSet());
+    }
+}
+
+void TestNumber::testSolve()
+{
+    {
+        svgio::svgreader::SvgNumber aNumber(1.01);
+        TestInfoProvider aInfoProvider;
+        double aSolvedNumber = aNumber.solve(aInfoProvider);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.01, aSolvedNumber, 1e-8);
+    }
+    {
+        svgio::svgreader::SvgNumber aNumber(1.0, svgio::svgreader::SvgUnit::pt);
+        TestInfoProvider aInfoProvider;
+        double aSolvedNumber = aNumber.solve(aInfoProvider);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.333, aSolvedNumber, 1e-3);
+    }
+    {
+        svgio::svgreader::SvgNumber aNumber(2.54, svgio::svgreader::SvgUnit::cm);
+        TestInfoProvider aInfoProvider;
+        double aSolvedNumber = aNumber.solve(aInfoProvider);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(96.0, aSolvedNumber, 1e-3);
     }
 }
 
