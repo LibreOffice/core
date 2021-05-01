@@ -2915,7 +2915,7 @@ void ScInterpreter::ScKurt()
 void ScInterpreter::ScHarMean()
 {
     short nParamCount = GetByte();
-    double nVal = 0.0;
+    KahanSum nVal = 0.0;
     double nValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3028,7 +3028,7 @@ void ScInterpreter::ScHarMean()
         }
     }
     if (nGlobalError == FormulaError::NONE)
-        PushDouble( nValCount / nVal );
+        PushDouble( nValCount / nVal.get() );
     else
         PushError( nGlobalError);
 }
@@ -3036,7 +3036,7 @@ void ScInterpreter::ScHarMean()
 void ScInterpreter::ScGeoMean()
 {
     short nParamCount = GetByte();
-    double nVal = 0.0;
+    KahanSum nVal = 0.0;
     double nValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3200,7 +3200,7 @@ void ScInterpreter::ScGeoMean()
         }
     }
     if (nGlobalError == FormulaError::NONE)
-        PushDouble(exp(nVal / nValCount));
+        PushDouble(exp(nVal.get() / nValCount));
     else
         PushError( nGlobalError);
 }
@@ -3846,10 +3846,10 @@ void ScInterpreter::ScTrimMean()
             nIndex--;
         nIndex /= 2;
         OSL_ENSURE(nIndex < nSize, "ScTrimMean: wrong index");
-        double fSum = 0.0;
+        KahanSum fSum = 0.0;
         for (SCSIZE i = nIndex; i < nSize-nIndex; i++)
             fSum += aSortArray[i];
-        PushDouble(fSum/static_cast<double>(nSize-2*nIndex));
+        PushDouble(fSum.get()/static_cast<double>(nSize-2*nIndex));
     }
 }
 
@@ -4285,7 +4285,7 @@ void ScInterpreter::ScAveDev()
         return;
     sal_uInt16 SaveSP = sp;
     double nMiddle = 0.0;
-    double rVal = 0.0;
+    KahanSum rVal = 0.0;
     double rValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -4369,7 +4369,7 @@ void ScInterpreter::ScAveDev()
         PushError( nGlobalError);
         return;
     }
-    nMiddle = rVal / rValCount;
+    nMiddle = rVal.get() / rValCount;
     sp = SaveSP;
     rVal = 0.0;
     nParam = nParamCount;
@@ -4398,7 +4398,7 @@ void ScInterpreter::ScAveDev()
                 ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
-                    rVal += (fabs(nCellVal - nMiddle));
+                    rVal += fabs(nCellVal - nMiddle);
                     while (aValIter.GetNext(nCellVal, nErr))
                          rVal += fabs(nCellVal - nMiddle);
                 }
@@ -4433,7 +4433,7 @@ void ScInterpreter::ScAveDev()
             default : SetError(FormulaError::IllegalParameter); break;
         }
     }
-    PushDouble(rVal / rValCount);
+    PushDouble(rVal.get() / rValCount);
 }
 
 void ScInterpreter::ScDevSq()
@@ -4477,8 +4477,8 @@ void ScInterpreter::ScProbability()
             PushNA();
         else
         {
-            double fSum = 0.0;
-            double fRes = 0.0;
+            KahanSum fSum = 0.0;
+            KahanSum fRes = 0.0;
             bool bStop = false;
             double fP, fW;
             for ( SCSIZE i = 0; i < nC1 && !bStop; i++ )
@@ -4502,10 +4502,10 @@ void ScInterpreter::ScProbability()
                         SetError( FormulaError::IllegalArgument);
                 }
             }
-            if (bStop || fabs(fSum -1.0) > 1.0E-7)
+            if (bStop || std::abs((fSum -1.0).get()) > 1.0E-7)
                 PushNoValue();
             else
-                PushDouble(fRes);
+                PushDouble(fRes.get());
         }
     }
 }
@@ -4667,8 +4667,8 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
     }
     // #i78250# numerical stability improved
     double fCount           = 0.0;
-    double fSumX            = 0.0;
-    double fSumY            = 0.0;
+    KahanSum fSumX          = 0.0;
+    KahanSum fSumY          = 0.0;
 
     for (SCSIZE i = 0; i < nC1; i++)
     {
@@ -4676,10 +4676,8 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         {
             if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
             {
-                double fValX = pMat1->GetDouble(i,j);
-                double fValY = pMat2->GetDouble(i,j);
-                fSumX += fValX;
-                fSumY += fValY;
+                fSumX += pMat1->GetDouble(i,j);
+                fSumY += pMat2->GetDouble(i,j);
                 fCount++;
             }
         }
@@ -4688,10 +4686,10 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         PushNoValue();
     else
     {
-        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
-        double fMeanX = fSumX / fCount;
-        double fMeanY = fSumY / fCount;
+        KahanSum fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+        KahanSum fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+        double fMeanX = fSumX.get() / fCount;
+        double fMeanY = fSumY.get() / fCount;
         for (SCSIZE i = 0; i < nC1; i++)
         {
             for (SCSIZE j = 0; j < nR1; j++)
@@ -4710,9 +4708,9 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         else
         {
             if ( bSlope )
-                PushDouble( fSumDeltaXDeltaY / fSumSqrDeltaX);
+                PushDouble( fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get());
             else
-                PushDouble( fMeanY - fSumDeltaXDeltaY / fSumSqrDeltaX * fMeanX);
+                PushDouble( fMeanY - fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get() * fMeanX);
         }
     }
 }
@@ -4750,8 +4748,8 @@ void ScInterpreter::ScForecast()
     double fVal = GetDouble();
     // #i78250# numerical stability improved
     double fCount           = 0.0;
-    double fSumX            = 0.0;
-    double fSumY            = 0.0;
+    KahanSum fSumX          = 0.0;
+    KahanSum fSumY          = 0.0;
 
     for (SCSIZE i = 0; i < nC1; i++)
     {
@@ -4759,10 +4757,8 @@ void ScInterpreter::ScForecast()
         {
             if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
             {
-                double fValX = pMat1->GetDouble(i,j);
-                double fValY = pMat2->GetDouble(i,j);
-                fSumX += fValX;
-                fSumY += fValY;
+                fSumX += pMat1->GetDouble(i,j);
+                fSumY += pMat2->GetDouble(i,j);
                 fCount++;
             }
         }
@@ -4771,10 +4767,10 @@ void ScInterpreter::ScForecast()
         PushNoValue();
     else
     {
-        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
-        double fMeanX = fSumX / fCount;
-        double fMeanY = fSumY / fCount;
+        KahanSum fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+        KahanSum fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+        double fMeanX = fSumX.get() / fCount;
+        double fMeanY = fSumY.get() / fCount;
         for (SCSIZE i = 0; i < nC1; i++)
         {
             for (SCSIZE j = 0; j < nR1; j++)
@@ -4791,7 +4787,7 @@ void ScInterpreter::ScForecast()
         if (fSumSqrDeltaX == 0.0)
             PushError( FormulaError::DivisionByZero);
         else
-            PushDouble( fMeanY + fSumDeltaXDeltaY / fSumSqrDeltaX * (fVal - fMeanX));
+            PushDouble( fMeanY + fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get() * (fVal - fMeanX));
     }
 }
 
