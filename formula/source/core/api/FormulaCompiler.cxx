@@ -2464,7 +2464,7 @@ void FormulaCompiler::AppendDouble( OUStringBuffer& rBuffer, double fVal ) const
         ::rtl::math::doubleToUStringBuffer( rBuffer, fVal,
                 rtl_math_StringFormat_Automatic,
                 rtl_math_DecimalPlaces_Max,
-                aSysLocale.GetLocaleDataPtr()->getNumDecimalSep()[0],
+                aSysLocale.GetLocaleData().getNumDecimalSep()[0],
                 true );
     }
 }

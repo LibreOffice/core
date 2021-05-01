@@ -57,13 +57,14 @@ public:
     virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
 private:
-    void                        setDateAcceptancePatternsConfig();
+    std::vector<OUString>       getDateAcceptancePatternsConfig();
 };
 
 SvtSysLocale_Impl::SvtSysLocale_Impl()
 {
-    pLocaleData.reset(new LocaleDataWrapper( aSysLocaleOptions.GetRealLanguageTag() ));
-    setDateAcceptancePatternsConfig();
+    pLocaleData.reset(new LocaleDataWrapper(
+        aSysLocaleOptions.GetRealLanguageTag(),
+        getDateAcceptancePatternsConfig() ));
 
     // listen for further changes
     aSysLocaleOptions.AddListener( this );
@@ -83,36 +84,33 @@ CharClass* SvtSysLocale_Impl::GetCharClass()
 
 void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints nHint )
 {
+    if ( !(nHint & ConfigurationHints::Locale) &&
+         !(nHint & ConfigurationHints::DatePatterns) )
+        return;
+
     MutexGuard aGuard( SvtSysLocale::GetMutex() );
 
+    const LanguageTag& rLanguageTag = aSysLocaleOptions.GetRealLanguageTag();
     if ( nHint & ConfigurationHints::Locale )
     {
-        const LanguageTag& rLanguageTag = aSysLocaleOptions.GetRealLanguageTag();
-        pLocaleData->setLanguageTag( rLanguageTag );
         GetCharClass()->setLanguageTag( rLanguageTag );
     }
-    if ( nHint & ConfigurationHints::DatePatterns )
-    {
-        setDateAcceptancePatternsConfig();
-    }
+    pLocaleData.reset(new LocaleDataWrapper(rLanguageTag, getDateAcceptancePatternsConfig()));
 }
 
-void SvtSysLocale_Impl::setDateAcceptancePatternsConfig()
+std::vector<OUString> SvtSysLocale_Impl::getDateAcceptancePatternsConfig()
 {
     OUString aStr( aSysLocaleOptions.GetDatePatternsConfigString());
     if (aStr.isEmpty())
-        pLocaleData->setDateAcceptancePatterns( uno::Sequence<OUString>());     // reset
-    else
+        return {};  // reset
+    ::std::vector< OUString > aVec;
+    for (sal_Int32 nIndex = 0; nIndex >= 0; /*nop*/)
     {
-        ::std::vector< OUString > aVec;
-        for (sal_Int32 nIndex = 0; nIndex >= 0; /*nop*/)
-        {
-            OUString aTok( aStr.getToken( 0, ';', nIndex));
-            if (!aTok.isEmpty())
-                aVec.push_back( aTok);
-        }
-        pLocaleData->setDateAcceptancePatterns( comphelper::containerToSequence(aVec) );
+        OUString aTok( aStr.getToken( 0, ';', nIndex));
+        if (!aTok.isEmpty())
+            aVec.push_back( aTok);
     }
+    return aVec;
 }
 
 SvtSysLocale::SvtSysLocale()
@@ -146,11 +144,6 @@ Mutex& SvtSysLocale::GetMutex()
 const LocaleDataWrapper& SvtSysLocale::GetLocaleData() const
 {
     return *(pImpl->pLocaleData);
-}
-
-const LocaleDataWrapper* SvtSysLocale::GetLocaleDataPtr() const
-{
-    return pImpl->pLocaleData.get();
 }
 
 const CharClass& SvtSysLocale::GetCharClass() const

@@ -221,12 +221,11 @@ static LanguageType GetDocLanguage( const SvxAutoCorrDoc& rDoc, sal_Int32 nPos )
 
 static LocaleDataWrapper& GetLocaleDataWrapper( LanguageType nLang )
 {
-    static LocaleDataWrapper aLclDtWrp( GetAppLang() );
+    static std::unique_ptr<LocaleDataWrapper> xLclDtWrp;
     LanguageTag aLcl( nLang );
-    const LanguageTag& rLcl = aLclDtWrp.getLoadedLanguageTag();
-    if( aLcl != rLcl )
-        aLclDtWrp.setLanguageTag( aLcl );
-    return aLclDtWrp;
+    if (!xLclDtWrp || xLclDtWrp->getLoadedLanguageTag() != aLcl)
+        xLclDtWrp.reset(new LocaleDataWrapper(aLcl));
+    return *xLclDtWrp;
 }
 static TransliterationWrapper& GetIgnoreTranslWrapper()
 {

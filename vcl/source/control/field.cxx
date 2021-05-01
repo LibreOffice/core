@@ -456,9 +456,17 @@ LocaleDataWrapper& FormatterBase::ImplGetLocaleDataWrapper() const
 {
     if ( !mpLocaleDataWrapper )
     {
-        const_cast<FormatterBase*>(this)->mpLocaleDataWrapper.reset( new LocaleDataWrapper( GetLanguageTag() ) );
+        mpLocaleDataWrapper.reset( new LocaleDataWrapper( GetLanguageTag() ) );
     }
     return *mpLocaleDataWrapper;
+}
+
+/** reset the LocaleDataWrapper when the language tag changes */
+void FormatterBase::ImplResetLocaleDataWrapper() const
+{
+    // just get rid of, the next time it is requested, it will get loaded with the right
+    // language tag
+    mpLocaleDataWrapper.reset();
 }
 
 const LocaleDataWrapper& FormatterBase::GetLocaleDataWrapper() const
@@ -873,7 +881,7 @@ void NumericBox::DataChanged( const DataChangedEvent& rDCEvt )
     {
         OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
-        ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
+        ImplResetLocaleDataWrapper();
         OUString sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
@@ -1492,7 +1500,7 @@ void MetricField::DataChanged( const DataChangedEvent& rDCEvt )
     {
         OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
-        ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
+        ImplResetLocaleDataWrapper();
         OUString sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
@@ -1605,7 +1613,7 @@ void MetricBox::DataChanged( const DataChangedEvent& rDCEvt )
     {
         OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
-        ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
+        ImplResetLocaleDataWrapper();
         OUString sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
@@ -1760,7 +1768,7 @@ void CurrencyField::DataChanged( const DataChangedEvent& rDCEvt )
     {
         OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
-        ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
+        ImplResetLocaleDataWrapper();
         OUString sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
@@ -1843,7 +1851,7 @@ void CurrencyBox::DataChanged( const DataChangedEvent& rDCEvt )
     {
         OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
-        ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
+        ImplResetLocaleDataWrapper();
         OUString sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );

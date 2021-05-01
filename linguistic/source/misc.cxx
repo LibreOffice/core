@@ -74,11 +74,10 @@ osl::Mutex &    GetLinguMutex()
 
 const LocaleDataWrapper & GetLocaleDataWrapper( LanguageType nLang )
 {
-    static LocaleDataWrapper aLclDtaWrp( SvtSysLocale().GetLanguageTag() );
-
-    if (nLang != aLclDtaWrp.getLoadedLanguageTag().getLanguageType())
-        aLclDtaWrp.setLanguageTag( LanguageTag( nLang ) );
-    return aLclDtaWrp;
+    static std::unique_ptr<LocaleDataWrapper> xLclDtaWrp;
+    if (!xLclDtaWrp || xLclDtaWrp->getLoadedLanguageTag().getLanguageType() != nLang)
+        xLclDtaWrp.reset(new LocaleDataWrapper(LanguageTag( nLang )));
+    return *xLclDtaWrp;
 }
 
 LanguageType LinguLocaleToLanguage( const css::lang::Locale& rLocale )

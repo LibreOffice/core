@@ -171,7 +171,7 @@ void SdOptionsGeneric::Store()
 bool SdOptionsGeneric::isMetricSystem()
 {
     SvtSysLocale aSysLocale;
-    MeasurementSystem eSys = aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum();
+    MeasurementSystem eSys = aSysLocale.GetLocaleData().getMeasurementSystemEnum();
 
     return ( eSys == MeasurementSystem::Metric );
 }

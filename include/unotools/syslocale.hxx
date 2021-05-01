@@ -61,7 +61,6 @@ public:
         INSTANCE OF SvtSysLocale LIVES!
         It is a faster access but be sure what you do!
      */
-            const LocaleDataWrapper*    GetLocaleDataPtr() const;
             const CharClass*            GetCharClassPtr() const;
             SvtSysLocaleOptions&        GetOptions() const;
             const LanguageTag&          GetLanguageTag() const;

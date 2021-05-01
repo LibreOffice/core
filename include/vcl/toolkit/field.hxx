@@ -40,7 +40,7 @@ class VCL_DLLPUBLIC FormatterBase
 {
 private:
     VclPtr<Edit>            mpField;
-    std::unique_ptr<LocaleDataWrapper>
+    mutable std::unique_ptr<LocaleDataWrapper>
                             mpLocaleDataWrapper;
     bool                    mbReformat;
     bool                    mbStrictFormat;
@@ -54,6 +54,8 @@ protected:
     void                    SetEmptyFieldValueData( bool bValue ) { mbEmptyFieldValue = bValue; }
 
     SAL_DLLPRIVATE LocaleDataWrapper& ImplGetLocaleDataWrapper() const;
+    /** reset the LocaleDataWrapper when the language tag changes */
+    SAL_DLLPRIVATE void ImplResetLocaleDataWrapper() const;
 
     Edit*                   GetField() const            { return mpField; }
     void                    ClearField() { mpField.clear(); }

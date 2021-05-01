@@ -55,18 +55,17 @@ class OnDemandLocaleDataWrapper
             SvtSysLocale        aSysLocale;
             LanguageType        eCurrentLanguage;
             LanguageType        eLastAnyLanguage;
-    const   LocaleDataWrapper*  pSystem;
     std::unique_ptr<const LocaleDataWrapper>  pEnglish;
     std::unique_ptr<      LocaleDataWrapper>  pAny;
-    const   LocaleDataWrapper*  pCurrent;
+            int                 nCurrent; // 0 == system, 1 == english, 2 == any
             bool                bInitialized;
 
 public:
                                 OnDemandLocaleDataWrapper()
                                     : eLastAnyLanguage( LANGUAGE_DONTKNOW )
+                                    , nCurrent(0)
                                     , bInitialized(false)
                                     {
-                                        pCurrent = pSystem = aSysLocale.GetLocaleDataPtr();
                                         eCurrentLanguage = LANGUAGE_SYSTEM;
                                     }
 
@@ -86,12 +85,12 @@ public:
                                     {
                                         LanguageType eLang = rLanguageTag.getLanguageType( false);
                                         if ( eLang == LANGUAGE_SYSTEM )
-                                                pCurrent = pSystem;
+                                            nCurrent = 0;
                                         else if ( eLang == LANGUAGE_ENGLISH_US )
                                         {
-                                                if ( !pEnglish )
-                                                    pEnglish.reset( new LocaleDataWrapper( m_xContext, rLanguageTag ) );
-                                                pCurrent = pEnglish.get();
+                                            if ( !pEnglish )
+                                                pEnglish.reset( new LocaleDataWrapper( m_xContext, rLanguageTag ) );
+                                            nCurrent = 1;
                                         }
                                         else
                                         {
@@ -102,10 +101,10 @@ public:
                                             }
                                             else if ( eLastAnyLanguage != eLang )
                                             {
-                                                pAny->setLanguageTag( rLanguageTag );
+                                                pAny.reset( new LocaleDataWrapper( m_xContext, rLanguageTag ) );
                                                 eLastAnyLanguage = eLang;
                                             }
-                                            pCurrent = pAny.get();
+                                            nCurrent = 2;
                                         }
                                         eCurrentLanguage = eLang;
                                     }
@@ -113,9 +112,18 @@ public:
             LanguageType        getCurrentLanguage() const
                                     { return eCurrentLanguage; }
 
-    const   LocaleDataWrapper*  get() const         { return pCurrent; }
+    const   LocaleDataWrapper*  get() const
+    {
+        switch (nCurrent)
+        {
+            case 0: return &aSysLocale.GetLocaleData();
+            case 1: return pEnglish.get();
+            case 2: return pAny.get();
+            default: assert(false); return nullptr;
+        }
+    }
     const   LocaleDataWrapper*  operator->() const  { return get(); }
-    const   LocaleDataWrapper&  operator*() const   { return *pCurrent; }
+    const   LocaleDataWrapper&  operator*() const   { return *get(); }
 };
 
 /** Load a calendar only if it's needed. Keep calendar for "en-US" locale

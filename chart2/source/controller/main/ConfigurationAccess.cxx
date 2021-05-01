@@ -33,8 +33,7 @@ namespace
 bool lcl_IsMetric()
 {
     SvtSysLocale aSysLocale;
-    const LocaleDataWrapper* pLocWrapper = aSysLocale.GetLocaleDataPtr();
-    MeasurementSystem eSys = pLocWrapper->getMeasurementSystemEnum();
+    MeasurementSystem eSys = aSysLocale.GetLocaleData().getMeasurementSystemEnum();
 
     return ( eSys == MeasurementSystem::Metric );
 }

@@ -973,7 +973,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
     pMgr->CloseAll( false );
 
     SvtSysLocale aSysLocale;
-    const LocaleDataWrapper* pLclData = aSysLocale.GetLocaleDataPtr();
+    const LocaleDataWrapper* pLclData = &aSysLocale.GetLocaleData();
     const LanguageType nLang = pLclData->getLanguageTag().getLanguageType();
     bool bCanFill = pMgr->FillCalcWithMergeData( m_rDoc.GetNumberFormatter(), nLang, aCalc );
 #endif

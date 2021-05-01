@@ -60,7 +60,6 @@ using namespace ::com::sun::star;
 // Global data of the DrawingEngine
 SdrGlobalData::SdrGlobalData()
     : pSysLocale(nullptr)
-    , pLocaleData(nullptr)
 {
     if (!utl::ConfigManager::IsFuzzing())
     {
@@ -77,9 +76,7 @@ const SvtSysLocale*         SdrGlobalData::GetSysLocale()
 }
 const LocaleDataWrapper*    SdrGlobalData::GetLocaleData()
 {
-    if ( !pLocaleData )
-        pLocaleData = GetSysLocale()->GetLocaleDataPtr();
-    return pLocaleData;
+    return &GetSysLocale()->GetLocaleData();
 }
 
 namespace {

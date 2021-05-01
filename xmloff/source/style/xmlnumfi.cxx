@@ -365,12 +365,10 @@ void SvXMLNumImpData::RemoveVolatileFormats()
 
 const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
 {
-    if ( !pLocaleData )
+    if ( !pLocaleData || pLocaleData->getLanguageTag() != LanguageTag(nLang) )
         pLocaleData = std::make_unique<LocaleDataWrapper>(
                pFormatter ? pFormatter->GetComponentContext() : m_xContext,
             LanguageTag( nLang ) );
-    else
-        pLocaleData->setLanguageTag( LanguageTag( nLang ) );
     return *pLocaleData;
 }
 

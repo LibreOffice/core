@@ -4804,7 +4804,7 @@ void appendDouble( const sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, dou
         rtl::math::doubleToUStringBuffer(
             rBuf, fVal,
             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-            aSysLocale.GetLocaleDataPtr()->getNumDecimalSep()[0], true);
+            aSysLocale.GetLocaleData().getNumDecimalSep()[0], true);
     }
 }
 
