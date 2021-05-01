@@ -1,0 +1,19 @@
+Add newline at end of KRHangulMapping.h
+
+without this, GCC 11 -E -fdirectives-only produces this:
+
+extern const uint16_t ksc5601_hangul_to_unicode[2350];# 38 "/workdir/UnpackedTarball/zxing/core/src/textcodec/KRHangulMapping.cpp" 2
+
+and compiling that fails with:
+
+KRHangulMapping.h:38:55: error: stray '#' in program
+
+--- zxing/core/src/textcodec/KRHangulMapping.h.orig	2021-05-01 18:00:09.011795242 +0200
++++ zxing/core/src/textcodec/KRHangulMapping.h	2021-05-01 18:00:16.774788294 +0200
+@@ -35,4 +35,4 @@
+ #include <cstdint>
+ 
+ /* Table including ksc5601 hangul to unicode */
+-extern const uint16_t ksc5601_hangul_to_unicode[2350];
+\ No newline at end of file
++extern const uint16_t ksc5601_hangul_to_unicode[2350];

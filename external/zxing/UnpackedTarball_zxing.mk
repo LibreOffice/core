@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,zxing,$(ZXING_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,zxing,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,zxing, \
+	external/zxing/zxing_newline.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
