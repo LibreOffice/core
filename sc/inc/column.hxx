@@ -720,6 +720,15 @@ public:
     SCSIZE      GetPatternCount() const;
     SCSIZE      GetPatternCount( SCROW nRow1, SCROW nRow2 ) const;
     bool        ReservePatternCount( SCSIZE nReserve );
+
+    // MixDataHandler needs to call AttachNewFormulaCells() (tdf#116413),
+    // but the method AttachNewFormulaCells() is private.
+    // Since MixDataHandler is in the anonymous namespace a friend declaration is not possible.
+    // Thus, this public method especially for this case is added as a workaround.
+    void AccessAttachNewFormulaCellsForMixDataHandler(const sc::CellStoreType::position_type& aPos,
+                                                      size_t nLength,
+                                                      std::vector<SCROW>& rNewSharedRows);
+
 private:
 
     sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow, std::vector<SCROW>& rNewSharedRows,
