@@ -90,7 +90,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
     unsigned short nCount;
     for (nCount = 0; nCount < 1000 && !lcl_HasChangeOfSign(fAy,fBy); nCount++)
     {
-        if (fabs(fAy) <= fabs(fBy))
+        if (std::abs(fAy) <= std::abs(fBy))
         {
             fTemp = fAx;
             fAx += 2.0 * (fAx - fBx);
@@ -130,8 +130,8 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
     double fSx = 0.5 * (fAx + fBx); // potential next point
     bool bHasToInterpolate = true;
     nCount = 0;
-    while ( nCount < 500 && fabs(fRy) > fYEps &&
-            (fBx-fAx) > ::std::max( fabs(fAx), fabs(fBx)) * fXEps )
+    while ( nCount < 500 && std::abs(fRy) > fYEps &&
+            (fBx-fAx) > ::std::max( std::abs(fAx), std::abs(fBx)) * fXEps )
     {
         if (bHasToInterpolate)
         {
@@ -166,7 +166,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
         }
         // if last iteration brought too small advance, then do bisection next
         // time, for safety
-        bHasToInterpolate = bHasToInterpolate && (fabs(fRy) * 2.0 <= fabs(fQy));
+        bHasToInterpolate = bHasToInterpolate && (std::abs(fRy) * 2.0 <= std::abs(fQy));
         ++nCount;
     }
     return fRx;
@@ -212,7 +212,7 @@ double ScInterpreter::taylor(const double* pPolynom, sal_uInt16 nMax, double x)
 double ScInterpreter::gauss(double x)
 {
 
-    double xAbs = fabs(x);
+    double xAbs = std::abs(x);
     sal_uInt16 xShort = static_cast<sal_uInt16>(::rtl::math::approxFloor(xAbs));
     double nVal = 0.0;
     if (xShort == 0)
@@ -268,7 +268,7 @@ double ScInterpreter::gaussinv(double x)
 
     q=x-0.5;
 
-    if(fabs(q)<=.425)
+    if(std::abs(q)<=.425)
     {
         t=0.180625-q*q;
 
@@ -598,7 +598,7 @@ double ScInterpreter::GetGamma(double fZ)
 
     if (fZ >= -0.5) // shift to x>=1, might overflow
     {
-        double fLogTest = lcl_GetLogGammaHelper(fZ+2) - rtl::math::log1p(fZ) - log( fabs(fZ));
+        double fLogTest = lcl_GetLogGammaHelper(fZ+2) - rtl::math::log1p(fZ) - log( std::abs(fZ));
         if (fLogTest >= fLogDblMax)
         {
             SetError( FormulaError::IllegalFPOperation);
@@ -608,7 +608,7 @@ double ScInterpreter::GetGamma(double fZ)
     }
     // fZ<-0.5
     // Use Euler's reflection formula: gamma(x)= pi/ ( gamma(1-x)*sin(pi*x) )
-    double fLogDivisor = lcl_GetLogGammaHelper(1-fZ) + log( fabs( ::rtl::math::sin( F_PI*fZ)));
+    double fLogDivisor = lcl_GetLogGammaHelper(1-fZ) + log( std::abs( ::rtl::math::sin( F_PI*fZ)));
     if (fLogDivisor - fLogPi >= fLogDblMax)     // underflow
         return 0.0;
 
@@ -969,7 +969,7 @@ static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
         {
             fnorm = 1.0/b2;
             cfnew = a2*fnorm;
-            bfinished = (fabs(cf-cfnew) < fabs(cf)*fMachEps);
+            bfinished = (std::abs(cf-cfnew) < std::abs(cf)*fMachEps);
         }
         cf = cfnew;
         rm += 1.0;
@@ -1147,7 +1147,7 @@ void ScInterpreter::ScGauss()
 void ScInterpreter::ScFisher()
 {
     double fVal = GetDouble();
-    if (fabs(fVal) >= 1.0)
+    if (std::abs(fVal) >= 1.0)
         PushIllegalArgument();
     else
         PushDouble( ::rtl::math::atanh( fVal));
@@ -2628,7 +2628,7 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
             PushNoValue();
             return false;
         }
-        fT = fabs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
+        fT = std::abs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
         double c = fS1/(fS1+fS2);
     //  GetTDist is calculated via GetBetaDist and also works with non-integral
     // degrees of freedom. The result matches Excel
@@ -2639,7 +2639,7 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
         //  according to Bronstein-Semendjajew
         double fS1 = (fSumSqr1 - fSum1*fSum1/fCount1) / (fCount1 - 1.0);    // Variance
         double fS2 = (fSumSqr2 - fSum2*fSum2/fCount2) / (fCount2 - 1.0);
-        fT = fabs( fSum1/fCount1 - fSum2/fCount2 ) /
+        fT = std::abs( fSum1/fCount1 - fSum2/fCount2 ) /
              sqrt( (fCount1-1.0)*fS1 + (fCount2-1.0)*fS2 ) *
              sqrt( fCount1*fCount2*(fCount1+fCount2-2)/(fCount1+fCount2) );
         fF = fCount1 + fCount2 - 2;
@@ -2708,7 +2708,7 @@ void ScInterpreter::ScTTest()
             PushError(FormulaError::DivisionByZero);
             return;
         }
-        fT = fabs(fSumD) * sqrt((fCount-1.0) / fDivider);
+        fT = std::abs(fSumD) * sqrt((fCount-1.0) / fDivider);
         fF = fCount - 1.0;
     }
     else if (fTyp == 2.0)
@@ -4379,14 +4379,14 @@ void ScInterpreter::ScAveDev()
         switch (GetStackType())
         {
             case svDouble :
-                rVal += fabs(GetDouble() - nMiddle);
+                rVal += std::abs(GetDouble() - nMiddle);
                 break;
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
                 ScRefCellValue aCell(mrDoc, aAdr);
                 if (aCell.hasNumeric())
-                    rVal += fabs(GetCellValue(aAdr, aCell) - nMiddle);
+                    rVal += std::abs(GetCellValue(aAdr, aCell) - nMiddle);
             }
             break;
             case svDoubleRef :
@@ -4398,9 +4398,9 @@ void ScInterpreter::ScAveDev()
                 ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
-                    rVal += fabs(nCellVal - nMiddle);
+                    rVal += std::abs(nCellVal - nMiddle);
                     while (aValIter.GetNext(nCellVal, nErr))
-                         rVal += fabs(nCellVal - nMiddle);
+                         rVal += std::abs(nCellVal - nMiddle);
                 }
             }
             break;
@@ -4416,7 +4416,7 @@ void ScInterpreter::ScAveDev()
                     {
                         for (SCSIZE nElem = 0; nElem < nCount; nElem++)
                         {
-                            rVal += fabs(pMat->GetDouble(nElem) - nMiddle);
+                            rVal += std::abs(pMat->GetDouble(nElem) - nMiddle);
                         }
                     }
                     else
@@ -4424,7 +4424,7 @@ void ScInterpreter::ScAveDev()
                         for (SCSIZE nElem = 0; nElem < nCount; nElem++)
                         {
                             if (!pMat->IsStringOrEmpty(nElem))
-                                rVal += fabs(pMat->GetDouble(nElem) - nMiddle);
+                                rVal += std::abs(pMat->GetDouble(nElem) - nMiddle);
                         }
                     }
                 }
