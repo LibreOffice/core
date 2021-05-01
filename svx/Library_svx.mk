@@ -21,6 +21,10 @@ $(eval $(call gb_Library_Library,svx))
 
 $(eval $(call gb_Library_set_componentfile,svx,svx/util/svx))
 
+ifneq ($(ENABLE_WASM_STRIP),TRUE)
+$(eval $(call gb_Library_set_componentfile,svx,svx/util/svx.extended))
+endif
+
 $(eval $(call gb_Library_set_include,svx,\
     -I$(SRCDIR)/svx/inc \
     -I$(SRCDIR)/svx/source/inc \
@@ -78,6 +82,12 @@ $(eval $(call gb_Library_use_externals,svx,\
 	icuuc \
 	icu_headers \
 ))
+
+ifneq ($(ENABLE_WASM_STRIP),TRUE)
+$(eval $(call gb_Library_add_exception_objects,svx,\
+    svx/source/unodraw/recoveryui \
+))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/AccessibleControlShape \
@@ -242,7 +252,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/tbxctrls/tbxdrctl \
     svx/source/tbxctrls/verttexttbxctrl \
     svx/source/uitest/uiobject \
-    svx/source/unodraw/recoveryui \
     svx/source/unodraw/unoctabl \
     svx/source/unodraw/UnoNamespaceMap \
     svx/source/unodraw/unopool \

@@ -70,7 +70,7 @@ MERGE_LIBRARY_LIST := \
 	sofficeapp \
 	sot \
 	spell \
-	$(if $(DISABLE_GUI),,spl) \
+	$(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP)),,spl) \
 	srtrs1 \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
 	svgio \
