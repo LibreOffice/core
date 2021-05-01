@@ -870,7 +870,7 @@ void ScContentTree::GetDrawNames( ScContentId nType )
     assert(pParent && "InsertContent without parent");
     // insert all of these in one go under pParent
     m_xTreeView->bulk_insert_for_each(aNames.size(), [this, &aNames](weld::TreeIter& rIter, int nIndex) {
-        m_xTreeView->set_text(rIter, aNames[nIndex]);
+        m_xTreeView->set_text(rIter, aNames[nIndex], 0);
         m_xTreeView->set_sensitive(rIter, true);
     }, pParent);
 }
