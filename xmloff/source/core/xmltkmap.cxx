@@ -20,7 +20,7 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 
 #include <unordered_map>
 #include <utility>
@@ -35,8 +35,8 @@ private:
         std::size_t operator()(const std::pair<sal_uInt16,OUString> &pair) const
         {
             std::size_t seed = 0;
-            boost::hash_combine(seed, pair.first);
-            boost::hash_combine(seed, pair.second.hashCode());
+            o3tl::hash_combine(seed, pair.first);
+            o3tl::hash_combine(seed, pair.second.hashCode());
             return seed;
         }
     };

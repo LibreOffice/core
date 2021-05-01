@@ -32,7 +32,7 @@
 
 #include <unordered_map>
 #include <vector>
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 
 // virtual resolution of the PDF OutputDev in dpi
 #define PDFI_OUTDEV_RESOLUTION 7200
@@ -81,12 +81,12 @@ namespace pdfi
         size_t operator()(const FontAttributes& rFont ) const
         {
             std::size_t seed = 0;
-            boost::hash_combine(seed, rFont.familyName.hashCode());
-            boost::hash_combine(seed, rFont.isBold);
-            boost::hash_combine(seed, rFont.isItalic);
-            boost::hash_combine(seed, rFont.isUnderline);
-            boost::hash_combine(seed, rFont.isOutline);
-            boost::hash_combine(seed, rFont.size);
+            o3tl::hash_combine(seed, rFont.familyName.hashCode());
+            o3tl::hash_combine(seed, rFont.isBold);
+            o3tl::hash_combine(seed, rFont.isItalic);
+            o3tl::hash_combine(seed, rFont.isUnderline);
+            o3tl::hash_combine(seed, rFont.isOutline);
+            o3tl::hash_combine(seed, rFont.size);
             return seed;
         }
     };
@@ -184,30 +184,30 @@ namespace pdfi
         size_t operator()(const GraphicsContext& rGC ) const
         {
             std::size_t seed = 0;
-            boost::hash_combine(seed, rGC.LineColor.Red);
-            boost::hash_combine(seed, rGC.LineColor.Green);
-            boost::hash_combine(seed, rGC.LineColor.Blue);
-            boost::hash_combine(seed, rGC.LineColor.Alpha);
-            boost::hash_combine(seed, rGC.FillColor.Red);
-            boost::hash_combine(seed, rGC.FillColor.Green);
-            boost::hash_combine(seed, rGC.FillColor.Blue);
-            boost::hash_combine(seed, rGC.FillColor.Alpha);
-            boost::hash_combine(seed, rGC.LineJoin);
-            boost::hash_combine(seed, rGC.LineCap);
-            boost::hash_combine(seed, rGC.BlendMode);
-            boost::hash_combine(seed, rGC.LineWidth);
-            boost::hash_combine(seed, rGC.Flatness);
-            boost::hash_combine(seed, rGC.MiterLimit);
-            boost::hash_combine(seed, rGC.DashArray.size());
-            boost::hash_combine(seed, rGC.FontId);
-            boost::hash_combine(seed, rGC.TextRenderMode);
-            boost::hash_combine(seed, rGC.Transformation.get( 0, 0 ));
-            boost::hash_combine(seed, rGC.Transformation.get( 1, 0 ));
-            boost::hash_combine(seed, rGC.Transformation.get( 0, 1 ));
-            boost::hash_combine(seed, rGC.Transformation.get( 1, 1 ));
-            boost::hash_combine(seed, rGC.Transformation.get( 0, 2 ));
-            boost::hash_combine(seed, rGC.Transformation.get( 1, 2 ));
-            boost::hash_combine(seed, rGC.Clip.count() ? rGC.Clip.getB2DPolygon(0).count() : 0);
+            o3tl::hash_combine(seed, rGC.LineColor.Red);
+            o3tl::hash_combine(seed, rGC.LineColor.Green);
+            o3tl::hash_combine(seed, rGC.LineColor.Blue);
+            o3tl::hash_combine(seed, rGC.LineColor.Alpha);
+            o3tl::hash_combine(seed, rGC.FillColor.Red);
+            o3tl::hash_combine(seed, rGC.FillColor.Green);
+            o3tl::hash_combine(seed, rGC.FillColor.Blue);
+            o3tl::hash_combine(seed, rGC.FillColor.Alpha);
+            o3tl::hash_combine(seed, rGC.LineJoin);
+            o3tl::hash_combine(seed, rGC.LineCap);
+            o3tl::hash_combine(seed, rGC.BlendMode);
+            o3tl::hash_combine(seed, rGC.LineWidth);
+            o3tl::hash_combine(seed, rGC.Flatness);
+            o3tl::hash_combine(seed, rGC.MiterLimit);
+            o3tl::hash_combine(seed, rGC.DashArray.size());
+            o3tl::hash_combine(seed, rGC.FontId);
+            o3tl::hash_combine(seed, rGC.TextRenderMode);
+            o3tl::hash_combine(seed, rGC.Transformation.get( 0, 0 ));
+            o3tl::hash_combine(seed, rGC.Transformation.get( 1, 0 ));
+            o3tl::hash_combine(seed, rGC.Transformation.get( 0, 1 ));
+            o3tl::hash_combine(seed, rGC.Transformation.get( 1, 1 ));
+            o3tl::hash_combine(seed, rGC.Transformation.get( 0, 2 ));
+            o3tl::hash_combine(seed, rGC.Transformation.get( 1, 2 ));
+            o3tl::hash_combine(seed, rGC.Clip.count() ? rGC.Clip.getB2DPolygon(0).count() : 0);
             return seed;
         }
     };

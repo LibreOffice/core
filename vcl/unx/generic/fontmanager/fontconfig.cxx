@@ -47,7 +47,7 @@ using namespace psp;
 
 #include <osl/process.h>
 
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 #include <utility>
 #include <algorithm>
 
@@ -86,11 +86,11 @@ template <> struct hash<FontOptionsKey>
     std::size_t operator()(const FontOptionsKey& k) const noexcept
     {
         std::size_t seed = k.m_sFamilyName.hashCode();
-        boost::hash_combine(seed, k.m_nFontSize);
-        boost::hash_combine(seed, k.m_eItalic);
-        boost::hash_combine(seed, k.m_eWeight);
-        boost::hash_combine(seed, k.m_eWidth);
-        boost::hash_combine(seed, k.m_ePitch);
+        o3tl::hash_combine(seed, k.m_nFontSize);
+        o3tl::hash_combine(seed, k.m_eItalic);
+        o3tl::hash_combine(seed, k.m_eWeight);
+        o3tl::hash_combine(seed, k.m_eWidth);
+        o3tl::hash_combine(seed, k.m_ePitch);
         return seed;
     }
 };

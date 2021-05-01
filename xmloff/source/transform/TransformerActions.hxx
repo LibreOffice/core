@@ -23,7 +23,7 @@
 #include <xmloff/namespacemap.hxx>
 #include "TransformerActionInit.hxx"
 #include "TransformerAction.hxx"
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 #include <unordered_map>
 
 struct NameKey_Impl
@@ -58,8 +58,8 @@ struct NameHash_Impl
 inline size_t NameHash_Impl::operator()( const NameKey_Impl& r ) const
 {
     std::size_t seed = 0;
-    boost::hash_combine(seed, r.m_nPrefix);
-    boost::hash_combine(seed, r.m_aLocalName.hashCode());
+    o3tl::hash_combine(seed, r.m_nPrefix);
+    o3tl::hash_combine(seed, r.m_aLocalName.hashCode());
     return seed;
 }
 
