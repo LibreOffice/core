@@ -236,7 +236,7 @@ namespace svgio::svgreader
                 }
 
                 const ::FontWeight nFontWeight(getVclFontWeight(rSvgStyleAttributes.getFontWeight()));
-                bool bItalic(FontStyle_italic == rSvgStyleAttributes.getFontStyle() || FontStyle_oblique == rSvgStyleAttributes.getFontStyle());
+                bool bItalic(FontStyle::italic == rSvgStyleAttributes.getFontStyle() || FontStyle::oblique == rSvgStyleAttributes.getFontStyle());
 
                 const drawinglayer::attribute::FontAttribute aFontAttribute(
                     aFontFamily,
@@ -327,23 +327,23 @@ namespace svgio::svgreader
                 TextAlign aTextAlign(rSvgStyleAttributes.getTextAlign());
 
                 // map TextAnchor to TextAlign, there seems not to be a difference
-                if(TextAnchor_notset != rSvgStyleAttributes.getTextAnchor())
+                if(TextAnchor::notset != rSvgStyleAttributes.getTextAnchor())
                 {
                     switch(rSvgStyleAttributes.getTextAnchor())
                     {
-                        case TextAnchor_start:
+                        case TextAnchor::start:
                         {
-                            aTextAlign = TextAlign_left;
+                            aTextAlign = TextAlign::left;
                             break;
                         }
-                        case TextAnchor_middle:
+                        case TextAnchor::middle:
                         {
-                            aTextAlign = TextAlign_center;
+                            aTextAlign = TextAlign::center;
                             break;
                         }
-                        case TextAnchor_end:
+                        case TextAnchor::end:
                         {
-                            aTextAlign = TextAlign_right;
+                            aTextAlign = TextAlign::right;
                             break;
                         }
                         default:
@@ -356,22 +356,22 @@ namespace svgio::svgreader
                 // apply TextAlign
                 switch(aTextAlign)
                 {
-                    case TextAlign_right:
+                    case TextAlign::right:
                     {
                         aPosition.setX(aPosition.getX() - fTextWidth);
                         break;
                     }
-                    case TextAlign_center:
+                    case TextAlign::center:
                     {
                         aPosition.setX(aPosition.getX() - (fTextWidth * 0.5));
                         break;
                     }
-                    case TextAlign_notset:
-                    case TextAlign_left:
-                    case TextAlign_justify:
+                    case TextAlign::notset:
+                    case TextAlign::left:
+                    case TextAlign::justify:
                     {
-                        // TextAlign_notset, TextAlign_left: nothing to do
-                        // TextAlign_justify is not clear currently; handle as TextAlign_left
+                        // TextAlign::notset, TextAlign::left: nothing to do
+                        // TextAlign::justify is not clear currently; handle as TextAlign::left
                         break;
                     }
                 }
@@ -382,18 +382,18 @@ namespace svgio::svgreader
                 // apply BaselineShift
                 switch(aBaselineShift)
                 {
-                    case BaselineShift_Sub:
+                    case BaselineShift::Sub:
                     {
                         aPosition.setY(aPosition.getY() + aTextLayouterDevice.getUnderlineOffset());
                         break;
                     }
-                    case BaselineShift_Super:
+                    case BaselineShift::Super:
                     {
                         aPosition.setY(aPosition.getY() + aTextLayouterDevice.getOverlineOffset());
                         break;
                     }
-                    case BaselineShift_Percentage:
-                    case BaselineShift_Length:
+                    case BaselineShift::Percentage:
+                    case BaselineShift::Length:
                     {
                         const SvgNumber aNumber(rSvgStyleAttributes.getBaselineShiftNumber());
                         const double mfBaselineShift(aNumber.solve(*this));
@@ -401,7 +401,7 @@ namespace svgio::svgreader
                         aPosition.setY(aPosition.getY() + mfBaselineShift);
                         break;
                     }
-                    default: // BaselineShift_Baseline
+                    default: // BaselineShift::Baseline
                     {
                         // nothing to do
                         break;
@@ -422,9 +422,9 @@ namespace svgio::svgreader
                 // check TextDecoration and if TextDecoratedPortionPrimitive2D is needed
                 const TextDecoration aDeco(rSvgStyleAttributes.getTextDecoration());
 
-                if(TextDecoration_underline == aDeco
-                    || TextDecoration_overline == aDeco
-                    || TextDecoration_line_through == aDeco)
+                if(TextDecoration::underline == aDeco
+                    || TextDecoration::overline == aDeco
+                    || TextDecoration::line_through == aDeco)
                 {
                     // get the fill for decoration as described by SVG. We cannot
                     // have different stroke colors/definitions for those, though
@@ -446,10 +446,10 @@ namespace svgio::svgreader
                         // extra props for decorated
                         aDecoColor,
                         aDecoColor,
-                        TextDecoration_overline == aDeco ? drawinglayer::primitive2d::TEXT_LINE_SINGLE : drawinglayer::primitive2d::TEXT_LINE_NONE,
-                        TextDecoration_underline == aDeco ? drawinglayer::primitive2d::TEXT_LINE_SINGLE : drawinglayer::primitive2d::TEXT_LINE_NONE,
+                        TextDecoration::overline == aDeco ? drawinglayer::primitive2d::TEXT_LINE_SINGLE : drawinglayer::primitive2d::TEXT_LINE_NONE,
+                        TextDecoration::underline == aDeco ? drawinglayer::primitive2d::TEXT_LINE_SINGLE : drawinglayer::primitive2d::TEXT_LINE_NONE,
                         false,
-                        TextDecoration_line_through == aDeco ? drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE : drawinglayer::primitive2d::TEXT_STRIKEOUT_NONE,
+                        TextDecoration::line_through == aDeco ? drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE : drawinglayer::primitive2d::TEXT_STRIKEOUT_NONE,
                         false,
                         drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_NONE,
                         true,
@@ -488,7 +488,7 @@ namespace svgio::svgreader
                     rSvgTextPosition,
                     rSvgStyleAttributes));
 
-            if(!(xRef.is() && (Visibility_visible == rSvgStyleAttributes.getVisibility())))
+            if(!(xRef.is() && (Visibility::visible == rSvgStyleAttributes.getVisibility())))
                 return;
 
             if(!rSvgTextPosition.isRotated())

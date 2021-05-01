@@ -523,7 +523,7 @@ namespace svgio::svgreader
                     // decompose:
                     // - visible terminal nodes
                     // - all non-terminal nodes (might contain visible nodes down the hierarchy)
-                    if( !rGrandChildren.empty() || ( pChildStyles && (Visibility_visible == pChildStyles->getVisibility())) )
+                    if( !rGrandChildren.empty() || ( pChildStyles && (Visibility::visible == pChildStyles->getVisibility())) )
                     {
                         drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
                         pCandidate->decomposeSvgNode(aNewTarget, bReferenced);
