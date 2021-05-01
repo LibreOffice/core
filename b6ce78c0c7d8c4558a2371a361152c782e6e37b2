@@ -16,6 +16,24 @@
       "revId": "b6ce78c0c7d8c4558a2371a361152c782e6e37b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fdb95b9_bdc31971",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-05-01T08:08:46Z",
+      "side": 1,
+      "message": "Hmm - currently we don\u0027t always finish the page on IsInterrupt(). Actually for the documents I tested, we go back to the previous page, which currently also qualifies with this patch.\n\nSee my other comment on line 696.",
+      "parentUuid": "1734dc38_01d7ec21",
+      "revId": "b6ce78c0c7d8c4558a2371a361152c782e6e37b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

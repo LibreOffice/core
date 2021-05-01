@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "00ea851c_d8716120",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-05-01T08:08:46Z",
+      "side": 0,
+      "message": "Thing is, CheckIdleEnd would just change the m_bInterrupt state at very specific positions before. All the IsInterrupt() calls would just ignore later code paths. And since this change also hits the IsBusy case, that is probably the main problem.",
+      "revId": "6e6e531b564cdc9d5b25287c215cdc5a1fcbb346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c1314d5_5f66229e",
         "filename": "sw/source/core/layout/layact.cxx",
         "patchSetId": 2
@@ -13,6 +30,58 @@
       "writtenOn": "2021-04-30T15:56:14Z",
       "side": 0,
       "message": "this whole loop here is kinda nonsense anyway because if the previous pages aren\u0027t done then the visible pages won\u0027t have the right result... ideally it should start formatting at the last page break before the visible pages... but even that isn\u0027t right because it could use the wrong side (left vs right pages)",
+      "revId": "6e6e531b564cdc9d5b25287c215cdc5a1fcbb346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2c42064_770b15ad",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-05-01T08:08:46Z",
+      "side": 0,
+      "message": "The m_nCheckPageNum !\u003d USHRT_MAX set by all functions removing or inserting pages will at least guarantee, that the SwPageDesc is correct, so AFAIK the \"wrong side\" case can\u0027t happen.\n\nExcept if the XCHECKPAGE case hits \u003d\u003d IsAgain() forces a hard return from InternalAction().",
+      "parentUuid": "6c1314d5_5f66229e",
+      "revId": "6e6e531b564cdc9d5b25287c215cdc5a1fcbb346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fef5b76f_e58e55c5",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-05-01T08:08:46Z",
+      "side": 0,
+      "message": "The condition to start again. The whole IsIdle() was added later.",
+      "revId": "6e6e531b564cdc9d5b25287c215cdc5a1fcbb346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82117440_b96c2ecc",
+        "filename": "sw/source/core/layout/layact.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1709,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-05-01T08:08:46Z",
+      "side": 0,
+      "message": "AFAIK this should actually just return false without IsInterrupt() check and also the other equal checks.",
       "revId": "6e6e531b564cdc9d5b25287c215cdc5a1fcbb346",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
