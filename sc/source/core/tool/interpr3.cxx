@@ -2748,53 +2748,58 @@ void ScInterpreter::ScFTest()
     SCSIZE nR1, nR2;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
+    double fVal;
     double fCount1  = 0.0;
     double fCount2  = 0.0;
-    double fSum1    = 0.0;
-    double fSumSqr1 = 0.0;
-    double fSum2    = 0.0;
-    double fSumSqr2 = 0.0;
+    KahanSum fSum1    = 0.0;
+    KahanSum fSumSqr1 = 0.0;
+    KahanSum fSum2    = 0.0;
+    KahanSum fSumSqr2 = 0.0;
 
-    std::vector<sc::op::Op> aOp;
-    aOp.emplace_back(sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal;}));
-    aOp.emplace_back(sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal * fVal;}));
-
-    auto aVal1 = pMat1->Collect(aOp);
-    fSum1 = aVal1[0].mfFirst + aVal1[0].mfRest;
-    fSumSqr1 = aVal1[1].mfFirst + aVal1[1].mfRest;
-    fCount1 = aVal1[2].mnCount;
-
-    auto aVal2 = pMat2->Collect(aOp);
-    fSum2 = aVal2[0].mfFirst + aVal2[0].mfRest;
-    fSumSqr2 = aVal2[1].mfFirst + aVal2[1].mfRest;
-    fCount2 = aVal2[2].mnCount;
+    for (SCSIZE i = 0; i < nC1; i++)
+    {
+        for (SCSIZE j = 0; j < nR1; j++)
+        {
+            if (!pMat1->IsStringOrEmpty(i,j))
+            {
+                fVal = pMat1->GetDouble(i,j);
+                fSum1    += fVal;
+                fSumSqr1 += fVal * fVal;
+                fCount1++;
+            }
+        }
+    }
+    for (SCSIZE i = 0; i < nC2; i++)
+    {
+        for (SCSIZE j = 0; j < nR2; j++)
+        {
+            if (!pMat2->IsStringOrEmpty(i,j))
+            {
+                fVal = pMat2->GetDouble(i,j);
+                fSum2    += fVal;
+                fSumSqr2 += fVal * fVal;
+                fCount2++;
+            }
+        }
+    }
 
     if (fCount1 < 2.0 || fCount2 < 2.0)
     {
         PushNoValue();
         return;
     }
-    double fS1 = (fSumSqr1-fSum1*fSum1/fCount1)/(fCount1-1.0);
-    double fS2 = (fSumSqr2-fSum2*fSum2/fCount2)/(fCount2-1.0);
+    double fS1 = (fSumSqr1-fSum1.get()*fSum1.get()/fCount1).get()/(fCount1-1.0);
+    double fS2 = (fSumSqr2-fSum2.get()*fSum2.get()/fCount2).get()/(fCount2-1.0);
     if (fS1 == 0.0 || fS2 == 0.0)
     {
         PushNoValue();
         return;
     }
-    double fF, fF1, fF2;
+    double fFcdf;
     if (fS1 > fS2)
-    {
-        fF = fS1/fS2;
-        fF1 = fCount1-1.0;
-        fF2 = fCount2-1.0;
-    }
+        fFcdf = GetFDist(fS1/fS2, fCount1-1.0, fCount2-1.0);
     else
-    {
-        fF = fS2/fS1;
-        fF1 = fCount2-1.0;
-        fF2 = fCount1-1.0;
-    }
-    double fFcdf = GetFDist(fF, fF1, fF2);
+        fFcdf = GetFDist(fS1/fS2, fCount2-1.0, fCount1-1.0);
     PushDouble(2.0*std::min(fFcdf, 1.0 - fFcdf));
 }
 
