@@ -45,7 +45,7 @@ const sal_Int16 supportedIndexTable[] = {  XlBordersIndex::xlEdgeLeft, XlBorders
 constexpr OUStringLiteral sTableBorder = u"TableBorder";
 
 //  Equiv widths in 1/100 mm
-const sal_Int32 OOLineThin = 35;
+const sal_Int32 OOLineThin = 26;
 const sal_Int32 OOLineMedium = 88;
 const sal_Int32 OOLineThick = 141;
 const sal_Int32 OOLineHairline = 2;

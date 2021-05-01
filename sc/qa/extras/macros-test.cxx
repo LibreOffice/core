@@ -13,6 +13,7 @@
 #include <sal/log.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
+#include <editeng/borderline.hxx>
 
 #include <docsh.hxx>
 #include <document.hxx>
@@ -57,6 +58,7 @@ public:
     void testTdf133889();
     void testTdf138646();
     void testTdf105558();
+    void testTdf90278();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -81,6 +83,7 @@ public:
     CPPUNIT_TEST(testTdf133889);
     CPPUNIT_TEST(testTdf138646);
     CPPUNIT_TEST(testTdf105558);
+    CPPUNIT_TEST(testTdf90278);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1050,6 +1053,38 @@ void ScMacrosTest::testTdf105558()
     xCloseable->close(true);
 }
 
+void ScMacrosTest::testTdf90278()
+{
+    OUString aFileName;
+    createFileURL(u"tdf90278.xls", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT(xComponent);
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT(pFoundShell);
+
+    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh);
+
+    Any aRet;
+    Sequence<sal_Int16> aOutParamIndex;
+    Sequence<Any> aOutParam;
+    Sequence<uno::Any> aParams;
+
+    // Without the fix in place, changing the border weight
+    // would cause a Basic exception/error in the following script.
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:VBAProject.Module1.BorderWeight?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    // Check the border weight of the corresponding cell in the test document
+    sal_Int32 aReturnValue;
+    aRet >>= aReturnValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aReturnValue);
+
+    xDocSh->DoClose();
+}
 
 ScMacrosTest::ScMacrosTest()
       : UnoApiTest("/sc/qa/extras/testdocuments")
