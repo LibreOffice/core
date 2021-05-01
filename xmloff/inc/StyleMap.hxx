@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 #include <unordered_map>
 
 enum class XmlStyleFamily;
@@ -50,8 +50,8 @@ struct StyleNameHash_Impl
 inline size_t StyleNameHash_Impl::operator()( const StyleNameKey_Impl& r ) const
 {
     std::size_t seed = 0;
-    boost::hash_combine(seed, r.m_nFamily);
-    boost::hash_combine(seed, r.m_aName.hashCode());
+    o3tl::hash_combine(seed, r.m_nFamily);
+    o3tl::hash_combine(seed, r.m_aName.hashCode());
     return seed;
 }
 

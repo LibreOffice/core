@@ -24,7 +24,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <memory>
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 
 GfxLink::GfxLink()
     : meType(GfxLinkType::NONE)
@@ -60,7 +60,7 @@ size_t GfxLink::GetHash() const
     if (!maHash)
     {
         std::size_t seed = maDataContainer.calculateHash();
-        boost::hash_combine(seed, meType);
+        o3tl::hash_combine(seed, meType);
         maHash = seed;
     }
     return maHash;

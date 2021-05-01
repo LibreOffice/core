@@ -9,7 +9,7 @@
  */
 
 #include <vcl/BinaryDataContainer.hxx>
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 
 BinaryDataContainer::BinaryDataContainer() = default;
 
@@ -27,9 +27,9 @@ BinaryDataContainer::BinaryDataContainer(std::unique_ptr<std::vector<sal_uInt8>>
 size_t BinaryDataContainer::calculateHash() const
 {
     size_t nSeed = 0;
-    boost::hash_combine(nSeed, getSize());
+    o3tl::hash_combine(nSeed, getSize());
     for (sal_uInt8 const& rByte : *mpData)
-        boost::hash_combine(nSeed, rByte);
+        o3tl::hash_combine(nSeed, rByte);
     return nSeed;
 }
 

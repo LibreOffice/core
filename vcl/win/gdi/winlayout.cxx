@@ -46,7 +46,7 @@
 
 #include <rtl/character.hxx>
 
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 #include <algorithm>
 
 #include <shlwapi.h>
@@ -171,8 +171,8 @@ struct BlobCacheKeyHash
     std::size_t operator()(BlobCacheKey const& rKey) const
     {
         std::size_t seed = 0;
-        boost::hash_combine(seed, rKey.first.get());
-        boost::hash_combine(seed, rKey.second);
+        o3tl::hash_combine(seed, rKey.first.get());
+        o3tl::hash_combine(seed, rKey.second);
         return seed;
     }
 };

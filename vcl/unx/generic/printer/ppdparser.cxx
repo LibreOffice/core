@@ -56,7 +56,7 @@
 
 #include <config_dbus.h>
 #include <config_gio.h>
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 
 namespace psp
 {
@@ -78,9 +78,9 @@ namespace psp
             size_t operator()(const css::lang::Locale& rLocale) const
             {
                 std::size_t seed = 0;
-                boost::hash_combine(seed, rLocale.Language.hashCode());
-                boost::hash_combine(seed, rLocale.Country.hashCode());
-                boost::hash_combine(seed, rLocale.Variant.hashCode());
+                o3tl::hash_combine(seed, rLocale.Language.hashCode());
+                o3tl::hash_combine(seed, rLocale.Country.hashCode());
+                o3tl::hash_combine(seed, rLocale.Variant.hashCode());
                 return seed;
             }
         };
