@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d90f61f3_d2e99dd2",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-05-01T09:56:40Z",
+      "side": 1,
+      "message": "I am using Sublime and tried to remove this trailing whitespace. This whitespace is not shown when i run git diff master.\nI will try to resolve it.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 4
+      },
+      "revId": "341d4d0596cba4eed2a766d1f07bc19f9d8cc8bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
