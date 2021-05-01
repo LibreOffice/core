@@ -790,7 +790,7 @@ const SalLayoutFlags eDefaultLayout = SalLayoutFlags::BiDiStrong;
 
 void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                              sal_Int32 nIndex, sal_Int32 nLen,
-                             MetricVector* pVector, OUString* pDisplayText,
+                             std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
                              const SalLayoutGlyphs* pLayoutCache
                              )
 {
@@ -824,11 +824,11 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         }
         if( ! aClip.IsNull() )
         {
-            MetricVector aTmp;
+            std::vector< tools::Rectangle > aTmp;
             GetGlyphBoundRects( rStartPt, rStr, nIndex, nLen, aTmp );
 
             bool bInserted = false;
-            for( MetricVector::const_iterator it = aTmp.begin(); it != aTmp.end(); ++it, nIndex++ )
+            for( std::vector< tools::Rectangle >::const_iterator it = aTmp.begin(); it != aTmp.end(); ++it, nIndex++ )
             {
                 bool bAppend = false;
 
@@ -836,7 +836,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                     bAppend = true;
                 else if( rStr[ nIndex ] == ' ' && bInserted )
                 {
-                    MetricVector::const_iterator next = it;
+                    std::vector< tools::Rectangle >::const_iterator next = it;
                     ++next;
                     if( next != aTmp.end() && aClip.IsOver( *next ) )
                         bAppend = true;
@@ -1460,7 +1460,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
 
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
-                                 MetricVector* pVector, OUString* pDisplayText,
+                                 std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
                                  vcl::ITextLayout& _rLayout )
 {
 
@@ -1751,7 +1751,7 @@ void OutputDevice::AddTextRectActions( const tools::Rectangle& rRect,
 }
 
 void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle,
-                             MetricVector* pVector, OUString* pDisplayText,
+                             std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
                              vcl::ITextLayout* _pTextLayout )
 {
     assert(!is_double_buffered_window());
@@ -2059,7 +2059,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
 
 void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
                                  sal_Int32 nIndex, sal_Int32 nLen,
-                                 DrawTextFlags nStyle, MetricVector* pVector, OUString* pDisplayText,
+                                 DrawTextFlags nStyle, std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
                                  const SalLayoutGlyphs* pGlyphs )
 {
     assert(!is_double_buffered_window());

@@ -1363,7 +1363,7 @@ sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
 }
 
 bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr,
-                                           int nIndex, int nLen, MetricVector& rVector )
+                                           int nIndex, int nLen, std::vector< tools::Rectangle >& rVector )
 {
     rVector.clear();
 

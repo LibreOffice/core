@@ -1962,7 +1962,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
 
                     if (pData->bIsTemporary)
                         nStyle |= DrawTextFlags::Disable;
-                    MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : nullptr;
+                    std::vector< tools::Rectangle >* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : nullptr;
                     OUString* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : nullptr;
                     if (bLayout)
                     {

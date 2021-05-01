@@ -116,8 +116,6 @@ namespace com::sun::star::awt {
 #define GLYPH_FONT_HEIGHT   256
 #endif
 
-typedef std::vector< tools::Rectangle > MetricVector;
-
 // OutputDevice-Types
 
 // Flags for DrawText()
@@ -976,17 +974,17 @@ public:
 
     void                        DrawText( const Point& rStartPt, const OUString& rStr,
                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                          MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr,
+                                          std::vector< tools::Rectangle >* pVector = nullptr, OUString* pDisplayText = nullptr,
                                           const SalLayoutGlyphs* pLayoutCache = nullptr );
 
     void                        DrawText( const tools::Rectangle& rRect,
                                           const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::NONE,
-                                          MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr,
+                                          std::vector< tools::Rectangle >* pVector = nullptr, OUString* pDisplayText = nullptr,
                                           vcl::ITextLayout* _pTextLayout = nullptr );
 
     static void                 ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                               const OUString& rOrigStr, DrawTextFlags nStyle,
-                                              MetricVector* pVector, OUString* pDisplayText, vcl::ITextLayout& _rLayout );
+                                              std::vector< tools::Rectangle >* pVector, OUString* pDisplayText, vcl::ITextLayout& _rLayout );
 
     void                        ImplDrawText( SalLayout& );
 
@@ -994,7 +992,7 @@ public:
 
     void                        DrawCtrlText( const Point& rPos, const OUString& rStr,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                              DrawTextFlags nStyle = DrawTextFlags::Mnemonic, MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr,
+                                              DrawTextFlags nStyle = DrawTextFlags::Mnemonic, std::vector< tools::Rectangle >* pVector = nullptr, OUString* pDisplayText = nullptr,
                                               const SalLayoutGlyphs* pGlyphs = nullptr);
 
     void                        DrawTextLine( const Point& rPos, tools::Long nWidth,
@@ -1235,7 +1233,7 @@ public:
                                 ImplGetEmphasisMarkStyle( const vcl::Font& rFont );
 
     bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
-                                                    int nLen, MetricVector& rVector );
+                                                    int nLen, std::vector< tools::Rectangle >& rVector );
 
     sal_Int32                   HasGlyphs( const vcl::Font& rFont, const OUString& rStr,
                                            sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;

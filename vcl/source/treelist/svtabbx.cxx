@@ -1051,7 +1051,7 @@ void SvHeaderTabListBox::GrabTableFocus()
     GrabFocus();
 }
 
-bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, MetricVector& rVector )
+bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, std::vector< tools::Rectangle >& rVector )
 {
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, rVector );
 }
@@ -1110,7 +1110,7 @@ tools::Rectangle SvHeaderTabListBox::GetFieldCharacterBounds(sal_Int32,sal_Int32
 sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
 {
     OUString sText = GetAccessibleCellText( _nRow, static_cast< sal_uInt16 >( _nColumnPos ) );
-    MetricVector aRects;
+    std::vector< tools::Rectangle > aRects;
     if ( GetGlyphBoundRects(Point(0,0), sText, 0, sText.getLength(), aRects) )
     {
         sal_Int32 nPos = 0;
