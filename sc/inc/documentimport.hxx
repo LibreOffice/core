@@ -12,6 +12,7 @@
 #include "scdllapi.h"
 #include "address.hxx"
 #include "attarray.hxx"
+#include <tools/solar.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -21,6 +22,7 @@
 class EditTextObject;
 class ScDocument;
 class ScColumn;
+class ScPatternAttr;
 class ScTokenArray;
 class ScFormulaCell;
 class ScStyleSheet;
@@ -131,6 +133,10 @@ public:
         ScDocument::CalcFormulaTree().
      */
     void broadcastRecalcAfterImport();
+
+    /** small cache for hot call during import */
+    bool isLatinScript(sal_uLong nFormat);
+    bool isLatinScript(const ScPatternAttr&);
 
 private:
     void initColumn(ScColumn& rCol);
