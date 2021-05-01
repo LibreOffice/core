@@ -17,36 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 
 enum class DrawTextFlags
 {
-    NONE                  = 0x00000000,
-    Disable               = 0x00000001,
-    Mnemonic              = 0x00000002,
-    Mono                  = 0x00000004,
-    Clip                  = 0x00000008,
-    Left                  = 0x00000010,
-    Center                = 0x00000020,
-    Right                 = 0x00000040,
-    Top                   = 0x00000080,
-    VCenter               = 0x00000100,
-    Bottom                = 0x00000200,
-    EndEllipsis           = 0x00000400,
-    PathEllipsis          = 0x00000800,
-    MultiLine             = 0x00001000,
-    WordBreak             = 0x00002000,
-    NewsEllipsis          = 0x00004000,
-    WordBreakHyphenation  = 0x00008000 | WordBreak,
-    CenterEllipsis        = 0x00010000,
-    HideMnemonic          = 0x00020000,
+    NONE = 0x00000000,
+    Disable = 0x00000001,
+    Mnemonic = 0x00000002,
+    Mono = 0x00000004,
+    Clip = 0x00000008,
+    Left = 0x00000010,
+    Center = 0x00000020,
+    Right = 0x00000040,
+    Top = 0x00000080,
+    VCenter = 0x00000100,
+    Bottom = 0x00000200,
+    EndEllipsis = 0x00000400,
+    PathEllipsis = 0x00000800,
+    MultiLine = 0x00001000,
+    WordBreak = 0x00002000,
+    NewsEllipsis = 0x00004000,
+    WordBreakHyphenation = 0x00008000 | WordBreak,
+    CenterEllipsis = 0x00010000,
+    HideMnemonic = 0x00020000,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<DrawTextFlags> : is_typed_flags<DrawTextFlags, 0x3ffff> {};
+template <> struct typed_flags<DrawTextFlags> : is_typed_flags<DrawTextFlags, 0x3ffff>
+{
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
