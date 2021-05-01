@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <memory>
+#include <unistd.h>
 
 #define LOGTAG "LibreOffice/androidinst"
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
