@@ -30,8 +30,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/math.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <unotools/readwritemutexguard.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <shared_mutex>
 #include <memory>
 #include <map>
 
@@ -81,44 +81,30 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     sal_uInt16              nCurrPositiveFormat;
     sal_uInt16              nCurrNegativeFormat;
     sal_uInt16              nCurrDigits;
-    bool                    bLocaleDataItemValid;
-    bool                    bReservedWordValid;
-    bool                    bSecondaryCalendarValid;
-    mutable ::utl::ReadWriteMutex   aMutex;
-    struct SAL_DLLPRIVATE Locale_Compare
-    {
-        bool operator()(const css::lang::Locale& rLocale1, const css::lang::Locale& rLocale2) const;
-    };
-    mutable std::map<css::lang::Locale, css::i18n::LocaleDataItem2, Locale_Compare> maDataItemCache;
+    mutable std::shared_mutex aMutex;
 
                                 // whenever Locale changes
-    void                invalidateData();
+    void                reloadData();
 
-    void                getOneLocaleItemImpl( sal_Int16 nItem );
     const OUString&     getOneLocaleItem( sal_Int16 nItem ) const;
 
-    void                getOneReservedWordImpl( sal_Int16 nWord );
     const OUString&     getOneReservedWord( sal_Int16 nWord ) const;
 
-    void                getCurrSymbolsImpl();
-    void                getCurrFormatsImpl();
+    void                loadCurrencyFormats();
 
     void                scanCurrFormatImpl( const OUString& rCode,
                             sal_Int32 nStart, sal_Int32& nSign,
                             sal_Int32& nPar, sal_Int32& nNum,
                             sal_Int32& nBlank, sal_Int32& nSym ) const;
 
-    void                getDateOrdersImpl();
+    void                loadDateOrders();
     DateOrder           scanDateOrderImpl( const OUString& rCode ) const;
-
-    void                getDefaultCalendarImpl();
-    void                getSecondaryCalendarImpl();
 
     void                ImplAddFormatNum( rtl::OUStringBuffer& rBuf,
                             sal_Int64 nNumber, sal_uInt16 nDecimals,
                             bool bUseThousandSep, bool bTrailingZeros ) const;
 
-    void                getDigitGroupingImpl();
+    void                loadDigitGrouping();
 
 public:
                                 LocaleDataWrapper(
