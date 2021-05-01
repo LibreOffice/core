@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84714e55_8ced559e",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-01T08:52:56Z",
+      "side": 1,
+      "message": "Please group the include with other unotools/ includes (in alphabetical order).\n\nFYI: Normally we should have *all* includes grouped (separate groups for standard library includes, UNO includes like \u003ccom/sun/star/...\u003e, core library includes, and local module includes), sorted alpahebtically inside each group. When a given file has no proper order of includes, then of course you should not sort them (this would introduce unrelated noise), but you still are advised to group related includes together - like having \u003cunotools/...\u003e be together, as I ask you here.",
+      "revId": "7153fb07f6893289aa67176f63bfd7e738d2c510",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
