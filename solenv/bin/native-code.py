@@ -819,7 +819,7 @@ desktop_constructor_list = [
     "com_sun_star_comp_svx_Impl_FindbarDispatcher_get_implementation",
     "com_sun_star_comp_svx_LineSpacingToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_NumberingToolBoxControl_get_implementation",
-    "com_sun_star_comp_svx_RecoveryUI_get_implementation",
+    ("com_sun_star_comp_svx_RecoveryUI_get_implementation", "#ifndef ENABLE_WASM_STRIP"),
     "com_sun_star_comp_svx_StyleToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_TableToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_TableToolBoxControl_get_implementation",

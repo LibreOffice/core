@@ -957,6 +957,7 @@ struct RefClearGuard
     @param  bEmergencySave
             differs between EMERGENCY_SAVE and RECOVERY
 */
+#ifndef ENABLE_WASM_STRIP
 bool impl_callRecoveryUI(bool bEmergencySave     ,
                          bool bExistsRecoveryData)
 {
@@ -988,6 +989,7 @@ bool impl_callRecoveryUI(bool bEmergencySave     ,
     aRet >>= bRet;
     return bRet;
 }
+#endif
 
 bool impl_bringToFrontRecoveryUI()
 {
@@ -1137,9 +1139,11 @@ void Desktop::Exception(ExceptionCategory nCategory)
         // Save all open documents so they will be reopened
         // the next time the application is started
         // returns true if at least one document could be saved...
+#ifndef ENABLE_WASM_STRIP
         bRestart = impl_callRecoveryUI(
                         true , // force emergency save
                         false);
+#endif
     }
 
     FlushConfiguration();
@@ -2007,6 +2011,7 @@ void Desktop::OpenClients()
 
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
 
+#ifndef ENABLE_WASM_STRIP
         if ( !bDisableRecovery &&
             (
                 bExistsRecoveryData || // => crash with files    => recovery
@@ -2025,6 +2030,7 @@ void Desktop::OpenClients()
                 TOOLS_WARN_EXCEPTION( "desktop.app", "Error during recovery");
             }
         }
+#endif
 
         Reference< XSessionManagerListener2 > xSessionListener;
         try

@@ -417,7 +417,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	slideshow \
 	sot \
 	spell \
-	$(if $(DISABLE_GUI) || $(ENABLE_WASM_STRIP),,spl) \
+	$(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP)),,spl) \
 	storagefd \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
 	svgio \
