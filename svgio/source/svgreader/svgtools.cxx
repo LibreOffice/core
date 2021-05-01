@@ -267,11 +267,6 @@ namespace svgio::svgreader
             return 0.0;
         }
 
-        bool SvgNumber::isPositive() const
-        {
-            return basegfx::fTools::moreOrEqual(mfNumber, 0.0);
-        }
-
         void skip_char(std::u16string_view rCandidate, sal_Unicode nChar, sal_Int32& nPos, const sal_Int32 nLen)
         {
             while(nPos < nLen && nChar == rCandidate[nPos])
