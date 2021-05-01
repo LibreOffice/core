@@ -21,7 +21,7 @@
 
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 
 #include <unordered_map>
 
@@ -38,8 +38,8 @@ class SpellCheckContext::SpellCheckCache
             size_t operator() (const CellPos& rPos) const
             {
                 std::size_t seed = 0;
-                boost::hash_combine(seed, rPos.mnCol);
-                boost::hash_combine(seed, rPos.mnRow);
+                o3tl::hash_combine(seed, rPos.mnCol);
+                o3tl::hash_combine(seed, rPos.mnRow);
                 return seed;
             }
         };

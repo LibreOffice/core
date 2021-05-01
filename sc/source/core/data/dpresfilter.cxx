@@ -13,7 +13,7 @@
 #include <unotools/charclass.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -30,8 +30,8 @@ ScDPResultFilterContext::ScDPResultFilterContext() :
 size_t ScDPResultTree::NamePairHash::operator() (const NamePairType& rPair) const
 {
     std::size_t seed = 0;
-    boost::hash_combine(seed, rPair.first.hashCode());
-    boost::hash_combine(seed, rPair.second.hashCode());
+    o3tl::hash_combine(seed, rPair.first.hashCode());
+    o3tl::hash_combine(seed, rPair.second.hashCode());
     return seed;
 }
 

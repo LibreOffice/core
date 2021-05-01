@@ -18,7 +18,7 @@
 #include <unordered_map>
 #include <vector>
 #include <cstddef>
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 #include <vcl/salnativewidgets.hxx>
 
 namespace vcl
@@ -145,8 +145,8 @@ template <> struct VCL_DLLPUBLIC hash<vcl::ControlTypeAndPart>
     std::size_t operator()(vcl::ControlTypeAndPart const& rControlTypeAndPart) const noexcept
     {
         std::size_t seed = 0;
-        boost::hash_combine(seed, rControlTypeAndPart.meType);
-        boost::hash_combine(seed, rControlTypeAndPart.mePart);
+        o3tl::hash_combine(seed, rControlTypeAndPart.meType);
+        o3tl::hash_combine(seed, rControlTypeAndPart.mePart);
         return seed;
     }
 };
