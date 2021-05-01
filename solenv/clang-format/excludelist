@@ -11141,6 +11141,7 @@ svgio/source/svgreader/svglinenode.cxx
 svgio/source/svgreader/svgmarkernode.cxx
 svgio/source/svgreader/svgmasknode.cxx
 svgio/source/svgreader/svgnode.cxx
+svgio/source/svgreader/SvgNumber.cxx
 svgio/source/svgreader/svgpathnode.cxx
 svgio/source/svgreader/svgpatternnode.cxx
 svgio/source/svgreader/svgpolynode.cxx
