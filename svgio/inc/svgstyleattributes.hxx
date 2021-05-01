@@ -39,134 +39,134 @@ namespace svgio::svgreader {
 
 namespace svgio::svgreader
     {
-        enum StrokeLinecap
+        enum class StrokeLinecap
         {
-            StrokeLinecap_notset,
-            StrokeLinecap_butt,
-            StrokeLinecap_round,
-            StrokeLinecap_square
+            notset,
+            butt,
+            round,
+            square
         };
 
-        enum StrokeLinejoin
+        enum class StrokeLinejoin
         {
-            StrokeLinejoin_notset,
-            StrokeLinejoin_miter,
-            StrokeLinejoin_round,
-            StrokeLinejoin_bevel
+            notset,
+            miter,
+            round,
+            bevel
         };
 
-        enum FontSize
+        enum class FontSize
         {
-            FontSize_notset,
-            FontSize_xx_small,
-            FontSize_x_small,
-            FontSize_small,
-            FontSize_smaller,
-            FontSize_medium,
-            FontSize_large,
-            FontSize_larger,
-            FontSize_x_large,
-            FontSize_xx_large,
-            FontSize_initial
+            notset,
+            xx_small,
+            x_small,
+            small,
+            smaller,
+            medium,
+            large,
+            larger,
+            x_large,
+            xx_large,
+            initial
         };
 
-        enum FontStretch
+        enum class FontStretch
         {
-            FontStretch_notset,
-            FontStretch_normal,
-            FontStretch_wider,
-            FontStretch_narrower,
-            FontStretch_ultra_condensed,
-            FontStretch_extra_condensed,
-            FontStretch_condensed,
-            FontStretch_semi_condensed,
-            FontStretch_semi_expanded,
-            FontStretch_expanded,
-            FontStretch_extra_expanded,
-            FontStretch_ultra_expanded
+            notset,
+            normal,
+            wider,
+            narrower,
+            ultra_condensed,
+            extra_condensed,
+            condensed,
+            semi_condensed,
+            semi_expanded,
+            expanded,
+            extra_expanded,
+            ultra_expanded
         };
 
         FontStretch getWider(FontStretch aSource);
         FontStretch getNarrower(FontStretch aSource);
 
-        enum FontStyle
+        enum class FontStyle
         {
-            FontStyle_notset,
-            FontStyle_normal,
-            FontStyle_italic,
-            FontStyle_oblique
+            notset,
+            normal,
+            italic,
+            oblique
         };
 
-        enum FontWeight
+        enum class FontWeight
         {
-            FontWeight_notset,
-            FontWeight_100,
-            FontWeight_200,
-            FontWeight_300,
-            FontWeight_400, // same as FontWeight_normal
-            FontWeight_500,
-            FontWeight_600,
-            FontWeight_700, // same as FontWeight_bold
-            FontWeight_800,
-            FontWeight_900,
-            FontWeight_bolder,
-            FontWeight_lighter,
+            notset,
+            N100,
+            N200,
+            N300,
+            N400, // same as normal
+            N500,
+            N600,
+            N700, // same as bold
+            N800,
+            N900,
+            bolder,
+            lighter,
         };
 
         FontWeight getBolder(FontWeight aSource);
         FontWeight getLighter(FontWeight aSource);
         ::FontWeight getVclFontWeight(FontWeight aSource);
 
-        enum TextAlign
+        enum class TextAlign
         {
-            TextAlign_notset,
-            TextAlign_left,
-            TextAlign_right,
-            TextAlign_center,
-            TextAlign_justify
+            notset,
+            left,
+            right,
+            center,
+            justify
         };
 
-        enum TextDecoration
+        enum class TextDecoration
         {
-            TextDecoration_notset,
-            TextDecoration_none,
-            TextDecoration_underline,
-            TextDecoration_overline,
-            TextDecoration_line_through,
-            TextDecoration_blink
+            notset,
+            none,
+            underline,
+            overline,
+            line_through,
+            blink
         };
 
-        enum TextAnchor
+        enum class TextAnchor
         {
-            TextAnchor_notset,
-            TextAnchor_start,
-            TextAnchor_middle,
-            TextAnchor_end
+            notset,
+            start,
+            middle,
+            end
         };
 
-        enum FillRule
+        enum class FillRule
         {
-            FillRule_notset,
-            FillRule_nonzero,
-            FillRule_evenodd
+            notset,
+            nonzero,
+            evenodd
         };
 
-        enum BaselineShift
+        enum class BaselineShift
         {
-            BaselineShift_Baseline,
-            BaselineShift_Sub,
-            BaselineShift_Super,
-            BaselineShift_Percentage,
-            BaselineShift_Length
+            Baseline,
+            Sub,
+            Super,
+            Percentage,
+            Length
         };
 
-        enum Visibility
+        enum class Visibility
         {
-            Visibility_notset,
-            Visibility_visible,
-            Visibility_hidden,
-            Visibility_collapse,
-            Visibility_inherit
+            notset,
+            visible,
+            hidden,
+            collapse,
+            inherit
         };
 
         class SvgStyleAttributes

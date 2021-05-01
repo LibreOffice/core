@@ -50,11 +50,11 @@ namespace svgio::svgreader
 {
         static basegfx::B2DLineJoin StrokeLinejoinToB2DLineJoin(StrokeLinejoin aStrokeLinejoin)
         {
-            if(StrokeLinejoin_round == aStrokeLinejoin)
+            if(StrokeLinejoin::round == aStrokeLinejoin)
             {
                 return basegfx::B2DLineJoin::Round;
             }
-            else if(StrokeLinejoin_bevel == aStrokeLinejoin)
+            else if(StrokeLinejoin::bevel == aStrokeLinejoin)
             {
                 return basegfx::B2DLineJoin::Bevel;
             }
@@ -66,15 +66,15 @@ namespace svgio::svgreader
         {
             switch(aStrokeLinecap)
             {
-                default: /* StrokeLinecap_notset, StrokeLinecap_butt */
+                default: /* StrokeLinecap::notset, StrokeLinecap::butt */
                 {
                     return css::drawing::LineCap_BUTT;
                 }
-                case StrokeLinecap_round:
+                case StrokeLinecap::round:
                 {
                     return css::drawing::LineCap_ROUND;
                 }
-                case StrokeLinecap_square:
+                case StrokeLinecap::square:
                 {
                     return css::drawing::LineCap_SQUARE;
                 }
@@ -85,14 +85,14 @@ namespace svgio::svgreader
         {
             switch(aSource)
             {
-                case FontStretch_ultra_condensed: aSource = FontStretch_extra_condensed; break;
-                case FontStretch_extra_condensed: aSource = FontStretch_condensed; break;
-                case FontStretch_condensed: aSource = FontStretch_semi_condensed; break;
-                case FontStretch_semi_condensed: aSource = FontStretch_normal; break;
-                case FontStretch_normal: aSource = FontStretch_semi_expanded; break;
-                case FontStretch_semi_expanded: aSource = FontStretch_expanded; break;
-                case FontStretch_expanded: aSource = FontStretch_extra_expanded; break;
-                case FontStretch_extra_expanded: aSource = FontStretch_ultra_expanded; break;
+                case FontStretch::ultra_condensed: aSource = FontStretch::extra_condensed; break;
+                case FontStretch::extra_condensed: aSource = FontStretch::condensed; break;
+                case FontStretch::condensed: aSource = FontStretch::semi_condensed; break;
+                case FontStretch::semi_condensed: aSource = FontStretch::normal; break;
+                case FontStretch::normal: aSource = FontStretch::semi_expanded; break;
+                case FontStretch::semi_expanded: aSource = FontStretch::expanded; break;
+                case FontStretch::expanded: aSource = FontStretch::extra_expanded; break;
+                case FontStretch::extra_expanded: aSource = FontStretch::ultra_expanded; break;
                 default: break;
             }
 
@@ -103,14 +103,14 @@ namespace svgio::svgreader
         {
             switch(aSource)
             {
-                case FontStretch_extra_condensed: aSource = FontStretch_ultra_condensed; break;
-                case FontStretch_condensed: aSource = FontStretch_extra_condensed; break;
-                case FontStretch_semi_condensed: aSource = FontStretch_condensed; break;
-                case FontStretch_normal: aSource = FontStretch_semi_condensed; break;
-                case FontStretch_semi_expanded: aSource = FontStretch_normal; break;
-                case FontStretch_expanded: aSource = FontStretch_semi_expanded; break;
-                case FontStretch_extra_expanded: aSource = FontStretch_expanded; break;
-                case FontStretch_ultra_expanded: aSource = FontStretch_extra_expanded; break;
+                case FontStretch::extra_condensed: aSource = FontStretch::ultra_condensed; break;
+                case FontStretch::condensed: aSource = FontStretch::extra_condensed; break;
+                case FontStretch::semi_condensed: aSource = FontStretch::condensed; break;
+                case FontStretch::normal: aSource = FontStretch::semi_condensed; break;
+                case FontStretch::semi_expanded: aSource = FontStretch::normal; break;
+                case FontStretch::expanded: aSource = FontStretch::semi_expanded; break;
+                case FontStretch::extra_expanded: aSource = FontStretch::expanded; break;
+                case FontStretch::ultra_expanded: aSource = FontStretch::extra_expanded; break;
                 default: break;
             }
 
@@ -121,14 +121,14 @@ namespace svgio::svgreader
         {
             switch(aSource)
             {
-                case FontWeight_100: aSource = FontWeight_200; break;
-                case FontWeight_200: aSource = FontWeight_300; break;
-                case FontWeight_300: aSource = FontWeight_400; break;
-                case FontWeight_400: aSource = FontWeight_500; break;
-                case FontWeight_500: aSource = FontWeight_600; break;
-                case FontWeight_600: aSource = FontWeight_700; break;
-                case FontWeight_700: aSource = FontWeight_800; break;
-                case FontWeight_800: aSource = FontWeight_900; break;
+                case FontWeight::N100: aSource = FontWeight::N200; break;
+                case FontWeight::N200: aSource = FontWeight::N300; break;
+                case FontWeight::N300: aSource = FontWeight::N400; break;
+                case FontWeight::N400: aSource = FontWeight::N500; break;
+                case FontWeight::N500: aSource = FontWeight::N600; break;
+                case FontWeight::N600: aSource = FontWeight::N700; break;
+                case FontWeight::N700: aSource = FontWeight::N800; break;
+                case FontWeight::N800: aSource = FontWeight::N900; break;
                 default: break;
             }
 
@@ -139,14 +139,14 @@ namespace svgio::svgreader
         {
             switch(aSource)
             {
-                case FontWeight_200: aSource = FontWeight_100; break;
-                case FontWeight_300: aSource = FontWeight_200; break;
-                case FontWeight_400: aSource = FontWeight_300; break;
-                case FontWeight_500: aSource = FontWeight_400; break;
-                case FontWeight_600: aSource = FontWeight_500; break;
-                case FontWeight_700: aSource = FontWeight_600; break;
-                case FontWeight_800: aSource = FontWeight_700; break;
-                case FontWeight_900: aSource = FontWeight_800; break;
+                case FontWeight::N200: aSource = FontWeight::N100; break;
+                case FontWeight::N300: aSource = FontWeight::N200; break;
+                case FontWeight::N400: aSource = FontWeight::N300; break;
+                case FontWeight::N500: aSource = FontWeight::N400; break;
+                case FontWeight::N600: aSource = FontWeight::N500; break;
+                case FontWeight::N700: aSource = FontWeight::N600; break;
+                case FontWeight::N800: aSource = FontWeight::N700; break;
+                case FontWeight::N900: aSource = FontWeight::N800; break;
                 default: break;
             }
 
@@ -159,15 +159,15 @@ namespace svgio::svgreader
 
             switch(aSource)
             {
-                case FontWeight_100: nRetval = WEIGHT_ULTRALIGHT; break;
-                case FontWeight_200: nRetval = WEIGHT_LIGHT; break;
-                case FontWeight_300: nRetval = WEIGHT_SEMILIGHT; break;
-                case FontWeight_400: nRetval = WEIGHT_NORMAL; break;
-                case FontWeight_500: nRetval = WEIGHT_MEDIUM; break;
-                case FontWeight_600: nRetval = WEIGHT_SEMIBOLD; break;
-                case FontWeight_700: nRetval = WEIGHT_BOLD; break;
-                case FontWeight_800: nRetval = WEIGHT_ULTRABOLD; break;
-                case FontWeight_900: nRetval = WEIGHT_BLACK; break;
+                case FontWeight::N100: nRetval = WEIGHT_ULTRALIGHT; break;
+                case FontWeight::N200: nRetval = WEIGHT_LIGHT; break;
+                case FontWeight::N300: nRetval = WEIGHT_SEMILIGHT; break;
+                case FontWeight::N400: nRetval = WEIGHT_NORMAL; break;
+                case FontWeight::N500: nRetval = WEIGHT_MEDIUM; break;
+                case FontWeight::N600: nRetval = WEIGHT_SEMIBOLD; break;
+                case FontWeight::N700: nRetval = WEIGHT_BOLD; break;
+                case FontWeight::N800: nRetval = WEIGHT_ULTRABOLD; break;
+                case FontWeight::N900: nRetval = WEIGHT_BLACK; break;
                 default: break;
             }
 
@@ -1117,8 +1117,8 @@ namespace svgio::svgreader
                 // create fill
                 basegfx::B2DPolyPolygon aPath(rPath);
                 const bool bNeedToCheckClipRule(SVGToken::Path == mrOwner.getType() || SVGToken::Polygon == mrOwner.getType());
-                const bool bClipPathIsNonzero(bNeedToCheckClipRule && mbIsClipPathContent && FillRule_nonzero == maClipRule);
-                const bool bFillRuleIsNonzero(bNeedToCheckClipRule && !mbIsClipPathContent && FillRule_nonzero == getFillRule());
+                const bool bClipPathIsNonzero(bNeedToCheckClipRule && mbIsClipPathContent && FillRule::nonzero == maClipRule);
+                const bool bFillRuleIsNonzero(bNeedToCheckClipRule && !mbIsClipPathContent && FillRule::nonzero == getFillRule());
 
                 if(bClipPathIsNonzero || bFillRuleIsNonzero)
                 {
@@ -1257,22 +1257,22 @@ namespace svgio::svgreader
             maFillOpacity(),
             maStrokeDasharray(),
             maStrokeDashOffset(),
-            maStrokeLinecap(StrokeLinecap_notset),
-            maStrokeLinejoin(StrokeLinejoin_notset),
+            maStrokeLinecap(StrokeLinecap::notset),
+            maStrokeLinejoin(StrokeLinejoin::notset),
             maStrokeMiterLimit(),
             maStrokeOpacity(),
             maFontFamily(),
             maFontSize(),
             maFontSizeNumber(),
-            maFontStretch(FontStretch_notset),
-            maFontStyle(FontStyle_notset),
-            maFontWeight(FontWeight_notset),
-            maTextAlign(TextAlign_notset),
-            maTextDecoration(TextDecoration_notset),
-            maTextAnchor(TextAnchor_notset),
+            maFontStretch(FontStretch::notset),
+            maFontStyle(FontStyle::notset),
+            maFontWeight(FontWeight::notset),
+            maTextAlign(TextAlign::notset),
+            maTextDecoration(TextDecoration::notset),
+            maTextAnchor(TextAnchor::notset),
             maColor(),
             maOpacity(),
-            maVisibility(Visibility_notset),
+            maVisibility(Visibility::notset),
             maTitle(),
             maDesc(),
             maClipPathXLink(),
@@ -1285,9 +1285,9 @@ namespace svgio::svgreader
             mpMarkerMidXLink(nullptr),
             maMarkerEndXLink(),
             mpMarkerEndXLink(nullptr),
-            maFillRule(FillRule_notset),
-            maClipRule(FillRule_nonzero),
-            maBaselineShift(BaselineShift_Baseline),
+            maFillRule(FillRule::notset),
+            maClipRule(FillRule::nonzero),
+            maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
             maResolvingParent(30, 0),
             mbIsClipPathContent(SVGToken::ClipPathNode == mrOwner.getType()),
@@ -1350,11 +1350,11 @@ namespace svgio::svgreader
                     {
                         if(aContent.match(commonStrings::aStrNonzero))
                         {
-                            maFillRule = FillRule_nonzero;
+                            maFillRule = FillRule::nonzero;
                         }
                         else if(aContent.match(commonStrings::aStrEvenOdd))
                         {
-                            maFillRule = FillRule_evenodd;
+                            maFillRule = FillRule::evenodd;
                         }
                     }
                     break;
@@ -1419,15 +1419,15 @@ namespace svgio::svgreader
                     {
                         if(aContent.startsWith("butt"))
                         {
-                            setStrokeLinecap(StrokeLinecap_butt);
+                            setStrokeLinecap(StrokeLinecap::butt);
                         }
                         else if(aContent.startsWith("round"))
                         {
-                            setStrokeLinecap(StrokeLinecap_round);
+                            setStrokeLinecap(StrokeLinecap::round);
                         }
                         else if(aContent.startsWith("square"))
                         {
-                            setStrokeLinecap(StrokeLinecap_square);
+                            setStrokeLinecap(StrokeLinecap::square);
                         }
                     }
                     break;
@@ -1438,15 +1438,15 @@ namespace svgio::svgreader
                     {
                         if(aContent.startsWith("miter"))
                         {
-                            setStrokeLinejoin(StrokeLinejoin_miter);
+                            setStrokeLinejoin(StrokeLinejoin::miter);
                         }
                         else if(aContent.startsWith("round"))
                         {
-                            setStrokeLinejoin(StrokeLinejoin_round);
+                            setStrokeLinejoin(StrokeLinejoin::round);
                         }
                         else if(aContent.startsWith("bevel"))
                         {
-                            setStrokeLinejoin(StrokeLinejoin_bevel);
+                            setStrokeLinejoin(StrokeLinejoin::bevel);
                         }
                     }
                     break;
@@ -1537,43 +1537,43 @@ namespace svgio::svgreader
                     {
                         if(aContent.startsWith("xx-small"))
                         {
-                            setFontSize(FontSize_xx_small);
+                            setFontSize(FontSize::xx_small);
                         }
                         else if(aContent.startsWith("x-small"))
                         {
-                            setFontSize(FontSize_x_small);
+                            setFontSize(FontSize::x_small);
                         }
                         else if(aContent.startsWith("small"))
                         {
-                            setFontSize(FontSize_small);
+                            setFontSize(FontSize::small);
                         }
                         else if(aContent.startsWith("smaller"))
                         {
-                            setFontSize(FontSize_smaller);
+                            setFontSize(FontSize::smaller);
                         }
                         else if(aContent.startsWith("medium"))
                         {
-                            setFontSize(FontSize_medium);
+                            setFontSize(FontSize::medium);
                         }
                         else if(aContent.startsWith("larger"))
                         {
-                            setFontSize(FontSize_larger);
+                            setFontSize(FontSize::larger);
                         }
                         else if(aContent.startsWith("large"))
                         {
-                            setFontSize(FontSize_large);
+                            setFontSize(FontSize::large);
                         }
                         else if(aContent.startsWith("x-large"))
                         {
-                            setFontSize(FontSize_x_large);
+                            setFontSize(FontSize::x_large);
                         }
                         else if(aContent.startsWith("xx-large"))
                         {
-                            setFontSize(FontSize_xx_large);
+                            setFontSize(FontSize::xx_large);
                         }
                         else if(aContent.startsWith("initial"))
                         {
-                            setFontSize(FontSize_initial);
+                            setFontSize(FontSize::initial);
                         }
                         else
                         {
@@ -1597,47 +1597,47 @@ namespace svgio::svgreader
                     {
                         if(aContent.startsWith("normal"))
                         {
-                            setFontStretch(FontStretch_normal);
+                            setFontStretch(FontStretch::normal);
                         }
                         else if(aContent.startsWith("wider"))
                         {
-                            setFontStretch(FontStretch_wider);
+                            setFontStretch(FontStretch::wider);
                         }
                         else if(aContent.startsWith("narrower"))
                         {
-                            setFontStretch(FontStretch_narrower);
+                            setFontStretch(FontStretch::narrower);
                         }
                         else if(aContent.startsWith("ultra-condensed"))
                         {
-                            setFontStretch(FontStretch_ultra_condensed);
+                            setFontStretch(FontStretch::ultra_condensed);
                         }
                         else if(aContent.startsWith("extra-condensed"))
                         {
-                            setFontStretch(FontStretch_extra_condensed);
+                            setFontStretch(FontStretch::extra_condensed);
                         }
                         else if(aContent.startsWith("condensed"))
                         {
-                            setFontStretch(FontStretch_condensed);
+                            setFontStretch(FontStretch::condensed);
                         }
                         else if(aContent.startsWith("semi-condensed"))
                         {
-                            setFontStretch(FontStretch_semi_condensed);
+                            setFontStretch(FontStretch::semi_condensed);
                         }
                         else if(aContent.startsWith("semi-expanded"))
                         {
-                            setFontStretch(FontStretch_semi_expanded);
+                            setFontStretch(FontStretch::semi_expanded);
                         }
                         else if(aContent.startsWith("expanded"))
                         {
-                            setFontStretch(FontStretch_expanded);
+                            setFontStretch(FontStretch::expanded);
                         }
                         else if(aContent.startsWith("extra-expanded"))
                         {
-                            setFontStretch(FontStretch_extra_expanded);
+                            setFontStretch(FontStretch::extra_expanded);
                         }
                         else if(aContent.startsWith("ultra-expanded"))
                         {
-                            setFontStretch(FontStretch_ultra_expanded);
+                            setFontStretch(FontStretch::ultra_expanded);
                         }
                     }
                     break;
@@ -1648,15 +1648,15 @@ namespace svgio::svgreader
                     {
                         if(aContent.startsWith("normal"))
                         {
-                            setFontStyle(FontStyle_normal);
+                            setFontStyle(FontStyle::normal);
                         }
                         else if(aContent.startsWith("italic"))
                         {
-                            setFontStyle(FontStyle_italic);
+                            setFontStyle(FontStyle::italic);
                         }
                         else if(aContent.startsWith("oblique"))
                         {
-                            setFontStyle(FontStyle_oblique);
+                            setFontStyle(FontStyle::oblique);
                         }
                     }
                     break;
@@ -1671,47 +1671,47 @@ namespace svgio::svgreader
                     {
                         if(aContent.startsWith("100"))
                         {
-                            setFontWeight(FontWeight_100);
+                            setFontWeight(FontWeight::N100);
                         }
                         else if(aContent.startsWith("200"))
                         {
-                            setFontWeight(FontWeight_200);
+                            setFontWeight(FontWeight::N200);
                         }
                         else if(aContent.startsWith("300"))
                         {
-                            setFontWeight(FontWeight_300);
+                            setFontWeight(FontWeight::N300);
                         }
                         else if(aContent.startsWith("400") || aContent.startsWith("normal"))
                         {
-                            setFontWeight(FontWeight_400);
+                            setFontWeight(FontWeight::N400);
                         }
                         else if(aContent.startsWith("500"))
                         {
-                            setFontWeight(FontWeight_500);
+                            setFontWeight(FontWeight::N500);
                         }
                         else if(aContent.startsWith("600"))
                         {
-                            setFontWeight(FontWeight_600);
+                            setFontWeight(FontWeight::N600);
                         }
                         else if(aContent.startsWith("700") || aContent.startsWith("bold"))
                         {
-                            setFontWeight(FontWeight_700);
+                            setFontWeight(FontWeight::N700);
                         }
                         else if(aContent.startsWith("800"))
                         {
-                            setFontWeight(FontWeight_800);
+                            setFontWeight(FontWeight::N800);
                         }
                         else if(aContent.startsWith("900"))
                         {
-                            setFontWeight(FontWeight_900);
+                            setFontWeight(FontWeight::N900);
                         }
                         else if(aContent.startsWith("bolder"))
                         {
-                            setFontWeight(FontWeight_bolder);
+                            setFontWeight(FontWeight::bolder);
                         }
                         else if(aContent.startsWith("lighter"))
                         {
-                            setFontWeight(FontWeight_lighter);
+                            setFontWeight(FontWeight::lighter);
                         }
                     }
                     break;
@@ -1730,23 +1730,23 @@ namespace svgio::svgreader
                     {
                         if(aContent.startsWith("none"))
                         {
-                            setTextDecoration(TextDecoration_none);
+                            setTextDecoration(TextDecoration::none);
                         }
                         else if(aContent.startsWith("underline"))
                         {
-                            setTextDecoration(TextDecoration_underline);
+                            setTextDecoration(TextDecoration::underline);
                         }
                         else if(aContent.startsWith("overline"))
                         {
-                            setTextDecoration(TextDecoration_overline);
+                            setTextDecoration(TextDecoration::overline);
                         }
                         else if(aContent.startsWith("line-through"))
                         {
-                            setTextDecoration(TextDecoration_line_through);
+                            setTextDecoration(TextDecoration::line_through);
                         }
                         else if(aContent.startsWith("blink"))
                         {
-                            setTextDecoration(TextDecoration_blink);
+                            setTextDecoration(TextDecoration::blink);
                         }
                     }
                     break;
@@ -1765,15 +1765,15 @@ namespace svgio::svgreader
                     {
                         if(aContent.startsWith("start"))
                         {
-                            setTextAnchor(TextAnchor_start);
+                            setTextAnchor(TextAnchor::start);
                         }
                         else if(aContent.startsWith("middle"))
                         {
-                            setTextAnchor(TextAnchor_middle);
+                            setTextAnchor(TextAnchor::middle);
                         }
                         else if(aContent.startsWith("end"))
                         {
-                            setTextAnchor(TextAnchor_end);
+                            setTextAnchor(TextAnchor::end);
                         }
                     }
                     break;
@@ -1784,19 +1784,19 @@ namespace svgio::svgreader
                     {
                         if(aContent.startsWith("left"))
                         {
-                            setTextAlign(TextAlign_left);
+                            setTextAlign(TextAlign::left);
                         }
                         else if(aContent.startsWith("right"))
                         {
-                            setTextAlign(TextAlign_right);
+                            setTextAlign(TextAlign::right);
                         }
                         else if(aContent.startsWith("center"))
                         {
-                            setTextAlign(TextAlign_center);
+                            setTextAlign(TextAlign::center);
                         }
                         else if(aContent.startsWith("justify"))
                         {
-                            setTextAlign(TextAlign_justify);
+                            setTextAlign(TextAlign::justify);
                         }
                     }
                     break;
@@ -1833,19 +1833,19 @@ namespace svgio::svgreader
                     {
                         if(aContent.startsWith("visible"))
                         {
-                            setVisibility(Visibility_visible);
+                            setVisibility(Visibility::visible);
                         }
                         else if(aContent.startsWith("hidden"))
                         {
-                            setVisibility(Visibility_hidden);
+                            setVisibility(Visibility::hidden);
                         }
                         else if(aContent.startsWith("collapse"))
                         {
-                            setVisibility(Visibility_collapse);
+                            setVisibility(Visibility::collapse);
                         }
                         else if(aContent.startsWith("inherit"))
                         {
-                            setVisibility(Visibility_inherit);
+                            setVisibility(Visibility::inherit);
                         }
                     }
                     break;
@@ -1876,11 +1876,11 @@ namespace svgio::svgreader
                     {
                         if(aContent.match(commonStrings::aStrNonzero))
                         {
-                            maClipRule = FillRule_nonzero;
+                            maClipRule = FillRule::nonzero;
                         }
                         else if(aContent.match(commonStrings::aStrEvenOdd))
                         {
-                            maClipRule = FillRule_evenodd;
+                            maClipRule = FillRule::evenodd;
                         }
                     }
                     break;
@@ -1929,11 +1929,11 @@ namespace svgio::svgreader
 
                         if(aContent.startsWith("sub"))
                         {
-                            setBaselineShift(BaselineShift_Sub);
+                            setBaselineShift(BaselineShift::Sub);
                         }
                         else if(aContent.startsWith("super"))
                         {
-                            setBaselineShift(BaselineShift_Super);
+                            setBaselineShift(BaselineShift::Super);
                         }
                         else if(readSingleNumber(aContent, aNum))
                         {
@@ -1941,17 +1941,17 @@ namespace svgio::svgreader
 
                             if(SvgUnit::percent == aNum.getUnit())
                             {
-                                setBaselineShift(BaselineShift_Percentage);
+                                setBaselineShift(BaselineShift::Percentage);
                             }
                             else
                             {
-                                setBaselineShift(BaselineShift_Length);
+                                setBaselineShift(BaselineShift::Length);
                             }
                         }
                         else
                         {
                             // no BaselineShift or inherit (which is automatically)
-                            setBaselineShift(BaselineShift_Baseline);
+                            setBaselineShift(BaselineShift::Baseline);
                         }
                     }
                     break;
@@ -2291,7 +2291,7 @@ namespace svgio::svgreader
 
         Visibility SvgStyleAttributes::getVisibility() const
         {
-            if(Visibility_notset == maVisibility || Visibility_inherit == maVisibility)
+            if(Visibility::notset == maVisibility || Visibility::inherit == maVisibility)
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -2303,7 +2303,7 @@ namespace svgio::svgreader
                     return ret;
                 }
                 //default is Visible
-                return Visibility_visible;
+                return Visibility::visible;
             }
 
             // Visibility correction/exception for self-exported SVGs:
@@ -2311,13 +2311,13 @@ namespace svgio::svgreader
             // single slides into <g visibility="hidden">. Not sure why
             // this happens, but this leads (correctly) to empty imported
             // Graphics.
-            // Thus, if Visibility_hidden is active and owner is a SVGToken::G
+            // Thus, if Visibility::hidden is active and owner is a SVGToken::G
             // and it's parent is also a SVGToken::G and it has a Class 'SlideGroup'
             // set, check if we are an Impress export.
             // We are an Impress export if an SVG-Node titled 'ooo:meta_slides'
             // exists.
             // All together gives:
-            if(Visibility_hidden == maVisibility
+            if(Visibility::hidden == maVisibility
                 && SVGToken::G == mrOwner.getType()
                 && nullptr != mrOwner.getDocument().findSvgNodeById("ooo:meta_slides"))
             {
@@ -2330,8 +2330,8 @@ namespace svgio::svgreader
                     if("SlideGroup" == aClass)
                     {
                         // if we detect this exception,
-                        // override Visibility_hidden -> Visibility_visible
-                        return Visibility_visible;
+                        // override Visibility::hidden -> Visibility::visible
+                        return Visibility::visible;
                     }
                 }
             }
@@ -2341,7 +2341,7 @@ namespace svgio::svgreader
 
         FillRule SvgStyleAttributes::getFillRule() const
         {
-            if(FillRule_notset != maFillRule)
+            if(FillRule::notset != maFillRule)
             {
                 return maFillRule;
             }
@@ -2357,7 +2357,7 @@ namespace svgio::svgreader
             }
 
             // default is NonZero
-            return FillRule_nonzero;
+            return FillRule::nonzero;
         }
 
         const SvgNumberVector& SvgStyleAttributes::getStrokeDasharray() const
@@ -2409,7 +2409,7 @@ namespace svgio::svgreader
 
         StrokeLinecap SvgStyleAttributes::getStrokeLinecap() const
         {
-            if(maStrokeLinecap != StrokeLinecap_notset)
+            if(maStrokeLinecap != StrokeLinecap::notset)
             {
                 return maStrokeLinecap;
             }
@@ -2424,13 +2424,13 @@ namespace svgio::svgreader
                 return ret;
             }
 
-            // default is StrokeLinecap_butt
-            return StrokeLinecap_butt;
+            // default is StrokeLinecap::butt
+            return StrokeLinecap::butt;
         }
 
         StrokeLinejoin SvgStyleAttributes::getStrokeLinejoin() const
         {
-            if(maStrokeLinejoin != StrokeLinejoin_notset)
+            if(maStrokeLinejoin != StrokeLinejoin::notset)
             {
                 return maStrokeLinejoin;
             }
@@ -2445,8 +2445,8 @@ namespace svgio::svgreader
                 return ret;
             }
 
-            // default is StrokeLinejoin_butt
-            return StrokeLinejoin_miter;
+            // default is StrokeLinejoin::butt
+            return StrokeLinejoin::miter;
         }
 
         SvgNumber SvgStyleAttributes::getStrokeMiterLimit() const
@@ -2565,21 +2565,21 @@ namespace svgio::svgreader
             //In CSS2, the suggested scaling factor between adjacent indexes is 1.2
             switch(maFontSize)
             {
-                case FontSize_notset:
+                case FontSize::notset:
                     break;
-                case FontSize_xx_small:
+                case FontSize::xx_small:
                 {
                     return SvgNumber(aDefaultSize / 1.728);
                 }
-                case FontSize_x_small:
+                case FontSize::x_small:
                 {
                     return SvgNumber(aDefaultSize / 1.44);
                 }
-                case FontSize_small:
+                case FontSize::small:
                 {
                     return SvgNumber(aDefaultSize / 1.2);
                 }
-                case FontSize_smaller:
+                case FontSize::smaller:
                 {
                     const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
                     if(pSvgStyleAttributes)
@@ -2589,16 +2589,16 @@ namespace svgio::svgreader
                     }
                     [[fallthrough]];
                 }
-                case FontSize_medium:
-                case FontSize_initial:
+                case FontSize::medium:
+                case FontSize::initial:
                 {
                     return SvgNumber(aDefaultSize);
                 }
-                case FontSize_large:
+                case FontSize::large:
                 {
                     return SvgNumber(aDefaultSize * 1.2);
                 }
-                case FontSize_larger:
+                case FontSize::larger:
                 {
                     const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
                     if(pSvgStyleAttributes)
@@ -2608,11 +2608,11 @@ namespace svgio::svgreader
                     }
                     [[fallthrough]];
                 }
-                case FontSize_x_large:
+                case FontSize::x_large:
                 {
                     return SvgNumber(aDefaultSize * 1.44);
                 }
-                case FontSize_xx_large:
+                case FontSize::xx_large:
                 {
                     return SvgNumber(aDefaultSize * 1.728);
                 }
@@ -2630,9 +2630,9 @@ namespace svgio::svgreader
 
         FontStretch SvgStyleAttributes::getFontStretch() const
         {
-            if(maFontStretch != FontStretch_notset)
+            if(maFontStretch != FontStretch::notset)
             {
-                if(FontStretch_wider != maFontStretch && FontStretch_narrower != maFontStretch)
+                if(FontStretch::wider != maFontStretch && FontStretch::narrower != maFontStretch)
                 {
                     return maFontStretch;
                 }
@@ -2646,11 +2646,11 @@ namespace svgio::svgreader
                 FontStretch aInherited = pSvgStyleAttributes->getFontStretch();
                 --maResolvingParent[18];
 
-                if(FontStretch_wider == maFontStretch)
+                if(FontStretch::wider == maFontStretch)
                 {
                     aInherited = getWider(aInherited);
                 }
-                else if(FontStretch_narrower == maFontStretch)
+                else if(FontStretch::narrower == maFontStretch)
                 {
                     aInherited = getNarrower(aInherited);
                 }
@@ -2658,13 +2658,13 @@ namespace svgio::svgreader
                 return aInherited;
             }
 
-            // default is FontStretch_normal
-            return FontStretch_normal;
+            // default is FontStretch::normal
+            return FontStretch::normal;
         }
 
         FontStyle SvgStyleAttributes::getFontStyle() const
         {
-            if(maFontStyle != FontStyle_notset)
+            if(maFontStyle != FontStyle::notset)
             {
                 return maFontStyle;
             }
@@ -2679,15 +2679,15 @@ namespace svgio::svgreader
                 return ret;
             }
 
-            // default is FontStyle_normal
-            return FontStyle_normal;
+            // default is FontStyle::normal
+            return FontStyle::normal;
         }
 
         FontWeight SvgStyleAttributes::getFontWeight() const
         {
-            if(maFontWeight != FontWeight_notset)
+            if(maFontWeight != FontWeight::notset)
             {
-                if(FontWeight_bolder != maFontWeight && FontWeight_lighter != maFontWeight)
+                if(FontWeight::bolder != maFontWeight && FontWeight::lighter != maFontWeight)
                 {
                     return maFontWeight;
                 }
@@ -2701,11 +2701,11 @@ namespace svgio::svgreader
                 FontWeight aInherited = pSvgStyleAttributes->getFontWeight();
                 --maResolvingParent[20];
 
-                if(FontWeight_bolder == maFontWeight)
+                if(FontWeight::bolder == maFontWeight)
                 {
                     aInherited = getBolder(aInherited);
                 }
-                else if(FontWeight_lighter == maFontWeight)
+                else if(FontWeight::lighter == maFontWeight)
                 {
                     aInherited = getLighter(aInherited);
                 }
@@ -2713,13 +2713,13 @@ namespace svgio::svgreader
                 return aInherited;
             }
 
-            // default is FontWeight_400 (FontWeight_normal)
-            return FontWeight_400;
+            // default is FontWeight::N400 (FontWeight::normal)
+            return FontWeight::N400;
         }
 
         TextAlign SvgStyleAttributes::getTextAlign() const
         {
-            if(maTextAlign != TextAlign_notset)
+            if(maTextAlign != TextAlign::notset)
             {
                 return maTextAlign;
             }
@@ -2734,13 +2734,13 @@ namespace svgio::svgreader
                 return ret;
             }
 
-            // default is TextAlign_left
-            return TextAlign_left;
+            // default is TextAlign::left
+            return TextAlign::left;
         }
 
         const SvgStyleAttributes* SvgStyleAttributes::getTextDecorationDefiningSvgStyleAttributes() const
         {
-            if(maTextDecoration != TextDecoration_notset)
+            if(maTextDecoration != TextDecoration::notset)
             {
                 return this;
             }
@@ -2769,14 +2769,14 @@ namespace svgio::svgreader
             }
             else
             {
-                // default is TextDecoration_none
-                return TextDecoration_none;
+                // default is TextDecoration::none
+                return TextDecoration::none;
             }
         }
 
         TextAnchor SvgStyleAttributes::getTextAnchor() const
         {
-            if(maTextAnchor != TextAnchor_notset)
+            if(maTextAnchor != TextAnchor::notset)
             {
                 return maTextAnchor;
             }
@@ -2791,8 +2791,8 @@ namespace svgio::svgreader
                 return ret;
             }
 
-            // default is TextAnchor_start
-            return TextAnchor_start;
+            // default is TextAnchor::start
+            return TextAnchor::start;
         }
 
         const basegfx::BColor* SvgStyleAttributes::getColor() const
