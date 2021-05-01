@@ -676,6 +676,13 @@ void ScColumn::AttachNewFormulaCell(
         rCell.SetDirty();
 }
 
+void ScColumn::AccessAttachNewFormulaCellsForMixDataHandler(
+    const sc::CellStoreType::position_type& aPos, size_t nLength,
+    std::vector<SCROW>& rNewSharedRows)
+{
+    AttachNewFormulaCells(aPos, nLength, rNewSharedRows);
+}
+
 void ScColumn::AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength,
         std::vector<SCROW>& rNewSharedRows )
 {
@@ -1852,6 +1859,13 @@ public:
                         aPos = rDestCells.position(aPos.first, nNextRow);
                         sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
                     }
+
+                    // Start listening on cells to get them updated by changes of referenced cells
+                    std::vector<SCROW> aNewSharedRows;
+                    aPos = rDestCells.position(itDestPos, nDestRow);
+                    size_t nFormulaCells = std::distance(itData, itDataEnd);
+                    mrDestColumn.AccessAttachNewFormulaCellsForMixDataHandler(aPos, nFormulaCells,
+                                                                              aNewSharedRows);
                 }
                 break;
                 case sc::element_type_empty:
