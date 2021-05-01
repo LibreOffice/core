@@ -23,8 +23,9 @@
 
 #include <fontinstance.hxx>
 #include <impfontcache.hxx>
-
 #include <PhysicalFontFace.hxx>
+
+#include <o3tl/hash_combine.hxx>
 
 // extend std namespace to add custom hash needed for LogicalFontInstance
 
@@ -35,8 +36,8 @@ namespace std
         size_t operator()(const pair< sal_UCS4, FontWeight >& rData) const
         {
             std::size_t seed = 0;
-            boost::hash_combine(seed, rData.first);
-            boost::hash_combine(seed, rData.second);
+            o3tl::hash_combine(seed, rData.first);
+            o3tl::hash_combine(seed, rData.second);
             return seed;
         }
     };

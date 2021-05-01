@@ -27,6 +27,8 @@
 #include <cairo.h>
 #include <cairo-ft.h>
 
+#include <deque>
+
 namespace {
 
 typedef struct FT_FaceRec_* FT_Face;
