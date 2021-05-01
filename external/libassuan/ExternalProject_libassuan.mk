@@ -34,7 +34,7 @@ $(call gb_ExternalProject_get_state_target,libassuan,build): $(call gb_Executabl
 		GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
         --host=$(gb_ExternalProject_libassuan_host) \
-		RC='windres -O COFF --target=$(gb_ExternalProject_libassuan_target) --preprocessor='\''$(call gb_Executable_get_target,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)'\' \
+		RC='windres -O COFF --target=$(gb_ExternalProject_libassuan_target) --preprocessor=$(call gb_Executable_get_target,cpp) --preprocessor-arg=-+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)' \
 		MAKE=$(MAKE) \
 	  && $(MAKE) \
 	)
