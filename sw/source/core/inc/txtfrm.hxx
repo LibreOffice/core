@@ -171,8 +171,8 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     static constexpr tools::Long nMinPrtLine = 0;    // This Line must not be underrun when printing
                                 // Hack for table cells stretching multiple pages
 
-    sal_uLong  mnAllLines        :24; // Line count for the Paint (including nThisLines)
-    sal_uLong  mnThisLines       :8; // Count of Lines of the Frame
+    sal_uInt32  mnAllLines        :24; // Line count for the Paint (including nThisLines)
+    sal_uInt32  mnThisLines       :8; // Count of Lines of the Frame
 
     // The x position for flys anchored at this paragraph.
     // These values are calculated in SwTextFrame::CalcBaseOfstForFly()

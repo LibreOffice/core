@@ -3756,7 +3756,7 @@ sal_uInt16 SwTextFrame::GetLineCount(TextFrameIndex const nPos)
 void SwTextFrame::ChgThisLines()
 {
     // not necessary to format here (GetFormatted etc.), because we have to come from there!
-    sal_uLong nNew = 0;
+    sal_uInt32 nNew = 0;
     const SwLineNumberInfo &rInf = GetDoc().GetLineNumberInfo();
     if ( !GetText().isEmpty() && HasPara() )
     {
@@ -3765,7 +3765,7 @@ void SwTextFrame::ChgThisLines()
         if ( rInf.IsCountBlankLines() )
         {
             aLine.Bottom();
-            nNew = static_cast<sal_uLong>(aLine.GetLineNr());
+            nNew = aLine.GetLineNr();
         }
         else
         {

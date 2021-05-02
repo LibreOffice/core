@@ -22,7 +22,6 @@
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
-#include <tools/solar.h>
 #include <tools/long.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
@@ -49,8 +48,8 @@ class SVT_DLLPUBLIC SvParser : public SvRefBase
 protected:
     SvStream&           rInput;
     OUString            aToken;             // scanned token
-    sal_uLong           nlLineNr;           // current line number
-    sal_uLong           nlLinePos;          // current column number
+    sal_uInt32          nlLineNr;           // current line number
+    sal_uInt32          nlLinePos;          // current column number
 
     std::unique_ptr<SvParser_Impl<T>> pImplData; // internal data
     tools::Long                m_nTokenIndex;      // current token index to detect loops for seeking backwards
@@ -107,12 +106,12 @@ public:
 
     SvParserState GetStatus() const;  // StatusInfo
 
-    sal_uLong    GetLineNr() const;
-    sal_uLong    GetLinePos() const;
+    sal_uInt32   GetLineNr() const;
+    sal_uInt32   GetLinePos() const;
     void         IncLineNr();
-    sal_uLong    IncLinePos();
-    void         SetLineNr( sal_uLong nlNum );
-    void         SetLinePos( sal_uLong nlPos );
+    sal_uInt32   IncLinePos();
+    void         SetLineNr( sal_uInt32 nlNum );
+    void         SetLinePos( sal_uInt32 nlPos );
 
     sal_uInt32 GetNextChar();   // Return next Unicode codepoint in UTF32.
     void RereadLookahead();

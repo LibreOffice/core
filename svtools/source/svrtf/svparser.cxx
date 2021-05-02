@@ -35,8 +35,8 @@ struct SvParser_Impl
 {
     OUString        aToken;             // gescanntes Token
     sal_uInt64      nFilePos;           // actual position in stream
-    sal_uLong       nlLineNr;           // actual line number
-    sal_uLong       nlLinePos;          // actual column number
+    sal_uInt32      nlLineNr;           // actual line number
+    sal_uInt32      nlLinePos;          // actual column number
     tools::Long            nTokenValue;        // extra value (RTF)
     bool            bTokenHasValue;     // indicates whether nTokenValue is valid
     T               nToken;             // actual Token
@@ -112,12 +112,12 @@ SvParser<T>::~SvParser()
 }
 
 template<typename T> SvParserState SvParser<T>::GetStatus() const { return eState; }
-template<typename T> sal_uLong  SvParser<T>::GetLineNr() const       { return nlLineNr; }
-template<typename T> sal_uLong  SvParser<T>::GetLinePos() const      { return nlLinePos; }
+template<typename T> sal_uInt32 SvParser<T>::GetLineNr() const       { return nlLineNr; }
+template<typename T> sal_uInt32 SvParser<T>::GetLinePos() const      { return nlLinePos; }
 template<typename T> void       SvParser<T>::IncLineNr()             { ++nlLineNr; }
-template<typename T> sal_uLong  SvParser<T>::IncLinePos()            { return ++nlLinePos; }
-template<typename T> void       SvParser<T>::SetLineNr( sal_uLong nlNum ) { nlLineNr = nlNum; }
-template<typename T> void       SvParser<T>::SetLinePos( sal_uLong nlPos ) {   nlLinePos = nlPos; }
+template<typename T> sal_uInt32 SvParser<T>::IncLinePos()            { return ++nlLinePos; }
+template<typename T> void       SvParser<T>::SetLineNr( sal_uInt32 nlNum ) { nlLineNr = nlNum; }
+template<typename T> void       SvParser<T>::SetLinePos( sal_uInt32 nlPos ) {   nlLinePos = nlPos; }
 template<typename T> bool       SvParser<T>::IsParserWorking() const { return SvParserState::Working == eState; }
 template<typename T> rtl_TextEncoding SvParser<T>::GetSrcEncoding() const { return eSrcEnc; }
 template<typename T> void       SvParser<T>::SetSwitchToUCS2( bool bSet ) { bSwitchToUCS2 = bSet; }
