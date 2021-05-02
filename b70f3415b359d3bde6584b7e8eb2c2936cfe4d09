@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bcf1e4ca_6a8c05b2",
+        "filename": "svx/source/dialog/weldeditview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1528,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-05-02T06:34:55Z",
+      "side": 0,
+      "message": "I think this switches between 2 different ideas of height.....",
+      "revId": "b70f3415b359d3bde6584b7e8eb2c2936cfe4d09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
