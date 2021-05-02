@@ -110,7 +110,6 @@ public:
     // Window
     virtual void SetText(const OUString& rText) override;
     virtual OUString GetText() const override;
-    virtual void Resize() override;
     virtual void Command(const CommandEvent& rCEvt) override;
 
     ESelection GetSelection() const;
