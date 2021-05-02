@@ -135,8 +135,23 @@ void WeldEditView::Resize()
     {
         OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
         Size aOutputSize(rDevice.PixelToLogic(GetOutputSizePixel()));
-        GetEditEngine()->SetPaperSize(aOutputSize);
+        // Resizes the edit engine to adjust to the size of the output area
         pEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
+        GetEditEngine()->SetPaperSize(aOutputSize);
+        pEditView->ShowCursor();
+
+        const tools::Long nMaxVisAreaStart
+            = pEditView->GetEditEngine()->GetTextHeight() - aOutputSize.Height();
+        tools::Rectangle aVisArea(pEditView->GetVisArea());
+        if (aVisArea.Top() > nMaxVisAreaStart)
+        {
+            aVisArea.SetTop(std::max<tools::Long>(nMaxVisAreaStart, 0));
+            aVisArea.SetSize(aOutputSize);
+            pEditView->SetVisArea(aVisArea);
+            pEditView->ShowCursor();
+        }
+
+        EditViewScrollStateChange();
     }
     weld::CustomWidgetController::Resize();
 }

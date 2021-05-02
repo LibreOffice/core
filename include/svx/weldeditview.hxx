@@ -61,6 +61,7 @@ protected:
 
     void DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
+public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
@@ -78,6 +79,7 @@ protected:
 
     void SetAcceptsTab(bool bAcceptsTab) { m_bAcceptsTab = bAcceptsTab; }
 
+protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     virtual void EditViewInvalidate(const tools::Rectangle& rRect) override { Invalidate(rRect); }
