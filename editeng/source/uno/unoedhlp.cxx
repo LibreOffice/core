@@ -33,7 +33,7 @@ SvxEditSourceHint::SvxEditSourceHint( SfxHintId _nId ) :
 {
 }
 
-SvxEditSourceHint::SvxEditSourceHint( SfxHintId _nId, sal_uLong nValue, sal_Int32 nStart, sal_Int32 nEnd ) :
+SvxEditSourceHint::SvxEditSourceHint( SfxHintId _nId, sal_Int32 nValue, sal_Int32 nStart, sal_Int32 nEnd ) :
     TextHint( _nId, nValue ),
     mnStart( nStart),
     mnEnd( nEnd )

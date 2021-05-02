@@ -312,7 +312,7 @@ TextHint::TextHint( SfxHintId Id ) : SfxHint( Id ), mnValue(0)
 {
 }
 
-TextHint::TextHint( SfxHintId Id, sal_uLong nValue ) : SfxHint( Id ), mnValue(nValue)
+TextHint::TextHint( SfxHintId Id, sal_Int32 nValue ) : SfxHint( Id ), mnValue(nValue)
 {
 }
 

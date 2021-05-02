@@ -21,7 +21,6 @@
 #define INCLUDED_EDITENG_UNOEDHLP_HXX
 
 #include <memory>
-#include <tools/solar.h>
 #include <vcl/textdata.hxx>
 #include <svl/hint.hxx>
 #include <tools/gen.hxx>
@@ -43,7 +42,7 @@ private:
 
 public:
             SvxEditSourceHint( SfxHintId nId );
-            SvxEditSourceHint( SfxHintId nId, sal_uLong nValue, sal_Int32 nStart, sal_Int32 nEnd );
+            SvxEditSourceHint( SfxHintId nId, sal_Int32 nValue, sal_Int32 nStart, sal_Int32 nEnd );
 
     using TextHint::GetValue;
     sal_Int32   GetStartValue() const { return mnStart;}
