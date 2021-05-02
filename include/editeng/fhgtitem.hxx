@@ -21,7 +21,6 @@
 
 #include <svl/poolitem.hxx>
 #include <tools/debug.hxx>
-#include <tools/solar.h>
 #include <editeng/editengdllapi.h>
 
 // class SvxFontHeightItem -----------------------------------------------
@@ -49,7 +48,7 @@ private:
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxFontHeightItem( const sal_uLong nSz /*= 240*/, const sal_uInt16 nPropHeight /*= 100*/,
+    SvxFontHeightItem( const sal_uInt32 nSz /*= 240*/, const sal_uInt16 nPropHeight /*= 100*/,
                        const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem

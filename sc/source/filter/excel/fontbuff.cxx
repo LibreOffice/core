@@ -84,7 +84,7 @@ void LotusFontBuffer::SetHeight( const sal_uInt16 nIndex, const sal_uInt16 nHeig
 {
     OSL_ENSURE( nIndex < nSize, "*LotusFontBuffer::SetHeight(): Array too small!" );
     if( nIndex < nSize )
-        pData[ nIndex ].Height( std::make_unique<SvxFontHeightItem>( static_cast<sal_uLong>(nHeight) * 20, 100, ATTR_FONT_HEIGHT ) );
+        pData[ nIndex ].Height( std::make_unique<SvxFontHeightItem>( static_cast<sal_uInt32>(nHeight) * 20, 100, ATTR_FONT_HEIGHT ) );
 }
 
 void LotusFontBuffer::SetType( const sal_uInt16 nIndex, const sal_uInt16 nType )
