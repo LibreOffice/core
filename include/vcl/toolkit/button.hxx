@@ -23,7 +23,6 @@
 #error "don't use this in new code"
 #endif
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
@@ -52,7 +51,7 @@ private:
 public:
     SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( WinBits nWinStyle, DrawFlags nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
-                                              sal_uLong nImageSep,
+                                              sal_Int32 nImageSep,
                                               DrawTextFlags nTextStyle, tools::Rectangle *pSymbolRect=nullptr, bool bAddImageSep = false );
     SAL_DLLPRIVATE void             ImplSetFocusRect( const tools::Rectangle &rFocusRect );
     SAL_DLLPRIVATE const tools::Rectangle& ImplGetFocusRect() const;
