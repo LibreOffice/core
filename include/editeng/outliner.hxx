@@ -907,7 +907,7 @@ public:
     void            SetRefDevice( OutputDevice* pRefDev );
     OutputDevice*   GetRefDevice() const;
 
-    sal_uLong       GetTextHeight() const;
+    sal_uInt32      GetTextHeight() const;
     tools::Rectangle GetParaBounds( sal_Int32 nParagraph ) const;
     Point           GetDocPos( const Point& rPaperPos ) const;
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder );
