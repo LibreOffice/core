@@ -80,53 +80,13 @@ TextOutRenderer& TextOutRenderer::get(bool bUseDWrite)
 bool ExTextOutRenderer::operator()(GenericSalLayout const& rLayout, SalGraphics& /*rGraphics*/,
                                    HDC hDC)
 {
-    HFONT hFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
-    ScopedHFONT hAltFont;
-    bool bUseAltFont = false;
-    bool bShift = false;
-    if (rLayout.GetFont().GetFontSelectPattern().mbVertical)
-    {
-        LOGFONTW aLogFont;
-        GetObjectW(hFont, sizeof(aLogFont), &aLogFont);
-        if (aLogFont.lfFaceName[0] == '@')
-        {
-            memmove(&aLogFont.lfFaceName[0], &aLogFont.lfFaceName[1],
-                    sizeof(aLogFont.lfFaceName) - sizeof(aLogFont.lfFaceName[0]));
-            hAltFont.reset(CreateFontIndirectW(&aLogFont));
-        }
-        else
-        {
-            bShift = true;
-            aLogFont.lfEscapement += 2700;
-            aLogFont.lfOrientation = aLogFont.lfEscapement;
-            hAltFont.reset(CreateFontIndirectW(&aLogFont));
-        }
-    }
-
-    UINT nTextAlign = GetTextAlign(hDC);
     int nStart = 0;
     Point aPos(0, 0);
     const GlyphItem* pGlyph;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         wchar_t glyphWStr = pGlyph->glyphId();
-        if (hAltFont && pGlyph->IsVertical() == bUseAltFont)
-        {
-            bUseAltFont = !bUseAltFont;
-            SelectFont(hDC, bUseAltFont ? hAltFont.get() : hFont);
-        }
-        if (bShift && pGlyph->IsVertical())
-            SetTextAlign(hDC, TA_TOP | TA_LEFT);
-
         ExtTextOutW(hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, nullptr, &glyphWStr, 1, nullptr);
-
-        if (bShift && pGlyph->IsVertical())
-            SetTextAlign(hDC, nTextAlign);
-    }
-    if (hAltFont)
-    {
-        if (bUseAltFont)
-            SelectFont(hDC, hFont);
     }
 
     return true;
@@ -320,7 +280,11 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     const HFONT hLayoutFont = pWinFont->GetHFONT();
 
     const HFONT hOrigFont = ::SelectFont(hDC, hLayoutFont);
-    DrawTextLayout(rLayout, hDC, false);
+
+    // There isnt' a way for Win32 API ExtTextOutW to render vertical-writing glyphs correctly,
+    // so let's use DWrite text renderer in this case.
+    DrawTextLayout(rLayout, hDC, rLayout.GetFont().GetFontSelectPattern().mbVertical);
+
     ::SelectFont(hDC, hOrigFont);
 }
 
