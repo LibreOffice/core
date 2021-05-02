@@ -195,7 +195,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OU
         const FontSelectPattern aFSD( *pFace, aSize, static_cast<float>(aSize.Height()), 0, false );
         // construct log font
         LOGFONTW aLogFont;
-        ImplGetLogFontFromFontSelect( mhDC, aFSD, pFace, aLogFont );
+        ImplGetLogFontFromFontSelect( aFSD, pFace, aLogFont );
 
         // create HFONT from log font
         HFONT hNewFont = ::CreateFontIndirectW( &aLogFont );
@@ -768,8 +768,7 @@ static int CALLBACK SalEnumQueryFontProcExW( const LOGFONTW*,
     return 0;
 }
 
-void ImplGetLogFontFromFontSelect( HDC hDC,
-                                   const FontSelectPattern& rFont,
+void ImplGetLogFontFromFontSelect( const FontSelectPattern& rFont,
                                    const PhysicalFontFace* pFontFace,
                                    LOGFONTW& rLogFont )
 {
@@ -816,29 +815,6 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     if ( rFont.mbNonAntialiased )
         rLogFont.lfQuality = NONANTIALIASED_QUALITY;
 
-    // select vertical mode if requested and available
-    if ( rFont.mbVertical && nNameLen )
-    {
-        // vertical fonts start with an '@'
-        memmove( &rLogFont.lfFaceName[1], &rLogFont.lfFaceName[0],
-            sizeof(rLogFont.lfFaceName)-sizeof(rLogFont.lfFaceName[0]) );
-        rLogFont.lfFaceName[0] = '@';
-
-        // check availability of vertical mode for this font
-        bool bAvailable = false;
-        EnumFontFamiliesExW( hDC, &rLogFont, SalEnumQueryFontProcExW,
-                         reinterpret_cast<LPARAM>(&bAvailable), 0 );
-
-        if( !bAvailable )
-        {
-            // restore non-vertical name if not vertical mode isn't available
-            memcpy( &rLogFont.lfFaceName[0], aName.getStr(), nNameLen*sizeof(wchar_t) );
-            rLogFont.lfFaceName[nNameLen] = '\0';
-            // keep it upright and create the font for sideway glyphs later.
-            rLogFont.lfEscapement = rLogFont.lfEscapement - 2700;
-            rLogFont.lfOrientation = rLogFont.lfEscapement;
-        }
-    }
 }
 
 HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
@@ -848,7 +824,7 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
     HFONT hNewFont = nullptr;
 
     LOGFONTW aLogFont;
-    ImplGetLogFontFromFontSelect( getHDC(), i_rFont, i_pFontFace, aLogFont );
+    ImplGetLogFontFromFontSelect( i_rFont, i_pFontFace, aLogFont );
 
     hNewFont = ::CreateFontIndirectW( &aLogFont );
 
