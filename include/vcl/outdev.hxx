@@ -31,6 +31,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <vcl/region.hxx>
+#include <vcl/rendercontext/DrawImageFlags.hxx>
 #include <vcl/rendercontext/DrawTextFlags.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
 #include <vcl/mapmod.hxx>
@@ -124,21 +125,6 @@ namespace com::sun::star::rendering {
 #endif
 
 // OutputDevice-Types
-
-// Flags for DrawImage(), these must match the definitions in css::awt::ImageDrawMode
-enum class DrawImageFlags
-{
-    NONE                 = 0x0000,
-    Disable              = 0x0001,
-    Highlight            = 0x0002,
-    Deactive             = 0x0004,
-    ColorTransform       = 0x0008,
-    SemiTransparent      = 0x0010,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<DrawImageFlags> : is_typed_flags<DrawImageFlags, 0x001f> {};
-}
 
 // Flags for DrawGrid()
 enum class DrawGridFlags
