@@ -218,7 +218,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
         break;
     case IMapObjectType::Circle:
         {
-            mnRadius = static_cast<sal_Int32>(static_cast<const IMapCircleObject*>(&rMapObject)->GetRadius(false));
+            mnRadius = static_cast<const IMapCircleObject*>(&rMapObject)->GetRadius(false);
             const Point aPoint( static_cast<const IMapCircleObject*>(&rMapObject)->GetCenter(false) );
 
             maCenter.X = aPoint.X();
