@@ -20,7 +20,6 @@
 #define INCLUDED_EDITENG_NUMITEM_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <svl/poolitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <tools/gen.hxx>
@@ -220,7 +219,7 @@ public:
     tools::Long GetIndentAt() const { return mnIndentAt;}
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
-    static OUString CreateRomanString( sal_uLong nNo, bool bUpper );
+    static OUString CreateRomanString( sal_Int32 nNo, bool bUpper );
 };
 
 //Feature-Flags (only sal_uInt16!)
