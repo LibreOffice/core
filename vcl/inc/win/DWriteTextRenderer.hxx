@@ -88,7 +88,7 @@ private:
 class WinFontTransformGuard
 {
 public:
-    WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, float fHScale, const GenericSalLayout& rLayout, const D2D1_POINT_2F& rBaseline);
+    WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, float fHScale, const GenericSalLayout& rLayout, const D2D1_POINT_2F& rBaseline, bool bIsVertical);
     ~WinFontTransformGuard();
 
 private:
