@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_TEXTDATA_HXX
 
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <svl/hint.hxx>
 #include <vcl/dllapi.h>
@@ -115,13 +114,13 @@ inline bool TextSelection::operator != ( const TextSelection& rSel ) const
 class VCL_DLLPUBLIC TextHint : public SfxHint
 {
 private:
-    sal_uLong   mnValue;
+    sal_Int32   mnValue;
 
 public:
     TextHint( SfxHintId nId );
-    TextHint( SfxHintId nId, sal_uLong nValue );
+    TextHint( SfxHintId nId, sal_Int32 nValue );
 
-    sal_uLong   GetValue() const        { return mnValue; }
+    sal_Int32   GetValue() const        { return mnValue; }
 };
 
 struct TEIMEInfos

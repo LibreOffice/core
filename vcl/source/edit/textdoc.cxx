@@ -504,7 +504,7 @@ TextPaM TextDoc::ConnectParagraphs( TextNode* pLeft, const TextNode* pRight )
     maTextNodes.erase( std::find_if( maTextNodes.begin(), maTextNodes.end(),
                                      [&] (std::unique_ptr<TextNode> const & p) { return p.get() == pRight; } ) );
 
-    sal_uLong nLeft = ::std::find_if( maTextNodes.begin(), maTextNodes.end(),
+    sal_Int32 nLeft = ::std::find_if( maTextNodes.begin(), maTextNodes.end(),
                                       [&] (std::unique_ptr<TextNode> const & p) { return p.get() == pLeft; } )
                         - maTextNodes.begin();
     TextPaM aPaM( nLeft, nPrevLen );
