@@ -98,7 +98,7 @@ bool Outliner::IsModified() const
     return pEditEngine->IsModified();
 }
 
-sal_uLong Outliner::GetTextHeight() const
+sal_uInt32 Outliner::GetTextHeight() const
 {
     return pEditEngine->GetTextHeight();
 }
