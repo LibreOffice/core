@@ -24,7 +24,6 @@
 #endif
 
 #include <vcl/dllapi.h>
-#include <tools/solar.h>
 #include <tools/color.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/toolkit/treelistentries.hxx>
@@ -63,8 +62,8 @@ class VCL_DLLPUBLIC SvTreeListEntry
 
     SvTreeListEntry*    pParent;
     SvTreeListEntries   m_Children;
-    sal_uLong           nAbsPos;
-    sal_uLong           nListPos;
+    sal_uInt32          nAbsPos;
+    sal_uInt32          nListPos;
     sal_uInt32          mnExtraIndent;
     ItemsType           m_Items;
     void*               pUserData;
@@ -88,7 +87,7 @@ public:
 
     bool HasChildren() const;
     bool HasChildListPos() const;
-    sal_uLong GetChildListPos() const;
+    sal_uInt32 GetChildListPos() const;
 
     SvTreeListEntries& GetChildEntries() { return m_Children; }
     const SvTreeListEntries& GetChildEntries() const { return m_Children; }

@@ -19,10 +19,10 @@
 #ifndef INCLUDED_TOOLS_CONTNR_HXX
 #define INCLUDED_TOOLS_CONTNR_HXX
 
-#include <limits.h>
+#include <sal/types.h>
 
-#define TREELIST_APPEND (ULONG_MAX)
-#define TREELIST_ENTRY_NOTFOUND (ULONG_MAX)
+#define TREELIST_APPEND (SAL_MAX_UINT32)
+#define TREELIST_ENTRY_NOTFOUND (SAL_MAX_UINT32)
 
 #endif
 

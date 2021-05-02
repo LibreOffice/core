@@ -300,8 +300,8 @@ protected:
     // Invalidate children on enable/disable
     virtual void StateChanged( StateChangedType eType ) override;
 
-    virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=TREELIST_APPEND);
-    virtual sal_uLong Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = TREELIST_APPEND );
+    virtual sal_uInt32 Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uInt32 nPos=TREELIST_APPEND);
+    virtual sal_uInt32 Insert( SvTreeListEntry* pEntry,sal_uInt32 nRootPos = TREELIST_APPEND );
 
     // In-place editing
     std::unique_ptr<SvInplaceEdit2>  pEdCtrl;
@@ -343,7 +343,7 @@ public:
         return pModel.get();
     }
 
-    sal_uLong GetEntryCount() const
+    sal_uInt32 GetEntryCount() const
     {
         return pModel ? pModel->GetEntryCount() : 0;
     }
@@ -378,8 +378,8 @@ public:
     SelectionMode   GetSelectionMode() const { return eSelMode; }
 
     // pParent == 0 -> Root level
-    SvTreeListEntry* GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const;
-    SvTreeListEntry* GetEntry( sal_uLong nRootPos ) const;
+    SvTreeListEntry* GetEntry( SvTreeListEntry* pParent, sal_uInt32 nPos ) const;
+    SvTreeListEntry* GetEntry( sal_uInt32 nRootPos ) const;
 
     SvTreeListEntry*    GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const;
     void            FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_Int32 >& _rPath ) const;
@@ -388,8 +388,8 @@ public:
     SvTreeListEntry* GetParent( SvTreeListEntry* pEntry ) const;
 
     using Window::GetChildCount;
-    sal_uLong           GetChildCount( SvTreeListEntry const * pParent ) const;
-    sal_uLong           GetLevelChildCount( SvTreeListEntry* pParent ) const;
+    sal_uInt32          GetChildCount( SvTreeListEntry const * pParent ) const;
+    sal_uInt32          GetLevelChildCount( SvTreeListEntry* pParent ) const;
 
     SvViewDataEntry* GetViewDataEntry( SvTreeListEntry const * pEntry ) const;
     SvViewDataItem*  GetViewDataItem(SvTreeListEntry const *, SvLBoxItem const *);
@@ -439,14 +439,14 @@ public:
         SvTreeListEntry*  pTarget,       // D'n'D DropPosition in GetModel()
         const SvTreeListEntry*  pEntry,        // Entry to be moved from GetSourceListBox()->GetModel()
         SvTreeListEntry*& rpNewParent,   // New TargetParent
-        sal_uLong&        rNewChildPos); // The TargetParent's position in Childlist
+        sal_uInt32&        rNewChildPos); // The TargetParent's position in Childlist
 
     // Return value: TRISTATE_TRUE == Ok, TRISTATE_FALSE == Cancel, TRISTATE_INDET == Ok and Make visible moved entry
     TriState    NotifyCopying(
         SvTreeListEntry*  pTarget,       // D'n'D DropPosition in GetModel()
         const SvTreeListEntry*  pEntry,        // Entry to be copied from GetSourceListBox()->GetModel()
         SvTreeListEntry*& rpNewParent,   // New TargetParent
-        sal_uLong&        rNewChildPos); // The TargetParent's position in Childlist
+        sal_uInt32&        rNewChildPos); // The TargetParent's position in Childlist
 
     // ACCESSIBILITY ==========================================================
 
@@ -554,14 +554,14 @@ public:
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos=TREELIST_APPEND, void* pUserData = nullptr);
+                                         sal_uInt32 nPos=TREELIST_APPEND, void* pUserData = nullptr);
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
                                          SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos = TREELIST_APPEND, void* pUserData = nullptr );
+                                         sal_uInt32 nPos = TREELIST_APPEND, void* pUserData = nullptr );
 
     const Image&    GetDefaultExpandedEntryBmp( ) const;
     const Image&    GetDefaultCollapsedEntryBmp( ) const;
@@ -645,7 +645,7 @@ public:
     bool            Expand( SvTreeListEntry* pParent );
     bool            Collapse( SvTreeListEntry* pParent );
     bool            Select( SvTreeListEntry* pEntry, bool bSelect=true );
-    sal_uLong       SelectChildren( SvTreeListEntry* pParent, bool bSelect );
+    sal_uInt32      SelectChildren( SvTreeListEntry* pParent, bool bSelect );
     void            SelectAll( bool bSelect );
 
     void SetCurEntry( SvTreeListEntry* _pEntry );
@@ -661,7 +661,7 @@ public:
 
     DECL_LINK( DefaultCompare, const SvSortData&, sal_Int32 );
     virtual void    ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,
-                        SvTreeListEntry* pEntry2, sal_uLong nPos ) override;
+                        SvTreeListEntry* pEntry2, sal_uInt32 nPos ) override;
 
     SvTreeListEntry*    GetFirstEntryInView() const;
     SvTreeListEntry*    GetNextEntryInView(SvTreeListEntry*) const;
