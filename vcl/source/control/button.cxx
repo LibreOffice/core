@@ -205,7 +205,7 @@ DrawTextFlags Button::ImplGetTextStyle( WinBits nWinStyle, DrawFlags nDrawFlags 
 
 void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
                                   Size& rSize,
-                                  sal_uLong nImageSep,
+                                  sal_Int32 nImageSep,
                                   DrawTextFlags nTextStyle, tools::Rectangle *pSymbolRect,
                                   bool bAddImageSep)
 {
@@ -842,7 +842,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFl
     Size aSize = rRect.GetSize();
     Point aPos = rRect.TopLeft();
 
-    sal_uLong nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
+    sal_Int32 nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
     if( nImageSep < 1 )
         nImageSep = 1;
     if ( mnDDStyle == PushButtonDropdownStyle::MenuButton ||
