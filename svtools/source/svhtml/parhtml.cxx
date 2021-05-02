@@ -134,7 +134,7 @@ void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers ) const
     // This is a very simplified scanner: it only searches all
     // numerals in the string.
     bool bInNum = false;
-    sal_uLong nNum = 0;
+    sal_uInt32 nNum = 0;
     for( sal_Int32 i=0; i<aValue.getLength(); i++ )
     {
         sal_Unicode c = aValue[ i ];
@@ -397,7 +397,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
             else
             {
                 sal_uInt64 nStreamPos = rInput.Tell();
-                sal_uLong nLinePos = GetLinePos();
+                sal_uInt32 nLinePos = GetLinePos();
 
                 sal_uInt32 cChar = 0U;
                 if( '#' == (nNextCh = GetNextChar()) )
@@ -515,7 +515,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                                         static_cast<sal_uInt64>(nPos+1)*GetCharSize(),
                                         "Wrong stream position" );
                             DBG_ASSERT( nlLinePos-nLinePos ==
-                                        static_cast<sal_uLong>(nPos+1),
+                                        static_cast<sal_uInt32>(nPos+1),
                                         "Wrong line position" );
                             rInput.Seek( nStreamPos );
                             nlLinePos = nLinePos;
@@ -553,7 +553,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                                                 static_cast<sal_uInt64>(nPos+1)*GetCharSize(),
                                                 "Wrong stream position" );
                                     DBG_ASSERT( nlLinePos-nLinePos ==
-                                                static_cast<sal_uLong>(nPos+1),
+                                                static_cast<sal_uInt32>(nPos+1),
                                                 "Wrong line position" );
                                     rInput.Seek( nStreamPos );
                                     nlLinePos = nLinePos;
@@ -810,8 +810,8 @@ HtmlTokenId HTMLParser::GetNextRawToken()
 
                 // and remember position in stream.
                 sal_uInt64 nStreamPos = rInput.Tell();
-                sal_uLong nLineNr = GetLineNr();
-                sal_uLong nLinePos = GetLinePos();
+                sal_uInt32 nLineNr = GetLineNr();
+                sal_uInt32 nLinePos = GetLinePos();
 
                 // Start of an end token?
                 bool bOffState = false;
@@ -1041,8 +1041,8 @@ HtmlTokenId HTMLParser::GetNextToken_()
         case '<':
             {
                 sal_uInt64 nStreamPos = rInput.Tell();
-                sal_uLong nLineNr = GetLineNr();
-                sal_uLong nLinePos = GetLinePos();
+                sal_uInt32 nLineNr = GetLineNr();
+                sal_uInt32 nLinePos = GetLinePos();
 
                 bool bOffState = false;
                 if( '/' == (nNextCh = GetNextChar()) )
@@ -1113,8 +1113,8 @@ HtmlTokenId HTMLParser::GetNextToken_()
                         if( '>'!=nNextCh )
                             aToken += " ";
                         sal_uInt64 nCStreamPos = 0;
-                        sal_uLong nCLineNr = 0;
-                        sal_uLong nCLinePos = 0;
+                        sal_uInt32 nCLineNr = 0;
+                        sal_uInt32 nCLinePos = 0;
                         sal_Int32 nCStrLen = 0;
 
                         bool bDone = false;
@@ -1220,7 +1220,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                         nRet = HtmlTokenId::UNKNOWNCONTROL_ON;
 
                         sal_uInt64 nCStreamPos = rInput.Tell();
-                        sal_uLong nCLineNr = GetLineNr(), nCLinePos = GetLinePos();
+                        sal_uInt32 nCLineNr = GetLineNr(), nCLinePos = GetLinePos();
 
                         bool bDone = false;
                         // Read until closing %>. If not found restart at first >.
