@@ -2409,12 +2409,12 @@ void SAL_CALL VCLXWindow::unlock(  )
 
 void SAL_CALL VCLXWindow::startPopupMode( const css::awt::Rectangle& )
 {
-    // TODO: remove interface in the next incompatible build
+    // deprecated
 }
 
 sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  )
 {
-    // TODO: remove interface in the next incompatible build
+    // deprecated
     return false;
 }
 
