@@ -2226,18 +2226,8 @@ static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pCont
             if ( hIMC )
             {
                 LOGFONTW aLogFont;
-                HDC hDC = GetDC( pFrame->mhWnd );
-                // In case of vertical writing, always append a '@' to the
-                // Windows font name, not only if such a Windows font really is
-                // available (bTestVerticalAvail == false in the below call):
-                // The Windows IME's candidates window seems to always use a
-                // font that has all necessary glyphs, not necessarily the one
-                // specified by this font name; but it seems to decide whether
-                // to use that font's horizontal or vertical variant based on a
-                // '@' in front of this font name.
-                ImplGetLogFontFromFontSelect(hDC, pContext->mpFont->GetFontSelectPattern(),
+                ImplGetLogFontFromFontSelect(pContext->mpFont->GetFontSelectPattern(),
                                              nullptr, aLogFont);
-                ReleaseDC( pFrame->mhWnd, hDC );
                 ImmSetCompositionFontW( hIMC, &aLogFont );
                 ImmReleaseContext( pFrame->mhWnd, hIMC );
             }
