@@ -558,7 +558,7 @@ void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxFontHeightItem -----------------------------------------------
 
-SvxFontHeightItem::SvxFontHeightItem( const sal_uLong nSz,
+SvxFontHeightItem::SvxFontHeightItem( const sal_uInt32 nSz,
                                       const sal_uInt16 nPrp,
                                       const sal_uInt16 nId ) :
     SfxPoolItem( nId )
