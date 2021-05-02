@@ -235,7 +235,7 @@ bool IMapRectangleObject::IsEqual( const IMapRectangleObject& rEqObj )
     return ( IMapObject::IsEqual( rEqObj ) && ( aRect == rEqObj.aRect ) );
 }
 
-IMapCircleObject::IMapCircleObject( const Point& rCenter, sal_uLong nCircleRadius,
+IMapCircleObject::IMapCircleObject( const Point& rCenter, sal_Int32 nCircleRadius,
                                     const OUString& rURL,
                                     const OUString& rAltText,
                                     const OUString& rDesc,
@@ -248,7 +248,7 @@ IMapCircleObject::IMapCircleObject( const Point& rCenter, sal_uLong nCircleRadiu
     ImpConstruct( rCenter, nCircleRadius, bPixelCoords );
 }
 
-void IMapCircleObject::ImpConstruct( const Point& rCenter, sal_uLong nRad, bool bPixel )
+void IMapCircleObject::ImpConstruct( const Point& rCenter, sal_Int32 nRad, bool bPixel )
 {
     if ( bPixel )
     {
@@ -342,9 +342,9 @@ Point IMapCircleObject::GetCenter( bool bPixelCoords ) const
     return aNewPoint;
 }
 
-sal_uLong IMapCircleObject::GetRadius( bool bPixelCoords ) const
+sal_Int32 IMapCircleObject::GetRadius( bool bPixelCoords ) const
 {
-    sal_uLong nNewRadius;
+    sal_Int32 nNewRadius;
 
     if ( bPixelCoords )
         nNewRadius = Application::GetDefaultDevice()->LogicToPixel( Size( nRadius, 0 ), MapMode( MapUnit::Map100thMM ) ).Width();

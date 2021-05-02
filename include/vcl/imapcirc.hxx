@@ -21,7 +21,6 @@
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
-#include <tools/solar.h>
 #include <vcl/imapobj.hxx>
 
 class Fraction;
@@ -29,9 +28,9 @@ class Fraction;
 class VCL_DLLPUBLIC IMapCircleObject final : public IMapObject
 {
     Point               aCenter;
-    sal_Int32               nRadius;
+    sal_Int32           nRadius;
 
-    void                ImpConstruct( const Point& rCenter, sal_uLong nRad, bool bPixel );
+    void                ImpConstruct( const Point& rCenter, sal_Int32 nRad, bool bPixel );
 
     // binary import/export
     virtual void        WriteIMapObject( SvStream& rOStm ) const override;
@@ -40,7 +39,7 @@ class VCL_DLLPUBLIC IMapCircleObject final : public IMapObject
 public:
 
                         IMapCircleObject() : nRadius(0) {}
-                        IMapCircleObject( const Point& rCenter, sal_uLong nRad,
+                        IMapCircleObject( const Point& rCenter, sal_Int32 nRad,
                                           const OUString& rURL,
                                           const OUString& rAltText,
                                           const OUString& rDesc,
@@ -53,7 +52,7 @@ public:
     virtual bool        IsHit( const Point& rPoint ) const override;
 
     Point               GetCenter( bool bPixelCoords = true ) const;
-    sal_uLong           GetRadius( bool bPixelCoords = true ) const;
+    sal_Int32           GetRadius( bool bPixelCoords = true ) const;
 
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
