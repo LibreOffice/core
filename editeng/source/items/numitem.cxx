@@ -514,7 +514,7 @@ Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
     return aRetSize;
 }
 
-OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, bool bUpper )
+OUString SvxNumberFormat::CreateRomanString( sal_Int32 nNo, bool bUpper )
 {
     nNo %= 4000;            // more can not be displayed
 //      i, ii, iii, iv, v, vi, vii, vii, viii, ix
