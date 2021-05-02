@@ -2135,7 +2135,7 @@ namespace emfio
         sal_uInt32 nVersion(0);
         mpInputStream->ReadUInt32(nVersion);  // according to [WS-EMF] 2.2.9, this SHOULD be 0x0001000, however
                                        // Microsoft note that not even Windows checks this...
-        SAL_INFO("emfio", "\tVersion: 0x" << std::hex << nSignature << std::dec);
+        SAL_INFO("emfio", "\tVersion: 0x" << std::hex << nVersion << std::dec);
         if (nVersion != 0x00010000)
         {
             SAL_WARN("emfio", "EMF\t\tThis really should be 0x00010000, though not absolutely essential...");
