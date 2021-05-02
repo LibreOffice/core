@@ -939,7 +939,7 @@ FontWidth FontSubstConfiguration::getSubstWidth( const css::uno::Reference< XNam
 ImplFontAttrs FontSubstConfiguration::getSubstType( const css::uno::Reference< XNameAccess >& rFont,
                                                     const OUString& rType ) const
 {
-    sal_uLong type = 0;
+    sal_uInt32 type = 0;
     try
     {
         Any aAny = rFont->getByName( rType );
@@ -955,7 +955,7 @@ ImplFontAttrs FontSubstConfiguration::getSubstType( const css::uno::Reference< X
             for( int k = 0; k < 32; k++ )
                 if( aToken.equalsIgnoreAsciiCaseAscii( pAttribNames[k] ) )
                 {
-                    type |= sal_uLong(1) << k;
+                    type |= sal_uInt32(1) << k;
                     break;
                 }
         }

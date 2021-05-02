@@ -21,7 +21,6 @@
 
 #include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
-#include <tools/solar.h>
 #include <tools/fontenum.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -46,7 +45,7 @@ enum class DefaultFontType;
 // Note that the bit flags must match the entries in the pAttribNames array in
 // unotools/source/config/fontcfg.cxx.
 
-enum class ImplFontAttrs : sal_uLong
+enum class ImplFontAttrs : sal_uInt32
 {
     None          = 0x00000000,
     Default       = 0x00000001, ///< Default-Font like Andale Sans UI, Palace Script, Albany, Thorndale, Cumberland, ...
