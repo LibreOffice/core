@@ -31,8 +31,14 @@
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <vcl/region.hxx>
+#include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/DrawGridFlags.hxx>
 #include <vcl/rendercontext/DrawImageFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/rendercontext/DrawTextFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
+#include <vcl/rendercontext/InvertFlags.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
@@ -125,98 +131,6 @@ namespace com::sun::star::rendering {
 #endif
 
 // OutputDevice-Types
-
-// Flags for DrawGrid()
-enum class DrawGridFlags
-{
-    NONE                 = 0x0000,
-    Dots                 = 0x0001,
-    HorzLines            = 0x0002,
-    VertLines            = 0x0004
-};
-namespace o3tl
-{
-    template<> struct typed_flags<DrawGridFlags> : is_typed_flags<DrawGridFlags, 0x0007> {};
-}
-
-// DrawModes
-enum class DrawModeFlags : sal_uInt32
-{
-    Default                = 0x00000000,
-    BlackLine              = 0x00000001,
-    BlackFill              = 0x00000002,
-    BlackText              = 0x00000004,
-    BlackBitmap            = 0x00000008,
-    BlackGradient          = 0x00000010,
-    GrayLine               = 0x00000020,
-    GrayFill               = 0x00000040,
-    GrayText               = 0x00000080,
-    GrayBitmap             = 0x00000100,
-    GrayGradient           = 0x00000200,
-    NoFill                 = 0x00000400,
-    WhiteLine              = 0x00000800,
-    WhiteFill              = 0x00001000,
-    WhiteText              = 0x00002000,
-    WhiteBitmap            = 0x00004000,
-    WhiteGradient          = 0x00008000,
-    SettingsLine           = 0x00010000,
-    SettingsFill           = 0x00020000,
-    SettingsText           = 0x00040000,
-    SettingsGradient       = 0x00080000,
-    NoTransparency         = 0x00100000,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<DrawModeFlags> : is_typed_flags<DrawModeFlags, 0x1fffff> {};
-}
-
-// Antialiasing
-enum class AntialiasingFlags
-{
-    NONE                = 0x0000,
-    DisableText         = 0x0001,
-    Enable              = 0x0002,
-    PixelSnapHairline  = 0x0004,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<AntialiasingFlags> : is_typed_flags<AntialiasingFlags, 0x07> {};
-}
-
-// AddFontSubstitute() flags
-enum class AddFontSubstituteFlags
-{
-    NONE            = 0x00,
-    ALWAYS          = 0x01,
-    ScreenOnly      = 0x02,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<AddFontSubstituteFlags> : is_typed_flags<AddFontSubstituteFlags, 0x03> {};
-}
-
-// GetDefaultFont() flags
-enum class GetDefaultFontFlags
-{
-    NONE          = 0x0000,
-    OnlyOne       = 0x0001,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<GetDefaultFontFlags> : is_typed_flags<GetDefaultFontFlags, 0x01> {};
-}
-
-// Flags for Invert()
-enum class InvertFlags
-{
-    NONE                    = 0x0000,
-    N50                     = 0x0001,
-    TrackFrame              = 0x0002
-};
-namespace o3tl
-{
-    template<> struct typed_flags<InvertFlags> : is_typed_flags<InvertFlags, 0x0003> {};
-}
 
 enum OutDevType { OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV, OUTDEV_PDF };
 
