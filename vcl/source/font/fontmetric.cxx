@@ -170,7 +170,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     const vcl::Font& rFont ( pDev->GetFont() );
     bool bCJKVertical = MsLangId::isCJK(rFont.GetLanguage()) && rFont.IsVertical();
     tools::Long nUnderlineOffset = bCJKVertical ? mnDescent : (mnDescent/2 + 1);
-    tools::Long nStrikeoutOffset = -((mnAscent - mnIntLeading) / 3);
+    tools::Long nStrikeoutOffset = rFont.IsVertical() ? -((mnAscent - mnDescent) / 2) : -((mnAscent - mnIntLeading) / 3);
 
     mnUnderlineSize        = nLineHeight;
     mnUnderlineOffset      = nUnderlineOffset - nLineHeight2;
