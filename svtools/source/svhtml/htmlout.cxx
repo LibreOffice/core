@@ -562,7 +562,7 @@ SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
     return rStream;
 }
 
-SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
+SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uInt32 nHex, sal_uInt8 nLen )
 {                                                  // out into a stream
     char aNToABuf[] = "0000000000000000";
 
@@ -926,7 +926,7 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
 
 OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             bool bValue,
-            double fVal, sal_uLong nFormat, SvNumberFormatter& rFormatter,
+            double fVal, sal_uInt32 nFormat, SvNumberFormatter& rFormatter,
             rtl_TextEncoding eDestEnc, OUString* pNonConvertableChars)
 {
     OStringBuffer aStrTD;

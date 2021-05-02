@@ -24,7 +24,6 @@
 #include <string_view>
 
 #include <svtools/svtdllapi.h>
-#include <tools/solar.h>
 #include <rtl/textenc.h>
 #include <rtl/string.hxx>
 #include <svl/macitem.hxx>
@@ -66,7 +65,7 @@ struct HTMLOutFuncs
     SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, const OUString&,
                         rtl_TextEncoding eDestEnc,
                         OUString *pNonConvertableChars = nullptr );
-    SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, sal_uLong nHex, sal_uInt8 nLen );
+    SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, sal_uInt32 nHex, sal_uInt8 nLen );
     SVT_DLLPUBLIC static SvStream& Out_Color( SvStream&, const Color&, bool bXHTML = false );
     SVT_DLLPUBLIC static SvStream& Out_ImageMap( SvStream&, const OUString&, const ImageMap&, const OUString&,
                                    const HTMLOutEvent *pEventTable,
@@ -98,7 +97,7 @@ struct HTMLOutFuncs
 
     // <TD SDVAL="..." SDNUM="...">
     SVT_DLLPUBLIC static OString CreateTableDataOptionsValNum(
-                bool bValue, double fVal, sal_uLong nFormat,
+                bool bValue, double fVal, sal_uInt32 nFormat,
                 SvNumberFormatter& rFormatter,
                 rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                 OUString *pNonConvertableChars = nullptr);
