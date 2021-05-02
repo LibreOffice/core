@@ -325,6 +325,18 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
         pTextLayout = pNewScriptRun.get();
     }
 
+    // nBaseOffset is used to align vertical text to the center of rotated
+    // horizontal text. That is the offset from original baseline to
+    // the center of EM box. Maybe we can use OpenType base table to improve this
+    // in the future.
+    DeviceCoordinate nBaseOffset = 0;
+    if (rArgs.mnFlags & SalLayoutFlags::Vertical)
+    {
+        hb_font_extents_t extents;
+        if (hb_font_get_h_extents(pHbFont, &extents))
+            nBaseOffset = ( extents.ascender + extents.descender ) / 2;
+    }
+
     hb_buffer_t* pHbBuffer = hb_buffer_create();
     hb_buffer_pre_allocate(pHbBuffer, nGlyphCapacity);
 #if !HB_VERSION_ATLEAST(1, 1, 0)
@@ -583,16 +595,9 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
                 {
                     nGlyphFlags |= GlyphItemFlags::IS_VERTICAL;
 
-                    // We have glyph offsets that is relative to h origin now,
-                    // add the origin back so it is relative to v origin.
-                    hb_font_add_glyph_origin_for_direction(pHbFont,
-                            nGlyphIndex,
-                            HB_DIRECTION_TTB,
-                            &pHbPositions[i].x_offset ,
-                            &pHbPositions[i].y_offset );
                     nAdvance = -pHbPositions[i].y_advance;
                     nXOffset = -pHbPositions[i].y_offset;
-                    nYOffset = -pHbPositions[i].x_offset;
+                    nYOffset = -pHbPositions[i].x_offset - nBaseOffset;
                 }
                 else
                 {
