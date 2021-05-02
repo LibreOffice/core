@@ -44,6 +44,7 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 #include <globstr.hrc>
+#include <comphelper/lok.hxx>
 
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -196,7 +197,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
                                                  aAnchorType == SCA_CELL_RESIZE);
 
     //  don't select if from (dispatch) API, to allow subsequent cell operations
-    SdrInsertFlags nInsOptions = bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE;
+    SdrInsertFlags nInsOptions = (bApi && !comphelper::LibreOfficeKit::isActive()) ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE;
     bool bSuccess = pView->InsertObjectAtView( pObj, *pPV, nInsOptions );
 
     // SetGraphicLink has to be used after inserting the object,
