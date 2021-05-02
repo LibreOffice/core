@@ -41,9 +41,6 @@
 #include <cfgitem.hxx>
 #include "accessibility.hxx"
 
-#define SCROLL_LINE         24
-
-
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 
@@ -136,7 +133,6 @@ SmEditWindow::SmEditWindow(SmCmdBoxWindow &rMyCmdBoxWin)
     // compare DataChanged
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 
-    mxScrolledWindow->connect_hadjustment_changed(LINK(this, SmEditWindow, ScrollHdl));
     mxScrolledWindow->connect_vadjustment_changed(LINK(this, SmEditWindow, ScrollHdl));
 
     CreateEditView();
@@ -234,8 +230,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
         pEditEngine->Clear();   //incorrect font size
         pEditEngine->SetText( aTxt );
 
-        AdjustScrollBars();
-        Resize();
+        mxTextControl->Resize();
     }
 }
 
@@ -268,34 +263,6 @@ IMPL_LINK_NOARG(SmEditTextWindow, CursorMoveTimerHdl, Timer *, void)
         }
     }
     aCursorMoveIdle.Stop();
-}
-
-void SmEditWindow::Resize()
-{
-    InterimItemWindow::Resize();
-
-    if (EditView* pEditView = GetEditView())
-    {
-        // Resizes the edit engine to adjust to the size of the output area
-        const Size aSize( pEditView->GetOutputArea().GetSize() );
-        pEditView->GetEditEngine()->SetPaperSize(aSize);
-
-        pEditView->SetOutputArea(AdjustScrollBars());
-        pEditView->ShowCursor();
-
-        OSL_ENSURE( pEditView->GetEditEngine(), "EditEngine missing" );
-        const tools::Long nMaxVisAreaStart = pEditView->GetEditEngine()->GetTextHeight() -
-                                      pEditView->GetOutputArea().GetHeight();
-        if (pEditView->GetVisArea().Top() > nMaxVisAreaStart)
-        {
-            tools::Rectangle aVisArea(pEditView->GetVisArea() );
-            aVisArea.SetTop( std::max<tools::Long>(nMaxVisAreaStart, 0) );
-            aVisArea.SetSize(pEditView->GetOutputArea().GetSize());
-            pEditView->SetVisArea(aVisArea);
-            pEditView->ShowCursor();
-        }
-        SetScrollBarRanges();
-    }
 }
 
 bool SmEditTextWindow::MouseButtonUp(const MouseEvent &rEvt)
@@ -488,8 +455,7 @@ void SmEditWindow::CreateEditView()
 
 IMPL_LINK_NOARG(SmEditTextWindow, EditStatusHdl, EditStatus&, void)
 {
-    if (GetEditView())
-        mrEditWindow.Resize();
+    Resize();
 }
 
 IMPL_LINK(SmEditWindow, ScrollHdl, weld::ScrolledWindow&, rScrolledWindow, void)
@@ -497,7 +463,7 @@ IMPL_LINK(SmEditWindow, ScrollHdl, weld::ScrolledWindow&, rScrolledWindow, void)
     if (EditView* pEditView = GetEditView())
     {
         pEditView->SetVisArea(tools::Rectangle(
-                    Point(rScrolledWindow.hadjustment_get_value(),
+                    Point(0,
                           rScrolledWindow.vadjustment_get_value()),
                     pEditView->GetVisArea().GetSize()));
         pEditView->Invalidate();
@@ -531,16 +497,11 @@ void SmEditWindow::SetScrollBarRanges()
         return;
 
     int nVUpper = pEditEngine->GetTextHeight();
-    int nHUpper = pEditEngine->GetPaperSize().Width();
     int nVCurrentDocPos = pEditView->GetVisArea().Top();
-    int nHCurrentDocPos = pEditView->GetVisArea().Left();
     const Size aOut(pEditView->GetOutputArea().GetSize());
     int nVStepIncrement = aOut.Height() * 2 / 10;
-    int nHStepIncrement = SCROLL_LINE;
     int nVPageIncrement = aOut.Height() * 8 / 10;
-    int nHPageIncrement = aOut.Width() * 8 / 10;
     int nVPageSize = aOut.Height();
-    int nHPageSize = aOut.Width();
 
     /* limit the page size to below nUpper because gtk's gtk_scrolled_window_start_deceleration has
        effectively...
@@ -551,12 +512,9 @@ void SmEditWindow::SetScrollBarRanges()
        and requires that upper > lower or the deceleration animation never ends
     */
     nVPageSize = std::min(nVPageSize, nVUpper);
-    nHPageSize = std::min(nHPageSize, nHUpper);
 
     mxScrolledWindow->vadjustment_configure(nVCurrentDocPos, 0, nVUpper,
                                             nVStepIncrement, nVPageIncrement, nVPageSize);
-    mxScrolledWindow->hadjustment_configure(nHCurrentDocPos, 0, nHUpper,
-                                            nHStepIncrement, nHPageIncrement, nHPageSize);
 }
 
 OUString SmEditWindow::GetText() const
