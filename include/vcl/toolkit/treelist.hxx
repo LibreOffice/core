@@ -26,7 +26,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/toolkit/treelistentries.hxx>
 
-#include <tools/solar.h>
 #include <tools/link.hxx>
 #include <tools/contnr.hxx>
 
@@ -67,7 +66,7 @@ class VCL_DLLPUBLIC SvTreeList final
     friend class        SvListView;
 
     SvListView&         mrOwnerListView;
-    sal_uLong           nEntryCount;
+    sal_uInt32          nEntryCount;
 
     Link<SvTreeListEntry*, SvTreeListEntry*>  aCloneLink;
     Link<const SvSortData&, sal_Int32>        aCompareLink;
@@ -85,20 +84,20 @@ class VCL_DLLPUBLIC SvTreeList final
     SvTreeListEntry*        PrevVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16& rDelta ) const;
 
     bool               IsEntryVisible( const SvListView*,SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry*    GetEntryAtVisPos( const SvListView*,sal_uLong nVisPos ) const;
-    sal_uLong           GetVisiblePos( const SvListView*,SvTreeListEntry const * pEntry ) const;
-    sal_uLong           GetVisibleCount( SvListView* ) const;
-    sal_uLong           GetVisibleChildCount( const SvListView*,SvTreeListEntry* pParent ) const;
+    SvTreeListEntry*    GetEntryAtVisPos( const SvListView*, sal_uInt32 nVisPos ) const;
+    sal_uInt32           GetVisiblePos( const SvListView*,SvTreeListEntry const * pEntry ) const;
+    sal_uInt32           GetVisibleCount( SvListView* ) const;
+    sal_uInt32           GetVisibleChildCount( const SvListView*,SvTreeListEntry* pParent ) const;
 
     SvTreeListEntry*        FirstSelected( const SvListView*) const;
     SvTreeListEntry*        NextSelected( const SvListView*,SvTreeListEntry* pEntry ) const;
 
-    sal_uLong           GetChildSelectionCount( const SvListView*,SvTreeListEntry* pParent ) const;
+    sal_uInt32           GetChildSelectionCount( const SvListView*,SvTreeListEntry* pParent ) const;
 
     VCL_DLLPRIVATE void SetAbsolutePositions();
 
     VCL_DLLPRIVATE void CloneChildren(
-        SvTreeListEntries& rDst, sal_uLong& rCloneCount, SvTreeListEntries& rSrc, SvTreeListEntry& rNewParent) const;
+        SvTreeListEntries& rDst, sal_uInt32& rCloneCount, SvTreeListEntries& rSrc, SvTreeListEntry& rNewParent) const;
 
     /**
      * Invalidate the cached position data to have them re-generated before
@@ -110,7 +109,7 @@ class VCL_DLLPUBLIC SvTreeList final
     VCL_DLLPRIVATE void GetInsertionPos(
                             SvTreeListEntry const * pEntry,
                             SvTreeListEntry* pParent,
-                            sal_uLong& rPos
+                            sal_uInt32& rPos
                         );
 
     VCL_DLLPRIVATE void ResortChildren( SvTreeListEntry* pParent );
@@ -130,7 +129,7 @@ public:
                             SvListAction nActionId,
                             SvTreeListEntry* pEntry1=nullptr,
                             SvTreeListEntry* pEntry2=nullptr,
-                            sal_uLong nPos=0
+                            sal_uInt32 nPos=0
                         );
 
     void                EnableInvalidate( bool bEnable );
@@ -139,7 +138,7 @@ public:
     // Notify all Listeners
     void                InvalidateEntry( SvTreeListEntry* );
 
-    sal_uLong           GetEntryCount() const { return nEntryCount; }
+    sal_uInt32          GetEntryCount() const { return nEntryCount; }
     SvTreeListEntry*    First() const;
     SvTreeListEntry*    Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const;
     SvTreeListEntry*    Prev( SvTreeListEntry* pEntry ) const;
@@ -147,26 +146,26 @@ public:
 
     SvTreeListEntry*    FirstChild( SvTreeListEntry* pParent ) const;
 
-    sal_uLong           Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pPar,sal_uLong nPos = TREELIST_APPEND);
-    sal_uLong           Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = TREELIST_APPEND )
+    sal_uInt32          Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pPar,sal_uInt32 nPos = TREELIST_APPEND);
+    sal_uInt32          Insert( SvTreeListEntry* pEntry,sal_uInt32 nRootPos = TREELIST_APPEND )
     { return Insert(pEntry, pRootItem.get(), nRootPos ); }
 
-    void                InsertTree( SvTreeListEntry* pTree, SvTreeListEntry* pTargetParent, sal_uLong nListPos );
+    void                InsertTree( SvTreeListEntry* pTree, SvTreeListEntry* pTargetParent, sal_uInt32 nListPos );
 
     // Entries need to be in the same Model!
     void                Move( SvTreeListEntry* pSource, SvTreeListEntry* pTarget );
 
     // Creates ChildList if needed
-    sal_uLong           Move( SvTreeListEntry* pSource, SvTreeListEntry* pTargetParent, sal_uLong nListPos);
-    sal_uLong           Copy( SvTreeListEntry* pSource, SvTreeListEntry* pTargetParent, sal_uLong nListPos);
+    sal_uInt32          Move( SvTreeListEntry* pSource, SvTreeListEntry* pTargetParent, sal_uInt32 nListPos);
+    sal_uInt32          Copy( SvTreeListEntry* pSource, SvTreeListEntry* pTargetParent, sal_uInt32 nListPos);
 
     bool Remove( const SvTreeListEntry* pEntry );
     void                Clear();
 
     bool                IsChild(const SvTreeListEntry* pParent, const SvTreeListEntry* pChild) const;
-    SvTreeListEntry*        GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const;
-    SvTreeListEntry*        GetEntry( sal_uLong nRootPos ) const;
-    SvTreeListEntry*        GetEntryAtAbsPos( sal_uLong nAbsPos ) const;
+    SvTreeListEntry*        GetEntry( SvTreeListEntry* pParent, sal_uInt32 nPos ) const;
+    SvTreeListEntry*        GetEntry( sal_uInt32 nRootPos ) const;
+    SvTreeListEntry*        GetEntryAtAbsPos( sal_uInt32 nAbsPos ) const;
 
     const SvTreeListEntry* GetParent( const SvTreeListEntry* pEntry ) const;
     SvTreeListEntry* GetParent( SvTreeListEntry* pEntry );
@@ -175,17 +174,17 @@ public:
     const SvTreeListEntries& GetChildList( SvTreeListEntry* pParent ) const;
     SvTreeListEntries& GetChildList( SvTreeListEntry* pParent );
 
-    sal_uLong GetAbsPos( const SvTreeListEntry* pEntry ) const;
-    static sal_uLong GetRelPos( const SvTreeListEntry* pChild );
+    sal_uInt32 GetAbsPos( const SvTreeListEntry* pEntry ) const;
+    static sal_uInt32 GetRelPos( const SvTreeListEntry* pChild );
 
-    sal_uLong GetChildCount( const SvTreeListEntry* pParent ) const;
+    sal_uInt32 GetChildCount( const SvTreeListEntry* pParent ) const;
     sal_uInt16 GetDepth( const SvTreeListEntry* pEntry ) const;
     bool IsAtRootDepth( const SvTreeListEntry* pEntry ) const;
 
     // The Model calls the Clone Link to clone Entries.
     // Thus we do not need to derive from the Model if we derive from SvTreeListEntry.
     // The Handler needs to return a SvTreeListEntry*
-    SvTreeListEntry*    Clone( SvTreeListEntry* pEntry, sal_uLong& nCloneCount ) const;
+    SvTreeListEntry*    Clone( SvTreeListEntry* pEntry, sal_uInt32& nCloneCount ) const;
     void                SetCloneLink( const Link<SvTreeListEntry*,SvTreeListEntry*>& rLink )
     { aCloneLink=rLink; }
 
@@ -224,10 +223,10 @@ public:
                             SvListAction nActionId,
                             SvTreeListEntry* pEntry1,
                             SvTreeListEntry* pEntry2,
-                            sal_uLong nPos
+                            sal_uInt32 nPos
                         );
 
-    sal_uLong           GetVisibleCount() const
+    sal_uInt32          GetVisibleCount() const
     { return pModel->GetVisibleCount( const_cast<SvListView*>(this) ); }
 
     SvTreeListEntry*        FirstVisible() const
@@ -248,7 +247,7 @@ public:
     SvTreeListEntry*        PrevVisible( SvTreeListEntry* pEntry, sal_uInt16& rDelta ) const
     { return pModel->PrevVisible(this,pEntry,rDelta); }
 
-    sal_uLong           GetSelectionCount() const;
+    sal_uInt32              GetSelectionCount() const;
 
     SvTreeListEntry* FirstSelected() const
     { return pModel->FirstSelected(this); }
@@ -256,19 +255,19 @@ public:
     SvTreeListEntry*        NextSelected( SvTreeListEntry* pEntry ) const
     { return pModel->NextSelected(this,pEntry); }
 
-    SvTreeListEntry*        GetEntryAtAbsPos( sal_uLong nAbsPos ) const
+    SvTreeListEntry*        GetEntryAtAbsPos( sal_uInt32 nAbsPos ) const
     { return pModel->GetEntryAtAbsPos(nAbsPos); }
 
-    SvTreeListEntry*        GetEntryAtVisPos( sal_uLong nVisPos ) const
+    SvTreeListEntry*        GetEntryAtVisPos( sal_uInt32 nVisPos ) const
     { return pModel->GetEntryAtVisPos(this,nVisPos); }
 
-    sal_uLong           GetAbsPos( SvTreeListEntry const * pEntry ) const
+    sal_uInt32              GetAbsPos( SvTreeListEntry const * pEntry ) const
     { return pModel->GetAbsPos(pEntry); }
 
-    sal_uLong           GetVisiblePos( SvTreeListEntry const * pEntry ) const
+    sal_uInt32           GetVisiblePos( SvTreeListEntry const * pEntry ) const
     { return pModel->GetVisiblePos(this,pEntry); }
 
-    sal_uLong           GetVisibleChildCount(SvTreeListEntry* pParent ) const
+    sal_uInt32           GetVisibleChildCount(SvTreeListEntry* pParent ) const
     { return pModel->GetVisibleChildCount(this,pParent); }
 
     bool               IsEntryVisible( SvTreeListEntry* pEntry ) const
