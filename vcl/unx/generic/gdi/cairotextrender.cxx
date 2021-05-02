@@ -249,22 +249,6 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 
             cairo_matrix_init_identity(&em_square);
             cairo_set_matrix(cr, &em_square);
-
-            //gives the same positions as pre-cairo conversion, but I don't
-            //like them
-            double xdiff = 0.0;
-            double ydiff = 0.0;
-
-            // The y is the origin point position, but Cairo will draw
-            // the glyph *above* that point, we need to move it down to
-            // the glyph’s baseline.
-            cairo_text_extents_t aExt;
-            cairo_glyph_extents(cr, &cairo_glyphs[nStartIndex], nLen, &aExt);
-            double nDescender = std::fmax(aExt.height + aExt.y_bearing, 0);
-            ydiff = (aExt.x_advance - nDescender) / nHeight;
-            xdiff = -font_extents.descent/nHeight;
-
-            cairo_matrix_translate(&m, xdiff, ydiff);
         }
 
         if (rFont.NeedsArtificialItalic())
