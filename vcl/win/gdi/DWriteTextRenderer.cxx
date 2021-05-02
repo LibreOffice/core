@@ -268,7 +268,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
             DWRITE_GLYPH_OFFSET glyphOffsets[] = { { 0.0f, 0.0f }, };
             D2D1_POINT_2F baseline = { static_cast<FLOAT>(aPos.X() - bounds.Left()) / fHScale,
                                        static_cast<FLOAT>(aPos.Y() - bounds.Top()) };
-            WinFontTransformGuard aTransformGuard(mpRT, fHScale, rLayout, baseline);
+            WinFontTransformGuard aTransformGuard(mpRT, fHScale, rLayout, baseline, pGlyph->IsVertical());
             DWRITE_GLYPH_RUN glyphs = {
                 mpFontFace,
                 mlfEmHeight,
@@ -389,7 +389,8 @@ bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** p
 
 WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, float fHScale,
                                              const GenericSalLayout& rLayout,
-                                             const D2D1_POINT_2F& rBaseline)
+                                             const D2D1_POINT_2F& rBaseline,
+                                             bool bIsVertical)
     : mpRenderTarget(pRenderTarget)
 {
     pRenderTarget->GetTransform(&maTransform);
@@ -400,13 +401,18 @@ WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, f
             = aTransform * D2D1::Matrix3x2F::Scale(D2D1::Size(fHScale, 1.0f), D2D1::Point2F(0, 0));
     }
 
-    if (rLayout.GetOrientation())
+    Degree10 angle = rLayout.GetOrientation();
+
+    if (bIsVertical)
+        angle += 900_deg10;
+
+    if (angle)
     {
         // DWrite angle is in clockwise degrees, our orientation is in counter-clockwise 10th
         // degrees.
         aTransform = aTransform
                      * D2D1::Matrix3x2F::Rotation(
-                           -static_cast<FLOAT>(rLayout.GetOrientation().get()) / 10, rBaseline);
+                           -static_cast<FLOAT>(angle.get()) / 10, rBaseline);
     }
     mpRenderTarget->SetTransform(aTransform);
 }
