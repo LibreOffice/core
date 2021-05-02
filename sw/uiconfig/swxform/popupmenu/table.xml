@@ -122,6 +122,7 @@
   </menu:menu>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertAnnotation"/>
+  <menu:menuitem menu:id=".uno:FieldDialog"/>
   <menu:menuitem menu:id=".uno:AcceptTrackedChange"/>
   <menu:menuitem menu:id=".uno:RejectTrackedChange"/>
   <menu:menuitem menu:id=".uno:NextTrackedChange"/>
