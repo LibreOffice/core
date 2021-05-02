@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="FootEndnoteDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="footendnotedialog|FootEndnoteDialog">Footnotes/Endnotes Settings</property>
+    <property name="title" translatable="yes" context="footendnotedialog|FootEndnoteDialog">Settings of Footnotes and Endnotes</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="default_width">0</property>
