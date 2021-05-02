@@ -23,8 +23,7 @@
 #error "don't use this in new code"
 #endif
 
-#include <tools/solar.h>
-
+#include <sal/types.h>
 #include <vector>
 
 class SvTreeListBox;
@@ -49,7 +48,7 @@ class SvViewDataEntry
     friend class SvTreeList;
 
     std::vector<SvViewDataItem> maItems;
-    sal_uLong nVisPos;
+    sal_uInt32 nVisPos;
     bool mbSelected:1;
     bool mbHighlighted:1;
     bool mbExpanded:1;

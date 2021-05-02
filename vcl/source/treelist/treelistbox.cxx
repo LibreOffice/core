@@ -431,17 +431,17 @@ IMPL_LINK( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry, SvTreeListEnt
     return CloneEntry(pEntry);
 }
 
-sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uLong nPos )
+sal_uInt32 SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uInt32 nPos )
 {
-    sal_uLong nInsPos = pModel->Insert( pEntry, pParent, nPos );
+    sal_uInt32 nInsPos = pModel->Insert( pEntry, pParent, nPos );
     pEntry->SetBackColor( GetBackground().GetColor() );
     SetAlternatingRowColors( mbAlternatingRowColors );
     return nInsPos;
 }
 
-sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos )
+sal_uInt32 SvTreeListBox::Insert( SvTreeListEntry* pEntry,sal_uInt32 nRootPos )
 {
-    sal_uLong nInsPos = pModel->Insert( pEntry, nRootPos );
+    sal_uInt32 nInsPos = pModel->Insert( pEntry, nRootPos );
     pEntry->SetBackColor( GetBackground().GetColor() );
     SetAlternatingRowColors( mbAlternatingRowColors );
     return nInsPos;
@@ -511,7 +511,7 @@ TriState SvTreeListBox::NotifyMoving(
     const SvTreeListEntry*  pEntry,        // entry that we want to move, from
                                  // GetSourceListBox()->GetModel()
     SvTreeListEntry*& rpNewParent,   // new target parent
-    sal_uLong&        rNewChildPos)  // position in childlist of target parent
+    sal_uInt32&        rNewChildPos)  // position in childlist of target parent
 {
     DBG_ASSERT(pEntry,"NotifyMoving:SourceEntry?");
     if( !pTarget )
@@ -545,7 +545,7 @@ TriState SvTreeListBox::NotifyCopying(
     const SvTreeListEntry*  pEntry,        // entry that we want to move, from
                                  // GetSourceListBox()->GetModel()
     SvTreeListEntry*& rpNewParent,   // new target parent
-    sal_uLong&        rNewChildPos)  // position in childlist of target parent
+    sal_uInt32&        rNewChildPos)  // position in childlist of target parent
 {
     return NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
 }
@@ -580,19 +580,19 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
     {
         pSourceEntry = elem;
         SvTreeListEntry* pNewParent = nullptr;
-        sal_uLong nInsertionPos = TREELIST_APPEND;
+        sal_uInt32 nInsertionPos = TREELIST_APPEND;
         TriState nOk = NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         if ( nOk )
         {
             if ( bClone )
             {
-                sal_uLong nCloneCount = 0;
+                sal_uInt32 nCloneCount = 0;
                 pSourceEntry = pModel->Clone(pSourceEntry, nCloneCount);
                 pModel->InsertTree(pSourceEntry, pNewParent, nInsertionPos);
             }
             else
             {
-                sal_uLong nListPos = pModel->Copy(pSourceEntry, pNewParent, nInsertionPos);
+                sal_uInt32 nListPos = pModel->Copy(pSourceEntry, pNewParent, nInsertionPos);
                 pSourceEntry = GetEntry( pNewParent, nListPos );
             }
         }
@@ -630,7 +630,7 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
     {
         pSourceEntry = elem;
         SvTreeListEntry* pNewParent = nullptr;
-        sal_uLong nInsertionPos = TREELIST_APPEND;
+        sal_uInt32 nInsertionPos = TREELIST_APPEND;
         TriState nOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         TriState nCopyOk = nOk;
         if ( !nOk && bAllowCopyFallback )
@@ -643,7 +643,7 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
         {
             if ( bClone )
             {
-                sal_uLong nCloneCount = 0;
+                sal_uInt32 nCloneCount = 0;
                 pSourceEntry = pModel->Clone(pSourceEntry, nCloneCount);
                 pModel->InsertTree(pSourceEntry, pNewParent, nInsertionPos);
             }
@@ -725,12 +725,12 @@ void SvTreeListBox::OnCurrentEntryChanged()
         mpImpl->m_aQuickSelectionEngine.Reset();
 }
 
-SvTreeListEntry* SvTreeListBox::GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const
+SvTreeListEntry* SvTreeListBox::GetEntry( SvTreeListEntry* pParent, sal_uInt32 nPos ) const
 {
     return pModel->GetEntry(pParent, nPos);
 }
 
-SvTreeListEntry* SvTreeListBox::GetEntry( sal_uLong nRootPos ) const
+SvTreeListEntry* SvTreeListBox::GetEntry( sal_uInt32 nRootPos ) const
 {
     return pModel->GetEntry(nRootPos);
 }
@@ -760,7 +760,7 @@ void SvTreeListBox::FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_In
     SvTreeListEntry* pParentEntry = GetParent( pEntry );
     while ( true )
     {
-        sal_uLong i, nCount = GetLevelChildCount( pParentEntry );
+        sal_uInt32 i, nCount = GetLevelChildCount( pParentEntry );
         for ( i = 0; i < nCount; ++i )
         {
             SvTreeListEntry* pTemp = GetEntry( pParentEntry, i );
@@ -787,12 +787,12 @@ SvTreeListEntry* SvTreeListBox::GetParent( SvTreeListEntry* pEntry ) const
     return pModel->GetParent(pEntry);
 }
 
-sal_uLong SvTreeListBox::GetChildCount( SvTreeListEntry const * pParent ) const
+sal_uInt32 SvTreeListBox::GetChildCount( SvTreeListEntry const * pParent ) const
 {
     return pModel->GetChildCount(pParent);
 }
 
-sal_uLong SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
+sal_uInt32 SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
 {
 
     //if _pParent is 0, then pEntry is the first child of the root.
@@ -1211,26 +1211,24 @@ DragDropMode SvTreeListBox::NotifyStartDrag()
 
 namespace
 {
-    struct SortLBoxes : public rtl::Static<std::set<sal_uLong>, SortLBoxes> {};
+    // void* to avoid loplugin:vclwidgets, we don't need ownership here
+    std::set<const void*> gSortLBoxes;
 }
 
 void SvTreeListBox::AddBoxToDDList_Impl( const SvTreeListBox& rB )
 {
-    sal_uLong nVal = reinterpret_cast<sal_uLong>(&rB);
-    SortLBoxes::get().insert( nVal );
+    gSortLBoxes.insert( &rB );
 }
 
 void SvTreeListBox::RemoveBoxFromDDList_Impl( const SvTreeListBox& rB )
 {
-    sal_uLong nVal = reinterpret_cast<sal_uLong>(&rB);
-    SortLBoxes::get().erase( nVal );
+    gSortLBoxes.erase( &rB );
 }
 
 IMPL_LINK( SvTreeListBox, DragFinishHdl_Impl, sal_Int8, nAction, void )
 {
-    sal_uLong nVal = reinterpret_cast<sal_uLong>(this);
-    std::set<sal_uLong> &rSortLBoxes = SortLBoxes::get();
-    std::set<sal_uLong>::const_iterator it = rSortLBoxes.find(nVal);
+    auto &rSortLBoxes = gSortLBoxes;
+    auto it = rSortLBoxes.find(this);
     if( it != rSortLBoxes.end() )
     {
         DragFinished( nAction );
@@ -1542,7 +1540,7 @@ IMPL_LINK( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData, void )
 SvTreeListEntry* SvTreeListBox::InsertEntry(
     const OUString& rText,
     SvTreeListEntry* pParent,
-    bool bChildrenOnDemand, sal_uLong nPos,
+    bool bChildrenOnDemand, sal_uInt32 nPos,
     void* pUser
 )
 {
@@ -1574,7 +1572,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
 
 SvTreeListEntry* SvTreeListBox::InsertEntry( const OUString& rText,
     const Image& aExpEntryBmp, const Image& aCollEntryBmp,
-    SvTreeListEntry* pParent, bool bChildrenOnDemand, sal_uLong nPos, void* pUser )
+    SvTreeListEntry* pParent, bool bChildrenOnDemand, sal_uInt32 nPos, void* pUser )
 {
     nTreeFlags |= SvTreeFlags::MANINS;
 
@@ -2149,10 +2147,10 @@ bool SvTreeListBox::Select( SvTreeListEntry* pEntry, bool bSelect )
     return bRetVal;
 }
 
-sal_uLong SvTreeListBox::SelectChildren( SvTreeListEntry* pParent, bool bSelect )
+sal_uInt32 SvTreeListBox::SelectChildren( SvTreeListEntry* pParent, bool bSelect )
 {
     pImpl->DestroyAnchor();
-    sal_uLong nRet = 0;
+    sal_uInt32 nRet = 0;
     if( !pParent->HasChildren() )
         return 0;
     sal_uInt16 nRefDepth = pModel->GetDepth( pParent );
@@ -3340,7 +3338,7 @@ IMPL_LINK( SvTreeListBox, DefaultCompare, const SvSortData&, rData, sal_Int32 )
 }
 
 void SvTreeListBox::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,
-                        SvTreeListEntry* pEntry2, sal_uLong nPos )
+                        SvTreeListEntry* pEntry2, sal_uInt32 nPos )
 {
     SolarMutexGuard aSolarGuard;
 

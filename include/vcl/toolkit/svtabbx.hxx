@@ -51,9 +51,9 @@ protected:
     virtual void                SetTabs() override;
     virtual void                InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&) override;
 
-    OUString                    GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const;
-    SvTreeListEntry*            GetEntryOnPos( sal_uLong _nEntryPos ) const;
-    SvTreeListEntry*            GetChildOnPos( SvTreeListEntry* _pParent, sal_uLong _nEntryPos, sal_uLong& _rPos ) const;
+    OUString                    GetTabEntryText( sal_uInt32 nPos, sal_uInt16 nCol ) const;
+    SvTreeListEntry*            GetEntryOnPos( sal_uInt32 _nEntryPos ) const;
+    SvTreeListEntry*            GetChildOnPos( SvTreeListEntry* _pParent, sal_uInt32 _nEntryPos, sal_uInt32& _rPos ) const;
 
 public:
     SvTabListBox( vcl::Window* pParent, WinBits );
@@ -65,27 +65,27 @@ public:
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos=TREELIST_APPEND, void* pUserData = nullptr ) override;
+                                         sal_uInt32 nPos=TREELIST_APPEND, void* pUserData = nullptr ) override;
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
                                          SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos = TREELIST_APPEND, void* pUserData = nullptr ) override;
+                                         sal_uInt32 nPos = TREELIST_APPEND, void* pUserData = nullptr ) override;
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
-                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = nullptr );
+                                 sal_uInt32 nPos, sal_uInt16 nCol, void* pUserData = nullptr );
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
                                  const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent,
-                                 sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr );
+                                 sal_uInt32 nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr );
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const override;
     static OUString  GetEntryText( const SvTreeListEntry*, sal_uInt16 nCol );
-    OUString         GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
+    OUString         GetEntryText( sal_uInt32 nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
-    OUString         GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const;
-    sal_uLong        GetEntryPos( const SvTreeListEntry* pEntry ) const;
+    OUString         GetCellText( sal_uInt32 nPos, sal_uInt16 nCol ) const;
+    sal_uInt32       GetEntryPos( const SvTreeListEntry* pEntry ) const;
 
     void             SetTabJustify( sal_uInt16 nTab, SvTabJustify );
     void             SetTabEditable( sal_uInt16 nTab, bool bEditable );
@@ -127,12 +127,12 @@ public:
     static bool     IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol );
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
-                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = nullptr ) override;
+                                 sal_uInt32 nPos, sal_uInt16 nCol, void* pUserData = nullptr ) override;
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
                                  const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent,
-                                 sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr ) override;
-    virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=TREELIST_APPEND) override;
-    virtual sal_uLong Insert( SvTreeListEntry* pEntry, sal_uLong nRootPos = TREELIST_APPEND ) override;
+                                 sal_uInt32 nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr ) override;
+    virtual sal_uInt32 Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uInt32 nPos=TREELIST_APPEND) override;
+    virtual sal_uInt32 Insert( SvTreeListEntry* pEntry, sal_uInt32 nRootPos = TREELIST_APPEND ) override;
 
     // Accessible -------------------------------------------------------------
 

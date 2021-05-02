@@ -30,7 +30,7 @@ void SvTreeListEntry::ClearChildren()
 
 void SvTreeListEntry::SetListPositions()
 {
-    sal_uLong nCur = 0;
+    sal_uInt32 nCur = 0;
     for (auto const& pEntry : m_Children)
     {
         SvTreeListEntry& rEntry = *pEntry;
@@ -78,7 +78,7 @@ bool SvTreeListEntry::HasChildListPos() const
     return pParent && !(pParent->nListPos & 0x80000000);
 }
 
-sal_uLong SvTreeListEntry::GetChildListPos() const
+sal_uInt32 SvTreeListEntry::GetChildListPos() const
 {
     if( pParent && (pParent->nListPos & 0x80000000) )
         pParent->SetListPositions();
@@ -210,7 +210,7 @@ void SvTreeListEntry::SetFlags( SvTLEntryFlags nFlags )
 SvTreeListEntry* SvTreeListEntry::NextSibling() const
 {
     SvTreeListEntries& rList = pParent->m_Children;
-    sal_uLong nPos = GetChildListPos();
+    sal_uInt32 nPos = GetChildListPos();
     nPos++;
     return (nPos < rList.size()) ? rList[nPos].get() : nullptr;
 }
@@ -218,7 +218,7 @@ SvTreeListEntry* SvTreeListEntry::NextSibling() const
 SvTreeListEntry* SvTreeListEntry::PrevSibling() const
 {
     SvTreeListEntries& rList = pParent->m_Children;
-    sal_uLong nPos = GetChildListPos();
+    sal_uInt32 nPos = GetChildListPos();
     if ( nPos == 0 )
         return nullptr;
     nPos--;
