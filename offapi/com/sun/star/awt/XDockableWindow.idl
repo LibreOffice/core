@@ -100,6 +100,8 @@ interface XDockableWindow : com::sun::star::uno::XInterface
         the corresponding events
         @param WindowRect
             specifies the position and size of the pop-up window in frame coordinates
+
+        @deprecated - doesn't do anything
      */
     void startPopupMode( [in] com::sun::star::awt::Rectangle WindowRect );
 
@@ -108,6 +110,8 @@ interface XDockableWindow : com::sun::star::uno::XInterface
         @returns
             `TRUE` if the window is in pop-up mode
             `FALSE` if the window is not in pop-up mode
+
+        @deprecated - always returns `FALSE`
      */
     boolean isInPopupMode();
 };
