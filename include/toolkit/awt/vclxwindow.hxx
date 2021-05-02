@@ -205,8 +205,6 @@ public:
     void SAL_CALL lock(  ) override;
     void SAL_CALL unlock(  ) override;
     sal_Bool SAL_CALL isLocked(  ) override;
-    void SAL_CALL startPopupMode( const css::awt::Rectangle& WindowRect ) override;
-    sal_Bool SAL_CALL isInPopupMode(  ) override;
 
     // css::awt::XWindow2
     void SAL_CALL setOutputSize( const css::awt::Size& aSize ) override;

@@ -92,24 +92,6 @@ interface XDockableWindow : com::sun::star::uno::XInterface
             `FALSE` if the window is not locked
      */
     boolean isLocked();
-
-
-    /** shows the window in a menu like style, i.e. without decoration
-        a special indicator will allow for tearing off the window
-        see com::sun::star::awt::XDockableWindowListener for
-        the corresponding events
-        @param WindowRect
-            specifies the position and size of the pop-up window in frame coordinates
-     */
-    void startPopupMode( [in] com::sun::star::awt::Rectangle WindowRect );
-
-
-    /** queries the current pop-up mode
-        @returns
-            `TRUE` if the window is in pop-up mode
-            `FALSE` if the window is not in pop-up mode
-     */
-    boolean isInPopupMode();
 };
 
 

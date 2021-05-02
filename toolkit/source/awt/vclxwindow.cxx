@@ -2407,18 +2407,6 @@ void SAL_CALL VCLXWindow::unlock(  )
         vcl::Window::GetDockingManager()->Unlock( pWindow );
 }
 
-void SAL_CALL VCLXWindow::startPopupMode( const css::awt::Rectangle& )
-{
-    // TODO: remove interface in the next incompatible build
-}
-
-sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  )
-{
-    // TODO: remove interface in the next incompatible build
-    return false;
-}
-
-
 // css::awt::XWindow2
 
 void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize )
