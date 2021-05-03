@@ -449,6 +449,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	passwordcontainer \
 	pcr \
 	pdffilter \
+	pdfimporter \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
 	sax \
 	sb \

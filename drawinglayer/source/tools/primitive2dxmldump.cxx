@@ -535,6 +535,13 @@ void Primitive2dXmlDump::dump(
     aWriter.endDocument();
 
     pStream->Seek(STREAM_SEEK_TO_BEGIN);
+
+    std::size_t nSize = pStream->remainingSize();
+    std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize + 1]);
+    pStream->ReadBytes(pBuffer.get(), nSize);
+    pBuffer[nSize] = 0;
+
+    printf ("%s\n", pBuffer.get());
 }
 
 namespace

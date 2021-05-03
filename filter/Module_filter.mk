@@ -26,6 +26,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Library_msfilter \
 	Library_odfflatxml \
 	Library_pdffilter \
+	Library_pdfimporter \
 	Library_storagefd \
 	Library_svgfilter \
 	Library_graphicfilter \
@@ -49,6 +50,7 @@ $(eval $(call gb_Module_add_check_targets,filter,\
     CppunitTest_filter_xslt \
     CppunitTest_filter_priority \
     CppunitTest_filter_msfilter \
+    CppunitTest_filter_pdfimporter_test \
     CppunitTest_filter_textfilterdetect \
     CppunitTest_filter_pdf \
 ))
