@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24976f8d_4619840d",
+        "filename": "sc/source/filter/xml/XMLExportDatabaseRanges.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-03T16:49:42Z",
+      "side": 1,
+      "message": "mpDoc",
+      "range": {
+        "startLine": 418,
+        "startChar": 26,
+        "endLine": 418,
+        "endChar": 30
+      },
+      "revId": "7b6648ece00b12c6a7c2e63459597dad7d0d853f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "090c3f67_9db4961b",
+        "filename": "sc/source/filter/xml/XMLExportDatabaseRanges.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-03T16:49:42Z",
+      "side": 1,
+      "message": "pDoc",
+      "range": {
+        "startLine": 420,
+        "startChar": 64,
+        "endLine": 420,
+        "endChar": 69
+      },
+      "revId": "7b6648ece00b12c6a7c2e63459597dad7d0d853f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
