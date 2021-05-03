@@ -416,25 +416,23 @@ void SheetDataBuffer::addColXfStyleProcessRowRanges()
                 bool bAddRange = true;
                 for ( ; rows_it != rRowStyles.end(); ++rows_it )
                 {
-                    const RowRangeStyle& r = *rows_it;
-
                     // Add the part of aStyleRows that does not overlap with r
-                    if ( aStyleRows.mnStartRow < r.mnStartRow )
+                    if ( aStyleRows.mnStartRow < rows_it->mnStartRow )
                     {
                         RowRangeStyle aSplit = aStyleRows;
-                        aSplit.mnEndRow = std::min(aStyleRows.mnEndRow, r.mnStartRow - 1);
+                        aSplit.mnEndRow = std::min(aStyleRows.mnEndRow, rows_it->mnStartRow - 1);
                         rows_it = rRowStyles.insert( aSplit ).first;
                     }
 
                     // Done if no part of aStyleRows extends beyond r
-                    if ( aStyleRows.mnEndRow <= r.mnEndRow )
+                    if ( aStyleRows.mnEndRow <= rows_it->mnEndRow )
                     {
                         bAddRange = false;
                         break;
                     }
 
                     // Cut off the part aStyleRows that was handled above
-                    aStyleRows.mnStartRow = r.mnEndRow + 1;
+                    aStyleRows.mnStartRow = rows_it->mnEndRow + 1;
                 }
                 if ( bAddRange )
                     rRowStyles.insert( aStyleRows );
