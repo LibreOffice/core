@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_WINDOW_HXX
 #define INCLUDED_VCL_WINDOW_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 #include <tools/link.hxx>
@@ -851,8 +850,8 @@ public:
 
     struct PointerState
     {
-        sal_uLong   mnState;    // the button state
-        Point   maPos;      // mouse position in output coordinates
+        sal_Int32 mnState;    // the button state
+        Point     maPos;      // mouse position in output coordinates
     };
     PointerState                        GetPointerState();
     bool                                IsMouseOver() const;
