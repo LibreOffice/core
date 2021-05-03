@@ -4,6 +4,8 @@ without this, compiling output of GCC 11 -E -fdirectives-only fails with:
 
 ooxml_tokens.inl:3524:32: error: stray '#' in program
 
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100392
+
 --- liborcus/src/liborcus/ooxml_tokens.inl.orig	2021-05-01 18:12:37.490131155 +0200
 +++ liborcus/src/liborcus/ooxml_tokens.inl	2021-05-01 18:12:50.994119453 +0200
 @@ -3521,4 +3521,4 @@
