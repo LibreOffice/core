@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d4e995e_a637b774",
+        "filename": "sc/qa/unit/data/functions/statistical/fods/chisq.test.fods",
+        "patchSetId": 2
+      },
+      "lineNbr": 3801,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-03T16:22:12Z",
+      "side": 1,
+      "message": "So we are going to provide results more accurate than Excel, for this Excel-specific function :-D",
+      "revId": "473ddf8a5129c11d2bfe37aa01bf53465c6a8148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
