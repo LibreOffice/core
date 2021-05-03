@@ -357,7 +357,7 @@ OUString ScAccessiblePreviewHeaderCell::createAccessibleName()
     else
     {
         // name of row header
-        sName += OUString::number(  ( maCellPos.Row() + 1 ) );
+        sName += OUString::number(  maCellPos.Row() + 1 );
     }
 
     return sName;

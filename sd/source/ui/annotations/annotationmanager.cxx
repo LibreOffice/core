@@ -767,7 +767,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForward)
                 ++iter;
                 if( iter != aAnnotations.end() )
                 {
-                    SelectAnnotation( (*iter) );
+                    SelectAnnotation( *iter );
                     return;
                 }
             }
@@ -786,7 +786,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForward)
             if (iter != aAnnotations.end() && iter != aAnnotations.begin())
             {
                 --iter;
-                SelectAnnotation( (*iter) );
+                SelectAnnotation( *iter );
                 return;
             }
         }

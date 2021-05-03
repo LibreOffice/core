@@ -368,8 +368,15 @@ bool UnnecessaryParen::VisitCallExpr(const CallExpr* callExpr)
 {
     if (ignoreLocation(callExpr))
         return true;
-    if (callExpr->getNumArgs() != 1 || isa<CXXOperatorCallExpr>(callExpr))
+    if (callExpr->getNumArgs() == 0 || isa<CXXOperatorCallExpr>(callExpr))
         return true;
+
+    // if we are calling a >1 arg method, are we using the defaults?
+    if (callExpr->getNumArgs() > 1)
+    {
+        if (!isa<CXXDefaultArgExpr>(callExpr->getArg(1)))
+            return true;
+    }
 
     auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(callExpr->getArg(0)));
     if (!parenExpr)

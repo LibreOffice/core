@@ -590,7 +590,7 @@ static OString lcl_GetValue( sal_uInt8 nType, double fVal, const XclExpString* p
     {
         case EXC_AFTYPE_STRING:     return XclXmlUtils::ToOString( *pStr );
         case EXC_AFTYPE_DOUBLE:     return OString::number( fVal );
-        case EXC_AFTYPE_BOOLERR:    return OString::number(  ( fVal != 0 ? 1 : 0 ) );
+        case EXC_AFTYPE_BOOLERR:    return OString::number( fVal != 0 ? 1 : 0 );
         default:                    return OString();
     }
 }
@@ -825,7 +825,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
                 rWorksheet->singleElement( XML_top10,
                         XML_top,        ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10TOP ) ),
                         XML_percent,    ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10PERC ) ),
-                        XML_val,        OString::number((nFlags >> 7))
+                        XML_val,        OString::number(nFlags >> 7)
                         // OOXTODO: XML_filterVal
                 );
             }

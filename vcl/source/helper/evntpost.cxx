@@ -42,7 +42,7 @@ EventPoster::~EventPoster()
 void EventPoster::Post()
 {
     DBG_TESTSOLARMUTEX();
-    m_nId = Application::PostUserEvent( ( LINK( this, EventPoster, DoEvent_Impl ) ) );
+    m_nId = Application::PostUserEvent( LINK( this, EventPoster, DoEvent_Impl ) );
 }
 
 IMPL_LINK( EventPoster, DoEvent_Impl, void*, /*p*/, void )

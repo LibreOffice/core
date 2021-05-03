@@ -1174,7 +1174,7 @@ void XmlFilterBase::exportCustomFragments()
     {
         uno::Reference<xml::dom::XDocument> customXmlDom = customXmlDomlist[j];
         uno::Reference<xml::dom::XDocument> customXmlDomProps = customXmlDomPropslist[j];
-        const OUString fragmentPath = "customXml/item" + OUString::number((j+1)) + ".xml";
+        const OUString fragmentPath = "customXml/item" + OUString::number(j+1) + ".xml";
         if (customXmlDom.is())
         {
             addRelation(oox::getRelationship(Relationship::CUSTOMXML), OUString("../" + fragmentPath));
@@ -1190,7 +1190,7 @@ void XmlFilterBase::exportCustomFragments()
         {
             uno::Reference<xml::sax::XSAXSerializable> serializer(customXmlDomProps, uno::UNO_QUERY);
             uno::Reference<xml::sax::XWriter> writer = xml::sax::Writer::create(comphelper::getProcessComponentContext());
-            writer->setOutputStream(openFragmentStream("customXml/itemProps"+OUString::number((j+1))+".xml",
+            writer->setOutputStream(openFragmentStream("customXml/itemProps"+OUString::number(j+1)+".xml",
                                     "application/vnd.openxmlformats-officedocument.customXmlProperties+xml"));
             serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
                                   uno::Sequence<beans::StringPair>());
@@ -1198,7 +1198,7 @@ void XmlFilterBase::exportCustomFragments()
             // Adding itemprops's relationship entry to item.xml.rels file
             addRelation(openFragmentStream(fragmentPath, "application/xml"),
                         oox::getRelationship(Relationship::CUSTOMXMLPROPS),
-                        OUString("itemProps"+OUString::number((j+1))+".xml"));
+                        OUString("itemProps"+OUString::number(j+1)+".xml"));
         }
     }
 

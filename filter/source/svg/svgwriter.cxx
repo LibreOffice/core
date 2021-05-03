@@ -1437,7 +1437,7 @@ void SVGTextWriter::implWriteBulletChars()
 
                 // Add ref attribute
                 sRefId = "#bullet-char-template-" +
-                         OUString::number( ( rInfo.cBulletChar ) );
+                         OUString::number( rInfo.cBulletChar );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
 
                 SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );

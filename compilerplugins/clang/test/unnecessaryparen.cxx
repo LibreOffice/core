@@ -113,6 +113,8 @@ int main()
 
     BrowseMode nBits = ( BrowseMode::Modules | BrowseMode::Top ); // expected-error {{parentheses immediately inside vardecl statement [loplugin:unnecessaryparen]}}
     (void)nBits;
+
+    OUString::number((v2+1)); // expected-error {{parentheses immediately inside single-arg call [loplugin:unnecessaryparen]}}
 };
 
 struct B { operator bool() const; };

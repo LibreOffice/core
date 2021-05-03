@@ -1491,11 +1491,11 @@ void DocxExport::WriteCustomXml()
         {
             m_rFilter.addRelation( m_pDocumentFS->getOutputStream(),
                     oox::getRelationship(Relationship::CUSTOMXML),
-                    OUString("../customXml/item"+OUString::number((j+1))+".xml" ));
+                    OUString("../customXml/item"+OUString::number(j+1)+".xml" ));
 
             uno::Reference< xml::sax::XSAXSerializable > serializer( customXmlDom, uno::UNO_QUERY );
             uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
-            writer->setOutputStream( GetFilter().openFragmentStream( "customXml/item"+OUString::number((j+1))+".xml",
+            writer->setOutputStream( GetFilter().openFragmentStream( "customXml/item"+OUString::number(j+1)+".xml",
                 "application/xml" ) );
             serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
                 uno::Sequence< beans::StringPair >() );
@@ -1505,16 +1505,16 @@ void DocxExport::WriteCustomXml()
         {
             uno::Reference< xml::sax::XSAXSerializable > serializer( customXmlDomProps, uno::UNO_QUERY );
             uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
-            writer->setOutputStream( GetFilter().openFragmentStream( "customXml/itemProps"+OUString::number((j+1))+".xml",
+            writer->setOutputStream( GetFilter().openFragmentStream( "customXml/itemProps"+OUString::number(j+1)+".xml",
                 "application/vnd.openxmlformats-officedocument.customXmlProperties+xml" ) );
             serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
                 uno::Sequence< beans::StringPair >() );
 
             // Adding itemprops's relationship entry to item.xml.rels file
-            m_rFilter.addRelation( GetFilter().openFragmentStream( "customXml/item"+OUString::number((j+1))+".xml",
+            m_rFilter.addRelation( GetFilter().openFragmentStream( "customXml/item"+OUString::number(j+1)+".xml",
                     "application/xml" ) ,
                     oox::getRelationship(Relationship::CUSTOMXMLPROPS),
-                    OUString("itemProps"+OUString::number((j+1))+".xml" ));
+                    OUString("itemProps"+OUString::number(j+1)+".xml" ));
         }
     }
 }

@@ -577,7 +577,7 @@ void PageMarginControl::StoreUserCustomValues()
 
     SvtViewOptions aWinOpt5( EViewType::Window, SWPAGE_MIRROR_GVALUE );
     aSeq[0].Name = "mbMirrored";
-    aSeq[0].Value <<= OUString::number( (m_bMirrored ? 1 : 0) );
+    aSeq[0].Value <<= OUString::number( m_bMirrored ? 1 : 0 );
     aWinOpt5.SetUserData( aSeq );
 }
 
