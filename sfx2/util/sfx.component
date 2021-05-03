@@ -19,11 +19,6 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.sfx2.BackingComp"
-      constructor="com_sun_star_comp_sfx2_BackingComp_get_implementation">
-    <service name="com.sun.star.frame.StartModule"/>
-    <service name="com.sun.star.frame.ProtocolHandler"/>
-  </implementation>
   <implementation name="SfxDocumentMetaData"
       constructor="SfxDocumentMetaData_get_implementation">
     <service name="com.sun.star.document.DocumentProperties"/>

@@ -770,7 +770,7 @@ desktop_constructor_list = [
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
     "com_sun_star_comp_office_FrameLoader_get_implementation",
     "com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation",
-    "com_sun_star_comp_sfx2_BackingComp_get_implementation",
+    ("com_sun_star_comp_sfx2_BackingComp_get_implementation", "#ifndef ENABLE_WASM_STRIP"),
     "com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation",
     "com_sun_star_comp_sfx2_InsertSymbolToolBoxControl_get_implementation",
     "com_sun_star_comp_sfx2_InsertSymbolToolBoxControl_get_implementation",
