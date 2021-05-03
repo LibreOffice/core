@@ -995,17 +995,15 @@ void ScInterpreter::ScRawSubtract()
     if (!MustHaveParamCountMin( nParamCount, 2))
         return;
 
-    // Fish the 1st parameter from the stack and push it on top.
-    const FormulaToken* p = pStack[ sp - nParamCount ];
-    PushWithoutError( *p );
+    // Reverse stack to process arguments from left to right.
+    ReverseStack( nParamCount);
     // Obtain the minuend.
     double fRes = GetDouble();
 
-    while (nGlobalError == FormulaError::NONE && nParamCount > 1)
+    while (nGlobalError == FormulaError::NONE && --nParamCount > 0)
     {
         // Simple single values without matrix support.
         fRes -= GetDouble();
-        --nParamCount;
     }
     while (nParamCount-- > 0)
         PopError();
