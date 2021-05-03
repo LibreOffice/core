@@ -466,6 +466,11 @@ protected:
 
     void            ReloadTopLevelListBox( SvxConfigEntry const * pSelection = nullptr );
 
+    bool            IsCommandInMenuList(const SvxConfigEntry *pEntryData,
+                                        const SvxEntries *pEntries);
+
+    SvxConfigEntry *CreateCommandFromSelection(const OUString &aURL);
+
 public:
 
     virtual ~SvxConfigPage() override;
