@@ -172,8 +172,17 @@ void SvxMenuConfigPage::UpdateButtonStates()
 
     m_xInsertBtn->set_sensitive(pMenuData != nullptr);
 
-    m_xAddCommandButton->set_sensitive(pMenuData != nullptr);
-    m_xRemoveCommandButton->set_sensitive(pMenuData != nullptr);
+    SvxConfigEntry* selectedCmd = CreateCommandFromSelection(GetScriptURL());
+
+    m_xAddCommandButton->set_sensitive(
+        pMenuData != nullptr && !IsCommandInMenuList(selectedCmd, pMenuData->GetEntries()));
+
+    delete selectedCmd;
+
+    if (bIsValidSelection)
+    {
+        m_xRemoveCommandButton->set_sensitive(pMenuData != nullptr);
+    }
 
     //Handle the gear button
     if (pMenuData && m_bIsMenuBar)

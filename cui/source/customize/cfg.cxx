@@ -1395,17 +1395,13 @@ SvxEntries* SvxConfigPage::FindParentForChild(
     return nullptr;
 }
 
-int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates)
+SvxConfigEntry *SvxConfigPage::CreateCommandFromSelection(const OUString &aURL)
 {
-    OUString aURL = GetScriptURL();
-    SvxConfigEntry* pParent = GetTopLevelSelection();
-
-    if ( aURL.isEmpty() || pParent == nullptr )
-    {
-        return -1;
-    }
-
     OUString aDisplayName;
+
+    if ( aURL.isEmpty() ) {
+        return nullptr;
+    }
 
     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aURL, m_aModuleId);
 
@@ -1416,30 +1412,64 @@ int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates)
     else
         aDisplayName = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
 
-    SvxConfigEntry* pNewEntryData =
+    SvxConfigEntry* toret =
         new SvxConfigEntry( aDisplayName, aURL, false, /*bParentData*/false );
-    pNewEntryData->SetUserDefined();
+
+    toret->SetUserDefined();
 
     if ( aDisplayName.isEmpty() )
-        pNewEntryData->SetName( GetSelectedDisplayName() );
+        toret->SetName( GetSelectedDisplayName() );
 
-    // check that this function is not already in the menu
-    if ( !bAllowDuplicates )
+    return toret;
+}
+
+bool SvxConfigPage::IsCommandInMenuList(const SvxConfigEntry *pEntryData,
+                                        const SvxEntries *pEntries)
+{
+    bool toret = false;
+
+    if ( pEntries != nullptr
+      && pEntryData != nullptr )
     {
-        for (auto const& entry : *pParent->GetEntries())
+        for (auto const& entry : *pEntries)
         {
-            if ( entry->GetCommand() == pNewEntryData->GetCommand() )
-            {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                          VclMessageType::Info, VclButtonsType::Ok, CuiResId(RID_SVXSTR_MNUCFG_ALREADY_INCLUDED)));
-                xBox->run();
-                delete pNewEntryData;
-                return -1;
-            }
+                if ( entry->GetCommand() == pEntryData->GetCommand() )
+                {
+                    toret = true;
+                    break;
+                }
         }
     }
 
-    return AppendEntry(pNewEntryData, nTarget);
+    return toret;
+}
+
+int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates)
+{
+    int toret = -1;
+    OUString aURL = GetScriptURL();
+    SvxConfigEntry* pParent = GetTopLevelSelection();
+
+    if ( aURL.isEmpty() || pParent == nullptr )
+    {
+        return -1;
+    }
+
+
+    SvxConfigEntry * pNewEntryData = CreateCommandFromSelection( aURL );
+
+    // check that this function is not already in the menu
+    if ( !bAllowDuplicates
+      && IsCommandInMenuList( pNewEntryData, pParent->GetEntries() )
+    )
+    {
+        delete pNewEntryData;
+    } else {
+        toret = AppendEntry( pNewEntryData, nTarget );
+    }
+
+    UpdateButtonStates();
+    return toret;
 }
 
 int SvxConfigPage::AppendEntry(
@@ -1599,6 +1629,8 @@ IMPL_LINK_NOARG(SvxConfigPage, SelectFunctionHdl, weld::TreeView&, void)
 
         m_xDescriptionField->set_text("");
     }
+
+    UpdateButtonStates();
 }
 
 IMPL_LINK_NOARG(SvxConfigPage, ImplUpdateDataHdl, Timer*, void)
