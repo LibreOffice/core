@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4cbe26cc_baad82eb",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4401,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-03T12:20:10Z",
+      "side": 1,
+      "message": "Noel: I\u0027m curious why loplugin:unnecessaryparen skips thinks like here for numbers, but flags for user-defined operators?",
+      "revId": "040451e19087d8cb8ff4376166ca8248f909a4e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
