@@ -2525,6 +2525,7 @@ namespace {
  */
 class StrCellIterator
 {
+protected:
     typedef std::pair<sc::CellStoreType::const_iterator,size_t> PosType;
     PosType maPos;
     sc::CellStoreType::const_iterator const miBeg;
@@ -2641,6 +2642,113 @@ public:
     }
 };
 
+/**
+ * Iterate over only over the super-block of string and edit-text blocks.
+ */
+class StrCellBlockIterator: public StrCellIterator
+{
+public:
+    StrCellBlockIterator(const sc::CellStoreType& rCells, SCROW nStart, const ScDocument* pDoc) :
+        StrCellIterator(rCells, nStart, pDoc)
+    {
+    }
+
+    bool prev()
+    {
+        // Don't go up anymore as we're on non-string block.
+        if (!has())
+            return false;
+
+        // We are in a string block.
+        if (maPos.second > 0)
+        {
+            // Move back one cell in the same block.
+            --maPos.second;
+        }
+        else
+        {
+            if (maPos.first == miBeg)
+                return false;
+
+            // Move to the last cell of the previous block.
+            --maPos.first;
+            maPos.second = maPos.first->size - 1;
+            // Reached non-string block.
+            if (!has())
+                return false;
+        }
+        return true;
+    }
+
+    bool next()
+    {
+        // Don't go down anymore as we're on non-string block.
+        if (!has())
+            return false;
+
+        // We are in a string block.
+        ++maPos.second;
+        if (maPos.second >= maPos.first->size)
+        {
+            // Move to the next block.
+            ++maPos.first;
+            if (maPos.first == miEnd)
+                return false;
+
+            maPos.second = 0;
+            // Reached non-string block.
+            if (!has())
+                return false;
+        }
+        return true;
+    }
+
+};
+
+}
+
+// Get a set of strings from super-block of string and edit-text blocks.
+// This used for computing auto-complete entries in input handler.
+bool ScColumn::GetStringBlockEntries(SCROW nCursorRow, std::set<ScTypedStrData>& rStrings) const
+{
+    // Start at the specified row position, and collect all string values
+    // going upward and downward directions in parallel. The cursor position
+    // cell must be skipped.
+
+    StrCellBlockIterator aItrUp(maCells, nCursorRow-1, GetDoc());
+    StrCellBlockIterator aItrDown(maCells, nCursorRow+1, GetDoc());
+
+    bool bMoveUp = aItrUp.valid() && aItrUp.has();
+    bool bMoveDown = aItrDown.valid() && aItrDown.has();
+    bool bFound = false;
+    OUString aStr;
+
+    while (bMoveUp || bMoveDown)
+    {
+        if (bMoveUp)
+        {
+            aStr = aItrUp.get();
+            if (!aStr.isEmpty())
+            {
+                if (rStrings.insert(ScTypedStrData(aStr)).second)
+                    bFound = true;
+            }
+            bMoveUp = aItrUp.prev();
+        }
+
+        if (bMoveDown)
+        {
+            aStr = aItrDown.get();
+            if (!aStr.isEmpty())
+            {
+                if (rStrings.insert(ScTypedStrData(aStr)).second)
+                    bFound = true;
+            }
+            bMoveDown = aItrDown.next();
+        }
+    }
+
+    return bFound;
 }
 
 // GetDataEntries - Strings from continuous Section around nRow

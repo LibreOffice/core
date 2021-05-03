@@ -2060,6 +2060,8 @@ public:
                                             SCTAB nTab, bool bCaseSens,
                                             ScFilterEntries& rFilterEntries );
 
+    void              GetStringBlockEntries( SCCOL nCursorCol, SCROW nCursorRow, SCTAB nTab,
+                                             std::vector<ScTypedStrData>& rStrings) const;
     void              GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                       std::vector<ScTypedStrData>& rStrings, bool bLimit = false );
     void              GetFormulaEntries( ScTypedCaseStrSet& rStrings );
