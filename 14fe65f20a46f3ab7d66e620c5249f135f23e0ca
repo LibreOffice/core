@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a9757fa_02500697",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2762,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-03T19:51:08Z",
+      "side": 0,
+      "message": "Please preserve the ScMatrix::Collect() call with sc::op::Op and lambdas, which has way less overhead in accessing the matrix elements than doing it in external loops.\n\nAs this seems to be the only place using it, you probably can redefine the Op in sc/inc/matrixoperators.hxx to use KahanSum instead of double and here use\n\n  sc::op::Op(0.0, [](KahanSum\u0026 rAccum, double fVal){rAccum +\u003d fVal;})\n\nand the Collect() return vector consisting of KahanSums (and count) as well, as ScMatrix::IterateResult is already KahanIterateResult (or should be..)",
+      "revId": "14fe65f20a46f3ab7d66e620c5249f135f23e0ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
