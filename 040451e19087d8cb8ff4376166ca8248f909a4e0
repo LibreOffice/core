@@ -16,6 +16,24 @@
       "revId": "040451e19087d8cb8ff4376166ca8248f909a4e0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "910aac0e_3704c021",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4401,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-05-03T12:46:56Z",
+      "side": 1,
+      "message": "user-defined operators have a slightly weird representation in the clang AST, so I will often just skip them to make my life easier",
+      "parentUuid": "4cbe26cc_baad82eb",
+      "revId": "040451e19087d8cb8ff4376166ca8248f909a4e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
