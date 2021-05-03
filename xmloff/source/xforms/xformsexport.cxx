@@ -659,9 +659,9 @@ OUString xforms_bool( const Any& rAny )
 
 void xforms_formatDate( OUStringBuffer& aBuffer, const util::Date& rDate )
 {
-    aBuffer.append(static_cast<sal_Int32>( rDate.Year ))
-            .append("-").append(static_cast<sal_Int32>( rDate.Month ))
-            .append("-").append(static_cast<sal_Int32>( rDate.Day ));
+    aBuffer.append( OUString::number( rDate.Year ) +
+                "-" + OUString::number( rDate.Month ) +
+                "-" + OUString::number( rDate.Day ) );
 }
 
 void xforms_formatTime( OUStringBuffer& aBuffer, const css::util::Time& rTime )

@@ -310,12 +310,12 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( nRowSpan>1 )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_rowspan
-                "=\"").append(static_cast<sal_Int32>(nRowSpan)).append("\"");
+                "=\"" + OString::number(nRowSpan) + "\"");
     }
     if( nColSpan > 1 )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_colspan
-                "=\"").append(static_cast<sal_Int32>(nColSpan)).append("\"");
+                "=\"" + OString::number(nColSpan) + "\"");
     }
 
     tools::Long nWidth = 0;
@@ -388,7 +388,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( nHeight )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_height
-                "=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
+                "=\"" + OString::number(aPixelSz.Height()) + "\"");
     }
 
     const SfxItemSet& rItemSet = pBox->GetFrameFormat()->GetAttrSet();
@@ -677,23 +677,23 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         if( aPixelSpc.Width() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_hspace
-                    "=\"").append(static_cast<sal_Int32>(aPixelSpc.Width())).append("\"");
+                    "=\"" + OString::number(aPixelSpc.Width()) + "\"");
         }
 
         if( aPixelSpc.Height() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_vspace
-                    "=\"").append(static_cast<sal_Int32>(aPixelSpc.Height())).append("\"");
+                    "=\"" + OString::number(aPixelSpc.Height()) + "\"");
         }
     }
 
     // output CELLPADDING: from layout or calculated
     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cellpadding
-            "=\"").append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(m_nCellPadding,false))).append("\"");
+            "=\"" + OString::number(SwHTMLWriter::ToPixel(m_nCellPadding,false)) + "\"");
 
     // output CELLSPACING: from layout or calculated
     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cellspacing
-            "=\"").append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(m_nCellSpacing,false))).append("\"");
+            "=\"" + OString::number(SwHTMLWriter::ToPixel(m_nCellSpacing,false)) + "\"");
 
     rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
 

@@ -557,8 +557,8 @@ void SwTableFormula::BoxNmsToPtr( const SwTable& rTable, OUStringBuffer& rNewStr
     if( pLastBox )
     {
         pBox = rTable.GetTableBox( *pLastBox );
-        rNewStr.append(reinterpret_cast<sal_PtrDiff>(pBox))
-                .append(":");
+        rNewStr.append(OUString::number(reinterpret_cast<sal_PtrDiff>(pBox)) +
+                    ":");
         rFirstBox = rFirstBox.copy( pLastBox->getLength()+1 );
     }
 
@@ -1222,7 +1222,7 @@ void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUStringBuffer& rN
     }
 
     if( pLastBox )
-        rNewStr.append(reinterpret_cast<sal_PtrDiff>(pEndBox)).append(":");
+        rNewStr.append(OUString::number(reinterpret_cast<sal_PtrDiff>(pEndBox)) + ":");
 
     rNewStr.append(reinterpret_cast<sal_PtrDiff>(pSttBox))
             .append(rFirstBox[ rFirstBox.getLength()-1] );

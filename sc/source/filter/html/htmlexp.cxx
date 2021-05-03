@@ -496,8 +496,7 @@ OString ScHTMLExport::BorderToStyle(const char* pBorderName,
         int nWidth = pLine->GetWidth();
         int nPxWidth = (nWidth > 0) ?
             std::max(o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::px), sal_Int64(1)) : 0;
-        aOut.append(static_cast<sal_Int32>(nPxWidth)).
-            append("px ");
+        aOut.append(OString::number(nPxWidth) + "px ");
         switch (pLine->GetBorderLineStyle())
         {
             case SvxBorderLineStyle::SOLID:
@@ -722,8 +721,8 @@ void ScHTMLExport::WriteTables()
             // ALIGN=LEFT allow text and graphics to flow around
         // CELLSPACING
         aByteStrOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cellspacing
-                "=\"").
-            append(static_cast<sal_Int32>(nCellSpacing)).append('"');
+                "=\"" +
+                OString::number(nCellSpacing) + "\"");
 
         // BORDER=0, we do the styling of the cells in <TD>
         aByteStrOut.append(" " OOO_STRING_SVTOOLS_HTML_O_border "=\"0\"");
@@ -935,8 +934,8 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
 
     if ( bTableDataHeight )
     {
-        aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_height "=\"").
-            append(static_cast<sal_Int32>(nHeightPixel)).append('"');
+        aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_height "=\"" +
+                OString::number(nHeightPixel) + "\"");
     }
 
     const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>( pAttr->GetItem(

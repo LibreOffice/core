@@ -177,13 +177,13 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     sal_Int32 nCount = rItemSet.Get( SDRATTR_TEXT_ANICOUNT ).GetValue();
     if( 0==nCount )
         nCount = SdrTextAniKind::Slide==eAniKind ? 1 : -1;
-    sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_loop "=\"").
-        append(nCount).append("\"");
+    sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_loop "=\"" +
+        OString::number(nCount) + "\"");
 
     // SCROLLDELAY
     sal_uInt16 nDelay = rItemSet.Get( SDRATTR_TEXT_ANIDELAY ).GetValue();
     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_scrolldelay
-            "=\"").append(static_cast<sal_Int32>(nDelay)).append("\"");
+            "=\"" + OString::number(nDelay) + "\"");
 
     // SCROLLAMOUNT
     sal_Int16 nAmount = rItemSet.Get( SDRATTR_TEXT_ANIAMOUNT ).GetValue();
@@ -200,7 +200,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     if( nAmount )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_scrollamount
-                "=\"").append(static_cast<sal_Int32>(nAmount)).append("\"");
+                "=\"" + OString::number(nAmount) + "\"");
     }
 
     Size aTwipSz( pTextObj->GetLogicRect().GetSize() );
@@ -231,13 +231,13 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
         if( aPixelSz.Width() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_width
-                    "=\"").append(static_cast<sal_Int32>(aPixelSz.Width())).append("\"");
+                    "=\"" + OString::number(aPixelSz.Width()) + "\"");
         }
 
         if( aPixelSz.Height() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_height
-                    "=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
+                    "=\"" + OString::number(aPixelSz.Height()) + "\"");
         }
     }
 

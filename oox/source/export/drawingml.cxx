@@ -1252,8 +1252,8 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia, 
 
     Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
                                                                       .appendAscii( GetComponentDir() )
-                                                                      .append( "/media/image" )
-                                                                      .append( static_cast<sal_Int32>(mnImageCounter) )
+                                                                      .append( "/media/image" +
+                                                                        OUString::number(mnImageCounter) )
                                                                       .appendAscii( pExtension )
                                                                       .makeStringAndClear(),
                                                                       sMediaType );
@@ -1339,9 +1339,9 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
         // copy the video stream
         Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(OUStringBuffer()
                                                                        .appendAscii(GetComponentDir())
-                                                                       .append("/media/media")
-                                                                       .append(static_cast<sal_Int32>(mnImageCounter))
-                                                                       .append(aExtension)
+                                                                       .append("/media/media" +
+                                                                            OUString::number(mnImageCounter) +
+                                                                            aExtension)
                                                                        .makeStringAndClear(),
                                                                        aMimeType);
 
@@ -1352,9 +1352,7 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
 
         // create the relation
         OUString aPath = OUStringBuffer().appendAscii(GetRelationCompPrefix())
-                                         .append("media/media")
-                                         .append(static_cast<sal_Int32>(mnImageCounter++))
-                                         .append(aExtension)
+                                         .append("media/media" + OUString::number(mnImageCounter++) + aExtension)
                                          .makeStringAndClear();
         aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(eMediaType), aPath);
         aMediaRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::MEDIA), aPath);

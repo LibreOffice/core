@@ -60,7 +60,7 @@ OUString MimeConfigurationHelper::GetStringClassIDRepresentation( const uno::Seq
 
             sal_Int32 nDigit1 = static_cast<sal_Int32>( static_cast<sal_uInt8>(aClassID[nInd]) / 16 );
             sal_Int32 nDigit2 = static_cast<sal_uInt8>(aClassID[nInd]) % 16;
-            aResult.append( nDigit1, 16 ).append( nDigit2, 16 );
+            aResult.append( OUString::number(nDigit1, 16) + OUString::number( nDigit2, 16 ) );
         }
     }
 

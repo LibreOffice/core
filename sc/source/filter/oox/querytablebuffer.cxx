@@ -79,7 +79,7 @@ void lclAppendWebQueryTableIndex( OUStringBuffer& rTables, sal_Int32 nTableIndex
     {
         if( !rTables.isEmpty() )
             rTables.append( ';' );
-        rTables.append( "HTML_" ).append( nTableIndex );
+        rTables.append( "HTML_" + OUString::number( nTableIndex ) );
     }
 }
 

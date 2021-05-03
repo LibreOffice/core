@@ -277,12 +277,8 @@ bool StringAdd::VisitCXXMemberCallExpr(CXXMemberCallExpr const* methodCall)
         && !tc1.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
         return true;
     auto paramType = methodDecl->getParamDecl(0)->getType();
-    // if we convert one of the number append methods, we need to create an extra temporary to hold the string convertion of the number
-    if (paramType->isIntegerType())
-        return true;
-    if (paramType->isCharType())
-        return true;
-    if (paramType->isFloatingType())
+    // char is still a pain to work with, when constructing a chained +
+    if (paramType->isCharType() || loplugin::TypeCheck(paramType).Typedef("sal_Unicode"))
         return true;
     auto arg = methodCall->getArg(0);
     // I don't think the OUStringAppend functionality can handle this efficiently
@@ -301,12 +297,8 @@ bool StringAdd::VisitCXXMemberCallExpr(CXXMemberCallExpr const* methodCall)
         || methodCall2->getNumArgs() == 0)
         return true;
     auto paramType2 = methodDecl2->getParamDecl(0)->getType();
-    // if we convert one of the number append methods, we need to create an extra temporary to hold the string convertion of the number
-    if (paramType2->isIntegerType())
-        return true;
-    if (paramType2->isCharType())
-        return true;
-    if (paramType2->isFloatingType())
+    // char is still a pain to work with, when constructing a chained +
+    if (paramType2->isCharType() || loplugin::TypeCheck(paramType2).Typedef("sal_Unicode"))
         return true;
     arg = methodCall2->getArg(0);
     // I don't think the OUStringAppend functionality can handle this efficiently

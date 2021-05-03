@@ -176,7 +176,8 @@ static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBord
             ::editeng::ConvertBorderWidthToWord(pLine->GetBorderLineStyle(), pLine->GetWidth()));
         if (255 >= pLine->GetWidth()) // That value comes from RTF specs
         {
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW).append(static_cast<sal_Int32>(fConverted));
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW
+                        + OString::number(static_cast<sal_Int32>(fConverted)));
         }
         else
         {
@@ -4258,11 +4259,8 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
                         *pPolyPoly, pNd, /*bCorrectCrop=*/true);
                     OStringBuffer aVerticies;
                     for (sal_uInt16 i = 0; i < aPoly.GetSize(); ++i)
-                        aVerticies.append(";(")
-                            .append(aPoly[i].X())
-                            .append(",")
-                            .append(aPoly[i].Y())
-                            .append(")");
+                        aVerticies.append(";(" + OString::number(aPoly[i].X()) + ","
+                                          + OString::number(aPoly[i].Y()) + ")");
                     aFlyProperties.push_back(std::make_pair<OString, OString>(
                         "pWrapPolygonVertices",
                         "8;" + OString::number(aPoly.GetSize()) + aVerticies.makeStringAndClear()));

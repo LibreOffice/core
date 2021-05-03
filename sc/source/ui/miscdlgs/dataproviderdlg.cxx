@@ -301,7 +301,7 @@ ScMergeColumnTransformationControl::ScMergeColumnTransformationControl(
     aBuffer.append(static_cast<sal_Int32>(nStartCol + 1));
     for ( SCCOL nCol = nStartCol + 1; nCol <= nEndCol; ++nCol)
     {
-        aBuffer.append(";").append(static_cast<sal_Int32>(nCol + 1));
+        aBuffer.append(";" + OUString::number(nCol + 1));
     }
 
     mxEdColumns->set_text(aBuffer.makeStringAndClear());

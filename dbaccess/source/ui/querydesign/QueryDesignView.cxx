@@ -2812,7 +2812,7 @@ OUString OQueryDesignView::getStatement()
         const sal_Int64 nLimit = rController.getLimit();
         if( nLimit != -1 )
         {
-            aSqlCmd.append( " LIMIT " ).append(nLimit);
+            aSqlCmd.append( " LIMIT " + OUString::number(nLimit) );
         }
     }
 

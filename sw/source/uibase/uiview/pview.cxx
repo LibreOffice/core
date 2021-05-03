@@ -398,14 +398,13 @@ OUString SwPagePreviewWin::GetStatusStr( sal_uInt16 nPageCnt ) const
     const sal_uInt16 nPageNum = mpPgPreviewLayout->IsPageVisible( mpPgPreviewLayout->SelectedPage() )
         ? mpPgPreviewLayout->SelectedPage() : std::max<sal_uInt16>(mnSttPage, 1);
 
-    OUStringBuffer aStatusStr;
+    OUString aStatusStr;
     const sal_uInt16 nVirtPageNum = mpPgPreviewLayout->GetVirtPageNumByPageNum( nPageNum );
     if( nVirtPageNum && nVirtPageNum != nPageNum )
     {
-        aStatusStr.append(static_cast<sal_Int32>(nVirtPageNum)).append( " " );
+        aStatusStr = OUString::number(nVirtPageNum) + " " ;
     }
-    aStatusStr.append(static_cast<sal_Int32>(nPageNum)).append( " / " ).append(static_cast<sal_Int32>(nPageCnt));
-    return aStatusStr.makeStringAndClear();
+    return aStatusStr + OUString::number(nPageNum) + " / " + OUString::number(nPageCnt);
 }
 
 void  SwPagePreviewWin::KeyInput( const KeyEvent &rKEvt )

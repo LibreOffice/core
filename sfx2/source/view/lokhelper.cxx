@@ -475,9 +475,9 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     if (nLOKWindowId == 0 || DisableCallbacks::disabled())
         return;
 
-    OStringBuffer aPayload;
-    aPayload.append("{ \"id\": \"").append(static_cast<sal_Int64>(nLOKWindowId)).append('"');
-    aPayload.append(", \"action\": \"" + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8) + "\"");
+    OStringBuffer aPayload =
+        "{ \"id\": \"" + OString::number(nLOKWindowId) + "\""
+        ", \"action\": \"" + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8) + "\"";
 
     for (const auto& rItem: rPayload)
     {

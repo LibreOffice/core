@@ -167,7 +167,7 @@ void PolyPolyElement::emitStructure( int nLevel)
         for( int n = 0; n < nPoints; n++ )
         {
             basegfx::B2DPoint aPoint = aPoly.getB2DPoint( n );
-            buff.append( " (").append(aPoint.getX()).append(",").append(aPoint.getY()).append(")");
+            buff.append( " (" + OUString::number(aPoint.getX()) + "," + OUString::number(aPoint.getY()) + ")");
         }
         SAL_WARN( "sdext", "    " << buff.makeStringAndClear() );
     }

@@ -633,13 +633,13 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         if( aPixelSpc.Width() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_hspace
-                    "=\"").append(static_cast<sal_Int32>(aPixelSpc.Width())).append("\"");
+                    "=\"" + OString::number(aPixelSpc.Width()) + "\"");
         }
 
         if( aPixelSpc.Height() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_vspace
-                    "=\"").append(static_cast<sal_Int32>(aPixelSpc.Height())).append("\"");
+                    "=\"" + OString::number(aPixelSpc.Height()) + "\"");
         }
     }
 
@@ -1587,7 +1587,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
     if( nCols )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cols
-                "=\"").append(static_cast<sal_Int32>(nCols)).append("\"");
+                "=\"" + OString::number(nCols) + "\"");
     }
 
     // the Gutter width (minimum value) as GUTTER
@@ -1601,7 +1601,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
                                             MapMode(MapUnit::MapTwip) ).Width());
         }
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_gutter
-                "=\"").append(static_cast<sal_Int32>(nGutter)).append("\"");
+                "=\"" + OString::number(nGutter) + "\"");
     }
 
     rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
@@ -1959,12 +1959,11 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
         nSize = static_cast<sal_Int16>(Application::GetDefaultDevice()
             ->LogicToPixel( Size(nSize,0), MapMode(MapUnit::MapTwip) ).Width());
 
-        aSpacer = OStringBuffer(OOO_STRING_SVTOOLS_HTML_spacer
+        aSpacer = OOO_STRING_SVTOOLS_HTML_spacer
                 " " OOO_STRING_SVTOOLS_HTML_O_type
                 "=\"" OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical "\""
                 " " OOO_STRING_SVTOOLS_HTML_O_size
-                "=\"").append(static_cast<sal_Int32>(nSize)).append("\"").
-            makeStringAndClear();
+                "=\"" + OString::number(nSize) + "\"";
     }
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();

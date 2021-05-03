@@ -308,8 +308,8 @@ OUString SAXEventKeeperImpl::printBufferNode(
     ElementMark * pBlocker = pBufferNode->getBlocker();
     if (pBlocker != nullptr)
     {
-        rc.append( pBlocker->getBufferId() ).append("(SecId=")
-            .append( pBlocker->getSecurityId() ).append(") ");
+        rc.append( OUString::number(pBlocker->getBufferId()) +
+            "(SecId=" + OUString::number( pBlocker->getSecurityId() ) + ") ");
     }
     rc.append("\n");
 
