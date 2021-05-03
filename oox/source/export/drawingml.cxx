@@ -637,7 +637,7 @@ void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGrad
         default:
             mpFS->singleElementNS(
                 XML_a, XML_lin, XML_ang,
-                OString::number((((3600 - rGradient.Angle + 900) * 6000) % 21600000)));
+                OString::number(((3600 - rGradient.Angle + 900) * 6000) % 21600000));
             break;
         case awt::GradientStyle_RADIAL:
             WriteGradientPath(rGradient, mpFS, true);
@@ -674,7 +674,7 @@ void DrawingML::WriteGradientFill(awt::Gradient rGradient, awt::Gradient rTransp
             mpFS->endElementNS( XML_a, XML_gsLst );
             mpFS->singleElementNS(
                 XML_a, XML_lin, XML_ang,
-                OString::number((((3600 - rGradient.Angle + 900) * 6000) % 21600000)));
+                OString::number(((3600 - rGradient.Angle + 900) * 6000) % 21600000));
             break;
         }
 
@@ -702,7 +702,7 @@ void DrawingML::WriteGradientFill(awt::Gradient rGradient, awt::Gradient rTransp
             mpFS->endElementNS(XML_a, XML_gsLst);
             mpFS->singleElementNS(
                 XML_a, XML_lin, XML_ang,
-                OString::number((((3600 - rGradient.Angle + 900) * 6000) % 21600000)));
+                OString::number(((3600 - rGradient.Angle + 900) * 6000) % 21600000));
             break;
         }
 

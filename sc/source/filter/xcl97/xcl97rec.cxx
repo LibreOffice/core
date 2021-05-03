@@ -1384,7 +1384,7 @@ void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
 
     rStrm.GetCurrentStream()->singleElement( XML_sheet,
             XML_name,               sUnicodeName.toUtf8(),
-            XML_sheetId,            OString::number( ( nTab+1 ) ),
+            XML_sheetId,            OString::number( nTab+1 ),
             XML_state,              nGrbit == 0x0000 ? "visible" : "hidden",
             FSNS( XML_r, XML_id ),  sId.toUtf8() );
 }

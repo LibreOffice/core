@@ -227,7 +227,7 @@ namespace dbp
         for (sal_Int32 i=0; i<m_xExistingRadios->n_children(); ++i)
         {
             rSettings.aLabels.push_back(m_xExistingRadios->get_text(i));
-            rSettings.aValues.push_back(OUString::number((i + 1)));
+            rSettings.aValues.push_back(OUString::number(i + 1));
         }
 
         return true;

@@ -144,7 +144,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, 
             std::unique_ptr<tools::Polygon> pEllipsePoly( new tools::Polygon( Point(), nHorzRound, nVertRound ) );
             sal_uInt16 i, nEnd, nSize4 = pEllipsePoly->GetSize() >> 2;
 
-            ImplInitSize((pEllipsePoly->GetSize() + 1));
+            ImplInitSize(pEllipsePoly->GetSize() + 1);
 
             const Point* pSrcAry = pEllipsePoly->GetConstPointAry();
             Point* pDstAry = mxPointAry.get();
@@ -280,7 +280,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
 
             nStart = 1;
             nEnd = nPoints + 1;
-            ImplInitSize((nPoints + 2));
+            ImplInitSize(nPoints + 2);
             mxPointAry[0] = aCenter2;
             mxPointAry[nEnd] = aCenter2;
         }

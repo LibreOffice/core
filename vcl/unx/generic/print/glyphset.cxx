@@ -153,7 +153,7 @@ GlyphSet::GetReencodedFontName (rtl_TextEncoding nEnc, std::string_view rFontNam
     {
         return OString::Concat(rFontName)
                + "-enc"
-               + OString::number ((nEnc - RTL_TEXTENCODING_USER_START));
+               + OString::number(nEnc - RTL_TEXTENCODING_USER_START);
     }
     else
     {

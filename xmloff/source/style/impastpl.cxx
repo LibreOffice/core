@@ -103,15 +103,15 @@ data2string(void *data,
     case typelib_TypeClass_BOOLEAN:
         return *static_cast<const sal_Bool*>(data) ? OUString("true") : OUString("false");
     case typelib_TypeClass_BYTE:
-        return OUString::number((*static_cast<const sal_Int8*>(data)));
+        return OUString::number(*static_cast<const sal_Int8*>(data));
     case typelib_TypeClass_SHORT:
-        return OUString::number((*static_cast<const sal_Int16*>(data)));
+        return OUString::number(*static_cast<const sal_Int16*>(data));
     case typelib_TypeClass_LONG:
-        return OUString::number((*static_cast<const sal_Int32*>(data)));
+        return OUString::number(*static_cast<const sal_Int32*>(data));
     case typelib_TypeClass_HYPER:
-        return OUString::number((*static_cast<const sal_Int64*>(data)));
+        return OUString::number(*static_cast<const sal_Int64*>(data));
     case typelib_TypeClass_UNSIGNED_SHORT:
-        return OUString::number((*static_cast<const sal_uInt16*>(data)));
+        return OUString::number(*static_cast<const sal_uInt16*>(data));
     case typelib_TypeClass_UNSIGNED_LONG:
         return OUString::number((*static_cast<const sal_uInt32*>(data)), 16);
     case typelib_TypeClass_UNSIGNED_HYPER:
@@ -121,7 +121,7 @@ data2string(void *data,
     case typelib_TypeClass_DOUBLE:
         return OUString::number(*static_cast<const double*>(data));
     case typelib_TypeClass_CHAR:
-        return ("U+" + OUString::number((*static_cast<const sal_uInt16*>(data))));
+        return ("U+" + OUString::number(*static_cast<const sal_uInt16*>(data)));
     case typelib_TypeClass_STRING:
         return *static_cast<OUString*>(data);
     case typelib_TypeClass_TYPE:
@@ -132,7 +132,7 @@ data2string(void *data,
     case typelib_TypeClass_STRUCT:
         return struct2string(data, type->pType);
     case typelib_TypeClass_ENUM:
-        return OUString::number((*static_cast<const sal_Int32*>(data)));
+        return OUString::number(*static_cast<const sal_Int32*>(data));
     default:
         assert(false); // this cannot happen I hope
         break;
