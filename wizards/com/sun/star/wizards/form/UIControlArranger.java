@@ -47,7 +47,7 @@ public class UIControlArranger
     private final XRadioButton optAlignLeft;
     private final XRadioButton optAlignRight;
     private final XControl flnLabelPlacement;
-    private final Map helpTexts = new HashMap(4);
+    private final Map<String,String> helpTexts = new HashMap<String,String>(4);
     private final ArrangeButtonList[] m_aArrangeList = new ArrangeButtonList[2];
     private final Integer IControlStep;
     private static final int SOBASEIMAGEYPOSITION = 66;
@@ -109,7 +109,7 @@ public class UIControlArranger
                 });
 
 
-        DefaultListModel imageModel = new DefaultListModel();
+        DefaultListModel<String> imageModel = new DefaultListModel<String>();
         imageModel.addElement(ARRANGELISTSIDE);
         imageModel.addElement(ARRANGELISTTOP);
         imageModel.addElement(ARRANGETABLE);

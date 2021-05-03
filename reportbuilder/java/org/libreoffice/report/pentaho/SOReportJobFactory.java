@@ -205,7 +205,7 @@ public class SOReportJobFactory
         {
             if (exception instanceof ReportDataFactoryException == false)
                 return;
-            exception = ((ReportDataFactoryException)exception).getParent();
+            exception = ((ReportDataFactoryException)exception).getCause();
             if (exception instanceof DataSourceException == false)
                 return;
             exception = ((DataSourceException)exception).getCause();
