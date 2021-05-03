@@ -115,7 +115,7 @@ struct __cxa_eh_globals {
 
 #if !HAVE_CXXABI_H_CXA_GET_GLOBALS
 namespace __cxxabiv1 {
-extern "C" __cxa_eh_globals * __cxa_get_globals() throw();
+extern "C" __cxa_eh_globals * __cxa_get_globals() noexcept;
 }
 #endif
 
