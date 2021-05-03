@@ -851,7 +851,7 @@ class SFScriptForge:
 
         def ImportFromPropertyValues(self, propertyvalues, overwrite = False):
             """
-                nserts the contents of an array of PropertyValue objects into the current dictionary.
+                Inserts the contents of an array of PropertyValue objects into the current dictionary.
                 PropertyValue Names are used as keys in the dictionary, whereas Values contain the corresponding values.
                 Date-type values are converted to datetime.datetime instances.
                 :param propertyvalues: a list.tuple containing com.sun.star.beans.PropertyValue objects
@@ -914,14 +914,18 @@ class SFScriptForge:
 
         def DebugPrint(self, *args):
             # Arguments are concatenated in a single string similar to what the Python print() function would produce
-            param = '\t'.join(list(map(repr, args))).expandtabs(tabsize = 4)
+            # Avoid using repr() on strings to not have backslashes * 4
+            param = '\t'.join(list(map(lambda a: a.strip("'") if isinstance(a, str) else repr(a),
+                                       args))).expandtabs(tabsize = 4)
             return self.ExecMethod(self.vbMethod, 'DebugPrint', param)
 
         @classmethod
         def PythonShell(cls, variables = None):
             """
-                Open an APSO python shell window - Thanks to its author Hanya
-                :param variables: Use PythonShell.(loc = globals()) to push the global dictionary to the shell window
+                Open an APSO python shell window - Thanks to its authors Hanya/Tsutomu Uchino/Hubert Lambert
+                :param variables: Typical use
+                                        PythonShell.({**globals(), **locals()})
+                                  to push the global and local dictionaries to the shell window
                 """
             if variables is None:
                 variables = locals()
@@ -939,7 +943,8 @@ class SFScriptForge:
                 kwargs['loc'].setdefault('XSCRIPTCONTEXT', uno)
                 console(**kwargs)
             else:
-                raise RuntimeError('The APSO extension could not be located in your LibreOffice installation')
+                # The APSO extension could not be located in your LibreOffice installation
+                cls._RaiseFatal('SF_Exception.PythonShell', 'variables=None', 'PYTHONSHELLERROR')
 
         @classmethod
         def RaiseFatal(cls, errorcode, *args):
@@ -949,7 +954,9 @@ class SFScriptForge:
                 For INTERNAL USE only
                 """
             # Direct call because RaiseFatal forces an execution stop in Basic
-            return cls.SIMPLEEXEC('SF_Exception.RaiseFatal', errorcode, *args)
+            if len(args) == 0:
+                args = (None,)
+            return cls.SIMPLEEXEC('@SF_Exception.RaiseFatal', (errorcode, *args))   # With ParamArray
 
         @classmethod
         def _RaiseFatal(cls, sub, subargs, errorcode, *args):
@@ -1397,6 +1404,7 @@ class SFScriptForge:
         @property
         def ActiveWindow(self):
             return self.ExecMethod(self.vbMethod, 'ActiveWindow')
+        activeWindow, activewindow = ActiveWindow, ActiveWindow
 
         def Activate(self, windowname = ''):
             return self.ExecMethod(self.vbMethod, 'Activate', windowname)
@@ -1452,7 +1460,7 @@ class SFDatabases:
     pass
 
     # #########################################################################
-    # SF_Document CLASS
+    # SF_Database CLASS
     # #########################################################################
     class SF_Database(SFServices):
         """
