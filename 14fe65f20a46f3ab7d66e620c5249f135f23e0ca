@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a5819f9_93cd6dd3",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-03T16:20:18Z",
+      "side": 1,
+      "message": "OK. Gonna change it.",
+      "parentUuid": "41d3dfea_386edb6f",
+      "revId": "14fe65f20a46f3ab7d66e620c5249f135f23e0ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b87fd968_0935076f",
         "filename": "sc/inc/kahan.hxx",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "14fe65f20a46f3ab7d66e620c5249f135f23e0ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "975a2ab9_823d0bac",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-03T16:20:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b87fd968_0935076f",
+      "revId": "14fe65f20a46f3ab7d66e620c5249f135f23e0ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
