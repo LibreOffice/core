@@ -287,7 +287,6 @@ private:
     void pattern50Fill();
 
 #ifdef MACOSX
-protected:
     void copyScaledArea(tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX, tools::Long nSrcY,
                         tools::Long nSrcWidth, tools::Long nSrcHeight, AquaSharedAttributes* pSrcShared);
 #endif
