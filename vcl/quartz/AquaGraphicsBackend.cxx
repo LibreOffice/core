@@ -50,8 +50,8 @@ namespace
 {
 const basegfx::B2DPoint aHalfPointOfs(0.5, 0.5);
 
-static void AddPolygonToPath(CGMutablePathRef xPath, const basegfx::B2DPolygon& rPolygon,
-                             bool bClosePath, bool bPixelSnap, bool bLineDraw)
+void AddPolygonToPath(CGMutablePathRef xPath, const basegfx::B2DPolygon& rPolygon, bool bClosePath,
+                      bool bPixelSnap, bool bLineDraw)
 {
     // short circuit if there is nothing to do
     const int nPointCount = rPolygon.count();
@@ -128,14 +128,14 @@ static void AddPolygonToPath(CGMutablePathRef xPath, const basegfx::B2DPolygon& 
     }
 }
 
-static void alignLinePoint(const Point* i_pIn, float& o_fX, float& o_fY)
+void alignLinePoint(const Point* i_pIn, float& o_fX, float& o_fY)
 {
     o_fX = static_cast<float>(i_pIn->getX()) + 0.5;
     o_fY = static_cast<float>(i_pIn->getY()) + 0.5;
 }
 
-static void getBoundRect(sal_uInt32 nPoints, const Point* pPtAry, tools::Long& rX, tools::Long& rY,
-                         tools::Long& rWidth, tools::Long& rHeight)
+void getBoundRect(sal_uInt32 nPoints, const Point* pPtAry, tools::Long& rX, tools::Long& rY,
+                  tools::Long& rWidth, tools::Long& rHeight)
 {
     tools::Long nX1 = pPtAry->getX();
     tools::Long nX2 = nX1;
@@ -167,7 +167,7 @@ static void getBoundRect(sal_uInt32 nPoints, const Point* pPtAry, tools::Long& r
     rHeight = nY2 - nY1 + 1;
 }
 
-static Color ImplGetROPColor(SalROPColor nROPColor)
+Color ImplGetROPColor(SalROPColor nROPColor)
 {
     Color nColor;
     if (nROPColor == SalROPColor::N0)
@@ -181,7 +181,7 @@ static Color ImplGetROPColor(SalROPColor nROPColor)
     return nColor;
 }
 
-static void drawPattern50(void*, CGContextRef rContext)
+void drawPattern50(void*, CGContextRef rContext)
 {
     static const CGRect aRects[2] = { { { 0, 0 }, { 2, 2 } }, { { 2, 2 }, { 2, 2 } } };
     CGContextAddRects(rContext, aRects, 2);
