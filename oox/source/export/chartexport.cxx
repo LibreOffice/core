@@ -807,13 +807,11 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     }
     OUString sFullStream = OUStringBuffer()
                             .appendAscii(sFullPath)
-                            .append(nChartCount)
-                            .append( ".xml" )
+                            .append(OUString::number(nChartCount) + ".xml")
                             .makeStringAndClear();
     OUString sRelativeStream = OUStringBuffer()
                             .appendAscii(sRelativePath)
-                            .append(nChartCount)
-                            .append( ".xml" )
+                            .append(OUString::number(nChartCount) + ".xml" )
                             .makeStringAndClear();
     FSHelperPtr pChart = CreateOutputStream(
             sFullStream,
@@ -1028,13 +1026,11 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
             }
             OUString sFullStream = OUStringBuffer()
                 .appendAscii(sFullPath)
-                .append(nDrawing)
-                .append(".xml")
+                .append(OUString::number(nDrawing) + ".xml")
                 .makeStringAndClear();
             OUString sRelativeStream = OUStringBuffer()
                 .appendAscii(sRelativePath)
-                .append(nDrawing)
-                .append(".xml")
+                .append(OUString::number(nDrawing) + ".xml")
                 .makeStringAndClear();
 
             sax_fastparser::FSHelperPtr pDrawing = CreateOutputStream(

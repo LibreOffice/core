@@ -230,7 +230,7 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
     OStringBuffer sRet("/" + rKind + "<<");
     for (const auto& rPair : aRet)
     {
-        sRet.append("/" + rPair.first + " ").append(rPair.second).append(" 0 R");
+        sRet.append("/" + rPair.first + " " + OString::number(rPair.second) + " 0 R");
     }
     sRet.append(">>");
 

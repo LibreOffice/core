@@ -240,7 +240,7 @@ protected:
         OUStringBuffer aBuffer;
         for (const double& vectorItem : rVector)
         {
-            aBuffer.append(vectorItem).append(";");
+            aBuffer.append(OUString::number(vectorItem) + ";");
         }
         return aBuffer.makeStringAndClear();
     }

@@ -937,10 +937,10 @@ SearchTabPage_Impl::SearchTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow
 SearchTabPage_Impl::~SearchTabPage_Impl()
 {
     SvtViewOptions aViewOpt( EViewType::TabPage, CONFIGNAME_SEARCHPAGE );
-    OUStringBuffer aUserData;
-    aUserData.append(static_cast<sal_Int32>(m_xFullWordsCB->get_active() ? 1 : 0))
-        .append(";")
-        .append( static_cast<sal_Int32>(m_xScopeCB->get_active() ? 1 : 0) );
+    OUStringBuffer aUserData =
+            OUString::number(m_xFullWordsCB->get_active() ? 1 : 0) +
+            ";" +
+            OUString::number(m_xScopeCB->get_active() ? 1 : 0);
     sal_Int32 nCount = std::min(m_xSearchED->get_count(), 10);  // save only 10 entries
 
     for ( sal_Int32 i = 0; i < nCount; ++i )

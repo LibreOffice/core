@@ -942,10 +942,10 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
     }
     if ( bValue || nFormat )
     {
-        aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_SDnum "=\"").
-            append(static_cast<sal_Int32>(static_cast<sal_uInt16>(
-                Application::GetSettings().GetLanguageTag().getLanguageType()))).
-            append(';'); // Language for Format 0
+        aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_SDnum "=\"" +
+            OString::number(static_cast<sal_uInt16>(
+                Application::GetSettings().GetLanguageTag().getLanguageType())) +
+                ";"); // Language for Format 0
         if ( nFormat )
         {
             OString aNumStr;

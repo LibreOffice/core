@@ -1619,15 +1619,10 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     // Do not cache the result if it would take most of the cache and thus get evicted soon.
     if (targetSize.Width() * targetSize.Height() * 4 > maxImageCacheSize() * 0.7)
         return image;
-    OString key;
-    OStringBuffer keyBuf;
-    keyBuf.append(targetSize.Width())
-        .append("x")
-        .append(targetSize.Height())
-        .append("_" + bitmap.GetImageKey());
+    OString key = OString::number(targetSize.Width()) + "x" + OString::number(targetSize.Height())
+                  + "_" + bitmap.GetImageKey();
     if (alphaBitmap)
-        keyBuf.append("_" + alphaBitmap->GetAlphaImageKey());
-    key = keyBuf.makeStringAndClear();
+        key += "_" + alphaBitmap->GetAlphaImageKey();
     image = findCachedImage(key);
     if (image)
     {

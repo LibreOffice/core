@@ -200,7 +200,7 @@ OUString BufferNode::printChildren() const
 
     for( const ElementCollector* ii : m_vElementCollectors )
     {
-        rc.append("BufID=").append(ii->getBufferId());
+        rc.append("BufID=" + OUString::number(ii->getBufferId()));
 
         if (ii->getModify())
         {
@@ -222,7 +222,7 @@ OUString BufferNode::printChildren() const
                 break;
         }
 
-        rc.append("(SecID=").append(ii->getSecurityId()).append(") ");
+        rc.append("(SecID=" + OUString::number(ii->getSecurityId()) + ") ");
     }
 
     return rc.makeStringAndClear();

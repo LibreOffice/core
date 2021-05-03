@@ -178,8 +178,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                         break;
                 }
                 if (nWrapType)
-                    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPWR)
-                        .append(static_cast<sal_Int32>(nWrapType));
+                    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPWR + OString::number(nWrapType));
             }
             break;
             case ESCHER_Prop_fillColor:
@@ -293,7 +292,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                     // number of segments
                     sal_uInt16 nSegments = impl_GetUInt16(pSegmentIt);
                     sal_Int32 nVertices = 0;
-                    aSegmentInfo.append("2;").append(static_cast<sal_Int32>(nSegments));
+                    aSegmentInfo.append("2;" + OString::number(nSegments));
                     pSegmentIt += 4;
 
                     for (; nSegments; --nSegments)
@@ -316,11 +315,8 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                                                                           nPointSize);
                                     sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos,
                                                                           nPointSize);
-                                    aVerticies.append(";(")
-                                        .append(nX)
-                                        .append(",")
-                                        .append(nY)
-                                        .append(")");
+                                    aVerticies.append(";(" + OString::number(nX) + ","
+                                                      + OString::number(nY) + ")");
                                     nVertices++;
                                 }
                                 break;
@@ -330,8 +326,8 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                                     = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
                                 sal_Int32 nY
                                     = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
-                                aVerticies.append(";(").append(nX).append(",").append(nY).append(
-                                    ")");
+                                aVerticies.append(";(" + OString::number(nX) + ","
+                                                  + OString::number(nY) + ")");
                                 nVertices++;
                                 break;
                             }
@@ -344,11 +340,8 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                                             pVerticesIt, nVerticesPos, nPointSize);
                                         sal_Int32 nY = impl_GetPointComponent(
                                             pVerticesIt, nVerticesPos, nPointSize);
-                                        aVerticies.append(";(")
-                                            .append(nX)
-                                            .append(",")
-                                            .append(nY)
-                                            .append(")");
+                                        aVerticies.append(";(" + OString::number(nX) + ","
+                                                          + OString::number(nY) + ")");
                                         nVertices++;
                                     }
                                 }
@@ -466,10 +459,10 @@ void RtfSdrExport::AddLineDimensions(const tools::Rectangle& rRectangle)
         m_aShapeProps.insert(std::pair<OString, OString>("fFlipH", "1"));
 
     // the actual dimensions
-    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(rRectangle.Left());
-    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPTOP).append(rRectangle.Top());
-    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPRIGHT).append(rRectangle.Right());
-    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(rRectangle.Bottom());
+    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPLEFT + OString::number(rRectangle.Left()));
+    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPTOP + OString::number(rRectangle.Top()));
+    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPRIGHT + OString::number(rRectangle.Right()));
+    m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM + OString::number(rRectangle.Bottom()));
 }
 
 void RtfSdrExport::AddRectangleDimensions(OStringBuffer& rBuffer,
@@ -478,10 +471,10 @@ void RtfSdrExport::AddRectangleDimensions(OStringBuffer& rBuffer,
     // We get the position relative to (the current?) character
     m_aShapeProps.insert(std::pair<OString, OString>("posrelh", "3"));
 
-    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(rRectangle.Left());
-    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPTOP).append(rRectangle.Top());
-    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPRIGHT).append(rRectangle.Right());
-    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(rRectangle.Bottom());
+    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPLEFT + OString::number(rRectangle.Left()));
+    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPTOP + OString::number(rRectangle.Top()));
+    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPRIGHT + OString::number(rRectangle.Right()));
+    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM + OString::number(rRectangle.Bottom()));
 }
 
 static void lcl_AppendSP(OStringBuffer& rRunText, const char* cName, std::string_view rValue)
@@ -531,10 +524,9 @@ void RtfSdrExport::impl_writeGraphic()
     // Add it to the properties.
     RtfStringBuffer aBuf;
     aBuf->append("{" OOO_STRING_SVTOOLS_RTF_PICT OOO_STRING_SVTOOLS_RTF_PNGBLIP);
-    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICW).append(sal_Int32(aMapped.Width()));
-    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICH)
-        .append(sal_Int32(aMapped.Height()))
-        .append(SAL_NEWLINE_STRING);
+    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICW + OString::number(aMapped.Width()));
+    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICH + OString::number(aMapped.Height())
+                 + SAL_NEWLINE_STRING);
     aBuf->append(msfilter::rtfutil::WriteHex(pGraphicAry, nSize));
     aBuf->append('}');
     m_aShapeProps.insert(std::pair<OString, OString>("pib", aBuf.makeStringAndClear()));

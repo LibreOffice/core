@@ -72,7 +72,7 @@ OUString XFSvgPathEntry::ToString()
 
     for (auto const& point : m_aPoints)
     {
-        str.append(point.GetX()*1000).append(" ").append(point.GetY()*1000).append(" ");
+        str.append( OUString::number(point.GetX()*1000) + " " + OUString::number(point.GetY()*1000) + " ");
     }
     str.stripEnd(' ');
     return str.makeStringAndClear();

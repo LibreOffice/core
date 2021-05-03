@@ -2788,7 +2788,7 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
 
             aPnt.setX( static_cast<tools::Long>(aPnt.X() * fFactor) );
             aPnt.setY( static_cast<tools::Long>(aPnt.Y() * fFactor) );
-            aStr.append(aPnt.X()).append(",").append(aPnt.Y());
+            aStr.append( OUString::number(aPnt.X()) + "," + OUString::number(aPnt.Y()) );
 
             if (nPoint < nNoOfPoints - 1)
                 aStr.append(',');

@@ -582,7 +582,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                     sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nPointSize );
                                     sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nPointSize );
                                     if (nX >= 0 && nY >= 0 )
-                                        aPath.append( "m" ).append( nX ).append( "," ).append( nY );
+                                        aPath.append( "m" + OString::number( nX ) + "," + OString::number( nY ) );
                                     break;
                                 }
                                 case msopathClientEscape:
@@ -613,7 +613,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                     {
                                         sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nPointSize );
                                         sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nPointSize );
-                                        aPath.append( "l" ).append( nX ).append( "," ).append( nY );
+                                        aPath.append( "l" + OString::number( nX ) + "," + OString::number( nY ) );
                                     }
                                     break;
                                 case msopathCurveTo:
@@ -625,9 +625,9 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                         sal_Int32 nY2 = impl_GetPointComponent( pVerticesIt, nPointSize );
                                         sal_Int32 nX3 = impl_GetPointComponent( pVerticesIt, nPointSize );
                                         sal_Int32 nY3 = impl_GetPointComponent( pVerticesIt, nPointSize );
-                                        aPath.append( "c" ).append( nX1 ).append( "," ).append( nY1 ).append( "," )
-                                            .append( nX2 ).append( "," ).append( nY2 ).append( "," )
-                                            .append( nX3 ).append( "," ).append( nY3 );
+                                        aPath.append( "c" + OString::number( nX1 ) + "," + OString::number( nY1 ) + "," +
+                                            OString::number( nX2 ) + "," + OString::number( nY2 ) + "," +
+                                            OString::number( nX3 ) + "," + OString::number( nY3 ) );
                                     }
                                     break;
                                 case msopathClose:
@@ -1005,7 +1005,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
             case ESCHER_Prop_Rotation:
                 {
                     // The higher half of the variable contains the angle.
-                    m_ShapeStyle.append(";rotation:").append(double(opt.nPropValue >> 16));
+                    m_ShapeStyle.append(";rotation:" + OString::number(double(opt.nPropValue >> 16)));
                     bAlreadyWritten[ESCHER_Prop_Rotation] = true;
                 }
                 break;
@@ -1130,24 +1130,24 @@ void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const tools::Rec
 
     if(m_bInline)
     {
-        rBuffer.append( "width:" ).append( double( rRectangle.Right() - rRectangle.Left() ) / 20 )
-            .append( "pt;height:" ).append( double( rRectangle.Bottom() - rRectangle.Top() ) / 20 )
-            .append( "pt" );
+        rBuffer.append( "width:" + OString::number( double( rRectangle.Right() - rRectangle.Left() ) / 20 ) +
+            "pt;height:" + OString::number( double( rRectangle.Bottom() - rRectangle.Top() ) / 20 ) +
+            "pt" );
     }
     else if ( mnGroupLevel == 1 )
     {
-        rBuffer.append( "margin-left:" ).append( double( rRectangle.Left() ) / 20 )
-            .append( "pt;margin-top:" ).append( double( rRectangle.Top() ) / 20 )
-            .append( "pt;width:" ).append( double( rRectangle.Right() - rRectangle.Left() ) / 20 )
-            .append( "pt;height:" ).append( double( rRectangle.Bottom() - rRectangle.Top() ) / 20 )
-            .append( "pt" );
+        rBuffer.append( "margin-left:" + OString::number( double( rRectangle.Left() ) / 20 ) +
+            "pt;margin-top:" + OString::number( double( rRectangle.Top() ) / 20 ) +
+            "pt;width:" + OString::number( double( rRectangle.Right() - rRectangle.Left() ) / 20 ) +
+            "pt;height:" + OString::number( double( rRectangle.Bottom() - rRectangle.Top() ) / 20 ) +
+            "pt" );
     }
     else
     {
-        rBuffer.append( "left:" ).append( rRectangle.Left() )
-            .append( ";top:" ).append( rRectangle.Top() )
-            .append( ";width:" ).append( rRectangle.Right() - rRectangle.Left() )
-            .append( ";height:" ).append( rRectangle.Bottom() - rRectangle.Top() );
+        rBuffer.append( "left:" + OString::number( rRectangle.Left() ) +
+            ";top:" + OString::number( rRectangle.Top() ) +
+            ";width:" + OString::number( rRectangle.Right() - rRectangle.Left() ) +
+            ";height:" + OString::number( rRectangle.Bottom() - rRectangle.Top() ) );
     }
 
     AddFlipXY();
@@ -1400,12 +1400,11 @@ sal_Int32 VMLExport::StartShape()
 
     if ( nShapeElement >= 0 && !m_pShapeAttrList->hasAttribute( XML_type ) && bReferToShapeType )
     {
-        OStringBuffer sTypeBuffer( 20 );
+        OString sType;
         if (m_bUseHashMarkForType)
-            sTypeBuffer.append("#");
-        m_pShapeAttrList->add( XML_type, sTypeBuffer
-                .append( "_x0000_t" ).append( sal_Int32( m_nShapeType ) )
-                .makeStringAndClear() );
+            sType = "#";
+        m_pShapeAttrList->add( XML_type, sType +
+                "_x0000_t" + OString::number( m_nShapeType ) );
     }
 
     // start of the shape

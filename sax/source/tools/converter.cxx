@@ -1549,11 +1549,11 @@ void Converter::convertDateTime(
     if (nYear < 10) {
         i_rBuffer.append(zero);
     }
-    i_rBuffer.append(nYear).append(dash);
+    i_rBuffer.append( OUString::number(nYear) + OUStringChar(dash) );
     if( i_rDateTime.Month < 10 ) {
         i_rBuffer.append(zero);
     }
-    i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Month) ).append(dash);
+    i_rBuffer.append( OUString::number(i_rDateTime.Month) + OUStringChar(dash) );
     if( i_rDateTime.Day   < 10 ) {
         i_rBuffer.append(zero);
     }

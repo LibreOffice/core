@@ -211,24 +211,24 @@ OUString ScAsciiOptions::WriteToString() const
         aOutStr.append(ScGlobal::GetCharsetString( eCharSet ));
 
     //Token 3: Number of start row.
-    aOutStr.append(",").append(nStartRow).append(",");
+    aOutStr.append("," + OUString::number(nStartRow) + ",");
 
     //Token 4: Column info.
     for (size_t nInfo=0; nInfo<mvColStart.size(); nInfo++)
     {
         if (nInfo)
             aOutStr.append("/");
-        aOutStr.append(mvColStart[nInfo])
-               .append("/")
-               .append(static_cast<sal_Int32>(mvColFormat[nInfo]));
+        aOutStr.append(OUString::number(mvColStart[nInfo]) +
+                "/" +
+               OUString::number(mvColFormat[nInfo]));
     }
 
     // #i112025# the options string is used in macros and linked sheets,
     // so new options must be added at the end, to remain compatible
 
-    aOutStr.append(",")
+    aOutStr.append("," +
                //Token 5: Language
-               .append(static_cast<sal_Int32>(static_cast<sal_uInt16>(eLang))).append("," +
+               OUString::number(static_cast<sal_uInt16>(eLang)) + "," +
                //Token 6: Import quoted field as text.
                OUString::boolean( bQuotedFieldAsText ) + "," +
                //Token 7: Detect special numbers.

@@ -8717,8 +8717,8 @@ void DocxAttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
     if (m_rExport.SdrExporter().getTextFrameSyntax() && m_rExport.SdrExporter().getFlyFrameSize())
     {
         const Size* pSize = m_rExport.SdrExporter().getFlyFrameSize();
-        m_rExport.SdrExporter().getTextFrameStyle().append(";width:").append(double(pSize->Width()) / 20);
-        m_rExport.SdrExporter().getTextFrameStyle().append("pt;height:").append(double(pSize->Height()) / 20).append("pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";width:" + OString::number(double(pSize->Width()) / 20));
+        m_rExport.SdrExporter().getTextFrameStyle().append("pt;height:" + OString::number(double(pSize->Height()) / 20) + "pt");
     }
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
@@ -8763,8 +8763,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-left:").append(double(rLRSpace.GetLeft()) / 20).append("pt");
-        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-right:").append(double(rLRSpace.GetRight()) / 20).append("pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-left:" + OString::number(double(rLRSpace.GetLeft()) / 20) + "pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-right:" + OString::number(double(rLRSpace.GetRight()) / 20) + "pt");
     }
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
@@ -8820,8 +8820,8 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-top:").append(double(rULSpace.GetUpper()) / 20).append("pt");
-        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-bottom:").append(double(rULSpace.GetLower()) / 20).append("pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-top:" + OString::number(double(rULSpace.GetUpper()) / 20) + "pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-bottom:" + OString::number(double(rULSpace.GetLower()) / 20) + "pt");
     }
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
@@ -9036,7 +9036,7 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyV
 
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        m_rExport.SdrExporter().getTextFrameStyle().append(";margin-top:").append(double(rFlyVert.GetPos()) / 20).append("pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";margin-top:" + OString::number(double(rFlyVert.GetPos()) / 20) + "pt");
         if ( !sAlign.isEmpty() )
             m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-vertical:" + sAlign);
         m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-vertical-relative:" + sVAnchor);
@@ -9062,7 +9062,7 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFly
 
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        m_rExport.SdrExporter().getTextFrameStyle().append(";margin-left:").append(double(rFlyHori.GetPos()) / 20).append("pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";margin-left:" + OString::number(double(rFlyHori.GetPos()) / 20) + "pt");
         if ( !sAlign.isEmpty() )
             m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-horizontal:" + sAlign);
         m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-horizontal-relative:" + sHAnchor);
@@ -9998,8 +9998,8 @@ void DocxAttributeOutput::BulletDefinition(int nId, const Graphic& rGraphic, Siz
 
     OStringBuffer aStyle;
     // Size is in twips, we need it in points.
-    aStyle.append("width:").append(double(aSize.Width()) / 20);
-    aStyle.append("pt;height:").append(double(aSize.Height()) / 20).append("pt");
+    aStyle.append("width:" + OString::number(double(aSize.Width()) / 20));
+    aStyle.append("pt;height:" + OString::number(double(aSize.Height()) / 20) + "pt");
     m_pSerializer->startElementNS(XML_w, XML_pict);
     m_pSerializer->startElementNS( XML_v, XML_shape,
             XML_style, aStyle.getStr(),

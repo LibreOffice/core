@@ -1616,7 +1616,7 @@ r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress
     {
         SCCOL nCol = rRef.Col();
         if (nCol != 0)
-            rBuf.append("[").append(static_cast<sal_Int32>(nCol)).append("]");
+            rBuf.append("[" + OUString::number(nCol) + "]");
     }
     else
         rBuf.append( static_cast<sal_Int32>(rAbsRef.Col() + 1) );
@@ -1629,7 +1629,7 @@ r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress
     {
         if (rRef.Row() != 0)
         {
-            rBuf.append("[").append(rRef.Row() ).append("]");
+            rBuf.append("[" + OUString::number(rRef.Row()) + "]");
         }
     }
     else

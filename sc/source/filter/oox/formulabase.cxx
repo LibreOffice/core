@@ -1272,8 +1272,8 @@ bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequ
         ornOpCode = rEntrySeq[ nSpecialId ].Token.OpCode;
         return true;
     }
-    OSL_FAIL( OStringBuffer( "OpCodeProviderImpl::initOpCode - opcode for special offset " ).
-        append( nSpecialId ).append( " not found" ).getStr() );
+    OSL_FAIL( OString( OString::Concat("OpCodeProviderImpl::initOpCode - opcode for special offset ") +
+                       OString::number( nSpecialId ) + " not found" ).getStr() );
     return false;
 }
 

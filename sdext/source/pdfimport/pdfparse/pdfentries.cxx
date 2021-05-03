@@ -1366,7 +1366,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 {
                                     OUStringBuffer aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        aTmp.append(" ").append(static_cast<sal_Int32>(sal_uInt8(aEnt[i])), 16);
+                                        aTmp.append(" " + OUString::number(sal_uInt8(aEnt[i]), 16));
                                     SAL_WARN("sdext.pdfimport.pdfparse",
                                              "O entry has length " << static_cast<int>(aEnt.getLength()) << ", should be 32 <" << aTmp.makeStringAndClear() << ">" );
                                 }
@@ -1386,7 +1386,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 {
                                     OUStringBuffer aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        aTmp.append(" ").append(static_cast<sal_Int32>(sal_uInt8(aEnt[i])), 16);
+                                        aTmp.append(" " + OUString::number(sal_uInt8(aEnt[i]), 16));
                                     SAL_WARN("sdext.pdfimport.pdfparse",
                                              "U entry has length " << static_cast<int>(aEnt.getLength()) << ", should be 32 <" << aTmp.makeStringAndClear() << ">" );
                                 }
