@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28117878_e3c9ec61",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-05-03T19:36:07Z",
+      "side": 1,
+      "message": "crashtesting has a bunch of places where this assert fires now: e.g. https://dev-builds.libreoffice.org/crashtest/f4880d0804478ba1edcb9f676278b77bd2bd7343/backtraces/task892-core.backtrace.txt from loading https://bugs.documentfoundation.org/attachment.cgi?id\u003d127438 from https://bugs.documentfoundation.org/show_bug.cgi?id\u003d102296",
+      "revId": "29016704108165371da9e2392d6ee28939ca46ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
