@@ -135,7 +135,7 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
  * writes the type name to rType, the filter name to rMediaDesc.
  */
 bool HandleEmptyFileUrlByExtension(MediaDescriptor& rMediaDesc, const OUString& rExt,
-                                   OUString& rType)
+                                   OUString& rType, OUString& rService)
 {
     OUString aURL = rMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString());
     if (!tools::isEmptyFileUrl(aURL))
@@ -156,6 +156,7 @@ bool HandleEmptyFileUrlByExtension(MediaDescriptor& rMediaDesc, const OUString& 
 
     rMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= pFilter->GetFilterName();
     rType = pFilter->GetTypeName();
+    rService = pFilter->GetServiceName();
     return true;
 }
 }
@@ -216,14 +217,25 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
         OUString aName = aParser.getName().toAsciiLowerCase();
 
         // Decide which filter to use based on the document service first,
-        // then on extension if that's not available.
+        // then on extension if that's not available. Make exception for 0-byte files
+        // whose extensions are handled by the same service as passed document service.
+        OUString aEmptyType, aEmptyService;
+        bool bEmpty = HandleEmptyFileUrlByExtension(aMediaDesc, aExt, aEmptyType, aEmptyService);
+        if (bEmpty && aDocService == aEmptyService)
+        {
+            aDocService.clear(); // don't fallback to text filter, use extension-based match
+            // TODO: maybe reset aExt when it's "xls"
+        }
+
         if (aDocService == CALC_DOCSERVICE)
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_TEXT_FILTER);
         else if (aDocService == WRITER_DOCSERVICE)
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_TEXT_FILTER);
         else if (aExt == "csv" || aExt == "tsv" || aExt == "tab" || aExt == "xls" || aName.endsWith(".csv.gz"))
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_TEXT_FILTER);
-        else if (!HandleEmptyFileUrlByExtension(aMediaDesc, aExt, aType))
+        else if (bEmpty)
+            aType = aEmptyType; // aMediaDesc is already updated in HandleEmptyFileUrlByExtension
+        else
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_TEXT_FILTER);
     }
 
