@@ -846,6 +846,7 @@ REM ----------------------------------------------------------------------------
 Public Function ImportFromCSVFile(Optional ByRef FileName As Variant _
 									, Optional ByVal Delimiter As Variant _
 									, Optional ByVal DateFormat As Variant _
+									, Optional ByVal _IsoDate As Variant _
 									) As Variant
 &apos;&apos;&apos;	Import the data contained in a comma-separated values (CSV) file
 &apos;&apos;&apos;	The comma may be replaced by any character
@@ -862,6 +863,7 @@ Public Function ImportFromCSVFile(Optional ByRef FileName As Variant _
 &apos;&apos;&apos;			The dash (-) may be replaced by a dot (.), a slash (/) or a space
 &apos;&apos;&apos;			Other date formats will be ignored
 &apos;&apos;&apos;			If &quot;&quot; (default), dates will be considered as strings
+&apos;&apos;&apos;		_IsoDate: when True, the execution is initiated from Python, do not convert dates to Date variables. Internal use only
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A 2D-array with each row corresponding with a single record read in the file
 &apos;&apos;&apos;		and each column corresponding with a field of the record
@@ -898,6 +900,7 @@ Const cstSubArgs = &quot;FileName, [Delimiter=&quot;&quot;,&quot;&quot;], [DateF
 Check:
 	If IsMissing(Delimiter) Or IsEmpty(Delimiter) Then Delimiter = &quot;,&quot;
 	If IsMissing(DateFormat) Or IsEmpty(DateFormat) Then DateFormat = &quot;&quot;
+	If IsMissing(_IsoDate) Or IsEmpty(_IsoDate) Then _IsoDate = False
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
 		If Not SF_Utils._Validate(Delimiter, &quot;Delimiter&quot;, V_STRING) Then GoTo Finally
@@ -941,6 +944,7 @@ Try:
 								iPosition = InStr(DateFormat, &quot;MM&quot;)		:	iMonth = CInt(Mid(sItem, iPosition, 2))
 								iPosition = InStr(DateFormat, &quot;DD&quot;)		:	iDay = CInt(Mid(sItem, iPosition, 2))
 								vItem = DateSerial(iYear, iMonth, iDay)
+								If _IsoDate Then vItem = SF_Utils._CDateToIso(vItem)	&apos;	Called from Python
 							Else
 								vItem = sItem
 							End If

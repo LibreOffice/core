@@ -923,6 +923,12 @@ Try:
 						, Comment :=	&quot;SF_Database can&apos;t interpret SQL statement\n&quot; _
 									&amp;	&quot;%1: The statement&quot; _
 					)
+	&apos;	SF_Exception.PythonShell (Python only)
+			.AddText(	Context := &quot;PYTHONSHELL&quot; _
+						, MsgId := &quot;The APSO extension could not be located in your LibreOffice installation.&quot; _
+						, Comment :=	&quot;SF_Exception.PythonShell error message&quot; _
+									&amp;	&quot;APSO: to leave unchanged&quot; _
+					)
 		End With
 	End If
 

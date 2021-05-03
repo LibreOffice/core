@@ -122,6 +122,9 @@ Const TEXTFIELDERROR			=	&quot;TEXTFIELDERROR&quot;
 Const DBREADONLYERROR			=	&quot;DBREADONLYERROR&quot;
 Const SQLSYNTAXERROR			=	&quot;SQLSYNTAXERROR&quot;
 
+&apos;	Python
+Const PYTHONSHELLERROR			=	&quot;PYTHONSHELLERROR&quot;
+
 REM ============================================================= PRIVATE MEMBERS
 
 &apos;	User defined errors
@@ -916,6 +919,9 @@ Try:
 			Case SQLSYNTAXERROR	&apos;	SF_Database._ExecuteSql(SQL)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;SQLSYNTAX&quot;, pvArgs(0))
+			Case PYTHONSHELLERROR	&apos;	SF_Exception.PythonShell (Python only)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;PYTHONSHELL&quot;)
 			Case Else
 		End Select
 	End With

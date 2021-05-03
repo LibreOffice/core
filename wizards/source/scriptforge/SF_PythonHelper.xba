@@ -693,7 +693,7 @@ Try:
 				   		((CallType And vbMethod) + (CallType And cstRetArray)) = vbMethod + cstRetArray) Then
 				Select Case sServiceName
 					Case &quot;ScriptForge.Array&quot;
-						If Script = &quot;ImportFromCSVFile&quot; Then vReturn = SF_Array.ImportFromCSVFile(vArgs(0), vArgs(1), vArgs(2))
+						If Script = &quot;ImportFromCSVFile&quot; Then vReturn = SF_Array.ImportFromCSVFile(vArgs(0), vArgs(1), vArgs(2), True)
 				End Select
 
 			&apos;	Methods in usual modules are called by ExecuteBasicScript() except if they use a ParamArray
@@ -788,12 +788,12 @@ Try:
 		&apos;	Replace dates by ISO notation
 		If iDims = 1 Then
 			For i = LBound(vReturn) To UBound(vReturn)
-				If VarType(vReturn(i)) = V_DATE Then vReturn(i) = SF_Utils._CDateToIso(vReturn(i))
+				If VarType(vReturn(i)) = V_DATE Then vReturn(i) = CDateToUnoDateTime(vReturn(i))
 			Next i
 		ElseIf iDims = 2 Then
 			For i = LBound(vReturn, 1) To UBound(vReturn, 1)
 				For j = LBound(vReturn, 2) To UBound(vReturn, 2)
-					If VarType(vReturn(i, j)) = V_DATE Then vReturn(i, j) = SF_Utils._CDateToIso(vReturn(i, j))
+					If VarType(vReturn(i, j)) = V_DATE Then vReturn(i, j) = CDateToUnoDateTime(vReturn(i, j))
 				Next j
 			Next i
 		End If
