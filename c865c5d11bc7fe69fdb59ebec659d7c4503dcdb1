@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a2c8583_834bdf71",
+        "filename": "include/vcl/flags/DrawFlags.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-05-03T13:05:45Z",
+      "side": 1,
+      "message": "That shouldn\u0027t be put into \"flags\" folder but probably \"outdev\"?",
+      "revId": "c865c5d11bc7fe69fdb59ebec659d7c4503dcdb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
