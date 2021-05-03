@@ -88,8 +88,8 @@ class SwShapeDescriptor_Impl
     std::unique_ptr<SwFormatSurround> m_pSurround;
     std::unique_ptr<SvxULSpaceItem> m_pULSpace;
     std::unique_ptr<SvxLRSpaceItem> m_pLRSpace;
-    bool            bOpaque;
-    uno::Reference< text::XTextRange > xTextRange;
+    bool            m_bOpaque;
+    uno::Reference< text::XTextRange > m_xTextRange;
     // #i26791#
     std::unique_ptr<SwFormatFollowTextFlow> m_pFollowTextFlow;
     // #i28701#
@@ -101,14 +101,14 @@ class SwShapeDescriptor_Impl
     SwShapeDescriptor_Impl& operator=(const SwShapeDescriptor_Impl&) = delete;
 
 public:
-    bool    bInitializedPropertyNotifier;
+    bool    m_bInitializedPropertyNotifier;
 
 public:
     SwShapeDescriptor_Impl(SwDoc const*const pDoc)
         : m_isInReading(pDoc && pDoc->IsInReading())
      // #i32349# - no defaults, in order to determine on
      // adding a shape, if positioning attributes are set or not.
-        , bOpaque(false)
+        , m_bOpaque(false)
      // #i26791#
         , m_pFollowTextFlow( new SwFormatFollowTextFlow(false) )
      // #i28701# #i35017#
@@ -116,7 +116,7 @@ public:
                             text::WrapInfluenceOnPosition::ONCE_CONCURRENT) )
      // #i28749#
         , mnPositionLayoutDir(text::PositionLayoutDir::PositionInLayoutDirOfAnchor)
-        , bInitializedPropertyNotifier(false)
+        , m_bInitializedPropertyNotifier(false)
      {}
 
     SwFormatAnchor*    GetAnchor(bool bCreate = false)
@@ -179,15 +179,15 @@ public:
         }
     uno::Reference< text::XTextRange > &    GetTextRange()
     {
-        return xTextRange;
+        return m_xTextRange;
     }
     bool    IsOpaque() const
         {
-            return bOpaque;
+            return m_bOpaque;
         }
     const bool&    GetOpaque() const
         {
-            return bOpaque;
+            return m_bOpaque;
         }
     void RemoveHOrient() { m_pHOrient.reset(); }
     void RemoveVOrient() { m_pVOrient.reset(); }
@@ -195,7 +195,7 @@ public:
     void RemoveSurround() { m_pSurround.reset(); }
     void RemoveULSpace() { m_pULSpace.reset(); }
     void RemoveLRSpace() { m_pLRSpace.reset(); }
-    void SetOpaque(bool bSet){bOpaque = bSet;}
+    void SetOpaque(bool bSet){m_bOpaque = bSet;}
 
     // #i26791#
     SwFormatFollowTextFlow* GetFollowTextFlow( bool _bCreate = false )
@@ -922,7 +922,7 @@ SwXShape::SwXShape(
             SetFrameFormat(pFormat);
 
         lcl_addShapePropertyEventFactories( *pObj, *this );
-        m_pImpl->bInitializedPropertyNotifier = true;
+        m_pImpl->m_bInitializedPropertyNotifier = true;
     }
 
 }
@@ -948,10 +948,10 @@ void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
                 pSwShape->m_bDescriptor = false;
             }
 
-            if ( !pSwShape->m_pImpl->bInitializedPropertyNotifier )
+            if ( !pSwShape->m_pImpl->m_bInitializedPropertyNotifier )
             {
                 lcl_addShapePropertyEventFactories( *pCurrent, *pSwShape );
-                pSwShape->m_pImpl->bInitializedPropertyNotifier = true;
+                pSwShape->m_pImpl->m_bInitializedPropertyNotifier = true;
             }
         }
     }
