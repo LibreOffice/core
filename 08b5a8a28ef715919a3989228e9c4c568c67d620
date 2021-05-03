@@ -22,6 +22,30 @@
       "revId": "08b5a8a28ef715919a3989228e9c4c568c67d620",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8624a12e_2fa04d8c",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4597,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-05-03T14:25:44Z",
+      "side": 1,
+      "message": "that is simple: the attribute name must be matched without namespace prefix.\n\nthere isn\u0027t a test function that can match the namespace of an attribute last i looked.\n\n(you can do it if you encode the attribute into the xpath expression, iirc it looks like \".../attribute::loext:data-type\", or \"[@loext:data-type\u003d\u0027...\u0027]\" and use one of the function to count the occurrences)",
+      "parentUuid": "f94b24c8_61c2c235",
+      "range": {
+        "startLine": 4597,
+        "startChar": 71,
+        "endLine": 4597,
+        "endChar": 86
+      },
+      "revId": "08b5a8a28ef715919a3989228e9c4c568c67d620",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
