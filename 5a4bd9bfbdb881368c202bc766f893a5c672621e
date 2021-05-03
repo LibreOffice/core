@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "664a8a2e_b7b9d0e5",
+        "filename": "sc/source/ui/cctrl/checklistmenu.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-03T08:24:49Z",
+      "side": 1,
+      "message": "This change reverts 2d2b08eb1c63e1d12d2dd12abf97e34f56e921c6, and may break tdf#127168.",
+      "revId": "5a4bd9bfbdb881368c202bc766f893a5c672621e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
