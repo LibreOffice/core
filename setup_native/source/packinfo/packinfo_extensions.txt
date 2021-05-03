@@ -36,10 +36,10 @@
 
 Start
 module = "gid_Module_Optional_Extensions_MEDIAWIKI"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-mediawiki-publisher"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-mediawiki-publisher"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-mediawiki-publisher"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-extension-mediawiki-publisher"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
 copyright = "2025 Collabora Productivity Ltd."
 solariscopyright = "solariscopyrightfile"
@@ -51,10 +51,10 @@ End
 
 Start
 module = "gid_Module_Optional_Extensions_NumberText"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-numbertext"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-numbertext"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-numbertext"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-extension-numbertext"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
 copyright = "2009 by FSF.hu"
 solariscopyright = "solariscopyrightfile"
@@ -66,10 +66,10 @@ End
 
 Start
 module = "gid_Module_Optional_Extensions_NLPSolver"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-nlpsolver"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-nlpsolver"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-nlpsolver"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-extension-nlpsolver"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
 copyright = "2025 Collabora Productivity Ltd."
 solariscopyright = "solariscopyrightfile"
@@ -81,10 +81,10 @@ End
 
 Start
 module = "gid_Module_Optional_Extensions_Script_Provider_For_BS"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-beanshell-script-provider"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-beanshell-script-provider"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-beanshell-script-provider"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-extension-beanshell-script-provider"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
 copyright = "2025 Collabora Productivity Ltd."
 solariscopyright = "solariscopyrightfile"
@@ -96,10 +96,10 @@ End
 
 Start
 module = "gid_Module_Optional_Extensions_Script_Provider_For_JS"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-javascript-script-provider"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-javascript-script-provider"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-javascript-script-provider"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-extension-javascript-script-provider"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
 copyright = "2025 Collabora Productivity Ltd."
 solariscopyright = "solariscopyrightfile"

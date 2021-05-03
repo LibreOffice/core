@@ -18,11 +18,11 @@
 
 Start
 module = "gid_Module_Root_SDK"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-sdk"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core, SUNWbtool (Name="CCS tools bundled with SunOS"), SUNWxcu4 (Name="XCU4 Utilities")"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-sdk"
-freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+solarispackagename = "%BASISPACKAGEPREFIX-sdk"
+solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWbtool (Name="CCS tools bundled with SunOS"), SUNWxcu4 (Name="XCU4 Utilities")"
+packagename = "%BASISPACKAGEPREFIX-sdk"
+freebsdrequires = "%BASISPACKAGEPREFIX-core"
+requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2025 Collabora Productivity Ltd."
 solariscopyright = "solariscopyrightfile"
 vendor = "Collabora Productivity Ltd."
