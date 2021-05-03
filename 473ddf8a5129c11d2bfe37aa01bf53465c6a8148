@@ -16,6 +16,24 @@
       "revId": "473ddf8a5129c11d2bfe37aa01bf53465c6a8148",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60fd0e75_659fa1b6",
+        "filename": "sc/qa/unit/data/functions/statistical/fods/chisq.test.fods",
+        "patchSetId": 2
+      },
+      "lineNbr": 3801,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-03T16:31:28Z",
+      "side": 1,
+      "message": "I don\u0027t believe it\u0027s something bad to be more accurate than the competence.",
+      "parentUuid": "8d4e995e_a637b774",
+      "revId": "473ddf8a5129c11d2bfe37aa01bf53465c6a8148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
