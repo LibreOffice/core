@@ -27,7 +27,7 @@ double SvgNumber::solveNonPercentage(const InfoProvider& rInfoProvider) const
 {
     if (!isSet())
     {
-        assert(false && "SvgNumber not set (!)");
+        SAL_WARN("svgio", "SvgNumber not set (!)");
         return 0.0;
     }
 
@@ -56,7 +56,7 @@ double SvgNumber::solveNonPercentage(const InfoProvider& rInfoProvider) const
         }
         case SvgUnit::percent:
         {
-            assert(false && "Do not use with percentage!");
+            SAL_WARN("svgio", "Do not use with percentage!");
             break;
         }
     }
@@ -68,7 +68,7 @@ double SvgNumber::solve(const InfoProvider& rInfoProvider, NumberType aNumberTyp
 {
     if (!isSet())
     {
-        assert(false && "SvgNumber not set (!)");
+        SAL_WARN("svgio", "SvgNumber not set (!)");
         return 0.0;
     }
 

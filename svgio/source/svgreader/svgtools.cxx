@@ -1046,7 +1046,7 @@ namespace svgio::svgreader
 
                     if(nInitPos == nPos)
                     {
-                        assert(false && "Could not interpret on current position (!)");
+                        SAL_WARN("svgio", "Could not interpret on current position (!)");
                         nPos++;
                     }
                 }
@@ -1249,7 +1249,7 @@ namespace svgio::svgreader
 
                     if(nInitPos == nPos)
                     {
-                        assert(false && "Could not interpret on current position (!)");
+                        SAL_WARN("svgio", "Could not interpret on current position (!)");
                         nPos++;
                     }
                 }
