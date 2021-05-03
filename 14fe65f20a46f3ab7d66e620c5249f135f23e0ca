@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41d3dfea_386edb6f",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-03T15:57:54Z",
+      "side": 1,
+      "message": "This doesn\u0027t quite match the definition of operator *\u003d; I suggest making them identical, to avoid small inconsistencies that sooner or later would surface.\n\n        KahanSum fSum(*this);\n        fSum *\u003d fTimes;",
+      "revId": "14fe65f20a46f3ab7d66e620c5249f135f23e0ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b87fd968_0935076f",
+        "filename": "sc/inc/kahan.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-03T15:57:54Z",
+      "side": 1,
+      "message": "Same for division.",
+      "revId": "14fe65f20a46f3ab7d66e620c5249f135f23e0ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
