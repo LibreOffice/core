@@ -49,6 +49,7 @@ public class PropertyInfo<PropType> {
         return m_description;
     }
 
+    @SuppressWarnings("unchecked")
     public void setValue(Object value) throws IllegalArgumentException {
         if (m_property.Type == Type.LONG) {
             if (!(value instanceof Integer))
