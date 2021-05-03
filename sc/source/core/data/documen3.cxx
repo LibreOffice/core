@@ -1578,6 +1578,27 @@ void ScDocument::GetFilterEntriesArea(
 }
 
 /**
+ * Get entries for computing auto-complete entries in input handler (no numbers/formulas)
+ */
+void ScDocument::GetStringBlockEntries(
+    SCCOL nCursorCol, SCROW nCursorRow, SCTAB nTab,
+    std::vector<ScTypedStrData>& rStrings) const
+{
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()))
+        return;
+
+    if (!maTabs[nTab])
+        return;
+
+    std::set<ScTypedStrData> aStrings;
+    if (maTabs[nTab]->GetStringBlockEntries(nCursorCol, nCursorRow, aStrings))
+    {
+        rStrings.insert(rStrings.end(), aStrings.begin(), aStrings.end());
+        sortAndRemoveDuplicates(rStrings, true/*bCaseSens*/);
+    }
+}
+
+/**
  * Entries for selection list listbox (no numbers/formulas)
  */
 void ScDocument::GetDataEntries(
@@ -1587,8 +1608,7 @@ void ScDocument::GetDataEntries(
     if( !bLimit )
     {
         /*  Try to generate the list from list validation. This part is skipped,
-            if bLimit==true, because in that case this function is called to get
-            cell values for auto completion on input. */
+            if bLimit==true. */
         sal_uInt32 nValidation = GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
         if( nValidation )
         {

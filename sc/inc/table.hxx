@@ -948,6 +948,8 @@ public:
     void GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, ScFilterEntries& rFilterEntries );
     void GetFilteredFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, ScFilterEntries& rFilterEntries );
     [[nodiscard]]
+    bool GetStringBlockEntries(SCCOL nCursorCol, SCROW nCursorRow, std::set<ScTypedStrData>& rStrings) const;
+    [[nodiscard]]
     bool GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit);
 
     bool        HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const;

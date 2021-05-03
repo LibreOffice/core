@@ -3477,6 +3477,11 @@ void ScTable::GetFilteredFilterEntries(
     }
 }
 
+bool ScTable::GetStringBlockEntries(SCCOL nCursorCol, SCROW nCursorRow, std::set<ScTypedStrData>& rStrings) const
+{
+    return aCol[nCursorCol].GetStringBlockEntries(nCursorRow, rStrings);
+}
+
 bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit)
 {
     return aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
