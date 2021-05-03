@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f94b24c8_61c2c235",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4597,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-05-03T14:02:35Z",
+      "side": 1,
+      "message": "neither \"loext:data-type\", nor \"data-type\" seems to work here - any idea?",
+      "range": {
+        "startLine": 4597,
+        "startChar": 71,
+        "endLine": 4597,
+        "endChar": 86
+      },
+      "revId": "08b5a8a28ef715919a3989228e9c4c568c67d620",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
