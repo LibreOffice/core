@@ -224,7 +224,7 @@ cat $DEBUGSRC | awk '
 			if(mem[c]!=1) print "d 755 root root "c" -"
 			mem[c]=1
 		}
-		print "f 2021 root root "$0" "$0
+		print "f 644 root root "$0" "$0
 	}' >> ${DEBUGSRC}-debugsource
 
  echo Spec file of debug source package: ${DEBUGSRC}-debugsource
