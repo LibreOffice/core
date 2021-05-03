@@ -185,6 +185,7 @@ public:
 
     void testSupBookVirtualPathXLS();
     void testAbsNamedRangeHTML();
+    void testTdf80149();
     void testSheetLocalRangeNameXLS();
     void testRelativeNamedExpressionsXLS();
     void testSheetTextBoxHyperlinkXLSX();
@@ -375,6 +376,7 @@ public:
     CPPUNIT_TEST(testPreserveTextWhitespaceXLSX);
     CPPUNIT_TEST(testPreserveTextWhitespace2XLSX);
     CPPUNIT_TEST(testAbsNamedRangeHTML);
+    CPPUNIT_TEST(testTdf80149);
     CPPUNIT_TEST(testSheetLocalRangeNameXLS);
     CPPUNIT_TEST(testRelativeNamedExpressionsXLS);
     CPPUNIT_TEST(testSheetTextBoxHyperlinkXLSX);
@@ -3828,6 +3830,32 @@ void ScExportTest::testAbsNamedRangeHTML()
     ScSingleRefData* pRef = pRangeData->GetCode()->FirstToken()->GetSingleRef();
     // see tdf#119141 for the reason why this isn't Sheet1.HTML_1
     CPPUNIT_ASSERT_MESSAGE("HTML_1 is an absolute reference",!pRef->IsTabRel());
+
+    xDocSh2->DoClose();
+}
+
+void ScExportTest::testTdf80149()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf80149.", FORMAT_CSV);
+    xDocSh->DoHardRecalc();
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLSX);
+    xDocSh->DoClose();
+    xDocSh2->DoHardRecalc();
+
+    ScDocument& rDoc = xDocSh2->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(OUString("row 1"), rDoc.GetString(0, 0, 0));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Character 0x16 is here ->>_x0016_<<--
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("Character 0x16 is here ->>_x0016_<<--"), rDoc.GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("File opens in libre office, but can't be saved as xlsx"), rDoc.GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("row 2"), rDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Subsequent rows get truncated"), rDoc.GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("This cell goes missing"), rDoc.GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("row 3"), rDoc.GetString(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Subsequent rows get truncated"), rDoc.GetString(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("This cell goes missing"), rDoc.GetString(2, 2, 0));
 
     xDocSh2->DoClose();
 }
