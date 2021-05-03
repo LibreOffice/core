@@ -62,9 +62,11 @@ private:
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
+#ifndef ENABLE_WASM_STRIP
     DECL_LINK(GetInvolvedHandler, weld::Button&, void);
     DECL_LINK(DonationHandler, weld::Button&, void);
     DECL_LINK(WhatsNewHandler, weld::Button&, void);
+#endif
     DECL_LINK(SwitchReadOnlyHandler, weld::Button&, void);
     DECL_LINK(SignDocumentHandler, weld::Button&, void);
     DECL_LINK(HiddenTrackChangesHandler, weld::Button&, void);

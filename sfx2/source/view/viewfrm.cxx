@@ -1345,6 +1345,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         bIsUITest = true;
                 }
 
+#ifndef ENABLE_WASM_STRIP
                 //what's new infobar
                 OUString sSetupVersion = utl::ConfigManager::getProductVersion();
                 sal_Int32 iCurrent = sSetupVersion.getToken(0,'.').toInt32() * 10 + sSetupVersion.getToken(1,'.').toInt32();
@@ -1434,6 +1435,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     officecfg::Setup::Product::LastTimeDonateShown::set(nNow, batch);
                     batch->commit();
                 }
+#endif
 
                 // read-only infobar if necessary
                 const SfxViewShell *pVSh;
@@ -1577,6 +1579,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
+#ifndef ENABLE_WASM_STRIP
 IMPL_LINK_NOARG(SfxViewFrame, WhatsNewHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_WHATSNEW);
@@ -1591,6 +1594,7 @@ IMPL_LINK_NOARG(SfxViewFrame, DonationHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_DONATION);
 }
+#endif
 
 IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, weld::Button&, rButton, void)
 {

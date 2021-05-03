@@ -1679,12 +1679,14 @@ AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
         std::make_unique<AboutDialog>(pParent));
 }
 
+#ifndef ENABLE_WASM_STRIP
 VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
 {
     return VclPtr<CuiAbstractController_Impl>::Create(
         std::make_unique<TipOfTheDayDialog>(pParent));
 }
+#endif
 
 VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateToolbarmodeDialog(weld::Window* pParent)

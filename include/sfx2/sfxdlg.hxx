@@ -146,7 +146,9 @@ public:
 
     virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* _pParent) = 0;
 
+#ifndef ENABLE_WASM_STRIP
     virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* _pParent) = 0;
+#endif
 
     virtual VclPtr<VclAbstractDialog> CreateToolbarmodeDialog(weld::Window* _pParent) = 0;
 };

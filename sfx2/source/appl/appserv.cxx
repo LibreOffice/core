@@ -504,6 +504,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             sfx2::openUriExternally(sURL, false);
             break;
         }
+#ifndef ENABLE_WASM_STRIP
         case SID_GETINVOLVED:
         {
             // Open get involved/join us page based on locales
@@ -531,6 +532,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             sfx2::openUriExternally(sURL, false);
             break;
         }
+#endif
         case SID_SHOW_LICENSE:
         {
             LicenseDialog aDialog(rReq.GetFrameWeld());
@@ -606,6 +608,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#ifndef ENABLE_WASM_STRIP
         case SID_TIPOFTHEDAY:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -614,6 +617,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
+#endif
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
