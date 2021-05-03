@@ -269,6 +269,7 @@ void sw::DrawFlyCntPortion::Paint(const SwTextPaintInfo&) const
  */
 SwFlyCntPortion::SwFlyCntPortion()
     : m_bMax(false)
+    , m_bDeleted(false)
     , m_eAlign(sw::LineAlign::NONE)
 {
     mnLineLength = TextFrameIndex(1);
