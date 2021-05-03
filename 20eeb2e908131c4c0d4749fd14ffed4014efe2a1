@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0cde773_d5b3dfdb",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-05-03T19:00:38Z",
+      "side": 1,
+      "message": "Heiko, since you used the \"333333\" color for DocColor, wouldn\u0027t it be nice to hard-code the Basic colors as well? In the bug report I left a few suggestions.\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d141566",
+      "range": {
+        "startLine": 639,
+        "startChar": 24,
+        "endLine": 639,
+        "endChar": 39
+      },
+      "revId": "20eeb2e908131c4c0d4749fd14ffed4014efe2a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
