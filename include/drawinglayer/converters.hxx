@@ -24,12 +24,10 @@
 
 namespace drawinglayer
 {
-    BitmapEx convertToBitmapEx(
-        const drawinglayer::primitive2d::Primitive2DContainer& rSeq,
-        const geometry::ViewInformation2D& rViewInformation2D,
-        sal_uInt32 nDiscreteWidth,
-        sal_uInt32 nDiscreteHeight,
-        sal_uInt32 nMaxSquarePixels);
+BitmapEx DRAWINGLAYER_DLLPUBLIC
+convertToBitmapEx(const drawinglayer::primitive2d::Primitive2DContainer& rSeq,
+                  const geometry::ViewInformation2D& rViewInformation2D, sal_uInt32 nDiscreteWidth,
+                  sal_uInt32 nDiscreteHeight, sal_uInt32 nMaxSquarePixels);
 
 } // end of namespace drawinglayer
 

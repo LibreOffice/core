@@ -28,7 +28,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <converters.hxx>
+#include <drawinglayer/converters.hxx>
 
 using namespace com::sun::star;
 
