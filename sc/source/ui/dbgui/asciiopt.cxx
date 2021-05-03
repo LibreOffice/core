@@ -192,7 +192,7 @@ OUString ScAsciiOptions::WriteToString() const
         {
             if (i)
                 aOutStr.append("/");
-            aOutStr.append(aFieldSeps[i]);
+            aOutStr.append(OUString::number(aFieldSeps[i]));
         }
         if ( bMergeFieldSeps )
         {
@@ -202,7 +202,7 @@ OUString ScAsciiOptions::WriteToString() const
     }
 
     // Token 1: Text Quote character.
-    aOutStr.append(",").append(cTextSep).append(",");
+    aOutStr.append("," + OUString::number(cTextSep) + ",");
 
     //Token 2: Text encoding.
     if ( bCharSetSystem )           // force "SYSTEM"
