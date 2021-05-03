@@ -164,9 +164,9 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
 
     rtl::Reference< SwDocStyleSheet > mxIterSheet;
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
-    SwPoolFormatList       aLst;
-    sal_uInt32          nLastPos;
-    bool                bFirstCalled;
+    SwPoolFormatList       m_aLst;
+    sal_uInt32          m_nLastPos;
+    bool                m_bFirstCalled;
 
     void                AppendStyleList(const std::vector<OUString>& rLst,
                                         bool        bUsed,
@@ -194,8 +194,8 @@ public:
 class SwDocStyleSheetPool : public SfxStyleSheetBasePool
 {
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
-    SwDoc&              rDoc;
-    bool                bOrganizer : 1;     ///< Organizer
+    SwDoc&              m_rDoc;
+    bool                m_bOrganizer : 1;     ///< Organizer
 
     virtual rtl::Reference<SfxStyleSheetBase> Create( const OUString&, SfxStyleFamily, SfxStyleSearchBits nMask) override;
     virtual rtl::Reference<SfxStyleSheetBase> Create( const SfxStyleSheetBase& ) override;
@@ -216,11 +216,11 @@ public:
 
     virtual void Remove( SfxStyleSheetBase* pStyle) override;
 
-    bool    IsOrganizerMode() const         { return bOrganizer; }
+    bool    IsOrganizerMode() const         { return m_bOrganizer; }
 
     virtual std::unique_ptr<SfxStyleSheetIterator> CreateIterator( SfxStyleFamily, SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;
 
-    SwDoc& GetDoc() const { return rDoc; }
+    SwDoc& GetDoc() const { return m_rDoc; }
 
     void dispose();
 

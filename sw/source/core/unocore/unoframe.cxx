@@ -140,7 +140,7 @@ using ::com::sun::star::style::XStyleFamiliesSupplier;
 
 class BaseFrameProperties_Impl
 {
-    SwUnoCursorHelper::SwAnyMapHelper aAnyMap;
+    SwUnoCursorHelper::SwAnyMapHelper m_aAnyMap;
 
 public:
     virtual ~BaseFrameProperties_Impl();
@@ -158,12 +158,12 @@ BaseFrameProperties_Impl::~BaseFrameProperties_Impl()
 
 void BaseFrameProperties_Impl::SetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any& rVal)
 {
-    aAnyMap.SetValue( nWID, nMemberId, rVal );
+    m_aAnyMap.SetValue( nWID, nMemberId, rVal );
 }
 
 bool BaseFrameProperties_Impl::GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any*& rpAny)
 {
-    return aAnyMap.FillValue( nWID, nMemberId, rpAny );
+    return m_aAnyMap.FillValue( nWID, nMemberId, rpAny );
 }
 
 bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet& rFromSet, bool& rSizeFound)
