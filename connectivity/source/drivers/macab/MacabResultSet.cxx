@@ -157,12 +157,12 @@ Any SAL_CALL MacabResultSet::queryInterface(const Type & rType)
     return aRet;
 }
 
-void SAL_CALL MacabResultSet::acquire() throw()
+void SAL_CALL MacabResultSet::acquire() noexcept
 {
     MacabResultSet_BASE::acquire();
 }
 
-void SAL_CALL MacabResultSet::release() throw()
+void SAL_CALL MacabResultSet::release() noexcept
 {
     MacabResultSet_BASE::release();
 }

@@ -568,12 +568,12 @@ void MacabCommonStatement::getFastPropertyValue(Any&,sal_Int32 nHandle) const
     }
 }
 
-void SAL_CALL MacabCommonStatement::acquire() throw()
+void SAL_CALL MacabCommonStatement::acquire() noexcept
 {
     MacabCommonStatement_BASE::acquire();
 }
 
-void SAL_CALL MacabCommonStatement::release() throw()
+void SAL_CALL MacabCommonStatement::release() noexcept
 {
     MacabCommonStatement_BASE::release();
 }
