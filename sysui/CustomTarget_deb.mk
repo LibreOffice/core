@@ -21,10 +21,10 @@ $(foreach product,$(PRODUCTLIST),\
 	$(product)/DEBIAN/postinst \
 	$(product)/DEBIAN/postrm \
 	$(product)/DEBIAN/prerm \
-	$(product)$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb) \
+	$(product)-freedesktop-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb) \
 ))
 
-$(deb_WORKDIR)/%-desktop-integration.tar.gz: $(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb
+$(deb_WORKDIR)/%-desktop-integration.tar.gz: $(deb_WORKDIR)/%-freedesktop-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb
 	fakeroot $(GNUTAR) -C $(deb_WORKDIR) -cf - $(notdir $<) | gzip > $@
 
 $(deb_WORKDIR)/%/DEBIAN/postrm: $(deb_SRCDIR)/postrm
@@ -51,15 +51,15 @@ $(deb_WORKDIR)/%/DEBIAN/control: $(deb_SRCDIR)/control $(gb_CustomTarget_workdir
 		-e 's/%PRODUCTNAME/$(PRODUCTNAME.$*) $(PRODUCTVERSION)/' \
 		-e 's/%PREFIX/$(UNIXFILENAME.$*)/' \
 		-e 's/%ICONPREFIX/$(UNIXFILENAME.$*)/' \
-		> $(deb_WORKDIR)/$*/usr/lib/menu/$*$(PKGVERSIONSHORT)
-	echo "Package: $*$(PKGVERSIONSHORT)-debian-menus" >$@
+		> $(deb_WORKDIR)/$*/usr/lib/menu/$*
+	echo "Package: $*-freedesktop-menus" >$@
 	cat $< | tr -d "\015" | \
 		sed 's/%productname/$(PRODUCTNAME.$*) $(PRODUCTVERSION)/' \
 		>> $@
 	echo "Version: $(PKGVERSION)-$(LIBO_VERSION_PATCH)" >>$@
 	du -k -s $(deb_WORKDIR)/$* | $(gb_AWK) -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >>$@
 
-$(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb: $(deb_WORKDIR)/%/DEBIAN/postrm $(deb_WORKDIR)/%/DEBIAN/postinst $(deb_WORKDIR)/%/DEBIAN/prerm $(deb_WORKDIR)/%/DEBIAN/control
+$(deb_WORKDIR)/%-freedesktop-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb: $(deb_WORKDIR)/%/DEBIAN/postrm $(deb_WORKDIR)/%/DEBIAN/postinst $(deb_WORKDIR)/%/DEBIAN/prerm $(deb_WORKDIR)/%/DEBIAN/control
 
 	chmod -R g-w $(deb_WORKDIR)/$*
 	chmod a+rx $(deb_WORKDIR)/$*/DEBIAN \
