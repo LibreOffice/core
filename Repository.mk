@@ -876,6 +876,12 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	) \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP),TRUE)
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	tipoftheday_images \
+))
+endif
+
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(SYSTEM_LIBEXTTEXTCAT),,libexttextcat_fingerprint) \
 	officecfg_misc \
@@ -959,7 +965,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	wizards_basicusr \
 	wizards_properties \
 	wizards_wizardshare \
-	tipoftheday_images \
 	toolbarmode_images \
 	vcl_theme_definitions \
 	$(if $(filter WNT,$(OS)), \
