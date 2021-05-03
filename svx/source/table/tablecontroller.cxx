@@ -984,7 +984,7 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
                 // Create a single undo action when applying the result of the dialog.
                 SdrTableObj& rTableObject(*mxTableObj);
                 SdrModel& rSdrModel(rTableObject.getSdrModelFromSdrObject());
-                bool bUndo = rSdrModel.IsUndoEnabled();
+                bool bUndo = rSdrModel.IsUndoEnabled() && !mrView.IsTextEdit();
                 if (bUndo)
                 {
                     rSdrModel.BegUndo(SvxResId(STR_TABLE_NUMFORMAT));
