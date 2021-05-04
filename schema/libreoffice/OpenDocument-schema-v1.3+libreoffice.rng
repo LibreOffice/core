@@ -2639,7 +2639,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
-  <!-- TODO no proposal -->
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4107 -->
   <rng:define name="table-filter-condition-attlist" combine="interleave">
     <rng:optional>
       <rng:attribute name="loext:data-type">
