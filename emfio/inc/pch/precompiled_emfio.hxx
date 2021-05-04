@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:13:45 using:
+ Generated on 2021-05-10 18:44:53 using:
  ./bin/update_pch emfio emfio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -45,6 +45,7 @@
 #if PCH_LEVEL >= 3
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/gen.hxx>
+#include <tools/solar.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4

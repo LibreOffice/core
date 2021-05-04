@@ -29,6 +29,7 @@
 #include <functional>
 #include <iterator>
 #include <limits>
+#include <map>
 #include <memory>
 #include <new>
 #include <optional>

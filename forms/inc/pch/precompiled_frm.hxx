@@ -215,6 +215,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/groupid.hxx>

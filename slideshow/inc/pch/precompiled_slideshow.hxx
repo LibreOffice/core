@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:48:19 using:
+ Generated on 2021-05-10 18:45:23 using:
  ./bin/update_pch slideshow slideshow --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <chrono>
 #include <cstddef>
@@ -39,14 +40,17 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <numeric>
 #include <optional>
 #include <ostream>
+#include <set>
 #include <stddef.h>
 #include <string.h>
 #include <string>
 #include <string_view>
 #include <type_traits>
 #include <typeinfo>
+#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -106,13 +110,23 @@
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
+#include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/DrawGridFlags.hxx>
+#include <vcl/rendercontext/DrawImageFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
+#include <vcl/rendercontext/DrawTextFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
+#include <vcl/rendercontext/ImplMapRes.hxx>
+#include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/SalLayoutFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/task.hxx>
@@ -137,6 +151,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -148,8 +163,11 @@
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <canvas/canvastools.hxx>
+#include <canvas/canvastoolsdllapi.h>
+#include <canvas/elapsedtime.hxx>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -166,6 +184,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -233,10 +252,13 @@
 #include <editeng/macros.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
+#include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
@@ -310,15 +332,14 @@
 #include <activitiesqueue.hxx>
 #include <animatableshape.hxx>
 #include <animationfactory.hxx>
-#include <attributableshape.hxx>
+#include <animationnode.hxx>
 #include <cursormanager.hxx>
 #include <delayevent.hxx>
 #include <disposable.hxx>
 #include <doctreenode.hxx>
-#include <doctreenodesupplier.hxx>
+#include <event.hxx>
 #include <eventmultiplexer.hxx>
 #include <eventqueue.hxx>
-#include <hyperlinkarea.hxx>
 #include <rgbcolor.hxx>
 #include <screenupdater.hxx>
 #include <shape.hxx>
@@ -331,6 +352,7 @@
 #include <unoview.hxx>
 #include <unoviewcontainer.hxx>
 #include <usereventqueue.hxx>
+#include <viewlayer.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

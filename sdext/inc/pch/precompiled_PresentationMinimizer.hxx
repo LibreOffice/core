@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <assert.h>
 #include <atomic>
 #include <cassert>
@@ -40,6 +41,7 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <numeric>
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
@@ -142,9 +144,11 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <tools/color.hxx>

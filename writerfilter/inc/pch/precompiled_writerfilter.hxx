@@ -47,10 +47,7 @@
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
 #include <rtl/string.hxx>
-#include <rtl/stringconcat.hxx>
-#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
@@ -101,6 +98,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <ooxml/resourceids.hxx>
 #include <sfx2/dllapi.h>
+#include <svx/svxdllapi.h>
 #include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>

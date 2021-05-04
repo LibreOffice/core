@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:48:18 using:
+ Generated on 2021-05-10 18:45:22 using:
  ./bin/update_pch sd sdui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <chrono>
 #include <cmath>
@@ -41,6 +42,7 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <numeric>
 #include <optional>
 #include <ostream>
 #include <set>
@@ -122,6 +124,7 @@
 #include <vcl/formatter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
@@ -131,10 +134,19 @@
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
+#include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/DrawGridFlags.hxx>
+#include <vcl/rendercontext/DrawImageFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
+#include <vcl/rendercontext/DrawTextFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
+#include <vcl/rendercontext/ImplMapRes.hxx>
+#include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/SalLayoutFlags.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -230,7 +242,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
-#include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
@@ -328,10 +340,12 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/enumarray.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
@@ -363,7 +377,6 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
-#include <svtools/tabbar.hxx>
 #include <svtools/unitconv.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/DiagramDataInterface.hxx>

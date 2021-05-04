@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <string_view>
 #include <vector>
@@ -34,6 +35,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
@@ -49,7 +51,9 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -60,10 +64,13 @@
 #include <tools/toolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <SvgNumber.hxx>
 #include <svgdocument.hxx>
 #include <svgnode.hxx>
 #include <svgpaint.hxx>
 #include <svgstyleattributes.hxx>
+#include <svgtoken.hxx>
+#include <svgtools.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

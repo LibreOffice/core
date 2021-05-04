@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <assert.h>
 #include <cassert>
 #include <chrono>
@@ -39,6 +40,7 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <numeric>
 #include <ostream>
 #include <set>
 #include <stddef.h>
@@ -163,9 +165,11 @@
 #include <cppuhelper/weak.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <sax/saxdllapi.h>

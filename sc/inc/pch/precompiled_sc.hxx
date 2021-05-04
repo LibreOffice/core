@@ -73,7 +73,7 @@
 #include <osl/module.hxx>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/security.h>
+#include <osl/process.h>
 #include <osl/security.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
@@ -83,7 +83,6 @@
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
-#include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
@@ -211,6 +210,9 @@
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
@@ -234,6 +236,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -334,6 +337,10 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <oox/dllapi.h>
+#include <oox/helper/binarystreambase.hxx>
+#include <oox/helper/refmap.hxx>
+#include <oox/helper/storagebase.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
@@ -362,6 +369,7 @@
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
@@ -549,12 +557,10 @@
 #include <rangelst.hxx>
 #include <rangenam.hxx>
 #include <rangeutl.hxx>
-#include <refdata.hxx>
 #include <reffact.hxx>
 #include <refundo.hxx>
 #include <refupdat.hxx>
 #include <refupdatecontext.hxx>
-#include <root.hxx>
 #include <rowheightcontext.hxx>
 #include <scabstdlg.hxx>
 #include <scdllapi.h>
@@ -583,9 +589,6 @@
 #include <userdat.hxx>
 #include <validat.hxx>
 #include <viewdata.hxx>
-#include <xiroot.hxx>
-#include <xlconst.hxx>
-#include <xlroot.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

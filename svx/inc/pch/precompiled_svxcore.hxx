@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:56:48 using:
+ Generated on 2021-05-10 18:45:27 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -66,6 +66,7 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
+#include <osl/process.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -519,6 +520,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xlineit0.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnedit.hxx>

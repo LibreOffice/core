@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:57:45 using:
+ Generated on 2021-05-10 18:45:59 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,7 +35,6 @@
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
-#include <limits.h>
 #include <limits>
 #include <map>
 #include <math.h>
@@ -63,6 +62,7 @@
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
+#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/module.hxx>

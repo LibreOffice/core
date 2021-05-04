@@ -26,6 +26,7 @@
 #include <cairo.h>
 #include <math.h>
 #include <memory>
+#include <pixman.h>
 #include <tuple>
 #include <boost/cast.hpp>
 #endif // PCH_LEVEL >= 1

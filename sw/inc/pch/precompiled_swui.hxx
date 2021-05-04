@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:48:47 using:
+ Generated on 2021-05-10 18:45:51 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -120,6 +120,7 @@
 #include <vcl/formatter.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/glyphitem.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/idle.hxx>
@@ -130,11 +131,20 @@
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/print.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
+#include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/DrawGridFlags.hxx>
+#include <vcl/rendercontext/DrawImageFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
+#include <vcl/rendercontext/DrawTextFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
+#include <vcl/rendercontext/ImplMapRes.hxx>
+#include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/SalLayoutFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
@@ -184,15 +194,13 @@
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
@@ -228,7 +236,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
@@ -274,7 +282,11 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/XTextSection.hpp>
+#include <com/sun/star/text/XRelativeTextContentInsert.hpp>
+#include <com/sun/star/text/XRelativeTextContentRemove.hpp>
+#include <com/sun/star/text/XTextAppendAndConvert.hpp>
+#include <com/sun/star/text/XTextCopy.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -379,12 +391,13 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <ooo/vba/word/XParagraphFormat.hpp>
+#include <ooo/vba/word/XSection.hpp>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <sfx2/Metadatable.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/chalign.hxx>
@@ -418,6 +431,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/listener.hxx>
 #include <svl/lstner.hxx>
 #include <svl/macitem.hxx>
 #include <svl/nfkeytab.hxx>
@@ -444,7 +458,6 @@
 #include <svx/autoformathelper.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/colorwindow.hxx>
-#include <svx/ctredlin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/framelinkarray.hxx>
@@ -570,7 +583,6 @@
 #include <optload.hxx>
 #include <outline.hxx>
 #include <pagedesc.hxx>
-#include <pam.hxx>
 #include <pardlg.hxx>
 #include <poolfmt.hxx>
 #include <reffld.hxx>
@@ -601,6 +613,7 @@
 #include <uitool.hxx>
 #include <undobj.hxx>
 #include <unobaseclass.hxx>
+#include <unotext.hxx>
 #include <unotools.hxx>
 #include <usrpref.hxx>
 #include <view.hxx>
