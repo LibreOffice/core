@@ -28,11 +28,6 @@ $(eval $(call gb_Library_set_componentfile,directx9canvas,canvas/source/directx/
 
 $(eval $(call gb_Library_use_sdk_api,directx9canvas))
 
-# clear NOMINMAX because GdiplusTypes.h uses those macros :(
-$(eval $(call gb_Library_add_defs,directx9canvas,\
-	-UNOMINMAX \
-))
-
 $(eval $(call gb_Library_use_external,directx9canvas,boost_headers))
 
 $(eval $(call gb_Library_use_libraries,directx9canvas,\
