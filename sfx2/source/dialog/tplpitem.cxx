@@ -31,9 +31,11 @@ SfxTemplateItem::SfxTemplateItem() :
 SfxTemplateItem::SfxTemplateItem
 (
     sal_uInt16 nWhichId,      // Slot-ID
-    const OUString& rStyle    // Name of the current Styles
+    const OUString& rStyle,    // Name of the current Styles
+    const OUString& rStyleIdentifier     // Prog Name of current Style
 ) : SfxFlagItem( nWhichId, static_cast<sal_uInt16>(SfxStyleSearchBits::All) ),
-    aStyle( rStyle )
+    aStyle( rStyle ),
+    aStyleIdentifier( rStyleIdentifier )
 {
 }
 
@@ -42,7 +44,8 @@ SfxTemplateItem::SfxTemplateItem
 bool SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return ( SfxFlagItem::operator==( rCmp ) &&
-             aStyle == static_cast<const SfxTemplateItem&>(rCmp).aStyle );
+             aStyle == static_cast<const SfxTemplateItem&>(rCmp).aStyle &&
+             aStyleIdentifier == static_cast<const SfxTemplateItem&>(rCmp).aStyleIdentifier );
 }
 
 SfxTemplateItem* SfxTemplateItem::Clone( SfxItemPool *) const
@@ -56,6 +59,7 @@ bool SfxTemplateItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 
     aTemplate.Value = static_cast<sal_uInt16>(GetValue());
     aTemplate.StyleName = aStyle;
+    aTemplate.StyleNameIdentifier = aStyleIdentifier;
     rVal <<= aTemplate;
 
     return true;
@@ -70,6 +74,7 @@ bool SfxTemplateItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId
     {
         SetValue( static_cast<SfxStyleSearchBits>(aTemplate.Value) );
         aStyle = aTemplate.StyleName;
+        aStyleIdentifier = aTemplate.StyleNameIdentifier;
         return true;
     }
 
