@@ -335,22 +335,22 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
     fprintf( fp, "\n================================================================================" );
     for ( sal_Int32 nPortion = 0; nPortion < pEE->pImpEditEngine->GetParaPortions().Count(); nPortion++)
     {
-        ParaPortion* pPPortion = pEE->pImpEditEngine->GetParaPortions()[nPortion];
+        ParaPortion& rPPortion = pEE->pImpEditEngine->GetParaPortions()[nPortion];
         fprintf( fp, "\nParagraph %" SAL_PRIdINT32 ": Length = %" SAL_PRIdINT32 ", Invalid = %i\nText = '%s'",
-                 nPortion, pPPortion->GetNode()->Len(), pPPortion->IsInvalid(),
-                 OUStringToOString(pPPortion->GetNode()->GetString(), RTL_TEXTENCODING_UTF8).getStr() );
+                 nPortion, rPPortion.GetNode()->Len(), rPPortion.IsInvalid(),
+                 OUStringToOString(rPPortion.GetNode()->GetString(), RTL_TEXTENCODING_UTF8).getStr() );
         fprintf( fp, "\nVorlage:" );
-        SfxStyleSheet* pStyle = pPPortion->GetNode()->GetStyleSheet();
+        SfxStyleSheet* pStyle = rPPortion.GetNode()->GetStyleSheet();
         if ( pStyle )
             fprintf( fp, " %s", OUStringToOString( pStyle->GetName(), RTL_TEXTENCODING_UTF8).getStr() );
         fprintf( fp, "\nParagraph attribute:" );
-        DbgOutItemSet( fp, pPPortion->GetNode()->GetContentAttribs().GetItems(), false, false );
+        DbgOutItemSet( fp, rPPortion.GetNode()->GetContentAttribs().GetItems(), false, false );
 
         fprintf( fp, "\nCharacter attribute:" );
         bool bZeroAttr = false;
-        for ( sal_Int32 z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); ++z )
+        for ( sal_Int32 z = 0; z < rPPortion.GetNode()->GetCharAttribs().Count(); ++z )
         {
-            const std::unique_ptr<EditCharAttrib>& rAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs()[z];
+            const std::unique_ptr<EditCharAttrib>& rAttr = rPPortion.GetNode()->GetCharAttribs().GetAttribs()[z];
             OStringBuffer aCharAttribs;
             aCharAttribs.append("\nA");
             aCharAttribs.append(nPortion);
@@ -370,20 +370,20 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
         if ( bZeroAttr )
             fprintf( fp, "\nNULL-Attribute!" );
 
-        const sal_Int32 nTextPortions = pPPortion->GetTextPortions().Count();
+        const sal_Int32 nTextPortions = rPPortion.GetTextPortions().Count();
         OStringBuffer aPortionStr("\nText portions: #");
         aPortionStr.append(nTextPortions);
         aPortionStr.append(" \nA");
         aPortionStr.append(nPortion);
         aPortionStr.append(": Paragraph Length = ");
-        aPortionStr.append(pPPortion->GetNode()->Len());
+        aPortionStr.append(rPPortion.GetNode()->Len());
         aPortionStr.append("\nA");
         aPortionStr.append(nPortion);
         aPortionStr.append(": ");
         sal_Int32 n = 0;
         for ( sal_Int32 z = 0; z < nTextPortions; ++z )
         {
-            TextPortion& rPortion = pPPortion->GetTextPortions()[z];
+            TextPortion& rPortion = rPPortion.GetTextPortions()[z];
             aPortionStr.append(' ');
             aPortionStr.append(rPortion.GetLen());
             aPortionStr.append('(');
@@ -399,23 +399,23 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
         aPortionStr.append(nPortion);
         aPortionStr.append(": Total length: ");
         aPortionStr.append(n);
-        if ( pPPortion->GetNode()->Len() != n )
+        if ( rPPortion.GetNode()->Len() != n )
             aPortionStr.append(" => Error !!!");
         fprintf(fp, "%s", aPortionStr.getStr());
 
         fprintf( fp, "\n\nLines:" );
         // First the content ...
-        for ( sal_Int32 nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
+        for ( sal_Int32 nLine = 0; nLine < rPPortion.GetLines().Count(); nLine++ )
         {
-            EditLine& rLine = pPPortion->GetLines()[nLine];
+            EditLine& rLine = rPPortion.GetLines()[nLine];
 
-            OString aLine(OUStringToOString(pPPortion->GetNode()->Copy(rLine.GetStart(), rLine.GetEnd() - rLine.GetStart()), RTL_TEXTENCODING_ASCII_US));
+            OString aLine(OUStringToOString(rPPortion.GetNode()->Copy(rLine.GetStart(), rLine.GetEnd() - rLine.GetStart()), RTL_TEXTENCODING_ASCII_US));
             fprintf( fp, "\nLine %" SAL_PRIdINT32 "\t>%s<", nLine, aLine.getStr() );
         }
         // then the internal data ...
-        for ( sal_Int32 nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
+        for ( sal_Int32 nLine = 0; nLine < rPPortion.GetLines().Count(); nLine++ )
         {
-            EditLine& rLine = pPPortion->GetLines()[nLine];
+            EditLine& rLine = rPPortion.GetLines()[nLine];
             fprintf( fp, "\nLine %" SAL_PRIdINT32 ":\tStart: %" SAL_PRIdINT32 ",\tEnd: %" SAL_PRIdINT32, nLine, rLine.GetStart(), rLine.GetEnd() );
             fprintf( fp, "\t\tPortions: %" SAL_PRIdINT32 " - %" SAL_PRIdINT32 ".\tHight: %i, Ascent=%i", rLine.GetStartPortion(), rLine.GetEndPortion(), rLine.GetHeight(), rLine.GetMaxAscent() );
         }
