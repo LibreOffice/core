@@ -53,6 +53,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestTextMapMode();
     void TestEnglishMapMode();
     void TestRectangleWithModifyWorldTransform();
+    void TestEllipseWithSelectClipPath();
     void TestDrawPolyLine16WithClip();
     void TestFillRegion();
     void TestCreatePen();
@@ -74,6 +75,7 @@ public:
     CPPUNIT_TEST(TestTextMapMode);
     CPPUNIT_TEST(TestEnglishMapMode);
     CPPUNIT_TEST(TestRectangleWithModifyWorldTransform);
+    CPPUNIT_TEST(TestEllipseWithSelectClipPath);
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
     CPPUNIT_TEST(TestCreatePen);
@@ -314,7 +316,6 @@ void Test::TestEnglishMapMode()
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[3]/polygon", "12699,1058 16933,1058 16933,2118 15346,2118 15346,6349 14287,6349 14287,2118 12699,2118");
 }
 
-
 void Test::TestRectangleWithModifyWorldTransform()
 {
     // Check import of EMF image with records: EXTCREATEPEN, SELECTOBJECT, MODIFYWORLDTRANSFORM, RECTANGLE
@@ -331,6 +332,26 @@ void Test::TestRectangleWithModifyWorldTransform()
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke", 1);
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke[1]/polygon", "1042,417 1960,946 2313,1556 1395,1028");
+}
+
+void Test::TestEllipseWithSelectClipPath()
+{
+    // EMF import test with records: RECTANGLE, BEGINPATH, ENDPATH, ELLIPSE
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEllipseWithSelectClipPath.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group/mask/polypolygon", 1);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group/mask/polypolygon[1]", "path", "m2790 705-106-106-106-70-318-106-424-70h-706l-35 35-247 35h-142l-318 106-105 70-106 106v141l106 106 105 70 318 106 424 71h706l424-71 318-106 106-70 106-106");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group/mask/polypolygoncolor", 1);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group/mask/polypolygoncolor[1]", "color", "#ffff00");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group/mask/polypolygoncolor[1]/polypolygon[1]", "path", "m353 353h2472v1057h-2472z");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/group/mask/polygonstroke", 1);
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/group/mask/polygonstroke[1]/polygon", "353,353 2825,353 2825,1410 353,1410");
 }
 
 void Test::TestDrawPolyLine16WithClip()
@@ -358,7 +379,6 @@ void Test::TestDrawPolyLine16WithClip()
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[1]/mask/polypolygon", "path", "m2646 0v1322h1323v1322h-1323v1322h-1323v-1322h-1323v-1322h1323v-1322");
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/group[1]/mask/polygonstroke/polygon", "0,793 3969,4230");
-
 }
 
 void Test::TestFillRegion()
