@@ -56,7 +56,7 @@ enum class TextRotation { NONE, TOPTOBOTTOM, BOTTOMTOTOP };
 
 class EditTextObjectImpl;
 
-class EDITENG_DLLPUBLIC EditTextObject final : public SfxItemPoolUser
+class EDITENG_DLLPUBLIC EditTextObject final
 {
     friend class EditTextObjectImpl;
     friend class editeng::FieldUpdaterImpl;
@@ -138,8 +138,6 @@ public:
 
     // #i102062#
     bool isWrongListEqual(const EditTextObject& rCompare) const;
-
-    virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool) override;
 
 #if DEBUG_EDIT_ENGINE
     void Dump() const;

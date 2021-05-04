@@ -263,9 +263,6 @@ public:
     // #i102062#
     bool isWrongListEqual(const EditTextObjectImpl& rCompare) const;
 
-    // from SfxItemPoolUser
-    void ObjectInDestruction(const SfxItemPool& rSfxItemPool);
-
 #if DEBUG_EDIT_ENGINE
     void Dump() const;
 #endif
