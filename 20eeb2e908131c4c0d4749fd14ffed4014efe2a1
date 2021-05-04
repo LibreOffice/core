@@ -22,6 +22,30 @@
       "revId": "20eeb2e908131c4c0d4749fd14ffed4014efe2a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3bc25db_cb57dee3",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-05-04T06:07:21Z",
+      "side": 1,
+      "message": "Yes, this was on my plan. But if you want to do it, feel free to amend this patch. Actually I\u0027m not really happy with the solution.",
+      "parentUuid": "a0cde773_d5b3dfdb",
+      "range": {
+        "startLine": 639,
+        "startChar": 24,
+        "endLine": 639,
+        "endChar": 39
+      },
+      "revId": "20eeb2e908131c4c0d4749fd14ffed4014efe2a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
