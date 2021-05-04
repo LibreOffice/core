@@ -124,6 +124,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
         m_xName->set_can_focus(true);
         m_xName->set_editable(true);
         m_xName->set_sensitive(true);
+        m_xName->grab_focus(); // tdf#142017 default to focus within the page, not in notebook tab
     }
     else
     {
