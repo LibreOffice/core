@@ -22,17 +22,17 @@ class BitmapEx;
 class VCL_DLLPUBLIC BitmapMosaicFilter final : public BitmapFilter
 {
 public:
-    BitmapMosaicFilter(sal_uLong nTileWidth, sal_uLong nTileHeight)
-        : mnTileWidth(std::max(nTileWidth, sal_uLong(1)))
-        , mnTileHeight(std::max(nTileHeight, sal_uLong(1)))
+    BitmapMosaicFilter(sal_Int32 nTileWidth, sal_Int32 nTileHeight)
+        : mnTileWidth(std::max(nTileWidth, sal_Int32(1)))
+        , mnTileHeight(std::max(nTileHeight, sal_Int32(1)))
     {
     }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    sal_uLong mnTileWidth;
-    sal_uLong mnTileHeight;
+    sal_Int32 mnTileWidth;
+    sal_Int32 mnTileHeight;
 };
 
 #endif
