@@ -22,11 +22,6 @@ $(eval $(call gb_StaticLibrary_use_api,directxcanvas,\
     udkapi \
 ))
 
-# clear NOMINMAX because GdiplusTypes.h uses those macros :(
-$(eval $(call gb_StaticLibrary_add_defs,directxcanvas,\
-	-UNOMINMAX \
-))
-
 $(eval $(call gb_StaticLibrary_add_exception_objects,directxcanvas,\
 	canvas/source/directx/dx_bitmap \
 	canvas/source/directx/dx_bitmapcanvashelper \
