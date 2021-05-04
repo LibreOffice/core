@@ -23,10 +23,22 @@ public:
     struct Entry
     {
         sal_uInt16 nmXMLNS;
-        const char* mpXMLName;
+        OUString maXMLName;
         const char* mpAPIName;
         sal_uInt16 mnItemID;
         sal_uInt8 mnFlag;
+
+        /* use template and OUStringLiteral so we can init this at compile time */
+        template <std::size_t N>
+        constexpr Entry(sal_uInt16 nXMLNS, OUStringLiteral<N> aXMLName, const char* pAPIName,
+                        sal_uInt16 nItemID, sal_uInt8 nFlag)
+            : nmXMLNS(nXMLNS)
+            , maXMLName(aXMLName)
+            , mpAPIName(pAPIName)
+            , mnItemID(nItemID)
+            , mnFlag(nFlag)
+        {
+        }
     };
 
     ScXMLEditAttributeMap();

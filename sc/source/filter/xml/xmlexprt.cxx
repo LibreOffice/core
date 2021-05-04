@@ -965,7 +965,7 @@ const SvxFieldData* toXMLPropertyStates(
             continue;
 
         sal_Int32 nIndex = xMapper->GetEntryIndex(
-            pEntry->nmXMLNS, OUString::createFromAscii(pEntry->mpXMLName), 0);
+            pEntry->nmXMLNS, pEntry->maXMLName, 0);
 
         if (nIndex == -1 || nIndex >= nEntryCount)
             continue;
