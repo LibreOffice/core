@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
-#include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+
+#include <cassert>
 
 Color OutputDevice::GetReadableFontColor(const Color& rFontColor, const Color& rBgColor) const
 {
@@ -32,11 +30,6 @@ Color OutputDevice::GetReadableFontColor(const Color& rFontColor, const Color& r
         return COL_BLACK;
     else
         return rFontColor;
-}
-
-Color OutputDevice::GetBackgroundColor() const
-{
-    return GetBackground().GetColor();
 }
 
 void OutputDevice::DrawWallpaper( const tools::Rectangle& rRect,
