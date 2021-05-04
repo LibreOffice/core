@@ -1836,6 +1836,37 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130629)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141613)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    pWrtSh->Insert("Test");
+
+    dispatchCommand(mxComponent,
+                    ".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=true",
+                    {});
+
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, "HeaderIsOn"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133358)
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");

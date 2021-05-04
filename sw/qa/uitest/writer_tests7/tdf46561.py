@@ -97,17 +97,4 @@ class tdf46561(UITestCase):
 
         self.ui_test.close_doc()
 
-    # Check that former crash has been fixed
-    def test_tdf141613(self):
-        self.ui_test.create_doc_in_start_center("writer")
-
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-
-        xArgs = mkPropertyValues({"Text": "something"})
-        self.xUITest.executeCommandWithParameters(".uno:InsertText", xArgs)
-        self.xUITest.executeCommand(".uno:InsertPageHeader")
-        self.xUITest.executeCommand(".uno:Undo")
-        self.xUITest.executeCommand(".uno:Undo")
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
