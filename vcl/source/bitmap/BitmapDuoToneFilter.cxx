@@ -32,12 +32,8 @@ BitmapEx BitmapDuoToneFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap aResultBitmap(aBitmap.GetSizePixel(), vcl::PixelFormat::N24_BPP);
     Bitmap::ScopedReadAccess pReadAcc(aBitmap);
     BitmapScopedWriteAccess pWriteAcc(aResultBitmap);
-    const BitmapColor aColorOne(static_cast<sal_uInt8>(mnColorOne >> 16),
-                                static_cast<sal_uInt8>(mnColorOne >> 8),
-                                static_cast<sal_uInt8>(mnColorOne));
-    const BitmapColor aColorTwo(static_cast<sal_uInt8>(mnColorTwo >> 16),
-                                static_cast<sal_uInt8>(mnColorTwo >> 8),
-                                static_cast<sal_uInt8>(mnColorTwo));
+    const BitmapColor aColorOne(mnColorOne);
+    const BitmapColor aColorTwo(mnColorTwo);
 
     for (tools::Long x = 0; x < nWidth; x++)
     {
