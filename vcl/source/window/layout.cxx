@@ -2771,7 +2771,7 @@ void VclHPaned::setAllocation(const Size& rAllocation)
             if (bInitialAllocation)
                 nFirstWidth = getLayoutRequisition(*pChild).Width();
             else
-                nFirstWidth = pChild->GetSizePixel().Width();
+                nFirstWidth = pChild->GetSizePixel().Width() + pChild->get_margin_start() + pChild->get_margin_end();
             bFirstCanResize = pChild->get_expand();
         }
         else if (nElement == 2)
