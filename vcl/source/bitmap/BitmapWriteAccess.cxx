@@ -67,7 +67,7 @@ void BitmapWriteAccess::CopyScanline(tools::Long nY, ConstScanline aSrcScanline,
                    || (!HasPalette() && nFormat > ScanlineFormat::N8BitPal),
                "No copying possible between palette and non palette scanlines!");
 
-    const sal_uLong nCount = std::min(GetScanlineSize(), nSrcScanlineSize);
+    const sal_uInt32 nCount = std::min(GetScanlineSize(), nSrcScanlineSize);
 
     if (!nCount)
         return;
