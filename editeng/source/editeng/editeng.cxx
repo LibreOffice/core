@@ -82,7 +82,14 @@ using namespace ::com::sun::star::linguistic2;
 static bool bDebugPaint = false;
 #endif
 
-static SfxItemPool* pGlobalPool=nullptr;
+struct PoolDeleter
+{
+    void operator()(SfxItemPool* pPool)
+    {
+        SfxItemPool::Free(pPool);
+    };
+};
+static std::unique_ptr<SfxItemPool, PoolDeleter> pGlobalPool;
 
 EditEngine::EditEngine( SfxItemPool* pItemPool )
 {
@@ -2597,7 +2604,7 @@ SfxItemPool* EditEngine::CreatePool()
 SfxItemPool& EditEngine::GetGlobalItemPool()
 {
     if ( !pGlobalPool )
-        pGlobalPool = CreatePool();
+        pGlobalPool.reset(CreatePool());
     return *pGlobalPool;
 }
 
