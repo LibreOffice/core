@@ -46,6 +46,30 @@
       "revId": "08b5a8a28ef715919a3989228e9c4c568c67d620",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37d1af23_0b7eea9f",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4597,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-05-04T09:43:57Z",
+      "side": 1,
+      "message": "Thanks, seems to work now.",
+      "parentUuid": "8624a12e_2fa04d8c",
+      "range": {
+        "startLine": 4597,
+        "startChar": 71,
+        "endLine": 4597,
+        "endChar": 86
+      },
+      "revId": "08b5a8a28ef715919a3989228e9c4c568c67d620",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
