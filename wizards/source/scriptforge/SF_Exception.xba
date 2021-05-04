@@ -85,6 +85,7 @@ Const SENDMAILERROR				=	&quot;SENDMAILERROR&quot;
 &apos;	SF_TextStream
 Const FILENOTOPENERROR			=	&quot;FILENOTOPENERROR&quot;
 Const FILEOPENMODEERROR			=	&quot;FILEOPENMODEERROR&quot;
+Const ENDOFFILEERROR			=	&quot;ENDOFFILEERROR&quot;
 
 &apos;	SF_UI
 Const DOCUMENTERROR				=	&quot;DOCUMENTERROR&quot;
@@ -842,6 +843,9 @@ Try:
 			Case FILEOPENMODEERROR		&apos;	SF_TextStream._IsFileOpen(FileName)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;FILEOPENMODE&quot;, pvArgs(0), pvArgs(1))
+			Case ENDOFFILEERROR			&apos;	SF_TextStream.ReadLine/ReadAll/SkipLine(FileName)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;ENDOFFILE&quot;, pvArgs(0))
 			Case DOCUMENTERROR			&apos;	SF_UI.GetDocument(ArgName, WindowName)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
