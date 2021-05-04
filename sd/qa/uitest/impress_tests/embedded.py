@@ -19,20 +19,18 @@ class EmbeddedDocument(UITestCase):
 
     xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Object 2"}))
 
-    def handle_embedded_document_dlg(dialog):
-        document = self.ui_test.get_component()
-        self.assertEqual("Name", get_cell_by_position(document, 0, 0, 0).getString())
-        self.assertEqual("NWell", get_cell_by_position(document, 0, 0, 1).getString())
-        self.assertEqual("PWell", get_cell_by_position(document, 0, 0, 2).getString())
-        self.assertEqual("Active", get_cell_by_position(document, 0, 0, 3).getString())
-        self.assertEqual("NoPoly", get_cell_by_position(document, 0, 0, 4).getString())
-        self.assertEqual("Poly", get_cell_by_position(document, 0, 0, 5).getString())
-        self.assertEqual("Sized", get_cell_by_position(document, 0, 0, 6).getString())
+    xEditWin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
-        self.xUITest.executeCommand(".uno:CloseDoc")
+    document = self.ui_test.get_component()
+    self.assertEqual("Name", get_cell_by_position(document, 0, 0, 0).getString())
+    self.assertEqual("NWell", get_cell_by_position(document, 0, 0, 1).getString())
+    self.assertEqual("PWell", get_cell_by_position(document, 0, 0, 2).getString())
+    self.assertEqual("Active", get_cell_by_position(document, 0, 0, 3).getString())
+    self.assertEqual("NoPoly", get_cell_by_position(document, 0, 0, 4).getString())
+    self.assertEqual("Poly", get_cell_by_position(document, 0, 0, 5).getString())
+    self.assertEqual("Sized", get_cell_by_position(document, 0, 0, 6).getString())
 
-    self.ui_test.execute_blocking_action(xEditWin.executeAction, args=("TYPE", mkPropertyValues({"KEYCODE": "RETURN"})),
-            dialog_handler=handle_embedded_document_dlg)
+    self.xUITest.executeCommand(".uno:CloseDoc")
 
     self.ui_test.close_doc()
 
