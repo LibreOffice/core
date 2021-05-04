@@ -1318,7 +1318,13 @@ namespace emfio
                     case EMR_ELLIPSE :
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 );
-                        DrawEllipse( ReadRectangle( nX32, nY32, nx32, ny32 ) );
+                        SAL_INFO("emfio", "\t\t Rectangle, left: " << nX32 << ", top: " << nY32 << ", right: " << nx32 << ", bottom: " << ny32);
+                        tools::Long dw = (nx32 - nX32) / 2;
+                        tools::Long dh = (ny32 - nY32) / 2;
+                        Point aCenter( nX32 + dw, nY32 + dh );
+                        tools::Polygon aPoly( aCenter, dw, dh );
+                        aPoly.Optimize( PolyOptimizeFlags::EDGES );
+                        DrawPolygon( aPoly, mbRecordPath );
                     }
                     break;
 
