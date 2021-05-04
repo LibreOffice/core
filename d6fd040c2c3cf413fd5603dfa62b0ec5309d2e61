@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98a784e4_05bb97e1",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-05-04T14:56:10Z",
+      "side": 1,
+      "message": "One thing I\u0027m concerned about this is that both the Document background (in Writer, Calc, etc) and the Basic Editor will have dark background.\n\nI am not sure if it\u0027s possible to have separate colors for the document background and the Basic editor background.\n\nFor example, on MS Word the dark theme has white background for the Document color:\nhttps://www.howtogeek.com/360470/how-to-enable-dark-mode-in-microsoft-office/",
+      "range": {
+        "startLine": 428,
+        "startChar": 19,
+        "endLine": 428,
+        "endChar": 25
+      },
+      "revId": "d6fd040c2c3cf413fd5603dfa62b0ec5309d2e61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
