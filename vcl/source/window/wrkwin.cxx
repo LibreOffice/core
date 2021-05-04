@@ -145,13 +145,7 @@ void WorkWindow::ShowFullScreenMode( bool bFullScreenMode, sal_Int32 nDisplayScr
 
     // Dispose of the canvas implementation, which might rely on
     // screen-specific system data.
-    css::uno::Reference< css::rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
-    if( xCanvas.is() )
-    {
-        css::uno::Reference< css::lang::XComponent >  xCanvasComponent( xCanvas, css::uno::UNO_QUERY );
-        if( xCanvasComponent.is() )
-            xCanvasComponent->dispose();
-    }
+    ImplDisposeCanvas();
 
     mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = true;
     ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplayScreen );

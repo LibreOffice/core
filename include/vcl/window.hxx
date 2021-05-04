@@ -595,6 +595,8 @@ protected:
     SAL_DLLPRIVATE void                 PushPaintHelper(PaintHelper* pHelper, vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void                 PopPaintHelper(PaintHelper const * pHelper);
 
+    virtual css::uno::Reference< css::rendering::XCanvas > ImplGetCanvas( bool bSpriteCanvas ) const override;
+
 private:
 
     SAL_DLLPRIVATE void                 ImplSetFrameParent( const vcl::Window* pParent );
@@ -705,9 +707,6 @@ private:
     SAL_DLLPRIVATE void                 ImplStartDnd();
 
     virtual void                        ImplPaintToDevice( ::OutputDevice* pTargetOutDev, const Point& rPos );
-
-    SAL_DLLPRIVATE css::uno::Reference< css::rendering::XCanvas >
-                                        ImplGetCanvas( bool bSpriteCanvas ) const;
 
 public:
     virtual vcl::Region                 GetActiveClipRegion() const override;
@@ -1252,13 +1251,6 @@ private:
      */
     Size get_ungrouped_preferred_size() const;
 public:
-    /// request XCanvas render interface for this window
-    css::uno::Reference< css::rendering::XCanvas >
-                                        GetCanvas() const;
-    /// request XSpriteCanvas render interface for this window
-    css::uno::Reference< css::rendering::XSpriteCanvas >
-                                        GetSpriteCanvas() const;
-
     /*  records all DrawText operations within the passed rectangle;
      *  a synchronous paint is sent to achieve this
      */

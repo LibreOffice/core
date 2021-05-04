@@ -49,4 +49,8 @@ $(eval $(call gb_Module_add_targets,canvas,\
 ))
 endif
 
+$(eval $(call gb_Module_add_check_targets,canvas,\
+    CppunitTest_canvas_test \
+))
+
 # vim: set noet sw=4 ts=4:

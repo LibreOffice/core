@@ -21,10 +21,12 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "spritecanvas.hxx"
+#include "outdevholder.hxx"
 #include "windowoutdevholder.hxx"
 
 
@@ -75,14 +77,27 @@ namespace vclcanvas
                              maArguments[3].getValueTypeClass() == uno::TypeClass_INTERFACE,
                              "VCLSpriteCanvas::initialize: wrong number of arguments, or wrong types" );
 
+        sal_Int64 nPtr = 0;
+        maArguments[0] >>= nPtr;
+
+        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
+        if( !pOutDev )
+            throw lang::NoSupportException("Passed OutDev invalid!", nullptr);
+
         uno::Reference< awt::XWindow > xParentWindow;
         maArguments[3] >>= xParentWindow;
 
-        OutDevProviderSharedPtr pOutDev = std::make_shared<WindowOutDevHolder>(xParentWindow);
+        OutDevProviderSharedPtr pOutDevProvider;
+        if( xParentWindow.is())
+            pOutDevProvider = std::make_shared<WindowOutDevHolder>(xParentWindow);
+        else
+            pOutDevProvider = std::make_shared<OutDevHolder>(*pOutDev);
 
         // setup helper
-        maDeviceHelper.init( pOutDev );
-        setWindow(uno::Reference<awt::XWindow2>(xParentWindow, uno::UNO_QUERY_THROW));
+        maDeviceHelper.init( pOutDevProvider );
+        setWindow( xParentWindow.is()
+            ? uno::Reference<awt::XWindow2>(xParentWindow, uno::UNO_QUERY_THROW)
+            : uno::Reference<awt::XWindow2>());
         maCanvasHelper.init( maDeviceHelper.getBackBuffer(),
                              *this,
                              maRedrawManager,

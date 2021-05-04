@@ -154,13 +154,7 @@ void Window::dispose()
 
     // Dispose of the canvas implementation (which, currently, has an
     // own wrapper window as a child to this one.
-    Reference< css::rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
-    if( xCanvas.is() )
-    {
-        Reference < XComponent > xCanvasComponent( xCanvas, UNO_QUERY );
-        if( xCanvasComponent.is() )
-            xCanvasComponent->dispose();
-    }
+    ImplDisposeCanvas();
 
     mpWindowImpl->mbInDispose = true;
 
@@ -3680,13 +3674,6 @@ bool Window::IsNativeWidgetEnabled() const
 
 Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas ) const
 {
-    // try to retrieve hard reference from weak member
-    Reference< css::rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
-
-    // canvas still valid? Then we're done.
-    if( xCanvas.is() )
-        return xCanvas;
-
     Sequence< Any > aArg(5);
 
     // Feed any with operating system's window handle
@@ -3707,6 +3694,7 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas )
     static vcl::DeleteUnoReferenceOnDeinit<XMultiComponentFactory> xStaticCanvasFactory(
         css::rendering::CanvasFactory::create( xContext ) );
     Reference<XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());
+    Reference< css::rendering::XCanvas > xCanvas;
 
     if(xCanvasFactory.is())
     {
@@ -3740,23 +3728,10 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas )
                          UNO_QUERY );
 
         }
-        mpWindowImpl->mxCanvas = xCanvas;
     }
 
     // no factory??? Empty reference, then.
     return xCanvas;
-}
-
-Reference< css::rendering::XCanvas > Window::GetCanvas() const
-{
-    return ImplGetCanvas( false );
-}
-
-Reference< css::rendering::XSpriteCanvas > Window::GetSpriteCanvas() const
-{
-    Reference< css::rendering::XSpriteCanvas > xSpriteCanvas(
-        ImplGetCanvas( true ), UNO_QUERY );
-    return xSpriteCanvas;
 }
 
 OUString Window::GetSurroundingText() const

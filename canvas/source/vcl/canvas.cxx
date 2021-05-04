@@ -19,40 +19,19 @@
 
 #include <sal/config.h>
 
+#include "canvas.hxx"
+
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/outdev.hxx>
 
-#include "canvas.hxx"
+#include "outdevholder.hxx"
 
 using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    namespace
-    {
-        class OutDevHolder : public OutDevProvider
-        {
-        public:
-            OutDevHolder(const OutDevHolder&) = delete;
-            const OutDevHolder& operator=(const OutDevHolder&) = delete;
-
-            explicit OutDevHolder( OutputDevice& rOutDev ) :
-                mrOutDev(rOutDev)
-            {}
-
-        private:
-            virtual OutputDevice&       getOutDev() override { return mrOutDev; }
-            virtual const OutputDevice& getOutDev() const override { return mrOutDev; }
-
-            // TODO(Q2): Lifetime issue. This _only_ works reliably,
-            // if disposing the Canvas correctly disposes all
-            // entities which hold this pointer.
-            OutputDevice& mrOutDev;
-        };
-    }
-
     Canvas::Canvas( const uno::Sequence< uno::Any >&                aArguments,
                     const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
         maArguments(aArguments)

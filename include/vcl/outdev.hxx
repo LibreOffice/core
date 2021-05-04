@@ -45,6 +45,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <unotools/fontdefs.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -108,6 +109,11 @@ namespace basegfx {
 
 namespace com::sun::star::awt {
     class XGraphics;
+}
+
+namespace com::sun::star::rendering {
+    class XCanvas;
+    class XSpriteCanvas;
 }
 
 #if defined UNX
@@ -304,6 +310,8 @@ private:
     std::unique_ptr<ImplOutDevData> mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
     vcl::ExtOutDevData*             mpExtOutDevData;
+    // The canvas interface for this output device. Is persistent after the first GetCanvas() call
+    mutable css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
 
     // TEMP TEMP TEMP
     VclPtr<VirtualDevice>           mpAlphaVDev;
@@ -440,6 +448,11 @@ public:
 
     virtual size_t               GetSyncCount() const { return 0xffffffff; }
 
+    /// request XCanvas render interface
+    css::uno::Reference< css::rendering::XCanvas > GetCanvas() const;
+    /// request XSpriteCanvas render interface
+    css::uno::Reference< css::rendering::XSpriteCanvas > GetSpriteCanvas() const;
+
 protected:
 
     /** Acquire a graphics device that the output device uses to draw on.
@@ -556,6 +569,9 @@ protected:
     SAL_DLLPRIVATE void         drawOutDevDirect(const OutputDevice& rSrcDev, SalTwoRect& rPosAry);
 
     SAL_DLLPRIVATE bool         is_double_buffered_window() const;
+
+    virtual css::uno::Reference< css::rendering::XCanvas > ImplGetCanvas( bool bSpriteCanvas ) const;
+    SAL_DLLPRIVATE void         ImplDisposeCanvas();
 
 private:
 
