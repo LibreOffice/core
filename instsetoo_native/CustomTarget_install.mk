@@ -157,7 +157,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.do
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d Collabora\ Office\ $(LIBO_VERSION_MAJOR)-$(LIBO_VERSION_PATCH) \
+			-d Collabora\ Office\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO) \
 			$(WORKDIR)/installation/$(PRODUCTNAME_no_spaces)/msi/install/*/*.msi \
 	&& touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
@@ -171,7 +171,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signin
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d Collabora\ Office\ $(LIBO_VERSION_MAJOR)-$(LIBO_VERSION_PATCH)\ Helppack \
+			-d Collabora\ Office\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)\ Helppack \
 			$(WORKDIR)/installation/$(PRODUCTNAME_no_spaces)_helppack/msi/install/*/*.msi \
 	&& touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
@@ -185,7 +185,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.don
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d Collabora\ Office\ $(LIBO_VERSION_MAJOR)-$(LIBO_VERSION_PATCH)\ SDK \
+			-d Collabora\ Office\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)\ SDK \
 			$(WORKDIR)/installation/$(PRODUCTNAME_no_spaces)_SDK/msi/install/*/*.msi \
 	&& touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)

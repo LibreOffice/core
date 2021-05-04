@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([Collabora Office],[2021.0.0.1],[],[],[https://collaboraoffice.com/])
+AC_INIT([Collabora Office],[21.05.1.1],[],[],[https://collaboraoffice.com/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -441,7 +441,7 @@ test -n "$LIBO_VERSION_SUFFIX" && LIBO_VERSION_SUFFIX=".$LIBO_VERSION_SUFFIX"
 # CFBundleShortVersionString at
 # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
 
-MACOSX_BUNDLE_SHORTVERSION=$LIBO_VERSION_MAJOR.$LIBO_VERSION_PATCH
+MACOSX_BUNDLE_SHORTVERSION=$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR.`expr $LIBO_VERSION_MICRO '*' 1000 + $LIBO_VERSION_PATCH`
 MACOSX_BUNDLE_VERSION=$MACOSX_BUNDLE_SHORTVERSION
 
 AC_SUBST(LIBO_VERSION_MAJOR)
@@ -465,7 +465,7 @@ dnl ===================================================================
 dnl Product version
 dnl ===================================================================
 AC_MSG_CHECKING([for product version])
-PRODUCTVERSION="$LIBO_VERSION_MAJOR"
+PRODUCTVERSION="$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR"
 AC_MSG_RESULT([$PRODUCTVERSION])
 AC_SUBST(PRODUCTVERSION)
 
