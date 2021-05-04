@@ -1062,24 +1062,24 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
             if ( bEmptyPara ||
                  ( ( pAttr->GetEnd() > nStartPos ) && ( pAttr->GetStart() < nEndPos ) ) )
             {
-                std::unique_ptr<XEditAttribute> pX = pTxtObj->mpImpl->CreateAttrib(*pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd());
+                XEditAttribute aX = pTxtObj->mpImpl->CreateAttrib(*pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd());
                 // Possibly Correct ...
                 if ( ( nNode == nStartNode ) && ( nStartPos != 0 ) )
                 {
-                    pX->GetStart() = ( pX->GetStart() > nStartPos ) ? pX->GetStart()-nStartPos : 0;
-                    pX->GetEnd() = pX->GetEnd() - nStartPos;
+                    aX.GetStart() = ( aX.GetStart() > nStartPos ) ? aX.GetStart()-nStartPos : 0;
+                    aX.GetEnd() = aX.GetEnd() - nStartPos;
 
                 }
                 if ( nNode == nEndNode )
                 {
-                    if ( pX->GetEnd() > (nEndPos-nStartPos) )
-                        pX->GetEnd() = nEndPos-nStartPos;
+                    if ( aX.GetEnd() > (nEndPos-nStartPos) )
+                        aX.GetEnd() = nEndPos-nStartPos;
                 }
-                DBG_ASSERT( pX->GetEnd() <= (nEndPos-nStartPos), "CreateBinTextObject: Attribute too long!" );
-                if ( !pX->GetLen() && !bEmptyPara )
-                    pTxtObj->mpImpl->DestroyAttrib(std::move(pX));
+                DBG_ASSERT( aX.GetEnd() <= (nEndPos-nStartPos), "CreateBinTextObject: Attribute too long!" );
+                if ( !aX.GetLen() && !bEmptyPara )
+                    pTxtObj->mpImpl->DestroyAttrib(aX);
                 else
-                    rCAttriblist.push_back(std::move(pX));
+                    rCAttriblist.push_back(std::move(aX));
             }
             nAttr++;
             pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
@@ -1225,7 +1225,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             bool bUpdateFields = false;
             for (size_t nAttr = 0; nAttr < nNewAttribs; ++nAttr)
             {
-                const XEditAttribute& rX = *pC->GetCharAttribs()[nAttr];
+                const XEditAttribute& rX = pC->GetCharAttribs()[nAttr];
                 // Can happen when paragraphs > 16K, it is simply wrapped.
                     //TODO! Still true, still needed?
                 if ( rX.GetEnd() <= aPaM.GetNode()->Len() )
