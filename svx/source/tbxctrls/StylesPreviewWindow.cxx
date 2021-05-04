@@ -69,7 +69,12 @@ void StyleStatusListener::StateChanged(SfxItemState /*eState*/, const SfxPoolIte
 {
     const SfxTemplateItem* pStateItem = dynamic_cast<const SfxTemplateItem*>(pState);
     if (pStateItem)
-        m_pPreviewControl->Select(pStateItem->GetStyleName());
+    {
+        if (pStateItem->GetStyleIdentifier().isEmpty())
+            m_pPreviewControl->Select(pStateItem->GetStyleName());
+        else
+            m_pPreviewControl->Select(pStateItem->GetStyleIdentifier());
+    }
 }
 
 StylePoolChangeListener::StylePoolChangeListener(StylesPreviewWindow_Base* pPreviewControl)
