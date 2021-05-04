@@ -163,9 +163,12 @@ OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rStrin
 
 ScTypedCaseStrSet::const_iterator findTextAll(
     const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator const & itPos,
-    const OUString& rStart, ::std::vector< OUString > &rResultVec, bool bBack)
+    const OUString& rStart, ::std::vector< OUString > &rResultVec, bool bBack, size_t nMax = 0)
 {
     rResultVec.clear(); // clear contents
+
+    if (!rDataSet.size())
+        return rDataSet.end();
 
     size_t nCount = 0;
     ScTypedCaseStrSet::const_iterator retit;
@@ -217,6 +220,8 @@ ScTypedCaseStrSet::const_iterator findTextAll(
                 std::advance(retit, nPos);
             }
             ++nCount;
+            if (nMax > 0 && nCount >= nMax)
+                break;
         }
     }
     else // Forwards
@@ -249,6 +254,8 @@ ScTypedCaseStrSet::const_iterator findTextAll(
             if ( nCount == 0 )
                 retit = it; // remember first match iterator
             ++nCount;
+            if (nMax > 0 && nCount >= nMax)
+                break;
         }
     }
 
@@ -1963,12 +1970,16 @@ void ScInputHandler::UseColData() // When typing
     if (aText.isEmpty())
         return;
 
+    std::vector< OUString > aResultVec;
     OUString aNew;
     miAutoPosColumn = pColumnData->end();
-    miAutoPosColumn = findText(*pColumnData, miAutoPosColumn, aText, aNew, false);
-    if (miAutoPosColumn == pColumnData->end())
+    miAutoPosColumn = findTextAll(*pColumnData, miAutoPosColumn, aText, aResultVec, false, 2);
+    bool bShowCompletion = (aResultVec.size() == 1);
+    if (!bShowCompletion)
         return;
 
+    assert(miAutoPosColumn != pColumnData->end());
+    aNew = aResultVec[0];
     // Strings can contain line endings (e.g. due to dBase import),
     // which would result in multiple paragraphs here, which is not desirable.
     //! Then GetExactMatch doesn't work either
