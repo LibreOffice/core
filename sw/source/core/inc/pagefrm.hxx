@@ -36,6 +36,22 @@ namespace vcl { class Font; }
 class SwSortedObjs;
 class SwAnchoredObject;
 
+enum class SwPageFrameInvFlags : sal_uInt8
+{
+    NONE = 0x00,
+    InvalidatePrt = 0x01,
+    SetCompletePaint = 0x02,
+    InvalidateNextPos = 0x04,
+    PrepareHeader = 0x08,
+    PrepareFooter = 0x10,
+    CheckGrid = 0x20,
+    InvalidateGrid = 0x40,
+};
+
+namespace o3tl {
+    template<> struct typed_flags<SwPageFrameInvFlags> : is_typed_flags<SwPageFrameInvFlags, 0x007f> {};
+}
+
 /// A page of the document layout. Upper frame is expected to be an SwRootFrame
 /// instance. At least an SwBodyFrame lower is expected.
 class SAL_DLLPUBLIC_RTTI SwPageFrame final: public SwFootnoteBossFrame
@@ -65,7 +81,7 @@ class SAL_DLLPUBLIC_RTTI SwPageFrame final: public SwFootnoteBossFrame
 
     static const sal_Int8 snShadowPxWidth;
 
-    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
+    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, SwPageFrameInvFlags &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
 
     /// Adapt the max. footnote height in each single column

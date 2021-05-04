@@ -514,7 +514,7 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         if(auto pSh = getRootFrame()->GetCurrShell())
             pSh->SetFirstVisPageInvalid();
 
-        sal_uInt8 nInvFlags = 0;
+        SwPageFrameInvFlags eInvFlags = SwPageFrameInvFlags::NONE;
         if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
         {
             auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
@@ -527,7 +527,7 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
             SwAttrSetChg aNewSet(rNewSetChg);
             do
             {
-                UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
+                UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
                 pOItem = aOIter.NextItem();
                 pNItem = aNIter.NextItem();
             } while(pNItem);
@@ -535,30 +535,30 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
                 SwLayoutFrame::SwClientNotify(rModify, sw::LegacyModifyHint(&aOldSet, &aNewSet));
         }
         else
-            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
+            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
 
-        if (nInvFlags == 0)
+        if (eInvFlags == SwPageFrameInvFlags::NONE)
             return;
 
         InvalidatePage( this );
-        if(nInvFlags & 0x01)
+        if(eInvFlags & SwPageFrameInvFlags::InvalidatePrt)
             InvalidatePrt_();
-        if(nInvFlags & 0x02)
+        if(eInvFlags & SwPageFrameInvFlags::SetCompletePaint)
             SetCompletePaint();
-        if(nInvFlags & 0x04 && GetNext() )
+        if(eInvFlags & SwPageFrameInvFlags::InvalidateNextPos && GetNext() )
             GetNext()->InvalidatePos();
-        if(nInvFlags & 0x08)
+        if(eInvFlags & SwPageFrameInvFlags::PrepareHeader)
             PrepareHeader();
-        if(nInvFlags & 0x10)
+        if(eInvFlags & SwPageFrameInvFlags::PrepareFooter)
             PrepareFooter();
-        if(nInvFlags & 0x20)
-            CheckGrid(nInvFlags & 0x40);
+        if(eInvFlags & SwPageFrameInvFlags::CheckGrid)
+            CheckGrid(bool(eInvFlags & SwPageFrameInvFlags::InvalidateGrid));
     } else
         SwFrame::SwClientNotify(rModify, rHint);
 }
 
 void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
-                             sal_uInt8 &rInvFlags,
+                             SwPageFrameInvFlags &rInvFlags,
                              SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
     bool bClear = true;
@@ -602,19 +602,19 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 SwLayoutFrame *pB = FindBodyCont();
                 assert(pB && "Page without Body.");
                 pB->ChgColumns( rOldCol, rNewCol );
-                rInvFlags |= 0x20;
+                rInvFlags |= static_cast<SwPageFrameInvFlags>(0x20);
             }
 
             // 2. header and footer:
             const SwFormatHeader &rOldH = pOldFormat->GetHeader();
             const SwFormatHeader &rNewH = pNewFormat->GetHeader();
             if( rOldH != rNewH )
-                rInvFlags |= 0x08;
+                rInvFlags |= static_cast<SwPageFrameInvFlags>(0x08);
 
             const SwFormatFooter &rOldF = pOldFormat->GetFooter();
             const SwFormatFooter &rNewF = pNewFormat->GetFooter();
             if( rOldF != rNewF )
-                rInvFlags |= 0x10;
+                rInvFlags |= static_cast<SwPageFrameInvFlags>(0x10);
             CheckDirChange();
 
             [[fallthrough]];
@@ -665,9 +665,9 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                     IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
                 pSh->InvalidateWindows( aOldRectWithBorderAndShadow );
             }
-            rInvFlags |= 0x03;
+            rInvFlags |= static_cast<SwPageFrameInvFlags>(0x03);
             if ( aOldPageFrameRect.Height() != getFrameArea().Height() )
-                rInvFlags |= 0x04;
+                rInvFlags |= static_cast<SwPageFrameInvFlags>(0x04);
         }
         break;
 
@@ -678,19 +678,19 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 SwLayoutFrame *pB = FindBodyCont();
                 assert(pB); //page without body
                 pB->ChgColumns( *static_cast<const SwFormatCol*>(pOld), *static_cast<const SwFormatCol*>(pNew) );
-                rInvFlags |= 0x22;
+                rInvFlags |= static_cast<SwPageFrameInvFlags>(0x22);
             }
         break;
 
         case RES_HEADER:
-            rInvFlags |= 0x08;
+            rInvFlags |= static_cast<SwPageFrameInvFlags>(0x08);
             break;
 
         case RES_FOOTER:
-            rInvFlags |= 0x10;
+            rInvFlags |= static_cast<SwPageFrameInvFlags>(0x10);
             break;
         case RES_TEXTGRID:
-            rInvFlags |= 0x60;
+            rInvFlags |= static_cast<SwPageFrameInvFlags>(0x60);
             break;
         case RES_FRAMEDIR :
             CheckDirChange();
