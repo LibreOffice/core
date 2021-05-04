@@ -106,7 +106,7 @@ namespace
     {
         const ::basegfx::B2DSize aWidth( rLineInfo.GetWidth(), 0 );
         o_rStrokeAttributes.StrokeWidth =
-            (rParms.mrStates.getState().mapModeTransform * aWidth).getX();
+            (rParms.mrStates.getState().mapModeTransform * aWidth).getLength();
 
         // setup reasonable defaults
         o_rStrokeAttributes.MiterLimit   = 15.0; // 1.0 was no good default; GDI+'s limit is 10.0, our's is 15.0
