@@ -13537,7 +13537,6 @@ private:
     std::unique_ptr<IMHandler> m_xIMHandler;
     cairo_surface_t* m_pSurface;
     gulong m_nDrawSignalId;
-    gulong m_nStyleUpdatedSignalId;
     gulong m_nQueryTooltip;
     gulong m_nPopupMenu;
     gulong m_nScrollEvent;
@@ -13581,12 +13580,6 @@ private:
         m_xDevice->SetOutputSizePixel(Size(nWidth, nHeight));
         m_pSurface = get_underlying_cairo_surface(*m_xDevice);
         GtkInstanceWidget::signal_size_allocate(nWidth, nHeight);
-    }
-    static void signalStyleUpdated(GtkWidget*, gpointer widget)
-    {
-        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
-        SolarMutexGuard aGuard;
-        return pThis->signal_style_updated();
     }
     void signal_style_updated()
     {
@@ -13648,6 +13641,7 @@ private:
         GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
         return pThis->signal_scroll(pEvent);
     }
+    DECL_LINK(SettingsChangedHdl, VclSimpleEvent&, void);
 public:
     GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder, const a11yref& rA11y, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pDrawingArea), pBuilder, bTakeOwnership)
@@ -13657,7 +13651,6 @@ public:
         , m_xDevice(DeviceFormat::DEFAULT)
         , m_pSurface(nullptr)
         , m_nDrawSignalId(g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(signalDraw), this))
-        , m_nStyleUpdatedSignalId(g_signal_connect(m_pDrawingArea,"style-updated", G_CALLBACK(signalStyleUpdated), this))
         , m_nQueryTooltip(g_signal_connect(m_pDrawingArea, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
         , m_nPopupMenu(g_signal_connect(m_pDrawingArea, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_nScrollEvent(g_signal_connect(m_pDrawingArea, "scroll-event", G_CALLBACK(signalScroll), this))
@@ -13665,6 +13658,8 @@ public:
         gtk_widget_set_has_tooltip(m_pWidget, true);
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
         m_xDevice->EnableRTL(get_direction());
+
+        Application::AddEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
     }
 
     AtkObject* GetAtkObject(AtkObject* pDefaultAccessible)
@@ -13802,6 +13797,8 @@ public:
 
     virtual ~GtkInstanceDrawingArea() override
     {
+        Application::RemoveEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
+
         g_object_steal_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea");
         if (m_pAccessible)
             g_object_unref(m_pAccessible);
@@ -13811,7 +13808,6 @@ public:
         g_signal_handler_disconnect(m_pDrawingArea, m_nScrollEvent);
         g_signal_handler_disconnect(m_pDrawingArea, m_nPopupMenu);
         g_signal_handler_disconnect(m_pDrawingArea, m_nQueryTooltip);
-        g_signal_handler_disconnect(m_pDrawingArea, m_nStyleUpdatedSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nDrawSignalId);
     }
 
@@ -13832,6 +13828,16 @@ public:
         m_aMouseReleaseHdl.Call(aEvent);
     }
 };
+
+IMPL_LINK(GtkInstanceDrawingArea, SettingsChangedHdl, VclSimpleEvent&, rEvent, void)
+{
+    if (rEvent.GetId() != VclEventId::ApplicationDataChanged)
+        return;
+
+    DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(rEvent).GetData());
+    if (pData->GetType() == DataChangedEventType::SETTINGS)
+        signal_style_updated();
+}
 
 class IMHandler
 {
