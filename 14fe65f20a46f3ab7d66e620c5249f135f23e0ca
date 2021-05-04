@@ -16,6 +16,24 @@
       "revId": "14fe65f20a46f3ab7d66e620c5249f135f23e0ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d11bfb07_149dc598",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2762,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-04T10:36:32Z",
+      "side": 0,
+      "message": "OK. Can do it.\nThere are several loops like that one.\nGonna need some time to study this issue.",
+      "parentUuid": "1a9757fa_02500697",
+      "revId": "14fe65f20a46f3ab7d66e620c5249f135f23e0ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
