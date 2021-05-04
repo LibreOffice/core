@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b796980_37db24c4",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-04T09:47:25Z",
+      "side": 1,
+      "message": "This could be std::abs",
+      "range": {
+        "startLine": 1008,
+        "startChar": 52,
+        "endLine": 1008,
+        "endChar": 69
+      },
+      "revId": "862cd47d230e40ed7d1581a0db57f8db479dff8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
