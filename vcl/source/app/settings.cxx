@@ -59,12 +59,12 @@ struct ImplMouseData
 {
     MouseSettingsOptions            mnOptions           = MouseSettingsOptions::NONE;
     sal_uInt64                      mnDoubleClkTime     = 500;
-    tools::Long                            mnDoubleClkWidth    = 2;
-    tools::Long                            mnDoubleClkHeight   = 2;
-    tools::Long                            mnStartDragWidth    = 2 ;
-    tools::Long                            mnStartDragHeight   = 2;
-    sal_uLong                       mnButtonRepeat      = 90;
-    sal_uLong                       mnMenuDelay         = 150;
+    sal_Int32                       mnDoubleClkWidth    = 2;
+    sal_Int32                       mnDoubleClkHeight   = 2;
+    sal_Int32                       mnStartDragWidth    = 2 ;
+    sal_Int32                       mnStartDragHeight   = 2;
+    sal_Int32                       mnButtonRepeat      = 90;
+    sal_Int32                       mnMenuDelay         = 150;
     MouseFollowFlags                mnFollow            = MouseFollowFlags::Menu;
     MouseMiddleButtonAction         mnMiddleButtonAction= MouseMiddleButtonAction::AutoScroll;
     MouseWheelBehaviour             mnWheelBehavior     = MouseWheelBehaviour::ALWAYS;
@@ -154,12 +154,12 @@ struct ImplStyleData
     vcl::Font                       maIconFont;
     vcl::Font                       maTabFont;
     vcl::Font                       maGroupFont;
-    tools::Long                            mnTitleHeight;
-    tools::Long                            mnFloatTitleHeight;
-    tools::Long                            mnScrollBarSize;
-    tools::Long                            mnSpinSize;
-    tools::Long                            mnCursorSize;
-    tools::Long                            mnAntialiasedMin;
+    sal_Int32                       mnTitleHeight;
+    sal_Int32                       mnFloatTitleHeight;
+    sal_Int32                       mnScrollBarSize;
+    sal_Int32                       mnSpinSize;
+    sal_Int32                       mnCursorSize;
+    sal_Int32                       mnAntialiasedMin;
     sal_uInt64                      mnCursorBlinkTime;
     DragFullOptions                 mnDragFullOptions;
     SelectionOptions                mnSelectionOptions;
@@ -178,7 +178,7 @@ struct ImplStyleData
     TriState                        meUseImagesInMenus;
     bool                            mnUseFlatBorders;
     bool                            mbPreferredUseImagesInMenus;
-    tools::Long                            mnMinThumbSize;
+    sal_Int32                       mnMinThumbSize;
     std::shared_ptr<vcl::IconThemeScanner>
                                     mIconThemeScanner;
     std::shared_ptr<vcl::IconThemeSelector>
@@ -220,7 +220,7 @@ struct ImplMiscData
 
 struct ImplHelpData
 {
-    sal_uLong                           mnTipTimeout = 3000;
+    sal_Int32                       mnTipTimeout = 3000;
 };
 
 struct ImplAllSettingsData
@@ -270,52 +270,52 @@ MouseSettings::GetDoubleClickTime() const
 }
 
 void
-MouseSettings::SetDoubleClickWidth( tools::Long nDoubleClkWidth )
+MouseSettings::SetDoubleClickWidth( sal_Int32 nDoubleClkWidth )
 {
     CopyData();
     mxData->mnDoubleClkWidth = nDoubleClkWidth;
 }
 
-tools::Long
+sal_Int32
 MouseSettings::GetDoubleClickWidth() const
 {
     return mxData->mnDoubleClkWidth;
 }
 
 void
-MouseSettings::SetDoubleClickHeight( tools::Long nDoubleClkHeight )
+MouseSettings::SetDoubleClickHeight( sal_Int32 nDoubleClkHeight )
 {
     CopyData();
     mxData->mnDoubleClkHeight = nDoubleClkHeight;
 }
 
-tools::Long
+sal_Int32
 MouseSettings::GetDoubleClickHeight() const
 {
     return mxData->mnDoubleClkHeight;
 }
 
 void
-MouseSettings::SetStartDragWidth( tools::Long nDragWidth )
+MouseSettings::SetStartDragWidth( sal_Int32 nDragWidth )
 {
     CopyData();
     mxData->mnStartDragWidth = nDragWidth;
 }
 
-tools::Long
+sal_Int32
 MouseSettings::GetStartDragWidth() const
 {
     return mxData->mnStartDragWidth;
 }
 
 void
-MouseSettings::SetStartDragHeight( tools::Long nDragHeight )
+MouseSettings::SetStartDragHeight( sal_Int32 nDragHeight )
 {
     CopyData();
     mxData->mnStartDragHeight = nDragHeight;
 }
 
-tools::Long
+sal_Int32
 MouseSettings::GetStartDragHeight() const
 {
     return mxData->mnStartDragHeight;
@@ -339,45 +339,45 @@ MouseSettings::GetContextMenuClicks()
     return 1;
 }
 
-sal_uLong
+sal_Int32
 MouseSettings::GetScrollRepeat()
 {
     return 100;
 }
 
-sal_uLong
+sal_Int32
 MouseSettings::GetButtonStartRepeat()
 {
     return 370;
 }
 
 void
-MouseSettings::SetButtonRepeat( sal_uLong nRepeat )
+MouseSettings::SetButtonRepeat( sal_Int32 nRepeat )
 {
     CopyData();
     mxData->mnButtonRepeat = nRepeat;
 }
 
-sal_uLong
+sal_Int32
 MouseSettings::GetButtonRepeat() const
 {
     return mxData->mnButtonRepeat;
 }
 
-sal_uLong
+sal_Int32
 MouseSettings::GetActionDelay()
 {
     return 250;
 }
 
 void
-MouseSettings::SetMenuDelay( sal_uLong nDelay )
+MouseSettings::SetMenuDelay( sal_Int32 nDelay )
 {
     CopyData();
     mxData->mnMenuDelay = nDelay;
 }
 
-sal_uLong
+sal_Int32
 MouseSettings::GetMenuDelay() const
 {
     return mxData->mnMenuDelay;
@@ -1862,91 +1862,91 @@ StyleSettings::GetTabFont() const
     return mxData->maTabFont;
 }
 
-tools::Long
+sal_Int32
 StyleSettings::GetBorderSize()
 {
     return 1;
 }
 
 void
-StyleSettings::SetTitleHeight( tools::Long nSize )
+StyleSettings::SetTitleHeight( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnTitleHeight = nSize;
 }
 
-tools::Long
+sal_Int32
 StyleSettings::GetTitleHeight() const
 {
     return mxData->mnTitleHeight;
 }
 
 void
-StyleSettings::SetFloatTitleHeight( tools::Long nSize )
+StyleSettings::SetFloatTitleHeight( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnFloatTitleHeight = nSize;
 }
 
-tools::Long
+sal_Int32
 StyleSettings::GetFloatTitleHeight() const
 {
     return mxData->mnFloatTitleHeight;
 }
 
 void
-StyleSettings::SetScrollBarSize( tools::Long nSize )
+StyleSettings::SetScrollBarSize( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnScrollBarSize = nSize;
 }
 
-tools::Long
+sal_Int32
 StyleSettings::GetScrollBarSize() const
 {
     return mxData->mnScrollBarSize;
 }
 
 void
-StyleSettings::SetMinThumbSize( tools::Long nSize )
+StyleSettings::SetMinThumbSize( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnMinThumbSize = nSize;
 }
 
-tools::Long
+sal_Int32
 StyleSettings::GetMinThumbSize() const
 {
     return mxData->mnMinThumbSize;
 }
 
 void
-StyleSettings::SetSpinSize( tools::Long nSize )
+StyleSettings::SetSpinSize( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnSpinSize = nSize;
 }
 
-tools::Long
+sal_Int32
 StyleSettings::GetSpinSize() const
 {
     return mxData->mnSpinSize;
 }
 
-tools::Long
+sal_Int32
 StyleSettings::GetSplitSize()
 {
     return 3;
 }
 
 void
-StyleSettings::SetCursorSize( tools::Long nSize )
+StyleSettings::SetCursorSize( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnCursorSize = nSize;
 }
 
-tools::Long
+sal_Int32
 StyleSettings::GetCursorSize() const
 {
     return mxData->mnCursorSize;
@@ -1962,7 +1962,7 @@ StyleSettings::SetCursorBlinkTime( sal_uInt64 nBlinkTime )
 sal_uInt64
 StyleSettings::GetCursorBlinkTime() const
 {
-    return static_cast<tools::Long>(mxData->mnCursorBlinkTime);
+    return mxData->mnCursorBlinkTime;
 }
 
 void
@@ -2005,13 +2005,13 @@ StyleSettings::GetDisplayOptions() const
 }
 
 void
-StyleSettings::SetAntialiasingMinPixelHeight( tools::Long nMinPixel )
+StyleSettings::SetAntialiasingMinPixelHeight( sal_Int32 nMinPixel )
 {
     CopyData();
     mxData->mnAntialiasedMin = nMinPixel;
 }
 
-sal_uLong
+sal_Int32
 StyleSettings::GetAntialiasingMinPixelHeight() const
 {
     return mxData->mnAntialiasedMin;
@@ -2689,14 +2689,14 @@ bool HelpSettings::operator ==( const HelpSettings& rSet ) const
     return (mxData->mnTipTimeout      == rSet.mxData->mnTipTimeout );
 }
 
-sal_uLong
+sal_Int32
 HelpSettings::GetTipDelay()
 {
     return 500;
 }
 
 void
-HelpSettings::SetTipTimeout( sal_uLong nTipTimeout )
+HelpSettings::SetTipTimeout( sal_Int32 nTipTimeout )
 {
     // copy if other references exist
     if (mxData.use_count() > 1)
@@ -2706,13 +2706,13 @@ HelpSettings::SetTipTimeout( sal_uLong nTipTimeout )
     mxData->mnTipTimeout = nTipTimeout;
 }
 
-sal_uLong
+sal_Int32
 HelpSettings::GetTipTimeout() const
 {
     return mxData->mnTipTimeout;
 }
 
-sal_uLong
+sal_Int32
 HelpSettings::GetBalloonDelay()
 {
     return 1500;
