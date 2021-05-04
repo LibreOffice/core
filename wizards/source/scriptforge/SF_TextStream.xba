@@ -41,6 +41,7 @@ REM ================================================================== EXCEPTION
 
 Const FILENOTOPENERROR			=	&quot;FILENOTOPENERROR&quot;		&apos;	The file is already closed
 Const FILEOPENMODEERROR			=	&quot;FILEOPENMODEERROR&quot;		&apos;	The file is open in incompatible mode
+Const ENDOFFILEERROR			=	&quot;ENDOFFILEERROR&quot;		&apos;	When file was read, an end-of-file was encountered
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -341,8 +342,7 @@ Finally:
 Catch:
 	GoTo Finally
 CatchEOF:
-	&apos;TODO: SF_Exception.RaiseFatal(FILEWRITEMODEERROR, cstThisSub)
-	MsgBox &quot;END OF FILE ERROR !!&quot;
+	SF_Exception.RaiseFatal(ENDOFFILEERROR, FileName)
 	GoTo Finally
 End Function    &apos;   ScriptForge.SF_TextStream.ReadAll
 
@@ -406,8 +406,7 @@ Finally:
 Catch:
 	GoTo Finally
 CatchEOF:
-	&apos;TODO: SF_Exception.RaiseFatal(FILEWRITEMODEERROR, cstThisSub)
-	MsgBox &quot;END OF FILE ERROR !!&quot;
+	SF_Exception.RaiseFatal(ENDOFFILEERROR, FileName)
 	GoTo Finally
 End Function    &apos;   ScriptForge.SF_TextStream.ReadLine
 
@@ -486,8 +485,7 @@ Finally:
 Catch:
 	GoTo Finally
 CatchEOF:
-	&apos;TODO: SF_Exception.RaiseFatal(FILEWRITEMODEERROR, cstThisSub)
-	MsfBox &quot;END OF FILE ERROR !!&quot;
+	SF_Exception.RaiseFatal(ENDOFFILEERROR, FileName)
 	GoTo Finally
 End Sub		    &apos;   ScriptForge.SF_TextStream.SkipLine
 

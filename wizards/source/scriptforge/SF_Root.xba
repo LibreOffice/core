@@ -647,6 +647,13 @@ Try:
 									&amp;	&quot;%1: A file name\n&quot; _
 									&amp;	&quot;%2: READ, WRITE or APPEND&quot; _
 					)
+	&apos;	SF_TextStream.ReadLine, ReadAll, SkipLine
+			.AddText(	Context := &quot;ENDOFFILE&quot; _
+						, MsgId := &quot;The requested file read operation could not be completed because an unexpected end-of-file was encountered.\n\n&quot; _
+									&amp; &quot;File name = &apos;%1&apos;&quot; _
+						, Comment :=	&quot;SF_TextStream.ReadLine/ReadAll/SkipLine error message\n&quot; _
+									&amp;	&quot;%1: A file name&quot; _
+					)
 	&apos;	SF_UI.Document
 			.AddText(	Context := &quot;DOCUMENT&quot; _
 						, MsgId := &quot;The requested document could not be found.\n\n&quot; _

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2021-05-02 17:38:42\n"
+"POT-Creation-Date: 2021-05-04 14:09:55\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -512,6 +512,17 @@ msgid  ""
 "\n"
 "File name = '%1'\n"
 "Open mode = %2"
+msgstr ""
+
+#. SF_TextStream.ReadLine/ReadAll/SkipLine error message
+#. %1: A file name
+#, kde-format
+msgctxt "ENDOFFILE"
+msgid  ""
+"The requested file read operation could not be completed because an "
+"unexpected end-of-file was encountered.\n"
+"\n"
+"File name = '%1'"
 msgstr ""
 
 #. SF_UI.GetDocument error message
