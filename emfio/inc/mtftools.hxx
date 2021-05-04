@@ -273,9 +273,9 @@ namespace emfio
     public:
         WinMtfClipPath() : maClip() {};
 
-        void        setClipPath(const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode);
-        void        intersectClipRect(const tools::Rectangle& rRect);
-        void        excludeClipRect(const tools::Rectangle& rRect);
+        void        setClipPath(const basegfx::B2DPolyPolygon&, sal_Int32 nClippingMode);
+        void        intersectClip(const basegfx::B2DPolyPolygon& rPolyPolygon);
+        void        excludeClip(const basegfx::B2DPolyPolygon& rPolyPolygon);
         void        moveClipRegion(const Size& rSize);
         void        setDefaultClipPath();
 

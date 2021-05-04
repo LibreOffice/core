@@ -53,6 +53,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestRectangleWithModifyWorldTransform();
     void TestChordWithModifyWorldTransform();
     void TestEllipseWithSelectClipPath();
+    void TestEllipseXformIntersectClipRect();
     void TestDrawPolyLine16WithClip();
     void TestFillRegion();
     void TestCreatePen();
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(TestRectangleWithModifyWorldTransform);
     CPPUNIT_TEST(TestChordWithModifyWorldTransform);
     CPPUNIT_TEST(TestEllipseWithSelectClipPath);
+    CPPUNIT_TEST(TestEllipseXformIntersectClipRect);
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
     CPPUNIT_TEST(TestCreatePen);
@@ -366,6 +368,21 @@ void Test::TestEllipseWithSelectClipPath()
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/group/mask/polygonstroke", 1);
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/group/mask/polygonstroke[1]/polygon", "353,353 2825,353 2825,1410 353,1410");
+}
+
+void Test::TestEllipseXformIntersectClipRect()
+{
+    // EMF import test with records: EXTCREATEPEN, CREATEBRUSHINDIRECT, MODIFYWORLDTRANSFORM, INTERSECTCLIPRECT, ELLIPSE
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEllipseXformIntersectClipRect.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon", "path", "m0 0h3000v2000h-3000z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group/mask/polypolygon", "path", "m370 152 1128-409 592 1623-1128 410z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group/mask/polypolygoncolor/polypolygon", "path", "m3565 155-58-55-205-150-90-42-124-30-392-45-368 21-211 39-598 217-187 105-21 46-121 81-66 24-87 69-272 287-75 102-42 90-61 247-9 79 97 265 57 54 205 150 91 42 124 31 392 45 112-3 467-58 597-217 187-105 296-220 271-286 76-103 42-90 60-247 9-78z");
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/group/mask/polygonstroke/polygon", "3565,155 3507,100 3302,-50 3212,-92 3088,-122 2696,-167 2328,-146 2117,-107 1519,110 1332,215 1311,261 1190,342 1124,366 1037,435 765,722 690,824 648,914 587,1161 578,1240 675,1505 732,1559 937,1709 1028,1751 1152,1782 1544,1827 1656,1824 2123,1766 2720,1549 2907,1444 3203,1224 3474,938 3550,835 3592,745 3652,498 3661,420");
 }
 
 void Test::TestDrawPolyLine16WithClip()

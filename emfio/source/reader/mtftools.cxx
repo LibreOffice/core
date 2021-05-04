@@ -66,19 +66,18 @@ namespace emfio
         return rInStream;
     }
 
-    void WinMtfClipPath::intersectClipRect( const tools::Rectangle& rRect )
+    void WinMtfClipPath::intersectClip( const basegfx::B2DPolyPolygon& rPolyPolygon )
     {
-        maClip.intersectRange(vcl::unotools::b2DRectangleFromRectangle(rRect));
+        maClip.intersectPolyPolygon(rPolyPolygon);
     }
 
-    void WinMtfClipPath::excludeClipRect( const tools::Rectangle& rRect )
+    void WinMtfClipPath::excludeClip( const basegfx::B2DPolyPolygon& rPolyPolygon )
     {
-        maClip.subtractRange(vcl::unotools::b2DRectangleFromRectangle(rRect));
+        maClip.subtractPolyPolygon(rPolyPolygon);
     }
 
-    void WinMtfClipPath::setClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )
+    void WinMtfClipPath::setClipPath( const basegfx::B2DPolyPolygon& rB2DPoly, sal_Int32 nClippingMode )
     {
-        const basegfx::B2DPolyPolygon& rB2DPoly=rPolyPolygon.getB2DPolyPolygon();
         switch ( nClippingMode )
         {
             case RGN_OR :
@@ -1014,7 +1013,15 @@ namespace emfio
         {
             return; // empty rectangles cause trouble
         }
-        maClipPath.intersectClipRect( ImplMap( rRect ) );
+        Point aPoints[] { Point(rRect.Left(), rRect.Top()),
+                          Point(rRect.Right(), rRect.Top()),
+                          Point(rRect.Right(), rRect.Bottom()),
+                          Point(rRect.Left(), rRect.Bottom()) };
+        tools::Polygon aPoly(4, aPoints);
+        aPoly = ImplMap( aPoly );
+        aPoly.Optimize( PolyOptimizeFlags::CLOSE );
+        tools::PolyPolygon aPolyPolyRect( aPoly );
+        maClipPath.intersectClip( aPolyPolyRect.getB2DPolyPolygon() );
     }
 
     void MtfTools::ExcludeClipRect( const tools::Rectangle& rRect )
@@ -1022,7 +1029,16 @@ namespace emfio
         if (utl::ConfigManager::IsFuzzing())
             return;
         mbClipNeedsUpdate=true;
-        maClipPath.excludeClipRect( ImplMap( rRect ) );
+
+        Point aPoints[] { Point(rRect.Left(), rRect.Top()),
+                          Point(rRect.Right(), rRect.Top()),
+                          Point(rRect.Right(), rRect.Bottom()),
+                          Point(rRect.Left(), rRect.Bottom()) };
+        tools::Polygon aPoly(4, aPoints);
+        aPoly = ImplMap( aPoly );
+        aPoly.Optimize( PolyOptimizeFlags::CLOSE );
+        tools::PolyPolygon aPolyPolyRect( aPoly );
+        maClipPath.excludeClip( aPolyPolyRect.getB2DPolyPolygon() );
     }
 
     void MtfTools::MoveClipRegion( const Size& rSize )
@@ -1047,7 +1063,7 @@ namespace emfio
             else
                 aPolyPolygon = ImplMap(aPolyPolygon);
         }
-        maClipPath.setClipPath(aPolyPolygon, nClippingMode);
+        maClipPath.setClipPath(aPolyPolygon.getB2DPolyPolygon(), nClippingMode);
     }
 
     void MtfTools::SetDefaultClipPath()
