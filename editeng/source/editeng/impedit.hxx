@@ -763,6 +763,17 @@ private:
 
     void                SetValidPaperSize( const Size& rSz );
 
+    tools::Long getXDirectionAware(const Point& pt) const;
+    tools::Long getYDirectionAware(const Point& pt) const;
+    tools::Long getWidthDirectionAware(const Size& sz) const;
+    tools::Long getHeightDirectionAware(const Size& sz) const;
+    void adjustXDirectionAware(Point& pt, tools::Long x) const;
+    void adjustYDirectionAware(Point& pt, tools::Long y) const;
+    void setXDirectionAware(Point& pt, tools::Long x) const;
+    void setYDirectionAware(Point& pt, tools::Long y) const;
+    bool isYOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
+    bool isXOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
+
     css::uno::Reference < css::i18n::XBreakIterator > const & ImplGetBreakIterator() const;
     css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > const & ImplGetInputSequenceChecker() const;
 
