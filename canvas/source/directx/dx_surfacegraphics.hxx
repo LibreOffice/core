@@ -30,7 +30,7 @@ namespace dxcanvas
     GraphicsSharedPtr returned has a deleter that does all the
     necessary DX cleanup work).
 */
-GraphicsSharedPtr createSurfaceGraphics(const COMReference<surface_type>& rSurface);
+GraphicsSharedPtr createSurfaceGraphics(const sal::systools::COMReference<surface_type>& rSurface);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

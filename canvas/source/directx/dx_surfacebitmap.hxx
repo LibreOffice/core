@@ -45,7 +45,7 @@ namespace dxcanvas
         virtual ::basegfx::B2IVector      getSize() const override;
         virtual bool                      hasAlpha() const override;
 
-        COMReference<surface_type>              getSurface() const { return mpSurface; }
+        sal::systools::COMReference<surface_type> getSurface() const { return mpSurface; }
 
         bool draw( double                           fAlpha,
                    const ::basegfx::B2DPoint&       rPos,
@@ -107,7 +107,7 @@ namespace dxcanvas
 
         // container for pixel data, we need to use a directx
         // surface since GDI+ sucks...
-        COMReference<surface_type> mpSurface;
+        sal::systools::COMReference<surface_type> mpSurface;
 
         // since GDI+ does not work correctly in case we
         // run on a 16bit display [don't ask me why] we need
