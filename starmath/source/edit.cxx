@@ -431,8 +431,8 @@ void SmEditTextWindow::UserPossiblyChangedText()
     // cursor travelling and such things...
     SmDocShell *pDocShell = mrEditWindow.GetDoc();
     EditEngine *pEditEngine = GetEditEngine();
-    if (pDocShell && pEditEngine)
-        pDocShell->SetModified(pEditEngine->IsModified());
+    if (pDocShell && pEditEngine && pEditEngine->IsModified())
+        pDocShell->SetModified(true);
     aModifyIdle.Start();
 }
 
