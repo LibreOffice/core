@@ -22,6 +22,30 @@
       "revId": "d6fd040c2c3cf413fd5603dfa62b0ec5309d2e61",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9824680_c41514b3",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-05-04T16:59:15Z",
+      "side": 1,
+      "message": "The white document background is what we have with Automatic and dark system themes. It was requested to also have a dark canvas- totally wrong from my POV. And yes, we can introduce a special background color for Basic. Though it\u0027s a bit more coding effort.",
+      "parentUuid": "98a784e4_05bb97e1",
+      "range": {
+        "startLine": 428,
+        "startChar": 19,
+        "endLine": 428,
+        "endChar": 25
+      },
+      "revId": "d6fd040c2c3cf413fd5603dfa62b0ec5309d2e61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
