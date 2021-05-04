@@ -91,7 +91,7 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Not empty", aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pixel format", vcl::PixelFormat::INVALID,
                                      aBmp.getPixelFormat());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(0),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_Int64>(0),
                                      aBmp.GetSizeBytes());
     }
 
@@ -104,7 +104,7 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pixel format", vcl::PixelFormat::N1_BPP,
                                      aBmp.getPixelFormat());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(12),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_Int64>(12),
                                      aBmp.GetSizeBytes());
     }
 
@@ -117,7 +117,7 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pixel format", vcl::PixelFormat::N8_BPP,
                                      aBmp.getPixelFormat());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(100),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_Int64>(100),
                                      aBmp.GetSizeBytes());
     }
 
@@ -130,7 +130,7 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pixel format", vcl::PixelFormat::N24_BPP,
                                      aBmp.getPixelFormat());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(300),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_Int64>(300),
                                      aBmp.GetSizeBytes());
     }
 
@@ -147,7 +147,7 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pixel format", vcl::PixelFormat::N32_BPP,
                                      aBmp.getPixelFormat());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", sal_uLong(400), aBmp.GetSizeBytes());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", sal_Int64(400), aBmp.GetSizeBytes());
     }
 }
 
