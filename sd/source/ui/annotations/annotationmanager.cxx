@@ -948,8 +948,11 @@ IMPL_LINK_NOARG(AnnotationManagerImpl, UpdateTagsHdl, void*, void)
 
 void AnnotationManagerImpl::CreateTags()
 {
-
     if( !(mxCurrentPage.is() && mpDoc) )
+        return;
+
+    auto xViewShell = mrBase.GetMainViewShell();
+    if (!xViewShell)
         return;
 
     try
@@ -964,7 +967,7 @@ void AnnotationManagerImpl::CreateTags()
         {
             Reference< XAnnotation > xAnnotation( xEnum->nextElement() );
             Color aColor( GetColorLight( mpDoc->GetAnnotationAuthorIndex( xAnnotation->getAuthor() ) ) );
-            rtl::Reference< AnnotationTag > xTag( new AnnotationTag( *this, *mrBase.GetMainViewShell()->GetView(), xAnnotation, aColor, nIndex++, maFont ) );
+            rtl::Reference< AnnotationTag > xTag( new AnnotationTag( *this, *xViewShell->GetView(), xAnnotation, aColor, nIndex++, maFont ) );
             maTagVector.push_back(xTag);
 
             if( xAnnotation == mxSelectedAnnotation )
