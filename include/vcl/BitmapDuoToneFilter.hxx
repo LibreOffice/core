@@ -18,7 +18,7 @@ class BitmapEx;
 class BitmapDuoToneFilter final : public BitmapFilter
 {
 public:
-    BitmapDuoToneFilter(sal_uLong nColorOne, sal_uLong nColorTwo)
+    BitmapDuoToneFilter(Color nColorOne, Color nColorTwo)
         : mnColorOne(nColorOne)
         , mnColorTwo(nColorTwo)
     {
@@ -27,8 +27,8 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    sal_uLong mnColorOne;
-    sal_uLong mnColorTwo;
+    Color mnColorOne;
+    Color mnColorTwo;
 };
 
 #endif
