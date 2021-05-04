@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37f10ce1_b9ada1ef",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-04T15:53:18Z",
+      "side": 1,
+      "message": "return !rURL.startsWith(\"#\");",
+      "range": {
+        "startLine": 165,
+        "startChar": 3,
+        "endLine": 168,
+        "endChar": 21
+      },
+      "revId": "78d3e0637a9a88c9b2f0e5801442902ac57c9371",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
