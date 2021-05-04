@@ -234,7 +234,7 @@ endif
 # Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes
 # (either the binary can change if it's a local build, or config_clang.h will change if configure detects
 # a new version of a newly installed system clang).
-$(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang$(CLANG_EXE_EXT) $(BUILDDIR)/config_host/config_clang.h
+$(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/$(basename $(CXX)) $(BUILDDIR)/config_host/config_clang.h
 	$(QUIET)touch $@
 
 
@@ -349,7 +349,7 @@ $(CLANGOUTDIR)/sharedvisitor/clang.pch: $(CLANGINDIR)/sharedvisitor/precompiled_
         $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp \
         | $(CLANGOUTDIR)/sharedvisitor
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),PCH,1)
-	$(QUIET)$(CLANGDIR)/bin/clang -x c++-header $(LO_CLANG_ANALYZER_PCH_CXXFLAGS) \
+	$(QUIET)$(CLANGDIR)/bin/$(basename $(CC)) -x c++-header $(LO_CLANG_ANALYZER_PCH_CXXFLAGS) \
         $(LO_CLANG_PCH_FLAGS) $(COMPILER_PLUGINS_TOOLING_ARGS) -c $< -o $@ -MMD -MT $@ -MP \
         -MF $(CLANGOUTDIR)/sharedvisitor/clang.pch.d
 
