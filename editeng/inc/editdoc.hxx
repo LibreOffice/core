@@ -433,8 +433,10 @@ class TextPortionList
     PortionsType maPortions;
 
 public:
-            TextPortionList();
-            ~TextPortionList();
+   TextPortionList();
+    ~TextPortionList();
+    TextPortionList(TextPortionList&&) = default;
+    TextPortionList& operator=(TextPortionList&&) = default;
 
     void    Reset();
     sal_Int32 FindPortion(
@@ -475,9 +477,7 @@ private:
     bool            bInvalid:1;   // for skillful formatting
 
 public:
-                    EditLine();
-                    EditLine( const EditLine& );
-                    ~EditLine();
+    EditLine();
 
     bool            IsIn( sal_Int32 nIndex ) const
                         { return ( (nIndex >= nStart ) && ( nIndex < nEnd ) ); }
@@ -532,7 +532,6 @@ public:
 
     EditLine*       Clone() const;
 
-    EditLine&   operator = ( const EditLine& rLine );
     friend bool operator == ( const EditLine& r1,  const EditLine& r2  );
 };
 
@@ -544,8 +543,10 @@ class EditLineList
     LinesType maLines;
 
 public:
-            EditLineList();
-            ~EditLineList();
+    EditLineList();
+    ~EditLineList();
+    EditLineList(EditLineList&&) = default;
+    EditLineList& operator=(EditLineList&&) = default;
 
     void Reset();
     void DeleteFromLine(sal_Int32 nDelFrom);
@@ -582,11 +583,11 @@ private:
     bool                bVisible            : 1;    // Belongs to the node!
     bool                bForceRepaint       : 1;
 
-                        ParaPortion( const ParaPortion& ) = delete;
-
 public:
-                        ParaPortion( ContentNode* pNode );
-                        ~ParaPortion();
+    ParaPortion( ContentNode* pNode );
+    ~ParaPortion();
+    ParaPortion( ParaPortion&& ) = default;
+    ParaPortion& operator=( ParaPortion&& ) = default;
 
     sal_Int32 GetLineNumber( sal_Int32 nIndex ) const;
 
@@ -633,7 +634,7 @@ public:
 class ParaPortionList
 {
     mutable sal_Int32 nLastCache;
-    std::vector<std::unique_ptr<ParaPortion>> maPortions;
+    std::vector<ParaPortion> maPortions;
 public:
                     ParaPortionList();
                     ~ParaPortionList();
@@ -646,13 +647,12 @@ public:
     ParaPortion* SafeGetObject(sal_Int32 nPos);
 
     sal_Int32 GetPos(const ParaPortion* p) const;
-    ParaPortion* operator[](sal_Int32 nPos);
-    const ParaPortion* operator[](sal_Int32 nPos) const;
+    ParaPortion& operator[](sal_Int32 nPos);
+    const ParaPortion& operator[](sal_Int32 nPos) const;
 
-    std::unique_ptr<ParaPortion> Release(sal_Int32 nPos);
-    void Remove(sal_Int32 nPos);
-    void Insert(sal_Int32 nPos, std::unique_ptr<ParaPortion> p);
-    void Append(std::unique_ptr<ParaPortion> p);
+    ParaPortion Remove(sal_Int32 nPos);
+    ParaPortion& Insert(sal_Int32 nPos, ParaPortion&& p);
+    void Append(ParaPortion&& p);
     sal_Int32 Count() const;
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
