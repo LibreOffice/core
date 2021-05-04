@@ -2771,7 +2771,7 @@ void VclHPaned::setAllocation(const Size& rAllocation)
             if (bInitialAllocation)
                 nFirstWidth = getLayoutRequisition(*pChild).Width();
             else
-                nFirstWidth = pChild->GetSizePixel().Width();
+                nFirstWidth = pChild->GetSizePixel().Width() + pChild->get_margin_start() + pChild->get_margin_end();
             bFirstCanResize = pChild->get_expand();
         }
         else if (nElement == 2)
@@ -2779,7 +2779,7 @@ void VclHPaned::setAllocation(const Size& rAllocation)
             if (bInitialAllocation)
                 nSecondWidth = getLayoutRequisition(*pChild).Width();
             else
-                nSecondWidth = pChild->GetSizePixel().Width();
+                nSecondWidth = pChild->GetSizePixel().Width() + pChild->get_margin_start() + pChild->get_margin_end();
             bSecondCanResize = pChild->get_expand();
         }
         ++nElement;
