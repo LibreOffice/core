@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "948cb152_3a5c083f",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-05-04T15:02:15Z",
+      "side": 1,
+      "message": "Oops... Yeah, that was part of an experimental approach I tried earlier. Thanks for finding it for me!",
+      "parentUuid": "3e62fc0d_df44ec4a",
+      "range": {
+        "startLine": 1715,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 5
+      },
+      "revId": "2a53d62c64f5028e54526b8c39d1f5df231858df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b6880f3_e8865c7e",
         "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "2a53d62c64f5028e54526b8c39d1f5df231858df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be43fe00_3b61025e",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1958,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-05-04T15:02:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b6880f3_e8865c7e",
+      "range": {
+        "startLine": 1958,
+        "startChar": 4,
+        "endLine": 1958,
+        "endChar": 32
+      },
+      "revId": "2a53d62c64f5028e54526b8c39d1f5df231858df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
