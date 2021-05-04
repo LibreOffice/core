@@ -46,6 +46,30 @@
       "revId": "20eeb2e908131c4c0d4749fd14ffed4014efe2a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "802afa06_92aa9c64",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-05-04T14:46:06Z",
+      "side": 1,
+      "message": "Hi Heiko... I edited the patch to add the suggested colors.",
+      "parentUuid": "a3bc25db_cb57dee3",
+      "range": {
+        "startLine": 639,
+        "startChar": 24,
+        "endLine": 639,
+        "endChar": 39
+      },
+      "revId": "20eeb2e908131c4c0d4749fd14ffed4014efe2a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
