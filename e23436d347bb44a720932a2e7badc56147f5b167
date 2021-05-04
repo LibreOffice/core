@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62080a11_0ebcbd38",
+        "filename": "canvas/source/directx/dx_surfacebitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-04T12:22:30Z",
+      "side": 0,
+      "message": "Noel, interesting if there\u0027s a way to find \u0027mutable\u0027 instances that actually are not needed, like here (operator-\u003e was already const). Are such cases a potential pessimization? (I doubt it would be a real problem though, or frequent enough; just curious)",
+      "revId": "e23436d347bb44a720932a2e7badc56147f5b167",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
