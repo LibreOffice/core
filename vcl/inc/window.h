@@ -29,7 +29,6 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <cppuhelper/weakref.hxx>
 
 #include <optional>
 #include <list>
@@ -59,10 +58,6 @@ namespace com::sun::star {
         class XAccessible;
         class XAccessibleContext;
         class XAccessibleEditableText;
-    }
-
-    namespace rendering {
-        class XCanvas;
     }
 
     namespace awt {
@@ -248,9 +243,6 @@ public:
     Link<vcl::Window&, bool> maHelpRequestHdl;
     Link<vcl::Window&, bool> maMnemonicActivateHdl;
     Link<tools::JsonWriter&, void> maDumpAsPropertyTreeHdl;
-
-    // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call
-    css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
 
     vcl::Cursor*        mpCursor;
     PointerStyle        maPointer;
