@@ -39,6 +39,13 @@ struct Template
     /** specifies a value that is bound to the style name.
      */
     long    Value;
+
+
+    /** specifies an identifier name in English (only for standard style).
+
+        @since LO 7.2
+     */
+    string StyleNameIdentifier;
 };
 
 

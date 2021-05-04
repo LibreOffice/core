@@ -28,13 +28,16 @@
 class SFX2_DLLPUBLIC SfxTemplateItem final : public SfxFlagItem
 {
     OUString aStyle;
+    OUString aStyleIdentifier;
 public:
     static SfxPoolItem* CreateDefault();
     SfxTemplateItem();
     SfxTemplateItem( sal_uInt16 nWhich,
-                     const OUString &rStyle );
+                     const OUString &rStyle,
+                     const OUString &rStyleIdentifier = "" );
 
     const OUString&         GetStyleName() const { return aStyle; }
+    const OUString&         GetStyleIdentifier() const { return aStyleIdentifier; }
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
