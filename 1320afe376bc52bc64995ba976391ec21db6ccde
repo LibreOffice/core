@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7a1ef4c_00903057",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3069,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-04T17:04:53Z",
+      "side": 0,
+      "message": "typo (removed line)",
+      "revId": "1320afe376bc52bc64995ba976391ec21db6ccde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

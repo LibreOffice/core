@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faf10b2b_d4414845",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport13.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-04T17:04:53Z",
+      "side": 1,
+      "message": "// The third paragraph contains a manual column break and a shape.\n    // The column break was moved into the shape during the first import\n    // (during moving the shape), and eliminated during the second import,\n    // losing the 2-column text layout. As a workaround, split the paragraph\n    // moving the column break into the fourth paragraph instead of losing it.",
+      "range": {
+        "startLine": 112,
+        "startChar": 1,
+        "endLine": 117,
+        "endChar": 112
+      },
+      "revId": "0943c41755a3e0f9b438c560465638e355121413",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
