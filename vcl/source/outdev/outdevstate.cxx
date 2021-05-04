@@ -436,51 +436,6 @@ void OutputDevice::SetLineColor( const Color& rColor )
         mpAlphaVDev->SetLineColor( COL_BLACK );
 }
 
-void OutputDevice::SetBackground()
-{
-
-    maBackground = Wallpaper();
-    mbBackground = false;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetBackground();
-}
-
-void OutputDevice::SetBackground( const Wallpaper& rBackground )
-{
-
-    maBackground = rBackground;
-
-    if( rBackground.GetStyle() == WallpaperStyle::NONE )
-        mbBackground = false;
-    else
-        mbBackground = true;
-
-    if( mpAlphaVDev )
-    {
-        // Some of these are probably wrong (e.g. if the gradient has transparency),
-        // but hopefully nobody uses that. If you do, feel free to implement it properly.
-        if( rBackground.GetStyle() == WallpaperStyle::NONE )
-            mpAlphaVDev->SetBackground( rBackground );
-        else if( rBackground.IsBitmap())
-        {
-            BitmapEx bitmap = rBackground.GetBitmap();
-            if( bitmap.IsAlpha())
-                mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( Bitmap( bitmap.GetAlpha()))));
-            else
-                mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
-        }
-        else if( rBackground.IsGradient())
-            mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
-        else
-        {
-            // Color background.
-            int transparency = 255 - rBackground.GetColor().GetAlpha();
-            mpAlphaVDev->SetBackground( Wallpaper( Color( transparency, transparency, transparency )));
-        }
-    }
-}
-
 void OutputDevice::SetFont( const vcl::Font& rNewFont )
 {
 
