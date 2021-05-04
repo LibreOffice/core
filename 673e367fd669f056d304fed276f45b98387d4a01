@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d77eb73b_8a10de71",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-04T04:11:59Z",
+      "side": 1,
+      "message": "So there\u0027s no binary operator- taking and returning a KahanSum?",
+      "range": {
+        "startLine": 98,
+        "startChar": 20,
+        "endLine": 98,
+        "endChar": 33
+      },
+      "revId": "673e367fd669f056d304fed276f45b98387d4a01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
