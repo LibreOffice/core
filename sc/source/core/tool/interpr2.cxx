@@ -1005,7 +1005,7 @@ void ScInterpreter::ScRoundUp()
 
 void ScInterpreter::RoundSignificant( double fX, double fDigits, double &fRes )
 {
-    double fTemp = ::rtl::math::approxFloor( log10( fX > 0 ? fX : -fX ) ) + 1.0 - fDigits;
+    double fTemp = ::rtl::math::approxFloor( log10( std::abs(fX) ) ) + 1.0 - fDigits;
     fRes = ::rtl::math::round( pow(10.0, -fTemp ) * fX ) * pow( 10.0, fTemp );
 }
 
