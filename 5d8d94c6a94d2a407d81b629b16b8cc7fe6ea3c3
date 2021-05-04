@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3aea8e9_c80f9691",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2810,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-04T12:29:07Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 2810,
+        "startChar": 30,
+        "endLine": 2810,
+        "endChar": 31
+      },
+      "revId": "5d8d94c6a94d2a407d81b629b16b8cc7fe6ea3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e66c638_419fdad7",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-04T12:29:07Z",
+      "side": 1,
+      "message": "// tdf#138782: for docs created in MS Word 2010 and older (compatibilityMode \u003c\u003d 14)",
+      "range": {
+        "startLine": 253,
+        "startChar": 8,
+        "endLine": 253,
+        "endChar": 84
+      },
+      "revId": "5d8d94c6a94d2a407d81b629b16b8cc7fe6ea3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64914d54_9db2f9f5",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-05-04T12:29:07Z",
+      "side": 1,
+      "message": "we don\u0027t need to list the duplicates: it is redundant and bad for issue tracking",
+      "range": {
+        "startLine": 254,
+        "startChar": 8,
+        "endLine": 254,
+        "endChar": 94
+      },
+      "revId": "5d8d94c6a94d2a407d81b629b16b8cc7fe6ea3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
