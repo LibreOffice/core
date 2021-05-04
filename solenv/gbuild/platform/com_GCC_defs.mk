@@ -219,7 +219,7 @@ endif
 gb_LINKER_DEBUGINFO_FLAGS=
 
 ifeq ($(HAVE_GCC_SPLIT_DWARF),TRUE)
-gb_DEBUGINFO_FLAGS+=-gsplit-dwarf
+gb_DEBUGINFO_FLAGS+=-gsplit-dwarf -gdwarf-4
 endif
 
 ifeq ($(HAVE_CLANG_DEBUG_INFO_KIND_CONSTRUCTOR),TRUE)
