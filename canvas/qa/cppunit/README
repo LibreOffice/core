@@ -1,0 +1,11 @@
+How to write a canvas test:
+===========================
+
+The easiest (relatively speaking) way is to copy&paste from somewhere. Use existing tests
+as the base, or canvas/workben/canvasdemo.cxx should be a good source too. If that doesn't
+help, then you'll need to find the right UNO interfaces (see canvas/README). Have "fun".
+
+
+Currently only the vclcanvas implementation is tested, because it's the only one
+capable of working with offscreen surfaces. Other implementations would need to
+be fixed, and then added to the gb_CppunitTest_use_components list in the makefile.
