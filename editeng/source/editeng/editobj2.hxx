@@ -49,11 +49,8 @@ private:
     sal_Int32           nStart;
     sal_Int32           nEnd;
 
-                        XEditAttribute( const XEditAttribute& rCopyFrom ) = delete;
-
 public:
     XEditAttribute( const SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-    ~XEditAttribute();
 
     const SfxPoolItem*      GetItem() const             { return pItem; }
 
@@ -116,14 +113,12 @@ public:
 class ContentInfo
 {
     friend class EditTextObjectImpl;
-public:
-    typedef std::vector<std::unique_ptr<XEditAttribute> > XEditAttributesType;
 
 private:
     svl::SharedString   maText;
     OUString            aStyle;
 
-    XEditAttributesType maCharAttribs;
+    std::vector<XEditAttribute> maCharAttribs;
     SfxStyleFamily      eFamily;
     SfxItemSet          aParaAttribs;
     std::unique_ptr<WrongList>
@@ -144,8 +139,8 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
-    const XEditAttributesType& GetCharAttribs() const { return maCharAttribs; }
-    XEditAttributesType& GetCharAttribs() { return maCharAttribs; }
+    const std::vector<XEditAttribute>& GetCharAttribs() const { return maCharAttribs; }
+    std::vector<XEditAttribute>& GetCharAttribs() { return maCharAttribs; }
 
     const OUString&     GetStyle()          const   { return aStyle; }
     SfxStyleFamily      GetFamily()         const   { return eFamily; }
@@ -217,8 +212,8 @@ public:
     void                    SetScriptType( SvtScriptType nType );
 
     ContentInfo*            CreateAndInsertContent();
-    std::unique_ptr<XEditAttribute> CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd );
-    void                    DestroyAttrib( std::unique_ptr<XEditAttribute> pAttr );
+    XEditAttribute CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd );
+    void                    DestroyAttrib( const XEditAttribute& rAttr );
 
     ContentInfosType&       GetContents() { return aContents;}
     const ContentInfosType& GetContents() const { return aContents;}

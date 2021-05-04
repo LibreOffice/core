@@ -46,13 +46,12 @@ using std::endl;
 using namespace com::sun::star;
 
 
-static std::unique_ptr<XEditAttribute> MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
+static XEditAttribute MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
 {
     // Create the new attribute in the pool
     const SfxPoolItem& rNew = rPool.Put( rItem );
 
-    std::unique_ptr<XEditAttribute> pNew(new XEditAttribute( rNew, nStart, nEnd ));
-    return pNew;
+    return XEditAttribute( rNew, nStart, nEnd );
 }
 
 XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
@@ -60,11 +59,6 @@ XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int3
     , nStart(nS)
     , nEnd(nE)
 {
-}
-
-XEditAttribute::~XEditAttribute()
-{
-    pItem = nullptr;  // belongs to the Pool.
 }
 
 bool XEditAttribute::IsFeature() const
@@ -113,12 +107,11 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
     // this should ensure that the Items end up in the correct Pool!
     aParaAttribs.Set( rCopyFrom.GetParaAttribs() );
 
-    for (const auto & aAttrib : rCopyFrom.maCharAttribs)
+    for (const XEditAttribute & rAttr : rCopyFrom.maCharAttribs)
     {
-        const XEditAttribute& rAttr = *aAttrib;
-        std::unique_ptr<XEditAttribute> pMyAttr = MakeXEditAttribute(
+        XEditAttribute aMyAttr = MakeXEditAttribute(
             rPoolToUse, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());
-        maCharAttribs.push_back(std::move(pMyAttr));
+        maCharAttribs.push_back(aMyAttr);
     }
 
     if ( rCopyFrom.GetWrongList() )
@@ -128,7 +121,7 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
 ContentInfo::~ContentInfo()
 {
     for (auto const& charAttrib : maCharAttribs)
-        aParaAttribs.GetPool()->Remove(*charAttrib->GetItem());
+        aParaAttribs.GetPool()->Remove(*charAttrib.GetItem());
     maCharAttribs.clear();
 }
 
@@ -160,9 +153,9 @@ void ContentInfo::dumpAsXml(xmlTextWriterPtr pWriter) const
     for (size_t i=0; i<maCharAttribs.size(); ++i)
     {
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("attribs"));
-        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("start"), "%" SAL_PRIdINT32, maCharAttribs[i]->GetStart());
-        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("end"), "%" SAL_PRIdINT32, maCharAttribs[i]->GetEnd());
-        maCharAttribs[i]->GetItem()->dumpAsXml(pWriter);
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("start"), "%" SAL_PRIdINT32, maCharAttribs[i].GetStart());
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("end"), "%" SAL_PRIdINT32, maCharAttribs[i].GetEnd());
+        maCharAttribs[i].GetItem()->dumpAsXml(pWriter);
         (void)xmlTextWriterEndElement(pWriter);
     }
     (void)xmlTextWriterEndElement(pWriter);
@@ -210,12 +203,7 @@ bool ContentInfo::Equals(const ContentInfo& rCompare, bool bComparePool) const
 {
     return maText == rCompare.maText && aStyle == rCompare.aStyle && eFamily == rCompare.eFamily
            && aParaAttribs.Equals(rCompare.aParaAttribs, bComparePool)
-           && std::equal(maCharAttribs.cbegin(), maCharAttribs.cend(),
-                         rCompare.maCharAttribs.cbegin(), rCompare.maCharAttribs.cend(),
-                         [](const std::unique_ptr<XEditAttribute>& pAttribute1,
-                            const std::unique_ptr<XEditAttribute>& pAttribute2) -> bool {
-                             return *pAttribute1 == *pAttribute2;
-                         });
+           && maCharAttribs == rCompare.maCharAttribs;
 }
 
 EditTextObject::EditTextObject( SfxItemPool* pPool ) :
@@ -654,14 +642,14 @@ void EditTextObjectImpl::SetScriptType( SvtScriptType nType )
     nScriptType = nType;
 }
 
-std::unique_ptr<XEditAttribute> EditTextObjectImpl::CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
+XEditAttribute EditTextObjectImpl::CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
 {
     return MakeXEditAttribute( *pPool, rItem, nStart, nEnd );
 }
 
-void EditTextObjectImpl::DestroyAttrib( std::unique_ptr<XEditAttribute> pAttr )
+void EditTextObjectImpl::DestroyAttrib( const XEditAttribute& rAttr )
 {
-    pPool->Remove( *pAttr->GetItem() );
+    pPool->Remove( *rAttr.GetItem() );
 }
 
 
@@ -712,9 +700,8 @@ void EditTextObjectImpl::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttr
 
     rLst.clear();
     const ContentInfo& rC = *aContents[nPara];
-    for (const auto & aAttrib : rC.maCharAttribs)
+    for (const XEditAttribute & rAttr : rC.maCharAttribs)
     {
-        const XEditAttribute& rAttr = *aAttrib;
         EECharAttrib aEEAttr(rAttr.GetStart(), rAttr.GetEnd(), rAttr.GetItem());
         rLst.push_back(aEEAttr);
     }
@@ -735,7 +722,7 @@ const SvxFieldItem* EditTextObjectImpl::GetField() const
             size_t nAttribs = rC.maCharAttribs.size();
             for (size_t nAttr = nAttribs; nAttr; )
             {
-                const XEditAttribute& rX = *rC.maCharAttribs[--nAttr];
+                const XEditAttribute& rX = rC.maCharAttribs[--nAttr];
                 if (rX.GetItem()->Which() == EE_FEATURE_FIELD)
                     return static_cast<const SvxFieldItem*>(rX.GetItem());
             }
@@ -755,9 +742,8 @@ const SvxFieldData* EditTextObjectImpl::GetFieldData(sal_Int32 nPara, size_t nPo
         return nullptr;
 
     size_t nCurPos = 0;
-    for (auto const& charAttrib : rC.maCharAttribs)
+    for (XEditAttribute const& rAttr : rC.maCharAttribs)
     {
-        const XEditAttribute& rAttr = *charAttrib;
         if (rAttr.GetItem()->Which() != EE_FEATURE_FIELD)
             // Skip attributes that are not fields.
             continue;
@@ -787,7 +773,7 @@ bool EditTextObjectImpl::HasField( sal_Int32 nType ) const
         size_t nAttrs = rC.maCharAttribs.size();
         for (size_t nAttr = 0; nAttr < nAttrs; ++nAttr)
         {
-            const XEditAttribute& rAttr = *rC.maCharAttribs[nAttr];
+            const XEditAttribute& rAttr = rC.maCharAttribs[nAttr];
             if (rAttr.GetItem()->Which() != EE_FEATURE_FIELD)
                 continue;
 
@@ -819,7 +805,7 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
 
         for (size_t nAttr = rC.maCharAttribs.size(); nAttr; )
         {
-            XEditAttribute& rAttr = *rC.maCharAttribs[--nAttr];
+            XEditAttribute& rAttr = rC.maCharAttribs[--nAttr];
             if ( !_nWhich || (rAttr.GetItem()->Which() == _nWhich) )
             {
                 pPool->Remove(*rAttr.GetItem());
@@ -873,9 +859,8 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
         std::vector<size_t>& rBorders = aParaBorders[nPara];
         rBorders.push_back(0);
         rBorders.push_back(rC.GetText().getLength());
-        for (const auto & aAttrib : rC.maCharAttribs)
+        for (const XEditAttribute & rAttr : rC.maCharAttribs)
         {
-            const XEditAttribute& rAttr = *aAttrib;
             const SfxPoolItem* pItem = rAttr.GetItem();
             if (!pItem)
                 continue;
@@ -937,9 +922,8 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
             return;
         }
 
-        for (const auto & aAttrib : rC.maCharAttribs)
+        for (const XEditAttribute & rXAttr : rC.maCharAttribs)
         {
-            const XEditAttribute& rXAttr = *aAttrib;
             const SfxPoolItem* pItem = rXAttr.GetItem();
             if (!pItem)
                 continue;
