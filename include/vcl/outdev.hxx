@@ -38,6 +38,7 @@
 #include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/rendercontext/DrawTextFlags.hxx>
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
+#include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
 #include <vcl/mapmod.hxx>
@@ -45,7 +46,6 @@
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/outdevstate.hxx>
-#include <vcl/outdevmap.hxx>
 #include <vcl/vclreferencebase.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
