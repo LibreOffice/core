@@ -850,59 +850,50 @@ public:
 
 void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs ) const
 {
-    std::vector<std::vector<size_t>> aParaBorders(aContents.size());
+    std::vector<editeng::Section> aAttrs;
+    aAttrs.reserve(aContents.size());
+    std::vector<size_t> aBorders;
 
-    // First pass: determine section borders for each paragraph.
     for (size_t nPara = 0; nPara < aContents.size(); ++nPara)
     {
+        aBorders.clear();
         const ContentInfo& rC = *aContents[nPara];
-        std::vector<size_t>& rBorders = aParaBorders[nPara];
-        rBorders.push_back(0);
-        rBorders.push_back(rC.GetText().getLength());
+        aBorders.push_back(0);
+        aBorders.push_back(rC.GetText().getLength());
         for (const XEditAttribute & rAttr : rC.maCharAttribs)
         {
             const SfxPoolItem* pItem = rAttr.GetItem();
             if (!pItem)
                 continue;
 
-            rBorders.push_back(rAttr.GetStart());
-            rBorders.push_back(rAttr.GetEnd());
+            aBorders.push_back(rAttr.GetStart());
+            aBorders.push_back(rAttr.GetEnd());
         }
-    }
 
-    // Sort and remove duplicates for each paragraph.
-    for (auto & paraBorders : aParaBorders)
-    {
-        std::sort(paraBorders.begin(), paraBorders.end());
-        auto itUniqueEnd = std::unique(paraBorders.begin(), paraBorders.end());
-        paraBorders.erase(itUniqueEnd, paraBorders.end());
-    }
+        // Sort and remove duplicates for each paragraph.
+        std::sort(aBorders.begin(), aBorders.end());
+        auto itUniqueEnd = std::unique(aBorders.begin(), aBorders.end());
+        aBorders.erase(itUniqueEnd, aBorders.end());
 
-    std::vector<editeng::Section> aAttrs;
+        // Create storage for each section.  Note that this creates storage even
+        // for unformatted sections.  The entries are sorted first by paragraph,
+        // then by section positions.  They don't overlap with each other.
 
-    // Create storage for each section.  Note that this creates storage even
-    // for unformatted sections.  The entries are sorted first by paragraph,
-    // then by section positions.  They don't overlap with each other.
-    size_t nPara1 = 0;
-    for (auto const& paraBorders : aParaBorders)
-    {
-        if (paraBorders.size() == 1 && paraBorders[0] == 0)
+        if (aBorders.size() == 1 && aBorders[0] == 0)
         {
             // Empty paragraph. Push an empty section.
-            aAttrs.emplace_back(nPara1, 0, 0);
-            ++nPara1;
+            aAttrs.emplace_back(nPara, 0, 0);
             continue;
         }
 
-        auto itBorder = paraBorders.begin(), itBorderEnd = paraBorders.end();
+        auto itBorder = aBorders.begin(), itBorderEnd = aBorders.end();
         size_t nPrev = *itBorder;
         size_t nCur;
         for (++itBorder; itBorder != itBorderEnd; ++itBorder, nPrev = nCur)
         {
             nCur = *itBorder;
-            aAttrs.emplace_back(nPara1, nPrev, nCur);
+            aAttrs.emplace_back(nPara, nPrev, nCur);
         }
-        ++nPara1;
     }
 
     if (aAttrs.empty())
