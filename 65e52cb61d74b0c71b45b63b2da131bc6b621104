@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b7b3bda_477f50de",
+        "filename": "sw/qa/uitest/writer_tests7/tdf46561.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-05-04T14:05:07Z",
+      "side": 1,
+      "message": "this test is wrong in many ways:\n1. It doesn\u0027t fail without the fix in place since the InsertPageHeader command doesn\u0027t insert the header\n2. Why was it added to sw/qa/uitest/writer_tests7/tdf46561.py ?\n3. it doesn\u0027t test any UI element, likely it can be implemented as a cppunittest.",
+      "revId": "65e52cb61d74b0c71b45b63b2da131bc6b621104",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
