@@ -25,10 +25,11 @@
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
+
+#include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
-#include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
