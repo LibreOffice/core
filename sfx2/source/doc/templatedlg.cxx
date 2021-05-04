@@ -1480,6 +1480,7 @@ short SfxTemplateSelectionDlg::run()
 
     // tdf#125079 toggle off the size tracking at some future idle point
     maIdle.SetPriority(TaskPriority::LOWEST);
+    maIdle.SetDebugName("sfx2 SfxTemplateManagerDlg maIdle");
     maIdle.SetInvokeHandler(LINK(this,SfxTemplateSelectionDlg,TimeOut));
     maIdle.Start();
     setTemplateViewMode(TemplateViewMode::eThumbnailView);
