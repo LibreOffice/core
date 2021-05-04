@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_SETTINGS_HXX
 #define INCLUDED_VCL_SETTINGS_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
@@ -95,17 +94,17 @@ public:
     void                            SetDoubleClickTime( sal_uInt64 nDoubleClkTime );
     sal_uInt64                      GetDoubleClickTime() const;
 
-    void                            SetDoubleClickWidth( tools::Long nDoubleClkWidth );
-    tools::Long                            GetDoubleClickWidth() const;
+    void                            SetDoubleClickWidth( sal_Int32 nDoubleClkWidth );
+    sal_Int32                       GetDoubleClickWidth() const;
 
-    void                            SetDoubleClickHeight( tools::Long nDoubleClkHeight );
-    tools::Long                            GetDoubleClickHeight() const;
+    void                            SetDoubleClickHeight( sal_Int32 nDoubleClkHeight );
+    sal_Int32                       GetDoubleClickHeight() const;
 
-    void                            SetStartDragWidth( tools::Long nDragWidth );
-    tools::Long                            GetStartDragWidth() const;
+    void                            SetStartDragWidth( sal_Int32 nDragWidth );
+    sal_Int32                       GetStartDragWidth() const;
 
-    void                            SetStartDragHeight( tools::Long nDragHeight );
-    tools::Long                            GetStartDragHeight() const;
+    void                            SetStartDragHeight( sal_Int32 nDragHeight );
+    sal_Int32                       GetStartDragHeight() const;
 
     static sal_uInt16               GetStartDragCode();
 
@@ -113,17 +112,17 @@ public:
 
     static sal_uInt16               GetContextMenuClicks();
 
-    static sal_uLong                GetScrollRepeat();
+    static sal_Int32                GetScrollRepeat();
 
-    static sal_uLong                GetButtonStartRepeat();
+    static sal_Int32                GetButtonStartRepeat();
 
-    void                            SetButtonRepeat( sal_uLong nRepeat );
-    sal_uLong                       GetButtonRepeat() const;
+    void                            SetButtonRepeat( sal_Int32 nRepeat );
+    sal_Int32                       GetButtonRepeat() const;
 
-    static sal_uLong                GetActionDelay();
+    static sal_Int32                GetActionDelay();
 
-    void                            SetMenuDelay( sal_uLong nDelay );
-    sal_uLong                       GetMenuDelay() const;
+    void                            SetMenuDelay( sal_Int32 nDelay );
+    sal_Int32                       GetMenuDelay() const;
 
     void                            SetFollow( MouseFollowFlags nFollow );
     MouseFollowFlags                GetFollow() const;
@@ -487,27 +486,27 @@ public:
     void                            SetTabFont( const vcl::Font& rFont );
     const vcl::Font&                GetTabFont() const;
 
-    static tools::Long                     GetBorderSize();
+    static sal_Int32                GetBorderSize();
 
-    void                            SetTitleHeight( tools::Long nSize );
-    tools::Long                            GetTitleHeight() const;
+    void                            SetTitleHeight( sal_Int32 nSize );
+    sal_Int32                       GetTitleHeight() const;
 
-    void                            SetFloatTitleHeight( tools::Long nSize );
-    tools::Long                            GetFloatTitleHeight() const;
+    void                            SetFloatTitleHeight( sal_Int32 nSize );
+    sal_Int32                       GetFloatTitleHeight() const;
 
-    void                            SetScrollBarSize( tools::Long nSize );
-    tools::Long                            GetScrollBarSize() const;
+    void                            SetScrollBarSize( sal_Int32 nSize );
+    sal_Int32                       GetScrollBarSize() const;
 
-    void                            SetMinThumbSize( tools::Long nSize );
-    tools::Long                            GetMinThumbSize() const;
+    void                            SetMinThumbSize( sal_Int32 nSize );
+    sal_Int32                       GetMinThumbSize() const;
 
-    void                            SetSpinSize( tools::Long nSize );
-    tools::Long                            GetSpinSize() const;
+    void                            SetSpinSize( sal_Int32 nSize );
+    sal_Int32                       GetSpinSize() const;
 
-    static tools::Long                     GetSplitSize();
+    static sal_Int32                GetSplitSize();
 
-    void                            SetCursorSize( tools::Long nSize );
-    tools::Long                            GetCursorSize() const;
+    void                            SetCursorSize( sal_Int32 nSize );
+    sal_Int32                       GetCursorSize() const;
 
     void                            SetCursorBlinkTime( sal_uInt64 nBlinkTime );
     sal_uInt64                      GetCursorBlinkTime() const;
@@ -521,8 +520,8 @@ public:
     void                            SetDisplayOptions( DisplayOptions nOptions );
     DisplayOptions                  GetDisplayOptions() const;
 
-    void                            SetAntialiasingMinPixelHeight( tools::Long nMinPixel );
-    sal_uLong                       GetAntialiasingMinPixelHeight() const;
+    void                            SetAntialiasingMinPixelHeight( sal_Int32 nMinPixel );
+    sal_Int32                       GetAntialiasingMinPixelHeight() const;
 
     void                            SetOptions( StyleSettingsOptions nOptions );
     StyleSettingsOptions            GetOptions() const;
@@ -646,10 +645,10 @@ class VCL_DLLPUBLIC HelpSettings
 public:
                                     HelpSettings();
 
-    static sal_uLong                GetTipDelay();
-    void                            SetTipTimeout( sal_uLong nTipTimeout );
-    sal_uLong                       GetTipTimeout() const;
-    static sal_uLong                GetBalloonDelay();
+    static sal_Int32                GetTipDelay();
+    void                            SetTipTimeout( sal_Int32 nTipTimeout );
+    sal_Int32                       GetTipTimeout() const;
+    static sal_Int32                GetBalloonDelay();
 
     bool                            operator ==( const HelpSettings& rSet ) const;
     bool                            operator !=( const HelpSettings& rSet ) const;
