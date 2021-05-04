@@ -98,7 +98,10 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyDuotone(
     AlphaMask   aMask( aBitmapEx.GetAlpha() );
 
     BitmapEx    aTmpBmpEx(aBitmapEx.GetBitmap());
-    BitmapFilter::Filter(aTmpBmpEx, BitmapDuoToneFilter(static_cast<sal_uLong>(nColorOne), static_cast<sal_uLong>(nColorTwo)));
+    BitmapFilter::Filter(aTmpBmpEx,
+                    BitmapDuoToneFilter(
+                        Color(ColorTransparency, nColorOne),
+                        Color(ColorTransparency, nColorTwo)));
 
     aReturnGraphic = ::Graphic( BitmapEx( aTmpBmpEx.GetBitmap(), aMask ) );
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
