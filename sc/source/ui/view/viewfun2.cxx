@@ -3060,6 +3060,16 @@ void ScViewFunc::MoveTable(
             }
             pDocShell->MoveTable( nMovTab, nDestTab1, bCopy, false );   // Undo is here
 
+            // tdf#43175 - Adjust chart references on every copied sheet
+            if (bCopy)
+            {
+                // New position of source table after moving
+                SCTAB nSrcTab = (nDestTab1 <= nMovTab) ? nMovTab + 1 : nMovTab;
+                //#i29848# adjust references to data on the copied sheet
+                ScChartHelper::AdjustRangesOfChartsOnDestinationPage(rDoc, rDestDoc, nSrcTab,
+                                                                     nDestTab1);
+            }
+
             if(bCopy && rDoc.IsScenario(nMovTab))
             {
                 OUString aComment;
@@ -3132,10 +3142,6 @@ void ScViewFunc::MoveTable(
             nNewTab--;
 
         SetTabNo( nNewTab, true );
-
-        //#i29848# adjust references to data on the copied sheet
-        if( bCopy )
-            ScChartHelper::AdjustRangesOfChartsOnDestinationPage( rDoc, rDestDoc, nTab, nNewTab );
     }
 }
 
