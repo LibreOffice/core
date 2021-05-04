@@ -22,6 +22,30 @@
       "revId": "862cd47d230e40ed7d1581a0db57f8db479dff8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41769e83_0d311651",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-04T10:20:21Z",
+      "side": 1,
+      "message": "Now you say it, it\u0027s right.\nI\u0027m setting you as the reviewer of the patch with the simplification.",
+      "parentUuid": "1b796980_37db24c4",
+      "range": {
+        "startLine": 1008,
+        "startChar": 52,
+        "endLine": 1008,
+        "endChar": 69
+      },
+      "revId": "862cd47d230e40ed7d1581a0db57f8db479dff8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
