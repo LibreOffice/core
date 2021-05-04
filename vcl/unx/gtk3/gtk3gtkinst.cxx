@@ -16007,7 +16007,7 @@ public:
         if (has_focus())
             return;
         if (m_pEntry)
-            gtk_widget_grab_focus(m_pEntry);
+            gtk_entry_grab_focus_without_selecting(GTK_ENTRY(m_pEntry));
         else
             gtk_widget_grab_focus(m_pToggleButton);
     }
