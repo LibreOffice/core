@@ -14684,11 +14684,13 @@ private:
         {
             m_bPopupActive = bIsShown;
             ComboBox::signal_popup_toggled();
-            if (!m_bPopupActive)
+            if (!m_bPopupActive && m_pEntry)
             {
-                //restore focus to the entry view when the popup is gone, which
+                disable_notify_events();
+                //restore focus to the GtkEntry when the popup is gone, which
                 //is what the vcl case does, to ease the transition a little
-                grab_focus();
+                gtk_widget_grab_focus(m_pEntry);
+                enable_notify_events();
             }
         }
     }
