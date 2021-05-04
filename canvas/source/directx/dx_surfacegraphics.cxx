@@ -30,10 +30,10 @@ namespace dxcanvas
     {
         struct GraphicsDeleter
         {
-            COMReference<surface_type> mpSurface;
+            sal::systools::COMReference<surface_type> mpSurface;
             HDC                        maHDC;
 
-            GraphicsDeleter(const COMReference<surface_type>& rSurface, HDC hdc) :
+            GraphicsDeleter(const sal::systools::COMReference<surface_type>& rSurface, HDC hdc) :
                 mpSurface(rSurface),
                 maHDC(hdc)
             {}
@@ -52,7 +52,7 @@ namespace dxcanvas
         };
     }
 
-    GraphicsSharedPtr createSurfaceGraphics(const COMReference<surface_type>& rSurface )
+    GraphicsSharedPtr createSurfaceGraphics(const sal::systools::COMReference<surface_type>& rSurface )
     {
         GraphicsSharedPtr  pRet;
         HDC aHDC;

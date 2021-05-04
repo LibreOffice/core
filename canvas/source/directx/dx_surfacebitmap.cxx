@@ -47,7 +47,7 @@ namespace dxcanvas
         struct DXColorBuffer : public canvas::IColorBuffer
         {
         public:
-            DXColorBuffer( const COMReference<surface_type>& rSurface,
+            DXColorBuffer( const sal::systools::COMReference<surface_type>& rSurface,
                            const ::basegfx::B2IVector& rSize )
                 : maSize(rSize)
                 , maLockedRect{}
@@ -69,7 +69,7 @@ namespace dxcanvas
 
             ::basegfx::B2IVector maSize;
             mutable D3DLOCKED_RECT maLockedRect;
-            mutable COMReference<surface_type> mpSurface;
+            sal::systools::COMReference<surface_type> mpSurface;
         };
 
         sal_uInt8* DXColorBuffer::lock() const

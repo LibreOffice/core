@@ -24,8 +24,6 @@
 
 #include <basegfx/numeric/ftools.hxx>
 
-
-#define WIN32_LEAN_AND_MEAN
 #include <prewin.h>
 
 // Enabling Direct3D Debug Information Further more, with registry key
@@ -62,89 +60,11 @@ namespace dxcanvas
     typedef std::shared_ptr< Gdiplus::Bitmap >          BitmapSharedPtr;
     typedef std::shared_ptr< Gdiplus::Font >            FontSharedPtr;
     typedef std::shared_ptr< Gdiplus::TextureBrush >    TextureBrushSharedPtr;
-
-    /** COM object RAII wrapper
-
-        This template wraps a Windows COM object, transparently
-        handling lifetime issues the C++ way (i.e. releasing the
-        reference when the object is destroyed)
-     */
-    template< typename T > class COMReference
-    {
-    public:
-        typedef T Wrappee;
-
-        COMReference() :
-            mp( nullptr )
-        {
-        }
-
-        /** Create from raw pointer
-
-            @attention This constructor assumes the interface is
-            already acquired (unless p is NULL), no additional AddRef
-            is called here.
-
-            This caters e.g. for all DirectX factory methods, which
-            return the created interfaces pre-acquired, into a raw
-            pointer. Simply pass the pointer to this class, but don't
-            call Release manually on it!
-
-            @example IDirectDrawSurface* pSurface;
-            pDD->CreateSurface(&aSurfaceDesc, &pSurface, NULL);
-            mpSurface = COMReference< IDirectDrawSurface >(pSurface);
-
-         */
-        explicit COMReference( T* p ) :
-            mp( p )
-        {
-        }
-
-        COMReference( const COMReference& rNew ) :
-            mp( nullptr )
-        {
-            if( rNew.mp == nullptr )
-                return;
-
-            rNew.mp->AddRef(); // do that _before_ assigning the
-                               // pointer. Just in case...
-            mp = rNew.mp;
-        }
-
-        COMReference& operator=( const COMReference& rRHS )
-        {
-            COMReference aTmp(rRHS);
-            std::swap( mp, aTmp.mp );
-
-            return *this;
-        }
-
-        ~COMReference()
-        {
-            reset();
-        }
-
-        int reset()
-        {
-            int refcount = 0;
-            if( mp )
-                refcount = mp->Release();
-
-            mp = nullptr;
-            return refcount;
-        }
-
-        bool        is() const { return mp != nullptr; }
-        T*          get() const { return mp; }
-        T*          operator->() const { return mp; }
-        T&          operator*() const { return *mp; }
-
-    private:
-        T*  mp;
-    };
-
 }
 
+#include <systools/win32/comtools.hxx> // for COMReference; must be inside prewin...postwin
+// Attention! All DirectX factory methods return the created interfaces pre-acquired, into a raw
+// pointer. Do not call AddRef on them when constructing COMReference!
 
 #include <postwin.h>
 

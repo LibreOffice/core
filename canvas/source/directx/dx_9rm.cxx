@@ -111,7 +111,7 @@ namespace dxcanvas
             };
 
             DXRenderModule&                  mrRenderModule;
-            COMReference<IDirect3DTexture9>  mpTexture;
+            sal::systools::COMReference<IDirect3DTexture9> mpTexture;
 
             ::basegfx::B2IVector             maSize;
         };
@@ -130,7 +130,7 @@ namespace dxcanvas
             virtual void lock() const override { maMutex.acquire(); }
             virtual void unlock() const override { maMutex.release(); }
 
-            virtual COMReference<IDirect3DSurface9>
+            virtual sal::systools::COMReference<IDirect3DSurface9>
                 createSystemMemorySurface( const ::basegfx::B2IVector& rSize ) override;
             virtual void disposing() override;
             virtual HWND getHWND() const override { return mhWnd; }
@@ -147,7 +147,7 @@ namespace dxcanvas
             virtual void pushVertex( const ::canvas::Vertex& vertex ) override;
             virtual bool isError() override;
 
-            COMReference<IDirect3DDevice9> getDevice() { return mpDevice; }
+            sal::systools::COMReference<IDirect3DDevice9> getDevice() { return mpDevice; }
 
             void flushVertexCache();
             void commitVertexCache();
@@ -166,10 +166,10 @@ namespace dxcanvas
             static ::osl::Mutex                         maMutex;
 
             HWND                                        mhWnd;
-            COMReference<IDirect3DDevice9>              mpDevice;
-            COMReference<IDirect3D9>                    mpDirect3D9;
-            COMReference<IDirect3DSwapChain9>           mpSwapChain;
-            COMReference<IDirect3DVertexBuffer9>        mpVertexBuffer;
+            sal::systools::COMReference<IDirect3DDevice9> mpDevice;
+            sal::systools::COMReference<IDirect3D9>     mpDirect3D9;
+            sal::systools::COMReference<IDirect3DSwapChain9> mpSwapChain;
+            sal::systools::COMReference<IDirect3DVertexBuffer9> mpVertexBuffer;
             std::shared_ptr<canvas::ISurface>                 mpTexture;
             VclPtr<SystemChildWindow>                   mpWindow;
             ::basegfx::B2IVector                        maSize;
@@ -246,7 +246,7 @@ namespace dxcanvas
             ENSURE_ARG_OR_THROW(rSize.getX() > 0 && rSize.getY() > 0,
                             "DXSurface::DXSurface(): request for zero-sized surface");
 
-            COMReference<IDirect3DDevice9> pDevice(rRenderModule.getDevice());
+            sal::systools::COMReference<IDirect3DDevice9> pDevice(rRenderModule.getDevice());
 
             IDirect3DTexture9 *pTexture(nullptr);
             if(FAILED(pDevice->CreateTexture(
@@ -257,7 +257,7 @@ namespace dxcanvas
                 &pTexture,nullptr)))
                 return;
 
-            mpTexture=COMReference<IDirect3DTexture9>(pTexture);
+            mpTexture = sal::systools::COMReference<IDirect3DTexture9>(pTexture, false);
             maSize = rSize;
         }
 
@@ -282,7 +282,7 @@ namespace dxcanvas
         {
             ImplRenderModuleGuard aGuard( mrRenderModule );
             mrRenderModule.flushVertexCache();
-            COMReference<IDirect3DDevice9> pDevice(mrRenderModule.getDevice());
+            sal::systools::COMReference<IDirect3DDevice9> pDevice(mrRenderModule.getDevice());
 
             if( FAILED(pDevice->SetTexture(0,mpTexture.get())) )
                 return false;
@@ -499,7 +499,7 @@ namespace dxcanvas
                     "Could not create DirectX device - out of memory!" );
             }
 
-            mpVertexBuffer=COMReference<IDirect3DVertexBuffer9>(pVB);
+            mpVertexBuffer = sal::systools::COMReference<IDirect3DVertexBuffer9>(pVB, false);
         }
 
 
@@ -542,8 +542,8 @@ namespace dxcanvas
             // TODO(F2): since we would like to share precious hardware
             // resources, the direct3d9 object should be global. each new
             // request for a canvas should only create a new swapchain.
-            mpDirect3D9 = COMReference<IDirect3D9>(
-                Direct3DCreate9(D3D_SDK_VERSION));
+            mpDirect3D9 = sal::systools::COMReference<IDirect3D9>(
+                Direct3DCreate9(D3D_SDK_VERSION), false);
             if(!mpDirect3D9.is())
                 return false;
 
@@ -730,12 +730,12 @@ namespace dxcanvas
                     return false;
 
             // got it, store it in a safe place...
-            mpDevice=COMReference<IDirect3DDevice9>(pDevice);
+            mpDevice = sal::systools::COMReference<IDirect3DDevice9>(pDevice, false);
 
             // After CreateDevice, the first swap chain already exists, so just get it...
             IDirect3DSwapChain9 *pSwapChain(nullptr);
             pDevice->GetSwapChain(0,&pSwapChain);
-            mpSwapChain=COMReference<IDirect3DSwapChain9>(pSwapChain);
+            mpSwapChain = sal::systools::COMReference<IDirect3DSwapChain9>(pSwapChain, false);
             if( !mpSwapChain.is() )
                 return false;
 
@@ -757,10 +757,10 @@ namespace dxcanvas
         // DXRenderModule::createSystemMemorySurface
 
 
-        COMReference<IDirect3DSurface9> DXRenderModule::createSystemMemorySurface( const ::basegfx::B2IVector& rSize )
+        sal::systools::COMReference<IDirect3DSurface9> DXRenderModule::createSystemMemorySurface( const ::basegfx::B2IVector& rSize )
         {
             if(isDisposed())
-                return COMReference<IDirect3DSurface9>(nullptr);
+                return sal::systools::COMReference<IDirect3DSurface9>(nullptr);
 
             // please note that D3DFMT_X8R8G8B8 is the only format we're
             // able to choose here, since GetDC() doesn't support any
@@ -778,7 +778,7 @@ namespace dxcanvas
                     "Could not create offscreen surface - out of mem!" );
             }
 
-            return COMReference<IDirect3DSurface9>(pSurface);
+            return sal::systools::COMReference<IDirect3DSurface9>(pSurface, false);
         }
 
 
@@ -815,7 +815,7 @@ namespace dxcanvas
                 // DX was kind enough to really reset the device...
                 do
                 {
-                    mpVertexBuffer.reset();
+                    mpVertexBuffer.clear();
                     hr = mpDevice->Reset(&mad3dpp);
                     if(SUCCEEDED(hr))
                     {
@@ -830,7 +830,7 @@ namespace dxcanvas
                             throw lang::NoSupportException(
                                 "Could not create DirectX device - out of memory!" );
                         }
-                        mpVertexBuffer=COMReference<IDirect3DVertexBuffer9>(pVB);
+                        mpVertexBuffer = sal::systools::COMReference<IDirect3DVertexBuffer9>(pVB, false);
 
                         // retry after the restore
                         if(SUCCEEDED(mpSwapChain->Present(&aRect,&aRect,nullptr,nullptr,0)))
@@ -897,12 +897,12 @@ namespace dxcanvas
                 mad3dpp.BackBufferHeight = maSize.getY();
 
                 // clear before, save resources
-                mpSwapChain.reset();
+                mpSwapChain.clear();
 
                 IDirect3DSwapChain9 *pSwapChain(nullptr);
                 if(FAILED(mpDevice->CreateAdditionalSwapChain(&mad3dpp,&pSwapChain)))
                     return;
-                mpSwapChain=COMReference<IDirect3DSwapChain9>(pSwapChain);
+                mpSwapChain = sal::systools::COMReference<IDirect3DSwapChain9>(pSwapChain, false);
 
                 // clear the render target [which is the backbuffer in this case].
                 // we are forced to do this once, and furthermore right now.

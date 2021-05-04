@@ -60,7 +60,7 @@ namespace dxcanvas
         /// Write a snapshot of the screen to disk
         virtual void screenShot() = 0;
 
-        virtual COMReference<surface_type>
+        virtual sal::systools::COMReference<surface_type>
             createSystemMemorySurface(
                 const ::basegfx::B2IVector& rSize ) = 0;
 
