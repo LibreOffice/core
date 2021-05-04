@@ -1325,7 +1325,14 @@ namespace emfio
                     case EMR_RECTANGLE :
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 );
-                        DrawRect( ReadRectangle( nX32, nY32, nx32, ny32 ) );
+                        SAL_INFO("emfio", "\t\t Rectangle, left: " << nX32 << ", top: " << nY32 << ", right: " << nx32 << ", bottom: " << ny32);
+                        Point aPoints[] { Point(nX32, nY32),
+                                          Point(nx32, nY32),
+                                          Point(nx32, ny32),
+                                          Point(nX32, ny32) };
+                        tools::Polygon aPoly(4, aPoints);
+                        aPoly.Optimize( PolyOptimizeFlags::CLOSE );
+                        DrawPolygon( aPoly, mbRecordPath );
                     }
                     break;
 
