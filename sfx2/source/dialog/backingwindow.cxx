@@ -100,7 +100,13 @@ public:
 
     virtual void StyleUpdated() override
     {
-        const bool bIsDark = Application::GetSettings().GetStyleSettings().GetDialogColor().IsDark();
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+        // tdf#141857 update background to current theme
+        OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+        rDevice.SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
+
+        const bool bIsDark = rStyleSettings.GetDialogColor().IsDark();
         if (bIsDark != mbIsDark)
             LoadImageForWidth(GetOutputSizePixel().Width());
         weld::CustomWidgetController::StyleUpdated();
