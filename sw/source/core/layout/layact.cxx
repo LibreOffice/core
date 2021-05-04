@@ -1606,7 +1606,9 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
             std::vector<std::pair<SwAnchoredObject*, SwPageFrame*>> moved;
             for (auto const pObj : *pObjs)
             {
-                SwPageFrame *const pAnchorPage(pObj->FindPageFrameOfAnchor());
+                assert(!pObj->AnchorFrame()->IsTextFrame()
+                    || !static_cast<SwTextFrame const*>(pObj->AnchorFrame())->IsFollow());
+                SwPageFrame *const pAnchorPage(pObj->AnchorFrame()->FindPageFrame());
                 assert(pAnchorPage);
                 if (pAnchorPage != pPage
                     && pPage->GetPhyPageNum() < pAnchorPage->GetPhyPageNum()
@@ -1618,6 +1620,7 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
             }
             for (auto const& [pObj, pAnchorPage] : moved)
             {
+                SAL_INFO("sw.layout", "SwLayAction::FormatContent: move anchored " << pObj << " from " << pPage->GetPhyPageNum() << " to " << pAnchorPage->GetPhyPageNum());
                 pObj->RegisterAtPage(*pAnchorPage);
                 ::Notify_Background(pObj->GetDrawObj(), pPage,
                     pObj->GetObjRect(), PrepareHint::FlyFrameLeave, false);
