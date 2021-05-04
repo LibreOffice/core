@@ -850,7 +850,7 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
 
 }
 
-bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
+bool Bitmap::Expand( sal_Int32 nDX, sal_Int32 nDY, const Color* pInitColor )
 {
     bool bRet = false;
 

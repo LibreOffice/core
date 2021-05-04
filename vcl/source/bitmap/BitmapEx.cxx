@@ -217,9 +217,9 @@ AlphaMask BitmapEx::GetAlpha() const
     return AlphaMask(maAlphaMask);
 }
 
-sal_uLong BitmapEx::GetSizeBytes() const
+sal_Int64 BitmapEx::GetSizeBytes() const
 {
-    sal_uLong nSizeBytes = maBitmap.GetSizeBytes();
+    sal_Int64 nSizeBytes = maBitmap.GetSizeBytes();
 
     if( !maAlphaMask.IsEmpty() )
         nSizeBytes += maAlphaMask.GetSizeBytes();
@@ -376,7 +376,7 @@ bool BitmapEx::Convert( BmpConversion eConversion )
     return !maBitmap.IsEmpty() && maBitmap.Convert( eConversion );
 }
 
-void BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, bool bExpandTransparent )
+void BitmapEx::Expand( sal_Int32 nDX, sal_Int32 nDY, bool bExpandTransparent )
 {
     bool bRet = false;
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_BITMAP_HXX
 #define INCLUDED_VCL_BITMAP_HXX
 
-#include <tools/solar.h>
 #include <tools/degree.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
@@ -205,7 +204,7 @@ public:
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
     bool                    Expand(
-                                sal_uLong nDX, sal_uLong nDY,
+                                sal_Int32 nDX, sal_Int32 nDY,
                                 const Color* pInitColor = nullptr );
 
     /** Copy a rectangular area from another bitmap

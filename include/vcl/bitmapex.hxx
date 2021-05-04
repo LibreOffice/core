@@ -25,6 +25,7 @@
 #include <vcl/Scanline.hxx>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
+#include <tools/solar.h>
 
 #include <sal/types.h>
 
@@ -83,7 +84,7 @@ public:
         return maBitmap.getPixelFormat();
     }
 
-    sal_uLong           GetSizeBytes() const;
+    sal_Int64           GetSizeBytes() const;
     BitmapChecksum      GetChecksum() const;
 
     /** Convert bitmap format
@@ -123,7 +124,7 @@ public:
         Whether to expand the transparency color or not.
      */
     void                Expand(
-                            sal_uLong nDX, sal_uLong nDY,
+                            sal_Int32 nDX, sal_Int32 nDY,
                             bool bExpandTransparent = false );
 
     /** Copy a rectangular area from another bitmap
