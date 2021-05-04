@@ -28,6 +28,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
 #include <rtl/bootstrap.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #ifdef DBG_UTIL
 #include <vcl/pngwrite.hxx>
@@ -1334,7 +1335,26 @@ namespace emfio
                     case EMR_ELLIPSE :
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 );
-                        DrawEllipse( ReadRectangle( nX32, nY32, nx32, ny32 ) );
+                        SAL_INFO("emfio", "\t\t Rectangle, left: " << nX32 << ", top: " << nY32 << ", right: " << nx32 << ", bottom: " << ny32);
+                        //::basegfx::B2DPoint aCenter( nX32 + ((nx32 - nX32) * 0.5), nY32 + ((ny32 - nY32) * 0.5) );
+                        Point aCenter( nX32 + ((nx32 - nX32) * 0.5), nY32 + ((ny32 - nY32) * 0.5) );
+
+                        double dw = (nx32 - nX32) * 0.5;
+                        double dh = (ny32 - nY32) * 0.5;
+                        tools::Polygon aPoly( aCenter, dw, dh );
+                        aPoly.Optimize( PolyOptimizeFlags::EDGES );
+
+
+                        /*::basegfx::B2DPolygon aPoly = ::basegfx::utils::createPolygonFromEllipse(aCenter, dw, dh);
+
+
+                        ::basegfx::B2DPolyPolygon polyPolygon(
+                            ::basegfx::utils::createPolygonFromEllipse(::basegfx::B2DPoint(dx + 0.5 * dw, dy + 0.5 * dh),
+                                                                       0.5 * dw, 0.5 * dh));
+                        polyPolygon.transform(maMapTransform);
+
+                        */
+                        DrawPolygon( aPoly, mbRecordPath );
                     }
                     break;
 
