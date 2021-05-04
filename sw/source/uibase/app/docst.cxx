@@ -163,11 +163,19 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_FAMILY2:
                 if(!pShell->IsFrameSelected())
                 {
+                    sal_uInt16 nId = -1;
                     SwTextFormatColl* pColl = pShell->GetCurTextFormatColl();
                     if(pColl)
+                    {
                         aName = pColl->GetName();
+                        nId = pColl->GetPoolFormatId();
+                    }
 
-                    SfxTemplateItem aItem(nWhich, aName);
+                    OUString aProgName;
+                    if (nId >= 0)
+                        SwStyleNameMapper::FillProgName(nId, aProgName);
+
+                    SfxTemplateItem aItem(nWhich, aName, aProgName);
 
                     SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto;
                     if (m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))
