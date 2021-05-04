@@ -58,7 +58,7 @@ SpinButton::SpinButton( vcl::Window* pParent, WinBits nStyle )
 
 IMPL_LINK(SpinButton, ImplTimeout, Timer*, pTimer, void)
 {
-    if (pTimer->GetTimeout() == MouseSettings::GetButtonStartRepeat())
+    if (pTimer->GetTimeout() == static_cast<sal_uInt64>(MouseSettings::GetButtonStartRepeat()))
     {
         pTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonRepeat() );
         pTimer->Start();

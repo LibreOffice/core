@@ -154,7 +154,7 @@ tools::Long BrowseBox::GetBarHeight() const
     // (we can't ask the scrollbars for their size cause if we're zoomed they still have to be
     // resized - which is done in UpdateScrollbars)
 
-    return std::max(aStatusBarHeight->GetSizePixel().Height(), GetSettings().GetStyleSettings().GetScrollBarSize());
+    return std::max(aStatusBarHeight->GetSizePixel().Height(), static_cast<tools::Long>(GetSettings().GetStyleSettings().GetScrollBarSize()));
 }
 
 BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
