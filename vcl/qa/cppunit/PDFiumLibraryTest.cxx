@@ -25,6 +25,8 @@
 #include <tools/stream.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdfread.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 class PDFiumLibraryTest : public test::BootstrapFixtureBase
 {
@@ -40,6 +42,7 @@ class PDFiumLibraryTest : public test::BootstrapFixtureBase
     void testAnnotationsMadeInAcrobat();
     void testAnnotationsDifferentTypes();
     void testTools();
+    void testFormFields();
 
     CPPUNIT_TEST_SUITE(PDFiumLibraryTest);
     CPPUNIT_TEST(testDocument);
@@ -49,6 +52,7 @@ class PDFiumLibraryTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testAnnotationsMadeInAcrobat);
     CPPUNIT_TEST(testAnnotationsDifferentTypes);
     CPPUNIT_TEST(testTools);
+    CPPUNIT_TEST(testFormFields);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -289,6 +293,41 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
         CPPUNIT_ASSERT(pAnnotation);
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup, pAnnotation->getSubType());
     }
+}
+
+void PDFiumLibraryTest::testFormFields()
+{
+    // Given a document with a form field that looks like plain text:
+    OUString aURL = getFullUrl(u"form-fields.pdf");
+    SvFileStream aFileStream(aURL, StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFileStream);
+    aMemory.Seek(0);
+
+    // When rendering its first (and only) page to a bitmap:
+    std::vector<BitmapEx> aBitmaps;
+    int nRet = vcl::RenderPDFBitmaps(aMemory.GetData(), aMemory.GetSize(), aBitmaps);
+    CPPUNIT_ASSERT(nRet);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aBitmaps.size());
+
+    // Then make sure the bitmap contains that text:
+    Bitmap aBitmap = aBitmaps[0].GetBitmap();
+    BitmapReadAccess aAccess(aBitmap);
+    Size aSize = aBitmap.GetSizePixel();
+    std::set<sal_uInt32> aColors;
+    for (tools::Long y = 0; y < aSize.Height(); ++y)
+    {
+        for (tools::Long x = 0; x < aSize.Width(); ++x)
+        {
+            aColors.insert(static_cast<sal_uInt32>(aAccess.GetPixel(y, x)));
+        }
+    }
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 1
+    // - Actual  : 1
+    // i.e. at least black text and white background is expected (possibly more, due to
+    // anti-aliasing), but nothing was rendered.
+    CPPUNIT_ASSERT_GREATER(static_cast<size_t>(1), aColors.size());
 }
 
 void PDFiumLibraryTest::testAnnotationsDifferentTypes()
