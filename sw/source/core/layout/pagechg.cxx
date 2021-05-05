@@ -602,19 +602,19 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 SwLayoutFrame *pB = FindBodyCont();
                 assert(pB && "Page without Body.");
                 pB->ChgColumns( rOldCol, rNewCol );
-                rInvFlags |= static_cast<SwPageFrameInvFlags>(0x20);
+                rInvFlags |= SwPageFrameInvFlags::CheckGrid;
             }
 
             // 2. header and footer:
             const SwFormatHeader &rOldH = pOldFormat->GetHeader();
             const SwFormatHeader &rNewH = pNewFormat->GetHeader();
             if( rOldH != rNewH )
-                rInvFlags |= static_cast<SwPageFrameInvFlags>(0x08);
+                rInvFlags |= SwPageFrameInvFlags::PrepareHeader;
 
             const SwFormatFooter &rOldF = pOldFormat->GetFooter();
             const SwFormatFooter &rNewF = pNewFormat->GetFooter();
             if( rOldF != rNewF )
-                rInvFlags |= static_cast<SwPageFrameInvFlags>(0x10);
+                rInvFlags |= SwPageFrameInvFlags::PrepareFooter;
             CheckDirChange();
 
             [[fallthrough]];
@@ -665,9 +665,9 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                     IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
                 pSh->InvalidateWindows( aOldRectWithBorderAndShadow );
             }
-            rInvFlags |= static_cast<SwPageFrameInvFlags>(0x03);
+            rInvFlags |= SwPageFrameInvFlags::InvalidatePrt | SwPageFrameInvFlags::SetCompletePaint;
             if ( aOldPageFrameRect.Height() != getFrameArea().Height() )
-                rInvFlags |= static_cast<SwPageFrameInvFlags>(0x04);
+                rInvFlags |= SwPageFrameInvFlags::InvalidateNextPos;
         }
         break;
 
@@ -678,19 +678,19 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 SwLayoutFrame *pB = FindBodyCont();
                 assert(pB); //page without body
                 pB->ChgColumns( *static_cast<const SwFormatCol*>(pOld), *static_cast<const SwFormatCol*>(pNew) );
-                rInvFlags |= static_cast<SwPageFrameInvFlags>(0x22);
+                rInvFlags |= SwPageFrameInvFlags::SetCompletePaint | SwPageFrameInvFlags::CheckGrid;
             }
         break;
 
         case RES_HEADER:
-            rInvFlags |= static_cast<SwPageFrameInvFlags>(0x08);
+            rInvFlags |= SwPageFrameInvFlags::PrepareHeader;
             break;
 
         case RES_FOOTER:
-            rInvFlags |= static_cast<SwPageFrameInvFlags>(0x10);
+            rInvFlags |= SwPageFrameInvFlags::PrepareFooter;
             break;
         case RES_TEXTGRID:
-            rInvFlags |= static_cast<SwPageFrameInvFlags>(0x60);
+            rInvFlags |= SwPageFrameInvFlags::CheckGrid | SwPageFrameInvFlags::InvalidateGrid;
             break;
         case RES_FRAMEDIR :
             CheckDirChange();
