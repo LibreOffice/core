@@ -571,17 +571,4 @@ void OutputDevice::InitFillColor()
     mbInitFillColor = false;
 }
 
-void OutputDevice::ImplReleaseFonts()
-{
-    mpGraphics->ReleaseFonts();
-
-    mbNewFont = true;
-    mbInitFont = true;
-
-    mpFontInstance.clear();
-    mpDeviceFontList.reset();
-    mpDeviceFontSizeList.reset();
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
