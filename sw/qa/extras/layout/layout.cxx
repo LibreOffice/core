@@ -1312,7 +1312,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf142080)
     load(DATA_DIRECTORY, "fdo43573-2-min.docx");
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
-    // check the first paragraph on page 9 with its fly; the colum was empty too
+    // check the first paragraph on page 9 with its fly; the column was empty too
     assertXPath(pLayout, "/root/page[9]/body/section[1]/column[1]/body/txt[1]/Text[1]", "Portion",
                 "De kleur u (rood) in het rechtervlak (R), de kleur r (wit) beneden (D),");
     SwTwips nPage9Top = getXPath(pLayout, "/root/page[9]/infos/bounds", "top").toInt32();

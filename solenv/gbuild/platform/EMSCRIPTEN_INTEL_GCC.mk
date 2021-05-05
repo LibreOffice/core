@@ -27,7 +27,7 @@ gb_LinkTarget_LDFLAGS += $(gb_EMSCRIPTEN_LDFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS) $(gb
 # Linker and compiler optimize + debug flags are handled in LinkTarget.mk
 gb_LINKEROPTFLAGS :=
 gb_LINKERSTRIPDEBUGFLAGS :=
-# This maps to g4, AKA sorce maps. The LO default would otherwise be g2!
+# This maps to g4, AKA source maps. The LO default would otherwise be g2!
 gb_DEBUGINFO_FLAGS = -g
 # We need at least code elimination, otherwise linking OOMs even with 64GB.
 # So we "fake" -Og support to mean -O1 for Emscripten and always enable it for debug in configure.
