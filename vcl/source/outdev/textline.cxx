@@ -28,6 +28,7 @@
 
 #include <tools/helpers.hxx>
 
+#include <drawmode.hxx>
 #include <salgdi.hxx>
 #include <impglyphitem.hxx>
 
@@ -811,31 +812,7 @@ void OutputDevice::SetTextLineColor()
 
 void OutputDevice::SetTextLineColor( const Color& rColor )
 {
-
-    Color aColor( rColor );
-
-    if ( mnDrawMode & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
-                        DrawModeFlags::GrayText |
-                        DrawModeFlags::SettingsText ) )
-    {
-        if ( mnDrawMode & DrawModeFlags::BlackText )
-        {
-            aColor = COL_BLACK;
-        }
-        else if ( mnDrawMode & DrawModeFlags::WhiteText )
-        {
-            aColor = COL_WHITE;
-        }
-        else if ( mnDrawMode & DrawModeFlags::GrayText )
-        {
-            const sal_uInt8 cLum = aColor.GetLuminance();
-            aColor = Color( cLum, cLum, cLum );
-        }
-        else if ( mnDrawMode & DrawModeFlags::SettingsText )
-        {
-            aColor = GetSettings().GetStyleSettings().GetFontColor();
-        }
-    }
+    Color aColor(GetDrawModeTextColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings()));
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextLineColorAction( aColor, true ) );
@@ -860,31 +837,7 @@ void OutputDevice::SetOverlineColor()
 
 void OutputDevice::SetOverlineColor( const Color& rColor )
 {
-
-    Color aColor( rColor );
-
-    if ( mnDrawMode & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
-                        DrawModeFlags::GrayText |
-                        DrawModeFlags::SettingsText ) )
-    {
-        if ( mnDrawMode & DrawModeFlags::BlackText )
-        {
-            aColor = COL_BLACK;
-        }
-        else if ( mnDrawMode & DrawModeFlags::WhiteText )
-        {
-            aColor = COL_WHITE;
-        }
-        else if ( mnDrawMode & DrawModeFlags::GrayText )
-        {
-            const sal_uInt8 cLum = aColor.GetLuminance();
-            aColor = Color( cLum, cLum, cLum );
-        }
-        else if ( mnDrawMode & DrawModeFlags::SettingsText )
-        {
-            aColor = GetSettings().GetStyleSettings().GetFontColor();
-        }
-    }
+    Color aColor(GetDrawModeTextColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings()));
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaOverlineColorAction( aColor, true ) );

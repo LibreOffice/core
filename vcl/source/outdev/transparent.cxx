@@ -74,39 +74,6 @@ namespace
     }
 }
 
-Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
-{
-    Color aColor( rColor );
-    DrawModeFlags nDrawMode = GetDrawMode();
-
-    if( nDrawMode & ( DrawModeFlags::BlackLine | DrawModeFlags::WhiteLine |
-                      DrawModeFlags::GrayLine |
-                      DrawModeFlags::SettingsLine ) )
-    {
-        if( !aColor.IsTransparent() )
-        {
-            if( nDrawMode & DrawModeFlags::BlackLine )
-            {
-                aColor = COL_BLACK;
-            }
-            else if( nDrawMode & DrawModeFlags::WhiteLine )
-            {
-                aColor = COL_WHITE;
-            }
-            else if( nDrawMode & DrawModeFlags::GrayLine )
-            {
-                const sal_uInt8 cLum = aColor.GetLuminance();
-                aColor = Color( cLum, cLum, cLum );
-            }
-            else if( nDrawMode & DrawModeFlags::SettingsLine )
-            {
-                aColor = GetSettings().GetStyleSettings().GetFontColor();
-            }
-        }
-    }
-    return aColor;
-}
-
 // Caution: This method is nearly the same as
 // void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
 // so when changes are made here do not forget to make changes there, too
