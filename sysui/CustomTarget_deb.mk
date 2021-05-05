@@ -47,7 +47,7 @@ $(deb_WORKDIR)/%/DEBIAN/control: $(deb_SRCDIR)/control $(call gb_CustomTarget_ge
 		KDEMAINDIR=/usr \
 		PREFIXDIR=/usr \
 		./create_tree.sh
-	sed $(deb_SRCDIR)/openoffice.org-freedesktop-menus \
+	sed $(deb_SRCDIR)/openoffice.org-debian-menus \
 		-e 's/%PRODUCTNAME/$(PRODUCTNAME.$*) $(PRODUCTVERSION)/' \
 		-e 's/%PREFIX/$(UNIXFILENAME.$*)/' \
 		-e 's/%ICONPREFIX/$(UNIXFILENAME.$*)/' \
