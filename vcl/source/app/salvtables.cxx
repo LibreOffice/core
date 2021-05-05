@@ -4739,7 +4739,13 @@ int SalInstanceTreeView::count_selected_rows() const { return m_xTreeView->GetSe
 
 int SalInstanceTreeView::get_height_rows(int nRows) const
 {
-    return m_xTreeView->GetEntryHeight() * nRows;
+    int nHeight = m_xTreeView->GetEntryHeight() * nRows;
+
+    sal_Int32 nLeftBorder(0), nTopBorder(0), nRightBorder(0), nBottomBorder(0);
+    m_xTreeView->GetBorder(nLeftBorder, nTopBorder, nRightBorder, nBottomBorder);
+    nHeight += nTopBorder + nBottomBorder;
+
+    return nHeight;
 }
 
 void SalInstanceTreeView::make_sorted()
