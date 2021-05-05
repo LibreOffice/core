@@ -20,6 +20,8 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/PathCapType.hpp>
+#include <com/sun/star/rendering/PathJoinType.hpp>
 
 using namespace ::com::sun::star;
 
@@ -27,9 +29,11 @@ class CanvasTest : public test::BootstrapFixture
 {
     VclPtr<VirtualDevice> mVclDevice;
     uno::Reference<rendering::XCanvas> mCanvas;
+    uno::Reference<rendering::XGraphicDevice> mDevice;
     rendering::ViewState mViewState;
     rendering::RenderState mRenderState;
     uno::Sequence<double> mColorBlack;
+    uno::Sequence<double> mColorBlue;
 
     // if enabled - check the result images with:
     // "xdg-open ./workdir/CppunitTest/canvas_test.test.core/"
@@ -55,6 +59,7 @@ public:
     {
         BootstrapFixture::setUp();
         mColorBlack = vcl::unotools::colorToStdColorSpaceSequence(COL_BLACK);
+        mColorBlue = vcl::unotools::colorToStdColorSpaceSequence(COL_BLUE);
         // Geometry init
         geometry::AffineMatrix2D aUnit(1, 0, 0, 0, 1, 0);
         mViewState.AffineTransform = aUnit;
@@ -67,6 +72,7 @@ public:
     {
         mVclDevice.clear();
         mCanvas = uno::Reference<rendering::XCanvas>();
+        mDevice = uno::Reference<rendering::XGraphicDevice>();
         BootstrapFixture::tearDown();
     }
 
@@ -80,6 +86,9 @@ public:
         mVclDevice->Erase();
         mCanvas = mVclDevice->GetCanvas();
         CPPUNIT_ASSERT(mCanvas.is());
+        mDevice
+            = uno::Reference<rendering::XGraphicDevice>(mCanvas->getDevice(), uno::UNO_SET_THROW);
+        CPPUNIT_ASSERT(mDevice.is());
     }
 
     void testDrawLine()
@@ -88,7 +97,7 @@ public:
         mCanvas->drawLine(geometry::RealPoint2D(1, 1), geometry::RealPoint2D(9, 1), mViewState,
                           mRenderState);
         exportDevice("test-draw-line.png", mVclDevice);
-        Bitmap bitmap = mVclDevice->GetBitmap(Point(), Size(10, 10));
+        Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetOutputSizePixel());
         Bitmap::ScopedReadAccess access(bitmap);
         // Canvas uses AA, which blurs the line, and it cannot be turned off,
         // so do not check the end points.
@@ -97,8 +106,81 @@ public:
         CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK), access->GetPixel(1, 8));
     }
 
+    // Draw a dashed line scaled, make sure the dashing is scaled properly.
+    void testTdf134053()
+    {
+        setupCanvas(Size(1000, 100));
+        // Scale everything up by 10 (2 in render state, 5 in view state).
+        mRenderState.AffineTransform = geometry::AffineMatrix2D(2, 0, 0, 0, 2, 0);
+        mViewState.AffineTransform = geometry::AffineMatrix2D(5, 0, 0, 0, 5, 0);
+
+        uno::Sequence<geometry::RealPoint2D> points(2);
+        points[0] = geometry::RealPoint2D(10, 5);
+        points[1] = geometry::RealPoint2D(88, 5);
+        uno::Sequence<uno::Sequence<geometry::RealPoint2D>> polygonPoints(1);
+        polygonPoints[0] = points;
+        uno::Reference<rendering::XLinePolyPolygon2D> polygon
+            = mDevice->createCompatibleLinePolyPolygon(polygonPoints);
+        polygon->setClosed(0, false);
+
+        mRenderState.DeviceColor = mColorBlue;
+        rendering::StrokeAttributes strokeAttributes;
+        strokeAttributes.StrokeWidth = 2.0;
+        strokeAttributes.MiterLimit = 2.0; // ?
+        strokeAttributes.StartCapType = rendering::PathCapType::ROUND;
+        strokeAttributes.EndCapType = rendering::PathCapType::ROUND;
+        strokeAttributes.JoinType = rendering::PathJoinType::MITER;
+        strokeAttributes.DashArray = { 10, 5, 0.1, 5 };
+
+        mCanvas->strokePolyPolygon(polygon, mViewState, mRenderState, strokeAttributes);
+
+        exportDevice("test-tdf134053.png", mVclDevice);
+        Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetOutputSizePixel());
+        Bitmap::ScopedReadAccess access(bitmap);
+        struct Check
+        {
+            tools::Long start;
+            tools::Long end;
+            Color color;
+        };
+        // There should be a long dash at X 100-200, a dot at 250, long one at 300-400, a dot at 450, etc.
+        // until a dot at 850. Add -5/+5 to account for round caps.
+        const Check checks[] = { { 0, 85, COL_WHITE }, // empty start
+                                 // dash, space, dot, space
+                                 { 95, 205, COL_BLUE },
+                                 { 215, 235, COL_WHITE },
+                                 { 245, 255, COL_BLUE },
+                                 { 265, 285, COL_WHITE },
+                                 { 295, 405, COL_BLUE },
+                                 { 415, 435, COL_WHITE },
+                                 { 445, 455, COL_BLUE },
+                                 { 465, 485, COL_WHITE },
+                                 { 495, 605, COL_BLUE },
+                                 { 615, 635, COL_WHITE },
+                                 { 645, 655, COL_BLUE },
+                                 { 665, 685, COL_WHITE },
+                                 { 695, 805, COL_BLUE },
+                                 { 815, 835, COL_WHITE },
+                                 { 845, 855, COL_BLUE },
+                                 { 865, 999, COL_WHITE } }; // empty end
+        for (const Check& check : checks)
+        {
+            for (tools::Long x = check.start; x <= check.end; ++x)
+            {
+                if (access->GetColor(50, x) != check.color)
+                {
+                    std::ostringstream str;
+                    str << "X: " << x;
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(str.str(), BitmapColor(check.color),
+                                                 access->GetColor(50, x));
+                }
+            }
+        }
+    }
+
     CPPUNIT_TEST_SUITE(CanvasTest);
     CPPUNIT_TEST(testDrawLine);
+    CPPUNIT_TEST(testTdf134053);
     CPPUNIT_TEST_SUITE_END();
 };
 
