@@ -90,15 +90,14 @@ struct MatrixPow
 void lcl_MFastMult(const ScMatrixRef& pA, const ScMatrixRef& pB, const ScMatrixRef& pR,
                    SCSIZE n, SCSIZE m, SCSIZE l)
 {
-    double sum;
     for (SCSIZE row = 0; row < n; row++)
     {
         for (SCSIZE col = 0; col < l; col++)
         {   // result element(col, row) =sum[ (row of A) * (column of B)]
-            sum = 0.0;
+            KahanSum fSum = 0.0;
             for (SCSIZE k = 0; k < m; k++)
-                sum += pA->GetDouble(k,row) * pB->GetDouble(col,k);
-            pR->PutDouble(sum, col, row);
+                fSum += pA->GetDouble(k,row) * pB->GetDouble(col,k);
+            pR->PutDouble(fSum.get(), col, row);
         }
     }
 }
@@ -886,7 +885,7 @@ static void lcl_LUP_solve( const ScMatrix* mLU, const SCSIZE n,
     // Define y=Ux and solve for y in Ly=Pb using forward substitution.
     for (SCSIZE i=0; i < n; ++i)
     {
-        double fSum = B[P[i]];
+        KahanSum fSum = B[P[i]];
         // Matrix inversion comes with a lot of zeros in the B vectors, we
         // don't have to do all the computing with results multiplied by zero.
         // Until then, simply lookout for the position of the first nonzero
@@ -894,19 +893,19 @@ static void lcl_LUP_solve( const ScMatrix* mLU, const SCSIZE n,
         if (nFirst != SCSIZE_MAX)
         {
             for (SCSIZE j = nFirst; j < i; ++j)
-                fSum -= mLU->GetDouble( j, i) * X[j];   // X[j] === y[j]
+                fSum -= mLU->GetDouble( j, i) * X[j];         // X[j] === y[j]
         }
-        else if (fSum)
+        else if (fSum != 0)
             nFirst = i;
-        X[i] = fSum;                                    // X[i] === y[i]
+        X[i] = fSum.get();                                    // X[i] === y[i]
     }
     // Solve for x in Ux=y using back substitution.
     for (SCSIZE i = n; i--; )
     {
-        double fSum = X[i];                             // X[i] === y[i]
+        KahanSum fSum = X[i];                                 // X[i] === y[i]
         for (SCSIZE j = i+1; j < n; ++j)
-            fSum -= mLU->GetDouble( j, i) * X[j];       // X[j] === x[j]
-        X[i] = fSum / mLU->GetDouble( i, i);            // X[i] === x[i]
+            fSum -= mLU->GetDouble( j, i) * X[j];             // X[j] === x[j]
+        X[i] = fSum.get() / mLU->GetDouble( i, i);            // X[i] === x[i]
     }
 #ifdef DEBUG_SC_LUP_DECOMPOSITION
     fprintf( stderr, "\n%s\n", "lcl_LUP_solve():");
@@ -1098,17 +1097,17 @@ void ScInterpreter::ScMatMult()
                 pRMat = GetNewMat(nC2, nR1, /*bEmpty*/true);
                 if (pRMat)
                 {
-                    double sum;
+                    KahanSum fSum;
                     for (SCSIZE i = 0; i < nR1; i++)
                     {
                         for (SCSIZE j = 0; j < nC2; j++)
                         {
-                            sum = 0.0;
+                            fSum = 0.0;
                             for (SCSIZE k = 0; k < nC1; k++)
                             {
-                                sum += pMat1->GetDouble(k,i)*pMat2->GetDouble(j,k);
+                                fSum += pMat1->GetDouble(k,i)*pMat2->GetDouble(j,k);
                             }
-                            pRMat->PutDouble(sum, j, i);
+                            pRMat->PutDouble(fSum.get(), j, i);
                         }
                     }
                     PushMatrix(pRMat);
@@ -1804,7 +1803,8 @@ void ScInterpreter::CalculateSumX2MY2SumX2DY2(bool _bSumX2DY2)
         PushNoValue();
         return;
     }
-    double fVal, fSum = 0.0;
+    double fVal;
+    KahanSum fSum = 0.0;
     for (i = 0; i < nC1; i++)
         for (j = 0; j < nR1; j++)
             if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
@@ -1817,7 +1817,7 @@ void ScInterpreter::CalculateSumX2MY2SumX2DY2(bool _bSumX2DY2)
                 else
                     fSum -= fVal * fVal;
             }
-    PushDouble(fSum);
+    PushDouble(fSum.get());
 }
 
 void ScInterpreter::ScSumX2DY2()
@@ -2701,7 +2701,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                     // = RMSE * sqrt( Xmean * (R' R)^(-1) * Xmean' + 1/N)
                     // (R' R)^(-1) = R^(-1) * (R')^(-1). Do not calculate it as
                     // a whole matrix, but iterate over unit vectors.
-                    double fSigmaIntercept = 0.0;
+                    KahanSum aSigmaIntercept = 0.0;
                     double fPart; // for Xmean * single column of (R' R)^(-1)
                     for (SCSIZE col = 0; col < K; col++)
                     {
@@ -2719,13 +2719,13 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                         if (bConstant)
                         {
                             fPart = lcl_GetSumProduct(pMeans, pMatZ, K);
-                            fSigmaIntercept += fPart * pMeans->GetDouble(col);
+                            aSigmaIntercept += fPart * pMeans->GetDouble(col);
                         }
                     }
                     if (bConstant)
                     {
-                        fSigmaIntercept = fRMSE
-                                          * sqrt(fSigmaIntercept + 1.0 / static_cast<double>(N));
+                        double fSigmaIntercept = fRMSE
+                                          * sqrt( (aSigmaIntercept + 1.0 / static_cast<double>(N) ).get() );
                         pResMat->PutDouble(fSigmaIntercept, K, 1);
                     }
                     else
@@ -2859,7 +2859,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                     // (R' R)^(-1) = R^(-1) * (R')^(-1). Do not calculate it as
                     // a whole matrix, but iterate over unit vectors.
                     // (R' R) ^(-1) is symmetric
-                    double fSigmaIntercept = 0.0;
+                    KahanSum aSigmaIntercept = 0.0;
                     double fPart; // for Xmean * single col of (R' R)^(-1)
                     for (SCSIZE row = 0; row < K; row++)
                     {
@@ -2876,13 +2876,13 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                         if (bConstant)
                         {
                             fPart = lcl_GetSumProduct(pMeans, pMatZ, K);
-                            fSigmaIntercept += fPart * pMeans->GetDouble(row);
+                            aSigmaIntercept += fPart * pMeans->GetDouble(row);
                         }
                     }
                     if (bConstant)
                     {
-                        fSigmaIntercept = fRMSE
-                                          * sqrt(fSigmaIntercept + 1.0 / static_cast<double>(N));
+                        double fSigmaIntercept = fRMSE
+                                          * sqrt( (aSigmaIntercept + 1.0 / static_cast<double>(N) ).get() );
                         pResMat->PutDouble(fSigmaIntercept, K, 1);
                     }
                     else
