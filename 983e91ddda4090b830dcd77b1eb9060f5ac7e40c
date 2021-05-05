@@ -46,6 +46,30 @@
       "revId": "983e91ddda4090b830dcd77b1eb9060f5ac7e40c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d4b7c8c_db0031a5",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2838,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-05T19:40:00Z",
+      "side": 1,
+      "message": "It wasn\u0027t supposed to be a NaN but Infinity instead..\nHowever, may it be that the KahanSum::operator+\u003d() does not handle Infinity and NaN correctly?\nIf so then the isinf() introduced now just covers a symptom and KahanSum should be fixed instead.",
+      "parentUuid": "ac07c68b_6773651c",
+      "range": {
+        "startLine": 2834,
+        "startChar": 20,
+        "endLine": 2838,
+        "endChar": 75
+      },
+      "revId": "983e91ddda4090b830dcd77b1eb9060f5ac7e40c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
