@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-10 18:48:08 using:
+ Generated on 2021-05-10 18:50:26 using:
  ./bin/update_pch desktop sofficeapp --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -58,6 +58,7 @@
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
+#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
@@ -75,6 +76,7 @@
 #include <rtl/character.hxx>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
