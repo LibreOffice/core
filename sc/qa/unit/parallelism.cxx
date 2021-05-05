@@ -70,7 +70,7 @@ public:
 
 private:
 
-    bool getThreadingFlag();
+    bool getThreadingFlag() const;
     void setThreadingFlag(bool bSet);
 
     static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo);
@@ -87,7 +87,7 @@ ScParallelismTest::ScParallelismTest()
 {
 }
 
-bool ScParallelismTest::getThreadingFlag()
+bool ScParallelismTest::getThreadingFlag() const
 {
     return officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get();
 }

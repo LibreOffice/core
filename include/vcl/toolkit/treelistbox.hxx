@@ -678,7 +678,7 @@ public:
 
     // Make single click "activate" a row like a double-click normally does
     void            SetActivateOnSingleClick(bool bEnable) { mbActivateOnSingleClick = bEnable; }
-    bool            GetActivateOnSingleClick() { return mbActivateOnSingleClick; }
+    bool            GetActivateOnSingleClick() const { return mbActivateOnSingleClick; }
 
     // Make mouse over a row "select" a row like a single-click normally does
     void            SetHoverSelection(bool bEnable) { mbHoverSelection = bEnable; }

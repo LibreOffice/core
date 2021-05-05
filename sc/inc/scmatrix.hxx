@@ -161,7 +161,7 @@ public:
         KahanIterateResult(double fAccumulator, size_t nCount)
             : maAccumulator(fAccumulator), mnCount(nCount) {}
 
-        double get() { return maAccumulator.get(); }
+        double get() const { return maAccumulator.get(); }
     };
 
 

@@ -549,7 +549,7 @@ public:
     {
     }
 
-    uno::Any getAny() { return maAny; }
+    const uno::Any& getAny() const { return maAny; }
 
     bool shouldShowExpander() override
     {

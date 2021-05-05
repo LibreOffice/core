@@ -37,7 +37,7 @@ public:
     virtual OUString GetTitle() const override;
 
     void SetCloserVisible(const bool bIsCloserVisible);
-    tools::Rectangle GetDragArea();
+    tools::Rectangle GetDragArea() const;
 
     virtual void DataChanged() override;
 

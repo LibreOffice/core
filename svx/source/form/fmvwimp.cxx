@@ -1010,7 +1010,7 @@ void FmXFormView::breakCreateFormObject()
     m_xLastCreatedControlModel.clear();
 }
 
-Reference<XWindow> FmXFormView::GetParentWindow()
+Reference<XWindow> FmXFormView::GetParentWindow() const
 {
     const vcl::Window* pCurrentWindow = m_pView ? dynamic_cast<const vcl::Window*>(m_pView->GetActualOutDev()) : nullptr;
     return VCLUnoHelper::GetInterface(const_cast<vcl::Window*>(pCurrentWindow));

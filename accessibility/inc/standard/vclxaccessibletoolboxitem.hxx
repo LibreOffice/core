@@ -51,7 +51,7 @@ private:
     bool                    m_bIndeterminate;
 
     css::uno::Reference< css::accessibility::XAccessible >    m_xChild;
-    OUString GetText();
+    OUString GetText() const;
 
 public:
     sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }

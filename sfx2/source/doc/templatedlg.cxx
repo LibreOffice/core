@@ -328,7 +328,7 @@ void SfxTemplateManagerDlg::setTemplateViewMode(TemplateViewMode eViewMode)
     }
 }
 
-TemplateViewMode SfxTemplateManagerDlg::getTemplateViewMode()
+TemplateViewMode SfxTemplateManagerDlg::getTemplateViewMode() const
 {
     return mViewMode;
 }

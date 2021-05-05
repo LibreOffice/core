@@ -66,17 +66,17 @@ protected:
 
     void select_id(const OUString& sId) { mxTreeView->select_id(sId); }
 
-    int get_selected_index() { return mxTreeView->get_selected_index(); }
+    int get_selected_index() const { return mxTreeView->get_selected_index(); }
 
-    std::vector<int> get_selected_rows() { return mxTreeView->get_selected_rows(); }
+    std::vector<int> get_selected_rows() const { return mxTreeView->get_selected_rows(); }
 
-    bool IsListViewVisible() { return mxTreeView->is_visible(); }
+    bool IsListViewVisible() const { return mxTreeView->is_visible(); }
 
     OUString get_id(int pos) { return mxTreeView->get_id(pos); }
 
     void set_cursor(int pos) { mxTreeView->set_cursor(pos); }
 
-    int get_cursor_index() { return mxTreeView->get_cursor_index(); }
+    int get_cursor_index() const { return mxTreeView->get_cursor_index(); }
 
     sal_uInt16 get_cursor_nId() { return get_nId(mxTreeView->get_cursor_index()); }
 

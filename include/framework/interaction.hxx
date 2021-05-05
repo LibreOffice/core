@@ -75,7 +75,7 @@ public:
 
     bool isAbort() const;
     OUString getFilter() const;
-    css::uno::Reference<css::task::XInteractionRequest> GetRequest();
+    css::uno::Reference<css::task::XInteractionRequest> GetRequest() const;
 };
 
 /*-************************************************************************************************************

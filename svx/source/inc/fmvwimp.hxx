@@ -172,7 +172,7 @@ class FmXFormView : public ::cppu::WeakImplHelper<
 
     FmFormShell* GetFormShell() const;
 
-    css::uno::Reference<css::awt::XWindow> GetParentWindow();
+    css::uno::Reference<css::awt::XWindow> GetParentWindow() const;
 
 protected:
     FmXFormView( FmFormView* _pView );

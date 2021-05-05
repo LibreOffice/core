@@ -226,7 +226,7 @@ void TemplateDlgLocalView::Hide()
     ListView::HideListView();
 }
 
-bool TemplateDlgLocalView::IsVisible()
+bool TemplateDlgLocalView::IsVisible() const
 {
     return ThumbnailView::IsVisible() || ListView::IsListViewVisible();
 }

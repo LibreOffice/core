@@ -355,7 +355,7 @@ void SbxVariable::SetParent( SbxObject* p )
     pParent = p;
 }
 
-const OUString& SbxVariable::GetDeclareClassName()
+const OUString& SbxVariable::GetDeclareClassName() const
 {
     return m_aDeclareClassName;
 }

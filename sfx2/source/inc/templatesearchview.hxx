@@ -51,7 +51,7 @@ public:
 
     void Clear() override;
 
-    bool IsVisible();
+    bool IsVisible() const;
 
     void syncCursor();
 

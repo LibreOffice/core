@@ -295,7 +295,7 @@ public:
     SbxObject* GetParent() { return pParent;}
     virtual void SetParent( SbxObject* );
 
-    const OUString& GetDeclareClassName();
+    const OUString& GetDeclareClassName() const;
     void SetDeclareClassName( const OUString& );
     void SetComListener( const css::uno::Reference< css::uno::XInterface >& xComListener,
                          StarBASIC* pParentBasic );

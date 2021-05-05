@@ -231,7 +231,7 @@ public:
     void SetValue(const OString& rValue) { m_aValue = rValue; }
     const OString& GetValue() const;
     sal_uInt64 GetLocation() const;
-    sal_uInt64 GetLength() { return m_aValue.getLength(); }
+    sal_uInt64 GetLength() const { return m_aValue.getLength(); }
 
     void writeString(OStringBuffer& rBuffer) override
     {
