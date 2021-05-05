@@ -48,32 +48,12 @@ namespace chart
 {
 
 DrawModelWrapper::DrawModelWrapper()
-:   SdrModel()
-    , m_pChartItemPool(nullptr)
+:   SdrModel(&ChartItemPool::GetGlobalChartItemPool())
 {
-    m_pChartItemPool = ChartItemPool::CreateChartItemPool();
-
     SetScaleUnit(MapUnit::Map100thMM);
     SetScaleFraction(Fraction(1, 1));
     SetDefaultFontHeight(423);     // 12pt
 
-    SfxItemPool* pMasterPool = &GetItemPool();
-    pMasterPool->SetDefaultMetric(MapUnit::Map100thMM);
-    pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, true) );
-    pMasterPool->SetPoolDefaultItem(makeSvx3DPercentDiagonalItem (5));
-
-    SfxItemPool* pPool = pMasterPool;
-    // append chart pool to end of pool chain
-    for (;;)
-    {
-        SfxItemPool* pSecondary = pPool->GetSecondaryPool();
-        if (!pSecondary)
-            break;
-
-        pPool = pSecondary;
-    }
-    pPool->SetSecondaryPool(m_pChartItemPool);
-    pMasterPool->FreezeIdRanges();
     SetTextDefaults();
 
     //this factory needs to be created before first use of 3D scenes once upon an office runtime
@@ -117,22 +97,6 @@ DrawModelWrapper::DrawModelWrapper()
 
 DrawModelWrapper::~DrawModelWrapper()
 {
-    //remove m_pChartItemPool from pool chain
-    if(m_pChartItemPool)
-    {
-        SfxItemPool* pPool = &GetItemPool();
-        for (;;)
-        {
-            SfxItemPool* pSecondary = pPool->GetSecondaryPool();
-            if(pSecondary == m_pChartItemPool)
-            {
-                pPool->SetSecondaryPool (nullptr);
-                break;
-            }
-            pPool = pSecondary;
-        }
-        SfxItemPool::Free(m_pChartItemPool);
-    }
     m_pRefDevice.disposeAndClear();
 }
 

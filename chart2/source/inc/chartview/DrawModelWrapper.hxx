@@ -37,8 +37,6 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTVIEW DrawModelWrapper : private SdrModel
 {
 private:
-    SfxItemPool* m_pChartItemPool;
-
     css::uno::Reference< css::drawing::XDrawPage > m_xMainDrawPage;
     css::uno::Reference< css::drawing::XDrawPage > m_xHiddenDrawPage;
 
