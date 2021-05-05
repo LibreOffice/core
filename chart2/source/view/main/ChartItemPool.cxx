@@ -214,16 +214,7 @@ MapUnit ChartItemPool::GetMetric(sal_uInt16 /* nWhich */) const
     return MapUnit::Map100thMM;
 }
 
-namespace {
-struct PoolDeleter
-{
-    void operator()(SfxItemPool* pPool)
-    {
-        SfxItemPool::Free(pPool);
-    }
-};
-}
-static std::unique_ptr<SfxItemPool, PoolDeleter> g_Pool1, g_Pool2, g_Pool3;
+static std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> g_Pool1, g_Pool2, g_Pool3;
 
 SfxItemPool& ChartItemPool::GetGlobalChartItemPool()
 {
@@ -241,6 +232,8 @@ SfxItemPool& ChartItemPool::GetGlobalChartItemPool()
 
         g_Pool2->SetSecondaryPool(g_Pool3.get());
         g_Pool1->FreezeIdRanges();
+        g_Pool2->FreezeIdRanges();
+        g_Pool3->FreezeIdRanges();
     }
     return *g_Pool1;
 }

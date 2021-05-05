@@ -278,7 +278,8 @@ public:
     explicit SdrModel(
         SfxItemPool* pPool = nullptr,
         ::comphelper::IEmbeddedHelper* pPers = nullptr,
-        bool bDisablePropertyFiles = false);
+        bool bDisablePropertyFiles = false,
+        MapUnit eDefaultScaleUnit = MapUnit::Map100thMM);
     virtual ~SdrModel() override;
     void ClearModel(bool bCalledFromDestructor);
 

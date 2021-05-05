@@ -45,7 +45,8 @@ private:
 public:
     FmFormModel(
         SfxItemPool* pPool = nullptr,
-        SfxObjectShell* pPers = nullptr);
+        SfxObjectShell* pPers = nullptr,
+        MapUnit eDefaultScaleUnit = MapUnit::Map100thMM);
 
     virtual ~FmFormModel() override;
 

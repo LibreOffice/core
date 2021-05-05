@@ -430,7 +430,13 @@ MapUnit SfxItemPool::GetMetric( sal_uInt16 ) const
 
 void SfxItemPool::SetDefaultMetric( MapUnit eNewMetric )
 {
+    assert((pImpl->eDefMetric == eNewMetric || !pImpl->mpPoolRanges) && "pool already frozen, cannot change metric");
     pImpl->eDefMetric = eNewMetric;
+}
+
+MapUnit SfxItemPool::GetDefaultMetric() const
+{
+    return pImpl->eDefMetric;
 }
 
 const OUString& SfxItemPool::GetName() const
@@ -787,6 +793,7 @@ SfxItemPool* SfxItemPool::GetMasterPool() const
  */
 void SfxItemPool::FreezeIdRanges()
 {
+    assert(!pImpl->mpPoolRanges && "pool already frozen, cannot freeze twice");
     FillItemIdRanges_Impl( pImpl->mpPoolRanges );
 }
 

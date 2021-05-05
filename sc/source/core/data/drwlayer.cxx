@@ -26,6 +26,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/editeng.hxx>
 #include <sot/exchange.hxx>
 #include <svx/objfac3d.hxx>
 #include <svx/xtable.hxx>
@@ -38,6 +39,7 @@
 #include <svx/svdomeas.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svdpool.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/svxids.hrc>
@@ -232,9 +234,34 @@ static ScRange lcl_getClipRangeFromClipDoc(ScDocument* pClipDoc, SCTAB nClipTab)
     return ScRange(nClipStartX, nClipStartY, nClipTab, nClipEndX, nClipEndY, nClipTab);
 }
 
+static SdrItemPool* GetDrawLayerItemPool()
+{
+    SdrItemPool* pPool = new SdrItemPool();
+    SfxItemPool* pGlobalOutlPool = EditEngine::CreatePool();
+    pPool->SetSecondaryPool(pGlobalOutlPool);
+    pPool->SetDefaultMetric(MapUnit::Map100thMM);
+
+    pPool->SetPoolDefaultItem( SvxFrameDirectionItem( SvxFrameDirection::Environment, EE_PARA_WRITINGDIR ) );
+    // #i33700#
+    // Set shadow distance defaults as PoolDefaultItems. Details see bug.
+    pPool->SetPoolDefaultItem(makeSdrShadowXDistItem(300));
+    pPool->SetPoolDefaultItem(makeSdrShadowYDistItem(300));
+
+    // default for script spacing depends on locale, see SdDrawDocument ctor in sd
+    LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
+    if (MsLangId::isKorean(eOfficeLanguage) || eOfficeLanguage == LANGUAGE_JAPANESE)
+    {
+        // secondary is edit engine pool
+        pPool->GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
+    }
+
+    pPool->FreezeIdRanges();                         // the pool is also used directly
+    return pPool;
+}
+
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     FmFormModel(
-        nullptr,
+        GetDrawLayerItemPool(),
         pGlobalDrawPersist ? pGlobalDrawPersist : (pDocument ? pDocument->GetDocumentShell() : nullptr)),
     aName( rName ),
     pDoc( pDocument ),
@@ -259,26 +286,6 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
 
     SetSwapGraphics();
 
-    SetScaleUnit(MapUnit::Map100thMM);
-    SfxItemPool& rPool = GetItemPool();
-    rPool.SetDefaultMetric(MapUnit::Map100thMM);
-    SvxFrameDirectionItem aModeItem( SvxFrameDirection::Environment, EE_PARA_WRITINGDIR );
-    rPool.SetPoolDefaultItem( aModeItem );
-
-    // #i33700#
-    // Set shadow distance defaults as PoolDefaultItems. Details see bug.
-    rPool.SetPoolDefaultItem(makeSdrShadowXDistItem(300));
-    rPool.SetPoolDefaultItem(makeSdrShadowYDistItem(300));
-
-    // default for script spacing depends on locale, see SdDrawDocument ctor in sd
-    LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
-    if (MsLangId::isKorean(eOfficeLanguage) || eOfficeLanguage == LANGUAGE_JAPANESE)
-    {
-        // secondary is edit engine pool
-        rPool.GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
-    }
-
-    rPool.FreezeIdRanges();                         // the pool is also used directly
 
     SdrLayerAdmin& rAdmin = GetLayerAdmin();
     rAdmin.NewLayer("vorne",    sal_uInt8(SC_LAYER_FRONT));

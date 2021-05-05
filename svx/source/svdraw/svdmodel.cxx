@@ -90,14 +90,16 @@ struct SdrModelImpl
 SdrModel::SdrModel(
     SfxItemPool* pPool,
     ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
-    bool bDisablePropertyFiles)
+    bool bDisablePropertyFiles,
+    MapUnit eDefaultUnit)
 :
 #ifdef DBG_UTIL
     // SdrObjectLifetimeWatchDog:
     maAllIncarnatedObjects(),
 #endif
     maMaPag(),
-    maPages()
+    maPages(),
+    m_eObjUnit(eDefaultUnit)
 {
     mpImpl.reset(new SdrModelImpl);
     mpImpl->mpUndoManager=nullptr;
@@ -105,7 +107,6 @@ SdrModel::SdrModel(
     mpImpl->mbAnchoredTextOverflowLegacy = false;
     mbInDestruction = false;
     m_aObjUnit=SdrEngineDefaults::GetMapFraction();
-    m_eObjUnit=SdrEngineDefaults::GetMapUnit();
     m_eUIUnit=FieldUnit::MM;
     m_aUIScale=Fraction(1,1);
     m_nUIUnitDecimalMark=0;
@@ -150,17 +151,15 @@ SdrModel::SdrModel(
     else
         mnCharCompressType = CharCompressType::NONE;
 
-    if ( pPool == nullptr )
+    if ( !m_pItemPool )
     {
-        m_pItemPool=new SdrItemPool(nullptr);
-        // Outliner doesn't have its own Pool, so use the EditEngine's
-        SfxItemPool* pOutlPool=EditEngine::CreatePool();
-        // OutlinerPool as SecondaryPool of SdrPool
-        m_pItemPool->SetSecondaryPool(pOutlPool);
-        // remember that I created both pools myself
-        m_bMyPool=true;
+        m_pItemPool = &SdrObject::GetGlobalDrawObjectItemPool();
+        assert(m_pItemPool->GetDefaultMetric() == m_eObjUnit);
     }
-    m_pItemPool->SetDefaultMetric(m_eObjUnit);
+    else
+    {
+        m_pItemPool->SetDefaultMetric(m_eObjUnit);
+    }
 
 // using static SdrEngineDefaults only if default SvxFontHeight item is not available
     const SfxPoolItem* pPoolItem = m_pItemPool->GetPoolDefaultItem( EE_CHAR_FONTHEIGHT );
@@ -913,10 +912,19 @@ void SdrModel::ImpSetUIUnit()
 
 void SdrModel::SetScaleUnit(MapUnit eMap, const Fraction& rFrac)
 {
-    if (m_eObjUnit!=eMap || m_aObjUnit!=rFrac) {
+    bool bUpdate = false;
+    if (m_eObjUnit!=eMap)
+    {
         m_eObjUnit=eMap;
-        m_aObjUnit=rFrac;
         m_pItemPool->SetDefaultMetric(m_eObjUnit);
+        bUpdate = true;
+    }
+    if (m_aObjUnit!=rFrac) {
+        m_aObjUnit=rFrac;
+        bUpdate = true;
+    }
+    if (bUpdate)
+    {
         ImpSetUIUnit();
         ImpSetOutlinerDefaults( m_pDrawOutliner.get() );
         ImpSetOutlinerDefaults( m_pHitTestOutliner.get() );

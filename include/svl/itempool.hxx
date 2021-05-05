@@ -113,6 +113,7 @@ public:
 
     virtual MapUnit                 GetMetric( sal_uInt16 nWhich ) const;
     void                            SetDefaultMetric( MapUnit eNewMetric );
+    MapUnit                         GetDefaultMetric() const;
 
     /** Request string representation of pool items.
 

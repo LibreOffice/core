@@ -33,10 +33,9 @@ using namespace com::sun::star;
 
 // Constructor
 SwDrawModel::SwDrawModel(SwDoc& rDoc)
-    : FmFormModel(&rDoc.GetAttrPool(), rDoc.GetDocShell())
+    : FmFormModel(&rDoc.GetAttrPool(), rDoc.GetDocShell(), /*defaultScaleUnit*/MapUnit::MapTwip)
     , m_rDoc(rDoc)
 {
-    SetScaleUnit( MapUnit::MapTwip );
     SetSwapGraphics();
 
     // use common InitDrawModelAndDocShell which will set the associations as needed,
