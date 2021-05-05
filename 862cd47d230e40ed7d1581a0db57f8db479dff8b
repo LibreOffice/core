@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0061390d_fe0d8e23",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-05T19:00:08Z",
+      "side": 1,
+      "message": "Nitpick: for readability I\u0027d prefer this as\n\n  sal_Int16 nFlag \u003d ((nParamCount \u003d\u003d 1) ? 1 : GetInt16());\n\nor at least\n\n  sal_Int16 nFlag \u003d (nParamCount \u003d\u003d 1) ? 1 : GetInt16();\n\nAlso for all similar places below.",
+      "range": {
+        "startLine": 251,
+        "startChar": 4,
+        "endLine": 251,
+        "endChar": 56
+      },
+      "revId": "862cd47d230e40ed7d1581a0db57f8db479dff8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1b796980_37db24c4",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 12
@@ -46,6 +69,47 @@
       "revId": "862cd47d230e40ed7d1581a0db57f8db479dff8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2cf17347_37cf42a3",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-05T19:00:08Z",
+      "side": 1,
+      "message": "Nitpick: also, either\n\n  fX \u003e\u003d 0 ? fX : -fX\n\nor\n\n  fX \u003c 0 ? -fX : fX\n\nas 0.0 doesn\u0027t need to be negated.",
+      "parentUuid": "41769e83_0d311651",
+      "range": {
+        "startLine": 1008,
+        "startChar": 52,
+        "endLine": 1008,
+        "endChar": 69
+      },
+      "revId": "862cd47d230e40ed7d1581a0db57f8db479dff8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6d08f564_89175b36",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-05T19:00:08Z",
+      "side": 1,
+      "message": "C++ nitpick: if the result of the operation is unused then use prefix operator --() or ++(), so\n\n  ++fVal;\n\nand\n\n  --fVal;\n\nIt doesn\u0027t matter much for plain types but would for objects (like KahanSum ...) where a return temporary doesn\u0027t have to be created, so it\u0027s just good habit.\n\nAnd please do not leave a space between variable name and operator..",
+      "revId": "862cd47d230e40ed7d1581a0db57f8db479dff8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
