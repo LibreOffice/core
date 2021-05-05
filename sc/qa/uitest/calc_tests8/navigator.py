@@ -150,3 +150,25 @@ class navigator(UITestCase):
         self.xUITest.executeCommand(".uno:Sidebar")
 
         self.ui_test.close_doc()
+
+    def test_tdf141973(self):
+        self.ui_test.load_file(get_url_for_data_file("tdf141973.ods"))
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWin = xCalcDoc.getChild("grid_window")
+
+        self.xUITest.executeCommand(".uno:Sidebar")
+
+        # Without the fix in place, this test would have crashed here
+        xGridWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "ScNavigatorPanel"}))
+
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanel")
+        xContentBox = xNavigatorPanel.getChild('contentbox')
+        xDrawings = xContentBox.getChild("7")
+        self.assertEqual('Drawing objects', get_state_as_dict(xDrawings)['Text'])
+        self.assertEqual(len(xDrawings.getChildren()), 1)
+        self.assertEqual('withname', get_state_as_dict(xDrawings.getChild('0'))['Text'])
+
+        self.xUITest.executeCommand(".uno:Sidebar")
+
+        self.ui_test.close_doc()
