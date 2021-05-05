@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9e62e92d_891f42e0",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-05T19:12:51Z",
+      "side": 1,
+      "message": "Gonna try, but it might trig a not necessary parentheses flag.",
+      "parentUuid": "0061390d_fe0d8e23",
+      "range": {
+        "startLine": 251,
+        "startChar": 4,
+        "endLine": 251,
+        "endChar": 56
+      },
+      "revId": "862cd47d230e40ed7d1581a0db57f8db479dff8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b796980_37db24c4",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 12
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "037d55d5_f600db53",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-05T19:12:51Z",
+      "side": 1,
+      "message": "In the end used std::abs.\nIt\u0027s here: https://gerrit.libreoffice.org/c/core/+/115066",
+      "parentUuid": "2cf17347_37cf42a3",
+      "range": {
+        "startLine": 1008,
+        "startChar": 52,
+        "endLine": 1008,
+        "endChar": 69
+      },
+      "revId": "862cd47d230e40ed7d1581a0db57f8db479dff8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d08f564_89175b36",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 12
@@ -110,6 +158,24 @@
       "revId": "862cd47d230e40ed7d1581a0db57f8db479dff8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f033dc1_da7c590f",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-05T19:12:51Z",
+      "side": 1,
+      "message": "I forgot about the int dummy parameter.",
+      "parentUuid": "6d08f564_89175b36",
+      "revId": "862cd47d230e40ed7d1581a0db57f8db479dff8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
