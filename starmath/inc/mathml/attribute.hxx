@@ -57,7 +57,7 @@ private:
 public:
     SmMlAttribute() { m_aSmMlAttributeValueType = SmMlAttributeValueType::NMlEmpty; };
 
-    virtual ~SmMlAttribute() { clearPreviousAttributeValue(); };
+    ~SmMlAttribute() { clearPreviousAttributeValue(); };
 
     SmMlAttribute(SmMlAttributeValueType)
     {

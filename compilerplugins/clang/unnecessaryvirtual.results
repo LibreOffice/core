@@ -296,8 +296,8 @@ include/vbahelper/vbareturntypes.hxx:39
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:45
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/toolkit/dialog.hxx:98
-    void Dialog::set_content_area(class VclBox *,)
+include/vcl/outdev.hxx:1666
+    void OutputDevice::SetMapMode(const class MapMode &,)
 include/vcl/weld.hxx:100
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
@@ -374,10 +374,6 @@ sc/source/ui/vba/vbapagebreak.hxx:47
     void ScVbaPageBreak::Delete()
 sc/source/ui/vba/vbapagebreak.hxx:48
     class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaPageBreak::Location()
-sd/source/ui/remotecontrol/ZeroconfService.hxx:37
-    void sd::ZeroconfService::~ZeroconfService()
-sfx2/source/devtools/DocumentModelTreeHandler.cxx:77
-    class rtl::OUString & (anonymous namespace)::DocumentModelTreeEntry::getString()
 shell/inc/i_xml_parser_event_handler.hxx:41
     void i_xml_parser_event_handler::~i_xml_parser_event_handler()
 slideshow/source/engine/activities/activitiesfactory.cxx:172
@@ -400,6 +396,8 @@ slideshow/source/engine/animationfactory.cxx:619
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 slideshow/source/inc/shape.hxx:221
     void slideshow::internal::Shape::setIsForeground(const _Bool,)
+starmath/inc/mathml/attribute.hxx:60
+    void SmMlAttribute::~SmMlAttribute()
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
 toolkit/inc/controls/geometrycontrolmodel.hxx:185
@@ -408,17 +406,17 @@ vcl/inc/jsdialog/jsdialogbuilder.hxx:138
     void JSDialogSender::sendFullUpdate(_Bool,)
 vcl/inc/jsdialog/jsdialogbuilder.hxx:141
     void JSDialogSender::sendAction(class VclPtr<class vcl::Window>,class std::unique_ptr<class std::__debug::unordered_map<class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> >, class rtl::OUString, struct std::hash<std::string>, struct std::equal_to<class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > >, class std::allocator<struct std::pair<const class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> >, class rtl::OUString> > >, struct std::default_delete<class std::__debug::unordered_map<class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> >, class rtl::OUString, struct std::hash<std::string>, struct std::equal_to<class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > >, class std::allocator<struct std::pair<const class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> >, class rtl::OUString> > > > >,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:301
+vcl/inc/jsdialog/jsdialogbuilder.hxx:304
     void JSWidget::show()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:307
+vcl/inc/jsdialog/jsdialogbuilder.hxx:310
     void JSWidget::hide()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:314
+vcl/inc/jsdialog/jsdialogbuilder.hxx:317
     void JSWidget::set_sensitive(_Bool,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:322
+vcl/inc/jsdialog/jsdialogbuilder.hxx:325
     class com::sun::star::uno::Reference<class com::sun::star::datatransfer::dnd::XDropTarget> JSWidget::get_drop_target()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:330
+vcl/inc/jsdialog/jsdialogbuilder.hxx:333
     void JSWidget::freeze()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:336
+vcl/inc/jsdialog/jsdialogbuilder.hxx:339
     void JSWidget::thaw()
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
@@ -432,7 +430,7 @@ vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
-vcl/inc/salvtables.hxx:1580
+vcl/inc/salvtables.hxx:1589
     _Bool SalInstanceTreeView::get_iter_abs_pos(class weld::TreeIter &,int,)const
 vcl/inc/skia/gdiimpl.hxx:238
     void SkiaSalGraphicsImpl::createSurface()
@@ -460,34 +458,28 @@ vcl/inc/unx/saldisp.hxx:197
     _Bool SalXLib::CheckTimeout(_Bool,)
 vcl/inc/unx/saldisp.hxx:404
     void SalX11Display::Yield()
-vcl/inc/unx/salframe.h:205
+vcl/inc/unx/salframe.h:208
     void X11SalFrame::updateGraphics(_Bool,)
 vcl/inc/unx/salinst.h:41
     class SalX11Display * X11SalInstance::CreateDisplay()const
-workdir/../vcl/inc/qt5/Qt5FilePicker.hxx:154
-    void Qt5FilePicker::addCustomControl(short,)
-workdir/../vcl/inc/qt5/Qt5FilePicker.hxx:172
-    void Qt5FilePicker::updateAutomaticFileExtension()
-workdir/../vcl/inc/qt5/Qt5Frame.hxx:160
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:155
     void Qt5Frame::registerDragSource(class Qt5DragSource *,)
-workdir/../vcl/inc/qt5/Qt5Frame.hxx:161
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:156
     void Qt5Frame::deregisterDragSource(const class Qt5DragSource *,)
-workdir/../vcl/inc/qt5/Qt5Frame.hxx:162
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:157
     void Qt5Frame::registerDropTarget(class Qt5DropTarget *,)
-workdir/../vcl/inc/qt5/Qt5Frame.hxx:163
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:158
     void Qt5Frame::deregisterDropTarget(const class Qt5DropTarget *,)
-workdir/../vcl/inc/qt5/Qt5Instance.hxx:84
-    class rtl::Reference<class Qt5FilePicker> Qt5Instance::createPicker(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,enum QFileDialog::FileMode,)
 writerfilter/source/dmapper/TableManager.hxx:492
     void writerfilter::dmapper::TableManager::tableExceptionProps(const class tools::SvRef<class writerfilter::dmapper::TablePropertyMap> &,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:65
-    void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:66
-    void writerfilter::ooxml::OOXMLFactory_ns::charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
+    void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:67
-    void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+    void writerfilter::ooxml::OOXMLFactory_ns::charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:68
+    void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+writerfilter/source/ooxml/OOXMLFactory.hxx:69
     void writerfilter::ooxml::OOXMLFactory_ns::attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,int,const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &,)
-xmloff/source/forms/elementimport.hxx:550
+xmloff/source/forms/elementimport.hxx:549
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OColumnImport::createElement()
 
