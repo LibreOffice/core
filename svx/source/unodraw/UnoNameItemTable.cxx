@@ -180,7 +180,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
 
     if (mpModelPool)
     {
-        NameOrIndex aSample(mnWhich, aName);
+        SampleItem aSample(mnWhich, aName);
         for (const SfxPoolItem* pNameOrIndex : mpModelPool->FindItemSurrogate(mnWhich, aSample))
             if (isValid(static_cast<const NameOrIndex*>(pNameOrIndex)))
             {
