@@ -21,8 +21,13 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/sdangitm.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svx3ditems.hxx>
 #include <svl/intitem.hxx>
+#include <editeng/editeng.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/ilstitem.hxx>
@@ -209,9 +214,35 @@ MapUnit ChartItemPool::GetMetric(sal_uInt16 /* nWhich */) const
     return MapUnit::Map100thMM;
 }
 
-SfxItemPool* ChartItemPool::CreateChartItemPool()
+namespace {
+struct PoolDeleter
 {
-    return new ChartItemPool();
+    void operator()(SfxItemPool* pPool)
+    {
+        SfxItemPool::Free(pPool);
+    }
+};
+}
+static std::unique_ptr<SfxItemPool, PoolDeleter> g_Pool1, g_Pool2, g_Pool3;
+
+SfxItemPool& ChartItemPool::GetGlobalChartItemPool()
+{
+    if (!g_Pool1)
+    {
+        // similar logic to SdrModel's pool, but with our chart pool tagged on the end
+        g_Pool1.reset(new SdrItemPool(nullptr));
+        g_Pool2.reset(EditEngine::CreatePool());
+        g_Pool3.reset(new ChartItemPool());
+        g_Pool1->SetSecondaryPool(g_Pool2.get());
+
+        g_Pool1->SetDefaultMetric(MapUnit::Map100thMM);
+        g_Pool1->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, true) );
+        g_Pool1->SetPoolDefaultItem(makeSvx3DPercentDiagonalItem (5));
+
+        g_Pool2->SetSecondaryPool(g_Pool3.get());
+        g_Pool1->FreezeIdRanges();
+    }
+    return *g_Pool1;
 }
 
 } //  namespace chart
