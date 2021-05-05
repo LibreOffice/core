@@ -1564,6 +1564,24 @@ static Writer& OutCSS1_SwFormat( Writer& rWrt, const SwFormat& rFormat,
          RES_POOLCHR_INET_VISIT==nRefPoolId) )
         bCheckForPseudo = true;
 
+    // root <p> style with line spacing set
+    if (rFormat.GetPoolFormatId() == RES_POOLCOLL_TEXT &&
+        aItemSet.GetItemState(RES_PARATR_LINESPACING, false) == SfxItemState::SET)
+    {
+        // If no font size is set, make the implicit font sizes explicit so they are exported.
+        // So that pasting from LibreOffice to Google Docs via Chromium does not result
+        // in all the lines of text getting ~0 linespacing and appearing drawn on top
+        // of eachother. GDocs seems to have a problem when a <style type="text/css">
+        // appears in the html and then a relative line-height is used in paragraphs as if
+        // they are relative to a 0 height font.
+        if (aItemSet.GetItemState(RES_CHRATR_FONTSIZE, false) != SfxItemState::SET)
+            aItemSet.Put(aItemSet.Get(RES_CHRATR_FONTSIZE));
+        if (aItemSet.GetItemState(RES_CHRATR_CJK_FONTSIZE, false) != SfxItemState::SET)
+            aItemSet.Put(aItemSet.Get(RES_CHRATR_CJK_FONTSIZE));
+        if (aItemSet.GetItemState(RES_CHRATR_CTL_FONTSIZE, false) != SfxItemState::SET)
+            aItemSet.Put(aItemSet.Get(RES_CHRATR_CTL_FONTSIZE));
+    }
+
     // export now the Attributes (incl. selector)
     bool bHasScriptDependencies = false;
     if( OutCSS1Rule( rHTMLWrt, aSelector, aItemSet, CSS1_FMT_ISTAG != nDeep,
