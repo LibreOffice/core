@@ -497,6 +497,7 @@ void ScInputWindow::setPosSizePixel(long nX, long nY, long nWidth, long nHeight,
         aItems.emplace_back("size", GetSizePixel().toString());
         aItems.emplace_back("lines", OString::number(aTextWindow.GetNumLines()));
         pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
+        Invalidate();
     }
 }
 
