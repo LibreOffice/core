@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ed9ff0b_9751eb4e",
+        "filename": "sc/source/ui/vba/vbaborders.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-05-05T16:05:53Z",
+      "side": 0,
+      "message": "Wouldn\u0027t VBA programmers get surprised if the message appears when aBorderLine.OuterLineWidth \u003d\u003d 4 (i.e. the border width is 0.04mm) ?\n--------------\n// https://opengrok.libreoffice.org/xref/core/oovbaapi/ooo/vba/excel/XlBorderWeight.idl?r\u003d2b383d19#3\n\nIf Range(\"A1\").Borders(xlEdgeBottom.Weight() \u003d XlBorderWeight.xlThick Then\nMsgbox(\"the border is 1.41mm \")\nEnd If",
+      "revId": "ff673ce838a5538b1432daf9007c047f6455a5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
