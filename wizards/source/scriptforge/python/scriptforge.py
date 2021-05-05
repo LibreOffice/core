@@ -1521,10 +1521,15 @@ class SFDialogs:
     class SF_Dialog(SFServices):
         """
             Each instance of the current class represents a single dialog box displayed to the user.
-            From a Python script, a dialog box can be displayed in modal mode only.
+            The dialog box must have been designed and defined with the Basic IDE previously.
+            From a Python script, a dialog box can be displayed in modal or in non-modal modes.
+
             In modal mode, the box is displayed and the execution of the macro process is suspended
             until one of the OK or Cancel buttons is pressed. In the meantime, other user actions
             executed on the box can trigger specific actions.
+
+            In non-modal mode, the floating dialog remains displayed until the dialog is terminated
+            by code (Terminate()) or until the LibreOffice application stops.
             """
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
@@ -1536,6 +1541,8 @@ class SFDialogs:
                                  OnMouseExited = False, OnMouseMoved = False, OnMousePressed = False,
                                  OnMouseReleased = False,
                                  Page = True, Visible = True, Width = True, XDialogModel = False, XDialogView = False)
+        # Class constants used together with the Execute() method
+        OKBUTTON, CANCELBUTTON = 1, 0
 
         @classmethod
         def PreProcessArgs(cls, args):
