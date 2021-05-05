@@ -30,6 +30,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
+#include <drawmode.hxx>
 #include <salgdi.hxx>
 
 #include <memory>
@@ -55,29 +56,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
     assert(!is_double_buffered_window());
 
     Hatch aHatch( rHatch );
-
-    if ( mnDrawMode & ( DrawModeFlags::BlackLine | DrawModeFlags::WhiteLine |
-                        DrawModeFlags::GrayLine |
-                        DrawModeFlags::SettingsLine ) )
-    {
-        Color aColor( rHatch.GetColor() );
-
-        if ( mnDrawMode & DrawModeFlags::BlackLine )
-            aColor = COL_BLACK;
-        else if ( mnDrawMode & DrawModeFlags::WhiteLine )
-            aColor = COL_WHITE;
-        else if ( mnDrawMode & DrawModeFlags::GrayLine )
-        {
-            const sal_uInt8 cLum = aColor.GetLuminance();
-            aColor = Color( cLum, cLum, cLum );
-        }
-        else if( mnDrawMode & DrawModeFlags::SettingsLine )
-        {
-            aColor = GetSettings().GetStyleSettings().GetFontColor();
-        }
-
-        aHatch.SetColor( aColor );
-    }
+    aHatch.SetColor(GetDrawModeHatchColor(rHatch.GetColor(), GetDrawMode(), GetSettings().GetStyleSettings()));
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaHatchAction( rPolyPoly, aHatch ) );
