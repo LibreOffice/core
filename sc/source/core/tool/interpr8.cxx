@@ -353,9 +353,9 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
             {
                 // gap, insert missing data points
                 double fYGap = ( maRange[ i ].Y + maRange[ i - 1 ].Y ) / 2.0;
-                for ( double fXGap = maRange[ i - 1].X + mfStepSize;  fXGap < maRange[ i ].X; fXGap += mfStepSize )
+                for ( KahanSum fXGap = maRange[ i - 1].X + mfStepSize;  fXGap < maRange[ i ].X; fXGap += mfStepSize )
                 {
-                    maRange.insert( maRange.begin() + i, DataPoint( fXGap, ( bDataCompletion ? fYGap : 0.0 ) ) );
+                    maRange.insert( maRange.begin() + i, DataPoint( fXGap.get(), ( bDataCompletion ? fYGap : 0.0 ) ) );
                     i++;
                     mnCount++;
                     nMissingXCount++;
@@ -419,10 +419,13 @@ bool ScETSForecastCalculation::prefillTrendData()
             return false;
         }
 
-        double fSum = 0.0;
+        KahanSum fSum = 0.0;
         for ( SCSIZE i = 0; i < mnSmplInPrd; i++ )
-            fSum += maRange[ i + mnSmplInPrd ].Y - maRange[ i ].Y;
-        double fTrend = fSum / static_cast< double >( mnSmplInPrd * mnSmplInPrd );
+        {
+            fSum += maRange[ i + mnSmplInPrd ].Y;
+            fSum -= maRange[ i ].Y;
+        }
+        double fTrend = fSum.get() / static_cast< double >( mnSmplInPrd * mnSmplInPrd );
 
         mpTrend[ 0 ] = fTrend;
     }
@@ -442,7 +445,7 @@ bool ScETSForecastCalculation::prefillPerIdx()
             return false;
         }
         SCSIZE nPeriods = mnCount / mnSmplInPrd;
-        std::vector< double > aPeriodAverage( nPeriods, 0.0 );
+        std::vector< KahanSum > aPeriodAverage( nPeriods, 0.0 );
         for ( SCSIZE i = 0; i < nPeriods ; i++ )
         {
             for ( SCSIZE j = 0; j < mnSmplInPrd; j++ )
@@ -458,20 +461,20 @@ bool ScETSForecastCalculation::prefillPerIdx()
 
         for ( SCSIZE j = 0; j < mnSmplInPrd; j++ )
         {
-            double fI = 0.0;
+            KahanSum fI = 0.0;
             for ( SCSIZE i = 0; i < nPeriods ; i++ )
             {
                 // adjust average value for position within period
                 if ( bAdditive )
-                    fI += ( maRange[ i * mnSmplInPrd + j ].Y -
-                            ( aPeriodAverage[ i ] + ( static_cast< double >( j ) - 0.5 * ( mnSmplInPrd - 1 ) ) *
-                              mpTrend[ 0 ] ) );
+                    fI +=   maRange[ i * mnSmplInPrd + j ].Y -
+                            ( aPeriodAverage[ i ].get() + ( static_cast< double >( j ) - 0.5 * ( mnSmplInPrd - 1 ) ) *
+                              mpTrend[ 0 ] );
                 else
-                    fI += ( maRange[ i * mnSmplInPrd + j ].Y /
-                            ( aPeriodAverage[ i ] + ( static_cast< double >( j ) - 0.5 * ( mnSmplInPrd - 1 ) ) *
-                              mpTrend[ 0 ] ) );
+                    fI +=   maRange[ i * mnSmplInPrd + j ].Y /
+                            ( aPeriodAverage[ i ].get() + ( static_cast< double >( j ) - 0.5 * ( mnSmplInPrd - 1 ) ) *
+                              mpTrend[ 0 ] );
             }
-            mpPerIdx[ j ] = fI / nPeriods;
+            mpPerIdx[ j ] = fI.get() / nPeriods;
         }
         if (mnSmplInPrd < mnCount)
             mpPerIdx[mnSmplInPrd] = 0.0;
@@ -500,10 +503,10 @@ void ScETSForecastCalculation::initCalc()
 
 void ScETSForecastCalculation::calcAccuracyIndicators()
 {
-    double fSumAbsErr     = 0.0;
-    double fSumDivisor    = 0.0;
-    double fSumErrSq      = 0.0;
-    double fSumAbsPercErr = 0.0;
+    KahanSum fSumAbsErr     = 0.0;
+    KahanSum fSumDivisor    = 0.0;
+    KahanSum fSumErrSq      = 0.0;
+    KahanSum fSumAbsPercErr = 0.0;
 
     for ( SCSIZE i = 1; i < mnCount; i++ )
     {
@@ -517,11 +520,11 @@ void ScETSForecastCalculation::calcAccuracyIndicators()
         fSumDivisor += fabs( maRange[ i ].Y - maRange[ i - 1 ].Y );
 
     int nCalcCount = mnCount - 1;
-    mfMAE   = fSumAbsErr / nCalcCount;
-    mfMASE  = fSumAbsErr / ( nCalcCount * fSumDivisor / ( nCalcCount - 1 ) );
-    mfMSE   = fSumErrSq / nCalcCount;
+    mfMAE   = fSumAbsErr.get() / nCalcCount;
+    mfMASE  = fSumAbsErr.get() / ( nCalcCount * fSumDivisor.get() / ( nCalcCount - 1 ) );
+    mfMSE   = fSumErrSq.get() / nCalcCount;
     mfRMSE  = sqrt( mfMSE );
-    mfSMAPE = fSumAbsPercErr * 2.0 / nCalcCount;
+    mfSMAPE = fSumAbsPercErr.get() * 2.0 / nCalcCount;
 }
 
 /*
@@ -539,7 +542,7 @@ SCSIZE ScETSForecastCalculation::CalcPeriodLen()
 
     for ( SCSIZE nPeriodLen = mnCount / 2; nPeriodLen >= 1; nPeriodLen-- )
     {
-        double fMeanError = 0.0;
+        KahanSum fMeanError = 0.0;
         SCSIZE nPeriods = mnCount / nPeriodLen;
         SCSIZE nStart = mnCount - ( nPeriods * nPeriodLen ) + 1;
         for ( SCSIZE i = nStart; i < ( mnCount - nPeriodLen ); i++ )
@@ -547,12 +550,13 @@ SCSIZE ScETSForecastCalculation::CalcPeriodLen()
             fMeanError += fabs( ( maRange[ i ].Y - maRange[ i - 1 ].Y ) -
                                 ( maRange[ nPeriodLen + i ].Y - maRange[ nPeriodLen + i - 1 ].Y ) );
         }
-        fMeanError /= static_cast< double >( ( nPeriods - 1 ) * nPeriodLen - 1 );
+        double fMeanErrorGet = fMeanError.get();
+        fMeanErrorGet /= static_cast< double >( ( nPeriods - 1 ) * nPeriodLen - 1 );
 
-        if ( fMeanError <= fBestME || fMeanError == 0.0 )
+        if ( fMeanErrorGet <= fBestME || fMeanErrorGet == 0.0 )
         {
             nBestVal = nPeriodLen;
-            fBestME = fMeanError;
+            fBestME = fMeanErrorGet;
         }
     }
     return nBestVal;
