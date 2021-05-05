@@ -61,7 +61,7 @@
                 <TextView
                     android:id="@+id/header_browser"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:padding="16dp"
                     android:text="@string/title_browser"
@@ -90,7 +90,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:id="@+id/header_recents"
                     android:text="@string/title_recents"
                     android:gravity="center_vertical"
