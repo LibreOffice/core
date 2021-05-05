@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12fd501f_48623c23",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2838,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-05T12:43:24Z",
+      "side": 1,
+      "message": "I believe the error on compilation is related with this comment.\n\nThis is the line that triggers the error: https://opengrok.libreoffice.org/xref/core/sc/qa/unit/ucalc_formula.cxx?r\u003d7049328f#7802\nJust before the result is checked 1E+308 used as input.\n\nAny ideas about potential solutions?",
+      "range": {
+        "startLine": 2834,
+        "startChar": 20,
+        "endLine": 2838,
+        "endChar": 75
+      },
+      "revId": "983e91ddda4090b830dcd77b1eb9060f5ac7e40c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
