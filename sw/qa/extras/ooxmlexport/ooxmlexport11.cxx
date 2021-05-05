@@ -1407,6 +1407,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121176, "tdf121176.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "must" ), getRun( getParagraph( 1 ), 2 )->getString());
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128913, "tdf128913.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // w:ins and w:del are imported correctly, if they contain only inline images
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:inline/a:graphic");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:inline/a:graphic");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142387, "tdf142387.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport();

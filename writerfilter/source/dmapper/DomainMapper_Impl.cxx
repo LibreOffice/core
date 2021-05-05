@@ -1826,6 +1826,24 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         }
                     }
 
+                    // apply redlines for inline images
+                    if (IsParaWithInlineObject())
+                    {
+                        for (const auto& rAnchored : rAppendContext.m_aAnchoredObjects)
+                        {
+                            // process only inline objects with redlining
+                            if (!rAnchored.m_xRedlineForInline)
+                                continue;
+
+                            // select the inline image and set its redline
+                            auto xAnchorRange = rAnchored.m_xAnchoredObject->getAnchor();
+                            uno::Reference< text::XTextCursor > xCursorOnImage =
+                                    xAnchorRange->getText()->createTextCursorByRange(xAnchorRange);
+                            xCursorOnImage->goRight(1, true);
+                            CreateRedline( xCursorOnImage, rAnchored.m_xRedlineForInline );
+                        }
+                    }
+
                     xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
                     m_xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
 
@@ -6880,7 +6898,21 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
             m_aTextAppendStack.top().m_aAnchoredObjects.push_back(aInfo);
         }
         else if (eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
+        {
             m_bParaWithInlineObject = true;
+
+            // store inline images with track changes, because the anchor point
+            // to set redlining is not available yet
+            if (!m_aTextAppendStack.empty() && !m_aRedlines.top().empty() )
+            {
+                // Remember this object is anchored to the current paragraph.
+                AnchoredObjectInfo aInfo;
+                aInfo.m_xAnchoredObject = xTextContent;
+                aInfo.m_xRedlineForInline = m_aRedlines.top().back();
+                m_aTextAppendStack.top().m_aAnchoredObjects.push_back(aInfo);
+            }
+
+        }
     }
 
     // Clear the reference, so in case the embedded object is inside a
