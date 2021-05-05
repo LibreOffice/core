@@ -80,6 +80,7 @@ const struct {
     { "en_ZM",  lcl_DATA_EN },
     { "en_LK",  lcl_DATA_EN },
     { "en_NG",  lcl_DATA_EN },
+    { "en_KE",  lcl_DATA_EN },
 
     { "es_ES",  lcl_DATA_ES },
     { "es_AR",  lcl_DATA_ES },
@@ -217,7 +218,7 @@ const struct {
     { "pa_IN",  lcl_DATA_OTHERS },
     { "bn_IN",  lcl_DATA_OTHERS },
     { "or_IN",  lcl_DATA_OTHERS },
-    { "en_IN",  lcl_DATA_OTHERS },
+    { "en_IN",  lcl_DATA_OTHERS },  // keep in OTHERS for IN
     { "ml_IN",  lcl_DATA_OTHERS },
     { "bn_BD",  lcl_DATA_OTHERS },
     { "th_TH",  lcl_DATA_OTHERS },
@@ -226,7 +227,7 @@ const struct {
     { "hu_HU",  lcl_DATA_OTHERS },
     { "id_ID",  lcl_DATA_OTHERS },
     { "ms_MY",  lcl_DATA_OTHERS },
-    { "en_MY",  lcl_DATA_OTHERS },
+    { "en_MY",  lcl_DATA_OTHERS },  // needs to be in OTHERS instead of EN because currency inherited from ms_MY
     { "ia",     lcl_DATA_OTHERS },
     { "mn_Cyrl_MN",  lcl_DATA_OTHERS },
     { "az_AZ",  lcl_DATA_OTHERS },
@@ -330,8 +331,7 @@ const struct {
     { "ilo_PH", lcl_DATA_OTHERS },
     { "ha_Latn_NG",  lcl_DATA_OTHERS },
     { "min_ID", lcl_DATA_OTHERS },
-    { "sun_ID", lcl_DATA_OTHERS },
-    { "en_KE",  lcl_DATA_OTHERS }
+    { "sun_ID", lcl_DATA_OTHERS }
 };
 
 #else
