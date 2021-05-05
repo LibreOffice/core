@@ -39,6 +39,24 @@
       "revId": "b347b4aaf36f7b8625e184d2962754a7e9042b52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73659194_ec3fb559",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-05T19:21:47Z",
+      "side": 1,
+      "message": "I\u0027m not sure to understand well. I thought PushDouble would push the error by the NaN value and that we where removing that step.\nHowever, gonna try to improve the patch title.",
+      "parentUuid": "f313ca79_8691ecb7",
+      "revId": "b347b4aaf36f7b8625e184d2962754a7e9042b52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
