@@ -31,6 +31,7 @@
 #include <vcl/pdf/PDFPageObjectType.hxx>
 
 #include <fpdf_doc.h>
+#include <fpdf_formfill.h>
 
 class SvMemoryStream;
 
@@ -79,7 +80,8 @@ public:
     ~PDFiumBitmap();
     FPDF_BITMAP getPointer() { return mpBitmap; }
     void fillRect(int left, int top, int width, int height, sal_uInt32 nColor);
-    void renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX, int nSizeY);
+    void renderPageBitmap(PDFiumDocument* pDoc, PDFiumPage* pPage, int nStartX, int nStartY,
+                          int nSizeX, int nSizeY);
     ConstScanline getBuffer();
     int getStride();
 };
@@ -244,10 +246,27 @@ public:
     FPDF_SIGNATURE getPointer() { return mpSignature; }
 };
 
+/// Wrapper around FPDF_FORMHANDLE.
+class PDFiumFormHandle final
+{
+private:
+    FPDF_FORMHANDLE mpHandle;
+
+    PDFiumFormHandle(const PDFiumFormHandle&) = delete;
+    PDFiumFormHandle& operator=(const PDFiumFormHandle&) = delete;
+
+public:
+    PDFiumFormHandle(FPDF_FORMHANDLE pHandle);
+    ~PDFiumFormHandle();
+    FPDF_FORMHANDLE getPointer();
+};
+
 class VCL_DLLPUBLIC PDFiumDocument final
 {
 private:
     FPDF_DOCUMENT mpPdfDocument;
+    FPDF_FORMFILLINFO m_aFormCallbacks;
+    std::unique_ptr<PDFiumFormHandle> m_pFormHandle;
 
 private:
     PDFiumDocument(const PDFiumDocument&) = delete;
@@ -256,6 +275,7 @@ private:
 public:
     PDFiumDocument(FPDF_DOCUMENT pPdfDocument);
     ~PDFiumDocument();
+    FPDF_FORMHANDLE getFormHandlePointer();
 
     // Page size in points
     basegfx::B2DSize getPageSize(int nIndex);
