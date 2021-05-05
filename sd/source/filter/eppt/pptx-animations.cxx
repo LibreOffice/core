@@ -994,11 +994,13 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
 {
     const Reference<XAnimationNode>& rXNode = getCurrentNode();
     std::optional<OString> sDuration;
+    std::optional<OString> sRepeatCount;
     const char* pRestart = nullptr;
     const char* pNodeType = nullptr;
     const char* pPresetClass = nullptr;
     const char* pFill = nullptr;
     double fDuration = 0;
+    double fRepeatCount = 0;
     Any aAny;
     assert(mpContext);
 
@@ -1070,12 +1072,30 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
 
     bool bAutoReverse = rXNode->getAutoReverse();
 
+    aAny = rXNode->getRepeatCount();
+    if (aAny.hasValue())
+    {
+        Timing eTiming;
+
+        if (aAny >>= eTiming)
+        {
+            if (eTiming == Timing_INDEFINITE)
+                sRepeatCount = "indefinite";
+        }
+        else
+            aAny >>= fRepeatCount;
+    }
+
+    if (fRepeatCount != 0)
+        sRepeatCount = OString::number(static_cast<sal_Int32>(fRepeatCount * 1000.0));
+
     mpFS->startElementNS(
         XML_p, XML_cTn, XML_id, OString::number(GetNextAnimationNodeId(rXNode)), XML_dur, sDuration,
         XML_autoRev, sax_fastparser::UseIf("1", bAutoReverse), XML_restart, pRestart, XML_nodeType,
         pNodeType, XML_fill, pFill, XML_presetClass, pPresetClass, XML_presetID,
         sax_fastparser::UseIf(OString::number(nPresetId), bPresetId), XML_presetSubtype,
-        sax_fastparser::UseIf(OString::number(nPresetSubType), bPresetSubType));
+        sax_fastparser::UseIf(OString::number(nPresetSubType), bPresetSubType), XML_repeatCount,
+        sRepeatCount);
 
     WriteAnimationCondList(mpContext->getCondition(true), XML_stCondLst);
     WriteAnimationCondList(mpContext->getCondition(false), XML_endCondLst);
