@@ -1466,6 +1466,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
         do
         {
             pLast = pFrame;
+            bool const wasFrameLowerOfLay(pLay->IsAnLower(pFrame));
             if( pFrame->IsVertical() ?
                 ( pFrame->GetUpper()->getFramePrintArea().Height() != pFrame->getFrameArea().Height() )
                 : ( pFrame->GetUpper()->getFramePrintArea().Width() != pFrame->getFrameArea().Width() ) )
@@ -1607,7 +1608,10 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
 
                 // #i28701# - restart layout process, if
                 // requested by floating screen object formatting
-                if ( bRestartLayoutProcess )
+                if (bRestartLayoutProcess
+                    // tdf#142080 if it was aleady on next page, and still is,
+                    // ignore restart, as restart could cause infinite loop
+                    && (wasFrameLowerOfLay || pLay->IsAnLower(pFrame)))
                 {
                     pFrame = pLay->ContainsAny();
                     pAgainObj1 = nullptr;
@@ -1671,10 +1675,10 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                         pFrame->InvalidatePos_();
                 }
             }
-          // Stay in the pLay
-          // Except for SectionFrames with Follow: the first ContentFrame of the Follow
-          // will be formatted, so that it gets a chance to load in the pLay.
-          // As long as these Frames are loading in pLay, we continue
+          // Stay in the pLay.
+          // Except for SectionFrames with Follow: the first ContentFrame of the
+          // Follow will be formatted, so that it gets a chance to move back
+          // into the pLay.  Continue as long as these Frames land in pLay.
         } while ( pFrame &&
                   ( pLay->IsAnLower( pFrame ) ||
                     ( pSect &&
