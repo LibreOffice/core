@@ -42,7 +42,7 @@ public:
     RequestPackageReparation(const RequestPackageReparation&) = delete;
     RequestPackageReparation& operator=(const RequestPackageReparation&) = delete;
     bool isApproved() const;
-    css::uno::Reference<css::task::XInteractionRequest> GetRequest();
+    css::uno::Reference<css::task::XInteractionRequest> GetRequest() const;
 };
 
 class NotifyBrokenPackage_Impl;
@@ -55,7 +55,7 @@ public:
     ~NotifyBrokenPackage();
     NotifyBrokenPackage(const NotifyBrokenPackage&) = delete;
     NotifyBrokenPackage& operator=(const NotifyBrokenPackage&) = delete;
-    css::uno::Reference<css::task::XInteractionRequest> GetRequest();
+    css::uno::Reference<css::task::XInteractionRequest> GetRequest() const;
 };
 
 #endif // INCLUDED_SFX2_BROKENPACKAGEINT_HXX

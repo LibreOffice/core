@@ -374,7 +374,7 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
     return nRet;
 }
 
-RndStdIds SwViewOption::GetDefaultAnchorType()
+RndStdIds SwViewOption::GetDefaultAnchorType() const
 {
     switch ( m_nDefaultAnchor )
     {

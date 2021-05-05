@@ -557,7 +557,7 @@ void JSInstanceBuilder::RemoveWindowWidget(sal_uInt64 nWindowId)
     }
 }
 
-const std::string& JSInstanceBuilder::GetTypeOfJSON() { return m_sTypeOfJSON; }
+const std::string& JSInstanceBuilder::GetTypeOfJSON() const { return m_sTypeOfJSON; }
 
 VclPtr<vcl::Window>& JSInstanceBuilder::GetContentWindow()
 {

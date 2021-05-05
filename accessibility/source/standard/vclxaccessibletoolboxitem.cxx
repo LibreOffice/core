@@ -114,7 +114,7 @@ VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
 {
 }
 
-OUString VCLXAccessibleToolBoxItem::GetText()
+OUString VCLXAccessibleToolBoxItem::GetText() const
 {
     OUString sRet;
     // no text for separators and spaces

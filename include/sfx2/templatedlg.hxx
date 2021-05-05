@@ -46,7 +46,7 @@ public:
 
     void setDocumentModel(const css::uno::Reference<css::frame::XModel>& rModel);
     void setTemplateViewMode(TemplateViewMode eViewMode);
-    TemplateViewMode getTemplateViewMode();
+    TemplateViewMode getTemplateViewMode() const;
 
 protected:
     void getApplicationSpecificSettings();

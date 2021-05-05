@@ -57,7 +57,7 @@ public:
     virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
 private:
-    std::vector<OUString>       getDateAcceptancePatternsConfig();
+    std::vector<OUString>       getDateAcceptancePatternsConfig() const;
 };
 
 SvtSysLocale_Impl::SvtSysLocale_Impl()
@@ -98,7 +98,7 @@ void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, Co
     pLocaleData.reset(new LocaleDataWrapper(rLanguageTag, getDateAcceptancePatternsConfig()));
 }
 
-std::vector<OUString> SvtSysLocale_Impl::getDateAcceptancePatternsConfig()
+std::vector<OUString> SvtSysLocale_Impl::getDateAcceptancePatternsConfig() const
 {
     OUString aStr( aSysLocaleOptions.GetDatePatternsConfigString());
     if (aStr.isEmpty())

@@ -36,7 +36,7 @@ public:
 
     virtual void Hide() override;
 
-    bool IsVisible();
+    bool IsVisible() const;
 
     void connect_focus_rect(const Link<weld::Widget&, tools::Rectangle>& rLink)
     {

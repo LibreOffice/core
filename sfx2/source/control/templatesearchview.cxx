@@ -279,7 +279,7 @@ void TemplateSearchView::Hide()
     ListView::HideListView();
 }
 
-bool TemplateSearchView::IsVisible()
+bool TemplateSearchView::IsVisible() const
 {
     return ThumbnailView::IsVisible() || ListView::IsListViewVisible();
 }

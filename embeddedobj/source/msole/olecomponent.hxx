@@ -123,7 +123,7 @@ public:
 
     css::uno::Sequence< sal_Int8 > GetCLSID();
 
-    bool IsWorkaroundActive() { return m_bWorkaroundActive; }
+    bool IsWorkaroundActive() const { return m_bWorkaroundActive; }
     bool IsDirty();
 
     void StoreOwnTmpIfNecessary();

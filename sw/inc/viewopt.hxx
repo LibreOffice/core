@@ -684,7 +684,7 @@ public:
     void SetDefaultAnchor( const sal_Int32 aFlag )
         { m_nDefaultAnchor = aFlag; }
 
-    RndStdIds GetDefaultAnchorType();
+    RndStdIds GetDefaultAnchorType() const;
 };
 
 inline bool SwViewOption::operator==( const SwViewOption &rOpt ) const

@@ -1791,7 +1791,7 @@ bool RequestPackageReparation::isApproved() const
     return mxImpl->isApproved();
 }
 
-css::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetRequest()
+css::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetRequest() const
 {
     return mxImpl;
 }
@@ -1836,7 +1836,7 @@ NotifyBrokenPackage::~NotifyBrokenPackage()
 {
 }
 
-css::uno::Reference < task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
+css::uno::Reference < task::XInteractionRequest > NotifyBrokenPackage::GetRequest() const
 {
     return mxImpl;
 }

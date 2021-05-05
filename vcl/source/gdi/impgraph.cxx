@@ -1697,7 +1697,7 @@ const std::shared_ptr<GfxLink> & ImpGraphic::getSharedGfxLink() const
     return mpGfxLink;
 }
 
-GfxLink ImpGraphic::getGfxLink()
+GfxLink ImpGraphic::getGfxLink() const
 {
     ensureAvailable();
 

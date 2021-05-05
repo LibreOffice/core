@@ -128,7 +128,7 @@ public:
         return *m_pCustomAnnotationMarker;
     }
 
-    bool hasCustomAnnotationMarker()
+    bool hasCustomAnnotationMarker() const
     {
         return bool(m_pCustomAnnotationMarker);
     }

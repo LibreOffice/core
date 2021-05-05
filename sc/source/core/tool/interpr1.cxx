@@ -3937,7 +3937,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
         std::vector<double> mvValues;
         KahanSum mfSum;
         ArrayRefListValue() = default;
-        double get() { return mfSum.get(); }
+        double get() const { return mfSum.get(); }
     };
     std::vector<ArrayRefListValue> vArrayValues;
 

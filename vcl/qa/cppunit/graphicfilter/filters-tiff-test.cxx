@@ -33,7 +33,7 @@ public:
     virtual bool load(const OUString&, const OUString& rURL, const OUString&, SfxFilterFlags,
                       SotClipboardFormatId, unsigned int) override;
 
-    OUString getUrl()
+    OUString getUrl() const
     {
         return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/tiff/");
     }

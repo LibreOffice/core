@@ -254,7 +254,7 @@ public:
     static void RemoveWindowWidget(sal_uInt64 nWindowId);
 
 private:
-    const std::string& GetTypeOfJSON();
+    const std::string& GetTypeOfJSON() const;
     VclPtr<vcl::Window>& GetContentWindow();
     VclPtr<vcl::Window>& GetNotifierWindow();
 };

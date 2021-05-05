@@ -179,7 +179,7 @@ OUString RequestFilterSelect::getFilter() const
     return mxImpl->getFilter();
 }
 
-uno::Reference < task::XInteractionRequest > RequestFilterSelect::GetRequest()
+uno::Reference < task::XInteractionRequest > RequestFilterSelect::GetRequest() const
 {
     return mxImpl;
 }

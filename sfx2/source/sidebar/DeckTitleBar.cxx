@@ -78,7 +78,7 @@ DeckTitleBar::~DeckTitleBar()
 {
 }
 
-tools::Rectangle DeckTitleBar::GetDragArea()
+tools::Rectangle DeckTitleBar::GetDragArea() const
 {
     int x, y, width, height;
     if (mxGripWidget->GetDrawingArea()->get_extents_relative_to(*mxTitlebar, x, y, width, height))
