@@ -1663,7 +1663,7 @@ public:
     bool                        IsMapModeEnabled() const { return mbMap; }
 
     void                        SetMapMode();
-    virtual void                SetMapMode( const MapMode& rNewMapMode );
+    void                        SetMapMode( const MapMode& rNewMapMode );
     void                        SetRelativeMapMode( const MapMode& rNewMapMode );
     virtual void                SetMetafileMapMode(const MapMode& rNewMapMode, bool bIsRecord);
     const MapMode&              GetMapMode() const { return maMapMode; }
