@@ -1508,7 +1508,7 @@ libo_FUZZ_ARG_ENABLE(optimized,
          By default, disabled for --enable-debug and --enable-dbgutil, enabled
          otherwise. Using 'debug' will try to use only optimizations that should
          not interfere with debugging. For Emscripten we default to optimized (-O1)
-         debug build, as otherwise biaries become too large.]))
+         debug build, as otherwise binaries become too large.]))
 
 libo_FUZZ_ARG_ENABLE(runtime-optimizations,
     AS_HELP_STRING([--disable-runtime-optimizations],
