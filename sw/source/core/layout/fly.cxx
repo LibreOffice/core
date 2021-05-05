@@ -1609,7 +1609,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                 // #i28701# - restart layout process, if
                 // requested by floating screen object formatting
                 if (bRestartLayoutProcess
-                    // tdf#142080 if it was aleady on next page, and still is,
+                    // tdf#142080 if it was already on next page, and still is,
                     // ignore restart, as restart could cause infinite loop
                     && (wasFrameLowerOfLay || pLay->IsAnLower(pFrame)))
                 {

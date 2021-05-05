@@ -5,7 +5,7 @@ $ emrun --serve_after_close instdir/program/ui-previewer.html
 
 The ui-previewer "binary" will "crash" with memory alignment problems.
 
-You can run the WASM mandelbrot Qt example, if you copy it's HTML
+You can run the WASM mandelbrot Qt example, if you copy its HTML
 and the qtloader.js from the Qt's example folder after build with:
 
 $ emrun --serve_after_close workdir/LinkTarget/Executable/mandelbrot.html
@@ -109,7 +109,7 @@ in the lode/docker dir to get the container prepared. Run
 
  PARALLELISM=4 BUILD_OPTIONS= BUILD_TARGET=build docker-compose run --rm -e PARALLELISM -e BUILD_TARGET -e BUILD_OPTIONS builder
 
-to perform an actual srcdir != buildir build; the container mounts
+to perform an actual srcdir != builddir build; the container mounts
 checked-out git repo and output dir via docker-compose.yml (so make
 sure the path names there match your setup):
 
@@ -124,7 +124,7 @@ The lode setup expects, inside the lode/docker subdir, the following directories
 = Ideas for an UNO bridge implementation =
 
 My post to Discord #emscripten: "I'm looking for a way to do an abstract call
-from one WASM C++ object to an other WASM C++ object, so like FFI / WebIDL,
+from one WASM C++ object to another WASM C++ object, so like FFI / WebIDL,
 just within WASM. All my code is C++ and normally I have bridge code, with
 assembler to implement the function call /RTTI and exception semantics of the
 specified platform. Code is at
@@ -186,7 +186,7 @@ This is mentioned at the end of: https://github.com/emscripten-core/emscripten/w
 The usage of MAIN_MODULE and SIDE_MODULE has other problems, a major one IMHO is symbol resolution at runtime only.
 So this works really more like plugins in the sense of symbol resolution without dependencies / rpath.
 
-There is some clang-level dynamic-linking in progress (WASM dlload). The follwing link is already a bit old,
+There is some clang-level dynamic-linking in progress (WASM dlload). The following link is already a bit old,
 but I found it a god summary of problems to expect:
 https://iandouglasscott.com/2019/07/18/experimenting-with-webassembly-dynamic-linking-with-clang/
 
@@ -195,8 +195,8 @@ https://iandouglasscott.com/2019/07/18/experimenting-with-webassembly-dynamic-li
 
 More info on Qt WASM emscripten pthreads: https://wiki.qt.io/Qt_for_WebAssembly#Multithreading_Support
 
-WASM needs -pthread at compile, not just link time for atomics support. Alternativel< you can provide
--s USE_PTHREADS=1, but both don't seem to work relyable, so best provide both.
+WASM needs -pthread at compile, not just link time for atomics support. Alternatively you can provide
+-s USE_PTHREADS=1, but both don't seem to work reliable, so best provide both.
 https://github.com/emscripten-core/emscripten/issues/10370
 
 The output file must have the prefix .o, otherwise the WASM files will get a
@@ -219,7 +219,7 @@ But with the know problems with exceptions and threads, this might change:
 - https://github.com/emscripten-core/emscripten/issues/12035
 
 We're also using emconfigure at the moment. Originally I patched emscripten, because it
-woulden't create the correct a.out file for C++ configure tests. Later I found that
+wouldn't create the correct a.out file for C++ configure tests. Later I found that
 the emconfigure sets EMMAKEN_JUST_CONFIGURE to work around the problem.
 
 ICU bug: https://github.com/emscripten-core/emscripten/issues/10129
