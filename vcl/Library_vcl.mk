@@ -95,6 +95,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/rendercontext/OutDevState \
+    vcl/source/rendercontext/drawmode \
     vcl/skia/SkiaHelper \
     vcl/source/rendercontext/ImplMapRes \
     vcl/source/animate/Animation \
@@ -212,7 +213,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/edit/xtextedt \
     vcl/source/toolkit/group \
     vcl/source/toolkit/morebtn \
-    vcl/source/outdev/background \
     vcl/source/outdev/outdev \
     vcl/source/outdev/outdevstate \
     vcl/source/outdev/clipping \
@@ -321,7 +321,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/VectorGraphicLoader \
     vcl/source/bitmap/impvect \
     vcl/source/bitmap/bitmap \
-    vcl/source/bitmap/bitmappalette \
     vcl/source/bitmap/BitmapEx \
     vcl/source/bitmap/BitmapInfoAccess \
     vcl/source/bitmap/BitmapReadAccess \
@@ -504,6 +503,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/backendtest/outputdevice/polyline \
     vcl/backendtest/outputdevice/polyline_b2d \
     vcl/backendtest/outputdevice/rectangle \
+    vcl/backendtest/GraphicsRenderTests \
     vcl/jsdialog/enabled \
     vcl/jsdialog/jsdialogbuilder \
     vcl/jsdialog/executor \
