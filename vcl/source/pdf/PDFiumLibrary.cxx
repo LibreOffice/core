@@ -20,6 +20,7 @@
 #include <fpdf_text.h>
 #include <fpdf_save.h>
 #include <fpdf_signature.h>
+#include <fpdf_formfill.h>
 
 #include <osl/endian.h>
 #include <vcl/bitmap.hxx>
@@ -198,14 +199,21 @@ PDFiumSignature::PDFiumSignature(FPDF_SIGNATURE pSignature)
 
 PDFiumDocument::PDFiumDocument(FPDF_DOCUMENT pPdfDocument)
     : mpPdfDocument(pPdfDocument)
+    , m_aFormCallbacks()
 {
+    m_aFormCallbacks.version = 1;
+    m_pFormHandle = std::make_unique<PDFiumFormHandle>(
+        FPDFDOC_InitFormFillEnvironment(pPdfDocument, &m_aFormCallbacks));
 }
 
 PDFiumDocument::~PDFiumDocument()
 {
+    m_pFormHandle.reset();
     if (mpPdfDocument)
         FPDF_CloseDocument(mpPdfDocument);
 }
+
+FPDF_FORMHANDLE PDFiumDocument::getFormHandlePointer() { return m_pFormHandle->getPointer(); }
 
 std::unique_ptr<PDFiumPage> PDFiumDocument::openPage(int nIndex)
 {
@@ -524,6 +532,15 @@ bool PDFiumPathSegment::isClosed() const { return FPDFPathSegment_GetClose(mpPat
 
 int PDFiumPathSegment::getType() const { return FPDFPathSegment_GetType(mpPathSegment); }
 
+PDFiumFormHandle::PDFiumFormHandle(FPDF_FORMHANDLE pHandle)
+    : mpHandle(pHandle)
+{
+}
+
+PDFiumFormHandle::~PDFiumFormHandle() { FPDFDOC_ExitFormFillEnvironment(mpHandle); }
+
+FPDF_FORMHANDLE PDFiumFormHandle::getPointer() { return mpHandle; }
+
 PDFiumBitmap::PDFiumBitmap(FPDF_BITMAP pBitmap)
     : mpBitmap(pBitmap)
 {
@@ -542,11 +559,15 @@ void PDFiumBitmap::fillRect(int left, int top, int width, int height, sal_uInt32
     FPDFBitmap_FillRect(mpBitmap, left, top, width, height, nColor);
 }
 
-void PDFiumBitmap::renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX,
-                                    int nSizeY)
+void PDFiumBitmap::renderPageBitmap(PDFiumDocument* pDoc, PDFiumPage* pPage, int nStartX,
+                                    int nStartY, int nSizeX, int nSizeY)
 {
     FPDF_RenderPageBitmap(mpBitmap, pPage->getPointer(), nStartX, nStartY, nSizeX, nSizeY,
                           /*rotate=*/0, /*flags=*/0);
+
+    // Render widget annotations for FormFields.
+    FPDF_FFLDraw(pDoc->getFormHandlePointer(), mpBitmap, pPage->getPointer(), nStartX, nStartY,
+                 nSizeX, nSizeY, /*rotate=*/0, /*flags=*/0);
 }
 
 ConstScanline PDFiumBitmap::getBuffer()

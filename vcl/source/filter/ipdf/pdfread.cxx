@@ -198,7 +198,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
         }
         const sal_uInt32 nColor = bTransparent ? 0x00000000 : 0xFFFFFFFF;
         pPdfBitmap->fillRect(0, 0, nPageWidth, nPageHeight, nColor);
-        pPdfBitmap->renderPageBitmap(pPdfPage.get(), /*start_x=*/0,
+        pPdfBitmap->renderPageBitmap(pPdfDocument.get(), pPdfPage.get(), /*start_x=*/0,
                                      /*start_y=*/0, nPageWidth, nPageHeight);
 
         // Save the buffer as a bitmap.
