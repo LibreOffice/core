@@ -29,7 +29,6 @@ class ChartItemPool : public SfxItemPool
 private:
     std::unique_ptr<SfxItemInfo[]> pItemInfos;
 
-public:
     ChartItemPool();
     ChartItemPool(const ChartItemPool& rPool);
 
@@ -40,8 +39,8 @@ public:
     virtual SfxItemPool* Clone() const override;
     MapUnit GetMetric(sal_uInt16 nWhich) const override;
 
-    /// creates a pure chart item pool
-    static SfxItemPool* CreateChartItemPool();
+    /// get the pure chart item pool
+    static SfxItemPool& GetGlobalChartItemPool();
 };
 
 } //  namespace chart
