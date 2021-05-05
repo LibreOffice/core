@@ -18,10 +18,11 @@ End Function
 Sub verify_testWeekDayName()
     On Error GoTo errorHandler
 
-    TestUtil.AssertEqual(WeekdayName(1),                    "Sunday", "WeekdayName(1)")
+    ' basic/qa/cppunit/test_vba.cxx sets LANGUAGE_ENGLISH_UK
+    TestUtil.AssertEqual(WeekdayName(1),                    "Monday", "WeekdayName(1)")
     TestUtil.AssertEqual(WeekdayName(1, , vbSunday),        "Sunday", "WeekdayName(1, , vbSunday)")
     TestUtil.AssertEqual(WeekdayName(1, , vbMonday),        "Monday", "WeekdayName(1, , vbMonday)")
-    TestUtil.AssertEqual(WeekdayName(2),                    "Monday", "WeekdayName(2)")
+    TestUtil.AssertEqual(WeekdayName(2),                    "Tuesday","WeekdayName(2)")
     TestUtil.AssertEqual(WeekdayName(2, True, vbMonday),    "Tue",    "WeekdayName(2, True, vbMonday)")
     TestUtil.AssertEqual(WeekdayName(2, True, vbTuesday),   "Wed",    "WeekdayName(2, True, vbTuesday)")
     TestUtil.AssertEqual(WeekdayName(2, True, vbWednesday), "Thu",    "WeekdayName(2, True, vbWednesday)")

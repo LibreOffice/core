@@ -215,7 +215,17 @@
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX ref="en_US"/>
-  <LC_CALENDAR ref="en_US"/>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek ref="en_US_gregorian"/>
+      <MonthsOfYear ref="en_US_gregorian"/>
+      <Eras ref="en_US_gregorian"/>
+      <StartDayOfWeek>
+        <DayID>mon</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>4</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>GBP</CurrencyID>
