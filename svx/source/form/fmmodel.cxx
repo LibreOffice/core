@@ -50,10 +50,9 @@ struct FmFormModelImplData
 
 FmFormModel::FmFormModel(
     SfxItemPool* pPool,
-    SfxObjectShell* pPers)
-:   SdrModel(
-        pPool,
-        pPers)
+    SfxObjectShell* pPers,
+    MapUnit eDefaultScaleUnit)
+:   SdrModel( pPool, pPers, /*bDisablePropertyFiles*/false, eDefaultScaleUnit )
     , m_pObjShell(nullptr)
     , m_bOpenInDesignMode(false)
     , m_bAutoControlFocus(false)

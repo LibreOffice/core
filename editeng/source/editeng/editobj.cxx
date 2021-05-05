@@ -435,6 +435,8 @@ void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
     if(bOwnerOfPool || pPool != &rSfxItemPool)
         return;
 
+    assert(false);
+
     // The pool we are based on gets destructed; get owner of pool by creating own one.
     // No need to call RemoveSfxItemPoolUser(), this is done from the pool's destructor
     // Base new pool on EditEnginePool; it would also be possible to clone the used
