@@ -226,7 +226,8 @@ public:
                 case OOLineHairline:
                     return uno::makeAny( XlBorderWeight::xlHairline );
                 default:
-                    break;
+                    // tdf#90278 - Return found border width
+                    return uno::makeAny(aBorderLine.OuterLineWidth);
             }
         }
         throw uno::RuntimeException("Method failed" );
