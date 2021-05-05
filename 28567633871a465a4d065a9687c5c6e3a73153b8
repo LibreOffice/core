@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cc32181_bc782f36",
+        "filename": "compilerplugins/Makefile-clang.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-05T07:22:01Z",
+      "side": 1,
+      "message": "* Using the GNU Make basename function is problematic, as it unconditionally strips the suffix starting with the last period (if any), so e.g. on Windows this would strip \".exe\" from $(CXX).  (Maybe actually rely on that behavior of the basename function, and keep the following \"$(CLANG_EXE_EXT)\"?  Which would still break down for obscure cases where the clang executable in $(CXX) is spelled \"clang.11\" or similar, of course...)\n\n* This should use $(firstword $(CXX)).\n\n* Any reason to use $(CXX) here and $(CC) below?  Maybe this should also use $(CC), for consistency, and to better match the original hardcoded \"clang\" (not \"clang++\").",
+      "range": {
+        "startLine": 237,
+        "startChar": 48,
+        "endLine": 237,
+        "endChar": 66
+      },
+      "revId": "28567633871a465a4d065a9687c5c6e3a73153b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b89a1937_5b310036",
+        "filename": "compilerplugins/Makefile-clang.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-05T07:22:01Z",
+      "side": 1,
+      "message": "This should use $(firstwird $(CC)).",
+      "range": {
+        "startLine": 352,
+        "startChar": 25,
+        "endLine": 352,
+        "endChar": 42
+      },
+      "revId": "28567633871a465a4d065a9687c5c6e3a73153b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
