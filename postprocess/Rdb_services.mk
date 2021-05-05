@@ -74,6 +74,7 @@ ifneq ($(ENABLE_WASM_STRIP),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\
 	chart2/source/controller/chartcontroller \
 	chart2/source/chartcore \
+	writerperfect/source/calc/wpftcalc \
 ))
 endif
 
@@ -140,7 +141,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	writerperfect/source/draw/wpftdraw \
 	writerperfect/source/impress/wpftimpress \
 	writerperfect/source/writer/wpftwriter \
-	writerperfect/source/calc/wpftcalc \
 	$(if $(filter MACOSX,$(OS)), \
 		$(call gb_Helper_optional,AVMEDIA,avmedia/source/macavf/avmediaMacAVF) \
 		shell/source/backends/macbe/macbe1 \
