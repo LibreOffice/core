@@ -248,7 +248,7 @@ void ScInterpreter::ScGetWeekOfYear()
     if ( !MustHaveParamCount( nParamCount, 1, 2 ) )
         return;
 
-    sal_Int16 nFlag = nParamCount == 1 ? 1 : GetInt16();
+    sal_Int16 nFlag = ( nParamCount == 1 ) ? 1 : GetInt16();
 
     Date aDate = pFormatter->GetNullDate();
     aDate.AddDays( GetInt32());
@@ -1219,13 +1219,13 @@ void ScInterpreter::ScOdd()
     {
         fVal = ::rtl::math::approxCeil(fVal);
         if (fmod(fVal, 2.0) == 0.0)
-            fVal ++;
+            ++fVal;
     }
     else
     {
         fVal = ::rtl::math::approxFloor(fVal);
         if (fmod(fVal, 2.0) == 0.0)
-            fVal --;
+            --fVal;
     }
     PushDouble(fVal);
 }
