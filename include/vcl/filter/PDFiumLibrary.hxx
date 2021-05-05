@@ -67,8 +67,8 @@ class VCL_DLLPUBLIC PDFiumBitmap
 public:
     virtual ~PDFiumBitmap() = default;
     virtual void fillRect(int left, int top, int width, int height, sal_uInt32 nColor) = 0;
-    virtual void renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX,
-                                  int nSizeY)
+    virtual void renderPageBitmap(PDFiumDocument* pDoc, PDFiumPage* pPage, int nStartX, int nStartY,
+                                  int nSizeX, int nSizeY)
         = 0;
     virtual ConstScanline getBuffer() = 0;
     virtual int getStride() = 0;

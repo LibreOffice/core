@@ -18,6 +18,7 @@
 #include <fpdf_text.h>
 #include <fpdf_save.h>
 #include <fpdf_signature.h>
+#include <fpdf_formfill.h>
 
 #include <osl/endian.h>
 #include <vcl/bitmap.hxx>
@@ -174,8 +175,8 @@ public:
     FPDF_BITMAP getPointer() { return mpBitmap; }
 
     void fillRect(int left, int top, int width, int height, sal_uInt32 nColor) override;
-    void renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX,
-                          int nSizeY) override;
+    void renderPageBitmap(PDFiumDocument* pDoc, PDFiumPage* pPage, int nStartX, int nStartY,
+                          int nSizeX, int nSizeY) override;
     ConstScanline getBuffer() override;
     int getStride() override;
     int getWidth() override;
@@ -366,10 +367,27 @@ public:
     bool hasLinks() override;
 };
 
+/// Wrapper around FPDF_FORMHANDLE.
+class PDFiumFormHandle final
+{
+private:
+    FPDF_FORMHANDLE mpHandle;
+
+    PDFiumFormHandle(const PDFiumFormHandle&) = delete;
+    PDFiumFormHandle& operator=(const PDFiumFormHandle&) = delete;
+
+public:
+    PDFiumFormHandle(FPDF_FORMHANDLE pHandle);
+    ~PDFiumFormHandle();
+    FPDF_FORMHANDLE getPointer();
+};
+
 class PDFiumDocumentImpl : public PDFiumDocument
 {
 private:
     FPDF_DOCUMENT mpPdfDocument;
+    FPDF_FORMFILLINFO m_aFormCallbacks;
+    std::unique_ptr<PDFiumFormHandle> m_pFormHandle;
 
 private:
     PDFiumDocumentImpl(const PDFiumDocumentImpl&) = delete;
@@ -378,6 +396,7 @@ private:
 public:
     PDFiumDocumentImpl(FPDF_DOCUMENT pPdfDocument);
     ~PDFiumDocumentImpl() override;
+    FPDF_FORMHANDLE getFormHandlePointer();
 
     // Page size in points
     basegfx::B2DSize getPageSize(int nIndex) override;
@@ -574,14 +593,21 @@ util::DateTime PDFiumSignatureImpl::getTime()
 
 PDFiumDocumentImpl::PDFiumDocumentImpl(FPDF_DOCUMENT pPdfDocument)
     : mpPdfDocument(pPdfDocument)
+    , m_aFormCallbacks()
 {
+    m_aFormCallbacks.version = 1;
+    m_pFormHandle = std::make_unique<PDFiumFormHandle>(
+        FPDFDOC_InitFormFillEnvironment(pPdfDocument, &m_aFormCallbacks));
 }
 
 PDFiumDocumentImpl::~PDFiumDocumentImpl()
 {
+    m_pFormHandle.reset();
     if (mpPdfDocument)
         FPDF_CloseDocument(mpPdfDocument);
 }
+
+FPDF_FORMHANDLE PDFiumDocumentImpl::getFormHandlePointer() { return m_pFormHandle->getPointer(); }
 
 std::unique_ptr<PDFiumPage> PDFiumDocumentImpl::openPage(int nIndex)
 {
@@ -931,6 +957,15 @@ PDFSegmentType PDFiumPathSegmentImpl::getType() const
     return static_cast<PDFSegmentType>(FPDFPathSegment_GetType(mpPathSegment));
 }
 
+PDFiumFormHandle::PDFiumFormHandle(FPDF_FORMHANDLE pHandle)
+    : mpHandle(pHandle)
+{
+}
+
+PDFiumFormHandle::~PDFiumFormHandle() { FPDFDOC_ExitFormFillEnvironment(mpHandle); }
+
+FPDF_FORMHANDLE PDFiumFormHandle::getPointer() { return mpHandle; }
+
 PDFiumBitmapImpl::PDFiumBitmapImpl(FPDF_BITMAP pBitmap)
     : mpBitmap(pBitmap)
 {
@@ -949,12 +984,17 @@ void PDFiumBitmapImpl::fillRect(int left, int top, int width, int height, sal_uI
     FPDFBitmap_FillRect(mpBitmap, left, top, width, height, nColor);
 }
 
-void PDFiumBitmapImpl::renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX,
-                                        int nSizeY)
+void PDFiumBitmapImpl::renderPageBitmap(PDFiumDocument* pDoc, PDFiumPage* pPage, int nStartX,
+                                        int nStartY, int nSizeX, int nSizeY)
 {
     auto pPageImpl = static_cast<PDFiumPageImpl*>(pPage);
     FPDF_RenderPageBitmap(mpBitmap, pPageImpl->getPointer(), nStartX, nStartY, nSizeX, nSizeY,
                           /*rotate=*/0, /*flags=*/0);
+
+    // Render widget annotations for FormFields.
+    auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
+    FPDF_FFLDraw(pDocImpl->getFormHandlePointer(), mpBitmap, pPageImpl->getPointer(), nStartX,
+                 nStartY, nSizeX, nSizeY, /*rotate=*/0, /*flags=*/0);
 }
 
 ConstScanline PDFiumBitmapImpl::getBuffer()
