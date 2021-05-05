@@ -420,6 +420,7 @@ struct AnchoredObjectInfo
 {
     css::uno::Reference<css::text::XTextContent> m_xAnchoredObject;
     sal_Int32 m_nLeftMargin = 0;
+    RedlineParamsPtr m_xRedlineForInline;
 };
 
 /// Stores info about objects anchored to a given paragraph.
