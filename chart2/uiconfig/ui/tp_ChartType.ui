@@ -75,7 +75,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="subtypewin">
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="hscrollbar_policy">never</property>
@@ -87,7 +87,7 @@
                         <property name="can_focus">True</property>
                         <child>
                           <object class="GtkDrawingArea" id="subtype">
-                            <property name="visible">True</property>
+                            <property name="visible">False</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                             <property name="hexpand">True</property>
@@ -111,6 +111,8 @@
                   <object class="GtkGrid" id="3dblock">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <property name="row_spacing">3</property>
                     <child>
                       <!-- n-columns=1 n-rows=1 -->
@@ -193,6 +195,7 @@
                           <object class="GtkTreeView" id="shape">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore1</property>
                             <property name="headers_visible">False</property>
@@ -469,14 +472,14 @@
             </child>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
+                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
                 <property name="hscrollbar_policy">never</property>
                 <property name="shadow_type">in</property>
                 <child>
                   <object class="GtkTreeView" id="charttype">
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="can_focus">True</property>
                     <property name="vexpand">True</property>
                     <property name="model">liststore2</property>
