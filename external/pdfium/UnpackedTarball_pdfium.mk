@@ -16,6 +16,8 @@ pdfium_patches += windows7.patch.1
 pdfium_patches += c++20-comparison.patch
 # Use CoreGraphics.h instead of Carbon.h
 pdfium_patches += cg-instead-of-carbon.patch.1
+# Android NDK 19 - that is known to work well - does not have 2 defines
+pdfium_patches += AndroidNDK19.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
