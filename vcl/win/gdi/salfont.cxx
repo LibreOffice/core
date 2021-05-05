@@ -1254,7 +1254,7 @@ void WinSalGraphics::ClearDevFontCache()
     ImplReleaseTempFonts(*GetSalData(), false);
 }
 
-bool WinFontInstance::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool) const
+bool WinFontInstance::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool bIsVertical) const
 {
     assert(m_pGraphics);
     HDC hDC = m_pGraphics->getHDC();
@@ -1269,8 +1269,24 @@ bool WinFontInstance::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& r
 
     // use unity matrix
     MAT2 aMat;
-    aMat.eM11 = aMat.eM22 = FixedFromDouble( 1.0 );
-    aMat.eM12 = aMat.eM21 = FixedFromDouble( 0.0 );
+    const FontSelectPattern& rFSD = GetFontSelectPattern();
+
+    // Use identity matrix for fonts requested in horizontal
+    // writing (LTR or RTL), or rotated glyphs in vertical writing.
+    if (!rFSD.mbVertical || !bIsVertical)
+    {
+        aMat.eM11 = aMat.eM22 = FixedFromDouble(1.0);
+        aMat.eM12 = aMat.eM21 = FixedFromDouble(0.0);
+    }
+    else
+    {
+        constexpr double nCos = 0.0;
+        constexpr double nSin = 1.0;
+        aMat.eM11 = FixedFromDouble(nCos);
+        aMat.eM12 = FixedFromDouble(nSin);
+        aMat.eM21 = FixedFromDouble(-nSin);
+        aMat.eM22 = FixedFromDouble(nCos);
+    }
 
     UINT nGGOFlags = GGO_METRICS;
     nGGOFlags |= GGO_GLYPH_INDEX;
