@@ -252,11 +252,6 @@ private:
     SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();
     SVX_DLLPRIVATE void ImpCreateTables(bool bDisablePropertyFiles);
 
-    SVX_DLLPRIVATE void ImpCtor(
-        SfxItemPool* pPool,
-        ::comphelper::IEmbeddedHelper* pPers,
-        bool bDisablePropertyFiles);
-
     // this is a weak reference to a possible living api wrapper for this model
     css::uno::Reference< css::uno::XInterface > mxUnoModel;
 
