@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d026537c_8b568436",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-05T19:56:39Z",
+      "side": 1,
+      "message": "Nitpick: the beautifully aligned inline comments are badly combed now.. ;)",
+      "revId": "496d9c5ebbad0a6359ff712e2bce6561d16ff815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
