@@ -63,6 +63,7 @@ fuzzer_core_libraries = \
     fwk \
     i18npool \
     i18nutil \
+    io \
     lng \
     localebe1 \
     msfilter \
