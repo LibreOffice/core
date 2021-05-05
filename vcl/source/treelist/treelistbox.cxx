@@ -3107,13 +3107,12 @@ Size SvTreeListBox::GetOptimalSize() const
     Size aRet(0, getPreferredDimensions(aWidths));
     for (tools::Long aWidth : aWidths)
         aRet.AdjustWidth(aWidth );
-    if (GetStyle() & WB_BORDER)
-    {
-        sal_Int32 nLeftBorder(0), nTopBorder(0), nRightBorder(0), nBottomBorder(0);
-        GetBorder(nLeftBorder, nTopBorder, nRightBorder, nBottomBorder);
-        aRet.AdjustWidth(nLeftBorder + nRightBorder);
-        aRet.AdjustHeight(nTopBorder + nBottomBorder);
-    }
+
+    sal_Int32 nLeftBorder(0), nTopBorder(0), nRightBorder(0), nBottomBorder(0);
+    GetBorder(nLeftBorder, nTopBorder, nRightBorder, nBottomBorder);
+    aRet.AdjustWidth(nLeftBorder + nRightBorder);
+    aRet.AdjustHeight(nTopBorder + nBottomBorder);
+
     tools::Long nMinWidth = nMinWidthInChars * approximate_char_width();
     aRet.setWidth( std::max(aRet.Width(), nMinWidth) );
 
