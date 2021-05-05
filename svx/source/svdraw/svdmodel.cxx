@@ -87,10 +87,17 @@ struct SdrModelImpl
 };
 
 
-void SdrModel::ImpCtor(
+SdrModel::SdrModel(
     SfxItemPool* pPool,
     ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
     bool bDisablePropertyFiles)
+:
+#ifdef DBG_UTIL
+    // SdrObjectLifetimeWatchDog:
+    maAllIncarnatedObjects(),
+#endif
+    maMaPag(),
+    maPages()
 {
     mpImpl.reset(new SdrModelImpl);
     mpImpl->mpUndoManager=nullptr;
@@ -187,21 +194,6 @@ void SdrModel::ImpCtor(
     /* End Text Chaining related code */
 
     ImpCreateTables(bDisablePropertyFiles || utl::ConfigManager::IsFuzzing());
-}
-
-SdrModel::SdrModel(
-    SfxItemPool* pPool,
-    ::comphelper::IEmbeddedHelper* pPers,
-    bool bDisablePropertyFiles)
-:
-#ifdef DBG_UTIL
-    // SdrObjectLifetimeWatchDog:
-    maAllIncarnatedObjects(),
-#endif
-    maMaPag(),
-    maPages()
-{
-    ImpCtor(pPool,pPers,bDisablePropertyFiles);
 }
 
 SdrModel::~SdrModel()
