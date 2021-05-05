@@ -96,7 +96,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include <comphelper/random.hxx>
 #include <comphelper/seqstream.hxx>
