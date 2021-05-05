@@ -3109,8 +3109,10 @@ Size SvTreeListBox::GetOptimalSize() const
         aRet.AdjustWidth(aWidth );
     if (GetStyle() & WB_BORDER)
     {
-        aRet.AdjustWidth(StyleSettings::GetBorderSize() * 2 );
-        aRet.AdjustHeight(StyleSettings::GetBorderSize() * 2 );
+        sal_Int32 nLeftBorder(0), nTopBorder(0), nRightBorder(0), nBottomBorder(0);
+        GetBorder(nLeftBorder, nTopBorder, nRightBorder, nBottomBorder);
+        aRet.AdjustWidth(nLeftBorder + nRightBorder);
+        aRet.AdjustHeight(nTopBorder + nBottomBorder);
     }
     tools::Long nMinWidth = nMinWidthInChars * approximate_char_width();
     aRet.setWidth( std::max(aRet.Width(), nMinWidth) );
