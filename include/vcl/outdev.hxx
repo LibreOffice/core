@@ -477,7 +477,7 @@ public:
     AntialiasingFlags           GetAntialiasing() const { return mnAntialiasing; }
 
     void                        SetDrawMode( DrawModeFlags nDrawMode );
-    DrawModeFlags               GetDrawMode() const { return mnDrawMode; }
+    DrawModeFlags               GetDrawMode() const;
 
     void                        SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode );
     ComplexTextLayoutFlags       GetLayoutMode() const { return mnTextLayoutMode; }
@@ -1489,9 +1489,6 @@ public:
                                     bool bTransparencyAutoMode,
                                     bool bDownsampleBitmaps,
                                     const Color& rBackground = COL_TRANSPARENT );
-
-    SAL_DLLPRIVATE Color        ImplDrawModeToColor  ( const Color& rColor ) const;
-
 
     void                        DrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
 

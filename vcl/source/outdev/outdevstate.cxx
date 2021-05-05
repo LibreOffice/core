@@ -28,6 +28,7 @@
 #include <vcl/settings.hxx>
 
 #include <outdev.h>
+#include <drawmode.hxx>
 #include <salgdi.hxx>
 
 OutDevState::OutDevState()
@@ -256,15 +257,6 @@ void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
         mpAlphaVDev->SetAntialiasing( nMode );
 }
 
-void OutputDevice::SetDrawMode( DrawModeFlags nDrawMode )
-{
-
-    mnDrawMode = nDrawMode;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetDrawMode( nDrawMode );
-}
-
 void OutputDevice::SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
 {
     if( mpMetaFile )
@@ -329,38 +321,7 @@ void OutputDevice::SetFillColor()
 
 void OutputDevice::SetFillColor( const Color& rColor )
 {
-
-    Color aColor( rColor );
-
-    if( mnDrawMode & ( DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill |
-                       DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
-                       DrawModeFlags::SettingsFill ) )
-    {
-        if( !aColor.IsTransparent() )
-        {
-            if( mnDrawMode & DrawModeFlags::BlackFill )
-            {
-                aColor = COL_BLACK;
-            }
-            else if( mnDrawMode & DrawModeFlags::WhiteFill )
-            {
-                aColor = COL_WHITE;
-            }
-            else if( mnDrawMode & DrawModeFlags::GrayFill )
-            {
-                const sal_uInt8 cLum = aColor.GetLuminance();
-                aColor = Color( cLum, cLum, cLum );
-            }
-            else if( mnDrawMode & DrawModeFlags::NoFill )
-            {
-                aColor = COL_TRANSPARENT;
-            }
-            else if( mnDrawMode & DrawModeFlags::SettingsFill )
-            {
-                aColor = GetSettings().GetStyleSettings().GetWindowColor();
-            }
-        }
-    }
+    Color aColor(GetDrawModeFillColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings()));
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaFillColorAction( aColor, true ) );
@@ -408,7 +369,7 @@ void OutputDevice::SetLineColor()
 void OutputDevice::SetLineColor( const Color& rColor )
 {
 
-    Color aColor = ImplDrawModeToColor( rColor );
+    Color aColor = GetDrawModeLineColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
@@ -438,52 +399,7 @@ void OutputDevice::SetLineColor( const Color& rColor )
 
 void OutputDevice::SetFont( const vcl::Font& rNewFont )
 {
-
-    vcl::Font aFont( rNewFont );
-    if ( mnDrawMode & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText | DrawModeFlags::SettingsText |
-                       DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill | DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
-                       DrawModeFlags::SettingsFill ) )
-    {
-        Color aTextColor( aFont.GetColor() );
-
-        if ( mnDrawMode & DrawModeFlags::BlackText )
-            aTextColor = COL_BLACK;
-        else if ( mnDrawMode & DrawModeFlags::WhiteText )
-            aTextColor = COL_WHITE;
-        else if ( mnDrawMode & DrawModeFlags::GrayText )
-        {
-            const sal_uInt8 cLum = aTextColor.GetLuminance();
-            aTextColor = Color( cLum, cLum, cLum );
-        }
-        else if ( mnDrawMode & DrawModeFlags::SettingsText )
-            aTextColor = GetSettings().GetStyleSettings().GetFontColor();
-
-        aFont.SetColor( aTextColor );
-
-        bool bTransFill = aFont.IsTransparent();
-        if ( !bTransFill )
-        {
-            Color aTextFillColor( aFont.GetFillColor() );
-
-            if ( mnDrawMode & DrawModeFlags::BlackFill )
-                aTextFillColor = COL_BLACK;
-            else if ( mnDrawMode & DrawModeFlags::WhiteFill )
-                aTextFillColor = COL_WHITE;
-            else if ( mnDrawMode & DrawModeFlags::GrayFill )
-            {
-                const sal_uInt8 cLum = aTextFillColor.GetLuminance();
-                aTextFillColor = Color( cLum, cLum, cLum );
-            }
-            else if( mnDrawMode & DrawModeFlags::SettingsFill )
-                aTextFillColor = GetSettings().GetStyleSettings().GetWindowColor();
-            else if ( mnDrawMode & DrawModeFlags::NoFill )
-            {
-                aTextFillColor = COL_TRANSPARENT;
-            }
-
-            aFont.SetFillColor( aTextFillColor );
-        }
-    }
+    vcl::Font aFont = GetDrawModeFont(rNewFont, GetDrawMode(), GetSettings().GetStyleSettings());
 
     if ( mpMetaFile )
     {
