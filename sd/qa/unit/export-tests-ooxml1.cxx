@@ -112,6 +112,7 @@ public:
     void testArcTo();
     void testNarrationMimeType();
     void testTdf140865Wordart3D();
+    void testTdf124457();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -166,6 +167,7 @@ public:
     CPPUNIT_TEST(testArcTo);
     CPPUNIT_TEST(testNarrationMimeType);
     CPPUNIT_TEST(testTdf140865Wordart3D);
+    CPPUNIT_TEST(testTdf124457);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1448,6 +1450,26 @@ void SdOOXMLExportTest1::testTdf140865Wordart3D()
     assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:contourClr/a:srgbClr", "val", "009876");
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testTdf124457()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf124457.pptx"), PPTX );
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    assertXPath(pXmlDoc,
+                "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/"
+                "p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par[1]/p:cTn",
+                "repeatCount", "3000");
+
+    assertXPath(pXmlDoc,
+                "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/"
+                "p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par[2]/p:cTn",
+                "repeatCount", "indefinite");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
