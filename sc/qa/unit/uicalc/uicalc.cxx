@@ -511,7 +511,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
 }
 
 // Test the call of .uno:PasteTransposed (tdf#102255)
-// Note: the transpose functionaly is tested in ucalc
+// Note: the transpose functionality is tested in ucalc
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
