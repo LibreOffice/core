@@ -47,6 +47,7 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <drwlayer.hxx>
+#include <editutil.hxx>
 
 using namespace css;
 
@@ -113,6 +114,8 @@ public:
     void testSpellOnlineRenderParameter();
     void testPasteIntoWrapTextCell();
     void testSortAscendingDescending();
+    void testAutoInputStringBlock();
+    void testAutoInputExactMatch();
 
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
@@ -162,6 +165,8 @@ public:
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
     CPPUNIT_TEST(testPasteIntoWrapTextCell);
     CPPUNIT_TEST(testSortAscendingDescending);
+    CPPUNIT_TEST(testAutoInputStringBlock);
+    CPPUNIT_TEST(testAutoInputExactMatch);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2431,6 +2436,102 @@ void ScTiledRenderingTest::testSortAscendingDescending()
     CPPUNIT_ASSERT_EQUAL(OString("rows"), aView.m_sInvalidateSheetGeometry);
 }
 
+static void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView, ScModelObj* pModelObj)
+{
+    pView->SetCursor(nCol, nRow);
+    for (const char& cChar : aStr)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, cChar, 0);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, cChar, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+}
+
+void ScTiledRenderingTest::testAutoInputStringBlock()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    pDoc->SetString(ScAddress(0, 3, 0), "ABC");  // A4
+    pDoc->SetString(ScAddress(0, 4, 0), "BAC");  // A5
+    ScFieldEditEngine& rEE = pDoc->GetEditEngine();
+    rEE.SetText("XYZ");
+    pDoc->SetEditText(ScAddress(0, 5, 0), rEE.CreateTextObject()); // A6
+    pDoc->SetString(ScAddress(0, 6, 0), "ZZZ");  // A7
+
+    ScAddress aA1(0, 0, 0);
+    lcl_typeCharsInCell("X", aA1.Col(), aA1.Row(), pView, pModelObj); // Type 'X' in A1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should not autocomplete", OUString("X"), pDoc->GetString(aA1));
+
+    ScAddress aA3(0, 2, 0); // Adjacent to the string "superblock" A4:A7
+    lcl_typeCharsInCell("X", aA3.Col(), aA3.Row(), pView, pModelObj); // Type 'X' in A3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A3 should autocomplete", OUString("XYZ"), pDoc->GetString(aA3));
+
+    ScAddress aA7(0, 6, 0); // Adjacent to the string "superblock" A4:A7
+    lcl_typeCharsInCell("X", aA7.Col(), aA7.Row(), pView, pModelObj); // Type 'X' in A7
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A7 should autocomplete", OUString("XYZ"), pDoc->GetString(aA7));
+
+    ScAddress aA10(0, 9, 0);
+    lcl_typeCharsInCell("X", aA10.Col(), aA10.Row(), pView, pModelObj); // Type 'X' in A10
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A10 should not autocomplete", OUString("X"), pDoc->GetString(aA10));
+}
+
+void ScTiledRenderingTest::testAutoInputExactMatch()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    pDoc->SetString(ScAddress(0, 1, 0), "Simple");  // A2
+    pDoc->SetString(ScAddress(0, 2, 0), "Simple");  // A3
+    pDoc->SetString(ScAddress(0, 3, 0), "Sing");  // A4
+    ScFieldEditEngine& rEE = pDoc->GetEditEngine();
+    rEE.SetText("Case");
+    pDoc->SetEditText(ScAddress(0, 4, 0), rEE.CreateTextObject()); // A5
+    pDoc->SetString(ScAddress(0, 5, 0), "Time");  // A6
+    pDoc->SetString(ScAddress(0, 6, 0), "Castle");  // A7
+
+    ScAddress aA8(0, 7, 0);
+    lcl_typeCharsInCell("S", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "S" in A8
+    // Should not autocomplete as there are multiple matches starting with "S".
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("1: A8 should have just S (should not autocomplete)", OUString("S"), pDoc->GetString(aA8));
+
+    lcl_typeCharsInCell("Si", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Si" in A8
+    // Should not autocomplete as there are multiple matches starting with "Si".
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("2: A8 should not autocomplete", OUString("Si"), pDoc->GetString(aA8));
+
+    lcl_typeCharsInCell("Sim", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Sim" in A8
+    // Should autocomplete to "Simple" which is the only match.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("3: A8 should autocomplete", OUString("Simple"), pDoc->GetString(aA8));
+
+    lcl_typeCharsInCell("Sin", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Sin" in A8
+    // Should autocomplete to "Sing" which is the only match.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("4: A8 should autocomplete", OUString("Sing"), pDoc->GetString(aA8));
+
+    lcl_typeCharsInCell("Cas", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Cas" in A8
+    // Should not autocomplete as there are multiple matches starting with "Cas".
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("5: A8 should not autocomplete", OUString("Cas"), pDoc->GetString(aA8));
+
+    lcl_typeCharsInCell("Cast", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Cast" in A8
+    // Should autocomplete to "Castle" which is the only match.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("6: A8 should autocomplete", OUString("Castle"), pDoc->GetString(aA8));
+
+    lcl_typeCharsInCell("T", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "T" in A8
+    // Should autocomplete to "Time" which is the only match.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("7: A8 should autocomplete", OUString("Time"), pDoc->GetString(aA8));
+}
 
 }
 
