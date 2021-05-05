@@ -15,6 +15,7 @@
 #include <fpdfview.h>
 #include <fpdf_edit.h>
 #include <fpdf_save.h>
+#include <fpdf_formfill.h>
 #endif
 
 #include <vcl/graph.hxx>
@@ -174,6 +175,10 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
     if (!pPdfDocument)
         return 0;
 
+    FPDF_FORMFILLINFO aFormCallbacks = {};
+    aFormCallbacks.version = 1;
+    FPDF_FORMHANDLE pFormHandle = FPDFDOC_InitFormFillEnvironment(pPdfDocument, &aFormCallbacks);
+
     const int nPageCount = FPDF_GetPageCount(pPdfDocument);
     if (nPages <= 0)
         nPages = nPageCount;
@@ -207,6 +212,10 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
         FPDF_RenderPageBitmap(pPdfBitmap, pPdfPage, /*start_x=*/0, /*start_y=*/0, nPageWidth,
                               nPageHeight, /*rotate=*/0, /*flags=*/0);
 
+        // Render widget annotations for FormFields.
+        FPDF_FFLDraw(pFormHandle, pPdfBitmap, pPdfPage, /*start_x=*/0, /*start_y=*/0, nPageWidth,
+                     nPageHeight, /*rotate=*/0, /*flags=*/0);
+
         // Save the buffer as a bitmap.
         Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
         {
@@ -225,6 +234,8 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
         FPDFBitmap_Destroy(pPdfBitmap);
         FPDF_ClosePage(pPdfPage);
     }
+
+    FPDFDOC_ExitFormFillEnvironment(pFormHandle);
 
     FPDF_CloseDocument(pPdfDocument);
 
