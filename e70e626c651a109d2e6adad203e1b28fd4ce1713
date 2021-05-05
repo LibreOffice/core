@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03863067_ea923fee",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-05T13:40:14Z",
+      "side": 1,
+      "message": "It\u0027s better to move the declaration of fSum here, to be together with its definition.",
+      "revId": "e70e626c651a109d2e6adad203e1b28fd4ce1713",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

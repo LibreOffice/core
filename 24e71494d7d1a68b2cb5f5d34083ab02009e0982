@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6cd66ca_f572655d",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2727,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-05T13:40:14Z",
+      "side": 0,
+      "message": "It doesn\u0027t make sense to assign the result of this expression back to KahanSum - it\u0027s just a double. I suggest to use a separate local double here.",
+      "revId": "24e71494d7d1a68b2cb5f5d34083ab02009e0982",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a42eed43_cba041d7",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2884,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-05T13:40:14Z",
+      "side": 0,
+      "message": "Same here",
+      "revId": "24e71494d7d1a68b2cb5f5d34083ab02009e0982",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
