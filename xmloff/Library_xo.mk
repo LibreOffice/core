@@ -21,6 +21,11 @@ $(eval $(call gb_Library_Library,xo))
 
 $(eval $(call gb_Library_set_componentfile,xo,xmloff/util/xo))
 
+# WASM_CHART change
+ifneq ($(ENABLE_WASM_STRIP),TRUE)
+$(eval $(call gb_Library_set_componentfile,xo,xmloff/util/xo.extended))
+endif
+
 $(eval $(call gb_Library_set_precompiled_header,xo,xmloff/inc/pch/precompiled_xo))
 
 $(eval $(call gb_Library_set_include,xo,\
@@ -56,6 +61,8 @@ $(eval $(call gb_Library_use_libraries,xo,\
     vcl \
 ))
 
+# WASM_CHART change
+ifneq ($(ENABLE_WASM_STRIP),TRUE)
 $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/chart/ColorPropertySet \
     xmloff/source/chart/PropertyMaps \
@@ -87,6 +94,10 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/chart/XMLTextOrientationHdl \
     xmloff/source/chart/contexts \
     xmloff/source/chart/transporttypes \
+))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/DocumentSettingsContext \
     xmloff/source/core/DomBuilderContext \
     xmloff/source/core/DomExport \

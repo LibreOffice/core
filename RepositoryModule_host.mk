@@ -20,6 +20,13 @@ $(eval $(call gb_Module_add_targets,libreoffice,\
 ))
 endif
 
+# WASM_CHART change
+ifneq ($(ENABLE_WASM_STRIP),TRUE)
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
+	chart2 \
+))
+endif
+
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
 	android \
@@ -32,7 +39,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	binaryurp \
 	bridges \
 	canvas \
-	chart2 \
 	cli_ure \
 	$(call gb_Helper_optional,DESKTOP,codemaker) \
 	comphelper \

@@ -1165,7 +1165,14 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 OUString sCLSID;
                 if(xPropSet->getPropertyValue("CLSID") >>= sCLSID)
                 {
+#ifndef ENABLE_WASM_STRIP
+                    // WASM_CHART change
+                    // TODO: With Chart extracted this cannot really happen since
+                    // no Chart could've been added at all
                     if (sCLSID == mrExport.GetChartExport()->getChartCLSID() ||
+#else
+                    if(
+#endif
                         sCLSID == SvGlobalName( SO3_RPTCH_CLASSID ).GetHexName() )
                     {
                         eShapeType = XmlShapeTypeDrawChartShape;

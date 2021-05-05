@@ -1712,7 +1712,12 @@ XMLPageExport* SvXMLExport::CreatePageExport()
 
 SchXMLExportHelper* SvXMLExport::CreateChartExport()
 {
+// WASM_CHART change
+// TODO: With Chart extracted this cannot really happen since
+// no Chart could've been added at all
+#ifndef ENABLE_WASM_STRIP
     return new SchXMLExportHelper(*this, *GetAutoStylePool());
+#endif
 }
 
 XMLFontAutoStylePool* SvXMLExport::CreateFontAutoStylePool()

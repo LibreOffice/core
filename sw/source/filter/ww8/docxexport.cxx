@@ -384,6 +384,10 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
         m_rFilter.openFragmentStreamWithSerializer( aFileName,
             "application/vnd.openxmlformats-officedocument.drawingml.chart+xml" );
 
+#ifndef ENABLE_WASM_STRIP
+    // WASM_CHART change
+    // TODO: With Chart extracted this cannot really happen since
+    // no Chart could've been added at all
     oox::drawingml::ChartExport aChartExport(XML_w, pChartFS, xModel, &m_rFilter, oox::drawingml::DOCUMENT_DOCX);
     css::uno::Reference<css::util::XModifiable> xModifiable(xModel, css::uno::UNO_QUERY);
     const bool bOldModified = xModifiable && xModifiable->isModified();
@@ -392,6 +396,7 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
         // tdf#134973: the model could get modified: e.g., calling XChartDocument::getSubTitle(),
         // which creates the object if absent, and sets the modified state.
         xModifiable->setModified(bOldModified);
+#endif
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 

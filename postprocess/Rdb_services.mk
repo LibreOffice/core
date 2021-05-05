@@ -69,10 +69,16 @@ $(eval $(call gb_Rdb_add_components,services,\
 
 ifeq ($(gb_Side),host)
 
+# WASM_CHART change
+ifneq ($(ENABLE_WASM_STRIP),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\
-	animations/source/animcore/animcore \
 	chart2/source/controller/chartcontroller \
 	chart2/source/chartcore \
+))
+endif
+
+$(eval $(call gb_Rdb_add_components,services,\
+	animations/source/animcore/animcore \
 	cui/util/cui \
 	desktop/source/deployment/deployment \
 	embeddedobj/util/embobj \
