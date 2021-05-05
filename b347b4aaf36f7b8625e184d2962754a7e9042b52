@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a57c79b_c56da6e5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-05T19:13:51Z",
+      "side": 1,
+      "message": "I\u0027d like the commit message changed to reflect reality (see code comment).",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "b347b4aaf36f7b8625e184d2962754a7e9042b52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f313ca79_8691ecb7",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-05T19:13:51Z",
+      "side": 1,
+      "message": "Actually this isn\u0027t a \"simplify\" (as per commit summary) or optimization but it restores the previous behaviour before the KahanSum change, the interim PushDouble() here did not push the error at all, except nGlobalError was set.",
+      "revId": "b347b4aaf36f7b8625e184d2962754a7e9042b52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
