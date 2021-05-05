@@ -1248,6 +1248,10 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
         sal_Int32 nOpaqueCount = 0;
         for (const auto& rAnchored : rAnchor.m_aAnchoredObjects)
         {
+            // Ignore inline objects stored only for redlining.
+            if (rAnchored.m_xRedlineForInline)
+                continue;
+
             uno::Reference<beans::XPropertySet> xShape(rAnchored.m_xAnchoredObject, uno::UNO_QUERY);
             if (!xShape.is())
             {
