@@ -1306,6 +1306,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116486)
     CPPUNIT_ASSERT_EQUAL(OUString("4006"), aTop);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf142080)
+{
+    // this caused an infinite loop
+    load(DATA_DIRECTORY, "fdo43573-2-min.docx");
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    // check the first paragraph on page 9 with its fly; the colum was empty too
+    assertXPath(pLayout, "/root/page[9]/body/section[1]/column[1]/body/txt[1]/Text[1]", "Portion",
+                "De kleur u (rood) in het rechtervlak (R), de kleur r (wit) beneden (D),");
+    SwTwips nPage9Top = getXPath(pLayout, "/root/page[9]/infos/bounds", "top").toInt32();
+    assertXPath(
+        pLayout,
+        "/root/page[9]/body/section[1]/column[1]/body/txt[1]/anchored/fly[1]/notxt/infos/bounds",
+        "top", OUString::number(nPage9Top + 1460));
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128198)
 {
     SwDoc* pDoc = createDoc("tdf128198-1.docx");
