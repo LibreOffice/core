@@ -2515,7 +2515,6 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
 }
 void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const
 {
-    Size aPaperMin,aPaperMax;
     tools::Rectangle aViewInit;
     TakeTextAnchorRect( aViewInit );
     if ( aGeo.nRotationAngle )
@@ -2562,11 +2561,8 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools
             nMinWdt = nMaxWdt;
         }
     }
-    aPaperMax.setWidth(nMaxWdt );
-    aPaperMax.setHeight(nMaxHgt );
-
-    aPaperMin.setWidth(nMinWdt );
-    aPaperMin.setHeight(nMinHgt );
+    Size aPaperMax(nMaxWdt, nMaxHgt);
+    Size aPaperMin(nMinWdt, nMinHgt);
 
     if ( pViewMin )
     {
