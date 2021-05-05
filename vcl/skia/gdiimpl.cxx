@@ -2060,13 +2060,16 @@ static double toCos(Degree10 degree10th) { return SkScalarCos(toRadian(degree10t
 static double toSin(Degree10 degree10th) { return SkScalarSin(toRadian(degree10th)); }
 
 void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Color textColor,
-                                            const SkFont& font, GlyphOrientation glyphOrientation)
+                                            const SkFont& font, const SkFont& verticalFont,
+                                            GlyphOrientation glyphOrientation)
 {
     SkiaZone zone;
     std::vector<SkGlyphID> glyphIds;
     std::vector<SkRSXform> glyphForms;
+    std::vector<bool> verticals;
     glyphIds.reserve(256);
     glyphForms.reserve(256);
+    verticals.reserve(256);
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
@@ -2082,19 +2085,38 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
         }
         SkRSXform form = SkRSXform::Make(toCos(angle), toSin(angle), aPos.X(), aPos.Y());
         glyphForms.emplace_back(std::move(form));
+        verticals.emplace_back(pGlyph->IsVertical());
     }
     if (glyphIds.empty())
         return;
-    sk_sp<SkTextBlob> textBlob
-        = SkTextBlob::MakeFromRSXform(glyphIds.data(), glyphIds.size() * sizeof(SkGlyphID),
-                                      glyphForms.data(), font, SkTextEncoding::kGlyphID);
+
     preDraw();
-    SAL_INFO("vcl.skia.trace",
-             "drawtextblob(" << this << "): " << textBlob->bounds() << ":" << textColor);
-    addUpdateRegion(textBlob->bounds());
-    SkPaint paint;
-    paint.setColor(toSkColor(textColor));
-    getDrawCanvas()->drawTextBlob(textBlob, 0, 0, paint);
+    auto getBoundRect = [&layout]() {
+        tools::Rectangle rect;
+        layout.GetBoundRect(rect);
+        return rect;
+    };
+    SAL_INFO("vcl.skia.trace", "drawtextblob(" << this << "): " << getBoundRect() << ", "
+                                               << glyphIds.size() << " glyphs, " << textColor);
+
+    // Vertical glyphs need a different font, so each run draw only consecutive horizontal or vertical glyphs.
+    std::vector<bool>::const_iterator pos = verticals.cbegin();
+    std::vector<bool>::const_iterator end = verticals.cend();
+    while (pos != end)
+    {
+        bool verticalRun = *pos;
+        std::vector<bool>::const_iterator rangeEnd = std::find(pos + 1, end, !verticalRun);
+        size_t index = pos - verticals.cbegin();
+        size_t count = rangeEnd - pos;
+        sk_sp<SkTextBlob> textBlob = SkTextBlob::MakeFromRSXform(
+            glyphIds.data() + index, count * sizeof(SkGlyphID), glyphForms.data() + index,
+            verticalRun ? verticalFont : font, SkTextEncoding::kGlyphID);
+        addUpdateRegion(textBlob->bounds());
+        SkPaint paint;
+        paint.setColor(toSkColor(textColor));
+        getDrawCanvas()->drawTextBlob(textBlob, 0, 0, paint);
+        pos = rangeEnd;
+    }
     postDraw();
 }
 
