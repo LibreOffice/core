@@ -223,7 +223,7 @@ public:
         Ignore
     };
     void drawGenericLayout(const GenericSalLayout& layout, Color textColor, const SkFont& font,
-                           GlyphOrientation glyphOrientation);
+                           const SkFont& verticalFont, GlyphOrientation glyphOrientation);
 
 protected:
     // To be called before any drawing.

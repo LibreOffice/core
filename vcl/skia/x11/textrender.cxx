@@ -48,7 +48,8 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
     }
     sk_sp<SkTypeface> typeface
         = SkFontMgr_createTypefaceFromFcPattern(fontManager, rFont.GetFontOptions()->GetPattern());
-    SkFont font(typeface, nHeight);
+    SkFont font(typeface);
+    font.setSize(nHeight);
     font.setScaleX(1.0 * nWidth / nHeight);
     if (rFont.NeedsArtificialItalic())
         font.setSkewX(1.0 * -0x4000L / 0x10000L);
@@ -57,9 +58,14 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
     font.setEdging(rFont.GetAntialiasAdvice() ? SkFont::Edging::kAntiAlias
                                               : SkFont::Edging::kAlias);
 
+    // Vertical font, use width as "height".
+    SkFont verticalFont(font);
+    verticalFont.setSize(nWidth);
+    verticalFont.setScaleX(1.0 * nHeight / nWidth);
+
     assert(dynamic_cast<SkiaSalGraphicsImpl*>(rGraphics.GetImpl()));
     SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(rGraphics.GetImpl());
-    impl->drawGenericLayout(rLayout, mnTextColor, font,
+    impl->drawGenericLayout(rLayout, mnTextColor, font, verticalFont,
                             SkiaSalGraphicsImpl::GlyphOrientation::Apply);
 }
 

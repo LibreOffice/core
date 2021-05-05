@@ -240,7 +240,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl());
     COLORREF color = ::GetTextColor(mWinParent.getHDC());
     Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
-    impl->drawGenericLayout(rLayout, salColor, font,
+    impl->drawGenericLayout(rLayout, salColor, font, font,
                             pWinFont->GetSkiaDWrite() ? GlyphOrientation::Apply
                                                       : GlyphOrientation::Ignore);
     return true;
