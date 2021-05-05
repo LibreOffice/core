@@ -2621,6 +2621,17 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:PasteAsLink" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Paste As Link </value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">As ~Link</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:PasteTextImportDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Use Text Import Dialog</value>
