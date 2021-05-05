@@ -75,6 +75,24 @@
       "revId": "b347b4aaf36f7b8625e184d2962754a7e9042b52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75d292e9_8b1c5931",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-05T19:48:48Z",
+      "side": 1,
+      "message": "Ah bah, I misread somewhat, the fPosArray holds the encoded double error in the error case and that in turn gets evaluated; so yes, this indeed simplifies slightly and the earlier effect was the same as before the other changes. Shrug..\nSorry for fuzz and confusion :)",
+      "parentUuid": "8635f6a7_10dda8dd",
+      "revId": "b347b4aaf36f7b8625e184d2962754a7e9042b52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
