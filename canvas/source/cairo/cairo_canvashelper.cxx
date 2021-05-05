@@ -914,10 +914,12 @@ namespace cairocanvas
             useStates( viewState, renderState, true );
 
             cairo_matrix_t aMatrix;
-            double w = strokeAttributes.StrokeWidth, h = 0;
             cairo_get_matrix( mpCairo.get(), &aMatrix );
-            cairo_matrix_transform_distance( &aMatrix, &w, &h );
-            cairo_set_line_width( mpCairo.get(), w );
+            double scaleFactorX = 1;
+            double scaleFactorY = 0;
+            cairo_matrix_transform_distance( &aMatrix, &scaleFactorX, &scaleFactorY );
+            double scaleFactor = basegfx::B2DVector( scaleFactorX, scaleFactorY ).getLength();
+            cairo_set_line_width( mpCairo.get(), strokeAttributes.StrokeWidth * scaleFactor );
 
             cairo_set_miter_limit( mpCairo.get(), strokeAttributes.MiterLimit );
 
@@ -953,14 +955,14 @@ namespace cairocanvas
                     break;
             }
 
-            //tdf#103026 If the w scaling is 0, then all dashes become zero so
+            //tdf#103026 If the scaling is 0, then all dashes become zero so
             //cairo will set the cairo_t status to CAIRO_STATUS_INVALID_DASH
             //and no further drawing will occur
-            if (strokeAttributes.DashArray.hasElements() && w > 0.0)
+            if (strokeAttributes.DashArray.hasElements() && scaleFactor > 0.0)
             {
                 auto aDashArray(comphelper::sequenceToContainer<std::vector<double>>(strokeAttributes.DashArray));
                 for (auto& rDash : aDashArray)
-                    rDash *= w;
+                    rDash *= scaleFactor;
                 cairo_set_dash(mpCairo.get(), aDashArray.data(), aDashArray.size(), 0);
             }
 
