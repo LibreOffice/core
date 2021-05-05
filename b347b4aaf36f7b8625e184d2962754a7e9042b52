@@ -57,6 +57,24 @@
       "revId": "b347b4aaf36f7b8625e184d2962754a7e9042b52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8635f6a7_10dda8dd",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-05T19:35:06Z",
+      "side": 1,
+      "message": "IIUC, before the change it did call PushDouble, and that\u0027s why I explicitly asked Dante to literally follow the existing behavior in the KahanSum patch, and use PushDouble there, not PushError, as Dante intended initially. I likely missed something :-)",
+      "parentUuid": "73659194_ec3fb559",
+      "revId": "b347b4aaf36f7b8625e184d2962754a7e9042b52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
