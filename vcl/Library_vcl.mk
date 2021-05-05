@@ -94,6 +94,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/rendercontext/drawmode \
     vcl/skia/SkiaHelper \
     vcl/source/rendercontext/ImplMapRes \
     vcl/source/animate/Animation \

@@ -24,6 +24,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
+#include <drawmode.hxx>
 #include <salgdi.hxx>
 
 Color OutputDevice::GetPixel(const Point& rPoint) const
@@ -87,7 +88,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 {
     assert(!is_double_buffered_window());
 
-    Color aColor = ImplDrawModeToColor( rColor );
+    Color aColor = GetDrawModeLineColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPixelAction( rPt, aColor ) );
