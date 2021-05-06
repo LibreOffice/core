@@ -43,7 +43,7 @@ class ScMessagePool final : public SfxItemPool
     ScCondFormatDlgItem aCondFormatDlgItem;
 
     std::vector<SfxPoolItem*>    mvPoolDefaults;
-    ScDocumentPool*              pDocPool;
+    std::unique_ptr<ScDocumentPool, SfxItemPoolDeleter> pDocPool;
 
 public:
     ScMessagePool();

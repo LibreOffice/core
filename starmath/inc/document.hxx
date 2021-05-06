@@ -23,6 +23,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/lstner.hxx>
+#include <svl/itempool.hxx>
 #include <sax/fshelper.hxx>
 #include <unotools/lingucfg.hxx>
 #include <oox/core/filterbase.hxx>
@@ -80,7 +81,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     OUString            maAccText;
     SvtLinguOptions     maLinguOptions;
     std::unique_ptr<SmTableNode> mpTree;
-    SfxItemPool        *mpEditEngineItemPool;
+    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> mpEditEngineItemPool;
     std::unique_ptr<EditEngine> mpEditEngine;
     VclPtr<SfxPrinter>  mpPrinter;       //q.v. comment to SmPrinter Access!
     VclPtr<Printer>     mpTmpPrinter;    //ditto

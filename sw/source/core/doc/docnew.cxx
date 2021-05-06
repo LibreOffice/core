@@ -597,8 +597,7 @@ SwDoc::~SwDoc()
     mpDfltCharFormat.reset();
     mpDfltFrameFormat.reset();
     mpLayoutCache.reset();
-
-    SfxItemPool::Free(mpAttrPool);
+    mpAttrPool.reset();
 }
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )

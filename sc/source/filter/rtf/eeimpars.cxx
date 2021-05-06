@@ -625,7 +625,7 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
         nRowMax(0)
 {
     // pPool is foisted on SvxRTFParser at RtfImportState::Start later on
-    pPool->SetSecondaryPool( pDocPool );
+    pPool->SetSecondaryPool( pDocPool.get() );
     pPool->FreezeIdRanges();
     NewActEntry( nullptr );
 }
@@ -637,13 +637,13 @@ ScEEParser::~ScEEParser()
 
     // Don't delete Pool until the lists have been deleted
     pPool->SetSecondaryPool( nullptr );
-    SfxItemPool::Free(pDocPool);
-    SfxItemPool::Free(pPool);
+    pDocPool.reset();
+    pPool.reset();
 }
 
 void ScEEParser::NewActEntry( const ScEEParseEntry* pE )
 {   // New free-flying mxActEntry
-    mxActEntry = std::make_shared<ScEEParseEntry>(pPool);
+    mxActEntry = std::make_shared<ScEEParseEntry>(pPool.get());
     mxActEntry->aSel.nStartPara = (pE ? pE->aSel.nEndPara + 1 : 0);
     mxActEntry->aSel.nStartPos = 0;
 }
