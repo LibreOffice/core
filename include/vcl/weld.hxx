@@ -34,6 +34,10 @@ namespace com::sun::star::awt
 {
 class XWindow;
 }
+namespace com::sun::star::datatransfer::clipboard
+{
+class XClipboard;
+}
 namespace com::sun::star::datatransfer::dnd
 {
 class XDropTarget;
@@ -333,6 +337,7 @@ public:
     virtual void set_background(const Color& rBackColor) = 0;
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() = 0;
+    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard> get_clipboard() const = 0;
 
     virtual void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) = 0;
     virtual void get_property_tree(tools::JsonWriter& rJsonWriter) = 0;
