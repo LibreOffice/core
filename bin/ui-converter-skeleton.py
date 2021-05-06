@@ -189,12 +189,6 @@ def remove_check_button_align(current):
 
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
-  firstline = f.readline()
-  # the comment after the xml declaration goes missing unless we provide a
-  # custom doctype with tostring that contains the comment as a line after
-  # the true doctype
-  if firstline.startswith("<!--"):
-    header = header + firstline
   f.seek(0)
   # remove_blank_text so pretty-printed input doesn't disrupt pretty-printed
   # output if nodes are added or removed
@@ -217,6 +211,6 @@ remove_check_button_align(root)
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters
   # which we don't want to see changed in the output
-  o.write(etree.tostring(root, pretty_print=True, method='xml', encoding='unicode', doctype=header[0:-1]).encode("utf8"))
+  o.write(etree.tostring(tree, pretty_print=True, method='xml', encoding='unicode', doctype=header[0:-1]).encode("utf8"))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
