@@ -277,19 +277,6 @@ css::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
     return css::i18n::ForbiddenCharacters();
 }
 
-css::uno::Sequence< OUString > LocaleDataWrapper::getReservedWord() const
-{
-    try
-    {
-        return xLD->getReservedWord( getMyLocale() );
-    }
-    catch ( const Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "unotools.i18n", "getReservedWord" );
-    }
-    return css::uno::Sequence< OUString >(0);
-}
-
 css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getAllInstalledLocaleNames() const
 {
     uno::Sequence< lang::Locale > &rInstalledLocales = InstalledLocales::get();

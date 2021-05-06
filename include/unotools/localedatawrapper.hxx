@@ -149,7 +149,6 @@ public:
     css::uno::Sequence< css::i18n::Currency2 > getAllCurrencies() const;
     css::uno::Sequence< css::i18n::FormatElement > getAllFormats() const;
     css::i18n::ForbiddenCharacters getForbiddenCharacters() const;
-    css::uno::Sequence< OUString > getReservedWord() const;
     css::uno::Sequence< css::lang::Locale > getAllInstalledLocaleNames() const;
     css::uno::Sequence< OUString > getDateAcceptancePatterns() const;
 

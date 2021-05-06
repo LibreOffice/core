@@ -49,7 +49,6 @@ public:
     Bitmap const & GetBitmap() const;
 
     void        Erase( sal_uInt8 cTransparency );
-    void        Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency );
     void        BlendWith(const Bitmap& rOther);
 
     BitmapReadAccess*  AcquireAlphaReadAccess() { return Bitmap::AcquireReadAccess(); }
