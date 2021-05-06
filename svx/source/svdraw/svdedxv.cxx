@@ -1717,19 +1717,15 @@ bool SdrObjEditView::IsTextEditHit(const Point& rHit) const
     if (mxTextEditObj.is())
     {
         tools::Rectangle aEditArea;
-        OutlinerView* pOLV = pTextEditOutliner->GetView(0);
-        if (pOLV != nullptr)
+        if (OutlinerView* pOLV = pTextEditOutliner->GetView(0))
         {
             aEditArea.Union(pOLV->GetOutputArea());
         }
-        bOk = aEditArea.IsInside(rHit);
-        if (bOk)
+        if (aEditArea.IsInside(rHit))
         { // check if any characters were actually hit
-            Point aPnt(rHit);
-            aPnt -= aEditArea.TopLeft();
+            const Point aPnt(rHit - aEditArea.TopLeft());
             tools::Long nHitTol = 2000;
-            OutputDevice* pRef = pTextEditOutliner->GetRefDevice();
-            if (pRef)
+            if (OutputDevice* pRef = pTextEditOutliner->GetRefDevice())
                 nHitTol = OutputDevice::LogicToLogic(nHitTol, MapUnit::Map100thMM,
                                                      pRef->GetMapMode().GetMapUnit());
 
