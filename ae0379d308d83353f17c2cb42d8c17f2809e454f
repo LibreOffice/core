@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d1aa969_a588ecee",
+        "filename": "emfio/qa/cppunit/emf/data/.~lock.TestLinearGradient.emf#",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-05-06T15:12:12Z",
+      "side": 1,
+      "message": "was it submitted by mistake ?",
+      "revId": "ae0379d308d83353f17c2cb42d8c17f2809e454f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
