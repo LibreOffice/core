@@ -883,6 +883,8 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     , mxButtonDown(m_xBuilder->weld_button("down"))
     , mnVertOffset(0)
 {
+    InitControlBase(m_xContainer.get());
+
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
     SetPaintTransparent(false);
