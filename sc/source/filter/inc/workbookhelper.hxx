@@ -167,7 +167,7 @@ public:
                             OUString& orName,
                             const css::uno::Sequence< css::sheet::FormulaToken>& rTokens,
                             sal_Int32 nIndex,
-                            sal_Int32 nNameFlags ) const;
+                            sal_Int32 nNameFlags, bool bHidden ) const;
 
     /** Creates and returns a defined name on-the-fly in the sheet.
         The name will not be buffered in the global defined names buffer.
@@ -176,7 +176,7 @@ public:
                             OUString& orName,
                             const css::uno::Sequence< css::sheet::FormulaToken>& rTokens,
                             sal_Int32 nIndex,
-                            sal_Int32 nNameFlags, sal_Int32 nTab ) const;
+                            sal_Int32 nNameFlags, sal_Int32 nTab, bool bHidden ) const;
 
     /** Creates and returns a database range on-the-fly in the Calc document.
         The range will not be buffered in the global table buffer.
