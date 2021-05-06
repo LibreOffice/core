@@ -1859,7 +1859,9 @@ static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xMo
     {
         Reference<XDrawPage> xDrawPage;
         xDrawPages->getByIndex(i) >>= xDrawPage;
-        Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
+        Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY);
+        if (!xNamed)
+            continue;
         OUString sSlideName = "#" + xNamed->getName();
         if (rURL == sSlideName)
         {
