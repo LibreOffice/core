@@ -19,6 +19,8 @@ struct FilterFieldValue
 {
     /** selects whether the TableFilterFieldValue::NumericValue
         or the TableFilterFieldValue::StringValue is used.
+
+        @deprecated - Use FilterType instead.
      */
     boolean IsNumeric;
 
@@ -29,6 +31,28 @@ struct FilterFieldValue
     /** specifies a string value for the condition.
      */
     string StringValue;
+
+    /** Which field should be used for filtering:
+
+        <ul>
+            <li>com::sun::star::sheet::FilterFieldType::NUMERIC -> NumericValue</li>
+            <li>com::sun::star::sheet::FilterFieldType::STRING -> StringValue</li>
+            <li>com::sun::star::sheet::FilterFieldType::DATE -> StringValue</li>
+            <li>com::sun::star::sheet::FilterFieldType::TEXT_COLOR -> ColorValue</li>
+            <li>com::sun::star::sheet::FilterFieldType::BACKGROUND_COLOR -> ColorValue</li>
+        </ul>
+
+        @see com::sun::star::sheet::FilterFieldType
+        @since LibreOffice 7.2
+     */
+    short FilterType;
+
+    /** The color which is used for filtering
+
+        @since LibreOffice 7.2
+     */
+    com::sun::star::util::Color ColorValue;
+
 };
 
 }; }; }; };
