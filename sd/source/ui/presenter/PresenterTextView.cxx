@@ -79,7 +79,7 @@ private:
     cppcanvas::CanvasSharedPtr mpCanvas;
     VclPtr<VirtualDevice> mpOutputDevice;
     std::unique_ptr<EditEngine> mpEditEngine;
-    SfxItemPool* mpEditEngineItemPool;
+    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> mpEditEngineItemPool;
     Size maSize;
     OUString msText;
     sal_Int32 mnTop;
@@ -258,7 +258,7 @@ PresenterTextView::Implementation::Implementation()
                 rFntDta.nFontInfoId));
     }
 
-    mpEditEngine.reset( new EditEngine (mpEditEngineItemPool) );
+    mpEditEngine.reset( new EditEngine (mpEditEngineItemPool.get()) );
 
     mpEditEngine->EnableUndo (true);
     mpEditEngine->SetDefTab (sal_uInt16(
@@ -279,7 +279,7 @@ PresenterTextView::Implementation::Implementation()
 PresenterTextView::Implementation::~Implementation()
 {
     mpEditEngine.reset();
-    SfxItemPool::Free(mpEditEngineItemPool);
+    mpEditEngineItemPool.reset();
     mpOutputDevice.disposeAndClear();
 }
 

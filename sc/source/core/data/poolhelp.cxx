@@ -27,11 +27,9 @@
 #include <stlpool.hxx>
 
 ScPoolHelper::ScPoolHelper( ScDocument& rSourceDoc )
-    : pEditPool(nullptr)
-    , pEnginePool(nullptr)
+    : pDocPool(new ScDocumentPool)
     , m_rSourceDoc(rSourceDoc)
 {
-    pDocPool = new ScDocumentPool;
     pDocPool->FreezeIdRanges();
 
     mxStylePool = new ScStyleSheetPool( *pDocPool, &rSourceDoc );
@@ -39,31 +37,31 @@ ScPoolHelper::ScPoolHelper( ScDocument& rSourceDoc )
 
 ScPoolHelper::~ScPoolHelper()
 {
-    SfxItemPool::Free(pEnginePool);
-    SfxItemPool::Free(pEditPool);
+    pEnginePool.reset();
+    pEditPool.reset();
     pFormTable.reset();
     mxStylePool.clear();
-    SfxItemPool::Free(pDocPool);
+    pDocPool.reset();
 }
 SfxItemPool*        ScPoolHelper::GetEditPool() const
 {
     if ( !pEditPool )
     {
-        pEditPool = EditEngine::CreatePool();
+        pEditPool.reset(EditEngine::CreatePool());
         pEditPool->SetDefaultMetric( MapUnit::Map100thMM );
         pEditPool->FreezeIdRanges();
     }
-    return pEditPool;
+    return pEditPool.get();
 }
 SfxItemPool*        ScPoolHelper::GetEnginePool() const
 {
     if ( !pEnginePool )
     {
-        pEnginePool = EditEngine::CreatePool();
+        pEnginePool.reset(EditEngine::CreatePool());
         pEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
         pEnginePool->FreezeIdRanges();
     } // ifg ( pEnginePool )
-    return pEnginePool;
+    return pEnginePool.get();
 }
 SvNumberFormatter*  ScPoolHelper::GetFormTable() const
 {

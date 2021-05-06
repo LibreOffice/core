@@ -25,6 +25,7 @@
 #include <comphelper/propertysethelper.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <svx/svxdllapi.h>
+#include <svl/itempool.hxx>
 
 class SdrModel;
 class SfxItemPool;
@@ -89,7 +90,7 @@ protected:
 
 protected:
     SdrModel* mpModel;
-    SfxItemPool* mpDefaultsPool;
+    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> mpDefaultsPool;
 };
 
 #endif

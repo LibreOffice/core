@@ -332,14 +332,14 @@ void SwDLL::RegisterControls()
 void    SwModule::InitAttrPool()
 {
     OSL_ENSURE(!m_pAttrPool, "Pool already exists!");
-    m_pAttrPool = new SwAttrPool(nullptr);
-    SetPool(m_pAttrPool);
+    m_pAttrPool.reset(new SwAttrPool(nullptr));
+    SetPool(m_pAttrPool.get());
 }
 
 void    SwModule::RemoveAttrPool()
 {
     SetPool(nullptr);
-    SfxItemPool::Free(m_pAttrPool);
+    m_pAttrPool.reset();
 }
 
 std::unique_ptr<SfxStyleFamilies> SwModule::CreateStyleFamilies()

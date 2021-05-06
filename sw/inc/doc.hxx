@@ -193,7 +193,7 @@ class SW_DLLPUBLIC SwDoc final
 
     // private Member
     std::unique_ptr<SwNodes> m_pNodes;    //< document content (Nodes Array)
-    SwAttrPool*              mpAttrPool;  //< the attribute pool
+    std::unique_ptr<SwAttrPool, SfxItemPoolDeleter> mpAttrPool;  //< the attribute pool
     SwPageDescs              m_PageDescs; //< PageDescriptors
     Link<bool,void>          maOle2Link;  //< OLE 2.0-notification
     /* @@@MAINTAINABILITY-HORROR@@@

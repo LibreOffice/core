@@ -146,10 +146,10 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     m_aIdleTimer.SetInvokeHandler( LINK( this, ScModule, IdleHandler ) );
     m_aIdleTimer.Start();
 
-    m_pMessagePool = new ScMessagePool;
+    m_pMessagePool.reset(new ScMessagePool);
     m_pMessagePool->FreezeIdRanges();
-    SetPool( m_pMessagePool );
-    ScGlobal::InitTextHeight( m_pMessagePool );
+    SetPool( m_pMessagePool.get() );
+    ScGlobal::InitTextHeight( m_pMessagePool.get() );
 
     StartListening( *SfxGetpApp() );       // for SfxHintId::Deinitializing
 }
@@ -160,7 +160,7 @@ ScModule::~ScModule()
 
     // InputHandler does not need to be deleted (there's none in the App anymore)
 
-    SfxItemPool::Free(m_pMessagePool);
+    m_pMessagePool.reset();
 
     m_pDragData.reset();
     m_pErrorHdl.reset();

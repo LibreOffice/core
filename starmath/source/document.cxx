@@ -353,12 +353,12 @@ EditEngine& SmDocShell::GetEditEngine()
         //! see also SmEditWindow::DataChanged !
         //!
 
-        mpEditEngineItemPool = EditEngine::CreatePool();
+        mpEditEngineItemPool.reset( EditEngine::CreatePool() );
 
         const StyleSettings& rStyleSettings = Application::GetDefaultDevice()->GetSettings().GetStyleSettings();
         UpdateEditEngineDefaultFonts(rStyleSettings.GetFieldTextColor());
 
-        mpEditEngine.reset( new EditEngine( mpEditEngineItemPool ) );
+        mpEditEngine.reset( new EditEngine( mpEditEngineItemPool.get() ) );
 
         mpEditEngine->SetAddExtLeading(true);
 
@@ -660,7 +660,7 @@ SmDocShell::~SmDocShell()
 
     mpCursor.reset();
     mpEditEngine.reset();
-    SfxItemPool::Free(mpEditEngineItemPool);
+    mpEditEngineItemPool.reset();
     mpPrinter.disposeAndClear();
 }
 

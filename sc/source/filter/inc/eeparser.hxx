@@ -23,6 +23,7 @@
 #include <vcl/errcode.hxx>
 #include <vcl/graph.hxx>
 #include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <editeng/editdata.hxx>
 #include <optional>
 #include <address.hxx>
@@ -99,8 +100,8 @@ class ScEEParser
 {
 protected:
     EditEngine*         pEdit;
-    SfxItemPool*        pPool;
-    SfxItemPool*        pDocPool;
+    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter>  pPool;
+    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter>  pDocPool;
     std::vector<std::shared_ptr<ScEEParseEntry>> maList;
     std::shared_ptr<ScEEParseEntry> mxActEntry;
     ColWidthsMap        maColWidths;

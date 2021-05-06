@@ -83,16 +83,7 @@ static bool bDebugPaint = false;
 #endif
 
 
-namespace {
-struct PoolDeleter
-{
-    void operator()(SfxItemPool* pPool)
-    {
-        SfxItemPool::Free(pPool);
-    };
-};
-}
-static std::unique_ptr<SfxItemPool, PoolDeleter> pGlobalPool;
+static std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> pGlobalPool;
 
 EditEngine::EditEngine( SfxItemPool* pItemPool )
 {

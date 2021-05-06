@@ -23,6 +23,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <docoptio.hxx>
 #include <osl/mutex.hxx>
+#include <svl/itempool.hxx>
 
 class ScDocument;
 class ScDocumentPool;
@@ -35,11 +36,11 @@ class ScPoolHelper final : public salhelper::SimpleReferenceObject
 private:
     mutable osl::Mutex maMtxCreateNumFormatter;
     ScDocOptions        aOpt;
-    ScDocumentPool*     pDocPool;
+    std::unique_ptr<ScDocumentPool, SfxItemPoolDeleter> pDocPool;
     rtl::Reference< ScStyleSheetPool > mxStylePool;
     mutable std::unique_ptr<SvNumberFormatter> pFormTable;
-    mutable SfxItemPool*        pEditPool;                      // EditTextObjectPool
-    mutable SfxItemPool*        pEnginePool;                    // EditEnginePool
+    mutable std::unique_ptr<SfxItemPool, SfxItemPoolDeleter>  pEditPool;     // EditTextObjectPool
+    mutable std::unique_ptr<SfxItemPool, SfxItemPoolDeleter>  pEnginePool;   // EditEnginePool
     ScDocument&                 m_rSourceDoc;
 
 public:
@@ -50,7 +51,7 @@ public:
     void        SourceDocumentGone();
 
                 // access to pointers (are never 0):
-    ScDocumentPool*     GetDocPool() const      { return pDocPool; }
+    ScDocumentPool*     GetDocPool() const      { return pDocPool.get(); }
     ScStyleSheetPool*   GetStylePool() const    { return mxStylePool.get(); }
     SvNumberFormatter*  GetFormTable() const;
     SfxItemPool*        GetEditPool() const;
