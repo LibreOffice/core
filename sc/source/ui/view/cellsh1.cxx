@@ -1517,6 +1517,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScTabViewShell::GetClipData(GetViewData().GetActiveWin()))) // own cell data
             {
                 rReq.SetSlot(FID_INS_CELL_CONTENTS);
+                // By default content (values/numbers, strings, formulas and dates),
+                // attributes and notes are pasted
                 rReq.AppendItem(SfxBoolItem(FN_PARAM_3, true)); // transpose
                 ExecuteSlot(rReq, GetInterface());
                 rReq.SetReturnValue(SfxInt16Item(nSlot, 1)); // 1 = success
