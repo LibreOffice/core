@@ -560,6 +560,11 @@ void EditEngine::SetMaxAutoPaperSize( const Size& rSz )
     pImpEditEngine->SetMaxAutoPaperSize( rSz );
 }
 
+void EditEngine::SetMinColumnWrapHeight(tools::Long nVal)
+{
+    pImpEditEngine->SetMinColumnWrapHeight(nVal);
+}
+
 OUString EditEngine::GetText( LineEnd eEnd ) const
 {
     return pImpEditEngine->GetEditDoc().GetText( eEnd );
@@ -2018,29 +2023,12 @@ bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    bool bTextPos = false;
     // take unrotated positions for calculation here
     Point aDocPos = GetDocPos( rPaperPos );
 
     if ( ( aDocPos.Y() > 0  ) && ( aDocPos.Y() < static_cast<tools::Long>(pImpEditEngine->GetTextHeight()) ) )
-    {
-        EditPaM aPaM = pImpEditEngine->GetPaM( aDocPos, false );
-        if ( aPaM.GetNode() )
-        {
-            const ParaPortion* pParaPortion = pImpEditEngine->FindParaPortion( aPaM.GetNode() );
-            DBG_ASSERT( pParaPortion, "ParaPortion?" );
-
-            sal_Int32 nLine = pParaPortion->GetLineNumber( aPaM.GetIndex() );
-            const EditLine& rLine = pParaPortion->GetLines()[nLine];
-            Range aLineXPosStartEnd = pImpEditEngine->GetLineXPosStartEnd( pParaPortion, &rLine );
-            if ( ( aDocPos.X() >= aLineXPosStartEnd.Min() - nBorder ) &&
-                 ( aDocPos.X() <= aLineXPosStartEnd.Max() + nBorder ) )
-            {
-                 bTextPos = true;
-            }
-        }
-    }
-    return bTextPos;
+        return pImpEditEngine->IsTextPos(aDocPos, nBorder);
+    return false;
 }
 
 void EditEngine::SetEditTextObjectPool( SfxItemPool* pPool )
