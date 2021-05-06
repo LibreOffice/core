@@ -3064,6 +3064,13 @@ public:
         return m_xDropTarget;
     }
 
+    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard> get_clipboard() const override
+    {
+        // the gen backend can have per-frame clipboards which is (presumably) useful for LibreOffice Online
+        // but normal usage is the shared system clipboard
+        return GetSystemClipboard();
+    }
+
     virtual void connect_get_property_tree(const Link<tools::JsonWriter&, void>& /*rLink*/) override
     {
         //not implemented for the gtk variant

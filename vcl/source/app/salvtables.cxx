@@ -553,6 +553,12 @@ css::uno::Reference<css::datatransfer::dnd::XDropTarget> SalInstanceWidget::get_
     return m_xWidget->GetDropTarget();
 }
 
+css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+SalInstanceWidget::get_clipboard() const
+{
+    return m_xWidget->GetClipboard();
+}
+
 void SalInstanceWidget::connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink)
 {
     m_xWidget->SetDumpAsPropertyTreeHdl(rLink);
