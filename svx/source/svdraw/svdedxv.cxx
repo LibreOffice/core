@@ -656,6 +656,13 @@ OutputDevice& SdrObjEditView::EditViewOutputDevice() const { return *pTextEditWi
 
 Point SdrObjEditView::EditViewPointerPosPixel() const { return pTextEditWin->GetPointerPosPixel(); }
 
+css::uno::Reference<css::datatransfer::clipboard::XClipboard> SdrObjEditView::GetClipboard() const
+{
+    if (!pTextEditWin)
+        return nullptr;
+    return pTextEditWin->GetClipboard();
+}
+
 css::uno::Reference<css::datatransfer::dnd::XDropTarget> SdrObjEditView::GetDropTarget()
 {
     if (!pTextEditWin)

@@ -2115,7 +2115,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 #endif
     }
     pCntnr->CopyByteString( SotClipboardFormatId::STRING, sData.makeStringAndClear() );
-    pCntnr->CopyToClipboard(GetSystemClipboard());
+    pCntnr->CopyToClipboard(m_xLBEntries->get_clipboard());
 }
 
 IMPL_LINK(OfaAutoCompleteTabPage, KeyReleaseHdl, const KeyEvent&, rEvent, bool)

@@ -637,8 +637,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 const SvxFieldData* pField = pEditView->GetFieldAtCursor();
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
-                    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard = GetSystemClipboard();
-
+                    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
+                        = pEditView->GetClipboard();
                     vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, SfxViewShell::Current());
                 }
             }

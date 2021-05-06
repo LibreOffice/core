@@ -720,7 +720,7 @@ bool AnnotationTextWindow::Command(const CommandEvent& rCEvt)
         bool bCanPaste = false;
         if (bEditable)
         {
-            TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(GetSystemClipboard()));
+            TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(GetClipboard()));
             bCanPaste = aDataHelper.GetFormatCount() != 0;
         }
 

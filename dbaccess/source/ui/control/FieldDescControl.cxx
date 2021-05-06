@@ -1222,7 +1222,7 @@ bool OFieldDescControl::isPasteAllowed()
     bool bAllowed = (m_pActFocusWindow != nullptr) && IsFocusInEditableWidget();
     if ( bAllowed )
     {
-        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromClipboard(GetSystemClipboard()));
+        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromClipboard(m_pActFocusWindow->get_clipboard()));
         bAllowed = aTransferData.HasFormat(SotClipboardFormatId::STRING);
     }
     return bAllowed;

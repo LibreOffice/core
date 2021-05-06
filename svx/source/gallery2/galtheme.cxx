@@ -32,6 +32,7 @@
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/fmmodel.hxx>
@@ -626,10 +627,10 @@ bool GalleryTheme::InsertTransferable(const uno::Reference< datatransfer::XTrans
     return bRet;
 }
 
-void GalleryTheme::CopyToClipboard(sal_uInt32 nPos)
+void GalleryTheme::CopyToClipboard(const weld::Widget& rWidget, sal_uInt32 nPos)
 {
     rtl::Reference<GalleryTransferable> pTransferable = new GalleryTransferable( this, nPos, false );
-    pTransferable->CopyToClipboard(GetSystemClipboard());
+    pTransferable->CopyToClipboard(rWidget.get_clipboard());
 }
 
 DateTime GalleryTheme::getModificationDate() const

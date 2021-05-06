@@ -700,7 +700,7 @@ namespace svxform
             return false;
 
         // get the clipboard
-        TransferableDataHelper aClipboardContent(TransferableDataHelper::CreateFromClipboard(GetSystemClipboard()));
+        TransferableDataHelper aClipboardContent(TransferableDataHelper::CreateFromClipboard(m_xTreeView->get_clipboard()));
 
         sal_Int8 nAction = m_aControlExchange.isClipboardOwner() && doingKeyboardCut( ) ? DND_ACTION_MOVE : DND_ACTION_COPY;
         std::unique_ptr<weld::TreeIter> xSelected(m_xTreeView->make_iterator());
@@ -1157,7 +1157,7 @@ namespace svxform
             else
             {
                 // the clipboard content
-                Reference< XClipboard > xClipboard( GetSystemClipboard() );
+                Reference< XClipboard > xClipboard(m_xTreeView->get_clipboard());
                 Reference< XTransferable > xTransferable;
                 if ( xClipboard.is() )
                     xTransferable = xClipboard->getContents();
@@ -1177,7 +1177,7 @@ namespace svxform
         if ( implPrepareExchange( DND_ACTION_COPY ) )
         {
             m_aControlExchange.setClipboardListener( LINK( this, NavigatorTree, OnClipboardAction ) );
-            m_aControlExchange.copyToClipboard( );
+            m_aControlExchange.copyToClipboard(*m_xTreeView);
         }
     }
 
@@ -1210,7 +1210,7 @@ namespace svxform
             return;
 
         m_aControlExchange.setClipboardListener( LINK( this, NavigatorTree, OnClipboardAction ) );
-        m_aControlExchange.copyToClipboard( );
+        m_aControlExchange.copyToClipboard(*m_xTreeView);
         m_bKeyboardCut = true;
 
         // mark all the entries we just "cut" into the clipboard as "nearly moved"

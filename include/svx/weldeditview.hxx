@@ -72,6 +72,8 @@ public:
     virtual void LoseFocus() override;
     virtual void Resize() override;
 
+    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    GetClipboard() const override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
 
     // Whether Tab will result in entering a tab or not

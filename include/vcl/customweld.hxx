@@ -104,6 +104,10 @@ public:
     {
         return m_pDrawingArea->get_drop_target();
     }
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const
+    {
+        return m_pDrawingArea->get_clipboard();
+    }
     void SetDragDataTransferrable(rtl::Reference<TransferDataContainer>& rTransferrable,
                                   sal_uInt8 eDNDConstants)
     {

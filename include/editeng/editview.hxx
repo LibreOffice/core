@@ -66,6 +66,9 @@ namespace sun {
 namespace star {
 namespace datatransfer {
     class XTransferable;
+    namespace clipboard {
+        class XClipboard;
+    }
     namespace dnd {
         class XDropTarget;
     }
@@ -127,6 +130,9 @@ public:
     virtual void EditViewScrollStateChange()
     {
     }
+
+    // Access to clipboard
+    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const = 0;
 
     // implemented if drag and drop support is wanted
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget()
@@ -273,7 +279,8 @@ public:
     void            InsertText( const EditTextObject& rTextObject );
     void            InsertText( css::uno::Reference< css::datatransfer::XTransferable > const & xDataObj, const OUString& rBaseURL, bool bUseSpecial );
 
-    css::uno::Reference< css::datatransfer::XTransferable > GetTransferable() const;
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const;
+    css::uno::Reference<css::datatransfer::XTransferable> GetTransferable() const;
 
     // An EditView, so that when TRUE the update will be free from flickering:
     void            SetEditEngineUpdateMode( bool bUpdate );
