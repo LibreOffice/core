@@ -704,7 +704,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
     if (!pWin)
         throw RuntimeException();
 
-    Reference< datatransfer::clipboard::XClipboard > xClipboard = GetSystemClipboard();
+    Reference< datatransfer::clipboard::XClipboard > xClipboard = pWin->GetClipboard();
     if ( xClipboard.is() )
     {
         OUString sText( getTextRange(nStartIndex, nEndIndex) );

@@ -1145,13 +1145,14 @@ void GalleryBrowser2::Execute(std::string_view rIdent)
     }
     else if (rIdent == "copy")
     {
-        mpCurTheme->CopyToClipboard(mnCurActionPos);
+        mpCurTheme->CopyToClipboard(*GetViewWindow(), mnCurActionPos);
     }
     else if (rIdent == "paste")
     {
         if( !mpCurTheme->IsReadOnly() )
         {
-            TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(GetSystemClipboard()));
+            weld::Widget* pParent = GetViewWindow();
+            TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(pParent->get_clipboard()));
             mpCurTheme->InsertTransferable( aDataHelper.GetTransferable(), mnCurActionPos );
          }
     }

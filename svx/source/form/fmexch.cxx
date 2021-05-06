@@ -34,7 +34,7 @@ namespace svxform
     {
     }
 
-    void OLocalExchange::copyToClipboard(const GrantAccess&)
+    void OLocalExchange::copyToClipboard(const weld::Widget& rWidget, const GrantAccess&)
     {
         if ( m_bClipboardOwner )
         {   // simulate a lostOwnership to notify parties interested in
@@ -42,7 +42,7 @@ namespace svxform
         }
 
         m_bClipboardOwner = true;
-        CopyToClipboard(GetSystemClipboard());
+        CopyToClipboard(rWidget.get_clipboard());
     }
 
     void OLocalExchange::clear()
@@ -320,10 +320,10 @@ namespace svxform
         implReset();
     }
 
-    void OLocalExchangeHelper::copyToClipboard( ) const
+    void OLocalExchangeHelper::copyToClipboard(const weld::Widget& rWidget) const
     {
         DBG_ASSERT( m_xTransferable.is(), "OLocalExchangeHelper::copyToClipboard: not prepared!" );
-        m_xTransferable->copyToClipboard(OLocalExchange::GrantAccess());
+        m_xTransferable->copyToClipboard(rWidget, OLocalExchange::GrantAccess());
     }
 
     void OLocalExchangeHelper::implReset()

@@ -1624,6 +1624,11 @@ css::uno::Reference<css::datatransfer::dnd::XDropTarget> WeldEditView::GetDropTa
     return m_xDropTarget;
 }
 
+css::uno::Reference<css::datatransfer::clipboard::XClipboard> WeldEditView::GetClipboard() const
+{
+    return weld::CustomWidgetController::GetClipboard();
+}
+
 namespace
 {
 class WeldEditViewUIObject final : public DrawingAreaUIObject

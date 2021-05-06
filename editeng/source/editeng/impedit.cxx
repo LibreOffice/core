@@ -1605,8 +1605,11 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
 
 Reference<css::datatransfer::clipboard::XClipboard> ImpEditView::GetClipboard() const
 {
+    if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
+        return pCallbacks->GetClipboard();
     if (vcl::Window* pWindow = GetWindow())
         return pWindow->GetClipboard();
+    SAL_WARN("editeng", "falling back to using GetSystemClipboard");
     return GetSystemClipboard();
 }
 

@@ -58,7 +58,7 @@ namespace svxform
         bool        isClipboardOwner() const { return m_bClipboardOwner; }
 
         void        setDragging(bool bDragging);
-        void        copyToClipboard(const GrantAccess&);
+        void        copyToClipboard(const weld::Widget& rWidget, const GrantAccess&);
 
         void        setClipboardListener( const Link<OLocalExchange&,void>& _rListener ) { m_aClipboardListener = _rListener; }
 
@@ -94,7 +94,7 @@ namespace svxform
 
         void        prepareDrag( );
 
-        void        copyToClipboard( ) const;
+        void    copyToClipboard(const weld::Widget& rWidget) const;
 
         bool    isDragSource() const { return m_xTransferable.is() && m_xTransferable->isDragging(); }
         bool    isClipboardOwner() const { return m_xTransferable.is() && m_xTransferable->isClipboardOwner(); }
