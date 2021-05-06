@@ -26,6 +26,7 @@
 #include <o3tl/deleter.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/lstner.hxx>
+#include <svl/itempool.hxx>
 #include <unotools/options.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
@@ -94,7 +95,7 @@ class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public
 
     std::unique_ptr<SfxErrorHandler> m_pErrorHandler;
 
-    SwAttrPool          *m_pAttrPool;
+    std::unique_ptr<SwAttrPool, SfxItemPoolDeleter> m_pAttrPool;
 
     // Current view is held here in order to avoid one's being forced
     // to work via GetActiveView.

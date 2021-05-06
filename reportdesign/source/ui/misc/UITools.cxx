@@ -727,7 +727,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         0
     };
 
-    SfxItemPool* pPool( new SfxItemPool("ReportCharProperties", XATTR_FILL_FIRST,ITEMID_WEIGHT_COMPLEX, aItemInfos, &pDefaults) );
+    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> pPool(new SfxItemPool("ReportCharProperties", XATTR_FILL_FIRST,ITEMID_WEIGHT_COMPLEX, aItemInfos, &pDefaults));
     // not needed for font height pPool->SetDefaultMetric( MapUnit::Map100thMM );  // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
     bool bSuccess = false;
@@ -755,7 +755,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 
-    SfxItemPool::Free(pPool);
+    pPool.reset();
     for (SfxPoolItem* pDefault : pDefaults)
         delete pDefault;
 
