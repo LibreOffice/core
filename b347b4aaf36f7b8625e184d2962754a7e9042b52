@@ -93,6 +93,24 @@
       "revId": "b347b4aaf36f7b8625e184d2962754a7e9042b52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b0d6798b_248f0706",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-06T05:29:47Z",
+      "side": 1,
+      "message": "Guess I\u0027m restoring it to the default.",
+      "parentUuid": "75d292e9_8b1c5931",
+      "revId": "b347b4aaf36f7b8625e184d2962754a7e9042b52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
