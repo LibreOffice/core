@@ -28,6 +28,7 @@
 #include <vcl/inputctx.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <optional>
@@ -402,12 +403,13 @@ class VCL_DLLPUBLIC PaintBufferGuard
     tools::Rectangle m_aPaintRect;
 public:
     PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow);
-    ~PaintBufferGuard();
+    ~PaintBufferGuard() COVERITY_NOEXCEPT_FALSE;
     /// If this is called, then the dtor will also copy rRectangle to the window from the buffer, before restoring the state.
     void SetPaintRect(const tools::Rectangle& rRectangle);
     /// Returns either the frame's buffer or the window, in case of no buffering.
     vcl::RenderContext* GetRenderContext();
 };
+typedef std::unique_ptr<PaintBufferGuard, o3tl::default_delete<PaintBufferGuard>> PaintBufferGuardPtr;
 }
 
 // helper methods

@@ -142,7 +142,7 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
-    std::unique_ptr<vcl::PaintBufferGuard> pGuard;
+    vcl::PaintBufferGuardPtr pGuard;
     if (mpRenderContext->GetOutDevType() == OUTDEV_WINDOW)
     {
         vcl::Window* pWindow = static_cast<vcl::Window*>(mpRenderContext.get());
@@ -174,7 +174,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
-    std::unique_ptr<vcl::PaintBufferGuard> pGuard;
+    vcl::PaintBufferGuardPtr pGuard;
     if (!pVDev && mpRenderContext->GetOutDevType() == OUTDEV_WINDOW)
     {
         vcl::Window* pWindow = static_cast<vcl::Window*>(mpRenderContext.get());
