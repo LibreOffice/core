@@ -26,9 +26,9 @@ class tdf91762(UITestCase):
         self.ui_test.close_dialog_through_button(xOkBtn)
 
         document = self.ui_test.get_component()
-        self.assertEqual(1929, document.DrawPages[0].getByIndex(1).BoundRect.Height)
+        self.assertEqual(1931, document.DrawPages[0].getByIndex(1).BoundRect.Height)
         self.assertEqual(25198, document.DrawPages[0].getByIndex(1).Size.Width)
-        self.assertEqual(1923, document.DrawPages[0].getByIndex(1).Size.Height)
+        self.assertEqual(1925, document.DrawPages[0].getByIndex(1).Size.Height)
 
         self.assertEqual(1400, document.DrawPages[0].getByIndex(1).Position.X)
         self.assertEqual(3685, document.DrawPages[0].getByIndex(1).Position.Y)
