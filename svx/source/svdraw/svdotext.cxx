@@ -683,11 +683,13 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting())
         {
             rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
+            rOutliner.SetMinColumnWrapHeight(nAnkHgt);
         }
 
         if(SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting())
         {
             rOutliner.SetMinAutoPaperSize(Size(0, nAnkHgt));
+            rOutliner.SetMinColumnWrapHeight(nAnkWdt);
         }
     }
 
