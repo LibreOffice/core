@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11be0171_2f35b8e5",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2624,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-06T13:56:47Z",
+      "side": 1,
+      "message": "This looks like asking to introduce a KahanSum::operator* taking a KahanSum - it could look cleaner (the operator could simply multiply both own members by the argument\u0027s get()).",
+      "range": {
+        "startLine": 2624,
+        "startChar": 31,
+        "endLine": 2624,
+        "endChar": 54
+      },
+      "revId": "58eaf6e24b1e005e42a6b0ace05210d6128bb6bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85aba239_67761b9a",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2630,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-06T13:56:47Z",
+      "side": 1,
+      "message": "Here the .get() might be removed in the both places, and then only applied to the result of subtraction.",
+      "range": {
+        "startLine": 2630,
+        "startChar": 27,
+        "endLine": 2630,
+        "endChar": 33
+      },
+      "revId": "58eaf6e24b1e005e42a6b0ace05210d6128bb6bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77f02537_0a4d9061",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2641,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-06T13:56:47Z",
+      "side": 1,
+      "message": "Here, too.",
+      "range": {
+        "startLine": 2641,
+        "startChar": 28,
+        "endLine": 2641,
+        "endChar": 34
+      },
+      "revId": "58eaf6e24b1e005e42a6b0ace05210d6128bb6bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
