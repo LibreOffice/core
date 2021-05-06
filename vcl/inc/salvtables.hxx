@@ -367,6 +367,8 @@ public:
     virtual VclPtr<VirtualDevice> create_virtual_device() const override;
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override;
+    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    get_clipboard() const override;
 
     virtual void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) override;
 
