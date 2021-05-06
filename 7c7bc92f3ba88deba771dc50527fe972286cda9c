@@ -16,6 +16,24 @@
       "revId": "7c7bc92f3ba88deba771dc50527fe972286cda9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6891618d_8c113d0a",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2726,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-05-06T09:24:22Z",
+      "side": 1,
+      "message": "Ok, I used the existing ScColumn::GetDataEntries() as a template to write this. Will fix.",
+      "parentUuid": "0a1bfa4d_98ad3cd2",
+      "revId": "7c7bc92f3ba88deba771dc50527fe972286cda9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
