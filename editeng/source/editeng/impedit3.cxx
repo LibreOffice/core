@@ -599,6 +599,13 @@ static sal_Int32 ImplCalculateFontIndependentLineSpacing( const sal_Int32 nFontH
     return ( nFontHeight * 12 ) / 10;   // + 20%
 }
 
+tools::Long ImpEditEngine::GetColumnWidth(const Size& rPaperSize) const
+{
+    assert(mnColumns >= 1);
+    tools::Long nWidth = IsVertical() ? rPaperSize.Height() : rPaperSize.Width();
+    return (nWidth - mnColumnSpacing * (mnColumns - 1)) / mnColumns;
+}
+
 bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 {
     ParaPortion& rParaPortion = GetParaPortions()[nPara];
@@ -786,11 +793,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
         }
 
-        tools::Long nMaxLineWidth;
-        if ( !IsVertical() )
-            nMaxLineWidth = aStatus.AutoPageWidth() ? aMaxAutoPaperSize.Width() : aPaperSize.Width();
-        else
-            nMaxLineWidth = aStatus.AutoPageHeight() ? aMaxAutoPaperSize.Height() : aPaperSize.Height();
+        const bool bAutoSize = IsVertical() ? aStatus.AutoPageHeight() : aStatus.AutoPageWidth();
+        tools::Long nMaxLineWidth = GetColumnWidth(bAutoSize ? aMaxAutoPaperSize : aPaperSize);
 
         nMaxLineWidth -= GetXValue( rLRItem.GetRight() );
         nMaxLineWidth -= nStartX;
@@ -798,7 +802,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         // If PaperSize == long_max, one cannot take away any negative
         // first line indent. (Overflow)
         if ( ( nMaxLineWidth < 0 ) && ( nStartX < 0 ) )
-            nMaxLineWidth = getWidthDirectionAware(aPaperSize) - GetXValue(rLRItem.GetRight());
+            nMaxLineWidth = GetColumnWidth(aPaperSize) - GetXValue(rLRItem.GetRight());
 
         // If still less than 0, it may be just the right edge.
         if ( nMaxLineWidth <= 0 )
@@ -1469,7 +1473,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             // has to be used for the Alignment. If it does not fit or if it
             // will change the paper width, it will be formatted again for
             // Justification! = LEFT anyway.
-            tools::Long nMaxLineWidthFix = getWidthDirectionAware(aPaperSize)
+            tools::Long nMaxLineWidthFix = GetColumnWidth(aPaperSize)
                                         - GetXValue( rLRItem.GetRight() ) - nStartX;
             if ( aTextSize.Width() < nMaxLineWidthFix )
                 nMaxLineWidth = nMaxLineWidthFix;
@@ -1726,7 +1730,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
     {
         sal_Int32 nPara = GetParaPortions().GetPos( pParaPortion );
         SvxAdjust eJustification = GetJustification( nPara );
-        tools::Long nMaxLineWidth = getWidthDirectionAware(aPaperSize);
+        tools::Long nMaxLineWidth = GetColumnWidth(aPaperSize);
         nMaxLineWidth -= GetXValue( rLRItem.GetRight() );
         if ( nMaxLineWidth < 0 )
             nMaxLineWidth = 1;
@@ -3029,6 +3033,35 @@ bool ImpEditEngine::isXOverflowDirectionAware(const Point& pt, const tools::Rect
         return pt.Y() < rectMax.Top();
 }
 
+// Returns the resulting shift for the point; allows to apply the same shift to other points
+Point ImpEditEngine::MoveToNextLine(
+    Point& rMovePos, // [in, out] Point that will move to the next line
+    tools::Long nLineHeight, // [in] Y-direction move distance (direction-aware)
+    sal_Int32& rColumn, // [in, out] current column number
+    Point aOrigin // [in] Origin point to calculate limits and initial Y position in a new column
+) const
+{
+    const Point aOld = rMovePos;
+
+    // Move the point by the requested distance in Y direction
+    adjustYDirectionAware(rMovePos, nLineHeight);
+    // Check if the resulting position has moved beyond the limits, and more columns left.
+    // The limits are defined by a rectangle starting from aOrigin with size of aMinAutoPaperSize
+    if (isYOverflowDirectionAware(rMovePos, { aOrigin, aMinAutoPaperSize })
+        && rColumn < mnColumns - 1)
+    {
+        ++rColumn;
+        // Set Y position of the point to that of aOrigin
+        setYDirectionAware(rMovePos, getYDirectionAware(aOrigin));
+        // Move the point by the requested distance in Y direction
+        adjustYDirectionAware(rMovePos, nLineHeight);
+        // Move the point by the column+spacing distance in X direction
+        adjustXDirectionAware(rMovePos, GetColumnWidth(aPaperSize) + mnColumnSpacing);
+    }
+
+    return rMovePos - aOld;
+}
+
 void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly, Degree10 nOrientation )
 {
     if ( !GetUpdateMode() && !bStripOnly )
@@ -3064,6 +3097,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
 
+    sal_Int32 nColumn = 0;
 
     // Over all the paragraphs...
 
@@ -3096,8 +3130,6 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
             adjustYDirectionAware(aStartPos, rPortion.GetFirstLineOffset());
 
-            const Point aParaStart( aStartPos );
-
             const SvxLineSpacingItem& rLSItem = rPortion.GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
             sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
                                 ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
@@ -3108,12 +3140,13 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                 const EditLine* const pLine = &rPortion.GetLines()[nLine];
                 assert( pLine && "NULL-Pointer in the line iterator in UpdateViews" );
                 sal_Int32 nIndex = pLine->GetStart();
+                tools::Long nLineHeight = pLine->GetHeight();
+                if (nLine != nLastLine)
+                    nLineHeight += nVertLineSpacing;
+                MoveToNextLine(aStartPos, nLineHeight, nColumn, aOrigin);
                 aTmpPos = aStartPos;
                 adjustXDirectionAware(aTmpPos, pLine->GetStartPosX());
-                adjustYDirectionAware(aTmpPos, pLine->GetMaxAscent());
-                adjustYDirectionAware(aStartPos, pLine->GetHeight());
-                if (nLine != nLastLine)
-                    adjustYDirectionAware(aStartPos, nVertLineSpacing);
+                adjustYDirectionAware(aTmpPos, pLine->GetMaxAscent() - nLineHeight);
 
                 if ( ( !IsVertical() && ( aStartPos.Y() > aClipRect.Top() ) )
                     || ( IsVertical() && IsTopToBottom() && aStartPos.X() < aClipRect.Right() )
@@ -3127,7 +3160,10 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                     // does, too. No change for not-layouting (painting).
                     if(0 == nLine) // && !bStripOnly)
                     {
-                        GetEditEnginePtr()->PaintingFirstLine(n, aParaStart, aTmpPos.Y(), aOrigin, nOrientation, rOutDev);
+                        Point aLineStart(aStartPos);
+                        adjustYDirectionAware(aLineStart, -nLineHeight);
+                        GetEditEnginePtr()->PaintingFirstLine(n, aLineStart, aTmpPos.Y(), aOrigin,
+                                                              nOrientation, rOutDev);
 
                         // Remember whether a bullet was painted.
                         const SfxBoolItem& rBulletState = pEditEngine->GetParaAttrib(n, EE_PARA_BULLETSTATE);
@@ -3146,7 +3182,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                         const TextPortion& rTextPortion = rPortion.GetTextPortions()[nPortion];
 
                         const tools::Long nPortionXOffset = GetPortionXOffset( &rPortion, pLine, nPortion );
-                        setXDirectionAware(aTmpPos, getXDirectionAware(aParaStart));
+                        setXDirectionAware(aTmpPos, getXDirectionAware(aStartPos));
                         adjustXDirectionAware(aTmpPos, nPortionXOffset);
                         if (isXOverflowDirectionAware(aTmpPos, aClipRect))
                             break; // No further output in line necessary
@@ -3313,8 +3349,8 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                             // what will lead to a compressed look with multiple lines
                                             const sal_uInt16 nMaxAscent(pLine->GetMaxAscent());
 
-                                            adjustYDirectionAware(aStartPos, nMaxAscent);
-                                            adjustYDirectionAware(aTmpPos, nMaxAscent);
+                                            aTmpPos += MoveToNextLine(aStartPos, nMaxAscent,
+                                                                      nColumn, aOrigin);
                                         }
                                         std::vector< sal_Int32 >::iterator curIt = itSubLines;
                                         ++itSubLines;
@@ -3945,7 +3981,7 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
         {
             aInvalidRect = tools::Rectangle();  // make empty
             aInvalidRect.SetLeft( 0 );
-            aInvalidRect.SetRight( aPaperSize.Width() );
+            aInvalidRect.SetRight(GetColumnWidth(aPaperSize));
             aInvalidRect.SetTop( GetParaPortions().GetYOffset( pUpperPortion ) );
             aInvalidRect.SetBottom( GetParaPortions().GetYOffset( pLowerPortion ) + pLowerPortion->GetHeight() );
 

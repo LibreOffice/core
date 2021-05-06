@@ -561,6 +561,9 @@ private:
     sal_Int32 mnOverflowingLine = -1;
     bool mbNeedsChainingHandling = false;
 
+    sal_Int32 mnColumns = 3;
+    sal_Int32 mnColumnSpacing = 400;
+
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
     Timer               aStatusTimer;
@@ -760,6 +763,10 @@ private:
     css::uno::Reference< css::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection );
 
     void                SetValidPaperSize( const Size& rSz );
+
+    tools::Long GetColumnWidth(const Size& rPaperSize) const;
+    Point MoveToNextLine(Point& rMovePos, tools::Long nLineHeight, sal_Int32& nColumn,
+                         Point aOrigin) const;
 
     tools::Long getXDirectionAware(const Point& pt) const;
     tools::Long getYDirectionAware(const Point& pt) const;
