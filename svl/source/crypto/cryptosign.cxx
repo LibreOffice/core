@@ -929,7 +929,7 @@ std::vector<unsigned char> DecodeHexString(const OString& rHex)
 }
 
 
-#if defined(SVL_CRYPTO_NSS) || defined(SVL_CRYPTO_MSCRYPTO)
+#if defined(SVL_CRYPTO_NSS) || defined(_WIN32)
 
 bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 {
@@ -1633,7 +1633,7 @@ bool Signing::Sign(OStringBuffer&)
 {
     return false;
 }
-#endif //!SVL_CRYPTO_NSS && !SVL_CRYPTO_MSCRYPTO
+#endif //!SVL_CRYPTO_NSS && !_WIN32
 
 
 namespace
@@ -1789,7 +1789,7 @@ bad_data:
     }
     return rv;
 }
-#elif defined SVL_CRYPTO_MSCRYPTO
+#elif defined _WIN32
 /// Verifies a non-detached signature using CryptoAPI.
 bool VerifyNonDetachedSignature(const std::vector<unsigned char>& aData, const std::vector<BYTE>& rExpectedHash)
 {
@@ -2105,7 +2105,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
 
     return true;
 
-#elif defined SVL_CRYPTO_MSCRYPTO
+#elif defined _WIN32
     // Open a message for decoding.
     HCRYPTMSG hMsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
                                           CMSG_DETACHED_FLAG,
@@ -2336,7 +2336,7 @@ bool Signing::Verify(SvStream& rStream,
                      const std::vector<unsigned char>& aSignature,
                      SignatureInformation& rInformation)
 {
-#if defined(SVL_CRYPTO_NSS) || defined(SVL_CRYPTO_MSCRYPTO)
+#if defined(SVL_CRYPTO_NSS) || defined(_WIN32)
 
     std::vector<unsigned char> buffer;
 
