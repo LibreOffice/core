@@ -20,7 +20,6 @@
 #pragma once
 
 #include <svx/weldeditview.hxx>
-#include <vcl/InterimItemWindow.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/transfer.hxx>
 
@@ -72,6 +71,7 @@ public:
     virtual bool Command(const CommandEvent& rCEvt) override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
+    virtual void StyleUpdated() override;
 
     void SetText(const OUString& rText);
     void InsertText(const OUString& rText);
@@ -83,34 +83,38 @@ public:
     void StartCursorMove();
 };
 
-class SmEditWindow final : public InterimItemWindow
+class SmEditWindow final
 {
     SmCmdBoxWindow& rCmdBox;
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
     std::unique_ptr<SmEditTextWindow> mxTextControl;
     std::unique_ptr<weld::CustomWeld> mxTextControlWin;
 
-    virtual void ApplySettings(vcl::RenderContext&) override;
-    virtual void DataChanged(const DataChangedEvent&) override;
-
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
 
-    void CreateEditView();
+    void CreateEditView(weld::Builder& rBuilder);
 
 public:
-    explicit SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin);
-    virtual ~SmEditWindow() override;
-    virtual void dispose() override;
+    SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin, weld::Builder& rBuilder);
+    ~SmEditWindow();
+
+    weld::Window* GetFrameWeld() const;
 
     SmDocShell* GetDoc();
     SmViewShell* GetView();
     EditView* GetEditView() const;
     EditEngine* GetEditEngine();
+    SmCmdBoxWindow& GetCmdBox() const { return rCmdBox; }
 
-    // Window
-    virtual void SetText(const OUString& rText) override;
-    virtual OUString GetText() const override;
-    virtual void Command(const CommandEvent& rCEvt) override;
+    void SetText(const OUString& rText);
+    OUString GetText() const;
+    void Flush();
+    void GrabFocus();
+
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const
+    {
+        return mxTextControl->GetClipboard();
+    }
 
     ESelection GetSelection() const;
     void SetSelection(const ESelection& rSel);
