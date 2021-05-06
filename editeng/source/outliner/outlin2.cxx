@@ -223,6 +223,11 @@ void Outliner::SetMaxAutoPaperSize( const Size& rSz )
     pEditEngine->SetMaxAutoPaperSize( rSz );
 }
 
+void Outliner::SetMinColumnWrapHeight(tools::Long nVal)
+{
+    pEditEngine->SetMinColumnWrapHeight(nVal);
+}
+
 bool Outliner::IsExpanded( Paragraph const * pPara ) const
 {
     return pParaList->HasVisibleChildren( pPara );

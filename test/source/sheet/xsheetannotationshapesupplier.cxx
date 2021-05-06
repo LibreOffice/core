@@ -33,7 +33,7 @@ void XSheetAnnotationShapeSupplier::testGetAnnotationShape()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("getAnnotationShape() wrong width",
                                  sal_Int32(11275), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("getAnnotationShape() wrong height",
-                                 sal_Int32(1386), xShape->getSize().Height);
+                                 sal_Int32(1387), xShape->getSize().Height);
 }
 
 }

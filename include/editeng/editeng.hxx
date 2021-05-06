@@ -272,6 +272,8 @@ public:
     const Size&     GetMaxAutoPaperSize() const;
     void            SetMaxAutoPaperSize( const Size& rSz );
 
+    void SetMinColumnWrapHeight(tools::Long nVal);
+
     OUString        GetText( LineEnd eEnd = LINEEND_LF ) const;
     OUString        GetText( const ESelection& rSelection ) const;
     sal_uInt32      GetTextLen() const;
