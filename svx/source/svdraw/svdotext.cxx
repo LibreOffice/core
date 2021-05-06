@@ -730,12 +730,12 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         // supporting full width for vertical text.
         if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting())
         {
-            rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
+            rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, nAnkHgt));
         }
 
         if(SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting())
         {
-            rOutliner.SetMinAutoPaperSize(Size(0, nAnkHgt));
+            rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, nAnkHgt));
         }
     }
 
