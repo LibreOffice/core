@@ -195,24 +195,13 @@ void ScEditWindow::SetCharAttributes()
 
 bool ScEditWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_uInt16 nKey =  rKEvt.GetKeyCode().GetModifier()
-                 + rKEvt.GetKeyCode().GetCode();
-
-    if ( nKey == KEY_TAB || nKey == KEY_TAB + KEY_SHIFT )
-    {
-        return false;
-    }
-    else if ( !m_xEditView->PostKeyEvent( rKEvt ) )
-    {
-        return false;
-    }
-    else if ( !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsShift() &&
+    if ( !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsShift() &&
                 rKEvt.GetKeyCode().IsMod2() && rKEvt.GetKeyCode().GetCode() == KEY_DOWN )
     {
         aObjectSelectLink.Call(*this);
         return true;
     }
-    return true;
+    return WeldEditView::KeyInput(rKEvt);
 }
 
 void ScEditWindow::GetFocus()
