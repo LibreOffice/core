@@ -46,6 +46,7 @@ fuzzer_core_libraries = \
     basctl \
     avmedia \
     basegfx \
+    basprov \
     bib \
     canvastools \
     configmgr \
