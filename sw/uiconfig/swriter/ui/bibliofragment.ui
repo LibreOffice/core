@@ -84,6 +84,7 @@
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="pagecb"/>
                 </accessibility>
