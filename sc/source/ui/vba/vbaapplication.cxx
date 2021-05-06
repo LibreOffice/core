@@ -746,7 +746,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor )
 OUString SAL_CALL
 ScVbaApplication::getName()
 {
-    return "Microsoft Excel";
+    return "LibreOffice Calc";
 }
 
 // #TODO #FIXME get/setDisplayAlerts are just stub impl
