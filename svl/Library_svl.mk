@@ -97,9 +97,6 @@ $(eval $(call gb_Library_use_system_win32_libs,svl,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_defs,svl,\
-    -DSVL_CRYPTO_MSCRYPTO \
-))
 $(eval $(call gb_Library_use_system_win32_libs,svl,\
     crypt32 \
 ))
