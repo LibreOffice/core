@@ -1094,7 +1094,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
     // sleeper set up when Olli paragraphs not hacked!
     if ( bAllowBigObjects && bOnlyFullParagraphs && IsFormatted() && GetUpdateMode() && ( nTextPortions >= nBigObjectStart ) )
     {
-        XParaPortionList* pXList = new XParaPortionList( GetRefDevice(), aPaperSize.Width(), nStretchX, nStretchY );
+        XParaPortionList* pXList = new XParaPortionList( GetRefDevice(), GetColumnWidth(aPaperSize), nStretchX, nStretchY );
         pTxtObj->mpImpl->SetPortionInfo(std::unique_ptr<XParaPortionList>(pXList));
         for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
         {
@@ -1177,7 +1177,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     bool bUsePortionInfo = false;
     XParaPortionList* pPortionInfo = rTextObject.mpImpl->GetPortionInfo();
 
-    if ( pPortionInfo && ( static_cast<tools::Long>(pPortionInfo->GetPaperWidth()) == aPaperSize.Width() )
+    if ( pPortionInfo && ( static_cast<tools::Long>(pPortionInfo->GetPaperWidth()) == GetColumnWidth(aPaperSize) )
             && ( pPortionInfo->GetRefMapMode() == GetRefDevice()->GetMapMode() )
             && ( pPortionInfo->GetStretchX() == nStretchX )
             && ( pPortionInfo->GetStretchY() == nStretchY ) )

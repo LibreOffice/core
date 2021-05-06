@@ -770,11 +770,13 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWriting)
     {
         rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
+        rOutliner.SetMinColumnWrapHeight(nAnchorTextHeight);
     }
 
     if(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWriting)
     {
         rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
+        rOutliner.SetMinColumnWrapHeight(nAnchorTextWidth);
     }
 
     rOutliner.SetPaperSize(aNullSize);
@@ -983,10 +985,12 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         if(bHorizontalIsBlock)
         {
             rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
+            rOutliner.SetMinColumnWrapHeight(nAnchorTextHeight);
         }
         else if(bVerticalIsBlock)
         {
             rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
+            rOutliner.SetMinColumnWrapHeight(nAnchorTextWidth);
         }
 
         if((rSdrBlockTextPrimitive.getWordWrap() || IsTextFrame()) && !rSdrBlockTextPrimitive.getUnlimitedPage())
