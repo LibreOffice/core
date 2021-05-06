@@ -544,6 +544,63 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     CPPUNIT_ASSERT_EQUAL(OUString("3"), pDoc->GetString(ScAddress(2, 0, 0))); // C1
 }
 
+// Test the call of .uno:PasteAsLink (tdf#90101)
+// Note: the paste as link functionaly is tested in ucalc
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "1");
+    insertStringToCell(*pModelObj, "A2", "a");
+    insertStringToCell(*pModelObj, "A3", "=A1");
+
+    // Add a note to A1
+    goToCell("A1");
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Note in A1")) } });
+    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+
+    // Set A2 bold
+    goToCell("A2");
+    dispatchCommand(mxComponent, ".uno:Bold", {});
+
+    // Check preconditions
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
+    const ScPatternAttr* pPattern = pDoc->GetPattern(0, 1, 0);
+    vcl::Font aFont;
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+
+    goToCell("A1:A3");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    goToCell("C1");
+
+    dispatchCommand(mxComponent, ".uno:PasteAsLink", {});
+
+    OUString aFormula;
+    pDoc->GetFormula(2, 0, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet1.$A$1"), aFormula); // C1
+    pDoc->GetFormula(2, 1, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet1.$A$2"), aFormula); // C2
+    pDoc->GetFormula(2, 2, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet1.$A$3"), aFormula); // C3
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(2, 0, 0)); // C1
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(2, 2, 0)); // C3
+
+    CPPUNIT_ASSERT_MESSAGE("There should be no note on C1", !pDoc->HasNote(ScAddress(2, 0, 0)));
+
+    pPattern = pDoc->GetPattern(2, 1, 0);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be normal (cell attributes should not be copied)",
+                                 WEIGHT_NORMAL, aFont.GetWeight());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131442)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
