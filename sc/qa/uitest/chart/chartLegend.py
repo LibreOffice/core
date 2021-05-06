@@ -111,7 +111,7 @@ class chartLegend(UITestCase):
 
     xDialog = self.xUITest.getTopFocusWindow()
     self.assertEqual("4.61", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-    self.assertEqual("1.54", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+    self.assertEqual("1.53", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
     xOkBtn = xDialog.getChild("ok")
     xOkBtn.executeAction("CLICK", tuple())
@@ -124,7 +124,7 @@ class chartLegend(UITestCase):
     # Check the position has changed after moving the label using the arrows keys
     xDialog = self.xUITest.getTopFocusWindow()
     self.assertEqual("4.51", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-    self.assertEqual("1.44", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+    self.assertEqual("1.43", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
     xOkBtn = xDialog.getChild("ok")
     xOkBtn.executeAction("CLICK", tuple())
