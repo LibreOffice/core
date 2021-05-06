@@ -1,0 +1,40 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_sheet_FilterFieldType_idl__
+#define __com_sun_star_sheet_FilterFieldType_idl__
+
+module com {  module sun {  module star {  module sheet {
+
+/**
+ * @since LibreOffice 7.2
+ */
+constants FilterFieldType
+{
+   /** Filter by numeric value */
+   const short NUMERIC = 0;
+
+   /** Filter by string value */
+   const short STRING = 1;
+
+   /** Filter by date */
+   const short DATE = 2;
+
+   /** Filter by text color */
+   const short TEXT_COLOR = 3;
+
+   /** Filter by background color */
+   const short BACKGROUND_COLOR = 4;
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
