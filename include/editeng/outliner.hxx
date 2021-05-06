@@ -789,6 +789,8 @@ public:
     const Size&     GetMaxAutoPaperSize() const;
     void            SetMaxAutoPaperSize( const Size& rSz );
 
+    void SetMinColumnWrapHeight(tools::Long nVal);
+
     void            SetDefTab( sal_uInt16 nTab );
 
     bool            IsFlatMode() const;
