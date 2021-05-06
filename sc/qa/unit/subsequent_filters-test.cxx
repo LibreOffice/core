@@ -316,6 +316,7 @@ public:
     void testDeleteCirclesInRowAndCol();
     void testTdf129940();
     void testTdf139763ShapeAnchor();
+    void testAutofilterNamedRangesXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
@@ -515,6 +516,7 @@ public:
     CPPUNIT_TEST(testDeleteCirclesInRowAndCol);
     CPPUNIT_TEST(testTdf129940);
     CPPUNIT_TEST(testTdf139763ShapeAnchor);
+    CPPUNIT_TEST(testAutofilterNamedRangesXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5770,6 +5772,27 @@ void ScFiltersTest::testTdf139763ShapeAnchor()
     CPPUNIT_ASSERT_MESSAGE("Failed to get cell anchored object.", pObj);
     CPPUNIT_ASSERT_MESSAGE("Shape must be anchored to cell.", ScDrawLayer::IsCellAnchored(*pObj));
     CPPUNIT_ASSERT_MESSAGE("Shape must not resize with cell.", !ScDrawLayer::IsResizeWithCell(*pObj));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testAutofilterNamedRangesXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"autofilternamedrange.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load autofilternamedrange.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    const ScDBData* pDBData = rDoc.GetDBCollection()->GetDBNearCursor(0, 0, 0);
+    CPPUNIT_ASSERT(pDBData);
+    ScRange aRange;
+    pDBData->GetArea(aRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 0, 3, 0), aRange);
+    OUString aPosStr;
+    bool bSheetLocal = false;
+    // test there is no '_xlnm._FilterDatabase' named range on the filter area
+    const ScRangeData* pRData = rDoc.GetRangeAtBlock(aRange, aPosStr, &bSheetLocal);
+    CPPUNIT_ASSERT(!pRData);
+    CPPUNIT_ASSERT_EQUAL(OUString(), aPosStr);
 
     xDocSh->DoClose();
 }

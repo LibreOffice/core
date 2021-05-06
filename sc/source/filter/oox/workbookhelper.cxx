@@ -149,9 +149,9 @@ public:
     /** Returns the specified cell or page style from the Calc document. */
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
     /** Creates and returns a defined name on-the-fly in the Calc document. */
-    ScRangeData* createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags );
+    ScRangeData* createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, bool bHidden );
     /** Creates and returns a defined name on the-fly in the correct Calc sheet. */
-    ScRangeData* createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab );
+    ScRangeData* createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab, bool bHidden );
     /** Creates and returns a database range on-the-fly in the Calc document. */
     Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr );
     /** Creates and returns an unnamed database range on-the-fly in the Calc document. */
@@ -350,7 +350,7 @@ Reference< XStyle > WorkbookGlobals::getStyleObject( const OUString& rStyleName,
 
 namespace {
 
-ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, const OUString& rName, const Sequence<FormulaToken>& rTokens, sal_Int16 nIndex, sal_Int32 nUnoType )
+ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, const OUString& rName, const Sequence<FormulaToken>& rTokens, sal_Int16 nIndex, sal_Int32 nUnoType, bool bHidden )
 {
     bool bDone = false;
     ScRangeData::Type nNewType = ScRangeData::Type::Name;
@@ -364,6 +364,9 @@ ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, c
     pNew->GuessPosition();
     if ( nIndex )
         pNew->SetIndex( nIndex );
+    // create but not insert hidden FILTER_CRITERIA named ranges to ScRangeName
+    if ( bHidden && nNewType == ScRangeData::Type::Criteria )
+        return pNew;
     if ( pNames->insert(pNew) )
         bDone = true;
     if (!bDone)
@@ -384,7 +387,7 @@ OUString findUnusedName( const ScRangeName* pRangeName, const OUString& rSuggest
 }
 
 ScRangeData* WorkbookGlobals::createNamedRangeObject(
-    OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags )
+    OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, bool bHidden )
 {
     // create the name and insert it into the Calc document
     ScRangeData* pScRangeData = nullptr;
@@ -395,13 +398,13 @@ ScRangeData* WorkbookGlobals::createNamedRangeObject(
         // find an unused name
         orName = findUnusedName( pNames, orName );
         // create the named range
-        pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
+        pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags, bHidden );
     }
     return pScRangeData;
 }
 
 ScRangeData* WorkbookGlobals::createLocalNamedRangeObject(
-    OUString& orName, const Sequence< FormulaToken >&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab )
+    OUString& orName, const Sequence< FormulaToken >&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab, bool bHidden )
 {
     // create the name and insert it into the Calc document
     ScRangeData* pScRangeData = nullptr;
@@ -414,7 +417,7 @@ ScRangeData* WorkbookGlobals::createLocalNamedRangeObject(
         // find an unused name
         orName = findUnusedName( pNames, orName );
         // create the named range
-        pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
+        pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags, bHidden );
     }
     return pScRangeData;
 }
@@ -859,14 +862,14 @@ Reference< XStyle > WorkbookHelper::getStyleObject( const OUString& rStyleName, 
     return mrBookGlob.getStyleObject( rStyleName, bPageStyle );
 }
 
-ScRangeData* WorkbookHelper::createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const
+ScRangeData* WorkbookHelper::createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, bool bHidden ) const
 {
-    return mrBookGlob.createNamedRangeObject( orName, rTokens, nIndex, nNameFlags );
+    return mrBookGlob.createNamedRangeObject( orName, rTokens, nIndex, nNameFlags, bHidden );
 }
 
-ScRangeData* WorkbookHelper::createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const
+ScRangeData* WorkbookHelper::createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab, bool bHidden ) const
 {
-    return mrBookGlob.createLocalNamedRangeObject( orName, rTokens, nIndex, nNameFlags, nTab );
+    return mrBookGlob.createLocalNamedRangeObject( orName, rTokens, nIndex, nNameFlags, nTab, bHidden );
 }
 
 Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr ) const
