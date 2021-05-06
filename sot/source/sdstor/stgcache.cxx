@@ -74,7 +74,7 @@ bool StgPage::IsPageGreater( const StgPage *pA, const StgPage *pB )
 // The disk cache holds the cached sectors. The sector type differ according
 // to their purpose.
 
-static sal_Int32 lcl_GetPageCount( sal_uLong nFileSize, short nPageSize )
+static sal_Int32 lcl_GetPageCount( sal_uInt64 nFileSize, short nPageSize )
 {
 //    return (nFileSize >= 512) ? (nFileSize - 512) / nPageSize : 0;
     // #i61980# real life: last page may be incomplete, return number of *started* pages
