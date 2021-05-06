@@ -252,7 +252,6 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/readwritemutexguard.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/ucbstreamhelper.hxx>

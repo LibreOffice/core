@@ -90,7 +90,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/i18n/intlwrapper \
     unotools/source/i18n/localedatawrapper \
     unotools/source/i18n/nativenumberwrapper \
-    unotools/source/i18n/readwritemutexguard \
     unotools/source/i18n/textsearch \
     unotools/source/i18n/transliterationwrapper \
     unotools/source/misc/closeveto \

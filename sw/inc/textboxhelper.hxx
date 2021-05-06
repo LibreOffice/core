@@ -92,25 +92,13 @@ public:
     /// not to interfere with the layout. Returns true on success.
     static bool setWrapThrough(SwFrameFormat* pShape);
 
-    /// Sets the surround to through for the textframe of the given shape,
-    /// not to interfere with the layout. Returns true on success.
-    static bool setWrapThrough(css::uno::Reference<css::drawing::XShape> xShape);
-
     /// Sets the anchor of the associated textframe of the given shape, and
     /// returns true on success.
     static bool changeAnchor(SwFrameFormat* pShape);
 
-    /// Sets the anchor of the associated textframe of the given shape, and
-    /// returns true on success.
-    static bool changeAnchor(css::uno::Reference<css::drawing::XShape> xShape);
-
     /// Does the positioning for the associated textframe of the shape, and
     /// returns true on success.
     static bool doTextBoxPositioning(SwFrameFormat* pShape);
-
-    /// Does the positioning for the associated textframe of the shape, and
-    /// returns true on success.
-    static bool doTextBoxPositioning(css::uno::Reference<css::drawing::XShape> xShape);
 
     /// Returns true if the anchor different for the  given shape, and the
     /// associated textframe of the given shape.
@@ -121,8 +109,6 @@ public:
 
     /// Returns true if the given shape has a valid textframe.
     static bool isTextBoxShapeHasValidTextFrame(SwFrameFormat* pShape);
-    /// Returns true if the given shape has a valid textframe.
-    static bool isTextBoxShapeHasValidTextFrame(css::uno::Reference<css::drawing::XShape> xShape);
 
     /**
      * If we have an associated TextFrame, then return that.

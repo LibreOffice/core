@@ -80,44 +80,6 @@ void AlphaMask::Erase( sal_uInt8 cTransparency )
     Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
 }
 
-void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency )
-{
-    AlphaScopedWriteAccess pAcc(*this);
-
-    if( !(pAcc && pAcc->GetBitCount() == 8) )
-        return;
-
-    const tools::Long nWidth = pAcc->Width(), nHeight = pAcc->Height();
-
-    if( pAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
-    {
-        for( tools::Long nY = 0; nY < nHeight; nY++ )
-        {
-            Scanline pScan = pAcc->GetScanline( nY );
-
-            for( tools::Long nX = 0; nX < nWidth; nX++, pScan++ )
-            {
-                if( *pScan == cSearchTransparency )
-                    *pScan = cReplaceTransparency;
-            }
-        }
-    }
-    else
-    {
-        BitmapColor aReplace( cReplaceTransparency );
-
-        for( tools::Long nY = 0; nY < nHeight; nY++ )
-        {
-            Scanline pScanline = pAcc->GetScanline(nY);
-            for( tools::Long nX = 0; nX < nWidth; nX++ )
-            {
-                if( pAcc->GetIndexFromData( pScanline, nX ) == cSearchTransparency )
-                    pAcc->SetPixelOnData( pScanline, nX, aReplace );
-            }
-        }
-    }
-}
-
 void AlphaMask::BlendWith(const Bitmap& rOther)
 {
     std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());

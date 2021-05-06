@@ -1100,13 +1100,6 @@ bool SwTextBoxHelper::setWrapThrough(SwFrameFormat* pShape)
     return false;
 }
 
-bool SwTextBoxHelper::setWrapThrough(uno::Reference<drawing::XShape> xShape)
-{
-    if (auto pShape = getShapeFormat(xShape))
-        return setWrapThrough(pShape);
-    return false;
-}
-
 bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape)
 {
     if (isTextBoxShapeHasValidTextFrame(pShape))
@@ -1198,13 +1191,6 @@ bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape)
     return false;
 }
 
-bool SwTextBoxHelper::changeAnchor(uno::Reference<drawing::XShape> xShape)
-{
-    if (auto pShape = getShapeFormat(xShape))
-        return changeAnchor(pShape);
-    return false;
-}
-
 bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape)
 {
     if (isTextBoxShapeHasValidTextFrame(pShape))
@@ -1254,13 +1240,6 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape)
     return false;
 }
 
-bool SwTextBoxHelper::doTextBoxPositioning(uno::Reference<drawing::XShape> xShape)
-{
-    if (auto pShape = getShapeFormat(xShape))
-        return doTextBoxPositioning(pShape);
-    return false;
-}
-
 std::optional<bool> SwTextBoxHelper::isAnchorTypeDifferent(SwFrameFormat* pShape)
 {
     std::optional<bool> bRet;
@@ -1293,14 +1272,6 @@ bool SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(SwFrameFormat* pShape)
         sErrMsg = "Not valid shape!";
 
     SAL_WARN("sw.core", "SwTextBoxHelper::isTextBoxShapeHasValidTextFrame: " << sErrMsg);
-    return false;
-}
-
-bool SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(uno::Reference<drawing::XShape> xShape)
-{
-    if (auto pShape = getShapeFormat(xShape))
-        return isTextBoxShapeHasValidTextFrame(pShape);
-
     return false;
 }
 

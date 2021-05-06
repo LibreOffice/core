@@ -98,7 +98,6 @@ SfxPoolItem* SvxKerningItem::CreateDefault() {return new SvxKerningItem(0, 0);}
 SfxPoolItem* SvxCaseMapItem::CreateDefault() {return new SvxCaseMapItem(SvxCaseMap::NotMapped, 0);}
 SfxPoolItem* SvxEscapementItem::CreateDefault() {return new SvxEscapementItem(0);}
 SfxPoolItem* SvxLanguageItem::CreateDefault() {return new SvxLanguageItem(LANGUAGE_GERMAN, 0);}
-SfxPoolItem* SvxBlinkItem::CreateDefault() {return new SvxBlinkItem(false, 0);}
 SfxPoolItem* SvxEmphasisMarkItem::CreateDefault() {return new SvxEmphasisMarkItem(FontEmphasisMark::NONE, 0);}
 SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(0_deg10, false, 0);}
 SfxPoolItem* SvxCharScaleWidthItem::CreateDefault() {return new SvxCharScaleWidthItem(100, 0);}

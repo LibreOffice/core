@@ -114,11 +114,6 @@ public:
         return mpBuffer->maPalette[nColor];
     }
 
-    const BitmapColor& GetBestPaletteColor(const BitmapColor& rBitmapColor) const
-    {
-        return GetPaletteColor(GetBestPaletteIndex(rBitmapColor));
-    }
-
     sal_uInt16 GetBestPaletteIndex(const BitmapColor& rBitmapColor) const;
 
     ColorMask& GetColorMask() const
