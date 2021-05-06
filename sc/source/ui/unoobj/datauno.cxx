@@ -34,6 +34,7 @@
 #include <com/sun/star/table/TableOrientation.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/sheet/DataImportMode.hpp>
+#include <com/sun/star/sheet/FilterFieldType.hpp>
 #include <com/sun/star/sheet/FilterOperator2.hpp>
 #include <com/sun/star/sheet/TableFilterField2.hpp>
 
@@ -64,6 +65,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace css::sheet;
 
 //  everything without Which-ID, map only for PropertySetInfo
 
@@ -1124,9 +1126,27 @@ void fillQueryParam(
             for (const auto& rVal : rVals)
             {
                 ScQueryEntry::Item aItem;
-                aItem.meType   = rVal.IsNumeric ? ScQueryEntry::ByValue : (rVal.IsDateValue ? ScQueryEntry::ByDate : ScQueryEntry::ByString);
+                switch (rVal.FilterType)
+                {
+                    case FilterFieldType::NUMERIC:
+                        aItem.meType = ScQueryEntry::ByValue;
+                        break;
+                    case FilterFieldType::STRING:
+                        aItem.meType = ScQueryEntry::ByString;
+                        break;
+                    case FilterFieldType::DATE:
+                        aItem.meType = ScQueryEntry::ByDate;
+                        break;
+                    case FilterFieldType::TEXT_COLOR:
+                        aItem.meType = ScQueryEntry::ByTextColor;
+                        break;
+                    case FilterFieldType::BACKGROUND_COLOR:
+                        aItem.meType = ScQueryEntry::ByBackgroundColor;
+                        break;
+                }
                 aItem.mfVal    = rVal.NumericValue;
                 aItem.maString = rPool.intern(rVal.StringValue);
+
 
                 if (aItem.meType == ScQueryEntry::ByString)
                 {
@@ -1150,6 +1170,11 @@ void fillQueryParam(
                     OUString aStr;
                     pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, 0, aStr);
                     aItem.maString = rPool.intern(aStr);
+                }
+                else if (aItem.meType == ScQueryEntry::ByTextColor
+                         || aItem.meType == ScQueryEntry::ByBackgroundColor)
+                {
+                    aItem.maColor = Color(ColorTransparency, rVal.ColorValue);
                 }
 
                 // filter all dates starting with the given date filter YYYY or YYYY-MM and filter all datetimes
