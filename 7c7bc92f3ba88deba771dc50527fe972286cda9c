@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a1bfa4d_98ad3cd2",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2726,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-06T09:12:10Z",
+      "side": 1,
+      "message": "This is a rather convoluted way to write code that\u0027s essentially two independent loops. If this review were for master I\u0027d -1 it.",
+      "revId": "7c7bc92f3ba88deba771dc50527fe972286cda9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
