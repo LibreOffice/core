@@ -157,6 +157,7 @@ BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
         }
 
         Bitmap::ReleaseAccess(pReadAcc);
+        pReadAcc = nullptr;
 
         if (pNewBmp)
         {
