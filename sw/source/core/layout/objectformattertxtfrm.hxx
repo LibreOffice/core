@@ -178,7 +178,7 @@ class SwObjectFormatterTextFrame : public SwObjectFormatter
             indicating, if 'anchor is moved forward'
         */
         static bool CheckMovedFwdCondition( SwAnchoredObject& _rAnchoredObj,
-                                            const sal_uInt32 _nFromPageNum,
+                                            SwPageFrame const& rFromPageFrame,
                                             const bool _bAnchoredAtMasterBeforeFormatAnchor,
                                             sal_uInt32& _noToPageNum,
                                             bool& _boInFollow,

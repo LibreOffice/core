@@ -226,9 +226,12 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 // #i43913#
                 bool bDummy( false );
                 bool bPageHasFlysAnchoredBelowThis(false);
-                // #i58182# - consider new method signature
+                // see how SwObjectFormatter::FormatObjsAtFrame_() checks
+                // "pPageFrameOfAnchor == &mrPageFrame" - only caller relevant for
+                // this subclass
+                assert(GetPageFrame().GetPhyPageNum() == GetPgNumOfCollected(nIdx));
                 if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition( *GetCollectedObj( nIdx ),
-                                              GetPgNumOfCollected( nIdx ),
+                                              GetPageFrame(),
                                               IsCollectedAnchoredAtMaster( nIdx ),
                                               nToPageNum, bDummy,
                                               bPageHasFlysAnchoredBelowThis))
@@ -542,11 +545,14 @@ SwAnchoredObject* SwObjectFormatterTextFrame::GetFirstObjWithMovedFwdAnchor(
                     // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
                     GetWrapInfluenceOnObjPos( true ) == _nWrapInfluenceOnPosition )
         {
+            // see how SwObjectFormatter::FormatObjsAtFrame_() checks
+            // "pPageFrameOfAnchor == &mrPageFrame" - only caller relevant for
+            // this subclass
+            assert(GetPageFrame().GetPhyPageNum() == GetPgNumOfCollected(i));
             // #i26945# - use new method <_CheckMovedFwdCondition(..)>
             // #i43913#
-            // #i58182# - consider new method signature
             if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition( *GetCollectedObj( i ),
-                                          GetPgNumOfCollected( i ),
+                                          GetPageFrame(),
                                           IsCollectedAnchoredAtMaster( i ),
                                           _noToPageNum, _boInFollow,
                                           o_rbPageHasFlysAnchoredBelowThis) )
@@ -596,12 +602,13 @@ static SwContentFrame const* FindFrameInBody(SwAnchoredObject const& rAnchored)
 // - replace private method by corresponding static public method
 bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
                                             SwAnchoredObject& _rAnchoredObj,
-                                            const sal_uInt32 _nFromPageNum,
+                                            SwPageFrame const& rFromPageFrame,
                                             const bool _bAnchoredAtMasterBeforeFormatAnchor,
                                             sal_uInt32& _noToPageNum,
                                             bool& _boInFollow,
                                             bool& o_rbPageHasFlysAnchoredBelowThis)
 {
+    const sal_uInt32 _nFromPageNum(rFromPageFrame.GetPhyPageNum());
     bool bAnchorIsMovedForward( false );
 
     SwPageFrame* pPageFrameOfAnchor = _rAnchoredObj.FindPageFrameOfAnchor();
@@ -678,21 +685,19 @@ bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
 
     if (bAnchorIsMovedForward)
     {
-        // tdf#138518 try to determine if there is a fly on page _nFromPageNum
+        // tdf#138518 try to determine if there is a fly on page rFromPageFrame
         // which is anchored in a frame that is "below" the anchor frame
         // of _rAnchoredObj, such that it should move to the next page before
         // _rAnchoredObj does
-        SwPageFrame const& rAnchoredObjPage(*_rAnchoredObj.GetPageFrame());
-        assert(rAnchoredObjPage.GetPhyPageNum() == _nFromPageNum);
-        if (auto * pObjs = rAnchoredObjPage.GetSortedObjs())
+        if (auto * pObjs = rFromPageFrame.GetSortedObjs())
         {
             for (SwAnchoredObject *const pObj : *pObjs)
             {
                 SwPageFrame const*const pObjAnchorPage(pObj->FindPageFrameOfAnchor());
                 assert(pObjAnchorPage);
-                if ((pObjAnchorPage == &rAnchoredObjPage
+                if ((pObjAnchorPage == &rFromPageFrame
                         ? _boInFollow // same-page but will move forward
-                        : rAnchoredObjPage.GetPhyPageNum() < pObjAnchorPage->GetPhyPageNum())
+                        : rFromPageFrame.GetPhyPageNum() < pObjAnchorPage->GetPhyPageNum())
                     && pObj->GetFrameFormat().GetAnchor().GetAnchorId()
                         != RndStdIds::FLY_AS_CHAR)
                 {
