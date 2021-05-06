@@ -51,6 +51,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestTextMapMode();
     void TestEnglishMapMode();
     void TestRectangleWithModifyWorldTransform();
+    void TestChordWithModifyWorldTransform();
     void TestEllipseWithSelectClipPath();
     void TestDrawPolyLine16WithClip();
     void TestFillRegion();
@@ -73,6 +74,7 @@ public:
     CPPUNIT_TEST(TestTextMapMode);
     CPPUNIT_TEST(TestEnglishMapMode);
     CPPUNIT_TEST(TestRectangleWithModifyWorldTransform);
+    CPPUNIT_TEST(TestChordWithModifyWorldTransform);
     CPPUNIT_TEST(TestEllipseWithSelectClipPath);
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
@@ -330,6 +332,20 @@ void Test::TestRectangleWithModifyWorldTransform()
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke", 1);
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke[1]/polygon", "1042,417 1960,946 2313,1556 1395,1028");
+}
+
+void Test::TestChordWithModifyWorldTransform()
+{
+    // EMF import test with records: CHORD, MODIFYWORLDTRANSFORM, EXTCREATEPEN, SELECTOBJECT
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestChordWithModifyWorldTransform.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor", "color", "#ffffff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor/polypolygon", "path", "m590 448-154 93-54 57-21 45 24 67 45 21 224-6 265-97z");
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke/polygon", "590,448 436,541 382,598 361,643 385,710 430,731 654,725 919,628");
 }
 
 void Test::TestEllipseWithSelectClipPath()
