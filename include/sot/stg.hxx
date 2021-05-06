@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SOT_STG_HXX
 #define INCLUDED_SOT_STG_HXX
 
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
 #include <sot/storinfo.hxx>
@@ -58,13 +57,13 @@ public:
 class BaseStorageStream : public StorageBase
 {
 public:
-    virtual sal_uLong   Read( void * pData, sal_uLong nSize ) = 0;
-    virtual sal_uLong   Write( const void* pData, sal_uLong nSize ) = 0;
+    virtual sal_Int32   Read( void * pData, sal_Int32 nSize ) = 0;
+    virtual sal_Int32   Write( const void* pData, sal_Int32 nSize ) = 0;
     virtual sal_uInt64  Seek( sal_uInt64 nPos ) = 0;
-    virtual sal_uLong   Tell() = 0;
+    virtual sal_uInt64  Tell() = 0;
     virtual void        Flush() = 0;
-    virtual bool        SetSize( sal_uLong nNewSize ) = 0;
-    virtual sal_uLong   GetSize() const = 0;
+    virtual bool        SetSize( sal_uInt64 nNewSize ) = 0;
+    virtual sal_uInt64  GetSize() const = 0;
     virtual void        CopyTo( BaseStorageStream * pDestStm ) = 0;
     virtual bool        Commit() = 0;
     virtual bool        Equals( const BaseStorageStream& rStream ) const = 0;
@@ -126,18 +125,18 @@ protected:
 class StorageStream final : public BaseStorageStream, public OLEStorageBase
 {
 //friend class Storage;
-    sal_uLong           nPos;                             // current position
+    sal_uInt64          nPos;                             // current position
 
                         virtual ~StorageStream() override;
 public:
                         StorageStream( StgIo*, StgDirEntry*, StreamMode );
-    virtual sal_uLong   Read( void * pData, sal_uLong nSize ) override;
-    virtual sal_uLong   Write( const void* pData, sal_uLong nSize ) override;
+    virtual sal_Int32   Read( void * pData, sal_Int32 nSize ) override;
+    virtual sal_Int32   Write( const void* pData, sal_Int32 nSize ) override;
     virtual sal_uInt64  Seek( sal_uInt64 nPos ) override;
-    virtual sal_uLong   Tell() override { return nPos; }
+    virtual sal_uInt64  Tell() override { return nPos; }
     virtual void        Flush() override;
-    virtual bool        SetSize( sal_uLong nNewSize ) override;
-    virtual sal_uLong   GetSize() const override;
+    virtual bool        SetSize( sal_uInt64 nNewSize ) override;
+    virtual sal_uInt64  GetSize() const override;
     virtual void        CopyTo( BaseStorageStream * pDestStm ) override;
     virtual bool        Commit() final override;
     virtual bool        Validate( bool=false ) const override;
@@ -214,13 +213,13 @@ public:
                                 UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, bool bRepair, css::uno::Reference< css::ucb::XProgressHandler > const & xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
-    virtual sal_uLong           Read( void * pData, sal_uLong nSize ) override;
-    virtual sal_uLong           Write( const void* pData, sal_uLong nSize ) override;
+    virtual sal_Int32           Read( void * pData, sal_Int32 nSize ) override;
+    virtual sal_Int32           Write( const void* pData, sal_Int32 nSize ) override;
     virtual sal_uInt64          Seek( sal_uInt64 nPos ) override;
-    virtual sal_uLong           Tell() override;
+    virtual sal_uInt64          Tell() override;
     virtual void                Flush() override;
-    virtual bool                SetSize( sal_uLong nNewSize ) override;
-    virtual sal_uLong           GetSize() const override;
+    virtual bool                SetSize( sal_uInt64 nNewSize ) override;
+    virtual sal_uInt64          GetSize() const override;
     virtual void                CopyTo( BaseStorageStream * pDestStm ) override;
     virtual bool                Commit() override;
     virtual bool                Validate( bool=false ) const override;

@@ -494,7 +494,7 @@ void StgDirEntry::Copy( BaseStorageStream& rDest )
     if( !(rDest.SetSize( n ) && n) )
         return;
 
-    sal_uLong Pos = rDest.Tell();
+    sal_uInt64 Pos = rDest.Tell();
     sal_uInt8 aTempBytes[ 4096 ];
     void* p = static_cast<void*>( aTempBytes );
     Seek( 0 );
@@ -549,7 +549,7 @@ bool StgDirEntry::Strm2Tmp()
 {
     if( !m_pTmpStrm )
     {
-        sal_uLong n = 0;
+        sal_uInt64 n = 0;
         if( m_pCurStrm )
         {
             // It was already committed once
@@ -575,10 +575,10 @@ bool StgDirEntry::Strm2Tmp()
                     m_pStgStrm->Pos2Page( 0 );
                     while( n )
                     {
-                        sal_uLong nn = n;
+                        sal_uInt64 nn = n;
                         if( nn > 4096 )
                             nn = 4096;
-                        if( static_cast<sal_uLong>(m_pStgStrm->Read( p, nn )) != nn )
+                        if( static_cast<sal_uInt64>(m_pStgStrm->Read( p, nn )) != nn )
                             break;
                         if (m_pTmpStrm->WriteBytes( p, nn ) != nn)
                             break;
@@ -624,7 +624,7 @@ bool StgDirEntry::Tmp2Strm()
         sal_uInt64 n = m_pTmpStrm->GetSize();
         std::unique_ptr<StgStrm> pNewStrm;
         StgIo& rIo = m_pStgStrm->GetIo();
-        sal_uLong nThreshold = static_cast<sal_uLong>(rIo.m_aHdr.GetThreshold());
+        sal_uInt64 nThreshold = rIo.m_aHdr.GetThreshold();
         if( n < nThreshold )
             pNewStrm.reset(new StgSmallStrm( rIo, STG_EOF ));
         else
@@ -640,7 +640,7 @@ bool StgDirEntry::Tmp2Strm()
                     nn = 4096;
                 if (m_pTmpStrm->ReadBytes( p, nn ) != nn)
                     break;
-                if( static_cast<sal_uLong>(pNewStrm->Write( p, nn )) != nn )
+                if( static_cast<sal_uInt64>(pNewStrm->Write( p, nn )) != nn )
                     break;
                 n -= nn;
             }
