@@ -1528,6 +1528,24 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 rReq.SetReturnValue(SfxInt16Item(nSlot, 0)); // 0 = fail
             break;
         }
+        case SID_PASTE_AS_LINK:
+        {
+            if (ScTransferObj::GetOwnClipboard(
+                    ScTabViewShell::GetClipData(GetViewData().GetActiveWin()))) // own cell data
+            {
+                rReq.SetSlot(FID_INS_CELL_CONTENTS);
+                // paste links to values/numbers, strings, formulas and dates
+                // do not paste attributes, notes and objects
+                rReq.AppendItem(SfxStringItem(FID_INS_CELL_CONTENTS, "VSFD"));
+                rReq.AppendItem(SfxBoolItem(FN_PARAM_4, true)); // as link
+                ExecuteSlot(rReq, GetInterface());
+                rReq.SetReturnValue(SfxInt16Item(nSlot, 1)); // 1 = success
+                pTabViewShell->CellContentChanged();
+            }
+            else
+                rReq.SetReturnValue(SfxInt16Item(nSlot, 0)); // 0 = fail
+            break;
+        }
         case SID_PASTE_TEXTIMPORT_DIALOG:
         {
             vcl::Window* pWin = GetViewData().GetActiveWin();
