@@ -241,20 +241,20 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Recta
     }
 
     // PaperSize should grow automatically in most cases
-    if(IsVerticalWriting())
-        aPaperMin.setWidth( 0 );
-    else
-        aPaperMin.setHeight( 0 );
-
-    if(eHAdj!=SDRTEXTHORZADJUST_BLOCK || bFitToSize) {
-        aPaperMin.setWidth(0 );
-    }
-
-    // For complete vertical adjustment support, set paper min height to 0, here.
-    if(SDRTEXTVERTADJUST_BLOCK != eVAdj || bFitToSize)
-    {
-        aPaperMin.setHeight( 0 );
-    }
+//    if(IsVerticalWriting())
+//        aPaperMin.setWidth( 0 );
+//    else
+//        aPaperMin.setHeight( 0 );
+//
+//    if(eHAdj!=SDRTEXTHORZADJUST_BLOCK || bFitToSize) {
+//        aPaperMin.setWidth(0 );
+//    }
+//
+//    // For complete vertical adjustment support, set paper min height to 0, here.
+//    if(SDRTEXTVERTADJUST_BLOCK != eVAdj || bFitToSize)
+//    {
+//        aPaperMin.setHeight( 0 );
+//    }
 
     if (pPaperMin!=nullptr) *pPaperMin=aPaperMin;
     if (pPaperMax!=nullptr) *pPaperMax=aPaperMax;
