@@ -24,6 +24,7 @@
 #include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
 #include <com/sun/star/sheet/TableFilterField3.hpp>
+#include <com/sun/star/util/Color.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace sheet { class XDatabaseRange; }
@@ -49,6 +50,7 @@ struct ApiFilterSettings
     void appendField( bool bAnd, sal_Int32 nOperator, double fValue );
     void appendField( bool bAnd, sal_Int32 nOperator, const OUString& rValue );
     void appendField( bool bAnd, const std::vector<OUString>& rValues );
+    void appendField( bool bAnd, css::util::Color aColor, bool bIsBackgroundColor );
 };
 
 /** Base class for specific filter settings for a column in a filtered range.
@@ -109,6 +111,27 @@ private:
     double              mfValue;        /// Number of items or percentage.
     bool                mbTop;          /// True = show top (greatest) items/percentage.
     bool                mbPercent;      /// True = percentage, false = number of items.
+};
+
+/** Settings for a color filter. */
+class ColorFilter : public FilterSettingsBase
+{
+public:
+    explicit ColorFilter(const WorkbookHelper& rHelper);
+
+    /** Imports filter settings from the filters and filter elements. */
+    virtual void importAttribs(sal_Int32 nElement, const AttributeList& rAttribs) override;
+    /** Imports filter settings from the FILTERS and FILTER records. */
+    virtual void importRecord(sal_Int32 nRecId, SequenceInputStream& rStrm) override;
+
+    /** Returns converted UNO API filter settings representing all filter settings. */
+    virtual ApiFilterSettings finalizeImport(sal_Int32 nMaxCount) override;
+
+private:
+    /// Whether we are dealing with the background color (vs. text color)
+    bool mbIsBackgroundColor;
+    /// Style name to retrieve the color from
+    OUString msStyleName;
 };
 
 /** A filter criterion for a custom filter. */

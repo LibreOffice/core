@@ -44,6 +44,9 @@ ContextHandlerRef FilterSettingsContext::onCreateContext( sal_Int32 nElement, co
         case XLS_TOKEN( customFilters ):
             if( nElement == XLS_TOKEN( customFilter ) ) return this;
         break;
+        case XLS_TOKEN( colorFilter ):
+            if( nElement == XLS_TOKEN( colorFilter ) ) return this;
+        break;
     }
     return nullptr;
 }
@@ -88,6 +91,8 @@ ContextHandlerRef FilterColumnContext::onCreateContext( sal_Int32 nElement, cons
             return new FilterSettingsContext( *this, mrFilterColumn.createFilterSettings< Top10Filter >() );
         case XLS_TOKEN( customFilters ):
             return new FilterSettingsContext( *this, mrFilterColumn.createFilterSettings< CustomFilter >() );
+        case XLS_TOKEN( colorFilter ):
+            return new FilterSettingsContext( *this, mrFilterColumn.createFilterSettings< ColorFilter >() );
     }
     return nullptr;
 }

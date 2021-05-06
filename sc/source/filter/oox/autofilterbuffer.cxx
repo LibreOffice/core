@@ -20,6 +20,7 @@
 #include <autofilterbuffer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/FilterFieldType.hpp>
 #include <com/sun/star/sheet/FilterConnection.hpp>
 #include <com/sun/star/sheet/FilterOperator2.hpp>
 #include <com/sun/star/sheet/TableFilterField3.hpp>
@@ -27,6 +28,8 @@
 #include <com/sun/star/sheet/XSheetFilterDescriptor3.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
+#include <editeng/colritem.hxx>
+#include <editeng/brushitem.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>
@@ -41,12 +44,17 @@
 #include <biffhelper.hxx>
 #include <document.hxx>
 #include <dbdata.hxx>
+#include <scitems.hxx>
 #include <sortparam.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <stylesbuffer.hxx>
 #include <userlist.hxx>
 
 namespace oox {
 namespace xls {
 
+using namespace css;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
@@ -161,7 +169,7 @@ void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, double fVal
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = nOperator;
     rFilterField.Values.realloc(1);
-    rFilterField.Values[0].IsNumeric = true;
+    rFilterField.Values[0].FilterType = FilterFieldType::NUMERIC;
     rFilterField.Values[0].NumericValue = fValue;
 }
 
@@ -172,7 +180,7 @@ void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, const OUStr
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = nOperator;
     rFilterField.Values.realloc(1);
-    rFilterField.Values[0].IsNumeric = false;
+    rFilterField.Values[0].FilterType = FilterFieldType::STRING;
     rFilterField.Values[0].StringValue = rValue;
 }
 
@@ -186,9 +194,21 @@ void ApiFilterSettings::appendField( bool bAnd, const std::vector<OUString>& rVa
     rFilterField.Values.realloc(n);
     for (size_t i = 0; i < n; ++i)
     {
-        rFilterField.Values[i].IsNumeric = false;
+        rFilterField.Values[i].FilterType = FilterFieldType::STRING;
         rFilterField.Values[i].StringValue = rValues[i];
     }
+}
+
+void ApiFilterSettings::appendField(bool bAnd, util::Color aColor, bool bIsBackgroundColor)
+{
+    maFilterFields.emplace_back();
+    TableFilterField3& rFilterField = maFilterFields.back();
+    rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
+    rFilterField.Operator = FilterOperator2::EQUAL;
+    rFilterField.Values.realloc(1);
+    rFilterField.Values[0].FilterType
+        = bIsBackgroundColor ? FilterFieldType::BACKGROUND_COLOR : FilterFieldType::TEXT_COLOR;
+    rFilterField.Values[0].ColorValue = aColor;
 }
 
 FilterSettingsBase::FilterSettingsBase( const WorkbookHelper& rHelper ) :
@@ -322,6 +342,54 @@ ApiFilterSettings Top10Filter::finalizeImport( sal_Int32 /*nMaxCount*/ )
         (mbPercent ? FilterOperator2::BOTTOM_PERCENT : FilterOperator2::BOTTOM_VALUES);
     ApiFilterSettings aSettings;
     aSettings.appendField( true, nOperator, mfValue );
+    return aSettings;
+}
+
+ColorFilter::ColorFilter(const WorkbookHelper& rHelper)
+    : FilterSettingsBase(rHelper)
+{
+}
+
+void ColorFilter::importAttribs(sal_Int32 nElement, const AttributeList& rAttribs)
+{
+    if (nElement == XLS_TOKEN(colorFilter))
+    {
+        // When cellColor attribute not found, it means cellColor = true
+        // cellColor = 0 (false) -> TextColor
+        // cellColor = 1 (true)  -> BackgroundColor
+        mbIsBackgroundColor = rAttribs.getBool(XML_cellColor, true);
+        msStyleName = getStyles().createDxfStyle( rAttribs.getInteger(XML_dxfId, -1) );
+    }
+}
+
+void ColorFilter::importRecord(sal_Int32 /* nRecId */, SequenceInputStream& /* rStrm */)
+{
+    // TODO
+}
+
+ApiFilterSettings ColorFilter::finalizeImport(sal_Int32 /*nMaxCount*/)
+{
+    ApiFilterSettings aSettings;
+    ScDocument& rDoc = getScDocument();
+    ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>(
+        rDoc.GetStyleSheetPool()->Find(msStyleName, SfxStyleFamily::Para));
+    if (!pStyleSheet)
+        return aSettings;
+
+    const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+    ::Color aColor;
+    if (mbIsBackgroundColor)
+    {
+        const SvxBrushItem* pItem = rItemSet.GetItem<SvxBrushItem>(ATTR_BACKGROUND);
+        aColor = pItem->GetColor();
+    }
+    else
+    {
+        const SvxColorItem* pItem = rItemSet.GetItem<SvxColorItem>(ATTR_FONT_COLOR);
+        aColor = pItem->GetValue();
+    }
+    util::Color nColor(aColor);
+    aSettings.appendField(true, nColor, mbIsBackgroundColor);
     return aSettings;
 }
 
