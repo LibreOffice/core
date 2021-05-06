@@ -165,7 +165,8 @@ cd \"$$origpath\"\n\
 	chmod +x "../Resources/$$file" && ln -s "../Resources/$$file" ; done
 	touch $@
 
-$(call gb_ExternalProject_get_state_target,python3,fixinstallnames) : $(call gb_ExternalProject_get_state_target,python3,build)
+$(call gb_ExternalProject_get_state_target,python3,fixinstallnames) : $(call gb_ExternalProject_get_state_target,python3,build) \
+        | $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff)
 	$(INSTALL_NAME_TOOL) -change \
 		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
 		@executable_path/../../../../LibreOfficePython \
