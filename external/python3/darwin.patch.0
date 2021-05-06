@@ -8,3 +8,15 @@
  .text
  
  /* ffi_call_unix64 (void *args, unsigned long bytes, unsigned flags,
+--- configure
++++ configure
+@@ -5167,7 +5167,9 @@
+ fi
+ 
+ 
++if test "$(uname -s)" = Darwin; then MULTIARCH=; else
+ MULTIARCH=$($CC --print-multiarch 2>/dev/null)
++fi
+ 
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for the platform triplet based on compiler characteristics" >&5
