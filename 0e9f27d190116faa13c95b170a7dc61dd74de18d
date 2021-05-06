@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6de1f3a_dfffe5f3",
+        "filename": "svx/source/xoutdev/xpool.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-05-06T16:16:30Z",
+      "side": 1,
+      "message": "What does this do?\nThere is an identical commit with the same issues at https://gerrit.libreoffice.org/c/core/+/114022.  Please look at my comments on that one, as they all apply here too.\nP.S. I wasn\u0027t added as a reviewer on this patch, so it took me a while to notice this.",
+      "range": {
+        "startLine": 116,
+        "startChar": 83,
+        "endLine": 116,
+        "endChar": 85
+      },
+      "revId": "0e9f27d190116faa13c95b170a7dc61dd74de18d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
