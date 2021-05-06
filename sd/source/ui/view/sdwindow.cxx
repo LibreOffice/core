@@ -263,13 +263,16 @@ void Window::Command(const CommandEvent& rCEvt)
     if (rCEvt.GetCommand() == CommandEventId::ModKeyChange)
         vcl::Window::Command(rCEvt);
     //show the text edit outliner view cursor
-    else if (!HasFocus() && rCEvt.GetCommand() == CommandEventId::CursorPos)
+    else if (mpViewShell && !HasFocus() && rCEvt.GetCommand() == CommandEventId::CursorPos)
     {
-        OutlinerView* pOLV = mpViewShell ? mpViewShell->GetView()->GetTextEditOutlinerView() : nullptr;
-        if (pOLV && this == pOLV->GetWindow())
+        // tdf#138855 Getting Focus may destroy TextEditOutlinerView so Grab if
+        // text editing active, but fetch the TextEditOutlinerView post-grab
+        if (mpViewShell->GetView()->IsTextEdit())
         {
             GrabFocus();
-            pOLV->ShowCursor();
+            OutlinerView* pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
+            if (pOLV && this == pOLV->GetWindow())
+                pOLV->ShowCursor();
         }
     }
 }
