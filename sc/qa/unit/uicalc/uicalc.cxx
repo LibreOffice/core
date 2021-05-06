@@ -521,8 +521,25 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     CPPUNIT_ASSERT(pDoc);
 
     insertStringToCell(*pModelObj, "A1", "1");
-    insertStringToCell(*pModelObj, "A2", "2");
-    insertStringToCell(*pModelObj, "A3", "3");
+    insertStringToCell(*pModelObj, "A2", "a");
+    insertStringToCell(*pModelObj, "A3", "=A1");
+
+    // Add a note to A1
+    goToCell("A1");
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Note in A1")) } });
+    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+
+    // Set A2 bold
+    goToCell("A2");
+    dispatchCommand(mxComponent, ".uno:Bold", {});
+
+    // Check preconditions
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
+    const ScPatternAttr* pPattern = pDoc->GetPattern(0, 1, 0);
+    vcl::Font aFont;
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 
     goToCell("A1:A3");
 
@@ -539,9 +556,21 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
 
     dispatchCommand(mxComponent, ".uno:PasteTransposed", {});
 
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(0, 0, 0))); // A1
-    CPPUNIT_ASSERT_EQUAL(OUString("2"), pDoc->GetString(ScAddress(1, 0, 0))); // B1
-    CPPUNIT_ASSERT_EQUAL(OUString("3"), pDoc->GetString(ScAddress(2, 0, 0))); // C1
+    OUString aFormula;
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(0, 0, 0)); // A1
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 0, 0)); // A1
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), pDoc->GetString(1, 0, 0)); // B1
+    pDoc->GetFormula(2, 0, 0, aFormula); // C1
+    CPPUNIT_ASSERT_EQUAL(OUString("=A1"), aFormula); // C1
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(2, 0, 0)); // C1
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(2, 0, 0)); // C1
+
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Note in A1"), pDoc->GetNote(ScAddress(0, 0, 0))->GetText());
+
+    pPattern = pDoc->GetPattern(1, 0, 0);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131442)
