@@ -36,7 +36,7 @@ public:
     /// get an XInterface easily.
     css::uno::Reference<css::uno::XInterface> getXI()
     {
-        return css::uno::Reference<css::uno::XInterface>(static_cast<cppu::OWeakObject*>(this));
+        return { static_cast<cppu::OWeakObject*>(this) };
     }
 
     // XServiceInfo

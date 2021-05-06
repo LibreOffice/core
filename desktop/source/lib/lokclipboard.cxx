@@ -62,8 +62,7 @@ void LOKClipboardFactory::releaseClipboardForView(int nViewId)
 uno::Reference<uno::XInterface>
     SAL_CALL LOKClipboardFactory::createInstanceWithArguments(const Sequence<Any>& /* rArgs */)
 {
-    return uno::Reference<uno::XInterface>(
-        static_cast<cppu::OWeakObject*>(getClipboardForCurView().get()));
+    return { static_cast<cppu::OWeakObject*>(getClipboardForCurView().get()) };
 }
 
 LOKClipboard::LOKClipboard()
@@ -211,7 +210,7 @@ uno::Any SAL_CALL LOKTransferable::getTransferData(const datatransfer::DataFlavo
             return m_aContent[i];
         }
     }
-    return uno::Any();
+    return {};
 }
 
 uno::Sequence<datatransfer::DataFlavor> SAL_CALL LOKTransferable::getTransferDataFlavors()
