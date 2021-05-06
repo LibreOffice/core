@@ -82,10 +82,10 @@ void SotTempStream::CopyTo( SotTempStream * pDestStm )
 
     constexpr int BUFSIZE = 64 * 1024;
     std::unique_ptr<sal_uInt8[]> pMem(new sal_uInt8[ BUFSIZE ]);
-    sal_uLong  nRead;
+    sal_Int32  nRead;
     while (0 != (nRead = ReadBytes(pMem.get(), BUFSIZE)))
     {
-        if (nRead != pDestStm->WriteBytes(pMem.get(), nRead))
+        if (nRead != static_cast<sal_Int32>(pDestStm->WriteBytes(pMem.get(), nRead)))
         {
             SetError( SVSTREAM_GENERALERROR );
             break;
@@ -139,7 +139,7 @@ std::size_t SotStorageStream::PutData(const void* pData, std::size_t const nSize
 
 sal_uInt64 SotStorageStream::SeekPos(sal_uInt64 nPos)
 {
-    sal_uLong nRet = pOwnStm->Seek( nPos );
+    sal_uInt64 nRet = pOwnStm->Seek( nPos );
     SetError( pOwnStm->GetError() );
     return nRet;
 }

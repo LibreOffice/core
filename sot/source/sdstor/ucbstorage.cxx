@@ -425,7 +425,7 @@ public:
     sal_Int16                   Commit();       // if modified and committed: transfer an XInputStream to the content
     void                        Revert();       // discard all changes
     BaseStorage*                CreateStorage();// create an OLE Storage on the UCBStorageStream
-    sal_uLong                   GetSize();
+    sal_uInt64                  GetSize();
 
     sal_uInt64                  ReadSourceWriteTemporary( sal_uInt64 aLength ); // read aLength from source and copy to temporary,
                                                                            // no seeking is produced
@@ -523,7 +523,7 @@ struct UCBStorageElement_Impl
 {
     OUString                    m_aName;        // the actual URL relative to the root "folder"
     OUString                    m_aOriginalName;// the original name in the content
-    sal_uLong                   m_nSize;
+    sal_uInt64                  m_nSize;
     bool                        m_bIsFolder;    // Only true when it is a UCBStorage !
     bool                        m_bIsStorage;   // Also true when it is an OLEStorage !
     bool                        m_bIsRemoved;   // element will be removed on commit
@@ -532,7 +532,7 @@ struct UCBStorageElement_Impl
     UCBStorageStream_ImplRef    m_xStream;      // reference to the "real" stream
 
                                 UCBStorageElement_Impl( const OUString& rName,
-                                                        bool bIsFolder = false, sal_uLong nSize = 0 )
+                                                        bool bIsFolder = false, sal_uInt64 nSize = 0 )
                                     : m_aName( rName )
                                     , m_aOriginalName( rName )
                                     , m_nSize( nSize )
@@ -754,7 +754,7 @@ void UCBStorageStream_Impl::ReadSourceWriteTemporary()
 
         try
         {
-            sal_uLong aReaded;
+            sal_Int32 aReaded;
             do
             {
                 aReaded = m_rSource->readBytes( aData, 32000 );
@@ -784,11 +784,11 @@ sal_uInt64 UCBStorageStream_Impl::ReadSourceWriteTemporary(sal_uInt64 aLength)
         try
         {
 
-            sal_uLong aReaded = 32000;
+            sal_Int32 aReaded = 32000;
 
             for (sal_uInt64 nInd = 0; nInd < aLength && aReaded == 32000 ; nInd += 32000)
             {
-                sal_uLong aToCopy = std::min<sal_uInt64>( aLength - nInd, 32000 );
+                sal_Int32 aToCopy = std::min<sal_Int32>( aLength - nInd, 32000 );
                 aReaded = m_rSource->readBytes( aData, aToCopy );
                 aResult += m_pStream->WriteBytes(aData.getArray(), aReaded);
             }
@@ -990,7 +990,7 @@ void  UCBStorageStream_Impl::ResetError()
         m_pAntiImpl->ResetError();
 }
 
-sal_uLong UCBStorageStream_Impl::GetSize()
+sal_uInt64 UCBStorageStream_Impl::GetSize()
 {
     if( !Init() )
         return 0;
@@ -1216,13 +1216,13 @@ UCBStorageStream::~UCBStorageStream()
     pImp->ReleaseRef();
 }
 
-sal_uLong UCBStorageStream::Read( void * pData, sal_uLong nSize )
+sal_Int32 UCBStorageStream::Read( void * pData, sal_Int32 nSize )
 {
     //return pImp->m_pStream->Read( pData, nSize );
     return pImp->GetData( pData, nSize );
 }
 
-sal_uLong UCBStorageStream::Write( const void* pData, sal_uLong nSize )
+sal_Int32 UCBStorageStream::Write( const void* pData, sal_Int32 nSize )
 {
     return pImp->PutData( pData, nSize );
 }
@@ -1233,7 +1233,7 @@ sal_uInt64 UCBStorageStream::Seek( sal_uInt64 nPos )
     return pImp->Seek( nPos );
 }
 
-sal_uLong UCBStorageStream::Tell()
+sal_uInt64 UCBStorageStream::Tell()
 {
     if( !pImp->Init() )
         return 0;
@@ -1246,7 +1246,7 @@ void UCBStorageStream::Flush()
     Commit();
 }
 
-bool UCBStorageStream::SetSize( sal_uLong nNewSize )
+bool UCBStorageStream::SetSize( sal_uInt64 nNewSize )
 {
     pImp->SetSize( nNewSize );
     return !pImp->GetError();
@@ -1322,7 +1322,7 @@ void UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
     pDestStm->Seek( 0 );
     while( n )
     {
-        sal_uInt32 nn = n;
+        sal_Int32 nn = n;
         if( nn > 4096 )
             nn = 4096;
         if( Read( p.get(), nn ) != nn )
@@ -1360,7 +1360,7 @@ bool UCBStorageStream::SetProperty( const OUString& rName, const css::uno::Any& 
     return false;
 }
 
-sal_uLong UCBStorageStream::GetSize() const
+sal_uInt64 UCBStorageStream::GetSize() const
 {
     return pImp->GetSize();
 }
@@ -1699,7 +1699,7 @@ void UCBStorage_Impl::ReadContent()
 
                 bool bIsFolder( xRow->getBoolean(2) );
                 sal_Int64 nSize = xRow->getLong(4);
-                UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, bIsFolder, static_cast<sal_uLong>(nSize) );
+                UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, bIsFolder, nSize );
                 m_aChildrenList.emplace_back( pElement );
 
                 bool bIsOfficeDocument = m_bIsLinked || ( m_aClassId != SvGlobalName() );
@@ -2338,7 +2338,7 @@ void UCBStorage::FillInfoList( SvStorageInfoList* pList ) const
         if ( !pElement->m_bIsRemoved )
         {
             // problem: what about the size of a substorage ?!
-            sal_uLong nSize = pElement->m_nSize;
+            sal_uInt64 nSize = pElement->m_nSize;
             if ( pElement->m_xStream.is() )
                 nSize = pElement->m_xStream->GetSize();
             SvStorageInfo aInfo( pElement->m_aName, nSize, pElement->m_bIsStorage );

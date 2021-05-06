@@ -360,7 +360,7 @@ bool SotExchange::GetFormatDataFlavor( SotClipboardFormatId nFormat, DataFlavor&
 
 /*************************************************************************
 |*
-|*    SotExchange::GetFormatMimeType( sal_uLong nFormat )
+|*    SotExchange::GetFormatMimeType( SotClipboardFormatId nFormat )
 |*
 *************************************************************************/
 

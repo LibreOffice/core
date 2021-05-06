@@ -45,7 +45,7 @@ namespace
 
         bool checkStream( const tools::SvRef<SotStorage> &xObjStor,
                           const OUString &rStreamName,
-                          sal_uLong nSize );
+                          sal_uInt64 nSize );
         bool checkStorage( const tools::SvRef<SotStorage> &xObjStor );
 
         virtual bool load(const OUString &,
@@ -65,17 +65,17 @@ namespace
 
     bool SotTest::checkStream( const tools::SvRef<SotStorage> &xObjStor,
                                const OUString &rStreamName,
-                               sal_uLong nSize )
+                               sal_uInt64 nSize )
     {
         unsigned char *pData = static_cast<unsigned char*>(malloc( nSize ));
-        sal_uLong nReadableSize = 0;
+        sal_uInt64 nReadableSize = 0;
         if( !pData )
             return true;
 
         {   // Read the data in one block
             tools::SvRef<SotStorageStream> xStream( xObjStor->OpenSotStream( rStreamName ) );
             xStream->Seek(0);
-            sal_uLong nRemaining = xStream->GetSize() - xStream->Tell();
+            sal_uInt64 nRemaining = xStream->GetSize() - xStream->Tell();
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "check size", nSize, nRemaining );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "check size #2", static_cast<sal_uInt64>(nSize), xStream->remainingSize());
@@ -85,7 +85,7 @@ namespace
         }
         {   // Read the data backwards as well
             tools::SvRef<SotStorageStream> xStream( xObjStor->OpenSotStream( rStreamName ) );
-            for( sal_uLong i = nReadableSize; i > 0; i-- )
+            for( sal_uInt64 i = nReadableSize; i > 0; i-- )
             {
                 CPPUNIT_ASSERT_MESSAGE( "sot reading error", !xStream->GetError() );
                 unsigned char c;
@@ -154,8 +154,8 @@ namespace
         CPPUNIT_ASSERT_MESSAGE("stream failed to open",
                                !xObjStor->GetError());
         CPPUNIT_ASSERT_MESSAGE("error in opened stream", !xStream->GetError());
-        sal_uLong nPos = xStream->GetSize();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("odd stream length", static_cast<sal_uLong>(13312), nPos);
+        sal_uInt64 nPos = xStream->GetSize();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("odd stream length", static_cast<sal_uInt64>(13312), nPos);
 
         xStream->Seek(STREAM_SEEK_TO_END);
         CPPUNIT_ASSERT_MESSAGE("error seeking to end", !xStream->GetError());
