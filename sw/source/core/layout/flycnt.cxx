@@ -423,7 +423,8 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     bool bDummy( false );
                     bool bPageHasFlysAnchoredBelowThis(false);
                     if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition(
-                                        *this, GetPageFrame()->GetPhyPageNum(),
+// TODO: what if this fly moved bc it's in table? does sth prevent that?
+                                *this, *GetPageFrame(),
                                 bAnchoredAtMaster, nToPageNum, bDummy,
                                 bPageHasFlysAnchoredBelowThis) )
                     {
