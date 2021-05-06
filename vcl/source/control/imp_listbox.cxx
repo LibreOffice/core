@@ -1484,6 +1484,9 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 for( sal_Int32 i = 0; i < nEntryCount; i++ )
                     SelectEntry( i, true );
 
+                // tdf#97066 - Update selected items
+                ImplCallSelect();
+
                 // restore update mode
                 SetUpdateMode( bUpdates );
                 Invalidate();
