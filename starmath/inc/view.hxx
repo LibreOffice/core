@@ -27,6 +27,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/timer.hxx>
 #include "document.hxx"
 #include "edit.hxx"
@@ -182,7 +183,7 @@ public:
 
 class SmCmdBoxWindow : public SfxDockingWindow
 {
-    VclPtr<SmEditWindow>        aEdit;
+    std::unique_ptr<SmEditWindow> m_xEdit;
     SmEditController    aController;
     bool                bExiting;
 
@@ -191,12 +192,6 @@ class SmCmdBoxWindow : public SfxDockingWindow
     DECL_LINK(InitialFocusTimerHdl, Timer *, void);
 
 protected:
-
-    // Window
-    virtual void    GetFocus() override;
-    virtual void Resize() override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual void StateChanged( StateChangedType nStateChange ) override;
 
     virtual Size CalcDockingSize(SfxChildAlignment eAlign) override;
     virtual SfxChildAlignment CheckAlignment(SfxChildAlignment eActual,
@@ -212,11 +207,16 @@ public:
     virtual ~SmCmdBoxWindow () override;
     virtual void dispose() override;
 
+    // Window
+    virtual void GetFocus() override;
+    virtual void StateChanged( StateChangedType nStateChange ) override;
+    virtual void Command(const CommandEvent& rCEvt) override;
+
     void AdjustPosition();
 
     SmEditWindow& GetEditWindow()
     {
-        return *aEdit;
+        return *m_xEdit;
     }
     SmViewShell* GetView();
 };

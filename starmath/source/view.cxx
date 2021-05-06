@@ -54,7 +54,6 @@
 #include <sfx2/zoomitem.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
@@ -82,8 +81,8 @@
 // space around the edit window, in pixels
 // fdo#69111: Increased border on the top so that the window is
 // easier to tear off.
-#define CMD_BOX_PADDING 4
-#define CMD_BOX_PADDING_TOP 10
+#define CMD_BOX_PADDING 3
+#define CMD_BOX_PADDING_TOP 11
 
 #define ShellClass_SmViewShell
 #include <smslots.hxx>
@@ -810,12 +809,14 @@ void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const 
 
 /**************************************************************************/
 SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWindow,
-                               vcl::Window *pParent) :
-    SfxDockingWindow(pBindings_, pChildWindow, pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_SIZEABLE|WB_DOCKABLE),
-    aEdit       (VclPtr<SmEditWindow>::Create(*this)),
-    aController (*aEdit, SID_TEXT, *pBindings_),
-    bExiting    (false)
+                               vcl::Window *pParent)
+    : SfxDockingWindow(pBindings_, pChildWindow, pParent, "EditWindow", "modules/smath/ui/editwindow.ui")
+    , m_xEdit(std::make_unique<SmEditWindow>(*this, *m_xBuilder))
+    , aController(*m_xEdit, SID_TEXT, *pBindings_)
+    , bExiting(false)
 {
+    set_id("math_edit");
+
     SetHelpId( HID_SMA_COMMAND_WIN );
     SetSizePixel(LogicToPixel(Size(292 , 94), MapMode(MapUnit::MapAppFont)));
     SetText(SmResId(STR_CMDBOXWINDOW));
@@ -824,6 +825,21 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
 
     aInitialFocusTimer.SetInvokeHandler(LINK(this, SmCmdBoxWindow, InitialFocusTimerHdl));
     aInitialFocusTimer.SetTimeout(100);
+}
+
+void SmCmdBoxWindow::Command(const CommandEvent& rCEvt)
+{
+    if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
+    {
+        ToTop();
+        Point aPoint = rCEvt.GetMousePosPixel();
+        SmViewShell *pViewSh = GetView();
+        if (pViewSh)
+            pViewSh->GetViewFrame()->GetDispatcher()->ExecutePopup("edit", this, &aPoint);
+        return;
+    }
+
+    SfxDockingWindow::Command(rCEvt);
 }
 
 SmCmdBoxWindow::~SmCmdBoxWindow ()
@@ -836,7 +852,7 @@ void SmCmdBoxWindow::dispose()
     aInitialFocusTimer.Stop();
     bExiting = true;
     aController.dispose();
-    aEdit.disposeAndClear();
+    m_xEdit.reset();
     SfxDockingWindow::dispose();
 }
 
@@ -845,36 +861,6 @@ SmViewShell * SmCmdBoxWindow::GetView()
     SfxDispatcher *pDispatcher = GetBindings().GetDispatcher();
     SfxViewShell *pView = pDispatcher ? pDispatcher->GetFrame()->GetViewShell() : nullptr;
     return  dynamic_cast<SmViewShell*>( pView);
-}
-
-void SmCmdBoxWindow::Resize()
-{
-    tools::Rectangle aRect(Point(0, 0), GetOutputSizePixel());
-    aRect.AdjustLeft(CMD_BOX_PADDING );
-    aRect.AdjustTop(CMD_BOX_PADDING_TOP );
-    aRect.AdjustRight( -(CMD_BOX_PADDING) );
-    aRect.AdjustBottom( -(CMD_BOX_PADDING) );
-
-    DecorationView aView(this);
-    aRect = aView.DrawFrame(aRect, DrawFrameStyle::In, DrawFrameFlags::NoDraw);
-
-    aEdit->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
-    SfxDockingWindow::Resize();
-    Invalidate();
-}
-
-void SmCmdBoxWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
-{
-    tools::Rectangle aRect(Point(0, 0), GetOutputSizePixel());
-    aRect.AdjustLeft(CMD_BOX_PADDING );
-    aRect.AdjustTop(CMD_BOX_PADDING_TOP );
-    aRect.AdjustRight( -(CMD_BOX_PADDING) );
-    aRect.AdjustBottom( -(CMD_BOX_PADDING) );
-
-    aEdit->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
-
-    DecorationView aView(&rRenderContext);
-    aView.DrawFrame( aRect, DrawFrameStyle::In );
 }
 
 Size SmCmdBoxWindow::CalcDockingSize(SfxChildAlignment eAlign)
@@ -938,7 +924,7 @@ IMPL_LINK_NOARG( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
     {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( comphelper::getProcessComponentContext() );
 
-        aEdit->GrabFocus();
+        m_xEdit->GrabFocus();
 
         SmViewShell* pView = GetView();
         assert(pView);
@@ -988,7 +974,7 @@ void SmCmdBoxWindow::ToggleFloatingMode()
 void SmCmdBoxWindow::GetFocus()
 {
     if (!bExiting)
-        aEdit->GrabFocus();
+        m_xEdit->GrabFocus();
 }
 
 SFX_IMPL_DOCKINGWINDOW_WITHID(SmCmdBoxWrapper, SID_CMDBOXWINDOW);
@@ -998,11 +984,14 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(vcl::Window *pParentWindow, sal_uInt16 nId,
                                  SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWindow, nId)
 {
-    SetWindow(VclPtr<SmCmdBoxWindow>::Create(pBindings, this, pParentWindow));
-
+    VclPtrInstance<SmCmdBoxWindow> pDialog(pBindings, this, pParentWindow);
+    SetWindow(pDialog);
     // make window docked to the bottom initially (after first start)
     SetAlignment(SfxChildAlignment::BOTTOM);
-    static_cast<SfxDockingWindow *>(GetWindow())->Initialize(pInfo);
+    pDialog->setDeferredProperties();
+    pDialog->set_border_width(CMD_BOX_PADDING);
+    pDialog->set_margin_top(CMD_BOX_PADDING_TOP);
+    pDialog->Initialize(pInfo);
 }
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SmViewShell, SfxViewShell)
@@ -1597,15 +1586,19 @@ void SmViewShell::Execute(SfxRequest& rReq)
             if( xTrans.is() )
             {
                 auto pTrans = comphelper::getUnoTunnelImplementation<TransferableHelper>(xTrans);
-                if( pTrans )
-                    pTrans->CopyToClipboard(GetEditWindow());
+                if (pTrans)
+                {
+                    SmEditWindow *pEditWin = GetEditWindow();
+                    pTrans->CopyToClipboard(pEditWin->GetClipboard());
+                }
             }
         }
         break;
 
         case SID_PASTEOBJECT:
         {
-            TransferableDataHelper aData( TransferableDataHelper::CreateFromSystemClipboard(GetEditWindow()) );
+            SmEditWindow *pEditWin = GetEditWindow();
+            TransferableDataHelper aData(TransferableDataHelper::CreateFromClipboard(pEditWin->GetClipboard()));
             uno::Reference < io::XInputStream > xStrm;
             SotClipboardFormatId nId;
             if( aData.GetTransferable().is() &&
@@ -1657,9 +1650,10 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 bool bCallExec = nullptr == pWin;
                 if( !bCallExec )
                 {
+                    SmEditWindow *pEditWin = GetEditWindow();
                     TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard(
-                                                    GetEditWindow()) );
+                        TransferableDataHelper::CreateFromClipboard(
+                                                    pEditWin->GetClipboard()));
 
                     if( aDataHelper.GetTransferable().is() &&
                         aDataHelper.HasFormat( SotClipboardFormatId::STRING ))
@@ -1726,7 +1720,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_IMPORT_MATHML_CLIPBOARD:
         {
-            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard(GetEditWindow()) );
+            SmEditWindow *pEditWin = GetEditWindow();
+            TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromClipboard(pEditWin->GetClipboard()));
             uno::Reference < io::XInputStream > xStrm;
             if  ( aDataHelper.GetTransferable().is() )
             {
@@ -1976,8 +1971,8 @@ void SmViewShell::GetState(SfxItemSet &rSet)
             if (pEditWin)
             {
                 TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard(
-                                                        pEditWin) );
+                        TransferableDataHelper::CreateFromClipboard(
+                                                        pEditWin->GetClipboard()) );
 
                 mbPasteState = aDataHelper.GetTransferable().is() &&
                  ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) ||

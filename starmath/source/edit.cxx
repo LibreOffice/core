@@ -100,6 +100,8 @@ void SmEditTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
 
+    SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
+
     EnableRTL(false);
 
     EditEngine* pEditEngine = GetEditEngine();
@@ -118,42 +120,24 @@ void SmEditTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     InitAccessible();
 }
 
-SmEditWindow::SmEditWindow(SmCmdBoxWindow &rMyCmdBoxWin)
-    : InterimItemWindow(&rMyCmdBoxWin, "modules/smath/ui/editwindow.ui", "EditWindow")
-    , rCmdBox(rMyCmdBoxWin)
-    , mxScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow", true))
+SmEditWindow::SmEditWindow(SmCmdBoxWindow &rMyCmdBoxWin, weld::Builder& rBuilder)
+    : rCmdBox(rMyCmdBoxWin)
+    , mxScrolledWindow(rBuilder.weld_scrolled_window("scrolledwindow", true))
 {
-    set_id("math_edit");
-    SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
-    SetMapMode(MapMode(MapUnit::MapPixel));
-
-    // Even RTL languages don't use RTL for math
-    EnableRTL( false );
-
-    // compare DataChanged
-    SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
-
     mxScrolledWindow->connect_vadjustment_changed(LINK(this, SmEditWindow, ScrollHdl));
 
-    CreateEditView();
-
-    // if not called explicitly the this edit window within the
-    // command window will just show an empty gray panel.
-    Show();
+    CreateEditView(rBuilder);
 }
 
 SmEditWindow::~SmEditWindow()
 {
-    disposeOnce();
+    DeleteEditView();
+    mxScrolledWindow.reset();
 }
 
-void SmEditWindow::dispose()
+weld::Window* SmEditWindow::GetFrameWeld() const
 {
-    DeleteEditView();
-
-    mxScrolledWindow.reset();
-
-    InterimItemWindow::dispose();
+    return rCmdBox.GetFrameWeld();
 }
 
 void SmEditTextWindow::StartCursorMove()
@@ -193,31 +177,18 @@ EditEngine * SmEditWindow::GetEditEngine()
     return nullptr;
 }
 
-void SmEditWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+void SmEditTextWindow::StyleUpdated()
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
-}
-
-void SmEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    InterimItemWindow::DataChanged( rDCEvt );
-
-    if (!((rDCEvt.GetType() == DataChangedEventType::FONTS) ||
-          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
-          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))))
-        return;
-
+    WeldEditView::StyleUpdated();
     EditEngine *pEditEngine = GetEditEngine();
-    SmDocShell *pDoc = GetDoc();
+    SmDocShell *pDoc = mrEditWindow.GetDoc();
 
     if (pEditEngine && pDoc)
     {
         //!
         //! see also SmDocShell::GetEditEngine() !
         //!
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
         pDoc->UpdateEditEngineDefaultFonts(rStyleSettings.GetFieldTextColor());
         pEditEngine->SetBackgroundColor(rStyleSettings.GetFieldColor());
@@ -230,7 +201,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
         pEditEngine->Clear();   //incorrect font size
         pEditEngine->SetText( aTxt );
 
-        mxTextControl->Resize();
+        Resize();
     }
 }
 
@@ -274,21 +245,6 @@ bool SmEditTextWindow::MouseButtonUp(const MouseEvent &rEvt)
     return bRet;
 }
 
-void SmEditWindow::Command(const CommandEvent& rCEvt)
-{
-    if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
-    {
-        GetParent()->ToTop();
-        Point aPoint = rCEvt.GetMousePosPixel();
-        SmViewShell *pViewSh = GetView();
-        if (pViewSh)
-            pViewSh->GetViewFrame()->GetDispatcher()->ExecutePopup("edit", this, &aPoint);
-        return;
-    }
-
-    InterimItemWindow::Command(rCEvt);
-}
-
 bool SmEditTextWindow::Command(const CommandEvent& rCEvt)
 {
     // no zooming in Command window
@@ -305,7 +261,8 @@ bool SmEditTextWindow::Command(const CommandEvent& rCEvt)
         // purely for "ExecutePopup" taking a vcl::Window and
         // we assume SmEditTextWindow 0,0 is at SmEditWindow 0,0
         ReleaseMouse();
-        mrEditWindow.Command(rCEvt);
+        mrEditWindow.GetCmdBox().Command(rCEvt);
+        GrabFocus();
         return true;
     }
 
@@ -437,7 +394,7 @@ void SmEditTextWindow::UserPossiblyChangedText()
     aModifyIdle.Start();
 }
 
-void SmEditWindow::CreateEditView()
+void SmEditWindow::CreateEditView(weld::Builder& rBuilder)
 {
     assert(!mxTextControl);
 
@@ -448,8 +405,7 @@ void SmEditWindow::CreateEditView()
         return;
 
     mxTextControl.reset(new SmEditTextWindow(*this));
-    mxTextControlWin.reset(new weld::CustomWeld(*m_xBuilder, "editview", *mxTextControl));
-    InitControlBase(mxTextControl->GetDrawingArea());
+    mxTextControlWin.reset(new weld::CustomWeld(rBuilder, "editview", *mxTextControl));
 
     SetScrollBarRanges();
 }
@@ -473,7 +429,7 @@ IMPL_LINK(SmEditWindow, ScrollHdl, weld::ScrolledWindow&, rScrolledWindow, void)
 
 tools::Rectangle SmEditWindow::AdjustScrollBars()
 {
-    tools::Rectangle aRect(Point(), GetOutputSizePixel());
+    tools::Rectangle aRect(Point(), rCmdBox.GetOutputSizePixel());
 
     if (mxScrolledWindow)
     {
@@ -533,6 +489,20 @@ void SmEditWindow::SetText(const OUString& rText)
     if (!mxTextControl)
         return;
     mxTextControl->SetText(rText);
+}
+
+void SmEditWindow::Flush()
+{
+    if (!mxTextControl)
+        return;
+    mxTextControl->Flush();
+}
+
+void SmEditWindow::GrabFocus()
+{
+    if (!mxTextControl)
+        return;
+    mxTextControl->GrabFocus();
 }
 
 void SmEditTextWindow::SetText(const OUString& rText)
@@ -860,7 +830,6 @@ void SmEditWindow::DeleteEditView()
             pEditEngine->SetStatusEventHdl( Link<EditStatus&,void>() );
             pEditEngine->RemoveView(pEditView);
         }
-        InitControlBase(nullptr);
         mxTextControlWin.reset();
         mxTextControl.reset();
     }
