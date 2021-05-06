@@ -45,7 +45,7 @@ ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
     tools::Long nMM = OutputDevice::LogicToLogic( 12, MapUnit::MapPoint, MapUnit::Map100thMM );
     pPool->SetPoolDefaultItem( SvxFontHeightItem( nMM, 100, EE_CHAR_FONTHEIGHT ) );
     // Free-flying pInsDefault
-    pInsDefault.reset( new ScRTFCellDefault( pPool ) );
+    pInsDefault.reset( new ScRTFCellDefault( pPool.get() ) );
 }
 
 ScRTFParser::~ScRTFParser()
@@ -163,7 +163,7 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, RtfImportInfo&, rInfo, void )
         case RtfImportState::Start:
         {
             SvxRTFParser* pParser = static_cast<SvxRTFParser*>(rInfo.pParser);
-            pParser->SetAttrPool( pPool );
+            pParser->SetAttrPool( pPool.get() );
             RTFPardAttrMapIds& rMap = pParser->GetPardMap();
             rMap.nBrush = ATTR_BACKGROUND;
             rMap.nBox = ATTR_BORDER;
@@ -304,7 +304,7 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
             pInsDefault->nTwips = pInfo->nTokenValue; // Right cell border
             maDefaultList.push_back( std::move(pInsDefault) );
             // New free-flying pInsDefault
-            pInsDefault.reset( new ScRTFCellDefault( pPool ) );
+            pInsDefault.reset( new ScRTFCellDefault( pPool.get() ) );
             if ( ++nColCnt > nColMax )
                 nColMax = nColCnt;
             nRtfLastToken = pInfo->nToken;

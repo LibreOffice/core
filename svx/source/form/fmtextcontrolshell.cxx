@@ -621,7 +621,7 @@ namespace svx
         if ( !pFontList )
             return;
 
-        SfxItemPool* pPool = EditEngine::CreatePool();
+        std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> pPool(EditEngine::CreatePool());
         pPool->FreezeIdRanges();
         std::unique_ptr< SfxItemSet > xPureItems( new SfxItemSet( *pPool ) );
 
@@ -722,7 +722,7 @@ namespace svx
         xDialog.reset();
         xCurrentItems.reset();
         xPureItems.reset();
-        SfxItemPool::Free(pPool);
+        pPool.reset();
     }
 
 

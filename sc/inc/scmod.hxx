@@ -23,6 +23,7 @@
 #include <o3tl/deleter.hxx>
 #include <vcl/timer.hxx>
 #include <svl/lstner.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include "global.hxx"
@@ -81,7 +82,7 @@ class SAL_DLLPUBLIC_RTTI ScModule final : public SfxModule, public SfxListener, 
     Timer               m_aIdleTimer;
     std::unique_ptr<ScDragData> m_pDragData;
     ScSelectionTransferObj* m_pSelTransfer;
-    ScMessagePool*      m_pMessagePool;
+    std::unique_ptr<ScMessagePool, SfxItemPoolDeleter> m_pMessagePool;
     // there is no global InputHandler anymore, each View has its own
     ScInputHandler*     m_pRefInputHandler;
     std::unique_ptr<ScViewCfg, o3tl::default_delete<ScViewCfg>> m_pViewCfg;

@@ -69,7 +69,7 @@ ScMessagePool::ScMessagePool()
 
     SetDefaults( &mvPoolDefaults );
 
-    SetSecondaryPool( pDocPool );
+    SetSecondaryPool( pDocPool.get() );
 }
 
 ScMessagePool::~ScMessagePool()
@@ -79,8 +79,6 @@ ScMessagePool::~ScMessagePool()
 
     for ( sal_uInt16 i=0; i <= MSGPOOL_END-MSGPOOL_START; i++ )
         ClearRefCount( *mvPoolDefaults[i] );
-
-    SfxItemPool::Free(pDocPool);
 }
 
 MapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const

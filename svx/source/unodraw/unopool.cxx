@@ -57,18 +57,18 @@ SvxUnoDrawPool::~SvxUnoDrawPool() noexcept
     if (mpDefaultsPool)
     {
         SfxItemPool* pOutlPool = mpDefaultsPool->GetSecondaryPool();
-        SfxItemPool::Free(mpDefaultsPool);
+        mpDefaultsPool.reset();
         SfxItemPool::Free(pOutlPool);
     }
 }
 
 void SvxUnoDrawPool::init()
 {
-    mpDefaultsPool = new SdrItemPool();
+    mpDefaultsPool.reset(new SdrItemPool());
     SfxItemPool* pOutlPool=EditEngine::CreatePool();
     mpDefaultsPool->SetSecondaryPool(pOutlPool);
 
-    SdrModel::SetTextDefaults( mpDefaultsPool, SdrEngineDefaults::GetFontHeight() );
+    SdrModel::SetTextDefaults( mpDefaultsPool.get(), SdrEngineDefaults::GetFontHeight() );
     mpDefaultsPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
     mpDefaultsPool->FreezeIdRanges();
 }
@@ -82,7 +82,7 @@ SfxItemPool* SvxUnoDrawPool::getModelPool( bool bReadOnly ) noexcept
     else
     {
         if( bReadOnly )
-            return mpDefaultsPool;
+            return mpDefaultsPool.get();
         else
             return nullptr;
     }
@@ -222,7 +222,7 @@ void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** pp
 
     SfxItemPool* pPool = getModelPool( true );
 
-    if( pPool && pPool != mpDefaultsPool )
+    if( pPool && pPool != mpDefaultsPool.get() )
     {
         while( *ppEntries )
         {
@@ -286,7 +286,7 @@ void SvxUnoDrawPool::_setPropertyToDefault( const comphelper::PropertyMapEntry* 
     // Assure, that ID is a Which-ID (it could be a Slot-ID.)
     // Thus, convert handle to Which-ID.
     const sal_uInt16 nWhich = pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) );
-    if ( pPool && pPool != mpDefaultsPool )
+    if ( pPool && pPool != mpDefaultsPool.get() )
     {
         // use method <ResetPoolDefaultItem(..)> instead of using probably incompatible item pool <mpDefaultsPool>.
         pPool->ResetPoolDefaultItem( nWhich );
