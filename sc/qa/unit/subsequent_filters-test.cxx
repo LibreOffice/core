@@ -301,6 +301,7 @@ public:
     void testTdf129940();
     void testTdf139763ShapeAnchor();
     void testEscapedUnicodeXLSX();
+    void testAutofilterNamedRangesXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
@@ -487,6 +488,7 @@ public:
     CPPUNIT_TEST(testTdf129940);
     CPPUNIT_TEST(testTdf139763ShapeAnchor);
     CPPUNIT_TEST(testEscapedUnicodeXLSX);
+    CPPUNIT_TEST(testAutofilterNamedRangesXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5465,6 +5467,26 @@ void ScFiltersTest::testEscapedUnicodeXLSX()
 
     // Without the fix, there would be "_x000D_" after every new-line char.
     CPPUNIT_ASSERT_EQUAL(OUString("Line 1\nLine 2\nLine 3\nLine 4"), rDoc.GetString(1, 1, 0));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testAutofilterNamedRangesXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"autofilternamedrange.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load autofilternamedrange.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    const ScDBData* pDBData = rDoc.GetDBCollection()->GetDBNearCursor(0, 0, 0);
+    CPPUNIT_ASSERT(pDBData);
+    ScRange aRange;
+    pDBData->GetArea(aRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 0, 3, 0), aRange);
+    OUString aPosStr;
+    // test there is no '_xlnm._FilterDatabase' named range on the filter area
+    const ScRangeData* pRData = rDoc.GetRangeAtBlock(aRange, aPosStr);
+    CPPUNIT_ASSERT(!pRData);
+    CPPUNIT_ASSERT_EQUAL(OUString(), aPosStr);
 
     xDocSh->DoClose();
 }
