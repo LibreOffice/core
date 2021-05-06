@@ -421,7 +421,8 @@ ScCheckListMenuControl::Config::Config() :
 }
 
 ScCheckListMember::ScCheckListMember()
-    : mbVisible(true)
+    : mnValue(0.0)
+    , mbVisible(true)
     , mbDate(false)
     , mbLeaf(false)
     , mbValue(false)
