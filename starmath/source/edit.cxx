@@ -304,6 +304,7 @@ bool SmEditTextWindow::Command(const CommandEvent& rCEvt)
     {
         // purely for "ExecutePopup" taking a vcl::Window and
         // we assume SmEditTextWindow 0,0 is at SmEditWindow 0,0
+        ReleaseMouse();
         mrEditWindow.Command(rCEvt);
         return true;
     }
