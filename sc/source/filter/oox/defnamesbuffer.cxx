@@ -225,16 +225,17 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
     using namespace ::com::sun::star::sheet::NamedRangeFlag;
     if( !isGlobalName() ) switch( mcBuiltinId )
     {
-        case BIFF_DEFNAME_CRITERIA:     nNameFlags = FILTER_CRITERIA;               break;
-        case BIFF_DEFNAME_PRINTAREA:    nNameFlags = PRINT_AREA;                    break;
-        case BIFF_DEFNAME_PRINTTITLES:  nNameFlags = COLUMN_HEADER | ROW_HEADER;    break;
+        case BIFF_DEFNAME_CRITERIA:
+        case BIFF_DEFNAME_FILTERDATABASE: nNameFlags = FILTER_CRITERIA;               break;
+        case BIFF_DEFNAME_PRINTAREA:      nNameFlags = PRINT_AREA;                    break;
+        case BIFF_DEFNAME_PRINTTITLES:    nNameFlags = COLUMN_HEADER | ROW_HEADER;    break;
     }
 
     // create the name and insert it into the document, maCalcName will be changed to the resulting name
     if (maModel.mnSheet >= 0)
-        mpScRangeData = createLocalNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags, maModel.mnSheet );
+        mpScRangeData = createLocalNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags, maModel.mnSheet, maModel.mbHidden );
     else
-        mpScRangeData = createNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags );
+        mpScRangeData = createNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags, maModel.mbHidden );
     mnTokenIndex = nIndex;
 }
 
