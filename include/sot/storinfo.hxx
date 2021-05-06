@@ -21,7 +21,6 @@
 #define INCLUDED_SOT_STORINFO_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <vector>
 #include <sot/sotdllapi.h>
 #include <sot/formats.hxx>
@@ -33,13 +32,13 @@ class SvStorageInfo
 {
     friend class SotStorage;
     OUString aName;
-    sal_uLong nSize;
+    sal_uInt64 nSize;
     bool bStream;
     bool bStorage;
 
 public:
     SvStorageInfo(const StgDirEntry&);
-    SvStorageInfo(const OUString& rName, sal_uLong nSz, bool bIsStorage)
+    SvStorageInfo(const OUString& rName, sal_uInt64 nSz, bool bIsStorage)
         : aName(rName)
         , nSize(nSz)
         , bStream(!bIsStorage)
@@ -50,7 +49,7 @@ public:
     const OUString& GetName() const { return aName; }
     bool IsStream() const { return bStream; }
     bool IsStorage() const { return bStorage; }
-    sal_uLong GetSize() const { return nSize; }
+    sal_uInt64 GetSize() const { return nSize; }
 };
 
 typedef std::vector<SvStorageInfo> SvStorageInfoList;

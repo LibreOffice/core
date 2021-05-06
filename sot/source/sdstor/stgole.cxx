@@ -112,11 +112,11 @@ bool StgCompObjStream::Load()
         if ( nLen1 > 0 )
         {
             // higher bits are ignored
-            sal_uLong nStrLen = ::std::min( nLen1, sal_Int32(0xFFFE) );
+            sal_Int32 nStrLen = ::std::min( nLen1, sal_Int32(0xFFFE) );
 
             std::unique_ptr<char[]> p(new char[ nStrLen+1 ]);
             p[nStrLen] = 0;
-            if (ReadBytes( p.get(), nStrLen ) == nStrLen)
+            if (static_cast<sal_Int32>(ReadBytes( p.get(), nStrLen )) == nStrLen)
             {
                 //The encoding here is "ANSI", which is pretty useless seeing as
                 //the actual codepage used doesn't seem to be specified/stored
