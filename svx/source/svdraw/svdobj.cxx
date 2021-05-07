@@ -547,7 +547,7 @@ void SdrObject::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 }
 
 // global static ItemPool for not-yet-inserted items
-static SdrItemPool* mpGlobalItemPool;
+static rtl::Reference<SdrItemPool> mpGlobalItemPool;
 
 // init global static itempool
 SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
