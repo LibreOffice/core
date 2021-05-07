@@ -69,11 +69,11 @@ writerfilter_SRC_ooxml_Preprocess_py=$(writerfilter_SRC)/ooxml/modelpreprocess.p
 writerfilter_SRC_ooxml_QNameToStr_py=$(writerfilter_SRC)/ooxml/qnametostr.py
 writerfilter_SRC_ooxml_ResourceIds_py=$(writerfilter_SRC)/ooxml/resourceids.py
 
-$(writerfilter_GEN_ooxml_Factory_cxx) : $(writerfilter_SRC)/ooxml/factoryimpl.py $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_GEN_ooxml_Model_processed)
+$(writerfilter_GEN_ooxml_Factory_cxx) : $(writerfilter_SRC)/ooxml/factoryimpl.py $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_GEN_ooxml_Model_processed) | $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_GEN_ooxml_Factory_hxx) : $(writerfilter_SRC)/ooxml/factoryinc.py $(writerfilter_GEN_ooxml_Model_processed)
+$(writerfilter_GEN_ooxml_Factory_hxx) : $(writerfilter_SRC)/ooxml/factoryinc.py $(writerfilter_GEN_ooxml_Model_processed) | $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
@@ -83,23 +83,23 @@ $(writerfilter_GEN_ooxml_Model_validated) : $(writerfilter_SRC)/../documentation
 		$(writerfilter_XMLLINTCOMMAND) --noout --relaxng $(writerfilter_SRC)/../documentation/ooxml/model.rng $(writerfilter_SRC_ooxml_Model) > $@ 2>&1 \
 		|| (cat $@; false))
 
-$(writerfilter_GEN_ooxml_Model_processed) : $(writerfilter_SRC_ooxml_Preprocess_py) $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_GEN_ooxml_Model_validated)
+$(writerfilter_GEN_ooxml_Model_processed) : $(writerfilter_SRC_ooxml_Preprocess_py) $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_GEN_ooxml_Model_validated) | $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_Preprocess_py) $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_SRC_ooxml_Model)) > $@
 
-$(writerfilter_GEN_ooxml_QNameToStr_cxx): $(writerfilter_SRC_ooxml_QNameToStr_py) $(writerfilter_GEN_ooxml_Model_processed)
+$(writerfilter_GEN_ooxml_QNameToStr_cxx): $(writerfilter_SRC_ooxml_QNameToStr_py) $(writerfilter_GEN_ooxml_Model_processed) | $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_QNameToStr_py) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_GEN_ooxml_ResourceIds_hxx) : $(writerfilter_SRC_ooxml_ResourceIds_py) $(writerfilter_GEN_ooxml_Model_processed) | $(writerfilter_WORK)/ooxml/.dir
+$(writerfilter_GEN_ooxml_ResourceIds_hxx) : $(writerfilter_SRC_ooxml_ResourceIds_py) $(writerfilter_GEN_ooxml_Model_processed) | $(writerfilter_WORK)/ooxml/.dir $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_ResourceIds_py) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_WORK)/ooxml/OOXMLFactory%.cxx : $(writerfilter_SRC)/ooxml/factoryimpl_ns.py $(writerfilter_GEN_ooxml_Model_processed)
+$(writerfilter_WORK)/ooxml/OOXMLFactory%.cxx : $(writerfilter_SRC)/ooxml/factoryimpl_ns.py $(writerfilter_GEN_ooxml_Model_processed) | $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed) $@) > $@
 
-$(writerfilter_WORK)/ooxml/OOXMLFactory%.hxx : $(writerfilter_SRC)/ooxml/factory_ns.py $(writerfilter_GEN_ooxml_Model_processed)
+$(writerfilter_WORK)/ooxml/OOXMLFactory%.hxx : $(writerfilter_SRC)/ooxml/factory_ns.py $(writerfilter_GEN_ooxml_Model_processed) | $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed) $@) > $@
 
