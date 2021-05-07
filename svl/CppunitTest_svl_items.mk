@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_items, \
 	svl \
 	comphelper \
 	sal \
+	salhelper \
 	cppu \
 	cppuhelper \
 ))

@@ -28,7 +28,7 @@ CPPUNIT_TEST_FIXTURE(StylePoolTest, testIterationOrder)
     std::vector<SfxPoolItem*> aDefaults{ &aDefault1 };
     SfxItemInfo const aItems[] = { { 1, false } };
 
-    SfxItemPool* pPool = new SfxItemPool("test", 1, 1, aItems);
+    rtl::Reference<SfxItemPool> pPool = new SfxItemPool("test", 1, 1, aItems);
     pPool->SetDefaults(&aDefaults);
     {
         // Set up parents in mixed order to make sure we do not sort by pointer address.
@@ -76,7 +76,6 @@ CPPUNIT_TEST_FIXTURE(StylePoolTest, testIterationOrder)
         CPPUNIT_ASSERT_EQUAL(OUString("Item3"), pItem3->GetValue());
         CPPUNIT_ASSERT(!pIter->getNext());
     }
-    SfxItemPool::Free(pPool);
 }
 }
 

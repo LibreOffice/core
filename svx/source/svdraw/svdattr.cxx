@@ -365,7 +365,7 @@ SdrItemPool::SdrItemPool(const SdrItemPool& rPool)
 {
 }
 
-SdrItemPool* SdrItemPool::Clone() const
+rtl::Reference<SfxItemPool> SdrItemPool::Clone() const
 {
     return new SdrItemPool(*this);
 }

@@ -597,7 +597,7 @@ SwDoc::~SwDoc()
     mpDfltCharFormat.reset();
     mpDfltFrameFormat.reset();
     mpLayoutCache.reset();
-    mpAttrPool.reset();
+    mpAttrPool.clear();
 }
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )

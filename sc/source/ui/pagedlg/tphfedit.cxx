@@ -64,7 +64,7 @@ ScEditWindow::ScEditWindow(ScEditWindowLocation eLoc, weld::Window* pDialog)
 
 void ScEditWindow::makeEditEngine()
 {
-    m_xEditEngine.reset(new ScHeaderEditEngine(EditEngine::CreatePool()));
+    m_xEditEngine.reset(new ScHeaderEditEngine(EditEngine::CreatePool().get()));
 }
 
 ScHeaderEditEngine* ScEditWindow::GetEditEngine() const

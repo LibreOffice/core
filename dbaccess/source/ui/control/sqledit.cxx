@@ -67,7 +67,6 @@ private:
 
 SQLEditView::SQLEditView()
     : m_aHighlighter(HighlighterLanguage::SQL)
-    , m_pItemPool(nullptr)
     , m_bInUpdate(false)
     , m_bDisableInternalUndo(false)
 {
@@ -114,8 +113,8 @@ void SQLEditView::makeEditEngine()
 {
     assert(!m_pItemPool);
     m_pItemPool = EditEngine::CreatePool();
-    SetItemPoolFont(m_pItemPool);
-    m_xEditEngine.reset(new EditEngine(m_pItemPool));
+    SetItemPoolFont(m_pItemPool.get());
+    m_xEditEngine.reset(new EditEngine(m_pItemPool.get()));
 }
 
 void SQLEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
@@ -366,7 +365,7 @@ void SQLEditView::ConfigurationChanged(utl::ConfigurationBroadcaster*, Configura
 void SQLEditView::ImplSetFont()
 {
     // see SmEditWindow::DataChanged for a similar case
-    SetItemPoolFont(m_pItemPool); // change default font
+    SetItemPoolFont(m_pItemPool.get()); // change default font
     // re-create with the new font
     EditEngine& rEditEngine = *GetEditEngine();
     OUString aTxt(rEditEngine.GetText());

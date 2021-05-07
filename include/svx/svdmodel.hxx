@@ -175,7 +175,7 @@ protected:
     int            m_nUIUnitDecimalMark; // see above
 
     std::unique_ptr<SdrLayerAdmin> m_pLayerAdmin;
-    SfxItemPool*    m_pItemPool;
+    rtl::Reference<SfxItemPool> m_pItemPool;
     comphelper::IEmbeddedHelper*
                     m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
     std::unique_ptr<SdrOutliner> m_pDrawOutliner;  // an Outliner for outputting text
@@ -191,7 +191,7 @@ protected:
     std::unique_ptr<std::deque<std::unique_ptr<SfxUndoAction>>> m_pRedoStack;
     std::unique_ptr<SdrUndoGroup> m_pCurrentUndoGroup;  // For multi-level
     sal_uInt16          m_nUndoLevel;                   // undo nesting
-    bool                m_bMyPool:1;        // to clean up pMyPool from 303a
+    bool                m_bIsWriter:1;        // to clean up pMyPool from 303a
     bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
     bool                mbChanged:1;
     bool                m_bPagNumsDirty:1;
@@ -568,7 +568,7 @@ public:
     std::unique_ptr<SdrOutliner> createOutliner( OutlinerMode nOutlinerMode );
     void disposeOutliner( std::unique_ptr<SdrOutliner> pOutliner );
 
-    bool IsWriter() const { return !m_bMyPool; }
+    bool IsWriter() const { return m_bIsWriter; }
 
     // Used as a fallback in *::ReadUserDataSequence() to process common properties
     void ReadUserDataSequenceValue(const css::beans::PropertyValue *pValue);

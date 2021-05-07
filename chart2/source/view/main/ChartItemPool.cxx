@@ -204,7 +204,7 @@ ChartItemPool::~ChartItemPool()
     ReleaseDefaults(true);
 }
 
-SfxItemPool* ChartItemPool::Clone() const
+rtl::Reference<SfxItemPool> ChartItemPool::Clone() const
 {
     return new ChartItemPool(*this);
 }
@@ -214,25 +214,16 @@ MapUnit ChartItemPool::GetMetric(sal_uInt16 /* nWhich */) const
     return MapUnit::Map100thMM;
 }
 
-namespace {
-struct PoolDeleter
-{
-    void operator()(SfxItemPool* pPool)
-    {
-        SfxItemPool::Free(pPool);
-    }
-};
-}
-static std::unique_ptr<SfxItemPool, PoolDeleter> g_Pool1, g_Pool2, g_Pool3;
+static rtl::Reference<SfxItemPool> g_Pool1, g_Pool2, g_Pool3;
 
 SfxItemPool& ChartItemPool::GetGlobalChartItemPool()
 {
     if (!g_Pool1)
     {
         // similar logic to SdrModel's pool, but with our chart pool tagged on the end
-        g_Pool1.reset(new SdrItemPool(nullptr));
-        g_Pool2.reset(EditEngine::CreatePool());
-        g_Pool3.reset(new ChartItemPool());
+        g_Pool1 = new SdrItemPool(nullptr);
+        g_Pool2 = EditEngine::CreatePool();
+        g_Pool3 = new ChartItemPool();
         g_Pool1->SetSecondaryPool(g_Pool2.get());
 
         g_Pool1->SetDefaultMetric(MapUnit::Map100thMM);

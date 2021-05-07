@@ -73,6 +73,7 @@ $(eval $(call gb_Library_use_libraries,svl,\
     $(if $(ENABLE_JAVA), \
         jvmfwk) \
     sal \
+    salhelper \
     sot \
     tl \
     ucbhelper \

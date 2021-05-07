@@ -36,7 +36,6 @@ namespace pcr
 
     OControlFontDialog::OControlFontDialog(const Reference< XComponentContext >& _rxContext )
         :OGenericUnoDialog( _rxContext )
-        ,m_pItemPool(nullptr)
         ,m_pItemPoolDefaults(nullptr)
     {
         registerProperty(PROPERTY_INTROSPECTEDOBJECT, OWN_PROPERTY_ID_INTROSPECTEDOBJECT,
