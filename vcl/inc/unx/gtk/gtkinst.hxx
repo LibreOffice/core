@@ -79,7 +79,7 @@ public:
 
 class GtkDnDTransferable;
 
-class GtkDropTarget final : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
+class GtkInstDropTarget final : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
                                                            css::lang::XInitialization,
                                                            css::lang::XServiceInfo>
 {
@@ -91,8 +91,8 @@ class GtkDropTarget final : public cppu::WeakComponentImplHelper<css::datatransf
     sal_Int8 m_nDefaultActions;
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
 public:
-    GtkDropTarget();
-    virtual ~GtkDropTarget() override;
+    GtkInstDropTarget();
+    virtual ~GtkInstDropTarget() override;
 
     // XInitialization
     virtual void        SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArgs) override;
@@ -128,7 +128,7 @@ public:
     void signalDragLeave(GtkWidget* pWidget, GdkDragContext* context, guint time);
 };
 
-class GtkDragSource final : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
+class GtkInstDragSource final : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
                                                            css::lang::XInitialization,
                                                            css::lang::XServiceInfo>
 {
@@ -138,7 +138,7 @@ class GtkDragSource final : public cppu::WeakComponentImplHelper<css::datatransf
     css::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
     VclToGtkHelper m_aConversionHelper;
 public:
-    GtkDragSource()
+    GtkInstDragSource()
         : WeakComponentImplHelper(m_aMutex)
         , m_pFrame(nullptr)
     {
@@ -151,7 +151,7 @@ public:
 
     void setActiveDragSource();
 
-    virtual ~GtkDragSource() override;
+    virtual ~GtkInstDragSource() override;
 
     // XDragSource
     virtual sal_Bool    SAL_CALL isDragImageSupported() override;
@@ -178,7 +178,7 @@ public:
 
     // For LibreOffice internal D&D we provide the Transferable without Gtk
     // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
-    static GtkDragSource* g_ActiveDragSource;
+    static GtkInstDragSource* g_ActiveDragSource;
     css::uno::Reference<css::datatransfer::XTransferable> const & GetTransferrable() const { return m_xTrans; }
 };
 

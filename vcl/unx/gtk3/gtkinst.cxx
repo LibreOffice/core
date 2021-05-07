@@ -1175,7 +1175,7 @@ Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& argu
     return xClipboard;
 }
 
-GtkDropTarget::GtkDropTarget()
+GtkInstDropTarget::GtkInstDropTarget()
     : WeakComponentImplHelper(m_aMutex)
     , m_pFrame(nullptr)
     , m_pFormatConversionRequest(nullptr)
@@ -1185,35 +1185,35 @@ GtkDropTarget::GtkDropTarget()
 {
 }
 
-OUString SAL_CALL GtkDropTarget::getImplementationName()
+OUString SAL_CALL GtkInstDropTarget::getImplementationName()
 {
     return "com.sun.star.datatransfer.dnd.VclGtkDropTarget";
 }
 
-sal_Bool SAL_CALL GtkDropTarget::supportsService(OUString const & ServiceName)
+sal_Bool SAL_CALL GtkInstDropTarget::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL GtkDropTarget::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL GtkInstDropTarget::getSupportedServiceNames()
 {
     Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GtkDropTarget" };
     return aRet;
 }
 
-GtkDropTarget::~GtkDropTarget()
+GtkInstDropTarget::~GtkInstDropTarget()
 {
     if (m_pFrame)
         m_pFrame->deregisterDropTarget(this);
 }
 
-void GtkDropTarget::deinitialize()
+void GtkInstDropTarget::deinitialize()
 {
     m_pFrame = nullptr;
     m_bActive = false;
 }
 
-void GtkDropTarget::initialize(const Sequence<Any>& rArguments)
+void GtkInstDropTarget::initialize(const Sequence<Any>& rArguments)
 {
     if (rArguments.getLength() < 2)
     {
@@ -1235,21 +1235,21 @@ void GtkDropTarget::initialize(const Sequence<Any>& rArguments)
     m_bActive = true;
 }
 
-void GtkDropTarget::addDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& xListener)
+void GtkInstDropTarget::addDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& xListener)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
     m_aListeners.push_back( xListener );
 }
 
-void GtkDropTarget::removeDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& xListener)
+void GtkInstDropTarget::removeDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& xListener)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), xListener), m_aListeners.end());
 }
 
-void GtkDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
+void GtkInstDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
 {
     osl::ClearableGuard<osl::Mutex> aGuard( m_aMutex );
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
@@ -1261,7 +1261,7 @@ void GtkDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent&
     }
 }
 
-void GtkDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
+void GtkInstDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
@@ -1273,7 +1273,7 @@ void GtkDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragE
     }
 }
 
-void GtkDropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde)
+void GtkInstDropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde)
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
@@ -1285,7 +1285,7 @@ void GtkDropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEv
     }
 }
 
-void GtkDropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)
+void GtkInstDropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
@@ -1297,22 +1297,22 @@ void GtkDropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent&
     }
 }
 
-sal_Bool GtkDropTarget::isActive()
+sal_Bool GtkInstDropTarget::isActive()
 {
     return m_bActive;
 }
 
-void GtkDropTarget::setActive(sal_Bool bActive)
+void GtkInstDropTarget::setActive(sal_Bool bActive)
 {
     m_bActive = bActive;
 }
 
-sal_Int8 GtkDropTarget::getDefaultActions()
+sal_Int8 GtkInstDropTarget::getDefaultActions()
 {
     return m_nDefaultActions;
 }
 
-void GtkDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
+void GtkInstDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
 {
     m_nDefaultActions = nDefaultActions;
 }
@@ -1322,37 +1322,37 @@ Reference< XInterface > GtkInstance::CreateDropTarget()
     if ( bRunningUnitTest )
         return SalInstance::CreateDropTarget();
 
-    return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new GtkDropTarget));
+    return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new GtkInstDropTarget));
 }
 
-GtkDragSource::~GtkDragSource()
+GtkInstDragSource::~GtkInstDragSource()
 {
     if (m_pFrame)
         m_pFrame->deregisterDragSource(this);
 
-    if (GtkDragSource::g_ActiveDragSource == this)
+    if (GtkInstDragSource::g_ActiveDragSource == this)
     {
-        SAL_WARN( "vcl.gtk", "dragEnd should have been called on GtkDragSource before dtor");
-        GtkDragSource::g_ActiveDragSource = nullptr;
+        SAL_WARN( "vcl.gtk", "dragEnd should have been called on GtkInstDragSource before dtor");
+        GtkInstDragSource::g_ActiveDragSource = nullptr;
     }
 }
 
-void GtkDragSource::deinitialize()
+void GtkInstDragSource::deinitialize()
 {
     m_pFrame = nullptr;
 }
 
-sal_Bool GtkDragSource::isDragImageSupported()
+sal_Bool GtkInstDragSource::isDragImageSupported()
 {
     return true;
 }
 
-sal_Int32 GtkDragSource::getDefaultCursor( sal_Int8 )
+sal_Int32 GtkInstDragSource::getDefaultCursor( sal_Int8 )
 {
     return 0;
 }
 
-void GtkDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rArguments)
+void GtkInstDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rArguments)
 {
     if (rArguments.getLength() < 2)
     {
@@ -1373,17 +1373,17 @@ void GtkDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rArgume
     m_pFrame->registerDragSource(this);
 }
 
-OUString SAL_CALL GtkDragSource::getImplementationName()
+OUString SAL_CALL GtkInstDragSource::getImplementationName()
 {
     return "com.sun.star.datatransfer.dnd.VclGtkDragSource";
 }
 
-sal_Bool SAL_CALL GtkDragSource::supportsService(OUString const & ServiceName)
+sal_Bool SAL_CALL GtkInstDragSource::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL GtkDragSource::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL GtkInstDragSource::getSupportedServiceNames()
 {
     Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GtkDragSource" };
     return aRet;
@@ -1394,7 +1394,7 @@ Reference< XInterface > GtkInstance::CreateDragSource()
     if ( bRunningUnitTest )
         return SalInstance::CreateDragSource();
 
-    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new GtkDragSource()) );
+    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new GtkInstDragSource()) );
 }
 
 namespace {
@@ -2143,8 +2143,8 @@ private:
     gulong m_nDragDataDeleteignalId;
     gulong m_nDragGetSignalId;
 
-    rtl::Reference<GtkDropTarget> m_xDropTarget;
-    rtl::Reference<GtkDragSource> m_xDragSource;
+    rtl::Reference<GtkInstDropTarget> m_xDropTarget;
+    rtl::Reference<GtkInstDragSource> m_xDragSource;
 
     static void signalSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
     {
@@ -2382,7 +2382,7 @@ private:
     {
         if (!m_xDragSource)
         {
-            m_xDragSource.set(new GtkDragSource);
+            m_xDragSource.set(new GtkInstDragSource);
 
             m_nDragFailedSignalId = g_signal_connect(m_pWidget, "drag-failed", G_CALLBACK(signalDragFailed), this);
             m_nDragDataDeleteignalId = g_signal_connect(m_pWidget, "drag-data-delete", G_CALLBACK(signalDragDelete), this);
@@ -3050,7 +3050,7 @@ public:
     {
         if (!m_xDropTarget)
         {
-            m_xDropTarget.set(new GtkDropTarget);
+            m_xDropTarget.set(new GtkInstDropTarget);
             if (!gtk_drag_dest_get_track_motion(m_pWidget))
             {
                 gtk_drag_dest_set(m_pWidget, GtkDestDefaults(0), nullptr, 0, GdkDragAction(0));

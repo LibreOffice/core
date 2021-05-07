@@ -52,8 +52,8 @@ class GtkSalGraphics;
 class GtkSalDisplay;
 
 typedef sal_uIntPtr GdkNativeWindow;
-class GtkDropTarget;
-class GtkDragSource;
+class GtkInstDropTarget;
+class GtkInstDragSource;
 class GtkDnDTransferable;
 
 class GtkSalMenu;
@@ -201,8 +201,8 @@ class GtkSalFrame final : public SalFrame
     tools::Long                            m_nWidthRequest;
     tools::Long                            m_nHeightRequest;
     cairo_region_t*                 m_pRegion;
-    GtkDropTarget*                  m_pDropTarget;
-    GtkDragSource*                  m_pDragSource;
+    GtkInstDropTarget*              m_pDropTarget;
+    GtkInstDragSource*              m_pDragSource;
     bool                            m_bGeometryIsProvisional;
     bool                            m_bIconSetWhileUnmapped;
 
@@ -349,25 +349,25 @@ public:
     void damaged(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
                  sal_Int32 nExtentsRight, sal_Int32 nExtentsBottom) const;
 
-    void registerDropTarget(GtkDropTarget* pDropTarget)
+    void registerDropTarget(GtkInstDropTarget* pDropTarget)
     {
         assert(!m_pDropTarget);
         m_pDropTarget = pDropTarget;
     }
 
-    void deregisterDropTarget(GtkDropTarget const * pDropTarget)
+    void deregisterDropTarget(GtkInstDropTarget const * pDropTarget)
     {
         assert(m_pDropTarget == pDropTarget); (void)pDropTarget;
         m_pDropTarget = nullptr;
     }
 
-    void registerDragSource(GtkDragSource* pDragSource)
+    void registerDragSource(GtkInstDragSource* pDragSource)
     {
         assert(!m_pDragSource);
         m_pDragSource = pDragSource;
     }
 
-    void deregisterDragSource(GtkDragSource const * pDragSource)
+    void deregisterDragSource(GtkInstDragSource const * pDragSource)
     {
         assert(m_pDragSource == pDragSource); (void)pDragSource;
         m_pDragSource = nullptr;

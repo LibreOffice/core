@@ -3589,7 +3589,7 @@ public:
     virtual void SAL_CALL dropComplete(sal_Bool bSuccess) override
     {
         gtk_drag_finish(m_pContext, bSuccess, false, m_nTime);
-        if (GtkDragSource::g_ActiveDragSource)
+        if (GtkInstDragSource::g_ActiveDragSource)
         {
             g_DropSuccessSet = true;
             g_DropSuccess = bSuccess;
@@ -3604,11 +3604,11 @@ class GtkDnDTransferable : public GtkTransferable
     GdkDragContext *m_pContext;
     guint m_nTime;
     GtkWidget *m_pWidget;
-    GtkDropTarget* m_pDropTarget;
+    GtkInstDropTarget* m_pDropTarget;
     GMainLoop *m_pLoop;
     GtkSelectionData *m_pData;
 public:
-    GtkDnDTransferable(GdkDragContext *pContext, guint nTime, GtkWidget *pWidget, GtkDropTarget *pDropTarget)
+    GtkDnDTransferable(GdkDragContext *pContext, guint nTime, GtkWidget *pWidget, GtkInstDropTarget *pDropTarget)
         : m_pContext(pContext)
         , m_nTime(nTime)
         , m_pWidget(pWidget)
@@ -3696,7 +3696,7 @@ public:
 
 // For LibreOffice internal D&D we provide the Transferable without Gtk
 // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
-GtkDragSource* GtkDragSource::g_ActiveDragSource;
+GtkInstDragSource* GtkInstDragSource::g_ActiveDragSource;
 
 gboolean GtkSalFrame::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time, gpointer frame)
 {
@@ -3706,7 +3706,7 @@ gboolean GtkSalFrame::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context
     return pThis->m_pDropTarget->signalDragDrop(pWidget, context, x, y, time);
 }
 
-gboolean GtkDropTarget::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time)
+gboolean GtkInstDropTarget::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time)
 {
     // remove the deferred dragExit, as we'll do a drop
 #ifndef NDEBUG
@@ -3737,8 +3737,8 @@ gboolean GtkDropTarget::signalDragDrop(GtkWidget* pWidget, GdkDragContext* conte
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
     // For LibreOffice internal D&D we provide the Transferable without Gtk
     // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
-    if (GtkDragSource::g_ActiveDragSource)
-        xTransferable = GtkDragSource::g_ActiveDragSource->GetTransferrable();
+    if (GtkInstDragSource::g_ActiveDragSource)
+        xTransferable = GtkInstDragSource::g_ActiveDragSource->GetTransferrable();
     else
         xTransferable = new GtkDnDTransferable(context, time, pWidget, this);
     aEvent.Transferable = xTransferable;
@@ -3782,7 +3782,7 @@ void GtkSalFrame::signalDragDropReceived(GtkWidget* pWidget, GdkDragContext* con
     pThis->m_pDropTarget->signalDragDropReceived(pWidget, context, x, y, data, ttype, time);
 }
 
-void GtkDropTarget::signalDragDropReceived(GtkWidget* /*pWidget*/, GdkDragContext * /*context*/, gint /*x*/, gint /*y*/, GtkSelectionData* data, guint /*ttype*/, guint /*time*/)
+void GtkInstDropTarget::signalDragDropReceived(GtkWidget* /*pWidget*/, GdkDragContext * /*context*/, gint /*x*/, gint /*y*/, GtkSelectionData* data, guint /*ttype*/, guint /*time*/)
 {
     /*
      * If we get a drop, then we will call like gtk_clipboard_wait_for_contents
@@ -3806,7 +3806,7 @@ gboolean GtkSalFrame::signalDragMotion(GtkWidget *pWidget, GdkDragContext *conte
 }
 
 
-gboolean GtkDropTarget::signalDragMotion(GtkWidget *pWidget, GdkDragContext *context, gint x, gint y, guint time)
+gboolean GtkInstDropTarget::signalDragMotion(GtkWidget *pWidget, GdkDragContext *context, gint x, gint y, guint time)
 {
     if (!m_bInDrag)
         gtk_drag_highlight(pWidget);
@@ -3824,7 +3824,7 @@ gboolean GtkDropTarget::signalDragMotion(GtkWidget *pWidget, GdkDragContext *con
     // tdf#124411 default to move if drag originates within LO itself, default
     // to copy if it comes from outside, this is similar to srcAndDestEqual
     // in macosx DropTarget::determineDropAction equivalent
-    sal_Int8 nNewDropAction = GtkDragSource::g_ActiveDragSource ?
+    sal_Int8 nNewDropAction = GtkInstDragSource::g_ActiveDragSource ?
                                 css::datatransfer::dnd::DNDConstants::ACTION_MOVE :
                                 css::datatransfer::dnd::DNDConstants::ACTION_COPY;
 
@@ -3861,8 +3861,8 @@ gboolean GtkDropTarget::signalDragMotion(GtkWidget *pWidget, GdkDragContext *con
         css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
         // For LibreOffice internal D&D we provide the Transferable without Gtk
         // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
-        if (GtkDragSource::g_ActiveDragSource)
-            xTransferable = GtkDragSource::g_ActiveDragSource->GetTransferrable();
+        if (GtkInstDragSource::g_ActiveDragSource)
+            xTransferable = GtkInstDragSource::g_ActiveDragSource->GetTransferrable();
         else
             xTransferable = new GtkDnDTransferable(context, time, pWidget, this);
         css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = xTransferable->getTransferDataFlavors();
@@ -3888,14 +3888,14 @@ void GtkSalFrame::signalDragLeave(GtkWidget *pWidget, GdkDragContext *context, g
 
 static gboolean lcl_deferred_dragExit(gpointer user_data)
 {
-    GtkDropTarget* pThis = static_cast<GtkDropTarget*>(user_data);
+    GtkInstDropTarget* pThis = static_cast<GtkInstDropTarget*>(user_data);
     css::datatransfer::dnd::DropTargetEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pThis);
     pThis->fire_dragExit(aEvent);
     return FALSE;
 }
 
-void GtkDropTarget::signalDragLeave(GtkWidget* pWidget, GdkDragContext* /*context*/, guint /*time*/)
+void GtkInstDropTarget::signalDragLeave(GtkWidget* pWidget, GdkDragContext* /*context*/, guint /*time*/)
 {
     m_bInDrag = false;
     gtk_drag_unhighlight(pWidget);
@@ -4534,14 +4534,14 @@ sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget) const
     return 0;
 }
 
-void GtkDragSource::set_datatransfer(const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
+void GtkInstDragSource::set_datatransfer(const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
                                      const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
 {
     m_xListener = rListener;
     m_xTrans = rTrans;
 }
 
-void GtkDragSource::setActiveDragSource()
+void GtkInstDragSource::setActiveDragSource()
 {
    // For LibreOffice internal D&D we provide the Transferable without Gtk
    // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
@@ -4550,12 +4550,12 @@ void GtkDragSource::setActiveDragSource()
    g_DropSuccess = false;
 }
 
-std::vector<GtkTargetEntry> GtkDragSource::FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
+std::vector<GtkTargetEntry> GtkInstDragSource::FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
 {
     return m_aConversionHelper.FormatsToGtk(rFormats);
 }
 
-void GtkDragSource::startDrag(const datatransfer::dnd::DragGestureEvent& rEvent,
+void GtkInstDragSource::startDrag(const datatransfer::dnd::DragGestureEvent& rEvent,
                               sal_Int8 sourceActions, sal_Int32 /*cursor*/, sal_Int32 /*image*/,
                               const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
                               const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
@@ -4620,7 +4620,7 @@ void GtkSalFrame::startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
         m_pDragSource->dragFailed();
 }
 
-void GtkDragSource::dragFailed()
+void GtkInstDragSource::dragFailed()
 {
     if (m_xListener.is())
     {
@@ -4642,7 +4642,7 @@ gboolean GtkSalFrame::signalDragFailed(GtkWidget* /*widget*/, GdkDragContext* /*
     return false;
 }
 
-void GtkDragSource::dragDelete()
+void GtkInstDragSource::dragDelete()
 {
     if (m_xListener.is())
     {
@@ -4663,7 +4663,7 @@ void GtkSalFrame::signalDragDelete(GtkWidget* /*widget*/, GdkDragContext* /*cont
     pThis->m_pDragSource->dragDelete();
 }
 
-void GtkDragSource::dragEnd(GdkDragContext* context)
+void GtkInstDragSource::dragEnd(GdkDragContext* context)
 {
     if (m_xListener.is())
     {
@@ -4690,7 +4690,7 @@ void GtkSalFrame::signalDragEnd(GtkWidget* /*widget*/, GdkDragContext* context, 
     pThis->m_pDragSource->dragEnd(context);
 }
 
-void GtkDragSource::dragDataGet(GtkSelectionData *data, guint info)
+void GtkInstDragSource::dragDataGet(GtkSelectionData *data, guint info)
 {
     m_aConversionHelper.setSelectionData(m_xTrans, data, info);
 }
