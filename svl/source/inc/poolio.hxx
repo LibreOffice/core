@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 #define INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 
+#include <rtl/ref.hxx>
 #include <svl/itempool.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <tools/debug.hxx>
@@ -151,12 +152,11 @@ struct SfxItemPool_Impl
 {
     SfxBroadcaster                  aBC;
     std::vector<SfxPoolItemArray_Impl> maPoolItemArrays;
-    std::vector<SfxItemPoolUser*>   maSfxItemPoolUsers; /// ObjectUser section
     OUString                        aName;
     std::vector<SfxPoolItem*>       maPoolDefaults;
     std::vector<SfxPoolItem*>*      mpStaticDefaults;
     SfxItemPool*                    mpMaster;
-    SfxItemPool*                    mpSecondary;
+    rtl::Reference<SfxItemPool>     mpSecondary;
     std::unique_ptr<sal_uInt16[]>   mpPoolRanges;
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
@@ -168,7 +168,6 @@ struct SfxItemPool_Impl
         , maPoolDefaults(nEnd - nStart + 1)
         , mpStaticDefaults(nullptr)
         , mpMaster(pMaster)
-        , mpSecondary(nullptr)
         , mnStart(nStart)
         , mnEnd(nEnd)
         , eDefMetric(MapUnit::MapCM)

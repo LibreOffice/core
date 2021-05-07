@@ -90,7 +90,7 @@ protected:
 
 protected:
     SdrModel* mpModel;
-    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> mpDefaultsPool;
+    rtl::Reference<SfxItemPool> mpDefaultsPool;
 };
 
 #endif

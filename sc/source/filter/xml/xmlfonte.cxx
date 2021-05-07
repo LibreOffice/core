@@ -36,7 +36,7 @@ class ScXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {
 private:
     // #i120077# remember owned pool
-    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter>  mpEditEnginePool;
+    rtl::Reference<SfxItemPool>  mpEditEnginePool;
 
     void AddFontItems(const sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const bool bExportDefaults);
 
@@ -101,7 +101,7 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
 
     // #i120077# remember the SfxItemPool in member variable before usage. The
     // local EditEngine will not take over ownership of the pool.
-    mpEditEnginePool.reset(EditEngine::CreatePool());
+    mpEditEnginePool = EditEngine::CreatePool();
     EditEngine aEditEngine(mpEditEnginePool.get());
 
     while (pStyle)

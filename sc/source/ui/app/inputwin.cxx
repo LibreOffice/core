@@ -1485,7 +1485,7 @@ void ScTextWnd::InitEditEngine()
         pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
     }
     else
-        pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
+        pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool().get(), nullptr, true);
     pNew->SetExecuteURL( false );
     m_xEditEngine = std::move(pNew);
 
@@ -1988,7 +1988,7 @@ void ScTextWnd::MakeDialogEditView()
         pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
     }
     else
-        pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
+        pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool().get(), nullptr, true);
     pNew->SetExecuteURL( false );
     m_xEditEngine = std::move(pNew);
 

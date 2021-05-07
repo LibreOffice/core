@@ -203,7 +203,7 @@ XOutdevItemPool::XOutdevItemPool(const XOutdevItemPool& rPool)
 {
 }
 
-SfxItemPool* XOutdevItemPool::Clone() const
+rtl::Reference<SfxItemPool> XOutdevItemPool::Clone() const
 {
     return new XOutdevItemPool(*this);
 }

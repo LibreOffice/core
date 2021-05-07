@@ -62,10 +62,10 @@ public:
         @param      _pTypeCollection        pointer to an <type>ODatasourceMap</type>. May be NULL, in this case
                                             the pool will not contain a typecollection default.
     */
-    static void createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection);
+    static void createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection);
     /** destroy and item set / item pool / pool defaults previously created by <method>createItemSet</method>
     */
-    static void destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults);
+    static void destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults);
 
     /** selects the DataSource
         @param  _rName

@@ -19,12 +19,14 @@
 
 #pragma once
 
+#include <rtl/ref.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <memory>
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 class SfxBroadcaster;
 struct SfxItemPool_Impl;
@@ -37,15 +39,6 @@ struct SfxItemInfo
 
 class SfxItemPool;
 
-class SVL_DLLPUBLIC SfxItemPoolUser
-{
-public:
-    virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool) = 0;
-
-protected:
-    ~SfxItemPoolUser() {}
-};
-
 /** Base class for providers of defaults of SfxPoolItems.
  *
  * The derived classes hold the concrete (const) instances which are referenced in several places
@@ -53,7 +46,7 @@ protected:
  * This helps to lower the amount of calls to lifecycle methods, speeds up comparisons within a document
  * and facilitates loading and saving of attributes.
  */
-class SVL_DLLPUBLIC SfxItemPool
+class SVL_DLLPUBLIC SfxItemPool : public salhelper::SimpleReferenceObject
 {
     friend struct SfxItemPool_Impl;
     friend class SfxItemSet;
@@ -61,10 +54,6 @@ class SVL_DLLPUBLIC SfxItemPool
 
     const SfxItemInfo*              pItemInfos;
     std::unique_ptr<SfxItemPool_Impl>               pImpl;
-
-public:
-    void AddSfxItemPoolUser(SfxItemPoolUser& rNewUser);
-    void RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser);
 
 private:
     sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
@@ -90,11 +79,8 @@ public:
                                                  const SfxItemInfo *pItemInfos,
                                                  std::vector<SfxPoolItem*> *pDefaults = nullptr );
 
-protected:
-    virtual                         ~SfxItemPool();
-
 public:
-    static void Free(SfxItemPool* pPool);
+    virtual                         ~SfxItemPool();
 
     SfxBroadcaster&                 BC();
 
@@ -113,6 +99,7 @@ public:
 
     virtual MapUnit                 GetMetric( sal_uInt16 nWhich ) const;
     void                            SetDefaultMetric( MapUnit eNewMetric );
+    MapUnit                         GetDefaultMetric() const;
 
     /** Request string representation of pool items.
 
@@ -144,7 +131,7 @@ public:
                                                      MapUnit ePresentationMetric,
                                                      OUString& rText,
                                                      const IntlWrapper& rIntlWrapper ) const;
-    virtual SfxItemPool*            Clone() const;
+    virtual rtl::Reference<SfxItemPool> Clone() const;
     const OUString&                 GetName() const;
 
     template<class T> const T&      Put( std::unique_ptr<T> xItem, sal_uInt16 nWhich = 0 )
@@ -233,15 +220,5 @@ inline sal_uInt32 SfxItemPool::ReleaseRef(const SfxPoolItem& rItem, sal_uInt32 n
 {
     return rItem.ReleaseRef(n);
 }
-
-// Utility class for using SfxItemPool with std::unique_ptr
-struct SfxItemPoolDeleter
-{
-    void operator()(SfxItemPool* pPool)
-    {
-        SfxItemPool::Free(pPool);
-    }
-};
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

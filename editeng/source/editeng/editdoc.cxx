@@ -1887,7 +1887,6 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
     bIsVertical(false),
     mnRotation(TextRotation::NONE),
     bIsFixedCellHeight(false),
-    bOwnerOfPool(pPool == nullptr),
     bModified(false),
     bDisableAttributeExpanding(false)
 {
@@ -1897,8 +1896,6 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
 EditDoc::~EditDoc()
 {
     ImplDestroyContents();
-    if ( bOwnerOfPool )
-        SfxItemPool::Free(pItemPool);
 }
 
 namespace {
@@ -3011,6 +3008,7 @@ EditEngineItemPool::EditEngineItemPool()
 EditEngineItemPool::~EditEngineItemPool()
 {
     ClearDefaults();
+    SetSecondaryPool(nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

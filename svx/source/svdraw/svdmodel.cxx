@@ -111,7 +111,7 @@ SdrModel::SdrModel(
     m_nUIUnitDecimalMark=0;
     m_pLayerAdmin=nullptr;
     m_pItemPool=pPool;
-    m_bMyPool=false;
+    m_bIsWriter=true;
     m_pEmbeddedHelper=_pEmbeddedHelper;
     m_pDrawOutliner=nullptr;
     m_pHitTestOutliner=nullptr;
@@ -154,11 +154,11 @@ SdrModel::SdrModel(
     {
         m_pItemPool=new SdrItemPool(nullptr);
         // Outliner doesn't have its own Pool, so use the EditEngine's
-        SfxItemPool* pOutlPool=EditEngine::CreatePool();
+        rtl::Reference<SfxItemPool> pOutlPool=EditEngine::CreatePool();
         // OutlinerPool as SecondaryPool of SdrPool
-        m_pItemPool->SetSecondaryPool(pOutlPool);
+        m_pItemPool->SetSecondaryPool(pOutlPool.get());
         // remember that I created both pools myself
-        m_bMyPool=true;
+        m_bIsWriter=false;
     }
     m_pItemPool->SetDefaultMetric(m_eObjUnit);
 
@@ -251,16 +251,6 @@ SdrModel::~SdrModel()
         {
         }
         mxStyleSheetPool.clear();
-    }
-
-    if (m_bMyPool)
-    {
-        // delete Pools if they're mine
-        SfxItemPool* pOutlPool=m_pItemPool->GetSecondaryPool();
-        SfxItemPool::Free(m_pItemPool);
-        // OutlinerPool has to be deleted after deleting ItemPool, because
-        // ItemPool contains SetItems that themselves reference Items from OutlinerPool.
-        SfxItemPool::Free(pOutlPool);
     }
 
     mpForbiddenCharactersTable.reset();
@@ -633,7 +623,7 @@ rtl::Reference<SdrPage> SdrModel::AllocPage(bool bMasterPage)
 
 void SdrModel::SetTextDefaults() const
 {
-    SetTextDefaults( m_pItemPool, mnDefTextHgt );
+    SetTextDefaults( m_pItemPool.get(), mnDefTextHgt );
 }
 
 void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
@@ -711,7 +701,7 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit )
     {
         pOutliner->EraseVirtualDevice();
         pOutliner->SetUpdateMode(false);
-        pOutliner->SetEditTextObjectPool(m_pItemPool);
+        pOutliner->SetEditTextObjectPool(m_pItemPool.get());
         pOutliner->SetDefTab(m_nDefaultTabulator);
     }
 

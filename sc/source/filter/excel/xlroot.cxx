@@ -372,7 +372,7 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
 {
     if( !mrData.mxHFEditEngine )
     {
-        mrData.mxHFEditEngine = std::make_shared<ScHeaderEditEngine>( EditEngine::CreatePool() );
+        mrData.mxHFEditEngine = std::make_shared<ScHeaderEditEngine>( EditEngine::CreatePool().get() );
         ScHeaderEditEngine& rEE = *mrData.mxHFEditEngine;
         rEE.SetRefMapMode(MapMode(MapUnit::MapTwip)); // headers/footers use twips as default metric
         rEE.SetUpdateMode( false );

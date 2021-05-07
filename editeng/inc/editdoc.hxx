@@ -720,7 +720,7 @@ private:
     mutable sal_Int32 nLastCache;
     std::vector<std::unique_ptr<ContentNode> > maContents;
 
-    SfxItemPool*    pItemPool;
+    rtl::Reference<SfxItemPool> pItemPool;
     Link<LinkParamNone*,void>      aModifyHdl;
 
     SvxFont         aDefFont;           //faster than ever from the pool!!
@@ -729,7 +729,6 @@ private:
     TextRotation    mnRotation;
     bool            bIsFixedCellHeight:1;
 
-    bool            bOwnerOfPool:1;
     bool            bModified:1;
     bool            bDisableAttributeExpanding:1;
 

@@ -40,7 +40,7 @@ ClassificationEditView::ClassificationEditView()
 
 void ClassificationEditView::makeEditEngine()
 {
-    m_xEditEngine.reset(new ClassificationEditEngine(EditEngine::CreatePool()));
+    m_xEditEngine.reset(new ClassificationEditEngine(EditEngine::CreatePool().get()));
 }
 
 ClassificationEditView::~ClassificationEditView()

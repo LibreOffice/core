@@ -122,10 +122,10 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    EditEngineItemPool* mpItemPool;
+    rtl::Reference<EditEngineItemPool> mpItemPool;
 };
 
-Test::Test() : mpItemPool(nullptr) {}
+Test::Test() {}
 
 void Test::setUp()
 {
@@ -138,7 +138,7 @@ void Test::setUp()
 
 void Test::tearDown()
 {
-    SfxItemPool::Free(mpItemPool);
+    mpItemPool.clear();
     test::BootstrapFixture::tearDown();
 }
 
@@ -146,7 +146,7 @@ void Test::tearDown()
 void Test::testLineSpacing()
 {
     // Create EditEngine's instance
-    EditEngine aEditEngine(mpItemPool);
+    EditEngine aEditEngine(mpItemPool.get());
 
     if(aEditEngine.GetRefDevice()->GetDPIY() != 96
         || aEditEngine.GetRefDevice()->GetDPIScaleFactor() != 1.0)
@@ -223,7 +223,7 @@ void Test::testLineSpacing()
 
 void Test::testConstruction()
 {
-    EditEngine aEngine(mpItemPool);
+    EditEngine aEngine(mpItemPool.get());
 
     aEngine.SetText("I am Edit Engine.");
 }
@@ -551,7 +551,7 @@ IMPL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
 void Test::testHyperlinkCopyPaste()
 {
     // Create Outliner instance
-    Outliner aOutliner(mpItemPool, OutlinerMode
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode
 ::TextObject);
     aOutliner.SetCalcFieldValueHdl( LINK( nullptr, Test, CalcFieldValueHdl ) );
 
@@ -675,7 +675,7 @@ void Test::testHyperlinkCopyPaste()
 void Test::testCopyPaste()
 {
     // Create EditEngine's instance
-    EditEngine aEditEngine( mpItemPool );
+    EditEngine aEditEngine( mpItemPool.get() );
 
     // Get EditDoc for current EditEngine's instance
     EditDoc &rDoc = aEditEngine.GetEditDoc();
@@ -707,7 +707,7 @@ void Test::testCopyPaste()
 void Test::testMultiParaSelCopyPaste()
 {
     // Create EditEngine's instance
-    EditEngine aEditEngine( mpItemPool );
+    EditEngine aEditEngine( mpItemPool.get() );
 
     // Get EditDoc for current EditEngine's instance
     EditDoc &rDoc = aEditEngine.GetEditDoc();
@@ -752,7 +752,7 @@ void Test::testMultiParaSelCopyPaste()
 void Test::testTabsCopyPaste()
 {
     // Create EditEngine's instance
-    EditEngine aEditEngine( mpItemPool );
+    EditEngine aEditEngine( mpItemPool.get() );
 
     // Get EditDoc for current EditEngine's instance
     EditDoc &rDoc = aEditEngine.GetEditDoc();
@@ -817,7 +817,7 @@ public:
 // https://bugzilla.novell.com/show_bug.cgi?id=467459
 void Test::testHyperlinkSearch()
 {
-    UrlEditEngine aEngine(mpItemPool);
+    UrlEditEngine aEngine(mpItemPool.get());
     EditDoc &rDoc = aEngine.GetEditDoc();
 
     OUString aSampleText = "Please write email to . if you find a fish(not a dog).";
@@ -902,7 +902,7 @@ bool hasItalic(const editeng::Section& rSecAttr)
 void Test::testBoldItalicCopyPaste()
 {
     // Create EditEngine's instance
-    EditEngine aEditEngine( mpItemPool );
+    EditEngine aEditEngine( mpItemPool.get() );
 
     // Get EditDoc for current EditEngine's instance
     EditDoc &rDoc = aEditEngine.GetEditDoc();
@@ -1083,7 +1083,7 @@ bool hasUnderline(const editeng::Section& rSecAttr)
 void Test::testUnderlineCopyPaste()
 {
     // Create EditEngine's instance
-    EditEngine aEditEngine( mpItemPool );
+    EditEngine aEditEngine( mpItemPool.get() );
 
     // Get EditDoc for current EditEngine's instance
     EditDoc &rDoc = aEditEngine.GetEditDoc();
@@ -1176,7 +1176,7 @@ void Test::testUnderlineCopyPaste()
 void Test::testMultiParaCopyPaste()
 {
     // Create EditEngine's instance
-    EditEngine aEditEngine( mpItemPool );
+    EditEngine aEditEngine( mpItemPool.get() );
 
     // Get EditDoc for current EditEngine's instance
     EditDoc &rDoc = aEditEngine.GetEditDoc();
@@ -1218,7 +1218,7 @@ void Test::testMultiParaCopyPaste()
 void Test::testParaBoldItalicCopyPaste()
 {
     // Create EditEngine's instance
-    EditEngine aEditEngine( mpItemPool );
+    EditEngine aEditEngine( mpItemPool.get()     );
 
     // Get EditDoc for current EditEngine's instance
     EditDoc &rDoc = aEditEngine.GetEditDoc();
@@ -1489,7 +1489,7 @@ void Test::testParaBoldItalicCopyPaste()
 void Test::testParaStartCopyPaste()
 {
     // Create EditEngine's instance
-    EditEngine aEditEngine( mpItemPool );
+    EditEngine aEditEngine( mpItemPool.get() );
 
     // Get EditDoc for current EditEngine's instance
     EditDoc &rDoc = aEditEngine.GetEditDoc();
@@ -1533,7 +1533,7 @@ void Test::testParaStartCopyPaste()
 
 void Test::testSectionAttributes()
 {
-    EditEngine aEngine(mpItemPool);
+    EditEngine aEngine(mpItemPool.get());
 
     std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEngine.GetEmptyItemSet()));
     SvxWeightItem aBold(WEIGHT_BOLD, EE_CHAR_WEIGHT);
@@ -1675,7 +1675,7 @@ void Test::testSectionAttributes()
 void Test::testLargeParaCopyPaste()
 {
     // Create EditEngine's instance
-    EditEngine aEditEngine( mpItemPool );
+    EditEngine aEditEngine( mpItemPool.get() );
 
     // Get EditDoc for current EditEngine's instance
     EditDoc &rDoc = aEditEngine.GetEditDoc();
@@ -1747,7 +1747,7 @@ void Test::testLargeParaCopyPaste()
 void Test::testTransliterate()
 {
     // Create EditEngine's instance
-    EditEngine aEditEngine( mpItemPool );
+    EditEngine aEditEngine( mpItemPool.get() );
 
     OUString sText("one (two) three");
     aEditEngine.SetText(sText);

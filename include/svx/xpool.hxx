@@ -39,7 +39,7 @@ public:
     XOutdevItemPool(SfxItemPool* pMaster);
     XOutdevItemPool(const XOutdevItemPool& rPool);
 
-    virtual SfxItemPool* Clone() const override;
+    virtual rtl::Reference<SfxItemPool> Clone() const override;
 
 protected:
     virtual ~XOutdevItemPool() override;

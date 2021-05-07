@@ -376,7 +376,7 @@ void ScDocumentPool::CellStyleCreated( std::u16string_view rName, const ScDocume
     }
 }
 
-SfxItemPool* ScDocumentPool::Clone() const
+rtl::Reference<SfxItemPool> ScDocumentPool::Clone() const
 {
     return new SfxItemPool (*this, true);
 }

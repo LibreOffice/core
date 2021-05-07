@@ -40,8 +40,8 @@ void PoolItemTest::testPool()
           { 4, false /* not poolable */}
         };
 
-    SfxItemPool *pPool = new SfxItemPool("testpool", 1, 4, aItems);
-    SfxItemPool_Impl *pImpl = SfxItemPool_Impl::GetImpl(pPool);
+    rtl::Reference<SfxItemPool> pPool = new SfxItemPool("testpool", 1, 4, aItems);
+    SfxItemPool_Impl *pImpl = SfxItemPool_Impl::GetImpl(pPool.get());
     CPPUNIT_ASSERT(pImpl != nullptr);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pImpl->maPoolItemArrays.size());
 
@@ -91,7 +91,6 @@ void PoolItemTest::testPool()
     pPool->Put(aNotherFour);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pImpl->maPoolItemArrays[3].size());
 
-    SfxItemPool::Free(pPool);
 }
 
 

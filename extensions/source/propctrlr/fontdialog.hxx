@@ -36,10 +36,10 @@ namespace pcr
         virtual ~ControlCharacterDialog() override;
 
         /// creates an item set to be used with this dialog
-        static void         createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults);
+        static void         createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults);
 
         /// destroys an item previously created with <method>createItemSet</method>
-        static void         destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults);
+        static void         destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults);
 
         /// fills the given item set with values obtained from the given property set
         static void         translatePropertiesToItems(

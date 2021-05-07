@@ -83,7 +83,7 @@ class IMapWindow final : public GraphCtrl
     ImageMap            aIMap;
     TargetList          aTargetList;
     Link<IMapWindow&,void> aInfoLink;
-    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> pIMapPool;
+    rtl::Reference<SfxItemPool> pIMapPool;
     SfxItemInfo         maItemInfos[1] = {};
     css::uno::Reference< css::frame::XFrame >
                         mxDocumentFrame;

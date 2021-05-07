@@ -816,9 +816,9 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
                 ResetEditMode();
             if (!mpEditEngine)
             {
-                SfxItemPool* pEnginePool = EditEngine::CreatePool();
+                rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
                 pEnginePool->FreezeIdRanges();
-                mpEditEngine = new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true);
+                mpEditEngine = new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true);
                 mbEditEngineCreated = true;
                 mpEditEngine->EnableUndo( false );
                 mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
@@ -1020,9 +1020,9 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         }
         else
         {
-            SfxItemPool* pEnginePool = EditEngine::CreatePool();
+            rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true) );
+            pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );
         }
         pEditEngine->EnableUndo( false );
         if (pDocShell)
@@ -1122,9 +1122,9 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
 {
     if (!mpEditEngine)
     {
-        SfxItemPool* pEnginePool = EditEngine::CreatePool();
+        rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
         pEnginePool->FreezeIdRanges();
-        std::unique_ptr<ScHeaderEditEngine> pHdrEngine(new ScHeaderEditEngine( pEnginePool ));
+        std::unique_ptr<ScHeaderEditEngine> pHdrEngine(new ScHeaderEditEngine( pEnginePool.get() ));
 
         pHdrEngine->EnableUndo( false );
         pHdrEngine->SetRefMapMode(MapMode(MapUnit::MapTwip));
@@ -1237,9 +1237,9 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         }
         else
         {
-            SfxItemPool* pEnginePool = EditEngine::CreatePool();
+            rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            mpEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true) );
+            mpEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );
         }
         mpEditEngine->EnableUndo( false );
         if (mpDocSh)

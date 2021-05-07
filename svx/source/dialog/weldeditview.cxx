@@ -105,7 +105,7 @@ WeldEditView::WeldEditView()
 // tdf#127033 want to use UI font so override makeEditEngine to enable that
 void WeldEditView::makeEditEngine()
 {
-    SfxItemPool* pItemPool = EditEngine::CreatePool();
+    rtl::Reference<SfxItemPool> pItemPool = EditEngine::CreatePool();
 
     vcl::Font aAppFont(Application::GetSettings().GetStyleSettings().GetAppFont());
 
@@ -126,7 +126,7 @@ void WeldEditView::makeEditEngine()
     pItemPool->SetPoolDefaultItem(
         SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT_CTL));
 
-    m_xEditEngine.reset(new EditEngine(pItemPool));
+    m_xEditEngine.reset(new EditEngine(pItemPool.get()));
 }
 
 void WeldEditView::Resize()
