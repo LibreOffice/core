@@ -866,7 +866,7 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
     m_xWidget->connect_custom_render(LINK(this, SvxStyleBox_Base, CustomRenderHdl));
     m_xWidget->set_custom_renderer(true);
 
-    m_xWidget->set_entry_width_chars(COMBO_WIDTH_IN_CHARS);
+    m_xWidget->set_entry_width_chars(COMBO_WIDTH_IN_CHARS + 3);
 }
 
 IMPL_LINK(SvxStyleBox_Base, CustomGetSizeHdl, OutputDevice&, rArg, Size)
@@ -1106,7 +1106,7 @@ void SvxStyleBox_Impl::SetOptimalSize()
     // set width in chars low so the size request will not be overridden
     m_xWidget->set_entry_width_chars(1);
     // tdf#132338 purely using this calculation to keep things their traditional width
-    Size aSize(LogicToPixel(Size(COMBO_WIDTH_IN_CHARS * 4, 0), MapMode(MapUnit::MapAppFont)));
+    Size aSize(LogicToPixel(Size((COMBO_WIDTH_IN_CHARS + 3) * 4, 0), MapMode(MapUnit::MapAppFont)));
     m_xWidget->set_size_request(aSize.Width(), -1);
 
     SetSizePixel(get_preferred_size());
@@ -1479,7 +1479,7 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
     m_xWidget->connect_focus_out(LINK(this, SvxFontNameBox_Base, FocusOutHdl));
     m_xWidget->connect_get_property_tree(LINK(this, SvxFontNameBox_Base, DumpAsPropertyTreeHdl));
 
-    m_xWidget->set_entry_width_chars(COMBO_WIDTH_IN_CHARS);
+    m_xWidget->set_entry_width_chars(COMBO_WIDTH_IN_CHARS + 5);
 }
 
 SvxFontNameBox_Impl::SvxFontNameBox_Impl(vcl::Window* pParent, const Reference<XDispatchProvider>& rDispatchProvider,
@@ -1614,7 +1614,7 @@ void SvxFontNameBox_Impl::SetOptimalSize()
     // set width in chars low so the size request will not be overridden
     m_xWidget->set_entry_width_chars(1);
     // tdf#132338 purely using this calculation to keep things their traditional width
-    Size aSize(LogicToPixel(Size(COMBO_WIDTH_IN_CHARS * 4, 0), MapMode(MapUnit::MapAppFont)));
+    Size aSize(LogicToPixel(Size((COMBO_WIDTH_IN_CHARS +5) * 4, 0), MapMode(MapUnit::MapAppFont)));
     m_xWidget->set_size_request(aSize.Width(), -1);
 
     SetSizePixel(get_preferred_size());
