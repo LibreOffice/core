@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "619cde18_b138efa5",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 4020,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-05-07T09:59:29Z",
+      "side": 1,
+      "message": "apparently the 3rd parameter must be an Executable, not a Package",
+      "revId": "156b59e0da2614933b61834c240f300d4c6a8a31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1344b30f_bbe9cf4d",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 4022,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-05-07T09:59:29Z",
+      "side": 1,
+      "message": "this should already add a dependency on the Package",
+      "revId": "156b59e0da2614933b61834c240f300d4c6a8a31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
