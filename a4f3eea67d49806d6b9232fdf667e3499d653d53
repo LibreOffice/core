@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47f5938f_65f16558",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2568,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-07T12:20:55Z",
+      "side": 1,
+      "message": "So this seems to be possible to simplify back to fSum*fSum?",
+      "range": {
+        "startLine": 2568,
+        "startChar": 31,
+        "endLine": 2568,
+        "endChar": 52
+      },
+      "revId": "a4f3eea67d49806d6b9232fdf667e3499d653d53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "706d4730_14a804be",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2630,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-07T12:20:55Z",
+      "side": 1,
+      "message": "std::abs((fSum1/fCount1 - fSum2/fCount2).get())",
+      "range": {
+        "startLine": 2630,
+        "startChar": 13,
+        "endLine": 2630,
+        "endChar": 64
+      },
+      "revId": "a4f3eea67d49806d6b9232fdf667e3499d653d53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd3050bd_e9a0c80c",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2704,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-07T12:20:55Z",
+      "side": 1,
+      "message": "fSumD*fSumD",
+      "range": {
+        "startLine": 2704,
+        "startChar": 46,
+        "endLine": 2704,
+        "endChar": 70
+      },
+      "revId": "a4f3eea67d49806d6b9232fdf667e3499d653d53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
