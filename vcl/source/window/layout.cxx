@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
@@ -262,6 +263,14 @@ void VclBox::setAllocation(const Size &rAllocation)
     {
         Size aRequisition = calculateRequisition();
         nExtraSpace = (getPrimaryDimension(rAllocation) - getPrimaryDimension(aRequisition)) / nExpandChildren;
+// In mobile, the screen size is small and extraSpace can become negative
+// Though the dialogs are rendered in javascript for LOK Android some widgets like weld::DrawingArea
+// is sent as bitmap but it is rendered from only the visible part
+// when it gets negative, it shrinks instead of expands and it becomes invisible
+#if HAVE_FEATURE_ANDROID_LOK
+        if (nExtraSpace < 0)
+            nExtraSpace = 0;
+#endif
     }
 
     //Split into those we pack from the start onwards, and those we pack from the end backwards
