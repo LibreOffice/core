@@ -363,7 +363,7 @@
       <value>https://hub.libreoffice.org/donation/</value>
     </prop>
     <prop oor:name="ReleaseNotesURL" oor:type="xs:string">
-      <value>https://www.collaboraoffice.com/collabora-office-2021-release-notes/</value>
+      <value>https://www.collaboraoffice.com/collabora-office-21.05-release-notes/</value>
     </prop>
     <prop oor:name="InstallJavaURL" oor:type="xs:string">
       <value>https://hub.libreoffice.org/InstallJava/</value>
