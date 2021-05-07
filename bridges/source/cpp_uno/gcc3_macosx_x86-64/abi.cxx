@@ -95,7 +95,7 @@ enum x86_64_reg_class
 
 static enum x86_64_reg_class
 merge_classes (enum x86_64_reg_class class1, enum x86_64_reg_class class2)
-    throw ()
+    noexcept
 {
     /* Rule #1: If both classes are equal, this is the resulting class.  */
     if (class1 == class2)
@@ -138,7 +138,7 @@ merge_classes (enum x86_64_reg_class class1, enum x86_64_reg_class class2)
    See the x86-64 PS ABI for details.
 */
 static int
-classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_class classes[], int byteOffset ) throw ()
+classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_class classes[], int byteOffset ) noexcept
 {
     switch ( pTypeRef->eTypeClass )
     {
@@ -257,7 +257,7 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
 
 /* Examine the argument and return set number of register required in each
    class.  Return 0 iff parameter should be passed in memory.  */
-bool x86_64::examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool bInReturn, int &nUsedGPR, int &nUsedSSE ) throw ()
+bool x86_64::examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool bInReturn, int &nUsedGPR, int &nUsedSSE ) noexcept
 {
     enum x86_64_reg_class classes[MAX_CLASSES];
     int n;
@@ -296,14 +296,14 @@ bool x86_64::examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool 
     return true;
 }
 
-bool x86_64::return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef ) throw ()
+bool x86_64::return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef ) noexcept
 {
     int g, s;
 
     return !examine_argument( pTypeRef, true, g, s );
 }
 
-void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64 *pGPR, const double *pSSE, void *pStruct ) throw ()
+void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64 *pGPR, const double *pSSE, void *pStruct ) noexcept
 {
     enum x86_64_reg_class classes[MAX_CLASSES];
     int n;

@@ -142,7 +142,7 @@ struct __cxa_eh_globals
 
 }
 
-extern "C" CPPU_CURRENT_NAMESPACE::__cxa_eh_globals *__cxa_get_globals () throw();
+extern "C" CPPU_CURRENT_NAMESPACE::__cxa_eh_globals *__cxa_get_globals () noexcept;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
