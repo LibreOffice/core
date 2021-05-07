@@ -95,6 +95,7 @@ bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
  * State conversion
  ************************************************************************/
+#if !GTK_CHECK_VERSION(4, 0, 0)
 static GtkStateFlags NWConvertVCLStateToGTKState(ControlState nVCLState)
 {
     GtkStateFlags nGTKState = GTK_STATE_FLAG_NORMAL;
@@ -220,29 +221,40 @@ tools::Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, tools::
 
     return partRect;
 }
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace
 {
     void QuerySize(GtkStyleContext *pContext, Size &rSize)
     {
         GtkBorder margin, border, padding;
-        GtkStateFlags stateflags = gtk_style_context_get_state (pContext);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        GtkStateFlags stateflags = gtk_style_context_get_state (pContext);
         gtk_style_context_get_margin(pContext, stateflags, &margin);
         gtk_style_context_get_border(pContext, stateflags, &border);
         gtk_style_context_get_padding(pContext, stateflags, &padding);
+#else
+        gtk_style_context_get_margin(pContext, &margin);
+        gtk_style_context_get_border(pContext, &border);
+        gtk_style_context_get_padding(pContext, &padding);
+#endif
 
-        int nMinWidth, nMinHeight;
+        int nMinWidth(0), nMinHeight(0);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_style_context_get(pContext, stateflags,
                 "min-width", &nMinWidth, "min-height", &nMinHeight, nullptr);
-
+#endif
         nMinWidth += margin.left + margin.right + border.left + border.right + padding.left + padding.right;
         nMinHeight += margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
 
         rSize = Size(std::max<tools::Long>(rSize.Width(), nMinWidth), std::max<tools::Long>(rSize.Height(), nMinHeight));
     }
 }
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 tools::Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, tools::Rectangle aAreaRect )
 {
     tools::Rectangle  buttonRect;
@@ -315,6 +327,7 @@ tools::Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, tools
 
     return buttonRect;
 }
+#endif
 
 static GtkWidget* gCacheWindow;
 static GtkWidget* gDumbContainer;
@@ -324,6 +337,7 @@ static GtkWidget* gComboBox;
 static GtkWidget* gListBox;
 static GtkWidget* gTreeViewWidget;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace
 {
     void style_context_set_state(GtkStyleContext* context, GtkStateFlags flags)
@@ -1002,6 +1016,7 @@ static GtkWidgetPath* buildRTLComboSiblingsPath()
     return pSiblingsPath;
 }
 
+
 GtkStyleContext* GtkSalGraphics::makeContext(GtkWidgetPath *pPath, GtkStyleContext *pParent)
 {
     GtkStyleContext* context = gtk_style_context_new();
@@ -1527,6 +1542,7 @@ namespace
         gtk_render_frame(context, cr, nX, nY, nWidth, nSeparatorHeight);
     }
 }
+#endif
 
 void GtkSalGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
 {
@@ -1535,6 +1551,7 @@ void GtkSalGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
     mpFrame->damaged(rDamagedRegion.Left(), rDamagedRegion.Top(), rDamagedRegion.GetWidth(), rDamagedRegion.GetHeight());
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                             ControlState nState, const ImplControlValue& rValue,
                                             const OUString&, const Color& rBackgroundColor)
@@ -2112,6 +2129,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
     return true;
 }
+
 /************************************************************************
  * helper for GtkSalFrame
  ************************************************************************/
@@ -2125,6 +2143,7 @@ static vcl::Font getFont(GtkStyleContext* pStyle, const css::lang::Locale& rLoca
     const PangoFontDescription* font = gtk_style_context_get_font(pStyle, gtk_style_context_get_state(pStyle));
     return pango_to_vcl(font, rLocale);
 }
+#endif
 
 vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale)
 {
@@ -2201,6 +2220,7 @@ vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale
 
 bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkWidget* pTopLevel = gtk_widget_get_toplevel(mpWindow);
     GtkStyleContext* pStyle = gtk_widget_get_style_context(pTopLevel);
     StyleContextSave aContextState;
@@ -2539,9 +2559,13 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     g_free(pThemeName);
 #endif
 
+#else
+    (void)rSettings;
+#endif
     return true;
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 bool GtkSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     switch(nType)
@@ -2647,9 +2671,9 @@ bool GtkSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
     }
 
     SAL_INFO("vcl.gtk", "Unhandled is native supported for Type:" << static_cast<int>(nType) << ", Part" << static_cast<int>(nPart));
-
     return false;
 }
+#endif
 
 #if ENABLE_CAIRO_CANVAS
 
@@ -2677,6 +2701,7 @@ void GtkSalGraphics::WidgetQueueDraw() const
     gtk_widget_queue_draw(pWidget);
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace {
 
 void getStyleContext(GtkStyleContext** style, GtkWidget* widget)
@@ -2687,6 +2712,7 @@ void getStyleContext(GtkStyleContext** style, GtkWidget* widget)
 }
 
 }
+#endif
 
 void GtkSalData::initNWF()
 {
@@ -2710,8 +2736,10 @@ void GtkSalData::initNWF()
 
 void GtkSalData::deInitNWF()
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     if (gCacheWindow)
         gtk_widget_destroy(gCacheWindow);
+#endif
 }
 
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
@@ -2719,6 +2747,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
       mpFrame( pFrame ),
       mpWindow( pWindow )
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     if (style_loaded)
         return;
 
@@ -2862,6 +2891,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpProgressBarProgressStyle = createStyleContext(GtkControlPart::ProgressBarProgress);
 
     gtk_widget_show_all(gDumbContainer);
+#endif
 }
 
 void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
@@ -2874,6 +2904,7 @@ void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
         return;
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkScreen* pScreen = gtk_widget_get_screen(mpWindow);
     double fResolution = -1.0;
     g_object_get(pScreen, "resolution", &fResolution, nullptr);
@@ -2882,6 +2913,9 @@ void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
         rDPIX = rDPIY = sal_Int32(fResolution);
     else
         rDPIX = rDPIY = 96;
+#else
+    rDPIX = rDPIY = 96;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

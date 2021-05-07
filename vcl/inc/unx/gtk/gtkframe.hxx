@@ -22,9 +22,10 @@
 
 #include <cairo.h>
 #include <gdk/gdk.h>
-#include <gdk/gdkx.h>
 #include <gtk/gtk.h>
+#if !GTK_CHECK_VERSION(4,0,0)
 #include <gtk/gtkx.h>
+#endif
 #include <gdk/gdkkeysyms.h>
 
 #include <salframe.hxx>
@@ -63,6 +64,7 @@ class GtkSalFrame final : public SalFrame
     struct IMHandler
     {
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         // Not all GTK Input Methods swallow key release
         // events.  Since they swallow the key press events and we
         // are left with the key release events, we need to
@@ -125,9 +127,12 @@ class GtkSalFrame final : public SalFrame
                     ;
             }
         };
+#endif
 
         GtkSalFrame*                    m_pFrame;
+#if !GTK_CHECK_VERSION(4, 0, 0)
         std::list< PreviousKeyPress >   m_aPrevKeyPresses;
+#endif
         int                             m_nPrevKeyPresses; // avoid using size()
         GtkIMContext*                   m_pIMContext;
         bool                            m_bFocused;
@@ -142,7 +147,9 @@ class GtkSalFrame final : public SalFrame
         void            deleteIMContext();
         void            updateIMSpotLocation();
         void            endExtTextInput( EndExtTextInputFlags nFlags );
+#if !GTK_CHECK_VERSION(4, 0, 0)
         bool            handleKeyEvent( GdkEventKey* pEvent );
+#endif
         void            focusChanged( bool bFocusIn );
 
         void            doCallEndExtTextInput();
@@ -163,16 +170,22 @@ class GtkSalFrame final : public SalFrame
     GtkWidget*                      m_pWindow;
     GtkHeaderBar*                   m_pHeaderBar;
     GtkGrid*                        m_pTopLevelGrid;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkEventBox*                    m_pEventBox;
+#endif
     GtkFixed*                       m_pFixedContainer;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
     GdkWindow*                      m_pForeignTopLevel;
     GdkNativeWindow                 m_aForeignTopLevelWindow;
+#endif
     SalFrameStyleFlags              m_nStyle;
     GtkSalFrame*                    m_pParent;
     std::list< GtkSalFrame* >       m_aChildren;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkWindowState                  m_nState;
+#endif
     SystemEnvData                   m_aSystemData;
     std::unique_ptr<GtkSalGraphics> m_pGraphics;
     bool                            m_bGraphics;
@@ -208,11 +221,13 @@ class GtkSalFrame final : public SalFrame
 
     GtkSalMenu*                     m_pSalMenu;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 #if ENABLE_DBUS && ENABLE_GIO
     private:
     friend void ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame);
     friend void on_registrar_available (GDBusConnection*, const gchar*, const gchar*, gpointer);
     friend void on_registrar_unavailable (GDBusConnection*, const gchar*, gpointer);
+#endif
 #endif
     guint                           m_nWatcherId;
 
@@ -221,6 +236,7 @@ class GtkSalFrame final : public SalFrame
     void InitCommon();
     void InvalidateGraphics();
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     // signals
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static void         signalStyleUpdated(GtkWidget*, gpointer);
@@ -258,6 +274,7 @@ class GtkSalFrame final : public SalFrame
     static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
     static void         signalDestroy( GtkWidget*, gpointer );
+#endif
 
     void            Center();
     void            SetDefaultSize();
@@ -271,7 +288,9 @@ class GtkSalFrame final : public SalFrame
                                    bool bSendRelease
                                    );
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static GdkNativeWindow findTopLevelSystemWindow( GdkNativeWindow aWindow );
+#endif
 
     static int m_nFloats;
 
@@ -338,7 +357,9 @@ public:
     static GdkDisplay*     getGdkDisplay();
     GtkWidget*  getWindow() const { return m_pWindow; }
     GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkEventBox* getEventBox() const { return m_pEventBox; }
+#endif
     GtkWidget*  getMouseEventWidget() const;
     GtkGrid*    getTopLevelGridWidget() const { return m_pTopLevelGrid; }
     const SalX11Screen& getXScreenNumber() const { return m_nXScreen; }
@@ -373,15 +394,19 @@ public:
         m_pDragSource = nullptr;
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     void startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
                    GdkDragAction sourceActions, GtkTargetList* pTargetList);
+#endif
 
     void closePopup();
 
     void addGrabLevel();
     void removeGrabLevel();
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     void nopaint_container_resize_children(GtkContainer*);
+#endif
 
     void LaunchAsyncScroll(GdkEvent const * pEvent);
     DECL_LINK(AsyncScroll, Timer *, void);
@@ -515,12 +540,16 @@ public:
     static void                 UpdateLastInputEventTime(guint32 nUserInputTime);
     static sal_uInt16           GetMouseModCode(guint nState);
     static sal_uInt16           GetKeyCode(guint nKeyVal);
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static guint                GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, guint8 group);
+#endif
     static sal_uInt16           GetKeyModCode(guint nState);
     static GdkEvent*            makeFakeKeyPress(GtkWidget* pWidget);
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static SalWheelMouseEvent   GetWheelEvent(const GdkEventScroll& rEvent);
     static gboolean             NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint,
         GdkModifierType, gpointer pFrame);
+#endif
     static OUString             GetPreeditDetails(GtkIMContext* pIMContext, std::vector<ExtTextInputAttr>& rInputFlags, sal_Int32& rCursorPos, sal_uInt8& rCursorFlags);
     static Selection            CalcDeleteSurroundingSelection(const OUString& rSurroundingText, sal_Int32 nCursorIndex, int nOffset, int nChars);
 
@@ -531,12 +560,14 @@ public:
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 extern "C" {
 
 GType ooo_fixed_get_type();
 AtkObject* ooo_fixed_get_accessible(GtkWidget *obj);
 
 } // extern "C"
+#endif
 
 #if !GTK_CHECK_VERSION(3, 22, 0)
 enum GdkAnchorHints

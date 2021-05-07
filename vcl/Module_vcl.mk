@@ -72,6 +72,11 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gtk3 \
 ))
 endif
+ifneq ($(ENABLE_GTK4),)
+$(eval $(call gb_Module_add_targets,vcl,\
+    Library_vclplug_gtk4 \
+))
+endif
 ifneq ($(ENABLE_KF5),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_kf5_moc \

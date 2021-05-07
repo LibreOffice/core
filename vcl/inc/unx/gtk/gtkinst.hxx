@@ -53,6 +53,11 @@ public:
 
 class GtkSalFrame;
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+gint gtk_dialog_run(GtkDialog *dialog);
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 struct VclToGtkHelper
 {
     std::vector<css::datatransfer::DataFlavor> aInfoToFlavor;
@@ -62,13 +67,16 @@ struct VclToGtkHelper
 private:
     GtkTargetEntry makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor);
 };
+#endif
 
 class GtkTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
 protected:
     std::map<OUString, GdkAtom> m_aMimeTypeToAtom;
 
     std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector(GdkAtom *targets, gint n_targets);
+#endif
 
 public:
     virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override = 0;
@@ -87,7 +95,9 @@ class GtkInstDropTarget final : public cppu::WeakComponentImplHelper<css::datatr
     GtkSalFrame* m_pFrame;
     GtkDnDTransferable* m_pFormatConversionRequest;
     bool m_bActive;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     bool m_bInDrag;
+#endif
     sal_Int8 m_nDefaultActions;
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
 public:
@@ -122,10 +132,12 @@ public:
         m_pFormatConversionRequest = pRequest;
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gboolean signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time);
     gboolean signalDragMotion(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time);
     void signalDragDropReceived(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, GtkSelectionData* data, guint ttype, guint time);
     void signalDragLeave(GtkWidget* pWidget, GdkDragContext* context, guint time);
+#endif
 };
 
 class GtkInstDragSource final : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
@@ -136,7 +148,9 @@ class GtkInstDragSource final : public cppu::WeakComponentImplHelper<css::datatr
     GtkSalFrame* m_pFrame;
     css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> m_xListener;
     css::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     VclToGtkHelper m_aConversionHelper;
+#endif
 public:
     GtkInstDragSource()
         : WeakComponentImplHelper(m_aMutex)
@@ -147,7 +161,9 @@ public:
     void set_datatransfer(const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
                           const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     std::vector<GtkTargetEntry> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
+#endif
 
     void setActiveDragSource();
 
@@ -173,8 +189,10 @@ public:
 
     void dragFailed();
     void dragDelete();
+#if !GTK_CHECK_VERSION(4, 0, 0)
     void dragEnd(GdkDragContext* context);
     void dragDataGet(GtkSelectionData *data, guint info);
+#endif
 
     // For LibreOffice internal D&D we provide the Transferable without Gtk
     // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
@@ -226,9 +244,11 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > CreateDragSource() override;
     virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget() override;
     virtual OpenGLContext* CreateOpenGLContext() override;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     virtual weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile) override;
     virtual weld::Builder* CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                                                 bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0) override;
+#endif
     virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonType, const OUString &rPrimaryMessage) override;
     virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow) override;
 
@@ -242,7 +262,9 @@ public:
 
 private:
     GtkSalTimer *m_pTimer;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     std::unordered_map< GdkAtom, css::uno::Reference<css::uno::XInterface> > m_aClipboards;
+#endif
     bool                        IsTimerExpired();
     bool                        bNeedsInit;
     cairo_font_options_t*       m_pLastCairoFontOptions;

@@ -49,8 +49,10 @@ SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< uno::XComponentCon
         getOKText().getStr(), GTK_RESPONSE_ACCEPT, nullptr );
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
+#if !GTK_CHECK_VERSION(4, 0, 0)
 #if ENABLE_GIO
     gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), false );
+#endif
 #endif
     gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), false );
 }
@@ -71,8 +73,13 @@ void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const OUString& aDirector
 
     SAL_INFO( "vcl", "setting path to " << aTxt );
 
-    gtk_file_chooser_set_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ),
-        aTxt.getStr() );
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GFile* pPath = g_file_new_for_uri(aTxt.getStr());
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_pDialog), pPath, nullptr);
+    g_object_unref(pPath);
+#else
+    gtk_file_chooser_set_current_folder_uri(GTK_FILE_CHOOSER(m_pDialog), aTxt.getStr());
+#endif
 }
 
 OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory()
@@ -81,8 +88,16 @@ OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory()
 
     assert( m_pDialog != nullptr );
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GFile* pPath =
+        gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(m_pDialog));
+    gchar* pCurrentFolder = g_file_get_uri(pPath);
+    g_object_unref(pPath);
+#else
     gchar* pCurrentFolder =
-        gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
+        gtk_file_chooser_get_current_folder_uri(GTK_FILE_CHOOSER(m_pDialog));
+#endif
+
     OUString aCurrentFolderName = uritounicode(pCurrentFolder);
     g_free( pCurrentFolder );
 
@@ -95,8 +110,15 @@ OUString SAL_CALL SalGtkFolderPicker::getDirectory()
 
     assert( m_pDialog != nullptr );
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GFile* pPath =
+        gtk_file_chooser_get_file(GTK_FILE_CHOOSER(m_pDialog));
+    gchar* pSelectedFolder = g_file_get_uri(pPath);
+    g_object_unref(pPath);
+#else
     gchar* pSelectedFolder =
         gtk_file_chooser_get_uri( GTK_FILE_CHOOSER( m_pDialog ) );
+#endif
     OUString aSelectedFolderName = uritounicode(pSelectedFolder);
     g_free( pSelectedFolder );
 

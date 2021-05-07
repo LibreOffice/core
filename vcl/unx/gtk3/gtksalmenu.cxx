@@ -398,6 +398,7 @@ void GtkSalMenu::Update()
     ImplUpdate(false, !bAlwaysShowDisabledEntries);
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 static void MenuPositionFunc(GtkMenu* menu, gint* x, gint* y, gboolean* push_in, gpointer user_data)
 {
     Point *pPos = static_cast<Point*>(user_data);
@@ -411,6 +412,7 @@ static void MenuPositionFunc(GtkMenu* menu, gint* x, gint* y, gboolean* push_in,
     *y = pPos->Y();
     *push_in = false;
 }
+#endif
 
 bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& rRect,
                                      FloatWinPopupFlags nFlags)
@@ -424,8 +426,13 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     // Generate the main menu structure, populates mpMenuModel
     UpdateFull();
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkWidget *pWidget = gtk_menu_new_from_model(mpMenuModel);
     gtk_menu_attach_to_widget(GTK_MENU(pWidget), mpFrame->getMouseEventWidget(), nullptr);
+#else
+    GtkWidget *pWidget = gtk_popover_menu_new_from_model(mpMenuModel);
+    gtk_widget_set_parent(pWidget, mpFrame->getMouseEventWidget());
+#endif
     gtk_widget_insert_action_group(mpFrame->getMouseEventWidget(), "win", mpActionGroup);
 
     //run in a sub main loop because we need to keep vcl PopupMenu alive to use
@@ -448,6 +455,12 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 #if GTK_CHECK_VERSION(3,22,0)
     if (gtk_check_version(3, 22, 0) == nullptr)
     {
+        tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
+        aFloatRect.Move(-mpFrame->maGeometry.nX, -mpFrame->maGeometry.nY);
+        GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
+                           static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GdkGravity rect_anchor = GDK_GRAVITY_SOUTH_WEST, menu_anchor = GDK_GRAVITY_NORTH_WEST;
 
         if (nFlags & FloatWinPopupFlags::Left)
@@ -465,17 +478,18 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
             rect_anchor = GDK_GRAVITY_NORTH_EAST;
         }
 
-        tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
-        aFloatRect.Move(-mpFrame->maGeometry.nX, -mpFrame->maGeometry.nY);
-        GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
-                           static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
-
         GdkWindow* gdkWindow = gtk_widget_get_window(mpFrame->getMouseEventWidget());
         gtk_menu_popup_at_rect(GTK_MENU(pWidget), gdkWindow, &rect, rect_anchor, menu_anchor, nullptr);
+#else
+        gtk_popover_set_pointing_to(GTK_POPOVER(pWidget), &rect);
+        (void)nFlags;
+        //TODO use gtk_popover_set_position
+#endif
     }
     else
 #endif
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         guint nButton;
         guint32 nTime;
 
@@ -502,13 +516,18 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 
         gtk_menu_popup(GTK_MENU(pWidget), nullptr, nullptr, MenuPositionFunc,
                        &aPos, nButton, nTime);
+#endif
     }
 
     if (g_main_loop_is_running(pLoop))
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gdk_threads_leave();
+#endif
         g_main_loop_run(pLoop);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gdk_threads_enter();
+#endif
     }
     g_main_loop_unref(pLoop);
 
@@ -516,7 +535,11 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 
     gtk_widget_insert_action_group(mpFrame->getMouseEventWidget(), "win", nullptr);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_widget_destroy(pWidget);
+#else
+    g_clear_pointer(&pWidget, gtk_widget_unparent);
+#endif
 
     g_object_unref(mpActionGroup);
     ClearActionGroupAndMenuModel();
@@ -670,8 +693,14 @@ GtkWidget* GtkSalMenu::AddButton(GtkWidget *pImage)
 {
     GtkWidget* pButton = gtk_button_new();
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_button_set_relief(GTK_BUTTON(pButton), GTK_RELIEF_NONE);
     gtk_button_set_focus_on_click(GTK_BUTTON(pButton), false);
+#else
+    gtk_button_set_has_frame(GTK_BUTTON(pButton), false);
+    gtk_widget_set_focus_on_click(pButton, false);
+#endif
+
     gtk_widget_set_can_focus(pButton, false);
 
     GtkStyleContext *pButtonContext = gtk_widget_get_style_context(GTK_WIDGET(pButton));
@@ -683,8 +712,12 @@ GtkWidget* GtkSalMenu::AddButton(GtkWidget *pImage)
 
     gtk_widget_set_valign(pButton, GTK_ALIGN_CENTER);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_container_add(GTK_CONTAINER(pButton), pImage);
     gtk_widget_show_all(pButton);
+#else
+    gtk_button_set_child(GTK_BUTTON(pButton), pImage);
+#endif
     return pButton;
 }
 
@@ -698,7 +731,11 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
     {
         if (mpCloseButton)
         {
+#if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_widget_destroy(mpCloseButton);
+#else
+            g_clear_pointer(&mpCloseButton, gtk_widget_unparent);
+#endif
             mpCloseButton = nullptr;
         }
         return;
@@ -708,7 +745,11 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
         return;
 
     GIcon* pIcon = g_themed_icon_new_with_default_fallbacks("window-close-symbolic");
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkWidget* pImage = gtk_image_new_from_gicon(pIcon, GTK_ICON_SIZE_MENU);
+#else
+    GtkWidget* pImage = gtk_image_new_from_gicon(pIcon);
+#endif
     g_object_unref(pIcon);
 
     mpCloseButton = AddButton(pImage);
@@ -735,7 +776,11 @@ namespace
 
 static void MenuButtonClicked(GtkWidget* pWidget, gpointer pMenu)
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
+#else
+    const char* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pWidget));
+#endif
     OString aId(pStr, pStr ? strlen(pStr) : 0);
     static_cast<MenuBar*>(pMenu)->HandleMenuButtonEvent(aId.toUInt32());
 }
@@ -761,7 +806,11 @@ bool GtkSalMenu::AddMenuBarButton(const SalMenuButtonItem& rNewItem)
                                                     pMemStm);
 
         GIcon *pIcon = g_bytes_icon_new(pBytes);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         pImage = gtk_image_new_from_gicon(pIcon, GTK_ICON_SIZE_MENU);
+#else
+        pImage = gtk_image_new_from_gicon(pIcon);
+#endif
         g_object_unref(pIcon);
     }
 
@@ -769,7 +818,9 @@ bool GtkSalMenu::AddMenuBarButton(const SalMenuButtonItem& rNewItem)
 
     maExtraButtons.emplace_back(rNewItem.mnId, pButton);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_buildable_set_name(GTK_BUILDABLE(pButton), OString::number(rNewItem.mnId).getStr());
+#endif
 
     gtk_widget_set_tooltip_text(pButton, rNewItem.maToolTipText.toUtf8().getStr());
 
@@ -795,8 +846,13 @@ void GtkSalMenu::RemoveMenuBarButton( sal_uInt16 nId )
     if (it != maExtraButtons.end())
     {
         gint nAttach(0);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_child_get(GTK_CONTAINER(mpMenuBarContainerWidget), it->second, "left-attach", &nAttach, nullptr);
         gtk_widget_destroy(it->second);
+#else
+        gtk_grid_query_child(GTK_GRID(mpMenuBarContainerWidget), it->second, &nAttach, nullptr, nullptr, nullptr);
+        g_clear_pointer(&(it->second), gtk_widget_unparent);
+#endif
         gtk_grid_remove_column(GTK_GRID(mpMenuBarContainerWidget), nAttach);
         maExtraButtons.erase(it);
     }
@@ -816,7 +872,11 @@ tools::Rectangle GtkSalMenu::GetMenuBarButtonRectPixel(sal_uInt16 nId, SalFrame*
 
     GtkSalFrame* pFrame = static_cast<GtkSalFrame*>(pReferenceFrame);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     int x, y;
+#else
+    double x, y;
+#endif
     if (!gtk_widget_translate_coordinates(pButton, GTK_WIDGET(pFrame->getMouseEventWidget()), 0, 0, &x, &y))
         return tools::Rectangle();
 
@@ -836,16 +896,19 @@ void GtkSalMenu::ReturnFocus()
 {
     if (mbAddedGrab)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_grab_remove(mpMenuBarWidget);
+#endif
         mbAddedGrab = false;
     }
     if (!mbReturnFocusToDocument)
-        gtk_widget_grab_focus(GTK_WIDGET(mpFrame->getEventBox()));
+        gtk_widget_grab_focus(mpFrame->getMouseEventWidget());
     else
         mpFrame->GetWindow()->GrabFocusToDocument();
     mbReturnFocusToDocument = false;
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalMenu::SignalKey(GdkEventKey const * pEvent)
 {
     if (pEvent->keyval == GDK_KEY_F6)
@@ -859,8 +922,9 @@ gboolean GtkSalMenu::SignalKey(GdkEventKey const * pEvent)
     }
     return false;
 }
+#endif
 
-//The GtkSalMenu is owner by a Vcl Menu/MenuBar. In the menubar
+//The GtkSalMenu is owned by a Vcl Menu/MenuBar. In the menubar
 //case the vcl menubar is present and "visible", but with a 0 height
 //so it not apparent. Normally it acts as though it is not there when
 //a Native menubar is active. If we return true here, then for keyboard
@@ -877,6 +941,7 @@ bool GtkSalMenu::TakeFocus()
     if (!mpMenuBarWidget)
         return false;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     //Send a keyboard event to the gtk menubar to let it know it has been
     //activated via the keyboard. Doesn't do anything except cause the gtk
     //menubar "keyboard_mode" member to get set to true, so typically mnemonics
@@ -889,13 +954,16 @@ bool GtkSalMenu::TakeFocus()
     //this pairing results in a menubar with keyboard focus with no menus
     //auto-popped down
     gtk_grab_add(mpMenuBarWidget);
+
     mbAddedGrab = true;
     gtk_menu_shell_select_first(GTK_MENU_SHELL(mpMenuBarWidget), false);
     gtk_menu_shell_deselect(GTK_MENU_SHELL(mpMenuBarWidget));
+#endif
     mbReturnFocusToDocument = true;
     return true;
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 static void MenuBarReturnFocus(GtkMenuShell*, gpointer menu)
 {
     GtkSalFrame::UpdateLastInputEventTime(gtk_get_current_event_time());
@@ -908,6 +976,7 @@ static gboolean MenuBarSignalKey(GtkWidget*, GdkEventKey* pEvent, gpointer menu)
     GtkSalMenu* pMenu = static_cast<GtkSalMenu*>(menu);
     return pMenu->SignalKey(pEvent);
 }
+#endif
 
 void GtkSalMenu::CreateMenuBarWidget()
 {
@@ -921,10 +990,15 @@ void GtkSalMenu::CreateMenuBarWidget()
     gtk_grid_insert_row(pGrid, 0);
     gtk_grid_attach(pGrid, mpMenuBarContainerWidget, 0, 0, 1, 1);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     mpMenuAllowShrinkWidget = gtk_scrolled_window_new(nullptr, nullptr);
+    gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(mpMenuAllowShrinkWidget), GTK_SHADOW_NONE);
+#else
+    mpMenuAllowShrinkWidget = gtk_scrolled_window_new();
+    gtk_scrolled_window_set_has_frame(GTK_SCROLLED_WINDOW(mpMenuAllowShrinkWidget), false);
+#endif
     // tdf#129634 don't allow this scrolled window as a candidate to tab into
     gtk_widget_set_can_focus(GTK_WIDGET(mpMenuAllowShrinkWidget), false);
-    gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(mpMenuAllowShrinkWidget), GTK_SHADOW_NONE);
     // tdf#116290 external policy on scrolledwindow will not show a scrollbar,
     // but still allow scrolled window to not be sized to the child content.
     // So the menubar can be shrunk past its nominal smallest width.
@@ -932,17 +1006,31 @@ void GtkSalMenu::CreateMenuBarWidget()
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(mpMenuAllowShrinkWidget), GTK_POLICY_EXTERNAL, GTK_POLICY_NEVER);
     gtk_grid_attach(GTK_GRID(mpMenuBarContainerWidget), mpMenuAllowShrinkWidget, 0, 0, 1, 1);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     mpMenuBarWidget = gtk_menu_bar_new_from_model(mpMenuModel);
+#else
+    mpMenuBarWidget = gtk_popover_menu_bar_new_from_model(mpMenuModel);
+#endif
 
     gtk_widget_insert_action_group(mpMenuBarWidget, "win", mpActionGroup);
     gtk_widget_set_hexpand(GTK_WIDGET(mpMenuBarWidget), true);
     gtk_widget_set_hexpand(mpMenuAllowShrinkWidget, true);
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_container_add(GTK_CONTAINER(mpMenuAllowShrinkWidget), mpMenuBarWidget);
+#else
+    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(mpMenuAllowShrinkWidget), mpMenuBarWidget);
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     g_signal_connect(G_OBJECT(mpMenuBarWidget), "deactivate", G_CALLBACK(MenuBarReturnFocus), this);
     g_signal_connect(G_OBJECT(mpMenuBarWidget), "key-press-event", G_CALLBACK(MenuBarSignalKey), this);
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_widget_show_all(mpMenuBarContainerWidget);
+#else
+    gtk_widget_show(mpMenuBarContainerWidget);
+#endif
 
     ShowCloseButton( static_cast<MenuBar*>(mpVCLMenu.get())->HasCloseButton() );
 
@@ -986,7 +1074,11 @@ void GtkSalMenu::ApplyPersona()
         mpMenuBarContainerProvider = gtk_css_provider_new();
         OUString aBuffer = "* { background-image: url(\"" + mxPersonaImage->GetURL() + "\"); background-position: top right; }";
         OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_css_provider_load_from_data(mpMenuBarContainerProvider, aResult.getStr(), aResult.getLength(), nullptr);
+#else
+        gtk_css_provider_load_from_data(mpMenuBarContainerProvider, aResult.getStr(), aResult.getLength());
+#endif
         gtk_style_context_add_provider(pMenuBarContainerContext, GTK_STYLE_PROVIDER(mpMenuBarContainerProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
@@ -998,7 +1090,11 @@ void GtkSalMenu::ApplyPersona()
           "background-image: none;"
           "background-color: transparent;"
           "}";
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_css_provider_load_from_data(mpMenuBarProvider, data, -1, nullptr);
+#else
+        gtk_css_provider_load_from_data(mpMenuBarProvider, data, -1);
+#endif
         gtk_style_context_add_provider(pMenuBarContext,
                                        GTK_STYLE_PROVIDER(mpMenuBarProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -1010,11 +1106,15 @@ void GtkSalMenu::DestroyMenuBarWidget()
 {
     if (mpMenuBarContainerWidget)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         // tdf#140225 call cancel before destroying it in case there are some
         // active menus popped open
         gtk_menu_shell_cancel(GTK_MENU_SHELL(mpMenuBarWidget));
 
         gtk_widget_destroy(mpMenuBarContainerWidget);
+#else
+        g_clear_pointer(&mpMenuBarContainerWidget, gtk_widget_unparent);
+#endif
         mpMenuBarContainerWidget = nullptr;
         mpCloseButton = nullptr;
     }
@@ -1033,6 +1133,7 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
     mpFrame->SetMenu( this );
     mpFrame->EnsureAppMenuWatch();
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     // Clean menu model and action group if needed.
     GtkWidget* pWidget = mpFrame->getWindow();
     GdkWindow* gdkWindow = gtk_widget_get_window( pWidget );
@@ -1066,6 +1167,7 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
         DestroyMenuBarWidget();
         CreateMenuBarWidget();
     }
+#endif
 }
 
 const GtkSalFrame* GtkSalMenu::GetFrame() const
@@ -1310,6 +1412,7 @@ void GtkSalMenu::DispatchCommand(const gchar *pCommand)
     GtkSalMenu* pTopLevel = pSalSubMenu->GetTopLevel();
     if (pTopLevel->mpMenuBarWidget)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         // tdf#125803 spacebar will toggle radios and checkbuttons without automatically
         // closing the menu. To handle this properly I imagine we need to set groups for the
         // radiobuttons so the others visually untoggle when the active one is toggled and
@@ -1318,6 +1421,7 @@ void GtkSalMenu::DispatchCommand(const gchar *pCommand)
         // or we could unconditionally deactivate the menus if regardless of what particular
         // type of menu item got activated
         gtk_menu_shell_deactivate(GTK_MENU_SHELL(pTopLevel->mpMenuBarWidget));
+#endif
     }
     pTopLevel->GetMenu()->HandleMenuCommandEvent(pSalSubMenu->GetMenu(), aMenuAndId.second);
 }

@@ -12,11 +12,19 @@
 
 #include <gtk/gtk.h>
 #if defined(GDK_WINDOWING_X11)
+#if GTK_CHECK_VERSION(4, 0, 0)
+#include <gdk/x11/gdkx.h>
+#else
 #include <gdk/gdkx.h>
+#endif
 bool DLSYM_GDK_IS_X11_DISPLAY(GdkDisplay* pDisplay);
 #endif
 #if defined(GDK_WINDOWING_WAYLAND)
+#if GTK_CHECK_VERSION(4, 0, 0)
+#include <gdk/wayland/gdkwayland.h>
+#else
 #include <gdk/gdkwayland.h>
+#endif
 bool DLSYM_GDK_IS_WAYLAND_DISPLAY(GdkDisplay* pDisplay);
 #endif
 

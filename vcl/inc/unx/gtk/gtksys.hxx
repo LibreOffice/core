@@ -17,8 +17,10 @@
 class GtkSalSystem final : public SalGenericSystem
 {
     GdkDisplay *mpDisplay;
+#if !GTK_CHECK_VERSION(4,0,0)
     // Number of monitors for every active screen.
     std::deque<std::pair<GdkScreen*, int> > maScreenMonitors;
+#endif
 public:
              GtkSalSystem();
     virtual ~GtkSalSystem() override;
@@ -35,10 +37,12 @@ public:
             { return getXScreenFromDisplayScreen( GetDisplayBuiltInScreen() ); }
     SalX11Screen      getXScreenFromDisplayScreen(unsigned int nDisplayScreen);
     void              countScreenMonitors();
+#if !GTK_CHECK_VERSION(4,0,0)
     // We have a 'screen' number that is combined from screen-idx + monitor-idx
     int        getScreenIdxFromPtr     (GdkScreen *pScreen);
     int        getScreenMonitorIdx     (GdkScreen *pScreen, int nX, int nY);
     GdkScreen *getScreenMonitorFromIdx (int nIdx, gint &nMonitor);
+#endif
 };
 
 #endif // INCLUDED_VCL_INC_UNX_GTK_GTKSYS_HXX
