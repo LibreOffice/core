@@ -184,6 +184,8 @@ public:
     bool                            IsInRange( sal_uInt16 nWhich ) const;
     void                            SetSecondaryPool( SfxItemPool *pPool );
     SfxItemPool*                    GetSecondaryPool() const;
+    /* get the last pool by following the GetSecondaryPool chain */
+    SfxItemPool*                    GetLastPoolInChain();
     SfxItemPool*                    GetMasterPool() const;
     void                            FreezeIdRanges();
 

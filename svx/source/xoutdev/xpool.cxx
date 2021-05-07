@@ -88,14 +88,7 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     }
     else
     {
-        SfxItemPool* pParent = _pMaster;
-
-        while(pParent->GetSecondaryPool())
-        {
-            pParent = pParent->GetSecondaryPool();
-        }
-
-        pParent->SetSecondaryPool(this);
+        _pMaster->GetLastPoolInChain()->SetSecondaryPool(this);
     }
 
     // prepare PoolDefaults
