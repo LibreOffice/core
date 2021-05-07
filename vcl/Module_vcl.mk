@@ -197,7 +197,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
     CppunitTest_vcl_font \
     CppunitTest_vcl_fontfeature \
     CppunitTest_vcl_fontmetric \
-    CppunitTest_vcl_complextext \
+    CppunitTest_vcl_text \
     CppunitTest_vcl_filters_test \
     CppunitTest_vcl_mnemonic \
     CppunitTest_vcl_outdev \
