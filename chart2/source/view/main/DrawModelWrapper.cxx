@@ -62,17 +62,8 @@ DrawModelWrapper::DrawModelWrapper()
     pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, true) );
     pMasterPool->SetPoolDefaultItem(makeSvx3DPercentDiagonalItem (5));
 
-    SfxItemPool* pPool = pMasterPool;
     // append chart pool to end of pool chain
-    for (;;)
-    {
-        SfxItemPool* pSecondary = pPool->GetSecondaryPool();
-        if (!pSecondary)
-            break;
-
-        pPool = pSecondary;
-    }
-    pPool->SetSecondaryPool(m_pChartItemPool);
+    pMasterPool->GetLastPoolInChain()->SetSecondaryPool(m_pChartItemPool);
     pMasterPool->FreezeIdRanges();
     SetTextDefaults();
 

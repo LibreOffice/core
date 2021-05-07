@@ -773,6 +773,15 @@ SfxItemPool* SfxItemPool::GetSecondaryPool() const
     return pImpl->mpSecondary;
 }
 
+/* get the last pool by following the GetSecondaryPool chain */
+SfxItemPool* SfxItemPool::GetLastPoolInChain()
+{
+    SfxItemPool* pLast = this;
+    while(pLast->GetSecondaryPool())
+        pLast = pLast->GetSecondaryPool();
+    return pLast;
+}
+
 SfxItemPool* SfxItemPool::GetMasterPool() const
 {
     return pImpl->mpMaster;
