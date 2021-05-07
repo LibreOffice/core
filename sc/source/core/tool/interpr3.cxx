@@ -2565,7 +2565,7 @@ void ScInterpreter::ScZTest()
 
         if (nParamCount != 3)
         {
-            sigma = (fSumSqr - fSum.get()*fSum.get()/rValCount).get()/(rValCount-1.0);
+            sigma = (fSumSqr - fSum*fSum/rValCount).get()/(rValCount-1.0);
             if (sigma == 0.0)
             {
                 PushError(FormulaError::DivisionByZero);
@@ -2701,7 +2701,7 @@ void ScInterpreter::ScTTest()
             return;
         }
         KahanSum fSumD = fSum1 - fSum2;
-        double fDivider = ( fSumSqrD*fCount - fSumD.get()*fSumD.get() ).get();
+        double fDivider = ( fSumSqrD*fCount - fSumD*fSumD ).get();
         if ( fDivider == 0.0 )
         {
             PushError(FormulaError::DivisionByZero);
@@ -4609,8 +4609,8 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
                 || (!_bStexy && fSumSqrDeltaY < ::std::numeric_limits<double>::min()))
                 PushError( FormulaError::DivisionByZero);
             else if ( _bStexy )
-                PushDouble( sqrt( ( fSumSqrDeltaY - fSumDeltaXDeltaY.get() *
-                            fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get() ).get() / (fCount-2)));
+                PushDouble( sqrt( ( fSumSqrDeltaY - fSumDeltaXDeltaY *
+                            fSumDeltaXDeltaY / fSumSqrDeltaX ).get() / (fCount-2)));
             else
                 PushDouble( fSumDeltaXDeltaY.get() / sqrt( fSumSqrDeltaX.get() * fSumSqrDeltaY.get() ));
         }
