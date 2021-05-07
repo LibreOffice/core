@@ -32,7 +32,7 @@ public:
         if (strstr(compiler.getSourceManager().getFileEntryForID(mainFileID)->getName(), "bootstrapfixture.cxx") != 0) {
             return;
         }
-        if (strstr(compiler.getSourceManager().getFileEntryForID(mainFileID)->getName(), "gtk3gtkinst.cxx") != 0) {
+        if (strstr(compiler.getSourceManager().getFileEntryForID(mainFileID)->getName(), "gtkinst.cxx") != 0) {
             return;
         }*/
 

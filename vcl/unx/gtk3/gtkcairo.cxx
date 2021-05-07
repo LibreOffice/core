@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "cairo_gtk3_cairo.hxx"
+#include "gtkcairo.hxx"
 
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>

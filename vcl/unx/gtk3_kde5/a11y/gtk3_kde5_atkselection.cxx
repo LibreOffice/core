@@ -7,6 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "../../gtk3/a11y/gtk3atkselection.cxx"
+#include "../../gtk3/a11y/atkselection.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

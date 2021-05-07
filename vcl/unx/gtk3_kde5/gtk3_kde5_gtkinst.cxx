@@ -19,7 +19,7 @@
 
 // make gtk3 plug advertise correctly as kde5 hybrid
 #define GTK_TOOLKIT_NAME "gtk3_kde5"
-#include "../gtk3/gtk3gtkinst.cxx"
+#include "../gtk3/gtkinst.cxx"
 
 #include "gtk3_kde5_filepicker.hxx"
 #include "gtk3_kde5_folderpicker.hxx"
