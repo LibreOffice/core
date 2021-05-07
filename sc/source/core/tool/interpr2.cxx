@@ -1735,7 +1735,7 @@ void ScInterpreter::ScDB()
             fSumOffRate += fDb;
         }
         if (fPeriod > fLife)
-            fDb = (-(fSumOffRate - fCost).get() * fOffRate * (12.0 - fMonths)) / 12.0;
+            fDb = -(fSumOffRate - fCost).get() * fOffRate * (12.0 - fMonths) / 12.0;
     }
     PushDouble(fDb);
 }
