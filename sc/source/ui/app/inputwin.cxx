@@ -44,6 +44,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
+#include <vcl/virdev.hxx>
 #include <unotools/charclass.hxx>
 
 #include <inputwin.hxx>
@@ -1290,7 +1291,27 @@ void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
         }
     }
 
-    WeldEditView::Paint(rRenderContext, rRect);
+    if (comphelper::LibreOfficeKit::isActive() && m_xEditEngine)
+    {
+        // in LOK somehow text is rendered very overscaled so render the original content first
+        // on a virtual device then redraw with correct scale to the target device
+
+        ScopedVclPtrInstance<VirtualDevice> pDevice;
+
+        tools::Long aPaperWidth = m_xEditEngine->GetPaperSize().getWidth();
+        double fRatio = static_cast<double>(rRect.GetSize().getHeight()) / rRect.GetSize().getWidth();
+
+        tools::Rectangle aPaperRect(Point(0, 0), Size(aPaperWidth, aPaperWidth * fRatio));
+        aPaperRect = pDevice->PixelToLogic(aPaperRect);
+
+        pDevice->SetOutputSize(aPaperRect.GetSize());
+
+        WeldEditView::Paint(*pDevice, aPaperRect);
+
+        rRenderContext.DrawOutDev(rRect.TopLeft(), rRect.GetSize(), Point(0,0), aPaperRect.GetSize(), *pDevice);
+    }
+    else
+        WeldEditView::Paint(rRenderContext, rRect);
 }
 
 EditView* ScTextWnd::GetEditView()
