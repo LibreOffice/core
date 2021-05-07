@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76a322ae_ce1ad9d7",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1819,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-07T18:09:33Z",
+      "side": 1,
+      "message": "Making fSummand a KahanSum seems to be unnecessary, there\u0027s no addition or subtraction on it.",
+      "range": {
+        "startLine": 1819,
+        "startChar": 16,
+        "endLine": 1819,
+        "endChar": 33
+      },
+      "revId": "62507aef393a5a73e7995f9fca96ebac1123906e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e042ead7_4ff7599f",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2703,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-07T18:09:33Z",
+      "side": 1,
+      "message": "Does a KahanSum for fSumD make sense here? It\u0027s only one subtraction that then is multiplied with itself.",
+      "range": {
+        "startLine": 2703,
+        "startChar": 8,
+        "endLine": 2703,
+        "endChar": 22
+      },
+      "revId": "62507aef393a5a73e7995f9fca96ebac1123906e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
