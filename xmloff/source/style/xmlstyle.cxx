@@ -423,7 +423,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
         case XmlStyleFamily::TEXT_RUBY:
             pStyle = new XMLPropStyleContext( GetImport(), *this, nFamily );
             break;
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_CHART
         // WASM_CHART change
         case XmlStyleFamily::SCH_CHART_ID:
             pStyle = new XMLChartStyleContext( GetImport(), *this, nFamily );
@@ -564,7 +564,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
         }
         xMapper = mxShapeImpPropMapper;
         break;
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_CHART
     // WASM_CHART change
     case XmlStyleFamily::SCH_CHART_ID:
         if( ! mxChartImpPropMapper.is() )

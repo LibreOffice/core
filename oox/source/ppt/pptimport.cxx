@@ -60,7 +60,7 @@ XmlFilterBase* PowerPointImport::mpDebugFilterBase = nullptr;
 
 PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxContext ) :
     XmlFilterBase( rxContext ),
-#ifdef ENABLE_WASM_STRIP
+#ifdef ENABLE_WASM_STRIP_CHART
     // WASM_CHART change
     mxChartConv( )
 #else

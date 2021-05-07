@@ -1345,7 +1345,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         bIsUITest = true;
                 }
 
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_PINGUSER
                 //what's new infobar
                 OUString sSetupVersion = utl::ConfigManager::getProductVersion();
                 sal_Int32 iCurrent = sSetupVersion.getToken(0,'.').toInt32() * 10 + sSetupVersion.getToken(1,'.').toInt32();
@@ -1579,7 +1579,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_PINGUSER
 IMPL_LINK_NOARG(SfxViewFrame, WhatsNewHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_WHATSNEW);

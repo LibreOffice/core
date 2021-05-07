@@ -417,7 +417,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	slideshow \
 	sot \
 	spell \
-	$(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP)),,spl) \
+	$(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,spl) \
 	storagefd \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
 	svgio \
@@ -876,7 +876,7 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	) \
 ))
 
-ifneq ($(ENABLE_WASM_STRIP),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_PINGUSER),TRUE)
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	tipoftheday_images \
 ))

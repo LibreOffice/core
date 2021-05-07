@@ -384,7 +384,7 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
         m_rFilter.openFragmentStreamWithSerializer( aFileName,
             "application/vnd.openxmlformats-officedocument.drawingml.chart+xml" );
 
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_CHART
     // WASM_CHART change
     // TODO: With Chart extracted this cannot really happen since
     // no Chart could've been added at all

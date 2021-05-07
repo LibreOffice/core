@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 
 ShapeFilterBase::ShapeFilterBase( const uno::Reference< uno::XComponentContext >& rxContext ) :
     XmlFilterBase( rxContext ),
-#ifdef ENABLE_WASM_STRIP
+#ifdef ENABLE_WASM_STRIP_CHART
     // WASM_CHART change
     mxChartConv( )
 #else

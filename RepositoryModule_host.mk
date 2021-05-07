@@ -21,7 +21,7 @@ $(eval $(call gb_Module_add_targets,libreoffice,\
 endif
 
 # WASM_CHART change
-ifneq ($(ENABLE_WASM_STRIP),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	chart2 \
 ))

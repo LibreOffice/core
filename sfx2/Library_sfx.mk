@@ -23,7 +23,7 @@ $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 
 $(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))
 
-ifneq ($(ENABLE_WASM_STRIP),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_RECENT),TRUE)
 $(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx.extended))
 endif
 
@@ -81,7 +81,7 @@ $(eval $(call gb_Library_use_externals,sfx,\
     orcus-parser\
 ))
 
-ifneq ($(ENABLE_WASM_STRIP),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_RECENT),TRUE)
 $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/backingcomp \
     sfx2/source/dialog/backingwindow \

@@ -70,7 +70,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 ifeq ($(gb_Side),host)
 
 # WASM_CHART change
-ifneq ($(ENABLE_WASM_STRIP),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\
 	chart2/source/controller/chartcontroller \
 	chart2/source/chartcore \
@@ -274,7 +274,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	desktop/source/migration/services/migrationoo2 \
 	desktop/source/migration/services/migrationoo3 \
 	desktop/source/offacc/offacc \
-	$(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP)),,desktop/source/splash/spl) \
+	$(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,desktop/source/splash/spl) \
 	$(if $(ENABLE_LDAP),extensions/source/config/ldap/ldapbe2) \
 	$(if $(filter WNT,$(OS)),\
 		extensions/source/config/WinUserInfo/WinUserInfoBe \

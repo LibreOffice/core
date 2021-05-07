@@ -938,7 +938,7 @@ public:
 
     virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* pParent) override;
 
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_PINGUSER
     virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
 #endif
 

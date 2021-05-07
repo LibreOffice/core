@@ -84,7 +84,7 @@ endif
 $(eval $(call gb_Library_set_componentfile,oox,oox/util/oox))
 
 # WASM_CHART change
-ifneq ($(ENABLE_WASM_STRIP),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/export/chartexport \
     oox/source/drawingml/chart/axiscontext \

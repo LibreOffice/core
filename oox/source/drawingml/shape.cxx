@@ -1840,7 +1840,7 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 Reference< chart2::XChartDocument > xChartDoc( xDocModel, UNO_QUERY_THROW );
 
                 // load the chart data from the XML fragment
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_CHART
                 // WASM_CHART change
                 // TODO: Instead of using convertFromModel an alternative may be
                 // added to convert not to Chart/OLE SdrObejct, but to GraphicObject

@@ -142,7 +142,7 @@ class Desktop final : public Application
         static OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const OUString& aFileURL );
 
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_SPLASH
         css::uno::Reference<css::task::XStatusIndicator> m_rSplashScreen;
         void                    OpenSplashScreen();
 #endif

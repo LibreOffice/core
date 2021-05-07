@@ -22,7 +22,7 @@ $(eval $(call gb_Library_Library,xof))
 $(eval $(call gb_Library_set_componentfile,xof,xmloff/source/transform/xof))
 
 # WASM_CHART change
-ifneq ($(ENABLE_WASM_STRIP),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Library_set_componentfile,xof,xmloff/source/transform/xof.extended))
 endif
 
@@ -53,7 +53,7 @@ $(eval $(call gb_Library_use_libraries,xof,\
 ))
 
 # WASM_CHART change
-ifneq ($(ENABLE_WASM_STRIP),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Library_add_exception_objects,xof,\
     xmloff/source/transform/ChartOASISTContext \
     xmloff/source/transform/ChartOOoTContext \

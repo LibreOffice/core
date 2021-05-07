@@ -1679,7 +1679,7 @@ AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
         std::make_unique<AboutDialog>(pParent));
 }
 
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_PINGUSER
 VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
 {

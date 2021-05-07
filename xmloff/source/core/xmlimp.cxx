@@ -1084,7 +1084,7 @@ SchXMLImportHelper* SvXMLImport::CreateChartImport()
 // added to convert not to Chart/OLE SdrObejct, but to GraphicObject
 // with the Chart visualization. There should be a preiew available
 // in the imported chart data
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_CHART
     return new SchXMLImportHelper();
 #endif
 }

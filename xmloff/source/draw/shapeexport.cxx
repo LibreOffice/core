@@ -1165,7 +1165,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 OUString sCLSID;
                 if(xPropSet->getPropertyValue("CLSID") >>= sCLSID)
                 {
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_CHART
                     // WASM_CHART change
                     // TODO: With Chart extracted this cannot really happen since
                     // no Chart could've been added at all

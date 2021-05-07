@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,svx))
 
 $(eval $(call gb_Library_set_componentfile,svx,svx/util/svx))
 
-ifneq ($(ENABLE_WASM_STRIP),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_RECOVERYUI),TRUE)
 $(eval $(call gb_Library_set_componentfile,svx,svx/util/svx.extended))
 endif
 
@@ -83,7 +83,7 @@ $(eval $(call gb_Library_use_externals,svx,\
 	icu_headers \
 ))
 
-ifneq ($(ENABLE_WASM_STRIP),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_RECOVERYUI),TRUE)
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/docrecovery \
     svx/source/unodraw/recoveryui \

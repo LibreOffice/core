@@ -957,7 +957,7 @@ struct RefClearGuard
     @param  bEmergencySave
             differs between EMERGENCY_SAVE and RECOVERY
 */
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_RECOVERYUI
 bool impl_callRecoveryUI(bool bEmergencySave     ,
                          bool bExistsRecoveryData)
 {
@@ -1139,7 +1139,7 @@ void Desktop::Exception(ExceptionCategory nCategory)
         // Save all open documents so they will be reopened
         // the next time the application is started
         // returns true if at least one document could be saved...
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_RECOVERYUI
         bRestart = impl_callRecoveryUI(
                         true , // force emergency save
                         false);
@@ -1157,7 +1157,7 @@ void Desktop::Exception(ExceptionCategory nCategory)
             osl_removeSignalHandler( pSignalHandler );
 
         restartOnMac(false);
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_SPLASH
         if ( m_rSplashScreen.is() )
             m_rSplashScreen->reset();
 #endif
@@ -1263,7 +1263,7 @@ int Desktop::Main()
     Translate::SetReadStringHook(ReplaceStringHookProc);
 
     // Startup screen
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_SPLASH
     OpenSplashScreen();
 #endif
 
@@ -1705,7 +1705,7 @@ int Desktop::doShutdown()
     if ( bRR )
     {
         restartOnMac(true);
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_SPLASH
         if ( m_rSplashScreen.is() )
             m_rSplashScreen->reset();
 #endif
@@ -2011,7 +2011,7 @@ void Desktop::OpenClients()
 
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
 
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_RECOVERYUI
         if ( !bDisableRecovery &&
             (
                 bExistsRecoveryData || // => crash with files    => recovery
@@ -2389,7 +2389,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     }
 }
 
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_SPLASH
 void Desktop::OpenSplashScreen()
 {
     const CommandLineArgs &rCmdLine = GetCommandLineArgs();
@@ -2444,7 +2444,7 @@ void Desktop::OpenSplashScreen()
 
 void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
 {
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_SPLASH
     if(m_rSplashScreen.is())
     {
         m_rSplashScreen->setValue(iProgress);
@@ -2454,7 +2454,7 @@ void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
 
 void Desktop::SetSplashScreenText( const OUString& rText )
 {
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_SPLASH
     if( m_rSplashScreen.is() )
     {
         m_rSplashScreen->setText( rText );
@@ -2464,7 +2464,7 @@ void Desktop::SetSplashScreenText( const OUString& rText )
 
 void Desktop::CloseSplashScreen()
 {
-#ifndef ENABLE_WASM_STRIP
+#ifndef ENABLE_WASM_STRIP_SPLASH
     if(m_rSplashScreen.is())
     {
         SolarMutexGuard ensureSolarMutex;
