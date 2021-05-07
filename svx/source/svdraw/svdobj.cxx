@@ -547,12 +547,12 @@ void SdrObject::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 }
 
 // global static ItemPool for not-yet-inserted items
-static SdrItemPool* mpGlobalItemPool;
+static rtl::Reference<SdrItemPool> mpGlobalItemPool;
 
 // init global static itempool
 SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
 {
-    if(!mpGlobalItemPool)
+    if(!mxGlobalItemPool)
     {
         mpGlobalItemPool = new SdrItemPool();
         rtl::Reference<SfxItemPool> pGlobalOutlPool = EditEngine::CreatePool();
@@ -561,7 +561,7 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
         mpGlobalItemPool->FreezeIdRanges();
     }
 
-    return *mpGlobalItemPool;
+    return *mxGlobalItemPool;
 }
 
 void SdrObject::SetRelativeWidth( double nValue )
