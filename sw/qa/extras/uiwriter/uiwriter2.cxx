@@ -2141,6 +2141,45 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142130)
+{
+    load(DATA_DIRECTORY, "tdf142130.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    //turn on red-lining and show changes
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // Dump the rendering of the first page as an XML file.
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This was 6 (crossing out of the first, not deleted image)
+    // (4 lines = 2 lines for crossing out of the second image, 2 lines for the
+    // vertical lines before the two lines)
+    assertXPath(pXmlDoc, "/metafile/push/push/push/line", 4);
+
+    // reject deletion of the second image
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(false);
+
+    xMetaFile = pShell->GetPreviewMetaFile();
+    xmlDocUniquePtr pXmlDoc2 = dumpAndParse(dumper, *xMetaFile);
+    // no crossing out and vertical redlines
+    assertXPath(pXmlDoc2, "/metafile/push/push/push/line", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)
 {
     SwDoc* pDoc = createDoc("tdf54819.fodt");
