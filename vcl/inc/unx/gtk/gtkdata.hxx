@@ -21,9 +21,13 @@
 #define INCLUDED_VCL_INC_UNX_GTK_GTKDATA_HXX
 
 #define GLIB_DISABLE_DEPRECATION_WARNINGS
-#include <gdk/gdk.h>
-#include <gdk/gdkx.h>
 #include <gtk/gtk.h>
+#include <gdk/gdk.h>
+#if GTK_CHECK_VERSION(4,0,0)
+#include <gdk/x11/gdkx.h>
+#else
+#include <gdk/gdkx.h>
+#endif
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
@@ -42,10 +46,12 @@ namespace com::sun::star::accessibility { class XAccessibleEventListener; }
 class GtkSalDisplay;
 class DocumentFocusListener;
 
+#if !GTK_CHECK_VERSION(4,0,0)
 inline ::Window widget_get_xid(GtkWidget *widget)
 {
     return GDK_WINDOW_XID(gtk_widget_get_window(widget));
 }
+#endif
 
 class GtkSalTimer final : public SalTimer
 {
@@ -182,11 +188,13 @@ public:
     SalX11Screen GetDefaultXScreen() { return m_pSys->GetDisplayDefaultXScreen(); }
     Size         GetScreenSize( int nDisplayScreen );
 
-    GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event );
     void startupNotificationCompleted() { m_bStartupCompleted = true; }
 
+#if !GTK_CHECK_VERSION(4,0,0)
+    GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event );
     void screenSizeChanged( GdkScreen const * );
     void monitorsChanged( GdkScreen const * );
+#endif
 
     virtual void TriggerUserEventProcessing() override;
     virtual void TriggerAllUserEventsProcessed() override;

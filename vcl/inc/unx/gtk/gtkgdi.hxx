@@ -98,6 +98,7 @@ class GtkSalGraphics : public SvpSalGraphics
     GtkSalFrame * const mpFrame;
 
 protected:
+#if !GTK_CHECK_VERSION(4, 0, 0)
     bool isNativeControlSupported(ControlType, ControlPart) override;
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart,
                                                const tools::Rectangle& rControlRegion,
@@ -111,6 +112,7 @@ protected:
                                                     const OUString& rCaption,
                                                     tools::Rectangle &rNativeBoundingRegion,
                                                     tools::Rectangle &rNativeContentRegion ) override;
+#endif
     bool updateSettings(AllSettings&) override;
     void handleDamage(const tools::Rectangle&) override;
 
@@ -118,11 +120,9 @@ public:
     GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
 
 #if ENABLE_CAIRO_CANVAS
-
     virtual bool        SupportsCairo() const override;
     virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
     virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
-
 #endif
 
     void WidgetQueueDraw() const;
@@ -132,7 +132,9 @@ public:
     virtual OUString getRenderBackendName() const override { return "gtk3svp"; }
 
     GtkStyleContext* createStyleContext(GtkControlPart ePart);
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkStyleContext* makeContext(GtkWidgetPath *pPath, GtkStyleContext *pParent);
+#endif
 private:
     GtkWidget              *mpWindow;
     static GtkStyleContext *mpWindowStyle;
@@ -201,6 +203,7 @@ private:
     static GtkStyleContext *mpSeparatorMenuItemStyle;
     static GtkStyleContext *mpSeparatorMenuItemSeparatorStyle;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static tools::Rectangle NWGetScrollButtonRect( ControlPart nPart, tools::Rectangle aAreaRect );
     static tools::Rectangle NWGetSpinButtonRect( ControlPart nPart, tools::Rectangle aAreaRect);
     static tools::Rectangle NWGetComboBoxButtonRect(ControlType nType, ControlPart nPart, tools::Rectangle aAreaRect);
@@ -234,7 +237,7 @@ private:
 
     static void PaintRadio(cairo_t *cr, GtkStyleContext *context,
                            const tools::Rectangle& rControlRectangle, bool bInMenu);
-
+#endif
 
     static bool style_loaded;
 };

@@ -44,6 +44,7 @@
 
 using namespace vcl_sal;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 /***************************************************************
  * class GtkSalDisplay                                         *
  ***************************************************************/
@@ -56,6 +57,7 @@ static GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
     return pDisplay->filterGdkEvent( sys_event );
 }
 }
+#endif
 
 GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
             m_pSys( GtkSalSystem::GetSingleton() ),
@@ -65,8 +67,10 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
     for(GdkCursor* & rpCsr : m_aCursors)
         rpCsr = nullptr;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     // FIXME: unify this with SalInst's filter too ?
     gdk_window_add_filter( nullptr, call_filterGdkEvent, this );
+#endif
 
     if ( getenv( "SAL_IGNOREXERRORS" ) )
         GetGenericUnixSalData()->ErrorTrapPush(); // and leak the trap
@@ -78,6 +82,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 
 GtkSalDisplay::~GtkSalDisplay()
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gdk_window_remove_filter( nullptr, call_filterGdkEvent, this );
 
     if( !m_bStartupCompleted )
@@ -86,8 +91,10 @@ GtkSalDisplay::~GtkSalDisplay()
     for(GdkCursor* & rpCsr : m_aCursors)
         if( rpCsr )
             gdk_cursor_unref( rpCsr );
+#endif
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 extern "C" {
 
 static void signalScreenSizeChanged( GdkScreen* pScreen, gpointer data )
@@ -124,14 +131,21 @@ void GtkSalDisplay::monitorsChanged( GdkScreen const * pScreen )
     if (pScreen)
         emitDisplayChanged();
 }
+#endif
 
 GdkCursor* GtkSalDisplay::getFromSvg(OUString const & name, int nXHot, int nYHot)
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkPixbuf* pPixBuf = load_icon_by_name(name);
+#else
+    (void)name;
+    GdkPixbuf* pPixBuf = nullptr;
+#endif
     assert(pPixBuf && "missing image?");
     if (!pPixBuf)
         return nullptr;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     guint nDefaultCursorSize = gdk_display_get_default_cursor_size( m_pGdkDisplay );
     int nPixWidth = gdk_pixbuf_get_width(pPixBuf);
     int nPixHeight = gdk_pixbuf_get_height(pPixBuf);
@@ -141,19 +155,32 @@ GdkCursor* GtkSalDisplay::getFromSvg(OUString const & name, int nXHot, int nYHot
                                                        nPixHeight * fScalefactor,
                                                        GDK_INTERP_HYPER);
     g_object_unref(pPixBuf);
-    GdkCursor* pCursor = gdk_cursor_new_from_pixbuf(m_pGdkDisplay, pScaledPixBuf,
-                                                    nXHot * fScalefactor, nYHot * fScalefactor);
-    return pCursor;
+    return gdk_cursor_new_from_pixbuf(m_pGdkDisplay, pScaledPixBuf,
+                                      nXHot * fScalefactor, nYHot * fScalefactor);
+#else
+    GdkTexture* pTexture = gdk_texture_new_for_pixbuf(pPixBuf);
+    g_object_unref(pPixBuf);
+    return gdk_cursor_new_from_texture(pTexture, nXHot, nYHot, nullptr);
+#endif
 }
 
 #define MAKE_CURSOR( vcl_name, name, name2 ) \
     case vcl_name: \
         pCursor = getFromSvg(name2, name##curs_x_hot, name##curs_y_hot); \
         break
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 #define MAP_BUILTIN( vcl_name, gdk_name ) \
     case vcl_name: \
         pCursor = gdk_cursor_new_for_display( m_pGdkDisplay, gdk_name ); \
         break
+#else
+// TODO, the rest of these
+#define MAP_BUILTIN( vcl_name, gdk_name ) \
+    case vcl_name: \
+        pCursor = gdk_cursor_new_from_name("normal", nullptr); \
+        break
+#endif
 
 GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
 {
@@ -273,7 +300,13 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             break;
         }
         if( !pCursor )
+        {
+#if !GTK_CHECK_VERSION(4, 0, 0)
             pCursor = gdk_cursor_new_for_display( m_pGdkDisplay, GDK_LEFT_PTR );
+#else
+            pCursor = gdk_cursor_new_from_name("normal", nullptr);
+#endif
+        }
 
         m_aCursors[ ePointerStyle ] = pCursor;
     }
@@ -466,8 +499,10 @@ void GtkSalData::Init()
     }
 
     // init gtk/gdk
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_init_check( &nParams, &pCmdLineAry );
     gdk_error_trap_push();
+#endif
 
     for (int i = 0; i < nParams; ++i)
         g_free( pCmdLineAry[i] );
@@ -505,6 +540,7 @@ void GtkSalData::Init()
     GtkSalDisplay *pDisplay = new GtkSalDisplay( pGdkDisp );
     SetDisplay( pDisplay );
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     int nScreens = gdk_display_get_n_screens( pGdkDisp );
     for( int n = 0; n < nScreens; n++ )
     {
@@ -545,21 +581,29 @@ void GtkSalData::Init()
         gtk_style_context_add_provider_for_screen(pScreen, GTK_STYLE_PROVIDER(pSmallButtonProvider),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+#endif
 }
 
 void GtkSalData::ErrorTrapPush()
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gdk_error_trap_push ();
+#endif
 }
 
 bool GtkSalData::ErrorTrapPop( bool bIgnoreError )
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     if (bIgnoreError)
     {
         gdk_error_trap_pop_ignored (); // faster
         return false;
     }
     return gdk_error_trap_pop () != 0;
+#else
+    (void)bIgnoreError;
+    return false;
+#endif
 }
 
 #if !GLIB_CHECK_VERSION(2,32,0)

@@ -72,6 +72,7 @@ void GtkSalObjectBase::Init()
     m_aSystemData.pWidget       = m_pSocket;
     m_aSystemData.nScreen       = m_pParent->getXScreenNumber().getXScreen();
     m_aSystemData.toolkit       = SystemEnvData::Toolkit::Gtk;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkScreen* pScreen = gtk_widget_get_screen(m_pParent->getWindow());
     GdkVisual* pVisual = gdk_screen_get_system_visual(pScreen);
 
@@ -96,6 +97,7 @@ void GtkSalObjectBase::Init()
     g_signal_connect( G_OBJECT(m_pSocket), "button-release-event", G_CALLBACK(signalButton), this );
     g_signal_connect( G_OBJECT(m_pSocket), "focus-in-event", G_CALLBACK(signalFocus), this );
     g_signal_connect( G_OBJECT(m_pSocket), "focus-out-event", G_CALLBACK(signalFocus), this );
+#endif
 }
 
 GtkSalObjectBase::~GtkSalObjectBase()
@@ -108,6 +110,7 @@ GtkSalObjectBase::~GtkSalObjectBase()
 
 GtkSalObject::~GtkSalObject()
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     if( m_pSocket )
     {
         // remove socket from parent frame's fixed container
@@ -120,12 +123,15 @@ GtkSalObject::~GtkSalObject()
         if( m_pSocket )
             gtk_widget_destroy( m_pSocket );
     }
+#endif
 }
 
 void GtkSalObject::ResetClipRegion()
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     if( m_pSocket )
         gdk_window_shape_combine_region( gtk_widget_get_window(m_pSocket), nullptr, 0, 0 );
+#endif
 }
 
 void GtkSalObjectBase::BeginSetClipRegion( sal_uInt32 )
@@ -148,8 +154,10 @@ void GtkSalObjectBase::UnionClipRegion( tools::Long nX, tools::Long nY, tools::L
 
 void GtkSalObject::EndSetClipRegion()
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     if( m_pSocket )
         gdk_window_shape_combine_region( gtk_widget_get_window(m_pSocket), m_pRegion, 0, 0 );
+#endif
 }
 
 void GtkSalObject::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight)
@@ -159,7 +167,9 @@ void GtkSalObject::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth
         GtkFixed* pContainer = GTK_FIXED(gtk_widget_get_parent(m_pSocket));
         gtk_fixed_move( pContainer, m_pSocket, nX, nY );
         gtk_widget_set_size_request( m_pSocket, nWidth, nHeight );
+#if !GTK_CHECK_VERSION(4, 0, 0)
         m_pParent->nopaint_container_resize_children(GTK_CONTAINER(pContainer));
+#endif
     }
 }
 
@@ -170,14 +180,23 @@ void GtkSalObject::Reparent(SalFrame* pFrame)
     {
         GtkFixed* pContainer = GTK_FIXED(gtk_widget_get_parent(m_pSocket));
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gint nX(0), nY(0);
         gtk_container_child_get(GTK_CONTAINER(pContainer), m_pSocket,
                 "x", &nX,
                 "y", &nY,
                 nullptr);
+#else
+        double nX(0), nY(0);
+        gtk_fixed_get_child_position(pContainer, m_pSocket, &nX, &nY);
+#endif
 
         g_object_ref(m_pSocket);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_remove(GTK_CONTAINER(pContainer), m_pSocket);
+#else
+        gtk_fixed_remove(pContainer, m_pSocket);
+#endif
 
         gtk_fixed_put(pNewParent->getFixedContainer(),
                       m_pSocket,
@@ -230,6 +249,7 @@ const SystemEnvData* GtkSalObjectBase::GetSystemData() const
     return &m_aSystemData;
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalObjectBase::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer object )
 {
     GtkSalObjectBase* pThis = static_cast<GtkSalObject*>(object);
@@ -250,6 +270,7 @@ gboolean GtkSalObjectBase::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpoin
 
     return FALSE;
 }
+#endif
 
 void GtkSalObject::signalDestroy( GtkWidget* pObj, gpointer object )
 {
@@ -262,10 +283,14 @@ void GtkSalObject::signalDestroy( GtkWidget* pObj, gpointer object )
 
 void GtkSalObjectBase::SetForwardKey( bool bEnable )
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     if( bEnable )
         gtk_widget_add_events( GTK_WIDGET( m_pSocket ), GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
     else
         gtk_widget_set_events( GTK_WIDGET( m_pSocket ), ~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK) & gtk_widget_get_events( GTK_WIDGET( m_pSocket ) ) );
+#else
+    (void)bEnable;
+#endif
 }
 
 GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
@@ -275,7 +300,11 @@ GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
     if( !pParent )
         return;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     m_pScrolledWindow = gtk_scrolled_window_new(nullptr, nullptr);
+#else
+    m_pScrolledWindow = gtk_scrolled_window_new();
+#endif
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(m_pScrolledWindow),
                                    GTK_POLICY_EXTERNAL, GTK_POLICY_EXTERNAL);
     g_signal_connect(m_pScrolledWindow, "scroll-event", G_CALLBACK(signalScroll), this);
@@ -294,16 +323,28 @@ GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
     OUString sColor = Application::GetSettings().GetStyleSettings().GetDialogColor().AsRGBHexString();
     OUString aBuffer = "* { background-color: #" + sColor + "; }";
     OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_css_provider_load_from_data(pBgCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
+#else
+    gtk_css_provider_load_from_data(pBgCssProvider, aResult.getStr(), aResult.getLength());
+#endif
     gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(pBgCssProvider),
                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), pViewPort);
+#else
+    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(m_pScrolledWindow), pViewPort);
+#endif
     gtk_widget_show(pViewPort);
 
     // our plug window
     m_pSocket = gtk_grid_new();
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_container_add(GTK_CONTAINER(pViewPort), m_pSocket);
+#else
+    gtk_viewport_set_child(GTK_VIEWPORT(pViewPort), m_pSocket);
+#endif
     gtk_widget_show(m_pSocket);
 
     Show(bShow);
@@ -318,14 +359,20 @@ GtkSalObjectWidgetClip::~GtkSalObjectWidgetClip()
     if( m_pSocket )
     {
         // remove socket from parent frame's fixed container
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_remove( GTK_CONTAINER(gtk_widget_get_parent(m_pScrolledWindow)),
                               m_pScrolledWindow );
+
         // get rid of the socket
         // actually the gtk_container_remove should let the ref count
         // of the socket sink to 0 and destroy it (see signalDestroy)
         // this is just a sanity check
         if( m_pScrolledWindow )
             gtk_widget_destroy( m_pScrolledWindow );
+#else
+        gtk_fixed_remove(GTK_FIXED(gtk_widget_get_parent(m_pScrolledWindow)),
+                         m_pScrolledWindow);
+#endif
     }
 }
 
@@ -380,7 +427,11 @@ void GtkSalObjectWidgetClip::ApplyClipRegion()
     else
         gtk_fixed_move(pContainer, m_pScrolledWindow, allocation.x, allocation.y);
     gtk_widget_set_size_request(m_pScrolledWindow, allocation.width, allocation.height);
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_widget_size_allocate(m_pScrolledWindow, &allocation);
+#else
+    gtk_widget_size_allocate(m_pScrolledWindow, &allocation, 0);
+#endif
 
     gtk_adjustment_set_value(gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(m_pScrolledWindow)), m_aClipRect.Left());
     gtk_adjustment_set_value(gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_pScrolledWindow)), m_aClipRect.Top());
@@ -391,10 +442,14 @@ void GtkSalObjectWidgetClip::SetPosSize(tools::Long nX, tools::Long nY, tools::L
     m_aRect = tools::Rectangle(Point(nX, nY), Size(nWidth, nHeight));
     if (m_pSocket)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkFixed* pContainer = GTK_FIXED(gtk_widget_get_parent(m_pScrolledWindow));
+#endif
         gtk_widget_set_size_request(m_pSocket, nWidth, nHeight);
         ApplyClipRegion();
+#if !GTK_CHECK_VERSION(4, 0, 0)
         m_pParent->nopaint_container_resize_children(GTK_CONTAINER(pContainer));
+#endif
     }
 }
 
@@ -405,14 +460,23 @@ void GtkSalObjectWidgetClip::Reparent(SalFrame* pFrame)
     {
         GtkFixed* pContainer = GTK_FIXED(gtk_widget_get_parent(m_pScrolledWindow));
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gint nX(0), nY(0);
         gtk_container_child_get(GTK_CONTAINER(pContainer), m_pScrolledWindow,
                 "x", &nX,
                 "y", &nY,
                 nullptr);
+#else
+        double nX(0), nY(0);
+        gtk_fixed_get_child_position(pContainer, m_pScrolledWindow, &nX, &nY);
+#endif
 
         g_object_ref(m_pScrolledWindow);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_remove(GTK_CONTAINER(pContainer), m_pScrolledWindow);
+#else
+        gtk_fixed_remove(pContainer, m_pScrolledWindow);
+#endif
 
         gtk_fixed_put(pNewParent->getFixedContainer(),
                       m_pScrolledWindow,
@@ -439,7 +503,11 @@ void GtkSalObjectWidgetClip::Show( bool bVisible )
         // cursor in a sidebar comment and scroll the page so the comment is invisible, we want the focus
         // to stay in the invisible widget, so its there when we scroll back or on a keypress the widget
         // gets the keystroke and scrolls back to make it visible again
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pScrolledWindow);
+#else
+        GtkWidget* pTopLevel = GTK_WIDGET(gtk_widget_get_root(m_pScrolledWindow));
+#endif
         GtkWidget* pOldFocus = GTK_IS_WINDOW(pTopLevel) ? gtk_window_get_focus(GTK_WINDOW(pTopLevel)) : nullptr;
 
         g_object_set_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange", GINT_TO_POINTER(true) );
@@ -473,6 +541,7 @@ gboolean GtkSalObjectWidgetClip::signalScroll(GtkWidget* pScrolledWindow, GdkEve
 // forward the wheel scroll events onto the main window instead
 bool GtkSalObjectWidgetClip::signal_scroll(GtkWidget*, GdkEvent* pEvent)
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkWidget* pEventWidget = gtk_get_event_widget(pEvent);
 
     GtkWidget* pMouseEventWidget = m_pParent->getMouseEventWidget();
@@ -488,6 +557,9 @@ bool GtkSalObjectWidgetClip::signal_scroll(GtkWidget*, GdkEvent* pEvent)
     pEvent->scroll.y = dest_y;
 
     GtkSalFrame::signalScroll(pMouseEventWidget, pEvent, m_pParent);
+#else
+    (void)pEvent;
+#endif
     return true;
 }
 
