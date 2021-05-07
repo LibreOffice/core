@@ -86,26 +86,24 @@ public class SubTile extends Layer {
     protected void finalize() throws Throwable {
         try {
             destroyImage();
-            cleanTexture(false);
+            cleanTexture();
         } finally {
             super.finalize();
         }
     }
 
-    private void cleanTexture(boolean immediately) {
+    private void cleanTexture() {
         if (mTextureIDs != null) {
             TextureReaper.get().add(mTextureIDs);
             mTextureIDs = null;
-            if (immediately) {
-                TextureReaper.get().reap();
-            }
+            TextureReaper.get().reap();
         }
     }
 
     public void destroy() {
         try {
             destroyImage();
-            cleanTexture(false);
+            cleanTexture();
         } catch (Exception ex) {
             Log.e(LOGTAG, "Error clearing buffers: ", ex);
         }
@@ -140,7 +138,7 @@ public class SubTile extends Layer {
 
         if (!textureSize.equals(mSize)) {
             mSize = textureSize;
-            cleanTexture(true);
+            cleanTexture();
         }
     }
 
