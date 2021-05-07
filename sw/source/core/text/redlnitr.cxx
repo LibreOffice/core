@@ -940,13 +940,13 @@ bool SwRedlineItr::ChkSpecialUnderline_() const
 bool SwRedlineItr::CheckLine(
         sal_uLong const nStartNode, sal_Int32 const nChkStart,
         sal_uLong const nEndNode, sal_Int32 nChkEnd, OUString& rRedlineText,
-        bool& bRedlineEnd, RedlineType& eRedlineEnd)
+        bool& bRedlineEnd, RedlineType& eRedlineEnd, bool bFullLine)
 {
     // note: previously this would return true in the (!m_bShow && m_pExt)
     // case, but surely that was a bug?
     if (m_nFirst == SwRedlineTable::npos || m_eMode != Mode::Show)
         return false;
-    if( nChkEnd == nChkStart ) // empty lines look one char further
+    if( nChkEnd == nChkStart && bFullLine ) // empty lines look one char further
         ++nChkEnd;
     sal_Int32 nOldStart = m_nStart;
     sal_Int32 nOldEnd = m_nEnd;
