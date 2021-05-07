@@ -21,6 +21,7 @@
 #include <utility>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/processfactory.hxx>
 #include <config_global.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -67,6 +68,7 @@
 #include <vcl/help.hxx>
 #include <vcl/transfer.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <editeng/frmdiritem.hxx>
@@ -2594,10 +2596,32 @@ rtl::Reference<SfxItemPool> EditEngine::CreatePool()
     return new EditEngineItemPool();
 }
 
+
+/** If we let the libc runtime clean us up, we trigger a crash */
+namespace
+{
+class TerminateListener : public ::cppu::WeakImplHelper< css::frame::XTerminateListener >
+{
+    void SAL_CALL queryTermination( const lang::EventObject& ) override
+    {}
+    void SAL_CALL notifyTermination( const lang::EventObject& ) override
+    {
+        pGlobalPool.clear();
+    }
+    virtual void SAL_CALL disposing( const ::css::lang::EventObject& ) override
+    {}
+};
+};
+
 SfxItemPool& EditEngine::GetGlobalItemPool()
 {
     if ( !pGlobalPool )
+    {
         pGlobalPool = CreatePool();
+        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
+        uno::Reference< frame::XTerminateListener > xListener( new TerminateListener );
+        xDesktop->addTerminateListener( xListener );
+    }
     return *pGlobalPool;
 }
 
