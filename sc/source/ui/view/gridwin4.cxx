@@ -1662,7 +1662,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     else
     {
         //  use EditEngine to draw mixed-script string
-        pEditEng.reset(new ScEditEngineDefaulter( EditEngine::CreatePool(), true ));
+        pEditEng.reset(new ScEditEngineDefaulter( EditEngine::CreatePool().get(), true ));
         pEditEng->SetRefMapMode(rRenderContext.GetMapMode());
         auto pEditDefaults = std::make_unique<SfxItemSet>( pEditEng->GetEmptyItemSet() );
         rDefPattern.FillEditItemSet( pEditDefaults.get() );

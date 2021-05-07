@@ -44,10 +44,10 @@ namespace frm
     {
         SolarMutexGuard g;
 
-        SfxItemPool* pPool = EditEngine::CreatePool();
+        rtl::Reference<SfxItemPool> pPool = EditEngine::CreatePool();
         pPool->FreezeIdRanges();
 
-        RichTextEngine* pReturn = new RichTextEngine( pPool );
+        RichTextEngine* pReturn = new RichTextEngine( pPool.get() );
         OutputDevice* pOutputDevice = pReturn->GetRefDevice();
         const MapMode& aDeviceMapMode( pOutputDevice->GetMapMode() );
 

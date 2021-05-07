@@ -185,9 +185,9 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
 {
     if (!pEditEngine)
     {
-        SfxItemPool* pEnginePool = EditEngine::CreatePool();
+        rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
         pEnginePool->FreezeIdRanges();
-        std::unique_ptr<ScHeaderEditEngine> pHdrEngine(new ScHeaderEditEngine( pEnginePool ));
+        std::unique_ptr<ScHeaderEditEngine> pHdrEngine(new ScHeaderEditEngine( pEnginePool.get() ));
 
         pHdrEngine->EnableUndo( false );
         pHdrEngine->SetRefMapMode(MapMode(MapUnit::MapTwip));
@@ -330,7 +330,7 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString()
     if (pData)
     {
         // for pure text, no font info is needed in pool defaults
-        ScHeaderEditEngine aEditEngine( EditEngine::CreatePool() );
+        ScHeaderEditEngine aEditEngine( EditEngine::CreatePool().get() );
 
         ScHeaderFieldData aData;
         FillDummyFieldData( aData );
@@ -347,7 +347,7 @@ void SAL_CALL ScHeaderFooterTextObj::setString( const OUString& aText )
     SolarMutexGuard aGuard;
 
     // for pure text, no font info is needed in pool defaults
-    ScHeaderEditEngine aEditEngine(EditEngine::CreatePool());
+    ScHeaderEditEngine aEditEngine(EditEngine::CreatePool().get());
     aEditEngine.SetTextCurrentDefaults( aText );
     aTextData.UpdateData(aEditEngine);
 }
@@ -700,11 +700,11 @@ UNO3_GETIMPLEMENTATION2_IMPL(ScDrawTextCursor, SvxUnoTextCursor);
 
 ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
 {
-    SfxItemPool* pEnginePool = EditEngine::CreatePool();
+    rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
     pEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
     pEnginePool->FreezeIdRanges();
 
-    pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true) );     // TRUE: become owner of pool
+    pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );     // TRUE: become owner of pool
     pForwarder.reset( new SvxEditEngineForwarder( *pEditEngine ) );
     pOriginalSource.reset( new ScSimpleEditSource( pForwarder.get() ) );
 }
@@ -788,9 +788,9 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         }
         else
         {
-            SfxItemPool* pEnginePool = EditEngine::CreatePool();
+            rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true) );
+            pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );
         }
         //  currently, GetPortions doesn't work if UpdateMode is sal_False,
         //  this will be fixed (in EditEngine) by src600

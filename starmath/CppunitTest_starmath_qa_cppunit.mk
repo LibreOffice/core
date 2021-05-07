@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\
     msfilter \
     oox \
     sal \
+    salhelper \
     sax \
     sfx \
     sot \

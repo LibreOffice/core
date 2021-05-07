@@ -73,7 +73,7 @@ lcl_CheckSlots2(std::map<sal_uInt16, sal_uInt16> & rSlotMap,
 #define CHECK_SLOTS() \
 do { \
     std::map<sal_uInt16, sal_uInt16> slotmap; \
-    for (SfxItemPool * p = pImpl->mpMaster; p; p = p->pImpl->mpSecondary) \
+    for (SfxItemPool * p = pImpl->mpMaster; p; p = p->pImpl->mpSecondary.get()) \
     { \
         lcl_CheckSlots2(slotmap, *p, p->pItemInfos); \
     } \
@@ -83,24 +83,6 @@ do { \
 #define CHECK_SLOTS() do {} while (false)
 #endif
 
-
-void SfxItemPool::AddSfxItemPoolUser(SfxItemPoolUser& rNewUser)
-{
-    // maintain sorted to reduce cost of remove
-    const auto insertIt = ::std::lower_bound(
-        pImpl->maSfxItemPoolUsers.begin(), pImpl->maSfxItemPoolUsers.end(), &rNewUser);
-    pImpl->maSfxItemPoolUsers.insert(insertIt, &rNewUser);
-}
-
-void SfxItemPool::RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser)
-{
-    const auto aFindResult = ::std::lower_bound(
-        pImpl->maSfxItemPoolUsers.begin(), pImpl->maSfxItemPoolUsers.end(), &rOldUser);
-    if(aFindResult != pImpl->maSfxItemPoolUsers.end() && *aFindResult == &rOldUser)
-    {
-        pImpl->maSfxItemPoolUsers.erase(aFindResult);
-    }
-}
 
 const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 {
@@ -126,7 +108,7 @@ bool SfxItemPool::IsItemPoolable_Impl( sal_uInt16 nPos ) const
 
 bool SfxItemPool::IsItemPoolable( sal_uInt16 nWhich ) const
 {
-    for ( const SfxItemPool *pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
+    for ( const SfxItemPool *pPool = this; pPool; pPool = pPool->pImpl->mpSecondary.get() )
     {
         if ( pPool->IsInRange(nWhich) )
             return pPool->IsItemPoolable_Impl( pPool->GetIndex_Impl(nWhich));
@@ -199,6 +181,7 @@ SfxItemPool::SfxItemPool
                                                     false
                                                     Take over static Defaults */
 ) :
+    salhelper::SimpleReferenceObject(),
     pItemInfos(rPool.pItemInfos),
     pImpl( new SfxItemPool_Impl( this, rPool.pImpl->aName, rPool.pImpl->mnStart, rPool.pImpl->mnEnd ) )
 {
@@ -229,7 +212,7 @@ SfxItemPool::SfxItemPool
 
     // Repair linkage
     if ( rPool.pImpl->mpSecondary )
-        SetSecondaryPool( rPool.pImpl->mpSecondary->Clone() );
+        SetSecondaryPool( rPool.pImpl->mpSecondary->Clone().get() );
 }
 
 void SfxItemPool::SetDefaults( std::vector<SfxPoolItem*>* pDefaults )
@@ -345,28 +328,6 @@ SfxItemPool::~SfxItemPool()
     }
 }
 
-void SfxItemPool::Free(SfxItemPool* pPool)
-{
-    if(!pPool)
-        return;
-
-    // tell all the registered SfxItemPoolUsers that the pool is in destruction
-    std::vector<SfxItemPoolUser*> aListCopy(pPool->pImpl->maSfxItemPoolUsers);
-    for(SfxItemPoolUser* pSfxItemPoolUser : aListCopy)
-    {
-        DBG_ASSERT(pSfxItemPoolUser, "corrupt SfxItemPoolUser list (!)");
-        pSfxItemPoolUser->ObjectInDestruction(*pPool);
-    }
-
-    // Clear the vector. This means that user do not need to call RemoveSfxItemPoolUser()
-    // when they get called from ObjectInDestruction().
-    pPool->pImpl->maSfxItemPoolUsers.clear();
-
-    // delete pool
-    delete pPool;
-}
-
-
 void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
 {
     // Reset Master in attached Pools
@@ -398,15 +359,15 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
         }
 #endif
 
-        pImpl->mpSecondary->pImpl->mpMaster = pImpl->mpSecondary;
-        for ( SfxItemPool *p = pImpl->mpSecondary->pImpl->mpSecondary; p; p = p->pImpl->mpSecondary )
-            p->pImpl->mpMaster = pImpl->mpSecondary;
+        pImpl->mpSecondary->pImpl->mpMaster = pImpl->mpSecondary.get();
+        for ( SfxItemPool *p = pImpl->mpSecondary->pImpl->mpSecondary.get(); p; p = p->pImpl->mpSecondary.get() )
+            p->pImpl->mpMaster = pImpl->mpSecondary.get();
     }
 
     // Set Master of new Secondary Pools
     DBG_ASSERT( !pPool || pPool->pImpl->mpMaster == pPool, "Secondary is present in two Pools" );
     SfxItemPool *pNewMaster = GetMasterPool() ? pImpl->mpMaster : this;
-    for ( SfxItemPool *p = pPool; p; p = p->pImpl->mpSecondary )
+    for ( SfxItemPool *p = pPool; p; p = p->pImpl->mpSecondary.get() )
         p->pImpl->mpMaster = pNewMaster;
 
     // Remember new Secondary Pool
@@ -430,7 +391,13 @@ MapUnit SfxItemPool::GetMetric( sal_uInt16 ) const
 
 void SfxItemPool::SetDefaultMetric( MapUnit eNewMetric )
 {
+//    assert((pImpl->eDefMetric == eNewMetric || !pImpl->mpPoolRanges) && "pool already frozen, cannot change metric");
     pImpl->eDefMetric = eNewMetric;
+}
+
+MapUnit SfxItemPool::GetDefaultMetric() const
+{
+    return pImpl->eDefMetric;
 }
 
 const OUString& SfxItemPool::GetName() const
@@ -452,10 +419,9 @@ bool SfxItemPool::GetPresentation
 }
 
 
-SfxItemPool* SfxItemPool::Clone() const
+rtl::Reference<SfxItemPool> SfxItemPool::Clone() const
 {
-    SfxItemPool *pPool = new SfxItemPool( *this );
-    return pPool;
+    return new SfxItemPool( *this );
 }
 
 
@@ -770,7 +736,7 @@ const SfxPoolItem& SfxItemPool::GetDefaultItem( sal_uInt16 nWhich ) const
 
 SfxItemPool* SfxItemPool::GetSecondaryPool() const
 {
-    return pImpl->mpSecondary;
+    return pImpl->mpSecondary.get();
 }
 
 /* get the last pool by following the GetSecondaryPool chain */
@@ -796,6 +762,7 @@ SfxItemPool* SfxItemPool::GetMasterPool() const
  */
 void SfxItemPool::FreezeIdRanges()
 {
+    assert(!pImpl->mpPoolRanges && "pool already frozen, cannot freeze twice");
     FillItemIdRanges_Impl( pImpl->mpPoolRanges );
 }
 
@@ -806,13 +773,13 @@ void SfxItemPool::FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRa
 
     const SfxItemPool *pPool;
     sal_uInt16 nLevel = 0;
-    for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
+    for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary.get() )
         ++nLevel;
 
     pWhichRanges.reset(new sal_uInt16[ 2*nLevel + 1 ]);
 
     nLevel = 0;
-    for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
+    for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary.get() )
     {
         pWhichRanges[nLevel++] = pPool->pImpl->mnStart;
         pWhichRanges[nLevel++] = pPool->pImpl->mnEnd;

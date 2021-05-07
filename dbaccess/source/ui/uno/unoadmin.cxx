@@ -32,7 +32,6 @@ namespace dbaui
 
 ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialogBase(_rxORB)
-    ,m_pItemPool(nullptr)
     ,m_pItemPoolDefaults(nullptr)
 {
     m_pCollection.reset( new ::dbaccess::ODsnTypeCollection(_rxORB) );
@@ -41,15 +40,10 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XC
 
 ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
 {
-    if (m_xDialog)
-    {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        if (m_xDialog)
-        {
-            destroyDialog();
-            ODbAdminDialog::destroyItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults);
-        }
-    }
+   ::osl::MutexGuard aGuard(m_aMutex);
+   if (m_xDialog)
+      destroyDialog();
+   ODbAdminDialog::destroyItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults);
 }
 
 void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)

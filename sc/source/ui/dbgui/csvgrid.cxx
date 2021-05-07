@@ -77,7 +77,7 @@ ScCsvGrid::ScCsvGrid(const ScCsvLayoutData& rData, std::unique_ptr<weld::Menu> x
     , mpGridDev( VclPtr<VirtualDevice>::Create() )
     , mxPopup(std::move(xPopup))
     , mpColorConfig( nullptr )
-    , mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool(), true ) )
+    , mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool().get(), true ) )
     , maColStates( 1 )
     , maTypeNames( 1 )
     , mnFirstImpLine( 0 )

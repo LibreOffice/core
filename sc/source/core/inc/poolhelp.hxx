@@ -36,11 +36,11 @@ class ScPoolHelper final : public salhelper::SimpleReferenceObject
 private:
     mutable osl::Mutex maMtxCreateNumFormatter;
     ScDocOptions        aOpt;
-    std::unique_ptr<ScDocumentPool, SfxItemPoolDeleter> pDocPool;
+    rtl::Reference<ScDocumentPool> pDocPool;
     rtl::Reference< ScStyleSheetPool > mxStylePool;
     mutable std::unique_ptr<SvNumberFormatter> pFormTable;
-    mutable std::unique_ptr<SfxItemPool, SfxItemPoolDeleter>  pEditPool;     // EditTextObjectPool
-    mutable std::unique_ptr<SfxItemPool, SfxItemPoolDeleter>  pEnginePool;   // EditEnginePool
+    mutable rtl::Reference<SfxItemPool>  pEditPool;     // EditTextObjectPool
+    mutable rtl::Reference<SfxItemPool>  pEnginePool;   // EditEnginePool
     ScDocument&                 m_rSourceDoc;
 
 public:

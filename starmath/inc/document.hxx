@@ -81,7 +81,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     OUString            maAccText;
     SvtLinguOptions     maLinguOptions;
     std::unique_ptr<SmTableNode> mpTree;
-    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> mpEditEngineItemPool;
+    rtl::Reference<SfxItemPool> mpEditEngineItemPool;
     std::unique_ptr<EditEngine> mpEditEngine;
     VclPtr<SfxPrinter>  mpPrinter;       //q.v. comment to SmPrinter Access!
     VclPtr<Printer>     mpTmpPrinter;    //ditto
