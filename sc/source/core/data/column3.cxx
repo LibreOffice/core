@@ -2585,6 +2585,11 @@ public:
         return (maPos.first->type == sc::element_type_string || maPos.first->type == sc::element_type_edittext);
     }
 
+    bool isEmpty() const
+    {
+        return maPos.first->type == sc::element_type_empty;
+    }
+
     bool prev()
     {
         if (!has())
@@ -2592,7 +2597,7 @@ public:
             // Not in a string block. Move back until we hit a string block.
             while (!has())
             {
-                if (maPos.first == miBeg)
+                if (isEmpty() || maPos.first == miBeg)
                     return false;
 
                 --maPos.first; // move to the preceding block.
@@ -2618,6 +2623,10 @@ public:
                 // Move to the last cell of the previous block.
                 --maPos.first;
                 maPos.second = maPos.first->size - 1;
+
+                if (isEmpty())
+                    return false;
+
                 if (has())
                     break;
             }
@@ -2632,6 +2641,9 @@ public:
             // Not in a string block. Move forward until we hit a string block.
             while (!has())
             {
+                if (isEmpty())
+                    return false;
+
                 ++maPos.first;
                 if (maPos.first == miEnd)
                     return false;
@@ -2653,6 +2665,10 @@ public:
                     return false;
 
                 maPos.second = 0;
+
+                if (isEmpty())
+                    return false;
+
                 if (has())
                     break;
             }
@@ -2694,16 +2710,12 @@ bool ScColumn::GetDataEntries(
     // going upward and downward directions in parallel. The start position
     // cell must be skipped.
 
-    StrCellIterator aItrUp(maCells, nStartRow, &GetDoc());
+    StrCellIterator aItrUp(maCells, nStartRow-1, &GetDoc());
     StrCellIterator aItrDown(maCells, nStartRow+1, &GetDoc());
 
     bool bMoveUp = aItrUp.valid();
-    if (!bMoveUp)
-        // Current cell is invalid.
-        return false;
-
-    // Skip the start position cell.
-    bMoveUp = aItrUp.prev(); // Find the previous string cell position.
+    if (bMoveUp && !aItrUp.has())
+        bMoveUp = aItrUp.prev(); // Find the previous string cell position.
 
     bool bMoveDown = aItrDown.valid();
     if (bMoveDown && !aItrDown.has())
