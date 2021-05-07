@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8ed78140_d7fc329d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2624,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-07T11:22:59Z",
+      "side": 1,
+      "message": "I added the operator.\nHowever I don\u0027t want to loose any info.\nDo it adds zero order term + 2 firts order terms + second order term",
+      "parentUuid": "11be0171_2f35b8e5",
+      "range": {
+        "startLine": 2624,
+        "startChar": 31,
+        "endLine": 2624,
+        "endChar": 54
+      },
+      "revId": "58eaf6e24b1e005e42a6b0ace05210d6128bb6bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85aba239_67761b9a",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 8
