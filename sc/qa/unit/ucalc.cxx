@@ -534,14 +534,22 @@ void Test::testDataEntries()
     m_pDoc->SetString(ScAddress(0,5,0), "Andy");
     m_pDoc->SetString(ScAddress(0,6,0), "Bruce");
     m_pDoc->SetString(ScAddress(0,7,0), "Charlie");
+    m_pDoc->SetValue(ScAddress(0,8,0), 100);
+    m_pDoc->SetValue(ScAddress(0,9,0), 200);
     m_pDoc->SetString(ScAddress(0,10,0), "Andy");
+    m_pDoc->SetValue(ScAddress(0,11,0), 1000);
 
     std::vector<ScTypedStrData> aEntries;
-    m_pDoc->GetDataEntries(0, 0, 0, aEntries); // Try at the very top.
+    m_pDoc->GetDataEntries(0, 0, 0, aEntries); // Try at the top.
+    std::vector<ScTypedStrData>::const_iterator it = aEntries.begin();
+    CPPUNIT_ASSERT_MESSAGE("The entries should be empty.", bool(it == aEntries.end()));
+
+    aEntries.clear();
+    m_pDoc->GetDataEntries(0, 4, 0, aEntries); // Try at A5.
 
     // Entries are supposed to be sorted in ascending order, and are all unique.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aEntries.size());
-    std::vector<ScTypedStrData>::const_iterator it = aEntries.begin();
+    it = aEntries.begin();
     CPPUNIT_ASSERT_EQUAL(OUString("Andy"), it->GetString());
     ++it;
     CPPUNIT_ASSERT_EQUAL(OUString("Bruce"), it->GetString());
@@ -551,7 +559,7 @@ void Test::testDataEntries()
     CPPUNIT_ASSERT_MESSAGE("The entries should have ended here.", bool(it == aEntries.end()));
 
     aEntries.clear();
-    m_pDoc->GetDataEntries(0, MAXROW, 0, aEntries); // Try at the very bottom.
+    m_pDoc->GetDataEntries(0, 12, 0, aEntries); // Try at A13.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aEntries.size());
 
     // Make sure we get the same set of suggestions.
@@ -563,6 +571,11 @@ void Test::testDataEntries()
     CPPUNIT_ASSERT_EQUAL(OUString("Charlie"), it->GetString());
     ++it;
     CPPUNIT_ASSERT_MESSAGE("The entries should have ended here.", bool(it == aEntries.end()));
+
+    aEntries.clear();
+    m_pDoc->GetDataEntries(0, MAXROW, 0, aEntries); // Try at the bottom.
+    it = aEntries.begin();
+    CPPUNIT_ASSERT_MESSAGE("The entries should be empty.", bool(it == aEntries.end()));
 
     m_pDoc->DeleteTab(0);
 }
