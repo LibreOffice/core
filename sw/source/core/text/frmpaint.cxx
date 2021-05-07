@@ -567,11 +567,11 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 if ( rSpace.GetTextFirstLineOffset() > 0 )
                     aPos.AdjustX(rSpace.GetTextFirstLineOffset() );
 
-                std::unique_ptr<SwSaveClip> pClip;
+                std::unique_ptr<SwSaveClip, o3tl::default_delete<SwSaveClip>> xClip;
                 if( IsUndersized() )
                 {
-                    pClip.reset(new SwSaveClip( pSh->GetOut() ));
-                    pClip->ChgClip( rRect );
+                    xClip.reset(new SwSaveClip( pSh->GetOut() ));
+                    xClip->ChgClip( rRect );
                 }
 
                 aPos.AdjustY(pFnt->GetAscent( pSh, *pSh->GetOut() ) );
