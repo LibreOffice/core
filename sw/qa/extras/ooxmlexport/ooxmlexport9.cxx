@@ -1199,6 +1199,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf100075, "tdf100075.docx")
     CPPUNIT_ASSERT(getProperty<sal_Int32>(xFrame1, "Height") > getProperty<sal_Int32>(xFrame2, "Height"));
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testheader_stuff , "header_stuff.doc") {
+    CPPUNIT_ASSERT_EQUAL(3 , getShapes()) ;
+
+    auto firstShapeHeight = getProperty<sal_Int32>(getShape(1), "Height") ;
+    auto thirdShapeHeight = getProperty<sal_Int32>(getShape(3), "Height") ;
+
+    /*for picture1 the height must be 29759 with ZOrder of 0 */
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(29759), firstShapeHeight ) ;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0) , getProperty<sal_Int32>(getShape(1), "ZOrder")) ;
+
+    /*Frame1 must have the ZOrder of 1*/
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1) , getProperty<sal_Int32>(getShape(2), "ZOrder")) ;
+
+    /*for picture 2 of height 2574 must have a ZOrder of 2 */
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2574), thirdShapeHeight) ;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(getShape(3), "ZOrder")) ;
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
 {
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
