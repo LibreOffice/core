@@ -38,6 +38,7 @@
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <vcl/threadex.hxx>
 
 #include "graphconvert.hxx"
 #include "olecomponent.hxx"
@@ -1131,6 +1132,18 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
             aFormat.dwAspect = nMSAspect;
 
             hr = pDataObject->GetData( &aFormat, &aMedium );
+
+            if (hr == RPC_E_WRONG_THREAD)
+            {
+                // Assume that the OLE object was loaded on the main thread.
+                vcl::solarthread::syncExecute([this, &hr, &pDataObject, &aFormat, &aMedium]() {
+                    // Make sure that the current state is embed::EmbedStates::RUNNING.
+                    RunObject();
+                    // Now try again on the correct thread.
+                    hr = pDataObject->GetData(&aFormat, &aMedium);
+                });
+            }
+
             if ( SUCCEEDED( hr ) && aMedium.tymed == TYMED_MFPICT ) // Win Metafile
             {
                 METAFILEPICT* pMF = static_cast<METAFILEPICT*>(GlobalLock( aMedium.hMetaFilePict ));
@@ -1179,6 +1192,10 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
                         OSL_FAIL( "Unexpected size is provided!" );
                 }
             }
+            else if (!SUCCEEDED(hr))
+            {
+                SAL_WARN("embeddedobj.ole", " OleComponent::GetExtent: GetData() failed");
+            }
             // i113605, to release storage medium
             if ( SUCCEEDED( hr ) )
                 ::ReleaseStgMedium(&aMedium);
@@ -1211,6 +1228,7 @@ awt::Size OleComponent::GetCachedExtent( sal_Int64 nAspect )
         //else
         //  throw io::IOException(); // TODO
 
+        SAL_WARN("embeddedobj.ole", " OleComponent::GetCachedExtent: GetExtent() failed");
         throw lang::IllegalArgumentException();
     }
 
@@ -1227,7 +1245,10 @@ awt::Size OleComponent::GetRecommendedExtent( sal_Int64 nAspect )
     SIZEL aSize;
     HRESULT hr = m_pNativeImpl->m_pOleObject->GetExtent( nMSAspect, &aSize );
     if ( FAILED( hr ) )
+    {
+        SAL_WARN("embeddedobj.ole", " OleComponent::GetRecommendedExtent: GetExtent() failed");
         throw lang::IllegalArgumentException();
+    }
 
     return awt::Size( aSize.cx, aSize.cy );
 }

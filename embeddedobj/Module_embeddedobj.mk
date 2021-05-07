@@ -21,4 +21,10 @@ $(eval $(call gb_Module_add_slowcheck_targets,embeddedobj,\
 ))
 endif
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Module_add_slowcheck_targets,embeddedobj,\
+    CppunitTest_embeddedobj_msole \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
