@@ -32,10 +32,10 @@ core_constructor_list = [
     "stardiv_UnoControls_ProgressMonitor_get_implementation",
     "stardiv_UnoControls_StatusIndicator_get_implementation",
 # canvas/source/factory/canvasfactory.component
-    "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
+    ("com_sun_star_comp_rendering_CanvasFactory_get_implementation", "#ifndef ENABLE_WASM_STRIP_CANVAS"),
 # canvas/source/vcl/vclcanvas.component
-    "com_sun_star_comp_rendering_Canvas_VCL_get_implementation",
-    "com_sun_star_comp_rendering_SpriteCanvas_VCL_get_implementation",
+    ("com_sun_star_comp_rendering_Canvas_VCL_get_implementation", "#ifndef ENABLE_WASM_STRIP_CANVAS"),
+    ("com_sun_star_comp_rendering_SpriteCanvas_VCL_get_implementation", "#ifndef ENABLE_WASM_STRIP_CANVAS"),
 # chart2/source/chartcore.component
     ("com_sun_star_chart2_ExponentialScaling_get_implementation", "#ifndef ENABLE_WASM_STRIP_CHART"),
     ("com_sun_star_chart2_LinearScaling_get_implementation", "#ifndef ENABLE_WASM_STRIP_CHART"),
@@ -107,7 +107,7 @@ core_constructor_list = [
     "com_sun_star_comp_configuration_ReadWriteAccess_get_implementation",
     "com_sun_star_comp_configuration_Update_get_implementation",
 # cppcanvas/source/uno/mtfrenderer.component
-    "com_sun_star_comp_rendering_MtfRenderer_get_implementation",
+    ("com_sun_star_comp_rendering_MtfRenderer_get_implementation", "#ifndef ENABLE_WASM_STRIP_CANVAS"),
 # cui/util/cui.component
     "com_sun_star_cui_ColorPicker_get_implementation",
 # dbaccess/util/dba.component

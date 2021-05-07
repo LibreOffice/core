@@ -12,9 +12,8 @@ $(eval $(call gb_Rdb_Rdb_install,services))
 #
 # "minimal" list of services for cross-compiling build tools
 #
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\
-	$(call gb_Helper_optional,AVMEDIA,avmedia/util/avmedia) \
-	$(call gb_Helper_optional,SCRIPTING,basic/util/sb) \
 	canvas/source/factory/canvasfactory \
 	canvas/source/simplecanvas/simplecanvas \
 	canvas/source/vcl/vclcanvas \
@@ -24,13 +23,19 @@ $(eval $(call gb_Rdb_add_components,services,\
 		canvas/source/directx/directx9canvas \
 		canvas/source/directx/gdipluscanvas \
 	) \
+	cppcanvas/source/uno/mtfrenderer \
+))
+endif
+
+$(eval $(call gb_Rdb_add_components,services,\
+	$(call gb_Helper_optional,AVMEDIA,avmedia/util/avmedia) \
+	$(call gb_Helper_optional,SCRIPTING,basic/util/sb) \
 	comphelper/util/comphelp \
 	configmgr/source/configmgr \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)), \
 		connectivity/source/dbtools/dbtools \
 		connectivity/source/drivers/dbase/dbase \
 	) \
-	cppcanvas/source/uno/mtfrenderer \
 	drawinglayer/drawinglayer \
 	emfio/emfio \
 	filter/source/config/cache/filterconfig1 \

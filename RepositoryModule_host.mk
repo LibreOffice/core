@@ -27,6 +27,14 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 ))
 endif
 
+# WASM_CANVAS change
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
+	canvas \
+	cppcanvas \
+))
+endif
+
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
 	android \
@@ -38,13 +46,11 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	bean \
 	binaryurp \
 	bridges \
-	canvas \
 	cli_ure \
 	$(call gb_Helper_optional,DESKTOP,codemaker) \
 	comphelper \
 	configmgr \
 	connectivity \
-	cppcanvas \
 	cppu \
 	cppuhelper \
 	cpputools \

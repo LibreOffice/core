@@ -17,11 +17,16 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+$(eval $(call gb_Helper_register_executables,NONE, \
+	canvasdemo \
+))
+endif
+
 $(eval $(call gb_Helper_register_executables,NONE, \
 	HelpIndexer \
 	HelpLinker \
 	bestreversemap \
-	canvasdemo \
 	cfgex \
 	concat-deps \
 	cpp \
@@ -323,6 +328,20 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ogltrans, \
 	OGLTrans \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
+	canvastools \
+	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
+	canvasfactory \
+	cppcanvas \
+	$(if $(filter WNT,$(OS)),directx9canvas) \
+	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
+	$(if $(filter WNT,$(OS)),gdipluscanvas) \
+	simplecanvas \
+	vclcanvas \
+))
+endif
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
 	$(if $(filter MACOSX,$(OS)),\
@@ -334,14 +353,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	) \
 	basegfx \
 	bib \
-	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
-	canvasfactory \
-	canvastools \
 	chartcore \
 	chartcontroller \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
-	cppcanvas \
 	configmgr \
 	ctl \
 	dba \
@@ -354,8 +369,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(USING_X11),desktop_detector) \
 	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
-	$(if $(filter WNT,$(OS)),directx9canvas) \
-	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
 	drawinglayer \
 	editeng \
 	$(if $(filter WNT,$(OS)),emser) \
@@ -371,7 +384,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	frm \
 	fsstorage \
 	fwk \
-	$(if $(filter WNT,$(OS)),gdipluscanvas) \
 	guesslang \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
 	i18npool \
@@ -413,7 +425,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	sdd \
 	sdfilt \
 	sfx \
-	simplecanvas \
 	slideshow \
 	sot \
 	spell \
@@ -447,7 +458,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		vbahelper \
 	) \
 	vcl \
-	vclcanvas \
 	writerperfect \
 	xmlscript \
 	xmlfa \
@@ -882,6 +892,12 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	$(if $(ENABLE_OPENGL_CANVAS),canvas_opengl_shader) \
+))
+endif
+
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(SYSTEM_LIBEXTTEXTCAT),,libexttextcat_fingerprint) \
 	officecfg_misc \
@@ -970,7 +986,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(filter WNT,$(OS)), \
 		vcl_opengl_denylist \
 	) \
-	$(if $(ENABLE_OPENGL_CANVAS),canvas_opengl_shader) \
 	$(if $(filter SKIA,$(BUILD_TYPE)), \
 		vcl_skia_denylist ) \
 	$(if $(DISABLE_PYTHON),,$(if $(filter-out AIX,$(OS)), \
