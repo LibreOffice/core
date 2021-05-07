@@ -646,10 +646,8 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     enum RedlineType eRedlineEnd;
                     std::pair<SwTextNode const*, sal_Int32> const flyStart(
                         rInf.GetTextFrame()->MapViewToModel(nPorSttIdx));
-                    std::pair<SwTextNode const*, sal_Int32> const flyEnd(
-                        rInf.GetTextFrame()->MapViewToModel(nPorSttIdx + pPos->GetLen()));
                     bool bHasFlyRedline = rLine.GetRedln()->CheckLine(flyStart.first->GetIndex(),
-                        flyStart.second, flyEnd.first->GetIndex(), flyEnd.second, sRedlineText,
+                        flyStart.second, flyStart.first->GetIndex(), flyStart.second, sRedlineText,
                         bHasRedlineEnd, eRedlineEnd);
                     bDeleted = bHasFlyRedline && eRedlineEnd == RedlineType::Delete;
                 }

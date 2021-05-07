@@ -947,7 +947,8 @@ bool SwRedlineItr::CheckLine(
     // case, but surely that was a bug?
     if (m_nFirst == SwRedlineTable::npos || m_eMode != Mode::Show)
         return false;
-    if( nChkEnd == nChkStart ) // empty lines look one char further
+    SwContentNode *pEndNode = m_rDoc.GetNodes()[nEndNode]->GetContentNode();
+    if( nChkEnd == nChkStart && nChkEnd == pEndNode->Len() ) // empty lines look one char further
         ++nChkEnd;
     sal_Int32 nOldStart = m_nStart;
     sal_Int32 nOldEnd = m_nEnd;
@@ -956,7 +957,7 @@ bool SwRedlineItr::CheckLine(
     eRedlineEnd = RedlineType::None;
 
     SwPosition const start(*m_rDoc.GetNodes()[nStartNode]->GetContentNode(), nChkStart);
-    SwPosition const end(*m_rDoc.GetNodes()[nEndNode]->GetContentNode(), nChkEnd);
+    SwPosition const end(*pEndNode, nChkEnd);
     SwRangeRedline const* pPrevRedline = nullptr;
     bool isBreak(false);
     for (m_nAct = m_nFirst; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++m_nAct)
