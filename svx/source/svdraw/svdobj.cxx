@@ -26,6 +26,8 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -36,6 +38,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
+#include <comphelper/processfactory.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
 #include <o3tl/deleter.hxx>
@@ -546,8 +549,25 @@ void SdrObject::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     }
 }
 
+
 // global static ItemPool for not-yet-inserted items
-static SdrItemPool* mpGlobalItemPool;
+static rtl::Reference<SdrItemPool> mpGlobalItemPool;
+
+/** If we let the libc runtime clean us up, we trigger a crash */
+namespace
+{
+class TerminateListener : public ::cppu::WeakImplHelper< css::frame::XTerminateListener >
+{
+    void SAL_CALL queryTermination( const lang::EventObject& ) override
+    {}
+    void SAL_CALL notifyTermination( const lang::EventObject& ) override
+    {
+        mpGlobalItemPool.clear();
+    }
+    virtual void SAL_CALL disposing( const ::css::lang::EventObject& ) override
+    {}
+};
+};
 
 // init global static itempool
 SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
@@ -559,6 +579,9 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
         mpGlobalItemPool->SetSecondaryPool(pGlobalOutlPool.get());
         mpGlobalItemPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
         mpGlobalItemPool->FreezeIdRanges();
+        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
+        uno::Reference< frame::XTerminateListener > xListener( new TerminateListener );
+        xDesktop->addTerminateListener( xListener );
     }
 
     return *mpGlobalItemPool;
