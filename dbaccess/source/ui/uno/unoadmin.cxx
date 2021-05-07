@@ -32,7 +32,6 @@ namespace dbaui
 
 ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialogBase(_rxORB)
-    ,m_pItemPool(nullptr)
     ,m_pItemPoolDefaults(nullptr)
 {
     m_pCollection.reset( new ::dbaccess::ODsnTypeCollection(_rxORB) );

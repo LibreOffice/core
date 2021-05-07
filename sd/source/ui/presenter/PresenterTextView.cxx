@@ -79,7 +79,7 @@ private:
     cppcanvas::CanvasSharedPtr mpCanvas;
     VclPtr<VirtualDevice> mpOutputDevice;
     std::unique_ptr<EditEngine> mpEditEngine;
-    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> mpEditEngineItemPool;
+    rtl::Reference<SfxItemPool> mpEditEngineItemPool;
     Size maSize;
     OUString msText;
     sal_Int32 mnTop;
@@ -279,7 +279,7 @@ PresenterTextView::Implementation::Implementation()
 PresenterTextView::Implementation::~Implementation()
 {
     mpEditEngine.reset();
-    mpEditEngineItemPool.reset();
+    mpEditEngineItemPool.clear();
     mpOutputDevice.disposeAndClear();
 }
 

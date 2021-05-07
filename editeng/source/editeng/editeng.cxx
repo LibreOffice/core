@@ -83,7 +83,7 @@ static bool bDebugPaint = false;
 #endif
 
 
-static std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> pGlobalPool;
+static rtl::Reference<SfxItemPool> pGlobalPool;
 
 EditEngine::EditEngine( SfxItemPool* pItemPool )
 {
@@ -2589,16 +2589,15 @@ void EditEngine::FieldClicked( const SvxFieldItem& )
 
 // ======================     Static Methods     =======================
 
-SfxItemPool* EditEngine::CreatePool()
+rtl::Reference<SfxItemPool> EditEngine::CreatePool()
 {
-    SfxItemPool* pPool = new EditEngineItemPool();
-    return pPool;
+    return new EditEngineItemPool();
 }
 
 SfxItemPool& EditEngine::GetGlobalItemPool()
 {
     if ( !pGlobalPool )
-        pGlobalPool.reset(CreatePool());
+        pGlobalPool = CreatePool();
     return *pGlobalPool;
 }
 

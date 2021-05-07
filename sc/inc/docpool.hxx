@@ -37,7 +37,7 @@ private:
             virtual ~ScDocumentPool() override;
 public:
 
-    virtual SfxItemPool*        Clone() const override;
+    virtual rtl::Reference<SfxItemPool> Clone() const override;
     virtual MapUnit             GetMetric( sal_uInt16 nWhich ) const override;
 
     void StyleDeleted( const ScStyleSheet* pStyle );      // delete templates(?) in organizer

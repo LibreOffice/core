@@ -54,19 +54,13 @@ SvxUnoDrawPool::SvxUnoDrawPool(SdrModel* pModel)
 
 SvxUnoDrawPool::~SvxUnoDrawPool() noexcept
 {
-    if (mpDefaultsPool)
-    {
-        SfxItemPool* pOutlPool = mpDefaultsPool->GetSecondaryPool();
-        mpDefaultsPool.reset();
-        SfxItemPool::Free(pOutlPool);
-    }
 }
 
 void SvxUnoDrawPool::init()
 {
-    mpDefaultsPool.reset(new SdrItemPool());
-    SfxItemPool* pOutlPool=EditEngine::CreatePool();
-    mpDefaultsPool->SetSecondaryPool(pOutlPool);
+    mpDefaultsPool = new SdrItemPool();
+    rtl::Reference<SfxItemPool> pOutlPool = EditEngine::CreatePool();
+    mpDefaultsPool->SetSecondaryPool(pOutlPool.get());
 
     SdrModel::SetTextDefaults( mpDefaultsPool.get(), SdrEngineDefaults::GetFontHeight() );
     mpDefaultsPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());

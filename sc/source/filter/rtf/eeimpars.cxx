@@ -637,8 +637,8 @@ ScEEParser::~ScEEParser()
 
     // Don't delete Pool until the lists have been deleted
     pPool->SetSecondaryPool( nullptr );
-    pDocPool.reset();
-    pPool.reset();
+    pDocPool.clear();
+    pPool.clear();
 }
 
 void ScEEParser::NewActEntry( const ScEEParseEntry* pE )

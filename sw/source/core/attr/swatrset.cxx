@@ -51,7 +51,7 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     // create SfxItemPool and EditEngine pool and add these in a chain. These
     // belong us and will be removed/destroyed in removeAndDeleteSecondaryPools() used from
     // the destructor
-    SfxItemPool *pSdrPool = new SdrItemPool(this);
+    rtl::Reference<SfxItemPool> pSdrPool = new SdrItemPool(this);
 
     // #75371# change DefaultItems for the SdrEdgeObj distance items
     // to TWIPS.
@@ -69,9 +69,9 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     pSdrPool->SetPoolDefaultItem(makeSdrShadowXDistItem(nDefShadowDist));
     pSdrPool->SetPoolDefaultItem(makeSdrShadowYDistItem(nDefShadowDist));
 
-    SfxItemPool *pEEgPool = EditEngine::CreatePool();
+    rtl::Reference<SfxItemPool> pEEgPool = EditEngine::CreatePool();
 
-    pSdrPool->SetSecondaryPool(pEEgPool);
+    pSdrPool->SetSecondaryPool(pEEgPool.get());
 
     if(!GetFrozenIdRanges())
     {
@@ -87,17 +87,9 @@ SwAttrPool::~SwAttrPool()
 {
     // cleanup secondary pools
     SfxItemPool *pSdrPool = GetSecondaryPool();
-    SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
-
     // first delete the items, then break the linking
     pSdrPool->Delete();
-
     SetSecondaryPool(nullptr);
-    pSdrPool->SetSecondaryPool(nullptr);
-
-    // final cleanup of secondary pool(s)
-    SfxItemPool::Free(pSdrPool);
-    SfxItemPool::Free(pEEgPool);
 }
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )

@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public
 
     std::unique_ptr<SfxErrorHandler> m_pErrorHandler;
 
-    std::unique_ptr<SwAttrPool, SfxItemPoolDeleter> m_pAttrPool;
+    rtl::Reference<SwAttrPool> m_pAttrPool;
 
     // Current view is held here in order to avoid one's being forced
     // to work via GetActiveView.

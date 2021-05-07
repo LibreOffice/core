@@ -510,8 +510,6 @@ ScEnginePoolHelper::~ScEnginePoolHelper()
 {
     if ( bDeleteDefaults )
         delete pDefaults;
-    if ( bDeleteEnginePool )
-        SfxItemPool::Free(pEnginePool);
 }
 
 ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
@@ -529,7 +527,7 @@ ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
 ScEditEngineDefaulter::ScEditEngineDefaulter( const ScEditEngineDefaulter& rOrg )
             :
             ScEnginePoolHelper( rOrg ),
-            EditEngine( pEnginePool )
+            EditEngine( pEnginePool.get() )
 {
     SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 }
