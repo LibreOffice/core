@@ -213,6 +213,4 @@ void VclComplexTextTest::testCaching()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclComplexTextTest);
 
-CPPUNIT_PLUGIN_IMPLEMENT();
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
