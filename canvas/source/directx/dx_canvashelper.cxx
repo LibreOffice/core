@@ -51,7 +51,7 @@ namespace dxcanvas
 {
     namespace
     {
-        Gdiplus::LineCap gdiCapFromCap( sal_Int8 nCapType )
+        Gdiplus::LineCap gdiLineCapFromCap( sal_Int8 nCapType )
         {
             switch( nCapType )
             {
@@ -66,10 +66,33 @@ namespace dxcanvas
 
                 default:
                     ENSURE_OR_THROW( false,
-                                      "gdiCapFromCap(): Unexpected cap type" );
+                                      "gdiLineCapFromCap(): Unexpected cap type" );
             }
 
             return Gdiplus::LineCapFlat;
+        }
+
+        Gdiplus::DashCap gdiDashCapFromCap( sal_Int8 nCapType )
+        {
+            switch( nCapType )
+            {
+                case rendering::PathCapType::BUTT:
+                    return Gdiplus::DashCapFlat;
+
+                case rendering::PathCapType::ROUND:
+                    return Gdiplus::DashCapRound;
+
+                // Gdiplus does not know square, using flat would make short
+                // dashes disappear, so use triangle as the closest one.
+                case rendering::PathCapType::SQUARE:
+                    return Gdiplus::DashCapTriangle;
+
+                default:
+                    ENSURE_OR_THROW( false,
+                                      "gdiDashCapFromCap(): Unexpected cap type" );
+            }
+
+            return Gdiplus::DashCapFlat;
         }
 
         Gdiplus::LineJoin gdiJoinFromJoin( sal_Int8 nJoinType )
@@ -368,9 +391,9 @@ namespace dxcanvas
                 aPen.SetDashPattern( rDashArray.data(),
                                      rDashArray.size() );
             }
-            aPen.SetLineCap( gdiCapFromCap(strokeAttributes.StartCapType),
-                             gdiCapFromCap(strokeAttributes.EndCapType),
-                             Gdiplus::DashCapFlat );
+            aPen.SetLineCap( gdiLineCapFromCap(strokeAttributes.StartCapType),
+                             gdiLineCapFromCap(strokeAttributes.EndCapType),
+                             gdiDashCapFromCap(strokeAttributes.StartCapType));
             if(!bIsNone)
                 aPen.SetLineJoin( gdiJoinFromJoin(strokeAttributes.JoinType) );
 
