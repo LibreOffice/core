@@ -1055,6 +1055,55 @@ void SwFEShell::SelectionToTop( bool bTop )
     else
         Imp()->GetDrawView()->MovMarkedToTop();
     ::lcl_NotifyNeighbours( &rMrkList );
+
+    // Does the selection contain a textbox?
+    for (size_t i = 0; i < rMrkList.GetMarkCount(); i++)
+        if (auto pObj = rMrkList.GetMark(i)->GetMarkedSdrObj())
+            // Get the textbox-shape
+            if (auto pFormat = FindFrameFormat(pObj))
+            {
+                // If it has not textframe skip...
+                if (!SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(pFormat))
+                    continue;
+                // If it has a textframe so it is a textbox, get its page
+                if (auto pDrwModel
+                    = pFormat->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel())
+                    // Not really understood why everything is on page 0...
+                    // but it is easier to handle sdrobjects, thats true
+                    if (auto pPage = pDrwModel->GetPage(0))
+                    {
+                        // nShift: it means how many layers the pObj have to be shifted up,
+                        // in order not to interfere with other shapes and textboxes.
+                        // Situations:
+                        // - The next shape has textframe: This shape have to shifted with
+                        //   two layers.
+                        // - The next shape has not got textframe: This shape have to be
+                        //   shifted only one layer up.
+                        // - The next shape is null:
+                        //      - This shape is already at heaven: Only the textframe have
+                        //        to be adjusted.
+                        sal_uInt32 nShift = 0;
+                        // Get the one level higher object (note: can be nullptr!)
+                        const auto pNextObj = pPage->SetObjectOrdNum(pObj->GetOrdNum() + 1, pObj->GetOrdNum() + 1);
+                        // If there is a higher object (not null)...
+                        if (pNextObj)
+                        {
+                            // One level shift is neccessary
+                            nShift++;
+                            // If this object is a textbox, two level increasing needed
+                            // (one for the shape and one for the frame)
+                            if (auto pNextFormat = FindFrameFormat(pNextObj))
+                                if (SwTextBoxHelper::isTextBox(pNextFormat, RES_DRAWFRMFMT)
+                                    || SwTextBoxHelper::isTextBox(pNextFormat, RES_FLYFRMFMT))
+                                    nShift++;
+                        }
+                        // Set the new z-order.
+                        pPage->SetObjectOrdNum(pObj->GetOrdNum(), pObj->GetOrdNum() + nShift);
+                    }
+                // The shape is on the right level, correct the layer of the frame
+                SwTextBoxHelper::DoTextBoxZOrderCorrection(pFormat);
+            }
+
     GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
 }
@@ -1075,6 +1124,36 @@ void SwFEShell::SelectionToBottom( bool bBottom )
     else
         Imp()->GetDrawView()->MovMarkedToBtm();
     ::lcl_NotifyNeighbours( &rMrkList );
+
+    // If the selection has textbox
+    for(size_t i = 0; i < rMrkList.GetMarkCount(); i++)
+        if (auto pObj = rMrkList.GetMark(i)->GetMarkedSdrObj())
+            // Get the shape of the textbox
+            if (auto pFormat = FindFrameFormat(pObj))
+            {
+                // If the shape has not textframes skip.
+                if (!SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(pFormat))
+                    continue;
+                // If has, move the shape to correct level with...
+                if (auto pDrwModel
+                    = pFormat->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel())
+                    if (auto pPage = pDrwModel->GetPage(0))
+                    {
+                        const auto pNextObj = pPage->SetObjectOrdNum(pObj->GetOrdNum() - 1, pObj->GetOrdNum() - 1);
+                        // If there is a lower object (not null)...
+                        if (pNextObj)
+                        {
+                            // If the lower has no textframe, just do nothing, else move by one lower
+                            if (auto pNextFormat = FindFrameFormat(pNextObj))
+                                if (SwTextBoxHelper::isTextBox(pNextFormat, RES_DRAWFRMFMT)
+                                    || SwTextBoxHelper::isTextBox(pNextFormat, RES_FLYFRMFMT))
+                                    pPage->SetObjectOrdNum(pObj->GetOrdNum(), pObj->GetOrdNum() - 1);
+                        }
+                    }
+                // And set correct layer for the selected textbox.
+                SwTextBoxHelper::DoTextBoxZOrderCorrection(pFormat);
+            }
+
     GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
 }
@@ -1138,6 +1217,9 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
                 SvxOpaqueItem aOpa( pFormat->GetOpaque() );
                 aOpa.SetValue(  nLayerId == rIDDMA.GetHellId() );
                 pFormat->SetFormatAttr( aOpa );
+                // If pObj has textframe, put its textframe to the right level
+                if (auto pTextBx = FindFrameFormat(pObj))
+                    SwTextBoxHelper::DoTextBoxZOrderCorrection(pTextBx);
             }
         }
     }

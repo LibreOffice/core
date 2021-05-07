@@ -39,6 +39,9 @@
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
 #include <svx/swframetypes.hxx>
+#include <drawdoc.hxx>
+#include <IDocumentUndoRedo.hxx>
+#include <DocumentDrawModelManager.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -136,6 +139,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
         pShape->SetFormatAttr(aSet);
     }
 
+    DoTextBoxZOrderCorrection(pShape);
     // Also initialize the properties, which are not constant, but inherited from the shape's ones.
     uno::Reference<drawing::XShape> xShape(pShape->FindRealSdrObject()->getUnoShape(),
                                            uno::UNO_QUERY);
@@ -960,6 +964,8 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
 
     if (aTextBoxSet.Count())
         pFormat->GetDoc()->SetFlyFrameAttr(*pFormat, aTextBoxSet);
+
+    DoTextBoxZOrderCorrection(&rShape);
 }
 
 SwFrameFormat* SwTextBoxHelper::getShapeFormat(uno::Reference<drawing::XShape> xShape)
@@ -1019,6 +1025,7 @@ bool SwTextBoxHelper::setWrapThrough(SwFrameFormat* pShape)
     {
         if (auto pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
         {
+            ::sw::UndoGuard const UndoGuard(pShape->GetDoc()->GetIDocumentUndoRedo());
             if (auto xFrame = SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat))
                 try
                 {
@@ -1070,6 +1077,7 @@ bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape)
             {
                 try
                 {
+                    ::sw::UndoGuard const UndoGuard(pShape->GetDoc()->GetIDocumentUndoRedo());
                     uno::Reference<beans::XPropertySet> const xPropertySet(
                         SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat),
                         uno::UNO_QUERY);
@@ -1136,7 +1144,7 @@ bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape)
                 }
             }
 
-            return doTextBoxPositioning(pShape);
+            return doTextBoxPositioning(pShape) && DoTextBoxZOrderCorrection(pShape);
         }
     }
     return false;
@@ -1155,6 +1163,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape)
     {
         if (auto pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
         {
+            ::sw::UndoGuard const UndoGuard(pShape->GetDoc()->GetIDocumentUndoRedo());
             if (pShape->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
             {
                 tools::Rectangle aRect(getTextRectangle(pShape, false));
@@ -1224,19 +1233,68 @@ std::optional<bool> SwTextBoxHelper::isAnchorTypeDifferent(SwFrameFormat* pShape
 
 bool SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(SwFrameFormat* pShape)
 {
-    OUString sErrMsg;
     if (pShape && pShape->Which() == RES_DRAWFRMFMT)
         if (auto pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
             if (pFormat && pFormat->Which() == RES_FLYFRMFMT)
                 return true;
             else
-                sErrMsg = "Shape do not have valid textframe!";
+                SAL_WARN("sw.core", "SwTextBoxHelper::isTextBoxShapeHasValidTextFrame: "
+                                    "Shape does not have valid textframe!");
         else
-            sErrMsg = "Shape do not have associated frame!";
+            SAL_WARN("sw.core", "SwTextBoxHelper::isTextBoxShapeHasValidTextFrame: "
+                                "Shape does not have associated frame!");
     else
-        sErrMsg = "Not valid shape!";
+        SAL_WARN("sw.core", "SwTextBoxHelper::isTextBoxShapeHasValidTextFrame: Not valid shape!");
+    return false;
+}
 
-    SAL_WARN("sw.core", "SwTextBoxHelper::isTextBoxShapeHasValidTextFrame: " << sErrMsg);
+bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape)
+{
+    if (isTextBoxShapeHasValidTextFrame(pShape))
+    {
+        if (SdrObject* pShpObj = pShape->FindRealSdrObject())
+        {
+            if (SdrObject* pFrmObj
+                = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT)->FindRealSdrObject())
+            {
+                // Get the draw model from the doc
+                SwDrawModel* pDrawModel
+                    = pShape->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+                if (pDrawModel)
+                {
+                    // Not really sure this will work all page, but it seems it will.
+                    auto pPage = pDrawModel->GetPage(0);
+                    // Recalc all Zorders
+                    pPage->RecalcObjOrdNums();
+                    // If the shape is behind the frame, is good, but if there are some objects
+                    // between of them that is wrong so put the frame exactly one level higher
+                    // than the shape.
+                    if (pFrmObj->GetOrdNum() > pShpObj->GetOrdNum())
+                        pPage->SetObjectOrdNum(pFrmObj->GetOrdNum(), pShpObj->GetOrdNum() + 1);
+                    else
+                        // Else, if the frame is behind the shape, bring to the front of it.
+                        while (pFrmObj->GetOrdNum() <= pShpObj->GetOrdNum())
+                        {
+                            pPage->SetObjectOrdNum(pFrmObj->GetOrdNum(), pFrmObj->GetOrdNum() + 1);
+                            // If there is any problem with the indexes, do not run over the infinity
+                            if (pPage->GetObjCount() == pFrmObj->GetOrdNum())
+                                break;
+                        }
+                    pPage->RecalcObjOrdNums();
+                    return true; // Success
+                }
+                SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
+                                    "No Valid Draw model for SdrObject for the shape!");
+            }
+            SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
+                                "No Valid SdrObject for the frame!");
+        }
+        SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
+                            "No Valid SdrObject for the shape!");
+    }
+    SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
+                        "No Valid TextFrame!");
+
     return false;
 }
 

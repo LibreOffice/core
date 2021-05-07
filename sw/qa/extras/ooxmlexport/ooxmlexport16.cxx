@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <comphelper/configuration.hxx>
 #include <editeng/escapementitem.hxx>
@@ -158,6 +159,36 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
     // I.e. Shadow size will be smaller than actual.
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(200000), nSize1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTextBoxZOrder, "testTextBoxZOrder.docx")
+{
+    // Is load successful?
+    CPPUNIT_ASSERT(mxComponent);
+    // Collect the z-order values of the textboxes
+    std::vector<sal_uInt64> ShapeZorders;
+    std::vector<sal_uInt64> FrameZorders;
+    for (int i = 1; i < 4; i++)
+    {
+        uno::Reference<drawing::XShape> xShape(getShape(i));
+        CPPUNIT_ASSERT(xShape);
+        uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShapeProperties);
+        uno::Reference<text::XTextFrame> xFrame = SwTextBoxHelper::getUnoTextFrame(xShape);
+        CPPUNIT_ASSERT(xFrame.is());
+        uno::Reference<beans::XPropertySet> const xFrameProperties(xFrame, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xFrameProperties);
+        ShapeZorders.push_back(xShapeProperties->getPropertyValue("ZOrder").get<sal_uInt64>());
+        FrameZorders.push_back(xFrameProperties->getPropertyValue("ZOrder").get<sal_uInt64>());
+    }
+    // Check the z-order values.
+    for (int i = 1; i < 3; i++)
+    {
+        CPPUNIT_ASSERT_GREATER(ShapeZorders[i - 1], ShapeZorders[i]);
+        CPPUNIT_ASSERT_GREATER(FrameZorders[i - 1], FrameZorders[i]);
+        CPPUNIT_ASSERT_GREATER(ShapeZorders[i - 1], FrameZorders[i - 1]);
+    }
+    // Without the fix it failed, because the z-order was wrong.
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf141550, "tdf141550.docx")
