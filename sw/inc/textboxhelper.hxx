@@ -107,6 +107,10 @@ public:
     /// Returns true if the given shape has a valid textframe.
     static bool isTextBoxShapeHasValidTextFrame(SwFrameFormat* pShape);
 
+    // Returns true on success. Synchronize z-order of the text frame of the given textbox
+    // by setting it one level higher than the z-order of the shape of the textbox.
+    static bool DoTextBoxZOrderCorrection(SwFrameFormat* pShape);
+
     /**
      * If we have an associated TextFrame, then return that.
      *
