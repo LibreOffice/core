@@ -50,8 +50,10 @@ public:
 
 private:
     // signals
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
+#endif
 };
 
 // this attempts to clip the hosted native window using gdk_window_shape_combine_region

@@ -125,7 +125,9 @@ public:
 
     void CreateMenuBarWidget();
     void DestroyMenuBarWidget();
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gboolean SignalKey(GdkEventKey const * pEvent);
+#endif
     void ReturnFocus();
 
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;

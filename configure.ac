@@ -1564,6 +1564,10 @@ libo_FUZZ_ARG_ENABLE(gtk3,
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
 ,test "${enable_gtk3+set}" = set || enable_gtk3=yes)
 
+AC_ARG_ENABLE(gtk4,
+    AS_HELP_STRING([--enable-gtk4],
+        [Determines whether to use Gtk+ 4.0 vclplug on platforms where Gtk+ 4.0 is available.]))
+
 AC_ARG_ENABLE(introspection,
     AS_HELP_STRING([--enable-introspection],
         [Generate files for GObject introspection.  Requires --enable-gtk3.  (Typically used by
@@ -11426,6 +11430,14 @@ if test "x$enable_gtk3_kde5" = "xyes"; then
 fi
 AC_SUBST(ENABLE_GTK3_KDE5)
 
+ENABLE_GTK4=""
+if test "x$enable_gtk4" = "xyes"; then
+    ENABLE_GTK4="TRUE"
+    AC_DEFINE(ENABLE_GTK4)
+    R="$R gtk4"
+fi
+AC_SUBST(ENABLE_GTK4)
+
 ENABLE_QT5=""
 if test "x$enable_qt5" = "xyes"; then
     ENABLE_QT5="TRUE"
@@ -11464,6 +11476,29 @@ if test "x$enable_gtk3" = "xyes" -o "x$enable_gtk3_kde5" = "xyes"; then
 fi
 AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
+
+GTK4_CFLAGS=""
+GTK4_LIBS=""
+if test "x$enable_gtk4" = "xyes"; then
+    if test "$with_system_cairo" = no; then
+        add_warning 'Non-system cairo combined with gtk4 is assumed to cause trouble; proceed at your own risk.'
+    fi
+    : ${with_system_cairo:=yes}
+    PKG_CHECK_MODULES(GTK4, gtk4 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo atk)
+    GTK4_CFLAGS=$(printf '%s' "$GTK4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    GTK4_CFLAGS="$GTK4_CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
+    FilterLibs "${GTK4_LIBS}"
+    GTK4_LIBS="${filteredlibs}"
+
+    dnl We require egl only for the gtk4 plugin. Otherwise we use glx.
+    if test "$with_system_epoxy" != "yes"; then
+        AC_CHECK_LIB(EGL, eglMakeCurrent, [:], AC_MSG_ERROR([libEGL required.]))
+        AC_CHECK_HEADER(EGL/eglplatform.h, [],
+                        [AC_MSG_ERROR(EGL headers not found. install mesa-libEGL-devel)], [])
+    fi
+fi
+AC_SUBST(GTK4_LIBS)
+AC_SUBST(GTK4_CFLAGS)
 
 if test "$enable_introspection" = yes; then
     if test "$ENABLE_GTK3" = "TRUE" -o "$ENABLE_GTK3_KDE5" = "TRUE"; then
@@ -11606,7 +11641,7 @@ AC_SUBST(SYSTEM_BLUEZ)
 dnl ===================================================================
 dnl Check whether to enable GIO support
 dnl ===================================================================
-if test "$ENABLE_GTK3" = "TRUE" -o "$ENABLE_GTK3_KDE5" = "TRUE"; then
+if test "$ENABLE_GTK4" = "TRUE" -o "$ENABLE_GTK3" = "TRUE" -o "$ENABLE_GTK3_KDE5" = "TRUE"; then
     AC_MSG_CHECKING([whether to enable GIO support])
     if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
         dnl Need at least 2.26 for the dbus support.

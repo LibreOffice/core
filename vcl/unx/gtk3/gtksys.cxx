@@ -87,6 +87,7 @@ struct GdkRectangleCoincident
 void
 GtkSalSystem::countScreenMonitors()
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     maScreenMonitors.clear();
     for (gint i = 0; i < gdk_display_get_n_screens(mpDisplay); i++)
     {
@@ -111,11 +112,13 @@ GtkSalSystem::countScreenMonitors()
         }
         maScreenMonitors.emplace_back(pScreen, nMonitors);
     }
+#endif
 }
 
 SalX11Screen
 GtkSalSystem::getXScreenFromDisplayScreen(unsigned int nScreen)
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gint nMonitor;
 
     GdkScreen *pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
@@ -124,8 +127,13 @@ GtkSalSystem::getXScreenFromDisplayScreen(unsigned int nScreen)
     if (!DLSYM_GDK_IS_X11_DISPLAY(mpDisplay))
         return SalX11Screen (0);
     return SalX11Screen (gdk_x11_screen_get_screen_number (pScreen));
+#else
+    (void)nScreen;
+    return SalX11Screen (0);
+#endif
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 GdkScreen *
 GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
 {
@@ -173,28 +181,42 @@ int GtkSalSystem::getScreenMonitorIdx (GdkScreen *pScreen,
     return getScreenIdxFromPtr (pScreen) +
         gdk_screen_get_monitor_at_point (pScreen, nX, nY);
 }
+#endif
 
 unsigned int GtkSalSystem::GetDisplayScreenCount()
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gint nMonitor;
     (void)getScreenMonitorFromIdx (G_MAXINT, nMonitor);
     return G_MAXINT - nMonitor;
+#else
+    return 1;
+#endif
 }
 
 bool GtkSalSystem::IsUnifiedDisplay()
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     return gdk_display_get_n_screens (mpDisplay) == 1;
+#else
+    return true;
+#endif
 }
 
 unsigned int GtkSalSystem::GetDisplayBuiltInScreen()
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkScreen *pDefault = gdk_display_get_default_screen (mpDisplay);
     int idx = getScreenIdxFromPtr (pDefault);
     return idx + gdk_screen_get_primary_monitor(pDefault);
+#else
+    return 0;
+#endif
 }
 
 tools::Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel (unsigned int nScreen)
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gint nMonitor;
     GdkScreen *pScreen;
     GdkRectangle aRect;
@@ -203,6 +225,10 @@ tools::Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel (unsigned int nScree
         return tools::Rectangle();
     gdk_screen_get_monitor_geometry (pScreen, nMonitor, &aRect);
     return tools::Rectangle (Point(aRect.x, aRect.y), Size(aRect.width, aRect.height));
+#else
+    (void)nScreen;
+    return tools::Rectangle();
+#endif
 }
 
 // convert ~ to indicate mnemonic to '_'
@@ -232,7 +258,11 @@ int GtkSalSystem::ShowNativeDialog (const OUString& rTitle, const OUString& rMes
     if (nButton < 0)
         nButton = -1;
 
-    gtk_widget_destroy (GTK_WIDGET (pDialog));
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    gtk_widget_destroy(GTK_WIDGET(pDialog));
+#else
+    gtk_window_destroy(GTK_WINDOW(pDialog));
+#endif
 
     return nButton;
 }
