@@ -546,21 +546,22 @@ void SdrObject::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     }
 }
 
-// init global static itempool
-SdrItemPool* SdrObject::mpGlobalItemPool = nullptr;
+// global static ItemPool for not-yet-inserted items
+static std::unique_ptr<SdrItemPool, SfxItemPoolDeleter> mxGlobalItemPool;
 
+// init global static itempool
 SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
 {
-    if(!mpGlobalItemPool)
+    if(!mxGlobalItemPool)
     {
-        mpGlobalItemPool = new SdrItemPool();
+        mxGlobalItemPool.reset(new SdrItemPool() );
         SfxItemPool* pGlobalOutlPool = EditEngine::CreatePool();
-        mpGlobalItemPool->SetSecondaryPool(pGlobalOutlPool);
-        mpGlobalItemPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
-        mpGlobalItemPool->FreezeIdRanges();
+        mxGlobalItemPool->SetSecondaryPool(pGlobalOutlPool);
+        mxGlobalItemPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
+        mxGlobalItemPool->FreezeIdRanges();
     }
 
-    return *mpGlobalItemPool;
+    return *mxGlobalItemPool;
 }
 
 void SdrObject::SetRelativeWidth( double nValue )
