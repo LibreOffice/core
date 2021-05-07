@@ -303,6 +303,7 @@ public:
     void testTdf72470();
     void testTdf35636();
     void testTdf98481();
+    void testTdf115022();
     void testVBAMacroFunctionODS();
     void testAutoheight2Rows();
     void testXLSDefColWidth();
@@ -502,6 +503,7 @@ public:
     CPPUNIT_TEST(testTdf72470);
     CPPUNIT_TEST(testTdf35636);
     CPPUNIT_TEST(testTdf98481);
+    CPPUNIT_TEST(testTdf115022);
     CPPUNIT_TEST(testVBAMacroFunctionODS);
     CPPUNIT_TEST(testAutoheight2Rows);
     CPPUNIT_TEST(testXLSDefColWidth);
@@ -5376,6 +5378,25 @@ void ScFiltersTest::testTdf98481()
     CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(ScAddress(1,4,0)));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(2,4,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(ScAddress(3,4,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf115022()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf115022.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(6.0, rDoc.GetValue(ScAddress(1,8,0)));
+
+    xDocSh->DoHardRecalc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 6
+    // - Actual  : 21
+    CPPUNIT_ASSERT_EQUAL(6.0, rDoc.GetValue(ScAddress(1,8,0)));
 
     xDocSh->DoClose();
 }
