@@ -464,7 +464,7 @@ namespace pcr
         }
     }
 
-    void ControlCharacterDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
+    void ControlCharacterDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
     {
         // just to be sure...
         _rpSet = nullptr;
@@ -534,7 +534,7 @@ namespace pcr
         _rpSet.reset(new SfxItemSet(*_rpPool));
     }
 
-    void ControlCharacterDialog::destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
+    void ControlCharacterDialog::destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
     {
         // from the pool, get and remember the font list (needs to be deleted)
         const SvxFontListItem& rFontListItem = static_cast<const SvxFontListItem&>(_rpPool->GetDefaultItem(CFID_FONTLIST));
@@ -546,7 +546,6 @@ namespace pcr
         // delete the pool
         _rpPool->ReleaseDefaults(true);
             // the "true" means delete the items, too
-        SfxItemPool::Free(_rpPool);
         _rpPool = nullptr;
 
         // reset the defaults ptr

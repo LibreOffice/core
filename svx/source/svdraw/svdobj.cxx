@@ -546,16 +546,17 @@ void SdrObject::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     }
 }
 
-// init global static itempool
-SdrItemPool* SdrObject::mpGlobalItemPool = nullptr;
+// global static ItemPool for not-yet-inserted items
+static SdrItemPool* mpGlobalItemPool;
 
+// init global static itempool
 SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
 {
     if(!mpGlobalItemPool)
     {
         mpGlobalItemPool = new SdrItemPool();
-        SfxItemPool* pGlobalOutlPool = EditEngine::CreatePool();
-        mpGlobalItemPool->SetSecondaryPool(pGlobalOutlPool);
+        rtl::Reference<SfxItemPool> pGlobalOutlPool = EditEngine::CreatePool();
+        mpGlobalItemPool->SetSecondaryPool(pGlobalOutlPool.get());
         mpGlobalItemPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
         mpGlobalItemPool->FreezeIdRanges();
     }

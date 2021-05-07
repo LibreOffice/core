@@ -212,7 +212,6 @@ EditTextObject::EditTextObject( SfxItemPool* pPool ) :
 }
 
 EditTextObject::EditTextObject( const EditTextObject& r ) :
-    SfxItemPoolUser(),
     mpImpl(new EditTextObjectImpl(this, *r.mpImpl))
 {
 }
@@ -390,11 +389,6 @@ bool EditTextObject::isWrongListEqual(const EditTextObject& rCompare) const
     return mpImpl->isWrongListEqual(*rCompare.mpImpl);
 }
 
-void EditTextObject::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
-{
-    mpImpl->ObjectInDestruction(rSfxItemPool);
-}
-
 #if DEBUG_EDIT_ENGINE
 void EditTextObject::Dump() const
 {
@@ -427,31 +421,6 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
        (void)xmlTextWriterEndDocument(pWriter);
        xmlFreeTextWriter(pWriter);
     }
-}
-
-// from SfxItemPoolUser
-void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
-{
-    if(bOwnerOfPool || pPool != &rSfxItemPool)
-        return;
-
-    // The pool we are based on gets destructed; get owner of pool by creating own one.
-    // No need to call RemoveSfxItemPoolUser(), this is done from the pool's destructor
-    // Base new pool on EditEnginePool; it would also be possible to clone the used
-    // pool if needed, but only text attributes should be used.
-    SfxItemPool* pNewPool = EditEngine::CreatePool();
-
-    pNewPool->SetDefaultMetric(pPool->GetMetric(DEF_METRIC));
-
-    ContentInfosType aReplaced;
-    aReplaced.reserve(aContents.size());
-    for (auto const& content : aContents)
-        aReplaced.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content, *pNewPool)));
-    aReplaced.swap(aContents);
-
-    // set local variables
-    pPool = pNewPool;
-    bOwnerOfPool = true;
 }
 
 #if DEBUG_EDIT_ENGINE
@@ -504,12 +473,6 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
         pPool = EditEngine::CreatePool();
         bOwnerOfPool =  true;
     }
-
-    if(!bOwnerOfPool && pPool)
-    {
-        // it is sure now that the pool is an EditEngineItemPool
-        pPool->AddSfxItemPoolUser(*mpFront);
-    }
 }
 
 EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextObjectImpl& r )
@@ -537,12 +500,6 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextOb
 
     }
 
-    if (!bOwnerOfPool)
-    {
-        // it is sure now that the pool is an EditEngineItemPool
-        pPool->AddSfxItemPoolUser(*mpFront);
-    }
-
     if (bOwnerOfPool && r.pPool)
         pPool->SetDefaultMetric( r.pPool->GetMetric( DEF_METRIC ) );
 
@@ -553,20 +510,11 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextOb
 
 EditTextObjectImpl::~EditTextObjectImpl()
 {
-    if(!bOwnerOfPool && pPool)
-    {
-        pPool->RemoveSfxItemPoolUser(*mpFront);
-    }
-
     ClearPortionInfo();
 
     // Remove contents before deleting the pool instance since each content
     // has to access the pool instance in its destructor.
     aContents.clear();
-    if ( bOwnerOfPool )
-    {
-        SfxItemPool::Free(pPool);
-    }
 }
 
 

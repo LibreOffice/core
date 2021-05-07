@@ -964,9 +964,6 @@ private:
     std::unique_ptr<sdr::contact::ViewContact>
                                       mpViewContact;
 
-    // global static ItemPool for not-yet-inserted items
-    static SdrItemPool*         mpGlobalItemPool;
-
     // do not use directly, always use getSvxShape() if you have to!
     SvxShape*                   mpSvxShape;
     css::uno::WeakReference< css::uno::XInterface >

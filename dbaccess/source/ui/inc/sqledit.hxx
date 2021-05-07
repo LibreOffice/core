@@ -41,7 +41,7 @@ namespace dbaui
         Timer m_aUpdateDataTimer;
         const SyntaxHighlighter m_aHighlighter;
         svtools::ColorConfig m_ColorConfig;
-        SfxItemPool* m_pItemPool;
+        rtl::Reference<SfxItemPool> m_pItemPool;
 
         rtl::Reference<ChangesListener> m_listener;
         osl::Mutex m_mutex;

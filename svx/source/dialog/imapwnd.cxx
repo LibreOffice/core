@@ -55,8 +55,8 @@ IMapWindow::IMapWindow(const Reference< XFrame >& rxDocumentFrame, weld::Dialog*
     : GraphCtrl(pDialog)
     , mxDocumentFrame(rxDocumentFrame)
 {
-    pIMapPool.reset(new SfxItemPool( "IMapItemPool",
-                                 SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, maItemInfos ));
+    pIMapPool = new SfxItemPool( "IMapItemPool",
+                                 SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, maItemInfos );
     pIMapPool->FreezeIdRanges();
 }
 

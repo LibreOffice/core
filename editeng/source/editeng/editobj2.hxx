@@ -173,7 +173,7 @@ private:
     EditTextObject* mpFront;
 
     ContentInfosType        aContents;
-    SfxItemPool*            pPool;
+    rtl::Reference<SfxItemPool>       pPool;
     std::unique_ptr<XParaPortionList> pPortionInfo;
 
     sal_uInt16              nMetric;
@@ -217,7 +217,7 @@ public:
 
     ContentInfosType&       GetContents() { return aContents;}
     const ContentInfosType& GetContents() const { return aContents;}
-    SfxItemPool*            GetPool() const         { return pPool; }
+    SfxItemPool*            GetPool() const         { return pPool.get(); }
     XParaPortionList*       GetPortionInfo() const  { return pPortionInfo.get(); }
     void                    SetPortionInfo( std::unique_ptr<XParaPortionList> pP )
                                 { pPortionInfo = std::move(pP); }
@@ -262,9 +262,6 @@ public:
 
     // #i102062#
     bool isWrongListEqual(const EditTextObjectImpl& rCompare) const;
-
-    // from SfxItemPoolUser
-    void ObjectInDestruction(const SfxItemPool& rSfxItemPool);
 
 #if DEBUG_EDIT_ENGINE
     void Dump() const;

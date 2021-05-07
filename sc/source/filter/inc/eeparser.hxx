@@ -100,8 +100,8 @@ class ScEEParser
 {
 protected:
     EditEngine*         pEdit;
-    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter>  pPool;
-    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter>  pDocPool;
+    rtl::Reference<SfxItemPool>  pPool;
+    rtl::Reference<SfxItemPool>  pDocPool;
     std::vector<std::shared_ptr<ScEEParseEntry>> maList;
     std::shared_ptr<ScEEParseEntry> mxActEntry;
     ColWidthsMap        maColWidths;

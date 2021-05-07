@@ -431,7 +431,7 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
                 if ( !pLeftArea || !pCenterArea || !pRightArea )
                 {
                     // no Text with Null are left
-                    ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), true );
+                    ScEditEngineDefaulter aEngine( EditEngine::CreatePool().get(), true );
                     if (!pLeftArea)
                         pLeftArea = aEngine.CreateTextObject();
                     if (!pCenterArea)
