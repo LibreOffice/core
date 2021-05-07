@@ -235,7 +235,8 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     if (fontHeight < 0)
         fontHeight = -fontHeight;
     SkFont font(typeface, fontHeight, pWinFont->getHScale(), 0);
-    font.setEdging(fontEdging);
+    font.setEdging(logFont.lfQuality == NONANTIALIASED_QUALITY ? SkFont::Edging::kAlias
+                                                               : fontEdging);
     assert(dynamic_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl()));
     SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl());
     COLORREF color = ::GetTextColor(mWinParent.getHDC());
