@@ -80,37 +80,37 @@ $(eval $(call gb_Library_use_externals,vclplug_gtk3,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
-    vcl/unx/gtk3/a11y/gtk3atkaction \
-    vcl/unx/gtk3/a11y/gtk3atkbridge \
-    vcl/unx/gtk3/a11y/gtk3atkcomponent \
-    vcl/unx/gtk3/a11y/gtk3atkeditabletext \
-    vcl/unx/gtk3/a11y/gtk3atkfactory \
-    vcl/unx/gtk3/a11y/gtk3atkhypertext \
-    vcl/unx/gtk3/a11y/gtk3atkimage \
-    vcl/unx/gtk3/a11y/gtk3atklistener \
-    vcl/unx/gtk3/a11y/gtk3atkregistry \
-    vcl/unx/gtk3/a11y/gtk3atkselection \
-    vcl/unx/gtk3/a11y/gtk3atktable \
-    vcl/unx/gtk3/a11y/gtk3atktextattributes \
-    vcl/unx/gtk3/a11y/gtk3atktext \
-    vcl/unx/gtk3/a11y/gtk3atkutil \
-    vcl/unx/gtk3/a11y/gtk3atkvalue \
-    vcl/unx/gtk3/a11y/gtk3atkwrapper \
+    vcl/unx/gtk3/a11y/atkaction \
+    vcl/unx/gtk3/a11y/atkbridge \
+    vcl/unx/gtk3/a11y/atkcomponent \
+    vcl/unx/gtk3/a11y/atkeditabletext \
+    vcl/unx/gtk3/a11y/atkfactory \
+    vcl/unx/gtk3/a11y/atkhypertext \
+    vcl/unx/gtk3/a11y/atkimage \
+    vcl/unx/gtk3/a11y/atklistener \
+    vcl/unx/gtk3/a11y/atkregistry \
+    vcl/unx/gtk3/a11y/atkselection \
+    vcl/unx/gtk3/a11y/atktable \
+    vcl/unx/gtk3/a11y/atktextattributes \
+    vcl/unx/gtk3/a11y/atktext \
+    vcl/unx/gtk3/a11y/atkutil \
+    vcl/unx/gtk3/a11y/atkvalue \
+    vcl/unx/gtk3/a11y/atkwrapper \
     vcl/unx/gtk3/fpicker/resourceprovider \
     vcl/unx/gtk3/fpicker/SalGtkFilePicker \
     vcl/unx/gtk3/fpicker/SalGtkFolderPicker \
     vcl/unx/gtk3/fpicker/SalGtkPicker \
-    vcl/unx/gtk3/gtk3gtkdata \
-    vcl/unx/gtk3/gtk3gtkinst \
-    vcl/unx/gtk3/gtk3gtksys \
-    vcl/unx/gtk3/cairo_gtk3_cairo \
-    vcl/unx/gtk3/gtk3salnativewidgets-gtk \
-    vcl/unx/gtk3/gtk3gtkframe \
-    vcl/unx/gtk3/gtk3gtkobject \
-	vcl/unx/gtk3/gtk3gtksalmenu \
-	vcl/unx/gtk3/gtk3glomenu \
-	vcl/unx/gtk3/gtk3gloactiongroup \
-    vcl/unx/gtk3/gtk3hudawareness \
+    vcl/unx/gtk3/gtkdata \
+    vcl/unx/gtk3/gtkinst \
+    vcl/unx/gtk3/gtksys \
+    vcl/unx/gtk3/gtkcairo \
+    vcl/unx/gtk3/salnativewidgets-gtk \
+    vcl/unx/gtk3/gtkframe \
+    vcl/unx/gtk3/gtkobject \
+	vcl/unx/gtk3/gtksalmenu \
+	vcl/unx/gtk3/glomenu \
+	vcl/unx/gtk3/gloactiongroup \
+    vcl/unx/gtk3/hudawareness \
 ))
 
 ifeq ($(OS),LINUX)

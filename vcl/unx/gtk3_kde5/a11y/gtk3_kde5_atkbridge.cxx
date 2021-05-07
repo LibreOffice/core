@@ -7,6 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "../../gtk3/a11y/gtk3atkbridge.cxx"
+#include "../../gtk3/a11y/atkbridge.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

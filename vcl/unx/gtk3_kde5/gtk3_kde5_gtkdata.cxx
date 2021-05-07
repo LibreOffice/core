@@ -17,6 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "../gtk3/gtk3gtkdata.cxx"
+#include "../gtk3/gtkdata.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

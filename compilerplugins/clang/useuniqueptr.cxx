@@ -351,8 +351,7 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     if (loplugin::TypeCheck(varDecl->getType()).Pointer().Class("IMapCompat").GlobalNamespace())
         return;
     // passing data to gtk API and I can't figure out the types
-    if (fn == SRCDIR "/vcl/unx/gtk3/gtk3gtkdata.cxx"
-        || fn == SRCDIR "/vcl/unx/gtk/gtkdata.cxx")
+    if (fn == SRCDIR "/vcl/unx/gtk3/gtkdata.cxx")
         return;
     // sometimes this stuff is held by tools::SvRef, sometimes by std::unique_ptr...
     if (fn == SRCDIR "/sot/source/unoolestorage/xolesimplestorage.cxx")
