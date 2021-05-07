@@ -411,7 +411,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
                 }
                 if ( bInsert )
                 {
-                    if (bPageHasFlysAnchoredBelowThis)
+                    if (!bPageHasFlysAnchoredBelowThis)
                     {
                         SwLayouter::InsertMovedFwdFrame(rDoc, mrAnchorTextFrame,
                                pAnchorPageFrame->GetPhyPageNum());
