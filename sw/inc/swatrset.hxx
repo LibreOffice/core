@@ -135,13 +135,6 @@ namespace vcl {
 class SAL_DLLPUBLIC_RTTI SwAttrPool final : public SfxItemPool
 {
 private:
-    // helpers to add/remove DrawingLayer ItemPool, used in constructor
-    // and destructor; still isolated to evtl. allow other use later, but
-    // used bz default now to have it instantly as needed for DrawingLayer
-    // FillStyle support
-    void createAndAddSecondaryPools();
-    void removeAndDeleteSecondaryPools();
-
     friend void InitCore();            // For creating/deleting of version maps.
     friend void FinitCore();
 

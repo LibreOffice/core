@@ -48,26 +48,6 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
                     aSlotTab, &aAttrTab ),
     m_pDoc( pD )
 {
-    // create secondary pools immediately
-    createAndAddSecondaryPools();
-}
-
-SwAttrPool::~SwAttrPool()
-{
-    // cleanup secondary pools first
-    removeAndDeleteSecondaryPools();
-}
-
-void SwAttrPool::createAndAddSecondaryPools()
-{
-    const SfxItemPool* pCheckAlreadySet = GetSecondaryPool();
-
-    if(pCheckAlreadySet)
-    {
-        OSL_ENSURE(false, "SwAttrPool already has a secondary pool (!)");
-        return;
-    }
-
     // create SfxItemPool and EditEngine pool and add these in a chain. These
     // belong us and will be removed/destroyed in removeAndDeleteSecondaryPools() used from
     // the destructor
@@ -103,23 +83,11 @@ void SwAttrPool::createAndAddSecondaryPools()
     }
 }
 
-void SwAttrPool::removeAndDeleteSecondaryPools()
+SwAttrPool::~SwAttrPool()
 {
+    // cleanup secondary pools
     SfxItemPool *pSdrPool = GetSecondaryPool();
-
-    if(!pSdrPool)
-    {
-        OSL_ENSURE(false, "SwAttrPool has no secondary pool, it's missing (!)");
-        return;
-    }
-
     SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
-
-    if(!pEEgPool)
-    {
-        OSL_ENSURE(false, "i don't accept additional pools");
-        return;
-    }
 
     // first delete the items, then break the linking
     pSdrPool->Delete();
