@@ -99,8 +99,8 @@ namespace sd {
 
 SfxItemPool* GetAnnotationPool()
 {
-    static SfxItemPool* s_pAnnotationPool = nullptr;
-    if( s_pAnnotationPool == nullptr )
+    static rtl::Reference<SfxItemPool> s_pAnnotationPool;
+    if( !s_pAnnotationPool )
     {
         s_pAnnotationPool = EditEngine::CreatePool();
         s_pAnnotationPool->SetPoolDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
@@ -109,7 +109,7 @@ SfxItemPool* GetAnnotationPool()
         s_pAnnotationPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(),aAppFont.GetFamilyName(),"",PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
     }
 
-    return s_pAnnotationPool;
+    return s_pAnnotationPool.get();
 }
 
 static SfxBindings* getBindings( ViewShellBase const & rBase )

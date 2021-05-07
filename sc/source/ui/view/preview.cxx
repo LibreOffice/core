@@ -505,7 +505,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
                 rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN);
 
         std::unique_ptr<ScEditEngineDefaulter> pEditEng(
-            new ScEditEngineDefaulter(EditEngine::CreatePool(), true));
+            new ScEditEngineDefaulter(EditEngine::CreatePool().get(), true));
 
         pEditEng->SetRefMapMode(aMMMode);
         auto pEditDefaults = std::make_unique<SfxItemSet>( pEditEng->GetEmptyItemSet() );

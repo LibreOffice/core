@@ -37,27 +37,29 @@ ScPoolHelper::ScPoolHelper( ScDocument& rSourceDoc )
 
 ScPoolHelper::~ScPoolHelper()
 {
-    pEnginePool.reset();
-    pEditPool.reset();
+    pEnginePool.clear();
+    pEditPool.clear();
     pFormTable.reset();
     mxStylePool.clear();
-    pDocPool.reset();
+    pDocPool.clear();
 }
-SfxItemPool*        ScPoolHelper::GetEditPool() const
+
+SfxItemPool* ScPoolHelper::GetEditPool() const
 {
     if ( !pEditPool )
     {
-        pEditPool.reset(EditEngine::CreatePool());
+        pEditPool = EditEngine::CreatePool();
         pEditPool->SetDefaultMetric( MapUnit::Map100thMM );
         pEditPool->FreezeIdRanges();
     }
     return pEditPool.get();
 }
-SfxItemPool*        ScPoolHelper::GetEnginePool() const
+
+SfxItemPool* ScPoolHelper::GetEnginePool() const
 {
     if ( !pEnginePool )
     {
-        pEnginePool.reset(EditEngine::CreatePool());
+        pEnginePool = EditEngine::CreatePool();
         pEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
         pEnginePool->FreezeIdRanges();
     } // ifg ( pEnginePool )

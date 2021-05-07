@@ -36,7 +36,7 @@ protected:
     virtual ~ChartItemPool() override;
 
 public:
-    virtual SfxItemPool* Clone() const override;
+    virtual rtl::Reference<SfxItemPool> Clone() const override;
     MapUnit GetMetric(sal_uInt16 nWhich) const override;
 
     /// get the pure chart item pool

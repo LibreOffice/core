@@ -788,7 +788,7 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
         new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO)
     };
 
-    std::unique_ptr<SfxItemPool, SfxItemPoolDeleter> pPool(new SfxItemPool("GridBrowserProperties", SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, &pDefaults));
+    rtl::Reference<SfxItemPool> pPool(new SfxItemPool("GridBrowserProperties", SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, &pDefaults));
     pPool->SetDefaultMetric( MapUnit::MapTwip );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
@@ -855,7 +855,7 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
     }
 
     pFormatDescriptor.reset();
-    pPool.reset();
+    pPool.clear();
     for (SfxPoolItem* pDefault : pDefaults)
         delete pDefault;
 

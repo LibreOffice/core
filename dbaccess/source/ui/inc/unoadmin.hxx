@@ -37,7 +37,7 @@ class ODatabaseAdministrationDialog
 {
 protected:
     std::unique_ptr<SfxItemSet> m_pDatasourceItems; // item set for the dialog
-    SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog
+    rtl::Reference<SfxItemPool> m_pItemPool;            // item pool for the item set for the dialog
     std::vector<SfxPoolItem*>*
                             m_pItemPoolDefaults;    // pool defaults
     std::unique_ptr<::dbaccess::ODsnTypeCollection>

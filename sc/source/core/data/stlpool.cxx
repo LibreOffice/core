@@ -218,7 +218,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     SfxItemSet*     pSet            = nullptr;
     SfxItemSet*     pHFSet          = nullptr;
     SvxSetItem*     pHFSetItem      = nullptr;
-    std::unique_ptr<ScEditEngineDefaulter> pEdEngine(new ScEditEngineDefaulter( EditEngine::CreatePool(), true ));
+    std::unique_ptr<ScEditEngineDefaulter> pEdEngine(new ScEditEngineDefaulter( EditEngine::CreatePool().get(), true ));
     pEdEngine->SetUpdateMode( false );
     std::unique_ptr<EditTextObject> pEmptyTxtObj = pEdEngine->CreateTextObject();
     std::unique_ptr<EditTextObject> pTxtObj;

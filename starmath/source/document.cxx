@@ -353,7 +353,7 @@ EditEngine& SmDocShell::GetEditEngine()
         //! see also SmEditWindow::DataChanged !
         //!
 
-        mpEditEngineItemPool.reset( EditEngine::CreatePool() );
+        mpEditEngineItemPool = EditEngine::CreatePool();
 
         const StyleSettings& rStyleSettings = Application::GetDefaultDevice()->GetSettings().GetStyleSettings();
         UpdateEditEngineDefaultFonts(rStyleSettings.GetFieldTextColor());
@@ -659,7 +659,7 @@ SmDocShell::~SmDocShell()
 
     mpCursor.reset();
     mpEditEngine.reset();
-    mpEditEngineItemPool.reset();
+    mpEditEngineItemPool.clear();
     mpPrinter.disposeAndClear();
 }
 
