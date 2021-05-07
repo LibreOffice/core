@@ -486,6 +486,7 @@ Size EmbeddedObjectRef::GetSize( MapMode const * pTargetMapMode ) const
             }
             catch(const embed::NoVisualAreaSizeException&)
             {
+                SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetSize: no visual area size");
             }
             catch (const uno::Exception&)
             {
@@ -504,6 +505,7 @@ Size EmbeddedObjectRef::GetSize( MapMode const * pTargetMapMode ) const
 
         if ( !aSize.Height && !aSize.Width )
         {
+            SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetSize: empty size, defaulting to 5x5cm");
             aSize.Width = 5000;
             aSize.Height = 5000;
         }

@@ -96,6 +96,7 @@ protected:
      */
     void          assertXPathNoAttribute(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute);
 
+    static void registerODFNamespaces(xmlXPathContextPtr& pXmlXpathCtx);
 };
 
 #endif

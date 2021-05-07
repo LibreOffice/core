@@ -225,8 +225,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                     aSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
                     bSuccess = true;
                 }
-                catch( const uno::Exception& )
+                catch( const uno::Exception& rException )
                 {
+                    SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetExtent() failed: " << rException);
                 }
 
                 if (bBackToLoaded)
@@ -249,8 +250,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                         aSize = m_pOleComponent->GetCachedExtent( nAspect ); // will throw an exception in case of failure
                         bSuccess = true;
                     }
-                    catch( const uno::Exception& )
+                    catch( const uno::Exception& rException )
                     {
+                        SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetCachedExtent() failed: " << rException);
                     }
                 }
 
@@ -262,8 +264,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                         aSize = m_pOleComponent->GetRecommendedExtent( nAspect ); // will throw an exception in case of failure
                         bSuccess = true;
                     }
-                    catch( const uno::Exception& )
+                    catch( const uno::Exception& rException )
                     {
+                        SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetRecommendedExtent() failed: " << rException);
                     }
                 }
 
