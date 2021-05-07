@@ -4609,8 +4609,8 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
                 || (!_bStexy && fSumSqrDeltaY < ::std::numeric_limits<double>::min()))
                 PushError( FormulaError::DivisionByZero);
             else if ( _bStexy )
-                PushDouble( sqrt( ( fSumSqrDeltaY - fSumDeltaXDeltaY.get() *
-                            fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get() ).get() / (fCount-2)));
+                PushDouble( sqrt( ( fSumSqrDeltaY - fSumDeltaXDeltaY *
+                            fSumDeltaXDeltaY / fSumSqrDeltaX ).get() / (fCount-2)));
             else
                 PushDouble( fSumDeltaXDeltaY.get() / sqrt( fSumSqrDeltaX.get() * fSumSqrDeltaY.get() ));
         }
