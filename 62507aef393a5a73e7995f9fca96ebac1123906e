@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "36e7f0da_6c714361",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1819,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-07T19:46:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76a322ae_ce1ad9d7",
+      "range": {
+        "startLine": 1819,
+        "startChar": 16,
+        "endLine": 1819,
+        "endChar": 33
+      },
+      "revId": "62507aef393a5a73e7995f9fca96ebac1123906e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e042ead7_4ff7599f",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 11
@@ -36,6 +60,30 @@
       "writtenOn": "2021-05-07T18:09:33Z",
       "side": 1,
       "message": "Does a KahanSum for fSumD make sense here? It\u0027s only one subtraction that then is multiplied with itself.",
+      "range": {
+        "startLine": 2703,
+        "startChar": 8,
+        "endLine": 2703,
+        "endChar": 22
+      },
+      "revId": "62507aef393a5a73e7995f9fca96ebac1123906e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8221fb9_f37019ea",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2703,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-07T19:46:29Z",
+      "side": 1,
+      "message": "And after that it\u0027s subtracted to fSumSqrD (KahanSum).\nBut I see the point.\nOverkill or not is up to you to decide.\nI haven\u0027t the knowledge to tell.",
+      "parentUuid": "e042ead7_4ff7599f",
       "range": {
         "startLine": 2703,
         "startChar": 8,
