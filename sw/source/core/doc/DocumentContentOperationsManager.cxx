@@ -447,28 +447,34 @@ namespace
     }
 
     // #i86492#
-    bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
+    bool lcl_ContainsOnlyParagraphsInSameList(const SwPaM& rPam, bool bPastingIntoList)
     {
         bool bRet = false;
 
         const SwTextNode* pTextNd = rPam.Start()->nNode.GetNode().GetTextNode();
         const SwTextNode* pEndTextNd = rPam.End()->nNode.GetNode().GetTextNode();
-        if ( pTextNd && pTextNd->IsInList() &&
-             pEndTextNd && pEndTextNd->IsInList() )
+        const bool bEndIsInList = pEndTextNd && pEndTextNd->IsInList();
+        // If bPastingIntoList, then treat regular paragraphs as (potential) list items.
+        if (pTextNd && pEndTextNd && (bPastingIntoList || bEndIsInList))
         {
+            if (pTextNd == pEndTextNd)
+                return true;
+
             bRet = true;
             SwNodeIndex aIdx(rPam.Start()->nNode);
-
+            const SwNumRule* pEndNumRule = pEndTextNd->GetNumRule();
+            const OUString& sEndListId = pEndTextNd->GetListId();
             do
             {
-                ++aIdx;
-                pTextNd = aIdx.GetNode().GetTextNode();
-
-                if ( !pTextNd || !pTextNd->IsInList() )
+                if (!pTextNd || pTextNd->IsInList() != bEndIsInList
+                    || pTextNd->GetNumRule() != pEndNumRule
+                    || pTextNd->GetListId() != sEndListId)
                 {
                     bRet = false;
                     break;
                 }
+                ++aIdx;
+                pTextNd = aIdx.GetNode().GetTextNode();
             } while (pTextNd != pEndTextNd);
         }
 
@@ -4802,14 +4808,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         pNumRuleToPropagate =
             rDoc.SearchNumRule( rPos, false, false, false, 0, aListIdToPropagate, nullptr, true );
     }
-    // #i86492#
-    // Do not propagate previous found list, if
-    // - destination is an empty paragraph which is not in a list and
-    // - source contains at least one paragraph which is not in a list
-    if ( pNumRuleToPropagate &&
-         pDestTextNd && !pDestTextNd->GetText().getLength() &&
-         !pDestTextNd->IsInList() &&
-         !lcl_ContainsOnlyParagraphsInList( rPam ) )
+    if (pNumRuleToPropagate
+        && !lcl_ContainsOnlyParagraphsInSameList(rPam, pDestTextNd && pDestTextNd->IsInList()))
     {
         pNumRuleToPropagate = nullptr;
     }
