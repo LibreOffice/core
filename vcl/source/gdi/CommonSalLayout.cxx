@@ -598,17 +598,22 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
                     nAdvance = -pHbPositions[i].y_advance;
                     nXOffset = -pHbPositions[i].y_offset;
                     nYOffset = -pHbPositions[i].x_offset - nBaseOffset;
+
+                    nAdvance = std::lround(nAdvance * nYScale);
+                    nXOffset = std::lround(nXOffset * nYScale);
+                    nYOffset = std::lround(nYOffset * nXScale);
                 }
                 else
                 {
                     nAdvance =  pHbPositions[i].x_advance;
                     nXOffset =  pHbPositions[i].x_offset;
                     nYOffset = -pHbPositions[i].y_offset;
+
+                    nAdvance = std::lround(nAdvance * nXScale);
+                    nXOffset = std::lround(nXOffset * nXScale);
+                    nYOffset = std::lround(nYOffset * nYScale);
                 }
 
-                nAdvance = std::lround(nAdvance * nXScale);
-                nXOffset = std::lround(nXOffset * nXScale);
-                nYOffset = std::lround(nYOffset * nYScale);
 
                 Point aNewPos(aCurrPos.X() + nXOffset, aCurrPos.Y() + nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
