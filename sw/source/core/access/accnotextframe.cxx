@@ -63,11 +63,11 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
     msDesc()
 {
     const SwNoTextNode* pNd = GetNoTextNode();
-    StartListening(const_cast<SwNoTextNode*>(pNd)->GetNotifier());
     // #i73249#
     // consider new attributes Title and Description
     if( pNd )
     {
+        StartListening(const_cast<SwNoTextNode*>(pNd)->GetNotifier());
         msTitle = pNd->GetTitle();
 
         msDesc = pNd->GetDescription();
