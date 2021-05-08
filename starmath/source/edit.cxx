@@ -129,7 +129,7 @@ SmEditWindow::SmEditWindow(SmCmdBoxWindow &rMyCmdBoxWin, weld::Builder& rBuilder
     CreateEditView(rBuilder);
 }
 
-SmEditWindow::~SmEditWindow()
+SmEditWindow::~SmEditWindow() COVERITY_NOEXCEPT_FALSE
 {
     DeleteEditView();
     mxScrolledWindow.reset();

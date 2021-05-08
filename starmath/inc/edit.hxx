@@ -96,7 +96,7 @@ class SmEditWindow final
 
 public:
     SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin, weld::Builder& rBuilder);
-    ~SmEditWindow();
+    ~SmEditWindow() COVERITY_NOEXCEPT_FALSE;
 
     weld::Window* GetFrameWeld() const;
 
