@@ -140,14 +140,20 @@ public:
      * summation algorithm,
      * https://en.wikipedia.org/wiki/Kahan_summation_algorithm
      */
-    struct IterateResult
+    template <typename tRes> struct IterateResult
     {
-        double mfFirst;
-        double mfRest;
-        size_t mnCount;
+        tRes mfFirst;
+        tRes mfRest;
+        size_t m_nCount;
+        std::vector<tRes> m_aAccumulator;
 
-        IterateResult(double fFirst, double fRest, size_t nCount) :
-            mfFirst(fFirst), mfRest(fRest), mnCount(nCount) {}
+        inline IterateResult(double fFirst, double fRest, size_t nOpCount) :
+            mfFirst(fFirst), mfRest(fRest), m_nCount(0), m_aAccumulator(nOpCount) {}
+
+        //inline IterateResult(const IterateResult& aIterateResult) :
+        //    mfFirst(aIterateResult.mfFirst), mfRest(aIterateResult.mfRest), m_nCount(aIterateResult.m_nCount), m_aAccumulator(std::move(aIterateResult.m_aAccumulator)) {}
+
+        inline void operator +=(size_t nCount) {m_nCount += nCount;}
     };
 
     /**
@@ -410,7 +416,7 @@ public:
     void DivOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
     void PowOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
 
-    std::vector<ScMatrix::IterateResult> Collect(const std::vector<sc::op::Op>& aOp) ;
+    ScMatrix::IterateResult<double> Collect(const std::vector<sc::op::Op>& aOp) ;
 
     void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc,
