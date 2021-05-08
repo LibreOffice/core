@@ -131,23 +131,12 @@ public:
     typedef std::function<void(size_t, size_t, svl::SharedString)> StringOpFunction;
     typedef std::function<void(size_t, size_t)> EmptyOpFunction;
 
-    /**
-     * When adding all numerical matrix elements for a scalar result such as
-     * summation, the interpreter wants to separate the first non-zero value
-     * with the rest of the summed values. This is necessary for better
-     * numerical stability, unless we sort all by absolute values before
-     * summing (not really an option) or use another algorithm, e.g. Kahan's
-     * summation algorithm,
-     * https://en.wikipedia.org/wiki/Kahan_summation_algorithm
-     */
-    struct IterateResult
+    template <typename tRes> struct IterateResult
     {
-        double mfFirst;
-        double mfRest;
-        size_t mnCount;
+        size_t m_nCount;
+        std::vector<tRes> m_aAccumulator;
 
-        IterateResult(double fFirst, double fRest, size_t nCount) :
-            mfFirst(fFirst), mfRest(fRest), mnCount(nCount) {}
+        inline IterateResult(size_t nOpCount) : m_nCount(0), m_aAccumulator(nOpCount) {}
     };
 
     /**
@@ -410,7 +399,7 @@ public:
     void DivOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
     void PowOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
 
-    std::vector<ScMatrix::IterateResult> Collect(const std::vector<sc::op::Op>& aOp) ;
+    ScMatrix::IterateResult<double> Collect(const std::vector<sc::op::Op>& aOp) ;
 
     void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc,
