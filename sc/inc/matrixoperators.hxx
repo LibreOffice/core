@@ -15,41 +15,36 @@
 
 namespace sc::op {
 
-
-template<typename T>
-struct Op_
+template<typename tRes>
+struct Op
 {
-    const double mInitVal;
-    const T maOp;
-    Op_(double InitVal, T aOp):
-        mInitVal(InitVal), maOp(aOp)
-    {
-    }
-    void operator()(double& rAccum, double fVal) const
-    {
-        maOp(rAccum, fVal);
-    }
+    tRes m_aInitVal;
+    std::function<void(tRes&, double)> m_aOp;
+
+    inline Op(tRes aInitVal, std::function<void(tRes&, double)> aOp):
+        m_aInitVal(aInitVal), m_aOp(aOp)
+    {}
+
+    inline Op(const Op<tRes>& aOp):
+        m_aInitVal(aOp.m_aInitVal), m_aOp(aOp.m_aOp)
+    {}
 };
 
-using Op = Op_<std::function<void(double&, double)>>;
+void fOpSum(KahanSum& aSum, double fVal);
 
-struct Sum
-{
-    static const double InitVal;
-    void operator()(KahanSum& rAccum, double fVal) const;
-};
+void fOpSumSquare(KahanSum& aSum, double fVal);
 
-struct SumSquare
-{
-    static const double InitVal;
-    void operator()(KahanSum& rAccum, double fVal) const;
-};
+void fOpProduct(double& fProd, double fVal);
 
-struct Product
-{
-    static const double InitVal;
-    void operator()(KahanSum& rAccum, double fVal) const;
-};
+extern Op<KahanSum> OpSum;
+
+extern Op<KahanSum> OpSumSquare;
+
+extern Op<double> OpProduct;
+
+extern Op<KahanSum> VOpSumAndSumSquare [2];
+
+extern std::vector<Op<KahanSum>> OpSumAndSumSquare;
 
 }
 

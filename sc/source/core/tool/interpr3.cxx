@@ -2739,38 +2739,24 @@ void ScInterpreter::ScFTest()
         PushIllegalParameter();
         return;
     }
-    SCSIZE nC1, nC2;
-    SCSIZE nR1, nR2;
-    pMat1->GetDimensions(nC1, nR1);
-    pMat2->GetDimensions(nC2, nR2);
-    double fCount1  = 0.0;
-    double fCount2  = 0.0;
-    double fSum1    = 0.0;
-    double fSumSqr1 = 0.0;
-    double fSum2    = 0.0;
-    double fSumSqr2 = 0.0;
 
-    std::vector<sc::op::Op> aOp;
-    aOp.emplace_back(sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal;}));
-    aOp.emplace_back(sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal * fVal;}));
+    auto aVal1 = pMat1->SumAndSumSquare(false, false);
+    KahanSum fSum1 = aVal1.m_aAccumulator[0];
+    KahanSum fSumSqr1 = aVal1.m_aAccumulator[1];
+    double fCount1 = aVal1.m_nCount;
 
-    auto aVal1 = pMat1->Collect(aOp);
-    fSum1 = aVal1[0].mfFirst + aVal1[0].mfRest;
-    fSumSqr1 = aVal1[1].mfFirst + aVal1[1].mfRest;
-    fCount1 = aVal1[2].mnCount;
-
-    auto aVal2 = pMat2->Collect(aOp);
-    fSum2 = aVal2[0].mfFirst + aVal2[0].mfRest;
-    fSumSqr2 = aVal2[1].mfFirst + aVal2[1].mfRest;
-    fCount2 = aVal2[2].mnCount;
+    auto aVal2 = pMat2->SumAndSumSquare(false, false);
+    KahanSum fSum2 = aVal2.m_aAccumulator[0];
+    KahanSum fSumSqr2 = aVal2.m_aAccumulator[1];
+    double fCount2 = aVal2.m_nCount;
 
     if (fCount1 < 2.0 || fCount2 < 2.0)
     {
         PushNoValue();
         return;
     }
-    double fS1 = (fSumSqr1-fSum1*fSum1/fCount1)/(fCount1-1.0);
-    double fS2 = (fSumSqr2-fSum2*fSum2/fCount2)/(fCount2-1.0);
+    double fS1 = (fSumSqr1-fSum1*fSum1/fCount1).get() / (fCount1-1.0);
+    double fS2 = (fSumSqr2-fSum2*fSum2/fCount2).get() / (fCount2-1.0);
     if (fS1 == 0.0 || fS2 == 0.0)
     {
         PushNoValue();
