@@ -328,7 +328,7 @@ public:
             const ScMatrix::EmptyOpFunction& aEmptyFunc) const;
 
     template<typename T>
-    std::vector<ScMatrix::IterateResult> ApplyCollectOperation(const std::vector<T>& aOp);
+    ScMatrix::IterateResult<double> ApplyCollectOperation(const std::vector<T>& aOp);
 
     void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
             SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool);
@@ -1169,21 +1169,21 @@ public:
     }
 };
 
-template<typename Op>
+template<typename Op, typename tRes>
 class WalkElementBlocksMultipleValues
 {
     const std::vector<Op>* mpOp;
-    std::vector<ScMatrix::IterateResult> maRes;
+    ScMatrix::IterateResult<tRes> maRes;
     bool mbFirst:1;
 public:
-    WalkElementBlocksMultipleValues(const std::vector<Op>& aOp) :
-        mpOp(&aOp), mbFirst(true)
+    WalkElementBlocksMultipleValues(const std::vector<Op>& aOp, bool bTextAsZero, bool bIgnoreErrorValues) :
+        mpOp(&aOp), maRes(0,0,aOp.size()), mbFirst(true)
     {
         for (const auto& rpOp : *mpOp)
         {
-            maRes.emplace_back(rpOp.mInitVal, rpOp.mInitVal, 0);
+            maRes.m_aAccumulator.emplace_back(static_cast<tRes>(rpOp.mInitVal));
         }
-        maRes.emplace_back(0.0, 0.0, 0); // count
+        maRes.m_aAccumulator.emplace_back(static_cast<tRes>(0)); // count
     }
 
     WalkElementBlocksMultipleValues( const WalkElementBlocksMultipleValues& ) = delete;
@@ -1200,7 +1200,7 @@ public:
         return *this;
     }
 
-    const std::vector<ScMatrix::IterateResult>& getResult() const { return maRes; }
+    const ScMatrix::IterateResult<tRes>& getResult() const { return maRes; }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
@@ -1218,7 +1218,7 @@ public:
                     {
                         for (size_t i = 0u; i < mpOp->size(); ++i)
                         {
-                            (*mpOp)[i](maRes[i].mfFirst, *it);
+                            (*mpOp)[i](maRes.m_aAccumulator[i], *it);
                         }
                         mbFirst = false;
                     }
@@ -1226,11 +1226,11 @@ public:
                     {
                         for (size_t i = 0u; i < mpOp->size(); ++i)
                         {
-                            (*mpOp)[i](maRes[i].mfRest, *it);
+                            (*mpOp)[i](maRes.m_aAccumulator[i], *it);
                         }
                     }
                 }
-                maRes.back().mnCount += node.size;
+                maRes.m_aAccumulator.back() += node.size;
             }
             break;
             case mdds::mtm::element_boolean:
@@ -1245,7 +1245,7 @@ public:
                     {
                         for (size_t i = 0u; i < mpOp->size(); ++i)
                         {
-                            (*mpOp)[i](maRes[i].mfFirst, *it);
+                            (*mpOp)[i](maRes.m_aAccumulator[i], *it);
                         }
                         mbFirst = false;
                     }
@@ -1253,11 +1253,11 @@ public:
                     {
                         for (size_t i = 0u; i < mpOp->size(); ++i)
                         {
-                            (*mpOp)[i](maRes[i].mfRest, *it);
+                            (*mpOp)[i](maRes.m_aAccumulator[i], *it);
                         }
                     }
                 }
-                maRes.back().mnCount += node.size;
+                maRes.m_aAccumulator.back() += node.size;
             }
             break;
             case mdds::mtm::element_string:
@@ -2423,9 +2423,9 @@ void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
 }
 
 template<typename T>
-std::vector<ScMatrix::IterateResult> ScMatrixImpl::ApplyCollectOperation(const std::vector<T>& aOp)
+ScMatrix::IterateResult<double> ScMatrixImpl::ApplyCollectOperation(const std::vector<T>& aOp)
 {
-    WalkElementBlocksMultipleValues<T> aFunc(aOp);
+    WalkElementBlocksMultipleValues<T,double> aFunc(aOp, false, false);
     aFunc = maMat.walk(std::move(aFunc));
     return aFunc.getResult();
 }
@@ -3425,7 +3425,7 @@ void ScMatrix::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
     pImpl->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
 }
 
-std::vector<ScMatrix::IterateResult> ScMatrix::Collect(const std::vector<sc::op::Op>& aOp)
+ScMatrix::IterateResult<double> ScMatrix::Collect(const std::vector<sc::op::Op>& aOp)
 {
     return pImpl->ApplyCollectOperation(aOp);
 }
