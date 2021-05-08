@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <cmath>
+
 /**
   * This class provides LO with Kahan summation algorithm
   * About this algorithm: https://en.wikipedia.org/wiki/Kahan_summation_algorithm
@@ -135,11 +137,7 @@ public:
 
     inline KahanSum operator*(const KahanSum& fTimes) const
     {
-        KahanSum fSum(m_fSum * fTimes.m_fSum);
-        fSum += m_fSum * fTimes.m_fError;
-        fSum += m_fError * fTimes.m_fSum;
-        fSum += m_fError * fTimes.m_fError;
-        return fSum;
+        return *this * fTimes.m_fSum + *this * fTimes.m_fError;
     }
 
     constexpr KahanSum operator*(double fTimes) const
@@ -149,12 +147,7 @@ public:
         return fSum;
     }
 
-    inline KahanSum operator/(const KahanSum& fDivides) const
-    {
-        KahanSum fSum(m_fSum / fDivides.get());
-        fSum += m_fError / fDivides.get();
-        return fSum;
-    }
+    inline KahanSum operator/(const KahanSum& fDivides) const { return *this / fDivides.get(); }
 
     constexpr KahanSum operator/(double fTimes) const
     {
