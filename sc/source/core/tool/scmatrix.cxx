@@ -1176,7 +1176,7 @@ class WalkElementBlocksMultipleValues
     std::vector<ScMatrix::IterateResult> maRes;
     bool mbFirst:1;
 public:
-    WalkElementBlocksMultipleValues(const std::vector<Op>& aOp) :
+    WalkElementBlocksMultipleValues(const std::vector<Op>& aOp, bool bTextAsZero, bool bIgnoreErrorValues) :
         mpOp(&aOp), mbFirst(true)
     {
         for (const auto& rpOp : *mpOp)
@@ -2425,7 +2425,7 @@ void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
 template<typename T>
 std::vector<ScMatrix::IterateResult> ScMatrixImpl::ApplyCollectOperation(const std::vector<T>& aOp)
 {
-    WalkElementBlocksMultipleValues<T> aFunc(aOp);
+    WalkElementBlocksMultipleValues<T> aFunc(aOp, false, false);
     aFunc = maMat.walk(std::move(aFunc));
     return aFunc.getResult();
 }
