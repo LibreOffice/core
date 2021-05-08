@@ -3882,10 +3882,10 @@
      <table:table-cell table:style-name="ce23"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce19" table:formula="of:=RSQ([.L3:.L9]; [.M3:.M9])" office:value-type="float" office:value="0.0579501915708812" calcext:value-type="float">
+     <table:table-cell table:style-name="ce19" table:formula="of:=RSQ([.L3:.L9]; [.M3:.M9])" office:value-type="float" office:value="0.057950191570881" calcext:value-type="float">
       <text:p>0.057950191570881</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="0.0579501915708812" calcext:value-type="float">
+     <table:table-cell office:value-type="float" office:value="0.057950191570881" calcext:value-type="float">
       <text:p>0.057950191570881</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce42" table:formula="of:=ROUND([.A4];12)=ROUND([.B4];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
@@ -3980,11 +3980,11 @@
      <table:table-cell table:style-name="ce23"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce19" table:formula="of:=RSQ([.L1:.L11]; [.M1:.M11])" office:value-type="float" office:value="0.0579501915708812" calcext:value-type="float">
-      <text:p>0.057950191570881</text:p>
+     <table:table-cell table:style-name="ce19" table:formula="of:=RSQ([.L1:.L11]; [.M1:.M11])" office:value-type="float" office:value="0.084084704321173" calcext:value-type="float">
+      <text:p>0.084084704321173</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="0.0579501915708812" calcext:value-type="float">
-      <text:p>0.057950191570881</text:p>
+     <table:table-cell office:value-type="float" office:value="0.084084704321173" calcext:value-type="float">
+      <text:p>0.084084704321173</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce28" table:formula="of:=ROUND([.A6];12)=ROUND([.B6];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>

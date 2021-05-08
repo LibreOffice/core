@@ -2530,28 +2530,10 @@ void ScInterpreter::ScZTest()
             ScMatrixRef pMat = GetMatrix();
             if (pMat)
             {
-                SCSIZE nCount = pMat->GetElementCount();
-                if (pMat->IsNumeric())
-                {
-                    for ( SCSIZE i = 0; i < nCount; i++ )
-                    {
-                        fVal= pMat->GetDouble(i);
-                        fSum += fVal;
-                        fSumSqr += fVal * fVal;
-                        rValCount++;
-                    }
-                }
-                else
-                {
-                    for (SCSIZE i = 0; i < nCount; i++)
-                        if (!pMat->IsStringOrEmpty(i))
-                        {
-                            fVal= pMat->GetDouble(i);
-                            fSum += fVal;
-                            fSumSqr += fVal * fVal;
-                            rValCount++;
-                        }
-                }
+                auto aMatData = pMat->SumAndSumSquare(false, false);
+                fSum += aMatData.m_aAccumulator[0];
+                fSumSqr += aMatData.m_aAccumulator[1];
+                rValCount += aMatData.m_nCount;
             }
         }
         break;
@@ -2579,40 +2561,19 @@ void ScInterpreter::ScZTest()
 }
 
 bool ScInterpreter::CalculateTest(bool _bTemplin
-                                  ,const SCSIZE nC1, const SCSIZE nC2,const SCSIZE nR1,const SCSIZE nR2
                                   ,const ScMatrixRef& pMat1,const ScMatrixRef& pMat2
                                   ,double& fT,double& fF)
 {
-    double fCount1    = 0.0;
-    double fCount2    = 0.0;
-    KahanSum fSum1    = 0.0;
-    KahanSum fSumSqr1 = 0.0;
-    KahanSum fSum2    = 0.0;
-    KahanSum fSumSqr2 = 0.0;
-    double fVal;
-    SCSIZE i,j;
-    for (i = 0; i < nC1; i++)
-        for (j = 0; j < nR1; j++)
-        {
-            if (!pMat1->IsStringOrEmpty(i,j))
-            {
-                fVal = pMat1->GetDouble(i,j);
-                fSum1    += fVal;
-                fSumSqr1 += fVal * fVal;
-                fCount1++;
-            }
-        }
-    for (i = 0; i < nC2; i++)
-        for (j = 0; j < nR2; j++)
-        {
-            if (!pMat2->IsStringOrEmpty(i,j))
-            {
-                fVal = pMat2->GetDouble(i,j);
-                fSum2    += fVal;
-                fSumSqr2 += fVal * fVal;
-                fCount2++;
-            }
-        }
+    auto aMatData1 = pMat1->SumAndSumSquare(false, false);
+    KahanSum fSum1 = aMatData1.m_aAccumulator[0];
+    KahanSum fSumSqr1 = aMatData1.m_aAccumulator[1];
+    double fCount1 = aMatData1.m_nCount;
+
+    auto aMatData2 = pMat2->SumAndSumSquare(false, false);
+    KahanSum fSum2 = aMatData2.m_aAccumulator[0];
+    KahanSum fSumSqr2 = aMatData2.m_aAccumulator[1];
+    double fCount2 = aMatData2.m_nCount;
+
     if (fCount1 < 2.0 || fCount2 < 2.0)
     {
         PushNoValue();
@@ -2712,12 +2673,12 @@ void ScInterpreter::ScTTest()
     }
     else if (fTyp == 2.0)
     {
-        if (!CalculateTest(false,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF))
+        if (!CalculateTest(false, pMat1, pMat2, fT ,fF))
             return;     // error was pushed
     }
     else if (fTyp == 3.0)
     {
-        if (!CalculateTest(true,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF))
+        if (!CalculateTest(true, pMat1, pMat2, fT, fF))
             return;     // error was pushed
     }
     else
@@ -2739,38 +2700,24 @@ void ScInterpreter::ScFTest()
         PushIllegalParameter();
         return;
     }
-    SCSIZE nC1, nC2;
-    SCSIZE nR1, nR2;
-    pMat1->GetDimensions(nC1, nR1);
-    pMat2->GetDimensions(nC2, nR2);
-    double fCount1  = 0.0;
-    double fCount2  = 0.0;
-    double fSum1    = 0.0;
-    double fSumSqr1 = 0.0;
-    double fSum2    = 0.0;
-    double fSumSqr2 = 0.0;
 
-    std::vector<sc::op::Op> aOp;
-    aOp.emplace_back(sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal;}));
-    aOp.emplace_back(sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal * fVal;}));
+    auto aVal1 = pMat1->SumAndSumSquare(false, false);
+    KahanSum fSum1 = aVal1.m_aAccumulator[0];
+    KahanSum fSumSqr1 = aVal1.m_aAccumulator[1];
+    double fCount1 = aVal1.m_nCount;
 
-    auto aVal1 = pMat1->Collect(aOp);
-    fSum1 = aVal1[0].mfFirst + aVal1[0].mfRest;
-    fSumSqr1 = aVal1[1].mfFirst + aVal1[1].mfRest;
-    fCount1 = aVal1[2].mnCount;
-
-    auto aVal2 = pMat2->Collect(aOp);
-    fSum2 = aVal2[0].mfFirst + aVal2[0].mfRest;
-    fSumSqr2 = aVal2[1].mfFirst + aVal2[1].mfRest;
-    fCount2 = aVal2[2].mnCount;
+    auto aVal2 = pMat2->SumAndSumSquare(false, false);
+    KahanSum fSum2 = aVal2.m_aAccumulator[0];
+    KahanSum fSumSqr2 = aVal2.m_aAccumulator[1];
+    double fCount2 = aVal2.m_nCount;
 
     if (fCount1 < 2.0 || fCount2 < 2.0)
     {
         PushNoValue();
         return;
     }
-    double fS1 = (fSumSqr1-fSum1*fSum1/fCount1)/(fCount1-1.0);
-    double fS2 = (fSumSqr2-fSum2*fSum2/fCount2)/(fCount2-1.0);
+    double fS1 = (fSumSqr1-fSum1*fSum1/fCount1).get() / (fCount1-1.0);
+    double fS2 = (fSumSqr2-fSum2*fSum2/fCount2).get() / (fCount2-1.0);
     if (fS1 == 0.0 || fS2 == 0.0)
     {
         PushNoValue();
@@ -4342,24 +4289,9 @@ void ScInterpreter::ScAveDev()
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
-                    SCSIZE nCount = pMat->GetElementCount();
-                    if (pMat->IsNumeric())
-                    {
-                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
-                        {
-                            rVal += pMat->GetDouble(nElem);
-                            rValCount++;
-                        }
-                    }
-                    else
-                    {
-                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
-                            if (!pMat->IsStringOrEmpty(nElem))
-                            {
-                                rVal += pMat->GetDouble(nElem);
-                                rValCount++;
-                            }
-                    }
+                    auto aVal = pMat->Sum(false, false);
+                    rVal += aVal.m_aAccumulator;
+                    rValCount += aVal.m_nCount;
                 }
             }
             break;
@@ -4560,22 +4492,12 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
      * but the latter produces wrong results if the absolute values are high,
      * for example above 10^8
      */
-    double fCount           = 0.0;
-    KahanSum fSumX          = 0.0;
-    KahanSum fSumY          = 0.0;
 
-    for (SCSIZE i = 0; i < nC1; i++)
-    {
-        for (SCSIZE j = 0; j < nR1; j++)
-        {
-            if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-            {
-                fSumX += pMat1->GetDouble(i,j);
-                fSumY += pMat2->GetDouble(i,j);
-                fCount++;
-            }
-        }
-    }
+    auto aValX = pMat1->Sum(false, false);
+    KahanSum fSumX = aValX.m_aAccumulator;
+    KahanSum fSumY = pMat2->SumNotCount(false, false).m_aAccumulator;
+    double fCount = aValX.m_nCount;
+
     if (fCount < (_bStexy ? 3.0 : (_bSample ? 2.0 : 1.0)))
         PushNoValue();
     else
@@ -4669,11 +4591,11 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         PushIllegalArgument();
         return;
     }
+
     // #i78250# numerical stability improved
     double fCount           = 0.0;
     KahanSum fSumX          = 0.0;
     KahanSum fSumY          = 0.0;
-
     for (SCSIZE i = 0; i < nC1; i++)
     {
         for (SCSIZE j = 0; j < nR1; j++)

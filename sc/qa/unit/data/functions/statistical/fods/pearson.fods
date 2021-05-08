@@ -3625,11 +3625,11 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro8">
-     <table:table-cell table:formula="of:=PEARSON([.I3:.I9];[.J3:.J9])" office:value-type="float" office:value="0.712309892320122" calcext:value-type="float">
-      <text:p>0.712309892320122</text:p>
+     <table:table-cell table:formula="of:=PEARSON([.I3:.I9];[.J3:.J9])" office:value-type="float" office:value="0.72288938620193" calcext:value-type="float">
+      <text:p>0.72288938620193</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="0.712309892320122" calcext:value-type="float">
-      <text:p>0.712309892320122</text:p>
+     <table:table-cell office:value-type="float" office:value="0.72288938620193" calcext:value-type="float">
+      <text:p>0.72288938620193</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce42" table:formula="of:=ROUND([.A7];12)=ROUND([.B7];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
