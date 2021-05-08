@@ -11,17 +11,22 @@
 
 namespace sc::op
 {
-void Sum::operator()(KahanSum& rAccum, double fVal) const { rAccum += fVal; }
+void fOpSum(KahanSum& aSum, double fVal) { aSum += fVal; }
 
-const double Sum::InitVal = 0.0;
+void fOpSumSquare(KahanSum& aSum, double fVal) { aSum += fVal * fVal; }
 
-void SumSquare::operator()(KahanSum& rAccum, double fVal) const { rAccum += fVal * fVal; }
+void fOpProduct(double& fProd, double fVal) { fProd *= fVal; }
 
-const double SumSquare::InitVal = 0.0;
+Op<KahanSum> OpSum(0.0, fOpSum);
 
-void Product::operator()(KahanSum& rAccum, double fVal) const { rAccum *= fVal; }
+Op<KahanSum> OpSumSquare(0.0, fOpSumSquare);
 
-const double Product::InitVal = 1.0;
+Op<double> OpProduct(1.0, fOpProduct);
+
+Op<KahanSum> VOpSumAndSumSquare[2] = { OpSum, OpSumSquare };
+
+std::vector<Op<KahanSum>> OpSumAndSumSquare(std::begin(VOpSumAndSumSquare),
+                                            std::end(VOpSumAndSumSquare));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
