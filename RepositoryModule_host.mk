@@ -35,6 +35,13 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
+	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
+	$(call gb_Helper_optional,DESKTOP,$(if $(DISABLE_DYNLOADING),,xmlhelp)) \
+))
+endif
+
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
 	android \
@@ -71,7 +78,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	formula \
 	$(call gb_Helper_optional,DESKTOP,fpicker) \
 	framework \
-	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
 	$(call gb_Helper_optional,HELP,helpcontent2) \
 	hwpfilter \
 	i18nlangtag \
@@ -159,7 +165,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	writerfilter \
 	writerperfect \
 	xmerge \
-	$(call gb_Helper_optional,DESKTOP,$(if $(DISABLE_DYNLOADING),,xmlhelp)) \
 	xmloff \
 	xmlreader \
 	xmlscript \

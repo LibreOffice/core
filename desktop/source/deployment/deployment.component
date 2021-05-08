@@ -38,20 +38,12 @@
     constructor="com_sun_star_comp_deployment_ProgressLog_get_implementation">
     <service name="com.sun.star.comp.deployment.ProgressLog"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.component.PackageRegistryBackend"
-    constructor="com_sun_star_comp_deployment_component_PackageRegistryBackend_get_implementation">
-    <service name="com.sun.star.deployment.PackageRegistryBackend"/>
-  </implementation>
   <implementation name="com.sun.star.comp.deployment.configuration.PackageRegistryBackend"
     constructor="com_sun_star_comp_deployment_configuration_PackageRegistryBackend_get_implementation">
     <service name="com.sun.star.deployment.PackageRegistryBackend"/>
   </implementation>
   <implementation name="com.sun.star.comp.deployment.executable.PackageRegistryBackend"
     constructor="com_sun_star_comp_deployment_executable_PackageRegistryBackend_get_implementation">
-    <service name="com.sun.star.deployment.PackageRegistryBackend"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.deployment.help.PackageRegistryBackend"
-    constructor="com_sun_star_comp_deployment_help_PackageRegistryBackend_get_implementation">
     <service name="com.sun.star.deployment.PackageRegistryBackend"/>
   </implementation>
   <implementation name="com.sun.star.comp.deployment.script.PackageRegistryBackend"

@@ -9,6 +9,15 @@
 
 $(eval $(call gb_Module_Module,cross_toolset))
 
+ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
+$(eval $(call gb_Module_add_moduledirs,cross_toolset,\
+	$(call gb_Helper_optional_for_host,DESKTOP, \
+		helpcompiler \
+		xmlhelp \
+	) \
+))
+endif
+
 $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	basegfx \
 	binaryurp \
@@ -86,10 +95,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 		vcl \
 		xmloff \
 		xmlscript \
-	) \
-	$(call gb_Helper_optional_for_host,DESKTOP, \
-		helpcompiler \
-		xmlhelp \
 	) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 ))

@@ -2874,9 +2874,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
+ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(CLUCENE_LIBS) \
 )
+endif
 
 endef
 
@@ -2890,9 +2892,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
+ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	clucene \
 )
+endif
 
 endef
 

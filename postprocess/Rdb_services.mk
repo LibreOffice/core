@@ -83,6 +83,12 @@ $(eval $(call gb_Rdb_add_components,services,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	desktop/source/deployment/deployment.extended \
+))
+endif
+
 $(eval $(call gb_Rdb_add_components,services,\
 	animations/source/animcore/animcore \
 	cui/util/cui \
