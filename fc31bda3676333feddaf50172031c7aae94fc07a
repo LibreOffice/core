@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "392722ee_f312b534",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4807,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-05-08T16:18:04Z",
+      "side": 0,
+      "message": "It seems pointless to specify \"IsEmptyParagraph\".  If the paragraph is not empty, the statement will already be true (because IsInList() or false b/c !pNumRuleToPropogate, right? I mean, I\u0027m pretty sure it starts searching on the current paragraph, so if it isn\u0027t a numbering, the search fails. But perhaps there are weird corner cases.",
+      "range": {
+        "startLine": 4807,
+        "startChar": 27,
+        "endLine": 4807,
+        "endChar": 42
+      },
+      "revId": "fc31bda3676333feddaf50172031c7aae94fc07a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

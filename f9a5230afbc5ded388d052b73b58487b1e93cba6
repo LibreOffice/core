@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3366c0e6_94f5b1e6",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4811,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-05-08T16:18:04Z",
+      "side": 1,
+      "message": "I could weaken the patch and add \u0026\u0026 !pDestTextNd-\u003eIsInList() to only make it affect empty, non-list paragraphs. But that pretty much makes it a pointless patch...",
+      "revId": "f9a5230afbc5ded388d052b73b58487b1e93cba6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
