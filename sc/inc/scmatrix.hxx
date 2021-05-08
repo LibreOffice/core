@@ -132,38 +132,45 @@ public:
     typedef std::function<void(size_t, size_t)> EmptyOpFunction;
 
     /**
-     * When adding all numerical matrix elements for a scalar result such as
-     * summation, the interpreter wants to separate the first non-zero value
-     * with the rest of the summed values. This is necessary for better
-     * numerical stability, unless we sort all by absolute values before
-     * summing (not really an option) or use another algorithm, e.g. Kahan's
-     * summation algorithm,
-     * https://en.wikipedia.org/wiki/Kahan_summation_algorithm
-     */
-    struct IterateResult
+      * Iterator for performing matricial operations.
+      */
+    template <typename tRes> struct IterateResult
     {
-        double mfFirst;
-        double mfRest;
-        size_t mnCount;
+        tRes m_aAccumulator;
+        size_t m_nCount;
 
-        IterateResult(double fFirst, double fRest, size_t nCount) :
-            mfFirst(fFirst), mfRest(fRest), mnCount(nCount) {}
+        inline IterateResult(tRes aAccumulator)
+            : m_aAccumulator(aAccumulator), m_nCount(0) {}
+    };
+
+    /**
+      * Iterator for performing matricial operations.
+      * This one doen't count the operations number.
+      */
+    template <typename tRes> struct IterateResultNotCount
+    {
+        tRes m_aAccumulator;
+
+        inline IterateResultNotCount(tRes aAccumulator)
+            : m_aAccumulator(aAccumulator) {}
+    };
+
+    /**
+      * Iterator for performing matricial operations.
+      * This one performs multiple operations at same time.
+      */
+    template <typename tRes> struct IterateResultMultiple
+    {
+        size_t m_nCount;
+        std::vector<tRes> m_aAccumulator;
+
+        inline IterateResultMultiple(size_t nOpCount)
+            : m_nCount(0), m_aAccumulator(nOpCount) {}
     };
 
     /**
       * Version of IterateResult for using Kahan sum.
       */
-    struct KahanIterateResult
-    {
-        KahanSum maAccumulator;
-        size_t mnCount;
-
-        KahanIterateResult(double fAccumulator, size_t nCount)
-            : maAccumulator(fAccumulator), mnCount(nCount) {}
-
-        double get() const { return maAccumulator.get(); }
-    };
-
 
     /** Checks nC or nR for zero and uses GetElementsMax() whether a matrix of
         the size of nC*nR could be allocated. A zero size (both nC and nR zero)
@@ -376,9 +383,12 @@ public:
     double Or() const ;        // logical OR of all matrix values, or NAN
     double Xor() const ;       // logical XOR of all matrix values, or NAN
 
-    KahanIterateResult Sum( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
-    KahanIterateResult SumSquare( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
-    KahanIterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    IterateResult<KahanSum> Sum( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    IterateResultNotCount<KahanSum> SumNotCount( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    IterateResult<KahanSum> SumSquare( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    IterateResult<KahanSum> SumDiffSquare( double fDiff, bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    IterateResultMultiple<KahanSum> SumAndSumSquare( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    IterateResult<double> Product( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
     size_t Count(bool bCountStrings, bool bCountErrors, bool bIgnoreEmptyStrings = false) const ;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const ;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const ;
@@ -409,8 +419,6 @@ public:
     void MulOp(double fVal, const ScMatrix& rMat) ;
     void DivOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
     void PowOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
-
-    std::vector<ScMatrix::IterateResult> Collect(const std::vector<sc::op::Op>& aOp) ;
 
     void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc,
