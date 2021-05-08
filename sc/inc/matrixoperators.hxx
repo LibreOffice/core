@@ -16,22 +16,21 @@
 namespace sc::op {
 
 
-template<typename T>
-struct Op_
+template< typename tRes>
+struct Op
 {
-    const double mInitVal;
-    const T maOp;
-    Op_(double InitVal, T aOp):
-        mInitVal(InitVal), maOp(aOp)
-    {
-    }
-    void operator()(double& rAccum, double fVal) const
-    {
-        maOp(rAccum, fVal);
-    }
+    Op(tRes aInitVal) : m_aInitVal(aInitVal) {};
+    const tRes m_aInitVal;
+    virtual void operator()(tRes& rAccum, double fVal) const;
+    virtual~Op(){};
 };
 
-using Op = Op_<std::function<void(double&, double)>>;
+class OpSum : public Op<KahanSum>
+{
+    OpSum() : Op<KahanSum>(0.0) {};
+    static KahanSum m_aInitVal;
+    void operator()(KahanSum& rAccum, double fVal) const override {rAccum += fVal;}
+};
 
 struct Sum
 {
@@ -48,7 +47,7 @@ struct SumSquare
 struct Product
 {
     static const double InitVal;
-    void operator()(KahanSum& rAccum, double fVal) const;
+    void operator()(double& rAccum, double fVal) const;
 };
 
 }
