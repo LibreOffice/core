@@ -389,9 +389,9 @@ static void IterateMatrix(
         case ifAVERAGE:
         case ifSUM:
         {
-            ScMatrix::KahanIterateResult aRes = pMat->Sum(bTextAsZero, bIgnoreErrVal);
-            fRes += aRes.maAccumulator;
-            rCount += aRes.mnCount;
+            ScMatrix::IterateResult aRes = pMat->Sum(bTextAsZero, bIgnoreErrVal);
+            fRes += aRes.m_aAccumulator;
+            rCount += aRes.m_nCount;
         }
         break;
         case ifCOUNT:
@@ -403,16 +403,16 @@ static void IterateMatrix(
         break;
         case ifPRODUCT:
         {
-            ScMatrix::KahanIterateResult aRes = pMat->Product(bTextAsZero, bIgnoreErrVal);
-            fRes *= aRes.get();
-            rCount += aRes.mnCount;
+            ScMatrix::IterateResult aRes = pMat->Product(bTextAsZero, bIgnoreErrVal);
+            fRes *= aRes.m_aAccumulator;
+            rCount += aRes.m_nCount;
         }
         break;
         case ifSUMSQ:
         {
-            ScMatrix::KahanIterateResult aRes = pMat->SumSquare(bTextAsZero, bIgnoreErrVal);
-            fRes += aRes.maAccumulator;
-            rCount += aRes.mnCount;
+            ScMatrix::IterateResult aRes = pMat->SumSquare(bTextAsZero, bIgnoreErrVal);
+            fRes += aRes.m_aAccumulator;
+            rCount += aRes.m_nCount;
         }
         break;
         default:
