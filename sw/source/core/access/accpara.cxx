@@ -3015,7 +3015,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionStart( sal_Int32 nSe
 
     ThrowIfDisposed();
 
-    sal_Int32 nStart, nEnd;
+    sal_Int32 nStart=-1, nEnd=-1;
     /*sal_Bool bSelected = */GetSelectionAtIndex(&nSelectedPortionIndex, nStart, nEnd );
     return nStart;
 }
@@ -3026,7 +3026,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionEnd( sal_Int32 nSele
 
     ThrowIfDisposed();
 
-    sal_Int32 nStart, nEnd;
+    sal_Int32 nStart=-1, nEnd=-1;
     /*sal_Bool bSelected = */GetSelectionAtIndex(&nSelectedPortionIndex, nStart, nEnd );
     return nEnd;
 }
