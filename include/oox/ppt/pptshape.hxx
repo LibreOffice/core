@@ -51,6 +51,8 @@ class PPTShape final : public oox::drawingml::Shape
     bool                        mbReferenced;           // placeholdershapes on Layout are displayed only, if they are not referenced
                                                         // placeholdershapes on Slide are displayed always
     oox::drawingml::ShapePtr mpPlaceholder;
+    /// Set if spPr tag is non empty for the shape
+    bool mbHasNoninheritedShapeProperties;
 
 public:
 
@@ -72,6 +74,11 @@ public:
     void setReferenced( bool bReferenced ){ mbReferenced = bReferenced; };
     void setPlaceholder( oox::drawingml::ShapePtr pPlaceholder ) { mpPlaceholder = pPlaceholder; }
     void setModelId( const OUString& rId ) { msModelId = rId; }
+
+    /// Flags shape as having a non-empty spPr tag
+    void setHasNoninheritedShapeProperties() { mbHasNoninheritedShapeProperties = true; }
+    /// Returns whether or not the shape had a non-empty spPr tag
+    bool hasNonInheritedShapeProperties() const { return mbHasNoninheritedShapeProperties; }
 
     static oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nFirstSubType,
             const sal_Int32 nSecondSubType, const OptValue< sal_Int32 >& oSubTypeIndex,
