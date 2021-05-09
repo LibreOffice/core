@@ -52,6 +52,10 @@ public:
 
     TextParagraphProperties&         getProperties() { return maProperties; }
     const TextParagraphProperties&   getProperties() const { return maProperties; }
+    /// Flags the textparagraph as having a pPr tag in it
+    void                             setHasProperties() { mbHasProperties = true; }
+    /// Returns whether the textparagraph had an pPr tag in it during import
+    bool                             hasProperties() const { return mbHasProperties; }
 
     TextCharacterProperties&         getEndProperties() { return maEndProperties; }
     const TextCharacterProperties&   getEndProperties() const { return maEndProperties; }
@@ -86,6 +90,7 @@ public:
 
 private:
     TextParagraphProperties     maProperties;
+    bool                        mbHasProperties;
     TextCharacterProperties     maEndProperties;
     TextRunVector               maRuns;
     // temporarily store this here
