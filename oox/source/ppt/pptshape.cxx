@@ -50,6 +50,7 @@ PPTShape::PPTShape( const oox::ppt::ShapeLocation eShapeLocation, const sal_Char
 : Shape( pServiceName )
 , meShapeLocation( eShapeLocation )
 , mbReferenced( false )
+, mbHasNoninheritedShapeProperties( false )
 {
 }
 
