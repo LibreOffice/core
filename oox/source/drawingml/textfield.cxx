@@ -32,6 +32,7 @@
 #include <drawingml/textparagraphproperties.hxx>
 #include <drawingml/textcharacterproperties.hxx>
 #include <tools/diagnose_ex.h>
+#include <editeng/flditem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -71,68 +72,28 @@ void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
                 aFields.emplace_back( xIface, UNO_QUERY );
                 return;
             }
-            bool bIsDate = true;
-            int idx = p.toInt32();
-            sal_uInt16 nNumFmt;
-            xIface = xFactory->createInstance( "com.sun.star.text.TextField.DateTime" );
-            aFields.emplace_back( xIface, UNO_QUERY );
-            Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
 
-            // here we should format the field properly. waiting after #i81091.
-            switch( idx )
+            SvxDateFormat eDateFormat = TextField::getLODateFormat(sType);
+            if (eDateFormat != SvxDateFormat::AppDefault)
             {
-            case 1: // Date dd/mm/yyyy
-                // this is the default format...
-                nNumFmt = 5;
-                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
-                break;
-            case 2: // Date Day, Month dd, yyyy
-                break;
-            case 3: // Date dd Month yyyy
-                nNumFmt = 3;
-                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
-                break;
-            case 4: // Date Month dd, yyyy
-                break;
-            case 5: // Date dd-Mon-yy
-                break;
-            case 6: // Date Month yy
-                break;
-            case 7: // Date Mon-yy
-                break;
-            case 8: // DateTime dd/mm/yyyy H:MM PM
-                lclCreateTextFields( aFields, xModel, "datetime12" );
-                break;
-            case 9: // DateTime dd/mm/yy H:MM:SS PM
-                lclCreateTextFields( aFields, xModel, "datetime13" );
-                break;
-            case 10: // Time H:MM
-                bIsDate = false;
-                nNumFmt = 3;
-                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
-                break;
-            case 11: // Time H:MM:SS
-                bIsDate = false;
-                // this is the default format
-                nNumFmt = 2;
-                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
-                break;
-            case 12: // Time H:MM PM
-                bIsDate = false;
-                nNumFmt = 6;
-                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
-                break;
-            case 13: // Time H:MM:SS PM
-                bIsDate = false;
-                nNumFmt = 7;
-                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
-                break;
-            default:
-                nNumFmt = 2;
-                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
+                xIface = xFactory->createInstance( "com.sun.star.text.TextField.DateTime" );
+                aFields.emplace_back( xIface, UNO_QUERY );
+                Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
+                xProps->setPropertyValue("NumberFormat", Any(static_cast<sal_Int32>(eDateFormat)));
+                xProps->setPropertyValue("IsDate", Any(true));
+                xProps->setPropertyValue("IsFixed", Any(false));
             }
-            xProps->setPropertyValue( "IsDate", makeAny( bIsDate ) );
-            xProps->setPropertyValue( "IsFixed", makeAny( false ) );
+
+            SvxTimeFormat eTimeFormat = TextField::getLOTimeFormat(sType);
+            if (eTimeFormat != SvxTimeFormat::AppDefault)
+            {
+                xIface = xFactory->createInstance( "com.sun.star.text.TextField.DateTime" );
+                aFields.emplace_back( xIface, UNO_QUERY );
+                Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
+                xProps->setPropertyValue("NumberFormat", Any(static_cast<sal_Int32>(eTimeFormat)));
+                xProps->setPropertyValue("IsDate", Any(false));
+                xProps->setPropertyValue("IsFixed", Any(false));
+            }
         }
         catch(const Exception &)
         {
@@ -245,6 +206,66 @@ sal_Int32 TextField::insertAt(
     return nCharHeight;
 }
 
+SvxDateFormat TextField::getLODateFormat(std::u16string_view rDateTimeType)
+{
+    OString aDateTimeNum = OUStringToOString(rDateTimeType.substr(8), RTL_TEXTENCODING_UTF8);
+
+    if( aDateTimeNum.isEmpty() ) // "datetime"
+        return SvxDateFormat::StdSmall;
+
+    int nDateTimeNum = aDateTimeNum.toInt32();
+
+    switch( nDateTimeNum )
+    {
+    case 1: // Date dd/mm/yyyy
+    case 2: // Date Day, Month dd, yyyy
+    case 5: // Date dd-Mon-yy
+    case 6: // Date Month yy
+    case 7: // Date Mon-yy
+    case 8: // DateTime dd/mm/yyyy H:MM PM
+    case 9: // DateTime dd/mm/yyyy H:MM:SS PM
+        return SvxDateFormat::B;
+    case 3: // Date dd Month yyyy
+        return SvxDateFormat::StdBig;
+    case 4: // Date Month dd, yyyy
+        return SvxDateFormat::StdSmall;
+    case 10: // Time H:MM
+    case 11: // Time H:MM:SS
+    case 12: // Time H:MM PM
+    case 13: // Time H:MM:SS PM
+    default:
+        return SvxDateFormat::AppDefault;
+    }
+}
+
+SvxTimeFormat TextField::getLOTimeFormat(std::u16string_view rDateTimeType)
+{
+    OString aDateTimeNum = OUStringToOString(rDateTimeType.substr(8), RTL_TEXTENCODING_UTF8);
+    int nDateTimeNum = aDateTimeNum.toInt32();
+
+    switch( nDateTimeNum )
+    {
+    case 8: // DateTime dd/mm/yyyy H:MM PM
+    case 12: // Time H:MM PM
+        return SvxTimeFormat::HH12_MM;
+    case 9: // DateTime dd/mm/yyyy H:MM:SS PM
+    case 13: // Time H:MM:SS PM
+        return SvxTimeFormat::HH12_MM_SS;
+    case 10: // Time H:MM
+        return SvxTimeFormat::HH24_MM;
+    case 11: // Time H:MM:SS
+        return SvxTimeFormat::Standard;
+    case 1: // Date dd/mm/yyyy
+    case 2: // Date Day, Month dd, yyyy
+    case 3: // Date dd Month yyyy
+    case 4: // Date Month dd, yyyy
+    case 5: // Date dd-Mon-yy
+    case 6: // Date Month yy
+    case 7: // Date Mon-yy
+    default:
+        return SvxTimeFormat::AppDefault;
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
