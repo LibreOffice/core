@@ -183,7 +183,7 @@ public:
 
 class SmCmdBoxWindow : public SfxDockingWindow
 {
-    std::unique_ptr<SmEditWindow> m_xEdit;
+    std::unique_ptr<SmEditWindow, o3tl::default_delete<SmEditWindow>> m_xEdit;
     SmEditController    aController;
     bool                bExiting;
 
