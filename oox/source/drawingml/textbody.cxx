@@ -108,6 +108,16 @@ bool TextBody::hasVisualRunProperties() const
     return false;
 }
 
+bool TextBody::hasParagraphProperties() const
+{
+    for ( auto& pTextParagraph : getParagraphs() )
+    {
+        if ( pTextParagraph->hasProperties() )
+            return true;
+    }
+    return false;
+}
+
 void TextBody::ApplyStyleEmpty(
     const ::oox::core::XmlFilterBase& rFilterBase,
     const Reference < XText > & xText,
