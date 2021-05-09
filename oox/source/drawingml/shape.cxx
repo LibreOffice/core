@@ -85,6 +85,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <svx/svdtrans.hxx>
@@ -270,7 +271,7 @@ void Shape::addShape(
         const basegfx::B2DHomMatrix& aTransformation,
         FillProperties& rShapeOrParentShapeFillProps,
         ShapeIdMap* pShapeMap,
-        bool bInGroup )
+        oox::drawingml::ShapePtr pParentGroupShape)
 {
     SAL_INFO("oox.drawingml", "Shape::addShape: id='" << msId << "'");
 
@@ -280,7 +281,7 @@ void Shape::addShape(
         if( !sServiceName.isEmpty() )
         {
             basegfx::B2DHomMatrix aMatrix( aTransformation );
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, false, false, aMatrix, rShapeOrParentShapeFillProps, bInGroup ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, false, false, aMatrix, rShapeOrParentShapeFillProps, pParentGroupShape) );
 
             if( pShapeMap && !msId.isEmpty() )
             {
@@ -393,41 +394,10 @@ void Shape::addChildren(
         ShapeIdMap* pShapeMap,
         const basegfx::B2DHomMatrix& aTransformation )
 {
-    basegfx::B2DHomMatrix aChildTransformation;
-
-    aChildTransformation.translate(-maChPosition.X, -maChPosition.Y);
-    aChildTransformation.scale(1/(maChSize.Width ? maChSize.Width : 1.0), 1/(maChSize.Height ? maChSize.Height : 1.0));
-
-    // Child position and size is typically non-zero, but it's allowed to have
-    // it like that, and in that case Word ignores the parent transformation
-    // (excluding translate component).
-    if (!mbWps || maChPosition.X || maChPosition.Y || maChSize.Width || maChSize.Height)
-    {
-        aChildTransformation *= aTransformation;
-    }
-    else
-    {
-        basegfx::B2DVector aScale, aTranslate;
-        double fRotate, fShearX;
-        aTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
-        aChildTransformation.translate(aTranslate.getX(), aTranslate.getY());
-    }
-
-    SAL_INFO("oox.drawingml", "Shape::addChildren: parent matrix:\n"
-             << aChildTransformation.get(0, 0) << " "
-             << aChildTransformation.get(0, 1) << " "
-             << aChildTransformation.get(0, 2) << "\n"
-             << aChildTransformation.get(1, 0) << " "
-             << aChildTransformation.get(1, 1) << " "
-             << aChildTransformation.get(1, 2) << "\n"
-             << aChildTransformation.get(2, 0) << " "
-             << aChildTransformation.get(2, 1) << " "
-             << aChildTransformation.get(2, 2));
-
     for (auto const& child : rMaster.maChildren)
     {
         child->setMasterTextListStyle( mpMasterTextListStyle );
-        child->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), pShapeMap, true );
+        child->addShape( rFilterBase, pTheme, rxShapes, aTransformation, getFillProperties(), pShapeMap, rMaster.shared_from_this());
     }
 }
 
@@ -652,6 +622,53 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
         uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
 }
 
+// Some helper methods for createAndInsert
+namespace
+{
+// mirrors aTransformation at its center axis
+// only valid if neither rotation or shear included
+void lcl_mirrorAtCenter(basegfx::B2DHomMatrix& aTransformation, bool bFlipH, bool bFlipV)
+{
+    if (!bFlipH && !bFlipV)
+        return;
+    basegfx::B2DPoint aCenter(0.5, 0.5);
+    aCenter *= aTransformation;
+    aTransformation.translate(-aCenter);
+    aTransformation.scale(bFlipH ? -1.0 : 1.0, bFlipV ? -1.0 : 1.0);
+    aTransformation.translate(aCenter);
+    return;
+}
+
+// only valid if neither rotation or shear included
+void lcl_doSpecialMSOWidthHeightToggle(basegfx::B2DHomMatrix& aTransformation)
+{
+    // The values are directly set at the matrix without any matrix multiplication.
+    // That way it is valid for lines too. Those have zero width or height.
+    const double fSx(aTransformation.get(0, 0));
+    const double fSy(aTransformation.get(1, 1));
+    const double fTx(aTransformation.get(0, 2));
+    const double fTy(aTransformation.get(1, 2));
+    aTransformation.set(0, 0, fSy);
+    aTransformation.set(1, 1, fSx);
+    aTransformation.set(0, 2, fTx + 0.5 * (fSx - fSy));
+    aTransformation.set(1, 2, fTy + 0.5 * (fSy - fSx));
+    return;
+}
+
+void lcl_RotateAtCenter(basegfx::B2DHomMatrix& aTransformation, const sal_Int32& rMSORotationAngle)
+{
+    if (rMSORotationAngle == 0)
+        return;
+    double fRad = basegfx::deg2rad(rMSORotationAngle / 60000.0);
+    basegfx::B2DPoint aCenter(0.5, 0.5);
+    aCenter *= aTransformation;
+    aTransformation.translate(-aCenter);
+    aTransformation.rotate(fRad);
+    aTransformation.translate(aCenter);
+    return;
+}
+}
+
 Reference< XShape > const & Shape::createAndInsert(
         ::oox::core::XmlFilterBase& rFilterBase,
         const OUString& rServiceName,
@@ -661,7 +678,7 @@ Reference< XShape > const & Shape::createAndInsert(
         bool bDoNotInsertEmptyTextBody,
         basegfx::B2DHomMatrix& aParentTransformation,
         FillProperties& rShapeOrParentShapeFillProps,
-        bool bInGroup )
+        oox::drawingml::ShapePtr pParentGroupShape)
 {
     bool bIsEmbMedia = false;
     SAL_INFO("oox.drawingml", "Shape::createAndInsert: id='" << msId << "' service='" << rServiceName << "'");
@@ -731,6 +748,7 @@ Reference< XShape > const & Shape::createAndInsert(
                               (mpCustomShapePropertiesPtr->getShapePresetType() >= 0 || mpCustomShapePropertiesPtr->getPath2DList().size() > 0) &&
                               mpCustomShapePropertiesPtr->getShapePresetType() != XML_Rect &&
                               mpCustomShapePropertiesPtr->getShapePresetType() != XML_rect);
+    // ToDo: Why is ConnectorShape here treated as custom shape, but below with start and end point?
     bool bIsCustomShape = ( aServiceName == "com.sun.star.drawing.CustomShape" ||
                             aServiceName == "com.sun.star.drawing.ConnectorShape" ||
                             bIsCroppedGraphic);
@@ -745,84 +763,129 @@ Reference< XShape > const & Shape::createAndInsert(
             mbFlipH ||
             mbFlipV );
 
-    basegfx::B2DHomMatrix aTransformation;
+    basegfx::B2DHomMatrix aTransformation; // will be cumulative transformation of this object
 
+    // Special for SmartArt import. Rotate diagram's shape around object's center before sizing.
     if (bUseRotationTransform && mnDiagramRotation != 0)
     {
-        // rotate diagram's shape around object's center before sizing
         aTransformation.translate(-0.5, -0.5);
         aTransformation.rotate(basegfx::deg2rad(mnDiagramRotation / 60000.0));
         aTransformation.translate(0.5, 0.5);
     }
 
-    if( maSize.Width != 1 || maSize.Height != 1)
+    // Build object matrix from shape size and position; corresponds to MSO ext and off
+    // Only LineShape and ConnectorShape may have zero width or height.
+    if (aServiceName == "com.sun.star.drawing.LineShape"
+        || aServiceName == "com.sun.star.drawing.ConnectorShape")
+        aTransformation.scale(maSize.Width, maSize.Height);
+    else
     {
-        // take care there are no zeros used by error
-        aTransformation.scale(
-            maSize.Width ? maSize.Width : 1.0,
-            maSize.Height ? maSize.Height : 1.0 );
+        aTransformation.scale(maSize.Width ? maSize.Width : 1.0,
+                              maSize.Height ? maSize.Height : 1.0);
     }
 
-    bool bNoTranslation = !aParentTransformation.isIdentity();
-    if( mbFlipH || mbFlipV || mnRotation != 0 || bNoTranslation )
+    // Evaluate object flip. Other shapes than custom shapes have no attribute for flip but use
+    // negative scale. Flip in MSO is at object center.
+    if (!bIsCustomShape && (mbFlipH || mbFlipV))
+        lcl_mirrorAtCenter(aTransformation, mbFlipH, mbFlipV);
+
+    // Evaluate parent flip.
+    // A CustomShape has mirror not as negative scale, but as attributes.
+    basegfx::B2DVector aParentScale(1.0, 1.0);
+    basegfx::B2DVector aParentTranslate(0.0, 0.0);
+    double fParentRotate(0.0);
+    double fParentShearX(0.0);
+    if (pParentGroupShape)
     {
-        // calculate object's center
-        basegfx::B2DPoint aCenter(0.5, 0.5);
-        aCenter *= aTransformation;
-
-        // center object at origin
-        aTransformation.translate( -aCenter.getX(), -aCenter.getY() );
-
-        if( !bIsCustomShape && ( mbFlipH || mbFlipV ) )
+        aParentTransformation.decompose(aParentScale, aParentTranslate, fParentRotate, fParentShearX);
+        if (bIsCustomShape)
         {
-            // mirror around object's center
-            aTransformation.scale( mbFlipH ? -1.0 : 1.0, mbFlipV ? -1.0 : 1.0 );
+            lcl_mirrorAtCenter(aTransformation, aParentScale.getX() < 0, aParentScale.getY() < 0);
+            if(aParentScale.getX() < 0)
+                mbFlipH = !mbFlipH;
+            if(aParentScale.getY() < 0)
+                mbFlipV = !mbFlipV;
         }
-
-        if( bUseRotationTransform )
-        {
-            // OOXML flips shapes before rotating them.
-            if( bIsCustomShape )
-            {
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                aParentTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
-                // A negative scale means that the shape needs to be flipped
-                if(aScale.getX() < 0)
-                {
-                    mbFlipH = !mbFlipH;
-                    aTransformation.scale(-1, 1);
-                }
-                if(aScale.getY() < 0)
-                {
-                    mbFlipV = !mbFlipV;
-                    aTransformation.scale(1, -1);
-                }
-            }
-            // rotate around object's center
-            aTransformation.rotate(basegfx::deg2rad(static_cast<double>(mnRotation) / 60000.0));
-        }
-
-        // move object back from center
-        aTransformation.translate( aCenter.getX(), aCenter.getY() );
     }
 
-    if( maPosition.X != 0 || maPosition.Y != 0)
+    if (maPosition.X != 0 || maPosition.Y != 0)
     {
         // if global position is used, add it to transformation
-        if (mbWps && !bInGroup)
+        if (mbWps && pParentGroupShape == nullptr)
             aTransformation.translate(
                 o3tl::convert(maPosition.X, o3tl::Length::mm100, o3tl::Length::emu),
                 o3tl::convert(maPosition.Y, o3tl::Length::mm100, o3tl::Length::emu));
         else
-            aTransformation.translate( maPosition.X, maPosition.Y );
+            aTransformation.translate(maPosition.X, maPosition.Y);
     }
 
-    aTransformation = aParentTransformation*aTransformation;
+    // Apply further parent transformations. First scale object then rotate. Other way round would
+    // introduce shearing.
+
+    // The attributes chExt and chOff of the group in oox file contain the values on which the size
+    // and position of the child is based on. If they differ from the actual size of the group as
+    // given in its ext and off attributes, the child has to be transformed according the new values.
+    if (pParentGroupShape)
+    {
+        // ToDo: A diagram in a group might need special handling because it cannot flip and only
+        // resize uniformly. But currently it is imported with zero size, see tdf#139575. That needs
+        // to be fixed beforehand.
+
+        // Scaling is done from left/top edges of the group. So these need to become coordinate axes.
+        aTransformation.translate(-pParentGroupShape->maChPosition.X,
+                                  -pParentGroupShape->maChPosition.Y);
+
+        // oox allows zero or missing attribute chExt. In that case the scaling factor is 1.
+        // Transform2DContext::onCreateContext has set maChSize to maSize for groups in oox file in
+        // such cases. For own made groups (e.g. diagrams) that is missing.
+        // The factors cumulate on the way through the parent groups, so we do not use maSize of the
+        // direct parent group but the cumulated value from aParentScale.
+        double fFactorX = 1.0;
+        double fFactorY = 1.0;
+        if (pParentGroupShape->maChSize.Width != 0)
+            fFactorX = aParentScale.getX() / pParentGroupShape->maChSize.Width;
+        if (pParentGroupShape->maChSize.Height != 0)
+            fFactorY = aParentScale.getY() / pParentGroupShape->maChSize.Height;
+        if (fFactorX != 1 || fFactorY != 1)
+        {
+            // It depends on the object rotation angle whether scaling is applied to switched
+            // width and height. MSO acts strange in that case (as of May 2021).
+            const sal_Int32 nDeg(mnRotation / 60000);
+            const bool bNeedsMSOWidhtHeightToggle
+                = (nDeg >= 45 && nDeg < 135) || (nDeg >= 225 && nDeg < 315);
+            if (bNeedsMSOWidhtHeightToggle)
+                lcl_doSpecialMSOWidthHeightToggle(aTransformation);
+
+            aTransformation.scale(fFactorX, fFactorY);
+
+            if (bNeedsMSOWidhtHeightToggle)
+            {
+                lcl_doSpecialMSOWidthHeightToggle(aTransformation);
+                // In case of flip the special case needs an additional 180deg rotation.
+                if ((aParentScale.getX() < 0) != (aParentScale.getY() < 0))
+                    lcl_RotateAtCenter(aTransformation, 10800000);
+            }
+        }
+    }
+
+    // Apply object rotation at current object center
+    // The flip contained in aParentScale will affect orientation of object rotation angle.
+    sal_Int16 nOrientation = ((aParentScale.getX() < 0) != (aParentScale.getY() < 0)) ? -1 : 1;
+    // ToDo: Not sure about the restrictions given by bUseRotationTransform.
+    if (bUseRotationTransform && mnRotation != 0)
+        lcl_RotateAtCenter(aTransformation, nOrientation * mnRotation);
+
+    if (fParentRotate != 0.0)
+        aTransformation.rotate(fParentRotate);
+    if (!aParentTranslate.equalZero())
+        aTransformation.translate(aParentTranslate);
+
     aParentTransformation = aTransformation;
+
     constexpr double fEmuToMm100 = o3tl::convert(1.0, o3tl::Length::emu, o3tl::Length::mm100);
     aTransformation.scale(fEmuToMm100, fEmuToMm100);
 
+    // OOXML flips shapes before rotating them, so the rotation needs to be inverted
     if( bIsCustomShape && mbFlipH != mbFlipV )
     {
         basegfx::B2DVector aScale, aTranslate;
@@ -831,11 +894,9 @@ Reference< XShape > const & Shape::createAndInsert(
 
         if(fRotate != 0)
         {
-            // calculate object's center
             basegfx::B2DPoint aCenter(0.5, 0.5);
             aCenter *= aTransformation;
             aTransformation.translate( -aCenter.getX(), -aCenter.getY() );
-            // OOXML flips shapes before rotating them, so the rotation needs to be inverted
             aTransformation.rotate( fRotate * -2.0 );
             aTransformation.translate( aCenter.getX(), aCenter.getY() );
         }
