@@ -24,6 +24,9 @@
 #include <drawingml/textparagraphproperties.hxx>
 #include <memory>
 
+enum class SvxTimeFormat;
+enum class SvxDateFormat;
+
 namespace oox { namespace drawingml {
 
 struct TextCharacterProperties;
@@ -49,6 +52,16 @@ public:
                         const TextCharacterProperties& rTextCharacterStyle,
                         float nDefaultCharHeight) const override;
 
+    /** Gets the corresponding LO Date format for given OOXML datetime field type
+     *
+     * @param rDateTimeType PPTX datetime field type e.g. datetime3
+     */
+    static SvxDateFormat getLODateFormat( std::u16string_view rDateTimeType );
+    /** Gets the corresponding LO Time format for given OOXML datetime field type
+     *
+     * @param rDateTimeType PPTX datetime field type e.g. datetime3
+     */
+    static SvxTimeFormat getLOTimeFormat( std::u16string_view rDateTimeType );
 private:
     TextParagraphProperties  maTextParagraphProperties;
     OUString msType;
