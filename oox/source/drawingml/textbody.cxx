@@ -93,6 +93,16 @@ OUString TextBody::toString() const
         return OUString();
 }
 
+bool TextBody::hasVisualRunProperties() const
+{
+    for ( auto& pTextParagraph : getParagraphs() )
+    {
+        if ( pTextParagraph->hasVisualRunProperties() )
+            return true;
+    }
+    return false;
+}
+
 void TextBody::ApplyStyleEmpty(
     const ::oox::core::XmlFilterBase& rFilterBase,
     const Reference < XText > & xText,
