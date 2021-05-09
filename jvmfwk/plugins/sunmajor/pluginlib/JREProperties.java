@@ -25,9 +25,6 @@ import java.util.*;
     unfortunately this works only with later update - versions (for example,
     1.3.1_07). Therefore we use this scheme. The property string has this form:
     name=value
-
-    Every character is cast to an integer which value is printed, followed by a
-    space. If all characters of the string are printed, then a new line is printed.
 */
 public class JREProperties
 {
@@ -40,13 +37,7 @@ public class JREProperties
             while (e.hasMoreElements()) {
                 String sProp = (String) e.nextElement();
                 String sCompleteProp = sProp + "=" + p.getProperty(sProp);
-                char[] arChars = new char[sCompleteProp.length()];
-                sCompleteProp.getChars(0, sCompleteProp.length(), arChars, 0);
-                for (int c = 0; c < arChars.length; c++) {
-                    System.out.print(String.valueOf((int) arChars[c]));
-                    System.out.print(" ");
-                }
-                System.out.print("\n");
+                System.out.println(sCompleteProp);
             }
         }
         catch(Exception e)
