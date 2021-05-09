@@ -2285,8 +2285,7 @@ PlottingPositionHelper& VSeriesPlotter::getPlottingPositionHelper( sal_Int32 nAx
     }
     if( !pRet )
         pRet = m_pMainPosHelper;
-    if(pRet)
-        pRet->setTimeResolution( m_nTimeResolution, m_aNullDate );
+    pRet->setTimeResolution( m_nTimeResolution, m_aNullDate );
     return *pRet;
 }
 
