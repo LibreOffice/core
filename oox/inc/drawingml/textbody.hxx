@@ -73,6 +73,9 @@ public:
      */
     bool hasVisualRunProperties() const;
 
+    /// Returns whether the textbody had a pPr tag in it
+    bool hasParagraphProperties() const;
+
     void                ApplyStyleEmpty(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             const css::uno::Reference < css::text::XText > & xText,
