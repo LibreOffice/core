@@ -113,9 +113,6 @@ static bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
 static bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
 #endif
 
-static bool decodeOutput(const OString& s, OUString* out);
-
-
 namespace
 {
 
@@ -384,11 +381,11 @@ bool getJavaProps(const OUString & exePath,
 #endif
 
     //prepare the arguments
-    sal_Int32 const cArgs = 3;
+    OUString arg0 = "-Dfile.encoding=UTF8";
     OUString arg1 = "-classpath";// + sClassPath;
     OUString arg2 = sClassPath;
     OUString arg3("JREProperties");
-    rtl_uString *args[cArgs] = {arg1.pData, arg2.pData, arg3.pData};
+    rtl_uString *args[] = {arg0.pData, arg1.pData, arg2.pData, arg3.pData};
 
     oslProcess javaProcess= nullptr;
     oslFileHandle fileOut= nullptr;
@@ -401,7 +398,7 @@ bool getJavaProps(const OUString & exePath,
     oslProcessError procErr =
         osl_executeProcess_WithRedirectedIO( exePath.pData,//usExe.pData,
                                              args,
-                                             cArgs,                 //sal_uInt32   nArguments,
+                                             SAL_N_ELEMENTS(args), //sal_uInt32   nArguments,
                                              osl_Process_HIDDEN, //oslProcessOption Options,
                                              nullptr, //oslSecurity Security,
                                              usStartDir.pData,//usStartDir.pData,//usWorkDir.pData, //rtl_uString *strWorkDir,
@@ -438,9 +435,7 @@ bool getJavaProps(const OUString & exePath,
         rs = stdoutReader.readLine( & aLine);
         if (rs != FileHandleReader::RESULT_OK)
             break;
-        OUString sLine;
-        if (!decodeOutput(aLine, &sLine))
-            continue;
+        OUString sLine = OStringToOUString(aLine, RTL_TEXTENCODING_UTF8);
         JFW_TRACE2("  \"" << sLine << "\"");
         sLine = sLine.trim();
         if (sLine.isEmpty())
@@ -477,35 +472,6 @@ bool getJavaProps(const OUString & exePath,
     osl_freeProcessHandle(javaProcess);
     return ret;
 }
-
-/* converts the properties printed by JREProperties.class into
-    readable strings. The strings are encoded as integer values separated
-    by spaces.
- */
-bool decodeOutput(const OString& s, OUString* out)
-{
-    OSL_ASSERT(out != nullptr);
-    OUStringBuffer buff(512);
-    sal_Int32 nIndex = 0;
-    do
-    {
-        OString aToken = s.getToken( 0, ' ', nIndex );
-        if (!aToken.isEmpty())
-        {
-            for (sal_Int32 i = 0; i < aToken.getLength(); ++i)
-            {
-                if (aToken[i] < '0' || aToken[i] > '9')
-                    return false;
-            }
-            sal_Unicode value = static_cast<sal_Unicode>(aToken.toInt32());
-            buff.append(value);
-        }
-    } while (nIndex >= 0);
-
-    *out = buff.makeStringAndClear();
-    return true;
-}
-
 
 #if defined(_WIN32)
 
