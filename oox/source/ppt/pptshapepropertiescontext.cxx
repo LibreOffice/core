@@ -20,6 +20,7 @@
 #include <oox/ppt/pptshapepropertiescontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
+#include <oox/ppt/pptshape.hxx>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
@@ -35,6 +36,10 @@ PPTShapePropertiesContext::PPTShapePropertiesContext( ContextHandler2Helper cons
 
 ContextHandlerRef PPTShapePropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
+    PPTShape* pPPTShape = dynamic_cast<PPTShape*>(&mrShape);
+    if (pPPTShape)
+        pPPTShape->setHasNoninheritedShapeProperties();
+
     switch( aElementToken )
     {
         case A_TOKEN( xfrm ):
