@@ -28,6 +28,8 @@
 #include <oox/drawingml/shape.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <oox/mathml/import.hxx>
 
@@ -176,6 +178,8 @@ ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, con
     switch( aElementToken )
     {
         case A_TOKEN( bodyPr ):     // CT_TextBodyPropertyBag
+            if (sax_fastparser::FastAttributeList::castToFastAttributeList(rAttribs.getFastAttributeList())->getFastAttributeTokens().size() > 0)
+                mrTextBody.setHasNoninheritedBodyProperties();
             if ( mpShapePtr )
                 return new TextBodyPropertiesContext( *this, rAttribs, mpShapePtr );
             else
