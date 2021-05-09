@@ -40,13 +40,7 @@ public class JREProperties
             while (e.hasMoreElements()) {
                 String sProp = (String) e.nextElement();
                 String sCompleteProp = sProp + "=" + p.getProperty(sProp);
-                char[] arChars = new char[sCompleteProp.length()];
-                sCompleteProp.getChars(0, sCompleteProp.length(), arChars, 0);
-                for (int c = 0; c < arChars.length; c++) {
-                    System.out.print(String.valueOf((int) arChars[c]));
-                    System.out.print(" ");
-                }
-                System.out.print("\n");
+                System.out.println(sCompleteProp);
             }
         }
         catch(Exception e)
