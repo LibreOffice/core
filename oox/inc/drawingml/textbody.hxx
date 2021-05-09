@@ -76,6 +76,11 @@ public:
     /// Returns whether the textbody had a pPr tag in it
     bool hasParagraphProperties() const;
 
+    /// Returns whether the textbody had a non-empty bodyPr tag in it
+    bool hasNoninheritedBodyProperties() const { return mbHasNoninheritedBodyProperties; }
+    /// Flags textbody as having a non-empty bodyPr tag
+    void setHasNoninheritedBodyProperties() { mbHasNoninheritedBodyProperties = true; }
+
     void                ApplyStyleEmpty(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             const css::uno::Reference < css::text::XText > & xText,
@@ -84,6 +89,8 @@ public:
 protected:
     TextParagraphVector maParagraphs;
     TextBodyProperties  maTextProperties;
+    /// Set if bodyPr tag in this textbody is non-empty during import
+    bool                mbHasNoninheritedBodyProperties;
     TextListStyle       maTextListStyle;
     Text3DProperties    ma3DProperties;
 };
