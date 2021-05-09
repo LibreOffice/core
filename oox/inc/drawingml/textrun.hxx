@@ -43,6 +43,12 @@ public:
     void                 setLineBreak() { mbIsLineBreak = true; }
     bool isLineBreak() const { return mbIsLineBreak; }
 
+    /** Returns whether the textrun had properties that alter it visually in its rPr tag
+     *
+     *  For instance _lang_ doesn't have a visual effect.
+     */
+    bool hasVisualRunProperties() const { return maTextCharacterProperties.mbHasVisualRunProperties; }
+
     virtual sal_Int32               insertAt(
                                     const ::oox::core::XmlFilterBase& rFilterBase,
                                     const css::uno::Reference < css::text::XText >& xText,
