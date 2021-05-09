@@ -59,6 +59,8 @@ struct TextCharacterProperties
     OptValue< bool >    moUnderlineLineFollowText;
     OptValue< bool >    moUnderlineFillFollowText;
     FillProperties      maFillProperties;
+    /// Set if there was a property set that alters run visually during import
+    bool mbHasVisualRunProperties;
 
     std::vector<css::beans::PropertyValue> maTextEffectsProperties;
 
@@ -79,6 +81,8 @@ struct TextCharacterProperties
     void                pushToPropSet(
                             PropertySet& rPropSet,
                             const ::oox::core::XmlFilterBase& rFilter ) const;
+
+    TextCharacterProperties() : mbHasVisualRunProperties(false) {}
 };
 
 
