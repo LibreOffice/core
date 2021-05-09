@@ -81,6 +81,9 @@ public:
     /// Flags textbody as having a non-empty bodyPr tag
     void setHasNoninheritedBodyProperties() { mbHasNoninheritedBodyProperties = true; }
 
+    /// Returns whether the textbody had a non-empty lstStyle tag in it
+    bool hasListStyleOnImport() const { return maTextListStyle.hasListStyleOnImport(); }
+
     void                ApplyStyleEmpty(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             const css::uno::Reference < css::text::XText > & xText,
