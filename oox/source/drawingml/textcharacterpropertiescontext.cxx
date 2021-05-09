@@ -27,6 +27,8 @@
 #include "hyperlinkcontext.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <sax/fastattribs.hxx>
+#include <sax/fastparser.hxx>
 
 #include <sal/log.hxx>
 
@@ -45,8 +47,16 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
 : ContextHandler2( rParent )
 , mrTextCharacterProperties( rTextCharacterProperties )
 {
-    if ( rAttribs.hasAttribute( XML_lang ) )
+    int nVisualTokenAmount = sax_fastparser::castToFastAttributeList(
+                rAttribs.getFastAttributeList() ).getFastAttributeTokens().size();
+
+    if ( rAttribs.hasAttribute( XML_lang ) ){
         mrTextCharacterProperties.moLang = rAttribs.getString( XML_lang );
+        --nVisualTokenAmount; // Not a visual attribute
+    }
+    if ( rAttribs.hasAttribute( XML_altLang )){
+        --nVisualTokenAmount; // Not a visual attribute
+    }
     if ( rAttribs.hasAttribute( XML_sz ) )
         mrTextCharacterProperties.moHeight = rAttribs.getInteger( XML_sz );
     if ( rAttribs.hasAttribute( XML_spc ) )
@@ -64,6 +74,17 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         mrTextCharacterProperties.moItalic = rAttribs.getBool( XML_i );
     if( rAttribs.hasAttribute( XML_cap ) )
         mrTextCharacterProperties.moCaseMap = rAttribs.getToken( XML_cap );
+    if ( rAttribs.hasAttribute( XML_dirty ) )
+    {
+        --nVisualTokenAmount; // Not a visual attribute
+    }
+    if ( rAttribs.hasAttribute( XML_smtClean ) )
+    {
+        --nVisualTokenAmount; // Not a visual attribute
+    }
+
+    if ( nVisualTokenAmount > 0 )
+        mrTextCharacterProperties.mbHasVisualRunProperties = true;
 
     /* TODO / unhandled so far:
        A_TOKEN( kern )
@@ -85,6 +106,9 @@ TextCharacterPropertiesContext::~TextCharacterPropertiesContext()
 
 ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
+    if( aElementToken != A_TOKEN(lang) )
+        mrTextCharacterProperties.mbHasVisualRunProperties = true;
+
     switch( aElementToken )
     {
 // TODO unsupported yet

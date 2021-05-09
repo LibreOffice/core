@@ -67,6 +67,12 @@ public:
     bool isEmpty() const;
     OUString toString() const;
 
+    /** Returns whether the textbody had a rPr tag in it that alters it visually
+     *
+     *  For instance _lang_ doesn't have a visual effect.
+     */
+    bool hasVisualRunProperties() const;
+
     void                ApplyStyleEmpty(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             const css::uno::Reference < css::text::XText > & xText,
