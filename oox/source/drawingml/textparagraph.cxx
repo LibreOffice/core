@@ -38,6 +38,7 @@ using namespace ::com::sun::star::beans;
 namespace oox { namespace drawingml {
 
 TextParagraph::TextParagraph()
+    : mbHasProperties( false )
 {
 }
 
