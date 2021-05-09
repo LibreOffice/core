@@ -80,9 +80,9 @@ EditDLL& EditDLL::Get()
 }
 
 DefItems::DefItems()
+    : mvDefItems(EDITITEMCOUNT)
 {
-    ppDefItems = new std::vector<SfxPoolItem*>(EDITITEMCOUNT);
-    std::vector<SfxPoolItem*>& rDefItems = *ppDefItems;
+    std::vector<SfxPoolItem*>& rDefItems = mvDefItems;
 
     // Paragraph attributes:
     SvxNumRule aDefaultNumRule( SvxNumRuleFlags::NONE, 0, false );
@@ -157,7 +157,8 @@ DefItems::DefItems()
 
 DefItems::~DefItems()
 {
-    SfxItemPool::ReleaseDefaults(ppDefItems, true);
+    for (auto& rItem : mvDefItems)
+        delete rItem;
 }
 
 std::shared_ptr<DefItems> GlobalEditData::GetDefItems()
