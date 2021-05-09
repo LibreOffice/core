@@ -32,6 +32,7 @@ using namespace ::com::sun::star::beans;
 namespace oox { namespace drawingml {
 
 TextBody::TextBody()
+    : mbHasNoninheritedBodyProperties( false )
 {
 }
 
