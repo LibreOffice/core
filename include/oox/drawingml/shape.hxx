@@ -187,7 +187,7 @@ public:
                             const basegfx::B2DHomMatrix& aTransformation,
                             FillProperties& rShapeOrParentShapeFillProps,
                             ShapeIdMap* pShapeMap = nullptr,
-                            bool bInGroup = false);
+                            oox::drawingml::ShapePtr pParentGroupShape = nullptr);
 
     const css::uno::Reference< css::drawing::XShape > &
                         getXShape() const { return mxShape; }
@@ -264,7 +264,7 @@ protected:
                             bool bDoNotInsertEmptyTextBody,
                             basegfx::B2DHomMatrix& aTransformation,
                             FillProperties& rShapeOrParentShapeFillProps,
-                            bool bInGroup = false
+                            oox::drawingml::ShapePtr pParentGroupShape = nullptr
                              );
 
     void                addChildren(
