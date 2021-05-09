@@ -811,7 +811,7 @@ void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const 
 SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWindow,
                                vcl::Window *pParent)
     : SfxDockingWindow(pBindings_, pChildWindow, pParent, "EditWindow", "modules/smath/ui/editwindow.ui")
-    , m_xEdit(std::make_unique<SmEditWindow>(*this, *m_xBuilder))
+    , m_xEdit(new SmEditWindow(*this, *m_xBuilder))
     , aController(*m_xEdit, SID_TEXT, *pBindings_)
     , bExiting(false)
 {
