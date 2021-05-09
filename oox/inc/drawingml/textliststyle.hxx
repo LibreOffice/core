@@ -50,6 +50,14 @@ public:
     };
     TextParagraphPropertiesArray& getAggregationListStyle() { return maAggregationListStyle; };
 
+    /// Flags ListStyle as having a non-empty lstStyle tag on import
+    void setHasListStyleOnImport() { mbHasListStyleOnImport = true; }
+    /** Returns whether the lstStyle tag was non-empty on import
+     *
+     *  @return true if list style has it's own noninherited properties.
+     */
+    bool hasListStyleOnImport() const { return mbHasListStyleOnImport; }
+
 #ifdef DBG_UTIL
     void dump() const;
 #endif
@@ -57,6 +65,8 @@ public:
 private:
     TextParagraphPropertiesArray maListStyle;
     TextParagraphPropertiesArray maAggregationListStyle;
+    /// Set if ListStyle has a non-empty lstStyle tag on import
+    bool mbHasListStyleOnImport;
 };
 }
 
