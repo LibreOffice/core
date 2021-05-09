@@ -89,6 +89,7 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
         }
         case A_TOKEN( pPr ):
         case W_TOKEN( pPr ):
+            mrParagraph.setHasProperties();
             return new TextParagraphPropertiesContext( *this, rAttribs, mrParagraph.getProperties() );
         case A_TOKEN( endParaRPr ):
             return new TextCharacterPropertiesContext( *this, rAttribs, mrParagraph.getEndProperties() );
