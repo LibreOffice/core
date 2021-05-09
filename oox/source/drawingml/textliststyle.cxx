@@ -23,6 +23,7 @@
 namespace oox::drawingml {
 
 TextListStyle::TextListStyle()
+    : mbHasListStyleOnImport(false)
 {
     for ( int i = 0; i < 9; i++ )
     {
