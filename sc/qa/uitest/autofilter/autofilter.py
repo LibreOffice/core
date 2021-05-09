@@ -367,4 +367,29 @@ class AutofilterTest(UITestCase):
         self.assertFalse(is_row_hidden(doc, 6))
 
         self.ui_test.close_doc()
+
+    def test_tdf138438(self):
+        doc = self.ui_test.load_file(get_url_for_data_file("tdf138438.ods"))
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+
+        # Top 10 filer
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xMenu = xFloatWindow.getChild("menu")
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+
+        self.assertFalse(is_row_hidden(doc, 0))
+        self.assertTrue(is_row_hidden(doc, 1))
+        self.assertTrue(is_row_hidden(doc, 2))
+        self.assertFalse(is_row_hidden(doc, 3))
+        self.assertFalse(is_row_hidden(doc, 4))
+        self.assertFalse(is_row_hidden(doc, 5))
+        self.assertFalse(is_row_hidden(doc, 6))
+        self.assertTrue(is_row_hidden(doc, 7))
+        self.assertFalse(is_row_hidden(doc, 8))
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
