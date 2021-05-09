@@ -3002,7 +3002,7 @@ EditEngineItemPool::EditEngineItemPool()
                     aItemInfos, nullptr )
 {
     m_xDefItems = EditDLL::Get().GetGlobalData()->GetDefItems();
-    SetDefaults(m_xDefItems->getDefaults());
+    SetDefaults(&m_xDefItems->getDefaults());
 }
 
 EditEngineItemPool::~EditEngineItemPool()

@@ -43,10 +43,10 @@ class DefItems
 {
 public:
     DefItems();
-    std::vector<SfxPoolItem*>* getDefaults() { return ppDefItems; }
+    std::vector<SfxPoolItem*> & getDefaults() { return mvDefItems; }
     ~DefItems();
 private:
-    std::vector<SfxPoolItem*>* ppDefItems;
+    std::vector<SfxPoolItem*> mvDefItems;
 };
 
 class GlobalEditData
