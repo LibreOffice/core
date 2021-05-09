@@ -23,6 +23,7 @@
 namespace oox::drawingml {
 
 TextListStyle::TextListStyle()
+    : mbHasListStyleOnImport(false)
 {
 }
 

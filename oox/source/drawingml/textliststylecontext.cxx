@@ -41,6 +41,7 @@ TextListStyleContext::~TextListStyleContext()
 
 ContextHandlerRef TextListStyleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
+    mrTextListStyle.setHasListStyleOnImport();
     switch( aElementToken )
     {
         case A_TOKEN( defPPr ):     // CT_TextParagraphProperties
