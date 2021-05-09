@@ -327,7 +327,7 @@ void VclBox::setAllocation(const Size &rAllocation)
             if (bFill)
             {
                 setPrimaryDimension(aChildSize, std::max(static_cast<tools::Long>(1),
-                    getPrimaryDimension(aBoxSize) - nPadding * 2));
+                    std::min(getPrimaryDimension(rAllocation), getPrimaryDimension(aBoxSize) - nPadding * 2)));
 
                 setPrimaryCoordinate(aChildPos, nPrimaryCoordinate + nPadding);
             }
