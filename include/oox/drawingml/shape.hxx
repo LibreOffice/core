@@ -179,6 +179,7 @@ public:
     ShapeStyleRefMap&        getShapeStyleRefs() { return maShapeStyleRefs; }
     const ShapeStyleRefMap&  getShapeStyleRefs() const { return maShapeStyleRefs; }
     const ShapeStyleRef*            getShapeStyleRef( sal_Int32 nRefType ) const;
+    bool hasShapeStyleRefs() const { return !maShapeStyleRefs.empty(); }
 
     // addShape is creating and inserting the corresponding XShape.
     void                addShape(
