@@ -195,6 +195,16 @@ formulaimport::XmlStreamBuilder & TextParagraph::GetMathXml()
     return *m_pMathXml;
 }
 
+bool TextParagraph::hasVisualRunProperties() const
+{
+   for ( auto& pTextRun : getRuns() )
+   {
+       if ( pTextRun->hasVisualRunProperties() )
+           return true;
+   }
+   return false;
+}
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

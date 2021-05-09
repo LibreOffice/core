@@ -78,6 +78,12 @@ public:
     }
     formulaimport::XmlStreamBuilder & GetMathXml();
 
+    /** Returns whether textparagraph had a rPr tag in it that alters it visually
+     *
+     *  For instance _lang_ doesn't have a visual effect.
+     */
+    bool hasVisualRunProperties() const;
+
 private:
     TextParagraphProperties     maProperties;
     TextCharacterProperties     maEndProperties;
