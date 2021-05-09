@@ -14,6 +14,8 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -21,6 +23,24 @@
 #include <rtl/math.hxx>
 
 using namespace ::com::sun::star;
+
+namespace
+{
+/// Gets one child of xShape, which one is specified by nIndex.
+uno::Reference<drawing::XShape> getChildShape(const uno::Reference<drawing::XShape>& xShape,
+                                              sal_Int32 nIndex)
+{
+    uno::Reference<container::XIndexAccess> xGroup(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    CPPUNIT_ASSERT(xGroup->getCount() > nIndex);
+
+    uno::Reference<drawing::XShape> xRet(xGroup->getByIndex(nIndex), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xRet.is());
+
+    return xRet;
+}
+}
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/oox/qa/unit/data/";
 
@@ -56,6 +76,41 @@ void OoxShapeTest::load(std::u16string_view rFileName)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
     mxComponent = loadFromDesktop(aURL);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
+{
+    load(u"tdf141463_GroupTransform.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getChildShape(xGroup, 0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed in several properties.
+
+    sal_Int32 nAngle;
+    xPropSet->getPropertyValue("ShearAngle") >>= nAngle;
+    // Failed with - Expected: 0
+    //             - Actual  : -810
+    // i.e. the shape was sheared although shearing does not exist in oox
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAngle);
+
+    xPropSet->getPropertyValue("RotateAngle") >>= nAngle;
+    // Failed with - Expected: 26000 (is in 1/100deg)
+    //             - Actual  : 26481 (is in 1/100deg)
+    // 100deg in PowerPoint UI = 360deg - 100deg in LO.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(26000), nAngle);
+
+    sal_Int32 nActual = xShape->getSize().Width;
+    // The group has ext.cy=2880000 and chExt.cy=4320000 resulting in Y-scale=2/3.
+    // The child has ext 2880000 x 1440000. Because of rotation angle 80deg, the Y-scale has to be
+    // applied to the width, resulting in 2880000 * 2/3 = 1920000EMU = 5333Hmm
+    // ToDo: Expected value currently 1 off.
+    // Failed with - Expected: 5332
+    //             - Actual  : 5432
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5332), nActual);
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testMultipleGroupShapes)
