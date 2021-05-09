@@ -2906,48 +2906,50 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
     for ( SCSIZE i=0; (i<nEntryCount) && (rParam.GetEntry(i).bDoQuery); i++ )
     {
         ScQueryEntry& rEntry = rParam.GetEntry(i);
-        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
 
-        switch ( rEntry.eOp )
+        for (ScQueryEntry::Item& rItem : rItems)
         {
-            case SC_TOPVAL:
-            case SC_BOTVAL:
-            case SC_TOPPERC:
-            case SC_BOTPERC:
+            switch (rEntry.eOp)
             {
-                ScSortParam aLocalSortParam( rParam, static_cast<SCCOL>(rEntry.nField) );
-                aSortParam = aLocalSortParam;       // used in CreateSortInfoArray, Compare
-                if ( !bSortCollatorInitialized )
+                case SC_TOPVAL:
+                case SC_BOTVAL:
+                case SC_TOPPERC:
+                case SC_BOTPERC:
                 {
-                    bSortCollatorInitialized = true;
-                    InitSortCollator( aLocalSortParam );
-                }
-                std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, rParam.nRow2, bGlobalKeepQuery, false));
-                DecoladeRow( pArray.get(), nRow1, rParam.nRow2 );
-                QuickSort( pArray.get(), nRow1, rParam.nRow2 );
-                std::unique_ptr<ScSortInfo[]> const & ppInfo = pArray->GetFirstArray();
-                SCSIZE nValidCount = nCount;
-                // Don't count note or blank cells, they are sorted to the end
-                while (nValidCount > 0 && ppInfo[nValidCount-1].maCell.isEmpty())
-                    nValidCount--;
-                // Don't count Strings, they are between Value and blank
-                while (nValidCount > 0 && ppInfo[nValidCount-1].maCell.hasString())
-                    nValidCount--;
-                if ( nValidCount > 0 )
-                {
-                    if ( rItem.meType == ScQueryEntry::ByString )
-                    {   // by string ain't going to work
-                        rItem.meType = ScQueryEntry::ByValue;
-                        rItem.mfVal = 10;   // 10 and 10% respectively
-                    }
-                    SCSIZE nVal = (rItem.mfVal >= 1 ? static_cast<SCSIZE>(rItem.mfVal) : 1);
-                    SCSIZE nOffset = 0;
-                    switch ( rEntry.eOp )
+                    ScSortParam aLocalSortParam(rParam, static_cast<SCCOL>(rEntry.nField));
+                    aSortParam = aLocalSortParam;       // used in CreateSortInfoArray, Compare
+                    if (!bSortCollatorInitialized)
                     {
+                        bSortCollatorInitialized = true;
+                        InitSortCollator(aLocalSortParam);
+                    }
+                    std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, rParam.nRow2, bGlobalKeepQuery, false));
+                    DecoladeRow(pArray.get(), nRow1, rParam.nRow2);
+                    QuickSort(pArray.get(), nRow1, rParam.nRow2);
+                    std::unique_ptr<ScSortInfo[]> const& ppInfo = pArray->GetFirstArray();
+                    SCSIZE nValidCount = nCount;
+                    // Don't count note or blank cells, they are sorted to the end
+                    while (nValidCount > 0 && ppInfo[nValidCount - 1].maCell.isEmpty())
+                        nValidCount--;
+                    // Don't count Strings, they are between Value and blank
+                    while (nValidCount > 0 && ppInfo[nValidCount - 1].maCell.hasString())
+                        nValidCount--;
+                    if (nValidCount > 0)
+                    {
+                        if (rItem.meType == ScQueryEntry::ByString)
+                        {   // by string ain't going to work
+                            rItem.meType = ScQueryEntry::ByValue;
+                            rItem.mfVal = 10;   // 10 and 10% respectively
+                        }
+                        SCSIZE nVal = (rItem.mfVal >= 1 ? static_cast<SCSIZE>(rItem.mfVal) : 1);
+                        SCSIZE nOffset = 0;
+                        switch (rEntry.eOp)
+                        {
                         case SC_TOPVAL:
                         {
                             rEntry.eOp = SC_GREATER_EQUAL;
-                            if ( nVal > nValidCount )
+                            if (nVal > nValidCount)
                                 nVal = nValidCount;
                             nOffset = nValidCount - nVal;   // 1 <= nVal <= nValidCount
                         }
@@ -2955,7 +2957,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                         case SC_BOTVAL:
                         {
                             rEntry.eOp = SC_LESS_EQUAL;
-                            if ( nVal > nValidCount )
+                            if (nVal > nValidCount)
                                 nVal = nValidCount;
                             nOffset = nVal - 1;     // 1 <= nVal <= nValidCount
                         }
@@ -2963,20 +2965,20 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                         case SC_TOPPERC:
                         {
                             rEntry.eOp = SC_GREATER_EQUAL;
-                            if ( nVal > 100 )
+                            if (nVal > 100)
                                 nVal = 100;
                             nOffset = nValidCount - (nValidCount * nVal / 100);
-                            if ( nOffset >= nValidCount )
+                            if (nOffset >= nValidCount)
                                 nOffset = nValidCount - 1;
                         }
                         break;
                         case SC_BOTPERC:
                         {
                             rEntry.eOp = SC_LESS_EQUAL;
-                            if ( nVal > 100 )
+                            if (nVal > 100)
                                 nVal = 100;
                             nOffset = (nValidCount * nVal / 100);
-                            if ( nOffset >= nValidCount )
+                            if (nOffset >= nValidCount)
                                 nOffset = nValidCount - 1;
                         }
                         break;
@@ -2984,28 +2986,29 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                         {
                             // added to avoid warnings
                         }
+                        }
+                        ScRefCellValue aCell = ppInfo[nOffset].maCell;
+                        if (aCell.hasNumeric())
+                            rItem.mfVal = aCell.getValue();
+                        else
+                        {
+                            OSL_FAIL("TopTenQuery: pCell no ValueData");
+                            rEntry.eOp = SC_GREATER_EQUAL;
+                            rItem.mfVal = 0;
+                        }
                     }
-                    ScRefCellValue aCell = ppInfo[nOffset].maCell;
-                    if (aCell.hasNumeric())
-                        rItem.mfVal = aCell.getValue();
                     else
                     {
-                        OSL_FAIL( "TopTenQuery: pCell no ValueData" );
                         rEntry.eOp = SC_GREATER_EQUAL;
+                        rItem.meType = ScQueryEntry::ByValue;
                         rItem.mfVal = 0;
                     }
                 }
-                else
+                break;
+                default:
                 {
-                    rEntry.eOp = SC_GREATER_EQUAL;
-                    rItem.meType = ScQueryEntry::ByValue;
-                    rItem.mfVal = 0;
+                    // added to avoid warnings
                 }
-            }
-            break;
-            default:
-            {
-                // added to avoid warnings
             }
         }
     }
