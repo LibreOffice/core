@@ -22,7 +22,7 @@
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
-#define SV_RESID_STRING_NOSELECTIONPOSSIBLE          NC_("SV_RESID_STRING_NOSELECTIONPOSSIBLE", "<No selection possible>")
+#define SV_RESID_STRING_NOSELECTIONPOSSIBLE          NC_("SV_RESID_STRING_NOSELECTIONPOSSIBLE", "[No selection possible]")
 
 #define SV_MENU_MAC_SERVICES                         NC_("SV_MENU_MAC_SERVICES", "Services")
 #define SV_MENU_MAC_HIDEAPP                          NC_("SV_MENU_MAC_HIDEAPP", "Hide %PRODUCTNAME")
