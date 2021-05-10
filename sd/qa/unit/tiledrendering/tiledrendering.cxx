@@ -130,6 +130,7 @@ public:
     void testLanguageAllText();
     void testInsertDeletePageInvalidation();
     void testSpellOnlineRenderParameter();
+    void testSlideDuplicateUndo();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testCreateDestroy);
@@ -184,6 +185,7 @@ public:
     CPPUNIT_TEST(testLanguageAllText);
     CPPUNIT_TEST(testInsertDeletePageInvalidation);
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
+    CPPUNIT_TEST(testSlideDuplicateUndo);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2543,6 +2545,54 @@ void SdTiledRenderingTest::testSpellOnlineRenderParameter()
     };
     pXImpressDocument->initializeForTiledRendering(aPropertyValues);
     CPPUNIT_ASSERT_EQUAL(!bSet, pXImpressDocument->GetDoc()->GetOnlineSpell());
+}
+
+void SdTiledRenderingTest::testSlideDuplicateUndo()
+{
+    // Create two views.
+    SdXImpressDocument* pXImpressDocument = createDoc("duplicate-undo.odp");
+    int nView0 = SfxLokHelper::getView();
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    int nView1 = SfxLokHelper::getView();
+    SfxLokHelper::setView(nView0);
+
+    // Switch to the 3rd slide on view 0, and start text editing.
+    {
+        pXImpressDocument->setPart(2);
+        sd::ViewShell* pViewShell0 = pXImpressDocument->GetDocShell()->GetViewShell();
+        SdrView* pView = pViewShell0->GetView();
+        SdPage* pActualPage = pViewShell0->GetActualPage();
+        SdrObject* pObject = pActualPage->GetObj(1);
+        SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
+        pView->MarkObj(pTextObj, pView->GetSdrPageView());
+        SfxStringItem aInputString(SID_ATTR_CHAR, "x");
+        pViewShell0->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
+                SfxCallMode::SYNCHRON, { &aInputString });
+        CPPUNIT_ASSERT(pView->IsTextEdit());
+        CPPUNIT_ASSERT(pView->GetTextEditPageView());
+    }
+
+    // Duplicate the first slide on view 1 and undo it.
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:DuplicatePage", {});
+    Scheduler::ProcessEventsToIdle();
+    pXImpressDocument->setPart(0, /*bAllowChangeFocus=*/false);
+    pXImpressDocument->setPart(1, /*bAllowChangeFocus=*/false);
+    SfxLokHelper::setView(nView0);
+    pXImpressDocument->setPart(0, /*bAllowChangeFocus=*/false);
+    pXImpressDocument->setPart(3, /*bAllowChangeFocus=*/false);
+    SfxLokHelper::setView(nView1);
+    pXImpressDocument->getUndoManager()->undo();
+    // Without the accompanying fix in place, this would have tried to access the outdated page view
+    // pointer, potentially leading to a crash.
+    pXImpressDocument->setPart(2, /*bAllowChangeFocus=*/false);
+
+    // Make sure that view 0 now doesn't have an outdated page view pointer.
+    SfxLokHelper::setView(nView0);
+    sd::ViewShell* pViewShell0 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView0 = pViewShell0->GetView();
+    CPPUNIT_ASSERT(!pView0->GetTextEditPageView());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);

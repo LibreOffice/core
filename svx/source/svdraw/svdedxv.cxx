@@ -194,6 +194,12 @@ void SdrObjEditView::HideSdrPage()
 {
     lcl_RemoveTextEditOutlinerViews(this, GetSdrPageView(), GetFirstOutputDevice());
 
+    if (pTextEditPV == GetSdrPageView())
+    {
+        // HideSdrPage() will clear mpPageView, avoid a dangling pointer.
+        pTextEditPV = nullptr;
+    }
+
     SdrGlueEditView::HideSdrPage();
 }
 
