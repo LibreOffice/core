@@ -691,8 +691,8 @@ void SbiParser::DefType()
                         SbxObject* pTypeObj = static_cast< SbxObject* >( rTypeArray->Find( aTypeName, SbxClassType::Object ) );
                         if( pTypeObj != nullptr )
                         {
-                            SbxObject* pCloneObj = cloneTypeObjectImpl( *pTypeObj );
-                            pTypeElem->PutObject( pCloneObj );
+                            SbxObjectRef pCloneObj = cloneTypeObjectImpl( *pTypeObj );
+                            pTypeElem->PutObject( pCloneObj.get() );
                         }
                     }
                 }

@@ -364,7 +364,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
             return pRes;
         }
     }
-    SbxVariable* pVar = nullptr;
+    SbxVariableRef pVar;
     switch( ct )
     {
     case SbxClassType::Variable:
@@ -375,17 +375,17 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
         pVar = new SbxMethod( rName, dt, bIsRuntimeFunction );
         break;
     case SbxClassType::Object:
-        pVar = CreateObject( rName );
+        pVar = CreateObject( rName ).get();
         break;
     default:
         break;
     }
     pVar->SetParent( this );
-    pArray->Put(pVar, pArray->Count());
+    pArray->Put(pVar.get(), pArray->Count());
     SetModified( true );
     // The object listen always
     StartListening(pVar->GetBroadcaster(), DuplicateHandling::Prevent);
-    return pVar;
+    return pVar.get();
 }
 
 void SbxObject::Insert( SbxVariable* pVar )
@@ -532,7 +532,7 @@ void SbxObject::Remove( SbxVariable* pVar )
 
 static bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
 {
-    SbxArrayRef p = static_cast<SbxArray*>( SbxBase::Load( rStrm ) );
+    SbxArrayRef p = static_cast<SbxArray*>( SbxBase::Load( rStrm ).get() );
     if( !p.is() )
     {
         return false;

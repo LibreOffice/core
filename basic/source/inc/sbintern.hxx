@@ -39,8 +39,8 @@ class BasicManager;
 class SbiFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
-    virtual SbxObject* CreateObject( const OUString& ) override;
+    virtual SbxBaseRef Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
+    virtual SbxObjectRef CreateObject( const OUString& ) override;
 };
 
 struct SbClassData
@@ -70,8 +70,8 @@ public:
     void AddClassModule( SbModule* pClassModule );
     void RemoveClassModule( SbModule* pClassModule );
 
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
-    virtual SbxObject* CreateObject( const OUString& ) override;
+    virtual SbxBaseRef Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
+    virtual SbxObjectRef CreateObject( const OUString& ) override;
 
     SbModule* FindClass( const OUString& rClassName );
 };
@@ -80,23 +80,23 @@ public:
 class SbTypeFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
-    virtual SbxObject* CreateObject( const OUString& ) override;
+    virtual SbxBaseRef Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
+    virtual SbxObjectRef CreateObject( const OUString& ) override;
 };
 
 class SbFormFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
-    virtual SbxObject* CreateObject( const OUString& ) override;
+    virtual SbxBaseRef Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
+    virtual SbxObjectRef CreateObject( const OUString& ) override;
 };
 
 // Factory class to create OLE objects
 class SbOLEFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
-    virtual SbxObject* CreateObject( const OUString& ) override;
+    virtual SbxBaseRef Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
+    virtual SbxObjectRef CreateObject( const OUString& ) override;
 };
 
 

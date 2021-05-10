@@ -1784,12 +1784,12 @@ static uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
     return aData;
 }
 
-static SbxObject* implCreateDialog( const uno::Sequence< sal_Int8 >& aData )
+static SbxObjectRef implCreateDialog( const uno::Sequence< sal_Int8 >& aData )
 {
     sal_Int8* pData = const_cast< uno::Sequence< sal_Int8 >& >(aData).getArray();
     SvMemoryStream aMemStream( pData, aData.getLength(), StreamMode::READ );
-    SbxBase* pBase = SbxBase::Load( aMemStream );
-    return dynamic_cast<SbxObject*>(pBase);
+    SbxBaseRef pBase = SbxBase::Load( aMemStream );
+    return dynamic_cast<SbxObject*>(pBase.get());
 }
 
 // HACK! Because this value is defined in basctl/inc/vcsbxdef.hxx

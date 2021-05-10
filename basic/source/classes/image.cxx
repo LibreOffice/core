@@ -308,8 +308,8 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                                 SbxObject* pNestedTypeObj = static_cast< SbxObject* >( rTypes->Find( aNestedTypeName, SbxClassType::Object ) );
                                 if (pNestedTypeObj)
                                 {
-                                    SbxObject* pCloneObj = cloneTypeObjectImpl( *pNestedTypeObj );
-                                    pTypeElem->PutObject( pCloneObj );
+                                    SbxObjectRef pCloneObj = cloneTypeObjectImpl( *pNestedTypeObj );
+                                    pTypeElem->PutObject( pCloneObj.get() );
                                 }
                             }
                             else

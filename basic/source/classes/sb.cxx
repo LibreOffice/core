@@ -410,7 +410,7 @@ const SFX_VB_ErrorItem SFX_VB_ErrorTab[] =
 // the Module-relationship. But it works only when a module is loaded.
 // Can cause troubles with separately loaded properties!
 
-SbxBase* SbiFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
+SbxBaseRef SbiFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
 {
     if( nCreator ==  SBXCR_SBX )
     {
@@ -433,7 +433,7 @@ SbxBase* SbiFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     return nullptr;
 }
 
-SbxObject* SbiFactory::CreateObject( const OUString& rClass )
+SbxObjectRef SbiFactory::CreateObject( const OUString& rClass )
 {
     if( rClass.equalsIgnoreAsciiCase( "StarBASIC" ) )
     {
@@ -464,28 +464,28 @@ SbxObject* SbiFactory::CreateObject( const OUString& rClass )
 }
 
 
-SbxBase* SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
+SbxBaseRef SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
 {
     // Not supported
     return nullptr;
 }
 
-SbxObject* SbOLEFactory::CreateObject( const OUString& rClassName )
+SbxObjectRef SbOLEFactory::CreateObject( const OUString& rClassName )
 {
-    SbxObject* pRet = createOLEObject_Impl( rClassName );
+    SbxObjectRef pRet = createOLEObject_Impl( rClassName );
     return pRet;
 }
 
 
 // SbFormFactory, show user forms by: dim as new <user form name>
 
-SbxBase* SbFormFactory::Create( sal_uInt16, sal_uInt32 )
+SbxBaseRef SbFormFactory::Create( sal_uInt16, sal_uInt32 )
 {
     // Not supported
     return nullptr;
 }
 
-SbxObject* SbFormFactory::CreateObject( const OUString& rClassName )
+SbxObjectRef SbFormFactory::CreateObject( const OUString& rClassName )
 {
     if( SbModule* pMod = GetSbData()->pMod )
     {
@@ -514,10 +514,10 @@ SbxObject* SbFormFactory::CreateObject( const OUString& rClassName )
 
 // SbTypeFactory
 
-SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
+SbxObjectRef cloneTypeObjectImpl( const SbxObject& rTypeObj )
 {
-    SbxObject* pRet = new SbxObject( rTypeObj );
-    pRet->PutObject( pRet );
+    SbxObjectRef pRet = new SbxObject( rTypeObj );
+    pRet->PutObject( pRet.get() );
 
     // Copy the properties, not only the reference to them
     SbxArray* pProps = pRet->GetProperties();
@@ -562,10 +562,10 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
             {
                 SbxBase* pObjBase = pVar->GetObject();
                 SbxObject* pSrcObj = dynamic_cast<SbxObject*>( pObjBase );
-                SbxObject* pDestObj = nullptr;
+                SbxObjectRef pDestObj;
                 if( pSrcObj != nullptr )
                     pDestObj = cloneTypeObjectImpl( *pSrcObj );
-                pNewProp->PutObject( pDestObj );
+                pNewProp->PutObject( pDestObj.get() );
             }
             pProps->PutDirect( pNewProp, i );
         }
@@ -573,15 +573,15 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
     return pRet;
 }
 
-SbxBase* SbTypeFactory::Create( sal_uInt16, sal_uInt32 )
+SbxBaseRef SbTypeFactory::Create( sal_uInt16, sal_uInt32 )
 {
     // Not supported
     return nullptr;
 }
 
-SbxObject* SbTypeFactory::CreateObject( const OUString& rClassName )
+SbxObjectRef SbTypeFactory::CreateObject( const OUString& rClassName )
 {
-    SbxObject* pRet = nullptr;
+    SbxObjectRef pRet;
     SbModule* pMod = GetSbData()->pMod;
     if( pMod )
     {
@@ -594,9 +594,9 @@ SbxObject* SbTypeFactory::CreateObject( const OUString& rClassName )
     return pRet;
 }
 
-SbxObject* createUserTypeImpl( const OUString& rClassName )
+SbxObjectRef createUserTypeImpl( const OUString& rClassName )
 {
-    SbxObject* pRetObj = GetSbData()->pTypeFac->CreateObject( rClassName );
+    SbxObjectRef pRetObj = GetSbData()->pTypeFac->CreateObject( rClassName );
     return pRetObj;
 }
 
@@ -609,7 +609,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     aOUSource = pClassModule->aOUSource;
     aComment = pClassModule->aComment;
     // see comment in destructor about these two
-    pImage = pClassModule->pImage;
+    pImage.reset(pClassModule->pImage.get());
     pBreaks = pClassModule->pBreaks;
 
     SetClassName( pClassModule->GetName() );
@@ -755,7 +755,7 @@ SbClassModuleObject::~SbClassModuleObject()
 
     // prevent the base class destructor from deleting these because
     // we do not actually own them
-    pImage = nullptr;
+    pImage.release();
     pBreaks = nullptr;
 }
 
@@ -852,13 +852,13 @@ void SbClassFactory::RemoveClassModule( SbModule* pClassModule )
     xClassModules->Remove( pClassModule );
 }
 
-SbxBase* SbClassFactory::Create( sal_uInt16, sal_uInt32 )
+SbxBaseRef SbClassFactory::Create( sal_uInt16, sal_uInt32 )
 {
     // Not supported
     return nullptr;
 }
 
-SbxObject* SbClassFactory::CreateObject( const OUString& rClassName )
+SbxObjectRef SbClassFactory::CreateObject( const OUString& rClassName )
 {
     SbxObjectRef xToUseClassModules = xClassModules;
 
@@ -873,7 +873,7 @@ SbxObject* SbClassFactory::CreateObject( const OUString& rClassName )
         }
     }
     SbxVariable* pVar = xToUseClassModules->Find( rClassName, SbxClassType::Object );
-    SbxObject* pRet = nullptr;
+    SbxObjectRef pRet;
     if( pVar )
     {
         SbModule* pVarMod = static_cast<SbModule*>(pVar);
@@ -1802,8 +1802,8 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
     }
     for (sal_uInt16 i = 0; i < nMod; ++i)
     {
-        SbxBase* pBase = SbxBase::Load( r );
-        SbModule* pMod = dynamic_cast<SbModule*>(pBase);
+        SbxBaseRef pBase = SbxBase::Load( r );
+        SbModule* pMod = dynamic_cast<SbModule*>(pBase.get());
         if( !pMod )
         {
             return false;
