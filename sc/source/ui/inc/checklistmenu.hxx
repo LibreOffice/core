@@ -79,6 +79,12 @@ public:
     void getMenuItemPosSize(size_t nPos, Point& rPos, Size& rSize) const;
     ScMenuFloatingWindow* getParentMenuWindow() const { return mpParentMenu;}
 
+    /**
+     * Dismiss all visible popup menus and set focus back to the application
+     * window.  This method is called e.g. when a menu action is fired.
+     */
+    virtual void terminateAllPopupMenus();
+
 protected:
     virtual void handlePopupEnd();
 
@@ -138,12 +144,6 @@ private:
      * selected.
      */
     void ensureSubMenuNotVisible();
-
-    /**
-     * Dismiss all visible popup menus and set focus back to the application
-     * window.  This method is called e.g. when a menu action is fired.
-     */
-    void terminateAllPopupMenus();
 
 private:
 

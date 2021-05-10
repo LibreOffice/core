@@ -738,6 +738,11 @@ void ScGridWindow::RefreshAutoFilterButton(const ScAddress& rPos)
 
 void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 {
+    // Terminate autofilter popup now when there is no further user input needed
+    bool bColorMode = eMode == AutoFilterMode::TextColor || eMode == AutoFilterMode::BackgroundColor;
+    if (!bColorMode)
+        mpAutoFilterPopup->terminateAllPopupMenus();
+
     const AutoFilterData* pData =
         static_cast<const AutoFilterData*>(mpAutoFilterPopup->getExtendedData());
 
@@ -826,7 +831,8 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     }
 
     // Remove old entries in auto-filter rules
-    aParam.RemoveAllEntriesByField(rPos.Col());
+    if (!bColorMode)
+        aParam.RemoveAllEntriesByField(rPos.Col());
 
     if( !(eMode == AutoFilterMode::Normal && mpAutoFilterPopup->isAllSelected() ) )
     {
@@ -879,19 +885,36 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 std::set<Color> aColors = eMode == AutoFilterMode::TextColor
                                               ? aFilterEntries.getTextColors()
                                               : aFilterEntries.getBackgroundColors();
+
                 sal_Int32 i = 1;
+                sal_Int32 nActive = -1;
                 for (auto& rColor : aColors)
                 {
                     pColorMenu->InsertItem(i, OUString(), MenuItemBits::CHECKABLE);
                     pColorMenu->SetItemColor(i, rColor);
+                    auto aItem = pEntry->GetQueryItem();
+                    if (aItem.maColor == rColor
+                        && ((eMode == AutoFilterMode::TextColor
+                             && aItem.meType == ScQueryEntry::ByTextColor)
+                            || (eMode == AutoFilterMode::BackgroundColor
+                                && aItem.meType == ScQueryEntry::ByBackgroundColor)))
+                    {
+                        nActive = i;
+                        pColorMenu->CheckItem(i, true);
+                    }
                     i++;
                 }
 
                 sal_uInt16 nSelected = pColorMenu->Execute(this, mpAutoFilterPopup->GetPosPixel());
                 pColorMenu.disposeAndClear();
+                mpAutoFilterPopup->terminateAllPopupMenus();
 
                 if (nSelected == 0)
-                    break;
+                    return;
+
+                // Disable color filter when active color was selected
+                if (nSelected == nActive)
+                    aParam.RemoveAllEntriesByField(rPos.Col());
 
                 // Get selected color from set
                 std::set<Color>::iterator it = aColors.begin();
