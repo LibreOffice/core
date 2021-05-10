@@ -64,6 +64,7 @@ protected:
         After this process It'll called 'Contextfilter' for application-specific
         filter-processes. */
     std::vector<XMLPropertyState> Filter_(
+            SvXMLExport const& rExport,
             const css::uno::Reference<css::beans::XPropertySet>& rPropSet,
             bool bDefault, bool bDisableFoFontFamily ) const;
 
@@ -114,6 +115,7 @@ public:
         After this process It'll called 'Contextfilter' for application-specific
         filter-processes. */
     std::vector<XMLPropertyState> Filter(
+        SvXMLExport const& rExport,
         const css::uno::Reference<css::beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily = false ) const;
 
     /** Like Filter(), except that:
@@ -122,6 +124,7 @@ public:
       * - instead of the property's value, its default value is exported.
       */
     std::vector<XMLPropertyState> FilterDefaults(
+        SvXMLExport const& rExport,
         const css::uno::Reference<css::beans::XPropertySet>& rPropSet ) const;
 
     /** Provides a partial ordering over two arrays of XMLPropertyState,

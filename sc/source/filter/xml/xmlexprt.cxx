@@ -2001,7 +2001,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
     OUString sStyleName;
     sal_Int32 nNumberFormat(-1);
     sal_Int32 nValidationIndex(-1);
-    std::vector< XMLPropertyState > aPropStates(xCellStylesExportPropertySetMapper->Filter( xProperties ));
+    std::vector<XMLPropertyState> aPropStates(xCellStylesExportPropertySetMapper->Filter(*this, xProperties));
     std::vector< XMLPropertyState >::iterator aItr(aPropStates.begin());
     std::vector< XMLPropertyState >::iterator aEndItr(aPropStates.end());
     sal_Int32 nCount(0);
@@ -2135,7 +2135,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
 void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& xColumnProperties,
                                      const OUString* pOldName, sal_Int32& rIndex, bool& rIsVisible)
 {
-    std::vector<XMLPropertyState> aPropStates(xColumnStylesExportPropertySetMapper->Filter(xColumnProperties));
+    std::vector<XMLPropertyState> aPropStates(xColumnStylesExportPropertySetMapper->Filter(*this, xColumnProperties));
     if(aPropStates.empty())
         return;
 
@@ -2172,7 +2172,7 @@ void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& 
 void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRowProperties,
                                   const OUString* pOldName, sal_Int32& rIndex)
 {
-    std::vector<XMLPropertyState> aPropStates(xRowStylesExportPropertySetMapper->Filter(xRowProperties));
+    std::vector<XMLPropertyState> aPropStates(xRowStylesExportPropertySetMapper->Filter(*this, xRowProperties));
     if(aPropStates.empty())
         return;
 
@@ -2320,7 +2320,7 @@ void ScXMLExport::collectAutoStyles()
                     uno::Reference<beans::XPropertySet> xTableProperties(xIndex->getByIndex(nTable), uno::UNO_QUERY);
                     if (xTableProperties.is())
                     {
-                        std::vector<XMLPropertyState> aPropStates(xTableStylesExportPropertySetMapper->Filter(xTableProperties));
+                        std::vector<XMLPropertyState> aPropStates(xTableStylesExportPropertySetMapper->Filter(*this, xTableProperties));
                         OUString sName( rTableEntry.maName );
                         GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TABLE_TABLE, OUString(), aPropStates);
                         GetAutoStylePool()->RegisterName(XmlStyleFamily::TABLE_TABLE, sName);
@@ -2354,7 +2354,7 @@ void ScXMLExport::collectAutoStyles()
                         {
                             if ( !rNoteEntry.maStyleName.isEmpty() )
                             {
-                                std::vector<XMLPropertyState> aPropStates(xShapeMapper->Filter(xShapeProperties));
+                                std::vector<XMLPropertyState> aPropStates(xShapeMapper->Filter(*this, xShapeProperties));
                                 OUString sName( rNoteEntry.maStyleName );
                                 GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::SD_GRAPHICS_ID, OUString(), aPropStates);
                                 GetAutoStylePool()->RegisterName(XmlStyleFamily::SD_GRAPHICS_ID, sName);
@@ -2362,7 +2362,7 @@ void ScXMLExport::collectAutoStyles()
                             if ( !rNoteEntry.maTextStyle.isEmpty() )
                             {
                                 std::vector<XMLPropertyState> aPropStates(
-                                    GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter(xShapeProperties));
+                                    GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter(*this, xShapeProperties));
                                 OUString sName( rNoteEntry.maTextStyle );
                                 GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TEXT_PARAGRAPH, OUString(), aPropStates);
                                 GetAutoStylePool()->RegisterName(XmlStyleFamily::TEXT_PARAGRAPH, sName);
@@ -2394,7 +2394,7 @@ void ScXMLExport::collectAutoStyles()
                             lcl_GetEnumerated( xCellText, rNoteParaEntry.maSelection.nStartPara ), uno::UNO_QUERY );
                         if ( xParaProp.is() )
                         {
-                            std::vector<XMLPropertyState> aPropStates(xParaPropMapper->Filter(xParaProp));
+                            std::vector<XMLPropertyState> aPropStates(xParaPropMapper->Filter(*this, xParaProp));
                             OUString sName( rNoteParaEntry.maName );
                             GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TEXT_PARAGRAPH, OUString(), aPropStates);
                             GetAutoStylePool()->RegisterName(XmlStyleFamily::TEXT_PARAGRAPH, sName);
@@ -2427,7 +2427,7 @@ void ScXMLExport::collectAutoStyles()
                         {
                             pCursor->SetSelection( rNoteTextEntry.maSelection );
 
-                            std::vector<XMLPropertyState> aPropStates(xTextPropMapper->Filter(xCursorProp));
+                            std::vector<XMLPropertyState> aPropStates(xTextPropMapper->Filter(*this, xCursorProp));
                             OUString sName( rNoteTextEntry.maName );
                             GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TEXT_TEXT, OUString(), aPropStates);
                             GetAutoStylePool()->RegisterName(XmlStyleFamily::TEXT_TEXT, sName);
@@ -2468,7 +2468,7 @@ void ScXMLExport::collectAutoStyles()
                     continue;
                 pCursor->SetSelection( rTextEntry.maSelection );
 
-                std::vector<XMLPropertyState> aPropStates(xTextPropMapper->Filter(xCursorProp));
+                std::vector<XMLPropertyState> aPropStates(xTextPropMapper->Filter(*this, xCursorProp));
                 OUString sName( rTextEntry.maName );
                 GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TEXT_TEXT, OUString(), aPropStates);
                 GetAutoStylePool()->RegisterName(XmlStyleFamily::TEXT_TEXT, sName);
@@ -2498,7 +2498,7 @@ void ScXMLExport::collectAutoStyles()
             uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
             if (xTableProperties.is())
             {
-                std::vector<XMLPropertyState> aPropStates(xTableStylesExportPropertySetMapper->Filter(xTableProperties));
+                std::vector<XMLPropertyState> aPropStates(xTableStylesExportPropertySetMapper->Filter(*this, xTableProperties));
                 if(!aPropStates.empty())
                 {
                     OUString sName;
