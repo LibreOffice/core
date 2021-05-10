@@ -4112,15 +4112,7 @@ public:
             gtk_drag_get_data(m_pWidget, m_pContext, it->second, m_nTime);
 
             if (g_main_loop_is_running(m_pLoop))
-            {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-                gdk_threads_leave();
-#endif
-                g_main_loop_run(m_pLoop);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-                gdk_threads_enter();
-#endif
-            }
+                main_loop_run(m_pLoop);
 
             g_main_loop_unref(m_pLoop);
             m_pLoop = nullptr;

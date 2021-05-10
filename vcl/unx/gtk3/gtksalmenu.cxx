@@ -536,15 +536,8 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 #endif
 
     if (g_main_loop_is_running(pLoop))
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gdk_threads_leave();
-#endif
-        g_main_loop_run(pLoop);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gdk_threads_enter();
-#endif
-    }
+        main_loop_run(pLoop);
+
     g_main_loop_unref(pLoop);
 
     mpVCLMenu->Deactivate();
