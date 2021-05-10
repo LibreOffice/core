@@ -2080,7 +2080,7 @@ public:
                                             ScFilterEntries& rFilterEntries );
 
     void              GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                      std::vector<ScTypedStrData>& rStrings, bool bLimit = false );
+                                      std::vector<ScTypedStrData>& rStrings, bool bValidation = false );
     void              GetFormulaEntries( ScTypedCaseStrSet& rStrings );
 
     bool               HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );
