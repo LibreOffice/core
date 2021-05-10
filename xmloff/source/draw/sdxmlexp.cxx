@@ -1528,7 +1528,7 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( const Reference<XDrawPage>& xD
 
         const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPresPagePropsMapper() );
 
-        std::vector< XMLPropertyState > aPropStates( aMapperRef->Filter( xPropSet ) );
+        std::vector<XMLPropertyState> aPropStates(aMapperRef->Filter(*this, xPropSet));
 
         if( !aPropStates.empty() )
         {

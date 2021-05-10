@@ -282,7 +282,8 @@ public:
 
 namespace
 {
-CustomLabelSeq lcl_getCustomLabelField(sal_Int32 nDataPointIndex,
+CustomLabelSeq lcl_getCustomLabelField(SvXMLExport const& rExport,
+                                       sal_Int32 nDataPointIndex,
                                        const uno::Reference< chart2::XDataSeries >& rSeries)
 {
     if (!rSeries.is())
@@ -291,7 +292,7 @@ CustomLabelSeq lcl_getCustomLabelField(sal_Int32 nDataPointIndex,
     // Custom data label text will be written to the <text:p> child element of a
     // <chart:data-label> element. That exists only since ODF 1.2.
     const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
-        SvtSaveOptions().GetODFSaneDefaultVersion());
+        rExport.getSaneDefaultVersion());
     if (nCurrentODFVersion < SvtSaveOptions::ODFSVER_012)
         return CustomLabelSeq();
 
@@ -307,13 +308,17 @@ CustomLabelSeq lcl_getCustomLabelField(sal_Int32 nDataPointIndex,
     return CustomLabelSeq();
 }
 
-css::chart2::RelativePosition lcl_getCustomLabelPosition(sal_Int32 nDataPointIndex,
+css::chart2::RelativePosition lcl_getCustomLabelPosition(
+    SvXMLExport const& rExport,
+    sal_Int32 const nDataPointIndex,
     const uno::Reference< chart2::XDataSeries >& rSeries)
 {
     if (!rSeries.is())
         return chart2::RelativePosition();
 
-    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+        rExport.getSaneDefaultVersion());
+
     if ((nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED) == 0) // do not export to ODF 1.3 or older
         return chart2::RelativePosition();
 
@@ -1182,13 +1187,15 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
     {
         Reference< beans::XPropertySet > xPropSet = rChartDoc->getArea();
         if( xPropSet.is())
-            aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+            aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
     }
 
     if( bExportContent )
     {
         //export data provider in xlink:href attribute
-        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+            mrExport.getSaneDefaultVersion());
+
         if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
         {
             OUString aDataProviderURL(  ".."  );
@@ -1272,7 +1279,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         {
             Reference< beans::XPropertySet > xPropSet( rChartDoc->getTitle(), uno::UNO_QUERY );
             if( xPropSet.is())
-                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
         }
         if( bExportContent )
         {
@@ -1312,7 +1319,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         {
             Reference< beans::XPropertySet > xPropSet( rChartDoc->getSubTitle(), uno::UNO_QUERY );
             if( xPropSet.is())
-                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
         }
 
         if( bExportContent )
@@ -1353,7 +1360,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         {
             Reference< beans::XPropertySet > xPropSet( rChartDoc->getLegend(), uno::UNO_QUERY );
             if( xPropSet.is())
-                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
         }
 
         if( bExportContent )
@@ -1361,7 +1368,8 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             Reference< beans::XPropertySet > xProp( rChartDoc->getLegend(), uno::UNO_QUERY );
             if( xProp.is())
             {
-                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+                    mrExport.getSaneDefaultVersion());
 
                 // export legend anchor position
                 try
@@ -1864,7 +1872,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     if( xPropSet.is())
     {
         if( mxExpPropMapper.is())
-            aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+            aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
     }
     if( bExportContent )
     {
@@ -1983,7 +1991,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             if( xStockPropSet.is())
             {
                 aPropertyStates.clear();
-                aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
+                aPropertyStates = mxExpPropMapper->Filter(mrExport, xStockPropSet);
 
                 if( !aPropertyStates.empty() )
                 {
@@ -2005,7 +2013,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             if( xStockPropSet.is())
             {
                 aPropertyStates.clear();
-                aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
+                aPropertyStates = mxExpPropMapper->Filter(mrExport, xStockPropSet);
 
                 if( !aPropertyStates.empty() )
                 {
@@ -2027,7 +2035,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             if( xStockPropSet.is())
             {
                 aPropertyStates.clear();
-                aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
+                aPropertyStates = mxExpPropMapper->Filter(mrExport, xStockPropSet);
 
                 if( !aPropertyStates.empty() )
                 {
@@ -2058,7 +2066,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     Reference< beans::XPropertySet > xWallPropSet = xWallFloorSupplier->getWall();
     if( xWallPropSet.is())
     {
-        aPropertyStates = mxExpPropMapper->Filter( xWallPropSet );
+        aPropertyStates = mxExpPropMapper->Filter(mrExport, xWallPropSet);
 
         if( !aPropertyStates.empty() )
         {
@@ -2085,7 +2093,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     if( !xFloorPropSet.is())
         return;
 
-    aPropertyStates = mxExpPropMapper->Filter( xFloorPropSet );
+    aPropertyStates = mxExpPropMapper->Filter(mrExport, xFloorPropSet);
 
     if( aPropertyStates.empty() )
         return;
@@ -2106,7 +2114,8 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
 void SchXMLExportHelper_Impl::exportCoordinateRegion( const uno::Reference< chart::XDiagram >& xDiagram )
 {
-    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+        mrExport.getSaneDefaultVersion());
     if (nCurrentODFVersion <= SvtSaveOptions::ODFSVER_012) //do not export to ODF 1.2 or older
         return;
 
@@ -2177,7 +2186,7 @@ void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XProperty
 {
     if( !rTitleProps.is() )
         return;
-    std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( rTitleProps );
+    std::vector<XMLPropertyState> aPropertyStates = mxExpPropMapper->Filter(mrExport, rTitleProps);
     if( bExportContent )
     {
         OUString aText;
@@ -2205,7 +2214,7 @@ void SchXMLExportHelper_Impl::exportGrid( const Reference< beans::XPropertySet >
 {
     if( !rGridProperties.is() )
         return;
-    std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( rGridProperties );
+    std::vector<XMLPropertyState> aPropertyStates = mxExpPropMapper->Filter(mrExport, rGridProperties);
     if( bExportContent )
     {
         AddAutoStyleAttribute( aPropertyStates );
@@ -2229,7 +2238,8 @@ bool lcl_exportAxisType( const Reference< chart2::XAxis >& rChart2Axis, SvXMLExp
     if( !rChart2Axis.is() )
         return bExportDateScale;
 
-    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+        rExport.getSaneDefaultVersion());
     if ((nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED) == 0) //do not export to ODF 1.3 or older
         return bExportDateScale;
 
@@ -2302,7 +2312,8 @@ void SchXMLExportHelper_Impl::exportAxis(
     // get property states for autostyles
     if( rAxisProps.is() && mxExpPropMapper.is() )
     {
-        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+            mrExport.getSaneDefaultVersion());
         if (nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED
             && eDimension == XML_X)
         {
@@ -2318,7 +2329,7 @@ void SchXMLExportHelper_Impl::exportAxis(
         }
 
         lcl_exportNumberFormat( "NumberFormat", rAxisProps, mrExport );
-        aPropertyStates = mxExpPropMapper->Filter( rAxisProps );
+        aPropertyStates = mxExpPropMapper->Filter(mrExport, rAxisProps);
 
         if (!maSrcShellID.isEmpty() && !maDestShellID.isEmpty() && maSrcShellID != maDestShellID)
         {
@@ -2727,7 +2738,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     TOOLS_INFO_EXCEPTION("xmloff.chart", "Required property not found in DataRowProperties" );
                                 }
 
-                                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+                                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+                                    mrExport.getSaneDefaultVersion());
                                 if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
                                 {
                                     lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
@@ -2735,7 +2747,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 }
 
                                 if( mxExpPropMapper.is())
-                                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                                    aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
                             }
 
                             if( bExportContent )
@@ -2760,7 +2772,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     // #i75297# allow empty series, export empty range to have all ranges on import
                                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, OUString());
 
-                                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+                                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+                                    mrExport.getSaneDefaultVersion());
                                 if (nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED) // do not export to ODF 1.3 or older
                                 {
                                     if (xPropSet.is())
@@ -2898,7 +2911,7 @@ void SchXMLExportHelper_Impl::exportSeries(
 
                         if( xStatProp.is() )
                         {
-                            aPropertyStates = mxExpPropMapper->Filter( xStatProp );
+                            aPropertyStates = mxExpPropMapper->Filter(mrExport, xStatProp);
 
                             if( !aPropertyStates.empty() )
                             {
@@ -2931,7 +2944,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                         uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ),
                         nSeriesLength, xNewDiagram, bExportContent );
 
-                    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+                    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+                        mrExport.getSaneDefaultVersion());
 
                     // create <chart:data-label> child element if needed.
                     if (xPropSet.is() && mxExpPropMapper.is())
@@ -3042,7 +3056,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
 
         OUString aService = xServiceName->getServiceName();
 
-        std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xProperties );
+        std::vector<XMLPropertyState> aPropertyStates = mxExpPropMapper->Filter(mrExport, xProperties);
 
         // Add service name (which is regression type)
         sal_Int32 nIndex = GetPropertySetMapper()->FindEntryIndex(XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE);
@@ -3057,7 +3071,8 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient") >>= bShowRSquared;
 
             bExportEquation = ( bShowEquation || bShowRSquared );
-            const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+            const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(
+                mrExport.getSaneDefaultVersion());
             if (nCurrentVersion < SvtSaveOptions::ODFSVER_012)
             {
                 bExportEquation=false;
@@ -3071,7 +3086,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
                 {
                     mrExport.addDataStyle( nNumberFormat );
                 }
-                aEquationPropertyStates = mxExpPropMapper->Filter( xEquationProperties );
+                aEquationPropertyStates = mxExpPropMapper->Filter(mrExport, xEquationProperties);
             }
         }
 
@@ -3132,7 +3147,8 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
 {
     assert(mxExpPropMapper.is());
 
-    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(
+        mrExport.getSaneDefaultVersion());
 
     /// Don't export X ErrorBars for older ODF versions.
     if (!bYError && nCurrentVersion < SvtSaveOptions::ODFSVER_012)
@@ -3182,7 +3198,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
         }
     }
 
-    std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xErrorBarProp );
+    std::vector<XMLPropertyState> aPropertyStates = mxExpPropMapper->Filter(mrExport, xErrorBarProp);
 
     if( aPropertyStates.empty() )
         return;
@@ -3347,7 +3363,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         xSeriesProperties->getPropertyValue("AttributedDataPoints") >>= aDataPointSeq;
         xSeriesProperties->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint;
 
-        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+            mrExport.getSaneDefaultVersion());
         if (nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED) // do not export to ODF 1.3 or older
             xSeriesProperties->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
     }
@@ -3401,7 +3418,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             SAL_WARN_IF( !xPropSet.is(), "xmloff.chart", "Pie Segments should have properties" );
             if( xPropSet.is())
             {
-                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+                    mrExport.getSaneDefaultVersion());
                 if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012 && bExportNumFmt)
                 {
                     lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
@@ -3426,7 +3444,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     }
                 }
 
-                aPropertyStates = mxExpPropMapper->Filter(xPropSet);
+                aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
                 if (!aPropertyStates.empty() || !aDataLabelPropertyStates.empty())
                 {
                     if (bExportContent)
@@ -3448,8 +3466,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                             maAutoStyleNameQueue.pop();
                         }
                         if(bExportNumFmt)
-                            aPoint.mCustomLabelText = lcl_getCustomLabelField(nElement, xSeries);
-                        aPoint.mCustomLabelPos = lcl_getCustomLabelPosition(nElement, xSeries);
+                            aPoint.mCustomLabelText = lcl_getCustomLabelField(mrExport, nElement, xSeries);
+                        aPoint.mCustomLabelPos = lcl_getCustomLabelPosition(mrExport, nElement, xSeries);
 
                         aDataPointVector.push_back( aPoint );
                     }
@@ -3497,7 +3515,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             }
             if( xPropSet.is())
             {
-                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
+                    mrExport.getSaneDefaultVersion());
                 if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
                 {
                     lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
@@ -3511,7 +3530,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                                                   mxExpPropMapper);
                 }
 
-                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
 
                 if (!aPropertyStates.empty() || !aDataLabelPropertyStates.empty())
                 {
@@ -3526,8 +3545,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                             aPoint.maStyleName = maAutoStyleNameQueue.front();
                             maAutoStyleNameQueue.pop();
                         }
-                        aPoint.mCustomLabelText = lcl_getCustomLabelField(nCurrIndex, xSeries);
-                        aPoint.mCustomLabelPos = lcl_getCustomLabelPosition(nCurrIndex, xSeries);
+                        aPoint.mCustomLabelText = lcl_getCustomLabelField(mrExport, nCurrIndex, xSeries);
+                        aPoint.mCustomLabelPos = lcl_getCustomLabelPosition(mrExport, nCurrIndex, xSeries);
                         if (!aDataLabelPropertyStates.empty())
                         {
                             SAL_WARN_IF(maAutoStyleNameQueue.empty(), "xmloff.chart",
