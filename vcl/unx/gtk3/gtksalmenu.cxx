@@ -1042,11 +1042,9 @@ void GtkSalMenu::CreateMenuBarWidget()
     g_signal_connect(G_OBJECT(mpMenuBarWidget), "key-press-event", G_CALLBACK(MenuBarSignalKey), this);
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_widget_show_all(mpMenuBarContainerWidget);
-#else
+    gtk_widget_show(mpMenuBarWidget);
+    gtk_widget_show(mpMenuAllowShrinkWidget);
     gtk_widget_show(mpMenuBarContainerWidget);
-#endif
 
     ShowCloseButton( static_cast<MenuBar*>(mpVCLMenu.get())->HasCloseButton() );
 
