@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 
 #include <stack>
+#include <optional>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <osl/mutex.hxx>
@@ -58,6 +59,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModule.hpp>
 #include <xmloff/GradientStyle.hxx>
 #include <xmloff/HatchStyle.hxx>
 #include <xmloff/ImageStyle.hxx>
@@ -260,6 +262,7 @@ public:
     uno::Reference< embed::XStorage >                   mxTargetStorage;
 
     SvtSaveOptions                                      maSaveOptions;
+    std::optional<SvtSaveOptions::ODFSaneDefaultVersion> m_oOverrideODFVersion;
 
     /// name of stream in package, e.g., "content.xml"
     OUString mStreamName;
@@ -418,6 +421,32 @@ void SvXMLExport::DetermineModelType_()
     if ( mxModel.is() )
     {
         meModelType = SvtModuleOptions::ClassifyFactoryByModel( mxModel );
+
+        // note: MATH documents will throw NotInitializedException; maybe unit test problem
+        if (meModelType == SvtModuleOptions::EFactory::WRITER)
+        {
+            uno::Reference<frame::XModule> const xModule(mxModel, uno::UNO_QUERY);
+            bool const isBaseForm(xModule.is() &&
+                xModule->getIdentifier() == "com.sun.star.sdb.FormDesign");
+            if (isBaseForm)
+            {
+                switch (mpImpl->maSaveOptions.GetODFSaneDefaultVersion())
+                {
+                    case SvtSaveOptions::ODFSVER_013_EXTENDED:
+                        SAL_INFO("xmloff.core", "tdf#138209 force form export to ODF 1.2");
+                        mpImpl->m_oOverrideODFVersion = SvtSaveOptions::ODFSVER_012_EXTENDED;
+                        maUnitConv.overrideSaneDefaultVersion(SvtSaveOptions::ODFSVER_012_EXTENDED);
+                        break;
+                    case SvtSaveOptions::ODFSVER_013:
+                        SAL_INFO("xmloff.core", "tdf#138209 force form export to ODF 1.2");
+                        mpImpl->m_oOverrideODFVersion = SvtSaveOptions::ODFSVER_012;
+                        maUnitConv.overrideSaneDefaultVersion(SvtSaveOptions::ODFSVER_012);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 }
 
@@ -430,7 +459,7 @@ SvXMLExport::SvXMLExport(
     m_xContext(xContext), m_implementationName(implementationName),
     mxAttrList( new SvXMLAttributeList ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    maUnitConv( xContext, util::MeasureUnit::MM_100TH, eDefaultMeasureUnit ),
+    maUnitConv(xContext, util::MeasureUnit::MM_100TH, eDefaultMeasureUnit, getSaneDefaultVersion()),
     meClass( eClass ),
     mnExportFlags( nExportFlags ),
     mnErrorFlags( SvXMLErrorFlags::NO ),
@@ -455,7 +484,7 @@ SvXMLExport::SvXMLExport(
     mxAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    maUnitConv( xContext, util::MeasureUnit::MM_100TH, eDefaultMeasureUnit ),
+    maUnitConv(xContext, util::MeasureUnit::MM_100TH, eDefaultMeasureUnit, getSaneDefaultVersion()),
     meClass( XML_TOKEN_INVALID ),
     mnExportFlags( SvXMLExportFlags::NONE ),
     mnErrorFlags( SvXMLErrorFlags::NO ),
@@ -490,7 +519,8 @@ SvXMLExport::SvXMLExport(
     mpNamespaceMap( new SvXMLNamespaceMap ),
     maUnitConv( xContext,
                 util::MeasureUnit::MM_100TH,
-                SvXMLUnitConverter::GetMeasureUnit(eDefaultFieldUnit) ),
+                SvXMLUnitConverter::GetMeasureUnit(eDefaultFieldUnit),
+                getSaneDefaultVersion()),
     meClass( XML_TOKEN_INVALID ),
     mnExportFlags( nExportFlag ),
     mnErrorFlags( SvXMLErrorFlags::NO ),
@@ -2291,11 +2321,11 @@ uno::Reference< embed::XStorage > const & SvXMLExport::GetTargetStorage() const
 
 SvtSaveOptions::ODFSaneDefaultVersion SvXMLExport::getSaneDefaultVersion() const
 {
-    if( mpImpl )
-        return mpImpl->maSaveOptions.GetODFSaneDefaultVersion();
-
-    // fatal error, use current version as default
-    return SvtSaveOptions::ODFSVER_LATEST;
+    if (mpImpl->m_oOverrideODFVersion)
+    {
+        return *mpImpl->m_oOverrideODFVersion;
+    }
+    return mpImpl->maSaveOptions.GetODFSaneDefaultVersion();
 }
 
 void

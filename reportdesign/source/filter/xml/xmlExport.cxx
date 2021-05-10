@@ -1112,11 +1112,11 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     const uno::Reference< report::XShape> xShape(_xProp,uno::UNO_QUERY);
     if ( xShape.is() )
     {
-        ::std::vector< XMLPropertyState > aPropertyStates( m_xParaPropMapper->Filter(_xProp) );
+        ::std::vector<XMLPropertyState> aPropertyStates(m_xParaPropMapper->Filter(*this, _xProp));
         if ( !aPropertyStates.empty() )
             m_aAutoStyleNames.emplace( _xProp,GetAutoStylePool()->Add( XmlStyleFamily::TEXT_PARAGRAPH, aPropertyStates ));
     }
-    ::std::vector< XMLPropertyState > aPropertyStates( m_xCellStylesExportPropertySetMapper->Filter(_xProp) );
+    ::std::vector<XMLPropertyState> aPropertyStates(m_xCellStylesExportPropertySetMapper->Filter(*this, _xProp));
     Reference<XFixedLine> xFixedLine(_xProp,uno::UNO_QUERY);
     if ( xFixedLine.is() )
     {
@@ -1178,7 +1178,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
             xBorderProp->setPropertyValue(it, aEmpty);
         }
 
-        ::std::vector< XMLPropertyState > aBorderStates(m_xCellStylesExportPropertySetMapper->Filter(xBorderProp));
+        ::std::vector<XMLPropertyState> aBorderStates(m_xCellStylesExportPropertySetMapper->Filter(*this, xBorderProp));
         aPropertyStates.insert( aPropertyStates.end(), aBorderStates.begin(), aBorderStates.end() );
     }
     else
@@ -1219,7 +1219,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
 
 void ORptExport::exportAutoStyle(const Reference<XSection>& _xProp)
 {
-    ::std::vector< XMLPropertyState > aPropertyStates( m_xTableStylesExportPropertySetMapper->Filter(_xProp) );
+    ::std::vector<XMLPropertyState> aPropertyStates(m_xTableStylesExportPropertySetMapper->Filter(*this, _xProp));
     if ( !aPropertyStates.empty() )
         m_aAutoStyleNames.emplace( _xProp.get(),GetAutoStylePool()->Add( XmlStyleFamily::TABLE_TABLE, aPropertyStates ));
 }

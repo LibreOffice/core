@@ -18,6 +18,8 @@
  */
 
 #include "XMLErrorBarStylePropertyHdl.hxx"
+
+#include <xmloff/xmluconv.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -35,10 +37,10 @@ XMLErrorBarStylePropertyHdl::~XMLErrorBarStylePropertyHdl()
 }
 
 bool XMLErrorBarStylePropertyHdl::exportXML( OUString& rStrExpValue,
-                                              const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+    const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const
 {
     uno::Any aValue(rValue);
-    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(rUnitConverter.getSaneDefaultVersion());
     if (nCurrentVersion < SvtSaveOptions::ODFSVER_012)
     {
         sal_Int32 nValue = 0;

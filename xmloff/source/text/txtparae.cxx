@@ -535,7 +535,7 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
     SAL_WARN_IF( !xPropMapper.is(), "xmloff", "There is the property mapper?" );
 
     vector< XMLPropertyState > aPropStates =
-            xPropMapper->Filter( rPropSet );
+            xPropMapper->Filter(GetExport(), rPropSet);
 
     if( ppAddStates )
     {
@@ -667,7 +667,7 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
     }
     SAL_WARN_IF( !xPropMapper.is(), "xmloff", "There is the property mapper?" );
 
-    vector< XMLPropertyState > aPropStates(xPropMapper->Filter( rPropSet ));
+    vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
 
     if( rPropSetHelper.hasProperty( NUMBERING_RULES_AUTO ) )
     {
@@ -764,7 +764,7 @@ OUString XMLTextParagraphExport::Find(
     SAL_WARN_IF( !xPropMapper.is(), "xmloff", "There is the property mapper?" );
     if( !xPropMapper.is() )
         return sName;
-    vector< XMLPropertyState > aPropStates(xPropMapper->Filter( rPropSet ));
+    vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
     if( ppAddStates )
     {
         while( *ppAddStates )
@@ -787,7 +787,7 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
         const XMLPropertyState** ppAddStates ) const
 {
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper(GetTextPropMapper());
-    vector< XMLPropertyState > aPropStates(xPropMapper->Filter( rPropSet ));
+    vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
 
     // Get parent and remove hyperlinks (they aren't of interest)
     OUString sName;

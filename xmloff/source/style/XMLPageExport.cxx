@@ -71,7 +71,7 @@ void XMLPageExport::collectPageMasterAutoStyle(
     SAL_WARN_IF( !xPageMasterPropSetMapper.is(), "xmloff", "page master family/XMLPageMasterPropSetMapper not found" );
     if( xPageMasterPropSetMapper.is() )
     {
-        ::std::vector<XMLPropertyState> aPropStates = xPageMasterExportPropMapper->Filter( rPropSet );
+        ::std::vector<XMLPropertyState> aPropStates = xPageMasterExportPropMapper->Filter(rExport, rPropSet);
         if( !aPropStates.empty())
         {
             OUString sParent;
@@ -84,7 +84,7 @@ void XMLPageExport::collectPageMasterAutoStyle(
     }
     assert(m_xPageMasterDrawingPageExportPropMapper.is());
     ::std::vector<XMLPropertyState> const aPropStates(
-            m_xPageMasterDrawingPageExportPropMapper->Filter(rPropSet));
+        m_xPageMasterDrawingPageExportPropMapper->Filter(rExport, rPropSet));
     if (!aPropStates.empty())
     {
         OUString sParent;
@@ -287,7 +287,7 @@ void XMLPageExport::exportDefaultStyle()
     GetExport().CheckAttrList();
 
     ::std::vector< XMLPropertyState > aPropStates =
-        xPageMasterExportPropMapper->FilterDefaults( xPropSet );
+        xPageMasterExportPropMapper->FilterDefaults(rExport, xPropSet);
 
     bool bExport = false;
     rtl::Reference < XMLPropertySetMapper > aPropMapper(xPageMasterExportPropMapper->getPropertySetMapper());

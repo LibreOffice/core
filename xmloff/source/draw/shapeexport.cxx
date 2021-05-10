@@ -392,7 +392,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         sal_Int32 nCount = 0;
         if( !bIsEmptyPresObj || (aShapeInfo.meShapeType != XmlShapeTypePresPageShape) )
         {
-            aPropStates = GetPropertySetMapper()->Filter( xPropSet );
+            aPropStates = GetPropertySetMapper()->Filter(mrExport, xPropSet);
 
             if (XmlShapeTypeDrawControlShape == aShapeInfo.meShapeType)
             {
@@ -443,7 +443,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         // optionally generate auto style for text attributes
         if( (!bIsEmptyPresObj || (aShapeInfo.meShapeType != XmlShapeTypePresPageShape)) && bObjSupportsText )
         {
-            aPropStates = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter( xPropSet );
+            aPropStates = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter(mrExport, xPropSet);
 
             // yet more additionally, we need to care for the ParaAdjust property
             if ( XmlShapeTypeDrawControlShape == aShapeInfo.meShapeType )
