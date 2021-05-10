@@ -1133,10 +1133,13 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
     mpFrame->SetMenu( this );
     mpFrame->EnsureAppMenuWatch();
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     // Clean menu model and action group if needed.
     GtkWidget* pWidget = mpFrame->getWindow();
-    GdkWindow* gdkWindow = gtk_widget_get_window( pWidget );
+#if !GTK_CHECK_VERSION(4,0,0)
+    GdkSurface* gdkWindow = gtk_widget_get_window( pWidget );
+#else
+    GdkSurface* gdkWindow = gtk_native_get_surface(gtk_widget_get_native(pWidget));
+#endif
 
     GLOMenu* pMenuModel = G_LO_MENU( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
@@ -1167,7 +1170,6 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
         DestroyMenuBarWidget();
         CreateMenuBarWidget();
     }
-#endif
 }
 
 const GtkSalFrame* GtkSalMenu::GetFrame() const

@@ -57,6 +57,10 @@ class GtkInstDropTarget;
 class GtkInstDragSource;
 class GtkDnDTransferable;
 
+#if !GTK_CHECK_VERSION(4,0,0)
+typedef GdkWindow GdkSurface;
+#endif
+
 class GtkSalMenu;
 
 class GtkSalFrame final : public SalFrame
@@ -221,13 +225,10 @@ class GtkSalFrame final : public SalFrame
 
     GtkSalMenu*                     m_pSalMenu;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 #if ENABLE_DBUS && ENABLE_GIO
     private:
-    friend void ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame);
     friend void on_registrar_available (GDBusConnection*, const gchar*, const gchar*, gpointer);
     friend void on_registrar_unavailable (GDBusConnection*, const gchar*, gpointer);
-#endif
 #endif
     guint                           m_nWatcherId;
 

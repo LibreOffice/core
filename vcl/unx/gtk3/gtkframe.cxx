@@ -491,7 +491,6 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
 
 // AppMenu watch functions.
 
-#if !GTK_CHECK_VERSION(4,0,0)
 static void ObjectDestroyedNotify( gpointer data )
 {
     if ( data ) {
@@ -515,7 +514,12 @@ static void hud_activated( gboolean hud_active, gpointer user_data )
 static bool ensure_dbus_setup( gpointer data )
 {
     GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( data );
-    GdkWindow* gdkWindow = gtk_widget_get_window( pSalFrame->getWindow() );
+    GtkWidget* pWidget = pSalFrame->getWindow();
+#if !GTK_CHECK_VERSION(4,0,0)
+    GdkSurface* gdkWindow = gtk_widget_get_window(pWidget);
+#else
+    GdkSurface* gdkWindow = gtk_native_get_surface(gtk_widget_get_native(pWidget));
+#endif
 
     if ( gdkWindow != nullptr && g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) == nullptr )
     {
@@ -540,8 +544,8 @@ static bool ensure_dbus_setup( gpointer data )
         g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify );
         g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify );
 
-        GdkDisplay *pDisplay = GtkSalFrame::getGdkDisplay();
 #if !GTK_CHECK_VERSION(4,0,0)
+        GdkDisplay *pDisplay = GtkSalFrame::getGdkDisplay();
 #if defined(GDK_WINDOWING_X11)
         if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
         {
@@ -551,7 +555,6 @@ static bool ensure_dbus_setup( gpointer data )
             gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "/org/libreoffice" );
             gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
         }
-#endif
 #endif
 #if defined(GDK_WINDOWING_WAYLAND)
         if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
@@ -563,6 +566,7 @@ static bool ensure_dbus_setup( gpointer data )
                                                                "/org/libreoffice",
                                                                g_dbus_connection_get_unique_name( pSessionBus ));
         }
+#endif
 #endif
         // Publish the menu model and the action group.
         SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
@@ -576,7 +580,6 @@ static bool ensure_dbus_setup( gpointer data )
     }
     return false;
 }
-#endif
 
 void on_registrar_available( GDBusConnection * /*connection*/,
                              const gchar     * /*name*/,
@@ -1131,12 +1134,8 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
 #endif
     m_nStyle = nStyle;
 
-#if !GTK_CHECK_VERSION(4,0,0)
-    GtkWindowType eWinType = (  (nStyle & SalFrameStyleFlags::FLOAT) &&
-                              ! (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
-                              )
-        ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL;
-#endif
+    bool bPopup = ((nStyle & SalFrameStyleFlags::FLOAT) &&
+                   !(nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION));
 
     if( nStyle & SalFrameStyleFlags::SYSTEMCHILD )
     {
@@ -1153,7 +1152,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     else
     {
 #if !GTK_CHECK_VERSION(4,0,0)
-        m_pWindow = gtk_window_new(eWinType);
+        m_pWindow = gtk_window_new(bPopup ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL);
 #else
         m_pWindow = gtk_window_new();
 #endif
@@ -1273,13 +1272,11 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
 
     InitCommon();
 
-#if !GTK_CHECK_VERSION(4,0,0)
-    if( eWinType == GTK_WINDOW_TOPLEVEL )
+    if (!bPopup)
     {
         // Enable DBus native menu if available.
         ensure_dbus_setup( this );
     }
-#endif
 }
 
 #if !GTK_CHECK_VERSION(4,0,0)
