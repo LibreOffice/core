@@ -202,6 +202,14 @@ public:
 
 };
 
+struct SfxItemPropertyMapCompare2
+{
+    bool operator() ( const SfxItemPropertyMapEntry & lhs, const SfxItemPropertyMapEntry & rhs ) const
+    {
+        return lhs.aName < rhs.aName;
+    }
+};
+
 // workaround for incremental linking bugs in MSVC2015
 class SAL_DLLPUBLIC_TEMPLATE SfxExtItemPropertySetInfo_Base : public cppu::WeakImplHelper< css::beans::XPropertySetInfo > {};
 
@@ -223,7 +231,8 @@ public:
         hasPropertyByName( const OUString& Name ) override;
 
 private:
-    std::unordered_map<OUString, SfxItemPropertySimpleEntry> maMap;
+    const SfxItemPropertyMapEntry* getByName( std::u16string_view rName ) const;
+    o3tl::sorted_vector< SfxItemPropertyMapEntry, SfxItemPropertyMapCompare2 > maMap;
     mutable css::uno::Sequence< css::beans::Property > m_aPropSeq;
 };
 
