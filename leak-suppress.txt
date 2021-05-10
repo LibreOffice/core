@@ -54,3 +54,6 @@ leak:mkdefsinc
 
 # idlc deliberately leaks
 leak:idlc/source/idlcmain.cxx
+
+# deliberate leak in cppunit
+leak:sal/cppunittester/cppunittester.cxx
