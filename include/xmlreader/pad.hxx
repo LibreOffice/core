@@ -47,7 +47,8 @@ private:
     SAL_DLLPRIVATE void flushSpan();
 
     Span span_;
-    OStringBuffer buffer_{ 256 };
+    sal_Int32 buflength_ = 0;
+    char buffer_[1024];
 };
 }
 
