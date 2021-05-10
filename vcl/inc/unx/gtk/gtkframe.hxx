@@ -287,18 +287,20 @@ class GtkSalFrame final : public SalFrame
     void WindowMap();
     void WindowUnmap();
     bool WindowCloseRequest();
+    void DrawingAreaMotion(int nEventX, int nEventY, guint32 nTime, guint nState);
 #if GTK_CHECK_VERSION(4, 0, 0)
     static void         signalMap( GtkWidget*, gpointer );
     static void         signalUnmap( GtkWidget*, gpointer );
     static gboolean     signalDelete( GtkWidget*, gpointer );
+    static void         signalMotion(GtkEventControllerMotion *controller, double x, double y, gpointer);
 #else
     static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalUnmap( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalDelete( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean     signalMotion( GtkWidget*, GdkEventMotion*, gpointer );
 #endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalConfigure( GtkWidget*, GdkEventConfigure*, gpointer );
-    static gboolean     signalMotion( GtkWidget*, GdkEventMotion*, gpointer );
     static gboolean     signalKey( GtkWidget*, GdkEventKey*, gpointer );
     static gboolean     signalWindowState( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );

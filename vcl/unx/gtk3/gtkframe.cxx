@@ -936,18 +936,21 @@ void GtkSalFrame::InitCommon()
 #if !GTK_CHECK_VERSION(4,0,0)
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-press-event", G_CALLBACK(signalButton), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-release-event", G_CALLBACK(signalButton), this ));
+
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "motion-notify-event", G_CALLBACK(signalMotion), this ));
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "leave-notify-event", G_CALLBACK(signalCrossing), this ));
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "enter-notify-event", G_CALLBACK(signalCrossing), this ));
 #else
     GtkGesture *pClick = gtk_gesture_click_new();
     gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pClick));
     g_signal_connect(pClick, "pressed", G_CALLBACK(gesturePressed), this);
     g_signal_connect(pClick, "released", G_CALLBACK(gestureReleased), this);
+
+    GtkEventController* pMotionController = gtk_event_controller_motion_new();
+    g_signal_connect(pMotionController, "motion", G_CALLBACK(signalMotion), this);
+    gtk_widget_add_controller(pEventWidget, pMotionController);
 #endif
 #if !GTK_CHECK_VERSION(4,0,0)
-    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "motion-notify-event", G_CALLBACK(signalMotion), this ));
-    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "leave-notify-event", G_CALLBACK(signalCrossing), this ));
-    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "enter-notify-event", G_CALLBACK(signalCrossing), this ));
-
-
     //Drop Target Stuff
     gtk_drag_dest_set(GTK_WIDGET(pEventWidget), GtkDestDefaults(0), nullptr, 0, GdkDragAction(0));
     gtk_drag_dest_set_track_motion(GTK_WIDGET(pEventWidget), true);
@@ -3165,7 +3168,30 @@ void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gdouble x, gdou
     }
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+void GtkSalFrame::DrawingAreaMotion(int nEventX, int nEventY, guint32 nTime, guint nState)
+{
+    SalMouseEvent aEvent;
+    aEvent.mnTime = nTime;
+    aEvent.mnX = nEventX;
+    aEvent.mnY = nEventY;
+    aEvent.mnCode = GetMouseModCode(nState);
+    aEvent.mnButton = 0;
+
+    if( AllSettings::GetLayoutRTL() )
+        aEvent.mnX = maGeometry.nWidth-1-aEvent.mnX;
+
+    CallCallbackExc(SalEvent::MouseMove, &aEvent);
+}
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+void GtkSalFrame::signalMotion(GtkEventControllerMotion *pController, double x, double y, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    GdkEvent* pEvent = gtk_event_controller_get_current_event(GTK_EVENT_CONTROLLER(pController));
+    GdkModifierType eType = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(pController));
+    pThis->DrawingAreaMotion(x, y, gdk_event_get_time(pEvent), eType);
+}
+#else
 gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer frame )
 {
     UpdateLastInputEventTime(pEvent->time);
@@ -3204,17 +3230,9 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 
     if (!aDel.isDeleted())
     {
-        SalMouseEvent aEvent;
-        aEvent.mnTime   = pEvent->time;
-        aEvent.mnX      = static_cast<tools::Long>(pEvent->x_root) - pThis->maGeometry.nX;
-        aEvent.mnY      = static_cast<tools::Long>(pEvent->y_root) - pThis->maGeometry.nY;
-        aEvent.mnCode   = GetMouseModCode( pEvent->state );
-        aEvent.mnButton = 0;
-
-        if( AllSettings::GetLayoutRTL() )
-            aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
-
-        pThis->CallCallbackExc( SalEvent::MouseMove, &aEvent );
+        pThis->DrawingAreaMotion(pEvent->x_root - pThis->maGeometry.nX,
+                                 pEvent->y_root - pThis->maGeometry.nY,
+                                 pEvent->time, pEvent->state);
     }
 
     if (!aDel.isDeleted())
@@ -3227,7 +3245,9 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 
     return true;
 }
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpointer frame )
 {
     UpdateLastInputEventTime(pEvent->time);
