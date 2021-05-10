@@ -1862,7 +1862,6 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
             gtk_window_maximize( GTK_WINDOW(m_pWindow) );
         else
             gtk_window_unmaximize( GTK_WINDOW(m_pWindow) );
-#if !GTK_CHECK_VERSION(4, 0, 0)
         /* #i42379# there is no rollup state in GDK; and rolled up windows are
         *  (probably depending on the WM) reported as iconified. If we iconify a
         *  window here that was e.g. a dialog, then it will be unmapped but still
@@ -1871,11 +1870,17 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         *  on windows with a parent (that is transient frames) since these tend
         *  to not be represented in an icon task list.
         */
-        if( (pState->mnState & WindowStateState::Minimized)
-            && ! m_pParent )
-            gtk_window_iconify( GTK_WINDOW(m_pWindow) );
+        bool bMinimize = pState->mnState & WindowStateState::Minimized && !m_pParent;
+#if GTK_CHECK_VERSION(4, 0, 0)
+        if (bMinimize)
+            gtk_window_minimize(GTK_WINDOW(m_pWindow));
         else
-            gtk_window_deiconify( GTK_WINDOW(m_pWindow) );
+            gtk_window_unminimize(GTK_WINDOW(m_pWindow));
+#else
+        if (bMinimize)
+            gtk_window_iconify(GTK_WINDOW(m_pWindow));
+        else
+            gtk_window_deiconify(GTK_WINDOW(m_pWindow));
 #endif
     }
     TriggerPaintEvent();
