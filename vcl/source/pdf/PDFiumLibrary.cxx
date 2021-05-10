@@ -293,15 +293,19 @@ public:
     double getFontSize() override;
     OUString getFontName() override;
     PDFTextRenderMode getTextRenderMode() override;
+    bool hasTransparency() override;
     Color getFillColor() override;
     Color getStrokeColor() override;
     double getStrokeWidth() override;
     // Path
     int getPathSegmentCount() override;
     std::unique_ptr<PDFiumPathSegment> getPathSegment(int index) override;
-    Size getImageSize(PDFiumPage& rPage) override;
-    std::unique_ptr<PDFiumBitmap> getImageBitmap() override;
     bool getDrawMode(PDFFillMode& eFillMode, bool& bStroke) override;
+    // Image
+    Size getImageSize(PDFiumPage& rPage) override;
+    PDFImageMetadata getImageMetadata(PDFiumPage& rPage) override;
+    std::unique_ptr<PDFiumBitmap> getImageBitmap() override;
+    bool getDecodedImageData(std::vector<sal_uInt8>& rData) override;
 };
 
 class PDFiumSearchHandleImpl final : public PDFiumSearchHandle
@@ -919,6 +923,8 @@ Color PDFiumPageObjectImpl::getFillColor()
     return aColor;
 }
 
+bool PDFiumPageObjectImpl::hasTransparency() { return FPDFPageObj_HasTransparency(mpPageObject); }
+
 Color PDFiumPageObjectImpl::getStrokeColor()
 {
     Color aColor = COL_TRANSPARENT;
@@ -956,6 +962,28 @@ Size PDFiumPageObjectImpl::getImageSize(PDFiumPage& rPage)
     auto& rPageImpl = static_cast<PDFiumPageImpl&>(rPage);
     FPDFImageObj_GetImageMetadata(mpPageObject, rPageImpl.getPointer(), &aMeta);
     return Size(aMeta.width, aMeta.height);
+}
+
+PDFImageMetadata PDFiumPageObjectImpl::getImageMetadata(PDFiumPage& rPage)
+{
+    FPDF_IMAGEOBJ_METADATA aMeta;
+    auto& rPageImpl = static_cast<PDFiumPageImpl&>(rPage);
+    FPDFImageObj_GetImageMetadata(mpPageObject, rPageImpl.getPointer(), &aMeta);
+    return { aMeta.width, aMeta.height, aMeta.bits_per_pixel };
+}
+
+bool PDFiumPageObjectImpl::getDecodedImageData(std::vector<sal_uInt8>& rData)
+{
+    unsigned long nLength = FPDFImageObj_GetImageDataDecoded(mpPageObject, nullptr, 0);
+    if (nLength > 0)
+    {
+        rData.resize(nLength);
+        unsigned long nReadLength
+            = FPDFImageObj_GetImageDataDecoded(mpPageObject, rData.data(), nLength);
+        if (nReadLength == nLength)
+            return true;
+    }
+    return false;
 }
 
 std::unique_ptr<PDFiumBitmap> PDFiumPageObjectImpl::getImageBitmap()

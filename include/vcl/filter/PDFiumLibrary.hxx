@@ -124,6 +124,13 @@ public:
     virtual PDFSegmentType getType() const = 0;
 };
 
+struct PDFImageMetadata
+{
+    sal_uInt32 mnWidth;
+    sal_uInt32 mnHeight;
+    sal_uInt32 mnBitsPerPixel;
+};
+
 class VCL_DLLPUBLIC PDFiumPageObject
 {
 public:
@@ -140,15 +147,20 @@ public:
     virtual double getFontSize() = 0;
     virtual OUString getFontName() = 0;
     virtual PDFTextRenderMode getTextRenderMode() = 0;
+    virtual bool hasTransparency() = 0;
     virtual Color getFillColor() = 0;
     virtual Color getStrokeColor() = 0;
     virtual double getStrokeWidth() = 0;
     // Path
     virtual int getPathSegmentCount() = 0;
     virtual std::unique_ptr<PDFiumPathSegment> getPathSegment(int index) = 0;
-    virtual Size getImageSize(PDFiumPage& rPage) = 0;
-    virtual std::unique_ptr<PDFiumBitmap> getImageBitmap() = 0;
     virtual bool getDrawMode(PDFFillMode& eFillMode, bool& bStroke) = 0;
+    // Image
+    virtual Size getImageSize(PDFiumPage& rPage) = 0;
+    virtual PDFImageMetadata getImageMetadata(PDFiumPage& rPage) = 0;
+
+    virtual std::unique_ptr<PDFiumBitmap> getImageBitmap() = 0;
+    virtual bool getDecodedImageData(std::vector<sal_uInt8>& rData) = 0;
 };
 
 class VCL_DLLPUBLIC PDFiumSearchHandle
