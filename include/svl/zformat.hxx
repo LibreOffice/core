@@ -22,6 +22,7 @@
 #include <svl/svldllapi.h>
 #include <svl/zforlist.hxx>
 #include <svl/nfkeytab.hxx>
+#include <tools/ustrstackbuf.hxx>
 #include <vector>
 
 namespace utl {
@@ -139,6 +140,8 @@ private:
     SvNumberNatNum aNatNum;             // DoubleByteNumber
 
 };
+
+typedef tools::OUStringStackBuffer<64> OUStringStackBuffer64;
 
 class SVL_DLLPUBLIC SvNumberformat
 {
@@ -432,6 +435,7 @@ public:
     /** Insert the number of blanks into the string that is needed to simulate
         the width of character c for underscore formats */
     static sal_Int32 InsertBlanks( OUStringBuffer& r, sal_Int32 nPos, sal_Unicode c );
+    static sal_Int32 InsertBlanks( OUStringStackBuffer64& r, sal_Int32 nPos, sal_Unicode c );
 
     /// One of YMD,DMY,MDY if date format
     DateOrder GetDateOrder() const;
@@ -599,7 +603,7 @@ private:
 
     // standard number output
     SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, OUString& OutString ) const;
-    SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, OUStringBuffer& OutString ) const;
+    SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, OUStringStackBuffer64& OutString ) const;
     SVL_DLLPRIVATE void ImpGetOutputStdToPrecision( double& rNumber, OUString& rOutString, sal_uInt16 nPrecision ) const;
     // numbers in input line
     SVL_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, OUString& OutString ) const;
@@ -613,7 +617,7 @@ private:
 
     // Helper function for number strings
     // append string symbols, insert leading 0 or ' ', or ...
-    SVL_DLLPRIVATE bool ImpNumberFill( OUStringBuffer& sStr,
+    SVL_DLLPRIVATE bool ImpNumberFill( OUStringStackBuffer64& sStr,
                     double& rNumber,
                     sal_Int32& k,
                     sal_uInt16& j,
@@ -622,7 +626,7 @@ private:
                     bool bInsertRightBlank = false );
 
     // Helper function to fill in the integer part and the group (AKA thousand) separators
-    SVL_DLLPRIVATE bool ImpNumberFillWithThousands( OUStringBuffer& sStr,
+    SVL_DLLPRIVATE bool ImpNumberFillWithThousands( OUStringStackBuffer64& sStr,
                                  double& rNumber,
                                  sal_Int32 k,
                                  sal_uInt16 j,
@@ -632,14 +636,14 @@ private:
 
     // Helper function to fill in the group (AKA thousand) separators
     // or to skip additional digits
-    SVL_DLLPRIVATE void ImpDigitFill( OUStringBuffer& sStr,
+    SVL_DLLPRIVATE void ImpDigitFill( OUStringStackBuffer64& sStr,
                                       sal_Int32 nStart,
                                       sal_Int32& k,
                                       sal_uInt16 nIx,
                                       sal_Int32 & nDigitCount,
                                       utl::DigitGroupingIterator & );
 
-    SVL_DLLPRIVATE bool ImpDecimalFill( OUStringBuffer& sStr,
+    SVL_DLLPRIVATE bool ImpDecimalFill( OUStringStackBuffer64& sStr,
                                  double& rNumber,
                                  sal_Int32 nDecPos,
                                  sal_uInt16 j,
@@ -661,20 +665,20 @@ private:
                                                 sal_Int64& nDiv ) const;
     SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
                                              sal_uInt16 nIx,
-                                             OUStringBuffer& OutString);
+                                             OUStringStackBuffer64& OutString);
     SVL_DLLPRIVATE bool ImpGetScientificOutput(double fNumber,
                                                sal_uInt16 nIx,
-                                               OUStringBuffer& OutString);
+                                               OUStringStackBuffer64& OutString);
 
     SVL_DLLPRIVATE bool ImpGetDateOutput( double fNumber,
                                           sal_uInt16 nIx,
-                                          OUStringBuffer& OutString );
+                                          OUStringStackBuffer64& OutString );
     SVL_DLLPRIVATE bool ImpGetTimeOutput( double fNumber,
                                           sal_uInt16 nIx,
-                                          OUStringBuffer& OutString );
+                                          OUStringStackBuffer64& OutString );
     SVL_DLLPRIVATE bool ImpGetDateTimeOutput( double fNumber,
                                               sal_uInt16 nIx,
-                                              OUStringBuffer& OutString );
+                                              OUStringStackBuffer64& OutString );
 
     // Switches to the "gregorian" calendar if the current calendar is
     // non-"gregorian" and the era is a "Dummy" era of a calendar which doesn't
@@ -686,12 +690,12 @@ private:
     // Append a "G" short era string of the given calendar. In the case of a
     // Gengou calendar this is a one character abbreviation, for other
     // calendars the XExtendedCalendar::getDisplayString() method is called.
-    SVL_DLLPRIVATE static void ImpAppendEraG( OUStringBuffer& OutStringBuffer, const CalendarWrapper& rCal,
+    SVL_DLLPRIVATE static void ImpAppendEraG( OUStringStackBuffer64& OutStringBuffer, const CalendarWrapper& rCal,
                                               sal_Int16 nNatNum );
 
     SVL_DLLPRIVATE bool ImpGetNumberOutput( double fNumber,
                                             sal_uInt16 nIx,
-                                            OUStringBuffer& OutString );
+                                            OUStringStackBuffer64& OutString );
 
     SVL_DLLPRIVATE void ImpCopyNumberformat( const SvNumberformat& rFormat );
 
@@ -716,12 +720,12 @@ private:
     // for use with the result of tools::Time::GetClock()) with the length of
     // nFractionDecimals, unless nMinimumInputLineDecimals>0 is given for input
     // line string where extra trailing "0" are discarded.
-    SVL_DLLPRIVATE sal_uInt16 ImpGetFractionOfSecondString( OUStringBuffer& rBuf, double fFractionOfSecond,
+    SVL_DLLPRIVATE sal_uInt16 ImpGetFractionOfSecondString( OUStringStackBuffer64& rBuf, double fFractionOfSecond,
             int nFractionDecimals, bool bAddOneRoundingDecimal, sal_uInt16 nIx, sal_uInt16 nMinimumInputLineDecimals );
 
     // transliterate according to NativeNumber
     SVL_DLLPRIVATE OUString impTransliterateImpl(const OUString& rStr, const SvNumberNatNum& rNum) const;
-    SVL_DLLPRIVATE void impTransliterateImpl(OUStringBuffer& rStr, const SvNumberNatNum& rNum) const;
+    SVL_DLLPRIVATE void impTransliterateImpl(OUStringStackBuffer64& rStr, const SvNumberNatNum& rNum) const;
     SVL_DLLPRIVATE OUString impTransliterateImpl(const OUString& rStr, const SvNumberNatNum& rNum, sal_uInt16 nDateKey) const;
 
     OUString impTransliterate(const OUString& rStr, const SvNumberNatNum& rNum) const
@@ -729,7 +733,7 @@ private:
         return rNum.IsComplete() ? impTransliterateImpl(rStr, rNum) : rStr;
     }
 
-    SVL_DLLPRIVATE void impTransliterate(OUStringBuffer& rStr, const SvNumberNatNum& rNum) const
+    SVL_DLLPRIVATE void impTransliterate(OUStringStackBuffer64& rStr, const SvNumberNatNum& rNum) const
     {
         if(rNum.IsComplete())
         {
