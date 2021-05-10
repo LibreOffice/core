@@ -6117,11 +6117,11 @@ static void preloadData()
     rtl::Bootstrap::set("UserInstallation", sUserPath);
 }
 
-class ProfileZoneDumper : public AutoTimer
+class TraceEventDumper : public AutoTimer
 {
     static const int dumpTimeoutMS = 5000;
 public:
-    ProfileZoneDumper() : AutoTimer( "zone dumper" )
+    TraceEventDumper() : AutoTimer( "Trace Event dumper" )
     {
         SetTimeout(dumpTimeoutMS);
         Start();
@@ -6136,9 +6136,12 @@ public:
             aOutput.append(OUStringToOString(s, RTL_TEXTENCODING_UTF8));
             aOutput.append("\n");
         }
-        OString aChunk = aOutput.makeStringAndClear();
-        if (gImpl && gImpl->mpCallback)
-            gImpl->mpCallback(LOK_CALLBACK_PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
+        if (aOutput.getLength() > 0)
+        {
+            OString aChunk = aOutput.makeStringAndClear();
+            if (gImpl && gImpl->mpCallback)
+                gImpl->mpCallback(LOK_CALLBACK_PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
+        }
     }
 };
 
@@ -6210,7 +6213,13 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (bProfileZones && eStage == SECOND_INIT)
     {
         comphelper::TraceEvent::startRecording();
-        new ProfileZoneDumper();
+    }
+
+    if (eStage == SECOND_INIT)
+    {
+        // We need the TraceEventDumper even if Trace Event recording is not on from the start, as it
+        // can be turned on on-the-fly.
+        new TraceEventDumper();
     }
 
     comphelper::ProfileZone aZone("lok-init");
