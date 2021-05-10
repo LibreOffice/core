@@ -5191,7 +5191,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
 }
 
 // formats the string for the XML stream
-static void escapeStringXML( const OUString& rStr, OUString &rValue)
+void escapeStringXML(const OUString& rStr, OUString &rValue)
 {
     const sal_Unicode* pUni = rStr.getStr();
     int nLen = rStr.getLength();
