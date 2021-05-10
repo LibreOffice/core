@@ -2432,12 +2432,12 @@ class FilterEntriesHandler
 
         const SvxBrushItem* pBrush = rColumn.GetDoc().GetAttr(aPos, ATTR_BACKGROUND);
         Color backgroundColor = pBrush->GetColor();
+        mrFilterEntries.addTextColor(textColor);
+        mrFilterEntries.addBackgroundColor(backgroundColor);
 
         if (rCell.hasString())
         {
             mrFilterEntries.push_back(ScTypedStrData(aStr));
-            mrFilterEntries.addTextColor(textColor);
-            mrFilterEntries.addBackgroundColor(backgroundColor);
             return;
         }
 
@@ -2460,8 +2460,6 @@ class FilterEntriesHandler
                     if (!aErr.isEmpty())
                     {
                         mrFilterEntries.push_back(ScTypedStrData(aErr));
-                        mrFilterEntries.addTextColor(textColor);
-                        mrFilterEntries.addBackgroundColor(backgroundColor);
                         return;
                     }
                 }
@@ -2499,8 +2497,6 @@ class FilterEntriesHandler
         to avoid duplicates in the filter lists with setting the mbIsFormatted */
         bool bFormFiltVal = mrColumn.HasFiltering() && nFormat;
         mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value, bDate, bFormFiltVal));
-        mrFilterEntries.addTextColor(textColor);
-        mrFilterEntries.addBackgroundColor(backgroundColor);
     }
 
 public:

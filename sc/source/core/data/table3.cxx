@@ -2817,7 +2817,21 @@ bool ScTable::ValidQuery(
         {
             for (const auto& rItem : rItems)
             {
-                if (aEval.isQueryByValue(rItem, nCol, nRow, aCell))
+                if (rItem.meType == ScQueryEntry::ByTextColor)
+                {
+                    std::pair<bool, bool> aThisRes
+                        = aEval.compareByTextColor(nCol, nRow, nTab, rItem);
+                    aRes.first |= aThisRes.first;
+                    aRes.second |= aThisRes.second;
+                }
+                else if (rItem.meType == ScQueryEntry::ByBackgroundColor)
+                {
+                    std::pair<bool,bool> aThisRes =
+                        aEval.compareByBackgroundColor(nCol, nRow, nTab, rItem);
+                    aRes.first |= aThisRes.first;
+                    aRes.second |= aThisRes.second;
+                }
+                else if (aEval.isQueryByValue(rItem, nCol, nRow, aCell))
                 {
                     std::pair<bool,bool> aThisRes =
                         aEval.compareByValue(aCell, nCol, nRow, rEntry, rItem, pContext);
@@ -2828,20 +2842,6 @@ bool ScTable::ValidQuery(
                 {
                     std::pair<bool,bool> aThisRes =
                         aEval.compareByString(aCell, nRow, rEntry, rItem, pContext);
-                    aRes.first |= aThisRes.first;
-                    aRes.second |= aThisRes.second;
-                }
-                if (rItem.meType == ScQueryEntry::ByTextColor)
-                {
-                    std::pair<bool, bool> aThisRes
-                        = aEval.compareByTextColor(nCol, nRow, nTab, rItem);
-                    aRes.first |= aThisRes.first;
-                    aRes.second |= aThisRes.second;
-                }
-                if (rItem.meType == ScQueryEntry::ByBackgroundColor)
-                {
-                    std::pair<bool,bool> aThisRes =
-                        aEval.compareByBackgroundColor(nCol, nRow, nTab, rItem);
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }

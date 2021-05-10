@@ -173,6 +173,12 @@ public:
     int GetTextWidth(const OUString& rsName) const;
     int IncreaseWindowWidthToFitText(int nMaxTextWidth);
 
+    /**
+     * Dismiss all visible popup menus and set focus back to the application
+     * window.  This method is called e.g. when a menu action is fired.
+     */
+    void terminateAllPopupMenus();
+
 private:
 
     std::vector<MenuItemData>         maMenuItems;
@@ -199,12 +205,6 @@ private:
     std::unique_ptr<weld::TreeIter> FindEntry(const weld::TreeIter* pParent, std::u16string_view sNode);
 
     void executeMenuItem(size_t nPos);
-
-    /**
-     * Dismiss all visible popup menus and set focus back to the application
-     * window.  This method is called e.g. when a menu action is fired.
-     */
-    void terminateAllPopupMenus();
 
     void endSubMenu(ScCheckListMenuControl& rSubMenu);
 
