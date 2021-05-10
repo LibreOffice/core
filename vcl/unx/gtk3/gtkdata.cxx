@@ -499,9 +499,10 @@ void GtkSalData::Init()
     }
 
     // init gtk/gdk
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_init_check();
+#else
     gtk_init_check( &nParams, &pCmdLineAry );
-    gdk_error_trap_push();
 #endif
 
     for (int i = 0; i < nParams; ++i)
@@ -531,6 +532,8 @@ void GtkSalData::Init()
         fflush( stderr );
         exit(0);
     }
+
+    ErrorTrapPush();
 
 #if defined(GDK_WINDOWING_X11)
     if (DLSYM_GDK_IS_X11_DISPLAY(pGdkDisp))
@@ -586,23 +589,40 @@ void GtkSalData::Init()
 
 void GtkSalData::ErrorTrapPush()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gdk_error_trap_push ();
+#if GTK_CHECK_VERSION(4, 0, 0)
+# if defined(GDK_WINDOWING_X11)
+    GdkDisplay* pGdkDisp = gdk_display_get_default();
+    if (DLSYM_GDK_IS_X11_DISPLAY(pGdkDisp))
+        gdk_x11_display_error_trap_push(pGdkDisp);
+# endif
+#else
+    gdk_error_trap_push();
 #endif
 }
 
 bool GtkSalData::ErrorTrapPop( bool bIgnoreError )
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+# if defined(GDK_WINDOWING_X11)
+    GdkDisplay* pGdkDisp = gdk_display_get_default();
+    if (DLSYM_GDK_IS_X11_DISPLAY(pGdkDisp))
+    {
+        if (bIgnoreError)
+        {
+            gdk_x11_display_error_trap_pop_ignored(pGdkDisp); // faster
+            return false;
+        }
+        return gdk_x11_display_error_trap_pop(pGdkDisp) != 0;
+    }
+# endif
+    return false;
+#else
     if (bIgnoreError)
     {
         gdk_error_trap_pop_ignored (); // faster
         return false;
     }
     return gdk_error_trap_pop () != 0;
-#else
-    (void)bIgnoreError;
-    return false;
 #endif
 }
 
