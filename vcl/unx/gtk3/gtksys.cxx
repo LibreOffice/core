@@ -214,21 +214,24 @@ unsigned int GtkSalSystem::GetDisplayBuiltInScreen()
 #endif
 }
 
-tools::Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel (unsigned int nScreen)
+tools::Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel(unsigned int nScreen)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+    GdkRectangle aRect;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GListModel* pList = gdk_display_get_monitors(mpDisplay);
+    GdkMonitor* pMonitor = static_cast<GdkMonitor*>(g_list_model_get_item(pList, nScreen));
+    if (!pMonitor)
+        return tools::Rectangle();
+    gdk_monitor_get_geometry(pMonitor, &aRect);
+#else
     gint nMonitor;
     GdkScreen *pScreen;
-    GdkRectangle aRect;
     pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
     if (!pScreen)
         return tools::Rectangle();
     gdk_screen_get_monitor_geometry (pScreen, nMonitor, &aRect);
-    return tools::Rectangle (Point(aRect.x, aRect.y), Size(aRect.width, aRect.height));
-#else
-    (void)nScreen;
-    return tools::Rectangle();
 #endif
+    return tools::Rectangle (Point(aRect.x, aRect.y), Size(aRect.width, aRect.height));
 }
 
 // convert ~ to indicate mnemonic to '_'
