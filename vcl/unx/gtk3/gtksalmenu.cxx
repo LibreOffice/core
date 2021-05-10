@@ -15,6 +15,7 @@
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/pngwrite.hxx>
+#include <vcl/pdfwriter.hxx> // for escapeStringXML
 
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
@@ -1248,6 +1249,14 @@ void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const 
     OUString aText = rText.replaceAll( "_", "__" );
     // Replace the LibreOffice hotkey identifier with an underscore
     aText = aText.replace( '~', '_' );
+    // quick and easy replacement of & to &amp; etc, for e.g. "Zoom & Pa_n" in impress
+#if GTK_CHECK_VERSION(4, 0, 0)
+    {
+        OUString aTempString;
+        vcl::escapeStringXML(aText, aTempString);
+        aText = aTempString;
+    }
+#endif
     OString aConvertedText = OUStringToOString( aText, RTL_TEXTENCODING_UTF8 );
 
     // Update item text only when necessary.
