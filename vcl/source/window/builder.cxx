@@ -3416,7 +3416,7 @@ namespace
     {
         bool bShift = rKey.second.indexOf("GDK_SHIFT_MASK") != -1;
         bool bMod1 = rKey.second.indexOf("GDK_CONTROL_MASK") != -1;
-        bool bMod2 = rKey.second.indexOf("GDK_MOD1_MASK") != -1;
+        bool bMod2 = rKey.second.indexOf("GDK_ALT_MASK") != -1;
         bool bMod3 = rKey.second.indexOf("GDK_MOD2_MASK") != -1;
 
         if (rKey.first == "Insert")
