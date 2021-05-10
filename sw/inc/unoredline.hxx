@@ -36,7 +36,7 @@ class SwXRedlineText final :
     public cppu::OWeakObject,
     public css::container::XEnumerationAccess
 {
-    SwNodeIndex aNodeIndex;
+    SwNodeIndex m_aNodeIndex;
     virtual const SwStartNode *GetStartNode() const override;
 
 public:
@@ -68,8 +68,8 @@ class SwXRedline final
     , public SwXText
     , public SvtListener
 {
-    SwDoc*      pDoc;
-    SwRangeRedline*  pRedline;
+    SwDoc*      m_pDoc;
+    SwRangeRedline*  m_pRedline;
 public:
     SwXRedline(SwRangeRedline& rRedline, SwDoc& rDoc);
     virtual ~SwXRedline() override;
@@ -102,7 +102,7 @@ public:
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 
-    const SwRangeRedline*    GetRedline() const {return pRedline;}
+    const SwRangeRedline*    GetRedline() const {return m_pRedline;}
     virtual void Notify( const SfxHint& ) override;
 };
 

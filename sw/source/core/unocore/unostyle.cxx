@@ -3393,15 +3393,15 @@ const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
 class SwAutoStylesEnumImpl
 {
     std::vector<std::shared_ptr<SfxItemSet>> mAutoStyles;
-    std::vector<std::shared_ptr<SfxItemSet>>::iterator aIter;
-    SwDoc& rDoc;
-    IStyleAccess::SwAutoStyleFamily eFamily;
+    std::vector<std::shared_ptr<SfxItemSet>>::iterator m_aIter;
+    SwDoc& m_rDoc;
+    IStyleAccess::SwAutoStyleFamily m_eFamily;
 public:
     SwAutoStylesEnumImpl( SwDoc& rInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
-    bool hasMoreElements() { return aIter != mAutoStyles.end(); }
-    std::shared_ptr<SfxItemSet> const & nextElement() { return *(aIter++); }
-    IStyleAccess::SwAutoStyleFamily getFamily() const { return eFamily; }
-    SwDoc& getDoc() const { return rDoc; }
+    bool hasMoreElements() { return m_aIter != mAutoStyles.end(); }
+    std::shared_ptr<SfxItemSet> const & nextElement() { return *(m_aIter++); }
+    IStyleAccess::SwAutoStyleFamily getFamily() const { return m_eFamily; }
+    SwDoc& getDoc() const { return m_rDoc; }
 };
 
 SwXAutoStyles::SwXAutoStyles(SwDocShell& rDocShell) :
@@ -3767,13 +3767,13 @@ sal_Bool SwXAutoStyleFamily::hasElements(  )
 }
 
 SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc& rInitDoc, IStyleAccess::SwAutoStyleFamily eFam )
-: rDoc( rInitDoc ), eFamily( eFam )
+: m_rDoc( rInitDoc ), m_eFamily( eFam )
 {
     // special case for ruby auto styles:
     if ( IStyleAccess::AUTO_STYLE_RUBY == eFam )
     {
         std::set< std::pair< sal_uInt16, text::RubyAdjust > > aRubyMap;
-        SwAttrPool& rAttrPool = rDoc.GetAttrPool();
+        SwAttrPool& rAttrPool = m_rDoc.GetAttrPool();
 
         // do this in two phases otherwise we invalidate the iterators when we insert into the pool
         std::vector<const SwFormatRuby*> vRubyItems;
@@ -3796,10 +3796,10 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc& rInitDoc, IStyleAccess::SwAut
     }
     else
     {
-        rDoc.GetIStyleAccess().getAllStyles( mAutoStyles, eFamily );
+        m_rDoc.GetIStyleAccess().getAllStyles( mAutoStyles, m_eFamily );
     }
 
-    aIter = mAutoStyles.begin();
+    m_aIter = mAutoStyles.begin();
 }
 
 SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc& rDoc, IStyleAccess::SwAutoStyleFamily eFam )

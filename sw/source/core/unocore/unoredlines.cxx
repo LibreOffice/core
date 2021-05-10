@@ -115,10 +115,10 @@ beans::XPropertySet* SwXRedlines::GetObject( SwRangeRedline& rRedline, SwDoc& rD
 }
 
 SwXRedlineEnumeration::SwXRedlineEnumeration(SwDoc& rDoc) :
-    pDoc(&rDoc),
-    nCurrentIndex(0)
+    m_pDoc(&rDoc),
+    m_nCurrentIndex(0)
 {
-    StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
 }
 
 SwXRedlineEnumeration::~SwXRedlineEnumeration()
@@ -127,19 +127,19 @@ SwXRedlineEnumeration::~SwXRedlineEnumeration()
 
 sal_Bool SwXRedlineEnumeration::hasMoreElements()
 {
-    if(!pDoc)
+    if(!m_pDoc)
         throw uno::RuntimeException();
-    return pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() > nCurrentIndex;
+    return m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() > m_nCurrentIndex;
 }
 
 uno::Any SwXRedlineEnumeration::nextElement()
 {
-    if(!pDoc)
+    if(!m_pDoc)
         throw uno::RuntimeException();
-    const SwRedlineTable& rRedTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-    if( rRedTable.size() <= nCurrentIndex )
+    const SwRedlineTable& rRedTable = m_pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    if( rRedTable.size() <= m_nCurrentIndex )
         throw container::NoSuchElementException();
-    uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTable[nCurrentIndex++], *pDoc );
+    uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTable[m_nCurrentIndex++], *m_pDoc );
     uno::Any aRet;
     aRet <<= xRet;
     return aRet;
@@ -163,7 +163,7 @@ uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames()
 void SwXRedlineEnumeration::Notify( const SfxHint& rHint )
 {
     if(rHint.GetId() == SfxHintId::Dying)
-        pDoc = nullptr;
+        m_pDoc = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
