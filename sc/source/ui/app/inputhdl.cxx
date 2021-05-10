@@ -1941,7 +1941,7 @@ void ScInputHandler::GetColData()
 
     std::vector<ScTypedStrData> aEntries;
     rDoc.GetDataEntries(
-        aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aEntries, true);
+        aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aEntries);
     if (!aEntries.empty())
         pColumnData->insert(aEntries.begin(), aEntries.end());
 
