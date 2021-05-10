@@ -222,7 +222,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 ))
 
-ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\
 	dbaccess/util/dba \
 ))
@@ -234,7 +234,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 
-ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\
 	dbaccess/source/filter/xml/dbaxml \
 	dbaccess/util/dbu \

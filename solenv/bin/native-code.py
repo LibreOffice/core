@@ -111,13 +111,13 @@ core_constructor_list = [
 # cui/util/cui.component
     "com_sun_star_cui_ColorPicker_get_implementation",
 # dbaccess/util/dba.component
-    "com_sun_star_comp_dba_DataAccessDescriptorFactory",
-    "com_sun_star_comp_dba_OCommandDefinition",
-    "com_sun_star_comp_dba_OComponentDefinition",
-    "com_sun_star_comp_dba_ODatabaseContext_get_implementation",
-    "com_sun_star_comp_dba_ODatabaseDocument",
-    "com_sun_star_comp_dba_ODatabaseSource",
-    "com_sun_star_comp_dba_ORowSet_get_implementation",
+    ("com_sun_star_comp_dba_DataAccessDescriptorFactory", "#ifndef ENABLE_WASM_STRIP_DBACCESS"),
+    ("com_sun_star_comp_dba_OCommandDefinition", "#ifndef ENABLE_WASM_STRIP_DBACCESS"),
+    ("com_sun_star_comp_dba_OComponentDefinition", "#ifndef ENABLE_WASM_STRIP_DBACCESS"),
+    ("com_sun_star_comp_dba_ODatabaseContext_get_implementation", "#ifndef ENABLE_WASM_STRIP_DBACCESS"),
+    ("com_sun_star_comp_dba_ODatabaseDocument", "#ifndef ENABLE_WASM_STRIP_DBACCESS"),
+    ("com_sun_star_comp_dba_ODatabaseSource", "#ifndef ENABLE_WASM_STRIP_DBACCESS"),
+    ("com_sun_star_comp_dba_ORowSet_get_implementation", "#ifndef ENABLE_WASM_STRIP_DBACCESS"),
 # drawinglayer/drawinglayer.component
     "drawinglayer_XPrimitive2DRenderer",
 # embeddedobj/util/embobj.component
