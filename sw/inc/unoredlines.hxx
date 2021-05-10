@@ -68,8 +68,8 @@ class SwXRedlineEnumeration final
     : public SwSimpleEnumeration_Base
     , public SvtListener
 {
-    SwDoc* pDoc;
-    SwRedlineTable::size_type nCurrentIndex;
+    SwDoc* m_pDoc;
+    SwRedlineTable::size_type m_nCurrentIndex;
 
     virtual ~SwXRedlineEnumeration() override;
 public:
