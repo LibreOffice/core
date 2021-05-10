@@ -1076,7 +1076,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         std::vector< XMLPropertyState > aPropertyStates;
         for (const auto & i : pExportHelper)
         {
-            aPropertyStates = i.first->Filter(_xProp);
+            aPropertyStates = i.first->Filter(*this, _xProp);
             if ( !aPropertyStates.empty() )
                 i.second.first->emplace( _xProp,GetAutoStylePool()->Add( i.second.second, aPropertyStates ) );
         }
@@ -1090,7 +1090,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
             GetFontAutoStylePool()->Add(aFont.Name,aFont.StyleName,static_cast<FontFamily>(aFont.Family),
                 static_cast<FontPitch>(aFont.Pitch),aFont.CharSet );
 
-            m_aCurrentPropertyStates = m_xCellExportHelper->Filter(_xProp);
+            m_aCurrentPropertyStates = m_xCellExportHelper->Filter(*this, _xProp);
             if ( !m_aCurrentPropertyStates.empty() && !xCollection->hasElements() )
             {
                 Reference< XDataDescriptorFactory> xFac(xCollection,UNO_QUERY);
@@ -1121,7 +1121,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         };
         for (const auto & i : pExportHelper)
         {
-            std::vector< XMLPropertyState > aPropStates = i.first->Filter( _xProp );
+            std::vector< XMLPropertyState > aPropStates = i.first->Filter(*this, _xProp);
             if ( !aPropStates.empty() )
             {
                 const rtl::Reference < XMLPropertySetMapper >& pStyle = i.first->getPropertySetMapper();

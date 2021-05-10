@@ -227,7 +227,8 @@ void SwXMLImportTableItemMapper_Impl::finished(
 void SwXMLImport::InitItemImport()
 {
     m_pTwipUnitConv.reset( new SvXMLUnitConverter( GetComponentContext(),
-            util::MeasureUnit::TWIP, util::MeasureUnit::TWIP ) );
+            util::MeasureUnit::TWIP, util::MeasureUnit::TWIP,
+            SvtSaveOptions::ODFSVER_LATEST_EXTENDED) );
 
     m_xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
     m_xTableColItemMap = new SvXMLItemMapEntries( aXMLTableColItemMap );

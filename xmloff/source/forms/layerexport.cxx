@@ -569,7 +569,7 @@ namespace xmloff
                 // determine a number style, if needed
                 xColumnPropertiesMeta = xColumnProperties->getPropertySetInfo();
                 // get the styles of the column
-                ::std::vector< XMLPropertyState > aPropertyStates = m_xStyleExportMapper->Filter( xColumnProperties );
+                ::std::vector<XMLPropertyState> aPropertyStates = m_xStyleExportMapper->Filter(m_rContext, xColumnProperties);
 
                 // care for the number format, additionally
                 OUString sColumnNumberStyle;

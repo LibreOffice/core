@@ -66,6 +66,7 @@ struct SvXMLUnitConverter::Impl
 {
     sal_Int16 m_eCoreMeasureUnit; /*css::util::MeasureUnit*/
     sal_Int16 m_eXMLMeasureUnit; /*css::util::MeasureUnit*/
+    SvtSaveOptions::ODFSaneDefaultVersion m_eODFVersion;
     util::Date m_aNullDate;
     mutable uno::Reference< text::XNumberingTypeInfo > m_xNumTypeInfo;
     mutable uno::Reference< i18n::XCharacterClassification > m_xCharClass;
@@ -73,9 +74,11 @@ struct SvXMLUnitConverter::Impl
 
     Impl(uno::Reference<uno::XComponentContext> const& xContext,
             sal_Int16 const eCoreMeasureUnit,
-            sal_Int16 const eXMLMeasureUnit)
+            sal_Int16 const eXMLMeasureUnit,
+            SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion)
         : m_eCoreMeasureUnit(eCoreMeasureUnit)
         , m_eXMLMeasureUnit(eXMLMeasureUnit)
+        , m_eODFVersion(nODFVersion)
         , m_aNullDate(30, 12, 1899)
         , m_xContext(xContext)
     {
@@ -117,6 +120,17 @@ sal_Int16 SvXMLUnitConverter::GetXMLMeasureUnit() const
     return m_pImpl->m_eXMLMeasureUnit;
 }
 
+SvtSaveOptions::ODFSaneDefaultVersion SvXMLUnitConverter::getSaneDefaultVersion() const
+{
+    return m_pImpl->m_eODFVersion;
+}
+
+void SvXMLUnitConverter::overrideSaneDefaultVersion(
+        SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion)
+{
+    m_pImpl->m_eODFVersion = nODFVersion;
+}
+
 /** constructs a SvXMLUnitConverter. The core measure unit is the
     default unit for numerical measures, the XML measure unit is
     the default unit for textual measures
@@ -125,8 +139,9 @@ sal_Int16 SvXMLUnitConverter::GetXMLMeasureUnit() const
 SvXMLUnitConverter::SvXMLUnitConverter(
     const uno::Reference<uno::XComponentContext>& xContext,
     sal_Int16 const eCoreMeasureUnit,
-    sal_Int16 const eXMLMeasureUnit)
-: m_pImpl(new Impl(xContext, eCoreMeasureUnit, eXMLMeasureUnit))
+    sal_Int16 const eXMLMeasureUnit,
+    SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion)
+: m_pImpl(new Impl(xContext, eCoreMeasureUnit, eXMLMeasureUnit, nODFVersion))
 {
 }
 

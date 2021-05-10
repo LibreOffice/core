@@ -402,7 +402,8 @@ SvXMLImport::SvXMLImport(
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
     mpUnitConv( new SvXMLUnitConverter( xContext,
-                util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH) ),
+                util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH,
+                SvtSaveOptions::ODFSVER_LATEST_EXTENDED) ),
 
     mnImportFlags( nImportFlags ),
     maNamespaceHandler( new SvXMLImportFastNamespaceHandler() ),
