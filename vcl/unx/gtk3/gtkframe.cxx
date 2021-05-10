@@ -986,15 +986,16 @@ void GtkSalFrame::InitCommon()
 #if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pWindow), "map-event", G_CALLBACK(signalMap), this );
     g_signal_connect( G_OBJECT(m_pWindow), "unmap-event", G_CALLBACK(signalUnmap), this );
+    g_signal_connect( G_OBJECT(m_pWindow), "delete-event", G_CALLBACK(signalDelete), this );
 #else
     g_signal_connect( G_OBJECT(m_pWindow), "map", G_CALLBACK(signalMap), this );
     g_signal_connect( G_OBJECT(m_pWindow), "unmap", G_CALLBACK(signalUnmap), this );
+    g_signal_connect( G_OBJECT(m_pWindow), "close-request", G_CALLBACK(signalDelete), this );
 #endif
 #if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pWindow), "configure-event", G_CALLBACK(signalConfigure), this );
     g_signal_connect( G_OBJECT(m_pWindow), "key-press-event", G_CALLBACK(signalKey), this );
     g_signal_connect( G_OBJECT(m_pWindow), "key-release-event", G_CALLBACK(signalKey), this );
-    g_signal_connect( G_OBJECT(m_pWindow), "delete-event", G_CALLBACK(signalDelete), this );
     g_signal_connect( G_OBJECT(m_pWindow), "window-state-event", G_CALLBACK(signalWindowState), this );
 #endif
     g_signal_connect( G_OBJECT(m_pWindow), "destroy", G_CALLBACK(signalDestroy), this );
@@ -3744,14 +3745,30 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
 
     return bStopProcessingKey;
 }
+#endif
 
-gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
+bool GtkSalFrame::WindowCloseRequest()
 {
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->CallCallbackExc( SalEvent::Close, nullptr );
+    SolarMutexGuard aGuard;
+    CallCallbackExc(SalEvent::Close, nullptr);
     return true;
 }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+gboolean GtkSalFrame::signalDelete(GtkWidget*, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    return pThis->WindowCloseRequest();
+}
+#else
+gboolean GtkSalFrame::signalDelete(GtkWidget*, GdkEvent*, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    return pThis->WindowCloseRequest();
+}
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 void GtkSalFrame::signalStyleUpdated(GtkWidget*, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
