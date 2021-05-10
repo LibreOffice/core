@@ -77,6 +77,7 @@ private:
     bool handleNetworkException(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest);
     bool handlePasswordRequest(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest);
     bool handleFilterOptionsRequest(const ::com::sun::star::uno::Reference<::com::sun::star::task::XInteractionRequest>& Request);
+    bool handleMacroConfirmationRequest(const css::uno::Reference<css::task::XInteractionRequest>& xRequest);
 
 public:
     void SetPassword(char const* pPassword);

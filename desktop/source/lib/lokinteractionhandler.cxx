@@ -350,6 +350,23 @@ bool LOKInteractionHandler::handleFilterOptionsRequest(const uno::Reference<task
     return false;
 }
 
+bool LOKInteractionHandler::handleMacroConfirmationRequest(const uno::Reference<task::XInteractionRequest>& xRequest)
+{
+    uno::Any const request(xRequest->getRequest());
+
+    task::DocumentMacroConfirmationRequest aConfirmRequest;
+    if (request >>= aConfirmRequest)
+    {
+        auto xInteraction(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr));
+
+        if (xInteraction.is())
+            xInteraction->handleInteractionRequest(xRequest);
+
+        return true;
+    }
+    return false;
+}
+
 sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
         const uno::Reference<task::XInteractionRequest>& xRequest)
 {
@@ -368,18 +385,8 @@ sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
     if (handleFilterOptionsRequest(xRequest))
         return true;
 
-    task::DocumentMacroConfirmationRequest aConfirmRequest;
-    if (request >>= aConfirmRequest)
-    {
-        uno::Reference< task::XInteractionHandler2 > xInteraction(
-            task::InteractionHandler::createWithParent(
-                ::comphelper::getProcessComponentContext(), nullptr));
-
-        if (xInteraction.is())
-            xInteraction->handleInteractionRequest(xRequest);
-
+     if (handleMacroConfirmationRequest(xRequest))
         return true;
-    }
 
     // TODO: perform more interactions 'for real' like the above
     selectApproved(rContinuations);
