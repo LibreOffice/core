@@ -944,6 +944,7 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "enter-notify-event", G_CALLBACK(signalCrossing), this ));
 #else
     GtkGesture *pClick = gtk_gesture_click_new();
+    gtk_gesture_single_set_button(GTK_GESTURE_SINGLE(pClick), 0);
     gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pClick));
     g_signal_connect(pClick, "pressed", G_CALLBACK(gesturePressed), this);
     g_signal_connect(pClick, "released", G_CALLBACK(gestureReleased), this);
