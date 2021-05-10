@@ -1004,6 +1004,11 @@ void GtkSalFrame::InitCommon()
     g_signal_connect_after( G_OBJECT(m_pWindow), "focus-out-event", G_CALLBACK(signalFocus), this );
     if (GTK_IS_WINDOW(m_pWindow)) // i.e. not if it's a GtkEventBox which doesn't have the signal
         m_nSetFocusSignalId = g_signal_connect( G_OBJECT(m_pWindow), "set-focus", G_CALLBACK(signalSetFocus), this );
+#else
+    GtkEventController* pFocusController = gtk_event_controller_focus_new();
+    g_signal_connect(pFocusController, "enter", G_CALLBACK(signalFocusEnter), this);
+    g_signal_connect(pFocusController, "leave", G_CALLBACK(signalFocusLeave), this);
+    gtk_widget_add_controller(pEventWidget, pFocusController);
 #endif
 #if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pWindow), "map-event", G_CALLBACK(signalMap), this );
@@ -3511,6 +3516,36 @@ void GtkSalFrame::TriggerPaintEvent()
     gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
 }
 
+void GtkSalFrame::DrawingAreaFocusInOut(SalEvent nEventType)
+{
+    SalGenericInstance* pSalInstance =
+        static_cast<SalGenericInstance*>(GetSalData()->m_pInstance);
+
+    // check if printers have changed (analogous to salframe focus handler)
+    pSalInstance->updatePrinterUpdate();
+
+    if (nEventType == SalEvent::LoseFocus)
+        m_nKeyModifiers = ModKeyFlags::NONE;
+
+    if (m_pIMHandler)
+    {
+        bool bFocusInAnotherGtkWidget = false;
+        if (GTK_IS_WINDOW(m_pWindow))
+        {
+            GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(m_pWindow));
+            bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(m_pFixedContainer);
+        }
+        if (!bFocusInAnotherGtkWidget)
+            m_pIMHandler->focusChanged(nEventType == SalEvent::GetFocus);
+    }
+
+    // ask for changed printers like generic implementation
+    if (nEventType == SalEvent::GetFocus && pSalInstance->isPrinterInit())
+        pSalInstance->updatePrinterUpdate();
+
+    CallCallbackExc(nEventType, nullptr);
+}
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer frame )
 {
@@ -3559,7 +3594,21 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
 
     return false;
 }
+#else
+void GtkSalFrame::signalFocusEnter(GtkEventControllerFocus*, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->DrawingAreaFocusInOut(SalEvent::GetFocus);
+}
 
+void GtkSalFrame::signalFocusLeave(GtkEventControllerFocus*, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->DrawingAreaFocusInOut(SalEvent::LoseFocus);
+}
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 // change of focus between native widgets within the toplevel
 void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
 {
