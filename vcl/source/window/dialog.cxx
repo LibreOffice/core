@@ -1035,10 +1035,6 @@ void Dialog::ImplEndExecuteModal()
 
 short Dialog::Execute()
 {
-// Once the Android app is based on same idea as the iOS one currently
-// being developed, no conditional should be needed here. Until then,
-// play it safe.
-#if HAVE_FEATURE_DESKTOP || defined IOS || HAVE_FEATURE_ANDROID_LOK
     VclPtr<vcl::Window> xWindow = this;
 
     mbInSyncExecute = true;
@@ -1069,10 +1065,6 @@ short Dialog::Execute()
     mpDialogImpl->mnResult = -1;
 
     return static_cast<short>(nRet);
-
-#else
-    return RET_OK;
-#endif
 }
 
 // virtual
