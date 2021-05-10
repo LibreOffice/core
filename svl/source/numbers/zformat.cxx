@@ -26,6 +26,7 @@
 #include <tools/long.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ustrsbuf.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
@@ -80,6 +81,23 @@ const sal_uInt8 cCharWidths[ 128-32 ] = {
 
 // static
 sal_Int32 SvNumberformat::InsertBlanks( OUStringBuffer& r, sal_Int32 nPos, sal_Unicode c )
+{
+    if( c >= 32 )
+    {
+        int n = 2;   // Default for chars > 128 (HACK!)
+        if( c <= 127 )
+        {
+            n = static_cast<int>(cCharWidths[ c - 32 ]);
+        }
+        while( n-- )
+        {
+            r.insert( nPos++, ' ');
+        }
+    }
+    return nPos;
+}
+
+sal_Int32 SvNumberformat::InsertBlanks( OUStringStackBuffer64& r, sal_Int32 nPos, sal_Unicode c )
 {
     if( c >= 32 )
     {
@@ -369,6 +387,17 @@ SvNumberformat::SvNumberformat( SvNumberformat const & rFormat, ImpSvNumberforma
     , bStarFlag( rFormat.bStarFlag )
 {
     ImpCopyNumberformat( rFormat );
+}
+
+void lcl_padToLength(
+    OUStringStackBuffer64& rBuffer, sal_Int32 nLength,
+    sal_Unicode cFill = '\0')
+{
+    while (nLength > rBuffer.getLength())
+    {
+        rBuffer.append(cFill);
+        --nLength;
+    }
 }
 
 static bool lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
@@ -2017,7 +2046,7 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
     return aTmp.makeStringAndClear();
 }
 
-void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& rOutString) const
+void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringStackBuffer64& rOutString) const
 {
     OUString sTemp;
     ImpGetOutputStandard(fNumber, sTemp);
@@ -2138,6 +2167,19 @@ short SvNumberformat::ImpCheckCondition(double fNumber,
     }
 }
 
+static bool lcl_appendStarFillChar( OUStringStackBuffer64& rBuf, const OUString& rStr )
+{
+    // Right during user input the star symbol is the very
+    // last character before the user enters another one.
+    if (rStr.getLength() > 1)
+    {
+        rBuf.append(u'\x001B');
+        rBuf.append(rStr[1]);
+        return true;
+    }
+    return false;
+}
+
 static bool lcl_appendStarFillChar( OUStringBuffer& rBuf, const OUString& rStr )
 {
     // Right during user input the star symbol is the very
@@ -2152,6 +2194,17 @@ static bool lcl_appendStarFillChar( OUStringBuffer& rBuf, const OUString& rStr )
 }
 
 static bool lcl_insertStarFillChar( OUStringBuffer& rBuf, sal_Int32 nPos, const OUString& rStr )
+{
+    if (rStr.getLength() > 1)
+    {
+        rBuf.insert( nPos, rStr[1]);
+        rBuf.insert( nPos, u'\x001B');
+        return true;
+    }
+    return false;
+}
+
+static bool lcl_insertStarFillChar( OUStringStackBuffer64& rBuf, sal_Int32 nPos, const OUString& rStr )
 {
     if (rStr.getLength() > 1)
     {
@@ -2460,11 +2513,11 @@ bool SvNumberformat::GetOutputString(double fNumber,
         }
         return false;
     }
-    OUStringBuffer sBuff(64);
+    OUStringStackBuffer64 sBuff;
     if (eType & SvNumFormatType::TEXT)
     {
         ImpGetOutputStandard(fNumber, sBuff);
-        OutString = sBuff.makeStringAndClear();
+        OutString = sBuff.toString();
         return false;
     }
     bool bHadStandard = false;
@@ -2549,7 +2602,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
         else if (nCnt == 0) // Else Standard Format
         {
             ImpGetOutputStandard(fNumber, sBuff);
-            OutString = sBuff.makeStringAndClear();
+            OutString = sBuff.toString();
             return false;
         }
         switch (rInfo.eScannedType)
@@ -2608,13 +2661,13 @@ bool SvNumberformat::GetOutputString(double fNumber,
         default: break;
         }
     }
-    OutString = sBuff.makeStringAndClear();
+    OutString = sBuff.toString();
     return bRes;
 }
 
 bool SvNumberformat::ImpGetScientificOutput(double fNumber,
                                             sal_uInt16 nIx,
-                                            OUStringBuffer& sStr)
+                                            OUStringStackBuffer64& sStr)
 {
     bool bRes = false;
     bool bSign = false;
@@ -2634,7 +2687,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     sStr = ::rtl::math::doubleToUString( fNumber,
                                          rtl_math_StringFormat_E,
                                          rInfo.nCntPre + rInfo.nCntPost - 1, '.' );
-    OUStringBuffer ExpStr;
+    OUStringStackBuffer64 ExpStr;
     short nExpSign = 1;
     sal_Int32 nExPos = sStr.indexOf('E');
     sal_Int32 nDecPos = -1;
@@ -2843,12 +2896,12 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
 
 bool SvNumberformat::ImpGetFractionOutput(double fNumber,
                                           sal_uInt16 nIx,
-                                          OUStringBuffer& sBuff)
+                                          OUStringStackBuffer64& sBuff)
 {
     bool bRes = false;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const sal_uInt16 nCnt = NumFor[nIx].GetCount();
-    OUStringBuffer sStr, sFrac, sDiv; // Strings, value for Integral part Numerator and denominator
+    OUStringStackBuffer64 sStr, sFrac, sDiv; // Strings, value for Integral part Numerator and denominator
     bool bSign = ( (fNumber < 0) && (nIx == 0) ); // sign Not in the ones at the end
     const OUString sIntegerFormat = lcl_GetFractionIntegerString(rInfo, nCnt);
     const OUString sNumeratorFormat = lcl_GetNumeratorString(rInfo, nCnt);
@@ -2998,7 +3051,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     return bRes;
 }
 
-sal_uInt16 SvNumberformat::ImpGetFractionOfSecondString( OUStringBuffer& rBuf, double fFractionOfSecond,
+sal_uInt16 SvNumberformat::ImpGetFractionOfSecondString( OUStringStackBuffer64& rBuf, double fFractionOfSecond,
         int nFractionDecimals, bool bAddOneRoundingDecimal, sal_uInt16 nIx, sal_uInt16 nMinimumInputLineDecimals )
 {
     if (!nFractionDecimals)
@@ -3031,7 +3084,7 @@ sal_uInt16 SvNumberformat::ImpGetFractionOfSecondString( OUStringBuffer& rBuf, d
 
 bool SvNumberformat::ImpGetTimeOutput(double fNumber,
                                       sal_uInt16 nIx,
-                                      OUStringBuffer& sBuff)
+                                      OUStringStackBuffer64& sBuff)
 {
     using namespace ::com::sun::star::i18n;
     bool bCalendarSet = false;
@@ -3061,7 +3114,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         nCntPost = rInfo.nCntPost;
     }
 
-    OUStringBuffer sSecStr;
+    OUStringStackBuffer64 sSecStr;
     sal_Int32 nSecPos = 0; // For figure by figure processing
     sal_uInt32 nHour, nMin, nSec;
     if (!rInfo.bThousand) // No [] format
@@ -3477,7 +3530,7 @@ bool SvNumberformat::ImpSwitchToSpecifiedCalendar( OUString& rOrgCalendar,
 #endif
 
 // static
-void SvNumberformat::ImpAppendEraG( OUStringBuffer& OutString,
+void SvNumberformat::ImpAppendEraG( OUStringStackBuffer64& OutString,
                                     const CalendarWrapper& rCal,
                                     sal_Int16 nNatNum )
 {
@@ -3629,7 +3682,7 @@ static bool lcl_isSignedYear( const CalendarWrapper& rCal, const ImpSvNumFor& rN
 
 bool SvNumberformat::ImpGetDateOutput(double fNumber,
                                       sal_uInt16 nIx,
-                                      OUStringBuffer& sBuff)
+                                      OUStringStackBuffer64& sBuff)
 {
     using namespace ::com::sun::star::i18n;
     bool bRes = false;
@@ -3816,15 +3869,14 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             aStr = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
             if (aStr.getLength() < 4)
             {
-                using namespace comphelper::string;
                 // Ensure that year consists of at least 4 digits, so it
                 // can be distinguished from 2 digits display and edited
                 // without suddenly being hit by the 2-digit year magic.
-                OUStringBuffer aBuf;
-                padToLength(aBuf, 4 - aStr.getLength(), '0');
+                OUStringStackBuffer64 aBuf;
+                lcl_padToLength(aBuf, 4 - aStr.getLength(), '0');
                 impTransliterate(aBuf, NumFor[nIx].GetNatNum());
                 aBuf.append(aStr);
-                aStr = aBuf.makeStringAndClear();
+                aStr = aBuf.toString();
             }
             // NatNum12: support variants of preposition, suffixation or article
             if ( bUseSpellout )
@@ -3889,7 +3941,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
 
 bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                                           sal_uInt16 nIx,
-                                          OUStringBuffer& sBuff)
+                                          OUStringStackBuffer64& sBuff)
 {
     using namespace ::com::sun::star::i18n;
     bool bRes = false;
@@ -3937,7 +3989,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     }
     sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
 
-    OUStringBuffer sSecStr;
+    OUStringStackBuffer64 sSecStr;
     sal_Int32 nSecPos = 0; // For figure by figure processing
     sal_uInt32 nHour, nMin, nSec;
     if (!rInfo.bThousand) // No [] format
@@ -4175,12 +4227,11 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             aYear = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
             if (aYear.getLength() < 4)
             {
-                using namespace comphelper::string;
                 // Ensure that year consists of at least 4 digits, so it
                 // can be distinguished from 2 digits display and edited
                 // without suddenly being hit by the 2-digit year magic.
-                OUStringBuffer aBuf;
-                padToLength(aBuf, 4 - aYear.getLength(), '0');
+                OUStringStackBuffer64 aBuf;
+                lcl_padToLength(aBuf, 4 - aYear.getLength(), '0');
                 impTransliterate(aBuf, NumFor[nIx].GetNatNum());
                 aBuf.append(aYear);
                 sBuff.append(aBuf);
@@ -4239,7 +4290,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
 
 bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                                         sal_uInt16 nIx,
-                                        OUStringBuffer& sStr)
+                                        OUStringStackBuffer64& sStr)
 {
     bool bRes = false;
     bool bSign;
@@ -4352,7 +4403,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     return bRes;
 }
 
-bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
+bool SvNumberformat::ImpDecimalFill( OUStringStackBuffer64& sStr,  // number string
                                    double& rNumber,       // number
                                    sal_Int32 nDecPos,     // decimals start
                                    sal_uInt16 j,          // symbol index within format code
@@ -4454,10 +4505,10 @@ bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
                 break;
             case NF_KEY_GENERAL: // Standard in the String
             {
-                OUStringBuffer sNum;
+                OUStringStackBuffer64 sNum;
                 ImpGetOutputStandard(rNumber, sNum);
                 sNum.stripStart('-');
-                sStr.insert(k, sNum.makeStringAndClear());
+                sStr.insert(k, sNum);
                 break;
             }
             default:
@@ -4473,7 +4524,7 @@ bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
     return bRes;
 }
 
-bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // number string
+bool SvNumberformat::ImpNumberFillWithThousands( OUStringStackBuffer64& sBuff,  // number string
                                                  double& rNumber,       // number
                                                  sal_Int32 k,           // position within string
                                                  sal_uInt16 j,          // symbol index within format code
@@ -4614,10 +4665,10 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
             break;
         case NF_KEY_GENERAL: // "General" in string
         {
-            OUStringBuffer sNum;
+            OUStringStackBuffer64 sNum;
             ImpGetOutputStandard(rNumber, sNum);
             sNum.stripStart('-');
-            sBuff.insert(k, sNum.makeStringAndClear());
+            sBuff.insert(k, sNum);
             break;
         }
         default:
@@ -4634,7 +4685,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
     return bRes;
 }
 
-void SvNumberformat::ImpDigitFill(OUStringBuffer& sStr,     // number string
+void SvNumberformat::ImpDigitFill(OUStringStackBuffer64& sStr,     // number string
                                   sal_Int32 nStart,         // start of digits
                                   sal_Int32 & k,            // position within string
                                   sal_uInt16 nIx,           // subformat index
@@ -4661,7 +4712,7 @@ void SvNumberformat::ImpDigitFill(OUStringBuffer& sStr,     // number string
     }
 }
 
-bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
+bool SvNumberformat::ImpNumberFill( OUStringStackBuffer64& sBuff, // number string
                                     double& rNumber,       // number for "General" format
                                     sal_Int32& k,          // position within string
                                     sal_uInt16& j,         // symbol index within format code
@@ -4749,11 +4800,11 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
             break;
         case NF_KEY_GENERAL: // Standard in the String
         {
-            OUStringBuffer sNum;
+            OUStringStackBuffer64 sNum;
             bFoundNumber = true;
             ImpGetOutputStandard(rNumber, sNum);
             sNum.stripStart('-');
-            sBuff.insert(k, sNum.makeStringAndClear());
+            sBuff.insert(k, sNum);
         }
         break;
         case NF_SYMBOLTYPE_FRAC_FDIV: // Do Nothing
@@ -5561,7 +5612,7 @@ OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
                                                                    rNum.GetParams());
 }
 
-void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
+void SvNumberformat::impTransliterateImpl(OUStringStackBuffer64& rStr,
                                           const SvNumberNatNum& rNum ) const
 {
     css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
