@@ -456,6 +456,25 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     // don't allow any more to appear until menu is dismissed
     mpFrame->BlockTooltip();
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
+    aFloatRect.Move(-mpFrame->maGeometry.nX, -mpFrame->maGeometry.nY);
+    GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
+                       static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
+
+    gtk_popover_set_pointing_to(GTK_POPOVER(pWidget), &rect);
+
+    if (nFlags & FloatWinPopupFlags::Left)
+        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_LEFT);
+    else if (nFlags & FloatWinPopupFlags::Up)
+        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_TOP);
+    else if (nFlags & FloatWinPopupFlags::Right)
+        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_RIGHT);
+    else
+        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_BOTTOM);
+
+    gtk_popover_popup(GTK_POPOVER(pWidget));
+#else
 #if GTK_CHECK_VERSION(3,22,0)
     if (gtk_check_version(3, 22, 0) == nullptr)
     {
@@ -464,7 +483,6 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
         GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
                            static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GdkGravity rect_anchor = GDK_GRAVITY_SOUTH_WEST, menu_anchor = GDK_GRAVITY_NORTH_WEST;
 
         if (nFlags & FloatWinPopupFlags::Left)
@@ -484,17 +502,10 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 
         GdkWindow* gdkWindow = gtk_widget_get_window(mpFrame->getMouseEventWidget());
         gtk_menu_popup_at_rect(GTK_MENU(pWidget), gdkWindow, &rect, rect_anchor, menu_anchor, nullptr);
-#else
-        gtk_popover_set_pointing_to(GTK_POPOVER(pWidget), &rect);
-        (void)nFlags;
-        //TODO use gtk_popover_set_position
-        gtk_popover_popup(GTK_POPOVER(pWidget));
-#endif
     }
     else
 #endif
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         guint nButton;
         guint32 nTime;
 
@@ -521,8 +532,8 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 
         gtk_menu_popup(GTK_MENU(pWidget), nullptr, nullptr, MenuPositionFunc,
                        &aPos, nButton, nTime);
-#endif
     }
+#endif
 
     if (g_main_loop_is_running(pLoop))
     {
