@@ -2292,9 +2292,13 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         }
         SvtSecurityOptions().SetMacroSecurityLevel(nMacroSecurityLevel);
 
+#if defined(ANDROID) && HAVE_FEATURE_ANDROID_LOK
+        sal_Int16 nMacroExecMode = document::MacroExecMode::USE_CONFIG;
+#else
         const OUString aEnableMacrosExecution = extractParameter(aOptions, "EnableMacrosExecution");
         sal_Int16 nMacroExecMode = aEnableMacrosExecution == "true" ? document::MacroExecMode::USE_CONFIG :
             document::MacroExecMode::NEVER_EXECUTE;
+#endif
         aFilterOptions[2].Name = "MacroExecutionMode";
         aFilterOptions[2].Value <<= nMacroExecMode;
 
