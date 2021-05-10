@@ -430,7 +430,8 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     GtkWidget *pWidget = gtk_menu_new_from_model(mpMenuModel);
     gtk_menu_attach_to_widget(GTK_MENU(pWidget), mpFrame->getMouseEventWidget(), nullptr);
 #else
-    GtkWidget *pWidget = gtk_popover_menu_new_from_model(mpMenuModel);
+    // TODO: gtk_popover_menu_new crashes on submenus with: "signal 'action-added' is invalid for instance  of type 'GtkActionMuxer'"
+    GtkWidget *pWidget = gtk_popover_menu_new_from_model_full(mpMenuModel, GTK_POPOVER_MENU_NESTED);
     gtk_widget_set_parent(pWidget, mpFrame->getMouseEventWidget());
 #endif
     gtk_widget_insert_action_group(mpFrame->getMouseEventWidget(), "win", mpActionGroup);
