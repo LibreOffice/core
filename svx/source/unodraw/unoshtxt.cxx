@@ -108,8 +108,10 @@ private:
     bool                            HasView() const { return mpView != nullptr; }
     bool                            IsEditMode() const
                                     {
+                                        if (!mbShapeIsEditMode)
+                                            return false;
                                         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
-                                        return mbShapeIsEditMode && pTextObj && pTextObj->IsTextEditActive();
+                                        return pTextObj && pTextObj->IsTextEditActive();
                                     }
 
     void                            dispose();
