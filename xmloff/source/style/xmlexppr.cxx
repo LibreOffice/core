@@ -520,18 +520,21 @@ void SvXMLExportPropertyMapper::ChainExportMapper(
 }
 
 std::vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter(
+    SvXMLExport const& rExport,
     const uno::Reference<beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily ) const
 {
-    return Filter_(rPropSet, false, bEnableFoFontFamily);
+    return Filter_(rExport, rPropSet, false, bEnableFoFontFamily);
 }
 
 std::vector<XMLPropertyState> SvXMLExportPropertyMapper::FilterDefaults(
+    SvXMLExport const& rExport,
     const uno::Reference<beans::XPropertySet>& rPropSet ) const
 {
-    return Filter_(rPropSet, true, false/*bEnableFoFontFamily*/);
+    return Filter_(rExport, rPropSet, true, false/*bEnableFoFontFamily*/);
 }
 
 vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
+    SvXMLExport const& rExport,
     const Reference<XPropertySet>& xPropSet, bool bDefault, bool bEnableFoFontFamily ) const
 {
     vector< XMLPropertyState > aPropStateArray;
@@ -553,7 +556,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
     if( !pFilterInfo )
     {
         assert(SvtSaveOptions().GetODFDefaultVersion() != SvtSaveOptions::ODFVER_UNKNOWN);
-        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(rExport.getSaneDefaultVersion());
         pFilterInfo = new FilterPropertiesInfo_Impl;
         for( sal_Int32 i=0; i < nProps; i++ )
         {

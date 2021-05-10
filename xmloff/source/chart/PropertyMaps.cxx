@@ -436,7 +436,8 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     {
                         if( ( nValue & chart::ChartDataCaption::PERCENT ) == chart::ChartDataCaption::PERCENT )
                         {
-                            const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFSaneDefaultVersion() );
+                            const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(
+                                    mrExport.getSaneDefaultVersion());
                             if (nCurrentVersion < SvtSaveOptions::ODFSVER_012)
                                 sValueBuffer.append( GetXMLToken( XML_PERCENTAGE ));
                             else
@@ -488,7 +489,8 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 break;
             case XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE:
                 {
-                    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFSaneDefaultVersion() );
+                    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(
+                            mrExport.getSaneDefaultVersion());
 
                     OUString aServiceName;
                     rProperty.maValue >>= aServiceName;

@@ -30,6 +30,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmltoken.hxx>
 
+#include <unotools/saveopt.hxx>
+
 #include <tools/fldunit.hxx>
 
 namespace com::sun::star {
@@ -90,7 +92,8 @@ public:
     SvXMLUnitConverter(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         sal_Int16 eCoreMeasureUnit /*css::util::MeasureUnit*/,
-        sal_Int16 eXMLMeasureUnit /*css::util::MeasureUnit*/);
+        sal_Int16 eXMLMeasureUnit /*css::util::MeasureUnit*/,
+        SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion);
 
     ~SvXMLUnitConverter();
 
@@ -104,6 +107,10 @@ public:
 
     /** gets the default unit for textual measures */
     sal_Int16 GetXMLMeasureUnit() const;
+
+    /// ODF version, only when exporting
+    SvtSaveOptions::ODFSaneDefaultVersion getSaneDefaultVersion() const;
+    void overrideSaneDefaultVersion(SvtSaveOptions::ODFSaneDefaultVersion const);
 
     /** gets XNumberingTypeInfo */
     const css::uno::Reference< css::text::XNumberingTypeInfo >& getNumTypeInfo() const;

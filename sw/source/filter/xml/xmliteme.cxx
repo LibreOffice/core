@@ -196,7 +196,8 @@ inline void SwXMLTableItemMapper_Impl::SetAbsWidth( sal_uInt32 nAbs )
 void SwXMLExport::InitItemExport()
 {
     m_pTwipUnitConverter.reset(new SvXMLUnitConverter(getComponentContext(),
-        util::MeasureUnit::TWIP, GetMM100UnitConverter().GetXMLMeasureUnit()));
+        util::MeasureUnit::TWIP, GetMM100UnitConverter().GetXMLMeasureUnit(),
+        getSaneDefaultVersion()));
 
     m_xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
     m_xTableRowItemMap = new SvXMLItemMapEntries( aXMLTableRowItemMap );
