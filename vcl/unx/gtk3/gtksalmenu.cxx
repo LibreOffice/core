@@ -440,7 +440,11 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     //launching PopupMenu to be destroyed, instead run the subloop here
     //until the gtk menu is destroyed
     GMainLoop* pLoop = g_main_loop_new(nullptr, true);
+#if GTK_CHECK_VERSION(4, 0, 0)
+    g_signal_connect_swapped(G_OBJECT(pWidget), "closed", G_CALLBACK(g_main_loop_quit), pLoop);
+#else
     g_signal_connect_swapped(G_OBJECT(pWidget), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
+#endif
 
 
     // tdf#120764 It isn't allowed under wayland to have two visible popups that share
@@ -484,6 +488,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
         gtk_popover_set_pointing_to(GTK_POPOVER(pWidget), &rect);
         (void)nFlags;
         //TODO use gtk_popover_set_position
+        gtk_popover_popup(GTK_POPOVER(pWidget));
 #endif
     }
     else
