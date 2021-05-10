@@ -935,8 +935,15 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "query-tooltip", G_CALLBACK(signalTooltipQuery), this ));
 #if !GTK_CHECK_VERSION(4,0,0)
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-press-event", G_CALLBACK(signalButton), this ));
-    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "motion-notify-event", G_CALLBACK(signalMotion), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-release-event", G_CALLBACK(signalButton), this ));
+#else
+    GtkGesture *pClick = gtk_gesture_click_new();
+    gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pClick));
+    g_signal_connect(pClick, "pressed", G_CALLBACK(gesturePressed), this);
+    g_signal_connect(pClick, "released", G_CALLBACK(gestureReleased), this);
+#endif
+#if !GTK_CHECK_VERSION(4,0,0)
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "motion-notify-event", G_CALLBACK(signalMotion), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "leave-notify-event", G_CALLBACK(signalCrossing), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "enter-notify-event", G_CALLBACK(signalCrossing), this ));
 
@@ -2933,7 +2940,47 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
 
     return true;
 }
+#else
+void GtkSalFrame::gesturePressed(GtkGestureClick* gesture, int /*n_press*/, gdouble x, gdouble y, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->gestureButton(gesture, SalEvent::MouseButtonDown, x, y);
+}
 
+void GtkSalFrame::gestureReleased(GtkGestureClick* gesture, int /*n_press*/, gdouble x, gdouble y, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->gestureButton(gesture, SalEvent::MouseButtonUp, x, y);
+}
+
+void GtkSalFrame::gestureButton(GtkGestureClick* gesture, SalEvent nEventType, gdouble x, gdouble y)
+{
+    SalMouseEvent aEvent;
+    switch (gtk_gesture_single_get_current_button(GTK_GESTURE_SINGLE(gesture)))
+    {
+        case 1: aEvent.mnButton = MOUSE_LEFT;   break;
+        case 2: aEvent.mnButton = MOUSE_MIDDLE; break;
+        case 3: aEvent.mnButton = MOUSE_RIGHT;  break;
+        default: return;
+    }
+
+    GdkEvent* pEvent = gtk_gesture_get_last_event(GTK_GESTURE(gesture), nullptr);
+
+    aEvent.mnTime   = gdk_event_get_time(pEvent);
+    aEvent.mnX      = x;
+    aEvent.mnY      = y;
+//TODO    aEvent.mnCode   = GetMouseModCode( pEvent->state );
+    aEvent.mnCode   = aEvent.mnButton;
+
+    if( AllSettings::GetLayoutRTL() )
+        aEvent.mnX = maGeometry.nWidth-1-aEvent.mnX;
+
+    CallCallbackExc(nEventType, &aEvent);
+}
+
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 void GtkSalFrame::LaunchAsyncScroll(GdkEvent const * pEvent)
 {
     //if we don't match previous pending states, flush that queue now
