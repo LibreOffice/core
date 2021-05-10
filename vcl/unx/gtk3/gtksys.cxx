@@ -37,7 +37,9 @@ SalSystem *GtkInstance::CreateSalSystem()
 GtkSalSystem::GtkSalSystem() : SalGenericSystem()
 {
     mpDisplay = gdk_display_get_default();
+#if !GTK_CHECK_VERSION(4, 0, 0)
     countScreenMonitors();
+#endif
     // rhbz#1285356, native look will be gtk2, which crashes
     // when gtk3 is already loaded. Until there is a solution
     // java-side force look and feel to something that doesn't
@@ -77,6 +79,7 @@ struct GdkRectangleCoincident
 
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 /**
  * GtkSalSystem::countScreenMonitors()
  *
@@ -87,7 +90,6 @@ struct GdkRectangleCoincident
 void
 GtkSalSystem::countScreenMonitors()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     maScreenMonitors.clear();
     for (gint i = 0; i < gdk_display_get_n_screens(mpDisplay); i++)
     {
@@ -112,8 +114,8 @@ GtkSalSystem::countScreenMonitors()
         }
         maScreenMonitors.emplace_back(pScreen, nMonitors);
     }
-#endif
 }
+#endif
 
 SalX11Screen
 GtkSalSystem::getXScreenFromDisplayScreen(unsigned int nScreen)
@@ -185,12 +187,12 @@ int GtkSalSystem::getScreenMonitorIdx (GdkScreen *pScreen,
 
 unsigned int GtkSalSystem::GetDisplayScreenCount()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    return g_list_model_get_n_items(gdk_display_get_monitors(mpDisplay));
+#else
     gint nMonitor;
     (void)getScreenMonitorFromIdx (G_MAXINT, nMonitor);
     return G_MAXINT - nMonitor;
-#else
-    return 1;
 #endif
 }
 

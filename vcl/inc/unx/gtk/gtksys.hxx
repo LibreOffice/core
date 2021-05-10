@@ -36,8 +36,8 @@ public:
     SalX11Screen      GetDisplayDefaultXScreen()
             { return getXScreenFromDisplayScreen( GetDisplayBuiltInScreen() ); }
     SalX11Screen      getXScreenFromDisplayScreen(unsigned int nDisplayScreen);
-    void              countScreenMonitors();
 #if !GTK_CHECK_VERSION(4,0,0)
+    void              countScreenMonitors();
     // We have a 'screen' number that is combined from screen-idx + monitor-idx
     int        getScreenIdxFromPtr     (GdkScreen *pScreen);
     int        getScreenMonitorIdx     (GdkScreen *pScreen, int nX, int nY);
