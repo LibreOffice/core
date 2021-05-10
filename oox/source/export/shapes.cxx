@@ -818,6 +818,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     // we use a allowlist for shapes where mapping to MSO preset shape is not optimal
     bool bCustGeom = true;
     bool bOnDenylist = false;
+    bool bDocxCustomShapeTextBox = GetDocumentType() == DOCUMENT_DOCX && rXPropSet->getPropertyValue("TextBox").get<bool>();
     if( sShapeType == "ooxml-non-primitive" )
         bCustGeom = true;
     else if( sShapeType.startsWith("ooxml") )
@@ -850,10 +851,17 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     }
     else if (bCustGeom)
     {
-        WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
-        bool bSuccess = WriteCustomGeometry(xShape, rSdrObjCustomShape);
-        if (!bSuccess)
-            WritePresetShape( sPresetShape );
+        WriteShapeTransformation(xShape, XML_a, bFlipH, bFlipV);
+        if (bDocxCustomShapeTextBox)
+        {
+            WritePresetShape(sPresetShape);
+        }
+        else
+        {
+            bool bSuccess = WriteCustomGeometry(xShape, rSdrObjCustomShape);
+            if (!bSuccess)
+                WritePresetShape(sPresetShape);
+        }
     }
     else if (bOnDenylist && bHasHandles && nAdjustmentValuesIndex !=-1 && !sShapeType.startsWith("mso-spt"))
     {
