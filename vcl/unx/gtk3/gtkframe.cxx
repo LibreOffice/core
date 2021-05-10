@@ -1033,7 +1033,9 @@ void GtkSalFrame::InitCommon()
     m_nKeyModifiers     = ModKeyFlags::NONE;
     m_bFullscreen       = false;
     m_bSpanMonitorsWhenFullscreen = false;
-#if !GTK_CHECK_VERSION(4,0,0)
+#if GTK_CHECK_VERSION(4,0,0)
+    m_nState            = GDK_TOPLEVEL_STATE_MINIMIZED;
+#else
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
 #endif
     m_pIMHandler        = nullptr;
@@ -3946,12 +3948,14 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
         pThis->m_aRestorePosSize = GetPosAndSize(GTK_WINDOW(pThis->m_pWindow));
     }
 
+#if !GTK_CHECK_VERSION(4,0,0)
     if ((pEvent->window_state.new_window_state & GDK_WINDOW_STATE_WITHDRAWN) &&
         !(pThis->m_nState & GDK_WINDOW_STATE_WITHDRAWN))
     {
         if (pThis->isFloatGrabWindow())
             pThis->closePopup();
     }
+#endif
 
     pThis->m_nState = pEvent->window_state.new_window_state;
 
