@@ -272,8 +272,10 @@ class GtkSalFrame final : public SalFrame
     static void         signalDragDataGet(GtkWidget* widget, GdkDragContext* context, GtkSelectionData *data, guint info,
                                           guint time, gpointer frame);
 
+#endif
     static void         gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame);
     static void         gestureLongPress(GtkGestureLongPress* gesture, gdouble x, gdouble y, gpointer frame);
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
     static void         signalSetFocus( GtkWindow* pWindow, GtkWidget* pWidget, gpointer frame );
 #endif
