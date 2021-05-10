@@ -61,6 +61,10 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+#   define GDK_ALT_MASK GDK_MOD1_MASK
+#endif
+
 using namespace com::sun::star;
 
 int GtkSalFrame::m_nFloats = 0;
@@ -74,13 +78,8 @@ sal_uInt16 GtkSalFrame::GetKeyModCode( guint state )
         nCode |= KEY_SHIFT;
     if( state & GDK_CONTROL_MASK )
         nCode |= KEY_MOD1;
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    if( state & GDK_MOD1_MASK )
-        nCode |= KEY_MOD2;
-#else
     if (state & GDK_ALT_MASK)
         nCode |= KEY_MOD2;
-#endif
     if( state & GDK_SUPER_MASK )
         nCode |= KEY_MOD3;
     return nCode;
@@ -2324,13 +2323,7 @@ void GtkSalFrame::KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,
         nModifiers = static_cast<GdkModifierType>( nModifiers | GDK_CONTROL_MASK );
 
     if ( rKeyCode.IsMod2() )
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        nModifiers = static_cast<GdkModifierType>( nModifiers | GDK_MOD1_MASK );
-#else
         nModifiers = static_cast<GdkModifierType>( nModifiers | GDK_ALT_MASK );
-#endif
-    }
 
     *pGdkModifiers = nModifiers;
 
