@@ -721,7 +721,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     bool bHasHandles = false;
 
     ShapeFlag nMirrorFlags = ShapeFlag::NONE;
-    MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
+    MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType);
     OSL_ENSURE(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(xShape)), "Not a SdrObjCustomShape (!)");
     SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(xShape)));
     const bool bIsDefaultObject(
@@ -818,6 +818,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     // we use a allowlist for shapes where mapping to MSO preset shape is not optimal
     bool bCustGeom = true;
     bool bOnDenylist = false;
+    bool bDocxCustomShapeTextBox = GetDocumentType() == DOCUMENT_DOCX && rXPropSet->getPropertyValue("TextBox").get<bool>();
     if( sShapeType == "ooxml-non-primitive" )
         bCustGeom = true;
     else if( sShapeType.startsWith("ooxml") )
@@ -848,7 +849,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             aPolyPolygon.Rotate(Point(0,0), Degree10(static_cast<sal_Int16>(bInvertRotation ? nRotation/10 : 3600-nRotation/10)));
         WritePolyPolygon(xShape, aPolyPolygon, false);
     }
-    else if (bCustGeom)
+    else if (bCustGeom && !(bDocxCustomShapeTextBox))
     {
         WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
         bool bSuccess = WriteCustomGeometry(xShape, rSdrObjCustomShape);
