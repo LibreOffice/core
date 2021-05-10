@@ -537,7 +537,7 @@ public:
         sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
         ScFilterEntries& rFilterEntries );
 
-    bool GetDataEntries( SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit ) const;
+    bool GetDataEntries( SCROW nRow, std::set<ScTypedStrData>& rStrings) const;
 
     void UpdateInsertTabAbs(SCTAB nNewPos);
     bool    TestTabRefAbs(SCTAB nTable) const;
