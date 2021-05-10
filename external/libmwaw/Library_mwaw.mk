@@ -41,7 +41,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/BeagleWksSSParser \
 	UnpackedTarball/libmwaw/src/lib/BeagleWksStructManager \
 	UnpackedTarball/libmwaw/src/lib/BeagleWksText \
+	UnpackedTarball/libmwaw/src/lib/Canvas5BMParser \
 	UnpackedTarball/libmwaw/src/lib/Canvas5Graph \
+	UnpackedTarball/libmwaw/src/lib/Canvas5Image \
 	UnpackedTarball/libmwaw/src/lib/Canvas5Parser \
 	UnpackedTarball/libmwaw/src/lib/Canvas5Structure \
 	UnpackedTarball/libmwaw/src/lib/Canvas5StyleManager \
