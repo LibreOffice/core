@@ -288,11 +288,14 @@ class GtkSalFrame final : public SalFrame
     void WindowUnmap();
     bool WindowCloseRequest();
     void DrawingAreaMotion(int nEventX, int nEventY, guint32 nTime, guint nState);
+    void DrawingAreaCrossing(SalEvent nEventType, int nEventX, int nEventY, guint32 nTime, guint nState);
 #if GTK_CHECK_VERSION(4, 0, 0)
     static void         signalMap( GtkWidget*, gpointer );
     static void         signalUnmap( GtkWidget*, gpointer );
     static gboolean     signalDelete( GtkWidget*, gpointer );
     static void         signalMotion(GtkEventControllerMotion *controller, double x, double y, gpointer);
+    static void         signalEnter(GtkEventControllerMotion *controller, double x, double y, gpointer);
+    static void         signalLeave(GtkEventControllerMotion *controller, gpointer);
 #else
     static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalUnmap( GtkWidget*, GdkEvent*, gpointer );
