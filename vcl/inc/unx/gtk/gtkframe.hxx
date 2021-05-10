@@ -254,10 +254,10 @@ class GtkSalFrame final : public SalFrame
     static void         sizeAllocated(GtkWidget*, int nWidth, int nHeight, gpointer frame);
 #endif
     static void         signalRealize(GtkWidget*, gpointer frame);
-#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalTooltipQuery(GtkWidget*, gint x, gint y,
                                      gboolean keyboard_mode, GtkTooltip *tooltip,
                                      gpointer frame);
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalDragMotion(GtkWidget *widget, GdkDragContext *context, gint x, gint y,
                                          guint time, gpointer frame);
     static gboolean     signalDragDrop(GtkWidget* widget, GdkDragContext *context, gint x, gint y,

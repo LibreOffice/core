@@ -921,8 +921,8 @@ void GtkSalFrame::InitCommon()
     gtk_grid_attach(m_pTopLevelGrid, GTK_WIDGET(m_pFixedContainer), 0, 0, 1, 1);
 #endif
 
-#if !GTK_CHECK_VERSION(4,0,0)
     GtkWidget *pEventWidget = getMouseEventWidget();
+#if !GTK_CHECK_VERSION(4,0,0)
     gtk_widget_set_app_paintable(GTK_WIDGET(m_pFixedContainer), true);
     gtk_widget_set_redraw_on_allocate(GTK_WIDGET(m_pFixedContainer), false);
 #endif
@@ -931,8 +931,10 @@ void GtkSalFrame::InitCommon()
     // connect signals
     // use pEventWidget instead of m_pWindow to avoid infinite event loop under Linux Mint Mate 18.3
     g_signal_connect( G_OBJECT(pEventWidget), "style-updated", G_CALLBACK(signalStyleUpdated), this );
+#endif
     gtk_widget_set_has_tooltip(pEventWidget, true);
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "query-tooltip", G_CALLBACK(signalTooltipQuery), this ));
+#if !GTK_CHECK_VERSION(4,0,0)
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-press-event", G_CALLBACK(signalButton), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "motion-notify-event", G_CALLBACK(signalMotion), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-release-event", G_CALLBACK(signalButton), this ));
@@ -2614,7 +2616,6 @@ bool GtkSalFrame::GetModal() const
     return gtk_window_get_modal(GTK_WINDOW(m_pWindow));
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalFrame::signalTooltipQuery(GtkWidget*, gint /*x*/, gint /*y*/,
                                      gboolean /*keyboard_mode*/, GtkTooltip *tooltip,
                                      gpointer frame)
@@ -2634,7 +2635,6 @@ gboolean GtkSalFrame::signalTooltipQuery(GtkWidget*, gint /*x*/, gint /*y*/,
     gtk_tooltip_set_tip_area(tooltip, &aHelpArea);
     return true;
 }
-#endif
 
 bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const tools::Rectangle& rHelpArea)
 {
