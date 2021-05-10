@@ -2848,11 +2848,35 @@ void GtkSalFrame::GrabFocus()
     }
 }
 
+bool GtkSalFrame::DrawingAreaButton(SalEvent nEventType, int nEventX, int nEventY, int nButton, guint32 nTime, guint nState)
+{
+    UpdateLastInputEventTime(nTime);
+
+    SalMouseEvent aEvent;
+    switch(nButton)
+    {
+        case 1: aEvent.mnButton = MOUSE_LEFT;   break;
+        case 2: aEvent.mnButton = MOUSE_MIDDLE; break;
+        case 3: aEvent.mnButton = MOUSE_RIGHT;  break;
+        default: return false;
+    }
+
+    aEvent.mnTime = nTime;
+    aEvent.mnX = nEventX;
+    aEvent.mnY = nEventY;
+    aEvent.mnCode = GetMouseModCode(nState);
+
+    if( AllSettings::GetLayoutRTL() )
+        aEvent.mnX = maGeometry.nWidth-1-aEvent.mnX;
+
+    CallCallbackExc(nEventType, &aEvent);
+
+    return true;
+}
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer frame)
 {
-    UpdateLastInputEventTime(pEvent->time);
-
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     GtkWidget* pEventWidget = pThis->getMouseEventWidget();
     bool bDifferentEventWindow = pEvent->window != gtk_widget_get_window(pEventWidget);
@@ -2872,7 +2896,6 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
             pThis->GrabFocus();
     }
 
-    SalMouseEvent aEvent;
     SalEvent nEventType = SalEvent::NONE;
     switch( pEvent->type )
     {
@@ -2884,13 +2907,6 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
             break;
         default:
             return false;
-    }
-    switch( pEvent->button )
-    {
-        case 1: aEvent.mnButton = MOUSE_LEFT;   break;
-        case 2: aEvent.mnButton = MOUSE_MIDDLE; break;
-        case 3: aEvent.mnButton = MOUSE_RIGHT;  break;
-        default: return false;
     }
 
     vcl::DeletionListener aDel( pThis );
@@ -2930,59 +2946,39 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
         }
     }
 
+    bool bRet = false;
     if (!aDel.isDeleted())
     {
-        aEvent.mnTime   = pEvent->time;
-        aEvent.mnX      = static_cast<tools::Long>(pEvent->x_root) - pThis->maGeometry.nX;
-        aEvent.mnY      = static_cast<tools::Long>(pEvent->y_root) - pThis->maGeometry.nY;
-        aEvent.mnCode   = GetMouseModCode( pEvent->state );
-
-        if( AllSettings::GetLayoutRTL() )
-            aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
-
-        pThis->CallCallbackExc( nEventType, &aEvent );
+        bRet = pThis->DrawingAreaButton(nEventType,
+                                        pEvent->x_root - pThis->maGeometry.nX,
+                                        pEvent->y_root - pThis->maGeometry.nY,
+                                        pEvent->button,
+                                        pEvent->time,
+                                        pEvent->state);
     }
 
-    return true;
+    return bRet;
 }
 #else
-void GtkSalFrame::gesturePressed(GtkGestureClick* gesture, int /*n_press*/, gdouble x, gdouble y, gpointer frame)
+void GtkSalFrame::gesturePressed(GtkGestureClick* pGesture, int /*n_press*/, gdouble x, gdouble y, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->gestureButton(gesture, SalEvent::MouseButtonDown, x, y);
+    pThis->gestureButton(pGesture, SalEvent::MouseButtonDown, x, y);
 }
 
-void GtkSalFrame::gestureReleased(GtkGestureClick* gesture, int /*n_press*/, gdouble x, gdouble y, gpointer frame)
+void GtkSalFrame::gestureReleased(GtkGestureClick* pGesture, int /*n_press*/, gdouble x, gdouble y, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->gestureButton(gesture, SalEvent::MouseButtonUp, x, y);
+    pThis->gestureButton(pGesture, SalEvent::MouseButtonUp, x, y);
 }
 
-void GtkSalFrame::gestureButton(GtkGestureClick* gesture, SalEvent nEventType, gdouble x, gdouble y)
+void GtkSalFrame::gestureButton(GtkGestureClick* pGesture, SalEvent nEventType, gdouble x, gdouble y)
 {
-    SalMouseEvent aEvent;
-    switch (gtk_gesture_single_get_current_button(GTK_GESTURE_SINGLE(gesture)))
-    {
-        case 1: aEvent.mnButton = MOUSE_LEFT;   break;
-        case 2: aEvent.mnButton = MOUSE_MIDDLE; break;
-        case 3: aEvent.mnButton = MOUSE_RIGHT;  break;
-        default: return;
-    }
-
-    GdkEvent* pEvent = gtk_gesture_get_last_event(GTK_GESTURE(gesture), nullptr);
-
-    aEvent.mnTime   = gdk_event_get_time(pEvent);
-    aEvent.mnX      = x;
-    aEvent.mnY      = y;
-//TODO    aEvent.mnCode   = GetMouseModCode( pEvent->state );
-    aEvent.mnCode   = aEvent.mnButton;
-
-    if( AllSettings::GetLayoutRTL() )
-        aEvent.mnX = maGeometry.nWidth-1-aEvent.mnX;
-
-    CallCallbackExc(nEventType, &aEvent);
+    GdkEvent* pEvent = gtk_event_controller_get_current_event(GTK_EVENT_CONTROLLER(pGesture));
+    GdkModifierType eType = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(pGesture));
+    int nButton = gtk_gesture_single_get_current_button(GTK_GESTURE_SINGLE(pGesture));
+    DrawingAreaButton(nEventType, x, y, nButton, gdk_event_get_time(pEvent), eType);
 }
-
 #endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)

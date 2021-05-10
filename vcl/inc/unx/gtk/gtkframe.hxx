@@ -275,6 +275,7 @@ class GtkSalFrame final : public SalFrame
 #endif
     static void         gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame);
     static void         gestureLongPress(GtkGestureLongPress* gesture, gdouble x, gdouble y, gpointer frame);
+    bool                DrawingAreaButton(SalEvent nEventType, int nEventX, int nEventY, int nButton, guint32 nTime, guint nState);
 #if GTK_CHECK_VERSION(4, 0, 0)
     static void         gesturePressed(GtkGestureClick* gesture, int n_press, gdouble x, gdouble y, gpointer frame);
     static void         gestureReleased(GtkGestureClick* gesture, int n_press, gdouble x, gdouble y, gpointer frame);
