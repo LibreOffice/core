@@ -988,9 +988,8 @@ void GtkSalFrame::InitCommon()
     g_signal_connect( G_OBJECT(m_pWindow), "key-release-event", G_CALLBACK(signalKey), this );
     g_signal_connect( G_OBJECT(m_pWindow), "delete-event", G_CALLBACK(signalDelete), this );
     g_signal_connect( G_OBJECT(m_pWindow), "window-state-event", G_CALLBACK(signalWindowState), this );
-    g_signal_connect( G_OBJECT(m_pWindow), "destroy", G_CALLBACK(signalDestroy), this );
-
 #endif
+    g_signal_connect( G_OBJECT(m_pWindow), "destroy", G_CALLBACK(signalDestroy), this );
 
     // init members
     m_nKeyModifiers     = ModKeyFlags::NONE;
@@ -4192,6 +4191,7 @@ void GtkInstDropTarget::signalDragLeave(GtkWidget* pWidget, GdkDragContext* /*co
     // exit handling to an idle.
     g_idle_add(lcl_deferred_dragExit, this);
 }
+#endif
 
 void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
 {
@@ -4204,13 +4204,14 @@ void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
     if (pThis->m_pSurface)
         cairo_surface_set_user_data(pThis->m_pSurface, SvpSalGraphics::getDamageKey(), nullptr, nullptr);
     pThis->m_pFixedContainer = nullptr;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     pThis->m_pEventBox = nullptr;
+#endif
     pThis->m_pTopLevelGrid = nullptr;
     pThis->m_pWindow = nullptr;
     pThis->m_xFrameWeld.reset();
     pThis->InvalidateGraphics();
 }
-#endif
 
 // GtkSalFrame::IMHandler
 
