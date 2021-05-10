@@ -276,8 +276,17 @@ class GtkSalFrame final : public SalFrame
     static void         gestureLongPress(GtkGestureLongPress* gesture, gdouble x, gdouble y, gpointer frame);
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
     static void         signalSetFocus( GtkWindow* pWindow, GtkWidget* pWidget, gpointer frame );
+#endif
+    void WindowMap();
+    void WindowUnmap();
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void         signalMap( GtkWidget*, gpointer );
+    static void         signalUnmap( GtkWidget*, gpointer );
+#else
     static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalUnmap( GtkWidget*, GdkEvent*, gpointer );
+#endif
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalConfigure( GtkWidget*, GdkEventConfigure*, gpointer );
     static gboolean     signalMotion( GtkWidget*, GdkEventMotion*, gpointer );
     static gboolean     signalKey( GtkWidget*, GdkEventKey*, gpointer );

@@ -981,8 +981,15 @@ void GtkSalFrame::InitCommon()
     g_signal_connect_after( G_OBJECT(m_pWindow), "focus-out-event", G_CALLBACK(signalFocus), this );
     if (GTK_IS_WINDOW(m_pWindow)) // i.e. not if it's a GtkEventBox which doesn't have the signal
         m_nSetFocusSignalId = g_signal_connect( G_OBJECT(m_pWindow), "set-focus", G_CALLBACK(signalSetFocus), this );
+#endif
+#if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pWindow), "map-event", G_CALLBACK(signalMap), this );
     g_signal_connect( G_OBJECT(m_pWindow), "unmap-event", G_CALLBACK(signalUnmap), this );
+#else
+    g_signal_connect( G_OBJECT(m_pWindow), "map", G_CALLBACK(signalMap), this );
+    g_signal_connect( G_OBJECT(m_pWindow), "unmap", G_CALLBACK(signalUnmap), this );
+#endif
+#if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pWindow), "configure-event", G_CALLBACK(signalConfigure), this );
     g_signal_connect( G_OBJECT(m_pWindow), "key-press-event", G_CALLBACK(signalKey), this );
     g_signal_connect( G_OBJECT(m_pWindow), "key-release-event", G_CALLBACK(signalKey), this );
@@ -3485,38 +3492,64 @@ void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
 
     gtk_widget_set_can_focus(GTK_WIDGET(pThis->m_pFixedContainer), !bLoseFocus);
 }
+#endif
 
-gboolean GtkSalFrame::signalMap(GtkWidget *, GdkEvent*, gpointer frame)
+void GtkSalFrame::WindowMap()
 {
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    SolarMutexGuard aGuard;
 
-    if (pThis->m_bIconSetWhileUnmapped)
-        pThis->SetIcon(gtk_window_get_icon_name(GTK_WINDOW(pThis->m_pWindow)));
+    if (m_bIconSetWhileUnmapped)
+        SetIcon(gtk_window_get_icon_name(GTK_WINDOW(m_pWindow)));
 
-    pThis->CallCallbackExc( SalEvent::Resize, nullptr );
-    pThis->TriggerPaintEvent();
-
-    return false;
+    CallCallbackExc( SalEvent::Resize, nullptr );
+    TriggerPaintEvent();
 }
 
-gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
+void GtkSalFrame::WindowUnmap()
 {
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    SolarMutexGuard aGuard;
 
-    pThis->CallCallbackExc( SalEvent::Resize, nullptr );
+    CallCallbackExc( SalEvent::Resize, nullptr );
 
-    if (pThis->m_bFloatPositioned)
+    if (m_bFloatPositioned)
     {
         // Unrealize is needed for cases where we reuse the same popup
         // (e.g. the font name control), making the realize signal fire
         // again on next show.
-        gtk_widget_unrealize(pThis->m_pWindow);
-        pThis->m_bFloatPositioned = false;
+        gtk_widget_unrealize(m_pWindow);
+        m_bFloatPositioned = false;
     }
+}
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+void GtkSalFrame::signalMap(GtkWidget*, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->WindowMap();
+}
+
+void GtkSalFrame::signalUnmap(GtkWidget*, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->WindowUnmap();
+}
+#else
+gboolean GtkSalFrame::signalMap(GtkWidget*, GdkEvent*, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->WindowMap();
     return false;
 }
 
+gboolean GtkSalFrame::signalUnmap(GtkWidget*, GdkEvent*, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->WindowUnmap();
+    return false;
+}
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer frame)
 {
     UpdateLastInputEventTime(pEvent->time);
