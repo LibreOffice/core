@@ -453,8 +453,6 @@ void ScMenuFloatingWindow::executeMenuItem(size_t nPos)
         return;
 
     maMenuItems[nPos].mpAction->execute();
-
-    terminateAllPopupMenus();
 }
 
 void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu)
