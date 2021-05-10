@@ -2453,23 +2453,24 @@ void ScTiledRenderingTest::testAutoInputStringBlock()
     ScFieldEditEngine& rEE = pDoc->GetEditEngine();
     rEE.SetText("XYZ");
     pDoc->SetEditText(ScAddress(0, 5, 0), rEE.CreateTextObject()); // A6
-    pDoc->SetString(ScAddress(0, 6, 0), "ZZZ");  // A7
+    pDoc->SetValue(ScAddress(0, 6, 0), 123);
+    pDoc->SetString(ScAddress(0, 7, 0), "ZZZ");  // A8
 
     ScAddress aA1(0, 0, 0);
     lcl_typeCharsInCell("X", aA1.Col(), aA1.Row(), pView, pModelObj); // Type 'X' in A1
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should not autocomplete", OUString("X"), pDoc->GetString(aA1));
 
-    ScAddress aA3(0, 2, 0); // Adjacent to the string "superblock" A4:A7
+    ScAddress aA3(0, 2, 0); // Adjacent to the string "superblock" A4:A8
     lcl_typeCharsInCell("X", aA3.Col(), aA3.Row(), pView, pModelObj); // Type 'X' in A3
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A3 should autocomplete", OUString("XYZ"), pDoc->GetString(aA3));
 
-    ScAddress aA7(0, 6, 0); // Adjacent to the string "superblock" A4:A7
-    lcl_typeCharsInCell("X", aA7.Col(), aA7.Row(), pView, pModelObj); // Type 'X' in A7
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A7 should autocomplete", OUString("XYZ"), pDoc->GetString(aA7));
+    ScAddress aA9(0, 8, 0); // Adjacent to the string "superblock" A4:A8
+    lcl_typeCharsInCell("X", aA9.Col(), aA9.Row(), pView, pModelObj); // Type 'X' in A9
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A9 should autocomplete", OUString("XYZ"), pDoc->GetString(aA9));
 
-    ScAddress aA10(0, 9, 0);
-    lcl_typeCharsInCell("X", aA10.Col(), aA10.Row(), pView, pModelObj); // Type 'X' in A10
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A10 should not autocomplete", OUString("X"), pDoc->GetString(aA10));
+    ScAddress aA11(0, 10, 0);
+    lcl_typeCharsInCell("X", aA11.Col(), aA11.Row(), pView, pModelObj); // Type 'X' in A11
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A11 should not autocomplete", OUString("X"), pDoc->GetString(aA11));
 }
 
 void ScTiledRenderingTest::testAutoInputExactMatch()
