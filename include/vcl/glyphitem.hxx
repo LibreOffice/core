@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 
 #include <vector>
+#include <memory>
 
 typedef sal_uInt16 sal_GlyphId;
 
@@ -31,14 +32,14 @@ class SalLayoutGlyphsImpl;
 
 class VCL_DLLPUBLIC SalLayoutGlyphs final
 {
-    SalLayoutGlyphsImpl* m_pImpl = nullptr;
+    std::unique_ptr<SalLayoutGlyphsImpl> m_pImpl;
     // Extra items are in a dynamically allocated vector in order to save memory.
     // The usual case should be that this stays unused (it should be only used
     // when font fallback takes place).
-    std::vector<SalLayoutGlyphsImpl*>* m_pExtraImpls = nullptr;
+    std::unique_ptr<std::vector<std::unique_ptr<SalLayoutGlyphsImpl>>> m_pExtraImpls;
 
 public:
-    SalLayoutGlyphs() = default;
+    SalLayoutGlyphs();
     SalLayoutGlyphs(const SalLayoutGlyphs&) = delete;
     SalLayoutGlyphs(SalLayoutGlyphs&&);
     ~SalLayoutGlyphs();

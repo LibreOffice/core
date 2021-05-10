@@ -23,13 +23,9 @@
 #include <unx/freetype_glyphcache.hxx>
 #endif
 
-SalLayoutGlyphs::~SalLayoutGlyphs()
-{
-    delete m_pImpl;
-    if (m_pExtraImpls)
-        for (SalLayoutGlyphsImpl* impl : *m_pExtraImpls)
-            delete impl;
-}
+SalLayoutGlyphs::SalLayoutGlyphs() {}
+
+SalLayoutGlyphs::~SalLayoutGlyphs() {}
 
 SalLayoutGlyphs::SalLayoutGlyphs(SalLayoutGlyphs&& rOther)
 {
@@ -54,7 +50,7 @@ bool SalLayoutGlyphs::IsValid() const
     if (!m_pImpl->IsValid())
         return false;
     if (m_pExtraImpls)
-        for (SalLayoutGlyphsImpl* impl : *m_pExtraImpls)
+        for (std::unique_ptr<SalLayoutGlyphsImpl> const& impl : *m_pExtraImpls)
             if (!impl->IsValid())
                 return false;
     return true;
@@ -63,35 +59,28 @@ bool SalLayoutGlyphs::IsValid() const
 void SalLayoutGlyphs::Invalidate()
 {
     // Invalidating is in fact simply clearing.
-    delete m_pImpl;
-    m_pImpl = nullptr;
-    if (m_pExtraImpls)
-    {
-        for (SalLayoutGlyphsImpl* impl : *m_pExtraImpls)
-            delete impl;
-        delete m_pExtraImpls;
-        m_pExtraImpls = nullptr;
-    }
+    m_pImpl.reset();
+    m_pExtraImpls.reset();
 }
 
 SalLayoutGlyphsImpl* SalLayoutGlyphs::Impl(unsigned int nLevel) const
 {
     if (nLevel == 0)
-        return m_pImpl;
+        return m_pImpl.get();
     if (m_pExtraImpls != nullptr && nLevel - 1 < m_pExtraImpls->size())
-        return (*m_pExtraImpls)[nLevel - 1];
+        return (*m_pExtraImpls)[nLevel - 1].get();
     return nullptr;
 }
 
 void SalLayoutGlyphs::AppendImpl(SalLayoutGlyphsImpl* pImpl)
 {
-    if (m_pImpl == nullptr)
-        m_pImpl = pImpl;
+    if (!m_pImpl)
+        m_pImpl.reset(pImpl);
     else
     {
-        if (m_pExtraImpls == nullptr)
-            m_pExtraImpls = new std::vector<SalLayoutGlyphsImpl*>;
-        m_pExtraImpls->push_back(pImpl);
+        if (!m_pExtraImpls)
+            m_pExtraImpls.reset(new std::vector<std::unique_ptr<SalLayoutGlyphsImpl>>);
+        m_pExtraImpls->emplace_back(pImpl);
     }
 }
 
