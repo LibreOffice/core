@@ -40,6 +40,10 @@ class ErrCode;
 
 class SbxFactory;
 class SbxObject;
+class SbxBase;
+
+typedef tools::SvRef<SbxBase> SbxBaseRef;
+typedef tools::SvRef<SbxObject> SbxObjectRef;
 
 class BASIC_DLLPUBLIC SbxBase : virtual public SvRefBase
 {
@@ -76,7 +80,7 @@ public:
 
     virtual void    Clear() = 0;
 
-    static SbxBase* Load( SvStream& );
+    static SbxBaseRef Load( SvStream& );
     bool            Store( SvStream& );
     virtual bool    LoadCompleted();
 
@@ -89,11 +93,9 @@ public:
     static void AddFactory( SbxFactory* );
     static void RemoveFactory( SbxFactory const * );
 
-    static SbxBase* Create( sal_uInt16, sal_uInt32 );
-    static SbxObject* CreateObject( const OUString& );
+    static SbxBaseRef Create( sal_uInt16, sal_uInt32 );
+    static SbxObjectRef CreateObject( const OUString& );
 };
-
-typedef tools::SvRef<SbxBase> SbxBaseRef;
 
 inline void SbxBase::SetFlags( SbxFlagBits n )
 { nFlags = n; }

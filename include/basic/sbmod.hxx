@@ -63,7 +63,7 @@ protected:
     css::uno::Reference< css::script::XInvocation > mxWrapper;
     OUString            aOUSource;
     OUString            aComment;
-    SbiImage*           pImage;        // the Image
+    std::unique_ptr<SbiImage> pImage;        // the Image
     SbiBreakpoints*     pBreaks;       // Breakpoints
     std::unique_ptr<SbClassData> pClassData;
     bool mbVBACompat;

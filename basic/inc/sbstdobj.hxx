@@ -28,7 +28,7 @@ class SbStdFactory final : public SbxFactory
 public:
     SbStdFactory();
 
-    virtual SbxObject*  CreateObject( const OUString& rClassName ) override;
+    virtual SbxObjectRef  CreateObject( const OUString& rClassName ) override;
 };
 
 class SbStdPicture final : public SbxObject

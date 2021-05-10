@@ -44,7 +44,7 @@ SbStdFactory::SbStdFactory()
 {
 }
 
-SbxObject* SbStdFactory::CreateObject( const OUString& rClassName )
+SbxObjectRef SbStdFactory::CreateObject( const OUString& rClassName )
 {
     if( rClassName.equalsIgnoreAsciiCase("Picture") )
         return new SbStdPicture;

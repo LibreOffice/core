@@ -204,8 +204,8 @@ public:
 class SbUnoFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
-    virtual SbxObject* CreateObject( const OUString& ) override;
+    virtual SbxBaseRef Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
+    virtual SbxObjectRef CreateObject( const OUString& ) override;
 };
 
 // wrapper for a uno-class

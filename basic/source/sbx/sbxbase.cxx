@@ -129,7 +129,7 @@ void SbxBase::RemoveFactory( SbxFactory const * pFac )
 }
 
 
-SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
+SbxBaseRef SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
 {
     // #91626: Hack to skip old Basic dialogs
     // Problem: There does not exist a factory any more,
@@ -153,7 +153,7 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     }
     // Unknown type: go over the factories!
     SbxAppData& r = GetSbxData_Impl();
-    SbxBase* pNew = nullptr;
+    SbxBaseRef pNew;
     for (auto const& rpFac : r.m_Factories)
     {
         pNew = rpFac->Create( nSbxId, nCreator );
@@ -164,10 +164,10 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     return pNew;
 }
 
-SbxObject* SbxBase::CreateObject( const OUString& rClass )
+SbxObjectRef SbxBase::CreateObject( const OUString& rClass )
 {
     SbxAppData& r = GetSbxData_Impl();
-    SbxObject* pNew = nullptr;
+    SbxObjectRef pNew;
     for (auto const& rpFac : r.m_Factories)
     {
         pNew = rpFac->CreateObject( rClass );
@@ -191,7 +191,7 @@ namespace {
 
 }
 
-SbxBase* SbxBase::Load( SvStream& rStrm )
+SbxBaseRef SbxBase::Load( SvStream& rStrm )
 {
     sal_uInt16 nSbxId(0), nFlagsTmp(0), nVer(0);
     sal_uInt32 nCreator(0), nSize(0);
@@ -200,7 +200,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
 
     sal_uInt64 nOldPos = rStrm.Tell();
     rStrm.ReadUInt32( nSize );
-    SbxBase* p = Create( nSbxId, nCreator );
+    SbxBaseRef p = Create( nSbxId, nCreator );
     if( p )
     {
         p->nFlags = nFlags;
@@ -267,12 +267,12 @@ SbxFactory::~SbxFactory()
 {
 }
 
-SbxBase* SbxFactory::Create( sal_uInt16, sal_uInt32 )
+SbxBaseRef SbxFactory::Create( sal_uInt16, sal_uInt32 )
 {
     return nullptr;
 }
 
-SbxObject* SbxFactory::CreateObject( const OUString& )
+SbxObjectRef SbxFactory::CreateObject( const OUString& )
 {
     return nullptr;
 }

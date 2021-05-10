@@ -2848,7 +2848,7 @@ Any SbUnoObject::getUnoAny()
 }
 
 // help method to create a Uno-Struct per CoreReflection
-static SbUnoObject* Impl_CreateUnoStruct( const OUString& aClassName )
+static SbUnoObjectRef Impl_CreateUnoStruct( const OUString& aClassName )
 {
     // get CoreReflection
     Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
@@ -2873,21 +2873,21 @@ static SbUnoObject* Impl_CreateUnoStruct( const OUString& aClassName )
     Any aNewAny;
     xClass->createObject( aNewAny );
     // make a SbUnoObject out of it
-    SbUnoObject* pUnoObj = new SbUnoObject( aClassName, aNewAny );
+    SbUnoObjectRef pUnoObj = new SbUnoObject( aClassName, aNewAny );
     return pUnoObj;
 }
 
 
 // Factory-Class to create Uno-Structs per DIM AS NEW
-SbxBase* SbUnoFactory::Create( sal_uInt16, sal_uInt32 )
+SbxBaseRef SbUnoFactory::Create( sal_uInt16, sal_uInt32 )
 {
     // Via SbxId nothing works in Uno
     return nullptr;
 }
 
-SbxObject* SbUnoFactory::CreateObject( const OUString& rClassName )
+SbxObjectRef SbUnoFactory::CreateObject( const OUString& rClassName )
 {
-    return Impl_CreateUnoStruct( rClassName );
+    return Impl_CreateUnoStruct( rClassName ).get();
 }
 
 

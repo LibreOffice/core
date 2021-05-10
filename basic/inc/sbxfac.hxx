@@ -29,8 +29,8 @@ class SbxFactory
 public:
     virtual ~SbxFactory();
     SbxFactory() {}
-    virtual SbxBase* Create(sal_uInt16 nSbxId, sal_uInt32);
-    virtual SbxObject* CreateObject(const OUString&);
+    virtual SbxBaseRef Create(sal_uInt16 nSbxId, sal_uInt32);
+    virtual SbxObjectRef CreateObject(const OUString&);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

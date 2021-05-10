@@ -417,7 +417,7 @@ static bool getDefaultVBAMode( StarBASIC* pb )
 
 SbModule::SbModule( const OUString& rName, bool bVBACompat )
          : SbxObject( "StarBASICModule" ),
-           pImage(nullptr), pBreaks(nullptr), mbVBACompat( bVBACompat ), bIsProxyModule( false )
+           pBreaks(nullptr), mbVBACompat( bVBACompat ), bIsProxyModule( false )
 {
     SetName( rName );
     SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::GlobalSearch );
@@ -434,7 +434,7 @@ SbModule::SbModule( const OUString& rName, bool bVBACompat )
 SbModule::~SbModule()
 {
     SAL_INFO("basic","Module named " << GetName() << " is destructing");
-    delete pImage;
+    pImage.reset();
     delete pBreaks;
     pClassData.reset();
     mxWrapper = nullptr;
@@ -465,7 +465,7 @@ const SbxObject* SbModule::FindType( const OUString& aTypeName ) const
 
 void SbModule::StartDefinitions()
 {
-    delete pImage; pImage = nullptr;
+    pImage.reset();
     if( pClassData )
         pClassData->clear();
 
@@ -557,11 +557,11 @@ void SbModule::GetProcedureProperty( const OUString& rName, SbxDataType t )
     }
     if( !pProp )
     {
-        pProp = new SbProcedureProperty( rName, t );
-        pProp->SetFlag( SbxFlagBits::ReadWrite );
-        pProp->SetParent( this );
-        pProps->Put(pProp, pProps->Count());
-        StartListening(pProp->GetBroadcaster(), DuplicateHandling::Prevent);
+        tools::SvRef<SbProcedureProperty> pNewProp = new SbProcedureProperty( rName, t );
+        pNewProp->SetFlag( SbxFlagBits::ReadWrite );
+        pNewProp->SetParent( this );
+        pProps->Put(pNewProp.get(), pProps->Count());
+        StartListening(pNewProp->GetBroadcaster(), DuplicateHandling::Prevent);
     }
 }
 
@@ -615,7 +615,7 @@ void SbModule::EndDefinitions( bool bNewState )
 
 void SbModule::Clear()
 {
-    delete pImage; pImage = nullptr;
+    pImage.reset();
     if( pClassData )
         pClassData->clear();
     SbxObject::Clear();
@@ -1571,7 +1571,7 @@ void
 SbModule::fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg ) const
 {
         if ( !pImg )
-            pImg = pImage;
+            pImg = pImage.get();
         for (sal_uInt32 i = 0; i < pMethods->Count(); i++)
         {
             SbMethod* pMeth = dynamic_cast<SbMethod*>(pMethods->Get(i));
@@ -1598,18 +1598,17 @@ bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     rStrm.ReadUChar( bImage );
     if( bImage )
     {
-        SbiImage* p = new SbiImage;
+        std::unique_ptr<SbiImage> p(new SbiImage);
         sal_uInt32 nImgVer = 0;
 
         if( !p->Load( rStrm, nImgVer ) )
         {
-            delete p;
             return false;
         }
         // If the image is in old format, we fix up the method start offsets
         if ( nImgVer < B_EXT_IMG_VERSION )
         {
-            fixUpMethodStart( false, p );
+            fixUpMethodStart( false, p.get() );
             p->ReleaseLegacyBuffer();
         }
         aComment = p->aComment;
@@ -1621,15 +1620,13 @@ bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             if( nVer == 1 )
             {
                 SetSource32( p->aOUSource );
-                delete p;
             }
             else
-                pImage = p;
+                pImage = std::move(p);
         }
         else
         {
             SetSource32( p->aOUSource );
-            delete p;
         }
     }
     return true;
@@ -2098,24 +2095,23 @@ void SbMethod::Broadcast( SfxHintId nHintId )
 
     // Block broadcasts while creating new method
     std::unique_ptr<SfxBroadcaster> pSaveBroadcaster = std::move(mpBroadcaster);
-    SbMethod* pThisCopy = new SbMethod( *this );
-    SbMethodRef xHolder = pThisCopy;
+    SbMethodRef xThisCopy = new SbMethod( *this );
     if( mpPar.is() )
     {
         // Enregister this as element 0, but don't reset the parent!
         if( GetType() != SbxVOID ) {
-            mpPar->PutDirect( pThisCopy, 0 );
+            mpPar->PutDirect( xThisCopy.get(), 0 );
         }
         SetParameters( nullptr );
     }
 
     mpBroadcaster = std::move(pSaveBroadcaster);
-    mpBroadcaster->Broadcast( SbxHint( nHintId, pThisCopy ) );
+    mpBroadcaster->Broadcast( SbxHint( nHintId, xThisCopy.get() ) );
 
     SbxFlagBits nSaveFlags = GetFlags();
     SetFlag( SbxFlagBits::ReadWrite );
     pSaveBroadcaster = std::move(mpBroadcaster);
-    Put( pThisCopy->GetValues_Impl() );
+    Put( xThisCopy->GetValues_Impl() );
     mpBroadcaster = std::move(pSaveBroadcaster);
     SetFlags( nSaveFlags );
 }

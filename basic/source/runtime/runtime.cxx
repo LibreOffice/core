@@ -598,7 +598,7 @@ SbMethod* SbiInstance::GetCaller( sal_uInt16 nLevel )
 
 SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
          : rBasic( *static_cast<StarBASIC*>(pm->pParent) ), pInst( GetSbData()->pInst ),
-           pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), mpExtCaller(nullptr), m_nLastTime(0)
+           pMod( pm ), pMeth( pe ), pImg( pMod->pImage.get() ), mpExtCaller(nullptr), m_nLastTime(0)
 {
     nFlags    = pe ? pe->GetDebugFlags() : BasicDebugFlags::NONE;
     pIosys    = pInst->GetIoSystem();
@@ -4382,7 +4382,7 @@ void SbiRuntime::StepOPEN( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 void SbiRuntime::StepCREATE( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     OUString aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
-    SbxObject *pObj = SbxBase::CreateObject( aClass );
+    SbxObjectRef pObj = SbxBase::CreateObject( aClass );
     if( !pObj )
     {
         Error( ERRCODE_BASIC_INVALID_OBJECT );
@@ -4393,9 +4393,9 @@ void SbiRuntime::StepCREATE( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         pObj->SetName( aName );
         // the object must be able to call the BASIC
         pObj->SetParent( &rBasic );
-        SbxVariable* pNew = new SbxVariable;
-        pNew->PutObject( pObj );
-        PushVar( pNew );
+        SbxVariableRef pNew = new SbxVariable;
+        pNew->PutObject( pObj.get() );
+        PushVar( pNew.get() );
     }
 }
 
@@ -4457,7 +4457,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         if (!bRestored || !pArray->SbxArray::GetRef(i)) // For those left unset after preserve
         {
-            SbxObject* pClassObj = SbxBase::CreateObject(aClass);
+            SbxObjectRef pClassObj = SbxBase::CreateObject(aClass);
             if (!pClassObj)
             {
                 Error(ERRCODE_BASIC_INVALID_OBJECT);
@@ -4470,7 +4470,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                 pClassObj->SetName(aName);
                 // the object must be able to call the basic
                 pClassObj->SetParent(&rBasic);
-                pArray->SbxArray::Put(pClassObj, i);
+                pArray->SbxArray::Put(pClassObj.get(), i);
             }
         }
     }
@@ -4481,15 +4481,15 @@ void SbiRuntime::StepTCREATE( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     OUString aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     OUString aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
 
-    SbxObject* pCopyObj = createUserTypeImpl( aClass );
+    SbxObjectRef pCopyObj = createUserTypeImpl( aClass );
     if( pCopyObj )
     {
         pCopyObj->SetName( aName );
     }
-    SbxVariable* pNew = new SbxVariable;
-    pNew->PutObject( pCopyObj );
+    SbxVariableRef pNew = new SbxVariable;
+    pNew->PutObject( pCopyObj.get() );
     pNew->SetDeclareClassName( aClass );
-    PushVar( pNew );
+    PushVar( pNew.get() );
 }
 
 void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt32 nOp2 )
