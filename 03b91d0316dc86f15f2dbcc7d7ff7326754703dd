@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9feedbff_5561415b",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-10T19:34:32Z",
+      "side": 1,
+      "message": "This still allocates from heap, right? So it looks to simply move the allocation down. Or am I missing something? 😁",
+      "range": {
+        "startLine": 2508,
+        "startChar": 26,
+        "endLine": 2508,
+        "endChar": 34
+      },
+      "revId": "03b91d0316dc86f15f2dbcc7d7ff7326754703dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
