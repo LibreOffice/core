@@ -1426,23 +1426,25 @@ void GtkSalFrame::SetIcon(const char* appicon)
 {
     gtk_window_set_icon_name(GTK_WINDOW(m_pWindow), appicon);
 
-#if !GTK_CHECK_VERSION(4,0,0)
 #if defined(GDK_WINDOWING_WAYLAND)
     if (DLSYM_GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
     {
+#if GTK_CHECK_VERSION(4,0,0)
+        GdkSurface* gdkWindow = gtk_native_get_surface(gtk_widget_get_native(m_pWindow));
+        gdk_wayland_toplevel_set_application_id((GDK_TOPLEVEL(gdkWindow)), appicon);
+#else
         static auto set_application_id = reinterpret_cast<void (*) (GdkWindow*, const char*)>(
                                              dlsym(nullptr, "gdk_wayland_window_set_application_id"));
         if (set_application_id)
         {
             GdkWindow* gdkWindow = gtk_widget_get_window(m_pWindow);
             set_application_id(gdkWindow, appicon);
-
-            // gdk_wayland_window_set_application_id doesn't seem to work before
-            // the window is mapped, so set this for real when/if we are mapped
-            m_bIconSetWhileUnmapped = !gtk_widget_get_mapped(m_pWindow);
         }
-    }
 #endif
+        // gdk_wayland_window_set_application_id doesn't seem to work before
+        // the window is mapped, so set this for real when/if we are mapped
+        m_bIconSetWhileUnmapped = !gtk_widget_get_mapped(m_pWindow);
+    }
 #endif
 }
 
