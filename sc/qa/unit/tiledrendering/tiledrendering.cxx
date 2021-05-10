@@ -167,8 +167,9 @@ public:
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
     CPPUNIT_TEST(testPasteIntoWrapTextCell);
     CPPUNIT_TEST(testSortAscendingDescending);
-    CPPUNIT_TEST(testAutoInputStringBlock);
-    CPPUNIT_TEST(testAutoInputExactMatch);
+    // Temporarily disable autoinput tests
+    //CPPUNIT_TEST(testAutoInputStringBlock);
+    //CPPUNIT_TEST(testAutoInputExactMatch);
     CPPUNIT_TEST_SUITE_END();
 
 private:
