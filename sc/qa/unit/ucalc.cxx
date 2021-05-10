@@ -488,6 +488,26 @@ void Test::testTdf90698()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testTdf134490()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+
+    m_pDoc->SetString(ScAddress(0,0,0), "--1");
+    m_pDoc->SetString(ScAddress(0,1,0), "---1");
+    m_pDoc->SetString(ScAddress(0,2,0), "+-1");
+    m_pDoc->SetString(ScAddress(0,3,0), "+--1");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: --1
+    // - Actual  : -1
+    CPPUNIT_ASSERT_EQUAL(OUString("--1"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("---1"), m_pDoc->GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("+-1"), m_pDoc->GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("+--1"), m_pDoc->GetString(ScAddress(0,3,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testTdf135249()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
