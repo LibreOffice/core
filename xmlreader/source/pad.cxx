@@ -32,10 +32,11 @@ void Pad::add(char const * begin, sal_Int32 length) {
         begin != nullptr && length >= 0 && !(span_.is() && buffer_.getLength() != 0));
     if (length != 0) {
         flushSpan();
-        if (buffer_.isEmpty()) {
+        if (buflength_ == 0) {
             span_ = Span(begin, length);
         } else {
-            buffer_.append(begin, length);
+            memcpy(buffer_ + buflength_, begin, length);
+            buflength_ += length;
         }
     }
 }
@@ -45,30 +46,32 @@ void Pad::addEphemeral(char const * begin, sal_Int32 length) {
         begin != nullptr && length >= 0 && !(span_.is() && buffer_.getLength() != 0));
     if (length != 0) {
         flushSpan();
-        buffer_.append(begin, length);
+        memcpy(buffer_ + buflength_, begin, length);
+        buflength_ += length;
     }
 }
 
 void Pad::clear() {
     assert(!(span_.is() && buffer_.getLength() != 0));
     span_.clear();
-    buffer_.setLength(0);
+    buflength_ = 0;
 }
 
 Span Pad::get() const {
     assert(!(span_.is() && buffer_.getLength() != 0));
     if (span_.is()) {
         return span_;
-    } else if (buffer_.isEmpty()) {
+    } else if (buflength_ == 0) {
         return Span("");
     } else {
-        return Span(buffer_.getStr(), buffer_.getLength());
+        return Span(buffer_, buflength_);
     }
 }
 
 void Pad::flushSpan() {
     if (span_.is()) {
-        buffer_.append(span_.begin, span_.length);
+        memcpy(buffer_ + buflength_, span_.begin, span_.length);
+        buflength_ += span_.length;
         span_.clear();
     }
 }
