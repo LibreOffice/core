@@ -262,7 +262,7 @@ DECLARE_WW8IMPORT_TEST(testTdf110987, "tdf110987")
     CPPUNIT_ASSERT(sFilterName != "MS Word 97 Vorlage");
 }
 
-DECLARE_WW8IMPORT_TEST(testTdf120768_zOrder, "tdf120768_zOrder.doc")
+DECLARE_WW8IMPORT_TEST(testTdf120761_zOrder, "tdf120761_zOrder.doc")
 {
     //The blue shape was covering everything (highest zorder = 2) instead of the lowest(0)
     uno::Reference<drawing::XShape> xShape(getShapeByName(u"Picture 2"), uno::UNO_QUERY);
