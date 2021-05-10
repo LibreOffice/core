@@ -53,6 +53,17 @@ inline ::Window widget_get_xid(GtkWidget *widget)
 }
 #endif
 
+inline void main_loop_run(GMainLoop* pLoop)
+{
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    gdk_threads_leave();
+#endif
+    g_main_loop_run(pLoop);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    gdk_threads_enter();
+#endif
+}
+
 class GtkSalTimer final : public SalTimer
 {
     struct SalGtkTimeoutSource *m_pTimeout;

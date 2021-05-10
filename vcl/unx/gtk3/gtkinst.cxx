@@ -4894,13 +4894,7 @@ struct DialogRunner
         m_pLoop = g_main_loop_new(nullptr, false);
         m_nResponseId = GTK_RESPONSE_NONE;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gdk_threads_leave();
-#endif
-        g_main_loop_run(m_pLoop);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gdk_threads_enter();
-#endif
+        main_loop_run(m_pLoop);
 
         g_main_loop_unref(m_pLoop);
 
@@ -5106,11 +5100,7 @@ private:
         gtk_menu_popup(GTK_MENU(pMenu), nullptr, nullptr, nullptr, nullptr, button, event_time);
 
         if (g_main_loop_is_running(pLoop))
-        {
-            gdk_threads_leave();
-            g_main_loop_run(pLoop);
-            gdk_threads_enter();
-        }
+            main_loop_run(pLoop);
 
         g_main_loop_unref(pLoop);
         g_signal_handler_disconnect(pMenu, nSignalId);
@@ -8645,11 +8635,8 @@ private:
         }
 
         if (g_main_loop_is_running(pLoop))
-        {
-            gdk_threads_leave();
-            g_main_loop_run(pLoop);
-            gdk_threads_enter();
-        }
+            main_loop_run(pLoop);
+
         g_main_loop_unref(pLoop);
         g_signal_handler_disconnect(m_pMenu, nSignalId);
     }
@@ -8934,11 +8921,8 @@ public:
         }
 
         if (g_main_loop_is_running(pLoop))
-        {
-            gdk_threads_leave();
-            g_main_loop_run(pLoop);
-            gdk_threads_enter();
-        }
+            main_loop_run(pLoop);
+
         g_main_loop_unref(pLoop);
         g_signal_handler_disconnect(m_pMenu, nSignalId);
         gtk_menu_detach(m_pMenu);
