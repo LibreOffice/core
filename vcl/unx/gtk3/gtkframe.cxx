@@ -964,9 +964,9 @@ void GtkSalFrame::InitCommon()
     g_signal_connect( G_OBJECT(m_pFixedContainer), "resize", G_CALLBACK(sizeAllocated), this );
 #endif
 
-#if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pFixedContainer), "realize", G_CALLBACK(signalRealize), this );
 
+#if !GTK_CHECK_VERSION(4,0,0)
     GtkGesture *pSwipe = gtk_gesture_swipe_new(pEventWidget);
     g_signal_connect(pSwipe, "swipe", G_CALLBACK(gestureSwipe), this);
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER (pSwipe), GTK_PHASE_TARGET);
@@ -3295,6 +3295,7 @@ void swapDirection(GdkGravity& gravity)
 }
 
 }
+#endif
 
 void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
 {
@@ -3304,6 +3305,7 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
         return;
     pThis->TriggerPaintEvent();
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     if (!pThis->m_bFloatPositioned)
         return;
 
@@ -3346,8 +3348,10 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
 
     GdkWindow* gdkWindow = gtk_widget_get_window(pThis->m_pWindow);
     window_move_to_rect(gdkWindow, &rect, rect_anchor, menu_anchor, static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE), 0, 0);
+#endif
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);

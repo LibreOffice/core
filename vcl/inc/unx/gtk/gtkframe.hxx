@@ -253,8 +253,8 @@ class GtkSalFrame final : public SalFrame
     static void         signalDraw(GtkDrawingArea*, cairo_t *cr, int width, int height, gpointer);
     static void         sizeAllocated(GtkWidget*, int nWidth, int nHeight, gpointer frame);
 #endif
-#if !GTK_CHECK_VERSION(4, 0, 0)
     static void         signalRealize(GtkWidget*, gpointer frame);
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalTooltipQuery(GtkWidget*, gint x, gint y,
                                      gboolean keyboard_mode, GtkTooltip *tooltip,
                                      gpointer frame);
