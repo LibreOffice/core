@@ -3510,7 +3510,12 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         }
         else if ( bDidMatch )
         {
-            return false;
+            // Accept a plain fractional number like 123.45 as there may be a
+            // decimal separator also present as literal like in a 0"."0 weirdo
+            // format.
+            if (nDecPos != 2 || nNumericsCnt != 2)
+                return false;
+            eScannedType = SvNumFormatType::NUMBER;
         }
         else
         {
@@ -3756,10 +3761,12 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             case SvNumFormatType::NUMBER:
                 if (nDecPos == 1)               // .05
                 {
-                    // matched MidStrings function like group separators
+                    // Matched MidStrings function like group separators, but
+                    // there can't be an integer part numeric input, so
+                    // effectively 0 thousands groups.
                     if ( nMatchedAllStrings )
                     {
-                        nThousand = nNumericsCnt - 1;
+                        nThousand = 0;
                     }
                     else if ( nNumericsCnt != 1 )
                     {
@@ -3768,10 +3775,21 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 }
                 else if (nDecPos == 2)          // 1.05
                 {
-                    // matched MidStrings function like group separators
+                    // Matched MidStrings function like group separators, but
+                    // let a decimal separator override a literal separator
+                    // string; like 0"." with input 123.45
                     if ( nMatchedAllStrings )
                     {
-                        nThousand = nNumericsCnt - 1;
+                        if (nNumericsCnt == 2)
+                            nThousand = 0;
+                        else
+                        {
+                            // Assume that if there was a decimal separator
+                            // matching also a literal string then it was the
+                            // last. We could find the last possible match to
+                            // support literals in fractions, but really..
+                            nThousand = nNumericsCnt - 1;
+                        }
                     }
                     else if ( nNumericsCnt != nThousand+2 )
                     {
