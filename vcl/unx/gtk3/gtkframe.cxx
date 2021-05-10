@@ -906,7 +906,11 @@ void GtkSalFrame::InitCommon()
 
     // add the fixed container child,
     // fixed is needed since we have to position plugin windows
+#if !GTK_CHECK_VERSION(4,0,0)
     m_pFixedContainer = GTK_FIXED(g_object_new( ooo_fixed_get_type(), nullptr ));
+#else
+    m_pFixedContainer = GTK_DRAWING_AREA(gtk_drawing_area_new());
+#endif
     gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
     gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), 1, 1);
 #if !GTK_CHECK_VERSION(4,0,0)
@@ -950,10 +954,18 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-data-delete", G_CALLBACK(signalDragDelete), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-data-get", G_CALLBACK(signalDragDataGet), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "scroll-event", G_CALLBACK(signalScroll), this ));
+#endif
 
+#if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pFixedContainer), "draw", G_CALLBACK(signalDraw), this );
-    g_signal_connect( G_OBJECT(m_pFixedContainer), "realize", G_CALLBACK(signalRealize), this );
     g_signal_connect( G_OBJECT(m_pFixedContainer), "size-allocate", G_CALLBACK(sizeAllocated), this );
+#else
+    gtk_drawing_area_set_draw_func(m_pFixedContainer, signalDraw, this, nullptr);
+    g_signal_connect( G_OBJECT(m_pFixedContainer), "resize", G_CALLBACK(sizeAllocated), this );
+#endif
+
+#if !GTK_CHECK_VERSION(4,0,0)
+    g_signal_connect( G_OBJECT(m_pFixedContainer), "realize", G_CALLBACK(signalRealize), this );
 
     GtkGesture *pSwipe = gtk_gesture_swipe_new(pEventWidget);
     g_signal_connect(pSwipe, "swipe", G_CALLBACK(gestureSwipe), this);
@@ -3216,34 +3228,59 @@ void GtkSalFrame::damaged(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
 #endif
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 // blit our backing cairo surface to the target cairo context
+void GtkSalFrame::DrawingAreaDraw(cairo_t *cr)
+{
+    cairo_set_source_surface(cr, m_pSurface, 0, 0);
+    cairo_paint(cr);
+}
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalFrame::signalDraw(GtkWidget*, cairo_t *cr, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-
-    cairo_set_source_surface(cr, pThis->m_pSurface, 0, 0);
-    cairo_paint(cr);
-
+    pThis->DrawingAreaDraw(cr);
     return false;
 }
+#else
+void GtkSalFrame::signalDraw(GtkDrawingArea*, cairo_t *cr, int /*width*/, int /*height*/, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->DrawingAreaDraw(cr);
+}
+#endif
 
+void GtkSalFrame::DrawingAreaResized(GtkWidget* pWidget, int nWidth, int nHeight)
+{
+    SolarMutexGuard aGuard;
+    // ignore size-allocations that occur during configuring an embedded SalObject
+    if (m_bSalObjectSetPosSize)
+        return;
+    maGeometry.nWidth = nWidth;
+    maGeometry.nHeight = nHeight;
+    bool bRealized = gtk_widget_get_realized(pWidget);
+    if (bRealized)
+        AllocateFrame();
+    CallCallbackExc( SalEvent::Resize, nullptr );
+    if (bRealized)
+        TriggerPaintEvent();
+}
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 void GtkSalFrame::sizeAllocated(GtkWidget* pWidget, GdkRectangle *pAllocation, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    // ignore size-allocations that occur during configuring an embedded SalObject
-    if (pThis->m_bSalObjectSetPosSize)
-        return;
-    pThis->maGeometry.nWidth = pAllocation->width;
-    pThis->maGeometry.nHeight = pAllocation->height;
-    bool bRealized = gtk_widget_get_realized(pWidget);
-    if (bRealized)
-        pThis->AllocateFrame();
-    pThis->CallCallbackExc( SalEvent::Resize, nullptr );
-    if (bRealized)
-        pThis->TriggerPaintEvent();
+    pThis->DrawingAreaResized(pWidget, pAllocation->width, pAllocation->height);
 }
+#else
+void GtkSalFrame::sizeAllocated(GtkWidget* pWidget, int nWidth, int nHeight, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->DrawingAreaResized(pWidget, nWidth, nHeight);
+}
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace {
 
 void swapDirection(GdkGravity& gravity)

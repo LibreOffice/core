@@ -176,8 +176,10 @@ class GtkSalFrame final : public SalFrame
     GtkGrid*                        m_pTopLevelGrid;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GtkEventBox*                    m_pEventBox;
-#endif
     GtkFixed*                       m_pFixedContainer;
+#else
+    GtkDrawingArea*                 m_pFixedContainer;
+#endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
@@ -241,9 +243,18 @@ class GtkSalFrame final : public SalFrame
     // signals
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static void         signalStyleUpdated(GtkWidget*, gpointer);
+#endif
+    void DrawingAreaResized(GtkWidget* pWidget, int nWidth, int nHeight);
+    void DrawingAreaDraw(cairo_t *cr);
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalDraw( GtkWidget*, cairo_t *cr, gpointer );
-    static void         signalRealize(GtkWidget*, gpointer frame);
     static void         sizeAllocated(GtkWidget*, GdkRectangle *pAllocation, gpointer frame);
+#else
+    static void         signalDraw(GtkDrawingArea*, cairo_t *cr, int width, int height, gpointer);
+    static void         sizeAllocated(GtkWidget*, int nWidth, int nHeight, gpointer frame);
+#endif
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    static void         signalRealize(GtkWidget*, gpointer frame);
     static gboolean     signalTooltipQuery(GtkWidget*, gint x, gint y,
                                      gboolean keyboard_mode, GtkTooltip *tooltip,
                                      gpointer frame);
@@ -357,7 +368,7 @@ public:
     static GtkSalDisplay*  getDisplay();
     static GdkDisplay*     getGdkDisplay();
     GtkWidget*  getWindow() const { return m_pWindow; }
-    GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
+    GtkFixed*   getFixedContainer() const { return GTK_FIXED(m_pFixedContainer); }
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GtkEventBox* getEventBox() const { return m_pEventBox; }
 #endif
