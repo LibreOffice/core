@@ -948,6 +948,8 @@ void GtkSalFrame::InitCommon()
 
     GtkEventController* pMotionController = gtk_event_controller_motion_new();
     g_signal_connect(pMotionController, "motion", G_CALLBACK(signalMotion), this);
+    g_signal_connect(pMotionController, "enter", G_CALLBACK(signalEnter), this);
+    g_signal_connect(pMotionController, "leave", G_CALLBACK(signalLeave), this);
     gtk_widget_add_controller(pEventWidget, pMotionController);
 #endif
 #if !GTK_CHECK_VERSION(4,0,0)
@@ -3170,6 +3172,8 @@ void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gdouble x, gdou
 
 void GtkSalFrame::DrawingAreaMotion(int nEventX, int nEventY, guint32 nTime, guint nState)
 {
+    UpdateLastInputEventTime(nTime);
+
     SalMouseEvent aEvent;
     aEvent.mnTime = nTime;
     aEvent.mnX = nEventX;
@@ -3194,8 +3198,6 @@ void GtkSalFrame::signalMotion(GtkEventControllerMotion *pController, double x, 
 #else
 gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer frame )
 {
-    UpdateLastInputEventTime(pEvent->time);
-
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     GtkWidget* pEventWidget = pThis->getMouseEventWidget();
     bool bDifferentEventWindow = pEvent->window != gtk_widget_get_window(pEventWidget);
@@ -3247,24 +3249,48 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 }
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpointer frame )
+void GtkSalFrame::DrawingAreaCrossing(SalEvent nEventType, int nEventX, int nEventY, guint32 nTime, guint nState)
 {
-    UpdateLastInputEventTime(pEvent->time);
+    UpdateLastInputEventTime(nTime);
 
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     SalMouseEvent aEvent;
-    aEvent.mnTime   = pEvent->time;
-    aEvent.mnX      = static_cast<tools::Long>(pEvent->x_root) - pThis->maGeometry.nX;
-    aEvent.mnY      = static_cast<tools::Long>(pEvent->y_root) - pThis->maGeometry.nY;
-    aEvent.mnCode   = GetMouseModCode( pEvent->state );
+    aEvent.mnTime = nTime;
+    aEvent.mnX = nEventX;
+    aEvent.mnY = nEventY;
+    aEvent.mnCode = GetMouseModCode(nState);
     aEvent.mnButton = 0;
 
     if (AllSettings::GetLayoutRTL())
-        aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
+        aEvent.mnX = maGeometry.nWidth-1-aEvent.mnX;
 
-    pThis->CallCallbackExc( (pEvent->type == GDK_ENTER_NOTIFY) ? SalEvent::MouseMove : SalEvent::MouseLeave, &aEvent );
+    CallCallbackExc(nEventType, &aEvent);
+}
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+void GtkSalFrame::signalEnter(GtkEventControllerMotion *pController, double x, double y, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    GdkEvent* pEvent = gtk_event_controller_get_current_event(GTK_EVENT_CONTROLLER(pController));
+    GdkModifierType eType = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(pController));
+    pThis->DrawingAreaCrossing(SalEvent::MouseMove, x, y, pEvent ? gdk_event_get_time(pEvent) : GDK_CURRENT_TIME, eType);
+}
+
+void GtkSalFrame::signalLeave(GtkEventControllerMotion *pController, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    GdkEvent* pEvent = gtk_event_controller_get_current_event(GTK_EVENT_CONTROLLER(pController));
+    GdkModifierType eType = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(pController));
+    pThis->DrawingAreaCrossing(SalEvent::MouseLeave, -1, -1, pEvent ? gdk_event_get_time(pEvent) : GDK_CURRENT_TIME, eType);
+}
+#else
+gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpointer frame )
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->DrawingAreaCrossing((pEvent->type == GDK_ENTER_NOTIFY) ? SalEvent::MouseMove : SalEvent::MouseLeave,
+                               pEvent->x_root - pThis->maGeometry.nX,
+                               pEvent->y_root - pThis->maGeometry.nY,
+                               pEvent->time,
+                               pEvent->state);
     return true;
 }
 #endif
