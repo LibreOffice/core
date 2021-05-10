@@ -1582,12 +1582,12 @@ void ScDocument::GetFilterEntriesArea(
  */
 void ScDocument::GetDataEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab,
-    std::vector<ScTypedStrData>& rStrings, bool bLimit )
+    std::vector<ScTypedStrData>& rStrings, bool bValidation )
 {
-    if( !bLimit )
+    if( bValidation )
     {
         /*  Try to generate the list from list validation. This part is skipped,
-            if bLimit==true, because in that case this function is called to get
+            if bValidation==false, because in that case this function is called to get
             cell values for auto completion on input. */
         sal_uInt32 nValidation = GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
         if( nValidation )
@@ -1610,7 +1610,7 @@ void ScDocument::GetDataEntries(
         return;
 
     std::set<ScTypedStrData> aStrings;
-    if (maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings, bLimit))
+    if (maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings))
     {
         rStrings.insert(rStrings.end(), aStrings.begin(), aStrings.end());
         sortAndRemoveDuplicates(rStrings, true/*bCaseSens*/);
