@@ -207,6 +207,37 @@ struct ExtensionMap
     const char *filterName;
 };
 
+class TraceEventDumper : public AutoTimer
+{
+    static const int dumpTimeoutMS = 5000;
+
+public:
+    TraceEventDumper() : AutoTimer( "Trace Event dumper" )
+    {
+        SetTimeout(dumpTimeoutMS);
+        Start();
+    }
+    virtual void Invoke() override
+    {
+        const css::uno::Sequence<OUString> aEvents =
+            comphelper::TraceEvent::getRecordingAndClear();
+        OStringBuffer aOutput;
+        for (const auto &s : aEvents)
+        {
+            aOutput.append(OUStringToOString(s, RTL_TEXTENCODING_UTF8));
+            aOutput.append("\n");
+        }
+        if (aOutput.getLength() > 0)
+        {
+            OString aChunk = aOutput.makeStringAndClear();
+            if (gImpl && gImpl->mpCallback)
+                gImpl->mpCallback(LOK_CALLBACK_PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
+        }
+    }
+};
+
+static TraceEventDumper *traceEventDumper = nullptr;
+
 static const ExtensionMap aWriterExtensionMap[] =
 {
     { "doc",   "MS Word 97" },
@@ -3868,7 +3899,11 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
     if (strcmp(pOption, "traceeventrecording") == 0)
     {
         if (strcmp(pValue, "start") == 0)
+        {
             comphelper::TraceEvent::startRecording();
+            if (traceEventDumper == nullptr)
+                traceEventDumper = new TraceEventDumper();
+        }
         else if (strcmp(pValue, "stop") == 0)
             comphelper::TraceEvent::stopRecording();
     }
@@ -6117,31 +6152,6 @@ static void preloadData()
     rtl::Bootstrap::set("UserInstallation", sUserPath);
 }
 
-class ProfileZoneDumper : public AutoTimer
-{
-    static const int dumpTimeoutMS = 5000;
-public:
-    ProfileZoneDumper() : AutoTimer( "zone dumper" )
-    {
-        SetTimeout(dumpTimeoutMS);
-        Start();
-    }
-    virtual void Invoke() override
-    {
-        const css::uno::Sequence<OUString> aEvents =
-            comphelper::TraceEvent::getRecordingAndClear();
-        OStringBuffer aOutput;
-        for (const auto &s : aEvents)
-        {
-            aOutput.append(OUStringToOString(s, RTL_TEXTENCODING_UTF8));
-            aOutput.append("\n");
-        }
-        OString aChunk = aOutput.makeStringAndClear();
-        if (gImpl && gImpl->mpCallback)
-            gImpl->mpCallback(LOK_CALLBACK_PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
-    }
-};
-
 static void activateNotebookbar(const OUString& rApp)
 {
     OUString aPath = "org.openoffice.Office.UI.ToolbarMode/Applications/" + rApp;
@@ -6210,7 +6220,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (bProfileZones && eStage == SECOND_INIT)
     {
         comphelper::TraceEvent::startRecording();
-        new ProfileZoneDumper();
+        traceEventDumper = new TraceEventDumper();
     }
 
     comphelper::ProfileZone aZone("lok-init");
