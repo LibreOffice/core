@@ -969,15 +969,25 @@ void GtkSalFrame::InitCommon()
 
 #if !GTK_CHECK_VERSION(4,0,0)
     GtkGesture *pSwipe = gtk_gesture_swipe_new(pEventWidget);
+    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pSwipe);
+#else
+    GtkGesture *pSwipe = gtk_gesture_swipe_new();
+    gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pSwipe));
+#endif
     g_signal_connect(pSwipe, "swipe", G_CALLBACK(gestureSwipe), this);
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER (pSwipe), GTK_PHASE_TARGET);
-    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pSwipe);
 
+#if !GTK_CHECK_VERSION(4,0,0)
     GtkGesture *pLongPress = gtk_gesture_long_press_new(pEventWidget);
+    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pLongPress);
+#else
+    GtkGesture *pLongPress = gtk_gesture_long_press_new();
+    gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pLongPress));
+#endif
     g_signal_connect(pLongPress, "pressed", G_CALLBACK(gestureLongPress), this);
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER (pLongPress), GTK_PHASE_TARGET);
-    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pLongPress);
 
+#if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect_after( G_OBJECT(m_pWindow), "focus-in-event", G_CALLBACK(signalFocus), this );
     g_signal_connect_after( G_OBJECT(m_pWindow), "focus-out-event", G_CALLBACK(signalFocus), this );
     if (GTK_IS_WINDOW(m_pWindow)) // i.e. not if it's a GtkEventBox which doesn't have the signal
@@ -3072,6 +3082,7 @@ gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEvent* pInEvent, gpointer fram
 
     return true;
 }
+#endif
 
 void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame)
 {
@@ -3082,14 +3093,13 @@ void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdo
     //within the same vcl window
     if (gtk_gesture_get_point(GTK_GESTURE(gesture), sequence, &x, &y))
     {
-        GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-
         SalSwipeEvent aEvent;
         aEvent.mnVelocityX = velocity_x;
         aEvent.mnVelocityY = velocity_y;
         aEvent.mnX = x;
         aEvent.mnY = y;
 
+        GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
         pThis->CallCallbackExc(SalEvent::Swipe, &aEvent);
     }
 }
@@ -3099,16 +3109,16 @@ void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gdouble x, gdou
     GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence(GTK_GESTURE_SINGLE(gesture));
     if (gtk_gesture_get_point(GTK_GESTURE(gesture), sequence, &x, &y))
     {
-        GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-
         SalLongPressEvent aEvent;
         aEvent.mnX = x;
         aEvent.mnY = y;
 
+        GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
         pThis->CallCallbackExc(SalEvent::LongPress, &aEvent);
     }
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer frame )
 {
     UpdateLastInputEventTime(pEvent->time);
@@ -3252,7 +3262,6 @@ void GtkSalFrame::signalDraw(GtkDrawingArea*, cairo_t *cr, int /*width*/, int /*
 
 void GtkSalFrame::DrawingAreaResized(GtkWidget* pWidget, int nWidth, int nHeight)
 {
-    SolarMutexGuard aGuard;
     // ignore size-allocations that occur during configuring an embedded SalObject
     if (m_bSalObjectSetPosSize)
         return;
@@ -3490,8 +3499,6 @@ void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
 
 void GtkSalFrame::WindowMap()
 {
-    SolarMutexGuard aGuard;
-
     if (m_bIconSetWhileUnmapped)
         SetIcon(gtk_window_get_icon_name(GTK_WINDOW(m_pWindow)));
 
@@ -3501,8 +3508,6 @@ void GtkSalFrame::WindowMap()
 
 void GtkSalFrame::WindowUnmap()
 {
-    SolarMutexGuard aGuard;
-
     CallCallbackExc( SalEvent::Resize, nullptr );
 
     if (m_bFloatPositioned)
@@ -3749,7 +3754,6 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
 
 bool GtkSalFrame::WindowCloseRequest()
 {
-    SolarMutexGuard aGuard;
     CallCallbackExc(SalEvent::Close, nullptr);
     return true;
 }
@@ -5067,6 +5071,7 @@ void GtkSalFrame::signalDragDataGet(GtkWidget* /*widget*/, GdkDragContext* /*con
 
 bool GtkSalFrame::CallCallbackExc(SalEvent nEvent, const void* pEvent) const
 {
+    SolarMutexGuard aGuard;
     bool nRet = false;
     try
     {
