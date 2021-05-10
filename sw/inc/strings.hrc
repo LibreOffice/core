@@ -1111,7 +1111,7 @@
 #define STR_FRM_FIXEDHEIGHT                     NC_("STR_FRM_FIXEDHEIGHT", "Fixed height:")
 #define STR_FRM_MINHEIGHT                       NC_("STR_FRM_MINHEIGHT", "Min. height:")
 #define STR_FLY_AT_PARA                         NC_("STR_FLY_AT_PARA", "to paragraph")
-#define STR_FLY_AS_CHAR                         NC_("STR_FLY_AS_CHAR", "to character")
+#define STR_FLY_AS_CHAR                         NC_("STR_FLY_AS_CHAR", "as character")
 #define STR_FLY_AT_PAGE                         NC_("STR_FLY_AT_PAGE", "to page")
 #define STR_POS_X                               NC_("STR_POS_X", "X Coordinate:")
 #define STR_POS_Y                               NC_("STR_POS_Y", "Y Coordinate:")
