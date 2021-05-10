@@ -1180,9 +1180,14 @@ $(eval $(call gb_Helper_register_mos,\
 ))
 
 # UI configuration
+ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)
+$(eval $(call gb_Helper_register_uiconfigs,\
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbaccess) \
+))
+endif
+
 $(eval $(call gb_Helper_register_uiconfigs,\
 	cui \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbaccess) \
 	desktop \
 	editeng \
 	filter \

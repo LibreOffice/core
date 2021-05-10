@@ -222,12 +222,25 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	dbaccess/util/dba \
+))
+endif
+
 $(eval $(call gb_Rdb_add_components,services,\
 	extensions/source/bibliography/bib \
-	dbaccess/util/dba \
 ))
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+
+ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	dbaccess/source/filter/xml/dbaxml \
+	dbaccess/util/dbu \
+	dbaccess/util/sdbt \
+))
+endif
 
 $(eval $(call gb_Rdb_add_components,services,\
 	extensions/source/dbpilots/dbp \
@@ -257,9 +270,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	connectivity/source/drivers/mysql_jdbc/mysql_jdbc \
 	connectivity/source/manager/sdbc2 \
 	connectivity/source/drivers/writer/writer \
-	dbaccess/source/filter/xml/dbaxml \
-	dbaccess/util/dbu \
-	dbaccess/util/sdbt \
 	forms/util/frm \
 	reportdesign/util/rpt \
 	reportdesign/util/rptui \

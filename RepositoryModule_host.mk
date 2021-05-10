@@ -42,6 +42,12 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
+	dbaccess \
+))
+endif
+
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
 	android \
@@ -62,7 +68,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	cppuhelper \
 	cpputools \
 	cui \
-	dbaccess \
 	desktop \
 	$(call gb_Helper_optional,DICTIONARIES,dictionaries) \
 	drawinglayer \
