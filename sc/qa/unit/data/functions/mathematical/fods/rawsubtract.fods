@@ -4098,6 +4098,30 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=ORG.LIBREOFFICE.RAWSUBTRACT(0.3;0.2;0.1;-0.1;-0.2;0.3)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce28" table:formula="of:=ROUND([.A13];20)=ROUND([.B13];20)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=RAWSUBTRACT(0.3;0.2;0.1;-0.1;-0.2;0.3)" calcext:value-type="string">
+      <text:p>=RAWSUBTRACT(0.3;0.2;0.1;-0.1;-0.2;0.3)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="7"/>
+     <table:table-cell table:style-name="ce19"/>
+     <table:table-cell table:style-name="ce46" table:number-columns-repeated="2"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce27" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce38"/>
+     <table:table-cell table:style-name="ce55"/>
+     <table:table-cell table:style-name="ce27" table:number-columns-repeated="4"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
