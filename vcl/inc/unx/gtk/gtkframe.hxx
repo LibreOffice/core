@@ -59,6 +59,7 @@ class GtkDnDTransferable;
 
 #if !GTK_CHECK_VERSION(4,0,0)
 typedef GdkWindow GdkSurface;
+typedef GdkWindowState GdkToplevelState;
 #endif
 
 class GtkSalMenu;
@@ -189,9 +190,7 @@ class GtkSalFrame final : public SalFrame
     SalFrameStyleFlags              m_nStyle;
     GtkSalFrame*                    m_pParent;
     std::list< GtkSalFrame* >       m_aChildren;
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    GdkWindowState                  m_nState;
-#endif
+    GdkToplevelState                m_nState;
     SystemEnvData                   m_aSystemData;
     std::unique_ptr<GtkSalGraphics> m_pGraphics;
     bool                            m_bGraphics;
@@ -210,7 +209,7 @@ class GtkSalFrame final : public SalFrame
 
     Size                            m_aMaxSize;
     Size                            m_aMinSize;
-    tools::Rectangle                       m_aRestorePosSize;
+    tools::Rectangle                m_aRestorePosSize;
 
     OUString                        m_aTooltip;
     tools::Rectangle                m_aHelpArea;
