@@ -779,23 +779,24 @@ osl::Mutex& impl_GetOwnStaticMutex()
 *//*-*************************************************************************************************************/
 SvtModuleOptions::SvtModuleOptions()
 {
-    // Global access, must be guarded (multithreading!)
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-
+    // no need to take the mutex yet, shared_ptr/weak_ptr are thread-safe
     m_pImpl = g_pModuleOptions.lock();
     if( !m_pImpl )
     {
-        m_pImpl = std::make_shared<SvtModuleOptions_Impl>();
-        g_pModuleOptions = m_pImpl;
-        ItemHolder1::holdConfigItem(EItem::ModuleOptions);
+        // take the mutex, so we don't accidentally create more than one
+        ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+
+        if( !m_pImpl )
+        {
+            m_pImpl = std::make_shared<SvtModuleOptions_Impl>();
+            ItemHolder1::holdConfigItem(EItem::ModuleOptions);
+            g_pModuleOptions = m_pImpl;
+        }
     }
 }
 
 SvtModuleOptions::~SvtModuleOptions()
 {
-    // Global access, must be guarded (multithreading!)
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-
     m_pImpl.reset();
 }
 
@@ -809,13 +810,13 @@ SvtModuleOptions::~SvtModuleOptions()
 *//*-*************************************************************************************************************/
 bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
 {
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    // doesn't need mutex, never modified
     return m_pImpl->IsModuleInstalled( eModule );
 }
 
 OUString SvtModuleOptions::GetFactoryName( EFactory eFactory ) const
 {
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    // doesn't need mutex, never modified
     return m_pImpl->GetFactoryName( eFactory );
 }
 
@@ -873,25 +874,25 @@ void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
 
 bool SvtModuleOptions::IsMath() const
 {
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    // doesn't need mutex, never modified
     return m_pImpl->IsModuleInstalled( EModule::MATH );
 }
 
 bool SvtModuleOptions::IsChart() const
 {
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    // doesn't need mutex, never modified
     return m_pImpl->IsModuleInstalled( EModule::CHART );
 }
 
 bool SvtModuleOptions::IsCalc() const
 {
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    // doesn't need mutex, never modified
     return m_pImpl->IsModuleInstalled( EModule::CALC );
 }
 
 bool SvtModuleOptions::IsDraw() const
 {
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    // doesn't need mutex, never modified
     return m_pImpl->IsModuleInstalled( EModule::DRAW );
 }
 
@@ -903,13 +904,13 @@ bool SvtModuleOptions::IsWriter() const
 
 bool SvtModuleOptions::IsImpress() const
 {
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    // doesn't need mutex, never modified
     return m_pImpl->IsModuleInstalled( EModule::IMPRESS );
 }
 
 bool SvtModuleOptions::IsDataBase() const
 {
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    // doesn't need mutex, never modified
     return m_pImpl->IsModuleInstalled( EModule::DATABASE );
 }
 
