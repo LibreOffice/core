@@ -929,7 +929,6 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     std::unique_ptr<ObjectInspectorWidgets>& pObjectInspectorWidgets)
     : mpObjectInspectorWidgets(pObjectInspectorWidgets)
     , mxContext(comphelper::getProcessComponentContext())
-    , mbPanedResetSize(true)
 {
     mpObjectInspectorWidgets->mpInterfacesTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerInterfaces));
@@ -962,15 +961,12 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("inspect", false);
     mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("back", false);
 
-    mpObjectInspectorWidgets->mpTextView->hide();
-
     mpObjectInspectorWidgets->mpNotebook->connect_leave_page(
         LINK(this, ObjectInspectorTreeHandler, NotebookLeavePage));
     mpObjectInspectorWidgets->mpNotebook->connect_enter_page(
         LINK(this, ObjectInspectorTreeHandler, NotebookEnterPage));
 
-    mpObjectInspectorWidgets->mpPaned->connect_size_allocate(
-        LINK(this, ObjectInspectorTreeHandler, PanedSizeChange));
+    pObjectInspectorWidgets->mpPaned->set_position(160);
 }
 
 void ObjectInspectorTreeHandler::handleExpanding(std::unique_ptr<weld::TreeView>& pTreeView,
@@ -1085,8 +1081,6 @@ IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OString&, rSel
 
 IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OString&, rPageId, void)
 {
-    mpObjectInspectorWidgets->mpTextView->hide();
-
     uno::Any aAny = maInspectionStack.back();
     if (!aAny.hasValue())
         return;
@@ -1108,12 +1102,10 @@ IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OString&, rPageId
     }
     else if (rPageId == "object_inspector_properties_tab")
     {
-        mbPanedResetSize = true;
         mpObjectInspectorWidgets->mpPropertiesTreeView->freeze();
         clearAll(mpObjectInspectorWidgets->mpPropertiesTreeView);
         appendProperties(xInterface);
         mpObjectInspectorWidgets->mpPropertiesTreeView->thaw();
-        mpObjectInspectorWidgets->mpTextView->show();
     }
     else if (rPageId == "object_inspector_methods_tab")
     {
@@ -1151,17 +1143,6 @@ IMPL_LINK(ObjectInspectorTreeHandler, NotebookLeavePage, const OString&, rPageId
         mpObjectInspectorWidgets->mpMethodsTreeView->thaw();
     }
     return true;
-}
-
-IMPL_LINK(ObjectInspectorTreeHandler, PanedSizeChange, const Size&, rSize, void)
-{
-    if (mbPanedResetSize)
-    {
-        // Set position at 90% of the height
-        tools::Long nHeight = rSize.Height();
-        mpObjectInspectorWidgets->mpPaned->set_position(nHeight * 0.9);
-        mbPanedResetSize = false;
-    }
 }
 
 void ObjectInspectorTreeHandler::clearObjectInspectorChildren(
