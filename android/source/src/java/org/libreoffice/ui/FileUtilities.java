@@ -138,6 +138,9 @@ public class FileUtilities {
             if (cursor != null && cursor.moveToFirst()) {
                 displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
             }
+        } catch (SecurityException e) {
+            // thrown e.g. when Uri has become invalid, e.g. corresponding file has been deleted
+            Log.i(LOGTAG, "SecurityException when trying to receive display name for Uri " + docUri);
         } finally {
             if (cursor != null) {
                 cursor.close();
