@@ -453,9 +453,7 @@ void SwView::SelectShell()
         }
 
         // Show Mail Merge toolbar initially for documents with Database fields
-        if (!m_bInitOnceCompleted
-            && (GetWrtShell().IsAnyDatabaseFieldInDoc()
-                || !GetWrtShell().GetDBData().sDataSource.isEmpty()))
+        if (!m_bInitOnceCompleted && GetWrtShell().IsAnyDatabaseFieldInDoc())
             ShowUIElement("private:resource/toolbar/mailmerge");
 
         // Activate the toolbar to the new selection which also was active last time.
