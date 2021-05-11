@@ -27,13 +27,13 @@ SalLayoutGlyphs::SalLayoutGlyphs() {}
 
 SalLayoutGlyphs::~SalLayoutGlyphs() {}
 
-SalLayoutGlyphs::SalLayoutGlyphs(SalLayoutGlyphs&& rOther)
+SalLayoutGlyphs::SalLayoutGlyphs(SalLayoutGlyphs&& rOther) noexcept
 {
     std::swap(m_pImpl, rOther.m_pImpl);
     std::swap(m_pExtraImpls, rOther.m_pExtraImpls);
 }
 
-SalLayoutGlyphs& SalLayoutGlyphs::operator=(SalLayoutGlyphs&& rOther)
+SalLayoutGlyphs& SalLayoutGlyphs::operator=(SalLayoutGlyphs&& rOther) noexcept
 {
     if (this != &rOther)
     {
