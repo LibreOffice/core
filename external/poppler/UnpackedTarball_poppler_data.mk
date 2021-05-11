@@ -7,13 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,poppler))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,poppler_data))
 
-$(eval $(call gb_Module_add_targets,poppler,\
-	StaticLibrary_poppler \
-	UnpackedTarball_poppler \
-	ExternalPackage_poppler_data \
-	UnpackedTarball_poppler_data \
-))
-
+$(eval $(call gb_UnpackedTarball_set_tarball,poppler_data,$(POPPLER_DATA_TARBALL),,poppler_data))
 # vim: set noet sw=4 ts=4:
