@@ -22,6 +22,30 @@
       "revId": "03b91d0316dc86f15f2dbcc7d7ff7326754703dd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bc9fd4a_34f228a1",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-05-11T06:40:34Z",
+      "side": 1,
+      "message": "No, it just means we skip some of the intermediate allocations",
+      "parentUuid": "9feedbff_5561415b",
+      "range": {
+        "startLine": 2508,
+        "startChar": 26,
+        "endLine": 2508,
+        "endChar": 34
+      },
+      "revId": "03b91d0316dc86f15f2dbcc7d7ff7326754703dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
