@@ -1,6 +1,6 @@
 diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
---- icu.org/source/common/dictbe.cpp	2020-04-22 22:04:20.000000000 +0200
-+++ icu/source/common/dictbe.cpp	2020-05-11 18:55:07.702282061 +0200
+--- icu.org/source/common/dictbe.cpp	2021-04-08 02:10:27.000000000 +0200
++++ icu/source/common/dictbe.cpp	2021-05-11 22:41:25.504455054 +0200
 @@ -32,7 +32,19 @@
   ******************************************************************
   */
@@ -216,7 +216,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
          // Dictionary leaves text after longest prefix, not longest word. Back up.
          if (count <= 0) {
              utext_setNativeIndex(text, start);
-@@ -815,53 +990,30 @@
+@@ -803,53 +978,30 @@
   * KhmerBreakEngine
   */
  
@@ -282,7 +282,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
      UTRACE_EXIT_STATUS(status);
  }
  
-@@ -874,180 +1026,204 @@
+@@ -862,176 +1014,204 @@
                                                  int32_t rangeStart,
                                                  int32_t rangeEnd,
                                                  UVector32 &foundBreaks ) const {
@@ -357,13 +357,9 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -                goto foundBest;
 -            }
 -            do {
--                int32_t wordsMatched = 1;
 -                if (words[(wordsFound + 1) % KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) > 0) {
--                    if (wordsMatched < 2) {
--                        // Followed by another dictionary word; mark first word as a good candidate
--                        words[wordsFound % KHMER_LOOKAHEAD].markCurrent();
--                        wordsMatched = 2;
--                    }
+-                    // Followed by another dictionary word; mark first word as a good candidate
+-                    words[wordsFound % KHMER_LOOKAHEAD].markCurrent();
 +    utext_setNativeIndex(text, rangeStart);
 +    int32_t numCodePts = rangeEnd - rangeStart;
 +    // bestSnlp[i] is the snlp of the best segmentation of the first i
@@ -639,8 +635,8 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  
  #if !UCONFIG_NO_NORMALIZATION
 diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
---- icu.org/source/common/dictbe.h	2020-04-22 22:04:20.000000000 +0200
-+++ icu/source/common/dictbe.h	2020-05-11 19:08:24.754634732 +0200
+--- icu.org/source/common/dictbe.h	2021-04-08 02:10:27.000000000 +0200
++++ icu/source/common/dictbe.h	2021-05-11 22:37:49.753857647 +0200
 @@ -34,7 +34,8 @@
   * threads without synchronization.</p>
   */
@@ -757,8 +753,8 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
   
    /** 
 diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionarydata.cpp
---- icu.org/source/common/dictionarydata.cpp	2020-04-22 22:04:20.000000000 +0200
-+++ icu/source/common/dictionarydata.cpp	2020-05-11 18:50:43.703113749 +0200
+--- icu.org/source/common/dictionarydata.cpp	2021-04-08 02:10:27.000000000 +0200
++++ icu/source/common/dictionarydata.cpp	2021-05-11 22:37:49.754857645 +0200
 @@ -44,7 +44,7 @@
  
  int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
@@ -806,8 +802,8 @@ diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionaryda
                  if (values != NULL) {
                      values[wordCount] = bt.getValue();
 diff -ur icu.org/source/common/dictionarydata.h icu/source/common/dictionarydata.h
---- icu.org/source/common/dictionarydata.h	2020-04-22 22:04:20.000000000 +0200
-+++ icu/source/common/dictionarydata.h	2020-05-11 18:50:43.704113746 +0200
+--- icu.org/source/common/dictionarydata.h	2021-04-08 02:10:27.000000000 +0200
++++ icu/source/common/dictionarydata.h	2021-05-11 22:37:49.754857645 +0200
 @@ -21,6 +21,7 @@
  #include "unicode/utext.h"
  #include "unicode/udata.h"
