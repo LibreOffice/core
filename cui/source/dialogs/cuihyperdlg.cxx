@@ -101,7 +101,7 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     // ItemSet
     if ( pSet )
     {
-        pExampleSet = new SfxItemSet( *pSet );
+        pExampleSet.reset(new SfxItemSet( *pSet ));
         pOutSet.reset(new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() ));
     }
 
