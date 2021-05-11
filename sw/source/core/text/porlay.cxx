@@ -58,6 +58,8 @@
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IMark.hxx>
+#include <sortedobjs.hxx>
+#include <dcontact.hxx>
 
 using namespace ::com::sun::star;
 using namespace i18n::ScriptType;
@@ -359,7 +361,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
     bool bHasBlankPortion = false;
     bool bHasOnlyBlankPortions = true;
-    bool bHasFlyContentPortion = false;
+    bool bHasFlyPortion = false;
 
     if( mpNextPortion )
     {
@@ -446,8 +448,8 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     SetHanging(true);
                     rInf.GetParaPortion()->SetMargin();
                 }
-                else if( !bHasFlyContentPortion && pPos->IsFlyCntPortion() )
-                     bHasFlyContentPortion = true;
+                else if( !bHasFlyPortion && ( pPos->IsFlyCntPortion() || pPos->IsFlyPortion() ) )
+                     bHasFlyPortion = true;
 
                 // To prevent that a paragraph-end-character does not change
                 // the line height through a Descent and thus causing the line
@@ -627,8 +629,8 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
     }
     SetRedline( bHasRedline );
 
-    // set redline for as-char anchored portions
-    if ( bHasFlyContentPortion )
+    // redlining: set crossing out for deleted anchored objects
+    if ( bHasFlyPortion )
     {
         SwLinePortion *pPos = mpNextPortion;
         TextFrameIndex nLineLength;
@@ -636,6 +638,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         {
             TextFrameIndex const nPorSttIdx = rInf.GetLineStart() + nLineLength;
             nLineLength += pPos->GetLen();
+            // anchored as characters
             if( pPos->IsFlyCntPortion() )
             {
                 bool bDeleted = false;
@@ -654,6 +657,37 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 }
                 static_cast<SwFlyCntPortion*>(pPos)->SetDeleted(bDeleted);
                 static_cast<SwFlyCntPortion*>(pPos)->SetAuthor(nAuthor);
+            }
+            // anchored to characters
+            else if ( pPos->IsFlyPortion() )
+            {
+                const IDocumentRedlineAccess& rIDRA =
+                        rInf.GetTextFrame()->GetDoc().getIDocumentRedlineAccess();
+                SwSortedObjs *pObjs = rInf.GetTextFrame()->GetDrawObjs();
+                if ( pObjs && IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
+                {
+                    for ( size_t i = 0; rInf.GetTextFrame()->GetDrawObjs() && i < pObjs->size(); ++i )
+                    {
+                        SwAnchoredObject* pAnchoredObj = (*rInf.GetTextFrame()->GetDrawObjs())[i];
+                        if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+                        {
+                            bool bDeleted = false;
+                            const SwFormatAnchor& rAnchor = pAnchoredObj->GetFrameFormat().GetAnchor();
+                            if ( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR )
+                            {
+                                SwPosition aAnchor = *rAnchor.GetContentAnchor();
+                                const SwPaM aPam(aAnchor, aAnchor);
+                                if ( rIDRA.HasRedline( aPam, RedlineType::Delete,
+                                        /*bStartOrEndInRange=*/false) )
+                                {
+                                    bDeleted = true;
+                                }
+                            }
+                            pFly->SetDeleted(bDeleted);
+                        }
+
+                    }
+                }
             }
             pPos = pPos->GetNextPortion();
         }
