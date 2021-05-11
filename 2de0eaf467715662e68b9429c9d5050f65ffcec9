@@ -16,6 +16,24 @@
       "revId": "2de0eaf467715662e68b9429c9d5050f65ffcec9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02eb5817_bbcdcfe4",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-05-11T14:11:25Z",
+      "side": 0,
+      "message": "\u003e This is removed without a replacement:\n\nIn regard to scale it is contained in CreateAndInsert, new lines #843 to #848. In regard to rotation, the new version would rotate. But the only case I know, where zero maChFoos exists, are diagrams (SmartArt), and they cannot rotate.\n\n\u003e did you find that this comment was not valid after all?\n\nI cannot create a scenario, where the else part is triggered and a rotation is involved.\nIn the \"normal\" case of grouped shapes, maChSize is forced to non-zero in Transform2DContext::onCreateContext. Besides the fact, that the else part is not triggered in the \"normal\" case, the statement is wrong for the \"normal\" case. Word considers the parent transformation.\n \n\u003e If it\u0027s still valid, then it may make sense to preserve it at the relevant place?\n\u003e \n\u003e It sounds quite non-trivial that Word ignores parent transformation, but only partially.\n\nI have only found in [MS-OI29500], \"If the size of the child extents is zero or omitted, there is no group scaling.\" That means, that the factor is 1.\n\nSo the question is, do you know a scenario, where all maChFoos are zero in line #404 and the parent group has a rotation? Then I could test, what Word does in that case.",
+      "parentUuid": "4b4d253a_7d9a5683",
+      "revId": "2de0eaf467715662e68b9429c9d5050f65ffcec9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
