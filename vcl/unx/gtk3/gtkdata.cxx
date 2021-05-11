@@ -57,8 +57,6 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
     if ( getenv( "SAL_IGNOREXERRORS" ) )
         GetGenericUnixSalData()->ErrorTrapPush(); // and leak the trap
 
-    m_bX11Display = DLSYM_GDK_IS_X11_DISPLAY( m_pGdkDisplay );
-
     gtk_widget_set_default_direction(AllSettings::GetLayoutRTL() ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
 }
 
