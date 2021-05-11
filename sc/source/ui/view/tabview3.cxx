@@ -66,6 +66,8 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <output.hxx>
 
+#include <utility>
+
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
 
 namespace
@@ -2686,9 +2688,11 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
             tools::Long nStartX = aViewData.GetScrPos( nStartCol, 0, eWhich ).X();
             tools::Long nEndX;
             if (nEndCol >= rDoc.MaxCol())
-                nEndX = nStartX + (bLayoutRTL ? 0 : ( aWinSize.Width()-1 ));
+                nEndX = bLayoutRTL ? 0 : ( aWinSize.Width()-1 );
             else
                 nEndX = aViewData.GetScrPos( nEndCol+1, 0, eWhich ).X() - nLayoutSign;
+            if (nStartX > nEndX)
+                std::swap(nStartX, nEndX);
             pColBar[eWhich]->Invalidate(
                     tools::Rectangle( nStartX, 0, nEndX, aWinSize.Height()-1 ) );
         }
@@ -2739,9 +2743,11 @@ void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )
             tools::Long nStartY = aViewData.GetScrPos( 0, nStartRow, eWhich ).Y();
             tools::Long nEndY;
             if (nEndRow >= rDoc.MaxRow())
-                nEndY = nStartY + aWinSize.Height() - 1;
+                nEndY = aWinSize.Height() - 1;
             else
                 nEndY = aViewData.GetScrPos( 0, nEndRow+1, eWhich ).Y() - 1;
+            if (nStartY > nEndY)
+                std::swap(nStartY, nEndY);
             pRowBar[eWhich]->Invalidate(
                     tools::Rectangle( 0, nStartY, aWinSize.Width()-1, nEndY ) );
         }
