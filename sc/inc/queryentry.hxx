@@ -79,7 +79,9 @@ struct SC_DLLPUBLIC ScQueryEntry
     void SetQueryByNonEmpty();
     bool IsQueryByNonEmpty() const;
     void SetQueryByTextColor(Color color);
+    bool IsQueryByTextColor() const;
     void SetQueryByBackgroundColor(Color color);
+    bool IsQueryByBackgroundColor() const;
     const Item& GetQueryItem() const { return GetQueryItemImpl(); }
     Item& GetQueryItem() { return GetQueryItemImpl(); }
     void            Clear();
