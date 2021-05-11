@@ -1252,12 +1252,10 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     {
         if (m_pParent)
         {
+            GtkWidget* pTopLevel = widget_get_root(m_pParent->m_pWindow);
 #if !GTK_CHECK_VERSION(4,0,0)
-            GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pParent->m_pWindow);
             if (!isChild())
                 gtk_window_set_screen(GTK_WINDOW(m_pWindow), gtk_widget_get_screen(pTopLevel));
-#else
-            GtkWidget* pTopLevel = GTK_WIDGET(gtk_widget_get_root(m_pParent->m_pWindow));
 #endif
 
             if (!(m_pParent->m_nStyle & SalFrameStyleFlags::PLUG))
@@ -3669,7 +3667,7 @@ void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
     else
         pGrabWidget = GTK_WIDGET(pThis->m_pFixedContainer);
 
-    GtkWidget* pTopLevel = gtk_widget_get_toplevel(pGrabWidget);
+    GtkWidget* pTopLevel = widget_get_root(pGrabWidget);
     // see commentary in GtkSalObjectWidgetClip::Show
     if (pTopLevel && g_object_get_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange"))
         return;

@@ -1024,7 +1024,7 @@ GtkStyleContext* GtkSalGraphics::makeContext(GtkWidgetPath *pPath, GtkStyleConte
     gtk_style_context_set_path(context, pPath);
     if (pParent == nullptr)
     {
-        GtkWidget* pTopLevel = gtk_widget_get_toplevel(mpWindow);
+        GtkWidget* pTopLevel = widget_get_root(mpWindow);
         GtkStyleContext* pStyle = gtk_widget_get_style_context(pTopLevel);
         gtk_style_context_set_parent(context, pStyle);
         gtk_style_context_set_scale (context, gtk_style_context_get_scale (pStyle));
@@ -1707,7 +1707,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         renderType = RenderType::TabItem;
         break;
     case ControlType::WindowBackground:
-        context = gtk_widget_get_style_context(gtk_widget_get_toplevel(mpWindow));
+        context = gtk_widget_get_style_context(widget_get_root(mpWindow));
         break;
     case ControlType::Frame:
     {
@@ -2221,7 +2221,7 @@ vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale
 bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GtkWidget* pTopLevel = gtk_widget_get_toplevel(mpWindow);
+    GtkWidget* pTopLevel = widget_get_root(mpWindow);
     GtkStyleContext* pStyle = gtk_widget_get_style_context(pTopLevel);
     StyleContextSave aContextState;
     aContextState.save(pStyle);

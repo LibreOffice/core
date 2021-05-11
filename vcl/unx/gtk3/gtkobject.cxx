@@ -499,11 +499,7 @@ void GtkSalObjectWidgetClip::Show( bool bVisible )
         // cursor in a sidebar comment and scroll the page so the comment is invisible, we want the focus
         // to stay in the invisible widget, so its there when we scroll back or on a keypress the widget
         // gets the keystroke and scrolls back to make it visible again
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pScrolledWindow);
-#else
-        GtkWidget* pTopLevel = GTK_WIDGET(gtk_widget_get_root(m_pScrolledWindow));
-#endif
+        GtkWidget* pTopLevel = widget_get_root(m_pScrolledWindow);
         GtkWidget* pOldFocus = GTK_IS_WINDOW(pTopLevel) ? gtk_window_get_focus(GTK_WINDOW(pTopLevel)) : nullptr;
 
         g_object_set_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange", GINT_TO_POINTER(true) );

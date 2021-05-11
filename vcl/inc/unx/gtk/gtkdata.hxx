@@ -68,6 +68,15 @@ inline void css_provider_load_from_data(GtkCssProvider *css_provider,
 #endif
 }
 
+inline GtkWidget* widget_get_root(GtkWidget* pWidget)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    return GTK_WIDGET(gtk_widget_get_root(pWidget));
+#else
+    return gtk_widget_get_toplevel(pWidget);
+#endif
+}
+
 class GtkSalTimer final : public SalTimer
 {
     struct SalGtkTimeoutSource *m_pTimeout;
