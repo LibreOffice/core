@@ -40,9 +40,6 @@ private:
     // just the current context
     css::uno::Reference<css::uno::XComponentContext> mxContext;
 
-    // should the paned size be reset to default on resize
-    bool mbPanedResetSize;
-
     static void clearObjectInspectorChildren(std::unique_ptr<weld::TreeView>& pTreeView,
                                              weld::TreeIter const& rParent);
     static void handleExpanding(std::unique_ptr<weld::TreeView>& pTreeView,
@@ -85,8 +82,6 @@ public:
     // different categories
     DECL_LINK(NotebookEnterPage, const OString&, void);
     DECL_LINK(NotebookLeavePage, const OString&, bool);
-
-    DECL_LINK(PanedSizeChange, const Size&, void);
 
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 
