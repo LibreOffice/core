@@ -907,6 +907,12 @@ void ImplicitBoolConversion::reportWarning(ImplicitCastExpr const * expr) {
                 }
             }
         }
+
+        // ignore template magic
+        StringRef aFileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
+        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/o3tl/hash_combine.hxx"))
+            return;
+
         report(
             DiagnosticsEngine::Warning,
             "implicit conversion (%0) from %1 to %2", compat::getBeginLoc(expr))
