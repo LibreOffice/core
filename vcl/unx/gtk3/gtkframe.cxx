@@ -654,8 +654,10 @@ void GtkSalFrame::InvalidateGraphics()
 
 GtkSalFrame::~GtkSalFrame()
 {
+#if !GTK_CHECK_VERSION(4,0,0)
     m_aSmoothScrollIdle.Stop();
     m_aSmoothScrollIdle.ClearInvokeHandler();
+#endif
 
     if (m_pDropTarget)
     {
@@ -889,7 +891,9 @@ void GtkSalFrame::InitCommon()
     m_aDamageHandler.handle = this;
     m_aDamageHandler.damaged = ::damaged;
 
+#if !GTK_CHECK_VERSION(4,0,0)
     m_aSmoothScrollIdle.SetInvokeHandler(LINK(this, GtkSalFrame, AsyncScroll));
+#endif
 
     m_pTopLevelGrid = GTK_GRID(gtk_grid_new());
 #if !GTK_CHECK_VERSION(4,0,0)
@@ -942,6 +946,8 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "motion-notify-event", G_CALLBACK(signalMotion), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "leave-notify-event", G_CALLBACK(signalCrossing), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "enter-notify-event", G_CALLBACK(signalCrossing), this ));
+
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "scroll-event", G_CALLBACK(signalScroll), this ));
 #else
     GtkGesture *pClick = gtk_gesture_click_new();
     gtk_gesture_single_set_button(GTK_GESTURE_SINGLE(pClick), 0);
@@ -954,6 +960,11 @@ void GtkSalFrame::InitCommon()
     g_signal_connect(pMotionController, "enter", G_CALLBACK(signalEnter), this);
     g_signal_connect(pMotionController, "leave", G_CALLBACK(signalLeave), this);
     gtk_widget_add_controller(pEventWidget, pMotionController);
+
+    GtkEventController* pScrollController = gtk_event_controller_scroll_new(GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
+    g_signal_connect(pScrollController, "scroll", G_CALLBACK(signalScroll), this);
+    gtk_widget_add_controller(pEventWidget, pScrollController);
+
 #endif
 #if !GTK_CHECK_VERSION(4,0,0)
     //Drop Target Stuff
@@ -969,7 +980,6 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-failed", G_CALLBACK(signalDragFailed), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-data-delete", G_CALLBACK(signalDragDelete), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-data-get", G_CALLBACK(signalDragDataGet), this ));
-    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "scroll-event", G_CALLBACK(signalScroll), this ));
 #endif
 
 #if !GTK_CHECK_VERSION(4,0,0)
@@ -3019,31 +3029,17 @@ void GtkSalFrame::LaunchAsyncScroll(GdkEvent const * pEvent)
 }
 #endif
 
-IMPL_LINK_NOARG(GtkSalFrame, AsyncScroll, Timer *, void)
+void GtkSalFrame::DrawingAreaScroll(double delta_x, double delta_y, int nEventX, int nEventY, guint32 nTime, guint nState)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    assert(!m_aPendingScrollEvents.empty());
-
     SalWheelMouseEvent aEvent;
 
-    GdkEvent* pEvent = m_aPendingScrollEvents.back();
-
-    aEvent.mnTime = pEvent->scroll.time;
-    aEvent.mnX = static_cast<sal_uLong>(pEvent->scroll.x);
+    aEvent.mnTime = nTime;
+    aEvent.mnX = nEventX;
     // --- RTL --- (mirror mouse pos)
     if (AllSettings::GetLayoutRTL())
         aEvent.mnX = maGeometry.nWidth - 1 - aEvent.mnX;
-    aEvent.mnY = static_cast<sal_uLong>(pEvent->scroll.y);
-    aEvent.mnCode = GetMouseModCode( pEvent->scroll.state );
-
-    double delta_x(0.0), delta_y(0.0);
-    for (auto pSubEvent : m_aPendingScrollEvents)
-    {
-        delta_x += pSubEvent->scroll.delta_x;
-        delta_y += pSubEvent->scroll.delta_y;
-        gdk_event_free(pSubEvent);
-    }
-    m_aPendingScrollEvents.clear();
+    aEvent.mnY = nEventY;
+    aEvent.mnCode = GetMouseModCode(nState);
 
     // rhbz#1344042 "Traditionally" in gtk3 we tool a single up/down event as
     // equating to 3 scroll lines and a delta of 120. So scale the delta here
@@ -3070,8 +3066,33 @@ IMPL_LINK_NOARG(GtkSalFrame, AsyncScroll, Timer *, void)
         aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40.0;
         CallCallbackExc(SalEvent::WheelMouse, &aEvent);
     }
-#endif
 }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+IMPL_LINK_NOARG(GtkSalFrame, AsyncScroll, Timer *, void)
+{
+    assert(!m_aPendingScrollEvents.empty());
+
+    SalWheelMouseEvent aEvent;
+
+    GdkEvent* pEvent = m_aPendingScrollEvents.back();
+    auto nEventX = pEvent->scroll.x;
+    auto nEventY = pEvent->scroll.y;
+    auto nTime = pEvent->scroll.time;
+    auto nState = pEvent->scroll.state;
+
+    double delta_x(0.0), delta_y(0.0);
+    for (auto pSubEvent : m_aPendingScrollEvents)
+    {
+        delta_x += pSubEvent->scroll.delta_x;
+        delta_y += pSubEvent->scroll.delta_y;
+        gdk_event_free(pSubEvent);
+    }
+    m_aPendingScrollEvents.clear();
+
+    DrawingAreaScroll(delta_x, delta_y, nEventX, nEventY, nTime, nState);
+}
+#endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
 SalWheelMouseEvent GtkSalFrame::GetWheelEvent(const GdkEventScroll& rEvent)
@@ -3151,6 +3172,26 @@ gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEvent* pInEvent, gpointer fram
 
     return true;
 }
+#else
+gboolean GtkSalFrame::signalScroll(GtkEventControllerScroll* pController, double delta_x, double delta_y, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+
+    GdkEvent* pEvent = gtk_event_controller_get_current_event(GTK_EVENT_CONTROLLER(pController));
+    GdkModifierType eState = gtk_event_controller_get_current_event_state(GTK_EVENT_CONTROLLER(pController));
+
+    auto nTime = gdk_event_get_time(pEvent);
+
+    UpdateLastInputEventTime(nTime);
+
+    double nEventX(0.0), nEventY(0.0);
+    gdk_event_get_position(pEvent, &nEventX, &nEventY);
+
+    pThis->DrawingAreaScroll(delta_x, delta_y, nEventX, nEventY, nTime, eState);
+
+    return true;
+}
+
 #endif
 
 void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame)
