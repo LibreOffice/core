@@ -22,6 +22,11 @@
 # include <io.h>
 # include <fcntl.h>  /*_O_BINARY*/
 #endif
+#ifndef SYSTEM_POPPLER
+#include <string>         // std::string
+#include <cstddef>        // std::size_t
+#include <config_folders.h> //LIBO_SHARE_FOLDER
+#endif
 
 FILE* g_binary_out=stderr;
 
@@ -67,11 +72,25 @@ int main(int argc, char **argv)
         ++k;
     }
 
+    /* Get data directory location */
+#ifdef SYSTEM_POPPLER
+    const char* datadir = nullptr;
+#else
+    /* Creates an absolute path to the poppler_data directory, by taking the path
+     * to the xpdfimport executable (provided in argv[0], and concatenating a
+     * relative path to the poppler_data directory from the program directory. */
+    const std::string execPath = argv[0];
+    const std::size_t filenameStartPos = execPath.find_last_of("/\\")+1;
+    const std::string programPath = execPath.substr(0,filenameStartPos);
+    const std::string popplerDataPath = programPath + "../" LIBO_SHARE_FOLDER "/xpdfimport/poppler_data";
+    const char* datadir = popplerDataPath.c_str();
+#endif
+
     // read config file
 #if POPPLER_CHECK_VERSION(0, 83, 0)
-    globalParams = std::make_unique<GlobalParams>();
+    globalParams = std::make_unique<GlobalParams>(datadir);
 #else
-    globalParams = new GlobalParams();
+    globalParams = new GlobalParams(datadir);
 #endif
     globalParams->setErrQuiet(true);
 #if defined(_MSC_VER)
