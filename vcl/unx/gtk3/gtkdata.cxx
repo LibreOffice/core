@@ -94,8 +94,15 @@ GtkSalDisplay::~GtkSalDisplay()
 #endif
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-extern "C" {
+#if GTK_CHECK_VERSION(4, 0, 0)
+
+static void signalMonitorsChanged(GListModel*, gpointer data)
+{
+    GtkSalDisplay* pDisp = static_cast<GtkSalDisplay*>(data);
+    pDisp->emitDisplayChanged();
+}
+
+#else
 
 static void signalScreenSizeChanged( GdkScreen* pScreen, gpointer data )
 {
@@ -107,8 +114,6 @@ static void signalMonitorsChanged( GdkScreen* pScreen, gpointer data )
 {
     GtkSalDisplay* pDisp = static_cast<GtkSalDisplay*>(data);
     pDisp->monitorsChanged( pScreen );
-}
-
 }
 
 GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* )
@@ -569,7 +574,14 @@ void GtkSalData::Init()
     GtkSalDisplay *pDisplay = new GtkSalDisplay( pGdkDisp );
     SetDisplay( pDisplay );
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    pDisplay->emitDisplayChanged();
+    GListModel *pMonitors = gdk_display_get_monitors(pGdkDisp);
+    g_signal_connect(pMonitors, "items-changed", G_CALLBACK(signalMonitorsChanged), pDisplay);
+
+    gtk_style_context_add_provider_for_display(pGdkDisp, CreateSmallButtonProvider(),
+            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+#else
     int nScreens = gdk_display_get_n_screens( pGdkDisp );
     for( int n = 0; n < nScreens; n++ )
     {
@@ -583,14 +595,11 @@ void GtkSalData::Init()
         g_signal_connect( G_OBJECT(pScreen), "size-changed",
                           G_CALLBACK(signalScreenSizeChanged), pDisplay );
         g_signal_connect( G_OBJECT(pScreen), "monitors-changed",
-                          G_CALLBACK(signalMonitorsChanged), GetGtkDisplay() );
+                          G_CALLBACK(signalMonitorsChanged), pDisplay );
 
         gtk_style_context_add_provider_for_screen(pScreen, CreateSmallButtonProvider(),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
-#else
-    gtk_style_context_add_provider_for_display(pGdkDisp, CreateSmallButtonProvider(),
-            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #endif
 }
 
