@@ -859,7 +859,7 @@ private:
     void ScNoName();
     void ScBadName();
     // Statistics:
-    static double taylor(const double* pPolynom, sal_uInt16 nMax, double x);
+    static KahanSum taylor(const double* pPolynom, sal_uInt16 nMax, double x);
     static double gauss(double x);
 
 public:
