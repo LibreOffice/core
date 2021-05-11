@@ -117,14 +117,10 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 
     OUString aFilePickerTitle = getResString( FILE_PICKER_TITLE_OPEN );
 
-    m_pDialog = gtk_file_chooser_dialog_new(
-            OUStringToOString( aFilePickerTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
-            nullptr,
-            GTK_FILE_CHOOSER_ACTION_OPEN,
-            getCancelText().getStr(), GTK_RESPONSE_CANCEL,
-            getOpenText().getStr(), GTK_RESPONSE_ACCEPT,
-            nullptr );
-
+    m_pDialog = GTK_WIDGET(g_object_new(GTK_TYPE_FILE_CHOOSER_DIALOG,
+                                        "title", OUStringToOString(aFilePickerTitle, RTL_TEXTENCODING_UTF8).getStr(),
+                                        "action", GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        nullptr));
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -452,39 +448,6 @@ shrinkFilterName( const OUString &rFilterName, bool bAllowNoStar = false )
 
     return aRealName;
 }
-
-#if !GTK_CHECK_VERSION(4, 0, 0)
-static void
-dialog_remove_buttons(GtkWidget *pActionArea)
-{
-    GtkContainer *pContainer = GTK_CONTAINER( pActionArea );
-
-    g_return_if_fail( pContainer != nullptr );
-
-    GList *pChildren = gtk_container_get_children( pContainer );
-
-    for( GList *p = pChildren; p; p = p->next )
-    {
-        GtkWidget *pWidget = GTK_WIDGET( p->data );
-        if ( GTK_IS_BUTTON( pWidget ) )
-            gtk_widget_destroy( pWidget );
-    }
-
-    g_list_free( pChildren );
-}
-
-static void
-dialog_remove_buttons( GtkDialog *pDialog )
-{
-    g_return_if_fail( GTK_IS_DIALOG( pDialog ) );
-
-    GtkWidget *pHeaderBar = gtk_dialog_get_header_bar(pDialog);
-    if( pHeaderBar != nullptr )
-        dialog_remove_buttons( pHeaderBar );
-    else
-        dialog_remove_buttons(gtk_dialog_get_action_area(pDialog));
-}
-#endif
 
 namespace {
 
@@ -1786,9 +1749,6 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     }
 
     gtk_file_chooser_set_action( GTK_FILE_CHOOSER( m_pDialog ), eAction);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    dialog_remove_buttons( GTK_DIALOG( m_pDialog ) );
-#endif
     gtk_dialog_add_button(GTK_DIALOG( m_pDialog ),
                           getCancelText().getStr(),
                           GTK_RESPONSE_CANCEL);
