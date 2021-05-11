@@ -443,6 +443,37 @@ bool GtkSalData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     return bWasEvent;
 }
 
+static GtkStyleProvider* CreateSmallButtonProvider()
+{
+    /*
+       set a provider to allow certain widgets to have no padding
+
+       a) little close button in menubar to close back to start-center
+       b) and small buttons in view->data sources (button.small-button)
+       c) small toolbar button in infobars (toolbar.small-button button)
+       d) comboboxes in the data browser for tdf#137695 (box#combobox button.small-button,
+          which would instead be combobox button.small-button if we didn't replace GtkComboBox,
+          see GtkInstanceComboBox for an explanation for why we do that)
+       e) entry in the data browser for tdf#137695 (entry.small-button)
+    */
+    GtkCssProvider* pSmallButtonProvider = gtk_css_provider_new();
+    static const gchar data[] =
+      "button.small-button, toolbar.small-button button, combobox.small-button *.combo, box#combobox.small-button *.combo, entry.small-button { "
+      "padding: 0;"
+      "margin-left: 0px;"
+      "margin-right: 0px;"
+      "min-height: 18px;"
+      "min-width: 18px;"
+      "}";
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_css_provider_load_from_data(pSmallButtonProvider, data, -1);
+#else
+    gtk_css_provider_load_from_data(pSmallButtonProvider, data, -1, nullptr);
+#endif
+
+    return GTK_STYLE_PROVIDER(pSmallButtonProvider);
+}
+
 void GtkSalData::Init()
 {
     SAL_INFO( "vcl.gtk", "GtkMainloop::Init()" );
@@ -554,31 +585,12 @@ void GtkSalData::Init()
         g_signal_connect( G_OBJECT(pScreen), "monitors-changed",
                           G_CALLBACK(signalMonitorsChanged), GetGtkDisplay() );
 
-        /*
-           set a provider to allow certain widgets to have no padding
-
-           a) little close button in menubar to close back to start-center
-           b) and small buttons in view->data sources (button.small-button)
-           c) small toolbar button in infobars (toolbar.small-button button)
-           d) comboboxes in the data browser for tdf#137695 (box#combobox button.small-button,
-              which would instead be combobox button.small-button if we didn't replace GtkComboBox,
-              see GtkInstanceComboBox for an explanation for why we do that)
-           e) entry in the data browser for tdf#137695 (entry.small-button)
-        */
-        GtkCssProvider* pSmallButtonProvider = gtk_css_provider_new();
-        static const gchar data[] =
-          "button.small-button, toolbar.small-button button, combobox.small-button *.combo, box#combobox.small-button *.combo, entry.small-button { "
-          "padding: 0;"
-          "margin-left: 0px;"
-          "margin-right: 0px;"
-          "min-height: 18px;"
-          "min-width: 18px;"
-          "}";
-        gtk_css_provider_load_from_data(pSmallButtonProvider, data, -1, nullptr);
-
-        gtk_style_context_add_provider_for_screen(pScreen, GTK_STYLE_PROVIDER(pSmallButtonProvider),
+        gtk_style_context_add_provider_for_screen(pScreen, CreateSmallButtonProvider(),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+#else
+    gtk_style_context_add_provider_for_display(pGdkDisp, CreateSmallButtonProvider(),
+            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #endif
 }
 
