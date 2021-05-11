@@ -65,6 +65,8 @@
 #   define GDK_ALT_MASK GDK_MOD1_MASK
 #   define GDK_TOPLEVEL_STATE_MAXIMIZED GDK_WINDOW_STATE_MAXIMIZED
 #   define GDK_TOPLEVEL_STATE_MINIMIZED GDK_WINDOW_STATE_ICONIFIED
+#   define gdk_wayland_surface_get_wl_surface gdk_wayland_window_get_wl_surface
+#   define gdk_x11_surface_get_xid gdk_x11_window_get_xid
 #endif
 
 using namespace com::sun::star;
@@ -541,7 +543,7 @@ static void attach_menu_model(GtkSalFrame* pSalFrame)
             return;
 
         // Generate menu paths.
-        sal_uIntPtr windowId = pSalFrame->GetNativeWindowHandle(pWidget);
+        sal_uIntPtr windowId = GtkSalFrame::GetNativeWindowHandle(pWidget);
         gchar* aDBusWindowPath = g_strdup_printf( "/org/libreoffice/window/%lu", windowId );
         gchar* aDBusMenubarPath = g_strdup_printf( "/org/libreoffice/window/%lu/menus/menubar", windowId );
 
@@ -2149,7 +2151,7 @@ void GtkSalFrame::updateWMClass()
         pClass->res_name  = const_cast<char*>(aResName.getStr());
         pClass->res_class = const_cast<char*>(pResClass);
         XSetClassHint( display,
-                       widget_get_xid(m_pWindow),
+                       GtkSalFrame::GetNativeWindowHandle(m_pWindow),
                        pClass );
         XFree( pClass );
     }
@@ -2195,7 +2197,7 @@ void GtkSalFrame::StartPresentation( bool bStart )
 #if !GTK_CHECK_VERSION(4, 0, 0)
     if( getDisplay()->IsX11Display() )
     {
-        aWindow = widget_get_xid(m_pWindow);
+        aWindow = GtkSalFrame::GetNativeWindowHandle(m_pWindow);
         aDisplay = GDK_DISPLAY_XDISPLAY( getGdkDisplay() );
     }
 #endif
@@ -5232,28 +5234,30 @@ Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
     return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
 
-sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget) const
+sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    (void) this;                // Silence loplugin:staticmethods
+#if !GTK_CHECK_VERSION(4,0,0)
+    GdkSurface* pSurface = gtk_widget_get_window(pWidget);
+#else
+    GdkSurface* pSurface = gtk_native_get_surface(gtk_widget_get_native(pWidget));
+#endif
+
     GdkDisplay *pDisplay = getGdkDisplay();
-    GdkWindow *pWindow = gtk_widget_get_window(pWidget);
 
 #if defined(GDK_WINDOWING_X11)
     if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
     {
-        return GDK_WINDOW_XID(pWindow);
+        return gdk_x11_surface_get_xid(pSurface);
     }
 #endif
+
 #if defined(GDK_WINDOWING_WAYLAND)
     if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
     {
-        return reinterpret_cast<sal_uIntPtr>(gdk_wayland_window_get_wl_surface(pWindow));
+        return reinterpret_cast<sal_uIntPtr>(gdk_wayland_surface_get_wl_surface(pSurface));
     }
 #endif
-#else
-    (void)pWidget;
-#endif
+
     return 0;
 }
 
