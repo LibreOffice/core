@@ -40,24 +40,11 @@
 
 #include <chrono>
 
-
-
 using namespace vcl_sal;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 /***************************************************************
  * class GtkSalDisplay                                         *
  ***************************************************************/
-extern "C" {
-static GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
-                                     GdkEvent* /*event*/,
-                                     gpointer data )
-{
-    GtkSalDisplay *pDisplay = static_cast<GtkSalDisplay *>(data);
-    return pDisplay->filterGdkEvent( sys_event );
-}
-}
-#endif
 
 GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
             m_pSys( GtkSalSystem::GetSingleton() ),
@@ -66,11 +53,6 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 {
     for(GdkCursor* & rpCsr : m_aCursors)
         rpCsr = nullptr;
-
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    // FIXME: unify this with SalInst's filter too ?
-    gdk_window_add_filter( nullptr, call_filterGdkEvent, this );
-#endif
 
     if ( getenv( "SAL_IGNOREXERRORS" ) )
         GetGenericUnixSalData()->ErrorTrapPush(); // and leak the trap
@@ -83,8 +65,6 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 GtkSalDisplay::~GtkSalDisplay()
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    gdk_window_remove_filter( nullptr, call_filterGdkEvent, this );
-
     if( !m_bStartupCompleted )
         gdk_notify_startup_complete();
 
@@ -114,13 +94,6 @@ static void signalMonitorsChanged( GdkScreen* pScreen, gpointer data )
 {
     GtkSalDisplay* pDisp = static_cast<GtkSalDisplay*>(data);
     pDisp->monitorsChanged( pScreen );
-}
-
-GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* )
-{
-    (void) this; // loplugin:staticmethods
-    //FIXME: implement filterGdkEvent ...
-    return GDK_FILTER_CONTINUE;
 }
 
 void GtkSalDisplay::screenSizeChanged( GdkScreen const * pScreen )

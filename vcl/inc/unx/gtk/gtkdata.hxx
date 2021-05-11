@@ -202,7 +202,6 @@ public:
     void startupNotificationCompleted() { m_bStartupCompleted = true; }
 
 #if !GTK_CHECK_VERSION(4,0,0)
-    GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event );
     void screenSizeChanged( GdkScreen const * );
     void monitorsChanged( GdkScreen const * );
 #endif
