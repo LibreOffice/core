@@ -2133,7 +2133,6 @@ void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
 
 void GtkSalFrame::updateWMClass()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     if (!getDisplay()->IsX11Display())
         return;
 
@@ -2152,7 +2151,6 @@ void GtkSalFrame::updateWMClass()
                    GtkSalFrame::GetNativeWindowHandle(m_pWindow),
                    pClass );
     XFree( pClass );
-#endif
 }
 
 void GtkSalFrame::SetApplicationID( const OUString &rWMClass )
