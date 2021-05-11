@@ -85,7 +85,6 @@ void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld::Window* pParent)
     : SfxModelessDialogController(pBindings, pChild, pParent, "cui/ui/hyperlinkdialog.ui", "HyperlinkDialog")
     , pSet            ( nullptr )
-    , pExampleSet     ( nullptr )
     , maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this )
     , mbIsHTMLDoc     ( false )
     , m_xIconCtrl(m_xBuilder->weld_notebook("tabcontrol"))
@@ -101,7 +100,7 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     // ItemSet
     if ( pSet )
     {
-        pExampleSet = new SfxItemSet( *pSet );
+        pExampleSet.reset(new SfxItemSet( *pSet ));
         pOutSet.reset(new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() ));
     }
 

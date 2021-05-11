@@ -163,7 +163,7 @@ void SvxHpLinkDlg::DeActivatePageImpl ()
     IconChoicePage * pPage = pData->xPage.get();
 
     if ( !pExampleSet && pPage->HasExchangeSupport() && pSet )
-        pExampleSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
+        pExampleSet.reset(new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() ));
 
     if ( pSet )
     {
@@ -187,10 +187,10 @@ void SvxHpLinkDlg::DeActivatePageImpl ()
             if ( !pExampleSet )
             {
                 SfxItemPool* pPool = pPage->GetItemSet().GetPool();
-                pExampleSet =
-                    new SfxItemSet( *pPool, GetInputRanges( *pPool ) );
+                pExampleSet.reset(
+                    new SfxItemSet( *pPool, GetInputRanges( *pPool ) ) );
             }
-            nRet = pPage->DeactivatePage( pExampleSet );
+            nRet = pPage->DeactivatePage( pExampleSet.get() );
         }
         else
             nRet = pPage->DeactivatePage( nullptr );
@@ -252,7 +252,7 @@ void SvxHpLinkDlg::SetInputSet( const SfxItemSet* pInSet )
 
     if ( !bSet && !pExampleSet && !pOutSet )
     {
-        pExampleSet = new SfxItemSet( *pSet );
+        pExampleSet.reset(new SfxItemSet( *pSet ));
         pOutSet.reset(new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() ));
     }
 }
