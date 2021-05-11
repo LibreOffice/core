@@ -2854,7 +2854,7 @@ if test $_os = Darwin; then
     # higher than or equal to the minimum required should be found.
 
     AC_MSG_CHECKING([what macOS SDK to use])
-    for _macosx_sdk in ${with_macosx_sdk-11.1 11.0 10.15 10.14 10.13 10.12}; do
+    for _macosx_sdk in ${with_macosx_sdk-11.3 11.1 11.0 10.15 10.14 10.13 10.12}; do
         MACOSX_SDK_PATH=`xcrun --sdk macosx${_macosx_sdk} --show-sdk-path 2> /dev/null`
         if test -d "$MACOSX_SDK_PATH"; then
             with_macosx_sdk="${_macosx_sdk}"
@@ -2892,8 +2892,11 @@ if test $_os = Darwin; then
     11.1)
         MACOSX_SDK_VERSION=110100
         ;;
+    11.3)
+        MACOSX_SDK_VERSION=110300
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.12--11.1])
+        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.12--11.3])
         ;;
     esac
 
@@ -2958,8 +2961,11 @@ if test $_os = Darwin; then
     11.1)
         MAC_OS_X_VERSION_MIN_REQUIRED="110100"
         ;;
+    11.3)
+        MAC_OS_X_VERSION_MIN_REQUIRED="110300"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.10--11.1])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.10--11.3])
         ;;
     esac
     MAC_OS_X_VERSION_MIN_REQUIRED_DOTS=$with_macosx_version_min_required
@@ -3027,8 +3033,11 @@ if test $_os = Darwin; then
     11.1)
         MAC_OS_X_VERSION_MAX_ALLOWED="110100"
         ;;
+    11.3)
+        MAC_OS_X_VERSION_MAX_ALLOWED="110100"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.10--11.1])
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.10--11.3])
         ;;
     esac
 
@@ -3148,8 +3157,8 @@ dnl ===================================================================
 
 if test $_os = iOS; then
     AC_MSG_CHECKING([what iOS SDK to use])
-    current_sdk_ver=14.4
-    older_sdk_vers="14.3 14.2 14.1 14.0 13.7 13.6 13.5 13.4 13.2 13.1 13.0 12.4 12.2"
+    current_sdk_ver=14.5
+    older_sdk_vers="14.4 14.3 14.2 14.1 14.0 13.7 13.6 13.5 13.4 13.2 13.1 13.0 12.4 12.2"
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
         versionmin=-mios-simulator-version-min=12.2
