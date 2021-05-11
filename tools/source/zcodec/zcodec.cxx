@@ -42,11 +42,9 @@ ZCodec::ZCodec( size_t nInBufSize, size_t nOutBufSize )
     : meState(STATE_INIT)
     , mbStatus(false)
     , mbFinish(false)
-    , mpInBuf(nullptr)
     , mnInBufSize(nInBufSize)
     , mnInToRead(0)
     , mpOStm(nullptr)
-    , mpOutBuf(nullptr)
     , mnOutBufSize(nOutBufSize)
     , mnCompressLevel(0)
     , mbGzLib(false)
@@ -67,7 +65,8 @@ void ZCodec::BeginCompression( int nCompressLevel, bool gzLib )
     mbFinish = false;
     mpOStm = nullptr;
     mnInToRead = 0xffffffff;
-    mpInBuf = mpOutBuf = nullptr;
+    mpInBuf.reset();
+    mpOutBuf.reset();
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
     pStream->total_out = pStream->total_in = 0;
     mnCompressLevel = nCompressLevel;
@@ -106,8 +105,8 @@ tools::Long ZCodec::EndCompression()
             retvalue = pStream->total_out;
             inflateEnd( pStream );
         }
-        delete[] mpOutBuf;
-        delete[] mpInBuf;
+        mpOutBuf.reset();
+        mpInBuf.reset();
         meState = STATE_INIT;
     }
     return mbStatus ? retvalue : -1;
@@ -118,11 +117,11 @@ void ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
     assert(meState == STATE_INIT);
     mpOStm = &rOStm;
     InitCompress();
-    mpInBuf = new sal_uInt8[ mnInBufSize ];
+    mpInBuf.reset(new sal_uInt8[ mnInBufSize ]);
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
     for (;;)
     {
-        pStream->next_in = mpInBuf;
+        pStream->next_in = mpInBuf.get();
         pStream->avail_in = rIStm.ReadBytes( pStream->next_in, mnInBufSize );
         if (pStream->avail_in == 0)
             break;
@@ -147,15 +146,16 @@ tools::Long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     mpOStm = &rOStm;
     InitDecompress(rIStm);
     pStream->avail_out = mnOutBufSize;
-    pStream->next_out = mpOutBuf = new sal_uInt8[ pStream->avail_out ];
+    mpOutBuf.reset(new sal_uInt8[ pStream->avail_out ]);
+    pStream->next_out = mpOutBuf.get();
     do
     {
         if ( pStream->avail_out == 0 ) ImplWriteBack();
         if ( pStream->avail_in == 0 && mnInToRead )
         {
             nInToRead = std::min( mnInBufSize, mnInToRead );
-            pStream->next_in = mpInBuf;
-            pStream->avail_in = rIStm.ReadBytes(mpInBuf, nInToRead);
+            pStream->next_in = mpInBuf.get();
+            pStream->avail_in = rIStm.ReadBytes(mpInBuf.get(), nInToRead);
             mnInToRead -= nInToRead;
         }
         err = mbStatus ? inflate(pStream, Z_NO_FLUSH) : Z_ERRNO;
@@ -218,8 +218,8 @@ tools::Long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
         if ( pStream->avail_in == 0 && mnInToRead )
         {
             nInToRead = std::min(mnInBufSize, mnInToRead);
-            pStream->next_in = mpInBuf;
-            pStream->avail_in = rIStm.ReadBytes(mpInBuf, nInToRead);
+            pStream->next_in = mpInBuf.get();
+            pStream->avail_in = rIStm.ReadBytes(mpInBuf.get(), nInToRead);
             mnInToRead -= nInToRead;
         }
         err = mbStatus ? inflate(pStream, Z_NO_FLUSH) : Z_ERRNO;
@@ -246,8 +246,8 @@ void ZCodec::ImplWriteBack()
 
     if ( nAvail > 0 )
     {
-        pStream->next_out = mpOutBuf;
-        mpOStm->WriteBytes( mpOutBuf, nAvail );
+        pStream->next_out = mpOutBuf.get();
+        mpOStm->WriteBytes( mpOutBuf.get(), nAvail );
         pStream->avail_out = mnOutBufSize;
     }
 }
@@ -260,8 +260,8 @@ void ZCodec::InitCompress()
     mbStatus = deflateInit2_(
         pStream, mnCompressLevel, Z_DEFLATED, MAX_WBITS, MAX_MEM_LEVEL,
         Z_DEFAULT_STRATEGY, ZLIB_VERSION, sizeof (z_stream)) >= 0;
-    mpOutBuf = new sal_uInt8[mnOutBufSize];
-    pStream->next_out = mpOutBuf;
+    mpOutBuf.reset(new sal_uInt8[mnOutBufSize]);
+    pStream->next_out = mpOutBuf.get();
     pStream->avail_out = mnOutBufSize;
 }
 
@@ -323,7 +323,7 @@ void ZCodec::InitDecompress(SvStream & inStream)
     }
     if ( mbStatus )
         meState = STATE_DECOMPRESS;
-    mpInBuf = new sal_uInt8[ mnInBufSize ];
+    mpInBuf.reset(new sal_uInt8[ mnInBufSize ]);
 }
 
 bool ZCodec::AttemptDecompression(SvStream& rIStm, SvStream& rOStm)
