@@ -2134,27 +2134,24 @@ void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
 void GtkSalFrame::updateWMClass()
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    OString aResClass = OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
-    const char *pResClass = !aResClass.isEmpty() ? aResClass.getStr() :
-                                                    SalGenericSystem::getFrameClassName();
-    Display *display;
-
     if (!getDisplay()->IsX11Display())
         return;
 
-    display = gdk_x11_display_get_xdisplay(getGdkDisplay());
+    if (!gtk_widget_get_realized(m_pWindow))
+        return;
 
-    if( gtk_widget_get_realized( m_pWindow ) )
-    {
-        XClassHint* pClass = XAllocClassHint();
-        OString aResName = SalGenericSystem::getFrameResName();
-        pClass->res_name  = const_cast<char*>(aResName.getStr());
-        pClass->res_class = const_cast<char*>(pResClass);
-        XSetClassHint( display,
-                       GtkSalFrame::GetNativeWindowHandle(m_pWindow),
-                       pClass );
-        XFree( pClass );
-    }
+    OString aResClass = OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
+    const char *pResClass = !aResClass.isEmpty() ? aResClass.getStr() :
+                                                    SalGenericSystem::getFrameClassName();
+    XClassHint* pClass = XAllocClassHint();
+    OString aResName = SalGenericSystem::getFrameResName();
+    pClass->res_name  = const_cast<char*>(aResName.getStr());
+    pClass->res_class = const_cast<char*>(pResClass);
+    Display *display = gdk_x11_display_get_xdisplay(getGdkDisplay());
+    XSetClassHint( display,
+                   GtkSalFrame::GetNativeWindowHandle(m_pWindow),
+                   pClass );
+    XFree( pClass );
 #endif
 }
 
