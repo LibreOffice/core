@@ -2166,9 +2166,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142130)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    // This was 6 (crossing out of the first, not deleted image)
-    // (4 lines = 2 lines for crossing out of the second image, 2 lines for the
-    // vertical lines before the two lines)
+    // This was 6 (bad crossing out of the first, not deleted image)
+    // (4 lines = 2 lines for crossing out of the second image + 2 lines =
+    // vertical "changed line" indicator before the two paragraph lines)
     assertXPath(pXmlDoc, "/metafile/push/push/push/line", 4);
 
     // check line color
@@ -2184,6 +2184,47 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142130)
     xmlDocUniquePtr pXmlDoc2 = dumpAndParse(dumper, *xMetaFile);
     // no crossing out and vertical redlines
     assertXPath(pXmlDoc2, "/metafile/push/push/push/line", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142196)
+{
+    load(DATA_DIRECTORY, "tdf142196.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    //turn on red-lining and show changes
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // Dump the rendering of the first page as an XML file.
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This was 1 (missing crossing out of the deleted image)
+    // (2 lines = crossing out of the deleted image + 1 line for the
+    // vertical "changed line" indicator before the paragraph line)
+    assertXPath(pXmlDoc, "//line", 3);
+
+    // reject deletion of the image
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(false);
+
+    xMetaFile = pShell->GetPreviewMetaFile();
+    xmlDocUniquePtr pXmlDoc2 = dumpAndParse(dumper, *xMetaFile);
+
+    // no crossing out and vertical "changed line" indicator
+    assertXPath(pXmlDoc2, "//line", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)

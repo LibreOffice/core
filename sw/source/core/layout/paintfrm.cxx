@@ -4156,6 +4156,16 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
 
     PaintDecorators();
 
+    // crossing out for tracked deletion
+    if ( IsDeleted() )
+    {
+        tools::Long startX = aRect.Left(  ), endX = aRect.Right();
+        tools::Long startY = aRect.Top(  ),  endY = aRect.Bottom();
+        rRenderContext.SetLineColor(NON_PRINTING_CHARACTER_COLOR);
+        rRenderContext.DrawLine(Point(startX, startY), Point(endX, endY));
+        rRenderContext.DrawLine(Point(startX, endY), Point(endX, startY));
+    }
+
     rRenderContext.Pop();
 
     if ( gProp.pSProgress && pNoText )
