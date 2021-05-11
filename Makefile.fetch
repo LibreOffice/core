@@ -203,6 +203,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,PAGEMAKER,PAGEMAKER_TARBALL) \
 		$(call fetch_Optional,PDFIUM,PDFIUM_TARBALL) \
 		$(call fetch_Optional,POPPLER,POPPLER_TARBALL) \
+		$(call fetch_Optional,POPPLER,POPPLER_DATA_TARBALL) \
 		$(call fetch_Optional,POSTGRESQL,POSTGRESQL_TARBALL) \
 		$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
 		$(call fetch_Optional,QXP,QXP_TARBALL) \
