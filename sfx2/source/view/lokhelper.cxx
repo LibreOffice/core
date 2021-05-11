@@ -612,9 +612,11 @@ namespace
 
     void LOKPostAsyncEvent(void* pEv, void*)
     {
-        LOKAsyncEventData* pLOKEv = static_cast<LOKAsyncEventData*>(pEv);
+        std::unique_ptr<LOKAsyncEventData> pLOKEv(static_cast<LOKAsyncEventData*>(pEv));
         if (pLOKEv->mpWindow->IsDisposed())
+        {
             return;
+        }
 
         int nView = SfxLokHelper::getView(nullptr);
         if (nView != pLOKEv->mnView)
@@ -676,8 +678,6 @@ namespace
             assert(false);
             break;
         }
-
-        delete pLOKEv;
     }
 
     void postEventAsync(LOKAsyncEventData *pEvent)
