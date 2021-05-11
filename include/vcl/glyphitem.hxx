@@ -41,11 +41,11 @@ class VCL_DLLPUBLIC SalLayoutGlyphs final
 public:
     SalLayoutGlyphs();
     SalLayoutGlyphs(const SalLayoutGlyphs&) = delete;
-    SalLayoutGlyphs(SalLayoutGlyphs&&);
+    SalLayoutGlyphs(SalLayoutGlyphs&&) noexcept;
     ~SalLayoutGlyphs();
 
     SalLayoutGlyphs& operator=(const SalLayoutGlyphs&) = delete;
-    SalLayoutGlyphs& operator=(SalLayoutGlyphs&&);
+    SalLayoutGlyphs& operator=(SalLayoutGlyphs&&) noexcept;
 
     SalLayoutGlyphsImpl* Impl(unsigned int nLevel) const;
     void AppendImpl(SalLayoutGlyphsImpl* pImpl);
