@@ -6716,6 +6716,7 @@ public:
     {
         vcl::Window::GetDockingManager()->EndPopupMode(m_xPopover);
         m_xPopover->EnableDocking(false);
+        signal_closed();
     }
 };
 }
