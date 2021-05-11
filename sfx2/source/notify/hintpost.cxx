@@ -37,8 +37,11 @@ void SfxHintPoster::Post(std::unique_ptr<SfxRequest> pHintToPost)
 
 IMPL_LINK(SfxHintPoster, DoEvent_Impl, void*, pPostedHint, void)
 {
+    auto pRequest = static_cast<SfxRequest*>(pPostedHint);
     if (m_Link)
-        m_Link(std::unique_ptr<SfxRequest>(static_cast<SfxRequest*>(pPostedHint)));
+        m_Link(std::unique_ptr<SfxRequest>(pRequest));
+    else
+        delete pRequest;
     ReleaseRef();
 }
 
