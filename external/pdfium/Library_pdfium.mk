@@ -286,7 +286,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 
 # fpdfdoc
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/core/fpdfdoc/cline \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_aaction \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_action \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_annot \
@@ -307,18 +306,17 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_nametree \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_numbertree \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_pagelabel \
-    UnpackedTarball/pdfium/core/fpdfdoc/cpdf_variabletext \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_viewerpreferences \
     UnpackedTarball/pdfium/core/fpdfdoc/cpvt_fontmap \
-    UnpackedTarball/pdfium/core/fpdfdoc/cpvt_generateap \
     UnpackedTarball/pdfium/core/fpdfdoc/cpvt_wordinfo \
-    UnpackedTarball/pdfium/core/fpdfdoc/csection \
-    UnpackedTarball/pdfium/core/fpdfdoc/ctypeset \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_structelement \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_structtree \
-    UnpackedTarball/pdfium/core/fpdfdoc/cba_fontmap \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_color_utils \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_icon \
+    UnpackedTarball/pdfium/core/fpdfdoc/cpdf_bafontmap \
+    UnpackedTarball/pdfium/core/fpdfdoc/cpdf_generateap \
+    UnpackedTarball/pdfium/core/fpdfdoc/cpvt_section \
+    UnpackedTarball/pdfium/core/fpdfdoc/cpvt_variabletext \
 ))
 
 # fpdftext
@@ -490,9 +488,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_caret \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_combo_box \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_edit \
-    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_edit_ctrl \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_edit_impl \
-    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_icon \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_sbbutton \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_list_box \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_cbbutton \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_cblistbox \
@@ -652,7 +649,7 @@ ifeq ($(OS),MACOSX)
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/apple/fx_apple_platform \
-    UnpackedTarball/pdfium/core/fxge/apple/fx_mac_impl \
+    UnpackedTarball/pdfium/core/fxge/apple/fx_apple_impl \
     UnpackedTarball/pdfium/core/fxge/apple/fx_quartz_device \
 ))
 
@@ -666,7 +663,7 @@ ifeq ($(OS),iOS)
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/apple/fx_apple_platform \
-    UnpackedTarball/pdfium/core/fxge/apple/fx_mac_impl \
+    UnpackedTarball/pdfium/core/fxge/apple/fx_apple_impl \
     UnpackedTarball/pdfium/core/fxge/apple/fx_quartz_device \
 ))
 
@@ -691,7 +688,7 @@ endif
 ifeq ($(OS),LINUX)
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/core/fxge/fx_ge_linux \
+    UnpackedTarball/pdfium/core/fxge/linux/fx_linux_impl \
 ))
 endif
 
