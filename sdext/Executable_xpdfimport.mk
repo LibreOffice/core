@@ -24,4 +24,17 @@ $(eval $(call gb_Executable_add_exception_objects,xpdfimport,\
 
 $(eval $(call gb_Executable_add_default_nativeres,xpdfimport))
 
+ifneq ($(SYSTEM_POPPLER),)
+# Using system poppler
+$(eval $(call gb_Executable_add_defs,xpdfimport,\
+    -DSYSTEM_POPPLER \
+))
+else
+# Using bundled poppler
+#$(eval $(call gb_Executable_add_libs,xpdfimport,-lstdc++fs))
+#$(eval $(call gb_Executable_add_defs,xpdfimport,\
+#    -DUSE_BUNDLED_POPPLER_DATA \
+#))
+endif
+
 # vim:set noet sw=4 ts=4:
