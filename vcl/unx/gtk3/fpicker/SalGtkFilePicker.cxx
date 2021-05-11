@@ -1109,12 +1109,12 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
 // cf. offapi/com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.idl
 GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
 {
-    GType      tType = GTK_TYPE_TOGGLE_BUTTON; //prevent warning by initializing
+    GType      tType = GTK_TYPE_CHECK_BUTTON; //prevent warning by initializing
     GtkWidget *pWidget = nullptr;
 
 #define MAP_TOGGLE( elem ) \
         case ExtendedFilePickerElementIds::CHECKBOX_##elem: \
-            pWidget = m_pToggles[elem]; tType = GTK_TYPE_TOGGLE_BUTTON; \
+            pWidget = m_pToggles[elem]; tType = GTK_TYPE_CHECK_BUTTON; \
             break
 #define MAP_BUTTON( elem ) \
         case ExtendedFilePickerElementIds::PUSHBUTTON_##elem: \
@@ -1317,11 +1317,15 @@ void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nContr
 
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
         SAL_WARN( "vcl.gtk", "enable unknown control " << nControlId);
-    else if( tType == GTK_TYPE_TOGGLE_BUTTON )
+    else if( tType == GTK_TYPE_CHECK_BUTTON)
     {
         bool bChecked = false;
         rValue >>= bChecked;
-        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( pWidget ), bChecked );
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_check_button_set_active(GTK_CHECK_BUTTON(pWidget), bChecked);
+#else
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pWidget), bChecked);
+#endif
     }
     else if( tType == GTK_TYPE_COMBO_BOX )
         HandleSetListValue(GTK_COMBO_BOX(pWidget), nControlAction, rValue);
@@ -1344,8 +1348,14 @@ uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nC
 
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
         SAL_WARN( "vcl.gtk", "enable unknown control " << nControlId);
-    else if( tType == GTK_TYPE_TOGGLE_BUTTON )
-        aRetval <<= bool( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( pWidget ) ) );
+    else if( tType == GTK_TYPE_CHECK_BUTTON)
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        aRetval <<= bool(gtk_check_button_get_active(GTK_CHECK_BUTTON(pWidget)));
+#else
+        aRetval <<= bool(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pWidget)));
+#endif
+    }
     else if( tType == GTK_TYPE_COMBO_BOX )
         aRetval = HandleGetListValue(GTK_COMBO_BOX(pWidget), nControlAction);
     else
@@ -1393,7 +1403,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& 
     }
 
     OString aTxt = OUStringToOString( rLabel.replace('~', '_'), RTL_TEXTENCODING_UTF8 );
-    if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
+    if( tType == GTK_TYPE_CHECK_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
         g_object_set( pWidget, "label", aTxt.getStr(),
                       "use_underline", true, nullptr );
     else
@@ -1412,7 +1422,7 @@ OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
 
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
         SAL_WARN( "vcl.gtk", "Get label on unknown control " << nControlId);
-    else if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
+    else if( tType == GTK_TYPE_CHECK_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
         aTxt = gtk_button_get_label( GTK_BUTTON( pWidget ) );
     else
         SAL_WARN( "vcl.gtk", "Can't get label on list");
