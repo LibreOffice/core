@@ -43,7 +43,7 @@ class RtfExport : public MSWordExportBase
     std::unique_ptr<RtfAttributeOutput> m_pAttrOutput;
 
     /// Sections/headers/footers
-    MSWordSections* m_pSections;
+    std::unique_ptr<MSWordSections> m_pSections;
 
     std::unique_ptr<RtfSdrExport> m_pSdrExport;
     bool m_bOutOutlineOnly;
