@@ -1011,6 +1011,7 @@ void GtkSalFrame::InitCommon()
     GtkEventController* pFocusController = gtk_event_controller_focus_new();
     g_signal_connect(pFocusController, "enter", G_CALLBACK(signalFocusEnter), this);
     g_signal_connect(pFocusController, "leave", G_CALLBACK(signalFocusLeave), this);
+    gtk_widget_set_focusable(pEventWidget, true);
     gtk_widget_add_controller(pEventWidget, pFocusController);
 #endif
 #if !GTK_CHECK_VERSION(4,0,0)
