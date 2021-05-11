@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b4d253a_7d9a5683",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-05-11T07:39:53Z",
+      "side": 0,
+      "message": "This is removed without a replacement: did you find that this comment was not valid after all? If it\u0027s still valid, then it may make sense to preserve it at the relevant place?\n\nIt sounds quite non-trivial that Word ignores parent transformation, but only partially.",
+      "revId": "2de0eaf467715662e68b9429c9d5050f65ffcec9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
