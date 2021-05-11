@@ -71,6 +71,7 @@ fuzzer_core_libraries = \
     package2 \
     sax \
     sb \
+    scriptframe \
     spell \
     sfx \
     sofficeapp \
