@@ -74,7 +74,8 @@ void trace_event_test()
         CPPUNIT_ASSERT(pAsync2.expired());
 
         // This will generate a 'b' event for async3
-        auto pAsync3(std::make_shared<comphelper::AsyncEvent>("async3"));
+        auto pAsync3(std::make_shared<comphelper::AsyncEvent>(
+            "async3", std::map<OUString, OUString>({ { "foo", "bar" }, { "tem", "42" } })));
 
         std::weak_ptr<comphelper::AsyncEvent> pAsync4;
 
@@ -148,7 +149,8 @@ void TestTraceEvent::test()
     CPPUNIT_ASSERT(aEvents[0].startsWith("{\"name:\"instant1\",\"ph\":\"i\","));
     CPPUNIT_ASSERT(aEvents[1].startsWith("{\"name\":\"async2.5\",\"ph\":\"b\",\"id\":1,"));
     CPPUNIT_ASSERT(aEvents[2].startsWith("{\"name\":\"block2\",\"ph\":\"X\","));
-    CPPUNIT_ASSERT(aEvents[3].startsWith("{\"name\":\"async3\",\"ph\":\"b\",\"id\":2,"));
+    CPPUNIT_ASSERT(aEvents[3].startsWith(
+        "{\"name\":\"async3\",\"ph\":\"b\",\"id\":2,\"args\":{\"foo\",\"bar\",\"tem\",\"42\"},"));
     CPPUNIT_ASSERT(aEvents[4].startsWith("{\"name\":\"async4in3\",\"ph\":\"b\",\"id\":2,"));
     CPPUNIT_ASSERT(aEvents[5].startsWith("{\"name\":\"block3\",\"ph\":\"X\","));
     CPPUNIT_ASSERT(aEvents[6].startsWith("{\"name\":\"async2.5\",\"ph\":\"e\",\"id\":1,"));
@@ -161,7 +163,8 @@ void TestTraceEvent::test()
     CPPUNIT_ASSERT(aEvents[13].startsWith("{\"name\":\"test2\",\"ph\":\"X\""));
     CPPUNIT_ASSERT(aEvents[14].startsWith("{\"name\":\"async4in3\",\"ph\":\"e\",\"id\":2,"));
     CPPUNIT_ASSERT(aEvents[15].startsWith("{\"name\":\"async7in3\",\"ph\":\"e\",\"id\":2,"));
-    CPPUNIT_ASSERT(aEvents[16].startsWith("{\"name\":\"async3\",\"ph\":\"e\",\"id\":2,"));
+    CPPUNIT_ASSERT(aEvents[16].startsWith(
+        "{\"name\":\"async3\",\"ph\":\"e\",\"id\":2,\"args\":{\"foo\",\"bar\",\"tem\",\"42\"},"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestTraceEvent);

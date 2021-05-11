@@ -14,6 +14,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -22,6 +23,7 @@
 #include <osl/time.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <comphelper/comphelperdllapi.h>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
 // implementation of XToolkitExperimental profiling API
@@ -30,6 +32,17 @@ namespace comphelper
 {
 class COMPHELPER_DLLPUBLIC TraceEvent
 {
+private:
+    static int getPid()
+    {
+        oslProcessInfo aProcessInfo;
+        aProcessInfo.Size = sizeof(oslProcessInfo);
+        if (osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &aProcessInfo)
+            == osl_Process_E_None)
+            return aProcessInfo.Ident;
+        return -1;
+    }
+
 protected:
     static std::atomic<bool> s_bRecording; // true during recording
 
@@ -42,18 +55,42 @@ protected:
         return static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec / 1000;
     }
 
-    static int getPid()
+    static OUString createArgsString(const std::map<OUString, OUString>& args)
     {
-        oslProcessInfo aProcessInfo;
-        aProcessInfo.Size = sizeof(oslProcessInfo);
-        if (osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &aProcessInfo)
-            == osl_Process_E_None)
-            return aProcessInfo.Ident;
-        return -1;
+        if (args.size() == 0)
+            return "";
+
+        OUStringBuffer sResult;
+        sResult.append(",\"args\":{");
+        bool first = true;
+        for (auto i : args)
+        {
+            if (!first)
+                sResult.append(',');
+            sResult.append('"');
+            sResult.append(i.first);
+            sResult.append("\",\"");
+            sResult.append(i.second);
+            sResult.append('"');
+            first = false;
+        }
+        sResult.append('}');
+
+        return sResult.makeStringAndClear();
+    }
+
+    const int m_nPid;
+    const OUString m_sArgs;
+
+    TraceEvent(std::map<OUString, OUString> args)
+        : m_nPid(getPid())
+        , m_sArgs(createArgsString(args))
+    {
     }
 
 public:
-    static void addInstantEvent(const char* sName);
+    static void addInstantEvent(const char* sName, const std::map<OUString, OUString>& args
+                                                   = std::map<OUString, OUString>());
 
     static void startRecording();
     static void stopRecording();
@@ -68,8 +105,10 @@ class COMPHELPER_DLLPUBLIC NamedEvent : public TraceEvent
 protected:
     const char* m_sName;
 
-    NamedEvent(const char* sName)
-        : m_sName(sName ? sName : "(null)")
+    NamedEvent(const char* sName,
+               const std::map<OUString, OUString>& args = std::map<OUString, OUString>())
+        : TraceEvent(args)
+        , m_sName(sName ? sName : "(null)")
     {
     }
 };
@@ -99,21 +138,18 @@ class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
 {
     static int s_nIdCounter;
     int m_nId;
-    int m_nPid;
     std::vector<std::shared_ptr<AsyncEvent>> m_aChildren;
     std::weak_ptr<AsyncEvent> m_pParent;
     bool m_bBeginRecorded;
 
-    AsyncEvent(const char* sName, int nId)
-        : NamedEvent(sName)
+    AsyncEvent(const char* sName, int nId, const std::map<OUString, OUString>& args)
+        : NamedEvent(sName, args)
         , m_nId(nId)
         , m_bBeginRecorded(false)
     {
         if (s_bRecording)
         {
             long long nNow = getNow();
-
-            m_nPid = getPid();
 
             // Generate a "Begin " (type b) event
             TraceEvent::addRecording("{"
@@ -123,7 +159,7 @@ class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
                                        "\"ph\":\"b\""
                                        ","
                                        "\"id\":"
-                                     + OUString::number(m_nId)
+                                     + OUString::number(m_nId) + m_sArgs
                                      + ","
                                        "\"ts\":"
                                      + OUString::number(nNow)
@@ -160,7 +196,7 @@ class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
                                        "\"ph\":\"e\""
                                        ","
                                        "\"id\":"
-                                     + OUString::number(m_nId)
+                                     + OUString::number(m_nId) + m_sArgs
                                      + ","
                                        "\"ts\":"
                                      + OUString::number(nNow)
@@ -174,21 +210,23 @@ class COMPHELPER_DLLPUBLIC AsyncEvent : public NamedEvent,
     }
 
 public:
-    AsyncEvent(const char* sName)
-        : AsyncEvent(sName, s_nIdCounter++)
+    AsyncEvent(const char* sName,
+               const std::map<OUString, OUString>& args = std::map<OUString, OUString>())
+        : AsyncEvent(sName, s_nIdCounter++, args)
     {
     }
 
     ~AsyncEvent() { generateEnd(); }
 
-    static std::weak_ptr<AsyncEvent> createWithParent(const char* sName,
-                                                      std::shared_ptr<AsyncEvent> pParent)
+    static std::weak_ptr<AsyncEvent>
+    createWithParent(const char* sName, std::shared_ptr<AsyncEvent> pParent,
+                     const std::map<OUString, OUString>& args = std::map<OUString, OUString>())
     {
         std::shared_ptr<AsyncEvent> pResult;
 
         if (s_bRecording && pParent->m_bBeginRecorded)
         {
-            pResult.reset(new AsyncEvent(sName, pParent->m_nId));
+            pResult.reset(new AsyncEvent(sName, pParent->m_nId, args));
             pParent->m_aChildren.push_back(pResult);
             pResult->m_pParent = pParent;
         }
