@@ -1599,7 +1599,8 @@ void ScViewFunc::OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
 bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
 {
     ScRange aRange;
-    if (GetViewData().GetSimpleArea(aRange) == SC_MARK_SIMPLE)
+    ScMarkType eMarkType = GetViewData().GetSimpleArea(aRange);
+    if (eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED)
     {
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         const ScMarkData& rMark = GetViewData().GetMarkData();
