@@ -731,7 +731,7 @@ ErrCode RtfExport::ExportDocument_Impl()
     }
 
     // Init sections
-    m_pSections = new MSWordSections(*this);
+    m_pSections.reset(new MSWordSections(*this));
 
     // Page description
     WritePageDescTable();
@@ -1031,7 +1031,6 @@ RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc& rDocument,
     : MSWordExportBase(rDocument, pCurrentPam, &rOriginalPam)
     , m_pFilter(pFilter)
     , m_pWriter(pWriter)
-    , m_pSections(nullptr)
     , m_bOutOutlineOnly(bOutOutlineOnly)
     , m_eDefaultEncoding(
           rtl_getTextEncodingFromWindowsCharset(sw::ms::rtl_TextEncodingToWinCharset(DEF_ENCODING)))
