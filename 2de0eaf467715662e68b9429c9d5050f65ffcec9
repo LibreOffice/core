@@ -34,6 +34,24 @@
       "revId": "2de0eaf467715662e68b9429c9d5050f65ffcec9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50fa3b15_4fd8d70a",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-05-11T15:18:16Z",
+      "side": 0,
+      "message": "It seems that was added in c9b1fd63452325ee5cb6d003e9fc8315d1ca104e, and testDMLGroupShapeChildPosition in sw/ still passes with your change, so that\u0027s the relevant scenario and your change causes no problem there. Thanks for checking, I was just unsure first.",
+      "parentUuid": "02eb5817_bbcdcfe4",
+      "revId": "2de0eaf467715662e68b9429c9d5050f65ffcec9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
