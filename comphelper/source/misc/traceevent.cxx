@@ -40,7 +40,7 @@ void TraceEvent::addRecording(const OUString& sObject)
     g_aRecording.emplace_back(sObject);
 }
 
-void TraceEvent::addInstantEvent(const char* sName)
+void TraceEvent::addInstantEvent(const char* sName, const std::map<OUString, OUString>& args)
 {
     long long nNow = getNow();
 
@@ -54,9 +54,8 @@ void TraceEvent::addInstantEvent(const char* sName)
                  "\"name:\""
                  + OUString(sName, strlen(sName), RTL_TEXTENCODING_UTF8)
                  + "\","
-                   "\"ph\":\"i\","
-                   "\"ts\":"
-                 + OUString::number(nNow)
+                   "\"ph\":\"i\""
+                 + createArgsString(args) + ",\"ts\":" + OUString::number(nNow)
                  + ","
                    "\"pid\":"
                  + OUString::number(nPid)
@@ -110,7 +109,7 @@ void ProfileZone::addRecording()
                              + OUString::number(m_nCreateTime)
                              + ","
                                "\"dur\":"
-                             + OUString::number(nNow - m_nCreateTime)
+                             + OUString::number(nNow - m_nCreateTime) + m_sArgs
                              + ","
                                "\"pid\":"
                              + OUString::number(m_nPid)
@@ -118,7 +117,6 @@ void ProfileZone::addRecording()
                                "\"tid\":"
                              + OUString::number(osl_getThreadIdentifier(nullptr)) + "},");
 }
-
 
 } // namespace comphelper
 
