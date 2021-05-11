@@ -51,6 +51,7 @@
 #include <basesh.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <rootfrm.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
 
@@ -138,6 +139,7 @@ public:
     void testBulletDeleteInvalidation();
     void testBulletNoNumInvalidation();
     void testBulletMultiDeleteInvalidation();
+    void testTocWithDifferentLanguage();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -212,6 +214,7 @@ public:
     CPPUNIT_TEST(testBulletDeleteInvalidation);
     CPPUNIT_TEST(testBulletNoNumInvalidation);
     CPPUNIT_TEST(testBulletMultiDeleteInvalidation);
+    CPPUNIT_TEST(testTocWithDifferentLanguage);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -266,6 +269,15 @@ void SwTiledRenderingTest::tearDown()
         mxComponent.clear();
     }
     comphelper::LibreOfficeKit::setActive(false);
+
+    OUString rLanguage("en");
+    SfxLokHelper::setDefaultLanguage(rLanguage);
+    comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(rLanguage));
+    comphelper::LibreOfficeKit::setLocale(LanguageTag(rLanguage));
+    SvtSysLocaleOptions aLocalOptions;
+    aLocalOptions.SetLocaleConfigString(rLanguage);
+    aLocalOptions.SetUILocaleConfigString(rLanguage);
+    aLocalOptions.Commit();
 
     test::BootstrapFixture::tearDown();
 }
@@ -2937,6 +2949,67 @@ void SwTiledRenderingTest::testBulletMultiDeleteInvalidation()
     SwFrame* pFirstText = pBody->GetLower();
     tools::Rectangle aFirstTextRect = pFirstText->getFrameArea().SVRect();
     CPPUNIT_ASSERT(!aFirstTextRect.IsOver(m_aInvalidations));
+}
+
+void SwTiledRenderingTest::testTocWithDifferentLanguage()
+{
+    OUString rLanguage = "de";
+    SfxLokHelper::setDefaultLanguage(rLanguage);
+    comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(rLanguage));
+    comphelper::LibreOfficeKit::setLocale(LanguageTag(rLanguage));
+    SvtSysLocaleOptions aLocalOptions;
+    aLocalOptions.SetLocaleConfigString(rLanguage);
+    aLocalOptions.SetUILocaleConfigString(rLanguage);
+    aLocalOptions.Commit();
+
+    SwXTextDocument* pXTextDocument = createDoc("toc.odt");
+
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+
+    // Go to the table of content
+    pWrtShell->GotoNextTOXBase();
+
+    // Check the first entry in the table of content
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    SwTextNode* pTitleNode = pShellCursor->GetPoint()->nNode.GetNode().GetTextNode();
+    SwNodeIndex aIdx(*pTitleNode);
+
+    SwTextNode* pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    CPPUNIT_ASSERT_EQUAL(OUString("1 A	1"), pNext->GetText());
+
+    // Go to the document content
+    pWrtShell->GotoPage(0, false);
+    pShellCursor = pWrtShell->getShellCursor(false);
+    SwTextNode* pSomeTextNode = pShellCursor->GetPoint()->nNode.GetNode().GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("Some text"), pSomeTextNode->GetText());
+
+    // Make first paragraph in the document a heading to include it in the table of content
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"Style", uno::makeAny(OUString("Heading 1"))},
+        {"FamilyName", uno::makeAny(OUString("ParagraphStyles"))}
+    }));
+    comphelper::dispatchCommand(".uno:StyleApply", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // Update table of content
+    pWrtShell->GotoPage(1, false);
+    pWrtShell->GotoNextTOXBase();
+    const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
+    pWrtShell->UpdateTableOf(*pTOXBase);
+
+    // Check the entries in the table of content
+    pShellCursor = pWrtShell->getShellCursor(false);
+    pTitleNode = pShellCursor->GetPoint()->nNode.GetNode().GetTextNode();
+    aIdx = SwNodeIndex(*pTitleNode);
+
+    pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    CPPUNIT_ASSERT_EQUAL(OUString("1 Some text	1"), pNext->GetText());
+
+    aIdx = SwNodeIndex(*pNext);
+    pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    CPPUNIT_ASSERT_EQUAL(OUString("2 A	1"), pNext->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
