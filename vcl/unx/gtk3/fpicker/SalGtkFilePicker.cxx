@@ -946,13 +946,23 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
     if ( !m_aCurrentFilter.isEmpty() )
         SetCurFilter(m_aCurrentFilter);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     mnHID_FolderChange =
         g_signal_connect( GTK_FILE_CHOOSER( m_pDialog ), "current-folder-changed",
             G_CALLBACK( folder_changed_cb ), static_cast<gpointer>(this) );
+#else
+    // no replacement in 4-0 that I can see :-(
+    mnHID_FolderChange = 0;
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     mnHID_SelectionChange =
         g_signal_connect( GTK_FILE_CHOOSER( m_pDialog ), "selection-changed",
             G_CALLBACK( selection_changed_cb ), static_cast<gpointer>(this) );
+#else
+    // no replacement in 4-0 that I can see :-(
+    mnHID_SelectionChange = 0;
+#endif
 
     int btn = GTK_RESPONSE_NO;
 
