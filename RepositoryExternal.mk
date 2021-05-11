@@ -2808,7 +2808,7 @@ else # !SYSTEM_POPPLER
 
 define gb_LinkTarget__use_poppler
 $(call gb_LinkTarget_use_external_project,$(1),poppler,full)
-
+$(call gb_LinkTarget_use_package,$(1),poppler_data)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,poppler) \
 	-I$(call gb_UnpackedTarball_get_dir,poppler)/poppler \
