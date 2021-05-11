@@ -73,39 +73,6 @@ public:
     static ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
                                    const std::vector<std::vector<const char*>>& rData);
 
-    template <size_t Size>
-    static ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
-                                   const char* aData[][Size], size_t nRowCount)
-    {
-        ScRange aRange(rPos);
-        aRange.aEnd.SetCol(rPos.Col() + Size - 1);
-        aRange.aEnd.SetRow(rPos.Row() + nRowCount - 1);
-
-        clearRange(pDoc, aRange);
-
-        for (size_t i = 0; i < Size; ++i)
-        {
-            for (size_t j = 0; j < nRowCount; ++j)
-            {
-                if (!aData[j][i])
-                    continue;
-
-                SCCOL nCol = i + rPos.Col();
-                SCROW nRow = j + rPos.Row();
-                OUString aStr(aData[j][i], strlen(aData[j][i]), RTL_TEXTENCODING_UTF8);
-
-                ScSetStringParam aParam; // Leave default.
-                aParam.meStartListening = sc::NoListening;
-                pDoc->SetString(nCol, nRow, rPos.Tab(), aStr, &aParam);
-            }
-        }
-
-        pDoc->StartAllListeners(aRange);
-
-        printRange(pDoc, aRange, "Range data content");
-        return aRange;
-    }
-
     Test();
     virtual ~Test() override;
 

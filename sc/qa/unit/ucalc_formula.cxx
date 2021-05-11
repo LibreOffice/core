@@ -4591,7 +4591,7 @@ void Test::testFuncCOUNTBLANK()
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Formula");
 
-    const char* aData[][4] = {
+    std::vector<std::vector<const char*>> aData = {
         { "1", nullptr, "=B1", "=\"\"" },
         { "2", nullptr, "=B2", "=\"\"" },
         { "A", nullptr, "=B3", "=\"\"" },
@@ -4601,7 +4601,7 @@ void Test::testFuncCOUNTBLANK()
     };
 
     ScAddress aPos(0,0,0);
-    ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
 
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,5,0)));
@@ -4613,7 +4613,7 @@ void Test::testFuncCOUNTBLANK()
 
     clearSheet(m_pDoc, 0);
 
-    const char* aData2[][2] = {
+    std::vector<std::vector<const char*>> aData2 = {
         { "1",     "=COUNTBLANK(A1)" },
         { "A",     "=COUNTBLANK(A2)" },
         {   nullptr,     "=COUNTBLANK(A3)" },
@@ -4621,7 +4621,7 @@ void Test::testFuncCOUNTBLANK()
         { "=A4"  , "=COUNTBLANK(A5)" },
     };
 
-    aRange = insertRangeData(m_pDoc, aPos, aData2, SAL_N_ELEMENTS(aData2));
+    aRange = insertRangeData(m_pDoc, aPos, aData2);
     CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
 
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,0,0)));
@@ -5149,14 +5149,14 @@ void Test::testFuncIF()
     // references, data in A5:C8, matrix formula in D4 so there is no
     // implicit intersection between formula and ranges.
     {
-        const char* aData[][3] = {
+        std::vector<std::vector<const char*>> aData = {
             { "1", "1", "16" },
             { "0", "1", "32" },
             { "1", "0", "64" },
             { "0", "0", "128" }
         };
         ScAddress aPos(0,4,0);
-        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
     }
     m_pDoc->InsertMatrixFormula(3,3, 3,3, aMark, "=SUM(IF(A5:A8;IF(B5:B8;C5:C8;0);0))");
@@ -5270,7 +5270,7 @@ void Test::testFuncIFERROR()
     }
 
     const SCCOL nCols = 3;
-    const char* aData2[][nCols] = {
+    std::vector<std::vector<const char*>> aData2 = {
         { "1", "2",    "3" },
         { "4", "=1/0", "6" },
         { "7", "8",    "9" }
@@ -5283,7 +5283,7 @@ void Test::testFuncIFERROR()
 
     // Data in C1:E3
     ScAddress aPos(2,0,0);
-    ScRange aRange = insertRangeData(m_pDoc, aPos, aData2, SAL_N_ELEMENTS(aData2));
+    ScRange aRange = insertRangeData(m_pDoc, aPos, aData2);
     CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
 
     // Array formula in F4:H6
@@ -5712,7 +5712,7 @@ void Test::testFuncVLOOKUP()
     // scalar value parameter in a function that has a ReferenceOrForceArray
     // type parameter somewhere else and formula is not in array mode,
     // VLOOKUP(Value;ReferenceOrForceArray;...)
-    const char* aData2[][5] = {
+    std::vector<std::vector<const char*>> aData2 = {
         { "1", "one",   "3", "=VLOOKUP(C21:C24;A21:B24;2;0)", "three" },
         { "2", "two",   "1", "=VLOOKUP(C21:C24;A21:B24;2;0)", "one"   },
         { "3", "three", "4", "=VLOOKUP(C21:C24;A21:B24;2;0)", "four"  },
@@ -5720,11 +5720,11 @@ void Test::testFuncVLOOKUP()
     };
 
     ScAddress aPos2(0,20,0);
-    ScRange aRange2 = insertRangeData(m_pDoc, aPos2, aData2, SAL_N_ELEMENTS(aData2));
+    ScRange aRange2 = insertRangeData(m_pDoc, aPos2, aData2);
     CPPUNIT_ASSERT_EQUAL(aPos2, aRange2.aStart);
 
     aPos2.SetCol(3);    // column D formula results
-    for (size_t i=0; i < SAL_N_ELEMENTS(aData2); ++i)
+    for (size_t i=0; i < aData2.size(); ++i)
     {
         CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aData2[i][4]), m_pDoc->GetString(aPos2));
         aPos2.IncRow();
@@ -5991,7 +5991,7 @@ void Test::testFuncDATEDIF()
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, "foo"));
 
-    const char* aData[][5] = {
+    std::vector<std::vector<const char*>> aData = {
         { "2007-01-01", "2007-01-10",  "d",   "9", "=DATEDIF(A1;B1;C1)" } ,
         { "2007-01-01", "2007-01-31",  "m",   "0", "=DATEDIF(A2;B2;C2)" } ,
         { "2007-01-01", "2007-02-01",  "m",   "1", "=DATEDIF(A3;B3;C3)" } ,
@@ -6009,14 +6009,14 @@ void Test::testFuncDATEDIF()
         { "2007-01-02", "2007-01-01", "md", "Err:502", "=DATEDIF(A15;B15;C15)" }    // fail date1 > date2
     };
 
-    clearRange( m_pDoc, ScRange(0, 0, 0, 4, SAL_N_ELEMENTS(aData), 0));
+    clearRange( m_pDoc, ScRange(0, 0, 0, 4, aData.size(), 0));
     ScAddress aPos(0,0,0);
-    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     m_pDoc->CalcAll();
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aData); ++i)
+    for (size_t i = 0; i < aData.size(); ++i)
     {
         OUString aVal = m_pDoc->GetString( 4, i, 0);
         //std::cout << "row "<< i << ": " << OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr() << ", expected " << aData[i][3] << std::endl;
@@ -6350,13 +6350,13 @@ void Test::testFormulaDepTracking3()
 
     m_pDoc->InsertTab(0, "Formula");
 
-    const char* pData[][4] = {
+    std::vector<std::vector<const char*>> aData = {
         { "1", "2", "=SUM(A1:B1)", "=SUM(C1:C3)" },
         { "3", "4", "=SUM(A2:B2)", nullptr },
         { "5", "6", "=SUM(A3:B3)", nullptr },
     };
 
-    insertRangeData(m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData));
+    insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
 
     // Check the initial formula results.
     CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(2,0,0)));
@@ -6432,7 +6432,7 @@ void Test::testFormulaDepTrackingDeleteCol()
 
     m_pDoc->InsertTab(0, "Formula");
 
-    const char* aData[][3] = {
+    std::vector<std::vector<const char*>> aData = {
         { "2", "=A1", "=B1" }, // not grouped
         { nullptr, nullptr, nullptr },           // empty row to separate the formula groups.
         { "3", "=A3", "=B3" }, // grouped
@@ -6440,7 +6440,7 @@ void Test::testFormulaDepTrackingDeleteCol()
     };
 
     ScAddress aPos(0,0,0);
-    ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
 
     // Check the initial values.
@@ -6959,7 +6959,7 @@ void Test::testExternalRefUnresolved()
     // Test error propagation of unresolved (not existing document) external
     // references. Well, let's hope no build machine has such file with sheet...
 
-    const char* aData[][1] = {
+    std::vector<std::vector<const char*>> aData = {
         { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1" },
         { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1+23" },
         { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1&\"W\"" },
@@ -6991,7 +6991,7 @@ void Test::testExternalRefUnresolved()
     };
 
     ScAddress aPos(0,0,0);
-    ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
 
     std::vector<std::vector<const char*>> aOutputCheck = {
@@ -7159,14 +7159,14 @@ void Test::testFuncFORMULA()
     m_pDoc->InsertTab(0, "Sheet1");
 
     // Data in B1:D3
-    const char* aData[][3] = {
+    std::vector<std::vector<const char*>> aData = {
         { "=A1", "=FORMULA(B1)", "=FORMULA(B1:B3)" },
         {     nullptr, "=FORMULA(B2)", "=FORMULA(B1:B3)" },
         { "=A3", "=FORMULA(B3)", "=FORMULA(B1:B3)" },
     };
 
     ScAddress aPos(1,0,0);
-    ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
 
     // Checks of C1:D3, where Cy==Dy, and D4:D6
@@ -7215,14 +7215,14 @@ void Test::testFuncTableRef()
 
     {
         // Populate "table" database range with headers and data in A1:B4
-        const char* aData[][2] = {
+        std::vector<std::vector<const char*>> aData = {
             { "Header1", "Header2" },
             { "1", "2" },
             { "4", "8" },
             { "16", "32" }
         };
         ScAddress aPos(0,0,0);
-        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
     }
 
@@ -7342,7 +7342,7 @@ void Test::testFuncTableRef()
         // inserted column, B1:B4 plus a table formula in B6. The empty header
         // should result in the internal table column name "Column2" that is
         // used in the formula.
-        const char* aData[][1] = {
+        std::vector<std::vector<const char*>> aData = {
             { "" },
             { "64" },
             { "128" },
@@ -7351,7 +7351,7 @@ void Test::testFuncTableRef()
             { pColumn2Formula }
         };
         ScAddress aPos(1,0,0);
-        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
     }
 
@@ -7393,13 +7393,13 @@ void Test::testFuncTableRef()
 
     {
         // Populate "hltable" database range with data in E10:F12
-        const char* aData[][2] = {
+        std::vector<std::vector<const char*>> aData = {
             { "1", "2" },
             { "4", "8" },
             { "16", "32" }
         };
         ScAddress aPos(4,9,0);
-        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
     }
 
@@ -7516,7 +7516,7 @@ void Test::testFuncTableRef()
         // column, F10:F12 plus a table formula in F14. The new header should
         // result in the internal table column name "Column3" that is used in
         // the formula.
-        const char* aData[][1] = {
+        std::vector<std::vector<const char*>> aData = {
             { "64" },
             { "128" },
             { "256" },
@@ -7524,7 +7524,7 @@ void Test::testFuncTableRef()
             { pColumn3Formula }
         };
         ScAddress aPos(5,9,0);
-        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
     }
 
@@ -8723,7 +8723,7 @@ void Test::testMatConcat()
     }
 
     {   // Data in A12:B16
-        const char* aData[][2] = {
+        std::vector<std::vector<const char*>> aData = {
             { "q", "w" },
             { "a",  "" },
             {  "", "x" },
@@ -8732,7 +8732,7 @@ void Test::testMatConcat()
         };
 
         ScAddress aPos(0,11,0);
-        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
     }
     // Matrix formula in C17:C21

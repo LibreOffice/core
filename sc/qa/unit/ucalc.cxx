@@ -924,12 +924,11 @@ struct HoriIterCheck
     const char* pVal;
 };
 
-template<size_t Size>
-bool checkHorizontalIterator(ScDocument& rDoc, const char* pData[][Size], size_t nDataCount, const HoriIterCheck* pChecks, size_t nCheckCount)
+bool checkHorizontalIterator(ScDocument& rDoc, const std::vector<std::vector<const char*>>& rData, const HoriIterCheck* pChecks, size_t nCheckCount)
 {
     ScAddress aPos(0,0,0);
-    Test::insertRangeData(&rDoc, aPos, pData, nDataCount);
-    ScHorizontalCellIterator aIter(rDoc, 0, 0, 0, 1, nDataCount-1);
+    Test::insertRangeData(&rDoc, aPos, rData);
+    ScHorizontalCellIterator aIter(rDoc, 0, 0, 0, 1, rData.size() - 1);
 
     SCCOL nCol;
     SCROW nRow;
@@ -974,7 +973,7 @@ void Test::testHorizontalIterator()
 
     {
         // Raw data - mixed types
-        const char* aData[][2] = {
+        std::vector<std::vector<const char*>> aData = {
             { "A", "B" },
             { "C", "1" },
             { "D", "2" },
@@ -993,7 +992,7 @@ void Test::testHorizontalIterator()
         };
 
         bool bRes = checkHorizontalIterator(
-            *m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test mixed.");
@@ -1001,7 +1000,7 @@ void Test::testHorizontalIterator()
 
     {
         // Raw data - 'hole' data
-        const char* aData[][2] = {
+        std::vector<std::vector<const char*>> aData = {
             { "A", "B" },
             { "C",  nullptr  },
             { "D", "E" },
@@ -1016,7 +1015,7 @@ void Test::testHorizontalIterator()
         };
 
         bool bRes = checkHorizontalIterator(
-            *m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test hole.");
@@ -1024,7 +1023,7 @@ void Test::testHorizontalIterator()
 
     {
         // Very holy data
-        const char* aData[][2] = {
+        std::vector<std::vector<const char*>> aData = {
             {  nullptr,  "A" },
             {  nullptr,   nullptr  },
             {  nullptr,  "1" },
@@ -1049,7 +1048,7 @@ void Test::testHorizontalIterator()
         };
 
         bool bRes = checkHorizontalIterator(
-            *m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test holy.");
@@ -1057,14 +1056,14 @@ void Test::testHorizontalIterator()
 
     {
         // Degenerate case
-        const char* aData[][2] = {
+        std::vector<std::vector<const char*>> aData = {
             {  nullptr,   nullptr },
             {  nullptr,   nullptr },
             {  nullptr,   nullptr },
         };
 
         bool bRes = checkHorizontalIterator(
-            *m_pDoc, aData, SAL_N_ELEMENTS(aData), nullptr, 0);
+            *m_pDoc, aData, nullptr, 0);
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test degenerate.");
@@ -1072,7 +1071,7 @@ void Test::testHorizontalIterator()
 
     {
         // Data at end
-        const char* aData[][2] = {
+        std::vector<std::vector<const char*>> aData = {
             {  nullptr,   nullptr },
             {  nullptr,   nullptr },
             {  nullptr,  "A" },
@@ -1083,7 +1082,7 @@ void Test::testHorizontalIterator()
         };
 
         bool bRes = checkHorizontalIterator(
-            *m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test at end.");
@@ -1091,7 +1090,7 @@ void Test::testHorizontalIterator()
 
     {
         // Data in middle
-        const char* aData[][2] = {
+        std::vector<std::vector<const char*>> aData = {
             {  nullptr,   nullptr  },
             {  nullptr,   nullptr  },
             {  nullptr,  "A" },
@@ -1105,7 +1104,7 @@ void Test::testHorizontalIterator()
         };
 
         bool bRes = checkHorizontalIterator(
-            *m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test in middle.");
@@ -11693,7 +11692,7 @@ void Test::testFormulaToValue()
 
     m_pDoc->InsertTab(0, "Test");
 
-    const char* aData[][3] = {
+    std::vector<std::vector<const char*>> aData = {
         { "=1", "=RC[-1]*2", "=ISFORMULA(RC[-1])" },
         { "=2", "=RC[-1]*2", "=ISFORMULA(RC[-1])" },
         { "=3", "=RC[-1]*2", "=ISFORMULA(RC[-1])" },
@@ -11703,7 +11702,7 @@ void Test::testFormulaToValue()
     };
 
     ScAddress aPos(1,2,0); // B3
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     {

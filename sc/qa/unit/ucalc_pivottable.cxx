@@ -775,7 +775,7 @@ void Test::testPivotTableCache()
     m_pDoc->InsertTab(0, "Data");
 
     // Raw data
-    const char* aData[][3] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "F1", "F2", "F3" },
         { "Z",  "A", "30" },
         { "R",  "A", "20" },
@@ -786,7 +786,7 @@ void Test::testPivotTableCache()
     };
 
     ScAddress aPos(1,1,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPCache aCache(*m_pDoc);
@@ -981,7 +981,7 @@ void Test::testPivotTableDuplicateDataFields()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const char* aData[][2] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Name", "Value" },
         { "A",       "45" },
         { "A",        "5" },
@@ -1003,7 +1003,7 @@ void Test::testPivotTableDuplicateDataFields()
     };
 
     ScAddress aPos(2,2,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
@@ -1076,7 +1076,7 @@ void Test::testPivotTableNormalGrouping()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const char* aData[][2] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Name", "Value" },
         { "A", "1" },
         { "B", "2" },
@@ -1094,7 +1094,7 @@ void Test::testPivotTableNormalGrouping()
     };
 
     ScAddress aPos(1,1,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
@@ -1225,7 +1225,7 @@ void Test::testPivotTableNumberGrouping()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const char* aData[][2] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Order", "Score" },
         { "43", "171" },
         { "18", "20"  },
@@ -1254,7 +1254,7 @@ void Test::testPivotTableNumberGrouping()
     };
 
     ScAddress aPos(1,1,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
@@ -1318,7 +1318,7 @@ void Test::testPivotTableDateGrouping()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const char* aData[][2] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Date", "Value" },
         { "2011-01-01", "1" },
         { "2011-03-02", "2" },
@@ -1337,7 +1337,7 @@ void Test::testPivotTableDateGrouping()
     };
 
     ScAddress aPos(1,1,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
@@ -1490,7 +1490,7 @@ void Test::testPivotTableEmptyRows()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const char* aData[][2] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Name", "Value" },
         { "A", "1" },
         { "B", "2" },
@@ -1505,7 +1505,7 @@ void Test::testPivotTableEmptyRows()
     };
 
     ScAddress aPos(1,1,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     // Extend the range downward to include some trailing empty rows.
@@ -1704,7 +1704,7 @@ void Test::testPivotTableCaseInsensitiveStrings()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const char* aData[][2] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Name", "Value" },
         { "A", "1" },
         { "a", "2" },
@@ -1717,7 +1717,7 @@ void Test::testPivotTableCaseInsensitiveStrings()
     };
 
     ScAddress aPos(1,1,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
@@ -1757,7 +1757,7 @@ void Test::testPivotTableNumStability()
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
     // Raw Data
-    const char* aData[][4] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Name",   "Time Start", "Time End", "Total"          },
         { "Sam",    "07:48 AM",   "09:00 AM", "=RC[-1]-RC[-2]" },
         { "Sam",    "09:00 AM",   "10:30 AM", "=RC[-1]-RC[-2]" },
@@ -1793,9 +1793,8 @@ void Test::testPivotTableNumStability()
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
-    size_t const nRowCount = SAL_N_ELEMENTS(aData);
     ScAddress aPos(1,1,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, nRowCount);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
 
     // Insert formulas to manually calculate sums for each name.
     m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+1, aDataRange.aStart.Tab(), "=SUMIF(R[-23]C:R[-1]C;\"Dennis\";R[-23]C[3]:R[-1]C[3])");
@@ -1861,7 +1860,7 @@ void Test::testPivotTableFieldReference()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const char* aData[][2] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Name", "Value" },
         { "A", "1" },
         { "B", "2" },
@@ -1876,7 +1875,7 @@ void Test::testPivotTableFieldReference()
     };
 
     ScAddress aPos(1,1,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = createDPFromRange(
@@ -2027,7 +2026,7 @@ void Test::testPivotTableDocFunc()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const char* aData[][2] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Name",      "Value" },
         { "Sun",       "1" },
         { "Oracle",    "2" },
@@ -2044,7 +2043,7 @@ void Test::testPivotTableDocFunc()
     };
 
     ScAddress aPos(1,1,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     std::unique_ptr<ScDPObject> pDPObj(createDPFromRange(
@@ -2095,7 +2094,7 @@ void Test::testFuncGETPIVOTDATA()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const char* aData[][2] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Name", "Value" },
         { "A", "1" },
         { "A", "2" },
@@ -2106,7 +2105,7 @@ void Test::testFuncGETPIVOTDATA()
     };
 
     ScAddress aPos(1,1,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = nullptr;
@@ -2251,7 +2250,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const char* aData[][3] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Type", "Member", "Value" },
         { "A", "Anna", "1" },
         { "B", "Brittany", "2" },
@@ -2260,7 +2259,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
     };
 
     ScAddress aPos(1,1,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     ScDPObject* pDPObj = nullptr;
@@ -2504,7 +2503,7 @@ void Test::testPivotTableMedianFunc()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const char* aData[][4] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Condition", "Day1Hit", "Day1Miss", "Day1FalseAlarm" },
         { "False Memory", "7", "3", "0" },
         { "Control", "10", "0", "1" },
@@ -2535,7 +2534,7 @@ void Test::testPivotTableMedianFunc()
     };
 
     ScAddress aPos(1, 1, 0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     std::unique_ptr<ScDPObject> pDPObj(createDPFromRange(

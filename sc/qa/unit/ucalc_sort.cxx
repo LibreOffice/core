@@ -42,15 +42,15 @@ void Test::testSort()
 
     ScAddress aPos(0,0,0);
     {
-        const char* aData[][2] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "2", "4" },
             { "4", "1" },
             { "1", "2" },
             { "1", "23" },
         };
 
-        clearRange(m_pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
-        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        clearRange(m_pDoc, ScRange(0, 0, 0, 1, aData.size(), 0));
+        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
     }
 
@@ -82,7 +82,7 @@ void Test::testSort()
     clearRange(m_pDoc, ScRange(0, 0, 0, 1, 9, 0)); // Clear A1:B10.
     {
         // 0 = empty cell
-        const char* aData[][1] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "Title" },
             { nullptr },
             { nullptr },
@@ -93,7 +93,7 @@ void Test::testSort()
             { "123" }
         };
 
-        aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        aDataRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
     }
 
@@ -141,7 +141,7 @@ void Test::testSortHorizontal()
     // Test case from fdo#78079.
 
     // 0 = empty cell
-    const char* aData[][4] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "table", "has UNIQUE", "Publish to EC2", "flag" },
         { "w2gi.mobilehit", "Yes", "No", "=CONCATENATE(B2;\"-\";C2)" },
         { "w2gi.visitors", "No", "No", "=CONCATENATE(B3;\"-\";C3)" },
@@ -149,7 +149,7 @@ void Test::testSortHorizontal()
     };
 
     // Insert raw data into A1:D4.
-    ScRange aDataRange = insertRangeData(m_pDoc, ScAddress(0,0,0), aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
     CPPUNIT_ASSERT_EQUAL(OUString("A1:D4"), aDataRange.Format(*m_pDoc, ScRefFlags::VALID));
 
     // Check the formula values.
@@ -204,12 +204,12 @@ void Test::testSortHorizontalWholeColumn()
     m_pDoc->InsertTab(0, "Sort");
 
     // 0 = empty cell
-    const char* aData[][5] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "4", "2", "47", "a", "9" }
     };
 
     // Insert row data to C1:G1.
-    ScRange aSortRange = insertRangeData(m_pDoc, ScAddress(2,0,0), aData, SAL_N_ELEMENTS(aData));
+    ScRange aSortRange = insertRangeData(m_pDoc, ScAddress(2,0,0), aData);
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2,0,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3,0,0)));
     CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(4,0,0)));
@@ -1040,7 +1040,7 @@ void Test::testSortRefUpdate4_Impl()
     m_pDoc->InsertTab(2, "Lesson2");
 
     {
-        const char* aData[][2] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "Name", "Note" },
             { "Student1", "1" },
             { "Student2", "2" },
@@ -1051,13 +1051,13 @@ void Test::testSortRefUpdate4_Impl()
 
         SCTAB nTab = 1;
         ScAddress aPos(0,0,nTab);
-        clearRange(m_pDoc, ScRange(0, 0, nTab, 1, SAL_N_ELEMENTS(aData), nTab));
-        ScRange aLesson1Range = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        clearRange(m_pDoc, ScRange(0, 0, nTab, 1, aData.size(), nTab));
+        ScRange aLesson1Range = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aLesson1Range.aStart);
     }
 
     {
-        const char* aData[][2] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "Name", "Note" },
             { "=Lesson1.A2", "3" },
             { "=Lesson1.A3", "4" },
@@ -1068,14 +1068,14 @@ void Test::testSortRefUpdate4_Impl()
 
         SCTAB nTab = 2;
         ScAddress aPos(0,0,nTab);
-        clearRange(m_pDoc, ScRange(0, 0, nTab, 1, SAL_N_ELEMENTS(aData), nTab));
-        ScRange aLesson2Range = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        clearRange(m_pDoc, ScRange(0, 0, nTab, 1, aData.size(), nTab));
+        ScRange aLesson2Range = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aLesson2Range.aStart);
     }
 
     ScRange aSortRange;
     {
-        const char* aData[][4] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "Name", "Lesson1", "Lesson2", "Average" },
             { "=Lesson1.A2", "=Lesson1.B2", "=Lesson2.B2", "=AVERAGE(B2:C2)" },
             { "=Lesson1.A3", "=Lesson1.B3", "=Lesson2.B3", "=AVERAGE(B3:C3)" },
@@ -1086,8 +1086,8 @@ void Test::testSortRefUpdate4_Impl()
 
         SCTAB nTab = 0;
         ScAddress aPos(0,0,nTab);
-        clearRange(m_pDoc, ScRange(0, 0, nTab, 1, SAL_N_ELEMENTS(aData), nTab));
-        aSortRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        clearRange(m_pDoc, ScRange(0, 0, nTab, 1, aData.size(), nTab));
+        aSortRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aSortRange.aStart);
     }
 
@@ -1241,7 +1241,7 @@ void Test::testSortRefUpdate5()
     };
     ScRange aSortRange;
     {
-        const char* aData[][3] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "Date", "Volatile", "Order" },
             { "1999-05-05", "=TODAY()-$A2", "4" },
             { "1994-10-18", "=TODAY()-$A3", "1" },
@@ -1251,8 +1251,8 @@ void Test::testSortRefUpdate5()
 
         SCTAB nTab = 0;
         ScAddress aPos(0,0,nTab);
-        clearRange(m_pDoc, ScRange(0, 0, nTab, 2, SAL_N_ELEMENTS(aData), nTab));
-        aSortRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        clearRange(m_pDoc, ScRange(0, 0, nTab, 2, aData.size(), nTab));
+        aSortRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aSortRange.aStart);
 
         // Actual results and expected sorted results.
@@ -1335,7 +1335,7 @@ void Test::testSortRefUpdate6()
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Sort");
 
-    const char* aData[][3] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "Order", "Value", "1" },
         { "9", "1", "=C1+B2" },
         { "1", "2", "=C2+B3" },
@@ -1343,7 +1343,7 @@ void Test::testSortRefUpdate6()
     };
 
     ScAddress aPos(0,0,0);
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL(aPos, aDataRange.aStart);
 
     {
@@ -1474,13 +1474,13 @@ void Test::testSortBroadcaster()
     m_pDoc->InsertTab(0, "Sort");
 
     {
-        const char* aData[][7] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "1",   nullptr, nullptr, "=B1", "=$B$1", "=SUM(A1:B1)", "=SUM($A$1:$B$1)" },
             { "2", "8", nullptr, "=B2", "=$B$2", "=SUM(A2:B2)", "=SUM($A$2:$B$2)" },
         };
 
         ScAddress aPos(0,0,0);
-        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aDataRange.aStart);
 
         {
@@ -1561,7 +1561,7 @@ void Test::testSortBroadcaster()
     // The same for sort by column. Start data at A5.
 
     {
-        const char* aData[][2] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "1", "2" },
             {   nullptr, "8" },
             { nullptr, nullptr },
@@ -1572,7 +1572,7 @@ void Test::testSortBroadcaster()
         };
 
         ScAddress aPos(0,4,0);
-        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aDataRange.aStart);
 
         {
@@ -1674,13 +1674,13 @@ void Test::testSortBroadcastBroadcaster()
     m_pDoc->InsertTab(0, "Sort");
 
     {
-        const char* aData[][3] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "1", "=A1", "=B1" },
             { "2", "=A2", "=B2" },
         };
 
         ScAddress aPos(0,0,0);
-        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aDataRange.aStart);
 
         {
@@ -1892,13 +1892,13 @@ void Test::testSortImages()
 
     ScAddress aPos(0,0,0);
     {
-        const char* aData[][1] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "2" },
             { "1" },
         };
 
-        clearRange(m_pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
-        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        clearRange(m_pDoc, ScRange(0, 0, 0, 1, aData.size(), 0));
+        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
     }
 
