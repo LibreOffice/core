@@ -57,3 +57,11 @@ leak:idlc/source/idlcmain.cxx
 
 # deliberate leak in cppunit
 leak:sal/cppunittester/cppunittester.cxx
+
+# TODO Firebird appears to be leaking like a sieve
+leak:connectivity::firebird::
+leak:Firebird::
+
+# TODO leaks in basic module
+# these appears to be some kind of ref-counting cycle
+leak:MacroSnippet::Compile()
