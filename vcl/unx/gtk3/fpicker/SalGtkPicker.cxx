@@ -188,13 +188,6 @@ namespace
     };
 }
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-gint gtk_dialog_run(GtkDialog*)
-{
-    return 0;
-}
-#endif
-
 gint RunDialog::run()
 {
     if (mxToolkit.is())
