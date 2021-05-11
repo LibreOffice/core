@@ -26,7 +26,6 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
     static int s_nNesting; // level of nested zones.
 
     long long m_nCreateTime;
-    int m_nPid;
     int m_nNesting;
 
     void addRecording();
@@ -36,9 +35,8 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
     // Note that the char pointer is stored as such in the ProfileZone object and used in the
     // destructor, so be sure to pass a pointer that stays valid for the duration of the object's
     // lifetime.
-    ProfileZone(const char* sName)
-        : NamedEvent(sName)
-        , m_nPid(-1)
+    ProfileZone(const char* sName, const std::map<OUString, OUString> &args = std::map<OUString, OUString>())
+        : NamedEvent(sName, args)
         , m_nNesting(-1)
     {
         if (s_bRecording)
@@ -46,8 +44,6 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
             TimeValue systemTime;
             osl_getSystemTime( &systemTime );
             m_nCreateTime = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec/1000;
-
-            m_nPid = getPid();
 
             m_nNesting = s_nNesting++;
         }
