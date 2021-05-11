@@ -549,6 +549,34 @@ namespace
 #endif
         }
 
+        void testTdf141709()
+        {
+#if HAVE_FEATURE_POPPLER
+            rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
+            xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
+
+            OString aOutput;
+            CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
+                xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testTdf141709.pdf"),
+                new OutputWrapString(aOutput),
+                nullptr));
+            std::cout << aOutput << std::endl;
+            // This ensures that the imported text contains all of the characters
+            CPPUNIT_ASSERT(aOutput.indexOf("敏") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("捷") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("的") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("狐") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("狸") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("跨") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("过") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("慵") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("懒") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("的") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("狗") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("。") != -1);
+#endif
+        }
+
         CPPUNIT_TEST_SUITE(PDFITest);
         CPPUNIT_TEST(testXPDFParser);
         CPPUNIT_TEST(testOdfWriterExport);
@@ -556,6 +584,7 @@ namespace
         CPPUNIT_TEST(testTdf96993);
         CPPUNIT_TEST(testTdf98421);
         CPPUNIT_TEST(testTdf105536);
+        CPPUNIT_TEST(testTdf141709);
         CPPUNIT_TEST_SUITE_END();
     };
 
