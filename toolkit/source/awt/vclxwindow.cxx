@@ -904,6 +904,9 @@ void VCLXWindow::dispose(  )
 {
     SolarMutexGuard aGuard;
 
+    if (!mpImpl)
+        return;
+
     mpImpl->mxViewGraphics = nullptr;
 
     if ( mpImpl->mbDisposing )
@@ -937,6 +940,7 @@ void VCLXWindow::dispose(  )
     mpImpl->mxAccessibleContext.clear();
 
     mpImpl->mbDisposing = false;
+    mpImpl.reset();
 }
 
 void VCLXWindow::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
