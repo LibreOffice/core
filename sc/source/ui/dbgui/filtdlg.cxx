@@ -218,6 +218,11 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                 aValStr = aStrNotEmpty;
                 maCondLbArr[i]->set_sensitive(false);
             }
+            else if (rEntry.IsQueryByTextColor() || rEntry.IsQueryByBackgroundColor())
+            {
+                // No support for color filters in filter dialog currently
+                continue;
+            }
             else
             {
                 OUString aQueryStr = rItem.maString.getString();
@@ -1112,6 +1117,10 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             {
                 aValStr = aStrNotEmpty;
                 maCondLbArr[i]->set_sensitive(false);
+            }
+            else if (rEntry.IsQueryByTextColor() || rEntry.IsQueryByBackgroundColor())
+            {
+                continue;
             }
             else
             {
