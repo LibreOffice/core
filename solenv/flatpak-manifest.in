@@ -439,6 +439,13 @@
                     "dest-filename": "poppler-21.01.0.tar.xz"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/poppler-data-0.4.10.tar.gz",
+                    "sha256": "6e2fcef66ec8c44625f94292ccf8af9f1d918b410d5aa69c274ce67387967b30",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "poppler-data-0.4.10.tar.gz"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/src/postgresql-13.1.tar.bz2",
                     "sha256": "12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f",
                     "type": "file",
