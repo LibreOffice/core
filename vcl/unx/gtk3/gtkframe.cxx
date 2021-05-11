@@ -1031,10 +1031,10 @@ void GtkSalFrame::InitCommon()
     g_signal_connect( G_OBJECT(m_pWindow), "key-press-event", G_CALLBACK(signalKey), this );
     g_signal_connect( G_OBJECT(m_pWindow), "key-release-event", G_CALLBACK(signalKey), this );
 #else
-    GtkEventController* pKeyController = gtk_event_controller_key_new();
-    g_signal_connect(pKeyController, "key-pressed", G_CALLBACK(signalKeyPressed), this);
-    g_signal_connect(pKeyController, "key-released", G_CALLBACK(signalKeyReleased), this);
-    gtk_widget_add_controller(pEventWidget, pKeyController);
+    m_pKeyController = GTK_EVENT_CONTROLLER_KEY(gtk_event_controller_key_new());
+    g_signal_connect(m_pKeyController, "key-pressed", G_CALLBACK(signalKeyPressed), this);
+    g_signal_connect(m_pKeyController, "key-released", G_CALLBACK(signalKeyReleased), this);
+    gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(m_pKeyController));
 
 #endif
     g_signal_connect( G_OBJECT(m_pWindow), "destroy", G_CALLBACK(signalDestroy), this );
@@ -3910,11 +3910,6 @@ bool GtkSalFrame::DrawingAreaKey(SalEvent nEventType, guint keyval, guint keycod
 {
     UpdateLastInputEventTime(nTime);
 
-#if 0
-    if (m_pIMHandler && m_pIMHandler->handleKeyEvent(pEvent))
-        return true;
-#endif
-
     vcl::DeletionListener aDel(this);
 
     bool bStopProcessingKey = false;
@@ -4573,6 +4568,7 @@ void GtkSalFrame::IMHandler::createIMContext()
     GetGenericUnixSalData()->ErrorTrapPush();
 #if GTK_CHECK_VERSION(4, 0, 0)
     gtk_im_context_set_client_widget(m_pIMContext, m_pFrame->getMouseEventWidget());
+    gtk_event_controller_key_set_im_context(m_pFrame->m_pKeyController, m_pIMContext);
 #else
     gtk_im_context_set_client_window(m_pIMContext, gtk_widget_get_window(m_pFrame->getMouseEventWidget()));
 #endif
@@ -4590,6 +4586,7 @@ void GtkSalFrame::IMHandler::deleteIMContext()
         GetGenericUnixSalData()->ErrorTrapPush();
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_im_context_set_client_widget(m_pIMContext, nullptr);
+        gtk_event_controller_key_set_im_context(m_pFrame->m_pKeyController, nullptr);
 #else
         gtk_im_context_set_client_window(m_pIMContext, nullptr);
 #endif
@@ -4856,8 +4853,70 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* /*pContext*/, gchar* 
     }
 }
 #else
-void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* /*pContext*/, gchar* /*pText*/, gpointer /*im_handler*/ )
+void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* /*pContext*/, gchar* pText, gpointer im_handler )
 {
+    GtkSalFrame::IMHandler* pThis = static_cast<GtkSalFrame::IMHandler*>(im_handler);
+
+    SolarMutexGuard aGuard;
+    vcl::DeletionListener aDel( pThis->m_pFrame );
+    {
+#if 0
+        const bool bWasPreedit =
+            (pThis->m_aInputEvent.mpTextAttr != nullptr) ||
+            pThis->m_bPreeditJustChanged;
+#endif
+
+        pThis->m_aInputEvent.mpTextAttr         = nullptr;
+        pThis->m_aInputEvent.maText             = OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 );
+        pThis->m_aInputEvent.mnCursorPos        = pThis->m_aInputEvent.maText.getLength();
+        pThis->m_aInputEvent.mnCursorFlags      = 0;
+
+        pThis->m_aInputFlags.clear();
+
+        /* necessary HACK: all keyboard input comes in here as soon as an IMContext is set
+         *  which is logical and consequent. But since even simple input like
+         *  <space> comes through the commit signal instead of signalKey
+         *  and all kinds of windows only implement KeyInput (e.g. PushButtons,
+         *  RadioButtons and a lot of other Controls), will send a single
+         *  KeyInput/KeyUp sequence instead of an ExtText event if there
+         *  never was a preedit and the text is only one character.
+         *
+         *  In this case there the last ExtText event must have been
+         *  SalEvent::EndExtTextInput, either because of a regular commit
+         *  or because there never was a preedit.
+         */
+        bool bSingleCommit = false;
+#if 0
+        // TODO this needs a rethink to work again if necessary
+        if( ! bWasPreedit
+            && pThis->m_aInputEvent.maText.getLength() == 1
+            && ! pThis->m_aPrevKeyPresses.empty()
+            )
+        {
+            const PreviousKeyPress& rKP = pThis->m_aPrevKeyPresses.back();
+            sal_Unicode aOrigCode = pThis->m_aInputEvent.maText[0];
+
+            if( checkSingleKeyCommitHack( rKP.keyval, aOrigCode ) )
+            {
+                pThis->m_pFrame->doKeyCallback( rKP.state, rKP.keyval, rKP.hardware_keycode, rKP.group, aOrigCode, true, true );
+                bSingleCommit = true;
+            }
+        }
+#endif
+        if( ! bSingleCommit )
+        {
+            pThis->m_pFrame->CallCallbackExc( SalEvent::ExtTextInput, static_cast<void*>(&pThis->m_aInputEvent));
+            if( ! aDel.isDeleted() )
+                pThis->doCallEndExtTextInput();
+        }
+        if( ! aDel.isDeleted() )
+        {
+            // reset input event
+            pThis->m_aInputEvent.maText.clear();
+            pThis->m_aInputEvent.mnCursorPos = 0;
+            pThis->updateIMSpotLocation();
+        }
+    }
 }
 #endif
 
