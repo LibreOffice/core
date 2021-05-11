@@ -22,6 +22,9 @@
 # include <io.h>
 # include <fcntl.h>  /*_O_BINARY*/
 #endif
+#ifndef SYSTEM_POPPLER
+#include <libgen.h>
+#endif
 
 FILE* g_binary_out=stderr;
 
@@ -29,6 +32,7 @@ static const char *ownerPassword = "\001";
 static const char *userPassword  = "\001";
 static const char *outputFile    = "\001";
 static const char *options       = "\001";
+const int MAX_DIRNAME_BUFFER     = 32768;
 
 int main(int argc, char **argv)
 {
@@ -67,11 +71,28 @@ int main(int argc, char **argv)
         ++k;
     }
 
+    /* Get data directory location */
+    char* datadir = nullptr;
+#ifndef SYSTEM_POPPLER
+    const char* poppler_data_relative_path = "/../share/xpdfimport/poppler_data";
+    const int exec_path_len = strnlen(argv[0],MAX_DIRNAME_BUFFER);
+    char dirname_buffer[exec_path_len+1];
+    strncpy(dirname_buffer, argv[0], exec_path_len);
+    dirname_buffer[exec_path_len] = '\0';
+    char* exec_path = dirname(dirname_buffer);
+    const int datadir_path_len = strnlen(exec_path, exec_path_len) + strlen(poppler_data_relative_path);
+    char datadir_path_buffer[datadir_path_len+1];
+    strncpy(datadir_path_buffer, exec_path, exec_path_len);
+    strncat(datadir_path_buffer, poppler_data_relative_path, datadir_path_len);
+    datadir_path_buffer[datadir_path_len+1] = '\0';
+    datadir = datadir_path_buffer;
+#endif
+
     // read config file
 #if POPPLER_CHECK_VERSION(0, 83, 0)
-    globalParams = std::make_unique<GlobalParams>();
+    globalParams = std::make_unique<GlobalParams>(datadir);
 #else
-    globalParams = new GlobalParams();
+    globalParams = new GlobalParams(datadir);
 #endif
     globalParams->setErrQuiet(true);
 #if defined(_MSC_VER)
