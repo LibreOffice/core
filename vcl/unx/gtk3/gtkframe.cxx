@@ -499,6 +499,7 @@ static void ObjectDestroyedNotify( gpointer data )
     }
 }
 
+#if !GTK_CHECK_VERSION(4,0,0)
 static void hud_activated( gboolean hud_active, gpointer user_data )
 {
     if ( hud_active )
@@ -511,6 +512,7 @@ static void hud_activated( gboolean hud_active, gpointer user_data )
             pSalMenu->UpdateFull();
     }
 }
+#endif
 
 static bool ensure_dbus_setup( gpointer data )
 {
@@ -524,6 +526,15 @@ static bool ensure_dbus_setup( gpointer data )
 
     if ( gdkWindow != nullptr && g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) == nullptr )
     {
+        // Create menu model and action group attached to this frame.
+        GMenuModel* pMenuModel = G_MENU_MODEL( g_lo_menu_new() );
+        GActionGroup* pActionGroup = reinterpret_cast<GActionGroup*>(g_lo_action_group_new());
+
+        // Set window properties.
+        g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify );
+        g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify );
+
+#if !GTK_CHECK_VERSION(4,0,0)
         // Get a DBus session connection.
         if(!pSessionBus)
             pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, nullptr, nullptr);
@@ -532,20 +543,11 @@ static bool ensure_dbus_setup( gpointer data )
             return false;
         }
 
-        // Create menu model and action group attached to this frame.
-        GMenuModel* pMenuModel = G_MENU_MODEL( g_lo_menu_new() );
-        GActionGroup* pActionGroup = reinterpret_cast<GActionGroup*>(g_lo_action_group_new());
-
         // Generate menu paths.
         sal_uIntPtr windowId = pSalFrame->GetNativeWindowHandle(pSalFrame->getWindow());
         gchar* aDBusWindowPath = g_strdup_printf( "/org/libreoffice/window/%lu", windowId );
         gchar* aDBusMenubarPath = g_strdup_printf( "/org/libreoffice/window/%lu/menus/menubar", windowId );
 
-        // Set window properties.
-        g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify );
-        g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify );
-
-#if !GTK_CHECK_VERSION(4,0,0)
         GdkDisplay *pDisplay = GtkSalFrame::getGdkDisplay();
 #if defined(GDK_WINDOWING_X11)
         if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
@@ -568,7 +570,6 @@ static bool ensure_dbus_setup( gpointer data )
                                                                g_dbus_connection_get_unique_name( pSessionBus ));
         }
 #endif
-#endif
         // Publish the menu model and the action group.
         SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
         pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, nullptr);
@@ -578,6 +579,7 @@ static bool ensure_dbus_setup( gpointer data )
 
         g_free( aDBusWindowPath );
         g_free( aDBusMenubarPath );
+#endif
     }
     return false;
 }
