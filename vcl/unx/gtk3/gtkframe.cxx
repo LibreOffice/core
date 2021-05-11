@@ -2142,7 +2142,7 @@ void GtkSalFrame::updateWMClass()
     if (!getDisplay()->IsX11Display())
         return;
 
-    display = GDK_DISPLAY_XDISPLAY(getGdkDisplay());
+    display = gdk_x11_display_get_xdisplay(getGdkDisplay());
 
     if( gtk_widget_get_realized( m_pWindow ) )
     {
@@ -2194,17 +2194,17 @@ void GtkSalFrame::StartPresentation( bool bStart )
 {
     std::optional<guint> aWindow;
     std::optional<Display*> aDisplay;
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    if( getDisplay()->IsX11Display() )
+
+    bool bX11 = getDisplay()->IsX11Display();
+    if (bX11)
     {
         aWindow = GtkSalFrame::GetNativeWindowHandle(m_pWindow);
-        aDisplay = GDK_DISPLAY_XDISPLAY( getGdkDisplay() );
+        aDisplay = gdk_x11_display_get_xdisplay(getGdkDisplay());
     }
-#endif
 
     m_ScreenSaverInhibitor.inhibit( bStart,
                                     u"presentation",
-                                    getDisplay()->IsX11Display(),
+                                    bX11,
                                     aWindow,
                                     aDisplay );
 }
