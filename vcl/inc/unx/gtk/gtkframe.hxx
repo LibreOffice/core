@@ -297,27 +297,39 @@ class GtkSalFrame final : public SalFrame
     void DrawingAreaMotion(int nEventX, int nEventY, guint32 nTime, guint nState);
     void DrawingAreaCrossing(SalEvent nEventType, int nEventX, int nEventY, guint32 nTime, guint nState);
     bool DrawingAreaKey(SalEvent nEventType, guint keyval, guint keycode, guint32 nTime, guint nState);
+    void DrawingAreaScroll(double delta_x, double delta_y, int nEventX, int nEventY, guint32 nTime, guint nState);
 #if GTK_CHECK_VERSION(4, 0, 0)
     static void         signalMap( GtkWidget*, gpointer );
     static void         signalUnmap( GtkWidget*, gpointer );
+
     static gboolean     signalDelete( GtkWidget*, gpointer );
+
     static void         signalMotion(GtkEventControllerMotion *controller, double x, double y, gpointer);
+
+    static gboolean     signalScroll(GtkEventControllerScroll* pController, double delta_x, double delta_y, gpointer);
+
     static void         signalEnter(GtkEventControllerMotion *controller, double x, double y, gpointer);
     static void         signalLeave(GtkEventControllerMotion *controller, gpointer);
-    static gboolean     signalKeyPressed(GtkEventControllerKey *controller, guint keyval, guint keycode, GdkModifierType state, gpointer user_data);
-    static gboolean     signalKeyReleased(GtkEventControllerKey *controller, guint keyval, guint keycode, GdkModifierType state, gpointer user_data);
+
+    static gboolean     signalKeyPressed(GtkEventControllerKey *controller, guint keyval, guint keycode, GdkModifierType state, gpointer);
+    static gboolean     signalKeyReleased(GtkEventControllerKey *controller, guint keyval, guint keycode, GdkModifierType state, gpointer);
 #else
     static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalUnmap( GtkWidget*, GdkEvent*, gpointer );
+
     static gboolean     signalDelete( GtkWidget*, GdkEvent*, gpointer );
+
     static gboolean     signalMotion( GtkWidget*, GdkEventMotion*, gpointer );
+
+    static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
+
+    static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
+
     static gboolean     signalKey( GtkWidget*, GdkEventKey*, gpointer );
 #endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalConfigure( GtkWidget*, GdkEventConfigure*, gpointer );
     static gboolean     signalWindowState( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
 #endif
     static void         signalDestroy( GtkWidget*, gpointer );
 
@@ -385,7 +397,9 @@ public:
     basegfx::B2IVector              m_aFrameSize;
     DamageHandler                   m_aDamageHandler;
     std::vector<GdkEvent*>          m_aPendingScrollEvents;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     Idle                            m_aSmoothScrollIdle;
+#endif
     int                             m_nGrabLevel;
     bool                            m_bSalObjectSetPosSize;
     GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
@@ -451,10 +465,10 @@ public:
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     void nopaint_container_resize_children(GtkContainer*);
-#endif
 
     void LaunchAsyncScroll(GdkEvent const * pEvent);
     DECL_LINK(AsyncScroll, Timer *, void);
+#endif
 
     virtual ~GtkSalFrame() override;
 
