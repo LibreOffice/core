@@ -180,6 +180,7 @@ class GtkSalFrame final : public SalFrame
     GtkFixed*                       m_pFixedContainer;
 #else
     GtkDrawingArea*                 m_pFixedContainer;
+    GtkEventControllerKey*          m_pKeyController;
 #endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkWindow*                      m_pForeignParent;
