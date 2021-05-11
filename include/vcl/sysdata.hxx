@@ -73,9 +73,8 @@ struct VCL_DLLPUBLIC SystemEnvData
     // however, the GTK3 vclplug wants to store pointers in here!
     sal_IntPtr          aShellWindow;   // the window of the frame's shell
     Platform            platform;       // the windowing system in use
-private:
-    sal_uIntPtr         aWindow;        // the window of the object
 public:
+    sal_uIntPtr         aWindow;        // the window of the object
 
     void SetWindowHandle(sal_uIntPtr nWindow)
     {
