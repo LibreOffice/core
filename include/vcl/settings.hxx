@@ -536,6 +536,7 @@ public:
 
     void                            SetToolbarIconSize( ToolbarIconSize nSize );
     ToolbarIconSize                 GetToolbarIconSize() const;
+    Size                            GetToolbarIconSizePixel() const;
 
     /** Set the icon theme to use. */
     void                            SetIconTheme(const OUString&);
