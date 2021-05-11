@@ -280,12 +280,12 @@ void Test::testSharedFormulas()
     aPos.Set(2,0,0);
     {
         // Insert data in C1:D2 and formulas in E1:E2
-        const char* pData[][3] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "5", "1", "=C:C/D:D" },
             { "4", "2", "=C:C/D:D" }
         };
 
-        insertRangeData(m_pDoc, aPos, pData, SAL_N_ELEMENTS(pData));
+        insertRangeData(m_pDoc, aPos, aData);
     }
     aPos.Set(4,1,0);
     pFC = m_pDoc->GetFormulaCell(aPos);
@@ -315,13 +315,13 @@ void Test::testSharedFormulasRefUpdate()
 
     {
         // Insert formulas that reference A10:A12 in B1:B3.
-        const char* pData[][1] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "=A10" },
             { "=A11" },
             { "=A12" }
         };
 
-        insertRangeData(m_pDoc, ScAddress(1,0,0), pData, SAL_N_ELEMENTS(pData));
+        insertRangeData(m_pDoc, ScAddress(1,0,0), aData);
     }
 
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,0,0), "A10", "Wrong formula in B1");
@@ -455,14 +455,14 @@ void Test::testSharedFormulasRefUpdateMove()
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,2,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,3,0)));
 
-    const char* aData[][1] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "=RC[-1]" },
         { "=RC[-1]" },
         { "=RC[-1]" }
     };
 
     // Set formulas in C2:C4 that reference B2:B4 individually.
-    insertRangeData(m_pDoc, ScAddress(2,1,0), aData, SAL_N_ELEMENTS(aData));
+    insertRangeData(m_pDoc, ScAddress(2,1,0), aData);
 
     // Check the formula results.
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,1,0)));
@@ -522,13 +522,13 @@ void Test::testSharedFormulasRefUpdateMove2()
 
     {
         // Set formulas in C2:C3 that reference B2:B3 individually, and F2:F3 to E2:E3.
-        const char* pData[][1] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "=RC[-1]" },
             { "=RC[-1]" }
         };
 
-        insertRangeData(m_pDoc, ScAddress(2,1,0), pData, SAL_N_ELEMENTS(pData));
-        insertRangeData(m_pDoc, ScAddress(5,1,0), pData, SAL_N_ELEMENTS(pData));
+        insertRangeData(m_pDoc, ScAddress(2,1,0), aData);
+        insertRangeData(m_pDoc, ScAddress(5,1,0), aData);
     }
 
     m_pDoc->CalcFormulaTree(); // calculate manually.
@@ -583,13 +583,13 @@ void Test::testSharedFormulasRefUpdateRange()
 
     {
         // Insert formulas to B3:B5.
-        const char* pData[][1] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "=SUM($A$3:$A$5)" },
             { "=SUM($A$3:$A$5)" },
             { "=SUM($A$3:$A$5)" }
         };
 
-        insertRangeData(m_pDoc, ScAddress(1,2,0), pData, SAL_N_ELEMENTS(pData));
+        insertRangeData(m_pDoc, ScAddress(1,2,0), aData);
     }
 
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,2,0), "SUM($A$3:$A$5)", "Wrong formula");
@@ -665,7 +665,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
 
     ScRange aWholeArea(0, 0, 0, 100, 100, 0); // Large enough for all references used in the test.
 
-    const char* aData[][3] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "1", "2", "=SUM(A1:B1)" },
         { "3", "4", "=SUM(A2:B2)" },
         { nullptr, nullptr, nullptr },
@@ -673,7 +673,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
         { "7", "8", "=SUM(A5:B5)" }
     };
 
-    insertRangeData(m_pDoc, ScAddress(0,0,0), aData, SAL_N_ELEMENTS(aData));
+    insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
 
     // Check initial formula values.
     CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(2,0,0)));
@@ -800,14 +800,14 @@ void Test::testSharedFormulasRefUpdateExternal()
     {
         // Insert formula cells in A7:A10 of the host document, referencing A1:A3
         // of the external document.
-        const char* pData[][1] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "='file:///extdata.fake'#$Data.A1" },
             { "='file:///extdata.fake'#$Data.A2" },
             { "='file:///extdata.fake'#$Data.A3" },
             { "=COUNTA('file:///extdata.fake'#$Data.A1:A3)" }
         };
 
-        insertRangeData(m_pDoc, ScAddress(0,6,0), pData, SAL_N_ELEMENTS(pData));
+        insertRangeData(m_pDoc, ScAddress(0,6,0), aData);
     }
 
     // Check the formula results.
@@ -926,14 +926,14 @@ void Test::testSharedFormulasInsertRow()
 
     {
         // Set formula cells in B1:B4 all referencing A4 as absolute reference.
-        const char* pData[][1] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "=$A$4" },
             { "=$A$4" },
             { "=$A$4" },
             { "=$A$4" }
         };
 
-        insertRangeData(m_pDoc, ScAddress(1,0,0), pData, SAL_N_ELEMENTS(pData));
+        insertRangeData(m_pDoc, ScAddress(1,0,0), aData);
     }
 
     // Insert a new row at row 3.
@@ -969,7 +969,7 @@ void Test::testSharedFormulasDeleteRows()
     {
         // Fill data cells A1:A20 and formula cells B1:B20.  Formulas in
         // B1:B10 and B11:B20 should be different.
-        const char* pData[][2] = {
+        const std::vector<std::vector<const char*>> aData = {
             { "0", "=RC[-1]+1" },
             { "1", "=RC[-1]+1" },
             { "2", "=RC[-1]+1" },
@@ -992,7 +992,7 @@ void Test::testSharedFormulasDeleteRows()
             { "19", "=RC[-1]+11" }
         };
 
-        insertRangeData(m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData));
+        insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
     }
 
     // B1:B10 should be shared.
@@ -1698,13 +1698,13 @@ void Test::testSharedFormulaAbsCellListener()
 
     m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
 
-    const char* pData[][1] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "=$A$1" },
         { "=$A$1" },
         { "=$A$1" }
     };
 
-    insertRangeData(m_pDoc, ScAddress(1,0,0), pData, SAL_N_ELEMENTS(pData));
+    insertRangeData(m_pDoc, ScAddress(1,0,0), aData);
 
     // A1 should have 3 listeners listening into it.
     const SvtBroadcaster* pBC = m_pDoc->GetBroadcaster(ScAddress(0,0,0));
@@ -1747,14 +1747,14 @@ void Test::testSharedFormulaUnshareAreaListeners()
 
     m_pDoc->InsertTab(0, "Test");
 
-    const char* pData[][2] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "=SUM(B1:B2)", "1" },
         { "=SUM(B2:B3)", "2" },
         { "=SUM(B3:B4)", "4" },
         {             nullptr, "8" }
     };
 
-    insertRangeData(m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData));
+    insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
 
     // Check that A1:A3 is a formula group.
     const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,0,0));
@@ -1775,14 +1775,14 @@ void Test::testSharedFormulaUnshareAreaListeners()
     {
         // Data in A2:C6
         const ScAddress aOrgPos(0,1,0);
-        const char* pData2[][3] = {
+        const std::vector<std::vector<const char*>> aData2 = {
             { "=SUM(B2:C2)",   "1",   "2" },
             { "=SUM(B3:C3)",   "4",   "8" },
             { "=SUM(B4:C4)",  "16",  "32" },
             { "=SUM(B5:C5)",  "64", "128" },
             { "=SUM(B6:C6)", "256", "512" },
         };
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Check that A2:A6 is a formula group.
         pFC = m_pDoc->GetFormulaCell(aOrgPos);
@@ -1875,7 +1875,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
         ScAddress aPos( ScAddress::UNINITIALIZED);
         ScFormulaCell* pCell;
         std::vector<ScFormulaCell*> aCells;
-        const char* pData2[][3] = {
+        const std::vector<std::vector<const char*>> aData2 = {
             { "=SUM(B3:C3)",   "1",   "2" },
             { "=SUM(B4:C4)",   "4",   "8" },
             { "=SUM(B5:C5)",  "16",  "32" },
@@ -1883,7 +1883,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
             { "=SUM(B7:C7)", "256", "512" },
         };
 
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Add grouping formulas in A1:A2, keep A3:A7
         aPos = ScAddress(0,0,0);
@@ -1908,7 +1908,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
 
         clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
 
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Add formulas in A1:A2, keep A3:A7
         aPos = ScAddress(0,0,0);
@@ -1939,7 +1939,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
 
         clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
 
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Add formula in A2, overwrite A3, keep A4:A7
         aPos = ScAddress(0,1,0);
@@ -1970,7 +1970,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
 
         clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
 
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Overwrite A3:A4, keep A5:A7
         aPos = ScAddress(0,2,0);
@@ -2002,7 +2002,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
 
         clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
 
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Keep A3, overwrite A4:A5, keep A6:A7
         aPos = ScAddress(0,3,0);
@@ -2038,7 +2038,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
 
         clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
 
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Keep A3:A4, overwrite A5:A6, keep A7
         aPos = ScAddress(0,4,0);
@@ -2074,7 +2074,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
 
         clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
 
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Keep A3:A5, overwrite A6:A7
         aPos = ScAddress(0,5,0);
@@ -2106,7 +2106,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
 
         clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
 
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Keep A3:A6, overwrite A7, add A8
         aPos = ScAddress(0,6,0);
@@ -2138,7 +2138,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
 
         clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
 
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Keep A3:A7, add A8:A9
         aPos = ScAddress(0,7,0);
@@ -2170,7 +2170,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
 
         clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
 
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Keep A3:A7, add grouping formulas in A8:A9
         aPos = ScAddress(0,7,0);
@@ -2196,7 +2196,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
 
         clearRange(m_pDoc, ScRange( 0,0,0, 2,8,0));
 
-        insertRangeData(m_pDoc, aOrgPos, pData2, SAL_N_ELEMENTS(pData2));
+        insertRangeData(m_pDoc, aOrgPos, aData2);
 
         // Overwrite grouping formulas in A4:A5
         aPos = ScAddress(0,3,0);
@@ -2233,17 +2233,17 @@ void Test::testSharedFormulaListenerDeleteArea()
     m_pDoc->InsertTab(0, "Test0");
     m_pDoc->InsertTab(1, "Test1");
 
-    const char* pData0[][3] = {
+    const std::vector<std::vector<const char*>> aData0 = {
         { "", "", "=Test1.C1" },
         { "", "", "=Test1.C2" }
     };
-    const char* pData1[][3] = {
+    const std::vector<std::vector<const char*>> aData1 = {
         { "=Test0.A1", "=Test0.B1", "=SUM(A1:B1)" },
         { "=Test0.A2", "=Test0.B2", "=SUM(A2:B2)" },
     };
 
-    insertRangeData(m_pDoc, ScAddress(0,0,0), pData0, SAL_N_ELEMENTS(pData0));
-    insertRangeData(m_pDoc, ScAddress(0,0,1), pData1, SAL_N_ELEMENTS(pData1));
+    insertRangeData(m_pDoc, ScAddress(0,0,0), aData0);
+    insertRangeData(m_pDoc, ScAddress(0,0,1), aData1);
 
     // Check that Test1.A1:A2 and Test1.B1:B2 are formula groups.
     const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,0,1));
@@ -2276,7 +2276,7 @@ void Test::testSharedFormulaUpdateOnReplacement()
 
     m_pDoc->InsertTab(0, "Test");
 
-    const char* pData[][1] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "1"              },
         { "=SUM($A$1:$A1)" },
         { "=SUM($A$1:$A2)" },
@@ -2287,7 +2287,7 @@ void Test::testSharedFormulaUpdateOnReplacement()
         { "=SUM($A$1:$A7)" }
     };
 
-    insertRangeData(m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData));
+    insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
 
     // Check that A2:A8 is a formula group.
     const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,1,0));
@@ -2431,12 +2431,12 @@ void Test::testSharedFormulaDeleteTopCell()
 
     m_pDoc->InsertTab(0, "Test");
 
-    const char* pData[][2] = {
+    const std::vector<std::vector<const char*>> aData = {
         { "=SUM(B$1:B$2)", "1" },
         { "=SUM(B$1:B$2)", "2" }
     };
 
-    insertRangeData( m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData));
+    insertRangeData( m_pDoc, ScAddress(0,0,0), aData);
 
     // Check that A1:A2 is a formula group.
     const ScFormulaCell* pFC = m_pDoc->GetFormulaCell( ScAddress(0,0,0));
