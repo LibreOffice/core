@@ -200,8 +200,6 @@ struct ExtensionMap
     const char *filterName;
 };
 
-}
-
 class TraceEventDumper : public AutoTimer
 {
     static const int dumpTimeoutMS = 5000;
@@ -230,6 +228,8 @@ public:
         }
     }
 };
+
+} // unnamed namespace
 
 static TraceEventDumper *traceEventDumper = nullptr;
 
