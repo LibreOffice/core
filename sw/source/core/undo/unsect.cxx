@@ -79,16 +79,18 @@ SwUndoInsSection::SwUndoInsSection(
         std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode> const*const pTOXBase)
     : SwUndo( SwUndoId::INSSECTION, &rPam.GetDoc() ), SwUndRng( rPam )
     , m_pSectionData(new SwSectionData(rNewData))
-    , m_pTOXBase( pTOXBase
-        ? std::make_unique<std::tuple<SwTOXBase *, sw::RedlineMode, sw::FieldmarkMode>>(
-            new SwTOXBase(*std::get<0>(*pTOXBase)), std::get<1>(*pTOXBase), std::get<2>(*pTOXBase))
-        : nullptr )
     , m_pAttrSet( (pSet && pSet->Count()) ? new SfxItemSet( *pSet ) : nullptr )
     , m_nSectionNodePos(0)
     , m_bSplitAtStart(false)
     , m_bSplitAtEnd(false)
     , m_bUpdateFootnote(false)
 {
+    if (pTOXBase)
+        m_xTOXBase.emplace(
+            std::make_unique<SwTOXBase>(*std::get<0>(*pTOXBase)),
+            std::get<1>(*pTOXBase),
+            std::get<2>(*pTOXBase));
+
     SwDoc& rDoc = rPam.GetDoc();
     if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
@@ -179,7 +181,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
 
     const SwTOXBaseSection* pUpdateTOX = nullptr;
-    if (m_pTOXBase)
+    if (m_xTOXBase)
     {
         SwRootFrame const* pLayout(nullptr);
         SwRootFrame * pLayoutToReset(nullptr);
@@ -187,15 +189,15 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
         comphelper::ScopeGuard g([&]() {
                 if (pLayoutToReset)
                 {
-                    pLayoutToReset->SetHideRedlines(std::get<1>(*m_pTOXBase) == sw::RedlineMode::Shown);
+                    pLayoutToReset->SetHideRedlines(std::get<1>(*m_xTOXBase) == sw::RedlineMode::Shown);
                     pLayoutToReset->SetFieldmarkMode(eFieldmarkMode);
                 }
             });
         o3tl::sorted_vector<SwRootFrame *> layouts(rDoc.GetAllLayouts());
         for (SwRootFrame const*const p : layouts)
         {
-            if ((std::get<1>(*m_pTOXBase) == sw::RedlineMode::Hidden) == p->IsHideRedlines()
-                && std::get<2>(*m_pTOXBase) == p->GetFieldmarkMode())
+            if ((std::get<1>(*m_xTOXBase) == sw::RedlineMode::Hidden) == p->IsHideRedlines()
+                && std::get<2>(*m_xTOXBase) == p->GetFieldmarkMode())
             {
                 pLayout = p;
                 break;
@@ -206,13 +208,13 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
             assert(!layouts.empty()); // must have one layout
             pLayoutToReset = *layouts.begin();
             eFieldmarkMode = pLayoutToReset->GetFieldmarkMode();
-            pLayoutToReset->SetHideRedlines(std::get<1>(*m_pTOXBase) == sw::RedlineMode::Hidden);
-            pLayoutToReset->SetFieldmarkMode(std::get<2>(*m_pTOXBase));
+            pLayoutToReset->SetHideRedlines(std::get<1>(*m_xTOXBase) == sw::RedlineMode::Hidden);
+            pLayoutToReset->SetFieldmarkMode(std::get<2>(*m_xTOXBase));
             pLayout = pLayoutToReset;
         }
         pUpdateTOX = rDoc.InsertTableOf( *rPam.GetPoint(),
             // don't expand: will be done by SwUndoUpdateIndex::RedoImpl()
-            *std::get<0>(*m_pTOXBase), m_pAttrSet.get(), false, pLayout);
+            *std::get<0>(*m_xTOXBase), m_pAttrSet.get(), false, pLayout);
     }
     else
     {
@@ -258,10 +260,10 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoInsSection::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    if (m_pTOXBase)
+    if (m_xTOXBase)
     {
         rDoc.InsertTableOf(*rContext.GetRepeatPaM().GetPoint(),
-            *std::get<0>(*m_pTOXBase), m_pAttrSet.get(), true,
+            *std::get<0>(*m_xTOXBase), m_pAttrSet.get(), true,
             rDoc.getIDocumentLayoutAccess().GetCurrentLayout()); // TODO add shell to RepeatContext?
     }
     else
