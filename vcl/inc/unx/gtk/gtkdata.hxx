@@ -46,13 +46,6 @@ namespace com::sun::star::accessibility { class XAccessibleEventListener; }
 class GtkSalDisplay;
 class DocumentFocusListener;
 
-#if !GTK_CHECK_VERSION(4,0,0)
-inline ::Window widget_get_xid(GtkWidget *widget)
-{
-    return GDK_WINDOW_XID(gtk_widget_get_window(widget));
-}
-#endif
-
 inline void main_loop_run(GMainLoop* pLoop)
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
