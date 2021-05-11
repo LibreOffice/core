@@ -514,9 +514,8 @@ static void hud_activated( gboolean hud_active, gpointer user_data )
 }
 #endif
 
-static bool ensure_dbus_setup( gpointer data )
+static void attach_native_menubar(GtkSalFrame* pSalFrame)
 {
-    GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( data );
     GtkWidget* pWidget = pSalFrame->getWindow();
 #if !GTK_CHECK_VERSION(4,0,0)
     GdkSurface* gdkWindow = gtk_widget_get_window(pWidget);
@@ -536,15 +535,13 @@ static bool ensure_dbus_setup( gpointer data )
 
 #if !GTK_CHECK_VERSION(4,0,0)
         // Get a DBus session connection.
-        if(!pSessionBus)
+        if (!pSessionBus)
             pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, nullptr, nullptr);
-        if( !pSessionBus )
-        {
-            return false;
-        }
+        if (!pSessionBus)
+            return;
 
         // Generate menu paths.
-        sal_uIntPtr windowId = pSalFrame->GetNativeWindowHandle(pSalFrame->getWindow());
+        sal_uIntPtr windowId = pSalFrame->GetNativeWindowHandle(pWidget);
         gchar* aDBusWindowPath = g_strdup_printf( "/org/libreoffice/window/%lu", windowId );
         gchar* aDBusMenubarPath = g_strdup_printf( "/org/libreoffice/window/%lu/menus/menubar", windowId );
 
@@ -581,7 +578,6 @@ static bool ensure_dbus_setup( gpointer data )
         g_free( aDBusMenubarPath );
 #endif
     }
-    return false;
 }
 
 void on_registrar_available( GDBusConnection * /*connection*/,
@@ -1347,8 +1343,8 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
 
     if (!bPopup)
     {
-        // Enable DBus native menu if available.
-        ensure_dbus_setup( this );
+        // Enable GMenuModel native menu
+        attach_native_menubar(this);
     }
 }
 
