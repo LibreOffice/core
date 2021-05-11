@@ -170,7 +170,6 @@ class GtkSalDisplay : public SalGenericDisplay
     GdkDisplay*                     m_pGdkDisplay;
     o3tl::enumarray<PointerStyle, GdkCursor*> m_aCursors;
     bool                            m_bStartupCompleted;
-    bool                            m_bX11Display;
 
     GdkCursor* getFromSvg( OUString const & name, int nXHot, int nYHot );
 
@@ -179,7 +178,6 @@ public:
     virtual ~GtkSalDisplay() override;
 
     GdkDisplay* GetGdkDisplay() const { return m_pGdkDisplay; }
-    bool        IsX11Display() const { return m_bX11Display; }
 
     GtkSalSystem* getSystem() const { return m_pSys; }
 

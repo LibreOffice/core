@@ -1767,7 +1767,8 @@ bool DLSYM_GDK_IS_WAYLAND_DISPLAY(GdkDisplay* pDisplay)
     static auto get_type = reinterpret_cast<GType (*) (void)>(dlsym(nullptr, "gdk_wayland_display_get_type"));
     if (!get_type)
         return false;
-    return G_TYPE_CHECK_INSTANCE_TYPE(pDisplay, get_type());
+    static bool bResult = G_TYPE_CHECK_INSTANCE_TYPE(pDisplay, get_type());
+    return bResult;
 }
 
 bool DLSYM_GDK_IS_X11_DISPLAY(GdkDisplay* pDisplay)
@@ -1775,7 +1776,8 @@ bool DLSYM_GDK_IS_X11_DISPLAY(GdkDisplay* pDisplay)
     static auto get_type = reinterpret_cast<GType (*) (void)>(dlsym(nullptr, "gdk_x11_display_get_type"));
     if (!get_type)
         return false;
-    return G_TYPE_CHECK_INSTANCE_TYPE(pDisplay, get_type());
+    static bool bResult = G_TYPE_CHECK_INSTANCE_TYPE(pDisplay, get_type());
+    return bResult;
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)

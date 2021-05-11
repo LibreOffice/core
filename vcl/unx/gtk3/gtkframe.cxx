@@ -2133,7 +2133,7 @@ void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
 
 void GtkSalFrame::updateWMClass()
 {
-    if (!getDisplay()->IsX11Display())
+    if (!DLSYM_GDK_IS_X11_DISPLAY(getGdkDisplay()))
         return;
 
     if (!gtk_widget_get_realized(m_pWindow))
@@ -2190,7 +2190,7 @@ void GtkSalFrame::StartPresentation( bool bStart )
     std::optional<guint> aWindow;
     std::optional<Display*> aDisplay;
 
-    bool bX11 = getDisplay()->IsX11Display();
+    bool bX11 = DLSYM_GDK_IS_X11_DISPLAY(getGdkDisplay());
     if (bX11)
     {
         aWindow = GtkSalFrame::GetNativeWindowHandle(m_pWindow);
