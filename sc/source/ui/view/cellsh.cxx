@@ -256,7 +256,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 if (nWhich == FID_INS_COLUMNS_AFTER)
                     eAction = sc::ColRowEditAction::InsertColumnsAfter;
 
-                bDisable = (!bSimpleArea) || GetViewData().SimpleRowMarked();
+                bDisable = (!bSimpleArea && eMarkType != SC_MARK_SIMPLE_FILTERED)
+                           || GetViewData().SimpleRowMarked();
                 if (!bEditable && nRow1 == 0 && nRow2 == rDoc.MaxRow())
                 {
                     // See if row insertions are allowed.
