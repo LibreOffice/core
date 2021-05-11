@@ -34,8 +34,9 @@
 #include <tools/urlobj.hxx>
 
 #include <vcl/window.hxx>
-#include <unx/gtk/gtkframe.hxx>
+#include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
+#include <unx/gtk/gtkframe.hxx>
 #include "SalGtkPicker.hxx"
 
 using namespace ::rtl;
@@ -94,23 +95,13 @@ extern "C"
 
 GtkWindow* RunDialog::GetTransientFor()
 {
-    GtkWindow *pParent = nullptr;
-
     vcl::Window * pWindow = ::Application::GetActiveTopWindow();
-    if( pWindow )
-    {
-        GtkSalFrame *pFrame = dynamic_cast<GtkSalFrame *>( pWindow->ImplGetFrame() );
-        if( pFrame )
-        {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-            pParent = GTK_WINDOW(gtk_widget_get_toplevel(pFrame->getWindow()));
-#else
-            pParent = GTK_WINDOW(gtk_widget_get_root(pFrame->getWindow()));
-#endif
-        }
-    }
-
-    return pParent;
+    if (!pWindow)
+        return nullptr;
+    GtkSalFrame *pFrame = dynamic_cast<GtkSalFrame*>(pWindow->ImplGetFrame());
+    if (!pFrame)
+        return nullptr;
+    return GTK_WINDOW(widget_get_root(pFrame->getWindow()));
 }
 
 RunDialog::RunDialog(GtkWidget *pDialog, const uno::Reference<awt::XExtendedToolkit>& rToolkit,
