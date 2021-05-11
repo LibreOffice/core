@@ -71,7 +71,7 @@ private:
 
     const SfxItemSet*       pSet;
     std::unique_ptr<SfxItemSet>     pOutSet;
-    SfxItemSet*             pExampleSet;
+    std::unique_ptr<SfxItemSet>     pExampleSet;
     std::unique_ptr<sal_uInt16[]>   pRanges;
 
     SvxHlinkCtrl        maCtrl;         ///< Controller
