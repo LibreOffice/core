@@ -18,6 +18,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtksys.hxx>
 #include <unx/gtk/gtkbackend.hxx>
@@ -256,6 +257,44 @@ static OString MapToGtkAccelerator(const OUString &rStr)
 {
     return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
 }
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+
+namespace
+{
+    struct DialogLoop
+    {
+        GMainLoop* m_pLoop = nullptr;
+        gint nResponseId = GTK_RESPONSE_NONE;
+
+        static void DialogResponse(GtkDialog*, gint nResponseId, gpointer data)
+        {
+            DialogLoop* pDialogLoop = static_cast<DialogLoop*>(data);
+            pDialogLoop->nResponseId = nResponseId;
+            g_main_loop_quit(pDialogLoop->m_pLoop);
+        }
+
+        int run(GtkDialog *pDialog)
+        {
+            gulong nSignalResponseId = g_signal_connect(pDialog, "response", G_CALLBACK(DialogResponse), this);
+            gtk_window_present(GTK_WINDOW(pDialog));
+            m_pLoop = g_main_loop_new(nullptr, false);
+            main_loop_run(m_pLoop);
+            g_main_loop_unref(m_pLoop);
+            g_signal_handler_disconnect(pDialog, nSignalResponseId);
+            return nResponseId;
+        }
+
+    };
+}
+
+gint gtk_dialog_run(GtkDialog* pDialog)
+{
+    DialogLoop aDialogLoop;
+    return aDialogLoop.run(pDialog);
+}
+
+#endif
 
 int GtkSalSystem::ShowNativeDialog (const OUString& rTitle, const OUString& rMessage,
                                     const std::vector< OUString >& rButtonNames)
