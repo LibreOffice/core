@@ -2268,10 +2268,10 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 
     m_ePointerStyle = ePointerStyle;
     GdkCursor *pCursor = getDisplay()->getCursor( ePointerStyle );
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gdk_window_set_cursor( gtk_widget_get_window(m_pWindow), pCursor );
-#else
+#if GTK_CHECK_VERSION(4, 0, 0)
     gtk_widget_set_cursor(GTK_WIDGET(m_pWindow), pCursor);
+#else
+    gdk_window_set_cursor( gtk_widget_get_window(m_pWindow), pCursor );
 #endif
 
     // #i80791# use grabPointer the same way as CaptureMouse, respective float grab
@@ -2322,13 +2322,13 @@ void GtkSalFrame::CaptureMouse( bool bCapture )
 
 void GtkSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkSalFrame* pFrame = this;
     while( pFrame && pFrame->isChild( false ) )
         pFrame = pFrame->m_pParent;
     if( ! pFrame )
         return;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkScreen *pScreen = gtk_widget_get_screen(pFrame->m_pWindow);
     GdkDisplay *pDisplay = gdk_screen_get_display( pScreen );
 
@@ -2763,11 +2763,8 @@ void* GtkSalFrame::ShowPopover(const OUString& rHelpText, vcl::Window* pParent, 
     gtk_popover_set_autohide(GTK_POPOVER(pWidget), false);
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_widget_show_all(pWidget);
-#else
+    gtk_widget_show(pLabel);
     gtk_widget_show(pWidget);
-#endif
 
     return pWidget;
 }
