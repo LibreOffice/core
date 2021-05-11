@@ -203,12 +203,12 @@ double ScInterpreter::integralPhi(double x)
     return 0.5 * ::rtl::math::erfc(-x * 0.7071067811865475); // * 1/sqrt(2)
 }
 
-double ScInterpreter::taylor(const double* pPolynom, sal_uInt16 nMax, double x)
+KahanSum ScInterpreter::taylor(const double* pPolynom, sal_uInt16 nMax, double x)
 {
-    double nVal = pPolynom[nMax];
+    KahanSum nVal = pPolynom[nMax];
     for (short i = nMax-1; i >= 0; i--)
     {
-        nVal = pPolynom[i] + (nVal * x);
+        nVal = (nVal * x) + pPolynom[i];
     }
     return nVal;
 }
@@ -226,7 +226,7 @@ double ScInterpreter::gauss(double x)
          -0.00118732821548045,  0.00011543468761616, -0.00000944465625950,
           0.00000066596935163, -0.00000004122667415,  0.00000000227352982,
           0.00000000011301172,  0.00000000000511243, -0.00000000000021218 };
-        nVal = taylor(t0, 11, (xAbs * xAbs)) * xAbs;
+        return taylor(t0, 11, (x * x)).get() * x;
     }
     else if (xShort <= 2)
     {
@@ -239,7 +239,7 @@ double ScInterpreter::gauss(double x)
          -0.00000000491799345,  0.00000000366377919, -0.00000000015981997,
          -0.00000000017381238,  0.00000000002624031,  0.00000000000560919,
          -0.00000000000172127, -0.00000000000008634,  0.00000000000007894 };
-        nVal = taylor(t2, 23, (xAbs - 2.0));
+        nVal = taylor(t2, 23, (xAbs - 2.0)).get();
     }
     else if (xShort <= 4)
     {
@@ -251,12 +251,12 @@ double ScInterpreter::gauss(double x)
          0.00000000909595465,  0.00000000944943118, -0.00000000329957075,
          0.00000000029492075,  0.00000000011874477, -0.00000000004420396,
          0.00000000000361422,  0.00000000000143638, -0.00000000000045848 };
-        nVal = taylor(t4, 20, (xAbs - 4.0));
+        nVal = taylor(t4, 20, (xAbs - 4.0)).get();
     }
     else
     {
         static const double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
-        nVal = 0.5 + phi(xAbs) * taylor(asympt, 4, 1.0 / (xAbs * xAbs)) / xAbs;
+        return 0.5 + phi(xAbs) * taylor(asympt, 4, 1.0 / (x * x)).get() / x;
     }
     if (x < 0.0)
         return -nVal;
