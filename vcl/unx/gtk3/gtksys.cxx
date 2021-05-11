@@ -207,12 +207,27 @@ bool GtkSalSystem::IsUnifiedDisplay()
 
 unsigned int GtkSalSystem::GetDisplayBuiltInScreen()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+#if defined(GDK_WINDOWING_X11)
+    if (DLSYM_GDK_IS_X11_DISPLAY(mpDisplay))
+    {
+        GdkMonitor* pPrimary = gdk_x11_display_get_primary_monitor(mpDisplay);
+        GListModel* pList = gdk_display_get_monitors(mpDisplay);
+        int nIndex = 0;
+        while (gpointer pElem = g_list_model_get_item(pList, nIndex))
+        {
+            if (pElem == pPrimary)
+                return nIndex;
+            ++nIndex;
+        }
+    }
+#endif
+    // nothing for wayland ?, hope for the best that its at index 0
+    return 0;
+#else // !GTK_CHECK_VERSION(4, 0, 0)
     GdkScreen *pDefault = gdk_display_get_default_screen (mpDisplay);
     int idx = getScreenIdxFromPtr (pDefault);
     return idx + gdk_screen_get_primary_monitor(pDefault);
-#else
-    return 0;
 #endif
 }
 
