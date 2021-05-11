@@ -2070,6 +2070,20 @@ StyleSettings::GetToolbarIconSize() const
     return mxData->mnToolbarIconSize;
 }
 
+Size StyleSettings::GetToolbarIconSizePixel() const
+{
+    switch (GetToolbarIconSize())
+    {
+        case ToolbarIconSize::Large:
+            return Size(24, 24);
+        case ToolbarIconSize::Size32:
+            return Size(32, 32);
+        case ToolbarIconSize::Small:
+        default:
+            return Size(16, 16);
+    }
+}
+
 const DialogStyle&
 StyleSettings::GetDialogStyle() const
 {

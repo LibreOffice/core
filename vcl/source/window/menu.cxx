@@ -1025,10 +1025,12 @@ OUString Menu::GetItemText( sal_uInt16 nItemId ) const
 
 void Menu::SetItemColor(sal_uInt16 nItemId, const Color& rColor)
 {
-    Bitmap aBmp(Size(50, 50), vcl::PixelFormat::N24_BPP);
+    StyleSettings aSettings = Application::GetSettings().GetStyleSettings();
+    auto iconSize = aSettings.GetToolbarIconSizePixel();
+    Bitmap aBmp(iconSize, vcl::PixelFormat::N24_BPP);
     BitmapWriteAccess aBmpAccess(aBmp);
     aBmpAccess.SetFillColor(rColor);
-    aBmpAccess.FillRect(tools::Rectangle(0, 0, 49, 49));
+    aBmpAccess.FillRect(tools::Rectangle(0, 0, iconSize.Width() - 1, iconSize.Height() - 1));
     BitmapEx aBmpEx(aBmp);
     Image aImage(aBmpEx);
     SetItemImage(nItemId, aImage);
