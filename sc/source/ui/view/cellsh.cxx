@@ -254,7 +254,12 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 if (nWhich == FID_INS_COLUMNS_AFTER)
                     eAction = sc::ColRowEditAction::InsertColumnsAfter;
 
+<<<<<<< HEAD   (c1c3aa tdf#127301 XLSX import: hide hidden named range of autofilte)
                 bDisable = (!bSimpleArea) || GetViewData()->SimpleRowMarked();
+=======
+                bDisable = (!bSimpleArea && eMarkType != SC_MARK_SIMPLE_FILTERED)
+                           || GetViewData().SimpleRowMarked();
+>>>>>>> CHANGE (a2c4a0 tdf#57351 sc UI: fix disabled Insert Columns options)
                 if (!bEditable && nRow1 == 0 && nRow2 == rDoc.MaxRow())
                 {
                     // See if row insertions are allowed.
