@@ -1333,8 +1333,9 @@ namespace emfio
                     case EMR_ROUNDRECT :
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nW ).ReadUInt32( nH );
-                        Size aSize( Size( nW, nH ) );
-                        DrawRoundRect( ReadRectangle( nX32, nY32, nx32, ny32 ), aSize );
+                        tools::Polygon aRoundRectPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), nW, nH );
+                        aRoundRectPoly.Optimize( PolyOptimizeFlags::EDGES );
+                        DrawPolygon( aRoundRectPoly, mbRecordPath );
                     }
                     break;
 

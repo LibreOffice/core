@@ -50,6 +50,16 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestLinearGradient();
     void TestTextMapMode();
     void TestEnglishMapMode();
+<<<<<<< HEAD   (626ea4 gbuild: work around GDB 10 bug with DWARF5 in split debug in)
+=======
+    void TestRectangleWithModifyWorldTransform();
+    void TestChordWithModifyWorldTransform();
+    void TestEllipseWithSelectClipPath();
+    void TestEllipseXformIntersectClipRect();
+    void TestDrawPolyLine16WithClip();
+    void TestFillRegion();
+    void TestRoundRect();
+>>>>>>> CHANGE (f11ed6 tdf#141982 tdf#142139 Add rotation and line width support to)
     void TestCreatePen();
     void TestPdfInEmf();
 
@@ -68,6 +78,16 @@ public:
     CPPUNIT_TEST(TestLinearGradient);
     CPPUNIT_TEST(TestTextMapMode);
     CPPUNIT_TEST(TestEnglishMapMode);
+<<<<<<< HEAD   (626ea4 gbuild: work around GDB 10 bug with DWARF5 in split debug in)
+=======
+    CPPUNIT_TEST(TestRectangleWithModifyWorldTransform);
+    CPPUNIT_TEST(TestChordWithModifyWorldTransform);
+    CPPUNIT_TEST(TestEllipseWithSelectClipPath);
+    CPPUNIT_TEST(TestEllipseXformIntersectClipRect);
+    CPPUNIT_TEST(TestDrawPolyLine16WithClip);
+    CPPUNIT_TEST(TestFillRegion);
+    CPPUNIT_TEST(TestRoundRect);
+>>>>>>> CHANGE (f11ed6 tdf#141982 tdf#142139 Add rotation and line width support to)
     CPPUNIT_TEST(TestCreatePen);
     CPPUNIT_TEST(TestPdfInEmf);
     CPPUNIT_TEST_SUITE_END();
@@ -306,6 +326,65 @@ void Test::TestEnglishMapMode()
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[3]/polygon", "12699,1058 16933,1058 16933,2118 15346,2118 15346,6349 14287,6349 14287,2118 12699,2118");
 
 
+<<<<<<< HEAD   (626ea4 gbuild: work around GDB 10 bug with DWARF5 in split debug in)
+=======
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/group[1]/mask/polypolygon", "path", "m2646 0v1322h1323v1322h-1323v1322h-1323v-1322h-1323v-1322h1323v-1322");
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/group[1]/mask/polygonstroke/polygon", "0,793 3969,4230");
+}
+
+void Test::TestFillRegion()
+{
+    // EMF import with records: CREATEBRUSHINDIRECT, FILLRGN. The SETICMMODE is also used.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestFillRegion.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon", "path", "m0 0h3943v3939h-3943z");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor", 1);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[1]/polypolygon",
+                "path", "m1323 0h1323v1322h1323v1322h-1323v1322h-1323v-1322h-1323v-1322h1323z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[1]", "color", "#ff0000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline", 1);
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]/polygon",
+                       "1323,0 2646,0 2646,1322 3969,1322 3969,2644 2646,2644 2646,3966 1323,3966 1323,2644 0,2644 0,1322 1323,1322");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]", "color", "#000000");
+>>>>>>> CHANGE (f11ed6 tdf#141982 tdf#142139 Add rotation and line width support to)
+}
+
+void Test::TestRoundRect()
+{
+    // EMF import with records: CREATEPEN, ROUNDRECT.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestRoundRect.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor", 2);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]/polypolygon",
+                "path", "m100 100h4000v2000h-4000z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]",
+                "color", "#ffffff");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke", 2);
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke[1]/polygon",
+                       "100,100 4100,100 4100,2100 100,2100");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke[1]/line",
+                "color", "#ff0000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[2]/polypolygon",
+                "path", "m4090 2650-10-50-10-30-50-90-100-110-20-10-30-20-20-20-30-20-90-40-100-30-170-30h-2730l-140 20-130 40-90 40-30 20-20 20-30 20-20 10-100 110-50 90-10 30-10 50v1090l10 50 10 30 50 90 100 110 20 10 30 20 20 20 30 20 90 40 100 30 170 30h2730l140-20 130-40 90-40 30-20 20-20 30-20 20-10 100-110 50-90 10-30 10-50z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[2]",
+                "color", "#ffffff");
+
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke[2]/polygon",
+                       "4090,2650 4080,2600 4070,2570 4020,2480 3920,2370 3900,2360 3870,2340 3850,2320 3820,2300 3730,2260 3630,2230 3460,2200 730,2200 590,2220 460,2260 370,2300 340,2320 320,2340 290,2360 270,2370 170,2480 120,2570 110,2600 100,2650 100,3740 110,3790 120,3820 170,3910 270,4020 290,4030 320,4050 340,4070 370,4090 460,4130 560,4160 730,4190 3460,4190 3600,4170 3730,4130 3820,4090 3850,4070 3870,4050 3900,4030 3920,4020 4020,3910 4070,3820 4080,3790 4090,3740");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke[2]/line",
+                "color", "#ff0000");
 }
 
 void Test::TestCreatePen()
