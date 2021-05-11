@@ -326,14 +326,7 @@ VCLXWindow::VCLXWindow( bool _bWithDefaultProps )
 
 VCLXWindow::~VCLXWindow()
 {
-    mpImpl.reset();
-
-    if ( GetWindow() )
-    {
-        GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
-        GetWindow()->SetWindowPeer( nullptr, nullptr );
-        GetWindow()->SetAccessible( nullptr );
-    }
+    assert(!mpImpl && "forgot to call dispose()");
 }
 
 
@@ -904,19 +897,25 @@ void VCLXWindow::dispose(  )
 {
     SolarMutexGuard aGuard;
 
-    mpImpl->mxViewGraphics = nullptr;
+    if (!mpImpl)
+        return;
 
     if ( mpImpl->mbDisposing )
         return;
+
+    mpImpl->mxViewGraphics = nullptr;
 
     mpImpl->mbDisposing = true;
 
     mpImpl->disposing();
 
-    if ( GetWindow() )
+    if ( auto pWindow = GetWindow() )
     {
+        pWindow->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
+        pWindow->SetWindowPeer( nullptr, nullptr );
+        pWindow->SetAccessible( nullptr );
+
         VclPtr<OutputDevice> pOutDev = GetOutputDevice();
-        SetWindow( nullptr );  // so that handlers are logged off, if necessary (virtual)
         SetOutputDevice( nullptr );
         pOutDev.disposeAndClear();
     }
@@ -934,9 +933,8 @@ void VCLXWindow::dispose(  )
     {
         OSL_FAIL( "VCLXWindow::dispose: could not dispose the accessible context!" );
     }
-    mpImpl->mxAccessibleContext.clear();
 
-    mpImpl->mbDisposing = false;
+    mpImpl.reset();
 }
 
 void VCLXWindow::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
