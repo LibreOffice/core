@@ -22,6 +22,9 @@
 # include <io.h>
 # include <fcntl.h>  /*_O_BINARY*/
 #endif
+#ifdef USE_BUNDLED_POPPLER_DATA
+#include <filesystem>
+#endif
 
 FILE* g_binary_out=stderr;
 
@@ -67,11 +70,20 @@ int main(int argc, char **argv)
         ++k;
     }
 
+    /* Get data directory location */
+#ifdef USE_BUNDLED_POPPLER_DATA
+    std::filesystem::path datadir_path(argv[0]);
+    datadir_path.replace_filename("../share/xpdfimport/poppler_data");
+    const char* datadir = datadir_path.c_str();
+#else
+    const char* datadir = nullptr;
+#endif
+
     // read config file
 #if POPPLER_CHECK_VERSION(0, 83, 0)
-    globalParams = std::make_unique<GlobalParams>();
+    globalParams = std::make_unique<GlobalParams>(datadir);
 #else
-    globalParams = new GlobalParams();
+    globalParams = new GlobalParams(datadir);
 #endif
     globalParams->setErrQuiet(true);
 #if defined(_MSC_VER)

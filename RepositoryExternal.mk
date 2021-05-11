@@ -2806,6 +2806,12 @@ endef
 
 else # !SYSTEM_POPPLER
 
+define gb_ExternalPackage__use_poppler_data
+#$(call gb_ExternalPackage_use_unpacked,poppler_data,poppler_data)
+#$(call gb_ExternalPackage_use_external_project,$(1),poppler_data,full)
+$(call gb_ExternalPackage_ExternalPackage,$(1),poppler_data)
+endef
+
 define gb_LinkTarget__use_poppler
 $(call gb_LinkTarget_use_external_project,$(1),poppler,full)
 

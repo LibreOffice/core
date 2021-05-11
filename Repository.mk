@@ -1010,6 +1010,7 @@ ifneq ($(ENABLE_POPPLER),)
 $(eval $(call gb_Helper_register_packages_for_install,pdfimport, \
 	sdext_pdfimport_pdf \
 ))
+
 endif
 
 $(eval $(call gb_Helper_register_packages_for_install,reportbuilder,\
