@@ -1084,11 +1084,7 @@ void GtkSalMenu::ApplyPersona()
         mpMenuBarContainerProvider = gtk_css_provider_new();
         OUString aBuffer = "* { background-image: url(\"" + mxPersonaImage->GetURL() + "\"); background-position: top right; }";
         OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_css_provider_load_from_data(mpMenuBarContainerProvider, aResult.getStr(), aResult.getLength(), nullptr);
-#else
-        gtk_css_provider_load_from_data(mpMenuBarContainerProvider, aResult.getStr(), aResult.getLength());
-#endif
+        css_provider_load_from_data(mpMenuBarContainerProvider, aResult.getStr(), aResult.getLength());
         gtk_style_context_add_provider(pMenuBarContainerContext, GTK_STYLE_PROVIDER(mpMenuBarContainerProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
@@ -1100,11 +1096,7 @@ void GtkSalMenu::ApplyPersona()
           "background-image: none;"
           "background-color: transparent;"
           "}";
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_css_provider_load_from_data(mpMenuBarProvider, data, -1, nullptr);
-#else
-        gtk_css_provider_load_from_data(mpMenuBarProvider, data, -1);
-#endif
+        css_provider_load_from_data(mpMenuBarProvider, data, -1);
         gtk_style_context_add_provider(pMenuBarContext,
                                        GTK_STYLE_PROVIDER(mpMenuBarProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);

@@ -323,11 +323,7 @@ GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
     OUString sColor = Application::GetSettings().GetStyleSettings().GetDialogColor().AsRGBHexString();
     OUString aBuffer = "* { background-color: #" + sColor + "; }";
     OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_css_provider_load_from_data(pBgCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
-#else
-    gtk_css_provider_load_from_data(pBgCssProvider, aResult.getStr(), aResult.getLength());
-#endif
+    css_provider_load_from_data(pBgCssProvider, aResult.getStr(), aResult.getLength());
     gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(pBgCssProvider),
                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 

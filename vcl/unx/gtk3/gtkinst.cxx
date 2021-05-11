@@ -2646,11 +2646,7 @@ private:
         m_pBgCssProvider = gtk_css_provider_new();
         OUString aBuffer = "* { background-color: #" + sColor + "; }";
         OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_css_provider_load_from_data(m_pBgCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
-#else
-        gtk_css_provider_load_from_data(m_pBgCssProvider, aResult.getStr(), aResult.getLength());
-#endif
+        css_provider_load_from_data(m_pBgCssProvider, aResult.getStr(), aResult.getLength());
         gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pBgCssProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
@@ -6657,11 +6653,7 @@ public:
                            "scrollbar contents button { color: #000000; } "
                            "scrollbar contents button:disabled { color: #7f7f7f; }";
         OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_css_provider_load_from_data(m_pScrollBarCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
-#else
-        gtk_css_provider_load_from_data(m_pScrollBarCssProvider, aResult.getStr(), aResult.getLength());
-#endif
+        css_provider_load_from_data(m_pScrollBarCssProvider, aResult.getStr(), aResult.getLength());
 
         gtk_style_context_add_provider(pHorzContext, GTK_STYLE_PROVIDER(m_pScrollBarCssProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -7200,11 +7192,7 @@ public:
         GtkStyleContext *pNotebookContext = gtk_widget_get_style_context(GTK_WIDGET(m_pOverFlowNotebook));
         GtkCssProvider *pProvider = gtk_css_provider_new();
         static const gchar data[] = "header.top > tabs > tab:checked { box-shadow: none; padding: 0 0 0 0; margin: 0 0 0 0; border-image: none; border-image-width: 0 0 0 0; background-image: none; background-color: transparent; border-radius: 0 0 0 0; border-width: 0 0 0 0; border-style: none; border-color: transparent; opacity: 0; min-height: 0; min-width: 0; }";
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_css_provider_load_from_data(pProvider, data, -1, nullptr);
-#else
-        gtk_css_provider_load_from_data(pProvider, data, -1);
-#endif
+        css_provider_load_from_data(pProvider, data, -1);
         gtk_style_context_add_provider(pNotebookContext, GTK_STYLE_PROVIDER(pProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
@@ -7649,11 +7637,7 @@ private:
                            "background-size: " + OUString::number(aSize.Width()) + "px " + OUString::number(aSize.Height()) + "px; "
                            "border-radius: 0; border-width: 0; }";
         OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_css_provider_load_from_data(m_pCustomCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
-#else
-        gtk_css_provider_load_from_data(m_pCustomCssProvider, aResult.getStr(), aResult.getLength());
-#endif
+        css_provider_load_from_data(m_pCustomCssProvider, aResult.getStr(), aResult.getLength());
         gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pCustomCssProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
@@ -8498,7 +8482,7 @@ public:
             GtkStyleContext *pPopoverContext = gtk_widget_get_style_context(pPlaceHolder);
             GtkCssProvider *pProvider = gtk_css_provider_new();
             static const gchar data[] = "popover { box-shadow: none; padding: 0 0 0 0; margin: 0 0 0 0; border-image: none; border-image-width: 0 0 0 0; background-image: none; background-color: transparent; border-radius: 0 0 0 0; border-width: 0 0 0 0; border-style: none; border-color: transparent; opacity: 0; min-height: 0; min-width: 0; }";
-            gtk_css_provider_load_from_data(pProvider, data, -1, nullptr);
+            css_provider_load_from_data(pProvider, data, -1);
             gtk_style_context_add_provider(pPopoverContext, GTK_STYLE_PROVIDER(pProvider),
                                            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
@@ -9218,7 +9202,7 @@ private:
                       "margin-right: 0px;"
                       "min-width: 4px;"
                       "}";
-                    gtk_css_provider_load_from_data(m_pMenuButtonProvider, data, -1, nullptr);
+                    css_provider_load_from_data(m_pMenuButtonProvider, data, -1);
                 }
 
                 gtk_style_context_add_provider(pButtonContext,
@@ -14319,7 +14303,7 @@ public:
         m_pFgCssProvider = gtk_css_provider_new();
         OUString aBuffer = "textview text { color: #" + sColor + "; }";
         OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
-        gtk_css_provider_load_from_data(m_pFgCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
+        css_provider_load_from_data(m_pFgCssProvider, aResult.getStr(), aResult.getLength());
         gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFgCssProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
