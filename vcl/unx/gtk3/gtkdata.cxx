@@ -441,12 +441,7 @@ static GtkStyleProvider* CreateSmallButtonProvider()
       "min-height: 18px;"
       "min-width: 18px;"
       "}";
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_css_provider_load_from_data(pSmallButtonProvider, data, -1);
-#else
-    gtk_css_provider_load_from_data(pSmallButtonProvider, data, -1, nullptr);
-#endif
-
+    css_provider_load_from_data(pSmallButtonProvider, data, -1);
     return GTK_STYLE_PROVIDER(pSmallButtonProvider);
 }
 

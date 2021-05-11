@@ -1789,7 +1789,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         const OUString sColorCss = "* { background-color: #" + rBackgroundColor.AsRGBHexString() + "; }";
         const OString aResult = OUStringToOString(sColorCss, RTL_TEXTENCODING_UTF8);
         pBgCssProvider =  gtk_css_provider_new();
-        gtk_css_provider_load_from_data(pBgCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
+        css_provider_load_from_data(pBgCssProvider, aResult.getStr(), aResult.getLength());
         gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(pBgCssProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }

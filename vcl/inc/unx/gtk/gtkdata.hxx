@@ -57,6 +57,17 @@ inline void main_loop_run(GMainLoop* pLoop)
 #endif
 }
 
+inline void css_provider_load_from_data(GtkCssProvider *css_provider,
+                                        const gchar *data,
+                                        gssize length)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_css_provider_load_from_data(css_provider, data, length);
+#else
+    gtk_css_provider_load_from_data(css_provider, data, length, nullptr);
+#endif
+}
+
 class GtkSalTimer final : public SalTimer
 {
     struct SalGtkTimeoutSource *m_pTimeout;
