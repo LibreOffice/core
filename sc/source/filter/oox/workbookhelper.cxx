@@ -370,7 +370,10 @@ ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, c
     if ( pNames->insert(pNew) )
         bDone = true;
     if (!bDone)
+    {
+        delete pNew;
         throw RuntimeException();
+    }
     return pNew;
 }
 
