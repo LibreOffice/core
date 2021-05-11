@@ -58,6 +58,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestEllipseXformIntersectClipRect();
     void TestDrawPolyLine16WithClip();
     void TestFillRegion();
+    void TestRoundRect();
     void TestCreatePen();
     void TestPdfInEmf();
 
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST(TestEllipseXformIntersectClipRect);
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
+    CPPUNIT_TEST(TestRoundRect);
     CPPUNIT_TEST(TestCreatePen);
     CPPUNIT_TEST(TestPdfInEmf);
     CPPUNIT_TEST_SUITE_END();
@@ -416,7 +418,7 @@ void Test::TestDrawPolyLine16WithClip()
 
 void Test::TestFillRegion()
 {
-    // Check import of EMF image with records: CREATEBRUSHINDIRECT, FILLRGN. The SETICMMODE is also used.
+    // EMF import with records: CREATEBRUSHINDIRECT, FILLRGN. The SETICMMODE is also used.
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestFillRegion.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
@@ -434,6 +436,39 @@ void Test::TestFillRegion()
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]/polygon",
                        "1323,0 2646,0 2646,1322 3969,1322 3969,2644 2646,2644 2646,3966 1323,3966 1323,2644 0,2644 0,1322 1323,1322");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]", "color", "#000000");
+}
+
+void Test::TestRoundRect()
+{
+    // EMF import with records: CREATEPEN, ROUNDRECT.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestRoundRect.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon",
+                "path", "m0 0h3465v3862h-3465z");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[1]/polypolygon",
+                "path", "m0 2752h1639v1110h-1639z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[1]",
+                "color", "#ffffff");
+
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[1]/polygon",
+                       "0,2752 1639,2752 1639,3862 0,3862");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[1]/line",
+                "color", "#ff0000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[2]/polypolygon",
+                "path", "m1745.5 1454h661.5c584.31726532098 0 1058-59.0984130223353 1058-132v-1190c0-72.9015869776647-473.682734679021-132-1058-132h-1323c-584.31726532098 0-1058 59.0984130223353-1058 132v1190c0 72.9015869776647 473.682734679021 132 1058 132z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[2]",
+                "color", "#ffffff");
+
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]/polygon",
+                       "1745.5,1454 2407,1454 3465,1322 3465,132 2407,0 1084,0 26,132 26,1322 1084,1454");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]",
+                "color", "#ff0000");
 }
 
 void Test::TestCreatePen()
