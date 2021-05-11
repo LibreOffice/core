@@ -1735,7 +1735,7 @@
           <value xml:lang="en-US">Zoom &amp; Pan</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Zoom &amp; Pan (CTRL to Zoom Out, SHIFT to Pan)</value>
+          <value xml:lang="en-US">Zoom &amp; Pan (Ctrl to Zoom Out, Shift to Pan)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
