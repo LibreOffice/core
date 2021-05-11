@@ -17,13 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_SC_SOURCE_CORE_INC_INTERPRE_HXX
+#define INCLUDED_SC_SOURCE_CORE_INC_INTERPRE_HXX
 
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/textsearch.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/tokenarray.hxx>
+#include <scdllapi.h>
 #include <types.hxx>
 #include <externalrefmgr.hxx>
 #include <calcconfig.hxx>
@@ -60,7 +62,8 @@ struct CompareOptions;
 
 struct ParamIfsResult
 {
-    KahanSum mfSum = 0.0;
+    double mfSum = 0.0;
+    double mfMem = 0.0;
     double mfCount = 0.0;
     double mfMin = std::numeric_limits<double>::max();
     double mfMax = std::numeric_limits<double>::lowest();
@@ -70,7 +73,8 @@ template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ParamIfsResult& rRes)
 {
     stream << "{" <<
-        "sum=" << rRes.mfSum.get() << "," <<
+        "sum=" << rRes.mfSum << "," <<
+        "mem=" << rRes.mfMem << "," <<
         "count=" << rRes.mfCount << "," <<
         "min=" << rRes.mfMin << "," <<
         "max=" << rRes.mfMax << "," <<
@@ -835,7 +839,7 @@ private:
     void ScSumX2DY2();
     void ScSumXMY2();
     void ScGrowth();
-    bool CalculateSkew(KahanSum& fSum, double& fCount, std::vector<double>& values);
+    bool CalculateSkew(double& fSum,double& fCount,double& vSum,std::vector<double>& values);
     void CalculateSkewOrSkewp( bool bSkewp );
     void CalculateSlopeIntercept(bool bSlope);
     void CalculateSmallLarge(bool bSmall);
@@ -1022,7 +1026,7 @@ public:
 
     FormulaError                GetError() const            { return nGlobalError; }
     formula::StackVar           GetResultType() const       { return xResult->GetType(); }
-    const svl::SharedString & GetStringResult() const;
+    svl::SharedString GetStringResult() const;
     double                      GetNumResult() const        { return xResult->GetDouble(); }
     const formula::FormulaConstTokenRef& GetResultToken() const { return xResult; }
     SvNumFormatType             GetRetFormatType() const    { return nRetFmtType; }
@@ -1160,5 +1164,7 @@ inline sal_Int16 ScInterpreter::GetDayOfWeek( sal_Int32 n )
 {   // monday = 0, ..., sunday = 6
     return static_cast< sal_Int16 >( ( n - 1 ) % 7 );
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
