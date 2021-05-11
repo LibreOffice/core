@@ -135,12 +135,7 @@ void GtkSalDisplay::monitorsChanged( GdkScreen const * pScreen )
 
 GdkCursor* GtkSalDisplay::getFromSvg(OUString const & name, int nXHot, int nYHot)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkPixbuf* pPixBuf = load_icon_by_name(name);
-#else
-    (void)name;
-    GdkPixbuf* pPixBuf = nullptr;
-#endif
     assert(pPixBuf && "missing image?");
     if (!pPixBuf)
         return nullptr;

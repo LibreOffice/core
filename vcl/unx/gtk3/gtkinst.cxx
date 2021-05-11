@@ -3665,6 +3665,7 @@ namespace
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
 }
+#endif
 
 namespace
 {
@@ -3702,6 +3703,7 @@ GdkPixbuf* load_icon_by_name(const OUString& rIconName)
     return load_icon_by_name_theme_lang(rIconName, sIconTheme, sUILang);
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace
 {
     GdkPixbuf* getPixbuf(const css::uno::Reference<css::graphic::XGraphic>& rImage)
