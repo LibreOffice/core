@@ -27,7 +27,6 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
     long long m_nCreateTime;
     bool m_bConsole;
     void stopConsole();
-    int m_nPid;
     int m_nNesting;
 
     void addRecording();
@@ -49,10 +48,9 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
      * Similar to the DEBUG macro in sal/log.hxx, don't forget to remove these lines before
      * committing.
      */
-    ProfileZone(const char* sName, bool bConsole = false)
-        : NamedEvent(sName)
+    ProfileZone(const char* sName, bool bConsole = false, const std::map<OUString, OUString> &args = std::map<OUString, OUString>())
+        : NamedEvent(sName, args)
         , m_bConsole(bConsole)
-        , m_nPid(-1)
         , m_nNesting(-1)
     {
         if (s_bRecording || m_bConsole)
@@ -60,8 +58,6 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
             TimeValue systemTime;
             osl_getSystemTime( &systemTime );
             m_nCreateTime = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec/1000;
-
-            m_nPid = getPid();
 
             m_nNesting = s_nNesting++;
         }
