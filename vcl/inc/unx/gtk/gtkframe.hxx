@@ -295,6 +295,7 @@ class GtkSalFrame final : public SalFrame
     bool WindowCloseRequest();
     void DrawingAreaMotion(int nEventX, int nEventY, guint32 nTime, guint nState);
     void DrawingAreaCrossing(SalEvent nEventType, int nEventX, int nEventY, guint32 nTime, guint nState);
+    bool DrawingAreaKey(SalEvent nEventType, guint keyval, guint keycode, guint32 nTime, guint nState);
 #if GTK_CHECK_VERSION(4, 0, 0)
     static void         signalMap( GtkWidget*, gpointer );
     static void         signalUnmap( GtkWidget*, gpointer );
@@ -302,15 +303,17 @@ class GtkSalFrame final : public SalFrame
     static void         signalMotion(GtkEventControllerMotion *controller, double x, double y, gpointer);
     static void         signalEnter(GtkEventControllerMotion *controller, double x, double y, gpointer);
     static void         signalLeave(GtkEventControllerMotion *controller, gpointer);
+    static gboolean     signalKeyPressed(GtkEventControllerKey *controller, guint keyval, guint keycode, GdkModifierType state, gpointer user_data);
+    static gboolean     signalKeyReleased(GtkEventControllerKey *controller, guint keyval, guint keycode, GdkModifierType state, gpointer user_data);
 #else
     static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalUnmap( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalDelete( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalMotion( GtkWidget*, GdkEventMotion*, gpointer );
+    static gboolean     signalKey( GtkWidget*, GdkEventKey*, gpointer );
 #endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalConfigure( GtkWidget*, GdkEventConfigure*, gpointer );
-    static gboolean     signalKey( GtkWidget*, GdkEventKey*, gpointer );
     static gboolean     signalWindowState( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );

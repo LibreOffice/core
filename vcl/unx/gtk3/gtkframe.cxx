@@ -1025,9 +1025,17 @@ void GtkSalFrame::InitCommon()
 #endif
 #if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pWindow), "configure-event", G_CALLBACK(signalConfigure), this );
+    g_signal_connect( G_OBJECT(m_pWindow), "window-state-event", G_CALLBACK(signalWindowState), this );
+#endif
+#if !GTK_CHECK_VERSION(4,0,0)
     g_signal_connect( G_OBJECT(m_pWindow), "key-press-event", G_CALLBACK(signalKey), this );
     g_signal_connect( G_OBJECT(m_pWindow), "key-release-event", G_CALLBACK(signalKey), this );
-    g_signal_connect( G_OBJECT(m_pWindow), "window-state-event", G_CALLBACK(signalWindowState), this );
+#else
+    GtkEventController* pKeyController = gtk_event_controller_key_new();
+    g_signal_connect(pKeyController, "key-pressed", G_CALLBACK(signalKeyPressed), this);
+    g_signal_connect(pKeyController, "key-released", G_CALLBACK(signalKeyReleased), this);
+    gtk_widget_add_controller(pEventWidget, pKeyController);
+
 #endif
     g_signal_connect( G_OBJECT(m_pWindow), "destroy", G_CALLBACK(signalDestroy), this );
 
@@ -3895,6 +3903,125 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
         pThis->m_pIMHandler->updateIMSpotLocation();
 
     return bStopProcessingKey;
+}
+#else
+
+bool GtkSalFrame::DrawingAreaKey(SalEvent nEventType, guint keyval, guint keycode, guint32 nTime, guint state)
+{
+    UpdateLastInputEventTime(nTime);
+
+#if 0
+    if (m_pIMHandler && m_pIMHandler->handleKeyEvent(pEvent))
+        return true;
+#endif
+
+    vcl::DeletionListener aDel(this);
+
+    bool bStopProcessingKey = false;
+
+    // handle modifiers
+    if( keyval == GDK_KEY_Shift_L || keyval == GDK_KEY_Shift_R ||
+        keyval == GDK_KEY_Control_L || keyval == GDK_KEY_Control_R ||
+        keyval == GDK_KEY_Alt_L || keyval == GDK_KEY_Alt_R ||
+        keyval == GDK_KEY_Meta_L || keyval == GDK_KEY_Meta_R ||
+        keyval == GDK_KEY_Super_L || keyval == GDK_KEY_Super_R )
+    {
+        sal_uInt16 nModCode = GetKeyModCode(state);
+        ModKeyFlags nExtModMask = ModKeyFlags::NONE;
+        sal_uInt16 nModMask = 0;
+        // pressing just the ctrl key leads to a keysym of XK_Control but
+        // the event state does not contain ControlMask. In the release
+        // event it's the other way round: it does contain the Control mask.
+        // The modifier mode therefore has to be adapted manually.
+        switch (keyval)
+        {
+            case GDK_KEY_Control_L:
+                nExtModMask = ModKeyFlags::LeftMod1;
+                nModMask = KEY_MOD1;
+                break;
+            case GDK_KEY_Control_R:
+                nExtModMask = ModKeyFlags::RightMod1;
+                nModMask = KEY_MOD1;
+                break;
+            case GDK_KEY_Alt_L:
+                nExtModMask = ModKeyFlags::LeftMod2;
+                nModMask = KEY_MOD2;
+                break;
+            case GDK_KEY_Alt_R:
+                nExtModMask = ModKeyFlags::RightMod2;
+                nModMask = KEY_MOD2;
+                break;
+            case GDK_KEY_Shift_L:
+                nExtModMask = ModKeyFlags::LeftShift;
+                nModMask = KEY_SHIFT;
+                break;
+            case GDK_KEY_Shift_R:
+                nExtModMask = ModKeyFlags::RightShift;
+                nModMask = KEY_SHIFT;
+                break;
+            // Map Meta/Super to MOD3 modifier on all Unix systems
+            // except macOS
+            case GDK_KEY_Meta_L:
+            case GDK_KEY_Super_L:
+                nExtModMask = ModKeyFlags::LeftMod3;
+                nModMask = KEY_MOD3;
+                break;
+            case GDK_KEY_Meta_R:
+            case GDK_KEY_Super_R:
+                nExtModMask = ModKeyFlags::RightMod3;
+                nModMask = KEY_MOD3;
+                break;
+        }
+
+        SalKeyModEvent aModEvt;
+        aModEvt.mbDown = nEventType == SalEvent::KeyInput;
+
+        if (!aModEvt.mbDown)
+        {
+            aModEvt.mnModKeyCode = m_nKeyModifiers;
+            aModEvt.mnCode = nModCode & ~nModMask;
+            m_nKeyModifiers &= ~nExtModMask;
+        }
+        else
+        {
+            aModEvt.mnCode = nModCode | nModMask;
+            m_nKeyModifiers |= nExtModMask;
+            aModEvt.mnModKeyCode = m_nKeyModifiers;
+        }
+
+        CallCallbackExc(SalEvent::KeyModChange, &aModEvt);
+    }
+    else
+    {
+        bStopProcessingKey = doKeyCallback(state,
+                                           keyval,
+                                           keycode,
+                                           0, // group
+                                           sal_Unicode(gdk_keyval_to_unicode(keyval)),
+                                           nEventType == SalEvent::KeyInput,
+                                           false);
+        if (!aDel.isDeleted())
+            m_nKeyModifiers = ModKeyFlags::NONE;
+    }
+
+    if (m_pIMHandler)
+        m_pIMHandler->updateIMSpotLocation();
+
+    return bStopProcessingKey;
+}
+
+gboolean GtkSalFrame::signalKeyPressed(GtkEventControllerKey* pController, guint keyval, guint keycode, GdkModifierType state, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    GdkEvent* pEvent = gtk_event_controller_get_current_event(GTK_EVENT_CONTROLLER(pController));
+    return pThis->DrawingAreaKey(SalEvent::KeyInput, keyval, keycode, gdk_event_get_time(pEvent), state);
+}
+
+gboolean GtkSalFrame::signalKeyReleased(GtkEventControllerKey* pController, guint keyval, guint keycode, GdkModifierType state, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    GdkEvent* pEvent = gtk_event_controller_get_current_event(GTK_EVENT_CONTROLLER(pController));
+    return pThis->DrawingAreaKey(SalEvent::KeyUp, keyval, keycode, gdk_event_get_time(pEvent), state);
 }
 #endif
 
