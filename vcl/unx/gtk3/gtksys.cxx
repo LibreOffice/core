@@ -264,24 +264,34 @@ namespace
 {
     struct DialogLoop
     {
-        GMainLoop* m_pLoop = nullptr;
+        GMainLoop* pLoop = nullptr;
         gint nResponseId = GTK_RESPONSE_NONE;
+        gulong nSignalResponseId = 0;
+        gulong nSignalCloseRequestId= 0;
 
-        static void DialogResponse(GtkDialog*, gint nResponseId, gpointer data)
+        static gboolean DialogClose(GtkWindow* pDialog, gpointer /*data*/)
+        {
+            gtk_dialog_response(GTK_DIALOG(pDialog), GTK_RESPONSE_CANCEL);
+            return true;
+        }
+
+        static void DialogResponse(GtkDialog* pDialog, gint nResponseId, gpointer data)
         {
             DialogLoop* pDialogLoop = static_cast<DialogLoop*>(data);
+            g_signal_handler_disconnect(pDialog, pDialogLoop->nSignalResponseId);
+            g_signal_handler_disconnect(pDialog, pDialogLoop->nSignalCloseRequestId);
             pDialogLoop->nResponseId = nResponseId;
-            g_main_loop_quit(pDialogLoop->m_pLoop);
+            g_main_loop_quit(pDialogLoop->pLoop);
         }
 
         int run(GtkDialog *pDialog)
         {
-            gulong nSignalResponseId = g_signal_connect(pDialog, "response", G_CALLBACK(DialogResponse), this);
+            nSignalResponseId = g_signal_connect(pDialog, "response", G_CALLBACK(DialogResponse), this);
+            nSignalCloseRequestId = g_signal_connect(pDialog, "close-request", G_CALLBACK(DialogClose), this);
             gtk_window_present(GTK_WINDOW(pDialog));
-            m_pLoop = g_main_loop_new(nullptr, false);
-            main_loop_run(m_pLoop);
-            g_main_loop_unref(m_pLoop);
-            g_signal_handler_disconnect(pDialog, nSignalResponseId);
+            pLoop = g_main_loop_new(nullptr, false);
+            main_loop_run(pLoop);
+            g_main_loop_unref(pLoop);
             return nResponseId;
         }
 
