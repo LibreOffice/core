@@ -128,6 +128,16 @@ void ScQueryEntry::SetQueryByTextColor(Color color)
     rItem.maColor = color;
 }
 
+bool ScQueryEntry::IsQueryByTextColor() const
+{
+    if (maQueryItems.size() != 1)
+        return false;
+
+    const Item& rItem = maQueryItems[0];
+    return eOp == SC_EQUAL &&
+        rItem.meType == ByTextColor;
+}
+
 void ScQueryEntry::SetQueryByBackgroundColor(Color color)
 {
     eOp = SC_EQUAL;
@@ -137,6 +147,16 @@ void ScQueryEntry::SetQueryByBackgroundColor(Color color)
     rItem.maString = svl::SharedString();
     rItem.mfVal = SC_BACKGROUNDCOLOR;
     rItem.maColor = color;
+}
+
+bool ScQueryEntry::IsQueryByBackgroundColor() const
+{
+    if (maQueryItems.size() != 1)
+        return false;
+
+    const Item& rItem = maQueryItems[0];
+    return eOp == SC_EQUAL &&
+        rItem.meType == ByBackgroundColor;
 }
 
 ScQueryEntry::Item& ScQueryEntry::GetQueryItemImpl() const
