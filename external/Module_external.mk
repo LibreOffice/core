@@ -85,6 +85,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,PAGEMAKER,libpagemaker) \
 	$(call gb_Helper_optional,PDFIUM,pdfium) \
 	$(call gb_Helper_optional,POPPLER,poppler) \
+	$(call gb_Helper_optional,POPPLER_DATA,poppler_data) \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
 	$(call gb_Helper_optional,PYTHON,python3) \
 	$(call gb_Helper_optional,QXP,libqxp) \
