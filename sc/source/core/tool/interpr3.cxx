@@ -205,12 +205,12 @@ double ScInterpreter::integralPhi(double x)
 
 double ScInterpreter::taylor(const double* pPolynom, sal_uInt16 nMax, double x)
 {
-    double nVal = pPolynom[nMax];
+    KahanSum nVal = pPolynom[nMax];
     for (short i = nMax-1; i >= 0; i--)
     {
-        nVal = pPolynom[i] + (nVal * x);
+        nVal = (nVal * x) + pPolynom[i];
     }
-    return nVal;
+    return nVal.get();
 }
 
 double ScInterpreter::gauss(double x)
