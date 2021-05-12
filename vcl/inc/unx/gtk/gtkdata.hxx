@@ -77,7 +77,7 @@ inline GtkWidget* widget_get_root(GtkWidget* pWidget)
 #endif
 }
 
-inline const char * image_get_icon_name(GtkImage *pImage)
+inline const char* image_get_icon_name(GtkImage *pImage)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
     return gtk_image_get_icon_name(pImage);
@@ -85,6 +85,19 @@ inline const char * image_get_icon_name(GtkImage *pImage)
     const gchar* icon_name;
     gtk_image_get_icon_name(pImage, &icon_name, nullptr);
     return icon_name;
+#endif
+}
+
+inline GtkWidget* widget_get_first_child(GtkWidget *pWidget)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    return gtk_widget_get_first_child(pWidget);
+#else
+    GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pWidget));
+    GList* pChild = g_list_first(pChildren);
+    GtkWidget* pRet = pChild ? static_cast<GtkWidget*>(pChild->data) : nullptr;
+    g_list_free(pChildren);
+    return pRet;
 #endif
 }
 

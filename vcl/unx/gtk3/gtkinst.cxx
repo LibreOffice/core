@@ -4417,17 +4417,12 @@ namespace
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         // try and omit drawing CSD under wayland
-        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pTopLevel));
-        GList* pChild = g_list_first(pChildren);
+        GtkWidget* pChild = widget_get_first_child(pTopLevel);
 
         int x, y;
-        gtk_widget_translate_coordinates(GTK_WIDGET(pChild->data),
-                                         GTK_WIDGET(pTopLevel),
-                                         0, 0, &x, &y);
+        gtk_widget_translate_coordinates(pChild, pTopLevel, 0, 0, &x, &y);
 
-        int innerborder = gtk_container_get_border_width(GTK_CONTAINER(pChild->data));
-        g_list_free(pChildren);
-
+        int innerborder = gtk_container_get_border_width(GTK_CONTAINER(pChild));
         int outerborder = gtk_container_get_border_width(GTK_CONTAINER(pTopLevel));
         int totalborder = outerborder + innerborder;
         x -= totalborder;
@@ -17821,14 +17816,8 @@ public:
             if (GtkInstanceContainer* pPage = dynamic_cast<GtkInstanceContainer*>(xNotebook->get_page(xNotebook->get_current_page_ident())))
             {
                 GtkWidget* pContainer = pPage->getWidget();
-                GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pContainer));
-                GList* pChild = g_list_first(pChildren);
-                if (pChild)
-                {
-                    GtkWidget* pPageWidget = static_cast<GtkWidget*>(pChild->data);
+                if (GtkWidget* pPageWidget = widget_get_first_child(pContainer))
                     sPageHelpId = ::get_help_id(pPageWidget);
-                }
-                g_list_free(pChildren);
             }
         }
         return sPageHelpId;
@@ -18317,14 +18306,9 @@ void GtkInstanceWindow::help()
             }
             if (pContainer)
             {
-                GList* pChildren = gtk_container_get_children(pContainer);
-                GList* pChild = g_list_first(pChildren);
-                if (pChild)
-                {
-                    GtkWidget* pContentWidget = static_cast<GtkWidget*>(pChild->data);
+                GtkWidget* pContentWidget = widget_get_first_child(GTK_WIDGET(pContainer));
+                if (pContentWidget)
                     sHelpId = ::get_help_id(pContentWidget);
-                }
-                g_list_free(pChildren);
             }
         }
     }
