@@ -285,54 +285,6 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
         mpAlphaVDev->SetRasterOp( eRasterOp );
 }
 
-
-void OutputDevice::SetFillColor()
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( Color(), false ) );
-
-    if ( mbFillColor )
-    {
-        mbInitFillColor = true;
-        mbFillColor = false;
-        maFillColor = COL_TRANSPARENT;
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetFillColor();
-}
-
-void OutputDevice::SetFillColor( const Color& rColor )
-{
-    Color aColor(vcl::drawmode::GetFillColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings()));
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( aColor, true ) );
-
-    if ( aColor.IsTransparent() )
-    {
-        if ( mbFillColor )
-        {
-            mbInitFillColor = true;
-            mbFillColor = false;
-            maFillColor = COL_TRANSPARENT;
-        }
-    }
-    else
-    {
-        if ( maFillColor != aColor )
-        {
-            mbInitFillColor = true;
-            mbFillColor = true;
-            maFillColor = aColor;
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetFillColor( COL_BLACK );
-}
-
 void OutputDevice::SetLineColor()
 {
 
@@ -447,28 +399,6 @@ void OutputDevice::InitLineColor()
         mpGraphics->SetLineColor();
 
     mbInitLineColor = false;
-}
-
-
-void OutputDevice::InitFillColor()
-{
-    DBG_TESTSOLARMUTEX();
-
-    if( mbFillColor )
-    {
-        if( RasterOp::N0 == meRasterOp )
-            mpGraphics->SetROPFillColor( SalROPColor::N0 );
-        else if( RasterOp::N1 == meRasterOp )
-            mpGraphics->SetROPFillColor( SalROPColor::N1 );
-        else if( RasterOp::Invert == meRasterOp )
-            mpGraphics->SetROPFillColor( SalROPColor::Invert );
-        else
-            mpGraphics->SetFillColor( maFillColor );
-    }
-    else
-        mpGraphics->SetFillColor();
-
-    mbInitFillColor = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
