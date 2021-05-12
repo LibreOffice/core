@@ -48,7 +48,7 @@ struct SumSquare
 struct Product
 {
     static const double InitVal;
-    void operator()(KahanSum& rAccum, double fVal) const;
+    void operator()(double& rAccum, double fVal) const;
 };
 
 }

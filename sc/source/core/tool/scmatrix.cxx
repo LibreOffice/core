@@ -302,9 +302,9 @@ public:
     double Or() const;
     double Xor() const;
 
-    ScMatrix::KahanIterateResult Sum( bool bTextAsZero, bool bIgnoreErrorValues ) const;
-    ScMatrix::KahanIterateResult SumSquare( bool bTextAsZero, bool bIgnoreErrorValues ) const;
-    ScMatrix::KahanIterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues ) const;
+    ScMatrix::IterateResult<KahanSum> Sum( bool bTextAsZero, bool bIgnoreErrorValues ) const;
+    ScMatrix::IterateResult<KahanSum> SumSquare( bool bTextAsZero, bool bIgnoreErrorValues ) const;
+    ScMatrix::IterateResult<double> Product( bool bTextAsZero, bool bIgnoreErrorValues ) const;
     size_t Count(bool bCountStrings, bool bCountErrors, bool bIgnoreEmptyStrings) const;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const;
@@ -328,7 +328,7 @@ public:
             const ScMatrix::EmptyOpFunction& aEmptyFunc) const;
 
     template<typename T>
-    std::vector<ScMatrix::IterateResult> ApplyCollectOperation(const std::vector<T>& aOp);
+    std::vector<ScMatrix::IterateResultMultiple> ApplyCollectOperation(const std::vector<T>& aOp);
 
     void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
             SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool);
@@ -1107,20 +1107,20 @@ double ScMatrixImpl::Xor() const
 
 namespace {
 
-template<typename Op>
+template<typename Op, typename tRes>
 class WalkElementBlocks
 {
     Op maOp;
-    ScMatrix::KahanIterateResult maRes;
+    ScMatrix::IterateResult<tRes> m_aRes;
     bool mbTextAsZero:1;
     bool mbIgnoreErrorValues:1;
 public:
     WalkElementBlocks(bool bTextAsZero, bool bIgnoreErrorValues) :
-        maRes(Op::InitVal, 0),
+        m_aRes(Op::InitVal, 0),
         mbTextAsZero(bTextAsZero), mbIgnoreErrorValues(bIgnoreErrorValues)
     {}
 
-    const ScMatrix::KahanIterateResult& getResult() const { return maRes; }
+    const ScMatrix::IterateResult<tRes>& getResult() const { return m_aRes; }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
@@ -1140,9 +1140,9 @@ public:
                         ++nIgnored;
                         continue;
                     }
-                    maOp(maRes.maAccumulator, *it);
+                    maOp(m_aRes.m_aAccumulator, *it);
                 }
-                maRes.mnCount += node.size - nIgnored;
+                m_aRes.m_nCount += node.size - nIgnored;
             }
             break;
             case mdds::mtm::element_boolean:
@@ -1153,14 +1153,14 @@ public:
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                 {
-                    maOp(maRes.maAccumulator, *it);
+                    maOp(m_aRes.m_aAccumulator, *it);
                 }
-                maRes.mnCount += node.size;
+                m_aRes.m_nCount += node.size;
             }
             break;
             case mdds::mtm::element_string:
                 if (mbTextAsZero)
-                    maRes.mnCount += node.size;
+                    m_aRes.m_nCount += node.size;
             break;
             case mdds::mtm::element_empty:
             default:
@@ -1173,7 +1173,7 @@ template<typename Op>
 class WalkElementBlocksMultipleValues
 {
     const std::vector<Op>* mpOp;
-    std::vector<ScMatrix::IterateResult> maRes;
+    std::vector<ScMatrix::IterateResultMultiple> maRes;
     bool mbFirst:1;
 public:
     WalkElementBlocksMultipleValues(const std::vector<Op>& aOp) :
@@ -1200,7 +1200,7 @@ public:
         return *this;
     }
 
-    const std::vector<ScMatrix::IterateResult>& getResult() const { return maRes; }
+    const std::vector<ScMatrix::IterateResultMultiple>& getResult() const { return maRes; }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
@@ -2080,29 +2080,29 @@ public:
 
 namespace {
 
-template<typename TOp>
-ScMatrix::KahanIterateResult GetValueWithCount(bool bTextAsZero, bool bIgnoreErrorValues, const MatrixImplType& maMat)
+template<typename TOp, typename tRes>
+ScMatrix::IterateResult<tRes> GetValueWithCount(bool bTextAsZero, bool bIgnoreErrorValues, const MatrixImplType& maMat)
 {
-    WalkElementBlocks<TOp> aFunc(bTextAsZero, bIgnoreErrorValues);
+    WalkElementBlocks<TOp, tRes> aFunc(bTextAsZero, bIgnoreErrorValues);
     aFunc = maMat.walk(aFunc);
     return aFunc.getResult();
 }
 
 }
 
-ScMatrix::KahanIterateResult ScMatrixImpl::Sum(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::IterateResult<KahanSum> ScMatrixImpl::Sum(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
-    return GetValueWithCount<sc::op::Sum>(bTextAsZero, bIgnoreErrorValues, maMat);
+    return GetValueWithCount<sc::op::Sum, KahanSum>(bTextAsZero, bIgnoreErrorValues, maMat);
 }
 
-ScMatrix::KahanIterateResult ScMatrixImpl::SumSquare(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::IterateResult<KahanSum> ScMatrixImpl::SumSquare(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
-    return GetValueWithCount<sc::op::SumSquare>(bTextAsZero, bIgnoreErrorValues, maMat);
+    return GetValueWithCount<sc::op::SumSquare, KahanSum>(bTextAsZero, bIgnoreErrorValues, maMat);
 }
 
-ScMatrix::KahanIterateResult ScMatrixImpl::Product(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::IterateResult<double> ScMatrixImpl::Product(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
-    return GetValueWithCount<sc::op::Product>(bTextAsZero, bIgnoreErrorValues, maMat);
+    return GetValueWithCount<sc::op::Product, double>(bTextAsZero, bIgnoreErrorValues, maMat);
 }
 
 size_t ScMatrixImpl::Count(bool bCountStrings, bool bCountErrors, bool bIgnoreEmptyStrings) const
@@ -2423,7 +2423,7 @@ void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
 }
 
 template<typename T>
-std::vector<ScMatrix::IterateResult> ScMatrixImpl::ApplyCollectOperation(const std::vector<T>& aOp)
+std::vector<ScMatrix::IterateResultMultiple> ScMatrixImpl::ApplyCollectOperation(const std::vector<T>& aOp)
 {
     WalkElementBlocksMultipleValues<T> aFunc(aOp);
     aFunc = maMat.walk(std::move(aFunc));
@@ -3208,17 +3208,17 @@ double ScMatrix::Xor() const
     return pImpl->Xor();
 }
 
-ScMatrix::KahanIterateResult ScMatrix::Sum(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::IterateResult<KahanSum> ScMatrix::Sum(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
     return pImpl->Sum(bTextAsZero, bIgnoreErrorValues);
 }
 
-ScMatrix::KahanIterateResult ScMatrix::SumSquare(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::IterateResult<KahanSum> ScMatrix::SumSquare(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
     return pImpl->SumSquare(bTextAsZero, bIgnoreErrorValues);
 }
 
-ScMatrix::KahanIterateResult ScMatrix::Product(bool bTextAsZero, bool bIgnoreErrorValues) const
+ScMatrix::IterateResult<double> ScMatrix::Product(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
     return pImpl->Product(bTextAsZero, bIgnoreErrorValues);
 }
@@ -3425,7 +3425,7 @@ void ScMatrix::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
     pImpl->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
 }
 
-std::vector<ScMatrix::IterateResult> ScMatrix::Collect(const std::vector<sc::op::Op>& aOp)
+std::vector<ScMatrix::IterateResultMultiple> ScMatrix::Collect(const std::vector<sc::op::Op>& aOp)
 {
     return pImpl->ApplyCollectOperation(aOp);
 }
