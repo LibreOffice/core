@@ -302,7 +302,7 @@ void SeriesHeader::SetPos()
     aSize.setWidth(m_nWidth);
     m_spColorBar->set_size_request(aSize.Width(), aSize.Height());
 
-    auto xVirDev(m_spColorBar->create_virtual_device());
+    ScopedVclPtr<VirtualDevice> xVirDev(m_spColorBar->create_virtual_device());
     xVirDev->SetOutputSizePixel(aSize);
     xVirDev->SetFillColor(m_aColor);
     xVirDev->SetLineColor(m_aColor);
