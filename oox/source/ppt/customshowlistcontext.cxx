@@ -33,12 +33,12 @@ namespace {
 
 class CustomShowContext : public ::oox::core::FragmentHandler2
 {
-    CustomShow mrCustomShow;
+    std::vector< CustomShow >& mrCustomShowList;
 
 public:
     CustomShowContext( ::oox::core::FragmentHandler2 const & rParent,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs,
-            CustomShow const & rCustomShow );
+            std::vector< CustomShow >& rCustomShowList );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 };
@@ -47,12 +47,14 @@ public:
 
 CustomShowContext::CustomShowContext( FragmentHandler2 const & rParent,
     const Reference< XFastAttributeList >& rxAttribs,
-        CustomShow const & rCustomShow )
+        std::vector< CustomShow >& rCustomShowList )
 : FragmentHandler2( rParent )
-, mrCustomShow( rCustomShow )
+, mrCustomShowList( rCustomShowList )
 {
-    mrCustomShow.maCustomShowName = rxAttribs->getOptionalValue( XML_name );
-    mrCustomShow.mnId = rxAttribs->getOptionalValue( XML_id );
+    CustomShow aCustomShow;
+    aCustomShow.maCustomShowName = rxAttribs->getOptionalValue( XML_name );
+    aCustomShow.mnId = rxAttribs->getOptionalValue( XML_id );
+    mrCustomShowList.push_back(aCustomShow);
 }
 
 ::oox::core::ContextHandlerRef CustomShowContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
@@ -60,7 +62,10 @@ CustomShowContext::CustomShowContext( FragmentHandler2 const & rParent,
     switch( aElementToken )
     {
         case PPT_TOKEN( sld ) :
-            mrCustomShow.maSldLst.push_back( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+            mrCustomShowList.back().maSldLst.push_back(
+                getRelations()
+                    .getRelationFromRelId(rAttribs.getString(R_TOKEN(id), OUString()))
+                    ->maTarget);
             return this;
         default:
         break;
@@ -86,9 +91,7 @@ CustomShowListContext::~CustomShowListContext( )
     {
         case PPT_TOKEN( custShow ) :
         {
-            CustomShow aCustomShow;
-            mrCustomShowList.push_back( aCustomShow );
-            return new CustomShowContext( *this, rAttribs.getFastAttributeList(), mrCustomShowList.back() );
+            return new CustomShowContext( *this, rAttribs.getFastAttributeList(), mrCustomShowList );
         }
         default:
         break;
