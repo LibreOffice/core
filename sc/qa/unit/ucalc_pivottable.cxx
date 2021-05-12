@@ -84,7 +84,7 @@ ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t 
                            static_cast<SCROW>(nDataCount), nRow2);
 
     ScRange aSrcRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
-    Test::printRange(pDoc, aSrcRange, "Data sheet content");
+    printRange(pDoc, aSrcRange, "Data sheet content");
     return aSrcRange;
 }
 

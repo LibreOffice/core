@@ -5781,7 +5781,7 @@ static void runTestMATCH(ScDocument* pDoc, const char* aData[DataSize], const St
     }
 
     pDoc->CalcAll();
-    Test::printRange(pDoc, ScRange(0, 0, 0, 2, FormulaSize-1, 0), "MATCH");
+    printRange(pDoc, ScRange(0, 0, 0, 2, FormulaSize-1, 0), "MATCH");
 
     // verify the results.
     for (size_t i = 0; i < FormulaSize; ++i)
@@ -5815,7 +5815,7 @@ static void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[DataSize]
     }
 
     pDoc->CalcAll();
-    Test::printRange(pDoc, ScRange(0, 0, 0, FormulaSize-1, 2, 0), "MATCH");
+    printRange(pDoc, ScRange(0, 0, 0, FormulaSize-1, 2, 0), "MATCH");
 
     // verify the results.
     for (size_t i = 0; i < FormulaSize; ++i)
@@ -6806,8 +6806,8 @@ void Test::testExternalRangeName()
 
 static void testExtRefFuncT(ScDocument* pDoc, ScDocument& rExtDoc)
 {
-    Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
-    Test::clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
 
     rExtDoc.SetString(0, 0, 0, "'1.2");
     rExtDoc.SetString(0, 1, 0, "Foo");
@@ -6827,8 +6827,8 @@ static void testExtRefFuncT(ScDocument* pDoc, ScDocument& rExtDoc)
 
 static void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument& rExtDoc)
 {
-    Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
-    Test::clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
 
     sc::AutoCalcSwitch aACSwitch(*pDoc, true);
 
@@ -6840,8 +6840,8 @@ static void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument& rExtDoc)
 
 static void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc)
 {
-    Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
-    Test::clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
 
     // Populate the external document.
     rExtDoc.SetString(ScAddress(0,0,0), "A1");
@@ -6871,8 +6871,8 @@ static void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc)
 
 static void testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc)
 {
-    Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
-    Test::clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
 
     sc::AutoCalcSwitch aACSwitch(*pDoc, true);
 
