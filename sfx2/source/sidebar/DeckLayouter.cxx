@@ -25,9 +25,11 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/viewsh.hxx>
 #include <comphelper/lok.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <vcl/jsdialog/executor.hxx>
 #include <vcl/window.hxx>
 #include <vcl/scrbar.hxx>
 
@@ -308,6 +310,9 @@ sal_Int32 PlacePanels (
             }
         }
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+        jsdialog::SendFullUpdate(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()), "Panel");
 
     return nY;
 }

@@ -14,6 +14,7 @@
 namespace jsdialog
 {
 bool isBuilderEnabled(const OUString& rUIFile, bool bMobile);
+bool isBuilderEnabledForSidebar(const OUString& rUIFile);
 bool isInterimBuilderEnabledForNotebookbar(const OUString& rUIFile);
 }
 

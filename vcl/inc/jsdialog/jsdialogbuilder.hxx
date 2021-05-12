@@ -207,6 +207,9 @@ class JSInstanceBuilder : public SalInstanceBuilder, public JSDialogSender
 
     /// used for dialogs
     JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+    /// used for sidebar panels
+    JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+                      sal_uInt64 nLOKWindowId);
     /// used for notebookbar, optional nWindowId is used if getting parent id failed
     JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                       const css::uno::Reference<css::frame::XFrame>& rFrame,
@@ -224,6 +227,9 @@ public:
     static JSInstanceBuilder* CreateAutofilterWindowBuilder(vcl::Window* pParent,
                                                             const OUString& rUIRoot,
                                                             const OUString& rUIFile);
+    static JSInstanceBuilder* CreateSidebarBuilder(weld::Widget* pParent, const OUString& rUIRoot,
+                                                   const OUString& rUIFile,
+                                                   sal_uInt64 nLOKWindowId = 0);
 
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id) override;
