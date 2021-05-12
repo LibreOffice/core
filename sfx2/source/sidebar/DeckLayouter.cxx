@@ -25,6 +25,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/viewsh.hxx>
 #include <comphelper/lok.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -34,6 +35,8 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
+
+#include <vcl/jsdialog/executor.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -302,6 +305,9 @@ sal_Int32 PlacePanels (
             }
         }
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+        jsdialog::SendFullUpdate(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()), "Panel");
 
     return nY;
 }
