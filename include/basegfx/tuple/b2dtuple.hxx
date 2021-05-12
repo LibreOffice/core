@@ -22,7 +22,7 @@
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/basegfxdllapi.h>
-#include <basegfx/utils/common.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
 
 namespace basegfx
 {
@@ -36,12 +36,8 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on two double values
     */
-    class SAL_WARN_UNUSED B2DTuple
+    class SAL_WARN_UNUSED B2DTuple : public Tuple2D<double>
     {
-    protected:
-        double mfX;
-        double mfY;
-
     public:
 
         /** Create a 2D Tuple
@@ -49,8 +45,7 @@ namespace basegfx
             The tuple is initialized to (0.0, 0.0)
         */
         B2DTuple()
-        :   mfX(0.0),
-            mfY(0.0)
+         : Tuple2D(0.0, 0.0)
         {}
 
         /** Create a 2D Tuple
@@ -64,8 +59,7 @@ namespace basegfx
             of the 2D Tuple.
         */
         B2DTuple(double fX, double fY)
-        :   mfX( fX ),
-            mfY( fY )
+            : Tuple2D(fX, fY)
         {}
 
         /** Create a copy of a 2D integer Tuple
@@ -75,118 +69,11 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC explicit B2DTuple(const B2ITuple& rTup);
 
-        /// Get X-Coordinate of 2D Tuple
-        double getX() const
-        {
-            return mfX;
-        }
-
-        /// Get Y-Coordinate of 2D Tuple
-        double getY() const
-        {
-            return mfY;
-        }
-
-        /// Set X-Coordinate of 2D Tuple
-        void setX(double fX)
-        {
-            mfX = fX;
-        }
-
-        /// Set Y-Coordinate of 2D Tuple
-        void setY(double fY)
-        {
-            mfY = fY;
-        }
-
-        double get(Axis2D eAxis)
-        {
-            return eAxis == Axis2D::X ? getX() : getY();
-        }
-
-        void set(Axis2D eAxis, double fValue)
-        {
-            if (eAxis == Axis2D::X)
-                setX(fValue);
-            else
-                setY(fValue);
-        }
-
-        // comparators with tolerance
-
-        bool equalZero() const
-        {
-            return (this == &getEmptyTuple() ||
-                    (fTools::equalZero(mfX) && fTools::equalZero(mfY)));
-        }
-
-        bool equal(const B2DTuple& rTup) const
-        {
-            return (
-                this == &rTup ||
-                (fTools::equal(mfX, rTup.mfX) &&
-                fTools::equal(mfY, rTup.mfY)));
-        }
-
         // operators
-
-
-        B2DTuple& operator+=( const B2DTuple& rTup )
-        {
-            mfX += rTup.mfX;
-            mfY += rTup.mfY;
-            return *this;
-        }
-
-        B2DTuple& operator-=( const B2DTuple& rTup )
-        {
-            mfX -= rTup.mfX;
-            mfY -= rTup.mfY;
-            return *this;
-        }
-
-        B2DTuple& operator/=( const B2DTuple& rTup )
-        {
-            mfX /= rTup.mfX;
-            mfY /= rTup.mfY;
-            return *this;
-        }
-
-        B2DTuple& operator*=( const B2DTuple& rTup )
-        {
-            mfX *= rTup.mfX;
-            mfY *= rTup.mfY;
-            return *this;
-        }
-
-        B2DTuple& operator*=(double t)
-        {
-            mfX *= t;
-            mfY *= t;
-            return *this;
-        }
-
-        B2DTuple& operator/=(double t)
-        {
-            const double fVal(1.0 / t);
-            mfX *= fVal;
-            mfY *= fVal;
-            return *this;
-        }
 
         B2DTuple operator-(void) const
         {
             return B2DTuple(-mfX, -mfY);
-        }
-
-        bool operator==( const B2DTuple& rTup ) const
-        {
-            return mfX == rTup.mfX && mfY == rTup.mfY;
-        }
-
-        bool operator!=( const B2DTuple& rTup ) const
-        {
-            return mfX != rTup.mfX || mfY != rTup.mfY;
         }
 
         BASEGFX_DLLPUBLIC static const B2DTuple& getEmptyTuple();

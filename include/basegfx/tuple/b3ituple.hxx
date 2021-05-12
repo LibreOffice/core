@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
+#include <basegfx/tuple/Tuple3D.hxx>
 
 namespace basegfx
 {
@@ -32,22 +33,15 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on three sal_Int32 values
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B3ITuple
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B3ITuple : public Tuple3D<sal_Int32>
     {
-    protected:
-        sal_Int32                                       mnX;
-        sal_Int32                                       mnY;
-        sal_Int32                                       mnZ;
-
     public:
         /** Create a 3D Tuple
 
             The tuple is initialized to (0, 0, 0)
         */
         B3ITuple()
-        :   mnX(0),
-            mnY(0),
-            mnZ(0)
+            : Tuple3D(0, 0, 0)
         {}
 
         /** Create a 3D Tuple
@@ -65,22 +59,8 @@ namespace basegfx
             of the 3D Tuple.
         */
         B3ITuple(sal_Int32 nX, sal_Int32 nY, sal_Int32 nZ)
-        :   mnX(nX),
-            mnY(nY),
-            mnZ(nZ)
+            : Tuple3D(nX, nY, nZ)
         {}
-
-        /// get X-Coordinate of 3D Tuple
-        sal_Int32 getX() const
-        {
-            return mnX;
-        }
-
-        /// get Y-Coordinate of 3D Tuple
-        sal_Int32 getY() const
-        {
-            return mnY;
-        }
 
         /// Array-access to 3D Tuple
         const sal_Int32& operator[] (int nPos) const
@@ -102,68 +82,9 @@ namespace basegfx
 
         // operators
 
-
-        B3ITuple& operator+=( const B3ITuple& rTup )
-        {
-            mnX += rTup.mnX;
-            mnY += rTup.mnY;
-            mnZ += rTup.mnZ;
-            return *this;
-        }
-
-        B3ITuple& operator-=( const B3ITuple& rTup )
-        {
-            mnX -= rTup.mnX;
-            mnY -= rTup.mnY;
-            mnZ -= rTup.mnZ;
-            return *this;
-        }
-
-        B3ITuple& operator/=( const B3ITuple& rTup )
-        {
-            mnX /= rTup.mnX;
-            mnY /= rTup.mnY;
-            mnZ /= rTup.mnZ;
-            return *this;
-        }
-
-        B3ITuple& operator*=( const B3ITuple& rTup )
-        {
-            mnX *= rTup.mnX;
-            mnY *= rTup.mnY;
-            mnZ *= rTup.mnZ;
-            return *this;
-        }
-
-        B3ITuple& operator*=(sal_Int32 t)
-        {
-            mnX *= t;
-            mnY *= t;
-            mnZ *= t;
-            return *this;
-        }
-
-        B3ITuple& operator/=(sal_Int32 t)
-        {
-            mnX /= t;
-            mnY /= t;
-            mnZ /= t;
-            return *this;
-        }
-
         B3ITuple operator-(void) const
         {
             return B3ITuple(-mnX, -mnY, -mnZ);
-        }
-
-        bool operator==( const B3ITuple& rTup ) const
-        {
-            return this == &rTup || (rTup.mnX == mnX && rTup.mnY == mnY && rTup.mnZ == mnZ);
-        }
-
-        bool operator!=( const B3ITuple& rTup ) const
-        {
-            return !(*this == rTup);
         }
     };
 
