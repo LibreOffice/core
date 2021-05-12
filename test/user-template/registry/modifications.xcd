@@ -65,6 +65,15 @@
       <value>en-US</value>
     </prop>
   </node>
+  <node oor:name="Office">
+    <node oor:name="Factories">
+      <node oor:name="com.sun.star.text.TextDocument">
+        <prop oor:name="ooSetupFactoryTemplateFile">
+          <value></value>
+        </prop>
+      </node>
+    </node>
+  </node>
  </oor:component-data>
  <oor:component-data oor:name="Common" oor:package="org.openoffice.Office">
   <node oor:name="Security">

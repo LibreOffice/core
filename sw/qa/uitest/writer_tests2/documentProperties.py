@@ -54,6 +54,12 @@ class documentProperties(UITestCase):
         select_pos(xTabs, "1")     #tab Description
 
         xTitleText = xDialog.getChild("title")
+
+        # tdf#132798
+        self.assertEqual('Default', get_state_as_dict(xTitleText)["Text"])
+
+        xTitleText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xTitleText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
         xTitleText.executeAction("TYPE", mkPropertyValues({"TEXT":"Title text"}))
         xSubjectText = xDialog.getChild("subject")
         xSubjectText.executeAction("TYPE", mkPropertyValues({"TEXT":"Subject text"}))
