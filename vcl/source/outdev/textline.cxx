@@ -50,27 +50,63 @@ void OutputDevice::ImplInitAboveTextLineSize()
 
 void OutputDevice::ImplDrawWavePixel( tools::Long nOriginX, tools::Long nOriginY,
                                       tools::Long nCurX, tools::Long nCurY,
+                                      tools::Long nWidth,
                                       Degree10 nOrientation,
                                       SalGraphics* pGraphics,
                                       const OutputDevice& rOutDev,
-                                      bool bDrawPixAsRect,
                                       tools::Long nPixWidth, tools::Long nPixHeight )
 {
-    if ( nOrientation )
+    if (nOrientation)
     {
         Point aPoint( nOriginX, nOriginY );
         aPoint.RotateAround( nCurX, nCurY, nOrientation );
     }
 
-    if ( bDrawPixAsRect )
+    if (DrawWavePixelAsRect(nWidth))
     {
-
         pGraphics->DrawRect( nCurX, nCurY, nPixWidth, nPixHeight, rOutDev );
     }
     else
     {
         pGraphics->DrawPixel( nCurX, nCurY, rOutDev );
     }
+}
+
+bool OutputDevice::DrawWavePixelAsRect(tools::Long nLineWidth) const
+{
+    if (nLineWidth > 1)
+        return true;
+
+    return false;
+}
+
+void OutputDevice::SetWaveLineColors(Color const& rColor, tools::Long nLineWidth)
+{
+    // On printers that output pixel via DrawRect()
+    if (nLineWidth > 1)
+    {
+        if (mbLineColor || mbInitLineColor)
+        {
+            mpGraphics->SetLineColor();
+            mbInitLineColor = true;
+        }
+
+        mpGraphics->SetFillColor( rColor );
+        mbInitFillColor = true;
+    }
+    else
+    {
+        mpGraphics->SetLineColor( rColor );
+        mbInitLineColor = true;
+    }
+}
+
+Size OutputDevice::GetWaveLineSize(tools::Long nLineWidth) const
+{
+    if (nLineWidth > 1)
+        return Size(nLineWidth, ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY);
+
+    return Size(1, 1);
 }
 
 void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
@@ -109,39 +145,20 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
         tools::Long    nDiffY = nHeight-1;
         tools::Long    nCount = nWidth;
         tools::Long    nOffY = -1;
-        tools::Long    nPixWidth;
-        tools::Long    nPixHeight;
-        bool    bDrawPixAsRect;
-        // On printers that output pixel via DrawRect()
-        if ( (GetOutDevType() == OUTDEV_PRINTER) || (nLineWidth > 1) )
-        {
-            if ( mbLineColor || mbInitLineColor )
-            {
-                mpGraphics->SetLineColor();
-                mbInitLineColor = true;
-            }
-            mpGraphics->SetFillColor( rColor );
-            mbInitFillColor = true;
-            bDrawPixAsRect  = true;
-            nPixWidth       = nLineWidth;
-            nPixHeight      = ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY;
-        }
-        else
-        {
-            mpGraphics->SetLineColor( rColor );
-            mbInitLineColor = true;
-            nPixWidth       = 1;
-            nPixHeight      = 1;
-            bDrawPixAsRect  = false;
-        }
+
+        SetWaveLineColors(rColor, nLineWidth);
+        Size aSize(GetWaveLineSize(nLineWidth));
+
+        tools::Long nPixWidth = aSize.Width();
+        tools::Long nPixHeight = aSize.Height();
 
         if ( !nDiffY )
         {
             while ( nWidth )
             {
-                ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
+                ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nLineWidth, nOrientation,
                                    mpGraphics, *this,
-                                   bDrawPixAsRect, nPixWidth, nPixHeight );
+                                   nPixWidth, nPixHeight );
                 nCurX++;
                 nWidth--;
             }
@@ -154,17 +171,17 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
             {
                 for( tools::Long i = nDiffY; i; --i )
                 {
-                    ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
+                    ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nLineWidth, nOrientation,
                                        mpGraphics, *this,
-                                       bDrawPixAsRect, nPixWidth, nPixHeight );
+                                       nPixWidth, nPixHeight );
                     nCurX++;
                     nCurY += nOffY;
                 }
                 for( tools::Long i = nDiffX; i; --i )
                 {
-                    ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
+                    ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nLineWidth, nOrientation,
                                        mpGraphics, *this,
-                                       bDrawPixAsRect, nPixWidth, nPixHeight );
+                                       nPixWidth, nPixHeight );
                     nCurX++;
                 }
                 nOffY = -nOffY;
@@ -174,18 +191,18 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
             {
                 for( tools::Long i = nDiffY; i && nFreq; --i, --nFreq )
                 {
-                    ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
+                    ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nLineWidth, nOrientation,
                                        mpGraphics, *this,
-                                       bDrawPixAsRect, nPixWidth, nPixHeight );
+                                       nPixWidth, nPixHeight );
                     nCurX++;
                     nCurY += nOffY;
 
                 }
                 for( tools::Long i = nDiffX; i && nFreq; --i, --nFreq )
                 {
-                    ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
+                    ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nLineWidth, nOrientation,
                                        mpGraphics, *this,
-                                       bDrawPixAsRect, nPixWidth, nPixHeight );
+                                       nPixWidth, nPixHeight );
                     nCurX++;
                 }
             }
