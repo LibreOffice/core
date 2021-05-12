@@ -19,7 +19,7 @@ void SumSquare::operator()(KahanSum& rAccum, double fVal) const { rAccum += fVal
 
 const double SumSquare::InitVal = 0.0;
 
-void Product::operator()(KahanSum& rAccum, double fVal) const { rAccum *= fVal; }
+void Product::operator()(double& rAccum, double fVal) const { rAccum *= fVal; }
 
 const double Product::InitVal = 1.0;
 }

@@ -1853,7 +1853,7 @@ void ScInterpreter::ScSumXMY2()
     }
     else
     {
-        PushDouble(pResMat->SumSquare(false).get());
+        PushDouble(pResMat->SumSquare(false).maAccumulator.get());
     }
 }
 

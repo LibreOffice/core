@@ -403,8 +403,8 @@ static void IterateMatrix(
         break;
         case ifPRODUCT:
         {
-            ScMatrix::KahanIterateResult aRes = pMat->Product(bTextAsZero, bIgnoreErrVal);
-            fRes *= aRes.get();
+            ScMatrix::DoubleIterateResult aRes = pMat->Product(bTextAsZero, bIgnoreErrVal);
+            fRes *= aRes.maAccumulator;
             rCount += aRes.mnCount;
         }
         break;

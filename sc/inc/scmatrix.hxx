@@ -140,29 +140,30 @@ public:
      * summation algorithm,
      * https://en.wikipedia.org/wiki/Kahan_summation_algorithm
      */
-    struct IterateResult
+    struct IterateResultMultiple
     {
         double mfFirst;
         double mfRest;
         size_t mnCount;
 
-        IterateResult(double fFirst, double fRest, size_t nCount) :
+        IterateResultMultiple(double fFirst, double fRest, size_t nCount) :
             mfFirst(fFirst), mfRest(fRest), mnCount(nCount) {}
     };
 
     /**
-      * Version of IterateResult for using Kahan sum.
+      * Iterator for executing one operation withe the matrix data.
       */
-    struct KahanIterateResult
+    template<typename tRes>
+    struct IterateResult
     {
-        KahanSum maAccumulator;
+        tRes maAccumulator;
         size_t mnCount;
 
-        KahanIterateResult(double fAccumulator, size_t nCount)
+        IterateResult(tRes fAccumulator, size_t nCount)
             : maAccumulator(fAccumulator), mnCount(nCount) {}
-
-        double get() const { return maAccumulator.get(); }
     };
+    typedef IterateResult<KahanSum> KahanIterateResult;
+    typedef IterateResult<double> DoubleIterateResult;
 
 
     /** Checks nC or nR for zero and uses GetElementsMax() whether a matrix of
@@ -378,7 +379,7 @@ public:
 
     KahanIterateResult Sum( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
     KahanIterateResult SumSquare( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
-    KahanIterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    DoubleIterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
     size_t Count(bool bCountStrings, bool bCountErrors, bool bIgnoreEmptyStrings = false) const ;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const ;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const ;
@@ -410,7 +411,7 @@ public:
     void DivOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
     void PowOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
 
-    std::vector<ScMatrix::IterateResult> Collect(const std::vector<sc::op::Op>& aOp) ;
+    std::vector<ScMatrix::IterateResultMultiple> Collect(const std::vector<sc::op::Op>& aOp) ;
 
     void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc,
