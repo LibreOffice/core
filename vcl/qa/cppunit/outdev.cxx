@@ -45,6 +45,9 @@ public:
     void testDrawTransformedBitmapExFlip();
     void testRTL();
     void testRTLGuard();
+    void testDefaultFillColor();
+    void testTransparentFillColor();
+    void testFillColor();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -63,6 +66,9 @@ public:
     CPPUNIT_TEST(testDrawTransformedBitmapExFlip);
     CPPUNIT_TEST(testRTL);
     CPPUNIT_TEST(testRTLGuard);
+    CPPUNIT_TEST(testDefaultFillColor);
+    CPPUNIT_TEST(testTransparentFillColor);
+    CPPUNIT_TEST(testFillColor);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -458,6 +464,69 @@ void VclOutdevTest::testRTLGuard()
     // Without the accompanying fix in place, this test would have failed, because the RTL status
     // from pWindow was not propagated to aGuard.
     CPPUNIT_ASSERT(aGuard.GetRenderContext()->IsRTLEnabled());
+}
+
+void VclOutdevTest::testDefaultFillColor()
+{
+    // Create a virtual device, and connect a metafile to it.
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    CPPUNIT_ASSERT(pVDev->IsFillColor());
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xFF, 0xFF), pVDev->GetFillColor());
+
+    pVDev->SetFillColor();
+    CPPUNIT_ASSERT(!pVDev->IsFillColor());
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, pVDev->GetFillColor());
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::FILLCOLOR, pAction->GetType());
+    auto pFillAction = static_cast<MetaFillColorAction*>(pAction);
+    const Color& rColor = pFillAction->GetColor();
+    CPPUNIT_ASSERT_EQUAL(Color(), rColor);
+}
+
+void VclOutdevTest::testTransparentFillColor()
+{
+    // Create a virtual device, and connect a metafile to it.
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    CPPUNIT_ASSERT(pVDev->IsFillColor());
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xFF, 0xFF), pVDev->GetFillColor());
+
+    pVDev->SetFillColor(COL_TRANSPARENT);
+    CPPUNIT_ASSERT(!pVDev->IsFillColor());
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, pVDev->GetFillColor());
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::FILLCOLOR, pAction->GetType());
+    auto pFillAction = static_cast<MetaFillColorAction*>(pAction);
+    const Color& rColor = pFillAction->GetColor();
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, rColor);
+}
+
+void VclOutdevTest::testFillColor()
+{
+    // Create a virtual device, and connect a metafile to it.
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    CPPUNIT_ASSERT(pVDev->IsFillColor());
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xFF, 0xFF), pVDev->GetFillColor());
+
+    pVDev->SetFillColor(COL_RED);
+    CPPUNIT_ASSERT(pVDev->IsFillColor());
+    CPPUNIT_ASSERT_EQUAL(COL_RED, pVDev->GetFillColor());
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::FILLCOLOR, pAction->GetType());
+    auto pFillAction = static_cast<MetaFillColorAction*>(pAction);
+    const Color& rColor = pFillAction->GetColor();
+    CPPUNIT_ASSERT_EQUAL(COL_RED, rColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
