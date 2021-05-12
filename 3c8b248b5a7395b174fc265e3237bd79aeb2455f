@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d4cd748_1271d5e5",
+        "filename": "offapi/UnoApi_offapi.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 3425,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-12T09:22:10Z",
+      "side": 1,
+      "message": "please keep the list sorted lexicographically",
+      "revId": "3c8b248b5a7395b174fc265e3237bd79aeb2455f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "405c28e7_cf6c019d",
+        "filename": "offapi/com/sun/star/sheet/FilterFieldType.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-12T09:22:10Z",
+      "side": 1,
+      "message": "is there a reason to use `short` rather than the canonic `long` here?",
+      "revId": "3c8b248b5a7395b174fc265e3237bd79aeb2455f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
