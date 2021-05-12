@@ -442,7 +442,8 @@ bool BuriedAssign::VisitIfStmt(IfStmt const* ifStmt)
             if (auto binaryOp2
                 = dyn_cast<BinaryOperator>(binaryOp->getLHS()->IgnoreParenImpCasts()))
             {
-                if (binaryOp->getRHS()->isCXX11ConstantExpr(compiler.getASTContext())
+                if (!binaryOp->getRHS()->isValueDependent()
+                    && binaryOp->getRHS()->isCXX11ConstantExpr(compiler.getASTContext())
                     && isAssignmentOp(binaryOp2->getOpcode()))
                     report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
                            compat::getBeginLoc(expr))
@@ -451,7 +452,8 @@ bool BuriedAssign::VisitIfStmt(IfStmt const* ifStmt)
             if (auto binaryOp2
                 = dyn_cast<BinaryOperator>(binaryOp->getRHS()->IgnoreParenImpCasts()))
             {
-                if (binaryOp->getLHS()->isCXX11ConstantExpr(compiler.getASTContext())
+                if (!binaryOp->getLHS()->isValueDependent()
+                    && binaryOp->getLHS()->isCXX11ConstantExpr(compiler.getASTContext())
                     && isAssignmentOp(binaryOp2->getOpcode()))
                     report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
                            compat::getBeginLoc(expr))
