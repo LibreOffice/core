@@ -20,46 +20,21 @@
 #ifndef INCLUDED_VCL_OUTDEVSTATE_HXX
 #define INCLUDED_VCL_OUTDEVSTATE_HXX
 
-#include <vcl/mapmod.hxx>
-#include <vcl/vclenum.hxx>
-
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <tools/fontenum.hxx>
+#include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
+
+#include <vcl/mapmod.hxx>
+#include <vcl/rendercontext/PushFlags.hxx>
+#include <vcl/vclenum.hxx>
+
 #include <memory>
 #include <optional>
-#include <i18nlangtag/lang.h>
 
 namespace vcl { class Font; }
 namespace vcl { class Region; }
-
-// Flags for OutputDevice::Push() and OutDevState
-enum class PushFlags {
-    NONE            = 0x0000,
-    LINECOLOR       = 0x0001,
-    FILLCOLOR       = 0x0002,
-    FONT            = 0x0004,
-    TEXTCOLOR       = 0x0008,
-    MAPMODE         = 0x0010,
-    CLIPREGION      = 0x0020,
-    RASTEROP        = 0x0040,
-    TEXTFILLCOLOR   = 0x0080,
-    TEXTALIGN       = 0x0100,
-    REFPOINT        = 0x0200,
-    TEXTLINECOLOR   = 0x0400,
-    TEXTLAYOUTMODE  = 0x0800,
-    TEXTLANGUAGE    = 0x1000,
-    OVERLINECOLOR   = 0x2000,
-    ALL             = 0xFFFF
-};
-
-namespace o3tl
-{
-    template<> struct typed_flags<PushFlags> : is_typed_flags<PushFlags, 0xFFFF> {};
-}
-#define PUSH_ALLTEXT  (PushFlags::TEXTCOLOR | PushFlags::TEXTFILLCOLOR | PushFlags::TEXTLINECOLOR | PushFlags::OVERLINECOLOR | PushFlags::TEXTALIGN | PushFlags::TEXTLAYOUTMODE | PushFlags::TEXTLANGUAGE)
-#define PUSH_ALLFONT  (PUSH_ALLTEXT | PushFlags::FONT)
 
 // Layout flags for Complex Text Layout
 // These are flag values, i.e they can be combined
