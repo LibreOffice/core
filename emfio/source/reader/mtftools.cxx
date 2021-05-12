@@ -1322,7 +1322,8 @@ namespace emfio
             if ( !bStroke )
                 mpGDIMetaFile->AddAction( new MetaPopAction() );
         }
-        else
+        // tdf#142014 By default the stroke is made with hairline. If width is bigger, we need to use PolyLineAction
+        if ( bStroke && ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) ) )
         {
             sal_uInt16 i, nCount = maPathObj.Count();
             for ( i = 0; i < nCount; i++ )
@@ -1408,6 +1409,13 @@ namespace emfio
         UpdateLineStyle();
         UpdateFillStyle();
         mpGDIMetaFile->AddAction( new MetaRoundRectAction( ImplMap( rRect ), std::abs( ImplMap( rSize ).Width() ), std::abs( ImplMap( rSize ).Height() ) ) );
+        // tdf#142139 Wrong line width during WMF import
+        if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
+        {
+            tools::Polygon aRoundRectPoly( rRect, rSize.Width(), rSize.Height() );
+            aRoundRectPoly.Optimize( PolyOptimizeFlags::EDGES );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( ImplMap( aRoundRectPoly ), maLineStyle.aLineInfo ) );
+        }
     }
 
     void MtfTools::DrawEllipse( const tools::Rectangle& rRect )
