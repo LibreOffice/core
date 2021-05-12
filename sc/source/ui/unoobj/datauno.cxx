@@ -1130,20 +1130,7 @@ void fillQueryParam(
 
                 if (aItem.meType == ScQueryEntry::ByString)
                 {
-                    sal_uInt32 nIndex = 0;
                     aItem.mbFormattedValue = true;
-                    bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(rVal.StringValue, nIndex, aItem.mfVal);
-                    if (bNumber)
-                    {
-                        if (aItem.mfVal != 0.0)
-                        {
-                            OUString aStr;
-                            pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, nIndex, aStr);
-                            aItem.maString = rPool.intern(aStr);
-                        }
-                        else
-                            aItem.meType = ScQueryEntry::ByValue;
-                    }
                 }
                 else if (aItem.meType == ScQueryEntry::ByValue)
                 {
