@@ -244,8 +244,8 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > CreateDragSource() override;
     virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget() override;
     virtual OpenGLContext* CreateOpenGLContext() override;
-#if !GTK_CHECK_VERSION(4, 0, 0)
     virtual weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile) override;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     virtual weld::Builder* CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                                                 bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0) override;
 #endif
