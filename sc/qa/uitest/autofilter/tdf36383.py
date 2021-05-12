@@ -10,6 +10,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_row
 
 #Bug 36383 - EDITING auto row height or change row height removes AutoFilter result
+#Bug 121314 - Show rows vs filter
 
 class tdf36383(UITestCase):
     def test_tdf36383_row_height(self):
@@ -60,6 +61,11 @@ class tdf36383(UITestCase):
 
         xOk = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOk)
+
+        self.assertFalse(row.getPropertyValue("IsVisible"))
+
+        #tdf12131 show row
+        self.xUITest.executeCommand(".uno:ShowRow")
 
         self.assertFalse(row.getPropertyValue("IsVisible"))
 

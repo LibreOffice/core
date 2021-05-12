@@ -2216,7 +2216,15 @@ void ScViewFunc::SetWidthOrHeight(
                 }
                 else if ( eMode==SC_SIZE_SHOW )
                 {
-                    rDoc.ShowRows( nStartNo, nEndNo, nTab, true );
+                    for (SCROW nRow = nStartNo; nRow <= nEndNo; ++nRow)
+                    {
+                        SCROW nLastRow = nRow;
+                        // tdf#121314 skip consecutive rows hidden by AutoFilter
+                        if (rDoc.RowFiltered(nRow, nTab, nullptr, &nLastRow))
+                            nRow = nLastRow;
+                        else
+                            rDoc.ShowRow(nRow, nTab, true);
+                    }
                 }
             }
             else                                // column width
