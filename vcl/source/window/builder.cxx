@@ -17,6 +17,7 @@
 
 #include <comphelper/lok.hxx>
 #include <i18nutil/unicode.hxx>
+#include <jsdialog/enabled.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/module.hxx>
 #include <sal/log.hxx>
@@ -166,50 +167,7 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
     bool bUseJSBuilder = false;
 
     if (comphelper::LibreOfficeKit::isActive())
-    {
-        if (bMobile)
-        {
-            if (rUIFile == "modules/swriter/ui/wordcount-mobile.ui" ||
-                rUIFile == "svx/ui/findreplacedialog-mobile.ui" ||
-                rUIFile == "modules/swriter/ui/watermarkdialog.ui" ||
-                rUIFile == "modules/scalc/ui/validationdialog.ui" ||
-                rUIFile == "modules/scalc/ui/validationcriteriapage.ui" ||
-                rUIFile == "modules/scalc/ui/validationhelptabpage-mobile.ui" ||
-                rUIFile == "modules/scalc/ui/erroralerttabpage-mobile.ui" ||
-                rUIFile == "modules/scalc/ui/validationdialog.ui")
-            {
-                bUseJSBuilder = true;
-            }
-        }
-
-        if (rUIFile == "modules/scalc/ui/pivottablelayoutdialog.ui"
-            || rUIFile == "modules/scalc/ui/selectsource.ui"
-            || rUIFile == "modules/scalc/ui/managenamesdialog.ui"
-            || rUIFile == "modules/scalc/ui/definename.ui"
-            || rUIFile == "modules/scalc/ui/correlationdialog.ui"
-            || rUIFile == "modules/scalc/ui/samplingdialog.ui"
-            || rUIFile == "modules/scalc/ui/descriptivestatisticsdialog.ui"
-            || rUIFile == "modules/scalc/ui/analysisofvariancedialog.ui"
-            || rUIFile == "modules/scalc/ui/covariancedialog.ui"
-            || rUIFile == "modules/scalc/ui/exponentialsmoothingdialog.ui"
-            || rUIFile == "modules/scalc/ui/movingaveragedialog.ui"
-            || rUIFile == "modules/scalc/ui/regressiondialog.ui"
-            || rUIFile == "modules/scalc/ui/ttestdialog.ui"
-            || rUIFile == "modules/scalc/ui/ttestdialog.ui"
-            || rUIFile == "modules/scalc/ui/ztestdialog.ui"
-            || rUIFile == "modules/scalc/ui/chisquaretestdialog.ui"
-            || rUIFile == "modules/scalc/ui/fourieranalysisdialog.ui"
-            || rUIFile == "modules/scalc/ui/datafielddialog.ui"
-            || rUIFile == "modules/scalc/ui/pivotfielddialog.ui"
-            || rUIFile == "modules/scalc/ui/datafieldoptionsdialog.ui"
-            || rUIFile == "svx/ui/fontworkgallerydialog.ui"
-            || rUIFile == "cui/ui/macroselectordialog.ui"
-            || rUIFile == "uui/ui/macrowarnmedium.ui"
-            || rUIFile == "modules/scalc/ui/textimportcsv.ui")
-        {
-            bUseJSBuilder = true;
-        }
-    }
+        bUseJSBuilder = jsdialog::isBuilderEnabled(rUIFile, bMobile);
 
     if (bUseJSBuilder)
         return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
@@ -220,14 +178,11 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
 weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
 {
     // Notebookbar sub controls
-    if (comphelper::LibreOfficeKit::isActive()
-        && (rUIFile == "svx/ui/stylespreview.ui"
-        || rUIFile == "modules/scalc/ui/numberbox.ui"))
+    if (comphelper::LibreOfficeKit::isActive() && jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))
     {
         return JSInstanceBuilder::CreateNotebookbarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>(), nLOKWindowId);
     }
-    else if (comphelper::LibreOfficeKit::isActive()
-        && (rUIFile == "modules/scalc/ui/filterdropdown.ui"))
+    else if (comphelper::LibreOfficeKit::isActive() && (rUIFile == "modules/scalc/ui/filterdropdown.ui"))
     {
         return JSInstanceBuilder::CreateAutofilterWindowBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
     }
