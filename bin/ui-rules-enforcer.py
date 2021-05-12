@@ -7,8 +7,13 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-# this should parse a .ui and overwrite it with the same content
-# for a in `git ls-files "*.ui"`; do bin/ui-converter-skeleton.py $a; done
+# ui-rules-enforcer enforces the .ui rules and properties used by LibreOffice
+# mostly the deprecations of
+# https://developer.gnome.org/gtk4/stable/gtk-migrating-3-to-4.html
+# and a few other home cooked rules
+
+# for any existing .ui this should parse it and overwrite it with the same content
+# e.g. for a in `git ls-files "*.ui"`; do bin/ui-rules-enforcer.py $a; done
 
 import lxml.etree as etree
 import sys
