@@ -463,11 +463,6 @@ public:
 
     void                        Push( PushFlags nFlags = PushFlags::ALL );
     void                        Pop();
-
-    // returns the current stack depth; that is the number of Push() calls minus the number of Pop() calls
-    // this should not normally be used since Push and Pop must always be used symmetrically
-    // however this may be e.g. a help when debugging code in which this somehow is not the case
-    sal_uInt32                  GetGCStackDepth() const;
     void                        ClearStack();
 
     void                        EnableOutput( bool bEnable = true );
