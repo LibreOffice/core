@@ -275,54 +275,6 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
         mpAlphaVDev->SetRasterOp( eRasterOp );
 }
 
-
-void OutputDevice::SetFillColor()
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( Color(), false ) );
-
-    if ( mbFillColor )
-    {
-        mbInitFillColor = true;
-        mbFillColor = false;
-        maFillColor = COL_TRANSPARENT;
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetFillColor();
-}
-
-void OutputDevice::SetFillColor( const Color& rColor )
-{
-    Color aColor(GetDrawModeFillColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings()));
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( aColor, true ) );
-
-    if ( aColor.IsTransparent() )
-    {
-        if ( mbFillColor )
-        {
-            mbInitFillColor = true;
-            mbFillColor = false;
-            maFillColor = COL_TRANSPARENT;
-        }
-    }
-    else
-    {
-        if ( maFillColor != aColor )
-        {
-            mbInitFillColor = true;
-            mbFillColor = true;
-            maFillColor = aColor;
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetFillColor( COL_BLACK );
-}
-
 void OutputDevice::SetLineColor()
 {
 
