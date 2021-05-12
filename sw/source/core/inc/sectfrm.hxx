@@ -33,6 +33,17 @@ enum class SwFindMode
     None = 0, EndNote = 1, LastCnt = 2, MyLast = 4
 };
 
+enum class SwSectionFrameInvFlags : sal_uInt8
+{
+    NONE = 0x00,
+    InvalidateSize = 0x01,
+    SetCompletePaint = 0x10,
+};
+
+namespace o3tl {
+    template<> struct typed_flags<SwSectionFrameInvFlags> : is_typed_flags<SwSectionFrameInvFlags, 0x0011> {};
+}
+
 class SwSectionFrame final: public SwLayoutFrame, public SwFlowFrame
 {
     SwSection* m_pSection;
@@ -42,7 +53,7 @@ class SwSectionFrame final: public SwLayoutFrame, public SwFlowFrame
     bool m_bOwnFootnoteNum; // special numbering of footnotes
     bool m_bFootnoteLock; // ftn, don't leave this section bwd
 
-    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
+    void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, SwSectionFrameInvFlags &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
     void Cut_( bool bRemove );
     // Is there a FootnoteContainer?
