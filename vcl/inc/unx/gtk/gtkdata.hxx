@@ -101,6 +101,12 @@ inline GtkWidget* widget_get_first_child(GtkWidget *pWidget)
 #endif
 }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+typedef double gtk_coord;
+#else
+typedef int gtk_coord;
+#endif
+
 class GtkSalTimer final : public SalTimer
 {
     struct SalGtkTimeoutSource *m_pTimeout;
