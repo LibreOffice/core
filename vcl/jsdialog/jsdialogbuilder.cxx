@@ -391,6 +391,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_bIsNotebookbar(false)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
+
     if (pRoot && pRoot->GetParent())
     {
         m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
@@ -398,6 +399,51 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
         InsertWindowToMap(m_nWindowId);
     }
+
+    initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
+}
+
+// used for sidebar panels
+JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
+                                     const OUString& rUIFile, sal_uInt64 nLOKWindowId)
+    : SalInstanceBuilder(extract_sal_widget(pParent), rUIRoot, rUIFile)
+    , m_nWindowId(nLOKWindowId)
+    , m_aParentDialog(nullptr)
+    , m_aContentWindow(nullptr)
+    , m_sTypeOfJSON("sidebar")
+    , m_bHasTopLevelDialog(false)
+    , m_bIsNotebookbar(false)
+{
+    vcl::Window* pRoot = m_xBuilder->get_widget_root();
+
+    m_aParentDialog = pRoot->GetParentWithLOKNotifier();
+
+    if (rUIFile == "sfx/ui/panel.ui")
+    {
+        // builder for Panel
+        m_aContentWindow = pRoot->GetParent()
+                               ->GetParent()
+                               ->GetParent()
+                               ->GetParent()
+                               ->GetParent()
+                               ->GetParent()
+                               ->GetParent();
+    }
+    else
+    {
+        // builder for PanelLayout
+        m_aContentWindow = pRoot->GetParent()
+                               ->GetParent()
+                               ->GetParent()
+                               ->GetParent()
+                               ->GetParent()
+                               ->GetParent()
+                               ->GetParent()
+                               ->GetParent()
+                               ->GetParent();
+    }
+
+    InsertWindowToMap(m_nWindowId);
 
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
@@ -475,6 +521,14 @@ JSInstanceBuilder* JSInstanceBuilder::CreateAutofilterWindowBuilder(vcl::Window*
                                                                     const OUString& rUIFile)
 {
     return new JSInstanceBuilder(pParent, rUIRoot, rUIFile);
+}
+
+JSInstanceBuilder* JSInstanceBuilder::CreateSidebarBuilder(weld::Widget* pParent,
+                                                           const OUString& rUIRoot,
+                                                           const OUString& rUIFile,
+                                                           sal_uInt64 nLOKWindowId)
+{
+    return new JSInstanceBuilder(pParent, rUIRoot, rUIFile, nLOKWindowId);
 }
 
 JSInstanceBuilder::~JSInstanceBuilder()
