@@ -70,7 +70,7 @@ public:
 
     virtual void tearDown() override
     {
-        mVclDevice.clear();
+        mVclDevice.disposeAndClear();
         mCanvas = uno::Reference<rendering::XCanvas>();
         mDevice = uno::Reference<rendering::XGraphicDevice>();
         BootstrapFixture::tearDown();
