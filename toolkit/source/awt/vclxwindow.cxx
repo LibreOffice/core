@@ -326,14 +326,7 @@ VCLXWindow::VCLXWindow( bool _bWithDefaultProps )
 
 VCLXWindow::~VCLXWindow()
 {
-    mpImpl.reset();
-
-    if ( GetWindow() )
-    {
-        GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
-        GetWindow()->SetWindowPeer( nullptr, nullptr );
-        GetWindow()->SetAccessible( nullptr );
-    }
+    assert(!mpImpl && "forgot to call dispose()");
 }
 
 
@@ -379,7 +372,7 @@ void VCLXWindow::resumeVclEventListening( )
 
 void VCLXWindow::notifyWindowRemoved( vcl::Window const & _rWindow )
 {
-    if ( mpImpl->getContainerListeners().getLength() )
+    if ( mpImpl && mpImpl->getContainerListeners().getLength() )
     {
         awt::VclContainerEvent aEvent;
         aEvent.Source = *this;
@@ -904,19 +897,25 @@ void VCLXWindow::dispose(  )
 {
     SolarMutexGuard aGuard;
 
-    mpImpl->mxViewGraphics = nullptr;
+    if (!mpImpl)
+        return;
 
     if ( mpImpl->mbDisposing )
         return;
+
+    mpImpl->mxViewGraphics = nullptr;
 
     mpImpl->mbDisposing = true;
 
     mpImpl->disposing();
 
-    if ( GetWindow() )
+    if ( auto pWindow = GetWindow() )
     {
+        pWindow->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
+        pWindow->SetWindowPeer( nullptr, nullptr );
+        pWindow->SetAccessible( nullptr );
+
         VclPtr<OutputDevice> pOutDev = GetOutputDevice();
-        SetWindow( nullptr );  // so that handlers are logged off, if necessary (virtual)
         SetOutputDevice( nullptr );
         pOutDev.disposeAndClear();
     }
@@ -934,22 +933,23 @@ void VCLXWindow::dispose(  )
     {
         OSL_FAIL( "VCLXWindow::dispose: could not dispose the accessible context!" );
     }
-    mpImpl->mxAccessibleContext.clear();
 
-    mpImpl->mbDisposing = false;
+    mpImpl.reset();
 }
 
 void VCLXWindow::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
 {
     SolarMutexGuard aGuard;
-
+    if (!mpImpl) // called during dispose by accessibility stuff
+        return;
     mpImpl->getEventListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
 {
     SolarMutexGuard aGuard;
-
+    if (!mpImpl)
+        return;
     mpImpl->getEventListeners().removeInterface( rxListener );
 }
 
@@ -1036,6 +1036,9 @@ void VCLXWindow::removeWindowListener( const css::uno::Reference< css::awt::XWin
 {
     SolarMutexGuard aGuard;
 
+    if (!mpImpl)
+        return;
+
     Reference< XWindowListener2 > xListener2( rxListener, UNO_QUERY );
     if ( xListener2.is() )
         mpImpl->getWindow2Listeners().removeInterface( xListener2 );
@@ -1052,6 +1055,8 @@ void VCLXWindow::addFocusListener( const css::uno::Reference< css::awt::XFocusLi
 void VCLXWindow::removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rxListener )
 {
     SolarMutexGuard aGuard;
+    if (!mpImpl)
+        return;
     mpImpl->getFocusListeners().removeInterface( rxListener );
 }
 
@@ -1064,6 +1069,8 @@ void VCLXWindow::addKeyListener( const css::uno::Reference< css::awt::XKeyListen
 void VCLXWindow::removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rxListener )
 {
     SolarMutexGuard aGuard;
+    if (!mpImpl)
+        return;
     mpImpl->getKeyListeners().removeInterface( rxListener );
 }
 
@@ -1076,6 +1083,8 @@ void VCLXWindow::addMouseListener( const css::uno::Reference< css::awt::XMouseLi
 void VCLXWindow::removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rxListener )
 {
     SolarMutexGuard aGuard;
+    if (!mpImpl)
+        return;
     mpImpl->getMouseListeners().removeInterface( rxListener );
 }
 
@@ -1088,6 +1097,8 @@ void VCLXWindow::addMouseMotionListener( const css::uno::Reference< css::awt::XM
 void VCLXWindow::removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rxListener )
 {
     SolarMutexGuard aGuard;
+    if (!mpImpl)
+        return;
     mpImpl->getMouseMotionListeners().removeInterface( rxListener );
 }
 
@@ -1100,6 +1111,8 @@ void VCLXWindow::addPaintListener( const css::uno::Reference< css::awt::XPaintLi
 void VCLXWindow::removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& rxListener )
 {
     SolarMutexGuard aGuard;
+    if (!mpImpl)
+        return;
     mpImpl->getPaintListeners().removeInterface( rxListener );
 }
 
@@ -2297,6 +2310,9 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ )
 void SAL_CALL VCLXWindow::disposing( const css::lang::EventObject& _rSource )
 {
     SolarMutexGuard aGuard;
+
+    if (!mpImpl)
+        return;
 
     // check if it comes from our AccessibleContext
     uno::Reference< uno::XInterface > aAC( mpImpl->mxAccessibleContext, uno::UNO_QUERY );

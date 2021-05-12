@@ -692,6 +692,13 @@ GtkSalFrame::~GtkSalFrame()
     while (m_nGrabLevel)
         removeGrabLevel();
 
+    {
+        SolarMutexGuard aGuard;
+
+        if(m_nWatcherId)
+            g_bus_unwatch_name(m_nWatcherId);
+    }
+
     GtkWidget *pEventWidget = getMouseEventWidget();
     for (auto handler_id : m_aMouseSignalIds)
         g_signal_handler_disconnect(G_OBJECT(pEventWidget), handler_id);
@@ -705,9 +712,6 @@ GtkSalFrame::~GtkSalFrame()
 #endif
     {
         SolarMutexGuard aGuard;
-
-        if(m_nWatcherId)
-            g_bus_unwatch_name(m_nWatcherId);
 
         if( m_pWindow )
         {
