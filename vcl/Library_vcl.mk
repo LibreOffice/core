@@ -217,6 +217,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/outdev \
     vcl/source/outdev/outdevstate \
     vcl/source/outdev/clipping \
+    vcl/source/outdev/fill \
     vcl/source/outdev/polygon \
     vcl/source/outdev/transparent \
     vcl/source/outdev/mask \
