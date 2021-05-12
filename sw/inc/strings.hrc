@@ -1226,8 +1226,8 @@
 #define STR_IMGBTN_RECENCY_DOWN                 NC_("STR_IMGBTN_RECENCY_DOWN", "Go forward")
 #define STR_IMGBTN_FIELD_UP                     NC_("STR_IMGBTN_FIELD_UP", "Previous field")
 #define STR_IMGBTN_FIELD_DOWN                   NC_("STR_IMGBTN_FIELD_DOWN", "Next field")
-#define STR_IMGBTN_FIELD_BYTYPE_UP              NC_("STR_IMGBTN_FIELD_BYTYPE_UP", "Previous field with current field type")
-#define STR_IMGBTN_FIELD_BYTYPE_DOWN            NC_("STR_IMGBTN_FIELD_BYTYPE_DOWN", "Next field with current field type")
+#define STR_IMGBTN_FIELD_BYTYPE_UP              NC_("STR_IMGBTN_FIELD_BYTYPE_UP", "Previous '%FIELDNAME' field")
+#define STR_IMGBTN_FIELD_BYTYPE_DOWN            NC_("STR_IMGBTN_FIELD_BYTYPE_DOWN", "Next '%FIELDNAME' field")
 
 #define STR_REDLINE_INSERT                      NC_("STR_REDLINE_INSERT", "Inserted")
 #define STR_REDLINE_DELETE                      NC_("STR_REDLINE_DELETE", "Deleted")

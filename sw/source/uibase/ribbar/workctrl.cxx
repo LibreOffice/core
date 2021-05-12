@@ -284,10 +284,23 @@ static const char* STR_IMGBTN_ARY[] =
 static OUString lcl_GetScrollToolTip(bool bNext)
 {
     sal_uInt16 nResId = SwView::GetMoveType();
-    if (!bNext)
-        nResId += NID_COUNT;
-    const char* id = STR_IMGBTN_ARY[nResId - NID_START];
-    return id ? SwResId(id): OUString();
+    OUString sToolTip = SwResId(STR_IMGBTN_ARY[(!bNext ? NID_COUNT : 0) + nResId - NID_START]);
+    if (nResId == NID_FIELD_BYTYPE)
+    {
+        OUString sFieldName;
+        SwWrtShell* pWrtSh = GetActiveWrtShell();
+        if (pWrtSh)
+        {
+            SwField* pCurField = pWrtSh->GetCurField(true);
+            if (pCurField)
+                sFieldName = pCurField->GetFieldName();
+        }
+        if (!sFieldName.isEmpty())
+            sToolTip = sToolTip.replaceFirst(u"%FIELDNAME", sFieldName);
+        else
+            sToolTip = SwResId(SW_STR_NONE);
+    }
+    return sToolTip;
 }
 
 namespace {
