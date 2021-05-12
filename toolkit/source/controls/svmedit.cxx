@@ -26,11 +26,10 @@ MultiLineEdit::MultiLineEdit(vcl::Window* pParent, WinBits nWinStyle)
 }
 
 // virtual
-css::uno::Reference<css::awt::XWindowPeer> MultiLineEdit::GetComponentInterface(bool bCreate)
+VCLXWindow* MultiLineEdit::GetComponentInterface(bool bCreate)
 {
-    css::uno::Reference<css::awt::XWindowPeer> xPeer(
-        VclMultiLineEdit::GetComponentInterface(false));
-    if (!xPeer.is() && bCreate)
+    VCLXWindow* xPeer = VclMultiLineEdit::GetComponentInterface(false);
+    if (!xPeer && bCreate)
     {
         rtl::Reference<VCLXMultiLineEdit> xVCLMEdit(new VCLXMultiLineEdit);
         xVCLMEdit->SetWindow(this);

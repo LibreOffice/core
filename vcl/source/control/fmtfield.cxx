@@ -910,7 +910,7 @@ namespace
             m_rSpinButton.SpinField::SetText(rText, rSel);
         }
 
-        virtual void SetEntryTextColor(const Color* pColor) override
+        virtual void SetEntryTextColor(const ::Color* pColor) override
         {
             if (pColor)
                 m_rSpinButton.SetControlForeground(*pColor);

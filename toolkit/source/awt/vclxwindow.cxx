@@ -912,7 +912,7 @@ void VCLXWindow::dispose(  )
     if ( auto pWindow = GetWindow() )
     {
         pWindow->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
-        pWindow->SetWindowPeer( nullptr, nullptr );
+        pWindow->SetWindowPeer( nullptr );
         pWindow->SetAccessible( nullptr );
 
         VclPtr<OutputDevice> pOutDev = GetOutputDevice();

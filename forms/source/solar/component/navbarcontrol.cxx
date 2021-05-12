@@ -216,7 +216,7 @@ namespace frm
 
         // some knittings
         pNavBar->setDispatcher( pPeer.get() );
-        pNavBar->SetComponentInterface( pPeer );
+        pNavBar->SetComponentInterface( pPeer.get() );
 
         // we want a faster repeating rate for the slots in this
         // toolbox

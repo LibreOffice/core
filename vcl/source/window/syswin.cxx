@@ -270,7 +270,7 @@ bool SystemWindow::Close()
     if ( xWindow->IsDisposed() )
         return false;
 
-    if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() )
+    if ( mpWindowImpl->mxVCLXWindow.is() && IsCreatedWithToolkit() )
         return false;
 
     // Is Window not closeable, ignore close

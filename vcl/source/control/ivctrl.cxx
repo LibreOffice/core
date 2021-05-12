@@ -18,6 +18,7 @@
  */
 
 
+#include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include "imivctl.hxx"
 #include <vcl/accessiblefactory.hxx>
@@ -421,7 +422,7 @@ css::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
         css::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
-            css::uno::Reference< css::awt::XWindowPeer > xHoldAlive(GetComponentInterface());
+            rtl::Reference<VCLXWindow> xHoldAlive(GetComponentInterface());
             xAccessible = _pImpl->GetAccessibleFactory().createAccessibleIconChoiceCtrl( *this, xAccParent );
         }
     }

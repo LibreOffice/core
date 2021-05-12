@@ -36,7 +36,7 @@ namespace dbaui
     using namespace ::com::sun::star;
 
     OTableWindowAccess::OTableWindowAccess(OTableWindow* _pTable)
-        :VCLXAccessibleComponent(_pTable->GetComponentInterface().is() ? _pTable->GetWindowPeer() : nullptr)
+        :VCLXAccessibleComponent(_pTable->GetComponentInterface() ? _pTable->GetWindowPeer() : nullptr)
         ,m_pTable(_pTable)
     {
     }

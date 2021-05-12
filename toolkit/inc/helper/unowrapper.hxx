@@ -51,8 +51,8 @@ public:
     virtual void        ReleaseAllGraphics( OutputDevice* pOutDev ) override;
 
     // Window
-    virtual css::uno::Reference< css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow ) override;
-    virtual void        SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer> xIFace ) override;
+    virtual rtl::Reference<VCLXWindow> GetWindowInterface( vcl::Window* pWindow ) override;
+    virtual void        SetWindowInterface( vcl::Window* pWindow, VCLXWindow* pIFace ) override;
     virtual VclPtr<vcl::Window> GetWindow(const css::uno::Reference<css::awt::XWindow>& rxWindow) override;
 
     // Menu

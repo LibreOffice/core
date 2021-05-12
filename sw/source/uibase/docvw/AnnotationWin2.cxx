@@ -1392,7 +1392,7 @@ css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAc
     rtl::Reference<SidebarWinAccessible> pAcc( new SidebarWinAccessible( *this,
                                                           mrView.GetWrtShell(),
                                                           mrSidebarItem ) );
-    SetWindowPeer( pAcc, pAcc.get() );
+    SetWindowPeer( pAcc.get() );
     return pAcc;
 }
 
