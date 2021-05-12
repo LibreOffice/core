@@ -1148,6 +1148,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         SwXNumberingRules::SetNumberingRuleByIndex( aNumRule,
                             *rProperties, nIndex);
         // set character format if needed
+        // this code appears to be dead - except when a style is assigned for BITMAP numbering?
         const SwCharFormats* pFormats = m_pDocShell->GetDoc()->GetCharFormats();
         const size_t nChCount = pFormats->size();
         for(sal_uInt16 i = 0; i < MAXLEVEL;i++)
@@ -1492,7 +1493,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     SetPropertiesToNumFormat(aFormat, m_sNewCharStyleNames[nIndex],
         &m_sNewBulletFontNames[nIndex],
         &sHeadingStyleName, &sParagraphStyleName,
-        m_pDoc, rProperties);
+        m_pDoc, m_pDocShell, rProperties);
 
 
     if (m_pDoc && !sParagraphStyleName.isEmpty())
@@ -1539,8 +1540,11 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         OUString *const pHeadingStyleName,
         OUString *const pParagraphStyleName,
         SwDoc *const pDoc,
+        SwDocShell *const pDocShell,
         const uno::Sequence<beans::PropertyValue>& rProperties)
 {
+    assert(pDoc == nullptr || pDocShell == nullptr); // can't be both ordinary and chapter numbering
+
     bool bWrongArg = false;
     std::unique_ptr<SvxBrushItem> pSetBrush;
     std::unique_ptr<Size> pSetSize;
@@ -1588,14 +1592,15 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             rProp.Value >>= uTmp;
             OUString sCharFormatName;
             SwStyleNameMapper::FillUIName( uTmp, sCharFormatName, SwGetPoolIdFromName::ChrFmt );
+            SwDoc *const pLocalDoc = pDocShell ? pDocShell->GetDoc() : pDoc;
             if (sCharFormatName == UNO_NAME_CHARACTER_FORMAT_NONE)
             {
                 rCharStyleName = aInvalidStyle;
                 aFormat.SetCharFormat(nullptr);
             }
-            else if(pDoc)
+            else if (pLocalDoc)
             {
-                const SwCharFormats* pFormats = pDoc->GetCharFormats();
+                const SwCharFormats* pFormats = pLocalDoc->GetCharFormats();
                 const size_t nChCount = pFormats->size();
 
                 SwCharFormat* pCharFormat = nullptr;
@@ -1614,7 +1619,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     {
 
                         SfxStyleSheetBase* pBase;
-                        SfxStyleSheetBasePool* pPool = pDoc->GetDocShell()->GetStyleSheetPool();
+                        SfxStyleSheetBasePool* pPool = pLocalDoc->GetDocShell()->GetStyleSheetPool();
                         pBase = pPool->Find(sCharFormatName, SfxStyleFamily::Char);
                         if(!pBase)
                             pBase = &pPool->Make(sCharFormatName, SfxStyleFamily::Char);
@@ -1626,7 +1631,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                 // If the character format has been found its name should not be in the
                 // char style names array
                 rCharStyleName.clear();
-                }
+            }
             else
                 rCharStyleName = sCharFormatName;
         }
@@ -1779,8 +1784,8 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         {
             OUString sBulletFontName;
             rProp.Value >>= sBulletFontName;
-            SwDocShell* pLclDocShell = pDoc->GetDocShell();
-            if( !sBulletFontName.isEmpty() && pLclDocShell )
+            SwDocShell *const pLclDocShell = pDocShell ? pDocShell : pDoc ? pDoc->GetDocShell() : nullptr;
+            if (!sBulletFontName.isEmpty() && pLclDocShell)
             {
                 const SvxFontListItem* pFontListItem =
                         static_cast<const SvxFontListItem* >(pLclDocShell
@@ -1878,7 +1883,8 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             }
             pSetVOrient->PutValue(rProp.Value, MID_VERTORIENT_ORIENT);
         }
-        else if (rProp.Name == UNO_NAME_HEADING_STYLE_NAME)
+        else if (rProp.Name == UNO_NAME_HEADING_STYLE_NAME
+                && pDocShell) // only on chapter numbering
         {
             if (pHeadingStyleName)
             {
