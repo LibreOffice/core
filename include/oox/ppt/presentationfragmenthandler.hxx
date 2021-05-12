@@ -51,6 +51,7 @@ private:
                         const oox::ppt::SlidePersistPtr& rPersist );
     void importSlide(sal_uInt32 nSlide, bool bFirstSlide, bool bImportNotes);
     void saveThemeToGrabBag(const oox::drawingml::ThemePtr& pThemePtr, sal_Int32 nThemeIdx);
+    void importCustomSlideShow(std::vector<CustomShow>& rCustomShowList);
 
     std::vector< OUString > maSlideMasterVector;
     std::vector< OUString > maSlidesVector;
