@@ -2570,7 +2570,7 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     if(const auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        sal_uInt8 nInvFlags = 0;
+        SwSectionFrameInvFlags eInvFlags = SwSectionFrameInvFlags::NONE;
         if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
         {
             auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
@@ -2583,7 +2583,7 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SwAttrSetChg aNewSet(rNewSetChg);
             do
             {
-                UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
+                UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
                 pNItem = aNIter.NextItem();
                 pOItem = aOIter.NextItem();
             } while (pNItem);
@@ -2591,13 +2591,13 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
         }
         else
-            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
+            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
 
-        if(nInvFlags != 0)
+        if (eInvFlags != SwSectionFrameInvFlags::NONE)
         {
-            if(nInvFlags & 0x01)
+            if(eInvFlags & SwSectionFrameInvFlags::InvalidateSize)
                 InvalidateSize();
-            if(nInvFlags & 0x10)
+            if(eInvFlags & SwSectionFrameInvFlags::SetCompletePaint)
                 SetCompletePaint();
         }
     }
@@ -2613,7 +2613,7 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 }
 
 void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
-                            sal_uInt8 &rInvFlags,
+                            SwSectionFrameInvFlags &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
     bool bClear = true;
@@ -2648,9 +2648,9 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
                           ( bChgEndn != IsEndnAtEnd() ) ||
                           ( bChgMyEndn != IsEndnoteAtMyEnd() );
                 ChgColumns( aCol, rNewCol, bChgFootnote );
-                rInvFlags |= 0x10;
+                rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x10);
             }
-            rInvFlags |= 0x01;
+            rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x01);
             bClear = false;
         }
             break;
@@ -2662,7 +2662,7 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
                 if (pOld && pNew)
                 {
                     ChgColumns( *static_cast<const SwFormatCol*>(pOld), *static_cast<const SwFormatCol*>(pNew) );
-                    rInvFlags |= 0x11;
+                    rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x11);
                 }
             }
             break;
@@ -2676,7 +2676,7 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
                 {
                     const SwFormatCol& rNewCol = GetFormat()->GetCol();
                     ChgColumns( rNewCol, rNewCol, true );
-                    rInvFlags |= 0x01;
+                    rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x01);
                 }
             }
             break;
@@ -2691,12 +2691,12 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
                 {
                     const SwFormatCol& rNewCol = GetFormat()->GetCol();
                     ChgColumns( rNewCol, rNewCol, true );
-                    rInvFlags |= 0x01;
+                    rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x01);
                 }
             }
             break;
         case RES_COLUMNBALANCE:
-            rInvFlags |= 0x01;
+            rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x01);
             break;
 
         case RES_FRAMEDIR :
