@@ -56,6 +56,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestEllipseXformIntersectClipRect();
     void TestDrawPolyLine16WithClip();
     void TestFillRegion();
+    void TestPolyLineWidth();
     void TestRoundRect();
     void TestCreatePen();
     void TestPdfInEmf();
@@ -81,6 +82,7 @@ public:
     CPPUNIT_TEST(TestEllipseXformIntersectClipRect);
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
+    CPPUNIT_TEST(TestPolyLineWidth);
     CPPUNIT_TEST(TestRoundRect);
     CPPUNIT_TEST(TestCreatePen);
     CPPUNIT_TEST(TestPdfInEmf);
@@ -434,6 +436,28 @@ void Test::TestFillRegion()
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]/polygon",
                        "1323,0 2646,0 2646,1322 3969,1322 3969,2644 2646,2644 2646,3966 1323,3966 1323,2644 0,2644 0,1322 1323,1322");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]", "color", "#000000");
+}
+
+void Test::TestPolyLineWidth()
+{
+    // EMF import with records: CREATEPEN, ROUNDRECT.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestPolyLineWidth.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor/polypolygon",
+                "path", "m530 529 1236-176-707 352z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor",
+                "color", "#ffff00");
+
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke/polygon",
+                       "530,529 530,529 1766,353 1059,705");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke/line",
+                "color", "#000000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke/line",
+                "width", "71");
 }
 
 void Test::TestRoundRect()
