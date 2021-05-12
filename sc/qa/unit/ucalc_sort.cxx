@@ -7,11 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ucalc.hxx"
+#include <test/bootstrapfixture.hxx>
 #include "helper/sorthelper.hxx"
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 
+#include <scdll.hxx>
 #include <postit.hxx>
 #include <sortparam.hxx>
 #include <dbdata.hxx>
@@ -33,12 +34,99 @@
 #include <svx/svdpage.hxx>
 #include <rtl/math.hxx>
 
-void Test::testSort()
+class TestSort : public test::BootstrapFixture
+{
+public:
+    TestSort();
+
+    virtual void setUp() override;
+    virtual void tearDown() override;
+
+    void testSort();
+    void testSortHorizontal();
+    void testSortHorizontalWholeColumn();
+    void testSortSingleRow();
+    void testSortWithFormulaRefs();
+    void testSortWithStrings();
+    void testSortInFormulaGroup();
+    void testSortWithCellFormats();
+    void testSortRefUpdate();
+    void testSortRefUpdate2();
+    void testSortRefUpdate3();
+    void testSortRefUpdate4();
+    void testSortRefUpdate4_Impl();
+    void testSortRefUpdate5();
+    void testSortRefUpdate6();
+    void testSortBroadcaster();
+    void testSortBroadcastBroadcaster();
+    void testSortOutOfPlaceResult();
+    void testSortPartialFormulaGroup();
+    void testSortImages();
+
+    CPPUNIT_TEST_SUITE(TestSort);
+
+    CPPUNIT_TEST(testSort);
+    CPPUNIT_TEST(testSortHorizontal);
+    CPPUNIT_TEST(testSortHorizontalWholeColumn);
+    CPPUNIT_TEST(testSortSingleRow);
+    CPPUNIT_TEST(testSortWithFormulaRefs);
+    CPPUNIT_TEST(testSortWithStrings);
+    CPPUNIT_TEST(testSortInFormulaGroup);
+    CPPUNIT_TEST(testSortWithCellFormats);
+    CPPUNIT_TEST(testSortRefUpdate);
+    CPPUNIT_TEST(testSortRefUpdate2);
+    CPPUNIT_TEST(testSortRefUpdate3);
+    CPPUNIT_TEST(testSortRefUpdate4);
+    CPPUNIT_TEST(testSortRefUpdate5);
+    CPPUNIT_TEST(testSortRefUpdate6);
+    CPPUNIT_TEST(testSortBroadcaster);
+    CPPUNIT_TEST(testSortBroadcastBroadcaster);
+    CPPUNIT_TEST(testSortOutOfPlaceResult);
+    CPPUNIT_TEST(testSortPartialFormulaGroup);
+    CPPUNIT_TEST(testSortImages);
+
+    CPPUNIT_TEST_SUITE_END();
+
+private:
+    ScDocShellRef m_xDocShell;
+    ScDocument* m_pDoc;
+};
+
+
+TestSort::TestSort()
+{
+}
+
+void TestSort::setUp()
+{
+    BootstrapFixture::setUp();
+
+    ScDLL::Init();
+
+    m_xDocShell = new ScDocShell(
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    m_xDocShell->SetIsInUcalc();
+    m_xDocShell->DoInitUnitTest();
+
+    m_pDoc = &m_xDocShell->GetDocument();
+}
+
+void TestSort::tearDown()
+{
+    m_xDocShell->DoClose();
+    m_xDocShell.clear();
+
+    test::BootstrapFixture::tearDown();
+}
+
+void TestSort::testSort()
 {
     m_pDoc->InsertTab(0, "test1");
 
     // We need a drawing layer in order to create caption objects.
-    m_pDoc->InitDrawLayer(&getDocShell());
+    m_pDoc->InitDrawLayer(m_xDocShell.get());
 
     ScAddress aPos(0,0,0);
     {
@@ -125,7 +213,7 @@ void Test::testSort()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortHorizontal()
+void TestSort::testSortHorizontal()
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -134,7 +222,7 @@ void Test::testSortHorizontal()
     aNewOptions.SetFormulaSepArg(";");
     aNewOptions.SetFormulaSepArrayCol(";");
     aNewOptions.SetFormulaSepArrayRow("|");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
     m_pDoc->InsertTab(0, "Sort");
@@ -163,7 +251,7 @@ void Test::testSortHorizontal()
         0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 3, 3)));
 
     // Sort A1:D4 horizontally, ascending by row 1.
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     ScSortParam aSortData;
     aSortData.nCol1 = 0;
@@ -197,12 +285,12 @@ void Test::testSortHorizontal()
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,3,0), "CONCATENATE(C4;\"-\";D4)", "Wrong formula!");
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortHorizontalWholeColumn()
+void TestSort::testSortHorizontalWholeColumn()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
     m_pDoc->InsertTab(0, "Sort");
@@ -233,7 +321,7 @@ void Test::testSortHorizontalWholeColumn()
         0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, nCol1, nRow1, nCol2, nRow2, false, false)));
 
     // Sort C:G horizontally ascending by row 1.
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     ScSortParam aSortData;
     aSortData.nCol1 = nCol1;
@@ -279,7 +367,7 @@ void Test::testSortHorizontalWholeColumn()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortSingleRow()
+void TestSort::testSortSingleRow()
 {
     // This test case is from fdo#80462.
 
@@ -294,7 +382,7 @@ void Test::testSortSingleRow()
         0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 0)));
 
     // Sort A1:B1 horizontally, ascending by row 1.
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     ScSortParam aSortData;
     aSortData.nCol1 = 0;
@@ -372,7 +460,7 @@ void Test::testSortSingleRow()
 
 // regression test of fdo#53814, sorting doesn't work as expected
 // if cells in the sort are referenced by formulas
-void Test::testSortWithFormulaRefs()
+void TestSort::testSortWithFormulaRefs()
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -432,7 +520,7 @@ void Test::testSortWithFormulaRefs()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortWithStrings()
+void TestSort::testSortWithStrings()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -473,7 +561,7 @@ void Test::testSortWithStrings()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortInFormulaGroup()
+void TestSort::testSortInFormulaGroup()
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -534,7 +622,7 @@ void Test::testSortInFormulaGroup()
     m_pDoc->DeleteTab( 0 );
 }
 
-void Test::testSortWithCellFormats()
+void TestSort::testSortWithCellFormats()
 {
     struct
     {
@@ -663,7 +751,7 @@ void Test::testSortWithCellFormats()
         0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 3)));
 
     // Sort A1:A4 ascending with cell formats.
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     ScSortParam aSortData;
     aSortData.nCol1 = 0;
@@ -699,7 +787,7 @@ void Test::testSortWithCellFormats()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortRefUpdate()
+void TestSort::testSortRefUpdate()
 {
     SortTypeSetter aSortTypeSet(true);
 
@@ -728,7 +816,7 @@ void Test::testSortRefUpdate()
         CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0)));
     }
 
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     // Define A1:A10 as sheet-local anonymous database range, else sort wouldn't run.
     m_pDoc->SetAnonymousDBData(
@@ -848,7 +936,7 @@ void Test::testSortRefUpdate()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortRefUpdate2()
+void TestSort::testSortRefUpdate2()
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -879,7 +967,7 @@ void Test::testSortRefUpdate2()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,3,0)));
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,4,0)));
 
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     // Define A1:B5 as sheet-local anonymous database range, else sort wouldn't run.
     m_pDoc->SetAnonymousDBData(
@@ -936,7 +1024,7 @@ void Test::testSortRefUpdate2()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortRefUpdate3()
+void TestSort::testSortRefUpdate3()
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -964,7 +1052,7 @@ void Test::testSortRefUpdate3()
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,4,0)));
     CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     // Sort A1:A6.
     m_pDoc->SetAnonymousDBData(
@@ -1023,7 +1111,7 @@ void Test::testSortRefUpdate3()
 
 // Derived from fdo#79441 https://bugs.freedesktop.org/attachment.cgi?id=100144
 // testRefInterne.ods
-void Test::testSortRefUpdate4()
+void TestSort::testSortRefUpdate4()
 {
     // This test has to work in both update reference modes.
     {
@@ -1036,7 +1124,7 @@ void Test::testSortRefUpdate4()
     }
 }
 
-void Test::testSortRefUpdate4_Impl()
+void TestSort::testSortRefUpdate4_Impl()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Sort");
@@ -1095,7 +1183,7 @@ void Test::testSortRefUpdate4_Impl()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aSortRange.aStart);
     }
 
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     // Sort A1:D6 by column D (Average, with a row header).
     {
@@ -1229,7 +1317,7 @@ void Test::testSortRefUpdate4_Impl()
  * functions it's not that easy to come up with something reproducible staying
  * stable over sorts... ;-)  Check for time and don't run test a few seconds
  * before midnight, ermm... */
-void Test::testSortRefUpdate5()
+void TestSort::testSortRefUpdate5()
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -1268,7 +1356,7 @@ void Test::testSortRefUpdate5()
         }
     }
 
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     // Sort A1:B5.
     m_pDoc->SetAnonymousDBData( 0, std::unique_ptr<ScDBData>(new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
@@ -1332,7 +1420,7 @@ void Test::testSortRefUpdate5()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortRefUpdate6()
+void TestSort::testSortRefUpdate6()
 {
     SortRefNoUpdateSetter aUpdateSet;
 
@@ -1363,7 +1451,7 @@ void Test::testSortRefUpdate6()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     // Sort A1:C4.
     m_pDoc->SetAnonymousDBData(
@@ -1435,7 +1523,7 @@ void Test::testSortRefUpdate6()
     }
 
     // Change the value of C1 and make sure the formula broadcasting chain still works.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     rFunc.SetValueCell(ScAddress(2,0,0), 11.0, false);
     {
         // Expected output table content.  0 = empty cell
@@ -1470,7 +1558,7 @@ void Test::testSortRefUpdate6()
 
 // fdo#86762 check that broadcasters are sorted correctly and empty cell is
 // broadcasted.
-void Test::testSortBroadcaster()
+void TestSort::testSortBroadcaster()
 {
     SortRefNoUpdateSetter aUpdateSet;
 
@@ -1502,7 +1590,7 @@ void Test::testSortBroadcaster()
         m_pDoc->SetAnonymousDBData(
                 0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 1)));
 
-        ScDBDocFunc aFunc(getDocShell());
+        ScDBDocFunc aFunc(*m_xDocShell.get());
 
         // Sort A1:B2 by column A descending.
         ScSortParam aSortData;
@@ -1599,7 +1687,7 @@ void Test::testSortBroadcaster()
         m_pDoc->SetAnonymousDBData(
                 0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 4, 1, 5)));
 
-        ScDBDocFunc aFunc(getDocShell());
+        ScDBDocFunc aFunc(*m_xDocShell.get());
 
         // Sort A5:B6 by row 5 descending.
         ScSortParam aSortData;
@@ -1670,7 +1758,7 @@ void Test::testSortBroadcaster()
 // tdf#99417 check that formulas are tracked that *only* indirectly depend on
 // sorted data and no other broadcasting than BroadcastBroadcasters is
 // involved (for which this test can not be included in testSortBroadcaster()).
-void Test::testSortBroadcastBroadcaster()
+void TestSort::testSortBroadcastBroadcaster()
 {
     SortRefNoUpdateSetter aUpdateSet;
 
@@ -1702,7 +1790,7 @@ void Test::testSortBroadcastBroadcaster()
         m_pDoc->SetAnonymousDBData(
                 0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 1)));
 
-        ScDBDocFunc aFunc(getDocShell());
+        ScDBDocFunc aFunc(*m_xDocShell.get());
 
         // Sort A1:A2 by column A descending.
         ScSortParam aSortData;
@@ -1739,7 +1827,7 @@ void Test::testSortBroadcastBroadcaster()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortOutOfPlaceResult()
+void TestSort::testSortOutOfPlaceResult()
 {
     m_pDoc->InsertTab(0, "Sort");
     m_pDoc->InsertTab(1, "Result");
@@ -1766,7 +1854,7 @@ void Test::testSortOutOfPlaceResult()
     CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
     CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     // Sort A1:A6, and set the result to C2:C7
     m_pDoc->SetAnonymousDBData(
@@ -1808,7 +1896,7 @@ void Test::testSortOutOfPlaceResult()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortPartialFormulaGroup()
+void TestSort::testSortPartialFormulaGroup()
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -1845,7 +1933,7 @@ void Test::testSortPartialFormulaGroup()
     CPPUNIT_ASSERT_MESSAGE("This formula cell should be the first in a group.", pFC->IsSharedTop());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect formula group length.", static_cast<SCROW>(5), pFC->GetSharedLength());
 
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell.get());
 
     // Sort only B2:B4.  This caused crash at one point (c.f. fdo#81617).
 
@@ -1885,12 +1973,12 @@ void Test::testSortPartialFormulaGroup()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSortImages()
+void TestSort::testSortImages()
 {
     m_pDoc->InsertTab(0, "testSortImages");
 
     // We need a drawing layer in order to create caption objects.
-    m_pDoc->InitDrawLayer(&getDocShell());
+    m_pDoc->InitDrawLayer(m_xDocShell.get());
     ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
 
@@ -1944,5 +2032,9 @@ void Test::testSortImages()
 
     m_pDoc->DeleteTab(0);
 }
+
+CPPUNIT_TEST_SUITE_REGISTRATION(TestSort);
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
