@@ -149,7 +149,7 @@ public:
         SwXNumberingRules::SetPropertiesToNumFormat(
             aNumberFormat,
             charStyleName,
-            nullptr, nullptr, nullptr, nullptr,
+            nullptr, nullptr, nullptr, nullptr, nullptr,
             props);
         SwNumRulesWithName *const pRules(GetOrCreateRules());
         pRules->SetNumFormat(nIndex, aNumberFormat, charStyleName);
