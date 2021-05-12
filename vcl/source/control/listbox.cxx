@@ -314,7 +314,7 @@ void ListBox::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetBackground();
 }
 
-void ListBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
+void ListBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
 {
     mpImplLB->GetMainWindow()->ApplySettings(*pDev);
 
@@ -347,7 +347,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     }
 
     // Content
-    if ( nFlags & DrawFlags::Mono )
+    if ( nFlags & SystemTextColorFlags::Mono )
     {
         pDev->SetTextColor( COL_BLACK );
     }

@@ -948,7 +948,7 @@ void DbCellControl::AlignControl(sal_Int16 nAlignment)
 void DbCellControl::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect)
 {
     m_pPainter->SetSizePixel(rRect.GetSize());
-    m_pPainter->Draw(&rDev, rRect.TopLeft(), DrawFlags::NONE);
+    m_pPainter->Draw(&rDev, rRect.TopLeft(), SystemTextColorFlags::NONE);
 }
 
 void DbCellControl::PaintFieldToCell( OutputDevice& _rDev, const tools::Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )

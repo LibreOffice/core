@@ -1147,7 +1147,7 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     }
 }
 
-void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
+void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
 {
     GetMainWindow()->ApplySettings(*pDev);
 
@@ -1202,7 +1202,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
         else
             nTextStyle |= DrawTextFlags::Left;
 
-        if ( nFlags & DrawFlags::Mono )
+        if ( nFlags & SystemTextColorFlags::Mono )
         {
             pDev->SetTextColor( COL_BLACK );
         }

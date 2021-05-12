@@ -1257,7 +1257,7 @@ void VclMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
-void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
+void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
 {
     ImplInitSettings(true);
 
@@ -1266,7 +1266,6 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nF
 
     vcl::Font aFont = pImpVclMEdit->GetTextWindow()->GetDrawPixelFont(pDev);
     aFont.SetTransparent( true );
-    OutDevType eOutDevType = pDev->GetOutDevType();
 
     pDev->Push();
     pDev->SetMapMode();
@@ -1293,21 +1292,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nF
         }
     }
 
-    // contents
-    if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
-        pDev->SetTextColor( COL_BLACK );
-    else
-    {
-        if ( !IsEnabled() )
-        {
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            pDev->SetTextColor( rStyleSettings.GetDisableColor() );
-        }
-        else
-        {
-            pDev->SetTextColor( GetTextColor() );
-        }
-    }
+    pDev->SetSystemTextColor(nFlags, IsEnabled());
 
     OUString aText = GetText();
     Size aTextSz( pDev->GetTextWidth( aText ), pDev->GetTextHeight() );

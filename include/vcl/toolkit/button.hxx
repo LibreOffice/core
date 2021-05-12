@@ -49,7 +49,7 @@ private:
                                     Button (const Button &) = delete;
                                     Button & operator= (const Button &) = delete;
 public:
-    SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( WinBits nWinStyle, DrawFlags nDrawFlags );
+    SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( WinBits nWinStyle, SystemTextColorFlags nSystemTextColorFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
                                               sal_Int32 nImageSep,
                                               DrawTextFlags nTextStyle, tools::Rectangle *pSymbolRect=nullptr, bool bAddImageSep = false );
@@ -64,7 +64,7 @@ protected:
     explicit            Button( WindowType nType );
 
     // for drawing RadioButton or CheckButton that has Text and/or Image
-    SAL_DLLPRIVATE void ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, DrawFlags nDrawFlags,
+    SAL_DLLPRIVATE void ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, SystemTextColorFlags nSystemTextColorFlags,
                                            const Point& rPos, const Size& rSize,
                                            const Size& rImageSize, tools::Rectangle& rStateRect,
                                            tools::Rectangle& rMouseRect);
@@ -135,7 +135,7 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    KeyUp( const KeyEvent& rKEvt ) override;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
@@ -186,12 +186,12 @@ protected:
     SAL_DLLPRIVATE void            ImplInitPushButtonData();
     SAL_DLLPRIVATE static WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void            ImplInitSettings( bool bBackground );
-    SAL_DLLPRIVATE void            ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFlags,
+    SAL_DLLPRIVATE void            ImplDrawPushButtonContent(OutputDevice* pDev, SystemTextColorFlags nSystemTextColorFlags,
                                                              const tools::Rectangle& rRect, bool bMenuBtnSep,
                                                              DrawButtonFlags nButtonFlags);
     SAL_DLLPRIVATE void            ImplDrawPushButton(vcl::RenderContext& rRenderContext);
     using Button::ImplGetTextStyle;
-    SAL_DLLPRIVATE DrawTextFlags   ImplGetTextStyle( DrawFlags nDrawFlags ) const;
+    SAL_DLLPRIVATE DrawTextFlags   ImplGetTextStyle( SystemTextColorFlags nSystemTextColorFlags ) const;
     SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SymbolType::DONTKNOW) && (meSymbol != SymbolType::IMAGE) ); }
 
                                    PushButton( const PushButton & ) = delete;
@@ -294,7 +294,7 @@ private:
     SAL_DLLPRIVATE void         ImplInitCheckBoxData();
     SAL_DLLPRIVATE static WinBits ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitSettings( bool bBackground );
-    SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
+    SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemTextColorFlags,
                                     const Point& rPos, const Size& rSize,
                                     const Size& rImageSize, tools::Rectangle& rStateRect,
                                     tools::Rectangle& rMouseRect );
@@ -327,7 +327,7 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    KeyUp( const KeyEvent& rKEvt ) override;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
@@ -387,7 +387,7 @@ private:
     SAL_DLLPRIVATE WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void     ImplInitSettings( bool bBackground );
     SAL_DLLPRIVATE void     ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
+    SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemTextColorFlags,
                               const Point& rPos, const Size& rSize,
                               const Size& rImageSize, tools::Rectangle& rStateRect,
                               tools::Rectangle& rMouseRect );
@@ -431,7 +431,7 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    KeyUp( const KeyEvent& rKEvt ) override;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;

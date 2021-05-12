@@ -1196,7 +1196,7 @@ namespace svt
                                aBoxSize);
         pCheckBoxPaint->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
 
-        pCheckBoxPaint->Draw(GetDataWindow().GetOutDev(), aRect.TopLeft(), DrawFlags::NONE);
+        pCheckBoxPaint->Draw(GetDataWindow().GetOutDev(), aRect.TopLeft(), SystemTextColorFlags::NONE);
     }
 
     void EditBrowseBox::AsynchGetFocus()

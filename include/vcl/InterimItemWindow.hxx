@@ -31,7 +31,8 @@ public:
 
     bool ControlHasFocus() const;
 
-    virtual void Draw(OutputDevice* pDevice, const Point& rPos, DrawFlags nFlags) override;
+    virtual void Draw(OutputDevice* pDevice, const Point& rPos,
+                      SystemTextColorFlags nFlags) override;
 
 protected:
     // bAllowCycleFocusOut of true allows focus to be moved out of the Control

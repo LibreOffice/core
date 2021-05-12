@@ -630,7 +630,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     }
 }
 
-void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
+void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
 {
     // we need pixel coordinates
     Size aRealSize = GetSizePixel();

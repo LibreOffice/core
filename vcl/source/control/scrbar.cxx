@@ -370,13 +370,13 @@ void ScrollBar::ImplCalc( bool bUpdate )
     ImplUpdateRects( bUpdate );
 }
 
-void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
+void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
 {
     Point aPos  = pDev->LogicToPixel( rPos );
 
     pDev->Push();
     pDev->SetMapMode();
-    if ( !(nFlags & DrawFlags::Mono) )
+    if ( !(nFlags & SystemTextColorFlags::Mono) )
     {
         // DecoView uses the FaceColor...
         AllSettings aSettings = pDev->GetSettings();
@@ -412,7 +412,7 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     mbCalcSize = true;
 }
 
-bool ScrollBar::ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags)
+bool ScrollBar::ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nSystemTextColorFlags)
 {
     ScrollbarValue scrValue;
 
@@ -480,7 +480,7 @@ bool ScrollBar::ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nD
     }
     else
     {
-        if ((nDrawFlags & SCRBAR_DRAW_PAGE1) || (nDrawFlags & SCRBAR_DRAW_PAGE2))
+        if ((nSystemTextColorFlags & SCRBAR_DRAW_PAGE1) || (nSystemTextColorFlags & SCRBAR_DRAW_PAGE2))
         {
             ControlPart part1 = bHorz ? ControlPart::TrackHorzLeft : ControlPart::TrackVertUpper;
             ControlPart part2 = bHorz ? ControlPart::TrackHorzRight : ControlPart::TrackVertLower;
@@ -505,13 +505,13 @@ bool ScrollBar::ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nD
                 }
             }
 
-            if (nDrawFlags & SCRBAR_DRAW_PAGE1)
+            if (nSystemTextColorFlags & SCRBAR_DRAW_PAGE1)
                 bNativeOK = rRenderContext.DrawNativeControl(ControlType::Scrollbar, part1, aCtrlRegion1, nState1, scrValue, OUString());
 
-            if (nDrawFlags & SCRBAR_DRAW_PAGE2)
+            if (nSystemTextColorFlags & SCRBAR_DRAW_PAGE2)
                 bNativeOK = rRenderContext.DrawNativeControl(ControlType::Scrollbar, part2, aCtrlRegion2, nState2, scrValue, OUString());
         }
-        if ((nDrawFlags & SCRBAR_DRAW_BTN1) || (nDrawFlags & SCRBAR_DRAW_BTN2))
+        if ((nSystemTextColorFlags & SCRBAR_DRAW_BTN1) || (nSystemTextColorFlags & SCRBAR_DRAW_BTN2))
         {
             ControlPart part1 = bHorz ? ControlPart::ButtonLeft : ControlPart::ButtonUp;
             ControlPart part2 = bHorz ? ControlPart::ButtonRight : ControlPart::ButtonDown;
@@ -545,13 +545,13 @@ bool ScrollBar::ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nD
                 }
             }
 
-            if (nDrawFlags & SCRBAR_DRAW_BTN1)
+            if (nSystemTextColorFlags & SCRBAR_DRAW_BTN1)
                 bNativeOK = rRenderContext.DrawNativeControl(ControlType::Scrollbar, part1, aCtrlRegion1, nState1, scrValue, OUString());
 
-            if (nDrawFlags & SCRBAR_DRAW_BTN2)
+            if (nSystemTextColorFlags & SCRBAR_DRAW_BTN2)
                 bNativeOK = rRenderContext.DrawNativeControl(ControlType::Scrollbar, part2, aCtrlRegion2, nState2, scrValue, OUString());
         }
-        if ((nDrawFlags & SCRBAR_DRAW_THUMB) && !maThumbRect.IsEmpty())
+        if ((nSystemTextColorFlags & SCRBAR_DRAW_THUMB) && !maThumbRect.IsEmpty())
         {
             ControlState nState = IsEnabled() ? ControlState::ENABLED : ControlState::NONE;
             tools::Rectangle aCtrlRegion(maThumbRect);

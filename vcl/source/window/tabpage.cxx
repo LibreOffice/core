@@ -162,7 +162,7 @@ void TabPage::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle&
             aControlValue, OUString() );
 }
 
-void TabPage::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags )
+void TabPage::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags )
 {
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = GetSizePixel();

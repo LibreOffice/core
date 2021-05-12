@@ -48,6 +48,7 @@ public:
     void testDefaultFillColor();
     void testTransparentFillColor();
     void testFillColor();
+    void testSystemTextColor();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -69,6 +70,7 @@ public:
     CPPUNIT_TEST(testDefaultFillColor);
     CPPUNIT_TEST(testTransparentFillColor);
     CPPUNIT_TEST(testFillColor);
+    CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -527,6 +529,24 @@ void VclOutdevTest::testFillColor()
     auto pFillAction = static_cast<MetaFillColorAction*>(pAction);
     const Color& rColor = pFillAction->GetColor();
     CPPUNIT_ASSERT_EQUAL(COL_RED, rColor);
+}
+
+void VclOutdevTest::testSystemTextColor()
+{
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+        pVDev->SetSystemTextColor(SystemTextColorFlags::NONE, true);
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, pVDev->GetTextColor());
+        pVDev->SetSystemTextColor(SystemTextColorFlags::Mono, false);
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, pVDev->GetTextColor());
+    }
+
+    {
+        ScopedVclPtrInstance<Printer> pPrinter;
+        pPrinter->SetSystemTextColor(SystemTextColorFlags::NONE, true);
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPrinter->GetTextColor());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
