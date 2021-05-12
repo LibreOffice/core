@@ -17538,9 +17538,7 @@ private:
         if (GTK_IS_IMAGE(pWidget))
         {
             GtkImage* pImage = GTK_IMAGE(pWidget);
-            const gchar* icon_name;
-            gtk_image_get_icon_name(pImage, &icon_name, nullptr);
-            if (icon_name)
+            if (const gchar* icon_name = image_get_icon_name(pImage))
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
                 if (!IsAllowedBuiltInIcon(aIconName))
