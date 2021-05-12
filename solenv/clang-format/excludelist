@@ -15040,6 +15040,7 @@ vcl/source/opengl/x11/X11DeviceInfo.cxx
 vcl/source/opengl/x11/context.cxx
 vcl/source/outdev/background.cxx
 vcl/source/outdev/bitmap.cxx
+vcl/source/outdev/bitmapex.cxx
 vcl/source/outdev/clipping.cxx
 vcl/source/outdev/curvedshapes.cxx
 vcl/source/outdev/fill.cxx
