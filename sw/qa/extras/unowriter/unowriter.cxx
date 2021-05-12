@@ -737,6 +737,39 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testImageCommentAtChar)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testChapterNumberingCharStyle)
+{
+    loadURL("private:factory/swriter", nullptr);
+
+    uno::Reference<lang::XMultiServiceFactory> xDoc(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(
+        xDoc->createInstance("com.sun.star.style.CharacterStyle"), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xStyleN(xStyle, uno::UNO_QUERY);
+    xStyle->setPropertyValue("CharColor", uno::makeAny(sal_Int32(0x00FF0000)));
+    uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameContainer> xStyles(
+        xSFS->getStyleFamilies()->getByName("CharacterStyles"), uno::UNO_QUERY);
+    xStyles->insertByName("red", uno::makeAny(xStyle));
+
+    uno::Reference<text::XChapterNumberingSupplier> xCNS(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexReplace> xOutline(xCNS->getChapterNumberingRules());
+    {
+        comphelper::SequenceAsHashMap hashMap(xOutline->getByIndex(0));
+        hashMap["CharStyleName"] <<= OUString("red");
+        uno::Sequence<beans::PropertyValue> props;
+        hashMap >> props;
+        xOutline->replaceByIndex(0, uno::makeAny(props));
+    }
+    // now rename the style
+    xStyleN->setName("reddishred");
+    {
+        comphelper::SequenceAsHashMap hashMap(xOutline->getByIndex(0));
+
+        // tdf#137810 this failed, was old value "red"
+        CPPUNIT_ASSERT_EQUAL(OUString("reddishred"), hashMap["CharStyleName"].get<OUString>());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testViewCursorPageStyle)
 {
     // Load a document with 2 pages, but a single paragraph.

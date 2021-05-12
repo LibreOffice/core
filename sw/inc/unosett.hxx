@@ -147,16 +147,16 @@ private:
     OUString                    m_sNewCharStyleNames[MAXLEVEL];
     OUString                    m_sNewBulletFontNames[MAXLEVEL];
     OUString                    m_sCreatedNumRuleName; //connects to a numbering in SwDoc
-    SwDoc*                      m_pDoc;
+    SwDoc*                      m_pDoc; // Only if *not* used as chapter numbering.
     SwDocShell*                 m_pDocShell; // Only if used as chapter numbering.
     SwNumRule*                  m_pNumRule;
     const SfxItemPropertySet*   m_pPropertySet;
     bool const                  m_bOwnNumRuleCreated;
 protected:
+    SwXNumberingRules(SwDocShell& rDocSh);  // chapter numbering
     virtual ~SwXNumberingRules() override;
 
 public:
-    SwXNumberingRules(SwDocShell& rDocSh);  // chapter numbering
     SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc = nullptr); // NumRule for paragraphs, numbering styles
     SwXNumberingRules(SwDoc& rDoc); //create a new instance
 
@@ -218,6 +218,7 @@ public:
             OUString *const pHeadingStyleName,
             OUString *const pParagraphStyleName,
             SwDoc *const pDoc,
+            SwDocShell *const pDocShell,
             css::uno::Sequence<css::beans::PropertyValue> const& rProperties);
 
 };
