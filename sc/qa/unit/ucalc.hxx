@@ -20,19 +20,6 @@ struct TestImpl;
 class ScUndoPaste;
 class ScUndoCut;
 
-/**
- * Temporarily set formula grammar.
- */
-class FormulaGrammarSwitch
-{
-    ScDocument* mpDoc;
-    formula::FormulaGrammar::Grammar meOldGrammar;
-
-public:
-    FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar);
-    ~FormulaGrammarSwitch();
-};
-
 class Test : public test::BootstrapFixture
 {
 public:
@@ -46,9 +33,6 @@ public:
     static ScDocShell* findLoadedDocShellByName(std::u16string_view rName);
     static bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,
                                  const RangeNameDef* pEnd);
-    static void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);
-    static void clearRange(ScDocument* pDoc, const ScRange& rRange);
-    static void clearSheet(ScDocument* pDoc, SCTAB nTab);
     static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc,
                                 bool bCreateUndo);
     static void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
@@ -69,9 +53,6 @@ public:
     static void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown);
 
     void checkPrecisionAsShown(OUString& rCode, double fValue, double fExpectedRoundVal);
-
-    static ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
-                                   const std::vector<std::vector<const char*>>& rData);
 
     Test();
     virtual ~Test() override;
@@ -494,27 +475,6 @@ public:
     void testFindAreaPosColRight();
     void testShiftCells();
 
-    void testSort();
-    void testSortHorizontal();
-    void testSortHorizontalWholeColumn();
-    void testSortSingleRow();
-    void testSortWithFormulaRefs();
-    void testSortWithStrings();
-    void testSortInFormulaGroup();
-    void testSortWithCellFormats();
-    void testSortRefUpdate();
-    void testSortRefUpdate2();
-    void testSortRefUpdate3();
-    void testSortRefUpdate4();
-    void testSortRefUpdate4_Impl();
-    void testSortRefUpdate5();
-    void testSortRefUpdate6();
-    void testSortBroadcaster();
-    void testSortBroadcastBroadcaster();
-    void testSortOutOfPlaceResult();
-    void testSortPartialFormulaGroup();
-    void testSortImages();
-
     void testNoteBasic();
     void testNoteDeleteRow();
     void testNoteDeleteCol();
@@ -882,25 +842,6 @@ public:
     CPPUNIT_TEST(testCopyPasteReferencesExternalDoc);
     CPPUNIT_TEST(testFindAreaPosVertical);
     CPPUNIT_TEST(testFindAreaPosColRight);
-    CPPUNIT_TEST(testSort);
-    CPPUNIT_TEST(testSortHorizontal);
-    CPPUNIT_TEST(testSortHorizontalWholeColumn);
-    CPPUNIT_TEST(testSortSingleRow);
-    CPPUNIT_TEST(testSortWithFormulaRefs);
-    CPPUNIT_TEST(testSortWithStrings);
-    CPPUNIT_TEST(testSortInFormulaGroup);
-    CPPUNIT_TEST(testSortWithCellFormats);
-    CPPUNIT_TEST(testSortRefUpdate);
-    CPPUNIT_TEST(testSortRefUpdate2);
-    CPPUNIT_TEST(testSortRefUpdate3);
-    CPPUNIT_TEST(testSortRefUpdate4);
-    CPPUNIT_TEST(testSortRefUpdate5);
-    CPPUNIT_TEST(testSortRefUpdate6);
-    CPPUNIT_TEST(testSortBroadcaster);
-    CPPUNIT_TEST(testSortBroadcastBroadcaster);
-    CPPUNIT_TEST(testSortOutOfPlaceResult);
-    CPPUNIT_TEST(testSortPartialFormulaGroup);
-    CPPUNIT_TEST(testSortImages);
     CPPUNIT_TEST(testShiftCells);
     CPPUNIT_TEST(testNoteBasic);
     CPPUNIT_TEST(testNoteDeleteRow);
