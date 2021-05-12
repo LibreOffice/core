@@ -281,7 +281,7 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
     const HFONT hOrigFont = ::SelectFont(hDC, hLayoutFont);
 
-    // There isnt' a way for Win32 API ExtTextOutW to render vertical-writing glyphs correctly,
+    // There isn't a way for Win32 API ExtTextOutW to render vertical-writing glyphs correctly,
     // so let's use DWrite text renderer in this case.
     DrawTextLayout(rLayout, hDC, rLayout.GetFont().GetFontSelectPattern().mbVertical);
 

@@ -15607,7 +15607,7 @@ private:
             {
                 m_aQuickSelectionEngine.Reset();
                 sal_uInt16 nKeyMod = aKeyCode.GetModifier();
-                // tdf#131076 don't let bare return toggle menu popup active, but do allow deactive
+                // tdf#131076 don't let bare return toggle menu popup active, but do allow deactivate
                 if (nCode == KEY_RETURN && !nKeyMod && !m_bPopupActive)
                     bDone = combobox_activate();
                 else if (nCode == KEY_UP && nKeyMod == KEY_MOD2 && m_bPopupActive)
