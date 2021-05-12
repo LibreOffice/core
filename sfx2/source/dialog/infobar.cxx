@@ -103,7 +103,7 @@ void SfxInfoBarWindow::SetCloseButtonImage()
     Size aSize = Image(StockImage::Yes, CLOSEDOC).GetSizePixel();
     aSize = Size(aSize.Width() * 1.5, aSize.Height() * 1.5);
 
-    VclPtr<VirtualDevice> xDevice(m_xCloseBtn->create_virtual_device());
+    ScopedVclPtr<VirtualDevice> xDevice(m_xCloseBtn->create_virtual_device());
     xDevice->SetOutputSizePixel(aSize);
 
     Point aBtnPos(0, 0);
