@@ -198,7 +198,7 @@ void lcl_SplineCalculation::Calculate()
             ( m_fYpN - ( m_aPoints[ n ].second - m_aPoints[ n - 1 ].second ) / xDiff );
     }
 
-    m_aSecDerivY[ n ] = ( un - qn * u[ n - 1 ] ) * ( qn * m_aSecDerivY[ n - 1 ] + 1.0 );
+    m_aSecDerivY[ n ] = ( un - qn * u[ n - 1 ] ) / ( qn * m_aSecDerivY[ n - 1 ] + 1.0 );
 
     // note: the algorithm in [1] iterates from n-1 to 0, but as size_type
     // may be (usually is) an unsigned type, we can not write k >= 0, as this
