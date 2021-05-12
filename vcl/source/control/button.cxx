@@ -188,7 +188,7 @@ void Button::ImplSetSeparatorX( tools::Long nX )
     mpButtonData->mnSeparatorX = nX;
 }
 
-DrawTextFlags Button::ImplGetTextStyle( WinBits nWinStyle, DrawFlags nDrawFlags )
+DrawTextFlags Button::ImplGetTextStyle( WinBits nWinStyle, SystemTextColorFlags nSystemTextColorFlags )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     DrawTextFlags nTextStyle = FixedText::ImplGetTextStyle(nWinStyle & ~WB_DEFBUTTON);
@@ -196,7 +196,7 @@ DrawTextFlags Button::ImplGetTextStyle( WinBits nWinStyle, DrawFlags nDrawFlags 
     if (!IsEnabled())
         nTextStyle |= DrawTextFlags::Disable;
 
-    if ((nDrawFlags & DrawFlags::Mono) ||
+    if ((nSystemTextColorFlags & SystemTextColorFlags::Mono) ||
         (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
     {
         nTextStyle |= DrawTextFlags::Mono;
@@ -747,14 +747,14 @@ bool PushButton::ImplHitTestPushButton( vcl::Window const * pDev,
     return aTestRect.IsInside( rPos );
 }
 
-DrawTextFlags PushButton::ImplGetTextStyle( DrawFlags nDrawFlags ) const
+DrawTextFlags PushButton::ImplGetTextStyle( SystemTextColorFlags nSystemTextColorFlags ) const
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     DrawTextFlags nTextStyle = DrawTextFlags::Mnemonic | DrawTextFlags::MultiLine | DrawTextFlags::EndEllipsis;
 
     if ( ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono ) ||
-         ( nDrawFlags & DrawFlags::Mono ) )
+         ( nSystemTextColorFlags & SystemTextColorFlags::Mono ) )
         nTextStyle |= DrawTextFlags::Mono;
 
     if ( GetStyle() & WB_WORDBREAK )
@@ -782,14 +782,14 @@ DrawTextFlags PushButton::ImplGetTextStyle( DrawFlags nDrawFlags ) const
     return nTextStyle;
 }
 
-void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFlags,
+void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, SystemTextColorFlags nSystemTextColorFlags,
                                            const tools::Rectangle &rRect, bool bMenuBtnSep,
                                            DrawButtonFlags nButtonFlags)
 {
     const StyleSettings &rStyleSettings = GetSettings().GetStyleSettings();
     tools::Rectangle aInRect = rRect;
     Color aColor;
-    DrawTextFlags nTextStyle = ImplGetTextStyle(nDrawFlags);
+    DrawTextFlags nTextStyle = ImplGetTextStyle(nSystemTextColorFlags);
     DrawSymbolFlags nStyle;
 
     if (aInRect.Right() < aInRect.Left() || aInRect.Bottom() < aInRect.Top())
@@ -798,7 +798,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFl
     pDev->Push(PushFlags::CLIPREGION);
     pDev->IntersectClipRegion(aInRect);
 
-    if (nDrawFlags & DrawFlags::Mono)
+    if (nSystemTextColorFlags & SystemTextColorFlags::Mono)
         aColor = COL_BLACK;
 
     else if (IsControlForeground())
@@ -1087,7 +1087,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         }
 
         // draw content using the same aInRect as non-native VCL would do
-        ImplDrawPushButtonContent(&rRenderContext, DrawFlags::NONE,
+        ImplDrawPushButtonContent(&rRenderContext, SystemTextColorFlags::NONE,
                                   aInRect, bDrawMenuSep, nButtonStyle);
 
         if (HasFocus())
@@ -1114,7 +1114,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     }
 
     // draw content
-    ImplDrawPushButtonContent(&rRenderContext, DrawFlags::NONE, aInRect, bDrawMenuSep, nButtonStyle);
+    ImplDrawPushButtonContent(&rRenderContext, SystemTextColorFlags::NONE, aInRect, bDrawMenuSep, nButtonStyle);
 
     if (HasFocus())
     {
@@ -1355,7 +1355,7 @@ void PushButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 }
 
 void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
-                       DrawFlags nFlags )
+                       SystemTextColorFlags nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = GetSizePixel();
@@ -1365,7 +1365,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
-    if ( nFlags & DrawFlags::Mono )
+    if ( nFlags & SystemTextColorFlags::Mono )
     {
         pDev->SetTextColor( COL_BLACK );
     }
@@ -1387,7 +1387,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
 
     DecorationView aDecoView( pDev );
     DrawButtonFlags nButtonStyle = DrawButtonFlags::NONE;
-    if ( nFlags & DrawFlags::Mono )
+    if ( nFlags & SystemTextColorFlags::Mono )
         nButtonStyle |= DrawButtonFlags::Mono;
     if ( IsChecked() )
         nButtonStyle |= DrawButtonFlags::Checked;
@@ -1641,7 +1641,7 @@ Size PushButton::CalcMinimumSize() const
     if (!PushButton::GetText().isEmpty())
     {
         Size textSize = GetTextRect( tools::Rectangle( Point(), Size( 0x7fffffff, 0x7fffffff ) ),
-                                     PushButton::GetText(), ImplGetTextStyle( DrawFlags::NONE ) ).GetSize();
+                                     PushButton::GetText(), ImplGetTextStyle( SystemTextColorFlags::NONE ) ).GetSize();
 
         tools::Long nTextHeight = textSize.Height() * 1.15;
 
@@ -2029,12 +2029,12 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
 }
 
 // for drawing RadioButton or CheckButton that has Text and/or Image
-void Button::ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, DrawFlags nDrawFlags,
+void Button::ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, SystemTextColorFlags nSystemTextColorFlags,
                                 const Point& rPos, const Size& rSize,
                                 const Size& rImageSize, tools::Rectangle& rStateRect,
                                 tools::Rectangle& rMouseRect)
 {
-    DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nDrawFlags );
+    DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nSystemTextColorFlags );
 
     const tools::Long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
     Size aSize( rSize );
@@ -2085,7 +2085,7 @@ void Button::ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, DrawFlags
         rMouseRect.SetBottom( rStateRect.Bottom() );
 }
 
-void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
+void RadioButton::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemTextColorFlags,
                             const Point& rPos, const Size& rSize,
                             const Size& rImageSize, tools::Rectangle& rStateRect,
                             tools::Rectangle& rMouseRect )
@@ -2101,7 +2101,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     {
         if (!aText.isEmpty() || HasImage())
         {
-            Button::ImplDrawRadioCheck(pDev, nWinStyle, nDrawFlags,
+            Button::ImplDrawRadioCheck(pDev, nWinStyle, nSystemTextColorFlags,
                                        rPos, rSize, rImageSize,
                                        rStateRect, rMouseRect);
         }
@@ -2180,7 +2180,7 @@ void RadioButton::ImplDrawRadioButton(vcl::RenderContext& rRenderContext)
     aImageSize.setHeight( CalcZoom(aImageSize.Height()) );
 
     // Draw control text
-    ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel(),
+    ImplDraw(&rRenderContext, SystemTextColorFlags::NONE, Point(), GetOutputSizePixel(),
              aImageSize, maStateRect, maMouseRect);
 
     if (!maImage && HasFocus())
@@ -2444,7 +2444,7 @@ void RadioButton::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
 }
 
 void RadioButton::Draw( OutputDevice* pDev, const Point& rPos,
-                        DrawFlags nFlags )
+                        SystemTextColorFlags nFlags )
 {
     if ( !maImage )
     {
@@ -2477,7 +2477,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos,
         pDev->Push();
         pDev->SetMapMode();
         pDev->SetFont( aFont );
-        if ( nFlags & DrawFlags::Mono )
+        if ( nFlags & SystemTextColorFlags::Mono )
             pDev->SetTextColor( COL_BLACK );
         else
             pDev->SetTextColor( GetTextColor() );
@@ -3085,7 +3085,7 @@ void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
         rRenderContext.DrawImage(maStateRect.TopLeft(), aImage);
 }
 
-void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
+void CheckBox::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemTextColorFlags,
                          const Point& rPos, const Size& rSize,
                          const Size& rImageSize, tools::Rectangle& rStateRect,
                          tools::Rectangle& rMouseRect )
@@ -3098,7 +3098,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
 
     if (!aText.isEmpty() || HasImage())
     {
-        Button::ImplDrawRadioCheck(pDev, nWinStyle, nDrawFlags,
+        Button::ImplDrawRadioCheck(pDev, nWinStyle, nSystemTextColorFlags,
                                    rPos, rSize, rImageSize,
                                    rStateRect, rMouseRect);
     }
@@ -3134,7 +3134,7 @@ void CheckBox::ImplDrawCheckBox(vcl::RenderContext& rRenderContext)
 
     HideFocus();
 
-    ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel(),
+    ImplDraw(&rRenderContext, SystemTextColorFlags::NONE, Point(), GetOutputSizePixel(),
              aImageSize, maStateRect, maMouseRect);
 
     ImplDrawCheckBoxState(rRenderContext);
@@ -3270,7 +3270,7 @@ void CheckBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
 }
 
 void CheckBox::Draw( OutputDevice* pDev, const Point& rPos,
-                     DrawFlags nFlags )
+                     SystemTextColorFlags nFlags )
 {
     MapMode     aResMapMode( MapUnit::Map100thMM );
     Point       aPos  = pDev->LogicToPixel( rPos );
@@ -3304,7 +3304,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos,
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
-    if ( nFlags & DrawFlags::Mono )
+    if ( nFlags & SystemTextColorFlags::Mono )
         pDev->SetTextColor( COL_BLACK );
     else
         pDev->SetTextColor( GetTextColor() );

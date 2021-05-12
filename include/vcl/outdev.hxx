@@ -33,6 +33,7 @@
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/rendercontext/DrawGridFlags.hxx>
 #include <vcl/rendercontext/DrawImageFlags.hxx>
 #include <vcl/rendercontext/DrawModeFlags.hxx>
@@ -1002,6 +1003,7 @@ public:
                                                     GDIMetaFile&     rMtf );
 
     void                        SetTextColor( const Color& rColor );
+    virtual void                SetSystemTextColor(SystemTextColorFlags nFlags, bool bEnabled);
     const Color&                GetTextColor() const { return maTextColor; }
 
     void                        SetTextFillColor();

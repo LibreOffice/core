@@ -875,7 +875,7 @@ void HeaderBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 }
 
 void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos,
-                      DrawFlags nFlags )
+                      SystemTextColorFlags nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = GetSizePixel();
@@ -885,7 +885,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos,
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
-    if ( nFlags & DrawFlags::Mono )
+    if ( nFlags & SystemTextColorFlags::Mono )
         pDev->SetTextColor( COL_BLACK );
     else
         pDev->SetTextColor( GetTextColor() );

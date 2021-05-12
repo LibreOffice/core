@@ -953,12 +953,12 @@ IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer, void )
     }
 }
 
-void SpinField::Draw(OutputDevice* pDev, const Point& rPos, DrawFlags nFlags)
+void SpinField::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
     Edit::Draw(pDev, rPos, nFlags);
 
     WinBits nFieldStyle = GetStyle();
-    if ( (nFlags & DrawFlags::NoControls ) || !( nFieldStyle & (WB_SPIN|WB_DROPDOWN) ) )
+    if ( (nFlags & SystemTextColorFlags::NoControls ) || !( nFieldStyle & (WB_SPIN|WB_DROPDOWN) ) )
         return;
 
     Point aPos = pDev->LogicToPixel( rPos );
@@ -976,7 +976,7 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, DrawFlags nFlags)
     aDown.Move(aPos.X(), aPos.Y());
 
     Color aButtonTextColor;
-    if (nFlags & DrawFlags::Mono)
+    if (nFlags & SystemTextColorFlags::Mono)
         aButtonTextColor = COL_BLACK;
     else
         aButtonTextColor = GetSettings().GetStyleSettings().GetButtonTextColor();

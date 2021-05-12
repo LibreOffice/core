@@ -1738,7 +1738,7 @@ void Edit::Resize()
     }
 }
 
-void Edit::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
+void Edit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
 {
     ApplySettings(*pDev);
 
@@ -1771,7 +1771,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     }
 
     // Content
-    if ( nFlags & DrawFlags::Mono )
+    if ( nFlags & SystemTextColorFlags::Mono )
         pDev->SetTextColor( COL_BLACK );
     else
     {
