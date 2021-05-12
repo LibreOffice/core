@@ -207,6 +207,7 @@ void SwHeaderFooterWin::dispose()
     m_pLine.disposeAndClear();
     m_xPushButton.reset();
     m_xMenuButton.reset();
+    m_xVirDev.disposeAndClear();
     SwFrameMenuButtonBase::dispose();
 }
 

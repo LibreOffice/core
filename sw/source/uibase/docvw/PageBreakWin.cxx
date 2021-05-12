@@ -134,7 +134,7 @@ void SwPageBreakWin::dispose()
 {
     m_bDestroyed = true;
     m_aFadeTimer.Stop();
-
+    m_xVirDev.disposeAndClear();
     m_pLine.disposeAndClear();
 
     m_xMenuButton.reset();
