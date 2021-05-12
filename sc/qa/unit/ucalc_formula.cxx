@@ -32,6 +32,7 @@
 #include <docoptio.hxx>
 #include <formulaopt.hxx>
 #include <externalrefmgr.hxx>
+#include <scmod.hxx>
 #include <svl/itemset.hxx>
 
 #include <formula/vectortoken.hxx>
@@ -1016,11 +1017,12 @@ void Test::testFormulaCompilerJumpReordering()
     };
 
     // Set separators first.
-    ScFormulaOptions aOptions;
-    aOptions.SetFormulaSepArg(";");
-    aOptions.SetFormulaSepArrayCol(";");
-    aOptions.SetFormulaSepArrayRow("|");
-    getDocShell().SetFormulaOptions(aOptions);
+    ScFormulaOptions aOldOptions, aNewOptions;
+    aOldOptions = SC_MOD()->GetFormulaOptions();
+    aNewOptions.SetFormulaSepArg(";");
+    aNewOptions.SetFormulaSepArrayCol(";");
+    aNewOptions.SetFormulaSepArrayRow("|");
+    getDocShell().SetFormulaOptions(aNewOptions);
 
     {
         // Compile formula string first.
@@ -1079,6 +1081,9 @@ void Test::testFormulaCompilerJumpReordering()
                 CPPUNIT_ASSERT_EQUAL(static_cast<int>(aCheckRPN2[i].meType), static_cast<int>(p->GetType()));
         }
     }
+
+    // restore formula options back to default
+    getDocShell().SetFormulaOptions(aOldOptions);
 }
 
 void Test::testFormulaCompilerImplicitIntersection2Param()
@@ -5008,6 +5013,11 @@ void Test::testFuncCOUNTIF()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
+    ScFormulaOptions aOldOptions, aNewOptions;
+    aOldOptions = SC_MOD()->GetFormulaOptions();
+    aNewOptions.SetFormulaSepArg(";");
+    getDocShell().SetFormulaOptions(aNewOptions);
+
     // COUNTIF (test case adopted from OOo i#36381)
 
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
@@ -5121,12 +5131,21 @@ void Test::testFuncCOUNTIF()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("One cell with 0.0",  1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Two cells with 1.0", 2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
+    // restore formula options back to default
+    getDocShell().SetFormulaOptions(aOldOptions);
+
     m_pDoc->DeleteTab(0);
 }
 
 void Test::testFuncIF()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    ScFormulaOptions aOldOptions, aNewOptions;
+    aOldOptions = SC_MOD()->GetFormulaOptions();
+    aNewOptions.SetFormulaSepArg(";");
+    aNewOptions.SetFormulaSepArrayCol(";");
+    getDocShell().SetFormulaOptions(aNewOptions);
 
     m_pDoc->InsertTab(0, "Formula");
 
@@ -5169,6 +5188,9 @@ void Test::testFuncIF()
     // Results must be 34 and 56.
     CPPUNIT_ASSERT_EQUAL(34.0, m_pDoc->GetValue(ScAddress(0,10,0)));
     CPPUNIT_ASSERT_EQUAL(56.0, m_pDoc->GetValue(ScAddress(1,10,0)));
+
+    // restore formula options back to default
+    getDocShell().SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
@@ -6122,6 +6144,11 @@ void Test::testFuncINDIRECT()
 //
 void Test::testFuncINDIRECT2()
 {
+    ScFormulaOptions aOldOptions, aNewOptions;
+    aOldOptions = SC_MOD()->GetFormulaOptions();
+    aNewOptions.SetFormulaSepArg(";");
+    getDocShell().SetFormulaOptions(aNewOptions);
+
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, "foo"));
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
@@ -6180,6 +6207,9 @@ void Test::testFuncINDIRECT2()
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,9,2));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
     CPPUNIT_ASSERT_MESSAGE("This formula cell should be an error.", pFC->GetErrCode() != FormulaError::NONE);
+
+    // restore formula options back to default
+    getDocShell().SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
@@ -7197,6 +7227,11 @@ void Test::testFuncTableRef()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
+    ScFormulaOptions aOldOptions, aNewOptions;
+    aOldOptions = SC_MOD()->GetFormulaOptions();
+    aNewOptions.SetFormulaSepArg(";");
+    getDocShell().SetFormulaOptions(aNewOptions);
+
     m_pDoc->InsertTab(0, "Sheet1");
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
@@ -7535,6 +7570,9 @@ void Test::testFuncTableRef()
         OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + "448"), OUString(aPrefix + m_pDoc->GetString(aPos)));
     }
+
+    // restore formula options back to default
+    getDocShell().SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
@@ -8409,6 +8447,13 @@ void Test::testFormulaErrorPropagation()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
+    ScFormulaOptions aOldOptions, aNewOptions;
+    aOldOptions = SC_MOD()->GetFormulaOptions();
+    aNewOptions.SetFormulaSepArg(";");
+    aNewOptions.SetFormulaSepArrayCol(";");
+    aNewOptions.SetFormulaSepArrayRow("|");
+    getDocShell().SetFormulaOptions(aNewOptions);
+
     m_pDoc->InsertTab(0, "Sheet1");
 
     ScMarkData aMark(m_pDoc->GetSheetLimits());
@@ -8476,6 +8521,9 @@ void Test::testFormulaErrorPropagation()
     m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR(({\"x\";2}+{3;4})-{5;6})");
     CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(ScRefFlags::VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
     CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(ScRefFlags::VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
+
+    // restore formula options back to default
+    getDocShell().SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
