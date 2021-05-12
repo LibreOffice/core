@@ -61,6 +61,7 @@ UnfloatTableButton::~UnfloatTableButton() { disposeOnce(); }
 void UnfloatTableButton::dispose()
 {
     m_xPushButton.reset();
+    m_xVirDev.disposeAndClear();
     SwFrameMenuButtonBase::dispose();
 }
 
