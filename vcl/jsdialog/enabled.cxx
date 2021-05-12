@@ -58,6 +58,49 @@ bool isBuilderEnabled(const OUString& rUIFile, bool bMobile)
     return false;
 }
 
+bool isBuilderEnabledForSidebar(const OUString& rUIFile)
+{
+    if (rUIFile == "sfx/ui/panel.ui" || rUIFile == "svx/ui/sidebartextpanel.ui"
+        || rUIFile == "svx/ui/sidebarstylespanel.ui" || rUIFile == "svx/ui/sidebarparagraph.ui"
+        || rUIFile == "svx/ui/sidebarlists.ui" || rUIFile == "svx/ui/sidebararea.ui"
+        || rUIFile == "svx/ui/sidebarfontwork.ui" || rUIFile == "svx/ui/sidebarshadow.ui"
+        || rUIFile == "svx/ui/sidebareffect.ui" || rUIFile == "svx/ui/sidebargraphic.ui"
+        || rUIFile == "svx/ui/sidebarline.ui" || rUIFile == "svx/ui/sidebarpossize.ui"
+        || rUIFile == "svx/ui/defaultshapespanel.ui" || rUIFile == "svx/ui/mediaplayback.ui"
+        || rUIFile == "svx/ui/sidebargallery.ui" || rUIFile == "sfx/ui/templatepanel.ui"
+        || rUIFile == "svx/ui/sidebarempty.ui" || rUIFile == "modules/schart/ui/sidebarelements.ui"
+        || rUIFile == "modules/schart/ui/sidebartype.ui"
+        || rUIFile == "modules/schart/ui/sidebarseries.ui"
+        || rUIFile == "modules/schart/ui/sidebaraxis.ui"
+        || rUIFile == "modules/schart/ui/sidebarerrorbar.ui"
+        || rUIFile == "modules/simpress/ui/customanimationspanel.ui"
+        || rUIFile == "modules/simpress/ui/layoutpanel.ui"
+        || rUIFile == "modules/simpress/ui/masterpagepanel.ui"
+        || rUIFile == "modules/simpress/ui/slidetransitionspanel.ui"
+        || rUIFile == "modules/simpress/ui/tabledesignpanel.ui"
+        || rUIFile == "modules/simpress/ui/navigatorpanel.ui"
+        || rUIFile == "modules/simpress/ui/sidebarslidebackground.ui"
+        || rUIFile == "modules/scalc/ui/sidebaralignment.ui"
+        || rUIFile == "modules/scalc/ui/sidebarcellappearance.ui"
+        || rUIFile == "modules/scalc/ui/sidebarnumberformat.ui"
+        || rUIFile == "modules/scalc/ui/navigatorpanel.ui"
+        || rUIFile == "modules/scalc/ui/functionpanel.ui"
+        || rUIFile == "modules/swriter/ui/pagestylespanel.ui"
+        || rUIFile == "modules/swriter/ui/pageformatpanel.ui"
+        || rUIFile == "modules/swriter/ui/pageheaderpanel.ui"
+        || rUIFile == "modules/swriter/ui/pagefooterpanel.ui"
+        || rUIFile == "modules/swriter/ui/sidebarwrap.ui"
+        || rUIFile == "modules/swriter/ui/navigatorpanel.ui"
+        || rUIFile == "modules/swriter/ui/managechangessidebar.ui"
+        || rUIFile == "svx/ui/inspectortextpanel.ui"
+        || rUIFile == "modules/swriter/ui/sidebarstylepresets.ui"
+        || rUIFile == "modules/swriter/ui/sidebartheme.ui"
+        || rUIFile == "modules/swriter/ui/sidebartableedit.ui")
+        return true;
+
+    return false;
+}
+
 bool isInterimBuilderEnabledForNotebookbar(const OUString& rUIFile)
 {
     if (rUIFile == "svx/ui/stylespreview.ui" || rUIFile == "modules/scalc/ui/numberbox.ui")
