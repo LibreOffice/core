@@ -40,7 +40,6 @@
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
