@@ -178,6 +178,25 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testRealNumbers)
     CPPUNIT_ASSERT(!aPages.empty());
 }
 
+CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testCommentEnd)
+{
+    // Load the test document:
+    // - it has two xrefs
+    // - second xref has an updated page content object with an indirect length
+    // - last startxref refers to the first xref
+    // - first xref has a /Prev to the second xref
+    // - first xref is terminated by a \r, which is not followed by a newline
+    // this means that if reading doesn't stop at the end of the first xref, then we'll try to look
+    // up the offset of the length object, which we don't yet have
+    OUString aSourceURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "comment-end.pdf";
+    SvFileStream aFile(aSourceURL, StreamMode::READ);
+    vcl::filter::PDFDocument aDocument;
+
+    // Without the accompanying fix in place, this test would have failed, because Tokenize() didn't
+    // stop at the end of the first xref.
+    CPPUNIT_ASSERT(aDocument.Read(aFile));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
