@@ -480,6 +480,50 @@ public:
     void operator+=(OString const &) && = delete;
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+    template<typename T> typename libreoffice_internal::CharPtrDetector<T, OString &>::Type
+    operator +=(T const & value) & { return operator +=(std::string_view(value)); }
+    template<typename T> typename libreoffice_internal::CharPtrDetector<T, OString &>::Type
+    operator +=(T const &) && = delete;
+
+    template<typename T>
+    typename libreoffice_internal::NonConstCharArrayDetector<T, OString &>::Type
+    operator +=(T & value) & { return operator +=(std::string_view(value)); }
+    template<typename T>
+    typename libreoffice_internal::NonConstCharArrayDetector<T, OString &>::Type operator +=(T &) &&
+        = delete;
+
+    template<typename T> typename libreoffice_internal::ConstCharArrayDetector<T, OString &>::Type
+    operator +=(T & literal) & {
+        assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        return operator +=(
+            std::string_view(
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::length));
+    }
+    template<typename T> typename libreoffice_internal::ConstCharArrayDetector<T, OString &>::Type
+    operator +=(T &) && = delete;
+
+    template<std::size_t N> OString & operator +=(OStringLiteral<N> const & literal) &
+    { return operator +=(std::string_view(literal.getStr(), literal.getLength())); }
+    template<std::size_t N> void operator +=(OStringLiteral<N> const &) && = delete;
+
+    OString & operator +=(std::string_view sv) & {
+        if (sv.empty()) {
+            return *this;
+        }
+        if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max() - pData->length)) {
+            throw std::bad_alloc();
+        }
+        auto const l = pData->length + sv.size();
+        rtl_string_ensureCapacity(&pData, l);
+        *addDataHelper(pData->buffer + pData->length, sv.data(), sv.size()) = '\0';
+        pData->length = l;
+        return *this;
+    }
+    void operator +=(std::string_view) && = delete;
+#endif
+
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
@@ -506,15 +550,7 @@ public:
     */
     template< typename T >
     OString& operator+=( OStringNumber< T >&& n ) & {
-        sal_Int32 l = n.length;
-        if( l == 0 )
-            return *this;
-        l += pData->length;
-        rtl_string_ensureCapacity( &pData, l );
-        char* end = addDataHelper( pData->buffer + pData->length, n.buf, n.length );
-        *end = '\0';
-        pData->length = l;
-        return *this;
+        return operator +=(std::string_view(n.buf, n.length));
     }
     template<typename T> void operator +=(
         OStringNumber<T> &&) && = delete;
