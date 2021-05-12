@@ -194,14 +194,9 @@ void OutputDevice::Pop()
     mpMetaFile = pOldMetaFile;
 }
 
-sal_uInt32 OutputDevice::GetGCStackDepth() const
-{
-    return maOutDevStateStack.size();
-}
-
 void OutputDevice::ClearStack()
 {
-    sal_uInt32 nCount = GetGCStackDepth();
+    sal_uInt32 nCount = maOutDevStateStack.size();
     while( nCount-- )
         Pop();
 }
