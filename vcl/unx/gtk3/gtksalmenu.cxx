@@ -884,11 +884,7 @@ tools::Rectangle GtkSalMenu::GetMenuBarButtonRectPixel(sal_uInt16 nId, SalFrame*
 
     GtkSalFrame* pFrame = static_cast<GtkSalFrame*>(pReferenceFrame);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    int x, y;
-#else
-    double x, y;
-#endif
+    gtk_coord x, y;
     if (!gtk_widget_translate_coordinates(pButton, GTK_WIDGET(pFrame->getMouseEventWidget()), 0, 0, &x, &y))
         return tools::Rectangle();
 

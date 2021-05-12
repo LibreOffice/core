@@ -2844,7 +2844,10 @@ namespace
         GtkWidget* pRealEventWidget = static_cast<GtkWidget*>(user_data);
         if (pRealEventWidget)
         {
-            gtk_widget_translate_coordinates(pRealEventWidget, pTargetWidget, rEventX, rEventY, &rEventX, &rEventY);
+            gtk_coord fX(0.0), fY(0.0);
+            gtk_widget_translate_coordinates(pRealEventWidget, pTargetWidget, rEventX, rEventY, &fX, &fY);
+            rEventX = fX;
+            rEventY = fY;
         }
     }
 }

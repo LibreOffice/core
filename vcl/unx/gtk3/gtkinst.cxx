@@ -3138,18 +3138,12 @@ public:
     {
         //for toplevel windows this is sadly futile under wayland, so we can't tell where a dialog is in order to allow
         //the document underneath to auto-scroll to place content in a visible location
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        bool ret = gtk_widget_translate_coordinates(m_pWidget,
-                                                    dynamic_cast<const GtkInstanceWidget&>(rRelative).getWidget(),
-                                                    0, 0, &x, &y);
-#else
-        double fX(0.0), fY(0.0);
+        gtk_coord fX(0.0), fY(0.0);
         bool ret = gtk_widget_translate_coordinates(m_pWidget,
                                                     dynamic_cast<const GtkInstanceWidget&>(rRelative).getWidget(),
                                                     0, 0, &fX, &fY);
         x = fX;
         y = fY;
-#endif
         width = gtk_widget_get_allocated_width(m_pWidget);
         height = gtk_widget_get_allocated_height(m_pWidget);
         return ret;
@@ -4419,7 +4413,7 @@ namespace
         // try and omit drawing CSD under wayland
         GtkWidget* pChild = widget_get_first_child(pTopLevel);
 
-        int x, y;
+        gtk_coord x, y;
         gtk_widget_translate_coordinates(pChild, pTopLevel, 0, 0, &x, &y);
 
         int innerborder = gtk_container_get_border_width(GTK_CONTAINER(pChild));
@@ -4441,13 +4435,8 @@ namespace
     {
         GtkWidget* pTopLevel = widget_get_root(pItem);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        int x, y;
+        gtk_coord x, y;
         gtk_widget_translate_coordinates(pItem, pTopLevel, 0, 0, &x, &y);
-#else
-        double x, y;
-        gtk_widget_translate_coordinates(pItem, pTopLevel, 0, 0, &x, &y);
-#endif
 
         Point aOffset = get_csd_offset(pTopLevel);
 
@@ -5586,7 +5575,7 @@ private:
 
             gtk_widget_get_allocation(pWidget, &allocation);
 
-            gint dest_x1, dest_y1;
+            gtk_coord dest_x1, dest_y1;
             gtk_widget_translate_coordinates(pWidget,
                                              m_pSidebarEventBox,
                                              0,
@@ -5594,7 +5583,7 @@ private:
                                              &dest_x1,
                                              &dest_y1);
 
-            gint dest_x2, dest_y2;
+            gtk_coord dest_x2, dest_y2;
             gtk_widget_translate_coordinates(pWidget,
                                              m_pSidebarEventBox,
                                              allocation.width,
@@ -8043,7 +8032,7 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
 {
     //place the toplevel just below its launcher button
     GtkWidget* pToplevel = widget_get_root(pMenuButton);
-    gint x, y, absx, absy;
+    gtk_coord x, y, absx, absy;
     gtk_widget_translate_coordinates(pMenuButton, pToplevel, 0, 0, &x, &y);
     GdkWindow *pWindow = gtk_widget_get_window(pToplevel);
     gdk_window_get_position(pWindow, &absx, &absy);
@@ -8142,7 +8131,7 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
 
     //place the toplevel just below its launcher button
     GtkWidget* pToplevel = widget_get_root(pComboBox);
-    gint x, y;
+    gtk_coord x, y;
     gtk_widget_translate_coordinates(pComboBox, pToplevel, 0, 0, &x, &y);
 
     gtk_widget_realize(GTK_WIDGET(pMenu));

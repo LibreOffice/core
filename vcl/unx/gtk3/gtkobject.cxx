@@ -538,7 +538,7 @@ bool GtkSalObjectWidgetClip::signal_scroll(GtkWidget*, GdkEvent* pEvent)
 
     GtkWidget* pMouseEventWidget = m_pParent->getMouseEventWidget();
 
-    gint dest_x, dest_y;
+    gtk_coord dest_x, dest_y;
     gtk_widget_translate_coordinates(pEventWidget,
                                      pMouseEventWidget,
                                      pEvent->scroll.x,
