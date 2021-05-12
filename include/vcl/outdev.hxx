@@ -1077,6 +1077,11 @@ protected:
     static
     SAL_DLLPRIVATE tools::Long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, tools::Long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE float        approximate_char_width() const;
+
+    virtual bool shouldDrawWavePixelAsRect(tools::Long nLineWidth) const;
+    virtual void SetWaveLineColors(Color const& rColor, tools::Long nLineWidth);
+    virtual Size GetWaveLineSize(tools::Long nLineWidth) const;
+
 private:
     SAL_DLLPRIVATE void         ImplInitTextColor();
 
@@ -1084,8 +1089,8 @@ private:
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY, tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight );
 
-    SAL_DLLPRIVATE static void  ImplDrawWavePixel( tools::Long nOriginX, tools::Long nOriginY, tools::Long nCurX, tools::Long nCurY, Degree10 nOrientation, SalGraphics* pGraphics, const OutputDevice& rOutDev,
-                                                   bool bDrawPixAsRect, tools::Long nPixWidth, tools::Long nPixHeight );
+    SAL_DLLPRIVATE void  ImplDrawWavePixel( tools::Long nOriginX, tools::Long nOriginY, tools::Long nCurX, tools::Long nCurY, tools::Long nWidth, Degree10 nOrientation, SalGraphics* pGraphics, const OutputDevice& rOutDev, tools::Long nPixWidth, tools::Long nPixHeight );
+
     SAL_DLLPRIVATE void         ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY, tools::Long nStartX, tools::Long nStartY, tools::Long nWidth, tools::Long nHeight, tools::Long nLineWidth, Degree10 nOrientation, const Color& rColor );
     SAL_DLLPRIVATE void         ImplDrawWaveTextLine( tools::Long nBaseX, tools::Long nBaseY, tools::Long nX, tools::Long nY, tools::Long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
     SAL_DLLPRIVATE void         ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBaseY, tools::Long nX, tools::Long nY, tools::Long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
