@@ -45,11 +45,8 @@
 #if !GTK_CHECK_VERSION(4, 0, 0)
 #include "a11y/atkwrapper.hxx"
 #endif
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
@@ -58,6 +55,14 @@
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -3607,7 +3612,6 @@ namespace
         return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     OUString get_label(GtkLabel* pLabel)
     {
         const gchar* pStr = gtk_label_get_label(pLabel);
@@ -3629,7 +3633,6 @@ namespace
     {
         gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
     }
-#endif
 
     OUString get_title(GtkWindow* pWindow)
     {
@@ -17316,12 +17319,19 @@ public:
     }
 };
 
+}
+
+#endif
+
+namespace {
+
     gboolean signalTooltipQuery(GtkWidget* pWidget, gint /*x*/, gint /*y*/,
                                          gboolean /*keyboard_mode*/, GtkTooltip *tooltip)
     {
         const ImplSVHelpData& aHelpData = ImplGetSVHelpData();
         if (aHelpData.mbBalloonHelp) // extended tips
         {
+#if !GTK_CHECK_VERSION(4, 0, 0)
             // by default use accessible description
             AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
             const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
@@ -17330,6 +17340,7 @@ public:
                 gtk_tooltip_set_text(tooltip, pDesc);
                 return true;
             }
+#endif
 
             // fallback to the mechanism which needs help installed
             OString sHelpId = ::get_help_id(pWidget);
@@ -17354,6 +17365,12 @@ public:
 
         return false;
     }
+
+}
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+
+namespace {
 
 class GtkInstancePopover : public GtkInstanceContainer, public virtual weld::Popover
 {
@@ -17478,6 +17495,11 @@ void ensure_disable_ctrl_page_up_down_bindings()
     }
 }
 
+}
+#endif
+
+namespace {
+
 bool IsAllowedBuiltInIcon(std::u16string_view iconName)
 {
     // limit the named icons to those known by VclBuilder
@@ -17485,11 +17507,155 @@ bool IsAllowedBuiltInIcon(std::u16string_view iconName)
 }
 
 }
-#endif
-
-#if !GTK_CHECK_VERSION(4, 0, 0)
 
 namespace {
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
+{
+    css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
+    if (!xNodeList.is())
+        return;
+    std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
+    sal_Int32 nNodeCount = xNodeList->getLength();
+    for (sal_Int32 i = 0; i < nNodeCount; ++i)
+    {
+        css::uno::Reference<css::xml::dom::XNode> xChild = xNodeList->item(i);
+
+        if (xChild->getNodeName() == "requires")
+        {
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xLib = xMap->getNamedItem("lib");
+            assert(xLib->getNodeValue() == "gtk+");
+            xLib->setNodeValue("gtk");
+            css::uno::Reference<css::xml::dom::XNode> xVersion = xMap->getNamedItem("version");
+            assert(xVersion->getNodeValue() == "3.20");
+            xVersion->setNodeValue("4.0");
+        }
+        else if (xChild->getNodeName() == "property")
+        {
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("name");
+            OUString sName(xName->getNodeValue().replace('_', '-'));
+            if (sName == "type-hint" || sName == "skip-taskbar-hint" ||
+                sName == "can-default" || sName == "has-default")
+            {
+                xRemoveList.push_back(xChild);
+            }
+        }
+        else if (xChild->getNodeName() == "child")
+        {
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("internal-child");
+            if (xName)
+            {
+                OUString sName(xName->getNodeValue());
+                if (sName == "vbox")
+                    xName->setNodeValue("content_area");
+            }
+        }
+        else if (xChild->getNodeName() == "object")
+        {
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
+            OUString sClass(xClass->getNodeValue());
+            if (sClass == "GtkButtonBox")
+                xClass->setNodeValue("GtkBox");
+        }
+        else if (xChild->getNodeName() == "packing")
+            xRemoveList.push_back(xChild);
+
+#if 0
+        css::xml::dom::NodeType eChildType = xChild->getNodeType();
+        switch ( eChildType )
+        {
+            case css::xml::dom::NodeType_ATTRIBUTE_NODE:
+            case css::xml::dom::NodeType_ELEMENT_NODE:
+            case css::xml::dom::NodeType_TEXT_NODE:
+        }
+#endif
+
+#if 0
+        if ( xChild->hasAttributes() )
+        {
+            Reference< css::xml::dom::XNamedNodeMap > xMap = xChild->getAttributes();
+            if ( xMap.is() )
+            {
+                sal_Int32 j, nMapLen = xMap->getLength();
+                for ( j = 0; j < nMapLen; ++j )
+                {
+                    Reference< css::xml::dom::XNode > xAttr = xMap->item(j);
+                }
+            }
+        }
+#endif
+        if (!xChild->hasChildNodes())
+            continue;
+        ConvertTree(xChild);
+    }
+    for (auto& xRemove : xRemoveList)
+        xNode->removeChild(xRemove);
+}
+#endif
+
+void load_ui_file(GtkBuilder* pBuilder, const OUString& rUri)
+{
+    GError *err = nullptr;
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+    // load the xml
+    css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    css::uno::Reference<css::xml::dom::XDocumentBuilder> xBuilder = xml::dom::DocumentBuilder::create(xContext);
+    css::uno::Reference<css::xml::dom::XDocument> xDocument = xBuilder->parseURI(rUri);
+
+    // convert it from gtk3 to gtk4
+    ConvertTree(xDocument);
+
+    css::uno::Reference<css::beans::XPropertySet> xTempFile(io::TempFile::create(xContext), css::uno::UNO_QUERY);
+    css::uno::Reference<css::io::XStream> xTempStream(xTempFile, css::uno::UNO_QUERY_THROW);
+    xTempFile->setPropertyValue("RemoveFile", css::uno::makeAny(false));
+
+    // serialize it back to xml
+    css::uno::Reference<css::xml::sax::XSAXSerializable> xSerializer(xDocument, css::uno::UNO_QUERY);
+    css::uno::Reference<css::xml::sax::XWriter> xWriter = css::xml::sax::Writer::create(xContext);
+    css::uno::Reference<css::io::XOutputStream> xTempOut = xTempStream->getOutputStream();
+    xWriter->setOutputStream(xTempOut);
+    xSerializer->serialize(css::uno::Reference<css::xml::sax::XDocumentHandler>(xWriter, css::uno::UNO_QUERY_THROW),
+            css::uno::Sequence<css::beans::StringPair>());
+
+    // feed it to GtkBuilder
+    css::uno::Reference<css::io::XSeekable> xTempSeek(xTempStream, css::uno::UNO_QUERY_THROW);
+    xTempSeek->seek(0);
+    auto xInput = xTempStream->getInputStream();
+    css::uno::Sequence<sal_Int8> bytes;
+    sal_Int32 nToRead = xInput->available();
+    while (true)
+    {
+        sal_Int32 nRead = xInput->readBytes(bytes, std::max<sal_Int32>(nToRead, 4096));
+        if (!nRead)
+            break;
+        auto rc = gtk_builder_add_from_string(pBuilder, reinterpret_cast<const gchar*>(bytes.getArray()), nRead, &err);
+        if (!rc)
+        {
+            SAL_WARN( "vcl.gtk", "GtkInstanceBuilder: error when calling gtk_builder_add_from_string: " << err->message);
+            g_error_free(err);
+        }
+        assert(rc && "could not load UI file");
+        // in the real world the first loop has read the entire file because its all 'available' without blocking
+    }
+#else
+    OUString aPath;
+    osl::FileBase::getSystemPathFromFileURL(rUri, aPath);
+    auto rc = gtk_builder_add_from_file(pBuilder, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr(), &err);
+
+    if (!rc)
+    {
+        SAL_WARN( "vcl.gtk", "GtkInstanceBuilder: error when calling gtk_builder_add_from_file: " << err->message);
+        g_error_free(err);
+    }
+    assert(rc && "could not load UI file");
+#endif
+}
 
 class GtkInstanceBuilder : public weld::Builder
 {
@@ -17536,6 +17702,7 @@ private:
                 }
             }
         }
+#if !GTK_CHECK_VERSION(4, 0, 0)
         else if (GTK_IS_TOOL_BUTTON(pWidget))
         {
             GtkToolButton* pToolButton = GTK_TOOL_BUTTON(pWidget);
@@ -17561,9 +17728,14 @@ private:
                     gtk_widget_set_tooltip_text(pWidget, label);
             }
         }
+#endif
 
         //set helpids
+#if !GTK_CHECK_VERSION(4, 0, 0)
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
+#else
+        const gchar* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pWidget));
+#endif
         size_t nLen = pStr ? strlen(pStr) : 0;
         if (nLen)
         {
@@ -17723,8 +17895,10 @@ public:
         , m_bAllowCycleFocusOut(bAllowCycleFocusOut)
     {
         OUString sHelpRoot(rUIFile);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         ensure_intercept_drawing_area_accessibility();
         ensure_disable_ctrl_page_up_down_bindings();
+#endif
 
         sal_Int32 nIdx = sHelpRoot.lastIndexOf('.');
         if (nIdx != -1)
@@ -17735,18 +17909,11 @@ public:
         m_aUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
 
         OUString aUri(rUIRoot + rUIFile);
-        OUString aPath;
-        osl::FileBase::getSystemPathFromFileURL(aUri, aPath);
+
         m_pBuilder = gtk_builder_new();
         m_nNotifySignalId = g_signal_connect_data(G_OBJECT(m_pBuilder), "notify", G_CALLBACK(signalNotify), this, nullptr, G_CONNECT_AFTER);
-        GError *err = nullptr;
-        auto rc = gtk_builder_add_from_file(m_pBuilder, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr(), &err);
-        if (!rc)
-        {
-            SAL_WARN( "vcl.gtk", "GtkInstanceBuilder: error when calling gtk_builder_add_from_file: " << err->message);
-            g_error_free(err);
-        }
-        assert(rc && "could not load UI file");
+
+        load_ui_file(m_pBuilder, aUri);
 
         m_pObjectList = gtk_builder_get_objects(m_pBuilder);
         g_slist_foreach(m_pObjectList, postprocess, this);
@@ -17869,6 +18036,7 @@ public:
 
     virtual std::unique_ptr<weld::Window> create_screenshot_window() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pTopLevel = nullptr;
 
         for (GSList* l = m_pObjectList; l; l = g_slist_next(l))
@@ -17903,6 +18071,9 @@ public:
         if (m_pParentWidget)
             gtk_window_set_transient_for(pDialog, GTK_WINDOW(widget_get_root(m_pParentWidget)));
         return std::make_unique<GtkInstanceDialog>(pDialog, this, true);
+#else
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Widget> weld_widget(const OString &id) override
@@ -17916,78 +18087,120 @@ public:
 
     virtual std::unique_ptr<weld::Container> weld_container(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkContainer* pContainer = GTK_CONTAINER(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pContainer)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pContainer));
         return std::make_unique<GtkInstanceContainer>(pContainer, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Box> weld_box(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkBox* pBox = GTK_BOX(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pBox)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pBox));
         return std::make_unique<GtkInstanceBox>(pBox, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Paned> weld_paned(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkPaned* pPaned = GTK_PANED(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pPaned)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pPaned));
         return std::make_unique<GtkInstancePaned>(pPaned, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Frame> weld_frame(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkFrame* pFrame = GTK_FRAME(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pFrame)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pFrame));
         return std::make_unique<GtkInstanceFrame>(pFrame, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::ScrolledWindow> weld_scrolled_window(const OString &id, bool bUserManagedScrolling = false) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkScrolledWindow* pScrolledWindow = GTK_SCROLLED_WINDOW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pScrolledWindow)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pScrolledWindow));
         return std::make_unique<GtkInstanceScrolledWindow>(pScrolledWindow, this, false, bUserManagedScrolling);
+#else
+        (void)id;
+        (void)bUserManagedScrolling;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkNotebook* pNotebook = GTK_NOTEBOOK(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pNotebook)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pNotebook));
         return std::make_unique<GtkInstanceNotebook>(pNotebook, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Button> weld_button(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkButton* pButton = GTK_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
         return std::make_unique<GtkInstanceButton>(pButton, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkMenuButton* pButton = GTK_MENU_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
         return std::make_unique<GtkInstanceMenuButton>(pButton, nullptr, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::MenuToggleButton> weld_menu_toggle_button(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkMenuButton* pButton = GTK_MENU_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pButton)
             return nullptr;
@@ -17995,105 +18208,164 @@ public:
         // gtk doesn't come with exactly the same concept
         GtkBuilder* pMenuToggleButton = makeMenuToggleButtonBuilder();
         return std::make_unique<GtkInstanceMenuToggleButton>(pMenuToggleButton, pButton, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::LinkButton> weld_link_button(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkLinkButton* pButton = GTK_LINK_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
         return std::make_unique<GtkInstanceLinkButton>(pButton, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::ToggleButton> weld_toggle_button(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkToggleButton* pToggleButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pToggleButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pToggleButton));
         return std::make_unique<GtkInstanceToggleButton>(pToggleButton, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkRadioButton* pRadioButton = GTK_RADIO_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pRadioButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pRadioButton));
         return std::make_unique<GtkInstanceRadioButton>(pRadioButton, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::CheckButton> weld_check_button(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkCheckButton* pCheckButton = GTK_CHECK_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pCheckButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pCheckButton));
         return std::make_unique<GtkInstanceCheckButton>(pCheckButton, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Scale> weld_scale(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkScale* pScale = GTK_SCALE(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pScale)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pScale));
         return std::make_unique<GtkInstanceScale>(pScale, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::ProgressBar> weld_progress_bar(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkProgressBar* pProgressBar = GTK_PROGRESS_BAR(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pProgressBar)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pProgressBar));
         return std::make_unique<GtkInstanceProgressBar>(pProgressBar, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Spinner> weld_spinner(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkSpinner* pSpinner = GTK_SPINNER(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pSpinner)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pSpinner));
         return std::make_unique<GtkInstanceSpinner>(pSpinner, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Image> weld_image(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkImage* pImage = GTK_IMAGE(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pImage)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pImage));
         return std::make_unique<GtkInstanceImage>(pImage, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Calendar> weld_calendar(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkCalendar* pCalendar = GTK_CALENDAR(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pCalendar)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pCalendar));
         return std::make_unique<GtkInstanceCalendar>(pCalendar, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Entry> weld_entry(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkEntry* pEntry = GTK_ENTRY(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pEntry)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pEntry));
         return std::make_unique<GtkInstanceEntry>(pEntry, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkSpinButton* pSpinButton = GTK_SPIN_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pSpinButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pSpinButton));
         return std::make_unique<GtkInstanceSpinButton>(pSpinButton, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::MetricSpinButton> weld_metric_spin_button(const OString& id, FieldUnit eUnit) override
@@ -18103,15 +18375,21 @@ public:
 
     virtual std::unique_ptr<weld::FormattedSpinButton> weld_formatted_spin_button(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkSpinButton* pSpinButton = GTK_SPIN_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pSpinButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pSpinButton));
         return std::make_unique<GtkInstanceFormattedSpinButton>(pSpinButton, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkComboBox* pComboBox = GTK_COMBO_BOX(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pComboBox)
             return nullptr;
@@ -18146,28 +18424,43 @@ public:
         */
         GtkBuilder* pComboBuilder = makeComboBoxBuilder();
         return std::make_unique<GtkInstanceComboBox>(pComboBuilder, pComboBox, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkTreeView* pTreeView = GTK_TREE_VIEW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pTreeView)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pTreeView));
         return std::make_unique<GtkInstanceTreeView>(pTreeView, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::IconView> weld_icon_view(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkIconView* pIconView = GTK_ICON_VIEW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pIconView)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pIconView));
         return std::make_unique<GtkInstanceIconView>(pIconView, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid, const OString& treeviewid) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkContainer* pContainer = GTK_CONTAINER(gtk_builder_get_object(m_pBuilder, containerid.getStr()));
         if (!pContainer)
             return nullptr;
@@ -18175,68 +18468,110 @@ public:
         return std::make_unique<GtkInstanceEntryTreeView>(pContainer, this, false,
                                                           weld_entry(entryid),
                                                           weld_tree_view(treeviewid));
+#else
+        (void)containerid;
+        (void)entryid;
+        (void)treeviewid;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Label> weld_label(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkLabel* pLabel = GTK_LABEL(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pLabel)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pLabel));
         return std::make_unique<GtkInstanceLabel>(pLabel, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::TextView> weld_text_view(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkTextView* pTextView = GTK_TEXT_VIEW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pTextView)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pTextView));
         return std::make_unique<GtkInstanceTextView>(pTextView, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Expander> weld_expander(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkExpander* pExpander = GTK_EXPANDER(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pExpander)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pExpander));
         return std::make_unique<GtkInstanceExpander>(pExpander, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::DrawingArea> weld_drawing_area(const OString &id, const a11yref& rA11y,
             FactoryFunction /*pUITestFactoryFunction*/, void* /*pUserData*/) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkDrawingArea* pDrawingArea = GTK_DRAWING_AREA(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pDrawingArea)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pDrawingArea));
         return std::make_unique<GtkInstanceDrawingArea>(pDrawingArea, this, rA11y, false);
+#else
+        (void)id;
+        (void)rA11y;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Menu> weld_menu(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkMenu* pMenu = GTK_MENU(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pMenu)
             return nullptr;
         return std::make_unique<GtkInstanceMenu>(pMenu, true);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Popover> weld_popover(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkPopover* pPopover = GTK_POPOVER(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pPopover)
             return nullptr;
         return std::make_unique<GtkInstancePopover>(pPopover, this, true);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString &id) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkToolbar* pToolbar = GTK_TOOLBAR(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pToolbar)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pToolbar));
         return std::make_unique<GtkInstanceToolbar>(pToolbar, this, false);
+#else
+        (void)id;
+        return nullptr;
+#endif
     }
 
     virtual std::unique_ptr<weld::SizeGroup> create_size_group() override
@@ -18246,7 +18581,6 @@ public:
 };
 
 }
-#endif
 
 void GtkInstanceWindow::help()
 {
@@ -18320,15 +18654,15 @@ void GtkInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
 
 weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    if (rUIFile != "svt/ui/javadisableddialog.ui")
+        return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
+#endif
     GtkInstanceWidget* pParentWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
     if (pParent && !pParentWidget) //remove when complete
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
     GtkWidget* pBuilderParent = pParentWidget ? pParentWidget->getWidget() : nullptr;
     return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile, nullptr, true);
-#else
-    return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
-#endif
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
