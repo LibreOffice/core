@@ -14139,6 +14139,7 @@ std::unique_ptr<weld::Label> GtkInstanceFrame::weld_label_widget() const
     return nullptr;
 #endif
 }
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
 
 namespace {
@@ -17498,6 +17499,13 @@ bool IsAllowedBuiltInIcon(std::u16string_view iconName)
     return VclBuilder::mapStockToSymbol(iconName) != SymbolType::DONTKNOW;
 }
 
+}
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+
+namespace {
+
 class GtkInstanceBuilder : public weld::Builder
 {
 private:
@@ -18338,7 +18346,6 @@ void GtkInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
     }
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -18351,7 +18358,6 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
 #endif
 }
-#endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
 // tdf#135965 for the case of native widgets inside a GtkSalFrame and F1 pressed, run help
