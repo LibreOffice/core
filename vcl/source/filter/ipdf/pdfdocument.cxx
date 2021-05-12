@@ -2145,9 +2145,14 @@ bool PDFCommentElement::Read(SvStream& rStream)
                 sal_uInt64 nPos = rStream.Tell();
                 if (ch == '\r')
                 {
+                    rStream.ReadChar(ch);
+                    rStream.SeekRel(-1);
                     // If the comment ends with a \r\n, count the \n as well to match Adobe Acrobat
                     // behavior.
-                    nPos += 1;
+                    if (ch == '\n')
+                    {
+                        nPos += 1;
+                    }
                 }
                 m_rDoc.PushBackEOF(nPos);
             }
