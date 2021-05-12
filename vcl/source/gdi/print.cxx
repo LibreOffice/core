@@ -1751,4 +1751,9 @@ css::awt::DeviceInfo Printer::GetDeviceInfo() const
     return aInfo;
 }
 
+void Printer::SetSystemTextColor(DrawFlags, bool)
+{
+    SetTextColor(COL_BLACK);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
