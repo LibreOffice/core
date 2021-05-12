@@ -49,6 +49,8 @@ public:
     void testTransparentFillColor();
     void testFillColor();
     void testSystemTextColor();
+    void testShouldDrawWavePixelAsRect();
+    void testGetWaveLineSize();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -71,6 +73,8 @@ public:
     CPPUNIT_TEST(testTransparentFillColor);
     CPPUNIT_TEST(testFillColor);
     CPPUNIT_TEST(testSystemTextColor);
+    CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
+    CPPUNIT_TEST(testGetWaveLineSize);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -546,6 +550,78 @@ void VclOutdevTest::testSystemTextColor()
         ScopedVclPtrInstance<Printer> pPrinter;
         pPrinter->SetSystemTextColor(SystemTextColorFlags::NONE, true);
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPrinter->GetTextColor());
+    }
+}
+
+namespace
+{
+class WaveLineTester : public OutputDevice
+{
+public:
+    WaveLineTester()
+        : OutputDevice(OUTDEV_VIRDEV)
+    {
+    }
+
+    bool AcquireGraphics() const { return true; }
+    void ReleaseGraphics(bool) {}
+    bool UsePolyPolygonForComplexGradient() { return false; }
+
+    bool testShouldDrawWavePixelAsRect(tools::Long nLineWidth)
+    {
+        return shouldDrawWavePixelAsRect(nLineWidth);
+    }
+
+    Size testGetWaveLineSize(tools::Long nLineWidth) { return GetWaveLineSize(nLineWidth); }
+};
+
+class WaveLineTesterPrinter : public Printer
+{
+public:
+    WaveLineTesterPrinter() {}
+
+    bool AcquireGraphics() const { return true; }
+    void ReleaseGraphics(bool) {}
+    bool UsePolyPolygonForComplexGradient() { return false; }
+
+    Size testGetWaveLineSize(tools::Long nLineWidth) { return GetWaveLineSize(nLineWidth); }
+};
+}
+
+void VclOutdevTest::testShouldDrawWavePixelAsRect()
+{
+    ScopedVclPtrInstance<WaveLineTester> pTestOutDev;
+
+    CPPUNIT_ASSERT(!pTestOutDev->testShouldDrawWavePixelAsRect(0));
+    CPPUNIT_ASSERT(!pTestOutDev->testShouldDrawWavePixelAsRect(1));
+
+    CPPUNIT_ASSERT(pTestOutDev->testShouldDrawWavePixelAsRect(10));
+}
+
+void VclOutdevTest::testGetWaveLineSize()
+{
+    {
+        ScopedVclPtrInstance<WaveLineTester> pTestOutDev;
+
+        pTestOutDev->SetDPIX(96);
+        pTestOutDev->SetDPIY(96);
+
+        CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestOutDev->testGetWaveLineSize(0));
+        CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestOutDev->testGetWaveLineSize(1));
+
+        CPPUNIT_ASSERT_EQUAL(Size(10, 10), pTestOutDev->testGetWaveLineSize(10));
+    }
+
+    {
+        ScopedVclPtrInstance<WaveLineTesterPrinter> pTestOutDev;
+
+        pTestOutDev->SetDPIX(96);
+        pTestOutDev->SetDPIY(96);
+
+        CPPUNIT_ASSERT_EQUAL(Size(0, 0), pTestOutDev->testGetWaveLineSize(0));
+        CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestOutDev->testGetWaveLineSize(1));
+
+        CPPUNIT_ASSERT_EQUAL(Size(10, 10), pTestOutDev->testGetWaveLineSize(10));
     }
 }
 
