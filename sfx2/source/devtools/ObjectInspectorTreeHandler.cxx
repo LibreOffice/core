@@ -966,6 +966,24 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     mpObjectInspectorWidgets->mpNotebook->connect_enter_page(
         LINK(this, ObjectInspectorTreeHandler, NotebookEnterPage));
 
+    auto nPropertiesDigitWidth
+        = mpObjectInspectorWidgets->mpPropertiesTreeView->get_approximate_digit_width();
+    std::vector<int> aPropertiesWidths;
+    aPropertiesWidths.push_back(nPropertiesDigitWidth * 30);
+    aPropertiesWidths.push_back(nPropertiesDigitWidth * 30);
+    aPropertiesWidths.push_back(nPropertiesDigitWidth * 30);
+    aPropertiesWidths.push_back(nPropertiesDigitWidth * 30);
+    mpObjectInspectorWidgets->mpPropertiesTreeView->set_column_fixed_widths(aPropertiesWidths);
+
+    auto nMethodsDigitWidth
+        = mpObjectInspectorWidgets->mpMethodsTreeView->get_approximate_digit_width();
+    std::vector<int> aMethodsWidths;
+    aMethodsWidths.push_back(nMethodsDigitWidth * 30);
+    aMethodsWidths.push_back(nMethodsDigitWidth * 15);
+    aMethodsWidths.push_back(nMethodsDigitWidth * 30);
+    aMethodsWidths.push_back(nMethodsDigitWidth * 30);
+    mpObjectInspectorWidgets->mpMethodsTreeView->set_column_fixed_widths(aMethodsWidths);
+
     pObjectInspectorWidgets->mpPaned->set_position(160);
 }
 
