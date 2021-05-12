@@ -77,6 +77,17 @@ inline GtkWidget* widget_get_root(GtkWidget* pWidget)
 #endif
 }
 
+inline const char * image_get_icon_name(GtkImage *pImage)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    return gtk_image_get_icon_name(pImage);
+#else
+    const gchar* icon_name;
+    gtk_image_get_icon_name(pImage, &icon_name, nullptr);
+    return icon_name;
+#endif
+}
+
 class GtkSalTimer final : public SalTimer
 {
     struct SalGtkTimeoutSource *m_pTimeout;
