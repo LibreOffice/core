@@ -284,7 +284,7 @@
           <value>2</value>
         </prop>
         <prop oor:name="ooSetupFactoryTemplateFile">
-          <value/>
+          <value>$(brandbaseurl)/share/template/common/styles/Default.ott</value>
         </prop>
         <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
           <value>false</value>
