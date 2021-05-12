@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2497b3b0_fe5e6330",
+        "filename": "include/tools/ustrstackbuf.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-12T06:15:39Z",
+      "side": 1,
+      "message": "For new source files, please use the latest boilerplate from TEMPLATE.SOURCECODE.HEADER.",
+      "revId": "3a385f9b26ee8393f435905b47972c0135b43a0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09d65f74_885558f6",
+        "filename": "include/tools/ustrstackbuf.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-12T06:15:39Z",
+      "side": 1,
+      "message": "Is this used somehow?",
+      "revId": "3a385f9b26ee8393f435905b47972c0135b43a0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
