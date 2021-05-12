@@ -161,14 +161,15 @@ bool InterimItemWindow::ChildKeyInput(const KeyEvent& rKEvt)
     return true;
 }
 
-void InterimItemWindow::Draw(OutputDevice* pDevice, const Point& rPos, DrawFlags /*nFlags*/)
+void InterimItemWindow::Draw(OutputDevice* pDevice, const Point& rPos,
+                             SystemTextColorFlags /*nFlags*/)
 {
     m_xContainer->draw(*pDevice, rPos, GetSizePixel());
 }
 
 void InterimItemWindow::ImplPaintToDevice(::OutputDevice* pTargetOutDev, const Point& rPos)
 {
-    Draw(pTargetOutDev, rPos, DrawFlags::NONE);
+    Draw(pTargetOutDev, rPos, SystemTextColorFlags::NONE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

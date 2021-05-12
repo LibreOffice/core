@@ -124,7 +124,7 @@ public:
     virtual void        dispose() override;
 
     virtual void        ApplySettings(vcl::RenderContext& rRenderContext) override;
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void        Resize() override;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
     virtual void        StateChanged( StateChangedType nType ) override;

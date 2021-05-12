@@ -327,19 +327,6 @@ namespace o3tl
     template<> struct typed_flags<GetFocusFlags> : is_typed_flags<GetFocusFlags, 0x077f> {};
 }
 
-
-// Flags for Draw()
-enum class DrawFlags
-{
-    NONE                = 0x0000,
-    Mono                = 0x0001,
-    NoControls          = 0x0004,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<DrawFlags> : is_typed_flags<DrawFlags, 0x0005> {};
-}
-
 // DialogControl-Flags
 enum class DialogControlFlags
 {
@@ -758,7 +745,7 @@ public:
 
     void                                Erase(vcl::RenderContext& rRenderContext);
 
-    virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, DrawFlags nFlags );
+    virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags );
     virtual void                        Move();
     virtual void                        Resize();
     virtual void                        Activate();

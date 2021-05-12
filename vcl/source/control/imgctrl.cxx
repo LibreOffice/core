@@ -149,7 +149,7 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 }
 
-void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags )
+void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags )
 {
     const Point     aPos  = pDev->LogicToPixel( rPos );
     const Size      aSize = GetSizePixel();

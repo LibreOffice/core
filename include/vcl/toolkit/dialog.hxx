@@ -93,7 +93,7 @@ public:
 protected:
     explicit        Dialog( WindowType nType );
     explicit        Dialog( vcl::Window* pParent, std::u16string_view rID, const OUString& rUIXMLDescription);
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void    settingOptimalLayoutSize(Window *pBox) override;
 
 protected:

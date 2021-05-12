@@ -120,14 +120,14 @@ void SpinButton::Resize()
     Invalidate();
 }
 
-void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, DrawFlags nFlags)
+void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
     Point aPos  = pDev->LogicToPixel(rPos);
     Size aSize = GetSizePixel();
 
     pDev->Push();
     pDev->SetMapMode();
-    if ( !(nFlags & DrawFlags::Mono) )
+    if ( !(nFlags & SystemTextColorFlags::Mono) )
     {
         // DecoView uses the FaceColor...
         AllSettings aSettings = pDev->GetSettings();

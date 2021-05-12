@@ -130,7 +130,7 @@ DrawTextFlags FixedText::ImplGetTextStyle( WinBits nWinStyle )
     return nTextStyle;
 }
 
-void FixedText::ImplDraw(OutputDevice* pDev, DrawFlags nDrawFlags,
+void FixedText::ImplDraw(OutputDevice* pDev, SystemTextColorFlags nSystemTextColorFlags,
                          const Point& rPos, const Size& rSize,
                          bool bFillLayout) const
 {
@@ -150,7 +150,7 @@ void FixedText::ImplDraw(OutputDevice* pDev, DrawFlags nDrawFlags,
     }
     if ( !IsEnabled() )
         nTextStyle |= DrawTextFlags::Disable;
-    if ( (nDrawFlags & DrawFlags::Mono) ||
+    if ( (nSystemTextColorFlags & SystemTextColorFlags::Mono) ||
          (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
         nTextStyle |= DrawTextFlags::Mono;
 
@@ -195,11 +195,11 @@ void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void FixedText::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
-    ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, SystemTextColorFlags::NONE, Point(), GetOutputSizePixel());
 }
 
 void FixedText::Draw( OutputDevice* pDev, const Point& rPos,
-                      DrawFlags nFlags )
+                      SystemTextColorFlags nFlags )
 {
     ApplySettings(*pDev);
 
@@ -210,7 +210,7 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos,
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
-    if ( nFlags & DrawFlags::Mono )
+    if ( nFlags & SystemTextColorFlags::Mono )
         pDev->SetTextColor( COL_BLACK );
     else
         pDev->SetTextColor( GetTextColor() );
@@ -351,7 +351,7 @@ Size FixedText::GetOptimalSize() const
 void FixedText::FillLayoutData() const
 {
     mxLayoutData.emplace();
-    ImplDraw(const_cast<FixedText*>(this)->GetOutDev(), DrawFlags::NONE, Point(), GetOutputSizePixel(), true);
+    ImplDraw(const_cast<FixedText*>(this)->GetOutDev(), SystemTextColorFlags::NONE, Point(), GetOutputSizePixel(), true);
     //const_cast<FixedText*>(this)->Invalidate();
 }
 
@@ -589,7 +589,7 @@ void FixedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     ImplDraw(rRenderContext);
 }
 
-void FixedLine::Draw( OutputDevice*, const Point&, DrawFlags )
+void FixedLine::Draw( OutputDevice*, const Point&, SystemTextColorFlags )
 {
 }
 
@@ -726,7 +726,7 @@ void FixedBitmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 }
 
 void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos,
-                        DrawFlags )
+                        SystemTextColorFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = GetSizePixel();
@@ -873,7 +873,7 @@ Size FixedImage::GetOptimalSize() const
 }
 
 void FixedImage::Draw( OutputDevice* pDev, const Point& rPos,
-                       DrawFlags )
+                       SystemTextColorFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = GetSizePixel();

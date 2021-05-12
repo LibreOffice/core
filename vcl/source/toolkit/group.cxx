@@ -87,7 +87,7 @@ GroupBox::GroupBox( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
+void GroupBox::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemTextColorFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {
     tools::Long                    nTop;
@@ -101,11 +101,11 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         nTextStyle &= ~DrawTextFlags::Mnemonic;
     if ( !IsEnabled() )
         nTextStyle |= DrawTextFlags::Disable;
-    if ( (nDrawFlags & DrawFlags::Mono) ||
+    if ( (nSystemTextColorFlags & SystemTextColorFlags::Mono) ||
          (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
     {
         nTextStyle |= DrawTextFlags::Mono;
-        nDrawFlags |= DrawFlags::Mono;
+        nSystemTextColorFlags |= SystemTextColorFlags::Mono;
     }
 
     if (aText.isEmpty())
@@ -125,7 +125,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
 
     if( ! bLayout )
     {
-        if ( nDrawFlags & DrawFlags::Mono )
+        if ( nSystemTextColorFlags & SystemTextColorFlags::Mono )
             pDev->SetLineColor( COL_BLACK );
         else
             pDev->SetLineColor( rStyleSettings.GetShadowColor() );
@@ -144,7 +144,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         bool bIsPrinter = OUTDEV_PRINTER == pDev->GetOutDevType();
         // if we're drawing onto a printer, spare the 3D effect #i46986#
 
-        if ( !bIsPrinter && !(nDrawFlags & DrawFlags::Mono) )
+        if ( !bIsPrinter && !(nSystemTextColorFlags & SystemTextColorFlags::Mono) )
         {
             pDev->SetLineColor( rStyleSettings.GetLightColor() );
             if (aText.isEmpty())
@@ -168,16 +168,16 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
 void GroupBox::FillLayoutData() const
 {
     mxLayoutData.emplace();
-    const_cast<GroupBox*>(this)->ImplDraw( const_cast<GroupBox*>(this)->GetOutDev(), DrawFlags::NONE, Point(), GetOutputSizePixel(), true );
+    const_cast<GroupBox*>(this)->ImplDraw( const_cast<GroupBox*>(this)->GetOutDev(), SystemTextColorFlags::NONE, Point(), GetOutputSizePixel(), true );
 }
 
 void GroupBox::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
-    ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, SystemTextColorFlags::NONE, Point(), GetOutputSizePixel());
 }
 
 void GroupBox::Draw( OutputDevice* pDev, const Point& rPos,
-                     DrawFlags nFlags )
+                     SystemTextColorFlags nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = GetSizePixel();
@@ -186,7 +186,7 @@ void GroupBox::Draw( OutputDevice* pDev, const Point& rPos,
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
-    if ( nFlags & DrawFlags::Mono )
+    if ( nFlags & SystemTextColorFlags::Mono )
         pDev->SetTextColor( COL_BLACK );
     else
         pDev->SetTextColor( GetTextColor() );
