@@ -18449,10 +18449,8 @@ weld::Window* GtkInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWin
 
 weld::Window* GtkSalFrame::GetFrameWeld() const
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     if (!m_xFrameWeld)
         m_xFrameWeld.reset(new GtkInstanceWindow(GTK_WINDOW(widget_get_root(getWindow())), nullptr, false));
-#endif
     return m_xFrameWeld.get();
 }
 
