@@ -547,8 +547,8 @@ void Window::dispose()
         mpWindowImpl->mpFrameData = nullptr;
     }
 
-    if (mpWindowImpl->mxWindowPeer)
-        mpWindowImpl->mxWindowPeer->dispose();
+    if (mpWindowImpl->mxVCLXWindow)
+        mpWindowImpl->mxVCLXWindow->dispose();
 
     // should be the last statements
     mpWindowImpl.reset();
@@ -612,7 +612,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mnChildEventListenersIteratingCount = 0;
     mpCursor                            = nullptr;                      // cursor
     maPointer                           = PointerStyle::Arrow;
-    mpVCLXWindow                        = nullptr;
+    mxVCLXWindow                        = nullptr;
     mpAccessibleInfos                   = nullptr;
     maControlForeground                 = COL_TRANSPARENT;  // no foreground set
     maControlBackground                 = COL_TRANSPARENT;  // no background set
@@ -3105,39 +3105,37 @@ const OUString& Window::GetHelpText() const
     return mpWindowImpl->maHelpText;
 }
 
-void Window::SetWindowPeer( Reference< css::awt::XWindowPeer > const & xPeer, VCLXWindow* pVCLXWindow  )
+void Window::SetWindowPeer( VCLXWindow* pVCLXWindow  )
 {
     if (!mpWindowImpl || mpWindowImpl->mbInDispose)
         return;
 
     // be safe against re-entrance: first clear the old ref, then assign the new one
-    if (mpWindowImpl->mxWindowPeer)
+    if (mpWindowImpl->mxVCLXWindow)
     {
-        mpWindowImpl->mxWindowPeer->dispose();
-        mpWindowImpl->mxWindowPeer.clear();
+        mpWindowImpl->mxVCLXWindow->dispose();
+        mpWindowImpl->mxVCLXWindow.clear();
     }
-    mpWindowImpl->mxWindowPeer = xPeer;
-
-    mpWindowImpl->mpVCLXWindow = pVCLXWindow;
+    mpWindowImpl->mxVCLXWindow = pVCLXWindow;
 }
 
-Reference< css::awt::XWindowPeer > Window::GetComponentInterface( bool bCreate )
+VCLXWindow* Window::GetComponentInterface( bool bCreate )
 {
-    if ( !mpWindowImpl->mxWindowPeer.is() && bCreate )
+    if ( !mpWindowImpl->mxVCLXWindow.is() && bCreate )
     {
         UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
         if ( pWrapper )
-            mpWindowImpl->mxWindowPeer = pWrapper->GetWindowInterface( this );
+            mpWindowImpl->mxVCLXWindow = pWrapper->GetWindowInterface( this );
     }
-    return mpWindowImpl->mxWindowPeer;
+    return mpWindowImpl->mxVCLXWindow.get();
 }
 
-void Window::SetComponentInterface( Reference< css::awt::XWindowPeer > const & xIFace )
+void Window::SetComponentInterface( VCLXWindow* pIFace )
 {
     UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
     SAL_WARN_IF( !pWrapper, "vcl.window", "SetComponentInterface: No Wrapper!" );
     if ( pWrapper )
-        pWrapper->SetWindowInterface( this, xIFace );
+        pWrapper->SetWindowInterface( this, pIFace );
 }
 
 typedef std::map<vcl::LOKWindowId, VclPtr<vcl::Window>> LOKWindowsMap;
@@ -3689,9 +3687,7 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas )
     aArg[ 0 ] <<= reinterpret_cast<sal_Int64>(this);
     aArg[ 1 ] <<= css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
     aArg[ 2 ] <<= mpWindowImpl->mbAlwaysOnTop;
-    aArg[ 3 ] <<= Reference< css::awt::XWindow >(
-                             const_cast<vcl::Window*>(this)->GetComponentInterface(),
-                             UNO_QUERY );
+    aArg[ 3 ] <<= const_cast<vcl::Window*>(this)->GetComponentInterfaceAs<css::awt::XWindow>();
     aArg[ 4 ] = GetSystemGfxDataAny();
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();

@@ -1946,9 +1946,9 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         else
         {
             xRef = pNewComp;
-            pNewWindow->SetComponentInterface( xRef );
+            pNewWindow->SetComponentInterface( pNewComp.get() );
         }
-        DBG_ASSERT( pNewWindow->GetComponentInterface( false ) == xRef,
+        DBG_ASSERT( pNewWindow->GetComponentInterface( false ) == pNewComp.get(),
             "VCLXToolkit::createWindow: did #133706# resurge?" );
 
         if ( rDescriptor.WindowAttributes & css::awt::WindowAttribute::SHOW )
@@ -2502,7 +2502,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
             break;
         }
     if (pFocus != nullptr)
-        xNext = pFocus->GetComponentInterface();
+        xNext = static_cast<cppu::OWeakObject*>(pFocus->GetComponentInterface());
     css::awt::FocusEvent aAwtEvent(
         static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
         static_cast<sal_Int16>(pWindow->GetGetFocusFlags()),

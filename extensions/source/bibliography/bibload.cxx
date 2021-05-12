@@ -227,7 +227,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame,
 
     pMyWindow->createBottomFrame(pView);
 
-    Reference< awt::XWindow >  xWin ( pMyWindow->GetComponentInterface(), UNO_QUERY );
+    auto xWin = pMyWindow->GetComponentInterfaceAs<awt::XWindow>();
 
     Reference< XController >  xCtrRef( new BibFrameController_Impl( xWin, m_xDatMan.get() ) );
 

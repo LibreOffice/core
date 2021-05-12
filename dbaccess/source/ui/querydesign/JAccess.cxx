@@ -33,7 +33,7 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
 
     OJoinDesignViewAccess::OJoinDesignViewAccess(OJoinTableView* _pTableView)
-        :VCLXAccessibleComponent(_pTableView->GetComponentInterface().is() ? _pTableView->GetWindowPeer() : nullptr)
+        :VCLXAccessibleComponent(_pTableView->GetComponentInterface() ? _pTableView->GetWindowPeer() : nullptr)
         ,m_pTableView(_pTableView)
     {
     }

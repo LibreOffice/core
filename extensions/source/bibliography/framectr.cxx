@@ -661,7 +661,7 @@ void BibFrameController_Impl::addStatusListener(
         m_xLastQueriedFocusWin = lcl_GetFocusChild( VCLUnoHelper::GetWindow( m_xWindow ) );
         if (m_xLastQueriedFocusWin)
         {
-            Reference<css::awt::XTextComponent> xEdit(m_xLastQueriedFocusWin->GetComponentInterface(), css::uno::UNO_QUERY);
+            Reference<css::awt::XTextComponent> xEdit = m_xLastQueriedFocusWin->GetComponentInterfaceAs<css::awt::XTextComponent>();
             aEvent.IsEnabled = xEdit && xEdit->isEditable() && !xEdit->getSelectedText().isEmpty();
         }
     }
@@ -670,7 +670,7 @@ void BibFrameController_Impl::addStatusListener(
         m_xLastQueriedFocusWin = lcl_GetFocusChild( VCLUnoHelper::GetWindow( m_xWindow ) );
         if (m_xLastQueriedFocusWin)
         {
-            Reference<css::awt::XTextComponent> xEdit(m_xLastQueriedFocusWin->GetComponentInterface(), css::uno::UNO_QUERY);
+            auto xEdit = m_xLastQueriedFocusWin->GetComponentInterfaceAs<css::awt::XTextComponent>();
             aEvent.IsEnabled = xEdit && !xEdit->getSelectedText().isEmpty();
         }
     }
@@ -680,7 +680,7 @@ void BibFrameController_Impl::addStatusListener(
         m_xLastQueriedFocusWin = lcl_GetFocusChild( VCLUnoHelper::GetWindow( m_xWindow ) );
         if (m_xLastQueriedFocusWin)
         {
-            Reference<css::awt::XTextComponent> xEdit(m_xLastQueriedFocusWin->GetComponentInterface(), css::uno::UNO_QUERY);
+            auto xEdit = m_xLastQueriedFocusWin->GetComponentInterfaceAs<css::awt::XTextComponent>();
             if (xEdit && !xEdit->isEditable())
             {
                 uno::Reference< datatransfer::clipboard::XClipboard > xClip = m_xLastQueriedFocusWin->GetClipboard();

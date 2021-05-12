@@ -436,7 +436,7 @@ void SAL_CALL ChartController::attachFrame(
         SolarMutexGuard aSolarGuard;
         auto pChartWindow = VclPtr<ChartWindow>::Create(this,pParent,pParent?pParent->GetStyle():0);
         pChartWindow->SetBackground();//no Background
-        m_xViewWindow.set( pChartWindow->GetComponentInterface(), uno::UNO_QUERY );
+        m_xViewWindow = pChartWindow->GetComponentInterfaceAs<css::awt::XWindow>();
         pChartWindow->Show();
         m_apDropTargetHelper.reset(
             new ChartDropTargetHelper( pChartWindow->GetDropTarget(),
