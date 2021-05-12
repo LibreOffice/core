@@ -326,19 +326,6 @@ namespace o3tl
     template<> struct typed_flags<GetFocusFlags> : is_typed_flags<GetFocusFlags, 0x077f> {};
 }
 
-
-// Flags for Draw()
-enum class DrawFlags
-{
-    NONE                = 0x0000,
-    Mono                = 0x0001,
-    NoControls          = 0x0004,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<DrawFlags> : is_typed_flags<DrawFlags, 0x0005> {};
-}
-
 // DialogControl-Flags
 enum class DialogControlFlags
 {
