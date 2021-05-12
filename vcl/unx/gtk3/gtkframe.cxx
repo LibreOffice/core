@@ -722,6 +722,7 @@ GtkSalFrame::~GtkSalFrame()
                 if ( m_nActionGroupExportId )
                     g_dbus_connection_unexport_action_group( pSessionBus, m_nActionGroupExportId );
             }
+            m_xFrameWeld.reset();
 #if !GTK_CHECK_VERSION(4,0,0)
             gtk_widget_destroy( m_pWindow );
 #else
