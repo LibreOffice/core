@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
-
+#include <basegfx/tuple/Tuple2D.hxx>
 
 namespace basegfx
 {
@@ -33,34 +33,29 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on two sal_Int64 values
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B2I64Tuple final
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B2I64Tuple : public Tuple2D<sal_Int64>
     {
-        sal_Int64                                       mnX;
-        sal_Int64                                       mnY;
-
     public:
         /** Create a 2D Tuple
 
             The tuple is initialized to (0, 0)
         */
         B2I64Tuple()
-        :   mnX(0),
-            mnY(0)
+            : Tuple2D(0, 0)
         {}
 
         /** Create a 2D Tuple
 
-            @param fX
+            @param nX
             This parameter is used to initialize the X-coordinate
             of the 2D Tuple.
 
-            @param fY
+            @param nY
             This parameter is used to initialize the Y-coordinate
             of the 2D Tuple.
         */
-        B2I64Tuple(sal_Int64 fX, sal_Int64 fY)
-        :   mnX( fX ),
-            mnY( fY )
+        B2I64Tuple(sal_Int64 nX, sal_Int64 nY)
+            : Tuple2D(nX, nY)
         {}
 
         /** Create a copy of a 2D Tuple
@@ -69,98 +64,14 @@ namespace basegfx
             The 2D Tuple which will be copied.
         */
         B2I64Tuple(const B2I64Tuple& rTup)
-        :   mnX( rTup.mnX ),
-            mnY( rTup.mnY )
+            : Tuple2D(rTup.mnX, rTup.mnY)
         {}
 
-        /// Get X-Coordinate of 2D Tuple
-        sal_Int64 getX() const
-        {
-            return mnX;
-        }
-
-        /// Get Y-Coordinate of 2D Tuple
-        sal_Int64 getY() const
-        {
-            return mnY;
-        }
-
-        /// Array-access to 2D Tuple
-        const sal_Int64& operator[] (int nPos) const
-        {
-            // Here, normally one if(...) should be used. In the assumption that
-            // both sal_Int64 members can be accessed as an array a shortcut is used here.
-            // if(0 == nPos) return mnX; return mnY;
-            return *((&mnX) + nPos);
-        }
-
-        /// Array-access to 2D Tuple
-        sal_Int64& operator[] (int nPos)
-        {
-            // Here, normally one if(...) should be used. In the assumption that
-            // both sal_Int64 members can be accessed as an array a shortcut is used here.
-            // if(0 == nPos) return mnX; return mnY;
-            return *((&mnX) + nPos);
-        }
-
         // operators
-
-
-        B2I64Tuple& operator+=( const B2I64Tuple& rTup )
-        {
-            mnX += rTup.mnX;
-            mnY += rTup.mnY;
-            return *this;
-        }
-
-        B2I64Tuple& operator-=( const B2I64Tuple& rTup )
-        {
-            mnX -= rTup.mnX;
-            mnY -= rTup.mnY;
-            return *this;
-        }
-
-        B2I64Tuple& operator/=( const B2I64Tuple& rTup )
-        {
-            mnX /= rTup.mnX;
-            mnY /= rTup.mnY;
-            return *this;
-        }
-
-        B2I64Tuple& operator*=( const B2I64Tuple& rTup )
-        {
-            mnX *= rTup.mnX;
-            mnY *= rTup.mnY;
-            return *this;
-        }
-
-        B2I64Tuple& operator*=(sal_Int64 t)
-        {
-            mnX *= t;
-            mnY *= t;
-            return *this;
-        }
-
-        B2I64Tuple& operator/=(sal_Int64 t)
-        {
-            mnX /= t;
-            mnY /= t;
-            return *this;
-        }
 
         B2I64Tuple operator-(void) const
         {
             return B2I64Tuple(-mnX, -mnY);
-        }
-
-        bool operator==( const B2I64Tuple& rTup ) const
-        {
-            return this == &rTup || (rTup.mnX == mnX && rTup.mnY == mnY);
-        }
-
-        bool operator!=( const B2I64Tuple& rTup ) const
-        {
-            return !(*this == rTup);
         }
 
         B2I64Tuple& operator=( const B2I64Tuple& rTup )
