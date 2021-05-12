@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <basegfx/tuple/Tuple3D.hxx>
 
 namespace basegfx
 {
@@ -36,22 +37,15 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on three double values
     */
-    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) B3DTuple
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) B3DTuple : public Tuple3D<double>
     {
-    protected:
-        double                                      mfX;
-        double                                      mfY;
-        double                                      mfZ;
-
     public:
         /** Create a 3D Tuple
 
             The tuple is initialized to (0.0, 0.0, 0.0)
         */
         B3DTuple()
-        :   mfX(0.0),
-            mfY(0.0),
-            mfZ(0.0)
+            : Tuple3D(0.0, 0.0, 0.0)
         {}
 
         /** Create a 3D Tuple
@@ -69,46 +63,8 @@ namespace basegfx
             of the 3D Tuple.
         */
         B3DTuple(double fX, double fY, double fZ)
-        :   mfX(fX),
-            mfY(fY),
-            mfZ(fZ)
+            : Tuple3D(fX, fY, fZ)
         {}
-
-        /// get X-Coordinate of 3D Tuple
-        double getX() const
-        {
-            return mfX;
-        }
-
-        /// get Y-Coordinate of 3D Tuple
-        double getY() const
-        {
-            return mfY;
-        }
-
-        /// get Z-Coordinate of 3D Tuple
-        double getZ() const
-        {
-            return mfZ;
-        }
-
-        /// set X-Coordinate of 3D Tuple
-        void setX(double fX)
-        {
-            mfX = fX;
-        }
-
-        /// set Y-Coordinate of 3D Tuple
-        void setY(double fY)
-        {
-            mfY = fY;
-        }
-
-        /// set Z-Coordinate of 3D Tuple
-        void setZ(double fZ)
-        {
-            mfZ = fZ;
-        }
 
         /// Array-access to 3D Tuple
         const double& operator[] (int nPos) const
@@ -150,70 +106,17 @@ namespace basegfx
 
         // operators
 
-
-        B3DTuple& operator+=( const B3DTuple& rTup )
-        {
-            mfX += rTup.mfX;
-            mfY += rTup.mfY;
-            mfZ += rTup.mfZ;
-            return *this;
-        }
-
-        B3DTuple& operator-=( const B3DTuple& rTup )
-        {
-            mfX -= rTup.mfX;
-            mfY -= rTup.mfY;
-            mfZ -= rTup.mfZ;
-            return *this;
-        }
-
-        B3DTuple& operator/=( const B3DTuple& rTup )
-        {
-            mfX /= rTup.mfX;
-            mfY /= rTup.mfY;
-            mfZ /= rTup.mfZ;
-            return *this;
-        }
-
-        B3DTuple& operator*=( const B3DTuple& rTup )
-        {
-            mfX *= rTup.mfX;
-            mfY *= rTup.mfY;
-            mfZ *= rTup.mfZ;
-            return *this;
-        }
-
-        B3DTuple& operator*=(double t)
-        {
-            mfX *= t;
-            mfY *= t;
-            mfZ *= t;
-            return *this;
-        }
-
-        B3DTuple& operator/=(double t)
-        {
-            const double fVal(1.0 / t);
-            mfX *= fVal;
-            mfY *= fVal;
-            mfZ *= fVal;
-            return *this;
-        }
-
         B3DTuple operator-(void) const
         {
             return B3DTuple(-mfX, -mfY, -mfZ);
         }
 
-        bool operator==( const B3DTuple& rTup ) const
+        bool operator==(const B3DTuple& rTup) const
         {
             return mfX == rTup.mfX && mfY == rTup.mfY && mfZ == rTup.mfZ;
         }
 
-        bool operator!=( const B3DTuple& rTup ) const
-        {
-            return mfX != rTup.mfX || mfY != rTup.mfY || mfZ != rTup.mfZ;
-        }
+        bool operator!=(const B3DTuple& rTup) const { return !operator==(rTup); }
 
         void correctValues(const double fCompareValue = 0.0)
         {
