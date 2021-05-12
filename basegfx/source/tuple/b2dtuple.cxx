@@ -30,8 +30,7 @@ namespace basegfx
     }
 
     B2DTuple::B2DTuple(const B2ITuple& rTup)
-    :   mfX( rTup.getX() ),
-        mfY( rTup.getY() )
+        : Tuple2D(rTup.getX(), rTup.getY())
     {}
 
     B2ITuple fround(const B2DTuple& rTup)
