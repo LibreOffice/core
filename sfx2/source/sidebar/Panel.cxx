@@ -24,6 +24,7 @@
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
 
 
@@ -50,7 +51,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
              Deck* pDeck,
              const std::function<Context()>& rContextAccess,
              const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : mxBuilder(Application::CreateBuilder(pParentWindow, "sfx/ui/panel.ui"))
+    : mxBuilder(Application::CreateBuilder(pParentWindow, "sfx/ui/panel.ui", false, reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
     , msPanelId(rPanelDescriptor.msId)
     , msTitle(rPanelDescriptor.msTitle)
     , mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional)
