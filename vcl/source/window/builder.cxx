@@ -178,17 +178,17 @@ namespace
 
 }
 
-weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile)
+weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
 {
-    bool bUseJSBuilder = false;
-
     if (comphelper::LibreOfficeKit::isActive())
-        bUseJSBuilder = jsdialog::isBuilderEnabled(rUIFile, bMobile);
+    {
+        if (jsdialog::isBuilderEnabledForSidebar(rUIFile))
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, nLOKWindowId);
+        if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
+            return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
+    }
 
-    if (bUseJSBuilder)
-        return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
-    else
-        return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
+    return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 }
 
 weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
