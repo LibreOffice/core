@@ -64,4 +64,5 @@ leak:Firebird::
 
 # TODO leaks in basic module
 # these appears to be some kind of ref-counting cycle
-leak:MacroSnippet::Compile()
+leak:SbiRuntime::
+leak:SbModule::
