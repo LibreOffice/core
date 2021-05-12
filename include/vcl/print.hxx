@@ -249,6 +249,10 @@ protected:
 
     virtual void                SetFontOrientation( LogicalFontInstance* const pFontInstance ) const override;
 
+    bool                        DrawWavePixelAsRect(tools::Long) const override { return true; }
+    void                        SetWaveLineColors(Color const& rColor, tools::Long) override;
+    Size                        GetWaveLineSize(tools::Long) const override;
+
 public:
                                 Printer();
                                 Printer( const JobSetup& rJobSetup );

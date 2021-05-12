@@ -1756,4 +1756,15 @@ void Printer::SetSystemTextColor(DrawFlags, bool)
     SetTextColor(COL_BLACK);
 }
 
+void Printer::SetWaveLineColors(Color const& rColor, tools::Long)
+{
+    mpGraphics->SetLineColor(rColor);
+    mbInitLineColor = true;
+}
+
+Size Printer::GetWaveLineSize(tools::Long) const
+{
+    return Size(1, 1);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
