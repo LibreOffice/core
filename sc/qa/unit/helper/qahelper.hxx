@@ -161,6 +161,19 @@ inline std::string print(const ScAddress& rAddr)
     return str.str();
 }
 
+/**
+ * Temporarily set formula grammar.
+ */
+class FormulaGrammarSwitch
+{
+    ScDocument* mpDoc;
+    formula::FormulaGrammar::Grammar meOldGrammar;
+
+public:
+    FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar);
+    ~FormulaGrammarSwitch();
+};
+
 class SCQAHELPER_DLLPUBLIC ScBootstrapFixture : public test::BootstrapFixture
 {
     static const FileFormat aFileFormats[];
@@ -219,5 +232,18 @@ SCQAHELPER_DLLPUBLIC void testFormats(ScBootstrapFixture* pTest, ScDocument* pDo
 SCQAHELPER_DLLPUBLIC ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos);
 
 SCQAHELPER_DLLPUBLIC std::string to_std_string(const OUString& rStr);
+
+/** Get a separate new ScDocShell with ScDocument that suits unit test needs. */
+void getNewDocShell(ScDocShellRef& rDocShellRef);
+
+/** Close such new ScDocShell. */
+void closeDocShell(ScDocShellRef& rDocShellRef);
+
+
+SCQAHELPER_DLLPUBLIC ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
+                                   const std::vector<std::vector<const char*>>& rData);
+SCQAHELPER_DLLPUBLIC void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);
+SCQAHELPER_DLLPUBLIC void clearRange(ScDocument* pDoc, const ScRange& rRange);
+SCQAHELPER_DLLPUBLIC void clearSheet(ScDocument* pDoc, SCTAB nTab);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

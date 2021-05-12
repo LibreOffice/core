@@ -36,6 +36,7 @@
 #include <sfx2/frame.hxx>
 #include <unotools/tempfile.hxx>
 #include <scitems.hxx>
+#include <stringutil.hxx>
 #include <tokenarray.hxx>
 
 #include <orcus/csv_parser.hpp>
@@ -49,6 +50,17 @@
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
+
+FormulaGrammarSwitch::FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar) :
+    mpDoc(pDoc), meOldGrammar(pDoc->GetGrammar())
+{
+    mpDoc->SetGrammar(eGrammar);
+}
+
+FormulaGrammarSwitch::~FormulaGrammarSwitch()
+{
+    mpDoc->SetGrammar(meOldGrammar);
+}
 
 // calc data structure pretty printer
 std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
@@ -842,6 +854,103 @@ void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* expected,
         CppUnit::Asserter::failNotEqual(to_std_string(aExpectedFormula),
                 to_std_string(aFormula), sourceLine, CppUnit::AdditionalMessage(msg));
     }
+}
+
+void getNewDocShell( ScDocShellRef& rDocShellRef )
+{
+    rDocShellRef = new ScDocShell(
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+
+    rDocShellRef->SetIsInUcalc();
+    rDocShellRef->DoInitUnitTest();
+}
+
+void closeDocShell( ScDocShellRef& rDocShellRef )
+{
+    rDocShellRef->DoClose();
+    rDocShellRef.clear();
+}
+
+ScRange insertRangeData(
+    ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<const char*>>& rData )
+{
+    if (rData.empty())
+        return ScRange(ScAddress::INITIALIZE_INVALID);
+
+    ScAddress aPos = rPos;
+
+    SCCOL nColWidth = 1;
+    for (const std::vector<const char*>& rRow : rData)
+        nColWidth = std::max<SCCOL>(nColWidth, rRow.size());
+
+    ScRange aRange(aPos);
+    aRange.aEnd.IncCol(nColWidth-1);
+    aRange.aEnd.IncRow(rData.size()-1);
+
+    clearRange(pDoc, aRange);
+
+    for (const std::vector<const char*>& rRow : rData)
+    {
+        aPos.SetCol(rPos.Col());
+
+        for (const char* pStr : rRow)
+        {
+            if (!pStr)
+            {
+                aPos.IncCol();
+                continue;
+            }
+
+            OUString aStr(pStr, strlen(pStr), RTL_TEXTENCODING_UTF8);
+
+            ScSetStringParam aParam; // Leave default.
+            aParam.meStartListening = sc::NoListening;
+            pDoc->SetString(aPos, aStr, &aParam);
+
+            aPos.IncCol();
+        }
+
+        aPos.IncRow();
+    }
+
+    pDoc->StartAllListeners(aRange);
+    printRange(pDoc, aRange, "Range data content");
+    return aRange;
+}
+
+void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
+{
+    SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
+    SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
+    svl::GridPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1, CALC_DEBUG_OUTPUT != 0);
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            ScAddress aPos(nCol, nRow, rRange.aStart.Tab());
+            ScRefCellValue aCell(*pDoc, aPos);
+            OUString aVal = ScCellFormat::GetOutputString(*pDoc, aPos, aCell);
+            printer.set(nRow-nRow1, nCol-nCol1, aVal);
+        }
+    }
+    printer.print(pCaption);
+}
+
+void clearRange(ScDocument* pDoc, const ScRange& rRange)
+{
+    ScMarkData aMarkData(pDoc->GetSheetLimits());
+    aMarkData.SetMarkArea(rRange);
+    pDoc->DeleteArea(
+        rRange.aStart.Col(), rRange.aStart.Row(),
+        rRange.aEnd.Col(), rRange.aEnd.Row(), aMarkData, InsertDeleteFlags::CONTENTS);
+}
+
+void clearSheet(ScDocument* pDoc, SCTAB nTab)
+{
+    ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
+    clearRange(pDoc, aRange);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

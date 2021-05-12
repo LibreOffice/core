@@ -1560,7 +1560,7 @@ public:
                                                       const ScMarkData& rMark, bool bAnchored = false );
     void                         DeleteObjectsInSelection( const ScMarkData& rMark );
 
-    void                         DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
+    SC_DLLPUBLIC void            DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
                                              InsertDeleteFlags nDelFlag, bool bBroadcast = true,
                                              sc::ColumnSpanSet* pBroadcastSpans = nullptr );
 
@@ -2309,7 +2309,7 @@ public:
     void                StartAllListeners();
     void                StartNeededListeners();
     void                StartNeededListeners( const std::shared_ptr<const sc::ColumnSet>& rpColSet );
-    void                StartAllListeners( const ScRange& rRange );
+    SC_DLLPUBLIC void   StartAllListeners( const ScRange& rRange );
 
     void                SetForcedFormulas( bool bVal ) { bHasForcedFormulas = bVal; }
     sal_uLong           GetFormulaCodeInTree() const { return nFormulaCodeInTree; }

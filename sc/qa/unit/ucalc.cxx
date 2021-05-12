@@ -100,17 +100,6 @@ struct TestImpl
     ScDocShellRef m_xDocShell;
 };
 
-FormulaGrammarSwitch::FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar) :
-    mpDoc(pDoc), meOldGrammar(pDoc->GetGrammar())
-{
-    mpDoc->SetGrammar(eGrammar);
-}
-
-FormulaGrammarSwitch::~FormulaGrammarSwitch()
-{
-    mpDoc->SetGrammar(meOldGrammar);
-}
-
 Test::Test() :
     m_pImpl(new TestImpl),
     m_pDoc(nullptr)
@@ -124,23 +113,6 @@ Test::~Test()
 ScDocShell& Test::getDocShell()
 {
     return *m_pImpl->m_xDocShell;
-}
-
-void Test::getNewDocShell( ScDocShellRef& rDocShellRef )
-{
-    rDocShellRef = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-
-    rDocShellRef->SetIsInUcalc();
-    rDocShellRef->DoInitUnitTest();
-}
-
-void Test::closeDocShell( ScDocShellRef& rDocShellRef )
-{
-    rDocShellRef->DoClose();
-    rDocShellRef.clear();
 }
 
 void Test::setUp()
@@ -927,7 +899,7 @@ struct HoriIterCheck
 bool checkHorizontalIterator(ScDocument& rDoc, const std::vector<std::vector<const char*>>& rData, const HoriIterCheck* pChecks, size_t nCheckCount)
 {
     ScAddress aPos(0,0,0);
-    Test::insertRangeData(&rDoc, aPos, rData);
+    insertRangeData(&rDoc, aPos, rData);
     ScHorizontalCellIterator aIter(rDoc, 0, 0, 0, 1, rData.size() - 1);
 
     SCCOL nCol;
@@ -12400,39 +12372,6 @@ bool Test::insertRangeNames(
     return true;
 }
 
-void Test::printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
-{
-    SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
-    SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
-    svl::GridPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1, CALC_DEBUG_OUTPUT != 0);
-    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-    {
-        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        {
-            ScAddress aPos(nCol, nRow, rRange.aStart.Tab());
-            ScRefCellValue aCell(*pDoc, aPos);
-            OUString aVal = ScCellFormat::GetOutputString(*pDoc, aPos, aCell);
-            printer.set(nRow-nRow1, nCol-nCol1, aVal);
-        }
-    }
-    printer.print(pCaption);
-}
-
-void Test::clearRange(ScDocument* pDoc, const ScRange& rRange)
-{
-    ScMarkData aMarkData(pDoc->GetSheetLimits());
-    aMarkData.SetMarkArea(rRange);
-    pDoc->DeleteArea(
-        rRange.aStart.Col(), rRange.aStart.Row(),
-        rRange.aEnd.Col(), rRange.aEnd.Row(), aMarkData, InsertDeleteFlags::CONTENTS);
-}
-
-void Test::clearSheet(ScDocument* pDoc, SCTAB nTab)
-{
-    ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
-    clearRange(pDoc, aRange);
-}
-
 ScUndoCut* Test::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo)
 {
     ScDocument* pSrcDoc = &rDocSh.GetDocument();
@@ -12536,53 +12475,6 @@ void Test::checkPrecisionAsShown( OUString& rCode, double fValue, double fExpect
         OUStringToOString( rCode, RTL_TEXTENCODING_ASCII_US ) +
         "\" is not correctly rounded";
     CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), fExpectedRoundVal, fRoundValue );
-}
-
-ScRange Test::insertRangeData(
-    ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<const char*>>& rData )
-{
-    if (rData.empty())
-        return ScRange(ScAddress::INITIALIZE_INVALID);
-
-    ScAddress aPos = rPos;
-
-    SCCOL nColWidth = 1;
-    for (const std::vector<const char*>& rRow : rData)
-        nColWidth = std::max<SCCOL>(nColWidth, rRow.size());
-
-    ScRange aRange(aPos);
-    aRange.aEnd.IncCol(nColWidth-1);
-    aRange.aEnd.IncRow(rData.size()-1);
-
-    clearRange(pDoc, aRange);
-
-    for (const std::vector<const char*>& rRow : rData)
-    {
-        aPos.SetCol(rPos.Col());
-
-        for (const char* pStr : rRow)
-        {
-            if (!pStr)
-            {
-                aPos.IncCol();
-                continue;
-            }
-
-            OUString aStr(pStr, strlen(pStr), RTL_TEXTENCODING_UTF8);
-
-            ScSetStringParam aParam; // Leave default.
-            aParam.meStartListening = sc::NoListening;
-            pDoc->SetString(aPos, aStr, &aParam);
-
-            aPos.IncCol();
-        }
-
-        aPos.IncRow();
-    }
-
-    pDoc->StartAllListeners(aRange);
-    printRange(pDoc, aRange, "Range data content");
-    return aRange;
 }
 
 void Test::testPrecisionAsShown()

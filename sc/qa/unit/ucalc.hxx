@@ -20,19 +20,6 @@ struct TestImpl;
 class ScUndoPaste;
 class ScUndoCut;
 
-/**
- * Temporarily set formula grammar.
- */
-class FormulaGrammarSwitch
-{
-    ScDocument* mpDoc;
-    formula::FormulaGrammar::Grammar meOldGrammar;
-
-public:
-    FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar);
-    ~FormulaGrammarSwitch();
-};
-
 class Test : public test::BootstrapFixture
 {
 public:
@@ -46,9 +33,6 @@ public:
     static ScDocShell* findLoadedDocShellByName(std::u16string_view rName);
     static bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,
                                  const RangeNameDef* pEnd);
-    static void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);
-    static void clearRange(ScDocument* pDoc, const ScRange& rRange);
-    static void clearSheet(ScDocument* pDoc, SCTAB nTab);
     static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc,
                                 bool bCreateUndo);
     static void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
@@ -70,18 +54,10 @@ public:
 
     void checkPrecisionAsShown(OUString& rCode, double fValue, double fExpectedRoundVal);
 
-    static ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
-                                   const std::vector<std::vector<const char*>>& rData);
-
     Test();
     virtual ~Test() override;
 
     ScDocShell& getDocShell();
-
-    /** Get a separate new ScDocShell with ScDocument that suits unit test needs. */
-    void getNewDocShell(ScDocShellRef& rDocShellRef);
-    /** Close such new ScDocShell. */
-    void closeDocShell(ScDocShellRef& rDocShellRef);
 
     virtual void setUp() override;
     virtual void tearDown() override;
