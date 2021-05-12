@@ -239,7 +239,7 @@ protected:
     bool                        TransformAndReduceBitmapExToTargetRange( const basegfx::B2DHomMatrix& aFullTransform,
                                     basegfx::B2DRange &aVisibleRange, double &fMaximumArea) override;
 
-    void                        DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
+    void                        DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                     BitmapEx& rBitmapEx ) override;
 
