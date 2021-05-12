@@ -547,6 +547,9 @@ void Window::dispose()
         mpWindowImpl->mpFrameData = nullptr;
     }
 
+    if (mpWindowImpl->mxWindowPeer)
+        mpWindowImpl->mxWindowPeer->dispose();
+
     // should be the last statements
     mpWindowImpl.reset();
 
@@ -3104,11 +3107,15 @@ const OUString& Window::GetHelpText() const
 
 void Window::SetWindowPeer( Reference< css::awt::XWindowPeer > const & xPeer, VCLXWindow* pVCLXWindow  )
 {
-    if (!mpWindowImpl)
+    if (!mpWindowImpl || mpWindowImpl->mbInDispose)
         return;
 
     // be safe against re-entrance: first clear the old ref, then assign the new one
-    mpWindowImpl->mxWindowPeer.clear();
+    if (mpWindowImpl->mxWindowPeer)
+    {
+        mpWindowImpl->mxWindowPeer->dispose();
+        mpWindowImpl->mxWindowPeer.clear();
+    }
     mpWindowImpl->mxWindowPeer = xPeer;
 
     mpWindowImpl->mpVCLXWindow = pVCLXWindow;
