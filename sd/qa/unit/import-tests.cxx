@@ -86,6 +86,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
@@ -120,6 +121,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testCustomSlideShow();
     void testInternalHyperlink();
     void testHyperlinkColor();
     void testSmoketest();
@@ -239,6 +241,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testCustomSlideShow);
     CPPUNIT_TEST(testInternalHyperlink);
     CPPUNIT_TEST(testHyperlinkColor);
     CPPUNIT_TEST(testSmoketest);
@@ -432,6 +435,22 @@ void SdImportTest::testDocumentLayout()
                 OUString(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump )),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testCustomSlideShow()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf131390.pptx"), PPTX);
+
+    css::uno::Reference<css::presentation::XCustomPresentationSupplier> aXCPSup(
+        xDocShRef->GetModel(), css::uno::UNO_QUERY);
+    css::uno::Reference<css::container::XNameContainer> aXCont(aXCPSup->getCustomPresentations());
+    const css::uno::Sequence< OUString> aNameSeq( aXCont->getElementNames() );
+
+    // In the document, there are two custom presentations.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), aNameSeq.size());
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testInternalHyperlink()

@@ -35,6 +35,10 @@
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 
 #include <oox/drawingml/theme.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -154,6 +158,49 @@ static void ResolveTextFields( XmlFilterBase const & rFilter )
                     }
                 }
             }
+        }
+    }
+}
+
+void PresentationFragmentHandler::importCustomSlideShow(std::vector<CustomShow>& rCustomShowList)
+{
+    PowerPointImport& rFilter = dynamic_cast<PowerPointImport&>(getFilter());
+    Reference<frame::XModel> xModel(rFilter.getModel());
+    Reference<XDrawPagesSupplier> xDrawPagesSupplier(xModel, UNO_QUERY_THROW);
+    Reference<XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW);
+
+    Reference<css::lang::XSingleServiceFactory> mxShowFactory;
+    Reference<css::container::XNameContainer> mxShows;
+    Reference<XCustomPresentationSupplier> xShowsSupplier(xModel, UNO_QUERY);
+    if (xShowsSupplier.is())
+    {
+        mxShows = xShowsSupplier->getCustomPresentations();
+        mxShowFactory.set(mxShows, UNO_QUERY);
+    }
+
+    for (size_t i = 0; i < rCustomShowList.size(); ++i)
+    {
+        Reference<com::sun::star::container::XIndexContainer> xShow(mxShowFactory->createInstance(),
+                                                                    UNO_QUERY);
+        if (xShow.is())
+        {
+            static const OUStringLiteral sSlide = u"slides/slide";
+            for (size_t j = 0; j < rCustomShowList[i].maSldLst.size(); ++j)
+            {
+                OUString sCustomSlide = rCustomShowList[i].maSldLst[j];
+                sal_Int32 nPageNumber = sCustomSlide.copy(sSlide.getLength()).toInt32();
+
+                Reference<XDrawPage> xPage;
+                xDrawPages->getByIndex(nPageNumber - 1) >>= xPage;
+                if (xPage.is())
+                {
+                    xShow->insertByIndex(xShow->getCount(), Any(xPage));
+                }
+            }
+
+            Any aAny;
+            aAny <<= xShow;
+            mxShows->insertByName(rCustomShowList[i].maCustomShowName, aAny);
         }
     }
 }
@@ -497,6 +544,8 @@ void PresentationFragmentHandler::finalizeImport()
                 nPagesImported++;
             }
             ResolveTextFields( rFilter );
+            if (!maCustomShowList.empty())
+                importCustomSlideShow(maCustomShowList);
         }
         catch( uno::Exception& )
         {
