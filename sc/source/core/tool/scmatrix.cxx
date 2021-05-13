@@ -327,8 +327,8 @@ public:
             const ScMatrix::BoolOpFunction& aBoolFunc, const ScMatrix::StringOpFunction& aStringFunc,
             const ScMatrix::EmptyOpFunction& aEmptyFunc) const;
 
-    template<typename T>
-    std::vector<ScMatrix::IterateResultMultiple> ApplyCollectOperation(const std::vector<T>& aOp);
+    template<typename T, typename tRes>
+    ScMatrix::IterateResultMultiple<tRes> ApplyCollectOperation(const std::vector<T>& aOp);
 
     void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
             SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool);
@@ -1169,38 +1169,37 @@ public:
     }
 };
 
-template<typename Op>
+template<typename Op, typename tRes>
 class WalkElementBlocksMultipleValues
 {
     const std::vector<Op>* mpOp;
-    std::vector<ScMatrix::IterateResultMultiple> maRes;
-    bool mbFirst:1;
+    ScMatrix::IterateResultMultiple<tRes> maRes;
 public:
     WalkElementBlocksMultipleValues(const std::vector<Op>& aOp) :
-        mpOp(&aOp), mbFirst(true)
+        mpOp(&aOp), maRes(0)
     {
         for (const auto& rpOp : *mpOp)
-        {
-            maRes.emplace_back(rpOp.mInitVal, rpOp.mInitVal, 0);
-        }
-        maRes.emplace_back(0.0, 0.0, 0); // count
+            maRes.maAccumulator.emplace_back(rpOp.mInitVal);
     }
 
     WalkElementBlocksMultipleValues( const WalkElementBlocksMultipleValues& ) = delete;
     WalkElementBlocksMultipleValues& operator= ( const WalkElementBlocksMultipleValues& ) = delete;
 
-    WalkElementBlocksMultipleValues(WalkElementBlocksMultipleValues&& r) noexcept :
-        mpOp(r.mpOp), maRes(std::move(r.maRes)), mbFirst(r.mbFirst) {}
+    WalkElementBlocksMultipleValues(WalkElementBlocksMultipleValues&& r) noexcept
+    : mpOp(r.mpOp), maRes(r.maRes.mnCount)
+    {
+        maRes.maAccumulator = std::move(r.maRes.maAccumulator);
+    }
 
     WalkElementBlocksMultipleValues& operator=(WalkElementBlocksMultipleValues&& r) noexcept
     {
         mpOp = r.mpOp;
-        maRes = std::move(r.maRes);
-        mbFirst = r.mbFirst;
+        maRes.maAccumulator = std::move(r.maRes.maAccumulator);
+        maRes.mnCount = r.maRes.mnCount;
         return *this;
     }
 
-    const std::vector<ScMatrix::IterateResultMultiple>& getResult() const { return maRes; }
+    const ScMatrix::IterateResultMultiple<tRes>& getResult() const { return maRes; }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
@@ -1214,23 +1213,10 @@ public:
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                 {
-                    if (mbFirst)
-                    {
-                        for (size_t i = 0u; i < mpOp->size(); ++i)
-                        {
-                            (*mpOp)[i](maRes[i].mfFirst, *it);
-                        }
-                        mbFirst = false;
+                    for (size_t i = 0u; i < mpOp->size(); ++i)
+                        (*mpOp)[i](maRes.maAccumulator[i], *it);
                     }
-                    else
-                    {
-                        for (size_t i = 0u; i < mpOp->size(); ++i)
-                        {
-                            (*mpOp)[i](maRes[i].mfRest, *it);
-                        }
-                    }
-                }
-                maRes.back().mnCount += node.size;
+                maRes.mnCount += node.size;
             }
             break;
             case mdds::mtm::element_boolean:
@@ -1241,23 +1227,10 @@ public:
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                 {
-                    if (mbFirst)
-                    {
-                        for (size_t i = 0u; i < mpOp->size(); ++i)
-                        {
-                            (*mpOp)[i](maRes[i].mfFirst, *it);
-                        }
-                        mbFirst = false;
-                    }
-                    else
-                    {
-                        for (size_t i = 0u; i < mpOp->size(); ++i)
-                        {
-                            (*mpOp)[i](maRes[i].mfRest, *it);
-                        }
-                    }
+                    for (size_t i = 0u; i < mpOp->size(); ++i)
+                        (*mpOp)[i](maRes.maAccumulator[i], *it);
                 }
-                maRes.back().mnCount += node.size;
+                maRes.mnCount += node.size;
             }
             break;
             case mdds::mtm::element_string:
@@ -2422,10 +2395,10 @@ void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
     maMat.walk(aFunc);
 }
 
-template<typename T>
-std::vector<ScMatrix::IterateResultMultiple> ScMatrixImpl::ApplyCollectOperation(const std::vector<T>& aOp)
+template<typename T, typename tRes>
+ScMatrix::IterateResultMultiple<tRes> ScMatrixImpl::ApplyCollectOperation(const std::vector<T>& aOp)
 {
-    WalkElementBlocksMultipleValues<T> aFunc(aOp);
+    WalkElementBlocksMultipleValues<T, tRes> aFunc(aOp);
     aFunc = maMat.walk(std::move(aFunc));
     return aFunc.getResult();
 }
@@ -3425,9 +3398,14 @@ void ScMatrix::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
     pImpl->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
 }
 
-std::vector<ScMatrix::IterateResultMultiple> ScMatrix::Collect(const std::vector<sc::op::Op>& aOp)
+ScMatrix::IterateResultMultiple<double> ScMatrix::Collect(const std::vector<sc::op::Op>& aOp)
 {
-    return pImpl->ApplyCollectOperation(aOp);
+    return pImpl->ApplyCollectOperation<sc::op::Op, double>(aOp);
+}
+
+ScMatrix::IterateResultMultiple<KahanSum> ScMatrix::CollectKahan(const std::vector<sc::op::kOp>& aOp)
+{
+    return pImpl->ApplyCollectOperation<sc::op::kOp, KahanSum>(aOp);
 }
 
 #if DEBUG_MATRIX
