@@ -142,14 +142,6 @@ void ListLevel::SetParaStyle( const tools::SvRef< StyleSheetEntry >& pStyle )
     if (!pStyle)
         return;
     m_pParaStyle = pStyle;
-    // AFAICT .docx spec does not identify which numberings or paragraph
-    // styles are actually the ones to be used for outlines (chapter numbering),
-    // it only kind of says somewhere that they should be named Heading1 to Heading9.
-    const OUString styleId= pStyle->sConvertedStyleName;
-    m_outline = ( styleId.getLength() == RTL_CONSTASCII_LENGTH( "Heading 1" )
-        && styleId.match( "Heading ", 0 )
-        && styleId[ RTL_CONSTASCII_LENGTH( "Heading " ) ] >= '1'
-        && styleId[ RTL_CONSTASCII_LENGTH( "Heading " ) ] <= '9' );
 }
 
 uno::Sequence<beans::PropertyValue> ListLevel::GetProperties(bool bDefaults)
@@ -406,7 +398,6 @@ const OUString& AbstractListDef::MapListId(OUString const& rId)
 
 ListDef::ListDef( ) : AbstractListDef( )
 {
-    m_nDefaultParentLevels = WW_OUTLINE_MAX + 1;
 }
 
 ListDef::~ListDef( )
@@ -500,11 +491,38 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             xFactory->createInstance("com.sun.star.style.NumberingStyle"),
             uno::UNO_QUERY_THROW );
 
-        OUString sStyleName = GetStyleName(GetId(), xStyles);
+        // Could this be LO's special Chapter Numbering "Outline" style (always written as numId 1)?
+        bool bIsValidAsChapterNumbering = false;
+        const sal_Int32 nAbstLevels = m_pAbstractDef ? m_pAbstractDef->Size() : 0;
+        if (nAbstLevels && GetId() == 1)
+        {
+            for (sal_Int8 nLevel = 0; nLevel < nAbstLevels; ++nLevel)
+            {
+                const ListLevel::Pointer pAbsLevel = m_pAbstractDef->GetLevel(nLevel);
+                const StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle();
+                if (!pParaStyle)
+                    continue;
+                const StyleSheetPropertyMap& rProps =
+                    *dynamic_cast<StyleSheetPropertyMap*>(pParaStyle->pProperties.get());
+                // In LO, the level's paraStyle outlineLevel always matches this listLevel.
+                // An undefined listLevel is treated as the first level.
+                sal_Int8 nListLevel = std::clamp<sal_Int8>(rProps.GetListLevel(), 0, 9);
+                if (nListLevel != nLevel || rProps.GetOutlineLevel() != nLevel)
+                {
+                    bIsValidAsChapterNumbering = false;
+                    break;
+                }
+                else
+                    bIsValidAsChapterNumbering = true;
+            }
+        }
 
-        xStyles->insertByName( sStyleName, makeAny( xStyle ) );
+        if (bIsValidAsChapterNumbering)
+            m_StyleName = "Outline"; //SwNumRule.GetOutlineRuleName()
+        else
+            xStyles->insertByName(GetStyleName(GetId(), xStyles), makeAny(xStyle));
 
-        uno::Any oStyle = xStyles->getByName( sStyleName );
+        uno::Any oStyle = xStyles->getByName(GetStyleName());
         xStyle.set( oStyle, uno::UNO_QUERY_THROW );
 
         // Get the default OOo Numbering style rules
@@ -513,7 +531,6 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
         uno::Sequence<uno::Sequence<beans::PropertyValue>> aProps = GetMergedPropertyValues();
 
-        sal_Int32 nAbstLevels = m_pAbstractDef ? m_pAbstractDef->Size() : 0;
         sal_Int32 nLevel = 0;
         while ( nLevel < nAbstLevels )
         {
@@ -571,7 +588,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             m_xNumRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
 
             // Handle the outline level here
-            if (pAbsLevel && pAbsLevel->isOutlineNumbering())
+            if (bIsValidAsChapterNumbering && pAbsLevel->GetParaStyle())
             {
                 uno::Reference< text::XChapterNumberingSupplier > xOutlines (
                     xFactory, uno::UNO_QUERY_THROW );
@@ -582,19 +599,6 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEADING_STYLE_NAME), pParaStyle->sConvertedStyleName));
 
                 xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
-            }
-
-            if (pAbsLevel)
-            {
-                // first level without default outline paragraph style
-                const tools::SvRef< StyleSheetEntry >& aParaStyle = pAbsLevel->GetParaStyle();
-                if ( WW_OUTLINE_MAX + 1 == m_nDefaultParentLevels && ( !aParaStyle ||
-                    aParaStyle->sConvertedStyleName.getLength() != RTL_CONSTASCII_LENGTH( "Heading 1" ) ||
-                    !aParaStyle->sConvertedStyleName.startsWith("Heading ") ||
-                    aParaStyle->sConvertedStyleName[ RTL_CONSTASCII_LENGTH( "Heading " ) ] - u'1' != nLevel ) )
-                {
-                    m_nDefaultParentLevels = nLevel;
-                }
             }
 
             nLevel++;
