@@ -9172,6 +9172,102 @@ void Test::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSkipEmpty)
     m_pDoc->DeleteTab(srcSheet);
 }
 
+void Test::testTdf68976()
+{
+    const SCTAB nTab = 0;
+    m_pDoc->InsertTab(nTab, "Test");
+
+    m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
+    m_pDoc->SetString(0, 1, nTab, "=$A$1"); // A2
+    m_pDoc->SetValue(0, 2, nTab, 1000.0); // A3
+
+    // Cut A3 to the clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScRange aSrcRange(0, 2, nTab, 0, 2, nTab);
+    cutToClip(getDocShell(), aSrcRange, &aClipDoc, false); // A3
+
+    ScRange aDestRange(1, 3, nTab, 1, 3, nTab); // B4
+    ScMarkData aDestMark(m_pDoc->GetSheetLimits());
+
+    // Transpose
+    ScDocument* pOrigClipDoc = &aClipDoc;
+    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
+    aDestMark.SetMarkArea(aDestRange);
+    // Paste
+    m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(),
+                         true, false, true, false);
+    m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
+    pTransClip.reset();
+
+    // Check results
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 0, nTab)); // A1
+    // Without the fix in place, this would have failed with
+    // - Expected: =$A$1
+    // - Actual  : =$B$4
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0, 1, nTab), "$A$1", "Wrong formula");
+    // Without the fix in place, this would have failed with
+    // - Expected: 1
+    // - Actual  : 1000
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 1, nTab)); // A2
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(0, 2, nTab)); // A3
+    CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(1, 3, nTab)); // B4
+}
+
+void Test::testTdf71058()
+{
+    const SCTAB nTab = 0;
+    m_pDoc->InsertTab(nTab, "Test");
+
+    m_pDoc->SetString(2, 2, nTab, "=C4"); // C3
+    m_pDoc->SetString(3, 2, nTab, "=D4"); // D3
+    m_pDoc->SetValue(2, 3, nTab, 1.0); // C4
+    m_pDoc->SetValue(3, 3, nTab, 2.0); // D4
+
+    // Cut C4:C5 to the clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScRange aSrcRange(2, 3, nTab, 3, 3, nTab);
+    cutToClip(getDocShell(), aSrcRange, &aClipDoc, false);
+
+    // To E6:E7
+    ScRange aDestRange(4, 5, nTab, 4, 6, nTab);
+    ScMarkData aDestMark(m_pDoc->GetSheetLimits());
+
+    // Transpose
+    ScDocument* pOrigClipDoc = &aClipDoc;
+    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
+    aDestMark.SetMarkArea(aDestRange);
+    // Paste
+    m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(),
+                         true, false, true, false);
+    m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
+    pTransClip.reset();
+
+    // Check precondition
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(4, 5, nTab));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(4, 6, nTab));
+
+    // Check results
+    // Without the fix in place, this would have failed with
+    // - Expected: =E6
+    // - Actual  : =C4
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2, 2, nTab), "E6", "Wrong formula");
+    // Without the fix in place, this would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(2, 2, nTab));
+
+    // Without the fix in place, this would have failed with
+    // - Expected: =E7
+    // - Actual  : =D4
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(3, 2, nTab), "E7", "Wrong formula");
+    // Without the fix in place, this would have failed with
+    // - Expected: 2
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3, 2, nTab));
+}
+
 void Test::testCopyPasteMultiRange()
 {
     m_pDoc->InsertTab(0, "Test");
