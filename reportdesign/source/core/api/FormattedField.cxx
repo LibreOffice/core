@@ -35,6 +35,11 @@ namespace reportdesign
     using namespace com::sun::star;
     using namespace comphelper;
 
+uno::Reference< uno::XInterface > OFormattedField::create(uno::Reference< uno::XComponentContext > const & xContext)
+{
+    return *(new OFormattedField(xContext));
+}
+
 static uno::Sequence< OUString > lcl_getFormattedFieldOptionals()
 {
     OUString pProps[] = { OUString(PROPERTY_MASTERFIELDS),OUString(PROPERTY_DETAILFIELDS) };
@@ -92,14 +97,25 @@ void SAL_CALL OFormattedField::dispose()
     m_xFormatsSupplier.clear();
 }
 
-OUString SAL_CALL OFormattedField::getImplementationName(  )
+OUString OFormattedField::getImplementationName_Static(  )
 {
     return "com.sun.star.comp.report.OFormattedField";
 }
 
-uno::Sequence< OUString > SAL_CALL OFormattedField::getSupportedServiceNames(  )
+
+OUString SAL_CALL OFormattedField::getImplementationName(  )
+{
+    return getImplementationName_Static();
+}
+
+uno::Sequence< OUString > OFormattedField::getSupportedServiceNames_Static(  )
 {
     return { SERVICE_FORMATTEDFIELD, "com.sun.star.awt.UnoControlFormattedFieldModel" };
+}
+
+uno::Sequence< OUString > SAL_CALL OFormattedField::getSupportedServiceNames(  )
+{
+    return getSupportedServiceNames_Static();
 }
 
 sal_Bool SAL_CALL OFormattedField::supportsService(const OUString& ServiceName)
@@ -340,13 +356,6 @@ OUString SAL_CALL OFormattedField::getShapeType(  )
 
 
 } // namespace reportdesign
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-reportdesign_OFormattedField_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
-{
-    return cppu::acquire(new reportdesign::OFormattedField(context));
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

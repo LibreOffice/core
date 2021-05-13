@@ -27,6 +27,12 @@ namespace reportdesign
 
     using namespace com::sun::star;
 
+uno::Reference< uno::XInterface > OFormatCondition::create(uno::Reference< uno::XComponentContext > const & xContext)
+{
+    return *(new OFormatCondition(xContext));
+}
+
+
 OFormatCondition::OFormatCondition(uno::Reference< uno::XComponentContext > const & _xContext)
 :FormatConditionBase(m_aMutex)
 ,FormatConditionPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >())
@@ -46,14 +52,27 @@ void SAL_CALL OFormatCondition::dispose()
     cppu::WeakComponentImplHelperBase::dispose();
 }
 
-OUString SAL_CALL OFormatCondition::getImplementationName(  )
+OUString OFormatCondition::getImplementationName_Static(  )
 {
     return "com.sun.star.comp.report.OFormatCondition";
 }
 
+
+OUString SAL_CALL OFormatCondition::getImplementationName(  )
+{
+    return getImplementationName_Static();
+}
+
+uno::Sequence< OUString > OFormatCondition::getSupportedServiceNames_Static(  )
+{
+    uno::Sequence< OUString > aServices { SERVICE_FORMATCONDITION };
+
+    return aServices;
+}
+
 uno::Sequence< OUString > SAL_CALL OFormatCondition::getSupportedServiceNames(  )
 {
-    return { SERVICE_FORMATCONDITION };
+    return getSupportedServiceNames_Static();
 }
 
 sal_Bool SAL_CALL OFormatCondition::supportsService(const OUString& ServiceName)
@@ -124,11 +143,5 @@ REPORTCONTROLFORMAT_IMPL(OFormatCondition,m_aFormatProperties)
 
 } // namespace reportdesign
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-reportdesign_OFormatCondition_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
-{
-    return cppu::acquire(new reportdesign::OFormatCondition(context));
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
