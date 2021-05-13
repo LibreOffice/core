@@ -111,6 +111,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
     // Without the accompanying fix in place, this test would have failed, as it was opened in
     // Writer instead.
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument"));
+    getComponent()->dispose();
 }
 }
 
