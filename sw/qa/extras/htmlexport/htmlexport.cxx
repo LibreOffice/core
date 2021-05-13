@@ -1386,6 +1386,37 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifObjdataPresentationDataSize)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(565994), aOle1Reader.m_nPresentationDataSize);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeading)
+{
+    // Given a document with a list heading:
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("list header");
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
+    SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
+    SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+    SwTextNode& rTextNode = *rNode.GetTextNode();
+    rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+    rTextNode.SetCountedInList(false);
+
+    // When exporting to ReqIF:
+    ExportToReqif();
+
+    // Then make sure the output is valid xhtml:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the accompanying fix in place, this test would have failed:
+    // - expected: <div><p>...</p></div>
+    // - actual  : <div><ol><p>...</p></li></ol></div>
+    // because a </li> but no <li> is not well-formed and <ol> with a non-li children is invalid.
+    assertXPathContent(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p", "list header");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
