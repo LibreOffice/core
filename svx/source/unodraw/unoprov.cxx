@@ -1579,7 +1579,7 @@ static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApi
 {
     switch( nWhich )
     {
-    case XATTR_FILLBITMAP:
+    case XATTR_FILLBITMAP: //tutaj patterny sa
         pApiResIds = RID_SVXSTR_BMP_DEF;
         pIntResIds = RID_SVXSTR_BMP;
         nCount = SAL_N_ELEMENTS(RID_SVXSTR_BMP_DEF);

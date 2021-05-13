@@ -29,7 +29,9 @@
 #include "emfpstringformat.hxx"
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <wmfemfhelper.hxx>
+#include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
@@ -752,28 +754,34 @@ namespace emfplushelper
             {
                 // EMF+ like hatching is currently not supported. These are just color blends which serve as an approximation for some of them
                 // for the others the hatch "background" color (secondColor in brush) is used.
-
-                bool isHatchBlend = true;
-                double blendFactor = 0.0;
-
+                double fDistance = 0.25;
+                double fAngle = 0.0;
+                sal_uInt32 nMinimalDiscreteDistance = 4;
+                drawinglayer::attribute::HatchStyle aHatchStyle( drawinglayer::attribute::HatchStyle::Single );
                 switch (brush->hatchStyle)
                 {
-                    case HatchStyle05Percent: blendFactor = 0.05; break;
-                    case HatchStyle10Percent: blendFactor = 0.10; break;
-                    case HatchStyle20Percent: blendFactor = 0.20; break;
-                    case HatchStyle25Percent: blendFactor = 0.25; break;
-                    case HatchStyle30Percent: blendFactor = 0.30; break;
-                    case HatchStyle40Percent: blendFactor = 0.40; break;
-                    case HatchStyle50Percent: blendFactor = 0.50; break;
-                    case HatchStyle60Percent: blendFactor = 0.60; break;
-                    case HatchStyle70Percent: blendFactor = 0.70; break;
-                    case HatchStyle75Percent: blendFactor = 0.75; break;
-                    case HatchStyle80Percent: blendFactor = 0.80; break;
-                    case HatchStyle90Percent: blendFactor = 0.90; break;
+                    case HatchStyleHorizontal: fAngle = 0.0; break;
+                    case HatchStyleVertical: fAngle = 3.14/2.0; break;
+                    case HatchStyleForwardDiagonal: fAngle = 3.0* 3.14/4.0; break;
+                    case HatchStyleBackwardDiagonal: fAngle = 3.14/4.0; break;
+                    case HatchStyleLargeGrid: fAngle = 3.14/2.0; aHatchStyle = drawinglayer::attribute::HatchStyle::Double; break;
+                    case HatchStyleDiagonalCross: fAngle = 3.14/4.0; aHatchStyle = drawinglayer::attribute::HatchStyle::Double; break;
+                    case HatchStyle05Percent: fDistance = 0.05; aHatchStyle = drawinglayer::attribute::HatchStyle::Triple; break;
+                    case HatchStyle10Percent: fDistance = 0.10; break;
+                    case HatchStyle20Percent: fDistance = 0.20; break;
+                    case HatchStyle25Percent: fDistance = 0.25; break;
+                    case HatchStyle30Percent: fDistance = 0.30; break;
+                    case HatchStyle40Percent: fDistance = 0.40; break;
+                    case HatchStyle50Percent: fAngle = 0.50; break;
+                    case HatchStyle60Percent: fAngle = 0.60; break;
+                    case HatchStyle70Percent: fAngle = 0.70; break;
+                    case HatchStyle75Percent: fAngle = 0.75; break;
+                    case HatchStyle80Percent: fAngle = 0.80; break;
+                    case HatchStyle90Percent: fAngle = 0.90; break;
                     default:
-                        isHatchBlend = false;
                         break;
                 }
+                /*
                 Color fillColor;
                 if (isHatchBlend)
                 {
@@ -783,13 +791,57 @@ namespace emfplushelper
                 else
                 {
                     fillColor = brush->secondColor;
-                }
+                }*/
                 // temporal solution: create a solid colored polygon
                 // TODO create a 'real' hatching primitive
+                /*
+                    PolyPolygonHatchPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                const basegfx::BColor& rBackgroundColor,
+                                const attribute::FillHatchAttribute& rFillHatch);
+
+                                    FillHatchAttribute(HatchStyle eStyle, double fDistance, double fAngle,
+                       const basegfx::BColor& rColor, sal_uInt32 nMinimalDiscreteDistance,
+                       bool bFillBackground);
+
+
+            HatchTexturePrimitive3D(
+                const attribute::FillHatchAttribute& rHatch,
+                const Primitive3DContainer& rChildren,
+                const basegfx::B2DVector& rTextureSize,
+                bool bModulate,
+                bool bFilter);
+
+
+        void SvgStyleAttributes::add_fillPattern(
+            const basegfx::B2DPolyPolygon& rPath,
+            drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+            const SvgPatternNode& rFillPattern,
+            const basegfx::B2DRange& rGeoRange) const
+        {
+            // fill polyPolygon with given pattern
+            const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives = rFillPattern.getPatternPrimitives();
+
+            if(rPrimitives.empty())
+                return;
+            drawinglayer::primitive2d::Primitive2DContainer aPrimitives(rPrimitives);
+
+            // embed in PatternFillPrimitive2D
+            rTarget.push_back(
+                new drawinglayer::primitive2d::PatternFillPrimitive2D(
+                    rPath,
+                    aPrimitives,
+                    aReferenceRange));
+                */
+
+                const drawinglayer::attribute::FillHatchAttribute rFillHatch(aHatchStyle, fDistance, fAngle,
+                                                                             brush->solidColor.getBColor(),
+                                                                             nMinimalDiscreteDistance,
+                                                                             !brush->secondColor.IsFullyTransparent());
                 mrTargetHolders.Current().append(
-                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                    new drawinglayer::primitive2d::PolyPolygonHatchPrimitive2D(
                         polygon,
-                        fillColor.getBColor()));
+                        brush->secondColor.getBColor(),
+                        rFillHatch ) );
             }
             else if (brush->type == BrushTypeTextureFill)
             {
