@@ -73,14 +73,33 @@ void SAL_CALL OReportEngineJFree::dispose()
     m_xActiveConnection.clear();
 }
 
-OUString SAL_CALL OReportEngineJFree::getImplementationName(  )
+OUString OReportEngineJFree::getImplementationName_Static(  )
 {
     return "com.sun.star.comp.report.OReportEngineJFree";
 }
 
+
+OUString SAL_CALL OReportEngineJFree::getImplementationName(  )
+{
+    return getImplementationName_Static();
+}
+
+uno::Sequence< OUString > OReportEngineJFree::getSupportedServiceNames_Static(  )
+{
+    uno::Sequence< OUString > aServices { "com.sun.star.report.ReportEngine" };
+
+    return aServices;
+}
+
+uno::Reference< uno::XInterface > OReportEngineJFree::create(uno::Reference< uno::XComponentContext > const & xContext)
+{
+    return *(new OReportEngineJFree(xContext));
+}
+
+
 uno::Sequence< OUString > SAL_CALL OReportEngineJFree::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.report.ReportEngine" };
+    return getSupportedServiceNames_Static();
 }
 
 sal_Bool SAL_CALL OReportEngineJFree::supportsService(const OUString& ServiceName)
@@ -359,12 +378,5 @@ void SAL_CALL OReportEngineJFree::setMaxRows( ::sal_Int32 MaxRows )
 
 } // namespace reportdesign
 
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-reportdesign_OReportEngineJFree_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
-{
-    return cppu::acquire(new reportdesign::OReportEngineJFree(context));
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
