@@ -46,6 +46,30 @@
       "revId": "9dba4e9a3efa2875176058e4b35b6073f009f05d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01ac1b4d_f650defa",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-13T16:20:37Z",
+      "side": 0,
+      "message": "Oh - this is quite different. The approx* functions do not simply \"reinvent\" the related standard function - unlike those that you referred above. The approx* do additional work to \"stabilize\" results around zero; and after that, call the standard function. So when you change them, you need to understand clearly, why was it used here (I don\u0027t know, maybe it was just a cargo-cult in this case - or maybe not - maybe git history could help), and what would change when you replace.",
+      "parentUuid": "f4647f91_9e97e55c",
+      "range": {
+        "startLine": 220,
+        "startChar": 48,
+        "endLine": 220,
+        "endChar": 68
+      },
+      "revId": "9dba4e9a3efa2875176058e4b35b6073f009f05d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
