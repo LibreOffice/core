@@ -16,6 +16,24 @@
       "revId": "28b89a46edde6fb9968374c755a85c088bda6dde",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c3bac91_dfb04cd0",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-13T16:41:47Z",
+      "side": 1,
+      "message": "x*x would be positive anyway, and last *x is making it negative as needed - so it should be ok ... however I don\u0027t see a good reason to make this case different from the other :-)",
+      "parentUuid": "b91d13d1_2b842297",
+      "revId": "28b89a46edde6fb9968374c755a85c088bda6dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
