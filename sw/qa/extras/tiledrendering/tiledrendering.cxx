@@ -157,6 +157,7 @@ public:
     void testBulletNoNumInvalidation();
     void testBulletMultiDeleteInvalidation();
     void testCondCollCopy();
+    void testMoveShapeHandle();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -236,6 +237,7 @@ public:
     CPPUNIT_TEST(testBulletNoNumInvalidation);
     CPPUNIT_TEST(testBulletMultiDeleteInvalidation);
     CPPUNIT_TEST(testCondCollCopy);
+    CPPUNIT_TEST(testMoveShapeHandle);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -260,16 +262,17 @@ private:
     OString m_sHyperlinkText;
     OString m_sHyperlinkLink;
     OString m_aFormFieldButton;
+    OString m_ShapeSelection;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
     : m_bFound(true),
-      m_nSelectionBeforeSearchResult(0),
-      m_nSelectionAfterSearchResult(0),
-      m_nInvalidations(0),
-      m_nRedlineTableSizeChanged(0),
-      m_nRedlineTableEntryModified(0),
-      m_nTrackedChangeIndex(-1)
+    m_nSelectionBeforeSearchResult(0),
+    m_nSelectionAfterSearchResult(0),
+    m_nInvalidations(0),
+    m_nRedlineTableSizeChanged(0),
+    m_nRedlineTableEntryModified(0),
+    m_nTrackedChangeIndex(-1)
 {
 }
 
@@ -324,102 +327,108 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     OString aPayload(pPayload);
     switch (nType)
     {
-    case LOK_CALLBACK_INVALIDATE_TILES:
-    {
-        tools::Rectangle aInvalidation;
-        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
-        if (std::string_view("EMPTY") == pPayload)
-            return;
-        CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
-        aInvalidation.setX(aSeq[0].toInt32());
-        aInvalidation.setY(aSeq[1].toInt32());
-        aInvalidation.setWidth(aSeq[2].toInt32());
-        aInvalidation.setHeight(aSeq[3].toInt32());
-        if (m_aInvalidation.IsEmpty())
-        {
-            m_aInvalidation = aInvalidation;
-        }
-        m_aInvalidations.Union(aInvalidation);
-        ++m_nInvalidations;
+        case LOK_CALLBACK_INVALIDATE_TILES:
+            {
+                tools::Rectangle aInvalidation;
+                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+                if (std::string_view("EMPTY") == pPayload)
+                    return;
+                CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
+                aInvalidation.setX(aSeq[0].toInt32());
+                aInvalidation.setY(aSeq[1].toInt32());
+                aInvalidation.setWidth(aSeq[2].toInt32());
+                aInvalidation.setHeight(aSeq[3].toInt32());
+                if (m_aInvalidation.IsEmpty())
+                {
+                    m_aInvalidation = aInvalidation;
+                }
+                m_aInvalidations.Union(aInvalidation);
+                ++m_nInvalidations;
+            }
+            break;
+        case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
+            {
+                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeq.getLength());
+                m_aDocumentSize.setWidth(aSeq[0].toInt32());
+                m_aDocumentSize.setHeight(aSeq[1].toInt32());
+            }
+            break;
+        case LOK_CALLBACK_TEXT_SELECTION:
+            {
+                m_aTextSelection = pPayload;
+                if (m_aSearchResultSelection.empty())
+                    ++m_nSelectionBeforeSearchResult;
+                else
+                    ++m_nSelectionAfterSearchResult;
+            }
+            break;
+        case LOK_CALLBACK_SEARCH_NOT_FOUND:
+            {
+                m_bFound = false;
+            }
+            break;
+        case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
+            {
+                m_aSearchResultSelection.clear();
+                boost::property_tree::ptree aTree;
+                std::stringstream aStream(pPayload);
+                boost::property_tree::read_json(aStream, aTree);
+                for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("searchResultSelection"))
+                {
+                    m_aSearchResultSelection.emplace_back(rValue.second.get<std::string>("rectangles").c_str());
+                    m_aSearchResultPart.push_back(std::atoi(rValue.second.get<std::string>("part").c_str()));
+                }
+            }
+            break;
+        case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+            {
+                ++m_nRedlineTableSizeChanged;
+            }
+            break;
+        case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+            {
+                ++m_nRedlineTableEntryModified;
+            }
+            break;
+        case LOK_CALLBACK_STATE_CHANGED:
+            {
+                OString aTrackedChangeIndexPrefix(".uno:TrackedChangeIndex=");
+                if (aPayload.startsWith(aTrackedChangeIndexPrefix))
+                {
+                    OString sIndex = aPayload.copy(aTrackedChangeIndexPrefix.getLength());
+                    if (sIndex.isEmpty())
+                        m_nTrackedChangeIndex = -1;
+                    else
+                        m_nTrackedChangeIndex = sIndex.toInt32();
+                }
+            }
+            break;
+        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+            {
+                if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+                {
+                    boost::property_tree::ptree aTree;
+                    std::stringstream aStream(pPayload);
+                    boost::property_tree::read_json(aStream, aTree);
+                    boost::property_tree::ptree &aChild = aTree.get_child("hyperlink");
+                    m_sHyperlinkText = aChild.get("text", "").c_str();
+                    m_sHyperlinkLink = aChild.get("link", "").c_str();
+                }
+            }
+            break;
+        case LOK_CALLBACK_FORM_FIELD_BUTTON:
+            {
+                m_aFormFieldButton = OString(pPayload);
+            }
+            break;
+        case LOK_CALLBACK_GRAPHIC_SELECTION:
+            {
+                m_ShapeSelection = OString(pPayload);
+            }
+            break;
     }
-    break;
-    case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
-    {
-        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeq.getLength());
-        m_aDocumentSize.setWidth(aSeq[0].toInt32());
-        m_aDocumentSize.setHeight(aSeq[1].toInt32());
-    }
-    break;
-    case LOK_CALLBACK_TEXT_SELECTION:
-    {
-        m_aTextSelection = pPayload;
-        if (m_aSearchResultSelection.empty())
-            ++m_nSelectionBeforeSearchResult;
-        else
-            ++m_nSelectionAfterSearchResult;
-    }
-    break;
-    case LOK_CALLBACK_SEARCH_NOT_FOUND:
-    {
-        m_bFound = false;
-    }
-    break;
-    case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
-    {
-        m_aSearchResultSelection.clear();
-        boost::property_tree::ptree aTree;
-        std::stringstream aStream(pPayload);
-        boost::property_tree::read_json(aStream, aTree);
-        for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("searchResultSelection"))
-        {
-            m_aSearchResultSelection.emplace_back(rValue.second.get<std::string>("rectangles").c_str());
-            m_aSearchResultPart.push_back(std::atoi(rValue.second.get<std::string>("part").c_str()));
-        }
-    }
-    break;
-    case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
-    {
-        ++m_nRedlineTableSizeChanged;
-    }
-    break;
-    case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
-    {
-        ++m_nRedlineTableEntryModified;
-    }
-    break;
-    case LOK_CALLBACK_STATE_CHANGED:
-    {
-        OString aTrackedChangeIndexPrefix(".uno:TrackedChangeIndex=");
-        if (aPayload.startsWith(aTrackedChangeIndexPrefix))
-        {
-            OString sIndex = aPayload.copy(aTrackedChangeIndexPrefix.getLength());
-            if (sIndex.isEmpty())
-                m_nTrackedChangeIndex = -1;
-            else
-                m_nTrackedChangeIndex = sIndex.toInt32();
-        }
-    }
-    break;
-    case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-    {
-        if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
-        {
-            boost::property_tree::ptree aTree;
-            std::stringstream aStream(pPayload);
-            boost::property_tree::read_json(aStream, aTree);
-            boost::property_tree::ptree &aChild = aTree.get_child("hyperlink");
-            m_sHyperlinkText = aChild.get("text", "").c_str();
-            m_sHyperlinkLink = aChild.get("link", "").c_str();
-        }
-    }
-    break;
-    case LOK_CALLBACK_FORM_FIELD_BUTTON:
-    {
-        m_aFormFieldButton = OString(pPayload);
-    }
-    break;
-    }
+
 }
 
 void SwTiledRenderingTest::testRegisterCallback()
@@ -597,10 +606,10 @@ void SwTiledRenderingTest::testInsertShape()
 static void lcl_search(bool bBackward)
 {
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-    {
-        {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
-        {"SearchItem.Backward", uno::makeAny(bBackward)}
-    }));
+                {
+                {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
+                {"SearchItem.Backward", uno::makeAny(bBackward)}
+                }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
 }
 
@@ -658,12 +667,12 @@ void SwTiledRenderingTest::testSearchViewArea()
     // visible area is the second page.
     pWrtShell->GotoPage(1, false);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-    {
-        {"SearchItem.SearchString", uno::makeAny(OUString("Heading"))},
-        {"SearchItem.Backward", uno::makeAny(false)},
-        {"SearchItem.SearchStartPointX", uno::makeAny(static_cast<sal_Int32>(aPoint.getX()))},
-        {"SearchItem.SearchStartPointY", uno::makeAny(static_cast<sal_Int32>(aPoint.getY()))}
-    }));
+                {
+                {"SearchItem.SearchString", uno::makeAny(OUString("Heading"))},
+                {"SearchItem.Backward", uno::makeAny(false)},
+                {"SearchItem.SearchStartPointX", uno::makeAny(static_cast<sal_Int32>(aPoint.getX()))},
+                {"SearchItem.SearchStartPointY", uno::makeAny(static_cast<sal_Int32>(aPoint.getY()))}
+                }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was just "Heading", i.e. SwView::SearchAndWrap() did not search from only the top of the second page.
     CPPUNIT_ASSERT_EQUAL(OUString("Heading on second page"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
@@ -675,10 +684,10 @@ void SwTiledRenderingTest::testSearchTextFrame()
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-    {
-        {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
-        {"SearchItem.Backward", uno::makeAny(false)},
-    }));
+                {
+                {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
+                {"SearchItem.Backward", uno::makeAny(false)},
+                }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was empty: nothing was highlighted after searching for 'TextFrame'.
     CPPUNIT_ASSERT(!m_aTextSelection.isEmpty());
@@ -690,10 +699,10 @@ void SwTiledRenderingTest::testSearchTextFrameWrapAround()
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-    {
-        {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
-        {"SearchItem.Backward", uno::makeAny(false)},
-    }));
+                {
+                {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
+                {"SearchItem.Backward", uno::makeAny(false)},
+                }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     CPPUNIT_ASSERT(m_bFound);
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
@@ -724,11 +733,11 @@ void SwTiledRenderingTest::testSearchAll()
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-    {
-        {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
-        {"SearchItem.Backward", uno::makeAny(false)},
-        {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
-    }));
+                {
+                {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
+                {"SearchItem.Backward", uno::makeAny(false)},
+                {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+                }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was 0; should be 2 results in the body text.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), m_aSearchResultSelection.size());
@@ -744,11 +753,11 @@ void SwTiledRenderingTest::testSearchAllNotifications()
     // Reset notification counter before search.
     m_nSelectionBeforeSearchResult = 0;
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-    {
-        {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
-        {"SearchItem.Backward", uno::makeAny(false)},
-        {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
-    }));
+                {
+                {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
+                {"SearchItem.Backward", uno::makeAny(false)},
+                {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+                }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 
@@ -762,9 +771,9 @@ void SwTiledRenderingTest::testPageDownInvalidation()
 {
     SwXTextDocument* pXTextDocument = createDoc("pagedown-invalidation.odt");
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-    {
-        {".uno:HideWhitespace", uno::makeAny(true)},
-    }));
+                {
+                {".uno:HideWhitespace", uno::makeAny(true)},
+                }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
@@ -786,214 +795,214 @@ void SwTiledRenderingTest::testPartHash()
 
 namespace {
 
-/// A view callback tracks callbacks invoked on one specific view.
-class ViewCallback final
-{
-    SfxViewShell* mpViewShell;
-    int mnView;
-public:
-    bool m_bOwnCursorInvalidated;
-    int m_nOwnCursorInvalidatedBy;
-    bool m_bOwnCursorAtOrigin;
-    tools::Rectangle m_aOwnCursor;
-    bool m_bViewCursorInvalidated;
-    tools::Rectangle m_aViewCursor;
-    bool m_bOwnSelectionSet;
-    bool m_bViewSelectionSet;
-    OString m_aViewSelection;
-    bool m_bTilesInvalidated;
-    bool m_bViewCursorVisible;
-    bool m_bGraphicViewSelection;
-    bool m_bGraphicSelection;
-    bool m_bViewLock;
-    /// Set if any callback was invoked.
-    bool m_bCalled;
-    /// Redline table size changed payload
-    boost::property_tree::ptree m_aRedlineTableChanged;
-    /// Redline table modified payload
-    boost::property_tree::ptree m_aRedlineTableModified;
-    /// Post-it / annotation payload.
-    boost::property_tree::ptree m_aComment;
-
-    ViewCallback(SfxViewShell* pViewShell = nullptr, std::function<void(ViewCallback&)> const & rBeforeInstallFunc = {})
-        : m_bOwnCursorInvalidated(false),
-          m_nOwnCursorInvalidatedBy(-1),
-          m_bOwnCursorAtOrigin(false),
-          m_bViewCursorInvalidated(false),
-          m_bOwnSelectionSet(false),
-          m_bViewSelectionSet(false),
-          m_bTilesInvalidated(false),
-          m_bViewCursorVisible(false),
-          m_bGraphicViewSelection(false),
-          m_bGraphicSelection(false),
-          m_bViewLock(false),
-          m_bCalled(false)
+    /// A view callback tracks callbacks invoked on one specific view.
+    class ViewCallback final
     {
-        // Because one call-site wants to set the bool fields up before the callback is installed
-        if (rBeforeInstallFunc)
-            rBeforeInstallFunc(*this);
+        SfxViewShell* mpViewShell;
+        int mnView;
+        public:
+        bool m_bOwnCursorInvalidated;
+        int m_nOwnCursorInvalidatedBy;
+        bool m_bOwnCursorAtOrigin;
+        tools::Rectangle m_aOwnCursor;
+        bool m_bViewCursorInvalidated;
+        tools::Rectangle m_aViewCursor;
+        bool m_bOwnSelectionSet;
+        bool m_bViewSelectionSet;
+        OString m_aViewSelection;
+        bool m_bTilesInvalidated;
+        bool m_bViewCursorVisible;
+        bool m_bGraphicViewSelection;
+        bool m_bGraphicSelection;
+        bool m_bViewLock;
+        /// Set if any callback was invoked.
+        bool m_bCalled;
+        /// Redline table size changed payload
+        boost::property_tree::ptree m_aRedlineTableChanged;
+        /// Redline table modified payload
+        boost::property_tree::ptree m_aRedlineTableModified;
+        /// Post-it / annotation payload.
+        boost::property_tree::ptree m_aComment;
 
-        mpViewShell = pViewShell ? pViewShell : SfxViewShell::Current();
-        mpViewShell->registerLibreOfficeKitViewCallback(&ViewCallback::callback, this);
-        mnView = SfxLokHelper::getView();
-    }
-
-    ~ViewCallback()
-    {
-        SfxLokHelper::setView(mnView);
-        mpViewShell->registerLibreOfficeKitViewCallback(nullptr, nullptr);
-    }
-
-    static void callback(int nType, const char* pPayload, void* pData)
-    {
-        static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
-    }
-
-    void callbackImpl(int nType, const char* pPayload)
-    {
-        OString aPayload(pPayload);
-        m_bCalled = true;
-        switch (nType)
-        {
-        case LOK_CALLBACK_INVALIDATE_TILES:
-        {
-            m_bTilesInvalidated = true;
-        }
-        break;
-        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        {
-            m_bOwnCursorInvalidated = true;
-
-            OString sRect;
-            if(comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+        ViewCallback(SfxViewShell* pViewShell = nullptr, std::function<void(ViewCallback&)> const & rBeforeInstallFunc = {})
+            : m_bOwnCursorInvalidated(false),
+            m_nOwnCursorInvalidatedBy(-1),
+            m_bOwnCursorAtOrigin(false),
+            m_bViewCursorInvalidated(false),
+            m_bOwnSelectionSet(false),
+            m_bViewSelectionSet(false),
+            m_bTilesInvalidated(false),
+            m_bViewCursorVisible(false),
+            m_bGraphicViewSelection(false),
+            m_bGraphicSelection(false),
+            m_bViewLock(false),
+            m_bCalled(false)
             {
-                std::stringstream aStream(pPayload);
-                boost::property_tree::ptree aTree;
-                boost::property_tree::read_json(aStream, aTree);
-                sRect = aTree.get_child("rectangle").get_value<std::string>().c_str();
-                m_nOwnCursorInvalidatedBy = aTree.get_child("viewId").get_value<int>();
+                // Because one call-site wants to set the bool fields up before the callback is installed
+                if (rBeforeInstallFunc)
+                    rBeforeInstallFunc(*this);
+
+                mpViewShell = pViewShell ? pViewShell : SfxViewShell::Current();
+                mpViewShell->registerLibreOfficeKitViewCallback(&ViewCallback::callback, this);
+                mnView = SfxLokHelper::getView();
             }
-            else
-                sRect = aPayload;
-            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(sRect));
-            if (std::string_view("EMPTY") == pPayload)
-                return;
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
-            m_aOwnCursor.setX(aSeq[0].toInt32());
-            m_aOwnCursor.setY(aSeq[1].toInt32());
-            m_aOwnCursor.setWidth(aSeq[2].toInt32());
-            m_aOwnCursor.setHeight(aSeq[3].toInt32());
-            if (m_aOwnCursor.getX() == 0 && m_aOwnCursor.getY() == 0)
-                m_bOwnCursorAtOrigin = true;
-        }
-        break;
-        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
-        {
-            m_bViewCursorInvalidated = true;
-            std::stringstream aStream(pPayload);
-            boost::property_tree::ptree aTree;
-            boost::property_tree::read_json(aStream, aTree);
-            OString aRect = aTree.get_child("rectangle").get_value<std::string>().c_str();
 
-            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRect));
-            if (std::string_view("EMPTY") == pPayload)
-                return;
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
-            m_aViewCursor.setX(aSeq[0].toInt32());
-            m_aViewCursor.setY(aSeq[1].toInt32());
-            m_aViewCursor.setWidth(aSeq[2].toInt32());
-            m_aViewCursor.setHeight(aSeq[3].toInt32());
-        }
-        break;
-        case LOK_CALLBACK_TEXT_SELECTION:
+        ~ViewCallback()
         {
-            m_bOwnSelectionSet = true;
+            SfxLokHelper::setView(mnView);
+            mpViewShell->registerLibreOfficeKitViewCallback(nullptr, nullptr);
         }
-        break;
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
-        {
-            m_bViewSelectionSet = true;
-            m_aViewSelection = aPayload;
-        }
-        break;
-        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
-        {
-            std::stringstream aStream(pPayload);
-            boost::property_tree::ptree aTree;
-            boost::property_tree::read_json(aStream, aTree);
-            m_bViewCursorVisible = aTree.get_child("visible").get_value<std::string>() == "true";
-        }
-        break;
-        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
-        {
-            std::stringstream aStream(pPayload);
-            boost::property_tree::ptree aTree;
-            boost::property_tree::read_json(aStream, aTree);
-            m_bGraphicViewSelection = aTree.get_child("selection").get_value<std::string>() != "EMPTY";
-        }
-        break;
-        case LOK_CALLBACK_GRAPHIC_SELECTION:
-        {
-            m_bGraphicSelection = aPayload != "EMPTY";
-        }
-        break;
-        case LOK_CALLBACK_VIEW_LOCK:
-        {
-            std::stringstream aStream(pPayload);
-            boost::property_tree::ptree aTree;
-            boost::property_tree::read_json(aStream, aTree);
-            m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
-        }
-        break;
-        case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
-        {
-            m_aRedlineTableChanged.clear();
-            std::stringstream aStream(pPayload);
-            boost::property_tree::read_json(aStream, m_aRedlineTableChanged);
-            m_aRedlineTableChanged = m_aRedlineTableChanged.get_child("redline");
-        }
-        break;
-        case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
-        {
-            m_aRedlineTableModified.clear();
-            std::stringstream aStream(pPayload);
-            boost::property_tree::read_json(aStream, m_aRedlineTableModified);
-            m_aRedlineTableModified = m_aRedlineTableModified.get_child("redline");
-        }
-        break;
-        case LOK_CALLBACK_COMMENT:
-        {
-            m_aComment.clear();
-            std::stringstream aStream(pPayload);
-            boost::property_tree::read_json(aStream, m_aComment);
-            m_aComment = m_aComment.get_child("comment");
-        }
-        break;
-        }
-    }
-};
 
-class TestResultListener : public cppu::WeakImplHelper<css::frame::XDispatchResultListener>
-{
-public:
-    sal_uInt32 m_nDocRepair;
+        static void callback(int nType, const char* pPayload, void* pData)
+        {
+            static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+        }
 
-    TestResultListener() : m_nDocRepair(0)
+        void callbackImpl(int nType, const char* pPayload)
+        {
+            OString aPayload(pPayload);
+            m_bCalled = true;
+            switch (nType)
+            {
+                case LOK_CALLBACK_INVALIDATE_TILES:
+                    {
+                        m_bTilesInvalidated = true;
+                    }
+                    break;
+                case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+                    {
+                        m_bOwnCursorInvalidated = true;
+
+                        OString sRect;
+                        if(comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+                        {
+                            std::stringstream aStream(pPayload);
+                            boost::property_tree::ptree aTree;
+                            boost::property_tree::read_json(aStream, aTree);
+                            sRect = aTree.get_child("rectangle").get_value<std::string>().c_str();
+                            m_nOwnCursorInvalidatedBy = aTree.get_child("viewId").get_value<int>();
+                        }
+                        else
+                            sRect = aPayload;
+                        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(sRect));
+                        if (std::string_view("EMPTY") == pPayload)
+                            return;
+                        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+                        m_aOwnCursor.setX(aSeq[0].toInt32());
+                        m_aOwnCursor.setY(aSeq[1].toInt32());
+                        m_aOwnCursor.setWidth(aSeq[2].toInt32());
+                        m_aOwnCursor.setHeight(aSeq[3].toInt32());
+                        if (m_aOwnCursor.getX() == 0 && m_aOwnCursor.getY() == 0)
+                            m_bOwnCursorAtOrigin = true;
+                    }
+                    break;
+                case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+                    {
+                        m_bViewCursorInvalidated = true;
+                        std::stringstream aStream(pPayload);
+                        boost::property_tree::ptree aTree;
+                        boost::property_tree::read_json(aStream, aTree);
+                        OString aRect = aTree.get_child("rectangle").get_value<std::string>().c_str();
+
+                        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRect));
+                        if (std::string_view("EMPTY") == pPayload)
+                            return;
+                        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+                        m_aViewCursor.setX(aSeq[0].toInt32());
+                        m_aViewCursor.setY(aSeq[1].toInt32());
+                        m_aViewCursor.setWidth(aSeq[2].toInt32());
+                        m_aViewCursor.setHeight(aSeq[3].toInt32());
+                    }
+                    break;
+                case LOK_CALLBACK_TEXT_SELECTION:
+                    {
+                        m_bOwnSelectionSet = true;
+                    }
+                    break;
+                case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+                    {
+                        m_bViewSelectionSet = true;
+                        m_aViewSelection = aPayload;
+                    }
+                    break;
+                case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+                    {
+                        std::stringstream aStream(pPayload);
+                        boost::property_tree::ptree aTree;
+                        boost::property_tree::read_json(aStream, aTree);
+                        m_bViewCursorVisible = aTree.get_child("visible").get_value<std::string>() == "true";
+                    }
+                    break;
+                case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+                    {
+                        std::stringstream aStream(pPayload);
+                        boost::property_tree::ptree aTree;
+                        boost::property_tree::read_json(aStream, aTree);
+                        m_bGraphicViewSelection = aTree.get_child("selection").get_value<std::string>() != "EMPTY";
+                    }
+                    break;
+                case LOK_CALLBACK_GRAPHIC_SELECTION:
+                    {
+                        m_bGraphicSelection = aPayload != "EMPTY";
+                    }
+                    break;
+                case LOK_CALLBACK_VIEW_LOCK:
+                    {
+                        std::stringstream aStream(pPayload);
+                        boost::property_tree::ptree aTree;
+                        boost::property_tree::read_json(aStream, aTree);
+                        m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
+                    }
+                    break;
+                case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+                    {
+                        m_aRedlineTableChanged.clear();
+                        std::stringstream aStream(pPayload);
+                        boost::property_tree::read_json(aStream, m_aRedlineTableChanged);
+                        m_aRedlineTableChanged = m_aRedlineTableChanged.get_child("redline");
+                    }
+                    break;
+                case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+                    {
+                        m_aRedlineTableModified.clear();
+                        std::stringstream aStream(pPayload);
+                        boost::property_tree::read_json(aStream, m_aRedlineTableModified);
+                        m_aRedlineTableModified = m_aRedlineTableModified.get_child("redline");
+                    }
+                    break;
+                case LOK_CALLBACK_COMMENT:
+                    {
+                        m_aComment.clear();
+                        std::stringstream aStream(pPayload);
+                        boost::property_tree::read_json(aStream, m_aComment);
+                        m_aComment = m_aComment.get_child("comment");
+                    }
+                    break;
+            }
+        }
+    };
+
+    class TestResultListener : public cppu::WeakImplHelper<css::frame::XDispatchResultListener>
     {
-    }
+        public:
+            sal_uInt32 m_nDocRepair;
 
-    virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent) override
-    {
-        if (rEvent.State == frame::DispatchResultState::SUCCESS)
+            TestResultListener() : m_nDocRepair(0)
         {
-            rEvent.Result >>= m_nDocRepair;
         }
-    }
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject&) override
-    {
-    }
-};
+            virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent) override
+            {
+                if (rEvent.State == frame::DispatchResultState::SUCCESS)
+                {
+                    rEvent.Result >>= m_nDocRepair;
+                }
+            }
+
+            virtual void SAL_CALL disposing(const css::lang::EventObject&) override
+            {
+            }
+    };
 
 }
 
@@ -1377,9 +1386,9 @@ void SwTiledRenderingTest::testUndoRepairDispatch()
     SfxLokHelper::setView(nView2);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-    {
-        {"Repair", uno::makeAny(true)}
-    }));
+                {
+                {"Repair", uno::makeAny(true)}
+                }));
     comphelper::dispatchCommand(".uno:Undo", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     // This was 1: repair mode couldn't undo the action, either.
@@ -1487,9 +1496,9 @@ void SwTiledRenderingTest::testTrackChanges()
 
     // Reject the change by id, while the cursor does not cover the tracked change.
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-    {
-        {"RejectTrackedChange", uno::makeAny(o3tl::narrowing<sal_uInt16>(pRedline->GetId()))}
-    }));
+                {
+                {"RejectTrackedChange", uno::makeAny(o3tl::narrowing<sal_uInt16>(pRedline->GetId()))}
+                }));
     comphelper::dispatchCommand(".uno:RejectTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 
@@ -1614,7 +1623,7 @@ void SwTiledRenderingTest::testCreateViewGraphicSelection()
 
     // Make sure that the hidden text cursor isn't visible in the second view, either.
     ViewCallback aView2(SfxViewShell::Current(),
-        [](ViewCallback& rView) { rView.m_bViewCursorVisible = true; });
+            [](ViewCallback& rView) { rView.m_bViewCursorVisible = true; });
     // This was true, the second view didn't get the visibility of the text
     // cursor of the first view.
     CPPUNIT_ASSERT(!aView2.m_bViewCursorVisible);
@@ -1723,10 +1732,10 @@ void SwTiledRenderingTest::testCommentInsert()
     // Add a comment.
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame()->GetFrame().GetFrameInterface();
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-    {
-        {"Text", uno::makeAny(OUString("some text"))},
-        {"Author", uno::makeAny(OUString("me"))},
-    });
+            {
+            {"Text", uno::makeAny(OUString("some text"))},
+            {"Author", uno::makeAny(OUString("me"))},
+            });
     ViewCallback aView;
     comphelper::dispatchCommand(".uno:InsertAnnotation", xFrame, aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -1852,22 +1861,22 @@ void SwTiledRenderingTest::testRedoRepairResult()
 
 namespace {
 
-void checkUndoRepairStates(SwXTextDocument* pXTextDocument, SwView* pView1, SwView* pView2)
-{
-    SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>{});
-    SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>{});
-    // first view, undo enabled
-    pView1->GetState(aItemSet1);
-    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet1.GetItemState(SID_UNDO));
-    const SfxUInt32Item *pUnsetItem = dynamic_cast<const SfxUInt32Item*>(aItemSet1.GetItem(SID_UNDO));
-    CPPUNIT_ASSERT(!pUnsetItem);
-    // second view, undo conflict
-    pView2->GetState(aItemSet2);
-    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));
-    const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aItemSet2.GetItem(SID_UNDO));
-    CPPUNIT_ASSERT(pUInt32Item);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
-};
+    void checkUndoRepairStates(SwXTextDocument* pXTextDocument, SwView* pView1, SwView* pView2)
+    {
+        SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        // first view, undo enabled
+        pView1->GetState(aItemSet1);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet1.GetItemState(SID_UNDO));
+        const SfxUInt32Item *pUnsetItem = dynamic_cast<const SfxUInt32Item*>(aItemSet1.GetItem(SID_UNDO));
+        CPPUNIT_ASSERT(!pUnsetItem);
+        // second view, undo conflict
+        pView2->GetState(aItemSet2);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));
+        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aItemSet2.GetItem(SID_UNDO));
+        CPPUNIT_ASSERT(pUInt32Item);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
+    };
 
 }
 
@@ -1965,7 +1974,7 @@ void SwTiledRenderingTest::testAllTrackedChanges()
     {
         SfxVoidItem aItem(FN_REDLINE_REJECT_ALL);
         pView1->GetViewFrame()->GetDispatcher()->ExecuteList(FN_REDLINE_REJECT_ALL,
-            SfxCallMode::SYNCHRON, { &aItem });
+                SfxCallMode::SYNCHRON, { &aItem });
     }
 
     // The reject all was performed.
@@ -1988,7 +1997,7 @@ void SwTiledRenderingTest::testAllTrackedChanges()
     {
         SfxVoidItem aItem(FN_REDLINE_ACCEPT_ALL);
         pView1->GetViewFrame()->GetDispatcher()->ExecuteList(FN_REDLINE_ACCEPT_ALL,
-            SfxCallMode::SYNCHRON, { &aItem });
+                SfxCallMode::SYNCHRON, { &aItem });
     }
 
     // The accept all was performed
@@ -2056,22 +2065,22 @@ void SwTiledRenderingTest::testDocumentRepair()
 
 namespace {
 
-void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, sal_uInt16 nWhich, bool bValue)
-{
-    uno::Sequence<OUString> aSeq;
-    const SfxPoolItem* pState = nullptr;
-    pViewShell->GetDispatcher()->QueryState(nWhich, pState);
-    const SfxStringListItem* pListItem = dynamic_cast<const SfxStringListItem*>(pState);
-    CPPUNIT_ASSERT(pListItem);
-    pListItem->GetStringList(aSeq);
-    if (bValue)
+    void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, sal_uInt16 nWhich, bool bValue)
     {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq.getLength());
-        CPPUNIT_ASSERT_EQUAL(OUString("Default Page Style"), aSeq[0]);
-    }
-    else
-        CPPUNIT_ASSERT(!aSeq.hasElements());
-};
+        uno::Sequence<OUString> aSeq;
+        const SfxPoolItem* pState = nullptr;
+        pViewShell->GetDispatcher()->QueryState(nWhich, pState);
+        const SfxStringListItem* pListItem = dynamic_cast<const SfxStringListItem*>(pState);
+        CPPUNIT_ASSERT(pListItem);
+        pListItem->GetStringList(aSeq);
+        if (bValue)
+        {
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq.getLength());
+            CPPUNIT_ASSERT_EQUAL(OUString("Default Page Style"), aSeq[0]);
+        }
+        else
+            CPPUNIT_ASSERT(!aSeq.hasElements());
+    };
 
 }
 
@@ -2192,9 +2201,9 @@ void SwTiledRenderingTest::testIMESupport()
     const std::vector<OString> aUtf8Inputs{ "年", "你", "你好", "你哈", "你好", "你好" };
     std::vector<OUString> aInputs;
     std::transform(aUtf8Inputs.begin(), aUtf8Inputs.end(),
-                   std::back_inserter(aInputs), [](OString aInput) {
-                       return OUString::fromUtf8(aInput);
-                   });
+            std::back_inserter(aInputs), [](OString aInput) {
+            return OUString::fromUtf8(aInput);
+            });
     for (const auto& aInput: aInputs)
     {
         pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, aInput);
@@ -2429,9 +2438,9 @@ void SwTiledRenderingTest::testSemiTransparent()
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
-                                                    Fraction(1.0), Point(), aPixmap.data());
+            Fraction(1.0), Point(), aPixmap.data());
     pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
-                              /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
+            /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
     Bitmap::ScopedReadAccess pAccess(aBitmap);
@@ -2458,9 +2467,9 @@ void SwTiledRenderingTest::testHighlightNumbering()
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
-                                                    Fraction(1.0), Point(), aPixmap.data());
+            Fraction(1.0), Point(), aPixmap.data());
     pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
-                              /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
+            /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
     Bitmap::ScopedReadAccess pAccess(aBitmap);
@@ -2483,9 +2492,9 @@ void SwTiledRenderingTest::testHighlightNumbering_shd()
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
-                                                    Fraction(1.0), Point(), aPixmap.data());
+            Fraction(1.0), Point(), aPixmap.data());
     pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
-                              /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
+            /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
     Bitmap::ScopedReadAccess pAccess(aBitmap);
@@ -2513,22 +2522,22 @@ void SwTiledRenderingTest::testPilcrowRedlining()
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
-                                                    Fraction(1.0), Point(), aPixmap.data());
+            Fraction(1.0), Point(), aPixmap.data());
     pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
-                              /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
+            /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(100, 100), Size(nTileSize, nTileSize));
     Bitmap::ScopedReadAccess pAccess(aBitmap);
 
     const char* aTexts[] = {
-            "Insert paragraph break",
-            "Insert paragraph break (empty line)",
-            "Delete paragraph break",
-            "Delete paragraph break (empty line)",
-            "Insert line break",
-            "Insert line break (empty line)",
-            "Delete line break",
-            "Delete line break (empty line)"
+        "Insert paragraph break",
+        "Insert paragraph break (empty line)",
+        "Delete paragraph break",
+        "Delete paragraph break (empty line)",
+        "Insert line break",
+        "Insert line break (empty line)",
+        "Delete line break",
+        "Delete line break (empty line)"
     };
 
     // Check redlining (strikeout and underline) over the paragraph and line break symbols
@@ -2547,8 +2556,8 @@ void SwTiledRenderingTest::testPilcrowRedlining()
                 // 4-pixel same color square sign strikeout or underline of redlining
                 // if its color is not white, black or non-printing character color
                 if ( aColor == aColor2 && aColor == aColor3 && aColor == aColor4 &&
-                    aColor != COL_WHITE && aColor != COL_BLACK &&
-                    aColor != NON_PRINTING_CHARACTER_COLOR )
+                        aColor != COL_WHITE && aColor != COL_BLACK &&
+                        aColor != NON_PRINTING_CHARACTER_COLOR )
                 {
                     bHasRedlineColor = true;
                     break;
@@ -2577,9 +2586,9 @@ void SwTiledRenderingTest::testClipText()
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
-                                                    Fraction(1.0), Point(), aPixmap.data());
+            Fraction(1.0), Point(), aPixmap.data());
     pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
-                              /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
+            /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
     pDevice->EnableMapMode(false);
     Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
     Bitmap::ScopedReadAccess pAccess(aBitmap);
@@ -2671,9 +2680,9 @@ void SwTiledRenderingTest::testHyperlink()
     Point aStart = pShellCursor->GetSttPos();
     aStart.setX(aStart.getX() + 1800);
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1,
-                                   MOUSE_LEFT, 0);
+            MOUSE_LEFT, 0);
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1,
-                                   MOUSE_LEFT, 0);
+            MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OString("hyperlink"), m_sHyperlinkText);
@@ -2705,9 +2714,9 @@ void SwTiledRenderingTest::testDropDownFormFieldButton()
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
-                                                    Fraction(1.0), Point(), aPixmap.data());
+            Fraction(1.0), Point(), aPixmap.data());
     pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
-                              /*nTilePosY=*/0, /*nTileWidth=*/10000, /*nTileHeight=*/4000);
+            /*nTilePosY=*/0, /*nTileWidth=*/10000, /*nTileHeight=*/4000);
 
     CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
     {
@@ -2778,9 +2787,9 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonEditing()
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
-                                                    Fraction(1.0), Point(), aPixmap.data());
+            Fraction(1.0), Point(), aPixmap.data());
     pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
-                              /*nTilePosY=*/0, /*nTileWidth=*/10000, /*nTileHeight=*/4000);
+            /*nTilePosY=*/0, /*nTileWidth=*/10000, /*nTileHeight=*/4000);
 
     // The item with the index '1' is selected by default
     CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
@@ -2803,7 +2812,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonEditing()
 
     // Do a tile rendering to trigger the button message.
     pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
-                              /*nTilePosY=*/0, /*nTileWidth=*/10000, /*nTileHeight=*/4000);
+            /*nTilePosY=*/0, /*nTileWidth=*/10000, /*nTileHeight=*/4000);
 
     CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
     {
@@ -2835,9 +2844,9 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonNoSelection()
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
-                                                    Fraction(1.0), Point(), aPixmap.data());
+            Fraction(1.0), Point(), aPixmap.data());
     pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
-                              /*nTilePosY=*/0, /*nTileWidth=*/10000, /*nTileHeight=*/4000);
+            /*nTilePosY=*/0, /*nTileWidth=*/10000, /*nTileHeight=*/4000);
 
     // None of the items is selected
     CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
@@ -2848,6 +2857,57 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonNoSelection()
 
         OString sSelected = aTree.get_child("params").get_child("selected").get_value<std::string>().c_str();
         CPPUNIT_ASSERT_EQUAL(OString("-1"), sSelected);
+    }
+}
+
+static void lcl_extractHandleParameters(const OString& selection, int& id, int& x, int& y)
+{
+    OString extraInfo = selection.copy(selection.indexOf("{"));
+    std::stringstream aStream(extraInfo.getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    boost::property_tree::ptree
+        handle0 = aTree
+        .get_child("handles")
+        .get_child("kinds")
+        .get_child("rectangle")
+        .get_child("1")
+        .begin()->second;
+    id = handle0.get_child("id").get_value<int>();
+    x = handle0.get_child("point").get_child("x").get_value<int>();
+    y = handle0.get_child("point").get_child("y").get_value<int>();
+}
+
+void SwTiledRenderingTest::testMoveShapeHandle()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    pWrtShell->SelectObj(Point(), 0, pObject);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!m_ShapeSelection.isEmpty());
+    {
+        int id, x, y;
+        lcl_extractHandleParameters(m_ShapeSelection, id, x ,y);
+        int oldX = x;
+        int oldY = y;
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        {
+            {"HandleNum", uno::makeAny(id)},
+            {"NewPosX", uno::makeAny(x+1)},
+            {"NewPosY", uno::makeAny(y+1)}
+        }));
+        comphelper::dispatchCommand(".uno:MoveShapeHandle", aPropertyValues);
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT(!m_ShapeSelection.isEmpty());
+        lcl_extractHandleParameters(m_ShapeSelection, id, x ,y);
+        CPPUNIT_ASSERT_EQUAL(x-1, oldX);
+        CPPUNIT_ASSERT_EQUAL(y-1, oldY);
     }
 }
 
