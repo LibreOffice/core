@@ -1250,7 +1250,7 @@ PointerStyle Window::GetPointer() const
 
 VCLXWindow* Window::GetWindowPeer() const
 {
-    return mpWindowImpl ? mpWindowImpl->mxVCLXWindow.get() : nullptr;
+    return mpWindowImpl ? mpWindowImpl->mpVCLXWindow : nullptr;
 }
 
 void Window::SetPosPixel( const Point& rNewPos )

@@ -21,14 +21,17 @@
 
 #include <sal/config.h>
 
-#include <rtl/ref.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
-class VCLXWindow;
+namespace com::sun::star::awt
+{
+class XWindowPeer;
+}
 class TextView;
 
 namespace basctl
 {
-rtl::Reference<VCLXWindow> createTextWindowPeer(TextView& view);
+css::uno::Reference<css::awt::XWindowPeer> createTextWindowPeer(TextView& view);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

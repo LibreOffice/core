@@ -62,7 +62,7 @@ TextWindowPeer::CreateAccessibleContext() {
 
 }
 
-rtl::Reference<VCLXWindow> basctl::createTextWindowPeer(
+css::uno::Reference<css::awt::XWindowPeer> basctl::createTextWindowPeer(
     TextView & view)
 {
     return new TextWindowPeer(view);

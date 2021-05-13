@@ -164,14 +164,14 @@ sal_Bool SAL_CALL IFrameObject::load(
         pWin->SetBackground();
         pWin->Show();
 
-        auto xWindow = pWin->GetComponentInterfaceAs<awt::XWindow>();
+        uno::Reference < awt::XWindow > xWindow( pWin->GetComponentInterface(), uno::UNO_QUERY );
         xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
 
         // we must destroy the IFrame before the parent is destroyed
         xWindow->addEventListener( this );
 
         mxFrame = frame::Frame::create( mxContext );
-        auto xWin = pWin->GetComponentInterfaceAs<awt::XWindow>();
+        uno::Reference < awt::XWindow > xWin( pWin->GetComponentInterface(), uno::UNO_QUERY );
         mxFrame->initialize( xWin );
         mxFrame->setName( maFrmDescr.GetName() );
 

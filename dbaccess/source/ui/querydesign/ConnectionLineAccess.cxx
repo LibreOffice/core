@@ -36,7 +36,7 @@ namespace dbaui
     using namespace ::com::sun::star;
 
     OConnectionLineAccess::OConnectionLineAccess(OTableConnection* _pLine)
-        : VCLXAccessibleComponent(_pLine->GetComponentInterface() ? _pLine->GetWindowPeer() : nullptr)
+        : VCLXAccessibleComponent(_pLine->GetComponentInterface().is() ? _pLine->GetWindowPeer() : nullptr)
         ,m_pLine(_pLine)
     {
     }

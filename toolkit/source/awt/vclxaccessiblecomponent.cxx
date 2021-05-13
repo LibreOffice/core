@@ -780,7 +780,7 @@ uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  )
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
-        auto xDev = pWindow->GetComponentInterfaceAs<awt::XDevice>();
+        uno::Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), uno::UNO_QUERY );
         if ( xDev.is() )
         {
             vcl::Font aFont;

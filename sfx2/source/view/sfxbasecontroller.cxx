@@ -445,7 +445,7 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow()
     if ( !m_pData->m_pViewShell )
         throw DisposedException();
 
-    return GetViewFrame_Impl().GetFrame().GetWindow().GetComponentInterfaceAs<XWindow>();
+    return Reference< XWindow >( GetViewFrame_Impl().GetFrame().GetWindow().GetComponentInterface(), UNO_QUERY_THROW );
 }
 
 OUString SAL_CALL SfxBaseController::getViewControllerName()

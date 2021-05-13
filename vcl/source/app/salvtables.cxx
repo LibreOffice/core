@@ -1236,7 +1236,8 @@ css::uno::Reference<css::awt::XWindow> SalInstanceContainer::CreateChildFrame()
     auto xPage = VclPtr<VclBin>::Create(m_xContainer.get());
     xPage->set_expand(true);
     xPage->Show();
-    return xPage->GetComponentInterfaceAs<css::awt::XWindow>();
+    return css::uno::Reference<css::awt::XWindow>(xPage->GetComponentInterface(),
+                                                  css::uno::UNO_QUERY);
 }
 
 std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
@@ -1406,7 +1407,9 @@ OUString SalInstanceWindow::get_title() const { return m_xWindow->GetText(); }
 
 css::uno::Reference<css::awt::XWindow> SalInstanceWindow::GetXWindow()
 {
-    return m_xWindow->GetComponentInterfaceAs<css::awt::XWindow>();
+    css::uno::Reference<css::awt::XWindow> xWindow(m_xWindow->GetComponentInterface(),
+                                                   css::uno::UNO_QUERY);
+    return xWindow;
 }
 
 void SalInstanceWindow::resize_to_request()
