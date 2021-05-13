@@ -221,10 +221,14 @@ void VCLXWindowImpl::disposing()
 {
     SolarMutexGuard aGuard;
     if ( mnCallbackEventId )
+    {
         Application::RemoveUserEvent( mnCallbackEventId );
-    mnCallbackEventId = nullptr;
+        mnCallbackEventId = nullptr;
+        // we acquired our VCLXWindow once before posting the event, release this one ref now
+        mrAntiImpl.release();
+    }
 
-    mbDisposed= true;
+    mbDisposed = true;
 
     css::lang::EventObject aEvent;
     aEvent.Source = mrAntiImpl;
@@ -275,9 +279,7 @@ IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks, void*, void)
         // we acquired our VCLXWindow once before posting the event, release this one ref now
         mrAntiImpl.release();
 
-        if ( !mnCallbackEventId )
-            // we were disposed while waiting for the mutex to lock
-            return;
+        assert( mnCallbackEventId && "should not be possible to call us if the event was removed");
 
         mnCallbackEventId = nullptr;
     }
