@@ -17527,6 +17527,20 @@ bool IsAllowedBuiltInIcon(std::u16string_view iconName)
 namespace {
 
 #if GTK_CHECK_VERSION(4, 0, 0)
+
+// <property name="spacing">6</property>
+Reference<css::xml::dom::XNode> CreateProperty(const css::uno::Reference<css::xml::dom::XDocument>& xDoc,
+                                               const OUString& rPropName, const OUString& rValue)
+{
+    css::uno::Reference<css::xml::dom::XElement> xProperty = xDoc->createElement("property");
+    css::uno::Reference<css::xml::dom::XAttr> xPropName = xDoc->createAttribute("name");
+    xPropName->setValue(rPropName);
+    xProperty->setAttributeNode(xPropName);
+    css::uno::Reference<css::xml::dom::XText> xValue = xDoc->createTextNode(rValue);
+    xProperty->appendChild(xValue);
+    return xProperty;
+}
+
 void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
@@ -17581,7 +17595,21 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
             css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
             OUString sClass(xClass->getNodeValue());
             if (sClass == "GtkButtonBox")
+            {
                 xClass->setNodeValue("GtkBox");
+
+                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
+                if (!xId->getNodeValue().startsWith("messagedialog-action_area"))
+                {
+                    auto xDoc = xChild->getOwnerDocument();
+                    auto xSpacingNode = CreateProperty(xDoc, "spacing", "6");
+                    auto xFirstChild = xChild->getFirstChild();
+                    if (xFirstChild.is())
+                        xChild->insertBefore(xSpacingNode, xFirstChild);
+                    else
+                        xChild->appendChild(xSpacingNode);
+                }
+            }
         }
         else if (xChild->getNodeName() == "packing")
         {
@@ -17682,6 +17710,7 @@ void load_ui_file(GtkBuilder* pBuilder, const OUString& rUri)
         sal_Int32 nRead = xInput->readBytes(bytes, std::max<sal_Int32>(nToRead, 4096));
         if (!nRead)
             break;
+        // fprintf(stderr, "text is %s\n", reinterpret_cast<const gchar*>(bytes.getArray()));
         auto rc = gtk_builder_add_from_string(pBuilder, reinterpret_cast<const gchar*>(bytes.getArray()), nRead, &err);
         if (!rc)
         {
