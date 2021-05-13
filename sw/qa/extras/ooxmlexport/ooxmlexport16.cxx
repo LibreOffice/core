@@ -25,10 +25,12 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <comphelper/configuration.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <editeng/escapementitem.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <textboxhelper.hxx>
 #include <unoprnms.hxx>
+#include <unotxdoc.hxx> //XChapterNumberingSupplier
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 
@@ -90,6 +92,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141231_arabicHebrewNumbering, "tdf141231_arabicH
     uno::Reference<beans::XPropertySet> xFootnoteSettings = xFootnotesSupplier->getFootnoteSettings();
     nActual = getProperty<sal_Int16>(xFootnotesSupplier->getFootnoteSettings(), "NumberingType");
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_ARABIC_ABJAD, nActual);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf141966_chapterNumbering, "tdf141966_chapterNumbering.docx")
+{
+    uno::Reference<text::XChapterNumberingSupplier> xNumberingSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xNumberingRules = xNumberingSupplier->getChapterNumberingRules();
+    comphelper::SequenceAsHashMap hashMap(xNumberingRules->getByIndex(0));
+
+    CPPUNIT_ASSERT(hashMap["HeadingStyleName"].get<OUString>().match("CN1"));
+
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(7, "Direct formatting with \"Outline\" numbering."), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("2nd"), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
