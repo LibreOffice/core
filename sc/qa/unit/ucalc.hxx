@@ -153,8 +153,6 @@ public:
     void testFuncIFERROR();
     void testFuncSHEET();
     void testFuncNOW();
-    void testFuncGETPIVOTDATA();
-    void testFuncGETPIVOTDATALeafAccess();
     void testMatrixOp();
     void testFuncRangeOp();
     void testFuncFORMULA();
@@ -223,90 +221,6 @@ public:
     void testMatrixConditionalBooleanResult();
     void testEnterMixedMatrix();
     void testMatrixEditable();
-
-    /**
-     * Basic test for pivot tables.
-     */
-    void testPivotTable();
-
-    /**
-     * Test against unwanted automatic format detection on field names and
-     * field members in pivot tables.
-     */
-    void testPivotTableLabels();
-
-    /**
-     * Make sure that we set cells displaying date values numeric cells,
-     * rather than text cells.  Grouping by date or number functionality
-     * depends on this.
-     */
-    void testPivotTableDateLabels();
-
-    /**
-     * Test for pivot table's filtering functionality by page fields.
-     */
-    void testPivotTableFilters();
-
-    /**
-     * Test for pivot table's named source range.
-     */
-    void testPivotTableNamedSource();
-
-    /**
-     * Test for pivot table cache.  Each dimension in the pivot cache stores
-     * only unique values that are sorted in ascending order.
-     */
-    void testPivotTableCache();
-
-    /**
-     * Test for pivot table containing data fields that reference the same
-     * source field but different functions.
-     */
-    void testPivotTableDuplicateDataFields();
-
-    void testPivotTableNormalGrouping();
-    void testPivotTableNumberGrouping();
-    void testPivotTableDateGrouping();
-    void testPivotTableEmptyRows();
-    void testPivotTableTextNumber();
-
-    /**
-     * Test for checking that pivot table treats strings in a case insensitive
-     * manner.
-     */
-    void testPivotTableCaseInsensitiveStrings();
-
-    /**
-     * Test for pivot table's handling of double-precision numbers that are
-     * very close together.
-     */
-    void testPivotTableNumStability();
-
-    /**
-     * Test for pivot table that include field with various non-default field
-     * references.
-     */
-    void testPivotTableFieldReference();
-
-    /**
-     * Test pivot table functionality performed via ScDBDocFunc.
-     */
-    void testPivotTableDocFunc();
-
-    /**
-     * Test pivot table per-field repeat item labels functionality
-     */
-    void testPivotTableRepeatItemLabels();
-
-    /**
-     * Test DPCollection public methods
-     */
-    void testPivotTableDPCollection();
-
-    /**
-    * Test pivot table median function
-    */
-    void testPivotTableMedianFunc();
 
     void testCellCopy();
     void testSheetCopy();
@@ -605,8 +519,6 @@ public:
     CPPUNIT_TEST(testFuncIF);
     CPPUNIT_TEST(testFuncCHOOSE);
     CPPUNIT_TEST(testFuncIFERROR);
-    CPPUNIT_TEST(testFuncGETPIVOTDATA);
-    CPPUNIT_TEST(testFuncGETPIVOTDATALeafAccess);
     CPPUNIT_TEST(testRefR1C1WholeCol);
     CPPUNIT_TEST(testRefR1C1WholeRow);
     CPPUNIT_TEST(testIterations);
@@ -657,25 +569,6 @@ public:
     CPPUNIT_TEST(testMatrixConditionalBooleanResult);
     CPPUNIT_TEST(testEnterMixedMatrix);
     CPPUNIT_TEST(testMatrixEditable);
-    CPPUNIT_TEST(testPivotTable);
-    CPPUNIT_TEST(testPivotTableLabels);
-    CPPUNIT_TEST(testPivotTableDateLabels);
-    CPPUNIT_TEST(testPivotTableFilters);
-    CPPUNIT_TEST(testPivotTableNamedSource);
-    CPPUNIT_TEST(testPivotTableCache);
-    CPPUNIT_TEST(testPivotTableDuplicateDataFields);
-    CPPUNIT_TEST(testPivotTableNormalGrouping);
-    CPPUNIT_TEST(testPivotTableNumberGrouping);
-    CPPUNIT_TEST(testPivotTableDateGrouping);
-    CPPUNIT_TEST(testPivotTableEmptyRows);
-    CPPUNIT_TEST(testPivotTableTextNumber);
-    CPPUNIT_TEST(testPivotTableCaseInsensitiveStrings);
-    CPPUNIT_TEST(testPivotTableNumStability);
-    CPPUNIT_TEST(testPivotTableFieldReference);
-    CPPUNIT_TEST(testPivotTableDocFunc);
-    CPPUNIT_TEST(testPivotTableRepeatItemLabels);
-    CPPUNIT_TEST(testPivotTableDPCollection);
-    CPPUNIT_TEST(testPivotTableMedianFunc);
     CPPUNIT_TEST(testCellCopy);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
