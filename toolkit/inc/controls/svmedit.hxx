@@ -26,7 +26,7 @@ class MultiLineEdit : public VclMultiLineEdit
 public:
     MultiLineEdit( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual VCLXWindow* GetComponentInterface(bool bCreate = true) override;
+    virtual css::uno::Reference< css::awt::XWindowPeer > GetComponentInterface(bool bCreate = true) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

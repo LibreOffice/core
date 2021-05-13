@@ -2040,10 +2040,11 @@ void ComplexEditorWindow::SetLineNumberDisplay(bool b)
     Resize();
 }
 
-VCLXWindow*
+uno::Reference< awt::XWindowPeer >
 EditorWindow::GetComponentInterface(bool bCreate)
 {
-    rtl::Reference< VCLXWindow > xPeer = Window::GetComponentInterface(false);
+    uno::Reference< awt::XWindowPeer > xPeer(
+        Window::GetComponentInterface(false));
     if (!xPeer.is() && bCreate)
     {
         // Make sure edit engine and view are available:
@@ -2051,9 +2052,9 @@ EditorWindow::GetComponentInterface(bool bCreate)
             CreateEditEngine();
 
         xPeer = createTextWindowPeer(*GetEditView());
-        SetComponentInterface(xPeer.get());
+        SetComponentInterface(xPeer);
     }
-    return xPeer.get();
+    return xPeer;
 }
 
 static sal_uInt32 getCorrectedPropCount(SbxArray* p)

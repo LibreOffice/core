@@ -270,11 +270,12 @@ public:
     OUString            maQuickHelpText;
     OUString            maID;
     InputContext        maInputContext;
+    css::uno::Reference< css::awt::XWindowPeer > mxWindowPeer;
     css::uno::Reference< css::accessibility::XAccessible > mxAccessible;
     std::shared_ptr< VclSizeGroup > m_xSizeGroup;
     std::vector<VclPtr<FixedText>> m_aMnemonicLabels;
     std::unique_ptr<ImplAccessibleInfos> mpAccessibleInfos;
-    rtl::Reference<VCLXWindow>  mxVCLXWindow; // peer window object from toolkit
+    VCLXWindow*         mpVCLXWindow;
     vcl::Region              maWinRegion;            //< region to 'shape' the VCL window (frame coordinates)
     vcl::Region              maWinClipRegion;        //< the (clipping) region that finally corresponds to the VCL window (frame coordinates)
     vcl::Region              maInvalidateRegion;     //< region that has to be redrawn (frame coordinates)

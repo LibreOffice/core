@@ -495,7 +495,7 @@ Reference< awt::XFont > AccessibleDialogControlShape::getFont(  )
     vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        auto xDev = pWindow->GetComponentInterfaceAs<awt::XDevice>();
+        Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), UNO_QUERY );
         if ( xDev.is() )
         {
             vcl::Font aFont;

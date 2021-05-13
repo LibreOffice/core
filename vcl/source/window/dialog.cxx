@@ -846,7 +846,7 @@ bool Dialog::Close()
     if ( xWindow->IsDisposed() )
         return false;
 
-    if ( mpWindowImpl->mxVCLXWindow.is() && IsCreatedWithToolkit() && !IsInExecute() )
+    if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() && !IsInExecute() )
         return false;
 
     // If there's a cancel button with a custom handler, then always give it a chance to

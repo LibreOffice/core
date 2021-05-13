@@ -76,7 +76,7 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
     {
         pWindow = VclPtr<vcl::Window>::Create(pParentWindow);
     }
-    auto xWindow = pWindow->GetComponentInterfaceAs<awt::XWindow>();
+    Reference<awt::XWindow> xWindow (pWindow->GetComponentInterface(), UNO_QUERY);
 
     if (bEnableChildTransparentMode)
     {

@@ -100,7 +100,7 @@ private:
     bool            bDoSyntaxHighlight;
     bool            bDelayHighlight;
 
-    virtual VCLXWindow* GetComponentInterface(bool bCreate = true) override;
+    virtual css::uno::Reference< css::awt::XWindowPeer > GetComponentInterface(bool bCreate = true) override;
     CodeCompleteDataCache aCodeCompleteCache;
     VclPtr<CodeCompleteWindow> pCodeCompleteWnd;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number

@@ -23,7 +23,6 @@
         - SelectAll( false ) => only repaint the deselected entries
 */
 
-#include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -3474,7 +3473,7 @@ css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
         if ( xAccParent.is() )
         {
             // need to be done here to get the vclxwindow later on in the accessible
-            rtl::Reference< VCLXWindow > xHoldAlive(GetComponentInterface());
+            css::uno::Reference< css::awt::XWindowPeer > xHoldAlive(GetComponentInterface());
             xAccessible = pImpl->m_aFactoryAccess.getFactory().createAccessibleTreeListBox( *this, xAccParent );
         }
     }

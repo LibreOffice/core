@@ -272,7 +272,7 @@ namespace frm
         VclPtrInstance<RichTextControl> pRichTextControl( pEngine, _pParentWindow, _nStyle, nullptr, pPeer.get() );
 
         // some knittings
-        pRichTextControl->SetComponentInterface( pPeer.get() );
+        pRichTextControl->SetComponentInterface( pPeer );
 
         // outta here
         return pPeer;

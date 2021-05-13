@@ -2660,7 +2660,7 @@ bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
                         css::awt::MouseEvent aEvent;
                         lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
                         if ( rNEvt.GetWindow() )
-                            aEvent.Source = static_cast<cppu::OWeakObject*>(rNEvt.GetWindow()->GetComponentInterface());
+                            aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
                         if ( nType == MouseNotifyEvent::MOUSEBUTTONDOWN)
                             bDone = pImp->MousePressed( aEvent );
                         else

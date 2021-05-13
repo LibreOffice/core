@@ -288,7 +288,7 @@ void LifecycleTest::testLeakage()
 void LifecycleTest::testToolkit()
 {
     LeakTestObject *pVclWin = LeakTestObject::Create<WorkWindow>(nullptr, WB_APP|WB_STDWORK);
-    auto xWindow = pVclWin->getRef()->GetComponentInterfaceAs<css::awt::XWindow>();
+    css::uno::Reference<css::awt::XWindow> xWindow(pVclWin->getRef()->GetComponentInterface(), css::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xWindow.is());
 
     // test UNO dispose

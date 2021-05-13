@@ -458,7 +458,7 @@ namespace accessibility
         Reference< awt::XFont > xFont;
         if ( m_pTabBar )
         {
-            auto xDev = m_pTabBar->GetComponentInterfaceAs<awt::XDevice>();
+            Reference< awt::XDevice > xDev( m_pTabBar->GetComponentInterface(), UNO_QUERY );
             if ( xDev.is() )
             {
                 vcl::Font aFont;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/window.hxx>
@@ -78,7 +77,8 @@ css::uno::Reference< css::accessibility::XAccessible > Window::GetAccessible( bo
 
 css::uno::Reference< css::accessibility::XAccessible > Window::CreateAccessible()
 {
-    return GetComponentInterfaceAs<css::accessibility::XAccessible>();
+    css::uno::Reference< css::accessibility::XAccessible > xAcc( GetComponentInterface(), css::uno::UNO_QUERY );
+    return xAcc;
 }
 
 void Window::SetAccessible( const css::uno::Reference< css::accessibility::XAccessible >& x )

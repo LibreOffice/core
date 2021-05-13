@@ -301,7 +301,7 @@ Reference< awt::XFont > OAccessibleMenuComponent::getFont(  )
         vcl::Window* pWindow = m_pMenu->GetWindow();
         if ( pWindow )
         {
-            auto xDev = pWindow->GetComponentInterfaceAs<awt::XDevice>();
+            Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), UNO_QUERY );
             if ( xDev.is() )
             {
                 const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();

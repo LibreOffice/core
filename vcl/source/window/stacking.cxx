@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/window.hxx>
 #include <vcl/taskpanelist.hxx>
@@ -620,7 +619,7 @@ bool Window::IsTopWindow() const
     {
         // #113722#, cache result of expensive queryInterface call
         vcl::Window *pThisWin = const_cast<vcl::Window*>(this);
-        auto xTopWindow = pThisWin->GetComponentInterfaceAs<XTopWindow>();
+        uno::Reference< XTopWindow > xTopWindow( pThisWin->GetComponentInterface(), UNO_QUERY );
         pThisWin->mpWindowImpl->mpWinData->mnIsTopWindow = xTopWindow.is() ? 1 : 0;
     }
     return mpWindowImpl->mpWinData->mnIsTopWindow == 1;

@@ -790,7 +790,7 @@ Reference< awt::XFont > AccessibleDialogWindow::getFont(  )
     Reference< awt::XFont > xFont;
     if ( m_pDialogWindow )
     {
-        auto xDev = m_pDialogWindow->GetComponentInterfaceAs<awt::XDevice>();
+        Reference< awt::XDevice > xDev( m_pDialogWindow->GetComponentInterface(), UNO_QUERY );
         if ( xDev.is() )
         {
             vcl::Font aFont;

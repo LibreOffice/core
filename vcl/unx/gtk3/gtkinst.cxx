@@ -15,7 +15,6 @@
 #include <string_view>
 
 #include <osl/process.h>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/genprn.h>
@@ -4260,7 +4259,7 @@ public:
 
         // NoActivate otherwise Show grab focus to this widget
         xEmbedWindow->Show(true, ShowFlags::NoActivate);
-        auto xWindow = xEmbedWindow->GetComponentInterfaceAs<css::awt::XWindow>();
+        css::uno::Reference<css::awt::XWindow> xWindow(xEmbedWindow->GetComponentInterface(), css::uno::UNO_QUERY);
         return xWindow;
 #else
         return nullptr;

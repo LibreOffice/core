@@ -184,7 +184,7 @@ namespace sfx2
                 KeyEvent aEvent;
                 lcl_initKeyEvent( aEvent, *_rEvent.GetKeyEvent() );
                 if ( _rEvent.GetWindow() )
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(_rEvent.GetWindow()->GetComponentInterface());
+                    aEvent.Source = _rEvent.GetWindow()->GetComponentInterface();
 
                 ::comphelper::OInterfaceIteratorHelper2 aIterator( m_pData->m_aKeyHandlers );
                 while ( aIterator.hasMoreElements() )
@@ -222,7 +222,7 @@ namespace sfx2
                 MouseEvent aEvent;
                 lcl_initMouseEvent( aEvent, *_rEvent.GetMouseEvent() );
                 if ( _rEvent.GetWindow() )
-                    aEvent.Source = static_cast<cppu::OWeakObject*>(_rEvent.GetWindow()->GetComponentInterface());
+                    aEvent.Source = _rEvent.GetWindow()->GetComponentInterface();
 
                 ::comphelper::OInterfaceIteratorHelper2 aIterator( m_pData->m_aMouseClickHandlers );
                 while ( aIterator.hasMoreElements() )

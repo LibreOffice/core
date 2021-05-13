@@ -567,7 +567,8 @@ uno::Reference< awt::XWindow > SAL_CALL SfxInPlaceClient_Impl::getWindow()
     if ( !m_pClient || !m_pClient->GetEditWin() )
         throw uno::RuntimeException();
 
-    return m_pClient->GetEditWin()->GetComponentInterfaceAs<awt::XWindow>();
+    uno::Reference< awt::XWindow > xWin( m_pClient->GetEditWin()->GetComponentInterface(), uno::UNO_QUERY );
+    return xWin;
 }
 
 
