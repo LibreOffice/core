@@ -94,6 +94,39 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
         return rWrt;
     }
 
+    if (rWrt.mbXHTML && !rInfo.IsNumbered())
+    {
+        // If the list only consists of non-numbered text nodes, then don't start the list.
+        bool bAtLeastOneNumbered = false;
+        sal_uLong nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() + 1;
+        while (true)
+        {
+            const SwNode* pNode = rWrt.m_pDoc->GetNodes()[nPos];
+            if (!pNode->IsTextNode())
+            {
+                break;
+            }
+
+            const SwTextNode* pTextNode = pNode->GetTextNode();
+            if (!pTextNode->GetNumRule())
+            {
+                break;
+            }
+
+            if (pTextNode->IsNumbered())
+            {
+                bAtLeastOneNumbered = true;
+                break;
+            }
+            ++nPos;
+        }
+
+        if (!bAtLeastOneNumbered)
+        {
+            return rWrt;
+        }
+    }
+
     bool bStartValue = false;
     if( !bSameRule && rInfo.GetDepth() )
     {
@@ -283,7 +316,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
 
     if (rWrt.mbXHTML)
     {
-        if (bListEnd || (!bListEnd && rNextInfo.IsNumbered()))
+        if ((bListEnd && rInfo.IsNumbered()) || (!bListEnd && rNextInfo.IsNumbered()))
         {
             HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(),
                                        OString(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li), false);
@@ -293,6 +326,39 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     if (!bListEnd)
     {
         return rWrt;
+    }
+
+    if (rWrt.mbXHTML && !rInfo.IsNumbered())
+    {
+        // If the list only consisted of non-numbered text nodes, then don't end the list.
+        bool bAtLeastOneNumbered = false;
+        sal_uLong nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() - 1;
+        while (true)
+        {
+            const SwNode* pNode = rWrt.m_pDoc->GetNodes()[nPos];
+            if (!pNode->IsTextNode())
+            {
+                break;
+            }
+
+            const SwTextNode* pTextNode = pNode->GetTextNode();
+            if (!pTextNode->GetNumRule())
+            {
+                break;
+            }
+
+            if (pTextNode->IsNumbered())
+            {
+                bAtLeastOneNumbered = true;
+                break;
+            }
+            --nPos;
+        }
+
+        if (!bAtLeastOneNumbered)
+        {
+            return rWrt;
+        }
     }
 
     OSL_ENSURE( rWrt.m_nLastParaToken == HtmlTokenId::NONE,
