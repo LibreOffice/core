@@ -30,6 +30,9 @@ Sub verify_testInStr()
     TestUtil.AssertEqual(InStr(1, SearchString, SearchChar, 0), 9, "InStr(1, SearchString, SearchChar, 0)")
     TestUtil.AssertEqual(InStr(1, SearchString, "W"),           0, "InStr(1, SearchString, ""W"")")
 
+    ' tdf#139840 - case-insensitive operation for non-ASCII characters
+    TestUtil.AssertEqual(InStr(1, "α", "Α", 1), 1, "InStr(1, ""α"", ""Α"", 1)")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testInStr", Err, Error$, Erl)

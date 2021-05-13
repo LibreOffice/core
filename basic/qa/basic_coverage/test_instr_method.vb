@@ -6,12 +6,17 @@
 '
 
 Function doUnitTest as Integer
-    dim aString as Variant
+
+    doUnitTest = 0
+
+    Dim aString As Variant
     aString = "Hello"
     ' InStr
-    If ( InStr( 1, aString, "l", 1) <> 3 ) Then
-        doUnitTest = 0
-    Else
-        doUnitTest = 1
-    End If
+    If (InStr(1, aString, "l", 1) <> 3) Then Exit Function
+
+    ' tdf#139840 - case-insensitive operation for non-ASCII characters
+    If (InStr(1, "α", "Α", 1) <> 1) Then Exit Function
+
+    doUnitTest = 1
+
 End Function
