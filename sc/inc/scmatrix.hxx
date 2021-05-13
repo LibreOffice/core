@@ -140,15 +140,17 @@ public:
      * summation algorithm,
      * https://en.wikipedia.org/wiki/Kahan_summation_algorithm
      */
+    template<typename tRes>
     struct IterateResultMultiple
     {
-        double mfFirst;
-        double mfRest;
+        std::vector<tRes> maAccumulator;
         size_t mnCount;
 
-        IterateResultMultiple(double fFirst, double fRest, size_t nCount) :
-            mfFirst(fFirst), mfRest(fRest), mnCount(nCount) {}
+        IterateResultMultiple(size_t nCount) :
+            maAccumulator(0), mnCount(nCount) {}
     };
+    typedef IterateResultMultiple<KahanSum> KahanIterateResultMultiple;
+    typedef IterateResultMultiple<double> DoubleIterateResultMultiple;
 
     /**
       * Iterator for executing one operation withe the matrix data.
@@ -411,7 +413,8 @@ public:
     void DivOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
     void PowOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
 
-    std::vector<ScMatrix::IterateResultMultiple> Collect(const std::vector<sc::op::Op>& aOp) ;
+    DoubleIterateResultMultiple Collect(const std::vector<sc::op::Op>& aOp) ;
+    KahanIterateResultMultiple CollectKahan(const std::vector<sc::op::kOp>& aOp) ;
 
     void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc,
