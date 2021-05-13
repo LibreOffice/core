@@ -56,6 +56,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestEllipseXformIntersectClipRect();
     void TestDrawPolyLine16WithClip();
     void TestFillRegion();
+    void TestPolylinetoCloseStroke();
     void TestPolyLineWidth();
     void TestRoundRect();
     void TestCreatePen();
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST(TestEllipseXformIntersectClipRect);
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
+    CPPUNIT_TEST(TestPolylinetoCloseStroke);
     CPPUNIT_TEST(TestPolyLineWidth);
     CPPUNIT_TEST(TestRoundRect);
     CPPUNIT_TEST(TestCreatePen);
@@ -436,6 +438,26 @@ void Test::TestFillRegion()
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]/polygon",
                        "1323,0 2646,0 2646,1322 3969,1322 3969,2644 2646,2644 2646,3966 1323,3966 1323,2644 0,2644 0,1322 1323,1322");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]", "color", "#000000");
+}
+
+void Test::TestPolylinetoCloseStroke()
+{
+    // EMF import with records: BEGINPATH, ARC, ENDPATH, STROKEPATH, EXTCREATEPEN.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestPolylinetoCloseStroke.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonhairline", 2);
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonhairline[1]/polygon",
+                       "1080,150 810,230 570,340 370,490 290,570 170,750 130,840 100,980 100,1080 140,1270 160,1320 210,1410 400,1620 500,1690");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonhairline[1]",
+                "color", "#000000");
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonhairline[2]/polygon",
+                       "1760,1120 1500,1180 1350,1240 1230,1310 1210,1330 1120,1440 1110,1460 1100,1510 1100,1580 1140,1670 1170,1710 1190,1730");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonhairline[2]",
+                "color", "#000000");
 }
 
 void Test::TestPolyLineWidth()
