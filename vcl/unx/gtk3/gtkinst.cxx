@@ -7492,6 +7492,7 @@ public:
         }
     }
 };
+#endif
 
 void update_attr_list(PangoAttrList* pAttrList, const vcl::Font& rFont)
 {
@@ -7574,6 +7575,7 @@ void set_font(GtkLabel* pLabel, const vcl::Font& rFont)
     pango_attr_list_unref(pAttrList);
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
 {
 private:
@@ -9988,7 +9990,12 @@ namespace
                 break;
         }
     }
+}
 
+#endif
+
+namespace
+{
     gboolean filter_pango_attrs(PangoAttribute *attr, gpointer data)
     {
         PangoAttrType* pFilterAttrs = static_cast<PangoAttrType*>(data);
@@ -10000,6 +10007,12 @@ namespace
         }
         return false;
     }
+}
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+
+namespace
+{
 
 class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
 {
@@ -14014,6 +14027,11 @@ public:
     }
 };
 
+}
+#endif
+
+namespace {
+
 class GtkInstanceLabel : public GtkInstanceWidget, public virtual weld::Label
 {
 private:
@@ -14114,7 +14132,6 @@ public:
 };
 
 }
-#endif
 
 std::unique_ptr<weld::Label> GtkInstanceFrame::weld_label_widget() const
 {
@@ -17538,7 +17555,10 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
             css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("name");
             OUString sName(xName->getNodeValue().replace('_', '-'));
             if (sName == "type-hint" || sName == "skip-taskbar-hint" ||
-                sName == "can-default" || sName == "has-default")
+                sName == "can-default" || sName == "has-default" ||
+                sName == "border-width" || sName == "layout-style" ||
+                sName == "has-focus" || sName == "no-show-all" ||
+                sName == "ignore-hidden")
             {
                 xRemoveList.push_back(xChild);
             }
@@ -17552,6 +17572,8 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                 OUString sName(xName->getNodeValue());
                 if (sName == "vbox")
                     xName->setNodeValue("content_area");
+                else if (sName == "accessible")
+                    xRemoveList.push_back(xChild); // Yikes!, what's the replacement for this going to be
             }
         }
         else if (xChild->getNodeName() == "object")
@@ -17563,32 +17585,59 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                 xClass->setNodeValue("GtkBox");
         }
         else if (xChild->getNodeName() == "packing")
-            xRemoveList.push_back(xChild);
-
-#if 0
-        css::xml::dom::NodeType eChildType = xChild->getNodeType();
-        switch ( eChildType )
         {
-            case css::xml::dom::NodeType_ATTRIBUTE_NODE:
-            case css::xml::dom::NodeType_ELEMENT_NODE:
-            case css::xml::dom::NodeType_TEXT_NODE:
-        }
-#endif
+            // remove "packing" and if its grid packing insert a replacement "layout" into
+            // the associated "object"
+            auto xDoc = xChild->getOwnerDocument();
+            css::uno::Reference<css::xml::dom::XElement> xNew = xDoc->createElement("layout");
 
-#if 0
-        if ( xChild->hasAttributes() )
-        {
-            Reference< css::xml::dom::XNamedNodeMap > xMap = xChild->getAttributes();
-            if ( xMap.is() )
+            bool bGridPacking = false;
+
+            // iterate over all children and append them to the new element
+            for (css::uno::Reference<css::xml::dom::XNode> xCurrent = xChild->getFirstChild();
+                 xCurrent.is();
+                 xCurrent = xChild->getFirstChild())
             {
-                sal_Int32 j, nMapLen = xMap->getLength();
-                for ( j = 0; j < nMapLen; ++j )
+                css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xCurrent->getAttributes();
+                if (xMap.is())
                 {
-                    Reference< css::xml::dom::XNode > xAttr = xMap->item(j);
+                    css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("name");
+                    OUString sName(xName->getNodeValue().replace('_', '-'));
+                    if (sName == "left-attach")
+                    {
+                        xName->setNodeValue("column");
+                        bGridPacking = true;
+                    }
+                    if (sName == "top-attach")
+                    {
+                        xName->setNodeValue("row");
+                        bGridPacking = true;
+                    }
+                }
+                xNew->appendChild(xChild->removeChild(xCurrent));
+            }
+
+            if (bGridPacking)
+            {
+                // go back to parent and find the object child and insert this "layout" as a
+                // new child of the object
+                auto xParent = xChild->getParentNode();
+                auto xInsertIn = xParent->getFirstChild();
+                for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xParent->getFirstChild();
+                     xObjectCandidate.is();
+                     xObjectCandidate = xObjectCandidate->getNextSibling())
+                {
+                    if (xObjectCandidate->getNodeName() == "object")
+                    {
+                        xObjectCandidate->appendChild(xNew);
+                        break;
+                    }
                 }
             }
+
+            xRemoveList.push_back(xChild);
         }
-#endif
+
         if (!xChild->hasChildNodes())
             continue;
         ConvertTree(xChild);
@@ -18478,16 +18527,11 @@ public:
 
     virtual std::unique_ptr<weld::Label> weld_label(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkLabel* pLabel = GTK_LABEL(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pLabel)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pLabel));
         return std::make_unique<GtkInstanceLabel>(pLabel, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::TextView> weld_text_view(const OString &id) override
@@ -18655,8 +18699,12 @@ void GtkInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
 weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
-    if (rUIFile != "svt/ui/javadisableddialog.ui")
+    if (rUIFile != "svt/ui/javadisableddialog.ui" &&
+        rUIFile != "modules/swriter/ui/wordcount.ui")
+    {
+        SAL_WARN( "vcl.gtk", rUIFile);
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
+    }
 #endif
     GtkInstanceWidget* pParentWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
     if (pParent && !pParentWidget) //remove when complete
