@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2e4b9618_078de792",
+        "filename": "sc/inc/scmatrix.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-13T15:06:17Z",
+      "side": 1,
+      "message": "That one is used for collect, which operates as arrays.\nI\u0027ve changed the name to get it out of the way.\nThe issue is addressed on the patch based on this one.\nhttps://gerrit.libreoffice.org/c/core/+/115542/2\nIs not set to review yet because it self conflicts with the base patch.",
+      "parentUuid": "1b470625_49e5a77e",
+      "range": {
+        "startLine": 145,
+        "startChar": 8,
+        "endLine": 145,
+        "endChar": 23
+      },
+      "revId": "fdaa686dae4d611b45cf41d50e2d9dba9775722c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78b66307_b86d2138",
         "filename": "sc/inc/scmatrix.hxx",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e1905c0b_5e71f85a",
+        "filename": "sc/inc/scmatrix.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-13T15:06:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78b66307_b86d2138",
+      "range": {
+        "startLine": 154,
+        "startChar": 45,
+        "endLine": 154,
+        "endChar": 50
+      },
+      "revId": "fdaa686dae4d611b45cf41d50e2d9dba9775722c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22c66bfe_0291ce1a",
         "filename": "sc/source/core/tool/scmatrix.cxx",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "fdaa686dae4d611b45cf41d50e2d9dba9775722c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43cdb790_88ff6dac",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-13T15:06:17Z",
+      "side": 1,
+      "message": "I used them to make the header look pretty.\nBut don\u0027t mind changing it.",
+      "parentUuid": "22c66bfe_0291ce1a",
+      "range": {
+        "startLine": 305,
+        "startChar": 4,
+        "endLine": 305,
+        "endChar": 37
+      },
+      "revId": "fdaa686dae4d611b45cf41d50e2d9dba9775722c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
