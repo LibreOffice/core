@@ -51,7 +51,6 @@ class ListLevel : public PropertyMap
     css::uno::Reference<css::awt::XBitmap> m_xGraphicBitmap;
     std::optional<sal_Int32>               m_nTabstop;
     tools::SvRef< StyleSheetEntry >          m_pParaStyle;
-    bool                                          m_outline;
     bool m_bHasValues = false;
 
 public:
@@ -63,7 +62,6 @@ public:
         ,m_nStartOverride(-1)
         ,m_nNFC(-1)
         ,m_nXChFollow(SvxNumberFormat::LISTTAB)
-        ,m_outline(false)
         {}
 
     // Setters for the import
@@ -77,9 +75,9 @@ public:
     void SetParaStyle( const tools::SvRef< StyleSheetEntry >& pStyle );
 
     // Getters
+    sal_Int16 GetNumberingType(sal_Int16 nDefault) const;
     const OUString& GetBulletChar( ) const { return m_sBulletChar; };
     const tools::SvRef< StyleSheetEntry >& GetParaStyle( ) const { return m_pParaStyle; };
-    bool isOutlineNumbering() const { return m_outline; }
     sal_Int32 GetStartOverride() const { return m_nStartOverride; };
     /// Determines if SetValue() was called at least once.
     bool HasValues() const;
@@ -163,7 +161,6 @@ public:
     const OUString&       GetStyleLink() const { return m_sStyleLink; };
 
     const OUString& MapListId(OUString const& rId);
-    bool isOutlineNumbering( sal_uInt16 nLvl ) { return GetLevel(nLvl) && GetLevel(nLvl)->isOutlineNumbering(); }
 };
 
 class ListDef : public AbstractListDef
@@ -177,9 +174,6 @@ private:
 
     /// mapped list style name
     OUString m_StyleName;
-
-    /// not custom outline parent levels
-    sal_Int16 m_nDefaultParentLevels;
 
 public:
     typedef tools::SvRef< ListDef > Pointer;
@@ -195,11 +189,10 @@ public:
     const OUString & GetStyleName() const { return m_StyleName; };
     const OUString & GetStyleName(sal_Int32 nId, css::uno::Reference<css::container::XNameContainer> const& xStyles);
 
-    sal_Int16 GetDefaultParentLevels() const { return m_nDefaultParentLevels; };
-
     css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetMergedPropertyValues();
 
-    void CreateNumberingRules(DomainMapper& rDMapper, css::uno::Reference<css::lang::XMultiServiceFactory> const& xFactory);
+    sal_uInt16 GetChapterNumberingWeight() const;
+    void CreateNumberingRules(DomainMapper& rDMapper, css::uno::Reference<css::lang::XMultiServiceFactory> const& xFactory, sal_Int16 nOutline);
 
     const css::uno::Reference<css::container::XIndexReplace>& GetNumberingRules() const { return m_xNumRules; }
 
