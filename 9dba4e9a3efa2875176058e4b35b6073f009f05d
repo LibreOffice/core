@@ -22,6 +22,30 @@
       "revId": "9dba4e9a3efa2875176058e4b35b6073f009f05d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4647f91_9e97e55c",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-13T16:16:02Z",
+      "side": 0,
+      "message": "There is no functional change.\nHowever there are those:\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d130977\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d130976\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d130975\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d130974\nReplace rtl::math with std.\nI also do find usefull to not reinvent the wheel.\nAlso any new developer surely knows basic std and has not to search for it\u0027s definition.\nI may create a tdf for it.",
+      "parentUuid": "a7667d7e_78a365e7",
+      "range": {
+        "startLine": 220,
+        "startChar": 48,
+        "endLine": 220,
+        "endChar": 68
+      },
+      "revId": "9dba4e9a3efa2875176058e4b35b6073f009f05d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
