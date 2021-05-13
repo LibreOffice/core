@@ -798,6 +798,7 @@ class TransClipHandler
     ScTable& mrClipTab;
     const ScTable& mrSrcTab;
     SCTAB mnSrcTab;
+    SCCOL mnCol1;
     SCCOL mnSrcCol;
     size_t mnTopRow;
     size_t mnEndRow;
@@ -812,7 +813,8 @@ class TransClipHandler
 
     ScAddress getDestPos(size_t nRow) const
     {
-        return ScAddress(static_cast<SCCOL>(nRow-mnTopRow), mnTransRow, mrClipTab.GetTab());
+        return ScAddress(static_cast<SCCOL>(mnCol1 + nRow - mnTopRow), mnTransRow,
+                         mrClipTab.GetTab());
     }
 
     ScFormulaCell* createRefCell(size_t nSrcRow, const ScAddress& rDestPos) const
@@ -829,23 +831,25 @@ class TransClipHandler
 
     void setLink(size_t nRow)
     {
-        SCCOL nTransCol = nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
+        SCCOL nTransCol = mnCol1 + nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
         mrClipTab.SetFormulaCell(nTransCol, mnTransRow,
                                  createRefCell(nRow, getDestPos(nRow)));
     }
 
 public:
-    TransClipHandler(ScTable& rClipTab, const ScTable& rSrcTab, SCTAB nSrcTab, SCCOL nSrcCol,
-                     size_t nTopRow, size_t nEndRow, SCROW nTransRow, SCROW nRowDestOffset,
-                     bool bAsLink, bool bWasCut, const InsertDeleteFlags& nFlags,
-                     const bool bIncludeFiltered, std::vector<SCROW>& rFilteredRows)
+    TransClipHandler(ScTable& rClipTab, const ScTable& rSrcTab, SCTAB nSrcTab, SCCOL nCol1,
+                     SCCOL nSrcCol, size_t nTopRow, size_t nEndRow, SCROW nCombinedStartRow,
+                     SCROW nRowDestOffset, bool bAsLink, bool bWasCut,
+                     const InsertDeleteFlags& nFlags, const bool bIncludeFiltered,
+                     std::vector<SCROW>& rFilteredRows)
         : mrClipTab(rClipTab)
         , mrSrcTab(rSrcTab)
         , mnSrcTab(nSrcTab)
+        , mnCol1(nCol1)
         , mnSrcCol(nSrcCol)
         , mnTopRow(nTopRow)
         , mnEndRow(nEndRow)
-        , mnTransRow(nTransRow)
+        , mnTransRow(nSrcCol - nCol1 + nCombinedStartRow)
         , mnRowDestOffset(nRowDestOffset)
         , mbAsLink(bAsLink)
         , mbWasCut(bWasCut)
@@ -881,7 +885,7 @@ public:
             return;
         }
 
-        SCCOL nTransCol = nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
+        SCCOL nTransCol = mnCol1 + nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
         mrClipTab.SetValue(nTransCol, mnTransRow, fVal);
     }
 
@@ -900,7 +904,7 @@ public:
             return;
         }
 
-        SCCOL nTransCol = nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
+        SCCOL nTransCol = mnCol1 + nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
         mrClipTab.SetRawString(nTransCol, mnTransRow, rStr);
     }
 
@@ -919,7 +923,7 @@ public:
             return;
         }
 
-        SCCOL nTransCol = nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
+        SCCOL nTransCol = mnCol1 + nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
         mrClipTab.SetEditText(nTransCol, mnTransRow, ScEditUtil::Clone(*p, mrClipTab.GetDoc()));
     }
 
@@ -948,7 +952,7 @@ public:
         if (!mbWasCut)
             pNew->TransposeReference();
 
-        SCCOL nTransCol = nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
+        SCCOL nTransCol = mnCol1 + nRow - mnTopRow - mnFilteredRows + mnRowDestOffset;
         mrClipTab.SetFormulaCell(nTransCol, mnTransRow, pNew);
     }
 
@@ -976,8 +980,8 @@ public:
 }
 
 void ScTable::TransposeClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            SCROW nRowDestOffset, ScTable* pTransClip, InsertDeleteFlags nFlags,
-                            bool bAsLink, bool bIncludeFiltered)
+                            SCROW nCombinedStartRow, SCROW nRowDestOffset, ScTable* pTransClip,
+                            InsertDeleteFlags nFlags, bool bAsLink, bool bIncludeFiltered)
 {
     bool bWasCut = rDocument.IsCutMode();
 
@@ -985,9 +989,9 @@ void ScTable::TransposeClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     {
         std::vector<SCROW> aFilteredRows;
 
-        TransClipHandler aFunc(*pTransClip, *this, nTab, nCol, nRow1, nRow2,
-                               static_cast<SCROW>(nCol - nCol1), nRowDestOffset, bAsLink, bWasCut,
-                               nFlags, bIncludeFiltered, aFilteredRows);
+        TransClipHandler aFunc(*pTransClip, *this, nTab, nCol1, nCol, nRow1, nRow2,
+                               nCombinedStartRow, nRowDestOffset, bAsLink, bWasCut, nFlags,
+                               bIncludeFiltered, aFilteredRows);
 
         const sc::CellStoreType& rCells = aCol[nCol].maCells;
 

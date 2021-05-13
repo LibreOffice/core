@@ -541,12 +541,15 @@ public:
     void        CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             SCCOL nDx, SCROW nDy, const ScTable* pTable);
     /**
+     * @param nCombinedStartRow start row of the combined range;
+     * used for transposed multi range selection with row direction;
+     * for other cases than multi range row selection this it equal to nRow1
      * @param nRowDestOffset adjustment of destination row position;
      * used for transposed multi range selection with row direction, otherwise 0
      */
-    void TransposeClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCROW nRowDestOffset,
-                       ScTable* pTransClip, InsertDeleteFlags nFlags, bool bAsLink,
-                       bool bIncludeFiltered);
+    void TransposeClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCROW nCombinedStartRow,
+                       SCROW nRowDestOffset, ScTable* pTransClip, InsertDeleteFlags nFlags,
+                       bool bAsLink, bool bIncludeFiltered);
 
     // mark of this document
     void MixMarked(
