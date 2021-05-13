@@ -57,8 +57,6 @@ typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
 class SC_DLLPUBLIC ScCsvGrid : public ScCsvControl, public utl::ConfigurationListener
 {
 private:
-    typedef ::std::unique_ptr< ScEditEngineDefaulter > ScEditEnginePtr;
-
     ScCsvTableBox*              mpTableBox;         /// Grid Parent
     VclPtr<VirtualDevice>       mpBackgrDev;        /// Grid background, headers, cell texts.
     VclPtr<VirtualDevice>       mpGridDev;          /// Data grid with selection and cursor.
@@ -75,7 +73,8 @@ private:
     Color                       maHeaderTextColor;  /// Text color for headers.
     Color                       maSelectColor;      /// Header color of selected columns.
 
-    ScEditEnginePtr             mpEditEngine;       /// For drawing cell texts.
+    std::unique_ptr< ScEditEngineDefaulter >
+                                mpEditEngine;       /// For drawing cell texts.
     vcl::Font                   maHeaderFont;       /// Font for column and row headers.
     vcl::Font                   maMonoFont;         /// Monospace font for data cells.
     Size                        maWinSize;          /// Size of the control.

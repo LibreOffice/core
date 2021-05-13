@@ -574,7 +574,6 @@ bool SvXMLImportPropertyMapper::FillPropertySet_(
 
 
 typedef pair<const OUString*, const Any* > PropertyPair;
-typedef vector<PropertyPair> PropertyPairs;
 
 namespace {
 
@@ -599,7 +598,7 @@ void SvXMLImportPropertyMapper::PrepareForMultiPropertySet_(
     sal_Int32 nCount = rProperties.size();
 
     // property pairs structure stores names + values of properties to be set.
-    PropertyPairs aPropertyPairs;
+    vector<PropertyPair> aPropertyPairs;
     aPropertyPairs.reserve( nCount );
 
     // iterate over property states that we want to set

@@ -62,8 +62,6 @@ namespace package {
 
 struct WSInternalData_Impl;
 
-typedef ::std::vector< OInputCompStream* > InputStreamsVector_Impl;
-
 struct OStorage_Impl;
 class OWriteStream;
 
@@ -81,7 +79,7 @@ struct OWriteStream_Impl
     css::uno::Reference< css::io::XStream > m_xCacheStream;
     css::uno::Reference< css::io::XSeekable > m_xCacheSeek;
 
-    InputStreamsVector_Impl m_aInputStreamsVector;
+    std::vector< OInputCompStream* > m_aInputStreamsVector;
 
     bool                        m_bHasDataToFlush;    // only modified elements will be sent to the original content
     bool                        m_bFlushed;      // sending the streams is coordinated by the root storage of the package

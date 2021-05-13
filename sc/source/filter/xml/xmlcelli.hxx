@@ -57,7 +57,6 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
         ~Field();
     };
 
-    typedef std::vector<std::unique_ptr<ParaFormat> > ParaFormatsType;
     typedef std::vector<std::unique_ptr<Field> > FieldsType;
     typedef std::pair<OUString, OUString> FormulaWithNamespace;
 
@@ -70,7 +69,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     OUStringBuffer maParagraph{32};
     sal_Int32 mnCurParagraph;
 
-    ParaFormatsType maFormats;
+    std::vector<std::unique_ptr<ParaFormat> > maFormats;
     FieldsType maFields;
 
     std::unique_ptr< ScXMLAnnotationData > mxAnnotationData;
