@@ -2737,12 +2737,12 @@ void SbiRuntime::StepWRITE()        // write TOS
     OUString s;
     if( ch )
     {
-        s += OUString(ch);
+        s += OUStringChar(ch);
     }
     s += p->GetOUString();
     if( ch )
     {
-        s += OUString(ch);
+        s += OUStringChar(ch);
     }
     pIosys->Write( s );
     Error( pIosys->GetError() );

@@ -1971,7 +1971,7 @@ public:
         case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         {
             uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aPayload));
-            if (OString("EMPTY") == pPayload)
+            if (std::string_view("EMPTY") == pPayload)
                 return;
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
             m_aOwnCursor.setX(aSeq[0].toInt32());

@@ -2172,7 +2172,7 @@ scoped_name :
     identifier
     {
         checkIdentifier($4);
-        *$1 += OString("::");
+        *$1 += "::";
         *$1 += *$4;
         delete $4;
         $$ = $1;

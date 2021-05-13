@@ -502,7 +502,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
     if (nIdx != -1)
         m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
-    m_sHelpRoot += OString('/');
+    m_sHelpRoot += "/";
 
     OUString sUri = sUIDir + sUIFile;
 

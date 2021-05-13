@@ -556,7 +556,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTokenize)
         // Just make sure the tokenizer finishes without an error, don't look at the signature.
         CPPUNIT_ASSERT(aDocument.Read(aStream));
 
-        if (OUString(rName) == "tdf107149.pdf")
+        if (rName == u"tdf107149.pdf")
             // This failed, page list was empty.
             CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aDocument.GetPages().size());
     }

@@ -152,6 +152,8 @@ void f5(OUString s)
     buf.append(s.copy(12));
     // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'std::u16string_view' (aka 'basic_string_view<char16_t>'), pass a 'std::u16string_view' [loplugin:stringview]}}
     buf.append(OUString(std::u16string_view(u"foo")));
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'std::u16string_view' (aka 'basic_string_view<char16_t>'), pass a 'std::u16string_view' [loplugin:stringview]}}
+    s += OUString(std::u16string_view(u"foo"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

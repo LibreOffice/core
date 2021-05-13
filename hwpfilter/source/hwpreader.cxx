@@ -19,6 +19,7 @@
 
 #include <deque>
 #include <memory>
+#include <string_view>
 
 #include "hwpreader.hxx"
 #include <math.h>
@@ -3152,25 +3153,26 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
 /* Document Summary */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
     {
-        if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "title")
+        if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))
+            == std::u16string_view(u"title"))
         {
             rstartEl( "text:title", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:title" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "subject")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"subject"))
         {
             rstartEl( "text:subject", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:subject" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "author")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"author"))
         {
             rstartEl( "text:author-name", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:author-name" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "keywords")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"keywords"))
         {
             rstartEl( "text:keywords", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
@@ -3180,61 +3182,63 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
 /* Personal Information */
     else if( hbox->type[0] == 3 && hbox->type[1] == 1 )
     {
-        if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "User")
+        if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))
+            == std::u16string_view(u"User"))
         {
             rstartEl( "text:sender-lastname", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:sender-lastname" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Company")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Company"))
         {
             rstartEl( "text:sender-company", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:sender-company" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Position")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Position"))
         {
             rstartEl( "text:sender-title", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:sender-title" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Division")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Division"))
         {
             rstartEl( "text:sender-position", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:sender-position" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Fax")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))
+                 == std::u16string_view(u"Fax"))
         {
             rstartEl( "text:sender-fax", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:sender-fax" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Pager")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Pager"))
         {
             rstartEl( "text:phone-private", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:phone-private" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "E-mail")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"E-mail"))
         {
             rstartEl( "text:sender-email", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:sender-email" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Zipcode(office)")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Zipcode(office)"))
         {
             rstartEl( "text:sender-postal-code", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:sender-postal-code" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Phone(office)")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Phone(office)"))
         {
             rstartEl( "text:sender-phone-work", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
             rendEl( "text:sender-phone-work" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Address(office)")
+        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Address(office)"))
         {
             rstartEl( "text:sender-street", mxList );
             rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );

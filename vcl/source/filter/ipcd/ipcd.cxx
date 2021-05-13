@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -167,7 +170,7 @@ void PCDReader::CheckPCDImagePacFile()
     m_rPCD.Seek( 2048 );
     m_rPCD.ReadBytes(Buf, 7);
     Buf[ 7 ] = 0;
-    if (OString(Buf) != "PCD_IPI")
+    if (Buf != std::string_view("PCD_IPI"))
         bStatus = false;
 }
 

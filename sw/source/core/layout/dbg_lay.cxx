@@ -440,7 +440,7 @@ void SwImplProtocol::FileInit()
                 aLine.clear();
             }
             else
-                aLine += OString(c);
+                aLine += OStringChar(c);
         }
         if( !aLine.isEmpty() )
             CheckLine( aLine );     // evaluate last line

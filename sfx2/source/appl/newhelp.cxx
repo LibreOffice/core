@@ -85,6 +85,7 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>
 
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -612,7 +613,8 @@ void IndexTabPage_Impl::InitializeIndex()
                             it = aInfo.emplace(aTempString, 0).first;
                             sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(OUString(), false)));
                             if ( (tmp = it->second++) != 0)
-                                m_xIndexList->append(sId, aTempString + OUString(append, tmp));
+                                m_xIndexList->append(
+                                    sId, aTempString + std::u16string_view(append, tmp));
                             else
                                 m_xIndexList->append(sId, aTempString);
                         }
@@ -639,7 +641,7 @@ void IndexTabPage_Impl::InitializeIndex()
                     // Assume the token is trimmed
                     it = aInfo.emplace(aKeywordPair, 0).first;
                     if ((tmp = it->second++) != 0)
-                        m_xIndexList->append(sId, aKeywordPair + OUString(append, tmp));
+                        m_xIndexList->append(sId, aKeywordPair + std::u16string_view(append, tmp));
                     else
                         m_xIndexList->append(sId, aKeywordPair);
 
@@ -664,7 +666,8 @@ void IndexTabPage_Impl::InitializeIndex()
 
                         it = aInfo.emplace(aTempString, 0).first;
                         if ( (tmp = it->second++) != 0 )
-                            m_xIndexList->append(sId, aTempString + OUString(append, tmp));
+                            m_xIndexList->append(
+                                sId, aTempString + std::u16string_view(append, tmp));
                         else
                             m_xIndexList->append(sId, aTempString);
                     }

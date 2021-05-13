@@ -167,7 +167,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
         OString sOut = " ";
         if( pOpt && (EXTENDED_STYPE != eScriptType ||
                      rDesc.AddListenerParam.isEmpty()) )
-            sOut += OString(pOpt);
+            sOut += pOpt;
         else
         {
             sOut += OOO_STRING_SVTOOLS_HTML_O_sdevent +

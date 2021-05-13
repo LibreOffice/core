@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include "dxfreprd.hxx"
 #include <osl/nlsupport.h>
@@ -205,7 +208,7 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                 // encodings for storing to corresponding formats, but there's
                 // no way to know that.
                 // See http://autodesk.blogs.com/between_the_lines/autocad-release-history.html
-                if ((rDGR.GetS() <= "AC1009") || (rDGR.GetS() == "AC2.22") || (rDGR.GetS() == "AC2.21") || (rDGR.GetS() == "AC2.10") ||
+                if ((rDGR.GetS() <= std::string_view("AC1009")) || (rDGR.GetS() == "AC2.22") || (rDGR.GetS() == "AC2.21") || (rDGR.GetS() == "AC2.10") ||
                     (rDGR.GetS() == "AC1.50") || (rDGR.GetS() == "AC1.40") || (rDGR.GetS() == "AC1.2")  || (rDGR.GetS() == "MC0.0"))
                 {
                     // Set OEM encoding for old DOS formats
@@ -215,7 +218,7 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                         setTextEncoding(utl_getWinTextEncodingFromLangStr(
                             utl_getLocaleForGlobalDefaultEncoding(), true));
                 }
-                else if (rDGR.GetS() >= "AC1021")
+                else if (rDGR.GetS() >= std::string_view("AC1021"))
                     setTextEncoding(RTL_TEXTENCODING_UTF8);
                 else
                 {

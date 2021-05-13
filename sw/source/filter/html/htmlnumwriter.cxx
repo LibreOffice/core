@@ -213,7 +213,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
         if( SVX_NUM_CHAR_SPECIAL == eType )
         {
             // ordered list: <OL>
-            sOut += OString(OOO_STRING_SVTOOLS_HTML_unorderlist);
+            sOut += OOO_STRING_SVTOOLS_HTML_unorderlist;
 
             // determine the type by the bullet character
             const char *pStr = nullptr;
@@ -238,7 +238,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
         else if( SVX_NUM_BITMAP == eType )
         {
             // Unordered list: <UL>
-            sOut += OString(OOO_STRING_SVTOOLS_HTML_unorderlist);
+            sOut += OOO_STRING_SVTOOLS_HTML_unorderlist;
             rWrt.Strm().WriteOString( sOut );
             OutHTML_BulletImage( rWrt,
                                     nullptr,
@@ -248,7 +248,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
         else
         {
             // Ordered list: <OL>
-            sOut += OString(OOO_STRING_SVTOOLS_HTML_orderlist);
+            sOut += OOO_STRING_SVTOOLS_HTML_orderlist;
 
             // determine the type by the format
             char cType = 0;

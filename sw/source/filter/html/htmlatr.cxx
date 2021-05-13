@@ -3130,7 +3130,7 @@ static Writer& OutHTML_SwTextCharFormat( Writer& rWrt, const SfxPoolItem& rHt )
         if( !pFormatInfo->aToken.isEmpty() )
             sOut += pFormatInfo->aToken;
         else
-            sOut += OString(OOO_STRING_SVTOOLS_HTML_span);
+            sOut += OOO_STRING_SVTOOLS_HTML_span;
 
         if( rHTMLWrt.m_bCfgOutStyles &&
             (!pFormatInfo->aClass.isEmpty() || pFormatInfo->bScriptDependent) )

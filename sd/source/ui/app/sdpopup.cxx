@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <editeng/flditem.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
@@ -164,7 +168,8 @@ void SdFieldPopup::Execute(weld::Window* pParent, const tools::Rectangle& rRect)
     {
         int nCount = m_xPopup->n_children();
         for (int i = 3; i < nCount; i++)
-            m_xPopup->set_active(OString::number(i), sIdent == OString::number(i));
+            m_xPopup->set_active(
+                OString::number(i), sIdent == std::string_view(OString::number(i)));
     }
 }
 

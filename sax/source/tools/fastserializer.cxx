@@ -26,6 +26,7 @@
 #include <comphelper/sequence.hxx>
 
 #include <string.h>
+#include <string_view>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <iostream>
@@ -315,9 +316,11 @@ namespace sax_fastparser {
                 mxFastTokenHandler->getUTF8Identifier(NAMESPACE(nElement)));
             Sequence<sal_Int8> const name(
                 mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
-            return OString(reinterpret_cast<char const*>(ns.getConstArray()), ns.getLength())
+            return std::string_view(
+                     reinterpret_cast<char const*>(ns.getConstArray()), ns.getLength())
                  + sColon
-                 + OString(reinterpret_cast<char const*>(name.getConstArray()), name.getLength());
+                 + std::string_view(
+                     reinterpret_cast<char const*>(name.getConstArray()), name.getLength());
         } else {
             Sequence<sal_Int8> const name(
                 mxFastTokenHandler->getUTF8Identifier(nElement));

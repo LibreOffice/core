@@ -90,7 +90,7 @@ void testConvertToString(TestConvertToString const & rTest)
     }
     else
     {
-        if (aStrict != OString(RTL_CONSTASCII_STRINGPARAM("12345")))
+        if (aStrict != "12345")
         {
             OStringBuffer aMessage(aPrefix);
             aMessage.append("modified output");

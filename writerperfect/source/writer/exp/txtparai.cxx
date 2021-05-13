@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "txtparai.hxx"
 
 #include "XMLFootnoteImportContext.hxx"
@@ -44,7 +48,7 @@ void FillStyle(const OUString& rName, std::map<OUString, librevenge::RVNGPropert
     librevenge::RVNGPropertyList::Iter itProp(rStyle);
     for (itProp.rewind(); itProp.next();)
     {
-        if (OString("style:parent-style-name") != itProp.key())
+        if (std::string_view("style:parent-style-name") != itProp.key())
             rPropertyList.insert(itProp.key(), itProp()->clone());
     }
 }

@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <string_view>
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -82,7 +83,7 @@ public:
 
     virtual std::unique_ptr<Resetter> preTest(const char* pFilename) override
     {
-        if (OString(pFilename) == "fdo58949.docx")
+        if (pFilename == std::string_view("fdo58949.docx"))
         {
             std::unique_ptr<Resetter> pResetter(new Resetter(
                 [] () {
@@ -97,7 +98,7 @@ public:
             pBatch->commit();
             return pResetter;
         }
-        if (OString(pFilename) == "2_MathType3.docx")
+        if (pFilename == std::string_view("2_MathType3.docx"))
         {
             std::unique_ptr<Resetter> pResetter(new Resetter(
                 [this] () {

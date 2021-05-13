@@ -961,7 +961,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
             if ( number > tableSize && !bRecycleSymbol)
                 result += OUString::number( number);
             else
-                result += OUString(&table[--number % tableSize], 1);
+                result += OUStringChar(table[--number % tableSize]);
      }
 
      // append suffix

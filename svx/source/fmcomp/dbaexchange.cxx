@@ -180,7 +180,7 @@ namespace svx
                 cCommandType = '2';
                 break;
         }
-        m_sCompatibleFormat += OUString(&cCommandType, 1);
+        m_sCompatibleFormat += OUStringChar(cCommandType);
         m_sCompatibleFormat += sSeparator;
         m_sCompatibleFormat += _rFieldName;
 
@@ -545,13 +545,13 @@ namespace svx
         switch (_nCommandType)
         {
             case CommandType::TABLE:
-                m_sCompatibleObjectDescription += OUString(&cTableMark, 1);
+                m_sCompatibleObjectDescription += OUStringChar(cTableMark);
                 break;
             case CommandType::QUERY:
-                m_sCompatibleObjectDescription += OUString(&cQueryMark, 1);
+                m_sCompatibleObjectDescription += OUStringChar(cQueryMark);
                 break;
             case CommandType::COMMAND:
-                m_sCompatibleObjectDescription += OUString(&cQueryMark, 1);
+                m_sCompatibleObjectDescription += OUStringChar(cQueryMark);
                 // think of it as a query
                 break;
         }

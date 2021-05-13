@@ -4419,7 +4419,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
     uno::Reference<beans::XPropertySet>
         aPropertySet( aXShape, uno::UNO_QUERY );
 
-    if ((aType == OString( "drawing.PolyPolygon" )) || (aType == OString( "drawing.PolyLine"  )))
+    if ((aType == "drawing.PolyPolygon") || (aType == "drawing.PolyLine"))
     {
         if ( aPropertySet.is() )
         {
@@ -4458,8 +4458,8 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
             }
         }
     }
-    else if ((aType == OString( "drawing.OpenBezier" )) || (aType == OString( "drawing.OpenFreeHand" )) || (aType == OString( "drawing.PolyLinePath" ))
-        || (aType == OString( "drawing.ClosedBezier" )) || ( aType == OString( "drawing.ClosedFreeHand" )) || (aType == OString( "drawing.PolyPolygonPath" )) )
+    else if ((aType == "drawing.OpenBezier") || (aType == "drawing.OpenFreeHand") || (aType == "drawing.PolyLinePath")
+        || (aType == "drawing.ClosedBezier") || ( aType == "drawing.ClosedFreeHand") || (aType == "drawing.PolyPolygonPath") )
     {
         uno::Reference<beans::XPropertySet>
             aPropertySet2( aXShape, uno::UNO_QUERY );
@@ -4623,7 +4623,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                 aPoly.Rotate( aRect.TopLeft(), Degree10(static_cast<sal_Int16>( ( nAngle + 5 ) / 10 )) );
             nRule = GetClosestPoint( aPoly, aRefPoint );
 
-            if (aType == OString( "drawing.Ellipse" ))
+            if (aType == "drawing.Ellipse")
                 nRule <<= 1;    // In PPT an ellipse has 8 ways to connect
         }
     }
