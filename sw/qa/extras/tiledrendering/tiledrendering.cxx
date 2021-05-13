@@ -138,6 +138,7 @@ public:
     void testBulletDeleteInvalidation();
     void testBulletNoNumInvalidation();
     void testBulletMultiDeleteInvalidation();
+    void testMoveShapeHandle();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -212,6 +213,7 @@ public:
     CPPUNIT_TEST(testBulletDeleteInvalidation);
     CPPUNIT_TEST(testBulletNoNumInvalidation);
     CPPUNIT_TEST(testBulletMultiDeleteInvalidation);
+    CPPUNIT_TEST(testMoveShapeHandle);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -236,6 +238,7 @@ private:
     OString m_sHyperlinkText;
     OString m_sHyperlinkLink;
     OString m_aFormFieldButton;
+    OString m_ShapeSelection;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
@@ -388,7 +391,13 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         m_aFormFieldButton = OString(pPayload);
     }
     break;
+    case LOK_CALLBACK_GRAPHIC_SELECTION:
+    {
+        m_ShapeSelection = OString(pPayload);
     }
+    break;
+    }
+
 }
 
 void SwTiledRenderingTest::testRegisterCallback()
@@ -2721,6 +2730,57 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonNoSelection()
 
         OString sSelected = aTree.get_child("params").get_child("selected").get_value<std::string>().c_str();
         CPPUNIT_ASSERT_EQUAL(OString("-1"), sSelected);
+    }
+}
+
+static void lcl_extractHandleParameters(const OString& selection, int& id, int& x, int& y)
+{
+    OString extraInfo = selection.copy(selection.indexOf("{"));
+    std::stringstream aStream(extraInfo.getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    boost::property_tree::ptree
+        handle0 = aTree
+            .get_child("handles")
+            .get_child("kinds")
+            .get_child("rectangle")
+            .get_child("1")
+            .begin()->second;
+    id = handle0.get_child("id").get_value<int>();
+    x = handle0.get_child("point").get_child("x").get_value<int>();
+    y = handle0.get_child("point").get_child("y").get_value<int>();
+}
+
+void SwTiledRenderingTest::testMoveShapeHandle()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    pWrtShell->SelectObj(Point(), 0, pObject);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!m_ShapeSelection.isEmpty());
+    {
+        int id, x, y;
+        lcl_extractHandleParameters(m_ShapeSelection, id, x ,y);
+        int oldX = x;
+        int oldY = y;
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        {
+            {"HandleNum", uno::makeAny(id)},
+            {"NewPosX", uno::makeAny(x+1)},
+            {"NewPosY", uno::makeAny(y+1)}
+        }));
+        comphelper::dispatchCommand(".uno:MoveShapeHandle", aPropertyValues);
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT(!m_ShapeSelection.isEmpty());
+        lcl_extractHandleParameters(m_ShapeSelection, id, x ,y);
+        CPPUNIT_ASSERT_EQUAL(x-1, oldX);
+        CPPUNIT_ASSERT_EQUAL(y-1, oldY);
     }
 }
 
