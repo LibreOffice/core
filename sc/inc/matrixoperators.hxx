@@ -16,7 +16,7 @@
 namespace sc::op {
 
 
-template<typename T>
+template<typename T, typename tRes>
 struct Op_
 {
     const double mInitVal;
@@ -25,13 +25,23 @@ struct Op_
         mInitVal(InitVal), maOp(aOp)
     {
     }
-    void operator()(double& rAccum, double fVal) const
+    void operator()(tRes& rAccum, double fVal) const
     {
         maOp(rAccum, fVal);
     }
 };
 
-using Op = Op_<std::function<void(double&, double)>>;
+using Op = Op_<std::function<void(double&, double)>, double>;
+using kOp = Op_<std::function<void(KahanSum&, double)>, KahanSum>;
+
+void fkOpSum(KahanSum& rAccum, double fVal);
+void fkOpSumSquare(KahanSum& rAccum, double fVal);
+
+extern kOp kOpSum;
+extern kOp kOpSumSquare;
+
+extern kOp vkOpSumAndSumSquare[2];
+extern std::vector<kOp> kOpSumAndSumSquare;
 
 struct Sum
 {
