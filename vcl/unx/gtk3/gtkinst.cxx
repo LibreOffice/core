@@ -17640,6 +17640,10 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                         xChild->insertBefore(xSpacingNode, xFirstChild);
                     else
                         xChild->appendChild(xSpacingNode);
+
+                    xChild->insertBefore(CreateProperty(xDoc, "margin-bottom", "6"), xSpacingNode);
+                    xChild->insertBefore(CreateProperty(xDoc, "margin-start", "6"), xSpacingNode);
+                    xChild->insertBefore(CreateProperty(xDoc, "margin-end", "6"), xSpacingNode);
                 }
             }
         }
