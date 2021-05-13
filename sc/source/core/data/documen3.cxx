@@ -1112,7 +1112,7 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
     OSL_ENSURE(pClipDoc->bIsClip, "UpdateTranspose: No Clip");
 
     ScRange aSource;
-    ScClipParam& rClipParam = GetClipParam();
+    ScClipParam& rClipParam = pClipDoc->GetClipParam();
     if (!rClipParam.maRanges.empty())
         aSource = rClipParam.maRanges.front();
     ScAddress aDest = rDestPos;
