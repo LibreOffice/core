@@ -35,7 +35,7 @@
 
 using namespace ::com::sun::star;
 
-static css::uno::Reference< css::awt::XWindowPeer > CreateXWindow( vcl::Window const * pWindow )
+static rtl::Reference<VCLXWindow> CreateXWindow( vcl::Window const * pWindow )
 {
     switch ( pWindow->GetType() )
     {
@@ -148,12 +148,13 @@ css::uno::Reference< css::awt::XToolkit> UnoWrapper::GetVCLToolkit()
 css::uno::Reference< css::awt::XWindowPeer> UnoWrapper::GetWindowInterface( vcl::Window* pWindow )
 {
     css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
-    if ( !xPeer.is() )
-    {
-        xPeer = CreateXWindow( pWindow );
-        SetWindowInterface( pWindow, xPeer );
-    }
-    return xPeer;
+    if ( xPeer )
+        return xPeer;
+
+    rtl::Reference<VCLXWindow> xVCLXWindow = CreateXWindow( pWindow );
+    xVCLXWindow->SetWindow( pWindow );
+    pWindow->SetWindowPeer( xVCLXWindow, xVCLXWindow.get() );
+    return xVCLXWindow;
 }
 
 VclPtr<vcl::Window> UnoWrapper::GetWindow(const css::uno::Reference<css::awt::XWindow>& rWindow)
@@ -165,7 +166,7 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Refer
 {
     VCLXWindow* pVCLXWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>( xIFace );
 
-    DBG_ASSERT( pVCLXWindow, "SetComponentInterface - unsupported type" );
+    assert( pVCLXWindow && "must be a VCLXWindow subclass" );
     if ( !pVCLXWindow )
         return;
 
@@ -173,7 +174,7 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Refer
     if( xPeer.is() )
     {
         bool bSameInstance( pVCLXWindow == dynamic_cast< VCLXWindow* >( xPeer.get() ));
-        DBG_ASSERT( bSameInstance, "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
+        assert( bSameInstance && "UnoWrapper::SetWindowInterface: there is already a WindowPeer/ComponentInterface for this VCL window" );
         if ( bSameInstance )
             return;
     }
