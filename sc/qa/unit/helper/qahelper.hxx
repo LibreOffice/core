@@ -24,6 +24,7 @@
 #include <string>
 #include <string_view>
 #include <sstream>
+#include <undoblk.hxx>
 
 #include <sal/types.h>
 
@@ -68,6 +69,7 @@ class SdrOle2Obj;
 class ScRangeList;
 class ScTokenArray;
 
+
 // data format for row height tests
 struct TestParam
 {
@@ -85,6 +87,13 @@ struct TestParam
     int nExportType; // -1 for import test, otherwise this is an export test
     int nRowData;
     RowData const * pData;
+};
+
+struct RangeNameDef
+{
+    const char* mpName;
+    const char* mpExpr;
+    sal_uInt16 mnIndex;
 };
 
 struct FileFormat {
@@ -233,8 +242,18 @@ SCQAHELPER_DLLPUBLIC ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& 
 
 SCQAHELPER_DLLPUBLIC std::string to_std_string(const OUString& rStr);
 
+SCQAHELPER_DLLPUBLIC ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc,
+                                    bool bCreateUndo);
+SCQAHELPER_DLLPUBLIC void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
+SCQAHELPER_DLLPUBLIC void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
+                                    ScDocument* pClipDoc);
+SCQAHELPER_DLLPUBLIC ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange,
+                                    ScDocumentUniquePtr pUndoDoc);
+
 SCQAHELPER_DLLPUBLIC ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
                                    const std::vector<std::vector<const char*>>& rData);
+SCQAHELPER_DLLPUBLIC bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,
+                                   const RangeNameDef* pEnd);
 SCQAHELPER_DLLPUBLIC void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);
 SCQAHELPER_DLLPUBLIC void clearRange(ScDocument* pDoc, const ScRange& rRange);
 SCQAHELPER_DLLPUBLIC void clearSheet(ScDocument* pDoc, SCTAB nTab);

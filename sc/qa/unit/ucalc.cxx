@@ -12378,79 +12378,6 @@ ScDocShell* Test::findLoadedDocShellByName(std::u16string_view rName)
     return nullptr;
 }
 
-bool Test::insertRangeNames(
-    ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p, const RangeNameDef* pEnd)
-{
-    ScAddress aA1(0, 0, 0);
-    for (; p != pEnd; ++p)
-    {
-        ScRangeData* pNew = new ScRangeData(
-            *pDoc,
-            OUString::createFromAscii(p->mpName),
-            OUString::createFromAscii(p->mpExpr),
-            aA1, ScRangeData::Type::Name,
-            formula::FormulaGrammar::GRAM_ENGLISH);
-        pNew->SetIndex(p->mnIndex);
-        bool bSuccess = pNames->insert(pNew);
-        if (!bSuccess)
-        {
-            cerr << "Insertion failed." << endl;
-            return false;
-        }
-    }
-
-    return true;
-}
-
-ScUndoCut* Test::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo)
-{
-    ScDocument* pSrcDoc = &rDocSh.GetDocument();
-
-    ScClipParam aClipParam(rRange, true);
-    ScMarkData aMark(pSrcDoc->GetSheetLimits());
-    aMark.SetMarkArea(rRange);
-    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
-
-    // Taken from ScViewFunc::CutToClip()
-    ScDocumentUniquePtr pUndoDoc;
-    if (bCreateUndo)
-    {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndoSelected( *pSrcDoc, aMark );
-        // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
-        ScRange aCopyRange = rRange;
-        aCopyRange.aStart.SetTab(0);
-        aCopyRange.aEnd.SetTab(pSrcDoc->GetTableCount()-1);
-        pSrcDoc->CopyToDocument( aCopyRange,
-                (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS,
-                false, *pUndoDoc );
-    }
-
-    aMark.MarkToMulti();
-    pSrcDoc->DeleteSelection( InsertDeleteFlags::ALL, aMark );
-    aMark.MarkToSimple();
-
-    if (pUndoDoc)
-        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, std::move(pUndoDoc) );
-
-    return nullptr;
-}
-
-void Test::copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc)
-{
-    ScClipParam aClipParam(rRange, false);
-    ScMarkData aMark(pSrcDoc->GetSheetLimits());
-    aMark.SetMarkArea(rRange);
-    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
-}
-
-void Test::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)
-{
-    ScMarkData aMark(pDestDoc->GetSheetLimits());
-    aMark.SetMarkArea(rDestRange);
-    pDestDoc->CopyFromClip(rDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pClipDoc);
-}
-
 void Test::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)
 {
     ScMarkData aMark(pDestDoc->GetSheetLimits());
@@ -12461,17 +12388,6 @@ void Test::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
     aCxt.setTabRange(rDestRange.aStart.Tab(), rDestRange.aEnd.Tab());
     pDestDoc->CopyOneCellFromClip(aCxt, rDestRange.aStart.Col(), rDestRange.aStart.Row(),
             rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
-}
-
-ScUndoPaste* Test::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocumentUniquePtr pUndoDoc)
-{
-    ScDocument& rDoc = rDocSh.GetDocument();
-    ScMarkData aMarkData(rDoc.GetSheetLimits());
-    aMarkData.SetMarkArea(rRange);
-    std::unique_ptr<ScRefUndoData> pRefUndoData(new ScRefUndoData(&rDoc));
-
-    return new ScUndoPaste(
-        &rDocSh, rRange, aMarkData, std::move(pUndoDoc), nullptr, InsertDeleteFlags::ALL, std::move(pRefUndoData), false);
 }
 
 void Test::setExpandRefs(bool bExpand)

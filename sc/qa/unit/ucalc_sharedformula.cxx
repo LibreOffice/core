@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <test/bootstrapfixture.hxx>
 #include <memory>
 #include <string_view>
-#include "ucalc.hxx"
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 #include <editutil.hxx>
@@ -26,13 +26,116 @@
 #include <dbdata.hxx>
 #include <bcaslot.hxx>
 #include <sharedformula.hxx>
+#include <scdll.hxx>
 
 #include <svl/sharedstring.hxx>
 #include <sfx2/docfile.hxx>
 
 #include <formula/grammar.hxx>
 
-void Test::testSharedFormulas()
+class TestSharedFormula : public test::BootstrapFixture
+{
+public:
+    TestSharedFormula();
+
+    virtual void setUp() override;
+    virtual void tearDown() override;
+
+    void testSharedFormulas();
+    void testSharedFormulasRefUpdate();
+    void testSharedFormulasRefUpdateMove();
+    void testSharedFormulasRefUpdateMove2();
+    void testSharedFormulasRefUpdateRange();
+    void testSharedFormulasRefUpdateRangeDeleteRow();
+    void testSharedFormulasRefUpdateExternal();
+    void testSharedFormulasInsertRow();
+    void testSharedFormulasDeleteRows();
+    void testSharedFormulasDeleteColumns();
+    void testSharedFormulasRefUpdateMoveSheets();
+    void testSharedFormulasRefUpdateCopySheets();
+    void testSharedFormulasRefUpdateDeleteSheets();
+    void testSharedFormulasCopyPaste();
+    void testSharedFormulaInsertColumn();
+    void testSharedFormulaMoveBlock();
+    void testSharedFormulaUpdateOnNamedRangeChange();
+    void testSharedFormulaUpdateOnDBChange();
+    void testSharedFormulaAbsCellListener();
+    void testSharedFormulaUnshareAreaListeners();
+    void testSharedFormulaListenerDeleteArea();
+    void testSharedFormulaUpdateOnReplacement();
+    void testSharedFormulaDeleteTopCell();
+    void testSharedFormulaCutCopyMoveIntoRef();
+    void testSharedFormulaCutCopyMoveWithRef();
+    void testSharedFormulaCutCopyMoveWithinRun();
+    void testSharedFormulaInsertShift();
+
+    CPPUNIT_TEST_SUITE(TestSharedFormula);
+
+    CPPUNIT_TEST(testSharedFormulas);
+    CPPUNIT_TEST(testSharedFormulasRefUpdate);
+    CPPUNIT_TEST(testSharedFormulasRefUpdateMove);
+    CPPUNIT_TEST(testSharedFormulasRefUpdateMove2);
+    CPPUNIT_TEST(testSharedFormulasRefUpdateRange);
+    CPPUNIT_TEST(testSharedFormulasRefUpdateRangeDeleteRow);
+    CPPUNIT_TEST(testSharedFormulasRefUpdateExternal);
+    CPPUNIT_TEST(testSharedFormulasInsertRow);
+    CPPUNIT_TEST(testSharedFormulasDeleteRows);
+    CPPUNIT_TEST(testSharedFormulasDeleteColumns);
+    CPPUNIT_TEST(testSharedFormulasRefUpdateMoveSheets);
+    CPPUNIT_TEST(testSharedFormulasRefUpdateCopySheets);
+    CPPUNIT_TEST(testSharedFormulasRefUpdateDeleteSheets);
+    CPPUNIT_TEST(testSharedFormulasCopyPaste);
+    CPPUNIT_TEST(testSharedFormulaInsertColumn);
+    CPPUNIT_TEST(testSharedFormulaMoveBlock);
+    CPPUNIT_TEST(testSharedFormulaUpdateOnNamedRangeChange);
+    CPPUNIT_TEST(testSharedFormulaUpdateOnDBChange);
+    CPPUNIT_TEST(testSharedFormulaAbsCellListener);
+    CPPUNIT_TEST(testSharedFormulaUnshareAreaListeners);
+    CPPUNIT_TEST(testSharedFormulaListenerDeleteArea);
+    CPPUNIT_TEST(testSharedFormulaUpdateOnReplacement);
+    CPPUNIT_TEST(testSharedFormulaDeleteTopCell);
+    CPPUNIT_TEST(testSharedFormulaCutCopyMoveIntoRef);
+    CPPUNIT_TEST(testSharedFormulaCutCopyMoveWithRef);
+    CPPUNIT_TEST(testSharedFormulaCutCopyMoveWithinRun);
+    CPPUNIT_TEST(testSharedFormulaInsertShift);
+
+    CPPUNIT_TEST_SUITE_END();
+
+private:
+    ScDocShellRef m_xDocShell;
+    ScDocument* m_pDoc;
+};
+
+
+TestSharedFormula::TestSharedFormula()
+{
+}
+
+void TestSharedFormula::setUp()
+{
+    BootstrapFixture::setUp();
+
+    ScDLL::Init();
+
+    m_xDocShell = new ScDocShell(
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    m_xDocShell->SetIsInUcalc();
+    m_xDocShell->DoInitUnitTest();
+
+    m_pDoc = &m_xDocShell->GetDocument();
+}
+
+void TestSharedFormula::tearDown()
+{
+    m_xDocShell->DoClose();
+    m_xDocShell.clear();
+
+    test::BootstrapFixture::tearDown();
+}
+
+void TestSharedFormula::testSharedFormulas()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -302,7 +405,7 @@ void Test::testSharedFormulas()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulasRefUpdate()
+void TestSharedFormula::testSharedFormulasRefUpdate()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -439,7 +542,7 @@ void Test::testSharedFormulasRefUpdate()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulasRefUpdateMove()
+void TestSharedFormula::testSharedFormulasRefUpdateMove()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -470,7 +573,7 @@ void Test::testSharedFormulasRefUpdateMove()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,3,0)));
 
     // Move B2:B4 to B1:B3.
-    bool bMoved = getDocShell().GetDocFunc().MoveBlock(ScRange(1,1,0,1,3,0), ScAddress(1,0,0), true, true, false, true);
+    bool bMoved = m_xDocShell->GetDocFunc().MoveBlock(ScRange(1,1,0,1,3,0), ScAddress(1,0,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
     // Make sure the values have been moved for real.
@@ -500,7 +603,7 @@ void Test::testSharedFormulasRefUpdateMove()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulasRefUpdateMove2()
+void TestSharedFormula::testSharedFormulasRefUpdateMove2()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false); // turn auto calc off this time.
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -540,7 +643,7 @@ void Test::testSharedFormulasRefUpdateMove2()
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(5,2,0)));
 
     // Move B2:C3 to C3:D4.
-    bool bMoved = getDocShell().GetDocFunc().MoveBlock(
+    bool bMoved = m_xDocShell->GetDocFunc().MoveBlock(
         ScRange(1,1,0,2,2,0), ScAddress(2,2,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -572,7 +675,7 @@ void Test::testSharedFormulasRefUpdateMove2()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulasRefUpdateRange()
+void TestSharedFormula::testSharedFormulasRefUpdateRange()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -658,7 +761,7 @@ struct SortByArea
 
 }
 
-void Test::testSharedFormulasRefUpdateRangeDeleteRow()
+void TestSharedFormula::testSharedFormulasRefUpdateRangeDeleteRow()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
     m_pDoc->InsertTab(0, "Formula");
@@ -710,7 +813,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
 
     // Delete row 3.  This will merge the two formula groups.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DelCellCmd::Rows, true);
@@ -778,7 +881,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulasRefUpdateExternal()
+void TestSharedFormula::testSharedFormulasRefUpdateExternal()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
     m_pDoc->InsertTab(0, "Formula");
@@ -823,7 +926,7 @@ void Test::testSharedFormulasRefUpdateExternal()
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,9,0), "COUNTA('file:///extdata.fake'#$Data.A1:A3)", "Wrong formula!");
 
     // Delete rows 1 and 2. This should not change the references in the formula cells below.
-    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rDocFunc.DeleteCells(ScRange(0,0,0,MAXCOL,1,0), &aMark, DelCellCmd::CellsUp, true);
@@ -855,7 +958,7 @@ void Test::testSharedFormulasRefUpdateExternal()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulasInsertRow()
+void TestSharedFormula::testSharedFormulasInsertRow()
 {
     struct
     {
@@ -937,7 +1040,7 @@ void Test::testSharedFormulasInsertRow()
     }
 
     // Insert a new row at row 3.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, INS_INSROWS_BEFORE, true, true);
@@ -961,7 +1064,7 @@ void Test::testSharedFormulasInsertRow()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulasDeleteRows()
+void TestSharedFormula::testSharedFormulasDeleteRows()
 {
     m_pDoc->InsertTab(0, "Test");
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -1057,7 +1160,7 @@ void Test::testSharedFormulasDeleteRows()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedLength());
 }
 
-void Test::testSharedFormulasDeleteColumns()
+void TestSharedFormula::testSharedFormulasDeleteColumns()
 {
     using namespace formula;
 
@@ -1066,7 +1169,7 @@ void Test::testSharedFormulasDeleteColumns()
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
@@ -1147,7 +1250,7 @@ void Test::testSharedFormulasDeleteColumns()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulasRefUpdateMoveSheets()
+void TestSharedFormula::testSharedFormulasRefUpdateMoveSheets()
 {
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
@@ -1227,7 +1330,7 @@ void Test::testSharedFormulasRefUpdateMoveSheets()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulasRefUpdateCopySheets()
+void TestSharedFormula::testSharedFormulasRefUpdateCopySheets()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // make sure auto calc is on.
 
@@ -1263,7 +1366,7 @@ void Test::testSharedFormulasRefUpdateCopySheets()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulasRefUpdateDeleteSheets()
+void TestSharedFormula::testSharedFormulasRefUpdateDeleteSheets()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // make sure auto calc is on.
 
@@ -1290,7 +1393,7 @@ void Test::testSharedFormulasRefUpdateDeleteSheets()
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,2,0), "Sheet2.B4", "Wrong formula");
 
     // Delete Sheet2.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     rFunc.DeleteTable(1, true);
 
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,0,0), "#REF!.B2", "Wrong formula");
@@ -1313,7 +1416,7 @@ void Test::testSharedFormulasRefUpdateDeleteSheets()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulasCopyPaste()
+void TestSharedFormula::testSharedFormulasCopyPaste()
 {
     m_pDoc->InsertTab(0, "Test");
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -1354,7 +1457,7 @@ void Test::testSharedFormulasCopyPaste()
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(*m_pDoc, 0, 0, true, true);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc);
-    std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, ScDocumentUniquePtr(pUndoDoc)));
+    std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(*m_xDocShell, aRange, ScDocumentUniquePtr(pUndoDoc)));
 
     // First, make sure the formula cells are shared in the undo document.
     aPos.SetCol(1);
@@ -1392,7 +1495,7 @@ void Test::testSharedFormulasCopyPaste()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulaInsertColumn()
+void TestSharedFormula::testSharedFormulaInsertColumn()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -1409,7 +1512,7 @@ void Test::testSharedFormulaInsertColumn()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulaMoveBlock()
+void TestSharedFormula::testSharedFormulaMoveBlock()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -1435,7 +1538,7 @@ void Test::testSharedFormulaMoveBlock()
     clearFormulaCellChangedFlag(*m_pDoc, aFormulaRange);
 
     // Move A1:A3 to D1:D3.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0,0,0,0,2,0), ScAddress(3,0,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -1517,7 +1620,7 @@ void Test::testSharedFormulaMoveBlock()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulaUpdateOnNamedRangeChange()
+void TestSharedFormula::testSharedFormulaUpdateOnNamedRangeChange()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -1588,7 +1691,7 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
     bSuccess = insertRangeNames(m_pDoc, pNames.get(), &aName, &aName + 1);
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pNames->size());
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
 
     typedef std::map<OUString, std::unique_ptr<ScRangeName>> NameMapType;
     NameMapType aNewNames;
@@ -1623,7 +1726,7 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulaUpdateOnDBChange()
+void TestSharedFormula::testSharedFormulaUpdateOnDBChange()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -1656,7 +1759,7 @@ void Test::testSharedFormulaUpdateOnDBChange()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,2,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,3,0)));
 
-    ScDBDocFunc aFunc(getDocShell());
+    ScDBDocFunc aFunc(*m_xDocShell);
 
     // Change the range referenced by MyRange to A1:A4.
     ScDBCollection aNewDBs(*m_pDoc);
@@ -1690,7 +1793,7 @@ void Test::testSharedFormulaUpdateOnDBChange()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulaAbsCellListener()
+void TestSharedFormula::testSharedFormulaAbsCellListener()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -1741,7 +1844,7 @@ static double checkNewValuesNotification( ScDocument* pDoc, const ScAddress& rOr
     return fVal;
 }
 
-void Test::testSharedFormulaUnshareAreaListeners()
+void TestSharedFormula::testSharedFormulaUnshareAreaListeners()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -1802,7 +1905,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
                 // ScDocument::SetString(), mimicking formula input in view.
                 {
                     ScFormulaCell* pCell = new ScFormulaCell( *m_pDoc, aPos, "=B4");
-                    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+                    ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
                     rDocFunc.SetFormulaCell( aPos, pCell, false);
                 }
             break;
@@ -2226,7 +2329,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulaListenerDeleteArea()
+void TestSharedFormula::testSharedFormulaListenerDeleteArea()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2270,7 +2373,7 @@ void Test::testSharedFormulaListenerDeleteArea()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulaUpdateOnReplacement()
+void TestSharedFormula::testSharedFormulaUpdateOnReplacement()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2313,7 +2416,7 @@ void Test::testSharedFormulaUpdateOnReplacement()
     ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aUndoRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
-    ScUndoDeleteContents aUndo(&getDocShell(), aMark, aUndoRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
+    ScUndoDeleteContents aUndo(m_xDocShell.get(), aMark, aUndoRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
 
     // Delete A4.
     clearRange(m_pDoc, aUndoRange);
@@ -2425,7 +2528,7 @@ void Test::testSharedFormulaUpdateOnReplacement()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulaDeleteTopCell()
+void TestSharedFormula::testSharedFormulaDeleteTopCell()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2451,7 +2554,7 @@ void Test::testSharedFormulaDeleteTopCell()
     // Delete cell A1.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    getDocShell().GetDocFunc().DeleteCell( ScAddress(0,0,0), aMark, InsertDeleteFlags::CONTENTS, false, /*bApi=*/ true);
+    m_xDocShell->GetDocFunc().DeleteCell( ScAddress(0,0,0), aMark, InsertDeleteFlags::CONTENTS, false, /*bApi=*/ true);
     // Check it's gone.
     CPPUNIT_ASSERT(!m_pDoc->GetFormulaCell( ScAddress(0,0,0)));
 
@@ -2467,7 +2570,7 @@ void Test::testSharedFormulaDeleteTopCell()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedFormulaCutCopyMoveIntoRef()
+void TestSharedFormula::testSharedFormulaCutCopyMoveIntoRef()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2491,7 +2594,7 @@ void Test::testSharedFormulaCutCopyMoveIntoRef()
         ScDocument aClipDoc(SCDOCMODE_CLIP);
         aClipDoc.ResetClip(m_pDoc, &aMark);
         // Cut C1:C2 to clipboard.
-        cutToClip( getDocShell(), ScRange(2,0,0, 2,1,0), &aClipDoc, false);
+        cutToClip(*m_xDocShell, ScRange(2,0,0, 2,1,0), &aClipDoc, false);
 
         // Paste to B1:B2
         ScRange aPasteRange(1,0,0, 1,1,0);
@@ -2538,7 +2641,7 @@ void Test::testSharedFormulaCutCopyMoveIntoRef()
         ScDocument aClipDoc(SCDOCMODE_CLIP);
         aClipDoc.ResetClip(m_pDoc, &aMark);
         // Cut B1:B2 to clipboard.
-        cutToClip( getDocShell(), ScRange(1,0,0, 1,1,0), &aClipDoc, false);
+        cutToClip(*m_xDocShell, ScRange(1,0,0, 1,1,0), &aClipDoc, false);
 
         // Check results in C1:C4 after Cut.
         const double fVec1[] = { 1.0, 4.0, 48.0, 192.0 };
@@ -2582,7 +2685,7 @@ void Test::testSharedFormulaCutCopyMoveIntoRef()
 }
 
 // tdf#121002
-void Test::testSharedFormulaCutCopyMoveWithRef()
+void TestSharedFormula::testSharedFormulaCutCopyMoveWithRef()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2616,7 +2719,7 @@ void Test::testSharedFormulaCutCopyMoveWithRef()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     aClipDoc.ResetClip(m_pDoc, &aMark);
     // Cut A3:B3 to clipboard.
-    cutToClip( getDocShell(), ScRange(0,2,0, 1,2,0), &aClipDoc, false);
+    cutToClip(*m_xDocShell, ScRange(0,2,0, 1,2,0), &aClipDoc, false);
 
     // Check results in C1:C4 after Cut.
     const double fVec1[] = { 0.0, 0.0, 0.0, 12.0 };
@@ -2654,7 +2757,7 @@ void Test::testSharedFormulaCutCopyMoveWithRef()
 }
 
 // tdf#120013
-void Test::testSharedFormulaCutCopyMoveWithinRun()
+void TestSharedFormula::testSharedFormulaCutCopyMoveWithinRun()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2699,7 +2802,7 @@ void Test::testSharedFormulaCutCopyMoveWithinRun()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     aClipDoc.ResetClip(m_pDoc, &aMark);
     // Cut A8:D8 to clipboard.
-    cutToClip( getDocShell(), ScRange(0,7,0, 3,7,0), &aClipDoc, false);
+    cutToClip(*m_xDocShell, ScRange(0,7,0, 3,7,0), &aClipDoc, false);
 
     // Check results in E3:E9 after Cut.
     const double fVec1[] = { 2200.0, 2200.0, 300.0, 300.0, 1900.0, 1900.0, 1900.0 };
@@ -2730,7 +2833,7 @@ void Test::testSharedFormulaCutCopyMoveWithinRun()
 }
 
 // tdf#129396
-void Test::testSharedFormulaInsertShift()
+void TestSharedFormula::testSharedFormulaInsertShift()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2794,5 +2897,9 @@ void Test::testSharedFormulaInsertShift()
 
     m_pDoc->DeleteTab(0);
 }
+
+CPPUNIT_TEST_SUITE_REGISTRATION(TestSharedFormula);
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
