@@ -70,6 +70,30 @@
       "revId": "9dba4e9a3efa2875176058e4b35b6073f009f05d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0865b620_f820be34",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-13T16:30:29Z",
+      "side": 0,
+      "message": "Undone.",
+      "parentUuid": "01ac1b4d_f650defa",
+      "range": {
+        "startLine": 220,
+        "startChar": 48,
+        "endLine": 220,
+        "endChar": 68
+      },
+      "revId": "9dba4e9a3efa2875176058e4b35b6073f009f05d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
