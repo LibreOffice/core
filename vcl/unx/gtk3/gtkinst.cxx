@@ -17581,7 +17581,45 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
             css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
             OUString sClass(xClass->getNodeValue());
             if (sClass == "GtkButtonBox")
+            {
                 xClass->setNodeValue("GtkBox");
+
+                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
+                if (!xId->getNodeValue().startsWith("messagedialog-action_area"))
+                {
+                    // add <property name="spacing">6</property>
+                    auto xDoc = xChild->getOwnerDocument();
+                    css::uno::Reference<css::xml::dom::XElement> xProperty = xDoc->createElement("property");
+                    css::uno::Reference<css::xml::dom::XAttr> xPropName = xDoc->createAttribute("name");
+                    xPropName->setValue("spacing");
+                    xProperty->setAttributeNode(xPropName);
+                    css::uno::Reference<css::xml::dom::XText> xValue = xDoc->createTextNode("6");
+                    xProperty->appendChild(xValue);
+
+                    css::uno::Reference<css::xml::dom::XElement> xOldElem(xChild, css::uno::UNO_QUERY);
+
+                    css::uno::Reference<css::xml::dom::XElement> xNew = xDoc->createElement("object");
+                    // iterate over all attributes and move them to the new element
+                    while (xMap->getLength())
+                    {
+                        css::uno::Reference<css::xml::dom::XAttr> xAttr(xMap->item(0), css::uno::UNO_QUERY);
+                        xNew->setAttributeNode(xOldElem->removeAttributeNode(xAttr));
+                    }
+
+                    xNew->appendChild(xProperty);
+
+                    // iterate over all children and move them to the new element
+                    for (css::uno::Reference<css::xml::dom::XNode> xCurrent = xChild->getFirstChild();
+                         xCurrent.is();
+                         xCurrent = xChild->getFirstChild())
+                    {
+                        xNew->appendChild(xChild->removeChild(xCurrent));
+                    }
+
+                    xNode->replaceChild(xNew, xChild);
+                    xChild = xNew;
+                }
+            }
         }
         else if (xChild->getNodeName() == "packing")
         {
@@ -17682,6 +17720,7 @@ void load_ui_file(GtkBuilder* pBuilder, const OUString& rUri)
         sal_Int32 nRead = xInput->readBytes(bytes, std::max<sal_Int32>(nToRead, 4096));
         if (!nRead)
             break;
+        // fprintf(stderr, "text is %s\n", reinterpret_cast<const gchar*>(bytes.getArray()));
         auto rc = gtk_builder_add_from_string(pBuilder, reinterpret_cast<const gchar*>(bytes.getArray()), nRead, &err);
         if (!rc)
         {
