@@ -162,6 +162,10 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
 
 void SwDoc::PropagateOutlineRule()
 {
+    SwNumRule* pMyOutlineRule = GetOutlineNumRule();
+    if (!pMyOutlineRule)
+        return;
+
     for (auto pColl : *mpTextFormatCollTable)
     {
         if(pColl->IsAssignedToListLevelOfOutlineStyle())
@@ -171,14 +175,8 @@ void SwDoc::PropagateOutlineRule()
 
             if ( rCollRuleItem.GetValue().isEmpty() )
             {
-                SwNumRule * pMyOutlineRule = GetOutlineNumRule();
-
-                if (pMyOutlineRule)
-                {
-                    SwNumRuleItem aNumItem( pMyOutlineRule->GetName() );
-
-                    pColl->SetFormatAttr(aNumItem);
-                }
+                SwNumRuleItem aNumItem( pMyOutlineRule->GetName() );
+                pColl->SetFormatAttr(aNumItem);
             }
         }
     }
