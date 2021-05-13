@@ -19,7 +19,7 @@ class SwBorderAttrAccess;
 namespace sw
 {
 /// Bookkeeping helper for SwCache caching writer borders.
-class SW_DLLPUBLIC BorderCacheOwner
+class BorderCacheOwner
 {
 private:
     friend SwBorderAttrs;
