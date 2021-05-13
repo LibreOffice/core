@@ -530,7 +530,7 @@ ErrCode const & SbiStream::Read( char& ch )
     if (aLine.isEmpty())
     {
         Read( aLine );
-        aLine += OString('\n');
+        aLine += "\n";
     }
     ch = aLine[0];
     aLine = aLine.copy(1);
@@ -724,7 +724,7 @@ char SbiIoSystem::Read()
         if( aIn.isEmpty() )
         {
             ReadCon( aIn );
-            aIn += OString('\n');
+            aIn += "\n";
         }
         ch = aIn[0];
         aIn = aIn.copy(1);

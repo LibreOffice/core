@@ -33,6 +33,7 @@
 #include <utility>
 #include <algorithm>
 #include <map>
+#include <string_view>
 
 #if defined(_WIN32)
 #if !defined WIN32_LEAN_AND_MEAN
@@ -252,13 +253,13 @@ FileHandleReader::readLine(OString * pLine)
                 m_bLf = true;
                 [[fallthrough]];
             case 0x0A:
-                *pLine += OString(m_aBuffer + nStart,
+                *pLine += std::string_view(m_aBuffer + nStart,
                                        m_nIndex - 1 - nStart);
                     //TODO! check for overflow, and not very efficient
                 return RESULT_OK;
             }
 
-        *pLine += OString(m_aBuffer + nStart, m_nIndex - nStart);
+        *pLine += std::string_view(m_aBuffer + nStart, m_nIndex - nStart);
             //TODO! check for overflow, and not very efficient
     }
 }

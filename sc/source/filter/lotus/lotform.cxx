@@ -29,6 +29,7 @@
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <memory>
+#include <string_view>
 
 static const char*      GetAddInName( const sal_uInt8 nIndex );
 
@@ -145,7 +146,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const char* pExtString )
             SAL_WARN_IF( nCnt != 3, "sc.filter",
                 "*LotusToSc::DoFunc(): TERM() or CTERM() need 3 parameters!" );
             nCnt = 4;
-            if ( OString(pExtString) == "TERM" )
+            if ( pExtString == std::string_view("TERM") )
             {
                 // @TERM(pmt,int,fv) -> NPER(int,-pmt,pv=0,fv)
                 NegToken( eParam[ 2 ] );

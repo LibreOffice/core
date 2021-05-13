@@ -39,7 +39,14 @@ public:
     {
     }
 
-    bool preRun() override { return true; }
+    bool preRun() override
+    {
+        auto const fn = handler.getMainFileName();
+        return !(
+            loplugin::isSamePathname(fn, SRCDIR "/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx")
+            || loplugin::isSamePathname(fn, SRCDIR "/sal/qa/rtl/strings/test_ostring_concat.cxx")
+            || loplugin::isSamePathname(fn, SRCDIR "/sal/qa/rtl/strings/test_oustring_concat.cxx"));
+    }
 
     virtual void run() override
     {
@@ -65,32 +72,21 @@ bool StringView::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOperator
     if (ignoreLocation(cxxOperatorCallExpr))
         return true;
 
-    auto check = [&](const Expr* expr) -> void {
-        auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(compat::IgnoreImplicit(expr));
-        if (!memberCallExpr)
-            return;
-        auto methodDecl = memberCallExpr->getMethodDecl();
-        if (!methodDecl || !methodDecl->getIdentifier() || methodDecl->getName() != "copy")
-            return;
-        report(DiagnosticsEngine::Warning, "rather than copy, pass with a view using subView()",
-               compat::getBeginLoc(expr))
-            << expr->getSourceRange();
-    };
     auto op = cxxOperatorCallExpr->getOperator();
     if (op == OO_Plus && cxxOperatorCallExpr->getNumArgs() == 2)
     {
-        check(cxxOperatorCallExpr->getArg(0));
-        check(cxxOperatorCallExpr->getArg(1));
+        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(0)));
+        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(1)));
     }
     if (compat::isComparisonOp(cxxOperatorCallExpr))
     {
-        check(cxxOperatorCallExpr->getArg(0));
-        check(cxxOperatorCallExpr->getArg(1));
+        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(0)));
+        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(1)));
     }
     else if (op == OO_PlusEqual)
-        check(cxxOperatorCallExpr->getArg(1));
+        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(1)));
     else if (op == OO_Subscript)
-        check(cxxOperatorCallExpr->getArg(0));
+        handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(0)));
     else if (op == OO_Equal)
     {
         if (loplugin::TypeCheck(cxxOperatorCallExpr->getType())
@@ -102,7 +98,7 @@ bool StringView::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOperator
                    .Namespace("rtl")
                    .GlobalNamespace())
         {
-            check(cxxOperatorCallExpr->getArg(1));
+            handleSubExprThatCouldBeView(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(1)));
         }
     }
     return true;

@@ -24,6 +24,7 @@
 #include <osl/file.hxx>
 
 #include <string.h>
+#include <string_view>
 #include <errno.h>
 
 #if defined(_WIN32)
@@ -118,7 +119,7 @@ OString createFileNameFromType( const OString& destination,
         if( nIndex == -1 )
             break;
 
-        if (buffer.isEmpty() || OString(".") == buffer.getStr())
+        if (buffer.isEmpty() || std::string_view(".") == buffer.getStr())
         {
             buffer.append(token);
             continue;

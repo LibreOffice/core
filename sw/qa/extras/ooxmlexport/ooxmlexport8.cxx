@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <string_view>
 
 #ifdef MACOSX
 #define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0
@@ -65,7 +66,8 @@ public:
 
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
-        if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx" )
+        if (filename == std::string_view("smartart.docx")
+            || filename == std::string_view("strict-smartart.docx") )
         {
             std::unique_ptr<Resetter> pResetter(new Resetter(
                 [] () {

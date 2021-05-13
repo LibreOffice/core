@@ -17980,7 +17980,7 @@ public:
         sal_Int32 nIdx = sHelpRoot.lastIndexOf('.');
         if (nIdx != -1)
             sHelpRoot = sHelpRoot.copy(0, nIdx);
-        sHelpRoot += OUString('/');
+        sHelpRoot += "/";
         m_aUtf8HelpRoot = OUStringToOString(sHelpRoot, RTL_TEXTENCODING_UTF8);
         m_aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
         m_aUILang = Application::GetSettings().GetUILanguageTag().getBcp47();

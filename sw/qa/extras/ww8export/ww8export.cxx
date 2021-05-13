@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -103,7 +107,7 @@ protected:
 
     virtual void postLoad(const char* pFilename) override
     {
-        if (OString(pFilename) == "tdf94386.odt")
+        if (pFilename == std::string_view("tdf94386.odt"))
         {
             SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
             CPPUNIT_ASSERT(pTextDoc);

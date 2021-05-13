@@ -522,7 +522,7 @@ bool SvxLRSpaceItem::GetPresentation
             else
                 rText = GetMetricText( nLeftMargin,
                                        eCoreUnit, ePresUnit, &rIntl );
-            rText += OUString(cpDelim);
+            rText += cpDelim;
             if ( 100 != nPropFirstLineOffset )
             {
                 rText += unicode::formatPercent(nPropFirstLineOffset,
@@ -531,7 +531,7 @@ bool SvxLRSpaceItem::GetPresentation
             else
                 rText += GetMetricText( static_cast<tools::Long>(nFirstLineOffset),
                                         eCoreUnit, ePresUnit, &rIntl );
-            rText += OUString(cpDelim);
+            rText += cpDelim;
             if ( 100 != nRightMargin )
             {
                 rText += unicode::formatPercent(nRightMargin,
@@ -553,7 +553,7 @@ bool SvxLRSpaceItem::GetPresentation
                 rText += GetMetricText( nLeftMargin, eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
-            rText += OUString(cpDelim);
+            rText += cpDelim;
             if ( 100 != nPropFirstLineOffset || nFirstLineOffset )
             {
                 rText += EditResId(RID_SVXITEMS_LRSPACE_FLINE);
@@ -566,7 +566,7 @@ bool SvxLRSpaceItem::GetPresentation
                                             eCoreUnit, ePresUnit, &rIntl ) +
                             " " + EditResId(GetMetricId(ePresUnit));
                 }
-                rText += OUString(cpDelim);
+                rText += cpDelim;
             }
             rText += EditResId(RID_SVXITEMS_LRSPACE_RIGHT);
             if ( 100 != nPropRightMargin )
@@ -800,7 +800,7 @@ bool SvxULSpaceItem::GetPresentation
             }
             else
                 rText = GetMetricText( static_cast<tools::Long>(nUpper), eCoreUnit, ePresUnit, &rIntl );
-            rText += OUString(cpDelim);
+            rText += cpDelim;
             if ( 100 != nPropLower )
             {
                 rText += unicode::formatPercent(nPropLower,

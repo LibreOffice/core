@@ -129,7 +129,7 @@ void XmlScriptTest::exportToFile(std::u16string_view sURL,
         memcpy(bytes.getArray() + nPos, readBytes.getConstArray(), static_cast<sal_uInt32>(nRead));
     }
 
-    osl::File aFile(OUString() + sURL);
+    osl::File aFile(OUString{ sURL });
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, aFile.open(osl_File_OpenFlag_Write));
     sal_uInt64 nBytesWritten;
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,

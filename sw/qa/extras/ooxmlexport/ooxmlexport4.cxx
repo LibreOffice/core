@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -54,7 +58,7 @@ protected:
 
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
-        if (OString(filename) == "combobox-control.docx" )
+        if (filename == std::string_view("combobox-control.docx") )
         {
             std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
             officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(true, batch);

@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <string_view>
 #include <config_features.h>
 
 #ifdef MACOSX
@@ -76,7 +77,7 @@ public:
 
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
-        if (OString(filename) == "fdo87488.docx")
+        if (filename == std::string_view("fdo87488.docx"))
         {
             std::unique_ptr<Resetter> pResetter(new Resetter(
                 [] () {

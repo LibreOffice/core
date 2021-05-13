@@ -103,7 +103,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             {
                 outputFile = options.getOption("-O");
                 if (!outputFile.endsWith("/")) {
-                    outputFile += OString('/');
+                    outputFile += "/";
                 }
                 outputFile += strippedFileName.replaceAt(
                         strippedFileName.getLength() -3 , 3, "urd");

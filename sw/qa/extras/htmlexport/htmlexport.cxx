@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <memory>
+#include <string_view>
 
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -207,12 +208,12 @@ public:
 private:
     bool mustCalcLayoutOf(const char* filename) override
     {
-        return OString(filename) != "fdo62336.docx";
+        return filename != std::string_view("fdo62336.docx");
     }
 
     bool mustTestImportOf(const char* filename) const override
     {
-        return OString(filename) != "fdo62336.docx";
+        return filename != std::string_view("fdo62336.docx");
     }
 
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
@@ -237,7 +238,7 @@ private:
         else
             setFilterOptions("");
 
-        if (OString(filename) == "charborder.odt")
+        if (filename == std::string_view("charborder.odt"))
         {
             // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
             SwGlobals::ensure(); // make sure that SW_MOD() is not 0

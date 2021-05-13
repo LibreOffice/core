@@ -12,6 +12,7 @@
 #include <iostream>
 #include <memory>
 #include <new>
+#include <string_view>
 
 #include <sal/log.hxx>
 #include <osl/socket.hxx>
@@ -254,7 +255,7 @@ getBluez5Adapter(DBusConnection *pConnection)
                                             char* pMessage;
 
                                             dbus_message_iter_get_basic(&aInnerInnerIter, &pMessage);
-                                            if (OString(pMessage) == "org.bluez.Adapter1")
+                                            if (pMessage == std::string_view("org.bluez.Adapter1"))
                                             {
                                                 dbus_message_unref(pMsg);
                                                 if (pPath)
@@ -882,13 +883,13 @@ static DBusHandlerResult ProfileMessageFunction
 {
     SAL_INFO("sdremote.bluetooth", "ProfileMessageFunction||" << dbus_message_get_interface(pMessage) << "||" <<  dbus_message_get_member(pMessage));
 
-    if (OString(dbus_message_get_interface(pMessage)) == "org.bluez.Profile1")
+    if (dbus_message_get_interface(pMessage) == std::string_view("org.bluez.Profile1"))
     {
-        if (OString(dbus_message_get_member(pMessage)) == "Release")
+        if (dbus_message_get_member(pMessage) == std::string_view("Release"))
         {
             return DBUS_HANDLER_RESULT_HANDLED;
         }
-        else if (OString(dbus_message_get_member(pMessage)) == "NewConnection")
+        else if (dbus_message_get_member(pMessage) == std::string_view("NewConnection"))
         {
             if (!dbus_message_has_signature(pMessage, "oha{sv}"))
             {
@@ -939,7 +940,7 @@ static DBusHandlerResult ProfileMessageFunction
                 return DBUS_HANDLER_RESULT_HANDLED;
             }
         }
-        else if (OString(dbus_message_get_member(pMessage)) == "RequestDisconnection")
+        else if (dbus_message_get_member(pMessage) == std::string_view("RequestDisconnection"))
         {
             return DBUS_HANDLER_RESULT_HANDLED;
         }

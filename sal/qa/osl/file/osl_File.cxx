@@ -4705,7 +4705,7 @@ namespace osl_Directory
 
             OString tmp_x(OUStringToOString(system_path, RTL_TEXTENCODING_UTF8));
             if (tmp_x.lastIndexOf('/') != (tmp_x.getLength() - 1))
-                tmp_x += OString('/');
+                tmp_x += "/";
 
 #if !defined(_WIN32) && !defined(ANDROID) && !defined(AIX)
             // FIXME would be nice to create unique dir even on Windows
@@ -4718,9 +4718,9 @@ namespace osl_Directory
              out != nullptr
           );
 
-            tmp_x += OString('/');
+            tmp_x += "/";
 #endif
-            tmp_x += OString(TEST_PATH_POSTFIX);
+            tmp_x += TEST_PATH_POSTFIX;
 
             OUString tmpTestPath;
             rc = osl::FileBase::getFileURLFromSystemPath(OStringToOUString(tmp_x, RTL_TEXTENCODING_UTF8), tmpTestPath);

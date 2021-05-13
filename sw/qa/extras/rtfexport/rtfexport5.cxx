@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <string_view>
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -55,7 +56,7 @@ public:
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
         m_aSavedSettings = Application::GetSettings();
-        if (OString(filename) == "fdo72031.rtf")
+        if (filename == std::string_view("fdo72031.rtf"))
         {
             std::unique_ptr<Resetter> pResetter(
                 new Resetter([this]() { Application::SetSettings(this->m_aSavedSettings); }));

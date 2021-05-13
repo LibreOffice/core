@@ -19,6 +19,7 @@
 #include <string.h>
 
 #include <stack>
+#include <string_view>
 
 using namespace ::com::sun::star;
 
@@ -798,7 +799,7 @@ void TestBreakIterator::testWeak()
             sal_Int16 nScript = m_xBreak->getScriptType(aWeaks, i);
             OString aMsg =
                 "Char 0x" +
-                OString::number(static_cast<sal_Int32>(OUString(aWeaks)[i]), 16) +
+                OString::number(static_cast<sal_Int32>(std::u16string_view(aWeaks)[i]), 16) +
                 " should have been weak";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(),
                 i18n::ScriptType::WEAK, nScript);
@@ -834,7 +835,7 @@ void TestBreakIterator::testAsian()
             sal_Int16 nScript = m_xBreak->getScriptType(aAsians, i);
             OString aMsg =
                 "Char 0x" +
-                OString::number(static_cast<sal_Int32>(OUString(aAsians)[i]), 16) +
+                OString::number(static_cast<sal_Int32>(std::u16string_view(aAsians)[i]), 16) +
                 " should have been asian";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(),
                 i18n::ScriptType::ASIAN, nScript);

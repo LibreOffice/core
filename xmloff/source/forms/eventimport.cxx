@@ -77,8 +77,7 @@ namespace xmloff
                 if ( !sLibrary.isEmpty() )
                 {
                     // for StarBasic, the library is prepended
-                    sal_Unicode cLibSeparator = ':';
-                    sLibrary += OUString( &cLibSeparator, 1 );
+                    sLibrary += ":";
                 }
                 sLibrary += pTranslated->ScriptCode;
                 pTranslated->ScriptCode = sLibrary;

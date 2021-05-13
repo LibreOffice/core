@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <string_view>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -703,7 +704,7 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
         const Locale & rLocale, const Sequence< Calendar2 > & calendarsSeq )
 {
     Sequence< CalendarItem2 > aItems;
-    if ( OUString( allCalendars[rnOffset] ) == "ref" )
+    if ( allCalendars[rnOffset] == std::u16string_view(u"ref") )
     {
         aItems = getCalendarItemByName( OUString( allCalendars[rnOffset+1]), rLocale, calendarsSeq, nWhichItem);
         rnOffset += 2;

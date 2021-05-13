@@ -52,7 +52,7 @@ public:
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
         m_aSavedSettings = Application::GetSettings();
-        if (OString(filename) == "fdo48023.rtf")
+        if (filename == std::string_view("fdo48023.rtf"))
         {
             std::unique_ptr<Resetter> pResetter(
                 new Resetter([this]() { Application::SetSettings(this->m_aSavedSettings); }));
@@ -61,7 +61,7 @@ public:
             Application::SetSettings(aSettings);
             return pResetter;
         }
-        else if (OString(filename) == "fdo44211.rtf")
+        else if (filename == std::string_view("fdo44211.rtf"))
         {
             std::unique_ptr<Resetter> pResetter(
                 new Resetter([this]() { Application::SetSettings(this->m_aSavedSettings); }));

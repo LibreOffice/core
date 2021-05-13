@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <string>
+#include <string_view>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -327,7 +328,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     {
         tools::Rectangle aInvalidation;
         uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
-        if (OString("EMPTY") == pPayload)
+        if (std::string_view("EMPTY") == pPayload)
             return;
         CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
         aInvalidation.setX(aSeq[0].toInt32());
@@ -875,7 +876,7 @@ public:
             else
                 sRect = aPayload;
             uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(sRect));
-            if (OString("EMPTY") == pPayload)
+            if (std::string_view("EMPTY") == pPayload)
                 return;
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
             m_aOwnCursor.setX(aSeq[0].toInt32());
@@ -895,7 +896,7 @@ public:
             OString aRect = aTree.get_child("rectangle").get_value<std::string>().c_str();
 
             uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRect));
-            if (OString("EMPTY") == pPayload)
+            if (std::string_view("EMPTY") == pPayload)
                 return;
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
             m_aViewCursor.setX(aSeq[0].toInt32());

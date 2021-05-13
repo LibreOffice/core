@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -43,7 +47,8 @@ protected:
      */
     bool mustTestImportOf(const char* filename) const override {
         // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".docx") || OString(filename) == "ooo39250-1-min.rtf";
+        return OString(filename).endsWith(".docx")
+            || filename == std::string_view("ooo39250-1-min.rtf");
     }
 };
 

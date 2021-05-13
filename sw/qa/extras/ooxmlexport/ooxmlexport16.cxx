@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <swmodeltestbase.hxx>
 
 #include <svx/svddef.hxx>
@@ -39,7 +43,7 @@ public:
 
 virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
-        if (OString(filename) == "tdf135774_numberingShading.docx")
+        if (filename == std::string_view("tdf135774_numberingShading.docx"))
         {
             bool bIsExportAsShading = SvtFilterOptions::Get().IsCharBackground2Shading();
             // This function is run at the end of the test - returning the filter options to normal.

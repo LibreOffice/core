@@ -83,7 +83,7 @@ int pdfVerify(int nArgc, char** pArgv)
 
     InitVCL();
     comphelper::ScopeGuard g([] { DeInitVCL(); });
-    if (nArgc > 3 && OString(pArgv[3]) == "-p")
+    if (nArgc > 3 && pArgv[3] == std::string_view("-p"))
     {
         generatePreview(pArgv[1], pArgv[2]);
         return 0;
@@ -110,7 +110,7 @@ int pdfVerify(int nArgc, char** pArgv)
         osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pArgv[2]), aOutURL);
 
     bool bRemoveSignature = false;
-    if (nArgc > 3 && OString(pArgv[3]) == "-r")
+    if (nArgc > 3 && pArgv[3] == std::string_view("-r"))
         bRemoveSignature = true;
 
     SvFileStream aStream(aInURL, StreamMode::READ);

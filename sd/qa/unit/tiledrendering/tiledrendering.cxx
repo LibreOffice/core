@@ -56,6 +56,7 @@
 
 #include <chrono>
 #include <cstdlib>
+#include <string_view>
 
 using namespace css;
 
@@ -931,7 +932,7 @@ public:
         case LOK_CALLBACK_CURSOR_VISIBLE:
         {
             m_bCursorVisibleChanged = true;
-            m_bCursorVisible = (OString("true") == pPayload);
+            m_bCursorVisible = (std::string_view("true") == pPayload);
         }
         break;
         case LOK_CALLBACK_VIEW_LOCK:
@@ -957,7 +958,7 @@ public:
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
             const int nViewId = aTree.get_child("viewId").get_value<int>();
-            m_aViewCursorVisibilities[nViewId] = OString("true") == pPayload;
+            m_aViewCursorVisibilities[nViewId] = std::string_view("true") == pPayload;
         }
         break;
         case LOK_CALLBACK_TEXT_VIEW_SELECTION:
