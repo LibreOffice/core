@@ -120,7 +120,9 @@ void SidebarTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     pDrawingArea->set_cursor(PointerStyle::Text);
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     InitAccessible();
+#endif
 }
 
 void SidebarTextControl::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)

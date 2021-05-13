@@ -3190,8 +3190,6 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
     if ( GetUpper() )
     {
-        SwRect aOldFrame( getFrameArea() );
-
         //The upper only grows as far as needed. nReal provides the distance
         //which is already available.
         SwTwips nReal = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea());
@@ -3220,12 +3218,15 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                 aRectFnSet.AddBottom( aFrm, nDist );
             }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
             SwRootFrame *pRootFrame = getRootFrame();
             if( pRootFrame && pRootFrame->IsAnyShellAccessible() &&
                 pRootFrame->GetCurrShell() )
             {
+                SwRect aOldFrame( getFrameArea() );
                 pRootFrame->GetCurrShell()->Imp()->MoveAccessibleFrame( this, aOldFrame );
             }
+#endif
         }
     }
 
@@ -4504,7 +4505,6 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
     SwFrame *pFrame = Lower();
     if ( bHeight )
     {
-        SwRootFrame *pRootFrame = getRootFrame();
         SwRectFnSet aRectFnSet(this);
         SwRect aOldFrame;
 
@@ -4581,8 +4581,11 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
 
             if ( pNotify )
             {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
+                SwRootFrame *pRootFrame = getRootFrame();
                 if( pRootFrame && pRootFrame->IsAnyShellAccessible() && pRootFrame->GetCurrShell() )
                     pRootFrame->GetCurrShell()->Imp()->MoveAccessibleFrame( pNotify, aOldFrame );
+#endif
 
                 pNotify->InvalidatePrt_();
             }
@@ -4853,12 +4856,14 @@ void SwCellFrame::DestroyImpl()
     {
         // At this stage the lower frames aren't destroyed already,
         // therefore we have to do a recursive dispose.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         SwRootFrame *pRootFrame = getRootFrame();
         if( pRootFrame && pRootFrame->IsAnyShellAccessible() &&
             pRootFrame->GetCurrShell() )
         {
             pRootFrame->GetCurrShell()->Imp()->DisposeAccessibleFrame( this, true );
         }
+#endif
 
         pMod->Remove( this );
         if( !pMod->HasWriterListeners() )
@@ -5449,12 +5454,14 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 InvalidatePrt();
             }
         }
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         if(pProtectItem)
         {
             SwViewShell* pSh = getRootFrame()->GetCurrShell();
             if(pSh && pSh->GetLayout()->IsAnyShellAccessible())
                 pSh->Imp()->InvalidateAccessibleEditableState(true, this);
         }
+#endif
         if(pFrameDirItem)
         {
             SetDerivedVert(false);
@@ -5596,6 +5603,7 @@ void SwCellFrame::dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const
 void SwCellFrame::Cut()
 {
     // notification for accessibility
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     {
         SwRootFrame *pRootFrame = getRootFrame();
         if( pRootFrame && pRootFrame->IsAnyShellAccessible() )
@@ -5607,6 +5615,7 @@ void SwCellFrame::Cut()
             }
         }
     }
+#endif
 
     SwLayoutFrame::Cut();
 }

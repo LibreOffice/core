@@ -1367,15 +1367,18 @@ bool SwAnnotationWin::IsScrollbarVisible() const
 
 void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     const bool bAnchorChanged = mpAnchorFrame != rSidebarItem.maLayoutInfo.mpAnchorFrame;
     if ( bAnchorChanged )
     {
         mrMgr.DisconnectSidebarWinFromFrame( *mpAnchorFrame, *this );
     }
+#endif
 
     mrSidebarItem = rSidebarItem;
     mpAnchorFrame = mrSidebarItem.maLayoutInfo.mpAnchorFrame;
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (SidebarWinAccessible* pAcc = dynamic_cast<SidebarWinAccessible*>(GetWindowPeer()))
         pAcc->ChangeSidebarItem( mrSidebarItem );
 
@@ -1385,8 +1388,10 @@ void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
                                       mrSidebarItem.GetFormatField(),
                                       *this );
     }
+#endif
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAccessible()
 {
     rtl::Reference<SidebarWinAccessible> pAcc( new SidebarWinAccessible( *this,
@@ -1395,6 +1400,7 @@ css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAc
     SetWindowPeer( pAcc, pAcc.get() );
     return pAcc;
 }
+#endif
 
 } // eof of namespace sw::sidebarwindows
 

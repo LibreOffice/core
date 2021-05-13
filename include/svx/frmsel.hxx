@@ -156,7 +156,7 @@ public:
     SvxBorderLineStyle getCurrentStyleLineStyle() const;
 
     // accessibility
-
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
     a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
@@ -170,7 +170,7 @@ public:
     /** Returns the accessibility child object at the specified position (relative to control). */
     css::uno::Reference< css::accessibility::XAccessible >
                         GetChildAccessible( const Point& rPos );
-
+#endif
     /** Returns the bounding rectangle of the specified frame border (if enabled). */
     tools::Rectangle           GetClickBoundRect( FrameBorderType eBorder ) const;
 
@@ -183,7 +183,9 @@ private:
     virtual void        StyleUpdated() override;
     virtual void        Resize() override;
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     rtl::Reference<a11y::AccFrameSelector> mxAccess;   /// Pointer to accessibility object of the control.
+#endif
     std::unique_ptr< FrameSelectorImpl > mxImpl;
 };
 

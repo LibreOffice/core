@@ -45,7 +45,9 @@ public:
     void                                SelectCharacter( const Subset* sub);
     virtual sal_UCS4                    GetSelectCharacter() const override;
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     virtual svx::SvxShowCharSetItem*    ImplGetItem( int _nPos ) override;
+#endif
     virtual int                         LastInView() const override;
     virtual void                        SelectIndex( int index, bool bFocus = false ) override;
     void                                AppendCharToList(sal_UCS4 cChar);

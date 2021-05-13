@@ -728,6 +728,7 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
     if( nSelectedIndex >= 0 )
     {
         getSelectedChar() = mxFontCharMap->GetCharFromIndex( nSelectedIndex );
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         if( m_xAccessible.is() )
         {
             svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
@@ -747,6 +748,7 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
             aNewAny <<= AccessibleStateType::SELECTED;
             pItem->m_xItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
+#endif
     }
     aHighHdl.Call( this );
 }
@@ -781,6 +783,7 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, weld::ScrolledWindow&, void)
     }
     else if( nSelectedIndex > LastInView() )
     {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         if( m_xAccessible.is() )
         {
             css::uno::Any aOldAny, aNewAny;
@@ -791,6 +794,7 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, weld::ScrolledWindow&, void)
                 m_xAccessible ->fireEvent( AccessibleEventId::CHILD, aOldAny, aNewAny );
             }
         }
+#endif
         SelectIndex( (LastInView() - COLUMN_COUNT + 1) + (nSelectedIndex % COLUMN_COUNT) );
     }
 
@@ -799,14 +803,17 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, weld::ScrolledWindow&, void)
 
 SvxShowCharSet::~SvxShowCharSet()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (m_xAccessible.is())
     {
         m_aItems.clear();
         m_xAccessible->clearCharSetControl();
         m_xAccessible.clear();
     }
+#endif
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 css::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
 {
     OSL_ENSURE(!m_xAccessible.is(),"Accessible already created!");
@@ -832,6 +839,7 @@ svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
 
     return aFind->second.get();
 }
+#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
 
 sal_Int32 SvxShowCharSet::getMaxCharCount() const
 {

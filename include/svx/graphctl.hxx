@@ -67,7 +67,9 @@ class SVX_DLLPUBLIC GraphCtrl : public weld::CustomWidgetController
 
                         DECL_LINK( UpdateHdl, Timer*, void );
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     rtl::Reference<SvxGraphCtrlAccessibleContext> mpAccContext;
+#endif
 
 protected:
 
@@ -125,7 +127,9 @@ public:
     void                SetSdrMode(bool b);
 
     Point               GetPositionInDialog() const;
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+#endif
 };
 
 class GraphCtrlView : public SdrView

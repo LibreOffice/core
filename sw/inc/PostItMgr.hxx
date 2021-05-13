@@ -263,11 +263,13 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
 
         void AssureStdModeAtShell();
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         void ConnectSidebarWinToFrame( const SwFrame& rFrame,
                                      const SwFormatField& rFormatField,
                                      sw::annotation::SwAnnotationWin& rSidebarWin );
         void DisconnectSidebarWinFromFrame( const SwFrame& rFrame,
                                           sw::annotation::SwAnnotationWin& rSidebarWin );
+#endif
         bool HasFrameConnectedSidebarWins( const SwFrame& rFrame );
         vcl::Window* GetSidebarWinForFrameByIndex( const SwFrame& rFrame,
                                             const sal_Int32 nIndex );

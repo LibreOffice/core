@@ -140,8 +140,10 @@ struct FrameSelectorImpl
     bool                mbAutoSelect;   /// true = Auto select a frame border, if focus reaches control.
     bool                mbHCMode;       /// true = High contrast mode.
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     std::vector<rtl::Reference<a11y::AccFrameSelectorChild>>
                         maChildVec;     /// Pointers to accessibility objects for frame borders.
+#endif
     explicit            FrameSelectorImpl( FrameSelector& rFrameSel );
                         ~FrameSelectorImpl();
 

@@ -49,11 +49,16 @@ public:
 protected:
     std::unique_ptr<EditEngine> m_xEditEngine;
     std::unique_ptr<EditView> m_xEditView;
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     rtl::Reference<WeldEditAccessible> m_xAccessible;
+#endif
 
     virtual void makeEditEngine();
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     void InitAccessible();
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+#endif
 
     void DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
@@ -66,8 +71,6 @@ protected:
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
     virtual void Resize() override;
-
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     virtual void EditViewInvalidate(const tools::Rectangle& rRect) override { Invalidate(rRect); }
 

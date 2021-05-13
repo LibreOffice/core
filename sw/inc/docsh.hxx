@@ -252,7 +252,9 @@ public:
                                    bool bTemplate = false ) const override;
 
     virtual std::set<Color> GetDocColors() override;
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     sfx::AccessibilityIssueCollection runAccessibilityCheck() override;
+#endif
 
     virtual void LoadStyles( SfxObjectShell& rSource ) override;
 

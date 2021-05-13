@@ -90,6 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/AccessibleControlShape \
     svx/source/accessibility/AccessibleEmptyEditSource \
@@ -111,11 +112,15 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/lookupcolorname \
 	svx/source/accessibility/svxpixelctlaccessiblecontext \
     svx/source/accessibility/svxrectctaccessiblecontext \
+    svx/source/dialog/AccessibilityCheckDialog \
+))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/customshapes/EnhancedCustomShape3d \
     svx/source/customshapes/EnhancedCustomShapeEngine \
     svx/source/customshapes/EnhancedCustomShapeFontWork \
     svx/source/customshapes/EnhancedCustomShapeHandle \
-    svx/source/dialog/AccessibilityCheckDialog \
     svx/source/dialog/_bmpmask \
     svx/source/dialog/charmap \
     svx/source/dialog/searchcharmap \

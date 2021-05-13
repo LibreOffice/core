@@ -92,6 +92,12 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 	$(if $(filter ODK,$(BUILD_TYPE)),uno-skeletonmaker) \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
+$(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
+	$(if $(filter-out ANDROID HAIKU iOS MACOSX WNT,$(OS)),oosplash) \
+))
+endif
+
 $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(if $(ENABLE_ONLINE_UPDATE_MAR),\
 		mar \
@@ -145,7 +151,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,FUZZERS,mtpfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,htmlfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,sftfuzzer) \
-	$(if $(filter-out ANDROID HAIKU iOS MACOSX WNT,$(OS)),oosplash) \
 	soffice_bin \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
 	$(if $(filter WNT,$(OS)), \
@@ -619,6 +624,14 @@ $(eval $(call gb_Helper_register_plugins_for_install,PRIVATELIBS_URE,ure, \
 	sal_textenc \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
+	$(if $(filter WNT,$(OS)), \
+		winaccessibility \
+	) \
+))
+endif
+
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
 	$(if $(filter WNT,$(OS)),avmediawin) \
@@ -670,7 +683,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 		fps \
 		inprocserv \
 		UAccCOM \
-		winaccessibility \
 	) \
 ))
 

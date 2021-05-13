@@ -152,7 +152,9 @@ public:
     */
     bool SetBookPreviewMode( const bool _bBookPreview );
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+#endif
 };
 
 /**
@@ -266,8 +268,10 @@ public:
 
     SwDocShell* GetDocShell();
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     // apply Accessibility options
     void ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessibilityOptions);
+#endif
 
     // Inline method to request values of new members
     // <mbResetFormDesignMode> and <mbFormDesignModeToReset>

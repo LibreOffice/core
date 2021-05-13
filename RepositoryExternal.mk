@@ -2862,6 +2862,8 @@ endif # SYSTEM_POPPLER
 endif # ENABLE_POPPLER
 
 
+ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
+
 ifneq ($(SYSTEM_CLUCENE),)
 
 define gb_LinkTarget__use_clucene
@@ -2874,11 +2876,9 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
-ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(CLUCENE_LIBS) \
 )
-endif
 
 endef
 
@@ -2892,11 +2892,9 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
-ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	clucene \
 )
-endif
 
 endef
 
@@ -2905,6 +2903,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
 ))
 
 endif # SYSTEM_CLUCENE
+
+endif # ENABLE_WASM_STRIP_CLUCENE
 
 define gb_LinkTarget__use_gobject
 $(call gb_LinkTarget_add_libs,$(1),\

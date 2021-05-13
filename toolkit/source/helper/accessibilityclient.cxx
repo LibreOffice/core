@@ -41,7 +41,9 @@ namespace toolkit
         oslModule                                s_hAccessibleImplementationModule = nullptr;
 #endif
 #if HAVE_FEATURE_DESKTOP
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         GetStandardAccComponentFactory           s_pAccessibleFactoryFunc = nullptr;
+#endif
 #endif
         ::rtl::Reference< IAccessibleFactory >   s_pFactory;
     }
@@ -151,6 +153,7 @@ namespace toolkit
     {
     }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     extern "C" { static void thisModule() {} }
@@ -158,6 +161,7 @@ namespace toolkit
     extern "C" void *getStandardAccessibleFactory();
 #endif
 #endif // HAVE_FEATURE_DESKTOP
+#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
 
     void AccessibilityClient::ensureInitialized()
     {
@@ -166,6 +170,7 @@ namespace toolkit
 
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 #if HAVE_FEATURE_DESKTOP
         // load the library implementing the factory
         if (!s_pFactory)
@@ -198,6 +203,7 @@ namespace toolkit
             }
         }
 #endif // HAVE_FEATURE_DESKTOP
+#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
 
         if (!s_pFactory)
             // the attempt to load the lib, or to create the factory, failed

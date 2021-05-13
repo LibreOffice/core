@@ -5342,14 +5342,18 @@ void SwEditWin::GetFocus()
     {
         m_rView.GotFocus();
         Window::GetFocus();
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         m_rView.GetWrtShell().InvalidateAccessibleFocus();
+#endif
     }
 }
 
 void SwEditWin::LoseFocus()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (m_rView.GetWrtShellPtr())
         m_rView.GetWrtShell().InvalidateAccessibleFocus();
+#endif
     Window::LoseFocus();
     if( m_pQuickHlpData && m_pQuickHlpData->m_bIsDisplayed )
         m_pQuickHlpData->Stop( m_rView.GetWrtShell() );
@@ -6039,6 +6043,7 @@ void SwEditWin::SetChainMode( bool bOn )
     m_rView.GetViewFrame()->GetBindings().Invalidate(aInva);
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 uno::Reference< css::accessibility::XAccessible > SwEditWin::CreateAccessible()
 {
     SolarMutexGuard aGuard;   // this should have happened already!!!
@@ -6051,6 +6056,7 @@ uno::Reference< css::accessibility::XAccessible > SwEditWin::CreateAccessible()
 
     return xAcc;
 }
+#endif
 
 void QuickHelpData::Move( QuickHelpData& rCpy )
 {

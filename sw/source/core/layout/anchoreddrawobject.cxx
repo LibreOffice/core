@@ -123,11 +123,13 @@ SwPosNotify::~SwPosNotify() COVERITY_NOEXCEPT_FALSE
         }
     }
     // tdf#101464 notify SwAccessibleMap about new drawing object position
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (mpOldPageFrame && mpOldPageFrame->getRootFrame()->IsAnyShellAccessible())
     {
         mpOldPageFrame->getRootFrame()->GetCurrShell()->Imp()->MoveAccessible(
                 nullptr, mpAnchoredDrawObj->GetDrawObj(), maOldObjRect);
     }
+#endif
 }
 
 // --> #i32795#

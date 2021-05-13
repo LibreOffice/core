@@ -89,6 +89,14 @@ $(eval $(call gb_Rdb_add_components,services,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	$(if $(filter WNT,$(OS)), \
+		winaccessibility/source/service/winaccessibility \
+	) \
+))
+endif
+
 $(eval $(call gb_Rdb_add_components,services,\
 	animations/source/animcore/animcore \
 	cui/util/cui \
@@ -173,7 +181,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		embeddedobj/source/msole/emboleobj.windows \
 		embedserv/util/emser \
 		extensions/source/ole/oleautobridge \
-		winaccessibility/source/service/winaccessibility \
 	) \
 	$(if $(WITH_WEBDAV), \
 		ucb/source/ucp/webdav-neon/ucpdav1 \

@@ -48,8 +48,14 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
+	winaccessibility \
+))
+endif
+
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	android \
 	animations \
 	apple_remote \
@@ -165,7 +171,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	vbahelper \
 	vcl \
 	wasm-qt \
-	winaccessibility \
 	wizards \
 	writerfilter \
 	writerperfect \

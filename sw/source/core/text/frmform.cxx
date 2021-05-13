@@ -666,6 +666,7 @@ SwContentFrame *SwTextFrame::JoinFrame()
     // Relation CONTENT_FLOWS_FROM for current next paragraph will change
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
     // is <this>, will change.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     {
         SwViewShell* pViewShell( pFoll->getRootFrame()->GetCurrShell() );
         if ( pViewShell && pViewShell->GetLayout() &&
@@ -676,6 +677,8 @@ SwContentFrame *SwTextFrame::JoinFrame()
                             this );
         }
     }
+#endif
+
     pFoll->Cut();
     SetFollow(pNxt);
     SwFrame::DestroyFrame(pFoll);
@@ -700,6 +703,7 @@ void SwTextFrame::SplitFrame(TextFrameIndex const nTextPos)
     // Relation CONTENT_FLOWS_FROM for current next paragraph will change
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
     // is <this>, will change.
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     {
         SwViewShell* pViewShell( pNew->getRootFrame()->GetCurrShell() );
         if ( pViewShell && pViewShell->GetLayout() &&
@@ -710,6 +714,7 @@ void SwTextFrame::SplitFrame(TextFrameIndex const nTextPos)
                             this );
         }
     }
+#endif
 
     // If footnotes end up in pNew bz our actions, we need
     // to re-register them

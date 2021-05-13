@@ -89,7 +89,9 @@ void SvxRectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder)
 SvxRectCtl::~SvxRectCtl()
 {
     pBitmap.reset();
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     pAccContext.clear();
+#endif
 }
 
 void SvxRectCtl::Resize()
@@ -415,11 +417,13 @@ void SvxRectCtl::GetFocus()
 {
     Invalidate();
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     // Send accessibility event.
     if (pAccContext.is())
     {
         pAccContext->FireChildFocus(GetActualRP());
     }
+#endif
 }
 
 void SvxRectCtl::LoseFocus()
@@ -499,9 +503,11 @@ void SvxRectCtl::SetActualRP( RectPoint eNewRP )
 
     Invalidate();
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     // notify accessibility object about change
     if (pAccContext.is())
         pAccContext->selectChild( eNewRP /* MT, bFireFocus */ );
+#endif
 }
 
 void SvxRectCtl::SetState( CTL_STATE nState )
@@ -550,11 +556,13 @@ tools::Rectangle SvxRectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) con
     return aRet;
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 Reference< XAccessible > SvxRectCtl::CreateAccessible()
 {
     pAccContext = new SvxRectCtlAccessibleContext(this);
     return pAccContext;
 }
+#endif
 
 RectPoint SvxRectCtl::GetApproxRPFromPixPt( const css::awt::Point& r ) const
 {
@@ -570,12 +578,14 @@ void SvxRectCtl::DoCompletelyDisable(bool bNew)
 
 // Control for editing bitmaps
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 css::uno::Reference< css::accessibility::XAccessible > SvxPixelCtl::CreateAccessible()
 {
     if (!m_xAccess.is())
         m_xAccess = new SvxPixelCtlAccessible(this);
     return m_xAccess;
 }
+#endif
 
 tools::Long SvxPixelCtl::PointToIndex(const Point &aPt) const
 {
@@ -673,10 +683,14 @@ bool SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
     tools::Long nIndex = ShowPosition(rMEvt.GetPosPixel());
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if(m_xAccess.is())
     {
         m_xAccess->NotifyChild(nIndex,true, true);
     }
+#else
+    (void)nIndex;
+#endif
 
     return true;
 }
@@ -816,6 +830,7 @@ bool SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
             default:
                 return CustomWidgetController::KeyInput( rKEvt );
         }
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         if(m_xAccess.is())
         {
             tools::Long nIndex = GetFocusPosIndex();
@@ -837,6 +852,9 @@ bool SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 break;
             }
         }
+#else
+        (void)bFocusPosChanged;
+#endif
         return true;
     }
     else
@@ -850,10 +868,12 @@ void SvxPixelCtl::GetFocus()
 {
     Invalidate(implCalFocusRect(aFocusPosition));
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (m_xAccess.is())
     {
         m_xAccess->NotifyChild(GetFocusPosIndex(),true,false);
     }
+#endif
 }
 
 void SvxPixelCtl::LoseFocus()

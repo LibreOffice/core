@@ -97,7 +97,9 @@ SwViewShellImp::SwViewShellImp( SwViewShell *pParent ) :
 
 SwViewShellImp::~SwViewShellImp()
 {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     m_pAccessibleMap.reset();
+#endif
 
     m_pPagePreviewLayout.reset();
 
@@ -282,6 +284,7 @@ void SwViewShellImp::InitPagePreviewLayout()
         m_pPagePreviewLayout.reset( new SwPagePreviewLayout( *m_pShell, *(m_pShell->GetLayout()) ) );
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 void SwViewShellImp::UpdateAccessible()
 {
     // We require a layout and an XModel to be accessible.
@@ -453,5 +456,6 @@ void SwViewShellImp::FireAccessibleEvents()
     if( IsAccessible() )
         GetAccessibleMap().FireEvents();
 }
+#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

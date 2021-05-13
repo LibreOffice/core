@@ -396,6 +396,8 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
         // tdf#134973: the model could get modified: e.g., calling XChartDocument::getSubTitle(),
         // which creates the object if absent, and sets the modified state.
         xModifiable->setModified(bOldModified);
+#else
+    (void)xModel;
 #endif
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }

@@ -497,12 +497,12 @@ public:
     const Size& GetBrowseBorder() const;
     sal_Int32 GetBrowseWidth() const;
     void SetBrowseBorder( const Size& rNew );
+    void ShowPreviewSelection( sal_uInt16 nSelPage );
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();
-
     css::uno::Reference< css::accessibility::XAccessible >  CreateAccessiblePreview();
 
-    void ShowPreviewSelection( sal_uInt16 nSelPage );
     void InvalidateAccessibleFocus();
 
     // Apply Accessibility options.
@@ -538,6 +538,7 @@ public:
     void InvalidateAccessibleParaAttrs( const SwTextFrame& rTextFrame );
 
     SwAccessibleMap* GetAccessibleMap();
+#endif
 
     SwViewShell( SwViewShell&, vcl::Window *pWin, OutputDevice *pOut = nullptr,
                 tools::Long nFlags = 0 );

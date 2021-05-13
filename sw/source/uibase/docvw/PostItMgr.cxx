@@ -2400,6 +2400,7 @@ void SwPostItMgr::ToggleInsModeOnActiveSidebarWin()
     }
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 void SwPostItMgr::ConnectSidebarWinToFrame( const SwFrame& rFrame,
                                           const SwFormatField& rFormatField,
                                           SwAnnotationWin& rSidebarWin )
@@ -2430,6 +2431,7 @@ void SwPostItMgr::DisconnectSidebarWinFromFrame( const SwFrame& rFrame,
         }
     }
 }
+#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
 
 bool SwPostItMgr::HasFrameConnectedSidebarWins( const SwFrame& rFrame )
 {

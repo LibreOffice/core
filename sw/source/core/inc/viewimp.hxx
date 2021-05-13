@@ -70,9 +70,11 @@ class SwViewShellImp
                                  // Is registered by the SwLayAction ctor and deregistered by the dtor
     SwLayIdle     *m_pIdleAct;     // The same as SwLayAction for SwLayIdle
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     /// note: the map is *uniquely* owned here - the shared_ptr is only
     /// used so that SwAccessibleContext can check via weak_ptr that it's alive
     std::shared_ptr<SwAccessibleMap> m_pAccessibleMap;
+#endif
 
     bool m_bFirstPageInvalid : 1; // Pointer to the first Page invalid?
     bool m_bResetHdlHiddenPaint : 1; // Ditto
@@ -93,8 +95,8 @@ class SwViewShellImp
 
 private:
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     SwAccessibleMap *CreateAccessibleMap();
-
     /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
 
         #i27138#
@@ -129,6 +131,7 @@ private:
         <SwViewShell::InvalidateAccessibleParaAttrs(..)>
     */
     void InvalidateAccessibleParaAttrs_( const SwTextFrame& rTextFrame );
+#endif
 
 public:
     SwViewShellImp( SwViewShell * );
@@ -214,6 +217,7 @@ public:
         return m_pPagePreviewLayout.get();
     }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     /// Is this view accessible?
     bool IsAccessible() const { return m_pAccessibleMap != nullptr; }
 
@@ -264,13 +268,14 @@ public:
 
     /// Fire all accessible events that have been collected so far
     void FireAccessibleEvents();
+#endif
 };
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 inline SwAccessibleMap& SwViewShellImp::GetAccessibleMap()
 {
     if( !m_pAccessibleMap )
         CreateAccessibleMap();
-
     return *m_pAccessibleMap;
 }
 
@@ -302,6 +307,8 @@ inline void SwViewShellImp::AddAccessibleObj( const SdrObject *pObj )
     SwRect aEmptyRect;
     MoveAccessible( nullptr, pObj, aEmptyRect );
 }
+#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
+
 #endif // INCLUDED_SW_SOURCE_CORE_INC_VIEWIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

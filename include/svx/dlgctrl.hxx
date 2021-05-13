@@ -84,7 +84,9 @@ private:
     SvxRectCtl& operator=(const SvxRectCtl&) = delete;
 
 protected:
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     rtl::Reference<SvxRectCtlAccessibleContext> pAccContext;
+#endif
     sal_uInt16 nBorderWidth;
     Point aPtLT, aPtMT, aPtRT;
     Point aPtLM, aPtMM, aPtRM;
@@ -127,9 +129,11 @@ public:
     tools::Rectangle           CalculateFocusRectangle() const;
     tools::Rectangle           CalculateFocusRectangle( RectPoint eRectPoint ) const;
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
     a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
+#endif
 
     RectPoint          GetApproxRPFromPixPt( const css::awt::Point& rPixelPoint ) const;
 
@@ -156,7 +160,9 @@ private:
     bool        bPaintable;
     //Add member identifying position
     Point       aFocusPosition;
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     rtl::Reference<SvxPixelCtlAccessible>  m_xAccess;
+#endif
 
     tools::Rectangle   implCalFocusRect( const Point& aPosition );
     void    ChangePixel( sal_uInt16 nPixel );
@@ -190,9 +196,11 @@ public:
     void    SetPaintable( bool bTmp ) { bPaintable = bTmp; }
     void    Reset();
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
     a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
+#endif
 
     static tools::Long GetSquares() { return nSquares ; }
     tools::Long GetWidth() const { return aRectSize.getWidth() ; }

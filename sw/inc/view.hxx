@@ -608,8 +608,11 @@ public:
 
     // Enable mail merge - mail merge field dialog enabled
     void EnableMailMerge();
+
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     //apply Accessibility options
     void ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessibilityOptions);
+#endif
 
     SwView(SfxViewFrame* pFrame, SfxViewShell*);
     virtual ~SwView() override;

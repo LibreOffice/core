@@ -81,7 +81,6 @@ public:
     void            getFavCharacterList(); //gets both Fav char and Fav char font list
     void            updateFavCharacterList(const OUString& rChar, const OUString& rFont);
 
-    virtual svx::SvxShowCharSetItem*    ImplGetItem( int _nPos );
     int                         FirstInView() const;
     virtual int                         LastInView() const;
     int                         PixelToMapIndex( const Point&) const;
@@ -99,7 +98,11 @@ public:
     virtual void Show() override { mxScrollArea->show(); }
     virtual void Hide() override { mxScrollArea->hide(); }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
+    virtual svx::SvxShowCharSetItem*    ImplGetItem( int _nPos );
     uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+#endif
 
 private:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
@@ -112,7 +115,6 @@ private:
     virtual void LoseFocus() override;
     virtual bool KeyInput(const KeyEvent&) override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
     virtual FactoryFunction GetUITestFactory() const override;
 
 protected:
@@ -127,7 +129,9 @@ protected:
     std::deque<OUString>           maFavCharList;
     std::deque<OUString>           maFavCharFontList;
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     rtl::Reference<svx::SvxShowCharSetAcc> m_xAccessible;
+#endif
     uno::Reference< uno::XComponentContext > mxContext;
     tools::Long            nX;
     tools::Long            nY;

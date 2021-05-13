@@ -2058,23 +2058,25 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
 
 static void lcl_MoveAllLowers( SwFrame* pFrame, const Point& rOffset )
 {
-    const SwRect aFrame( pFrame->getFrameArea() );
-
     // first move the current frame
     // RotateFlyFrame3: moved to transform_translate instead of
     // direct modification to allow the SwFrame evtl. needed own reactions
     pFrame->transform_translate(rOffset);
 
     // Don't forget accessibility:
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if( pFrame->IsAccessibleFrame() )
     {
         SwRootFrame *pRootFrame = pFrame->getRootFrame();
         if( pRootFrame && pRootFrame->IsAnyShellAccessible() &&
             pRootFrame->GetCurrShell() )
         {
+            const SwRect aFrame( pFrame->getFrameArea() );
+
             pRootFrame->GetCurrShell()->Imp()->MoveAccessibleFrame( pFrame, aFrame );
         }
     }
+#endif
 
     // the move any objects
     lcl_MoveAllLowerObjs( pFrame, rOffset );

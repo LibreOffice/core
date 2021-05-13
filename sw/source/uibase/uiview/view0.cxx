@@ -113,6 +113,7 @@ view::XSelectionSupplier* SwView::GetUNOObject()
     return m_pViewImpl->GetUNOObject();
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 void SwView::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessibilityOptions)
 {
     m_pWrtShell->ApplyAccessibilityOptions(rAccessibilityOptions);
@@ -121,6 +122,7 @@ void SwView::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessib
         m_pWrtShell->ShowCursor();
 
 }
+#endif
 
 void SwView::SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem> const & rConfigItem)
 {

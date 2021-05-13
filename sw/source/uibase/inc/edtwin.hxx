@@ -244,7 +244,9 @@ public:
     const SwView &GetView() const { return m_rView; }
           SwView &GetView()       { return m_rView; }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+#endif
 
     static tools::Long GetDDStartPosX() { return m_nDDStartPosX; }
     static tools::Long GetDDStartPosY() { return m_nDDStartPosY; }

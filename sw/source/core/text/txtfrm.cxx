@@ -1940,6 +1940,7 @@ void UpdateMergedParaForMove(sw::MergedPara & rMerged,
  * Related: fdo#56031 filter out attribute changes that don't matter for
  * humans/a11y to stop flooding the destination mortal with useless noise
  */
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 static bool isA11yRelevantAttribute(sal_uInt16 nWhich)
 {
     return nWhich != RES_CHRATR_RSID;
@@ -1953,6 +1954,7 @@ static bool hasA11yRelevantAttribute( const std::vector<sal_uInt16>& rWhichFmtAt
 
     return false;
 }
+#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
 
 // Note: for now this overrides SwClient::SwClientNotify; the intermediary
 // classes still override SwClient::Modify, which should continue to work
@@ -2239,6 +2241,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 }
             }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
             if( isA11yRelevantAttribute( pNewUpdate->getWhichAttr() ) &&
                 hasA11yRelevantAttribute( pNewUpdate->getFmtAttrs() ) )
             {
@@ -2248,6 +2251,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                     pViewSh->InvalidateAccessibleParaAttrs( *this );
                 }
             }
+#endif
         }
         break;
         case RES_OBJECTDYING:
@@ -2545,6 +2549,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                     SwContentFrame::SwClientNotify(rModify, sw::LegacyModifyHint(pOld, pNew));
             }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
             if (isA11yRelevantAttribute(nWhich))
             {
                 SwViewShell* pViewSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
@@ -2553,6 +2558,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                     pViewSh->InvalidateAccessibleParaAttrs( *this );
                 }
             }
+#endif
         }
         break;
 

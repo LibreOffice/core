@@ -1120,7 +1120,9 @@ void SwPagePreview::Init()
     aOpt.SetHideWhitespaceMode( false );
 
     GetViewShell()->ApplyViewOptions( aOpt );
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     GetViewShell()->ApplyAccessibilityOptions(SW_MOD()->GetAccessibilityOptions());
+#endif
 
     // adjust view shell option to the same as for print
     SwPrintData const aPrintOptions = *SW_MOD()->GetPrtOptions(false);
@@ -1808,6 +1810,7 @@ bool SwPagePreview::HandleWheelCommands( const CommandEvent& rCEvt )
     return bOk;
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 uno::Reference< css::accessibility::XAccessible >
     SwPagePreviewWin::CreateAccessible()
 {
@@ -1831,6 +1834,7 @@ void SwPagePreview::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rA
 {
     GetViewShell()->ApplyAccessibilityOptions(rAccessibilityOptions);
 }
+#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
 
 void SwPagePreview::ShowHScrollbar(bool bShow)
 {

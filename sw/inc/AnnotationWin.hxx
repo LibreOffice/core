@@ -171,7 +171,9 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public InterimItemWindow
         void SetLanguage(const SvxLanguageItem& rNewItem);
 
         void ChangeSidebarItem( SwSidebarItem const & rSidebarItem );
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+#endif
 
         void DrawForPage(OutputDevice* pDev, const Point& rPos);
 

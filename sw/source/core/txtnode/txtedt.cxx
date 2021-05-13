@@ -1390,9 +1390,11 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
             aRect = lcl_CalculateRepaintRect(*this, rNode, nChgStart, nChgEnd);
 
             // fdo#71558 notify misspelled word to accessibility
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
             SwViewShell* pViewSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
             if( pViewSh )
                 pViewSh->InvalidateAccessibleParaAttrs( *this );
+#endif
         }
 
         pNode->GetWrong()->SetInvalid( nInvStart, nInvEnd );

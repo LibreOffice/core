@@ -1558,7 +1558,9 @@ class SwNotifyAccAboutInvalidTextSelections
 
         ~SwNotifyAccAboutInvalidTextSelections() COVERITY_NOEXCEPT_FALSE
         {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
             mrCursorSh.InvalidateAccessibleParaTextSelection();
+#endif
         }
 };
 
@@ -1744,8 +1746,10 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
                 m_pVisibleCursor->Show(); // show again
             }
             m_eMvState = CursorMoveState::NONE;  // state for cursor travelling - GetModelPositionForViewPoint
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
             if (Imp()->IsAccessible())
                 Imp()->InvalidateAccessibleCursorPosition( pTableFrame );
+#endif
             return;
         }
     }
@@ -2016,8 +2020,10 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
     m_eMvState = CursorMoveState::NONE; // state for cursor travelling - GetModelPositionForViewPoint
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (Imp()->IsAccessible())
         Imp()->InvalidateAccessibleCursorPosition( pFrame );
+#endif
 
     // switch from blinking cursor to read-only-text-selection cursor
     const sal_uInt64 nBlinkTime = GetOut()->GetSettings().GetStyleSettings().

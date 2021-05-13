@@ -1531,12 +1531,14 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
     m_xDoc->BroadcastStyleOperation(rName, nFamily, SfxHintId::StyleSheetCreated);
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 sfx::AccessibilityIssueCollection SwDocShell::runAccessibilityCheck()
 {
     sw::AccessibilityCheck aCheck(m_xDoc.get());
     aCheck.check();
     return aCheck.getIssueCollection();
 }
+#endif
 
 std::set<Color> SwDocShell::GetDocColors()
 {

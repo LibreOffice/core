@@ -74,11 +74,14 @@ GraphCtrl::~GraphCtrl()
 {
     aUpdateIdle.Stop();
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if( mpAccContext.is() )
     {
         mpAccContext->disposing();
         mpAccContext.clear();
     }
+#endif
+
     pView.reset();
     pModel.reset();
     pUserCall.reset();
@@ -142,9 +145,11 @@ void GraphCtrl::InitSdrModel()
     pView->SetBufferedOutputAllowed(true);
     pView->SetBufferedOverlayAllowed(true);
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     // Tell the accessibility object about the changes.
     if (mpAccContext.is())
         mpAccContext->setModelAndView (pModel.get(), pView.get());
+#endif
 }
 
 void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
@@ -827,6 +832,7 @@ Point GraphCtrl::GetPositionInDialog() const
     return Point();
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessible()
 {
     if(mpAccContext == nullptr )
@@ -837,5 +843,6 @@ css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessib
     }
     return mpAccContext;
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -120,9 +120,11 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
         mpShadow->setVisible(false);
     }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     mrMgr.ConnectSidebarWinToFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
                                   mrSidebarItem.GetFormatField(),
                                   *this );
+#endif
 
     if (SupportsDoubleBuffering())
         // When double-buffering, allow parents to paint on our area. That's
@@ -140,8 +142,10 @@ void SwAnnotationWin::dispose()
     if (IsDisposed())
         return;
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     mrMgr.DisconnectSidebarWinFromFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
                                        *this );
+#endif
 
     Disable();
 

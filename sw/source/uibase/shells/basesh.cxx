@@ -2690,6 +2690,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             }
         }
         break;
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         case SID_ACCESSIBILITY_CHECK:
         {
             sw::AccessibilityCheck aCheck(rSh.GetDoc());
@@ -2698,6 +2699,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             aDialog.run();
         }
         break;
+#endif
         default:OSL_FAIL("wrong Dispatcher (basesh.cxx)");
     }
     if(!bDone)

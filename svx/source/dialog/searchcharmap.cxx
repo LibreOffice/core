@@ -389,6 +389,7 @@ SvxSearchCharSet::~SvxSearchCharSet()
 {
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 svx::SvxShowCharSetItem* SvxSearchCharSet::ImplGetItem( int _nPos )
 {
     ItemsMap::iterator aFind = m_aItems.find(_nPos);
@@ -409,6 +410,7 @@ svx::SvxShowCharSetItem* SvxSearchCharSet::ImplGetItem( int _nPos )
 
     return aFind->second.get();
 }
+#endif
 
 sal_Int32 SvxSearchCharSet::getMaxCharCount() const
 {

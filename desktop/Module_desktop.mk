@@ -106,9 +106,11 @@ else ifeq ($(OS),EMSCRIPTEN)
 
 else
 
+ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_oosplash \
 ))
+endif # ENABLE_WASM_STRIP_ACCESSIBILITY
 
 endif
 
