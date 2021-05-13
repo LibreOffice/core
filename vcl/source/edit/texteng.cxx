@@ -2372,7 +2372,7 @@ OUString TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord, 
                     GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true).startPos);
         }
         // tdf#57879 - expand selection to the right to include connector punctuations and search for additional word boundaries
-        if (aBoundary.endPos < pNode->GetText().getLength() && u_charType(pNode->GetText()[aBoundary.endPos - 1]) == U_CONNECTOR_PUNCTUATION)
+        if (aBoundary.endPos > 0 && aBoundary.endPos < pNode->GetText().getLength() && u_charType(pNode->GetText()[aBoundary.endPos - 1]) == U_CONNECTOR_PUNCTUATION)
         {
             aBoundary.endPos = xBI->getWordBoundary(pNode->GetText(), aBoundary.endPos,
                 GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true).endPos;
