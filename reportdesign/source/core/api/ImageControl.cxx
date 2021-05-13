@@ -161,14 +161,33 @@ void SAL_CALL OImageControl::dispose()
     cppu::WeakComponentImplHelperBase::dispose();
 }
 
-OUString SAL_CALL OImageControl::getImplementationName(  )
+OUString OImageControl::getImplementationName_Static(  )
 {
     return "com.sun.star.comp.report.OImageControl";
 }
 
+
+OUString SAL_CALL OImageControl::getImplementationName(  )
+{
+    return getImplementationName_Static();
+}
+
+uno::Sequence< OUString > OImageControl::getSupportedServiceNames_Static(  )
+{
+    uno::Sequence< OUString > aServices { SERVICE_IMAGECONTROL };
+
+    return aServices;
+}
+
+uno::Reference< uno::XInterface > OImageControl::create(uno::Reference< uno::XComponentContext > const & xContext)
+{
+    return *(new OImageControl(xContext));
+}
+
+
 uno::Sequence< OUString > SAL_CALL OImageControl::getSupportedServiceNames(  )
 {
-    return { SERVICE_IMAGECONTROL };
+    return getSupportedServiceNames_Static();
 }
 
 sal_Bool SAL_CALL OImageControl::supportsService(const OUString& ServiceName)
@@ -458,13 +477,6 @@ void SAL_CALL OImageControl::setPreserveIRI( sal_Bool _preserveiri )
 }
 
 } // namespace reportdesign
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-reportdesign_OImageControl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
-{
-    return cppu::acquire(new reportdesign::OImageControl(context));
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
