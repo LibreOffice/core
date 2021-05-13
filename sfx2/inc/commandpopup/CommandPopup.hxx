@@ -63,7 +63,7 @@ private:
                              std::vector<CurrentEntry>& rCommandList);
 };
 
-class SFX2_DLLPUBLIC CommandListBox final
+class CommandListBox final
 {
 private:
     std::unique_ptr<weld::Builder> mxBuilder;
@@ -91,7 +91,7 @@ public:
     }
 };
 
-class SFX2_DLLPUBLIC CommandPopupHandler final
+class CommandPopupHandler final
 {
 private:
     std::unique_ptr<CommandListBox> mpListBox;
