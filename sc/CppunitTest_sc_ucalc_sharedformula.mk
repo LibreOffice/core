@@ -9,24 +9,20 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_ucalc))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_ucalc_sharedformula))
 
-$(eval $(call gb_Library_use_common_precompiled_header,sc_ucalc))
+$(eval $(call gb_Library_use_common_precompiled_header,sc_ucalc_sharedformula))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
-    sc/qa/unit/ucalc \
-    sc/qa/unit/ucalc_column \
-    sc/qa/unit/ucalc_condformat \
-    sc/qa/unit/ucalc_formula \
-    sc/qa/unit/ucalc_pivottable \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc_sharedformula, \
+    sc/qa/unit/ucalc_sharedformula \
 ))
 
-$(eval $(call gb_CppunitTest_use_library_objects,sc_ucalc, \
+$(eval $(call gb_CppunitTest_use_library_objects,sc_ucalc_sharedformula, \
 	sc \
 	scqahelper \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
+$(eval $(call gb_CppunitTest_use_externals,sc_ucalc_sharedformula,\
 	boost_headers \
     $(call gb_Helper_optional,OPENCL, \
         clew) \
@@ -39,7 +35,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
 	orcus-parser \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_ucalc_sharedformula, \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
@@ -75,27 +71,27 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     xo \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_ucalc,\
+$(eval $(call gb_CppunitTest_set_include,sc_ucalc_sharedformula,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/source/core/inc \
     -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_ucalc,\
+$(eval $(call gb_CppunitTest_use_api,sc_ucalc_sharedformula,\
 	udkapi \
 	offapi \
 	oovbaapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_custom_headers,sc_ucalc,\
+$(eval $(call gb_CppunitTest_use_custom_headers,sc_ucalc_sharedformula,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sc_ucalc))
-$(eval $(call gb_CppunitTest_use_vcl,sc_ucalc))
+$(eval $(call gb_CppunitTest_use_ure,sc_ucalc_sharedformula))
+$(eval $(call gb_CppunitTest_use_vcl,sc_ucalc_sharedformula))
 
-$(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
+$(eval $(call gb_CppunitTest_use_components,sc_ucalc_sharedformula,\
     configmgr/source/configmgr \
     framework/util/fwk \
     i18npool/source/search/i18nsearch \
@@ -113,11 +109,11 @@ $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_CppunitTest_add_libs,sc_ucalc,\
+$(eval $(call gb_CppunitTest_add_libs,sc_ucalc_sharedformula,\
      -lrt \
 ))
 endif
 
-$(eval $(call gb_CppunitTest_use_configuration,sc_ucalc))
+$(eval $(call gb_CppunitTest_use_configuration,sc_ucalc_sharedformula))
 
 # vim: set noet sw=4 ts=4:
