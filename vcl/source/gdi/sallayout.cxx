@@ -949,7 +949,7 @@ void GenericSalLayout::MoveGlyph( int nStart, tools::Long nNewXPos )
     if( pGlyphIter->IsRTLGlyph() )
         nNewXPos += pGlyphIter->m_nNewWidth - pGlyphIter->origWidth();
     // calculate the x-offset to the old position
-    tools::Long nXDelta = nNewXPos - pGlyphIter->m_aLinearPos.getX();
+    tools::Long nXDelta = nNewXPos - pGlyphIter->m_aLinearPos.getX() + pGlyphIter->xOffset();
     // adjust all following glyph positions if needed
     if( nXDelta != 0 )
     {
