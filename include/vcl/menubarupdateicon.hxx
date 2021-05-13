@@ -29,7 +29,7 @@ class SystemWindow;
 class VclSimpleEvent;
 class VclWindowEvent;
 
-class VCL_DLLPUBLIC MenuBarUpdateIconManager
+class MenuBarUpdateIconManager
 {
 private:
     OUString maBubbleTitle;
