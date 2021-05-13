@@ -1292,8 +1292,9 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
     if (bCaseInsensitive)
     {
         // tdf#132389 - case-insensitive operation for non-ASCII characters
-        const css::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-        css::uno::Reference < i18n::XCharacterClassification > xCharClass = vcl::unohelper::CreateCharacterClassification();
+        const css::lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
+        css::uno::Reference<i18n::XCharacterClassification> xCharClass
+            = vcl::unohelper::CreateCharacterClassification();
         aSrcStr = xCharClass->toUpper(aSrcStr, 0, aSrcStr.getLength(), rLocale);
         aFindStr = xCharClass->toUpper(aFindStr, 0, aFindStr.getLength(), rLocale);
     }
