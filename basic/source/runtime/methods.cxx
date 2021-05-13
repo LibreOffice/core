@@ -887,8 +887,13 @@ void SbRtl_InStr(StarBASIC *, SbxArray & rPar, bool)
                 OUString aStr1 = rPar.Get(nFirstStringPos)->GetOUString();
                 OUString aToken = rToken;
 
-                aStr1 = aStr1.toAsciiUpperCase();
-                aToken = aToken.toAsciiUpperCase();
+                // tdf#139840 - case-insensitive operation for non-ASCII characters
+                const css::lang::Locale& rLocale
+                    = Application::GetSettings().GetLanguageTag().getLocale();
+                css::uno::Reference<i18n::XCharacterClassification> xCharClass
+                    = vcl::unohelper::CreateCharacterClassification();
+                aStr1 = xCharClass->toUpper(aStr1, 0, aStr1.getLength(), rLocale);
+                aToken = xCharClass->toUpper(aToken, 0, aToken.getLength(), rLocale);
 
                 nPos = aStr1.indexOf( aToken, nStartPos-1 ) + 1;
             }
