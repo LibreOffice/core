@@ -3028,9 +3028,92 @@ tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nF
     return aEditCursor;
 }
 
+std::tuple<const ParaPortion*, const EditLine*, tools::Long>
+ImpEditEngine::GetPortionAndLine(Point aDocPos)
+{
+    // First find the column from the point
+    sal_Int32 nClickColumn = 0;
+    for (tools::Long nColumnStart = 0, nColumnWidth = GetColumnWidth(aPaperSize);;
+         nColumnStart += mnColumnSpacing + nColumnWidth, ++nClickColumn)
+    {
+        if (aDocPos.X() <= nColumnStart + nColumnWidth + mnColumnSpacing / 2)
+            break;
+        if (nClickColumn >= mnColumns - 1)
+            break;
+    }
+
+    const Point aOrigin(0, 0);
+    Point aLineStart(aOrigin);
+    const tools::Long nVertLineSpacing = CalcVertLineSpacing(aLineStart);
+    sal_Int32 nColumn = 0;
+    const ParaPortion* pPortion = nullptr;
+    const EditLine* pLine = nullptr;
+    tools::Long nLineStartX = 0;
+    bool bStop = false;
+    for (sal_Int32 n = 0, nPortions = GetParaPortions().Count(); n < nPortions && !bStop; ++n)
+    {
+        const ParaPortion& rPortion = GetParaPortions()[n];
+        const SvxLineSpacingItem& rLSItem
+            = rPortion.GetNode()->GetContentAttribs().GetItem(EE_PARA_SBL);
+        sal_uInt16 nSBL = (rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix)
+                              ? GetYValue(rLSItem.GetInterLineSpace())
+                              : 0;
+        if (rPortion.IsVisible())
+        {
+            adjustYDirectionAware(aLineStart, rPortion.GetFirstLineOffset());
+            for (sal_Int32 nLine = 0, nLines = rPortion.GetLines().Count(); nLine < nLines; nLine++)
+            {
+                const EditLine& rLine = rPortion.GetLines()[nLine];
+                tools::Long nLineHeight = rLine.GetHeight();
+                if (nLine != nLines - 1)
+                    nLineHeight += nVertLineSpacing;
+                MoveToNextLine(aLineStart, nLineHeight, nColumn, aOrigin);
+                if ((nLine != nLines - 1) && !aStatus.IsOutliner())
+                {
+                    adjustYDirectionAware(aLineStart, nSBL);
+                }
+                if (nColumn > nClickColumn)
+                {
+                    bStop = true;
+                    break;
+                }
+                pPortion = &rPortion; // Candidate paragraph
+                pLine = &rLine; // Last visible line not later than click position
+                nLineStartX = getXDirectionAware(aLineStart);
+                if (nColumn == nClickColumn && getYDirectionAware(aLineStart) > aDocPos.Y())
+                {
+                    bStop = true;
+                    break; // Found it
+                }
+            }
+        }
+        else
+        {
+            adjustYDirectionAware(aLineStart, rPortion.GetHeight());
+        }
+    }
+
+    return { pPortion, pLine, nLineStartX };
+}
+
 EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
 {
     OSL_ENSURE( GetUpdateMode(), "Must not be reached when Update=FALSE: GetPaM" );
+
+    if (const auto& [pPortion, pLine, nLineStartX] = GetPortionAndLine(aDocPos); pPortion)
+    {
+        sal_Int32 nCurIndex
+            = GetChar(pPortion, pLine, aDocPos.X() - nLineStartX, bSmart);
+        EditPaM aPaM(pPortion->GetNode(), nCurIndex);
+
+        if (nCurIndex && (nCurIndex == pLine->GetEnd())
+            && (pLine != &pPortion->GetLines()[pPortion->GetLines().Count() - 1]))
+        {
+            aPaM = CursorLeft(aPaM);
+        }
+
+        return aPaM;
+    }
 
     tools::Long nY = 0;
     EditPaM aPaM;
@@ -3066,6 +3149,18 @@ EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
     aPaM.SetNode( GetParaPortions()[nPortion].GetNode() );
     aPaM.SetIndex( GetParaPortions()[nPortion].GetNode()->Len() );
     return aPaM;
+}
+
+bool ImpEditEngine::IsTextPos(const Point& rDocPos, sal_uInt16 nBorder)
+{
+    if (const auto& [pPortion, pLine, nLineStartX] = GetPortionAndLine(rDocPos); pPortion)
+    {
+        Range aLineXPosStartEnd = GetLineXPosStartEnd(pPortion, pLine);
+        if ((rDocPos.X() >= nLineStartX + aLineXPosStartEnd.Min() - nBorder)
+            && (rDocPos.X() <= nLineStartX + aLineXPosStartEnd.Max() + nBorder))
+            return true;
+    }
+    return false;
 }
 
 sal_uInt32 ImpEditEngine::GetTextHeight() const

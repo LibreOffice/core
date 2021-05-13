@@ -56,6 +56,7 @@
 
 #include <optional>
 #include <memory>
+#include <tuple>
 #include <vector>
 
 class EditView;
@@ -616,8 +617,10 @@ private:
 
     std::unique_ptr<EditTextObject> GetEmptyTextObject();
 
+    std::tuple<const ParaPortion*, const EditLine*, tools::Long> GetPortionAndLine(Point aDocPos);
     EditPaM             GetPaM( Point aDocPos, bool bSmart = true );
     EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, bool bSmart );
+    bool IsTextPos(const Point& rDocPos, sal_uInt16 nBorder);
     tools::Long GetXPos(const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
     tools::Long GetPortionXOffset(const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nTextPortion) const;
     sal_Int32 GetChar(const ParaPortion* pParaPortion, const EditLine* pLine, tools::Long nX, bool bSmart = true);
