@@ -161,7 +161,7 @@ VclPtr<vcl::Window> UnoWrapper::GetWindow(const css::uno::Reference<css::awt::XW
     return VCLUnoHelper::GetWindow(rWindow);
 }
 
-void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer> xIFace )
+void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XWindowPeer> & xIFace )
 {
     VCLXWindow* pVCLXWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>( xIFace );
 

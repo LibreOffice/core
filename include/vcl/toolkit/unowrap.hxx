@@ -57,7 +57,7 @@ public:
 
     // Window
     virtual css::uno::Reference<css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow ) = 0;
-    virtual void                SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer > xIFace ) = 0;
+    virtual void                SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XWindowPeer > & xIFace ) = 0;
     virtual VclPtr<vcl::Window> GetWindow(const css::uno::Reference<css::awt::XWindow>& rxWindow) = 0;
 
     // PopupMenu
