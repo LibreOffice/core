@@ -17546,12 +17546,14 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
     if (!xNodeList.is())
         return;
-    std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
-    sal_Int32 nNodeCount = xNodeList->getLength();
-    for (sal_Int32 i = 0; i < nNodeCount; ++i)
-    {
-        css::uno::Reference<css::xml::dom::XNode> xChild = xNodeList->item(i);
 
+    std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
+
+    OUString sBorderWidth;
+
+    for (css::uno::Reference<css::xml::dom::XNode> xChild = xNode->getFirstChild();
+         xChild.is(); xChild = xChild->getNextSibling())
+    {
         if (xChild->getNodeName() == "requires")
         {
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
@@ -17567,6 +17569,10 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
             css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("name");
             OUString sName(xName->getNodeValue().replace('_', '-'));
+
+            if (sName == "border-width")
+                sBorderWidth = OUString::number(12);
+
             if (sName == "type-hint" || sName == "skip-taskbar-hint" ||
                 sName == "can-default" || sName == "has-default" ||
                 sName == "border-width" || sName == "layout-style" ||
@@ -17578,6 +17584,32 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
         }
         else if (xChild->getNodeName() == "child")
         {
+            if (!sBorderWidth.isEmpty())
+            {
+                for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xChild->getFirstChild();
+                     xObjectCandidate.is();
+                     xObjectCandidate = xObjectCandidate->getNextSibling())
+                {
+                    if (xObjectCandidate->getNodeName() == "object")
+                    {
+                        auto xDoc = xChild->getOwnerDocument();
+                        auto xMarginEnd = CreateProperty(xDoc, "margin-end", sBorderWidth);
+
+                        auto xFirstChild = xObjectCandidate->getFirstChild();
+                        if (xFirstChild.is())
+                            xObjectCandidate->insertBefore(xMarginEnd, xFirstChild);
+                        else
+                            xObjectCandidate->appendChild(xMarginEnd);
+
+                        xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-top", sBorderWidth), xMarginEnd);
+                        xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-bottom", sBorderWidth), xMarginEnd);
+                        xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-start", sBorderWidth), xMarginEnd);
+                        break;
+                    }
+                }
+                sBorderWidth.clear();
+            }
+
             css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
             css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("internal-child");
             if (xName)
@@ -17649,7 +17681,6 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                 // go back to parent and find the object child and insert this "layout" as a
                 // new child of the object
                 auto xParent = xChild->getParentNode();
-                auto xInsertIn = xParent->getFirstChild();
                 for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xParent->getFirstChild();
                      xObjectCandidate.is();
                      xObjectCandidate = xObjectCandidate->getNextSibling())
