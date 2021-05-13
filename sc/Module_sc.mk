@@ -9,6 +9,7 @@
 #
 
 include $(SRCDIR)/sc/common_unoapi_tests.mk
+include $(SRCDIR)/sc/ucalc_setup.mk
 
 $(eval $(call gb_Module_Module,sc))
 
