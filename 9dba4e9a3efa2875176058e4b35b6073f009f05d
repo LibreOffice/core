@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7667d7e_78a365e7",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-13T15:36:49Z",
+      "side": 0,
+      "message": "Why this had to be changed? Does it affect the result? Asking because it seems to not affect Kahan summation directly, and is only used to get the value magnitude, so maybe it\u0027s reasonable to keep this?",
+      "range": {
+        "startLine": 220,
+        "startChar": 48,
+        "endLine": 220,
+        "endChar": 68
+      },
+      "revId": "9dba4e9a3efa2875176058e4b35b6073f009f05d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
