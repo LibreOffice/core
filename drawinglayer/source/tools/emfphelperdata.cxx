@@ -29,8 +29,10 @@
 #include "emfpstringformat.hxx"
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <wmfemfhelper.hxx>
+#include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
@@ -804,30 +806,297 @@ namespace emfplushelper
             }
             else if (brush->type == BrushTypeHatchFill)
             {
-                // EMF+ like hatching is currently not supported. These are just color blends which serve as an approximation for some of them
-                // for the others the hatch "background" color (secondColor in brush) is used.
-
-                bool isHatchBlend = true;
-                double blendFactor = 0.0;
-
+                double fDistance = 0.25;
+                double fAngle = 0.0;
+                sal_uInt32 nMinimalDiscreteDistance = 4;
+                drawinglayer::attribute::HatchStyle aHatchStyle(drawinglayer::attribute::HatchStyle::Single);
                 switch (brush->hatchStyle)
                 {
-                    case HatchStyle05Percent: blendFactor = 0.05; break;
-                    case HatchStyle10Percent: blendFactor = 0.10; break;
-                    case HatchStyle20Percent: blendFactor = 0.20; break;
-                    case HatchStyle25Percent: blendFactor = 0.25; break;
-                    case HatchStyle30Percent: blendFactor = 0.30; break;
-                    case HatchStyle40Percent: blendFactor = 0.40; break;
-                    case HatchStyle50Percent: blendFactor = 0.50; break;
-                    case HatchStyle60Percent: blendFactor = 0.60; break;
-                    case HatchStyle70Percent: blendFactor = 0.70; break;
-                    case HatchStyle75Percent: blendFactor = 0.75; break;
-                    case HatchStyle80Percent: blendFactor = 0.80; break;
-                    case HatchStyle90Percent: blendFactor = 0.90; break;
+                   /* case HatchStyleHorizontal:
+                        fAngle = 0.0;
+                        break;
+                    case HatchStyleVertical:
+                        fAngle = 3.14/2.0;
+                        break;
+                    case HatchStyleForwardDiagonal:
+                        fAngle = 3.0* 3.14/4.0; break;
+                    case HatchStyleBackwardDiagonal: fAngle = 3.14/4.0; break;
+                    case HatchStyleLargeGrid: fAngle = 3.14/2.0; aHatchStyle = drawinglayer::attribute::HatchStyle::Double; break;
+                    case HatchStyleDiagonalCross: fAngle = 3.14/4.0; aHatchStyle = drawinglayer::attribute::HatchStyle::Double; break;
+                    case HatchStyle05Percent: fDistance = 0.05; aHatchStyle = drawinglayer::attribute::HatchStyle::Triple; break;
+                    case HatchStyle10Percent: fDistance = 0.10; break;
+
+*/
+
+                    case HatchStyleHorizontal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 100;
+                        fAngle = 0.;
+                        break;
+                    case HatchStyleVertical:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 100;
+                        fAngle = 90.;
+                        break;
+                    case HatchStyleForwardDiagonal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 100;
+                        fAngle = 135.;
+                        break;
+                    case HatchStyleBackwardDiagonal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 100;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle05Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 250;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle10Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 200;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle20Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 150;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle25Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 200;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle30Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 175;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle40Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 150;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle50Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 125;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle60Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Triple;
+                        fDistance = 150;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle70Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Triple;
+                        fDistance = 125;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle75Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Triple;
+                        fDistance = 100;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle80Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Triple;
+                        fDistance = 75;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyle90Percent:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Triple;
+                        fDistance = 50;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleLightVertical:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 50;
+                        fAngle = 90.;
+                        break;
+                    case HatchStyleLightHorizontal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 50;
+                        fAngle = 0.;
+                        break;
+                    case HatchStyleNarrowVertical:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 50;
+                        fAngle = 90.;
+                        break;
+                    case HatchStyleNarrowHorizontal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 50;
+                        fAngle = 0.;
+                        break;
+                    case HatchStyleDarkVertical:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 25;
+                        fAngle = 90.;
+                        break;
+                    case HatchStyleDarkHorizontal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 25;
+                        fAngle = 0.;
+                        break;
+                    case HatchStyleDashedHorizontal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 150;
+                        fAngle = 0.;
+                        break;
+                    case HatchStyleDashedVertical:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 150;
+                        fAngle = 90.;
+                        break;
+                    case HatchStyleLightDownwardDiagonal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 50;
+                        fAngle = 135.;
+                        break;
+                    case HatchStyleLightUpwardDiagonal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 50;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleDarkDownwardDiagonal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 50;
+                        fAngle = 135.;
+                        break;
+                    case HatchStyleDarkUpwardDiagonal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 50;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleWideDownwardDiagonal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 100;
+                        fAngle = 135.;
+                        break;
+                    case HatchStyleWideUpwardDiagonal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 100;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleDashedDownwardDiagonal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 150;
+                        fAngle = 135.;
+                        break;
+                    case HatchStyleDashedUpwardDiagonal:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 150;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleDiagonalCross:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 100;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleSmallCheckerBoard:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 50;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleLargeCheckerBoard:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 100;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleSmallGrid:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 50;
+                        fAngle = 0.;
+                        break;
+                    case HatchStyleLargeGrid:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 100;
+                        fAngle = 0.;
+                        break;
+                    case HatchStyleDottedGrid:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 400;
+                        fAngle = 0.;
+                        break;
+                    case HatchStyleSmallConfetti:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 200;
+                        fAngle = 60.;
+                        break;
+                    case HatchStyleLargeConfetti:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 100;
+                        fAngle = 60.;
+                        break;
+                    case HatchStyleHorizontalBrick:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 300;
+                        fAngle = 0.;
+                        break;
+                    case HatchStyleDiagonalBrick:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 300;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleSolidDiamond:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 100;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleOutlinedDiamond:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 100;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleDottedDiamond:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 300;
+                        fAngle = 45.;
+                        break;
+                    case HatchStylePlaid:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Triple;
+                        fDistance = 200;
+                        fAngle = 90.;
+                        break;
+                    case HatchStyleSphere:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Triple;
+                        fDistance = 100;
+                        fAngle = 0.;
+                        break;
+                    case HatchStyleWeave:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 150;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleDivot:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Triple;
+                        fDistance = 400;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleShingle:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 200;
+                        fAngle = 135.;
+                        break;
+                    case HatchStyleWave:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 100;
+                        fAngle = 0.;
+                        break;
+                    case HatchStyleTrellis:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
+                        fDistance = 75;
+                        fAngle = 45.;
+                        break;
+                    case HatchStyleZigZag:
+                        aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
+                        fDistance = 75;
+                        fAngle = 0.;
+                        break;
                     default:
-                        isHatchBlend = false;
                         break;
                 }
+                /*
                 Color fillColor;
                 if (isHatchBlend)
                 {
@@ -838,12 +1107,34 @@ namespace emfplushelper
                 {
                     fillColor = brush->secondColor;
                 }
-                // temporal solution: create a solid colored polygon
-                // TODO create a 'real' hatching primitive
+
+        void SvgStyleAttributes::add_fillPattern(
+            const basegfx::B2DPolyPolygon& rPath,
+            drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+            const SvgPatternNode& rFillPattern,
+            const basegfx::B2DRange& rGeoRange) const
+        {
+            // fill polyPolygon with given pattern
+            const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives = rFillPattern.getPatternPrimitives();
+
+            if(rPrimitives.empty())
+                return;
+            drawinglayer::primitive2d::Primitive2DContainer aPrimitives(rPrimitives);
+
+            // embed in PatternFillPrimitive2D
+            rTarget.push_back(
+                new drawinglayer::primitive2d::PatternFillPrimitive2D(
+                    rPath,
+                    aPrimitives,
+                    aReferenceRange));
+                */
+                const drawinglayer::attribute::FillHatchAttribute rFillHatch(
+                    aHatchStyle, fDistance / 400.0, basegfx::deg2rad(fAngle),
+                    brush->solidColor.getBColor(), nMinimalDiscreteDistance,
+                    !brush->secondColor.IsFullyTransparent());
                 mrTargetHolders.Current().append(
-                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                        polygon,
-                        fillColor.getBColor()));
+                    new drawinglayer::primitive2d::PolyPolygonHatchPrimitive2D(
+                        polygon, brush->secondColor.getBColor(), rFillHatch));
             }
             else if (brush->type == BrushTypeTextureFill)
             {
