@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "870ecdbc_7b6734be",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-05-13T22:57:03Z",
+      "side": 1,
+      "message": "Question from a translator: Is there a particular reason for this string to have a trailing space, or is it just a typo?\n\nTrailing spaces get special checks on Weblate, LO\u0027s translation website used by most translators.  One would have to add a space to the end of the translation as well, or manually silence the warning from Weblate\u0027s checking.",
+      "range": {
+        "startLine": 2615,
+        "startChar": 34,
+        "endLine": 2615,
+        "endChar": 51
+      },
+      "revId": "02b72784e5601636d26c8e4592958c262efb1a7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
