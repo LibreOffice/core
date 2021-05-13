@@ -1184,8 +1184,6 @@ sc/qa/unit/ucalc.hxx:251
     void Test::testExternalRefUnresolved()
 sc/qa/unit/ucalc.hxx:391
     void Test::testCopyPasteSkipEmptyConditionalFormatting()
-sc/qa/unit/ucalc.hxx:418
-    void Test::testSharedFormulaMoveBlock()
 sc/qa/unit/ucalc.hxx:536
     void Test::testCondFormatUpdateMoveTab()
 sc/qa/unit/ucalc.hxx:537

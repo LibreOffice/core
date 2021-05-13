@@ -1686,7 +1686,7 @@ public:
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                 InsertDeleteFlags nFlags, bool bMarked, ScDocument& rDestDoc);
 
-    void            CopyToDocument(const ScRange& rRange,
+    SC_DLLPUBLIC void           CopyToDocument(const ScRange& rRange,
                                 InsertDeleteFlags nFlags, bool bMarked, ScDocument& rDestDoc,
                                 const ScMarkData* pMarks = nullptr, bool bColRowFlags = true);
     void            UndoToDocument(const ScRange& rRange,
@@ -1871,7 +1871,7 @@ public:
 
     SC_DLLPUBLIC void           ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
                                                        ScEditDataArray* pDataArray = nullptr, bool* pIsChanged = nullptr );
-    void                        DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
+    SC_DLLPUBLIC void           DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
     void                        DeleteSelectionTab( SCTAB nTab, InsertDeleteFlags nDelFlag, const ScMarkData& rMark );
 
     SC_DLLPUBLIC void           SetColWidth( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth );
