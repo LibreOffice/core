@@ -18,6 +18,7 @@
 #
 
 include $(SRCDIR)/sw/ooxmlexport_setup.mk
+include $(SRCDIR)/sw/uiwriter_setup.mk
 
 $(eval $(call gb_Module_Module,sw))
 
