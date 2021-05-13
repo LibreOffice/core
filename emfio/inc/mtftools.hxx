@@ -366,6 +366,22 @@ namespace emfio
         }
     };
 
+
+    struct WinMtfPalette final : GDIObj
+    {
+        std::vector< Color > aPaletteColors;
+
+        WinMtfPalette()
+            : aPaletteColors(std::vector< Color >{})
+        {}
+
+        WinMtfPalette(const std::vector< Color > rPaletteColors)
+            : aPaletteColors(rPaletteColors)
+        {}
+
+    };
+
+
     struct WinMtfLineStyle final : GDIObj
     {
         Color       aLineColor;
@@ -497,6 +513,7 @@ namespace emfio
         WinMtfFillStyle     maLatestFillStyle;
         WinMtfFillStyle     maFillStyle;
         WinMtfFillStyle     maNopFillStyle;
+        WinMtfPalette       maPalette;
 
         vcl::Font           maLatestFont;
         vcl::Font           maFont;

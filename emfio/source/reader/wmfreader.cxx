@@ -774,6 +774,7 @@ namespace emfio
             break;
 
             case W_META_SELECTOBJECT:
+            case W_META_SELECTPALETTE:
             {
                 sal_uInt16   nObjIndex = 0;
                 mpInputStream->ReadUInt16( nObjIndex );
@@ -951,7 +952,22 @@ namespace emfio
 
             case W_META_CREATEPALETTE:
             {
-                CreateObject();
+                sal_uInt16 nStart = 0;
+                sal_uInt16 nNumberOfEntries = 0;
+                mpInputStream->ReadUInt16( nStart );
+                mpInputStream->ReadUInt16( nNumberOfEntries );
+
+                SAL_INFO("emfio", "\t\t Start 0x" << std::hex << nStart << std::dec << ", Number of entries: " << nNumberOfEntries);
+                sal_uInt32 nPalleteEntry;
+                std::vector< Color > aPaletteColors;
+                for (sal_uInt16 i = 0; i < nNumberOfEntries; ++i)
+                {
+                    //PALETTEENTRY: Values, Blue, Green, Red
+                    mpInputStream->ReadUInt32( nPalleteEntry );
+                    SAL_INFO("emfio", "\t\t " << i << ". Palette entry: " << std::setw(10) << std::showbase <<std::hex << nPalleteEntry << std::dec );
+                    aPaletteColors.push_back(Color(static_cast<sal_uInt8>(nPalleteEntry), static_cast<sal_uInt8>(nPalleteEntry >> 8), static_cast<sal_uInt8>(nPalleteEntry >> 16)));
+                }
+                CreateObject(std::make_unique<WinMtfPalette>( aPaletteColors ));
             }
             break;
 
@@ -1318,7 +1334,6 @@ namespace emfio
             case W_META_DRAWTEXT:
             case W_META_SETMAPPERFLAGS:
             case W_META_SETDIBTODEV:
-            case W_META_SELECTPALETTE:
             case W_META_REALIZEPALETTE:
             case W_META_ANIMATEPALETTE:
             case W_META_SETPALENTRIES:
