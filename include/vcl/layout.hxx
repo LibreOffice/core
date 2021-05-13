@@ -479,7 +479,7 @@ private:
     DECL_LINK(ClickHdl, CheckBox&, void);
 };
 
-class VCL_DLLPUBLIC VclScrolledWindow final : public VclBin
+class VclScrolledWindow final : public VclBin
 {
 public:
     VclScrolledWindow(vcl::Window *pParent );

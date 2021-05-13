@@ -17,7 +17,7 @@ namespace psp
 class PrinterGfx;
 }
 
-class VCL_DLLPUBLIC GenPspGfxBackend final : public SalGraphicsImpl
+class GenPspGfxBackend final : public SalGraphicsImpl
 {
 private:
     psp::PrinterGfx* m_pPrinterGfx;
