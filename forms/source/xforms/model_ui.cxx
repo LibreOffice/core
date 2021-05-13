@@ -610,6 +610,8 @@ css::uno::Reference<css::xml::dom::XNode> Model::renameNode( const css::uno::Ref
 
         Reference<XNamedNodeMap> xMap = xNode->getAttributes();
         sal_Int32 nLength = xMap.is() ? xMap->getLength() : 0;
+        // looping until nLength is suspicious wrt removeAttributeNode
+        // presumably shrinking XNamedNodeMap::getLength by 1
         for( sal_Int32 n = 0; n < nLength; n++ )
         {
             Reference<XAttr> xAttr( xMap->item(n), UNO_QUERY );
