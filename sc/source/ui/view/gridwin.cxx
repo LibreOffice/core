@@ -664,6 +664,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
+    bool bQueryByNonEmpty = false;
     std::vector<ScQueryEntry*> aEntries = aParam.FindAllEntriesByField(nCol);
     std::unordered_set<OUString> aSelectedString;
     std::unordered_set<double> aSelectedValue;
@@ -671,8 +672,13 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     {
         if (pEntry && pEntry->bDoQuery && pEntry->eOp == SC_EQUAL)
         {
-            ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
-            std::for_each(rItems.begin(), rItems.end(), AddSelectedItemString(aSelectedString, aSelectedValue));
+            if (!pEntry->IsQueryByNonEmpty())
+            {
+                ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
+                std::for_each(rItems.begin(), rItems.end(), AddSelectedItemString(aSelectedString, aSelectedValue));
+            }
+            else
+                bQueryByNonEmpty = true;
         }
     }
 
@@ -685,6 +691,8 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         bool bSelected = true;
         if (!aSelectedValue.empty() || !aSelectedString.empty())
             bSelected = aSelectedValue.count(aDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
+        else if (bQueryByNonEmpty)
+            bSelected = !aStringVal.isEmpty();
         if ( rEntry.IsDate() )
             rControl.addDateMember( aStringVal, rEntry.GetValue(), bSelected );
         else
