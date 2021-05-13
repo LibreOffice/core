@@ -130,6 +130,7 @@ public:
     void testInsertDeletePageInvalidation();
     void testSpellOnlineRenderParameter();
     void testSlideDuplicateUndo();
+    void testMoveShapeHandle();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testCreateDestroy);
@@ -185,6 +186,7 @@ public:
     CPPUNIT_TEST(testInsertDeletePageInvalidation);
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
     CPPUNIT_TEST(testSlideDuplicateUndo);
+    CPPUNIT_TEST(testMoveShapeHandle);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -866,6 +868,7 @@ public:
     std::map<int, bool> m_aViewCursorVisibilities;
     bool m_bViewSelectionSet;
     boost::property_tree::ptree m_aCommentCallbackResult;
+    OString m_ShapeSelection;
 
     ViewCallback()
         : m_bGraphicSelectionInvalidated(false),
@@ -917,6 +920,7 @@ public:
         case LOK_CALLBACK_GRAPHIC_SELECTION:
         {
             m_bGraphicSelectionInvalidated = true;
+            m_ShapeSelection = OString(pPayload);
         }
         break;
         case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
@@ -2611,6 +2615,56 @@ void SdTiledRenderingTest::testSlideDuplicateUndo()
     CPPUNIT_ASSERT(!pView0->GetTextEditPageView());
 }
 
+static void lcl_extractHandleParameters(const OString& selection, int& id, int& x, int& y)
+{
+    OString extraInfo = selection.copy(selection.indexOf("{"));
+    std::stringstream aStream(extraInfo.getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    boost::property_tree::ptree
+        handle0 = aTree
+            .get_child("handles")
+            .get_child("kinds")
+            .get_child("rectangle")
+            .get_child("1")
+            .begin()->second;
+    id = handle0.get_child("id").get_value<int>();
+    x = handle0.get_child("point").get_child("x").get_value<int>();
+    y = handle0.get_child("point").get_child("y").get_value<int>();
+}
+
+void SdTiledRenderingTest::testMoveShapeHandle()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
+    ViewCallback aView1;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
+    {
+        int id, x, y;
+        lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
+        int oldX = x;
+        int oldY = y;
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        {
+            {"HandleNum", uno::makeAny(id)},
+            {"NewPosX", uno::makeAny(x+1)},
+            {"NewPosY", uno::makeAny(y+1)}
+        }));
+        comphelper::dispatchCommand(".uno:MoveShapeHandle", aPropertyValues);
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
+        lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
+        CPPUNIT_ASSERT_EQUAL(x-1, oldX);
+        CPPUNIT_ASSERT_EQUAL(y-1, oldY);
+    }
+
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
