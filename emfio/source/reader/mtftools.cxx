@@ -485,12 +485,20 @@ namespace emfio
     Color MtfTools::ReadColor()
     {
         sal_uInt32 nColor;
-
         mpInputStream->ReadUInt32( nColor );
-        Color aColor(static_cast<sal_uInt8>(nColor), static_cast<sal_uInt8>(nColor >> 8), static_cast<sal_uInt8>(nColor >> 16));
+        Color aColor( COL_BLACK );
+        if ( ( nColor & 0xFFFF0000 ) == 0x01000000 )
+        {
+            size_t index = nColor & 0x0000FFFF;
+            if ( index < maPalette.aPaletteColors.size() )
+                aColor = maPalette.aPaletteColors[ index ];
+            else
+                SAL_INFO( "emfio", "\t\t Palette index out of range: " << index );
+        }
+        else
+            aColor = Color( static_cast<sal_uInt8>( nColor ), static_cast<sal_uInt8>( nColor >> 8 ), static_cast<sal_uInt8>( nColor >> 16 ) );
 
         SAL_INFO("emfio", "\t\tColor: " << aColor);
-
         return aColor;
     };
 
@@ -868,12 +876,24 @@ namespace emfio
                 {
                     maFillStyle = *brush;
                     mbFillStyleSelected = true;
+                    SAL_INFO("emfio", "\t\tBrush Object, Index: " << nIndex << ", Color: " << maFillStyle.aFillColor);
                 }
                 else if (const auto font = dynamic_cast<WinMtfFontStyle*>(
                              pGDIObj))
                 {
                     maFont = font->aFont;
+                    SAL_INFO("emfio", "\t\tFont Object, Index: " << nIndex << ", Font: " << maFont.GetFamilyName() << " " << maFont.GetStyleName());
                 }
+                else if (const auto palette = dynamic_cast<WinMtfPalette*>(
+                             pGDIObj))
+                {
+                    maPalette = palette->aPaletteColors;
+                    SAL_INFO("emfio", "\t\tPalette Object, Index: " << nIndex << ", Number of colours: " << maPalette.aPaletteColors.size() );
+                }
+            }
+            else
+            {
+                SAL_WARN("emfio", "Warning: Unable to find Object with index:" << nIndex);
             }
         }
     }
@@ -1099,6 +1119,7 @@ namespace emfio
         maLatestFillStyle(),
         maFillStyle(),
         maNopFillStyle(),
+        maPalette(),
         maLatestFont(),
         maFont(),
         mnLatestTextAlign(90),
