@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <scdllapi.h>
 
 class ScDocument;
 class ScDBCollection;
@@ -31,7 +32,7 @@ class ScChartListenerCollection;
 class ScAreaLinkSaveCollection;
 class ScUnoRefList;
 
-class ScRefUndoData
+class SC_DLLPUBLIC ScRefUndoData
 {
 private:
     std::unique_ptr<ScDBCollection>             pDBCollection;

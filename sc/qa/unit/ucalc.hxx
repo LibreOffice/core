@@ -23,26 +23,10 @@ class ScUndoCut;
 class Test : public test::BootstrapFixture
 {
 public:
-    struct RangeNameDef
-    {
-        const char* mpName;
-        const char* mpExpr;
-        sal_uInt16 mnIndex;
-    };
-
     static ScDocShell* findLoadedDocShellByName(std::u16string_view rName);
-    static bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,
-                                 const RangeNameDef* pEnd);
-    static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc,
-                                bool bCreateUndo);
-    static void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
-    static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
-                              ScDocument* pClipDoc);
     static void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
                                      ScDocument* pClipDoc,
                                      InsertDeleteFlags eFlags = InsertDeleteFlags::ALL);
-    static ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange,
-                                        ScDocumentUniquePtr pUndoDoc);
 
     /**
      * Enable or disable expand reference options which controls how
@@ -402,33 +386,6 @@ public:
     void testMergedCells();
     void testUpdateReference();
     void testSearchCells();
-    void testSharedFormulas();
-    void testSharedFormulasRefUpdate();
-    void testSharedFormulasRefUpdateMove();
-    void testSharedFormulasRefUpdateMove2();
-    void testSharedFormulasRefUpdateRange();
-    void testSharedFormulasRefUpdateRangeDeleteRow();
-    void testSharedFormulasRefUpdateExternal();
-    void testSharedFormulasInsertRow();
-    void testSharedFormulasDeleteRows();
-    void testSharedFormulasDeleteColumns();
-    void testSharedFormulasRefUpdateMoveSheets();
-    void testSharedFormulasRefUpdateCopySheets();
-    void testSharedFormulasRefUpdateDeleteSheets();
-    void testSharedFormulasCopyPaste();
-    void testSharedFormulaInsertColumn();
-    void testSharedFormulaMoveBlock();
-    void testSharedFormulaUpdateOnNamedRangeChange();
-    void testSharedFormulaUpdateOnDBChange();
-    void testSharedFormulaAbsCellListener();
-    void testSharedFormulaUnshareAreaListeners();
-    void testSharedFormulaListenerDeleteArea();
-    void testSharedFormulaUpdateOnReplacement();
-    void testSharedFormulaDeleteTopCell();
-    void testSharedFormulaCutCopyMoveIntoRef();
-    void testSharedFormulaCutCopyMoveWithRef();
-    void testSharedFormulaCutCopyMoveWithinRun();
-    void testSharedFormulaInsertShift();
     void testFormulaPosition();
     void testFormulaWizardSubformula();
 
@@ -802,32 +759,6 @@ public:
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST(testSearchCells);
-    CPPUNIT_TEST(testSharedFormulas);
-    CPPUNIT_TEST(testSharedFormulasRefUpdate);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateMove);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateMove2);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateRange);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateRangeDeleteRow);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateExternal);
-    CPPUNIT_TEST(testSharedFormulasInsertRow);
-    CPPUNIT_TEST(testSharedFormulasDeleteRows);
-    CPPUNIT_TEST(testSharedFormulasDeleteColumns);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateMoveSheets);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateCopySheets);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateDeleteSheets);
-    CPPUNIT_TEST(testSharedFormulasCopyPaste);
-    CPPUNIT_TEST(testSharedFormulaInsertColumn);
-    CPPUNIT_TEST(testSharedFormulaUpdateOnNamedRangeChange);
-    CPPUNIT_TEST(testSharedFormulaUpdateOnDBChange);
-    CPPUNIT_TEST(testSharedFormulaAbsCellListener);
-    CPPUNIT_TEST(testSharedFormulaUnshareAreaListeners);
-    CPPUNIT_TEST(testSharedFormulaListenerDeleteArea);
-    CPPUNIT_TEST(testSharedFormulaUpdateOnReplacement);
-    CPPUNIT_TEST(testSharedFormulaDeleteTopCell);
-    CPPUNIT_TEST(testSharedFormulaCutCopyMoveIntoRef);
-    CPPUNIT_TEST(testSharedFormulaCutCopyMoveWithRef);
-    CPPUNIT_TEST(testSharedFormulaCutCopyMoveWithinRun);
-    CPPUNIT_TEST(testSharedFormulaInsertShift);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testFormulaWizardSubformula);
     CPPUNIT_TEST(testMixData);
