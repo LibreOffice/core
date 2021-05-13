@@ -1305,11 +1305,15 @@ namespace emfio
                 mpGDIMetaFile->AddAction( new MetaPopAction() );
         }
         // tdf#142014 By default the stroke is made with hairline. If width is bigger, we need to use PolyLineAction
-        if ( bStroke && ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) ) )
+        if ( bStroke )
         {
-            sal_uInt16 i, nCount = maPathObj.Count();
-            for ( i = 0; i < nCount; i++ )
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( maPathObj[ i ], maLineStyle.aLineInfo ) );
+            // bFill is drawing hairstyle line. So we need to to draw it only when the width is different than 0
+            if ( !bFill || maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
+            {
+                sal_uInt16 i, nCount = maPathObj.Count();
+                for ( i = 0; i < nCount; i++ )
+                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( maPathObj[ i ], maLineStyle.aLineInfo ) );
+            }
         }
         ClearPath();
     }
