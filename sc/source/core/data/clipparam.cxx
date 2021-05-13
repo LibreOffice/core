@@ -153,7 +153,9 @@ void ScClipParam::transpose(const ScDocument& rSrcDoc, bool bIncludeFiltered,
                 nCol2 += static_cast<SCCOL>(nRowDelta);
                 nRow1 += static_cast<SCROW>(nColDelta);
                 nRow2 += static_cast<SCROW>(nColDelta);
-                aNewRanges.push_back( ScRange(nCol1, nRow1, rRange.aStart.Tab(), nCol2, nRow2, rRange.aStart.Tab() ) );
+                aNewRanges.push_back(ScRange(nColOrigin + nCol1, nRowOrigin + nRow1,
+                                             rRange.aStart.Tab(), nColOrigin + nCol2,
+                                             nRowOrigin + nRow2, rRange.aStart.Tab()));
             }
             else
                 nRowCount += nNonFilteredRows;
@@ -163,6 +165,7 @@ void ScClipParam::transpose(const ScDocument& rSrcDoc, bool bIncludeFiltered,
         // and selection are in the same dimension (i.e. row), see ScDocument::TransposeClip()
         if (bIsMultiRangeRowFilteredTranspose)
         {
+            assert(!bIncludeFiltered && "bIsMultiRangeRowFilteredTranspose can only be true if bIncludeFiltered is false");
             SCCOL nColDelta = rRange1.aStart.Col() - nColOrigin;
             SCROW nRowDelta = rRange1.aStart.Row() - nRowOrigin;
             SCCOL nCol1 = 0;
@@ -173,8 +176,9 @@ void ScClipParam::transpose(const ScDocument& rSrcDoc, bool bIncludeFiltered,
             nCol2 += static_cast<SCCOL>(nRowDelta);
             nRow1 += static_cast<SCROW>(nColDelta);
             nRow2 += static_cast<SCROW>(nColDelta);
-            aNewRanges.push_back(
-                ScRange(nCol1, nRow1, rRange1.aStart.Tab(), nCol2, nRow2, rRange1.aStart.Tab()));
+            aNewRanges.push_back(ScRange(nColOrigin + nCol1, nRowOrigin + nRow1,
+                                         rRange1.aStart.Tab(), nColOrigin + nCol2,
+                                         nRowOrigin + nRow2, rRange1.aStart.Tab()));
         }
     }
     maRanges = aNewRanges;

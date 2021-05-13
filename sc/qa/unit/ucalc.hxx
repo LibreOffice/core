@@ -406,6 +406,8 @@ public:
     void testCopyPasteSpecialSkipEmptyMultiRangeRowTranspose();
     void testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredTranspose();
     void testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFilteredTranspose();
+    void testTdf68976();
+    void testTdf71058();
     void testCopyPasteMultiRange();
     void testCopyPasteSkipEmpty();
     void testCopyPasteSkipEmpty2();
@@ -827,6 +829,8 @@ public:
     CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowTranspose);
     CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredTranspose);
     CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFilteredTranspose);
+    CPPUNIT_TEST(testTdf68976);
+    CPPUNIT_TEST(testTdf71058);
     CPPUNIT_TEST(testCopyPasteMultiRange);
     CPPUNIT_TEST(testCopyPasteSkipEmpty);
     CPPUNIT_TEST(testCopyPasteSkipEmpty2);
