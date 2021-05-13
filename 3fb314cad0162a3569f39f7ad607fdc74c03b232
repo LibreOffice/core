@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09b0af6d_b142aeb1",
+        "filename": "sc/inc/scmatrix.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-13T16:35:25Z",
+      "side": 1,
+      "message": "Is this mfFirst/mfRest thing actually still used somewhere? If not, it could be removed; if yes, there\u0027s probably another candidate for KahaSum ;-)",
+      "revId": "3fb314cad0162a3569f39f7ad607fdc74c03b232",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
