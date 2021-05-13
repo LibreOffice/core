@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b91d13d1_2b842297",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-05-13T16:40:05Z",
+      "side": 1,
+      "message": "Erm.. are you sure these x don\u0027t have to be the absolute value xAbs instead?",
+      "revId": "28b89a46edde6fb9968374c755a85c088bda6dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
