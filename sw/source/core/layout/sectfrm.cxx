@@ -2648,9 +2648,9 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
                           ( bChgEndn != IsEndnAtEnd() ) ||
                           ( bChgMyEndn != IsEndnoteAtMyEnd() );
                 ChgColumns( aCol, rNewCol, bChgFootnote );
-                rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x10);
+                rInvFlags |= SwSectionFrameInvFlags::SetCompletePaint;
             }
-            rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x01);
+            rInvFlags |= SwSectionFrameInvFlags::InvalidateSize;
             bClear = false;
         }
             break;
@@ -2662,7 +2662,7 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
                 if (pOld && pNew)
                 {
                     ChgColumns( *static_cast<const SwFormatCol*>(pOld), *static_cast<const SwFormatCol*>(pNew) );
-                    rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x11);
+                    rInvFlags |= SwSectionFrameInvFlags::InvalidateSize | SwSectionFrameInvFlags::SetCompletePaint;
                 }
             }
             break;
@@ -2676,7 +2676,7 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
                 {
                     const SwFormatCol& rNewCol = GetFormat()->GetCol();
                     ChgColumns( rNewCol, rNewCol, true );
-                    rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x01);
+                    rInvFlags |= SwSectionFrameInvFlags::InvalidateSize;
                 }
             }
             break;
@@ -2691,12 +2691,12 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
                 {
                     const SwFormatCol& rNewCol = GetFormat()->GetCol();
                     ChgColumns( rNewCol, rNewCol, true );
-                    rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x01);
+                    rInvFlags |= SwSectionFrameInvFlags::InvalidateSize;
                 }
             }
             break;
         case RES_COLUMNBALANCE:
-            rInvFlags |= static_cast<SwSectionFrameInvFlags>(0x01);
+            rInvFlags |= SwSectionFrameInvFlags::InvalidateSize;
             break;
 
         case RES_FRAMEDIR :
