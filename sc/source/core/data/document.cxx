@@ -2385,8 +2385,7 @@ void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags,
             SCROW nRowCountNonFiltered = CountNonFilteredRows(
                 aClipRange.aStart.Row(), aClipRange.aEnd.Row(), aClipRange.aStart.Tab());
             assert(!bIncludeFiltered && "bIsMultiRangeRowFilteredTranspose can only be true if bIncludeFiltered is false");
-            SCROW nRowCountInRange = nRowCountNonFiltered;
-            nRowCount += nRowCountInRange; // for next iteration
+            nRowCount += nRowCountNonFiltered; // for next iteration
         }
 
         for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
@@ -2394,10 +2393,10 @@ void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags,
             if (maTabs[i])
             {
                 OSL_ENSURE(pTransClip->maTabs[i], "TransposeClip: Table not there");
-                maTabs[i]->TransposeClip(aClipRange.aStart.Col(), aClipRange.aStart.Row(),
-                                         aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), nRowOffset,
-                                         pTransClip->maTabs[i].get(), nFlags, bAsLink,
-                                         bIncludeFiltered);
+                maTabs[i]->TransposeClip(
+                    aClipRange.aStart.Col(), aClipRange.aStart.Row(), aClipRange.aEnd.Col(),
+                    aClipRange.aEnd.Row(), aCombinedClipRange.aStart.Row(), nRowOffset,
+                    pTransClip->maTabs[i].get(), nFlags, bAsLink, bIncludeFiltered);
 
                 if ( mpDrawLayer && ( nFlags & InsertDeleteFlags::OBJECTS ) )
                 {
