@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b470625_49e5a77e",
+        "filename": "sc/inc/scmatrix.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-13T14:40:45Z",
+      "side": 1,
+      "message": "This seems to be some leftover from pre-Kahan times, when this was used for summation, too. Or am I mistaken? I would hope that the struct could be dropped and DoubleIterateResult be used instead in multiplications.",
+      "range": {
+        "startLine": 145,
+        "startChar": 8,
+        "endLine": 145,
+        "endChar": 23
+      },
+      "revId": "fdaa686dae4d611b45cf41d50e2d9dba9775722c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78b66307_b86d2138",
+        "filename": "sc/inc/scmatrix.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-13T14:40:45Z",
+      "side": 1,
+      "message": "here",
+      "range": {
+        "startLine": 154,
+        "startChar": 45,
+        "endLine": 154,
+        "endChar": 50
+      },
+      "revId": "fdaa686dae4d611b45cf41d50e2d9dba9775722c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22c66bfe_0291ce1a",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-13T14:40:45Z",
+      "side": 1,
+      "message": "Looks like the typedefs (DoubleIterateResult/KahanIterateResult) could be used here (and elsewhere) - then only a single line would change. Or else why they exist?",
+      "range": {
+        "startLine": 305,
+        "startChar": 4,
+        "endLine": 305,
+        "endChar": 37
+      },
+      "revId": "fdaa686dae4d611b45cf41d50e2d9dba9775722c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
