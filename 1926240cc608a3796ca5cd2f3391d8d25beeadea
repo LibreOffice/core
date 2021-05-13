@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31c91b72_46c7a77b",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-13T07:55:17Z",
+      "side": 1,
+      "message": "I\u0027m not sure we need to use UI language here; application locale seems a better choice. UI language should only affect displayed strings; the behavior should only depend on locale IIUC.",
+      "range": {
+        "startLine": 892,
+        "startChar": 49,
+        "endLine": 892,
+        "endChar": 65
+      },
+      "revId": "1926240cc608a3796ca5cd2f3391d8d25beeadea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
