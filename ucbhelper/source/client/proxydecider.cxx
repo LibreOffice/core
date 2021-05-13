@@ -84,8 +84,6 @@ public:
 
 }
 
-typedef std::pair< WildCard, WildCard > NoProxyListEntry;
-
 namespace {
 
 class HostnameCache
@@ -133,6 +131,7 @@ class InternetProxyDecider_Impl :
     const InternetProxyServer                m_aEmptyProxy;
     ProxyType                                m_nProxyType;
     uno::Reference< util::XChangesNotifier > m_xNotifier;
+    typedef std::pair< WildCard, WildCard > NoProxyListEntry;
     std::vector< NoProxyListEntry >          m_aNoProxyList;
     mutable HostnameCache                    m_aHostnames;
 

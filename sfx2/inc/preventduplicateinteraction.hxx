@@ -186,9 +186,6 @@ class PreventDuplicateInteraction final : private ThreadHelpBase2
                 {}
         };
 
-        typedef ::std::vector< InteractionInfo > InteractionList;
-
-
     // member
     private:
 
@@ -204,7 +201,7 @@ class PreventDuplicateInteraction final : private ThreadHelpBase2
         /** This list describe which and how incoming interactions must be handled.
             Further it contains all collected information after this interaction
             object was used.*/
-        InteractionList m_lInteractionRules;
+        std::vector< InteractionInfo > m_lInteractionRules;
 
 
     // uno interface

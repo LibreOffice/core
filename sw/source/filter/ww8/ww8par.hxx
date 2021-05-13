@@ -1267,7 +1267,8 @@ private:
 
     std::unique_ptr<WW8SmartTagData> m_pSmartTagData;
 
-    sw::util::AuthorInfos m_aAuthorInfos;
+    /// Redlining Authors, map word author key to writer author value
+    std::map<sal_uInt16, std::size_t> m_aAuthorInfos;
     OUString m_sBaseURL;
 
                                 // Ini-Flags:

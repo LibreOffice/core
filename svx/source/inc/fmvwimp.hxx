@@ -127,9 +127,6 @@ private:
     vcl::Window* getWindow() const {return m_pWindow;}
 };
 
-typedef ::rtl::Reference< FormViewPageWindowAdapter >   PFormViewPageWindowAdapter;
-typedef ::std::set< css::uno::Reference< css::form::XForm > > SetOfForms;
-typedef ::std::map< css::uno::Reference< css::awt::XControlContainer >, SetOfForms > MapControlContainerToSetOfForms;
 class SdrModel;
 
 class FmXFormView : public ::cppu::WeakImplHelper<
@@ -157,10 +154,11 @@ class FmXFormView : public ::cppu::WeakImplHelper<
     css::sdb::SQLErrorEvent
                     m_aAsyncError;          // error event which is to be displayed asyn. See m_nErrorMessageEvent.
 
-    std::vector< PFormViewPageWindowAdapter >
+    std::vector< rtl::Reference< FormViewPageWindowAdapter > >
                     m_aPageWindowAdapters;  // to be filled in alive mode only
-    MapControlContainerToSetOfForms
-                    m_aNeedTabOrderUpdate;
+    typedef ::std::set< css::uno::Reference< css::form::XForm > > SetOfForms;
+    std::map< css::uno::Reference< css::awt::XControlContainer >, SetOfForms >
+                    m_aNeedTabOrderUpdate; // map control container to set of forms
 
     // list of selected objects, used for restoration when switching from Alive to DesignMode
     SdrMarkList             m_aMark;
@@ -206,7 +204,7 @@ public:
     virtual void SAL_CALL focusLost( const css::awt::FocusEvent& e ) override;
 
     FmFormView* getView() const {return m_pView;}
-    PFormViewPageWindowAdapter  findWindow( const css::uno::Reference< css::awt::XControlContainer >& _rxCC ) const;
+    rtl::Reference< FormViewPageWindowAdapter >  findWindow( const css::uno::Reference< css::awt::XControlContainer >& _rxCC ) const;
 
     css::uno::Reference< css::form::runtime::XFormController >
             getFormController( const css::uno::Reference< css::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;

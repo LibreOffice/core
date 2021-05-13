@@ -264,9 +264,6 @@ struct ListCharStylePropertyMap_t
 
 }
 
-typedef std::vector< ListCharStylePropertyMap_t > ListCharStylePropertyVector_t;
-
-
 struct StyleSheetTable_Impl
 {
     DomainMapper&                           m_rDMapper;
@@ -276,7 +273,7 @@ struct StyleSheetTable_Impl
     StyleSheetEntryPtr                      m_pCurrentEntry;
     PropertyMapPtr                          m_pDefaultParaProps, m_pDefaultCharProps;
     OUString                                m_sDefaultParaStyleName; //WW8 name
-    ListCharStylePropertyVector_t           m_aListCharStylePropertyVector;
+    std::vector< ListCharStylePropertyMap_t > m_aListCharStylePropertyVector;
     bool                                    m_bHasImportedDefaultParaProps;
     bool                                    m_bIsNewDoc;
 

@@ -491,7 +491,7 @@ void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt)
         }
         else
         {
-            PFormViewPageWindowAdapter pAdapter = findWindow( xControlContainer );
+            rtl::Reference< FormViewPageWindowAdapter > pAdapter = findWindow( xControlContainer );
             if ( pAdapter.is() )
                 pAdapter->updateTabOrder( xForm );
         }
@@ -514,10 +514,10 @@ void SAL_CALL FmXFormView::elementRemoved(const ContainerEvent& /*evt*/)
 }
 
 
-PFormViewPageWindowAdapter FmXFormView::findWindow( const Reference< XControlContainer >& _rxCC )  const
+rtl::Reference< FormViewPageWindowAdapter > FmXFormView::findWindow( const Reference< XControlContainer >& _rxCC )  const
 {
     auto i = std::find_if(m_aPageWindowAdapters.begin(), m_aPageWindowAdapters.end(),
-        [&_rxCC](const PFormViewPageWindowAdapter& rpAdapter) { return _rxCC == rpAdapter->getControlContainer(); });
+        [&_rxCC](const rtl::Reference< FormViewPageWindowAdapter >& rpAdapter) { return _rxCC == rpAdapter->getControlContainer(); });
     if (i != m_aPageWindowAdapters.end())
         return *i;
     return nullptr;
@@ -535,7 +535,7 @@ void FmXFormView::addWindow(const SdrPageWindow& rWindow)
         &&  ( !findWindow( xCC ).is() )
         )
     {
-        PFormViewPageWindowAdapter pAdapter = new FormViewPageWindowAdapter( comphelper::getProcessComponentContext(), rWindow, this );
+        rtl::Reference< FormViewPageWindowAdapter > pAdapter = new FormViewPageWindowAdapter( comphelper::getProcessComponentContext(), rWindow, this );
         m_aPageWindowAdapters.push_back( pAdapter );
 
         // listen at the ControlContainer to notice changes
@@ -554,7 +554,7 @@ void FmXFormView::removeWindow( const Reference< XControlContainer >& _rxCC )
     // - the control container for a window is removed while the active mode is on
 
     auto i = std::find_if(m_aPageWindowAdapters.begin(), m_aPageWindowAdapters.end(),
-        [&_rxCC](const PFormViewPageWindowAdapter& rpAdapter) { return _rxCC == rpAdapter->getControlContainer(); });
+        [&_rxCC](const rtl::Reference< FormViewPageWindowAdapter >& rpAdapter) { return _rxCC == rpAdapter->getControlContainer(); });
     if (i != m_aPageWindowAdapters.end())
     {
         Reference< XContainer >  xContainer( _rxCC, UNO_QUERY );
@@ -601,7 +601,7 @@ void FmXFormView::resumeTabOrderUpdate()
     // update the tab orders for all components which were collected since the suspendTabOrderUpdate call.
     for (const auto& rContainer : m_aNeedTabOrderUpdate)
     {
-        PFormViewPageWindowAdapter pAdapter = findWindow( rContainer.first );
+        rtl::Reference< FormViewPageWindowAdapter > pAdapter = findWindow( rContainer.first );
         if ( !pAdapter.is() )
             continue;
 
@@ -695,7 +695,7 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate, void*, void)
     find_active_databaseform fad(pShImpl->getActiveController_Lock());
 
     vcl::Window* pWindow = const_cast<vcl::Window*>(static_cast<const vcl::Window*>(m_pView->GetActualOutDev()));
-    PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
+    rtl::Reference< FormViewPageWindowAdapter > pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
     for (const auto& rpPageWindowAdapter : m_aPageWindowAdapters)
     {
         if ( pWindow == rpPageWindowAdapter->getWindow() )
@@ -876,7 +876,7 @@ Reference< XFormController > FmXFormView::getFormController( const Reference< XF
 {
     Reference< XFormController > xController;
 
-    for (const PFormViewPageWindowAdapter& pAdapter : m_aPageWindowAdapters)
+    for (const rtl::Reference< FormViewPageWindowAdapter >& pAdapter : m_aPageWindowAdapters)
     {
         if ( !pAdapter )
         {
@@ -909,7 +909,7 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus, void*, void)
     FmFormPage* pPage = dynamic_cast<FmFormPage*>( pSdrPage  );
     Reference< XIndexAccess > xForms( pPage ? Reference< XIndexAccess >( pPage->GetForms() ) : Reference< XIndexAccess >() );
 
-    const PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
+    const rtl::Reference< FormViewPageWindowAdapter > pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
     const vcl::Window* pWindow = pAdapter ? pAdapter->getWindow() : nullptr;
 
     ENSURE_OR_RETURN_VOID( xForms.is() && pWindow, "FmXFormView::OnAutoFocus: could not collect all essentials!" );

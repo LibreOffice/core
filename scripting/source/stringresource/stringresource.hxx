@@ -81,8 +81,6 @@ struct LocaleItem
     {}
 };
 
-typedef std::vector< std::unique_ptr<LocaleItem> > LocaleItemVector;
-
 typedef ::cppu::WeakImplHelper<
     css::lang::XServiceInfo,
     css::resource::XStringResourceManager > StringResourceImpl_BASE;
@@ -100,7 +98,7 @@ protected:
 
     std::vector< std::unique_ptr<LocaleItem> >                m_aLocaleItemVector;
     std::vector< std::unique_ptr<LocaleItem> >                m_aDeletedLocaleItemVector;
-    LocaleItemVector                                          m_aChangedDefaultLocaleVector;
+    std::vector< std::unique_ptr<LocaleItem> >                m_aChangedDefaultLocaleVector;
 
     bool                                                      m_bModified;
     bool                                                      m_bReadOnly;

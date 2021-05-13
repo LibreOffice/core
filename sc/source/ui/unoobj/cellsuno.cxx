@@ -9197,8 +9197,6 @@ const ScRangeList& ScUniqueFormatsEntry::GetRanges()
     return *aReturnRanges;
 }
 
-typedef std::unordered_map< const ScPatternAttr*, ScUniqueFormatsEntry, ScPatternHashCode > ScUniqueFormatsHashMap;
-
 namespace {
 
 // function object to sort the range lists by start of first range
@@ -9234,7 +9232,7 @@ ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange
 
     // Collect the ranges for each format in a hash map, to avoid nested loops
 
-    ScUniqueFormatsHashMap aHashMap;
+    std::unordered_map< const ScPatternAttr*, ScUniqueFormatsEntry, ScPatternHashCode > aHashMap;
     while (aIter.GetNext( nCol1, nCol2, nRow1, nRow2 ) )
     {
         ScRange aRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );

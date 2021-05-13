@@ -2913,7 +2913,7 @@ void FmXFormShell::startFiltering_Lock()
     else
         xContainer = getActiveController_Lock()->getContainer();
 
-    PFormViewPageWindowAdapter pAdapter = pXView->findWindow( xContainer );
+    rtl::Reference< FormViewPageWindowAdapter > pAdapter = pXView->findWindow( xContainer );
     if ( pAdapter.is() )
     {
         const ::std::vector< Reference< runtime::XFormController> >& rControllerList = pAdapter->GetList();
@@ -2986,7 +2986,7 @@ void FmXFormShell::stopFiltering_Lock(bool bSave)
     else
         xContainer = getActiveController_Lock()->getContainer();
 
-    PFormViewPageWindowAdapter pAdapter = pXView->findWindow(xContainer);
+    rtl::Reference< FormViewPageWindowAdapter > pAdapter = pXView->findWindow(xContainer);
     if ( pAdapter.is() )
     {
         const ::std::vector< Reference< runtime::XFormController > >& rControllerList = pAdapter->GetList();

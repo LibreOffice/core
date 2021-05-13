@@ -1559,8 +1559,6 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
     return bHandled;
 }
 
-typedef std::vector<std::unique_ptr<weld::TreeIter>> iter_vector;
-
 bool FmFilterNavigator::getNextEntry(weld::TreeIter& rEntry)
 {
     bool bEntry = m_xTreeView->iter_next(rEntry);
@@ -1608,7 +1606,7 @@ IMPL_LINK(FmFilterNavigator, KeyInputHdl, const ::KeyEvent&, rKEvt, bool)
                 break;
 
 
-            iter_vector aSelected;
+            std::vector<std::unique_ptr<weld::TreeIter>> aSelected;
             m_xTreeView->selected_foreach([this, &aSelected](weld::TreeIter& rEntry){
                 aSelected.emplace_back(m_xTreeView->make_iterator(&rEntry));
                 return false;

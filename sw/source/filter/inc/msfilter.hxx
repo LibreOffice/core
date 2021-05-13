@@ -105,9 +105,6 @@ namespace sw
 
     namespace util
     {
-        /// Redlining Authors, map word author key to writer author value
-        typedef std::map<sal_uInt16, std::size_t> AuthorInfos;
-
         /** Clips a value to MAX/MIN 16bit value to make it safe for use
             as a position value to give to writer. i.e. +-57.8cm. Sometimes
             we see ridiculous values for positioning in rtf and word document,

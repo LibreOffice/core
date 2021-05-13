@@ -92,8 +92,6 @@ struct MergeInfo
 
 }
 
-typedef std::vector< std::shared_ptr< MergeInfo > > MergeInfoVector;
-
 class XMLTableImportContext : public SvXMLImportContext
 {
 public:
@@ -124,7 +122,7 @@ public:
     // default cell style name for the current row
     OUString msDefaultCellStyleName;
 
-    MergeInfoVector maMergeInfos;
+    std::vector< std::shared_ptr< MergeInfo > > maMergeInfos;
 };
 
 namespace {

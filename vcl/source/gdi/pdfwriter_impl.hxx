@@ -445,8 +445,6 @@ struct PDFScreen : public PDFAnnotation
 
 struct PDFWidget : public PDFAnnotation
 {
-    typedef std::unordered_map<OString, SvMemoryStream*> PDFAppearanceStreams;
-
     PDFWriter::WidgetType       m_eType;
     OString                m_aName;
     OUString               m_aDescription;
@@ -474,6 +472,7 @@ struct PDFWidget : public PDFAnnotation
     sal_Int32                   m_nDest;
     std::vector<OUString>  m_aListEntries;
     std::vector<sal_Int32>      m_aSelectedEntries;
+    typedef std::unordered_map<OString, SvMemoryStream*> PDFAppearanceStreams;
     std::unordered_map<OString, PDFAppearanceStreams> m_aAppearances;
     PDFWidget()
             : m_eType( PDFWriter::PushButton ),
