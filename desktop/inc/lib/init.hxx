@@ -144,7 +144,7 @@ namespace desktop {
         std::mutex m_mutex;
     };
 
-    struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public _LibreOfficeKitDocument
+    struct LibLODocument_Impl : public _LibreOfficeKitDocument
     {
         css::uno::Reference<css::lang::XComponent> mxComponent;
         std::shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
@@ -156,7 +156,7 @@ namespace desktop {
         ~LibLODocument_Impl();
     };
 
-    struct DESKTOP_DLLPUBLIC LibLibreOffice_Impl : public _LibreOfficeKit
+    struct LibLibreOffice_Impl : public _LibreOfficeKit
     {
         OUString maLastExceptionMsg;
         std::shared_ptr< LibreOfficeKitClass > m_pOfficeClass;

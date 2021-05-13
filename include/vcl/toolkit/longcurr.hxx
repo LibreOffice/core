@@ -30,7 +30,7 @@
 
 class LocaleDataWrapper;
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) LongCurrencyFormatter : public FormatterBase
+class LongCurrencyFormatter : public FormatterBase
 {
 public:
                             virtual ~LongCurrencyFormatter() override;

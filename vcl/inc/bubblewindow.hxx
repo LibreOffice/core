@@ -23,7 +23,7 @@
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 
-class VCL_DLLPUBLIC BubbleWindow final : public FloatingWindow
+class BubbleWindow final : public FloatingWindow
 {
     Point           maTipPos;
     vcl::Region     maBounds;
