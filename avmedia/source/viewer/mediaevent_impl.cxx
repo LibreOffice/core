@@ -40,7 +40,7 @@ MediaEventListenersImpl::~MediaEventListenersImpl()
 
 void MediaEventListenersImpl::cleanUp()
 {
-    Application::RemoveMouseAndKeyEvents( reinterpret_cast< vcl::Window* >( mpNotifyWindow.get() ) );
+    Application::RemoveMouseAndKeyEvents( mpNotifyWindow.get() );
     mpNotifyWindow = nullptr;
 }
 
@@ -63,7 +63,7 @@ void SAL_CALL MediaEventListenersImpl::keyPressed( const css::awt::KeyEvent& e )
                                   ( ( e.Modifiers & 4 ) ? KEY_MOD2 : 0 ) );
         KeyEvent aVCLKeyEvt( e.KeyChar, aVCLKeyCode );
 
-        Application::PostKeyEvent( VclEventId::WindowKeyInput, reinterpret_cast< vcl::Window* >( mpNotifyWindow.get() ), &aVCLKeyEvt );
+        Application::PostKeyEvent( VclEventId::WindowKeyInput, mpNotifyWindow.get(), &aVCLKeyEvt );
     }
 }
 
@@ -80,7 +80,7 @@ void SAL_CALL MediaEventListenersImpl::keyReleased( const css::awt::KeyEvent& e 
                                   ( ( e.Modifiers & 2 ) ? KEY_MOD1 : 0 ) |
                                   ( ( e.Modifiers & 4 ) ? KEY_MOD2 : 0 ) );
         KeyEvent aVCLKeyEvt( e.KeyChar, aVCLKeyCode );
-        Application::PostKeyEvent( VclEventId::WindowKeyUp, reinterpret_cast< vcl::Window* >( mpNotifyWindow.get() ), &aVCLKeyEvt );
+        Application::PostKeyEvent( VclEventId::WindowKeyUp, mpNotifyWindow.get(), &aVCLKeyEvt );
     }
 }
 
@@ -99,7 +99,7 @@ void SAL_CALL MediaEventListenersImpl::mousePressed( const css::awt::MouseEvent&
                                 ( ( e.Buttons & 2 ) ? MOUSE_RIGHT : 0 ) |
                                 ( ( e.Buttons & 4 ) ? MOUSE_MIDDLE : 0 ),
                                 e.Modifiers );
-        Application::PostMouseEvent( VclEventId::WindowMouseButtonDown, reinterpret_cast< vcl::Window* >( mpNotifyWindow.get() ), &aVCLMouseEvt );
+        Application::PostMouseEvent( VclEventId::WindowMouseButtonDown, mpNotifyWindow.get(), &aVCLMouseEvt );
     }
 }
 
@@ -118,7 +118,7 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const css::awt::MouseEvent
                                 ( ( e.Buttons & 2 ) ? MOUSE_RIGHT : 0 ) |
                                 ( ( e.Buttons & 4 ) ? MOUSE_MIDDLE : 0 ),
                                 e.Modifiers );
-        Application::PostMouseEvent( VclEventId::WindowMouseButtonUp, reinterpret_cast< vcl::Window* >( mpNotifyWindow.get() ), &aVCLMouseEvt );
+        Application::PostMouseEvent( VclEventId::WindowMouseButtonUp, mpNotifyWindow.get(), &aVCLMouseEvt );
     }
 }
 
@@ -141,7 +141,7 @@ void SAL_CALL MediaEventListenersImpl::mouseDragged( const css::awt::MouseEvent&
     if( mpNotifyWindow )
     {
         MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), 0, MouseEventModifiers::NONE, e.Buttons, e.Modifiers );
-        Application::PostMouseEvent( VclEventId::WindowMouseMove, reinterpret_cast< vcl::Window* >( mpNotifyWindow.get() ), &aVCLMouseEvt );
+        Application::PostMouseEvent( VclEventId::WindowMouseMove, mpNotifyWindow.get(), &aVCLMouseEvt );
     }
 }
 
@@ -154,7 +154,7 @@ void SAL_CALL MediaEventListenersImpl::mouseMoved( const css::awt::MouseEvent& e
     if( mpNotifyWindow )
     {
         MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), 0, MouseEventModifiers::NONE, e.Buttons, e.Modifiers );
-        Application::PostMouseEvent( VclEventId::WindowMouseMove, reinterpret_cast< vcl::Window* >( mpNotifyWindow.get() ), &aVCLMouseEvt );
+        Application::PostMouseEvent( VclEventId::WindowMouseMove, mpNotifyWindow.get(), &aVCLMouseEvt );
     }
 }
 
