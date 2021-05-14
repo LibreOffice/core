@@ -2062,7 +2062,7 @@ public:
     virtual void set_font_color(const Color& rColor) = 0;
 };
 
-class VCL_DLLPUBLIC TextView : virtual public Container
+class VCL_DLLPUBLIC TextView : virtual public Widget
 {
     friend class ::LOKTrigger;
 

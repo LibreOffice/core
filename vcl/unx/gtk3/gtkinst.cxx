@@ -14150,7 +14150,7 @@ std::unique_ptr<weld::Label> GtkInstanceFrame::weld_label_widget() const
 
 namespace {
 
-class GtkInstanceTextView : public GtkInstanceContainer, public virtual weld::TextView
+class GtkInstanceTextView : public GtkInstanceWidget, public virtual weld::TextView
 {
 private:
     GtkTextView* m_pTextView;
@@ -14241,7 +14241,7 @@ private:
 
 public:
     GtkInstanceTextView(GtkTextView* pTextView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceContainer(GTK_CONTAINER(pTextView), pBuilder, bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pTextView), pBuilder, bTakeOwnership)
         , m_pTextView(pTextView)
         , m_pTextBuffer(gtk_text_view_get_buffer(pTextView))
         , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTextView)))
@@ -14363,12 +14363,12 @@ public:
         g_signal_handler_block(m_pVAdjustment, m_nVAdjustChangedSignalId);
         g_signal_handler_block(m_pTextBuffer, m_nCursorPosSignalId);
         g_signal_handler_block(m_pTextBuffer, m_nChangedSignalId);
-        GtkInstanceContainer::disable_notify_events();
+        GtkInstanceWidget::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceContainer::enable_notify_events();
+        GtkInstanceWidget::enable_notify_events();
         g_signal_handler_unblock(m_pTextBuffer, m_nChangedSignalId);
         g_signal_handler_unblock(m_pTextBuffer, m_nCursorPosSignalId);
         g_signal_handler_unblock(m_pVAdjustment, m_nVAdjustChangedSignalId);

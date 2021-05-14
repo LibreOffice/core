@@ -1263,7 +1263,7 @@ public:
     virtual ~SalInstanceToolbar() override;
 };
 
-class SalInstanceTextView : public SalInstanceContainer, public virtual weld::TextView
+class SalInstanceTextView : public SalInstanceWidget, public virtual weld::TextView
 {
 private:
     VclPtr<VclMultiLineEdit> m_xTextView;
