@@ -333,6 +333,7 @@ public:
         BackgroundColor,
         SortAscending,
         SortDescending,
+        Clear
     };
 
     ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos eWhichPos );
