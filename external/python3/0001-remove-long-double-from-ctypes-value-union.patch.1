@@ -1,0 +1,34 @@
+From 6d999803a07ef5e01f0048d4f276e9cf4401a23d Mon Sep 17 00:00:00 2001
+From: Benjamin Peterson <benjamin@python.org>
+Date: Mon, 5 Sep 2016 16:24:52 -0700
+Subject: [PATCH] remove long double from ctypes value union
+
+It is unused. It also forces a 16-byte alignment, which creates problems because
+Python's allocator only uses 8-byte alignment.
+---
+ Modules/_ctypes/ctypes.h | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/Modules/_ctypes/ctypes.h b/Modules/_ctypes/ctypes.h
+index 0d3f7241ca..d80ea82cee 100644
+--- a/Modules/_ctypes/ctypes.h
++++ b/Modules/_ctypes/ctypes.h
+@@ -34,7 +34,6 @@ union value {
+ #ifdef HAVE_LONG_LONG
+                 PY_LONG_LONG ll;
+ #endif
+-                long double D;
+ };
+ 
+ /*
+@@ -306,7 +305,6 @@ struct tagPyCArgObject {
+ #ifdef HAVE_LONG_LONG
+         PY_LONG_LONG q;
+ #endif
+-        long double D;
+         double d;
+         float f;
+         void *p;
+-- 
+2.31.1
+
