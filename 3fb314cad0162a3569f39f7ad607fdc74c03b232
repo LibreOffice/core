@@ -16,6 +16,24 @@
       "revId": "3fb314cad0162a3569f39f7ad607fdc74c03b232",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc006677_de488538",
+        "filename": "sc/inc/scmatrix.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-14T09:42:52Z",
+      "side": 1,
+      "message": "It was used once. But it is addressed in the child change.",
+      "parentUuid": "09b0af6d_b142aeb1",
+      "revId": "3fb314cad0162a3569f39f7ad607fdc74c03b232",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
