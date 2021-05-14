@@ -22,6 +22,7 @@ $(eval $(call gb_Module_make_global_targets,$(SRCDIR)/RepositoryModule_$(gb_Side
 
 ifneq (,$(DISABLE_DYNLOADING))
 include $(SRCDIR)/solenv/gbuild/static.mk
+$(if $(gb_LinkTarget__Lock),$(shell rm -f $(gb_LinkTarget__Lock)))
 endif
 
 upload-symbols:

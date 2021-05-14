@@ -24,6 +24,7 @@ gb_BUILD_TOOLS = \
 		helpex \
 		idxdict \
 		javamaker \
+		lockfile \
 		makedepend \
 		propex \
 		saxparser \

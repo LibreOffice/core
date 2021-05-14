@@ -46,6 +46,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	$(if $(filter iOS,$(OS)),LibreOffice) \
 	lngconvex \
 	localize \
+	lockfile \
 	makedepend \
 	mbsdiff \
 	osl_process_child \

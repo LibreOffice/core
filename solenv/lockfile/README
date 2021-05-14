@@ -1,0 +1,6 @@
+All files (except for the dummy maillock.h) were copied from liblockfile 1.17.
+
+Just the max sleep time was adjusted in lockfile.c / lockfile_create_save_tmplock:
+
++			if (sleeptime > 60) sleeptime = 60;
+-			if (sleeptime > 5) sleeptime = 5;

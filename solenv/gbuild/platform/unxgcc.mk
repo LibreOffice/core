@@ -109,6 +109,10 @@ gb_LinkTarget__RPATHS := \
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
+gb_LinkTarget__cmd_lockfile = $(call gb_Executable_get_command,lockfile)
+gb_LinkTarget__Lock := $(WORKDIR)/LinkTarget/link.lock
+gb_LinkTarget__WantLock = $(if $(and $(filter TRUE,$(DISABLE_DYNLOADING)),$(CROSS_COMPILING),$(filter CppunitTest Executable,$(TARGETTYPE))),$(true))
+
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
 # we want to use @$(extraobjectlist) in the long run
 # link with C compiler if there are no C++ files (pyuno_wrapper depends on this)
@@ -117,6 +121,7 @@ gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 # libclang_rt.ubsan_cxx-x86_64.a, and oosplash links against sal but itself only
 # contains .c sources:
 define gb_LinkTarget__command_dynamiclink
+$(if $(gb_LinkTarget__WantLock),$(gb_LinkTarget__cmd_lockfile) -r -1 $(gb_LinkTarget__Lock))
 $(call gb_Helper_abbreviate_dirs,\
 	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
@@ -148,17 +153,19 @@ $(call gb_Helper_abbreviate_dirs,\
 		    $(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
                 ) \
 		-o $(1) \
-	$(if $(SOVERSIONSCRIPT),&& ln -sf ../../program/$(notdir $(1)) $(ILIBTARGET)))
-	$(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
-		$(READELF) -d $(1) | grep SONAME > $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
-		$(NM) $(gb_LTOPLUGINFLAGS) --dynamic --extern-only --defined-only --format=posix $(1) \
-			| cut -d' ' -f1-2 \
-			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
-		$(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp, \
-			$(WORKDIR)/LinkTarget/$(2).exports,$(1))))
-	$(if $(and $(filter CppunitTest Executable,$(TARGETTYPE)),$(filter EMSCRIPTEN,$(OS)),$(filter TRUE,$(ENABLE_QT5))), \
-		cp $(QT5_PLATFORMS_SRCDIR)/qtlogo.svg $(QT5_PLATFORMS_SRCDIR)/qtloader.js $(dir $(1)) ; \
-		sed -e 's/@APPNAME@/$(subst $(gb_Executable_EXT),,$(notdir $(1)))/' $(QT5_PLATFORMS_SRCDIR)/wasm_shell.html > $(dir $(1))qt_$(notdir $(1)))
+	$(if $(SOVERSIONSCRIPT),&& ln -sf ../../program/$(notdir $(1)) $(ILIBTARGET)) \
+	$(if $(gb_LinkTarget__WantLock),; RC=$$? ; rm -f $(gb_LinkTarget__Lock); if test $$RC -ne 0; then exit $$RC; fi))
+$(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
+	$(READELF) -d $(1) | grep SONAME > $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
+	$(NM) $(gb_LTOPLUGINFLAGS) --dynamic --extern-only --defined-only --format=posix $(1) \
+		| cut -d' ' -f1-2 \
+		>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
+	$(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp, \
+		$(WORKDIR)/LinkTarget/$(2).exports,$(1))))
+$(if $(and $(filter CppunitTest Executable,$(TARGETTYPE)),$(filter EMSCRIPTEN,$(OS)),$(filter TRUE,$(ENABLE_QT5))), \
+	cp $(QT5_PLATFORMS_SRCDIR)/qtlogo.svg $(QT5_PLATFORMS_SRCDIR)/qtloader.js $(dir $(1)) ; \
+	sed -e 's/@APPNAME@/$(subst $(gb_Executable_EXT),,$(notdir $(1)))/' $(QT5_PLATFORMS_SRCDIR)/wasm_shell.html > $(dir $(1))qt_$(notdir $(1)))
+
 endef
 
 define gb_LinkTarget__command_staticlink

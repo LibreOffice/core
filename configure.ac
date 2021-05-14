@@ -5264,6 +5264,7 @@ if test "$cross_compiling" = "yes"; then
         config_host/*.in \
         sysui/desktop/macosx/Info.plist.in \
         .vscode/vs-code-template.code-workspace.in \
+        solenv/lockfile/autoconf.h.in \
         ) \
     | (cd CONF-FOR-BUILD && tar xf -)
     cp configure CONF-FOR-BUILD
@@ -5495,6 +5496,12 @@ AC_SUBST(SDKDIRNAME_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
 AC_SUBST(CC_FOR_BUILD)
 AC_SUBST(CXX_FOR_BUILD)
+
+dnl ===================================================================
+dnl Check for lockfile deps
+dnl ===================================================================
+AC_CHECK_HEADERS([getopt.h paths.h sys/param.h])
+AC_CHECK_FUNCS([utime utimes])
 
 dnl ===================================================================
 dnl Check for syslog header
@@ -14235,6 +14242,7 @@ AC_CONFIG_HEADERS([config_host/config_oauth2.h])
 AC_CONFIG_HEADERS([config_host/config_poppler.h])
 AC_CONFIG_HEADERS([config_host/config_python.h])
 AC_CONFIG_HEADERS([config_host/config_writerperfect.h])
+AC_CONFIG_HEADERS([solenv/lockfile/autoconf.h])
 AC_OUTPUT
 
 if test "$CROSS_COMPILING" = TRUE; then
