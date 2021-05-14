@@ -102,41 +102,43 @@ void f5(char const* s1, sal_Int32 n1, char16_t const* s2, sal_Int32 n2)
 {
     // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
     call_view(OString());
-    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OString' constructed from a 'const char [4]', pass a 'std::string_view' [loplugin:stringview]}}
     call_view(OString("foo"));
-    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' (or an 'rtl::OStringChar') [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OString' constructed from a 'const char', pass a 'std::string_view' (or an 'rtl::OStringChar') [loplugin:stringview]}}
     call_view(OString(*s1));
-    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OString' constructed from a 'const char *', pass a 'std::string_view' [loplugin:stringview]}}
     call_view(OString(s1));
-    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OString' constructed from a 'const char *', pass a 'std::string_view' [loplugin:stringview]}}
     call_view(OString(s1, n1));
     constexpr OStringLiteral l1("foo");
-    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OString' constructed from a 'const rtl::OStringLiteral<4>', pass a 'std::string_view' [loplugin:stringview]}}
     call_view(OString(l1));
-    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OString' constructed from a 'std::string_view' (aka 'basic_string_view<char>'), pass a 'std::string_view' [loplugin:stringview]}}
     call_view(OString(std::string_view("foo")));
-    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OString' constructed from a 'OStringNumber<int>', pass a 'std::string_view' [loplugin:stringview]}}
     call_view(OString(OString::number(0)));
     // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString());
-    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'const char [4]', pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString("foo"));
-    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'const char16_t [4]', pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString(u"foo"));
-    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' (or an 'rtl::OUStringChar') [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'const char', pass a 'std::u16string_view' (or an 'rtl::OUStringChar') [loplugin:stringview]}}
     call_view(OUString(*s1));
-    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' (or an 'rtl::OUStringChar') [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'const char16_t', pass a 'std::u16string_view' (or an 'rtl::OUStringChar') [loplugin:stringview]}}
     call_view(OUString(*s2));
-    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'const char16_t *', pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString(s2));
-    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'const char16_t *', pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString(s2, n2));
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'const char16_t *', pass a 'std::u16string_view' (or an 'rtl::OUStringChar') [loplugin:stringview]}}
+    call_view(OUString(s2, 1));
     constexpr OUStringLiteral l2(u"foo");
-    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'const rtl::OUStringLiteral<4>', pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString(l2));
-    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'std::u16string_view' (aka 'basic_string_view<char16_t>'), pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString(std::u16string_view(u"foo")));
-    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'OUStringNumber<int>', pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString(OUString::number(0)));
 }
 
@@ -148,7 +150,7 @@ void f5(OUString s)
     buf = s.copy(5);
     // expected-error@+1 {{rather than copy, pass with a view using subView() [loplugin:stringview]}}
     buf.append(s.copy(12));
-    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'std::u16string_view' (aka 'basic_string_view<char16_t>'), pass a 'std::u16string_view' [loplugin:stringview]}}
     buf.append(OUString(std::u16string_view(u"foo")));
 }
 

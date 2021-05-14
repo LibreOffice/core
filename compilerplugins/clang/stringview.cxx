@@ -165,6 +165,7 @@ void StringView::handleSubExprThatCouldBeView(Expr const* subExpr)
 
 void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
 {
+    QualType argType;
     bool charArg = false;
     auto const d = expr->getConstructor();
     switch (d->getNumParams())
@@ -176,6 +177,7 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
             auto const t = d->getParamDecl(0)->getType();
             if (t->isAnyCharacterType())
             {
+                argType = expr->getArg(0)->IgnoreImplicit()->getType();
                 charArg = true;
                 break;
             }
@@ -194,6 +196,7 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
                 || tc.RvalueReference().Struct("OUStringNumber").Namespace("rtl").GlobalNamespace()
                 || tc.ClassOrStruct("basic_string_view").StdNamespace())
             {
+                argType = expr->getArg(0)->IgnoreImplicit()->getType();
                 break;
             }
             return;
@@ -207,6 +210,19 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
                 if (t->isIntegralType(compiler.getASTContext())
                     && !(t->isBooleanType() || t->isAnyCharacterType()))
                 {
+                    auto const arg = expr->getArg(1);
+                    if (!arg->isValueDependent())
+                    {
+                        if (auto const val
+                            = compat::getIntegerConstantExpr(arg, compiler.getASTContext()))
+                        {
+                            if (val->getExtValue() == 1)
+                            {
+                                charArg = true;
+                            }
+                        }
+                    }
+                    argType = expr->getArg(0)->IgnoreImplicit()->getType();
                     break;
                 }
             }
@@ -216,6 +232,7 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
                     .Namespace("rtl")
                     .GlobalNamespace())
             {
+                argType = expr->getArg(0)->IgnoreImplicit()->getType();
                 break;
             }
             return;
@@ -224,10 +241,11 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
             return;
     }
     report(DiagnosticsEngine::Warning,
-           "instead of an %0, pass a '%select{std::string_view|std::u16string_view}1'"
-           "%select{| (or an '%select{rtl::OStringChar|rtl::OUStringChar}1')}2",
+           "instead of an %0%select{| constructed from a %2}1, pass a"
+           " '%select{std::string_view|std::u16string_view}3'"
+           "%select{| (or an '%select{rtl::OStringChar|rtl::OUStringChar}3')}4",
            expr->getExprLoc())
-        << expr->getType()
+        << expr->getType() << (argType.isNull() ? 0 : 1) << argType
         << (loplugin::TypeCheck(expr->getType()).Class("OString").Namespace("rtl").GlobalNamespace()
                 ? 0
                 : 1)
