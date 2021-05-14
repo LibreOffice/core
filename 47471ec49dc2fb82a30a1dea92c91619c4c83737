@@ -22,6 +22,30 @@
       "revId": "47471ec49dc2fb82a30a1dea92c91619c4c83737",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "242956f1_fb2017ff",
+        "filename": "sc/source/core/tool/matrixoperators.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-14T09:56:34Z",
+      "side": 1,
+      "message": "I guess I don\u0027t really need it.",
+      "parentUuid": "8b4fe911_63630542",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 23
+      },
+      "revId": "47471ec49dc2fb82a30a1dea92c91619c4c83737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
