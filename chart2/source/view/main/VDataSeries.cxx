@@ -277,10 +277,11 @@ void VDataSeries::doSortByXValues()
     sal_Int32 nPointIndex = 0;
     for( nPointIndex=0; nPointIndex < m_nPointCount; nPointIndex++ )
     {
-        std::vector< double > aSinglePoint;
-        aSinglePoint.push_back( (nPointIndex < m_aValues_X.Doubles.getLength()) ? m_aValues_X.Doubles[nPointIndex] : fNan );
-        aSinglePoint.push_back( (nPointIndex < m_aValues_Y.Doubles.getLength()) ? m_aValues_Y.Doubles[nPointIndex] : fNan );
-        aTmp.push_back( aSinglePoint );
+        aTmp.push_back(
+                        { ((nPointIndex < m_aValues_X.Doubles.getLength()) ? m_aValues_X.Doubles[nPointIndex] : fNan),
+                          ((nPointIndex < m_aValues_Y.Doubles.getLength()) ? m_aValues_Y.Doubles[nPointIndex] : fNan)
+                        }
+                      );
     }
 
     //do sort
