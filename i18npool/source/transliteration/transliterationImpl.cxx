@@ -202,7 +202,7 @@ TransliterationImpl::loadModule( TransliterationModules modType, const Locale& r
                                                 bodyCascade[numCascade], rLocale))
                     numCascade++;
         }
-        // additional transliterations from TranslationModuleExtra (we cannot extend TransliterationModule)
+        // additional transliterations from TransliterationModulesExtra (we cannot extend TransliterationModule)
         if (bool(modType & TransliterationModules(TransliterationModulesExtra::IGNORE_DIACRITICS_CTL)))
         {
             if (loadModuleByName("ignoreDiacritics_CTL", bodyCascade[numCascade], rLocale))
