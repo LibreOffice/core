@@ -713,6 +713,9 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     rControl.addSeparator();
     rControl.addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
+    if (aEntries.size())
+        rControl.addMenuItem(
+            ScResId(SCSTR_CLEAR_FILTER), new AutoFilterAction(this, AutoFilterMode::Clear));
 
     rControl.initMembers(nMaxTextWidth + 20); // 20 pixel estimated for the checkbox
 
@@ -841,7 +844,8 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     if (!bColorMode)
         aParam.RemoveAllEntriesByField(rPos.Col());
 
-    if( !(eMode == AutoFilterMode::Normal && rControl.isAllSelected() ) )
+    if (eMode != AutoFilterMode::Clear
+        && !(eMode == AutoFilterMode::Normal && rControl.isAllSelected()))
     {
         // Try to use the existing entry for the column (if one exists).
         ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
@@ -933,7 +937,6 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 else
                     pEntry->SetQueryByBackgroundColor(selectedColor);
             }
-
             break;
             default:
                 // We don't know how to handle this!
