@@ -10,3 +10,14 @@
  
  #include "core/fxcrt/fx_system.h"
  #include "core/fxcrt/retain_ptr.h"
+--- a/core/fpdfapi/font/cpdf_type1font.cpp
++++ b/core/fpdfapi/font/cpdf_type1font.cpp
+@@ -14,7 +14,7 @@
+ #include "core/fxge/fx_freetype.h"
+ 
+ #if defined(OS_APPLE)
+-#include <Carbon/Carbon.h>
++#include <CoreGraphics/CoreGraphics.h>
+ #endif  // defined(OS_APPLE)
+ 
+ namespace {
