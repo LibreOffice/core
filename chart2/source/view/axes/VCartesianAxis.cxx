@@ -1275,9 +1275,7 @@ void VCartesianAxis::get2DAxisMainLine(
                 double fDeltaY = rEnd.getY() - rStart.getY();
 
                 //only those points are candidates which are lying on exactly one wall as these are outer edges
-                tScreenPosAndLogicPosList aPosList;
-                aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOnYPlane, fZOther ) );
-                aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOther, fZOnZPlane ) );
+                tScreenPosAndLogicPosList aPosList { getScreenPosAndLogicPos( fMinX, fYOnYPlane, fZOther ), getScreenPosAndLogicPos( fMinX, fYOther, fZOnZPlane ) };
 
                 if( fabs(fDeltaY) > fabs(fDeltaX)  )
                 {
