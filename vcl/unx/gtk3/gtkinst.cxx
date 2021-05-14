@@ -17567,6 +17567,15 @@ void SetPropertyOnTopLevel(const Reference<css::xml::dom::XNode>& xNode, const R
     }
 }
 
+OUString GetParentObjectType(const Reference<css::xml::dom::XNode>& xNode)
+{
+    auto xParent = xNode->getParentNode();
+    assert(xParent->getNodeName() == "object");
+    css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap = xParent->getAttributes();
+    css::uno::Reference<css::xml::dom::XNode> xClass = xParentMap->getNamedItem("class");
+    return xClass->getNodeValue();
+}
+
 bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
@@ -17624,6 +17633,30 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                 bChildCanFocus = toBool(xChild->getFirstChild()->getNodeValue());
                 if (!bChildCanFocus)
                     xCantFocus = xChild;
+            }
+
+            if (sName == "activates-default")
+            {
+                if (GetParentObjectType(xChild) == "GtkSpinButton")
+                    xRemoveList.push_back(xChild);
+            }
+
+            if (sName == "truncate-multiline")
+            {
+                if (GetParentObjectType(xChild) == "GtkSpinButton")
+                    xRemoveList.push_back(xChild);
+            }
+
+            if (sName == "shadow-type")
+            {
+                if (GetParentObjectType(xChild) == "GtkFrame")
+                    xRemoveList.push_back(xChild);
+            }
+
+            if (sName == "draw-indicator")
+            {
+                assert(toBool(xChild->getFirstChild()->getNodeValue()));
+                xRemoveList.push_back(xChild);
             }
 
             if (sName == "type-hint" || sName == "skip-taskbar-hint" ||
@@ -17755,6 +17788,11 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
 
             xRemoveList.push_back(xChild);
         }
+        else if (xChild->getNodeName() == "accessibility")
+        {
+            // TODO <relation type="labelled-by" target="pagenumcb"/> -> <relation name="labelled-by">pagenumcb</relation>
+            xRemoveList.push_back(xChild);
+        }
 
         auto xNextChild = xChild->getNextSibling();
 
@@ -17831,6 +17869,11 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                 else // if (!xId->getNodeValue().startsWith("messagedialog-action_area"))
                     xClass->setNodeValue("GtkBox");
             }
+            else if (sClass == "GtkRadioButton")
+            {
+                xClass->setNodeValue("GtkCheckButton");
+            }
+
         }
 
         xChild = xNextChild;
