@@ -442,7 +442,7 @@ inline T* VclBuilder::get(const OString& sID)
 /*
  * @return true if rValue is "True", "true", "1", etc.
  */
-bool toBool(std::u16string_view rValue);
+VCL_DLLPUBLIC bool toBool(std::u16string_view rValue);
 
 #endif
 
