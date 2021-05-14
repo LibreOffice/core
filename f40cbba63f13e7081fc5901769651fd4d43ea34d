@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c953eac_0bd724ab",
+        "filename": "connectivity/qa/connectivity/resource/sharedresources_test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T10:50:27Z",
+      "side": 1,
+      "message": "Even might be simplified to\n\n    std::vector\u003cstd::pair\u003cconst char*, OUString\u003e\u003e aStringToSubstitutes{\n        { \"$sub0$\", \"vector0\" },\n        { \"$sub1$\", \"vector1\" },\n        { \"$sub2$\", \"vector2\" },\n    };",
+      "revId": "f40cbba63f13e7081fc5901769651fd4d43ea34d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
