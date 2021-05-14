@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b4fe911_63630542",
+        "filename": "sc/source/core/tool/matrixoperators.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T09:50:50Z",
+      "side": 1,
+      "message": "Why do you need this? I suppose it\u0027s possible to just\n\n  std::vector\u003ckOp\u003e kOpSumAndSumSquare \u003d { kOpSum, kOpSumSquare };",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 23
+      },
+      "revId": "47471ec49dc2fb82a30a1dea92c91619c4c83737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
