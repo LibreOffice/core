@@ -97,54 +97,56 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUSt
 {
     if ( acceptsURL(url) )
     {
-        std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< OUString > aBoolean(2);
         aBoolean[0] = "0";
         aBoolean[1] = "1";
 
-        aDriverInfo.push_back(DriverPropertyInfo(
+        std::vector< DriverPropertyInfo > aDriverInfo
+        {
+             { DriverPropertyInfo(
                 "CharSet"
                 ,"CharSet of the database."
                 ,false
                 ,OUString()
                 ,Sequence< OUString >())
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
+             },
+             { DriverPropertyInfo(
                 "Extension"
                 ,"Extension of the file format."
                 ,false
                 ,".*"
                 ,Sequence< OUString >())
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
+             },
+             { DriverPropertyInfo(
                 "ShowDeleted"
                 ,"Display inactive records."
                 ,false
                 ,"0"
                 ,aBoolean)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
+             },
+             { DriverPropertyInfo(
                 "EnableSQL92Check"
                 ,"Use SQL92 naming constraints."
                 ,false
                 ,"0"
                 ,aBoolean)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
+             },
+             { DriverPropertyInfo(
                 "UseRelativePath"
                 ,"Handle the connection url as relative path."
                 ,false
                 ,"0"
                 ,aBoolean)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
+             },
+             { DriverPropertyInfo(
                 "URL"
                 ,"The URL of the database document which is used to create an absolute path."
                 ,false
                 ,OUString()
                 ,Sequence< OUString >())
-                );
+             }
+        };
         return Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size());
     } // if ( acceptsURL(url) )
     {
