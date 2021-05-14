@@ -46,6 +46,30 @@
       "revId": "02b72784e5601636d26c8e4592958c262efb1a7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58048606_4c9285ed",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-05-14T11:33:09Z",
+      "side": 1,
+      "message": "Great!  While you are at it, would you please fix the same issue for string \"Paste As Link \" in https://gerrit.libreoffice.org/c/core/+/115137 as well?\n\nThanks.",
+      "parentUuid": "141592eb_fb411245",
+      "range": {
+        "startLine": 2615,
+        "startChar": 34,
+        "endLine": 2615,
+        "endChar": 51
+      },
+      "revId": "02b72784e5601636d26c8e4592958c262efb1a7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
