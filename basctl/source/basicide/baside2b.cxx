@@ -1640,14 +1640,9 @@ WatchWindow::WatchWindow(Layout* pParent)
     m_xTreeListBox->connect_changed( LINK( this, WatchWindow, TreeListHdl ) );
     m_xTreeListBox->connect_expanding(LINK(this, WatchWindow, RequestingChildrenHdl));
 
-    std::vector<int> aWidths;
-    std::vector<bool> aEditables;
-    aWidths.push_back(220);  // VarTabWidth
-    aEditables.push_back(false);
-    aWidths.push_back(100);  // ValueTabWidth
-    aEditables.push_back(true);
-    aWidths.push_back(1250); // TypeTabWidth
-    aEditables.push_back(false);
+    // VarTabWidth, ValueTabWidth, TypeTabWidth
+    std::vector<int> aWidths { 220, 100, 1250 };
+    std::vector<bool> aEditables { false, true, false };
     m_xTreeListBox->set_column_fixed_widths(aWidths);
     m_xTreeListBox->set_column_editables(aEditables);
 
