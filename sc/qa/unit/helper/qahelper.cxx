@@ -979,6 +979,13 @@ void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDoc
             rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
 }
 
+void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown)
+{
+    ScDocOptions aOpt = pDoc->GetDocOptions();
+    aOpt.SetCalcAsShown(bCalcAsShown);
+    pDoc->SetDocOptions(aOpt);
+}
+
 ScDocShell* findLoadedDocShellByName(std::u16string_view rName)
 {
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));

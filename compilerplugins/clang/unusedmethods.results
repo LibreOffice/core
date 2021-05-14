@@ -1176,12 +1176,6 @@ sc/qa/unit/helper/qahelper.hxx:155
     class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > print(const class ScAddress &)
 sc/qa/unit/screenshots/screenshots.cxx:325
     int main()
-sc/qa/unit/ucalc.hxx:151
-    void Test::testFormulaHashAndTag()
-sc/qa/unit/ucalc.hxx:191
-    void Test::testSingleCellCopyColumnLabel()
-sc/qa/unit/ucalc.hxx:251
-    void Test::testExternalRefUnresolved()
 sc/source/core/inc/interpre.hxx:71
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & sc::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const struct sc::ParamIfsResult &)
 sc/source/core/opencl/formulagroupcl.cxx:1061
