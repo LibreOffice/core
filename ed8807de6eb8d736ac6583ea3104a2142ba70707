@@ -34,6 +34,24 @@
       "revId": "ed8807de6eb8d736ac6583ea3104a2142ba70707",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0157746_d45295a0",
+        "filename": "starmath/source/document.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T11:08:06Z",
+      "side": 1,
+      "message": ":-) Please in this case moving it is the *correct* change. Me need minimal diff, yes; but no smaller than necessary.",
+      "parentUuid": "539f3595_2b9d96ac",
+      "revId": "ed8807de6eb8d736ac6583ea3104a2142ba70707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
