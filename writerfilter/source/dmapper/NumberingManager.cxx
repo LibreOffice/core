@@ -268,7 +268,7 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
     }
 
     std::optional<PropertyMap::Property> aPropFont = getProperty(PROP_CHAR_FONT_NAME);
-    if(aPropFont && !isOutlineNumbering())
+    if (aPropFont)
         aNumberingProperties.emplace_back( getPropertyName(PROP_BULLET_FONT_NAME), 0, aPropFont->second, beans::PropertyState_DIRECT_VALUE );
 
     return comphelper::containerToSequence(aNumberingProperties);
