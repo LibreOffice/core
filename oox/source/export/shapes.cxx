@@ -832,7 +832,17 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     else if( bHasHandles )
         bCustGeom = true;
 
-    if (bHasHandles && bCustGeom)
+    // Let the custom shapes what has name and preset information in OOXML, to be written
+    // as preset ones with parameters. This helper class does this.
+    if (!sShapeType.startsWith("ooxml") && GetDocumentType() == DOCUMENT_DOCX
+        && rXPropSet->getPropertyValue("TextBox").get<bool>()
+        && xShape->getShapeType() == "com.sun.star.drawing.CustomShape")
+    {
+        DMLPresetShapeExporter aCustomShapeConverter(this, xShape);
+        aCustomShapeConverter.WriteShape();
+    }
+    // Other case does the same as before
+    else if (bHasHandles && bCustGeom)
     {
         WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, false, true );// do not flip, polypolygon coordinates are flipped already
         tools::PolyPolygon aPolyPolygon( rSdrObjCustomShape.GetLineGeometry(true) );
