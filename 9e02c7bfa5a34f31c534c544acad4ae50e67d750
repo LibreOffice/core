@@ -46,6 +46,30 @@
       "revId": "9e02c7bfa5a34f31c534c544acad4ae50e67d750",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90cdba19_a4dafebc",
+        "filename": "codemaker/source/codemaker/global.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T10:44:13Z",
+      "side": 1,
+      "message": "\u003e What extra allocation are you talking about?\n\nI meant the creation of OString in OStringBuffer::getStr() - just because I misread. It\u0027s not toString, so sorry for the noise :-)",
+      "parentUuid": "dc6672c2_159146b1",
+      "range": {
+        "startLine": 122,
+        "startChar": 32,
+        "endLine": 122,
+        "endChar": 72
+      },
+      "revId": "9e02c7bfa5a34f31c534c544acad4ae50e67d750",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
