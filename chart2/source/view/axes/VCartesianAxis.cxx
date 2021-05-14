@@ -1275,9 +1275,7 @@ void VCartesianAxis::get2DAxisMainLine(
                 double fDeltaY = rEnd.getY() - rStart.getY();
 
                 //only those points are candidates which are lying on exactly one wall as these are outer edges
-                tScreenPosAndLogicPosList aPosList;
-                aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOnYPlane, fZOther ) );
-                aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOther, fZOnZPlane ) );
+                tScreenPosAndLogicPosList aPosList { getScreenPosAndLogicPos( fMinX, fYOnYPlane, fZOther ), getScreenPosAndLogicPos( fMinX, fYOther, fZOnZPlane ) };
 
                 if( fabs(fDeltaY) > fabs(fDeltaX)  )
                 {
@@ -1329,9 +1327,7 @@ void VCartesianAxis::get2DAxisMainLine(
                 double fDeltaY = rEnd.getY() - rStart.getY();
 
                 //only those points are candidates which are lying on exactly one wall as these are outer edges
-                tScreenPosAndLogicPosList aPosList;
-                aPosList.push_back( getScreenPosAndLogicPos( fXOnXPlane, fMinY, fZOther ) );
-                aPosList.push_back( getScreenPosAndLogicPos( fXOther, fMinY, fZOnZPlane ) );
+                tScreenPosAndLogicPosList aPosList { getScreenPosAndLogicPos( fXOnXPlane, fMinY, fZOther ), getScreenPosAndLogicPos( fXOther, fMinY, fZOnZPlane ) };
 
                 if( fabs(fDeltaY) > fabs(fDeltaX)  )
                 {
@@ -1408,9 +1404,7 @@ void VCartesianAxis::get2DAxisMainLine(
                 double fDeltaX = rEnd.getX() - rStart.getX();
 
                 //only those points are candidates which are lying on exactly one wall as these are outer edges
-                tScreenPosAndLogicPosList aPosList;
-                aPosList.push_back( getScreenPosAndLogicPos( fXOther, fYOnYPlane, fMinZ ) );
-                aPosList.push_back( getScreenPosAndLogicPos( fXOnXPlane, fYOther, fMinZ ) );
+                tScreenPosAndLogicPosList aPosList { getScreenPosAndLogicPos( fXOther, fYOnYPlane, fMinZ ), getScreenPosAndLogicPos( fXOnXPlane, fYOther, fMinZ ) };
 
                 std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
                 ScreenPosAndLogicPos aBestPos( aPosList[0] );
