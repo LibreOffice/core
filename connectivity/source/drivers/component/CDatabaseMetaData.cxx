@@ -53,31 +53,29 @@ Reference< XResultSet > OComponentDatabaseMetaData::impl_getTypeInfo_throw(  )
     static ODatabaseMetaDataResultSet::ORows aRows;
     if(aRows.empty())
     {
-        ODatabaseMetaDataResultSet::ORow aRow;
-
         aRows.reserve(6);
-        aRow.reserve(18);
-
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(OUString("VARCHAR")));
-        aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
-        aRow.push_back(new ORowSetValueDecorator(sal_Int32(65535)));
-        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::get1Value()); // ORowSetValue((sal_Int32)ColumnValue::NULLABLE)
-        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
-        aRow.push_back(new ORowSetValueDecorator(sal_Int32(ColumnSearch::CHAR)));
-        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(sal_Int32(10)));
-
+        ODatabaseMetaDataResultSet::ORow aRow
+        {
+            ODatabaseMetaDataResultSet::getEmptyValue(),
+            new ORowSetValueDecorator(OUString("VARCHAR")),
+            new ORowSetValueDecorator(DataType::VARCHAR),
+            new ORowSetValueDecorator(sal_Int32(65535)),
+            ODatabaseMetaDataResultSet::getQuoteValue(),
+            ODatabaseMetaDataResultSet::getQuoteValue(),
+            ODatabaseMetaDataResultSet::getEmptyValue(),
+            ODatabaseMetaDataResultSet::get1Value(), // ORowSetValue((sal_Int32)ColumnValue::NULLABLE
+            ODatabaseMetaDataResultSet::get1Value(),
+            new ORowSetValueDecorator(sal_Int32(ColumnSearch::CHAR)),
+            ODatabaseMetaDataResultSet::get1Value(),
+            ODatabaseMetaDataResultSet::get0Value(),
+            ODatabaseMetaDataResultSet::get0Value(),
+            ODatabaseMetaDataResultSet::getEmptyValue(),
+            ODatabaseMetaDataResultSet::get0Value(),
+            ODatabaseMetaDataResultSet::get0Value(),
+            ODatabaseMetaDataResultSet::getEmptyValue(),
+            ODatabaseMetaDataResultSet::getEmptyValue(),
+            new ORowSetValueDecorator(sal_Int32(10))
+        };
 
         aRows.push_back(aRow);
 

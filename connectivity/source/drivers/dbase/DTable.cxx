@@ -1885,11 +1885,13 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                         m_xColumns->getByIndex(i) >>= xCol;
                         OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-                        std::vector< std::pair<const char* , OUString > > aStringToSubstitutes;
-                        aStringToSubstitutes.push_back(std::pair<const char* , OUString >("$columnname$", aColName));
-                        aStringToSubstitutes.push_back(std::pair<const char* , OUString >("$precision$", OUString::number(nLen)));
-                        aStringToSubstitutes.push_back(std::pair<const char* , OUString >("$scale$", OUString::number(nScale)));
-                        aStringToSubstitutes.push_back(std::pair<const char* , OUString >("$value$", OStringToOUString(aDefaultValue,RTL_TEXTENCODING_UTF8)));
+                        std::vector< std::pair<const char* , OUString > > aStringToSubstitutes
+                        {
+                            { "$columnname$", aColName },
+                            { "$precision$", OUString::number(nLen) },
+                            { "$scale$", OUString::number(nScale) },
+                            { "$value$", OStringToOUString(aDefaultValue,RTL_TEXTENCODING_UTF8) }
+                        };
 
                         const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                                 STR_INVALID_COLUMN_DECIMAL_VALUE
