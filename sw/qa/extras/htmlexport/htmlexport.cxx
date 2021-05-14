@@ -1417,6 +1417,36 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeading)
     assertXPathContent(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p", "list header");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteNoMargin)
+{
+    // Given a document with some text, para style set to Quotations, no bottom margin:
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->insertString(xText->getEnd(), "string", /*bAbsorb=*/false);
+    uno::Reference<beans::XPropertySet> xQuotations(
+        getStyles("ParagraphStyles")->getByName("Quotations"), uno::UNO_QUERY);
+    xQuotations->setPropertyValue("ParaBottomMargin", uno::makeAny(static_cast<sal_Int32>(0)));
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    xParagraph->setPropertyValue("ParaStyleName", uno::makeAny(OUString("Quotations")));
+
+    // When exporting to XHTML:
+    ExportToReqif();
+
+    // Then make sure the output is valid xhtml:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed:
+    // - expected: <blockquote><p>...</p></blockquote>
+    // - actual  : <blockquote>...</blockquote>
+    // i.e. <blockquote> is can't have character children, but it had.
+    assertXPathContent(pXmlDoc,
+                       "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:blockquote/reqif-xhtml:p",
+                       "string");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
