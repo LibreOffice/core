@@ -10907,6 +10907,11 @@ smoketest/smoketest.cxx
 solenv/bin/concat-deps.c
 solenv/gbuildtojson/gbuildtojson.cxx
 solenv/gcc-wrappers/wrapper.cxx
+solenv/lockfile/autoconf.h.in
+solenv/lockfile/dotlockfile.c
+solenv/lockfile/lockfile.c
+solenv/lockfile/lockfile.h
+solenv/lockfile/maillock.h
 soltools/cpp/_eval.c
 soltools/cpp/_getopt.c
 soltools/cpp/_include.c
