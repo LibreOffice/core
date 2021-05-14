@@ -1990,6 +1990,11 @@ void Test::testMatrixConditionalBooleanResult()
 {
     m_pDoc->InsertTab(0, "foo");
 
+    ScFormulaOptions aOldOptions, aNewOptions;
+    aOldOptions = SC_MOD()->GetFormulaOptions();
+    aNewOptions.SetFormulaSepArg(";");
+    getDocShell().SetFormulaOptions(aNewOptions);
+
     // Create matrix formulas in A1:B1,A2:B2,A3:B3,A4:B4 producing mixed
     // boolean and numeric results in an unformatted area.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
@@ -2007,6 +2012,9 @@ void Test::testMatrixConditionalBooleanResult()
     //CPPUNIT_ASSERT_EQUAL( OUString("FALSE"), m_pDoc->GetString(1,2,0));   // not yet
     CPPUNIT_ASSERT_EQUAL( OUString("FALSE"), m_pDoc->GetString(0,3,0));
     CPPUNIT_ASSERT_EQUAL( OUString("42"),    m_pDoc->GetString(1,3,0));
+
+    // restore formula options back to default
+    getDocShell().SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
@@ -12359,50 +12367,6 @@ void Test::testEmptyCalcDocDefaults()
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsActiveScenario(tab) );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasCalcNotification(tab) );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasManualBreaks(tab) );
-}
-
-ScDocShell* Test::findLoadedDocShellByName(std::u16string_view rName)
-{
-    ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
-    while (pShell)
-    {
-        SfxMedium* pMedium = pShell->GetMedium();
-        if (pMedium)
-        {
-            OUString aName = pMedium->GetName();
-            if (aName == rName)
-                return pShell;
-        }
-        pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, checkSfxObjectShell<ScDocShell>, false));
-    }
-    return nullptr;
-}
-
-void Test::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)
-{
-    ScMarkData aMark(pDestDoc->GetSheetLimits());
-    aMark.SetMarkArea(rDestRange);
-    sc::CopyFromClipContext aCxt(*pDestDoc, nullptr, pClipDoc, eFlags, false, false);
-    aCxt.setDestRange(rDestRange.aStart.Col(), rDestRange.aStart.Row(),
-            rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
-    aCxt.setTabRange(rDestRange.aStart.Tab(), rDestRange.aEnd.Tab());
-    pDestDoc->CopyOneCellFromClip(aCxt, rDestRange.aStart.Col(), rDestRange.aStart.Row(),
-            rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
-}
-
-void Test::setExpandRefs(bool bExpand)
-{
-    ScModule* pMod = SC_MOD();
-    ScInputOptions aOpt = pMod->GetInputOptions();
-    aOpt.SetExpandRefs(bExpand);
-    pMod->SetInputOptions(aOpt);
-}
-
-void Test::setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown)
-{
-    ScDocOptions aOpt = pDoc->GetDocOptions();
-    aOpt.SetCalcAsShown(bCalcAsShown);
-    pDoc->SetDocOptions(aOpt);
 }
 
 void Test::checkPrecisionAsShown( OUString& rCode, double fValue, double fExpectedRoundVal )

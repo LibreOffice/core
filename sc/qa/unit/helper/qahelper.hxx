@@ -250,6 +250,13 @@ SCQAHELPER_DLLPUBLIC void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDe
 SCQAHELPER_DLLPUBLIC ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange,
                                     ScDocumentUniquePtr pUndoDoc);
 
+SCQAHELPER_DLLPUBLIC ScDocShell* findLoadedDocShellByName(std::u16string_view rName);
+SCQAHELPER_DLLPUBLIC void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
+                                 ScDocument* pClipDoc,
+                                 InsertDeleteFlags eFlags = InsertDeleteFlags::ALL);
+
+SCQAHELPER_DLLPUBLIC void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown);
+
 SCQAHELPER_DLLPUBLIC ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
                                    const std::vector<std::vector<const char*>>& rData);
 SCQAHELPER_DLLPUBLIC bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ucalc.hxx"
+#include <test/bootstrapfixture.hxx>
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 #include <markdata.hxx>
@@ -20,6 +20,7 @@
 #include <formulacell.hxx>
 #include <docsh.hxx>
 #include <docfunc.hxx>
+#include <inputopt.hxx>
 #include <paramisc.hxx>
 #include <tokenstringcontext.hxx>
 #include <refupdatecontext.hxx>
@@ -32,6 +33,7 @@
 #include <docoptio.hxx>
 #include <formulaopt.hxx>
 #include <externalrefmgr.hxx>
+#include <scdll.hxx>
 #include <scmod.hxx>
 #include <svl/itemset.hxx>
 
@@ -85,9 +87,393 @@ ScRange getCachedRange(const ScExternalRefCache::TableTypeRef& pCacheTab)
     return aRange;
 }
 
+void setExpandRefs(bool bExpand)
+{
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aOpt = pMod->GetInputOptions();
+    aOpt.SetExpandRefs(bExpand);
+    pMod->SetInputOptions(aOpt);
 }
 
-void Test::testFormulaCreateStringFromTokens()
+void testFormulaRefUpdateNameCopySheetCheckTab( ScDocument* pDoc, SCTAB nTab, bool bCheckNames )
+{
+    if (bCheckNames)
+    {
+        const ScRangeData* pName;
+        pName = pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL should exist", pName);
+        pName = pDoc->GetRangeName(nTab)->findByUpperName("LOCAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL should exist", pName);
+        pName = pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL_GLOBAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL_GLOBAL should exist", pName);
+        pName = pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL_LOCAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL_LOCAL should exist", pName);
+        pName = pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL_UNUSED");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL_UNUSED should exist", pName);
+        pName = pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL_UNUSED_NOREF");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL_UNUSED_NOREF should not exist", !pName);
+        pName = pDoc->GetRangeName(nTab)->findByUpperName("LOCAL_GLOBAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL_GLOBAL should exist", pName);
+        pName = pDoc->GetRangeName(nTab)->findByUpperName("LOCAL_LOCAL");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL_LOCAL should exist", pName);
+        pName = pDoc->GetRangeName(nTab)->findByUpperName("LOCAL_UNUSED");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL_UNUSED should exist", pName);
+        pName = pDoc->GetRangeName(nTab)->findByUpperName("LOCAL_UNUSED_NOREF");
+        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL_UNUSED_NOREF should exist", pName);
+    }
+
+    ScAddress aPos(0,0,0);
+    aPos.SetRow(0);
+    aPos.SetTab(nTab);
+    int nSheet = nTab + 1;
+    CPPUNIT_ASSERT_EQUAL( 1.0 * nSheet, pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL( 11.0 * nSheet, pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL( 100.0 * nSheet, pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL( 11000.0 * nSheet, pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL( 10000.0 * nSheet, pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL( 1100000.0 * nSheet, pDoc->GetValue(aPos));
+}
+
+class ColumnTest
+{
+    ScDocument * m_pDoc;
+
+    const SCROW m_nTotalRows;
+    const SCROW m_nStart1;
+    const SCROW m_nEnd1;
+    const SCROW m_nStart2;
+    const SCROW m_nEnd2;
+
+public:
+    ColumnTest( ScDocument * pDoc, SCROW nTotalRows,
+                SCROW nStart1, SCROW nEnd1, SCROW nStart2, SCROW nEnd2 )
+        : m_pDoc(pDoc), m_nTotalRows(nTotalRows)
+        , m_nStart1(nStart1), m_nEnd1(nEnd1)
+        , m_nStart2(nStart2), m_nEnd2(nEnd2)
+    {}
+
+    void operator() ( SCCOL nColumn, const OUString& rFormula,
+                      std::function<double(SCROW )> const & lExpected ) const
+    {
+        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        ScMarkData aMark(m_pDoc->GetSheetLimits());
+
+        ScAddress aPos(nColumn, m_nStart1, 0);
+        m_pDoc->SetString(aPos, rFormula);
+        ASSERT_DOUBLES_EQUAL( lExpected(m_nStart1), m_pDoc->GetValue(aPos) );
+
+        // Copy formula cell to clipboard.
+        ScClipParam aClipParam(aPos, false);
+        aMark.SetMarkArea(aPos);
+        m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+        // Paste it to first range.
+        InsertDeleteFlags nFlags = InsertDeleteFlags::CONTENTS;
+        ScRange aDestRange(nColumn, m_nStart1, 0, nColumn, m_nEnd1, 0);
+        aMark.SetMarkArea(aDestRange);
+        m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, &aClipDoc);
+
+        // Paste it second range.
+        aDestRange = ScRange(nColumn, m_nStart2, 0, nColumn, m_nEnd2, 0);
+        aMark.SetMarkArea(aDestRange);
+        m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, &aClipDoc);
+
+        // Check the formula results for passed column.
+        for( SCROW i = 0; i < m_nTotalRows; ++i )
+        {
+            if( !((m_nStart1 <= i && i <= m_nEnd1) || (m_nStart2 <= i && i <= m_nEnd2)) )
+                continue;
+            double fExpected = lExpected(i);
+            ASSERT_DOUBLES_EQUAL(fExpected, m_pDoc->GetValue(ScAddress(nColumn,i,0)));
+        }
+    }
+};
+
+}
+
+class TestFormula : public test::BootstrapFixture
+{
+public:
+    TestFormula();
+
+    virtual void setUp() override;
+    virtual void tearDown() override;
+
+    void testFormulaCreateStringFromTokens();
+    void testFormulaParseReference();
+    void testFetchVectorRefArray();
+    void testGroupConverter3D();
+    void testFormulaHashAndTag();
+    void testFormulaTokenEquality();
+    void testFormulaRefData();
+    void testFormulaCompiler();
+    void testFormulaCompilerJumpReordering();
+    void testFormulaCompilerImplicitIntersection2Param();
+    void testFormulaCompilerImplicitIntersection1ParamNoChange();
+    void testFormulaCompilerImplicitIntersection1ParamWithChange();
+    void testFormulaCompilerImplicitIntersection1NoGroup();
+    void testFormulaCompilerImplicitIntersectionOperators();
+    void testFormulaAnnotateTrimOnDoubleRefs();
+    void testFormulaRefUpdate();
+    void testFormulaRefUpdateRange();
+    void testFormulaRefUpdateSheets();
+    void testFormulaRefUpdateSheetsDelete();
+    void testFormulaRefUpdateInsertRows();
+    void testFormulaRefUpdateInsertColumns();
+    void testFormulaRefUpdateMove();
+    void testFormulaRefUpdateMoveUndo();
+    void testFormulaRefUpdateMoveUndo2();
+    void testFormulaRefUpdateMoveUndo3NonShared();
+    void testFormulaRefUpdateMoveUndo3Shared();
+    void testFormulaRefUpdateMoveUndoDependents();
+    void testFormulaRefUpdateMoveUndo4();
+    void testFormulaRefUpdateMoveToSheet();
+    void testFormulaRefUpdateDeleteContent();
+    void testFormulaRefUpdateDeleteAndShiftLeft();
+    void testFormulaRefUpdateDeleteAndShiftLeft2();
+    void testFormulaRefUpdateDeleteAndShiftUp();
+    void testFormulaRefUpdateName();
+    void testFormulaRefUpdateNameMove();
+    void testFormulaRefUpdateNameExpandRef();
+    void testFormulaRefUpdateNameExpandRef2();
+    void testFormulaRefUpdateNameDeleteRow();
+    void testFormulaRefUpdateNameCopySheet();
+    void testFormulaRefUpdateSheetLocalMove();
+    void testFormulaRefUpdateNameDelete();
+    void testFormulaRefUpdateValidity();
+    void testTokenArrayRefUpdateMove();
+    void testSingleCellCopyColumnLabel();
+    void testIntersectionOpExcel();
+    void testTdf97369();
+    void testTdf97587();
+    void testTdf93415();
+    void testTdf100818();
+    void testMatConcat();
+    void testMatConcatReplication();
+    void testExternalRef();
+    void testFormulaDepTracking();
+    void testFormulaDepTracking2();
+    void testFormulaDepTracking3();
+    void testFormulaDepTrackingDeleteRow();
+    void testFormulaDepTrackingDeleteCol();
+    void testFormulaMatrixResultUpdate();
+    void testExternalRefFunctions();
+    void testExternalRangeName();
+    void testExternalRefUnresolved();
+    void testRefR1C1WholeCol();
+    void testRefR1C1WholeRow();
+    void testIterations();
+    void testInsertColCellStoreEventSwap();
+    void testFormulaAfterDeleteRows();
+    void testMultipleOperations();
+    void testFuncCOLUMN();
+    void testFuncCOUNT();
+    void testFuncCOUNTBLANK();
+    void testFuncROW();
+    void testFuncSUM();
+    void testFuncPRODUCT();
+    void testFuncSUMPRODUCT();
+    void testFuncSUMXMY2();
+    void testFuncMIN();
+    void testFuncN();
+    void testFuncCOUNTIF();
+    void testFuncNUMBERVALUE();
+    void testFuncLEN();
+    void testFuncLOOKUP();
+    void testFuncLOOKUParrayWithError();
+    void testTdf141146();
+    void testFuncVLOOKUP();
+    void testFuncMATCH();
+    void testFuncCELL();
+    void testFuncDATEDIF();
+    void testFuncINDIRECT();
+    void testFuncINDIRECT2();
+    void testFunc_MATCH_INDIRECT();
+    void testFuncIF();
+    void testFuncCHOOSE();
+    void testFuncIFERROR();
+    void testFuncSHEET();
+    void testFuncNOW();
+    void testMatrixOp();
+    void testFuncRangeOp();
+    void testFuncFORMULA();
+    void testFuncTableRef();
+    void testFuncFTEST();
+    void testFuncFTESTBug();
+    void testFuncCHITEST();
+    void testFuncTTEST();
+    void testFuncSUMX2PY2();
+    void testFuncSUMX2MY2();
+    void testFuncGCD();
+    void testFuncLCM();
+    void testFuncSUMSQ();
+    void testFuncMDETERM();
+    void testFormulaErrorPropagation();
+    void testFuncRowsHidden();
+    void testFuncSUMIFS();
+    void testFuncRefListArraySUBTOTAL();
+    void testFuncJumpMatrixArrayIF();
+    void testFuncJumpMatrixArrayOFFSET();
+
+    CPPUNIT_TEST_SUITE(TestFormula);
+
+    CPPUNIT_TEST(testFormulaCreateStringFromTokens);
+    CPPUNIT_TEST(testFormulaParseReference);
+    CPPUNIT_TEST(testFetchVectorRefArray);
+    CPPUNIT_TEST(testGroupConverter3D);
+    // CPPUNIT_TEST(testFormulaHashAndTag);
+    CPPUNIT_TEST(testFormulaTokenEquality);
+    CPPUNIT_TEST(testFormulaRefData);
+    CPPUNIT_TEST(testFormulaCompiler);
+    CPPUNIT_TEST(testFormulaCompilerJumpReordering);
+    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection2Param);
+    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection1ParamNoChange);
+    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection1ParamWithChange);
+    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection1NoGroup);
+    CPPUNIT_TEST(testFormulaCompilerImplicitIntersectionOperators);
+    CPPUNIT_TEST(testFormulaAnnotateTrimOnDoubleRefs);
+    CPPUNIT_TEST(testFormulaRefUpdate);
+    CPPUNIT_TEST(testFormulaRefUpdateRange);
+    CPPUNIT_TEST(testFormulaRefUpdateSheets);
+    CPPUNIT_TEST(testFormulaRefUpdateSheetsDelete);
+    CPPUNIT_TEST(testFormulaRefUpdateInsertRows);
+    CPPUNIT_TEST(testFormulaRefUpdateInsertColumns);
+    CPPUNIT_TEST(testFormulaRefUpdateMove);
+    CPPUNIT_TEST(testFormulaRefUpdateMoveUndo);
+    CPPUNIT_TEST(testFormulaRefUpdateMoveUndo2);
+    CPPUNIT_TEST(testFormulaRefUpdateMoveUndo3NonShared);
+    CPPUNIT_TEST(testFormulaRefUpdateMoveUndo3Shared);
+    CPPUNIT_TEST(testFormulaRefUpdateMoveUndoDependents);
+    CPPUNIT_TEST(testFormulaRefUpdateMoveUndo4);
+    CPPUNIT_TEST(testFormulaRefUpdateMoveToSheet);
+    CPPUNIT_TEST(testFormulaRefUpdateDeleteContent);
+    CPPUNIT_TEST(testFormulaRefUpdateDeleteAndShiftLeft);
+    CPPUNIT_TEST(testFormulaRefUpdateDeleteAndShiftLeft2);
+    CPPUNIT_TEST(testFormulaRefUpdateDeleteAndShiftUp);
+    CPPUNIT_TEST(testFormulaRefUpdateName);
+    CPPUNIT_TEST(testFormulaRefUpdateNameMove);
+    CPPUNIT_TEST(testFormulaRefUpdateNameExpandRef);
+    CPPUNIT_TEST(testFormulaRefUpdateNameExpandRef2);
+    CPPUNIT_TEST(testFormulaRefUpdateNameDeleteRow);
+    CPPUNIT_TEST(testFormulaRefUpdateNameCopySheet);
+    CPPUNIT_TEST(testFormulaRefUpdateSheetLocalMove);
+    CPPUNIT_TEST(testFormulaRefUpdateNameDelete);
+    CPPUNIT_TEST(testFormulaRefUpdateValidity);
+    CPPUNIT_TEST(testTokenArrayRefUpdateMove);
+    CPPUNIT_TEST(testSingleCellCopyColumnLabel);
+    CPPUNIT_TEST(testIntersectionOpExcel);
+    CPPUNIT_TEST(testTdf97369);
+    CPPUNIT_TEST(testTdf97587);
+    CPPUNIT_TEST(testTdf93415);
+    CPPUNIT_TEST(testTdf100818);
+    CPPUNIT_TEST(testMatConcat);
+    CPPUNIT_TEST(testMatConcatReplication);
+    CPPUNIT_TEST(testExternalRef);
+    CPPUNIT_TEST(testFormulaDepTracking);
+    CPPUNIT_TEST(testFormulaDepTracking2);
+    CPPUNIT_TEST(testFormulaDepTracking3);
+    CPPUNIT_TEST(testFormulaDepTrackingDeleteRow);
+    CPPUNIT_TEST(testFormulaDepTrackingDeleteCol);
+    CPPUNIT_TEST(testFormulaMatrixResultUpdate);
+    CPPUNIT_TEST(testExternalRefFunctions);
+    CPPUNIT_TEST(testExternalRangeName);
+    CPPUNIT_TEST(testExternalRefUnresolved);
+    CPPUNIT_TEST(testRefR1C1WholeCol);
+    CPPUNIT_TEST(testRefR1C1WholeRow);
+    CPPUNIT_TEST(testIterations);
+    CPPUNIT_TEST(testInsertColCellStoreEventSwap);
+    CPPUNIT_TEST(testFormulaAfterDeleteRows);
+    CPPUNIT_TEST(testMultipleOperations);
+    CPPUNIT_TEST(testFuncCOLUMN);
+    CPPUNIT_TEST(testFuncCOUNT);
+    CPPUNIT_TEST(testFuncCOUNTBLANK);
+    CPPUNIT_TEST(testFuncROW);
+    CPPUNIT_TEST(testFuncSUM);
+    CPPUNIT_TEST(testFuncPRODUCT);
+    CPPUNIT_TEST(testFuncSUMPRODUCT);
+    CPPUNIT_TEST(testFuncSUMXMY2);
+    CPPUNIT_TEST(testFuncMIN);
+    CPPUNIT_TEST(testFuncN);
+    CPPUNIT_TEST(testFuncCOUNTIF);
+    CPPUNIT_TEST(testFuncNUMBERVALUE);
+    CPPUNIT_TEST(testFuncLEN);
+    CPPUNIT_TEST(testFuncLOOKUP);
+    CPPUNIT_TEST(testFuncLOOKUParrayWithError);
+    CPPUNIT_TEST(testTdf141146);
+    CPPUNIT_TEST(testFuncVLOOKUP);
+    CPPUNIT_TEST(testFuncMATCH);
+    CPPUNIT_TEST(testFuncCELL);
+    CPPUNIT_TEST(testFuncDATEDIF);
+    CPPUNIT_TEST(testFuncINDIRECT);
+    CPPUNIT_TEST(testFuncINDIRECT2);
+    CPPUNIT_TEST(testFunc_MATCH_INDIRECT);
+    CPPUNIT_TEST(testFuncIF);
+    CPPUNIT_TEST(testFuncCHOOSE);
+    CPPUNIT_TEST(testFuncIFERROR);
+    CPPUNIT_TEST(testFuncSHEET);
+    CPPUNIT_TEST(testFuncNOW);
+    CPPUNIT_TEST(testMatrixOp);
+    CPPUNIT_TEST(testFuncRangeOp);
+    CPPUNIT_TEST(testFuncFORMULA);
+    CPPUNIT_TEST(testFuncTableRef);
+    CPPUNIT_TEST(testFuncFTEST);
+    CPPUNIT_TEST(testFuncFTESTBug);
+    CPPUNIT_TEST(testFuncCHITEST);
+    CPPUNIT_TEST(testFuncTTEST);
+    CPPUNIT_TEST(testFuncSUMX2PY2);
+    CPPUNIT_TEST(testFuncSUMX2MY2);
+    CPPUNIT_TEST(testFuncGCD);
+    CPPUNIT_TEST(testFuncLCM);
+    CPPUNIT_TEST(testFuncSUMSQ);
+    CPPUNIT_TEST(testFuncMDETERM);
+    CPPUNIT_TEST(testFormulaErrorPropagation);
+    CPPUNIT_TEST(testFuncRowsHidden);
+    CPPUNIT_TEST(testFuncSUMIFS);
+    CPPUNIT_TEST(testFuncRefListArraySUBTOTAL);
+    CPPUNIT_TEST(testFuncJumpMatrixArrayIF);
+    CPPUNIT_TEST(testFuncJumpMatrixArrayOFFSET);
+
+    CPPUNIT_TEST_SUITE_END();
+
+private:
+    ScDocShellRef m_xDocShell;
+    ScDocument* m_pDoc;
+};
+
+TestFormula::TestFormula()
+{
+}
+
+void TestFormula::setUp()
+{
+    BootstrapFixture::setUp();
+
+    ScDLL::Init();
+
+    m_xDocShell = new ScDocShell(
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    m_xDocShell->SetIsInUcalc();
+    m_xDocShell->DoInitUnitTest();
+
+    m_pDoc = &m_xDocShell->GetDocument();
+}
+
+void TestFormula::tearDown()
+{
+    m_xDocShell->DoClose();
+    m_xDocShell.clear();
+
+    test::BootstrapFixture::tearDown();
+}
+
+void TestFormula::testFormulaCreateStringFromTokens()
 {
     // Insert sheets.
     m_pDoc->InsertTab(0, "Test");
@@ -248,7 +634,7 @@ bool equals( const formula::VectorRefArray& rArray, size_t nPos, const OUString&
 
 }
 
-void Test::testFormulaParseReference()
+void TestFormula::testFormulaParseReference()
 {
     OUString aTab1("90's Music"), aTab2("90's and 70's"), aTab3("All Others"), aTab4("NoQuote");
     m_pDoc->InsertTab(0, "Dummy"); // just to shift the sheet indices...
@@ -478,7 +864,7 @@ void Test::testFormulaParseReference()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFetchVectorRefArray()
+void TestFormula::testFetchVectorRefArray()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -774,7 +1160,7 @@ void Test::testFetchVectorRefArray()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testGroupConverter3D()
+void TestFormula::testGroupConverter3D()
 {
     m_pDoc->InsertTab(0, "Test");
     m_pDoc->InsertTab(1, "Test2");
@@ -795,7 +1181,7 @@ void Test::testGroupConverter3D()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaHashAndTag()
+void TestFormula::testFormulaHashAndTag()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -888,7 +1274,7 @@ void Test::testFormulaHashAndTag()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaTokenEquality()
+void TestFormula::testFormulaTokenEquality()
 {
     struct FormulaTokenEqualityTest
     {
@@ -943,7 +1329,7 @@ void Test::testFormulaTokenEquality()
     }
 }
 
-void Test::testFormulaRefData()
+void TestFormula::testFormulaRefData()
 {
     std::unique_ptr<ScDocument> pDoc = std::make_unique<ScDocument>();
 
@@ -986,7 +1372,7 @@ void Test::testFormulaRefData()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong end position of extended range.", ScAddress(8,6,0), aTest.aEnd);
 }
 
-void Test::testFormulaCompiler()
+void TestFormula::testFormulaCompiler()
 {
     static const struct {
         const char* pInput; FormulaGrammar::Grammar eInputGram;
@@ -1008,7 +1394,7 @@ void Test::testFormulaCompiler()
     }
 }
 
-void Test::testFormulaCompilerJumpReordering()
+void TestFormula::testFormulaCompilerJumpReordering()
 {
     struct TokenCheck
     {
@@ -1022,7 +1408,7 @@ void Test::testFormulaCompilerJumpReordering()
     aNewOptions.SetFormulaSepArg(";");
     aNewOptions.SetFormulaSepArrayCol(";");
     aNewOptions.SetFormulaSepArrayRow("|");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     {
         // Compile formula string first.
@@ -1083,10 +1469,10 @@ void Test::testFormulaCompilerJumpReordering()
     }
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 }
 
-void Test::testFormulaCompilerImplicitIntersection2Param()
+void TestFormula::testFormulaCompilerImplicitIntersection2Param()
 {
     struct TestCaseFormula
     {
@@ -1212,7 +1598,7 @@ void Test::testFormulaCompilerImplicitIntersection2Param()
     }
 }
 
-void Test::testFormulaCompilerImplicitIntersection1ParamNoChange()
+void TestFormula::testFormulaCompilerImplicitIntersection1ParamNoChange()
 {
     struct TestCaseFormulaNoChange
     {
@@ -1309,7 +1695,7 @@ void Test::testFormulaCompilerImplicitIntersection1ParamNoChange()
     }
 }
 
-void Test::testFormulaCompilerImplicitIntersection1ParamWithChange()
+void TestFormula::testFormulaCompilerImplicitIntersection1ParamWithChange()
 {
     struct TestCaseFormula
     {
@@ -1390,7 +1776,7 @@ void Test::testFormulaCompilerImplicitIntersection1ParamWithChange()
     }
 }
 
-void Test::testFormulaCompilerImplicitIntersection1NoGroup()
+void TestFormula::testFormulaCompilerImplicitIntersection1NoGroup()
 {
     m_pDoc->InsertTab(0, "Formula");
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
@@ -1407,7 +1793,7 @@ void Test::testFormulaCompilerImplicitIntersection1NoGroup()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaCompilerImplicitIntersectionOperators()
+void TestFormula::testFormulaCompilerImplicitIntersectionOperators()
 {
     struct TestCase
     {
@@ -1443,7 +1829,7 @@ void Test::testFormulaCompilerImplicitIntersectionOperators()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaAnnotateTrimOnDoubleRefs()
+void TestFormula::testFormulaAnnotateTrimOnDoubleRefs()
 {
     m_pDoc->InsertTab(0, "Test");
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
@@ -1552,7 +1938,7 @@ void Test::testFormulaAnnotateTrimOnDoubleRefs()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdate()
+void TestFormula::testFormulaRefUpdate()
 {
     m_pDoc->InsertTab(0, "Formula");
 
@@ -1759,7 +2145,7 @@ void Test::testFormulaRefUpdate()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateRange()
+void TestFormula::testFormulaRefUpdateRange()
 {
     m_pDoc->InsertTab(0, "Formula");
 
@@ -2193,7 +2579,7 @@ void Test::testFormulaRefUpdateRange()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateSheets()
+void TestFormula::testFormulaRefUpdateSheets()
 {
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
@@ -2337,7 +2723,7 @@ void Test::testFormulaRefUpdateSheets()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateInsertRows()
+void TestFormula::testFormulaRefUpdateInsertRows()
 {
     setExpandRefs(false);
 
@@ -2357,7 +2743,7 @@ void Test::testFormulaRefUpdateInsertRows()
     // Insert rows over rows 1:2.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     rFunc.InsertCells(ScRange(0,0,0,m_pDoc->MaxCol(),1,0), &aMark, INS_INSROWS_BEFORE, false, true);
 
     // The raw data should have shifted to B4:B6.
@@ -2392,7 +2778,7 @@ void Test::testFormulaRefUpdateInsertRows()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateSheetsDelete()
+void TestFormula::testFormulaRefUpdateSheetsDelete()
 {
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
@@ -2468,7 +2854,7 @@ void Test::testFormulaRefUpdateSheetsDelete()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateInsertColumns()
+void TestFormula::testFormulaRefUpdateInsertColumns()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     setExpandRefs(false);
@@ -2512,7 +2898,7 @@ void Test::testFormulaRefUpdateInsertColumns()
     // Insert columns over A:B.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     rFunc.InsertCells(ScRange(0,0,0,1,m_pDoc->MaxRow(),0), &aMark, INS_INSCOLS_BEFORE, false, true);
 
     // Now, the original column B has moved to column D.
@@ -2558,7 +2944,7 @@ void Test::testFormulaRefUpdateInsertColumns()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateMove()
+void TestFormula::testFormulaRefUpdateMove()
 {
     m_pDoc->InsertTab(0, "Sheet1");
 
@@ -2581,7 +2967,7 @@ void Test::testFormulaRefUpdateMove()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,11,0));
 
     // Move B4:B6 to D4 (two columns to the right).
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(1,3,0,1,5,0), ScAddress(3,3,0), true, false, false, false);
     CPPUNIT_ASSERT_MESSAGE("Failed to move B4:B6.", bMoved);
 
@@ -2631,7 +3017,7 @@ void Test::testFormulaRefUpdateMove()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateMoveUndo()
+void TestFormula::testFormulaRefUpdateMoveUndo()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -2670,7 +3056,7 @@ void Test::testFormulaRefUpdateMoveUndo()
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,11,0), "SUM(A1:A4)", "Wrong formula.");
 
     // Move A1:A3 to C1:C3. Note that A4 remains.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0,0,0,0,2,0), ScAddress(2,0,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -2729,7 +3115,7 @@ void Test::testFormulaRefUpdateMoveUndo()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateMoveUndo2()
+void TestFormula::testFormulaRefUpdateMoveUndo2()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -2758,7 +3144,7 @@ void Test::testFormulaRefUpdateMoveUndo2()
     CPPUNIT_ASSERT_EQUAL(SCROW(2), pFC->GetSharedLength());
 
     // Drag A1:B1 into A2:B2 thereby overwriting the old A2:B2 content.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0,0,0,1,0,0), ScAddress(0,1,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -2793,7 +3179,7 @@ void Test::testFormulaRefUpdateMoveUndo2()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateMoveUndo3NonShared()
+void TestFormula::testFormulaRefUpdateMoveUndo3NonShared()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -2817,7 +3203,7 @@ void Test::testFormulaRefUpdateMoveUndo3NonShared()
     CPPUNIT_ASSERT(bGood);
 
     // Drag A2:A3 into C2:C3.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0,1,0,0,2,0), ScAddress(2,1,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -2847,7 +3233,7 @@ void Test::testFormulaRefUpdateMoveUndo3NonShared()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateMoveUndo3Shared()
+void TestFormula::testFormulaRefUpdateMoveUndo3Shared()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -2878,7 +3264,7 @@ void Test::testFormulaRefUpdateMoveUndo3Shared()
     CPPUNIT_ASSERT_EQUAL(SCROW(2), pFC->GetSharedLength());
 
     // Drag A2:A4 into C2:C4.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0,1,0,0,3,0), ScAddress(2,1,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -2919,7 +3305,7 @@ void Test::testFormulaRefUpdateMoveUndo3Shared()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateMoveUndoDependents()
+void TestFormula::testFormulaRefUpdateMoveUndoDependents()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -2950,7 +3336,7 @@ void Test::testFormulaRefUpdateMoveUndoDependents()
     CPPUNIT_ASSERT(bGood);
 
     // Drag C2 into D2.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(2, 1, 0, 2, 1, 0), ScAddress(3, 1, 0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -2984,7 +3370,7 @@ void Test::testFormulaRefUpdateMoveUndoDependents()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateMoveUndo4()
+void TestFormula::testFormulaRefUpdateMoveUndo4()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -3005,7 +3391,7 @@ void Test::testFormulaRefUpdateMoveUndo4()
     CPPUNIT_ASSERT(bGood);
 
     // Drag A1:A2 into B1:B2.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0, 0, 0, 0, 1, 0), ScAddress(1, 0, 0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -3049,7 +3435,7 @@ void Test::testFormulaRefUpdateMoveUndo4()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateMoveToSheet()
+void TestFormula::testFormulaRefUpdateMoveToSheet()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -3069,7 +3455,7 @@ void Test::testFormulaRefUpdateMoveToSheet()
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(1,1,0)));
 
     // Move A1:A2 on Sheet1 to B3:B4 on Sheet2.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0,0,0,0,1,0), ScAddress(1,2,1), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -3093,7 +3479,7 @@ void Test::testFormulaRefUpdateMoveToSheet()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateDeleteContent()
+void TestFormula::testFormulaRefUpdateDeleteContent()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -3107,7 +3493,7 @@ void Test::testFormulaRefUpdateDeleteContent()
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,1,0)));
 
     // Delete B2.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(ScAddress(1,1,0));
     rFunc.DeleteContents(aMark, InsertDeleteFlags::CONTENTS, true, true);
@@ -3131,7 +3517,7 @@ void Test::testFormulaRefUpdateDeleteContent()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateDeleteAndShiftLeft()
+void TestFormula::testFormulaRefUpdateDeleteAndShiftLeft()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -3150,7 +3536,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft()
     // Delete columns D:E (middle of the reference).
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bDeleted = rFunc.DeleteCells(ScRange(3,0,0,4,m_pDoc->MaxRow(),0), &aMark, DelCellCmd::CellsLeft, true);
     CPPUNIT_ASSERT(bDeleted);
 
@@ -3234,7 +3620,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateDeleteAndShiftLeft2()
+void TestFormula::testFormulaRefUpdateDeleteAndShiftLeft2()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -3285,7 +3671,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft2()
     // Delete Column A.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bDeleted = rFunc.DeleteCells(ScRange(0,0,0,0,m_pDoc->MaxRow(),0), &aMark, DelCellCmd::CellsLeft, true);
     CPPUNIT_ASSERT(bDeleted);
 
@@ -3305,7 +3691,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft2()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateDeleteAndShiftUp()
+void TestFormula::testFormulaRefUpdateDeleteAndShiftUp()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -3324,7 +3710,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftUp()
     // Delete rows 4:5 (middle of the reference).
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bDeleted = rFunc.DeleteCells(ScRange(0,3,0,m_pDoc->MaxCol(),4,0), &aMark, DelCellCmd::CellsUp, true);
     CPPUNIT_ASSERT(bDeleted);
 
@@ -3408,7 +3794,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftUp()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateName()
+void TestFormula::testFormulaRefUpdateName()
 {
     m_pDoc->InsertTab(0, "Formula");
 
@@ -3540,7 +3926,7 @@ void Test::testFormulaRefUpdateName()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateNameMove()
+void TestFormula::testFormulaRefUpdateNameMove()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -3566,7 +3952,7 @@ void Test::testFormulaRefUpdateNameMove()
     CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$B$4"), aSymbol);
 
     // Move B2:B4 to D3.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(1,1,0,1,3,0), ScAddress(3,2,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -3642,7 +4028,7 @@ void Test::testFormulaRefUpdateNameMove()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateNameExpandRef()
+void TestFormula::testFormulaRefUpdateNameExpandRef()
 {
     setExpandRefs(true);
 
@@ -3662,7 +4048,7 @@ void Test::testFormulaRefUpdateNameExpandRef()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
     // Insert a new row at row 4, which should expand the named range to A1:A4.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange(0,3,0,m_pDoc->MaxCol(),3,0), &aMark, INS_INSROWS_BEFORE, false, true);
@@ -3764,7 +4150,7 @@ void Test::testFormulaRefUpdateNameExpandRef()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateNameExpandRef2()
+void TestFormula::testFormulaRefUpdateNameExpandRef2()
 {
     setExpandRefs(true);
 
@@ -3776,7 +4162,7 @@ void Test::testFormulaRefUpdateNameExpandRef2()
     CPPUNIT_ASSERT(bInserted);
 
     // Insert a new row at row 4, which should expand the named range to A1:A4.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
@@ -3791,7 +4177,7 @@ void Test::testFormulaRefUpdateNameExpandRef2()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateNameDeleteRow()
+void TestFormula::testFormulaRefUpdateNameDeleteRow()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -3819,7 +4205,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     OUString aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$3"), aExpr2);
 
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
 
     // Delete row 3.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
@@ -3915,7 +4301,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateNameCopySheet()
+void TestFormula::testFormulaRefUpdateNameCopySheet()
 {
     m_pDoc->InsertTab(0, "Test");
     m_pDoc->InsertTab(1, "Test2");
@@ -4060,69 +4446,25 @@ void Test::testFormulaRefUpdateNameCopySheet()
     aPos.IncRow();
     m_pDoc->SetString(aPos, "=local_local");
 
-    testFormulaRefUpdateNameCopySheetCheckTab( 0, false);
+    testFormulaRefUpdateNameCopySheetCheckTab( m_pDoc, 0, false);
 
     // Copy sheet after.
     m_pDoc->CopyTab(0, 1);
-    testFormulaRefUpdateNameCopySheetCheckTab( 0, false);
-    testFormulaRefUpdateNameCopySheetCheckTab( 1, true);
+    testFormulaRefUpdateNameCopySheetCheckTab( m_pDoc, 0, false);
+    testFormulaRefUpdateNameCopySheetCheckTab( m_pDoc, 1, true);
 
     // Copy sheet before, shifting following now two sheets.
     m_pDoc->CopyTab(1, 0);
-    testFormulaRefUpdateNameCopySheetCheckTab( 0, true);
-    testFormulaRefUpdateNameCopySheetCheckTab( 1, false);
-    testFormulaRefUpdateNameCopySheetCheckTab( 2, true);
+    testFormulaRefUpdateNameCopySheetCheckTab( m_pDoc, 0, true);
+    testFormulaRefUpdateNameCopySheetCheckTab( m_pDoc, 1, false);
+    testFormulaRefUpdateNameCopySheetCheckTab( m_pDoc, 2, true);
 
     m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateNameCopySheetCheckTab( SCTAB nTab, bool bCheckNames )
-{
-    if (bCheckNames)
-    {
-        const ScRangeData* pName;
-        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL");
-        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL should exist", pName);
-        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("LOCAL");
-        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL should exist", pName);
-        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL_GLOBAL");
-        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL_GLOBAL should exist", pName);
-        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL_LOCAL");
-        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL_LOCAL should exist", pName);
-        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL_UNUSED");
-        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL_UNUSED should exist", pName);
-        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("GLOBAL_UNUSED_NOREF");
-        CPPUNIT_ASSERT_MESSAGE("Sheet-local name GLOBAL_UNUSED_NOREF should not exist", !pName);
-        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("LOCAL_GLOBAL");
-        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL_GLOBAL should exist", pName);
-        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("LOCAL_LOCAL");
-        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL_LOCAL should exist", pName);
-        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("LOCAL_UNUSED");
-        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL_UNUSED should exist", pName);
-        pName = m_pDoc->GetRangeName(nTab)->findByUpperName("LOCAL_UNUSED_NOREF");
-        CPPUNIT_ASSERT_MESSAGE("Sheet-local name LOCAL_UNUSED_NOREF should exist", pName);
-    }
-
-    ScAddress aPos(0,0,0);
-    aPos.SetRow(0);
-    aPos.SetTab(nTab);
-    int nSheet = nTab + 1;
-    CPPUNIT_ASSERT_EQUAL( 1.0 * nSheet, m_pDoc->GetValue(aPos));
-    aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL( 11.0 * nSheet, m_pDoc->GetValue(aPos));
-    aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL( 100.0 * nSheet, m_pDoc->GetValue(aPos));
-    aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL( 11000.0 * nSheet, m_pDoc->GetValue(aPos));
-    aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL( 10000.0 * nSheet, m_pDoc->GetValue(aPos));
-    aPos.IncRow();
-    CPPUNIT_ASSERT_EQUAL( 1100000.0 * nSheet, m_pDoc->GetValue(aPos));
-}
-
-void Test::testFormulaRefUpdateSheetLocalMove()
+void TestFormula::testFormulaRefUpdateSheetLocalMove()
 {
     SCTAB nSheet1 = 0;
     SCTAB nSheet2 = 1;
@@ -4153,7 +4495,7 @@ void Test::testFormulaRefUpdateSheetLocalMove()
     m_pDoc->SetString( aPos, "=MyCell");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2.B3", 2.0, m_pDoc->GetValue(aPos));
 
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     OUString aFormula;
 
     // Move Sheet1.B1 ("x") to Sheet2.B1
@@ -4282,7 +4624,7 @@ void Test::testFormulaRefUpdateSheetLocalMove()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateNameDelete()
+void TestFormula::testFormulaRefUpdateNameDelete()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -4302,7 +4644,7 @@ void Test::testFormulaRefUpdateNameDelete()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateValidity()
+void TestFormula::testFormulaRefUpdateValidity()
 {
     struct {
 
@@ -4367,7 +4709,7 @@ void Test::testFormulaRefUpdateValidity()
     bool bGood = aCheck.checkList(aList);
     CPPUNIT_ASSERT_MESSAGE("Initial list is incorrect.", bGood);
 
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
@@ -4425,7 +4767,7 @@ void Test::testFormulaRefUpdateValidity()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTokenArrayRefUpdateMove()
+void TestFormula::testTokenArrayRefUpdateMove()
 {
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
@@ -4471,7 +4813,7 @@ void Test::testTokenArrayRefUpdateMove()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testMultipleOperations()
+void TestFormula::testMultipleOperations()
 {
     m_pDoc->InsertTab(0, "MultiOp");
 
@@ -4522,7 +4864,7 @@ void Test::testMultipleOperations()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncCOLUMN()
+void TestFormula::testFuncCOLUMN()
 {
     m_pDoc->InsertTab(0, "Formula");
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
@@ -4551,7 +4893,7 @@ void Test::testFuncCOLUMN()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncCOUNT()
+void TestFormula::testFuncCOUNT()
 {
     m_pDoc->InsertTab(0, "Formula");
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
@@ -4591,7 +4933,7 @@ void Test::testFuncCOUNT()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncCOUNTBLANK()
+void TestFormula::testFuncCOUNTBLANK()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Formula");
@@ -4638,7 +4980,7 @@ void Test::testFuncCOUNTBLANK()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncROW()
+void TestFormula::testFuncROW()
 {
     m_pDoc->InsertTab(0, "Formula");
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
@@ -4681,7 +5023,7 @@ void Test::testFuncROW()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
 
     // Insert a new row at row 4.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange(0,3,0,m_pDoc->MaxCol(),3,0), &aMark, INS_INSROWS_BEFORE, false, true);
@@ -4696,7 +5038,7 @@ void Test::testFuncROW()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncSUM()
+void TestFormula::testFuncSUM()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, "foo"));
@@ -4759,7 +5101,7 @@ void Test::testFuncSUM()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncPRODUCT()
+void TestFormula::testFuncPRODUCT()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto recalc.
 
@@ -4812,7 +5154,7 @@ void Test::testFuncPRODUCT()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncSUMPRODUCT()
+void TestFormula::testFuncSUMPRODUCT()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -4850,7 +5192,7 @@ void Test::testFuncSUMPRODUCT()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncSUMXMY2()
+void TestFormula::testFuncSUMXMY2()
 {
     m_pDoc->InsertTab(0, "Test SumXMY2");
 
@@ -4880,7 +5222,7 @@ void Test::testFuncSUMXMY2()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncMIN()
+void TestFormula::testFuncMIN()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto recalc.
     m_pDoc->InsertTab(0, "Formula");
@@ -4930,7 +5272,7 @@ void Test::testFuncMIN()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncN()
+void TestFormula::testFuncN()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, "foo"));
@@ -5009,14 +5351,14 @@ void Test::testFuncN()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncCOUNTIF()
+void TestFormula::testFuncCOUNTIF()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
     ScFormulaOptions aOldOptions, aNewOptions;
     aOldOptions = SC_MOD()->GetFormulaOptions();
     aNewOptions.SetFormulaSepArg(";");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     // COUNTIF (test case adopted from OOo i#36381)
 
@@ -5132,12 +5474,12 @@ void Test::testFuncCOUNTIF()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Two cells with 1.0", 2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncIF()
+void TestFormula::testFuncIF()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -5145,7 +5487,7 @@ void Test::testFuncIF()
     aOldOptions = SC_MOD()->GetFormulaOptions();
     aNewOptions.SetFormulaSepArg(";");
     aNewOptions.SetFormulaSepArrayCol(";");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     m_pDoc->InsertTab(0, "Formula");
 
@@ -5190,12 +5532,12 @@ void Test::testFuncIF()
     CPPUNIT_ASSERT_EQUAL(56.0, m_pDoc->GetValue(ScAddress(1,10,0)));
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncCHOOSE()
+void TestFormula::testFuncCHOOSE()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -5217,7 +5559,7 @@ void Test::testFuncCHOOSE()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncIFERROR()
+void TestFormula::testFuncIFERROR()
 {
     // IFERROR/IFNA (fdo#56124)
 
@@ -5330,7 +5672,7 @@ void Test::testFuncIFERROR()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncSHEET()
+void TestFormula::testFuncSHEET()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (SC_TAB_APPEND, "test1"));
@@ -5361,7 +5703,7 @@ void Test::testFuncSHEET()
     m_pDoc->DeleteTab(--nTabCount);
 }
 
-void Test::testFuncNOW()
+void TestFormula::testFuncNOW()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, "foo"));
@@ -5390,7 +5732,7 @@ void Test::testFuncNOW()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncNUMBERVALUE()
+void TestFormula::testFuncNUMBERVALUE()
 {
     // NUMBERVALUE fdo#57180
 
@@ -5449,7 +5791,7 @@ void Test::testFuncNUMBERVALUE()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncLEN()
+void TestFormula::testFuncLEN()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -5482,7 +5824,7 @@ void Test::testFuncLEN()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncLOOKUP()
+void TestFormula::testFuncLOOKUP()
 {
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
@@ -5531,7 +5873,7 @@ void Test::testFuncLOOKUP()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncLOOKUParrayWithError()
+void TestFormula::testFuncLOOKUParrayWithError()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
     m_pDoc->InsertTab(0, "Test");
@@ -5560,7 +5902,7 @@ void Test::testFuncLOOKUParrayWithError()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf141146()
+void TestFormula::testTdf141146()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
     m_pDoc->InsertTab(0, "Test1");
@@ -5590,7 +5932,7 @@ void Test::testTdf141146()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncVLOOKUP()
+void TestFormula::testFuncVLOOKUP()
 {
     // VLOOKUP
 
@@ -5830,7 +6172,7 @@ static void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[DataSize]
     }
 }
 
-void Test::testFuncMATCH()
+void TestFormula::testFuncMATCH()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, "foo"));
@@ -5965,7 +6307,7 @@ void Test::testFuncMATCH()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncCELL()
+void TestFormula::testFuncCELL()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, "foo"));
@@ -6008,7 +6350,7 @@ void Test::testFuncCELL()
 }
 
 /** See also test case document fdo#44456 sheet cpearson */
-void Test::testFuncDATEDIF()
+void TestFormula::testFuncDATEDIF()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, "foo"));
@@ -6048,7 +6390,7 @@ void Test::testFuncDATEDIF()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncINDIRECT()
+void TestFormula::testFuncINDIRECT()
 {
     OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
@@ -6142,12 +6484,12 @@ void Test::testFuncINDIRECT()
 
 // Test case for tdf#83365 - Access across spreadsheet returns Err:504
 //
-void Test::testFuncINDIRECT2()
+void TestFormula::testFuncINDIRECT2()
 {
     ScFormulaOptions aOldOptions, aNewOptions;
     aOldOptions = SC_MOD()->GetFormulaOptions();
     aNewOptions.SetFormulaSepArg(";");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, "foo"));
@@ -6209,7 +6551,7 @@ void Test::testFuncINDIRECT2()
     CPPUNIT_ASSERT_MESSAGE("This formula cell should be an error.", pFC->GetErrCode() != FormulaError::NONE);
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
@@ -6218,7 +6560,7 @@ void Test::testFuncINDIRECT2()
 
 // Test for tdf#107724 do not propagate an array context from MATCH to INDIRECT
 // as INDIRECT returns ParamClass::Reference
-void Test::testFunc_MATCH_INDIRECT()
+void TestFormula::testFunc_MATCH_INDIRECT()
 {
     CPPUNIT_ASSERT_MESSAGE("failed to insert sheet", m_pDoc->InsertTab( 0, "foo"));
 
@@ -6242,7 +6584,7 @@ void Test::testFunc_MATCH_INDIRECT()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaDepTracking()
+void TestFormula::testFormulaDepTracking()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
 
@@ -6350,7 +6692,7 @@ void Test::testFormulaDepTracking()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaDepTracking2()
+void TestFormula::testFormulaDepTracking2()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
 
@@ -6374,7 +6716,7 @@ void Test::testFormulaDepTracking2()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaDepTracking3()
+void TestFormula::testFormulaDepTracking3()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
@@ -6395,7 +6737,7 @@ void Test::testFormulaDepTracking3()
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(3,0,0)));
 
     // Change B3 and make sure the change gets propagated to D1.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     rFunc.SetValueCell(ScAddress(1,2,0), 60.0, false);
     CPPUNIT_ASSERT_EQUAL(65.0, m_pDoc->GetValue(ScAddress(2,2,0)));
     CPPUNIT_ASSERT_EQUAL(75.0, m_pDoc->GetValue(ScAddress(3,0,0)));
@@ -6403,7 +6745,7 @@ void Test::testFormulaDepTracking3()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaDepTrackingDeleteRow()
+void TestFormula::testFormulaDepTrackingDeleteRow()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
@@ -6435,7 +6777,7 @@ void Test::testFormulaDepTrackingDeleteRow()
     CPPUNIT_ASSERT_EQUAL(90.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
     // Delete row 2.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.DeleteCells(ScRange(0,1,0,m_pDoc->MaxCol(),1,0), &aMark, DelCellCmd::CellsUp, true);
@@ -6456,7 +6798,7 @@ void Test::testFormulaDepTrackingDeleteRow()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaDepTrackingDeleteCol()
+void TestFormula::testFormulaDepTrackingDeleteCol()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
@@ -6493,7 +6835,7 @@ void Test::testFormulaDepTrackingDeleteCol()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
 
     // Delete column A.  A1, B1, A3:A4 and B3:B4 should all show #REF!.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.DeleteCells(ScRange(0,0,0,0,m_pDoc->MaxRow(),0), &aMark, DelCellCmd::CellsLeft, true);
@@ -6570,7 +6912,7 @@ void Test::testFormulaDepTrackingDeleteCol()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaMatrixResultUpdate()
+void TestFormula::testFormulaMatrixResultUpdate()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -6598,7 +6940,7 @@ void Test::testFormulaMatrixResultUpdate()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testExternalRef()
+void TestFormula::testExternalRef()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
     xExtDocSh->SetIsInUcalc();
@@ -6773,7 +7115,7 @@ void Test::testExternalRef()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testExternalRangeName()
+void TestFormula::testExternalRangeName()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
     xExtDocSh->SetIsInUcalc();
@@ -6885,7 +7227,7 @@ static void testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc)
     CPPUNIT_ASSERT_EQUAL(OUString("Answer: 42"), pDoc->GetString(ScAddress(0,0,0)));
 }
 
-void Test::testExternalRefFunctions()
+void TestFormula::testExternalRefFunctions()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
     xExtDocSh->SetIsInUcalc();
@@ -6981,7 +7323,7 @@ void Test::testExternalRefFunctions()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testExternalRefUnresolved()
+void TestFormula::testExternalRefUnresolved()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
     m_pDoc->InsertTab(0, "Test");
@@ -7061,7 +7403,7 @@ void Test::testExternalRefUnresolved()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testMatrixOp()
+void TestFormula::testMatrixOp()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -7098,7 +7440,7 @@ void Test::testMatrixOp()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncRangeOp()
+void TestFormula::testFuncRangeOp()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -7182,7 +7524,7 @@ void Test::testFuncRangeOp()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncFORMULA()
+void TestFormula::testFuncFORMULA()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -7223,19 +7565,19 @@ void Test::testFuncFORMULA()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncTableRef()
+void TestFormula::testFuncTableRef()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
     ScFormulaOptions aOldOptions, aNewOptions;
     aOldOptions = SC_MOD()->GetFormulaOptions();
     aNewOptions.SetFormulaSepArg(";");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     m_pDoc->InsertTab(0, "Sheet1");
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
 
     {
         ScDBCollection* pDBs = m_pDoc->GetDBCollection();
@@ -7572,12 +7914,12 @@ void Test::testFuncTableRef()
     }
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncFTEST()
+void TestFormula::testFuncFTEST()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -7730,7 +8072,7 @@ void Test::testFuncFTEST()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncFTESTBug()
+void TestFormula::testFuncFTESTBug()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -7750,7 +8092,7 @@ void Test::testFuncFTESTBug()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncCHITEST()
+void TestFormula::testFuncCHITEST()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -7872,7 +8214,7 @@ void Test::testFuncCHITEST()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncTTEST()
+void TestFormula::testFuncTTEST()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -7977,7 +8319,7 @@ void Test::testFuncTTEST()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncSUMX2PY2()
+void TestFormula::testFuncSUMX2PY2()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -8043,7 +8385,7 @@ void Test::testFuncSUMX2PY2()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncSUMX2MY2()
+void TestFormula::testFuncSUMX2MY2()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -8119,7 +8461,7 @@ void Test::testFuncSUMX2MY2()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncGCD()
+void TestFormula::testFuncGCD()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -8217,7 +8559,7 @@ void Test::testFuncGCD()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncLCM()
+void TestFormula::testFuncLCM()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -8313,7 +8655,7 @@ void Test::testFuncLCM()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncSUMSQ()
+void TestFormula::testFuncSUMSQ()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -8388,7 +8730,7 @@ void Test::testFuncSUMSQ()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncMDETERM()
+void TestFormula::testFuncMDETERM()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -8443,7 +8785,7 @@ void Test::testFuncMDETERM()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaErrorPropagation()
+void TestFormula::testFormulaErrorPropagation()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -8452,7 +8794,7 @@ void Test::testFormulaErrorPropagation()
     aNewOptions.SetFormulaSepArg(";");
     aNewOptions.SetFormulaSepArrayCol(";");
     aNewOptions.SetFormulaSepArrayRow("|");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     m_pDoc->InsertTab(0, "Sheet1");
 
@@ -8523,71 +8865,12 @@ void Test::testFormulaErrorPropagation()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(ScRefFlags::VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
 
-namespace {
-
-class ColumnTest
-{
-    ScDocument * m_pDoc;
-
-    const SCROW m_nTotalRows;
-    const SCROW m_nStart1;
-    const SCROW m_nEnd1;
-    const SCROW m_nStart2;
-    const SCROW m_nEnd2;
-
-public:
-    ColumnTest( ScDocument * pDoc, SCROW nTotalRows,
-                SCROW nStart1, SCROW nEnd1, SCROW nStart2, SCROW nEnd2 )
-        : m_pDoc(pDoc), m_nTotalRows(nTotalRows)
-        , m_nStart1(nStart1), m_nEnd1(nEnd1)
-        , m_nStart2(nStart2), m_nEnd2(nEnd2)
-    {}
-
-    void operator() ( SCCOL nColumn, const OUString& rFormula,
-                      std::function<double(SCROW )> const & lExpected ) const
-    {
-        ScDocument aClipDoc(SCDOCMODE_CLIP);
-        ScMarkData aMark(m_pDoc->GetSheetLimits());
-
-        ScAddress aPos(nColumn, m_nStart1, 0);
-        m_pDoc->SetString(aPos, rFormula);
-        ASSERT_DOUBLES_EQUAL( lExpected(m_nStart1), m_pDoc->GetValue(aPos) );
-
-        // Copy formula cell to clipboard.
-        ScClipParam aClipParam(aPos, false);
-        aMark.SetMarkArea(aPos);
-        m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
-
-        // Paste it to first range.
-        InsertDeleteFlags nFlags = InsertDeleteFlags::CONTENTS;
-        ScRange aDestRange(nColumn, m_nStart1, 0, nColumn, m_nEnd1, 0);
-        aMark.SetMarkArea(aDestRange);
-        m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, &aClipDoc);
-
-        // Paste it second range.
-        aDestRange = ScRange(nColumn, m_nStart2, 0, nColumn, m_nEnd2, 0);
-        aMark.SetMarkArea(aDestRange);
-        m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, &aClipDoc);
-
-        // Check the formula results for passed column.
-        for( SCROW i = 0; i < m_nTotalRows; ++i )
-        {
-            if( !((m_nStart1 <= i && i <= m_nEnd1) || (m_nStart2 <= i && i <= m_nEnd2)) )
-                continue;
-            double fExpected = lExpected(i);
-            ASSERT_DOUBLES_EQUAL(fExpected, m_pDoc->GetValue(ScAddress(nColumn,i,0)));
-        }
-    }
-};
-
-}
-
-void Test::testTdf97369()
+void TestFormula::testTdf97369()
 {
     const SCROW TOTAL_ROWS = 330;
     const SCROW ROW_RANGE = 10;
@@ -8647,7 +8930,7 @@ void Test::testTdf97369()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf97587()
+void TestFormula::testTdf97587()
 {
     const SCROW TOTAL_ROWS = 150;
     const SCROW ROW_RANGE = 10;
@@ -8699,7 +8982,7 @@ void Test::testTdf97587()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf93415()
+void TestFormula::testTdf93415()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Sheet1"));
 
@@ -8719,7 +9002,7 @@ void Test::testTdf93415()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf100818()
+void TestFormula::testTdf100818()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Sheet1"));
 
@@ -8745,7 +9028,7 @@ void Test::testTdf100818()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testMatConcat()
+void TestFormula::testMatConcat()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
 
@@ -8806,7 +9089,7 @@ void Test::testMatConcat()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testMatConcatReplication()
+void TestFormula::testMatConcatReplication()
 {
     // if one of the matrices is a one column or row matrix
     // the matrix is replicated across the larger matrix
@@ -8836,7 +9119,7 @@ void Test::testMatConcatReplication()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testRefR1C1WholeCol()
+void TestFormula::testRefR1C1WholeCol()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
 
@@ -8851,7 +9134,7 @@ void Test::testRefR1C1WholeCol()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testRefR1C1WholeRow()
+void TestFormula::testRefR1C1WholeRow()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
 
@@ -8866,7 +9149,7 @@ void Test::testRefR1C1WholeRow()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSingleCellCopyColumnLabel()
+void TestFormula::testSingleCellCopyColumnLabel()
 {
     ScDocOptions aOptions = m_pDoc->GetDocOptions();
     aOptions.SetLookUpColRowNames(true);
@@ -8892,7 +9175,7 @@ void Test::testSingleCellCopyColumnLabel()
 }
 
 // Significant whitespace operator intersection in Excel syntax, tdf#96426
-void Test::testIntersectionOpExcel()
+void TestFormula::testIntersectionOpExcel()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
 
@@ -8926,7 +9209,7 @@ void Test::testIntersectionOpExcel()
 }
 
 //Test Subtotal and Aggregate during hide rows #tdf93171
-void Test::testFuncRowsHidden()
+void TestFormula::testFuncRowsHidden()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Test");
@@ -8970,7 +9253,7 @@ void Test::testFuncRowsHidden()
 }
 
 // Test COUNTIFS, SUMIFS, AVERAGEIFS in array context.
-void Test::testFuncSUMIFS()
+void TestFormula::testFuncSUMIFS()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Test");
@@ -9140,7 +9423,7 @@ void Test::testFuncSUMIFS()
 }
 
 // Test SUBTOTAL with reference lists in array context.
-void Test::testFuncRefListArraySUBTOTAL()
+void TestFormula::testFuncRefListArraySUBTOTAL()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Test");
@@ -9260,7 +9543,7 @@ void Test::testFuncRefListArraySUBTOTAL()
 
 // tdf#115493 jump commands return the matrix result instead of the reference
 // list array.
-void Test::testFuncJumpMatrixArrayIF()
+void TestFormula::testFuncJumpMatrixArrayIF()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Test");
@@ -9290,7 +9573,7 @@ void Test::testFuncJumpMatrixArrayIF()
 
 // tdf#123477 OFFSET() returns the matrix result instead of the reference list
 // array if result is not used as ReferenceOrRefArray.
-void Test::testFuncJumpMatrixArrayOFFSET()
+void TestFormula::testFuncJumpMatrixArrayOFFSET()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Test");
@@ -9316,7 +9599,7 @@ void Test::testFuncJumpMatrixArrayOFFSET()
 }
 
 // Test iterations with circular chain of references.
-void Test::testIterations()
+void TestFormula::testIterations()
 {
     ScDocOptions aDocOpts = m_pDoc->GetDocOptions();
     aDocOpts.SetIter( true );
@@ -9351,7 +9634,7 @@ void Test::testIterations()
 
 // tdf#111428 CellStoreEvent and its counter used for quick "has a column
 // formula cells" must point to the correct column.
-void Test::testInsertColCellStoreEventSwap()
+void TestFormula::testInsertColCellStoreEventSwap()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Test");
@@ -9368,7 +9651,7 @@ void Test::testInsertColCellStoreEventSwap()
     // in question, use ScDocFunc::SetFormulaCell() instead which actually is
     // also called when editing a cell and creating a formula cell.
     ScFormulaCell* pCell = new ScFormulaCell(*m_pDoc, aPos, "=A1+1");
-    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
     rDocFunc.SetFormulaCell( aPos, pCell, false);   // C1, change formula
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Initial calculation failed", 2.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue( 0,0,0, 2.0 );     // A1, change value
@@ -9377,7 +9660,7 @@ void Test::testInsertColCellStoreEventSwap()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaAfterDeleteRows()
+void TestFormula::testFormulaAfterDeleteRows()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Test");
@@ -9396,5 +9679,9 @@ void Test::testFormulaAfterDeleteRows()
 
     ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong value at A4", 3.0, m_pDoc->GetValue(aPos));
 }
+
+CPPUNIT_TEST_SUITE_REGISTRATION(TestFormula);
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
