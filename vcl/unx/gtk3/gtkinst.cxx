@@ -17553,8 +17553,8 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
 
     OUString sBorderWidth;
 
-    for (css::uno::Reference<css::xml::dom::XNode> xChild = xNode->getFirstChild();
-         xChild.is(); xChild = xChild->getNextSibling())
+    css::uno::Reference<css::xml::dom::XNode> xChild = xNode->getFirstChild();
+    while (xChild.is())
     {
         if (xChild->getNodeName() == "requires")
         {
@@ -17643,32 +17643,6 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                 sBorderWidth.clear();
             }
         }
-        else if (xChild->getNodeName() == "object")
-        {
-            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
-            OUString sClass(xClass->getNodeValue());
-            if (sClass == "GtkButtonBox")
-            {
-                xClass->setNodeValue("GtkBox");
-
-                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
-                if (!xId->getNodeValue().startsWith("messagedialog-action_area"))
-                {
-                    auto xDoc = xChild->getOwnerDocument();
-                    auto xSpacingNode = CreateProperty(xDoc, "spacing", "6");
-                    auto xFirstChild = xChild->getFirstChild();
-                    if (xFirstChild.is())
-                        xChild->insertBefore(xSpacingNode, xFirstChild);
-                    else
-                        xChild->appendChild(xSpacingNode);
-
-                    xChild->insertBefore(CreateProperty(xDoc, "margin-bottom", "6"), xSpacingNode);
-                    xChild->insertBefore(CreateProperty(xDoc, "margin-start", "6"), xSpacingNode);
-                    xChild->insertBefore(CreateProperty(xDoc, "margin-end", "6"), xSpacingNode);
-                }
-            }
-        }
         else if (xChild->getNodeName() == "packing")
         {
             // remove "packing" and if its grid packing insert a replacement "layout" into
@@ -17698,6 +17672,15 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                         xName->setNodeValue("row");
                         bGridPacking = true;
                     }
+                    if (sName == "secondary")
+                    {
+                        // turn parent tag of <child> into <child type="start">
+                        auto xParent = xChild->getParentNode();
+                        css::uno::Reference<css::xml::dom::XAttr> xTypeStart = xDoc->createAttribute("type");
+                        xTypeStart->setValue("start");
+                        css::uno::Reference<css::xml::dom::XElement> xElem(xParent, css::uno::UNO_QUERY_THROW);
+                        xElem->setAttributeNode(xTypeStart);
+                    }
                 }
                 xNew->appendChild(xChild->removeChild(xCurrent));
             }
@@ -17722,9 +17705,78 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
             xRemoveList.push_back(xChild);
         }
 
-        if (!xChild->hasChildNodes())
-            continue;
-        ConvertTree(xChild);
+        auto xNextChild = xChild->getNextSibling();
+
+        if (xChild->hasChildNodes())
+            ConvertTree(xChild);
+
+        if (xChild->getNodeName() == "object")
+        {
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xClass = xMap->getNamedItem("class");
+            OUString sClass(xClass->getNodeValue());
+            if (sClass == "GtkButtonBox")
+            {
+                css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
+                if (xId->getNodeValue().startsWith("dialog-action_area"))
+                {
+                    xClass->setNodeValue("GtkHeaderBar");
+                    auto xDoc = xChild->getOwnerDocument();
+                    auto xSpacingNode = CreateProperty(xDoc, "show-title-buttons", "False");
+                    auto xFirstChild = xChild->getFirstChild();
+                    if (xFirstChild.is())
+                        xChild->insertBefore(xSpacingNode, xFirstChild);
+                    else
+                        xChild->appendChild(xSpacingNode);
+
+                    // move the replacement GtkHeaderBar up to before the content_area
+                    auto xContentAreaCandidate = xChild->getParentNode();
+                    while (xContentAreaCandidate)
+                    {
+                        css::uno::Reference<css::xml::dom::XNamedNodeMap> xChildMap = xContentAreaCandidate->getAttributes();
+                        css::uno::Reference<css::xml::dom::XNode> xName = xChildMap->getNamedItem("internal-child");
+                        if (xName && xName->getNodeValue() == "content_area")
+                        {
+                            auto xActionArea = xChild->getParentNode();
+
+                            xActionArea->getParentNode()->removeChild(xActionArea);
+
+                            css::uno::Reference<css::xml::dom::XAttr> xTypeTitleBar = xDoc->createAttribute("type");
+                            xTypeTitleBar->setValue("titlebar");
+                            css::uno::Reference<css::xml::dom::XElement> xElem(xActionArea, css::uno::UNO_QUERY_THROW);
+                            xElem->setAttributeNode(xTypeTitleBar);
+                            xElem->removeAttribute("internal-child");
+
+                            xContentAreaCandidate->getParentNode()->insertBefore(xActionArea, xContentAreaCandidate);
+
+                            for (css::uno::Reference<css::xml::dom::XNode> xTitleChild = xChild->getFirstChild();
+                                 xTitleChild.is(); xTitleChild = xTitleChild->getNextSibling())
+                            {
+                                if (xTitleChild->getNodeName() == "child")
+                                {
+                                    fprintf(stderr, "node is %s\n", xTitleChild->getNodeName().toUtf8().getStr());
+                                    css::uno::Reference<css::xml::dom::XElement> xChildElem(xTitleChild, css::uno::UNO_QUERY_THROW);
+                                    if (!xChildElem->hasAttribute("type"))
+                                    {
+                                        // turn parent tag of <child> into <child type="end">
+                                        css::uno::Reference<css::xml::dom::XAttr> xTypeEnd = xDoc->createAttribute("type");
+                                        xTypeEnd->setValue("end");
+                                        xChildElem->setAttributeNode(xTypeEnd);
+                                    }
+                                }
+                            }
+
+                            break;
+                        }
+                        xContentAreaCandidate = xContentAreaCandidate->getParentNode();
+                    }
+                }
+                else // if (!xId->getNodeValue().startsWith("messagedialog-action_area"))
+                    xClass->setNodeValue("GtkBox");
+            }
+        }
+
+        xChild = xNextChild;
     }
     for (auto& xRemove : xRemoveList)
         xNode->removeChild(xRemove);
