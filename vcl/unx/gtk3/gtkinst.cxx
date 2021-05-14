@@ -17573,7 +17573,7 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
             OUString sName(xName->getNodeValue().replace('_', '-'));
 
             if (sName == "border-width")
-                sBorderWidth = OUString::number(12);
+                sBorderWidth = xChild->getFirstChild()->getNodeValue();
 
             if (sName == "type-hint" || sName == "skip-taskbar-hint" ||
                 sName == "can-default" || sName == "has-default" ||
