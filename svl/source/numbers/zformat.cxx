@@ -3666,6 +3666,8 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     // '[NatNum12 YYYY=year,D=ordinal]D" of "MMMM", "YYYY' -> "first of April, nineteen ninety"
     //
     // Note: set only for YYYY, MMMM, M, DDDD, D and NNN/AAAA in date formats.
+    // Additionally for MMMMM, MMM, DDD and NN/AA to support at least
+    // capitalize, upper, lower, title.
     // XXX It's possible to extend this for other keywords and date + time
     // combinations, as required.
 
@@ -3717,29 +3719,22 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_MONTH, nNatNum ));
             break;
         case NF_KEY_MMM:                // MMM
-            sBuff.append(rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
-                                                                 static_cast<NfKeywordIndex>(rInfo.nTypeArray[i])),
-                                                nNatNum));
-            break;
         case NF_KEY_MMMM:               // MMMM
-            // NatNum12: support variants of preposition, suffixation or article
+        case NF_KEY_MMMMM:              // MMMMM
+            // NatNum12: support variants of preposition, suffixation or
+            // article, or capitalize, upper, lower, title.
             // Note: result of the "spell out" conversion can depend from the optional
             // PartitiveMonths or GenitiveMonths defined in the locale data,
             // see description of ImpUseMonthCase(), and locale data in
             // i18npool/source/localedata/data/ and libnumbertext
             aStr = rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
-                                                                 static_cast<NfKeywordIndex>(rInfo.nTypeArray[i])),
-                                                nNatNum);
+                                                           static_cast<NfKeywordIndex>(rInfo.nTypeArray[i])),
+                                                           nNatNum);
             if ( bUseSpellout )
             {
                 aStr = impTransliterate(aStr, NumFor[nIx].GetNatNum(), rInfo.nTypeArray[i]);
             }
             sBuff.append(aStr);
-            break;
-        case NF_KEY_MMMMM:              // MMMMM
-            sBuff.append(rCal.getDisplayString( ImpUseMonthCase( nUseMonthCase, NumFor[nIx],
-                                                                 static_cast<NfKeywordIndex>(rInfo.nTypeArray[i])),
-                                                nNatNum));
             break;
         case NF_KEY_Q:                  // Q
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_QUARTER, nNatNum ));
@@ -3764,7 +3759,13 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
-            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum ));
+            aStr = rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum );
+            // NatNum12: support at least capitalize, upper, lower, title
+            if ( bUseSpellout )
+            {
+                aStr = impTransliterate(aStr, NumFor[nIx].GetNatNum(), rInfo.nTypeArray[i]);
+            }
+            sBuff.append(aStr);
             if ( bOtherCalendar )
             {
                 SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
@@ -3846,7 +3847,13 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
         case NF_KEY_NN:                 // NN
         case NF_KEY_AAA:                // AAA
-            sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum ));
+            aStr = rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum );
+            // NatNum12: support at least capitalize, upper, lower, title
+            if ( bUseSpellout )
+            {
+                aStr = impTransliterate(aStr, NumFor[nIx].GetNatNum(), rInfo.nTypeArray[i]);
+            }
+            sBuff.append(aStr);
             break;
         case NF_KEY_NNN:                // NNN
         case NF_KEY_AAAA:               // AAAA
