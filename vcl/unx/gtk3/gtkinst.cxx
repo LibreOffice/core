@@ -17567,15 +17567,17 @@ void SetPropertyOnTopLevel(const Reference<css::xml::dom::XNode>& xNode, const R
     }
 }
 
-void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
+bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
     if (!xNodeList.is())
-        return;
+        return false;
 
     std::vector<css::uno::Reference<css::xml::dom::XNode>> xRemoveList;
 
     OUString sBorderWidth;
+    bool bChildCanFocus = false;
+    css::uno::Reference<css::xml::dom::XNode> xCantFocus;
 
     css::uno::Reference<css::xml::dom::XNode> xChild = xNode->getFirstChild();
     while (xChild.is())
@@ -17615,6 +17617,13 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                 auto xDoc = xChild->getOwnerDocument();
                 auto xDefaultWidget = CreateProperty(xDoc, "focus-widget", xId->getNodeValue());
                 SetPropertyOnTopLevel(xChild, xDefaultWidget);
+            }
+
+            if (sName == "can-focus")
+            {
+                bChildCanFocus = toBool(xChild->getFirstChild()->getNodeValue());
+                if (!bChildCanFocus)
+                    xCantFocus = xChild;
             }
 
             if (sName == "type-hint" || sName == "skip-taskbar-hint" ||
@@ -17750,7 +17759,14 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
         auto xNextChild = xChild->getNextSibling();
 
         if (xChild->hasChildNodes())
-            ConvertTree(xChild);
+        {
+            bChildCanFocus |= ConvertTree(xChild);
+            if (bChildCanFocus && xCantFocus.is())
+            {
+                xNode->removeChild(xCantFocus);
+                xCantFocus.clear();
+            }
+        }
 
         if (xChild->getNodeName() == "object")
         {
@@ -17821,6 +17837,8 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
     }
     for (auto& xRemove : xRemoveList)
         xNode->removeChild(xRemove);
+
+    return bChildCanFocus;
 }
 #endif
 
