@@ -5148,6 +5148,429 @@ void DrawingML::WriteFromTo(const uno::Reference<css::drawing::XShape>& rXShape,
     pDrawing->endElement(FSNS(XML_cdr, XML_to));
 }
 
+//////////////////////////// DMLPresetShapeExporter class ///////////////////////////
+
+// ctor
+DMLPresetShapeExporter::DMLPresetShapeExporter(DrawingML* pDMLExporter,
+    css::uno::Reference<css::drawing::XShape> xShape) :
+    m_pDMLexporter(pDMLExporter)
+{
+    OSL_ASSERT(xShape->getShapeType() == "com.sun.star.drawing.CustomShape");
+
+    m_xShape = xShape;
+    m_bHasHandleValues = false;
+    uno::Reference<beans::XPropertySet> xShpProps(m_xShape, uno::UNO_QUERY);
+    css::uno::Sequence<css::beans::PropertyValue> aCustomShapeGeometry
+        = xShpProps->getPropertyValue("CustomShapeGeometry")
+              .get<uno::Sequence<beans::PropertyValue>>();
+
+    for (sal_uInt32 i = 0; i < aCustomShapeGeometry.size(); i++)
+    {
+        if (aCustomShapeGeometry[i].Name == "Type")
+        {
+            m_sPresetShapeType = aCustomShapeGeometry[i].Value.get<OUString>();
+        }
+        if (aCustomShapeGeometry[i].Name == "Handles")
+        {
+            m_bHasHandleValues = true;
+            m_HandleValues
+                = aCustomShapeGeometry[i]
+                      .Value
+                      .get<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>>();
+        }
+        if (aCustomShapeGeometry[i].Name == "Equations")
+        {
+            m_Equations = aCustomShapeGeometry[i].Value.get<css::uno::Sequence<OUString>>();
+        }
+        if (aCustomShapeGeometry[i].Name == "AdjustmentValues")
+        {
+            m_AdjustmentValues
+                = aCustomShapeGeometry[i]
+                      .Value
+                      .get<css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>>();
+        }
+        if (aCustomShapeGeometry[i].Name == "Path")
+        {
+            m_Path = aCustomShapeGeometry[i]
+                         .Value.get<css::uno::Sequence<css::beans::PropertyValue>>();
+        }
+        if (aCustomShapeGeometry[i].Name == "ViewBox")
+        {
+            m_ViewBox = aCustomShapeGeometry[i].Value.get<css::awt::Rectangle>();
+        }
+    }
+};
+
+// dtor
+DMLPresetShapeExporter::~DMLPresetShapeExporter()
+{
+};
+
+bool DMLPresetShapeExporter::HasHandleValue()
+{
+    return m_bHasHandleValues;
 }
+
+OUString DMLPresetShapeExporter::GetShapeType()
+{
+    return m_sPresetShapeType;
+}
+
+bool DMLPresetShapeExporter::WriteShape()
+{
+    if (m_pDMLexporter && m_xShape)
+    {
+        // Case 1: We do not have adjustment points of the shape: just export it as preset
+        if (!m_bHasHandleValues)
+        {
+            OUString sShapeType = GetShapeType();
+            const char* sPresetShape
+                = msfilter::util::GetOOXMLPresetGeometry(sShapeType.toUtf8().getStr());
+            m_pDMLexporter->WritePresetShape(sPresetShape);
+        }
+        else // Case2: There are adjustment points what have to be converted and exported: under dev.
+        {
+            OUString sShapeType = GetShapeType();
+            const char* sPresetShape
+                = msfilter::util::GetOOXMLPresetGeometry(sShapeType.toUtf8().getStr());
+            auto& rFS = m_pDMLexporter->GetFS();
+
+            rFS->startElementNS(XML_a, XML_prstGeom, XML_prst, sPresetShape);
+            rFS->startElementNS(XML_a, XML_avLst);
+            for (auto const& elem : m_HandleValues)
+            {
+                std::vector<std::pair<OUString, OUString>> aVals
+                    = GetOOXMLAVPointVals(sShapeType, GetOOXMLHandlePointAdjustmentRatio(elem));
+                for (const auto& aAVval : aVals)
+                    rFS->singleElementNS(XML_a, XML_gd, XML_name, aAVval.first, XML_fmla,
+                                         aAVval.second);
+            }
+            rFS->endElementNS(XML_a, XML_avLst);
+            rFS->endElementNS(XML_a, XML_prstGeom);
+        }
+        return true;
+    }
+    return false;
+};
+
+std::vector<std::pair<OUString, OUString>> DMLPresetShapeExporter::GetOOXMLAVPointVals(
+    OUString sShapeType, std::pair<std::optional<double>, std::optional<double>> nPointRatioValues)
+{
+    std::vector< std::pair< OUString, OUString > >aRet;
+
+    if (sShapeType == "triangle" || sShapeType == "isosceles-triangle")
+    {
+        sal_Int32 adjval = std::round(nPointRatioValues.first.value() * 100000);
+        aRet.push_back( std::pair( OUString("adj"), OUString("val ") + OUString::number(adjval) ) );
+    }
+    else if (sShapeType == "round-rectangle")
+    {
+        sal_Int32 adjval = std::round(nPointRatioValues.first.has_value() ? nPointRatioValues.first.value() * 50000 : nPointRatioValues.second.value() * 50000);
+        aRet.push_back( std::pair( OUString("adj"), OUString("val ") + OUString::number(adjval) ) );
+    }
+    else if (sShapeType == "parallelogram") // TODO: improve the accuracy
+    {
+        sal_Int32 adjval = std::round(nPointRatioValues.first.value() * 150000);
+        aRet.push_back( std::pair( OUString("adj"), OUString("val ") + OUString::number(adjval) ) );
+    }
+    else if (sShapeType == "trapezoid") // TODO: mirroring
+    {
+        sal_Int32 adjval = std::round(nPointRatioValues.first.value() * 100000);
+        aRet.push_back( std::pair( OUString("adj"), OUString("val ") + OUString::number(adjval) ) );
+    }
+    else if (sShapeType == "hexagon")
+    {
+        sal_Int32 adjval = std::round(nPointRatioValues.first.value() * 50000);
+        aRet.push_back( std::pair( OUString("adj"), OUString("val ") + OUString::number(adjval) ) );
+        aRet.push_back( std::pair( OUString("vf"), OUString("val ") + OUString::number( 115470 ) ) );
+    }
+    else if (sShapeType == "octagon")
+    {
+        sal_Int32 adjval = std::round(nPointRatioValues.first.value() * 50000);
+        aRet.push_back( std::pair( OUString("adj"), OUString("val ") + OUString::number(adjval) ) );
+    }
+    else if (sShapeType == "cross")
+    {
+        sal_Int32 adjval = std::round(nPointRatioValues.first.value() * 50000);
+        aRet.push_back( std::pair( OUString("adj"), OUString("val ") + OUString::number(adjval) ) );
+    }
+    else if (sShapeType == "star5")
+    {
+        sal_Int32 adjval = std::round(nPointRatioValues.second.value() * 50000);
+        aRet.push_back( std::pair( OUString("adj"), OUString("val ") + OUString::number(adjval) ) );
+        aRet.push_back( std::pair( OUString("hf"), OUString("val ") + OUString::number(105146) ) );
+        aRet.push_back( std::pair( OUString("vf"), OUString("val ") + OUString::number(110557) ) );
+    }
+    else if (sShapeType == "right-arrow")
+    {
+        sal_Int32 adjvalx = std::round(nPointRatioValues.first.value() *  250000);
+        sal_Int32 adjvaly = std::round(nPointRatioValues.second.value() *  100000);
+        aRet.push_back( std::pair( OUString("adj1"), OUString("val ") + OUString::number(adjvalx) ) );
+        aRet.push_back( std::pair( OUString("adj2"), OUString("val ") + OUString::number(adjvaly) ) );
+
+    }
+
+    //if (sType == "mso-spt14")
+    //    return nValIn * 100000;
+    //if (sType == "pentagon-right")
+    //    return nValIn * 100000;
+
+    //if (sType == "cube") return nValIn * 100000;
+
+
+    // TODO: etc.
+    //if (sType == "shapetype")
+    //    return nValIn * corrvalue;
+
+    /*    //
+
+    // { "mso-spt17", mso_sptBalloon },
+    // { "mso-spt18", mso_sptSeal },
+    { "mso-spt19", "arc" },
+    { "mso-spt20", "line" },
+    { "mso-spt21", "plaque" },
+    { "can", "can" },
+    { "ring", "donut" },
+    { "mso-spt24", "textPlain" },
+    { "mso-spt25", "textStop" },
+    { "mso-spt26", "textTriangle" },
+    { "mso-spt27", "textCanDown" },
+    { "mso-spt28", "textWave1" },
+    { "mso-spt29", "textArchUpPour" },
+    { "mso-spt30", "textCanDown" },
+    { "mso-spt31", "textArchUp" },
+    { "mso-spt32", "straightConnector1" },
+    { "mso-spt33", "bentConnector2" },
+    { "mso-spt34", "bentConnector3" },
+    { "mso-spt35", "bentConnector4" },
+    { "mso-spt36", "bentConnector5" },
+    { "mso-spt37", "curvedConnector2" },
+    { "mso-spt38", "curvedConnector3" },
+    { "mso-spt39", "curvedConnector4" },
+    { "mso-spt40", "curvedConnector5" },
+    { "mso-spt41", "callout1" },
+    { "mso-spt42", "callout2" },
+    { "mso-spt43", "callout3" },
+    { "mso-spt44", "accentCallout1" },
+    { "mso-spt45", "accentCallout2" },
+    { "mso-spt46", "accentCallout3" },
+    { "line-callout-1", "borderCallout1" },
+    { "line-callout-2", "borderCallout2" },
+    { "line-callout-3", "borderCallout3" },
+    { "mso-spt49", "borderCallout3" },
+    { "mso-spt50", "accentBorderCallout1" },
+    { "mso-spt51", "accentBorderCallout2" },
+    { "mso-spt52", "accentBorderCallout3" },
+    { "mso-spt53", "ribbon" },
+    { "mso-spt54", "ribbon2" },
+    { "chevron", "chevron" },
+    { "pentagon", "pentagon" },
+    { "forbidden", "noSmoking" },
+    { "star8", "star8" },
+    { "mso-spt59", "star16" },
+    { "mso-spt60", "star32" },
+    { "rectangular-callout", "wedgeRectCallout" },
+    { "round-rectangular-callout", "wedgeRoundRectCallout" },
+    { "round-callout", "wedgeEllipseCallout" },
+    { "mso-spt64", "wave" },
+    { "paper", "foldedCorner" },
+    { "left-arrow", "leftArrow" },
+    { "down-arrow", "downArrow" },
+    { "up-arrow", "upArrow" },
+    { "left-right-arrow", "leftRightArrow" },
+    { "up-down-arrow", "upDownArrow" },
+    { "mso-spt71", "irregularSeal1" },
+    { "bang", "irregularSeal2" },
+    { "lightning", "lightningBolt" },
+    { "heart", "heart" },
+    { "quad-arrow", "quadArrow" },
+    { "left-arrow-callout", "leftArrowCallout" },
+    { "right-arrow-callout", "rightArrowCallout" },
+    { "up-arrow-callout", "upArrowCallout" },
+    { "down-arrow-callout", "downArrowCallout" },
+    { "left-right-arrow-callout", "leftRightArrowCallout" },
+    { "up-down-arrow-callout", "upDownArrowCallout" },
+    { "quad-arrow-callout", "quadArrowCallout" },
+    { "quad-bevel", "bevel" },
+    { "left-bracket", "leftBracket" },
+    { "right-bracket", "rightBracket" },
+    { "left-brace", "leftBrace" },
+    { "right-brace", "rightBrace" },
+    { "mso-spt89", "leftUpArrow" },
+    { "mso-spt90", "bentUpArrow" },
+    { "mso-spt91", "bentArrow" },
+    { "star24", "star24" },
+    { "striped-right-arrow", "stripedRightArrow" },
+    { "notched-right-arrow", "notchedRightArrow" },
+    { "block-arc", "blockArc" },
+    { "smiley", "smileyFace" },
+    { "vertical-scroll", "verticalScroll" },
+    { "horizontal-scroll", "horizontalScroll" },
+    { "circular-arrow", "circularArrow" },
+    { "mso-spt100", "pie" }, // looks like MSO_SPT is wrong here
+    { "mso-spt101", "uturnArrow" },
+    { "mso-spt102", "curvedRightArrow" },
+    { "mso-spt103", "curvedLeftArrow" },
+    { "mso-spt104", "curvedUpArrow" },
+    { "mso-spt105", "curvedDownArrow" },
+    { "cloud-callout", "cloudCallout" },
+    { "mso-spt107", "ellipseRibbon" },
+    { "mso-spt108", "ellipseRibbon2" },
+    { "flowchart-process", "flowChartProcess" },
+    { "flowchart-decision", "flowChartDecision" },
+    { "flowchart-data", "flowChartInputOutput" },
+    { "flowchart-predefined-process", "flowChartPredefinedProcess" },
+    { "flowchart-internal-storage", "flowChartInternalStorage" },
+    { "flowchart-document", "flowChartDocument" },
+    { "flowchart-multidocument", "flowChartMultidocument" },
+    { "flowchart-terminator", "flowChartTerminator" },
+    { "flowchart-preparation", "flowChartPreparation" },
+    { "flowchart-manual-input", "flowChartManualInput" },
+    { "flowchart-manual-operation", "flowChartManualOperation" },
+    { "flowchart-connector", "flowChartConnector" },
+    { "flowchart-card", "flowChartPunchedCard" },
+    { "flowchart-punched-tape", "flowChartPunchedTape" },
+    { "flowchart-summing-junction", "flowChartSummingJunction" },
+    { "flowchart-or", "flowChartOr" },
+    { "flowchart-collate", "flowChartCollate" },
+    { "flowchart-sort", "flowChartSort" },
+    { "flowchart-extract", "flowChartExtract" },
+    { "flowchart-merge", "flowChartMerge" },
+    { "mso-spt129", "flowChartOfflineStorage" },
+    { "flowchart-stored-data", "flowChartOnlineStorage" },
+    { "flowchart-sequential-access", "flowChartMagneticTape" },
+    { "flowchart-magnetic-disk", "flowChartMagneticDisk" },
+    { "flowchart-direct-access-storage", "flowChartMagneticDrum" },
+    { "flowchart-display", "flowChartDisplay" },
+    { "flowchart-delay", "flowChartDelay" },
+
+    // { "mso-spt142", "textRingInside" },
+    // { "mso-spt143", "textRingOutside" },
+
+    // { "mso-spt157", "textWave2" },
+    // { "mso-spt158", "textWave3" },
+    // { "mso-spt159", "textWave4" },
+    // { "mso-spt161", "textDeflate" },
+    // { "mso-spt162", "textInflateBottom" },
+    // { "mso-spt163", "textDeflateBottom" },
+    // { "mso-spt164", "textInflateTop" },
+    // { "mso-spt165", "textDeflateTop" },
+    // { "mso-spt166", "textDeflateInflate" },
+    // { "mso-spt167", "textDeflateInflateDeflate" }
+    // { "mso-spt174", "textCanUp" },
+    // { "mso-spt175", "textCanDown" },
+    { "flowchart-alternate-process", "flowChartAlternateProcess" },
+    { "flowchart-off-page-connector", "flowChartOffpageConnector" },
+    { "mso-spt178", "callout1" },
+    { "mso-spt179", "accentCallout1" },
+    { "mso-spt180", "borderCallout1" },
+    { "mso-spt182", "leftRightUpArrow" },
+    { "sun", "sun" },
+    { "moon", "moon" },
+    { "bracket-pair", "bracketPair" },
+    { "brace-pair", "bracePair" },
+    { "star4", "star4" },
+    { "mso-spt188", "doubleWave" },
+    { "mso-spt189", "actionButtonBlank" },
+    { "mso-spt190", "actionButtonHome" },
+    { "mso-spt191", "actionButtonHelp" },
+    { "mso-spt192", "actionButtonInformation" },
+    { "mso-spt193", "actionButtonForwardNext" },
+    { "mso-spt194", "actionButtonBackPrevious" },
+    { "mso-spt195", "actionButtonEnd" },
+    { "mso-spt196", "actionButtonBeginning" },
+    { "mso-spt197", "actionButtonReturn" },
+    { "mso-spt198", "actionButtonDocument" },
+    { "mso-spt199", "actionButtonSound" },
+    { "mso-spt200", "actionButtonMovie" },
+    // { "mso-spt201", "hostControl" },
+    { "mso-spt202", "rect" },*/
+return aRet;
+};
+
+std::pair<std::optional<double>, std::optional<double>>
+DMLPresetShapeExporter::GetOOXMLHandlePointAdjustmentRatio(
+    css::uno::Sequence<css::beans::PropertyValue> aValues)
+{
+    std::pair<std::optional<double>, std::optional<double>> aRetVal;
+
+    // Get neccessary any data
+    auto aPos = FindHandleValue(aValues, "Position");
+    auto aXMax = FindHandleValue(aValues, "RangeXMaximum");
+    auto aYMax = FindHandleValue(aValues, "RangeYMaximum");
+    auto aXMin = FindHandleValue(aValues, "RangeXMinimum");
+    auto aYMin = FindHandleValue(aValues, "RangeYMinimum");
+
+    // Case 1: The handling point has x and y coordinates as well.
+    if (aPos.hasValue() && aXMax.hasValue() && aXMin.hasValue() && aPos.hasValue()
+        && aYMax.hasValue() && aYMin.hasValue())
+    {
+        auto nPos = aPos.get<css::drawing::EnhancedCustomShapeParameterPair>();
+        // Get the adjustment data
+        auto nAdjValX = m_AdjustmentValues[nPos.First.Value.get<long>()].Value.get<double>();
+
+        auto nXmax = aXMax.get<css::drawing::EnhancedCustomShapeParameter>();
+        auto nXmin = aXMin.get<css::drawing::EnhancedCustomShapeParameter>();
+
+        auto nAdjValY = m_AdjustmentValues[nPos.Second.Value.get<long>()].Value.get<double>();
+
+        auto nYmax = aYMax.get<css::drawing::EnhancedCustomShapeParameter>();
+        auto nYmin = aYMin.get<css::drawing::EnhancedCustomShapeParameter>();
+
+        std::optional<double> aValX
+            = nAdjValX / (nXmax.Value.get<double>() - nXmin.Value.get<double>());
+        std::optional<double> aValY
+            = nAdjValY / (nYmax.Value.get<double>() - nYmin.Value.get<double>());
+        aRetVal = std::make_pair(aValX, aValY);
+        return aRetVal;
+    }
+    // Case 2: Only x coordinates we have at handling point
+    if (aPos.hasValue() && aXMax.hasValue() && aXMin.hasValue())
+    {
+        auto nPos = aPos.get<css::drawing::EnhancedCustomShapeParameterPair>();
+
+        auto nAdjVal = m_AdjustmentValues[nPos.First.Value.get<long>()].Value.get<double>();
+
+        auto nXmax = aXMax.get<css::drawing::EnhancedCustomShapeParameter>();
+        auto nXmin = aXMin.get<css::drawing::EnhancedCustomShapeParameter>();
+
+        std::optional<double> aValX
+            = nAdjVal / (nXmax.Value.get<double>() - nXmin.Value.get<double>());
+        std::optional<double> aValY;
+        aRetVal = std::make_pair(aValX, aValY);
+        return aRetVal;
+    }
+    // Case 3 this point only adjutable in y way.
+    if (aPos.hasValue() && aYMax.hasValue() && aYMin.hasValue())
+    {
+        auto nPos = aPos.get<css::drawing::EnhancedCustomShapeParameterPair>();
+
+        auto nAdjVal = m_AdjustmentValues[nPos.Second.Value.get<long>()].Value.get<double>();
+
+        auto nYmax = aYMax.get<css::drawing::EnhancedCustomShapeParameter>();
+        auto nYmin = aYMin.get<css::drawing::EnhancedCustomShapeParameter>();
+
+        std::optional<double> aValX;
+        std::optional<double> aValY
+            = nAdjVal / (nYmax.Value.get<double>() - nYmin.Value.get<double>());
+        aRetVal = std::make_pair(aValX, aValY);
+        return aRetVal;
+    }
+    return aRetVal;
+};
+
+css::uno::Any
+DMLPresetShapeExporter::FindHandleValue(css::uno::Sequence<css::beans::PropertyValue> aValues,
+                                        OUString sKey)
+{
+    for (sal_uInt32 i = 0; i < aValues.size(); i++)
+    {
+        if (aValues[i].Name == sKey)
+            return aValues[i].Value;
+    }
+    return uno::Any();
+};
+
+}// end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

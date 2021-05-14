@@ -43,6 +43,7 @@
 #include <vcl/checksum.hxx>
 #include <tools/gen.hxx>
 #include <vcl/mapmod.hxx>
+#include <com/sun/star/awt/Rectangle.hpp>
 
 class Graphic;
 class SdrObjCustomShape;
@@ -51,6 +52,7 @@ namespace com::sun::star {
 namespace awt {
     struct FontDescriptor;
     struct Gradient;
+    struct Rectangle;
 }
 namespace beans {
     struct PropertyValue;
@@ -61,6 +63,7 @@ namespace drawing {
     class XShape;
     struct EnhancedCustomShapeParameterPair;
     struct EnhancedCustomShapeParameter;
+    struct EnhancedCustomShapeAdjustmentValue;
 }
 namespace graphic {
     class XGraphic;
@@ -331,8 +334,61 @@ public:
 
 };
 
-}
-}
+/// Class for exporting the custom shapes to OOXML preset ones, if possible.
+/// This functionality needed for keeping the information for the office programs
+/// about the shape type, and geometry data. Before theese shapes were exported
+/// whith custom geometry, and they keept their geometry but has no inormation
+/// about the shape itself. This lead to lost textbox size/position/padding for
+/// example. So this class exports these shapes with preset shape geometry
+/// and converts their adjustment values to OOXML one.
+ class DMLPresetShapeExporter
+{
+private:
+    css::uno::Reference< css::drawing::XShape > m_xShape; // the shape to export
+    DrawingML* m_pDMLexporter; // the DMLwriter
+    OUString m_sPresetShapeType; // the type of the custom shape (diamond/retangle/circle/triangle...)
+    bool m_bHasHandleValues; // True if the shape has points where its geomerty can be modified
+
+    // Custom Shape Geometry information for export:
+
+    // not used yet, it cann be useful in futher dev
+    css::awt::Rectangle m_ViewBox;
+    // not used yet, it cann be useful in futher dev
+    css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > m_AdjustmentValues;
+    // Shapes what have adjusting points, the setting values are stored in this:
+    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > m_HandleValues;
+    // not used yet, it cann be useful in futher dev
+    css::uno::Sequence< css::beans::PropertyValue > m_Path;
+    // not used yet, it cann be useful in futher dev
+    css::uno::Sequence< OUString > m_Equations;
+
+
+public:
+    DMLPresetShapeExporter() = delete;
+    ~DMLPresetShapeExporter();
+
+    DMLPresetShapeExporter(DrawingML* pDMLExporter,
+        css::uno::Reference< css::drawing::XShape > xShape);
+
+    bool HasHandleValue();
+    OUString GetShapeType();
+    bool WriteShape();
+
+private:
+
+    // Returns with the corresponding correction value of the given shape type
+    std::vector<std::pair<OUString, OUString> > GetOOXMLAVPointVals(OUString sShapeType, std::pair< std::optional<double>, std::optional<double> > nPointRatioValues);
+
+    // Returns the calculated points to be exported.
+    std::pair< std::optional<double>, std::optional<double> > GetOOXMLHandlePointAdjustmentRatio(css::uno::Sequence< css::beans::PropertyValue> aValues);
+
+    // Finds the sKey value in the property sequence.
+    css::uno::Any FindHandleValue(css::uno::Sequence< css::beans::PropertyValue> aValues, OUString sKey);
+
+}; // end of DMLPresetShapeExporter class
+
+} // end of namespace oox::drawingml
+} // end of namespace oox
 
 #endif
 
