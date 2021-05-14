@@ -301,11 +301,10 @@ namespace oglcanvas
         maLastUpdate.reset();
 
         const double fps(denominator == 0.0 ? 100.0 : 1.0/denominator);
-        std::vector<double> aVec; aVec.push_back(fps);
-        aVec.push_back(maActiveSprites.size());
-        aVec.push_back(mpTextureCache->getCacheSize());
-        aVec.push_back(mpTextureCache->getCacheMissCount());
-        aVec.push_back(mpTextureCache->getCacheHitCount());
+        std::vector<double> aVec { fps, static_cast<double>(maActiveSprites.size()),
+                                        static_cast<double>(mpTextureCache->getCacheSize()),
+                                        static_cast<double>(mpTextureCache->getCacheMissCount()),
+                                        static_cast<double>(mpTextureCache->getCacheHitCount()) };
         renderOSD( aVec, 20 );
 
         /*
