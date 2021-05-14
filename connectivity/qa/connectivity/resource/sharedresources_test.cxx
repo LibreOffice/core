@@ -88,11 +88,9 @@ void SharedResourcesTest::testGetSourceStringWithSubstitutionThree()
 
 void SharedResourcesTest::testGetSourceStringWithSubstitutionVector()
 {
-    std::vector<std::pair<const char*, OUString>> aStringToSubstitutes{
-        std::pair<const char*, OUString>("$sub0$", "vector0"),
-        std::pair<const char*, OUString>("$sub1$", "vector1"),
-        std::pair<const char*, OUString>("$sub2$", "vector2")
-    };
+    std::vector<std::pair<const char*, OUString>> aStringToSubstitutes{ { "$sub0$", "vector0" },
+                                                                        { "$sub1$", "vector1" },
+                                                                        { "$sub2$", "vector2" } };
 
     CPPUNIT_ASSERT_EQUAL(OUString("Three substitution vector0 vector1 vector2"),
                          m_aResource.getResourceStringWithSubstitution(
