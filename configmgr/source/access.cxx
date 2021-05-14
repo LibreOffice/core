@@ -173,19 +173,19 @@ css::uno::Sequence< css::uno::Type > Access::getTypes()
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    std::vector< css::uno::Type > types;
-    types.push_back(cppu::UnoType< css::uno::XInterface >::get());
-    types.push_back(cppu::UnoType< css::uno::XWeak >::get());
-    types.push_back(cppu::UnoType< css::lang::XTypeProvider >::get());
-    types.push_back(cppu::UnoType< css::lang::XServiceInfo >::get());
-    types.push_back(cppu::UnoType< css::lang::XComponent >::get());
-    types.push_back(cppu::UnoType< css::container::XContainer >::get());
-    types.push_back(cppu::UnoType< css::beans::XExactName >::get());
-    types.push_back(cppu::UnoType< css::container::XHierarchicalName >::get());
-    types.push_back(cppu::UnoType< css::container::XNamed >::get());
-    types.push_back(cppu::UnoType< css::beans::XProperty >::get());
-    types.push_back(cppu::UnoType< css::container::XElementAccess >::get());
-    types.push_back(cppu::UnoType< css::container::XNameAccess >::get());
+    std::vector< css::uno::Type > types { cppu::UnoType< css::uno::XInterface >::get(),
+                                          cppu::UnoType< css::uno::XWeak >::get(),
+                                          cppu::UnoType< css::lang::XTypeProvider >::get(),
+                                          cppu::UnoType< css::lang::XServiceInfo >::get(),
+                                          cppu::UnoType< css::lang::XComponent >::get(),
+                                          cppu::UnoType< css::container::XContainer >::get(),
+                                          cppu::UnoType< css::beans::XExactName >::get(),
+                                          cppu::UnoType< css::container::XHierarchicalName >::get(),
+                                          cppu::UnoType< css::container::XNamed >::get(),
+                                          cppu::UnoType< css::beans::XProperty >::get(),
+                                          cppu::UnoType< css::container::XElementAccess >::get(),
+                                          cppu::UnoType< css::container::XNameAccess >::get()
+                                        };
     if (getNode()->kind() == Node::KIND_GROUP) {
         types.push_back(cppu::UnoType< css::beans::XPropertySetInfo >::get());
         types.push_back(cppu::UnoType< css::beans::XPropertySet >::get());
