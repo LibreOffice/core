@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7000d6e5_df888a76",
+        "filename": "starmath/source/document.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T10:59:00Z",
+      "side": 1,
+      "message": "It was OK down below, among module-local includes.",
+      "revId": "ed8807de6eb8d736ac6583ea3104a2142ba70707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
