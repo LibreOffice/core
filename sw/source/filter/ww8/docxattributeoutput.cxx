@@ -8645,20 +8645,29 @@ void DocxAttributeOutput::ParaNumRule_Impl( const SwTextNode* pTextNd, sal_Int32
     if ( USHRT_MAX == nNumId )
         return;
 
+    // LibreOffice is not very flexible with "Outline Numbering" (aka "Outline" numbering style).
+    // Only ONE numbering rule ("Outline") can be associated with a style-assigned-listLevel,
+    // and no other style is able to inherit these numId/nLvl settings - only text nodes can.
+    // So listLevel only exists in paragraph properties EXCEPT for up to ten styles that have been
+    // assigned to one of these special Chapter Numbering listlevels (by default Heading 1-10).
     const sal_Int32 nTableSize = m_rExport.m_pUsedNumTable ? m_rExport.m_pUsedNumTable->size() : 0;
     const SwNumRule* pRule = nNumId > 0 && nNumId <= nTableSize ? (*m_rExport.m_pUsedNumTable)[nNumId-1] : nullptr;
-    const bool bOutlineRule = pRule && pRule->IsOutlineRule();
-
-    // Do not export outline rules (Chapter Numbering) as paragraph properties, only as style properties.
-    if ( !pTextNd || !bOutlineRule )
+    const SwTextFormatColl* pColl = pTextNd ? pTextNd->GetTextColl() : nullptr;
+    // Do not duplicate numbering that is inherited from the (Chapter numbering) style
+    // (since on import we duplicate style numbering/listlevel to the paragraph).
+    if (pColl && pColl->IsAssignedToListLevelOfOutlineStyle()
+        && nLvl == pColl->GetAssignedOutlineStyleLevel() && pRule && pRule->IsOutlineRule())
     {
-        m_pSerializer->startElementNS(XML_w, XML_numPr);
-        m_pSerializer->singleElementNS(XML_w, XML_ilvl,
-                                       FSNS(XML_w, XML_val), OString::number(nLvl));
-        m_pSerializer->singleElementNS(XML_w, XML_numId,
-                                       FSNS(XML_w, XML_val), OString::number(nNumId));
-        m_pSerializer->endElementNS( XML_w, XML_numPr );
+        // By definition of how LO is implemented, assignToListLevel is only possible
+        // when the style is also using OutlineRule for numbering. Adjust logic if that changes.
+        assert(pRule->GetName() == pColl->GetNumRule(true).GetValue());
+        return;
     }
+
+    m_pSerializer->startElementNS(XML_w, XML_numPr);
+    m_pSerializer->singleElementNS(XML_w, XML_ilvl, FSNS(XML_w, XML_val), OString::number(nLvl));
+    m_pSerializer->singleElementNS(XML_w, XML_numId, FSNS(XML_w, XML_val), OString::number(nNumId));
+    m_pSerializer->endElementNS(XML_w, XML_numPr);
 }
 
 void DocxAttributeOutput::ParaScriptSpace( const SfxBoolItem& rScriptSpace )
