@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c9badd7_804f22e6",
+        "filename": "starmath/inc/document.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T10:08:25Z",
+      "side": 1,
+      "message": "It seems that there\u0027s no need replace the forward declaration with the include: we generally try to use forward declarations to reduce compilation times a bit (personally I don\u0027t know how much of a difference this gives); and here you likely only needed to add another forward declaration of SmEditEngine, to make compiler happy.",
+      "revId": "e804f39aebed6c5c3f418e20fef6bee1ef28ef34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e00d7c42_b328d602",
+        "filename": "starmath/inc/document.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T10:08:25Z",
+      "side": 1,
+      "message": "Why this change? The function still is required to return a valid pointer (and its validity is not checked by users), so reference is a better and more telling choice. Additionally, avoiding this change would avoid some unrelated noise.",
+      "range": {
+        "startLine": 180,
+        "startChar": 15,
+        "endLine": 180,
+        "endChar": 16
+      },
+      "revId": "e804f39aebed6c5c3f418e20fef6bee1ef28ef34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0509ff63_5482b885",
+        "filename": "starmath/inc/editengine.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T10:08:25Z",
+      "side": 1,
+      "message": "I\u0027d suggest to rename it from editengine.hxx to e.g. smediteng.hxx, to reduce confusion, when the name suggests more that it contains definition of EditEngine itself, not of one of its descendants",
+      "revId": "e804f39aebed6c5c3f418e20fef6bee1ef28ef34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
