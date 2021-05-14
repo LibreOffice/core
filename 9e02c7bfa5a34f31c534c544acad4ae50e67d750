@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97f1df79_34c6a44f",
+        "filename": "codemaker/source/codemaker/global.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T09:24:34Z",
+      "side": 1,
+      "message": "This is strange. Yes, the change is \"minimal\" and keeps the structure, but wouldn\u0027t it be better to reverse the comparison operator arguments, and let the literal be alone? Or maybe even introduce a method for string buffers (getView()?) returning a string view, and avoid an extra allocation, too?",
+      "range": {
+        "startLine": 122,
+        "startChar": 32,
+        "endLine": 122,
+        "endChar": 72
+      },
+      "revId": "9e02c7bfa5a34f31c534c544acad4ae50e67d750",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
