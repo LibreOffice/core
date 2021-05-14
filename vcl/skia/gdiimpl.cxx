@@ -2060,8 +2060,7 @@ static double toCos(Degree10 degree10th) { return SkScalarCos(toRadian(degree10t
 static double toSin(Degree10 degree10th) { return SkScalarSin(toRadian(degree10th)); }
 
 void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Color textColor,
-                                            const SkFont& font, const SkFont& verticalFont,
-                                            GlyphOrientation glyphOrientation)
+                                            const SkFont& font, const SkFont& verticalFont)
 {
     SkiaZone zone;
     std::vector<SkGlyphID> glyphIds;
@@ -2076,13 +2075,9 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     while (layout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         glyphIds.push_back(pGlyph->glyphId());
-        Degree10 angle(0); // 10th of degree
-        if (glyphOrientation == GlyphOrientation::Apply)
-        {
-            angle = layout.GetOrientation();
-            if (pGlyph->IsVertical())
-                angle += 900_deg10; // 90 degree
-        }
+        Degree10 angle = layout.GetOrientation();
+        if (pGlyph->IsVertical())
+            angle += 900_deg10;
         SkRSXform form = SkRSXform::Make(toCos(angle), toSin(angle), aPos.X(), aPos.Y());
         glyphForms.emplace_back(std::move(form));
         verticals.emplace_back(pGlyph->IsVertical());
@@ -2099,7 +2094,8 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     SAL_INFO("vcl.skia.trace", "drawtextblob(" << this << "): " << getBoundRect() << ", "
                                                << glyphIds.size() << " glyphs, " << textColor);
 
-    // Vertical glyphs need a different font, so each run draw only consecutive horizontal or vertical glyphs.
+    // Vertical glyphs need a different font, so split drawing into runs that each
+    // draw only consecutive horizontal or vertical glyphs.
     std::vector<bool>::const_iterator pos = verticals.cbegin();
     std::vector<bool>::const_iterator end = verticals.cend();
     while (pos != end)
