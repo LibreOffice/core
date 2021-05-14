@@ -711,11 +711,15 @@ void SmEditTextWindow::UpdateStatus(bool bSetDocModified)
     SmModule *pMod = SM_MOD();
     if (pMod && pMod->GetConfig()->IsAutoRedraw())
         Flush();
-    SmDocShell* pDoc = bSetDocModified ? mrEditWindow.GetDoc() : nullptr;
-    if (pDoc)
-        pDoc->SetModified();
+    if (bSetDocModified)
+        mrEditWindow.GetDoc()->SetModified();
 
     static_cast<SmEditEngine*>(GetEditEngine())->executeZoom(GetEditView());
+}
+
+void SmEditWindow::UpdateStatus(bool bSetDocModified)
+{
+    mxTextControl->UpdateStatus(bSetDocModified);
 }
 
 void SmEditWindow::Cut()
