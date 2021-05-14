@@ -988,15 +988,12 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  )
     rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
-    ODatabaseMetaDataResultSet::ORows aRows;
-    for(std::size_t i=0;i < SAL_N_ELEMENTS(sTableTypes);++i)
+    auto nNbTypes = SAL_N_ELEMENTS(sTableTypes);
+    ODatabaseMetaDataResultSet::ORows aRows(nNbTypes);
+    for(std::size_t i=0;i < nNbTypes;++i)
     {
-        ODatabaseMetaDataResultSet::ORow aRow;
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(OUString(sTableTypes[i])));
-
         // bound row
-        aRows.push_back(aRow);
+        aRows.push_back( { ODatabaseMetaDataResultSet::getEmptyValue(), new ORowSetValueDecorator(OUString(sTableTypes[i])) });
     }
     // here we set the rows at the resultset
     pResult->setRows(aRows);
@@ -1013,29 +1010,29 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
 
     static ODatabaseMetaDataResultSet::ORows aRows = []()
     {
-        ODatabaseMetaDataResultSet::ORows tmp;
-        ODatabaseMetaDataResultSet::ORow aRow;
-        aRow.reserve(19);
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(OUString("VARCHAR")));
-        aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
-        aRow.push_back(new ORowSetValueDecorator(sal_Int32(s_nCHAR_OCTET_LENGTH)));
-        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        // aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnValue::NULLABLE));
-        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
-        aRow.push_back(new ORowSetValueDecorator(sal_Int32(ColumnSearch::FULL)));
-        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(sal_Int32(10)));
+        ODatabaseMetaDataResultSet::ORows tmp(2);
+        ODatabaseMetaDataResultSet::ORow aRow
+        {
+            { ODatabaseMetaDataResultSet::getEmptyValue() },
+            { new ORowSetValueDecorator(OUString("VARCHAR")) },
+            { new ORowSetValueDecorator(DataType::VARCHAR) },
+            { new ORowSetValueDecorator(sal_Int32(s_nCHAR_OCTET_LENGTH)) },
+            { ODatabaseMetaDataResultSet::getQuoteValue() },
+            { ODatabaseMetaDataResultSet::getQuoteValue() },
+            { ODatabaseMetaDataResultSet::getEmptyValue() },
+            { ODatabaseMetaDataResultSet::get1Value() },
+            { ODatabaseMetaDataResultSet::get1Value() },
+            { new ORowSetValueDecorator(sal_Int32(ColumnSearch::FULL)) },
+            { ODatabaseMetaDataResultSet::get1Value() },
+            { ODatabaseMetaDataResultSet::get0Value() },
+            { ODatabaseMetaDataResultSet::get0Value() },
+            { ODatabaseMetaDataResultSet::getEmptyValue() },
+            { ODatabaseMetaDataResultSet::get0Value() },
+            { ODatabaseMetaDataResultSet::get0Value() },
+            { ODatabaseMetaDataResultSet::getEmptyValue() },
+            { ODatabaseMetaDataResultSet::getEmptyValue() },
+            { new ORowSetValueDecorator(sal_Int32(10)) }
+        };
 
         tmp.push_back(aRow);
 
@@ -1190,14 +1187,16 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
                 OUString aName = OStringToOUString( e_source_peek_name( pSource ),
                                                               RTL_TEXTENCODING_UTF8 );
 
-                ODatabaseMetaDataResultSet::ORow aRow{
-                    ORowSetValueDecoratorRef(),
-                    ORowSetValueDecoratorRef(),
-                    ORowSetValueDecoratorRef(),
-                    new ORowSetValueDecorator(aName),
-                    new ORowSetValueDecorator(ORowSetValue(aTable)),
-                    ODatabaseMetaDataResultSet::getEmptyValue()};
-                aRows.push_back(aRow);
+                aRows.push_back(
+                                 {
+                                     ORowSetValueDecoratorRef(),
+                                     ORowSetValueDecoratorRef(),
+                                     ORowSetValueDecoratorRef(),
+                                     new ORowSetValueDecorator(aName),
+                                     new ORowSetValueDecorator(ORowSetValue(aTable)),
+                                     ODatabaseMetaDataResultSet::getEmptyValue()
+                                 }
+                               );
             }
         }
     }

@@ -616,10 +616,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
     static ODatabaseMetaDataResultSet::ORows aRows;
     if(aRows.empty())
     {
-        ODatabaseMetaDataResultSet::ORow aRow;
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(OUString("TABLE")));
-        aRows.push_back(aRow);
+        aRows.push_back( { ODatabaseMetaDataResultSet::getEmptyValue(), new ORowSetValueDecorator(OUString("TABLE")) } );
     }
     pResult->setRows(aRows);
     return pResult;
