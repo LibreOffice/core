@@ -17543,6 +17543,30 @@ Reference<css::xml::dom::XNode> CreateProperty(const css::uno::Reference<css::xm
     return xProperty;
 }
 
+void SetPropertyOnTopLevel(const Reference<css::xml::dom::XNode>& xNode, const Reference<css::xml::dom::XNode>& xProperty)
+{
+    for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xNode->getParentNode();
+         xObjectCandidate.is();
+         xObjectCandidate = xObjectCandidate->getParentNode())
+    {
+        if (xObjectCandidate->getNodeName() == "object")
+        {
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xObjectMap = xObjectCandidate->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xClass = xObjectMap->getNamedItem("class");
+            if (xClass->getNodeValue() == "GtkDialog")
+            {
+                auto xFirstChild = xObjectCandidate->getFirstChild();
+                if (xFirstChild.is())
+                    xObjectCandidate->insertBefore(xProperty, xFirstChild);
+                else
+                    xObjectCandidate->appendChild(xProperty);
+
+                break;
+            }
+        }
+    }
+}
+
 void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
 {
     css::uno::Reference<css::xml::dom::XNodeList> xNodeList = xNode->getChildNodes();
@@ -17574,6 +17598,24 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
 
             if (sName == "border-width")
                 sBorderWidth = xChild->getFirstChild()->getNodeValue();
+
+            if (sName == "has-default")
+            {
+                css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap = xChild->getParentNode()->getAttributes();
+                css::uno::Reference<css::xml::dom::XNode> xId = xParentMap->getNamedItem("id");
+                auto xDoc = xChild->getOwnerDocument();
+                auto xDefaultWidget = CreateProperty(xDoc, "default-widget", xId->getNodeValue());
+                SetPropertyOnTopLevel(xChild, xDefaultWidget);
+            }
+
+            if (sName == "has-focus")
+            {
+                css::uno::Reference<css::xml::dom::XNamedNodeMap> xParentMap = xChild->getParentNode()->getAttributes();
+                css::uno::Reference<css::xml::dom::XNode> xId = xParentMap->getNamedItem("id");
+                auto xDoc = xChild->getOwnerDocument();
+                auto xDefaultWidget = CreateProperty(xDoc, "focus-widget", xId->getNodeValue());
+                SetPropertyOnTopLevel(xChild, xDefaultWidget);
+            }
 
             if (sName == "type-hint" || sName == "skip-taskbar-hint" ||
                 sName == "can-default" || sName == "has-default" ||
@@ -17754,7 +17796,6 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                             {
                                 if (xTitleChild->getNodeName() == "child")
                                 {
-                                    fprintf(stderr, "node is %s\n", xTitleChild->getNodeName().toUtf8().getStr());
                                     css::uno::Reference<css::xml::dom::XElement> xChildElem(xTitleChild, css::uno::UNO_QUERY_THROW);
                                     if (!xChildElem->hasAttribute("type"))
                                     {
