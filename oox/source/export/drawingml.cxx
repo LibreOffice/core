@@ -5145,6 +5145,6 @@ void DrawingML::WriteFromTo(const uno::Reference<css::drawing::XShape>& rXShape,
     pDrawing->endElement(FSNS(XML_cdr, XML_to));
 }
 
-}
+}// end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
