@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,solenv))
 $(eval $(call gb_Module_add_targets_for_build,solenv,\
 	Executable_concat-deps \
 	Executable_gbuildtojson \
+    $(if $(filter-out ANDROID MACOSX iOS WNT,$(OS)),Executable_lockfile) \
 ))
 
 ifeq ($(COM),MSC)
