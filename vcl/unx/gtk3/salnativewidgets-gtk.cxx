@@ -2232,7 +2232,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     // text colors
     GdkRGBA text_color;
     style_context_set_state(pStyle, GTK_STATE_FLAG_NORMAL);
-    gtk_style_context_get_color(pStyle, gtk_style_context_get_state(pStyle), &text_color);
+    style_context_get_color(pStyle, &text_color);
     ::Color aTextColor = getColor( text_color );
     aStyleSet.SetDialogTextColor( aTextColor );
     aStyleSet.SetButtonTextColor( aTextColor );
@@ -2262,7 +2262,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 
     // mouse over text colors
     style_context_set_state(pStyle, GTK_STATE_FLAG_PRELIGHT);
-    gtk_style_context_get_color(pStyle, gtk_style_context_get_state(pStyle), &text_color);
+    style_context_get_color(pStyle, &text_color);
     aTextColor = getColor(text_color);
     aStyleSet.SetDefaultButtonRolloverTextColor(aTextColor);
     aStyleSet.SetButtonRolloverTextColor(aTextColor);
@@ -2278,11 +2278,11 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         GdkRGBA normal_button_rollover_text_color, pressed_button_rollover_text_color;
         aContextState.save(mpButtonStyle);
         style_context_set_state(mpButtonStyle, GTK_STATE_FLAG_PRELIGHT);
-        gtk_style_context_get_color(mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &normal_button_rollover_text_color);
+        style_context_get_color(mpButtonStyle, &normal_button_rollover_text_color);
         aTextColor = getColor(normal_button_rollover_text_color);
         aStyleSet.SetButtonRolloverTextColor( aTextColor );
         style_context_set_state(mpButtonStyle, static_cast<GtkStateFlags>(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE));
-        gtk_style_context_get_color(mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &pressed_button_rollover_text_color);
+        style_context_get_color(mpButtonStyle, &pressed_button_rollover_text_color);
         aTextColor = getColor(pressed_button_rollover_text_color);
         style_context_set_state(mpButtonStyle, GTK_STATE_FLAG_NORMAL);
         aStyleSet.SetButtonPressedRolloverTextColor( aTextColor );
@@ -2301,7 +2301,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 
         GdkRGBA tooltip_bg_color, tooltip_fg_color;
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
-        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &tooltip_fg_color);
+        style_context_get_color(pCStyle, &tooltip_fg_color);
         gtk_style_context_get_background_color(pCStyle, gtk_style_context_get_state(pCStyle), &tooltip_bg_color);
 
         aContextState.restore();
@@ -2323,7 +2323,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         style_context_set_state(pCStyle, GTK_STATE_FLAG_SELECTED);
         gtk_style_context_get_background_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
         ::Color aHighlightColor = getColor( text_color );
-        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
+        style_context_get_color(pCStyle, &text_color);
         ::Color aHighlightTextColor = getColor( text_color );
         aStyleSet.SetHighlightColor( aHighlightColor );
         aStyleSet.SetHighlightTextColor( aHighlightTextColor );
@@ -2352,7 +2352,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 
         // Dark shadow color
         style_context_set_state(pCStyle, GTK_STATE_FLAG_INSENSITIVE);
-        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &color);
+        style_context_get_color(pCStyle, &color);
         ::Color aDarkShadowColor = getColor( color );
         aStyleSet.SetDarkShadowColor( aDarkShadowColor );
 
@@ -2391,19 +2391,19 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetMenuBarRolloverColor( aBackColor );
 
     style_context_set_state(mpMenuBarItemStyle, GTK_STATE_FLAG_NORMAL);
-    gtk_style_context_get_color( mpMenuBarItemStyle, gtk_style_context_get_state(mpMenuBarItemStyle), &text_color );
+    style_context_get_color(mpMenuBarItemStyle, &text_color);
     aTextColor = aStyleSet.GetPersonaMenuBarTextColor().value_or( getColor( text_color ) );
     aStyleSet.SetMenuBarTextColor( aTextColor );
     aStyleSet.SetMenuBarRolloverTextColor( aTextColor );
 
     style_context_set_state(mpMenuBarItemStyle, GTK_STATE_FLAG_PRELIGHT);
-    gtk_style_context_get_color( mpMenuBarItemStyle, gtk_style_context_get_state(mpMenuBarItemStyle), &text_color );
+    style_context_get_color(mpMenuBarItemStyle, &text_color);
     aTextColor = aStyleSet.GetPersonaMenuBarTextColor().value_or( getColor( text_color ) );
     aStyleSet.SetMenuBarHighlightTextColor( aTextColor );
 
     // menu items
     style_context_set_state(mpMenuItemLabelStyle, GTK_STATE_FLAG_NORMAL);
-    gtk_style_context_get_color(mpMenuItemLabelStyle, gtk_style_context_get_state(mpMenuItemLabelStyle), &color);
+    style_context_get_color(mpMenuItemLabelStyle, &color);
     aTextColor = getColor(color);
     aStyleSet.SetMenuTextColor(aTextColor);
 
@@ -2412,7 +2412,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     ::Color aHighlightColor = getColor( background_color );
     aStyleSet.SetMenuHighlightColor( aHighlightColor );
 
-    gtk_style_context_get_color( mpMenuItemLabelStyle, gtk_style_context_get_state(mpMenuItemLabelStyle), &color );
+    style_context_get_color(mpMenuItemLabelStyle, &color);
     ::Color aHighlightTextColor = getColor( color );
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
@@ -2421,10 +2421,10 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     // hyperlink colors
     aContextState.save(mpLinkButtonStyle);
     style_context_set_state(mpLinkButtonStyle, GTK_STATE_FLAG_LINK);
-    gtk_style_context_get_color(mpLinkButtonStyle, gtk_style_context_get_state(mpLinkButtonStyle), &text_color);
+    style_context_get_color(mpLinkButtonStyle, &text_color);
     aStyleSet.SetLinkColor(getColor(text_color));
     style_context_set_state(mpLinkButtonStyle, GTK_STATE_FLAG_VISITED);
-    gtk_style_context_get_color(mpLinkButtonStyle, gtk_style_context_get_state(mpLinkButtonStyle), &text_color);
+    style_context_get_color(mpLinkButtonStyle, &text_color);
     aStyleSet.SetVisitedLinkColor(getColor(text_color));
     aContextState.restore();
 
@@ -2432,7 +2432,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabLabelStyle;
         aContextState.save(pCStyle);
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
-        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
+        style_context_get_color(pCStyle, &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabTextColor(aTextColor);
         aStyleSet.SetTabFont(getFont(mpNotebookHeaderTabsTabLabelStyle, rSettings.GetUILanguageTag().getLocale()));
@@ -2443,7 +2443,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         GtkStyleContext *pCStyle = mpToolButtonStyle;
         aContextState.save(pCStyle);
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
-        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
+        style_context_get_color(pCStyle, &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetToolTextColor(aTextColor);
         aStyleSet.SetToolFont(getFont(mpToolButtonStyle, rSettings.GetUILanguageTag().getLocale()));
@@ -2455,7 +2455,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabHoverLabelStyle;
         aContextState.save(pCStyle);
         style_context_set_state(pCStyle, GTK_STATE_FLAG_PRELIGHT);
-        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
+        style_context_get_color(pCStyle, &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabRolloverTextColor(aTextColor);
         aContextState.restore();
@@ -2465,7 +2465,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabActiveLabelStyle;
         aContextState.save(pCStyle);
         style_context_set_state(pCStyle, GTK_STATE_FLAG_CHECKED);
-        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
+        style_context_get_color(pCStyle, &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabHighlightTextColor(aTextColor);
         aContextState.restore();
