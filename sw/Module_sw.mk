@@ -17,6 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+include $(SRCDIR)/sw/layoutwriter_setup.mk
 include $(SRCDIR)/sw/ooxmlexport_setup.mk
 include $(SRCDIR)/sw/uiwriter_setup.mk
 
@@ -107,6 +108,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
         CppunitTest_sw_uiwriter3 \
     ) \
     CppunitTest_sw_layoutwriter \
+    CppunitTest_sw_layoutwriter2 \
     CppunitTest_sw_mailmerge \
     CppunitTest_sw_globalfilter \
     CppunitTest_sw_accessible_relation_set \

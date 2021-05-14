@@ -2843,4 +2843,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf135035)
     CPPUNIT_ASSERT_GREATER(nParentWidth, nFly3Width);
 }
 
+CPPUNIT_PLUGIN_IMPLEMENT();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
