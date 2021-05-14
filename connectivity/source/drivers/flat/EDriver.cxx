@@ -82,47 +82,48 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
 {
     if ( acceptsURL(url) )
     {
-        std::vector< DriverPropertyInfo > aDriverInfo;
-
         Sequence< OUString > aBoolean(2);
         aBoolean[0] = "0";
         aBoolean[1] = "1";
 
-        aDriverInfo.push_back(DriverPropertyInfo(
+        std::vector< DriverPropertyInfo > aDriverInfo
+        {
+            { DriverPropertyInfo(
                 "FieldDelimiter"
                 ,"Field separator."
                 ,false
                 ,OUString()
                 ,Sequence< OUString >())
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
+            },
+            { DriverPropertyInfo(
                 "HeaderLine"
                 ,"Text contains headers."
                 ,false
                 ,"0"
                 ,aBoolean)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
+            },
+            { DriverPropertyInfo(
                 "StringDelimiter"
                 ,"Text separator."
                 ,false
                 ,"0"
                 ,aBoolean)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
+            },
+            { DriverPropertyInfo(
                 "DecimalDelimiter"
                 ,"Decimal separator."
                 ,false
                 ,"0"
                 ,aBoolean)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
+            },
+            { DriverPropertyInfo(
                 "ThousandDelimiter"
                 ,"Thousands separator."
                 ,false
                 ,"0"
                 ,aBoolean)
-                );
+            }
+        };
         return ::comphelper::concatSequences(OFileDriver::getPropertyInfo(url,info ),
                                              Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size()));
     }
