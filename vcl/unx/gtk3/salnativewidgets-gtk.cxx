@@ -18,6 +18,7 @@
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
 #include <unx/gtk/gtkbackend.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include <unx/fontmanager.hxx>
@@ -337,9 +338,9 @@ static GtkWidget* gComboBox;
 static GtkWidget* gListBox;
 static GtkWidget* gTreeViewWidget;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace
 {
+#if !GTK_CHECK_VERSION(4, 0, 0)
     void style_context_set_state(GtkStyleContext* context, GtkStateFlags flags)
     {
         do
@@ -348,7 +349,9 @@ namespace
         }
         while ((context = gtk_style_context_get_parent(context)));
     }
+#endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     class StyleContextSave
     {
     private:
@@ -404,8 +407,10 @@ namespace
 
         return aRect;
     }
+#endif
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                     cairo_t *cr,
                                     const tools::Rectangle& rControlRectangle,
@@ -2138,6 +2143,34 @@ static ::Color getColor( const GdkRGBA& rCol )
     return ::Color( static_cast<int>(rCol.red * 0xFFFF) >> 8, static_cast<int>(rCol.green * 0xFFFF) >> 8, static_cast<int>(rCol.blue * 0xFFFF) >> 8 );
 }
 
+static ::Color style_context_get_background_color(GtkStyleContext* pStyle)
+{
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    GdkRGBA background_color;
+    gtk_style_context_get_background_color(pStyle, gtk_style_context_get_state(pStyle), &background_color);
+    return getColor(background_color);
+#else
+    cairo_surface_t *target = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
+    cairo_t* cr = cairo_create(target);
+    gtk_render_background(pStyle, cr, 0, 0, 1, 1);
+    cairo_destroy(cr);
+
+    cairo_surface_flush(target);
+    vcl::bitmap::lookup_table const & unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
+    unsigned char *data = cairo_image_surface_get_data(target);
+    sal_uInt8 a = data[SVP_CAIRO_ALPHA];
+    sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
+    sal_uInt8 g = unpremultiply_table[a][data[SVP_CAIRO_GREEN]];
+    sal_uInt8 r = unpremultiply_table[a][data[SVP_CAIRO_RED]];
+    Color aColor(ColorAlpha, a, r, g, b);
+    cairo_surface_destroy(target);
+
+    return aColor;
+#endif
+}
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 static vcl::Font getFont(GtkStyleContext* pStyle, const css::lang::Locale& rLocale)
 {
     const PangoFontDescription* font = gtk_style_context_get_font(pStyle, gtk_style_context_get_state(pStyle));
@@ -2245,10 +2278,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetFieldTextColor( aTextColor );
 
     // background colors
-    GdkRGBA background_color;
-    gtk_style_context_get_background_color(pStyle, gtk_style_context_get_state(pStyle), &background_color);
-
-    ::Color aBackColor = getColor( background_color );
+    ::Color aBackColor = style_context_get_background_color(pStyle);
     aStyleSet.BatchSetBackgrounds( aBackColor );
 
     // UI font
@@ -2299,15 +2329,15 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         GtkStyleContext *pCStyle = makeContext (pCPath, nullptr);
         aContextState.save(pCStyle);
 
-        GdkRGBA tooltip_bg_color, tooltip_fg_color;
+        GdkRGBA tooltip_fg_color;
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
         style_context_get_color(pCStyle, &tooltip_fg_color);
-        gtk_style_context_get_background_color(pCStyle, gtk_style_context_get_state(pCStyle), &tooltip_bg_color);
+        ::Color aTooltipBgColor = style_context_get_background_color(pCStyle);
 
         aContextState.restore();
         g_object_unref( pCStyle );
 
-        aStyleSet.SetHelpColor( getColor( tooltip_bg_color ));
+        aStyleSet.SetHelpColor(aTooltipBgColor);
         aStyleSet.SetHelpTextColor( getColor( tooltip_fg_color ));
     }
 
@@ -2321,8 +2351,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 
         // highlighting colors
         style_context_set_state(pCStyle, GTK_STATE_FLAG_SELECTED);
-        gtk_style_context_get_background_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
-        ::Color aHighlightColor = getColor( text_color );
+        ::Color aHighlightColor = style_context_get_background_color(pCStyle);
         style_context_get_color(pCStyle, &text_color);
         ::Color aHighlightTextColor = getColor( text_color );
         aStyleSet.SetHighlightColor( aHighlightColor );
@@ -2335,11 +2364,8 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         aStyleSet.SetActiveTextColor( aHighlightTextColor );
 
         // field background color
-        GdkRGBA field_background_color;
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
-        gtk_style_context_get_background_color(pCStyle, gtk_style_context_get_state(pCStyle), &field_background_color);
-
-        ::Color aBackFieldColor = getColor( field_background_color );
+        ::Color aBackFieldColor = style_context_get_background_color(pCStyle);
         aStyleSet.SetFieldColor( aBackFieldColor );
         // This baby is the default page/paper color
         aStyleSet.SetWindowColor( aBackFieldColor );
@@ -2379,14 +2405,12 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 
     // menu colors
     style_context_set_state(mpMenuStyle, GTK_STATE_FLAG_NORMAL);
-    gtk_style_context_get_background_color( mpMenuStyle, gtk_style_context_get_state(mpMenuStyle), &background_color );
-    aBackColor = getColor( background_color );
+    aBackColor = style_context_get_background_color(mpMenuStyle);
     aStyleSet.SetMenuColor( aBackColor );
 
     // menu bar
     style_context_set_state(mpMenuBarStyle, GTK_STATE_FLAG_NORMAL);
-    gtk_style_context_get_background_color( mpMenuBarStyle, gtk_style_context_get_state(mpMenuBarStyle), &background_color );
-    aBackColor = getColor( background_color );
+    aBackColor = style_context_get_background_color(mpMenuBarStyle);
     aStyleSet.SetMenuBarColor( aBackColor );
     aStyleSet.SetMenuBarRolloverColor( aBackColor );
 
@@ -2408,8 +2432,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetMenuTextColor(aTextColor);
 
     style_context_set_state(mpMenuItemLabelStyle, GTK_STATE_FLAG_PRELIGHT);
-    gtk_style_context_get_background_color( mpMenuItemLabelStyle, gtk_style_context_get_state(mpMenuItemLabelStyle), &background_color );
-    ::Color aHighlightColor = getColor( background_color );
+    ::Color aHighlightColor = style_context_get_background_color(mpMenuItemLabelStyle);
     aStyleSet.SetMenuHighlightColor( aHighlightColor );
 
     style_context_get_color(mpMenuItemLabelStyle, &color);
@@ -2562,6 +2585,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 #else
     (void)rSettings;
 #endif
+
     return true;
 }
 
