@@ -217,13 +217,8 @@ public:
     void drawShader(const SalTwoRect& rPosAry, const sk_sp<SkShader>& shader,
                     SkBlendMode blendMode = SkBlendMode::kSrcOver);
 
-    enum class GlyphOrientation
-    {
-        Apply,
-        Ignore
-    };
     void drawGenericLayout(const GenericSalLayout& layout, Color textColor, const SkFont& font,
-                           const SkFont& verticalFont, GlyphOrientation glyphOrientation);
+                           const SkFont& verticalFont);
 
 protected:
     // To be called before any drawing.

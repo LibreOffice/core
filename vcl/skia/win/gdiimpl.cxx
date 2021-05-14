@@ -203,6 +203,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     const SkiaWinFontInstance* pWinFont
         = static_cast<const SkiaWinFontInstance*>(&rLayout.GetFont());
     const HFONT hLayoutFont = pWinFont->GetHFONT();
+    double hScale = pWinFont->getHScale();
     LOGFONTW logFont;
     if (GetObjectW(hLayoutFont, sizeof(logFont), &logFont) == 0)
     {
@@ -216,34 +217,51 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
         bool dwrite = true;
         if (!typeface) // fall back to GDI text rendering
         {
-            // If lfWidth is kept, then with fHScale != 1 characters get too wide, presumably
+            // If lfWidth is kept, then with hScale != 1 characters get too wide, presumably
             // because the horizontal scaling gets applied twice if GDI is used for drawing (tdf#141715).
-            // Using lfWidth /= fHScale gives slightly incorrect sizes, for a reason I don't understand.
+            // Using lfWidth /= hScale gives slightly incorrect sizes, for a reason I don't understand.
             // LOGFONT docs say that 0 means GDI will find out the right value on its own somehow,
             // and it apparently works.
             logFont.lfWidth = 0;
+            // Reset LOGFONT orientation, the proper orientation is applied by drawGenericLayout(),
+            // and keeping this would make it get applied once more when doing the actual GDI drawing.
+            // Resetting it here does not seem to cause any problem.
+            logFont.lfOrientation = 0;
+            logFont.lfEscapement = 0;
             typeface.reset(SkCreateTypefaceFromLOGFONT(logFont));
             dwrite = false;
+            if (!typeface)
+                return false;
         }
         // Cache the typeface.
         const_cast<SkiaWinFontInstance*>(pWinFont)->SetSkiaTypeface(typeface, dwrite);
     }
-    // lfHeight actually depends on DPI, so it's not really font height as such,
-    // but for LOGFONT-based typefaces Skia simply sets lfHeight back to this value
-    // directly.
-    double fontHeight = logFont.lfHeight;
-    if (fontHeight < 0)
-        fontHeight = -fontHeight;
-    SkFont font(typeface, fontHeight, pWinFont->getHScale(), 0);
+
+    SkFont font(typeface);
     font.setEdging(logFont.lfQuality == NONANTIALIASED_QUALITY ? SkFont::Edging::kAlias
                                                                : fontEdging);
+
+    const FontSelectPattern& rFSD = pWinFont->GetFontSelectPattern();
+    int nHeight = rFSD.mnHeight;
+    int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
+    if (nWidth == 0 || nHeight == 0)
+        return false;
+    font.setSize(nHeight);
+    font.setScaleX(hScale);
+
+    // Unlike with Freetype-based font handling, use height even in vertical mode,
+    // additionally multiply it by horizontal scale to get the proper
+    // size and then scale the width back, otherwise the height would
+    // not be correct. I don't know why this is inconsistent.
+    SkFont verticalFont(font);
+    verticalFont.setSize(nHeight * hScale);
+    verticalFont.setScaleX(1.0 / hScale);
+
     assert(dynamic_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl()));
     SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl());
     COLORREF color = ::GetTextColor(mWinParent.getHDC());
     Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
-    impl->drawGenericLayout(rLayout, salColor, font, font,
-                            pWinFont->GetSkiaDWrite() ? GlyphOrientation::Apply
-                                                      : GlyphOrientation::Ignore);
+    impl->drawGenericLayout(rLayout, salColor, font, verticalFont);
     return true;
 }
 
