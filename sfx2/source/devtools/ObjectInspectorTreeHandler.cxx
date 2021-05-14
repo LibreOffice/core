@@ -971,10 +971,12 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     std::vector<int> aPropertiesWidths(4, nPropertiesDigitWidth * 30);
     mpObjectInspectorWidgets->mpPropertiesTreeView->set_column_fixed_widths(aPropertiesWidths);
 
-    auto nMethodsDigitWidth = static_cast<int>(
-        mpObjectInspectorWidgets->mpMethodsTreeView->get_approximate_digit_width());
-    std::vector<int> aMethodsWidths{ nMethodsDigitWidth * 30, nMethodsDigitWidth * 15,
-                                     nMethodsDigitWidth * 30, nMethodsDigitWidth * 50 };
+    auto nMethodsDigitWidth
+        = mpObjectInspectorWidgets->mpMethodsTreeView->get_approximate_digit_width();
+    std::vector<int> aMethodsWidths{ static_cast<int>(nMethodsDigitWidth * 30),
+                                     static_cast<int>(nMethodsDigitWidth * 15),
+                                     static_cast<int>(nMethodsDigitWidth * 30),
+                                     static_cast<int>(nMethodsDigitWidth * 50) };
     mpObjectInspectorWidgets->mpMethodsTreeView->set_column_fixed_widths(aMethodsWidths);
 
     pObjectInspectorWidgets->mpPaned->set_position(160);
