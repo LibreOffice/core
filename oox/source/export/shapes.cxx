@@ -73,6 +73,7 @@
 #include <oox/export/chartexport.hxx>
 #include <oox/mathml/export.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <oox/export/DMLPresetShapeExport.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -832,77 +833,90 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     else if( bHasHandles )
         bCustGeom = true;
 
-    if (bHasHandles && bCustGeom)
+    bool bPresetWriteSuccesful = false;
+    // Let the custom shapes what has name and preset information in OOXML, to be written
+    // as preset ones with parameters. Try that with this converter class.
+    if (!sShapeType.startsWith("ooxml") && GetDocumentType() == DOCUMENT_DOCX
+        && xShape->getShapeType() == "com.sun.star.drawing.CustomShape")
     {
-        WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, false, true );// do not flip, polypolygon coordinates are flipped already
-        tools::PolyPolygon aPolyPolygon( rSdrObjCustomShape.GetLineGeometry(true) );
-        sal_Int32 nRotation = 0;
-        // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
-        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-        if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
-            xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
-        // Remove rotation
-        bool bInvertRotation = bFlipH != bFlipV;
-        if (nRotation != 0)
-            aPolyPolygon.Rotate(Point(0,0), Degree10(static_cast<sal_Int16>(bInvertRotation ? nRotation/10 : 3600-nRotation/10)));
-        WritePolyPolygon(xShape, aPolyPolygon, false);
+        WriteShapeTransformation(xShape, XML_a, bFlipH, bFlipV, false, true);
+        DMLPresetShapeExporter aCustomShapeConverter(this, xShape);
+        bPresetWriteSuccesful = aCustomShapeConverter.WriteShape();
     }
-    else if (bCustGeom)
+    // If preset writing has problems try to write the shape as it done before
+    if (!bPresetWriteSuccesful)
     {
-        WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
-        bool bSuccess = WriteCustomGeometry(xShape, rSdrObjCustomShape);
-        if (!bSuccess)
-            WritePresetShape( sPresetShape );
-    }
-    else if (bOnDenylist && bHasHandles && nAdjustmentValuesIndex !=-1 && !sShapeType.startsWith("mso-spt"))
-    {
-        WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
-        std::vector< std::pair< sal_Int32, sal_Int32> > aHandlePositionList;
-        std::vector< std::pair< sal_Int32, sal_Int32> > aAvList;
-        aGeometrySeq[ nAdjustmentValuesIndex ].Value >>= aAdjustmentSeq ;
-
-        lcl_AnalyzeHandles( aHandles, aHandlePositionList, aAdjustmentSeq );
-
-        sal_Int32 nXPosition = 0;
-        sal_Int32 nYPosition = 0;
-        if ( !aHandlePositionList.empty() )
+        if (bHasHandles && bCustGeom)
         {
-            nXPosition = aHandlePositionList[0].first ;
-            nYPosition = aHandlePositionList[0].second ;
+            WriteShapeTransformation(xShape, XML_a, bFlipH, bFlipV, false, true);// do not flip, polypolygon coordinates are flipped already
+            tools::PolyPolygon aPolyPolygon(rSdrObjCustomShape.GetLineGeometry(true));
+            sal_Int32 nRotation = 0;
+            // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
+            uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+            if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
+                xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
+            // Remove rotation
+            bool bInvertRotation = bFlipH != bFlipV;
+            if (nRotation != 0)
+                aPolyPolygon.Rotate(Point(0, 0), Degree10(static_cast<sal_Int16>(bInvertRotation ? nRotation / 10 : 3600 - nRotation / 10)));
+            WritePolyPolygon(xShape, aPolyPolygon, false);
         }
-        switch( eShapeType )
+        else if (bCustGeom)
         {
+            WriteShapeTransformation(xShape, XML_a, bFlipH, bFlipV);
+            bool bSuccess = WriteCustomGeometry(xShape, rSdrObjCustomShape);
+            if (!bSuccess)
+                WritePresetShape(sPresetShape);
+        }
+        else if (bOnDenylist && bHasHandles && nAdjustmentValuesIndex != -1 && !sShapeType.startsWith("mso-spt"))
+        {
+            WriteShapeTransformation(xShape, XML_a, bFlipH, bFlipV);
+            Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
+            std::vector< std::pair< sal_Int32, sal_Int32> > aHandlePositionList;
+            std::vector< std::pair< sal_Int32, sal_Int32> > aAvList;
+            aGeometrySeq[nAdjustmentValuesIndex].Value >>= aAdjustmentSeq;
+
+            lcl_AnalyzeHandles(aHandles, aHandlePositionList, aAdjustmentSeq);
+
+            sal_Int32 nXPosition = 0;
+            sal_Int32 nYPosition = 0;
+            if (!aHandlePositionList.empty())
+            {
+                nXPosition = aHandlePositionList[0].first;
+                nYPosition = aHandlePositionList[0].second;
+            }
+            switch (eShapeType)
+            {
             case mso_sptBorderCallout1:
             {
-                sal_Int32 adj3 =  double(nYPosition)/aViewBox.Height *100000;
-                sal_Int32 adj4 =  double(nXPosition)/aViewBox.Width *100000;
-                lcl_AppendAdjustmentValue( aAvList, 1, 18750 );
-                lcl_AppendAdjustmentValue( aAvList, 2, -8333 );
-                lcl_AppendAdjustmentValue( aAvList, 3, adj3 );
-                lcl_AppendAdjustmentValue( aAvList, 4, adj4 );
+                sal_Int32 adj3 = double(nYPosition) / aViewBox.Height * 100000;
+                sal_Int32 adj4 = double(nXPosition) / aViewBox.Width * 100000;
+                lcl_AppendAdjustmentValue(aAvList, 1, 18750);
+                lcl_AppendAdjustmentValue(aAvList, 2, -8333);
+                lcl_AppendAdjustmentValue(aAvList, 3, adj3);
+                lcl_AppendAdjustmentValue(aAvList, 4, adj4);
                 break;
             }
             case mso_sptBorderCallout2:
             {
-                sal_Int32 adj5 =  double(nYPosition)/aViewBox.Height *100000;
-                sal_Int32 adj6 =  double(nXPosition)/aViewBox.Width *100000;
-                sal_Int32 adj3 =  18750;
-                sal_Int32 adj4 =  -16667;
-                lcl_AppendAdjustmentValue( aAvList, 1, 18750 );
-                lcl_AppendAdjustmentValue( aAvList, 2, -8333 );
-                if ( aHandlePositionList.size() > 1 )
+                sal_Int32 adj5 = double(nYPosition) / aViewBox.Height * 100000;
+                sal_Int32 adj6 = double(nXPosition) / aViewBox.Width * 100000;
+                sal_Int32 adj3 = 18750;
+                sal_Int32 adj4 = -16667;
+                lcl_AppendAdjustmentValue(aAvList, 1, 18750);
+                lcl_AppendAdjustmentValue(aAvList, 2, -8333);
+                if (aHandlePositionList.size() > 1)
                 {
-                    nXPosition = aHandlePositionList[1].first ;
-                    nYPosition = aHandlePositionList[1].second ;
-                    adj3 =  double(nYPosition)/aViewBox.Height *100000;
-                    adj4 =  double(nXPosition)/aViewBox.Width *100000;
+                    nXPosition = aHandlePositionList[1].first;
+                    nYPosition = aHandlePositionList[1].second;
+                    adj3 = double(nYPosition) / aViewBox.Height * 100000;
+                    adj4 = double(nXPosition) / aViewBox.Width * 100000;
                 }
-                lcl_AppendAdjustmentValue( aAvList, 3, adj3 );
-                lcl_AppendAdjustmentValue( aAvList, 4, adj4 );
-                lcl_AppendAdjustmentValue( aAvList, 5, adj5 );
-                lcl_AppendAdjustmentValue( aAvList, 6, adj6 );
+                lcl_AppendAdjustmentValue(aAvList, 3, adj3);
+                lcl_AppendAdjustmentValue(aAvList, 4, adj4);
+                lcl_AppendAdjustmentValue(aAvList, 5, adj5);
+                lcl_AppendAdjustmentValue(aAvList, 6, adj6);
                 break;
             }
             case mso_sptWedgeRectCallout:
@@ -910,21 +924,21 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             case mso_sptWedgeEllipseCallout:
             case mso_sptCloudCallout:
             {
-                sal_Int32 adj1 =  (double(nXPosition)/aViewBox.Width -0.5) *100000;
-                sal_Int32 adj2 =  (double(nYPosition)/aViewBox.Height -0.5) *100000;
-                lcl_AppendAdjustmentValue( aAvList, 1, adj1 );
-                lcl_AppendAdjustmentValue( aAvList, 2, adj2 );
-                if ( eShapeType == mso_sptWedgeRRectCallout)
+                sal_Int32 adj1 = (double(nXPosition) / aViewBox.Width - 0.5) * 100000;
+                sal_Int32 adj2 = (double(nYPosition) / aViewBox.Height - 0.5) * 100000;
+                lcl_AppendAdjustmentValue(aAvList, 1, adj1);
+                lcl_AppendAdjustmentValue(aAvList, 2, adj2);
+                if (eShapeType == mso_sptWedgeRRectCallout)
                 {
-                    lcl_AppendAdjustmentValue( aAvList, 3, 16667);
+                    lcl_AppendAdjustmentValue(aAvList, 3, 16667);
                 }
 
                 break;
             }
             case mso_sptFoldedCorner:
             {
-                sal_Int32 adj =  double( aViewBox.Width - nXPosition) / std::min( aViewBox.Width,aViewBox.Height ) * 100000;
-                lcl_AppendAdjustmentValue( aAvList, 0, adj );
+                sal_Int32 adj = double(aViewBox.Width - nXPosition) / std::min(aViewBox.Width, aViewBox.Height) * 100000;
+                lcl_AppendAdjustmentValue(aAvList, 0, adj);
                 break;
             }
             case mso_sptDonut:
@@ -935,8 +949,8 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             case mso_sptBevel:
             case mso_sptBracketPair:
             {
-                sal_Int32 adj =  double( nXPosition )/aViewBox.Width*100000 ;
-                lcl_AppendAdjustmentValue( aAvList, 0, adj );
+                sal_Int32 adj = double(nXPosition) / aViewBox.Width * 100000;
+                lcl_AppendAdjustmentValue(aAvList, 0, adj);
                 break;
             }
             case mso_sptCan:
@@ -944,24 +958,24 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             case mso_sptBracePair:
             case mso_sptVerticalScroll:
             {
-                sal_Int32 adj =  double( nYPosition )/aViewBox.Height *100000 ;
-                lcl_AppendAdjustmentValue( aAvList, 0, adj );
+                sal_Int32 adj = double(nYPosition) / aViewBox.Height * 100000;
+                lcl_AppendAdjustmentValue(aAvList, 0, adj);
                 break;
             }
             case mso_sptSmileyFace:
             {
-                sal_Int32 adj =  double( nYPosition )/aViewBox.Height *100000 - 76458.0;
-                lcl_AppendAdjustmentValue( aAvList, 0, adj );
+                sal_Int32 adj = double(nYPosition) / aViewBox.Height * 100000 - 76458.0;
+                lcl_AppendAdjustmentValue(aAvList, 0, adj);
                 break;
             }
             case mso_sptBlockArc:
             {
-                sal_Int32 nRadius = 50000 * ( 1 - double(nXPosition) / 10800);
-                sal_Int32 nAngleStart = lcl_NormalizeAngle( nYPosition );
-                sal_Int32 nAngleEnd = lcl_NormalizeAngle( 180 - nAngleStart );
-                lcl_AppendAdjustmentValue( aAvList, 1, 21600000 / 360 * nAngleStart );
-                lcl_AppendAdjustmentValue( aAvList, 2, 21600000 / 360 * nAngleEnd );
-                lcl_AppendAdjustmentValue( aAvList, 3, nRadius );
+                sal_Int32 nRadius = 50000 * (1 - double(nXPosition) / 10800);
+                sal_Int32 nAngleStart = lcl_NormalizeAngle(nYPosition);
+                sal_Int32 nAngleEnd = lcl_NormalizeAngle(180 - nAngleStart);
+                lcl_AppendAdjustmentValue(aAvList, 1, 21600000 / 360 * nAngleStart);
+                lcl_AppendAdjustmentValue(aAvList, 2, 21600000 / 360 * nAngleEnd);
+                lcl_AppendAdjustmentValue(aAvList, 3, nRadius);
                 break;
             }
             // case mso_sptNil:
@@ -969,26 +983,27 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             // case mso_sptBorderCallout3:
             default:
             {
-                if (!strcmp( sPresetShape, "frame" ))
+                if (!strcmp(sPresetShape, "frame"))
                 {
-                    sal_Int32 adj1 =  double( nYPosition )/aViewBox.Height *100000 ;
-                    lcl_AppendAdjustmentValue( aAvList, 1, adj1 );
+                    sal_Int32 adj1 = double(nYPosition) / aViewBox.Height * 100000;
+                    lcl_AppendAdjustmentValue(aAvList, 1, adj1);
                 }
                 break;
             }
+            }
+            WritePresetShape(sPresetShape, aAvList);
         }
-        WritePresetShape( sPresetShape  , aAvList );
-    }
-    else // preset geometry
-    {
-        WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
-        if( nAdjustmentValuesIndex != -1 )
+        else // preset geometry
         {
-            WritePresetShape( sPresetShape, eShapeType, bPredefinedHandlesUsed,
-                              aGeometrySeq[ nAdjustmentValuesIndex ] );
+            WriteShapeTransformation(xShape, XML_a, bFlipH, bFlipV);
+            if (nAdjustmentValuesIndex != -1)
+            {
+                WritePresetShape(sPresetShape, eShapeType, bPredefinedHandlesUsed,
+                    aGeometrySeq[nAdjustmentValuesIndex]);
+            }
+            else
+                WritePresetShape(sPresetShape);
         }
-        else
-            WritePresetShape( sPresetShape );
     }
     if( rXPropSet.is() )
     {
