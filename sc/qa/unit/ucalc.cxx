@@ -5869,21 +5869,6 @@ void Test::testEmptyCalcDocDefaults()
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasManualBreaks(tab) );
 }
 
-void Test::setExpandRefs(bool bExpand)
-{
-    ScModule* pMod = SC_MOD();
-    ScInputOptions aOpt = pMod->GetInputOptions();
-    aOpt.SetExpandRefs(bExpand);
-    pMod->SetInputOptions(aOpt);
-}
-
-void Test::setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown)
-{
-    ScDocOptions aOpt = pDoc->GetDocOptions();
-    aOpt.SetCalcAsShown(bCalcAsShown);
-    pDoc->SetDocOptions(aOpt);
-}
-
 void Test::checkPrecisionAsShown( OUString& rCode, double fValue, double fExpectedRoundVal )
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();

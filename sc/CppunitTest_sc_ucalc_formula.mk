@@ -9,7 +9,6 @@
 #
 #*************************************************************************
 
-# empty second argument (i.e. no 1)
-$(eval $(call sc_ucalc_test,))
+$(eval $(call sc_ucalc_test,_formula))
 
 # vim: set noet sw=4 ts=4:
