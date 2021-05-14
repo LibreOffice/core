@@ -43,6 +43,7 @@
 #include <vcl/checksum.hxx>
 #include <tools/gen.hxx>
 #include <vcl/mapmod.hxx>
+#include <com/sun/star/awt/Rectangle.hpp>
 
 class Graphic;
 class SdrObjCustomShape;
@@ -53,6 +54,7 @@ namespace com::sun::star {
 namespace awt {
     struct FontDescriptor;
     struct Gradient;
+    struct Rectangle;
 }
 namespace beans {
     struct PropertyValue;
@@ -63,6 +65,7 @@ namespace drawing {
     class XShape;
     struct EnhancedCustomShapeParameterPair;
     struct EnhancedCustomShapeParameter;
+    struct EnhancedCustomShapeAdjustmentValue;
 }
 namespace graphic {
     class XGraphic;
@@ -358,8 +361,8 @@ public:
 
 };
 
-}
-}
+} // end of namespace oox::drawingml
+} // end of namespace oox
 
 #endif
 
