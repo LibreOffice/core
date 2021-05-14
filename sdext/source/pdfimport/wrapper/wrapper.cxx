@@ -151,7 +151,7 @@ class Parser
     sal_Int32                                    m_nCharIndex;
 
 
-    OString readNextToken();
+    std::string_view readNextToken();
     void           readInt32( sal_Int32& o_Value );
     sal_Int32      readInt32();
     void           readInt64( sal_Int64& o_Value );
@@ -244,35 +244,42 @@ OString lcl_unescapeLineFeeds(const OString& i_rStr)
     return aResult;
 }
 
-OString Parser::readNextToken()
+std::string_view Parser::readNextToken()
 {
     OSL_PRECOND(m_nCharIndex!=-1,"insufficient input");
-    return m_aLine.getToken(m_nNextToken,' ',m_nCharIndex);
+    return m_aLine.getTokenView(m_nNextToken,' ',m_nCharIndex);
 }
 
 void Parser::readInt32( sal_Int32& o_Value )
 {
-    o_Value = readNextToken().toInt32();
+    std::string_view tok = readNextToken();
+    o_Value = rtl_str_toInt32_WithLength(tok.data(), 10, tok.size());
 }
 
 sal_Int32 Parser::readInt32()
 {
-    return readNextToken().toInt32();
+    std::string_view tok = readNextToken();
+    return rtl_str_toInt32_WithLength(tok.data(), 10, tok.size());
 }
 
 void Parser::readInt64( sal_Int64& o_Value )
 {
-    o_Value = readNextToken().toInt64();
+    std::string_view tok = readNextToken();
+    o_Value = rtl_str_toInt64_WithLength(tok.data(), 10, tok.size());
 }
 
 void Parser::readDouble( double& o_Value )
 {
-    o_Value = readNextToken().toDouble();
+    std::string_view tok = readNextToken();
+    o_Value = rtl_math_stringToDouble(tok.data(), tok.data() + tok.size(), '.', 0,
+                                   nullptr, nullptr);
 }
 
 double Parser::readDouble()
 {
-    return readNextToken().toDouble();
+    std::string_view tok = readNextToken();
+    return rtl_math_stringToDouble(tok.data(), tok.data() + tok.size(), '.', 0,
+                                   nullptr, nullptr);
 }
 
 void Parser::readBinaryData( uno::Sequence<sal_Int8>& rBuf )
@@ -679,7 +686,7 @@ void Parser::readFont()
 
 uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
 {
-    OString aToken = readNextToken();
+    std::string_view aToken = readNextToken();
     const sal_Int32 nImageSize( readInt32() );
 
     OUString           aFileName;
@@ -809,9 +816,9 @@ void Parser::parseLine( const OString& rLine )
     OSL_PRECOND( m_xContext.is(), "Invalid service factory" );
 
     m_nNextToken = 0; m_nCharIndex = 0; m_aLine = rLine;
-    const OString& rCmd = readNextToken();
-    const hash_entry* pEntry = PdfKeywordHash::in_word_set( rCmd.getStr(),
-                                                            rCmd.getLength() );
+    const std::string_view rCmd = readNextToken();
+    const hash_entry* pEntry = PdfKeywordHash::in_word_set( rCmd.data(),
+                                                            rCmd.size() );
     OSL_ASSERT(pEntry);
     switch( pEntry->eKey )
     {
