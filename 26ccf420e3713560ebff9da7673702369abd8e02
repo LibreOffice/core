@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35ef03a1_b0c0daa8",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T15:37:07Z",
+      "side": 1,
+      "message": "As far as I see, the return value from this function is only immediately converted to double, right? So it seems that it\u0027s OK if it keeps returning double, which would limit the change to two lines inside this function only, without any loss.",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 8
+      },
+      "revId": "26ccf420e3713560ebff9da7673702369abd8e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
