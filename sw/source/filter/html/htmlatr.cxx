@@ -755,6 +755,8 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     rHWrt.ChangeParaToken( nToken );
 
     bool bHasParSpace = bUseParSpace && rULSpace.GetLower() > 0;
+    // XHTML doesn't allow character children for <blockquote>.
+    bool bXhtmlBlockQuote = rHWrt.mbXHTML && rInfo.aToken == OOO_STRING_SVTOOLS_HTML_blockquote;
 
     // if necessary, start a new list item
     if( rInfo.bInNumberBulletList && bNumbered )
@@ -801,7 +803,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     // Also, XHTML does not allow character children in this context.
     OString aToken = rInfo.aToken;
     if( (!rHWrt.m_bCfgOutStyles || rHWrt.mbXHTML) && rInfo.bParaPossible && !bPara &&
-        (bHasParSpace || pAdjItem) )
+        (bHasParSpace || bXhtmlBlockQuote || pAdjItem) )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OString(rHWrt.GetNamespace() + rInfo.aToken) );
         aToken = OOO_STRING_SVTOOLS_HTML_parabreak;
@@ -849,7 +851,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         (!rInfo.bInNumberBulletList && !rHWrt.m_nDefListLvl) ||
         (rInfo.bInNumberBulletList && !bNumbered) ||
         (!rHWrt.m_bCfgOutStyles &&
-         (bHasParSpace || pAdjItem ||
+         (bHasParSpace || bXhtmlBlockQuote || pAdjItem ||
           (eLang != LANGUAGE_DONTKNOW && eLang != rHWrt.m_eLang))) ||
         nDir != rHWrt.m_nDirection ||
         rHWrt.m_bCfgOutStyles )
