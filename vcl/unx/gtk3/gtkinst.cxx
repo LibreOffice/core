@@ -7800,6 +7800,8 @@ public:
 
 void GtkInstanceDialog::asyncresponse(gint ret)
 {
+    SolarMutexGuard aGuard;
+
     if (ret == GTK_RESPONSE_HELP)
     {
         help();
