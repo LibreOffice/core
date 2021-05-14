@@ -61,14 +61,7 @@ void CommonFunctorsTest::testAnyToString()
 
 void CommonFunctorsTest::testDoubleToString()
 {
-    std::vector<double> aInput;
-    aInput.push_back(2.0);
-    aInput.push_back(10.0);
-    aInput.push_back(12.0);
-    aInput.push_back(15.0);
-    aInput.push_back(25.234);
-    aInput.push_back(123.456);
-    aInput.push_back(0.123450);
+    std::vector<double> aInput { 2.0, 10.0, 12.0, 15.0, 25.234, 123.456, 0.123450 };
 
     std::vector<OUString> aOutput;
     std::transform(aInput.begin(), aInput.end(),
