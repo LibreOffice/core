@@ -1548,9 +1548,17 @@ class SFDialogs:
         def PreProcessArgs(cls, args):
             """
                 Review the arguments of the creation of the Basic service (must be a class method)
-                Add the XComponentContext as last argument
+                    - accept None as default values for Container and Library arguments
+                    - add the XComponentContext as last argument
                 """
-            newargs = (*args, ScriptForge.componentcontext)
+            listargs = list(args)   # Make a mutable list because args is an immutable tuple
+            if len(listargs) >= 1:
+                if listargs[0] is None:         # Container
+                    listargs[0] = ''
+            if len(listargs) >= 2:
+                if listargs[1] is None:
+                    listargs[1] = 'Standard'    # Library
+            newargs = (*listargs, ScriptForge.componentcontext)
             return newargs
 
         def Activate(self):
