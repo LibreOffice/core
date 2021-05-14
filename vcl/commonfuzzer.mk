@@ -90,6 +90,7 @@ fuzzer_core_libraries = \
     ucbhelper \
     ucpexpand1 \
     ucpfile1 \
+    ucppkg1 \
     unoxml \
     utl \
     uui \
