@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe7afde0_cffef4ae",
+        "filename": "sfx2/source/devtools/ObjectInspectorTreeHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T09:15:34Z",
+      "side": 1,
+      "message": "This is not the same as the previous code. Specifically, where nMethodsDigitWidth was previously 5.5, the vector was initialized to {165, 82, 165, 275}, and now it will become {150, 75, 150, 250}.",
+      "range": {
+        "startLine": 974,
+        "startChar": 30,
+        "endLine": 974,
+        "endChar": 46
+      },
+      "revId": "c76e184ca1448c15f2f5fb059a51c2b483d0e387",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
