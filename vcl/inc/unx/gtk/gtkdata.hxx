@@ -101,6 +101,15 @@ inline GtkWidget* widget_get_first_child(GtkWidget *pWidget)
 #endif
 }
 
+inline void style_context_get_color(GtkStyleContext *pStyle, GdkRGBA *pColor)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    return gtk_style_context_get_color(pStyle, pColor);
+#else
+    return gtk_style_context_get_color(pStyle, gtk_style_context_get_state(pStyle), pColor);
+#endif
+}
+
 #if GTK_CHECK_VERSION(4, 0, 0)
 typedef double gtk_coord;
 #else
