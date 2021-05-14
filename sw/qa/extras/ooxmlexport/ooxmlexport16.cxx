@@ -123,6 +123,31 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
     assertXPath(pXmlSettings, "/w:settings/w:gutterAtTop", 1);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCustomShapePresetExport, "testCustomShapePresetExport.odt")
+{
+    // Check if the load failed.
+    CPPUNIT_ASSERT(getPages());
+
+    // Check all shapes of the file
+    for (int i = 1; i <= getShapes(); i++)
+    {
+        uno::Reference<beans::XPropertySet> xProperties(getShape(i), uno::UNO_QUERY);
+        // Get the custom shape property
+        auto aCustomShapeGeometry = xProperties->getPropertyValue("CustomShapeGeometry")
+                                        .get<uno::Sequence<beans::PropertyValue>>();
+        // Find for shape type
+        for (const auto& aCustomGeometryIterator : aCustomShapeGeometry)
+        {
+            if (aCustomGeometryIterator.Name == "Type")
+                CPPUNIT_ASSERT_MESSAGE(
+                    "This is an ooxml preset shape with custom geometry! Shape type lost!",
+                    aCustomGeometryIterator.Value.get<OUString>() != "ooxml-non-primitive");
+            // Without the fix, all shapes has ooxml-non-primitive type, and lost their
+            // real type (like triangle) with the textbox padding.
+        }
+    }
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf69635, "tdf69635.docx")
 {
     xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
