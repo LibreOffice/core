@@ -1470,6 +1470,15 @@ void Test::testUserDefinedNumberFormats()
         sCode = "[NatNum12 NNN=upper NN=upper]NNN NN";
         sExpected = "TUESDAY TUE";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode = "[NatNum12 MMMM=lower MMM=lower MMMMM=lower]MMMM MMM MMMMM";
+        sExpected = "january jan j";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode = "[NatNum12 DDDD=lower DDD=lower]DDDD DDD";
+        sExpected = "tuesday tue";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode = "[NatNum12 NNN=lower NN=lower]NNN NN";
+        sExpected = "tuesday tue";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     { // tdf#130193 tdf#130140 Native Number Formats mapping for Chinese (Traditional), Japanese, Korean
         // -- Traditional Chinese: DBNum1 -> NatNum4, DBNum2 -> NatNum5, DBnum3 -> NatNum3
