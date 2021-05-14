@@ -183,3 +183,6 @@ LibreOffice.VC.VC.opendb
 /a.wasm
 /a.out.js
 /a.out.wasm
+
+# lockfile config header
+/solenv/lockfile/autoconf.h
