@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ad99170_4d2a71e4",
+        "filename": "starmath/inc/document.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-14T10:36:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c9badd7_804f22e6",
+      "revId": "e804f39aebed6c5c3f418e20fef6bee1ef28ef34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e00d7c42_b328d602",
         "filename": "starmath/inc/document.hxx",
         "patchSetId": 12
@@ -30,6 +48,30 @@
       "writtenOn": "2021-05-14T10:08:25Z",
       "side": 1,
       "message": "Why this change? The function still is required to return a valid pointer (and its validity is not checked by users), so reference is a better and more telling choice. Additionally, avoiding this change would avoid some unrelated noise.",
+      "range": {
+        "startLine": 180,
+        "startChar": 15,
+        "endLine": 180,
+        "endChar": 16
+      },
+      "revId": "e804f39aebed6c5c3f418e20fef6bee1ef28ef34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6785875c_282b4116",
+        "filename": "starmath/inc/document.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-14T10:36:52Z",
+      "side": 1,
+      "message": "Thought the reference should be a covered pointer it doesn\u0027t seem to be the same thing to the compiler. It will give errors if left unchanged.\n\nJust in case you are interested:\n/libreoffice/starmath/source/document.cxx: In member function ‘EditEngine\u0026 SmDocShell::GetEditEngine()’:\n/libreoffice/starmath/source/document.cxx:317:55: error: use of deleted function ‘EditEngine::EditEngine(const EditEngine\u0026)’\n  317 |     return static_cast\u003cEditEngine\u003e(*mpEditEngine.get());\n      |                                                       ^\nIn file included from /libreoffice/starmath/inc/editengine.hxx:10,\n                 from /libreoffice/starmath/inc/document.hxx:35,\n                 from /libreoffice/starmath/source/document.cxx:60:\n/libreoffice/include/editeng/editeng.hxx:158:40: note: declared here\n  158 |                      EditEngine( const EditEngine\u0026 ) \u003d delete;",
+      "parentUuid": "e00d7c42_b328d602",
       "range": {
         "startLine": 180,
         "startChar": 15,
@@ -56,6 +98,24 @@
       "revId": "e804f39aebed6c5c3f418e20fef6bee1ef28ef34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c599b16e_596b2161",
+        "filename": "starmath/inc/editengine.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-14T10:36:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0509ff63_5482b885",
+      "revId": "e804f39aebed6c5c3f418e20fef6bee1ef28ef34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
