@@ -92,6 +92,33 @@ GtkStyleContext* GtkSalGraphics::mpRadioMenuItemRadioStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSeparatorMenuItemStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSeparatorMenuItemSeparatorStyle = nullptr;
 
+static void style_context_get_margin(GtkStyleContext *pContext, GtkBorder *pMargin)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_style_context_get_margin(pContext, pMargin);
+#else
+    gtk_style_context_get_margin(pContext, gtk_style_context_get_state(pContext), pMargin);
+#endif
+}
+
+static void style_context_get_border(GtkStyleContext* pContext, GtkBorder* pBorder)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_style_context_get_border(pContext, pBorder);
+#else
+    gtk_style_context_get_border(pContext, gtk_style_context_get_state(pContext), pBorder);
+#endif
+}
+
+static void style_context_get_padding(GtkStyleContext* pContext, GtkBorder* pPadding)
+{
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gtk_style_context_get_padding(pContext, pPadding);
+#else
+    gtk_style_context_get_padding(pContext, gtk_style_context_get_state(pContext), pPadding);
+#endif
+}
+
 bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
  * State conversion
@@ -176,8 +203,8 @@ tools::Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, tools::
     gint icon_size = std::max(w, h);
 
     GtkBorder padding, border;
-    gtk_style_context_get_padding(mpSpinUpStyle, gtk_style_context_get_state(mpSpinUpStyle), &padding);
-    gtk_style_context_get_border(mpSpinUpStyle, gtk_style_context_get_state(mpSpinUpStyle), &border);
+    style_context_get_padding(mpSpinUpStyle, &padding);
+    style_context_get_border(mpSpinUpStyle, &border);
 
     gint buttonWidth = icon_size + padding.left + padding.right +
         border.left + border.right;
@@ -231,19 +258,13 @@ namespace
     {
         GtkBorder margin, border, padding;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkStateFlags stateflags = gtk_style_context_get_state (pContext);
-        gtk_style_context_get_margin(pContext, stateflags, &margin);
-        gtk_style_context_get_border(pContext, stateflags, &border);
-        gtk_style_context_get_padding(pContext, stateflags, &padding);
-#else
-        gtk_style_context_get_margin(pContext, &margin);
-        gtk_style_context_get_border(pContext, &border);
-        gtk_style_context_get_padding(pContext, &padding);
-#endif
+        style_context_get_margin(pContext, &margin);
+        style_context_get_border(pContext, &border);
+        style_context_get_padding(pContext, &padding);
 
         int nMinWidth(0), nMinHeight(0);
 #if !GTK_CHECK_VERSION(4, 0, 0)
+        GtkStateFlags stateflags = gtk_style_context_get_state (pContext);
         gtk_style_context_get(pContext, stateflags,
                 "min-width", &nMinWidth, "min-height", &nMinHeight, nullptr);
 #endif
@@ -384,7 +405,7 @@ namespace
 
         tools::Rectangle aRect(rIn);
         GtkBorder margin;
-        gtk_style_context_get_margin(pContext, gtk_style_context_get_state(pContext), &margin);
+        style_context_get_margin(pContext, &margin);
 
         aRect.AdjustLeft(margin.left );
         aRect.AdjustTop(margin.top );
@@ -397,8 +418,8 @@ namespace
                                        aRect.GetWidth(), aRect.GetHeight());
 
         GtkBorder border, padding;
-        gtk_style_context_get_border(pContext, gtk_style_context_get_state(pContext), &border);
-        gtk_style_context_get_padding(pContext, gtk_style_context_get_state(pContext), &padding);
+        style_context_get_border(pContext, &border);
+        style_context_get_padding(pContext, &padding);
 
         aRect.AdjustLeft(border.left + padding.left );
         aRect.AdjustTop(border.top + padding.top );
@@ -724,7 +745,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         gtk_style_context_set_state(pScrollbarSliderStyle, stateFlags);
 
         GtkBorder margin;
-        gtk_style_context_get_margin(pScrollbarSliderStyle, stateFlags, &margin);
+        style_context_get_margin(pScrollbarSliderStyle, &margin);
 
         gtk_render_background(pScrollbarSliderStyle, cr,
                           thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
@@ -752,8 +773,8 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     gtk_style_context_set_state(context, stateFlags);
     stateFlags = gtk_style_context_get_state(context);
 
-    gtk_style_context_get_padding(context, stateFlags, &padding);
-    gtk_style_context_get_border(context, stateFlags, &border);
+    style_context_get_padding(context, &padding);
+    style_context_get_border(context, &border);
 
     gtk_render_background(context, cr,
                           buttonRect.Left(), buttonRect.Top(),
@@ -849,9 +870,9 @@ tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect(ControlType nType,
 
     GtkBorder padding;
     if (nType == ControlType::Listbox)
-        gtk_style_context_get_padding(mpListboxButtonStyle, gtk_style_context_get_state(mpListboxButtonStyle), &padding);
+        style_context_get_padding(mpListboxButtonStyle, &padding);
     else
-        gtk_style_context_get_padding(mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &padding);
+        style_context_get_padding(mpButtonStyle, &padding);
 
     gint nArrowWidth = FALLBACK_ARROW_SIZE;
     gtk_style_context_get(mpComboboxButtonArrowStyle,
@@ -1880,7 +1901,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         {
             GtkBorder border;
 
-            gtk_style_context_get_border(context, flags, &border);
+            style_context_get_border(context, &border);
 
             nX += border.left;
             nY += border.top;
@@ -1900,7 +1921,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         if (nProgressWidth)
         {
             GtkBorder padding;
-            gtk_style_context_get_padding(context, gtk_style_context_get_state(context), &padding);
+            style_context_get_padding(context, &padding);
 
             nX += padding.left;
             nY += padding.top;
@@ -1956,10 +1977,10 @@ static tools::Rectangle GetWidgetSize(const tools::Rectangle& rControlRegion, Gt
 static tools::Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, tools::Long nContentWidth, tools::Long nContentHeight, const tools::Rectangle& rControlRegion)
 {
     GtkBorder border;
-    gtk_style_context_get_border(pStyle, gtk_style_context_get_state(pStyle), &border);
+    style_context_get_border(pStyle, &border);
 
     GtkBorder padding;
-    gtk_style_context_get_padding(pStyle, gtk_style_context_get_state(pStyle), &padding);
+    style_context_get_padding(pStyle, &padding);
 
     gint nWidgetHeight = nContentHeight + padding.top + padding.bottom + border.top + border.bottom;
     nWidgetHeight = std::max(std::max<gint>(nWidgetHeight, rControlRegion.GetHeight()), 34);
@@ -1994,10 +2015,10 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                                      nullptr );
 
         GtkBorder border;
-        gtk_style_context_get_border(pButtonStyle, gtk_style_context_get_state(pButtonStyle), &border);
+        style_context_get_border(pButtonStyle, &border);
 
         GtkBorder padding;
-        gtk_style_context_get_padding(pButtonStyle, gtk_style_context_get_state(pButtonStyle), &padding);
+        style_context_get_padding(pButtonStyle, &padding);
 
 
         indicator_size += 2*indicator_spacing + border.left + padding.left + border.right + padding.right;
@@ -2106,10 +2127,10 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         aEditRect = rControlRegion;
 
         GtkBorder padding;
-        gtk_style_context_get_padding(mpFrameInStyle, gtk_style_context_get_state(mpFrameInStyle), &padding);
+        style_context_get_padding(mpFrameInStyle, &padding);
 
         GtkBorder border;
-        gtk_style_context_get_border(mpFrameInStyle, gtk_style_context_get_state(mpFrameInStyle), &border);
+        style_context_get_border(mpFrameInStyle, &border);
 
         int x1 = aEditRect.Left();
         int y1 = aEditRect.Top();
