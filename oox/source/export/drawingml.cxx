@@ -5148,6 +5148,297 @@ void DrawingML::WriteFromTo(const uno::Reference<css::drawing::XShape>& rXShape,
     pDrawing->endElement(FSNS(XML_cdr, XML_to));
 }
 
+// DMLPresetShapeExporter class
+
+// ctor
+DMLPresetShapeExporter::DMLPresetShapeExporter(DrawingML* pDMLExporter,
+    css::uno::Reference<css::drawing::XShape> xShape) :
+    m_pDMLexporter(pDMLExporter)
+{
+    // This class only work with custom shapes!
+    OSL_ASSERT(xShape->getShapeType() == "com.sun.star.drawing.CustomShape");
+
+    m_xShape = xShape;
+    m_bHasHandleValues = false;
+    uno::Reference<beans::XPropertySet> xShpProps(m_xShape, uno::UNO_QUERY);
+    css::uno::Sequence<css::beans::PropertyValue> aCustomShapeGeometry
+        = xShpProps->getPropertyValue("CustomShapeGeometry")
+              .get<uno::Sequence<beans::PropertyValue>>();
+
+    for (sal_uInt32 i = 0; i < aCustomShapeGeometry.size(); i++)
+    {
+        if (aCustomShapeGeometry[i].Name == "Type")
+        {
+            m_sPresetShapeType = aCustomShapeGeometry[i].Value.get<OUString>();
+        }
+        if (aCustomShapeGeometry[i].Name == "Handles")
+        {
+            m_bHasHandleValues = true;
+            m_HandleValues
+                = aCustomShapeGeometry[i]
+                      .Value
+                      .get<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>>();
+        }
+        if (aCustomShapeGeometry[i].Name == "Equations")
+        {
+            m_Equations = aCustomShapeGeometry[i].Value.get<css::uno::Sequence<OUString>>();
+        }
+        if (aCustomShapeGeometry[i].Name == "AdjustmentValues")
+        {
+            m_AdjustmentValues
+                = aCustomShapeGeometry[i]
+                      .Value
+                      .get<css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>>();
+        }
+        if (aCustomShapeGeometry[i].Name == "Path")
+        {
+            m_Path = aCustomShapeGeometry[i]
+                         .Value.get<css::uno::Sequence<css::beans::PropertyValue>>();
+        }
+        if (aCustomShapeGeometry[i].Name == "ViewBox")
+        {
+            m_ViewBox = aCustomShapeGeometry[i].Value.get<css::awt::Rectangle>();
+        }
+    }
+};
+
+// dtor
+DMLPresetShapeExporter::~DMLPresetShapeExporter()
+{
+    // Do nothing
+};
+
+bool DMLPresetShapeExporter::HasHandleValue()
+{
+    return m_bHasHandleValues;
 }
+
+OUString DMLPresetShapeExporter::GetShapeType()
+{
+    return m_sPresetShapeType;
+}
+
+bool DMLPresetShapeExporter::WriteShape()
+{
+    if (m_pDMLexporter && m_xShape)
+    {
+        // Case 1: We do not have adjustment points of the shape: just export it as preset
+        if (!m_bHasHandleValues)
+        {
+            OUString sShapeType = GetShapeType();
+            const char* sPresetShape
+                = msfilter::util::GetOOXMLPresetGeometry(sShapeType.toUtf8().getStr());
+            m_pDMLexporter->WritePresetShape(sPresetShape);
+            return true;
+        }
+        else // Case2: There are adjustment points what have to be converted and exported.
+        {
+            OUString sShapeType = GetShapeType();
+            const char* sPresetShape
+                = msfilter::util::GetOOXMLPresetGeometry(sShapeType.toUtf8().getStr());
+            auto& rFS = m_pDMLexporter->GetFS();
+
+            rFS->startElementNS(XML_a, XML_prstGeom, XML_prst, sPresetShape);
+            rFS->startElementNS(XML_a, XML_avLst);
+            const bool bRet = WriteAVlist();
+            rFS->endElementNS(XML_a, XML_avLst);
+            rFS->endElementNS(XML_a, XML_prstGeom);
+            return bRet;
+        }
+    }
+    return false;
+};
+
+std::pair<std::optional<double>, std::optional<double>>
+DMLPresetShapeExporter::GetOOXMLHandlePointAdjustmentRatio(
+    css::uno::Sequence<css::beans::PropertyValue> aValues)
+{
+    std::pair<std::optional<double>, std::optional<double>> aRetVal;
+
+    // Get neccessary any data
+    auto aPos = FindHandleValue(aValues, "Position");
+    auto aXMax = FindHandleValue(aValues, "RangeXMaximum");
+    auto aYMax = FindHandleValue(aValues, "RangeYMaximum");
+    auto aXMin = FindHandleValue(aValues, "RangeXMinimum");
+    auto aYMin = FindHandleValue(aValues, "RangeYMinimum");
+
+    // Case 1: The handling point has x and y coordinates as well.
+    if (aPos.hasValue() && aXMax.hasValue() && aXMin.hasValue() && aPos.hasValue()
+        && aYMax.hasValue() && aYMin.hasValue())
+    {
+        auto nPos = aPos.get<css::drawing::EnhancedCustomShapeParameterPair>();
+        // Get the adjustment data
+        auto nAdjValX = m_AdjustmentValues[nPos.First.Value.get<long>()].Value.get<double>();
+
+        auto nXmax = aXMax.get<css::drawing::EnhancedCustomShapeParameter>();
+        auto nXmin = aXMin.get<css::drawing::EnhancedCustomShapeParameter>();
+
+        auto nAdjValY = m_AdjustmentValues[nPos.Second.Value.get<long>()].Value.get<double>();
+
+        auto nYmax = aYMax.get<css::drawing::EnhancedCustomShapeParameter>();
+        auto nYmin = aYMin.get<css::drawing::EnhancedCustomShapeParameter>();
+
+        std::optional<double> aValX
+            = nAdjValX / (nXmax.Value.get<double>() - nXmin.Value.get<double>());
+        std::optional<double> aValY
+            = nAdjValY / (nYmax.Value.get<double>() - nYmin.Value.get<double>());
+        aRetVal = std::make_pair(aValX, aValY);
+        return aRetVal;
+    }
+    // Case 2: Only x coordinates we have at handling point
+    if (aPos.hasValue() && aXMax.hasValue() && aXMin.hasValue())
+    {
+        auto nPos = aPos.get<css::drawing::EnhancedCustomShapeParameterPair>();
+
+        auto nAdjVal = m_AdjustmentValues[nPos.First.Value.get<long>()].Value.get<double>();
+
+        auto nXmax = aXMax.get<css::drawing::EnhancedCustomShapeParameter>();
+        auto nXmin = aXMin.get<css::drawing::EnhancedCustomShapeParameter>();
+
+        std::optional<double> aValX
+            = nAdjVal / (nXmax.Value.get<double>() - nXmin.Value.get<double>());
+        std::optional<double> aValY;
+        aRetVal = std::make_pair(aValX, aValY);
+        return aRetVal;
+    }
+    // Case 3 this point only adjutable in y way.
+    if (aPos.hasValue() && aYMax.hasValue() && aYMin.hasValue())
+    {
+        auto nPos = aPos.get<css::drawing::EnhancedCustomShapeParameterPair>();
+
+        auto nAdjVal = m_AdjustmentValues[nPos.Second.Value.get<long>()].Value.get<double>();
+
+        auto nYmax = aYMax.get<css::drawing::EnhancedCustomShapeParameter>();
+        auto nYmin = aYMin.get<css::drawing::EnhancedCustomShapeParameter>();
+
+        std::optional<double> aValX;
+        std::optional<double> aValY
+            = nAdjVal / (nYmax.Value.get<double>() - nYmin.Value.get<double>());
+        aRetVal = std::make_pair(aValX, aValY);
+        return aRetVal;
+    }
+    return aRetVal;
+};
+
+css::uno::Any
+DMLPresetShapeExporter::FindHandleValue(css::uno::Sequence<css::beans::PropertyValue> aValues,
+                                        OUString sKey)
+{
+    for (sal_uInt32 i = 0; i < aValues.size(); i++)
+    {
+        if (aValues[i].Name == sKey)
+            return aValues[i].Value;
+    }
+    return uno::Any();
+};
+
+bool DMLPresetShapeExporter::WriteAVlist()
+{
+    OUString sShapeType = GetShapeType();
+    // This vector sores the adjustment values for the export
+    std::vector< std::pair<OUString, OUString> > vAdjVals;
+    // This vector stores the additional adjustment information
+    std::vector< std::pair<OUString, OUString> > vOtherVals;
+
+    for (const auto& rAdjustPointValues : std::as_const(m_HandleValues))
+    {
+        // First, get the ratio of the current adjustment point
+        const auto& nPointRatioValues = GetOOXMLHandlePointAdjustmentRatio(rAdjustPointValues);
+
+        // Then map it to ooxml value by shape type
+        // Sorry for the constant values, but ooxml handles it this way,
+        // because they are parameters for equations of the mso programs.
+        // This is tested by shape type. Each. The first value of the ratio
+        // is the X component, the second is the Y.
+        if (sShapeType == "triangle" || sShapeType == "isosceles-triangle")
+        {
+            sal_Int32 adjval = std::round(*nPointRatioValues.first * 100000);
+            vAdjVals.push_back(
+                std::pair(OUString("adj"), (OUString("val " + OUString::number(adjval)))));
+        }
+        else if (sShapeType == "round-rectangle")
+        {
+            sal_Int32 adjval = std::round(nPointRatioValues.first.has_value()
+                                              ? *nPointRatioValues.first * 50000
+                                              : *nPointRatioValues.second * 50000);
+            vAdjVals.push_back(
+                std::pair(OUString("adj"), (OUString("val " + OUString::number(adjval)))));
+        }
+        else if (sShapeType == "parallelogram") // TODO: improve the accuracy
+        {
+            sal_Int32 adjval = std::round(*nPointRatioValues.first * 150000);
+            vAdjVals.push_back(
+                std::pair(OUString("adj"), (OUString("val " + OUString::number(adjval)))));
+        }
+        else if (sShapeType == "trapezoid") // TODO: mirroring
+        {
+            sal_Int32 adjval = std::round(*nPointRatioValues.first * 100000);
+            vAdjVals.push_back(
+                std::pair(OUString("adj"), (OUString("val " + OUString::number(adjval)))));
+        }
+        else if (sShapeType == "hexagon")
+        {
+            sal_Int32 adjval = std::round(*nPointRatioValues.first * 50000);
+            vAdjVals.push_back(
+                std::pair(OUString("adj"), (OUString("val " + OUString::number(adjval)))));
+            vOtherVals.push_back(
+                std::pair(OUString("vf"), OUString("val " + OUString::number(115470))));
+        }
+        else if (sShapeType == "octagon")
+        {
+            sal_Int32 adjval = std::round(*nPointRatioValues.first * 50000);
+            vAdjVals.push_back(
+                std::pair(OUString("adj"), (OUString("val " + OUString::number(adjval)))));
+        }
+        else if (sShapeType == "cross")
+        {
+            sal_Int32 adjval = std::round(*nPointRatioValues.first * 50000);
+            vAdjVals.push_back(
+                std::pair(OUString("adj"), (OUString("val " + OUString::number(adjval)))));
+        }
+        else if (sShapeType == "star5")
+        {
+            sal_Int32 adjval = std::round(*nPointRatioValues.second * 50000);
+            vAdjVals.push_back(
+                std::pair(OUString("adj"), (OUString("val " + OUString::number(adjval)))));
+            vOtherVals.push_back(
+                std::pair(OUString("hf"), OUString("val " + OUString::number(105146))));
+            vOtherVals.push_back(
+                std::pair(OUString("vf"), OUString("val " + OUString::number(110557))));
+        }
+        //else if (sShapeType == "right-arrow") // Word can't open
+        //{
+        //    sal_Int32 adjvalx = std::round(*nPointRatioValues.first * 250000);
+        //    sal_Int32 adjvaly = std::round(*nPointRatioValues.second * 100000);
+        //    vAdjVals.push_back(
+        //        std::pair(OUString("adj"), OUString("val ") + OUString::number(adjvalx)));
+        //    vAdjVals.push_back(
+        //        std::pair(OUString("adj"), OUString("val ") + OUString::number(adjvaly)));
+        //}
+
+        // TODO: continue with the other shapes
+    }
+
+    // Write the mapped and collected adjustment values to the xml
+    for (size_t i = 0; i < vAdjVals.size(); i++)
+    {
+        OUString sName = (vAdjVals[i].first.startsWith("adj") && vAdjVals.size() > 1)
+                             ? vAdjVals[i].first + OUString::number(i)
+                             : vAdjVals[i].first;
+        OUString sFmla = vAdjVals[i].second;
+        m_pDMLexporter->GetFS()->singleElementNS(XML_a, XML_gd, XML_name, sName, XML_fmla, sFmla);
+    }
+    // And also write the other values as well.
+    for (size_t i = 0; i < vOtherVals.size(); i++)
+    {
+        m_pDMLexporter->GetFS()->singleElementNS(XML_a, XML_gd, XML_name, vOtherVals[i].first,
+                                                 XML_fmla, vOtherVals[i].second);
+    }
+    // Return true on success.
+    return true;
+};
+
+
+}// end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
