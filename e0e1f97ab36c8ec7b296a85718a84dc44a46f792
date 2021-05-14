@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd915f13_086c9d90",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T17:19:06Z",
+      "side": 1,
+      "message": "I guess that if you don\u0027t change the order here, what happens is:\n\n1. first, a temporary KahanSum is created as ta result of multiplication;\n2. A temporary KahanSum is created from pPolynom[i];\n3. The two temporaries are summed, performing two calls to add(double) (for each component of right-hand KahanSum elements)\n4. The result is assigned to nVal.\n\nI suppose that it\u0027s better to expand this:\n\n        nVal *\u003d x;\n        nVal +\u003d pPolynom[i];\n\nThis makes a single call to add() and does not copy anything.",
+      "revId": "e0e1f97ab36c8ec7b296a85718a84dc44a46f792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
