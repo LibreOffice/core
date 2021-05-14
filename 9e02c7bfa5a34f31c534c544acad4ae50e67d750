@@ -22,6 +22,30 @@
       "revId": "9e02c7bfa5a34f31c534c544acad4ae50e67d750",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc6672c2_159146b1",
+        "filename": "codemaker/source/codemaker/global.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-14T10:37:38Z",
+      "side": 1,
+      "message": "* On the order of operands:  Yes, I personally consider this order to be an absolutely horrible abomination, but so be it.\n\n* The string_view ctor is constexpr, so std::string_view(\".\") is guaranteed not to call strlen at runtime.  And the \u003d\u003d overload comparing a string_view and a char* is free not to call strlen on the char* if it so chooses, so this way around it is potentially more efficient than\n\n  \".\" \u003d\u003d std::string_view(buffer.getStr())\n\n* What extra allocation are you talking about?\n\n* OStringBuffer has a non-explicit conversion operator to string_view, so this can presumably be simplified to\n\n  std::string_view(\".\") \u003d\u003d buffer\n\nbut that changes the semantics if buffer contains embedded NULs.  (I assume stopping at the first embedded NUL, if any, isn\u0027t what the original author intended, and I\u0027ll do that simplification in a follow-up commit, just didn\u0027t want to burry that semantic change in this large commit.)",
+      "parentUuid": "97f1df79_34c6a44f",
+      "range": {
+        "startLine": 122,
+        "startChar": 32,
+        "endLine": 122,
+        "endChar": 72
+      },
+      "revId": "9e02c7bfa5a34f31c534c544acad4ae50e67d750",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
