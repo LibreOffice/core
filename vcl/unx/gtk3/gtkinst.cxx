@@ -18896,7 +18896,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
     if (rUIFile != "svt/ui/javadisableddialog.ui" &&
-        rUIFile != "modules/swriter/ui/wordcount.ui")
+        rUIFile != "modules/swriter/ui/wordcount.ui" &&
+        rUIFile != "sfx/ui/querysavedialog.ui")
     {
         SAL_WARN( "vcl.gtk", rUIFile);
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
