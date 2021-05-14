@@ -17584,7 +17584,23 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
         }
         else if (xChild->getNodeName() == "child")
         {
-            if (!sBorderWidth.isEmpty())
+            bool bContentArea = false;
+
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("internal-child");
+            if (xName)
+            {
+                OUString sName(xName->getNodeValue());
+                if (sName == "vbox")
+                {
+                    xName->setNodeValue("content_area");
+                    bContentArea = true;
+                }
+                else if (sName == "accessible")
+                    xRemoveList.push_back(xChild); // Yikes!, what's the replacement for this going to be
+            }
+
+            if (bContentArea || !sBorderWidth.isEmpty())
             {
                 for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xChild->getFirstChild();
                      xObjectCandidate.is();
@@ -17593,32 +17609,36 @@ void ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                     if (xObjectCandidate->getNodeName() == "object")
                     {
                         auto xDoc = xChild->getOwnerDocument();
-                        auto xMarginEnd = CreateProperty(xDoc, "margin-end", sBorderWidth);
 
-                        auto xFirstChild = xObjectCandidate->getFirstChild();
-                        if (xFirstChild.is())
-                            xObjectCandidate->insertBefore(xMarginEnd, xFirstChild);
-                        else
-                            xObjectCandidate->appendChild(xMarginEnd);
+                        if (bContentArea)
+                        {
+                            auto xVExpand = CreateProperty(xDoc, "vexpand", "True");
 
-                        xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-top", sBorderWidth), xMarginEnd);
-                        xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-bottom", sBorderWidth), xMarginEnd);
-                        xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-start", sBorderWidth), xMarginEnd);
+                            auto xFirstChild = xObjectCandidate->getFirstChild();
+                            if (xFirstChild.is())
+                                xObjectCandidate->insertBefore(xVExpand, xFirstChild);
+                            else
+                                xObjectCandidate->appendChild(xVExpand);
+                        }
+
+                        if (!sBorderWidth.isEmpty())
+                        {
+                            auto xMarginEnd = CreateProperty(xDoc, "margin-end", sBorderWidth);
+
+                            auto xFirstChild = xObjectCandidate->getFirstChild();
+                            if (xFirstChild.is())
+                                xObjectCandidate->insertBefore(xMarginEnd, xFirstChild);
+                            else
+                                xObjectCandidate->appendChild(xMarginEnd);
+
+                            xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-top", sBorderWidth), xMarginEnd);
+                            xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-bottom", sBorderWidth), xMarginEnd);
+                            xObjectCandidate->insertBefore(CreateProperty(xDoc, "margin-start", sBorderWidth), xMarginEnd);
+                        }
                         break;
                     }
                 }
                 sBorderWidth.clear();
-            }
-
-            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
-            css::uno::Reference<css::xml::dom::XNode> xName = xMap->getNamedItem("internal-child");
-            if (xName)
-            {
-                OUString sName(xName->getNodeValue());
-                if (sName == "vbox")
-                    xName->setNodeValue("content_area");
-                else if (sName == "accessible")
-                    xRemoveList.push_back(xChild); // Yikes!, what's the replacement for this going to be
             }
         }
         else if (xChild->getNodeName() == "object")
