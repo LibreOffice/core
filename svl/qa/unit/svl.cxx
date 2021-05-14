@@ -1461,6 +1461,15 @@ void Test::testUserDefinedNumberFormats()
         sCode = "[NatNum12 YYYY=title year, D=capitalize ordinal]D\" of \"MMMM\", \"YYYY";
         sExpected = "Second of January, Nineteen Hundred";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode = "[NatNum12 MMMM=upper MMM=upper MMMMM=upper]MMMM MMM MMMMM";
+        sExpected = "JANUARY JAN J";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode = "[NatNum12 DDDD=upper DDD=upper]DDDD DDD";
+        sExpected = "TUESDAY TUE";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode = "[NatNum12 NNN=upper NN=upper]NNN NN";
+        sExpected = "TUESDAY TUE";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     { // tdf#130193 tdf#130140 Native Number Formats mapping for Chinese (Traditional), Japanese, Korean
         // -- Traditional Chinese: DBNum1 -> NatNum4, DBNum2 -> NatNum5, DBnum3 -> NatNum3
