@@ -2612,7 +2612,7 @@
       </node>
       <node oor:name=".uno:PasteTransposed" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Paste Transposed </value>
+          <value xml:lang="en-US">Paste Transposed</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Trans~pose</value>
@@ -2623,7 +2623,7 @@
       </node>
       <node oor:name=".uno:PasteAsLink" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Paste As Link </value>
+          <value xml:lang="en-US">Paste As Link</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">As ~Link</value>
