@@ -22,6 +22,30 @@
       "revId": "02b72784e5601636d26c8e4592958c262efb1a7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "141592eb_fb411245",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-05-14T05:01:53Z",
+      "side": 1,
+      "message": "The trailing space is a typo. Good catch. I\u0027ll submit another patch removing the typo.",
+      "parentUuid": "870ecdbc_7b6734be",
+      "range": {
+        "startLine": 2615,
+        "startChar": 34,
+        "endLine": 2615,
+        "endChar": 51
+      },
+      "revId": "02b72784e5601636d26c8e4592958c262efb1a7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
