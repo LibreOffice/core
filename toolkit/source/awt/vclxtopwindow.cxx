@@ -92,14 +92,16 @@ void VCLXTopWindow::addTopWindowListener( const css::uno::Reference< css::awt::X
 {
     SolarMutexGuard aGuard;
 
-    GetTopWindowListeners().addInterface( rxListener );
+    if (!IsDisposed())
+        GetTopWindowListeners().addInterface( rxListener );
 }
 
 void VCLXTopWindow::removeTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
-    GetTopWindowListeners().removeInterface( rxListener );
+    if (!IsDisposed())
+        GetTopWindowListeners().removeInterface( rxListener );
 }
 
 void VCLXTopWindow::toFront(  )

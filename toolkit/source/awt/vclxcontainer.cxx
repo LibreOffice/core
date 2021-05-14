@@ -73,14 +73,16 @@ void VCLXContainer::addVclContainerListener( const css::uno::Reference< css::awt
 {
     SolarMutexGuard aGuard;
 
-    GetContainerListeners().addInterface( rxListener );
+    if (!IsDisposed())
+        GetContainerListeners().addInterface( rxListener );
 }
 
 void VCLXContainer::removeVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
-    GetContainerListeners().removeInterface( rxListener );
+    if (!IsDisposed())
+        GetContainerListeners().removeInterface( rxListener );
 }
 
 css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > VCLXContainer::getWindows(  )
