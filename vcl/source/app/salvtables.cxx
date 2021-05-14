@@ -5714,7 +5714,7 @@ std::unique_ptr<weld::Label> SalInstanceFrame::weld_label_widget() const
 
 SalInstanceTextView::SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
-    : SalInstanceContainer(pTextView, pBuilder, bTakeOwnership)
+    : SalInstanceWidget(pTextView, pBuilder, bTakeOwnership)
     , m_xTextView(pTextView)
 {
     m_xTextView->SetModifyHdl(LINK(this, SalInstanceTextView, ChangeHdl));
