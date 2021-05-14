@@ -17,7 +17,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
     sc/qa/unit/ucalc \
     sc/qa/unit/ucalc_column \
     sc/qa/unit/ucalc_condformat \
-    sc/qa/unit/ucalc_formula \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,sc_ucalc, \

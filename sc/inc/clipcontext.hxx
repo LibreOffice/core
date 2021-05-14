@@ -42,7 +42,7 @@ public:
     ColumnBlockPositionSet* getBlockPositionSet() { return mpSet.get(); }
 };
 
-class CopyFromClipContext final : public ClipContextBase
+class SC_DLLPUBLIC CopyFromClipContext final : public ClipContextBase
 {
     SCCOL mnDestCol1;
     SCCOL mnDestCol2;
