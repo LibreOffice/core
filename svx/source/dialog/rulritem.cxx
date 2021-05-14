@@ -25,6 +25,8 @@
 #include <com/sun/star/frame/status/LeftRightMargin.hpp>
 #include <com/sun/star/frame/status/UpperLowerMargin.hpp>
 
+#include <limits>
+
 SfxPoolItem* SvxPagePosSizeItem::CreateDefault() { return new SvxPagePosSizeItem; }
 SfxPoolItem* SvxLongLRSpaceItem::CreateDefault() { return new SvxLongLRSpaceItem; }
 SfxPoolItem* SvxLongULSpaceItem::CreateDefault() { return new SvxLongULSpaceItem; }
