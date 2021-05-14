@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <string_view>
+#include <scmod.hxx>
 
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -1825,11 +1826,12 @@ void ScFiltersTest::testDataTableMortgageXLS()
     ScDocShellRef xDocSh = loadDoc(u"data-table/mortgage.", FORMAT_XLS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.is());
 
-    ScFormulaOptions aOptions;
-    aOptions.SetFormulaSepArg(",");
-    aOptions.SetFormulaSepArrayCol(",");
-    aOptions.SetFormulaSepArrayRow(";");
-    xDocSh->SetFormulaOptions(aOptions);
+    ScFormulaOptions aOldOptions, aNewOptions;
+    aOldOptions = SC_MOD()->GetFormulaOptions();
+    aNewOptions.SetFormulaSepArg(",");
+    aNewOptions.SetFormulaSepArrayCol(",");
+    aNewOptions.SetFormulaSepArrayRow(";");
+    xDocSh->SetFormulaOptions(aNewOptions);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -1850,6 +1852,9 @@ void ScFiltersTest::testDataTableMortgageXLS()
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(4,9,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,E$8)", "Wrong formula!");
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(4,10,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,E$8)", "Wrong formula!");
 
+    // restore formula options back to default
+    xDocSh->SetFormulaOptions(aOldOptions);
+
     xDocSh->DoClose();
 }
 
@@ -1858,11 +1863,12 @@ void ScFiltersTest::testDataTableOneVarXLSX()
     ScDocShellRef xDocSh = loadDoc(u"data-table/one-variable.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.is());
 
-    ScFormulaOptions aOptions;
-    aOptions.SetFormulaSepArg(",");
-    aOptions.SetFormulaSepArrayCol(",");
-    aOptions.SetFormulaSepArrayRow(";");
-    xDocSh->SetFormulaOptions(aOptions);
+    ScFormulaOptions aOldOptions, aNewOptions;
+    aOldOptions = SC_MOD()->GetFormulaOptions();
+    aNewOptions.SetFormulaSepArg(",");
+    aNewOptions.SetFormulaSepArrayCol(",");
+    aNewOptions.SetFormulaSepArrayRow(";");
+    xDocSh->SetFormulaOptions(aNewOptions);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -1893,6 +1899,9 @@ void ScFiltersTest::testDataTableOneVarXLSX()
 
     CPPUNIT_ASSERT_EQUAL(50.0, rDoc.GetValue(ScAddress(8,4,0)));
 
+    // restore formula options back to default
+    xDocSh->SetFormulaOptions(aOldOptions);
+
     xDocSh->DoClose();
 }
 
@@ -1901,11 +1910,12 @@ void ScFiltersTest::testDataTableMultiTableXLSX()
     ScDocShellRef xDocSh = loadDoc(u"data-table/multi-table.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.is());
 
-    ScFormulaOptions aOptions;
-    aOptions.SetFormulaSepArg(",");
-    aOptions.SetFormulaSepArrayCol(",");
-    aOptions.SetFormulaSepArrayRow(";");
-    xDocSh->SetFormulaOptions(aOptions);
+    ScFormulaOptions aOldOptions, aNewOptions;
+    aOldOptions = SC_MOD()->GetFormulaOptions();
+    aNewOptions.SetFormulaSepArg(",");
+    aNewOptions.SetFormulaSepArrayCol(",");
+    aNewOptions.SetFormulaSepArrayRow(";");
+    xDocSh->SetFormulaOptions(aNewOptions);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -1924,6 +1934,9 @@ void ScFiltersTest::testDataTableMultiTableXLSX()
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(12,14,0), "MULTIPLE.OPERATIONS($A$3,$E$1,$A15,$D$1,M$3)", "Wrong formula!");
 
     CPPUNIT_ASSERT_EQUAL(144.0, rDoc.GetValue(ScAddress(12,14,0)));
+
+    // restore formula options back to default
+    xDocSh->SetFormulaOptions(aOldOptions);
 
     xDocSh->DoClose();
 }
