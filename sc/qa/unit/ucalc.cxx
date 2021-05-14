@@ -12361,50 +12361,6 @@ void Test::testEmptyCalcDocDefaults()
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasManualBreaks(tab) );
 }
 
-ScDocShell* Test::findLoadedDocShellByName(std::u16string_view rName)
-{
-    ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
-    while (pShell)
-    {
-        SfxMedium* pMedium = pShell->GetMedium();
-        if (pMedium)
-        {
-            OUString aName = pMedium->GetName();
-            if (aName == rName)
-                return pShell;
-        }
-        pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, checkSfxObjectShell<ScDocShell>, false));
-    }
-    return nullptr;
-}
-
-void Test::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)
-{
-    ScMarkData aMark(pDestDoc->GetSheetLimits());
-    aMark.SetMarkArea(rDestRange);
-    sc::CopyFromClipContext aCxt(*pDestDoc, nullptr, pClipDoc, eFlags, false, false);
-    aCxt.setDestRange(rDestRange.aStart.Col(), rDestRange.aStart.Row(),
-            rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
-    aCxt.setTabRange(rDestRange.aStart.Tab(), rDestRange.aEnd.Tab());
-    pDestDoc->CopyOneCellFromClip(aCxt, rDestRange.aStart.Col(), rDestRange.aStart.Row(),
-            rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
-}
-
-void Test::setExpandRefs(bool bExpand)
-{
-    ScModule* pMod = SC_MOD();
-    ScInputOptions aOpt = pMod->GetInputOptions();
-    aOpt.SetExpandRefs(bExpand);
-    pMod->SetInputOptions(aOpt);
-}
-
-void Test::setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown)
-{
-    ScDocOptions aOpt = pDoc->GetDocOptions();
-    aOpt.SetCalcAsShown(bCalcAsShown);
-    pDoc->SetDocOptions(aOpt);
-}
-
 void Test::checkPrecisionAsShown( OUString& rCode, double fValue, double fExpectedRoundVal )
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();

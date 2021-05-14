@@ -23,19 +23,6 @@ class ScUndoCut;
 class Test : public test::BootstrapFixture
 {
 public:
-    static ScDocShell* findLoadedDocShellByName(std::u16string_view rName);
-    static void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
-                                     ScDocument* pClipDoc,
-                                     InsertDeleteFlags eFlags = InsertDeleteFlags::ALL);
-
-    /**
-     * Enable or disable expand reference options which controls how
-     * references in formula are expanded when inserting rows or columns.
-     */
-    static void setExpandRefs(bool bExpand);
-
-    static void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown);
-
     void checkPrecisionAsShown(OUString& rCode, double fValue, double fExpectedRoundVal);
 
     Test();
@@ -78,133 +65,11 @@ public:
 
     void testMarkedCellIteration();
 
-    void testFormulaCreateStringFromTokens();
-    void testFormulaParseReference();
-    void testFetchVectorRefArray();
-    void testGroupConverter3D();
-    void testFormulaHashAndTag();
-    void testFormulaTokenEquality();
-    void testFormulaRefData();
-    void testFormulaCompiler();
-    void testFormulaCompilerJumpReordering();
-    void testFormulaCompilerImplicitIntersection2Param();
-    void testFormulaCompilerImplicitIntersection1ParamNoChange();
-    void testFormulaCompilerImplicitIntersection1ParamWithChange();
-    void testFormulaCompilerImplicitIntersection1NoGroup();
-    void testFormulaCompilerImplicitIntersectionOperators();
-    void testFormulaAnnotateTrimOnDoubleRefs();
-    void testFormulaRefUpdate();
-    void testFormulaRefUpdateRange();
-    void testFormulaRefUpdateSheets();
-    void testFormulaRefUpdateSheetsDelete();
-    void testFormulaRefUpdateInsertRows();
-    void testFormulaRefUpdateInsertColumns();
-    void testFormulaRefUpdateMove();
-    void testFormulaRefUpdateMoveUndo();
-    void testFormulaRefUpdateMoveUndo2();
-    void testFormulaRefUpdateMoveUndo3NonShared();
-    void testFormulaRefUpdateMoveUndo3Shared();
-    void testFormulaRefUpdateMoveUndoDependents();
-    void testFormulaRefUpdateMoveUndo4();
-    void testFormulaRefUpdateMoveToSheet();
-    void testFormulaRefUpdateDeleteContent();
-    void testFormulaRefUpdateDeleteAndShiftLeft();
-    void testFormulaRefUpdateDeleteAndShiftLeft2();
-    void testFormulaRefUpdateDeleteAndShiftUp();
-    void testFormulaRefUpdateName();
-    void testFormulaRefUpdateNameMove();
-    void testFormulaRefUpdateNameExpandRef();
-    void testFormulaRefUpdateNameExpandRef2();
-    void testFormulaRefUpdateNameDeleteRow();
-    void testFormulaRefUpdateNameCopySheet();
-    void testFormulaRefUpdateNameCopySheetCheckTab(SCTAB Tab, bool bCheckNames);
-    void testFormulaRefUpdateSheetLocalMove();
-    void testFormulaRefUpdateNameDelete();
-    void testFormulaRefUpdateValidity();
-    void testTokenArrayRefUpdateMove();
-    void testSingleCellCopyColumnLabel();
-    void testIntersectionOpExcel();
-    void testMultipleOperations();
-    void testFuncCOLUMN();
-    void testFuncCOUNT();
-    void testFuncCOUNTBLANK();
-    void testFuncROW();
-    void testFuncSUM();
-    void testFuncPRODUCT();
-    void testFuncSUMPRODUCT();
-    void testFuncSUMXMY2();
-    void testFuncMIN();
-    void testFuncN();
-    void testFuncCOUNTIF();
-    void testFuncNUMBERVALUE();
-    void testFuncLEN();
-    void testFuncLOOKUP();
-    void testFuncLOOKUParrayWithError();
-    void testTdf141146();
-    void testFuncVLOOKUP();
-    void testFuncMATCH();
-    void testFuncCELL();
-    void testFuncDATEDIF();
-    void testFuncINDIRECT();
-    void testFuncINDIRECT2();
-    void testFunc_MATCH_INDIRECT();
-    void testFuncIF();
-    void testFuncCHOOSE();
-    void testFuncIFERROR();
-    void testFuncSHEET();
-    void testFuncNOW();
-    void testMatrixOp();
-    void testFuncRangeOp();
-    void testFuncFORMULA();
-    void testFuncTableRef();
-    void testFuncFTEST();
-    void testFuncFTESTBug();
-    void testFuncCHITEST();
-    void testFuncTTEST();
-    void testFuncSUMX2PY2();
-    void testFuncSUMX2MY2();
-    void testFuncGCD();
-    void testFuncLCM();
-    void testFuncSUMSQ();
-    void testFuncMDETERM();
-    void testFuncSUMIFS();
-    void testFuncRefListArraySUBTOTAL();
-    void testFuncJumpMatrixArrayIF();
-    void testFuncJumpMatrixArrayOFFSET();
-    void testMatConcat();
-    void testMatConcatReplication();
-    void testRefR1C1WholeCol();
-    void testRefR1C1WholeRow();
-    void testIterations();
-
-    void testExternalRef();
-    void testExternalRefFunctions();
-    void testExternalRangeName();
-    void testExternalRefUnresolved();
-
     void testCopyToDocument();
 
     void testHorizontalIterator();
     void testValueIterator();
     void testHorizontalAttrIterator();
-
-    /**
-     * Basic test for formula dependency tracking.
-     */
-    void testFormulaDepTracking();
-
-    /**
-     * Another test for formula dependency tracking, inspired by fdo#56278.
-     */
-    void testFormulaDepTracking2();
-
-    void testFormulaDepTracking3();
-
-    void testFormulaDepTrackingDeleteRow();
-
-    void testFormulaDepTrackingDeleteCol();
-
-    void testFormulaMatrixResultUpdate();
 
     /**
      * More direct test for cell broadcaster management, used to track formula
@@ -414,23 +279,14 @@ public:
     // tdf#80137
     void testCopyPasteMatrixFormula();
     void testUndoDataAnchor();
-    void testFormulaErrorPropagation();
     void testSetFormula();
     void testMultipleDataCellsInRange();
-
-    void testTdf97369();
-    void testTdf97587();
-    void testTdf93415();
-    void testTdf100818();
 
     void testEmptyCalcDocDefaults();
 
     void testPrecisionAsShown();
     void testProtectedSheetEditByRow();
     void testProtectedSheetEditByColumn();
-    void testFuncRowsHidden();
-    void testInsertColCellStoreEventSwap();
-    void testFormulaAfterDeleteRows();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -448,117 +304,10 @@ public:
     CPPUNIT_TEST(testDataEntries);
     CPPUNIT_TEST(testSelectionFunction);
     CPPUNIT_TEST(testMarkedCellIteration);
-    CPPUNIT_TEST(testFormulaCreateStringFromTokens);
-    CPPUNIT_TEST(testFormulaParseReference);
-    CPPUNIT_TEST(testFetchVectorRefArray);
-    CPPUNIT_TEST(testGroupConverter3D);
-    // CPPUNIT_TEST(testFormulaHashAndTag);
-    CPPUNIT_TEST(testFormulaTokenEquality);
-    CPPUNIT_TEST(testFormulaRefData);
-    CPPUNIT_TEST(testFormulaCompiler);
-    CPPUNIT_TEST(testFormulaCompilerJumpReordering);
-    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection2Param);
-    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection1ParamNoChange);
-    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection1ParamWithChange);
-    CPPUNIT_TEST(testFormulaCompilerImplicitIntersection1NoGroup);
-    CPPUNIT_TEST(testFormulaCompilerImplicitIntersectionOperators);
-    CPPUNIT_TEST(testFormulaAnnotateTrimOnDoubleRefs);
-    CPPUNIT_TEST(testFormulaRefUpdate);
-    CPPUNIT_TEST(testFormulaRefUpdateRange);
-    CPPUNIT_TEST(testFormulaRefUpdateSheets);
-    CPPUNIT_TEST(testFormulaRefUpdateSheetsDelete);
-    CPPUNIT_TEST(testFormulaRefUpdateInsertRows);
-    CPPUNIT_TEST(testFormulaRefUpdateInsertColumns);
-    CPPUNIT_TEST(testFormulaRefUpdateMove);
-    CPPUNIT_TEST(testFormulaRefUpdateMoveUndo);
-    CPPUNIT_TEST(testFormulaRefUpdateMoveUndo2);
-    CPPUNIT_TEST(testFormulaRefUpdateMoveUndo3NonShared);
-    CPPUNIT_TEST(testFormulaRefUpdateMoveUndo3Shared);
-    CPPUNIT_TEST(testFormulaRefUpdateMoveUndoDependents);
-    CPPUNIT_TEST(testFormulaRefUpdateMoveUndo4);
-    CPPUNIT_TEST(testFormulaRefUpdateMoveToSheet);
-    CPPUNIT_TEST(testFormulaRefUpdateDeleteContent);
-    CPPUNIT_TEST(testFormulaRefUpdateDeleteAndShiftLeft);
-    CPPUNIT_TEST(testFormulaRefUpdateDeleteAndShiftLeft2);
-    CPPUNIT_TEST(testFormulaRefUpdateDeleteAndShiftUp);
-    CPPUNIT_TEST(testFormulaRefUpdateName);
-    CPPUNIT_TEST(testFormulaRefUpdateNameMove);
-    CPPUNIT_TEST(testFormulaRefUpdateNameExpandRef);
-    CPPUNIT_TEST(testFormulaRefUpdateNameExpandRef2);
-    CPPUNIT_TEST(testFormulaRefUpdateNameDeleteRow);
-    CPPUNIT_TEST(testFormulaRefUpdateNameCopySheet);
-    CPPUNIT_TEST(testFormulaRefUpdateSheetLocalMove);
-    CPPUNIT_TEST(testFormulaRefUpdateNameDelete);
-    CPPUNIT_TEST(testFormulaRefUpdateValidity);
-    CPPUNIT_TEST(testTokenArrayRefUpdateMove);
-    CPPUNIT_TEST(testIntersectionOpExcel);
-    CPPUNIT_TEST(testMultipleOperations);
-    CPPUNIT_TEST(testFuncCOLUMN);
-    CPPUNIT_TEST(testFuncCOUNT);
-    CPPUNIT_TEST(testFuncCOUNTBLANK);
-    CPPUNIT_TEST(testFuncROW);
-    CPPUNIT_TEST(testFuncSUM);
-    CPPUNIT_TEST(testFuncPRODUCT);
-    CPPUNIT_TEST(testFuncSUMPRODUCT);
-    CPPUNIT_TEST(testFuncSUMXMY2);
-    CPPUNIT_TEST(testFuncMIN);
-    CPPUNIT_TEST(testFuncN);
-    CPPUNIT_TEST(testFuncCOUNTIF);
-    CPPUNIT_TEST(testFuncNUMBERVALUE);
-    CPPUNIT_TEST(testFuncLEN);
-    CPPUNIT_TEST(testFuncLOOKUP);
-    CPPUNIT_TEST(testFuncLOOKUParrayWithError);
-    CPPUNIT_TEST(testTdf141146);
-    CPPUNIT_TEST(testFuncVLOOKUP);
-    CPPUNIT_TEST(testFuncMATCH);
-    CPPUNIT_TEST(testFuncCELL);
-    CPPUNIT_TEST(testFuncDATEDIF);
-    CPPUNIT_TEST(testFuncINDIRECT);
-    CPPUNIT_TEST(testFuncINDIRECT2);
-    CPPUNIT_TEST(testFunc_MATCH_INDIRECT);
-    CPPUNIT_TEST(testFuncIF);
-    CPPUNIT_TEST(testFuncCHOOSE);
-    CPPUNIT_TEST(testFuncIFERROR);
-    CPPUNIT_TEST(testRefR1C1WholeCol);
-    CPPUNIT_TEST(testRefR1C1WholeRow);
-    CPPUNIT_TEST(testIterations);
-    CPPUNIT_TEST(testMatrixOp);
-    CPPUNIT_TEST(testFuncRangeOp);
-    CPPUNIT_TEST(testFuncFORMULA);
-    CPPUNIT_TEST(testFuncTableRef);
-    CPPUNIT_TEST(testFuncFTEST);
-    CPPUNIT_TEST(testFuncFTESTBug);
-    CPPUNIT_TEST(testFuncCHITEST);
-    CPPUNIT_TEST(testFuncTTEST);
-    CPPUNIT_TEST(testFuncSUMX2PY2);
-    CPPUNIT_TEST(testFuncSUMX2MY2);
-    CPPUNIT_TEST(testFuncGCD);
-    CPPUNIT_TEST(testFuncLCM);
-    CPPUNIT_TEST(testFuncSUMSQ);
-    CPPUNIT_TEST(testFuncMDETERM);
-    CPPUNIT_TEST(testFuncSUMIFS);
-    CPPUNIT_TEST(testFuncRefListArraySUBTOTAL);
-    CPPUNIT_TEST(testFuncJumpMatrixArrayIF);
-    CPPUNIT_TEST(testFuncJumpMatrixArrayOFFSET);
-    CPPUNIT_TEST(testMatConcat);
-    CPPUNIT_TEST(testMatConcatReplication);
-    CPPUNIT_TEST(testExternalRef);
-    CPPUNIT_TEST(testExternalRangeName);
-    CPPUNIT_TEST(testExternalRefFunctions);
-    // currently crashes windows
-    // CPPUNIT_TEST(testExternalRefUnresolved);
     CPPUNIT_TEST(testCopyToDocument);
-    CPPUNIT_TEST(testFuncSHEET);
-    CPPUNIT_TEST(testFuncNOW);
     CPPUNIT_TEST(testHorizontalIterator);
     CPPUNIT_TEST(testValueIterator);
     CPPUNIT_TEST(testHorizontalAttrIterator);
-    CPPUNIT_TEST(testFormulaDepTracking);
-    CPPUNIT_TEST(testFormulaDepTracking2);
-    CPPUNIT_TEST(testFormulaDepTracking3);
-    CPPUNIT_TEST(testFormulaDepTrackingDeleteRow);
-    CPPUNIT_TEST(testFormulaDepTrackingDeleteCol);
-    CPPUNIT_TEST(testFormulaMatrixResultUpdate);
     CPPUNIT_TEST(testCellBroadcaster);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
@@ -715,20 +464,12 @@ public:
     CPPUNIT_TEST(testSetStringAndNote);
     CPPUNIT_TEST(testCopyPasteMatrixFormula);
     CPPUNIT_TEST(testUndoDataAnchor);
-    CPPUNIT_TEST(testFormulaErrorPropagation);
     CPPUNIT_TEST(testSetFormula);
     CPPUNIT_TEST(testMultipleDataCellsInRange);
-    CPPUNIT_TEST(testTdf97369);
-    CPPUNIT_TEST(testTdf97587);
-    CPPUNIT_TEST(testTdf93415);
-    CPPUNIT_TEST(testTdf100818);
     CPPUNIT_TEST(testEmptyCalcDocDefaults);
     CPPUNIT_TEST(testPrecisionAsShown);
     CPPUNIT_TEST(testProtectedSheetEditByRow);
     CPPUNIT_TEST(testProtectedSheetEditByColumn);
-    CPPUNIT_TEST(testFuncRowsHidden);
-    CPPUNIT_TEST(testInsertColCellStoreEventSwap);
-    CPPUNIT_TEST(testFormulaAfterDeleteRows);
     CPPUNIT_TEST_SUITE_END();
 
 private:
