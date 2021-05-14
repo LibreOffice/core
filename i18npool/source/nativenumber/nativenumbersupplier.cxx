@@ -637,12 +637,13 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
 
     if (nNativeNumberMode == NativeNumberMode::NATNUM12)
     {
-        // handle capitalization prefixes "capitalize", "upper" and "title"
+        // handle capitalization prefixes "capitalize", "upper", "lower" and "title"
 
         enum WhichCasing
         {
             CAPITALIZE,
             UPPER,
+            LOWER,
             TITLE
         };
 
@@ -656,6 +657,7 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
         {
             { std::u16string_view(u"capitalize"), CAPITALIZE },
             { std::u16string_view(u"upper"), UPPER },
+            { std::u16string_view(u"lower"), LOWER },
             { std::u16string_view(u"title"), TITLE }
         };
 
@@ -685,6 +687,8 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
                         (aStr.getLength() > 1 ? aStr.copy(1) : OUString());
                 case UPPER:
                     return xCharClass->toUpper(aStr, 0, aStr.getLength(), aLocale);
+                case LOWER:
+                    return xCharClass->toLower(aStr, 0, aStr.getLength(), aLocale);
                 case TITLE:
                     return xCharClass->toTitle(aStr, 0, aStr.getLength(), aLocale);
             }
