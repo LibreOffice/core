@@ -613,6 +613,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
                     SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
                     SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS,
+                    SID_SMEDITWINDOWZOOM,       SID_SMEDITWINDOWZOOM,
                     0
                 };
                 auto pItemSet = std::make_unique<SfxItemSet>( SmDocShell::GetPool(), nRange );
