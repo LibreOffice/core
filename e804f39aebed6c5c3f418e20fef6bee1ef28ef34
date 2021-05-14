@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "ae4f7a30_96bf33d0",
+        "filename": "starmath/inc/document.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-14T10:39:23Z",
+      "side": 1,
+      "message": "return *mpEditEngine.get();",
+      "parentUuid": "6785875c_282b4116",
+      "range": {
+        "startLine": 180,
+        "startChar": 15,
+        "endLine": 180,
+        "endChar": 16
+      },
+      "revId": "e804f39aebed6c5c3f418e20fef6bee1ef28ef34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0509ff63_5482b885",
         "filename": "starmath/inc/editengine.hxx",
         "patchSetId": 12
