@@ -914,6 +914,15 @@ sal_Int32 toInt32                             ( const IMPL_RTL_STRCODE* pStr,
 }
 
 template <typename IMPL_RTL_STRCODE>
+sal_Int32 toInt32_WithLength                  ( const IMPL_RTL_STRCODE* pStr,
+                                                sal_Int16 nRadix,
+                                                sal_Int32 nStrLength )
+{
+    assert(pStr);
+    return toInt_WithLength<sal_Int32, sal_uInt32>(pStr, nRadix, nStrLength);
+}
+
+template <typename IMPL_RTL_STRCODE>
 sal_Int64 toInt64                             ( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
 {
@@ -1731,6 +1740,70 @@ sal_Int32 getToken                                ( IMPL_RTL_STRINGDATA** ppThis
             return -1;
     }
 }
+
+
+/* ----------------------------------------------------------------------- */
+
+template <typename IMPL_RTL_STRINGDATA>
+sal_Int32 getTokenView                            ( std::string_view* pNew,
+                                                    IMPL_RTL_STRINGDATA* pStr,
+                                                    sal_Int32 nToken,
+                                                    STRCODE<IMPL_RTL_STRINGDATA> cTok,
+                                                    sal_Int32 nIndex )
+{
+    assert(ppThis);
+    assert(pStr);
+    const auto*             pCharStr        = pStr->buffer;
+    sal_Int32               nLen            = pStr->length-nIndex;
+    sal_Int32               nTokCount       = 0;
+
+    // Set ppThis to an empty string and return -1 if either nToken or nIndex is
+    // negative:
+    if (nIndex < 0)
+        nToken = -1;
+
+    pCharStr += nIndex;
+    const auto* pOrgCharStr = pCharStr;
+    const auto* pCharStrStart = pCharStr;
+    while ( nLen > 0 )
+    {
+        if ( *pCharStr == cTok )
+        {
+            nTokCount++;
+
+            if ( nTokCount == nToken )
+                pCharStrStart = pCharStr+1;
+            else
+            {
+                if ( nTokCount > nToken )
+                    break;
+            }
+        }
+
+        pCharStr++;
+        nLen--;
+    }
+
+    if ( (nToken < 0) || (nTokCount < nToken) || (pCharStr == pCharStrStart) )
+    {
+        if( (nToken < 0) || (nTokCount < nToken) )
+            return -1;
+        else if( nLen > 0 )
+            return nIndex+(pCharStr-pOrgCharStr)+1;
+        else return -1;
+    }
+    else
+    {
+        *pNew = std::string_view( pCharStrStart, pCharStr-pCharStrStart );
+        if ( nLen )
+            return nIndex+(pCharStr-pOrgCharStr)+1;
+        else
+            return -1;
+    }
+}
+
+
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

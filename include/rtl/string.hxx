@@ -63,6 +63,11 @@ extern bool rtl_string_unittest_const_literal_function;
 #define rtl rtlunittest
 #endif
 
+#ifdef LIBO_INTERNAL_ONLY
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getTokenView(
+    std::string_view* newStr , rtl_String * str, sal_Int32 token, char cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
+#endif
+
 namespace rtl
 {
 
@@ -1765,6 +1770,14 @@ public:
         index = rtl_string_getToken( &pNew, pData, token, cTok, index );
         return OString( pNew, SAL_NO_ACQUIRE );
     }
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+    std::string_view getTokenView( sal_Int32 token, char cTok, sal_Int32& index ) const
+    {
+        std::string_view aNew;
+        index = rtl_string_getTokenView( &aNew, pData, token, cTok, index );
+        return aNew;
+    }
+#endif
 
     /**
       Returns a token from the string.
