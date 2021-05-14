@@ -361,6 +361,7 @@ static GtkWidget* gSpinBox;
 #if GTK_CHECK_VERSION(4, 0, 0)
 static GtkWidget* gVScrollbar;
 static GtkWidget* gHScrollbar;
+static GtkWidget* gTextView;
 #endif
 static GtkWidget* gEntryBox;
 static GtkWidget* gComboBox;
@@ -2384,14 +2385,17 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     }
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkRGBA color;
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         // construct style context for text view
         GtkWidgetPath *pCPath = gtk_widget_path_new();
         gtk_widget_path_append_type( pCPath, GTK_TYPE_TEXT_VIEW );
         gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
         GtkStyleContext *pCStyle = makeContext( pCPath, nullptr );
+#else
+        GtkStyleContext *pCStyle = gtk_widget_get_style_context(gTextView);
+#endif
         aContextState.save(pCStyle);
 
         // highlighting colors
@@ -2415,11 +2419,16 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         // This baby is the default page/paper color
         aStyleSet.SetWindowColor( aBackFieldColor );
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+        double caretAspectRatio = 0.04f;
+        g_object_get(pSettings, "gtk-cursor-aspect-ratio", &caretAspectRatio, nullptr);
+#else
         // Cursor width
         gfloat caretAspectRatio = 0.04f;
         gtk_style_context_get_style( pCStyle, "cursor-aspect-ratio", &caretAspectRatio, nullptr );
+#endif
         // Assume 20px tall for the ratio computation, which should give reasonable results
-        aStyleSet.SetCursorSize( 20 * caretAspectRatio + 1 );
+        aStyleSet.SetCursorSize(20 * caretAspectRatio + 1);
 
         // Dark shadow color
         style_context_set_state(pCStyle, GTK_STATE_FLAG_INSENSITIVE);
@@ -2435,13 +2444,14 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         aStyleSet.SetShadowColor(aShadowColor);
 
         aContextState.restore();
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_object_unref( pCStyle );
+#endif
 
         // Tab colors
         aStyleSet.SetActiveTabColor( aBackFieldColor ); // same as the window color.
         aStyleSet.SetInactiveTabColor( aBackColor );
     }
-#endif
 
     // menu disabled entries handling
     aStyleSet.SetSkipDisabledInMenus( true );
@@ -2898,6 +2908,10 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_fixed_put(GTK_FIXED(gDumbContainer), gHScrollbar, 0, 0);
     gtk_widget_show(gHScrollbar);
     mpHScrollbarStyle = gtk_widget_get_style_context(gHScrollbar);
+
+    gTextView = gtk_text_view_new();
+    gtk_fixed_put(GTK_FIXED(gDumbContainer), gTextView, 0, 0);
+    gtk_widget_show(gTextView);
 #else
     mpVScrollbarStyle = createStyleContext(GtkControlPart::ScrollbarVertical);
     mpVScrollbarContentsStyle = createStyleContext(GtkControlPart::ScrollbarVerticalContents);
