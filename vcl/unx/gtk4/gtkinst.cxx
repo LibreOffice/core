@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// make gtk4 plug advertise correctly as gtk4
+#define GTK_TOOLKIT_NAME "gtk4"
+
 #include "../gtk3/gtkinst.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

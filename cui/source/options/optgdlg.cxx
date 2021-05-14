@@ -579,7 +579,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xMouseMiddleLB(m_xBuilder->weld_combo_box("mousemiddle"))
     , m_xMoreIcons(m_xBuilder->weld_button("btnMoreIcons"))
 {
-    if (Application::GetToolkitName() == "gtk3")
+    if (Application::GetToolkitName().startsWith("gtk"))
         m_xMenuIconBox->hide();
 
     m_xFontAntiAliasing->connect_toggled( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
