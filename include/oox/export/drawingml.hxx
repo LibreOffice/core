@@ -331,6 +331,54 @@ public:
 
 };
 
+/// Class for exporting the custom shapes to OOXML preset ones, if possible.
+/// This functionality needed for keeping the information for the office programs
+/// about the shape type, and geometry data. Before theese shapes were exported
+/// whith custom geometry, and they keept their geometry but has no inormation
+/// about the shape itself. This lead to lost textbox size/position/padding for
+/// example. So this class exports these shapes with preset shape geometry
+/// and converts their adjustment values to OOXML one.
+ class DMLPresetShapeExporter
+{
+private:
+    css::uno::Reference< css::drawing::XShape > m_xShape; // the shape to export
+    DrawingML* m_pDMLexporter; // the DMLwriter
+    OUString m_sPresetShapeType; // the type of the custom shape (diamond/retangle/circle/triangle...)
+    bool m_bHasHandleValues; // True if the shape has points where its geomerty can be modified
+
+    // Custom Shape Geometry information for export:
+
+    // not used yet, it cann be useful in futher dev
+    css::awt::Rectangle m_ViewBox;
+    // not used yet, it cann be useful in futher dev
+    css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > m_AdjustmentValues;
+    // Shapes what have adjusting points, the setting values are stored in this:
+    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > m_HandleValues;
+    // not used yet, it cann be useful in futher dev
+    css::uno::Sequence< css::beans::PropertyValue > m_Path;
+    // not used yet, it cann be useful in futher dev
+    css::uno::Sequence< OUString > m_Equations;
+
+
+public:
+    DMLPresetShapeExporter() = delete;
+    ~DMLPresetShapeExporter();
+
+    DMLPresetShapeExporter(DrawingML* pDMLExporter,
+        css::uno::Reference< css::drawing::XShape > xShape);
+
+    OUString GetShapeType();
+    bool WriteShape();
+
+private:
+    // Under still develeopment:
+    sal_uInt16 GetNumberOfAdjustmantPoints();
+    css::drawing::EnhancedCustomShapeParameterPair GetPositionOfHandleValueAtAdjutmentPoint(sal_uInt16 nPoint);
+    css::drawing::EnhancedCustomShapeParameterPair GetMinimumOfHandleValueAtAdjutmentPoint(sal_uInt16 nPoint);
+    css::drawing::EnhancedCustomShapeParameterPair GetMaximumOfHandleValueAtAdjutmentPoint(sal_uInt16 nPoint);
+
+};
+
 }
 }
 

@@ -5148,6 +5148,154 @@ void DrawingML::WriteFromTo(const uno::Reference<css::drawing::XShape>& rXShape,
     pDrawing->endElement(FSNS(XML_cdr, XML_to));
 }
 
+//////////////////////////// DMLPresetShapeExporter class ///////////////////////////
+
+// ctor
+DMLPresetShapeExporter::DMLPresetShapeExporter(DrawingML* pDMLExporter,
+    css::uno::Reference<css::drawing::XShape> xShape) :
+    m_pDMLexporter(pDMLExporter)
+{
+    OSL_ASSERT(xShape->getShapeType() == "com.sun.star.drawing.CustomShape");
+
+    m_xShape = xShape;
+    m_bHasHandleValues = false;
+    uno::Reference< beans::XPropertySet> xShpProps(m_xShape, uno::UNO_QUERY);
+    css::uno::Sequence<css::beans::PropertyValue> aCustomShapeGeometry =
+        xShpProps->getPropertyValue("CustomShapeGeometry").get<uno::Sequence<beans::PropertyValue>>();
+
+    for (sal_uInt32 i = 0; i < aCustomShapeGeometry.size(); i++)
+    {
+        if (aCustomShapeGeometry[i].Name == "Type")
+        {
+            m_sPresetShapeType = aCustomShapeGeometry[i].Value.get<OUString>();
+
+        }
+        if (aCustomShapeGeometry[i].Name == "Handles")
+        {
+            m_bHasHandleValues = true;
+            m_HandleValues = aCustomShapeGeometry[i].Value.get<css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue >>>();
+
+        }
+        if (aCustomShapeGeometry[i].Name == "Equations")
+        {
+            m_Equations = aCustomShapeGeometry[i].Value.get<css::uno::Sequence< OUString >>();
+
+        }
+        if (aCustomShapeGeometry[i].Name == "AdjustmentValues")
+        {
+            m_AdjustmentValues = aCustomShapeGeometry[i].Value.get<css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue >>();
+
+        }
+        if (aCustomShapeGeometry[i].Name == "Path")
+        {
+            m_Path = aCustomShapeGeometry[i].Value.get<css::uno::Sequence< css::beans::PropertyValue >>();
+
+        }
+        if (aCustomShapeGeometry[i].Name == "ViewBox")
+        {
+            m_ViewBox = aCustomShapeGeometry[i].Value.get<css::awt::Rectangle>();
+        }
+    }
+};
+
+// dtor
+DMLPresetShapeExporter::~DMLPresetShapeExporter()
+{};
+
+OUString DMLPresetShapeExporter::GetShapeType()
+{
+    return m_sPresetShapeType;
+}
+
+// Working area:
+
+sal_uInt16 DMLPresetShapeExporter::GetNumberOfAdjustmantPoints()
+{
+    if (!m_bHasHandleValues)
+        return 0;
+
+    return m_HandleValues.size();
+};
+css::drawing::EnhancedCustomShapeParameterPair DMLPresetShapeExporter::GetPositionOfHandleValueAtAdjutmentPoint(sal_uInt16 nPoint)
+{
+    if (m_bHasHandleValues && 0 <= nPoint && nPoint <m_HandleValues.size())
+    {
+        uno::Sequence<beans::PropertyValue> aValSeq = m_HandleValues[nPoint];
+        for (sal_uInt16 i=0; i < aValSeq.size(); i++)
+        {
+            if (aValSeq[i].Name == "Position")
+                return aValSeq[i].Value.get<EnhancedCustomShapeParameterPair>();
+        }
+    }
+    return EnhancedCustomShapeParameterPair();
+};
+css::drawing::EnhancedCustomShapeParameterPair DMLPresetShapeExporter::GetMinimumOfHandleValueAtAdjutmentPoint(sal_uInt16 nPoint)
+{
+    if (m_bHasHandleValues && 0 <= nPoint && nPoint <m_HandleValues.size())
+    {
+        EnhancedCustomShapeParameter X,Y;
+        uno::Sequence<beans::PropertyValue> aValSeq = m_HandleValues[nPoint];
+        for (sal_uInt16 i=0; i < aValSeq.size(); i++)
+        {
+            if (aValSeq[i].Name == "RangeXMinimum")
+            {
+                X = aValSeq[i].Value.get<EnhancedCustomShapeParameter>();
+            }
+            if (aValSeq[i].Name == "RangeYMinimum")
+            {
+                Y = aValSeq[i].Value.get<EnhancedCustomShapeParameter>();
+            }
+        }
+        return EnhancedCustomShapeParameterPair(X, Y);
+    }
+    return EnhancedCustomShapeParameterPair();
+};
+css::drawing::EnhancedCustomShapeParameterPair DMLPresetShapeExporter::GetMaximumOfHandleValueAtAdjutmentPoint(sal_uInt16 nPoint)
+{
+    if (m_bHasHandleValues && 0 <= nPoint && nPoint <m_HandleValues.size())
+    {
+        uno::Sequence<beans::PropertyValue> aValSeq = m_HandleValues[nPoint];
+        EnhancedCustomShapeParameter X,Y;
+        for (sal_uInt16 i=0; i < aValSeq.size(); i++)
+        {
+            if (aValSeq[i].Name == "RangeXMaximum")
+            {
+                X = aValSeq[i].Value.get<EnhancedCustomShapeParameter>();
+            }
+            if (aValSeq[i].Name == "RangeYMaximum")
+            {
+                Y = aValSeq[i].Value.get<EnhancedCustomShapeParameter>();
+            }
+        }
+        return EnhancedCustomShapeParameterPair(X, Y);
+    }
+    return EnhancedCustomShapeParameterPair();
+};
+
+bool DMLPresetShapeExporter::WriteShape()
+{
+    if (m_pDMLexporter && m_xShape)
+    {
+        // Case 1: We do not have adjustment points of the shape: just export it as preset
+        if (!m_bHasHandleValues)
+        {
+            OUString sShapeType = GetShapeType();
+            const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry(sShapeType.toUtf8().getStr());
+            m_pDMLexporter->WritePresetShape(sPresetShape);
+        }
+        else // Case2: There are adjustment points what have to be converted and exported: under dev.
+        {
+            OUString sShapeType = GetShapeType();
+            const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry(sShapeType.toUtf8().getStr());
+            std::vector<std::pair<sal_Int32, sal_Int32>> adjpoints;
+            // There will be the converison calling Convert()!
+            m_pDMLexporter->WritePresetShape(sPresetShape, adjpoints);
+        }
+        return true;
+    }
+    return false;
+};
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
