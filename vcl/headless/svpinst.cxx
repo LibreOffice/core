@@ -59,6 +59,7 @@
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/profilezone.hxx>
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 
@@ -483,6 +484,8 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 
             if (pSVData->mpPollCallback)
             {
+                comphelper::ProfileZone("mpPollCallback invocation");
+
                 // Poll for events from the LOK client.
                 if (nTimeoutMicroS < 0)
                     nTimeoutMicroS = 5000 * 1000;
