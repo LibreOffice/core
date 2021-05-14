@@ -73,6 +73,7 @@
 #include <oox/export/chartexport.hxx>
 #include <oox/mathml/export.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <oox/export/DMLPresetShapeExport.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -832,7 +833,19 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     else if( bHasHandles )
         bCustGeom = true;
 
-    if (bHasHandles && bCustGeom)
+    bool bPresetWriteSuccessful = false;
+    // Let the custom shapes what has name and preset information in OOXML, to be written
+    // as preset ones with parameters. Try that with this converter class.
+    if (!sShapeType.startsWith("ooxml") && GetDocumentType() == DOCUMENT_DOCX
+        && xShape->getShapeType() == "com.sun.star.drawing.CustomShape")
+    {
+        DMLPresetShapeExporter aCustomShapeConverter(this, xShape);
+        bPresetWriteSuccessful = aCustomShapeConverter.WriteShape();
+    }
+    // If preset writing has problems try to write the shape as it done before
+    if (bPresetWriteSuccessful)
+        ;// Already written do nothing.
+    else if (bHasHandles && bCustGeom)
     {
         WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, false, true );// do not flip, polypolygon coordinates are flipped already
         tools::PolyPolygon aPolyPolygon( rSdrObjCustomShape.GetLineGeometry(true) );
@@ -862,9 +875,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         std::vector< std::pair< sal_Int32, sal_Int32> > aHandlePositionList;
         std::vector< std::pair< sal_Int32, sal_Int32> > aAvList;
         aGeometrySeq[ nAdjustmentValuesIndex ].Value >>= aAdjustmentSeq ;
-
         lcl_AnalyzeHandles( aHandles, aHandlePositionList, aAdjustmentSeq );
-
         sal_Int32 nXPosition = 0;
         sal_Int32 nYPosition = 0;
         if ( !aHandlePositionList.empty() )
@@ -918,7 +929,6 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                 {
                     lcl_AppendAdjustmentValue( aAvList, 3, 16667);
                 }
-
                 break;
             }
             case mso_sptFoldedCorner:
@@ -990,6 +1000,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         else
             WritePresetShape( sPresetShape );
     }
+
     if( rXPropSet.is() )
     {
         WriteFill( rXPropSet );
