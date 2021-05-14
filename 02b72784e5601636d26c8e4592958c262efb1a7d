@@ -70,6 +70,30 @@
       "revId": "02b72784e5601636d26c8e4592958c262efb1a7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90c30f12_4affca31",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1000961
+      },
+      "writtenOn": "2021-05-14T12:00:15Z",
+      "side": 1,
+      "message": "OK. Sure.",
+      "parentUuid": "58048606_4c9285ed",
+      "range": {
+        "startLine": 2615,
+        "startChar": 34,
+        "endLine": 2615,
+        "endChar": 51
+      },
+      "revId": "02b72784e5601636d26c8e4592958c262efb1a7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
