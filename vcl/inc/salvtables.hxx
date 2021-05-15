@@ -1002,7 +1002,7 @@ public:
     virtual ~SalInstanceComboBoxWithEdit() override;
 };
 
-class SalInstanceButton : public SalInstanceContainer, public virtual weld::Button
+class SalInstanceButton : public SalInstanceWidget, public virtual weld::Button
 {
 private:
     VclPtr<::Button> m_xButton;

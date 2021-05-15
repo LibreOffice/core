@@ -2567,7 +2567,7 @@ IMPL_LINK_NOARG(SalInstanceVerticalNotebook, ActivatePageHdl, VerticalTabControl
 
 SalInstanceButton::SalInstanceButton(::Button* pButton, SalInstanceBuilder* pBuilder,
                                      bool bTakeOwnership)
-    : SalInstanceContainer(pButton, pBuilder, bTakeOwnership)
+    : SalInstanceWidget(pButton, pBuilder, bTakeOwnership)
     , m_xButton(pButton)
     , m_aOldClickHdl(pButton->GetClickHdl())
 {
