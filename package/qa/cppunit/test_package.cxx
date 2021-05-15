@@ -106,7 +106,8 @@ namespace
                 const std::vector<char>& rBuf = *itBuf;
                 CPPUNIT_ASSERT_EQUAL(size_t(1048576), rBuf.size()); // 1 MB each.
                 for (char check : rBuf)
-                    CPPUNIT_ASSERT_EQUAL(c, check);
+                    if (c != check)
+                        CPPUNIT_ASSERT_MESSAGE("stream does not contain expected data", false);
             }
     }
 
@@ -174,6 +175,7 @@ namespace
 
         for (char c = 'a'; c <= 'z'; ++c, ++itBuf)
         {
+            itBuf->reserve(1024*1024);
             OUString aName = OUStringChar(c) + ".txt";
 
             uno::Reference<io::XInputStream> xStrm;
