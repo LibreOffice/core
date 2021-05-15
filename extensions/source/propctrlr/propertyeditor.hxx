@@ -99,7 +99,7 @@ namespace pcr
 
         Size                        get_preferred_size() const;
 
-        weld::Container*            getWidget() const { return m_xTabControl.get(); }
+        weld::Widget*               getWidget() const { return m_xTabControl.get(); }
 
         void                        Show() { m_xTabControl->show(); }
         void                        Hide() { m_xTabControl->hide(); }
