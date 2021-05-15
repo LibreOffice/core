@@ -3,3 +3,4 @@ CXX=/opt/rh/devtoolset-7/root/usr/bin/g++
 --enable-kf5
 --disable-dependency-tracking
 --with-jdk-home=/etc/alternatives/java_sdk_11
+--enable-odk
