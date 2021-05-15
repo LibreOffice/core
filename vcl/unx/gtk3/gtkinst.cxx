@@ -10640,7 +10640,7 @@ int promote_arg(bool bArg)
     return static_cast<int>(bArg);
 }
 
-class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
+class GtkInstanceTreeView : public GtkInstanceWidget, public virtual weld::TreeView
 {
 private:
     GtkTreeView* m_pTreeView;
@@ -11372,7 +11372,7 @@ private:
 
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pTreeView), pBuilder, bTakeOwnership)
         , m_pTreeView(pTreeView)
         , m_pTreeModel(gtk_tree_view_get_model(m_pTreeView))
         , m_bWorkAroundBadDragRegion(false)
@@ -12748,7 +12748,7 @@ public:
     {
         disable_notify_events();
         bool bIsFirstFreeze = IsFirstFreeze();
-        GtkInstanceContainer::freeze();
+        GtkInstanceWidget::freeze();
         if (bIsFirstFreeze)
         {
             g_object_ref(m_pTreeModel);
@@ -12785,7 +12785,7 @@ public:
             gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pTreeModel));
             g_object_unref(m_pTreeModel);
         }
-        GtkInstanceContainer::thaw();
+        GtkInstanceWidget::thaw();
         enable_notify_events();
     }
 
@@ -12879,12 +12879,12 @@ public:
         g_signal_handler_block(m_pTreeModel, m_nRowDeletedSignalId);
         g_signal_handler_block(m_pTreeModel, m_nRowInsertedSignalId);
 
-        GtkInstanceContainer::disable_notify_events();
+        GtkInstanceWidget::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceContainer::enable_notify_events();
+        GtkInstanceWidget::enable_notify_events();
 
         g_signal_handler_unblock(m_pTreeModel, m_nRowDeletedSignalId);
         g_signal_handler_unblock(m_pTreeModel, m_nRowInsertedSignalId);
@@ -13224,7 +13224,7 @@ IMPL_LINK_NOARG(GtkInstanceTreeView, async_stop_cell_editing, void*, void)
 
 namespace {
 
-class GtkInstanceIconView : public GtkInstanceContainer, public virtual weld::IconView
+class GtkInstanceIconView : public GtkInstanceWidget, public virtual weld::IconView
 {
 private:
     GtkIconView* m_pIconView;
@@ -13345,7 +13345,7 @@ private:
 
 public:
     GtkInstanceIconView(GtkIconView* pIconView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceContainer(GTK_CONTAINER(pIconView), pBuilder, bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pIconView), pBuilder, bTakeOwnership)
         , m_pIconView(pIconView)
         , m_pTreeStore(GTK_TREE_STORE(gtk_icon_view_get_model(m_pIconView)))
         , m_nTextCol(gtk_icon_view_get_text_column(m_pIconView))
@@ -13405,7 +13405,7 @@ public:
     {
         disable_notify_events();
         bool bIsFirstFreeze = IsFirstFreeze();
-        GtkInstanceContainer::freeze();
+        GtkInstanceWidget::freeze();
         if (bIsFirstFreeze)
         {
             g_object_ref(m_pTreeStore);
@@ -13424,7 +13424,7 @@ public:
             gtk_icon_view_set_model(m_pIconView, GTK_TREE_MODEL(m_pTreeStore));
             g_object_unref(m_pTreeStore);
         }
-        GtkInstanceContainer::thaw();
+        GtkInstanceWidget::thaw();
         enable_notify_events();
     }
 
@@ -13613,12 +13613,12 @@ public:
         g_signal_handler_block(m_pIconView, m_nSelectionChangedSignalId);
         g_signal_handler_block(m_pIconView, m_nItemActivatedSignalId);
 
-        GtkInstanceContainer::disable_notify_events();
+        GtkInstanceWidget::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceContainer::enable_notify_events();
+        GtkInstanceWidget::enable_notify_events();
 
         g_signal_handler_unblock(m_pIconView, m_nItemActivatedSignalId);
         g_signal_handler_unblock(m_pIconView, m_nSelectionChangedSignalId);
@@ -17253,7 +17253,7 @@ public:
     }
 };
 
-class GtkInstanceExpander : public GtkInstanceContainer, public virtual weld::Expander
+class GtkInstanceExpander : public GtkInstanceWidget, public virtual weld::Expander
 {
 private:
     GtkExpander* m_pExpander;
@@ -17303,7 +17303,7 @@ private:
 
 public:
     GtkInstanceExpander(GtkExpander* pExpander, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceContainer(GTK_CONTAINER(pExpander), pBuilder, bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pExpander), pBuilder, bTakeOwnership)
         , m_pExpander(pExpander)
         , m_nSignalId(g_signal_connect(m_pExpander, "notify::expanded", G_CALLBACK(signalExpanded), this))
         , m_nButtonPressEventSignalId(g_signal_connect_after(m_pExpander, "button-press-event", G_CALLBACK(signalButton), this))
