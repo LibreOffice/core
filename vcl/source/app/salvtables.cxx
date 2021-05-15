@@ -2310,7 +2310,7 @@ IMPL_LINK_NOARG(SalInstanceScrolledWindow, HscrollHdl, ScrollBar*, void)
 
 SalInstanceNotebook::SalInstanceNotebook(TabControl* pNotebook, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
-    : SalInstanceContainer(pNotebook, pBuilder, bTakeOwnership)
+    : SalInstanceWidget(pNotebook, pBuilder, bTakeOwnership)
     , m_xNotebook(pNotebook)
 {
     m_xNotebook->SetActivatePageHdl(LINK(this, SalInstanceNotebook, ActivatePageHdl));
@@ -2447,7 +2447,7 @@ IMPL_LINK_NOARG(SalInstanceNotebook, ActivatePageHdl, TabControl*, void)
 
 namespace
 {
-class SalInstanceVerticalNotebook : public SalInstanceContainer, public virtual weld::Notebook
+class SalInstanceVerticalNotebook : public SalInstanceWidget, public virtual weld::Notebook
 {
 private:
     VclPtr<VerticalTabControl> m_xNotebook;
@@ -2459,7 +2459,7 @@ private:
 public:
     SalInstanceVerticalNotebook(VerticalTabControl* pNotebook, SalInstanceBuilder* pBuilder,
                                 bool bTakeOwnership)
-        : SalInstanceContainer(pNotebook, pBuilder, bTakeOwnership)
+        : SalInstanceWidget(pNotebook, pBuilder, bTakeOwnership)
         , m_xNotebook(pNotebook)
     {
         m_xNotebook->SetActivatePageHdl(LINK(this, SalInstanceVerticalNotebook, ActivatePageHdl));
@@ -2835,7 +2835,7 @@ public:
 
 namespace
 {
-class SalInstanceLinkButton : public SalInstanceContainer, public virtual weld::LinkButton
+class SalInstanceLinkButton : public SalInstanceWidget, public virtual weld::LinkButton
 {
 private:
     VclPtr<FixedHyperlink> m_xButton;
@@ -2846,7 +2846,7 @@ private:
 public:
     SalInstanceLinkButton(FixedHyperlink* pButton, SalInstanceBuilder* pBuilder,
                           bool bTakeOwnership)
-        : SalInstanceContainer(pButton, pBuilder, bTakeOwnership)
+        : SalInstanceWidget(pButton, pBuilder, bTakeOwnership)
         , m_xButton(pButton)
     {
         m_aOrigClickHdl = m_xButton->GetClickHdl();
