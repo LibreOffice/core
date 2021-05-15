@@ -675,7 +675,7 @@ enum class EntryMessageType
 class Menu;
 
 /// A widget used to choose from a list of items.
-class VCL_DLLPUBLIC ComboBox : virtual public Container
+class VCL_DLLPUBLIC ComboBox : virtual public Widget
 {
 private:
     OUString m_sSavedValue;
