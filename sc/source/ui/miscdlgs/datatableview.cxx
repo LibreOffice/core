@@ -90,7 +90,7 @@ void ScDataTableColView::HideEntries(SCCOLROW nPos, SCCOLROW nEndPos)
 
 
 ScDataTableRowView::ScDataTableRowView(vcl::Window* pParent, SelectionEngine* pSelectionEngine):
-        ScHeaderControl(pParent, pSelectionEngine, 1024, true, nullptr),
+        ScHeaderControl(pParent, pSelectionEngine, 1048576, true, nullptr),
         mpDoc(nullptr),
         mnRow(0)
 {
@@ -218,7 +218,7 @@ SCCOL findColFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCCOL nStartC
     }
 
     SAL_WARN("sc", "Could not find the corresponding column");
-    return -1;
+    return MAXCOL;
 }
 
 SCROW findRowFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCROW nStartRow = 0)
@@ -238,7 +238,7 @@ SCROW findRowFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCROW nStartR
     }
 
     SAL_WARN("sc", "Could not find the corresponding row");
-    return -1;
+    return MAXROW;
 }
 
 }
@@ -321,13 +321,13 @@ IMPL_LINK(ScDataTableView, ScrollHdl, ScrollBar*, pScrollBar, void)
     if (pScrollBar == mpVScroll.get())
     {
         mnFirstVisibleRow = pScrollBar->GetThumbPos();
-        pScrollBar->SetRangeMax(mnFirstVisibleRow + 100);
+        pScrollBar->SetRangeMax(std::min( int(MAXROW),mnFirstVisibleRow + 100));
         mpRowView->SetPos(mnFirstVisibleRow);
     }
     else
     {
         mnFirstVisibleCol = pScrollBar->GetThumbPos();
-        pScrollBar->SetRangeMax(mnFirstVisibleCol + 50);
+        pScrollBar->SetRangeMax(std::min( int(MAXCOL),mnFirstVisibleCol + 50 ));
         mpColView->SetPos(mnFirstVisibleCol);
     }
     Invalidate();
