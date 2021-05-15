@@ -1348,7 +1348,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf85232, "tdf85232.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.LineShape"), xShapeDescriptor->getShapeType());
 
     // This was 2900: horizontal position of the line was incorrect, the 3 children were not connected visually.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2267), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2265), xShape->getPosition().X);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf95755, "tdf95755.docx")

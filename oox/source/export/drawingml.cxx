@@ -1735,14 +1735,14 @@ void DrawingML::WriteTransformation(const Reference< XShape >& xShape, const too
                           XML_rot, sax_fastparser::UseIf(OString::number(nRotation), nRotation % 21600000 != 0));
 
     sal_Int32 nLeft = rRect.Left();
-    sal_Int32 nChildLeft = nLeft;
     sal_Int32 nTop = rRect.Top();
-    sal_Int32 nChildTop = nTop;
     if (GetDocumentType() == DOCUMENT_DOCX && !m_xParent.is())
     {
         nLeft = 0;
         nTop = 0;
     }
+    sal_Int32 nChildLeft = nLeft;
+    sal_Int32 nChildTop = nTop;
 
     mpFS->singleElementNS(XML_a, XML_off,
         XML_x, OString::number(oox::drawingml::convertHmmToEmu(nLeft)),

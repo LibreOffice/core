@@ -289,7 +289,7 @@ DECLARE_OOXMLIMPORT_TEST(test120551, "tdf120551.docx")
     // 'Expected: 430, Actual  : -2542'.
     // CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(430), nHoriOrientPosition);
     // File 140335EMU = 389,8Hmm
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(392), nHoriOrientPosition);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(390), nHoriOrientPosition);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf111550, "tdf111550.docx")
