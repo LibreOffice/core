@@ -227,7 +227,7 @@
                 <property name="group">originalsize</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="fittoprintable-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="drawprinteroptions|extended_tip|fitoprinttable">Specifies whether to scale down objects that are beyond the margins of the current printer so they fit on the paper in the printer.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="drawprinteroptions|extended_tip|fittoprinttable">Specifies whether to scale down objects that are beyond the margins of the current printer so they fit on the paper in the printer.</property>
                   </object>
                 </child>
               </object>
@@ -249,7 +249,7 @@
                 <property name="group">originalsize</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="distributeonmultiple-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="drawprinteroptions|extended_tip|disrtibuteonmultiple">Prints a large format document, such as a poster or banner, by distributing the document page across multiple sheets of paper. The distribution option calculates how many sheets of paper are needed. You can then piece together the sheets.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="drawprinteroptions|extended_tip|distributeonmultiple">Prints a large format document, such as a poster or banner, by distributing the document page across multiple sheets of paper. The distribution option calculates how many sheets of paper are needed. You can then piece together the sheets.</property>
                   </object>
                 </child>
               </object>

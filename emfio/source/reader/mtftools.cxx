@@ -1346,7 +1346,7 @@ namespace emfio
         // tdf#142014 By default the stroke is made with hairline. If width is bigger, we need to use PolyLineAction
         if ( bStroke )
         {
-            // bFill is drawing hairstyle line. So we need to to draw it only when the width is different than 0
+            // bFill is drawing hairstyle line. So we need to draw it only when the width is different than 0
             if ( !bFill || maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
             {
                 sal_uInt16 i, nCount = maPathObj.Count();

@@ -130,7 +130,7 @@ static bool lcl_IsAllowed(const SwWrtShell* rSh)
         SwTextNode* pTextNode = rSh->GetCursor()->GetNode().GetTextNode();
         if (pTextNode && pTextNode->IsOutline())
         {
-            // disallow if this is am outline node having folded content
+            // disallow if this is an outline node having folded content
             bool bVisible = true;
             pTextNode->GetAttrOutlineContentVisible(bVisible);
             if (!bVisible)
@@ -2224,7 +2224,7 @@ void SwWrtShell::MakeAllFoldedOutlineContentVisible(bool bMakeVisible)
         // HideControls function.
         GetView().GetEditWin().GetFrameControlsManager().HideControls(FrameControlType::Outline);
 
-        // temporarily set outline content visibile attribute true for folded outline nodes
+        // temporarily set outline content visible attribute true for folded outline nodes
         std::vector<SwNode*> aFoldedOutlineNodeArray;
         for (SwNode* pNd: GetNodes().GetOutLineNds())
         {

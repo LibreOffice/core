@@ -202,7 +202,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                 if (rSh.IsEndPara())
                 {
                     SwNodeIndex aIdx(rSh.GetCursor()->GetNode());
-                    // disallow if this is am outline node having folded content
+                    // disallow if this is an outline node having folded content
                     bool bVisible = true;
                     aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
                     if (!bVisible)
