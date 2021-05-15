@@ -2,3 +2,4 @@
 --enable-dbgutil
 --disable-symbols
 --disable-dependency-tracking
+--enable-odk

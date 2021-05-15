@@ -1433,9 +1433,8 @@ libo_FUZZ_ARG_ENABLE(epm,
 )
 
 libo_FUZZ_ARG_ENABLE(odk,
-    AS_HELP_STRING([--disable-odk],
-        [LibreOffice includes an ODK, office development kit which some packagers may
-         wish to build without.])
+    AS_HELP_STRING([--enable-odk],
+        [Enable building the Office Development Kit, the part that extensions need to build against])
 )
 
 AC_ARG_ENABLE(mpl-subset,
@@ -8866,7 +8865,7 @@ AC_SUBST(ENABLE_LWP)
 dnl ===================================================================
 dnl Check for building ODK
 dnl ===================================================================
-if test "$enable_odk" = no; then
+if test "$enable_odk" != yes; then
     unset DOXYGEN
 else
     if test "$with_doxygen" = no; then
@@ -8901,7 +8900,7 @@ fi
 AC_SUBST([DOXYGEN])
 
 AC_MSG_CHECKING([whether to build the ODK])
-if test "$enable_odk" = "" -o "$enable_odk" != "no"; then
+if test "$enable_odk" = yes; then
     AC_MSG_RESULT([yes])
     BUILD_TYPE="$BUILD_TYPE ODK"
 else
