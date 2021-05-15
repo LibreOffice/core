@@ -7933,6 +7933,7 @@ GtkInstanceButton* GtkInstanceDialog::has_click_handler(int nResponse)
     }
     return pButton;
 }
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
 
 namespace {
@@ -9966,6 +9967,8 @@ public:
 };
 }
 
+#endif
+
 namespace
 {
     void set_entry_message_type(GtkEntry* pEntry, weld::EntryMessageType eType)
@@ -9985,8 +9988,6 @@ namespace
     }
 }
 
-#endif
-
 namespace
 {
     gboolean filter_pango_attrs(PangoAttribute *attr, gpointer data)
@@ -10001,8 +10002,6 @@ namespace
         return false;
     }
 }
-
-#if !GTK_CHECK_VERSION(4, 0, 0)
 
 namespace
 {
@@ -10088,13 +10087,21 @@ public:
     virtual void set_text(const OUString& rText) override
     {
         disable_notify_events();
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_editable_set_text(GTK_EDITABLE(m_pEntry), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+#else
         gtk_entry_set_text(m_pEntry, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+#endif
         enable_notify_events();
     }
 
     virtual OUString get_text() const override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        const gchar* pText = gtk_editable_get_text(GTK_EDITABLE(m_pEntry));
+#else
         const gchar* pText = gtk_entry_get_text(m_pEntry);
+#endif
         OUString sRet(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
         return sRet;
     }
@@ -10102,14 +10109,23 @@ public:
     virtual void set_width_chars(int nChars) override
     {
         disable_notify_events();
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_editable_set_width_chars(GTK_EDITABLE(m_pEntry), nChars);
+        gtk_editable_set_max_width_chars(GTK_EDITABLE(m_pEntry), nChars);
+#else
         gtk_entry_set_width_chars(m_pEntry, nChars);
         gtk_entry_set_max_width_chars(m_pEntry, nChars);
+#endif
         enable_notify_events();
     }
 
     virtual int get_width_chars() const override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        return gtk_editable_get_width_chars(GTK_EDITABLE(m_pEntry));
+#else
         return gtk_entry_get_width_chars(m_pEntry);
+#endif
     }
 
     virtual void set_max_length(int nChars) override
@@ -10242,17 +10258,29 @@ public:
 
     virtual void cut_clipboard() override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_activate_action(GTK_WIDGET(m_pEntry), "cut.clipboard", nullptr);
+#else
         gtk_editable_cut_clipboard(GTK_EDITABLE(m_pEntry));
+#endif
     }
 
     virtual void copy_clipboard() override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_activate_action(GTK_WIDGET(m_pEntry), "copy.clipboard", nullptr);
+#else
         gtk_editable_copy_clipboard(GTK_EDITABLE(m_pEntry));
+#endif
     }
 
     virtual void paste_clipboard() override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_activate_action(GTK_WIDGET(m_pEntry), "paste.clipboard", nullptr);
+#else
         gtk_editable_paste_clipboard(GTK_EDITABLE(m_pEntry));
+#endif
     }
 
     virtual void set_placeholder_text(const OUString& rText) override
@@ -10294,6 +10322,13 @@ public:
         g_signal_handler_disconnect(m_pEntry, m_nChangedSignalId);
     }
 };
+
+}
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+
+namespace
+{
 
     struct Search
     {
@@ -18622,16 +18657,11 @@ public:
 
     virtual std::unique_ptr<weld::Entry> weld_entry(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkEntry* pEntry = GTK_ENTRY(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pEntry)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pEntry));
         return std::make_unique<GtkInstanceEntry>(pEntry, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OString &id) override
@@ -18930,9 +18960,10 @@ void GtkInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
 weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
-    if (rUIFile != "svt/ui/javadisableddialog.ui" &&
-        rUIFile != "modules/swriter/ui/wordcount.ui" &&
-        rUIFile != "sfx/ui/querysavedialog.ui")
+    if (rUIFile != "sfx/ui/querysavedialog.ui" &&
+        rUIFile != "svt/ui/javadisableddialog.ui" &&
+        rUIFile != "modules/swriter/ui/gotopagedialog.ui" &&
+        rUIFile != "modules/swriter/ui/wordcount.ui")
     {
         SAL_WARN( "vcl.gtk", rUIFile);
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
