@@ -891,7 +891,7 @@ void TestSharedFormula::testSharedFormulasRefUpdateExternal()
     xExtDocSh->SetIsInUcalc();
 
     SfxMedium* pMed = new SfxMedium("file:///extdata.fake", StreamMode::STD_READWRITE);
-    xExtDocSh->DoInitNew(pMed);
+    xExtDocSh->DoLoad(pMed);
     ScDocument& rExtDoc = xExtDocSh->GetDocument();
 
     // Populate A1:A3.
