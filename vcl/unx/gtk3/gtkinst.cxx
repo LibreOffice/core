@@ -17883,6 +17883,21 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                                         // turn parent tag of <child> into <child type="end">
                                         css::uno::Reference<css::xml::dom::XAttr> xTypeEnd = xDoc->createAttribute("type");
                                         xTypeEnd->setValue("end");
+
+                                        for (css::uno::Reference<css::xml::dom::XNode> xObjectCandidate = xTitleChild->getFirstChild();
+                                             xObjectCandidate.is();
+                                             xObjectCandidate = xObjectCandidate->getNextSibling())
+                                        {
+                                            if (xObjectCandidate->getNodeName() == "object")
+                                            {
+                                                css::uno::Reference<css::xml::dom::XNamedNodeMap> xObjectMap = xObjectCandidate->getAttributes();
+                                                css::uno::Reference<css::xml::dom::XNode> xObjectId = xObjectMap->getNamedItem("id");
+                                                if (xObjectId->getNodeValue() == "cancel")
+                                                    xTypeEnd->setValue("start");
+                                                break;
+                                            }
+                                        }
+
                                         xChildElem->setAttributeNode(xTypeEnd);
                                     }
                                 }
