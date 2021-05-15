@@ -663,7 +663,7 @@ public:
 //ComboBox and ListBox have similar apis, ComboBoxes in LibreOffice have an edit box and ListBoxes
 //don't. This distinction isn't there in Gtk. Use a template to sort this problem out.
 template <class vcl_type>
-class SalInstanceComboBox : public SalInstanceContainer, public virtual weld::ComboBox
+class SalInstanceComboBox : public SalInstanceWidget, public virtual weld::ComboBox
 {
 protected:
     // owner for ListBox/ComboBox UserData
@@ -674,7 +674,7 @@ protected:
 
 public:
     SalInstanceComboBox(vcl_type* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceContainer(pComboBox, pBuilder, bTakeOwnership)
+        : SalInstanceWidget(pComboBox, pBuilder, bTakeOwnership)
         , m_xComboBox(pComboBox)
     {
     }
@@ -863,7 +863,7 @@ public:
             signal_popup_toggled();
             return;
         }
-        SalInstanceContainer::HandleEventListener(rEvent);
+        SalInstanceWidget::HandleEventListener(rEvent);
     }
 };
 
