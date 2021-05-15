@@ -1365,7 +1365,7 @@ public:
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
 };
 
-class VCL_DLLPUBLIC Button : virtual public Container
+class VCL_DLLPUBLIC Button : virtual public Widget
 {
     friend class ::LOKTrigger;
 
