@@ -27,7 +27,9 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/view/XViewCursor.hpp>
 #include <comphelper/configuration.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <editeng/escapementitem.hxx>
@@ -69,6 +71,24 @@ protected:
         return OString(filename).endsWith(".docx");
     }
 };
+
+DECLARE_OOXMLEXPORT_TEST(testTdf142486, "tdf142486_FrameBorderNoShadow.odt")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextViewCursor> xViewCursor(xTextViewCursorSupplier->getViewCursor());
+    xViewCursor->gotoStart(/*bExpand=*/false);
+    uno::Reference<view::XViewCursor> xCursor(xViewCursor, uno::UNO_QUERY);
+    xCursor->goDown(/*nCount=*/3, /*bExpand=*/false);
+    xViewCursor->goRight(/*nCount=*/1, /*bExpand=*/true);
+    OUString sText = xViewCursor->getString();
+    // Without fix in place, the frame size including shadow width was exported as object size. On
+    // import the shadow width was added as wrap "distance from text". That results in totally
+    // different wrapping of the surrouding text.
+    // Here line started with "x" instead of expected "e".
+    CPPUNIT_ASSERT(sText.startsWith("e"));
+}
 
 DECLARE_OOXMLEXPORT_TEST(testTdf136059, "tdf136059.odt")
 {
@@ -264,7 +284,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFooterMarginLost, "footer-margin-lost.do
 CPPUNIT_TEST_FIXTURE(Test, testEffectExtentLineWidth)
 {
     auto verify = [this]() {
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(508),
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(506),
                              getProperty<sal_Int32>(getShape(1), "TopMargin"));
     };
 
