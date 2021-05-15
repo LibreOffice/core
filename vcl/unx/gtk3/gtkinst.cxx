@@ -13773,9 +13773,11 @@ IMPL_LINK_NOARG(GtkInstanceIconView, async_signal_selection_changed, void*, void
     signal_selection_changed();
 }
 
+#endif
+
 namespace {
 
-class GtkInstanceSpinButton : public GtkInstanceEntry, public virtual weld::SpinButton
+class GtkInstanceSpinButton : public GtkInstanceEditable, public virtual weld::SpinButton
 {
 private:
     GtkSpinButton* m_pButton;
@@ -13830,7 +13832,7 @@ private:
     virtual void signal_activate() override
     {
         gtk_spin_button_update(m_pButton);
-        GtkInstanceEntry::signal_activate();
+        GtkInstanceEditable::signal_activate();
     }
 
     double toGtk(int nValue) const
@@ -13845,7 +13847,7 @@ private:
 
 public:
     GtkInstanceSpinButton(GtkSpinButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceEntry(GTK_ENTRY(pButton), pBuilder, bTakeOwnership)
+        : GtkInstanceEditable(GTK_WIDGET(pButton), pBuilder, bTakeOwnership)
         , m_pButton(pButton)
         , m_nValueChangedSignalId(g_signal_connect(pButton, "value-changed", G_CALLBACK(signalValueChanged), this))
         , m_nOutputSignalId(g_signal_connect(pButton, "output", G_CALLBACK(signalOutput), this))
@@ -13877,7 +13879,11 @@ public:
         // value from this new text, but don't want to reformat with that value
         if (!m_bFormatting)
         {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            gtk_editable_set_text(GTK_EDITABLE(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+#else
             gtk_entry_set_text(GTK_ENTRY(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+#endif
 
             m_bBlockOutput = true;
             gtk_spin_button_update(m_pButton);
@@ -13889,7 +13895,11 @@ public:
             bool bKeepBlank = m_bBlank && get_value() == 0;
             if (!bKeepBlank)
             {
+#if GTK_CHECK_VERSION(4, 0, 0)
+                gtk_editable_set_text(GTK_EDITABLE(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+#else
                 gtk_entry_set_text(GTK_ENTRY(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+#endif
                 m_bBlank = false;
             }
         }
@@ -13941,12 +13951,12 @@ public:
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pButton, m_nValueChangedSignalId);
-        GtkInstanceEntry::disable_notify_events();
+        GtkInstanceEditable::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceEntry::enable_notify_events();
+        GtkInstanceEditable::enable_notify_events();
         g_signal_handler_unblock(m_pButton, m_nValueChangedSignalId);
     }
 
@@ -13957,6 +13967,12 @@ public:
         g_signal_handler_disconnect(m_pButton, m_nValueChangedSignalId);
     }
 };
+
+}
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+
+namespace {
 
 class GtkInstanceFormattedSpinButton : public GtkInstanceEntry, public virtual weld::FormattedSpinButton
 {
@@ -18779,16 +18795,11 @@ public:
 
     virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkSpinButton* pSpinButton = GTK_SPIN_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pSpinButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pSpinButton));
         return std::make_unique<GtkInstanceSpinButton>(pSpinButton, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::MetricSpinButton> weld_metric_spin_button(const OString& id, FieldUnit eUnit) override
@@ -19073,8 +19084,11 @@ void GtkInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
 weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
-    if (rUIFile != "sfx/ui/querysavedialog.ui" &&
+    if (rUIFile != "cui/ui/percentdialog.ui" &&
+        rUIFile != "sfx/ui/querysavedialog.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
+        rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
+        rUIFile != "modules/smath/ui/savedefaultsdialog.ui" &&
         rUIFile != "modules/swriter/ui/gotopagedialog.ui" &&
         rUIFile != "modules/swriter/ui/wordcount.ui")
     {
