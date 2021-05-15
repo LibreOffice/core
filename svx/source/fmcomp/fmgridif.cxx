@@ -2043,7 +2043,6 @@ void FmXGridPeer::dispose()
     m_aModifyListeners.disposeAndClear(aEvt);
     m_aUpdateListeners.disposeAndClear(aEvt);
     m_aContainerListeners.disposeAndClear(aEvt);
-    VCLXWindow::dispose();
 
     // release all interceptors
     Reference< XDispatchProviderInterceptor > xInterceptor( m_xFirstDispatchInterceptor );
@@ -2063,7 +2062,32 @@ void FmXGridPeer::dispose()
     }
 
     DisConnectFromDispatcher();
-    setRowSet(Reference< XRowSet > ());
+
+    // unregister all listeners
+    if (m_xCursor.is())
+    {
+        m_xCursor->removeRowSetListener(this);
+
+        Reference< XReset >  xReset(m_xCursor, UNO_QUERY);
+        if (xReset.is())
+            xReset->removeResetListener(this);
+        Reference< XLoadable >  xLoadable(m_xCursor, UNO_QUERY);
+        if (xLoadable.is())
+            xLoadable->removeLoadListener(this);
+        Reference< XPropertySet >  xSet(m_xCursor, UNO_QUERY);
+        if (xSet.is())
+        {
+            xSet->removePropertyChangeListener(FM_PROP_ISMODIFIED, this);
+            xSet->removePropertyChangeListener(FM_PROP_ROWCOUNT, this);
+        }
+        m_xCursor.clear();
+    }
+
+    VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
+    if (pGrid)
+        pGrid->setDataSource(Reference< XRowSet > ());
+
+    VCLXWindow::dispose();
 }
 
 // XContainer
