@@ -7571,7 +7571,7 @@ void set_font(GtkLabel* pLabel, const vcl::Font& rFont)
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
+class GtkInstanceButton : public GtkInstanceWidget, public virtual weld::Button
 {
 private:
     GtkButton* m_pButton;
@@ -7672,11 +7672,7 @@ protected:
 
 public:
     GtkInstanceButton(GtkButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        : GtkInstanceContainer(GTK_CONTAINER(pButton), pBuilder, bTakeOwnership)
-#else
-        : GtkInstanceContainer(GTK_WIDGET(pButton), pBuilder, bTakeOwnership)
-#endif
+        : GtkInstanceWidget(GTK_WIDGET(pButton), pBuilder, bTakeOwnership)
         , m_pButton(pButton)
         , m_pCustomCssProvider(nullptr)
         , m_nSignalId(g_signal_connect(pButton, "clicked", G_CALLBACK(signalClicked), this))
@@ -7771,12 +7767,12 @@ public:
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pButton, m_nSignalId);
-        GtkInstanceContainer::disable_notify_events();
+        GtkInstanceWidget::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceContainer::enable_notify_events();
+        GtkInstanceWidget::enable_notify_events();
         g_signal_handler_unblock(m_pButton, m_nSignalId);
     }
 
