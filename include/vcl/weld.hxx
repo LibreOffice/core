@@ -1525,7 +1525,7 @@ class VCL_DLLPUBLIC RadioButton : virtual public ToggleButton
 {
 };
 
-class VCL_DLLPUBLIC LinkButton : virtual public Container
+class VCL_DLLPUBLIC LinkButton : virtual public Widget
 {
 protected:
     Link<LinkButton&, bool> m_aActivateLinkHdl;
