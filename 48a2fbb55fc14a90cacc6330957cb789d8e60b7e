@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b35855d_84ba2916",
+        "filename": "svx/source/xoutdev/xpool.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-05-15T06:30:12Z",
+      "side": 1,
+      "message": "Please don\u0027t make unnecessary changes. As you can see, none of the other items here have this. If that is a problem, they should all be dealt with in the same way, and it should be done in a separate patch. There should be consistency in the code.",
+      "revId": "48a2fbb55fc14a90cacc6330957cb789d8e60b7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
