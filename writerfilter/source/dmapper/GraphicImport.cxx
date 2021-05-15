@@ -71,6 +71,7 @@
 #include "util.hxx"
 
 #include <comphelper/propertysequence.hxx>
+#include <algorithm> // std::swap
 
 using namespace css;
 
@@ -510,7 +511,7 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
     }
 }
 
-static bool lcl_bHasGroupSlantedChild (const SdrObject* pObj)
+static bool lcl_bHasGroupSlantedChild(const SdrObject* pObj)
 {
     // Returns true, if a child object differs more than 0.02deg from horizontal or vertical.
     // Because lines sometimes are imported as customshapes, a horizontal or vertical line
@@ -525,14 +526,54 @@ static bool lcl_bHasGroupSlantedChild (const SdrObject* pObj)
     SdrObjListIter aIterator(pSubList, SdrIterMode::DeepNoGroups);
     while (aIterator.IsMore())
     {
-            const SdrObject* pSubObj = aIterator.Next();
-            const Degree100 nRotateAngle = NormAngle36000(pSubObj->GetRotateAngle());
-            const sal_uInt16 nRot = nRotateAngle.get();
-            if ((3 < nRot && nRot < 8997) || (9003 < nRot && nRot < 17997)
-                || (18003 < nRot && nRot < 26997) || (27003 < nRot && nRot < 35997))
-                return true;
+        const SdrObject* pSubObj = aIterator.Next();
+        const Degree100 nRotateAngle = NormAngle36000(pSubObj->GetRotateAngle());
+        const sal_uInt16 nRot = nRotateAngle.get();
+        if ((3 < nRot && nRot < 8997) || (9003 < nRot && nRot < 17997)
+            || (18003 < nRot && nRot < 26997) || (27003 < nRot && nRot < 35997))
+            return true;
     }
     return false;
+}
+
+static void lcl_doMSOWidthHeightSwap(awt::Point& rLeftTop, awt::Size& rSize,
+                                       const sal_Int32 nMSOAngle)
+{
+    if (nMSOAngle == 0)
+        return;
+    // convert nMSOAngle to degree in [0°,180°[
+    sal_Int16 nAngleDeg = (nMSOAngle / 60000) % 180;
+    if (nAngleDeg >= 45 && nAngleDeg < 135)
+    {
+        // keep center of rectangle given in rLeftTop and rSize
+        sal_Int32 aTemp = rSize.Width - rSize.Height;
+        rLeftTop.X += aTemp / 2;
+        rLeftTop.Y -= aTemp / 2;
+        std::swap(rSize.Width, rSize.Height);
+    }
+    return;
+}
+
+void GraphicImport::lcl_expandRectangleByEffectExtent(awt::Point& rLeftTop, awt::Size& rSize)
+{
+    sal_Int32 nEffectExtent = (m_pImpl->m_oEffectExtentLeft)
+                                  ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentLeft)
+                                  : 0;
+    rLeftTop.X -= nEffectExtent;
+    rSize.Width += nEffectExtent;
+    nEffectExtent = (m_pImpl->m_oEffectExtentRight)
+                        ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentRight)
+                        : 0;
+    rSize.Width += nEffectExtent;
+    nEffectExtent = (m_pImpl->m_oEffectExtentTop)
+                        ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentTop)
+                        : 0;
+    rLeftTop.Y -= nEffectExtent;
+    rSize.Height += nEffectExtent;
+    nEffectExtent = (m_pImpl->m_oEffectExtentBottom)
+                        ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentBottom)
+                        : 0;
+    rSize.Height += nEffectExtent;
 }
 
 void GraphicImport::lcl_attribute(Id nName, Value& rValue)
@@ -846,7 +887,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         Degree100 nRotation;
                         if (bKeepRotation)
                         {
-                            // Use internal API, getPropertyValue(RotateAngle)
+                            // Use internal API, getPropertyValue("RotateAngle")
                             // would use GetObjectRotation(), which is not what
                             // we want.
                             if (pShape)
@@ -856,58 +897,6 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         if (bKeepRotation)
                         {
                             xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation.get()));
-                            if (nRotation == 0_deg100)
-                            {
-                                // Include effect extent in the margin to bring Writer layout closer
-                                // to Word. But do this for non-rotated shapes only, where effect
-                                // extents map to increased margins as-is.
-
-                                sal_Int32 nLineWidth{};
-                                if (xShapeProps->getPropertySetInfo()->hasPropertyByName("LineWidth"))
-                                {
-                                    xShapeProps->getPropertyValue("LineWidth") >>= nLineWidth;
-                                }
-
-                                if (m_pImpl->m_oEffectExtentLeft)
-                                {
-                                    sal_Int32 nLeft = oox::drawingml::convertEmuToHmm(
-                                        *m_pImpl->m_oEffectExtentLeft);
-                                    if (nLeft >= nLineWidth / 2)
-                                    {
-                                        nLeft -= nLineWidth / 2;
-                                    }
-                                    m_pImpl->nLeftMargin += nLeft;
-                                }
-                                if (m_pImpl->m_oEffectExtentTop)
-                                {
-                                    sal_Int32 nTop = oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentTop);
-                                    if (nTop >= nLineWidth / 2)
-                                    {
-                                        nTop -= nLineWidth / 2;
-                                    }
-                                    m_pImpl->nTopMargin += nTop;
-                                }
-                                if (m_pImpl->m_oEffectExtentRight)
-                                {
-                                    sal_Int32 nRight = oox::drawingml::convertEmuToHmm(
-                                        *m_pImpl->m_oEffectExtentRight);
-                                    if (nRight >= nLineWidth / 2)
-                                    {
-                                        nRight -= nLineWidth / 2;
-                                    }
-                                    m_pImpl->nRightMargin += nRight;
-                                }
-                                if (m_pImpl->m_oEffectExtentBottom)
-                                {
-                                    sal_Int32 nBottom = oox::drawingml::convertEmuToHmm(
-                                        *m_pImpl->m_oEffectExtentBottom);
-                                    if (nBottom >= nLineWidth / 2)
-                                    {
-                                        nBottom -= nLineWidth / 2;
-                                    }
-                                    m_pImpl->nBottomMargin += nBottom;
-                                }
-                            }
                         }
 
                         m_pImpl->bIsGraphic = true;
@@ -924,56 +913,165 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         if (m_pImpl->isYSizeValid())
                             aImportSize.Height = m_pImpl->getYSize(); // Hmm
                         const awt::Point aImportPosition(GetGraphicObjectPosition()); // Hmm
-                        const awt::Point aCentrum(aImportPosition.X + aImportSize.Width / 2,
-                                                  aImportPosition.Y + aImportSize.Height / 2);
+                        double fCentrumX = aImportPosition.X + aImportSize.Width / 2.0;
+                        double fCentrumY = aImportPosition.Y + aImportSize.Height / 2.0;
 
-                        // In case of group and lines, rotations are incorporated in the child shapes or
-                        // points respectively in LO. MSO has rotation as separate property. The
-                        // position refers to the unrotated rectangle of MSO. We need to adapt it to
-                        // the left-top of the rotated shape.
-                        if (bIsGroupOrLine)
+                        // In case of group and lines, transformations are incorporated in the child
+                        // shapes or points respectively in LO. MSO has rotation as separate property.
+                        // The position refers to the unrotated rectangle of MSO. We need to adapt it
+                        // to the left-top of the transformed shape.
+                        awt::Size aLOSize(m_xShape->getSize()); // LO snap rectangle size in Hmm
+                        if (bIsGroupOrLine  && !(m_pImpl->mpWrapPolygon))
                         {
-                            // Get actual LO snap rectangle size of group or line.
-                            awt::Size aLOSize(m_xShape->getSize()); //Hmm
-
                             // Set LO position. MSO rotation is done on shape center.
-                            m_pImpl->nLeftPosition = aCentrum.X - aLOSize.Width / 2;
-                            m_pImpl->nTopPosition = aCentrum.Y - aLOSize.Height / 2;
+                            if(pShape && pShape->IsGroupObject())
+                            {
+                                tools::Rectangle aSnapRect = pShape->GetSnapRect(); // Twips
+                                m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(aSnapRect.Left());
+                                m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(aSnapRect.Top());
+                                aLOSize.Width = ConversionHelper::convertTwipToMM100(aSnapRect.getWidth());
+                                aLOSize.Height = ConversionHelper::convertTwipToMM100(aSnapRect.getHeight());
+                            }
+                            else
+                            {
+                                m_pImpl->nLeftPosition = fCentrumX - aLOSize.Width / 2.0;
+                                m_pImpl->nTopPosition = fCentrumY - aLOSize.Height / 2.0;
+                            }
                             m_xShape->setPosition(GetGraphicObjectPosition());
                         }
 
                         // Margin correction
-                        // In case of wrap "Square" or "in Line", MSO uses special rules to
-                        // determine the rectangle into which the shape is placed, depending on
-                        // rotation angle.
-                        // If angle is smaller to horizontal than 45deg, the unrotated mso shape
-                        // rectangle is used, whereby the height is expanded to the bounding
-                        // rectangle height of the shape.
-                        // If angle is larger to horizontal than 45deg, the 90deg rotated rectangle
-                        // is used, whereby the width is expanded to the bounding width of the
-                        // shape.
-                        if (bIsGroupOrLine && (m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE
-                            || (m_pImpl->nWrap == text::WrapTextMode_PARALLEL && !(m_pImpl->mpWrapPolygon))))
+                        if (m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
                         {
-
-                            nOOXAngle = (nOOXAngle / 60000) % 180; // convert to degree in [0°,180°[
-
-                            if (nOOXAngle >= 45 && nOOXAngle < 135)
+                            if (nOOXAngle == 0)
                             {
-                                const sal_Int32 nImportRot90Top(aCentrum.Y - aImportSize.Width / 2);
-                                sal_Int32 nVertMarginOffset(m_pImpl->nTopPosition - nImportRot90Top);
-                                nVertMarginOffset = std::max<sal_Int32>(nVertMarginOffset, 0);
-                                m_pImpl->nTopMargin += nVertMarginOffset;
-                                m_pImpl->nBottomMargin += nVertMarginOffset;
+                                // EffectExtent contains all needed additional space, including fat
+                                // stroke and shadow. Simple add it to the margins.
+                                sal_Int32 nEffectExtent = (m_pImpl->m_oEffectExtentLeft)
+                                    ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentLeft)
+                                    : 0;                                    
+                                m_pImpl->nLeftMargin  += nEffectExtent;
+                                nEffectExtent = (m_pImpl->m_oEffectExtentRight)
+                                    ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentRight) : 0;
+                                m_pImpl->nRightMargin += nEffectExtent;
+                                nEffectExtent = (m_pImpl->m_oEffectExtentTop)
+                                    ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentTop) : 0;
+                                m_pImpl->nTopMargin  += nEffectExtent;
+                                nEffectExtent = (m_pImpl->m_oEffectExtentBottom)
+                                    ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentBottom) : 0;
+                                m_pImpl->nBottomMargin += nEffectExtent;
                             }
                             else
                             {
-                                sal_Int32 nHoriMarginOffset(m_pImpl->nLeftPosition - aImportPosition.X);
-                                nHoriMarginOffset = std::max<sal_Int32>(nHoriMarginOffset, 0);
-                                m_pImpl->nLeftMargin += nHoriMarginOffset;
-                                m_pImpl->nRightMargin += nHoriMarginOffset;
+                                // As of June 2021 LibreOffice uses an area, which is large enough to
+                                // contain the rotated snap rectangle. MSO uses a smaller area, so
+                                // that the rotated snap rectangle covers text.
+                                awt::Point aMSOBaseLeftTop = aImportPosition;
+                                awt::Size aMSOBaseSize = aImportSize;
+                                lcl_doMSOWidthHeightSwap(aMSOBaseLeftTop, aMSOBaseSize, nOOXAngle);
+                                lcl_expandRectangleByEffectExtent(aMSOBaseLeftTop, aMSOBaseSize);
+
+                                // Get LO SnapRect from SdrObject if possible
+                                awt::Rectangle aLOSnapRect;
+                                // For case we have no SdrObject, initialize with values from m_pImpl
+                                aLOSnapRect.X = m_pImpl->nLeftPosition;
+                                aLOSnapRect.Y = m_pImpl->nTopPosition;
+                                aLOSnapRect.Width = aLOSize.Width;
+                                aLOSnapRect.Height = aLOSize.Height;
+                                if (pShape)
+                                {
+                                    tools::Rectangle aSnapRect = pShape->GetSnapRect(); // Twip
+                                    aLOSnapRect.X = ConversionHelper::convertTwipToMM100(aSnapRect.Left());
+                                    aLOSnapRect.Y = ConversionHelper::convertTwipToMM100(aSnapRect.Top());
+                                    aLOSnapRect.Width = ConversionHelper::convertTwipToMM100(aSnapRect.getWidth());
+                                    aLOSnapRect.Height = ConversionHelper::convertTwipToMM100(aSnapRect.getHeight());
+                                }
+
+                                m_pImpl->nLeftMargin  += aLOSnapRect.X - aMSOBaseLeftTop.X;
+                                m_pImpl->nRightMargin += aMSOBaseLeftTop.X + aMSOBaseSize.Width
+                                                         - (aLOSnapRect.X + aLOSnapRect.Width);
+                                m_pImpl->nTopMargin  += aLOSnapRect.Y - aMSOBaseLeftTop.Y;
+                                m_pImpl->nBottomMargin += aMSOBaseLeftTop.Y + aMSOBaseSize.Height
+                                                          - (aLOSnapRect.Y + aLOSnapRect.Height);
+                                // tdf#141880 LibreOffice cannot handle negative vertical margins.
+                                // Those cases are catched below at common place.
+                            }
+                        } // end IMPORT_AS_DETECTED_INLINE
+                        else if ((m_pImpl->nWrap == text::WrapTextMode_PARALLEL
+                                  || m_pImpl->nWrap == text::WrapTextMode_DYNAMIC
+                                  || m_pImpl->nWrap == text::WrapTextMode_LEFT
+                                  || m_pImpl->nWrap == text::WrapTextMode_RIGHT
+                                  || m_pImpl->nWrap == text::WrapTextMode_NONE)
+                                  && !(m_pImpl->mpWrapPolygon))
+                        {
+                            // For wrap "Square" an area is defined around which the text wraps. MSO
+                            // describes the area by a base rectangle and effectExtent. LO uses the
+                            // shape bounding box and margins. We adapt the margins to get the same
+                            // area as MSO.
+                            awt::Point aMSOBaseLeftTop = aImportPosition;
+                            awt::Size aMSOBaseSize = aImportSize;
+                            lcl_doMSOWidthHeightSwap(aMSOBaseLeftTop, aMSOBaseSize, nOOXAngle);
+                            lcl_expandRectangleByEffectExtent(aMSOBaseLeftTop, aMSOBaseSize);
+
+                            // Get LO bound rectangle from SdrObject if possible
+                            awt::Rectangle aLOBoundRect;
+                            // For case we have no SdrObject, initialize with values from m_pImpl
+                            aLOBoundRect.X = m_pImpl->nLeftPosition;
+                            aLOBoundRect.Y = m_pImpl->nTopPosition;
+                            aLOBoundRect.Width = aLOSize.Width;
+                            aLOBoundRect.Height = aLOSize.Height;
+                            if (pShape)
+                            {
+                                tools::Rectangle aBoundRect = pShape->GetCurrentBoundRect(); // Twip
+                                aLOBoundRect.X = ConversionHelper::convertTwipToMM100(aBoundRect.Left());
+                                aLOBoundRect.Y = ConversionHelper::convertTwipToMM100(aBoundRect.Top());
+                                aLOBoundRect.Width = ConversionHelper::convertTwipToMM100(aBoundRect.getWidth());
+                                aLOBoundRect.Height = ConversionHelper::convertTwipToMM100(aBoundRect.getHeight());
+                            }
+
+                            m_pImpl->nLeftMargin  += aLOBoundRect.X - aMSOBaseLeftTop.X;
+                            m_pImpl->nRightMargin += aMSOBaseLeftTop.X + aMSOBaseSize.Width
+                                                     - (aLOBoundRect.X + aLOBoundRect.Width);
+                            m_pImpl->nTopMargin  += aLOBoundRect.Y - aMSOBaseLeftTop.Y;
+                            m_pImpl->nBottomMargin += aMSOBaseLeftTop.Y + aMSOBaseSize.Height
+                                                      - (aLOBoundRect.Y + aLOBoundRect.Height);
+                        }
+                        else // WrapTextMode_THROUGH(T) or mpWrapPolygon exists
+                        {
+                            // Word uses a wrap polygon in case of wrapTight or wrapThrough, which the
+                            // user can manipulate. Word writes values to effectExtent which would
+                            // be uses in case of wrapSquare, but ignores them for wrapTight or
+                            // wrapThrough. But they contain the information about the needed extent
+                            // for effects, rotation and fat stroke. So use them in that cases too
+                            // although LibreOffice has its own methods for contour.
+                            if (m_pImpl->m_oEffectExtentLeft)
+                            {
+                                m_pImpl->nLeftMargin
+                                    += oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentLeft);
+                            }
+                            if (m_pImpl->m_oEffectExtentTop)
+                            {
+                                m_pImpl->nTopMargin
+                                    += oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentTop);
+                            }
+                            if (m_pImpl->m_oEffectExtentRight)
+                            {
+                                m_pImpl->nRightMargin
+                                    += oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentRight);
+                            }
+                            if (m_pImpl->m_oEffectExtentBottom)
+                            {
+                                m_pImpl->nBottomMargin
+                                    += oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentBottom);
                             }
                         }
+
+                        // FixMe: tdf#141880 LibreOffice cannot handle negative vertical margins
+                        // although they are allowed in ODF.
+                        if (m_pImpl->nTopMargin < 0)
+                            m_pImpl->nTopMargin = 0;
+                        if (m_pImpl->nBottomMargin < 0)
+                            m_pImpl->nBottomMargin = 0;
                     }
 
                     if (bUseShape && m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)

@@ -23,6 +23,7 @@
 
 #include "LoggedResources.hxx"
 
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
@@ -124,6 +125,7 @@ public:
     virtual void lcl_endShape() override;
 
     void handleWrapTextValue(sal_uInt32 nVal);
+    void lcl_expandRectangleByEffectExtent(css::awt::Point& rLeftTop, css::awt::Size& rSize);
 };
 
 typedef tools::SvRef<GraphicImport> GraphicImportPtr;
