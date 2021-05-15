@@ -755,20 +755,21 @@ void SwXMLImport::endDocument()
                 if( pCurrNd->CanJoinNext( &pPos->nNode ))
                 {
                     SwTextNode* pNextNd = pPos->nNode.GetNode().GetTextNode();
-
+                    bool endNodeFound = pDoc->GetNodes()[nNodeIdx-1]->IsEndNode();
                     SwNode *pLastPar = pDoc->GetNodes()[nNodeIdx -2];
                     if ( !pLastPar->IsTextNode() ) {
                         pLastPar = pDoc->GetNodes()[nNodeIdx -1];
                     }
-                    if ( pLastPar->IsTextNode() )
+                    if ( !endNodeFound && pLastPar->IsTextNode() )
                     {
                         pNextNd->ChgFormatColl(pLastPar->GetTextNode()->GetTextColl());
                     }
 
                     pPos->nContent.Assign( pNextNd, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();
-                    pNextNd->JoinPrev();
-
+                    if (!endNodeFound){
+                        pNextNd->JoinPrev();
+                    }
                     // Remove line break that has been inserted by the import,
                     // but only if one has been inserted!
                     if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) &&
