@@ -271,7 +271,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124600)
     // - Expected: 0
     // - Actual  : 318
     // i.e. the shape had an unexpected left margin, but not in Word.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+    // The current value -2 reflects that a negative margin would be needed to get the
+    // same rendering as in Word.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-2),
                          getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
 
     // Make sure that "Shape 1 text" (anchored in the header) has the same left margin as the body
@@ -283,7 +285,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124600)
     // - Actual  : 1815
     // i.e. there was a >0 left margin on the text of the shape, resulting in incorrect horizontal
     // position.
-    CPPUNIT_ASSERT_EQUAL(aBodyTextLeft, aShapeTextLeft);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aBodyTextLeft.toDouble(), aShapeTextLeft.toDouble(), 1.0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf120548)
@@ -303,7 +305,7 @@ CPPUNIT_TEST_FIXTURE(Test, test120551)
     // 'Expected: 430, Actual  : -2542'.
     // CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(430), nHoriOrientPosition);
     // File 140335EMU = 389,8Hmm
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(392), nHoriOrientPosition);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(390), nHoriOrientPosition);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf111550)

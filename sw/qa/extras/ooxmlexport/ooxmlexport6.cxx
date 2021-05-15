@@ -108,12 +108,14 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
     OUString aType = comphelper::SequenceAsHashMap(getProperty<beans::PropertyValues>(xShape, "CustomShapeGeometry"))["Type"].get<OUString>();
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-bentConnector3"), aType);
     // Connector was incorrectly shifted towards the top left corner, X was 552, Y was 0.
+    // It is not a DML, but a VML shape. The whole group is shifted 3mm right and 6mm up.
+    // Value is as in LO7.2.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4018), xShape->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4487), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4491), xShape->getPosition().Y);
 
     xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
     // This was incorrectly shifted towards the top of the page, Y was 106.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4727), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4731), xShape->getPosition().Y);
 }
 
 // testDmlTextshapeB was only made export-only because as an import-export test it failed for an unknown reason
@@ -123,13 +125,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlTextshapeB, "dml-textshapeB.docx")
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(3), uno::UNO_QUERY);
     // Connector was incorrectly shifted towards the top left corner, X was 192, Y was -5743.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3776), xShape->getPosition().X);
-    // Value as of LO7.2. Whole group is still shifted 3mm to right and 5mm down.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-5063), xShape->getPosition().Y);
+    // Value as of LO7.2.
+    // FixMe: The shape is a VML group, not a DML. Export writes the connector shifted up, resulting
+    // in different routing. LO7.2 reads and writes the second connector wrongly. Whole group is
+    // still shifted.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-5064), xShape->getPosition().Y);
 
     xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
     // This was incorrectly shifted towards the top of the page, Y was -5011.
     // Value as of LO 7.2
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4712), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4713), xShape->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")

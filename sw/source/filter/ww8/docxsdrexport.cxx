@@ -17,6 +17,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdobjkind.hxx>
 #include <oox/token/namespaces.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
@@ -85,31 +86,41 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
 
 void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, Degree100 nRotation100)
 {
+    // MSO uses left|top of the unrotated object rectangle as position. When you rotate that retangle
+    // around its center and build a snap rectangle S from it, then left|top of S has to be the
+    // position used in LO. This method converts LOs aPos to the position uses by MSO.
     // code from ImplEESdrWriter::ImplFlipBoundingBox (filter/source/msfilter/eschesdo.cxx)
-    // TODO: refactor
 
+    // rSize has to be size of the logicRect of the object. For calculating the diff, we build a rectangle
+    // with left|top A = (-fWidthHalf | -fHeightHalf) and right|top B = (fWidthHalf | -fHeightHalf).
+    // Because y-axis points down, the rotation matrix R is
+    //  fcos fsin
+    // -fsin fcos
+    // Left of rectangle S = X-coord of R * A, Top of rectangle S = Y-coord of R * B
+
+    // use nRotation in [0;9000], for to have only one case (A and B) and not four cases.
     if (nRotation100 == 0_deg100)
         return;
     sal_Int64 nRotation = nRotation100.get();
     if (nRotation < 0)
         nRotation = (36000 + nRotation) % 36000;
     if (nRotation % 18000 == 0)
-        nRotation = 0;
+        nRotation = 0; // prevents endless loop
     while (nRotation > 9000)
         nRotation = (18000 - (nRotation % 18000));
 
     double fVal = static_cast<double>(nRotation) * F_PI18000;
-    double fCos = cos(fVal);
+    double fCos = (nRotation == 9000) ? 0.0 : cos(fVal);
     double fSin = sin(fVal);
 
-    double nWidthHalf = static_cast<double>(rSize.Width()) / 2;
-    double nHeightHalf = static_cast<double>(rSize.Height()) / 2;
+    double fWidthHalf = static_cast<double>(rSize.Width()) / 2.0;
+    double fHeightHalf = static_cast<double>(rSize.Height()) / 2.0;
 
-    double nXDiff = fSin * nHeightHalf + fCos * nWidthHalf - nWidthHalf;
-    double nYDiff = fSin * nWidthHalf + fCos * nHeightHalf - nHeightHalf;
+    double fXDiff = fSin * fHeightHalf + fCos * fWidthHalf - fWidthHalf;
+    double fYDiff = fSin * fWidthHalf + fCos * fHeightHalf - fHeightHalf;
 
-    aPos.X += nXDiff;
-    aPos.Y += nYDiff;
+    aPos.X += fXDiff + 0.5;
+    aPos.Y += fYDiff + 0.5;
 }
 
 /// Determines if the anchor is inside a paragraph.
@@ -118,7 +129,175 @@ bool IsAnchorTypeInsideParagraph(const ww8::Frame* pFrame)
     const SwFormatAnchor& rAnchor = pFrame->GetFrameFormat().GetAttrSet().GetAnchor();
     return rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE;
 }
+
+bool lcl_IsRotateAngleValid(const SdrObject& rObj)
+{
+    // Some shape types report a rotation angle but are not actually rotated, because all rotation
+    // have been incorporated. Here only OBJ_GRUP and OBJ_LINE are used. Others (e.g. OBJ_MEASURE) can
+    // be added if needed, but I think they do not appear here.
+    switch (rObj.GetObjIdentifier())
+    {
+        case OBJ_GRUP:
+        case OBJ_LINE:
+            return false;
+        default:
+            return true;
+    }
 }
+
+void lcl_calculateBoundRawEffectExtent(sal_Int32& rLeft, sal_Int32& rRight, sal_Int32& rTop,
+                                  sal_Int32& rBottom, const SdrObject& rObj)
+{
+    // This method calculates the extent needed to bring the current bound rectangle of LibreOffice to
+    // the base rectangle used by Word. The 'base rectangle' is the unrotated shape rectangle, maybe
+    // having swapped width and height depending on rotation angle. MS rotates around shape center,
+    // LO around left/top edge. Thus logic rectangle of LO is not directly usable as 'base rectangle'.
+
+    double fCenterX = (rObj.GetSnapRect().Left() + rObj.GetSnapRect().Right()) / 2.0;
+    double fCenterY = (rObj.GetSnapRect().Top() + rObj.GetSnapRect().Bottom()) / 2.0;
+    double fHalfWidth = rObj.GetLogicRect().getWidth() / 2.0;
+    double fHalfHeight = rObj.GetLogicRect().getHeight() / 2.0;
+    double fMSOLeft;
+    double fMSORight;
+    double fMSOTop;
+    double fMSOBottom;
+
+    // MSO swaps width and height depending on rotation angle.
+    double fRotation = lcl_IsRotateAngleValid(rObj)
+                       ? toDegrees(NormAngle36000(rObj.GetRotateAngle())) : 0.0;
+    if ((fRotation >= 45.0 && fRotation < 135.0) || (fRotation >= 225.0 && fRotation < 315.0))
+    {
+        fMSOLeft = fCenterX - fHalfHeight;
+        fMSORight = fCenterX + fHalfHeight;
+        fMSOTop = fCenterY - fHalfWidth;
+        fMSOBottom = fCenterY + fHalfWidth;
+    }
+    else
+    {
+        fMSOLeft = fCenterX - fHalfWidth;
+        fMSORight = fCenterX + fHalfWidth;
+        fMSOTop = fCenterY - fHalfHeight;
+        fMSOBottom = fCenterY + fHalfHeight;
+    }
+    // The boundRect does not contain wrap "distance from text" values, but fat stroke and effects.
+    tools::Rectangle aLOBoundRect = rObj.GetCurrentBoundRect();
+    rLeft = fMSOLeft - aLOBoundRect.Left();
+    rRight = aLOBoundRect.Right() - fMSORight;
+    rTop = fMSOTop - aLOBoundRect.Top();
+    rBottom = aLOBoundRect.Bottom() - fMSOBottom;
+    // Result values might be negative, e.g for a custom shape 'Arc'.
+    return;
+}
+
+void lcl_calculateSnapRawEffectExtent(sal_Int32& rLeft, sal_Int32& rRight, sal_Int32& rTop,
+                                  sal_Int32& rBottom, const SdrObject& rObj)
+{
+    // LO uses the snap rectangle as the default place for "as char" (MSO 'inline') anchored objects.
+    // Word reserves an area that covers the unrotated rectangle or - in the case of width-height swap
+    // - the 90° rotated rectangle. It places the rotated object in this area so that the center points
+    // match. Effects like shadow or thick lines are not considered. This method calculates the
+    // effectExtent needed in Word to render the object the same way as LibreOffice.
+
+    tools::Rectangle aLOSnapRect = rObj.GetSnapRect();
+    double fCenterX = (aLOSnapRect.Left() + aLOSnapRect.Right()) / 2.0;
+    double fCenterY = (aLOSnapRect.Top() + aLOSnapRect.Bottom()) / 2.0;
+    double fHalfWidth = rObj.GetLogicRect().getWidth() / 2.0;
+    double fHalfHeight = rObj.GetLogicRect().getHeight() / 2.0;
+    double fMSOLeft;
+    double fMSORight;
+    double fMSOTop;
+    double fMSOBottom;
+
+    // MSO swaps width and height depending on rotation angle.
+    double fRotation = lcl_IsRotateAngleValid(rObj)
+                       ? toDegrees(NormAngle36000(rObj.GetRotateAngle())) : 0.0;
+    if ((fRotation >= 45.0 && fRotation < 135.0) || (fRotation >= 225.0 && fRotation < 315.0))
+    {
+        fMSOLeft = fCenterX - fHalfHeight;
+        fMSORight = fCenterX + fHalfHeight;
+        fMSOTop = fCenterY - fHalfWidth;
+        fMSOBottom = fCenterY + fHalfWidth;
+    }
+    else
+    {
+        fMSOLeft = fCenterX - fHalfWidth;
+        fMSORight = fCenterX + fHalfWidth;
+        fMSOTop = fCenterY - fHalfHeight;
+        fMSOBottom = fCenterY + fHalfHeight;
+    }
+
+    rLeft = fMSOLeft - aLOSnapRect.Left();
+    rRight = aLOSnapRect.Right() - fMSORight;
+    rTop = fMSOTop - aLOSnapRect.Top();
+    rBottom = aLOSnapRect.Bottom() - fMSOBottom;
+    return;
+}
+
+bool lcl_makeSingleDistAndEffectExtentNonNegative(sal_Int64& rDist, sal_Int32& rExt)
+{
+    // A negative effectExtent is allowed in OOXML, but Word cannot handle it (bug in Word). It
+    // might occur, if the BoundRect in LO is smaller than the base rect in Word.
+    // A negative wrap distance from text is allowed in ODF. LO can currently only handle left and
+    // right negative values, see bug tdf#141880. Dist must be non-negative in OOXML.
+    // We try to compensate Dist vs effectExtent to get similar visual appearance.
+    if (rExt >= 0 && rDist >= 0)
+        return true;
+    if (rExt < 0 && rDist < 0)
+    {
+        rExt = 0;
+        rDist = 0;
+        return false;
+    }
+    if (rDist + static_cast<sal_Int64>(rExt) < 0) // different sign, so no overflow
+    {
+        rExt = 0;
+        rDist = 0;
+        return false;
+    }
+    // rDist + rExt >= 0
+    rDist += rExt;
+    rExt = 0;
+    return true;
+}
+
+bool lcl_makeDistAndExtentNonNegative(sal_Int64& rDistT, sal_Int64& rDistB, sal_Int64& rDistL,
+                                      sal_Int64& rDistR, sal_Int32& rLeftExt, sal_Int32& rTopExt,
+                                      sal_Int32& rRightExt, sal_Int32& rBottomExt)
+{
+    bool bLeft = lcl_makeSingleDistAndEffectExtentNonNegative(rDistL, rLeftExt);
+    bool bTop = lcl_makeSingleDistAndEffectExtentNonNegative(rDistT, rTopExt);
+    bool bRight = lcl_makeSingleDistAndEffectExtentNonNegative(rDistR, rRightExt);
+    bool bBottom = lcl_makeSingleDistAndEffectExtentNonNegative(rDistB, rBottomExt);
+    return bLeft && bTop && bRight && bBottom;
+}
+
+
+
+void makeSingleDistZeroAndExtentNonNegative(sal_Int64& rDist, sal_Int32& rExt)
+{
+    if (static_cast<double>(rDist) + static_cast<double>(rExt) >= static_cast<double>(SAL_MAX_INT32))
+        rExt = SAL_MAX_INT32;
+    else if (static_cast<double>(rDist) + static_cast<double>(rExt) <= 0)
+        rExt = 0;
+    else // 0 < rDist + rExt < SAL_MAX_INT32
+    {
+        rExt = static_cast<sal_Int32>(rDist + rExt);
+        if (rExt < 0)
+            rExt = 0;
+    }
+    rDist = 0;
+}
+
+void lcl_makeDistZeroAndExtentNonNegative(sal_Int64& rDistT, sal_Int64& rDistB, sal_Int64& rDistL,
+                                      sal_Int64& rDistR, sal_Int32& rLeftExt, sal_Int32& rTopExt,
+                                      sal_Int32& rRightExt, sal_Int32& rBottomExt)
+{
+    makeSingleDistZeroAndExtentNonNegative(rDistL, rLeftExt);
+    makeSingleDistZeroAndExtentNonNegative(rDistT, rTopExt);
+    makeSingleDistZeroAndExtentNonNegative(rDistR, rRightExt);
+    makeSingleDistZeroAndExtentNonNegative(rDistB, rBottomExt);
+}
+} // end anonymous namespace
 
 ExportDataSaveRestore::ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd,
                                              ww8::Frame const* pParentFrame)
@@ -354,17 +533,20 @@ void DocxSdrExport::setFlyWrapAttrList(
 
 void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, const Size& rSize)
 {
+    // Word uses size excluding right edge. Caller writeDMLDrawing and writeDiagram are changed for
+    // now. ToDo: Look whether the other callers give the size this way.
     m_pImpl->setDrawingOpen(true);
     m_pImpl->setParagraphHasDrawing(true);
     m_pImpl->getSerializer()->startElementNS(XML_w, XML_drawing);
+    const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
 
-    // tdf#135047: It must be allowed to find in parents too, but default value of bInP parameter
-    // for GetLRSpace() and GetULSpace() is true, so no direct setting is required.
-    const SvxLRSpaceItem& aLRSpaceItem = pFrameFormat->GetLRSpace();
-    const SvxULSpaceItem& aULSpaceItem = pFrameFormat->GetULSpace();
+    // LO determines the place needed for the object from wrap type, wrap margin ('distance to text'),
+    // object type and anchor type. Word uses dist* for user set margins and effectExtent for place
+    // needed for effects like shadow and glow, for fat stroke and for rotation. We map the LO values
+    // to values needed by Word so that the appearance is the same as far as possible.
+    // All values in Twips, change to EMU immediately before writing out.
 
-    bool isAnchor;
-
+    bool isAnchor; // true XML_anchor, false XML_inline
     if (m_pImpl->getFlyFrameGraphic())
     {
         isAnchor = false; // make Graphic object inside DMLTextFrame & VMLTextFrame as Inline
@@ -374,55 +556,97 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         isAnchor = pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR;
     }
 
-    // Count effectExtent values, their value is needed before dist{T,B,L,R} is written.
-    SvxShadowItem aShadowItem = pFrameFormat->GetShadow();
-    sal_Int32 nLeftExt = 0;
-    sal_Int32 nRightExt = 0;
-    sal_Int32 nTopExt = 0;
-    sal_Int32 nBottomExt = 0;
-    if (aShadowItem.GetLocation() != SvxShadowLocation::NONE)
+    // tdf#135047: It must be allowed to find in parents too, but default value of bInP parameter
+    // for GetLRSpace() and GetULSpace() is true, so no direct setting is required.
+    const SvxLRSpaceItem& aLRSpaceItem = pFrameFormat->GetLRSpace();
+    const SvxULSpaceItem& aULSpaceItem = pFrameFormat->GetULSpace();
+    sal_Int64 nDistT = aULSpaceItem.GetUpper();
+    sal_Int64 nDistB = aULSpaceItem.GetLower();
+    sal_Int64 nDistL = aLRSpaceItem.GetLeft();
+    sal_Int64 nDistR = aLRSpaceItem.GetRight();
+
+    // LibreOffice behaves different for frames and drawing objects, but MS Office treats frames
+    // as drawing objects too. Therefore we transform the values from frame so as if they come
+    // from a drawing object.
+    sal_Int32 nWidthDiff(0);
+    sal_Int32 nHeightDiff(0);
+    sal_Int32 nPosXDiff(0);
+    sal_Int32 nPosYDiff(0);
+    sal_Int32 nLeftExt(0);
+    sal_Int32 nRightExt(0);
+    sal_Int32 nTopExt(0);
+    sal_Int32 nBottomExt(0);
+
+    if ((!pObj) || (pObj && (pObj->GetObjIdentifier() == SwFlyDrawObjIdentifier)))
     {
-        sal_Int32 nShadowWidth(TwipsToEMU(aShadowItem.GetWidth()));
-        switch (aShadowItem.GetLocation())
+        // Frame objects have a restricted shadow and no further effects. They have border instead of
+        // stroke. LO includes shadow and border in the object size, but Word not.
+        SvxShadowItem aShadowItem = pFrameFormat->GetShadow();
+        if (aShadowItem.GetLocation() != SvxShadowLocation::NONE)
         {
-            case SvxShadowLocation::TopLeft:
-                nTopExt = nLeftExt = nShadowWidth;
-                break;
-            case SvxShadowLocation::TopRight:
-                nTopExt = nRightExt = nShadowWidth;
-                break;
-            case SvxShadowLocation::BottomLeft:
-                nBottomExt = nLeftExt = nShadowWidth;
-                break;
-            case SvxShadowLocation::BottomRight:
-                nBottomExt = nRightExt = nShadowWidth;
-                break;
-            case SvxShadowLocation::NONE:
-            case SvxShadowLocation::End:
-                break;
-        }
-    }
-    else if (const SdrObject* pObject = pFrameFormat->FindRealSdrObject())
-    {
-        // No shadow, but we have an idea what was the original effectExtent.
-        uno::Any aAny;
-        pObject->GetGrabBagItem(aAny);
-        comphelper::SequenceAsHashMap aGrabBag(aAny);
-        auto it = aGrabBag.find("CT_EffectExtent");
-        if (it != aGrabBag.end())
-        {
-            comphelper::SequenceAsHashMap aEffectExtent(it->second);
-            for (const std::pair<const OUString, uno::Any>& rDirection : aEffectExtent)
+            sal_Int32 nShadowWidth(aShadowItem.GetWidth());
+            switch (aShadowItem.GetLocation())
             {
-                if (rDirection.first == "l" && rDirection.second.has<sal_Int32>())
-                    nLeftExt = rDirection.second.get<sal_Int32>();
-                else if (rDirection.first == "t" && rDirection.second.has<sal_Int32>())
-                    nTopExt = rDirection.second.get<sal_Int32>();
-                else if (rDirection.first == "r" && rDirection.second.has<sal_Int32>())
-                    nRightExt = rDirection.second.get<sal_Int32>();
-                else if (rDirection.first == "b" && rDirection.second.has<sal_Int32>())
-                    nBottomExt = rDirection.second.get<sal_Int32>();
+                case SvxShadowLocation::TopLeft:
+                    nTopExt = nLeftExt = nShadowWidth;
+                    nPosXDiff = nLeftExt; // actual move is postponed
+                    nPosYDiff = nTopExt;
+                    nWidthDiff = -nLeftExt; // actual size extent is postponed
+                    nHeightDiff = -nTopExt;
+                    break;
+                case SvxShadowLocation::TopRight:
+                    nTopExt = nRightExt = nShadowWidth;
+                    nPosYDiff = nTopExt;
+                    nWidthDiff = -nRightExt;
+                    nHeightDiff = -nTopExt;
+                    break;
+                case SvxShadowLocation::BottomLeft:
+                    nBottomExt = nLeftExt = nShadowWidth;
+                    nPosXDiff = nLeftExt;
+                    nWidthDiff = -nLeftExt;
+                    nHeightDiff = -nBottomExt;
+                    break;
+                case SvxShadowLocation::BottomRight:
+                    nBottomExt = nRightExt = nShadowWidth;
+                    nWidthDiff = -nRightExt;
+                    nHeightDiff = -nBottomExt;
+                    break;
+                case SvxShadowLocation::NONE:
+                case SvxShadowLocation::End:
+                    break;
             }
+        }
+        // ToDo LineWidth is not correct for frames. We need border.
+        // sal_Int32 nHalfStrokeWidth = pObj->GetMergedItem(XATTR_LINEWIDTH).GetValue() / 2;
+        // nLeftExt += nHalfStrokeWidth;
+        // nRightExt += nHalfStrokeWidth;
+        // nTopExt += nHalfStrokeWidth;
+        // nBottomExt += nHalfStrokeWidth;
+    }
+    else // other objects than frames. pObj exists.
+    {
+        // Word cannot handle negative EffectExtent although allowed in OOXML, the 'dist' attributes
+        // may not be negative. Take care of that.
+        if (isAnchor)
+        {
+            lcl_calculateBoundRawEffectExtent(nLeftExt, nRightExt, nTopExt, nBottomExt, *pObj);
+            // We have calculated the effectExtent from boundRect, therefore half stroke width is
+            // already contained.
+            // ToDo: The other half of the strokeWidth needs to be subtracted from padding.
+            //       Where is that?
+            // ToDo: bool bCompansated = ... to be later able to switch from wrapSquare to wrapTight,
+            //       if wrapSquare would require negative effectExtent.
+            lcl_makeDistAndExtentNonNegative(nDistT, nDistB, nDistL, nDistR, nLeftExt, nTopExt,
+                                             nRightExt, nBottomExt);
+        }
+        else
+        {
+            lcl_calculateSnapRawEffectExtent(nLeftExt, nRightExt, nTopExt, nBottomExt, *pObj);
+            // nDistT,... contain the needed distances from import or set by user. But Word
+            // ignores Dist attributes of inline shapes. So we move all needed distances to
+            // effectExtent and force effectExtent to non-negative.
+            lcl_makeDistZeroAndExtentNonNegative(nDistT, nDistB, nDistL, nDistR, nLeftExt, nTopExt,
+                                             nRightExt, nBottomExt);
         }
     }
 
@@ -430,12 +654,9 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     {
         rtl::Reference<sax_fastparser::FastAttributeList> attrList
             = sax_fastparser::FastSerializerHelper::createAttrList();
+
         bool bOpaque = pFrameFormat->GetOpaque().GetValue();
-        awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(),
-                        pFrameFormat->GetVertOrient().GetPos());
-        const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
-        Degree100 nRotation(0);
-        if (pObj != nullptr)
+        if (pObj)
         {
             // SdrObjects know their layer, consider that instead of the frame format.
             bOpaque = pObj->GetLayer()
@@ -444,46 +665,17 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                              != pFrameFormat->GetDoc()
                                     ->getIDocumentDrawModelAccess()
                                     .GetInvisibleHellId();
-
-            // Do not do this with lines.
-            if (pObj->GetObjIdentifier() != OBJ_LINE)
-            {
-                nRotation = pObj->GetRotateAngle();
-                lclMovePositionWithRotation(aPos, rSize, nRotation);
-            }
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
-        sal_Int32 nLineWidth = 0;
-        if (const SdrObject* pObject = pFrameFormat->FindRealSdrObject())
-        {
-            nLineWidth = pObject->GetMergedItem(XATTR_LINEWIDTH).GetValue();
-        }
 
-        // Extend distance with the effect extent if the shape is not rotated, which is the opposite
-        // of the mapping done at import time.
-        // The type of dist* attributes is unsigned, so make sure no negative value is written.
-        sal_Int64 nTopExtDist = nRotation ? 0 : nTopExt;
-        nTopExtDist -= TwipsToEMU(nLineWidth / 2);
-        sal_Int64 nDistT = std::max(static_cast<sal_Int64>(0),
-                                    TwipsToEMU(aULSpaceItem.GetUpper()) - nTopExtDist);
-        attrList->add(XML_distT, OString::number(nDistT).getStr());
-        sal_Int64 nBottomExtDist = nRotation ? 0 : nBottomExt;
-        nBottomExtDist -= TwipsToEMU(nLineWidth / 2);
-        sal_Int64 nDistB = std::max(static_cast<sal_Int64>(0),
-                                    TwipsToEMU(aULSpaceItem.GetLower()) - nBottomExtDist);
-        attrList->add(XML_distB, OString::number(nDistB).getStr());
-        sal_Int64 nLeftExtDist = nRotation ? 0 : nLeftExt;
-        nLeftExtDist -= TwipsToEMU(nLineWidth / 2);
-        sal_Int64 nDistL = std::max(static_cast<sal_Int64>(0),
-                                    TwipsToEMU(aLRSpaceItem.GetLeft()) - nLeftExtDist);
-        attrList->add(XML_distL, OString::number(nDistL).getStr());
-        sal_Int64 nRightExtDist = nRotation ? 0 : nRightExt;
-        nRightExtDist -= TwipsToEMU(nLineWidth / 2);
-        sal_Int64 nDistR = std::max(static_cast<sal_Int64>(0),
-                                    TwipsToEMU(aLRSpaceItem.GetRight()) - nRightExtDist);
-        attrList->add(XML_distR, OString::number(nDistR).getStr());
+        attrList->add(XML_distT, OString::number(TwipsToEMU(nDistT)).getStr());
+        attrList->add(XML_distB, OString::number(TwipsToEMU(nDistB)).getStr());
+        attrList->add(XML_distL, OString::number(TwipsToEMU(nDistL)).getStr());
+        attrList->add(XML_distR, OString::number(TwipsToEMU(nDistR)).getStr());
+
         attrList->add(XML_simplePos, "0");
         attrList->add(XML_locked, "0");
+
         bool bLclInTabCell = true;
         if (pObj)
         {
@@ -497,24 +689,40 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             attrList->add(XML_layoutInCell, "1");
         else
             attrList->add(XML_layoutInCell, "0");
+
         bool bAllowOverlap = pFrameFormat->GetWrapInfluenceOnObjPos().GetAllowOverlap();
         attrList->add(XML_allowOverlap, bAllowOverlap ? "1" : "0");
-        if (pObj != nullptr)
+
+        if (pObj)
             // It seems 0 and 1 have special meaning: just start counting from 2 to avoid issues with that.
             attrList->add(XML_relativeHeight, OString::number(pObj->GetOrdNum() + 2));
         else
             // relativeHeight is mandatory attribute, if value is not present, we must write default value
             attrList->add(XML_relativeHeight, "0");
-        if (pObj != nullptr)
+
+        if (pObj)
         {
             OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObj);
             if (!sAnchorId.isEmpty())
                 attrList->addNS(XML_wp14, XML_anchorId,
                                 OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
         }
+
         m_pImpl->getSerializer()->startElementNS(XML_wp, XML_anchor, attrList);
+
         m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_simplePos, XML_x, "0", XML_y,
                                                   "0"); // required, unused
+
+        // Position is either determined by coordinates aPos or alignment keywords like 'center'.
+        // First prepare them.
+        awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(),
+                        pFrameFormat->GetVertOrient().GetPos());
+
+        aPos.X += nPosXDiff; // Make the postponed position move of frames.
+        aPos.Y += nPosYDiff;
+        if (pObj && lcl_IsRotateAngleValid(*pObj))
+            lclMovePositionWithRotation(aPos, rSize, pObj->GetRotateAngle());
+
         const char* relativeFromH;
         const char* relativeFromV;
         const char* alignH = nullptr;
@@ -611,8 +819,11 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             default:
                 break;
         }
+
+        // write out horizontal position
         m_pImpl->getSerializer()->startElementNS(XML_wp, XML_positionH, XML_relativeFrom,
                                                  relativeFromH);
+
         /**
         * Sizes of integral types
         * climits header defines constants with the limits of integral types for the specific system and compiler implementation used.
@@ -620,6 +831,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         **/
         const sal_Int64 MAX_INTEGER_VALUE = SAL_MAX_INT32;
         const sal_Int64 MIN_INTEGER_VALUE = SAL_MIN_INT32;
+
         if (alignH != nullptr)
         {
             m_pImpl->getSerializer()->startElementNS(XML_wp, XML_align);
@@ -654,9 +866,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             m_pImpl->getSerializer()->endElementNS(XML_wp, XML_posOffset);
         }
         m_pImpl->getSerializer()->endElementNS(XML_wp, XML_positionH);
+
+        // write out vertical position
         m_pImpl->getSerializer()->startElementNS(XML_wp, XML_positionV, XML_relativeFrom,
                                                  relativeFromV);
-
         sal_Int64 nPosYEMU = TwipsToEMU(aPos.Y);
 
         // tdf#93675, 0 below line/paragraph and/or top line/paragraph with
@@ -693,16 +906,16 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         }
         m_pImpl->getSerializer()->endElementNS(XML_wp, XML_positionV);
     }
-    else
+    else // inline
     {
+        // nDist is forced to zero above and ignored by Word anyway, so write 0 directly.
         rtl::Reference<sax_fastparser::FastAttributeList> aAttrList
             = sax_fastparser::FastSerializerHelper::createAttrList();
-        aAttrList->add(XML_distT, OString::number(TwipsToEMU(aULSpaceItem.GetUpper())).getStr());
-        aAttrList->add(XML_distB, OString::number(TwipsToEMU(aULSpaceItem.GetLower())).getStr());
-        aAttrList->add(XML_distL, OString::number(TwipsToEMU(aLRSpaceItem.GetLeft())).getStr());
-        aAttrList->add(XML_distR, OString::number(TwipsToEMU(aLRSpaceItem.GetRight())).getStr());
-        const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
-        if (pObj != nullptr)
+        aAttrList->add(XML_distT, OString::number(0).getStr());
+        aAttrList->add(XML_distB, OString::number(0).getStr());
+        aAttrList->add(XML_distL, OString::number(0).getStr());
+        aAttrList->add(XML_distR, OString::number(0).getStr());
+        if (pObj)
         {
             OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObj);
             if (!sAnchorId.isEmpty())
@@ -710,10 +923,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                                  OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
         }
         m_pImpl->getSerializer()->startElementNS(XML_wp, XML_inline, aAttrList);
+        // ToDo: Preparation needed for effectExtent?
     }
 
-    // now the common parts
-    // extent of the image
+    // now the common parts 'extent' and 'effectExtent'
     /**
     * Extent width is of type long ( i.e cx & cy ) as
     *
@@ -732,25 +945,31 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     *  Therefore changing the following accordingly so that LO sync's up with MSO.
     **/
     sal_uInt64 cx
-        = TwipsToEMU(std::clamp(rSize.Width(), tools::Long(0), tools::Long(SAL_MAX_INT32)));
+        = TwipsToEMU(std::clamp(rSize.Width() + nWidthDiff, tools::Long(0), tools::Long(SAL_MAX_INT32)));
     OString aWidth(OString::number(std::min(cx, sal_uInt64(SAL_MAX_INT32))));
     sal_uInt64 cy
-        = TwipsToEMU(std::clamp(rSize.Height(), tools::Long(0), tools::Long(SAL_MAX_INT32)));
+        = TwipsToEMU(std::clamp(rSize.Height() + nHeightDiff, tools::Long(0), tools::Long(SAL_MAX_INT32)));
     OString aHeight(OString::number(std::min(cy, sal_uInt64(SAL_MAX_INT32))));
 
     m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_extent, XML_cx, aWidth, XML_cy, aHeight);
 
-    // effectExtent, extent including the effect (shadow only for now)
+    // XML_effectExtent, includes effects, fat stroke and rotation
     m_pImpl->getSerializer()->singleElementNS(
-        XML_wp, XML_effectExtent, XML_l, OString::number(nLeftExt), XML_t, OString::number(nTopExt),
-        XML_r, OString::number(nRightExt), XML_b, OString::number(nBottomExt));
+        XML_wp, XML_effectExtent, XML_l, OString::number(TwipsToEMU(nLeftExt)), XML_t, OString::number(TwipsToEMU(nTopExt)),
+        XML_r, OString::number(TwipsToEMU(nRightExt)), XML_b, OString::number(TwipsToEMU(nBottomExt)));
+
+    if (!isAnchor)
+        return; // OOXML 'inline' has not wrap type at all
+
+    // XML_anchor has exact one of types wrapNone, wrapSquare, wrapTight, wrapThrough and
+    // WrapTopAndBottom. Map our own types to them as far as possible.
+    sal_Int32 nWrapToken = 0; // 0 indicates that no wrap type is yet determined.
 
     // See if we know the exact wrap type from grab-bag.
-    sal_Int32 nWrapToken = 0;
-    if (const SdrObject* pObject = pFrameFormat->FindRealSdrObject())
+    if (pObj)
     {
         uno::Any aAny;
-        pObject->GetGrabBagItem(aAny);
+        pObj->GetGrabBagItem(aAny);
         comphelper::SequenceAsHashMap aGrabBag(aAny);
         auto it = aGrabBag.find("EG_WrapType");
         if (it != aGrabBag.end())
@@ -891,10 +1110,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         }
     }
 
-    // No? Then just approximate based on what we have.
-    if (!isAnchor || nWrapToken)
+    if (nWrapToken)
         return;
 
+    // No wrap type determined yet? Then just approximate based on what we have.
     switch (pFrameFormat->GetSurround().GetValue())
     {
         case css::text::WrapTextMode_NONE:
@@ -973,7 +1192,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     m_pImpl->getExport().DocxAttrOutput().GetSdtEndBefore(pSdrObject);
 
     sax_fastparser::FSHelperPtr pFS = m_pImpl->getSerializer();
-    Size aSize(pSdrObject->GetLogicRect().GetWidth(), pSdrObject->GetLogicRect().GetHeight());
+    Size aSize(pSdrObject->GetLogicRect().getWidth(), pSdrObject->GetLogicRect().getHeight());
     startDMLAnchorInline(pFrameFormat, aSize);
 
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
@@ -1242,7 +1461,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
                                            uno::UNO_QUERY);
 
     // write necessary tags to document.xml
-    Size aSize(sdrObject->GetSnapRect().GetWidth(), sdrObject->GetSnapRect().GetHeight());
+    Size aSize(sdrObject->GetSnapRect().getWidth(), sdrObject->GetSnapRect().getHeight());
     startDMLAnchorInline(&rFrameFormat, aSize);
 
     m_pImpl->getDrawingML()->WriteDiagram(xShape, nDiagramId);

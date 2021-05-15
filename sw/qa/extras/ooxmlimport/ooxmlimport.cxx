@@ -1377,7 +1377,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf85232)
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.LineShape"), xShapeDescriptor->getShapeType());
 
     // This was 2900: horizontal position of the line was incorrect, the 3 children were not connected visually.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2267), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2265), xShape->getPosition().X);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf95755)

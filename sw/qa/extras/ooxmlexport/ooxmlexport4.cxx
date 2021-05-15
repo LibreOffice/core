@@ -84,7 +84,6 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
     // 'actual child size' = 'group ext' * 'child ext' / 'chExt from group', see section 'chExt' in
     // [MS-OI29500]. Here for width from file 3108960 * 4896 / 4911 = 3099464 EMU. That corresponds to
     // width 8.61cm and 325px in UI in Word and rounds down to 8609 Hmm. FIXME: Expected value is wrong.
-    // Right after import we get a rounding error: 8662 vs 8664.
     if (mbExported)
     {
         uno::Reference<drawing::XShape> xYear(xGroup->getByIndex(1), uno::UNO_QUERY);
