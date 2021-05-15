@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "075b37b5_cb41ab96",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-05-15T23:38:34Z",
+      "side": 1,
+      "message": "Cool! First time I have seen an if statement with initializer like this. Searching internet I find it was introduced in C++17. New to me 😎.",
+      "range": {
+        "startLine": 395,
+        "startChar": 0,
+        "endLine": 395,
+        "endChar": 63
+      },
+      "revId": "4caf4403c1b862e7ccca94b9caee31394d019732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
