@@ -152,8 +152,6 @@ DECLARE_OOXMLEXPORT_TEST(testWpsOnly, "wps-only.docx")
     // Check position, it was 0. This is a shape, so use getPosition(), not a property.
     CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(671830), xShape->getPosition().X);
 
-    // Left margin should be 0, as margins are not relevant for <wp:wrapNone/>.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, "LeftMargin"));
     // Wrap type was PARALLEL.
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(xShape, "Surround"));
     // Confirm that the deprecated (incorrectly spelled) _THROUGHT also matches

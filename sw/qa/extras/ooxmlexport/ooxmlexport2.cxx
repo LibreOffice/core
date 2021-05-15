@@ -585,8 +585,8 @@ DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 
     // Left / right margin was incorrect: the attribute was missing and we
     // didn't have the right default (had 0 instead of the below one).
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "LeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "RightMargin"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "LeftMargin"), 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "RightMargin"), 2);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCellBtlr, "cell-btlr.docx")
