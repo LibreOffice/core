@@ -83,13 +83,14 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
 
     // 'actual child size' = 'group ext' * 'child ext' / 'chExt from group', see section 'chExt' in
     // [MS-OI29500]. Here for width from file 3108960 * 4896 / 4911 = 3099464 EMU. That corresponds to
-    // width 8.61cm and 325px in UI in Word and rounds down to 8609 Hmm. FIXME: Expected value is wrong.
-    // Right after import we get a rounding error: 8662 vs 8664.
+    // width 8.61cm and 325px in UI in Word and rounds down to 8609 Hmm. Considering scaling of the
+    // parent group to the anchor extent (* 3118485 / 3108960) we get a display width of 3108960 EMU
+    // = 8636Hmm. FIXME: Expected value is as in LO 7.2. Reason for difference is yet unknown.
     if (mbExported)
     {
         uno::Reference<drawing::XShape> xYear(xGroup->getByIndex(1), uno::UNO_QUERY);
         // This was 2, due to incorrect handling of parent transformations inside DML groupshapes.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(8664), xYear->getSize().Width);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8662), xYear->getSize().Width);
     }
 }
 
