@@ -851,7 +851,7 @@ public:
    button column when enable_toggle_buttons is used). Column index -1 is
    reserved to access those columns.
 */
-class VCL_DLLPUBLIC TreeView : virtual public Container
+class VCL_DLLPUBLIC TreeView : virtual public Widget
 {
     friend class ::LOKTrigger;
 
@@ -1280,7 +1280,7 @@ public:
     using Widget::set_sensitive;
 };
 
-class VCL_DLLPUBLIC IconView : virtual public Container
+class VCL_DLLPUBLIC IconView : virtual public Widget
 {
     friend class ::LOKTrigger;
 
@@ -2136,7 +2136,7 @@ public:
     void connect_vadjustment_changed(const Link<TextView&, void>& rLink) { m_aVChangeHdl = rLink; }
 };
 
-class VCL_DLLPUBLIC Expander : virtual public Container
+class VCL_DLLPUBLIC Expander : virtual public Widget
 {
 protected:
     Link<Expander&, void> m_aExpandedHdl;

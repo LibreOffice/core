@@ -1341,7 +1341,7 @@ struct SalInstanceTreeIter : public weld::TreeIter
     SvTreeListEntry* iter;
 };
 
-class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::TreeView
+class SalInstanceTreeView : public SalInstanceWidget, public virtual weld::TreeView
 {
 protected:
     // owner for UserData
@@ -1701,7 +1701,7 @@ public:
     virtual ~SalInstanceTreeView() override;
 };
 
-class SalInstanceExpander : public SalInstanceContainer, public virtual weld::Expander
+class SalInstanceExpander : public SalInstanceWidget, public virtual weld::Expander
 {
 private:
     VclPtr<VclExpander> m_xExpander;
@@ -1726,7 +1726,7 @@ public:
     virtual ~SalInstanceExpander() override;
 };
 
-class SalInstanceIconView : public SalInstanceContainer, public virtual weld::IconView
+class SalInstanceIconView : public SalInstanceWidget, public virtual weld::IconView
 {
 private:
     // owner for UserData

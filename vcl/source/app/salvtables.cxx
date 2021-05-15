@@ -3655,7 +3655,7 @@ void SalInstanceTreeView::set_header_item_width(const std::vector<int>& rWidths)
 
 SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
-    : SalInstanceContainer(pTreeView, pBuilder, bTakeOwnership)
+    : SalInstanceWidget(pTreeView, pBuilder, bTakeOwnership)
     , m_xTreeView(pTreeView)
     , m_aCheckButtonData(pTreeView, false)
     , m_aRadioButtonData(pTreeView, true)
@@ -3823,14 +3823,14 @@ void SalInstanceTreeView::show()
 {
     if (LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get()))
         pHeaderBox->GetParent()->Show();
-    SalInstanceContainer::show();
+    SalInstanceWidget::show();
 }
 
 void SalInstanceTreeView::hide()
 {
     if (LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get()))
         pHeaderBox->GetParent()->Hide();
-    SalInstanceContainer::hide();
+    SalInstanceWidget::hide();
 }
 
 void SalInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
@@ -5169,7 +5169,7 @@ IMPL_LINK(SalInstanceTreeView, EditedEntryHdl, IterString, rIterString, bool)
 
 SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
-    : SalInstanceContainer(pIconView, pBuilder, bTakeOwnership)
+    : SalInstanceWidget(pIconView, pBuilder, bTakeOwnership)
     , m_xIconView(pIconView)
 {
     m_xIconView->SetSelectHdl(LINK(this, SalInstanceIconView, SelectHdl));
@@ -5876,7 +5876,7 @@ IMPL_LINK(SalInstanceTextView, CursorListener, VclWindowEvent&, rEvent, void)
 
 SalInstanceExpander::SalInstanceExpander(VclExpander* pExpander, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
-    : SalInstanceContainer(pExpander, pBuilder, bTakeOwnership)
+    : SalInstanceWidget(pExpander, pBuilder, bTakeOwnership)
     , m_xExpander(pExpander)
 {
     m_xExpander->SetExpandedHdl(LINK(this, SalInstanceExpander, ExpandedHdl));
@@ -5892,7 +5892,7 @@ void SalInstanceExpander::set_expanded(bool bExpand) { m_xExpander->set_expanded
 
 bool SalInstanceExpander::has_focus() const
 {
-    return m_xExpander->get_label_widget()->HasFocus() || SalInstanceContainer::has_focus();
+    return m_xExpander->get_label_widget()->HasFocus() || SalInstanceWidget::has_focus();
 }
 
 void SalInstanceExpander::grab_focus() { return m_xExpander->get_label_widget()->GrabFocus(); }
