@@ -2,3 +2,4 @@
 --disable-symbols
 --disable-dependency-tracking
 --enable-optimized
+--enable-odk
