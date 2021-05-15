@@ -18985,8 +18985,6 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     }
 #endif
     GtkInstanceWidget* pParentWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
-    if (pParent && !pParentWidget) //remove when complete
-        return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
     GtkWidget* pBuilderParent = pParentWidget ? pParentWidget->getWidget() : nullptr;
     return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile, nullptr, true);
 }
