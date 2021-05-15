@@ -17,6 +17,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/view/XViewCursor.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -53,6 +55,42 @@ void Test::tearDown()
 }
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/dmapper/data/";
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf142305SquareWrapMargin)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf142305SquareWrapMargin.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<frame::XModel> xModel(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextViewCursor> xViewCursor(xTextViewCursorSupplier->getViewCursor());
+    xViewCursor->gotoStart(/*bExpand=*/false);
+    uno::Reference<view::XViewCursor> xCursor(xViewCursor, uno::UNO_QUERY);
+    xCursor->goDown(/*nCount=*/10, /*bExpand=*/false);
+    xViewCursor->goRight(/*nCount=*/1, /*bExpand=*/true);
+    OUString sText = xViewCursor->getString();
+    // Without fix in place, wrap was tight to the bounding box and not around the full shape as in
+    // Word. That results in different text at start of line, here "u" instead of expected "m".
+    CPPUNIT_ASSERT(sText.startsWith("m"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf142304GroupPosition)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf142304GroupPosition.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nVertPosition = 0;
+    xShape->getPropertyValue("VertOrientPosition") >>= nVertPosition;
+    // Without fix in place the group was shifted left and down
+    // The test would have failed with Expected: 2178, Actual: 2521
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2178), nVertPosition);
+    sal_Int32 nHoriPosition = 0;
+    // The test would have failed with Expected: 4304, Actual: 3874
+    xShape->getPropertyValue("HoriOrientPosition") >>= nHoriPosition;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4304), nHoriPosition);
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf141540ChildRotation)
 {
