@@ -1032,7 +1032,7 @@ public:
     virtual ~SalInstanceButton() override;
 };
 
-class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::Notebook
+class SalInstanceNotebook : public SalInstanceWidget, public virtual weld::Notebook
 {
 private:
     VclPtr<TabControl> m_xNotebook;

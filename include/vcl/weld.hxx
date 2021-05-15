@@ -457,7 +457,7 @@ public:
     virtual std::unique_ptr<Label> weld_label_widget() const = 0;
 };
 
-class VCL_DLLPUBLIC Notebook : virtual public Container
+class VCL_DLLPUBLIC Notebook : virtual public Widget
 {
 protected:
     Link<const OString&, bool> m_aLeavePageHdl;
@@ -1525,7 +1525,7 @@ class VCL_DLLPUBLIC RadioButton : virtual public ToggleButton
 {
 };
 
-class VCL_DLLPUBLIC LinkButton : virtual public Container
+class VCL_DLLPUBLIC LinkButton : virtual public Widget
 {
 protected:
     Link<LinkButton&, bool> m_aActivateLinkHdl;

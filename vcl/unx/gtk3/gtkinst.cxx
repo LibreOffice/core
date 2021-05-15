@@ -6729,7 +6729,7 @@ public:
     }
 };
 
-class GtkInstanceNotebook : public GtkInstanceContainer, public virtual weld::Notebook
+class GtkInstanceNotebook : public GtkInstanceWidget, public virtual weld::Notebook
 {
 private:
     GtkNotebook* m_pNotebook;
@@ -7172,11 +7172,7 @@ private:
 
 public:
     GtkInstanceNotebook(GtkNotebook* pNotebook, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        : GtkInstanceContainer(GTK_CONTAINER(pNotebook), pBuilder, bTakeOwnership)
-#else
-        : GtkInstanceContainer(GTK_WIDGET(pNotebook), pBuilder, bTakeOwnership)
-#endif
+        : GtkInstanceWidget(GTK_WIDGET(pNotebook), pBuilder, bTakeOwnership)
         , m_pNotebook(pNotebook)
         , m_pOverFlowBox(nullptr)
         , m_pOverFlowNotebook(GTK_NOTEBOOK(gtk_notebook_new()))
@@ -7408,12 +7404,12 @@ public:
         gtk_widget_freeze_child_notify(GTK_WIDGET(m_pOverFlowNotebook));
 #endif
         g_object_freeze_notify(G_OBJECT(m_pOverFlowNotebook));
-        GtkInstanceContainer::disable_notify_events();
+        GtkInstanceWidget::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceContainer::enable_notify_events();
+        GtkInstanceWidget::enable_notify_events();
         g_object_thaw_notify(G_OBJECT(m_pOverFlowNotebook));
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_thaw_child_notify(GTK_WIDGET(m_pOverFlowNotebook));
@@ -9633,7 +9629,7 @@ public:
     }
 };
 
-class GtkInstanceLinkButton : public GtkInstanceContainer, public virtual weld::LinkButton
+class GtkInstanceLinkButton : public GtkInstanceWidget, public virtual weld::LinkButton
 {
 private:
     GtkLinkButton* m_pButton;
@@ -9648,7 +9644,7 @@ private:
 
 public:
     GtkInstanceLinkButton(GtkLinkButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceContainer(GTK_CONTAINER(pButton), pBuilder, bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pButton), pBuilder, bTakeOwnership)
         , m_pButton(pButton)
         , m_nSignalId(g_signal_connect(pButton, "activate-link", G_CALLBACK(signalActivateLink), this))
     {
@@ -9678,12 +9674,12 @@ public:
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pButton, m_nSignalId);
-        GtkInstanceContainer::disable_notify_events();
+        GtkInstanceWidget::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceContainer::enable_notify_events();
+        GtkInstanceWidget::enable_notify_events();
         g_signal_handler_unblock(m_pButton, m_nSignalId);
     }
 
