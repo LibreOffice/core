@@ -1825,12 +1825,6 @@ void ScFiltersTest::testDataTableMortgageXLS()
     ScDocShellRef xDocSh = loadDoc(u"data-table/mortgage.", FORMAT_XLS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.is());
 
-    ScFormulaOptions aOptions;
-    aOptions.SetFormulaSepArg(",");
-    aOptions.SetFormulaSepArrayCol(",");
-    aOptions.SetFormulaSepArrayRow(";");
-    xDocSh->SetFormulaOptions(aOptions);
-
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // One-variable table
@@ -1857,12 +1851,6 @@ void ScFiltersTest::testDataTableOneVarXLSX()
 {
     ScDocShellRef xDocSh = loadDoc(u"data-table/one-variable.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.is());
-
-    ScFormulaOptions aOptions;
-    aOptions.SetFormulaSepArg(",");
-    aOptions.SetFormulaSepArrayCol(",");
-    aOptions.SetFormulaSepArrayRow(";");
-    xDocSh->SetFormulaOptions(aOptions);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -1900,12 +1888,6 @@ void ScFiltersTest::testDataTableMultiTableXLSX()
 {
     ScDocShellRef xDocSh = loadDoc(u"data-table/multi-table.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.is());
-
-    ScFormulaOptions aOptions;
-    aOptions.SetFormulaSepArg(",");
-    aOptions.SetFormulaSepArrayCol(",");
-    aOptions.SetFormulaSepArrayRow(";");
-    xDocSh->SetFormulaOptions(aOptions);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
