@@ -53,7 +53,7 @@ private:
     ESelection m_aAllSelection;
 
     /**
-      * Finds the ESelection wich contains all the text.
+      * Finds the ESelection which contains all the text.
       */
     void updateAllESelection();
 };

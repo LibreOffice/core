@@ -1808,7 +1808,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                 // the document. When the cursor is at the end of the visible document and
                 // right arrow key is pressed Move fails after moving the cursor to the
                 // end of the document model, which doesn't have a node frame and causes
-                // wierd numbers to be displayed in the statusbar page number count. Left
+                // weird numbers to be displayed in the statusbar page number count. Left
                 // arrow, when in this state, causes a crash without RestoredSavePos() added here.
                 RestoreSavePos();
             break;
