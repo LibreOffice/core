@@ -266,13 +266,17 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupShapeFontName)
 CPPUNIT_TEST_FIXTURE(Test, testTdf124600)
 {
     load(mpTestDocumentPath, "tdf124600.docx");
-    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // uno::Reference<drawing::XShape> xShape = getShape(1);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0
     // - Actual  : 318
     // i.e. the shape had an unexpected left margin, but not in Word.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
-                         getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
+    // Regina: LO needs a left margin to get the same rendering as Word, because Word aligns the
+    // shape with the outer edge of the border, but LibreOffice aligns with the snap rectangle.
+    // Expected: 0 is wrong. ToDo: The current margin is wrong and needs to be fixed. Then activate
+    // the test again with the correct margin.
+    // CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+    //                     getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
 
     // Make sure that "Shape 1 text" (anchored in the header) has the same left margin as the body
     // text.
@@ -283,7 +287,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124600)
     // - Actual  : 1815
     // i.e. there was a >0 left margin on the text of the shape, resulting in incorrect horizontal
     // position.
-    CPPUNIT_ASSERT_EQUAL(aBodyTextLeft, aShapeTextLeft);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aBodyTextLeft.toDouble(), aShapeTextLeft.toDouble(), 1.0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf120548)
@@ -303,7 +307,7 @@ CPPUNIT_TEST_FIXTURE(Test, test120551)
     // 'Expected: 430, Actual  : -2542'.
     // CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(430), nHoriOrientPosition);
     // File 140335EMU = 389,8Hmm
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(392), nHoriOrientPosition);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(390), nHoriOrientPosition);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf111550)
