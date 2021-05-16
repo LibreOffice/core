@@ -88,40 +88,40 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
 
         std::vector< DriverPropertyInfo > aDriverInfo
         {
-            { DriverPropertyInfo(
+            {
                 "FieldDelimiter"
                 ,"Field separator."
                 ,false
                 ,OUString()
-                ,Sequence< OUString >())
+                ,Sequence< OUString >()
             },
-            { DriverPropertyInfo(
+            {
                 "HeaderLine"
                 ,"Text contains headers."
                 ,false
                 ,"0"
-                ,aBoolean)
+                ,aBoolean
             },
-            { DriverPropertyInfo(
+            {
                 "StringDelimiter"
                 ,"Text separator."
                 ,false
                 ,"0"
-                ,aBoolean)
+                ,aBoolean
             },
-            { DriverPropertyInfo(
+            {
                 "DecimalDelimiter"
                 ,"Decimal separator."
                 ,false
                 ,"0"
-                ,aBoolean)
+                ,aBoolean
             },
-            { DriverPropertyInfo(
+            {
                 "ThousandDelimiter"
                 ,"Thousands separator."
                 ,false
                 ,"0"
-                ,aBoolean)
+                ,aBoolean
             }
         };
         return ::comphelper::concatSequences(OFileDriver::getPropertyInfo(url,info ),

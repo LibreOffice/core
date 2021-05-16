@@ -1013,25 +1013,25 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
         ODatabaseMetaDataResultSet::ORows tmp(2);
         ODatabaseMetaDataResultSet::ORow aRow
         {
-            { ODatabaseMetaDataResultSet::getEmptyValue() },
-            { new ORowSetValueDecorator(OUString("VARCHAR")) },
-            { new ORowSetValueDecorator(DataType::VARCHAR) },
-            { new ORowSetValueDecorator(sal_Int32(s_nCHAR_OCTET_LENGTH)) },
-            { ODatabaseMetaDataResultSet::getQuoteValue() },
-            { ODatabaseMetaDataResultSet::getQuoteValue() },
-            { ODatabaseMetaDataResultSet::getEmptyValue() },
-            { ODatabaseMetaDataResultSet::get1Value() },
-            { ODatabaseMetaDataResultSet::get1Value() },
-            { new ORowSetValueDecorator(sal_Int32(ColumnSearch::FULL)) },
-            { ODatabaseMetaDataResultSet::get1Value() },
-            { ODatabaseMetaDataResultSet::get0Value() },
-            { ODatabaseMetaDataResultSet::get0Value() },
-            { ODatabaseMetaDataResultSet::getEmptyValue() },
-            { ODatabaseMetaDataResultSet::get0Value() },
-            { ODatabaseMetaDataResultSet::get0Value() },
-            { ODatabaseMetaDataResultSet::getEmptyValue() },
-            { ODatabaseMetaDataResultSet::getEmptyValue() },
-            { new ORowSetValueDecorator(sal_Int32(10)) }
+             ODatabaseMetaDataResultSet::getEmptyValue() ,
+             new ORowSetValueDecorator(OUString("VARCHAR")) ,
+             new ORowSetValueDecorator(DataType::VARCHAR) ,
+             new ORowSetValueDecorator(sal_Int32(s_nCHAR_OCTET_LENGTH)) ,
+             ODatabaseMetaDataResultSet::getQuoteValue() ,
+             ODatabaseMetaDataResultSet::getQuoteValue() ,
+             ODatabaseMetaDataResultSet::getEmptyValue() ,
+             ODatabaseMetaDataResultSet::get1Value() ,
+             ODatabaseMetaDataResultSet::get1Value() ,
+             new ORowSetValueDecorator(sal_Int32(ColumnSearch::FULL)) ,
+             ODatabaseMetaDataResultSet::get1Value() ,
+             ODatabaseMetaDataResultSet::get0Value() ,
+             ODatabaseMetaDataResultSet::get0Value() ,
+             ODatabaseMetaDataResultSet::getEmptyValue() ,
+             ODatabaseMetaDataResultSet::get0Value() ,
+             ODatabaseMetaDataResultSet::get0Value() ,
+             ODatabaseMetaDataResultSet::getEmptyValue() ,
+             ODatabaseMetaDataResultSet::getEmptyValue() ,
+             new ORowSetValueDecorator(sal_Int32(10))
         };
 
         tmp.push_back(aRow);
