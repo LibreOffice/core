@@ -83,6 +83,8 @@ public:
     DECL_LINK(NotebookEnterPage, const OString&, void);
     DECL_LINK(NotebookLeavePage, const OString&, bool);
 
+    DECL_LINK(HeaderBarClick, int, void);
+
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 
     void dispose();
