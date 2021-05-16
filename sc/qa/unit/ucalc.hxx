@@ -16,7 +16,6 @@
 #include <memory>
 #include <clipparam.hxx>
 
-struct TestImpl;
 class ScUndoPaste;
 class ScUndoCut;
 
@@ -654,7 +653,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    std::unique_ptr<TestImpl> m_pImpl;
+    ScDocShellRef m_xDocShell;
     ScDocument* m_pDoc;
 
     void executeCopyPasteSpecial(bool bApplyFilter, bool bIncludedFiltered, bool bAsLink,
