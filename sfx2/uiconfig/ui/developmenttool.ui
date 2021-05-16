@@ -320,7 +320,6 @@
                             <property name="title" translatable="yes" context="developmenttool|name">Name</property>
                             <property name="clickable">True</property>
                             <property name="sort-indicator">True</property>
-                            <property name="sort-column-id">0</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext4"/>
                               <attributes>
@@ -366,7 +365,6 @@
                             <property name="title" translatable="yes" context="developmenttool|name">Name</property>
                             <property name="clickable">True</property>
                             <property name="sort-indicator">True</property>
-                            <property name="sort-column-id">0</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext7"/>
                               <attributes>
@@ -421,7 +419,6 @@
                                 <property name="title" translatable="yes" context="developmenttool|object">Object</property>
                                 <property name="clickable">True</property>
                                 <property name="sort-indicator">True</property>
-                                <property name="sort-column-id">0</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="obj_insp_cellrenderertext1"/>
                                   <attributes>
@@ -436,7 +433,6 @@
                                 <property name="title" translatable="yes" context="developmenttool|value">Value</property>
                                 <property name="clickable">True</property>
                                 <property name="sort-indicator">True</property>
-                                <property name="sort-column-id">1</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="obj_insp_cellrenderertext2"/>
                                   <attributes>
@@ -451,7 +447,6 @@
                                 <property name="title" translatable="yes" context="developmenttool|type">Type</property>
                                 <property name="clickable">True</property>
                                 <property name="sort-indicator">True</property>
-                                <property name="sort-column-id">2</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="obj_insp_cellrenderertext3"/>
                                   <attributes>
@@ -466,7 +461,6 @@
                                 <property name="title" translatable="yes" context="developmenttool|info">Info</property>
                                 <property name="clickable">True</property>
                                 <property name="sort-indicator">True</property>
-                                <property name="sort-column-id">3</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="obj_insp_cellrenderertext5"/>
                                   <attributes>
@@ -545,7 +539,6 @@
                             <property name="title" translatable="yes" context="developmenttool|method">Method</property>
                             <property name="clickable">True</property>
                             <property name="sort-indicator">True</property>
-                            <property name="sort-column-id">0</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext10"/>
                               <attributes>
@@ -560,7 +553,6 @@
                             <property name="title" translatable="yes" context="developmenttool|returntype">Return Type</property>
                             <property name="clickable">True</property>
                             <property name="sort-indicator">True</property>
-                            <property name="sort-column-id">1</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext11"/>
                               <attributes>
@@ -575,7 +567,6 @@
                             <property name="title" translatable="yes" context="developmenttool|parameters">Parameters</property>
                             <property name="clickable">True</property>
                             <property name="sort-indicator">True</property>
-                            <property name="sort-column-id">2</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext12"/>
                               <attributes>
@@ -590,7 +581,6 @@
                             <property name="title" translatable="yes" context="developmenttool|implementation_class">Implementation Class</property>
                             <property name="clickable">True</property>
                             <property name="sort-indicator">True</property>
-                            <property name="sort-column-id">3</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext13"/>
                               <attributes>

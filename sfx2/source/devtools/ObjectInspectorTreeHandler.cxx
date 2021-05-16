@@ -956,6 +956,15 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     mpObjectInspectorWidgets->mpPropertiesTreeView->make_sorted();
     mpObjectInspectorWidgets->mpMethodsTreeView->make_sorted();
 
+    mpObjectInspectorWidgets->mpInterfacesTreeView->connect_column_clicked(
+        LINK(this, ObjectInspectorTreeHandler, HeaderBarClick));
+    mpObjectInspectorWidgets->mpServicesTreeView->connect_column_clicked(
+        LINK(this, ObjectInspectorTreeHandler, HeaderBarClick));
+    mpObjectInspectorWidgets->mpPropertiesTreeView->connect_column_clicked(
+        LINK(this, ObjectInspectorTreeHandler, HeaderBarClick));
+    mpObjectInspectorWidgets->mpMethodsTreeView->connect_column_clicked(
+        LINK(this, ObjectInspectorTreeHandler, HeaderBarClick));
+
     mpObjectInspectorWidgets->mpToolbar->connect_clicked(
         LINK(this, ObjectInspectorTreeHandler, ToolbarButtonClicked));
     mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("inspect", false);
@@ -1043,6 +1052,73 @@ IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeVi
     }
 
     mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("inspect", bHaveNodeWithObject);
+}
+
+IMPL_LINK(ObjectInspectorTreeHandler, HeaderBarClick, int, nColumn, void)
+{
+    bool bSortAtoZ;
+    auto rPageId = mpObjectInspectorWidgets->mpNotebook->get_current_page_ident();
+
+    if (rPageId == "object_inspector_interfaces_tab")
+    {
+        bSortAtoZ = mpObjectInspectorWidgets->mpInterfacesTreeView->get_sort_order();
+        mpObjectInspectorWidgets->mpInterfacesTreeView->set_sort_order(!bSortAtoZ);
+        mpObjectInspectorWidgets->mpInterfacesTreeView->set_sort_indicator(
+            !bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
+    }
+    else if (rPageId == "object_inspector_services_tab")
+    {
+        bSortAtoZ = mpObjectInspectorWidgets->mpServicesTreeView->get_sort_order();
+        mpObjectInspectorWidgets->mpServicesTreeView->set_sort_order(!bSortAtoZ);
+        mpObjectInspectorWidgets->mpServicesTreeView->set_sort_indicator(
+            !bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
+    }
+    else if (rPageId == "object_inspector_properties_tab")
+    {
+        bSortAtoZ = mpObjectInspectorWidgets->mpPropertiesTreeView->get_sort_order();
+
+        //set new arrow positions in headerbar
+        if (nColumn == mpObjectInspectorWidgets->mpPropertiesTreeView->get_sort_column())
+        {
+            bSortAtoZ = !bSortAtoZ;
+            mpObjectInspectorWidgets->mpPropertiesTreeView->set_sort_order(bSortAtoZ);
+        }
+        else
+        {
+            int nOldSortColumn = mpObjectInspectorWidgets->mpPropertiesTreeView->get_sort_column();
+            if (nOldSortColumn != -1)
+                mpObjectInspectorWidgets->mpPropertiesTreeView->set_sort_indicator(TRISTATE_INDET,
+                                                                                   nOldSortColumn);
+            mpObjectInspectorWidgets->mpPropertiesTreeView->set_sort_column(nColumn);
+        }
+
+        if (nColumn != -1)
+            mpObjectInspectorWidgets->mpPropertiesTreeView->set_sort_indicator(
+                bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
+    }
+    else if (rPageId == "object_inspector_methods_tab")
+    {
+        bSortAtoZ = mpObjectInspectorWidgets->mpMethodsTreeView->get_sort_order();
+
+        //set new arrow positions in headerbar
+        if (nColumn == mpObjectInspectorWidgets->mpMethodsTreeView->get_sort_column())
+        {
+            bSortAtoZ = !bSortAtoZ;
+            mpObjectInspectorWidgets->mpMethodsTreeView->set_sort_order(bSortAtoZ);
+        }
+        else
+        {
+            int nOldSortColumn = mpObjectInspectorWidgets->mpMethodsTreeView->get_sort_column();
+            if (nOldSortColumn != -1)
+                mpObjectInspectorWidgets->mpMethodsTreeView->set_sort_indicator(TRISTATE_INDET,
+                                                                                nOldSortColumn);
+            mpObjectInspectorWidgets->mpMethodsTreeView->set_sort_column(nColumn);
+        }
+
+        if (nColumn != -1)
+            mpObjectInspectorWidgets->mpMethodsTreeView->set_sort_indicator(
+                bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
+    }
 }
 
 IMPL_LINK(ObjectInspectorTreeHandler, PopupMenuHandler, const CommandEvent&, rCommandEvent, bool)
