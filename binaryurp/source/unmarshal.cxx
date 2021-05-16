@@ -477,6 +477,7 @@ void Unmarshal::readMemberValues(
             css::uno::TypeDescription(&ctd->pBaseTypeDescription->aBase),
             values);
     }
+    values->reserve(values->size() + ctd->nMembers);
     for (sal_Int32 i = 0; i != ctd->nMembers; ++i) {
         values->push_back(
             readValue(css::uno::TypeDescription(ctd->ppTypeRefs[i])));
