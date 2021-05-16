@@ -38,6 +38,7 @@ public:
     ScFiltersTest();
 
     virtual void setUp() override;
+    virtual void tearDown() override;
 
     void testTdf137576_Measureline();
     void testTdf137216_HideCol();
@@ -767,6 +768,16 @@ void ScFiltersTest::setUp()
     m_xCalcComponent =
         getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
+}
+
+void ScFiltersTest::tearDown()
+{
+    uno::Reference< lang::XComponent > xComp(m_xCalcComponent, uno::UNO_QUERY);
+    if (xComp)
+        xComp->dispose();
+    m_xCalcComponent.clear();
+
+    test::BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest);
