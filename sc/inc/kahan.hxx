@@ -28,6 +28,12 @@ public:
     {
     }
 
+    constexpr KahanSum(double x_0, double err_0)
+        : m_fSum(x_0)
+        , m_fError(err_0)
+    {
+    }
+
     constexpr KahanSum(const KahanSum& fSum) = default;
 
 public:
@@ -181,6 +187,9 @@ public:
     {
         return fSum.m_fSum != m_fSum || fSum.m_fError != m_fError;
     }
+
+    constexpr double* getSum() { return &m_fSum; }
+    constexpr double* getError() { return &m_fError; }
 
 public:
     /**
