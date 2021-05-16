@@ -1998,7 +1998,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         // how many results per level
         SCCOL nResCount         = rParam.nSubTotals[aRowEntry.nGroupNo];
         // result functions
-        ScSubTotalFunc* pResFunc = rParam.pFunctions[aRowEntry.nGroupNo];
+        ScSubTotalFunc* pResFunc = rParam.pFunctions[aRowEntry.nGroupNo].get();
 
         if (nResCount > 0)                                      // otherwise only sort
         {
@@ -2113,7 +2113,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         for (sal_uInt16 nLevel = 0; nLevel<nLevelCount; nLevel++)
         {
             const sal_uInt16 nGroupNo = nLevelCount - nLevel - 1;
-            const ScSubTotalFunc* pResFunc = rParam.pFunctions[nGroupNo];
+            const ScSubTotalFunc* pResFunc = rParam.pFunctions[nGroupNo].get();
             if (!pResFunc)
             {
                 // No subtotal function given for this group => no formula or
@@ -2158,8 +2158,8 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     for (const auto& rRowEntry : aRowVector)
     {
         SCCOL nResCount         = rParam.nSubTotals[rRowEntry.nGroupNo];
-        SCCOL* nResCols         = rParam.pSubTotals[rRowEntry.nGroupNo];
-        ScSubTotalFunc* pResFunc = rParam.pFunctions[rRowEntry.nGroupNo];
+        SCCOL* nResCols         = rParam.pSubTotals[rRowEntry.nGroupNo].get();
+        ScSubTotalFunc* pResFunc = rParam.pFunctions[rRowEntry.nGroupNo].get();
         for ( SCCOL nResult=0; nResult < nResCount; ++nResult )
         {
             aRef.Ref1.SetAbsCol(nResCols[nResult]);

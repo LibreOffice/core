@@ -344,8 +344,8 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
             aParam.nSubTotals[nPos] = nCount;
             if (nCount != 0)
             {
-                aParam.pSubTotals[nPos] = new SCCOL[nCount];
-                aParam.pFunctions[nPos] = new ScSubTotalFunc[nCount];
+                aParam.pSubTotals[nPos].reset(new SCCOL[nCount]);
+                aParam.pFunctions[nPos].reset(new ScSubTotalFunc[nCount]);
 
                 const sheet::SubTotalColumn* pAry = rColumns.getConstArray();
                 for (SCCOL i = 0; i < nCount; ++i)
@@ -356,8 +356,8 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
             }
             else
             {
-                aParam.pSubTotals[nPos] = nullptr;
-                aParam.pFunctions[nPos] = nullptr;
+                aParam.pSubTotals[nPos].reset();
+                aParam.pFunctions[nPos].reset();
             }
             ++nPos;
         }

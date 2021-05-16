@@ -37,8 +37,8 @@ ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
         if ( (r.nSubTotals[i] > 0) && r.pSubTotals[i] && r.pFunctions[i] )
         {
             nSubTotals[i] = r.nSubTotals[i];
-            pSubTotals[i] = new SCCOL   [r.nSubTotals[i]];
-            pFunctions[i] = new ScSubTotalFunc  [r.nSubTotals[i]];
+            pSubTotals[i].reset(new SCCOL   [r.nSubTotals[i]]);
+            pFunctions[i].reset(new ScSubTotalFunc  [r.nSubTotals[i]]);
 
             for (SCCOL j=0; j<r.nSubTotals[i]; j++)
             {
@@ -49,8 +49,6 @@ ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
         else
         {
             nSubTotals[i] = 0;
-            pSubTotals[i] = nullptr;
-            pFunctions[i] = nullptr;
         }
     }
 }
@@ -103,13 +101,13 @@ ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
         nField[i]       = r.nField[i];
         nSubTotals[i]   = r.nSubTotals[i];
 
-        if ( pSubTotals[i] ) delete [] pSubTotals[i];
-        if ( pFunctions[i] ) delete [] pFunctions[i];
+        pSubTotals[i].reset();
+        pFunctions[i].reset();
 
         if ( r.nSubTotals[i] > 0 )
         {
-            pSubTotals[i] = new SCCOL   [r.nSubTotals[i]];
-            pFunctions[i] = new ScSubTotalFunc  [r.nSubTotals[i]];
+            pSubTotals[i].reset(new SCCOL   [r.nSubTotals[i]]);
+            pFunctions[i].reset(new ScSubTotalFunc  [r.nSubTotals[i]]);
 
             for (SCCOL j=0; j<r.nSubTotals[i]; j++)
             {
@@ -120,8 +118,6 @@ ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
         else
         {
             nSubTotals[i] = 0;
-            pSubTotals[i] = nullptr;
-            pFunctions[i] = nullptr;
         }
     }
 
@@ -189,11 +185,8 @@ void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
     if (nGroup != 0)
         nGroup--;
 
-    delete [] pSubTotals[nGroup];
-    delete [] pFunctions[nGroup];
-
-    pSubTotals[nGroup] = new SCCOL      [nCount];
-    pFunctions[nGroup] = new ScSubTotalFunc [nCount];
+    pSubTotals[nGroup].reset(new SCCOL[nCount]);
+    pFunctions[nGroup].reset(new ScSubTotalFunc[nCount]);
     nSubTotals[nGroup] = static_cast<SCCOL>(nCount);
 
     for ( sal_uInt16 i=0; i<nCount; i++ )
