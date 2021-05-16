@@ -26,25 +26,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-namespace
-{
-template< class Map >
-    void lcl_DisposeAndClearAndDeleteAllMapElements(
-        Map & rMap,
-        const Reference< uno::XInterface > & xEventSource )
-{
-    for( const auto& rElement : rMap )
-    {
-        if( rElement.second )
-        {
-            rElement.second->disposeAndClear( xEventSource );
-            delete rElement.second;
-        }
-    }
-}
-
-} // anonymous namespace
-
 namespace chart
 {
 
@@ -65,7 +46,15 @@ void CommandDispatch::initialize()
 /// is called when this is disposed
 void SAL_CALL CommandDispatch::disposing()
 {
-    lcl_DisposeAndClearAndDeleteAllMapElements( m_aListeners, static_cast< cppu::OWeakObject* >( this ));
+    Reference< uno::XInterface > xEventSource(static_cast< cppu::OWeakObject* >( this ));
+    for( auto& rElement : m_aListeners )
+    {
+        if( rElement.second )
+        {
+            rElement.second->disposeAndClear( xEventSource );
+            rElement.second.reset();
+        }
+    }
     m_aListeners.clear();
 }
 
