@@ -209,6 +209,7 @@ void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwContentFr
     }
 
     SwOutlineContentVisibilityWin* pWin = dynamic_cast<SwOutlineContentVisibilityWin *>(pControl->GetWindow());
+    assert(pWin != nullptr);
     pWin->Set();
 
     if (pWin->GetSymbol() == ButtonSymbol::SHOW)
