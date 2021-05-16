@@ -133,8 +133,8 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
     {
         SCCOL           nField      = theSubTotalData.nField[nGroupIdx];
         SCCOL           nSubTotals  = theSubTotalData.nSubTotals[nGroupIdx];
-        SCCOL*          pSubTotals  = theSubTotalData.pSubTotals[nGroupIdx];
-        ScSubTotalFunc* pFunctions  = theSubTotalData.pFunctions[nGroupIdx];
+        SCCOL*          pSubTotals  = theSubTotalData.pSubTotals[nGroupIdx].get();
+        ScSubTotalFunc* pFunctions  = theSubTotalData.pFunctions[nGroupIdx].get();
 
         mxLbGroup->set_active( GetFieldSelPos( nField )+1 );
 

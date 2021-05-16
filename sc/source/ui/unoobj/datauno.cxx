@@ -507,8 +507,8 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
         aParam.nSubTotals[nPos] = nCount;
         if (nCount != 0)
         {
-            aParam.pSubTotals[nPos] = new SCCOL[nCount];
-            aParam.pFunctions[nPos] = new ScSubTotalFunc[nCount];
+            aParam.pSubTotals[nPos].reset(new SCCOL[nCount]);
+            aParam.pFunctions[nPos].reset(new ScSubTotalFunc[nCount]);
 
             const sheet::SubTotalColumn* pAry = aSubTotalColumns.getConstArray();
             for (SCCOL i=0; i<nCount; i++)
@@ -519,8 +519,8 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
         }
         else
         {
-            aParam.pSubTotals[nPos] = nullptr;
-            aParam.pFunctions[nPos] = nullptr;
+            aParam.pSubTotals[nPos].reset();
+            aParam.pFunctions[nPos].reset();
         }
     }
     //! otherwise exception or so? (too many columns)
@@ -581,15 +581,15 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
     aParam.bGroupActive[nPos] = true;
     aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
 
-    delete aParam.pSubTotals[nPos];
-    delete aParam.pFunctions[nPos];
+    aParam.pSubTotals[nPos].reset();
+    aParam.pFunctions[nPos].reset();
 
     SCCOL nCount = static_cast<SCCOL>(nColCount);
     aParam.nSubTotals[nPos] = nCount;
     if (nCount != 0)
     {
-        aParam.pSubTotals[nPos] = new SCCOL[nCount];
-        aParam.pFunctions[nPos] = new ScSubTotalFunc[nCount];
+        aParam.pSubTotals[nPos].reset(new SCCOL[nCount]);
+        aParam.pFunctions[nPos].reset(new ScSubTotalFunc[nCount]);
 
         const sheet::SubTotalColumn* pAry = aSubTotalColumns.getConstArray();
         for (SCCOL i=0; i<nCount; i++)
@@ -600,8 +600,8 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
     }
     else
     {
-        aParam.pSubTotals[nPos] = nullptr;
-        aParam.pFunctions[nPos] = nullptr;
+        aParam.pSubTotals[nPos].reset();
+        aParam.pFunctions[nPos].reset();
     }
 
     PutData(aParam);

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "global.hxx"
+#include <memory>
 
 struct SC_DLLPUBLIC ScSubTotalParam
 {
@@ -29,8 +30,8 @@ struct SC_DLLPUBLIC ScSubTotalParam
     bool            bGroupActive[MAXSUBTOTAL];  ///< active groups
     SCCOL           nField[MAXSUBTOTAL];        ///< associated field
     SCCOL           nSubTotals[MAXSUBTOTAL];    ///< number of SubTotals
-    SCCOL*          pSubTotals[MAXSUBTOTAL];    ///< array of columns to be calculated
-    ScSubTotalFunc* pFunctions[MAXSUBTOTAL];    ///< array of associated functions
+    std::unique_ptr<SCCOL[]> pSubTotals[MAXSUBTOTAL];    ///< array of columns to be calculated
+    std::unique_ptr<ScSubTotalFunc[]> pFunctions[MAXSUBTOTAL];    ///< array of associated functions
 
     ScSubTotalParam();
     ScSubTotalParam( const ScSubTotalParam& r );
