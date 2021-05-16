@@ -16,6 +16,24 @@
       "revId": "48a2fbb55fc14a90cacc6330957cb789d8e60b7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a0467b_79596832",
+        "filename": "svx/source/xoutdev/xpool.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2021-05-16T08:26:37Z",
+      "side": 1,
+      "message": "Ok. I got that. Will follow the consistency from now on.",
+      "parentUuid": "5b35855d_84ba2916",
+      "revId": "48a2fbb55fc14a90cacc6330957cb789d8e60b7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
