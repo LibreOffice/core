@@ -28,7 +28,7 @@ namespace com::sun::star::chart2 { class XDiagram; }
 namespace chart
 {
 
-enum ThreeDLookScheme
+enum class ThreeDLookScheme
 {
     ThreeDLookScheme_Simple,
     ThreeDLookScheme_Realistic,

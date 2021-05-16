@@ -44,7 +44,7 @@ struct lcl_ModelProperties
         : m_aShadeMode(drawing::ShadeMode_FLAT)
         , m_nRoundedEdges(-1)
         , m_nObjectLines(-1)
-        , m_eScheme(::chart::ThreeDLookScheme_Unknown)
+        , m_eScheme(::chart::ThreeDLookScheme::ThreeDLookScheme_Unknown)
     {}
 };
 
@@ -248,13 +248,13 @@ void ThreeD_SceneAppearance_TabPage::updateScheme()
         m_xLB_Scheme->remove(POS_3DSCHEME_CUSTOM);
     switch( aProps.m_eScheme )
     {
-        case ThreeDLookScheme_Simple:
+        case ThreeDLookScheme::ThreeDLookScheme_Simple:
             m_xLB_Scheme->set_active( POS_3DSCHEME_SIMPLE );
             break;
-        case ThreeDLookScheme_Realistic:
+        case ThreeDLookScheme::ThreeDLookScheme_Realistic:
             m_xLB_Scheme->set_active( POS_3DSCHEME_REALISTIC );
             break;
-        case ThreeDLookScheme_Unknown:
+        case ThreeDLookScheme::ThreeDLookScheme_Unknown:
             {
                 m_xLB_Scheme->insert_text(POS_3DSCHEME_CUSTOM, m_aCustom);
                 m_xLB_Scheme->set_active(POS_3DSCHEME_CUSTOM);
@@ -275,9 +275,9 @@ IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, weld::ComboBox&
         uno::Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( m_xChartModel ) );
 
         if( m_xLB_Scheme->get_active() == POS_3DSCHEME_REALISTIC )
-            ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Realistic );
+            ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme::ThreeDLookScheme_Realistic );
         else if( m_xLB_Scheme->get_active() == POS_3DSCHEME_SIMPLE )
-            ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Simple );
+            ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme::ThreeDLookScheme_Simple );
         else
         {
             OSL_FAIL( "Invalid Entry selected" );

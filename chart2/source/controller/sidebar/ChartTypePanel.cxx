@@ -184,8 +184,9 @@ void ChartTypePanel::Initialize()
 
             //set ThreeDLookScheme
             aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme(xDiagram);
-            if (!aParameter.b3DLook && aParameter.eThreeDLookScheme != ThreeDLookScheme_Realistic)
-                aParameter.eThreeDLookScheme = ThreeDLookScheme_Realistic;
+            if (!aParameter.b3DLook
+                && aParameter.eThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Realistic)
+                aParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
 
             try
             {
@@ -412,8 +413,9 @@ void ChartTypePanel::selectMainType()
     //detect the new ThreeDLookScheme
     aParameter.eThreeDLookScheme
         = ThreeDHelper::detectScheme(ChartModelHelper::findDiagram(m_xChartModel));
-    if (!aParameter.b3DLook && aParameter.eThreeDLookScheme != ThreeDLookScheme_Realistic)
-        aParameter.eThreeDLookScheme = ThreeDLookScheme_Realistic;
+    if (!aParameter.b3DLook
+        && aParameter.eThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Realistic)
+        aParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
 
     uno::Reference<css::chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
     try

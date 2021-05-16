@@ -53,7 +53,7 @@ ChartTypeParameter::ChartTypeParameter()
                     , nCurveResolution(20)
                     , nSplineOrder(3)
                     , nGeometry3D(DataPointGeometry3D::CUBOID)
-                    , eThreeDLookScheme(ThreeDLookScheme_Realistic)
+                    , eThreeDLookScheme(ThreeDLookScheme::ThreeDLookScheme_Realistic)
                     , bSortByXValues(false)
                     , mbRoundedEdge(false)
 {
@@ -73,7 +73,7 @@ ChartTypeParameter::ChartTypeParameter( sal_Int32 SubTypeIndex, bool HasXAxisWit
                     , nCurveResolution(20)
                     , nSplineOrder(3)
                     , nGeometry3D(DataPointGeometry3D::CUBOID)
-                    , eThreeDLookScheme(ThreeDLookScheme_Realistic)
+                    , eThreeDLookScheme(ThreeDLookScheme::ThreeDLookScheme_Realistic)
                     , bSortByXValues(false)
                     , mbRoundedEdge(false)
 {
