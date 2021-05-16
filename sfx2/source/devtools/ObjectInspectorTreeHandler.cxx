@@ -956,6 +956,15 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     mpObjectInspectorWidgets->mpPropertiesTreeView->make_sorted();
     mpObjectInspectorWidgets->mpMethodsTreeView->make_sorted();
 
+    mpObjectInspectorWidgets->mpInterfacesTreeView->connect_column_clicked(
+        LINK(this, ObjectInspectorTreeHandler, HeaderBarClick));
+    mpObjectInspectorWidgets->mpServicesTreeView->connect_column_clicked(
+        LINK(this, ObjectInspectorTreeHandler, HeaderBarClick));
+    mpObjectInspectorWidgets->mpPropertiesTreeView->connect_column_clicked(
+        LINK(this, ObjectInspectorTreeHandler, HeaderBarClick));
+    mpObjectInspectorWidgets->mpMethodsTreeView->connect_column_clicked(
+        LINK(this, ObjectInspectorTreeHandler, HeaderBarClick));
+
     mpObjectInspectorWidgets->mpToolbar->connect_clicked(
         LINK(this, ObjectInspectorTreeHandler, ToolbarButtonClicked));
     mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("inspect", false);
@@ -1043,6 +1052,29 @@ IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeVi
     }
 
     mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("inspect", bHaveNodeWithObject);
+}
+
+void updateOrder(std::unique_ptr<weld::TreeView>& pTreeView, sal_Int32 nColumn)
+{
+    pTreeView->set_sort_column(nColumn);
+
+    bool bSortAtoZ = pTreeView->get_sort_order();
+    pTreeView->set_sort_order(!bSortAtoZ);
+    pTreeView->set_sort_indicator(!bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
+}
+
+IMPL_LINK(ObjectInspectorTreeHandler, HeaderBarClick, int, nColumn, void)
+{
+    auto rPageId = mpObjectInspectorWidgets->mpNotebook->get_current_page_ident();
+
+    if (rPageId == "object_inspector_interfaces_tab")
+        updateOrder(mpObjectInspectorWidgets->mpInterfacesTreeView, nColumn);
+    else if (rPageId == "object_inspector_services_tab")
+        updateOrder(mpObjectInspectorWidgets->mpServicesTreeView, nColumn);
+    else if (rPageId == "object_inspector_properties_tab")
+        updateOrder(mpObjectInspectorWidgets->mpPropertiesTreeView, nColumn);
+    else if (rPageId == "object_inspector_methods_tab")
+        updateOrder(mpObjectInspectorWidgets->mpMethodsTreeView, nColumn);
 }
 
 IMPL_LINK(ObjectInspectorTreeHandler, PopupMenuHandler, const CommandEvent&, rCommandEvent, bool)
