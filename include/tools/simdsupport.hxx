@@ -20,6 +20,7 @@
 #undef LO_SSSE3_AVAILABLE
 #undef LO_AVX_AVAILABLE
 #undef LO_AVX2_AVAILABLE
+#undef LO_AVX512F_AVAILABLE
 
 #if defined(_MSC_VER) // VISUAL STUDIO COMPILER
 
@@ -46,6 +47,12 @@
 #include <immintrin.h>
 #endif // defined(__AVX2__)
 
+// compiled with /arch:AVX512F
+#if defined(__AVX512F__)
+#define LO_AVX512F_AVAILABLE
+#include <immintrin.h>
+#endif // defined(__AVX512F__)
+
 #else // compiler Clang and GCC
 
 #if defined(__SSE2__) || defined(__x86_64__) // SSE2 is required for X64
@@ -67,6 +74,12 @@
 #define LO_AVX2_AVAILABLE
 #include <immintrin.h>
 #endif // defined(__AVX2__)
+
+#if defined(__AVX512F__)
+#define LO_AVX512F_AVAILABLE
+#include <immintrin.h>
+#else
+#endif // defined(__AVX512F__)
 
 #endif // end compiler Clang and GCC
 
