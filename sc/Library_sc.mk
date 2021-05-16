@@ -99,7 +99,7 @@ $(eval $(call gb_Library_use_libraries,sc,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sc,\
-    sc/source/core/tool/arraysumSSE2, $(CXXFLAGS_INTRINSICS_SSE2) \
+    sc/source/core/tool/arraysum, -mavx -mavx512f\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sc,\
