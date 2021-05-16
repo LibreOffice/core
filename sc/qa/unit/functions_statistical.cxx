@@ -1,4 +1,5 @@
 #include "functions_test.hxx"
+#include <arraysumfunctor.hxx>
 
 class StatisticalFunctionsTest : public FunctionsTest
 {
@@ -24,6 +25,8 @@ void StatisticalFunctionsTest::testStatisticalFormulasFODS()
 StatisticalFunctionsTest::StatisticalFunctionsTest():
     FunctionsTest("sc/qa/unit/data/functions/statistical/fods/")
 {
+        // Checkout SSE2, AVX and AVX512 opperations
+        sc::op::test_sums();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(StatisticalFunctionsTest);
