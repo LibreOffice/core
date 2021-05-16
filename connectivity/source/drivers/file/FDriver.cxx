@@ -104,47 +104,47 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUSt
 
         std::vector< DriverPropertyInfo > aDriverInfo
         {
-             { DriverPropertyInfo(
+             {
                 "CharSet"
                 ,"CharSet of the database."
                 ,false
                 ,OUString()
-                ,Sequence< OUString >())
+                ,Sequence< OUString >()
              },
-             { DriverPropertyInfo(
+             {
                 "Extension"
                 ,"Extension of the file format."
                 ,false
                 ,".*"
-                ,Sequence< OUString >())
+                ,Sequence< OUString >()
              },
-             { DriverPropertyInfo(
+             {
                 "ShowDeleted"
                 ,"Display inactive records."
                 ,false
                 ,"0"
-                ,aBoolean)
+                ,aBoolean
              },
-             { DriverPropertyInfo(
+             {
                 "EnableSQL92Check"
                 ,"Use SQL92 naming constraints."
                 ,false
                 ,"0"
-                ,aBoolean)
+                ,aBoolean
              },
-             { DriverPropertyInfo(
+             {
                 "UseRelativePath"
                 ,"Handle the connection url as relative path."
                 ,false
                 ,"0"
-                ,aBoolean)
+                ,aBoolean
              },
-             { DriverPropertyInfo(
+             {
                 "URL"
                 ,"The URL of the database document which is used to create an absolute path."
                 ,false
                 ,OUString()
-                ,Sequence< OUString >())
+                ,Sequence< OUString >()
              }
         };
         return Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size());
