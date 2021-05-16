@@ -99,6 +99,14 @@ $(eval $(call gb_Library_use_libraries,sc,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sc,\
+    sc/source/core/tool/arraysumAVX512, $(CXXFLAGS_INTRINSICS_AVX512F) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,sc,\
+    sc/source/core/tool/arraysumAVX, $(CXXFLAGS_INTRINSICS_AVX) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/arraysumSSE2, $(CXXFLAGS_INTRINSICS_SSE2) \
 ))
 

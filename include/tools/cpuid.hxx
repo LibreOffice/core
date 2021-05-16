@@ -26,7 +26,8 @@ enum class InstructionSetFlags
     SSE41 = 0x08,
     SSE42 = 0x10,
     AVX   = 0x20,
-    AVX2  = 0x40
+    AVX2  = 0x40,
+    AVX512F = 0x100
 };
 
 } // end cpuid
@@ -63,11 +64,25 @@ inline bool hasSSSE3()
     return isCpuInstructionSetSupported(InstructionSetFlags::SSSE3);
 }
 
+/** Check if AVX is supported by the CPU
+ */
+inline bool hasAVX()
+{
+    return isCpuInstructionSetSupported(InstructionSetFlags::AVX);
+}
+
 /** Check if AVX2 is supported by the CPU
  */
 inline bool hasAVX2()
 {
     return isCpuInstructionSetSupported(InstructionSetFlags::AVX2);
+}
+
+/** Check if AVX512F is supported by the CPU
+ */
+inline bool hasAVX512F()
+{
+    return isCpuInstructionSetSupported(InstructionSetFlags::AVX512F);
 }
 
 /** Check if Hyper Threading is supported

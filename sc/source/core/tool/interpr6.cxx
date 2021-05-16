@@ -223,9 +223,7 @@ public:
                     return;
 
                 const double *p = &sc::numeric_block::at(*rNode.data, nOffset);
-                sc::ArraySumFunctor functor(p, nDataSize);
-
-                maSum += functor();
+                maSum += sc::op::sumArray(p, nDataSize);
                 break;
             }
 

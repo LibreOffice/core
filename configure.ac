@@ -7631,6 +7631,7 @@ CXXFLAGS_INTRINSICS_SSE42=
 CXXFLAGS_INTRINSICS_AVX=
 CXXFLAGS_INTRINSICS_AVX2=
 CXXFLAGS_INTRINSICS_AVX512=
+CXXFLAGS_INTRINSICS_AVX512F=
 CXXFLAGS_INTRINSICS_F16C=
 CXXFLAGS_INTRINSICS_FMA=
 
@@ -7643,6 +7644,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     flag_avx=-mavx
     flag_avx2=-mavx2
     flag_avx512="-mavx512f -mavx512vl -mavx512bw -mavx512dq -mavx512cd"
+    flag_avx512f=-mavx512f
     flag_f16c=-mf16c
     flag_fma=-mfma
 else
@@ -7658,6 +7660,7 @@ else
     flag_avx=-arch:AVX
     flag_avx2=-arch:AVX2
     flag_avx512=-arch:AVX512
+    flag_avx512f=-arch:AVX512
     # These are part of -arch:AVX2
     flag_f16c=-arch:AVX2
     flag_fma=-arch:AVX2
@@ -7807,6 +7810,7 @@ CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([${can_compile_avx512}])
 if test "${can_compile_avx512}" = "yes" ; then
     CXXFLAGS_INTRINSICS_AVX512="$flag_avx512"
+    CXXFLAGS_INTRINSICS_AVX512F="$flag_avx512f"
 fi
 
 AC_MSG_CHECKING([whether $CXX can compile F16C intrinsics])
@@ -7859,6 +7863,7 @@ AC_SUBST([CXXFLAGS_INTRINSICS_SSE42])
 AC_SUBST([CXXFLAGS_INTRINSICS_AVX])
 AC_SUBST([CXXFLAGS_INTRINSICS_AVX2])
 AC_SUBST([CXXFLAGS_INTRINSICS_AVX512])
+AC_SUBST([CXXFLAGS_INTRINSICS_AVX512F])
 AC_SUBST([CXXFLAGS_INTRINSICS_F16C])
 AC_SUBST([CXXFLAGS_INTRINSICS_FMA])
 
@@ -12013,6 +12018,7 @@ LO_CLANG_CXXFLAGS_INTRINSICS_SSE42=
 LO_CLANG_CXXFLAGS_INTRINSICS_AVX=
 LO_CLANG_CXXFLAGS_INTRINSICS_AVX2=
 LO_CLANG_CXXFLAGS_INTRINSICS_AVX512=
+LO_CLANG_CXXFLAGS_INTRINSICS_AVX512F=
 LO_CLANG_CXXFLAGS_INTRINSICS_F16C=
 LO_CLANG_CXXFLAGS_INTRINSICS_FMA=
 
@@ -12066,6 +12072,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
         flag_avx=-mavx
         flag_avx2=-mavx2
         flag_avx512="-mavx512f -mavx512vl -mavx512bw -mavx512dq -mavx512cd"
+        flag_avx512f=-mavx512f
         flag_f16c=-mf16c
         flag_fma=-mfma
 
@@ -12213,6 +12220,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
         AC_MSG_RESULT([${can_compile_avx512}])
         if test "${can_compile_avx512}" = "yes" ; then
             LO_CLANG_CXXFLAGS_INTRINSICS_AVX512="$flag_avx512"
+            LO_CLANG_CXXFLAGS_INTRINSICS_AVX512F="$flag_avx512f"
         fi
 
         AC_MSG_CHECKING([whether $CXX can compile F16C intrinsics])
@@ -12319,6 +12327,7 @@ AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_SSE42)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX2)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512)
+AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512F)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_F16C)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_FMA)
 AC_SUBST(CLANG_USE_LD)
