@@ -660,7 +660,7 @@ inline bool SwWrtShell::Is_FnDragEQBeginDrag() const
 class MakeAllOutlineContentTemporarilyVisible
 {
 private:
-    SwWrtShell* m_pWrtSh;
+    SwWrtShell* m_pWrtSh = nullptr;
     bool m_bDone = false;
 public:
     static sal_uInt32 nLock;
