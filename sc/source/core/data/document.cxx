@@ -6596,6 +6596,20 @@ bool ScDocument::HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab) const
     return pNote != nullptr;
 }
 
+bool ScDocument::HasNote(SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return false;
+
+    nStartCol = pTab->ClampToAllocatedColumns(nStartCol);
+    nEndCol = pTab->ClampToAllocatedColumns(nEndCol);
+    for (SCCOL nCol = nStartCol; nCol < nEndCol; ++nCol)
+        if (pTab->aCol[nCol].HasCellNote(nStartRow, nEndRow))
+            return true;
+    return false;
+}
+
 bool ScDocument::HasColNotes(SCCOL nCol, SCTAB nTab) const
 {
     if (!ValidCol(nCol))

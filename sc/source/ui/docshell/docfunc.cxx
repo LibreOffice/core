@@ -4977,11 +4977,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
         if (bRecord)
         {
             // test if the range contains other notes which also implies that we need an undo document
-            bool bHasNotes = false;
-            for( ScAddress aPos( nStartCol, nStartRow, nTab ); !bHasNotes && (aPos.Col() <= nEndCol); aPos.IncCol() )
-                for( aPos.SetRow( nStartRow ); !bHasNotes && (aPos.Row() <= nEndRow); aPos.IncRow() )
-                    bHasNotes = ((aPos.Col() != nStartCol) || (aPos.Row() != nStartRow)) && (rDoc.HasNote(aPos));
-
+            bool bHasNotes = rDoc.HasNote(nTab, nStartCol, nStartRow, nEndCol, nEndRow);
             if (!pUndoDoc)
             {
                 pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
