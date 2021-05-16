@@ -1,4 +1,5 @@
 #include "functions_test.hxx"
+//#include <sc/arraysumfunctor.hxx>
 
 class StatisticalFunctionsTest : public FunctionsTest
 {
