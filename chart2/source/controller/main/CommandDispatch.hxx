@@ -25,6 +25,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 
 #include <map>
+#include <memory>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XURLTransformer; }
@@ -120,7 +121,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::util::XURLTransformer >  m_xURLTransformer;
 
-    typedef std::map< OUString, ::comphelper::OInterfaceContainerHelper2* >
+    typedef std::map< OUString, std::unique_ptr<::comphelper::OInterfaceContainerHelper2> >
         tListenerMap;
 
     tListenerMap m_aListeners;
