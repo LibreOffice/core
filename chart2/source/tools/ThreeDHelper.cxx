@@ -205,14 +205,14 @@ void lcl_setLightsForScheme( const uno::Reference< beans::XPropertySet >& xDiagr
 {
     if(!xDiagramProps.is())
         return;
-    if( rScheme == ThreeDLookScheme_Unknown)
+    if( rScheme == ThreeDLookScheme::ThreeDLookScheme_Unknown)
         return;
 
     xDiagramProps->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_2, uno::Any( true ) );
 
     uno::Reference< chart2::XDiagram > xDiagram( xDiagramProps, uno::UNO_QUERY );
     uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
-    uno::Any aADirection( rScheme == ThreeDLookScheme_Simple
+    uno::Any aADirection( rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple
         ? ChartTypeHelper::getDefaultSimpleLightDirection(xChartType)
         : ChartTypeHelper::getDefaultRealisticLightDirection(xChartType) );
 
@@ -232,10 +232,12 @@ void lcl_setLightsForScheme( const uno::Reference< beans::XPropertySet >& xDiagr
         }
     }
 
-    sal_Int32 nColor = ::chart::ChartTypeHelper::getDefaultDirectLightColor( rScheme==ThreeDLookScheme_Simple, xChartType );
+    sal_Int32 nColor = ::chart::ChartTypeHelper::getDefaultDirectLightColor(
+        rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple, xChartType);
     xDiagramProps->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_2, uno::Any( nColor ) );
 
-    sal_Int32 nAmbientColor = ::chart::ChartTypeHelper::getDefaultAmbientLightColor( rScheme==ThreeDLookScheme_Simple, xChartType );
+    sal_Int32 nAmbientColor = ::chart::ChartTypeHelper::getDefaultAmbientLightColor(
+        rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple, xChartType);
     xDiagramProps->setPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR, uno::Any( nAmbientColor ) );
 }
 
@@ -1152,7 +1154,7 @@ double ThreeDHelper::PerspectiveToCameraDistance( double fPerspective )
 
 ThreeDLookScheme ThreeDHelper::detectScheme( const uno::Reference< XDiagram >& xDiagram )
 {
-    ThreeDLookScheme aScheme = ThreeDLookScheme_Unknown;
+    ThreeDLookScheme aScheme = ThreeDLookScheme::ThreeDLookScheme_Unknown;
 
     sal_Int32 nRoundedEdges;
     sal_Int32 nObjectLines;
@@ -1174,12 +1176,12 @@ ThreeDLookScheme ThreeDHelper::detectScheme( const uno::Reference< XDiagram >& x
     if( lcl_isSimpleScheme( aShadeMode, nRoundedEdges, nObjectLines, xDiagram ) )
     {
         if( lcl_isSimpleLightScheme(xDiagramProps) )
-            aScheme = ThreeDLookScheme_Simple;
+            aScheme = ThreeDLookScheme::ThreeDLookScheme_Simple;
     }
     else if( lcl_isRealisticScheme( aShadeMode, nRoundedEdges, nObjectLines ) )
     {
         if( lcl_isRealisticLightScheme(xDiagramProps) )
-            aScheme = ThreeDLookScheme_Realistic;
+            aScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
     }
 
     return aScheme;
@@ -1187,14 +1189,14 @@ ThreeDLookScheme ThreeDHelper::detectScheme( const uno::Reference< XDiagram >& x
 
 void ThreeDHelper::setScheme( const uno::Reference< XDiagram >& xDiagram, ThreeDLookScheme aScheme )
 {
-    if( aScheme == ThreeDLookScheme_Unknown )
+    if( aScheme == ThreeDLookScheme::ThreeDLookScheme_Unknown )
         return;
 
     drawing::ShadeMode aShadeMode;
     sal_Int32 nRoundedEdges;
     sal_Int32 nObjectLines;
 
-    if( aScheme == ThreeDLookScheme_Simple )
+    if( aScheme == ThreeDLookScheme::ThreeDLookScheme_Simple )
         lcl_setSimpleScheme(aShadeMode,nRoundedEdges,nObjectLines,xDiagram);
     else
         lcl_setRealisticScheme(aShadeMode,nRoundedEdges,nObjectLines);
@@ -1278,7 +1280,9 @@ void ThreeDHelper::setDefaultIllumination( const uno::Reference< beans::XPropert
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
-    ThreeDLookScheme aScheme = (aShadeMode==drawing::ShadeMode_FLAT) ? ThreeDLookScheme_Simple : ThreeDLookScheme_Realistic;
+    ThreeDLookScheme aScheme = (aShadeMode == drawing::ShadeMode_FLAT)
+                                   ? ThreeDLookScheme::ThreeDLookScheme_Simple
+                                   : ThreeDLookScheme::ThreeDLookScheme_Realistic;
     lcl_setLightsForScheme( xSceneProperties, aScheme );
 }
 

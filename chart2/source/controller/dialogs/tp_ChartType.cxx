@@ -178,7 +178,11 @@ void ChartTypeTabPage::stateChanged()
 
     //detect the new ThreeDLookScheme
     uno::Reference<XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
-    aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme(xDiagram);
+    // tdf#124295 - select always a 3D scheme
+    if (ThreeDLookScheme aThreeDLookScheme = ThreeDHelper::detectScheme(xDiagram);
+        aThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Unknown)
+        aParameter.eThreeDLookScheme = aThreeDLookScheme;
+
     try
     {
         uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
@@ -240,8 +244,9 @@ void ChartTypeTabPage::selectMainType()
     commitToModel( aParameter );
     //detect the new ThreeDLookScheme
     aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( ChartModelHelper::findDiagram( m_xChartModel ) );
-    if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Realistic )
-        aParameter.eThreeDLookScheme=ThreeDLookScheme_Realistic;
+    if (!aParameter.b3DLook
+        && aParameter.eThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Realistic)
+        aParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
 
     uno::Reference<XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
     try
@@ -320,8 +325,9 @@ void ChartTypeTabPage::initializePage()
 
             //set ThreeDLookScheme
             aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( xDiagram );
-            if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Realistic )
-                aParameter.eThreeDLookScheme=ThreeDLookScheme_Realistic;
+            if (!aParameter.b3DLook
+                && aParameter.eThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Realistic)
+                aParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
 
             try
             {

@@ -48,24 +48,31 @@ void Dim3DLookResourceGroup::fillControls(const ChartTypeParameter& rParameter)
     m_xCB_3DLook->set_active(rParameter.b3DLook);
     m_xLB_Scheme->set_sensitive(rParameter.b3DLook);
 
-    if (rParameter.eThreeDLookScheme == ThreeDLookScheme_Simple)
-        m_xLB_Scheme->set_active(POS_3DSCHEME_SIMPLE);
-    else if (rParameter.eThreeDLookScheme == ThreeDLookScheme_Realistic)
-        m_xLB_Scheme->set_active(POS_3DSCHEME_REALISTIC);
-    else
-        m_xLB_Scheme->set_active(-1);
+    // tdf#124295 - select always a 3D scheme
+    switch (rParameter.eThreeDLookScheme)
+    {
+        case ThreeDLookScheme::ThreeDLookScheme_Simple:
+            m_xLB_Scheme->set_active(POS_3DSCHEME_SIMPLE);
+            break;
+        case ThreeDLookScheme::ThreeDLookScheme_Realistic:
+        case ThreeDLookScheme::ThreeDLookScheme_Unknown:
+            m_xLB_Scheme->set_active(POS_3DSCHEME_REALISTIC);
+            break;
+    }
 }
 
 void Dim3DLookResourceGroup::fillParameter(ChartTypeParameter& rParameter)
 {
     rParameter.b3DLook = m_xCB_3DLook->get_active();
-    const int nPos = m_xLB_Scheme->get_active();
-    if (nPos == POS_3DSCHEME_SIMPLE)
-        rParameter.eThreeDLookScheme = ThreeDLookScheme_Simple;
-    else if (nPos == POS_3DSCHEME_REALISTIC)
-        rParameter.eThreeDLookScheme = ThreeDLookScheme_Realistic;
-    else
-        rParameter.eThreeDLookScheme = ThreeDLookScheme_Unknown;
+    // tdf#124295 - select always a 3D scheme
+    switch (m_xLB_Scheme->get_active())
+    {
+        case POS_3DSCHEME_SIMPLE:
+            rParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Simple;
+            break;
+        default:
+            rParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
+    }
 }
 
 IMPL_LINK_NOARG(Dim3DLookResourceGroup, Dim3DLookCheckHdl, weld::ToggleButton&, void)
