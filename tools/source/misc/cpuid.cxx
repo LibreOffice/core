@@ -56,6 +56,7 @@ bool checkAVXSupportInOS()
 #define XSAVE_bit (1 << 27)
 #define AVX_bit (1 << 28)
 #define AVX2_bit (1 << 5)
+#define AVX512F_bit (1 << 16)
 
 InstructionSetFlags getCpuInstructionSetFlags()
 {
@@ -98,6 +99,8 @@ InstructionSetFlags getCpuInstructionSetFlags()
 
                     if ((aExtendedInfo[1] & AVX2_bit) != 0)
                         eInstructions |= InstructionSetFlags::AVX2;
+                    if ((aExtendedInfo[1] & AVX512F_bit) != 0)
+                        eInstructions |= InstructionSetFlags::AVX512F;
                 }
             }
         }
@@ -127,6 +130,8 @@ OUString instructionSetSupportedString()
         aString += "AVX ";
     if (isCpuInstructionSetSupported(InstructionSetFlags::AVX2))
         aString += "AVX2 ";
+    if (isCpuInstructionSetSupported(InstructionSetFlags::AVX512F))
+        aString += "AVX512F ";
     return aString;
 }
 
