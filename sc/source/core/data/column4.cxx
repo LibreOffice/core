@@ -767,6 +767,38 @@ void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
     std::for_each(it, ++itEnd, NoteEntryCollector(rNotes, nTab, nCol, nStartRow, nEndRow));
 }
 
+bool ScColumn::HasCellNote(SCROW nStartRow, SCROW nEndRow) const
+{
+    std::pair<sc::CellNoteStoreType::const_iterator,size_t> aStartPos =
+        maCellNotes.position(nStartRow);
+    if (aStartPos.first == maCellNotes.end())
+        // Invalid row number.
+        return false;
+
+    std::pair<sc::CellNoteStoreType::const_iterator,size_t> aEndPos =
+        maCellNotes.position(nEndRow);
+
+    for (sc::CellNoteStoreType::const_iterator it = aStartPos.first; it != aEndPos.first; ++it)
+    {
+        if (it->type != sc::element_type_cellnote)
+            continue;
+        size_t nTopRow = it->position;
+        sc::cellnote_block::const_iterator blockIt = sc::cellnote_block::begin(*(it->data));
+        sc::cellnote_block::const_iterator blockItEnd = sc::cellnote_block::end(*(it->data));
+        size_t nOffset = 0;
+        if(nTopRow < o3tl::make_unsigned(nStartRow))
+        {
+            std::advance(blockIt, nStartRow - nTopRow);
+            nOffset = nStartRow - nTopRow;
+        }
+
+        if (blockIt != blockItEnd && nTopRow + nOffset <= o3tl::make_unsigned(nEndRow))
+            return true;
+    }
+
+    return false;
+}
+
 void ScColumn::GetUnprotectedCells( SCROW nStartRow, SCROW nEndRow, ScRangeList& rRangeList ) const
 {
     SCROW nTmpStartRow = nStartRow, nTmpEndRow = nEndRow;

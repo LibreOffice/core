@@ -1234,6 +1234,7 @@ public:
     void                         SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScPostIt> pNote);
     SC_DLLPUBLIC bool            HasNote(const ScAddress& rPos) const;
     bool                         HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+    bool                         HasNote(SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow) const;
     SC_DLLPUBLIC bool            HasColNotes(SCCOL nCol, SCTAB nTab) const;
     SC_DLLPUBLIC bool            HasTabNotes(SCTAB nTab) const;
     bool                         HasNotes() const;
