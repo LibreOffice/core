@@ -434,7 +434,7 @@ void ChartModel::insertDefaultChart()
                 {
                     xDiagramProperties->setPropertyValue( "RightAngledAxes", uno::Any( true ));
                     xDiagramProperties->setPropertyValue( "D3DScenePerspective", uno::Any( drawing::ProjectionMode_PARALLEL ));
-                    ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Realistic );
+                    ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme::ThreeDLookScheme_Realistic );
                 }
 
                 //set some new 'defaults' for wall and floor
