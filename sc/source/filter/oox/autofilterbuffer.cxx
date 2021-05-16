@@ -404,6 +404,7 @@ ApiFilterSettings Top10Filter::finalizeImport()
 
 ColorFilter::ColorFilter(const WorkbookHelper& rHelper)
     : FilterSettingsBase(rHelper)
+    , mbIsBackgroundColor(false)
 {
 }
 
