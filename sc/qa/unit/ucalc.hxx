@@ -24,9 +24,6 @@ class Test : public test::BootstrapFixture
 {
 public:
     static ScDocShell* findLoadedDocShellByName(std::u16string_view rName);
-    static void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
-                                     ScDocument* pClipDoc,
-                                     InsertDeleteFlags eFlags = InsertDeleteFlags::ALL);
 
     /**
      * Enable or disable expand reference options which controls how
@@ -288,7 +285,6 @@ public:
     void testCopyPasteMultiRange();
     void testCopyPasteSkipEmpty();
     void testCopyPasteSkipEmpty2();
-    void testCopyPasteSkipEmptyConditionalFormatting();
     void testCutPasteRefUndo();
     void testCutPasteGroupRefUndo();
     void testMoveRefBetweenSheets();
@@ -356,50 +352,6 @@ public:
     void testAnchoredRotatedShape();
     void testCellTextWidth();
     void testEditTextIterator();
-
-    // conditional format tests
-    // mostly in ucalc_condformat.cxx
-    void testCondFormatINSDEL();
-    void testCondFormatInsertRow();
-    void testCondFormatInsertCol();
-    void testCondFormatInsertDeleteSheets();
-    void testCondCopyPaste();
-    void testCondCopyPasteSingleCell(); //e.g. fdo#82503
-    void testCondCopyPasteSingleCellToRange(); //e.g. fdo#82503
-    void testCondCopyPasteSingleCellIntoSameFormatRange(); // e.g., tdf#95295
-    void testCondCopyPasteSingleRowToRange(); //e.g. tdf#106242
-    void testCondCopyPasteSingleRowToRange2();
-    void testCondCopyPasteSheetBetweenDoc();
-    void testCondCopyPasteSheet();
-    void testIconSet();
-    void testDataBarLengthAutomaticAxis();
-    void testDataBarLengthMiddleAxis();
-
-    // Tests for the ScFormulaListener class
-    void testFormulaListenerSingleCellToSingleCell();
-    void testFormulaListenerMultipleCellsToSingleCell();
-    void testFormulaListenerSingleCellToMultipleCells();
-    void testFormulaListenerMultipleCellsToMultipleCells();
-    void testFormulaListenerUpdateInsertTab();
-    void testFormulaListenerUpdateDeleteTab();
-
-    // Check that the Listeners are correctly updated when we
-    // call an operation
-    void testCondFormatUpdateMoveTab();
-    void testCondFormatUpdateDeleteTab();
-    void testCondFormatUpdateInsertTab();
-    void testCondFormatUpdateReference();
-    void testCondFormatUpdateReferenceDelRow();
-    void testCondFormatUpdateReferenceInsRow();
-
-    void testCondFormatEndsWithStr();
-    void testCondFormatEndsWithVal();
-
-    void testCondFormatUndoList();
-    void testMultipleSingleCellCondFormatCopyPaste();
-    void testDeduplicateMultipleCondFormats();
-    void testCondFormatListenToOwnRange();
-    void testCondFormatVolatileFunctionRecalc();
 
     void testImportStream();
     void testDeleteContents();
@@ -640,7 +592,6 @@ public:
     CPPUNIT_TEST(testCopyPasteMultiRange);
     CPPUNIT_TEST(testCopyPasteSkipEmpty);
     CPPUNIT_TEST(testCopyPasteSkipEmpty2);
-    //CPPUNIT_TEST(testCopyPasteSkipEmptyConditionalFormatting);
     CPPUNIT_TEST(testCutPasteRefUndo);
     CPPUNIT_TEST(testCutPasteGroupRefUndo);
     CPPUNIT_TEST(testMoveRefBetweenSheets);
@@ -677,35 +628,6 @@ public:
     CPPUNIT_TEST(testAnchoredRotatedShape);
     CPPUNIT_TEST(testCellTextWidth);
     CPPUNIT_TEST(testEditTextIterator);
-    CPPUNIT_TEST(testCondFormatINSDEL);
-    CPPUNIT_TEST(testCondFormatInsertRow);
-    CPPUNIT_TEST(testCondFormatInsertCol);
-    CPPUNIT_TEST(testCondFormatInsertDeleteSheets);
-    CPPUNIT_TEST(testCondCopyPaste);
-    CPPUNIT_TEST(testCondCopyPasteSingleCell);
-    CPPUNIT_TEST(testCondCopyPasteSingleCellToRange);
-    CPPUNIT_TEST(testCondCopyPasteSingleCellIntoSameFormatRange);
-    CPPUNIT_TEST(testCondCopyPasteSingleRowToRange);
-    CPPUNIT_TEST(testCondCopyPasteSingleRowToRange2);
-    CPPUNIT_TEST(testCondCopyPasteSheetBetweenDoc);
-    CPPUNIT_TEST(testCondCopyPasteSheet);
-    CPPUNIT_TEST(testCondFormatEndsWithStr);
-    CPPUNIT_TEST(testCondFormatEndsWithVal);
-    CPPUNIT_TEST(testCondFormatUpdateReferenceDelRow);
-    CPPUNIT_TEST(testCondFormatUpdateReferenceInsRow);
-    CPPUNIT_TEST(testCondFormatUndoList);
-    CPPUNIT_TEST(testMultipleSingleCellCondFormatCopyPaste);
-    CPPUNIT_TEST(testDeduplicateMultipleCondFormats);
-    CPPUNIT_TEST(testCondFormatVolatileFunctionRecalc);
-    CPPUNIT_TEST(testIconSet);
-    CPPUNIT_TEST(testDataBarLengthAutomaticAxis);
-    CPPUNIT_TEST(testDataBarLengthMiddleAxis);
-    CPPUNIT_TEST(testFormulaListenerSingleCellToSingleCell);
-    CPPUNIT_TEST(testFormulaListenerSingleCellToMultipleCells);
-    CPPUNIT_TEST(testFormulaListenerMultipleCellsToSingleCell);
-    CPPUNIT_TEST(testFormulaListenerMultipleCellsToMultipleCells);
-    CPPUNIT_TEST(testFormulaListenerUpdateInsertTab);
-    CPPUNIT_TEST(testFormulaListenerUpdateDeleteTab);
     CPPUNIT_TEST(testImportStream);
     CPPUNIT_TEST(testDeleteContents);
     CPPUNIT_TEST(testTransliterateText);

@@ -24,6 +24,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <formula/errorcodes.hxx>
+#include <clipcontext.hxx>
 #include <clipparam.hxx>
 #include <cppunit/Asserter.h>
 #include <cppunit/AdditionalMessage.h>
@@ -965,6 +966,19 @@ ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocume
     return new ScUndoPaste(
         &rDocSh, rRange, aMarkData, std::move(pUndoDoc), nullptr, InsertDeleteFlags::ALL, std::move(pRefUndoData), false);
 }
+
+void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)
+{
+    ScMarkData aMark(pDestDoc->GetSheetLimits());
+    aMark.SetMarkArea(rDestRange);
+    sc::CopyFromClipContext aCxt(*pDestDoc, nullptr, pClipDoc, eFlags, false, false);
+    aCxt.setDestRange(rDestRange.aStart.Col(), rDestRange.aStart.Row(),
+            rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
+    aCxt.setTabRange(rDestRange.aStart.Tab(), rDestRange.aEnd.Tab());
+    pDestDoc->CopyOneCellFromClip(aCxt, rDestRange.aStart.Col(), rDestRange.aStart.Row(),
+            rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
+}
+
 
 bool insertRangeNames(
     ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p, const RangeNameDef* pEnd)

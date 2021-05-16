@@ -12378,18 +12378,6 @@ ScDocShell* Test::findLoadedDocShellByName(std::u16string_view rName)
     return nullptr;
 }
 
-void Test::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)
-{
-    ScMarkData aMark(pDestDoc->GetSheetLimits());
-    aMark.SetMarkArea(rDestRange);
-    sc::CopyFromClipContext aCxt(*pDestDoc, nullptr, pClipDoc, eFlags, false, false);
-    aCxt.setDestRange(rDestRange.aStart.Col(), rDestRange.aStart.Row(),
-            rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
-    aCxt.setTabRange(rDestRange.aStart.Tab(), rDestRange.aEnd.Tab());
-    pDestDoc->CopyOneCellFromClip(aCxt, rDestRange.aStart.Col(), rDestRange.aStart.Row(),
-            rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
-}
-
 void Test::setExpandRefs(bool bExpand)
 {
     ScModule* pMod = SC_MOD();
