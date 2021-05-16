@@ -767,6 +767,22 @@ void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
     std::for_each(it, ++itEnd, NoteEntryCollector(rNotes, nTab, nCol, nStartRow, nEndRow));
 }
 
+bool ScColumn::HasCellNote(SCROW nStartRow, SCROW nEndRow) const
+{
+    std::pair<sc::CellNoteStoreType::const_iterator,size_t> aPos = maCellNotes.position(nStartRow);
+    sc::CellNoteStoreType::const_iterator it = aPos.first;
+    if (it == maCellNotes.end())
+        return false;
+
+    std::pair<sc::CellNoteStoreType::const_iterator,size_t> aEndPos =
+        maCellNotes.position(nEndRow);
+    sc::CellNoteStoreType::const_iterator itEnd = aEndPos.first;
+    if (aEndPos.first == maCellNotes.end())
+        return false;
+
+    return true;
+}
+
 void ScColumn::GetUnprotectedCells( SCROW nStartRow, SCROW nEndRow, ScRangeList& rRangeList ) const
 {
     SCROW nTmpStartRow = nStartRow, nTmpEndRow = nEndRow;
