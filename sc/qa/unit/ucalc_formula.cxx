@@ -1022,7 +1022,7 @@ void Test::testFormulaCompilerJumpReordering()
     aNewOptions.SetFormulaSepArg(";");
     aNewOptions.SetFormulaSepArrayCol(";");
     aNewOptions.SetFormulaSepArrayRow("|");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     {
         // Compile formula string first.
@@ -1083,7 +1083,7 @@ void Test::testFormulaCompilerJumpReordering()
     }
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 }
 
 void Test::testFormulaCompilerImplicitIntersection2Param()
@@ -2357,7 +2357,7 @@ void Test::testFormulaRefUpdateInsertRows()
     // Insert rows over rows 1:2.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     rFunc.InsertCells(ScRange(0,0,0,m_pDoc->MaxCol(),1,0), &aMark, INS_INSROWS_BEFORE, false, true);
 
     // The raw data should have shifted to B4:B6.
@@ -2512,7 +2512,7 @@ void Test::testFormulaRefUpdateInsertColumns()
     // Insert columns over A:B.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     rFunc.InsertCells(ScRange(0,0,0,1,m_pDoc->MaxRow(),0), &aMark, INS_INSCOLS_BEFORE, false, true);
 
     // Now, the original column B has moved to column D.
@@ -2581,7 +2581,7 @@ void Test::testFormulaRefUpdateMove()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,11,0));
 
     // Move B4:B6 to D4 (two columns to the right).
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(1,3,0,1,5,0), ScAddress(3,3,0), true, false, false, false);
     CPPUNIT_ASSERT_MESSAGE("Failed to move B4:B6.", bMoved);
 
@@ -2670,7 +2670,7 @@ void Test::testFormulaRefUpdateMoveUndo()
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,11,0), "SUM(A1:A4)", "Wrong formula.");
 
     // Move A1:A3 to C1:C3. Note that A4 remains.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0,0,0,0,2,0), ScAddress(2,0,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -2758,7 +2758,7 @@ void Test::testFormulaRefUpdateMoveUndo2()
     CPPUNIT_ASSERT_EQUAL(SCROW(2), pFC->GetSharedLength());
 
     // Drag A1:B1 into A2:B2 thereby overwriting the old A2:B2 content.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0,0,0,1,0,0), ScAddress(0,1,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -2817,7 +2817,7 @@ void Test::testFormulaRefUpdateMoveUndo3NonShared()
     CPPUNIT_ASSERT(bGood);
 
     // Drag A2:A3 into C2:C3.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0,1,0,0,2,0), ScAddress(2,1,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -2878,7 +2878,7 @@ void Test::testFormulaRefUpdateMoveUndo3Shared()
     CPPUNIT_ASSERT_EQUAL(SCROW(2), pFC->GetSharedLength());
 
     // Drag A2:A4 into C2:C4.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0,1,0,0,3,0), ScAddress(2,1,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -2950,7 +2950,7 @@ void Test::testFormulaRefUpdateMoveUndoDependents()
     CPPUNIT_ASSERT(bGood);
 
     // Drag C2 into D2.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(2, 1, 0, 2, 1, 0), ScAddress(3, 1, 0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -3005,7 +3005,7 @@ void Test::testFormulaRefUpdateMoveUndo4()
     CPPUNIT_ASSERT(bGood);
 
     // Drag A1:A2 into B1:B2.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0, 0, 0, 0, 1, 0), ScAddress(1, 0, 0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -3069,7 +3069,7 @@ void Test::testFormulaRefUpdateMoveToSheet()
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(1,1,0)));
 
     // Move A1:A2 on Sheet1 to B3:B4 on Sheet2.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(0,0,0,0,1,0), ScAddress(1,2,1), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -3107,7 +3107,7 @@ void Test::testFormulaRefUpdateDeleteContent()
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,1,0)));
 
     // Delete B2.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(ScAddress(1,1,0));
     rFunc.DeleteContents(aMark, InsertDeleteFlags::CONTENTS, true, true);
@@ -3150,7 +3150,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft()
     // Delete columns D:E (middle of the reference).
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bDeleted = rFunc.DeleteCells(ScRange(3,0,0,4,m_pDoc->MaxRow(),0), &aMark, DelCellCmd::CellsLeft, true);
     CPPUNIT_ASSERT(bDeleted);
 
@@ -3285,7 +3285,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft2()
     // Delete Column A.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bDeleted = rFunc.DeleteCells(ScRange(0,0,0,0,m_pDoc->MaxRow(),0), &aMark, DelCellCmd::CellsLeft, true);
     CPPUNIT_ASSERT(bDeleted);
 
@@ -3324,7 +3324,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftUp()
     // Delete rows 4:5 (middle of the reference).
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bDeleted = rFunc.DeleteCells(ScRange(0,3,0,m_pDoc->MaxCol(),4,0), &aMark, DelCellCmd::CellsUp, true);
     CPPUNIT_ASSERT(bDeleted);
 
@@ -3566,7 +3566,7 @@ void Test::testFormulaRefUpdateNameMove()
     CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$B$4"), aSymbol);
 
     // Move B2:B4 to D3.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(1,1,0,1,3,0), ScAddress(3,2,0), true, true, false, true);
     CPPUNIT_ASSERT(bMoved);
 
@@ -3662,7 +3662,7 @@ void Test::testFormulaRefUpdateNameExpandRef()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
     // Insert a new row at row 4, which should expand the named range to A1:A4.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange(0,3,0,m_pDoc->MaxCol(),3,0), &aMark, INS_INSROWS_BEFORE, false, true);
@@ -3776,7 +3776,7 @@ void Test::testFormulaRefUpdateNameExpandRef2()
     CPPUNIT_ASSERT(bInserted);
 
     // Insert a new row at row 4, which should expand the named range to A1:A4.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
@@ -3819,7 +3819,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     OUString aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$3"), aExpr2);
 
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
 
     // Delete row 3.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
@@ -4153,7 +4153,7 @@ void Test::testFormulaRefUpdateSheetLocalMove()
     m_pDoc->SetString( aPos, "=MyCell");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2.B3", 2.0, m_pDoc->GetValue(aPos));
 
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     OUString aFormula;
 
     // Move Sheet1.B1 ("x") to Sheet2.B1
@@ -4367,7 +4367,7 @@ void Test::testFormulaRefUpdateValidity()
     bool bGood = aCheck.checkList(aList);
     CPPUNIT_ASSERT_MESSAGE("Initial list is incorrect.", bGood);
 
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
@@ -4681,7 +4681,7 @@ void Test::testFuncROW()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
 
     // Insert a new row at row 4.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange(0,3,0,m_pDoc->MaxCol(),3,0), &aMark, INS_INSROWS_BEFORE, false, true);
@@ -5016,7 +5016,7 @@ void Test::testFuncCOUNTIF()
     ScFormulaOptions aOldOptions, aNewOptions;
     aOldOptions = SC_MOD()->GetFormulaOptions();
     aNewOptions.SetFormulaSepArg(";");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     // COUNTIF (test case adopted from OOo i#36381)
 
@@ -5132,7 +5132,7 @@ void Test::testFuncCOUNTIF()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Two cells with 1.0", 2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
@@ -5145,7 +5145,7 @@ void Test::testFuncIF()
     aOldOptions = SC_MOD()->GetFormulaOptions();
     aNewOptions.SetFormulaSepArg(";");
     aNewOptions.SetFormulaSepArrayCol(";");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     m_pDoc->InsertTab(0, "Formula");
 
@@ -5190,7 +5190,7 @@ void Test::testFuncIF()
     CPPUNIT_ASSERT_EQUAL(56.0, m_pDoc->GetValue(ScAddress(1,10,0)));
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
@@ -6147,7 +6147,7 @@ void Test::testFuncINDIRECT2()
     ScFormulaOptions aOldOptions, aNewOptions;
     aOldOptions = SC_MOD()->GetFormulaOptions();
     aNewOptions.SetFormulaSepArg(";");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, "foo"));
@@ -6209,7 +6209,7 @@ void Test::testFuncINDIRECT2()
     CPPUNIT_ASSERT_MESSAGE("This formula cell should be an error.", pFC->GetErrCode() != FormulaError::NONE);
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
@@ -6395,7 +6395,7 @@ void Test::testFormulaDepTracking3()
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(3,0,0)));
 
     // Change B3 and make sure the change gets propagated to D1.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     rFunc.SetValueCell(ScAddress(1,2,0), 60.0, false);
     CPPUNIT_ASSERT_EQUAL(65.0, m_pDoc->GetValue(ScAddress(2,2,0)));
     CPPUNIT_ASSERT_EQUAL(75.0, m_pDoc->GetValue(ScAddress(3,0,0)));
@@ -6435,7 +6435,7 @@ void Test::testFormulaDepTrackingDeleteRow()
     CPPUNIT_ASSERT_EQUAL(90.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
     // Delete row 2.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.DeleteCells(ScRange(0,1,0,m_pDoc->MaxCol(),1,0), &aMark, DelCellCmd::CellsUp, true);
@@ -6493,7 +6493,7 @@ void Test::testFormulaDepTrackingDeleteCol()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
 
     // Delete column A.  A1, B1, A3:A4 and B3:B4 should all show #REF!.
-    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.DeleteCells(ScRange(0,0,0,0,m_pDoc->MaxRow(),0), &aMark, DelCellCmd::CellsLeft, true);
@@ -7230,12 +7230,12 @@ void Test::testFuncTableRef()
     ScFormulaOptions aOldOptions, aNewOptions;
     aOldOptions = SC_MOD()->GetFormulaOptions();
     aNewOptions.SetFormulaSepArg(";");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     m_pDoc->InsertTab(0, "Sheet1");
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
 
     {
         ScDBCollection* pDBs = m_pDoc->GetDBCollection();
@@ -7572,7 +7572,7 @@ void Test::testFuncTableRef()
     }
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
@@ -8452,7 +8452,7 @@ void Test::testFormulaErrorPropagation()
     aNewOptions.SetFormulaSepArg(";");
     aNewOptions.SetFormulaSepArrayCol(";");
     aNewOptions.SetFormulaSepArrayRow("|");
-    getDocShell().SetFormulaOptions(aNewOptions);
+    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     m_pDoc->InsertTab(0, "Sheet1");
 
@@ -8523,7 +8523,7 @@ void Test::testFormulaErrorPropagation()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(ScRefFlags::VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
 
     // restore formula options back to default
-    getDocShell().SetFormulaOptions(aOldOptions);
+    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }
@@ -9368,7 +9368,7 @@ void Test::testInsertColCellStoreEventSwap()
     // in question, use ScDocFunc::SetFormulaCell() instead which actually is
     // also called when editing a cell and creating a formula cell.
     ScFormulaCell* pCell = new ScFormulaCell(*m_pDoc, aPos, "=A1+1");
-    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
     rDocFunc.SetFormulaCell( aPos, pCell, false);   // C1, change formula
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Initial calculation failed", 2.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue( 0,0,0, 2.0 );     // A1, change value
