@@ -114,96 +114,96 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
 
         std::vector< DriverPropertyInfo > aDriverInfo
         {
-            { DriverPropertyInfo(
+            {
                 "JavaDriverClass"
                 ,"The JDBC driver class name."
                 ,true
                 ,OUString()
-                ,Sequence< OUString >())
+                ,Sequence< OUString >()
             },
-            { DriverPropertyInfo(
+            {
                 "JavaDriverClassPath"
                 ,"The class path where to look for the JDBC driver."
                 ,true
                 , ""
-                ,Sequence< OUString >())
+                ,Sequence< OUString >()
             },
-            { DriverPropertyInfo(
+            {
                 "SystemProperties"
                 ,"Additional properties to set at java.lang.System before loading the driver."
                 ,true
                 , ""
-                ,Sequence< OUString >())
+                ,Sequence< OUString >()
             },
-            { DriverPropertyInfo(
+            {
                 "ParameterNameSubstitution"
                 ,"Change named parameters with '?'."
                 ,false
                 ,"false"
-                ,aBooleanValues)
+                ,aBooleanValues
             },
-            { DriverPropertyInfo(
+            {
                 "IgnoreDriverPrivileges"
                 ,"Ignore the privileges from the database driver."
                 ,false
                 , "false"
-                ,aBooleanValues)
+                ,aBooleanValues
             },
-            { DriverPropertyInfo(
+            {
                 "IsAutoRetrievingEnabled"
                 ,"Retrieve generated values."
                 ,false
                 ,"false"
-                ,aBooleanValues)
+                ,aBooleanValues
             },
-            { DriverPropertyInfo(
+            {
                 "AutoRetrievingStatement"
                 ,"Auto-increment statement."
                 ,false
                 ,OUString()
-                ,Sequence< OUString >())
+                ,Sequence< OUString >()
             },
-            { DriverPropertyInfo(
+            {
                 "GenerateASBeforeCorrelationName"
                 ,"Generate AS before table correlation names."
                 ,false
                 ,"false"
-                ,aBooleanValues)
+                ,aBooleanValues
             },
-            { DriverPropertyInfo(
+            {
                 "IgnoreCurrency"
                 ,"Ignore the currency field from the ResultsetMetaData."
                 ,false
                 ,"false"
-                ,aBooleanValues)
+                ,aBooleanValues
             },
-            { DriverPropertyInfo(
+            {
                 "EscapeDateTime"
                 ,"Escape date time format."
                 ,false
                 ,"true"
-                ,aBooleanValues)
+                ,aBooleanValues
             },
-            { DriverPropertyInfo(
+            {
                 "TypeInfoSettings"
                 ,"Defines how the type info of the database metadata should be manipulated."
                 ,false
                 ,OUString()
-                ,Sequence< OUString > ())
+                ,Sequence< OUString > ()
             },
-            { DriverPropertyInfo(
+            {
                 "ImplicitCatalogRestriction"
                 ,"The catalog which should be used in getTables calls, when the caller passed NULL."
                 ,false
                 ,OUString( )
-                ,Sequence< OUString > ())
+                ,Sequence< OUString > ()
             },
-            { DriverPropertyInfo(
+            {
                 "ImplicitSchemaRestriction"
                 ,"The schema which should be used in getTables calls, when the caller passed NULL."
                 ,false
                 ,OUString( )
-                ,Sequence< OUString > ())
+                ,Sequence< OUString > ()
             }
         };
         return Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size());
