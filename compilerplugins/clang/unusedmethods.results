@@ -1182,18 +1182,6 @@ sc/qa/unit/ucalc.hxx:191
     void Test::testSingleCellCopyColumnLabel()
 sc/qa/unit/ucalc.hxx:251
     void Test::testExternalRefUnresolved()
-sc/qa/unit/ucalc.hxx:391
-    void Test::testCopyPasteSkipEmptyConditionalFormatting()
-sc/qa/unit/ucalc.hxx:536
-    void Test::testCondFormatUpdateMoveTab()
-sc/qa/unit/ucalc.hxx:537
-    void Test::testCondFormatUpdateDeleteTab()
-sc/qa/unit/ucalc.hxx:538
-    void Test::testCondFormatUpdateInsertTab()
-sc/qa/unit/ucalc.hxx:539
-    void Test::testCondFormatUpdateReference()
-sc/qa/unit/ucalc.hxx:549
-    void Test::testCondFormatListenToOwnRange()
 sc/source/core/inc/interpre.hxx:71
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & sc::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const struct sc::ParamIfsResult &)
 sc/source/core/opencl/formulagroupcl.cxx:1061

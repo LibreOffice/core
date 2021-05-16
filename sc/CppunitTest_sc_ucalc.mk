@@ -16,7 +16,6 @@ $(eval $(call gb_Library_use_common_precompiled_header,sc_ucalc))
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
     sc/qa/unit/ucalc \
     sc/qa/unit/ucalc_column \
-    sc/qa/unit/ucalc_condformat \
     sc/qa/unit/ucalc_formula \
 ))
 
