@@ -83,9 +83,9 @@
 #include <vcl/sysdata.hxx>
 #endif
 
-bool SwViewShell::mbLstAct = false;
-ShellResource *SwViewShell::mpShellRes = nullptr;
-vcl::DeleteOnDeinit<std::shared_ptr<weld::Window>> SwViewShell::mpCareDialog(new std::shared_ptr<weld::Window>);
+bool SwViewShell::sbLstAct = false;
+ShellResource *SwViewShell::spShellRes = nullptr;
+vcl::DeleteOnDeinit<std::shared_ptr<weld::Window>> SwViewShell::spCareDialog(new std::shared_ptr<weld::Window>);
 
 static bool bInSizeNotify = false;
 
@@ -257,12 +257,12 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
     mbInEndAction = true;
     //will this put the EndAction of the last shell in the sequence?
 
-    SwViewShell::mbLstAct = true;
+    SwViewShell::sbLstAct = true;
     for(SwViewShell& rShell : GetRingContainer())
     {
         if(&rShell != this && rShell.ActionPend())
         {
-            SwViewShell::mbLstAct = false;
+            SwViewShell::sbLstAct = false;
             break;
         }
     }
@@ -440,7 +440,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
         mbPaintWorks = true;
 
     mbInEndAction = false;
-    SwViewShell::mbLstAct = false;
+    SwViewShell::sbLstAct = false;
     Imp()->EndAction();
 
     //We artificially end the action here to enable the automatic scrollbars
@@ -1330,9 +1330,9 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
 
                 // SW paint stuff
                 PaintDesktop(*GetOut(), aRect);
-                SwViewShell::mbLstAct = true;
+                SwViewShell::sbLstAct = true;
                 GetLayout()->PaintSwFrame( *GetOut(), aRect );
-                SwViewShell::mbLstAct = false;
+                SwViewShell::sbLstAct = false;
 
                 // end paint and destroy ObjectContact again
                 DLPostPaint2(true);
@@ -1809,9 +1809,9 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
                 //When useful, process or destroy the old InvalidRect.
                 if ( aRect.IsInside( maInvalidRect ) )
                     ResetInvalidRect();
-                SwViewShell::mbLstAct = true;
+                SwViewShell::sbLstAct = true;
                 GetLayout()->PaintSwFrame( rRenderContext, aRect );
-                SwViewShell::mbLstAct = false;
+                SwViewShell::sbLstAct = false;
             }
             else
             {
@@ -1830,9 +1830,9 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
                     //When useful, process or destroy the old InvalidRect.
                     if ( aRect.IsInside( maInvalidRect ) )
                         ResetInvalidRect();
-                    SwViewShell::mbLstAct = true;
+                    SwViewShell::sbLstAct = true;
                     GetLayout()->PaintSwFrame( rRenderContext, aRect );
-                    SwViewShell::mbLstAct = false;
+                    SwViewShell::sbLstAct = false;
                     // --> OD 2009-08-12 #i101192#
                     // end Pre/PostPaint encapsulation
                     DLPostPaint2(true);
@@ -2545,12 +2545,12 @@ void SwViewShell::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAcc
 
 ShellResource* SwViewShell::GetShellRes()
 {
-    return mpShellRes;
+    return spShellRes;
 }
 
 void SwViewShell::SetCareDialog(const std::shared_ptr<weld::Window>& rNew)
 {
-    (*mpCareDialog.get()) = rNew;
+    (*spCareDialog.get()) = rNew;
 }
 
 sal_uInt16 SwViewShell::GetPageCount() const

@@ -48,15 +48,15 @@ namespace {
 
 class SwASCIIParser
 {
-    SwDoc& rDoc;
-    std::unique_ptr<SwPaM> pPam;
-    SvStream& rInput;
-    std::unique_ptr<char[]> pArr;
-    const SwAsciiOptions& rOpt;
-    std::unique_ptr<SfxItemSet> pItemSet;
-    tools::Long nFileSize;
-    SvtScriptType nScript;
-    bool bNewDoc;
+    SwDoc& m_rDoc;
+    std::unique_ptr<SwPaM> m_pPam;
+    SvStream& m_rInput;
+    std::unique_ptr<char[]> m_pArr;
+    const SwAsciiOptions& m_rOpt;
+    std::unique_ptr<SfxItemSet> m_pItemSet;
+    tools::Long m_nFileSize;
+    SvtScriptType m_nScript;
+    bool m_bNewDoc;
 
     ErrCode ReadChars();
     void InsertText( const OUString& rStr );
@@ -92,97 +92,103 @@ ErrCode AsciiReader::Read( SwDoc& rDoc, const OUString&, SwPaM &rPam, const OUSt
     return nRet;
 }
 
-SwASCIIParser::SwASCIIParser(SwDoc& rD, const SwPaM& rCursor, SvStream& rIn,
-    bool bReadNewDoc, const SwAsciiOptions& rOpts)
-    : rDoc(rD), rInput(rIn), rOpt(rOpts), nFileSize(0), nScript(SvtScriptType::NONE)
-    , bNewDoc(bReadNewDoc)
+SwASCIIParser::SwASCIIParser(SwDoc& rD, const SwPaM& rCursor, SvStream& rIn, bool bReadNewDoc,
+                             const SwAsciiOptions& rOpts)
+    : m_rDoc(rD)
+    , m_rInput(rIn)
+    , m_rOpt(rOpts)
+    , m_nFileSize(0)
+    , m_nScript(SvtScriptType::NONE)
+    , m_bNewDoc(bReadNewDoc)
 {
-    pPam.reset( new SwPaM( *rCursor.GetPoint() ) );
-    pArr.reset( new char [ ASC_BUFFLEN + 2 ] );
+    m_pPam.reset(new SwPaM(*rCursor.GetPoint()));
+    m_pArr.reset(new char[ASC_BUFFLEN + 2]);
 
-    pItemSet = std::make_unique<SfxItemSet>( rDoc.GetAttrPool(),
-                svl::Items<RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
-                RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_LANGUAGE,
-                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_LANGUAGE>{} );
+    m_pItemSet = std::make_unique<SfxItemSet>(
+        m_rDoc.GetAttrPool(),
+        svl::Items<RES_CHRATR_FONT, RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_FONT,
+                   RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_LANGUAGE>{});
 
     // set defaults from the options
-    if( rOpt.GetLanguage() )
+    if (m_rOpt.GetLanguage())
     {
-        SvxLanguageItem aLang( rOpt.GetLanguage(), RES_CHRATR_LANGUAGE );
-        pItemSet->Put( aLang );
+        SvxLanguageItem aLang(m_rOpt.GetLanguage(), RES_CHRATR_LANGUAGE);
+        m_pItemSet->Put(aLang);
         aLang.SetWhich(RES_CHRATR_CJK_LANGUAGE);
-        pItemSet->Put( aLang );
+        m_pItemSet->Put(aLang);
         aLang.SetWhich(RES_CHRATR_CTL_LANGUAGE);
-        pItemSet->Put( aLang );
+        m_pItemSet->Put(aLang);
     }
-    if( rOpt.GetFontName().isEmpty() )
+    if (m_rOpt.GetFontName().isEmpty())
         return;
 
-    vcl::Font aTextFont( rOpt.GetFontName(), Size( 0, 10 ) );
-    if( rDoc.getIDocumentDeviceAccess().getPrinter( false ) )
-        aTextFont = rDoc.getIDocumentDeviceAccess().getPrinter( false )->GetFontMetric( aTextFont );
+    vcl::Font aTextFont(m_rOpt.GetFontName(), Size(0, 10));
+    if (m_rDoc.getIDocumentDeviceAccess().getPrinter(false))
+        aTextFont = m_rDoc.getIDocumentDeviceAccess().getPrinter(false)->GetFontMetric(aTextFont);
     SvxFontItem aFont( aTextFont.GetFamilyType(), aTextFont.GetFamilyName(),
                        OUString(), aTextFont.GetPitch(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
-    pItemSet->Put( aFont );
+    m_pItemSet->Put(aFont);
     aFont.SetWhich(RES_CHRATR_CJK_FONT);
-    pItemSet->Put( aFont );
+    m_pItemSet->Put(aFont);
     aFont.SetWhich(RES_CHRATR_CTL_FONT);
-    pItemSet->Put( aFont );
+    m_pItemSet->Put(aFont);
 }
 
 // Calling the parser
 ErrCode SwASCIIParser::CallParser()
 {
-    rInput.ResetError();
-    nFileSize = rInput.TellEnd();
-    rInput.Seek(STREAM_SEEK_TO_BEGIN);
-    rInput.ResetError();
+    m_rInput.ResetError();
+    m_nFileSize = m_rInput.TellEnd();
+    m_rInput.Seek(STREAM_SEEK_TO_BEGIN);
+    m_rInput.ResetError();
 
-    ::StartProgress( STR_STATSTR_W4WREAD, 0, nFileSize, rDoc.GetDocShell() );
+    ::StartProgress(STR_STATSTR_W4WREAD, 0, m_nFileSize, m_rDoc.GetDocShell());
 
     std::unique_ptr<SwPaM> pInsPam;
     sal_Int32 nSttContent = 0;
-    if (!bNewDoc)
+    if (!m_bNewDoc)
     {
-        const SwNodeIndex& rTmp = pPam->GetPoint()->nNode;
+        const SwNodeIndex& rTmp = m_pPam->GetPoint()->nNode;
         pInsPam.reset(new SwPaM( rTmp, rTmp, 0, -1 ));
-        nSttContent = pPam->GetPoint()->nContent.GetIndex();
+        nSttContent = m_pPam->GetPoint()->nContent.GetIndex();
     }
 
     SwTextFormatColl *pColl = nullptr;
 
-    if (bNewDoc)
+    if (m_bNewDoc)
     {
-        pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HTML_PRE, false);
+        pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HTML_PRE,
+                                                                         false);
         if (!pColl)
-            pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD,false);
+            pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD,
+                                                                             false);
         if (pColl)
-            rDoc.SetTextFormatColl(*pPam, pColl);
+            m_rDoc.SetTextFormatColl(*m_pPam, pColl);
     }
 
     ErrCode nError = ReadChars();
 
-    if( pItemSet )
+    if (m_pItemSet)
     {
         // set only the attribute, for scanned scripts.
-        if( !( SvtScriptType::LATIN & nScript ))
+        if (!(SvtScriptType::LATIN & m_nScript))
         {
-            pItemSet->ClearItem( RES_CHRATR_FONT );
-            pItemSet->ClearItem( RES_CHRATR_LANGUAGE );
+            m_pItemSet->ClearItem(RES_CHRATR_FONT);
+            m_pItemSet->ClearItem(RES_CHRATR_LANGUAGE);
         }
-        if( !( SvtScriptType::ASIAN & nScript ))
+        if (!(SvtScriptType::ASIAN & m_nScript))
         {
-            pItemSet->ClearItem( RES_CHRATR_CJK_FONT );
-            pItemSet->ClearItem( RES_CHRATR_CJK_LANGUAGE );
+            m_pItemSet->ClearItem(RES_CHRATR_CJK_FONT);
+            m_pItemSet->ClearItem(RES_CHRATR_CJK_LANGUAGE);
         }
-        if( !( SvtScriptType::COMPLEX & nScript ))
+        if (!(SvtScriptType::COMPLEX & m_nScript))
         {
-            pItemSet->ClearItem( RES_CHRATR_CTL_FONT );
-            pItemSet->ClearItem( RES_CHRATR_CTL_LANGUAGE );
+            m_pItemSet->ClearItem(RES_CHRATR_CTL_FONT);
+            m_pItemSet->ClearItem(RES_CHRATR_CTL_LANGUAGE);
         }
-        if( pItemSet->Count() )
+        if (m_pItemSet->Count())
         {
-            if( bNewDoc )
+            if (m_bNewDoc)
             {
                 if (pColl)
                 {
@@ -206,37 +212,37 @@ ErrCode SwASCIIParser::CallParser()
                     while (*pWhichIds)
                     {
                         const SfxPoolItem *pItem;
-                        if (SfxItemState::SET == pItemSet->GetItemState(*pWhichIds,
-                            false, &pItem))
+                        if (SfxItemState::SET
+                            == m_pItemSet->GetItemState(*pWhichIds, false, &pItem))
                         {
                             pColl->SetFormatAttr( *pItem );
-                            pItemSet->ClearItem( *pWhichIds );
+                            m_pItemSet->ClearItem(*pWhichIds);
                         }
                         ++pWhichIds;
                     }
                 }
-                if (pItemSet->Count())
-                    rDoc.SetDefault(*pItemSet);
+                if (m_pItemSet->Count())
+                    m_rDoc.SetDefault(*m_pItemSet);
             }
             else if( pInsPam )
             {
                 // then set over the insert range the defined attributes
-                *pInsPam->GetMark() = *pPam->GetPoint();
+                *pInsPam->GetMark() = *m_pPam->GetPoint();
                 ++pInsPam->GetPoint()->nNode;
                 pInsPam->GetPoint()->nContent.Assign(
                                     pInsPam->GetContentNode(), nSttContent );
 
                 // !!!!!
                 OSL_ENSURE( false, "Have to change - hard attr. to para. style" );
-                rDoc.getIDocumentContentOperations().InsertItemSet( *pInsPam, *pItemSet );
+                m_rDoc.getIDocumentContentOperations().InsertItemSet(*pInsPam, *m_pItemSet);
             }
         }
-        pItemSet.reset();
+        m_pItemSet.reset();
     }
 
     pInsPam.reset();
 
-    ::EndProgress( rDoc.GetDocShell() );
+    ::EndProgress(m_rDoc.GetDocShell());
     return nError;
 }
 
@@ -247,20 +253,19 @@ ErrCode SwASCIIParser::ReadChars()
     sal_Unicode cLastCR = 0;
     bool bSwapUnicode = false;
 
-    const SwAsciiOptions *pUseMe=&rOpt;
+    const SwAsciiOptions* pUseMe = &m_rOpt;
     SwAsciiOptions aEmpty;
-    if (nFileSize >= 2 &&
-        aEmpty.GetFontName() == rOpt.GetFontName() &&
-        aEmpty.GetCharSet() == rOpt.GetCharSet() &&
-        aEmpty.GetLanguage() == rOpt.GetLanguage() &&
-        aEmpty.GetParaFlags() == rOpt.GetParaFlags())
+    if (m_nFileSize >= 2 && aEmpty.GetFontName() == m_rOpt.GetFontName()
+        && aEmpty.GetCharSet() == m_rOpt.GetCharSet()
+        && aEmpty.GetLanguage() == m_rOpt.GetLanguage()
+        && aEmpty.GetParaFlags() == m_rOpt.GetParaFlags())
     {
         sal_Size nLen, nOrig;
-        nOrig = nLen = rInput.ReadBytes(pArr.get(), ASC_BUFFLEN);
+        nOrig = nLen = m_rInput.ReadBytes(m_pArr.get(), ASC_BUFFLEN);
         rtl_TextEncoding eCharSet;
         LineEnd eLineEnd;
         const bool bRet
-            = SwIoSystem::IsDetectableText(pArr.get(), nLen, &eCharSet, &bSwapUnicode, &eLineEnd);
+            = SwIoSystem::IsDetectableText(m_pArr.get(), nLen, &eCharSet, &bSwapUnicode, &eLineEnd);
         if (!bRet)
             return ERRCODE_IO_BROKENPACKAGE;
 
@@ -269,10 +274,10 @@ ErrCode SwASCIIParser::ReadChars()
         {
             aEmpty.SetCharSet(eCharSet);
             aEmpty.SetParaFlags(eLineEnd);
-            rInput.SeekRel(-(tools::Long(nLen)));
+            m_rInput.SeekRel(-(tools::Long(nLen)));
         }
         else
-            rInput.SeekRel(-(tools::Long(nOrig)));
+            m_rInput.SeekRel(-(tools::Long(nOrig)));
         pUseMe=&aEmpty;
     }
 
@@ -292,8 +297,8 @@ ErrCode SwASCIIParser::ReadChars()
     }
     else if (pUseMe != &aEmpty)  //Already successfully figured out type
     {
-        rInput.StartReadingUnicodeText( currentCharSet );
-        bSwapUnicode = rInput.IsEndianSwap();
+        m_rInput.StartReadingUnicodeText(currentCharSet);
+        bSwapUnicode = m_rInput.IsEndianSwap();
     }
 
     std::unique_ptr<sal_Unicode[]> aWork;
@@ -307,9 +312,10 @@ ErrCode SwASCIIParser::ReadChars()
 
             // Read a new block
             sal_Size lGCount;
-            if( ERRCODE_NONE != rInput.GetError() || 0 == (lGCount =
-                        rInput.ReadBytes( pArr.get() + nArrOffset,
-                                     ASC_BUFFLEN - nArrOffset )))
+            if (ERRCODE_NONE != m_rInput.GetError()
+                || 0
+                       == (lGCount = m_rInput.ReadBytes(m_pArr.get() + nArrOffset,
+                                                        ASC_BUFFLEN - nArrOffset)))
                 break;      // break from the while loop
 
             /*
@@ -328,32 +334,29 @@ ErrCode SwASCIIParser::ReadChars()
                 sal_Unicode* pBuf = aWork.get();
                 pBuf[nNewLen] = 0;                         // ensure '\0'
 
-                nNewLen = rtl_convertTextToUnicode( hConverter, hContext,
-                                pArr.get(), lGCount, pBuf, nNewLen,
-                                (
-                                RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
-                                RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
-                                RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT |
-                                RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE
-                                ),
-                                &nInfo,
-                                &nCntBytes );
+                nNewLen = rtl_convertTextToUnicode(hConverter, hContext, m_pArr.get(), lGCount,
+                                                   pBuf, nNewLen,
+                                                   (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT
+                                                    | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT
+                                                    | RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT
+                                                    | RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE),
+                                                   &nInfo, &nCntBytes);
                 nArrOffset = lGCount - nCntBytes;
                 if( 0 != nArrOffset )
-                    memmove( pArr.get(), pArr.get() + nCntBytes, nArrOffset );
+                    memmove(m_pArr.get(), m_pArr.get() + nCntBytes, nArrOffset);
 
                 pStt = pLastStt = aWork.get();
                 pEnd = pStt + nNewLen;
             }
             else
             {
-                pStt = pLastStt = reinterpret_cast<sal_Unicode*>(pArr.get());
+                pStt = pLastStt = reinterpret_cast<sal_Unicode*>(m_pArr.get());
                 auto nChars = lGCount / 2;
                 pEnd = pStt + nChars;
 
                 if( bSwapUnicode )
                 {
-                    char* pF = pArr.get(), *pN = pArr.get() + 1;
+                    char *pF = m_pArr.get(), *pN = m_pArr.get() + 1;
                     for (sal_Size n = 0; n < nChars; ++n, pF += 2, pN += 2)
                     {
                         char c = *pF;
@@ -366,7 +369,7 @@ ErrCode SwASCIIParser::ReadChars()
             *pEnd = 0;
             nReadCnt += lGCount;
 
-            ::SetProgressState( nReadCnt, rDoc.GetDocShell() );
+            ::SetProgressState(nReadCnt, m_rDoc.GetDocShell());
 
             if( cLastCR )
             {
@@ -375,9 +378,8 @@ ErrCode SwASCIIParser::ReadChars()
                 cLastCR = 0;
                 nLineLen = 0;
                 // We skip the last one at the end
-                if( !rInput.eof() || !(pEnd == pStt ||
-                    ( !*pEnd && pEnd == pStt+1 ) ) )
-                    rDoc.getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
+                if (!m_rInput.eof() || !(pEnd == pStt || (!*pEnd && pEnd == pStt + 1)))
+                    m_rDoc.getIDocumentContentOperations().SplitNode(*m_pPam->GetPoint(), false);
             }
         }
 
@@ -392,7 +394,7 @@ ErrCode SwASCIIParser::ReadChars()
                         ++pStt;
 
                         // We skip the last one at the end
-                        if( !rInput.eof() || pEnd != pStt )
+                        if (!m_rInput.eof() || pEnd != pStt)
                             bSplitNode = true;
                     }
                     break;
@@ -416,7 +418,7 @@ ErrCode SwASCIIParser::ReadChars()
                         }
 
                         // We skip the last one at the end
-                        if( bChkSplit && ( !rInput.eof() || pEnd != pStt ))
+                        if (bChkSplit && (!m_rInput.eof() || pEnd != pStt))
                             bSplitNode = true;
                     }
                     break;
@@ -429,9 +431,10 @@ ErrCode SwASCIIParser::ReadChars()
                         {
                             InsertText( OUString( pLastStt ));
                         }
-                        rDoc.getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
-                        rDoc.getIDocumentContentOperations().InsertPoolItem(
-                            *pPam, SvxFormatBreakItem( SvxBreak::PageBefore, RES_BREAK ) );
+                        m_rDoc.getIDocumentContentOperations().SplitNode(*m_pPam->GetPoint(),
+                                                                         false);
+                        m_rDoc.getIDocumentContentOperations().InsertPoolItem(
+                            *m_pPam, SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK));
                         pLastStt = pStt;
                         nLineLen = 0;
                         bIns = false;
@@ -439,11 +442,11 @@ ErrCode SwASCIIParser::ReadChars()
                     break;
 
         case 0x1a:
-                    if( nReadCnt == nFileSize && pStt+1 == pEnd )
-                        *pStt = 0;
-                    else
-                        *pStt = '#';        // Replacement visualisation
-                    break;
+            if (nReadCnt == m_nFileSize && pStt + 1 == pEnd)
+                *pStt = 0;
+            else
+                *pStt = '#'; // Replacement visualisation
+            break;
 
         case '\t':  break;
 
@@ -462,7 +465,7 @@ ErrCode SwASCIIParser::ReadChars()
                 sal_Unicode c = *pStt;
                 *pStt = 0;
                 InsertText( OUString( pLastStt ));
-                rDoc.getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
+                m_rDoc.getIDocumentContentOperations().SplitNode(*m_pPam->GetPoint(), false);
                 pLastStt = pStt;
                 nLineLen = 0;
                 *pStt = c;
@@ -474,10 +477,10 @@ ErrCode SwASCIIParser::ReadChars()
         {
             // We found a CR/LF, thus save the text
             InsertText( OUString( pLastStt ));
-            if(bNewDoc)
-                rDoc.getIDocumentContentOperations().AppendTextNode( *pPam->GetPoint() );
+            if (m_bNewDoc)
+                m_rDoc.getIDocumentContentOperations().AppendTextNode(*m_pPam->GetPoint());
             else
-                rDoc.getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
+                m_rDoc.getIDocumentContentOperations().SplitNode(*m_pPam->GetPoint(), false);
             pLastStt = pStt;
             nLineLen = 0;
         }
@@ -493,12 +496,11 @@ ErrCode SwASCIIParser::ReadChars()
 
 void SwASCIIParser::InsertText( const OUString& rStr )
 {
-    rDoc.getIDocumentContentOperations().InsertString( *pPam, rStr );
+    m_rDoc.getIDocumentContentOperations().InsertString(*m_pPam, rStr);
 
-    if( pItemSet && g_pBreakIt && nScript != ( SvtScriptType::LATIN |
-                                             SvtScriptType::ASIAN |
-                                             SvtScriptType::COMPLEX ) )
-        nScript |= g_pBreakIt->GetAllScriptsOfText( rStr );
+    if (m_pItemSet && g_pBreakIt
+        && m_nScript != (SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX))
+        m_nScript |= g_pBreakIt->GetAllScriptsOfText(rStr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
