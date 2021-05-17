@@ -90,7 +90,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
     libjpeg \
     libpng \
     mdds_headers \
-    $(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
@@ -492,7 +491,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/fontsubset/ttcr \
     vcl/source/fontsubset/xlat \
     vcl/source/pdf/PDFiumTools \
-    vcl/source/pdf/$(if $(filter PDFIUM,$(BUILD_TYPE)),,Dummy)PDFiumLibrary \
     vcl/source/uitest/logger \
     vcl/source/uitest/uiobject \
     vcl/source/uitest/uitest \
@@ -559,34 +557,18 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/print/genprnpsp \
     vcl/unx/generic/print/prtsetup \
     vcl/unx/generic/print/text_gfx \
-
-vcl_headless_freetype_libs = \
-    cairo \
-    fontconfig \
-    freetype \
+    vcl/unx/generic/printer/jobdata \
+    vcl/unx/generic/printer/ppdparser \
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/app/salplug \
-    vcl/unx/generic/printer/jobdata \
-    vcl/unx/generic/printer/ppdparser \
     vcl/unx/generic/window/screensaverinhibitor \
     vcl/unx/generic/printer/cpdmgr \
-    $(if $(ENABLE_CUPS),\
-        vcl/unx/generic/printer/cupsmgr \
-        vcl/unx/generic/printer/printerinfomanager \
-    , \
-        vcl/null/printerinfomanager \
-    ) \
-    $(vcl_headless_code) \
-    $(vcl_headless_freetype_code) \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-    $(if $(ENABLE_CUPS),cups) \
     dbus \
     valgrind \
-    $(vcl_headless_freetype_libs) \
 ))
 
 $(eval $(call gb_Library_add_libs,vcl,\
@@ -604,24 +586,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 endif
 endif # USING_X11
 
-ifneq (,$(filter LINUX %BSD SOLARIS,$(OS)))
-$(eval $(call gb_Library_add_libs,vcl,\
-    -lm $(DLOPEN_LIBS) \
-))
-endif
 
 ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/printer/jobdata \
-    vcl/unx/generic/printer/ppdparser \
-    vcl/null/printerinfomanager \
     vcl/headless/headlessinst \
-    $(vcl_headless_code) \
-    $(vcl_headless_freetype_code) \
-))
-
-$(eval $(call gb_Library_use_externals,vcl,\
-    $(vcl_headless_freetype_libs) \
 ))
 
 else # !DISABLE_GUI
@@ -644,27 +612,53 @@ $(eval $(call gb_Library_use_externals,vcl,\
 endif # !DISABLE_GUI
 
 
-ifeq ($(OS),HAIKU)
+#
+# * plugin loader: used on all platforms except iOS and Android
+# * select headless code and corresponding libraries
+#
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/printer/jobdata \
-    vcl/unx/generic/printer/ppdparser \
-    vcl/null/printerinfomanager \
-    $(vcl_headless_code) \
-    $(vcl_headless_freetype_code) \
+    $(if $(filter-out iOS,$(OS)), \
+        vcl/source/app/salplug \
+    ) \
+    $(if $(USE_HEADLESS_CODE), \
+        $(if $(ENABLE_CUPS), \
+            vcl/unx/generic/printer/cupsmgr \
+            vcl/unx/generic/printer/printerinfomanager \
+        , \
+            vcl/null/printerinfomanager \
+        ) \
+        $(vcl_headless_code) \
+        $(vcl_headless_freetype_code) \
+    ) \
+    vcl/source/pdf/$(if $(filter PDFIUM,$(BUILD_TYPE)),,Dummy)PDFiumLibrary \
+))
+
+# fontconfig depends on expat for static builds
+$(eval $(call gb_Library_use_externals,vcl,\
+    $(if $(USE_HEADLESS_CODE), \
+        cairo \
+        $(if $(ENABLE_CUPS),cups) \
+        fontconfig \
+        freetype \
+    ) \
+    $(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
 
 $(eval $(call gb_Library_add_libs,vcl,\
+    $(if $(filter LINUX %BSD SOLARIS,$(OS)), \
+        -lm \
+        $(if $(DISABLE_DYNLOADING),,$(DLOPEN_LIBS)) \
+    ) \
+))
+
+
+#
+# OS specific stuff not handled yet
+#
+
+ifeq ($(OS),HAIKU)
+$(eval $(call gb_Library_add_libs,vcl,\
     -lbe \
-))
-
-$(eval $(call gb_Library_add_exception_objects,vcl, \
-    $(if $(or $(ENABLE_QT5),$(ENABLE_KF5)),vcl/source/app/salplug) \
-    $(if $(ENABLE_QT6),vcl/source/app/salplug) \
-))
-
-$(eval $(call gb_Library_use_externals,vcl,\
-    expat \
-    $(vcl_headless_freetype_libs) \
 ))
 endif
 
@@ -676,18 +670,7 @@ $(eval $(call gb_Library_add_libs,vcl,\
     -llo-bootstrap \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/printer/jobdata \
-    vcl/unx/generic/printer/ppdparser \
-    vcl/null/printerinfomanager \
     vcl/android/androidinst \
-    vcl/source/app/salplug \
-    $(vcl_headless_code) \
-    $(vcl_headless_freetype_code) \
-))
-
-$(eval $(call gb_Library_use_externals,vcl,\
-    expat \
-    $(vcl_headless_freetype_libs) \
 ))
 endif
 
@@ -725,17 +708,12 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     Cocoa \
     CoreFoundation \
 ))
-
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/app/salplug \
-))
 endif
 
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/opengl/win/WinDeviceInfo \
-    vcl/source/app/salplug \
     vcl/win/app/fileregistration \
 ))
 
