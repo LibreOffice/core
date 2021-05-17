@@ -18,19 +18,19 @@ module com {  module sun {  module star {  module sheet {
 constants FilterFieldType
 {
    /** Filter by numeric value */
-   const short NUMERIC = 0;
+   const long NUMERIC = 0;
 
    /** Filter by string value */
-   const short STRING = 1;
+   const long STRING = 1;
 
    /** Filter by date */
-   const short DATE = 2;
+   const long DATE = 2;
 
    /** Filter by text color */
-   const short TEXT_COLOR = 3;
+   const long TEXT_COLOR = 3;
 
    /** Filter by background color */
-   const short BACKGROUND_COLOR = 4;
+   const long BACKGROUND_COLOR = 4;
 };
 
 }; }; }; };
