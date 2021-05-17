@@ -23,8 +23,8 @@ ignoreDiacritics_CTL::ignoreDiacritics_CTL()
     implementationName = "com.sun.star.i18n.Transliteration.ignoreDiacritics_CTL";
 
     UErrorCode nStatus = U_ZERO_ERROR;
-    m_transliterator = icu::Transliterator::createInstance("NFD; [:M:] Remove; NFC",
-            UTRANS_FORWARD, nStatus);
+    m_transliterator.reset( icu::Transliterator::createInstance("NFD; [:M:] Remove; NFC",
+            UTRANS_FORWARD, nStatus) );
     if (U_FAILURE(nStatus))
         m_transliterator = nullptr;
 }

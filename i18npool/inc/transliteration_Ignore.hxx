@@ -21,6 +21,7 @@
 
 #include "transliteration_commonclass.hxx"
 #include <unicode/translit.h>
+#include <memory>
 
 namespace i18nutil { class oneToOneMapping; }
 
@@ -91,7 +92,7 @@ TRANSLITERATION_IGNORE(Kashida_CTL)
 
 class ignoreDiacritics_CTL final : public transliteration_Ignore
 {
-    icu::Transliterator* m_transliterator;
+    std::unique_ptr<icu::Transliterator> m_transliterator;
 
 public:
     ignoreDiacritics_CTL();
