@@ -435,8 +435,8 @@ void ImpEditEngine::FormatDoc()
     // One can also get into the formatting through UpdateMode ON=>OFF=>ON...
     // enable optimization first after Vobis delivery...
     {
-        sal_uInt32 nNewHeightNTP;
-        sal_uInt32 nNewHeight = CalcTextHeight( &nNewHeightNTP );
+        tools::Long nNewHeightNTP;
+        tools::Long nNewHeight = CalcTextHeight(&nNewHeightNTP);
         tools::Long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
             aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TextHeightChanged : EditStatusFlags::TEXTWIDTHCHANGED;
@@ -567,10 +567,10 @@ void ImpEditEngine::CheckPageOverflow()
 {
     SAL_INFO("editeng.chaining", "[CONTROL_STATUS] AutoPageSize is " << (( aStatus.GetControlWord() & EEControlBits::AUTOPAGESIZE ) ? "ON" : "OFF") );
 
-    sal_uInt32 nBoxHeight = GetMaxAutoPaperSize().Height();
+    tools::Long nBoxHeight = GetMaxAutoPaperSize().Height();
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current MaxAutoPaperHeight is " << nBoxHeight);
 
-    sal_uInt32 nTxtHeight = CalcTextHeight(nullptr);
+    tools::Long nTxtHeight = CalcTextHeight(nullptr);
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current Text Height is " << nTxtHeight);
 
     sal_uInt32 nParaCount = GetParaPortions().Count();
@@ -829,7 +829,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         {
             GetTextRanger()->SetVertical( IsVertical() );
 
-            tools::Long nTextY = nStartPosY + GetEditCursor( &rParaPortion, pLine->GetStart() ).Top();
+            tools::Long nTextY = nStartPosY + GetEditCursor( &rParaPortion, pLine, pLine->GetStart(), GetCursorFlags::NONE ).Top();
             if ( !bSameLineAgain )
             {
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
@@ -3033,6 +3033,50 @@ bool ImpEditEngine::isXOverflowDirectionAware(const Point& pt, const tools::Rect
         return pt.Y() < rectMax.Top();
 }
 
+tools::Long ImpEditEngine::getLeftDirectionAware(const tools::Rectangle& rect) const
+{
+    if (!IsVertical())
+        return rect.Left();
+
+    if (IsTopToBottom())
+        return rect.Top();
+    else
+        return rect.Bottom();
+}
+
+tools::Long ImpEditEngine::getRightDirectionAware(const tools::Rectangle& rect) const
+{
+    if (!IsVertical())
+        return rect.Right();
+
+    if (IsTopToBottom())
+        return rect.Bottom();
+    else
+        return rect.Top();
+}
+
+tools::Long ImpEditEngine::getTopDirectionAware(const tools::Rectangle& rect) const
+{
+    if (!IsVertical())
+        return rect.Top();
+
+    if (IsTopToBottom())
+        return rect.Right();
+    else
+        return rect.Left();
+}
+
+tools::Long ImpEditEngine::getBottomDirectionAware(const tools::Rectangle& rect) const
+{
+    if (!IsVertical())
+        return rect.Bottom();
+
+    if (IsTopToBottom())
+        return rect.Left();
+    else
+        return rect.Right();
+}
+
 // Returns the resulting shift for the point; allows to apply the same shift to other points
 Point ImpEditEngine::MoveToNextLine(
     Point& rMovePos, // [in, out] Point that will move to the next line
@@ -3061,6 +3105,8 @@ Point ImpEditEngine::MoveToNextLine(
 
     return rMovePos - aOld;
 }
+
+// TODO: use IterateLineAreas in ImpEditEngine::Paint, to avoid algorithm duplication
 
 void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly, Degree10 nOrientation )
 {
@@ -4574,10 +4620,10 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
     }
 }
 
-void ImpEditEngine::ImplUpdateOverflowingParaNum(sal_uInt32 nPaperHeight)
+void ImpEditEngine::ImplUpdateOverflowingParaNum(tools::Long nPaperHeight)
 {
-    sal_uInt32 nY = 0;
-    sal_uInt32 nPH;
+    tools::Long nY = 0;
+    tools::Long nPH;
 
     for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ ) {
         ParaPortion& rPara = GetParaPortions()[nPara];
@@ -4593,12 +4639,12 @@ void ImpEditEngine::ImplUpdateOverflowingParaNum(sal_uInt32 nPaperHeight)
     }
 }
 
-void ImpEditEngine::ImplUpdateOverflowingLineNum(sal_uInt32 nPaperHeight,
+void ImpEditEngine::ImplUpdateOverflowingLineNum(tools::Long nPaperHeight,
                                              sal_uInt32 nOverflowingPara,
-                                             sal_uInt32 nHeightBeforeOverflowingPara)
+                                             tools::Long nHeightBeforeOverflowingPara)
 {
-    sal_uInt32 nY = nHeightBeforeOverflowingPara;
-    sal_uInt32 nLH;
+    tools::Long nY = nHeightBeforeOverflowingPara;
+    tools::Long nLH;
 
     ParaPortion& rPara = GetParaPortions()[nOverflowingPara];
 

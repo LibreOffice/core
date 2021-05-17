@@ -521,107 +521,114 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     bool bStartHandleVisible = false;
     bool bEndHandleVisible = false;
 
-    for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
-    {
-        ParaPortion* pTmpPortion = pEditEngine->GetParaPortions().SafeGetObject( nPara );
-        if (!pTmpPortion)
+    auto f = [&, nStartLine = sal_Int32(0), nEndLine = sal_Int32(0)](
+                 ParaPortion& rPortion, sal_Int32 nPortion, EditLine* pLine, sal_Int32 nLine,
+                 const tools::Rectangle& rArea, sal_Int32 nColumn) mutable {
+        if (!pLine) // Begin of ParaPortion
         {
-            SAL_WARN( "editeng", "Portion in Selection not found!" );
-            continue;
+            if (nPortion < nStartPara)
+                return ImpEditEngine::CallbackResult::SkipThisPortion;
+            if (nPortion > nEndPara)
+                return ImpEditEngine::CallbackResult::Stop;
+            DBG_ASSERT(!rPortion.IsInvalid(), "Portion in Selection not formatted!");
+            if (rPortion.IsInvalid())
+                return ImpEditEngine::CallbackResult::SkipThisPortion;
+
+            if (nPortion == nStartPara)
+                nStartLine = rPortion.GetLines().FindLine(aTmpSel.Min().GetIndex(), false);
+            else
+                nStartLine = 0;
+
+            if (nPortion == nEndPara)
+                nEndLine = rPortion.GetLines().FindLine(aTmpSel.Max().GetIndex(), true);
+            else
+                nEndLine = rPortion.GetLines().Count() - 1;
         }
-
-        DBG_ASSERT( !pTmpPortion->IsInvalid(), "Portion in Selection not formatted!" );
-
-        if ( !pTmpPortion->IsVisible() || pTmpPortion->IsInvalid() )
-            continue;
-
-        tools::Long nParaStart = pEditEngine->GetParaPortions().GetYOffset( pTmpPortion );
-        if ( ( nParaStart + pTmpPortion->GetHeight() ) < GetVisDocTop() )
-            continue;
-        if ( nParaStart > GetVisDocBottom() )
-            break;
-
-        sal_uInt16 nStartLine = 0;
-        sal_uInt16 nEndLine = pTmpPortion->GetLines().Count() -1;
-        if ( nPara == nStartPara )
-            nStartLine = pTmpPortion->GetLines().FindLine( aTmpSel.Min().GetIndex(), false );
-        if ( nPara == nEndPara )
-            nEndLine = pTmpPortion->GetLines().FindLine( aTmpSel.Max().GetIndex(), true );
-
-        for ( sal_uInt16 nLine = nStartLine; nLine <= nEndLine; nLine++ )
+        else // This is a correct ParaPortion
         {
-            const EditLine& rLine = pTmpPortion->GetLines()[nLine];
+            if (nLine < nStartLine)
+                return ImpEditEngine::CallbackResult::Continue;
+            if (nLine > nEndLine)
+                return ImpEditEngine::CallbackResult::SkipThisPortion;
 
             bool bPartOfLine = false;
-            sal_Int32 nStartIndex = rLine.GetStart();
-            sal_Int32 nEndIndex = rLine.GetEnd();
-            if ( ( nPara == nStartPara ) && ( nLine == nStartLine ) && ( nStartIndex != aTmpSel.Min().GetIndex() ) )
+            sal_Int32 nStartIndex = pLine->GetStart();
+            sal_Int32 nEndIndex = pLine->GetEnd();
+            if ((nPortion == nStartPara) && (nLine == nStartLine)
+                && (nStartIndex != aTmpSel.Min().GetIndex()))
             {
                 nStartIndex = aTmpSel.Min().GetIndex();
                 bPartOfLine = true;
             }
-            if ( ( nPara == nEndPara ) && ( nLine == nEndLine ) && ( nEndIndex != aTmpSel.Max().GetIndex() ) )
+            if ((nPortion == nEndPara) && (nLine == nEndLine)
+                && (nEndIndex != aTmpSel.Max().GetIndex()))
             {
                 nEndIndex = aTmpSel.Max().GetIndex();
                 bPartOfLine = true;
             }
 
             // Can happen if at the beginning of a wrapped line.
-            if ( nEndIndex < nStartIndex )
+            if (nEndIndex < nStartIndex)
                 nEndIndex = nStartIndex;
 
-            tools::Rectangle aTmpRect( pEditEngine->pImpEditEngine->GetEditCursor( pTmpPortion, nStartIndex ) );
-            Point aTopLeft( aTmpRect.TopLeft() );
-            Point aBottomRight( aTmpRect.BottomRight() );
-
-            aTopLeft.AdjustY(nParaStart );
-            aBottomRight.AdjustY(nParaStart );
+            tools::Rectangle aTmpRect(pEditEngine->pImpEditEngine->GetEditCursor(
+                &rPortion, pLine, nStartIndex, GetCursorFlags::NONE));
+            aTmpRect.Move(0, pEditEngine->pImpEditEngine->getTopDirectionAware(rArea));
 
             // Only paint if in the visible range ...
-            if ( aTopLeft.Y() > GetVisDocBottom() )
-                break;
+            if (aTmpRect.Top() > GetVisDocBottom())
+                return ImpEditEngine::CallbackResult::Continue;
 
-            if ( aBottomRight.Y() < GetVisDocTop() )
-                continue;
+            if (aTmpRect.Bottom() < GetVisDocTop())
+                return ImpEditEngine::CallbackResult::Continue;
 
-            if ( ( nPara == nStartPara ) && ( nLine == nStartLine ) )
+            if ((nPortion == nStartPara) && (nLine == nStartLine))
                 bStartHandleVisible = true;
-            if ( ( nPara == nEndPara ) && ( nLine == nEndLine ) )
+            if ((nPortion == nEndPara) && (nLine == nEndLine))
                 bEndHandleVisible = true;
 
             // Now that we have Bidi, the first/last index doesn't have to be the 'most outside' position
-            if ( !bPartOfLine )
+            if (!bPartOfLine)
             {
-                Range aLineXPosStartEnd = pEditEngine->GetLineXPosStartEnd(pTmpPortion, &rLine);
-                aTopLeft.setX( aLineXPosStartEnd.Min() );
-                aBottomRight.setX( aLineXPosStartEnd.Max() );
-                ImplDrawHighlightRect(rTarget, aTopLeft, aBottomRight, pPolyPoly.get());
+                Range aLineXPosStartEnd = pEditEngine->GetLineXPosStartEnd(&rPortion, pLine);
+                aTmpRect.SetLeft(aLineXPosStartEnd.Min());
+                aTmpRect.SetRight(aLineXPosStartEnd.Max());
+                aTmpRect.Move(pEditEngine->pImpEditEngine->getLeftDirectionAware(rArea), 0);
+                ImplDrawHighlightRect(rTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(), pPolyPoly.get());
             }
             else
             {
                 sal_Int32 nTmpStartIndex = nStartIndex;
                 sal_Int32 nWritingDirStart, nTmpEndIndex;
+                const sal_Int32 nLeftOffset
+                    = pEditEngine->pImpEditEngine->getLeftDirectionAware(rArea);
 
-                while ( nTmpStartIndex < nEndIndex )
+                while (nTmpStartIndex < nEndIndex)
                 {
-                    pEditEngine->pImpEditEngine->GetRightToLeft( nPara, nTmpStartIndex+1, &nWritingDirStart, &nTmpEndIndex );
-                    if ( nTmpEndIndex > nEndIndex )
+                    pEditEngine->pImpEditEngine->GetRightToLeft(nPortion, nTmpStartIndex + 1,
+                                                                &nWritingDirStart, &nTmpEndIndex);
+                    if (nTmpEndIndex > nEndIndex)
                         nTmpEndIndex = nEndIndex;
 
-                    DBG_ASSERT( nTmpEndIndex > nTmpStartIndex, "DrawSelectionXOR, Start >= End?" );
+                    DBG_ASSERT(nTmpEndIndex > nTmpStartIndex, "DrawSelectionXOR, Start >= End?");
 
-                    tools::Long nX1 = pEditEngine->GetXPos(pTmpPortion, &rLine, nTmpStartIndex, true);
-                    tools::Long nX2 = pEditEngine->GetXPos(pTmpPortion, &rLine, nTmpEndIndex);
+                    tools::Long nX1
+                        = pEditEngine->GetXPos(&rPortion, pLine, nTmpStartIndex, true);
+                    tools::Long nX2 = pEditEngine->GetXPos(&rPortion, pLine, nTmpEndIndex);
 
-                    Point aPt1( std::min( nX1, nX2 ), aTopLeft.Y() );
-                    Point aPt2( std::max( nX1, nX2 ), aBottomRight.Y() );
+                    aTmpRect.SetLeft(std::min(nX1, nX2));
+                    aTmpRect.SetRight(std::max(nX1, nX2));
+                    aTmpRect.Move(nLeftOffset, 0);
 
-                    ImplDrawHighlightRect(rTarget, aPt1, aPt2, pPolyPoly.get());
+                    ImplDrawHighlightRect(rTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(),
+                                          pPolyPoly.get());
                     nTmpStartIndex = nTmpEndIndex;
                 }
             }
         }
-    }
+        return ImpEditEngine::CallbackResult::Continue;
+    };
+    pEditEngine->pImpEditEngine->IterateLineAreas(f, ImpEditEngine::IterFlag::none);
 
     if (comphelper::LibreOfficeKit::isActive() && mpViewShell && pOutWin)
         lokSelectionCallback(pPolyPoly, bStartHandleVisible, bEndHandleVisible);
@@ -1802,6 +1809,9 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, 
     Point aDocPos( GetDocPos( rPos ) );
     EditPaM aPaM = pEditEngine->GetPaM(aDocPos, false);
 
+    if (!aPaM)
+        return nullptr;
+
     if ( aPaM.GetIndex() == aPaM.GetNode()->Len() )
     {
         // Otherwise, whenever the Field at the very end and mouse under the text
@@ -1839,6 +1849,8 @@ bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
 
     Point aDocPos( GetDocPos( rPos ) );
     EditPaM aPaM = pEditEngine->GetPaM(aDocPos, false);
+    if (!aPaM)
+        return false;
 
     if ( aPaM.GetIndex() == 0 )
     {
