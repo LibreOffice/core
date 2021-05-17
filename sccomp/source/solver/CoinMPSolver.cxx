@@ -326,6 +326,7 @@ void SAL_CALL CoinMPSolver::solve()
         }
         catch (const CoinError& e)
         {
+            CoinUnloadProblem(hProb);
             throw std::runtime_error(e.message());
         }
     }
