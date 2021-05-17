@@ -979,6 +979,22 @@ void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDoc
             rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
 }
 
+ScDocShell* findLoadedDocShellByName(std::u16string_view rName)
+{
+    ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
+    while (pShell)
+    {
+        SfxMedium* pMedium = pShell->GetMedium();
+        if (pMedium)
+        {
+            OUString aName = pMedium->GetName();
+            if (aName == rName)
+                return pShell;
+        }
+        pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, checkSfxObjectShell<ScDocShell>, false));
+    }
+    return nullptr;
+}
 
 bool insertRangeNames(
     ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p, const RangeNameDef* pEnd)
