@@ -11410,7 +11410,7 @@ dnl     AC_MSG_RESULT([sal_Int32])
 dnl fi
 
 dnl ===================================================================
-dnl Test which vclplugs have to be built.
+dnl Show which vclplugs will be built.
 dnl ===================================================================
 R=""
 if test "$USING_X11" != TRUE; then
@@ -11456,6 +11456,30 @@ if test "x$enable_kf5" = "xyes"; then
     R="$R kf5"
 fi
 AC_SUBST(ENABLE_KF5)
+
+if test "x$USING_X11" = "xyes"; then
+    R="$R gen"
+fi
+
+if test "$_os" = "WINNT"; then
+    R="$R win"
+elif test "$_os" = "Darwin"; then
+    R="$R osx"
+elif test "$_os" = "iOS"; then
+    R="ios (builtin)"
+fi
+
+build_vcl_plugins="$R"
+if test -z "$build_vcl_plugins"; then
+    build_vcl_plugins=" none"
+fi
+AC_MSG_NOTICE([VCLplugs to be built:${build_vcl_plugins}])
+VCL_PLUGIN_INFO=$R
+AC_SUBST([VCL_PLUGIN_INFO])
+
+dnl ===================================================================
+dnl Check for GTK libraries
+dnl ===================================================================
 
 GTK3_CFLAGS=""
 GTK3_LIBS=""
@@ -11510,22 +11534,6 @@ if test "$enable_introspection" = yes; then
         AC_MSG_ERROR([--enable-introspection requires --enable-gtk3])
     fi
 fi
-
-if test "$_os" = "WINNT"; then
-    R="$R win"
-elif test "$_os" = "Darwin"; then
-    R="$R osx"
-elif test "$_os" = "iOS"; then
-    R="ios (builtin)"
-fi
-
-build_vcl_plugins="$R"
-if test -z "$build_vcl_plugins"; then
-    build_vcl_plugins="none"
-fi
-AC_MSG_NOTICE([VCLplugs to be built: $build_vcl_plugins])
-VCL_PLUGIN_INFO=$R
-AC_SUBST([VCL_PLUGIN_INFO])
 
 dnl ===================================================================
 dnl check for dbus support
