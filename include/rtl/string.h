@@ -747,31 +747,6 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_str_toBoolean(
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_toInt32(
         const char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 
-/** Interpret a string as an integer.
-
-    This function cannot be used for language-specific conversion.  The string
-    must be null-terminated.
-
-    @param str
-    a null-terminated string.
-
-    @param radix
-    the radix.  Must be between RTL_STR_MIN_RADIX (2) and RTL_STR_MAX_RADIX
-    (36), inclusive.
-
-    @param len
-    the length of the character array.
-
-    @return
-    the integer value represented by the string, or 0 if the string does not
-    represent an integer.
-
-    @since LibreOffice 7.2
-    @internal
- */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_toInt32_WithLength(
-        const char * str, sal_Int16 radix, sal_Int32 nStrLength ) SAL_THROW_EXTERN_C();
-
 /** Interpret a string as an unsigned integer.
 
     This function cannot be used for language-specific conversion.  The string
