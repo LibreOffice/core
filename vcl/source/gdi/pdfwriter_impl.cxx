@@ -8748,29 +8748,40 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
 
         long nWidth = aSize.Width();
         long nHeight = aSize.Height();
+        basegfx::B2DRange aBBox(0, 0, aSize.Width(),  aSize.Height());
         if (auto pRotate = dynamic_cast<filter::PDFNumberElement*>(pPage->Lookup("Rotate")))
         {
             // The original page was rotated, then construct a transformation matrix which does the
             // same with our form object.
-            if (rtl::math::approxEqual(pRotate->GetValue(), 90))
-            {
-                std::swap(nWidth, nHeight);
-                basegfx::B2DHomMatrix aMat;
-                aMat.rotate(basegfx::deg2rad(pRotate->GetValue()));
-                // Rotate around the origo (bottom left corner) counter-clockwise, then translate
-                // horizontally to effectively keep the bottom left corner unchanged.
-                aLine.append(" /Matrix [ ");
-                aLine.append(aMat.get(0, 0));
-                aLine.append(" ");
-                aLine.append(aMat.get(0, 1));
-                aLine.append(" ");
-                aLine.append(aMat.get(1, 0));
-                aLine.append(" ");
-                aLine.append(aMat.get(1, 1));
-                aLine.append(" 0 ");
-                aLine.append(nWidth);
-                aLine.append(" ] ");
-            }
+            sal_Int32 nRotAngle = static_cast<sal_Int32>(pRotate->GetValue()) % 360;
+            // /Rotate is clockwise, matrix rotate is counter-clockwise.
+            sal_Int32 nAngle = -1 * nRotAngle;
+
+            // The bounding box just rotates.
+            basegfx::B2DHomMatrix aBBoxMat;
+            aBBoxMat.rotate(basegfx::deg2rad(pRotate->GetValue()));
+            aBBox.transform(aBBoxMat);
+
+            // Now transform the object: rotate around the center and make sure that the rotation
+            // doesn't affect the aspect ratio.
+            basegfx::B2DHomMatrix aMat;
+            aMat.translate(-0.5 * aBBox.getWidth(), -0.5 * aBBox.getHeight());
+            aMat.rotate(basegfx::deg2rad(nAngle));
+            aMat.translate(0.5 * nWidth, 0.5 * nHeight);
+
+            aLine.append(" /Matrix [ ");
+            aLine.append(aMat.a());
+            aLine.append(" ");
+            aLine.append(aMat.b());
+            aLine.append(" ");
+            aLine.append(aMat.c());
+            aLine.append(" ");
+            aLine.append(aMat.d());
+            aLine.append(" ");
+            aLine.append(aMat.e());
+            aLine.append(" ");
+            aLine.append(aMat.f());
+            aLine.append(" ] ");
         }
 
         PDFObjectCopier aCopier(*this);
@@ -8778,9 +8789,9 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         aCopier.copyPageResources(pPage, aLine, rResources);
 
         aLine.append(" /BBox [ 0 0 ");
-        aLine.append(nWidth);
+        aLine.append(aBBox.getWidth());
         aLine.append(" ");
-        aLine.append(nHeight);
+        aLine.append(aBBox.getHeight());
         aLine.append(" ]");
 
         if (!g_bDebugDisableCompression)
