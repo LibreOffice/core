@@ -1,0 +1,289 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "732df85a_ac157d10",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "if it shall be null-terminated, what is the exact role of nStrLen?",
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da56adce_608766a1",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "nStrLength",
+      "range": {
+        "startLine": 762,
+        "startChar": 11,
+        "endLine": 762,
+        "endChar": 14
+      },
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd96a0c1_a185eba1",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "any preconditions (non-negative, presumably)?",
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "907a0017_0b9036cc",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "Notwithstanding other broken uses similar to this, I think the correct way is to wrap documentation comment and declaration in\n\n  /** @cond INTERNAL */\n  ...\n  /** @endcond */\n\n\n`@internal` appears to be ignored by doxygen.",
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b1870a4_d8746f4d",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "Instead of adding to the sal ABI, can\u0027t we use the existing rtl_str_toInt64_WithLength and then check for the appropriate range (in a C++ inline function, say)?  (Esp. given that we will presumably want to get rid of all of these conversion functions in favor of C++17 std::from_chars, once that is available in all C++ standard library baselines, cf. README.md and \u003chttps://en.cppreference.com/w/cpp/compiler_support#C.2B.2B17_library_features\u003e \"Elementary string conversions, including FP (Floating-Point) values support\" row.)\n\nAlso, it looks a bit odd to add a _str_ but not a _ustr_ variant.",
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc011f86_55ba9008",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "input?",
+      "range": {
+        "startLine": 1339,
+        "startChar": 27,
+        "endLine": 1339,
+        "endChar": 32
+      },
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51ef7b9d_c7ef65ee",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "this example code looks like a copy/paste error?",
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4937ec39_fd5e16b5",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "what new string reference count is this about?",
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d97262c2_bbb750f2",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "this looks like copy/paste nonsense?",
+      "range": {
+        "startLine": 1361,
+        "startChar": 40,
+        "endLine": 1362,
+        "endChar": 11
+      },
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e7a1f05_11160868",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "what is newStr?",
+      "range": {
+        "startLine": 1363,
+        "startChar": 4,
+        "endLine": 1363,
+        "endChar": 10
+      },
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d52b5be_cdb57395",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54850474_2787a1f9",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1388,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "It looks a bit odd to have a _string_ but not a _uString_ variant.",
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c5f28d0_34539422",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "is this \"fast string\" related functionality, or is that a copy/paste glitch?",
+      "range": {
+        "startLine": 1768,
+        "startChar": 29,
+        "endLine": 1768,
+        "endChar": 46
+      },
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18fec098_337c6097",
+        "filename": "sal/util/sal.map",
+        "patchSetId": 7
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "is it a good idea to sneak that breaking change \"correction\" into this unrelated change?",
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cb5ebad_ff8d264d",
+        "filename": "sal/util/sal.map",
+        "patchSetId": 7
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T12:47:08Z",
+      "side": 1,
+      "message": "I would let such lists be sorted lexicographically by Unicode scalar values.",
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
