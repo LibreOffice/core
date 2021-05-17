@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7114606c_7dd4efcf",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-05-17T09:38:52Z",
+      "side": 1,
+      "message": "before:\n\n(rr) p pPos-\u003enNode.GetNodes()\n$1 \u003d (SwNodes \u0026) @0x71c6e90: {\n  \u003cBigPtrArray\u003e \u003d BigPtrArray of length 16 \u003d {\n[   0] 0x35fe820            StartNode , \n[   1] 0x7189bc0              EndNode , \n[   2] 0x3604b00            StartNode , \n[   3] 0x71e6490              EndNode , \n[   4] 0x36199b0            StartNode , \n[   5] 0x717bdc0              EndNode , \n[   6] 0x3606020            StartNode , \n[   7] 0x71cee00              EndNode , \n[   8] 0x36059a0            StartNode , \n[   9]  0x8cfc878            TextNode \"\", \n[  10]  0x8d00820         SectionNode , \n[  11]   0x8dd88b8           TextNode \"Text iin section\", \n[  12]  0x8d83130             EndNode , \n[  13]  0x8d010c8            TextNode \"\", \n[  14]  0x721fcc8            TextNode \"\", \n[  15] 0x71d1e90              EndNode }, \n\nafter:\n\n(rr) p pPos-\u003enNode.GetNodes()\n$5 \u003d (SwNodes \u0026) @0x71c6e90: {\n  \u003cBigPtrArray\u003e \u003d BigPtrArray of length 15 \u003d {\n[   0] 0x35fe820            StartNode , \n[   1] 0x7189bc0              EndNode , \n[   2] 0x3604b00            StartNode , \n[   3] 0x71e6490              EndNode , \n[   4] 0x36199b0            StartNode , \n[   5] 0x717bdc0              EndNode , \n[   6] 0x3606020            StartNode , \n[   7] 0x71cee00              EndNode , \n[   8] 0x36059a0            StartNode , \n[   9]  0x8cfc878            TextNode \"\", \n[  10]  0x8d00820         SectionNode , \n[  11]   0x8dd88b8           TextNode \"Text iin section\", \n[  12]  0x8d83130             EndNode , \n[  13]  0x721fcc8            TextNode \"\", \n[  14] 0x71d1e90              EndNode }, \n\ni find it unintuitive to put the \"if\" here where node 13 was joined, and not the second JoinPrev in line 778 where node 11 will be joined, which is what removes the section\n\n... also, a short comment that the condition is checked to avoid removing section would be nice.",
+      "revId": "bf95b7ecca7bee7efc033c651e9e0bff83005bb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
