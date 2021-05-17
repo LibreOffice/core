@@ -10064,22 +10064,22 @@ private:
     gulong m_nSelectionPosSignalId;
     gulong m_nActivateSignalId;
 
-    static void signalChanged(GtkEntry*, gpointer widget)
+    static void signalChanged(GtkEditable*, gpointer widget)
     {
         GtkInstanceEntry* pThis = static_cast<GtkInstanceEntry*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_changed();
     }
 
-    static void signalInsertText(GtkEntry* pEntry, const gchar* pNewText, gint nNewTextLength,
+    static void signalInsertText(GtkEditable* pEditable, const gchar* pNewText, gint nNewTextLength,
                                  gint* position, gpointer widget)
     {
         GtkInstanceEntry* pThis = static_cast<GtkInstanceEntry*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_insert_text(pEntry, pNewText, nNewTextLength, position);
+        pThis->signal_insert_text(pEditable, pNewText, nNewTextLength, position);
     }
 
-    void signal_insert_text(GtkEntry* pEntry, const gchar* pNewText, gint nNewTextLength, gint* position)
+    void signal_insert_text(GtkEditable* pEditable, const gchar* pNewText, gint nNewTextLength, gint* position)
     {
         if (!m_aInsertTextHdl.IsSet())
             return;
@@ -10088,11 +10088,11 @@ private:
         if (bContinue && !sText.isEmpty())
         {
             OString sFinalText(OUStringToOString(sText, RTL_TEXTENCODING_UTF8));
-            g_signal_handlers_block_by_func(pEntry, reinterpret_cast<gpointer>(signalInsertText), this);
-            gtk_editable_insert_text(GTK_EDITABLE(pEntry), sFinalText.getStr(), sFinalText.getLength(), position);
-            g_signal_handlers_unblock_by_func(pEntry, reinterpret_cast<gpointer>(signalInsertText), this);
+            g_signal_handlers_block_by_func(pEditable, reinterpret_cast<gpointer>(signalInsertText), this);
+            gtk_editable_insert_text(pEditable, sFinalText.getStr(), sFinalText.getLength(), position);
+            g_signal_handlers_unblock_by_func(pEditable, reinterpret_cast<gpointer>(signalInsertText), this);
         }
-        g_signal_stop_emission_by_name(pEntry, "insert-text");
+        g_signal_stop_emission_by_name(pEditable, "insert-text");
     }
 
     static void signalCursorPosition(GtkEntry*, GParamSpec*, gpointer widget)
