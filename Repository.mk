@@ -23,9 +23,14 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_CLUCENE),TRUE)
 $(eval $(call gb_Helper_register_executables,NONE, \
 	HelpIndexer \
 	HelpLinker \
+))
+endif
+
+$(eval $(call gb_Helper_register_executables,NONE, \
 	bestreversemap \
 	cfgex \
 	concat-deps \
@@ -633,6 +638,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 ))
 endif
 
+ifneq ($(DENABLE_WASM_STRIP_UCPHELP),TRUE)
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
+	ucpchelp1 \
+))
+endif
+
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
 	$(if $(filter WNT,$(OS)),avmediawin) \
@@ -669,7 +680,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(WITH_WEBDAV),ucpdav1) \
 	ucpfile1 \
 	ucpftp1 \
-	ucpchelp1 \
 	ucphier1 \
 	ucppkg1 \
 	unopkgapp \
