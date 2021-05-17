@@ -230,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "235c4ce5_36c82cbc",
+        "filename": "include/rtl/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1388,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-05-17T13:40:57Z",
+      "side": 1,
+      "message": "If I find a use-case for it, I\u0027ll be sure to add it",
+      "parentUuid": "54850474_2787a1f9",
+      "revId": "3669d4ec43a6aa2d410d8351d631548db45a5302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c5f28d0_34539422",
         "filename": "include/rtl/string.hxx",
         "patchSetId": 7
