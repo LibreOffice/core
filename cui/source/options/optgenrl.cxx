@@ -315,7 +315,7 @@ void SvxGeneralTabPage::InitCryptography()
             {
                  m_xSigningKeyLB->set_size_request(nMaxWidth, -1);
                  m_xEncryptionKeyLB->set_size_request(nMaxWidth, -1);
-                 m_xEncryptToSelfCB->set_label_line_wrap(true);
+                 m_xEncryptToSelfCB->set_label_wrap(true);
                  m_xEncryptToSelfCB->set_size_request(nMaxWidth, -1);
             }
         }
