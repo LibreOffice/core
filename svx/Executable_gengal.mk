@@ -44,16 +44,13 @@ $(eval $(call gb_Executable_use_libraries,gengal,\
     cppu \
     cppuhelper \
     utl \
-    vcl \
     svxcore \
 ))
 
+$(eval $(call gb_Executable_use_vclmain,gengal))
+
 $(eval $(call gb_Executable_add_exception_objects,gengal,\
     svx/source/gengal/gengal \
-))
-
-$(eval $(call gb_Executable_use_static_libraries,gengal,\
-    vclmain \
 ))
 
 ifeq ($(OS),WNT)
@@ -63,25 +60,6 @@ $(eval $(call gb_Executable_use_system_win32_libs,gengal,\
 	oldnames \
 	user32 \
 ))
-endif
-
-ifeq ($(DISABLE_GUI),TRUE)
-$(eval $(call gb_Executable_add_libs,gengal,\
-	$(DLOPEN_LIBS) \
-))
-else
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Executable_add_libs,gengal,\
-	$(DLOPEN_LIBS) \
-    -lX11 \
-))
-
-ifeq ($(USING_X11),TRUE)
-$(eval $(call gb_Executable_use_static_libraries,gengal,\
-	glxtest \
-))
-endif
-endif
 endif
 
 $(eval $(call gb_Executable_add_default_nativeres,gengal))

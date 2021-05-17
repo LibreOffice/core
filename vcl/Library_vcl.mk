@@ -108,12 +108,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
     $(if $(filter SKIA,$(BUILD_TYPE)),skia) \
 ))
 
-ifeq ($(DISABLE_GUI),)
-$(eval $(call gb_Library_use_externals,vcl,\
-     epoxy \
- ))
-endif
-
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationBitmap \
@@ -202,7 +196,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/longcurr \
     vcl/source/control/imp_listbox \
     vcl/source/control/listbox \
-	vcl/source/control/managedmenubutton \
+    vcl/source/control/managedmenubutton \
     vcl/source/control/menubtn \
     vcl/source/control/NotebookbarPopup \
     vcl/source/control/PriorityHBox \
@@ -540,131 +534,153 @@ $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/filter/jpeg/transupp \
 ))
 
-vcl_headless_code= \
-    vcl/headless/svpframe \
-    $(if $(filter-out iOS,$(OS)), \
-        vcl/headless/svpbmp \
-        vcl/headless/svpgdi \
-        vcl/headless/svpdata \
-        vcl/headless/CustomWidgetDraw) \
+vcl_headless_code = \
+    vcl/headless/CustomWidgetDraw \
+    vcl/headless/svpbmp \
+    vcl/headless/svpcairotextrender \
+    vcl/headless/svpdata \
     vcl/headless/svpdummies \
+    vcl/headless/svpframe \
+    vcl/headless/svpgdi \
     vcl/headless/svpinst \
+    vcl/headless/svpprn \
+    vcl/headless/svptext \
     vcl/headless/svpvd \
+    vcl/unx/generic/app/gendata \
     vcl/unx/generic/app/gendisp \
     vcl/unx/generic/app/geninst \
     vcl/unx/generic/app/gensys \
-
-vcl_headless_freetype_code=\
-    vcl/headless/svpprn \
-    vcl/headless/svptext \
-    vcl/unx/generic/app/gendata \
+    vcl/unx/generic/fontmanager/fontconfig \
+    vcl/unx/generic/fontmanager/fontmanager \
+    vcl/unx/generic/fontmanager/fontsubst \
+    vcl/unx/generic/fontmanager/helper \
     vcl/unx/generic/gdi/cairotextrender \
     vcl/unx/generic/gdi/freetypetextrender \
     vcl/unx/generic/glyphs/freetype_glyphcache \
     vcl/unx/generic/glyphs/glyphcache \
-    vcl/unx/generic/fontmanager/fontsubst \
-    vcl/unx/generic/fontmanager/fontconfig \
-    vcl/unx/generic/fontmanager/fontmanager \
-    vcl/unx/generic/fontmanager/helper \
-    vcl/headless/svpcairotextrender \
     vcl/unx/generic/print/bitmap_gfx \
     vcl/unx/generic/print/common_gfx \
-    vcl/unx/generic/print/glyphset \
-    vcl/unx/generic/print/printerjob \
-    vcl/unx/generic/print/psputil \
+    vcl/unx/generic/print/genprnpsp \
     vcl/unx/generic/print/GenPspGfxBackend \
     vcl/unx/generic/print/genpspgraphics \
-    vcl/unx/generic/print/genprnpsp \
+    vcl/unx/generic/print/glyphset \
+    vcl/unx/generic/print/printerjob \
     vcl/unx/generic/print/prtsetup \
+    vcl/unx/generic/print/psputil \
     vcl/unx/generic/print/text_gfx \
-
-ifeq ($(USING_X11),TRUE)
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/app/salplug \
-    vcl/unx/generic/printer/jobdata \
-    vcl/unx/generic/printer/ppdparser \
-    vcl/unx/generic/window/screensaverinhibitor \
-    vcl/unx/generic/printer/cpdmgr \
-    $(if $(filter TRUE,$(ENABLE_CUPS)),\
-        vcl/unx/generic/printer/cupsmgr \
-        vcl/unx/generic/printer/printerinfomanager \
-        , \
-        vcl/null/printerinfomanager \
-    ) \
-    $(vcl_headless_code) \
-    $(vcl_headless_freetype_code) \
-))
-
-$(eval $(call gb_Library_use_externals,vcl,\
-    cairo \
-    cups \
-    dbus \
-    fontconfig \
-    freetype \
-    valgrind \
-))
-endif
-
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-$(eval $(call gb_Library_add_libs,vcl,\
-    -lm $(DLOPEN_LIBS) \
-))
-endif
-
-ifeq ($(DISABLE_GUI),TRUE)
-$(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
-    vcl/headless/headlessinst \
+
+vcl_default_unx_libs = \
+    cairo \
+    fontconfig \
+    freetype \
+
+ifneq (,$(filter LINUX %BSD SOLARIS,$(OS)))
+$(eval $(call gb_Library_add_libs,vcl,\
+    -lm \
+    $(if $(DISABLE_DYNLOADING),,$(DLOPEN_LIBS)) \
+))
+endif
+
+#
+# DISABLE_GUI
+#
+ifeq ($(DISABLE_GUI),TRUE)
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/skia/SkiaHelper \
     $(vcl_headless_code) \
-    $(vcl_headless_freetype_code) \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-    cairo \
-    freetype \
-    fontconfig \
+    $(vcl_default_unx_libs) \
 ))
 
 else # ! DISABLE_GUI
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/skia/SkiaHelper \
     vcl/source/opengl/DeviceInfo \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
-    vcl/skia/SkiaHelper \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         vcl/skia/salbmp \
         vcl/skia/zone \
         vcl/skia/gdiimpl \
-        ) \
- ))
+    ) \
+))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_package,vcl,vcl_opengl_denylist))
-endif
+$(eval $(call gb_Library_use_externals,vcl,\
+    epoxy \
+))
 
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+#
+# !DISABLE_GUI && USING_X11
+#
+ifeq ($(USING_X11),TRUE)
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    $(if $(DISABLE_DYNLOADING),vcl/source/app/salplug_static,vcl/source/app/salplug) \
+    $(vcl_headless_code) \
+    vcl/unx/generic/window/screensaverinhibitor \
+    vcl/unx/generic/printer/cpdmgr \
+    $(if $(filter TRUE,$(ENABLE_CUPS)),\
+        vcl/unx/generic/printer/cupsmgr \
+        vcl/unx/generic/printer/printerinfomanager \
+    ) \
+))
+
+$(eval $(call gb_Library_use_externals,vcl,\
+    cups \
+    dbus \
+    valgrind \
+    $(vcl_default_unx_libs) \
+))
+
 $(eval $(call gb_Library_add_libs,vcl,\
     -lX11 \
     -lXext \
+))
+
+#
+# X11 with OPENGL / glx support
+#
+ifneq (,$(filter LINUX %BSD SOLARIS,$(OS)))
+$(eval $(call gb_Library_use_static_libraries,vcl,\
+    glxtest \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/opengl/x11/X11DeviceInfo \
 ))
 endif
-endif # ! DISABLE_GUI
+
+else # !USING_X11
+
+#
+# !DISABLE_GUI && !USING_X11
+#
+# Code for all OS not handled later!
+#
+ifneq (,$(filter-out iOS WNT ANDROID MACOSX HAIKU,$(OS)))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    $(if $(DISABLE_DYNLOADING),vcl/source/app/salplug_static,vcl/source/app/salplug) \
+    $(vcl_headless_code) \
+))
+
+$(eval $(call gb_Library_use_externals,vcl,\
+    expat \
+    $(vcl_default_unx_libs) \
+))
+endif
+
+endif # !USING_X11
+endif # !DISABLE_GUI
 
 
 ifeq ($(OS),HAIKU)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/printer/jobdata \
-    vcl/unx/generic/printer/ppdparser \
-    vcl/null/printerinfomanager \
     $(vcl_headless_code) \
-    $(vcl_headless_freetype_code) \
 ))
 
 $(eval $(call gb_Library_add_libs,vcl,\
@@ -676,12 +692,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl, \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-    cairo \
-    fontconfig \
-    freetype \
     expat \
+    $(vcl_default_unx_libs) \
 ))
-endif
+endif # HAIKU
 
 
 ifeq ($(OS),ANDROID)
@@ -691,48 +705,50 @@ $(eval $(call gb_Library_add_libs,vcl,\
     -llo-bootstrap \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/printer/jobdata \
-    vcl/unx/generic/printer/ppdparser \
-    vcl/null/printerinfomanager \
     vcl/android/androidinst \
     $(vcl_headless_code) \
-    $(vcl_headless_freetype_code) \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-    cairo \
-    fontconfig \
-    freetype \
     expat \
+    $(vcl_default_unx_libs) \
 ))
-endif
+endif # ANDROID
 
 
 ifeq ($(OS),iOS)
 $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
 ))
+
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/ios/iosinst \
-    vcl/ios/dummies \
+    vcl/headless/svpdummies \
+    vcl/headless/svpframe \
+    vcl/headless/svpinst \
+    vcl/headless/svpvd \
     vcl/ios/clipboard \
-    vcl/ios/salios \
-    vcl/ios/iOSTransferable \
     vcl/ios/DataFlavorMapping \
+    vcl/ios/dummies \
     vcl/ios/HtmlFmtFlt \
+    vcl/ios/iosinst \
+    vcl/ios/iOSTransferable \
+    vcl/ios/salios \
     vcl/quartz/ctfonts \
     vcl/quartz/salbmp \
     vcl/quartz/salgdi \
     vcl/quartz/salgdicommon \
     vcl/quartz/salvd \
     vcl/quartz/utils \
-    $(vcl_headless_code) \
+    vcl/unx/generic/app/gendisp \
+    vcl/unx/generic/app/geninst \
+    vcl/unx/generic/app/gensys \
 ))
+
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     UIKit \
     CoreFoundation \
 ))
-endif
+endif # iOS
 
 
 ifeq ($(OS),MACOSX)
@@ -744,7 +760,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/salplug \
 ))
-endif
+endif # MACOSX
 
 
 ifeq ($(OS),WNT)
@@ -764,18 +780,10 @@ $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
 
 # HACK: dependency on icon themes so running unit tests don't
 # prevent delivering these by having open file handles on WNT
-ifeq ($(gb_Side),host)
-$(eval $(call gb_Library_use_package,vcl,postprocess_images))
-endif
-endif # $(OS) == WNT
-
-
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
-ifeq ($(USING_X11),TRUE)
-$(eval $(call gb_Library_use_static_libraries,vcl,\
-	glxtest \
+$(eval $(call gb_Library_use_package,vcl,\
+    vcl_opengl_denylist \
+    $(if $(filter host,$(gb_Side)),postprocess_images) \
 ))
-endif
-endif
+endif # WNT
 
 # vim: set noet sw=4 ts=4:

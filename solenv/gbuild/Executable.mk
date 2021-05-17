@@ -85,6 +85,30 @@ define gb_Executable_set_targettype_gui
 $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$(1))) : TARGETGUI := $(2)
 endef
 
+# call gb_Executable_use_glxtest,exe,add_libs
+define gb_Executable_use_glxtest
+$(call gb_Executable_use_libraries,$(1),vcl)
+
+ifeq (,$(DISABLE_DYNLOADING))
+$(call gb_Executable_add_libs,$(1),$(DLOPEN_LIBS))
+endif
+
+ifeq (,$(DISABLE_GUI))
+ifeq ($(USING_X11),TRUE)
+$(call gb_Executable_add_libs,$(1),-lX11 $(2))
+$(call gb_Executable_use_static_libraries,$(1),glxtest)
+endif
+endif
+
+endef # gb_Executable_use_glxtest
+
+# call gb_Executable_use_vclmain,exe,add_libs
+define gb_Executable_use_vclmain
+$(call gb_Executable_use_glxtest,$(1),$(2))
+$(call gb_Executable_use_static_libraries,$(1),vclmain)
+
+endef # gb_Executable_use_vclmain
+
 # forward the call to the gb_LinkTarget implementation
 # (note: because the function name is in $(1), the other args are shifted by 1)
 define gb_Executable__forward_to_Linktarget

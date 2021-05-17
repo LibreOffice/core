@@ -5159,10 +5159,6 @@ emscripten*)
     ;;
 esac
 
-if test "$with_x" = "no"; then
-    AC_MSG_ERROR([Use --disable-gui instead. How can we get rid of this option? No idea where it comes from.])
-fi
-
 DISABLE_GUI=""
 if test "$enable_gui" = "no"; then
     if test "$USING_X11" != TRUE; then
@@ -5174,6 +5170,10 @@ if test "$enable_gui" = "no"; then
     test_cairo=yes
 fi
 AC_SUBST(DISABLE_GUI)
+
+if test "$with_x" = "no"; then
+    USING_X11=
+fi
 
 WORKDIR="${BUILDDIR}/workdir"
 INSTDIR="${BUILDDIR}/instdir"
