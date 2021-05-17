@@ -1381,7 +1381,7 @@ public:
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
     virtual void set_from_icon_name(const OUString& rIconName) = 0;
     virtual OUString get_label() const = 0;
-    virtual void set_label_line_wrap(bool wrap) = 0;
+    virtual void set_label_wrap(bool wrap) = 0;
     void clicked() { signal_clicked(); }
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont

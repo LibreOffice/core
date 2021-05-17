@@ -115,13 +115,13 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(weld::Container* pParent, MacroSecuri
     int nMaxWidth = m_xLowRB->get_approximate_digit_width() * 60;
     if (nPrefWidth > nMaxWidth)
     {
-        m_xLowRB->set_label_line_wrap(true);
+        m_xLowRB->set_label_wrap(true);
         m_xLowRB->set_size_request(nMaxWidth, -1);
-        m_xMediumRB->set_label_line_wrap(true);
+        m_xMediumRB->set_label_wrap(true);
         m_xMediumRB->set_size_request(nMaxWidth, -1);
-        m_xHighRB->set_label_line_wrap(true);
+        m_xHighRB->set_label_wrap(true);
         m_xHighRB->set_size_request(nMaxWidth, -1);
-        m_xVeryHighRB->set_label_line_wrap(true);
+        m_xVeryHighRB->set_label_wrap(true);
         m_xVeryHighRB->set_size_request(nMaxWidth, -1);
     }
 

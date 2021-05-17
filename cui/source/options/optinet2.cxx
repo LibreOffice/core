@@ -496,7 +496,7 @@ SvxSecurityTabPage::SvxSecurityTabPage(weld::Container* pPage, weld::DialogContr
     int nMaxWidth = m_xSavePasswordsCB->get_approximate_digit_width() * 40;
     if (aPrefSize.Width() > nMaxWidth)
     {
-        m_xSavePasswordsCB->set_label_line_wrap(true);
+        m_xSavePasswordsCB->set_label_wrap(true);
         m_xSavePasswordsCB->set_size_request(nMaxWidth, -1);
     }
 

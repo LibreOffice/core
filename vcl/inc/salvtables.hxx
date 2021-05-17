@@ -1021,7 +1021,7 @@ public:
 
     virtual void set_from_icon_name(const OUString& rIconName) override;
 
-    virtual void set_label_line_wrap(bool wrap) override;
+    virtual void set_label_wrap(bool wrap) override;
 
     virtual OUString get_label() const override;
 

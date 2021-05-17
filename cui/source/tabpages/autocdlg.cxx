@@ -1914,7 +1914,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(weld::Container* pPage, weld::Dia
     int nMaxWidth = m_xCBRemoveList->get_approximate_digit_width() * 40;
     if (aPrefSize.Width() > nMaxWidth)
     {
-        m_xCBRemoveList->set_label_line_wrap(true);
+        m_xCBRemoveList->set_label_wrap(true);
         m_xCBRemoveList->set_size_request(nMaxWidth, -1);
     }
 

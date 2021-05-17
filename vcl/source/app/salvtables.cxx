@@ -2596,7 +2596,7 @@ void SalInstanceButton::set_from_icon_name(const OUString& rIconName)
     m_xButton->SetModeImage(Image(StockImage::Yes, rIconName));
 }
 
-void SalInstanceButton::set_label_line_wrap(bool wrap)
+void SalInstanceButton::set_label_wrap(bool wrap)
 {
     WinBits nBits = m_xButton->GetStyle();
     nBits &= ~WB_WORDBREAK;
