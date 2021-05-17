@@ -8901,7 +8901,6 @@ sc/source/ui/drawfunc/fusel2.cxx
 sc/source/ui/drawfunc/futext.cxx
 sc/source/ui/drawfunc/futext3.cxx
 sc/source/ui/drawfunc/graphsh.cxx
-sc/source/ui/drawfunc/mediash.cxx
 sc/source/ui/drawfunc/oleobjsh.cxx
 sc/source/ui/formdlg/dwfunctr.cxx
 sc/source/ui/formdlg/formula.cxx
@@ -9822,7 +9821,6 @@ sd/source/ui/inc/DrawViewShell.hxx
 sd/source/ui/inc/FrameView.hxx
 sd/source/ui/inc/GraphicObjectBar.hxx
 sd/source/ui/inc/LayerTabBar.hxx
-sd/source/ui/inc/MediaObjectBar.hxx
 sd/source/ui/inc/NavigatorChildWindow.hxx
 sd/source/ui/inc/OutlineView.hxx
 sd/source/ui/inc/OutlineViewShell.hxx
@@ -10132,7 +10130,6 @@ sd/source/ui/view/DocumentRenderer.cxx
 sd/source/ui/view/FormShellManager.cxx
 sd/source/ui/view/GraphicObjectBar.cxx
 sd/source/ui/view/ImpressViewShellBase.cxx
-sd/source/ui/view/MediaObjectBar.cxx
 sd/source/ui/view/OutlineViewShellBase.cxx
 sd/source/ui/view/Outliner.cxx
 sd/source/ui/view/OutlinerIterator.cxx
@@ -13512,7 +13509,6 @@ sw/source/uibase/shells/grfsh.cxx
 sw/source/uibase/shells/grfshex.cxx
 sw/source/uibase/shells/langhelper.cxx
 sw/source/uibase/shells/listsh.cxx
-sw/source/uibase/shells/mediash.cxx
 sw/source/uibase/shells/olesh.cxx
 sw/source/uibase/shells/tabsh.cxx
 sw/source/uibase/shells/textdrw.cxx
