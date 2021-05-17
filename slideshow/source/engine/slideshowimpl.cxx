@@ -18,6 +18,7 @@
  */
 
 
+#include <config_features.h>
 #include <tools/diagnose_ex.h>
 
 #include <cppuhelper/basemutex.hxx>
@@ -2349,6 +2350,9 @@ std::shared_ptr<avmedia::MediaTempFile> SlideShowImpl::getMediaTempFile(const OU
 {
     std::shared_ptr<avmedia::MediaTempFile> aRet;
 
+#if !HAVE_FEATURE_AVMEDIA
+    (void)aUrl;
+#else
     if (!mxSBD.is())
         return aRet;
 
@@ -2372,6 +2376,7 @@ std::shared_ptr<avmedia::MediaTempFile> SlideShowImpl::getMediaTempFile(const OU
 
         xInStream->closeInput();
     }
+#endif
 
     return aRet;
 }

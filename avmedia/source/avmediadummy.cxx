@@ -21,6 +21,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <osl/file.hxx>
 
 using namespace ::com::sun::star;
 
@@ -70,7 +71,6 @@ SfxPoolItem* MediaItem::CreateDefault()
     return new MediaItem;
 }
 
-
 MediaItem* MediaItem::Clone( SfxItemPool*) const
 {
   return nullptr;
@@ -82,12 +82,11 @@ bool MediaItem::operator==( const SfxPoolItem& rItem ) const
     return false;
 }
 
+MediaTempFile::~MediaTempFile()
+{
+    ::osl::File::remove(m_TempFileURL);
+}
+
 } // namespace avmedia
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_framework_SoundHandler_get_implementation(css::uno::XComponentContext*,
-                                                            css::uno::Sequence<css::uno::Any> const &)
-{
-    return nullptr;
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

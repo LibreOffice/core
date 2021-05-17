@@ -9,15 +9,16 @@
 
 $(eval $(call gb_Library_Library,avmedia))
 
-$(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
-
 $(eval $(call gb_Library_set_include,avmedia,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/avmedia/inc \
 	-I$(SRCDIR)/avmedia/source/inc \
 ))
 
-$(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
+$(eval $(call gb_Library_use_libraries,avmedia,\
+    sal \
+    svl \
+))
 
 $(eval $(call gb_Library_use_sdk_api,avmedia,))
 
@@ -25,36 +26,33 @@ $(eval $(call gb_Library_use_externals,avmedia,\
 	boost_headers \
 ))
 
-ifeq ($(USE_AVMEDIA_DUMMY),TRUE)
+ifeq (,$(filter AVMEDIA,$(BUILD_TYPE)))
+
 $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/avmediadummy \
 ))
 
+else # AVMEDIA
 
-else
-
+ifeq (,$(DISABLE_GUI))
 
 $(eval $(call gb_Library_add_defs,avmedia,\
 	-DAVMEDIA_DLLIMPLEMENTATION \
 ))
 
-ifeq ($(DISABLE_GUI),)
+$(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
+
 $(eval $(call gb_Library_use_externals,avmedia,\
     epoxy \
 ))
-endif
-
 
 $(eval $(call gb_Library_use_libraries,avmedia,\
 	comphelper \
 	ucbhelper \
 	cppu \
 	cppuhelper \
-	sal \
 	i18nlangtag \
 	sfx \
-	svl \
-	svt \
 	tl \
 	utl \
 	vcl \
@@ -71,6 +69,8 @@ $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/viewer/mediawindow \
 	avmedia/source/viewer/mediawindow_impl \
 ))
-endif
+
+endif # !DISABLE_GUI
+endif # AVMEDIA
 
 # vim: set noet sw=4 ts=4:

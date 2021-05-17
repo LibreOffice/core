@@ -18,6 +18,7 @@
  */
 
 
+#include <config_features.h>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/lang/NoSupportException.hpp>
@@ -90,6 +91,9 @@ namespace slideshow::internal
             ENSURE_OR_THROW( rComponentContext.is(),
                               "SoundPlayer::SoundPlayer(): Invalid component context" );
 
+#if !HAVE_FEATURE_AVMEDIA
+            (void) rMediaFileManager;
+#else
             try
             {
                 if (rSoundURL.startsWithIgnoreAsciiCase("vnd.sun.star.Package:"))
@@ -107,6 +111,7 @@ namespace slideshow::internal
             catch( uno::Exception& )
             {
             }
+#endif
 
             if( !mxPlayer.is() )
                 throw lang::NoSupportException(

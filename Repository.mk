@@ -324,10 +324,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ogltrans, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	acc \
-	$(call gb_Helper_optional,AVMEDIA,avmedia) \
+    avmedia \
+    $(call gb_Helper_optional,AVMEDIA, \
 	$(if $(filter MACOSX,$(OS)),\
 		avmediaMacAVF \
 	) \
+    ) \
 	$(call gb_Helper_optional,SCRIPTING, \
 		basctl \
 		basprov \
@@ -593,8 +595,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
-	$(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
-	$(if $(filter WNT,$(OS)),avmediawin) \
+    $(call gb_Helper_optional,AVMEDIA, \
+        $(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
+        $(if $(filter WNT,$(OS)),avmediawin) \
+    ) \
 	cached1 \
 	collator_data \
 	comphelper \
@@ -1108,7 +1112,7 @@ $(eval $(call gb_ExternalExecutable_register_executables,\
 # Resources
 $(eval $(call gb_Helper_register_mos,\
 	acc \
-	avmedia \
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
 	$(call gb_Helper_optional,SCRIPTING,basctl) \
 	chart \
 	cnr \

@@ -51,7 +51,7 @@ $(eval $(call gb_Library_add_defs,sw,\
 ))
 
 $(eval $(call gb_Library_use_libraries,sw,\
-    $(call gb_Helper_optional,AVMEDIA,avmedia) \
+    avmedia \
     basegfx \
     comphelper \
     cppu \
