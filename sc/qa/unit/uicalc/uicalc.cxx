@@ -1610,6 +1610,20 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf99913)
     CPPUNIT_ASSERT(pDoc->RowFiltered(2, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126540_GridToggleModifiesTheDocument)
+{
+    ScModelObj* pModelObj = createDoc("tdf99913.xlsx");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Toggling the grid of a sheet, must set the document modified state
+    ScDocShell* pDocSh = ScDocShell::GetViewData()->GetDocShell();
+    CPPUNIT_ASSERT(!pDocSh->IsModified());
+    dispatchCommand(mxComponent, ".uno:ToggleSheetGrid", {});
+    CPPUNIT_ASSERT(pDocSh->IsModified());
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
