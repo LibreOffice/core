@@ -249,8 +249,6 @@ void SecurityEnvironment_NssImpl::updateSlots()
 //                  continue;
 //              }
             addCryptoSlot(pSlot);
-            PK11_FreeSlot( pSlot ) ;
-            pSlot = nullptr;
 
             if (pSymKey != nullptr)
             {
@@ -261,6 +259,8 @@ void SecurityEnvironment_NssImpl::updateSlots()
 
         }// end of if(pSlot != NULL)
     }// end of for
+
+    PK11_FreeSlotList(soltList);
 }
 
 Sequence< Reference < XCertificate > >
