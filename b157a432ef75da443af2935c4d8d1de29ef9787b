@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd2517cf_0955735c",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-05-17T10:15:12Z",
+      "side": 1,
+      "message": "you probably should update this help text\n\nmaybe: \"enable buildng the Office Document Kit\"",
+      "revId": "b157a432ef75da443af2935c4d8d1de29ef9787b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
