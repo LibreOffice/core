@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb36fbc2_c2a43f01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-05-17T06:25:36Z",
+      "side": 1,
+      "message": "A typo: should be \"Neumaier\"\n\nPlease make topic \"kahansum\" - the common topic helps grouping, and even though there\u0027s a separate bug for this (which is good!), the change is related to the common task.",
+      "range": {
+        "startLine": 7,
+        "startChar": 49,
+        "endLine": 7,
+        "endChar": 58
+      },
+      "revId": "b6f30328b2439ff505c1fcddb5133fd8a5c61ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
