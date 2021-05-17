@@ -1458,11 +1458,6 @@ void TestCopyPaste::executeCopyPasteSpecial(bool bApplyFilter, bool bIncludedFil
                                             InsertDeleteFlags aFlags = InsertDeleteFlags::CONTENTS
                                                                        | InsertDeleteFlags::ATTRIB)
 {
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
-
     const SCTAB srcSheet = 0;
     m_pDoc->InsertTab(srcSheet, "SrcSheet");
 
@@ -1872,9 +1867,6 @@ void TestCopyPaste::executeCopyPasteSpecial(bool bApplyFilter, bool bIncludedFil
     }
     if (bCalcAll)
         m_pDoc->CalcAll();
-
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
 }
 
 void TestCopyPaste::testCopyPasteSpecial()
@@ -2176,11 +2168,6 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty)
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
 
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
-
     /*
          |  D  |    E     | F  |  G  |     H      |        I            |
 
@@ -2453,20 +2440,12 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty)
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
-
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
 }
 
 void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     /*
          |  D  |    E     | F  |  G  |     H      |        I            |
@@ -2730,9 +2709,6 @@ void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetNote(ScAddress(5, 3, srcSheet))->GetText(),
                          m_pDoc->GetNote(ScAddress(8, 3, destSheet))->GetText());
 
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
-
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
 }
@@ -2741,11 +2717,6 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     /*
              |         D          |    E     |    F     |       G       |
@@ -3132,9 +3103,6 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty)
                                  m_pDoc->GetNote(ScAddress(5, 3, srcSheet))->GetText(),
                                  m_pDoc->GetNote(ScAddress(6, 6, destSheet))->GetText());
 
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
-
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
 }
@@ -3143,11 +3111,6 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     /*
                                   ┌--- filtered src row 2          ┌--- repeated row
@@ -3547,9 +3510,6 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
                                  m_pDoc->GetNote(ScAddress(5, 3, srcSheet))->GetText(),
                                  m_pDoc->GetNote(ScAddress(5, 6, destSheet))->GetText());
 
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
-
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
 }
@@ -3558,11 +3518,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     /*
                           ┌--- not selected src col C
@@ -3830,9 +3785,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetNote(ScAddress(5, 3, srcSheet))->GetText(),
                          m_pDoc->GetNote(ScAddress(7, 4, destSheet))->GetText());
 
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
-
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
 }
@@ -3841,11 +3793,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     /*
                           ┌--- not selected src col C
@@ -4068,9 +4015,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetNote(ScAddress(5, 3, srcSheet))->GetText(),
                          m_pDoc->GetNote(ScAddress(7, 3, destSheet))->GetText());
 
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
-
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
 }
@@ -4079,11 +4023,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     /*
              |         D          |    E     |    F     |       G       |
@@ -4354,9 +4293,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetNote(ScAddress(5, 3, srcSheet))->GetText(),
                          m_pDoc->GetNote(ScAddress(6, 5, destSheet))->GetText());
 
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
-
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
 }
@@ -4365,11 +4301,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     /*
                                   ┌--- filtered src row 2
@@ -4612,9 +4543,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetNote(ScAddress(5, 3, srcSheet))->GetText(),
                          m_pDoc->GetNote(ScAddress(5, 5, destSheet))->GetText());
 
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
-
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
 }
@@ -4623,11 +4551,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     /*
          |  D  |    E     | F    |  G   |     H      |        I            |
@@ -4943,9 +4866,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetNote(ScAddress(2, 4, srcSheet))->GetText(),
                          m_pDoc->GetNote(ScAddress(5, 4, destSheet))->GetText());
 
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
-
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
 }
@@ -4954,11 +4874,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     /*
          |  D  |    E     | F  |  G  |     H      |        I            |
@@ -5228,9 +5143,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetNote(ScAddress(2, 4, srcSheet))->GetText(),
                          m_pDoc->GetNote(ScAddress(5, 3, destSheet))->GetText());
 
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
-
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
 }
@@ -5239,11 +5151,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     /*
              |         D          |    E     |    F     | G  |  H  |
@@ -5625,9 +5532,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetNote(ScAddress(2, 4, srcSheet))->GetText(),
                          m_pDoc->GetNote(ScAddress(6, 3, destSheet))->GetText());
 
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
-
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
 }
@@ -5636,11 +5540,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     /*
              |         D          |    E     | F  |  G  |
@@ -5978,9 +5877,6 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
                              m_pDoc->GetNote(ScAddress(4, 5, destSheet))->GetText());
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetNote(ScAddress(2, 4, srcSheet))->GetText(),
                          m_pDoc->GetNote(ScAddress(5, 3, destSheet))->GetText());
-
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
