@@ -216,13 +216,13 @@ void SecurityEnvironment_NssImpl::updateSlots()
     m_Slots.clear();
     m_tSymKeyList.clear();
 
-    PK11SlotList * soltList = PK11_GetAllTokens( CKM_INVALID_MECHANISM, PR_FALSE, PR_FALSE, nullptr ) ;
-    if( soltList == nullptr )
+    PK11SlotList * slotList = PK11_GetAllTokens( CKM_INVALID_MECHANISM, PR_FALSE, PR_FALSE, nullptr ) ;
+    if( slotList == nullptr )
         return;
 
-    for (PK11SlotListElement* soltEle = soltList->head ; soltEle != nullptr; soltEle = soltEle->next)
+    for (PK11SlotListElement* slotEle = slotList->head ; slotEle != nullptr; slotEle = slotEle->next)
     {
-        PK11SlotInfo * pSlot = soltEle->slot ;
+        PK11SlotInfo * pSlot = slotEle->slot ;
 
         if(pSlot != nullptr)
         {
@@ -260,7 +260,7 @@ void SecurityEnvironment_NssImpl::updateSlots()
         }// end of if(pSlot != NULL)
     }// end of for
 
-    PK11_FreeSlotList(soltList);
+    PK11_FreeSlotList(slotList);
 }
 
 Sequence< Reference < XCertificate > >
