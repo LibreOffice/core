@@ -220,6 +220,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/stbctrls/zoomsliderctrl \
     svx/source/stbctrls/zoomctrl \
     svx/source/svdraw/ActionDescriptionProvider \
+    svx/source/svdraw/MediaShellHelpers \
     svx/source/smarttags/SmartTagMgr \
     svx/source/table/accessiblecell \
     svx/source/table/accessibletableshape \
