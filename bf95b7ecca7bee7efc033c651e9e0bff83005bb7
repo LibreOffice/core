@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "26ac2807_c8f44b0b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-05-17T09:42:00Z",
+      "side": 1,
+      "message": "oh, please write this as \"tdf#142157\" because some scripting depends on that.",
+      "range": {
+        "startLine": 7,
+        "startChar": 49,
+        "endLine": 7,
+        "endChar": 59
+      },
+      "revId": "bf95b7ecca7bee7efc033c651e9e0bff83005bb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7114606c_7dd4efcf",
         "filename": "sw/source/filter/xml/xmlimp.cxx",
         "patchSetId": 2
