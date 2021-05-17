@@ -10056,6 +10056,7 @@ class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
 {
 private:
     GtkEntry* m_pEntry;
+    GtkEditable* m_pEditable;
     std::unique_ptr<vcl::Font> m_xFont;
     gulong m_nChangedSignalId;
     gulong m_nInsertTextSignalId;
@@ -10122,10 +10123,11 @@ public:
     GtkInstanceEntry(GtkEntry* pEntry, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pEntry), pBuilder, bTakeOwnership)
         , m_pEntry(pEntry)
-        , m_nChangedSignalId(g_signal_connect(pEntry, "changed", G_CALLBACK(signalChanged), this))
-        , m_nInsertTextSignalId(g_signal_connect(pEntry, "insert-text", G_CALLBACK(signalInsertText), this))
-        , m_nCursorPosSignalId(g_signal_connect(pEntry, "notify::cursor-position", G_CALLBACK(signalCursorPosition), this))
-        , m_nSelectionPosSignalId(g_signal_connect(pEntry, "notify::selection-bound", G_CALLBACK(signalCursorPosition), this))
+        , m_pEditable(GTK_EDITABLE(pEntry))
+        , m_nChangedSignalId(g_signal_connect(m_pEditable, "changed", G_CALLBACK(signalChanged), this))
+        , m_nInsertTextSignalId(g_signal_connect(m_pEditable, "insert-text", G_CALLBACK(signalInsertText), this))
+        , m_nCursorPosSignalId(g_signal_connect(m_pEditable, "notify::cursor-position", G_CALLBACK(signalCursorPosition), this))
+        , m_nSelectionPosSignalId(g_signal_connect(m_pEditable, "notify::selection-bound", G_CALLBACK(signalCursorPosition), this))
         , m_nActivateSignalId(g_signal_connect(pEntry, "activate", G_CALLBACK(signalActivate), this))
     {
     }
@@ -10134,7 +10136,7 @@ public:
     {
         disable_notify_events();
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_editable_set_text(GTK_EDITABLE(m_pEntry), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+        gtk_editable_set_text(m_pEditable, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
 #else
         gtk_entry_set_text(m_pEntry, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
 #endif
@@ -10144,7 +10146,7 @@ public:
     virtual OUString get_text() const override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        const gchar* pText = gtk_editable_get_text(GTK_EDITABLE(m_pEntry));
+        const gchar* pText = gtk_editable_get_text(m_pEditable);
 #else
         const gchar* pText = gtk_entry_get_text(m_pEntry);
 #endif
@@ -10156,8 +10158,8 @@ public:
     {
         disable_notify_events();
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_editable_set_width_chars(GTK_EDITABLE(m_pEntry), nChars);
-        gtk_editable_set_max_width_chars(GTK_EDITABLE(m_pEntry), nChars);
+        gtk_editable_set_width_chars(m_pEditable, nChars);
+        gtk_editable_set_max_width_chars(m_pEditable, nChars);
 #else
         gtk_entry_set_width_chars(m_pEntry, nChars);
         gtk_entry_set_max_width_chars(m_pEntry, nChars);
@@ -10168,7 +10170,7 @@ public:
     virtual int get_width_chars() const override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        return gtk_editable_get_width_chars(GTK_EDITABLE(m_pEntry));
+        return gtk_editable_get_width_chars(m_pEditable);
 #else
         return gtk_entry_get_width_chars(m_pEntry);
 #endif
@@ -10184,22 +10186,22 @@ public:
     virtual void select_region(int nStartPos, int nEndPos) override
     {
         disable_notify_events();
-        gtk_editable_select_region(GTK_EDITABLE(m_pEntry), nStartPos, nEndPos);
+        gtk_editable_select_region(m_pEditable, nStartPos, nEndPos);
         enable_notify_events();
     }
 
     bool get_selection_bounds(int& rStartPos, int& rEndPos) override
     {
-        return gtk_editable_get_selection_bounds(GTK_EDITABLE(m_pEntry), &rStartPos, &rEndPos);
+        return gtk_editable_get_selection_bounds(m_pEditable, &rStartPos, &rEndPos);
     }
 
     virtual void replace_selection(const OUString& rText) override
     {
         disable_notify_events();
-        gtk_editable_delete_selection(GTK_EDITABLE(m_pEntry));
+        gtk_editable_delete_selection(m_pEditable);
         OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
-        gint position = gtk_editable_get_position(GTK_EDITABLE(m_pEntry));
-        gtk_editable_insert_text(GTK_EDITABLE(m_pEntry), sText.getStr(), sText.getLength(),
+        gint position = gtk_editable_get_position(m_pEditable);
+        gtk_editable_insert_text(m_pEditable, sText.getStr(), sText.getLength(),
                                  &position);
         enable_notify_events();
     }
@@ -10207,23 +10209,23 @@ public:
     virtual void set_position(int nCursorPos) override
     {
         disable_notify_events();
-        gtk_editable_set_position(GTK_EDITABLE(m_pEntry), nCursorPos);
+        gtk_editable_set_position(m_pEditable, nCursorPos);
         enable_notify_events();
     }
 
     virtual int get_position() const override
     {
-        return gtk_editable_get_position(GTK_EDITABLE(m_pEntry));
+        return gtk_editable_get_position(m_pEditable);
     }
 
     virtual void set_editable(bool bEditable) override
     {
-        gtk_editable_set_editable(GTK_EDITABLE(m_pEntry), bEditable);
+        gtk_editable_set_editable(m_pEditable, bEditable);
     }
 
     virtual bool get_editable() const override
     {
-        return gtk_editable_get_editable(GTK_EDITABLE(m_pEntry));
+        return gtk_editable_get_editable(m_pEditable);
     }
 
     virtual void set_overwrite_mode(bool bOn) override
@@ -10244,20 +10246,20 @@ public:
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pEntry, m_nActivateSignalId);
-        g_signal_handler_block(m_pEntry, m_nSelectionPosSignalId);
-        g_signal_handler_block(m_pEntry, m_nCursorPosSignalId);
-        g_signal_handler_block(m_pEntry, m_nInsertTextSignalId);
-        g_signal_handler_block(m_pEntry, m_nChangedSignalId);
+        g_signal_handler_block(m_pEditable, m_nSelectionPosSignalId);
+        g_signal_handler_block(m_pEditable, m_nCursorPosSignalId);
+        g_signal_handler_block(m_pEditable, m_nInsertTextSignalId);
+        g_signal_handler_block(m_pEditable, m_nChangedSignalId);
         GtkInstanceWidget::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
         GtkInstanceWidget::enable_notify_events();
-        g_signal_handler_unblock(m_pEntry, m_nChangedSignalId);
-        g_signal_handler_unblock(m_pEntry, m_nInsertTextSignalId);
-        g_signal_handler_unblock(m_pEntry, m_nCursorPosSignalId);
-        g_signal_handler_unblock(m_pEntry, m_nSelectionPosSignalId);
+        g_signal_handler_unblock(m_pEditable, m_nChangedSignalId);
+        g_signal_handler_unblock(m_pEditable, m_nInsertTextSignalId);
+        g_signal_handler_unblock(m_pEditable, m_nCursorPosSignalId);
+        g_signal_handler_unblock(m_pEditable, m_nSelectionPosSignalId);
         g_signal_handler_unblock(m_pEntry, m_nActivateSignalId);
     }
 
@@ -10307,7 +10309,7 @@ public:
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_activate_action(GTK_WIDGET(m_pEntry), "cut.clipboard", nullptr);
 #else
-        gtk_editable_cut_clipboard(GTK_EDITABLE(m_pEntry));
+        gtk_editable_cut_clipboard(m_pEditable);
 #endif
     }
 
@@ -10316,7 +10318,7 @@ public:
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_activate_action(GTK_WIDGET(m_pEntry), "copy.clipboard", nullptr);
 #else
-        gtk_editable_copy_clipboard(GTK_EDITABLE(m_pEntry));
+        gtk_editable_copy_clipboard(m_pEditable);
 #endif
     }
 
@@ -10325,7 +10327,7 @@ public:
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_activate_action(GTK_WIDGET(m_pEntry), "paste.clipboard", nullptr);
 #else
-        gtk_editable_paste_clipboard(GTK_EDITABLE(m_pEntry));
+        gtk_editable_paste_clipboard(m_pEditable);
 #endif
     }
 
@@ -10362,10 +10364,10 @@ public:
     virtual ~GtkInstanceEntry() override
     {
         g_signal_handler_disconnect(m_pEntry, m_nActivateSignalId);
-        g_signal_handler_disconnect(m_pEntry, m_nSelectionPosSignalId);
-        g_signal_handler_disconnect(m_pEntry, m_nCursorPosSignalId);
-        g_signal_handler_disconnect(m_pEntry, m_nInsertTextSignalId);
-        g_signal_handler_disconnect(m_pEntry, m_nChangedSignalId);
+        g_signal_handler_disconnect(m_pEditable, m_nSelectionPosSignalId);
+        g_signal_handler_disconnect(m_pEditable, m_nCursorPosSignalId);
+        g_signal_handler_disconnect(m_pEditable, m_nInsertTextSignalId);
+        g_signal_handler_disconnect(m_pEditable, m_nChangedSignalId);
     }
 };
 
