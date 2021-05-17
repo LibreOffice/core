@@ -735,6 +735,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 rViewData.SetShowGrid(!bShowGrid);
                 SfxBindings& rBindings = GetViewFrame()->GetBindings();
                 rBindings.Invalidate( FID_TAB_TOGGLE_GRID );
+                ScDocShellModificator aModificator(*rViewData.GetDocShell());
+                aModificator.SetDocumentModified();
                 PaintGrid();
                 rReq.Done();
             }
