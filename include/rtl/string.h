@@ -747,31 +747,6 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_str_toBoolean(
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_toInt32(
         const char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 
-/** Interpret a string as an integer.
-
-    This function cannot be used for language-specific conversion.  The string
-    must be null-terminated.
-
-    @param str
-    a null-terminated string.
-
-    @param radix
-    the radix.  Must be between RTL_STR_MIN_RADIX (2) and RTL_STR_MAX_RADIX
-    (36), inclusive.
-
-    @param len
-    the length of the character array.
-
-    @return
-    the integer value represented by the string, or 0 if the string does not
-    represent an integer.
-
-    @since LibreOffice 7.2
-    @internal
- */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_toInt32_WithLength(
-        const char * str, sal_Int16 radix, sal_Int32 nStrLength ) SAL_THROW_EXTERN_C();
-
 /** Interpret a string as an unsigned integer.
 
     This function cannot be used for language-specific conversion.  The string
@@ -1289,7 +1264,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newTrim(
 
 /** Create a new string by extracting a single token from another string.
 
-    Starting at index, the token's next token is searched for.  If there is no
+    Starting at index, the next token is searched for.  If there is no
     such token, the result is an empty string.  Otherwise, all characters from
     the start of that token and up to, but not including the next occurrence
     of cTok make up the resulting token.  The return value is the position of
@@ -1334,33 +1309,19 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newTrim(
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getToken(
         rtl_String ** newStr , rtl_String * str, sal_Int32 token, char cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
 
+/** @cond INTERNAL */
 /** Create a new string by extracting a single token from another string.
 
-    Starting at index, the token's next token is searched for.  If there is no
+    Starting at index, the next token is searched for.  If there is no
     such token, the result is an empty string.  Otherwise, all characters from
     the start of that token and up to, but not including the next occurrence
     of cTok make up the resulting token.  The return value is the position of
     the next token, or -1 if no more tokens follow.
 
-    Example code could look like
-      rtl_String * pToken = NULL;
-      sal_Int32 nIndex = 0;
-      do
-      {
-          ...
-          nIndex = rtl_string_getToken(&pToken, pStr, 0, ';', nIndex);
-          ...
-      }
-      while (nIndex >= 0);
-
-    The new string does not necessarily have a reference count of 1, so it
-    must not be modified without checking the reference count.  This function
-    does not handle out-of-memory conditions.
+    This function does not handle out-of-memory conditions.
 
     @param ppViewStr
-    pointer to the start of the token.  The pointed-to data must be null or a valid
-    string.  If either token or index is negative, nullptr is stored in
-    newStr (and -1 is returned).
+    pointer to the start of the token.
 
     @param pViewLength
     length of the token.
@@ -1382,10 +1343,10 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getToken(
     the index of the next token, or -1 if no more tokens follow.
 
     @since LibreOffice 7.2
-    @internal
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getTokenView(
     const char ** ppViewStr , sal_Int32* pViewLength, rtl_String * str, sal_Int32 token, char cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
+/** @endcond */
 
 /* ======================================================================= */
 

@@ -253,13 +253,19 @@ std::string_view Parser::readNextToken()
 void Parser::readInt32( sal_Int32& o_Value )
 {
     std::string_view tok = readNextToken();
-    o_Value = rtl_str_toInt32_WithLength(tok.data(), 10, tok.size());
+    sal_Int64 n = rtl_str_toInt64_WithLength(tok.data(), 10, tok.size());
+    if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32)
+        n = 0;
+    o_Value = n;
 }
 
 sal_Int32 Parser::readInt32()
 {
     std::string_view tok = readNextToken();
-    return rtl_str_toInt32_WithLength(tok.data(), 10, tok.size());
+    sal_Int64 n =rtl_str_toInt64_WithLength(tok.data(), 10, tok.size());
+    if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32)
+        n = 0;
+    return n;
 }
 
 void Parser::readInt64( sal_Int64& o_Value )

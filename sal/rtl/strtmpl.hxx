@@ -914,15 +914,6 @@ sal_Int32 toInt32                             ( const IMPL_RTL_STRCODE* pStr,
 }
 
 template <typename IMPL_RTL_STRCODE>
-sal_Int32 toInt32_WithLength                  ( const IMPL_RTL_STRCODE* pStr,
-                                                sal_Int16 nRadix,
-                                                sal_Int32 nStrLength )
-{
-    assert(pStr);
-    return toInt_WithLength<sal_Int32, sal_uInt32>(pStr, nRadix, nStrLength);
-}
-
-template <typename IMPL_RTL_STRCODE>
 sal_Int64 toInt64                             ( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
 {
