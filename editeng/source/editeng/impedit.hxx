@@ -54,6 +54,7 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <functional>
 #include <optional>
 #include <memory>
 #include <tuple>
@@ -549,8 +550,8 @@ private:
     // For Formatting / Update...
     std::vector<std::unique_ptr<DeletedNodeInfo> > aDeletedNodes;
     tools::Rectangle           aInvalidRect;
-    sal_uInt32          nCurTextHeight;
-    sal_uInt32          nCurTextHeightNTP;  // without trailing empty paragraphs
+    tools::Long         nCurTextHeight;
+    tools::Long         nCurTextHeightNTP;  // without trailing empty paragraphs
     sal_uInt16          nOnePixelInRef;
 
     IdleFormattter      aIdleFormatter;
@@ -619,7 +620,6 @@ private:
 
     std::tuple<const ParaPortion*, const EditLine*, tools::Long> GetPortionAndLine(Point aDocPos);
     EditPaM             GetPaM( Point aDocPos, bool bSmart = true );
-    EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, bool bSmart );
     bool IsTextPos(const Point& rDocPos, sal_uInt16 nBorder);
     tools::Long GetXPos(const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
     tools::Long GetPortionXOffset(const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nTextPortion) const;
@@ -767,26 +767,11 @@ private:
 
     void                SetValidPaperSize( const Size& rSz );
 
-    tools::Long GetColumnWidth(const Size& rPaperSize) const;
-    Point MoveToNextLine(Point& rMovePos, tools::Long nLineHeight, sal_Int32& nColumn,
-                         Point aOrigin) const;
-
-    tools::Long getXDirectionAware(const Point& pt) const;
-    tools::Long getYDirectionAware(const Point& pt) const;
-    tools::Long getWidthDirectionAware(const Size& sz) const;
-    tools::Long getHeightDirectionAware(const Size& sz) const;
-    void adjustXDirectionAware(Point& pt, tools::Long x) const;
-    void adjustYDirectionAware(Point& pt, tools::Long y) const;
-    void setXDirectionAware(Point& pt, tools::Long x) const;
-    void setYDirectionAware(Point& pt, tools::Long y) const;
-    bool isYOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
-    bool isXOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
-
     css::uno::Reference < css::i18n::XBreakIterator > const & ImplGetBreakIterator() const;
     css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > const & ImplGetInputSequenceChecker() const;
 
-    void ImplUpdateOverflowingParaNum( sal_uInt32 );
-    void ImplUpdateOverflowingLineNum( sal_uInt32, sal_uInt32, sal_uInt32 );
+    void ImplUpdateOverflowingParaNum(tools::Long);
+    void ImplUpdateOverflowingLineNum(tools::Long, sal_uInt32, tools::Long);
 
     void CreateSpellInfo( bool bMultipleDocs );
     /// Obtains a view shell ID from the active EditView.
@@ -904,7 +889,7 @@ public:
 
     EditSelection   MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos, EditView* pCurView );
 
-    sal_uInt32      CalcTextHeight( sal_uInt32* pHeightNTP );
+    tools::Long     CalcTextHeight( tools::Long* pHeightNTP );
     sal_uInt32      GetTextHeight() const;
     sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth( bool bIgnoreExtraSpace);
@@ -936,7 +921,9 @@ public:
     }
 
     tools::Rectangle       PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags = GetCursorFlags::NONE );
-    tools::Rectangle       GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex, GetCursorFlags nFlags = GetCursorFlags::NONE );
+    tools::Rectangle GetEditCursor(const ParaPortion* pPortion, const EditLine* pLine,
+                                   sal_Int32 nIndex, GetCursorFlags nFlags);
+
 
     bool            IsModified() const      { return aEditDoc.IsModified(); }
     void            SetModifyFlag( bool b ) { aEditDoc.SetModified( b ); }
@@ -1136,6 +1123,49 @@ public:
     void Dispose();
     void SetLOKSpecialPaperSize(const Size& rSize) { aLOKSpecialPaperSize = rSize; }
     const Size& GetLOKSpecialPaperSize() const { return aLOKSpecialPaperSize; }
+
+    enum class CallbackResult
+    {
+        Continue,
+        SkipThisPortion, // Do not call callback until next portion
+        Stop, // Stop iteration
+    };
+    using IterateLinesAreasFunc = std::function<CallbackResult(
+        ParaPortion& /*rPortion*/, // Current ParaPortion
+        sal_Int32 /*nPortion*/,
+        EditLine* /*pLine*/, // Current line, or nullptr for paragraph start
+        sal_Int32 /*nLine*/,
+        const tools::Rectangle& /*rArea*/, // The area for the line (or for invisible rPortion)
+        sal_Int32 /*nColumn*/ // Column number (only valid for EditLine*)
+        )>;
+
+    enum IterFlag // bitmask
+    {
+        none = 0,
+        inclILS = 1, // rArea includes interline space
+    };
+
+    // bIncludeInterlineSpace controls if rArea passed to the callback will include line spacing
+    void IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eOptions);
+
+    tools::Long GetColumnWidth(const Size& rPaperSize) const;
+    Point MoveToNextLine(Point& rMovePos, tools::Long nLineHeight, sal_Int32& nColumn,
+                         Point aOrigin) const;
+
+    tools::Long getXDirectionAware(const Point& pt) const;
+    tools::Long getYDirectionAware(const Point& pt) const;
+    tools::Long getWidthDirectionAware(const Size& sz) const;
+    tools::Long getHeightDirectionAware(const Size& sz) const;
+    void adjustXDirectionAware(Point& pt, tools::Long x) const;
+    void adjustYDirectionAware(Point& pt, tools::Long y) const;
+    void setXDirectionAware(Point& pt, tools::Long x) const;
+    void setYDirectionAware(Point& pt, tools::Long y) const;
+    bool isYOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
+    bool isXOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
+    tools::Long getLeftDirectionAware(const tools::Rectangle& rect) const;
+    tools::Long getRightDirectionAware(const tools::Rectangle& rect) const;
+    tools::Long getTopDirectionAware(const tools::Rectangle& rect) const;
+    tools::Long getBottomDirectionAware(const tools::Rectangle& rect) const;
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
