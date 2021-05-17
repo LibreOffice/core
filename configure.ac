@@ -2683,7 +2683,7 @@ AC_SUBST(ENABLE_RELEASE_BUILD)
 AC_SUBST(GET_TASK_ALLOW_ENTITLEMENT)
 
 AC_MSG_CHECKING([whether to build a Community flavor])
-if test -z "$enable_community_flavor" -o "$enable_community_flavor" == "yes"; then
+if test -z "$enable_community_flavor" -o "$enable_community_flavor" = "yes"; then
     AC_DEFINE(HAVE_FEATURE_COMMUNITY_FLAVOR)
     AC_MSG_RESULT([yes])
 else
