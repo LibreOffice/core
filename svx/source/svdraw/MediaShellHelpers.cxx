@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 #include <svx/MediaShellHelpers.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <sfx2/request.hxx>
@@ -41,6 +42,7 @@ void GetState(const SdrMarkView* pSdrView, SfxItemSet& rSet)
         if (SID_AVMEDIA_TOOLBOX != nWhich)
             continue;
 
+#if HAVE_FEATURE_AVMEDIA
         const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
         bool bDisable = true;
 
@@ -60,12 +62,18 @@ void GetState(const SdrMarkView* pSdrView, SfxItemSet& rSet)
         }
 
         if (bDisable)
+#endif
             rSet.DisableItem(SID_AVMEDIA_TOOLBOX);
     }
 }
 
 const ::avmedia::MediaItem* Execute(const SdrMarkView* pSdrView, SfxRequest const& rReq)
 {
+#if !HAVE_FEATURE_AVMEDIA
+    (void)pSdrView;
+    (void)rReq;
+    return nullptr;
+#else
     if (!pSdrView)
         return nullptr;
 
@@ -96,6 +104,7 @@ const ::avmedia::MediaItem* Execute(const SdrMarkView* pSdrView, SfxRequest cons
         .executeMediaItem(*pMediaItem);
 
     return pMediaItem;
+#endif
 }
 
 } // end of namespace svx::MediaShellHelpers

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <textsh.hxx>
@@ -38,10 +39,15 @@ using namespace ::sfx2;
 
 bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
 {
+    bool bRet = false;
+
+#if !HAVE_FEATURE_AVMEDIA
+    (void) rReq;
+#else
     OUString     aURL;
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     vcl::Window&        rWindow = GetView().GetViewFrame()->GetWindow();
-    bool                bAPI = false, bRet = false;
+    bool bAPI = false;
 
     if( pReqArgs )
     {
@@ -115,6 +121,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
             rWindow.LeaveWait();
         }
     }
+#endif
 
     return bRet;
 }

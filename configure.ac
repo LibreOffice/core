@@ -1381,8 +1381,8 @@ libo_FUZZ_ARG_ENABLE(extension-integration,
 
 AC_ARG_ENABLE(avmedia,
     AS_HELP_STRING([--disable-avmedia],
-        [Disable displaying and inserting AV media in documents. Work in progress, use only if you are hacking on it.])
-)
+        [Disable displaying and inserting AV media in documents. Work in progress, use only if you are hacking on it.]),
+,test "${enable_avmedia+set}" = set || enable_avmedia=yes)
 
 AC_ARG_ENABLE(database-connectivity,
     AS_HELP_STRING([--disable-database-connectivity],
@@ -2944,17 +2944,12 @@ fi
 
 # Whether to build "avmedia" functionality or not.
 
-if test -z "$enable_avmedia"; then
-    enable_avmedia=yes
-fi
-
-BUILD_TYPE="$BUILD_TYPE AVMEDIA"
 if test "$enable_avmedia" = yes; then
+    BUILD_TYPE="$BUILD_TYPE AVMEDIA"
     AC_DEFINE(HAVE_FEATURE_AVMEDIA)
 else
-    USE_AVMEDIA_DUMMY='TRUE'
+    test_gstreamer_1_0=no
 fi
-AC_SUBST(USE_AVMEDIA_DUMMY)
 
 # Decide whether to build database connectivity stuff (including Base) or not.
 if test "$enable_database_connectivity" != no; then

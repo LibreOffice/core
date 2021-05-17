@@ -64,7 +64,7 @@ $(eval $(call gb_Library_use_externals,sc,orcus-parser))
 endif
 
 $(eval $(call gb_Library_use_libraries,sc,\
-    $(call gb_Helper_optional,AVMEDIA,avmedia) \
+    avmedia \
     basegfx \
     comphelper \
     cppu \
