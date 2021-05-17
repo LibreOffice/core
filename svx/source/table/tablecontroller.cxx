@@ -1424,30 +1424,44 @@ bool SvxTableController::DeleteMarked()
     SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
     const bool bUndo(rModel.IsUndoEnabled());
+    bool bDeleteTable = false;
 
     if (bUndo)
         rModel.BegUndo(SvxResId(STR_TABLE_DELETE_CELL_CONTENTS));
 
     CellPos aStart, aEnd;
     getSelectedCells( aStart, aEnd );
-    for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
+    const sal_Int32 nRemovedColumns = aEnd.mnCol - aStart.mnCol + 1;
+    const sal_Int32 nRemovedRows = aEnd.mnRow - aStart.mnRow + 1;
+    if( nRemovedColumns == mxTable->getColumnCount() && nRemovedRows == mxTable->getRowCount())
     {
-        for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
+        bDeleteTable = true;
+    }
+    else
+    {
+        for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
         {
-            CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-            if (xCell.is() && xCell->hasText())
+            for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
             {
-                if (bUndo)
-                    xCell->AddUndo();
-                xCell->SetOutlinerParaObject(nullptr);
+                CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+                if (xCell.is() && xCell->hasText())
+                {
+                    if (bUndo)
+                        xCell->AddUndo();
+                    xCell->SetOutlinerParaObject(nullptr);
+                }
             }
         }
     }
 
+    if (bDeleteTable)
+        mrView.DeleteMarkedObj();
+
     if (bUndo)
         rModel.EndUndo();
 
-    UpdateTableShape();
+    if (!bDeleteTable)
+        UpdateTableShape();
     return true;
 }
 
