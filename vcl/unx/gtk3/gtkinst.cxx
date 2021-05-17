@@ -10119,11 +10119,33 @@ protected:
         }
     }
 
+    PangoAttrList* get_attributes()
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        return gtk_text_get_attributes(GTK_TEXT(m_pDelegate));
+#else
+        return gtk_entry_get_attributes(GTK_ENTRY(m_pDelegate));
+#endif
+    }
+
+    void set_attributes(PangoAttrList* pAttrs)
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_text_set_attributes(GTK_TEXT(m_pDelegate), pAttrs);
+#else
+        gtk_entry_set_attributes(GTK_ENTRY(m_pDelegate), pAttrs);
+#endif
+    }
+
 public:
-    GtkInstanceEditable(GtkWidget* pWidget, GtkWidget* pDelegate, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+    GtkInstanceEditable(GtkWidget* pWidget, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(pWidget, pBuilder, bTakeOwnership)
         , m_pEditable(GTK_EDITABLE(pWidget))
-        , m_pDelegate(pDelegate)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        , m_pDelegate(GTK_WIDGET(gtk_editable_get_delegate(m_pEditable)))
+#else
+        , m_pDelegate(pWidget)
+#endif
         , m_nChangedSignalId(g_signal_connect(m_pEditable, "changed", G_CALLBACK(signalChanged), this))
         , m_nInsertTextSignalId(g_signal_connect(m_pEditable, "insert-text", G_CALLBACK(signalInsertText), this))
         , m_nCursorPosSignalId(g_signal_connect(m_pEditable, "notify::cursor-position", G_CALLBACK(signalCursorPosition), this))
@@ -10179,7 +10201,11 @@ public:
     virtual void set_max_length(int nChars) override
     {
         disable_notify_events();
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_text_set_max_length(GTK_TEXT(m_pDelegate), nChars);
+#else
         gtk_entry_set_max_length(GTK_ENTRY(m_pDelegate), nChars);
+#endif
         enable_notify_events();
     }
 
@@ -10230,12 +10256,20 @@ public:
 
     virtual void set_overwrite_mode(bool bOn) override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_text_set_overwrite_mode(GTK_TEXT(m_pDelegate), bOn);
+#else
         gtk_entry_set_overwrite_mode(GTK_ENTRY(m_pDelegate), bOn);
+#endif
     }
 
     virtual bool get_overwrite_mode() const override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        return gtk_text_get_overwrite_mode(GTK_TEXT(m_pDelegate));
+#else
         return gtk_entry_get_overwrite_mode(GTK_ENTRY(m_pDelegate));
+#endif
     }
 
     virtual void set_message_type(weld::EntryMessageType eType) override
@@ -10245,7 +10279,7 @@ public:
 
     virtual void disable_notify_events() override
     {
-        g_signal_handler_block(GTK_ENTRY(m_pDelegate), m_nActivateSignalId);
+        g_signal_handler_block(m_pDelegate, m_nActivateSignalId);
         g_signal_handler_block(m_pEditable, m_nSelectionPosSignalId);
         g_signal_handler_block(m_pEditable, m_nCursorPosSignalId);
         g_signal_handler_block(m_pEditable, m_nInsertTextSignalId);
@@ -10260,16 +10294,16 @@ public:
         g_signal_handler_unblock(m_pEditable, m_nInsertTextSignalId);
         g_signal_handler_unblock(m_pEditable, m_nCursorPosSignalId);
         g_signal_handler_unblock(m_pEditable, m_nSelectionPosSignalId);
-        g_signal_handler_unblock(GTK_ENTRY(m_pDelegate), m_nActivateSignalId);
+        g_signal_handler_unblock(m_pDelegate, m_nActivateSignalId);
     }
 
     virtual void set_font(const vcl::Font& rFont) override
     {
         m_xFont.reset(new vcl::Font(rFont));
-        PangoAttrList* pOrigList = gtk_entry_get_attributes(GTK_ENTRY(m_pDelegate));
+        PangoAttrList* pOrigList = get_attributes();
         PangoAttrList* pAttrList = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
         update_attr_list(pAttrList, rFont);
-        gtk_entry_set_attributes(GTK_ENTRY(m_pDelegate), pAttrList);
+        set_attributes(pAttrList);
         pango_attr_list_unref(pAttrList);
     }
 
@@ -10282,7 +10316,7 @@ public:
 
     void set_font_color(const Color& rColor) override
     {
-        PangoAttrList* pOrigList = gtk_entry_get_attributes(GTK_ENTRY(m_pDelegate));
+        PangoAttrList* pOrigList = get_attributes();
         if (rColor == COL_AUTO && !pOrigList) // nothing to do
             return;
 
@@ -10294,7 +10328,7 @@ public:
         if (rColor != COL_AUTO)
             pango_attr_list_insert(pAttrs, pango_attr_foreground_new(rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0));
 
-        gtk_entry_set_attributes(GTK_ENTRY(m_pDelegate), pAttrs);
+        set_attributes(pAttrs);
         pango_attr_list_unref(pAttrs);
         pango_attr_list_unref(pRemovedAttrs);
     }
@@ -10333,14 +10367,22 @@ public:
 
     virtual void set_placeholder_text(const OUString& rText) override
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_text_set_placeholder_text(GTK_TEXT(m_pDelegate), rText.toUtf8().getStr());
+#else
         gtk_entry_set_placeholder_text(GTK_ENTRY(m_pDelegate), rText.toUtf8().getStr());
+#endif
     }
 
     virtual void grab_focus() override
     {
         if (has_focus())
             return;
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_text_grab_focus_without_selecting(GTK_TEXT(m_pDelegate));
+#else
         gtk_entry_grab_focus_without_selecting(GTK_ENTRY(m_pDelegate));
+#endif
     }
 
     virtual void set_alignment(TxtAlign eXAlign) override
@@ -10358,7 +10400,11 @@ public:
                 xalign = 1.0;
                 break;
         }
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_editable_set_alignment(m_pEditable, xalign);
+#else
         gtk_entry_set_alignment(GTK_ENTRY(m_pDelegate), xalign);
+#endif
     }
 
     virtual ~GtkInstanceEditable() override
@@ -10375,7 +10421,7 @@ class GtkInstanceEntry : public GtkInstanceEditable
 {
 public:
     GtkInstanceEntry(GtkEntry* pEntry, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceEditable(GTK_WIDGET(pEntry), GTK_WIDGET(pEntry), pBuilder, bTakeOwnership)
+        : GtkInstanceEditable(GTK_WIDGET(pEntry), pBuilder, bTakeOwnership)
     {
     }
 };
