@@ -439,6 +439,9 @@ bool SwFormatAnchor::GetPresentation
         case RndStdIds::FLY_AS_CHAR:
             pId = STR_FLY_AS_CHAR;
             break;
+        case RndStdIds::FLY_AT_CHAR:
+            pId = STR_FLY_AT_CHAR;
+            break;
         case RndStdIds::FLY_AT_PAGE:
             pId = STR_FLY_AT_PAGE;
             break;
