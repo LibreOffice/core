@@ -16,6 +16,24 @@
       "revId": "3d04679831cc05a7104b9b5ef33f79d8ed37346e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb9198e6_f2d787cb",
+        "filename": "offapi/com/sun/star/sheet/FilterFieldType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-05-17T14:25:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2712798e_9305fd41",
+      "revId": "3d04679831cc05a7104b9b5ef33f79d8ed37346e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
