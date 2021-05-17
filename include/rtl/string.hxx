@@ -1765,7 +1765,7 @@ public:
         index = rtl_string_getToken( &pNew, pData, token, cTok, index );
         return OString( pNew, SAL_NO_ACQUIRE );
     }
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+#ifdef LIBO_INTERNAL_ONLY
     std::string_view getTokenView( sal_Int32 token, char cTok, sal_Int32& index ) const
     {
         const char* pViewData = nullptr;
