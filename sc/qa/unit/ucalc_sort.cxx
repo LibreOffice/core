@@ -217,13 +217,6 @@ void TestSort::testSortHorizontal()
 {
     SortRefUpdateSetter aUpdateSet;
 
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    aNewOptions.SetFormulaSepArrayCol(";");
-    aNewOptions.SetFormulaSepArrayRow("|");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
-
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
     m_pDoc->InsertTab(0, "Sort");
 
@@ -283,9 +276,6 @@ void TestSort::testSortHorizontal()
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,1,0), "CONCATENATE(C2;\"-\";D2)", "Wrong formula!");
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,2,0), "CONCATENATE(C3;\"-\";D3)", "Wrong formula!");
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,3,0), "CONCATENATE(C4;\"-\";D4)", "Wrong formula!");
-
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(0);
 }

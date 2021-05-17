@@ -1968,10 +1968,10 @@ void Test::testMatrixConditionalBooleanResult()
     // boolean and numeric results in an unformatted area.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    m_pDoc->InsertMatrixFormula( 0,0, 1,0, aMark, "=IF({1,0};TRUE();42)");  // {TRUE,42}
-    m_pDoc->InsertMatrixFormula( 0,1, 1,1, aMark, "=IF({0,1};TRUE();42)");  // {42,1} aim for {42,TRUE}
-    m_pDoc->InsertMatrixFormula( 0,2, 1,2, aMark, "=IF({1,0};42;FALSE())"); // {42,0} aim for {42,FALSE}
-    m_pDoc->InsertMatrixFormula( 0,3, 1,3, aMark, "=IF({0,1};42;FALSE())"); // {FALSE,42}
+    m_pDoc->InsertMatrixFormula( 0,0, 1,0, aMark, "=IF({1;0};TRUE();42)");  // {TRUE,42}
+    m_pDoc->InsertMatrixFormula( 0,1, 1,1, aMark, "=IF({0;1};TRUE();42)");  // {42,1} aim for {42,TRUE}
+    m_pDoc->InsertMatrixFormula( 0,2, 1,2, aMark, "=IF({1;0};42;FALSE())"); // {42,0} aim for {42,FALSE}
+    m_pDoc->InsertMatrixFormula( 0,3, 1,3, aMark, "=IF({0;1};42;FALSE())"); // {FALSE,42}
 
     CPPUNIT_ASSERT_EQUAL( OUString("TRUE"),  m_pDoc->GetString(0,0,0));
     CPPUNIT_ASSERT_EQUAL( OUString("42"),    m_pDoc->GetString(1,0,0));
@@ -5591,7 +5591,7 @@ void Test::testFormulaWizardSubformula()
     ScSimpleFormulaCalculator aFCell1( *m_pDoc, ScAddress(0,0,0), "=B1:B3", true );
     FormulaError nErrCode = aFCell1.GetErrCode();
     CPPUNIT_ASSERT( nErrCode == FormulaError::NONE || aFCell1.IsMatrix() );
-    CPPUNIT_ASSERT_EQUAL( OUString("{1;#DIV/0!;#NAME?}"), aFCell1.GetString().getString() );
+    CPPUNIT_ASSERT_EQUAL( OUString("{1|#DIV/0!|#NAME?}"), aFCell1.GetString().getString() );
 
     m_pDoc->SetString(ScAddress(1,0,0), "=NA()");       // B1
     m_pDoc->SetString(ScAddress(1,1,0), "2");           // B2
@@ -5599,7 +5599,7 @@ void Test::testFormulaWizardSubformula()
     ScSimpleFormulaCalculator aFCell2( *m_pDoc, ScAddress(0,0,0), "=B1:B3", true );
     nErrCode = aFCell2.GetErrCode();
     CPPUNIT_ASSERT( nErrCode == FormulaError::NONE || aFCell2.IsMatrix() );
-    CPPUNIT_ASSERT_EQUAL( OUString("{#N/A;2;3}"), aFCell2.GetString().getString() );
+    CPPUNIT_ASSERT_EQUAL( OUString("{#N/A|2|3}"), aFCell2.GetString().getString() );
 
     m_pDoc->DeleteTab(0);
 }
@@ -6048,12 +6048,6 @@ void Test::testProtectedSheetEditByRow()
     ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
     m_pDoc->InsertTab(0, "Protected");
 
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    aNewOptions.SetFormulaSepArrayCol(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
-
     {
         // Remove protected flags from rows 2-5.
         ScPatternAttr aAttr(m_pDoc->GetPool());
@@ -6121,9 +6115,6 @@ void Test::testProtectedSheetEditByRow()
         CPPUNIT_ASSERT_MESSAGE("row insertion at row 3 should fail.", !bInserted);
     }
 
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
-
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
@@ -6132,12 +6123,6 @@ void Test::testProtectedSheetEditByColumn()
 {
     ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
     m_pDoc->InsertTab(0, "Protected");
-
-    ScFormulaOptions aOldOptions, aNewOptions;
-    aOldOptions = SC_MOD()->GetFormulaOptions();
-    aNewOptions.SetFormulaSepArg(";");
-    aNewOptions.SetFormulaSepArrayCol(";");
-    m_xDocShell->SetFormulaOptions(aNewOptions);
 
     {
         // Remove protected flags from columns B to E.
@@ -6205,9 +6190,6 @@ void Test::testProtectedSheetEditByColumn()
         bool bInserted = rDocFunc.InsertCells(aCol3, &aMark, INS_INSCOLS_BEFORE, true, true);
         CPPUNIT_ASSERT_MESSAGE("column insertion at column C should fail.", !bInserted);
     }
-
-    // restore formula options back to default
-    m_xDocShell->SetFormulaOptions(aOldOptions);
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
