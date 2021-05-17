@@ -45,7 +45,7 @@ struct FilterFieldValue
         @see com::sun::star::sheet::FilterFieldType
         @since LibreOffice 7.2
      */
-    short FilterType;
+    long FilterType;
 
     /** The color which is used for filtering
 
