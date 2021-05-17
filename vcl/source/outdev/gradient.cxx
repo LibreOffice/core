@@ -441,8 +441,8 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
 
 bool OutputDevice::is_double_buffered_window() const
 {
-    const vcl::Window *pWindow = dynamic_cast<const vcl::Window*>(this);
-    return pWindow && pWindow->SupportsDoubleBuffering();
+    auto pOwnerWindow = GetOwnerWindow();
+    return pOwnerWindow && pOwnerWindow->SupportsDoubleBuffering();
 }
 
 void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
