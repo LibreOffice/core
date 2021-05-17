@@ -19,28 +19,24 @@
 
 #pragma once
 
-#include <shellids.hxx>
+#include <svx/svxdllapi.h>
 
-class ScViewData;
-class SfxModule;
+class SdrMarkView;
+class SfxItemSet;
+class SfxRequest;
 
-#include "drawsh.hxx"
-
-class ScMediaShell final : public ScDrawShell
+namespace avmedia
 {
-public:
-    SFX_DECL_INTERFACE(SCID_MEDIA_SHELL)
+class MediaItem;
+}
 
-private:
-    /// SfxInterface initializer.
-    static void InitInterface_Impl();
-
-public:
-    ScMediaShell(ScViewData& rData);
-    virtual ~ScMediaShell() override;
-
-    void ExecuteMedia(const SfxRequest& rReq);
-    void GetMediaState(SfxItemSet& rSet);
+namespace svx
+{
+struct SVX_DLLPUBLIC SvMediaShellBase final
+{
+    static void GetState(SdrMarkView* pSdrView, SfxItemSet& rSet);
+    static const ::avmedia::MediaItem* Execute(SdrMarkView* pSdrView, SfxRequest const& rReq);
 };
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
