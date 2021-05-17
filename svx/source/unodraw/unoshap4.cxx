@@ -785,9 +785,11 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
         || (pProperty->nWID == OWN_ATTR_MEDIA_MIMETYPE)
         || (pProperty->nWID == OWN_ATTR_VALUE_GRAPHIC))
     {
+#if HAVE_FEATURE_AVMEDIA
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( GetSdrObject() );
         ::avmedia::MediaItem aItem;
         bool bOk = false;
+#endif
 
         switch( pProperty->nWID )
         {
@@ -919,11 +921,13 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
             OSL_FAIL("SvxMediaShape::setPropertyValueImpl(), unknown argument!");
         }
 
+#if HAVE_FEATURE_AVMEDIA
         if( bOk )
         {
             pMedia->setMediaProperties( aItem );
             return true;
         }
+#endif
     }
     else
     {
@@ -945,7 +949,9 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
         || (pProperty->nWID == OWN_ATTR_VALUE_GRAPHIC))
     {
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( GetSdrObject() );
+#if HAVE_FEATURE_AVMEDIA
         const ::avmedia::MediaItem aItem( pMedia->getMediaProperties() );
+#endif
 
         switch( pProperty->nWID )
         {

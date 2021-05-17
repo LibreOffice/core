@@ -49,7 +49,7 @@ $(eval $(call gb_Library_add_defs,svxcore,\
 ))
 
 $(eval $(call gb_Library_use_libraries,svxcore,\
-    $(call gb_Helper_optional,AVMEDIA,avmedia) \
+    avmedia \
     basegfx \
     sb \
     comphelper \
@@ -257,7 +257,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/viewobjectcontactofsdrole2obj \
     svx/source/sdr/contact/viewobjectcontactofunocontrol \
     svx/source/sdr/contact/viewobjectcontactofgraphic \
-    svx/source/sdr/contact/sdrmediawindow \
+    $(call gb_Helper_optional,AVMEDIA,svx/source/sdr/contact/sdrmediawindow) \
     svx/source/sdr/contact/viewobjectcontactofsdrmediaobj \
     svx/source/sdr/contact/viewcontactofsdrcaptionobj \
     svx/source/sdr/contact/viewcontactofvirtobj \
