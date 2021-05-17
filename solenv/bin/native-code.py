@@ -677,7 +677,7 @@ writer_factory_list = [
 
 writer_constructor_list = [
 # basic/util/sb.component
-    ("com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation","#if HAVE_FEATURE_SCRIPTING"),
+    ("com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
     ("com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # filter/source/textfilterdetect/textfd.component
     "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation",
@@ -698,7 +698,7 @@ writer_constructor_list = [
     "com_sun_star_comp_Writer_RtfFilter_get_implementation",
     "com_sun_star_comp_Writer_WriterFilter_get_implementation",
 # writerperfect/source/writer/wpftwriter.component
-    "com_sun_star_comp_Writer_EPUBExportFilter_get_implementation",
+    ("com_sun_star_comp_Writer_EPUBExportFilter_get_implementation", "#ifndef ENABLE_WASM_STRIP_EPUB"),
     ]
 
 desktop_factory_list = [

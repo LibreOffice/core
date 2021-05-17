@@ -1903,6 +1903,7 @@ endef
 gb_ExternalProject__use_epubgen :=
 
 else # !SYSTEM_EPUBGEN
+ifneq ($(ENABLE_WASM_STRIP_EPUB),TRUE)
 
 define gb_LinkTarget__use_epubgen
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1920,6 +1921,7 @@ $(call gb_ExternalProject_use_external_project,$(1),libepubgen)
 
 endef
 
+endif # ENABLE_WASM_STRIP_EPUB
 endif # SYSTEM_EPUBGEN
 
 ifneq ($(SYSTEM_REVENGE),)

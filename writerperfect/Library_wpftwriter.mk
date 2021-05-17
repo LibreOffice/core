@@ -26,6 +26,10 @@ $(eval $(call gb_Library_set_include,wpftwriter,\
 
 $(eval $(call gb_Library_set_componentfile,wpftwriter,writerperfect/source/writer/wpftwriter))
 
+ifneq ($(ENABLE_WASM_STRIP_EPUB),TRUE)
+$(eval $(call gb_Library_set_componentfile,wpftwriter,writerperfect/source/writer/wpftwriter.extended))
+endif
+
 $(eval $(call gb_Library_use_sdk_api,wpftwriter))
 
 $(eval $(call gb_Library_use_common_precompiled_header,wpftwriter))
@@ -50,11 +54,16 @@ $(eval $(call gb_Library_use_libraries,wpftwriter,\
 	xo \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_EPUB),TRUE)
+$(eval $(call gb_Library_use_externals,wpftwriter,\
+	epubgen \
+))
+endif
+
 $(eval $(call gb_Library_use_externals,wpftwriter,\
 	abw \
 	boost_headers \
 	ebook \
-	epubgen \
 	etonyek \
 	icu_headers \
 	icui18n \
@@ -71,13 +80,18 @@ $(eval $(call gb_Library_use_externals,wpftwriter,\
 	zlib \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_EPUB),TRUE)
 $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
-	writerperfect/source/writer/AbiWordImportFilter \
-	writerperfect/source/writer/EBookImportFilter \
 	writerperfect/source/writer/EPUBExportDialog \
 	writerperfect/source/writer/EPUBExportFilter \
 	writerperfect/source/writer/EPUBExportUIComponent \
 	writerperfect/source/writer/EPUBPackage \
+))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,wpftwriter,\
+	writerperfect/source/writer/AbiWordImportFilter \
+	writerperfect/source/writer/EBookImportFilter \
 	writerperfect/source/writer/MSWorksImportFilter \
 	writerperfect/source/writer/MWAWImportFilter \
 	writerperfect/source/writer/PagesImportFilter \
