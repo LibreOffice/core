@@ -1223,6 +1223,8 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     aCertID.hashAlgorithm.algorithm.data = nullptr;
     aCertID.hashAlgorithm.parameters.data = nullptr;
     SECOID_SetAlgorithmID(nullptr, &aCertID.hashAlgorithm, SEC_OID_SHA256, nullptr);
+    comphelper::ScopeGuard aAlgoGuard(
+        [&aCertID] () { SECOID_DestroyAlgorithmID(&aCertID.hashAlgorithm, false); } );
     // Write ESSCertIDv2.certHash.
     SECItem aCertHashItem;
     auto pDerEncoded = reinterpret_cast<const unsigned char *>(aDerEncoded.getArray());
@@ -1273,6 +1275,8 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         SAL_WARN("svl.crypto", "my_SEC_StringToOID() failed");
         return false;
     }
+    comphelper::ScopeGuard aGuard(
+        [&aOidData] () { SECITEM_FreeItem(&aOidData.oid, false); } );
     aOidData.offset = SEC_OID_UNKNOWN;
     aOidData.desc = "id-aa-signingCertificateV2";
     aOidData.mechanism = CKM_SHA_1;
@@ -1292,7 +1296,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     cms_output.len = 0;
     PLArenaPool *arena = PORT_NewArena(10000);
     const ::comphelper::ScopeGuard aScopeGuard(
-        [&arena]() mutable { free(arena); } );
+        [&arena]() mutable { PORT_FreeArena(arena, true); } );
     NSSCMSEncoderContext *cms_ecx;
 
     // Possibly it would work to even just pass NULL for the password callback function and its
@@ -2100,6 +2104,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     }
 
     // Everything went fine
+    SECITEM_FreeItem(&aOidData.oid, false);
     PORT_Free(pActualResultBuffer);
     HASH_Destroy(pHASHContext);
     NSS_CMSSignerInfo_Destroy(pCMSSignerInfo);
