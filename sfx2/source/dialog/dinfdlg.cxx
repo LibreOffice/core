@@ -35,6 +35,7 @@
 #include <svtools/imagemgr.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
 
 #include <memory>
 
@@ -975,7 +976,9 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         aPath.removeFinalSlash();
         OUString aText( aPath.PathToFileName() ); //! (pb) MaxLen?
         m_xFileValEd->set_label(aText);
-        m_xFileValEd->set_uri("file://" + aText);
+        OUString aURLStr;
+        osl::FileBase::getFileURLFromSystemPath(aText, aURLStr);
+        m_xFileValEd->set_uri(aURLStr);
     }
     else if (aURL.GetProtocol() != INetProtocol::PrivSoffice)
     {
