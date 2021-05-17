@@ -3421,8 +3421,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	FillDirection \
 	FillMode \
 	FilterConnection \
-	FilterFieldValue \
 	FilterFieldType \
+	FilterFieldValue \
 	FilterOperator \
 	FilterOperator2 \
 	FormulaLanguage \
