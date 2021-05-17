@@ -22,6 +22,30 @@
       "revId": "b6f30328b2439ff505c1fcddb5133fd8a5c61ed3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d478acde_9dd19bfa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-17T09:27:10Z",
+      "side": 1,
+      "message": "I\u0027m changing it to Kahansum.",
+      "parentUuid": "fb36fbc2_c2a43f01",
+      "range": {
+        "startLine": 7,
+        "startChar": 49,
+        "endLine": 7,
+        "endChar": 58
+      },
+      "revId": "b6f30328b2439ff505c1fcddb5133fd8a5c61ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
