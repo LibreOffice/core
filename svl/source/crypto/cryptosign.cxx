@@ -21,6 +21,7 @@
 #include <comphelper/hash.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -1290,6 +1291,8 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     cms_output.data = nullptr;
     cms_output.len = 0;
     PLArenaPool *arena = PORT_NewArena(10000);
+    const ::comphelper::ScopeGuard aScopeGuard(
+        [&arena]() mutable { free(arena); } );
     NSSCMSEncoderContext *cms_ecx;
 
     // Possibly it would work to even just pass NULL for the password callback function and its
