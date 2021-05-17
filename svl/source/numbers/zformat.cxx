@@ -3237,9 +3237,9 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     genitive case if the day follows the month, and partitive case if the day
     precedes the month. If there is no day of month the nominative case (noun)
     is returned. Also if the month is immediately preceded or followed by a
-    literal string other than space the nominative name is used, this prevents
-    duplicated casing for MMMM\t\a and such in documents imported from (e.g.
-    Finnish) Excel or older LibO/OOo releases.
+    literal string other than space and not followed by a comma, the nominative
+    name is used, this prevents duplicated casing for MMMM\t\a and such in
+    documents imported from (e.g. Finnish) Excel or older LibO/OOo releases.
  */
 
 // IDEA: instead of eCodeType pass the index to nTypeArray and restrict
@@ -3276,9 +3276,11 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
             case NF_KEY_MMMMM:
                 if ((i < nCount-1 &&
                      rInfo.nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
-                     rInfo.sStrArray[i+1][0] != ' ') ||
+                     // Literal following, not space nor comma.
+                     rInfo.sStrArray[i+1][0] != ' ' && rInfo.sStrArray[i+1][0] != ',') ||
                     (i > 0 && rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_STRING &&
                      ((nLen = rInfo.sStrArray[i-1].getLength()) > 0) &&
+                     // Literal preceding, not space.
                      rInfo.sStrArray[i-1][nLen-1] != ' '))
                 {
                     io_nState = 1;
