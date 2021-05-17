@@ -8120,12 +8120,7 @@ sc/qa/unit/subsequent_export-test.cxx
 sc/qa/unit/subsequent_filters-test.cxx
 sc/qa/unit/tiledrendering/tiledrendering.cxx
 sc/qa/unit/ucalc.cxx
-sc/qa/unit/ucalc_column.cxx
-sc/qa/unit/ucalc_condformat.cxx
 sc/qa/unit/ucalc_formula.cxx
-sc/qa/unit/ucalc_pivottable.cxx
-sc/qa/unit/ucalc_sharedformula.cxx
-sc/qa/unit/ucalc_sort.cxx
 sc/source/core/data/attarray.cxx
 sc/source/core/data/attrib.cxx
 sc/source/core/data/autonamecache.cxx

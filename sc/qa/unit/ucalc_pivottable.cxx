@@ -35,13 +35,15 @@
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 
-template<> std::string CppUnit::assertion_traits<ScDPItemData>::toString(ScDPItemData const &)
-{ return "ScDPItemData"; } //TODO: combine with ScDPItemData::Dump?
+template <> std::string CppUnit::assertion_traits<ScDPItemData>::toString(ScDPItemData const&)
+{
+    return "ScDPItemData";
+} //TODO: combine with ScDPItemData::Dump?
 
 using namespace ::com::sun::star;
 
-namespace {
-
+namespace
+{
 struct DPFieldDef
 {
     const char* pName;
@@ -55,12 +57,15 @@ struct DPFieldDef
     bool bRepeatItemLabels;
 };
 
-template<size_t Size>
-ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t nFieldCount, const char* aData[][Size], size_t nDataCount)
+template <size_t Size>
+ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t nFieldCount,
+                           const char* aData[][Size], size_t nDataCount)
 {
     // Insert field names in row 0.
     for (size_t i = 0; i < nFieldCount; ++i)
-        pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
+        pDoc->SetString(
+            static_cast<SCCOL>(i), 0, 0,
+            OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
 
     // Insert data into row 1 and downward.
     for (size_t i = 0; i < nDataCount; ++i)
@@ -69,8 +74,8 @@ ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t 
         for (size_t j = 0; j < nFieldCount; ++j)
         {
             SCCOL nCol = static_cast<SCCOL>(j);
-            pDoc->SetString(
-                nCol, nRow, 0, OUString(aData[i][j], strlen(aData[i][j]), RTL_TEXTENCODING_UTF8));
+            pDoc->SetString(nCol, nRow, 0,
+                            OUString(aData[i][j], strlen(aData[i][j]), RTL_TEXTENCODING_UTF8));
         }
     }
 
@@ -79,26 +84,25 @@ ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t 
     pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Data is expected to start from (col=0,row=0).", SCCOL(0), nCol1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Data is expected to start from (col=0,row=0).", SCROW(0), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.",
-                           static_cast<SCCOL>(nFieldCount - 1), nCol2);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.",
-                           static_cast<SCROW>(nDataCount), nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.", static_cast<SCCOL>(nFieldCount - 1),
+                                 nCol2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.", static_cast<SCROW>(nDataCount), nRow2);
 
     ScRange aSrcRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
     printRange(pDoc, aSrcRange, "Data sheet content");
     return aSrcRange;
 }
 
-bool checkDPTableOutput(
-    const ScDocument* pDoc, const ScRange& aOutRange,
-    const std::vector<std::vector<const char*>>& aOutputCheck, const char* pCaption )
+bool checkDPTableOutput(const ScDocument* pDoc, const ScRange& aOutRange,
+                        const std::vector<std::vector<const char*>>& aOutputCheck,
+                        const char* pCaption)
 {
     return checkOutput(pDoc, aOutRange, aOutputCheck, pCaption);
 }
 
-ScDPObject* createDPFromSourceDesc(
-    ScDocument* pDoc, const ScSheetSourceDesc& rDesc, const DPFieldDef aFields[], size_t nFieldCount,
-    bool bFilterButton)
+ScDPObject* createDPFromSourceDesc(ScDocument* pDoc, const ScSheetSourceDesc& rDesc,
+                                   const DPFieldDef aFields[], size_t nFieldCount,
+                                   bool bFilterButton)
 {
     ScDPObject* pDPObj = new ScDPObject(pDoc);
     pDPObj->SetSheetDesc(rDesc);
@@ -167,9 +171,8 @@ ScDPObject* createDPFromSourceDesc(
     return pDPObj;
 }
 
-ScDPObject* createDPFromRange(
-    ScDocument* pDoc, const ScRange& rRange, const DPFieldDef aFields[], size_t nFieldCount,
-    bool bFilterButton)
+ScDPObject* createDPFromRange(ScDocument* pDoc, const ScRange& rRange, const DPFieldDef aFields[],
+                              size_t nFieldCount, bool bFilterButton)
 {
     ScSheetSourceDesc aSheetDesc(pDoc);
     aSheetDesc.SetSourceRange(rRange);
@@ -194,12 +197,12 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
     o3tl::sorted_vector<ScDPObject*> aRefs;
     bool bSuccess = pDPs->ReloadGroupsInCache(pDPObj, aRefs);
     CPPUNIT_ASSERT_MESSAGE("Failed to reload group data in cache.", bSuccess);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one table linked to this cache.", size_t(1), aRefs.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one table linked to this cache.", size_t(1),
+                                 aRefs.size());
     pDPObj->ReloadGroupTableData();
 
     return refresh(pDPObj);
 }
-
 }
 
 class TestPivottable : public test::BootstrapFixture
@@ -327,9 +330,7 @@ private:
     ScDocument* m_pDoc;
 };
 
-TestPivottable::TestPivottable()
-{
-}
+TestPivottable::TestPivottable() {}
 
 void TestPivottable::setUp()
 {
@@ -337,10 +338,9 @@ void TestPivottable::setUp()
 
     ScDLL::Init();
 
-    m_xDocShell = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    m_xDocShell
+        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
     m_xDocShell->SetIsInUcalc();
     m_xDocShell->DoInitUnitTest();
 
@@ -361,20 +361,15 @@ void TestPivottable::testPivotTable()
     m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
-    static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
-    };
+    static const DPFieldDef aFields[]
+        = { { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+            { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false } };
 
     // Raw data
     const char* aData[][3] = {
-        { "Andy",    "A", "30" },
-        { "Bruce",   "A", "20" },
-        { "Charlie", "B", "45" },
-        { "David",   "B", "12" },
-        { "Edward",  "C",  "8" },
-        { "Frank",   "C", "15" },
+        { "Andy", "A", "30" },  { "Bruce", "A", "20" }, { "Charlie", "B", "45" },
+        { "David", "B", "12" }, { "Edward", "C", "8" }, { "Frank", "C", "15" },
     };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
@@ -384,13 +379,13 @@ void TestPivottable::testPivotTable()
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
     SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+    ScDPObject* pDPObj = createDPFromRange(m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0),
+                                           aFields, nFieldCount, false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     bool bOverflow = false;
@@ -401,22 +396,23 @@ void TestPivottable::testPivotTable()
     aOutRange = pDPObj->GetOutRange();
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Sum - Score", "Group", nullptr, nullptr, nullptr },
-            { "Name", "A", "B", "C", "Total Result" },
-            { "Andy", "30", nullptr, nullptr, "30" },
-            { "Bruce", "20", nullptr, nullptr, "20" },
-            { "Charlie", nullptr, "45", nullptr, "45" },
-            { "David", nullptr, "12", nullptr, "12" },
-            { "Edward", nullptr, nullptr, "8", "8" },
-            { "Frank", nullptr, nullptr, "15", "15" },
-            { "Total Result", "50", "57", "23", "130" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Sum - Score", "Group", nullptr, nullptr, nullptr },
+                { "Name", "A", "B", "C", "Total Result" },
+                { "Andy", "30", nullptr, nullptr, "30" },
+                { "Bruce", "20", nullptr, nullptr, "20" },
+                { "Charlie", nullptr, "45", nullptr, "45" },
+                { "David", nullptr, "12", nullptr, "12" },
+                { "Edward", nullptr, nullptr, "8", "8" },
+                { "Frank", nullptr, nullptr, "15", "15" },
+                { "Total Result", "50", "57", "23", "130" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1),
+                                 pDPs->GetSheetCaches().size());
 
     // Update the cell values.
     double aData2[] = { 100, 200, 300, 400, 500, 600 };
@@ -439,29 +435,31 @@ void TestPivottable::testPivotTable()
     pDPObj2->Output(aOutRange.aStart);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Sum - Score", "Group", nullptr, nullptr, nullptr },
-            { "Name", "A", "B", "C", "Total Result" },
-            { "Andy", "30", nullptr, nullptr, "30" },
-            { "Bruce", "20", nullptr, nullptr, "20" },
-            { "Charlie", nullptr, "45", nullptr, "45" },
-            { "David", nullptr, "12", nullptr, "12" },
-            { "Edward", nullptr, nullptr, "8", "8" },
-            { "Frank", nullptr, nullptr, "15", "15" },
-            { "Total Result", "50", "57", "23", "130" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Sum - Score", "Group", nullptr, nullptr, nullptr },
+                { "Name", "A", "B", "C", "Total Result" },
+                { "Andy", "30", nullptr, nullptr, "30" },
+                { "Bruce", "20", nullptr, nullptr, "20" },
+                { "Charlie", nullptr, "45", nullptr, "45" },
+                { "David", nullptr, "12", nullptr, "12" },
+                { "Edward", nullptr, nullptr, "8", "8" },
+                { "Frank", nullptr, nullptr, "15", "15" },
+                { "Total Result", "50", "57", "23", "130" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (from old cache)");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "DataPilot table output (from old cache)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1),
+                                 pDPs->GetSheetCaches().size());
 
     // Free the first datapilot object after the 2nd one gets reloaded, to
     // prevent the data cache from being deleted before the reload.
     pDPs->FreeTable(pDPObj);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1),
+                                 pDPs->GetSheetCaches().size());
 
     // This time clear the cache to refresh the data from the source range.
     CPPUNIT_ASSERT_MESSAGE("This datapilot should be based on sheet data.", pDPObj2->IsSheetData());
@@ -469,26 +467,26 @@ void TestPivottable::testPivotTable()
     const char* pErrId = pDPs->ReloadCache(pDPObj2, aRefs);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cache reload failed.", static_cast<const char*>(nullptr), pErrId);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Reloading a cache shouldn't remove any cache.",
-                           static_cast<size_t>(1), pDPs->GetSheetCaches().size());
+                                 static_cast<size_t>(1), pDPs->GetSheetCaches().size());
 
     pDPObj2->ClearTableData();
     pDPObj2->Output(aOutRange.aStart);
 
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Sum - Score", "Group", nullptr, nullptr, nullptr },
-            { "Name", "A", "B", "C", "Total Result" },
-            { "Andy", "100", nullptr, nullptr, "100" },
-            { "Bruce", "200", nullptr, nullptr, "200" },
-            { "Charlie", nullptr, "300", nullptr, "300" },
-            { "David", nullptr, "400", nullptr, "400" },
-            { "Edward", nullptr, nullptr, "500", "500" },
-            { "Frank", nullptr, nullptr, "600", "600" },
-            { "Total Result", "300", "700", "1100", "2100" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Sum - Score", "Group", nullptr, nullptr, nullptr },
+                { "Name", "A", "B", "C", "Total Result" },
+                { "Andy", "100", nullptr, nullptr, "100" },
+                { "Bruce", "200", nullptr, nullptr, "200" },
+                { "Charlie", nullptr, "300", nullptr, "300" },
+                { "David", nullptr, "400", nullptr, "400" },
+                { "Edward", nullptr, nullptr, "500", "500" },
+                { "Frank", nullptr, nullptr, "600", "600" },
+                { "Total Result", "300", "700", "1100", "2100" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (refreshed)");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "DataPilot table output (refreshed)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -496,42 +494,43 @@ void TestPivottable::testPivotTable()
 
     // Swap the two sheets.
     m_pDoc->MoveTab(1, 0);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Swapping the sheets shouldn't remove the cache.",
-                           size_t(1), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Swapping the sheets shouldn't remove the cache.", size_t(1),
+                                 pDPs->GetSheetCaches().size());
     CPPUNIT_ASSERT_MESSAGE("Cache should have moved.", !pDPs->GetSheetCaches().hasCache(aSrcRange));
     aSrcRange.aStart.SetTab(1);
     aSrcRange.aEnd.SetTab(1);
     CPPUNIT_ASSERT_MESSAGE("Cache should be here.", pDPs->GetSheetCaches().hasCache(aSrcRange));
 
     pDPs->FreeTable(pDPObj2);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any data pilot table stored with the document.",
-                           size_t(0), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There shouldn't be any data pilot table stored with the document.", size_t(0),
+        pDPs->GetCount());
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more data cache.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more data cache.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     // Insert a brand new pivot table object once again, but this time, don't
     // create the output to avoid creating a data cache.
     m_pDoc->DeleteTab(1);
     m_pDoc->InsertTab(1, "Table");
 
-    pDPObj = createDPFromRange(
-        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+    pDPObj = createDPFromRange(m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields,
+                               nFieldCount, false);
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Data cache shouldn't exist yet before creating the table output.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+                                 size_t(0), pDPs->GetSheetCaches().size());
 
     // Now, "refresh" the table.  This should still return a reference to self
     // even with the absence of data cache.
     aRefs.clear();
     pDPs->ReloadCache(pDPObj, aRefs);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("It should return the same object as a reference.",
-                           o3tl::sorted_vector<ScDPObject*>::size_type(1), aRefs.size());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("It should return the same object as a reference.",
-                           pDPObj, *aRefs.begin());
+                                 o3tl::sorted_vector<ScDPObject*>::size_type(1), aRefs.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("It should return the same object as a reference.", pDPObj,
+                                 *aRefs.begin());
 
     pDPs->FreeTable(pDPObj);
 
@@ -545,11 +544,10 @@ void TestPivottable::testPivotTableLabels()
     m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
-    static const DPFieldDef aFields[] = {
-        { "Software", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
-        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
-    };
+    static const DPFieldDef aFields[]
+        = { { "Software", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Version", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+            { "1.2.3", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false } };
 
     // Raw data
     const char* aData[][3] = {
@@ -565,26 +563,26 @@ void TestPivottable::testPivotTableLabels()
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
     SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+    ScDPObject* pDPObj = createDPFromRange(m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0),
+                                           aFields, nFieldCount, false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Sum - 1.2.3", "Version", nullptr, nullptr, nullptr },
-            { "Software", "3.3.0", "3.3.1", "3.4.0", "Total Result" },
-            { "LibreOffice", "30", "20", "45", "95" },
-            { "Total Result", "30", "20", "45", "95" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Sum - 1.2.3", "Version", nullptr, nullptr, nullptr },
+                { "Software", "3.3.0", "3.3.1", "3.4.0", "Total Result" },
+                { "LibreOffice", "30", "20", "45", "95" },
+                { "Total Result", "30", "20", "45", "95" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -600,18 +598,15 @@ void TestPivottable::testPivotTableDateLabels()
     m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
-    static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Date",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
-    };
+    static const DPFieldDef aFields[]
+        = { { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Date", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false } };
 
     // Raw data
-    const char* aData[][3] = {
-        { "Zena",   "2011-1-1", "30" },
-        { "Yodel",  "2011-1-2", "20" },
-        { "Xavior", "2011-1-3", "45" }
-    };
+    const char* aData[][3] = { { "Zena", "2011-1-1", "30" },
+                               { "Yodel", "2011-1-2", "20" },
+                               { "Xavior", "2011-1-3", "45" } };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
     size_t const nDataCount = SAL_N_ELEMENTS(aData);
@@ -620,35 +615,33 @@ void TestPivottable::testPivotTableDateLabels()
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
     SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+    ScDPObject* pDPObj = createDPFromRange(m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0),
+                                           aFields, nFieldCount, false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Sum - Value", "Date", nullptr, nullptr, nullptr },
-            { "Name", "2011-01-01", "2011-01-02", "2011-01-03", "Total Result" },
-            { "Xavior",  nullptr, nullptr, "45", "45" },
-            { "Yodel",  nullptr, "20", nullptr, "20" },
-            { "Zena",  "30", nullptr, nullptr, "30" },
-            { "Total Result", "30", "20", "45", "95" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Sum - Value", "Date", nullptr, nullptr, nullptr },
+                { "Name", "2011-01-01", "2011-01-02", "2011-01-03", "Total Result" },
+                { "Xavior", nullptr, nullptr, "45", "45" },
+                { "Yodel", nullptr, "20", nullptr, "20" },
+                { "Zena", "30", nullptr, nullptr, "30" },
+                { "Total Result", "30", "20", "45", "95" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     {
-        const char* const aChecks[] = {
-            "2011-01-01", "2011-01-02", "2011-01-03"
-        };
+        const char* const aChecks[] = { "2011-01-01", "2011-01-02", "2011-01-03" };
 
         // Make sure those cells that contain dates are numeric.
         SCROW nRow = aOutRange.aStart.Row() + 1;
@@ -657,7 +650,8 @@ void TestPivottable::testPivotTableDateLabels()
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         {
             OUString aVal = m_pDoc->GetString(nCol, nRow, 1);
-            CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected.", aVal.equalsAscii(aChecks[nCol-nCol1]));
+            CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected.",
+                                   aVal.equalsAscii(aChecks[nCol - nCol1]));
             CPPUNIT_ASSERT_MESSAGE("This cell contains a date value and is supposed to be numeric.",
                                    m_pDoc->HasValueData(nCol, nRow, 1));
         }
@@ -675,25 +669,18 @@ void TestPivottable::testPivotTableFilters()
     m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
-    static const DPFieldDef aFields[] = {
-        { "Name",   sheet::DataPilotFieldOrientation_HIDDEN, ScGeneralFunction::NONE, false },
-        { "Group1", sheet::DataPilotFieldOrientation_HIDDEN, ScGeneralFunction::NONE, false },
-        { "Group2", sheet::DataPilotFieldOrientation_PAGE, ScGeneralFunction::NONE, false },
-        { "Val1",   sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false },
-        { "Val2",   sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
-    };
+    static const DPFieldDef aFields[]
+        = { { "Name", sheet::DataPilotFieldOrientation_HIDDEN, ScGeneralFunction::NONE, false },
+            { "Group1", sheet::DataPilotFieldOrientation_HIDDEN, ScGeneralFunction::NONE, false },
+            { "Group2", sheet::DataPilotFieldOrientation_PAGE, ScGeneralFunction::NONE, false },
+            { "Val1", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false },
+            { "Val2", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false } };
 
     // Raw data
-    const char* aData[][5] = {
-        { "A", "1", "A", "1", "10" },
-        { "B", "1", "A", "1", "10" },
-        { "C", "1", "B", "1", "10" },
-        { "D", "1", "B", "1", "10" },
-        { "E", "2", "A", "1", "10" },
-        { "F", "2", "A", "1", "10" },
-        { "G", "2", "B", "1", "10" },
-        { "H", "2", "B", "1", "10" }
-    };
+    const char* aData[][5] = { { "A", "1", "A", "1", "10" }, { "B", "1", "A", "1", "10" },
+                               { "C", "1", "B", "1", "10" }, { "D", "1", "B", "1", "10" },
+                               { "E", "2", "A", "1", "10" }, { "F", "2", "A", "1", "10" },
+                               { "G", "2", "B", "1", "10" }, { "H", "2", "B", "1", "10" } };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
     size_t const nDataCount = SAL_N_ELEMENTS(aData);
@@ -702,28 +689,24 @@ void TestPivottable::testPivotTableFilters()
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
     SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, true);
+    ScDPObject* pDPObj = createDPFromRange(m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0),
+                                           aFields, nFieldCount, true);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Filter", nullptr },
-            { "Group2", "- all -" },
-            { nullptr, nullptr },
-            { "Data", nullptr },
-            { "Sum - Val1", "8" },
-            { "Sum - Val2", "80" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Filter", nullptr }, { "Group2", "- all -" }, { nullptr, nullptr },
+                { "Data", nullptr },   { "Sum - Val1", "8" },   { "Sum - Val2", "80" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (unfiltered)");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "DataPilot table output (unfiltered)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -731,16 +714,15 @@ void TestPivottable::testPivotTableFilters()
 
     ScAddress aFormulaAddr = aOutRange.aEnd;
     aFormulaAddr.IncRow(2);
-    m_pDoc->SetString(aFormulaAddr.Col(), aFormulaAddr.Row(), aFormulaAddr.Tab(),
-                      "=B6");
+    m_pDoc->SetString(aFormulaAddr.Col(), aFormulaAddr.Row(), aFormulaAddr.Tab(), "=B6");
     double fTest = m_pDoc->GetValue(aFormulaAddr);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", 80.0, fTest);
+    ASSERT_DOUBLES_EQUAL_MESSAGE(
+        "Incorrect formula value that references a cell in the pivot table output.", 80.0, fTest);
 
     // Set current page of 'Group2' to 'A'.
     pDPObj->BuildAllDimensionMembers();
     ScDPSaveData aSaveData(*pDPObj->GetSaveData());
-    ScDPSaveDimension* pPageDim = aSaveData.GetDimensionByName(
-        "Group2");
+    ScDPSaveDimension* pPageDim = aSaveData.GetDimensionByName("Group2");
     CPPUNIT_ASSERT_MESSAGE("Dimension not found", pPageDim);
     OUString aPage("A");
     pPageDim->SetCurrentPage(&aPage);
@@ -748,50 +730,45 @@ void TestPivottable::testPivotTableFilters()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Filter", nullptr },
-            { "Group2", "A" },
-            { nullptr, nullptr },
-            { "Data", nullptr },
-            { "Sum - Val1", "4" },
-            { "Sum - Val2", "40" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Filter", nullptr }, { "Group2", "A" },     { nullptr, nullptr },
+                { "Data", nullptr },   { "Sum - Val1", "4" }, { "Sum - Val2", "40" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "DataPilot table output (filtered by page)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     fTest = m_pDoc->GetValue(aFormulaAddr);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", 40.0, fTest);
+    ASSERT_DOUBLES_EQUAL_MESSAGE(
+        "Incorrect formula value that references a cell in the pivot table output.", 40.0, fTest);
 
     // Set query filter.
     ScSheetSourceDesc aDesc(*pDPObj->GetSheetDesc());
     ScQueryParam aQueryParam(aDesc.GetQueryParam());
-    CPPUNIT_ASSERT_MESSAGE("There should be at least one query entry.", aQueryParam.GetEntryCount() > 0);
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one query entry.",
+                           aQueryParam.GetEntryCount() > 0);
     ScQueryEntry& rEntry = aQueryParam.GetEntry(0);
     rEntry.bDoQuery = true;
-    rEntry.nField = 1;  // Group1
+    rEntry.nField = 1; // Group1
     rEntry.GetQueryItem().mfVal = 1;
     aDesc.SetQueryParam(aQueryParam);
     pDPObj->SetSheetDesc(aDesc);
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Filter", nullptr },
-            { "Group2", "A" },
-            { nullptr, nullptr },
-            { "Data", nullptr },
-            { "Sum - Val1", "2" },
-            { "Sum - Val2", "20" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Filter", nullptr }, { "Group2", "A" },     { nullptr, nullptr },
+                { "Data", nullptr },   { "Sum - Val1", "2" }, { "Sum - Val2", "20" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by query)");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "DataPilot table output (filtered by query)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     fTest = m_pDoc->GetValue(aFormulaAddr);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", 20.0, fTest);
+    ASSERT_DOUBLES_EQUAL_MESSAGE(
+        "Incorrect formula value that references a cell in the pivot table output.", 20.0, fTest);
 
     // Set the current page of 'Group2' back to '- all -'. The query filter
     // should still be in effect.
@@ -800,22 +777,19 @@ void TestPivottable::testPivotTableFilters()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Filter", nullptr },
-            { "Group2", "- all -" },
-            { nullptr, nullptr },
-            { "Data", nullptr },
-            { "Sum - Val1", "4" },
-            { "Sum - Val2", "40" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Filter", nullptr }, { "Group2", "- all -" }, { nullptr, nullptr },
+                { "Data", nullptr },   { "Sum - Val1", "4" },   { "Sum - Val2", "40" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "DataPilot table output (filtered by page)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any data pilot table stored with the document.",
-                           size_t(0), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There shouldn't be any data pilot table stored with the document.", size_t(0),
+        pDPs->GetCount());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -827,20 +801,15 @@ void TestPivottable::testPivotTableNamedSource()
     m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
-    static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
-    };
+    static const DPFieldDef aFields[]
+        = { { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+            { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false } };
 
     // Raw data
     const char* aData[][3] = {
-        { "Andy",    "A", "30" },
-        { "Bruce",   "A", "20" },
-        { "Charlie", "B", "45" },
-        { "David",   "B", "12" },
-        { "Edward",  "C",  "8" },
-        { "Frank",   "C", "15" },
+        { "Andy", "A", "30" },  { "Bruce", "A", "20" }, { "Charlie", "B", "45" },
+        { "David", "B", "12" }, { "Edward", "C", "8" }, { "Frank", "C", "15" },
     };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
@@ -854,8 +823,7 @@ void TestPivottable::testPivotTableNamedSource()
     OUString aRangeName("MyData");
     ScRangeName* pNames = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT_MESSAGE("Failed to get global range name container.", pNames);
-    ScRangeData* pName = new ScRangeData(
-        *m_pDoc, aRangeName, aRangeStr);
+    ScRangeData* pName = new ScRangeData(*m_pDoc, aRangeName, aRangeStr);
     bool bSuccess = pNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bSuccess);
 
@@ -866,58 +834,59 @@ void TestPivottable::testPivotTableNamedSource()
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Sum - Score", "Group", nullptr, nullptr, nullptr },
-            { "Name", "A", "B", "C", "Total Result" },
-            { "Andy", "30", nullptr, nullptr, "30" },
-            { "Bruce", "20", nullptr, nullptr, "20" },
-            { "Charlie", nullptr, "45", nullptr, "45" },
-            { "David", nullptr, "12", nullptr, "12" },
-            { "Edward", nullptr, nullptr, "8", "8" },
-            { "Frank", nullptr, nullptr, "15", "15" },
-            { "Total Result", "50", "57", "23", "130" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Sum - Score", "Group", nullptr, nullptr, nullptr },
+                { "Name", "A", "B", "C", "Total Result" },
+                { "Andy", "30", nullptr, nullptr, "30" },
+                { "Bruce", "20", nullptr, nullptr, "20" },
+                { "Charlie", nullptr, "45", nullptr, "45" },
+                { "David", nullptr, "12", nullptr, "12" },
+                { "Edward", nullptr, nullptr, "8", "8" },
+                { "Frank", nullptr, nullptr, "15", "15" },
+                { "Total Result", "50", "57", "23", "130" } };
 
         bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one named range data cache.",
-                           size_t(1), pDPs->GetNameCaches().size());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one named range data cache.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one named range data cache.", size_t(1),
+                                 pDPs->GetNameCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one named range data cache.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     // Move the table with pivot table to the left of the source data sheet.
     m_pDoc->MoveTab(1, 0);
     OUString aTabName;
     m_pDoc->GetName(0, aTabName);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong sheet name.", OUString("Table"), aTabName);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Pivot table output is on the wrong sheet!",
-                           static_cast<SCTAB>(0), pDPObj->GetOutRange().aStart.Tab());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet name.", OUString("Table"), aTabName);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Pivot table output is on the wrong sheet!", static_cast<SCTAB>(0),
+                                 pDPObj->GetOutRange().aStart.Tab());
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Moving the pivot table to another sheet shouldn't have changed the cache state.",
-                           size_t(1), pDPs->GetNameCaches().size());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Moving the pivot table to another sheet shouldn't have changed the cache state.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Moving the pivot table to another sheet shouldn't have changed the cache state.",
+        size_t(1), pDPs->GetNameCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Moving the pivot table to another sheet shouldn't have changed the cache state.",
+        size_t(0), pDPs->GetSheetCaches().size());
 
     const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
     CPPUNIT_ASSERT_MESSAGE("Sheet source description doesn't exist.", pDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Named source range has been altered unexpectedly!",
-                           pDesc->GetRangeName(), aRangeName);
+                                 pDesc->GetRangeName(), aRangeName);
 
     CPPUNIT_ASSERT_MESSAGE("Cache should exist.", pDPs->GetNameCaches().hasCache(aRangeName));
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           size_t(0), pDPs->GetNameCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetNameCaches().size());
 
     pNames->clear();
     m_pDoc->DeleteTab(1);
@@ -930,18 +899,14 @@ void TestPivottable::testPivotTableCache()
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
-        { "F1", "F2", "F3" },
-        { "Z",  "A", "30" },
-        { "R",  "A", "20" },
-        { "A",  "B", "45" },
-        { "F",  "B", "12" },
-        { "Y",  "C",  "8" },
-        { "12", "C", "15" },
+        { "F1", "F2", "F3" }, { "Z", "A", "30" }, { "R", "A", "20" },  { "A", "B", "45" },
+        { "F", "B", "12" },   { "Y", "C", "8" },  { "12", "C", "15" },
     };
 
-    ScAddress aPos(1,1,0);
+    ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
     ScDPCache aCache(*m_pDoc);
     aCache.InitFromDoc(*m_pDoc, aDataRange);
@@ -965,33 +930,27 @@ void TestPivottable::testPivotTableCache()
     const ScDPItemData* pItem = aCache.GetItemDataById(0, 0);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           12.0, pItem->GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", 12.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(0, 1);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("A"), pItem->GetString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", OUString("A"), pItem->GetString());
     pItem = aCache.GetItemDataById(0, 2);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("F"), pItem->GetString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", OUString("F"), pItem->GetString());
     pItem = aCache.GetItemDataById(0, 3);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("R"), pItem->GetString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", OUString("R"), pItem->GetString());
     pItem = aCache.GetItemDataById(0, 4);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("Y"), pItem->GetString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", OUString("Y"), pItem->GetString());
     pItem = aCache.GetItemDataById(0, 5);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("Z"), pItem->GetString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", OUString("Z"), pItem->GetString());
     pItem = aCache.GetItemDataById(0, 6);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
@@ -1001,18 +960,15 @@ void TestPivottable::testPivotTableCache()
     pItem = aCache.GetItemDataById(1, 0);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("A"), pItem->GetString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", OUString("A"), pItem->GetString());
     pItem = aCache.GetItemDataById(1, 1);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("B"), pItem->GetString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", OUString("B"), pItem->GetString());
     pItem = aCache.GetItemDataById(1, 2);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("C"), pItem->GetString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", OUString("C"), pItem->GetString());
     pItem = aCache.GetItemDataById(1, 3);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
@@ -1022,33 +978,27 @@ void TestPivottable::testPivotTableCache()
     pItem = aCache.GetItemDataById(2, 0);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           8.0, pItem->GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", 8.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 1);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           12.0, pItem->GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", 12.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 2);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           15.0, pItem->GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", 15.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 3);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           20.0, pItem->GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", 20.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 4);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           30.0, pItem->GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", 30.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 5);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           45.0, pItem->GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", 45.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 6);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
@@ -1135,38 +1085,29 @@ void TestPivottable::testPivotTableDuplicateDataFields()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const std::vector<std::vector<const char*>> aData = {
-        { "Name", "Value" },
-        { "A",       "45" },
-        { "A",        "5" },
-        { "A",       "41" },
-        { "A",       "49" },
-        { "A",        "4" },
-        { "B",       "33" },
-        { "B",       "84" },
-        { "B",       "74" },
-        { "B",        "8" },
-        { "B",       "68" }
-    };
+    const std::vector<std::vector<const char*>> aData
+        = { { "Name", "Value" }, { "A", "45" }, { "A", "5" },  { "A", "41" },
+            { "A", "49" },       { "A", "4" },  { "B", "33" }, { "B", "84" },
+            { "B", "74" },       { "B", "8" },  { "B", "68" } };
 
     // Dimension definition
-    static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false }
-    };
+    static const DPFieldDef aFields[]
+        = { { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false } };
 
-    ScAddress aPos(2,2,0);
+    ScAddress aPos(2, 2, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    ScDPObject* pDPObj
+        = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1182,7 +1123,8 @@ void TestPivottable::testPivotTableDuplicateDataFields()
             { "Total Count - Value", nullptr, "10" },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1198,27 +1140,28 @@ void TestPivottable::testPivotTableDuplicateDataFields()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { nullptr, "Data", nullptr },
-            { "Name", "Sum - Value", "Count - Value" },
-            { "A", "144", "5" },
-            { "B", "267", "5" },
-            { "Total Result", "411", "10" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { nullptr, "Data", nullptr },
+                { "Name", "Sum - Value", "Count - Value" },
+                { "A", "144", "5" },
+                { "B", "267", "5" },
+                { "Total Result", "411", "10" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     ScPivotParam aParam;
     pDPObj->FillLabelData(aParam);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly 4 labels (2 original, 1 data layout, and 1 duplicate dimensions).",
-                           size_t(4), aParam.maLabelArray.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There should be exactly 4 labels (2 original, 1 data layout, and 1 duplicate dimensions).",
+        size_t(4), aParam.maLabelArray.size());
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1230,52 +1173,45 @@ void TestPivottable::testPivotTableNormalGrouping()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const std::vector<std::vector<const char*>> aData = {
-        { "Name", "Value" },
-        { "A", "1" },
-        { "B", "2" },
-        { "C", "3" },
-        { "D", "4" },
-        { "E", "5" },
-        { "F", "6" },
-        { "G", "7" }
-    };
+    const std::vector<std::vector<const char*>> aData
+        = { { "Name", "Value" }, { "A", "1" }, { "B", "2" }, { "C", "3" },
+            { "D", "4" },        { "E", "5" }, { "F", "6" }, { "G", "7" } };
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
         { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
-    ScAddress aPos(1,1,0);
+    ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    ScDPObject* pDPObj
+        = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "Sum - Value" },
-            { "A", "1" },
-            { "B", "2" },
-            { "C", "3" },
-            { "D", "4" },
-            { "E", "5" },
-            { "F", "6" },
-            { "G", "7" },
-            { "Total Result", "28" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck = { { "Name", "Sum - Value" },
+                                                               { "A", "1" },
+                                                               { "B", "2" },
+                                                               { "C", "3" },
+                                                               { "D", "4" },
+                                                               { "E", "5" },
+                                                               { "F", "6" },
+                                                               { "G", "7" },
+                                                               { "Total Result", "28" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Initial output without grouping");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "Initial output without grouping");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1286,8 +1222,7 @@ void TestPivottable::testPivotTableNormalGrouping()
 
     OUString aGroupPrefix("Group");
     OUString aBaseDimName("Name");
-    OUString aGroupDimName =
-        pDimData->CreateGroupDimName(aBaseDimName, *pDPObj, false, nullptr);
+    OUString aGroupDimName = pDimData->CreateGroupDimName(aBaseDimName, *pDPObj, false, nullptr);
 
     {
         // Group A, B and C together.
@@ -1311,19 +1246,18 @@ void TestPivottable::testPivotTableNormalGrouping()
     aOutRange = refreshGroups(pDPs, pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name2", "Name", "Sum - Value" },
-            { "D", "D", "4" },
-            { "E", "E", "5" },
-            { "F", "F", "6" },
-            { "G", "G", "7" },
-            { "Group1", "A", "1" },
-            { nullptr,        "B", "2" },
-            { nullptr,        "C", "3" },
-            { "Total Result", nullptr, "28" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck = { { "Name2", "Name", "Sum - Value" },
+                                                               { "D", "D", "4" },
+                                                               { "E", "E", "5" },
+                                                               { "F", "F", "6" },
+                                                               { "G", "G", "7" },
+                                                               { "Group1", "A", "1" },
+                                                               { nullptr, "B", "2" },
+                                                               { nullptr, "C", "3" },
+                                                               { "Total Result", nullptr, "28" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "A, B, C grouped by Group1.");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "A, B, C grouped by Group1.");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1348,26 +1282,25 @@ void TestPivottable::testPivotTableNormalGrouping()
     aOutRange = refreshGroups(pDPs, pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name2", "Name", "Sum - Value" },
-            { "G", "G", "7" },
-            { "Group1", "A", "1" },
-            { nullptr,        "B", "2" },
-            { nullptr,        "C", "3" },
-            { "Group2", "D", "4" },
-            { nullptr,        "E", "5" },
-            { nullptr,        "F", "6" },
-            { "Total Result", nullptr, "28" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck = { { "Name2", "Name", "Sum - Value" },
+                                                               { "G", "G", "7" },
+                                                               { "Group1", "A", "1" },
+                                                               { nullptr, "B", "2" },
+                                                               { nullptr, "C", "3" },
+                                                               { "Group2", "D", "4" },
+                                                               { nullptr, "E", "5" },
+                                                               { nullptr, "F", "6" },
+                                                               { "Total Result", nullptr, "28" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "D, E, F grouped by Group2.");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "D, E, F grouped by Group2.");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1379,27 +1312,11 @@ void TestPivottable::testPivotTableNumberGrouping()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const std::vector<std::vector<const char*>> aData = {
-        { "Order", "Score" },
-        { "43", "171" },
-        { "18", "20"  },
-        { "69", "159" },
-        { "95", "19"  },
-        { "96", "163" },
-        { "46", "70"  },
-        { "22", "36"  },
-        { "81", "49"  },
-        { "54", "61"  },
-        { "39", "62"  },
-        { "86", "17"  },
-        { "34", "0"   },
-        { "30", "25"  },
-        { "24", "103" },
-        { "16", "59"  },
-        { "24", "119" },
-        { "15", "86"  },
-        { "69", "170" }
-    };
+    const std::vector<std::vector<const char*>> aData
+        = { { "Order", "Score" }, { "43", "171" }, { "18", "20" }, { "69", "159" }, { "95", "19" },
+            { "96", "163" },      { "46", "70" },  { "22", "36" }, { "81", "49" },  { "54", "61" },
+            { "39", "62" },       { "86", "17" },  { "34", "0" },  { "30", "25" },  { "24", "103" },
+            { "16", "59" },       { "24", "119" }, { "15", "86" }, { "69", "170" } };
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
@@ -1407,17 +1324,18 @@ void TestPivottable::testPivotTableNumberGrouping()
         { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
-    ScAddress aPos(1,1,0);
+    ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    ScDPObject* pDPObj
+        = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
@@ -1443,24 +1361,20 @@ void TestPivottable::testPivotTableNumberGrouping()
     ScRange aOutRange = refreshGroups(pDPs, pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Order", "Sum - Score" },
-            { "<30",   "423" },
-            { "30-39", "87"  },
-            { "40-49", "241" },
-            { "50-60", "61"  },
-            { ">60",   "577" },
-            { "Total Result", "1389" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Order", "Sum - Score" }, { "<30", "423" },  { "30-39", "87" },
+                { "40-49", "241" },         { "50-60", "61" }, { ">60", "577" },
+                { "Total Result", "1389" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Order grouped by numbers");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Order grouped by numbers");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1472,17 +1386,10 @@ void TestPivottable::testPivotTableDateGrouping()
     m_pDoc->InsertTab(1, "Table");
 
     // Raw data
-    const std::vector<std::vector<const char*>> aData = {
-        { "Date", "Value" },
-        { "2011-01-01", "1" },
-        { "2011-03-02", "2" },
-        { "2012-01-04", "3" },
-        { "2012-02-23", "4" },
-        { "2012-02-24", "5" },
-        { "2012-03-15", "6" },
-        { "2011-09-03", "7" },
-        { "2012-12-25", "8" }
-    };
+    const std::vector<std::vector<const char*>> aData
+        = { { "Date", "Value" },   { "2011-01-01", "1" }, { "2011-03-02", "2" },
+            { "2012-01-04", "3" }, { "2012-02-23", "4" }, { "2012-02-24", "5" },
+            { "2012-03-15", "6" }, { "2011-09-03", "7" }, { "2012-12-25", "8" } };
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
@@ -1490,17 +1397,18 @@ void TestPivottable::testPivotTableDateGrouping()
         { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
-    ScAddress aPos(1,1,0);
+    ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    ScDPObject* pDPObj
+        = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
@@ -1524,9 +1432,8 @@ void TestPivottable::testPivotTableDateGrouping()
 
     {
         // Add quarter dimension.  This will be an additional dimension.
-        OUString aGroupDimName =
-            pDimData->CreateDateGroupDimName(
-                sheet::DataPilotFieldGroupBy::QUARTERS, *pDPObj, true, nullptr);
+        OUString aGroupDimName = pDimData->CreateDateGroupDimName(
+            sheet::DataPilotFieldGroupBy::QUARTERS, *pDPObj, true, nullptr);
         ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
         aGroupDim.SetDateInfo(aInfo, sheet::DataPilotFieldGroupBy::QUARTERS);
         pDimData->AddGroupDimension(aGroupDim);
@@ -1539,9 +1446,8 @@ void TestPivottable::testPivotTableDateGrouping()
 
     {
         // Add year dimension.  This is a new dimension also.
-        OUString aGroupDimName =
-            pDimData->CreateDateGroupDimName(
-                sheet::DataPilotFieldGroupBy::YEARS, *pDPObj, true, nullptr);
+        OUString aGroupDimName = pDimData->CreateDateGroupDimName(
+            sheet::DataPilotFieldGroupBy::YEARS, *pDPObj, true, nullptr);
         ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
         aGroupDim.SetDateInfo(aInfo, sheet::DataPilotFieldGroupBy::YEARS);
         pDimData->AddGroupDimension(aGroupDim);
@@ -1559,16 +1465,17 @@ void TestPivottable::testPivotTableDateGrouping()
         std::vector<std::vector<const char*>> aOutputCheck = {
             { "Years", "Quarters", "Date", "Sum - Value" },
             { "2011", "Q1", "Jan", "1" },
-            { nullptr, nullptr,         "Mar", "2" },
-            { nullptr,      "Q3", "Sep", "7" },
+            { nullptr, nullptr, "Mar", "2" },
+            { nullptr, "Q3", "Sep", "7" },
             { "2012", "Q1", "Jan", "3" },
-            { nullptr, nullptr,         "Feb", "9" },
-            { nullptr, nullptr,         "Mar", "6" },
-            { nullptr,      "Q4", "Dec", "8" },
+            { nullptr, nullptr, "Feb", "9" },
+            { nullptr, nullptr, "Mar", "6" },
+            { nullptr, "Q4", "Dec", "8" },
             { "Total Result", nullptr, nullptr, "36" },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Years, quarters and months date groups.");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "Years, quarters and months date groups.");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1591,12 +1498,13 @@ void TestPivottable::testPivotTableDateGrouping()
         std::vector<std::vector<const char*>> aOutputCheck = {
             { "Years", "Quarters", "Date", "Sum - Value" },
             { "2011", "Q1", "Jan", "1" },
-            { nullptr, nullptr,         "Mar", "2" },
-            { nullptr,      "Q3", "Sep", "7" },
+            { nullptr, nullptr, "Mar", "2" },
+            { nullptr, "Q3", "Sep", "7" },
             { "Total Result", nullptr, nullptr, "10" },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Year 2012 data now hidden");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Year 2012 data now hidden");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1612,27 +1520,21 @@ void TestPivottable::testPivotTableDateGrouping()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Date", "Sum - Value" },
-            { "2011-01-01", "1" },
-            { "2011-03-02", "2" },
-            { "2011-09-03", "7" },
-            { "2012-01-04", "3" },
-            { "2012-02-23", "4" },
-            { "2012-02-24", "5" },
-            { "2012-03-15", "6" },
-            { "2012-12-25", "8" },
-            { "Total Result", "36" }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Date", "Sum - Value" }, { "2011-01-01", "1" }, { "2011-03-02", "2" },
+                { "2011-09-03", "7" },     { "2012-01-04", "3" }, { "2012-02-23", "4" },
+                { "2012-02-24", "5" },     { "2012-03-15", "6" }, { "2012-12-25", "8" },
+                { "Total Result", "36" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Remove all date grouping.");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Remove all date grouping.");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1645,11 +1547,7 @@ void TestPivottable::testPivotTableEmptyRows()
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
-        { "Name", "Value" },
-        { "A", "1" },
-        { "B", "2" },
-        { "C", "3" },
-        { "D", "4" },
+        { "Name", "Value" }, { "A", "1" }, { "B", "2" }, { "C", "3" }, { "D", "4" },
     };
 
     // Dimension definition
@@ -1658,20 +1556,21 @@ void TestPivottable::testPivotTableEmptyRows()
         { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
-    ScAddress aPos(1,1,0);
+    ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
     // Extend the range downward to include some trailing empty rows.
     aDataRange.aEnd.IncRow(2);
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    ScDPObject* pDPObj
+        = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1702,11 +1601,7 @@ void TestPivottable::testPivotTableEmptyRows()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "Sum - Value" },
-            { "A", "1" },
-            { "B", "2" },
-            { "C", "3" },
-            { "D", "4" },
+            { "Name", "Sum - Value" }, { "A", "1" }, { "B", "2" }, { "C", "3" }, { "D", "4" },
             { "Total Result", "10" },
         };
 
@@ -1721,9 +1616,9 @@ void TestPivottable::testPivotTableEmptyRows()
     const char* pErr = pDPs->ReloadCache(pDPObj, aRefs);
     CPPUNIT_ASSERT_MESSAGE("Failed to reload cache.", !pErr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should only be one pivot table linked to this cache.",
-                           o3tl::sorted_vector<ScDPObject*>::size_type(1), aRefs.size());
+                                 o3tl::sorted_vector<ScDPObject*>::size_type(1), aRefs.size());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should only be one pivot table linked to this cache.",
-                           pDPObj, *aRefs.begin());
+                                 pDPObj, *aRefs.begin());
 
     pDPObj->ClearTableData();
     aOutRange = refresh(pDPObj);
@@ -1731,10 +1626,7 @@ void TestPivottable::testPivotTableEmptyRows()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "Sum - Value" },
-            { "B", "3" },
-            { "C", "3" },
-            { "D", "4" },
+            { "Name", "Sum - Value" }, { "B", "3" }, { "C", "3" }, { "D", "4" },
             { "Total Result", "10" },
         };
 
@@ -1744,8 +1636,8 @@ void TestPivottable::testPivotTableEmptyRows()
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1758,11 +1650,7 @@ void TestPivottable::testPivotTableTextNumber()
 
     // Raw data
     const char* aData[][2] = {
-        { "Name", "Value" },
-        { "0001", "1" },
-        { "0002", "2" },
-        { "0003", "3" },
-        { "0004", "4" },
+        { "Name", "Value" }, { "0001", "1" }, { "0002", "2" }, { "0003", "3" }, { "0004", "4" },
     };
 
     // Dimension definition
@@ -1786,19 +1674,21 @@ void TestPivottable::testPivotTableTextNumber()
             continue;
 
         // Check the data rows.
-        CPPUNIT_ASSERT_MESSAGE("This cell is supposed to be text.", m_pDoc->HasStringData(0, nRow, 0));
-        CPPUNIT_ASSERT_MESSAGE("This cell is supposed to be numeric.", m_pDoc->HasValueData(1, nRow, 0));
+        CPPUNIT_ASSERT_MESSAGE("This cell is supposed to be text.",
+                               m_pDoc->HasStringData(0, nRow, 0));
+        CPPUNIT_ASSERT_MESSAGE("This cell is supposed to be numeric.",
+                               m_pDoc->HasValueData(1, nRow, 0));
     }
 
     ScRange aDataRange(0, 0, 0, 1, 4, 0);
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    ScDPObject* pDPObj
+        = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1806,15 +1696,12 @@ void TestPivottable::testPivotTableTextNumber()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "Sum - Value" },
-            { "0001", "1" },
-            { "0002", "2" },
-            { "0003", "3" },
-            { "0004", "4" },
-            { "Total Result", "10" },
+            { "Name", "Sum - Value" }, { "0001", "1" }, { "0002", "2" },
+            { "0003", "3" },           { "0004", "4" }, { "Total Result", "10" },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Text number field members");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Text number field members");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1833,20 +1720,18 @@ void TestPivottable::testPivotTableTextNumber()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "0004" },
-            {  nullptr, nullptr },
-            { "Sum - Value", nullptr },
-            { "4", nullptr }
+            { "Name", "0004" }, { nullptr, nullptr }, { "Sum - Value", nullptr }, { "4", nullptr }
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Text number field members");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Text number field members");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                                 size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1870,17 +1755,18 @@ void TestPivottable::testPivotTableCaseInsensitiveStrings()
         { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
-    ScAddress aPos(1,1,0);
+    ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    ScDPObject* pDPObj
+        = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1893,14 +1779,15 @@ void TestPivottable::testPivotTableCaseInsensitiveStrings()
             { "Total Result", "3" },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Case insensitive strings");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Case insensitive strings");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1911,64 +1798,69 @@ void TestPivottable::testPivotTableNumStability()
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
     // Raw Data
-    const std::vector<std::vector<const char*>> aData = {
-        { "Name",   "Time Start", "Time End", "Total"          },
-        { "Sam",    "07:48 AM",   "09:00 AM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "09:00 AM",   "10:30 AM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "10:30 AM",   "12:30 PM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "12:30 PM",   "01:00 PM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "01:00 PM",   "01:30 PM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "01:30 PM",   "02:00 PM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "02:00 PM",   "07:15 PM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "07:47 AM",   "09:00 AM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "09:00 AM",   "10:00 AM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "10:00 AM",   "11:00 AM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "11:00 AM",   "11:30 AM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "11:30 AM",   "12:45 PM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "12:45 PM",   "01:15 PM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "01:15 PM",   "02:30 PM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "02:30 PM",   "02:45 PM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "02:45 PM",   "04:30 PM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "04:30 PM",   "06:00 PM", "=RC[-1]-RC[-2]" },
-        { "Sam",    "06:00 PM",   "07:15 PM", "=RC[-1]-RC[-2]" },
-        { "Mike",   "06:15 AM",   "08:30 AM", "=RC[-1]-RC[-2]" },
-        { "Mike",   "08:30 AM",   "10:03 AM", "=RC[-1]-RC[-2]" },
-        { "Mike",   "10:03 AM",   "12:00 PM", "=RC[-1]-RC[-2]" },
-        { "Dennis", "11:00 AM",   "01:00 PM", "=RC[-1]-RC[-2]" },
-        { "Dennis", "01:00 PM",   "02:00 PM", "=RC[-1]-RC[-2]" }
-    };
+    const std::vector<std::vector<const char*>> aData
+        = { { "Name", "Time Start", "Time End", "Total" },
+            { "Sam", "07:48 AM", "09:00 AM", "=RC[-1]-RC[-2]" },
+            { "Sam", "09:00 AM", "10:30 AM", "=RC[-1]-RC[-2]" },
+            { "Sam", "10:30 AM", "12:30 PM", "=RC[-1]-RC[-2]" },
+            { "Sam", "12:30 PM", "01:00 PM", "=RC[-1]-RC[-2]" },
+            { "Sam", "01:00 PM", "01:30 PM", "=RC[-1]-RC[-2]" },
+            { "Sam", "01:30 PM", "02:00 PM", "=RC[-1]-RC[-2]" },
+            { "Sam", "02:00 PM", "07:15 PM", "=RC[-1]-RC[-2]" },
+            { "Sam", "07:47 AM", "09:00 AM", "=RC[-1]-RC[-2]" },
+            { "Sam", "09:00 AM", "10:00 AM", "=RC[-1]-RC[-2]" },
+            { "Sam", "10:00 AM", "11:00 AM", "=RC[-1]-RC[-2]" },
+            { "Sam", "11:00 AM", "11:30 AM", "=RC[-1]-RC[-2]" },
+            { "Sam", "11:30 AM", "12:45 PM", "=RC[-1]-RC[-2]" },
+            { "Sam", "12:45 PM", "01:15 PM", "=RC[-1]-RC[-2]" },
+            { "Sam", "01:15 PM", "02:30 PM", "=RC[-1]-RC[-2]" },
+            { "Sam", "02:30 PM", "02:45 PM", "=RC[-1]-RC[-2]" },
+            { "Sam", "02:45 PM", "04:30 PM", "=RC[-1]-RC[-2]" },
+            { "Sam", "04:30 PM", "06:00 PM", "=RC[-1]-RC[-2]" },
+            { "Sam", "06:00 PM", "07:15 PM", "=RC[-1]-RC[-2]" },
+            { "Mike", "06:15 AM", "08:30 AM", "=RC[-1]-RC[-2]" },
+            { "Mike", "08:30 AM", "10:03 AM", "=RC[-1]-RC[-2]" },
+            { "Mike", "10:03 AM", "12:00 PM", "=RC[-1]-RC[-2]" },
+            { "Dennis", "11:00 AM", "01:00 PM", "=RC[-1]-RC[-2]" },
+            { "Dennis", "01:00 PM", "02:00 PM", "=RC[-1]-RC[-2]" } };
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
         { "Total", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
-    ScAddress aPos(1,1,0);
+    ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
 
     // Insert formulas to manually calculate sums for each name.
-    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+1, aDataRange.aStart.Tab(), "=SUMIF(R[-23]C:R[-1]C;\"Dennis\";R[-23]C[3]:R[-1]C[3])");
-    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+2, aDataRange.aStart.Tab(), "=SUMIF(R[-24]C:R[-2]C;\"Mike\";R[-24]C[3]:R[-2]C[3])");
-    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+3, aDataRange.aStart.Tab(), "=SUMIF(R[-25]C:R[-3]C;\"Sam\";R[-25]C[3]:R[-3]C[3])");
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row() + 1, aDataRange.aStart.Tab(),
+                      "=SUMIF(R[-23]C:R[-1]C;\"Dennis\";R[-23]C[3]:R[-1]C[3])");
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row() + 2, aDataRange.aStart.Tab(),
+                      "=SUMIF(R[-24]C:R[-2]C;\"Mike\";R[-24]C[3]:R[-2]C[3])");
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row() + 3, aDataRange.aStart.Tab(),
+                      "=SUMIF(R[-25]C:R[-3]C;\"Sam\";R[-25]C[3]:R[-3]C[3])");
 
     m_pDoc->CalcAll();
 
     // Get correct sum values.
-    double fDennisTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+1, aDataRange.aStart.Tab());
-    double fMikeTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+2, aDataRange.aStart.Tab());
-    double fSamTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+3, aDataRange.aStart.Tab());
+    double fDennisTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row() + 1,
+                                           aDataRange.aStart.Tab());
+    double fMikeTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row() + 2,
+                                         aDataRange.aStart.Tab());
+    double fSamTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row() + 3,
+                                        aDataRange.aStart.Tab());
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    ScDPObject* pDPObj
+        = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -1991,7 +1883,8 @@ void TestPivottable::testPivotTableNumStability()
     aPos.IncCol();
     aPos.IncRow();
     double fTest = m_pDoc->GetValue(aPos);
-    CPPUNIT_ASSERT_MESSAGE("Incorrect value for Dennis.", rtl::math::approxEqual(fTest, fDennisTotal));
+    CPPUNIT_ASSERT_MESSAGE("Incorrect value for Dennis.",
+                           rtl::math::approxEqual(fTest, fDennisTotal));
     aPos.IncRow();
     fTest = m_pDoc->GetValue(aPos);
     CPPUNIT_ASSERT_MESSAGE("Incorrect value for Mike.", rtl::math::approxEqual(fTest, fMikeTotal));
@@ -2001,8 +1894,8 @@ void TestPivottable::testPivotTableNumStability()
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2015,11 +1908,7 @@ void TestPivottable::testPivotTableFieldReference()
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
-        { "Name", "Value" },
-        { "A", "1" },
-        { "B", "2" },
-        { "C", "4" },
-        { "D", "8" },
+        { "Name", "Value" }, { "A", "1" }, { "B", "2" }, { "C", "4" }, { "D", "8" },
     };
 
     // Dimension definition
@@ -2028,17 +1917,18 @@ void TestPivottable::testPivotTableFieldReference()
         { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
-    ScAddress aPos(1,1,0);
+    ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+    ScDPObject* pDPObj
+        = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -2046,15 +1936,12 @@ void TestPivottable::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "Sum - Value" },
-            { "A", "1" },
-            { "B", "2" },
-            { "C", "4" },
-            { "D", "8" },
+            { "Name", "Sum - Value" }, { "A", "1" }, { "B", "2" }, { "C", "4" }, { "D", "8" },
             { "Total Result", "15" },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (none)");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (none)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2073,15 +1960,12 @@ void TestPivottable::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "Sum - Value" },
-            { "A", nullptr },
-            { "B", "1" },
-            { "C", "3" },
-            { "D", "7" },
+            { "Name", "Sum - Value" },   { "A", nullptr }, { "B", "1" }, { "C", "3" }, { "D", "7" },
             { "Total Result", nullptr },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (difference from)");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "Field reference (difference from)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2093,15 +1977,12 @@ void TestPivottable::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "Sum - Value" },
-            { "A", "100.00%" },
-            { "B", "200.00%" },
-            { "C", "400.00%" },
-            { "D", "800.00%" },
-            { "Total Result", nullptr },
+            { "Name", "Sum - Value" }, { "A", "100.00%" }, { "B", "200.00%" },
+            { "C", "400.00%" },        { "D", "800.00%" }, { "Total Result", nullptr },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (% of)");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (% of)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2113,15 +1994,12 @@ void TestPivottable::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "Sum - Value" },
-            { "A", nullptr },
-            { "B", "100.00%" },
-            { "C", "300.00%" },
-            { "D", "700.00%" },
-            { "Total Result", nullptr },
+            { "Name", "Sum - Value" }, { "A", nullptr },   { "B", "100.00%" },
+            { "C", "300.00%" },        { "D", "700.00%" }, { "Total Result", nullptr },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (% difference from)");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "Field reference (% difference from)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2133,15 +2011,12 @@ void TestPivottable::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "Sum - Value" },
-            { "A", "1" },
-            { "B", "3" },
-            { "C", "7" },
-            { "D", "15" },
+            { "Name", "Sum - Value" },   { "A", "1" }, { "B", "3" }, { "C", "7" }, { "D", "15" },
             { "Total Result", nullptr },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (Running total)");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "Field reference (Running total)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2153,22 +2028,19 @@ void TestPivottable::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "Sum - Value" },
-            { "A", "6.67%" },
-            { "B", "13.33%" },
-            { "C", "26.67%" },
-            { "D", "53.33%" },
-            { "Total Result", "100.00%" },
+            { "Name", "Sum - Value" }, { "A", "6.67%" },  { "B", "13.33%" },
+            { "C", "26.67%" },         { "D", "53.33%" }, { "Total Result", "100.00%" },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (% of column)");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (% of column)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2181,13 +2053,8 @@ void TestPivottable::testPivotTableDocFunc()
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
-        { "Name",      "Value" },
-        { "Sun",       "1" },
-        { "Oracle",    "2" },
-        { "Red Hat",   "4" },
-        { "SUSE",      "8" },
-        { "Apple",     "16" },
-        { "Microsoft", "32" },
+        { "Name", "Value" }, { "Sun", "1" },    { "Oracle", "2" },     { "Red Hat", "4" },
+        { "SUSE", "8" },     { "Apple", "16" }, { "Microsoft", "32" },
     };
 
     // Dimension definition
@@ -2196,12 +2063,13 @@ void TestPivottable::testPivotTableDocFunc()
         { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
-    ScAddress aPos(1,1,0);
+    ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
-    std::unique_ptr<ScDPObject> pDPObj(createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false));
+    std::unique_ptr<ScDPObject> pDPObj(
+        createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false));
 
     CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObj);
 
@@ -2217,17 +2085,13 @@ void TestPivottable::testPivotTableDocFunc()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name", "Sum - Value" },
-            { "Apple", "16" },
-            { "Microsoft", "32" },
-            { "Oracle", "2" },
-            { "Red Hat", "4" },
-            { "Sun", "1" },
-            { "SUSE", "8" },
-            { "Total Result", "63" },
+            { "Name", "Sum - Value" }, { "Apple", "16" },        { "Microsoft", "32" },
+            { "Oracle", "2" },         { "Red Hat", "4" },       { "Sun", "1" },
+            { "SUSE", "8" },           { "Total Result", "63" },
         };
 
-        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table created via ScDBDocFunc");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                      "Pivot table created via ScDBDocFunc");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2249,18 +2113,14 @@ void TestPivottable::testFuncGETPIVOTDATA()
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
-        { "Name", "Value" },
-        { "A", "1" },
-        { "A", "2" },
-        { "A", "3" },
-        { "B", "4" },
-        { "B", "5" },
-        { "B", "6" },
+        { "Name", "Value" }, { "A", "1" }, { "A", "2" }, { "A", "3" },
+        { "B", "4" },        { "B", "5" }, { "B", "6" },
     };
 
-    ScAddress aPos(1,1,0);
+    ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
     ScDPObject* pDPObj = nullptr;
 
@@ -2276,8 +2136,8 @@ void TestPivottable::testFuncGETPIVOTDATA()
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -2290,7 +2150,8 @@ void TestPivottable::testFuncGETPIVOTDATA()
             { "Total Result", "21" },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table created for GETPIVOTDATA");
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "Pivot table created for GETPIVOTDATA");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2340,16 +2201,17 @@ void TestPivottable::testFuncGETPIVOTDATA()
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name",                "Data",           nullptr   },
-            { "A",                   "Sum - Value",   "6"  },
-            {  nullptr,                    "Count - Value", "3"  },
-            { "B",                   "Sum - Value",  "15"  },
-            {  nullptr,                    "Count - Value", "3"  },
-            { "Total Sum - Value",   nullptr,               "21" },
-            { "Total Count - Value", nullptr,               "6"  },
+            { "Name", "Data", nullptr },
+            { "A", "Sum - Value", "6" },
+            { nullptr, "Count - Value", "3" },
+            { "B", "Sum - Value", "15" },
+            { nullptr, "Count - Value", "3" },
+            { "Total Sum - Value", nullptr, "21" },
+            { "Total Count - Value", nullptr, "6" },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table refreshed");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table refreshed");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2391,8 +2253,8 @@ void TestPivottable::testFuncGETPIVOTDATA()
     pDPs->FreeTable(pDPObj);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2405,16 +2267,14 @@ void TestPivottable::testFuncGETPIVOTDATALeafAccess()
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
-        { "Type", "Member", "Value" },
-        { "A", "Anna", "1" },
-        { "B", "Brittany", "2" },
-        { "A", "Cecilia", "3" },
-        { "B", "Donna", "4" },
+        { "Type", "Member", "Value" }, { "A", "Anna", "1" },  { "B", "Brittany", "2" },
+        { "A", "Cecilia", "3" },       { "B", "Donna", "4" },
     };
 
-    ScAddress aPos(1,1,0);
+    ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
     ScDPObject* pDPObj = nullptr;
 
@@ -2430,23 +2290,21 @@ void TestPivottable::testFuncGETPIVOTDATALeafAccess()
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
     ScRange aOutRange = refresh(pDPObj);
 
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Type",         "Member",   "Sum - Value" },
-            { "A",            "Anna",     "1"           },
-            {  nullptr,             "Cecilia",  "3"           },
-            { "B",            "Brittany", "2"           },
-            {  nullptr,             "Donna",    "4"           },
-            { "Total Result",  nullptr,         "10"          },
+            { "Type", "Member", "Sum - Value" }, { "A", "Anna", "1" },
+            { nullptr, "Cecilia", "3" },         { "B", "Brittany", "2" },
+            { nullptr, "Donna", "4" },           { "Total Result", nullptr, "10" },
         };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table refreshed");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table refreshed");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2459,30 +2317,30 @@ void TestPivottable::testFuncGETPIVOTDATALeafAccess()
     };
 
     static const Check aChecks[] = {
-        { "=GETPIVOTDATA($A$1;\"Member[Anna]\")",     1.0 },
+        { "=GETPIVOTDATA($A$1;\"Member[Anna]\")", 1.0 },
         { "=GETPIVOTDATA($A$1;\"Member[Brittany]\")", 2.0 },
-        { "=GETPIVOTDATA($A$1;\"Member[Cecilia]\")",  3.0 },
-        { "=GETPIVOTDATA($A$1;\"Member[Donna]\")",    4.0 },
+        { "=GETPIVOTDATA($A$1;\"Member[Cecilia]\")", 3.0 },
+        { "=GETPIVOTDATA($A$1;\"Member[Donna]\")", 4.0 },
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
-        m_pDoc->SetString(ScAddress(4,i,1), OUString::createFromAscii(aChecks[i].mpFormula));
+        m_pDoc->SetString(ScAddress(4, i, 1), OUString::createFromAscii(aChecks[i].mpFormula));
 
     m_pDoc->CalcAll();
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
-        FormulaError nErr = m_pDoc->GetErrCode(ScAddress(4,i,1));
+        FormulaError nErr = m_pDoc->GetErrCode(ScAddress(4, i, 1));
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(FormulaError::NONE), static_cast<sal_uInt16>(nErr));
-        double fVal = m_pDoc->GetValue(ScAddress(4,i,1));
+        double fVal = m_pDoc->GetValue(ScAddress(4, i, 1));
         CPPUNIT_ASSERT_EQUAL(aChecks[i].mfResult, fVal);
     }
 
     pDPs->FreeTable(pDPObj);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                           size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2494,23 +2352,18 @@ void TestPivottable::testPivotTableRepeatItemLabels()
     m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
-    static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, true },
-        { "Country", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Year", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
-    };
+    static const DPFieldDef aFields[]
+        = { { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, true },
+            { "Country", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Year", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false } };
 
     // Raw data
     const char* aData[][4] = {
-        { "Andy",    "US", "1999", "30" },
-        { "Andy",    "US", "2002", "20" },
-        { "Andy",    "US", "2010", "45" },
-        { "David",   "GB", "1998", "12" },
-        { "Edward",  "NO", "2000",  "8" },
-        { "Frank",   "FR", "2009", "15" },
-        { "Frank",   "FR", "2008", "45" },
-        { "Frank",   "FR", "2007", "45" },
+        { "Andy", "US", "1999", "30" },  { "Andy", "US", "2002", "20" },
+        { "Andy", "US", "2010", "45" },  { "David", "GB", "1998", "12" },
+        { "Edward", "NO", "2000", "8" }, { "Frank", "FR", "2009", "15" },
+        { "Frank", "FR", "2008", "45" }, { "Frank", "FR", "2007", "45" },
     };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
@@ -2520,13 +2373,13 @@ void TestPivottable::testPivotTableRepeatItemLabels()
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
     SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
 
-    ScDPObject* pDPObj = createDPFromRange(
-        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+    ScDPObject* pDPObj = createDPFromRange(m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0),
+                                           aFields, nFieldCount, false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
-                           size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
 
     bool bOverflow = false;
@@ -2537,29 +2390,30 @@ void TestPivottable::testPivotTableRepeatItemLabels()
     aOutRange = pDPObj->GetOutRange();
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Name",         "Country", "Year", "Sum - Score" },
-            { "Andy",         "US",      "1999", "30"          },
-            { "Andy",         nullptr,         "2002", "20"          },
-            { "Andy",         nullptr,         "2010", "45"          },
-            { "David",        "GB",      "1998", "12"          },
-            { "Edward",       "NO",      "2000", "8"           },
-            { "Frank",        "FR",      "2007", "45"          },
-            { "Frank",        nullptr,         "2008", "45"          },
-            { "Frank",        nullptr,         "2009", "15"          },
-            { "Total Result", nullptr,         nullptr,      "220"         }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Name", "Country", "Year", "Sum - Score" },
+                { "Andy", "US", "1999", "30" },
+                { "Andy", nullptr, "2002", "20" },
+                { "Andy", nullptr, "2010", "45" },
+                { "David", "GB", "1998", "12" },
+                { "Edward", "NO", "2000", "8" },
+                { "Frank", "FR", "2007", "45" },
+                { "Frank", nullptr, "2008", "45" },
+                { "Frank", nullptr, "2009", "15" },
+                { "Total Result", nullptr, nullptr, "220" } };
 
-        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bool bSuccess
+            = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1),
+                                 pDPs->GetSheetCaches().size());
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
-                                 size_t(0), pDPs->GetSheetCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.", size_t(0),
+                                 pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2571,11 +2425,10 @@ void TestPivottable::testPivotTableDPCollection()
     m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
-    static const DPFieldDef aFields[] = {
-        { "Software", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
-        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
-    };
+    static const DPFieldDef aFields[]
+        = { { "Software", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Version", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+            { "1.2.3", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false } };
 
     // Raw data
     const char* aData[][3] = {
@@ -2597,27 +2450,26 @@ void TestPivottable::testPivotTableDPCollection()
     // Check at the beginning
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be no DP table", size_t(0), pDPs->GetCount());
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u"DP1"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u""));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return nullptr", static_cast<ScDPObject*>(nullptr),
+                                 pDPs->GetByName(u"DP1"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return nullptr", static_cast<ScDPObject*>(nullptr),
+                                 pDPs->GetByName(u""));
 
     // Add 2 DP objects
-    ScDPObject* pDPObj = createDPFromRange(m_pDoc, aDataRange , aFields, nFieldCount, false);
+    ScDPObject* pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, nFieldCount, false);
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     pDPObj->SetName("DP1"); // set custom name
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1),
+                                 pDPs->GetCount());
 
     ScDPObject* pDPObj2 = createDPFromRange(m_pDoc, aDataRange, aFields, nFieldCount, false);
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj2));
     pDPObj2->SetName("DP2"); // set custom name
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be two DP tables", size_t(2), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return first DPObject",
-                                 pDPObj, pDPs->GetByName(u"DP1"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return second DPObject",
-                                 pDPObj2, pDPs->GetByName(u"DP2"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return first DPObject", pDPObj, pDPs->GetByName(u"DP1"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return second DPObject", pDPObj2, pDPs->GetByName(u"DP2"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("empty string should return nullptr",
                                  static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u""));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("non existent name should return nullptr",
@@ -2628,8 +2480,7 @@ void TestPivottable::testPivotTableDPCollection()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("first DP object was deleted, should return nullptr",
                                  static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u"DP1"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return second DPObject",
-                                 pDPObj2, pDPs->GetByName(u"DP2"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return second DPObject", pDPObj2, pDPs->GetByName(u"DP2"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("empty string should return nullptr",
                                  static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u""));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("non existent name should return nullptr",
@@ -2684,15 +2535,17 @@ void TestPivottable::testPivotTableMedianFunc()
         { "Condition", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
         { "Day1Hit", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
         { "Day1Miss", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
-        { "Day1FalseAlarm", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
+        { "Day1FalseAlarm", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN,
+          false },
     };
 
     ScAddress aPos(1, 1, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                 aDataRange.aStart);
 
-    std::unique_ptr<ScDPObject> pDPObj(createDPFromRange(
-        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false));
+    std::unique_ptr<ScDPObject> pDPObj(
+        createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false));
     CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObj);
 
     // Create a new pivot table output.
@@ -2705,20 +2558,24 @@ void TestPivottable::testPivotTableMedianFunc()
     ScRange aOutRange = pDPObject->GetOutRange();
     {
         // Expected output table content.  0 = empty cell
-        std::vector<std::vector<const char*>> aOutputCheck = {
-            { "Condition", "Data", nullptr },
-            { "Control", "Median - Day1Hit", "10" },
-            { nullptr, "Median - Day1Miss", "0" },
-            { nullptr, "Median - Day1FalseAlarm", "1", },
-            { "False Memory", "Median - Day1Hit", "9" },
-            { nullptr, "Median - Day1Miss", "1" },
-            { nullptr, "Median - Day1FalseAlarm", "0", "0" },
-            { "Total Median - Day1Hit", nullptr, "9", nullptr },
-            { "Total Median - Day1Miss", nullptr, "1", nullptr },
-            { "Total Median - Day1FalseAlarm", nullptr, "0.5", nullptr }
-        };
+        std::vector<std::vector<const char*>> aOutputCheck
+            = { { "Condition", "Data", nullptr },
+                { "Control", "Median - Day1Hit", "10" },
+                { nullptr, "Median - Day1Miss", "0" },
+                {
+                    nullptr,
+                    "Median - Day1FalseAlarm",
+                    "1",
+                },
+                { "False Memory", "Median - Day1Hit", "9" },
+                { nullptr, "Median - Day1Miss", "1" },
+                { nullptr, "Median - Day1FalseAlarm", "0", "0" },
+                { "Total Median - Day1Hit", nullptr, "9", nullptr },
+                { "Total Median - Day1Miss", nullptr, "1", nullptr },
+                { "Total Median - Day1FalseAlarm", nullptr, "0.5", nullptr } };
 
-        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table created via ScDBDocFunc");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                      "Pivot table created via ScDBDocFunc");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 

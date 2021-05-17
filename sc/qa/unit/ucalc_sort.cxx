@@ -92,10 +92,7 @@ private:
     ScDocument* m_pDoc;
 };
 
-
-TestSort::TestSort()
-{
-}
+TestSort::TestSort() {}
 
 void TestSort::setUp()
 {
@@ -103,10 +100,9 @@ void TestSort::setUp()
 
     ScDLL::Init();
 
-    m_xDocShell = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    m_xDocShell
+        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
     m_xDocShell->SetIsInUcalc();
     m_xDocShell->DoInitUnitTest();
 
@@ -128,7 +124,7 @@ void TestSort::testSort()
     // We need a drawing layer in order to create caption objects.
     m_pDoc->InitDrawLayer(m_xDocShell.get());
 
-    ScAddress aPos(0,0,0);
+    ScAddress aPos(0, 0, 0);
     {
         const std::vector<std::vector<const char*>> aData = {
             { "2", "4" },
@@ -139,7 +135,8 @@ void TestSort::testSort()
 
         clearRange(m_pDoc, ScRange(0, 0, 0, 1, aData.size(), 0));
         ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                     aDataRange.aStart);
     }
 
     // Insert note in cell B2.
@@ -159,7 +156,7 @@ void TestSort::testSort()
 
     m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
-    double nVal = m_pDoc->GetValue(1,0,0);
+    double nVal = m_pDoc->GetValue(1, 0, 0);
     ASSERT_DOUBLES_EQUAL(nVal, 1.0);
 
     // check that note is also moved after sorting
@@ -170,19 +167,13 @@ void TestSort::testSort()
     clearRange(m_pDoc, ScRange(0, 0, 0, 1, 9, 0)); // Clear A1:B10.
     {
         // 0 = empty cell
-        const std::vector<std::vector<const char*>> aData = {
-            { "Title" },
-            { nullptr },
-            { nullptr },
-            { "12" },
-            { "b" },
-            { "1" },
-            { "9" },
-            { "123" }
-        };
+        const std::vector<std::vector<const char*>> aData
+            = { { "Title" }, { nullptr }, { nullptr }, { "12" },
+                { "b" },     { "1" },     { "9" },     { "123" } };
 
         aDataRange = insertRangeData(m_pDoc, aPos, aData);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                     aDataRange.aStart);
     }
 
     aSortData.nCol1 = aDataRange.aStart.Col();
@@ -238,13 +229,13 @@ void TestSort::testSortHorizontal()
     };
 
     // Insert raw data into A1:D4.
-    ScRange aDataRange = insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
+    ScRange aDataRange = insertRangeData(m_pDoc, ScAddress(0, 0, 0), aData);
     CPPUNIT_ASSERT_EQUAL(OUString("A1:D4"), aDataRange.Format(*m_pDoc, ScRefFlags::VALID));
 
     // Check the formula values.
-    CPPUNIT_ASSERT_EQUAL(OUString("Yes-No"), m_pDoc->GetString(ScAddress(3,1,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("No-No"), m_pDoc->GetString(ScAddress(3,2,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Yes-Yes"), m_pDoc->GetString(ScAddress(3,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Yes-No"), m_pDoc->GetString(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("No-No"), m_pDoc->GetString(ScAddress(3, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Yes-Yes"), m_pDoc->GetString(ScAddress(3, 3, 0)));
 
     // Define A1:D4 as sheet-local anonymous database range.
     m_pDoc->SetAnonymousDBData(
@@ -271,18 +262,19 @@ void TestSort::testSortHorizontal()
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
             { "table", "flag", "has UNIQUE", "Publish to EC2" },
-            { "w2gi.mobilehit",     "Yes-No",  "Yes", "No" },
-            { "w2gi.visitors",      "No-No",   "No",  "No" },
+            { "w2gi.mobilehit", "Yes-No", "Yes", "No" },
+            { "w2gi.visitors", "No-No", "No", "No" },
             { "w2gi.pagedimension", "Yes-Yes", "Yes", "Yes" },
         };
 
-        bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Sorted by column with formula");
+        bool bSuccess
+            = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Sorted by column with formula");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,1,0), "CONCATENATE(C2;\"-\";D2)", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,2,0), "CONCATENATE(C3;\"-\";D3)", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,3,0), "CONCATENATE(C4;\"-\";D4)", "Wrong formula!");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1, 1, 0), "CONCATENATE(C2;\"-\";D2)", "Wrong formula!");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1, 2, 0), "CONCATENATE(C3;\"-\";D3)", "Wrong formula!");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1, 3, 0), "CONCATENATE(C4;\"-\";D4)", "Wrong formula!");
 
     // restore formula options back to default
     m_xDocShell->SetFormulaOptions(aOldOptions);
@@ -296,17 +288,15 @@ void TestSort::testSortHorizontalWholeColumn()
     m_pDoc->InsertTab(0, "Sort");
 
     // 0 = empty cell
-    const std::vector<std::vector<const char*>> aData = {
-        { "4", "2", "47", "a", "9" }
-    };
+    const std::vector<std::vector<const char*>> aData = { { "4", "2", "47", "a", "9" } };
 
     // Insert row data to C1:G1.
-    ScRange aSortRange = insertRangeData(m_pDoc, ScAddress(2,0,0), aData);
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2,0,0)));
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3,0,0)));
-    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(4,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(5,0,0)));
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(6,0,0)));
+    ScRange aSortRange = insertRangeData(m_pDoc, ScAddress(2, 0, 0), aData);
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(6, 0, 0)));
 
     // Extend the sort range to whole column.
     aSortRange.aEnd.SetRow(MAXROW);
@@ -318,7 +308,8 @@ void TestSort::testSortHorizontalWholeColumn()
 
     // Define C:G as sheet-local anonymous database range.
     m_pDoc->SetAnonymousDBData(
-        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, nCol1, nRow1, nCol2, nRow2, false, false)));
+        0, std::unique_ptr<ScDBData>(
+               new ScDBData(STR_DB_LOCAL_NONAME, 0, nCol1, nRow1, nCol2, nRow2, false, false)));
 
     // Sort C:G horizontally ascending by row 1.
     ScDBDocFunc aFunc(*m_xDocShell);
@@ -338,11 +329,11 @@ void TestSort::testSortHorizontalWholeColumn()
     CPPUNIT_ASSERT(bSorted);
 
     // Check the sort result.
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,0,0)));
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(3,0,0)));
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(4,0,0)));
-    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(5,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(6,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(6, 0, 0)));
 
     // Undo and check.
 
@@ -350,19 +341,19 @@ void TestSort::testSortHorizontalWholeColumn()
     CPPUNIT_ASSERT(pUndoMgr);
 
     pUndoMgr->Undo();
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2,0,0)));
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3,0,0)));
-    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(4,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(5,0,0)));
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(6,0,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(6, 0, 0)));
 
     // Redo and check.
     pUndoMgr->Redo();
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,0,0)));
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(3,0,0)));
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(4,0,0)));
-    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(5,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(6,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(6, 0, 0)));
 
     m_pDoc->DeleteTab(0);
 }
@@ -374,8 +365,8 @@ void TestSort::testSortSingleRow()
     m_pDoc->InsertTab(0, "Test");
 
     // Sort range consists of only one row.
-    m_pDoc->SetString(ScAddress(0,0,0), "X");
-    m_pDoc->SetString(ScAddress(1,0,0), "Y");
+    m_pDoc->SetString(ScAddress(0, 0, 0), "X");
+    m_pDoc->SetString(ScAddress(1, 0, 0), "Y");
 
     // Define A1:B1 as sheet-local anonymous database range.
     m_pDoc->SetAnonymousDBData(
@@ -404,17 +395,17 @@ void TestSort::testSortSingleRow()
     clearSheet(m_pDoc, 0);
 
     // A1:G1
-    m_pDoc->SetString(ScAddress(0,0,0), "Header");
-    m_pDoc->SetValue(ScAddress(1,0,0),  1.0);
-    m_pDoc->SetValue(ScAddress(2,0,0), 10.0);
-    m_pDoc->SetValue(ScAddress(3,0,0),  3.0);
-    m_pDoc->SetValue(ScAddress(4,0,0),  9.0);
-    m_pDoc->SetValue(ScAddress(5,0,0), 12.0);
-    m_pDoc->SetValue(ScAddress(6,0,0),  2.0);
+    m_pDoc->SetString(ScAddress(0, 0, 0), "Header");
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 1.0);
+    m_pDoc->SetValue(ScAddress(2, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(3, 0, 0), 3.0);
+    m_pDoc->SetValue(ScAddress(4, 0, 0), 9.0);
+    m_pDoc->SetValue(ScAddress(5, 0, 0), 12.0);
+    m_pDoc->SetValue(ScAddress(6, 0, 0), 2.0);
 
     // Define A1:G1 as sheet-local anonymous database range.
-    m_pDoc->SetAnonymousDBData(
-        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 6, 0, false, true)));
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0,
+                                                                         0, 6, 0, false, true)));
 
     // Update the sort data.
     aSortData.nCol1 = 0;
@@ -424,36 +415,36 @@ void TestSort::testSortSingleRow()
     CPPUNIT_ASSERT(bSorted);
 
     // Check the result.
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(2,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(4,0,0)));
-    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(5,0,0)));
-    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(6,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(6, 0, 0)));
 
     // Undo and check.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
     pUndoMgr->Undo();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
-    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(4,0,0)));
-    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(5,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(6,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(6, 0, 0)));
 
     // Redo and check.
     pUndoMgr->Redo();
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(2,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(4,0,0)));
-    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(5,0,0)));
-    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(6,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(6, 0, 0)));
 
     m_pDoc->DeleteTab(0);
 }
@@ -468,12 +459,9 @@ void TestSort::testSortWithFormulaRefs()
     m_pDoc->InsertTab(1, "List2");
 
     const char* aFormulaData[6] = {
-        "=IF($List1.A2<>\"\";$List1.A2;\"\")",
-        "=IF($List1.A3<>\"\";$List1.A3;\"\")",
-        "=IF($List1.A4<>\"\";$List1.A4;\"\")",
-        "=IF($List1.A5<>\"\";$List1.A5;\"\")",
-        "=IF($List1.A6<>\"\";$List1.A6;\"\")",
-        "=IF($List1.A7<>\"\";$List1.A7;\"\")",
+        "=IF($List1.A2<>\"\";$List1.A2;\"\")", "=IF($List1.A3<>\"\";$List1.A3;\"\")",
+        "=IF($List1.A4<>\"\";$List1.A4;\"\")", "=IF($List1.A5<>\"\";$List1.A5;\"\")",
+        "=IF($List1.A6<>\"\";$List1.A6;\"\")", "=IF($List1.A7<>\"\";$List1.A7;\"\")",
     };
 
     const char* const aTextData[4] = {
@@ -484,21 +472,16 @@ void TestSort::testSortWithFormulaRefs()
     };
 
     const char* aResults[6] = {
-        "bob",
-        "brian",
-        "larry",
-        "tim",
-        "",
-        "",
+        "bob", "brian", "larry", "tim", "", "",
     };
 
     // Insert data to sort in A2:A5 on the 1st sheet.
     for (SCROW i = 1; i <= 4; ++i)
-        m_pDoc->SetString( 0, i, 0, OUString::createFromAscii(aTextData[i-1]) );
+        m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aTextData[i - 1]));
 
     // Insert formulas in A1:A6 on the 2nd sheet.
     for (size_t i = 0; i < SAL_N_ELEMENTS(aFormulaData); ++i)
-        m_pDoc->SetString( 0, i, 1, OUString::createFromAscii(aFormulaData[i]) );
+        m_pDoc->SetString(0, i, 1, OUString::createFromAscii(aFormulaData[i]));
 
     // Sort data in A2:A8 on the 1st sheet. No column header.
     ScSortParam aSortData;
@@ -514,7 +497,7 @@ void TestSort::testSortWithFormulaRefs()
     for (size_t i = 0; i < SAL_N_ELEMENTS(aResults); ++i)
     {
         OUString sResult = m_pDoc->GetString(0, i + 1, 0);
-        CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aResults[i] ), sResult );
+        CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(aResults[i]), sResult);
     }
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -526,13 +509,13 @@ void TestSort::testSortWithStrings()
 
     ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
     rEE.SetTextCurrentDefaults("Val1");
-    m_pDoc->SetString(ScAddress(1,1,0), "Header");
-    m_pDoc->SetString(ScAddress(1,2,0), "Val2");
-    m_pDoc->SetEditText(ScAddress(1,3,0), rEE.CreateTextObject());
+    m_pDoc->SetString(ScAddress(1, 1, 0), "Header");
+    m_pDoc->SetString(ScAddress(1, 2, 0), "Val2");
+    m_pDoc->SetEditText(ScAddress(1, 3, 0), rEE.CreateTextObject());
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Val2"), m_pDoc->GetString(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Val1"), m_pDoc->GetString(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val2"), m_pDoc->GetString(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val1"), m_pDoc->GetString(ScAddress(1, 3, 0)));
 
     ScSortParam aParam;
     aParam.nCol1 = 1;
@@ -546,17 +529,17 @@ void TestSort::testSortWithStrings()
 
     m_pDoc->Sort(0, aParam, false, true, nullptr, nullptr);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Val1"), m_pDoc->GetString(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Val2"), m_pDoc->GetString(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val1"), m_pDoc->GetString(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val2"), m_pDoc->GetString(ScAddress(1, 3, 0)));
 
     aParam.maKeyState[0].bAscending = false;
 
     m_pDoc->Sort(0, aParam, false, true, nullptr, nullptr);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Val2"), m_pDoc->GetString(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Val1"), m_pDoc->GetString(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val2"), m_pDoc->GetString(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val1"), m_pDoc->GetString(ScAddress(1, 3, 0)));
 
     m_pDoc->DeleteTab(0);
 }
@@ -565,28 +548,28 @@ void TestSort::testSortInFormulaGroup()
 {
     SortRefUpdateSetter aUpdateSet;
 
-    static const struct {
+    static const struct
+    {
         SCCOL nCol;
         SCROW nRow;
-        const char *pData;
-    } aEntries[] = {
-        { 0, 0, "3" },   { 1, 0, "=A1" },
-        { 0, 1, "1" },   { 1, 1, "=A2" },
-        { 0, 2, "20" },  { 1, 2, "=A3" },
-        { 0, 3, "10" },  { 1, 3, "=A4+1" }, // swap across groups
-        { 0, 4, "2"  },  { 1, 4, "=A5+1" },
-        { 0, 5, "101" }, { 1, 5, "=A6" }, // swap inside contiguous group
-        { 0, 6, "100" }, { 1, 6, "=A7" },
-        { 0, 7, "102" }, { 1, 7, "=A8" },
-        { 0, 8, "104" }, { 1, 8, "=A9" },
-        { 0, 9, "103" }, { 1, 9, "=A10" },
-    };
+        const char* pData;
+    } aEntries[]
+        = {
+              { 0, 0, "3" },   { 1, 0, "=A1" },   { 0, 1, "1" },
+              { 1, 1, "=A2" }, { 0, 2, "20" },    { 1, 2, "=A3" },
+              { 0, 3, "10" },  { 1, 3, "=A4+1" }, // swap across groups
+              { 0, 4, "2" },   { 1, 4, "=A5+1" }, { 0, 5, "101" },
+              { 1, 5, "=A6" }, // swap inside contiguous group
+              { 0, 6, "100" }, { 1, 6, "=A7" },   { 0, 7, "102" },
+              { 1, 7, "=A8" }, { 0, 8, "104" },   { 1, 8, "=A9" },
+              { 0, 9, "103" }, { 1, 9, "=A10" },
+          };
 
     m_pDoc->InsertTab(0, "sorttest");
 
-    for ( SCROW i = 0; i < SCROW(SAL_N_ELEMENTS( aEntries )); ++i )
-        m_pDoc->SetString( aEntries[i].nCol, aEntries[i].nRow, 0,
-                           OUString::createFromAscii( aEntries[i].pData) );
+    for (SCROW i = 0; i < SCROW(SAL_N_ELEMENTS(aEntries)); ++i)
+        m_pDoc->SetString(aEntries[i].nCol, aEntries[i].nRow, 0,
+                          OUString::createFromAscii(aEntries[i].pData));
 
     ScSortParam aSortData;
     aSortData.nCol1 = 0;
@@ -599,34 +582,25 @@ void TestSort::testSortInFormulaGroup()
 
     m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
-    static const double aResults[] = {
-        1.0,   1.0,
-        2.0,   3.0,
-        3.0,   3.0,
-        10.0,  11.0,
-        20.0,  20.0,
-        100.0, 100.0,
-        101.0, 101.0,
-        102.0, 102.0,
-        103.0, 103.0,
-        104.0, 104.0
-    };
+    static const double aResults[]
+        = { 1.0,   1.0,   2.0,   3.0,   3.0,   3.0,   10.0,  11.0,  20.0,  20.0,
+            100.0, 100.0, 101.0, 101.0, 102.0, 102.0, 103.0, 103.0, 104.0, 104.0 };
 
-    for ( SCROW i = 0; i < SCROW(SAL_N_ELEMENTS( aEntries )); ++i )
+    for (SCROW i = 0; i < SCROW(SAL_N_ELEMENTS(aEntries)); ++i)
     {
-        double val = m_pDoc->GetValue( aEntries[i].nCol, aEntries[i].nRow, 0 );
+        double val = m_pDoc->GetValue(aEntries[i].nCol, aEntries[i].nRow, 0);
         CPPUNIT_ASSERT_MESSAGE("Mis-matching value after sort.",
                                rtl::math::approxEqual(val, aResults[i]));
     }
 
-    m_pDoc->DeleteTab( 0 );
+    m_pDoc->DeleteTab(0);
 }
 
 void TestSort::testSortWithCellFormats()
 {
     struct
     {
-        bool isBold( const ScPatternAttr* pPat ) const
+        bool isBold(const ScPatternAttr* pPat) const
         {
             if (!pPat)
             {
@@ -652,7 +626,7 @@ void TestSort::testSortWithCellFormats()
             return true;
         }
 
-        bool isItalic( const ScPatternAttr* pPat ) const
+        bool isItalic(const ScPatternAttr* pPat) const
         {
             if (!pPat)
             {
@@ -678,7 +652,7 @@ void TestSort::testSortWithCellFormats()
             return true;
         }
 
-        bool isNormal( const ScPatternAttr* pPat ) const
+        bool isNormal(const ScPatternAttr* pPat) const
         {
             if (!pPat)
             {
@@ -715,13 +689,13 @@ void TestSort::testSortWithCellFormats()
     m_pDoc->InsertTab(0, "Test");
 
     // Insert some values into A1:A4.
-    m_pDoc->SetString(ScAddress(0,0,0), "Header");
-    m_pDoc->SetString(ScAddress(0,1,0), "Normal");
-    m_pDoc->SetString(ScAddress(0,2,0), "Bold");
-    m_pDoc->SetString(ScAddress(0,3,0), "Italic");
+    m_pDoc->SetString(ScAddress(0, 0, 0), "Header");
+    m_pDoc->SetString(ScAddress(0, 1, 0), "Normal");
+    m_pDoc->SetString(ScAddress(0, 2, 0), "Bold");
+    m_pDoc->SetString(ScAddress(0, 3, 0), "Italic");
 
     // Set A3 bold and A4 italic.
-    const ScPatternAttr* pPat = m_pDoc->GetPattern(ScAddress(0,2,0));
+    const ScPatternAttr* pPat = m_pDoc->GetPattern(ScAddress(0, 2, 0));
     CPPUNIT_ASSERT(pPat);
     {
         ScPatternAttr aNewPat(*pPat);
@@ -730,11 +704,11 @@ void TestSort::testSortWithCellFormats()
         m_pDoc->ApplyPattern(0, 2, 0, aNewPat);
 
         // Make sure it's really in.
-        bool bGood = aCheck.isBold(m_pDoc->GetPattern(ScAddress(0,2,0)));
+        bool bGood = aCheck.isBold(m_pDoc->GetPattern(ScAddress(0, 2, 0)));
         CPPUNIT_ASSERT_MESSAGE("A3 is not bold but it should.", bGood);
     }
 
-    pPat = m_pDoc->GetPattern(ScAddress(0,3,0));
+    pPat = m_pDoc->GetPattern(ScAddress(0, 3, 0));
     CPPUNIT_ASSERT(pPat);
     {
         ScPatternAttr aNewPat(*pPat);
@@ -742,7 +716,7 @@ void TestSort::testSortWithCellFormats()
         rSet.Put(SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE));
         m_pDoc->ApplyPattern(0, 3, 0, aNewPat);
 
-        bool bGood = aCheck.isItalic(m_pDoc->GetPattern(ScAddress(0,3,0)));
+        bool bGood = aCheck.isItalic(m_pDoc->GetPattern(ScAddress(0, 3, 0)));
         CPPUNIT_ASSERT_MESSAGE("A4 is not italic but it should.", bGood);
     }
 
@@ -767,21 +741,21 @@ void TestSort::testSortWithCellFormats()
     CPPUNIT_ASSERT(bSorted);
 
     // Check the sort result.
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Bold"),   m_pDoc->GetString(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Italic"), m_pDoc->GetString(ScAddress(0,2,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Normal"), m_pDoc->GetString(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Bold"), m_pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Italic"), m_pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Normal"), m_pDoc->GetString(ScAddress(0, 3, 0)));
 
     // A2 should be bold now.
-    bool bBold = aCheck.isBold(m_pDoc->GetPattern(ScAddress(0,1,0)));
+    bool bBold = aCheck.isBold(m_pDoc->GetPattern(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_MESSAGE("A2 should be bold after the sort.", bBold);
 
     // and A3 should be italic.
-    bool bItalic = aCheck.isItalic(m_pDoc->GetPattern(ScAddress(0,2,0)));
+    bool bItalic = aCheck.isItalic(m_pDoc->GetPattern(ScAddress(0, 2, 0)));
     CPPUNIT_ASSERT_MESSAGE("A3 should be italic.", bItalic);
 
     // A4 should have neither bold nor italic.
-    bool bNormal = aCheck.isNormal(m_pDoc->GetPattern(ScAddress(0,3,0)));
+    bool bNormal = aCheck.isNormal(m_pDoc->GetPattern(ScAddress(0, 3, 0)));
     CPPUNIT_ASSERT_MESSAGE("A4 should be neither bold nor italic.", bNormal);
 
     m_pDoc->DeleteTab(0);
@@ -797,23 +771,23 @@ void TestSort::testSortRefUpdate()
     m_pDoc->InsertTab(0, "Sort");
 
     // Set values to sort in column A.
-    m_pDoc->SetString(ScAddress(0,0,0), "Header");
+    m_pDoc->SetString(ScAddress(0, 0, 0), "Header");
 
     double aValues[] = { 4.0, 36.0, 14.0, 29.0, 98.0, 78.0, 0.0, 99.0, 1.0 };
     size_t nCount = SAL_N_ELEMENTS(aValues);
     for (size_t i = 0; i < nCount; ++i)
-        m_pDoc->SetValue(ScAddress(0,i+1,0), aValues[i]);
+        m_pDoc->SetValue(ScAddress(0, i + 1, 0), aValues[i]);
 
     // Set formulas to reference these values in column C.
-    m_pDoc->SetString(ScAddress(2,0,0), "Formula");
+    m_pDoc->SetString(ScAddress(2, 0, 0), "Formula");
     for (size_t i = 0; i < nCount; ++i)
-        m_pDoc->SetString(ScAddress(2,1+i,0), "=RC[-2]");
+        m_pDoc->SetString(ScAddress(2, 1 + i, 0), "=RC[-2]");
 
     // Check the values in column C.
     for (size_t i = 0; i < nCount; ++i)
     {
         double fCheck = aValues[i];
-        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0)));
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2, i + 1, 0)));
     }
 
     ScDBDocFunc aFunc(*m_xDocShell);
@@ -838,11 +812,11 @@ void TestSort::testSortRefUpdate()
     double aSorted[] = { 0.0, 1.0, 4.0, 14.0, 29.0, 36.0, 78.0, 98.0, 99.0 };
 
     // Check the sort result.
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
     for (size_t i = 0; i < nCount; ++i)
     {
         double fCheck = aSorted[i];
-        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0,i+1,0)));
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0, i + 1, 0)));
     }
 
     // Sorting should not alter the values in column C.
@@ -850,22 +824,22 @@ void TestSort::testSortRefUpdate()
     for (size_t i = 0; i < nCount; ++i)
     {
         double fCheck = aValues[i];
-        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0)));
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2, i + 1, 0)));
     }
 
     // C2 should now point to A4.
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "R[2]C[-2]", "Wrong formula in C2!");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2, 1, 0), "R[2]C[-2]", "Wrong formula in C2!");
 
     // Undo the sort.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     pUndoMgr->Undo();
 
     // Check the undo result.
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
     for (size_t i = 0; i < nCount; ++i)
     {
         double fCheck = aValues[i];
-        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0,i+1,0)));
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0, i + 1, 0)));
     }
 
     // Values in column C should still be unaltered.
@@ -873,20 +847,20 @@ void TestSort::testSortRefUpdate()
     for (size_t i = 0; i < nCount; ++i)
     {
         double fCheck = aValues[i];
-        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0)));
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2, i + 1, 0)));
     }
 
     // C2 should now point to A2.
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "RC[-2]", "Wrong formula in C2!");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2, 1, 0), "RC[-2]", "Wrong formula in C2!");
 
     // Redo.
     pUndoMgr->Redo();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
     for (size_t i = 0; i < nCount; ++i)
     {
         double fCheck = aSorted[i];
-        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0,i+1,0)));
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0, i + 1, 0)));
     }
 
     // Sorting should not alter the values in column C.
@@ -894,18 +868,18 @@ void TestSort::testSortRefUpdate()
     for (size_t i = 0; i < nCount; ++i)
     {
         double fCheck = aValues[i];
-        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0)));
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2, i + 1, 0)));
     }
 
     // C2 should now point to A4.
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "R[2]C[-2]", "Wrong formula in C2!");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2, 1, 0), "R[2]C[-2]", "Wrong formula in C2!");
 
     // Undo again.
     pUndoMgr->Undo();
 
     // Formulas in column C should all be "RC[-2]" again.
     for (size_t i = 0; i < nCount; ++i)
-        m_pDoc->SetString(ScAddress(2,1+i,0), "=RC[-2]");
+        m_pDoc->SetString(ScAddress(2, 1 + i, 0), "=RC[-2]");
 
     // Turn off reference update on sort.
     SortTypeSetter::changeTo(false);
@@ -914,23 +888,23 @@ void TestSort::testSortRefUpdate()
     CPPUNIT_ASSERT(bSorted);
 
     // Check the sort result again.
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
     for (size_t i = 0; i < nCount; ++i)
     {
         double fCheck = aSorted[i];
-        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0,i+1,0)));
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0, i + 1, 0)));
     }
 
     // Formulas in column C should all remain "RC[-2]".
     for (size_t i = 0; i < nCount; ++i)
-        m_pDoc->SetString(ScAddress(2,1+i,0), "=RC[-2]");
+        m_pDoc->SetString(ScAddress(2, 1 + i, 0), "=RC[-2]");
 
     // The values in column C should now be the same as sorted values in column A.
     m_pDoc->CalcAll(); // just in case...
     for (size_t i = 0; i < nCount; ++i)
     {
         double fCheck = aSorted[i];
-        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0))); // column C
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2, i + 1, 0))); // column C
     }
 
     m_pDoc->DeleteTab(0);
@@ -947,12 +921,8 @@ void TestSort::testSortRefUpdate2()
 
     // Set up the sheet.
     const char* aData[][2] = {
-        { "F1", "F2" },
-        { "9", "=RC[-1]" },
-        { "2", "=RC[-1]" },
-        { "6", "=RC[-1]" },
-        { "4", "=RC[-1]" },
-        { nullptr, nullptr } // terminator
+        { "F1", "F2" },     { "9", "=RC[-1]" }, { "2", "=RC[-1]" },
+        { "6", "=RC[-1]" }, { "4", "=RC[-1]" }, { nullptr, nullptr } // terminator
     };
 
     for (SCROW i = 0; aData[i][0]; ++i)
@@ -962,10 +932,10 @@ void TestSort::testSortRefUpdate2()
     }
 
     // Check the values in B2:B5.
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,3,0)));
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1, 4, 0)));
 
     ScDBDocFunc aFunc(*m_xDocShell);
 
@@ -987,39 +957,39 @@ void TestSort::testSortRefUpdate2()
     CPPUNIT_ASSERT(bSorted);
 
     // Check the sort result in column A.
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0,2,0)));
-    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,3,0)));
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
 
     // and column B.
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,3,0)));
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1, 4, 0)));
 
     // Formulas in column B should still point to their respective left neighbor cell.
     for (SCROW i = 1; i <= 4; ++i)
     {
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,i,0), "RC[-1]", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1, i, 0), "RC[-1]", "Wrong formula!");
     }
 
     // Undo and check the result in column B.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     pUndoMgr->Undo();
 
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,3,0)));
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1, 4, 0)));
 
     // and redo.
     pUndoMgr->Redo();
 
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,3,0)));
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1, 4, 0)));
 
     m_pDoc->DeleteTab(0);
 }
@@ -1032,25 +1002,20 @@ void TestSort::testSortRefUpdate3()
     m_pDoc->InsertTab(0, "Sort");
 
     const char* pData[] = {
-        "Header",
-        "1",
-        "=A2+10",
-        "2",
-        "=A4+10",
-        "=A2+A4",
+        "Header", "1", "=A2+10", "2", "=A4+10", "=A2+A4",
         nullptr // terminator
     };
 
     for (SCROW i = 0; pData[i]; ++i)
-        m_pDoc->SetString(ScAddress(0,i,0), OUString::createFromAscii(pData[i]));
+        m_pDoc->SetString(ScAddress(0, i, 0), OUString::createFromAscii(pData[i]));
 
     // Check the initial values.
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,2,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,3,0)));
-    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,4,0)));
-    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
 
     ScDBDocFunc aFunc(*m_xDocShell);
 
@@ -1073,38 +1038,38 @@ void TestSort::testSortRefUpdate3()
 
     // Check the sorted values.
     m_pDoc->CalcAll();
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,2,0)));
-    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,3,0)));
-    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,4,0)));
-    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
 
     // Make sure the formula cells have been adjusted correctly.
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,3,0), "A2+A3", "Wrong formula in A4.");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,4,0), "A2+10", "Wrong formula in A5.");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,5,0), "A3+10", "Wrong formula in A6.");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0, 3, 0), "A2+A3", "Wrong formula in A4.");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0, 4, 0), "A2+10", "Wrong formula in A5.");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0, 5, 0), "A3+10", "Wrong formula in A6.");
 
     // Undo and check the result.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     pUndoMgr->Undo();
     m_pDoc->CalcAll();
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,2,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,3,0)));
-    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,4,0)));
-    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
 
     // Redo and check the result.
     pUndoMgr->Redo();
     m_pDoc->CalcAll();
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,2,0)));
-    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,3,0)));
-    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,4,0)));
-    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
 
     m_pDoc->DeleteTab(0);
 }
@@ -1133,36 +1098,30 @@ void TestSort::testSortRefUpdate4_Impl()
 
     {
         const std::vector<std::vector<const char*>> aData = {
-            { "Name", "Note" },
-            { "Student1", "1" },
-            { "Student2", "2" },
-            { "Student3", "3" },
-            { "Student4", "4" },
-            { "Student5", "5" },
+            { "Name", "Note" },  { "Student1", "1" }, { "Student2", "2" },
+            { "Student3", "3" }, { "Student4", "4" }, { "Student5", "5" },
         };
 
         SCTAB nTab = 1;
-        ScAddress aPos(0,0,nTab);
+        ScAddress aPos(0, 0, nTab);
         clearRange(m_pDoc, ScRange(0, 0, nTab, 1, aData.size(), nTab));
         ScRange aLesson1Range = insertRangeData(m_pDoc, aPos, aData);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aLesson1Range.aStart);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                     aLesson1Range.aStart);
     }
 
     {
         const std::vector<std::vector<const char*>> aData = {
-            { "Name", "Note" },
-            { "=Lesson1.A2", "3" },
-            { "=Lesson1.A3", "4" },
-            { "=Lesson1.A4", "9" },
-            { "=Lesson1.A5", "6" },
-            { "=Lesson1.A6", "3" },
+            { "Name", "Note" },     { "=Lesson1.A2", "3" }, { "=Lesson1.A3", "4" },
+            { "=Lesson1.A4", "9" }, { "=Lesson1.A5", "6" }, { "=Lesson1.A6", "3" },
         };
 
         SCTAB nTab = 2;
-        ScAddress aPos(0,0,nTab);
+        ScAddress aPos(0, 0, nTab);
         clearRange(m_pDoc, ScRange(0, 0, nTab, 1, aData.size(), nTab));
         ScRange aLesson2Range = insertRangeData(m_pDoc, aPos, aData);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aLesson2Range.aStart);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                     aLesson2Range.aStart);
     }
 
     ScRange aSortRange;
@@ -1177,10 +1136,11 @@ void TestSort::testSortRefUpdate4_Impl()
         };
 
         SCTAB nTab = 0;
-        ScAddress aPos(0,0,nTab);
+        ScAddress aPos(0, 0, nTab);
         clearRange(m_pDoc, ScRange(0, 0, nTab, 1, aData.size(), nTab));
         aSortRange = insertRangeData(m_pDoc, aPos, aData);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aSortRange.aStart);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                     aSortRange.aStart);
     }
 
     ScDBDocFunc aFunc(*m_xDocShell);
@@ -1193,29 +1153,31 @@ void TestSort::testSortRefUpdate4_Impl()
         aSortData.nRow1 = aSortRange.aStart.Row();
         aSortData.nRow2 = aSortRange.aEnd.Row();
         aSortData.bHasHeader = true;
-        aSortData.maKeyState[0].bDoSort = true;         // sort on
-        aSortData.maKeyState[0].nField = 3;             // Average
-        aSortData.maKeyState[0].bAscending = false;     // descending
+        aSortData.maKeyState[0].bDoSort = true; // sort on
+        aSortData.maKeyState[0].nField = 3; // Average
+        aSortData.maKeyState[0].bAscending = false; // descending
 
-        m_pDoc->SetAnonymousDBData( 0, std::unique_ptr<ScDBData>(new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
-                    aSortData.nCol1, aSortData.nRow1, aSortData.nCol2, aSortData.nRow2)));
+        m_pDoc->SetAnonymousDBData(
+            0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
+                                                      aSortData.nCol1, aSortData.nRow1,
+                                                      aSortData.nCol2, aSortData.nRow2)));
 
         bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
         CPPUNIT_ASSERT(bSorted);
 
         // Check the sorted values.
         m_pDoc->CalcAll();
-        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0,0,0)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Student3"), m_pDoc->GetString(ScAddress(0,1,0)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Student4"), m_pDoc->GetString(ScAddress(0,2,0)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Student5"), m_pDoc->GetString(ScAddress(0,3,0)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Student2"), m_pDoc->GetString(ScAddress(0,4,0)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Student1"), m_pDoc->GetString(ScAddress(0,5,0)));
-        CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(3,1,0)));
-        CPPUNIT_ASSERT_EQUAL( 5.0, m_pDoc->GetValue(ScAddress(3,2,0)));
-        CPPUNIT_ASSERT_EQUAL( 4.0, m_pDoc->GetValue(ScAddress(3,3,0)));
-        CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,4,0)));
-        CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(3,5,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student3"), m_pDoc->GetString(ScAddress(0, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student4"), m_pDoc->GetString(ScAddress(0, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student5"), m_pDoc->GetString(ScAddress(0, 3, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student2"), m_pDoc->GetString(ScAddress(0, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student1"), m_pDoc->GetString(ScAddress(0, 5, 0)));
+        CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(3, 3, 0)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3, 5, 0)));
 
         // Make sure the formula cells have been adjusted correctly.
         const char* aCheck[][4] = {
@@ -1226,11 +1188,14 @@ void TestSort::testSortRefUpdate4_Impl()
             { "Lesson1.A3", "Lesson1.B3", "Lesson2.B3", "AVERAGE(B5:C5)" },
             { "Lesson1.A2", "Lesson1.B2", "Lesson2.B2", "AVERAGE(B6:C6)" },
         };
-        for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aCheck)); ++nRow)
+        for (SCROW nRow = 0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aCheck)); ++nRow)
         {
-            for (SCCOL nCol=0; nCol < 4; ++nCol)
+            for (SCCOL nCol = 0; nCol < 4; ++nCol)
             {
-                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol], OString("Wrong formula in " + OStringChar(char('A'+nCol)) + OString::number(nRow+2) + ".").getStr());
+                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(nCol, nRow + 1, 0), aCheck[nRow][nCol],
+                                     OString("Wrong formula in " + OStringChar(char('A' + nCol))
+                                             + OString::number(nRow + 2) + ".")
+                                         .getStr());
             }
         }
 
@@ -1238,22 +1203,22 @@ void TestSort::testSortRefUpdate4_Impl()
         SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
         pUndoMgr->Undo();
         m_pDoc->CalcAll();
-        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0,0,0)));
-        CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(3,1,0)));
-        CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,2,0)));
-        CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(3,3,0)));
-        CPPUNIT_ASSERT_EQUAL( 5.0, m_pDoc->GetValue(ScAddress(3,4,0)));
-        CPPUNIT_ASSERT_EQUAL( 4.0, m_pDoc->GetValue(ScAddress(3,5,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3, 3, 0)));
+        CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(3, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(3, 5, 0)));
 
         // Redo and check the result.
         pUndoMgr->Redo();
         m_pDoc->CalcAll();
-        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0,0,0)));
-        CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(3,1,0)));
-        CPPUNIT_ASSERT_EQUAL( 5.0, m_pDoc->GetValue(ScAddress(3,2,0)));
-        CPPUNIT_ASSERT_EQUAL( 4.0, m_pDoc->GetValue(ScAddress(3,3,0)));
-        CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,4,0)));
-        CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(3,5,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(3, 3, 0)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3, 5, 0)));
     }
 
     // Sort A2:AMJ6 by column A (Name, without header).
@@ -1261,32 +1226,34 @@ void TestSort::testSortRefUpdate4_Impl()
         ScSortParam aSortData;
         aSortData.nCol1 = 0;
         aSortData.nCol2 = MAXCOL;
-        aSortData.nRow1 = aSortRange.aStart.Row()+1;
+        aSortData.nRow1 = aSortRange.aStart.Row() + 1;
         aSortData.nRow2 = aSortRange.aEnd.Row();
         aSortData.bHasHeader = false;
-        aSortData.maKeyState[0].bDoSort = true;         // sort on
-        aSortData.maKeyState[0].nField = 0;             // Name
-        aSortData.maKeyState[0].bAscending = false;     // descending
+        aSortData.maKeyState[0].bDoSort = true; // sort on
+        aSortData.maKeyState[0].nField = 0; // Name
+        aSortData.maKeyState[0].bAscending = false; // descending
 
-        m_pDoc->SetAnonymousDBData( 0, std::unique_ptr<ScDBData>(new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
-                    aSortData.nCol1, aSortData.nRow1, aSortData.nCol2, aSortData.nRow2)));
+        m_pDoc->SetAnonymousDBData(
+            0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
+                                                      aSortData.nCol1, aSortData.nRow1,
+                                                      aSortData.nCol2, aSortData.nRow2)));
 
         bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
         CPPUNIT_ASSERT(bSorted);
 
         // Check the sorted values.
         m_pDoc->CalcAll();
-        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0,0,0)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Student5"), m_pDoc->GetString(ScAddress(0,1,0)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Student4"), m_pDoc->GetString(ScAddress(0,2,0)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Student3"), m_pDoc->GetString(ScAddress(0,3,0)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Student2"), m_pDoc->GetString(ScAddress(0,4,0)));
-        CPPUNIT_ASSERT_EQUAL(OUString("Student1"), m_pDoc->GetString(ScAddress(0,5,0)));
-        CPPUNIT_ASSERT_EQUAL( 4.0, m_pDoc->GetValue(ScAddress(3,1,0)));
-        CPPUNIT_ASSERT_EQUAL( 5.0, m_pDoc->GetValue(ScAddress(3,2,0)));
-        CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(3,3,0)));
-        CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,4,0)));
-        CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(3,5,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student5"), m_pDoc->GetString(ScAddress(0, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student4"), m_pDoc->GetString(ScAddress(0, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student3"), m_pDoc->GetString(ScAddress(0, 3, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student2"), m_pDoc->GetString(ScAddress(0, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student1"), m_pDoc->GetString(ScAddress(0, 5, 0)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3, 3, 0)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3, 5, 0)));
 
         // Make sure the formula cells have been adjusted correctly.
         const char* aCheck[][4] = {
@@ -1297,11 +1264,14 @@ void TestSort::testSortRefUpdate4_Impl()
             { "Lesson1.A3", "Lesson1.B3", "Lesson2.B3", "AVERAGE(B5:C5)" },
             { "Lesson1.A2", "Lesson1.B2", "Lesson2.B2", "AVERAGE(B6:C6)" },
         };
-        for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aCheck)); ++nRow)
+        for (SCROW nRow = 0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aCheck)); ++nRow)
         {
-            for (SCCOL nCol=0; nCol < 4; ++nCol)
+            for (SCCOL nCol = 0; nCol < 4; ++nCol)
             {
-                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol], OString("Wrong formula in " + OStringChar(char('A'+nCol)) + OString::number(nRow+2) + ".").getStr());
+                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(nCol, nRow + 1, 0), aCheck[nRow][nCol],
+                                     OString("Wrong formula in " + OStringChar(char('A' + nCol))
+                                             + OString::number(nRow + 2) + ".")
+                                         .getStr());
             }
         }
     }
@@ -1334,33 +1304,34 @@ void TestSort::testSortRefUpdate5()
     ScRange aSortRange;
     {
         const std::vector<std::vector<const char*>> aData = {
-            { "Date", "Volatile", "Order" },
-            { "1999-05-05", "=TODAY()-$A2", "4" },
-            { "1994-10-18", "=TODAY()-$A3", "1" },
-            { "1996-06-30", "=TODAY()-$A4", "3" },
+            { "Date", "Volatile", "Order" },       { "1999-05-05", "=TODAY()-$A2", "4" },
+            { "1994-10-18", "=TODAY()-$A3", "1" }, { "1996-06-30", "=TODAY()-$A4", "3" },
             { "1995-11-21", "=TODAY()-$A5", "2" },
         };
 
         SCTAB nTab = 0;
-        ScAddress aPos(0,0,nTab);
+        ScAddress aPos(0, 0, nTab);
         clearRange(m_pDoc, ScRange(0, 0, nTab, 2, aData.size(), nTab));
         aSortRange = insertRangeData(m_pDoc, aPos, aData);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aSortRange.aStart);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                     aSortRange.aStart);
 
         // Actual results and expected sorted results.
-        for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+        for (SCROW nRow = 0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
         {
-            double fVal = m_pDoc->GetValue(ScAddress(1,nRow+1,0));
+            double fVal = m_pDoc->GetValue(ScAddress(1, nRow + 1, 0));
             aValCheck[nRow][0] = fVal;
-            aValCheck[static_cast<size_t>(aValCheck[nRow][1])-1][2] = fVal;
+            aValCheck[static_cast<size_t>(aValCheck[nRow][1]) - 1][2] = fVal;
         }
     }
 
     ScDBDocFunc aFunc(*m_xDocShell);
 
     // Sort A1:B5.
-    m_pDoc->SetAnonymousDBData( 0, std::unique_ptr<ScDBData>(new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
-                aSortRange.aStart.Col(), aSortRange.aStart.Row(), aSortRange.aEnd.Col(), aSortRange.aEnd.Row())));
+    m_pDoc->SetAnonymousDBData(
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
+                                                  aSortRange.aStart.Col(), aSortRange.aStart.Row(),
+                                                  aSortRange.aEnd.Col(), aSortRange.aEnd.Row())));
 
     // Sort by column A.
     ScSortParam aSortData;
@@ -1369,19 +1340,19 @@ void TestSort::testSortRefUpdate5()
     aSortData.nRow1 = aSortRange.aStart.Row();
     aSortData.nRow2 = aSortRange.aEnd.Row();
     aSortData.bHasHeader = true;
-    aSortData.maKeyState[0].bDoSort = true;         // sort on
-    aSortData.maKeyState[0].nField = 0;             // Date
-    aSortData.maKeyState[0].bAscending = true;      // ascending
+    aSortData.maKeyState[0].bDoSort = true; // sort on
+    aSortData.maKeyState[0].nField = 0; // Date
+    aSortData.maKeyState[0].bAscending = true; // ascending
     bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Check the sorted values.
     m_pDoc->CalcAll();
-    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+    for (SCROW nRow = 0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
     {
-        size_t i = static_cast<size_t>(m_pDoc->GetValue(ScAddress(2,nRow+1,0)));    // order 1..4
-        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(nRow+1), i);
-        CPPUNIT_ASSERT_EQUAL( aValCheck[i-1][2], m_pDoc->GetValue(ScAddress(1,nRow+1,0)));
+        size_t i = static_cast<size_t>(m_pDoc->GetValue(ScAddress(2, nRow + 1, 0))); // order 1..4
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(nRow + 1), i);
+        CPPUNIT_ASSERT_EQUAL(aValCheck[i - 1][2], m_pDoc->GetValue(ScAddress(1, nRow + 1, 0)));
     }
 
     // Make sure the formula cells have been adjusted correctly.
@@ -1392,29 +1363,31 @@ void TestSort::testSortRefUpdate5()
         "TODAY()-$A4",
         "TODAY()-$A5",
     };
-    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aFormulaCheck)); ++nRow)
+    for (SCROW nRow = 0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aFormulaCheck)); ++nRow)
     {
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,nRow+1,0), aFormulaCheck[nRow], OString("Wrong formula in B" + OString::number(nRow+2) + ".").getStr());
+        ASSERT_FORMULA_EQUAL(
+            *m_pDoc, ScAddress(1, nRow + 1, 0), aFormulaCheck[nRow],
+            OString("Wrong formula in B" + OString::number(nRow + 2) + ".").getStr());
     }
 
     // Undo and check the result.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     pUndoMgr->Undo();
     m_pDoc->CalcAll();
-    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+    for (SCROW nRow = 0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
     {
-        CPPUNIT_ASSERT_EQUAL( aValCheck[nRow][0], m_pDoc->GetValue(ScAddress(1,nRow+1,0)));
-        CPPUNIT_ASSERT_EQUAL( aValCheck[nRow][1], m_pDoc->GetValue(ScAddress(2,nRow+1,0)));
+        CPPUNIT_ASSERT_EQUAL(aValCheck[nRow][0], m_pDoc->GetValue(ScAddress(1, nRow + 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(aValCheck[nRow][1], m_pDoc->GetValue(ScAddress(2, nRow + 1, 0)));
     }
 
     // Redo and check the result.
     pUndoMgr->Redo();
     m_pDoc->CalcAll();
-    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+    for (SCROW nRow = 0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
     {
-        size_t i = static_cast<size_t>(m_pDoc->GetValue(ScAddress(2,nRow+1,0)));    // order 1..4
-        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(nRow+1), i);
-        CPPUNIT_ASSERT_EQUAL( aValCheck[i-1][2], m_pDoc->GetValue(ScAddress(1,nRow+1,0)));
+        size_t i = static_cast<size_t>(m_pDoc->GetValue(ScAddress(2, nRow + 1, 0))); // order 1..4
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(nRow + 1), i);
+        CPPUNIT_ASSERT_EQUAL(aValCheck[i - 1][2], m_pDoc->GetValue(ScAddress(1, nRow + 1, 0)));
     }
 
     m_pDoc->DeleteTab(0);
@@ -1434,7 +1407,7 @@ void TestSort::testSortRefUpdate6()
         { "8", "3", "=C3+B4" },
     };
 
-    ScAddress aPos(0,0,0);
+    ScAddress aPos(0, 0, 0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL(aPos, aDataRange.aStart);
 
@@ -1479,14 +1452,15 @@ void TestSort::testSortRefUpdate6()
             { "9", "1", "7" },
         };
 
-        bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
+        bool bSuccess
+            = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
     // Make sure that the formulas in C2:C4 are not adjusted.
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "C1+B2", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,2,0), "C2+B3", "Wrong formula!");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,3,0), "C3+B4", "Wrong formula!");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2, 1, 0), "C1+B2", "Wrong formula!");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2, 2, 0), "C2+B3", "Wrong formula!");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2, 3, 0), "C3+B4", "Wrong formula!");
 
     // Undo and check.
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
@@ -1524,7 +1498,7 @@ void TestSort::testSortRefUpdate6()
 
     // Change the value of C1 and make sure the formula broadcasting chain still works.
     ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
-    rFunc.SetValueCell(ScAddress(2,0,0), 11.0, false);
+    rFunc.SetValueCell(ScAddress(2, 0, 0), 11.0, false);
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
@@ -1549,7 +1523,8 @@ void TestSort::testSortRefUpdate6()
             { "9", "1", "7" },
         };
 
-        bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "After undo of header value change");
+        bool bSuccess
+            = checkOutput(m_pDoc, aDataRange, aOutputCheck, "After undo of header value change");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1567,18 +1542,18 @@ void TestSort::testSortBroadcaster()
 
     {
         const std::vector<std::vector<const char*>> aData = {
-            { "1",   nullptr, nullptr, "=B1", "=$B$1", "=SUM(A1:B1)", "=SUM($A$1:$B$1)" },
+            { "1", nullptr, nullptr, "=B1", "=$B$1", "=SUM(A1:B1)", "=SUM($A$1:$B$1)" },
             { "2", "8", nullptr, "=B2", "=$B$2", "=SUM(A2:B2)", "=SUM($A$2:$B$2)" },
         };
 
-        ScAddress aPos(0,0,0);
+        ScAddress aPos(0, 0, 0);
         ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aDataRange.aStart);
 
         {
             // Expected output table content.  0 = empty cell
             std::vector<std::vector<const char*>> aOutputCheck = {
-                { "1",   nullptr, nullptr, "0", "0",  "1",  "1" },
+                { "1", nullptr, nullptr, "0", "0", "1", "1" },
                 { "2", "8", nullptr, "8", "8", "10", "10" },
             };
 
@@ -1588,7 +1563,7 @@ void TestSort::testSortBroadcaster()
 
         // Sort A1:B2.
         m_pDoc->SetAnonymousDBData(
-                0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 1)));
+            0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 1)));
 
         ScDBDocFunc aFunc(*m_xDocShell);
 
@@ -1610,44 +1585,45 @@ void TestSort::testSortBroadcaster()
             // Expected output table content.  0 = empty cell
             std::vector<std::vector<const char*>> aOutputCheck = {
                 { "2", "8", nullptr, "8", "8", "10", "10" },
-                { "1",   nullptr, nullptr, "0", "0",  "1",  "1" },
+                { "1", nullptr, nullptr, "0", "0", "1", "1" },
             };
 
-            bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
+            bool bSuccess
+                = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
             CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
         }
 
         // Make sure that the formulas in D1:G2 are not adjusted.
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(3,0,0), "B1", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(3,1,0), "B2", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(4,0,0), "$B$1", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(4,1,0), "$B$2", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(5,0,0), "SUM(A1:B1)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(5,1,0), "SUM(A2:B2)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(6,0,0), "SUM($A$1:$B$1)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(6,1,0), "SUM($A$2:$B$2)", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(3, 0, 0), "B1", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(3, 1, 0), "B2", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(4, 0, 0), "$B$1", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(4, 1, 0), "$B$2", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(5, 0, 0), "SUM(A1:B1)", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(5, 1, 0), "SUM(A2:B2)", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(6, 0, 0), "SUM($A$1:$B$1)", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(6, 1, 0), "SUM($A$2:$B$2)", "Wrong formula!");
 
         // Enter new value and check that it is broadcasted. First in empty cell.
-        m_pDoc->SetString(1,1,0, "16");
-        double nVal = m_pDoc->GetValue(3,1,0);
-        ASSERT_DOUBLES_EQUAL( 16.0, nVal);
-        nVal = m_pDoc->GetValue(4,1,0);
-        ASSERT_DOUBLES_EQUAL( 16.0, nVal);
-        nVal = m_pDoc->GetValue(5,1,0);
-        ASSERT_DOUBLES_EQUAL( 17.0, nVal);
-        nVal = m_pDoc->GetValue(6,1,0);
-        ASSERT_DOUBLES_EQUAL( 17.0, nVal);
+        m_pDoc->SetString(1, 1, 0, "16");
+        double nVal = m_pDoc->GetValue(3, 1, 0);
+        ASSERT_DOUBLES_EQUAL(16.0, nVal);
+        nVal = m_pDoc->GetValue(4, 1, 0);
+        ASSERT_DOUBLES_EQUAL(16.0, nVal);
+        nVal = m_pDoc->GetValue(5, 1, 0);
+        ASSERT_DOUBLES_EQUAL(17.0, nVal);
+        nVal = m_pDoc->GetValue(6, 1, 0);
+        ASSERT_DOUBLES_EQUAL(17.0, nVal);
 
         // Enter new value and check that it is broadcasted. Now overwriting data.
-        m_pDoc->SetString(1,0,0, "32");
-        nVal = m_pDoc->GetValue(3,0,0);
-        ASSERT_DOUBLES_EQUAL( 32.0, nVal);
-        nVal = m_pDoc->GetValue(4,0,0);
-        ASSERT_DOUBLES_EQUAL( 32.0, nVal);
-        nVal = m_pDoc->GetValue(5,0,0);
-        ASSERT_DOUBLES_EQUAL( 34.0, nVal);
-        nVal = m_pDoc->GetValue(6,0,0);
-        ASSERT_DOUBLES_EQUAL( 34.0, nVal);
+        m_pDoc->SetString(1, 0, 0, "32");
+        nVal = m_pDoc->GetValue(3, 0, 0);
+        ASSERT_DOUBLES_EQUAL(32.0, nVal);
+        nVal = m_pDoc->GetValue(4, 0, 0);
+        ASSERT_DOUBLES_EQUAL(32.0, nVal);
+        nVal = m_pDoc->GetValue(5, 0, 0);
+        ASSERT_DOUBLES_EQUAL(34.0, nVal);
+        nVal = m_pDoc->GetValue(6, 0, 0);
+        ASSERT_DOUBLES_EQUAL(34.0, nVal);
     }
 
     // The same for sort by column. Start data at A5.
@@ -1655,28 +1631,23 @@ void TestSort::testSortBroadcaster()
     {
         const std::vector<std::vector<const char*>> aData = {
             { "1", "2" },
-            {   nullptr, "8" },
+            { nullptr, "8" },
             { nullptr, nullptr },
-            { "=A6",             "=B6" },
-            { "=$A$6",           "=$B$6" },
-            { "=SUM(A5:A6)",     "=SUM(B5:B6)" },
+            { "=A6", "=B6" },
+            { "=$A$6", "=$B$6" },
+            { "=SUM(A5:A6)", "=SUM(B5:B6)" },
             { "=SUM($A$5:$A$6)", "=SUM($B$5:$B$6)" },
         };
 
-        ScAddress aPos(0,4,0);
+        ScAddress aPos(0, 4, 0);
         ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aDataRange.aStart);
 
         {
             // Expected output table content.  0 = empty cell
             std::vector<std::vector<const char*>> aOutputCheck = {
-                { "1", "2" },
-                {   nullptr, "8" },
-                { nullptr, nullptr },
-                { "0",  "8" },
-                { "0",  "8" },
-                { "1", "10" },
-                { "1", "10" },
+                { "1", "2" }, { nullptr, "8" }, { nullptr, nullptr }, { "0", "8" },
+                { "0", "8" }, { "1", "10" },    { "1", "10" },
             };
 
             bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Initial value");
@@ -1685,7 +1656,7 @@ void TestSort::testSortBroadcaster()
 
         // Sort A5:B6.
         m_pDoc->SetAnonymousDBData(
-                0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 4, 1, 5)));
+            0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 4, 1, 5)));
 
         ScDBDocFunc aFunc(*m_xDocShell);
 
@@ -1706,49 +1677,45 @@ void TestSort::testSortBroadcaster()
         {
             // Expected output table content.  0 = empty cell
             std::vector<std::vector<const char*>> aOutputCheck = {
-                { "2", "1" },
-                { "8",   nullptr },
-                { nullptr, nullptr },
-                { "8",  "0" },
-                { "8",  "0" },
-                { "10", "1" },
-                { "10", "1" },
+                { "2", "1" }, { "8", nullptr }, { nullptr, nullptr }, { "8", "0" },
+                { "8", "0" }, { "10", "1" },    { "10", "1" },
             };
 
-            bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
+            bool bSuccess
+                = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
             CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
         }
 
         // Make sure that the formulas in A8:B11 are not adjusted.
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,7,0), "A6", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,7,0), "B6", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,8,0), "$A$6", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,8,0), "$B$6", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,9,0), "SUM(A5:A6)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,9,0), "SUM(B5:B6)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,10,0), "SUM($A$5:$A$6)", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,10,0), "SUM($B$5:$B$6)", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0, 7, 0), "A6", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1, 7, 0), "B6", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0, 8, 0), "$A$6", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1, 8, 0), "$B$6", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0, 9, 0), "SUM(A5:A6)", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1, 9, 0), "SUM(B5:B6)", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0, 10, 0), "SUM($A$5:$A$6)", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1, 10, 0), "SUM($B$5:$B$6)", "Wrong formula!");
 
         // Enter new value and check that it is broadcasted. First in empty cell.
-        m_pDoc->SetString(1,5,0, "16");
-        double nVal = m_pDoc->GetValue(1,7,0);
+        m_pDoc->SetString(1, 5, 0, "16");
+        double nVal = m_pDoc->GetValue(1, 7, 0);
         ASSERT_DOUBLES_EQUAL(nVal, 16.0);
-        nVal = m_pDoc->GetValue(1,8,0);
+        nVal = m_pDoc->GetValue(1, 8, 0);
         ASSERT_DOUBLES_EQUAL(nVal, 16.0);
-        nVal = m_pDoc->GetValue(1,9,0);
+        nVal = m_pDoc->GetValue(1, 9, 0);
         ASSERT_DOUBLES_EQUAL(nVal, 17.0);
-        nVal = m_pDoc->GetValue(1,10,0);
+        nVal = m_pDoc->GetValue(1, 10, 0);
         ASSERT_DOUBLES_EQUAL(nVal, 17.0);
 
         // Enter new value and check that it is broadcasted. Now overwriting data.
-        m_pDoc->SetString(0,5,0, "32");
-        nVal = m_pDoc->GetValue(0,7,0);
+        m_pDoc->SetString(0, 5, 0, "32");
+        nVal = m_pDoc->GetValue(0, 7, 0);
         ASSERT_DOUBLES_EQUAL(nVal, 32.0);
-        nVal = m_pDoc->GetValue(0,8,0);
+        nVal = m_pDoc->GetValue(0, 8, 0);
         ASSERT_DOUBLES_EQUAL(nVal, 32.0);
-        nVal = m_pDoc->GetValue(0,9,0);
+        nVal = m_pDoc->GetValue(0, 9, 0);
         ASSERT_DOUBLES_EQUAL(nVal, 34.0);
-        nVal = m_pDoc->GetValue(0,10,0);
+        nVal = m_pDoc->GetValue(0, 10, 0);
         ASSERT_DOUBLES_EQUAL(nVal, 34.0);
     }
 
@@ -1771,7 +1738,7 @@ void TestSort::testSortBroadcastBroadcaster()
             { "2", "=A2", "=B2" },
         };
 
-        ScAddress aPos(0,0,0);
+        ScAddress aPos(0, 0, 0);
         ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
         CPPUNIT_ASSERT_EQUAL(aPos, aDataRange.aStart);
 
@@ -1788,7 +1755,7 @@ void TestSort::testSortBroadcastBroadcaster()
 
         // Sort A1:A2.
         m_pDoc->SetAnonymousDBData(
-                0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 1)));
+            0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 1)));
 
         ScDBDocFunc aFunc(*m_xDocShell);
 
@@ -1813,15 +1780,16 @@ void TestSort::testSortBroadcastBroadcaster()
                 { "1", "1", "1" },
             };
 
-            bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
+            bool bSuccess
+                = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
             CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
         }
 
         // Make sure that the formulas in B1:C2 are not adjusted.
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,0,0), "A1", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1,1,0), "A2", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,0,0), "B1", "Wrong formula!");
-        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2,1,0), "B2", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1, 0, 0), "A1", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(1, 1, 0), "A2", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2, 0, 0), "B1", "Wrong formula!");
+        ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(2, 1, 0), "B2", "Wrong formula!");
     }
 
     m_pDoc->DeleteTab(0);
@@ -1833,26 +1801,21 @@ void TestSort::testSortOutOfPlaceResult()
     m_pDoc->InsertTab(1, "Result");
 
     const char* pData[] = {
-        "Header",
-        "1",
-        "23",
-        "2",
-        "9",
-        "-2",
+        "Header", "1", "23", "2", "9", "-2",
         nullptr // terminator
     };
 
     // source data in A1:A6.
     for (SCROW i = 0; pData[i]; ++i)
-        m_pDoc->SetString(ScAddress(0,i,0), OUString::createFromAscii(pData[i]));
+        m_pDoc->SetString(ScAddress(0, i, 0), OUString::createFromAscii(pData[i]));
 
     // Check the initial values.
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(0,2,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,3,0)));
-    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
-    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
 
     ScDBDocFunc aFunc(*m_xDocShell);
 
@@ -1877,20 +1840,20 @@ void TestSort::testSortOutOfPlaceResult()
     CPPUNIT_ASSERT(bSorted);
 
     // Source data still intact.
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(0,2,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,3,0)));
-    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
-    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
 
     // Sort result in C2:C7 on sheet "Result".
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(2,1,1)));
-    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(2,2,1)));
-    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(2,3,1)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(2,4,1)));
-    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(2,5,1)));
-    CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(2,6,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(2, 1, 1)));
+    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(2, 2, 1)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2, 3, 1)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(2, 5, 1)));
+    CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(2, 6, 1)));
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1907,13 +1870,8 @@ void TestSort::testSortPartialFormulaGroup()
 
     // Set up the sheet.
     const char* aData[][2] = {
-        { "F1", "F2" },
-        { "43", "=RC[-1]" },
-        { "50", "=RC[-1]" },
-        {  "8", "=RC[-1]" },
-        { "47", "=RC[-1]" },
-        { "28", "=RC[-1]" },
-        { nullptr, nullptr } // terminator
+        { "F1", "F2" },      { "43", "=RC[-1]" }, { "50", "=RC[-1]" }, { "8", "=RC[-1]" },
+        { "47", "=RC[-1]" }, { "28", "=RC[-1]" }, { nullptr, nullptr } // terminator
     };
 
     // A1:B6.
@@ -1926,18 +1884,21 @@ void TestSort::testSortPartialFormulaGroup()
     // Check the initial condition.
     for (SCROW i = 1; i <= 5; ++i)
         // A2:A6 should equal B2:B6.
-        CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(ScAddress(0,i,0)), m_pDoc->GetValue(ScAddress(1,i,0)));
+        CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(ScAddress(0, i, 0)),
+                             m_pDoc->GetValue(ScAddress(1, i, 0)));
 
-    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,1,0));
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, 0));
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_MESSAGE("This formula cell should be the first in a group.", pFC->IsSharedTop());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect formula group length.", static_cast<SCROW>(5), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect formula group length.", static_cast<SCROW>(5),
+                                 pFC->GetSharedLength());
 
     ScDBDocFunc aFunc(*m_xDocShell);
 
     // Sort only B2:B4.  This caused crash at one point (c.f. fdo#81617).
 
-    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 1, 1, 1, 3)));
+    m_pDoc->SetAnonymousDBData(
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 1, 1, 1, 3)));
 
     ScSortParam aSortData;
     aSortData.nCol1 = 1;
@@ -1957,18 +1918,18 @@ void TestSort::testSortPartialFormulaGroup()
     // Check the cell values after the partial sort.
 
     // Column A
-    CPPUNIT_ASSERT_EQUAL(43.0, m_pDoc->GetValue(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL(50.0, m_pDoc->GetValue(ScAddress(0,2,0)));
-    CPPUNIT_ASSERT_EQUAL( 8.0, m_pDoc->GetValue(ScAddress(0,3,0)));
-    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(0,4,0)));
-    CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(43.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(50.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
 
     // Column B
-    CPPUNIT_ASSERT_EQUAL( 8.0, m_pDoc->GetValue(ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_EQUAL(43.0, m_pDoc->GetValue(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL(50.0, m_pDoc->GetValue(ScAddress(1,3,0)));
-    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(1,4,0)));
-    CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(1,5,0)));
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(43.0, m_pDoc->GetValue(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(50.0, m_pDoc->GetValue(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(1, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(1, 5, 0)));
 
     m_pDoc->DeleteTab(0);
 }
@@ -1982,7 +1943,7 @@ void TestSort::testSortImages()
     ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
 
-    ScAddress aPos(0,0,0);
+    ScAddress aPos(0, 0, 0);
     {
         const std::vector<std::vector<const char*>> aData = {
             { "2" },
@@ -1991,7 +1952,8 @@ void TestSort::testSortImages()
 
         clearRange(m_pDoc, ScRange(0, 0, 0, 1, aData.size(), 0));
         ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos,
+                                     aDataRange.aStart);
     }
 
     // Insert graphic in cell B2.
@@ -2006,8 +1968,8 @@ void TestSort::testSortImages()
     ScAddress aCellPos(1, 1, 0);
     pDrawLayer->MoveObject(pObj, aCellPos);
 
-    std::map<SCROW, std::vector<SdrObject*>> pRowObjects
-        = pDrawLayer->GetObjectsAnchoredToRange(aCellPos.Tab(), aCellPos.Col(), aCellPos.Row(), aCellPos.Row());
+    std::map<SCROW, std::vector<SdrObject*>> pRowObjects = pDrawLayer->GetObjectsAnchoredToRange(
+        aCellPos.Tab(), aCellPos.Col(), aCellPos.Row(), aCellPos.Row());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pRowObjects[aCellPos.Row()].size());
 
     ScSortParam aSortData;
@@ -2021,13 +1983,13 @@ void TestSort::testSortImages()
 
     m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
-    double nVal = m_pDoc->GetValue(0,0,0);
+    double nVal = m_pDoc->GetValue(0, 0, 0);
     ASSERT_DOUBLES_EQUAL(nVal, 1.0);
 
     // check that note is also moved after sorting
     aCellPos = ScAddress(1, 0, 0);
-    pRowObjects
-        = pDrawLayer->GetObjectsAnchoredToRange(aCellPos.Tab(), aCellPos.Col(), aCellPos.Row(), aCellPos.Row());
+    pRowObjects = pDrawLayer->GetObjectsAnchoredToRange(aCellPos.Tab(), aCellPos.Col(),
+                                                        aCellPos.Row(), aCellPos.Row());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pRowObjects[aCellPos.Row()].size());
 
     m_pDoc->DeleteTab(0);
