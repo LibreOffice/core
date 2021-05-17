@@ -146,6 +146,7 @@ public:
     void testVersion15();
     void testDefaultVersion();
     void testMultiPagePDF();
+    void testPdfImageRotate180();
 
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -189,6 +190,7 @@ public:
     CPPUNIT_TEST(testVersion15);
     CPPUNIT_TEST(testDefaultVersion);
     CPPUNIT_TEST(testMultiPagePDF);
+    CPPUNIT_TEST(testPdfImageRotate180);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -2178,6 +2180,76 @@ void PdfExportTest::testMultiPagePDF()
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(193), rObjectStream.remainingSize());
     }
 #endif
+}
+
+void PdfExportTest::testPdfImageRotate180()
+{
+    // Create an empty document.
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<text::XTextDocument> xTextDocument(xComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+
+    // Insert the PDF image.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphicObject(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf-image-rotate-180.pdf";
+    xGraphicObject->setPropertyValue("GraphicURL", uno::makeAny(aURL));
+    uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
+    xShape->setSize(awt::Size(1000, 1000));
+    uno::Reference<text::XTextContent> xTextContent(xGraphicObject, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor->getStart(), xTextContent, /*bAbsorb=*/false);
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xComponent->dispose();
+
+    // Parse the export result.
+    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+
+    // Make sure that the page -> form -> form has a child image.
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_CountObjects(pPdfPage.get()));
+    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), 0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pPageObject));
+    // 2: white background and the actual object.
+    CPPUNIT_ASSERT_EQUAL(2, FPDFFormObj_CountObjects(pPageObject));
+    FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetObject(pPageObject, 1);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pFormObject));
+    CPPUNIT_ASSERT_EQUAL(1, FPDFFormObj_CountObjects(pFormObject));
+
+    // Check if the inner form object (original page object in the pdf image) has the correct
+    // rotation.
+    FPDF_PAGEOBJECT pInnerFormObject = FPDFFormObj_GetObject(pFormObject, 0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pInnerFormObject));
+    CPPUNIT_ASSERT_EQUAL(1, FPDFFormObj_CountObjects(pInnerFormObject));
+    FPDF_PAGEOBJECT pImage = FPDFFormObj_GetObject(pInnerFormObject, 0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, FPDFPageObj_GetType(pImage));
+    FS_MATRIX aMatrix;
+    FPDFFormObj_GetMatrix(pInnerFormObject, &aMatrix);
+    basegfx::B2DHomMatrix aMat{ aMatrix.a, aMatrix.c, aMatrix.e, aMatrix.b, aMatrix.d, aMatrix.f };
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate = 0;
+    double fShearX = 0;
+    aMat.decompose(aScale, aTranslate, fRotate, fShearX);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -1
+    // - Actual  : 1
+    // i.e. the 180 degrees rotation didn't happen (via a combination of horizontal + vertical
+    // flip).
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, aScale.getX(), 0.01);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
