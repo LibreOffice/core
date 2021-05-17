@@ -261,6 +261,8 @@ void SecurityEnvironment_NssImpl::updateSlots()
 
         }// end of if(pSlot != NULL)
     }// end of for
+
+    PK11_FreeSlotList(soltList);
 }
 
 Sequence< Reference < XCertificate > >
