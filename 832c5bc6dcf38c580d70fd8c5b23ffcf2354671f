@@ -16,6 +16,24 @@
       "revId": "832c5bc6dcf38c580d70fd8c5b23ffcf2354671f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61454f72_56d5af07",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-05-17T13:41:51Z",
+      "side": 1,
+      "message": "no, we\u0027re reading an external PDF file",
+      "parentUuid": "215489c6_1293221c",
+      "revId": "832c5bc6dcf38c580d70fd8c5b23ffcf2354671f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
