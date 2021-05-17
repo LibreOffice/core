@@ -9,9 +9,9 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include "txtparai.hxx"
+
+#include <string_view>
 
 #include "XMLFootnoteImportContext.hxx"
 #include "XMLTextFrameContext.hxx"
