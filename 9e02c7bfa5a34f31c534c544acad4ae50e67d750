@@ -70,6 +70,30 @@
       "revId": "9e02c7bfa5a34f31c534c544acad4ae50e67d750",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdb06371_b52a82ff",
+        "filename": "codemaker/source/codemaker/global.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-17T15:44:27Z",
+      "side": 1,
+      "message": "\"I\u0027ll do that simplification in a follow-up commit\": \u003chttps://gerrit.libreoffice.org/c/core/+/115713\u003e \"Use implicit conversion from OStringBuffer to std::string_view\"",
+      "parentUuid": "90cdba19_a4dafebc",
+      "range": {
+        "startLine": 122,
+        "startChar": 32,
+        "endLine": 122,
+        "endChar": 72
+      },
+      "revId": "9e02c7bfa5a34f31c534c544acad4ae50e67d750",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
