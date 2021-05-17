@@ -45,45 +45,36 @@ namespace {
 
 class SwASC_AttrIter
 {
-    SwASCWriter& rWrt;
-    const SwTextNode& rNd;
-    sal_Int32 nCurrentSwPos;
+    SwASCWriter& m_rWrt;
+    const SwTextNode& m_rNd;
+    sal_Int32 m_nCurrentSwPos;
 
     sal_Int32 SearchNext( sal_Int32 nStartPos );
 
 public:
     SwASC_AttrIter( SwASCWriter& rWrt, const SwTextNode& rNd, sal_Int32 nStt );
 
-    void NextPos()
-    {
-        nCurrentSwPos = SearchNext( nCurrentSwPos + 1 );
-    }
+    void NextPos() { m_nCurrentSwPos = SearchNext(m_nCurrentSwPos + 1); }
 
-    sal_Int32 WhereNext() const
-    {
-        return nCurrentSwPos;
-    }
+    sal_Int32 WhereNext() const { return m_nCurrentSwPos; }
 
     bool OutAttr( sal_Int32 nSwPos );
 };
 
 }
 
-SwASC_AttrIter::SwASC_AttrIter(
-    SwASCWriter& rWr,
-    const SwTextNode& rTextNd,
-    sal_Int32 nStt )
-    : rWrt( rWr )
-    , rNd( rTextNd )
-    , nCurrentSwPos( 0 )
+SwASC_AttrIter::SwASC_AttrIter(SwASCWriter& rWr, const SwTextNode& rTextNd, sal_Int32 nStt)
+    : m_rWrt(rWr)
+    , m_rNd(rTextNd)
+    , m_nCurrentSwPos(0)
 {
-    nCurrentSwPos = SearchNext( nStt + 1 );
+    m_nCurrentSwPos = SearchNext(nStt + 1);
 }
 
 sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
 {
     sal_Int32 nMinPos = SAL_MAX_INT32;
-    const SwpHints* pTextAttrs = rNd.GetpSwpHints();
+    const SwpHints* pTextAttrs = m_rNd.GetpSwpHints();
     if( pTextAttrs )
     {
         // TODO: This can be optimized, if we make use of the fact that the TextAttrs
@@ -123,7 +114,7 @@ sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
 bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
 {
     bool bRet = false;
-    const SwpHints* pTextAttrs = rNd.GetpSwpHints();
+    const SwpHints* pTextAttrs = m_rNd.GetpSwpHints();
     if( pTextAttrs )
     {
         for( size_t i = 0; i < pTextAttrs->Count(); ++i )
@@ -150,16 +141,16 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
                         if( !rFootnote.GetNumStr().isEmpty() )
                             sOut = rFootnote.GetNumStr();
                         else if( rFootnote.IsEndNote() )
-                            sOut = rWrt.m_pDoc->GetEndNoteInfo().m_aFormat.
-                            GetNumStr( rFootnote.GetNumber() );
+                            sOut = m_rWrt.m_pDoc->GetEndNoteInfo().m_aFormat.GetNumStr(
+                                rFootnote.GetNumber());
                         else
-                            sOut = rWrt.m_pDoc->GetFootnoteInfo().m_aFormat.
-                            GetNumStr( rFootnote.GetNumber() );
+                            sOut = m_rWrt.m_pDoc->GetFootnoteInfo().m_aFormat.GetNumStr(
+                                rFootnote.GetNumber());
                     }
                     break;
                 }
                 if( !sOut.isEmpty() )
-                    rWrt.Strm().WriteUnicodeOrByteText( sOut );
+                    m_rWrt.Strm().WriteUnicodeOrByteText(sOut);
             }
             else if( nSwPos < pHt->GetStart() )
                 break;

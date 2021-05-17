@@ -97,7 +97,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     std::unique_ptr<BitmapEx> m_xReplaceBmp; ///< replaced display of still loaded images
     std::unique_ptr<BitmapEx> m_xErrorBmp;   ///< error display of missed images
 
-    static bool mbLstAct;            // true if EndAction of last Shell
+    static bool sbLstAct;            // true if EndAction of last Shell
                                      // i.e. if the EndActions of the other
                                      // Shells on the document are through.
 
@@ -163,8 +163,8 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     SAL_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
 protected:
-    static ShellResource*      mpShellRes;      ///< Resources for the Shell.
-    static vcl::DeleteOnDeinit< std::shared_ptr<weld::Window> > mpCareDialog;    ///< Avoid this window.
+    static ShellResource*      spShellRes;      ///< Resources for the Shell.
+    static vcl::DeleteOnDeinit< std::shared_ptr<weld::Window> > spCareDialog;    ///< Avoid this window.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.
     tools::Rectangle        maLOKVisibleArea;///< The visible area in the LibreOfficeKit client.
@@ -339,7 +339,7 @@ public:
 
     void SetWin(vcl::Window* win) { mpWin = win; }
     void SetOut(vcl::RenderContext* pOut) { mpOut = pOut; }
-    static bool IsLstEndAction() { return SwViewShell::mbLstAct; }
+    static bool IsLstEndAction() { return SwViewShell::sbLstAct; }
 
     // Change of all page descriptors.
     void   ChgAllPageOrientation( Orientation eOri );
@@ -430,13 +430,13 @@ public:
 
     const SwAccessibilityOptions* GetAccessibilityOptions() const { return mpAccOptions.get();}
 
-    static void           SetShellRes( ShellResource* pRes ) { mpShellRes = pRes; }
+    static void           SetShellRes( ShellResource* pRes ) { spShellRes = pRes; }
     static ShellResource* GetShellRes();
 
     static weld::Window*   CareChildWin(SwViewShell const & rVSh);
     static void           SetCareDialog(const std::shared_ptr<weld::Window>& rNew);
     static weld::Window*  GetCareDialog(SwViewShell const & rVSh)
-                          { return (*mpCareDialog.get()) ? mpCareDialog.get()->get() : CareChildWin(rVSh); }
+                          { return (*spCareDialog.get()) ? spCareDialog.get()->get() : CareChildWin(rVSh); }
 
     SfxViewShell   *GetSfxViewShell() const { return mpSfxViewShell; }
     void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }

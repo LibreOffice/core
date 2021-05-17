@@ -1761,7 +1761,8 @@ namespace {
 
 class SwTableProperties_Impl
 {
-    SwUnoCursorHelper::SwAnyMapHelper aAnyMap;
+    SwUnoCursorHelper::SwAnyMapHelper m_aAnyMap;
+
 public:
     SwTableProperties_Impl();
 
@@ -1778,10 +1779,14 @@ SwTableProperties_Impl::SwTableProperties_Impl()
     { }
 
 void SwTableProperties_Impl::SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rVal)
-    { aAnyMap.SetValue( nWhichId, nMemberId, rVal ); }
+    {
+        m_aAnyMap.SetValue(nWhichId, nMemberId, rVal);
+    }
 
 bool SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny )
-    { return aAnyMap.FillValue( nWhichId, nMemberId, rpAny ); }
+    {
+        return m_aAnyMap.FillValue(nWhichId, nMemberId, rpAny);
+    }
 
 void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet,
         std::function<std::unique_ptr<SfxPoolItem>()> aItemFactory,
