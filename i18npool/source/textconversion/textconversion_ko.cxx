@@ -105,7 +105,6 @@ static sal_Int16 checkScriptType(sal_Unicode c)
 }
 
 #ifdef DISABLE_DYNLOADING
-
 extern "C" {
 
 const sal_Unicode* getHangul2HanjaData();
@@ -115,7 +114,6 @@ const sal_uInt16* getHanja2HangulIndex();
 const sal_Unicode* getHanja2HangulData();
 
 }
-
 #endif
 
 Sequence< OUString >
@@ -129,15 +127,12 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
     sal_Int16 (*getHangul2HanjaIndexCount)() = reinterpret_cast<sal_Int16 (*)()>(getFunctionBySymbol("getHangul2HanjaIndexCount"));
     const sal_uInt16* (*getHanja2HangulIndex)() = reinterpret_cast<const sal_uInt16* (*)()>(getFunctionBySymbol("getHanja2HangulIndex"));
     const sal_Unicode* (*getHanja2HangulData)() = reinterpret_cast<const sal_Unicode* (*)()>(getFunctionBySymbol("getHanja2HangulData"));
+
+    if (toHanja && getHangul2HanjaIndex && getHangul2HanjaIndexCount && getHangul2HanjaData)
 #else
-#pragma GCC diagnostic push
-#ifdef __clang__
-#pragma GCC diagnostic warning "-Wbool-conversions"
-#else
-#pragma GCC diagnostic warning "-Waddress"
+    if (toHanja)
 #endif
-#endif
-    if (toHanja && getHangul2HanjaIndex && getHangul2HanjaIndexCount && getHangul2HanjaData) {
+    {
         ch = aText[nStartPos];
         const Hangul_Index *Hangul_ko = getHangul2HanjaIndex();
         sal_Int16 top =  getHangul2HanjaIndexCount();
@@ -160,7 +155,12 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
                 break;
             }
         }
-    } else if (! toHanja && getHanja2HangulIndex && getHanja2HangulData)
+    }
+#ifndef DISABLE_DYNLOADING
+    else if (!toHanja && getHanja2HangulIndex && getHanja2HangulData)
+#else
+    else if (!toHanja)
+#endif
     {
         std::unique_ptr<sal_Unicode[]> newStr(new sal_Unicode[nLength+1]);
         sal_Int32 count = 0;
@@ -182,9 +182,6 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
             output[0] = OUString(newStr.get(), count);
         }
     }
-#if defined(DISABLE_DYNLOADING)
-#pragma GCC diagnostic pop
-#endif
     return output;
 }
 
