@@ -2485,6 +2485,73 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportPDF)
 
 #endif
 }
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageRotate180)
+{
+    // Create an empty document.
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+
+    // Insert the PDF image.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphicObject(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf-image-rotate-180.pdf";
+    xGraphicObject->setPropertyValue("GraphicURL", uno::makeAny(aURL));
+    uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
+    xShape->setSize(awt::Size(1000, 1000));
+    uno::Reference<text::XTextContent> xTextContent(xGraphicObject, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor->getStart(), xTextContent, /*bAbsorb=*/false);
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Make sure that the page -> form -> form has a child image.
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Form, pPageObject->getType());
+    // 2: white background and the actual object.
+    CPPUNIT_ASSERT_EQUAL(2, pPageObject->getFormObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pFormObject = pPageObject->getFormObject(1);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Form, pFormObject->getType());
+    CPPUNIT_ASSERT_EQUAL(1, pFormObject->getFormObjectCount());
+
+    // Check if the inner form object (original page object in the pdf image) has the correct
+    // rotation.
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pInnerFormObject = pFormObject->getFormObject(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Form, pInnerFormObject->getType());
+    CPPUNIT_ASSERT_EQUAL(1, pInnerFormObject->getFormObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pImage = pInnerFormObject->getFormObject(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Image, pImage->getType());
+    basegfx::B2DHomMatrix aMat = pInnerFormObject->getMatrix();
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate = 0;
+    double fShearX = 0;
+    aMat.decompose(aScale, aTranslate, fRotate, fShearX);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -1
+    // - Actual  : 1
+    // i.e. the 180 degrees rotation didn't happen (via a combination of horizontal + vertical
+    // flip).
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, aScale.getX(), 0.01);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
