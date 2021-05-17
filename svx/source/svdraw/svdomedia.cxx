@@ -44,10 +44,12 @@ using namespace ::com::sun::star;
 struct SdrMediaObj::Impl
 {
     ::avmedia::MediaItem                  m_MediaProperties;
+#if HAVE_FEATURE_AVMEDIA
     // Note: the temp file is read only, until it is deleted!
     // It may be shared between multiple documents in case of copy/paste,
     // hence the shared_ptr.
     std::shared_ptr< ::avmedia::MediaTempFile >  m_pTempFile;
+#endif
     uno::Reference< graphic::XGraphic >   m_xCachedSnapshot;
     OUString m_LastFailedPkgURL;
 };
@@ -62,7 +64,9 @@ SdrMediaObj::SdrMediaObj(SdrModel& rSdrModel, SdrMediaObj const & rSource)
 :   SdrRectObj(rSdrModel, rSource)
     ,m_xImpl( new Impl )
 {
+#if HAVE_FEATURE_AVMEDIA
     m_xImpl->m_pTempFile = rSource.m_xImpl->m_pTempFile; // before props
+#endif
     setMediaProperties( rSource.getMediaProperties() );
     m_xImpl->m_xCachedSnapshot = rSource.m_xImpl->m_xCachedSnapshot;
 }
@@ -218,7 +222,7 @@ const OUString& SdrMediaObj::getURL() const
 #if HAVE_FEATURE_AVMEDIA
     return m_xImpl->m_MediaProperties.getURL();
 #else
-static OUString ret;
+    static OUString ret;
     return ret;
 #endif
 }
@@ -236,6 +240,7 @@ const ::avmedia::MediaItem& SdrMediaObj::getMediaProperties() const
 
 uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream() const
 {
+#if HAVE_FEATURE_AVMEDIA
     if (!m_xImpl->m_pTempFile)
     {
         SAL_WARN("svx", "this is only intended for embedded media");
@@ -245,10 +250,16 @@ uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream() const
                 uno::Reference<ucb::XCommandEnvironment>(),
                 comphelper::getProcessComponentContext());
     return tempFile.openStream();
+#else
+    return nullptr;
+#endif
 }
 
 void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream)
 {
+#if !HAVE_FEATURE_AVMEDIA
+    (void) xStream;
+#else
     if (m_xImpl->m_pTempFile || m_xImpl->m_LastFailedPkgURL.isEmpty())
     {
         SAL_WARN("svx", "this is only intended for embedded media");
@@ -265,12 +276,11 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
     if (bSuccess)
     {
         m_xImpl->m_pTempFile = std::make_shared<::avmedia::MediaTempFile>(tempFileURL);
-#if HAVE_FEATURE_AVMEDIA
         m_xImpl->m_MediaProperties.setURL(
             m_xImpl->m_LastFailedPkgURL, tempFileURL, "");
-#endif
     }
     m_xImpl->m_LastFailedPkgURL.clear(); // once only
+#endif
 }
 
 /// copy a stream from XStorage to temp file
