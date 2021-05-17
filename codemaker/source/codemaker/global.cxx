@@ -119,7 +119,7 @@ OString createFileNameFromType( const OString& destination,
         if( nIndex == -1 )
             break;
 
-        if (buffer.isEmpty() || std::string_view(".") == buffer.getStr())
+        if (buffer.isEmpty() || std::string_view(".") == buffer)
         {
             buffer.append(token);
             continue;
