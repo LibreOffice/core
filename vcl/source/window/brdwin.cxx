@@ -80,7 +80,7 @@ static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,
     nState &= ~DrawButtonFlags::Highlight;
 
     tools::Rectangle aTempRect;
-    vcl::Window *pWin = dynamic_cast< vcl::Window* >(pDev);
+    vcl::Window *pWin = pDev->GetOwnerWindow();
     if( pWin )
     {
         if( bMouseOver )
