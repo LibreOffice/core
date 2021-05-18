@@ -392,7 +392,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
 
     Size rDestSize( pOut->LogicToPixel( rLogicDestSize ) );
 
-    const vcl::Window* win = pOut ? pOut->GetOwnerWindow() : nullptr;
+    const vcl::Window* win = pOut->GetOwnerWindow();
 
     if (!win)
         win = Application::GetActiveTopWindow();
