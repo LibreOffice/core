@@ -2128,12 +2128,22 @@ protected:
     bool IsFirstFreeze() const { return m_nFreezeCount == 0; }
     bool IsLastThaw() const { return m_nFreezeCount == 1; }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalFocusIn(GtkEventControllerFocus*, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_focus_in();
+    }
+#else
     static gboolean signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_focus_in();
         return false;
     }
+#endif
 
     void signal_focus_in()
     {
@@ -2157,6 +2167,14 @@ protected:
         return m_aMnemonicActivateHdl.Call(*this);
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalFocusOut(GtkEventControllerFocus*, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_focus_in();
+    }
+#else
     static gboolean signalFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
@@ -2164,6 +2182,7 @@ protected:
         pThis->signal_focus_out();
         return false;
     }
+#endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     void launch_drag_cancel(GdkDragContext* context)
@@ -2304,6 +2323,10 @@ private:
     gulong m_nDragFailedSignalId;
     gulong m_nDragDataDeleteignalId;
     gulong m_nDragGetSignalId;
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GtkEventController* m_pFocusController;
+#endif
 
     rtl::Reference<GtkInstDropTarget> m_xDropTarget;
     rtl::Reference<GtkInstDragSource> m_xDragSource;
@@ -2709,6 +2732,9 @@ public:
         , m_nDragFailedSignalId(0)
         , m_nDragDataDeleteignalId(0)
         , m_nDragGetSignalId(0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        , m_pFocusController(nullptr)
+#endif
     {
         if (!bTakeOwnership)
             g_object_ref(m_pWidget);
@@ -3209,10 +3235,30 @@ public:
         return GTK_WINDOW(widget_get_root(m_pWidget));
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GtkEventController* get_focus_controller()
+    {
+        if (!m_pFocusController)
+        {
+            gtk_widget_set_focusable(m_pWidget, true);
+            m_pFocusController = gtk_event_controller_focus_new();
+            gtk_widget_add_controller(m_pWidget, m_pFocusController);
+        }
+        return m_pFocusController;
+    }
+#endif
+
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
     {
         if (!m_nFocusInSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            m_nFocusInSignalId = g_signal_connect(get_focus_controller(), "enter", G_CALLBACK(signalFocusIn), this);
+#else
             m_nFocusInSignalId = g_signal_connect(m_pWidget, "focus-in-event", G_CALLBACK(signalFocusIn), this);
+#endif
+        }
+
         weld::Widget::connect_focus_in(rLink);
     }
 
@@ -3226,7 +3272,13 @@ public:
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
     {
         if (!m_nFocusOutSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            m_nFocusOutSignalId = g_signal_connect(get_focus_controller(), "leave", G_CALLBACK(signalFocusOut), this);
+#else
             m_nFocusOutSignalId = g_signal_connect(m_pWidget, "focus-out-event", G_CALLBACK(signalFocusOut), this);
+#endif
+        }
         weld::Widget::connect_focus_out(rLink);
     }
 
@@ -3425,12 +3477,25 @@ public:
             g_signal_handler_disconnect(m_pMouseEventBox, m_nEnterSignalId);
         if (m_nButtonReleaseSignalId)
             g_signal_handler_disconnect(m_pMouseEventBox, m_nButtonReleaseSignalId);
+
         if (m_nFocusInSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_focus_controller(), m_nFocusInSignalId);
+#else
             g_signal_handler_disconnect(m_pWidget, m_nFocusInSignalId);
+#endif
+        }
         if (m_nMnemonicActivateSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nMnemonicActivateSignalId);
         if (m_nFocusOutSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_focus_controller(), m_nFocusOutSignalId);
+#else
             g_signal_handler_disconnect(m_pWidget, m_nFocusOutSignalId);
+#endif
+        }
         if (m_nSizeAllocateSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nSizeAllocateSignalId);
 
@@ -3468,11 +3533,23 @@ public:
     virtual void disable_notify_events()
     {
         if (m_nFocusInSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_block(get_focus_controller(), m_nFocusInSignalId);
+#else
             g_signal_handler_block(m_pWidget, m_nFocusInSignalId);
+#endif
+        }
         if (m_nMnemonicActivateSignalId)
             g_signal_handler_block(m_pWidget, m_nMnemonicActivateSignalId);
         if (m_nFocusOutSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_block(get_focus_controller(), m_nFocusOutSignalId);
+#else
             g_signal_handler_block(m_pWidget, m_nFocusOutSignalId);
+#endif
+        }
         if (m_nSizeAllocateSignalId)
             g_signal_handler_block(m_pWidget, m_nSizeAllocateSignalId);
     }
@@ -3482,11 +3559,24 @@ public:
         if (m_nSizeAllocateSignalId)
             g_signal_handler_unblock(m_pWidget, m_nSizeAllocateSignalId);
         if (m_nFocusOutSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_unblock(get_focus_controller(), m_nFocusOutSignalId);
+#else
             g_signal_handler_unblock(m_pWidget, m_nFocusOutSignalId);
+#endif
+        }
         if (m_nMnemonicActivateSignalId)
             g_signal_handler_unblock(m_pWidget, m_nMnemonicActivateSignalId);
+
         if (m_nFocusInSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_unblock(get_focus_controller(), m_nFocusInSignalId);
+#else
             g_signal_handler_unblock(m_pWidget, m_nFocusInSignalId);
+#endif
+        }
     }
 
     virtual void help_hierarchy_foreach(const std::function<bool(const OString&)>& func) override;
