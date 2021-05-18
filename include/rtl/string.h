@@ -1309,45 +1309,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newTrim(
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getToken(
         rtl_String ** newStr , rtl_String * str, sal_Int32 token, char cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
 
-/** @cond INTERNAL */
-/** Create a new string by extracting a single token from another string.
-
-    Starting at index, the next token is searched for.  If there is no
-    such token, the result is an empty string.  Otherwise, all characters from
-    the start of that token and up to, but not including the next occurrence
-    of cTok make up the resulting token.  The return value is the position of
-    the next token, or -1 if no more tokens follow.
-
-    This function does not handle out-of-memory conditions.
-
-    @param ppViewStr
-    pointer to the start of the token.
-
-    @param pViewLength
-    length of the token.
-
-    @param str
-    a valid string.
-
-    @param token
-    the number of the token to return, starting at index.
-
-    @param cTok
-    the character that separates the tokens.
-
-    @param idx
-    the position at which searching for the token starts.  Must not be greater
-    than the length of str.
-
-    @return
-    the index of the next token, or -1 if no more tokens follow.
-
-    @since LibreOffice 7.2
- */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getTokenView(
-    const char ** ppViewStr , sal_Int32* pViewLength, rtl_String * str, sal_Int32 token, char cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
-/** @endcond */
-
 /* ======================================================================= */
 
 /** Supply an ASCII string literal together with its length.

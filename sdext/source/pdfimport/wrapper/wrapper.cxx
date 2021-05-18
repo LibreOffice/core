@@ -24,6 +24,7 @@
 #include <pdfihelper.hxx>
 #include <wrapper.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -58,6 +59,7 @@
 #include <vcl/font.hxx>
 #include <vcl/virdev.hxx>
 
+#include <cstddef>
 #include <memory>
 #include <string_view>
 #include <unordered_map>
@@ -181,7 +183,7 @@ class LineParser {
     uno::Sequence<beans::PropertyValue> readImageImpl();
 
 public:
-    sal_Int32                                    m_nCharIndex = 0;
+    std::size_t m_nCharIndex = 0;
 
     LineParser(Parser & parser, OString const & line): m_parser(parser), m_aLine(line) {}
 
@@ -254,8 +256,8 @@ OString lcl_unescapeLineFeeds(std::string_view i_rStr)
 
 std::string_view LineParser::readNextToken()
 {
-    OSL_PRECOND(m_nCharIndex!=-1,"insufficient input");
-    return m_aLine.getTokenView(0,' ',m_nCharIndex);
+    OSL_PRECOND(m_nCharIndex!=std::string_view::npos,"insufficient input");
+    return o3tl::getToken(m_aLine,' ',m_nCharIndex);
 }
 
 void LineParser::readInt32( sal_Int32& o_Value )
@@ -322,7 +324,7 @@ uno::Reference<rendering::XPolyPolygon2D> LineParser::readPath()
         OSL_PRECOND(false, "broken path");
 
     basegfx::B2DPolyPolygon aResult;
-    while( m_nCharIndex != -1 )
+    while( m_nCharIndex != std::string_view::npos )
     {
         basegfx::B2DPolygon aSubPath;
 
@@ -331,11 +333,14 @@ uno::Reference<rendering::XPolyPolygon2D> LineParser::readPath()
         aSubPath.setClosed( nClosedFlag != 0 );
 
         sal_Int32 nContiguousControlPoints(0);
-        sal_Int32 nDummy=m_nCharIndex;
-        std::string_view aCurrToken( m_aLine.getTokenView(0,' ',nDummy) );
 
-        while( m_nCharIndex != -1 && aCurrToken != aSubPathMarker )
+        while( m_nCharIndex != std::string_view::npos )
         {
+            std::size_t nDummy=m_nCharIndex;
+            if (o3tl::getToken(m_aLine,' ',nDummy) == aSubPathMarker) {
+                break;
+            }
+
             sal_Int32 nCurveFlag;
             double    nX, nY;
             readDouble( nX );
@@ -363,14 +368,10 @@ uno::Reference<rendering::XPolyPolygon2D> LineParser::readPath()
 
                 nContiguousControlPoints=0;
             }
-
-            // one token look-ahead (new subpath or more points?
-            nDummy=m_nCharIndex;
-            aCurrToken = m_aLine.getTokenView(0,' ',nDummy);
         }
 
         aResult.append( aSubPath );
-        if( m_nCharIndex != -1 )
+        if( m_nCharIndex != std::string_view::npos )
             readNextToken();
     }
 
@@ -396,11 +397,11 @@ void LineParser::readChar()
 
     OString aChars;
 
-    if (m_nCharIndex != -1)
+    if (m_nCharIndex != std::string_view::npos)
         aChars = lcl_unescapeLineFeeds( m_aLine.subView( m_nCharIndex ) );
 
     // chars gobble up rest of line
-    m_nCharIndex = -1;
+    m_nCharIndex = std::string_view::npos;
 
     m_parser.m_pSink->drawGlyphs(OStringToOUString(aChars, RTL_TEXTENCODING_UTF8),
         aRect, aUnoMatrix, fontSize);
@@ -421,7 +422,7 @@ void LineParser::readLineCap()
 
 void LineParser::readLineDash()
 {
-    if( m_nCharIndex == -1 )
+    if( m_nCharIndex == std::string_view::npos )
     {
         m_parser.m_pSink->setLineDash( uno::Sequence<double>(), 0.0 );
         return;
@@ -613,7 +614,7 @@ void LineParser::readFont()
     aFontName = lcl_unescapeLineFeeds( m_aLine.subView( m_nCharIndex ) );
 
     // name gobbles up rest of line
-    m_nCharIndex = -1;
+    m_nCharIndex = std::string_view::npos;
 
     Parser::FontMapType::const_iterator pFont( m_parser.m_aFontMap.find(nFontID) );
     if( pFont != m_parser.m_aFontMap.end() )
@@ -793,7 +794,7 @@ void LineParser::readLink()
                                 m_aLine.subView(m_nCharIndex) ),
                                 RTL_TEXTENCODING_UTF8 ) );
     // name gobbles up rest of line
-    m_nCharIndex = -1;
+    m_nCharIndex = std::string_view::npos;
 }
 
 void LineParser::readMaskedImage()
@@ -907,7 +908,8 @@ void Parser::parseLine( const OString& rLine )
     }
 
     // all consumed?
-    SAL_WARN_IF(lp.m_nCharIndex!=-1, "sdext.pdfimport", "leftover scanner input");
+    SAL_WARN_IF(
+        lp.m_nCharIndex!=std::string_view::npos, "sdext.pdfimport", "leftover scanner input");
 }
 
 } // namespace
