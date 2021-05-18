@@ -88,6 +88,24 @@
       "revId": "832c5bc6dcf38c580d70fd8c5b23ffcf2354671f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "950aeb42_7134e830",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-18T06:39:53Z",
+      "side": 1,
+      "message": "\u003e Ah, sorry, I had naively assumed that it would do some kind of error return, but without actually looking at the code.\n\nBut wait, when I do look at the implementation (toInt_WithLength in sal/rtl/strtmpl.hxx:892--893), the documentation of e.g. OString::toInt32 in include/rtl/string.hxx (\"0 if this string represents no number or one of too large magnitude\"), and e.g. testToInt32Overflow in sal/qa/rtl/strings/test_strings_toint.cxx, it /does/ return 0 for values out of range.",
+      "parentUuid": "d72ab2d5_d19a61b4",
+      "revId": "832c5bc6dcf38c580d70fd8c5b23ffcf2354671f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
