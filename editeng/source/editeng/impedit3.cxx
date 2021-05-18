@@ -691,7 +691,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     // Saving both layout mode and language (since I'm potentially changing both)
     GetRefDevice()->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
 
-    ImplInitLayoutMode( GetRefDevice(), nPara, -1 );
+    ImplInitLayoutMode(*GetRefDevice(), nPara, -1);
 
     sal_Int32 nRealInvalidStart = nInvalidStart;
 
@@ -755,7 +755,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     EditLine aSaveLine( *pLine );
     SvxFont aTmpFont( pNode->GetCharAttribs().GetDefFont() );
 
-    ImplInitLayoutMode( GetRefDevice(), nPara, nIndex );
+    ImplInitLayoutMode(*GetRefDevice(), nPara, nIndex);
 
     std::unique_ptr<tools::Long[]> pBuf(new tools::Long[ pNode->Len() ]);
 
@@ -3194,7 +3194,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                 // #114278# Saving both layout mode and language (since I'm
                                 // potentially changing both)
                                 rOutDev.Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
-                                ImplInitLayoutMode( &rOutDev, n, nIndex );
+                                ImplInitLayoutMode(rOutDev, n, nIndex);
                                 ImplInitDigitMode(&rOutDev, aTmpFont.GetLanguage());
 
                                 OUString aText;
@@ -4280,7 +4280,7 @@ void ImpEditEngine::ImplInitDigitMode(OutputDevice* pOutDev, LanguageType eCurLa
         pOutDev->SetDigitLanguage(ImplCalcDigitLang(eCurLang));
 }
 
-void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, sal_Int32 nIndex )
+void ImpEditEngine::ImplInitLayoutMode(OutputDevice& rOutDev, sal_Int32 nPara, sal_Int32 nIndex)
 {
     bool bCTL = false;
     bool bR2L = false;
@@ -4299,7 +4299,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
         // it also works for issue 55927
     }
 
-    ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
+    ComplexTextLayoutFlags nLayoutMode = rOutDev.GetLayoutMode();
 
     // We always use the left position for DrawText()
     nLayoutMode &= ~ComplexTextLayoutFlags::BiDiRtl;
@@ -4319,12 +4319,12 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
             nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::TextOriginLeft;
     }
 
-    pOutDev->SetLayoutMode( nLayoutMode );
+    rOutDev.SetLayoutMode( nLayoutMode );
 
     // #114278# Also setting up digit language from Svt options
     // (cannot reliably inherit the outdev's setting)
     LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
-    ImplInitDigitMode( pOutDev, eLang );
+    ImplInitDigitMode(&rOutDev, eLang);
 }
 
 Reference < i18n::XBreakIterator > const & ImpEditEngine::ImplGetBreakIterator() const

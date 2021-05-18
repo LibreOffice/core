@@ -3157,7 +3157,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
     // potentially changing both)
     GetRefDevice()->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
 
-    ImplInitLayoutMode( GetRefDevice(), nPara, -1 );
+    ImplInitLayoutMode(*GetRefDevice(), nPara, -1);
 
     SvxAdjust eJustification = GetJustification( nPara );
 
