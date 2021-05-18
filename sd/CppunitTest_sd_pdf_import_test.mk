@@ -15,7 +15,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_pdf_import_test, \
 
 $(eval $(call gb_CppunitTest_use_externals,sd_pdf_import_test, \
     boost_headers \
-    $(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sd_pdf_import_test,\
