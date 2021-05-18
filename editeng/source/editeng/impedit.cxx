@@ -701,7 +701,7 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDo
     }
     else
     {
-        vcl::Window* pWindow = dynamic_cast<vcl::Window*>(&rTarget);
+        vcl::Window* pWindow = rTarget.GetOwnerWindow();
 
         if (pWindow)
         {
