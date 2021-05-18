@@ -684,7 +684,14 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         const double aDoubleVal = rEntry.GetValue();
         bool bSelected = true;
         if (!aSelectedValue.empty() || !aSelectedString.empty())
-            bSelected = aSelectedValue.count(aDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
+        {
+            if (aStringVal.isEmpty())
+                bSelected = aSelectedString.count(aStringVal) > 0;
+            else
+                bSelected
+                    = aSelectedValue.count(aDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
+        }
+
         if ( rEntry.IsDate() )
             rControl.addDateMember( aStringVal, rEntry.GetValue(), bSelected );
         else
