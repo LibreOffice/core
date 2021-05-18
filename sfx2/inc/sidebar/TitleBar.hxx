@@ -56,7 +56,6 @@ protected:
     std::unique_ptr<weld::Container> mxTitlebar;
     std::unique_ptr<weld::Image> mxAddonImage;
     std::unique_ptr<weld::Toolbar> mxToolBox;
-    std::unique_ptr<ToolbarUnoDispatcher> mxToolBoxController;
     Theme::ThemeItem meThemeItem;
 
     virtual void HandleToolBoxItemClick() = 0;

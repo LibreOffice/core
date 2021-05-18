@@ -41,7 +41,6 @@ using namespace ::com::sun::star;
 /// Sample tests for import
 class XmlScriptTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
-    uno::Reference<lang::XComponent> mxComponent;
     OUString maDataPath;
 
     void testBasicElements();
@@ -76,13 +75,7 @@ void XmlScriptTest::setUp()
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 }
 
-void XmlScriptTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
+void XmlScriptTest::tearDown() { test::BootstrapFixture::tearDown(); }
 
 Reference<container::XNameContainer> XmlScriptTest::importFile(std::u16string_view sFileName)
 {
