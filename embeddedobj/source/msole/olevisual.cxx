@@ -225,9 +225,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                     aSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
                     bSuccess = true;
                 }
-                catch( const uno::Exception& rException )
+                catch( const uno::Exception& )
                 {
-                    SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetExtent() failed: " << rException);
+                    TOOLS_WARN_EXCEPTION("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetExtent() failed:");
                 }
 
                 if (bBackToLoaded)
@@ -250,9 +250,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                         aSize = m_pOleComponent->GetCachedExtent( nAspect ); // will throw an exception in case of failure
                         bSuccess = true;
                     }
-                    catch( const uno::Exception& rException )
+                    catch( const uno::Exception& )
                     {
-                        SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetCachedExtent() failed: " << rException);
+                        TOOLS_WARN_EXCEPTION("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetCachedExtent() failed:");
                     }
                 }
 
@@ -264,9 +264,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                         aSize = m_pOleComponent->GetRecommendedExtent( nAspect ); // will throw an exception in case of failure
                         bSuccess = true;
                     }
-                    catch( const uno::Exception& rException )
+                    catch( const uno::Exception& )
                     {
-                        SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetRecommendedExtent() failed: " << rException);
+                        TOOLS_WARN_EXCEPTION("embeddedobj.ole", "OleEmbeddedObject::getVisualAreaSize: GetRecommendedExtent() failed:");
                     }
                 }
 
