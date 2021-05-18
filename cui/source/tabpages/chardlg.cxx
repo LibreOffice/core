@@ -2707,7 +2707,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
                 m_xHighPosBtn->set_active(true);
                 if ( nEsc == DFLT_ESC_AUTO_SUPER )
                 {
-                    nEsc = DFLT_ESC_SUPER;
+                    nEsc = .8 * (100 - nEscProp);  //approximation of actual percentage used
                     bAutomatic = true;
                 }
             }
@@ -2717,7 +2717,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
                 m_xLowPosBtn->set_active(true);
                 if ( nEsc == DFLT_ESC_AUTO_SUB )
                 {
-                    nEsc = DFLT_ESC_SUB;
+                    nEsc = .2 * -(100 - nEscProp);  //approximation of actual percentage used
                     bAutomatic = true;
                 }
             }
