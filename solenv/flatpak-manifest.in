@@ -393,12 +393,6 @@
                     "dest-filename": "external/tarballs/postgresql-13.1.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/QR-Code-generator-1.4.0.tar.gz",
-                    "sha256": "fcdf9fd69fde07ae4dca2351d84271a9de8093002f733b77c70f52f1630f6e4a",
-                    "type": "file",
-                    "dest-filename": "external/tarballs/QR-Code-generator-1.4.0.tar.gz"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/a39f6c07ddb20d7dd2ff1f95fa21e2cd-raptor2-2.0.15.tar.gz",
                     "sha256": "ada7f0ba54787b33485d090d3d2680533520cd4426d2f7fb4782dd4a6a1480ed",
                     "type": "file",
@@ -589,6 +583,12 @@
                     "sha256": "58ffc8475a8650aadc351345aef696937747b40501ab78d72c197c5ff5b3035c",
                     "type": "file",
                     "dest-filename": "external/tarballs/box2d-2.3.1.tar.gz"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/zxing-cpp-1.1.1.tar.gz",
+                    "sha256": "e595b3fa2ec320beb0b28f6af56b1141853257c2611686685639cebb3b248c86",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/zxing-cpp-1.1.1.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/extern/f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf",
