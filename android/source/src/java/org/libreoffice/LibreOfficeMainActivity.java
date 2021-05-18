@@ -100,6 +100,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private LOKitTileProvider mTileProvider;
     private String mPassword;
     private boolean mPasswordProtected;
+    private boolean mbSkipNextRefresh;
     public boolean pendingInsertGraphic; // boolean indicating a pending insert graphic action, used in LOKitTileProvider.postLoad()
 
     public GeckoLayerClient getLayerClient() {
@@ -213,6 +214,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             Log.e(LOGTAG, "No document specified. This should never happen.");
             return;
         }
+        // the loadDocument/loadNewDocument event already triggers a refresh as well,
+        // so there's no need to do another refresh in 'onStart'
+        mbSkipNextRefresh = true;
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
@@ -466,7 +470,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     protected void onStart() {
         Log.i(LOGTAG, "onStart..");
         super.onStart();
-        LOKitShell.sendEvent(new LOEvent(LOEvent.REFRESH));
+        if (!mbSkipNextRefresh) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.REFRESH));
+        }
+        mbSkipNextRefresh = false;
     }
 
     @Override
