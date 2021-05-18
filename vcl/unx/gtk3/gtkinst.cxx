@@ -8115,11 +8115,7 @@ public:
 
     virtual bool get_inconsistent() const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         return gtk_toggle_button_get_inconsistent(m_pToggleButton);
-#else
-        return false;
-#endif
     }
 
     virtual void disable_notify_events() override
@@ -9822,20 +9818,78 @@ public:
     }
 };
 
-class GtkInstanceRadioButton : public GtkInstanceToggleButton, public virtual weld::RadioButton
+class GtkInstanceCheckButton : public GtkInstanceButton, public virtual weld::CheckButton
 {
-public:
-    GtkInstanceRadioButton(GtkRadioButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceToggleButton(GTK_TOGGLE_BUTTON(pButton), pBuilder, bTakeOwnership)
+private:
+    GtkCheckButton* m_pCheckButton;
+    gulong m_nSignalId;
+
+    static void signalToggled(void*, gpointer widget)
     {
+        GtkInstanceCheckButton* pThis = static_cast<GtkInstanceCheckButton*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_toggled();
+    }
+
+public:
+    GtkInstanceCheckButton(GtkCheckButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceButton(GTK_BUTTON(pButton), pBuilder, bTakeOwnership)
+        , m_pCheckButton(pButton)
+        , m_nSignalId(g_signal_connect(m_pCheckButton, "toggled", G_CALLBACK(signalToggled), this))
+    {
+    }
+
+    virtual void set_active(bool active) override
+    {
+        disable_notify_events();
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_check_button_set_inconsistent(m_pCheckButton, false);
+        gtk_check_button_set_active(m_pCheckButton, active);
+#else
+        gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(m_pCheckButton), false);
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pCheckButton), active);
+#endif
+        enable_notify_events();
+    }
+
+    virtual bool get_active() const override
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        return gtk_check_button_get_active(m_pCheckButton);
+#else
+        return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pCheckButton));
+#endif
+    }
+
+    virtual void set_inconsistent(bool inconsistent) override
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_check_button_set_inconsistent(m_pCheckButton, inconsistent);
+#else
+        gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(m_pCheckButton), inconsistent);
+#endif
+    }
+
+    virtual bool get_inconsistent() const override
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        return gtk_check_button_get_inconsistent(m_pCheckButton);
+#else
+        return gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(m_pCheckButton));
+#endif
+    }
+
+    virtual ~GtkInstanceCheckButton() override
+    {
+        g_signal_handler_disconnect(m_pCheckButton, m_nSignalId);
     }
 };
 
-class GtkInstanceCheckButton : public GtkInstanceToggleButton, public virtual weld::CheckButton
+class GtkInstanceRadioButton : public GtkInstanceCheckButton, public virtual weld::RadioButton
 {
 public:
-    GtkInstanceCheckButton(GtkCheckButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceToggleButton(GTK_TOGGLE_BUTTON(pButton), pBuilder, bTakeOwnership)
+    GtkInstanceRadioButton(GtkRadioButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceCheckButton(GTK_CHECK_BUTTON(pButton), pBuilder, bTakeOwnership)
     {
     }
 };
