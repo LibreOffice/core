@@ -17945,12 +17945,22 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                         xName->setNodeValue("column");
                         bGridPacking = true;
                     }
-                    if (sName == "top-attach")
+                    else if (sName == "top-attach")
                     {
                         xName->setNodeValue("row");
                         bGridPacking = true;
                     }
-                    if (sName == "secondary")
+                    else if (sName == "width")
+                    {
+                        xName->setNodeValue("column-span");
+                        bGridPacking = true;
+                    }
+                    else if (sName == "height")
+                    {
+                        xName->setNodeValue("row-span");
+                        bGridPacking = true;
+                    }
+                    else if (sName == "secondary")
                     {
                         // turn parent tag of <child> into <child type="start">
                         auto xParent = xChild->getParentNode();
