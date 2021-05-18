@@ -35,7 +35,6 @@ public:
     explicit OutDevHolder(OutputDevice& rOutDev)
         : mrOutDev(rOutDev)
     {
-        assert(&rOutDev);
     }
 
 private:
