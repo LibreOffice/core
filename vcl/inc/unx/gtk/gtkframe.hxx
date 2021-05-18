@@ -416,9 +416,6 @@ public:
     static GdkDisplay*     getGdkDisplay();
     GtkWidget*  getWindow() const { return m_pWindow; }
     GtkFixed*   getFixedContainer() const { return GTK_FIXED(m_pFixedContainer); }
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    GtkEventBox* getEventBox() const { return m_pEventBox; }
-#endif
     GtkWidget*  getMouseEventWidget() const;
     GtkGrid*    getTopLevelGridWidget() const { return m_pTopLevelGrid; }
     const SalX11Screen& getXScreenNumber() const { return m_nXScreen; }

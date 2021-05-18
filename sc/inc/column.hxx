@@ -586,9 +586,6 @@ public:
     void SetScriptType( SCROW nRow, SvtScriptType nType );
     void UpdateScriptTypes( SCROW nRow1, SCROW nRow2 );
 
-    size_t GetFormulaHash( SCROW nRow ) const;
-
-    ScFormulaVectorState GetFormulaVectorState( SCROW nRow ) const;
     formula::FormulaTokenRef ResolveStaticReference( SCROW nRow );
     bool ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow1, SCROW nRow2 );
     void FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2, svl::SharedStringPool* pPool ) const;

@@ -39,7 +39,6 @@
 #include "prlayout.hxx"
 
 class ModifyListenerForwarder;
-struct SfxItemPropertySimpleEntry;
 struct SfxItemPropertyMapEntry;
 
 typedef cppu::ImplInheritanceHelper< SfxUnoStyleSheet,

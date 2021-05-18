@@ -1018,16 +1018,6 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
         pFormat->GetDoc()->SetFlyFrameAttr(*pFormat, aTextBoxSet);
 }
 
-SwFrameFormat* SwTextBoxHelper::getShapeFormat(uno::Reference<drawing::XShape> xShape)
-{
-    if (xShape)
-        if (auto pShape = dynamic_cast<SwXShape*>(xShape.get()))
-            if (SwFrameFormat* pFormat = pShape->GetFrameFormat())
-                return pFormat;
-    SAL_WARN("sw.core", "SwTextBoxHelper::getShapeFormat: No Shape Format!");
-    return nullptr;
-}
-
 void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
 {
     if (!pObj)

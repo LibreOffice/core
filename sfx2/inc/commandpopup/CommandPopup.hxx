@@ -78,7 +78,6 @@ private:
     DECL_LINK(QueryTooltip, const weld::TreeIter&, OUString);
     DECL_LINK(RowActivated, weld::TreeView&, bool);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
-    DECL_LINK(SelectionChanged, weld::TreeView&, void);
     DECL_LINK(TreeViewKeyPress, const KeyEvent&, bool);
 
     void dispatchCommandAndClose(OUString const& rCommand);

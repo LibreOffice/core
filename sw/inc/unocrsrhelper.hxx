@@ -28,7 +28,6 @@
 
 class SfxItemSet;
 class SfxItemPropertySet;
-struct SfxItemPropertySimpleEntry;
 struct SfxItemPropertyMapEntry;
 class SdrObject;
 class SwTextNode;

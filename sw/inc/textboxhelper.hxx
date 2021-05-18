@@ -82,9 +82,6 @@ public:
     /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
     static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet);
 
-    /// Returns the SwFrameFormat* of the given UNO-XShape if exists otherwise nullptr.
-    static SwFrameFormat* getShapeFormat(css::uno::Reference<css::drawing::XShape> xShape);
-
     /// Copy shape attributes to the text frame
     static void updateTextBoxMargin(SdrObject* pObj);
 

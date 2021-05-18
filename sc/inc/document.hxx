@@ -2460,8 +2460,6 @@ public:
     void                         SetScriptType( const ScAddress& rPos, SvtScriptType nType );
     void                         UpdateScriptTypes( const ScAddress& rPos, SCCOL nColSize, SCROW nRowSize );
 
-    size_t                       GetFormulaHash( const ScAddress& rPos ) const;
-
     /**
      * Make specified formula cells non-grouped.
      *
@@ -2475,8 +2473,6 @@ public:
     void UnshareFormulaCells( SCTAB nTab, SCCOL nCol, std::vector<SCROW>& rRows );
     void RegroupFormulaCells( SCTAB nTab, SCCOL nCol );
     void RegroupFormulaCells( const ScRange& range );
-
-    ScFormulaVectorState GetFormulaVectorState( const ScAddress& rPos ) const;
 
     formula::FormulaTokenRef ResolveStaticReference( const ScAddress& rPos );
     formula::FormulaTokenRef ResolveStaticReference( const ScRange& rRange );

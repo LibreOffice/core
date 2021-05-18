@@ -43,7 +43,6 @@ class SfxItemSet;
 
 class ScStyleFamilyObj;
 class ScStyleObj;
-struct SfxItemPropertySimpleEntry;
 struct SfxItemPropertyMapEntry;
 
 class ScStyleFamiliesObj final : public ::cppu::WeakImplHelper<

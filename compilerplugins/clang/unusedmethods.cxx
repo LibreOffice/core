@@ -225,7 +225,8 @@ bool UnusedMethods::checkIgnoreLocation(SourceLocation loc)
         return true;
     const char* bufferName = presumedLoc.getFilename();
     if (bufferName == NULL
-        || loplugin::hasPathnamePrefix(bufferName, SRCDIR "/external/"))
+        || loplugin::hasPathnamePrefix(bufferName, SRCDIR "/external/")
+        || loplugin::hasPathnamePrefix(bufferName, WORKDIR "/"))
         return true;
     if( loplugin::hasPathnamePrefix(bufferName, BUILDDIR "/")
         || loplugin::hasPathnamePrefix(bufferName, SRCDIR "/") )

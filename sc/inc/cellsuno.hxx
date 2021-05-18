@@ -113,7 +113,6 @@ class SfxHint;
 class SfxItemPropertyMap;
 class SfxItemPropertySet;
 class SfxItemSet;
-struct SfxItemPropertySimpleEntry;
 struct SfxItemPropertyMapEntry;
 
 namespace editeng { class SvxBorderLine; }
