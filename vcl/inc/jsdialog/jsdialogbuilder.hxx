@@ -229,6 +229,7 @@ public:
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id) override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id) override;
+    virtual std::unique_ptr<weld::Container> weld_container(const OString& id) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OString& id) override;
     virtual std::unique_ptr<weld::Button> weld_button(const OString& id) override;
     virtual std::unique_ptr<weld::Entry> weld_entry(const OString& id) override;
@@ -391,6 +392,13 @@ public:
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override;
     virtual void undo_collapse() override;
     virtual void response(int response) override;
+};
+
+class JSContainer final : public JSWidget<SalInstanceContainer, vcl::Window>
+{
+public:
+    JSContainer(JSDialogSender* pSender, vcl::Window* pContainer, SalInstanceBuilder* pBuilder,
+                bool bTakeOwnership);
 };
 
 class JSLabel final : public JSWidget<SalInstanceLabel, FixedText>

@@ -626,6 +626,17 @@ std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(cons
     return pRet;
 }
 
+std::unique_ptr<weld::Container> JSInstanceBuilder::weld_container(const OString& id)
+{
+    vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(id);
+    auto pWeldWidget = std::make_unique<JSContainer>(this, pContainer, this, false);
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id)
 {
     ::FixedText* pLabel = m_xBuilder->get<FixedText>(id);
@@ -858,6 +869,12 @@ void JSDialog::response(int response)
 
     sendClose();
     SalInstanceDialog::response(response);
+}
+
+JSContainer::JSContainer(JSDialogSender* pSender, vcl::Window* pContainer,
+                         SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceContainer, vcl::Window>(pSender, pContainer, pBuilder, bTakeOwnership)
+{
 }
 
 JSLabel::JSLabel(JSDialogSender* pSender, FixedText* pLabel, SalInstanceBuilder* pBuilder,
