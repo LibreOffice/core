@@ -830,7 +830,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             {
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
-                ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
+                ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
 
                 if ( IsFixedCellHeight() )
                     nTextLineHeight = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() );
@@ -1043,7 +1043,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     {
                         SeekCursor( pNode, nTmpPos+1, aTmpFont );
                         aTmpFont.SetPhysFont( GetRefDevice() );
-                        ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
+                        ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
 
                         OUString aFieldValue = static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
                         // get size, but also DXArray to allow length information in line breaking below
@@ -1146,7 +1146,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 DBG_ASSERT( nPortionLen || bProcessingEmptyLine, "Empty Portion - Extra Space?!" );
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
-                ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
+                ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
 
                 if (!bContinueLastPortion)
                     pPortion->SetRightToLeftLevel( GetRightToLeft( nPara, nTmpPos+1 ) );
@@ -1372,7 +1372,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         {
             SeekCursor( pNode, pLine->GetStart()+1, aTmpFont );
             aTmpFont.SetPhysFont( pRefDev );
-            ImplInitDigitMode(pRefDev, aTmpFont.GetLanguage());
+            ImplInitDigitMode(*pRefDev, aTmpFont.GetLanguage());
 
             if ( IsFixedCellHeight() )
                 aTextSize.setHeight( ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() ) );
@@ -1394,7 +1394,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             {
                 SeekCursor( pNode, nTPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
-                ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
+                ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
                 RecalcFormatterFontMetrics( aFormatterMetrics, aTmpFont );
             }
             nTPos = nTPos + rTP.GetLen();
@@ -2370,7 +2370,7 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
             SeekCursor( pPortion->GetNode(), nTxtPortionStart+1, aTmpFont );
             aTmpFont.SetPhysFont( GetRefDevice() );
             GetRefDevice()->Push( PushFlags::TEXTLANGUAGE );
-            ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
+            ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
             Size aSz = aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nTxtPortionStart, pTextPortion->GetLen() );
             GetRefDevice()->Pop();
             pTextPortion->GetExtraInfos()->nOrgWidth = aSz.Width();
@@ -3195,7 +3195,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                 // potentially changing both)
                                 rOutDev.Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
                                 ImplInitLayoutMode(rOutDev, n, nIndex);
-                                ImplInitDigitMode(&rOutDev, aTmpFont.GetLanguage());
+                                ImplInitDigitMode(rOutDev, aTmpFont.GetLanguage());
 
                                 OUString aText;
                                 sal_Int32 nTextStart = 0;
@@ -4273,11 +4273,9 @@ OUString ImpEditEngine::convertDigits(const OUString &rString, sal_Int32 nStt, s
 }
 
 // Either sets the digit mode at the output device
-void ImpEditEngine::ImplInitDigitMode(OutputDevice* pOutDev, LanguageType eCurLang)
+void ImpEditEngine::ImplInitDigitMode(OutputDevice& rOutDev, LanguageType eCurLang)
 {
-    assert(pOutDev); //presumably there isn't any case where pOutDev should be NULL?
-    if (pOutDev)
-        pOutDev->SetDigitLanguage(ImplCalcDigitLang(eCurLang));
+    rOutDev.SetDigitLanguage(ImplCalcDigitLang(eCurLang));
 }
 
 void ImpEditEngine::ImplInitLayoutMode(OutputDevice& rOutDev, sal_Int32 nPara, sal_Int32 nIndex)
@@ -4324,7 +4322,7 @@ void ImpEditEngine::ImplInitLayoutMode(OutputDevice& rOutDev, sal_Int32 nPara, s
     // #114278# Also setting up digit language from Svt options
     // (cannot reliably inherit the outdev's setting)
     LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
-    ImplInitDigitMode(&rOutDev, eLang);
+    ImplInitDigitMode(rOutDev, eLang);
 }
 
 Reference < i18n::XBreakIterator > const & ImpEditEngine::ImplGetBreakIterator() const
