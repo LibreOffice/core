@@ -785,6 +785,8 @@ private:
     const ParaPortionList&  GetParaPortions() const { return aParaPortionList; }
     ParaPortionList&        GetParaPortions()       { return aParaPortionList; }
 
+    tools::Long Calc1ColumnTextHeight(tools::Long* pHeightNTP);
+
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -1130,15 +1132,17 @@ public:
         SkipThisPortion, // Do not call callback until next portion
         Stop, // Stop iteration
     };
-    using IterateLinesAreasFunc = std::function<CallbackResult(
-        ParaPortion& /*rPortion*/, // Current ParaPortion
-        sal_Int32 /*nPortion*/,
-        EditLine* /*pLine*/, // Current line, or nullptr for paragraph start
-        sal_Int32 /*nLine*/,
-        const tools::Rectangle& /*rArea*/, // The area for the line (or for invisible rPortion)
-        sal_Int32 /*nColumn*/ // Column number (only valid for EditLine*)
-        )>;
-
+    struct LineAreaInfo
+    {
+        sal_Int32 nColumn; // Column number; when overflowing, equal to total number of columns
+        ParaPortion& rPortion; // Current ParaPortion
+        sal_Int32 nPortion;
+        EditLine* pLine = nullptr; // Current line, or nullptr for paragraph start
+        sal_Int32 nLine = 0;
+        tools::Rectangle aArea; // The area for the line (or for invisible rPortion)
+        tools::Long nHeightNeededToNotWrap;
+    };
+    using IterateLinesAreasFunc = std::function<CallbackResult(const LineAreaInfo&)>;
     enum IterFlag // bitmask
     {
         none = 0,
@@ -1150,7 +1154,7 @@ public:
 
     tools::Long GetColumnWidth(const Size& rPaperSize) const;
     Point MoveToNextLine(Point& rMovePos, tools::Long nLineHeight, sal_Int32& nColumn,
-                         Point aOrigin) const;
+                         Point aOrigin, tools::Long* pnHeightNeededToNotWrap = nullptr) const;
 
     tools::Long getXDirectionAware(const Point& pt) const;
     tools::Long getYDirectionAware(const Point& pt) const;
@@ -1160,7 +1164,7 @@ public:
     void adjustYDirectionAware(Point& pt, tools::Long y) const;
     void setXDirectionAware(Point& pt, tools::Long x) const;
     void setYDirectionAware(Point& pt, tools::Long y) const;
-    bool isYOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
+    tools::Long getYOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
     bool isXOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
     tools::Long getLeftDirectionAware(const tools::Rectangle& rect) const;
     tools::Long getRightDirectionAware(const tools::Rectangle& rect) const;

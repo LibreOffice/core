@@ -3011,15 +3011,17 @@ void ImpEditEngine::setYDirectionAware(Point& pt, tools::Long y) const
         pt.setX(y);
 }
 
-bool ImpEditEngine::isYOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const
+tools::Long ImpEditEngine::getYOverflowDirectionAware(const Point& pt,
+                                                      const tools::Rectangle& rectMax) const
 {
+    tools::Long nRes;
     if (!IsVertical())
-        return pt.Y() >= rectMax.Bottom();
-
-    if (IsTopToBottom())
-        return pt.X() <= rectMax.Left();
+        nRes = pt.Y() - rectMax.Bottom();
+    else if (IsTopToBottom())
+        nRes = rectMax.Left() - pt.X();
     else
-        return pt.X() >= rectMax.Right();
+        nRes = pt.X() - rectMax.Right();
+    return std::max(nRes, tools::Long(0));
 }
 
 bool ImpEditEngine::isXOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const
@@ -3082,7 +3084,8 @@ Point ImpEditEngine::MoveToNextLine(
     Point& rMovePos, // [in, out] Point that will move to the next line
     tools::Long nLineHeight, // [in] Y-direction move distance (direction-aware)
     sal_Int32& rColumn, // [in, out] current column number
-    Point aOrigin // [in] Origin point to calculate limits and initial Y position in a new column
+    Point aOrigin, // [in] Origin point to calculate limits and initial Y position in a new column
+    tools::Long* pnHeightNeededToNotWrap // On column wrap, returns how much more height is needed
 ) const
 {
     const Point aOld = rMovePos;
@@ -3090,17 +3093,30 @@ Point ImpEditEngine::MoveToNextLine(
     // Move the point by the requested distance in Y direction
     adjustYDirectionAware(rMovePos, nLineHeight);
     // Check if the resulting position has moved beyond the limits, and more columns left.
-    // The limits are defined by a rectangle starting from aOrigin with size of aMinAutoPaperSize
-    if (isYOverflowDirectionAware(rMovePos, { aOrigin, aMinAutoPaperSize })
-        && rColumn < mnColumns - 1)
+    // The limits are defined by a rectangle starting from aOrigin with width of aPaperSize
+    // and height of nCurTextHeight
+    Size aActPaperSize(aPaperSize);
+    if (IsVertical())
+        aActPaperSize.setWidth(nCurTextHeight);
+    else
+        aActPaperSize.setHeight(nCurTextHeight);
+    tools::Long nNeeded = getYOverflowDirectionAware(rMovePos, { aOrigin, aActPaperSize });
+    if (pnHeightNeededToNotWrap)
+        *pnHeightNeededToNotWrap = nNeeded;
+    if (nNeeded && rColumn < mnColumns)
     {
         ++rColumn;
-        // Set Y position of the point to that of aOrigin
-        setYDirectionAware(rMovePos, getYDirectionAware(aOrigin));
-        // Move the point by the requested distance in Y direction
-        adjustYDirectionAware(rMovePos, nLineHeight);
-        // Move the point by the column+spacing distance in X direction
-        adjustXDirectionAware(rMovePos, GetColumnWidth(aPaperSize) + mnColumnSpacing);
+        // If we didn't fit into the last column, indicate that only by setting the column number
+        // to the total number of columns; do not adjust
+        if (rColumn < mnColumns)
+        {
+            // Set Y position of the point to that of aOrigin
+            setYDirectionAware(rMovePos, getYDirectionAware(aOrigin));
+            // Move the point by the requested distance in Y direction
+            adjustYDirectionAware(rMovePos, nLineHeight);
+            // Move the point by the column+spacing distance in X direction
+            adjustXDirectionAware(rMovePos, GetColumnWidth(aPaperSize) + mnColumnSpacing);
+        }
     }
 
     return rMovePos - aOld;
@@ -3808,7 +3824,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                 }
 
                 // no more visible actions?
-                if (isYOverflowDirectionAware(aStartPos, aClipRect))
+                if (getYOverflowDirectionAware(aStartPos, aClipRect))
                     break;
             }
 
@@ -3849,7 +3865,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
             pPDFExtOutDevData->EndStructureElement();
 
         // no more visible actions?
-        if (isYOverflowDirectionAware(aStartPos, aClipRect))
+        if (getYOverflowDirectionAware(aStartPos, aClipRect))
             break;
     }
 }

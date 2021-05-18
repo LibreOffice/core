@@ -59,12 +59,14 @@
 #include <svl/asiancfg.hxx>
 #include <i18nutil/unicode.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/flagguard.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 
 #include <unicode/ubidi.h>
 #include <algorithm>
+#include <limits>
 #include <memory>
 #include <string_view>
 #include <fstream>
@@ -546,29 +548,29 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 const sal_Int32 nMaxPos = nMinPos + mpIMEInfos->nLen - 1;
                 std::vector<tools::Rectangle> aRects(mpIMEInfos->nLen);
 
-                auto f = [&](ParaPortion& rPortion, sal_Int32 nPortion, const EditLine* pLine,
-                             sal_Int32, const tools::Rectangle& rArea, sal_Int32) {
-                    if (!pLine) // Start of ParaPortion
+                auto f = [&](const LineAreaInfo& rInfo) {
+                    if (!rInfo.pLine) // Start of ParaPortion
                     {
-                        if (nPortion < nPortionPos)
+                        if (rInfo.nPortion < nPortionPos)
                             return CallbackResult::SkipThisPortion;
-                        if (nPortion > nPortionPos)
+                        if (rInfo.nPortion > nPortionPos)
                             return CallbackResult::Stop;
-                        assert(&rPortion == pParaPortion);
+                        assert(&rInfo.rPortion == pParaPortion);
                     }
                     else // This is the needed ParaPortion
                     {
-                        if (pLine->GetStart() > nMaxPos)
+                        if (rInfo.pLine->GetStart() > nMaxPos)
                             return CallbackResult::Stop;
-                        if (pLine->GetEnd() < nMinPos)
+                        if (rInfo.pLine->GetEnd() < nMinPos)
                             return CallbackResult::Continue;
                         for (sal_Int32 n = nMinPos; n <= nMaxPos; ++n)
                         {
-                            if (pLine->IsIn(n))
+                            if (rInfo.pLine->IsIn(n))
                             {
-                                tools::Rectangle aR
-                                    = GetEditCursor(pParaPortion, pLine, n, GetCursorFlags::NONE);
-                                aR.Move(getLeftDirectionAware(rArea), getTopDirectionAware(rArea));
+                                tools::Rectangle aR = GetEditCursor(pParaPortion, rInfo.pLine, n,
+                                                                    GetCursorFlags::NONE);
+                                aR.Move(getLeftDirectionAware(rInfo.aArea),
+                                        getTopDirectionAware(rInfo.aArea));
                                 aRects[n - nMinPos] = pView->GetImpEditView()->GetWindowPos(aR);
                             }
                         }
@@ -3074,22 +3076,20 @@ tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nF
     const EditLine* pLastLine = nullptr;
     tools::Rectangle aLineArea;
 
-    auto f = [&, bEOL(bool(nFlags & GetCursorFlags::EndOfLine))](
-                 ParaPortion& rPortion, sal_Int32, const EditLine* pLine, sal_Int32,
-                 const tools::Rectangle& rArea, sal_Int32) {
-        if (!pLine) // start of ParaPortion
+    auto f = [&, bEOL(bool(nFlags & GetCursorFlags::EndOfLine))](const LineAreaInfo& rInfo) {
+        if (!rInfo.pLine) // start of ParaPortion
         {
-            ContentNode* pNode = rPortion.GetNode();
+            ContentNode* pNode = rInfo.rPortion.GetNode();
             OSL_ENSURE(pNode, "Invalid Node in Portion!");
             if (pNode != aPaM.GetNode())
                 return CallbackResult::SkipThisPortion;
-            pPortion = &rPortion;
+            pPortion = &rInfo.rPortion;
         }
         else // guaranteed that this is the correct ParaPortion
         {
-            pLastLine = pLine;
-            aLineArea = rArea;
-            if ((pLine->GetStart() == nIndex) || (pLine->IsIn(nIndex, bEOL)))
+            pLastLine = rInfo.pLine;
+            aLineArea = rInfo.aArea;
+            if ((rInfo.pLine->GetStart() == nIndex) || (rInfo.pLine->IsIn(nIndex, bEOL)))
                 return CallbackResult::Stop;
         }
         return CallbackResult::Continue;
@@ -3125,7 +3125,8 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                 return;
 
             // First call to f() for ParaPortion (pLine is nullptr)
-            auto eResult = f(rPortion, n, nullptr, 0, {}, nColumn);
+            LineAreaInfo aInfo{nColumn, rPortion, n};
+            auto eResult = f(aInfo);
             if (eResult == CallbackResult::Stop)
                 return;
             bSkipThis = eResult == CallbackResult::SkipThisPortion;
@@ -3143,7 +3144,8 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                 tools::Long nLineHeight = rLine.GetHeight();
                 if (nLine != nLines - 1)
                     nLineHeight += nVertLineSpacing;
-                MoveToNextLine(aLineStart, nLineHeight, nColumn, aOrigin);
+                MoveToNextLine(aLineStart, nLineHeight, nColumn, aOrigin,
+                               &aInfo.nHeightNeededToNotWrap);
                 const bool bInclILS = eOptions & IterFlag::inclILS;
                 if (bInclILS && (nLine != nLines - 1) && !aStatus.IsOutliner())
                 {
@@ -3158,8 +3160,11 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                     adjustYDirectionAware(aOtherCorner, -nLineHeight);
 
                     // Calls to f() for each line
-                    eResult = f(rPortion, n, &rLine, nLine,
-                                tools::Rectangle::Justify(aLineStart, aOtherCorner), nColumn);
+                    aInfo.nColumn = nColumn;
+                    aInfo.pLine = &rLine;
+                    aInfo.nLine = nLine;
+                    aInfo.aArea = tools::Rectangle::Justify(aLineStart, aOtherCorner);
+                    eResult = f(aInfo);
                     if (eResult == CallbackResult::Stop)
                         return;
                     bSkipThis = eResult == CallbackResult::SkipThisPortion;
@@ -3191,16 +3196,15 @@ ImpEditEngine::GetPortionAndLine(Point aDocPos)
     const EditLine* pLastLine = nullptr;
     tools::Long nLineStartX = 0;
 
-    auto f = [&](ParaPortion& rPortion, sal_Int32, const EditLine* pLine, sal_Int32,
-                 const tools::Rectangle& rArea, sal_Int32 nColumn) {
-        if (pLine) // Only handle lines, not ParaPortion starts
+    auto f = [&](const LineAreaInfo& rInfo) {
+        if (rInfo.pLine) // Only handle lines, not ParaPortion starts
         {
-            if (nColumn > nClickColumn)
+            if (rInfo.nColumn > nClickColumn)
                 return CallbackResult::Stop;
-            pLastPortion = &rPortion; // Candidate paragraph
-            pLastLine = pLine; // Last visible line not later than click position
-            nLineStartX = getLeftDirectionAware(rArea);
-            if (nColumn == nClickColumn && getBottomDirectionAware(rArea) > aDocPos.Y())
+            pLastPortion = &rInfo.rPortion; // Candidate paragraph
+            pLastLine = rInfo.pLine; // Last visible line not later than click position
+            nLineStartX = getLeftDirectionAware(rInfo.aArea);
+            if (rInfo.nColumn == nClickColumn && getBottomDirectionAware(rInfo.aArea) > aDocPos.Y())
                 return CallbackResult::Stop; // Found it
         }
         return CallbackResult::Continue;
@@ -3384,33 +3388,117 @@ sal_uInt32 ImpEditEngine::GetTextHeightNTP() const
     return nCurTextHeightNTP;
 }
 
-tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
+tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
 {
-    OSL_ENSURE( GetUpdateMode(), "Should not be used when Update=FALSE: CalcTextHeight" );
-    tools::Long nY = 0;
+    tools::Long nHeight = 0;
+    // Pretend that we have ~infinite height to get total height
+    comphelper::ValueRestorationGuard aGuard(nCurTextHeight,
+                                             std::numeric_limits<tools::Long>::max());
 
-    auto f = [&, minY = tools::Long(0), lastCol = sal_Int32(0)](
-                 ParaPortion& rPortion, sal_Int32, const EditLine* pLine, sal_Int32,
-                 const tools::Rectangle& rArea, sal_Int32 nColumn) mutable {
-        if (pLine)
+    auto f = [&](const LineAreaInfo& rInfo) {
+        if (rInfo.pLine)
         {
-            if (lastCol != nColumn)
-                minY = std::max(nY, minY); // total height can't be less than previous columns
-            lastCol = nColumn;
-            nY = std::max(getBottomDirectionAware(rArea), minY);
-            if (pHeightNTP)
-            {
-                if (rPortion.IsEmpty())
-
-                    *pHeightNTP = std::max(*pHeightNTP, minY);
-                else
-                    *pHeightNTP = nY;
-            }
+            nHeight = getBottomDirectionAware(rInfo.aArea) + 1;
+            if (pHeightNTP && !rInfo.rPortion.IsEmpty())
+                *pHeightNTP = nHeight;
         }
         return CallbackResult::Continue;
     };
     IterateLineAreas(f, IterFlag::none);
-    return nY;
+    return nHeight;
+}
+
+tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
+{
+    OSL_ENSURE( GetUpdateMode(), "Should not be used when Update=FALSE: CalcTextHeight" );
+
+    const tools::Long nMinHeight
+        = IsVertical() ? aMinAutoPaperSize.getWidth() : aMinAutoPaperSize.getHeight();
+
+    tools::Long nCurrentTextHeight = Calc1ColumnTextHeight(pHeightNTP);
+    if (mnColumns <= 1 || nCurrentTextHeight <= nMinHeight)
+        return nCurrentTextHeight; // All text fits into a single column - done!
+
+    // The final column height can be smaller than total height divided by number of columns (taking
+    // into account first line offset and interline spacing, that aren't considered in positioning
+    // after the wrap). The wrap should only happen after the minimal height is exceeded.
+    tools::Long nTentativeColHeight = nMinHeight;
+    tools::Long nWantedIncrease = 0;
+
+    // This does the necessary column balancing for the case when the text does not fit min height.
+    // When the height of column (taken from nCurTextHeight) is too small, the last column will
+    // owerflow, so the resulting height of the text will exceed the set column height. Increasing
+    // the column height step by step by the minimal value that allows one of columns to accomodate
+    // one line more, we finally get to the point where all the text fits. At each iteration, the
+    // height is only increased, so it's impossible to have infinite layout loops. The found value
+    // is the global minimum.
+    //
+    // E.g., given the following four line heights:
+    // Line 1: 10;
+    // Line 2: 12;
+    // Line 3: 10;
+    // Line 4: 10;
+    // number of columns 3, and the minimal paper height of 5, the iterations would be:
+    // * Tentative column height is set to 5
+    // <ITERATION 1>
+    // * Line 1 is attempted to go to column 0. Overflow is 5 => moved to column 1.
+    // * Line 2 is attempted to go to column 1 after Line 1; overflow is 17 => moved to column 2.
+    // * Line 3 is attempted to go to column 2 after Line 2; overflow is 17, stays in max column 2.
+    // * Line 4 goes to column 2 after Line 3.
+    // * Final iteration columns are: {empty}, {Line 1}, {Line 2, Line 3, Line 4}
+    // * Total text height is max({0, 10, 32}) == 32 > Tentative column height 5 => NEXT ITERATION
+    // * Minimal height increase that allows at least one column to accomodate one more line is
+    //   min({5, 17, 17}) = 5.
+    // * Tentative column height is set to 5 + 5 = 10.
+    // <ITERATION 2>
+    // * Line 1 goes to column 0, no overflow.
+    // * Line 2 is attempted to go to column 0 after Line 1; overflow is 12 => moved to column 1.
+    // * Line 3 is attempted to go to column 1 after Line 2; overflow is 12 => moved to column 2.
+    // * Line 4 is attempted to go to column 2 after Line 3; overflow is 10, stays in max column 2.
+    // * Final iteration columns are: {Line 1}, {Line 2}, {Line 3, Line 4}
+    // * Total text height is max({10, 12, 20}) == 20 > Tentative column height 10 => NEXT ITERATION
+    // * Minimal height increase that allows at least one column to accomodate one more line is
+    //   min({12, 12, 10}) = 10.
+    // * Tentative column height is set to 10 + 10 == 20.
+    // <ITERATION 3>
+    // * Line 1 goes to column 0, no overflow.
+    // * Line 2 is attempted to go to column 0 after Line 1; overflow is 2 => moved to column 1.
+    // * Line 3 is attempted to go to column 1 after Line 2; overflow is 2 => moved to column 2.
+    // * Line 4 is attempted to go to column 2 after Line 3; no overflow.
+    // * Final iteration columns are: {Line 1}, {Line 2}, {Line 3, Line 4}
+    // * Total text height is max({10, 12, 20}) == 20 == Tentative column height 20 => END.
+    do
+    {
+        nTentativeColHeight += nWantedIncrease;
+        nWantedIncrease = std::numeric_limits<tools::Long>::max();
+        nCurrentTextHeight = 0;
+        auto f = [&, minHeight = tools::Long(0),
+                  lastCol = sal_Int32(0)](const LineAreaInfo& rInfo) mutable {
+            if (rInfo.pLine)
+            {
+                if (lastCol != rInfo.nColumn)
+                {
+                    minHeight = std::max(nCurrentTextHeight,
+                                    minHeight); // total height can't be less than previous columns
+                    nWantedIncrease = std::min(rInfo.nHeightNeededToNotWrap, nWantedIncrease);
+                }
+                lastCol = rInfo.nColumn;
+                nCurrentTextHeight = std::max(getBottomDirectionAware(rInfo.aArea) + 1, minHeight);
+                if (pHeightNTP)
+                {
+                    if (rInfo.rPortion.IsEmpty())
+
+                        *pHeightNTP = std::max(*pHeightNTP, minHeight);
+                    else
+                        *pHeightNTP = nCurrentTextHeight;
+                }
+            }
+            return CallbackResult::Continue;
+        };
+        comphelper::ValueRestorationGuard aGuard(nCurTextHeight, nTentativeColHeight);
+        IterateLineAreas(f, IterFlag::none);
+    } while (nCurrentTextHeight > nTentativeColHeight && nWantedIncrease > 0);
+    return nCurrentTextHeight;
 }
 
 sal_Int32 ImpEditEngine::GetLineCount( sal_Int32 nParagraph ) const

@@ -521,46 +521,45 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     bool bStartHandleVisible = false;
     bool bEndHandleVisible = false;
 
-    auto f = [&, nStartLine = sal_Int32(0), nEndLine = sal_Int32(0)](
-                 ParaPortion& rPortion, sal_Int32 nPortion, EditLine* pLine, sal_Int32 nLine,
-                 const tools::Rectangle& rArea, sal_Int32 nColumn) mutable {
-        if (!pLine) // Begin of ParaPortion
+    auto f = [&, nStartLine = sal_Int32(0),
+              nEndLine = sal_Int32(0)](const ImpEditEngine::LineAreaInfo& rInfo) mutable {
+        if (!rInfo.pLine) // Begin of ParaPortion
         {
-            if (nPortion < nStartPara)
+            if (rInfo.nPortion < nStartPara)
                 return ImpEditEngine::CallbackResult::SkipThisPortion;
-            if (nPortion > nEndPara)
+            if (rInfo.nPortion > nEndPara)
                 return ImpEditEngine::CallbackResult::Stop;
-            DBG_ASSERT(!rPortion.IsInvalid(), "Portion in Selection not formatted!");
-            if (rPortion.IsInvalid())
+            DBG_ASSERT(!rInfo.rPortion.IsInvalid(), "Portion in Selection not formatted!");
+            if (rInfo.rPortion.IsInvalid())
                 return ImpEditEngine::CallbackResult::SkipThisPortion;
 
-            if (nPortion == nStartPara)
-                nStartLine = rPortion.GetLines().FindLine(aTmpSel.Min().GetIndex(), false);
+            if (rInfo.nPortion == nStartPara)
+                nStartLine = rInfo.rPortion.GetLines().FindLine(aTmpSel.Min().GetIndex(), false);
             else
                 nStartLine = 0;
 
-            if (nPortion == nEndPara)
-                nEndLine = rPortion.GetLines().FindLine(aTmpSel.Max().GetIndex(), true);
+            if (rInfo.nPortion == nEndPara)
+                nEndLine = rInfo.rPortion.GetLines().FindLine(aTmpSel.Max().GetIndex(), true);
             else
-                nEndLine = rPortion.GetLines().Count() - 1;
+                nEndLine = rInfo.rPortion.GetLines().Count() - 1;
         }
         else // This is a correct ParaPortion
         {
-            if (nLine < nStartLine)
+            if (rInfo.nLine < nStartLine)
                 return ImpEditEngine::CallbackResult::Continue;
-            if (nLine > nEndLine)
+            if (rInfo.nLine > nEndLine)
                 return ImpEditEngine::CallbackResult::SkipThisPortion;
 
             bool bPartOfLine = false;
-            sal_Int32 nStartIndex = pLine->GetStart();
-            sal_Int32 nEndIndex = pLine->GetEnd();
-            if ((nPortion == nStartPara) && (nLine == nStartLine)
+            sal_Int32 nStartIndex = rInfo.pLine->GetStart();
+            sal_Int32 nEndIndex = rInfo.pLine->GetEnd();
+            if ((rInfo.nPortion == nStartPara) && (rInfo.nLine == nStartLine)
                 && (nStartIndex != aTmpSel.Min().GetIndex()))
             {
                 nStartIndex = aTmpSel.Min().GetIndex();
                 bPartOfLine = true;
             }
-            if ((nPortion == nEndPara) && (nLine == nEndLine)
+            if ((rInfo.nPortion == nEndPara) && (rInfo.nLine == nEndLine)
                 && (nEndIndex != aTmpSel.Max().GetIndex()))
             {
                 nEndIndex = aTmpSel.Max().GetIndex();
@@ -572,8 +571,8 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 nEndIndex = nStartIndex;
 
             tools::Rectangle aTmpRect(pEditEngine->pImpEditEngine->GetEditCursor(
-                &rPortion, pLine, nStartIndex, GetCursorFlags::NONE));
-            aTmpRect.Move(0, pEditEngine->pImpEditEngine->getTopDirectionAware(rArea));
+                &rInfo.rPortion, rInfo.pLine, nStartIndex, GetCursorFlags::NONE));
+            aTmpRect.Move(0, pEditEngine->pImpEditEngine->getTopDirectionAware(rInfo.aArea));
 
             // Only paint if in the visible range ...
             if (aTmpRect.Top() > GetVisDocBottom())
@@ -582,30 +581,32 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             if (aTmpRect.Bottom() < GetVisDocTop())
                 return ImpEditEngine::CallbackResult::Continue;
 
-            if ((nPortion == nStartPara) && (nLine == nStartLine))
+            if ((rInfo.nPortion == nStartPara) && (rInfo.nLine == nStartLine))
                 bStartHandleVisible = true;
-            if ((nPortion == nEndPara) && (nLine == nEndLine))
+            if ((rInfo.nPortion == nEndPara) && (rInfo.nLine == nEndLine))
                 bEndHandleVisible = true;
 
             // Now that we have Bidi, the first/last index doesn't have to be the 'most outside' position
             if (!bPartOfLine)
             {
-                Range aLineXPosStartEnd = pEditEngine->GetLineXPosStartEnd(&rPortion, pLine);
+                Range aLineXPosStartEnd
+                    = pEditEngine->GetLineXPosStartEnd(&rInfo.rPortion, rInfo.pLine);
                 aTmpRect.SetLeft(aLineXPosStartEnd.Min());
                 aTmpRect.SetRight(aLineXPosStartEnd.Max());
-                aTmpRect.Move(pEditEngine->pImpEditEngine->getLeftDirectionAware(rArea), 0);
-                ImplDrawHighlightRect(rTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(), pPolyPoly.get());
+                aTmpRect.Move(pEditEngine->pImpEditEngine->getLeftDirectionAware(rInfo.aArea), 0);
+                ImplDrawHighlightRect(rTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(),
+                                      pPolyPoly.get());
             }
             else
             {
                 sal_Int32 nTmpStartIndex = nStartIndex;
                 sal_Int32 nWritingDirStart, nTmpEndIndex;
                 const sal_Int32 nLeftOffset
-                    = pEditEngine->pImpEditEngine->getLeftDirectionAware(rArea);
+                    = pEditEngine->pImpEditEngine->getLeftDirectionAware(rInfo.aArea);
 
                 while (nTmpStartIndex < nEndIndex)
                 {
-                    pEditEngine->pImpEditEngine->GetRightToLeft(nPortion, nTmpStartIndex + 1,
+                    pEditEngine->pImpEditEngine->GetRightToLeft(rInfo.nPortion, nTmpStartIndex + 1,
                                                                 &nWritingDirStart, &nTmpEndIndex);
                     if (nTmpEndIndex > nEndIndex)
                         nTmpEndIndex = nEndIndex;
@@ -613,8 +614,9 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                     DBG_ASSERT(nTmpEndIndex > nTmpStartIndex, "DrawSelectionXOR, Start >= End?");
 
                     tools::Long nX1
-                        = pEditEngine->GetXPos(&rPortion, pLine, nTmpStartIndex, true);
-                    tools::Long nX2 = pEditEngine->GetXPos(&rPortion, pLine, nTmpEndIndex);
+                        = pEditEngine->GetXPos(&rInfo.rPortion, rInfo.pLine, nTmpStartIndex, true);
+                    tools::Long nX2
+                        = pEditEngine->GetXPos(&rInfo.rPortion, rInfo.pLine, nTmpEndIndex);
 
                     aTmpRect.SetLeft(std::min(nX1, nX2));
                     aTmpRect.SetRight(std::max(nX1, nX2));
