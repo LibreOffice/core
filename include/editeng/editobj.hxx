@@ -68,7 +68,7 @@ class EDITENG_DLLPUBLIC EditTextObject final
 
 public:
     EditTextObject( const EditTextObject& r );
-    virtual ~EditTextObject();
+    ~EditTextObject();
     EditTextObject&      operator=( const EditTextObject& ) = delete;
 
     /**
