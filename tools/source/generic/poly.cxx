@@ -230,11 +230,19 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
     const tools::Long  nWidth = rBound.GetWidth();
     const tools::Long  nHeight = rBound.GetHeight();
 
-    if( ( nWidth > 1 ) && ( nHeight > 1 ) )
+    if( ( nWidth != 0 ) && ( nHeight != 0 ) )
     {
         const Point aCenter( rBound.Center() );
+<<<<<<< HEAD   (ad5ebd tdf#138209 ODF export: work around forms problem in LO < 7.0)
         const tools::Long  nRadX = aCenter.X() - rBound.Left();
         const tools::Long  nRadY = aCenter.Y() - rBound.Top();
+=======
+        // tdf#142268 Get Top Left corner of rectangle (the rectangle is not always correctly created)
+        const auto aBoundLeft = rBound.Left() < aCenter.X() ? rBound.Left() : rBound.Right();
+        const auto aBoundTop = rBound.Top() < aCenter.Y() ? rBound.Top() : rBound.Bottom();
+        const auto nRadX = o3tl::saturating_sub(aCenter.X(), aBoundLeft);
+        const auto nRadY = o3tl::saturating_sub(aCenter.Y(), aBoundTop);
+>>>>>>> CHANGE (39369c tdf#55007 tdf#142263 tdf#142268 EMF Properly display ARC and)
         sal_uInt16  nPoints;
 
         tools::Long nRadXY;
