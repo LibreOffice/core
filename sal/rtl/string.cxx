@@ -700,9 +700,4 @@ sal_Int32 SAL_CALL rtl_string_getToken(rtl_String** ppThis, rtl_String* pStr, sa
     return rtl::str::getToken(ppThis, pStr, nToken, cTok, nIndex);
 }
 
-sal_Int32 SAL_CALL rtl_string_getTokenView(const char ** ppViewStr , sal_Int32* pViewLength, rtl_String* pStr, sal_Int32 nToken,
-                                       char cTok, sal_Int32 nIndex) SAL_THROW_EXTERN_C()
-{
-    return rtl::str::getTokenView(ppViewStr, pViewLength, pStr, nToken, cTok, nIndex);
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
