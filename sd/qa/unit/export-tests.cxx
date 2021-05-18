@@ -37,7 +37,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-
+#include <com/sun/star/text/WritingMode2.hpp>
 
 #include <svx/svdotable.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
@@ -57,6 +57,7 @@ public:
     void testBnc480256();
     void testUnknownAttributes();
     void testTdf80020();
+    void testTdf128985();
     void testLinkedGraphicRT();
     void testTdf79082();
     void testImageWithSpecialID();
@@ -99,6 +100,7 @@ public:
     CPPUNIT_TEST(testBnc480256);
     CPPUNIT_TEST(testUnknownAttributes);
     CPPUNIT_TEST(testTdf80020);
+    CPPUNIT_TEST(testTdf128985);
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testTdf79082);
     CPPUNIT_TEST(testImageWithSpecialID);
@@ -595,6 +597,43 @@ void SdExportTest::testTdf80020()
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
     uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("Test Style"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf128985()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf128985.odp"), ODP);
+
+    {
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("LushGreen"), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("outline1"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropSet( xStyle, uno::UNO_QUERY );
+
+        sal_Int16 nWritingMode = 0;
+        xPropSet->getPropertyValue( "WritingMode" ) >>= nWritingMode;
+        CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, nWritingMode);
+
+        xPropSet->setPropertyValue("WritingMode", uno::makeAny(text::WritingMode2::LR_TB));
+
+        xDocShRef = saveAndReload( xDocShRef.get(), ODP );
+    }
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("LushGreen"), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("outline1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet( xStyle, uno::UNO_QUERY );
+
+    sal_Int16 nWritingMode = 0;
+    xPropSet->getPropertyValue( "WritingMode" ) >>= nWritingMode;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nWritingMode);
 
     xDocShRef->DoClose();
 }
