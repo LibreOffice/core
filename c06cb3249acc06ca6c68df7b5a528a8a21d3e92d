@@ -109,6 +109,24 @@
       "revId": "c06cb3249acc06ca6c68df7b5a528a8a21d3e92d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f28f3573_1b0ec617",
+        "filename": "sc/source/core/tool/arraysum.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-05-18T15:53:48Z",
+      "side": 1,
+      "message": "compile time !\u003d runtime.\n\nYou can compile on newer systems where you get the stuff but run on an older one. (In fact, that is the normal situation, given you can\u0027t even assume SSE2 on i386 systems.).",
+      "parentUuid": "464e6da3_ed510266",
+      "revId": "c06cb3249acc06ca6c68df7b5a528a8a21d3e92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
