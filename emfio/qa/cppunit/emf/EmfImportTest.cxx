@@ -51,6 +51,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestTextMapMode();
     void TestEnglishMapMode();
     void TestRectangleWithModifyWorldTransform();
+    void TestArcInsideWronglyDefinedRectangle();
     void TestChordWithModifyWorldTransform();
     void TestEllipseWithSelectClipPath();
     void TestEllipseXformIntersectClipRect();
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(TestTextMapMode);
     CPPUNIT_TEST(TestEnglishMapMode);
     CPPUNIT_TEST(TestRectangleWithModifyWorldTransform);
+    CPPUNIT_TEST(TestArcInsideWronglyDefinedRectangle);
     CPPUNIT_TEST(TestChordWithModifyWorldTransform);
     CPPUNIT_TEST(TestEllipseWithSelectClipPath);
     CPPUNIT_TEST(TestEllipseXformIntersectClipRect);
@@ -356,6 +358,19 @@ void Test::TestChordWithModifyWorldTransform()
     assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor", "color", "#ffffff");
     assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor/polypolygon", "path", "m590 448-154 93-54 57-21 45 24 67 45 21 224-6 265-97z");
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke/polygon", "590,448 436,541 382,598 361,643 385,710 430,731 654,725 919,628");
+}
+
+void Test::TestArcInsideWronglyDefinedRectangle()
+{
+    // tdf#142268 EMF import test with records: ARC
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestArcInsideWronglyDefinedRectangle.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonhairline", "color", "#000000");
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonhairline/polygon", "1630,1450 1650,1470 1850,1540 1990,1540 2040,1530 2190,1470 2270,1410 2330,1350 2390,1260 2430,1160 2430,1140 2440,1090 2450,1060 2450,950 2440,930 2430,880 2430,850 2420,820 2360,710 2310,650 2250,590 2110,510 1980,480 1870,480 1770,500 1670,540 1650,560 1630,570 1600,580 1540,640 1460,740 1450,770");
 }
 
 void Test::TestEllipseWithSelectClipPath()
