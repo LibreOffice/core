@@ -1629,8 +1629,21 @@ Size PushButton::CalcMinimumSize() const
     {
         Size textSize = GetTextRect( tools::Rectangle( Point(), Size( 0x7fffffff, 0x7fffffff ) ),
                                      PushButton::GetText(), ImplGetTextStyle( DrawFlags::NONE ) ).GetSize();
-        aSize.AdjustWidth(textSize.Width() );
-        aSize.setHeight( std::max( aSize.Height(), tools::Long( textSize.Height() * 1.15 ) ) );
+
+        tools::Long nTextHeight = textSize.Height() * 1.15;
+
+        ImageAlign eImageAlign = GetImageAlign();
+        // tdf#142337 only considering the simple top/bottom/left/right possibilities
+        if (eImageAlign == ImageAlign::Top || eImageAlign == ImageAlign::Bottom)
+        {
+            aSize.AdjustHeight(nTextHeight);
+            aSize.setWidth(std::max(aSize.Width(), textSize.Width()));
+        }
+        else
+        {
+            aSize.AdjustWidth(textSize.Width());
+            aSize.setHeight(std::max(aSize.Height(), nTextHeight));
+        }
     }
 
     // cf. ImplDrawPushButton ...
