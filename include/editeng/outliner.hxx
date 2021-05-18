@@ -635,9 +635,9 @@ protected:
     void            StyleSheetChanged( SfxStyleSheet const * pStyle );
 
     void            InvalidateBullet(sal_Int32 nPara);
-    void            PaintBullet( sal_Int32 nPara, const Point& rStartPos,
-                    const Point& rOrigin, Degree10 nOrientation,
-                    OutputDevice* pOutDev );
+    void            PaintBullet(sal_Int32 nPara, const Point& rStartPos,
+                                const Point& rOrigin, Degree10 nOrientation,
+                                OutputDevice& rOutDev);
 
     // used by OutlinerEditEng. Allows Outliner objects to provide
     // bullet access to the EditEngine.
@@ -771,8 +771,8 @@ public:
     void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink );
     Link<EditStatus&, void> const & GetStatusEventHdl() const;
 
-    void            Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect );
-    void            Draw( OutputDevice* pOutDev, const Point& rStartPos );
+    void            Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect );
+    void            Draw( OutputDevice& rOutDev, const Point& rStartPos );
 
     const Size&     GetPaperSize() const;
     void            SetPaperSize( const Size& rSize );

@@ -38,15 +38,15 @@ OutlinerEditEng::~OutlinerEditEng()
 {
 }
 
-void OutlinerEditEng::PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, tools::Long /*nBaseLineY*/, const Point& rOrigin, Degree10 nOrientation, OutputDevice* pOutDev )
+void OutlinerEditEng::PaintingFirstLine(sal_Int32 nPara, const Point& rStartPos, tools::Long /*nBaseLineY*/, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev)
 {
     if( GetControlWord() & EEControlBits::OUTLINER )
     {
-        PaintFirstLineInfo aInfo( nPara, rStartPos, pOutDev );
+        PaintFirstLineInfo aInfo(nPara, rStartPos, &rOutDev);
         pOwner->maPaintFirstLineHdl.Call( &aInfo );
     }
 
-    pOwner->PaintBullet( nPara, rStartPos, rOrigin, nOrientation, pOutDev );
+    pOwner->PaintBullet(nPara, rStartPos, rOrigin, nOrientation, rOutDev);
 }
 
 const SvxNumberFormat* OutlinerEditEng::GetNumberFormat( sal_Int32 nPara ) const

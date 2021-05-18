@@ -1114,23 +1114,23 @@ void ScPrintFunc::SetDateTime( const DateTime& rDateTime )
     aFieldData.aDateTime = rDateTime;
 }
 
-static void lcl_DrawGraphic( const Graphic &rGraphic, vcl::RenderContext *pOut,
+static void lcl_DrawGraphic( const Graphic &rGraphic, vcl::RenderContext& rOutDev,
                       const tools::Rectangle &rGrf, const tools::Rectangle &rOut )
 {
     const bool bNotInside = !rOut.IsInside( rGrf );
     if ( bNotInside )
     {
-        pOut->Push();
-        pOut->IntersectClipRegion( rOut );
+        rOutDev.Push();
+        rOutDev.IntersectClipRegion( rOut );
     }
 
-    rGraphic.Draw( pOut, rGrf.TopLeft(), rGrf.GetSize() );
+    rGraphic.Draw(rOutDev, rGrf.TopLeft(), rGrf.GetSize());
 
     if ( bNotInside )
-        pOut->Pop();
+        rOutDev.Pop();
 }
 
-static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOut, const OutputDevice* pRefDev,
+static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext& rOutDev, const OutputDevice* pRefDev,
                         const tools::Rectangle &rOrg, const tools::Rectangle &rOut,
                         OUString const & referer )
 {
@@ -1197,7 +1197,7 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOu
 
                         GraphicObject aObject( *pGraphic );
 
-                        if( pOut->GetOutDevType() == OUTDEV_PDF &&
+                        if( rOutDev.GetOutDevType() == OUTDEV_PDF &&
                             (aObject.GetType() == GraphicType::Bitmap || aObject.GetType() == GraphicType::Default) )
                         {
                             // For PDF export, every draw
@@ -1227,12 +1227,12 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOu
                             const Size      aSize( rOrg.GetSize() );
                             const double    Abitmap( k1/k2 * aSize.Width()*aSize.Height() );
 
-                            aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0),
+                            aObject.DrawTiled( rOutDev, rOrg, aGrfSize, Size(0,0),
                                                ::std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
                         }
                         else
                         {
-                            aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0) );
+                            aObject.DrawTiled( rOutDev, rOrg, aGrfSize, Size(0,0) );
                         }
 
                         bDraw = false;
@@ -1243,12 +1243,12 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOu
                       bDraw = false;
                       break;
 
-        default: OSL_ENSURE( !pOut, "new Graphic position?" );
+        default: OSL_ENSURE( false, "new Graphic position?" );
     }
     tools::Rectangle aGrf( aPos,aDrawSize );
     if ( bDraw && aGrf.IsOver( rOut ) )
     {
-        lcl_DrawGraphic( *pGraphic, pOut, aGrf, rOut );
+        lcl_DrawGraphic( *pGraphic, rOutDev, aGrf, rOut );
     }
 }
 
@@ -1310,7 +1310,7 @@ void ScPrintFunc::DrawBorder( tools::Long nScrX, tools::Long nScrY, tools::Long 
             if (pDocShell->HasName()) {
                 referer = pDocShell->GetMedium()->GetName();
             }
-            lcl_DrawGraphic( *pBackground, pDev, pRefDev, aFrameRect, aFrameRect, referer );
+            lcl_DrawGraphic(*pBackground, *pDev, pRefDev, aFrameRect, aFrameRect, referer);
         }
         else
         {
@@ -1831,7 +1831,7 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
             tools::Long nDif = aPaperSize.Height() - static_cast<tools::Long>(pEditEngine->GetTextHeight());
             if (nDif > 0)
                 aDraw.AdjustY(nDif / 2 );
-            pEditEngine->Draw( pDev, aDraw );
+            pEditEngine->Draw(*pDev, aDraw);
         }
 
         //  center
@@ -1845,7 +1845,7 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
             tools::Long nDif = aPaperSize.Height() - static_cast<tools::Long>(pEditEngine->GetTextHeight());
             if (nDif > 0)
                 aDraw.AdjustY(nDif / 2 );
-            pEditEngine->Draw( pDev, aDraw );
+            pEditEngine->Draw(*pDev, aDraw);
         }
 
         //  right
@@ -1859,7 +1859,7 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
             tools::Long nDif = aPaperSize.Height() - static_cast<tools::Long>(pEditEngine->GetTextHeight());
             if (nDif > 0)
                 aDraw.AdjustY(nDif / 2 );
-            pEditEngine->Draw( pDev, aDraw );
+            pEditEngine->Draw(*pDev, aDraw);
         }
 
         pDev->SetClipRegion();
@@ -1916,13 +1916,13 @@ tools::Long ScPrintFunc::DoNotes( tools::Long nNoteStart, bool bDoPrint, ScPrevi
                 {
                     if (bDoPrint)
                     {
-                        pEditEngine->Draw( pDev, Point( nPosX, nPosY ) );
+                        pEditEngine->Draw(*pDev, Point(nPosX, nPosY));
 
                         OUString aMarkStr(rPos.Format(ScRefFlags::VALID, &rDoc, rDoc.GetAddressConvention()) + ":");
 
                         //  cell position also via EditEngine, for correct positioning
                         pEditEngine->SetTextCurrentDefaults(aMarkStr);
-                        pEditEngine->Draw( pDev, Point( aPageRect.Left(), nPosY ) );
+                        pEditEngine->Draw(*pDev, Point(aPageRect.Left(), nPosY));
                     }
 
                     if ( pLocationData )

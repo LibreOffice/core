@@ -159,28 +159,28 @@ BitmapChecksum Animation::GetChecksum() const
     return nCrc;
 }
 
-bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz,
+bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDestSz,
                       tools::Long nExtraData, OutputDevice* pFirstFrameOutDev)
 {
     bool bRet = false;
 
     if (!maList.empty())
     {
-        if ((pOut->GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
+        if ((rOut.GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
             && (ANIMATION_TIMEOUT_ON_CLICK != maList[mnPos]->mnWait))
         {
             bool differs = true;
 
             auto itAnimView = std::find_if(
                 maViewList.begin(), maViewList.end(),
-                [pOut, nExtraData](const std::unique_ptr<ImplAnimView>& pAnimView) -> bool {
-                    return pAnimView->matches(pOut, nExtraData);
+                [&rOut, nExtraData](const std::unique_ptr<ImplAnimView>& pAnimView) -> bool {
+                    return pAnimView->matches(&rOut, nExtraData);
                 });
 
             if (itAnimView != maViewList.end())
             {
                 if ((*itAnimView)->getOutPos() == rDestPt
-                    && (*itAnimView)->getOutSizePix() == pOut->LogicToPixel(rDestSz))
+                    && (*itAnimView)->getOutSizePix() == rOut.LogicToPixel(rDestSz))
                 {
                     (*itAnimView)->repaint();
                     differs = false;
@@ -198,7 +198,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
             if (differs)
                 maViewList.emplace_back(
-                    new ImplAnimView(this, pOut, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev));
+                    new ImplAnimView(this, &rOut, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev));
 
             if (!mbIsInAnimation)
             {
@@ -207,7 +207,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
             }
         }
         else
-            Draw(pOut, rDestPt, rDestSz);
+            Draw(rOut, rDestPt, rDestSz);
 
         bRet = true;
     }
@@ -230,12 +230,12 @@ void Animation::Stop(const OutputDevice* pOut, tools::Long nExtraData)
     }
 }
 
-void Animation::Draw(OutputDevice* pOut, const Point& rDestPt) const
+void Animation::Draw(OutputDevice& rOut, const Point& rDestPt) const
 {
-    Draw(pOut, rDestPt, pOut->PixelToLogic(maGlobalSize));
+    Draw(rOut, rDestPt, rOut.PixelToLogic(maGlobalSize));
 }
 
-void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz) const
+void Animation::Draw(OutputDevice& rOut, const Point& rDestPt, const Size& rDestSz) const
 {
     const size_t nCount = maList.size();
 
@@ -244,10 +244,10 @@ void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDest
 
     AnimationBitmap* pObj = maList[std::min(mnPos, nCount - 1)].get();
 
-    if (pOut->GetConnectMetaFile() || (pOut->GetOutDevType() == OUTDEV_PRINTER))
-        maList[0]->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
+    if (rOut.GetConnectMetaFile() || (rOut.GetOutDevType() == OUTDEV_PRINTER))
+        maList[0]->maBitmapEx.Draw(&rOut, rDestPt, rDestSz);
     else if (ANIMATION_TIMEOUT_ON_CLICK == pObj->mnWait)
-        pObj->maBitmapEx.Draw(pOut, rDestPt, rDestSz);
+        pObj->maBitmapEx.Draw(&rOut, rDestPt, rDestSz);
     else
     {
         const size_t nOldPos = mnPos;
@@ -255,7 +255,7 @@ void Animation::Draw(OutputDevice* pOut, const Point& rDestPt, const Size& rDest
             const_cast<Animation*>(this)->mnPos = nCount - 1;
 
         {
-            ImplAnimView{ const_cast<Animation*>(this), pOut, rDestPt, rDestSz, 0 };
+            ImplAnimView{ const_cast<Animation*>(this), &rOut, rDestPt, rDestSz, 0 };
         }
 
         const_cast<Animation*>(this)->mnPos = nOldPos;

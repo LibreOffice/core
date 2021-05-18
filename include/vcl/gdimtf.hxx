@@ -97,7 +97,7 @@ private:
                                                            const tools::PolyPolygon& rPolyPoly,
                                                            const Gradient& rGrad );
 
-    SAL_DLLPRIVATE bool                 ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rLogicDestSize );
+    SAL_DLLPRIVATE bool                 ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Size rLogicDestSize);
 
     void                                Linker( OutputDevice* pOut, bool bLink );
 
@@ -144,10 +144,9 @@ public:
     void            Record( OutputDevice* pOutDev );
     bool            IsRecord() const { return m_bRecord; }
 
-    void            Play( GDIMetaFile& rMtf );
-    void            Play( OutputDevice* pOutDev, size_t nPos = GDI_METAFILE_END );
-    void            Play( OutputDevice* pOutDev, const Point& rPos,
-                          const Size& rSize );
+    void            Play(GDIMetaFile& rMtf);
+    void            Play(OutputDevice& rOutDev, size_t nPos = GDI_METAFILE_END);
+    void            Play(OutputDevice& rOutDev, const Point& rPos, const Size& rSize);
 
     void            Pause( bool bPause );
     bool            IsPause() const { return m_bPause; }

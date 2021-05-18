@@ -1130,7 +1130,7 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText )
         {
             sal_Int32 nX = rPos.X() + GetCharWidth() * nBeginIx;
             mpEditEngine->SetTextCurrentDefaults( aToken );
-            mpEditEngine->Draw( mpBackgrDev.get(), Point( nX, rPos.Y() ) );
+            mpEditEngine->Draw(*mpBackgrDev, Point(nX, rPos.Y()));
         }
     }
 

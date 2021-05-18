@@ -240,7 +240,7 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     rTarget.Pop();
 
     if (rGraphic.GetType() != GraphicType::NONE)
-        rGraphic.Draw(&rTarget, Point(), GetGraphicSize());
+        rGraphic.Draw(rTarget, Point(), GetGraphicSize());
 
     if (aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom())
     {

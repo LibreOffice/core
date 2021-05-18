@@ -2120,7 +2120,7 @@ void SvxNumOptionsTabPage::EditModifyHdl_Impl(const weld::Entry* pEdit)
     SetModified();
 }
 
-static tools::Long lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, tools::Long nXStart,
+static tools::Long lcl_DrawGraphic(VirtualDevice& rVDev, const SvxNumberFormat &rFmt, tools::Long nXStart,
                         tools::Long nYMiddle, tools::Long nDivision)
 {
     const SvxBrushItem* pBrushItem = rFmt.GetBrush();
@@ -2134,8 +2134,8 @@ static tools::Long lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &
             aGSize.setWidth( aGSize.Width() / nDivision );
             nRet = aGSize.Width();
             aGSize.setHeight( aGSize.Height() / nDivision );
-            pGrf->Draw( pVDev, Point(nXStart,nYMiddle - ( aGSize.Height() / 2) ),
-                    pVDev->PixelToLogic( aGSize ) );
+            pGrf->Draw(rVDev, Point(nXStart,nYMiddle - ( aGSize.Height() / 2) ),
+                       rVDev.PixelToLogic( aGSize ) );
         }
     }
     return nRet;
@@ -2280,7 +2280,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 if (SVX_NUM_BITMAP == (rFmt.GetNumberingType() &(~LINK_TOKEN)))
                 {
                     tools::Long nYMiddle = nYStart + ( nFontHeight / 2 );
-                    nBulletWidth = rFmt.IsShowSymbol() ? lcl_DrawGraphic(pVDev.get(), rFmt, nNumberXPos, nYMiddle, nWidthRelation) : 0;
+                    nBulletWidth = rFmt.IsShowSymbol() ? lcl_DrawGraphic(*pVDev, rFmt, nNumberXPos, nYMiddle, nWidthRelation) : 0;
                 }
                 else if (SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
                 {
@@ -2401,7 +2401,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     if (rFmt.IsShowSymbol())
                     {
                         tools::Long nYMiddle = nYStart + ( nFontHeight / 2 );
-                        nTextOffset = lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYMiddle, nWidthRelation);
+                        nTextOffset = lcl_DrawGraphic(*pVDev, rFmt, nXStart, nYMiddle, nWidthRelation);
                         nTextOffset = nTextOffset + nXStep;
                     }
                 }

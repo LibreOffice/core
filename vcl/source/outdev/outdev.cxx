@@ -704,7 +704,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
             GDIMetaFile* pOldMetaFile = mpMetaFile;
 
             mpMetaFile = nullptr;
-            Graphic( *pSubst ).Draw( this, rPoint, rSize );
+            Graphic(*pSubst).Draw(*this, rPoint, rSize);
             mpMetaFile = pOldMetaFile;
         }
     }

@@ -879,8 +879,8 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     return aBulletFont;
 }
 
-void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
-    const Point& rOrigin, Degree10 nOrientation, OutputDevice* pOutDev )
+void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin,
+                           Degree10 nOrientation, OutputDevice& rOutDev)
 {
 
     bool bDrawBullet = false;
@@ -916,8 +916,8 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
             // Use baseline
             bool bSymbol = pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL;
             aBulletFont.SetAlignment( bSymbol ? ALIGN_BOTTOM : ALIGN_BASELINE );
-            vcl::Font aOldFont = pOutDev->GetFont();
-            pOutDev->SetFont( aBulletFont );
+            vcl::Font aOldFont = rOutDev.GetFont();
+            rOutDev.SetFont( aBulletFont );
 
             ParagraphInfos  aParaInfos = pEditEngine->GetParagraphInfos( nPara );
             Point aTextPos;
@@ -963,26 +963,26 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                 aTextPos += rOrigin;
                 vcl::Font aRotatedFont( aBulletFont );
                 aRotatedFont.SetOrientation( nOrientation );
-                pOutDev->SetFont( aRotatedFont );
+                rOutDev.SetFont( aRotatedFont );
             }
 
             // VCL will take care of brackets and so on...
-            ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
+            ComplexTextLayoutFlags nLayoutMode = rOutDev.GetLayoutMode();
             nLayoutMode &= ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::BiDiStrong);
             if ( bRightToLeftPara )
                 nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft | ComplexTextLayoutFlags::BiDiStrong;
-            pOutDev->SetLayoutMode( nLayoutMode );
+            rOutDev.SetLayoutMode( nLayoutMode );
 
             if(bStrippingPortions)
             {
-                const vcl::Font& aSvxFont(pOutDev->GetFont());
+                const vcl::Font& aSvxFont(rOutDev.GetFont());
                 std::unique_ptr<tools::Long[]> pBuf(new tools::Long[ pPara->GetText().getLength() ]);
-                pOutDev->GetTextArray( pPara->GetText(), pBuf.get() );
+                rOutDev.GetTextArray( pPara->GetText(), pBuf.get() );
 
                 if(bSymbol)
                 {
                     // aTextPos is Bottom, go to Baseline
-                    FontMetric aMetric(pOutDev->GetFontMetric());
+                    FontMetric aMetric(rOutDev.GetFontMetric());
                     aTextPos.AdjustY( -(aMetric.GetDescent()) );
                 }
 
@@ -991,10 +991,10 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
             }
             else
             {
-                pOutDev->DrawText( aTextPos, pPara->GetText() );
+                rOutDev.DrawText( aTextPos, pPara->GetText() );
             }
 
-            pOutDev->SetFont( aOldFont );
+            rOutDev.SetFont( aOldFont );
         }
         else
         {
@@ -1042,7 +1042,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                 else
                 {
                     // Remove CAST when KA made the Draw-Method const
-                    const_cast<GraphicObject*>(pFmt->GetBrush()->GetGraphicObject())->Draw( pOutDev, aBulletPos, pPara->aBulSize );
+                    const_cast<GraphicObject*>(pFmt->GetBrush()->GetGraphicObject())->Draw(rOutDev, aBulletPos, pPara->aBulSize);
                 }
             }
         }
@@ -1053,7 +1053,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
             bStrippingPortions || nOrientation )
         return;
 
-    tools::Long nWidth = pOutDev->PixelToLogic( Size( 10, 0 ) ).Width();
+    tools::Long nWidth = rOutDev.PixelToLogic( Size( 10, 0 ) ).Width();
 
     Point aStartPos, aEndPos;
     if ( !bVertical )
@@ -1074,10 +1074,10 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
         aEndPos.AdjustY(nWidth );
     }
 
-    const Color& rOldLineColor = pOutDev->GetLineColor();
-    pOutDev->SetLineColor( COL_BLACK );
-    pOutDev->DrawLine( aStartPos, aEndPos );
-    pOutDev->SetLineColor( rOldLineColor );
+    const Color& rOldLineColor = rOutDev.GetLineColor();
+    rOutDev.SetLineColor( COL_BLACK );
+    rOutDev.DrawLine( aStartPos, aEndPos );
+    rOutDev.SetLineColor( rOldLineColor );
 }
 
 void Outliner::InvalidateBullet(sal_Int32 nPara)

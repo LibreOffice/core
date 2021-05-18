@@ -147,7 +147,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
         if( pVDev->SetOutputSizePixel( aSizePix ) )
         {
             const Point aPt;
-            aTmpGrf.Draw( pVDev, aPt, aSizePix );
+            aTmpGrf.Draw(*pVDev, aPt, aSizePix);
             aBmp = pVDev->GetBitmap( aPt, aSizePix );
         }
 

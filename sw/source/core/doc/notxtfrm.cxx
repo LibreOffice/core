@@ -141,7 +141,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
     aFont.SetColor( aCol );
 
     const BitmapEx& rBmp = const_cast<SwViewShell&>(rSh).GetReplacementBitmap(bDefect);
-    Graphic::DrawEx( rSh.GetOut(), rText, aFont, rBmp, rRect.Pos(), rRect.SSize() );
+    Graphic::DrawEx(*rSh.GetOut(), rText, aFont, rBmp, rRect.Pos(), rRect.SSize());
 }
 
 SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )
@@ -200,7 +200,7 @@ static void lcl_ClearArea( const SwFrame &rFrame,
         {
             for( const auto &rRegion : aRegion )
             {
-                ::DrawGraphic( pItem, &rOut, aOrigRect, rRegion );
+                ::DrawGraphic(pItem, rOut, aOrigRect, rRegion);
             }
         }
     }
@@ -1380,7 +1380,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
 
             if ( pGraphic && pGraphic->GetType() != GraphicType::NONE )
             {
-                pGraphic->Draw( pOut, aPosition, aSize );
+                pGraphic->Draw(*pOut, aPosition, aSize);
 
                 // shade the representation if the object is activated outplace
                 uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();

@@ -158,17 +158,15 @@ private:
 
     sal_uLong           getSizeBytes() const;
 
-    void                draw( OutputDevice* pOutDev,
-                                  const Point& rDestPt ) const;
-    void                draw( OutputDevice* pOutDev,
-                                  const Point& rDestPt,
-                                  const Size& rDestSize ) const;
+    void                draw(OutputDevice& rOutDev, const Point& rDestPt) const;
+    void                draw(OutputDevice& rOutDev, const Point& rDestPt,
+                             const Size& rDestSize) const;
 
-    void                startAnimation( OutputDevice* pOutDev,
-                                            const Point& rDestPt,
-                                            const Size& rDestSize,
-                                            tools::Long nExtraData,
-                                            OutputDevice* pFirstFrameOutDev );
+    void                startAnimation(OutputDevice& rOutDev,
+                                       const Point& rDestPt,
+                                       const Size& rDestSize,
+                                       tools::Long nExtraData,
+                                       OutputDevice* pFirstFrameOutDev);
     void                stopAnimation( const OutputDevice* pOutputDevice,
                                            tools::Long nExtraData );
 

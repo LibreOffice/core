@@ -514,7 +514,7 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
         {
             sal_uInt16 nY = 11 + i * 33;
             aPos.setY( aBLPos.Y() + nRectHeight  * nY / 100 );
-            aGraphic.Draw( pDev, aPos, aSize );
+            aGraphic.Draw(*pDev, aPos, aSize);
         }
     }
 }

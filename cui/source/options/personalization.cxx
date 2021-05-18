@@ -148,7 +148,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
         ScopedVclPtr<VirtualDevice> xVirDev
             = m_vDefaultPersonaImages[nIndex]->create_virtual_device();
         xVirDev->SetOutputSizePixel(aSize);
-        aGraphic.Draw(xVirDev.get(), Point(0, 0));
+        aGraphic.Draw(*xVirDev, Point(0, 0));
         m_vDefaultPersonaImages[nIndex]->set_image(xVirDev.get());
         xVirDev.disposeAndClear();
 

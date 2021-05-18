@@ -79,7 +79,7 @@ void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib);
 // transparency, saved in the color of the brush item.
 void DrawGraphic(
     const SvxBrushItem *,
-    vcl::RenderContext *,
+    vcl::RenderContext &,
     const SwRect &rOrg,
     const SwRect &rOut,
     const sal_uInt8 nGrfNum = GRFNUM_NO,

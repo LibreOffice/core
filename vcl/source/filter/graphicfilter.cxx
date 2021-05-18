@@ -1591,7 +1591,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
             aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
             aVirDev->SetOutputSizePixel(aSizePixel);
             Graphic aGraphic2=aGraphic;
-            aGraphic2.Draw(aVirDev.get(),Point(0,0),aSizePixel); // this changes the MapMode
+            aGraphic2.Draw(*aVirDev, Point(0, 0), aSizePixel); // this changes the MapMode
             aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
             aGraphic=Graphic(aVirDev->GetBitmapEx(Point(0,0),aSizePixel));
         }
