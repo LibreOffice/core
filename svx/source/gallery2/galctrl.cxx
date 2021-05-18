@@ -122,9 +122,9 @@ void GalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
         const Size  aSize( aPreviewRect.GetSize() );
 
         if( aGraphicObj.IsAnimated() )
-            aGraphicObj.StartAnimation(&rRenderContext, aPos, aSize);
+            aGraphicObj.StartAnimation(rRenderContext, aPos, aSize);
         else
-            aGraphicObj.Draw(&rRenderContext, aPos, aSize);
+            aGraphicObj.Draw(rRenderContext, aPos, aSize);
     }
 }
 
@@ -266,9 +266,9 @@ void DialogGalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools
         const Size  aSize( aPreviewRect.GetSize() );
 
         if( aGraphicObj.IsAnimated() )
-            aGraphicObj.StartAnimation(&rRenderContext, aPos, aSize);
+            aGraphicObj.StartAnimation(rRenderContext, aPos, aSize);
         else
-            aGraphicObj.Draw(&rRenderContext, aPos, aSize);
+            aGraphicObj.Draw(rRenderContext, aPos, aSize);
     }
 }
 

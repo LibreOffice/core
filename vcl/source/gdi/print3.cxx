@@ -1345,7 +1345,7 @@ void PrinterController::printFilteredPage( int i_nPage )
 
     mpImplData->mxPrinter->Push();
     aCleanedFile.WindStart();
-    aCleanedFile.Play( mpImplData->mxPrinter.get() );
+    aCleanedFile.Play(*mpImplData->mxPrinter);
     mpImplData->mxPrinter->Pop();
 
     mpImplData->mxPrinter->ImplEndPage();

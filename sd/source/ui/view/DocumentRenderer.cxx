@@ -1133,7 +1133,7 @@ namespace {
             pOutliner->Clear();
             pOutliner->SetText(*mpParaObject);
 
-            pOutliner->Draw(&rPrinter, aOutRect);
+            pOutliner->Draw(rPrinter, aOutRect);
 
             PrintMessage(
                 rPrinter,

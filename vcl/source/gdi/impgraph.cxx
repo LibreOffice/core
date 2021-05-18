@@ -619,7 +619,7 @@ Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) con
                     aVDev->SetAntialiasing(aVDev->GetAntialiasing() | AntialiasingFlags::PixelSnapHairline);
                 }
 
-                draw( aVDev.get(), Point(), aDrawSize );
+                draw(*aVDev, Point(), aDrawSize);
 
                 // use maBitmapEx as local buffer for rendered metafile
                 const_cast< ImpGraphic* >(this)->maBitmapEx = aVDev->GetBitmapEx( Point(), aVDev->GetOutputSizePixel() );
@@ -1001,7 +1001,7 @@ sal_uLong ImpGraphic::getSizeBytes() const
     return mnSizeBytes;
 }
 
-void ImpGraphic::draw(OutputDevice* pOutDev, const Point& rDestPt) const
+void ImpGraphic::draw(OutputDevice& rOutDev, const Point& rDestPt) const
 {
     ensureAvailable();
 
@@ -1020,18 +1020,18 @@ void ImpGraphic::draw(OutputDevice* pOutDev, const Point& rDestPt) const
 
             if (mpAnimation)
             {
-                mpAnimation->Draw(pOutDev, rDestPt);
+                mpAnimation->Draw(rOutDev, rDestPt);
             }
             else
             {
-                maBitmapEx.Draw(pOutDev, rDestPt);
+                maBitmapEx.Draw(&rOutDev, rDestPt);
             }
         }
         break;
 
         case GraphicType::GdiMetafile:
         {
-            draw(pOutDev, rDestPt, maMetaFile.GetPrefSize());
+            draw(rOutDev, rDestPt, maMetaFile.GetPrefSize());
         }
         break;
 
@@ -1041,8 +1041,8 @@ void ImpGraphic::draw(OutputDevice* pOutDev, const Point& rDestPt) const
     }
 }
 
-void ImpGraphic::draw(OutputDevice* pOutDev,
-                          const Point& rDestPt, const Size& rDestSize) const
+void ImpGraphic::draw(OutputDevice& rOutDev,
+                      const Point& rDestPt, const Size& rDestSize) const
 {
     ensureAvailable();
 
@@ -1061,11 +1061,11 @@ void ImpGraphic::draw(OutputDevice* pOutDev,
 
             if (mpAnimation)
             {
-                mpAnimation->Draw(pOutDev, rDestPt, rDestSize);
+                mpAnimation->Draw(rOutDev, rDestPt, rDestSize);
             }
             else
             {
-                maBitmapEx.Draw(pOutDev, rDestPt, rDestSize);
+                maBitmapEx.Draw(&rOutDev, rDestPt, rDestSize);
             }
         }
         break;
@@ -1073,7 +1073,7 @@ void ImpGraphic::draw(OutputDevice* pOutDev,
         case GraphicType::GdiMetafile:
         {
             const_cast<ImpGraphic*>(this)->maMetaFile.WindStart();
-            const_cast<ImpGraphic*>(this)->maMetaFile.Play(pOutDev, rDestPt, rDestSize);
+            const_cast<ImpGraphic*>(this)->maMetaFile.Play(rOutDev, rDestPt, rDestSize);
             const_cast<ImpGraphic*>(this)->maMetaFile.WindStart();
         }
         break;
@@ -1084,14 +1084,14 @@ void ImpGraphic::draw(OutputDevice* pOutDev,
     }
 }
 
-void ImpGraphic::startAnimation( OutputDevice* pOutDev, const Point& rDestPt,
-                                     const Size& rDestSize, tools::Long nExtraData,
-                                     OutputDevice* pFirstFrameOutDev )
+void ImpGraphic::startAnimation(OutputDevice& rOutDev, const Point& rDestPt,
+                                const Size& rDestSize, tools::Long nExtraData,
+                                OutputDevice* pFirstFrameOutDev )
 {
     ensureAvailable();
 
     if( isSupportedGraphic() && !isSwappedOut() && mpAnimation )
-        mpAnimation->Start( pOutDev, rDestPt, rDestSize, nExtraData, pFirstFrameOutDev );
+        mpAnimation->Start(rOutDev, rDestPt, rDestSize, nExtraData, pFirstFrameOutDev);
 }
 
 void ImpGraphic::stopAnimation( const OutputDevice* pOutDev, tools::Long nExtraData )

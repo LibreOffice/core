@@ -1797,7 +1797,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                 Size aTextSize( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
                                 Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
                                             (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
-                                pEditEng->Draw( &rRenderContext, aPos );
+                                pEditEng->Draw(rRenderContext, aPos);
                             }
                             else
                             {

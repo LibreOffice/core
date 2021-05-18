@@ -34,23 +34,23 @@ using namespace ::com::sun::star;
 namespace
 {
 
-void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
-                             vcl::Font* pFont, const BitmapEx* pBitmapEx,
-                             const Point& rDestPt, const Size& rDestSize )
+void ImplDrawDefault(OutputDevice& rOutDev, const OUString* pText,
+                     vcl::Font* pFont, const BitmapEx* pBitmapEx,
+                     const Point& rDestPt, const Size& rDestSize)
 {
-    sal_uInt16  nPixel = static_cast<sal_uInt16>(pOutDev->PixelToLogic( Size( 1, 1 ) ).Width());
+    sal_uInt16  nPixel = static_cast<sal_uInt16>(rOutDev.PixelToLogic( Size( 1, 1 ) ).Width());
     sal_uInt16  nPixelWidth = nPixel;
     Point       aPoint( rDestPt.X() + nPixelWidth, rDestPt.Y() + nPixelWidth );
     Size        aSize( rDestSize.Width() - ( nPixelWidth << 1 ), rDestSize.Height() - ( nPixelWidth << 1 ) );
     bool        bFilled = ( pBitmapEx != nullptr || pFont != nullptr );
     tools::Rectangle   aBorderRect( aPoint, aSize );
 
-    pOutDev->Push();
+    rOutDev.Push();
 
-    pOutDev->SetFillColor();
+    rOutDev.SetFillColor();
 
     // On the printer a black rectangle and on the screen one with 3D effect
-    pOutDev->DrawBorder(aBorderRect);
+    rOutDev.DrawBorder(aBorderRect);
 
     aPoint.AdjustX(nPixelWidth + 2*nPixel );
     aPoint.AdjustY(nPixelWidth + 2*nPixel );
@@ -59,20 +59,20 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
 
     if( !aSize.IsEmpty() && pBitmapEx && !pBitmapEx->IsEmpty() )
     {
-        Size aBitmapSize( pOutDev->PixelToLogic( pBitmapEx->GetSizePixel() ) );
+        Size aBitmapSize( rOutDev.PixelToLogic( pBitmapEx->GetSizePixel() ) );
 
         if( aSize.Height() > aBitmapSize.Height() && aSize.Width() > aBitmapSize.Width() )
         {
-            pOutDev->DrawBitmapEx( aPoint, *pBitmapEx );
+            rOutDev.DrawBitmapEx( aPoint, *pBitmapEx );
             aPoint.AdjustX(aBitmapSize.Width() + 2*nPixel );
             aSize.AdjustWidth( -(aBitmapSize.Width() + 2*nPixel) );
         }
     }
 
-    if ( !aSize.IsEmpty() && pFont && pText && pText->getLength() && pOutDev->IsOutputEnabled() )
+    if ( !aSize.IsEmpty() && pFont && pText && pText->getLength() && rOutDev.IsOutputEnabled() )
     {
         MapMode aMapMode( MapUnit::MapPoint );
-        Size    aSz = pOutDev->LogicToLogic( Size( 0, 12 ), &aMapMode, nullptr );
+        Size aSz = rOutDev.LogicToLogic( Size( 0, 12 ), &aMapMode, nullptr );
         tools::Long    nThreshold = aSz.Height() / 2;
         tools::Long    nStep = nThreshold / 3;
 
@@ -82,10 +82,10 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
         for(;; aSz.AdjustHeight( -nStep ) )
         {
             pFont->SetFontSize( aSz );
-            pOutDev->SetFont( *pFont );
+            rOutDev.SetFont( *pFont );
 
-            tools::Long nTextHeight = pOutDev->GetTextHeight();
-            tools::Long nTextWidth = pOutDev->GetTextWidth( *pText );
+            tools::Long nTextHeight = rOutDev.GetTextHeight();
+            tools::Long nTextWidth = rOutDev.GetTextWidth( *pText );
             if ( nTextHeight )
             {
                 // The approximation does not respect imprecisions caused
@@ -111,7 +111,7 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
                                 nNext++;
                             while ( nStart+nNext < pText->getLength() && (*pText)[nStart+nNext] != ' ' )
                                 nNext++;
-                            nTextWidth = pOutDev->GetTextWidth( *pText, nStart, nNext );
+                            nTextWidth = rOutDev.GetTextWidth( *pText, nStart, nNext );
                             if ( nTextWidth > aSize.Width() )
                                 break;
                             nLen = nNext;
@@ -119,10 +119,10 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
                         while ( nStart+nNext < pText->getLength() );
 
                         sal_Int32 n = nLen;
-                        nTextWidth = pOutDev->GetTextWidth( *pText, nStart, n );
+                        nTextWidth = rOutDev.GetTextWidth( *pText, nStart, n );
                         while( nTextWidth > aSize.Width() )
-                            nTextWidth = pOutDev->GetTextWidth( *pText, nStart, --n );
-                        pOutDev->DrawText( aPoint, *pText, nStart, n );
+                            nTextWidth = rOutDev.GetTextWidth( *pText, nStart, --n );
+                        rOutDev.DrawText( aPoint, *pText, nStart, n );
 
                         aPoint.AdjustY(nTextHeight );
                         nStart      = sal::static_int_cast<sal_uInt16>(nStart + nLen);
@@ -149,12 +149,12 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
         aBorderRect.AdjustRight( -1 );
         aBorderRect.AdjustBottom( -1 );
 
-        pOutDev->SetLineColor( COL_LIGHTRED );
-        pOutDev->DrawLine( aBorderRect.TopLeft(), aBorderRect.BottomRight() );
-        pOutDev->DrawLine( aBorderRect.TopRight(), aBorderRect.BottomLeft() );
+        rOutDev.SetLineColor( COL_LIGHTRED );
+        rOutDev.DrawLine( aBorderRect.TopLeft(), aBorderRect.BottomRight() );
+        rOutDev.DrawLine( aBorderRect.TopRight(), aBorderRect.BottomLeft() );
     }
 
-    pOutDev->Pop();
+    rOutDev.Pop();
 }
 
 } // end anonymous namespace
@@ -424,33 +424,33 @@ sal_uLong Graphic::GetSizeBytes() const
     return mxImpGraphic->getSizeBytes();
 }
 
-void Graphic::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const
+void Graphic::Draw(OutputDevice& rOutDev, const Point& rDestPt) const
 {
-    mxImpGraphic->draw( pOutDev, rDestPt );
+    mxImpGraphic->draw(rOutDev, rDestPt);
 }
 
-void Graphic::Draw( OutputDevice* pOutDev,
-                    const Point& rDestPt, const Size& rDestSz ) const
+void Graphic::Draw(OutputDevice& rOutDev, const Point& rDestPt,
+                   const Size& rDestSz) const
 {
     if( GraphicType::Default == mxImpGraphic->getType() )
-        ImplDrawDefault( pOutDev, nullptr, nullptr, nullptr, rDestPt, rDestSz );
+        ImplDrawDefault(rOutDev, nullptr, nullptr, nullptr, rDestPt, rDestSz);
     else
-        mxImpGraphic->draw( pOutDev, rDestPt, rDestSz );
+        mxImpGraphic->draw(rOutDev, rDestPt, rDestSz);
 }
 
-void Graphic::DrawEx( OutputDevice* pOutDev, const OUString& rText,
-                    vcl::Font& rFont, const BitmapEx& rBitmap,
-                    const Point& rDestPt, const Size& rDestSz )
+void Graphic::DrawEx(OutputDevice& rOutDev, const OUString& rText,
+                     vcl::Font& rFont, const BitmapEx& rBitmap,
+                     const Point& rDestPt, const Size& rDestSz)
 {
-    ImplDrawDefault( pOutDev, &rText, &rFont, &rBitmap, rDestPt, rDestSz );
+    ImplDrawDefault(rOutDev, &rText, &rFont, &rBitmap, rDestPt, rDestSz);
 }
 
-void Graphic::StartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
-                              const Size& rDestSz, tools::Long nExtraData,
-                              OutputDevice* pFirstFrameOutDev )
+void Graphic::StartAnimation(OutputDevice& rOutDev, const Point& rDestPt,
+                             const Size& rDestSz, tools::Long nExtraData,
+                             OutputDevice* pFirstFrameOutDev)
 {
     ImplTestRefCount();
-    mxImpGraphic->startAnimation( pOutDev, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev );
+    mxImpGraphic->startAnimation(rOutDev, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev);
 }
 
 void Graphic::StopAnimation( const OutputDevice* pOutDev, tools::Long nExtraData )

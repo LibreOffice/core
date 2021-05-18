@@ -200,35 +200,35 @@ const SfxItemSet& EditEngine::GetEmptyItemSet() const
     return pImpEditEngine->GetEmptyItemSet();
 }
 
-void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect )
+void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect )
 {
-    Draw( pOutDev, rOutRect, Point( 0, 0 ) );
+    Draw( rOutDev, rOutRect, Point( 0, 0 ) );
 }
 
-void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, Degree10 nOrientation )
+void EditEngine::Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation )
 {
     // Create with 2 points, as with positive points it will end up with
     // LONGMAX as Size, Bottom and Right in the range > LONGMAX.
     tools::Rectangle aBigRect( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
-    if( pOutDev->GetConnectMetaFile() )
-        pOutDev->Push();
+    if( rOutDev.GetConnectMetaFile() )
+        rOutDev.Push();
     Point aStartPos( rStartPos );
     if ( IsVertical() )
     {
         aStartPos.AdjustX(GetPaperSize().Width() );
         aStartPos = Rotate( aStartPos, nOrientation, rStartPos );
     }
-    pImpEditEngine->Paint( pOutDev, aBigRect, aStartPos, false, nOrientation );
-    if( pOutDev->GetConnectMetaFile() )
-        pOutDev->Pop();
+    pImpEditEngine->Paint(rOutDev, aBigRect, aStartPos, false, nOrientation);
+    if( rOutDev.GetConnectMetaFile() )
+        rOutDev.Pop();
 }
 
-void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos )
+void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos )
 {
-    Draw( pOutDev, rOutRect, rStartDocPos, true );
+    Draw( rOutDev, rOutRect, rStartDocPos, true );
 }
 
-void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip )
+void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip )
 {
 #if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
     if ( bDebugPaint )
@@ -237,8 +237,8 @@ void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, 
 
     // Align to the pixel boundary, so that it becomes exactly the same
     // as Paint ()
-    tools::Rectangle aOutRect( pOutDev->LogicToPixel( rOutRect ) );
-    aOutRect = pOutDev->PixelToLogic( aOutRect );
+    tools::Rectangle aOutRect( rOutDev.LogicToPixel( rOutRect ) );
+    aOutRect = rOutDev.PixelToLogic( aOutRect );
 
     Point aStartPos;
     if ( !IsVertical() )
@@ -252,14 +252,14 @@ void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, 
         aStartPos.setY( aOutRect.Top() - rStartDocPos.X() );
     }
 
-    bool bClipRegion = pOutDev->IsClipRegion();
-    bool bMetafile = pOutDev->GetConnectMetaFile();
-    vcl::Region aOldRegion = pOutDev->GetClipRegion();
+    bool bClipRegion = rOutDev.IsClipRegion();
+    bool bMetafile = rOutDev.GetConnectMetaFile();
+    vcl::Region aOldRegion = rOutDev.GetClipRegion();
 
     // If one existed => intersection!
     // Use Push/pop for creating the Meta file
     if ( bMetafile )
-        pOutDev->Push();
+        rOutDev.Push();
 
     // Always use the Intersect method, it is a must for Metafile!
     if ( bClip )
@@ -272,25 +272,25 @@ void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, 
             // Some printer drivers cause problems if characters graze the
             // ClipRegion, therefore rather add a pixel more ...
             tools::Rectangle aClipRect( aOutRect );
-            if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
+            if ( rOutDev.GetOutDevType() == OUTDEV_PRINTER )
             {
                 Size aPixSz( 1, 0 );
-                aPixSz = pOutDev->PixelToLogic( aPixSz );
+                aPixSz = rOutDev.PixelToLogic( aPixSz );
                 aClipRect.AdjustRight(aPixSz.Width() );
                 aClipRect.AdjustBottom(aPixSz.Width() );
             }
-            pOutDev->IntersectClipRegion( aClipRect );
+            rOutDev.IntersectClipRegion( aClipRect );
         }
     }
 
-    pImpEditEngine->Paint( pOutDev, aOutRect, aStartPos );
+    pImpEditEngine->Paint( rOutDev, aOutRect, aStartPos );
 
     if ( bMetafile )
-        pOutDev->Pop();
+        rOutDev.Pop();
     else if ( bClipRegion )
-        pOutDev->SetClipRegion( aOldRegion );
+        rOutDev.SetClipRegion( aOldRegion );
     else
-        pOutDev->SetClipRegion();
+        rOutDev.SetClipRegion();
 }
 
 void EditEngine::InsertView(EditView* pEditView, size_t nIndex)
@@ -1820,7 +1820,7 @@ void EditEngine::StripPortions()
             aBigRect.SetBottom( 0 );
         }
     }
-    pImpEditEngine->Paint( aTmpDev.get(), aBigRect, Point(), true );
+    pImpEditEngine->Paint(*aTmpDev, aBigRect, Point(), true);
 }
 
 void EditEngine::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList )
@@ -2475,7 +2475,7 @@ void EditEngine::DrawingTab( const Point& /*rStartPos*/, tools::Long /*nWidth*/,
 {
 }
 
-void EditEngine::PaintingFirstLine( sal_Int32, const Point&, tools::Long, const Point&, Degree10, OutputDevice* )
+void EditEngine::PaintingFirstLine(sal_Int32, const Point&, tools::Long, const Point&, Degree10, OutputDevice&)
 {
 }
 

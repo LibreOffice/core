@@ -623,7 +623,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
         ( mnDrawMode & DrawModeFlags::NoTransparency ) )
     {
         const_cast<GDIMetaFile&>(rMtf).WindStart();
-        const_cast<GDIMetaFile&>(rMtf).Play( this, rPos, rSize );
+        const_cast<GDIMetaFile&>(rMtf).Play(*this, rPos, rSize);
         const_cast<GDIMetaFile&>(rMtf).WindStart();
     }
     else
@@ -679,7 +679,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // draw MetaFile to buffer
                     xVDev->EnableMapMode(bBufferMapModeEnabled);
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
-                    const_cast<GDIMetaFile&>(rMtf).Play(xVDev.get(), rPos, rSize);
+                    const_cast<GDIMetaFile&>(rMtf).Play(*xVDev, rPos, rSize);
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
 
                     // get content bitmap from buffer
@@ -714,7 +714,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     // create paint bitmap
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
-                    const_cast<GDIMetaFile&>(rMtf).Play( xVDev.get(), rPos, rSize );
+                    const_cast<GDIMetaFile&>(rMtf).Play(*xVDev, rPos, rSize);
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
                     xVDev->EnableMapMode( false );
                     BitmapEx aPaint = xVDev->GetBitmapEx(Point(), xVDev->GetOutputSizePixel());

@@ -168,14 +168,14 @@ OUString Outliner::GetWord( sal_Int32 nPara, sal_Int32 nIndex )
     return pEditEngine->GetWord( nPara, nIndex );
 }
 
-void Outliner::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect )
+void Outliner::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect )
 {
-    pEditEngine->Draw( pOutDev, rOutRect );
+    pEditEngine->Draw( rOutDev, rOutRect );
 }
 
-void Outliner::Draw( OutputDevice* pOutDev, const Point& rStartPos )
+void Outliner::Draw( OutputDevice& rOutDev, const Point& rStartPos )
 {
-    pEditEngine->Draw( pOutDev, rStartPos );
+    pEditEngine->Draw( rOutDev, rStartPos );
 }
 
 void Outliner::SetPaperSize( const Size& rSize )

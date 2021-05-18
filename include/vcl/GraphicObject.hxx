@@ -59,7 +59,7 @@ private:
     std::unique_ptr<GrfSimpleCacheObj> mxSimpleCache;
 
     bool                    VCL_DLLPRIVATE ImplGetCropParams(
-                                OutputDevice const * pOut,
+                                const OutputDevice& rOut,
                                 Point& rPt,
                                 Size& rSz,
                                 const GraphicAttr* pAttr,
@@ -128,7 +128,7 @@ private:
                             );
 
     bool VCL_DLLPRIVATE     ImplDrawTiled(
-                                OutputDevice* pOut,
+                                OutputDevice& rOut,
                                 const tools::Rectangle& rArea,
                                 const Size& rSizePixel,
                                 const Size& rOffset,
@@ -217,12 +217,10 @@ public:
     bool                    IsAnimated() const;
     bool                    IsEPS() const;
 
-    bool                    Draw(
-                                OutputDevice* pOut,
-                                const Point& rPt,
-                                const Size& rSz,
-                                const GraphicAttr* pAttr = nullptr
-                            );
+    bool                    Draw(OutputDevice& rOut,
+                                 const Point& rPt,
+                                 const Size& rSz,
+                                 const GraphicAttr* pAttr = nullptr);
 
     /** Draw the graphic repeatedly into the given output rectangle
 
@@ -253,7 +251,7 @@ public:
         bitmap drawings appear on the outdev.
      */
     void                    DrawTiled(
-                                OutputDevice* pOut,
+                                OutputDevice& rOut,
                                 const tools::Rectangle& rArea,
                                 const Size& rSize,
                                 const Size& rOffset,
@@ -261,7 +259,7 @@ public:
                             );
 
     bool                    StartAnimation(
-                                OutputDevice* pOut,
+                                OutputDevice& rOut,
                                 const Point& rPt,
                                 const Size& rSz,
                                 tools::Long nExtraData = 0,

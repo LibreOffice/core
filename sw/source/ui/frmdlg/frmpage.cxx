@@ -2649,7 +2649,7 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     }
     else if (bGraphic)  //draw unmirrored preview graphic
     {
-        aGraphic.Draw(&rRenderContext, aPntPos, aPntSz);
+        aGraphic.Draw(rRenderContext, aPntPos, aPntSz);
     }
     else    //draw unmirrored stock sample image
     {

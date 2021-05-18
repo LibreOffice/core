@@ -57,14 +57,14 @@ void CuiGraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const ::
         const Size aGraphicSize(rRenderContext.LogicToPixel(maPreview.GetPrefSize(), maPreview.GetPrefMapMode()));
         const Point aGraphicPosition((aOutputSize.Width()  - aGraphicSize.Width()  ) >> 1,
                                      (aOutputSize.Height() - aGraphicSize.Height() ) >> 1);
-        maPreview.StartAnimation(&rRenderContext, aGraphicPosition, aGraphicSize);
+        maPreview.StartAnimation(rRenderContext, aGraphicPosition, aGraphicSize);
     }
     else
     {
         const Size  aGraphicSize(maPreview.GetSizePixel());
         const Point aGraphicPosition((aOutputSize.Width()  - aGraphicSize.Width())  >> 1,
                                      (aOutputSize.Height() - aGraphicSize.Height()) >> 1);
-        maPreview.Draw(&rRenderContext, aGraphicPosition, aGraphicSize);
+        maPreview.Draw(rRenderContext, aGraphicPosition, aGraphicSize);
     }
 }
 

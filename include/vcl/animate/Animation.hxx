@@ -41,13 +41,13 @@ public:
 
     void Clear();
 
-    bool Start(OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz,
+    bool Start(OutputDevice& rOutDev, const Point& rDestPt, const Size& rDestSz,
                tools::Long nExtraData, OutputDevice* pFirstFrameOutDev);
 
     void Stop(const OutputDevice* pOutDev = nullptr, tools::Long nExtraData = 0);
 
-    void Draw(OutputDevice* pOutDev, const Point& rDestPt) const;
-    void Draw(OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz) const;
+    void Draw(OutputDevice& rOutDev, const Point& rDestPt) const;
+    void Draw(OutputDevice& rOutDev, const Point& rDestPt, const Size& rDestSz) const;
 
     bool IsInAnimation() const { return mbIsInAnimation; }
     bool IsTransparent() const;

@@ -271,7 +271,6 @@ void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry*
     }
 }
 
-
 void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphic >& rxGraphic )
 {
     if( mpOutDev && mxDevice.is() && rxGraphic.is() )
@@ -280,7 +279,7 @@ void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphi
         if (!aGraphic.IsNone())
         {
             GraphicObject aGraphicObject(aGraphic);
-            aGraphicObject.Draw( mpOutDev, maDestRect.TopLeft(), maDestRect.GetSize() );
+            aGraphicObject.Draw(*mpOutDev, maDestRect.TopLeft(), maDestRect.GetSize());
         }
     }
 }
