@@ -702,7 +702,7 @@ private:
                                                   tools::Long* pDXArray, sal_uInt16 n100thPercentFromMax, bool bManipulateDXArray );
     void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, tools::Long nRemainingWidth );
 
-    void                ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, sal_Int32 nIndex );
+    void                ImplInitLayoutMode(OutputDevice& rOutDev, sal_Int32 nPara, sal_Int32 nIndex);
     LanguageType        ImplCalcDigitLang(LanguageType eCurLang) const;
     void                ImplInitDigitMode(OutputDevice* pOutDev, LanguageType eLang);
     static OUString     convertDigits(const OUString &rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang);
