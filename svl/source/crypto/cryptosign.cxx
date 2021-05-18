@@ -1926,6 +1926,8 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
                                  /*pwfn_arg=*/nullptr,
                                  /*decrypt_key_cb=*/nullptr,
                                  /*decrypt_key_cb_arg=*/nullptr);
+    comphelper::ScopeGuard aGuard(
+        [&pCMSMessage] () { NSS_CMSMessage_Destroy(pCMSMessage); } );
     if (!NSS_CMSMessage_IsSigned(pCMSMessage))
     {
         SAL_WARN("svl.crypto", "ValidateSignature: message is not signed");
@@ -1949,7 +1951,14 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     // Import certificates from the signed data temporarily, so it'll be
     // possible to verify the signature, even if we didn't have the certificate
     // previously.
-    std::vector<CERTCertificate*> aDocumentCertificates;
+    struct CertDeleter
+    {
+        void operator()(CERTCertificate *p) const
+        {
+            CERT_DestroyCertificate(p);
+        }
+    };
+    std::vector<std::unique_ptr<CERTCertificate,CertDeleter())> aDocumentCertificates;
     for (size_t i = 0; pCMSSignedData->rawCerts[i]; ++i)
         aDocumentCertificates.push_back(CERT_NewTempCertificate(CERT_GetDefaultCertDB(), pCMSSignedData->rawCerts[i], nullptr, 0, 0));
 
@@ -2108,8 +2117,6 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     PORT_Free(pActualResultBuffer);
     HASH_Destroy(pHASHContext);
     NSS_CMSSignerInfo_Destroy(pCMSSignerInfo);
-    for (auto pDocumentCertificate : aDocumentCertificates)
-        CERT_DestroyCertificate(pDocumentCertificate);
 
     return true;
 
