@@ -10054,9 +10054,10 @@ namespace
 
 class GtkInstanceEditable : public GtkInstanceWidget, public virtual weld::Entry
 {
-private:
+protected:
     GtkEditable* m_pEditable;
     GtkWidget* m_pDelegate;
+private:
     std::unique_ptr<vcl::Font> m_xFont;
     gulong m_nChangedSignalId;
     gulong m_nInsertTextSignalId;
@@ -13856,6 +13857,9 @@ public:
         , m_bBlockOutput(false)
         , m_bBlank(false)
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+          gtk_text_set_activates_default(GTK_TEXT(m_pDelegate), true);
+#endif
     }
 
     virtual int get_value() const override
@@ -13880,7 +13884,7 @@ public:
         if (!m_bFormatting)
         {
 #if GTK_CHECK_VERSION(4, 0, 0)
-            gtk_editable_set_text(GTK_EDITABLE(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+            gtk_editable_set_text(m_pEditable, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
 #else
             gtk_entry_set_text(GTK_ENTRY(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
 #endif
@@ -13896,7 +13900,7 @@ public:
             if (!bKeepBlank)
             {
 #if GTK_CHECK_VERSION(4, 0, 0)
-                gtk_editable_set_text(GTK_EDITABLE(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+                gtk_editable_set_text(m_pEditable, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
 #else
                 gtk_entry_set_text(GTK_ENTRY(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
 #endif
