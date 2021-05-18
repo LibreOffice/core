@@ -367,4 +367,47 @@ class AutofilterTest(UITestCase):
         self.assertFalse(is_row_hidden(doc, 6))
 
         self.ui_test.close_doc()
+
+    def test_tdf142350(self):
+        self.ui_test.create_doc_in_start_center("calc")
+        document = self.ui_test.get_component()
+        calcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = calcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+
+        enter_text_to_cell(gridwin, "A1", "A")
+        enter_text_to_cell(gridwin, "A2", "0")
+        enter_text_to_cell(gridwin, "A3", "")
+        enter_text_to_cell(gridwin, "A4", "1")
+
+        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
+
+        self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
+
+        gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xList = xCheckListMenu.getChild("check_list_box")
+        xEntry = xList.getChild("2")
+        xEntry.executeAction("CLICK", tuple())
+
+        xOkButton = xFloatWindow.getChild("ok")
+        xOkButton.executeAction("CLICK", tuple())
+
+        self.assertFalse(is_row_hidden(document, 1))
+        self.assertTrue(is_row_hidden(document, 2))
+        self.assertFalse(is_row_hidden(document, 3))
+
+        gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xList = xCheckListMenu.getChild("check_list_box")
+        self.assertEqual(3, len(xList.getChildren()))
+        self.assertEqual('true', get_state_as_dict(xList.getChild('0'))['IsChecked'])
+        self.assertEqual('true', get_state_as_dict(xList.getChild('1'))['IsChecked'])
+        self.assertEqual('false', get_state_as_dict(xList.getChild('2'))['IsChecked'])
+        xCloseButton = xFloatWindow.getChild("cancel")
+        xCloseButton.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
