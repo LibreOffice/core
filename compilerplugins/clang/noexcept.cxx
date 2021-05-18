@@ -41,33 +41,34 @@ public:
             return true;
         }
         auto const r = tloc.getExceptionSpecRange();
-        auto const repl = isInUnoIncludeFile(r.getBegin()) ? "SAL_NOEXCEPT" : "noexcept";
-        if (rewriter != nullptr)
+        auto r2 = r;
+        auto l1 = r.getBegin();
+        while (compiler.getSourceManager().isMacroArgExpansion(l1))
         {
-            auto r2 = r;
-            auto l1 = r.getBegin();
-            while (compiler.getSourceManager().isMacroArgExpansion(l1))
+            l1 = compiler.getSourceManager().getImmediateMacroCallerLoc(l1);
+        }
+        if (compiler.getSourceManager().isMacroBodyExpansion(l1))
+        {
+            auto l2 = r.getEnd();
+            while (compiler.getSourceManager().isMacroArgExpansion(l2))
             {
-                l1 = compiler.getSourceManager().getImmediateMacroCallerLoc(l1);
+                l2 = compiler.getSourceManager().getImmediateMacroCallerLoc(l2);
             }
-            if (compiler.getSourceManager().isMacroBodyExpansion(l1))
+            if (compiler.getSourceManager().isMacroBodyExpansion(l2))
             {
-                auto l2 = r.getEnd();
-                while (compiler.getSourceManager().isMacroArgExpansion(l2))
+                //TODO: check l1, l2 are in same macro body expansion
+                auto const spl = compiler.getSourceManager().getSpellingLoc(l1);
+                if (ignoreLocation(spl))
                 {
-                    l2 = compiler.getSourceManager().getImmediateMacroCallerLoc(l2);
+                    return true;
                 }
-                if (compiler.getSourceManager().isMacroBodyExpansion(l2))
-                {
-                    //TODO: check l1, l2 are in same macro body expansion
-                    r2 = { compiler.getSourceManager().getSpellingLoc(l1),
-                           compiler.getSourceManager().getSpellingLoc(l2) };
-                }
+                r2 = { spl, compiler.getSourceManager().getSpellingLoc(l2) };
             }
-            if (replaceText(r2, repl))
-            {
-                return true;
-            }
+        }
+        auto const repl = isInUnoIncludeFile(r.getBegin()) ? "SAL_NOEXCEPT" : "noexcept";
+        if (rewriter != nullptr && replaceText(r2, repl))
+        {
+            return true;
         }
         report(DiagnosticsEngine::Warning,
                "Replace legacy dynamic 'throw ()' exception specification with '%0'", r.getBegin())
