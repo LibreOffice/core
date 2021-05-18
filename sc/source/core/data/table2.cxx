@@ -808,7 +808,6 @@ class TransClipHandler
     bool mbWasCut;
     bool mbIncludeFiltered;
     InsertDeleteFlags mnFlags;
-    std::vector<SCROW>& mrFilteredRows;
 
     ScAddress getDestPos(size_t nRow) const
     {
@@ -851,7 +850,6 @@ public:
         , mbWasCut(bWasCut)
         , mbIncludeFiltered(bIncludeFiltered)
         , mnFlags(nFlags)
-        , mrFilteredRows(rFilteredRows)
     {
         // Create list of filtered rows.
         if (!mbIncludeFiltered)
@@ -861,7 +859,7 @@ public:
                 // maybe this loop could be optimized
                 bool bFiltered = mrSrcTab.RowFiltered(curRow, nullptr, nullptr);
                 if (bFiltered)
-                    mrFilteredRows.push_back(curRow);
+                    rFilteredRows.push_back(curRow);
             }
         }
     }
