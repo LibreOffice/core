@@ -72,7 +72,7 @@ namespace connectivity::ado
             ~ODatabaseMetaDataResultSetMetaData() override;
 
             /// Avoid ambiguous cast error from the compiler.
-            operator css::uno::Reference< css::sdbc::XResultSetMetaData > () throw()
+            operator css::uno::Reference< css::sdbc::XResultSetMetaData > () noexcept
             { return this; }
 
             virtual sal_Int32 SAL_CALL getColumnCount(  ) override;

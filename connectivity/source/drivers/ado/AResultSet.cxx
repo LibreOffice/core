@@ -1136,12 +1136,12 @@ void OResultSet::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
     }
 }
 
-void SAL_CALL OResultSet::acquire() throw()
+void SAL_CALL OResultSet::acquire() noexcept
 {
     OResultSet_BASE::acquire();
 }
 
-void SAL_CALL OResultSet::release() throw()
+void SAL_CALL OResultSet::release() noexcept
 {
     OResultSet_BASE::release();
 }

@@ -51,7 +51,7 @@
 
 using namespace ::com::sun::star;
 
-static OUString toUNOname(OUString const& rRTTIname) throw()
+static OUString toUNOname(OUString const& rRTTIname) noexcept
 {
     OUStringBuffer aRet(64);
     OUString aStr(rRTTIname.copy(4, rRTTIname.getLength() - 4 - 2)); // filter .?AUzzz@yyy@xxx@@
@@ -67,7 +67,7 @@ static OUString toUNOname(OUString const& rRTTIname) throw()
     return aRet.makeStringAndClear();
 }
 
-static OUString toRTTIname(OUString const& rUNOname) throw()
+static OUString toRTTIname(OUString const& rUNOname) noexcept
 {
     OUStringBuffer aRet(64);
     aRet.append(".?AV"); // class ".?AV"; struct ".?AU"
@@ -83,9 +83,9 @@ static OUString toRTTIname(OUString const& rUNOname) throw()
     return aRet.makeStringAndClear();
 }
 
-ExceptionTypeInfo::~ExceptionTypeInfo() throw() { (void)m_data; }
+ExceptionTypeInfo::~ExceptionTypeInfo() noexcept { (void)m_data; }
 
-ExceptionTypeInfoWrapper* RTTInfos::getInfo(OUString const& rUNOname) throw()
+ExceptionTypeInfoWrapper* RTTInfos::getInfo(OUString const& rUNOname) noexcept
 {
     ExceptionTypeInfoWrapper* pRTTI;
     t_string2PtrMap::const_iterator const iFind(m_allRTTI.find(rUNOname));
@@ -107,7 +107,7 @@ ExceptionTypeInfoWrapper* RTTInfos::getInfo(OUString const& rUNOname) throw()
     return pRTTI;
 }
 
-type_info* RTTInfos::get(OUString const& rUNOname, int* len) throw()
+type_info* RTTInfos::get(OUString const& rUNOname, int* len) noexcept
 {
     static RTTInfos* s_pRTTIs = new RTTInfos();
 
@@ -121,13 +121,13 @@ type_info* RTTInfos::get(OUString const& rUNOname, int* len) throw()
     return pETIW->get_type_info();
 }
 
-RTTInfos::RTTInfos() throw() {}
+RTTInfos::RTTInfos() noexcept {}
 
 DWORD ExceptionInfos::allocationGranularity = 0;
 
-ExceptionInfos::ExceptionInfos() throw() {}
+ExceptionInfos::ExceptionInfos() noexcept {}
 
-ExceptionInfos::~ExceptionInfos() throw()
+ExceptionInfos::~ExceptionInfos() noexcept
 {
     SAL_INFO("bridges", "> freeing exception infos... <");
 
@@ -136,7 +136,7 @@ ExceptionInfos::~ExceptionInfos() throw()
         delete static_cast<RaiseInfo*>(rEntry.second);
 }
 
-RaiseInfo* ExceptionInfos::getRaiseInfo(typelib_TypeDescription* pTD) throw()
+RaiseInfo* ExceptionInfos::getRaiseInfo(typelib_TypeDescription* pTD) noexcept
 {
     static ExceptionInfos* s_pInfos = []() {
 #if defined _M_AMD64 || defined _M_ARM64

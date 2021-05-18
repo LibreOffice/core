@@ -27,7 +27,7 @@ RuntimeException::RuntimeException(int Error) :
 }
 
 
-RuntimeException::~RuntimeException() throw()
+RuntimeException::~RuntimeException() noexcept
 {
 }
 
@@ -44,7 +44,7 @@ ZipException::ZipException(int Error) :
 }
 
 
-const char* ZipException::what() const throw()
+const char* ZipException::what() const noexcept
 {
     return nullptr;
 }
@@ -57,14 +57,14 @@ Win32Exception::Win32Exception(int Error) :
 }
 
 
-Win32Exception::~Win32Exception() throw()
+Win32Exception::~Win32Exception() noexcept
 {
     if (m_MsgBuff)
         LocalFree(m_MsgBuff);
 }
 
 
-const char* Win32Exception::what() const throw()
+const char* Win32Exception::what() const noexcept
 {
     if (m_MsgBuff == nullptr)
     {

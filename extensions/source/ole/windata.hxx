@@ -174,7 +174,7 @@ public:
    {
        OSL_ASSERT(pTypeInfo);
    }
-   ~TypeAttr() throw()
+   ~TypeAttr() noexcept
    {
         if (m_pTypeAttr != nullptr)
         {
@@ -182,12 +182,12 @@ public:
         }
    }
 
-   TYPEATTR** operator&() throw()
+   TYPEATTR** operator&() noexcept
    {
       return &m_pTypeAttr;
    }
 
-   TYPEATTR* operator->() throw()
+   TYPEATTR* operator->() noexcept
    {
       return m_pTypeAttr;
    }

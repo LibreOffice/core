@@ -61,12 +61,12 @@ class ExceptionTypeInfo final
     char m_d_name[1];
 
 public:
-    explicit ExceptionTypeInfo(void* data, const char* d_name) throw()
+    explicit ExceptionTypeInfo(void* data, const char* d_name) noexcept
         : m_data(data)
     {
         ::strcpy(m_d_name, d_name); // #100211# - checked
     }
-    virtual ~ExceptionTypeInfo() throw();
+    virtual ~ExceptionTypeInfo() noexcept;
 };
 
 class ExceptionTypeInfoWrapper final
@@ -75,7 +75,7 @@ class ExceptionTypeInfoWrapper final
     ExceptionTypeInfo info;
 
 public:
-    explicit ExceptionTypeInfoWrapper(void* m_data, const char* m_d_name) throw()
+    explicit ExceptionTypeInfoWrapper(void* m_data, const char* m_d_name) noexcept
         : info(m_data, m_d_name)
     {
         type_info_size = sizeof(ExceptionTypeInfo) + strlen(m_d_name);
@@ -90,13 +90,13 @@ class RTTInfos final
     osl::Mutex m_aMutex;
     t_string2PtrMap m_allRTTI;
 
-    RTTInfos() throw();
-    ExceptionTypeInfoWrapper* getInfo(OUString const& rUNOname) throw();
+    RTTInfos() noexcept;
+    ExceptionTypeInfoWrapper* getInfo(OUString const& rUNOname) noexcept;
 
 public:
     ~RTTInfos();
 
-    static type_info* get(OUString const& rUNOname, int* len = nullptr) throw();
+    static type_info* get(OUString const& rUNOname, int* len = nullptr) noexcept;
 };
 
 class ExceptionInfos final
@@ -105,12 +105,12 @@ class ExceptionInfos final
     t_string2PtrMap m_allRaiseInfos;
 
 public:
-    static RaiseInfo* getRaiseInfo(typelib_TypeDescription* pTD) throw();
+    static RaiseInfo* getRaiseInfo(typelib_TypeDescription* pTD) noexcept;
 
     static DWORD allocationGranularity;
 
-    ExceptionInfos() throw();
-    ~ExceptionInfos() throw();
+    ExceptionInfos() noexcept;
+    ~ExceptionInfos() noexcept;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

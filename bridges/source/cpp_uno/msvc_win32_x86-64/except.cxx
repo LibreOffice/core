@@ -256,13 +256,13 @@ void
 using namespace ::com::sun::star;
 
 static void* __cdecl copyConstruct(void* pExcThis, void* pSource,
-                                   typelib_TypeDescription* pTD) throw()
+                                   typelib_TypeDescription* pTD) noexcept
 {
     ::uno_copyData(pExcThis, pSource, pTD, uno::cpp_acquire);
     return pExcThis;
 }
 
-static void* __cdecl destruct(void* pExcThis, typelib_TypeDescription* pTD) throw()
+static void* __cdecl destruct(void* pExcThis, typelib_TypeDescription* pTD) noexcept
 {
     ::uno_destructData(pExcThis, pTD, uno::cpp_release);
     return pExcThis;
@@ -270,7 +270,8 @@ static void* __cdecl destruct(void* pExcThis, typelib_TypeDescription* pTD) thro
 
 const int codeSnippetSize = 40;
 
-static void GenerateConstructorTrampoline(unsigned char* code, typelib_TypeDescription* pTD) throw()
+static void GenerateConstructorTrampoline(unsigned char* code,
+                                          typelib_TypeDescription* pTD) noexcept
 {
     unsigned char* p = code;
 
@@ -294,7 +295,7 @@ static void GenerateConstructorTrampoline(unsigned char* code, typelib_TypeDescr
     assert(p < code + codeSnippetSize);
 }
 
-static void GenerateDestructorTrampoline(unsigned char* code, typelib_TypeDescription* pTD) throw()
+static void GenerateDestructorTrampoline(unsigned char* code, typelib_TypeDescription* pTD) noexcept
 {
     unsigned char* p = code;
 
@@ -319,7 +320,7 @@ static void GenerateDestructorTrampoline(unsigned char* code, typelib_TypeDescri
 }
 
 ExceptionType::ExceptionType(unsigned char* pCode, sal_uInt64 pCodeBase,
-                             typelib_TypeDescription* pTD) throw()
+                             typelib_TypeDescription* pTD) noexcept
     : _n0(0)
     , _n1(0)
     , _n2(-1)
@@ -355,7 +356,7 @@ ExceptionType::ExceptionType(unsigned char* pCode, sal_uInt64 pCodeBase,
 * is also member of ExceptionType and can be referenced via 32 bit offset.
 */
 
-RaiseInfo::RaiseInfo(typelib_TypeDescription* pTD) throw()
+RaiseInfo::RaiseInfo(typelib_TypeDescription* pTD) noexcept
     : _n0(0)
     , _n2(0)
     , _pTD(pTD)
