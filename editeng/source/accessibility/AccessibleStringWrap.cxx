@@ -43,7 +43,7 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, tools::Rectangl
     DBG_ASSERT(nIndex >= 0,
                "SvxAccessibleStringWrap::GetCharacterBounds: index value overflow");
 
-    mrFont.SetPhysFont( &mrDev );
+    mrFont.SetPhysFont(mrDev);
 
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= maText.getLength() )
