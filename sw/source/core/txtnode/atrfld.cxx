@@ -377,7 +377,24 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
         pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(pNodeOld, pNodeNew));
     if(bExpand)
     {
-        mpTextField->ExpandTextField( pOld == nullptr && pNew == nullptr );
+        bool bForceNotify = pOld == nullptr && pNew == nullptr;
+        if (bForceNotify)
+        {
+            // Force notify was added for conditional text fields, at least the title fields needs
+            // no forced notify.
+            const SwField* pField = mpTextField->GetFormatField().GetField();
+            const SwFieldIds nWhich = pField->GetTyp()->Which();
+            if (nWhich == SwFieldIds::DocInfo)
+            {
+                auto pDocInfoField = static_cast<const SwDocInfoField*>(pField);
+                if (pDocInfoField->GetSubType() == nsSwDocInfoSubType::DI_TITLE)
+                {
+                    bForceNotify = false;
+                }
+            }
+        }
+
+        mpTextField->ExpandTextField(bForceNotify);
     }
 }
 
