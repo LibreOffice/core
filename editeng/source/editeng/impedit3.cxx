@@ -829,7 +829,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             if ( !bSameLineAgain )
             {
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
-                aTmpFont.SetPhysFont( GetRefDevice() );
+                aTmpFont.SetPhysFont(*GetRefDevice());
                 ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
 
                 if ( IsFixedCellHeight() )
@@ -1042,7 +1042,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     case EE_FEATURE_FIELD:
                     {
                         SeekCursor( pNode, nTmpPos+1, aTmpFont );
-                        aTmpFont.SetPhysFont( GetRefDevice() );
+                        aTmpFont.SetPhysFont(*GetRefDevice());
                         ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
 
                         OUString aFieldValue = static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
@@ -1145,7 +1145,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             {
                 DBG_ASSERT( nPortionLen || bProcessingEmptyLine, "Empty Portion - Extra Space?!" );
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
-                aTmpFont.SetPhysFont( GetRefDevice() );
+                aTmpFont.SetPhysFont(*GetRefDevice());
                 ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
 
                 if (!bContinueLastPortion)
@@ -1371,7 +1371,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         if ( aTextSize.Height() == 0 )
         {
             SeekCursor( pNode, pLine->GetStart()+1, aTmpFont );
-            aTmpFont.SetPhysFont( pRefDev );
+            aTmpFont.SetPhysFont(*pRefDev);
             ImplInitDigitMode(*pRefDev, aTmpFont.GetLanguage());
 
             if ( IsFixedCellHeight() )
@@ -1393,7 +1393,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             if ( rTP.GetKind() != PortionKind::LINEBREAK )
             {
                 SeekCursor( pNode, nTPos+1, aTmpFont );
-                aTmpFont.SetPhysFont( GetRefDevice() );
+                aTmpFont.SetPhysFont(*GetRefDevice());
                 ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
                 RecalcFormatterFontMetrics( aFormatterMetrics, aTmpFont );
             }
@@ -1707,7 +1707,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
 
     SvxFont aTmpFont;
     SeekCursor( pParaPortion->GetNode(), bLineBreak ? pParaPortion->GetNode()->Len() : 0, aTmpFont );
-    aTmpFont.SetPhysFont( pRefDev );
+    aTmpFont.SetPhysFont(*pRefDev);
 
     TextPortion* pDummyPortion = new TextPortion( 0 );
     pDummyPortion->GetSize() = aTmpFont.GetPhysTxtSize( pRefDev );
@@ -2070,7 +2070,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         // Determine the width of the Hyph-Portion:
         SvxFont aFont;
         SeekCursor( pParaPortion->GetNode(), nBreakPos, aFont );
-        aFont.SetPhysFont( GetRefDevice() );
+        aFont.SetPhysFont(*GetRefDevice());
         pHyphPortion->GetSize().setHeight( GetRefDevice()->GetTextHeight() );
         pHyphPortion->GetSize().setWidth( GetRefDevice()->GetTextWidth( CH_HYPH ) );
 
@@ -2368,7 +2368,7 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
             sal_Int32 nTxtPortionStart = pPortion->GetTextPortions().GetStartPos( nSplitPortion );
             SvxFont aTmpFont( pPortion->GetNode()->GetCharAttribs().GetDefFont() );
             SeekCursor( pPortion->GetNode(), nTxtPortionStart+1, aTmpFont );
-            aTmpFont.SetPhysFont( GetRefDevice() );
+            aTmpFont.SetPhysFont(*GetRefDevice());
             GetRefDevice()->Push( PushFlags::TEXTLANGUAGE );
             ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
             Size aSz = aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nTxtPortionStart, pTextPortion->GetLen() );
@@ -2760,7 +2760,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         // For the current Output device, because otherwise if RefDev=Printer its looks
         // ugly on the screen!
         OutputDevice* pDev = pOut ? pOut : GetRefDevice();
-        rFont.SetPhysFont( pDev );
+        rFont.SetPhysFont(*pDev);
         FontMetric aMetric( pDev->GetFontMetric() );
 
         // before forcing nPropr to 100%, calculate a new escapement relative to this fake size.
@@ -2891,7 +2891,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     if ( nPropr != 100 )
     {
         rFont.SetPropr( 100 );
-        rFont.SetPhysFont( pRefDev );
+        rFont.SetPhysFont(*pRefDev);
     }
     sal_uInt16 nAscent, nDescent;
 
@@ -2915,7 +2915,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
         {
             // Lets see what Leading one gets on the screen
             VclPtr<VirtualDevice> pVDev = GetVirtualDevice( pRefDev->GetMapMode(), pRefDev->GetDrawMode() );
-            rFont.SetPhysFont( pVDev );
+            rFont.SetPhysFont(*pVDev);
             aMetric = pVDev->GetFontMetric();
 
             // This is so that the Leading does not count itself out again,
@@ -3189,7 +3189,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     aTmpFont.SetTransparent( sal_False );
                                 }
 #endif
-                                aTmpFont.SetPhysFont( &rOutDev );
+                                aTmpFont.SetPhysFont(rOutDev);
 
                                 // #114278# Saving both layout mode and language (since I'm
                                 // potentially changing both)
@@ -3263,7 +3263,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                                                     aTmpFont.SetEscapement( -20 );
                                                     aTmpFont.SetPropr( 25 );
-                                                    aTmpFont.SetPhysFont( &rOutDev );
+                                                    aTmpFont.SetPhysFont(rOutDev);
 
                                                     const Size aSlashSize = aTmpFont.QuickGetTextSize( &rOutDev, aSlash, 0, 1 );
                                                     Point aSlashPos( aTmpPos );
@@ -3275,7 +3275,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                                                     aTmpFont.SetEscapement( nOldEscapement );
                                                     aTmpFont.SetPropr( nOldPropr );
-                                                    aTmpFont.SetPhysFont( &rOutDev );
+                                                    aTmpFont.SetPhysFont(rOutDev);
                                                 }
                                             }
                                         }
@@ -3333,7 +3333,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                                     pTmpDXArray.reset(new tools::Long[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
-                                    aTmpFont.SetPhysFont( GetRefDevice() );
+                                    aTmpFont.SetPhysFont(*GetRefDevice());
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, pTmpDXArray.get() );
 
                                     // add a meta file comment if we record to a metafile
@@ -3360,7 +3360,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     // crash when accessing 0 pointer in pDXArray
                                     pTmpDXArray.reset(new tools::Long[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
-                                    aTmpFont.SetPhysFont( GetRefDevice() );
+                                    aTmpFont.SetPhysFont(*GetRefDevice());
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), pTmpDXArray.get() );
                                 }
 
@@ -3488,7 +3488,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                                         aOutPos = lcl_ImplCalcRotatedPos( aOutPos, aOrigin, nSin, nCos );
                                         aTmpFont.SetOrientation( aTmpFont.GetOrientation()+nOrientation );
-                                        aTmpFont.SetPhysFont( &rOutDev );
+                                        aTmpFont.SetPhysFont(rOutDev);
 
                                     }
 
@@ -3529,7 +3529,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                                 sal_uInt8 nProp = aTmpFont.GetPropr();
                                                 aTmpFont.SetEscapement( 0 );
                                                 aTmpFont.SetPropr( 100 );
-                                                aTmpFont.SetPhysFont( &rOutDev );
+                                                aTmpFont.SetPhysFont(rOutDev);
                                                 OUStringBuffer aBlanks;
                                                 comphelper::string::padToLength( aBlanks, nTextLen, ' ' );
                                                 Point aUnderlinePos( aOutPos );
@@ -3541,7 +3541,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                                 if ( !nOrientation )
                                                     aTmpFont.SetEscapement( nEsc );
                                                 aTmpFont.SetPropr( nProp );
-                                                aTmpFont.SetPhysFont( &rOutDev );
+                                                aTmpFont.SetPhysFont(rOutDev);
                                             }
                                         }
                                         Point aRealOutPos( aOutPos );
@@ -3652,7 +3652,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     SeekCursor( rPortion.GetNode(), nIndex+1, aTmpFont, &rOutDev );
                                     aTmpFont.SetTransparent( false );
                                     aTmpFont.SetEscapement( 0 );
-                                    aTmpFont.SetPhysFont( &rOutDev );
+                                    aTmpFont.SetPhysFont(rOutDev);
                                     tools::Long nCharWidth = aTmpFont.QuickGetTextSize( &rOutDev,
                                         OUString(rTextPortion.GetExtraValue()), 0, 1 ).Width();
                                     sal_Int32 nChars = 2;
