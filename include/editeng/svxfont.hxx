@@ -78,8 +78,8 @@ public:
     // Handle upper case letters
     void DoOnCapitals(SvxDoCapitals &rDo) const;
 
-    void SetPhysFont( OutputDevice *pOut ) const;
-    vcl::Font ChgPhysFont( OutputDevice *pOut ) const;
+    void SetPhysFont(OutputDevice& rOut) const;
+    vcl::Font ChgPhysFont(OutputDevice& rOut) const;
 
     Size GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
                           const sal_Int32 nIdx, const sal_Int32 nLen) const;
@@ -91,8 +91,8 @@ public:
 
     Size GetPhysTxtSize( const OutputDevice *pOut );
 
-    Size GetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                      const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32 ) const;
+    Size GetTextSize(const OutputDevice& rOut, const OUString &rTxt,
+                     const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32) const;
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
                         const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, const tools::Long* pDXArray = nullptr ) const;

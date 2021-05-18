@@ -328,7 +328,7 @@ Size FontPrevWin_Impl::CalcTextSize(vcl::RenderContext& rRenderContext, OutputDe
                                     ((nScript == css::i18n::ScriptType::COMPLEX) ?
                                         maCTLFont :
                                         rInFont);
-        tools::Long nWidth = rFont.GetTextSize(_pPrinter, maText, nStart, nEnd - nStart).Width();
+        tools::Long nWidth = rFont.GetTextSize(*_pPrinter, maText, nStart, nEnd - nStart).Width();
         if (nIdx >= maTextWidth.size())
             break;
 
@@ -747,12 +747,12 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
             if (pImpl->mcStartBracket)
             {
                 OUString sBracket(pImpl->mcStartBracket);
-                nStartBracketWidth = rFont.GetTextSize(pPrinter, sBracket).Width();
+                nStartBracketWidth = rFont.GetTextSize(*pPrinter, sBracket).Width();
             }
             if (pImpl->mcEndBracket)
             {
                 OUString sBracket(pImpl->mcEndBracket);
-                nEndBracketWidth = rFont.GetTextSize(pPrinter, sBracket).Width();
+                nEndBracketWidth = rFont.GetTextSize(*pPrinter, sBracket).Width();
             }
             nTextWidth = pImpl->CalcTextSize(rRenderContext, pPrinter, aSmallFont).Width();
             tools::Long nResultWidth = nStartBracketWidth;

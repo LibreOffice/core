@@ -400,7 +400,7 @@ Size SwDropCapsPict::CalcTextSize()
                                     ? maCTLFont
                                     : maFont);
 
-        sal_uLong nWidth = rFnt.GetTextSize(mpPrinter, maText, nStart, nEnd-nStart ).Width();
+        sal_uLong nWidth = rFnt.GetTextSize(*mpPrinter, maText, nStart, nEnd-nStart ).Width();
 
         if (nIdx < maScriptChanges.size())
             maScriptChanges[nIdx].textWidth = nWidth;
