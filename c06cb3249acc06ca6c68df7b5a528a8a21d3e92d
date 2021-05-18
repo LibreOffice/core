@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b35c92c3_2f3f75f2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-18T13:59:59Z",
+      "side": 1,
+      "message": "Can you tell me where can I find those statistics, please?\nI\u0027d like to take a look to SSE4.2.",
+      "parentUuid": "0d9b1636_93ada8dd",
+      "revId": "c06cb3249acc06ca6c68df7b5a528a8a21d3e92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "501e5a2c_2144d5cf",
         "filename": "include/tools/cpuid.hxx",
         "patchSetId": 15
@@ -70,6 +88,24 @@
       "writtenOn": "2021-05-18T11:02:25Z",
       "side": 1,
       "message": "This is not how to do code that conditionally executes based on different instruction sets. The file is compiled with AVX512F, so this may crash on any CPU that doesn\u0027t have AVX512F. The proper way to do this is to have a generic file that contains this function, and then have xxx_AVX.cxx etc. files that are compiled with relevant CPU flags and all code in it is executed only after the generic code detects that the CPU feature is available. See how the current code handles conditional use of SSE2.",
+      "revId": "c06cb3249acc06ca6c68df7b5a528a8a21d3e92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "464e6da3_ed510266",
+        "filename": "sc/source/core/tool/arraysum.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-18T13:59:59Z",
+      "side": 1,
+      "message": "Sorry, I don´t get it. Can you explain it in more detail?\nMy code already checks out if AVX is available before attempting it\u0027s use.\nThe difference between this and the already existent is that the existent code generates an empty function if there is no AVX on compile time.\nSo what am I missing?",
+      "parentUuid": "54a40c78_94f3c136",
       "revId": "c06cb3249acc06ca6c68df7b5a528a8a21d3e92d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
