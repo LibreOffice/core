@@ -33,7 +33,7 @@ struct ExceptionType final
     ExceptionTypeInfo exc_type_info;
 
     explicit ExceptionType(unsigned char* pCode, sal_uInt64 pCodeBase,
-                           typelib_TypeDescription* pTD) throw();
+                           typelib_TypeDescription* pTD) noexcept;
 
     ExceptionType(const ExceptionType&) = delete;
     ExceptionType& operator=(const ExceptionType&) = delete;
@@ -51,7 +51,7 @@ struct RaiseInfo final
     unsigned char* _code;
     sal_uInt64 _codeBase;
 
-    explicit RaiseInfo(typelib_TypeDescription* pTD) throw();
+    explicit RaiseInfo(typelib_TypeDescription* pTD) noexcept;
 };
 
 #pragma pack(pop)

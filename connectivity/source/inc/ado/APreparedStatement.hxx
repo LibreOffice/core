@@ -62,8 +62,8 @@ namespace connectivity
             // a Constructor, that is needed for when Returning the Object is needed:
             OPreparedStatement( OConnection* _pConnection, const OUString& sql);
 
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
+            virtual void SAL_CALL acquire() noexcept override;
+            virtual void SAL_CALL release() noexcept override;
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             //XTypeProvider
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
