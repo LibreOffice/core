@@ -2414,22 +2414,6 @@ SvtScriptType ScTable::GetRangeScriptType(
     return aCol[nCol].GetRangeScriptType(rBlockPos.miCellTextAttrPos, nRow1, nRow2, itr);
 }
 
-size_t ScTable::GetFormulaHash( SCCOL nCol, SCROW nRow ) const
-{
-    if ( !IsColValid( nCol ) )
-        return 0;
-
-    return aCol[nCol].GetFormulaHash(nRow);
-}
-
-ScFormulaVectorState ScTable::GetFormulaVectorState( SCCOL nCol, SCROW nRow ) const
-{
-    if ( !IsColValid( nCol ) )
-        return FormulaVectorUnknown;
-
-    return aCol[nCol].GetFormulaVectorState(nRow);
-}
-
 formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol, SCROW nRow )
 {
     if ( !ValidCol( nCol ) || !ValidRow( nRow ) )

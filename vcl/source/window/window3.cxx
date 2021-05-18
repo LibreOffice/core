@@ -120,17 +120,8 @@ bool Window::IsOverlineColor() const { return GetOutDev()->IsOverlineColor(); }
 void Window::SetTextAlign(TextAlign eAlign) { GetOutDev()->SetTextAlign(eAlign); }
 
 float Window::GetDPIScaleFactor() const { return GetOutDev()->GetDPIScaleFactor(); }
-sal_Int32 Window::GetDPIScalePercentage() const { return GetOutDev()->GetDPIScalePercentage(); }
 tools::Long Window::GetOutOffXPixel() const { return GetOutDev()->GetOutOffXPixel(); }
 tools::Long Window::GetOutOffYPixel() const { return GetOutDev()->GetOutOffYPixel(); }
-void Window::SetOutOffXPixel(tools::Long nOutOffX)
-{
-    return GetOutDev()->SetOutOffXPixel(nOutOffX);
-}
-void Window::SetOutOffYPixel(tools::Long nOutOffY)
-{
-    return GetOutDev()->SetOutOffXPixel(nOutOffY);
-}
 void Window::SetMapMode() { GetOutDev()->SetMapMode(); }
 void Window::SetMapMode(const MapMode& rNewMapMode) { GetOutDev()->SetMapMode(rNewMapMode); }
 bool Window::IsRTLEnabled() const { return GetOutDev()->IsRTLEnabled(); }
@@ -149,18 +140,6 @@ tools::Rectangle Window::LogicToPixel(const tools::Rectangle& rLogicRect) const
 {
     return GetOutDev()->LogicToPixel(rLogicRect);
 }
-tools::Polygon Window::LogicToPixel(const tools::Polygon& rLogicPoly) const
-{
-    return GetOutDev()->LogicToPixel(rLogicPoly);
-}
-tools::PolyPolygon Window::LogicToPixel(const tools::PolyPolygon& rLogicPoly) const
-{
-    return GetOutDev()->LogicToPixel(rLogicPoly);
-}
-basegfx::B2DPolyPolygon Window::LogicToPixel(const basegfx::B2DPolyPolygon& rLogicPolyPoly) const
-{
-    return GetOutDev()->LogicToPixel(rLogicPolyPoly);
-}
 vcl::Region Window::LogicToPixel(const vcl::Region& rLogicRegion) const
 {
     return GetOutDev()->LogicToPixel(rLogicRegion);
@@ -178,15 +157,6 @@ tools::Rectangle Window::LogicToPixel(const tools::Rectangle& rLogicRect,
 {
     return GetOutDev()->LogicToPixel(rLogicRect, rMapMode);
 }
-tools::Polygon Window::LogicToPixel(const tools::Polygon& rLogicPoly, const MapMode& rMapMode) const
-{
-    return GetOutDev()->LogicToPixel(rLogicPoly, rMapMode);
-}
-basegfx::B2DPolyPolygon Window::LogicToPixel(const basegfx::B2DPolyPolygon& rLogicPolyPoly,
-                                             const MapMode& rMapMode) const
-{
-    return GetOutDev()->LogicToPixel(rLogicPolyPoly, rMapMode);
-}
 
 Point Window::PixelToLogic(const Point& rDevicePt) const
 {
@@ -200,15 +170,7 @@ tools::Rectangle Window::PixelToLogic(const tools::Rectangle& rDeviceRect) const
 {
     return GetOutDev()->PixelToLogic(rDeviceRect);
 }
-tools::Polygon Window::PixelToLogic(const tools::Polygon& rDevicePoly) const
-{
-    return GetOutDev()->PixelToLogic(rDevicePoly);
-}
 tools::PolyPolygon Window::PixelToLogic(const tools::PolyPolygon& rDevicePolyPoly) const
-{
-    return GetOutDev()->PixelToLogic(rDevicePolyPoly);
-}
-basegfx::B2DPolyPolygon Window::PixelToLogic(const basegfx::B2DPolyPolygon& rDevicePolyPoly) const
 {
     return GetOutDev()->PixelToLogic(rDevicePolyPoly);
 }
@@ -229,37 +191,11 @@ tools::Rectangle Window::PixelToLogic(const tools::Rectangle& rDeviceRect,
 {
     return GetOutDev()->PixelToLogic(rDeviceRect, rMapMode);
 }
-tools::Polygon Window::PixelToLogic(const tools::Polygon& rDevicePoly,
-                                    const MapMode& rMapMode) const
-{
-    return GetOutDev()->PixelToLogic(rDevicePoly, rMapMode);
-}
-basegfx::B2DPolygon Window::PixelToLogic(const basegfx::B2DPolygon& rDevicePoly,
-                                         const MapMode& rMapMode) const
-{
-    return GetOutDev()->PixelToLogic(rDevicePoly, rMapMode);
-}
-basegfx::B2DPolyPolygon Window::PixelToLogic(const basegfx::B2DPolyPolygon& rDevicePolyPoly,
-                                             const MapMode& rMapMode) const
-{
-    return GetOutDev()->PixelToLogic(rDevicePolyPoly, rMapMode);
-}
 
-Point Window::LogicToLogic(const Point& rPtSource, const MapMode* pMapModeSource,
-                           const MapMode* pMapModeDest) const
-{
-    return GetOutDev()->LogicToLogic(rPtSource, pMapModeSource, pMapModeDest);
-}
 Size Window::LogicToLogic(const Size& rSzSource, const MapMode* pMapModeSource,
                           const MapMode* pMapModeDest) const
 {
     return GetOutDev()->LogicToLogic(rSzSource, pMapModeSource, pMapModeDest);
-}
-tools::Rectangle Window::LogicToLogic(const tools::Rectangle& rRectSource,
-                                      const MapMode* pMapModeSource,
-                                      const MapMode* pMapModeDest) const
-{
-    return GetOutDev()->LogicToLogic(rRectSource, pMapModeSource, pMapModeDest);
 }
 
 tools::Rectangle Window::GetTextRect(const tools::Rectangle& rRect, const OUString& rStr,

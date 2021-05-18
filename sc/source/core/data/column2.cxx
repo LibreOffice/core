@@ -2153,18 +2153,6 @@ void ScColumn::SetScriptType( SCROW nRow, SvtScriptType nType )
     CellStorageModified();
 }
 
-size_t ScColumn::GetFormulaHash( SCROW nRow ) const
-{
-    const ScFormulaCell* pCell = FetchFormulaCell(nRow);
-    return pCell ? pCell->GetHash() : 0;
-}
-
-ScFormulaVectorState ScColumn::GetFormulaVectorState( SCROW nRow ) const
-{
-    const ScFormulaCell* pCell = FetchFormulaCell(nRow);
-    return pCell ? pCell->GetVectorState() : FormulaVectorUnknown;
-}
-
 formula::FormulaTokenRef ScColumn::ResolveStaticReference( SCROW nRow )
 {
     std::pair<sc::CellStoreType::iterator,size_t> aPos = maCells.position(nRow);

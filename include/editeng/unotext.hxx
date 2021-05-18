@@ -57,7 +57,6 @@
 
 class SvxItemPropertySet;
 struct SfxItemPropertyMapEntry;
-struct SfxItemPropertySimpleEntry;
 
 #define WID_FONTDESC                OWN_ATTR_VALUE_START
 #define WID_NUMLEVEL                OWN_ATTR_VALUE_START+1

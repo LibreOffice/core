@@ -95,7 +95,6 @@ namespace frm
 
     RichTextEngine::RichTextEngine( SfxItemPool* _pPool )
         :EditEngine( _pPool )
-        ,m_pEnginePool( _pPool )
     {
     }
 

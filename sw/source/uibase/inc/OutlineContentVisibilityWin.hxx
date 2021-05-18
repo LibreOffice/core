@@ -40,7 +40,6 @@ public:
     virtual void ShowAll(bool bShow) override;
     virtual bool Contains(const Point& rDocPt) const override;
     virtual void SetReadonly(bool /*bReadonly*/) override {}
-    virtual bool IsFocused() const override { return ControlHasFocus(); }
     virtual const SwFrame* GetFrame() override { return m_pFrame; }
     virtual SwEditWin* GetEditWin() override { return m_pEditWin; }
 

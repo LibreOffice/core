@@ -1749,24 +1749,6 @@ bool ScDocument::HasPartOfMerged( const ScRange& rRange )
     return bPart;
 }
 
-size_t ScDocument::GetFormulaHash( const ScAddress& rPos ) const
-{
-    SCTAB nTab = rPos.Tab();
-    if (!ValidTab(nTab) || o3tl::make_unsigned(nTab) >= maTabs.size() || !maTabs[nTab])
-        return 0;
-
-    return maTabs[nTab]->GetFormulaHash(rPos.Col(), rPos.Row());
-}
-
-ScFormulaVectorState ScDocument::GetFormulaVectorState( const ScAddress& rPos ) const
-{
-    SCTAB nTab = rPos.Tab();
-    if (!ValidTab(nTab) || o3tl::make_unsigned(nTab) >= maTabs.size() || !maTabs[nTab])
-        return FormulaVectorUnknown;
-
-    return maTabs[nTab]->GetFormulaVectorState(rPos.Col(), rPos.Row());
-}
-
 formula::FormulaTokenRef ScDocument::ResolveStaticReference( const ScAddress& rPos )
 {
     SCTAB nTab = rPos.Tab();

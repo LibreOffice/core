@@ -69,43 +69,6 @@ struct SfxItemPropertyMapEntry
         }
 };
 
-struct SfxItemPropertySimpleEntry
-{
-    css::uno::Type                      aType;
-    sal_uInt16                          nWID;
-    /// flag bitmap, @see css::beans::PropertyAttribute
-    sal_Int16                           nFlags;
-    sal_uInt8                           nMemberId;
-    PropertyMoreFlags                   nMoreFlags = PropertyMoreFlags::NONE;
-
-    SfxItemPropertySimpleEntry()
-        : nWID( 0 )
-        , nFlags( 0 )
-        , nMemberId( 0 )
-        {
-        }
-
-    SfxItemPropertySimpleEntry(sal_uInt16 _nWID, css::uno::Type const & _rType,
-                               sal_Int16 _nFlags)
-        : aType(     _rType )
-        , nWID(      _nWID )
-        , nFlags(    _nFlags )
-        , nMemberId( 0 )
-        {
-            assert(_nFlags <= 0x1ff );
-        }
-
-    explicit SfxItemPropertySimpleEntry( const SfxItemPropertyMapEntry& rMapEntry )
-        : aType( rMapEntry.aType )
-        , nWID( rMapEntry.nWID )
-        , nFlags( rMapEntry.nFlags )
-        , nMemberId( rMapEntry.nMemberId )
-        , nMoreFlags( rMapEntry.nMoreFlags )
-        {
-        }
-
-};
-
 struct SfxItemPropertyMapCompare
 {
     bool operator() ( const SfxItemPropertyMapEntry * lhs, const SfxItemPropertyMapEntry * rhs ) const

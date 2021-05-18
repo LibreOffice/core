@@ -41,7 +41,6 @@ namespace frm
     class RichTextEngine final : public EditEngine
     {
     private:
-        SfxItemPool*                            m_pEnginePool;
         ::std::vector< IEngineStatusListener* > m_aStatusListeners;
 
     public:
@@ -53,8 +52,6 @@ namespace frm
         // for multiplexing the StatusChanged events of the edit engine
         void registerEngineStatusListener( IEngineStatusListener* _pListener );
         void revokeEngineStatusListener( IEngineStatusListener const * _pListener );
-
-        SfxItemPool* getPool() { return m_pEnginePool; }
 
     private:
         /** constructs a new RichTextEngine. The instances takes the ownership of the given SfxItemPool

@@ -1490,9 +1490,6 @@ public:
     Point                       LogicToPixel( const Point& rLogicPt ) const;
     Size                        LogicToPixel( const Size& rLogicSize ) const;
     tools::Rectangle            LogicToPixel( const tools::Rectangle& rLogicRect ) const;
-    tools::Polygon              LogicToPixel( const tools::Polygon& rLogicPoly ) const;
-    tools::PolyPolygon          LogicToPixel( const tools::PolyPolygon& rLogicPolyPoly ) const;
-    basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
     vcl::Region                 LogicToPixel( const vcl::Region& rLogicRegion )const;
     Point                       LogicToPixel( const Point& rLogicPt,
                                               const MapMode& rMapMode ) const;
@@ -1500,17 +1497,11 @@ public:
                                               const MapMode& rMapMode ) const;
     tools::Rectangle            LogicToPixel( const tools::Rectangle& rLogicRect,
                                               const MapMode& rMapMode ) const;
-    tools::Polygon              LogicToPixel( const tools::Polygon& rLogicPoly,
-                                              const MapMode& rMapMode ) const;
-    basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
-                                              const MapMode& rMapMode ) const;
 
     Point                       PixelToLogic( const Point& rDevicePt ) const;
     Size                        PixelToLogic( const Size& rDeviceSize ) const;
     tools::Rectangle                   PixelToLogic( const tools::Rectangle& rDeviceRect ) const;
-    tools::Polygon              PixelToLogic( const tools::Polygon& rDevicePoly ) const;
     tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly ) const;
-    basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
     vcl::Region                 PixelToLogic( const vcl::Region& rDeviceRegion ) const;
     Point                       PixelToLogic( const Point& rDevicePt,
                                               const MapMode& rMapMode ) const;
@@ -1518,20 +1509,8 @@ public:
                                               const MapMode& rMapMode ) const;
     tools::Rectangle            PixelToLogic( const tools::Rectangle& rDeviceRect,
                                               const MapMode& rMapMode ) const;
-    tools::Polygon              PixelToLogic( const tools::Polygon& rDevicePoly,
-                                              const MapMode& rMapMode ) const;
-    basegfx::B2DPolygon         PixelToLogic( const basegfx::B2DPolygon& rDevicePoly,
-                                              const MapMode& rMapMode ) const;
-    basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
-                                              const MapMode& rMapMode ) const;
 
-    Point                       LogicToLogic( const Point&      rPtSource,
-                                              const MapMode*    pMapModeSource,
-                                              const MapMode*    pMapModeDest ) const;
     Size                        LogicToLogic( const Size&       rSzSource,
-                                              const MapMode*    pMapModeSource,
-                                              const MapMode*    pMapModeDest ) const;
-    tools::Rectangle            LogicToLogic( const tools::Rectangle&  rRectSource,
                                               const MapMode*    pMapModeSource,
                                               const MapMode*    pMapModeDest ) const;
 
@@ -1544,11 +1523,8 @@ public:
                                              TextRectInfo* pInfo = nullptr,
                                              const vcl::ITextLayout* _pTextLayout = nullptr ) const;
     float                       GetDPIScaleFactor() const;
-    sal_Int32                   GetDPIScalePercentage() const;
     tools::Long                 GetOutOffXPixel() const;
     tools::Long                 GetOutOffYPixel() const;
-    void                        SetOutOffXPixel(tools::Long nOutOffX);
-    void                        SetOutOffYPixel(tools::Long nOutOffY);
 
     void                        EnableMapMode( bool bEnable = true );
     bool                        IsMapModeEnabled() const;
