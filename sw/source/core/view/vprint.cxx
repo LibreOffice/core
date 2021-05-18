@@ -554,7 +554,7 @@ bool SwViewShell::PrintOrPDFExport(
             pMetaFile->WindStart();
 
             //play back the scaled page
-            pMetaFile->Play(pOutDev);
+            pMetaFile->Play(*pOutDev);
             pMetaFile.reset();
         }
     }

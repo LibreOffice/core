@@ -96,8 +96,8 @@ void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
 namespace
 {
 
-bool lclDrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                              GraphicObject const & rObj, const GraphicAttr& rAttr)
+bool lclDrawObj(OutputDevice& rOut, const Point& rPt, const Size& rSz,
+                GraphicObject const & rObj, const GraphicAttr& rAttr)
 {
     Point   aPt( rPt );
     Size    aSz( rSz );
@@ -122,7 +122,7 @@ bool lclDrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                 aSz = aRotBoundRect.GetSize();
             }
 
-            aGraphic.Draw( pOut, aPt, aSz );
+            aGraphic.Draw(rOut, aPt, aSz);
         }
 
         bRet = true;
@@ -345,8 +345,8 @@ bool GraphicObject::IsEPS() const
     return maGraphic.IsEPS();
 }
 
-bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
-                                       tools::PolyPolygon& rClipPolyPoly, bool& bRectClipRegion ) const
+bool GraphicObject::ImplGetCropParams(const OutputDevice& rOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
+                                      tools::PolyPolygon& rClipPolyPoly, bool& bRectClipRegion) const
 {
     bool bRet = false;
 
@@ -374,7 +374,7 @@ bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Si
         else
         {
             MapMode m(maGraphic.GetPrefMapMode());
-            aSize100 = pOut->LogicToLogic( maGraphic.GetPrefSize(), &m, &aMap100 );
+            aSize100 = rOut.LogicToLogic( maGraphic.GetPrefSize(), &m, &aMap100 );
         }
 
         nTotalWidth = aSize100.Width() - pAttr->GetLeftCrop() - pAttr->GetRightCrop();
@@ -456,17 +456,17 @@ void GraphicObject::SetUserData( const OUString& rUserData )
     maUserData = rUserData;
 }
 
-bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                          const GraphicAttr* pAttr )
+bool GraphicObject::Draw(OutputDevice& rOut, const Point& rPt, const Size& rSz,
+                         const GraphicAttr* pAttr)
 {
     GraphicAttr         aAttr( pAttr ? *pAttr : GetAttr() );
     Point               aPt( rPt );
     Size                aSz( rSz );
-    const DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
+    const DrawModeFlags nOldDrawMode = rOut.GetDrawMode();
     bool                bCropped = aAttr.IsCropped();
     bool bRet;
 
-    pOut->SetDrawMode( nOldDrawMode & ~DrawModeFlags( DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient ) );
+    rOut.SetDrawMode(nOldDrawMode & ~DrawModeFlags( DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient ));
 
     // mirrored horizontally
     if( aSz.Width() < 0 )
@@ -488,9 +488,9 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     {
         tools::PolyPolygon aClipPolyPoly;
         bool        bRectClip;
-        const bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
+        const bool  bCrop = ImplGetCropParams(rOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip);
 
-        pOut->Push( PushFlags::CLIPREGION );
+        rOut.Push(PushFlags::CLIPREGION);
 
         if( bCrop )
         {
@@ -499,36 +499,36 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                 // #i29534# Store crop rect for later forwarding to
                 // PDF writer
                 tools::Rectangle aCropRect = aClipPolyPoly.GetBoundRect();
-                pOut->IntersectClipRegion( aCropRect );
+                rOut.IntersectClipRegion(aCropRect);
             }
             else
             {
-                pOut->IntersectClipRegion(vcl::Region(aClipPolyPoly));
+                rOut.IntersectClipRegion(vcl::Region(aClipPolyPoly));
             }
         }
     }
 
-    bRet = lclDrawObj(pOut, aPt, aSz, *this, aAttr);
+    bRet = lclDrawObj(rOut, aPt, aSz, *this, aAttr);
 
     if( bCropped )
-        pOut->Pop();
+        rOut.Pop();
 
-    pOut->SetDrawMode( nOldDrawMode );
+    rOut.SetDrawMode( nOldDrawMode );
 
     return bRet;
 }
 
-void GraphicObject::DrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea, const Size& rSize,
-                               const Size& rOffset, int nTileCacheSize1D )
+void GraphicObject::DrawTiled(OutputDevice& rOut, const tools::Rectangle& rArea, const Size& rSize,
+                              const Size& rOffset, int nTileCacheSize1D)
 {
-    if( pOut == nullptr || rSize.IsEmpty() )
+    if (rSize.IsEmpty())
         return;
 
-    const MapMode   aOutMapMode( pOut->GetMapMode() );
+    const MapMode   aOutMapMode(rOut.GetMapMode());
     // #106258# Clamp size to 1 for zero values. This is okay, since
     // logical size of zero is handled above already
-    const Size      aOutTileSize( ::std::max( tools::Long(1), pOut->LogicToPixel( rSize, aOutMapMode ).Width() ),
-                                  ::std::max( tools::Long(1), pOut->LogicToPixel( rSize, aOutMapMode ).Height() ) );
+    const Size      aOutTileSize( ::std::max( tools::Long(1), rOut.LogicToPixel( rSize, aOutMapMode ).Width() ),
+                                  ::std::max( tools::Long(1), rOut.LogicToPixel( rSize, aOutMapMode ).Height() ) );
 
     //#i69780 clip final tile size to a sane max size
     while ((static_cast<sal_Int64>(rSize.Width()) * nTileCacheSize1D) > SAL_MAX_UINT16)
@@ -536,12 +536,12 @@ void GraphicObject::DrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea
     while ((static_cast<sal_Int64>(rSize.Height()) * nTileCacheSize1D) > SAL_MAX_UINT16)
         nTileCacheSize1D /= 2;
 
-    ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, nullptr, nTileCacheSize1D );
+    ImplDrawTiled(rOut, rArea, aOutTileSize, rOffset, nullptr, nTileCacheSize1D);
 }
 
-bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                    tools::Long nExtraData,
-                                    OutputDevice* pFirstFrameOutDev )
+bool GraphicObject::StartAnimation(OutputDevice& rOut, const Point& rPt, const Size& rSz,
+                                   tools::Long nExtraData,
+                                   OutputDevice* pFirstFrameOutDev)
 {
     bool bRet = false;
 
@@ -559,16 +559,16 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
         {
             tools::PolyPolygon aClipPolyPoly;
             bool        bRectClip;
-            const bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
+            const bool  bCrop = ImplGetCropParams(rOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip);
 
-            pOut->Push( PushFlags::CLIPREGION );
+            rOut.Push(PushFlags::CLIPREGION);
 
             if( bCrop )
             {
                 if( bRectClip )
-                    pOut->IntersectClipRegion( aClipPolyPoly.GetBoundRect() );
+                    rOut.IntersectClipRegion(aClipPolyPoly.GetBoundRect());
                 else
-                    pOut->IntersectClipRegion(vcl::Region(aClipPolyPoly));
+                    rOut.IntersectClipRegion(vcl::Region(aClipPolyPoly));
             }
         }
 
@@ -578,15 +578,15 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
             mxSimpleCache->maGraphic.SetAnimationNotifyHdl(GetGraphic().GetAnimationNotifyHdl());
         }
 
-        mxSimpleCache->maGraphic.StartAnimation(pOut, aPt, aSz, nExtraData, pFirstFrameOutDev);
+        mxSimpleCache->maGraphic.StartAnimation(rOut, aPt, aSz, nExtraData, pFirstFrameOutDev);
 
         if( bCropped )
-            pOut->Pop();
+            rOut.Pop();
 
         bRet = true;
     }
     else
-        bRet = Draw( pOut, rPt, rSz, &aAttr );
+        bRet = Draw(rOut, rPt, rSz, &aAttr);
 
     return bRet;
 }

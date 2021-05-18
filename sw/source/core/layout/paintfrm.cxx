@@ -1549,11 +1549,11 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
         gProp.pSRetoucheFly = nullptr;
 }
 
-static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
-                                 vcl::RenderContext* _pOut,
-                                 const SwRect& _rAlignedPaintRect,
-                                 const GraphicObject& _rGraphicObj,
-                                 SwPaintProperties const & properties)
+static void lcl_implDrawGraphicBackgrd(const SvxBrushItem& _rBackgrdBrush,
+                                       vcl::RenderContext& _rOut,
+                                       const SwRect& _rAlignedPaintRect,
+                                       const GraphicObject& _rGraphicObj,
+                                       SwPaintProperties const & properties)
 {
     /// determine color of background
     ///     If color of background brush is not "no fill"/"auto fill" or
@@ -1585,17 +1585,17 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     if ( bDrawTransparent )
     {
         /// draw background transparent
-        if( _pOut->GetFillColor() != aColor.GetRGBColor() )
-            _pOut->SetFillColor( aColor.GetRGBColor() );
+        if( _rOut.GetFillColor() != aColor.GetRGBColor() )
+            _rOut.SetFillColor( aColor.GetRGBColor() );
         tools::PolyPolygon aPoly( _rAlignedPaintRect.SVRect() );
-        _pOut->DrawTransparent( aPoly, nTransparencyPercent );
+        _rOut.DrawTransparent( aPoly, nTransparencyPercent );
     }
     else
     {
         /// draw background opaque
-        if ( _pOut->GetFillColor() != aColor )
-            _pOut->SetFillColor( aColor );
-        _pOut->DrawRect( _rAlignedPaintRect.SVRect() );
+        if ( _rOut.GetFillColor() != aColor )
+            _rOut.SetFillColor( aColor );
+        _rOut.DrawRect( _rAlignedPaintRect.SVRect() );
     }
 }
 
@@ -1614,7 +1614,7 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
  * @param _rBackgrdBrush
  * background brush contain the color the background has to be drawn.
  *
- * @param _pOut
+ * @param _rOut
  * output device the background has to be drawn in.
  *
  * @param _rAlignedPaintRect
@@ -1632,7 +1632,7 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
  * boolean (optional; default: false) indicating, if the background is already drawn.
 */
 static void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
-                                    OutputDevice* _pOut,
+                                    OutputDevice& _rOut,
                                     const SwRect& _rAlignedPaintRect,
                                     const GraphicObject& _rGraphicObj,
                                     bool _bNumberingGraphic,
@@ -1648,7 +1648,7 @@ static void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
          ( _rGraphicObj.IsTransparent() || _rGraphicObj.GetType() == GraphicType::NONE  )
        )
     {
-        lcl_implDrawGraphicBackgrd( _rBackgrdBrush, _pOut, _rAlignedPaintRect, _rGraphicObj, properties );
+        lcl_implDrawGraphicBackgrd( _rBackgrdBrush, _rOut, _rAlignedPaintRect, _rGraphicObj, properties );
     }
 }
 
@@ -1667,7 +1667,7 @@ static void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
  *
  * Also, change type of <bGrfNum> and <bClip> from <bool> to <bool>
  */
-static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOut,
+static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext &rOutDev,
                       SwViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       bool bGrfNum,
                       SwPaintProperties const & properties,
@@ -1678,24 +1678,24 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOu
     // Calculate align rectangle from parameter <rGrf> and use aligned
     // rectangle <aAlignedGrfRect> in the following code
     SwRect aAlignedGrfRect = rGrf;
-    ::SwAlignRect( aAlignedGrfRect, &rSh, pOut );
+    ::SwAlignRect( aAlignedGrfRect, &rSh, &rOutDev );
 
     // Change type from <bool> to <bool>.
     const bool bNotInside = !rOut.IsInside( aAlignedGrfRect );
     if ( bNotInside )
     {
-        pOut->Push( PushFlags::CLIPREGION );
-        pOut->IntersectClipRegion( rOut.SVRect() );
+        rOutDev.Push( PushFlags::CLIPREGION );
+        rOutDev.IntersectClipRegion( rOut.SVRect() );
     }
 
     GraphicObject *pGrf = const_cast<GraphicObject*>(rBrush.GetGraphicObject());
 
     // Outsource drawing of background with a background color
-    ::lcl_DrawGraphicBackgrd( rBrush, pOut, aAlignedGrfRect, *pGrf, bGrfNum, properties, bBackgrdAlreadyDrawn );
+    ::lcl_DrawGraphicBackgrd( rBrush, rOutDev, aAlignedGrfRect, *pGrf, bGrfNum, properties, bBackgrdAlreadyDrawn );
 
     // Because for drawing a graphic left-top-corner and size coordinates are
     // used, these coordinates have to be determined on pixel level.
-    ::SwAlignGrfRect( &aAlignedGrfRect, *pOut );
+    ::SwAlignGrfRect( &aAlignedGrfRect, rOutDev );
 
     const basegfx::B2DHomMatrix aGraphicTransform(
         basegfx::utils::createScaleTranslateB2DHomMatrix(
@@ -1703,7 +1703,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOu
             aAlignedGrfRect.Left(), aAlignedGrfRect.Top()));
 
     paintGraphicUsingPrimitivesHelper(
-        *pOut,
+        rOutDev,
         *pGrf,
         pGrf->GetAttr(),
         aGraphicTransform,
@@ -1712,7 +1712,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOu
         OUString());
 
     if ( bNotInside )
-        pOut->Pop();
+        rOutDev.Pop();
 }
 
 bool DrawFillAttributes(
@@ -1811,7 +1811,7 @@ bool DrawFillAttributes(
 
 void DrawGraphic(
     const SvxBrushItem *pBrush,
-    vcl::RenderContext *pOutDev,
+    vcl::RenderContext &rOutDev,
     const SwRect &rOrg,
     const SwRect &rOut,
     const sal_uInt8 nGrfNum,
@@ -1915,16 +1915,16 @@ void DrawGraphic(
             GraphicObject* pGraphicObj = const_cast< GraphicObject* >(pBrush->GetGraphicObject());
             // calculate aligned paint rectangle
             SwRect aAlignedPaintRect = rOut;
-            ::SwAlignRect( aAlignedPaintRect, &rSh, pOutDev );
+            ::SwAlignRect( aAlignedPaintRect, &rSh, &rOutDev );
             // draw background color for aligned paint rectangle
-            lcl_DrawGraphicBackgrd( *pBrush, pOutDev, aAlignedPaintRect, *pGraphicObj, bGrfNum, gProp );
+            lcl_DrawGraphicBackgrd( *pBrush, rOutDev, aAlignedPaintRect, *pGraphicObj, bGrfNum, gProp );
 
             // set left-top-corner of background graphic to left-top-corner of the
             // area, from which the background brush is determined.
             aGrf.Pos() = rOrg.Pos();
             // setup clipping at output device
-            pOutDev->Push( PushFlags::CLIPREGION );
-            pOutDev->IntersectClipRegion( rOut.SVRect() );
+            rOutDev.Push( PushFlags::CLIPREGION );
+            rOutDev.IntersectClipRegion( rOut.SVRect() );
             // use new method <GraphicObject::DrawTiled(::)>
             {
                 // calculate paint offset
@@ -1954,14 +1954,14 @@ void DrawGraphic(
                 const Size      aSize( aAlignedPaintRect.SSize() );
                 const double    Abitmap( k1/k2 * static_cast<double>(aSize.Width())*aSize.Height() );
 
-                pGraphicObj->DrawTiled( pOutDev,
+                pGraphicObj->DrawTiled( rOutDev,
                                         aAlignedPaintRect.SVRect(),
                                         aGrf.SSize(),
                                         Size( aPaintOffset.X(), aPaintOffset.Y() ),
                                         std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
             }
             // reset clipping at output device
-            pOutDev->Pop();
+            rOutDev.Pop();
             // set <bDraw> and <bRetouche> to false, indicating that background
             // graphic and background are already drawn.
             bDraw = bRetouche = false;
@@ -1972,7 +1972,7 @@ void DrawGraphic(
         bDraw = false;
         break;
 
-    default: OSL_ENSURE( !pOutDev, "new Graphic position?" );
+    default: OSL_ENSURE( false, "new Graphic position?" );
     }
 
     /// init variable <bGrfBackgrdAlreadDrawn> to indicate, if background of
@@ -1980,8 +1980,8 @@ void DrawGraphic(
     bool bGrfBackgrdAlreadyDrawn = false;
     if ( bRetouche )
     {
-        pOutDev->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
-        pOutDev->SetLineColor();
+        rOutDev.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+        rOutDev.SetLineColor();
 
         // check, if an existing background graphic (not filling the complete
         // background) is transparent drawn and the background color is
@@ -2044,11 +2044,11 @@ void DrawGraphic(
         }
 
         // #i75614# reset draw mode in high contrast mode in order to get fill color set
-        const DrawModeFlags nOldDrawMode = pOutDev->GetDrawMode();
+        const DrawModeFlags nOldDrawMode = rOutDev.GetDrawMode();
         if ( gProp.pSGlobalShell->GetWin() &&
              Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         {
-            pOutDev->SetDrawMode( DrawModeFlags::Default );
+            rOutDev.SetDrawMode( DrawModeFlags::Default );
         }
 
         // If background region has to be drawn transparent, set only the RGB values of the background color as
@@ -2057,21 +2057,21 @@ void DrawGraphic(
         {
             case Transparent:
             {
-                if( pOutDev->GetFillColor() != aColor.GetRGBColor() )
-                    pOutDev->SetFillColor( aColor.GetRGBColor() );
+                if( rOutDev.GetFillColor() != aColor.GetRGBColor() )
+                    rOutDev.SetFillColor( aColor.GetRGBColor() );
                 break;
             }
             default:
             {
-                if( pOutDev->GetFillColor() != aColor )
-                    pOutDev->SetFillColor( aColor );
+                if( rOutDev.GetFillColor() != aColor )
+                    rOutDev.SetFillColor( aColor );
                 break;
             }
         }
 
         // #i75614#
         // restore draw mode
-        pOutDev->SetDrawMode( nOldDrawMode );
+        rOutDev.SetDrawMode( nOldDrawMode );
 
         switch (eDrawStyle)
         {
@@ -2107,7 +2107,7 @@ void DrawGraphic(
                   (( bTransparentGrfWithNoFillBackgrd ? nGrfTransparency : (255 - aColor.GetAlpha())
                    )*100 + 0x7F)/0xFF);
                 // draw poly-polygon transparent
-                pOutDev->DrawTransparent( aDrawPoly, nTransparencyPercent );
+                rOutDev.DrawTransparent( aDrawPoly, nTransparencyPercent );
 
                 break;
             }
@@ -2122,22 +2122,22 @@ void DrawGraphic(
                 // loop rectangles of background region, which has to be drawn
                 for( size_t i = 0; i < aRegion.size(); ++i )
                 {
-                    pOutDev->DrawRect( aRegion[i].SVRect() );
+                    rOutDev.DrawRect( aRegion[i].SVRect() );
                 }
             }
         }
-        pOutDev ->Pop();
+        rOutDev.Pop();
     }
 
     if( bDraw && aGrf.IsOver( rOut ) )
-        lcl_DrawGraphic( *pBrush, pOutDev, rSh, aGrf, rOut, bGrfNum, gProp,
+        lcl_DrawGraphic( *pBrush, rOutDev, rSh, aGrf, rOut, bGrfNum, gProp,
                          bGrfBackgrdAlreadyDrawn );
 
     if( bReplaceGrfNum )
     {
         const BitmapEx& rBmp = rSh.GetReplacementBitmap(false);
-        vcl::Font aTmp( pOutDev->GetFont() );
-        Graphic::DrawEx(pOutDev, OUString(), aTmp, rBmp, rOrg.Pos(), rOrg.SSize());
+        vcl::Font aTmp( rOutDev.GetFont() );
+        Graphic::DrawEx(rOutDev, OUString(), aTmp, rBmp, rOrg.Pos(), rOrg.SSize());
     }
 }
 
@@ -6445,7 +6445,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                     //         - see declaration in /core/inc/frmtool.hxx.
                         ::DrawGraphic(
                                 pItem,
-                                pOut,
+                                *pOut,
                                 aOrigBackRect,
                                 aRegion[i],
                                 GRFNUM_NO,

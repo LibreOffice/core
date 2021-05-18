@@ -262,7 +262,7 @@ void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtua
     BitmapEx aSourceBitmapEx = pVirtualDev->GetBitmapEx(Point(), Size(10, 10));
     ScopedVclPtrInstance<VirtualDevice> pVirtualDevResult;
     pVirtualDevResult->SetOutputSizePixel(Size(10, 10));
-    const_cast<GDIMetaFile&>(rMetaFile).Play(pVirtualDevResult.get());
+    const_cast<GDIMetaFile&>(rMetaFile).Play(*pVirtualDevResult);
     BitmapEx aResultBitmapEx = pVirtualDevResult->GetBitmapEx(Point(), Size(10, 10));
 
     const bool bWriteCompareBitmap = false;

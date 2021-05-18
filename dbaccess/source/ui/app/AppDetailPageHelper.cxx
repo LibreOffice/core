@@ -1211,9 +1211,9 @@ void OPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
         const Size aSize(m_aPreviewRect.GetSize());
 
         if (m_aGraphicObj.IsAnimated())
-            m_aGraphicObj.StartAnimation(&rRenderContext, aPos, aSize);
+            m_aGraphicObj.StartAnimation(rRenderContext, aPos, aSize);
         else
-            m_aGraphicObj.Draw(&rRenderContext, aPos, aSize);
+            m_aGraphicObj.Draw(rRenderContext, aPos, aSize);
     }
 }
 

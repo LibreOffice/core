@@ -230,7 +230,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
 
         for( const Graphic& aGraphic : aGraphics )
         {
-            aGraphic.Draw( pDev, aPos );
+            aGraphic.Draw(*pDev, aPos);
 
             aPos.AdjustX(aGraphic.GetSizePixel().Width() + 3 );
         }

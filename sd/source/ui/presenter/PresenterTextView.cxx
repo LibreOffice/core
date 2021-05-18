@@ -413,7 +413,7 @@ Reference<rendering::XBitmap> const & PresenterTextView::Implementation::GetBitm
         mpEditEngine->SetText(msText);
         mpEditEngine->SetPaperSize(maSize);
 
-        mpEditEngine->Draw(mpOutputDevice, aWindowBox, Point(0,mnTop));
+        mpEditEngine->Draw(*mpOutputDevice, aWindowBox, Point(0,mnTop));
 
         const BitmapEx aBitmap (mpOutputDevice->GetBitmapEx(Point(0,0), maSize));
         mxBitmap = cppcanvas::VCLFactory::createBitmap(

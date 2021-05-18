@@ -150,7 +150,7 @@ AsianCompressionFlags GetCharTypeForCompression( sal_Unicode cChar )
     }
 }
 
-static void lcl_DrawRedLines( OutputDevice* pOutDev,
+static void lcl_DrawRedLines( OutputDevice& rOutDev,
                               tools::Long nFontHeight,
                               const Point& rPoint,
                               size_t nIndex,
@@ -163,7 +163,7 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
                               bool bIsRightToLeft )
 {
     // But only if font is not too small...
-    tools::Long nHeight = pOutDev->LogicToPixel(Size(0, nFontHeight)).Height();
+    tools::Long nHeight = rOutDev.LogicToPixel(Size(0, nFontHeight)).Height();
     if (WRONG_SHOW_MIN >= nHeight)
         return;
 
@@ -186,7 +186,7 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
         {
             // VCL doesn't know that the text is vertical, and is manipulating
             // the positions a little bit in y direction...
-            tools::Long nOnePixel = pOutDev->PixelToLogic(Size(0, 1)).Height();
+            tools::Long nOnePixel = rOutDev.PixelToLogic(Size(0, 1)).Height();
             tools::Long nCorrect = 2 * nOnePixel;
             aPoint1.AdjustY(-nCorrect);
             aPoint1.AdjustX(-nCorrect);
@@ -224,8 +224,8 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
         }
 
         {
-            vcl::ScopedAntialiasing a(*pOutDev, true);
-            pOutDev->DrawWaveLine(aPoint1, aPoint2);
+            vcl::ScopedAntialiasing a(rOutDev, true);
+            rOutDev.DrawWaveLine(aPoint1, aPoint2);
         }
 
         nStart = nEnd + 1;
@@ -3029,7 +3029,7 @@ bool ImpEditEngine::isXOverflowDirectionAware(const Point& pt, const tools::Rect
         return pt.Y() < rectMax.Top();
 }
 
-void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly, Degree10 nOrientation )
+void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly, Degree10 nOrientation )
 {
     if ( !GetUpdateMode() && !bStripOnly )
         return;
@@ -3037,12 +3037,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
     if ( !IsFormatted() )
         FormatDoc();
 
-    tools::Long nFirstVisXPos = - pOutDev->GetMapMode().GetOrigin().X();
-    tools::Long nFirstVisYPos = - pOutDev->GetMapMode().GetOrigin().Y();
+    tools::Long nFirstVisXPos = - rOutDev.GetMapMode().GetOrigin().X();
+    tools::Long nFirstVisYPos = - rOutDev.GetMapMode().GetOrigin().Y();
 
     DBG_ASSERT( GetParaPortions().Count(), "No ParaPortion?!" );
     SvxFont aTmpFont( GetParaPortions()[0].GetNode()->GetCharAttribs().GetDefFont() );
-    vcl::PDFExtOutDevData* const pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( pOutDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* const pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( rOutDev.GetExtOutDevData() );
 
     // In the case of rotated text is aStartPos considered TopLeft because
     // other information is missing, and since the whole object is shown anyway
@@ -3059,7 +3059,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 
     // #110496# Added some more optional metafile comments. This
     // change: factored out some duplicated code.
-    GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
+    GDIMetaFile* pMtf = rOutDev.GetConnectMetaFile();
     const bool bMetafileValid( pMtf != nullptr );
 
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
@@ -3127,7 +3127,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                     // does, too. No change for not-layouting (painting).
                     if(0 == nLine) // && !bStripOnly)
                     {
-                        GetEditEnginePtr()->PaintingFirstLine( n, aParaStart, aTmpPos.Y(), aOrigin, nOrientation, pOutDev );
+                        GetEditEnginePtr()->PaintingFirstLine(n, aParaStart, aTmpPos.Y(), aOrigin, nOrientation, rOutDev);
 
                         // Remember whether a bullet was painted.
                         const SfxBoolItem& rBulletState = pEditEngine->GetParaAttrib(n, EE_PARA_BULLETSTATE);
@@ -3157,17 +3157,17 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                             case PortionKind::FIELD:
                             case PortionKind::HYPHENATOR:
                             {
-                                SeekCursor( rPortion.GetNode(), nIndex+1, aTmpFont, pOutDev );
+                                SeekCursor( rPortion.GetNode(), nIndex+1, aTmpFont, &rOutDev );
 
                                 bool bDrawFrame = false;
 
                                 if ( ( rTextPortion.GetKind() == PortionKind::FIELD ) && !aTmpFont.IsTransparent() &&
                                      ( GetBackgroundColor() != COL_AUTO ) && GetBackgroundColor().IsDark() &&
-                                     ( IsAutoColorEnabled() && ( pOutDev->GetOutDevType() != OUTDEV_PRINTER ) ) )
+                                     ( IsAutoColorEnabled() && ( rOutDev.GetOutDevType() != OUTDEV_PRINTER ) ) )
                                 {
                                     aTmpFont.SetTransparent( true );
-                                    pOutDev->SetFillColor();
-                                    pOutDev->SetLineColor( GetAutoColor() );
+                                    rOutDev.SetFillColor();
+                                    rOutDev.SetLineColor( GetAutoColor() );
                                     bDrawFrame = true;
                                 }
 
@@ -3189,13 +3189,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     aTmpFont.SetTransparent( sal_False );
                                 }
 #endif
-                                aTmpFont.SetPhysFont( pOutDev );
+                                aTmpFont.SetPhysFont( &rOutDev );
 
                                 // #114278# Saving both layout mode and language (since I'm
                                 // potentially changing both)
-                                pOutDev->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
-                                ImplInitLayoutMode( pOutDev, n, nIndex );
-                                ImplInitDigitMode(pOutDev, aTmpFont.GetLanguage());
+                                rOutDev.Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
+                                ImplInitLayoutMode( &rOutDev, n, nIndex );
+                                ImplInitDigitMode(&rOutDev, aTmpFont.GetLanguage());
 
                                 OUString aText;
                                 sal_Int32 nTextStart = 0;
@@ -3229,7 +3229,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 
                                             if ( 0x200B == cChar || 0x2060 == cChar )
                                             {
-                                                tools::Long nHalfBlankWidth = aTmpFont.QuickGetTextSize( pOutDev, " ", 0, 1 ).Width() / 2;
+                                                tools::Long nHalfBlankWidth = aTmpFont.QuickGetTextSize( &rOutDev, " ", 0, 1 ).Width() / 2;
 
                                                 const tools::Long nAdvanceX = ( nTmpIdx == nTmpEnd ?
                                                                          rTextPortion.GetSize().Width() :
@@ -3244,16 +3244,16 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                 adjustXDirectionAware(aBottomRightRectPos, 2 * nHalfBlankWidth);
                                                 adjustYDirectionAware(aBottomRightRectPos, pLine->GetHeight());
 
-                                                pOutDev->Push( PushFlags::FILLCOLOR );
-                                                pOutDev->Push( PushFlags::LINECOLOR );
-                                                pOutDev->SetFillColor( COL_LIGHTGRAY );
-                                                pOutDev->SetLineColor( COL_LIGHTGRAY );
+                                                rOutDev.Push( PushFlags::FILLCOLOR );
+                                                rOutDev.Push( PushFlags::LINECOLOR );
+                                                rOutDev.SetFillColor( COL_LIGHTGRAY );
+                                                rOutDev.SetLineColor( COL_LIGHTGRAY );
 
                                                 const tools::Rectangle aBackRect( aTopLeftRectPos, aBottomRightRectPos );
-                                                pOutDev->DrawRect( aBackRect );
+                                                rOutDev.DrawRect( aBackRect );
 
-                                                pOutDev->Pop();
-                                                pOutDev->Pop();
+                                                rOutDev.Pop();
+                                                rOutDev.Pop();
 
                                                 if ( 0x200B == cChar )
                                                 {
@@ -3263,19 +3263,19 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 
                                                     aTmpFont.SetEscapement( -20 );
                                                     aTmpFont.SetPropr( 25 );
-                                                    aTmpFont.SetPhysFont( pOutDev );
+                                                    aTmpFont.SetPhysFont( &rOutDev );
 
-                                                    const Size aSlashSize = aTmpFont.QuickGetTextSize( pOutDev, aSlash, 0, 1 );
+                                                    const Size aSlashSize = aTmpFont.QuickGetTextSize( &rOutDev, aSlash, 0, 1 );
                                                     Point aSlashPos( aTmpPos );
                                                     const tools::Long nAddX = nHalfBlankWidth - aSlashSize.Width() / 2;
                                                     setXDirectionAware(aSlashPos, getXDirectionAware(aTopLeftRectPos));
                                                     adjustXDirectionAware(aSlashPos, nAddX);
 
-                                                    aTmpFont.QuickDrawText( pOutDev, aSlashPos, aSlash, 0, 1 );
+                                                    aTmpFont.QuickDrawText( &rOutDev, aSlashPos, aSlash, 0, 1 );
 
                                                     aTmpFont.SetEscapement( nOldEscapement );
                                                     aTmpFont.SetPropr( nOldPropr );
-                                                    aTmpFont.SetPhysFont( pOutDev );
+                                                    aTmpFont.SetPhysFont( &rOutDev );
                                                 }
                                             }
                                         }
@@ -3445,12 +3445,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
                                     // get Overline color (from ((const SvxOverlineItem*)GetItem())->GetColor() in
-                                    // consequence, but also already set at pOutDev)
-                                    const Color aOverlineColor(pOutDev->GetOverlineColor());
+                                    // consequence, but also already set at rOutDev)
+                                    const Color aOverlineColor(rOutDev.GetOverlineColor());
 
                                     // get TextLine color (from ((const SvxUnderlineItem*)GetItem())->GetColor() in
-                                    // consequence, but also already set at pOutDev)
-                                    const Color aTextLineColor(pOutDev->GetTextLineColor());
+                                    // consequence, but also already set at rOutDev)
+                                    const Color aTextLineColor(rOutDev.GetTextLineColor());
 
                                     // Unicode code points conversion according to ctl text numeral setting
                                     aText = convertDigits(aText, nTextStart, nTextLen,
@@ -3488,7 +3488,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 
                                         aOutPos = lcl_ImplCalcRotatedPos( aOutPos, aOrigin, nSin, nCos );
                                         aTmpFont.SetOrientation( aTmpFont.GetOrientation()+nOrientation );
-                                        aTmpFont.SetPhysFont( pOutDev );
+                                        aTmpFont.SetPhysFont( &rOutDev );
 
                                     }
 
@@ -3525,23 +3525,23 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                             }
                                             if ( bSpecialUnderline )
                                             {
-                                                Size aSz = aTmpFont.GetPhysTxtSize( pOutDev, aText, nTextStart, nTextLen );
+                                                Size aSz = aTmpFont.GetPhysTxtSize( &rOutDev, aText, nTextStart, nTextLen );
                                                 sal_uInt8 nProp = aTmpFont.GetPropr();
                                                 aTmpFont.SetEscapement( 0 );
                                                 aTmpFont.SetPropr( 100 );
-                                                aTmpFont.SetPhysFont( pOutDev );
+                                                aTmpFont.SetPhysFont( &rOutDev );
                                                 OUStringBuffer aBlanks;
                                                 comphelper::string::padToLength( aBlanks, nTextLen, ' ' );
                                                 Point aUnderlinePos( aOutPos );
                                                 if ( nOrientation )
                                                     aUnderlinePos = lcl_ImplCalcRotatedPos( aTmpPos, aOrigin, nSin, nCos );
-                                                pOutDev->DrawStretchText( aUnderlinePos, aSz.Width(), aBlanks.makeStringAndClear(), 0, nTextLen );
+                                                rOutDev.DrawStretchText( aUnderlinePos, aSz.Width(), aBlanks.makeStringAndClear(), 0, nTextLen );
 
                                                 aTmpFont.SetUnderline( LINESTYLE_NONE );
                                                 if ( !nOrientation )
                                                     aTmpFont.SetEscapement( nEsc );
                                                 aTmpFont.SetPropr( nProp );
-                                                aTmpFont.SetPhysFont( pOutDev );
+                                                aTmpFont.SetPhysFont( &rOutDev );
                                             }
                                         }
                                         Point aRealOutPos( aOutPos );
@@ -3561,7 +3561,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                             --nTextLen;
 
                                         // output directly
-                                        aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
+                                        aTmpFont.QuickDrawText( &rOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
 
                                         if ( bDrawFrame )
                                         {
@@ -3570,7 +3570,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                             if ( nOrientation )
                                                 aTopLeft = lcl_ImplCalcRotatedPos( aTopLeft, aOrigin, nSin, nCos );
                                             tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
-                                            pOutDev->DrawRect( aRect );
+                                            rOutDev.DrawRect( aRect );
                                         }
 
                                         // PDF export:
@@ -3611,14 +3611,14 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                 adjustYDirectionAware(aRedLineTmpPos, -nShift);
                                             }
                                         }
-                                        Color aOldColor( pOutDev->GetLineColor() );
-                                        pOutDev->SetLineColor( GetColorConfig().GetColorValue( svtools::SPELL ).nColor );
-                                        lcl_DrawRedLines( pOutDev, aTmpFont.GetFontSize().Height(), aRedLineTmpPos, static_cast<size_t>(nIndex), static_cast<size_t>(nIndex) + rTextPortion.GetLen(), pDXArray, rPortion.GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical(), rTextPortion.IsRightToLeft() );
-                                        pOutDev->SetLineColor( aOldColor );
+                                        Color aOldColor( rOutDev.GetLineColor() );
+                                        rOutDev.SetLineColor( GetColorConfig().GetColorValue( svtools::SPELL ).nColor );
+                                        lcl_DrawRedLines( rOutDev, aTmpFont.GetFontSize().Height(), aRedLineTmpPos, static_cast<size_t>(nIndex), static_cast<size_t>(nIndex) + rTextPortion.GetLen(), pDXArray, rPortion.GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical(), rTextPortion.IsRightToLeft() );
+                                        rOutDev.SetLineColor( aOldColor );
                                     }
                                 }
 
-                                pOutDev->Pop();
+                                rOutDev.Pop();
 
                                 pTmpDXArray.reset();
 
@@ -3649,11 +3649,11 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                             {
                                 if ( rTextPortion.GetExtraValue() && ( rTextPortion.GetExtraValue() != ' ' ) )
                                 {
-                                    SeekCursor( rPortion.GetNode(), nIndex+1, aTmpFont, pOutDev );
+                                    SeekCursor( rPortion.GetNode(), nIndex+1, aTmpFont, &rOutDev );
                                     aTmpFont.SetTransparent( false );
                                     aTmpFont.SetEscapement( 0 );
-                                    aTmpFont.SetPhysFont( pOutDev );
-                                    tools::Long nCharWidth = aTmpFont.QuickGetTextSize( pOutDev,
+                                    aTmpFont.SetPhysFont( &rOutDev );
+                                    tools::Long nCharWidth = aTmpFont.QuickGetTextSize( &rOutDev,
                                         OUString(rTextPortion.GetExtraValue()), 0, 1 ).Width();
                                     sal_Int32 nChars = 2;
                                     if( nCharWidth )
@@ -3666,8 +3666,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     OUStringBuffer aBuf;
                                     comphelper::string::padToLength(aBuf, nChars, rTextPortion.GetExtraValue());
                                     OUString aText(aBuf.makeStringAndClear());
-                                    aTmpFont.QuickDrawText( pOutDev, aTmpPos, aText, 0, aText.getLength() );
-                                    pOutDev->DrawStretchText( aTmpPos, rTextPortion.GetSize().Width(), aText );
+                                    aTmpFont.QuickDrawText( &rOutDev, aTmpPos, aText, 0, aText.getLength() );
+                                    rOutDev.DrawStretchText( aTmpPos, rTextPortion.GetSize().Width(), aText );
 
                                     if ( bStripOnly )
                                     {
@@ -3675,8 +3675,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                         const bool bEndOfLine(nPortion == pLine->GetEndPortion());
                                         const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
-                                        const Color aOverlineColor(pOutDev->GetOverlineColor());
-                                        const Color aTextLineColor(pOutDev->GetTextLineColor());
+                                        const Color aOverlineColor(rOutDev.GetOverlineColor());
+                                        const Color aTextLineColor(rOutDev.GetTextLineColor());
 
                                         // StripPortions() data callback
                                         GetEditEnginePtr()->DrawingTab( aTmpPos,
@@ -3695,8 +3695,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     const bool bEndOfLine(nPortion == pLine->GetEndPortion());
                                     const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
-                                    const Color aOverlineColor(pOutDev->GetOverlineColor());
-                                    const Color aTextLineColor(pOutDev->GetTextLineColor());
+                                    const Color aOverlineColor(rOutDev.GetOverlineColor());
+                                    const Color aTextLineColor(rOutDev.GetTextLineColor());
 
                                     GetEditEnginePtr()->DrawingText(
                                         aTmpPos, OUString(), 0, 0, nullptr,
@@ -3744,8 +3744,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
             // changes in EditEngine behaviour.
             if(!bEndOfParagraphWritten && !bPaintBullet && bStripOnly)
             {
-                const Color aOverlineColor(pOutDev->GetOverlineColor());
-                const Color aTextLineColor(pOutDev->GetTextLineColor());
+                const Color aOverlineColor(rOutDev.GetOverlineColor());
+                const Color aTextLineColor(rOutDev.GetTextLineColor());
 
                 GetEditEnginePtr()->DrawingText(
                     aTmpPos, OUString(), 0, 0, nullptr,
@@ -3815,7 +3815,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
     vcl::Region aOldRegion = rTarget.GetClipRegion();
     rTarget.IntersectClipRegion( aClipRect );
 
-    Paint( &rTarget, aClipRect, aStartPos );
+    Paint(rTarget, aClipRect, aStartPos);
 
     if ( bClipRegion )
         rTarget.SetClipRegion( aOldRegion );

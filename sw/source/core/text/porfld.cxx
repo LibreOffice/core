@@ -959,8 +959,10 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
                 Graphic* pGraph = const_cast<Graphic*>(m_pBrush->GetGraphic());
                 if (pGraph)
                 {
+                    const OutputDevice* pOut = rInf.GetOut();
+                    assert(pOut);
                     pGraph->StartAnimation(
-                        const_cast<OutputDevice*>(rInf.GetOut()), aPos, aSize, m_nId );
+                        *const_cast<OutputDevice*>(pOut), aPos, aSize, m_nId);
                 }
             }
 
@@ -993,7 +995,9 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     if( bDraw && aTmp.HasArea() )
     {
-        DrawGraphic( m_pBrush.get(), const_cast<OutputDevice*>(rInf.GetOut()),
+        const OutputDevice* pOut = rInf.GetOut();
+        assert(pOut);
+        DrawGraphic( m_pBrush.get(), *const_cast<OutputDevice*>(pOut),
             aTmp, aRepaint, m_bReplace ? GRFNUM_REPLACE : GRFNUM_YES );
     }
 }

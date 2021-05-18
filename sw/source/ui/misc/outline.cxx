@@ -858,7 +858,7 @@ static tools::Long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFormat& 
     return nRet;
 }
 
-static tools::Long lcl_DrawGraphic(vcl::RenderContext* pVDev, const SwNumFormat &rFormat, tools::Long nXStart, tools::Long nYStart, tools::Long nDivision)
+static tools::Long lcl_DrawGraphic(vcl::RenderContext& rVDev, const SwNumFormat &rFormat, tools::Long nXStart, tools::Long nYStart, tools::Long nDivision)
 {
     const SvxBrushItem* pBrushItem = rFormat.GetBrush();
     tools::Long nRet = 0;
@@ -871,7 +871,7 @@ static tools::Long lcl_DrawGraphic(vcl::RenderContext* pVDev, const SwNumFormat 
             aGSize.setWidth( aGSize.Width() / nDivision );
             nRet = aGSize.Width();
             aGSize.setHeight( aGSize.Height() / nDivision );
-            pGraphic->Draw(pVDev, Point(nXStart, nYStart), pVDev->PixelToLogic(aGSize));
+            pGraphic->Draw(rVDev, Point(nXStart, nYStart), rVDev.PixelToLogic(aGSize));
         }
     }
     return nRet;
@@ -958,7 +958,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
                 tools::Long nBulletWidth = 0;
                 if (SVX_NUM_BITMAP == rFormat.GetNumberingType())
                 {
-                    nBulletWidth = lcl_DrawGraphic(pVDev.get(), rFormat, nNumberXPos,
+                    nBulletWidth = lcl_DrawGraphic(*pVDev, rFormat, nNumberXPos,
                                                    nYStart, nWidthRelation);
                 }
                 else if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType())
@@ -1051,7 +1051,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
                 tools::Long nTextOffset;
                 if (SVX_NUM_BITMAP == rFormat.GetNumberingType())
                 {
-                    lcl_DrawGraphic(pVDev.get(), rFormat, nXStart, nYStart, nWidthRelation);
+                    lcl_DrawGraphic(*pVDev, rFormat, nXStart, nYStart, nWidthRelation);
                     nTextOffset = nLineHeight + nXStep;
                 }
                 else if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType())

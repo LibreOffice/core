@@ -247,13 +247,13 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
 
                         pVDev->SetBackground( Wallpaper( COL_BLACK ) );
                         pVDev->Erase();
-                        rGraphic.Draw( pVDev.get(), aPt, aSize );
+                        rGraphic.Draw(*pVDev, aPt, aSize);
 
                         const Bitmap aBitmap( pVDev->GetBitmap( aPt, aSize ) );
 
                         pVDev->SetBackground( aWallpaper );
                         pVDev->Erase();
-                        rGraphic.Draw( pVDev.get(), aPt, aSize );
+                        rGraphic.Draw(*pVDev, aPt, aSize);
 
                         pVDev->SetRasterOp( RasterOp::Xor );
                         pVDev->DrawBitmap( aPt, aSize, aBitmap );
@@ -275,7 +275,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
 
                 if( pVDev->SetOutputSizePixel( aSize ) )
                 {
-                    rGraphic.Draw( pVDev.get(), Point(), aSize );
+                    rGraphic.Draw(*pVDev, Point(), aSize);
                     aGraphic = BitmapEx(pVDev->GetBitmap(Point(), aSize));
                 }
                 else
