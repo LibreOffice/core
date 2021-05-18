@@ -210,10 +210,10 @@ public:
     characters are encoded as pairs of characters: '\\' 'n', resp.
     '\\' 'r'. This function converts them back to '\n', resp. '\r'.
   */
-OString lcl_unescapeLineFeeds(const OString& i_rStr)
+OString lcl_unescapeLineFeeds(std::string_view i_rStr)
 {
-    const size_t nOrigLen(sal::static_int_cast<size_t>(i_rStr.getLength()));
-    const char* const pOrig(i_rStr.getStr());
+    const size_t nOrigLen(i_rStr.size());
+    const char* const pOrig(i_rStr.data());
     std::unique_ptr<char[]> pBuffer(new char[nOrigLen + 1]);
 
     const char* pRead(pOrig);
@@ -316,7 +316,7 @@ void LineParser::readBinaryData( uno::Sequence<sal_Int8>& rBuf )
 
 uno::Reference<rendering::XPolyPolygon2D> LineParser::readPath()
 {
-    const OString aSubPathMarker( "subpath" );
+    static const std::string_view aSubPathMarker( "subpath" );
 
     if( readNextToken() != aSubPathMarker )
         OSL_PRECOND(false, "broken path");
@@ -332,7 +332,7 @@ uno::Reference<rendering::XPolyPolygon2D> LineParser::readPath()
 
         sal_Int32 nContiguousControlPoints(0);
         sal_Int32 nDummy=m_nCharIndex;
-        OString aCurrToken( m_aLine.getToken(0,' ',nDummy) );
+        std::string_view aCurrToken( m_aLine.getTokenView(0,' ',nDummy) );
 
         while( m_nCharIndex != -1 && aCurrToken != aSubPathMarker )
         {
@@ -366,7 +366,7 @@ uno::Reference<rendering::XPolyPolygon2D> LineParser::readPath()
 
             // one token look-ahead (new subpath or more points?
             nDummy=m_nCharIndex;
-            aCurrToken = m_aLine.getToken(0,' ',nDummy);
+            aCurrToken = m_aLine.getTokenView(0,' ',nDummy);
         }
 
         aResult.append( aSubPath );
@@ -397,7 +397,7 @@ void LineParser::readChar()
     OString aChars;
 
     if (m_nCharIndex != -1)
-        aChars = lcl_unescapeLineFeeds( m_aLine.copy( m_nCharIndex ) );
+        aChars = lcl_unescapeLineFeeds( m_aLine.subView( m_nCharIndex ) );
 
     // chars gobble up rest of line
     m_nCharIndex = -1;
@@ -610,7 +610,7 @@ void LineParser::readFont()
     readInt32(nFileLen);
 
     nSize = nSize < 0.0 ? -nSize : nSize;
-    aFontName = lcl_unescapeLineFeeds( m_aLine.copy( m_nCharIndex ) );
+    aFontName = lcl_unescapeLineFeeds( m_aLine.subView( m_nCharIndex ) );
 
     // name gobbles up rest of line
     m_nCharIndex = -1;
@@ -790,7 +790,7 @@ void LineParser::readLink()
 
     m_parser.m_pSink->hyperLink( aBounds,
                         OStringToOUString( lcl_unescapeLineFeeds(
-                                m_aLine.copy(m_nCharIndex) ),
+                                m_aLine.subView(m_nCharIndex) ),
                                 RTL_TEXTENCODING_UTF8 ) );
     // name gobbles up rest of line
     m_nCharIndex = -1;
