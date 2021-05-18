@@ -9115,7 +9115,7 @@ libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.3 >= 0.3.1])
 libo_PKG_VERSION([MWAW], [libmwaw-0.3], [0.3.17])
 
 libo_CHECK_SYSTEM_MODULE([libetonyek],[ETONYEK],[libetonyek-0.1])
-libo_PKG_VERSION([ETONYEK], [libetonyek-0.1], [0.1.8])
+libo_PKG_VERSION([ETONYEK], [libetonyek-0.1], [0.1.10])
 
 libo_CHECK_SYSTEM_MODULE([libfreehand],[FREEHAND],[libfreehand-0.1])
 
