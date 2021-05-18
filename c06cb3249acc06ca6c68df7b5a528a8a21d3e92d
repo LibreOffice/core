@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d9b1636_93ada8dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-18T11:02:25Z",
+      "side": 1,
+      "message": "From LO crashreports:\nSSE2: 100%\nAVX: ~80%\nAVX2: ~64%\nAVX512F: ~4.5%\n\nSo removing SSE2 means ~20%.",
+      "revId": "c06cb3249acc06ca6c68df7b5a528a8a21d3e92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "501e5a2c_2144d5cf",
+        "filename": "include/tools/cpuid.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-18T11:02:25Z",
+      "side": 1,
+      "message": "Since AVX512 is a group of several instruction sets, I think it\u0027d be better to add the \u0027F\u0027 to the function name. Especially given that the comment for it says \u0027D\u0027 by mistake.",
+      "range": {
+        "startLine": 83,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 21
+      },
+      "revId": "c06cb3249acc06ca6c68df7b5a528a8a21d3e92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f24f00d_96200ed1",
+        "filename": "sc/Library_sc.mk",
+        "patchSetId": 15
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-18T11:02:25Z",
+      "side": 1,
+      "message": "We have $(CXXFLAGS_INTRINSICS_XXX) flags, set up by configure.ac , please us those. If you need only 512F, you can copy-paste and split a specific check just for that.",
+      "revId": "c06cb3249acc06ca6c68df7b5a528a8a21d3e92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54a40c78_94f3c136",
+        "filename": "sc/source/core/tool/arraysum.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-05-18T11:02:25Z",
+      "side": 1,
+      "message": "This is not how to do code that conditionally executes based on different instruction sets. The file is compiled with AVX512F, so this may crash on any CPU that doesn\u0027t have AVX512F. The proper way to do this is to have a generic file that contains this function, and then have xxx_AVX.cxx etc. files that are compiled with relevant CPU flags and all code in it is executed only after the generic code detects that the CPU feature is available. See how the current code handles conditional use of SSE2.",
+      "revId": "c06cb3249acc06ca6c68df7b5a528a8a21d3e92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
