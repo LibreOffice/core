@@ -41,7 +41,6 @@ using namespace ::com::sun::star;
 /// Sample tests for import
 class XmlScriptTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
-    uno::Reference<lang::XComponent> mxComponent;
     OUString maDataPath;
 
     void testBasicElements();
@@ -53,7 +52,6 @@ class XmlScriptTest : public test::BootstrapFixture, public unotest::MacrosTest,
 
 public:
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override
     {
@@ -74,14 +72,6 @@ void XmlScriptTest::setUp()
     maDataPath = "/xmlscript/qa/cppunit/data/";
 
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
-}
-
-void XmlScriptTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
 }
 
 Reference<container::XNameContainer> XmlScriptTest::importFile(std::u16string_view sFileName)

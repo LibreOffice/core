@@ -201,7 +201,6 @@ class SwCalc
     sal_Int32   m_nCommandPos;
 
     SwDoc&      m_rDoc;
-    SvtSysLocale m_aSysLocale;
     std::unique_ptr<LocaleDataWrapper> m_xLocaleDataWrapper;
     CharClass*  m_pCharClass;
 

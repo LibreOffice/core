@@ -165,6 +165,8 @@ public:
 
 private:
     MyFieldInfo niceName(const FieldDecl*);
+    bool ignoreLocation(SourceLocation loc);
+    bool checkIgnoreLocation(SourceLocation loc);
     void checkTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr);
     void checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* memberExpr);
     void checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memberExpr);
@@ -281,10 +283,46 @@ MyFieldInfo UnusedFields::niceName(const FieldDecl* fieldDecl)
     return aInfo;
 }
 
+/**
+ * Our need to see everything conflicts with the PCH code in pluginhandler::ignoreLocation,
+ * so we have to do this ourselves.
+ */
+bool UnusedFields::ignoreLocation(SourceLocation loc)
+{
+    static std::unordered_map<SourceLocation, bool> checkedMap;
+    auto it = checkedMap.find(loc);
+    if (it != checkedMap.end())
+        return it->second;
+    bool ignore = checkIgnoreLocation(loc);
+    checkedMap.emplace(loc, ignore);
+    return ignore;
+}
+
+bool UnusedFields::checkIgnoreLocation(SourceLocation loc)
+{
+    // simplified form of the code in PluginHandler::checkIgnoreLocation
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
+    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
+        return true;
+    PresumedLoc presumedLoc = compiler.getSourceManager().getPresumedLoc( expansionLoc );
+    if( presumedLoc.isInvalid())
+        return true;
+    const char* bufferName = presumedLoc.getFilename();
+    if (bufferName == NULL
+        || loplugin::hasPathnamePrefix(bufferName, SRCDIR "/external/")
+        || loplugin::hasPathnamePrefix(bufferName, WORKDIR "/"))
+        return true;
+    if( loplugin::hasPathnamePrefix(bufferName, BUILDDIR "/")
+        || loplugin::hasPathnamePrefix(bufferName, SRCDIR "/") )
+        return false; // ok
+    return true;
+}
+
+
 bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
 {
     fieldDecl = fieldDecl->getCanonicalDecl();
-    if (ignoreLocation( fieldDecl )) {
+    if (ignoreLocation( compat::getBeginLoc(fieldDecl) )) {
         return true;
     }
     // ignore stuff that forms part of the stable URE interface
@@ -392,7 +430,7 @@ bool startswith(const std::string& rStr, const char* pSubStr)
 bool UnusedFields::TraverseCXXConstructorDecl(CXXConstructorDecl* cxxConstructorDecl)
 {
     auto copy = insideMoveOrCopyOrCloneDeclParent;
-    if (!ignoreLocation(cxxConstructorDecl) && cxxConstructorDecl->isThisDeclarationADefinition())
+    if (!ignoreLocation(compat::getBeginLoc(cxxConstructorDecl)) && cxxConstructorDecl->isThisDeclarationADefinition())
     {
         if (cxxConstructorDecl->isCopyOrMoveConstructor())
             insideMoveOrCopyOrCloneDeclParent = cxxConstructorDecl->getParent();
@@ -406,7 +444,7 @@ bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
 {
     auto copy1 = insideMoveOrCopyOrCloneDeclParent;
     auto copy2 = insideFunctionDecl;
-    if (!ignoreLocation(cxxMethodDecl) && cxxMethodDecl->isThisDeclarationADefinition())
+    if (!ignoreLocation(compat::getBeginLoc(cxxMethodDecl)) && cxxMethodDecl->isThisDeclarationADefinition())
     {
         if (cxxMethodDecl->isCopyAssignmentOperator()
             || cxxMethodDecl->isMoveAssignmentOperator()
@@ -433,7 +471,7 @@ bool UnusedFields::TraverseFunctionDecl(FunctionDecl* functionDecl)
     auto copy1 = insideStreamOutputOperator;
     auto copy2 = insideFunctionDecl;
     auto copy3 = insideMoveOrCopyOrCloneDeclParent;
-    if (functionDecl->getLocation().isValid() && !ignoreLocation(functionDecl) && functionDecl->isThisDeclarationADefinition())
+    if (functionDecl->getLocation().isValid() && !ignoreLocation(compat::getBeginLoc(functionDecl)) && functionDecl->isThisDeclarationADefinition())
     {
         auto op = functionDecl->getOverloadedOperator();
         if (op == OO_LessLess
@@ -500,7 +538,7 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
         return true;
     }
     fieldDecl = fieldDecl->getCanonicalDecl();
-    if (ignoreLocation(fieldDecl)) {
+    if (ignoreLocation(compat::getBeginLoc(fieldDecl))) {
         return true;
     }
     // ignore stuff that forms part of the stable URE interface
@@ -1074,7 +1112,7 @@ bool UnusedFields::IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * c
 // have to do it here
 bool UnusedFields::VisitCXXConstructorDecl( const CXXConstructorDecl* cxxConstructorDecl )
 {
-    if (ignoreLocation( cxxConstructorDecl )) {
+    if (ignoreLocation( compat::getBeginLoc(cxxConstructorDecl) )) {
         return true;
     }
     // ignore stuff that forms part of the stable URE interface
@@ -1107,7 +1145,7 @@ bool UnusedFields::VisitCXXConstructorDecl( const CXXConstructorDecl* cxxConstru
 // have to do it here.
 bool UnusedFields::VisitInitListExpr( const InitListExpr* initListExpr)
 {
-    if (ignoreLocation( initListExpr ))
+    if (ignoreLocation( compat::getBeginLoc(initListExpr) ))
         return true;
 
     QualType varType = initListExpr->getType().getDesugaredType(compiler.getASTContext());
@@ -1133,7 +1171,7 @@ bool UnusedFields::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
         return true;
     }
     fieldDecl = fieldDecl->getCanonicalDecl();
-    if (ignoreLocation(fieldDecl)) {
+    if (ignoreLocation(compat::getBeginLoc(fieldDecl))) {
         return true;
     }
     // ignore stuff that forms part of the stable URE interface

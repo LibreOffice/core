@@ -35,9 +35,6 @@ class VclMetaFileProcessor2DTest : public test::BootstrapFixture
 {
     VclPtr<VirtualDevice> mVclDevice;
     uno::Reference<rendering::XCanvas> mCanvas;
-    rendering::ViewState mViewState;
-    rendering::RenderState mRenderState;
-    uno::Sequence<double> mColorBlack;
 
     // if enabled - check the result images with:
     // "xdg-open ./workdir/CppunitTest/drawinglayer_processors.test.core/"
@@ -57,18 +54,6 @@ public:
     VclMetaFileProcessor2DTest()
         : BootstrapFixture(true, false)
     {
-    }
-
-    virtual void setUp() override
-    {
-        BootstrapFixture::setUp();
-        mColorBlack = vcl::unotools::colorToStdColorSpaceSequence(COL_BLACK);
-        // Geometry init
-        com::sun::star::geometry::AffineMatrix2D aUnit(1, 0, 0, 0, 1, 0);
-        mViewState.AffineTransform = aUnit;
-        mRenderState.AffineTransform = aUnit;
-        mRenderState.DeviceColor = mColorBlack;
-        mRenderState.CompositeOperation = rendering::CompositeOperation::OVER;
     }
 
     virtual void tearDown() override

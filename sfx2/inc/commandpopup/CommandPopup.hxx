@@ -72,7 +72,6 @@ private:
     std::unique_ptr<weld::TreeView> mpCommandTreeView;
 
     std::vector<CurrentEntry> maCommandList;
-    OUString m_PreviousText;
     std::unique_ptr<MenuContentHandler> mpMenuContentHandler;
 
     DECL_LINK(QueryTooltip, const weld::TreeIter&, OUString);
