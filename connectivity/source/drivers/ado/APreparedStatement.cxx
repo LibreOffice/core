@@ -426,12 +426,12 @@ void SAL_CALL OPreparedStatement::clearParameters(  )
     }
 }
 
-void SAL_CALL OPreparedStatement::acquire() throw()
+void SAL_CALL OPreparedStatement::acquire() noexcept
 {
     OStatement_Base::acquire();
 }
 
-void SAL_CALL OPreparedStatement::release() throw()
+void SAL_CALL OPreparedStatement::release() noexcept
 {
     OStatement_Base::release();
 }

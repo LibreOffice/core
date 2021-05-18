@@ -50,7 +50,7 @@ bool cpp_call(
     typelib_MethodParameter * pParams,
     void * pUnoReturn,
     void * pUnoArgs[],
-    uno_Any ** ppUnoExc ) throw ()
+    uno_Any ** ppUnoExc ) noexcept
 {
     const int MAXPARAMS = 32;
 

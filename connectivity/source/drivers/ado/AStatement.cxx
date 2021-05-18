@@ -108,7 +108,7 @@ void OStatement_Base::disposing()
     OStatement_BASE::disposing();
 }
 
-void SAL_CALL OStatement_Base::release() throw()
+void SAL_CALL OStatement_Base::release() noexcept
 {
     OStatement_BASE::release();
 }
@@ -809,17 +809,17 @@ OStatement::~OStatement()
 }
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.AStatement","com.sun.star.sdbc.Statement");
 
-void SAL_CALL OStatement_Base::acquire() throw()
+void SAL_CALL OStatement_Base::acquire() noexcept
 {
     OStatement_BASE::acquire();
 }
 
-void SAL_CALL OStatement::acquire() throw()
+void SAL_CALL OStatement::acquire() noexcept
 {
     OStatement_Base::acquire();
 }
 
-void SAL_CALL OStatement::release() throw()
+void SAL_CALL OStatement::release() noexcept
 {
     OStatement_Base::release();
 }

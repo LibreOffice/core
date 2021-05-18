@@ -209,12 +209,12 @@ Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 /*columnIndex*/
 }
 
 
-void SAL_CALL OCallableStatement::acquire() throw()
+void SAL_CALL OCallableStatement::acquire() noexcept
 {
     OPreparedStatement::acquire();
 }
 
-void SAL_CALL OCallableStatement::release() throw()
+void SAL_CALL OCallableStatement::release() noexcept
 {
     OPreparedStatement::release();
 }
