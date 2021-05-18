@@ -1,22 +1,22 @@
-basic/source/comp/codegen.cxx:482
+basic/source/comp/codegen.cxx:478
     void (anonymous namespace)::OffSetAccumulator::start(const unsigned char *,)
-basic/source/comp/codegen.cxx:483
+basic/source/comp/codegen.cxx:479
     void (anonymous namespace)::OffSetAccumulator::processOpCode0(enum SbiOpcode,)
-basic/source/comp/codegen.cxx:484
+basic/source/comp/codegen.cxx:480
     void (anonymous namespace)::OffSetAccumulator::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:485
+basic/source/comp/codegen.cxx:481
     void (anonymous namespace)::OffSetAccumulator::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:494
+basic/source/comp/codegen.cxx:490
     _Bool (anonymous namespace)::OffSetAccumulator::processParams()
-basic/source/comp/codegen.cxx:505
+basic/source/comp/codegen.cxx:501
     void (anonymous namespace)::BufferTransformer::start(const unsigned char *,)
-basic/source/comp/codegen.cxx:506
+basic/source/comp/codegen.cxx:502
     void (anonymous namespace)::BufferTransformer::processOpCode0(enum SbiOpcode,)
-basic/source/comp/codegen.cxx:510
+basic/source/comp/codegen.cxx:506
     void (anonymous namespace)::BufferTransformer::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:535
+basic/source/comp/codegen.cxx:531
     void (anonymous namespace)::BufferTransformer::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:544
+basic/source/comp/codegen.cxx:540
     _Bool (anonymous namespace)::BufferTransformer::processParams()
 canvas/inc/base/basemutexhelper.hxx:58
     void canvas::BaseMutexHelper::disposing()
@@ -260,6 +260,8 @@ include/comphelper/unique_disposing_ptr.hxx:169
     void comphelper::unique_disposing_solar_mutex_reset_ptr::reset(type-parameter-0-0 *,)
 include/comphelper/weakeventlistener.hxx:120
     void comphelper::OWeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
+include/editeng/editobj.hxx:71
+    void EditTextObject::~EditTextObject()
 include/svl/svdde.hxx:236
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
 include/svl/svdde.hxx:237
@@ -296,9 +298,7 @@ include/vbahelper/vbareturntypes.hxx:39
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:45
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/outdev.hxx:1666
-    void OutputDevice::SetMapMode(const class MapMode &,)
-include/vcl/weld.hxx:100
+include/vcl/weld.hxx:104
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
     _Bool sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::NeedParallelReduction()const
@@ -396,8 +396,6 @@ slideshow/source/engine/animationfactory.cxx:619
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 slideshow/source/inc/shape.hxx:221
     void slideshow::internal::Shape::setIsForeground(const _Bool,)
-starmath/inc/mathml/attribute.hxx:60
-    void SmMlAttribute::~SmMlAttribute()
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
 toolkit/inc/controls/geometrycontrolmodel.hxx:185
@@ -430,11 +428,11 @@ vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
-vcl/inc/salvtables.hxx:1589
+vcl/inc/salvtables.hxx:1591
     _Bool SalInstanceTreeView::get_iter_abs_pos(class weld::TreeIter &,int,)const
 vcl/inc/skia/gdiimpl.hxx:238
     void SkiaSalGraphicsImpl::createSurface()
-vcl/inc/unx/gtk/gtkdata.hxx:180
+vcl/inc/unx/gtk/gtkdata.hxx:247
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
 vcl/inc/unx/saldata.hxx:50
     void X11SalData::Init()
