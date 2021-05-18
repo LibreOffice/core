@@ -1879,7 +1879,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, tools:
     if ( !IsFormatted() )
         FormatDoc();
 
-    vcl::Window* const pOutWin = pOutDev ? pOutDev->GetOwnerWindow() : nullptr;
+    vcl::Window* const pOutWin = pOutDev->GetOwnerWindow();
     const bool bTransparent = (pOutWin && pOutWin->IsPaintTransparent());
 
     tools::Long nY = rStartPos.Y();
