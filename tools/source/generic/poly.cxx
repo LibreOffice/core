@@ -230,11 +230,14 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
     const tools::Long  nWidth = rBound.GetWidth();
     const tools::Long  nHeight = rBound.GetHeight();
 
-    if( ( nWidth > 1 ) && ( nHeight > 1 ) )
+    if( ( nWidth != 0 ) && ( nHeight != 0 ) )
     {
         const Point aCenter( rBound.Center() );
-        const tools::Long  nRadX = aCenter.X() - rBound.Left();
-        const tools::Long  nRadY = aCenter.Y() - rBound.Top();
+        // tdf#142268 Get Top Left corner of rectangle (the rectangle is not always correctly created)
+        const auto aBoundLeft = rBound.Left() < aCenter.X() ? rBound.Left() : rBound.Right();
+        const auto aBoundTop = rBound.Top() < aCenter.Y() ? rBound.Top() : rBound.Bottom();
+        const tools::Long  nRadX = aCenter.X() - aBoundLeft;
+        const tools::Long  nRadY = aCenter.Y() - aBoundTop;
         sal_uInt16  nPoints;
 
         tools::Long nRadXY;
