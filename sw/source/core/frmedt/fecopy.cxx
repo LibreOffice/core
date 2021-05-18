@@ -1246,7 +1246,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
 
                             GDIMetaFile aMtf;
                             aMtf.Record( pVirtDev.get() );
-                            aGrf.Draw( pVirtDev, aPt, aSz );
+                            aGrf.Draw(*pVirtDev, aPt, aSz);
                             aMtf.Stop();
                             aMtf.SetPrefMapMode( aTmp );
                             aMtf.SetPrefSize( aSz );
@@ -1270,7 +1270,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                         pVirtDev->SetMapMode( aTmp );
                         if( pVirtDev->SetOutputSize( aSz ) )
                         {
-                            aGrf.Draw( pVirtDev.get(), Point(), aSz );
+                            aGrf.Draw(*pVirtDev, Point(), aSz);
                             rGrf = pVirtDev->GetBitmapEx( Point(), aSz );
                         }
                         else

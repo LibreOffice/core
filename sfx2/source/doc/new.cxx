@@ -89,7 +89,7 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFil
         rRenderContext.SetFillColor(COL_WHITE);
         rRenderContext.DrawRect(tools::Rectangle(aPoint + Point(FRAME, FRAME), bPoint + Point(FRAME, FRAME)));
         pFile->WindStart();
-        pFile->Play(&rRenderContext, aPoint + Point(FRAME, FRAME), aSize);
+        pFile->Play(rRenderContext, aPoint + Point(FRAME, FRAME), aSize);
     }
 }
 

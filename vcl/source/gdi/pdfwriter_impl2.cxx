@@ -485,7 +485,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                                 // create paint bitmap
                                 aTmpMtf.WindStart();
-                                aTmpMtf.Play( xVDev.get(), aPoint, aDstSize );
+                                aTmpMtf.Play(*xVDev, aPoint, aDstSize);
                                 aTmpMtf.WindStart();
 
                                 xVDev->EnableMapMode( false );
@@ -499,7 +499,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 xVDev->SetDrawMode( DrawModeFlags::WhiteLine | DrawModeFlags::WhiteFill | DrawModeFlags::WhiteText |
                                                     DrawModeFlags::WhiteBitmap | DrawModeFlags::WhiteGradient );
                                 aTmpMtf.WindStart();
-                                aTmpMtf.Play( xVDev.get(), aPoint, aDstSize );
+                                aTmpMtf.Play(*xVDev, aPoint, aDstSize);
                                 aTmpMtf.WindStart();
                                 xVDev->EnableMapMode( false );
                                 aMask = xVDev->GetBitmap( aPoint, aDstSizePixel );

@@ -719,7 +719,7 @@ void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     ::tools::Rectangle aRect(
         Point((aWinSize.Width() - m_aFrameSize.Width())/2, (aWinSize.Height() - m_aFrameSize.Height())/2),
         m_aFrameSize);
-    m_aGrf.Draw(&rRenderContext, aRect.TopLeft(), aRect.GetSize());
+    m_aGrf.Draw(rRenderContext, aRect.TopLeft(), aRect.GetSize());
 
     // Remove one more case that uses XOR paint (RasterOp::Invert).
     // Get colors and logic DashLength from settings, use equal to

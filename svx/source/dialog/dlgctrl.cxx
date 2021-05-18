@@ -1178,7 +1178,7 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
         Point aPos( aOutputSize.Width() / 3, aOutputSize.Height() / 2 );
         aPos.AdjustX( -(maSymbolSize.Width() / 2) );
         aPos.AdjustY( -(maSymbolSize.Height() / 2) );
-        mpGraphic->Draw(&getBufferDevice(), aPos, maSymbolSize);
+        mpGraphic->Draw(getBufferDevice(), aPos, maSymbolSize);
     }
 
     LocalPostPaint(rRenderContext);

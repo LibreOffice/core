@@ -341,14 +341,14 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf )
     }
 }
 
-void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
+void GDIMetaFile::Play(OutputDevice& rOut, size_t nPos)
 {
     if( m_bRecord )
         return;
 
     MetaAction* pAction = GetCurAction();
     const size_t nObjCount = m_aList.size();
-    size_t  nSyncCount = pOut->GetSyncCount();
+    size_t  nSyncCount = rOut.GetSyncCount();
 
     if( nPos > nObjCount )
         nPos = nObjCount;
@@ -357,24 +357,24 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
     // This is necessary, since old metafiles don't even know of these
     // recent add-ons. Newer metafiles must of course explicitly set
     // those states.
-    pOut->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
-    pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
-    pOut->SetDigitLanguage( LANGUAGE_SYSTEM );
+    rOut.Push(PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE);
+    rOut.SetLayoutMode(ComplexTextLayoutFlags::Default);
+    rOut.SetDigitLanguage(LANGUAGE_SYSTEM);
 
-    SAL_INFO( "vcl.gdi", "GDIMetaFile::Play on device of size: " << pOut->GetOutputSizePixel().Width() << " " << pOut->GetOutputSizePixel().Height());
+    SAL_INFO( "vcl.gdi", "GDIMetaFile::Play on device of size: " << rOut.GetOutputSizePixel().Width() << " " << rOut.GetOutputSizePixel().Height());
 
-    if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSize() ) ) {
+    if (!ImplPlayWithRenderer(rOut, Point(0,0), rOut.GetOutputSize())) {
         size_t  i  = 0;
         for( size_t nCurPos = m_nCurrentActionElement; nCurPos < nPos; nCurPos++ )
         {
             if( pAction )
             {
-                pAction->Execute( pOut );
+                pAction->Execute(&rOut);
 
                 // flush output from time to time
                 if( i++ > nSyncCount )
                 {
-                    pOut->Flush();
+                    rOut.Flush();
                     i = 0;
                 }
             }
@@ -382,17 +382,17 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
             pAction = NextAction();
         }
     }
-    pOut->Pop();
+    rOut.Pop();
 }
 
-bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rLogicDestSize )
+bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Size rLogicDestSize)
 {
     if (!m_bUseCanvas)
         return false;
 
-    Size rDestSize( pOut->LogicToPixel( rLogicDestSize ) );
+    Size rDestSize(rOut.LogicToPixel(rLogicDestSize));
 
-    const vcl::Window* win = pOut->GetOwnerWindow();
+    const vcl::Window* win = rOut.GetOwnerWindow();
 
     if (!win)
         win = Application::GetActiveTopWindow();
@@ -432,10 +432,10 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                 BitmapEx aBitmapEx;
                 if( aBitmapEx.Create( xBitmapCanvas, aSize ) )
                 {
-                    if (pOut->GetMapMode().GetMapUnit() == MapUnit::MapPixel)
-                        pOut->DrawBitmapEx( rPos, aBitmapEx );
+                    if (rOut.GetMapMode().GetMapUnit() == MapUnit::MapPixel)
+                        rOut.DrawBitmapEx( rPos, aBitmapEx );
                     else
-                        pOut->DrawBitmapEx( rPos, rLogicDestSize, aBitmapEx );
+                        rOut.DrawBitmapEx( rPos, rLogicDestSize, aBitmapEx );
                     return true;
                 }
             }
@@ -454,21 +454,21 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     return false;
 }
 
-void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
-                        const Size& rSize )
+void GDIMetaFile::Play(OutputDevice& rOut, const Point& rPos,
+                       const Size& rSize)
 {
     MapMode aDrawMap( GetPrefMapMode() );
-    Size    aDestSize( pOut->LogicToPixel( rSize ) );
+    Size    aDestSize(rOut.LogicToPixel(rSize));
 
     if( !aDestSize.Width() || !aDestSize.Height() )
         return;
 
-    GDIMetaFile*    pMtf = pOut->GetConnectMetaFile();
+    GDIMetaFile* pMtf = rOut.GetConnectMetaFile();
 
-    if( ImplPlayWithRenderer( pOut, rPos, rSize ) )
+    if (ImplPlayWithRenderer(rOut, rPos, rSize))
         return;
 
-    Size aTmpPrefSize( pOut->LogicToPixel( GetPrefSize(), aDrawMap ) );
+    Size aTmpPrefSize(rOut.LogicToPixel(GetPrefSize(), aDrawMap));
 
     if( !aTmpPrefSize.Width() )
         aTmpPrefSize.setWidth( aDestSize.Width() );
@@ -485,35 +485,34 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
     // #i47260# Convert logical output position to offset within
     // the metafile's mapmode. Therefore, disable pixel offset on
     // outdev, it's inverse mnOutOffLogicX/Y is calculated for a
-    // different mapmode (the one currently set on pOut, that is)
+    // different mapmode (the one currently set on rOut, that is)
     // - thus, aDrawMap's origin would generally be wrong. And
     // even _if_ aDrawMap is similar to pOutDev's current mapmode,
     // it's _still_ undesirable to have pixel offset unequal zero,
     // because one would still get round-off errors (the
     // round-trip error for LogicToPixel( PixelToLogic() ) was the
     // reason for having pixel offset in the first place).
-    const Size& rOldOffset( pOut->GetPixelOffset() );
+    const Size& rOldOffset(rOut.GetPixelOffset());
     const Size  aEmptySize;
-    pOut->SetPixelOffset( aEmptySize );
-    aDrawMap.SetOrigin( pOut->PixelToLogic( pOut->LogicToPixel( rPos ), aDrawMap ) );
-    pOut->SetPixelOffset( rOldOffset );
+    rOut.SetPixelOffset(aEmptySize);
+    aDrawMap.SetOrigin(rOut.PixelToLogic(rOut.LogicToPixel(rPos), aDrawMap));
+    rOut.SetPixelOffset(rOldOffset);
 
-    pOut->Push();
+    rOut.Push();
 
     bool bIsRecord = (pMtf && pMtf->IsRecord());
-    pOut->SetMetafileMapMode(aDrawMap, bIsRecord);
+    rOut.SetMetafileMapMode(aDrawMap, bIsRecord);
 
     // #i23407# Set backwards-compatible text language and layout mode
     // This is necessary, since old metafiles don't even know of these
     // recent add-ons. Newer metafiles must of course explicitly set
     // those states.
-    pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
-    pOut->SetDigitLanguage( LANGUAGE_SYSTEM );
+    rOut.SetLayoutMode(ComplexTextLayoutFlags::Default);
+    rOut.SetDigitLanguage(LANGUAGE_SYSTEM);
 
-    Play( pOut );
+    Play(rOut);
 
-    pOut->Pop();
-
+    rOut.Pop();
 }
 
 void GDIMetaFile::Pause( bool _bPause )
@@ -2826,7 +2825,7 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
 
         // draw metafile into VDev
         const_cast<GDIMetaFile *>(this)->WindStart();
-        const_cast<GDIMetaFile *>(this)->Play(aVDev.get(), Point(), aAntialias);
+        const_cast<GDIMetaFile *>(this)->Play(*aVDev, Point(), aAntialias);
 
         // get paint bitmap
         BitmapEx aBitmap( aVDev->GetBitmapEx( aNullPt, aVDev->GetOutputSizePixel() ) );

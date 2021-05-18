@@ -835,16 +835,16 @@ namespace vclcanvas
                 const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width() ),
                                    ::basegfx::fround( aScale.getY() * aBmpSize.Height() ) );
 
-                pGrfObj->Draw( &mpOutDevProvider->getOutDev(),
-                               aPt,
-                               aSz,
-                               &aGrfAttr );
+                pGrfObj->Draw(mpOutDevProvider->getOutDev(),
+                              aPt,
+                              aSz,
+                              &aGrfAttr);
 
                 if( mp2ndOutDevProvider )
-                    pGrfObj->Draw( &mp2ndOutDevProvider->getOutDev(),
-                                   aPt,
-                                   aSz,
-                                   &aGrfAttr );
+                    pGrfObj->Draw(mp2ndOutDevProvider->getOutDev(),
+                                  aPt,
+                                  aSz,
+                                  &aGrfAttr);
 
                 // created GraphicObject, which possibly cached
                 // display bitmap - return cache object, to retain
@@ -1161,12 +1161,12 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
             setupOutDevState( viewState, renderState, IGNORE_COLOR );
 
-            if( !rGrf->Draw( &mpOutDevProvider->getOutDev(), rPt, rSz, &rAttr ) )
+            if (!rGrf->Draw(mpOutDevProvider->getOutDev(), rPt, rSz, &rAttr))
                 return false;
 
             // #i80779# Redraw also into mask outdev
-            if( mp2ndOutDevProvider )
-                return rGrf->Draw( &mp2ndOutDevProvider->getOutDev(), rPt, rSz, &rAttr );
+            if (mp2ndOutDevProvider)
+                return rGrf->Draw(mp2ndOutDevProvider->getOutDev(), rPt, rSz, &rAttr);
 
             return true;
         }

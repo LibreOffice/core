@@ -105,7 +105,7 @@ void OldStylePrintAdaptor::printPage( int i_nPage ) const
     if( i_nPage < int(mpData->maPages.size()) )
    {
        mpData->maPages[ i_nPage ].maPage.WindStart();
-       mpData->maPages[ i_nPage ].maPage.Play( getPrinter().get() );
+       mpData->maPages[ i_nPage ].maPage.Play(*getPrinter());
    }
 }
 

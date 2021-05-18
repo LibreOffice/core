@@ -176,7 +176,7 @@ void GraphCtrl::GraphicToVD()
     xVD->Erase();
     const bool bGraphicValid(GraphicType::NONE != aGraphic.GetType());
     if (bGraphicValid)
-        aGraphic.Draw(xVD.get(), Point(), aGraphSize);
+        aGraphic.Draw(*xVD, Point(), aGraphSize);
 }
 
 void GraphCtrl::Resize()

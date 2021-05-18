@@ -169,7 +169,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             Point aCurrPos(aTileInfo.aNextTileTopLeft.X(), aTileInfo.aTileTopLeft.Y());
             for (int nX=0; nX < aTileInfo.nTilesEmptyX; nX += nMSBFactor)
             {
-                if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr))
+                if (!pTileGraphic->Draw(rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr))
                     return false;
 
                 aCurrPos.AdjustX(aTileInfo.aTileSizePixel.Width() );
@@ -190,7 +190,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             aCurrPos.setY( aTileInfo.aNextTileTopLeft.Y() );
             for (int nY=0; nY < aTileInfo.nTilesEmptyY; nY += nMSBFactor)
             {
-                if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr))
+                if (!pTileGraphic->Draw(rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr))
                     return false;
 
                 aCurrPos.AdjustY(aTileInfo.aTileSizePixel.Height() );
@@ -250,7 +250,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
         {
             if( bNoFirstTileDraw )
                 bNoFirstTileDraw = false; // don't draw first tile position
-            else if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr))
+            else if (!pTileGraphic->Draw(rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr))
                 return false;
 
             aCurrPos.AdjustX(aTileInfo.aTileSizePixel.Width() );
@@ -272,10 +272,10 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
     return true;
 }
 
-bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea, const Size& rSizePixel,
-                                   const Size& rOffset, const GraphicAttr* pAttr, int nTileCacheSize1D )
+bool GraphicObject::ImplDrawTiled(OutputDevice& rOut, const tools::Rectangle& rArea, const Size& rSizePixel,
+                                  const Size& rOffset, const GraphicAttr* pAttr, int nTileCacheSize1D)
 {
-    const MapMode   aOutMapMode( pOut->GetMapMode() );
+    const MapMode   aOutMapMode(rOut.GetMapMode());
     const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
     bool            bRet( false );
 
@@ -327,15 +327,15 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
 
             // paint generated tile
             GraphicObject aTmpGraphic( aTileBitmap );
-            bRet = aTmpGraphic.ImplDrawTiled( pOut, rArea,
-                                              aTileBitmap.GetSizePixel(),
-                                              rOffset, pAttr, nTileCacheSize1D );
+            bRet = aTmpGraphic.ImplDrawTiled(rOut, rArea,
+                                             aTileBitmap.GetSizePixel(),
+                                             rOffset, pAttr, nTileCacheSize1D);
         }
     }
     else
     {
-        const Size      aOutOffset( pOut->LogicToPixel( rOffset, aOutMapMode ) );
-        const tools::Rectangle aOutArea( pOut->LogicToPixel( rArea, aOutMapMode ) );
+        const Size      aOutOffset( rOut.LogicToPixel( rOffset, aOutMapMode ) );
+        const tools::Rectangle aOutArea( rOut.LogicToPixel( rArea, aOutMapMode ) );
 
         // number of invisible (because out-of-area) tiles
         int nInvisibleTilesX;
@@ -354,24 +354,24 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
             nInvisibleTilesY = aOutOffset.Height() / rSizePixel.Height();
 
         // origin from where to 'virtually' start drawing in pixel
-        const Point aOutOrigin( pOut->LogicToPixel( Point( rArea.Left() - rOffset.Width(),
+        const Point aOutOrigin( rOut.LogicToPixel( Point( rArea.Left() - rOffset.Width(),
                                                            rArea.Top() - rOffset.Height() ) ) );
         // position in pixel from where to really start output
         const Point aOutStart( aOutOrigin.X() + nInvisibleTilesX*rSizePixel.Width(),
                                aOutOrigin.Y() + nInvisibleTilesY*rSizePixel.Height() );
 
-        pOut->Push( PushFlags::CLIPREGION );
-        pOut->IntersectClipRegion( rArea );
+        rOut.Push( PushFlags::CLIPREGION );
+        rOut.IntersectClipRegion( rArea );
 
         // Paint all tiles
 
 
-        bRet = ImplDrawTiled( *pOut, aOutStart,
-                              (aOutArea.GetWidth() + aOutArea.Left() - aOutStart.X() + rSizePixel.Width() - 1) / rSizePixel.Width(),
-                              (aOutArea.GetHeight() + aOutArea.Top() - aOutStart.Y() + rSizePixel.Height() - 1) / rSizePixel.Height(),
-                              rSizePixel, pAttr );
+        bRet = ImplDrawTiled(rOut, aOutStart,
+                             (aOutArea.GetWidth() + aOutArea.Left() - aOutStart.X() + rSizePixel.Width() - 1) / rSizePixel.Width(),
+                             (aOutArea.GetHeight() + aOutArea.Top() - aOutStart.Y() + rSizePixel.Height() - 1) / rSizePixel.Height(),
+                             rSizePixel, pAttr);
 
-        pOut->Pop();
+        rOut.Pop();
     }
 
     return bRet;
@@ -408,10 +408,10 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
 
             // update return value. This method should return true, if
             // at least one of the looped Draws succeeded.
-            bRet |= Draw( &rOut,
-                          bDrawInPixel ? aCurrPos : rOut.PixelToLogic( aCurrPos ),
-                          bDrawInPixel ? rTileSizePixel : aTileSizeLogic,
-                          pAttr );
+            bRet |= Draw(rOut,
+                         bDrawInPixel ? aCurrPos : rOut.PixelToLogic(aCurrPos),
+                         bDrawInPixel ? rTileSizePixel : aTileSizeLogic,
+                         pAttr);
 
             aCurrPos.AdjustX(rTileSizePixel.Width() );
         }
