@@ -118,6 +118,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKBinaryElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKBrContext \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKCalcEngineContext \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKCellCommentDrawableInfoElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKChartInfoElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKColorElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKCoreImageFilterDescriptorElement \
