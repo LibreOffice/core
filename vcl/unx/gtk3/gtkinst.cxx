@@ -17803,6 +17803,50 @@ bool ConvertTree(const Reference<css::xml::dom::XNode>& xNode)
                     xRemoveList.push_back(xChild);
             }
 
+            if (sName == "image")
+            {
+                if (GetParentObjectType(xChild) == "GtkButton")
+                {
+                    // find the image object, expected to be a child of "interface" and relocate
+                    // it to be a child of this GtkButton
+                    auto xObjectCandidate = xChild->getParentNode();
+                    if (xObjectCandidate->getNodeName() == "object")
+                    {
+                        OUString sImageId = xChild->getFirstChild()->getNodeValue();
+
+                        css::uno::Reference<css::xml::dom::XNode> xRootCandidate = xChild->getParentNode();
+                        while (xRootCandidate)
+                        {
+                             if (xRootCandidate->getNodeName() == "interface")
+                                 break;
+                             xRootCandidate = xRootCandidate->getParentNode();
+                        }
+
+                        css::uno::Reference<css::xml::dom::XNode> xImageNode;
+
+                        for (auto xObjectCandidate = xRootCandidate->getFirstChild(); xObjectCandidate.is(); xObjectCandidate = xObjectCandidate->getNextSibling())
+                        {
+                            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xObjectCandidate->getAttributes();
+                            if (!xMap.is())
+                                continue;
+                            css::uno::Reference<css::xml::dom::XNode> xId = xMap->getNamedItem("id");
+                            if (xId && xId->getNodeValue() == sImageId)
+                            {
+                                xImageNode = xObjectCandidate;
+                                break;
+                            }
+                        }
+
+                        auto xDoc = xChild->getOwnerDocument();
+                        css::uno::Reference<css::xml::dom::XElement> xImageChild = xDoc->createElement("child");
+                        xImageChild->appendChild(xImageNode->getParentNode()->removeChild(xImageNode));
+                        xObjectCandidate->appendChild(xImageChild);
+                    }
+
+                    xRemoveList.push_back(xChild);
+                }
+            }
+
             if (sName == "draw-indicator")
             {
                 assert(toBool(xChild->getFirstChild()->getNodeValue()));
@@ -19088,7 +19132,8 @@ void GtkInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
 weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
-    if (rUIFile != "cui/ui/percentdialog.ui" &&
+    if (rUIFile != "cui/ui/hyphenate.ui" &&
+        rUIFile != "cui/ui/percentdialog.ui" &&
         rUIFile != "sfx/ui/querysavedialog.ui" &&
         rUIFile != "svt/ui/javadisableddialog.ui" &&
         rUIFile != "modules/smath/ui/fontsizedialog.ui" &&
