@@ -1,0 +1,28 @@
+From 1aa22c746b41a688296f4daf4fc35710d2045a33 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Wed, 19 May 2021 19:43:43 +0200
+Subject: [PATCH] fix build with MSVC
+
+error C2664: 'libetonyek::IWORKFormula::IWORKFormula(const boost::optional<unsigned int> &)': cannot convert argument 1 from 'int' to 'const boost::optional<unsigned int> &'
+
+Change-Id: Iaa3de2d0ef8f960495e5d5afebb75c5063955177
+---
+ src/lib/IWAParser.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/IWAParser.cpp b/src/lib/IWAParser.cpp
+index 7fd95c3..a2bd292 100644
+--- a/src/lib/IWAParser.cpp
++++ b/src/lib/IWAParser.cpp
+@@ -3403,7 +3403,7 @@ bool IWAParser::parseFormula(const IWAMessage &msg, IWORKFormulaPtr_t &formula)
+   }
+   else
+   {
+-    formula.reset(new IWORKFormula(0));
++    formula.reset(new IWORKFormula(boost::make_optional(0u)));
+     formula->parse(stack[0]);
+   }
+   return ok;
+-- 
+2.31.1
+
