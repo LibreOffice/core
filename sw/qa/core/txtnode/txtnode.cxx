@@ -9,8 +9,13 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/scheduler.hxx>
 
+#include <IDocumentStatistics.hxx>
 #include <fmtanchr.hxx>
 #include <frameformats.hxx>
 #include <wrtsh.hxx>
@@ -82,6 +87,71 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxNodeSplit)
     // Without the accompanying fix in place, this would have crashed in
     // SwFlyAtContentFrame::Modify().
     pWrtShell->SplitNode();
+}
+
+namespace
+{
+struct ViewCallback
+{
+    int m_nInvalidations = 0;
+
+    static void callback(int nType, const char* pPayload, void* pData);
+    void callbackImpl(int nType, const char* pPayload);
+};
+
+void ViewCallback::callback(int nType, const char* pPayload, void* pData)
+{
+    static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+}
+
+void ViewCallback::callbackImpl(int nType, const char* /*pPayload*/)
+{
+    switch (nType)
+    {
+        case LOK_CALLBACK_INVALIDATE_TILES:
+        {
+            ++m_nInvalidations;
+        }
+        break;
+    }
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
+{
+    // Set up LOK to track invalidations.
+    comphelper::LibreOfficeKit::setActive(true);
+
+    // Given a document with a title field:
+    load(DATA_DIRECTORY, "title-field-invalidate.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pTextDoc->initializeForTiledRendering({});
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDoc* pDoc = pShell->GetDoc();
+    SwWrtShell* pWrtShell = pShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    ViewCallback aCallback;
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&ViewCallback::callback,
+                                                                     &aCallback);
+    Scheduler::ProcessEventsToIdle();
+    aCallback.m_nInvalidations = 0;
+
+    // When typing to the document:
+    pWrtShell->Insert("x");
+
+    // Then make sure that only the text frame at the cursor is invalidated:
+    pDoc->getIDocumentStatistics().GetUpdatedDocStat(/*bCompleteAsync=*/true, /*bFields=*/false);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the footer was also invalidated on each keypress.
+    CPPUNIT_ASSERT_EQUAL(1, aCallback.m_nInvalidations);
+
+    // Tear down LOK.
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
