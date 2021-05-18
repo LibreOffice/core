@@ -33,6 +33,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
+#ifdef ENABLE_WASM_STRIP_LOCALES
+#define WITH_LOCALE_ALL 0
+#endif
+
 namespace i18npool {
 
 BreakIteratorImpl::BreakIteratorImpl( const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )

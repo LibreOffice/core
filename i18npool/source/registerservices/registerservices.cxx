@@ -60,6 +60,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace i18npool;
 
+#ifdef ENABLE_WASM_STRIP_LOCALES
+#define WITH_LOCALE_ALL 0
+#endif
+
 #define IMPL_CREATEINSTANCE( ImplName ) \
     static uno::Reference< uno::XInterface >   \
         ImplName##_CreateInstance(               \

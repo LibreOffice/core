@@ -999,6 +999,10 @@ print ("""/*
 #include <osl/detail/component-mapping.h>
 #include <string.h>
 
+#ifdef ENABLE_WASM_STRIP_LOCALES
+#define WITH_LOCALE_ALL 0
+#endif
+
 """)
 if not options.pure_c:
     print ("""extern "C" {""")

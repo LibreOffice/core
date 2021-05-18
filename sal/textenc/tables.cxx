@@ -27,6 +27,10 @@
 #include <rtl/textenc.h>
 #include <sal/types.h>
 
+#ifdef ENABLE_WASM_STRIP_LOCALES
+#define WITH_LOCALE_ALL 0
+#endif
+
 #define NOTABUNI_START 0xFF
 #define NOTABUNI_END 0x00
 
