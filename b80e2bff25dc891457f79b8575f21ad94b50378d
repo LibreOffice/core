@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3433c2e4_93f0fa2e",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-05-18T13:26:36Z",
+      "side": 1,
+      "message": "This depends on the earlier patch that allows direct formatting to export an outline number.",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 91
+      },
+      "revId": "b80e2bff25dc891457f79b8575f21ad94b50378d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
