@@ -181,7 +181,7 @@ bool CommonStylePreviewRenderer::recalculate()
 Size CommonStylePreviewRenderer::getRenderSize() const
 {
     assert(m_pFont);
-    Size aPixelSize = m_pFont->GetTextSize(&mrOutputDev, maStyleName);
+    Size aPixelSize = m_pFont->GetTextSize(mrOutputDev, maStyleName);
 
     if (aPixelSize.Height() > mnMaxHeight)
         aPixelSize.setHeight( mnMaxHeight );
