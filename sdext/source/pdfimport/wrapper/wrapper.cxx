@@ -138,6 +138,8 @@ enum parseKey {
 
 class Parser
 {
+    friend class LineParser;
+
     typedef std::unordered_map< sal_Int64,
                            FontAttributes > FontMapType;
 
@@ -145,19 +147,47 @@ class Parser
     const uno::Reference<uno::XComponentContext> m_xContext;
     const ContentSinkSharedPtr                   m_pSink;
     const oslFileHandle                          m_pErr;
-    OString                               m_aLine;
     FontMapType                                  m_aFontMap;
-    sal_Int32                                    m_nNextToken;
-    sal_Int32                                    m_nCharIndex;
 
+public:
+    Parser( const ContentSinkSharedPtr&                   rSink,
+            oslFileHandle                                 pErr,
+            const uno::Reference<uno::XComponentContext>& xContext ) :
+        m_xContext(xContext),
+        m_pSink(rSink),
+        m_pErr(pErr),
+        m_aFontMap(101)
+    {}
 
-    std::string_view readNextToken();
+    void parseLine( const OString& rLine );
+};
+
+class LineParser {
+    Parser & m_parser;
+    OString                               m_aLine;
+
+    static sal_Int32 parseFontCheckForString(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
+                                      const char* pAttrib, sal_Int32 nAttribLen,
+                                      FontAttributes& rResult, bool bItalic, bool bBold);
+    static sal_Int32 parseFontRemoveSuffix(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
+                              const char* pAttrib, sal_Int32 nAttribLen);
+    static void          parseFontFamilyName( FontAttributes& aResult );
+
     void           readInt32( sal_Int32& o_Value );
-    sal_Int32      readInt32();
     void           readInt64( sal_Int64& o_Value );
     void           readDouble( double& o_Value );
-    double         readDouble();
     void           readBinaryData( uno::Sequence<sal_Int8>& rBuf );
+
+    uno::Sequence<beans::PropertyValue> readImageImpl();
+
+public:
+    sal_Int32                                    m_nCharIndex = 0;
+
+    LineParser(Parser & parser, OString const & line): m_parser(parser), m_aLine(line) {}
+
+    std::string_view readNextToken();
+    sal_Int32      readInt32();
+    double         readDouble();
 
     uno::Reference<rendering::XPolyPolygon2D> readPath();
 
@@ -167,35 +197,13 @@ class Parser
     void                 readLineJoin();
     void                 readTransformation();
     rendering::ARGBColor readColor();
-    static void          parseFontFamilyName( FontAttributes& aResult );
     void                 readFont();
-    uno::Sequence<beans::PropertyValue> readImageImpl();
 
     void                 readImage();
     void                 readMask();
     void                 readLink();
     void                 readMaskedImage();
     void                 readSoftMaskedImage();
-    static sal_Int32 parseFontCheckForString(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
-                                      const char* pAttrib, sal_Int32 nAttribLen,
-                                      FontAttributes& rResult, bool bItalic, bool bBold);
-    static sal_Int32 parseFontRemoveSuffix(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
-                              const char* pAttrib, sal_Int32 nAttribLen);
-
-public:
-    Parser( const ContentSinkSharedPtr&                   rSink,
-            oslFileHandle                                 pErr,
-            const uno::Reference<uno::XComponentContext>& xContext ) :
-        m_xContext(xContext),
-        m_pSink(rSink),
-        m_pErr(pErr),
-        m_aLine(),
-        m_aFontMap(101),
-        m_nNextToken(-1),
-        m_nCharIndex(-1)
-    {}
-
-    void parseLine( const OString& rLine );
 };
 
 /** Unescapes line-ending characters in input string. These
@@ -244,45 +252,45 @@ OString lcl_unescapeLineFeeds(const OString& i_rStr)
     return aResult;
 }
 
-std::string_view Parser::readNextToken()
+std::string_view LineParser::readNextToken()
 {
     OSL_PRECOND(m_nCharIndex!=-1,"insufficient input");
-    return m_aLine.getTokenView(m_nNextToken,' ',m_nCharIndex);
+    return m_aLine.getTokenView(0,' ',m_nCharIndex);
 }
 
-void Parser::readInt32( sal_Int32& o_Value )
+void LineParser::readInt32( sal_Int32& o_Value )
 {
     std::string_view tok = readNextToken();
     o_Value = rtl_str_toInt32_WithLength(tok.data(), 10, tok.size());
 }
 
-sal_Int32 Parser::readInt32()
+sal_Int32 LineParser::readInt32()
 {
     std::string_view tok = readNextToken();
     return rtl_str_toInt32_WithLength(tok.data(), 10, tok.size());
 }
 
-void Parser::readInt64( sal_Int64& o_Value )
+void LineParser::readInt64( sal_Int64& o_Value )
 {
     std::string_view tok = readNextToken();
     o_Value = rtl_str_toInt64_WithLength(tok.data(), 10, tok.size());
 }
 
-void Parser::readDouble( double& o_Value )
+void LineParser::readDouble( double& o_Value )
 {
     std::string_view tok = readNextToken();
     o_Value = rtl_math_stringToDouble(tok.data(), tok.data() + tok.size(), '.', 0,
                                    nullptr, nullptr);
 }
 
-double Parser::readDouble()
+double LineParser::readDouble()
 {
     std::string_view tok = readNextToken();
     return rtl_math_stringToDouble(tok.data(), tok.data() + tok.size(), '.', 0,
                                    nullptr, nullptr);
 }
 
-void Parser::readBinaryData( uno::Sequence<sal_Int8>& rBuf )
+void LineParser::readBinaryData( uno::Sequence<sal_Int8>& rBuf )
 {
     sal_Int32 nFileLen( rBuf.getLength() );
     sal_Int8*           pBuf( rBuf.getArray() );
@@ -290,7 +298,7 @@ void Parser::readBinaryData( uno::Sequence<sal_Int8>& rBuf )
     oslFileError        nRes=osl_File_E_None;
     while( nFileLen )
     {
-        nRes = osl_readFile( m_pErr, pBuf, nFileLen, &nBytesRead );
+        nRes = osl_readFile( m_parser.m_pErr, pBuf, nFileLen, &nBytesRead );
         if (osl_File_E_None != nRes )
             break;
         pBuf += nBytesRead;
@@ -300,7 +308,7 @@ void Parser::readBinaryData( uno::Sequence<sal_Int8>& rBuf )
     OSL_PRECOND(nRes==osl_File_E_None, "inconsistent data");
 }
 
-uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
+uno::Reference<rendering::XPolyPolygon2D> LineParser::readPath()
 {
     const OString aSubPathMarker( "subpath" );
 
@@ -318,7 +326,7 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
 
         sal_Int32 nContiguousControlPoints(0);
         sal_Int32 nDummy=m_nCharIndex;
-        OString aCurrToken( m_aLine.getToken(m_nNextToken,' ',nDummy) );
+        OString aCurrToken( m_aLine.getToken(0,' ',nDummy) );
 
         while( m_nCharIndex != -1 && aCurrToken != aSubPathMarker )
         {
@@ -352,7 +360,7 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
 
             // one token look-ahead (new subpath or more points?
             nDummy=m_nCharIndex;
-            aCurrToken = m_aLine.getToken(m_nNextToken,' ',nDummy);
+            aCurrToken = m_aLine.getToken(0,' ',nDummy);
         }
 
         aResult.append( aSubPath );
@@ -364,7 +372,7 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
         new basegfx::unotools::UnoPolyPolygon(aResult));
 }
 
-void Parser::readChar()
+void LineParser::readChar()
 {
     double fontSize;
     geometry::Matrix2D aUnoMatrix;
@@ -388,11 +396,11 @@ void Parser::readChar()
     // chars gobble up rest of line
     m_nCharIndex = -1;
 
-    m_pSink->drawGlyphs(OStringToOUString(aChars, RTL_TEXTENCODING_UTF8),
+    m_parser.m_pSink->drawGlyphs(OStringToOUString(aChars, RTL_TEXTENCODING_UTF8),
         aRect, aUnoMatrix, fontSize);
 }
 
-void Parser::readLineCap()
+void LineParser::readLineCap()
 {
     sal_Int8 nCap(rendering::PathCapType::BUTT);
     switch( readInt32() )
@@ -402,14 +410,14 @@ void Parser::readLineCap()
         case 1: nCap = rendering::PathCapType::ROUND; break;
         case 2: nCap = rendering::PathCapType::SQUARE; break;
     }
-    m_pSink->setLineCap(nCap);
+    m_parser.m_pSink->setLineCap(nCap);
 }
 
-void Parser::readLineDash()
+void LineParser::readLineDash()
 {
     if( m_nCharIndex == -1 )
     {
-        m_pSink->setLineDash( uno::Sequence<double>(), 0.0 );
+        m_parser.m_pSink->setLineDash( uno::Sequence<double>(), 0.0 );
         return;
     }
 
@@ -421,10 +429,10 @@ void Parser::readLineDash()
     for( sal_Int32 i=0; i<nLen; ++i )
         *pArray++ = readDouble();
 
-    m_pSink->setLineDash( aDashArray, nOffset );
+    m_parser.m_pSink->setLineDash( aDashArray, nOffset );
 }
 
-void Parser::readLineJoin()
+void LineParser::readLineJoin()
 {
     sal_Int8 nJoin(rendering::PathJoinType::MITER);
     switch( readInt32() )
@@ -434,10 +442,10 @@ void Parser::readLineJoin()
         case 1: nJoin = rendering::PathJoinType::ROUND; break;
         case 2: nJoin = rendering::PathJoinType::BEVEL; break;
     }
-    m_pSink->setLineJoin(nJoin);
+    m_parser.m_pSink->setLineJoin(nJoin);
 }
 
-void Parser::readTransformation()
+void LineParser::readTransformation()
 {
     geometry::AffineMatrix2D aMat;
     readDouble(aMat.m00);
@@ -446,10 +454,10 @@ void Parser::readTransformation()
     readDouble(aMat.m11);
     readDouble(aMat.m02);
     readDouble(aMat.m12);
-    m_pSink->setTransformation( aMat );
+    m_parser.m_pSink->setTransformation( aMat );
 }
 
-rendering::ARGBColor Parser::readColor()
+rendering::ARGBColor LineParser::readColor()
 {
     rendering::ARGBColor aRes;
     readDouble(aRes.Red);
@@ -459,7 +467,7 @@ rendering::ARGBColor Parser::readColor()
     return aRes;
 }
 
-sal_Int32 Parser::parseFontCheckForString(
+sal_Int32 LineParser::parseFontCheckForString(
     const sal_Unicode* pCopy, sal_Int32 nCopyLen,
     const char* pAttrib, sal_Int32 nAttribLen,
     FontAttributes& rResult, bool bItalic, bool bBold)
@@ -478,7 +486,7 @@ sal_Int32 Parser::parseFontCheckForString(
     return nAttribLen;
 }
 
-sal_Int32 Parser::parseFontRemoveSuffix(
+sal_Int32 LineParser::parseFontRemoveSuffix(
     const sal_Unicode* pCopy, sal_Int32 nCopyLen,
     const char* pAttrib, sal_Int32 nAttribLen)
 {
@@ -490,7 +498,7 @@ sal_Int32 Parser::parseFontRemoveSuffix(
     return nAttribLen;
 }
 
-void Parser::parseFontFamilyName( FontAttributes& rResult )
+void LineParser::parseFontFamilyName( FontAttributes& rResult )
 {
     OUStringBuffer aNewFamilyName( rResult.familyName.getLength() );
 
@@ -580,7 +588,7 @@ void Parser::parseFontFamilyName( FontAttributes& rResult )
     rResult.familyName = aNewFamilyName.makeStringAndClear();
 }
 
-void Parser::readFont()
+void LineParser::readFont()
 {
     OString aFontName;
     sal_Int64      nFontID;
@@ -601,13 +609,13 @@ void Parser::readFont()
     // name gobbles up rest of line
     m_nCharIndex = -1;
 
-    FontMapType::const_iterator pFont( m_aFontMap.find(nFontID) );
-    if( pFont != m_aFontMap.end() )
+    Parser::FontMapType::const_iterator pFont( m_parser.m_aFontMap.find(nFontID) );
+    if( pFont != m_parser.m_aFontMap.end() )
     {
         OSL_PRECOND(nFileLen==0,"font data for known font");
         FontAttributes aRes(pFont->second);
         aRes.size = nSize;
-        m_pSink->setFont( aRes );
+        m_parser.m_pSink->setFont( aRes );
 
         return;
     }
@@ -636,8 +644,8 @@ void Parser::readFont()
         try
         {
             uno::Reference< beans::XMaterialHolder > xMat(
-                m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.awt.FontIdentificator", aArgs, m_xContext ),
+                m_parser.m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                    "com.sun.star.awt.FontIdentificator", aArgs, m_parser.m_xContext ),
                 uno::UNO_QUERY );
             if( xMat.is() )
             {
@@ -670,21 +678,21 @@ void Parser::readFont()
 
     }
 
-    if (!m_xDev)
-        m_xDev.disposeAndReset(VclPtr<VirtualDevice>::Create());
+    if (!m_parser.m_xDev)
+        m_parser.m_xDev.disposeAndReset(VclPtr<VirtualDevice>::Create());
 
     vcl::Font font(aResult.familyName, Size(0, 1000));
-    m_xDev->SetFont(font);
-    FontMetric metric(m_xDev->GetFontMetric());
+    m_parser.m_xDev->SetFont(font);
+    FontMetric metric(m_parser.m_xDev->GetFontMetric());
     aResult.ascent = metric.GetAscent() / 1000.0;
 
-    m_aFontMap[nFontID] = aResult;
+    m_parser.m_aFontMap[nFontID] = aResult;
 
     aResult.size = nSize;
-    m_pSink->setFont(aResult);
+    m_parser.m_pSink->setFont(aResult);
 }
 
-uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
+uno::Sequence<beans::PropertyValue> LineParser::readImageImpl()
 {
     std::string_view aToken = readNextToken();
     const sal_Int32 nImageSize( readInt32() );
@@ -708,10 +716,10 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
     uno::Sequence< uno::Any > aStreamCreationArgs(1);
     aStreamCreationArgs[0] <<= aDataSequence;
 
-    uno::Reference< uno::XComponentContext > xContext( m_xContext, uno::UNO_SET_THROW );
+    uno::Reference< uno::XComponentContext > xContext( m_parser.m_xContext, uno::UNO_SET_THROW );
     uno::Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< io::XInputStream > xDataStream(
-        xFactory->createInstanceWithArgumentsAndContext( "com.sun.star.io.SequenceInputStream", aStreamCreationArgs, m_xContext ),
+        xFactory->createInstanceWithArgumentsAndContext( "com.sun.star.io.SequenceInputStream", aStreamCreationArgs, m_parser.m_xContext ),
         uno::UNO_QUERY_THROW );
 
     uno::Sequence<beans::PropertyValue> aSequence( comphelper::InitPropertySequence({
@@ -723,7 +731,7 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
     return aSequence;
 }
 
-void Parser::readImage()
+void LineParser::readImage()
 {
     sal_Int32 nWidth, nHeight,nMaskColors;
     readInt32(nWidth);
@@ -750,23 +758,23 @@ void Parser::readImage()
         aMaskRanges[0] <<= aMinRange;
         aMaskRanges[1] <<= aMaxRange;
 
-        m_pSink->drawColorMaskedImage( aImg, aMaskRanges );
+        m_parser.m_pSink->drawColorMaskedImage( aImg, aMaskRanges );
     }
     else
-        m_pSink->drawImage( aImg );
+        m_parser.m_pSink->drawImage( aImg );
 }
 
-void Parser::readMask()
+void LineParser::readMask()
 {
     sal_Int32 nWidth, nHeight, nInvert;
     readInt32(nWidth);
     readInt32(nHeight);
     readInt32(nInvert);
 
-    m_pSink->drawMask( readImageImpl(), nInvert != 0);
+    m_parser.m_pSink->drawMask( readImageImpl(), nInvert != 0);
 }
 
-void Parser::readLink()
+void LineParser::readLink()
 {
     geometry::RealRectangle2D aBounds;
     readDouble(aBounds.X1);
@@ -774,7 +782,7 @@ void Parser::readLink()
     readDouble(aBounds.X2);
     readDouble(aBounds.Y2);
 
-    m_pSink->hyperLink( aBounds,
+    m_parser.m_pSink->hyperLink( aBounds,
                         OStringToOUString( lcl_unescapeLineFeeds(
                                 m_aLine.copy(m_nCharIndex) ),
                                 RTL_TEXTENCODING_UTF8 ) );
@@ -782,7 +790,7 @@ void Parser::readLink()
     m_nCharIndex = -1;
 }
 
-void Parser::readMaskedImage()
+void LineParser::readMaskedImage()
 {
     sal_Int32 nWidth, nHeight, nMaskWidth, nMaskHeight, nMaskInvert;
     readInt32(nWidth);
@@ -793,10 +801,10 @@ void Parser::readMaskedImage()
 
     const uno::Sequence<beans::PropertyValue> aImage( readImageImpl() );
     const uno::Sequence<beans::PropertyValue> aMask ( readImageImpl() );
-    m_pSink->drawMaskedImage( aImage, aMask, nMaskInvert != 0 );
+    m_parser.m_pSink->drawMaskedImage( aImage, aMask, nMaskInvert != 0 );
 }
 
-void Parser::readSoftMaskedImage()
+void LineParser::readSoftMaskedImage()
 {
     sal_Int32 nWidth, nHeight, nMaskWidth, nMaskHeight;
     readInt32(nWidth);
@@ -806,7 +814,7 @@ void Parser::readSoftMaskedImage()
 
     const uno::Sequence<beans::PropertyValue> aImage( readImageImpl() );
     const uno::Sequence<beans::PropertyValue> aMask ( readImageImpl() );
-    m_pSink->drawAlphaMaskedImage( aImage, aMask );
+    m_parser.m_pSink->drawAlphaMaskedImage( aImage, aMask );
 }
 
 void Parser::parseLine( const OString& rLine )
@@ -815,76 +823,76 @@ void Parser::parseLine( const OString& rLine )
     OSL_PRECOND( m_pErr,          "Invalid filehandle" );
     OSL_PRECOND( m_xContext.is(), "Invalid service factory" );
 
-    m_nNextToken = 0; m_nCharIndex = 0; m_aLine = rLine;
-    const std::string_view rCmd = readNextToken();
+    LineParser lp(*this, rLine);
+    const std::string_view rCmd = lp.readNextToken();
     const hash_entry* pEntry = PdfKeywordHash::in_word_set( rCmd.data(),
                                                             rCmd.size() );
     OSL_ASSERT(pEntry);
     switch( pEntry->eKey )
     {
         case CLIPPATH:
-            m_pSink->intersectClip(readPath()); break;
+            m_pSink->intersectClip(lp.readPath()); break;
         case DRAWCHAR:
-            readChar(); break;
+            lp.readChar(); break;
         case DRAWIMAGE:
-            readImage(); break;
+            lp.readImage(); break;
         case DRAWLINK:
-            readLink(); break;
+            lp.readLink(); break;
         case DRAWMASK:
-            readMask(); break;
+            lp.readMask(); break;
         case DRAWMASKEDIMAGE:
-            readMaskedImage(); break;
+            lp.readMaskedImage(); break;
         case DRAWSOFTMASKEDIMAGE:
-            readSoftMaskedImage(); break;
+            lp.readSoftMaskedImage(); break;
         case ENDPAGE:
             m_pSink->endPage(); break;
         case ENDTEXTOBJECT:
             m_pSink->endText(); break;
         case EOCLIPPATH:
-            m_pSink->intersectEoClip(readPath()); break;
+            m_pSink->intersectEoClip(lp.readPath()); break;
         case EOFILLPATH:
-            m_pSink->eoFillPath(readPath()); break;
+            m_pSink->eoFillPath(lp.readPath()); break;
         case FILLPATH:
-            m_pSink->fillPath(readPath()); break;
+            m_pSink->fillPath(lp.readPath()); break;
         case RESTORESTATE:
             m_pSink->popState(); break;
         case SAVESTATE:
             m_pSink->pushState(); break;
         case SETPAGENUM:
-            m_pSink->setPageNum( readInt32() ); break;
+            m_pSink->setPageNum( lp.readInt32() ); break;
         case STARTPAGE:
         {
-            const double nWidth ( readDouble() );
-            const double nHeight( readDouble() );
+            const double nWidth ( lp.readDouble() );
+            const double nHeight( lp.readDouble() );
             m_pSink->startPage( geometry::RealSize2D( nWidth, nHeight ) );
             break;
         }
         case STROKEPATH:
-            m_pSink->strokePath(readPath()); break;
+            m_pSink->strokePath(lp.readPath()); break;
         case UPDATECTM:
-            readTransformation(); break;
+            lp.readTransformation(); break;
         case UPDATEFILLCOLOR:
-            m_pSink->setFillColor( readColor() ); break;
+            m_pSink->setFillColor( lp.readColor() ); break;
         case UPDATEFLATNESS:
-            m_pSink->setFlatness( readDouble( ) ); break;
+            m_pSink->setFlatness( lp.readDouble( ) ); break;
         case UPDATEFONT:
-            readFont(); break;
+            lp.readFont(); break;
         case UPDATELINECAP:
-            readLineCap(); break;
+            lp.readLineCap(); break;
         case UPDATELINEDASH:
-            readLineDash(); break;
+            lp.readLineDash(); break;
         case UPDATELINEJOIN:
-            readLineJoin(); break;
+            lp.readLineJoin(); break;
         case UPDATELINEWIDTH:
-            m_pSink->setLineWidth( readDouble() );break;
+            m_pSink->setLineWidth( lp.readDouble() );break;
         case UPDATEMITERLIMIT:
-            m_pSink->setMiterLimit( readDouble() ); break;
+            m_pSink->setMiterLimit( lp.readDouble() ); break;
         case UPDATESTROKECOLOR:
-            m_pSink->setStrokeColor( readColor() ); break;
+            m_pSink->setStrokeColor( lp.readColor() ); break;
         case UPDATESTROKEOPACITY:
             break;
         case SETTEXTRENDERMODE:
-            m_pSink->setTextRenderMode( readInt32() ); break;
+            m_pSink->setTextRenderMode( lp.readInt32() ); break;
 
         case NONE:
         default:
@@ -893,7 +901,7 @@ void Parser::parseLine( const OString& rLine )
     }
 
     // all consumed?
-    SAL_WARN_IF(m_nCharIndex!=-1, "sdext.pdfimport", "leftover scanner input");
+    SAL_WARN_IF(lp.m_nCharIndex!=-1, "sdext.pdfimport", "leftover scanner input");
 }
 
 } // namespace
