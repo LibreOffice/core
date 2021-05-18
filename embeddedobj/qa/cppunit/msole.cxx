@@ -66,6 +66,8 @@ void Test::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
     XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
 }
 
+namespace
+{
 class OdtExportThread : public osl::Thread
 {
     uno::Reference<lang::XComponent> mxComponent;
@@ -90,6 +92,7 @@ void OdtExportThread::run()
         comphelper::makePropertyValue("FilterName", OUString("writer8")),
     };
     xStorable->storeToURL(maURL, aStoreProperties);
+}
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSaveOnThread)
