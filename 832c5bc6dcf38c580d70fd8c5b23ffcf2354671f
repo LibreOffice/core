@@ -70,6 +70,24 @@
       "revId": "832c5bc6dcf38c580d70fd8c5b23ffcf2354671f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d72ab2d5_d19a61b4",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-05-18T06:31:59Z",
+      "side": 1,
+      "message": "\u003e I\u0027m not sure what to do here. The existing code in sal/rtl/strtmpl.hxx:833 will just silently overflow if the number is bigger than what can fit into a sal_Int32. \n\nAh, sorry, I had naively assumed that it would do some kind of error return, but without actually looking at the code.",
+      "parentUuid": "e24ca68e_df793a12",
+      "revId": "832c5bc6dcf38c580d70fd8c5b23ffcf2354671f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
