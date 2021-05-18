@@ -144,7 +144,7 @@ void CrashReporter::writeCommonInfo()
     addKeyValue("BuildID", utl::Bootstrap::getBuildIdData(""), AddItem);
     addKeyValue("URL", protocol + "://" + url + "/submit/", AddItem);
 
-    if (proxy_server.aName != OUString())
+    if (!proxy_server.aName.isEmpty())
     {
         addKeyValue("Proxy", proxy_server.aName + ":" + OUString::number(proxy_server.nPort), AddItem);
     }
