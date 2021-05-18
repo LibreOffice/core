@@ -760,14 +760,6 @@ void WinSalGraphics::SetTextColor( Color nColor )
     ::SetTextColor( getHDC(), aCol );
 }
 
-static int CALLBACK SalEnumQueryFontProcExW( const LOGFONTW*,
-                                      const TEXTMETRICW*,
-                                      DWORD, LPARAM lParam )
-{
-    *reinterpret_cast<bool*>(lParam) = true;
-    return 0;
-}
-
 void ImplGetLogFontFromFontSelect( const FontSelectPattern& rFont,
                                    const PhysicalFontFace* pFontFace,
                                    LOGFONTW& rLogFont )
