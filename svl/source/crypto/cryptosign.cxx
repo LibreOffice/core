@@ -1926,6 +1926,8 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
                                  /*pwfn_arg=*/nullptr,
                                  /*decrypt_key_cb=*/nullptr,
                                  /*decrypt_key_cb_arg=*/nullptr);
+    comphelper::ScopeGuard aGuard(
+        [&pCMSMessage] () { NSS_CMSMessage_Destroy(pCMSMessage); } );
     if (!NSS_CMSMessage_IsSigned(pCMSMessage))
     {
         SAL_WARN("svl.crypto", "ValidateSignature: message is not signed");
@@ -1949,9 +1951,16 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     // Import certificates from the signed data temporarily, so it'll be
     // possible to verify the signature, even if we didn't have the certificate
     // previously.
-    std::vector<CERTCertificate*> aDocumentCertificates;
+    struct CertDeleter
+    {
+        void operator()(CERTCertificate *p) const
+        {
+            CERT_DestroyCertificate(p);
+        }
+    };
+    std::vector<std::unique_ptr<CERTCertificate,CertDeleter>> aDocumentCertificates;
     for (size_t i = 0; pCMSSignedData->rawCerts[i]; ++i)
-        aDocumentCertificates.push_back(CERT_NewTempCertificate(CERT_GetDefaultCertDB(), pCMSSignedData->rawCerts[i], nullptr, 0, 0));
+        aDocumentCertificates.emplace_back(CERT_NewTempCertificate(CERT_GetDefaultCertDB(), pCMSSignedData->rawCerts[i], nullptr, 0, 0));
 
     NSSCMSSignerInfo* pCMSSignerInfo = NSS_CMSSignedData_GetSignerInfo(pCMSSignedData, 0);
     if (!pCMSSignerInfo)
@@ -1959,6 +1968,8 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         SAL_WARN("svl.crypto", "ValidateSignature: NSS_CMSSignedData_GetSignerInfo() failed");
         return false;
     }
+    comphelper::ScopeGuard aSignerGuard(
+        [&pCMSSignerInfo] () { NSS_CMSSignerInfo_Destroy(pCMSSignerInfo); } );
 
     SECItem aAlgorithm = NSS_CMSSignedData_GetDigestAlgs(pCMSSignedData)[0]->algorithm;
     SECOidTag eOidTag = SECOID_FindOIDTag(&aAlgorithm);
@@ -1987,6 +1998,8 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         SAL_WARN("svl.crypto", "ValidateSignature: HASH_Create() failed");
         return false;
     }
+    comphelper::ScopeGuard aHashGuard(
+        [&pHASHContext] () { HASH_Destroy(pHASHContext); } );
 
     // We have a hash, update it with the byte ranges.
     HASH_Update(pHASHContext, aData.data(), aData.size());
@@ -2013,6 +2026,8 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     }
 
     auto pActualResultBuffer = static_cast<unsigned char*>(PORT_Alloc(nMaxResultLen));
+    comphelper::ScopeGuard aResultsGuard(
+        [&pActualResultBuffer] () { PORT_Free(pActualResultBuffer); } );
     unsigned int nActualResultLen;
     HASH_End(pHASHContext, pActualResultBuffer, &nActualResultLen, nMaxResultLen);
 
@@ -2105,11 +2120,6 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
 
     // Everything went fine
     SECITEM_FreeItem(&aOidData.oid, false);
-    PORT_Free(pActualResultBuffer);
-    HASH_Destroy(pHASHContext);
-    NSS_CMSSignerInfo_Destroy(pCMSSignerInfo);
-    for (auto pDocumentCertificate : aDocumentCertificates)
-        CERT_DestroyCertificate(pDocumentCertificate);
 
     return true;
 
