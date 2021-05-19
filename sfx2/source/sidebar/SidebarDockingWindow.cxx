@@ -72,7 +72,7 @@ public:
                 tools::JsonWriter aJsonWriter;
                 m_rSidebarDockingWin.DumpAsPropertyTree(aJsonWriter);
                 aJsonWriter.put("id", m_rSidebarDockingWin.GetLOKWindowId());
-                std::unique_ptr<char[]> data( aJsonWriter.extractData());
+                std::unique_ptr<char[], o3tl::free_delete> data( aJsonWriter.extractData());
                 std::string_view message(data.get());
                 if (message != m_LastNotificationMessage)
                 {
