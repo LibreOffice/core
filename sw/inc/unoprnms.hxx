@@ -735,6 +735,7 @@
 #define UNO_NAME_ITEMS "Items"
 #define UNO_NAME_SELITEM "SelectedItem"
 #define UNO_NAME_IS_SPLIT_ALLOWED "IsSplitAllowed"
+#define UNO_NAME_IS_NOT_TRACKED "IsNotTracked"
 #define UNO_NAME_CHAR_HIDDEN "CharHidden"
 #define UNO_NAME_IS_FOLLOWING_TEXT_FLOW "IsFollowingTextFlow"
 #define UNO_NAME_WIDTH_TYPE "WidthType"

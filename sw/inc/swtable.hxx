@@ -445,6 +445,8 @@ public:
     void RemoveFromTable();
     const SwStartNode *GetSttNd() const { return m_pStartNode; }
     sal_uLong GetSttIdx() const;
+    // it doesn't contain box content
+    bool IsEmpty() const;
 
     // Search next/previous box with content.
     SwTableBox* FindNextBox( const SwTable&, const SwTableBox*,

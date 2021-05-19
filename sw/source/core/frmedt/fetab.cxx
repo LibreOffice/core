@@ -31,7 +31,9 @@
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
 #include <fesh.hxx>
+#include <wrtsh.hxx>
 #include <doc.hxx>
+#include <docsh.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <cntfrm.hxx>
@@ -325,6 +327,34 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
     }
 
     CurrShell aCurr( this );
+
+    // tracked deletion: remove only textbox content,
+    // and set IsNoTracked table line property to false
+    if ( GetDoc()->GetDocShell()->IsChangeRecording() )
+    {
+        StartUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
+        StartAllAction();
+
+        SvxPrintItem aNotTracked(RES_PRINT, false);
+        GetDoc()->SetRowNotTracked( *getShellCursor( false ), aNotTracked );
+
+        if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
+            pWrtShell->SelectTableRow();
+
+        SwEditShell* pEditShell = GetDoc()->GetEditShell();
+        SwRedlineTable::size_type nPrev = pEditShell->GetRedlineCount();
+        pEditShell->Delete();
+
+        EndAllActionAndCall();
+        EndUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
+
+        // track row deletion only if there were tracked text changes
+        // FIXME redline count can be the same in special cases, e.g. adding a
+        // new tracked deletion with removing an own tracked insertion...
+        if ( nPrev != pEditShell->GetRedlineCount() )
+            return true;
+    }
+
     StartAllAction();
 
     // search for boxes via the layout

@@ -3370,6 +3370,83 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf118311)
     assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletion)
+{
+    // load a 1-row table, and delete the row with enabled change tracking:
+    // now the row is not deleted silently, but keeps the deleted cell contents,
+    // and only accepting all of them will result the deletion of the table row.
+    SwDoc* pDoc = createDoc("tdf118311.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // check table
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // delete table row with enabled change tracking
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    // This was deleted without change tracking
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // accept the deletion of the content of the first cell
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
+    pEditShell->AcceptRedline(0);
+
+    // table row was still not deleted
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // accept last redline
+    pEditShell->AcceptRedline(0);
+
+    // table row (and the 1-row table) was deleted finally
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
+
+    // Undo, and delete the row without change tracking
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // table exists again
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+
+    // disable change tracking
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // delete table row without change tracking
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    // the table (row) was deleted
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128335)
 {
     // Load the bugdoc, which has 3 textboxes.

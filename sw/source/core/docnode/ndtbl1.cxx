@@ -535,6 +535,32 @@ bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::unique_ptr<SvxBrushI
     return bRet;
 }
 
+void SwDoc::SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNew )
+{
+    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    if( !pTableNd )
+        return;
+
+    std::vector<SwTableLine*> aRowArr; // For Lines collecting
+    ::lcl_CollectLines( aRowArr, rCursor, true );
+
+    if( aRowArr.empty() )
+        return;
+
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttrTable>(*pTableNd));
+    }
+
+    std::vector<std::unique_ptr<SwTableFormatCmp>> aFormatCmp;
+    aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
+
+    for( auto pLn : aRowArr )
+        ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
+
+    getIDocumentState().SetModified();
+}
+
 static void InsertCell( std::vector<SwCellFrame*>& rCellArr, SwCellFrame* pCellFrame )
 {
     if( rCellArr.end() == std::find( rCellArr.begin(), rCellArr.end(), pCellFrame ) )
