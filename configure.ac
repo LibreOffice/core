@@ -2628,11 +2628,7 @@ if test "$enable_extensions" = yes; then
 fi
 
 if test -z "$enable_scripting"; then
-    # Disable scripting for iOS unless specifically overridden
-    # with --enable-scripting.
-    if test $_os != iOS; then
-        enable_scripting=yes
-    fi
+    enable_scripting=yes
 fi
 
 DISABLE_SCRIPTING=''
