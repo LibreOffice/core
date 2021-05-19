@@ -320,52 +320,52 @@ SecurityEnvironment_NssImpl::getPersonalCertificates()
 
 Reference< XCertificate > SecurityEnvironment_NssImpl::getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber )
 {
+    if( !m_pHandler )
+        return nullptr;
+
     rtl::Reference<X509Certificate_NssImpl> xcert;
+    CERTIssuerAndSN issuerAndSN ;
+    CERTCertificate* cert ;
+    CERTName* nmIssuer ;
+    char* chIssuer ;
+    SECItem* derIssuer ;
+    std::unique_ptr<PRArenaPool> arena(PORT_NewArena(DER_DEFAULT_CHUNKSIZE));
+    if( arena == nullptr )
+        throw RuntimeException() ;
 
-    if( m_pHandler != nullptr ) {
-        CERTIssuerAndSN issuerAndSN ;
-        CERTCertificate* cert ;
-        CERTName* nmIssuer ;
-        char* chIssuer ;
-        SECItem* derIssuer ;
-        std::unique_ptr<PRArenaPool> arena(PORT_NewArena(DER_DEFAULT_CHUNKSIZE));
-        if( arena == nullptr )
-            throw RuntimeException() ;
+    // Create cert info from issue and serial
+    OString ostr = OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
+    chIssuer = PL_strndup( ostr.getStr(), static_cast<int>(ostr.getLength()) ) ;
+    nmIssuer = CERT_AsciiToName( chIssuer ) ;
+    if( nmIssuer == nullptr ) {
+        PL_strfree( chIssuer ) ;
+        return nullptr; // no need for exception cf. i40394
+    }
 
-        // Create cert info from issue and serial
-        OString ostr = OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
-        chIssuer = PL_strndup( ostr.getStr(), static_cast<int>(ostr.getLength()) ) ;
-        nmIssuer = CERT_AsciiToName( chIssuer ) ;
-        if( nmIssuer == nullptr ) {
-            PL_strfree( chIssuer ) ;
-            return nullptr; // no need for exception cf. i40394
-        }
-
-        derIssuer = SEC_ASN1EncodeItem( arena.get(), nullptr, static_cast<void*>(nmIssuer), SEC_ASN1_GET( CERT_NameTemplate ) ) ;
-        if( derIssuer == nullptr ) {
-            PL_strfree( chIssuer ) ;
-            CERT_DestroyName( nmIssuer ) ;
-            throw RuntimeException() ;
-        }
-
-        memset( &issuerAndSN, 0, sizeof( issuerAndSN ) ) ;
-
-        issuerAndSN.derIssuer.data = derIssuer->data ;
-        issuerAndSN.derIssuer.len = derIssuer->len ;
-
-        issuerAndSN.serialNumber.data = reinterpret_cast<unsigned char *>(const_cast<sal_Int8 *>(serialNumber.getConstArray()));
-        issuerAndSN.serialNumber.len = serialNumber.getLength() ;
-
-        cert = CERT_FindCertByIssuerAndSN( m_pHandler, &issuerAndSN ) ;
-        if( cert != nullptr ) {
-            xcert = NssCertToXCert( cert ) ;
-        }
-
+    derIssuer = SEC_ASN1EncodeItem( arena.get(), nullptr, static_cast<void*>(nmIssuer), SEC_ASN1_GET( CERT_NameTemplate ) ) ;
+    if( derIssuer == nullptr ) {
         PL_strfree( chIssuer ) ;
         CERT_DestroyName( nmIssuer ) ;
-        //SECITEM_FreeItem( derIssuer, PR_FALSE ) ;
-        CERT_DestroyCertificate( cert ) ;
+        throw RuntimeException() ;
     }
+
+    memset( &issuerAndSN, 0, sizeof( issuerAndSN ) ) ;
+
+    issuerAndSN.derIssuer.data = derIssuer->data ;
+    issuerAndSN.derIssuer.len = derIssuer->len ;
+
+    issuerAndSN.serialNumber.data = reinterpret_cast<unsigned char *>(const_cast<sal_Int8 *>(serialNumber.getConstArray()));
+    issuerAndSN.serialNumber.len = serialNumber.getLength() ;
+
+    cert = CERT_FindCertByIssuerAndSN( m_pHandler, &issuerAndSN ) ;
+    if( cert != nullptr ) {
+        xcert = NssCertToXCert( cert ) ;
+    }
+
+    PL_strfree( chIssuer ) ;
+    CERT_DestroyName( nmIssuer ) ;
+    //SECITEM_FreeItem( derIssuer, PR_FALSE ) ;
+    CERT_DestroyCertificate( cert ) ;
 
     return xcert ;
 }
@@ -374,50 +374,41 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertifi
     // Remember the signing certificate.
     m_xSigningCertificate = begin;
 
-    const X509Certificate_NssImpl* xcert ;
-    const CERTCertificate* cert ;
-    CERTCertList* certChain ;
-
     Reference< XUnoTunnel > xCertTunnel( begin, UNO_QUERY_THROW ) ;
-    xcert = reinterpret_cast<X509Certificate_NssImpl*>(
+    const X509Certificate_NssImpl* xcert = reinterpret_cast<X509Certificate_NssImpl*>(
         sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
     if( xcert == nullptr ) {
         throw RuntimeException() ;
     }
 
-    cert = xcert->getNssCert() ;
-    if( cert != nullptr ) {
-        int64 timeboundary ;
+    const CERTCertificate* cert = xcert->getNssCert() ;
+    if (!cert)
+        return {};
 
-        //Get the system clock time
-        timeboundary = PR_Now() ;
+    //Get the system clock time
+    int64 timeboundary = PR_Now() ;
+    CERTCertList* certChain = CERT_GetCertChainFromCert( const_cast<CERTCertificate*>(cert), timeboundary, certUsageAnyCA ) ;
 
-        certChain = CERT_GetCertChainFromCert( const_cast<CERTCertificate*>(cert), timeboundary, certUsageAnyCA ) ;
-    } else {
-        certChain = nullptr ;
-    }
+    if( !certChain )
+        return {};
 
-    if( certChain != nullptr ) {
-        std::vector<uno::Reference<security::XCertificate>> aCertChain;
+    std::vector<uno::Reference<security::XCertificate>> aCertChain;
 
-        for (CERTCertListNode* node = CERT_LIST_HEAD(certChain); !CERT_LIST_END(node, certChain); node = CERT_LIST_NEXT(node)) {
-            rtl::Reference<X509Certificate_NssImpl> pCert = new X509Certificate_NssImpl();
-            if( pCert == nullptr ) {
-                CERT_DestroyCertList( certChain ) ;
-                throw RuntimeException() ;
-            }
-
-            pCert->setCert( node->cert ) ;
-
-            aCertChain.push_back(pCert);
+    for (CERTCertListNode* node = CERT_LIST_HEAD(certChain); !CERT_LIST_END(node, certChain); node = CERT_LIST_NEXT(node)) {
+        rtl::Reference<X509Certificate_NssImpl> pCert = new X509Certificate_NssImpl();
+        if( pCert == nullptr ) {
+            CERT_DestroyCertList( certChain ) ;
+            throw RuntimeException() ;
         }
 
-        CERT_DestroyCertList( certChain ) ;
+        pCert->setCert( node->cert ) ;
 
-        return comphelper::containerToSequence(aCertChain);
+        aCertChain.push_back(pCert);
     }
 
-    return Sequence< Reference < XCertificate > >();
+    CERT_DestroyCertList( certChain ) ;
+
+    return comphelper::containerToSequence(aCertChain);
 }
 
 rtl::Reference<X509Certificate_NssImpl> SecurityEnvironment_NssImpl::createAndAddCertificateFromPackage(
@@ -498,20 +489,16 @@ Reference< XCertificate > SecurityEnvironment_NssImpl::createCertificateFromAsci
     OString oscert = OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
     xmlChar* chCert = xmlStrndup( reinterpret_cast<const xmlChar*>(oscert.getStr()), static_cast<int>(oscert.getLength()) ) ;
     int certSize = xmlSecBase64Decode( chCert, reinterpret_cast<xmlSecByte*>(chCert), xmlStrlen( chCert ) ) ;
-    if (certSize > 0)
-    {
-        Sequence< sal_Int8 > rawCert(certSize) ;
-        for (int i = 0 ; i < certSize; ++i)
-            rawCert[i] = *( chCert + i ) ;
-
-        xmlFree( chCert ) ;
-
-        return createCertificateFromRaw( rawCert ) ;
-    }
-    else
-    {
+    if (certSize == 0)
         return nullptr;
-    }
+
+    Sequence< sal_Int8 > rawCert(certSize) ;
+    for (int i = 0 ; i < certSize; ++i)
+        rawCert[i] = *( chCert + i ) ;
+
+    xmlFree( chCert ) ;
+
+    return createCertificateFromRaw( rawCert ) ;
 }
 
 sal_Int32 SecurityEnvironment_NssImpl ::
@@ -521,7 +508,6 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     sal_Int32 validity = csss::CertificateValidity::INVALID;
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
-    ::std::vector<CERTCertificate*> vecTmpNSSCertificates;
     Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
 
     SAL_INFO("xmlsecurity.xmlsec", "Start verification of certificate: " << aCert->getSubjectName());
@@ -538,193 +524,190 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     OSL_ASSERT(m_pHandler == CERT_GetDefaultCertDB());
     CERTCertDBHandle * certDb = m_pHandler != nullptr ? m_pHandler : CERT_GetDefaultCertDB();
     cert = xcert->getNssCert() ;
-    if( cert != nullptr )
+    if( !cert )
+        return css::security::CertificateValidity::INVALID;
+
+
+    ::std::vector<CERTCertificate*> vecTmpNSSCertificates;
+
+    //prepare the intermediate certificates
+    for (const auto& rIntermediateCert : intermediateCerts)
     {
+        Sequence<sal_Int8> der = rIntermediateCert->getEncoded();
+        SECItem item;
+        item.type = siBuffer;
+        item.data = reinterpret_cast<unsigned char*>(der.getArray());
+        item.len = der.getLength();
 
-        //prepare the intermediate certificates
-        for (const auto& rIntermediateCert : intermediateCerts)
+        CERTCertificate* certTmp = CERT_NewTempCertificate(certDb, &item,
+                                       nullptr     /* nickname */,
+                                       PR_FALSE /* isPerm */,
+                                       PR_TRUE  /* copyDER */);
+        if (!certTmp)
         {
-            Sequence<sal_Int8> der = rIntermediateCert->getEncoded();
-            SECItem item;
-            item.type = siBuffer;
-            item.data = reinterpret_cast<unsigned char*>(der.getArray());
-            item.len = der.getLength();
+             SAL_INFO("xmlsecurity.xmlsec", "Failed to add a temporary certificate: " << rIntermediateCert->getIssuerName());
 
-            CERTCertificate* certTmp = CERT_NewTempCertificate(certDb, &item,
-                                           nullptr     /* nickname */,
-                                           PR_FALSE /* isPerm */,
-                                           PR_TRUE  /* copyDER */);
-            if (!certTmp)
-            {
-                 SAL_INFO("xmlsecurity.xmlsec", "Failed to add a temporary certificate: " << rIntermediateCert->getIssuerName());
-
-            }
-            else
-            {
-                 SAL_INFO("xmlsecurity.xmlsec", "Added temporary certificate: " <<
-                          (certTmp->subjectName ? certTmp->subjectName : ""));
-                 vecTmpNSSCertificates.push_back(certTmp);
-            }
         }
+        else
+        {
+             SAL_INFO("xmlsecurity.xmlsec", "Added temporary certificate: " <<
+                      (certTmp->subjectName ? certTmp->subjectName : ""));
+             vecTmpNSSCertificates.push_back(certTmp);
+        }
+    }
 
 
-        SECStatus status ;
+    SECStatus status ;
 
-        CERTVerifyLog log;
-        log.arena = PORT_NewArena(512);
-        log.head = log.tail = nullptr;
-        log.count = 0;
+    CERTVerifyLog log;
+    log.arena = PORT_NewArena(512);
+    log.head = log.tail = nullptr;
+    log.count = 0;
 
-        CERT_EnableOCSPChecking(certDb);
-        CERT_DisableOCSPDefaultResponder(certDb);
-        CERTValOutParam cvout[5];
-        CERTValInParam cvin[3];
-        int ncvinCount=0;
+    CERT_EnableOCSPChecking(certDb);
+    CERT_DisableOCSPDefaultResponder(certDb);
+    CERTValOutParam cvout[5];
+    CERTValInParam cvin[3];
+    int ncvinCount=0;
 
 #if ( NSS_VMAJOR > 3 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR > 12 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR == 12 && NSS_VPATCH > 0 )
-        cvin[ncvinCount].type = cert_pi_useAIACertFetch;
-        cvin[ncvinCount].value.scalar.b = PR_TRUE;
-        ncvinCount++;
+    cvin[ncvinCount].type = cert_pi_useAIACertFetch;
+    cvin[ncvinCount].value.scalar.b = PR_TRUE;
+    ncvinCount++;
 #endif
 
-        PRUint64 revFlagsLeaf[2];
-        PRUint64 revFlagsChain[2];
-        CERTRevocationFlags rev;
-        rev.leafTests.number_of_defined_methods = 2;
-        rev.leafTests.cert_rev_flags_per_method = revFlagsLeaf;
-        //the flags are defined in cert.h
-        //We check both leaf and chain.
-        //It is enough if one revocation method has fresh info,
-        //but at least one must have some. Otherwise validation fails.
-        //!!! using leaf test and CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE
-        // when validating a root certificate will result in "revoked". Usually
-        //there is no revocation information available for the root cert because
-        //it must be trusted anyway and it does itself issue revocation information.
-        //When we use the flag here and OOo shows the certification path then the root
-        //cert is invalid while all other can be valid. It would probably best if
-        //this interface method returned the whole chain.
-        //Otherwise we need to check if the certificate is self-signed and if it is
-        //then not use the flag when doing the leaf-test.
-        rev.leafTests.cert_rev_flags_per_method[cert_revocation_method_crl] =
-            CERT_REV_M_TEST_USING_THIS_METHOD
-            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
-        rev.leafTests.cert_rev_flags_per_method[cert_revocation_method_ocsp] =
-            CERT_REV_M_TEST_USING_THIS_METHOD
-            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
-        rev.leafTests.number_of_preferred_methods = 0;
-        rev.leafTests.preferred_methods = nullptr;
-        rev.leafTests.cert_rev_method_independent_flags =
-            CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
+    PRUint64 revFlagsLeaf[2];
+    PRUint64 revFlagsChain[2];
+    CERTRevocationFlags rev;
+    rev.leafTests.number_of_defined_methods = 2;
+    rev.leafTests.cert_rev_flags_per_method = revFlagsLeaf;
+    //the flags are defined in cert.h
+    //We check both leaf and chain.
+    //It is enough if one revocation method has fresh info,
+    //but at least one must have some. Otherwise validation fails.
+    //!!! using leaf test and CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE
+    // when validating a root certificate will result in "revoked". Usually
+    //there is no revocation information available for the root cert because
+    //it must be trusted anyway and it does itself issue revocation information.
+    //When we use the flag here and OOo shows the certification path then the root
+    //cert is invalid while all other can be valid. It would probably best if
+    //this interface method returned the whole chain.
+    //Otherwise we need to check if the certificate is self-signed and if it is
+    //then not use the flag when doing the leaf-test.
+    rev.leafTests.cert_rev_flags_per_method[cert_revocation_method_crl] =
+        CERT_REV_M_TEST_USING_THIS_METHOD
+        | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+    rev.leafTests.cert_rev_flags_per_method[cert_revocation_method_ocsp] =
+        CERT_REV_M_TEST_USING_THIS_METHOD
+        | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+    rev.leafTests.number_of_preferred_methods = 0;
+    rev.leafTests.preferred_methods = nullptr;
+    rev.leafTests.cert_rev_method_independent_flags =
+        CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
 
-        rev.chainTests.number_of_defined_methods = 2;
-        rev.chainTests.cert_rev_flags_per_method = revFlagsChain;
-        rev.chainTests.cert_rev_flags_per_method[cert_revocation_method_crl] =
-            CERT_REV_M_TEST_USING_THIS_METHOD
-            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
-        rev.chainTests.cert_rev_flags_per_method[cert_revocation_method_ocsp] =
-            CERT_REV_M_TEST_USING_THIS_METHOD
-            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
-        rev.chainTests.number_of_preferred_methods = 0;
-        rev.chainTests.preferred_methods = nullptr;
-        rev.chainTests.cert_rev_method_independent_flags =
-            CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
+    rev.chainTests.number_of_defined_methods = 2;
+    rev.chainTests.cert_rev_flags_per_method = revFlagsChain;
+    rev.chainTests.cert_rev_flags_per_method[cert_revocation_method_crl] =
+        CERT_REV_M_TEST_USING_THIS_METHOD
+        | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+    rev.chainTests.cert_rev_flags_per_method[cert_revocation_method_ocsp] =
+        CERT_REV_M_TEST_USING_THIS_METHOD
+        | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+    rev.chainTests.number_of_preferred_methods = 0;
+    rev.chainTests.preferred_methods = nullptr;
+    rev.chainTests.cert_rev_method_independent_flags =
+        CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
 
 
-        cvin[ncvinCount].type = cert_pi_revocationFlags;
-        cvin[ncvinCount].value.pointer.revocation = &rev;
-        ncvinCount++;
-        // does not work, not implemented yet in 3.12.4
+    cvin[ncvinCount].type = cert_pi_revocationFlags;
+    cvin[ncvinCount].value.pointer.revocation = &rev;
+    ncvinCount++;
+    // does not work, not implemented yet in 3.12.4
 //         cvin[ncvinCount].type = cert_pi_keyusage;
 //         cvin[ncvinCount].value.scalar.ui = KU_DIGITAL_SIGNATURE;
 //         ncvinCount++;
-        cvin[ncvinCount].type = cert_pi_end;
+    cvin[ncvinCount].type = cert_pi_end;
 
-        cvout[0].type = cert_po_trustAnchor;
-        cvout[0].value.pointer.cert = nullptr;
-        cvout[1].type = cert_po_errorLog;
-        cvout[1].value.pointer.log = &log;
-        cvout[2].type = cert_po_end;
+    cvout[0].type = cert_po_trustAnchor;
+    cvout[0].value.pointer.cert = nullptr;
+    cvout[1].type = cert_po_errorLog;
+    cvout[1].value.pointer.log = &log;
+    cvout[2].type = cert_po_end;
 
-        // We check SSL server certificates, CA certificates and signing certificates.
-        //
-        // ToDo check keyusage, looking at CERT_KeyUsageAndTypeForCertUsage (
-        // mozilla/security/nss/lib/certdb/certdb.c indicates that
-        // certificateUsageSSLClient, certificateUsageSSLServer and certificateUsageSSLCA
-        // are sufficient. They cover the key usages for digital signature, key agreement
-        // and encipherment and certificate signature
+    // We check SSL server certificates, CA certificates and signing certificates.
+    //
+    // ToDo check keyusage, looking at CERT_KeyUsageAndTypeForCertUsage (
+    // mozilla/security/nss/lib/certdb/certdb.c indicates that
+    // certificateUsageSSLClient, certificateUsageSSLServer and certificateUsageSSLCA
+    // are sufficient. They cover the key usages for digital signature, key agreement
+    // and encipherment and certificate signature
 
-        //never use the following usages because they are not checked properly
-        // certificateUsageUserCertImport
-        // certificateUsageVerifyCA
-        // certificateUsageAnyCA
-        // certificateUsageProtectedObjectSigner
+    //never use the following usages because they are not checked properly
+    // certificateUsageUserCertImport
+    // certificateUsageVerifyCA
+    // certificateUsageAnyCA
+    // certificateUsageProtectedObjectSigner
 
-        UsageDescription arUsages[5];
-        arUsages[0] = UsageDescription( certificateUsageSSLClient, "certificateUsageSSLClient"  );
-        arUsages[1] = UsageDescription( certificateUsageSSLServer, "certificateUsageSSLServer"  );
-        arUsages[2] = UsageDescription( certificateUsageSSLCA, "certificateUsageSSLCA"  );
-        arUsages[3] = UsageDescription( certificateUsageEmailSigner, "certificateUsageEmailSigner" );
-        arUsages[4] = UsageDescription( certificateUsageEmailRecipient, "certificateUsageEmailRecipient" );
+    UsageDescription arUsages[5];
+    arUsages[0] = UsageDescription( certificateUsageSSLClient, "certificateUsageSSLClient"  );
+    arUsages[1] = UsageDescription( certificateUsageSSLServer, "certificateUsageSSLServer"  );
+    arUsages[2] = UsageDescription( certificateUsageSSLCA, "certificateUsageSSLCA"  );
+    arUsages[3] = UsageDescription( certificateUsageEmailSigner, "certificateUsageEmailSigner" );
+    arUsages[4] = UsageDescription( certificateUsageEmailRecipient, "certificateUsageEmailRecipient" );
 
-        int numUsages = SAL_N_ELEMENTS(arUsages);
-        for (int i = 0; i < numUsages; i++)
-        {
-            SAL_INFO("xmlsecurity.xmlsec", "Testing usage " << i+1 <<
-                     " of " << numUsages << ": " <<
-                     arUsages[i].description <<
-                     " (0x" << std::hex << static_cast<int>(arUsages[i].usage) << ")" << std::dec);
-
-            status = CERT_PKIXVerifyCert(const_cast<CERTCertificate *>(cert), arUsages[i].usage,
-                                         cvin, cvout, nullptr);
-            if( status == SECSuccess )
-            {
-                SAL_INFO("xmlsecurity.xmlsec", "CERT_PKIXVerifyCert returned SECSuccess.");
-                //When an intermediate or root certificate is checked then we expect the usage
-                //certificateUsageSSLCA. This, however, will be only set when in the trust settings dialog
-                //the button "This certificate can identify websites" is checked. If for example only
-                //"This certificate can identify mail users" is set then the end certificate can
-                //be validated and the returned usage will contain certificateUsageEmailRecipient.
-                //But checking directly the root or intermediate certificate will fail. In the
-                //certificate path view the end certificate will be shown as valid but the others
-                //will be displayed as invalid.
-
-                validity = csss::CertificateValidity::VALID;
-                SAL_INFO("xmlsecurity.xmlsec", "Certificate is valid.");
-                CERTCertificate * issuerCert = cvout[0].value.pointer.cert;
-                if (issuerCert)
-                {
-                    SAL_INFO("xmlsecurity.xmlsec", "Root certificate: " << issuerCert->subjectName);
-                    CERT_DestroyCertificate(issuerCert);
-                };
-
-                break;
-            }
-            else
-            {
-                PRIntn err = PR_GetError();
-                SAL_INFO("xmlsecurity.xmlsec", "Error: " <<  err << ": " << getCertError(err));
-
-                /* Display validation results */
-                if ( log.count > 0)
-                {
-                    CERTVerifyLogNode *node = nullptr;
-                    printChainFailure(&log);
-
-                    for (node = log.head; node; node = node->next) {
-                        if (node->cert)
-                            CERT_DestroyCertificate(node->cert);
-                    }
-                    log.head = log.tail = nullptr;
-                    log.count = 0;
-                }
-                SAL_INFO("xmlsecurity.xmlsec", "Certificate is invalid.");
-            }
-        }
-
-    }
-    else
+    int numUsages = SAL_N_ELEMENTS(arUsages);
+    for (int i = 0; i < numUsages; i++)
     {
-        validity = css::security::CertificateValidity::INVALID ;
+        SAL_INFO("xmlsecurity.xmlsec", "Testing usage " << i+1 <<
+                 " of " << numUsages << ": " <<
+                 arUsages[i].description <<
+                 " (0x" << std::hex << static_cast<int>(arUsages[i].usage) << ")" << std::dec);
+
+        status = CERT_PKIXVerifyCert(const_cast<CERTCertificate *>(cert), arUsages[i].usage,
+                                     cvin, cvout, nullptr);
+        if( status == SECSuccess )
+        {
+            SAL_INFO("xmlsecurity.xmlsec", "CERT_PKIXVerifyCert returned SECSuccess.");
+            //When an intermediate or root certificate is checked then we expect the usage
+            //certificateUsageSSLCA. This, however, will be only set when in the trust settings dialog
+            //the button "This certificate can identify websites" is checked. If for example only
+            //"This certificate can identify mail users" is set then the end certificate can
+            //be validated and the returned usage will contain certificateUsageEmailRecipient.
+            //But checking directly the root or intermediate certificate will fail. In the
+            //certificate path view the end certificate will be shown as valid but the others
+            //will be displayed as invalid.
+
+            validity = csss::CertificateValidity::VALID;
+            SAL_INFO("xmlsecurity.xmlsec", "Certificate is valid.");
+            CERTCertificate * issuerCert = cvout[0].value.pointer.cert;
+            if (issuerCert)
+            {
+                SAL_INFO("xmlsecurity.xmlsec", "Root certificate: " << issuerCert->subjectName);
+                CERT_DestroyCertificate(issuerCert);
+            };
+
+            break;
+        }
+        else
+        {
+            PRIntn err = PR_GetError();
+            SAL_INFO("xmlsecurity.xmlsec", "Error: " <<  err << ": " << getCertError(err));
+
+            /* Display validation results */
+            if ( log.count > 0)
+            {
+                CERTVerifyLogNode *node = nullptr;
+                printChainFailure(&log);
+
+                for (node = log.head; node; node = node->next) {
+                    if (node->cert)
+                        CERT_DestroyCertificate(node->cert);
+                }
+                log.head = log.tail = nullptr;
+                log.count = 0;
+            }
+            SAL_INFO("xmlsecurity.xmlsec", "Certificate is invalid.");
+        }
     }
 
     //Destroying the temporary certificates
