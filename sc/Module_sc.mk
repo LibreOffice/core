@@ -37,6 +37,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 endif
 
 ifneq ($(OS),iOS)
+ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_check_targets,sc,\
 	Library_scqahelper \
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
@@ -58,6 +59,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_cache_test \
     CppunitTest_sc_shapetest \
 ))
+endif
 
 ifneq ($(DISABLE_GUI),TRUE)
 ifeq ($(OS),LINUX)
