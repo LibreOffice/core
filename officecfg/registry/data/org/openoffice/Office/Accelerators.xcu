@@ -1972,12 +1972,28 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
+            <!-- tdf#142257 Replace Ctrl-[ with Shift-Ctrl-, for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
+            <!-- tdf#142257 Replace Ctrl-] with Shift-Ctrl-. for Hungarian -->
+            <value xml:lang="hu"></value>
+          </prop>
+        </node>
+        <node oor:name="COMMA_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="POINT_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Grow</value>
           </prop>
         </node>
       </node>
@@ -2078,12 +2094,28 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
+            <!-- tdf#142257 Replace Ctrl-[ with Shift-Ctrl-, for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
+            <!-- tdf#142257 Replace Ctrl-] with Shift-Ctrl-. for Hungarian -->
+            <value xml:lang="hu"></value>
+          </prop>
+        </node>
+        <node oor:name="COMMA_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="POINT_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Grow</value>
           </prop>
         </node>
         <node oor:name="B_MOD1" oor:op="replace">
@@ -3327,12 +3359,28 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
+            <!-- tdf#142257 Replace Ctrl-[ with Shift-Ctrl-, for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
+            <!-- tdf#142257 Replace Ctrl-] with Shift-Ctrl-. for Hungarian -->
+            <value xml:lang="hu"></value>
+          </prop>
+        </node>
+        <node oor:name="COMMA_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="POINT_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Grow</value>
           </prop>
         </node>
       </node>
@@ -3501,12 +3549,28 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
+            <!-- tdf#142257 Replace Ctrl-[ with Shift-Ctrl-, for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
+            <!-- tdf#142257 Replace Ctrl-] with Shift-Ctrl-. for Hungarian -->
+            <value xml:lang="hu"></value>
+          </prop>
+        </node>
+        <node oor:name="COMMA_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="POINT_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Grow</value>
           </prop>
         </node>
         <node oor:name="B_MOD1" oor:op="replace">
@@ -5880,12 +5944,28 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
+            <!-- tdf#142257 Replace Ctrl-[ with Shift-Ctrl-, for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
+            <!-- tdf#142257 Replace Ctrl-] with Shift-Ctrl-. for Hungarian -->
+            <value xml:lang="hu"></value>
+          </prop>
+        </node>
+        <node oor:name="COMMA_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="POINT_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Grow</value>
           </prop>
         </node>
         <node oor:name="B_MOD1" oor:op="replace">
@@ -6730,12 +6810,28 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
+            <!-- tdf#142257 Replace Ctrl-[ with Shift-Ctrl-, for Hungarian -->
+            <value xml:lang="hu"></value>
           </prop>
         </node>
         <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
+            <!-- tdf#142257 Replace Ctrl-] with Shift-Ctrl-. for Hungarian -->
+            <value xml:lang="hu"></value>
+          </prop>
+        </node>
+        <node oor:name="COMMA_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="POINT_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="hu">.uno:Grow</value>
           </prop>
         </node>
         <node oor:name="B_MOD1" oor:op="replace">
@@ -7718,18 +7814,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:Undo</value>
           </prop>
         </node>
-        <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Shrink</value>
-          </prop>
-        </node>
-        <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Grow</value>
-          </prop>
-        </node>
       </node>
       <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace">
         <node oor:name="BACKSPACE_MOD2" oor:op="replace">
@@ -7836,18 +7920,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Undo</value>
-          </prop>
-        </node>
-        <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Shrink</value>
-          </prop>
-        </node>
-        <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Grow</value>
           </prop>
         </node>
       </node>
