@@ -22,6 +22,30 @@
       "revId": "11886f260f3b03fa05ed50d59aebf3e20703dfc8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6613d161_497e600c",
+        "filename": "sc/source/core/inc/arraysumfunctor.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-05-19T16:47:08Z",
+      "side": 1,
+      "message": "The executeUnrolled should be fine.\nAndroid, ARM does not support stuff like SSE2 and the CppunitTest_sc_statistical_functions_test checks summation.\nChecking AVX512 is not possible. The GCC version we use is too old and there\u0027s an error in the intel intrinsics that prevents it from building (corrected in 2018).\nSo we would need to check AVX and SSE2.\nBut it\u0027s better to test everything.\n\nThe way the code is we can make something like this: see end of comment.\nIf declared in the same header we can avoid the GCC bug.\n\nThe only problem is I have no idea of that LO CppunitTest stuff.\nSo I have no idea about how to call it.\n\nvoid test_sums()\n{\n// Needs exactly 9 terms\ndouble summands a[] \u003d {0, 1, 2, 3, 4, 10, 20, 2, -1};\ndouble* pCurrent \u003d a;\nsize_t i \u003d 0;\n#ifdef LO_AVX512F_AVAILABLE\n    if (hasAVX512F)\n        assert(executeAVX512F(i, 9, pCurrent) \u003d\u003d 42.0);\n#endif\n#ifdef LO_AVX_AVAILABLE\n    if (hasAVX)\n        assert(executeAVX(i, 9, pCurrent) \u003d\u003d 42.0);\n#endif\n#ifdef LO_SSE2_AVAILABLE\n    if (hasSSE2)\n        assert( executeSSE2(i, 9, pCurrent) \u003d\u003d 42.0 )\n#endif\n    assert( executeUnrolled(i, 9, pCurrent) \u003d\u003d 42.0 );\n}",
+      "parentUuid": "b4b73349_0498d339",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 1
+      },
+      "revId": "11886f260f3b03fa05ed50d59aebf3e20703dfc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
