@@ -102,8 +102,7 @@ void ScColRowNameRangesDlg::Init()
     m_xBtnRemove->connect_clicked  ( LINK( this, ScColRowNameRangesDlg, RemoveBtnHdl ) );
     m_xLbRange->connect_changed( LINK( this, ScColRowNameRangesDlg, Range1SelectHdl ) );
     m_xEdAssign->SetModifyHdl  ( LINK( this, ScColRowNameRangesDlg, Range1DataModifyHdl ) );
-    m_xBtnColHead->connect_clicked ( LINK( this, ScColRowNameRangesDlg, ColClickHdl ) );
-    m_xBtnRowHead->connect_clicked ( LINK( this, ScColRowNameRangesDlg, RowClickHdl ) );
+    m_xBtnColHead->connect_toggled ( LINK( this, ScColRowNameRangesDlg, ColRowToggleHdl ) );
     m_xEdAssign2->SetModifyHdl ( LINK( this, ScColRowNameRangesDlg, Range2DataModifyHdl ) );
 
     Link<formula::RefEdit&,void> aEditLink = LINK( this, ScColRowNameRangesDlg, GetEditFocusHdl );
@@ -729,40 +728,36 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl, formula::RefEdit&, v
     }
 }
 
-// handler for the radio button for columns, adjust ranges
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl, weld::Button&, void)
+IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColRowToggleHdl, weld::ToggleButton&, void)
 {
-    if (!m_xBtnColHead->get_active())
-        return;
-
-    if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == rDoc.MaxRow() )
+    if (m_xBtnColHead->get_active())
     {
-        theCurArea.aEnd.SetRow( rDoc.MaxRow() - 1 );
-        OUString aStr(theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
-        m_xEdAssign->SetText( aStr );
+        // handler for the radio button for columns, adjust ranges
+        if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == rDoc.MaxRow() )
+        {
+            theCurArea.aEnd.SetRow( rDoc.MaxRow() - 1 );
+            OUString aStr(theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
+            m_xEdAssign->SetText( aStr );
+        }
+        ScRange aRange( theCurData );
+        aRange.aStart.SetRow( std::min( static_cast<tools::Long>(theCurArea.aEnd.Row() + 1), static_cast<tools::Long>(rDoc.MaxRow()) ) );
+        aRange.aEnd.SetRow( rDoc.MaxRow() );
+        AdjustColRowData( aRange );
     }
-    ScRange aRange( theCurData );
-    aRange.aStart.SetRow( std::min( static_cast<tools::Long>(theCurArea.aEnd.Row() + 1), static_cast<tools::Long>(rDoc.MaxRow()) ) );
-    aRange.aEnd.SetRow( rDoc.MaxRow() );
-    AdjustColRowData( aRange );
-}
-
-// handler for the radio button for columns, adjust range
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl, weld::Button&, void)
-{
-    if (!m_xBtnRowHead->get_active())
-        return;
-
-    if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == rDoc.MaxCol() )
+    else if (m_xBtnRowHead->get_active())
     {
-        theCurArea.aEnd.SetCol( rDoc.MaxCol() - 1 );
-        OUString aStr(theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
-        m_xEdAssign->SetText( aStr );
+        // handler for the radio button for columns, adjust range
+        if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == rDoc.MaxCol() )
+        {
+            theCurArea.aEnd.SetCol( rDoc.MaxCol() - 1 );
+            OUString aStr(theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
+            m_xEdAssign->SetText( aStr );
+        }
+        ScRange aRange( theCurData );
+        aRange.aStart.SetCol( static_cast<SCCOL>(std::min( static_cast<tools::Long>(theCurArea.aEnd.Col() + 1), static_cast<tools::Long>(rDoc.MaxCol()) )) );
+        aRange.aEnd.SetCol( rDoc.MaxCol() );
+        AdjustColRowData( aRange );
     }
-    ScRange aRange( theCurData );
-    aRange.aStart.SetCol( static_cast<SCCOL>(std::min( static_cast<tools::Long>(theCurArea.aEnd.Col() + 1), static_cast<tools::Long>(rDoc.MaxCol()) )) );
-    aRange.aEnd.SetCol( rDoc.MaxCol() );
-    AdjustColRowData( aRange );
 }
 
 IMPL_LINK( ScColRowNameRangesDlg, GetEditFocusHdl, formula::RefEdit&, rCtrl, void )
