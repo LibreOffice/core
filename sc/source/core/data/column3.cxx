@@ -2429,11 +2429,13 @@ class FilterEntriesHandler
         ScAddress aPos(rColumn.GetCol(), nRow, rColumn.GetTab());
         const SvxColorItem* pColor = rColumn.GetDoc().GetAttr(aPos, ATTR_FONT_COLOR);
         Color textColor = pColor->GetValue();
+        if (textColor != COL_AUTO)
+            mrFilterEntries.addTextColor(textColor);
 
         const SvxBrushItem* pBrush = rColumn.GetDoc().GetAttr(aPos, ATTR_BACKGROUND);
         Color backgroundColor = pBrush->GetColor();
-        mrFilterEntries.addTextColor(textColor);
-        mrFilterEntries.addBackgroundColor(backgroundColor);
+        if (backgroundColor != COL_AUTO)
+            mrFilterEntries.addBackgroundColor(backgroundColor);
 
         if (rCell.hasString())
         {
