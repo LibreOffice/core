@@ -32,7 +32,7 @@ class Tdf118883(UITestCase):
 
         calc_document = self.ui_test.get_component()
 
-        # Without the fix in place, this test would have failed wiht
+        # Without the fix in place, this test would have failed with
         # AssertionError: 1 != 0
         self.assertEqual(1, calc_document.DrawPages[0].getCount())
 
