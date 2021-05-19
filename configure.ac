@@ -986,7 +986,6 @@ ios*) # iOS
     enable_coinmp=no
     enable_lpsolve=no
     enable_extension_integration=no
-    enable_scripting=no
     enable_xmlhelp=no
     with_ppds=no
     if test "$enable_ios_simulator" = "yes"; then
