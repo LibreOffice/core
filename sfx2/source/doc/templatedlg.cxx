@@ -221,8 +221,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
         mxMoreTemplatesButton->set_sensitive(false);
     else
         mxMoreTemplatesButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, LinkClickHdl));
-    mxListViewButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, ListViewHdl));
-    mxThumbnailViewButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, ThumbnailViewHdl));
+    mxListViewButton->connect_toggled(LINK(this, SfxTemplateManagerDlg, ListViewHdl));
+    mxThumbnailViewButton->connect_toggled(LINK(this, SfxTemplateManagerDlg, ThumbnailViewHdl));
 
     mxSearchFilter->connect_changed(LINK(this, SfxTemplateManagerDlg, SearchUpdateHdl));
     mxSearchFilter->connect_focus_in(LINK( this, SfxTemplateManagerDlg, GetFocusHdl ));
@@ -819,7 +819,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, LoseFocusHdl, weld::Widget&, void)
     }
 }
 
-IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ListViewHdl, weld::Button&, void )
+IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ListViewHdl, weld::ToggleButton&, void )
 {
     setTemplateViewMode(TemplateViewMode::eListView);
 
@@ -829,7 +829,7 @@ IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ListViewHdl, weld::Button&, void )
         mxSearchView->ListView::grab_focus();
 }
 
-IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ThumbnailViewHdl, weld::Button&, void )
+IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ThumbnailViewHdl, weld::ToggleButton&, void )
 {
     setTemplateViewMode(TemplateViewMode::eThumbnailView);
     bMakeSelItemVisible = true;

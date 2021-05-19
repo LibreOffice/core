@@ -86,8 +86,8 @@ protected:
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
-    DECL_LINK(ListViewHdl, weld::Button&, void);
-    DECL_LINK(ThumbnailViewHdl, weld::Button&, void);
+    DECL_LINK(ListViewHdl, weld::ToggleButton&, void);
+    DECL_LINK(ThumbnailViewHdl, weld::ToggleButton&, void);
     DECL_LINK(FocusRectLocalHdl, weld::Widget&, tools::Rectangle);
     DECL_LINK(FocusRectSearchHdl, weld::Widget&, tools::Rectangle);
 

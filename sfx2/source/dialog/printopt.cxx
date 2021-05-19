@@ -72,9 +72,9 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage(weld::Container* pPag
     m_xPrinterOutputRB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl ) );
     m_xPrintFileOutputRB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl ) );
 
-    m_xReduceTransparencyCB->connect_clicked( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl ) );
-    m_xReduceGradientsCB->connect_clicked( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl ) );
-    m_xReduceBitmapsCB->connect_clicked( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl ) );
+    m_xReduceTransparencyCB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl ) );
+    m_xReduceGradientsCB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl ) );
+    m_xReduceBitmapsCB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl ) );
 
     m_xReduceGradientsStripesRB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl ) );
     m_xReduceBitmapsResolutionRB->connect_toggled( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl ) );
@@ -216,7 +216,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
     }
 }
 
-IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, weld::Button&, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, weld::ToggleButton&, void )
 {
     const bool bReduceTransparency = m_xReduceTransparencyCB->get_active();
 
@@ -226,7 +226,7 @@ IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, wel
     m_xTransparencyCB->set_sensitive( !bReduceTransparency );
 }
 
-IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, weld::Button&, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, weld::ToggleButton&, void )
 {
     const bool bEnable = m_xReduceGradientsCB->get_active();
 
@@ -237,7 +237,7 @@ IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, weld::
     ToggleReduceGradientsStripesRBHdl(*m_xReduceGradientsStripesRB);
 }
 
-IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, weld::Button&, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, weld::ToggleButton&, void )
 {
     const bool bEnable = m_xReduceBitmapsCB->get_active();
 

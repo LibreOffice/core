@@ -44,6 +44,7 @@ class SfxVersionDialog : public SfxDialogController
     DECL_LINK(DClickHdl_Impl, weld::TreeView&, bool);
     DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
     DECL_LINK(ButtonHdl_Impl, weld::Button&, void);
+    DECL_LINK(ToggleHdl_Impl, weld::ToggleButton&, void);
     void Init_Impl();
     void Open_Impl();
 
