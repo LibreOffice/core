@@ -58,6 +58,9 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
 {
     m_xDialog->set_centered_on_parent(false);
     mxRadioRestore->connect_toggled(LINK(this, SafeModeDialog, RadioBtnHdl));
+    mxRadioConfigure->connect_toggled(LINK(this, SafeModeDialog, RadioBtnHdl));
+    mxRadioExtensions->connect_toggled(LINK(this, SafeModeDialog, RadioBtnHdl));
+    mxRadioReset->connect_toggled(LINK(this, SafeModeDialog, RadioBtnHdl));
 
     mxBtnContinue->connect_clicked(LINK(this, SafeModeDialog, DialogBtnHdl));
     mxBtnRestart->connect_clicked(LINK(this, SafeModeDialog, DialogBtnHdl));
@@ -193,8 +196,10 @@ void SafeModeDialog::applyChanges()
         css::uno::Reference< css::task::XInteractionHandler >());
 }
 
-IMPL_LINK_NOARG(SafeModeDialog, RadioBtnHdl, weld::ToggleButton&, void)
+IMPL_LINK(SafeModeDialog, RadioBtnHdl, weld::ToggleButton&, rButton, void)
 {
+    if (!rButton.get_active())
+        return;
     if (mxRadioRestore->get_active())
     {
         // Enable the currently selected box

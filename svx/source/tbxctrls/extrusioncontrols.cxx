@@ -443,9 +443,9 @@ void ExtrusionDepthWindow::statusChanged(
     }
 }
 
-IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl, weld::ToggleButton&, void)
+IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::ToggleButton&, rButton, void)
 {
-    if (mbSettingValue)
+    if (mbSettingValue || !rButton.get_active())
         return;
 
     if (mxCustom->get_active())
@@ -604,6 +604,8 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::PopupWindowController* pCo
     mxLightingSet->SetOutputSizePixel(aSize);
 
     mxBright->connect_toggled(LINK(this, ExtrusionLightingWindow, SelectToolbarMenuHdl));
+    mxNormal->connect_toggled(LINK(this, ExtrusionLightingWindow, SelectToolbarMenuHdl));
+    mxDim->connect_toggled(LINK(this, ExtrusionLightingWindow, SelectToolbarMenuHdl));
 
     AddStatusListener( g_sExtrusionLightingDirection );
     AddStatusListener( g_sExtrusionLightingIntensity );
@@ -707,8 +709,11 @@ IMPL_LINK_NOARG(ExtrusionLightingWindow, SelectValueSetHdl, ValueSet*, void)
     mxControl->EndPopupMode();
 }
 
-IMPL_LINK_NOARG(ExtrusionLightingWindow, SelectToolbarMenuHdl, weld::ToggleButton&, void)
+IMPL_LINK(ExtrusionLightingWindow, SelectToolbarMenuHdl, weld::ToggleButton&, rButton, void)
 {
+    if (!rButton.get_active())
+        return;
+
     int nLevel;
     if (mxBright->get_active())
         nLevel = 0;
@@ -798,6 +803,9 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(svt::PopupWindowController* pCont
     , mxMetal(m_xBuilder->weld_radio_button("metal"))
 {
     mxWireFrame->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
+    mxMatt->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
+    mxPlastic->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
+    mxMetal->connect_toggled(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
 
     AddStatusListener( g_sExtrusionSurface );
 }
@@ -838,8 +846,11 @@ void ExtrusionSurfaceWindow::statusChanged(
     }
 }
 
-IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl, weld::ToggleButton&, void)
+IMPL_LINK(ExtrusionSurfaceWindow, SelectHdl, weld::ToggleButton&, rButton, void)
 {
+    if (!rButton.get_active())
+        return;
+
     sal_Int32 nSurface;
     if (mxWireFrame->get_active())
         nSurface = 0;

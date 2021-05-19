@@ -163,12 +163,12 @@ FmSearchDialog::~FmSearchDialog()
 void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sInitialText)
 {
     //the initialization of all the Controls
-    m_prbSearchForText->connect_clicked(LINK(this, FmSearchDialog, OnClickedFieldRadios));
-    m_prbSearchForNull->connect_clicked(LINK(this, FmSearchDialog, OnClickedFieldRadios));
-    m_prbSearchForNotNull->connect_clicked(LINK(this, FmSearchDialog, OnClickedFieldRadios));
+    m_prbSearchForText->connect_toggled(LINK(this, FmSearchDialog, OnToggledSearchRadio));
+    m_prbSearchForNull->connect_toggled(LINK(this, FmSearchDialog, OnToggledSearchRadio));
+    m_prbSearchForNotNull->connect_toggled(LINK(this, FmSearchDialog, OnToggledSearchRadio));
 
-    m_prbAllFields->connect_clicked(LINK(this, FmSearchDialog, OnClickedFieldRadios));
-    m_prbSingleField->connect_clicked(LINK(this, FmSearchDialog, OnClickedFieldRadios));
+    m_prbAllFields->connect_toggled(LINK(this, FmSearchDialog, OnToggledFieldRadios));
+    m_prbSingleField->connect_toggled(LINK(this, FmSearchDialog, OnToggledFieldRadios));
 
     m_pbSearchAgain->connect_clicked(LINK(this, FmSearchDialog, OnClickedSearchAgain));
     m_ppbApproxSettings->connect_clicked(LINK(this, FmSearchDialog, OnClickedSpecialSettings));
@@ -240,24 +240,29 @@ short FmSearchDialog::run()
     return nRet;
 }
 
-IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, weld::Button&, rButton, void)
+IMPL_LINK(FmSearchDialog, OnToggledSearchRadio, weld::ToggleButton&, rButton, void)
 {
-    if ((&rButton == m_prbSearchForText.get()) || (&rButton == m_prbSearchForNull.get()) || (&rButton == m_prbSearchForNotNull.get()))
+    if (!rButton.get_active())
+        return;
+    EnableSearchForDependees(true);
+}
+
+IMPL_LINK(FmSearchDialog, OnToggledFieldRadios, weld::ToggleButton&, rButton, void)
+{
+    if (!rButton.get_active())
+        return;
+
+    // en- or disable field list box accordingly
+    if (m_prbSingleField->get_active())
     {
-        EnableSearchForDependees(true);
+        m_plbField->set_sensitive(true);
+        m_pSearchEngine->RebuildUsedFields(m_plbField->get_active());
     }
     else
-        // en- or disable field list box accordingly
-        if (&rButton == m_prbSingleField.get())
-        {
-            m_plbField->set_sensitive(true);
-            m_pSearchEngine->RebuildUsedFields(m_plbField->get_active());
-        }
-        else
-        {
-            m_plbField->set_sensitive(false);
-            m_pSearchEngine->RebuildUsedFields(-1);
-        }
+    {
+        m_plbField->set_sensitive(false);
+        m_pSearchEngine->RebuildUsedFields(-1);
+    }
 }
 
 IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain, weld::Button&, void)
@@ -638,19 +643,19 @@ void FmSearchDialog::LoadParams()
         nInitialField = 0;
     m_plbField->set_active(nInitialField);
     OnFieldSelected(*m_plbField);
-    // all fields/single field (AFTER selecting the field because OnClickedFieldRadios expects a valid value there)
+    // all fields/single field (AFTER selecting the field because OnToggledFieldRadios expects a valid value there)
     if (aParams.bAllFields)
     {
         m_prbSingleField->set_active(false);
         m_prbAllFields->set_active(true);
-        OnClickedFieldRadios(*m_prbAllFields);
-        // OnClickedFieldRadios also calls to RebuildUsedFields
+        OnToggledFieldRadios(*m_prbAllFields);
+        // OnToggledFieldRadios also calls to RebuildUsedFields
     }
     else
     {
         m_prbAllFields->set_active(false);
         m_prbSingleField->set_active(true);
-        OnClickedFieldRadios(*m_prbSingleField);
+        OnToggledFieldRadios(*m_prbSingleField);
     }
 
     m_plbPosition->set_active(aParams.nPosition);
@@ -708,7 +713,7 @@ void FmSearchDialog::LoadParams()
         case 2: m_prbSearchForNotNull->set_active(true); break;
         default: m_prbSearchForText->set_active(true); break;
     }
-    OnClickedFieldRadios(*m_prbSearchForText);
+    OnToggledFieldRadios(*m_prbSearchForText);
 }
 
 void FmSearchDialog::SaveParams() const
