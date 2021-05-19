@@ -2625,7 +2625,7 @@ DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbG
 DbFilterField::~DbFilterField()
 {
     if (m_nControlClass == css::form::FormComponentType::CHECKBOX)
-        static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( Link<weld::Button&,void>() );
+        static_cast<CheckBoxControl*>(m_pWindow.get())->SetToggleHdl(Link<weld::CheckButton&,void>());
 
 }
 
@@ -2686,7 +2686,7 @@ void DbFilterField::CreateControl(BrowserDataWin* pParent, const Reference< css:
         case css::form::FormComponentType::CHECKBOX:
             m_pWindow = VclPtr<CheckBoxControl>::Create(pParent);
             m_pWindow->SetPaintTransparent( true );
-            static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( LINK( this, DbFilterField, OnClick ) );
+            static_cast<CheckBoxControl*>(m_pWindow.get())->SetToggleHdl(LINK(this, DbFilterField, OnToggle));
 
             m_pPainter = VclPtr<CheckBoxControl>::Create(pParent);
             m_pPainter->SetPaintTransparent( true );
@@ -3057,7 +3057,7 @@ void DbFilterField::UpdateFromField(const Reference< XColumn >& /*_rxField*/, co
     OSL_FAIL( "DbFilterField::UpdateFromField: cannot update a filter control from a field!" );
 }
 
-IMPL_LINK_NOARG(DbFilterField, OnClick, weld::Button&, void)
+IMPL_LINK_NOARG(DbFilterField, OnToggle, weld::CheckButton&, void)
 {
     TriState eState = static_cast<CheckBoxControl*>(m_pWindow.get())->GetState();
     OUStringBuffer aTextBuf;
@@ -3778,7 +3778,7 @@ void FmXCheckBoxCell::disposing()
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
-    m_pBox->SetClickHdl(Link<weld::Button&,void>());
+    m_pBox->SetToggleHdl(Link<weld::CheckButton&,void>());
     m_pBox = nullptr;
 
     FmXDataCell::disposing();

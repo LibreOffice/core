@@ -515,7 +515,7 @@ namespace svt
     {
         std::unique_ptr<weld::CheckButton> m_xBox;
         weld::TriStateEnabled m_aModeState;
-        Link<weld::Button&,void> m_aClickLink;
+        Link<weld::CheckButton&,void> m_aToggleLink;
         Link<LinkParamNone*,void> m_aModify1Hdl;
         Link<LinkParamNone*,void> m_aModify2Hdl;
 
@@ -524,7 +524,7 @@ namespace svt
         virtual ~CheckBoxControl() override;
         virtual void dispose() override;
 
-        void SetClickHdl(const Link<weld::Button&,void>& rHdl) {m_aClickLink = rHdl;}
+        void SetToggleHdl(const Link<weld::CheckButton&,void>& rHdl) {m_aToggleLink = rHdl;}
 
         // sets a link to call when the text is changed by the user
         void SetModifyHdl(const Link<LinkParamNone*,void>& rHdl)

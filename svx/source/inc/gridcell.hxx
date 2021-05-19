@@ -672,7 +672,7 @@ private:
 
     void SetList(const css::uno::Any& rItems, bool bComboBox);
     void CreateControl(BrowserDataWin* pParent, const css::uno::Reference< css::beans::XPropertySet >& xModel);
-    DECL_LINK( OnClick, weld::Button&, void );
+    DECL_LINK(OnToggle, weld::CheckButton&, void);
 
     css::uno::Sequence< OUString >  m_aValueList;
     OUString    m_aText;
