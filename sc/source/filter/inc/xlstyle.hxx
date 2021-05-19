@@ -547,6 +547,7 @@ struct XclCellArea
     sal_uInt8           mnPattern;      /// Fill pattern.
 
     explicit            XclCellArea();
+    explicit            XclCellArea(sal_uInt8 nPattern);
 
     /** Returns true, if the area represents transparent state. */
     bool                IsTransparent() const;
