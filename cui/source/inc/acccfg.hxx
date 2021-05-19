@@ -122,7 +122,7 @@ private:
     DECL_LINK(Save, weld::Button&, void);
     DECL_LINK(Load, weld::Button&, void);
     DECL_LINK(Default, weld::Button&, void);
-    DECL_LINK(RadioHdl, weld::Button&, void);
+    DECL_LINK(RadioHdl, weld::ToggleButton&, void);
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
     DECL_LINK(FocusOut_Impl, weld::Widget&, void);
     DECL_LINK(TimeOut_Impl, Timer*, void);
