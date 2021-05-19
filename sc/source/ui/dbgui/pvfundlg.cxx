@@ -793,7 +793,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     // *** AUTO SHOW ***
 
     m_xCbShow->set_active( maLabelData.maShowInfo.IsEnabled );
-    m_xCbShow->connect_clicked( LINK( this, ScDPSubtotalOptDlg, CheckHdl ) );
+    m_xCbShow->connect_toggled( LINK( this, ScDPSubtotalOptDlg, CheckHdl ) );
 
     m_xLbShowFrom->set_active(FromDataPilotFieldShowItemsMode(maLabelData.maShowInfo.ShowItemsMode));
     tools::Long nCount = static_cast< tools::Long >( maLabelData.maShowInfo.ItemCount );
@@ -879,7 +879,7 @@ IMPL_LINK(ScDPSubtotalOptDlg, RadioClickHdl, weld::Button&, rBtn, void)
     m_xLbSortBy->set_sensitive(&rBtn != m_xRbSortMan.get());
 }
 
-IMPL_LINK(ScDPSubtotalOptDlg, CheckHdl, weld::Button&, rCBox, void)
+IMPL_LINK(ScDPSubtotalOptDlg, CheckHdl, weld::ToggleButton&, rCBox, void)
 {
     if (&rCBox == m_xCbShow.get())
     {
