@@ -1498,6 +1498,9 @@ Reference< XShape > const & Shape::createAndInsert(
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );
 
                 nTextRotateAngle -= mnDiagramRotation;
+                /* OOX measures text rotation clockwise in 1/60000th degrees,
+                   relative to the containing shape. setTextRotateAngle wants degrees anticlockwise. */
+                nTextRotateAngle = -1 * nTextRotateAngle / 60000;
 
                 if (getTextBody()->getTextProperties().moUpright)
                 {
@@ -1506,18 +1509,15 @@ Reference< XShape > const & Shape::createAndInsert(
                     // shape containing it is rotated.
                     // Hence, we rotate the text into the opposite direction of
                     // the rotation of the shape, by as much as the shape was rotated.
-                    mpCustomShapePropertiesPtr->setTextRotateAngle(mnRotation / 60000);
+                    mpCustomShapePropertiesPtr->setTextRotateAngle((mnRotation / 60000) + nTextRotateAngle);
                     // Also put the initial angles away in a GrabBag.
                     putPropertyToGrabBag("Upright", Any(true));
                     putPropertyToGrabBag("nShapeRotationAtImport", Any(mnRotation / 60000));
-                    putPropertyToGrabBag("nTextRotationAtImport", Any(mnRotation / 60000));
+                    putPropertyToGrabBag("nTextRotationAtImport", Any(nTextRotateAngle));
                 }
                 else
                 {
-                    /* OOX measures text rotation clockwise in 1/60000th degrees,
-                       relative to the containing shape. setTextRotateAngle wants
-                       degrees anticlockwise. */
-                    mpCustomShapePropertiesPtr->setTextRotateAngle(-1 * nTextRotateAngle / 60000);
+                    mpCustomShapePropertiesPtr->setTextRotateAngle(nTextRotateAngle);
                 }
 
                 auto sHorzOverflow = getTextBody()->getTextProperties().msHorzOverflow;

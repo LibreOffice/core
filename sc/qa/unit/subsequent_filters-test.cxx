@@ -295,6 +295,7 @@ public:
     void testShapeRotationImport();
     void testShapeDisplacementOnRotationImport();
     void testTextBoxBodyUpright();
+    void testTextBoxBodyRotateAngle();
     void testTextLengthDataValidityXLSX();
     void testDeleteCircles();
     void testDrawCircleInMergeCells();
@@ -482,6 +483,7 @@ public:
     CPPUNIT_TEST(testShapeRotationImport);
     CPPUNIT_TEST(testShapeDisplacementOnRotationImport);
     CPPUNIT_TEST(testTextBoxBodyUpright);
+    CPPUNIT_TEST(testTextBoxBodyRotateAngle);
     CPPUNIT_TEST(testTextLengthDataValidityXLSX);
     CPPUNIT_TEST(testDeleteCircles);
     CPPUNIT_TEST(testDrawCircleInMergeCells);
@@ -5269,6 +5271,31 @@ void ScFiltersTest::testTextBoxBodyUpright()
         }
     }
     CPPUNIT_ASSERT_EQUAL(sal_Int32(90), nAngle);
+}
+
+void ScFiltersTest::testTextBoxBodyRotateAngle()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf141644.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf141644.xlsx", xDocSh.is());
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocSh->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
+
+    // Check the new textRotateAngle.
+    sal_Int32 nAngle;
+    uno::Any aGeom = xShapeProperties->getPropertyValue("CustomShapeGeometry");
+    auto aGeomSeq = aGeom.get<Sequence<beans::PropertyValue>>();
+    for (const auto& aProp : std::as_const(aGeomSeq))
+    {
+        if (aProp.Name == "TextPreRotateAngle")
+        {
+            aProp.Value >>= nAngle;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-270), nAngle);
 }
 
 void ScFiltersTest::testTextLengthDataValidityXLSX()

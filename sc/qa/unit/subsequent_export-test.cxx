@@ -5653,8 +5653,8 @@ void ScExportTest::testTdf137000_handle_upright()
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDrawing);
 
-    assertXPathNoAttribute(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr",
-                           "rot");
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr",
+                           "rot", "-5400000");
 }
 
 void ScExportTest::testTdf126305_DataValidatyErrorAlert()
