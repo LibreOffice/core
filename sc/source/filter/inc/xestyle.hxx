@@ -373,8 +373,11 @@ struct XclExpCellArea : public XclCellArea
 {
     sal_uInt32          mnForeColorId;  /// Foreground color ID.
     sal_uInt32          mnBackColorId;  /// Background color ID.
+    sal_uInt32 maForeColor; // Actual foreground color
+    sal_uInt32 maBackColor; // Actual background color
 
     explicit            XclExpCellArea();
+    explicit            XclExpCellArea(sal_uInt32 aForeColor, sal_uInt32 aBackColor);
 
     /** Fills the area attributes from the passed item set.
         @return  true = At least one area item is set. */
@@ -724,6 +727,7 @@ public:
     XclExpDxf( const XclExpRoot& rRoot, std::unique_ptr<XclExpCellAlign> pAlign, std::unique_ptr<XclExpCellBorder> pBorder,
             std::unique_ptr<XclExpDxfFont> pFont, std::unique_ptr<XclExpNumFmt> pNumberFmt,
             std::unique_ptr<XclExpCellProt> pProt, std::unique_ptr<XclExpColor> pColor);
+    XclExpDxf( const XclExpRoot& rRoot, std::unique_ptr<XclExpCellArea> pCellArea);
     virtual ~XclExpDxf() override;
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
@@ -736,6 +740,7 @@ private:
     std::unique_ptr<XclExpNumFmt> mpNumberFmt;
     std::unique_ptr<XclExpCellProt> mpProt;
     std::unique_ptr<XclExpColor> mpColor;
+    std::unique_ptr<XclExpCellArea> mpCellArea;
 };
 
 class XclExpDxfs : public XclExpRecordBase, protected XclExpRoot
@@ -744,11 +749,15 @@ public:
     XclExpDxfs( const XclExpRoot& rRoot );
 
     sal_Int32 GetDxfId(const OUString& rName);
+    sal_Int32 GetDxfByBackColor(sal_uInt32 nColor);
+    sal_Int32 GetDxfByForeColor(sal_uInt32 nColor);
 
     virtual void SaveXml( XclExpXmlStream& rStrm) override;
 private:
     typedef std::vector< std::unique_ptr<XclExpDxf> > DxfContainer;
     std::map<OUString, sal_Int32> maStyleNameToDxfId;
+    std::map<sal_uInt32, sal_Int32> maBackColorToDxfId;
+    std::map<sal_uInt32, sal_Int32> maForeColorToDxfId;
     DxfContainer maDxf;
     std::unique_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
 };

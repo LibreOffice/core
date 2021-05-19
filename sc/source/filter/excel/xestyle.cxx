@@ -46,6 +46,8 @@
 #include <xestring.hxx>
 #include <xltools.hxx>
 #include <conditio.hxx>
+#include <dbdata.hxx>
+#include <filterentries.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <oox/export/utils.hxx>
@@ -1865,7 +1867,18 @@ void XclExpCellBorder::SaveXml( XclExpXmlStream& rStrm ) const
 
 XclExpCellArea::XclExpCellArea() :
     mnForeColorId( XclExpPalette::GetColorIdFromIndex( mnForeColor ) ),
-    mnBackColorId( XclExpPalette::GetColorIdFromIndex( mnBackColor ) )
+    mnBackColorId( XclExpPalette::GetColorIdFromIndex( mnBackColor ) ),
+    maForeColor(0),
+    maBackColor(0)
+{
+}
+
+XclExpCellArea::XclExpCellArea(sal_uInt32 aForeColor, sal_uInt32 aBackColor)
+    : XclCellArea(EXC_PATT_SOLID)
+    , mnForeColorId(0)
+    , mnBackColorId(0)
+    , maForeColor(aForeColor)
+    , maBackColor(aBackColor)
 {
 }
 
@@ -1942,15 +1955,44 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
 
     XclExpPalette& rPalette = rStrm.GetRoot().GetPalette();
 
-    if( mnPattern == EXC_PATT_NONE || ( mnForeColor == 0 && mnBackColor == 0 ) )
+    if (mnPattern == EXC_PATT_NONE
+        || (mnForeColor == 0 && mnBackColor == 0 && maForeColor == 0 && maBackColor == 0))
+    {
         rStyleSheet->singleElement(XML_patternFill, XML_patternType, ToPatternType(mnPattern));
+    }
     else
     {
         rStyleSheet->startElement(XML_patternFill, XML_patternType, ToPatternType(mnPattern));
-        rStyleSheet->singleElement( XML_fgColor,
-                XML_rgb, XclXmlUtils::ToOString(rPalette.GetColor(mnForeColor)) );
-        rStyleSheet->singleElement( XML_bgColor,
-                XML_rgb, XclXmlUtils::ToOString(rPalette.GetColor(mnBackColor)) );
+        if (maForeColor != 0 || maBackColor != 0)
+        {
+            if (maForeColor != 0)
+            {
+                rStyleSheet->singleElement(
+                    XML_fgColor, XML_rgb,
+                    XclXmlUtils::ToOString(Color(ColorTransparency, maForeColor)));
+            }
+
+            if (maBackColor != 0)
+            {
+                rStyleSheet->singleElement(
+                    XML_bgColor, XML_rgb,
+                    XclXmlUtils::ToOString(Color(ColorTransparency, maBackColor)));
+            }
+        }
+        else
+        {
+            if (mnForeColor != 0)
+            {
+                rStyleSheet->singleElement(XML_fgColor, XML_rgb,
+                                           XclXmlUtils::ToOString(rPalette.GetColor(mnForeColor)));
+            }
+            if (mnBackColor != 0)
+            {
+                rStyleSheet->singleElement(XML_bgColor, XML_rgb,
+                                           XclXmlUtils::ToOString(rPalette.GetColor(mnBackColor)));
+            }
+        }
+
         rStyleSheet->endElement( XML_patternFill );
     }
 
@@ -3013,9 +3055,42 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     xFormatter->FillKeywordTableForExcel( *mpKeywordTable );
 
     SCTAB nTables = rRoot.GetDoc().GetTableCount();
-    sal_Int32 nIndex = 0;
+    sal_Int32 nForeColorIndex = 0;
+    sal_Int32 nBackColorIndex = 0;
+    sal_Int32 nCondFormattingIndex = 0;
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)
     {
+        // Color filters
+        const ScDBData* pData = rRoot.GetDoc().GetDBCollection()->GetDBNearCursor(0, 0, 0);
+        ScRange aRange;
+        pData->GetArea(aRange);
+        ScFilterEntries aFilterEntries;
+        rRoot.GetDoc().GetFilterEntriesArea(aRange.aStart.Col(), aRange.aStart.Row(),
+                                            aRange.aEnd.Row(), nTab, true, aFilterEntries);
+
+        for (auto rColor : aFilterEntries.getBackgroundColors())
+        {
+            sal_uInt32 nColor = static_cast<sal_uInt32>(rColor);
+            if (maBackColorToDxfId.emplace(nColor, nBackColorIndex).second)
+            {
+                std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(0, nColor));
+                maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
+                nBackColorIndex++;
+            }
+
+        }
+        for (auto& rColor : aFilterEntries.getTextColors())
+        {
+            sal_uInt32 nColor = static_cast<sal_uInt32>(rColor);
+            if (maForeColorToDxfId.emplace(nColor, nForeColorIndex).second)
+            {
+                std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(nColor, 0));
+                maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
+                nForeColorIndex++;
+            }
+        }
+
+        // Conditional formatting
         ScConditionalFormatList* pList = rRoot.GetDoc().GetCondFormList(nTab);
         if (pList)
         {
@@ -3044,7 +3119,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         aStyleName = pEntry->GetStyleName();
                     }
 
-                    if (maStyleNameToDxfId.emplace(aStyleName, nIndex).second)
+                    if (maStyleNameToDxfId.emplace(aStyleName, nCondFormattingIndex).second)
                     {
                         SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para);
                         if(!pStyle)
@@ -3089,7 +3164,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                         maDxf.push_back(std::make_unique<XclExpDxf>( rRoot, std::move(pAlign), std::move(pBorder),
                                 std::move(pFont), std::move(pNumFormat), std::move(pCellProt), std::move(pColor) ));
-                        ++nIndex;
+                        ++nCondFormattingIndex;
                     }
 
                 }
@@ -3102,6 +3177,22 @@ sal_Int32 XclExpDxfs::GetDxfId( const OUString& rStyleName )
 {
     std::map<OUString, sal_Int32>::iterator itr = maStyleNameToDxfId.find(rStyleName);
     if(itr!= maStyleNameToDxfId.end())
+        return itr->second;
+    return -1;
+}
+
+sal_Int32 XclExpDxfs::GetDxfByBackColor( sal_uInt32 nColor )
+{
+    std::map<sal_uInt32, sal_Int32>::iterator itr = maBackColorToDxfId.find(nColor);
+    if(itr!= maBackColorToDxfId.end())
+        return itr->second;
+    return -1;
+}
+
+sal_Int32 XclExpDxfs::GetDxfByForeColor( sal_uInt32 nColor )
+{
+    std::map<sal_uInt32, sal_Int32>::iterator itr = maForeColorToDxfId.find(nColor);
+    if(itr!= maForeColorToDxfId.end())
         return itr->second;
     return -1;
 }
@@ -3135,6 +3226,12 @@ XclExpDxf::XclExpDxf( const XclExpRoot& rRoot, std::unique_ptr<XclExpCellAlign> 
 {
 }
 
+XclExpDxf::XclExpDxf(const XclExpRoot& rRoot, std::unique_ptr<XclExpCellArea> pCellArea)
+    : XclExpRoot(rRoot)
+    , mpCellArea(std::move(pCellArea))
+{
+}
+
 XclExpDxf::~XclExpDxf()
 {
 }
@@ -3156,6 +3253,8 @@ void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
         mpBorder->SaveXml(rStrm);
     if (mpProt)
         mpProt->SaveXml(rStrm);
+    if (mpCellArea)
+        mpCellArea->SaveXml(rStrm);
     rStyleSheet->endElement( XML_dxf );
 }
 
