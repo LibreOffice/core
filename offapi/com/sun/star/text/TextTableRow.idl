@@ -105,6 +105,14 @@ published service TextTableRow
         @since LibreOffice 6.1
      */
     [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
+
+    /** If TRUE, the table row wasn't deleted or inserted with its tracked cell content
+
+        @since LibreOffice 7.2
+     */
+
+        [optional, property, maybevoid] boolean IsNotTracked;
+
 };
 
 

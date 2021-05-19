@@ -1226,21 +1226,6 @@ const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 n
     return pTable->GetPrevBoxStartNode(USHRT_MAX, USHRT_MAX);
 }
 
-static bool IsBoxEmpty( const SwTableBox *pBox )
-{
-    const SwStartNode *pSttNd = pBox->GetSttNd();
-    if( pSttNd &&
-        pSttNd->GetIndex() + 2 == pSttNd->EndOfSectionIndex() )
-    {
-        const SwContentNode *pCNd =
-            pSttNd->GetNodes()[pSttNd->GetIndex()+1]->GetContentNode();
-        if( pCNd && !pCNd->Len() )
-            return true;
-    }
-
-    return false;
-}
-
 sal_uInt16 HTMLTable::GetTopCellSpace( sal_uInt16 nRow ) const
 {
     sal_uInt16 nSpace = m_nCellPadding;
@@ -1413,7 +1398,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 pFrameFormat->ResetFormatAttr( RES_BACKGROUND );
 
             // Only set format if there's a value or the box is empty
-            if( bHasNumFormat && (bHasValue || IsBoxEmpty(pBox)) )
+            if( bHasNumFormat && (bHasValue || pBox->IsEmpty()) )
             {
                 bool bLock = pFrameFormat->GetDoc()->GetNumberFormatter()
                                      ->IsTextFormat( nNumFormat );
