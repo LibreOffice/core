@@ -360,13 +360,20 @@ public:
 class XclExpAutofilter : public XclExpRecord, protected XclExpRoot
 {
 private:
-    enum FilterType { FilterCondition, MultiValue, BlankValue };
+    enum FilterType
+    {
+        FilterCondition,
+        MultiValue,
+        BlankValue,
+        ColorValue
+    };
     FilterType              meType;
     sal_uInt16              nCol;
     sal_uInt16              nFlags;
     bool                    bHasBlankValue;
     ExcFilterCondition      aCond[ 2 ];
     std::vector<std::pair<OUString, bool>> maMultiValues; // first->values, second->bDateFormat
+    std::vector<std::pair<::Color, bool>> maColorValues; // first->Color, second->bIsBackgroundColor (vs. TextColor)
 
     bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
                                 sal_uInt8 nOp, double fVal, const OUString* pText,
@@ -383,6 +390,7 @@ public:
     bool                    HasCondition() const;
     bool                    AddEntry( const ScQueryEntry& rEntry );
     void                    AddMultiValueEntry( const ScQueryEntry& rEntry );
+    void AddColorEntry( const ScQueryEntry& rEntry );
 
     virtual void            SaveXml( XclExpXmlStream& rStrm ) override;
 };
