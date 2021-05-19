@@ -43,6 +43,7 @@
 #include <xelink.hxx>
 #include <xename.hxx>
 #include <xlname.hxx>
+#include <xestyle.hxx>
 
 #include <xcl97rec.hxx>
 #include <tabprotection.hxx>
@@ -711,6 +712,10 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     }
     else if(rEntry.IsQueryByNonEmpty())
         bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, 0.0, nullptr, true );
+    else if (rEntry.IsQueryByTextColor() || rEntry.IsQueryByBackgroundColor())
+    {
+        AddColorEntry(rEntry);
+    }
     // other conditions
     else
     {
@@ -794,6 +799,17 @@ void XclExpAutofilter::AddMultiValueEntry( const ScQueryEntry& rEntry )
     }
 }
 
+void XclExpAutofilter::AddColorEntry(const ScQueryEntry& rEntry)
+{
+    meType = ColorValue;
+    const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+    for (const auto& rItem : rItems)
+    {
+        maColorValues.push_back(
+            std::make_pair(rItem.maColor, rItem.meType == ScQueryEntry::ByBackgroundColor));
+    }
+}
+
 void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
 {
     rStrm << nCol << nFlags;
@@ -835,8 +851,22 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             aCond[ 0 ].SaveXml( rStrm );
             aCond[ 1 ].SaveXml( rStrm );
             rWorksheet->endElement( XML_customFilters );
-            // OOXTODO: XLM_colorFilter, XML_dynamicFilter,
-            // XML_extLst, XML_filters, XML_iconFilter, XML_top10
+            // OOXTODO: XML_dynamicFilter, XML_extLst, XML_filters, XML_iconFilter
+        }
+        break;
+        case ColorValue:
+        {
+            if (!maColorValues.empty())
+            {
+                Color color = maColorValues[0].first;
+                sal_uInt32 nColor = static_cast<sal_uInt32>(color);
+                sal_Int32 nDxfId;
+                if (maColorValues[0].second) // is background color
+                    nDxfId = GetDxfs().GetDxfByBackColor(nColor);
+                else
+                    nDxfId = GetDxfs().GetDxfByForeColor(nColor);
+                rWorksheet->singleElement(XML_colorFilter, XML_dxfId, OString::number(nDxfId));
+            }
         }
         break;
         case BlankValue:
