@@ -459,6 +459,10 @@ private:
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_TEXT);
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             }
+            else if (rItem.meType == ScQueryEntry::ByDate)
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+            }
             else if (rItem.meType == ScQueryEntry::ByTextColor
                      || rItem.meType == ScQueryEntry::ByBackgroundColor)
             {
