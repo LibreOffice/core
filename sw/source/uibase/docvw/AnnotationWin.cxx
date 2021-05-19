@@ -62,6 +62,7 @@
 #include "AnchorOverlayObject.hxx"
 #include "OverlayRanges.hxx"
 #include "SidebarTxtControl.hxx"
+#include "SidebarWinAcc.hxx"
 
 #include <memory>
 
