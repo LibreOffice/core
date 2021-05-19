@@ -44,6 +44,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138892_noNumbering, "tdf138892_noNumbering.docx"
     CPPUNIT_ASSERT_MESSAGE("Para3: <blank line>", getProperty<OUString>(getParagraph(3), "NumberingStyleName").isEmpty());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf132752, "tdf132752.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1801), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
 {
     // Don't crash when document is opened
