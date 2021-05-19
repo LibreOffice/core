@@ -695,7 +695,7 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     mxReverseOrderBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
     mxCollateBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
     mxSingleJobsBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
-    mxPagesBtn->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
+    mxBrochureBtn->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
 
     // setup select hdl
     mxPrinters->connect_changed( LINK( this, PrintDialog, SelectHdl ) );
@@ -1517,7 +1517,6 @@ void PrintDialog::setupOptionalUI()
                 pVal->Value >>= bVal;
             mxBrochureBtn->set_active( bVal );
             mxBrochureBtn->set_sensitive( maPController->isUIOptionEnabled( aPropertyName ) && pVal != nullptr );
-            mxBrochureBtn->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
 
             maPropertyToWindowMap[aPropertyName].emplace_back(mxBrochureBtn.get());
             maControlToPropertyMap[mxBrochureBtn.get()] = aPropertyName;
@@ -1843,9 +1842,9 @@ IMPL_LINK(PrintDialog, ToggleHdl, weld::ToggleButton&, rButton, void)
                                  makeAny( bChecked ) );
         maUpdatePreviewIdle.Start();
     }
-    else if( &rButton == mxBrochureBtn.get() )
+    else if (&rButton == mxBrochureBtn.get())
     {
-        PropertyValue* pVal = getValueForWindow( &rButton );
+        PropertyValue* pVal = getValueForWindow(mxBrochureBtn.get());
         if( pVal )
         {
             bool bVal = mxBrochureBtn->get_active();
@@ -1856,7 +1855,7 @@ IMPL_LINK(PrintDialog, ToggleHdl, weld::ToggleButton&, rButton, void)
             // update preview and page settings
             maUpdatePreviewNoCacheIdle.Start();
         }
-        if( mxBrochureBtn->get_active() )
+        if (mxBrochureBtn->get_active())
         {
             mxOrientationBox->set_sensitive( false );
             mxOrientationBox->set_active( ORIENTATION_LANDSCAPE );
@@ -1865,13 +1864,14 @@ IMPL_LINK(PrintDialog, ToggleHdl, weld::ToggleButton&, rButton, void)
             showAdvancedControls( false );
             enableNupControls( false );
         }
-    }
-    else if( &rButton == mxPagesBtn.get() )
-    {
-        mxOrientationBox->set_sensitive( true );
-        mxOrientationBox->set_active( ORIENTATION_AUTOMATIC );
-        enableNupControls( true );
-        updateNupFromPages();
+        else
+        {
+            mxOrientationBox->set_sensitive( true );
+            mxOrientationBox->set_active( ORIENTATION_AUTOMATIC );
+            enableNupControls( true );
+            updateNupFromPages();
+        }
+
     }
 }
 
