@@ -170,16 +170,24 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Refer
     if ( !pVCLXWindow )
         return;
 
-    css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
-    if( xPeer.is() )
+    if (!pWindow)
     {
-        bool bSameInstance( pVCLXWindow == dynamic_cast< VCLXWindow* >( xPeer.get() ));
-        assert( bSameInstance && "UnoWrapper::SetWindowInterface: there is already a WindowPeer/ComponentInterface for this VCL window" );
-        if ( bSameInstance )
-            return;
+        // we are disconnecting a peer from a window
+        pVCLXWindow->SetWindow( nullptr );
     }
-    pVCLXWindow->SetWindow( pWindow );
-    pWindow->SetWindowPeer( xIFace, pVCLXWindow );
+    else
+    {
+        css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
+        if( xPeer.is() )
+        {
+            bool bSameInstance( pVCLXWindow == dynamic_cast< VCLXWindow* >( xPeer.get() ));
+            SAL_WARN_IF( !bSameInstance, "toolkit.helper", "UnoWrapper::SetWindowInterface: there is already a WindowPeer/ComponentInterface for this VCL window" );
+            if ( bSameInstance )
+                return;
+        }
+        pVCLXWindow->SetWindow( pWindow );
+        pWindow->SetWindowPeer( xIFace, pVCLXWindow );
+    }
 }
 
 css::uno::Reference<css::awt::XPopupMenu> UnoWrapper::CreateMenuInterface( PopupMenu* pPopupMenu )
