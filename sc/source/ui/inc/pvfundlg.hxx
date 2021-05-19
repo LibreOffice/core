@@ -152,7 +152,7 @@ private:
     sal_Int32 FindListBoxEntry( const weld::ComboBox& rLBox, std::u16string_view rEntry, sal_Int32 nStartPos ) const;
 
     DECL_LINK( RadioClickHdl, weld::Button&, void );
-    DECL_LINK( CheckHdl, weld::Button&, void );
+    DECL_LINK( CheckHdl, weld::ToggleButton&, void );
     DECL_LINK( SelectHdl, weld::ComboBox&, void );
     DECL_LINK( ButtonClicked, weld::Button&, void );
 

@@ -76,7 +76,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(
                                     rArgSet.Get( nWhichQuery ));
 
-    m_xBtnCase->connect_clicked    ( LINK( this, ScPivotFilterDlg, CheckBoxHdl ) );
+    m_xBtnCase->connect_toggled( LINK( this, ScPivotFilterDlg, CheckBoxHdl ) );
 
     m_xLbField1->connect_changed  ( LINK( this, ScPivotFilterDlg, LbSelectHdl ) );
     m_xLbField2->connect_changed  ( LINK( this, ScPivotFilterDlg, LbSelectHdl ) );
@@ -463,7 +463,7 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void )
     }
 }
 
-IMPL_LINK(ScPivotFilterDlg, CheckBoxHdl, weld::Button&, rBox, void)
+IMPL_LINK(ScPivotFilterDlg, CheckBoxHdl, weld::ToggleButton&, rBox, void)
 {
     // update the value lists when dealing with uppercase/lowercase
 
