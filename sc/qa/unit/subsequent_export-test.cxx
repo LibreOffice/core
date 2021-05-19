@@ -212,6 +212,13 @@ public:
     void testTdf95640_ods_to_xlsx_with_standard_list();
     void testTdf95640_xlsx_to_xlsx();
     void testDateAutofilterXLSX();
+<<<<<<< HEAD   (0e6830 tdf#142350 sc AutoFilter: fix (empty) entry checking)
+=======
+    void testDateAutofilterODS();
+    void testAutofilterColorsODF();
+    void testAutofilterColorsOOXML();
+    void testAutofilterColorsStyleOOXML();
+>>>>>>> CHANGE (f2c9da tdf#142231 sc odf: fix export of single date filter value)
 
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
@@ -393,6 +400,13 @@ public:
     CPPUNIT_TEST(testTdf95640_ods_to_xlsx_with_standard_list);
     CPPUNIT_TEST(testTdf95640_xlsx_to_xlsx);
     CPPUNIT_TEST(testDateAutofilterXLSX);
+<<<<<<< HEAD   (0e6830 tdf#142350 sc AutoFilter: fix (empty) entry checking)
+=======
+    CPPUNIT_TEST(testDateAutofilterODS);
+    CPPUNIT_TEST(testAutofilterColorsODF);
+    CPPUNIT_TEST(testAutofilterColorsOOXML);
+    CPPUNIT_TEST(testAutofilterColorsStyleOOXML);
+>>>>>>> CHANGE (f2c9da tdf#142231 sc odf: fix export of single date filter value)
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
@@ -4470,6 +4484,60 @@ void ScExportTest::testDateAutofilterXLSX()
     xDocSh->DoClose();
 }
 
+<<<<<<< HEAD   (0e6830 tdf#142350 sc AutoFilter: fix (empty) entry checking)
+=======
+void ScExportTest::testDateAutofilterODS()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf142231.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "content.xml", FORMAT_ODS);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[1]", "value", "Calc");
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[2]", "value", "2021-05-04");
+}
+
+void ScExportTest::testAutofilterColorsODF()
+{
+    ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "content.xml", FORMAT_ODS);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[1]", "value", "#e8f2a1");
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[1][@loext:data-type='background-color']");
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[2]", "value", "#3465a4");
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[2][@loext:data-type='text-color']");
+}
+
+void ScExportTest::testAutofilterColorsOOXML()
+{
+    ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                     "xl/tables/table1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId", "4");
+}
+
+void ScExportTest::testAutofilterColorsStyleOOXML()
+{
+    ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf[5]/x:fill/x:patternFill/x:bgColor", "rgb",
+                "FFFFD7D7");
+}
+
+>>>>>>> CHANGE (f2c9da tdf#142231 sc odf: fix export of single date filter value)
 void ScExportTest::testTdf88657ODS()
 {
     ScDocShellRef xDocSh = loadDoc("tdf88657.", FORMAT_ODS);

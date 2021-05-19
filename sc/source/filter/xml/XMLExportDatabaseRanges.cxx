@@ -446,6 +446,30 @@ private:
             const ScQueryEntry::Item& rItem = rItems.front();
             if (rItem.meType == ScQueryEntry::ByString)
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+<<<<<<< HEAD   (0e6830 tdf#142350 sc AutoFilter: fix (empty) entry checking)
+=======
+            }
+            else if (rItem.meType == ScQueryEntry::ByDate)
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+            }
+            else if (rItem.meType == ScQueryEntry::ByTextColor
+                     || rItem.meType == ScQueryEntry::ByBackgroundColor)
+            {
+                if (mrExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+                {
+                    if (rItem.meType == ScQueryEntry::ByTextColor)
+                        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_TYPE, XML_TEXT_COLOR);
+                    else
+                        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_TYPE,
+                                              XML_BACKGROUND_COLOR);
+                }
+
+                OUStringBuffer buffer;
+                sax::Converter::convertColor(buffer, rItem.maColor);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, buffer.makeStringAndClear());
+            }
+>>>>>>> CHANGE (f2c9da tdf#142231 sc odf: fix export of single date filter value)
             else
             {
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
