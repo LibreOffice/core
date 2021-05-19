@@ -1952,6 +1952,7 @@ void ScInputHandler::UseColData() // When typing
                     miAutoPosColumn = pColumnData->end();
                     miAutoPosColumn = findTextAll(*pColumnData, miAutoPosColumn, aText, aResultVec, false, 2);
                     bool bShowCompletion = (aResultVec.size() == 1);
+                    bUseTab = (aResultVec.size() == 2);
                     if (bShowCompletion)
                     {
                         assert(miAutoPosColumn != pColumnData->end());
@@ -1984,18 +1985,14 @@ void ScInputHandler::UseColData() // When typing
                             pTopView->SetSelection( aSelection );
                         }
 
-                        aAutoSearch = aText; // To keep searching - nAutoPos is set
-
-                        if (aText.getLength() == aNew.getLength())
-                        {
-                            // If the inserted text is found, consume TAB only if there's more coming
-                            OUString aDummy;
-                            ScTypedCaseStrSet::const_iterator itNextPos =
-                                findText(*pColumnData, miAutoPosColumn, aText, aDummy, false);
-                            bUseTab = itNextPos != pColumnData->end();
-                        }
-                        else
-                            bUseTab = true;
+                        aAutoSearch = aText;
+                    }
+                    else if (bUseTab)
+                    {
+                        // Allow cycling through possible matches using shortcut.
+                        // Make miAutoPosColumn invalid so that Ctrl+TAB provides the first matching one.
+                        miAutoPosColumn = pColumnData->end();
+                        aAutoSearch = aText;
                     }
                 }
             }
@@ -2008,7 +2005,7 @@ void ScInputHandler::NextAutoEntry( bool bBack )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pColumnData )
     {
-        if (miAutoPosColumn != pColumnData->end() && !aAutoSearch.isEmpty())
+        if (!aAutoSearch.isEmpty())
         {
             // Is the selection still valid (could be changed via the mouse)?
             ESelection aSel = pActiveView->GetSelection();
@@ -3636,7 +3633,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                     NextFormulaEntry( bShift );
                     bUsed = true;
                 }
-                else if (pColumnData && bUseTab && miAutoPosColumn != pColumnData->end())
+                else if (pColumnData && bUseTab)
                 {
                     // Iterate through AutoInput entries
                     NextAutoEntry( bShift );
